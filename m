@@ -2,195 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A14598487
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A6559847E
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245017AbiHRNnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
+        id S245182AbiHRNnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245241AbiHRNml (ORCPT
+        with ESMTP id S244804AbiHRNnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:42:41 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DD9B5E46;
-        Thu, 18 Aug 2022 06:41:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hzA3q6cP6atJ564S1GvtIc6JT7IqFZbW6S5zKNMiW/KjDSzcKEHvhss3NNEZ9RlCMbXNJ0yG/p/4bZ9LtMliUpA4FtkYV7KzgfjHuMUhv5fHbQx5eu+ph+zYCSjaFDp5XGMdzHs0mLNICO6XPgxVq5IDTq7z5UoM7zhCtayBoJtCVCZj5gTDTE8CjqAHQlUCaEkjB41ZYB0wx37BUBVdBckVNx9KXiu76PrhDbvJC5ZvsRmnmmbVl7EY/hsiczk7WX5SsV0WHz0AEi4ax94RWBy3l8krTbmEGsoZaDGo0vewoqjppwgcIDLKu37LIjLMJoXi/gyWAvW/SRtT29CBNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G8kXoL7OOEWwOc2Zsh3QAJMp32FexBDm1yFhpdI4UXY=;
- b=Qipq9LaLUris1aYtMmghjSunv4BK1bDr6mH7f2ONdAJNvxqfsWSNEmstkOPoJk1NyxDXolhKLeeI217TJOvDlk9A+enQFELQwvGPy28l2Q+BLsZOTvBROBy28MGobhExRl3+SyXRWtkcjfV4gLUD9Vi/WCwmF7Wn+HliKwrGrAsKxxdyXrIumwlyN2DfDJzEYNZ6EizpXQdhzDPtOhaUO8ZH9D0O1buplDhKXyZPE2UV1vhpKY8qEKyt1pOoVbraeJeRQF9jnjzucohId794T8N8s0ZcZtoF12RKME8QsLQCSA76KBT4+yz354MCxbxnmShv1dkh0D2CEIASglQOHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G8kXoL7OOEWwOc2Zsh3QAJMp32FexBDm1yFhpdI4UXY=;
- b=A4aUfox8vOohycyOiZgkY0S0yk0ZajW5XgwR4ipxb4B6VEscD71QWuNgbfrOk1h4bF3i3BkIZ7+6wyKn1EHldekoXW2gHZRzKRcw7hgoG1C6mRgMDIeu0+EbC4Qgt0aL6+KKD85Y7k+EQ/fYM2AkzMekf4c6wyv1hf5b3cmIl+LxnZkq7mW8hGLfsGSXuzzCXeShkva808A+QM1gMXILUowYSF4aiDKQfh1XeaJHAw4EOlVucOG3eBwaAmW+pQSjLlE2eYcTVgySyo25GNlDkV3RphgRa/u6RrUMF4ZnNagBdp1KC9iAWLu/OCGb4GmvSPpanfe6xnrNKlSTcZOJQw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MN2PR12MB4142.namprd12.prod.outlook.com (2603:10b6:208:1dd::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Thu, 18 Aug
- 2022 13:41:20 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%6]) with mapi id 15.20.5525.019; Thu, 18 Aug 2022
- 13:41:20 +0000
-Date:   Thu, 18 Aug 2022 10:41:19 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v11 09/13] iommu/sva: Refactoring
- iommu_sva_bind/unbind_device()
-Message-ID: <Yv5Bf7+59po6K/1h@nvidia.com>
-References: <20220817012024.3251276-1-baolu.lu@linux.intel.com>
- <20220817012024.3251276-10-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817012024.3251276-10-baolu.lu@linux.intel.com>
-X-ClientProxiedBy: BL1PR13CA0165.namprd13.prod.outlook.com
- (2603:10b6:208:2bd::20) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Thu, 18 Aug 2022 09:43:02 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA7BB5A64
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:42:09 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 2FD8A2B05FEE;
+        Thu, 18 Aug 2022 09:42:05 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 18 Aug 2022 09:42:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660830124; x=1660837324; bh=HQC2uQh9jT
+        R5zuhwO9XMFeqtwLctTZY2rM1W/lF/1i0=; b=ltryRsjYqi1O97i1fEor/8CUH0
+        eV9s5UGSADqzroBSY3eVnDaNvBwGKasz2b6MSimH5N8JxjAHhclmoLCVeG2qq0wp
+        HLHzV9DhvCJ3jRXKcz7GHj8jeKKYEV6oNRFk8Cy90HbGMlwn55on0oDpCq2I7gSq
+        H5ZCs5qUCFGQWPfB2FqkmYBH14oorz13RRNzkzanntYz4hgr7Cn6EJlU6h3UofJp
+        Bzca/XJh+tTvIXS3S3kJS2pEKzzr8B6O8DU617LOsJHMVAKK1gyxHUsuiijkPOnt
+        TbNraVdN+DcqZmbKHyiv9XvUngyfSM5UdQ1LMdIC1N8BwekRI/zOEzazf5Tw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660830124; x=1660837324; bh=HQC2uQh9jTR5zuhwO9XMFeqtwLct
+        TZY2rM1W/lF/1i0=; b=CQPiA58vVLxmJMqggX/oIptmnHPvW6R1i8JljDcmqS+a
+        j/YU5Gm8+tGP++JlUpAb4CoSmBlBn8iFVO4FRt1G/7hHFapMqA4gPQgIvy7iL5h6
+        h/DKzE36elER5UwM6HrASreqJ8DP/2WplprYmAIg9Mtu5NPrtJ/qnvigT3Au5vBc
+        s2iqHi9JVXZy2dCgKq6obmD84xwwT0nESJyDGuzcgyleFf0q9Bz/p+GAKUoatobb
+        UEU7qhhxr5tFlcIFLerlP2ywHlX2c/bkhCL7lFyFjj9kyq74Ncy/q9zisxk6q/WJ
+        G98p0o/JRuuPXUZywqFAjoHexcDQw/yWPs+bB5NfbA==
+X-ME-Sender: <xms:q0H-YqFScjGApQHr1t9NPfOW6jXu0Ht7RJ7pYAKNqcp792Tfl5CrSQ>
+    <xme:q0H-YrXwS9bjjtG2rVpl6H0MFXLkZb_DGpsJraUkz0Oa5h7cL1CKIykNFjGjPmXnv
+    AWJKhbsRKiUHMidAZE>
+X-ME-Received: <xmr:q0H-YkJz1Ew2cwLeqlmQieun19musfq4H_o7hUWkKIuX-MQNVZM05h7elg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehledggedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeevkefhveeffeeiuedtiedttdfhjeeiteefffegieeijeeigfelhfeltdei
+    leejfeenucffohhmrghinhephhhinhhnvghrrdhinhhfohdpfihikhhiphgvughirgdroh
+    hrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehm
+    rgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:q0H-YkHLvVd0vNeO52JIGs1NtlThexGXIEADSZoOPDL575edFWcYMg>
+    <xmx:q0H-YgW1m9qStfkuJ2P2HlYCYL4Z-7LCXxhcxUpcQqpuvNfKXF_QxQ>
+    <xmx:q0H-YnMtcbBDfpQIyoNiIFYLprA9hkiGq6kgzn7ppeMOkqycmyZu1w>
+    <xmx:rEH-YmFREu56WOFKWCjODGXdld8BLa5ngFziZUcpI5arGyioP7vI7yYksEE>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 18 Aug 2022 09:42:03 -0400 (EDT)
+Date:   Thu, 18 Aug 2022 15:42:00 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 04/35] drm/modes: Introduce 480i and 576i modes
+Message-ID: <20220818134200.cr22bftmjn226ehn@houat>
+References: <20220728-rpi-analog-tv-properties-v1-4-3d53ae722097@cerno.tech>
+ <CAMuHMdUrwzPYjA0wdR7ADj5Ov6+m03JbnY8fBYzRYyWDuNm5=g@mail.gmail.com>
+ <20220816132636.3tmwqmrox64pu3lt@houat>
+ <CAMuHMdUNLPbjs=usYQBim5FxsrC1oJLuF+3JB7auzHHRoOqavQ@mail.gmail.com>
+ <20220817075351.4xpsqdngjgtiqvob@houat>
+ <CAMuHMdUusnhYodWGCxJBu-1Hd2KW-xdT8jxE_iVdQjDo8b3Y5Q@mail.gmail.com>
+ <20220817131454.qcuywcuc4ts4hswm@houat>
+ <CAMuHMdVPEgnnsY-4uuf=FDJ0YxWpch-0kZWFT_TZfcDvXLtwWQ@mail.gmail.com>
+ <20220818123934.eim2bfrgbxsmviqx@houat>
+ <CAMuHMdWXbHkrBZgsmUnU=q52+q7UZZNO3tgQW7Men+msQ1JDwQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 12ea30b4-03a7-49af-eece-08da811f5570
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4142:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CXclGwiqJO0rHQAsDV0wgzebjQY/5rbChBsXHBUzZ4xGIb5/9YyPrI+QHi+vX632iPxlmXJZhYdIU3H7wec6CPJefmr5V4SK3fQFcuMz8+syNcV1wunwuUQCdtR5MFeZwc/JUv7yFspfsknP73WXYKOoPkp7nJx97V2NenmQyI50HX5BCwvO7pNe97BFC+5v9TKgAln05QSEtwXRCVFAw3U7RktvGEmc4TDi1mXn0uARsLeVh3MozObBE7zeJ9bd8ToPDSHiFtQILQvOr0sbtM2rmncCKIAvL5rwan1sZ+NpahIG/RJdAD4mphKSmPLtr6IghmEUV5aPxVkqVhBsEsTixBwhbOrjGG/tKg5veDn+h8nV3OKeMP3BwKL/VN7ASSpvx6WrXW7W9xT4vgkLC4LT/gVDr8klNXKscYI7NKIABSsC6J6snZb9TXhWjWObPMjFpGIHy8vazJeC8GCDKnBWmnvo8Kj2CUkbwFdsVP2+oRLnToQbzONuVA8BYuR3AWQ0UW43t2diCS5yeIxUbkKdsVRLbn3GJod4It8a7r+CMNGpeQ/jXNlPBARb+6rLnqrpvUGg/5Rhx5CCmC/kf1iXWm/7+PbmaU2g9VwQmQmcdkD9mqQh2X6t9FeVrd/YtG808GvZqLJ6LP7QfnMKG+nLw1yu+tSHnIZkRPoL8aIKV7+SZdWe6Iwn6VToV9of7YurU/woBwTJxDr5N48pzA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(396003)(39860400002)(366004)(136003)(83380400001)(186003)(38100700002)(66946007)(4326008)(66556008)(66476007)(316002)(5660300002)(6916009)(8676002)(8936002)(54906003)(6506007)(41300700001)(7416002)(26005)(6512007)(478600001)(6486002)(36756003)(86362001)(2906002)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hIjX2JtwH29hfAfPrmuehLbFyskEWUzFElueTIFH2BV72J8Gn5vVekFnoNal?=
- =?us-ascii?Q?OKviJyl9Tpp5Mb+3OBLxhzrcLDiFlk9sEQPID+HAD5ZaxzAIirKLgOyc+9gS?=
- =?us-ascii?Q?nsHo1cf5Pu2aXFlx6dFO0dBM9zAUMCQ9SqDx7YnFSK5El65rQ+RBhF4BW/vS?=
- =?us-ascii?Q?sfx4njSc9LoViU/31DJhIOFbO3xIKmlZPHHqh76u07nMVqyvwJd8Qm/oXGw6?=
- =?us-ascii?Q?h3PT4H5BSq7gGW6CEcx3mNQUgg8nxHiNF83h2rGUOxi0HOIPKlVKtgUozIEL?=
- =?us-ascii?Q?2kkzY57n6BzvY147n6IAiJPjl6L4ffRfGoY5vvUobdBG+LrGQkjNMYhq7Idf?=
- =?us-ascii?Q?x8+bOCu/KKUN5ghFxgDeOJ39Q2GGV2V7+fv2TvOK068+utdC6uafF9300FRV?=
- =?us-ascii?Q?YGRiND/Cyu2mWLlAwi9z7lQNsTo2vypGVkt57FGZKFIu7xvM+RsilS84rGTs?=
- =?us-ascii?Q?HSYHkdN7BdtCvTx4mahpWsvXxtrbFwTtDcNP1Numl7/ylHPN2zCus1NJWxAq?=
- =?us-ascii?Q?WZh0EmiP/z7h8pJdaKEQkXGXIte+jxImf3Ja6sA+vl1Sjv4HlTlYssOQfhBw?=
- =?us-ascii?Q?XfJvdIwx/2nrUkWI1JxUfaZvijw9olcHjlmkSC/7k1Zwe3WejqxYeOV0Od4k?=
- =?us-ascii?Q?chcSZVwP61lyQ5v8DwcLk68pNlNsSI/wDiQs0hh5OP3Lc8h5sSVfGGiTQPxF?=
- =?us-ascii?Q?atv3ERDrDFvJDeFRANCrrH3XbEKsLDhIyVAjGv2blbsxO0D+Q/D6jt6bRYF8?=
- =?us-ascii?Q?AHcFUSHAW1KDZ6OWheH0kulSZ3vGt//o0BlP3ZQHMJNqgNXIbNqZ+2UNF6uA?=
- =?us-ascii?Q?R8li8KKJqTn5Ojm0JzrpnnxoSGFgJN2tHeMtMZ1kaJNgWG8ylhYt+g/vs+jl?=
- =?us-ascii?Q?aPxDZtLDvUJgP+TG5eQeSWodjgPKhr6GOKjbZoDBkfROCMPTUC6wlwfSRu9w?=
- =?us-ascii?Q?+9z4azKVN8AO3U8CyAIaoUy+BpzmcbWNibgeDyowe4lHucMn+RogE6/nQLon?=
- =?us-ascii?Q?UuUewk5/akOZnHccSFDt84IuurHilq05Wx0Pzfn8HDLi+PYiJJM8dwT/oha+?=
- =?us-ascii?Q?7E8Q8A4uVtH7N2LVlnzZ63TsCflx+yeGSEPwTktCITNGZIPGfI2wx080jjNu?=
- =?us-ascii?Q?K+GHwPRdCPZidPTdNsIc2zDbD3Y1Kngyh23YeA/Z0ZYumzednEWnVsW8ATUB?=
- =?us-ascii?Q?vgivFKuQYQTjrei9eSgj8xYns90u+9xG88AJ2flWqLDIRgBIoomvrFyvazsb?=
- =?us-ascii?Q?BMaoxqUul4vIh0LquZp3LYOFtzDWqc//CBjlpFY9nP4r6ERH9Pdz2V7ZtNZ+?=
- =?us-ascii?Q?Q2LpNwvH9NAztpJGbqbIhXTW3BFNcbgULCv9DlPwggHv6aYJaZc7CGeW0kEX?=
- =?us-ascii?Q?evXUf7PvAYJ86oN97FhXySjtwVjbJL3G8h+7MoXjVX7smLlMkvTWNW7uQFp8?=
- =?us-ascii?Q?LhvItDBS8ycCkBJXvmFG+aXEJvT/z6315o16R0gsE/ec595iSecpV6CLdD9t?=
- =?us-ascii?Q?4b5IvO7w3f6KlXEC/h21peTNOeDqjM8xFPULpBHcE/DEb7sadbUhAQeSF6/j?=
- =?us-ascii?Q?j2QLYovL9b06cWH1kee8N2bN3pHS/uFyMr+d93LX?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12ea30b4-03a7-49af-eece-08da811f5570
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 13:41:20.4873
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hjPBc3cKTcdZqjq1AOlWd30ZZpIt8NdzD8lkwzFcf608bD0rUU3OJgPPHYKr0TnM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4142
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bjiayi7n6oays3ln"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWXbHkrBZgsmUnU=q52+q7UZZNO3tgQW7Men+msQ1JDwQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 09:20:20AM +0800, Lu Baolu wrote:
-> +
-> +/**
-> + * iommu_sva_bind_device() - Bind a process address space to a device
-> + * @dev: the device
-> + * @mm: the mm to bind, caller must hold a reference to mm_users
-> + *
-> + * Create a bond between device and address space, allowing the device to access
-> + * the mm using the returned PASID. If a bond already exists between @device and
-> + * @mm, it is returned and an additional reference is taken. Caller must call
-> + * iommu_sva_unbind_device() to release each reference.
-> + *
-> + * iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) must be called first, to
-> + * initialize the required SVA features.
-> + *
-> + * On error, returns an ERR_PTR value.
-> + */
-> +struct iommu_sva *iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
-> +{
-> +	struct iommu_domain *domain;
-> +	struct iommu_sva *bond;
 
-This is called handle below, pick one name please
+--bjiayi7n6oays3ln
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +	ioasid_t max_pasids;
-> +	int ret;
-> +
-> +	max_pasids = dev->iommu->max_pasids;
-> +	if (!max_pasids)
-> +		return ERR_PTR(-EOPNOTSUPP);
-> +
-> +	/* Allocate mm->pasid if necessary. */
-> +	ret = iommu_sva_alloc_pasid(mm, 1, max_pasids - 1);
-> +	if (ret)
-> +		return ERR_PTR(ret);
-> +
-> +	bond = kzalloc(sizeof(*bond), GFP_KERNEL);
-> +	if (!bond)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	mutex_lock(&iommu_sva_lock);
-> +	/* Search for an existing domain. */
-> +	domain = iommu_get_domain_for_dev_pasid(dev, mm->pasid);
-> +	if (domain) {
+On Thu, Aug 18, 2022 at 02:57:55PM +0200, Geert Uytterhoeven wrote:
+> Hi Maxime,
+>=20
+> On Thu, Aug 18, 2022 at 2:39 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > On Wed, Aug 17, 2022 at 04:01:48PM +0200, Geert Uytterhoeven wrote:
+> > > > I've looked around and it looks like the entire blanking area is
+> > > > supposed to be 40 pixels in interlaced, but I couldn't find anywher=
+e how
+> > >
+> > > 625 lines - 575[*] visible lines =3D 50 lines.
+> > >
+> > > [*] BT.656 uses 576 visible lines as that's a multiple of 2, for spli=
+tting
+> > >      a frame in two fields of equal size.
+> > >
+> > > "visible" is relative, as it includes the overscan region.
+> > > Some PAL monitors used with computers had knobs to control width/heig=
+ht
+> > > and position of the screen, so you could make use of most or all of
+> > > the overscan region
+> >
+> > It brings back some memories :)
+> >
+> > > but on a real TV you're limited to ca. 640x512 (on PAL) which is what
+> > > an Amiga used by default (with a 14 MHz pixclock).
+> >
+> > > > it's supposed to be split between the upper and lower margins and t=
+he
+> > > > sync period.
+> > >
+> > > "Field Synchronization of PAL System" on
+> > > http://martin.hinner.info/vga/pal.html shows the split.
+> >
+> > Thanks, that's excellent as well.
+> >
+> > I'm mostly done with a function that creates a PAL mode, but I still
+> > have one question.
+> >
+> > If I understand well, the blanking period is made up (interlace) of 16
+> > pulses for the first field, 14 for the second, each pulse taking half a
+> > line. That amount to 30 pulses, so 15 lines.
+> >
+> > I first assumed that the pre-equalizing pulses would be the back porch,
+> > the long sync pulses the vsync, and the post-equalizing pulses the front
+> > porch. But... we're still missing 35 lines to amount to 625 lines, that
+> > seems to be counted in the field itself (305 lines =3D=3D (575 + 35) / =
+2)
+> >
+> > So I guess my assumption was wrong to begin with.
+>=20
+> The back porch is the number of lines between the last "visible" line
+> and the start of the synchronization pulse, i.e. "l" in the "Field
+> Synchronization of PAL System" drawing.
+> Virtual sync length is "m".
+> The front porch is the number of lines between the end of
+> the synchronization pulse, and the first "visible" line, i.e.
+> "j - l - m" (I think you used "n", thus missing lines 6-23 and 319-335).
 
-This isn't safe, or sane. A driver could have attached something to
-this PASID that is not a SVA domain and thus not protected by the
-iommu_sva_lock.
+Ah, yes, that makes sense
 
-At a minimum you should add a type match to
-iommu_get_domain_for_dev_pasid(), eg to confirm it is a SVA domain and
-do that check under the xa_lock of the pasid xarray.
+> > You seem to have used a fixed vsync in amifb to 4 lines, and I don't
+>=20
+> Actually "m" is 2.5 lines in the first field, and 3 lines in the second f=
+ield,
+> so "4" is not that much off of 2.5 + 3.
 
-And then the general idea is that SVA domain attach/detach must hold
-this janky global lock. 
+Is it? If I'm reading that drawing well, l before the first field starts
+on the second half of line 623 and stops at the end of line 625, so 2.5
+line, and on the second field starts at the beginning of line 311, and
+stops half-way through 313 so 2.5 line again.
 
-> +		refcount_inc(&domain->users);
+Then, for the first field, m starts at the beginning of line 1, stops
+half-way through line 3, so 2.5 line indeed, and then on the second
+field starts on the second half of 313 and stops at the end of line 315.
+So 2.5 again?
 
-This atomic is always processed under the iommu_sva_lock, so it
-doesn't need to be an atomic anymore.
+Thus, both should be 5?
 
-Otherwise this design looks OK to me too
+> > understand how you come up with the upper and lower margins (or rather,
+> > how they are linked to what's described in that page)
+>=20
+> These margins probably came from the Amiga hardware reference manual,
+> for the default 640x512 (PAL) and 640x400 (NTSC) modes.
 
-Jason
+Ok.
+
+I started adding more sanity checks to my code, and I just realised I
+don't seem to be able to reach 720 pixels over a single line though. If
+I understood it properly, and according to [1] the active part of a line
+is supposed to be 51.95us, and the blanking period taking 12.05us. [2]
+in the timing section has pretty much the same numbers, so it looks
+sane.
+
+At 13.5Mhz, a pixel is going to take roughly 74ns, and 51950 / 74 =3D 702
+pixels
+
+It seems we can go push it to 52350 ns, but that still gives us only 706
+pixels.
+
+Similarly, if I just choose to ignore that limit and just take the
+active time I need, 720 * 74 =3D 53280ns
+
+That leaves us 10720ns for the blanking period, and that's not enough to
+fit even the minimum of the front porch, hsync and back porch (1.55 +
+4.5 + 5.5 =3D 11.55us).
+
+Are those constraints merely recommendations, or am I missing something?
+
+Thanks!
+Maxime
+
+1: https://en.wikipedia.org/wiki/PAL#PAL_signal_details
+2: http://martin.hinner.info/vga/pal.html
+
+--bjiayi7n6oays3ln
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYv5BqAAKCRDj7w1vZxhR
+xWtBAQDibwVaic8Y/y58QuWnOuhXnUvfjLJQpEPWFoP8AcS2PAEApAMrj2LZQrsW
+1JWlpoRTdj2V5czk8fjcIqqDqWHqrQE=
+=Vc6t
+-----END PGP SIGNATURE-----
+
+--bjiayi7n6oays3ln--

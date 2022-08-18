@@ -2,139 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9FE5983C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB675983CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244785AbiHRNI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S244932AbiHRNJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244911AbiHRNI1 (ORCPT
+        with ESMTP id S244117AbiHRNJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:08:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE54137F91
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:08:25 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oOfG1-0000TO-Va; Thu, 18 Aug 2022 15:08:22 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AD3B1CD860;
-        Thu, 18 Aug 2022 13:08:14 +0000 (UTC)
-Date:   Thu, 18 Aug 2022 15:08:14 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com, Dario Binacchi <dariobin@libero.it>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 4/4] can: bxcan: add support for ST bxCAN controller
-Message-ID: <20220818130814.z7b4rvmld6wvk4fg@pengutronix.de>
-References: <20220817143529.257908-1-dario.binacchi@amarulasolutions.com>
- <20220817143529.257908-5-dario.binacchi@amarulasolutions.com>
- <20220818103031.m7bl6gbzcc76etig@pengutronix.de>
+        Thu, 18 Aug 2022 09:09:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1092A721B;
+        Thu, 18 Aug 2022 06:09:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AAA56160E;
+        Thu, 18 Aug 2022 13:09:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD017C433D6;
+        Thu, 18 Aug 2022 13:09:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660828180;
+        bh=9x4BUNySY3ragNluRSR1VyPAkopHYd2HMy0eUJpv0rQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pKxJRXrbe/9gXJGrG8NAv0TqHP0ITm0G53/79YOA4oQmd3vgRnkJY6kTIzIS2Xg1J
+         H/ElEQDn7Jr58iBwGSLP88/xx2UZFrATcwJx9TP3qY001R+/jIYfEN34NNwXWeKeRl
+         FSyz4Yj1Y8NGWMzUW71wboQM5ef8f59shrdHewzs7uP7lbkzbA1ChWcBxzH4XUFuV3
+         tHfojUQEHY2CBu2dkTExUeH70NdVCIzVKWezLqvtgj95mMIsstLIvqOwwHoidyr2yx
+         HFvuilctAiy33MAeZf7XYxGdcZUjSIQSm3ubwnd8y/VGjqzNL9K00jcKBIGDiK2/Ko
+         Uy3SjHRvDvdgQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2EAB84035A; Thu, 18 Aug 2022 10:09:37 -0300 (-03)
+Date:   Thu, 18 Aug 2022 10:09:37 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     roberto.sassu@huaweicloud.com
+Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, quentin@isovalent.com,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH 3/3] tools/build: Display logical OR of a feature flavors
+Message-ID: <Yv46EW6KbUe9zjur@kernel.org>
+References: <20220818120957.319995-1-roberto.sassu@huaweicloud.com>
+ <20220818120957.319995-3-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dtkjkszqd6mas3zd"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220818103031.m7bl6gbzcc76etig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220818120957.319995-3-roberto.sassu@huaweicloud.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Thu, Aug 18, 2022 at 02:09:57PM +0200, roberto.sassu@huaweicloud.com escreveu:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Sometimes, features are simply different flavors of another feature, to
+> properly detect the exact dependencies needed by different Linux
+> distributions.
+> 
+> For example, libbfd has three flavors: libbfd if the distro does not
+> require any additional dependency; libbfd-liberty if it requires libiberty;
+> libbfd-liberty-z if it requires libiberty and libz.
+> 
+> It might not be clear to the user whether a feature has been successfully
+> detected or not, given that some of its flavors will be set to OFF, others
+> to ON.
+> 
+> Instead, display only the feature main flavor if not in verbose mode
+> (VF != 1), and set it to ON if at least one of its flavors has been
+> successfully detected (logical OR), OFF otherwise. Omit the other flavors.
+> 
+> Accomplish that by declaring a FEATURE_GROUP_MEMBERS-<feature main flavor>
+> variable, with the list of the other flavors as variable value. For now, do
+> it just for libbfd.
+> 
+> In verbose mode, of if no group is defined for a feature, show the feature
+> detection result as before.
 
---dtkjkszqd6mas3zd
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Looks cool, tested and added this to the commit log message here in my
+local branch, that will go public after further tests for the other
+csets in it:
 
-On 18.08.2022 12:30:31, Marc Kleine-Budde wrote:
-> One step at a time, let's look at the TX path:
->=20
-> On 17.08.2022 16:35:29, Dario Binacchi wrote:
-> > +static netdev_tx_t bxcan_start_xmit(struct sk_buff *skb,
-> > +				    struct net_device *ndev)
-> > +{
-> > +	struct bxcan_priv *priv =3D netdev_priv(ndev);
-> > +	struct can_frame *cf =3D (struct can_frame *)skb->data;
-> > +	struct bxcan_regs *regs =3D priv->regs;
-> > +	struct bxcan_mb *mb_regs;
->=20
-> __iomem?
->=20
-> > +	unsigned int mb_id;
-> > +	u32 id, tsr;
-> > +	int i, j;
-> > +
-> > +	if (can_dropped_invalid_skb(ndev, skb))
-> > +		return NETDEV_TX_OK;
-> > +
-> > +	tsr =3D readl(&regs->tsr);
-> > +	mb_id =3D ffs((tsr & BXCAN_TSR_TME) >> BXCAN_TSR_TME_SHIFT);
->=20
-> We want to send the CAN frames in the exact order they are pushed into
-> the driver, so don't pick the first free mailbox you find. How a
-                                                                 are
-> priorities for the TX mailboxes handled?
->=20
-> Is the mailbox with the lowest number send first? Is there a priority
-> field in the mailbox?
+Committer testing:
 
-I just had a look into the data sheet and it says that the TX mailboxes
-are handled in transmit request order. This is good.
+Collecting the output from:
 
-[...]
+  $ make -C tools/bpf/bpftool/ clean
+  $ make -C tools/bpf/bpftool/ |& grep "Auto-detecting system features" -A10
 
-> The mcp251xfd has a proper hardware FIFO ring buffer for TX, the bxcan
-> probably doesn't. The get_tx_free() check is a bit different. Look at
-> c_can_get_tx_free() in:
+  $ diff -u before after
+  --- before    2022-08-18 10:06:40.422086966 -0300
+  +++ after     2022-08-18 10:07:59.202138282 -0300
+  @@ -1,6 +1,4 @@
+   Auto-detecting system features:
+   ...                                  libbfd: [ on  ]
+  -...                          libbfd-liberty: [ on  ]
+  -...                        libbfd-liberty-z: [ on  ]
+   ...                                  libcap: [ on  ]
+   ...                         clang-bpf-co-re: [ on  ]
+  $
 
-This means you can use the simpler get_tx_free from the mcp251xfd driver.
->=20
-> | https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
-it/?id=3D28e86e9ab522e65b08545e5008d0f1ac5b19dad1
->=20
-> This patch is a good example for the relevant changes.
+Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-This patch is non the less a good example for the TX path.
+Thanks for working on this!
 
-Marc
+- Arnaldo
+ 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  tools/build/Makefile.feature | 27 +++++++++++++++++++++++++--
+>  1 file changed, 25 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+> index 6c809941ff01..57619f240b56 100644
+> --- a/tools/build/Makefile.feature
+> +++ b/tools/build/Makefile.feature
+> @@ -137,6 +137,12 @@ FEATURE_DISPLAY ?=              \
+>           libaio			\
+>           libzstd
+>  
+> +#
+> +# Declare group members of a feature to display the logical OR of the detection
+> +# result instead of each member result.
+> +#
+> +FEATURE_GROUP_MEMBERS-libbfd = libbfd-liberty libbfd-liberty-z
+> +
+>  # Set FEATURE_CHECK_(C|LD)FLAGS-all for all FEATURE_TESTS features.
+>  # If in the future we need per-feature checks/flags for features not
+>  # mentioned in this list we need to refactor this ;-).
+> @@ -179,8 +185,17 @@ endif
+>  #
+>  feature_print_status = $(eval $(feature_print_status_code))
+>  
+> +feature_group = $(eval $(feature_gen_group)) $(GROUP)
+> +
+> +define feature_gen_group
+> +  GROUP := $(1)
+> +  ifneq ($(feature_verbose),1)
+> +    GROUP += $(FEATURE_GROUP_MEMBERS-$(1))
+> +  endif
+> +endef
+> +
+>  define feature_print_status_code
+> -  ifeq ($(feature-$(1)), 1)
+> +  ifneq (,$(filter 1,$(foreach feat,$(call feature_group,$(feat)),$(feature-$(feat)))))
+>      MSG = $(shell printf '...%40s: [ \033[32mon\033[m  ]' $(1))
+>    else
+>      MSG = $(shell printf '...%40s: [ \033[31mOFF\033[m ]' $(1))
+> @@ -244,12 +259,20 @@ ifeq ($(VF),1)
+>    feature_verbose := 1
+>  endif
+>  
+> +ifneq ($(feature_verbose),1)
+> +  #
+> +  # Determine the features to omit from the displayed message, as only the
+> +  # logical OR of the detection result will be shown.
+> +  #
+> +  FEATURE_OMIT := $(foreach feat,$(FEATURE_DISPLAY),$(FEATURE_GROUP_MEMBERS-$(feat)))
+> +endif
+> +
+>  feature_display_entries = $(eval $(feature_display_entries_code))
+>  define feature_display_entries_code
+>    ifeq ($(feature_display),1)
+>      $$(info )
+>      $$(info Auto-detecting system features:)
+> -    $(foreach feat,$(FEATURE_DISPLAY),$(call feature_print_status,$(feat),) $$(info $(MSG)))
+> +    $(foreach feat,$(filter-out $(FEATURE_OMIT),$(FEATURE_DISPLAY)),$(call feature_print_status,$(feat),) $$(info $(MSG)))
+>    endif
+>  
+>    ifeq ($(feature_verbose),1)
+> -- 
+> 2.25.1
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+-- 
 
---dtkjkszqd6mas3zd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmL+OboACgkQrX5LkNig
-0111dwgAsKHBnsZaWy6rH4/lkSd7m7BsivcwGcyfFO0SqgkUt/hKtV9luwypGM5y
-0EpYLPJJDxJyZHtcv9Xc65ceMWYAu/KrodPF9gYvHdPusZLer42UZX7OSCZjRKg/
-rg5QNEmMSFGsaXuOV13F2vkdUgCHqO+RMQzA1QkrCWXfGBfP8KEOBEyGkWRBWV3B
-EOiXp+XK1KLoHTD7cCCh0usmj+OqTc98mntbSq92UUB6UQph0PecyrNYU07PIvAW
-bZ9zoUdVC/0aAEGLHWY3pUXj7/nj8GxUiLCQiPH+Vvv+xYT2pe1kHpMWL7qp03WH
-NIfB5M8Vu2g7sAF39XW6q0VdHXTu0g==
-=JlUx
------END PGP SIGNATURE-----
-
---dtkjkszqd6mas3zd--
+- Arnaldo

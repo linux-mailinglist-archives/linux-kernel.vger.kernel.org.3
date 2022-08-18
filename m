@@ -2,227 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC55597ADD
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 03:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0839D597ADE
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 03:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242508AbiHRBMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 21:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
+        id S242525AbiHRBM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 21:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242500AbiHRBMe (ORCPT
+        with ESMTP id S242500AbiHRBMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 21:12:34 -0400
-Received: from sonic304-25.consmr.mail.gq1.yahoo.com (sonic304-25.consmr.mail.gq1.yahoo.com [98.137.68.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1C491D05
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 18:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660785152; bh=ZPSBhv+BnUzQui1sj0KSyre9cw3BlEcE00TKx62Iiyc=; h=Date:From:Subject:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=kSckY4DLDPsH4hgqo82qguxPZyaUIGIuqZNWLToR/CcH78AcZm60i7RIeV2x31r2zq0Ea3VcbbH7yGsx5Pb/bA1AnFMTJLmAjsnbowoiVy+76DRc7YMY81N/a2uQbr3AxDxKm0KYwcao1zWPuTcpeDWTLVNbl6Kx4y7x0fE1mPc01S98YBmr40KqrmYSKlEre25ik+OSUKFnxA1sMDeg/RBjxscQ1mBakBjC/dThSt/1yXd6hhbH1wtuioQNL0Qex1+3HesBwcEP/rGC2di8biKvnOU+AE09rBG/6KcxfXWMR3ND8nyDimQg+i8gJ6mnUSB2DtZZ3oXVQaz1B6/FHw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660785152; bh=admdHDUpxj5NaiIMdcMo0kjU1Onetw/KXQG1ptgbH4o=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=FnbGIA34JBg8XTdquv2ZX3nfW61JycQSkOm+bSKk9P5XS35Gef2Voe4/ptGxauT8qUb5MH5pwF/gk6lC15ZRKt+QfAvJBuT2E00er3jlkxRjrfVoeUwHtPchg0lxMsL5pu+ZzQWNV7VjzKnodrpH2slfxawLvb600woA/vWkzy7J6L5+8+V2EnrmuCex/pLXoCjco33fp8b3pmqvWKxTaoboy5T6swfFu0H3QPWVkhRy+xBgDJq2pug2cX44FpDZlSHtlassTT03S10Xz7M93QhSBmVd6jnjfVHCCzMH6BtAzl1mC6P2NqlyUEjhWr4nDrjI+akEpxdLNgIzOT+T+g==
-X-YMail-OSG: EEmkZlEVM1lWtvjVqxnMLi1LD5rMMNribr2QvgyFICAQL9sNJEMqzJzPIx7jqAR
- uouUEStHzxMTQ4HKs93.ZPIaKdhjSV2UtHoIwhbtnsj9.XKMa0ZM4BxlV.6Vc5ueauBo9YT7PAna
- YP0Lq4573EfgIrZ08s99Ks9ccRyk8sHwNV.9XHfpQ_kpELcyPx8wljHE9u0a_pPXFEpq0iz7v9RN
- bnI3OW.b4OiDjubLx5gWeyp26RU2TBwM.ABzsRUtZ1iCsMNgZDwEwReHfUJN6vvmN.RIksrqgm3v
- inEFUn._bKtj9yIo2bpJZGLxDEYCNuzn1g5wmeEgGvOx0p7unwArrpoksf_fBUia7ToG5oHcZ2Aq
- TSzM.pSGV6ujf4GczM1w1Y9wz.zLS7uqcUEBxfxGA158.GaBG9cMfpQxrAN7Nievy3QYUDxAbud8
- mmnECuSLtgqXLizSAfBYJCuhNSRIo6w6cLjL.36TulK1dLPcMJ9wxVLkomQ.68RIZHnGyiyjKVcA
- GZ9K4FcTA.6QMmzi23LPKw.hcdXVUXHd.YZ3DlcK__liSGl_iiVy6vBwUu2k34Tmu0CbiMTKSsTB
- PqyUKwWXZoyzQVtZH7yhOVRlnAERnn.anf4fzqb0L8ABisttyucj849eQVN0CN3.uw9ppWMdScgu
- 54mMpnoCgF.KX.ZJUPkhmxNIvmBwkoRyffPtSBHshwpMlmenvvkOo72EMTGPaYHP7tHreXG6mmpi
- ArSBPmR0kKdhGCg6R9_O.8EqHRNISeuTujQOz70uqZhrRlyzGoCuzK.0_tOrN5XhIF1H0f9_pVVg
- s8qZ_XGNB1C2mwlY0DlJD6pTylPWQAUAahF2xyJ9fBSoy.Iqk81950kgoJDQHE27gyvmCdLgzit4
- c7Br4jSxYN7awbjyHwJRmepkjZdP6kFmjmUsqFC.5vcezwJQ5pDoVuG3nTBjC9_TxmSepSzBCqP5
- 22aiyyl6ME5.WjNmSp87hYAYYPo3302.TLLOnN4TEmdkkzCFZdh8EgmEei0MbpsxS_.yLycXJWtp
- LDlgALv06NEzoBvB8nPIa9xoFhw8dU7.Ar.lxNPEK8kGjV.QNYp56MTnX5S.g1zndMmTjWhB1whD
- mLdi02wOsBr3GD.ryJHqXC2EJGWolFoxqu8n9q1E5JBrysvWCTqd_a3Mw6ySQHRcE34APZF5J82e
- 7aWvAmAESu_SEbtwR_1_jc9jitM1WgXnd9ZtXFqLEYuITiuPflbTxZqdhn70SsuxS4nwyxpllir4
- hNsW2sXOfyvCd2ezDo1_Qo41IN.Oy19XfKeuepATI0K8YdOQxP_T4Xi64ct_4wRlgJ.GsNDGKwSE
- dGFk1EdaAlB9nIcZZwXVpHWBStsh2I7DgKLbM6XBW8lLmMQ0hcI_8vWJCeZwn1n0abPWcuBoyPk7
- iTrW3ie9UvCL4DUDknKJaocgDkSqqTWPgsMyUR5GkRp2Qj6d_xJ0rYiIdZ17ZsC.A2ImDpjYv.8P
- QRd7P2FkW35KpoPmUVI3hwfZDAXAORjjfHtuOtTgMtHo5CCK05Q8ViX55.9RVRuMjDKat7L3JRxF
- ixnLDXxJDYKk7Ndx186BKC7rMAk3Z8W0Vsvc46uHf2k8L06ScyyH4NVANsagl4BYJsTuFC0eue.q
- 2hCwJFhbCR.oBhW.9.WNbEyvJrhszcKx482FHrOrs60Ij4PKk_FSp1vC5Up7sUie7djRZPatjMXX
- 9iq1Tj7ID6rhTena9ZluMCFSnYBrlNPQxDaRexCSksgruleHX.9TIUTkCmDPR9DvdQHlViXJX7u8
- 9YAJAMJ72QxzwxQwGMxK17oOXZmIQf6GYbPttEdkbMJSodV1woQdr.lBfAReMrIkGbirRVUsz74L
- vltuIkMFml5qLER6G_veG5vL4iYIsBbCPnO3Fu9FronL1lRGZw5INmwocT6bGrksPHOSXqXVL4Nf
- QVAZUnD6k4qaRdRajkMlRxMsd._CTZ2WzB0Q8gv5_4s7dwL2uhg2naAYJsruO_5AqF7Meq51Uahp
- vb6VH9il_KLycqCZcYlaOyvMk1kyk2NPuFNJQm5A0Gtmrix80pkEzPjOQu.oNIQWIZpQbUSmir6P
- BWXCTWX346vALsnWFlKKyZRXoVs5RdVhsOqqSi1gUj9vl9z0HIoVP4fgUkpGzqt6m3ZMzqzzE0Wl
- ceEqO.vuRd5oDBGackPG80txqIgin4mLcBhcP3zoqZiOobT4scIDJ8LKnXV.J9kuuHhL_Dn9NtYg
- dAcN8Jx7di3y3iU1lUbN1
-X-Sonic-MF: <brchuckz@aim.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.gq1.yahoo.com with HTTP; Thu, 18 Aug 2022 01:12:32 +0000
-Received: by hermes--production-ne1-6649c47445-tz6bb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID c51a6b35f6c872b1b78e2e9f4a32680b;
-          Thu, 18 Aug 2022 01:12:28 +0000 (UTC)
-Message-ID: <806d152f-358b-572a-64f2-798fe7783f93@netscape.net>
-Date:   Wed, 17 Aug 2022 21:12:24 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-From:   Chuck Zmudzinski <brchuckz@netscape.net>
-Subject: Re: [PATCH] perf scripts python: Let script to be python2 compliant
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alan Bartlett <ajb@elrepo.org>, Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-perf-users@vger.kernel.org, ElRepo <contact@elrepo.org>,
-        Akemi Yagi <toracat@elrepo.org>, Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20220725104220.1106663-1-leo.yan@linaro.org>
- <Yt68AZA2VV9d02xZ@kernel.org>
- <CA+_WhHyZZC=3gtzetEAQQrjtGujHmY5azwtQNZEc90gyOAwUDg@mail.gmail.com>
- <CAP-5=fWiNdnEawdj_3ExCrcwRSnRxeV8=8RhA6pwbw_bJdPJFg@mail.gmail.com>
- <YuBDw/+7McESS05X@kernel.org>
- <CAP-5=fV4+KeGcyyODTNjS01dw1iTXpFyaLXwZ8nBkek+NHL37w@mail.gmail.com>
- <11781d7e-d9de-f889-ff57-9d26d92ada44@netscape.net>
- <16cb5f73-ac85-5094-3cd1-ec91cb47fb99@netscape.net>
- <CAP-5=fXjBBbU3EHD5iY6VMKMo3wj+dJteeqBf5B9m464HtdF3Q@mail.gmail.com>
+        Wed, 17 Aug 2022 21:12:54 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0961A91D05
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 18:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660785173; x=1692321173;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=bR+juqm9KYNSHqKBRDDudoNE70J7GuEnzc2NXNdAbJU=;
+  b=ieXPYhCvid02Sir1UlGmBiVWPgpJ9pbcXJhNneUYFdavTZUQBJIrk01n
+   SSoeLmSoZUQOX/kPdjPnm7nd7UwBqQDWICebRLuppWitwoQqfYMDzCM54
+   vVoRiUA2qAU9LtgDTp8CJQiXcFoxpsFozPHUzGCoZqsIanR7OURqR08XJ
+   7CZy2bcBPqMQdyEt3Nzf67EU+b7h9WedP0meIKMTt4/3hqIFIPCJJiDd6
+   +wiMDAJ+fOwaLPg2hA4dfiKPGANkqlF87IJqbyI6ZLwGbGncC/BZiI4j4
+   z9I8XbJ3Pnumt9x/7p1pa1WVGrkwekUCyQ71+xLuxYzVMHvRLnXt6nbpt
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="292636512"
+X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
+   d="scan'208";a="292636512"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 18:12:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
+   d="scan'208";a="935595057"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga005.fm.intel.com with ESMTP; 17 Aug 2022 18:12:52 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 17 Aug 2022 18:12:50 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 17 Aug 2022 18:12:50 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Wed, 17 Aug 2022 18:12:50 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Wed, 17 Aug 2022 18:12:50 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=djv6bazh/N7WrJOLXQqmhQfCIb3OdECZfiEjIAl2NOmZV/wt2oi7GTKu80GVUA9Zcqik2Hw56c7q8iNvZsgd8C3gZsNG1/V9pu2bNY8vrahAMN2DLGoCjvjLpwPICUN+9ENjjv0K3nvpgFvcyxqsexMJy9dq80KQm+HeScA3vp56X4KNi2gAoN8h1tMfYHI3lK73nprxbrj8wBAXwwAJdYjd2bpXRWK8z9LJPvnZ9htDuXxereLbv/AOqOuwDkSzeRog5Lrz4UfnydlRZW5LjJyTGZa+rB5n0CBV3KL2rCWmQgaVQ2sOaW5lej6BVIWczbykNl8g1pCn0PBU12EUmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PEbT7XG8t6nmSSs2R8TfL2etaBu/NWC50gU7PE6+FJU=;
+ b=DjUjAAgwAxv/Mumao/8Txe8SSSsbhni/+eKTElqeD1+s1keRoV3Gmb+3fwGbOFc5GSzDXmQVVhVmtf8EnLoDdy82V+zc04uWjY4nHubXfzu49i+mRP7IIZIeVlANX+XiaEIwamu4ToOI1z+gG6PUUgMIOMoc/ecB2x2LYuAFL11Vt3ylRKUg+Wl6/W0bOgbjmUQRIlcZ6l6sm7avteum5ata0oyGZgxMJlLG5nYTPFWsL7PwuvVpebEdz0/F/optxFU6FpF9O4QjG8USiHIfEWL6oUxGdVoEVURosTYoNLOTb8BK89aaF0V3l/FnfNZkyQFcw0SQtgAl8KTgGtrBQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
+ by DM4PR11MB6041.namprd11.prod.outlook.com (2603:10b6:8:60::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Thu, 18 Aug
+ 2022 01:12:49 +0000
+Received: from CO1PR11MB4820.namprd11.prod.outlook.com
+ ([fe80::fcda:4c77:5786:209c]) by CO1PR11MB4820.namprd11.prod.outlook.com
+ ([fe80::fcda:4c77:5786:209c%4]) with mapi id 15.20.5525.019; Thu, 18 Aug 2022
+ 01:12:49 +0000
+Message-ID: <c6c32b07-596e-3344-8aa1-bb341fa78932@intel.com>
+Date:   Thu, 18 Aug 2022 09:12:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.12.0
+Subject: Re: [PATCH 5/6] mm/hugetlb: fix sysfs group leak in
+ hugetlb_unregister_node()
 Content-Language: en-US
-In-Reply-To: <CAP-5=fXjBBbU3EHD5iY6VMKMo3wj+dJteeqBf5B9m464HtdF3Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Miaohe Lin <linmiaohe@huawei.com>, <akpm@linux-foundation.org>,
+        <mike.kravetz@oracle.com>, <songmuchun@bytedance.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220816130553.31406-1-linmiaohe@huawei.com>
+ <20220816130553.31406-6-linmiaohe@huawei.com>
+From:   "Yin, Fengwei" <fengwei.yin@intel.com>
+In-Reply-To: <20220816130553.31406-6-linmiaohe@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SG2PR06CA0216.apcprd06.prod.outlook.com
+ (2603:1096:4:68::24) To CO1PR11MB4820.namprd11.prod.outlook.com
+ (2603:10b6:303:6f::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 205f03c1-d8d8-4a06-f5d2-08da80b6c402
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6041:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hzfHcy8ydldSHpPmPIhZyyMky5bhiad68nM3+GnMBrISz+PIxqGOpptUVECKJhHToYO6to4uXJYdMr8n8UVtAiGln5xT+6n/BnnOmZ2U61ZpxlFiJp1j3Rzt85ZKSHXq+7MaFeExO2Ay+KLX1/kX8l9GeylCdbsgkB5sa0J3KAMigJeWZ9x4KpiI1l9aITkOAJzq2gpqWG32WAV2kzcx1KsCbVeHUDho7gb+oi7yB2O5MRBVGj+5zdOz1UfOZ7GmM+ESDb+tY9iAvBnstqGrsXMi/I9gL3bNeNTYXFpZ7Zw2uZDtfM/zIZMYCUrpkvW3f2JmOcbz9udAD67AGDhPsAIFpbbmOj4ntKBVfNAN/OoOQVz5FA4VyCHjMAL2IeXnfzNFERYftgNRRLSIKNpDHW+3aD0JJfolMoguKffiDXutnp3lN/Vr1eP4QoBB40ZSJkWy8j+CzNYQgPOy3szXwREa361rzyJw59nG0XhTAi7Bb0QTQQPrXn6xkuEieJxGnIFSe3W05+i8gHkNpDlDMOmTbKfzHSXwejM+YvMoF7QvDuOiTp11qxJBtKZ3MqXhL7CSdoMb7zxhp3N0KED1cWfUOhZg3enZ6QTkvQyQaQlUpPZOCDzgFPSuSTc/VB6rT9lKX0FtWMPOP8/APh6WYzcyKOadcfaj5xoxTk6gkvxE17BicUFQwS5LptXuzfiWKa59/T4LV84ec4kCBKcVZAgwSsUidKmoPr4VUHsHlMX2JYwUNP5INs90BwCP6zV7zbE7uVvbb/ra6smLTbGqyhuDGe3LQ2i9lm+lt80Ba74=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4820.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(39860400002)(396003)(376002)(346002)(31696002)(2616005)(66556008)(38100700002)(86362001)(316002)(8676002)(82960400001)(4326008)(66946007)(66476007)(6666004)(6506007)(6486002)(53546011)(478600001)(83380400001)(5660300002)(8936002)(6512007)(26005)(36756003)(41300700001)(186003)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OVd4QXRmYk9ubDZqYklsd2NMUnpEeCtmUE8wVXpVdHRkczBZeUx1ZXp2UUxu?=
+ =?utf-8?B?ZFNmRWxZU1JicitCemtteCs3aTNsa2liVlBZY3B6ZXAxVTloZ0ljcGZ1NDA1?=
+ =?utf-8?B?bDI3ckZBNVBBV1RQZDN4eFNVTTA3OSt1TFdpM0xkQzF6U3d2ditkUnZrNUNu?=
+ =?utf-8?B?N2RoQldxakptT0RXTElWRWhZQWh3dUJiTk1CcE1odDhXSEJ2S1QvdDlCdk5r?=
+ =?utf-8?B?ZU1JeHQ0aVF5N3BNNktqc0hvNXdZVW5RZi8rL2FGZjhUYUV2YXhoL3NzMmdm?=
+ =?utf-8?B?THQ0SElxeE1UKy8wbjZCOWxzZDY5MjF1WXAyQ1Jzb21hS044RC9tQ0hWYU85?=
+ =?utf-8?B?ZFRBZkRxZXZsV013dWRFTVlLZU1Zd3BybUxoSjhmWnVNcDlURVo1Nk1zQUZj?=
+ =?utf-8?B?Z2d1UVphNFl0ZDErTTRZRGVlcnFMcXR6bmNnOVptcC93MWdrNDNWaGFOYWJw?=
+ =?utf-8?B?Z2lOdEVhVkNMMXdZU1YrOGlwWHh5UXVuRmZZN2U5U25FUjVvYXExQngzbDhv?=
+ =?utf-8?B?VFRBc1JKZGFaNitwZjd3YUd0MGxsVmhzQ1hmbTR0NjJvL2dyTk1XM2orVTBy?=
+ =?utf-8?B?SkoyMzJRZUpSS0FOZzh5eTdFQ2VyQkJOQmYxLzBmL2Q4amdzRkZkTHJaeUR6?=
+ =?utf-8?B?MjVRbFJaMTBkWjlXK1hqRE5yaU1EcW5uUzZwckN3MEdCUEpHR2ZsRWNkU0xT?=
+ =?utf-8?B?Y2crQWRHUnlOcm13aTBlZ3NJa2hxSzRUcm0rb0xSekFPVHVybkpQUk92emJ0?=
+ =?utf-8?B?citnN2c4VnJibkh2V2N6anNDV1c4UGdiemZlSmZCSWlxaHZrR3VNdUlxeUx4?=
+ =?utf-8?B?WTRDRVd4bDcxZWszdlhWMkpzdTZ2c3lPSVgzbjhzdWRxN0UwTFdMekJJd01s?=
+ =?utf-8?B?MStEYUIySkxmV0ZINnVmZFJ1a0RQVWZ5TkNpb3UyNVJueGdFVlg2V2FaYmR4?=
+ =?utf-8?B?QmhxKzFEQ2hPNnFyTmZjOE1seE1XSVdWclBUU0t6R09Bb0swU3ZMTzN3dFpo?=
+ =?utf-8?B?SmxZNVF2L3E1NXFic0ZsQ1d1SmhrZFpsOE14NTJwWFNLQy8yWTNYYXduV0Y5?=
+ =?utf-8?B?MjY3b0xlQ0lrRzNKa0FILzY0YUc3cjVpbzdUQlhnNHhVTXVwc3NlUGM3Skhx?=
+ =?utf-8?B?QklXZDh0MGxGMHpWZTQ5L3FCQU1XdUJPTEJ3YzNPMHdzRnZlZmNoalJoZ0pH?=
+ =?utf-8?B?Q0xUV29JdzRkUnVoZ0Rla01SRm52aWpQWExwVkhxd3FqcVp0eU1yMkNRb1pm?=
+ =?utf-8?B?R0FDYlpoTVBXakpEc2lJekZhc25Nd3VncEhnalNBbVVpYTF1YVk4cFVTQUZa?=
+ =?utf-8?B?UFVwM2dJVEtSNUg1OEtKK1pkQkJoTnd0czBhdzhCUURuMkhCRkQvRFNkdEdC?=
+ =?utf-8?B?dXJjYy9ZV2lSK1ZEeEorK2hwOXJkWXo1bEZ5V0hSekVMZDM3eHBQcDlHaW1m?=
+ =?utf-8?B?VDJuTUtidFpXTnNya01IOUhXSnpia3B3ZzFpZklVRFFqUVpEdHVHS1hYZlRU?=
+ =?utf-8?B?Y3Ezblp6c0s1bDJUZVFkTFdpUWg1UjBrM2VGWVpsVEg4bUVLcVdHbTVUQVBr?=
+ =?utf-8?B?NUxFNHNIaUZyZ000Ujh2aEo5dWRSWXFEdUdCbXkzWlN4TmlHSlFxR1dZcWU2?=
+ =?utf-8?B?dUlmWDVxRCtuTEFlK3UyY1pDcFF5dDhwaW5VVndiUnRsbjJjSXRpUlY0RHhW?=
+ =?utf-8?B?Mkl5NFNLNmxDOVFGcnJlSmtFUjd5OThvOEhiWVZTbUdqdXdCTmR5MzM2a3Fn?=
+ =?utf-8?B?L0J2Qy9ta2tQWkpxcVBrSVV0M3ZKYlVzUSthbFZPN0VabFpYenZabDBMbmhV?=
+ =?utf-8?B?cUtDeERPSXgxbStLa0VJQW5vWkFkME9JeXB3d1NZdTRPdjI3d2wwV0hRbXM1?=
+ =?utf-8?B?QVYzVTVFTHo3Qm9FR05xUGVyT0Q3dFZvcUNIaGZRQlo2bmxDd1lQTnpNY0xi?=
+ =?utf-8?B?dEZKLzBkVEZhNnZoRlFIdmc3MDdKMFZsRnMzbVJlYlNGQVVWVjM3OEh3ZERM?=
+ =?utf-8?B?d2Rzb0V4MXViSGhSWDlESEdTaUF2QjFxOHhyQnVIaExkM3NDaFdHM1VhM0ZG?=
+ =?utf-8?B?dDhkSEZUZFlUTGM5SFJYV1dNLytXcTUvYUVBdHU1bXhISDlzVE4yQmFNZDBL?=
+ =?utf-8?Q?5wL57lvpybXeDjFkZMzcop3Vk?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 205f03c1-d8d8-4a06-f5d2-08da80b6c402
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4820.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 01:12:48.9621
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /6zFTlp21NHT2v8LWqAl4ET/qrrVVKOEUtQGbWKmS9EQ2YK1rQWfsPnIqUYobhpmL4+Vr4BbXhE9E2iq/PCj5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6041
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/17/22 6:36 PM, Ian Rogers wrote:
-> On Wed, Aug 17, 2022 at 3:13 PM Chuck Zmudzinski <brchuckz@netscape.net> wrote:
-> >
-> > On 8/17/2022 3:52 PM, Chuck Zmudzinski wrote:
-> > > On 7/26/22 4:43 PM, Ian Rogers wrote:
-> > > > On Tue, Jul 26, 2022 at 12:43 PM Arnaldo Carvalho de Melo
-> > > > <acme@kernel.org> wrote:
-> > > > >
-> > > > > Em Tue, Jul 26, 2022 at 10:52:31AM -0700, Ian Rogers escreveu:
-> > > > > > On Tue, Jul 26, 2022 at 9:57 AM Alan Bartlett <ajb@elrepo.org> wrote:
-> > > > > > >
-> > > > > > > On Mon, 25 Jul 2022 at 16:51, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > > > > > >
-> > > > > > > > Em Mon, Jul 25, 2022 at 06:42:20PM +0800, Leo Yan escreveu:
-> > > > > > > > > The mainline kernel can be used for relative old distros, e.g. RHEL 7.
-> > > > > > > > > The distro doesn't upgrade from python2 to python3, this causes the
-> > > > > > > > > building error that the python script is not python2 compliant.
-> > > > > > > > >
-> > > > > > > > > To fix the building failure, this patch changes from the python f-string
-> > > > > > > > > format to traditional string format.
-> > > > > > > >
-> > > > > > > > Thanks, applied.
-> > > > > > > >
-> > > > > > > > - Arnaldo
-> > > > > > >
-> > > > > > > Leo / Arnaldo,
-> > > > > > >
-> > > > > > > Applying the patch on top of -5.19-rc8 fixes the problem that we (the
-> > > > > > > ELRepo Project) experienced when attempting to build on RHEL7.
-> > > > > > >
-> > > > > > > So --
-> > > > > > >
-> > > > > > > Tested-by: Alan Bartlett <ajb@elrepo.org>
-> > > > > > >
-> > > > > > > Hopefully you will get it to Linus in time for -5.19 GA.
-> > > > >
-> > > > > > So I'm somewhat concerned about perf supporting unsupported
-> > > > > > distributions and this holding the code base back. RHEL7 was launched
-> > > > > > 8 years ago (June 10, 2014) and full support ended 3 years ago (August
-> > > > > > 6, 2019) [1]. Currently RHEL7 is in "Maintenance Support or
-> > > > > > Maintenance Support 2" phase which is defined to mean [2]:
-> > > > > >
-> > > > > > ```
-> > > > > > During the Maintenance Support Phase for Red Hat Enterprise Linux
-> > > > > > Version 8 & 9, and Maintenance Support 2 Phase for Red Hat Enterprise
-> > > > > > Linux version 7, Red Hat defined Critical and Important impact
-> > > > > > Security Advisories (RHSAs) and selected (at Red Hat discretion)
-> > > > > > Urgent Priority Bug Fix Advisories (RHBAs) may be released as they
-> > > > > > become available. Other errata advisories may be delivered as
-> > > > > > appropriate.
-> > > > > >
-> > > > > > New functionality and new hardware enablement are not planned for
-> > > > > > availability in the Maintenance Support (RHEL 8 & 9) Phase and
-> > > > > > Maintenance Support 2 (RHEL 7) Phase.
-> > > > > > ```
-> > > > > >
-> > > > > > >From this definition, why would RHEL7 pick up a new perf tool? I don't
-> > > > > > think they would and as such we don't need to worry about supporting
-> > > > > > it. RHEL8 defaults to python 3 and full support ends for it next year.
-> > > > > > Let's set the bar at RHEL8 and not worry about RHEL7 breakages like
-> > > > > > this in future. I think the bar for caring should be "will the distro
-> > > > > > pick up our code", if we don't do this then we're signing up to not
-> > > > > > allowing tools to update for 10 years! If someone is building a kernel
-> > > > > > and perf tool on RHEL7 then they should be signing up to also deal
-> > > > > > with tool chain issues, which in this case can mean installing
-> > > > > > python3.
-> > > > >
-> > > > > In this specific supporting things that people report using, like was
-> > > > > done in this case, isn't such a big problem.
-> > > >
-> > > > So there are linters will fire for this code and say it is not
-> > > > pythonic. It is only a linter warning vs asking to support an 8 year
-> > > > old out of support distribution. There are other cases, such as
-> > > > improving the C code structure, where we've failed to land changes
-> > > > because of build errors on old distributions. This could indicate perf
-> > > > code is wrong or the distribution is wrong. I'm saying that if we
-> > > > believe in the perf code being correct and the distribution is out of
-> > > > support, then we should keep the perf code as-is and the issue is one
-> > > > for user of the out-of-support distribution.
-> > > >
-> > > > > Someone reported a problem in a system they used, the author of the code
-> > > > > in question posted a patch allowing perf to be used in such old systems,
-> > > > > doesn't get in the way of newer systems, small patch, merged, life goes
-> > > > > on.
-> > >
-> > > Considering the proposed patch, can you be sure that replacing the
-> > > f-string format with the legacy format won't cause a regression for
-> > > some python3 user somewhere when this hits the real world? Even
-> > > if it does not cause a regression today, as new versions and features
-> > > are added to python3, can you be sure none of those new features
-> > > will depend on the upgrade from the legacy format to the f-string
-> > > format here to work properly? So many regressions happen because
-> > > the people who write patches cannot possibly foresee how their
-> > > patch is going to affect the millions of Linux users out there, but still
-> > > they are certain it will not cause a regression somewhere. So how
-> > > can the chances that this patch will cause a regression be minimized?
-> > >
-> > > It seems to me for this to be suitable for the Linux kernel, the
-> > > default should be to use the modern python3 format and only
-> > > enable python2 compatibility via a sysctl setting and/or kernel boot
-> > > option for those who are still using python2. There should be no
-> > > change to the behavior of the kernel for users who have upgraded
-> > > to python3. But I don't see any such consideration for python3
-> > > users in this patch.
-> >
-> > Sorry, I didn't see this is a script, LOL! So obviously a sysctl or boot option
-> > does not apply. But can't the script implement this simple logic:
-> >
-> > If python version = 3 use f-string format
-> > if python version = 2 use traditional string format
->
-> Doing this in the script would be noisy, having two scripts less than
-> ideal. I'd suggest we wait two weeks, declare the official death of
-> RHEL7 without "rpm -i python3" and then revert the python3 to python2
-> patch. There are plenty of things to worry about and python2 shouldn't
-> be one of them (it died over 2 years ago).
 
-I see this has already been committed. I agree it should not
-stay in the kernel tree for long. At some point in the future
-it will most likely cause problems if it is not reverted.
 
-Chuck
+On 8/16/2022 9:05 PM, Miaohe Lin wrote:
+> The sysfs group per_node_hstate_attr_group and hstate_demote_attr_group
+> when h->demote_order != 0 are created in hugetlb_register_node(). But
+> these sysfs groups are not removed when unregister the node, thus sysfs
+> group is leaked. Using sysfs_remove_group() to fix this issue.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Reviewed-by: Fengwei Yin <fengwei.yin@intel.com>
 
->
-> Thanks,
-> Ian
->
-> > Best regards,
-> >
-> > Chuck
+Regards
+Yin, Fengwei
 
+> ---
+>  mm/hugetlb.c | 25 ++++++++++++++++++-------
+>  1 file changed, 18 insertions(+), 7 deletions(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index b69d7808f457..e1356ad57087 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -3850,12 +3850,18 @@ static int hugetlb_sysfs_add_hstate(struct hstate *h, struct kobject *parent,
+>  	}
+>  
+>  	if (h->demote_order) {
+> -		if (sysfs_create_group(hstate_kobjs[hi],
+> -					&hstate_demote_attr_group))
+> +		retval = sysfs_create_group(hstate_kobjs[hi],
+> +					    &hstate_demote_attr_group);
+> +		if (retval) {
+>  			pr_warn("HugeTLB unable to create demote interfaces for %s\n", h->name);
+> +			sysfs_remove_group(hstate_kobjs[hi], hstate_attr_group);
+> +			kobject_put(hstate_kobjs[hi]);
+> +			hstate_kobjs[hi] = NULL;
+> +			return retval;
+> +		}
+>  	}
+>  
+> -	return retval;
+> +	return 0;
+>  }
+>  
+>  static void __init hugetlb_sysfs_init(void)
+> @@ -3941,10 +3947,15 @@ static void hugetlb_unregister_node(struct node *node)
+>  
+>  	for_each_hstate(h) {
+>  		int idx = hstate_index(h);
+> -		if (nhs->hstate_kobjs[idx]) {
+> -			kobject_put(nhs->hstate_kobjs[idx]);
+> -			nhs->hstate_kobjs[idx] = NULL;
+> -		}
+> +		struct kobject *hstate_kobj = nhs->hstate_kobjs[idx];
+> +
+> +		if (!hstate_kobj)
+> +			continue;
+> +		if (h->demote_order)
+> +			sysfs_remove_group(hstate_kobj, &hstate_demote_attr_group);
+> +		sysfs_remove_group(hstate_kobj, &per_node_hstate_attr_group);
+> +		kobject_put(hstate_kobj);
+> +		nhs->hstate_kobjs[idx] = NULL;
+>  	}
+>  
+>  	kobject_put(nhs->hugepages_kobj);

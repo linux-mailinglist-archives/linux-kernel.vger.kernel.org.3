@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E96598699
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5625986AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343922AbiHRO6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
+        id S1343949AbiHRO7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343891AbiHRO6Q (ORCPT
+        with ESMTP id S1343904AbiHRO7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:58:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D1E2EF;
-        Thu, 18 Aug 2022 07:58:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CD03B821C8;
-        Thu, 18 Aug 2022 14:58:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9CF2C433D7;
-        Thu, 18 Aug 2022 14:58:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660834689;
-        bh=luR6i3/V/eJO/gG0ZpCGa1hqwnYHscYwGEBAjl6sHKA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i2v6ZUpkzQSSzHrqICDibacK4Zhv5qKPs8VVF6miieOMl8KDym7iiL4TinmbxQZfc
-         5HPhDnlGsPxvYTcU9kENPDfLRNbyBJM41ROtxLWNQXtz+NSYAld3r7raFmUTVLD2Cy
-         SZkwX+bFj5dIJ/lGD/I3bLapl1O6vrjcSNre0h40=
-Date:   Thu, 18 Aug 2022 16:58:01 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     duoming@zju.edu.cn
-Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        briannorris@chromium.org, amitkarwar@gmail.com,
-        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
-        huxinming820@gmail.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, johannes@sipsolutions.net,
-        rafael@kernel.org
-Subject: Re: [PATCH v7 1/2] devcoredump: remove the useless gfp_t parameter
- in dev_coredumpv and dev_coredumpm
-Message-ID: <Yv5TefZcrUPY1Qjc@kroah.com>
-References: <cover.1660739276.git.duoming@zju.edu.cn>
- <b861ce56ba555109a67f85a146a785a69f0a3c95.1660739276.git.duoming@zju.edu.cn>
- <YvzicURy8t2JdQke@kroah.com>
- <176e7de7.8a223.182ac1fbc47.Coremail.duoming@zju.edu.cn>
+        Thu, 18 Aug 2022 10:59:01 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A9137190;
+        Thu, 18 Aug 2022 07:58:45 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 22:58:18 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1660834723;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PUxQG9E/JOlLTHeBkFAkSNSYI+XFzfu1BhI66/Ss6h8=;
+        b=unUva2CYC3tZebs7tkMt9Ffula7ZWOGCQLK37/XZ5AZnb61zjY/+vOWxI3M8w8JjezSyFi
+        FhsLycP3A8/YMYaBPV9OqqDJ+9f++Iw3adlE83tlIhPFDZ6C4udmZ7nNM693FSWS+FYgyH
+        oEdVjpXuSnJgbwx2Nf9b09LRonJaOGQ=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Wu XiangCheng <wu.xiangcheng@linux.dev>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>, corbet@lwn.net,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Wu XiangCheng <bobwxc@email.cn>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 02/13] docs: update vmemmap_dedup.rst reference
+Message-ID: <Yv5TimOuTK45ZHyH@bobwxc.mipc>
+References: <cover.1660829433.git.mchehab@kernel.org>
+ <2c81bc7ef207f0a84387a5d714601513f4bf1960.1660829433.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <176e7de7.8a223.182ac1fbc47.Coremail.duoming@zju.edu.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2c81bc7ef207f0a84387a5d714601513f4bf1960.1660829433.git.mchehab@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 10:05:37PM +0800, duoming@zju.edu.cn wrote:
-> Hello,
+话说 Mauro Carvalho Chehab 于 2022-08-18 (四) 15:38:48 +0200 曰过：
+> Changeset ee65728e103b ("docs: rename Documentation/vm to Documentation/mm")
+> renamed: Documentation/vm/vmemmap_dedup.rst
+> to: Documentation/mm/vmemmap_dedup.rst.
 > 
-> On Wed, 17 Aug 2022 14:43:29 +0200 Greg KH wrote:
+> Update its cross-reference accordingly.
 > 
-> > On Wed, Aug 17, 2022 at 08:39:12PM +0800, Duoming Zhou wrote:
-> > > The dev_coredumpv() and dev_coredumpm() could not be used in atomic
-> > > context, because they call kvasprintf_const() and kstrdup() with
-> > > GFP_KERNEL parameter. The process is shown below:
-> > > 
-> > > dev_coredumpv(.., gfp_t gfp)
-> > >   dev_coredumpm(.., gfp_t gfp)
-> > >     dev_set_name
-> > >       kobject_set_name_vargs
-> > >         kvasprintf_const(GFP_KERNEL, ...); //may sleep
-> > >           kstrdup(s, GFP_KERNEL); //may sleep
-> > > 
-> > > This patch removes gfp_t parameter of dev_coredumpv() and dev_coredumpm()
-> > > and changes the gfp_t parameter of kzalloc() in dev_coredumpm() to
-> > > GFP_KERNEL in order to show they could not be used in atomic context.
-> > > 
-> > > Fixes: 833c95456a70 ("device coredump: add new device coredump class")
-> > > Reviewed-by: Brian Norris <briannorris@chromium.org>
-> > > Reviewed-by: Johannes Berg <johannes@sipsolutions.net>
-> > > Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> > > ---
-> > > Changes in v7:
-> > >   - Remove gfp_t flag in amdgpu device.
-> > 
-> > Again, this creates a "flag day" where we have to be sure we hit all
-> > users of this api at the exact same time.  This will prevent any new
-> > driver that comes into a maintainer tree during the next 3 months from
-> > ever being able to use this api without cauing build breakages in the
-> > linux-next tree.
-> > 
-> > Please evolve this api to work properly for everyone at the same time,
-> > like was previously asked for so that we can take this change.  It will
-> > take 2 releases, but that's fine.
+> Fixes: ee65728e103b ("docs: rename Documentation/vm to Documentation/mm")
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+
+Acked-by: Wu XiangCheng <bobwxc@email.cn>
+
+Thanks,
+
+> ---
 > 
-> Thank you for your reply, I will evolve this api to work properly for everyone.
-> If there are not any new drivers that use this api during the next 3 months, 
-> I will send this patch again. Otherwise, I will wait until there are not new
-> users anymore.
+> See [PATCH 00/13] at: https://lore.kernel.org/all/cover.1660829433.git.mchehab@kernel.org/
+> 
+>  mm/hugetlb_vmemmap.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/hugetlb_vmemmap.h b/mm/hugetlb_vmemmap.h
+> index 25bd0e002431..b8fc23c8763f 100644
+> --- a/mm/hugetlb_vmemmap.h
+> +++ b/mm/hugetlb_vmemmap.h
+> @@ -16,7 +16,7 @@ void hugetlb_vmemmap_optimize(const struct hstate *h, struct page *head);
+>  
+>  /*
+>   * Reserve one vmemmap page, all vmemmap addresses are mapped to it. See
+> - * Documentation/vm/vmemmap_dedup.rst.
+> + * Documentation/mm/vmemmap_dedup.rst.
+>   */
+>  #define HUGETLB_VMEMMAP_RESERVE_SIZE	PAGE_SIZE
+>  
+> -- 
+> 2.37.1
+> 
 
-No, that is not necessary.  Do the work now so that there is no flag day
-and you don't have to worry about new users, it will all "just work".
+-- 
+Wu XiangCheng	0x32684A40BCA7AEA7
 
-thanks,
-
-greg k-h

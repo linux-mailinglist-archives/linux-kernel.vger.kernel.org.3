@@ -2,167 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43ACD597B7B
+	by mail.lfdr.de (Postfix) with ESMTP id 8C35E597B7C
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239937AbiHRCYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 22:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
+        id S242502AbiHRC1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 22:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233588AbiHRCYu (ORCPT
+        with ESMTP id S233588AbiHRC1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 22:24:50 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AA171BD3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 19:24:49 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27I1WfaI014129;
-        Thu, 18 Aug 2022 02:24:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=5D69sy822CZwTCBimDMXWzfojWA04EG0IM9ZAqxhJZI=;
- b=Fpf5QvJ6WVpHdd7eQPUJNBE3LjVSIQvfljVSQi8U7jqby65E/zqAgVrjDc4hom3dxz4b
- XPy+S5fklu6nD17yJ76A7Q7cFC5hsGq6NV5dDgcRuB8gIIO2SE1k1Rm+5qH+H7kopOvv
- UFvQe+T2aJeXS+DHJsRTWPvbYCSbGrnUd3NAuJRCyEq5u8fX3uyTAwscaHRjuPBaMyDS
- Z1rwUuOpawVxbom08hEmwzBD/fgSJhKKwnYKZ3GaEKdF5NlgQlam0CiUTPLbEb+EACoz
- yhoMfr/zB+fKExmWLog9Ny8dbRkVc+1SGXv10KBozXj0VpgoBdm3vKPB4Rq77dkhbtz1 Cg== 
-Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j0w30bpv7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 02:24:33 +0000
-Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-        by APTAIPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27I2OTrf026600;
-        Thu, 18 Aug 2022 02:24:29 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTPS id 3hxnbs38ut-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 18 Aug 2022 02:24:29 +0000
-Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27I2OSb8026541;
-        Thu, 18 Aug 2022 02:24:28 GMT
-Received: from maow2-gv.ap.qualcomm.com (maow2-gv.qualcomm.com [10.232.193.133])
-        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 27I2OSfq026539;
-        Thu, 18 Aug 2022 02:24:28 +0000
-Received: by maow2-gv.ap.qualcomm.com (Postfix, from userid 399080)
-        id EF81321029A6; Thu, 18 Aug 2022 10:24:26 +0800 (CST)
-From:   Kassey Li <quic_yingangl@quicinc.com>
-To:     akpm@linux-foundation.org, vbabka@kernel.org
-Cc:     Kassey Li <quic_yingangl@quicinc.com>, minchan@kernel.org,
-        vbabka@suse.cz, iamjoonsoo.kim@lge.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v9] mm/page_owner.c: add llseek for page_owner
-Date:   Thu, 18 Aug 2022 10:24:25 +0800
-Message-Id: <20220818022425.31056-1-quic_yingangl@quicinc.com>
+        Wed, 17 Aug 2022 22:27:22 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87B571BE9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 19:27:20 -0700 (PDT)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M7THk64QCzmVym;
+        Thu, 18 Aug 2022 10:25:06 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by dggpeml500024.china.huawei.com
+ (7.185.36.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 18 Aug
+ 2022 10:27:18 +0800
+From:   Yuan Can <yuancan@huawei.com>
+To:     <joro@8bytes.org>, <will@kernel.org>, <robin.murphy@arm.com>,
+        <iommu@lists.linux.dev>
+CC:     <linux-kernel@vger.kernel.org>, <yuancan@huawei.com>,
+        <baolu.lu@linux.intel.com>, <haifeng.zhao@linux.intel.com>
+Subject: [PATCH -next v2] iommu: return early when devices in a group require different domain type
+Date:   Thu, 18 Aug 2022 02:24:33 +0000
+Message-ID: <20220818022433.41770-1-yuancan@huawei.com>
 X-Mailer: git-send-email 2.17.1
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: -VeImGXq8WwH5karAXO-BVz0l_aZhZ1e
-X-Proofpoint-GUID: -VeImGXq8WwH5karAXO-BVz0l_aZhZ1e
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-17_17,2022-08-16_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 suspectscore=0 mlxlogscore=772 clxscore=1015
- malwarescore=0 bulkscore=0 adultscore=0 phishscore=0 impostorscore=0
- spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180007
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is too slow to dump all the pages, in some usage we just want dump
-a given start pfn, for example: CMA range or a single page.
+When alloc default domain for an iommu_group in
+probe_alloc_default_domain, the expected domain type
+of each device in the iommu_group is checked in a loop,
+if two devices require different types, the loop can
+be broken since the default domain will be set to
+iommu_def_domain_type.
+Return 1 when this happened to break the loop in
+__iommu_group_for_each_dev.
 
-To speed up and save time, this change allows specify start pfn
-by add llseek for page_onwer.
-
-Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
+Signed-off-by: Yuan Can <yuancan@huawei.com>
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- Documentation/mm/page_owner.rst |  5 +++++
- mm/page_owner.c                 | 24 +++++++++++++++++++++---
- 2 files changed, 26 insertions(+), 3 deletions(-)
+ drivers/iommu/iommu.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/mm/page_owner.rst b/Documentation/mm/page_owner.rst
-index f5c954afe97c..f18fd8907049 100644
---- a/Documentation/mm/page_owner.rst
-+++ b/Documentation/mm/page_owner.rst
-@@ -94,6 +94,11 @@ Usage
- 	Page allocated via order XXX, ...
- 	PFN XXX ...
- 	// Detailed stack
-+    By default, it will do full pfn dump, to start with a given pfn,
-+    page_owner supports fseek.
-+
-+    FILE *fp = fopen("/sys/kernel/debug/page_owner", "r");
-+    fseek(fp, pfn_start, SEEK_SET);
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 74bc9111c7be..0d4d78946d31 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -1653,6 +1653,7 @@ static int probe_get_default_domain_type(struct device *dev, void *data)
+ 				 dev_name(gtype->dev),
+ 				 iommu_domain_type_str(gtype->type));
+ 			gtype->type = 0;
++			return 1; /* end the outer loop */
+ 		}
  
-    The ``page_owner_sort`` tool ignores ``PFN`` rows, puts the remaining rows
-    in buf, uses regexp to extract the page order value, counts the times
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index e4c6f3f1695b..25720d81bc26 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -497,8 +497,10 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 		return -EINVAL;
- 
- 	page = NULL;
--	pfn = min_low_pfn + *ppos;
--
-+	if (*ppos == 0)
-+		pfn = min_low_pfn;
-+	else
-+		pfn = *ppos;
- 	/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
- 	while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
- 		pfn++;
-@@ -561,7 +563,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 			continue;
- 
- 		/* Record the next PFN to read in the file offset */
--		*ppos = (pfn - min_low_pfn) + 1;
-+		*ppos = pfn + 1;
- 
- 		return print_page_owner(buf, count, pfn, page,
- 				page_owner, handle);
-@@ -570,6 +572,21 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 	return 0;
- }
- 
-+static loff_t lseek_page_owner(struct file *file, loff_t offset, int orig)
-+{
-+	switch (orig) {
-+	case SEEK_SET:
-+		file->f_pos = offset;
-+		break;
-+	case SEEK_CUR:
-+		file->f_pos += offset;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return file->f_pos;
-+}
-+
- static void init_pages_in_zone(pg_data_t *pgdat, struct zone *zone)
- {
- 	unsigned long pfn = zone->zone_start_pfn;
-@@ -660,6 +677,7 @@ static void init_early_allocated_pages(void)
- 
- static const struct file_operations proc_page_owner_operations = {
- 	.read		= read_page_owner,
-+	.llseek		= lseek_page_owner,
- };
- 
- static int __init pageowner_init(void)
+ 		if (!gtype->dev) {
 -- 
 2.17.1
 

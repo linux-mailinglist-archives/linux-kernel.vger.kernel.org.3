@@ -2,269 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4E9598A42
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58969598A2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244218AbiHRRSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S1343999AbiHRRSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344682AbiHRRSH (ORCPT
+        with ESMTP id S243702AbiHRRSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:18:07 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C84CD505
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:15:20 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so2474750pjf.2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:15:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=AlJnMdRWI5BfRSyUR23BkFHHxdszN/7rAb7ygL3qrCk=;
-        b=o+lqsJCfXfg+vynKuUuyjFpXEfqn9Y+A106ruxFvLRUwtBdTNH05yFa8A2ATCQcaye
-         z4ARc5TQYJAkXospOYm7nTvEKY3XJkh2IOoo65D2ppK6Xorik9nePYebCEK3e8k7WZSv
-         75qUgaovud2XubudtlzZaE2nf/Rnuj5si3HcXsgB+JjkZLyChqg4x/s2w4QNWp6SB31q
-         QAz5Jwo9k2YC6HdaKQgEyTKpH/kz86Pn4FRiLgbtP/7YsuXki2xvGzfhpBTbtAhdwYPq
-         fTHVMWyQrsaQTTy4vBzP6E2FW3QYTxMls+ixd3WvmMTVzfhCthYGC9XSiEI4ibaD+S+G
-         jw5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=AlJnMdRWI5BfRSyUR23BkFHHxdszN/7rAb7ygL3qrCk=;
-        b=VVkbwZVWXXvIn0NkZvTZNZXuPEN7vdh20FAgi9a+sjP+3NsVe53/gemX3iQ+mwfEjm
-         ZxUdvJIRazhFewTxfXNXr+N0sfFtZetzw6JXynzD8JM5bMkQiLTHSXjIOdA4xYIPxpjB
-         sOnkz2I+ik9OnfGRPnz6Oq8AOGtAxtH7vfMaNkJ8I3qlRsc3nnj778DNWL13f8CkXJDL
-         GMZwCOOmp/C4A/1u011Qi4UmW62+OoUrnZynzpdt3B39sMGLxytQ6BYJD+NK/fPBkDb9
-         ccJlzrjzqzfvsu3/HqKbWApdE6IpL0dKSKpQrDU2jKmGYNWUup1vaUPMudg3weNd2EFr
-         CgOQ==
-X-Gm-Message-State: ACgBeo0b/nujRkj+bmVTRGjaNUF7vB68YbMxsFsp6Bl7zKcoyMDgsJV+
-        JMHhDUA0qoDTb/qtq+LxthLCEA==
-X-Google-Smtp-Source: AA6agR6SWLeIMPfA+g5+b+GAooz6Q15ZOPcSVfSeG/41tKMIUHqFuOVplKXS1tcNL03im/i3eDbI0w==
-X-Received: by 2002:a17:90a:1b65:b0:1f7:4725:aa6e with SMTP id q92-20020a17090a1b6500b001f74725aa6emr3926169pjq.179.1660842919544;
-        Thu, 18 Aug 2022 10:15:19 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p18-20020a170902ead200b0016a6caacaefsm1632016pld.103.2022.08.18.10.15.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 10:15:16 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 17:15:11 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 09/26] KVM: VMX: nVMX: Support TSC scaling and
- PERF_GLOBAL_CTRL with enlightened VMCS
-Message-ID: <Yv5zn4qTl0aiaQvh@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-10-vkuznets@redhat.com>
+        Thu, 18 Aug 2022 13:18:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E37CD520
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:15:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA07EB8221B
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 17:15:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC11C433C1;
+        Thu, 18 Aug 2022 17:15:24 +0000 (UTC)
+Date:   Thu, 18 Aug 2022 18:15:20 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Will Deacon <will@kernel.org>, James Morse <james.morse@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v2] arm64: errata: add detection for AMEVCNTR01
+ incrementing incorrectly
+Message-ID: <Yv5zqC2AMN9NhRrA@arm.com>
+References: <20220817121551.21790-1-ionela.voinescu@arm.com>
+ <Yv0eVVmrnPp7fjaB@arm.com>
+ <Yv4qp9xar9EBQaD8@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802160756.339464-10-vkuznets@redhat.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yv4qp9xar9EBQaD8@arm.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
-> Enlightened VMCS v1 got updated and now includes the required fields
-> for TSC scaling and loading PERF_GLOBAL_CTRL upon VMENTER/VMEXIT
-> features. For Hyper-V on KVM enablement, KVM can just observe VMX control
-> MSRs and use the features (with or without eVMCS) when
-> possible. Hyper-V on KVM case is trickier because of live migration:
-> the new features require explicit enablement from VMM to not break
-> it. Luckily, the updated eVMCS revision comes with a feature bit in
-> CPUID.0x4000000A.EBX.
-
-The refactor to implement the 2-d array should go in a prep patch.  Unless you
-(or anyone else) objects to the feedback below, I'll do the split myself, post v6,
-and queue this up (without patch 1, and assuming there're no major issues in the
-back half of the series).
-
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/hyperv.c     |  2 +-
->  arch/x86/kvm/vmx/evmcs.c  | 88 +++++++++++++++++++++++++++++++--------
->  arch/x86/kvm/vmx/evmcs.h  | 17 ++------
->  arch/x86/kvm/vmx/nested.c |  2 +-
->  arch/x86/kvm/vmx/vmx.c    |  2 +-
->  5 files changed, 78 insertions(+), 33 deletions(-)
+On Thu, Aug 18, 2022 at 01:03:51PM +0100, Ionela Voinescu wrote:
+> On Wednesday 17 Aug 2022 at 17:59:01 (+0100), Catalin Marinas wrote:
+> > On Wed, Aug 17, 2022 at 01:15:51PM +0100, Ionela Voinescu wrote:
+> > > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> > > index 869ffc4d4484..5d7efb15f7cf 100644
+> > > --- a/arch/arm64/kernel/topology.c
+> > > +++ b/arch/arm64/kernel/topology.c
+> > > @@ -301,7 +301,8 @@ static void cpu_read_corecnt(void *val)
+> > >  
+> > >  static void cpu_read_constcnt(void *val)
+> > >  {
+> > > -	*(u64 *)val = read_constcnt();
+> > > +	*(u64 *)val = this_cpu_has_cap(ARM64_WORKAROUND_2457168) ?
+> > > +		      0UL : read_constcnt();
+> > >  }
+> > >  
+> > >  static inline
+> > > @@ -328,7 +329,12 @@ int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
+> > >   */
+> > >  bool cpc_ffh_supported(void)
+> > >  {
+> > > -	return freq_counters_valid(get_cpu_with_amu_feat());
+> > > +	int cpu = get_cpu_with_amu_feat();
+> > > +
+> > > +	if ((cpu >= nr_cpu_ids) || !cpumask_test_cpu(cpu, cpu_present_mask))
+> > > +		return false;
+> > > +
+> > > +	return true;
+> > >  }
+> > 
+> > So here we tell the core code that FFH is supported but always return 0
+> > via cpc_read_ffh() if the const counter is requested. I assume the core
+> > code figures this out and doesn't use the value on the affected CPUs. I
+> > was hoping cpc_ffh_supported() would be per-CPU and the core code simply
+> > skips calling cpc_read() on the broken cores.
 > 
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 1098915360ae..8a2b24f9bbf6 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -2552,7 +2552,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
->  		case HYPERV_CPUID_NESTED_FEATURES:
->  			ent->eax = evmcs_ver;
->  			ent->eax |= HV_X64_NESTED_MSR_BITMAP;
-> -
-> +			ent->ebx |= HV_X64_NESTED_EVMCS1_2022_UPDATE;
->  			break;
->  
->  		case HYPERV_CPUID_SYNDBG_VENDOR_AND_MAX_FUNCTIONS:
-> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
-> index 8bea5dea0341..e8497f9854a1 100644
-> --- a/arch/x86/kvm/vmx/evmcs.c
-> +++ b/arch/x86/kvm/vmx/evmcs.c
-> @@ -368,7 +368,60 @@ uint16_t nested_get_evmcs_version(struct kvm_vcpu *vcpu)
->  	return 0;
->  }
->  
-> -void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata)
-> +enum evmcs_revision {
-> +	EVMCSv1_2016,
-> +	EVMCSv1_2022,
-> +	EVMCS_REVISION_MAX,
+> I used to think the same, but I've realised that the current approach is
+> best, in my opinion.
+> 
+> There are two users of these counters exposed though FFH in the kernel:
+> CPPC-based frequency invariance(FIE) and reading current frequency through
+> sysfs. If AMU counters are disabled or the CPU is affected by this
+> erratum, a single read of 0 for any of the counters will result in
+> cppc_get_perf_ctrs() returning -EFAULT which:
+> 
+> - (cppc_cpufreq_cpu_fie_init()) Will disable the use of FIE for that
+>   policy, and those counters will never be read again for that CPU, for
+>   the purpose of FIE. This is the operation that would result in reading
+>   those counters most often, which in this case won't happen.
+> 
+> - Will return -EFAULT from cppc_cpufreq_get_rate() signaling to the user
+>   that it cannot return a proper frequency using those counters. That's
+>   cast to unsigned int so the user would have to be knowledgeable on the
+>   matter :), but that's an existing problem.
+> 
+> Therefore, error checking based on a counter read of 0 would be
+> equivalent here to checking a potential ffh_supported(cpu). Also, in the
+> future we might use FFH to not only read these counters. So it's better
+> to keep ffh_supported() to just reflect whether generically FFH is
+> supported, even if in some cases the "backend" (AMUs here) is disabled
+> or broken.
 
-"MAX" is technically wrong, the "max" entry is usually the last valid entry.  This
-should be NR_EVMCS_REVISIONS, and then NR_EVMCS_CTRLS below.
+This works for me as long as the callers are aware of what a return of 0
+when reading the counter means.
 
-> +};
-> +
-> +enum evmcs_unsupported_ctrl_type {
+> > Is the other register read by cpc_read_ffh() still useful without the
+> > const one?
+> 
+> Not for the current uses, and unlikely to be in the future - I don't see
+> how the core counter value can be useful without a constant reference.
 
-I think drop the "unsupported" here, because the naming gets weird when trying to
-use it for something other than indexing evmcs_unsupported_ctls (see bottom).
+I was thinking of return 0 directly from cpc_read_ffh() since the other
+counter is not used independently but I guess your approach matches the
+erratum better since it's only the const counter that's broken.
 
-> +	EVMCS_EXIT_CTLS,
-> +	EVMCS_ENTRY_CTLS,
+> > While the Kconfig entry describes the behaviour, I'd rather have a
+> > comment in cpc_ffh_supported() and maybe cpu_read_constcnt() on why we
+> > do these tricks.
+> 
+> Will do!
 
-s/CTLS/CTRLS for consistency.
+Thanks. With comments added, feel free to add:
 
-> +	EVMCS_2NDEXEC,
-> +	EVMCS_PINCTRL,
-> +	EVMCS_VMFUNC,
-> +	EVMCS_CTRL_MAX,
-> +};
-> +
-> +static u32 evmcs_unsupported_ctls[EVMCS_CTRL_MAX][EVMCS_REVISION_MAX] = {
-
-This can be "const".  And s/ctls/ctrls for consistency.
-
-> +	[EVMCS_EXIT_CTLS] = {
-> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_VMEXIT_CTRL | VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL,
-> +		[EVMCSv1_2022] = EVMCS1_UNSUPPORTED_VMEXIT_CTRL,
-> +	},
-> +	[EVMCS_ENTRY_CTLS] = {
-> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_VMENTRY_CTRL | VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL,
-> +		[EVMCSv1_2022] =  EVMCS1_UNSUPPORTED_VMENTRY_CTRL,
-> +	},
-> +	[EVMCS_2NDEXEC] = {
-> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_2NDEXEC | SECONDARY_EXEC_TSC_SCALING,
-> +		[EVMCSv1_2022] = EVMCS1_UNSUPPORTED_2NDEXEC,
-> +	},
-> +	[EVMCS_PINCTRL] = {
-> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_PINCTRL,
-> +		[EVMCSv1_2022] = EVMCS1_UNSUPPORTED_PINCTRL,
-> +	},
-> +	[EVMCS_VMFUNC] = {
-> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_VMFUNC,
-> +		[EVMCSv1_2022] = EVMCS1_UNSUPPORTED_VMFUNC,
-> +	},
-> +};
-> +
-> +static u32 evmcs_get_unsupported_ctls(struct kvm_vcpu *vcpu,
-> +				      enum evmcs_unsupported_ctrl_type ctrl_type)
-> +{
-> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> +	enum evmcs_revision evmcs_rev = EVMCSv1_2016;
-> +
-> +	if (!hv_vcpu)
-
-This is a functiontal change, and I don't think it's correct either.  Previously,
-KVM would apply the EVMCSv1_2016 filter irrespective of whether or not
-vcpu->arch.hyperv is non-NULL.  nested_enable_evmcs() doesn't require a Hyper-V
-vCPU, and AFAICT nothing requires a Hyper-V vCPU to use eVMCS.
-
-So I believe this should be:
-
-	if (hv_vcpu &&
-	    hv_vcpu->cpuid_cache.nested_ebx & HV_X64_NESTED_EVMCS1_2022_UPDATE)
-		evmcs_rev = EVMCSv1_2022;
-
-> +		return 0;
-> +
-> +	if (hv_vcpu->cpuid_cache.nested_ebx & HV_X64_NESTED_EVMCS1_2022_UPDATE)
-> +		evmcs_rev = EVMCSv1_2022;
-> +
-> +	return evmcs_unsupported_ctls[ctrl_type][evmcs_rev];
-> +}
-> +
-
-...
-
-> -int nested_evmcs_check_controls(struct vmcs12 *vmcs12)
-> +int nested_evmcs_check_controls(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12)
->  {
->  	int ret = 0;
->  	u32 unsupp_ctl;
->  
->  	unsupp_ctl = vmcs12->pin_based_vm_exec_control &
-> -		EVMCS1_UNSUPPORTED_PINCTRL;
-> +		evmcs_get_unsupported_ctls(vcpu, EVMCS_PINCTRL);
->  	if (unsupp_ctl) {
->  		trace_kvm_nested_vmenter_failed(
-> -			"eVMCS: unsupported pin-based VM-execution controls",
-> +			"eVMCS: unsupported pin-based VM-execution controls: ",
->  			unsupp_ctl);
-
-Egad!  This is all broken, at least in theory.  The second param to
-trace_kvm_nested_vmenter_failed() is the error code, not the bad value.  It mostly
-works because __print_symbolic() falls back to printing the hex value on error,
-but that relies on there being no collisions/matches between unsupp_ctl and the
-set of VMX_VMENTER_INSTRUCTION_ERRORS.  E.g. if there's a collision then the
-tracepoint will pretty print a string and cause confusion.
-
-And checking every control even after one fails seems unnecessary subtle.  It
-provides marginal benefit while increasing the probability that we screw up and
-squash "ret" to zero.  Yeah, it might save some onion peeling, but if that happens
-during production and now during initial development of a feature, then someone
-has much bigger problems to worry about.
-
-Unless there are objections, I'll fold in a patch to yield:
-
-#define CC KVM_NESTED_VMENTER_CONSISTENCY_CHECK
-
-static bool nested_evmcs_is_valid_controls(enum evmcs_ctrl_type type, u32 val)
-{
-	return val & evmcs_get_unsupported_ctls(type);
-}
-
-int nested_evmcs_check_controls(struct vmcs12 *vmcs12)
-{
-	if (CC(!nested_evmcs_is_valid_controls(EVMCS_PINCTRL,
-					       vmcs12->pin_based_vm_exec_control)))
-		return -EINVAL;
-
-	if (CC(!nested_evmcs_is_valid_controls(EVMCS_2NDEXEC,
-					       vmcs12->secondary_vm_exec_control)))
-		return -EINVAL;
-
-	if (CC(!nested_evmcs_is_valid_controls(EVMCS_EXIT_CTRLS,
-					       vmcs12->vm_exit_controls)))
-		return -EINVAL;
-
-	if (CC(!nested_evmcs_is_valid_controls(EVMCS_ENTRY_CTRLS,
-					       vmcs12->vm_entry_controls)))
-		return -EINVAL;
-
-	if (CC(!nested_evmcs_is_valid_controls(EVMCS_VMFUNC,
-					       vmcs12->vm_function_control)))
-		return -EINVAL;
-
-	return 0;
-}
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>

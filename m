@@ -2,77 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0755597D8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 06:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6DF597D95
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 06:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243360AbiHRE3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 00:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
+        id S243442AbiHREio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 00:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238358AbiHRE3W (ORCPT
+        with ESMTP id S242800AbiHREim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 00:29:22 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B58E6069E;
-        Wed, 17 Aug 2022 21:29:21 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4M7X1G34J7zGpXn;
-        Thu, 18 Aug 2022 12:27:46 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 12:29:19 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 18 Aug
- 2022 12:29:19 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <den@openvz.org>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>
-Subject: [PATCH -next] net: neigh: use dev_kfree_skb_irq instead of kfree_skb()
-Date:   Thu, 18 Aug 2022 12:37:29 +0800
-Message-ID: <20220818043729.412753-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 18 Aug 2022 00:38:42 -0400
+Received: from out199-1.us.a.mail.aliyun.com (out199-1.us.a.mail.aliyun.com [47.90.199.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455862CCA4;
+        Wed, 17 Aug 2022 21:38:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R781e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VMZPVz8_1660797509;
+Received: from 192.168.1.120(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VMZPVz8_1660797509)
+          by smtp.aliyun-inc.com;
+          Thu, 18 Aug 2022 12:38:31 +0800
+Message-ID: <5b7b3f1c-637c-37bf-9a32-244eb62d543d@linux.alibaba.com>
+Date:   Thu, 18 Aug 2022 12:38:29 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH V2 1/2] riscv: kexec: Disable all interrupts in kexec
+ crash path
+To:     guoren@kernel.org, palmer@dabbelt.com, heiko@sntech.de,
+        conor.dooley@microchip.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, liaochang1@huawei.com,
+        mick@ics.forth.gr, jszhang@kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Will Deacon <will.deacon@arm.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>
+References: <20220817161258.748836-1-guoren@kernel.org>
+ <20220817161258.748836-2-guoren@kernel.org>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+In-Reply-To: <20220817161258.748836-2-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is not allowed to call kfree_skb() from hardware interrupt
-context or with interrupts being disabled. So replace kfree_skb()
-with dev_kfree_skb_irq() under spin_lock_irqsave().
+It is ok for me
 
-Fixes: 66ba215cb513 ("neigh: fix possible DoS due to net iface start/stop loop")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- net/core/neighbour.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Xianting Tian <xianting.tian@linux.alibaba.com>
 
-diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-index 5b669eb80270..167826200f3e 100644
---- a/net/core/neighbour.c
-+++ b/net/core/neighbour.c
-@@ -328,7 +328,7 @@ static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
- 			__skb_unlink(skb, list);
- 
- 			dev_put(dev);
--			kfree_skb(skb);
-+			dev_kfree_skb_irq(skb);
- 		}
- 		skb = skb_next;
- 	}
--- 
-2.25.1
-
+在 2022/8/18 上午12:12, guoren@kernel.org 写道:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> If a crash happens on cpu3 and all interrupts are binding on cpu0, the
+> bad irq routing will cause a crash kernel which can't receive any irq.
+> Because crash kernel won't clean up all harts' PLIC enable bits in
+> enable registers. This patch is similar to 9141a003a491 ("ARM: 7316/1:
+> kexec: EOI active and mask all interrupts in kexec crash path") and
+> 78fd584cdec0 ("arm64: kdump: implement machine_crash_shutdown()"), and
+> PowerPC also has the same mechanism.
+>
+> Fixes: fba8a8674f68 ("RISC-V: Add kexec support")
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Will Deacon <will.deacon@arm.com>
+> Cc: AKASHI Takahiro <takahiro.akashi@linaro.org>
+> Cc: Nick Kossifidis <mick@ics.forth.gr>
+> ---
+>   arch/riscv/kernel/machine_kexec.c | 35 +++++++++++++++++++++++++++++++
+>   1 file changed, 35 insertions(+)
+>
+> diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
+> index ee79e6839b86..db41c676e5a2 100644
+> --- a/arch/riscv/kernel/machine_kexec.c
+> +++ b/arch/riscv/kernel/machine_kexec.c
+> @@ -15,6 +15,8 @@
+>   #include <linux/compiler.h>	/* For unreachable() */
+>   #include <linux/cpu.h>		/* For cpu_down() */
+>   #include <linux/reboot.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+>   
+>   /*
+>    * kexec_image_info - Print received image details
+> @@ -154,6 +156,37 @@ void crash_smp_send_stop(void)
+>   	cpus_stopped = 1;
+>   }
+>   
+> +static void machine_kexec_mask_interrupts(void)
+> +{
+> +	unsigned int i;
+> +	struct irq_desc *desc;
+> +
+> +	for_each_irq_desc(i, desc) {
+> +		struct irq_chip *chip;
+> +		int ret;
+> +
+> +		chip = irq_desc_get_chip(desc);
+> +		if (!chip)
+> +			continue;
+> +
+> +		/*
+> +		 * First try to remove the active state. If this
+> +		 * fails, try to EOI the interrupt.
+> +		 */
+> +		ret = irq_set_irqchip_state(i, IRQCHIP_STATE_ACTIVE, false);
+> +
+> +		if (ret && irqd_irq_inprogress(&desc->irq_data) &&
+> +		    chip->irq_eoi)
+> +			chip->irq_eoi(&desc->irq_data);
+> +
+> +		if (chip->irq_mask)
+> +			chip->irq_mask(&desc->irq_data);
+> +
+> +		if (chip->irq_disable && !irqd_irq_disabled(&desc->irq_data))
+> +			chip->irq_disable(&desc->irq_data);
+> +	}
+> +}
+> +
+>   /*
+>    * machine_crash_shutdown - Prepare to kexec after a kernel crash
+>    *
+> @@ -169,6 +202,8 @@ machine_crash_shutdown(struct pt_regs *regs)
+>   	crash_smp_send_stop();
+>   
+>   	crash_save_cpu(regs, smp_processor_id());
+> +	machine_kexec_mask_interrupts();
+> +
+>   	pr_info("Starting crashdump kernel...\n");
+>   }
+>   

@@ -2,47 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA6F597C4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161F2597C47
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242585AbiHRDaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 23:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
+        id S241079AbiHRDgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 23:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235263AbiHRDaK (ORCPT
+        with ESMTP id S235263AbiHRDgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 23:30:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1418FD66
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:30:07 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M7Vdr1QbLzXdqW;
-        Thu, 18 Aug 2022 11:25:52 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 11:30:04 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 11:30:04 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <rostedt@goodmis.org>, <mingo@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH v2] ftrace: Fix NULL pointer dereference in is_ftrace_trampoline when ftrace is dead
-Date:   Thu, 18 Aug 2022 11:26:59 +0800
-Message-ID: <20220818032659.56209-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        Wed, 17 Aug 2022 23:36:18 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E8A5D126;
+        Wed, 17 Aug 2022 20:36:15 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id w19so928545ejc.7;
+        Wed, 17 Aug 2022 20:36:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=T/2mVkL6UP+T2DXZhWWVUjggRKMFf9g6i9WM+ljIyVQ=;
+        b=BYzEghcwFkBcD7A6zWs3WzR3B0gUnGWUrbDuTc5xx11MOYGRYvZGzUgs5Bl/ctwyQ8
+         f4PIRM+utzgCqEM3R6gvUD74KIxbnt3vwEwy+9ZxmGC3tSQuEHvI9I5EgRW7zBgsoFmd
+         jY+d3fYqzu0mIaElLNWY6J6cg+rpjMOtW5jWIySXaqZcWgyuGGlhXqqn0iPkPCdit9VO
+         9ixNdYTin+ymQrc/t9Pnurxs+xriQdbMBDPQfuC3AcurR2vWkHlIJVTA57EN1Sc9Px9S
+         RcnTI/yEJBeL8/GfX3xqCvulfdhbRtU21Lp+r6yAOxzF5yeblE/qrWwlPXMRFGOAvkDl
+         Lu1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=T/2mVkL6UP+T2DXZhWWVUjggRKMFf9g6i9WM+ljIyVQ=;
+        b=M8gzOav4KQfcRER+hJdwHwJZSK9bPiIk8bWvp8ervlV4mHbSlkjLhP9IsajgbDR8xW
+         qSXfbD7aGby44tN/KvyITJmWPJNsmMbu24aP6mmaBzzes7Ui+uZqA3G43ksogQ7SNBc2
+         OWOKt8E8JaWFo9y8pFUAvcxILNs9pU4MzP6W+W4kr1koj3W5DAQDlOyWKmLKku9TZPh1
+         pm1J+I7YIVnNLEcuNvcxnj6vxyhlFdiIhOnvsi8K+pcfSU3FryvAjaxebhR/tK1fPwEt
+         UqxwwU5FDZLtkoYAcDFQGKY3TmuPV5V14EkqGiKNTxh1AWaMgSU/Lj5byiLl15dt4bf+
+         0qDw==
+X-Gm-Message-State: ACgBeo0qYjnljQi1SqsoCNHtK/gFDXyAyRjwJ2yijBIG1bhMrSiORFDJ
+        UHoarUz2wF1rC2K81e1X8P72p2r2O4MQ4PlqzuE=
+X-Google-Smtp-Source: AA6agR4/YmmiBdH0KTeertmhcBZU0uCTsCJ7X2g08B2BoPa7m2wObJ72BASYMmIZhLCRs0GIDs/9dMZh2dja9edP2/c=
+X-Received: by 2002:a17:907:3f24:b0:730:bcbd:395d with SMTP id
+ hq36-20020a1709073f2400b00730bcbd395dmr680668ejc.540.1660793773978; Wed, 17
+ Aug 2022 20:36:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220419051114.1569291-1-seanga2@gmail.com>
+In-Reply-To: <20220419051114.1569291-1-seanga2@gmail.com>
+From:   Kelvin Cheung <keguang.zhang@gmail.com>
+Date:   Thu, 18 Aug 2022 11:36:02 +0800
+Message-ID: <CAJhJPsUM=LrgrKcoA8xT=4JWt8uxjn6yDxP9vjuZmvb4WvjPZQ@mail.gmail.com>
+Subject: Re: [RFT PATCH] clk: ls1c: Fix PLL rate calculation
+To:     Sean Anderson <seanga2@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Du Huanpeng <dhu@hodcarrier.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Yang Ling <gnaygnil@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,91 +69,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ftrace_startup does not remove ops from ftrace_ops_list when
-ftrace_startup_enable fails:
+Sean, Du,
+I saw you are discussing the PLL rate calculation issue.
+My question is whether the upstream kernel works on your ls1c300?
+For me, it never works, even the earliest version which LS1C support was me=
+rged.
+After the kernel is loaded by PMON, there is no console output at all.
+I also confirm this issue with Yang.
+BTW, my board is 1C300B.
+Are your board is different from me? Or your bootloader?
 
-register_ftrace_function
-  ftrace_startup
-    __register_ftrace_function
-      ...
-      add_ftrace_ops(&ftrace_ops_list, ops)
-      ...
-    ...
-    ftrace_startup_enable // if ftrace failed to modify, ftrace_disabled is set to 1
-    ...
-  return 0 // ops is in the ftrace_ops_list.
+Thanks!
 
-When ftrace_disabled = 1, unregister_ftrace_function simply returns without doing anything:
-unregister_ftrace_function
-  ftrace_shutdown
-    if (unlikely(ftrace_disabled))
-            return -ENODEV;  // return here, __unregister_ftrace_function is not executed,
-                             // as a result, ops is still in the ftrace_ops_list
-    __unregister_ftrace_function
-    ...
+Sean Anderson <seanga2@gmail.com> =E4=BA=8E2022=E5=B9=B44=E6=9C=8819=E6=97=
+=A5=E5=91=A8=E4=BA=8C 13:11=E5=86=99=E9=81=93=EF=BC=9A
+>
+> While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1], I
+> noticed the following calculation, which is copied from
+> drivers/clk/loongson1/clk-loongson1c.c:
+>
+> ulong ls1c300_pll_get_rate(struct clk *clk)
+> {
+>         unsigned int mult;
+>         long long parent_rate;
+>         void *base;
+>         unsigned int val;
+>
+>         parent_rate =3D clk_get_parent_rate(clk);
+>         base =3D (void *)clk->data;
+>
+>         val =3D readl(base + START_FREQ);
+>         mult =3D FIELD_GET(FRAC_N, val) + FIELD_GET(M_PLL, val);
+>         return (mult * parent_rate) / 4;
+> }
+>
+> I would like to examine the use of M_PLL and FRAC_N to calculate the mult=
+iplier
+> for the PLL. The datasheet has the following to say:
+>
+> START_FREQ =E4=BD=8D    =E7=BC=BA=E7=9C=81=E5=80=BC      =E6=8F=8F=E8=BF=
+=B0
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> FRAC_N     23:16 0           PLL =E5=80=8D=E9=A2=91=E7=B3=BB=E6=95=B0=E7=
+=9A=84=E5=B0=8F=E6=95=B0=E9=83=A8=E5=88=86
+>
+>                  =E7=94=B1          PLL =E5=80=8D=E9=A2=91=E7=B3=BB=E6=95=
+=B0=E7=9A=84=E6=95=B4=E6=95=B0=E9=83=A8=E5=88=86
+> M_PLL      15:8  NAND_D[3:0] (=E7=90=86=E8=AE=BA=E5=8F=AF=E4=BB=A5=E8=BE=
+=BE=E5=88=B0 255=EF=BC=8C=E5=BB=BA=E8=AE=AE=E4=B8=8D=E8=A6=81=E8=B6=85=E8=
+=BF=87 100)
+>                  =E9=85=8D=E7=BD=AE
+>
+> which according to google translate means
+>
+> START_FREQ Bits  Default       Description
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> FRAC_N     23:16 0             Fractional part of the PLL multiplication =
+factor
+>
+>                  Depends on    Integer part of PLL multiplication factor
+> M_PLL      15:8  NAND_D[3:0]   (Theoretically it can reach 255, [but] it =
+is
+>                  configuration  recommended not to exceed 100)
+>
+> So just based on this description, I would expect that the formula to be
+> something like
+>
+>         rate =3D parent * (255 * M_PLL + FRAC_N) / 255 / 4
+>
+> However, the datasheet also gives the following formula:
+>
+>         rate =3D parent * (M_PLL + FRAC_N) / 4
+>
+> which is what the Linux driver has implemented. I find this very unusual.
+> First, the datasheet specifically says that these fields are the integer =
+and
+> fractional parts of the multiplier. Second, I think such a construct does=
+ not
+> easily map to traditional PLL building blocks. Implementing this formula =
+in
+> hardware would likely require an adder, just to then set the threshold of=
+ a
+> clock divider.
+>
+> I think it is much more likely that the first formula is correct. The aut=
+hor of
+> the datasheet may think of a multiplier of (say) 3.14 as
+>
+>         M_PLL =3D 3
+>         FRAC_N =3D 0.14
+>
+> which together sum to the correct multiplier, even though the actual valu=
+e
+> stored in FRAC_N would be 36.
+>
+> I suspect that this has slipped by unnoticed because when FRAC_N is 0, th=
+ere is
+> no difference in the formulae. The following patch is untested, but I sus=
+pect
+> it will fix this issue. I would appreciate if anyone with access to the
+> hardware could measure the output of the PLL (or one of its derived clock=
+s) and
+> determine the correct formula.
+>
+> [1] https://lore.kernel.org/u-boot/20220418204519.19991-1-dhu@hodcarrier.=
+org/T/#u
+>
+> Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
+> Signed-off-by: Sean Anderson <seanga2@gmail.com>
+> ---
+>
+>  drivers/clk/loongson1/clk-loongson1c.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongso=
+n1/clk-loongson1c.c
+> index 703f87622cf5..2b98a116c1ea 100644
+> --- a/drivers/clk/loongson1/clk-loongson1c.c
+> +++ b/drivers/clk/loongson1/clk-loongson1c.c
+> @@ -21,9 +21,9 @@ static unsigned long ls1x_pll_recalc_rate(struct clk_hw=
+ *hw,
+>         u32 pll, rate;
+>
+>         pll =3D __raw_readl(LS1X_CLK_PLL_FREQ);
+> -       rate =3D ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
+> +       rate =3D (pll & 0xff00) + ((pll >> 16) & 0xff);
+>         rate *=3D OSC;
+> -       rate >>=3D 2;
+> +       rate >>=3D 10;
+>
+>         return rate;
+>  }
+> --
+> 2.35.1
+>
 
-If ops is dynamically allocated, it will be free later, in this case,
-is_ftrace_trampoline accesses NULL pointer:
 
-is_ftrace_trampoline
-  ftrace_ops_trampoline
-    do_for_each_ftrace_op(op, ftrace_ops_list) // OOPS! op may be NULL!
+--=20
+Best regards,
 
-Syzkaller reports as follows:
-[ 1203.506103] BUG: kernel NULL pointer dereference, address: 000000000000010b
-[ 1203.508039] #PF: supervisor read access in kernel mode
-[ 1203.508798] #PF: error_code(0x0000) - not-present page
-[ 1203.509558] PGD 800000011660b067 P4D 800000011660b067 PUD 130fb8067 PMD 0
-[ 1203.510560] Oops: 0000 [#1] SMP KASAN PTI
-[ 1203.511189] CPU: 6 PID: 29532 Comm: syz-executor.2 Tainted: G    B   W         5.10.0 #8
-[ 1203.512324] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-[ 1203.513895] RIP: 0010:is_ftrace_trampoline+0x26/0xb0
-[ 1203.514644] Code: ff eb d3 90 41 55 41 54 49 89 fc 55 53 e8 f2 00 fd ff 48 8b 1d 3b 35 5d 03 e8 e6 00 fd ff 48 8d bb 90 00 00 00 e8 2a 81 26 00 <48> 8b ab 90 00 00 00 48 85 ed 74 1d e8 c9 00 fd ff 48 8d bb 98 00
-[ 1203.518838] RSP: 0018:ffffc900012cf960 EFLAGS: 00010246
-[ 1203.520092] RAX: 0000000000000000 RBX: 000000000000007b RCX: ffffffff8a331866
-[ 1203.521469] RDX: 0000000000000000 RSI: 0000000000000008 RDI: 000000000000010b
-[ 1203.522583] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8df18b07
-[ 1203.523550] R10: fffffbfff1be3160 R11: 0000000000000001 R12: 0000000000478399
-[ 1203.524596] R13: 0000000000000000 R14: ffff888145088000 R15: 0000000000000008
-[ 1203.525634] FS:  00007f429f5f4700(0000) GS:ffff8881daf00000(0000) knlGS:0000000000000000
-[ 1203.526801] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 1203.527626] CR2: 000000000000010b CR3: 0000000170e1e001 CR4: 00000000003706e0
-[ 1203.528611] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[ 1203.529605] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-Therefore, when ftrace_startup_enable fails, we need to rollback registration
-process and remove ops from ftrace_ops_list.
-
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
-Changes since v1:
-  - Only roll back _unregister_ftrace_function when ftrace_disabled is set
-
- kernel/trace/ftrace.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index bc921a3f7ea8..126c769d36c3 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -2974,6 +2974,16 @@ int ftrace_startup(struct ftrace_ops *ops, int command)
- 
- 	ftrace_startup_enable(command);
- 
-+	/*
-+	 * If ftrace is in an undefined state, we just remove ops from list
-+	 * to prevent the NULL pointer, instead of totally rolling it back and
-+	 * free trampoline, because those actions could cause further damage.
-+	 */
-+	if (unlikely(ftrace_disabled)) {
-+		__unregister_ftrace_function(ops);
-+		return -ENODEV;
-+	}
-+
- 	ops->flags &= ~FTRACE_OPS_FL_ADDING;
- 
- 	return 0;
--- 
-2.30.GIT
-
+Kelvin Cheung

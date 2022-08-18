@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57CB598466
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A2759845E
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245282AbiHRNkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
+        id S245171AbiHRNkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244905AbiHRNjO (ORCPT
+        with ESMTP id S244598AbiHRNjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:39:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B19C5C35F;
+        Thu, 18 Aug 2022 09:39:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC715A3ED;
         Thu, 18 Aug 2022 06:39:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CF20B8218A;
-        Thu, 18 Aug 2022 13:39:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C61C43141;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C154C616C3;
+        Thu, 18 Aug 2022 13:39:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3615C43154;
         Thu, 18 Aug 2022 13:39:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1660829947;
-        bh=upBcvo3t5W/BE4EQxlNY6X7rXZFVscfzwvp+ClKoClE=;
+        bh=Zo7h93fUJVJst6f9rgBv/W2cFjyN/CWBieAeHFz2d+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Evo4jsj8TJpyGCvqd/F9Q3Typ3GV4aGlInDAHthaTfRUu/Ipir8Opm5NLbsGuw42N
-         ahUtlS4UH+9gPFkfmGN63ztvsio8td5/ASNQC6EBbBL1t9W/9uPOPPINPVXcGgW4IS
-         NimgkxOokYJxdeHNktZmKTJTQOM9GXihhCzDcznLhfyKqzDxgvZ8cv0JpoeDR6CRnM
-         Tk3a3lcYB0qw+ue3Uj44dzlDMCDWsRLwZcv++D3JO75Fyy02qkr/Q+lgEvA/veoW6c
-         XmgJwYtyyMnvmc8gNWfsWw5vguZ1MVTwEN8Uyw23yM3q3cFe/ZIvbgkwT43u2Ct68c
-         jV/bfhgmFrrCw==
+        b=H4jzaZLYB9GJXkRH6fE7kFydsWBSUwOCze8DUBT8ymFjdeXX4P5RaWbCnv4+XhnVP
+         zGhwOVPPwiQFbKzKRjKiRyMhRkkFkp6qyhZwKDPjvH9CuxwP9JfRWZbt7CFCf72NFu
+         EpoPJFseUDZjtGVfhJL2O1knNfk1tCKTyhmeee2aEekD0lPXaRIL/tLSjCNpEyC0lo
+         s686XpJpxMPCkqlv78SyE+uUnrfGX9qURPXMrH7gR7f+GXbX6CxmwJGHaOHb2fn3PP
+         DEGCqXM1aZietCQQxvm+B6ck2uP5wcnUE6CwcYlZRbwers0ZVSalSzf38gIPKDvW9j
+         yminwNu7fZPkA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1oOfjl-00AY7h-GO;
+        id 1oOfjl-00AY7l-HV;
         Thu, 18 Aug 2022 15:39:05 +0200
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>, corbet@lwn.net
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Madhavan Srinivasan <maddy@in.ibm.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 08/13] MAINTAINERS: fix a typo for hpe,gxp-spifi.yaml
-Date:   Thu, 18 Aug 2022 15:38:54 +0200
-Message-Id: <e3b8444a65fc698d639e1f75eff04786796b210e.1660829433.git.mchehab@kernel.org>
+Subject: [PATCH 09/13] ABI: sysfs-bus-nvdimm: fix a doc build warning
+Date:   Thu, 18 Aug 2022 15:38:55 +0200
+Message-Id: <1d576ae406d6183321320ffceb9c63a09fa095d3.1660829433.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <cover.1660829433.git.mchehab@kernel.org>
 References: <cover.1660829433.git.mchehab@kernel.org>
@@ -58,31 +62,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The entry has hpe,gxp-spi.yaml instead, causing this warning:
+The "::" tag requires a blank line after it, as otherwise, it won't be
+processed.
 
-	Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/spi/hpe,gxp-spi.yaml
+Fix this warning:
+
+	Documentation/ABI/testing/sysfs-bus-nvdimm:11: WARNING: Unexpected indentation.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 See [PATCH 00/13] at: https://lore.kernel.org/all/cover.1660829433.git.mchehab@kernel.org/
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/ABI/testing/sysfs-bus-nvdimm | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ae1a12b3f090..c27a875f52b0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2178,7 +2178,7 @@ M:	Jean-Marie Verdun <verdun@hpe.com>
- M:	Nick Hawkins <nick.hawkins@hpe.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
--F:	Documentation/devicetree/bindings/spi/hpe,gxp-spi.yaml
-+F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
- F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
- F:	arch/arm/boot/dts/hpe-bmc*
- F:	arch/arm/boot/dts/hpe-gxp*
+diff --git a/Documentation/ABI/testing/sysfs-bus-nvdimm b/Documentation/ABI/testing/sysfs-bus-nvdimm
+index 1c1f5acbf53d..eeabba807e4b 100644
+--- a/Documentation/ABI/testing/sysfs-bus-nvdimm
++++ b/Documentation/ABI/testing/sysfs-bus-nvdimm
+@@ -18,9 +18,11 @@ Description:	(RO) Attribute group to describe the magic bits
+ 		Each attribute under this group defines a bit range of the
+ 		perf_event_attr.config. Supported attribute is listed
+ 		below::
++
+ 		  event  = "config:0-4"  - event ID
+ 
+ 		For example::
++
+ 			ctl_res_cnt = "event=0x1"
+ 
+ What:           /sys/bus/event_source/devices/nmemX/events
 -- 
 2.37.1
 

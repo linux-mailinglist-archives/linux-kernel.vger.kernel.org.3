@@ -2,121 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C02598AB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C5C598AB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345113AbiHRRs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
+        id S1345121AbiHRRtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240100AbiHRRsV (ORCPT
+        with ESMTP id S241671AbiHRRts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:48:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D26DDF4B;
-        Thu, 18 Aug 2022 10:48:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBEDC6172F;
-        Thu, 18 Aug 2022 17:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F13C433C1;
-        Thu, 18 Aug 2022 17:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660844898;
-        bh=udomEyyFxdEYeJSomBe9t/Lqt0I7Cxz89UK62m0Wvw8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Br7DMj0OTnbMu5MA/Vo9QfrhjNhiI0219bY6t+oWXGFdvlEO1qE6Rd21K2bWtYkAL
-         EBzjFObkmkG/Mn2pM0Gmhq1BtKqr2SfCJtaGvB58WWUZAQy/Rw9P00tJvWmEK4PY4B
-         kFLHI2g77BvnlRezTbo9dVrWsqjiiq+WuVHYFCVs=
-Date:   Thu, 18 Aug 2022 19:48:15 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: Re: [PATCH v2 1/2] usb: xhci-mtk: relax TT periodic bandwidth
- allocation
-Message-ID: <Yv57X37JcYCBhabS@kroah.com>
-References: <20220805060328.6189-1-chunfeng.yun@mediatek.com>
+        Thu, 18 Aug 2022 13:49:48 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E64C00CF
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:49:46 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id jm11so2094250plb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:49:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=9DsDwT22PvIrk8KHMwJ4ojUKw5VmQXY3VeVmmTdugFY=;
+        b=dWVWBD0NtA2732x4FF3h3VXV9QrF8WCyK9Xq3/5pIPDN5c86oYi6pd3E9Tqzmih61D
+         XnsOe6zN2dBFud6HcHR2TkmRnpUN4cbSmB6/ezyBroFT1kk1jpFkmivR4jYnNugQ8FCC
+         BPR07fC/5T+Bhdaj7/2hzP3SiucmLnoMKltgU0WQYGyMOMiTax5IVuAaE0BhlUR80QW2
+         0z+vUjonVlwZtRBhiS8KckiRKkzQp0Dvl97cyMHVh9HwpFXUc5/ZzSTltF/N2xqtr1vV
+         iurbgm6EKrbjvJUwUSpZP1hN02Xu1jzOe4/p7363eNgCDdKQuhlWoxy6WYYvyO4G0tDR
+         W1eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=9DsDwT22PvIrk8KHMwJ4ojUKw5VmQXY3VeVmmTdugFY=;
+        b=IqjF9GXMsUowrQlACS6NAhbpEORkylScXj+yTZAET5S0ODyrLfhJ79sL9rZYwEpMPv
+         5wG6rCD8rLVD/0ADD5f6ddd5l95KI/l6aIONI+Zhi8NXBTvahtcsz9LZnboM/kXsHNFK
+         cNm012J8m67vSy3vwrJGYwC6gBMV9pVi5YTGWb++43loC1UPpsgWnVXTXzERnldUd+8g
+         8F/ktx5+PyiNEh1Oa/albfhjZpxF2rVUg36Ld7gadg4MuylmGv+dk25qJIyysnVbjjqL
+         ImeK64/nV9N0XATZ5tQZ7DJ4kAc6p5Q76BnmetnzWqWWAbg9eCR29XLZIEBmnO8JfFxq
+         cL/w==
+X-Gm-Message-State: ACgBeo3dkhgKRW4WJshzmvzGl4of1BlV1T+o8f7s3lb05VgYBAphgXzZ
+        GUHOMlHlrsTK1wCkVkVZg6OX9A==
+X-Google-Smtp-Source: AA6agR4xdRGg/7F/tdy10J4KT9KsESLpZLsqDBIGuLR0y4Zg077lgqYhN6Lj/jXTbwiQ/RkkA+Tc8Q==
+X-Received: by 2002:a17:90b:4f42:b0:1f5:6976:7021 with SMTP id pj2-20020a17090b4f4200b001f569767021mr4302756pjb.30.1660844985933;
+        Thu, 18 Aug 2022 10:49:45 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 186-20020a6219c3000000b00535f293bac6sm736695pfz.14.2022.08.18.10.49.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 10:49:45 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 17:49:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 22/26] KVM: VMX: Move LOAD_IA32_PERF_GLOBAL_CTRL
+ errata handling out of setup_vmcs_config()
+Message-ID: <Yv57tmu09nOQcFrf@google.com>
+References: <20220802160756.339464-1-vkuznets@redhat.com>
+ <20220802160756.339464-23-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220805060328.6189-1-chunfeng.yun@mediatek.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220802160756.339464-23-vkuznets@redhat.com>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 02:03:27PM +0800, Chunfeng Yun wrote:
-> Currently uses the worst case byte budgets on FS/LS bus bandwidth,
-> for example, for an isochronos IN endpoint with 192 bytes budget, it
-> will consume the whole 5 uframes(188 * 5) while the actual FS bus
-> budget should be just 192 bytes. It cause that many usb audio headsets
-> with 3 interfaces (audio input, audio output, and HID) cannot be
-> configured.
-> To improve it, changes to use "approximate" best case budget for FS/LS
-> bandwidth management. For the same endpoint from the above example,
-> the approximate best case budget is now reduced to (188 * 2) bytes.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
+> While it seems reasonable to not expose LOAD_IA32_PERF_GLOBAL_CTRL controls
+> to L1 hypervisor on buggy CPUs, such change would inevitably break live
+> migration from older KVMs where the controls are exposed. Keep the status quo
+> for now, L1 hypervisor itself is supposed to take care of the errata.
+
+As noted before, this statement is wrong as it requires guest FMS == host FMS,
+but it's irrelevant because KVM can emulate the control unconditionally.  I'll
+test and fold in my suggested patch[*] (assuming it works) and reword this part
+of the changelog.  Ah, and I'll also need to fold in a patch to actually emulate
+the controls without hardware support.
+
+[*] https://lore.kernel.org/all/YtnZmCutdd5tpUmz@google.com
+
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 > ---
-> v2: change commit message
-> ---
->  drivers/usb/host/xhci-mtk-sch.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
+>  arch/x86/kvm/vmx/vmx.c | 59 +++++++++++++++++++++++++-----------------
+>  1 file changed, 35 insertions(+), 24 deletions(-)
 > 
-> diff --git a/drivers/usb/host/xhci-mtk-sch.c
->  b/drivers/usb/host/xhci-mtk-sch.c
-> index 06a6b19acaae..a17bc584ee99 100644
-> --- a/drivers/usb/host/xhci-mtk-sch.c
-> +++ b/drivers/usb/host/xhci-mtk-sch.c
-> @@ -425,7 +425,6 @@ static int check_fs_bus_bw(struct mu3h_sch_ep_info
->  *sch_ep, int offset)
+
+...
+
+> @@ -8192,6 +8199,10 @@ static __init int hardware_setup(void)
+>  	if (setup_vmcs_config(&vmcs_config, &vmx_capability) < 0)
+>  		return -EIO;
 >  
->  static int check_sch_tt(struct mu3h_sch_ep_info *sch_ep, u32 offset)
->  {
-> -	u32 extra_cs_count;
->  	u32 start_ss, last_ss;
->  	u32 start_cs, last_cs;
+> +	if (cpu_has_perf_global_ctrl_bug())
+> +		pr_warn_once("kvm: VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL "
+> +			     "does not work properly. Using workaround\n");
+
+Any objections to opportunistically tweaking this?
+
+		pr_warn_once("kvm: CPU has VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL erratum,"
+			     "using MSR load/store lists for PERF_GLOBAL_CTRL\n");
+
+> +
+>  	if (boot_cpu_has(X86_FEATURE_NX))
+>  		kvm_enable_efer_bits(EFER_NX);
 >  
-> @@ -461,18 +460,12 @@ static int check_sch_tt(struct mu3h_sch_ep_info
->  *sch_ep, u32 offset)
->  		if (last_cs > 7)
->  			return -ESCH_CS_OVERFLOW;
->  
-> -		if (sch_ep->ep_type == ISOC_IN_EP)
-> -			extra_cs_count = (last_cs == 7) ? 1 : 2;
-> -		else /*  ep_type : INTR IN / INTR OUT */
-> -			extra_cs_count = 1;
-> -
-> -		cs_count += extra_cs_count;
->  		if (cs_count > 7)
->  			cs_count = 7; /* HW limit */
->  
->  		sch_ep->cs_count = cs_count;
-> -		/* one for ss, the other for idle */
-> -		sch_ep->num_budget_microframes = cs_count + 2;
-> +		/* ss, idle are ignored */
-> +		sch_ep->num_budget_microframes = cs_count;
->  
->  		/*
->  		 * if interval=1, maxp >752, num_budge_micoframe is larger
 > -- 
-> 2.18.0
+> 2.35.3
 > 
-
-This doesn't apply to my tree without fuzz, and when I force it, I get a
-build error.  Can you please rebase against 6.0-rc1 and resend?
-
-thanks,
-
-greg k-h

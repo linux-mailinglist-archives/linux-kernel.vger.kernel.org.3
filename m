@@ -2,173 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F23E1597EC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EBF597EC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243709AbiHRGnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 02:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        id S243266AbiHRGom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 02:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbiHRGni (ORCPT
+        with ESMTP id S243713AbiHRGoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 02:43:38 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2126.outbound.protection.outlook.com [40.107.104.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6A224BF5
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:43:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WKSA3uYCoyihwYy+nYvgPTDp806DNKDyyRrAC4HgEUMLoaBn3jP+pslfO0BWGt6DRqfFhtul4uYqzoVQASkPojTNYgYZ5nW50bbUH3+T1UGwJQKMq1nBH20C/ZuPvkY0D90axuWzNgUM/eiHk7Pwol5SVtQ9Vu1FagCaAzryfbOS7FA1yQw7YLqu77ytXwR3swRfPzXzlgTst2mcUi97NPO27VJY5CY5681tRVYplmUOXpCNgD8cUjABg8ksaTlLMLKM1hzqwBybM6H41lO3gDs/AR51vkIJrEZ4NPGoHNKg+McssI0pL1EEouUt8z4c8rGv0ScYYZQsRimiVtPPRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hYLYLf/glmri4PWUT3cOAHQ00t6csHjFqp4GnehsEtI=;
- b=fbKMNVzBNled1pxqAuPtBcNdovPkSsKJDyIeVY7bTnsTYygRlnKIayW4Z8GhWk3UKiemBapTyejOtOA+X3sCfvo1sSs1S/Hvb3qrx6p4UDtkuiXTnOwa0Jsl5RoknpKiVJ3YxyeEdWi7RNeIIwBJSS3weyjlL8vsuZiNsS0pO1y7SvYrRIa9gbv0AKF7wZGj14cH5ENtKNMDEKAg8JzTA5ckfw7JaIW+BNZYuVlY50evbqnsQVg8dX3LunbuiR0Df/kSYxJebFdCegr56r/Z2OcNPAKJeHeAZkYKotozdyO+3wnYrP+6FlrVZgVp8BuGMM0qtGXUOpP6e0Lh0dWw+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hYLYLf/glmri4PWUT3cOAHQ00t6csHjFqp4GnehsEtI=;
- b=BbZ6Uxs4e81HCnEx+8BY4wm/y9Kq6wpPBtMu1ExdZ/w8nYA9d4Fi/T1WuZQEbmlKbzG7aU648p350fCn589XMakXBODG5a92lAIIQP3IksAK1hF+skm38dixkZUyPJRCfTmAzEAtQ3SGzntswljvoarGLzYgPE9fCaoNfjfbGHpBL9bC7zwMZ+ldBIcuWdRoQ3Ssf7YVausOGvKq895BlRWluwRSEILriru/qdX8h7nfgfrISjUH8diAkMs4iBl8lXTY2eeryh0H1Ic5Twn366dTplC6e9OOysq55eMhnmbnNDqf6rJ2uZ5nGPqVtcwvvGsquwrKNmodwVxnxpjFDw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from VE1PR08MB4765.eurprd08.prod.outlook.com (2603:10a6:802:a5::16)
- by DU0PR08MB9106.eurprd08.prod.outlook.com (2603:10a6:10:470::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Thu, 18 Aug
- 2022 06:43:33 +0000
-Received: from VE1PR08MB4765.eurprd08.prod.outlook.com
- ([fe80::cce4:bfef:99c9:9841]) by VE1PR08MB4765.eurprd08.prod.outlook.com
- ([fe80::cce4:bfef:99c9:9841%5]) with mapi id 15.20.5525.019; Thu, 18 Aug 2022
- 06:43:32 +0000
-Message-ID: <e692b61d-7760-48bd-b22a-9ffa9162b4f7@virtuozzo.com>
-Date:   Thu, 18 Aug 2022 09:43:29 +0300
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.2
-Subject: Re: [PATCH v2 1/4] Make place for common balloon code
-To:     Ritesh Harjani <ritesh.list@gmail.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nadav Amit <namit@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org
-References: <20220816094117.3144881-1-alexander.atanasov@virtuozzo.com>
- <20220816094117.3144881-2-alexander.atanasov@virtuozzo.com>
- <20220818044123.q5yzdaszcxl7mcl6@riteshh-domain>
-From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-In-Reply-To: <20220818044123.q5yzdaszcxl7mcl6@riteshh-domain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0155.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::16) To VE1PR08MB4765.eurprd08.prod.outlook.com
- (2603:10a6:802:a5::16)
+        Thu, 18 Aug 2022 02:44:39 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6561C51A09
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:44:38 -0700 (PDT)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 798283F12E
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:44:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1660805075;
+        bh=DlhFnIdUMBOYUKK8lBE6v5auDBKzAT3PWLok7Bl69AQ=;
+        h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=uG3DQZHoedbQQZf+hoDyE2hDkQYNAP17EpN7e+wTeappdjx96S+9DJgGloJKFFBvG
+         l4dS3uNoPXe6XXc2DjlUslSl0k+Gc6SJIAWjmF8DlF4Co7UMrCyCQJ+jzqhDPv0ju1
+         bePd9INPcLoc2/b2e5vjzKfsiTHtKoPbMklRzy/0bGl9S3Cm+1E0TKhBNi2mayMMob
+         mUfa08QD3Ml9uuGX7CewD55AO3RMFO4uLB5M4NN/MTCusUXP/m/iSmCToom2iLNcSe
+         Yh7I23KTSViOxG8JPGigbPuftlUfRLRdjdd9MWKlYdU3gMVnwFVnphwckRJ1RR0WkW
+         pYT8Ferz6kj6Q==
+Received: by mail-ed1-f70.google.com with SMTP id g8-20020a056402424800b0043e81c582a4so380900edb.17
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:44:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:organization:references:in-reply-to:message-id:subject
+         :cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=DlhFnIdUMBOYUKK8lBE6v5auDBKzAT3PWLok7Bl69AQ=;
+        b=YIRUwkXmTgiKBZ97fQxNbHJQlLYnnnOw/4Ap8wKeg1WQH+mrryDc9M1a5eLMlCZV2R
+         v+0Ii/xq7/tGA/Z/0pZ02nDppgBnImsAx86VY0YIASUcXAlB8y8aOWEGpnfmgSFfJhe+
+         y2NlQmhihqZMz76Yb2B/VE04zz6gjmIqgyWTpOaKZOnIGPeBp48G/S9RvvJHNEgdNgZz
+         1t3KSlBhjmHSCGzV0L5o0wq05IxMofS+OH/l0nYwe3Vx04H2uDKFYgf5txBlgSLWngsM
+         na9S7SpqQeXgSeTHlCSy0MpgjqZA/1hQqs081B6xNXJZCYZLNaxrR61X4DW4PkxuuBl7
+         b2oA==
+X-Gm-Message-State: ACgBeo2+I202qAjh2cOmDIIdipe1RyxxTOhuLADMdREbcFJ+Dp5dkt/D
+        YKOSrF5J+djZCSUoiNohZRR/PIvUac6iH2uQ0xRa3vTslxYMG8/k5wSe4/v6ivaa4Afa9+LschP
+        iMVojBEShtD7y+x4Cli69syTEF1T6D0xW+ZvNriTn5g==
+X-Received: by 2002:aa7:d508:0:b0:445:dd73:4f6f with SMTP id y8-20020aa7d508000000b00445dd734f6fmr1100781edq.231.1660805075103;
+        Wed, 17 Aug 2022 23:44:35 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6ZAU7Kf5zJnIs7zdYVrqU4dSuauM0GuoeE5k0wyJ9b5fwFVy3N4F7Qic0fUtdAg9Mt31Q0pA==
+X-Received: by 2002:aa7:d508:0:b0:445:dd73:4f6f with SMTP id y8-20020aa7d508000000b00445dd734f6fmr1100767edq.231.1660805074928;
+        Wed, 17 Aug 2022 23:44:34 -0700 (PDT)
+Received: from smeagol ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id 2-20020a170906300200b00721d8e5bf0bsm399793ejz.6.2022.08.17.23.44.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 23:44:33 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 08:44:30 +0200
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com,
+        linux-amlogic@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: meson: vdec: Add MODULE_FIRMWARE macro
+Message-ID: <20220818084430.0ca10b30@smeagol>
+In-Reply-To: <04115bee-5ddb-701f-ad18-d2c846155816@baylibre.com>
+References: <20220817140539.150013-1-juerg.haefliger@canonical.com>
+        <04115bee-5ddb-701f-ad18-d2c846155816@baylibre.com>
+Organization: Canonical Ltd
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ad0092db-501c-481b-cdee-08da80e4f7dc
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9106:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ydLlKIwFMd0GDCkjHSz3ilB0FwncTT2GqW7O+KAhQmlrUZcKGWTyQQosGbVtW0or2cvHmv/X+wRN5x1k15nNG5r3g4usMGoRTpHt5ydBhnyde4gSQxsDDjkkD3OQUwdn+ETCEqbFQjl9DJBqKZxFZVngeyv2daTEaKwgvtoOLKSTJQR5fszdzah5GABGmF06ufv/HDluwZ+r8On9n8hqi5R1vYYWbIxWJc1a3cfBdNwDbsF8ZKP1T5VyOZ93QTFMHKI43UJ1ZRdO8+Y25PNZlcDJkbQQU6cgc9NK5X/i4d5/uEJWxk/+8nws5oXWMu9/AXeUiweUo/vrBBcllz/0DA7mv40OGRjux80LC6G0y26QTF5KV/iTbLMeTY59gER2JnwV7rLTkmtyElhWXXVZ4dbRf5ddsXRNiAhgrhosvWiSrLy5CVnWIDpcpHJyCXaV58rxwD7lQNOoRl/XZeJXiagjmewUpoWXb+AG9zbl/WiVLkJxCPzq/gwcOgCaHxUx3ex9TIKFwHHw5t3a/C+nL+Fh5JWlkhy66bbX2meeNawlGT3sBTxCc6GwV7prxBLkRnb8bQI9zXMncOCj/i5I3qsgAe2tQL1cQvPioAueZbhZETiubJ6oARvNLz5wkjISB1GKwO2z8tZtmxkwAiLxQlwCldCKt2yFe6ffp7VvZa6lxWMrpN+/KPtLmSSC3ao7QJbHTkPmcVco74Gt7l1bnAyXmvhre3gzj8/Y91rMtKNd9QLhvZI9hGjsVkSpfDJ5ZeHoJCVBq8Xs/bls0v5D7rDENulrKH4L95fmTLz19cRAZXx/w6m1GHl1nNMuFgL4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4765.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(39850400004)(136003)(346002)(396003)(376002)(316002)(38350700002)(38100700002)(66556008)(31686004)(8676002)(36756003)(66946007)(66476007)(4326008)(52116002)(53546011)(6666004)(2906002)(186003)(44832011)(26005)(41300700001)(7416002)(6512007)(6506007)(83380400001)(86362001)(6486002)(54906003)(6916009)(478600001)(2616005)(8936002)(5660300002)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UFZTb2NDSjZyVlJ3ZGI5bVNHazllaHBEMXJVd1NkSFFOd0FuekxicFhpUVBK?=
- =?utf-8?B?Y3B1cVNBemgwcENCbjR4ZkdzNXJRdFVjb1JIaXBrc0kveHZ2T1ZkV1d2ZmVo?=
- =?utf-8?B?TGhXa29VUnpwZmw3cnZjUVg4NlpJdDBadlBSQ0lDbVBwUUVENW13YSs3NVRJ?=
- =?utf-8?B?L3JvWFFJRG83UzNFcFB3SEh1R0dpUkVCLzI4ZGZSdStZZzQvNlkzbFRYenJB?=
- =?utf-8?B?M1p6TmpHbnk0T1BIcmMrbFEzUlEwNlNEWVRuWjRYeWJEbE5DZ0NaSTBXQStP?=
- =?utf-8?B?V0YwUkszdnczMHBQZEFpT1hBeWM4eHBNUURzTUU4VjBQa1dFODhnWUVjQWhm?=
- =?utf-8?B?cVVvODllbGFGUjdMZDFEajJlSmpTNENRNjNqV0Y4ZElyTTdhallFLzRNMGU5?=
- =?utf-8?B?dWVRYnV5d2ZsMDZBZnQ1bEs1ODNkOFZIMUlaNU9kOXRha0NiQ0xZUEk5UkJw?=
- =?utf-8?B?NmZDK3Bqc1dwclBOaXVGNTJML2ZBU2VFUFRrMmpKcEc5UWNNM0drb2pVUDUr?=
- =?utf-8?B?UytpL2pKK0RHaFJyUEEyZ1Y0Vjk4K1NDYlRKbGQ5UEpkUk9DaFlPcXVsdTh4?=
- =?utf-8?B?Wm1EN3QrQnZZQWZ6ZlEyM29mM0YwcDNBZDdudVVXR1puL253dC95R1lVcmhr?=
- =?utf-8?B?MW4yMGEvNEUveFJrR1QvVjB4UHB5Q2U1NFg4VWhoSGVPdHhEbWxOekRzeHRS?=
- =?utf-8?B?VXlWNXJ6Q2t1UjVjcFU3ZVI1UG8xMDQzSEpNTnJXTnBqMnRvOTlQN2VPa3hJ?=
- =?utf-8?B?NThORVdMMmdOQW9xTmltckZyQ1JKdzd1OWJ5dzM1c2c5YnVaWmkxNUFMVDJF?=
- =?utf-8?B?QnNpNTR2VEN5UVBINGxONnlpRjRDdTlqNmkvMWUrN1F4N0l4T09tVGlTY0Fy?=
- =?utf-8?B?TzlLT0d4UUl4M0VBUENMOUo2Z0lIWXNYZmpYYnJ1UjU4RWxESG9kUTE1Qy9x?=
- =?utf-8?B?UzB2VitwbGpUMVU3M0dGQlNGWm5rcjc4aFNRaFVWMzFiWEFLY3QxK0tQdFlk?=
- =?utf-8?B?cytYK09SaFZBOHltTnR5ZWlQTHNqaXZ3dXA3cEU2K3M0cWFjTk1PdGttUXBO?=
- =?utf-8?B?MnF4bmxyUnREY2hqeThUY1VwcDliSmdYc2JhZ2dMdnNmbUJDY1ZqQVMrZ2hq?=
- =?utf-8?B?RGl1ZjJGM3o5NlYwK2ZBZmZyZE02VEk4bWlJL01KUlM4NGlRU2E5WWh3Q1dk?=
- =?utf-8?B?WUY1NXZYN0dNOVllaUxsUzFlN2Qvb1h5NnMwMnFVQnFwdzR1ODlDNjh1L0Qv?=
- =?utf-8?B?QUhXTDBpdEM0ZEpoM1lJa09ER0VaZ1FGT2l4YTFVZTBCeVVMUkI2MEhzWlNS?=
- =?utf-8?B?NThZWU92d3BmdzJvL2RyZFJLNVdrRGthRWpUZGlYQ0Iyd2k1TlpHRWNPNm55?=
- =?utf-8?B?NVh1Q2VtWDhRdUYwaDdVNXdOUWRsalRocm1lNXg2ZkVJeDk1bFdYenJwY1pP?=
- =?utf-8?B?ZHBDcnBlNFFCYlBWeEJOcTFYS1JYbkFsWDRBeW9waEp0Sm1raWdEcjFUdVVl?=
- =?utf-8?B?S1dhVC9zVm1udlBCRWNvVVBTVGJKU3JZdWtMTFI1bGluVHZTaUhRcElUKzJX?=
- =?utf-8?B?OGhySGtmRGlRZkJHNTZXZXIyZndsYXkyNnNBV3hvZ0I0a3dNSXAyVWlzdTZC?=
- =?utf-8?B?anlRMDZBT2ZPcFRZak82OVJLci9vdVFOeTFWem9HT3BWZ3VDYmFpK1NBdURu?=
- =?utf-8?B?WXorV0UwcjRLQ01wUUJCVmFkWmZHRzBJa2xrSnM4cHNmMUdpWm9MQjl4NG5H?=
- =?utf-8?B?T0hDTnFCaHhDWHExN0owWjJEQlRaeXVRbnZGb3RITis5OUhPNGZJYnN2ZUx1?=
- =?utf-8?B?ejZlVVZSMlF3VFg3UGdYYTJBeGxCSE9RWW10UlJUSmtobDBob3ZmS1NyUS9w?=
- =?utf-8?B?UXQrSXZ0Q0l5bVBtRitCdTJUQnVzNTNKcVlXK2dIL2Z2ckNsdi9lV20yT0tH?=
- =?utf-8?B?aW5ZU0VFdjJ3VFlFVnVSZmpkenVPNEY2S3F0NTdVcUVTMDB2TU90RElPamtt?=
- =?utf-8?B?di9BNTAwWFdlWDAwNkYramE3V0l1SWFBZ2pGQW9sNFIyQWp0WGZ2blkyVmFn?=
- =?utf-8?B?SmcrVldXZEd0d1cvRnYwdXdQSWRiN3UzME1hcWpPQ1VDdjl6bXlVekpiZVFD?=
- =?utf-8?B?RE1qUVl2OTlhVHVPdDIzNG1oK3ZYcUFUTTNmcU1jdHk0Uy85bGYyNllSSnpw?=
- =?utf-8?Q?z5KyCKBa0MDL7cuvNmopxAo=3D?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ad0092db-501c-481b-cdee-08da80e4f7dc
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4765.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 06:43:32.7563
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9KK9X8yKbgb9JPA0U9d+7wxzZZU6jTy9Bj27+raXbm/kzSj5/rSBDNpj2pprpMV5Asco5RilV4H2C1aqydI9N2jjj4Xamt1LqhHs89OMPsY6h5TG3O4VJgIs0TCz+0aK
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB9106
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/NRjcrFgnzwojt7mVFj1UxFl";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+--Sig_/NRjcrFgnzwojt7mVFj1UxFl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 18.08.22 7:41, Ritesh Harjani wrote:
-> On 22/08/16 12:41PM, Alexander Atanasov wrote:
->> File already contains code that is common along balloon
->> drivers so rename it to reflect its contents.
->> mm/balloon_compaction.c -> mm/balloon_common.c
->>
->> Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
->> ---
->>   MAINTAINERS                                              | 4 ++--
->>   arch/powerpc/platforms/pseries/cmm.c                     | 2 +-
->>   drivers/misc/vmw_balloon.c                               | 2 +-
->>   drivers/virtio/virtio_balloon.c                          | 2 +-
->>   include/linux/{balloon_compaction.h => balloon_common.h} | 2 +-
->>   mm/Makefile                                              | 2 +-
->>   mm/{balloon_compaction.c => balloon_common.c}            | 4 ++--
-> 
->>   mm/migrate.c                                             | 2 +-
->>   mm/vmscan.c                                              | 2 +-
-> I think we don't need balloon headers in above two files at all.
-> I don't see any references of balloon functions in them.
+On Wed, 17 Aug 2022 18:08:19 +0200
+Neil Armstrong <narmstrong@baylibre.com> wrote:
 
-...
+> On 17/08/2022 16:05, Juerg Haefliger wrote:
+> > The meson-vdec module loads firmware so add MODULE_FIRMWARE macros to
+> > provide that information via modinfo.
+> >=20
+> > Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+> > ---
+> >   .../staging/media/meson/vdec/vdec_platform.c  | 20 +++++++++++++++++++
+> >   1 file changed, 20 insertions(+)
+> >=20
+> > diff --git a/drivers/staging/media/meson/vdec/vdec_platform.c b/drivers=
+/staging/media/meson/vdec/vdec_platform.c
+> > index 88c9d72e1c83..c7750d4be848 100644
+> > --- a/drivers/staging/media/meson/vdec/vdec_platform.c
+> > +++ b/drivers/staging/media/meson/vdec/vdec_platform.c
+> > @@ -280,3 +280,23 @@ const struct vdec_platform vdec_platform_sm1 =3D {
+> >   	.num_formats =3D ARRAY_SIZE(vdec_formats_sm1),
+> >   	.revision =3D VDEC_REVISION_SM1,
+> >   };
+> > +
+> > +MODULE_FIRMWARE("meson/vdec/g12a_h264.bin");
+> > +MODULE_FIRMWARE("meson/vdec/g12a_h264.bin"); =20
+>=20
+> Duplicate
 
-> Since I don't often look into this side of code, it's better to confirm :)
+Oh this is embarrassing :-(
 
-Yes, you are right. It passed a visual and compile verification.
-I will remove them in the next iteration. Thanks for pointing it out :)
 
--- 
-Regards,
-Alexander Atanasov
+> > +MODULE_FIRMWARE("meson/vdec/g12a_vp9.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxbb_h264.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxl_h264.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxl_mpeg12.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxl_mpeg12.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxl_mpeg12.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxl_mpeg12.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxl_mpeg12.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxl_mpeg12.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxl_mpeg12.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxl_mpeg12.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxl_mpeg12.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxl_mpeg12.bin"); =20
+>=20
+> DDDDDDDuplicate
+>=20
+> > +MODULE_FIRMWARE("meson/vdec/gxl_vp9.bin");
+> > +MODULE_FIRMWARE("meson/vdec/gxl_vp9.bin"); =20
+>=20
+> Duplicate
+>=20
+> > +MODULE_FIRMWARE("meson/vdec/gxm_h264.bin");
+> > +MODULE_FIRMWARE("meson/vdec/sm1_vp9_mmu.bin"); =20
+>=20
+> With the duplicate entries removed, please add my:
+> Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
 
+Will do. Thanks for the review.
+
+...Juerg
+
+
+--Sig_/NRjcrFgnzwojt7mVFj1UxFl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEhZfU96IuprviLdeLD9OLCQumQrcFAmL9388ACgkQD9OLCQum
+QrdG7Q/9FwPE/3/kGYBq248tkz8znw0beqrk7fc04SQdThTNb+Nm8x+4ozI/vs7r
+ybj+Pysjebw37NTrhjZCXGisHt02zs9D0yZmN2bkoHOvP/2ADhrlfI2x6Bmb7VZo
+Tmd1EXUHSBI9mJEA3Po0grFqq/I4Pz9ntVHMKrxUdCd/0iEKHHnSb8l4Zo6upq1s
+cBYpAvHi393MGpgI91gqHv3QowE/IpNFLhxt3/hgFUxi8BiUsOJBetO7c+kBIBHi
+YqqUvTd4seKYzctWYGdbB94EW15mMALypsQMsR28UKwCcd1aC0dmV4r/o99sCajP
+Xxyb0Ud9t/j6wXdR1hnU//bkOvOtOjDEgRKHVunfKALOFq8XleCW+2ZSEQGWqZXG
+kDJeLs6RyKBZPWWn/IvY9tmVv79iPcODEYXSdW7BKzj9p5Syqaf+3cAB/Td4wlNV
+O+/NFPbS4FrsMV3r+0OgR9+N9IfyFUutlZosW56uzHKbaq2pOvcLUBLdYY73jsn2
+r8M+chwvKhdL2fG4nZR/a18/Vot5c3CaUQ0arMLEZBxzI4joAHYcgzId0ICztk75
+zmZB+rrpvOsUgseQhcQV5xcJ5zmS2sV/EAfWROXnl1OWU1tW3OXAcn8gOgz4KBsY
+v5WXJcCjdolJhr/7p67181WQavdvxW/4B8lOq1xFp3l+FKHbnU4=
+=3reT
+-----END PGP SIGNATURE-----
+
+--Sig_/NRjcrFgnzwojt7mVFj1UxFl--

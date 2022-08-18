@@ -2,100 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAAEB597B71
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43ACD597B7B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242623AbiHRCYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 22:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S239937AbiHRCYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 22:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236382AbiHRCYB (ORCPT
+        with ESMTP id S233588AbiHRCYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 22:24:01 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE25D6CF5B;
-        Wed, 17 Aug 2022 19:23:59 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4M7TDd0WW9zGpdW;
-        Thu, 18 Aug 2022 10:22:25 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 10:23:58 +0800
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 10:23:57 +0800
-Subject: Re: [PATCH v3] perf/core: Fix reentry problem in
- perf_output_read_group
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <rostedt@goodmis.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
-References: <20220816091103.257702-1-yangjihong1@huawei.com>
- <YvumDL1qz1NjpfEC@worktop.programming.kicks-ass.net>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <42e62907-2895-1267-8942-fcad544dca35@huawei.com>
-Date:   Thu, 18 Aug 2022 10:23:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-MIME-Version: 1.0
-In-Reply-To: <YvumDL1qz1NjpfEC@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 17 Aug 2022 22:24:50 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AA171BD3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 19:24:49 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27I1WfaI014129;
+        Thu, 18 Aug 2022 02:24:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=5D69sy822CZwTCBimDMXWzfojWA04EG0IM9ZAqxhJZI=;
+ b=Fpf5QvJ6WVpHdd7eQPUJNBE3LjVSIQvfljVSQi8U7jqby65E/zqAgVrjDc4hom3dxz4b
+ XPy+S5fklu6nD17yJ76A7Q7cFC5hsGq6NV5dDgcRuB8gIIO2SE1k1Rm+5qH+H7kopOvv
+ UFvQe+T2aJeXS+DHJsRTWPvbYCSbGrnUd3NAuJRCyEq5u8fX3uyTAwscaHRjuPBaMyDS
+ Z1rwUuOpawVxbom08hEmwzBD/fgSJhKKwnYKZ3GaEKdF5NlgQlam0CiUTPLbEb+EACoz
+ yhoMfr/zB+fKExmWLog9Ny8dbRkVc+1SGXv10KBozXj0VpgoBdm3vKPB4Rq77dkhbtz1 Cg== 
+Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j0w30bpv7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 02:24:33 +0000
+Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
+        by APTAIPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27I2OTrf026600;
+        Thu, 18 Aug 2022 02:24:29 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTPS id 3hxnbs38ut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 18 Aug 2022 02:24:29 +0000
+Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27I2OSb8026541;
+        Thu, 18 Aug 2022 02:24:28 GMT
+Received: from maow2-gv.ap.qualcomm.com (maow2-gv.qualcomm.com [10.232.193.133])
+        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 27I2OSfq026539;
+        Thu, 18 Aug 2022 02:24:28 +0000
+Received: by maow2-gv.ap.qualcomm.com (Postfix, from userid 399080)
+        id EF81321029A6; Thu, 18 Aug 2022 10:24:26 +0800 (CST)
+From:   Kassey Li <quic_yingangl@quicinc.com>
+To:     akpm@linux-foundation.org, vbabka@kernel.org
+Cc:     Kassey Li <quic_yingangl@quicinc.com>, minchan@kernel.org,
+        vbabka@suse.cz, iamjoonsoo.kim@lge.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v9] mm/page_owner.c: add llseek for page_owner
+Date:   Thu, 18 Aug 2022 10:24:25 +0800
+Message-Id: <20220818022425.31056-1-quic_yingangl@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -VeImGXq8WwH5karAXO-BVz0l_aZhZ1e
+X-Proofpoint-GUID: -VeImGXq8WwH5karAXO-BVz0l_aZhZ1e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-17_17,2022-08-16_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=772 clxscore=1015
+ malwarescore=0 bulkscore=0 adultscore=0 phishscore=0 impostorscore=0
+ spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208180007
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+It is too slow to dump all the pages, in some usage we just want dump
+a given start pfn, for example: CMA range or a single page.
 
-On 2022/8/16 22:13, Peter Zijlstra wrote:
-> On Tue, Aug 16, 2022 at 05:11:03PM +0800, Yang Jihong wrote:
->> perf_output_read_group may respond to IPI request of other cores and invoke
->> __perf_install_in_context function. As a result, hwc configuration is modified.
->> As a result, the hwc configuration is modified, causing inconsistency and
->> unexpected consequences.
-> 
->>   read_pmevcntrn+0x1e4/0x1ec arch/arm64/kernel/perf_event.c:423
->>   armv8pmu_read_evcntr arch/arm64/kernel/perf_event.c:467 [inline]
->>   armv8pmu_read_hw_counter arch/arm64/kernel/perf_event.c:475 [inline]
->>   armv8pmu_read_counter+0x10c/0x1f0 arch/arm64/kernel/perf_event.c:528
->>   armpmu_event_update+0x9c/0x1bc drivers/perf/arm_pmu.c:247
->>   armpmu_read+0x24/0x30 drivers/perf/arm_pmu.c:264
->>   perf_output_read_group+0x4cc/0x71c kernel/events/core.c:6806
->>   perf_output_read+0x78/0x1c4 kernel/events/core.c:6845
->>   perf_output_sample+0xafc/0x1000 kernel/events/core.c:6892
->>   __perf_event_output kernel/events/core.c:7273 [inline]
->>   perf_event_output_forward+0xd8/0x130 kernel/events/core.c:7287
->>   __perf_event_overflow+0xbc/0x20c kernel/events/core.c:8943
->>   perf_swevent_overflow kernel/events/core.c:9019 [inline]
->>   perf_swevent_event+0x274/0x2c0 kernel/events/core.c:9047
->>   do_perf_sw_event kernel/events/core.c:9160 [inline]
->>   ___perf_sw_event+0x150/0x1b4 kernel/events/core.c:9191
->>   __perf_sw_event+0x58/0x7c kernel/events/core.c:9203
->>   perf_sw_event include/linux/perf_event.h:1177 [inline]
-> 
->> Interrupts is not disabled when perf_output_read_group reads PMU counter.
-> 
-> s/is/are/ due to 'interrupts' being plural
-> 
-> Anyway, yes, I suppose this is indeed so. That code expects to run with
-> IRQs disabled but in the case of software events that isn't so.
-> 
-The v4 patch only corrects the commit message because it is not 
-determined whether to check the software event.
-If processing is improper, please tell me and will resend the patch.
+To speed up and save time, this change allows specify start pfn
+by add llseek for page_onwer.
 
-Thanks,
-Yang
+Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
+---
+ Documentation/mm/page_owner.rst |  5 +++++
+ mm/page_owner.c                 | 24 +++++++++++++++++++++---
+ 2 files changed, 26 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/mm/page_owner.rst b/Documentation/mm/page_owner.rst
+index f5c954afe97c..f18fd8907049 100644
+--- a/Documentation/mm/page_owner.rst
++++ b/Documentation/mm/page_owner.rst
+@@ -94,6 +94,11 @@ Usage
+ 	Page allocated via order XXX, ...
+ 	PFN XXX ...
+ 	// Detailed stack
++    By default, it will do full pfn dump, to start with a given pfn,
++    page_owner supports fseek.
++
++    FILE *fp = fopen("/sys/kernel/debug/page_owner", "r");
++    fseek(fp, pfn_start, SEEK_SET);
+ 
+    The ``page_owner_sort`` tool ignores ``PFN`` rows, puts the remaining rows
+    in buf, uses regexp to extract the page order value, counts the times
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index e4c6f3f1695b..25720d81bc26 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -497,8 +497,10 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 		return -EINVAL;
+ 
+ 	page = NULL;
+-	pfn = min_low_pfn + *ppos;
+-
++	if (*ppos == 0)
++		pfn = min_low_pfn;
++	else
++		pfn = *ppos;
+ 	/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
+ 	while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
+ 		pfn++;
+@@ -561,7 +563,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 			continue;
+ 
+ 		/* Record the next PFN to read in the file offset */
+-		*ppos = (pfn - min_low_pfn) + 1;
++		*ppos = pfn + 1;
+ 
+ 		return print_page_owner(buf, count, pfn, page,
+ 				page_owner, handle);
+@@ -570,6 +572,21 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 	return 0;
+ }
+ 
++static loff_t lseek_page_owner(struct file *file, loff_t offset, int orig)
++{
++	switch (orig) {
++	case SEEK_SET:
++		file->f_pos = offset;
++		break;
++	case SEEK_CUR:
++		file->f_pos += offset;
++		break;
++	default:
++		return -EINVAL;
++	}
++	return file->f_pos;
++}
++
+ static void init_pages_in_zone(pg_data_t *pgdat, struct zone *zone)
+ {
+ 	unsigned long pfn = zone->zone_start_pfn;
+@@ -660,6 +677,7 @@ static void init_early_allocated_pages(void)
+ 
+ static const struct file_operations proc_page_owner_operations = {
+ 	.read		= read_page_owner,
++	.llseek		= lseek_page_owner,
+ };
+ 
+ static int __init pageowner_init(void)
+-- 
+2.17.1
+

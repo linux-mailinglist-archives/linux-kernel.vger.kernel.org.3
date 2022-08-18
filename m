@@ -2,116 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFE1597E95
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F23E1597EC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243627AbiHRGYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 02:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
+        id S243709AbiHRGnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 02:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243477AbiHRGYX (ORCPT
+        with ESMTP id S233362AbiHRGni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 02:24:23 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8B265541;
-        Wed, 17 Aug 2022 23:24:21 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4M7ZZ11GNkzKPyP;
-        Thu, 18 Aug 2022 14:22:49 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP2 (Coremail) with SMTP id Syh0CgCnkb0R2_1i+pULAg--.32172S4;
-        Thu, 18 Aug 2022 14:24:19 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH -next] blk-mq: remove unused function blk_mq_queue_stopped()
-Date:   Thu, 18 Aug 2022 14:35:55 +0800
-Message-Id: <20220818063555.3741222-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 18 Aug 2022 02:43:38 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2126.outbound.protection.outlook.com [40.107.104.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6A224BF5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:43:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WKSA3uYCoyihwYy+nYvgPTDp806DNKDyyRrAC4HgEUMLoaBn3jP+pslfO0BWGt6DRqfFhtul4uYqzoVQASkPojTNYgYZ5nW50bbUH3+T1UGwJQKMq1nBH20C/ZuPvkY0D90axuWzNgUM/eiHk7Pwol5SVtQ9Vu1FagCaAzryfbOS7FA1yQw7YLqu77ytXwR3swRfPzXzlgTst2mcUi97NPO27VJY5CY5681tRVYplmUOXpCNgD8cUjABg8ksaTlLMLKM1hzqwBybM6H41lO3gDs/AR51vkIJrEZ4NPGoHNKg+McssI0pL1EEouUt8z4c8rGv0ScYYZQsRimiVtPPRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hYLYLf/glmri4PWUT3cOAHQ00t6csHjFqp4GnehsEtI=;
+ b=fbKMNVzBNled1pxqAuPtBcNdovPkSsKJDyIeVY7bTnsTYygRlnKIayW4Z8GhWk3UKiemBapTyejOtOA+X3sCfvo1sSs1S/Hvb3qrx6p4UDtkuiXTnOwa0Jsl5RoknpKiVJ3YxyeEdWi7RNeIIwBJSS3weyjlL8vsuZiNsS0pO1y7SvYrRIa9gbv0AKF7wZGj14cH5ENtKNMDEKAg8JzTA5ckfw7JaIW+BNZYuVlY50evbqnsQVg8dX3LunbuiR0Df/kSYxJebFdCegr56r/Z2OcNPAKJeHeAZkYKotozdyO+3wnYrP+6FlrVZgVp8BuGMM0qtGXUOpP6e0Lh0dWw+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hYLYLf/glmri4PWUT3cOAHQ00t6csHjFqp4GnehsEtI=;
+ b=BbZ6Uxs4e81HCnEx+8BY4wm/y9Kq6wpPBtMu1ExdZ/w8nYA9d4Fi/T1WuZQEbmlKbzG7aU648p350fCn589XMakXBODG5a92lAIIQP3IksAK1hF+skm38dixkZUyPJRCfTmAzEAtQ3SGzntswljvoarGLzYgPE9fCaoNfjfbGHpBL9bC7zwMZ+ldBIcuWdRoQ3Ssf7YVausOGvKq895BlRWluwRSEILriru/qdX8h7nfgfrISjUH8diAkMs4iBl8lXTY2eeryh0H1Ic5Twn366dTplC6e9OOysq55eMhnmbnNDqf6rJ2uZ5nGPqVtcwvvGsquwrKNmodwVxnxpjFDw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from VE1PR08MB4765.eurprd08.prod.outlook.com (2603:10a6:802:a5::16)
+ by DU0PR08MB9106.eurprd08.prod.outlook.com (2603:10a6:10:470::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Thu, 18 Aug
+ 2022 06:43:33 +0000
+Received: from VE1PR08MB4765.eurprd08.prod.outlook.com
+ ([fe80::cce4:bfef:99c9:9841]) by VE1PR08MB4765.eurprd08.prod.outlook.com
+ ([fe80::cce4:bfef:99c9:9841%5]) with mapi id 15.20.5525.019; Thu, 18 Aug 2022
+ 06:43:32 +0000
+Message-ID: <e692b61d-7760-48bd-b22a-9ffa9162b4f7@virtuozzo.com>
+Date:   Thu, 18 Aug 2022 09:43:29 +0300
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.2
+Subject: Re: [PATCH v2 1/4] Make place for common balloon code
+To:     Ritesh Harjani <ritesh.list@gmail.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nadav Amit <namit@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org
+References: <20220816094117.3144881-1-alexander.atanasov@virtuozzo.com>
+ <20220816094117.3144881-2-alexander.atanasov@virtuozzo.com>
+ <20220818044123.q5yzdaszcxl7mcl6@riteshh-domain>
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+In-Reply-To: <20220818044123.q5yzdaszcxl7mcl6@riteshh-domain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0155.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a2::16) To VE1PR08MB4765.eurprd08.prod.outlook.com
+ (2603:10a6:802:a5::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgCnkb0R2_1i+pULAg--.32172S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF4DWw47Cw1DtF13tF1xAFb_yoW8ZryrpF
-        ZxGa12kw4vgw4UZ348Jw4xZrnxWws0krW7J3yftrWFvw1qkr1rXr10ya1UXrW0yrZ5AFW3
-        CrnrJrWDGr1kXrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
-        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-        AvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
-        xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ad0092db-501c-481b-cdee-08da80e4f7dc
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9106:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ydLlKIwFMd0GDCkjHSz3ilB0FwncTT2GqW7O+KAhQmlrUZcKGWTyQQosGbVtW0or2cvHmv/X+wRN5x1k15nNG5r3g4usMGoRTpHt5ydBhnyde4gSQxsDDjkkD3OQUwdn+ETCEqbFQjl9DJBqKZxFZVngeyv2daTEaKwgvtoOLKSTJQR5fszdzah5GABGmF06ufv/HDluwZ+r8On9n8hqi5R1vYYWbIxWJc1a3cfBdNwDbsF8ZKP1T5VyOZ93QTFMHKI43UJ1ZRdO8+Y25PNZlcDJkbQQU6cgc9NK5X/i4d5/uEJWxk/+8nws5oXWMu9/AXeUiweUo/vrBBcllz/0DA7mv40OGRjux80LC6G0y26QTF5KV/iTbLMeTY59gER2JnwV7rLTkmtyElhWXXVZ4dbRf5ddsXRNiAhgrhosvWiSrLy5CVnWIDpcpHJyCXaV58rxwD7lQNOoRl/XZeJXiagjmewUpoWXb+AG9zbl/WiVLkJxCPzq/gwcOgCaHxUx3ex9TIKFwHHw5t3a/C+nL+Fh5JWlkhy66bbX2meeNawlGT3sBTxCc6GwV7prxBLkRnb8bQI9zXMncOCj/i5I3qsgAe2tQL1cQvPioAueZbhZETiubJ6oARvNLz5wkjISB1GKwO2z8tZtmxkwAiLxQlwCldCKt2yFe6ffp7VvZa6lxWMrpN+/KPtLmSSC3ao7QJbHTkPmcVco74Gt7l1bnAyXmvhre3gzj8/Y91rMtKNd9QLhvZI9hGjsVkSpfDJ5ZeHoJCVBq8Xs/bls0v5D7rDENulrKH4L95fmTLz19cRAZXx/w6m1GHl1nNMuFgL4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4765.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(39850400004)(136003)(346002)(396003)(376002)(316002)(38350700002)(38100700002)(66556008)(31686004)(8676002)(36756003)(66946007)(66476007)(4326008)(52116002)(53546011)(6666004)(2906002)(186003)(44832011)(26005)(41300700001)(7416002)(6512007)(6506007)(83380400001)(86362001)(6486002)(54906003)(6916009)(478600001)(2616005)(8936002)(5660300002)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UFZTb2NDSjZyVlJ3ZGI5bVNHazllaHBEMXJVd1NkSFFOd0FuekxicFhpUVBK?=
+ =?utf-8?B?Y3B1cVNBemgwcENCbjR4ZkdzNXJRdFVjb1JIaXBrc0kveHZ2T1ZkV1d2ZmVo?=
+ =?utf-8?B?TGhXa29VUnpwZmw3cnZjUVg4NlpJdDBadlBSQ0lDbVBwUUVENW13YSs3NVRJ?=
+ =?utf-8?B?L3JvWFFJRG83UzNFcFB3SEh1R0dpUkVCLzI4ZGZSdStZZzQvNlkzbFRYenJB?=
+ =?utf-8?B?M1p6TmpHbnk0T1BIcmMrbFEzUlEwNlNEWVRuWjRYeWJEbE5DZ0NaSTBXQStP?=
+ =?utf-8?B?V0YwUkszdnczMHBQZEFpT1hBeWM4eHBNUURzTUU4VjBQa1dFODhnWUVjQWhm?=
+ =?utf-8?B?cVVvODllbGFGUjdMZDFEajJlSmpTNENRNjNqV0Y4ZElyTTdhallFLzRNMGU5?=
+ =?utf-8?B?dWVRYnV5d2ZsMDZBZnQ1bEs1ODNkOFZIMUlaNU9kOXRha0NiQ0xZUEk5UkJw?=
+ =?utf-8?B?NmZDK3Bqc1dwclBOaXVGNTJML2ZBU2VFUFRrMmpKcEc5UWNNM0drb2pVUDUr?=
+ =?utf-8?B?UytpL2pKK0RHaFJyUEEyZ1Y0Vjk4K1NDYlRKbGQ5UEpkUk9DaFlPcXVsdTh4?=
+ =?utf-8?B?Wm1EN3QrQnZZQWZ6ZlEyM29mM0YwcDNBZDdudVVXR1puL253dC95R1lVcmhr?=
+ =?utf-8?B?MW4yMGEvNEUveFJrR1QvVjB4UHB5Q2U1NFg4VWhoSGVPdHhEbWxOekRzeHRS?=
+ =?utf-8?B?VXlWNXJ6Q2t1UjVjcFU3ZVI1UG8xMDQzSEpNTnJXTnBqMnRvOTlQN2VPa3hJ?=
+ =?utf-8?B?NThORVdMMmdOQW9xTmltckZyQ1JKdzd1OWJ5dzM1c2c5YnVaWmkxNUFMVDJF?=
+ =?utf-8?B?QnNpNTR2VEN5UVBINGxONnlpRjRDdTlqNmkvMWUrN1F4N0l4T09tVGlTY0Fy?=
+ =?utf-8?B?TzlLT0d4UUl4M0VBUENMOUo2Z0lIWXNYZmpYYnJ1UjU4RWxESG9kUTE1Qy9x?=
+ =?utf-8?B?UzB2VitwbGpUMVU3M0dGQlNGWm5rcjc4aFNRaFVWMzFiWEFLY3QxK0tQdFlk?=
+ =?utf-8?B?cytYK09SaFZBOHltTnR5ZWlQTHNqaXZ3dXA3cEU2K3M0cWFjTk1PdGttUXBO?=
+ =?utf-8?B?MnF4bmxyUnREY2hqeThUY1VwcDliSmdYc2JhZ2dMdnNmbUJDY1ZqQVMrZ2hq?=
+ =?utf-8?B?RGl1ZjJGM3o5NlYwK2ZBZmZyZE02VEk4bWlJL01KUlM4NGlRU2E5WWh3Q1dk?=
+ =?utf-8?B?WUY1NXZYN0dNOVllaUxsUzFlN2Qvb1h5NnMwMnFVQnFwdzR1ODlDNjh1L0Qv?=
+ =?utf-8?B?QUhXTDBpdEM0ZEpoM1lJa09ER0VaZ1FGT2l4YTFVZTBCeVVMUkI2MEhzWlNS?=
+ =?utf-8?B?NThZWU92d3BmdzJvL2RyZFJLNVdrRGthRWpUZGlYQ0Iyd2k1TlpHRWNPNm55?=
+ =?utf-8?B?NVh1Q2VtWDhRdUYwaDdVNXdOUWRsalRocm1lNXg2ZkVJeDk1bFdYenJwY1pP?=
+ =?utf-8?B?ZHBDcnBlNFFCYlBWeEJOcTFYS1JYbkFsWDRBeW9waEp0Sm1raWdEcjFUdVVl?=
+ =?utf-8?B?S1dhVC9zVm1udlBCRWNvVVBTVGJKU3JZdWtMTFI1bGluVHZTaUhRcElUKzJX?=
+ =?utf-8?B?OGhySGtmRGlRZkJHNTZXZXIyZndsYXkyNnNBV3hvZ0I0a3dNSXAyVWlzdTZC?=
+ =?utf-8?B?anlRMDZBT2ZPcFRZak82OVJLci9vdVFOeTFWem9HT3BWZ3VDYmFpK1NBdURu?=
+ =?utf-8?B?WXorV0UwcjRLQ01wUUJCVmFkWmZHRzBJa2xrSnM4cHNmMUdpWm9MQjl4NG5H?=
+ =?utf-8?B?T0hDTnFCaHhDWHExN0owWjJEQlRaeXVRbnZGb3RITis5OUhPNGZJYnN2ZUx1?=
+ =?utf-8?B?ejZlVVZSMlF3VFg3UGdYYTJBeGxCSE9RWW10UlJUSmtobDBob3ZmS1NyUS9w?=
+ =?utf-8?B?UXQrSXZ0Q0l5bVBtRitCdTJUQnVzNTNKcVlXK2dIL2Z2ckNsdi9lV20yT0tH?=
+ =?utf-8?B?aW5ZU0VFdjJ3VFlFVnVSZmpkenVPNEY2S3F0NTdVcUVTMDB2TU90RElPamtt?=
+ =?utf-8?B?di9BNTAwWFdlWDAwNkYramE3V0l1SWFBZ2pGQW9sNFIyQWp0WGZ2blkyVmFn?=
+ =?utf-8?B?SmcrVldXZEd0d1cvRnYwdXdQSWRiN3UzME1hcWpPQ1VDdjl6bXlVekpiZVFD?=
+ =?utf-8?B?RE1qUVl2OTlhVHVPdDIzNG1oK3ZYcUFUTTNmcU1jdHk0Uy85bGYyNllSSnpw?=
+ =?utf-8?Q?z5KyCKBa0MDL7cuvNmopxAo=3D?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad0092db-501c-481b-cdee-08da80e4f7dc
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4765.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 06:43:32.7563
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9KK9X8yKbgb9JPA0U9d+7wxzZZU6jTy9Bj27+raXbm/kzSj5/rSBDNpj2pprpMV5Asco5RilV4H2C1aqydI9N2jjj4Xamt1LqhHs89OMPsY6h5TG3O4VJgIs0TCz+0aK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB9106
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+Hello,
 
-blk_mq_queue_stopped() doesn't have any caller, which was found by
-code coverage test, thus remove it.
+On 18.08.22 7:41, Ritesh Harjani wrote:
+> On 22/08/16 12:41PM, Alexander Atanasov wrote:
+>> File already contains code that is common along balloon
+>> drivers so rename it to reflect its contents.
+>> mm/balloon_compaction.c -> mm/balloon_common.c
+>>
+>> Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+>> ---
+>>   MAINTAINERS                                              | 4 ++--
+>>   arch/powerpc/platforms/pseries/cmm.c                     | 2 +-
+>>   drivers/misc/vmw_balloon.c                               | 2 +-
+>>   drivers/virtio/virtio_balloon.c                          | 2 +-
+>>   include/linux/{balloon_compaction.h => balloon_common.h} | 2 +-
+>>   mm/Makefile                                              | 2 +-
+>>   mm/{balloon_compaction.c => balloon_common.c}            | 4 ++--
+> 
+>>   mm/migrate.c                                             | 2 +-
+>>   mm/vmscan.c                                              | 2 +-
+> I think we don't need balloon headers in above two files at all.
+> I don't see any references of balloon functions in them.
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/blk-mq.c         | 20 --------------------
- include/linux/blk-mq.h |  1 -
- 2 files changed, 21 deletions(-)
+...
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 5ee62b95f3e5..5568c7d09114 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2229,26 +2229,6 @@ void blk_mq_delay_run_hw_queues(struct request_queue *q, unsigned long msecs)
- }
- EXPORT_SYMBOL(blk_mq_delay_run_hw_queues);
- 
--/**
-- * blk_mq_queue_stopped() - check whether one or more hctxs have been stopped
-- * @q: request queue.
-- *
-- * The caller is responsible for serializing this function against
-- * blk_mq_{start,stop}_hw_queue().
-- */
--bool blk_mq_queue_stopped(struct request_queue *q)
--{
--	struct blk_mq_hw_ctx *hctx;
--	unsigned long i;
--
--	queue_for_each_hw_ctx(q, hctx, i)
--		if (blk_mq_hctx_stopped(hctx))
--			return true;
--
--	return false;
--}
--EXPORT_SYMBOL(blk_mq_queue_stopped);
--
- /*
-  * This function is often used for pausing .queue_rq() by driver when
-  * there isn't enough resource or some conditions aren't satisfied, and
-diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-index effee1dc715a..92294a5fb083 100644
---- a/include/linux/blk-mq.h
-+++ b/include/linux/blk-mq.h
-@@ -857,7 +857,6 @@ void blk_mq_kick_requeue_list(struct request_queue *q);
- void blk_mq_delay_kick_requeue_list(struct request_queue *q, unsigned long msecs);
- void blk_mq_complete_request(struct request *rq);
- bool blk_mq_complete_request_remote(struct request *rq);
--bool blk_mq_queue_stopped(struct request_queue *q);
- void blk_mq_stop_hw_queue(struct blk_mq_hw_ctx *hctx);
- void blk_mq_start_hw_queue(struct blk_mq_hw_ctx *hctx);
- void blk_mq_stop_hw_queues(struct request_queue *q);
+> Since I don't often look into this side of code, it's better to confirm :)
+
+Yes, you are right. It passed a visual and compile verification.
+I will remove them in the next iteration. Thanks for pointing it out :)
+
 -- 
-2.31.1
+Regards,
+Alexander Atanasov
 

@@ -2,107 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C29598274
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B90598273
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244378AbiHRLt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 07:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S244211AbiHRLtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 07:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239197AbiHRLtv (ORCPT
+        with ESMTP id S239197AbiHRLtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 07:49:51 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583A47696A;
-        Thu, 18 Aug 2022 04:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660823390; x=1692359390;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w0DG8lbNG0etxgamQ6E0DavXvsqnzqxQNG520Oa4wm0=;
-  b=b5q0RYlCnk/+YZMz3FdKHqRnqzdDihiNNhGChVLvmCDV+ifMBAJ4BS9O
-   cCbUSrDDDecVNxdrAfm400mriGQOXUnqhG/l570Yanq6I/tfQ//ItPMY1
-   UQKtA++yad5Yk9/0w0QXMPAOQOGWlQJukAl7ltR87sYXmhTiuoDUfmULX
-   ve1Nwx2eifeMjfezJGezMwY/KEc1VMEWRUvpAOr/M297gLw5qXhCC7s7Y
-   PvJQ++OTsQIPpYH12DOpmjjghwsgblbR+ZKQwR5GFjwilrEfc5kJHhUrl
-   Dkv0ed0o5vmGRiuI0IxZ58GtvtdzsoGInjzSASv71jjxMFL6cpZwvLb76
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="275784968"
-X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
-   d="scan'208";a="275784968"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 04:49:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
-   d="scan'208";a="734026515"
-Received: from lkp-server01.sh.intel.com (HELO 6cc724e23301) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Aug 2022 04:49:45 -0700
-Received: from kbuild by 6cc724e23301 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oOe1w-0000So-2t;
-        Thu, 18 Aug 2022 11:49:44 +0000
-Date:   Thu, 18 Aug 2022 19:49:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wupeng Ma <mawupeng1@huawei.com>, akpm@linux-foundation.org
-Cc:     kbuild-all@lists.01.org, corbet@lwn.net, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com,
-        songmuchun@bytedance.com, mike.kravetz@oracle.com,
-        osalvador@suse.de, surenb@google.com, mawupeng1@huawei.com,
-        rppt@kernel.org, charante@codeaurora.org, jsavitz@redhat.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        wangkefeng.wang@huawei.com
-Subject: Re: [PATCH -next 2/2] mm: sysctl: Introduce per zone
- watermark_scale_factor
-Message-ID: <202208181945.AoDDCp5a-lkp@intel.com>
-References: <20220818090430.2859992-3-mawupeng1@huawei.com>
+        Thu, 18 Aug 2022 07:49:41 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767FF7696A;
+        Thu, 18 Aug 2022 04:49:38 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 201D684AD1;
+        Thu, 18 Aug 2022 13:49:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1660823376;
+        bh=WQ7yFrQ43wD2Xkn26HybdsHzAjFarYakjSFUugC018Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=vZDJ1fJAUFbWwzww70/2p9YtQEUDjkybt/5NKA8MGGL0xZ1DXdx8R/OwD/6avok0D
+         HSNAacSM4iumUbfKWf7LQuGe5eRkuxTCRRzXBm0HZk6V5nVlkoSiJMDk1nT0llmBya
+         9lHUCoEqo3ZGQ/FbraGhW6WNhxBIHsfWw1q2q/XJ2zB03WeBQzKqkDHl/xi+iSJswU
+         3MMi1HFnJmUmkmf63iU9t7PUCWIvVcCk0yIxz41Dcd5RQ1Hki1E6yyEsptF1i0n7hS
+         nbUodWhvuNkixEWY81SSW0PsexFf9IzbAfLbfrmAWBVHpLyLwQ5+JjZdTO7RaMxrhc
+         v74Pxqt8adMww==
+Message-ID: <05dcf1a0-067a-ed50-b07d-b796d22e7b7b@denx.de>
+Date:   Thu, 18 Aug 2022 13:49:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818090430.2859992-3-mawupeng1@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v3 0/6] Add the iMX8MP PCIe support
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>
+Cc:     "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>
+References: <1660806153-29001-1-git-send-email-hongxing.zhu@nxp.com>
+ <2afdb802-9a86-8313-ebfa-9f2fee7e0023@denx.de>
+ <AS8PR04MB8676D575ED7FD81B0451BD028C6D9@AS8PR04MB8676.eurprd04.prod.outlook.com>
+Content-Language: en-US
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <AS8PR04MB8676D575ED7FD81B0451BD028C6D9@AS8PR04MB8676.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wupeng,
+On 8/18/22 12:53, Hongxing Zhu wrote:
+>> -----Original Message-----
+>> From: Marek Vasut <marex@denx.de>
+>> Sent: 2022年8月18日 17:20
+>> To: Hongxing Zhu <hongxing.zhu@nxp.com>; p.zabel@pengutronix.de;
+>> l.stach@pengutronix.de; bhelgaas@google.com; lorenzo.pieralisi@arm.com;
+>> robh@kernel.org; shawnguo@kernel.org; vkoul@kernel.org;
+>> alexander.stein@ew.tq-group.com
+>> Cc: linux-phy@lists.infradead.org; devicetree@vger.kernel.org;
+>> linux-pci@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+>> linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
+>> <linux-imx@nxp.com>
+>> Subject: Re: [PATCH v3 0/6] Add the iMX8MP PCIe support
+>>
+>> On 8/18/22 09:02, Richard Zhu wrote:
+>>> Based on the 6.0-rc1 of the pci/next branch.
+>>> This series adds the i.MX8MP PCIe support and had been tested on
+>>> i.MX8MP EVK board when one PCIe NVME device is used.
+>>>
+>>> - i.MX8MP PCIe has reversed initial PERST bit value refer to
+>> i.MX8MQ/i.MX8MM.
+>>>     Add the PHY PERST explicitly for i.MX8MP PCIe PHY.
+>>> - Add the i.MX8MP PCIe PHY support in the i.MX8M PCIe PHY driver.
+>>>     And share as much as possible codes with i.MX8MM PCIe PHY.
+>>> - Add the i.MX8MP PCIe support in binding document, DTS files, and PCIe
+>>>     driver.
+>>>
+>>> Main changes v2-->v3:
+>>> - Fix the schema checking error in the PHY dt-binding patch.
+>>> - Inspired by Lucas, the PLL configurations might not required when
+>>>     external OSC is used as PCIe referrence clock. It's true. Remove all
+>>>     the HSIO PLL bit manipulations, and PCIe works fine on i.MX8MP EVK
+>> board
+>>>     with one NVME device is used.
+>>> - Drop the #4 patch of v2, since it had been applied by Rob.
+>>>
+>>> Main changes v1-->v2:
+>>> - It's my fault forget including Vinod, re-send v2 after include Vinod
+>>>     and linux-phy@lists.infradead.org.
+>>> - List the basements of this patch-set. The branch, codes changes and so on.
+>>> - Clean up some useless register and bit definitions in #3 patch.
+>>>
+>>> Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml |  16
+>> +++++++--
+>>> arch/arm64/boot/dts/freescale/imx8mp-evk.dts                 |  53
+>> +++++++++++++++++++++++++++++
+>>> arch/arm64/boot/dts/freescale/imx8mp.dtsi                    |  46
+>> ++++++++++++++++++++++++-
+>>> drivers/pci/controller/dwc/pci-imx6.c                        |  17
+>> +++++++++-
+>>> drivers/phy/freescale/phy-fsl-imx8m-pcie.c                   | 150
+>> +++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------
+>> ------------------
+>>> drivers/reset/reset-imx7.c                                   |   1 +
+>>> 6 files changed, 232 insertions(+), 51 deletions(-)
+>>
+>> For the entire series:
+>>
+>> Tested-by: Marek Vasut <marex@denx.de>
+>>
+> Hi Marek:
+> Thanks for your kindly help to test it.
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on next-20220818]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wupeng-Ma/watermark-related-improvement-on-zone-movable/20220818-170659
-base:    5b6a4bf680d61b1dd26629840f848d0df8983c62
-config: openrisc-buildonly-randconfig-r004-20220818 (https://download.01.org/0day-ci/archive/20220818/202208181945.AoDDCp5a-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d126658752d146244ef366f63b8edbb797dc5436
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Wupeng-Ma/watermark-related-improvement-on-zone-movable/20220818-170659
-        git checkout d126658752d146244ef366f63b8edbb797dc5436
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   or1k-linux-ld: or1k-linux-ld: DWARF error: could not find abbrev number 84
-   mm/page_alloc.o: in function `watermark_scale_factor_sysctl_handler':
->> page_alloc.c:(.text+0xeaa8): undefined reference to `sysctl_vals'
->> or1k-linux-ld: page_alloc.c:(.text+0xeaac): undefined reference to `sysctl_vals'
-   `.exit.text' referenced in section `.data' of sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Gladly. Thank you for your continued effort .

@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2112359866B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B4F598669
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245385AbiHROuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
+        id S1343713AbiHROuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245520AbiHROtw (ORCPT
+        with ESMTP id S1343684AbiHROuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:49:52 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D0A7DF5B;
-        Thu, 18 Aug 2022 07:49:51 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 9339A22239;
-        Thu, 18 Aug 2022 16:49:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1660834189;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jY1twBjLYosPm8HpbJJVDyZ0uNW0GmRMhPk2jKbPVEM=;
-        b=m1/g13R6IY8xGEpW1NbvicdyrugCw4pwAPyzX+T8CAlW53fy5I7cEdt7i4Lf9w9ODAfEgf
-        kITSbLpspvvFTJK+p+1P+gLAa9LP4zMyC3Sb6VM6jJvYkOAkTsUG9ZE4LsWvmK2Iph8dnP
-        X7oITZLmqTOk6jYjztKpt+XCUtkF7uA=
+        Thu, 18 Aug 2022 10:50:14 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6822EB56FA;
+        Thu, 18 Aug 2022 07:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kcvfVewPJvPhkIgYC4PjI+fY/pTp+IQ+7EHGsX/jXkc=; b=BLTlKkx4WurVPayDWJNAkI2zNs
+        sCVob1kKu+ckvs1ZrBnEMoy/sKzfiWO9Ni/jhwSz5BZww81yfvgcdBjhjGF6ybu35TVci544IE99C
+        BqWwS7mfaTqbWf7yt05HrL1U8PfX2nSaCAT9kXtGCa1rbxShhtYblgfZ+xhi9+Lg36Cx+YQBbUGsr
+        3v4qigAHqo3dq1AzIOfXSuB0zslO2ILy2Maouz0d5lTB6wLAbDSFS8hB4YBdTAtdAyCLCtXhSsJ+W
+        WXyzna/4JsLROYfsgDOSTiLuDMOi1BYFVbEQOlLVzC3uO85Hbu+ZodK87Po/CFWy+hdcKyVlmNdFq
+        zdhlzPeA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oOgqQ-009tn9-KD; Thu, 18 Aug 2022 14:50:02 +0000
+Date:   Thu, 18 Aug 2022 15:50:02 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     david@fromorbit.com, djwong@kernel.org, fgheet255t@gmail.com,
+        hch@infradead.org, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, riteshh@linux.ibm.com,
+        syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in iomap_iter
+Message-ID: <Yv5RmsUvRh+RKpXH@casper.infradead.org>
+References: <20220818110031.89467-1-code@siddh.me>
+ <20220818111117.102681-1-code@siddh.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 18 Aug 2022 16:49:49 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH devicetree 0/3] NXP LS1028A DT changes for multiple switch
- CPU ports
-In-Reply-To: <20220818140519.2767771-1-vladimir.oltean@nxp.com>
-References: <20220818140519.2767771-1-vladimir.oltean@nxp.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <8d3d96cdede2f1e40ed9ae5742a0468d@walle.cc>
-X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818111117.102681-1-code@siddh.me>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,31 +54,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-08-18 16:05, schrieb Vladimir Oltean:
-> The Ethernet switch embedded within the NXP LS1028A has 2 Ethernet 
-> ports
-> towards the host, for local packet termination. In current device 
-> trees,
-> only the first port is enabled. Enabling the second port allows having 
-> a
-> higher termination throughput.
+On Thu, Aug 18, 2022 at 04:41:17PM +0530, Siddh Raman Pant wrote:
+>  include/uapi/linux/loop.h | 12 ++++++------
 
-Is it used automatically or does the userspace has to configure 
-something?
+I don't think changing these from u64 to s64 is the right way to go.
 
-> Care has been taken that this change does not produce regressions when
-> using updated device trees with old kernels that do not support 
-> multiple
-> DSA CPU ports. The only difference for old kernels will be the
-> appearance of a new net device (for &enetc_port3) which will not be 
-> very
-> useful for much of anything.
+>  2 files changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+> index e3c0ba93c1a3..4ca20ce3158d 100644
+> --- a/drivers/block/loop.c
+> +++ b/drivers/block/loop.c
+> @@ -977,6 +977,9 @@ loop_set_status_from_info(struct loop_device *lo,
+>  		return -EINVAL;
+>  	}
+>  
+> +	if (info->lo_offset < 0 || info->lo_sizelimit < 0)
+> +		return -EINVAL;
+> +
+>  	lo->lo_offset = info->lo_offset;
+>  	lo->lo_sizelimit = info->lo_sizelimit;
 
-Mh, I don't understand. Does it now cause regressions or not? I mean
-besides that there is a new unused interface?
+I'd instead do it here:
 
-I was just thinking of that systemready stuff where the u-boot might
-supply its (newer) device tree to an older kernel, i.e. an older debian
-or similar.
+	if (lo>lo_offset < 0 || lo->lo_sizelimit < 0)
+		return -EINVAL;
 
--michael

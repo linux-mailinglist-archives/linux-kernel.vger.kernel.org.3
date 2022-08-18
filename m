@@ -2,72 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F280D5986BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972275986BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:03:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343954AbiHRPBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
+        id S1343926AbiHRPCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343943AbiHRPAv (ORCPT
+        with ESMTP id S1343987AbiHRPBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:00:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFFB32BA4;
-        Thu, 18 Aug 2022 08:00:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D302B821CE;
-        Thu, 18 Aug 2022 15:00:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E77C433D7;
-        Thu, 18 Aug 2022 15:00:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660834846;
-        bh=w6/ETLvl6ZG2+0UlR1OeUzSwR5sjy2rVzbgpetE7Jao=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jyemUVkbI7r0kIO7aSwt8dj+8DwO9ot3ryBxDCUv3IuhyBu7QbX65Dj2DoBUJ1aRA
-         IfTgDRH5H5dfm0lkURf6lstrZgWK2sl1EOE9JhkVrS5pkqvYeaNAjcc/Bnorgjord9
-         ZMme4Z1TfbRACGT2vZdJ12ucPykQdtRzPaslvb/c=
-Date:   Thu, 18 Aug 2022 17:00:44 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v1 0/9] fw_devlink improvements
-Message-ID: <Yv5UHLOk9jh8KB6c@kroah.com>
-References: <20220810060040.321697-1-saravanak@google.com>
- <YvYiF36M09dX9ASm@atomide.com>
- <CAGETcx-t0O0B+5i0FWwm5w2=ccOD5zVAaUvgQoP8PT9SOT_btw@mail.gmail.com>
- <Yvog4K0barAvvVeb@atomide.com>
- <CAGETcx-k+ca5uG42XvW5yiK8RWDYfeRs9va5boqnp33s45AGRg@mail.gmail.com>
- <Yv3kqoMo3R/7onlw@atomide.com>
+        Thu, 18 Aug 2022 11:01:50 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBAE49B58
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:01:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LccdFbPDSxXP+gACKuKTMuEMaaSrmuhltQbhTM8ys/U=; b=U/p7+XSNH4LJjD0Qr6Vocdo1qZ
+        kPXkbxTXApbs7c+pbjX6DjHx0NDSpAn+wyaTG75S2L00/kKFiUs0gOp+HCGYDLCDYF3EFgEbuy1hX
+        DJRfD8avqpvWvKDMIOj9hRns71Q0AkeVlwLiz3KuGy30EWm9z2y6McQtlaQmXTTX9iXUN4C/4mHhw
+        FqpIRgdt0L7wCYElPHASLD0M2OkJ8dcbaUIawVJ9rT2xLd8DsM3CXMGbMIvGtLtBNCfxdI2vGj/fo
+        j2JfIm2nMB8dF0P4fTMreV5BxDZRPDPsELI2wznKsApyducwTOHPOY0jyEvXYixqtY+CPdX77SSfm
+        rn2j11jw==;
+Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=65245)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oOh1l-0000p4-JX; Thu, 18 Aug 2022 17:01:45 +0200
+Message-ID: <9daca9bf-838e-c3eb-51de-1cf5188a9341@tronnes.org>
+Date:   Thu, 18 Aug 2022 17:01:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yv3kqoMo3R/7onlw@atomide.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
+ <9fdecae2-80ad-6212-0522-7dccf9fb57be@tronnes.org>
+ <20220816082612.grebxql5ynnfnvfd@houat>
+ <ea6ebdda-f779-78af-1ffd-bd86d715077f@tronnes.org>
+ <20220816094922.oqhrhefv327zo2ou@houat>
+ <be9b6b71-fa2a-3290-2bce-901342e01981@tronnes.org>
+ <20220817114605.jpb3tlnoseyvf65d@houat>
+ <30f3005d-0acc-e5af-10ca-cf46f18b3478@tronnes.org>
+ <133c2a1d-0b4c-cef9-11fe-9ce9985253d6@tronnes.org>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <133c2a1d-0b4c-cef9-11fe-9ce9985253d6@tronnes.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,56 +83,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 10:05:14AM +0300, Tony Lindgren wrote:
-> Hi,
+
+
+Den 18.08.2022 01.23, skrev Noralf Trønnes:
 > 
-> * Saravana Kannan <saravanak@google.com> [220815 18:16]:
-> > On Mon, Aug 15, 2022 at 3:33 AM Tony Lindgren <tony@atomide.com> wrote:
-> > >
-> > > * Saravana Kannan <saravanak@google.com> [220813 00:45]:
-> > > > On Fri, Aug 12, 2022 at 2:49 AM Tony Lindgren <tony@atomide.com> wrote:
-> > > > >
-> > > > > * Saravana Kannan <saravanak@google.com> [220810 05:54]:
-> > > > > > Tony,
-> > > > > >
-> > > > > > This should handle the odd case of the child being the supplier of the
-> > > > > > parent. Can you please give this a shot? I want to make sure the cycle
-> > > > > > detection code handles this properly and treats it like it's NOT a cycle.
-> > > > >
-> > > > > Yup, this series works for me, so feel free to add:
-> > > > >
-> > > > > Tested-by: Tony Lindgren <tony@atomide.com>
-> > > >
-> > > > Thanks for testing!
-> > > >
-> > > > Btw, out of curiosity, how many different boards did you test this on?
-> > > > IIRC you had an issue only in one board, right? Not to say I didn't
-> > > > break anything else, I'm just trying to see how much confidence we
-> > > > have on this series so far. I'm hoping the rest of the folks I listed
-> > > > in the email will get around to testing this series.
-> > >
-> > > Sorry if I was not clear earlier. The issue affects several generations
-> > > of TI 32-bit SoCs at least, not just one board.
-> > 
-> > But this series fixes the issues for all of them or are you still
-> > seeing some broken boot with this series?
 > 
-> Yes. However, I'm now getting confused what exactly you're proposing to fix
-> the regressions for v6.0-rc series.
+> Den 17.08.2022 15.11, skrev Noralf Trønnes:
+>>
+>>
+>> Den 17.08.2022 13.46, skrev Maxime Ripard:
+>>> On Tue, Aug 16, 2022 at 09:35:24PM +0200, Noralf Trønnes wrote:
+>>>> Den 16.08.2022 11.49, skrev Maxime Ripard:
+>>>>> On Tue, Aug 16, 2022 at 11:42:20AM +0200, Noralf Trønnes wrote:
+>>>>>> Den 16.08.2022 10.26, skrev Maxime Ripard:
+>>>>>>> Hi,
+>>>>>>>
+>>>>>>> On Mon, Aug 08, 2022 at 02:44:56PM +0200, Noralf Trønnes wrote:
+>>>>>>>> Den 29.07.2022 18.34, skrev Maxime Ripard:
+>>>>>>>>> The TV mode property has been around for a while now to select and get the
+>>>>>>>>> current TV mode output on an analog TV connector.
+>>>>>>>>>
+>>>>>>>>> Despite that property name being generic, its content isn't and has been
+>>>>>>>>> driver-specific which makes it hard to build any generic behaviour on top
+>>>>>>>>> of it, both in kernel and user-space.
+>>>>>>>>>
+>>>>>>>>> Let's create a new bitmask tv norm property, that can contain any of the
+>>>>>>>>> analog TV standards currently supported by kernel drivers. Each driver can
+>>>>>>>>> then pass in a bitmask of the modes it supports.
+>>>>>>>>>
+>>>>>>>>> We'll then be able to phase out the older tv mode property.
+>>>>>>>>>
+>>>>>>>>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>>>>>>>>>
+> 
+>>>> How do you test the property? I've used modetest but I can only change
+>>>> to a tv.mode that matches the current display mode. I can't switch from
+>>>> ntsc to pal for instance.
+>>>
+>>> Yep, if you want to change from PAL to NTSC, it will require a new mode.
+>>>
+>>
+>> So userspace has to check tv.mode first and then create a display mode
+>> the driver will accept if switching to a different display mode is
+>> necessary? In other words, userspace can't discover from the kernel
+>> which display modes a certain tv.mode/norm provides before it is
+>> selected? If so, maybe libdrm should have some function(s) to deal with
+>> switching between modes that require a different display mode since
+>> knowledge about which display modes a tv.mode supports is needed before
+>> hand.
+>>
+> 
+> I haven't used vc4 on Pi4 in mainline before and have finally gotten it
+> to work.
+> 
+> I see that the connector reports 2 modes that together fit all tv.norms
+> so userspace doesn't have to contruct a display mode, but it does need
+> to know which display mode belongs to a certain tv.norm.
+> 
+> When I try to use modetest I'm unable to set a mode:
+> 
+> pi@pi4t:~ $ modetest -M vc4 -s 45:720x480i
+> setting mode 720x480i-29.97Hz on connectors 45, crtc 68
+> failed to set mode: Function not implemented
+> 
+> The errno is misleading, modetest does a drmModeDirtyFB before checking
+> the error returned by drmModeSetCrtc.
+> 
+> Setting the property succeeds, but the modeset still fails:
+> 
+> pi@pi4t:~ $ modetest -M vc4 -s 45:720x480i -w 45:"tv norm":2
+> setting mode 720x480i-29.97Hz on connectors 45, crtc 68
+> failed to set mode: Function not implemented
+> 
+> pi@pi4t:~ $ modetest -M vc4 -c
+>         37 tv norm:
+>                 flags: bitmask
+>                 values: NTSC-443=0x1 NTSC-J=0x2 NTSC-M=0x4 PAL-B=0x10
+> PAL-M=0x200 PAL-N=0x400 SECAM-B=0x2000
+>                 value: 2
+> 
+> Here's the log, can you see if there's anything obvious in there:
+> https://gist.github.com/notro/a079498bf6b64327105752b2bafa8858
+> 
 
-So am I :(
+I'm one step closer as I now have fbcon working, I had forgotten to add
+enable_tvout=1 and I had disable_fw_kms_setup=1 which disables the
+video= mode on the kernel commandline.
 
-> I'd like to see just the fixes series for v6.0-rc series. With proper fixes
-> tags, and possibly reverts.
+modetest still fails though, after alot of printk sprinkling, I've
+tracked it down to the drm_mode_equal test in
+drm_atomic_helper_connector_tv_check(). The aspect ratios differ:
 
-Agreed, that would help out a lot here.
+[   61.336295] drm_atomic_helper_connector_tv_check:
+mode->picture_aspect_ratio=1
+[   61.336301] drm_atomic_helper_connector_tv_check:
+&crtc_state->mode->picture_aspect_ratio=0
 
-> Then discussing patches for Linux next can be done based on the fixes :)
-
-Agreed.
-
-I'll drop this whole series from my queue now and wait for a new one.
-
-thanks,
-
-greg k-h
+Noralf.

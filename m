@@ -2,114 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADD3597CB6
+	by mail.lfdr.de (Postfix) with ESMTP id A653B597CB7
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 06:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiHREHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 00:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S242820AbiHREIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 00:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242671AbiHREHs (ORCPT
+        with ESMTP id S242800AbiHREIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 00:07:48 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B37ADCCA
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 21:07:48 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 24so353797pgr.7
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 21:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=U/r+CY8lWSEvFEuXmpxEtml3rn7cEpqhLmD9eKbRoKw=;
-        b=Vi8pDKeOTrVE3HoWFNEu7pyMGCdWCqy/uMXeZf9Ly6QPNYa4PO3wpFjcL4DDoQUGYc
-         IDd5O2PuT1s7KbiowgPqRPqlwQ7ax3D7/Z63XGVum/LRN5YdEq5vsdafIkfK7zTVXFvG
-         Ckw/5semUbgrqMtUIQl6TXsgnCIvIIcDhf1/QRHhsmtFY4eB9KcEnV0RgyRgZ038KfVd
-         Pb7cbB/jZBCo1Z0hJWCz7cDVUny0nlXJxlg7ynsfQPKWPs2thX6H/zlWZYnDOPXgufIE
-         I+S4/Vdz9u2GfHk2Or29tWyYadnEiEdbHYpvFOdWuYF19T+2AsBykJ3zxtVUh+vOTbhZ
-         Xkgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=U/r+CY8lWSEvFEuXmpxEtml3rn7cEpqhLmD9eKbRoKw=;
-        b=zBuoLxtHp/zxxA07eQ5pdXNjATBjlAOyNyh/zNWJGKG5XtSYiGfF1ETnoUgrWxVMIJ
-         HwIqP3zq5lDeBbvHl5kHwYa7lnAH0f+CdNwEJI4C6m7BlXewfYsCSYXm4G8bSTUwvS4p
-         Qd/EiMjPpoCzo5PmTZdzskrL+eMXKeeqqIEFySkk+i8AlGqwoL0M5QWrHzuRACSBoNyL
-         p1aTPsdOLULgU1iNSGklQGGVwnd1bYBzukndng3gaRsaWdBychz/BDoZ2wb/hEey/Zda
-         Wzf3O0te/8D6bN1kBjWF+BSMnFy+H6SEUNxzC4pBmRr1h2A+/4dklbIxVxhv5LiCHMYt
-         m9Zw==
-X-Gm-Message-State: ACgBeo2d2YZyHloZ0E8isK5oKoq0o5HIGF/Y95DOVqPWBN+Vq8LIbGMq
-        OBC8d1MyDQZPNq7axCqsXISL7IMT+eI=
-X-Google-Smtp-Source: AA6agR79HfWQNVqr5TVIXxAvBDd2+JF37eL8jC5jSwUo7QxlBoTSrQcF7fHi9HWS1gLjJnHDnR0BAg==
-X-Received: by 2002:a63:1b55:0:b0:41e:2cc8:4296 with SMTP id b21-20020a631b55000000b0041e2cc84296mr1095266pgm.510.1660795667705;
-        Wed, 17 Aug 2022 21:07:47 -0700 (PDT)
-Received: from fedora.. ([103.230.104.3])
-        by smtp.gmail.com with ESMTPSA id p4-20020aa79e84000000b0052db82ad8b2sm349603pfq.123.2022.08.17.21.07.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 21:07:47 -0700 (PDT)
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-To:     linux-cachefs@redhat.com, linux-kernel@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v2] fscache: fix misdocumented parameter
-Date:   Thu, 18 Aug 2022 10:07:38 +0600
-Message-Id: <20220818040738.12036-1-khalid.masum.92@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Thu, 18 Aug 2022 00:08:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD8065A7
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 21:08:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C9556CE1F30
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 04:08:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6373C433C1;
+        Thu, 18 Aug 2022 04:08:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660795695;
+        bh=pDWN1SWFQoLY+kQmDNlmfijZ8n3SHAhhTy8zIM7ERM4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XYN3YPkZZMXZ3UOhenBuHC2QYCxNpc/wlEKWq4ayEeU7OdxAWPIY02+lbPlIs+pwx
+         It6ParZnbv0Kg5FkcqgYbCWLeL7J8IRnXNSvUvIbF0coNw4WPlbHPsIyc0ISjot2SG
+         91hgjJMUyD9x+3DHn7rCKFO79ZTqfOlaEn98tU1aLhtB4qtI9ci7p8/MtZVhDv1X7h
+         l3EAD8GIyxcXU5RU96QK/iY3fKkk4m75X1byhnY7Hx2PLUfQtuOZdIXcDHy718HrQ6
+         1J6o+28rPMhahsmoCxuaduTf8dlmpURyjJfQJRcytAf/ZsNvEZ1LhGAzvoxynyvKIt
+         oAX9xCUiIjyaw==
+Date:   Thu, 18 Aug 2022 04:08:11 +0000
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Tim Van Patten <timvp@google.com>
+Cc:     rrangel@chromium.org, robbarnes@google.com,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] platform/chrome: cros_ec: Send host event for
+ prepare/complete
+Message-ID: <Yv27K4+rLfskcQdm@google.com>
+References: <20220802113957.v3.1.I2c8c550183162e7594309b66d19af696b8d84552@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802113957.v3.1.I2c8c550183162e7594309b66d19af696b8d84552@changeid>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes two warnings generated by make docs. The functions
-fscache_use_cookie and fscache_unuse_cookie, both have a parameter
-named cookie. But they are documented with the name "object" with
-unclear description. Which generates the warning when creating docs.
+On Tue, Aug 02, 2022 at 11:40:08AM -0600, Tim Van Patten wrote:
+> Update cros_ec_lpc_pm_ops to call cros_ec_lpc_prepare() during PM
+> .prepare() and cros_ec_lpc_complete() during .complete(). This allows the
+> EC to log entry/exit of AP's suspend/resume more accurately.
 
-This commit will replace the currently misdocumented parameter names
-with the correct ones while adding proper descriptions.
+As what I commented on [1], the term "host event" in the commit title is
+confusing.  Also, as this is a cros_ec_lpc specific patch, please change
+the prefix.
 
-CC: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
----
-Changes since v1:
-- Update commit message.
-- Link: https://lore.kernel.org/lkml/20220521142446.4746-1-khalid.masum.92@gmail.com/
+[1]: https://patchwork.kernel.org/project/chrome-platform/patch/20220706205136.v2.1.Ic7a7c81f880ab31533652e0928aa6e687bb268b5@changeid/#24934911
 
- include/linux/fscache.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> -static int cros_ec_lpc_resume(struct device *dev)
+> +static void cros_ec_lpc_complete(struct device *dev)
+>  {
+>  	struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = cros_ec_resume(ec_dev);
+>  
+> -	return cros_ec_resume(ec_dev);
+> +	dev_info(dev, "EC resume completed: ret = %d\n", ret);
 
-diff --git a/include/linux/fscache.h b/include/linux/fscache.h
-index 720874e6ee94..36e5dd84cf59 100644
---- a/include/linux/fscache.h
-+++ b/include/linux/fscache.h
-@@ -258,7 +258,7 @@ struct fscache_cookie *fscache_acquire_cookie(struct fscache_volume *volume,
- 
- /**
-  * fscache_use_cookie - Request usage of cookie attached to an object
-- * @object: Object description
-+ * @cookie: The cookie representing the cache object
-  * @will_modify: If cache is expected to be modified locally
-  *
-  * Request usage of the cookie attached to an object.  The caller should tell
-@@ -274,7 +274,7 @@ static inline void fscache_use_cookie(struct fscache_cookie *cookie,
- 
- /**
-  * fscache_unuse_cookie - Cease usage of cookie attached to an object
-- * @object: Object description
-+ * @cookie: The cookie representing the cache object
-  * @aux_data: Updated auxiliary data (or NULL)
-  * @object_size: Revised size of the object (or NULL)
-  *
--- 
-2.37.1
-
+cros_ec_resume() always returns 0.

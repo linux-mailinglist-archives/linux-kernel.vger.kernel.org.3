@@ -2,349 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993FA59862A
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635B859862F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343588AbiHROlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
+        id S1343636AbiHROlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343738AbiHROkx (ORCPT
+        with ESMTP id S1343589AbiHROlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:40:53 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C50BB6D69
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:40:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660833651; x=1692369651;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=i4cd9ZCyDeiI32aG4+SpV02IpwiyqXjWpCXCGMQtBk0=;
-  b=baU8lCkuwIeq2ZQY6JyzPCoaqtzWM5gmeSkPdPEwgqJ4N3uSk0mKv29J
-   U2XdV2jDXi/7ru1cSYkXp9fHiFkgd7J8ilw6a/0AOTXh5Ww5kSNZj277J
-   D58GMaxD0UcyDKnULznztf7MBApF4oBvn5RycU9awdZ98bJNZuIAwSvC5
-   2wxJz5yPSHkGP/rpiNYA2HWv9Jgou6Dc2PvYBzFBnDuLnm6D5U6yC4xCM
-   uBTwsMqVhjKxDB3sJU9BaA/b4BImzf8vEUQWDVuejauKUlcXy5zGg7YH8
-   5MDjZKBaDLfCA0gbWuMB75H1GSyExABZOxbhQGYVmDjgyJ8d12gajkat0
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="272539564"
-X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
-   d="scan'208";a="272539564"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 07:40:51 -0700
-X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
-   d="scan'208";a="558550616"
-Received: from joshuaal-mobl.amr.corp.intel.com (HELO [10.212.151.117]) ([10.212.151.117])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 07:40:51 -0700
-Message-ID: <7e4a4746-8146-b0b2-e0b3-d32960421da6@linux.intel.com>
-Date:   Thu, 18 Aug 2022 07:40:51 -0700
+        Thu, 18 Aug 2022 10:41:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC01BA9E4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660833690;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pXyPb8ie44mgN3nyP6ok6kS6T5MRdJAreHuUq8jouGM=;
+        b=YtmlWA2PXSjsfTCLJMQ5/ba6EYTdioW7G5fms62+03HQOOEi918PC6eDjotluxXI0Tjwg6
+        HhSgbMSXOhVyjOjhwbqbm5BfxPiX9zn3V0NHcsX54sQWqtc22ZE0uPw/OtWgmb0FAfyywP
+        BE3ecVYEzJhLCU1mvci8gGGq7dz3UmE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-588-F4esNa3GNv6ire3Nqnskmw-1; Thu, 18 Aug 2022 10:41:26 -0400
+X-MC-Unique: F4esNa3GNv6ire3Nqnskmw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 754523C025C6;
+        Thu, 18 Aug 2022 14:41:26 +0000 (UTC)
+Received: from jtoppins.rdu.csb (unknown [10.22.33.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 31FE1404C6DE;
+        Thu, 18 Aug 2022 14:41:26 +0000 (UTC)
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     netdev@vger.kernel.org, jay.vosburgh@canonical.com
+Cc:     liuhangbin@gmail.com, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH net v4 1/3] selftests: include bonding tests into the kselftest infra
+Date:   Thu, 18 Aug 2022 10:41:10 -0400
+Message-Id: <3258bfc0586d79b1420526e7f718a678c62aefd9.1660832962.git.jtoppins@redhat.com>
+In-Reply-To: <cover.1660832962.git.jtoppins@redhat.com>
+References: <cover.1660832962.git.jtoppins@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v9 1/6] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220728034420.648314-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Yv5KNyX992ddvVtD@zn.tnic>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <Yv5KNyX992ddvVtD@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Boris,
+This creates a test collection in drivers/net/bonding for bonding
+specific kernel selftests.
 
-On 8/18/22 7:18 AM, Borislav Petkov wrote:
-> On Wed, Jul 27, 2022 at 08:44:15PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> 
-> ...
-> 
+The first test is a reproducer that provisions a bond and given the
+specific order in how the ip-link(8) commands are issued the bond never
+transmits an LACPDU frame on any of its slaves.
 
-We have a v10 version of this patch. We have dropped GetQuote support as per Dave's
-comment. If it is not a problem, for the rest of the patches in this series, please
-check v10.
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+---
 
-https://lore.kernel.org/lkml/Yu1z0KcU5C2AJO6S@fedora/T/
+Notes:
+    v2:
+     * fully integrated the test into the kselftests infrastructure
+     * moved the reproducer to under
+       tools/testing/selftests/drivers/net/bonding
+     * reduced the test to its minimial amount and used ip-link(8) for
+       all bond interface configuration
+    v3:
+     * rebase to latest net/master
+     * remove `#set -x` requested by Hangbin
+    v4:
+     * no changes
 
->> Operations like getting TDREPORT or Quote generation involves sending
->> a blob of data as input and getting another blob of data as output. It
->> was considered to use a sysfs interface for this, but it doesn't fit
->> well into the standard sysfs model for configuring values. It would be
->> possible to do read/write on files, but it would need multiple file
->> descriptors, which would be somewhat messy. IOCTLs seems to be the best
->> fitting and simplest model for this use case. This is similar to AMD
->> SEV platform, which also uses IOCTL interface to support attestation.
-> 
-> So the gist of this whole commit message - with the TD<->TDX
-> nomenclature fixed - needs to go to Documentation/x86/tdx.rst.
+ MAINTAINERS                                   |  1 +
+ tools/testing/selftests/Makefile              |  1 +
+ .../selftests/drivers/net/bonding/Makefile    |  6 ++
+ .../net/bonding/bond-break-lacpdu-tx.sh       | 81 +++++++++++++++++++
+ .../selftests/drivers/net/bonding/config      |  1 +
+ .../selftests/drivers/net/bonding/settings    |  1 +
+ 6 files changed, 91 insertions(+)
+ create mode 100644 tools/testing/selftests/drivers/net/bonding/Makefile
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh
+ create mode 100644 tools/testing/selftests/drivers/net/bonding/config
+ create mode 100644 tools/testing/selftests/drivers/net/bonding/settings
 
-Ok. I will add it in next version.
-
-> 
->> diff --git a/arch/x86/coco/tdx/attest.c b/arch/x86/coco/tdx/attest.c
->> new file mode 100644
->> index 000000000000..46a2f3612753
->> --- /dev/null
->> +++ b/arch/x86/coco/tdx/attest.c
->> @@ -0,0 +1,81 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * attest.c - TDX attestation feature support.
-> 
-> s/feature //
-
-Ok.
-
-> 
->> + *
->> + * Implements attestation related IOCTL handlers.
->> + *
->> + * Copyright (C) 2022 Intel Corporation
->> + *
->> + */
->> +
->> +#include <linux/mm.h>
->> +#include <linux/io.h>
->> +#include <asm/tdx.h>
->> +
->> +#include "tdx.h"
->> +
->> +/* TDREPORT module call leaf ID */
->> +#define TDX_GET_REPORT			4
-> 
-> All TDX leaf definitions go to arch/x86/include/asm/shared/tdx.h, for
-> example.
-> 
-> Not spread around the tree. There are some in arch/x86/coco/tdx/tdx.c
-> too.
-> 
-> In a pre-patch: please pick a fitting header, move them there and keep
-> them all there.
-
-Sure.  Will move it.
-
-> 
->> +long tdx_get_report(void __user *argp)
->> +{
->> +	u8 *reportdata = NULL, *tdreport = NULL;
->> +	struct tdx_report_req req;
->> +	long ret;
->> +
->> +	/* Copy request struct from the user buffer */
-> 
-> Useless comment.
-
-Ok. I will remove it in next version.
-
-> 
->> +	if (copy_from_user(&req, argp, sizeof(req)))
->> +		return -EFAULT;
->> +
->> +	/*
->> +	 * Per TDX Module 1.0 specification, section titled
->> +	 * "TDG.MR.REPORT", REPORTDATA and TDREPORT length
->> +	 * is fixed as TDX_REPORTDATA_LEN and TDX_REPORT_LEN.
->> +	 */
->> +	if (req.rpd_len != TDX_REPORTDATA_LEN || req.tdr_len != TDX_REPORT_LEN)
->> +		return -EINVAL;
->> +
->> +	/* Allocate kernel buffers for REPORTDATA and TDREPORT */
->> +	reportdata = kzalloc(req.rpd_len, GFP_KERNEL);
->> +	if (!reportdata) {
->> +		ret = -ENOMEM;
->> +		goto report_failed;
->> +	}
->> +
->> +	tdreport = kzalloc(req.tdr_len, GFP_KERNEL);
->> +	if (!tdreport) {
->> +		ret = -ENOMEM;
->> +		goto report_failed;
->> +	}
->> +
->> +
->> +	/* Copy REPORTDATA from user to kernel buffer */
-> 
-> Useless comment.
-
-Ok. I will remove it in next version.
-
-> 
->> +	if (copy_from_user(reportdata, (void *)req.reportdata, req.rpd_len)) {
-> 
-> You're trusting a user pointer without any checks?
-> 
-> I guess there's not a lot you can check besides the length with you do.
-> If there are sanity checks you can do, though, do them here.
-
-I will add NULL pointer check and a subtype validity check there.
-
-> 
->> +		ret = -EFAULT;
->> +		goto report_failed;
->> +	}
->> +
->> +	/*
->> +	 * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
->> +	 *
->> +	 * Get the TDREPORT using REPORTDATA as input. Refer to
->> +	 * section 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0
->> +	 * Specification for detailed information.
->> +	 */
->> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
->> +				virt_to_phys(reportdata), req.subtype,
-> 
-> That subtype you're not checking either.
-> 
-> Where's the paranoia?!
-> 
->> +				0, NULL);
->> +	if (ret) {
->> +		ret = -EIO;
->> +		goto report_failed;
->> +	}
->> +
->> +	/* Copy TDREPORT data back to the user buffer */
-> 
-> Another useless comment.
-
-Will remove it.
-
-> 
->> +	if (copy_to_user((void *)req.tdreport, tdreport, req.tdr_len))
->> +		ret = -EFAULT;
->> +
->> +report_failed:
->> +	kfree(reportdata);
->> +	kfree(tdreport);
->> +	return ret;
->> +}
->> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
->> index 928dcf7a20d9..205f98f42da8 100644
->> --- a/arch/x86/coco/tdx/tdx.c
->> +++ b/arch/x86/coco/tdx/tdx.c
->> @@ -5,6 +5,9 @@
->>  #define pr_fmt(fmt)     "tdx: " fmt
->>  
->>  #include <linux/cpufeature.h>
->> +#include <linux/miscdevice.h>
->> +#include <linux/mm.h>
->> +#include <linux/io.h>
->>  #include <asm/coco.h>
->>  #include <asm/tdx.h>
->>  #include <asm/vmx.h>
->> @@ -12,6 +15,8 @@
->>  #include <asm/insn-eval.h>
->>  #include <asm/pgtable.h>
->>  
->> +#include "tdx.h"
->> +
->>  /* TDX module Call Leaf IDs */
->>  #define TDX_GET_INFO			1
->>  #define TDX_GET_VEINFO			3
->> @@ -34,6 +39,10 @@
->>  #define VE_GET_PORT_NUM(e)	((e) >> 16)
->>  #define VE_IS_IO_STRING(e)	((e) & BIT(4))
->>  
->> +#define DRIVER_NAME	"tdx-guest"
-> 
-> Just "tdx". When you add another driver, then you can disambiguate.
-
-Agree.
-
-> 
->> +static struct miscdevice tdx_misc_dev;
->> +
->>  /*
->>   * Wrapper for standard use of __tdx_hypercall with no output aside from
->>   * return code.
->> @@ -775,3 +784,49 @@ void __init tdx_early_init(void)
->>  
->>  	pr_info("Guest detected\n");
->>  }
->> +
->> +static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
->> +			    unsigned long arg)
->> +{
->> +	void __user *argp = (void __user *)arg;
->> +	long ret = -EINVAL;
->> +
->> +	switch (cmd) {
->> +	case TDX_CMD_GET_REPORT:
->> +		ret = tdx_get_report(argp);
->> +		break;
->> +	default:
->> +		pr_debug("cmd %d not supported\n", cmd);
->> +		break;
->> +	}
->> +
->> +	return ret;
->> +}
->> +
->> +static const struct file_operations tdx_guest_fops = {
->> +	.owner		= THIS_MODULE,
->> +	.unlocked_ioctl	= tdx_guest_ioctl,
->> +	.llseek		= no_llseek,
->> +};
->> +
->> +static int __init tdx_guest_init(void)
->> +{
->> +	int ret;
->> +
->> +	/* Make sure we are in a valid TDX platform */
-> 
-> More useless comments.
-> 
-> When you type comments, pls stop and think whether it even makes sense
-> to add them or the code you're commenting is actually clear from the
-> function naming and the given parameters and the position in the
-> function..., from all of it, that it is pretty clear what happens.
-
-Ok. I will check and remove obvious comments.
-
-> 
->> +	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
->> +		return -EIO;
->> +
->> +	tdx_misc_dev.name = DRIVER_NAME;
->> +	tdx_misc_dev.minor = MISC_DYNAMIC_MINOR;
->> +	tdx_misc_dev.fops = &tdx_guest_fops;
->> +
->> +	ret = misc_register(&tdx_misc_dev);
->> +	if (ret) {
->> +		pr_err("misc device registration failed\n");
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->> +device_initcall(tdx_guest_init)
-> 
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f2d64020399b..e5fb14dc302d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3672,6 +3672,7 @@ F:	Documentation/networking/bonding.rst
+ F:	drivers/net/bonding/
+ F:	include/net/bond*
+ F:	include/uapi/linux/if_bonding.h
++F:	tools/testing/selftests/net/bonding/
+ 
+ BOSCH SENSORTEC BMA400 ACCELEROMETER IIO DRIVER
+ M:	Dan Robertson <dan@dlrobertson.com>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 10b34bb03bc1..c2064a35688b 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -12,6 +12,7 @@ TARGETS += cpu-hotplug
+ TARGETS += damon
+ TARGETS += drivers/dma-buf
+ TARGETS += drivers/s390x/uvdevice
++TARGETS += drivers/net/bonding
+ TARGETS += efivarfs
+ TARGETS += exec
+ TARGETS += filesystems
+diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
+new file mode 100644
+index 000000000000..ab6c54b12098
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0
++# Makefile for net selftests
++
++TEST_PROGS := bond-break-lacpdu-tx.sh
++
++include ../../../lib.mk
+diff --git a/tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh b/tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh
+new file mode 100755
+index 000000000000..47ab90596acb
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh
+@@ -0,0 +1,81 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++# Regression Test:
++#   Verify LACPDUs get transmitted after setting the MAC address of
++#   the bond.
++#
++# https://bugzilla.redhat.com/show_bug.cgi?id=2020773
++#
++#       +---------+
++#       | fab-br0 |
++#       +---------+
++#            |
++#       +---------+
++#       |  fbond  |
++#       +---------+
++#        |       |
++#    +------+ +------+
++#    |veth1 | |veth2 |
++#    +------+ +------+
++#
++# We use veths instead of physical interfaces
++
++set -e
++tmp=$(mktemp -q dump.XXXXXX)
++cleanup() {
++	ip link del fab-br0 >/dev/null 2>&1 || :
++	ip link del fbond  >/dev/null 2>&1 || :
++	ip link del veth1-bond  >/dev/null 2>&1 || :
++	ip link del veth2-bond  >/dev/null 2>&1 || :
++	modprobe -r bonding  >/dev/null 2>&1 || :
++	rm -f -- ${tmp}
++}
++
++trap cleanup 0 1 2
++cleanup
++sleep 1
++
++# create the bridge
++ip link add fab-br0 address 52:54:00:3B:7C:A6 mtu 1500 type bridge \
++	forward_delay 15
++
++# create the bond
++ip link add fbond type bond mode 4 miimon 200 xmit_hash_policy 1 \
++	ad_actor_sys_prio 65535 lacp_rate fast
++
++# set bond address
++ip link set fbond address 52:54:00:3B:7C:A6
++ip link set fbond up
++
++# set again bond sysfs parameters
++ip link set fbond type bond ad_actor_sys_prio 65535
++
++# create veths
++ip link add name veth1-bond type veth peer name veth1-end
++ip link add name veth2-bond type veth peer name veth2-end
++
++# add ports
++ip link set fbond master fab-br0
++ip link set veth1-bond down master fbond
++ip link set veth2-bond down master fbond
++
++# bring up
++ip link set veth1-end up
++ip link set veth2-end up
++ip link set fab-br0 up
++ip link set fbond up
++ip addr add dev fab-br0 10.0.0.3
++
++tcpdump -n -i veth1-end -e ether proto 0x8809 >${tmp} 2>&1 &
++sleep 15
++pkill tcpdump >/dev/null 2>&1
++rc=0
++num=$(grep "packets captured" ${tmp} | awk '{print $1}')
++if test "$num" -gt 0; then
++	echo "PASS, captured ${num}"
++else
++	echo "FAIL"
++	rc=1
++fi
++exit $rc
+diff --git a/tools/testing/selftests/drivers/net/bonding/config b/tools/testing/selftests/drivers/net/bonding/config
+new file mode 100644
+index 000000000000..dc1c22de3c92
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/config
+@@ -0,0 +1 @@
++CONFIG_BONDING=y
+diff --git a/tools/testing/selftests/drivers/net/bonding/settings b/tools/testing/selftests/drivers/net/bonding/settings
+new file mode 100644
+index 000000000000..867e118223cd
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/settings
+@@ -0,0 +1 @@
++timeout=60
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.31.1
+

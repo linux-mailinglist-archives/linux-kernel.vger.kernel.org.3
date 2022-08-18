@@ -2,100 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421C6598D68
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C83598D75
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345645AbiHRULr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 16:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
+        id S1345896AbiHRUKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 16:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241330AbiHRUKX (ORCPT
+        with ESMTP id S1345892AbiHRUJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:10:23 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D1CD476C;
-        Thu, 18 Aug 2022 13:05:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1660853122; x=1692389122;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=lv07QCNfWXt+ZVjahIKXTMyMvM6zNtVFv07gtD8Z56c=;
-  b=rKXaUdL+MyaqZHZAZovyWNgiGk1Zh6TycoxhckDfw+GujuSa2s8VKMEA
-   SQtQ6nAxhvjMjmSPVjcK/rocfBQVTce1xM5i/u8f7/dKVHI3oj2kFUKQ5
-   ldJdy7GYijXmQiJHUBWRND13vgh/jgPie81DXCEzsJ2xYfoZoaHPbNQmS
-   Y=;
-X-IronPort-AV: E=Sophos;i="5.93,247,1654560000"; 
-   d="scan'208";a="234686975"
-Subject: Re: [PATCH v2 01/16] hwmon: (mr75203) fix VM sensor allocation when "intel,
- vm-map" not defined
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 20:02:01 +0000
-Received: from EX13MTAUEB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com (Postfix) with ESMTPS id 412871A0029;
-        Thu, 18 Aug 2022 20:01:59 +0000 (UTC)
-Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
- EX13MTAUEB001.ant.amazon.com (10.43.60.96) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 18 Aug 2022 20:01:59 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Thu, 18 Aug 2022 20:01:58 +0000
-Received: from [192.168.92.216] (10.85.143.172) by mail-relay.amazon.com
- (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Thu, 18 Aug 2022 20:01:54 +0000
-Message-ID: <4814ab5d-1e7c-996a-0c3d-226fc16752c0@amazon.com>
-Date:   Thu, 18 Aug 2022 23:01:53 +0300
+        Thu, 18 Aug 2022 16:09:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32594D21DB
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 13:04:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CCD461458
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 20:03:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F3FBC433C1;
+        Thu, 18 Aug 2022 20:03:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660853027;
+        bh=IeUfviVB25387GkpWnclXYp8ePJifeEM+3lrJ3qxfwM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZG4UqLSfbXDvPv8EIV23mRe6BfblTvnqOMdcHvLUKp2+AhZk71SXjlr2EglrMefSs
+         yb0hWyDhJSEa+5W9kB++u/dymS58r7nwgBfYNpKUDpBGjt1dVXFAuMQ7cK7rKM64nH
+         UxiGYtdVFdVYHk3f5SyhG9WsCZ4+SpoN5vtPtKauDQuJifGjmVJqI0W5gvFnBo5nbR
+         B3tVzeUatQt0l+wKQ1GmxAkksTKPgi27iNYFMVnegLKkzKvaE36G12piO0OAB7vFJH
+         nhvaSU2O69ea+fI0VsA8hUHgyKxn/XyP3kMXZbYZqNSwhHk8itVFjgEPRNBKqZt2VG
+         KgH/7SLleK0Ew==
+Date:   Thu, 18 Aug 2022 22:03:40 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linux Phy <linux-phy@lists.infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        josef.schlehofer@nic.cz
+Subject: Re: [PATCH linux-phy v2 1/4] string.h: Add str_has_proper_prefix()
+Message-ID: <20220818220340.78901438@thinkpad>
+In-Reply-To: <CAHp75VfN1_0Wgop3Fx4DP2ECRTi9gUV87eUQhKgs4LfYGTzbpA@mail.gmail.com>
+References: <20220817200335.911-1-kabel@kernel.org>
+        <20220817200335.911-2-kabel@kernel.org>
+        <CAHp75VecURpGCBY3WVKqhd64Ngobjvi-w=PuHQBH2V-MqCzkuw@mail.gmail.com>
+        <20220818214828.22023dc7@thinkpad>
+        <CAHp75VfN1_0Wgop3Fx4DP2ECRTi9gUV87eUQhKgs4LfYGTzbpA@mail.gmail.com>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
-        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
-        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
-        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>,
-        "Farber, Eliav" <farbere@amazon.com>
-References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-2-farbere@amazon.com>
- <20220818194008.GA3118944@roeck-us.net>
-Content-Language: en-US
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <20220818194008.GA3118944@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/2022 10:40 PM, Guenter Roeck wrote:
-> "intel,vm-map" is listed as required property in moortec,mr75203.yaml.
-> If it is missing, the probe function should fail.
+On Thu, 18 Aug 2022 22:56:14 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-Indeed according to moortec,mr75203.yaml "intel,vm-map" is listed as 
-required
-but the code indicates otherwise:
+> On Thu, Aug 18, 2022 at 10:48 PM Marek Beh=C3=BAn <kabel@kernel.org> wrot=
+e:
+> > On Thu, 18 Aug 2022 22:10:58 +0300
+> > Andy Shevchenko <andy.shevchenko@gmail.com> wrote: =20
+> > > On Wed, Aug 17, 2022 at 11:06 PM Marek Beh=C3=BAn <kabel@kernel.org> =
+wrote: =20
+>=20
+> ...
+>=20
+> > > Besides not the good naming (what 'proper' means), =20
+> >
+> > The naming comes from similar naming in math: proper subset is as
+> > subset that is not equal to the superset. See
+> > https://en.wikipedia.org/wiki/Substring :
+> >   "A proper prefix of a string is not equal to the string itself" =20
+>=20
+> It's nice to learn something, but I still think that name has too
+> broad meaning(s) that may easily confuse the developers.
+>=20
+> > =20
+> > > the entire function is not needed. You may simply call
+> > >
+> > >   str_has_prefix() && p[len] !=3D '\0';
+> > >
+> > > Correct? =20
+> >
+> > Do you mean that I should implement this function to simply return
+> >   str_has_prefix() && p[len] !=3D '\0'
+> > or that this function should not exist at all and I should do that in
+> > the code where I would have used the function? =20
+>=20
+> The latter since this seems do not have users, except a single newcomer,
+>=20
 
-/*
-  * Incase intel,vm-map property is not defined, we assume
-  * incremental channel numbers.
-  */
+Very well. Thanks for the review.
 
-The probe function takes care in case it is missing and does not fail.
-It also seems less reasonable that an Intel proprietary parameter will be
-required and not optional.
-So in patch 03 I fixed the moortec,mr75203.yaml documentation and 
-changed it to
-be optional.
-
---
-Regards, Eliav
-
+Marek

@@ -2,143 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9481598F95
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 23:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C51598F9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 23:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345831AbiHRVdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 17:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
+        id S1345883AbiHRVeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 17:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbiHRVdA (ORCPT
+        with ESMTP id S1344516AbiHRVeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 17:33:00 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754D41144;
-        Thu, 18 Aug 2022 14:32:59 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id x21so3461826edd.3;
-        Thu, 18 Aug 2022 14:32:59 -0700 (PDT)
+        Thu, 18 Aug 2022 17:34:07 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41B590185
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:34:05 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id w3so3469455edc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:34:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=CiTL5HnekfjqUpmditrs+w9/F0W/1X/M0uXhus6DyhE=;
-        b=EuWsiuCkZPpxHdW4bfvh26ZwaSPeY1B3LLlrCFCWUefmWz2549EmYh8qHUU/MdnOwm
-         1WeLbk3FDKznDxP3hPxTuuHbSefbKPM8V74qIzNe+zX8gvrN3c9xZFtS4RMYgHMouc4h
-         7y+Th11v8ztk2/yWTl9rSCQ5WimMFkpWj400xUziuREPZaykKVu9scjZjwkS5sj6dFZF
-         DIBwmfvJRvI+SSI0hjWwPo95pu5w1prwmRpMPOM04mWIEg9xL/UXuKLUdY8dc7jrTlQA
-         qjQ2i1cyDQN53TNThaRAOId7mXsQVMrKZKnqrb8eI3vzQMnoMxLd71CLdS1HvlIGMWBB
-         2kcg==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=qErRFIQ0nHVnmKdsLBSakvXDlQR0goAZInCyznmckxY=;
+        b=hn7koqt0JXqitWaXAGRzTAAniDctUWCyarxNwwp0EBoRHiVHG2Z8guogWJs3qdpLxM
+         sLC4QzABjP6CVSwvyA2aTXNBT3wYYecTtJy3D2wo/pb8fEjaHShM3tJj1Pj1pW70lTL9
+         diCnHQTdiwzzzyzVdV2SmaYpPJuGyKUjY310Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=CiTL5HnekfjqUpmditrs+w9/F0W/1X/M0uXhus6DyhE=;
-        b=t7tPlkSxSx291jY0FthwzwatfzgYK//QNdWfivybtYNYiBB6wlZuV2V6QMDm6Qgw3K
-         KgbaHqW5cfeMYGZ7Vm+GVAxkEBlv3Mq+JLnXuEFWNRCwUDVNrmhhwgOW2g1wHelE4ndb
-         sFqV1QYY2bddoeCtrBtX4zH529F67m9CtfGG14Mn5I7Y0jKxXonFrdbg0Qpe9idmi7RS
-         vhxnc0maPCMd1vxeNasflP+EdvmbD2AOa18WvR/84XzNRuocOjZiaqZVT4wWKovu37hA
-         ALDwwc9qZuavNJkaplShWFweQC3MbZHLGGrmJztYJhawquMwfjWn3HjThpCprCylHjQQ
-         9ZOQ==
-X-Gm-Message-State: ACgBeo3xDyEUEKCLyc1Dm94fRCsZ9dSDWed5OvskWpKoSL0XIJW3ZVpo
-        IsyNrZeB26/CzvKUSTwimxWtIxSHtrlZzA==
-X-Google-Smtp-Source: AA6agR6vRrKUIoMBXHEi9PJO0ghurQ1aJLzbrIf4lPolUlKK3Wrzxy+60BmVGuu8pWIQT58GuI3lJg==
-X-Received: by 2002:a05:6402:25c6:b0:43b:7797:d953 with SMTP id x6-20020a05640225c600b0043b7797d953mr3705988edb.254.1660858378054;
-        Thu, 18 Aug 2022 14:32:58 -0700 (PDT)
-Received: from krava ([83.240.63.36])
-        by smtp.gmail.com with ESMTPSA id b2-20020a17090636c200b006fee7b5dff2sm1364138ejc.143.2022.08.18.14.32.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 14:32:57 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 18 Aug 2022 23:32:55 +0200
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-Message-ID: <Yv6wB4El4iueJtwX@krava>
-References: <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
- <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
- <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
- <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
- <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
- <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
- <YvppJ7TjMXD3cSdZ@worktop.programming.kicks-ass.net>
- <Yv6gm09CMdZ/HMr5@krava>
- <20220818165024.433f56fd@gandalf.local.home>
- <CAADnVQ+n=x=CuBk23UNnD9CHVXjrXLUofbockh-SWaLwH3H9fw@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=qErRFIQ0nHVnmKdsLBSakvXDlQR0goAZInCyznmckxY=;
+        b=omOtqpM38eQiPLnsQuYgSbMh8HOo2FCEnxhlU1Djz0XDlLUscmWbBpiJoGsBVXX9OP
+         FoY8gS3ThF74uRKYtJU20yjsYyWBm34Ni/qAxiZf9nMhAp8SwOWEXz19IcUHsdan6Enr
+         NAWocsP3S0dB1akWdGtVesYol5oDLOGz6UxiI0btTKu/+1cBtdQvXQQpWyy1sbiobZq4
+         fhSMH2g3DtWWNAdS7rexNyDTAwuMgqsCOynV2Vb1p9PxvovNVtXkVTz5ZD0+Xab8pIp9
+         Xt0enZSgrvfBXriTDV2mnNlPOitFSN/IFF8WHlBT7f45hM0qc/QTF94SdF5R8BXFV7gE
+         97tA==
+X-Gm-Message-State: ACgBeo0pkAkH93cG6BiGDquT4HuqcL7TPcwjEfCIUudHZLEJVR2W2KDy
+        ACZhZSNWtKYfCvyXKrKDynz17Kyr/R4jUlv9
+X-Google-Smtp-Source: AA6agR4qxoihVJvqAM9/PB7Kp5O8bFGQ5Gr8AMNFMYTpJsCix5n8OHvpfBkWDp7zSo5+s2BG2U88jg==
+X-Received: by 2002:a05:6402:551a:b0:446:1526:85ea with SMTP id fi26-20020a056402551a00b00446152685eamr3121768edb.188.1660858444108;
+        Thu, 18 Aug 2022 14:34:04 -0700 (PDT)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id kv22-20020a17090778d600b00705cdfec71esm1363154ejc.7.2022.08.18.14.34.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 14:34:01 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id s11-20020a1cf20b000000b003a52a0945e8so1604781wmc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:34:01 -0700 (PDT)
+X-Received: by 2002:a05:600c:5114:b0:3a6:1ab9:5b3d with SMTP id
+ o20-20020a05600c511400b003a61ab95b3dmr2859717wms.93.1660858441222; Thu, 18
+ Aug 2022 14:34:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQ+n=x=CuBk23UNnD9CHVXjrXLUofbockh-SWaLwH3H9fw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220816093644.764259-1-judyhsiao@chromium.org>
+In-Reply-To: <20220816093644.764259-1-judyhsiao@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 18 Aug 2022 14:33:47 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XLsBcbrjb0DwG+Yhia_hk4kcKT2S0_vMT=k3cWxh=NRg@mail.gmail.com>
+Message-ID: <CAD=FV=XLsBcbrjb0DwG+Yhia_hk4kcKT2S0_vMT=k3cWxh=NRg@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: Use "PP1800_L2C" as the DMIC
+ power source.
+To:     Judy Hsiao <judyhsiao@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Jimmy Cheng-Yi Chiang <cychiang@google.com>,
+        Judy Hsiao <judyhsiao@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 02:00:21PM -0700, Alexei Starovoitov wrote:
-> On Thu, Aug 18, 2022 at 1:50 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > On Thu, 18 Aug 2022 22:27:07 +0200
-> > Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > > ok, so the problem with __attribute__((patchable_function_entry(5))) is that
-> > > it puts function address into __patchable_function_entries section, which is
-> > > one of ftrace locations source:
-> > >
-> > >   #define MCOUNT_REC()    . = ALIGN(8);     \
-> > >     __start_mcount_loc = .;                 \
-> > >     KEEP(*(__mcount_loc))                   \
-> > >     KEEP(*(__patchable_function_entries))   \
-> > >     __stop_mcount_loc = .;                  \
-> > >    ...
-> > >
-> > >
-> > > it looks like __patchable_function_entries is used for other than x86 archs,
-> > > so we perhaps we could have x86 specific MCOUNT_REC macro just with
-> > > __mcount_loc section?
-> >
-> > So something like this:
-> >
-> > #ifdef CONFIG_X86
-> > # define NON_MCOUNT_PATCHABLE KEEP(*(__patchable_function_entries))
-> > # define MCOUNT_PATCHABLE
-> > #else
-> > # define NON_MCOUNT_PATCHABLE
-> > # define MCOUNT_PATCHABLE  KEEP(*(__patchable_function_entries))
-> > #endif
-> >
-> >   #define MCOUNT_REC()    . = ALIGN(8);     \
-> >     __start_mcount_loc = .;                 \
-> >     KEEP(*(__mcount_loc))                   \
-> >     MCOUNT_PATCHABLE                        \
-> >     __stop_mcount_loc = .;                  \
-> >     NON_MCOUNT_PATCHABLE                    \
-> >    ...
-> >
-> > ??
-> 
-> That's what more or less Peter's patch is doing:
-> Here it is again for reference:
-> https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=8d075bdf11193f1d276bf19fa56b4b8dfe24df9e
+Hi,
 
-ah nice, and discards the __patchable_function_entries section, great
+On Tue, Aug 16, 2022 at 2:36 AM Judy Hsiao <judyhsiao@chromium.org> wrote:
+>
+> Use "PP1800_L2C" as the DMIC power source to match the hardware
+> schematic.
+> It fixes the DMIC no sound issue of villager-r1.
+>
+>
+> Co-developed-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+> ---
+> Changes since V1:
+>     -- Update the commit message.
+>
+>
+> This patch depends on:
+> arm64: dts: qcom: sc7280: Add herobrine-villager-r1. [1]
+>
+> [1]
+> https://patchwork.kernel.org/patch/12926099/
+>
+>
+>  .../dts/qcom/sc7280-herobrine-villager-r1.dts | 28 +++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
+> index c03b3ae4de50..983defa7c76d 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
+> @@ -12,3 +12,31 @@ / {
+>         model = "Google Villager (rev1+)";
+>         compatible = "google,villager", "qcom,sc7280";
+>  };
+> +
+> +&lpass_va_macro {
+> +       vdd-micb-supply = <&pp1800_l2c>;
+> +};
+> +
+> +&sound {
+> +       audio-routing =
+> +                       "IN1_HPHL", "HPHL_OUT",
+> +                       "IN2_HPHR", "HPHR_OUT",
+> +                       "AMIC1", "MIC BIAS1",
+> +                       "AMIC2", "MIC BIAS2",
+> +                       "VA DMIC0", "vdd-micb",
+> +                       "VA DMIC1", "vdd-micb",
+> +                       "VA DMIC2", "vdd-micb",
+> +                       "VA DMIC3", "vdd-micb",
+> +                       "TX SWR_ADC0", "ADC1_OUTPUT",
+> +                       "TX SWR_ADC1", "ADC2_OUTPUT",
+> +                       "TX SWR_ADC2", "ADC3_OUTPUT",
+> +                       "TX SWR_DMIC0", "DMIC1_OUTPUT",
+> +                       "TX SWR_DMIC1", "DMIC2_OUTPUT",
+> +                       "TX SWR_DMIC2", "DMIC3_OUTPUT",
+> +                       "TX SWR_DMIC3", "DMIC4_OUTPUT",
+> +                       "TX SWR_DMIC4", "DMIC5_OUTPUT",
+> +                       "TX SWR_DMIC5", "DMIC6_OUTPUT",
+> +                       "TX SWR_DMIC6", "DMIC7_OUTPUT",
+> +                       "TX SWR_DMIC7", "DMIC8_OUTPUT";
 
-jirka
+In v1, Stephen pointed out that the subject and description of your
+patch talk about adjusting the supply. However, your patch _also_
+adjusts the audio routing.
+
+It feels like the audio routing should be done in a separate patch and
+that patch.
+
+-Doug

@@ -2,117 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856FA598D83
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686CE598D8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244787AbiHRUO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 16:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
+        id S1345479AbiHRUPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 16:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345944AbiHRUOA (ORCPT
+        with ESMTP id S1345914AbiHRUOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:14:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1CFD276D
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 13:12:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFB2A61488
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 20:12:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B010FC433D6;
-        Thu, 18 Aug 2022 20:12:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660853562;
-        bh=kqSDJYDlk+GZoTBDy/G+LCULfAbmCJdE3oXWaVevqOc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KATih+84YFLy5PxMeIZjKJkIsTKk+XKcG8JcMHzR4IJVXlJQRhy82ziejaEos1i7s
-         Y3i0nL2ImEBYVKuHb1X0HbRV+wvGQ1kHwQpDKlfaDqIR8PMCcXCDI1RR+jMP/peh2P
-         G5c/qGo5TKeEtPYrBU5Eym6FeP3HE4VPlG0sdtxo/BZwl75K+jUwmehnTZao5fc/2i
-         D01Nc/SjxwGeEjcXP3I37isiViWdp/03rwNXUw0VWxoqrBkHzwc1PhxhBCk3s5OXUv
-         hZhAbum/QDM9Hi9c7Ic/HJhQ9DtPfuO6NmNQpoxcuFZyMerhxMyiAw2ehuq+BUIrOM
-         EqCq9AVQtztaw==
-Date:   Thu, 18 Aug 2022 22:12:36 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linux Phy <linux-phy@lists.infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        josef.schlehofer@nic.cz
-Subject: Re: [PATCH linux-phy v2 1/4] string.h: Add str_has_proper_prefix()
-Message-ID: <20220818221236.7b16db07@thinkpad>
-In-Reply-To: <CAHp75VfN1_0Wgop3Fx4DP2ECRTi9gUV87eUQhKgs4LfYGTzbpA@mail.gmail.com>
-References: <20220817200335.911-1-kabel@kernel.org>
-        <20220817200335.911-2-kabel@kernel.org>
-        <CAHp75VecURpGCBY3WVKqhd64Ngobjvi-w=PuHQBH2V-MqCzkuw@mail.gmail.com>
-        <20220818214828.22023dc7@thinkpad>
-        <CAHp75VfN1_0Wgop3Fx4DP2ECRTi9gUV87eUQhKgs4LfYGTzbpA@mail.gmail.com>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 18 Aug 2022 16:14:43 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D39CB5E7;
+        Thu, 18 Aug 2022 13:14:02 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id jm11so2395933plb.13;
+        Thu, 18 Aug 2022 13:14:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=egYSJNbQxtbIjtuZxTLb7Op2z9efDIBz0CVG82pd35Q=;
+        b=OrdgxQZHf0g36dqgz8oBTc9Pw5flV5lUnAKO+L/BXl1IbHMz6Y0SdtGaYvkVBINho4
+         lDQxJFuriCNhvRWKDJNhT68uzk2DPMhppFWOYNcSIqRtXgQ007eDkXLtc+jww6Lj5KLD
+         bi5Hl0bUgFcwQCWbAGu7DenppWIMcGBnYco7S8QPnPoDXHha8aQzzDXNw1MH45MtU5YD
+         h79Ex5qk3hBSkTCq5yMPSmY4oysetZiE+lOLmlZG0IiY73TIsd5bixD5Ch64z4MmscdV
+         7xJE0+dTV8j1ZGcn7S3l71FVgayPZcdCrd1NjyNiOIJhXeHyVtH+Ok8VxHPO6GsW1++T
+         q1ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=egYSJNbQxtbIjtuZxTLb7Op2z9efDIBz0CVG82pd35Q=;
+        b=RLE+omWKLqZU1kiF1oKN0jXPYrYf+X3C+PFVXDU5LIicpP6m5L+3c5vetN9Jxn28Ls
+         dpQSw27C3gdcCn2NYTpmEgE1IubqgVW9hyx8SMFwY8LBM2yuu0QJv2wNF0FF3A0Q6eg/
+         FA3lCUAg4kDDaUQlB6yckvnqrtvBn7Xt6LLHj2ldH6tFZqVmYAETT9/xTb1v4WG/YoSv
+         KnqzD9kStnlTJWWUDoVzcVreBCtot73sH2dPvjsAyndsGofDVFrbYPwf0iov9DsugTsQ
+         j4BwwOPlC6sH5ZtilECeiPt4layNNxOO/r1lyxVN0Sq8ZOKZ0oJAsCxFB3AgstzCUO9Y
+         dVqQ==
+X-Gm-Message-State: ACgBeo0VRBv4ln+k2cNfhOVOkNK9RovyIuMy82PARqvRdJXr1RxW2YLR
+        gvq1OZ8mz3CeR9J3fDP4hvE=
+X-Google-Smtp-Source: AA6agR4k9h5ht6adNQ4cG6aZIayrOdx0qxU/jk7nZlcuvmViw6faXm9ppDtDbTHN6V4LU/YdyEvwDA==
+X-Received: by 2002:a17:90b:4653:b0:1f3:1ce3:2cb with SMTP id jw19-20020a17090b465300b001f31ce302cbmr10134904pjb.176.1660853641591;
+        Thu, 18 Aug 2022 13:14:01 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n3-20020aa79843000000b0052dd7d0ad04sm2058779pfq.88.2022.08.18.13.14.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 13:14:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 18 Aug 2022 13:13:59 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
+        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
+        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
+        rtanwar@maxlinear.com
+Subject: Re: [PATCH v2 11/16] hwmon: (mr75203) add protection for negative
+ voltage value
+Message-ID: <20220818201359.GA3430651@roeck-us.net>
+References: <20220817054321.6519-1-farbere@amazon.com>
+ <20220817054321.6519-12-farbere@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817054321.6519-12-farbere@amazon.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 Aug 2022 22:56:14 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+On Wed, Aug 17, 2022 at 05:43:16AM +0000, Eliav Farber wrote:
+> This change makes sure the returned voltage vlaue is 0 or positive.
+> 
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+>  drivers/hwmon/mr75203.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> index 24a00339cfd8..e3191f590167 100644
+> --- a/drivers/hwmon/mr75203.c
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -218,6 +218,13 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+>  			return ret;
+>  
+>  		n &= SAMPLE_DATA_MSK;
+> +
+> +		/* Voltage can't be negative */
 
-> On Thu, Aug 18, 2022 at 10:48 PM Marek Beh=C3=BAn <kabel@kernel.org> wrot=
-e:
-> > On Thu, 18 Aug 2022 22:10:58 +0300
-> > Andy Shevchenko <andy.shevchenko@gmail.com> wrote: =20
-> > > On Wed, Aug 17, 2022 at 11:06 PM Marek Beh=C3=BAn <kabel@kernel.org> =
-wrote: =20
->=20
-> ...
->=20
-> > > Besides not the good naming (what 'proper' means), =20
-> >
-> > The naming comes from similar naming in math: proper subset is as
-> > subset that is not equal to the superset. See
-> > https://en.wikipedia.org/wiki/Substring :
-> >   "A proper prefix of a string is not equal to the string itself" =20
->=20
-> It's nice to learn something, but I still think that name has too
-> broad meaning(s) that may easily confuse the developers.
->=20
-> > =20
-> > > the entire function is not needed. You may simply call
-> > >
-> > >   str_has_prefix() && p[len] !=3D '\0';
-> > >
-> > > Correct? =20
-> >
-> > Do you mean that I should implement this function to simply return
-> >   str_has_prefix() && p[len] !=3D '\0'
-> > or that this function should not exist at all and I should do that in
-> > the code where I would have used the function? =20
->=20
-> The latter since this seems do not have users, except a single newcomer,
->=20
+Who says, and what does that mean ? Under which conditions would
+the value be negative, and why would that be a problem / bug ?
+After all, negative voltages do exist.
 
-Just out of curiosity I grepped for all usages of str_has_prefix() and
-there are some where it str_has_proper_prefix() could detect failure
-earlier. For example in kernel/trace/trace_events_user.c in function
-user_field_size().
+Guenter
 
-Do you think I should propose converting those? There aren't that many
-uses, so probably not.
-
-Marek
-
+> +		if (PVT_N_CONST * n < PVT_R_CONST) {
+> +			*val = 0;
+> +			return 0;
+> +		}
+> +
+>  		/* Convert the N bitstream count into voltage */
+>  		*val = pvt->vd[channel].pre_scaler;
+>  		*val *= (PVT_N_CONST * n - PVT_R_CONST);

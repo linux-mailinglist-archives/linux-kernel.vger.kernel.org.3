@@ -2,129 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DDE598EA5
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 23:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF1A598E9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 23:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346461AbiHRVCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 17:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S1346452AbiHRVCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 17:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346336AbiHRVA6 (ORCPT
+        with ESMTP id S1346322AbiHRVA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 17:00:58 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED1BD3ECE;
-        Thu, 18 Aug 2022 14:00:34 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a7so5472747ejp.2;
-        Thu, 18 Aug 2022 14:00:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=A32HPAP5Od3KT+F9QIsj7jmUdN0RqSZ7BrLG62V5DEQ=;
-        b=EiftZ2/VM3oMS8+3i8v5hmQJ7gd+jj9Nf4+FG1BUSy1bOtagUF0gdo7NXGpTDkTiV4
-         krvqNoexSpttqYfC2DiaUJbkZiavbyqRJWAwcwjAvcGuNBGgSlpQfJ96GtYq81176VNh
-         zty2bVEkWJyGMMt6MxgqI4tJXq0/mkCnlHQlTnECgC5C0OHS4zbw7JE6BE2/HzkcKSRj
-         oLKKYFMwEFlk1p2K9MQ7ebeEqci6tLIgJ3LgPDKDrUG1/82fMnvJ9TiEHgTs4DCvVoii
-         /mLKKcEFlJhRRLEknCVTDHajSGUZJ58XWqj0GCdgTK3r9CmhEjrfVsupepMKXI+i6rW6
-         BFOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=A32HPAP5Od3KT+F9QIsj7jmUdN0RqSZ7BrLG62V5DEQ=;
-        b=aTDtIBxeRSKRa7oa6Idj+1w+FMOgQ0sAS8+g9rQwEzMY0VRY2iqobB1jX/PAjcs+hM
-         VBhDgq6RlYIy62BjuUsfSEO6/DAVJ3XWIn1seqzQyNK7n1qa9N49Zn4UqdWWVUAN6Wtq
-         hdNWPGY8uFogtx0t8JtbvSeaAe53Oa2oho0p4l5v4TYojp4Ir4eZ9pm+PrEyl5/I+yIh
-         gL1C7mxBT2eQHjpT3gz8m3dNOfbfMlSJGsvGIgTXhEBU//0cjJKX1LsNku3BvmYfaI86
-         AcyyC4Z88l7i6uQAK6kO53c2K0vbJ/B+BoxJc6ccFGg20YLij7TfZQ67NwMM7iiOuYXa
-         OgYw==
-X-Gm-Message-State: ACgBeo3ip/55BczYjCnw1ik/8uHWb7k6zzDjsuONvXHW3HrULQfETVTJ
-        X+LoQBlmr2jRVqoVDrU1rN45bZZAM1rQgL5pn+LooIrPy/k=
-X-Google-Smtp-Source: AA6agR7aQiGzTiYfENEZTzgyWjIg+8U1NkzkYo7M9PDX9EYfCqoeF8HY7s/XnhGCss7xqrObq8l/Ir8cbgHuZaJKfDk=
-X-Received: by 2002:a17:906:a089:b0:72f:826b:e084 with SMTP id
- q9-20020a170906a08900b0072f826be084mr3061943ejy.708.1660856432758; Thu, 18
- Aug 2022 14:00:32 -0700 (PDT)
+        Thu, 18 Aug 2022 17:00:56 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025AED3E66
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:00:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=+ZYalOTKl7babZkqDXEH3SWGLWy
+        EV9exEA3FekqnLXw=; b=UtE7hIChMzCXNpZS5uOxZNyEepkjNO9AqTguTdQBoRc
+        zB4taYgv97GGCb7O+QqEh0axP6gfIZmCBs39fmJEzxQm4zwBrEpO2Zde2/xpcw8z
+        yJbTSQ3Yzb80UkBGo2PwmMVD/b0ycsPgKGXghbLhkZK+mjUuFURau0argSPFvr+I
+        =
+Received: (qmail 3960386 invoked from network); 18 Aug 2022 23:00:24 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Aug 2022 23:00:24 +0200
+X-UD-Smtp-Session: l3s3148p1@o0gnRYrmVcAucref
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Karsten Keil <isdn@linux-pingi.de>, netdev@vger.kernel.org
+Subject: [PATCH] isdn: move from strlcpy with unused retval to strscpy
+Date:   Thu, 18 Aug 2022 23:00:23 +0200
+Message-Id: <20220818210023.6889-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <Yvn9xR7qhXW7FnFL@worktop.programming.kicks-ass.net>
- <YvoVgMzMuQbAEayk@krava> <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
- <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
- <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net> <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
- <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net> <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
- <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net> <YvppJ7TjMXD3cSdZ@worktop.programming.kicks-ass.net>
- <Yv6gm09CMdZ/HMr5@krava> <20220818165024.433f56fd@gandalf.local.home>
-In-Reply-To: <20220818165024.433f56fd@gandalf.local.home>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 18 Aug 2022 14:00:21 -0700
-Message-ID: <CAADnVQ+n=x=CuBk23UNnD9CHVXjrXLUofbockh-SWaLwH3H9fw@mail.gmail.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 1:50 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Thu, 18 Aug 2022 22:27:07 +0200
-> Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> > ok, so the problem with __attribute__((patchable_function_entry(5))) is that
-> > it puts function address into __patchable_function_entries section, which is
-> > one of ftrace locations source:
-> >
-> >   #define MCOUNT_REC()    . = ALIGN(8);     \
-> >     __start_mcount_loc = .;                 \
-> >     KEEP(*(__mcount_loc))                   \
-> >     KEEP(*(__patchable_function_entries))   \
-> >     __stop_mcount_loc = .;                  \
-> >    ...
-> >
-> >
-> > it looks like __patchable_function_entries is used for other than x86 archs,
-> > so we perhaps we could have x86 specific MCOUNT_REC macro just with
-> > __mcount_loc section?
->
-> So something like this:
->
-> #ifdef CONFIG_X86
-> # define NON_MCOUNT_PATCHABLE KEEP(*(__patchable_function_entries))
-> # define MCOUNT_PATCHABLE
-> #else
-> # define NON_MCOUNT_PATCHABLE
-> # define MCOUNT_PATCHABLE  KEEP(*(__patchable_function_entries))
-> #endif
->
->   #define MCOUNT_REC()    . = ALIGN(8);     \
->     __start_mcount_loc = .;                 \
->     KEEP(*(__mcount_loc))                   \
->     MCOUNT_PATCHABLE                        \
->     __stop_mcount_loc = .;                  \
->     NON_MCOUNT_PATCHABLE                    \
->    ...
->
-> ??
+Follow the advice of the below link and prefer 'strscpy' in this
+subsystem. Conversion is 1:1 because the return value is not used.
+Generated by a coccinelle script.
 
-That's what more or less Peter's patch is doing:
-Here it is again for reference:
-https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=8d075bdf11193f1d276bf19fa56b4b8dfe24df9e
+Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/isdn/capi/kcapi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/isdn/capi/kcapi.c b/drivers/isdn/capi/kcapi.c
+index e69c4bf557bf..ae24848af233 100644
+--- a/drivers/isdn/capi/kcapi.c
++++ b/drivers/isdn/capi/kcapi.c
+@@ -798,7 +798,7 @@ u16 capi20_get_serial(u32 contr, u8 serial[CAPI_SERIAL_LEN])
+ 	u16 ret;
+ 
+ 	if (contr == 0) {
+-		strlcpy(serial, driver_serial, CAPI_SERIAL_LEN);
++		strscpy(serial, driver_serial, CAPI_SERIAL_LEN);
+ 		return CAPI_NOERROR;
+ 	}
+ 
+@@ -806,7 +806,7 @@ u16 capi20_get_serial(u32 contr, u8 serial[CAPI_SERIAL_LEN])
+ 
+ 	ctr = get_capi_ctr_by_nr(contr);
+ 	if (ctr && ctr->state == CAPI_CTR_RUNNING) {
+-		strlcpy(serial, ctr->serial, CAPI_SERIAL_LEN);
++		strscpy(serial, ctr->serial, CAPI_SERIAL_LEN);
+ 		ret = CAPI_NOERROR;
+ 	} else
+ 		ret = CAPI_REGNOTINSTALLED;
+-- 
+2.35.1
+

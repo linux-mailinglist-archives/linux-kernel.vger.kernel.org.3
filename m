@@ -2,160 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00E3598918
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF0F59891E
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344869AbiHRQkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 12:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
+        id S1344874AbiHRQkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 12:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344848AbiHRQkI (ORCPT
+        with ESMTP id S1344861AbiHRQks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 12:40:08 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E623A5C78
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 09:40:07 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j7so2376494wrh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 09:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=GexUlF4ShsbvM/5+FHZTW5WNt/VoSURza5qmXJXUOss=;
-        b=4Bt5Ng7gp6Cz4HNi5h74gAu47EzSTvO8GPxcrnNA5KcEfSGM/+mkSOLTpT1KHtQmQC
-         nyc05lkJswlBcFQrpM3M8pLq1p+AdsQuczSs55nYJUb7czQgXTxvZU64Noz6YK6XBgoE
-         0Z/9zVwOHSa4XgjHnm7r1OjEdyqYgGnu2KO81Ha8K1LrsIopy9tp+GGlRfraLtyGas0B
-         5vo935PmV/vJII+nvOKg5lnfdLa8fD0bdQA5fsLrG2XZi/MyTy663jF8ZT8guGOOsOlT
-         YOY21xNRWC1iKX+68AYjhhif8lICvVvVWqn60jXhSWK/wDxeZxUdQxqQF8dPHB8jLztN
-         xtpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=GexUlF4ShsbvM/5+FHZTW5WNt/VoSURza5qmXJXUOss=;
-        b=URfghbZtYx/gwb55oeVuNQstZqux/ww7v9e9OLSTAQNlWC7dmO22zAy018c0cI3L1r
-         gLZ3yQvjbxxPsxGLTj0hK9wirb6pLdJRuelwgveKLwW91WLIKfJXE6aP+WdaWfs3ceLo
-         feq7JvKhy6Ncex3h5591AU5VerMI9YK7i8lhJkSnnP/bMRplF/wnpl9T9AycimyKkpqN
-         tJFVGnLdcxg7mZ9wmeBW33WlNFFs7snX27lAIkzOj6Cl3JyzwDY/b2dzkvt1hxe3owwL
-         fOGkviM/Zc+GLeSO07nqZpIwzz6L00FH0FvHS7MFZJ/p2GouxJBXccUWqlJuPXnTNSxM
-         u90Q==
-X-Gm-Message-State: ACgBeo1Hg3o/Nd4KKjOhyQpp+tRDJgJvHNs547zkdS/MaG9hIyX7rfCh
-        b4FE+vgh+6GJeXYQEVEa7bGIUQ==
-X-Google-Smtp-Source: AA6agR4OebAoKoxymPHgrWb1d98AXrHPQ3vhI+HZKG4LtXNDBBpK4goEN7GMVn6C5YBzSQl+F4e3mQ==
-X-Received: by 2002:adf:fa81:0:b0:224:f260:2523 with SMTP id h1-20020adffa81000000b00224f2602523mr2075676wrr.26.1660840805703;
-        Thu, 18 Aug 2022 09:40:05 -0700 (PDT)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id i20-20020a1c5414000000b003a327f19bf9sm6621432wmb.14.2022.08.18.09.40.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 09:40:05 -0700 (PDT)
-Message-ID: <23da162e-1018-9bfa-bc5c-ec09eba9428b@isovalent.com>
-Date:   Thu, 18 Aug 2022 17:40:04 +0100
+        Thu, 18 Aug 2022 12:40:48 -0400
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50055.outbound.protection.outlook.com [40.107.5.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E26BFC64;
+        Thu, 18 Aug 2022 09:40:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SoDYKw563oTqusbonX3ksW+UP7Gqp11Q9/eC/T6ZFCpMiRXgz7J1YOdJc9owOEAZOo15AkOZpWl1yM60v2DH5mWM7pkmMeyqgZ/+LmZlTFZvG79xbM23xNXirUiT7cG51Uy7trTgnt1BD5dJXfDm+Rz9IGvi9To/3b2+5Gaof2tVtj8oZdxpbXaL43N448ULCqJgNohn+qGO6z3VyAhp248wt42siKKXFftG4b32Ca9BGfW12Yg+atLKpzTqmivFVRA/nm1+SE0jqNjPBTzoIr/VhQqOn7wKMsF90SuXFWjX6099vM0gkuRk2rNrnMjWd4qi4vFTyIYGReHUSzqW0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZI0k6vsIJYqSjDMj+D1YVKPgRT9z2KAVW1GKIBPipN4=;
+ b=bPlW/caQEpvC99h8EqHnrffCshweFTLj4lb1x1sTPV1I0mn1UEBLe6o2rlYAHblmR8qZmL2ogNKJs1M7Qzpj4ezFqBkn3s83LwngQYgZ02IEtqnJxUOrkplHQ7kgch6fmAjMpv4woFj0ugkLOfX6bm0IzxN7nqYp+15SQfjm0YJ0xE7bxHqqW1I4SSu/d84LaWLlpfiGvzo3R5kUIey5rjYHz33FaG6vEjS26+mIZReCxLD3TWrJnXICQToOgO3aMnfZh/CDYAV5Huxa/qOaJfUz3i3Uf6NMh6ZEOt5E7EzHPAqfoGoOfC+VlPO2CU4a64TI3ajaXBcnr2RRtdnX2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZI0k6vsIJYqSjDMj+D1YVKPgRT9z2KAVW1GKIBPipN4=;
+ b=PG2FGXN9srl6ji3iGQS24pqq3waibYjw0aRHTZlz7BGkBwZ01cuM5xoZ+8j4d9QlnMuwRL1OfdW6AVmTvs4qxLxNwFBhaBKkHx+f2hyyznfSVg21NxNKP5Ttck/j+micGz0/PGhMJIWvGC7j1wxN+XspcNxDISLkBMF0Em54XOI+irUiaZUSDbKRQOCpQs026+SITCE2IiwfiiOSikxIRcnLWkbZSCpMdfoiz8XsCGWDzCWuxK8FrW/Q/R0OkKX4eSoed3eMbr6juqkBtR23wRfKVV7zjGz98vHzlEgbE+QnJ9QSqXQyvdbWt5Xu8GE7Y8sFM9I5Ea8pUl0dGBiRhg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by PR2PR03MB5355.eurprd03.prod.outlook.com (2603:10a6:101:20::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Thu, 18 Aug
+ 2022 16:40:43 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::ecaa:a5a9:f0d5:27a2]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::ecaa:a5a9:f0d5:27a2%4]) with mapi id 15.20.5504.019; Thu, 18 Aug 2022
+ 16:40:43 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     Camelia Alexandra Groza <camelia.groza@nxp.com>,
+        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Bhadram Varka <vbhadram@nvidia.com>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH net] net: dpaa: Fix <1G ethernet on LS1046ARDB
+Date:   Thu, 18 Aug 2022 12:40:29 -0400
+Message-Id: <20220818164029.2063293-1-sean.anderson@seco.com>
+X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: CH0PR04CA0057.namprd04.prod.outlook.com
+ (2603:10b6:610:77::32) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 3/3] tools/build: Display logical OR of a feature flavors
-Content-Language: en-GB
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20220818120957.319995-1-roberto.sassu@huaweicloud.com>
- <20220818120957.319995-3-roberto.sassu@huaweicloud.com>
- <Yv46EW6KbUe9zjur@kernel.org>
- <71544d2970e246e1f0d5f5ec065ea2437df58cd9.camel@huaweicloud.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <71544d2970e246e1f0d5f5ec065ea2437df58cd9.camel@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 56a0d0aa-8bcd-414b-e1f6-08da81386476
+X-MS-TrafficTypeDiagnostic: PR2PR03MB5355:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2IZ+J9zalH8aHWZBSnkUbz3IbHQeZaZ58BpY5gTu2NMrgn/2zHpFieYPpPaGUI+XeETDHB4zyswGh+YLmp4vzU8q6Tnlg2cbxBEFYryGT0BNwYx0P53yEOn4KzPmKMMLVhUY7xeA9+00L7bTI/xXsLm2GPyep/URWW9rDek/CQ946q6ffKWfDbMyCSAduOV0FvmTGs9SUGr/ImO8wieV++fNJ2855npO8ua3kdlhJvfU8UGGZgADHMstSqrvnmgJwRrl0h0QcNxVzlOK0jTkDxJ/DfKISCBt8kUyiYtP+pIxNhc/5atybDlHPDCg7lwKJP/FrCwUVKyXdE5rCKi2qbu8sUDs1udPnAz7HjXZK9qDvWEzeCQCyx5/Ir3S+fCYYlhmXCkb7I6na1AUYdxV27IGY1xJZbqxMasDzD6kiCqg3M98Ysl5SfkYJ7+S0Svtf7o4Lpo/a/6PRWwHB9oaaiiz8BJcaCeVSxP4//XP1ib7Fr189TMYNfPaaGaQLesYpopntp9d3DUmjmJYSUurci8LkCQh/gHhY4m/4JoItEgZfH88sHn9FS7HzFk+uLYoxLnrIXRZqOsR2SMA/gwVxodXpduU68B/vj2Jng6Shwfh24mg7KMrzv+tuG6yaNCdB5aLX87Pk7t7CutcXdZc/VGA7pNJm/4uwgmBWuI00rQ9w0ZBgVppn6vV8MYqNM9PClq8wBAri/TkonVQDjK0ClyV/P3xY3WnHDokw1j/FmxnKqtFQkCCjPvhmahz7xmtwNuWFcHGtboa1fYSiv3O1TRcHzheuxzYMpmqnVKn/4k=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(376002)(136003)(39850400004)(366004)(7416002)(83380400001)(41300700001)(6512007)(6506007)(107886003)(6666004)(2906002)(5660300002)(52116002)(44832011)(26005)(186003)(6486002)(2616005)(8936002)(966005)(1076003)(86362001)(54906003)(110136005)(478600001)(38100700002)(38350700002)(316002)(36756003)(8676002)(66556008)(4326008)(66476007)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ADm3ZksGuxiuZDXPrI1KrgXzClQ7ja+Ac2zuSMW8ogrZSvyRk8t0Pj8XXpJP?=
+ =?us-ascii?Q?X+zDfzkXFi+1HF8TkF9ENA6uk/203ZGXcF7zop337iBEKnncskcKOfav7v5j?=
+ =?us-ascii?Q?NdY+OwoovZLBaDJWwjynvM6C7tBS/p8nM/CfpS0SPl3LQNamUMCVF5tsm6YI?=
+ =?us-ascii?Q?3jWGFcaRErPq/gQ9q3KP8rFaJSfXCxhMhhuiCjCipzOuSomjN2t+V7oaEUXK?=
+ =?us-ascii?Q?9rHtYwaU6QWgrbS661I72b4uFUEr66302nIyjvE80ThV8D4fmHZqQWnZ7BrV?=
+ =?us-ascii?Q?r6/5dzfJYy1kQjPbkFqmNqJKyR9HfXPg9w3kgsnJUO9qFgFB0xiSRBrc7Ds2?=
+ =?us-ascii?Q?yxqtGxVEpgZBNL16dWWIA82B04Dop4A0B4ezN4FCLofol/HZ2RfzhzjXH15s?=
+ =?us-ascii?Q?UPSmjlM2wgMd1ajVA5J4UXGBtR833/TX3zuSaUFV8pvfouPwL3beRaNNkXiD?=
+ =?us-ascii?Q?NfguZQAUxwO+vCoNmjLdbZ5jCSlBaLqmw+w3R0NUyAh4qKH8mgbrySgz8hpR?=
+ =?us-ascii?Q?5hWQOojknbd3jJLwTO3TfjAgGxGDMdFTwlinbbYLlvNyn0kO8isetZxRUFJk?=
+ =?us-ascii?Q?lH64s0xpYPjCc2vJVmlTvs76afaMNQignLQHCxi72azrdz9JoUw4titmXGcU?=
+ =?us-ascii?Q?5Td0Sk83BAQVUWEUsc0aZ6ypv9dK7MmivRtBwmO1dkKdV4PMI246j0tOfpMD?=
+ =?us-ascii?Q?Jq4tivipCYpew4nBaphLJ2ls4NZy2FS6S2D0ov89eFwimhKVlSTb2d3aeITD?=
+ =?us-ascii?Q?FMNGXUz3eU3csjc3jEwY4DZ7/77K14lT6fQ/f88Soh6BX+pWZ1ZCcuC34r0f?=
+ =?us-ascii?Q?Ua1Ybe6/oTmGpmtdbHRz/ucdO+0CKtuM2ujNxrvfs1eHgdxx9ZXVlIbk9T+l?=
+ =?us-ascii?Q?fcV63OVw0mYUz+tCS4HC60nvOZHBqW7yYSHpzECE39LU1TfJl2U6fPDo0v0a?=
+ =?us-ascii?Q?NgboNjY7Pjn45TjfuyAwaL9laCphWmKWFNNp760Kg6j2i3/8V1L9fXATCA4a?=
+ =?us-ascii?Q?oUe/B7B0ZH+p3jxfQ1bw1C9OuE/hawP+j0+4I//CaXo/leTKf98UaSF3cPFY?=
+ =?us-ascii?Q?rpNRzg5A/ouhOLSw2f4JRrepKw6Pjss8xh4LTZz3nxiKVOwqgWmqGV4c4lIf?=
+ =?us-ascii?Q?hPsntwQ0i3DilaX11n0YmaIsZ9Uz8Vpg4gDU1JIYfzd4zCK+8NrzgcmqNJ4c?=
+ =?us-ascii?Q?f4WjE/WLvJSjmroB2QCKSAuO8hUL6SJuCtLqckqNyCBRn1ZXwCdarR8TErfM?=
+ =?us-ascii?Q?ir2lI2FRuj1Uj+r4P/nmGO9LJZvKuSRNXfW3QJ1AijKLfY2I4RwshcpX5rvV?=
+ =?us-ascii?Q?6brPmMD9yyZlkYLyrtc1FIYcZs5LKwzI/tgEyi7HcJToiW0zsDE2R6qVpaeb?=
+ =?us-ascii?Q?ezn/sG8eJuzY5MeD4a4RZOwrNo/Jj1G4i4XVXpevV91Uhq5vDU+SKWFggYKQ?=
+ =?us-ascii?Q?AdeWdAen+AImS7/RaogTMO/NDRPHoFE07oDpDqRVVXBaMZOCdSi9WVWp5dZa?=
+ =?us-ascii?Q?IE6lDbIf52/UeZ6Wq1/zkuhcWQAB/fEYJGRyLt55lUdPGYlF6yaVCxt9/ULQ?=
+ =?us-ascii?Q?jkgdbf/PK3MI+cWV/M+KXSy7X8d+iR2WrHWBbqVqA80oYTLrqP1jLaioYGhG?=
+ =?us-ascii?Q?PQ=3D=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56a0d0aa-8bcd-414b-e1f6-08da81386476
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 16:40:43.3916
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cKF1SS5zr+GHhKSdBjgYQzmIvY95Cw9WOaQoCTCfPv3CIwa0FyJP2iTCPIUo9UMbJa/QzAjg/s3/tR5hWnIbcw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR2PR03MB5355
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/08/2022 14:25, Roberto Sassu wrote:
-> On Thu, 2022-08-18 at 10:09 -0300, Arnaldo Carvalho de Melo wrote:
->> Em Thu, Aug 18, 2022 at 02:09:57PM +0200, 
->> roberto.sassu@huaweicloud.com escreveu:
->>> From: Roberto Sassu <roberto.sassu@huawei.com>
->>>
->>> Sometimes, features are simply different flavors of another
->>> feature, to
->>> properly detect the exact dependencies needed by different Linux
->>> distributions.
->>>
->>> For example, libbfd has three flavors: libbfd if the distro does
->>> not
->>> require any additional dependency; libbfd-liberty if it requires
->>> libiberty;
->>> libbfd-liberty-z if it requires libiberty and libz.
->>>
->>> It might not be clear to the user whether a feature has been
->>> successfully
->>> detected or not, given that some of its flavors will be set to OFF,
->>> others
->>> to ON.
->>>
->>> Instead, display only the feature main flavor if not in verbose
->>> mode
->>> (VF != 1), and set it to ON if at least one of its flavors has been
->>> successfully detected (logical OR), OFF otherwise. Omit the other
->>> flavors.
->>>
->>> Accomplish that by declaring a FEATURE_GROUP_MEMBERS-<feature main
->>> flavor>
->>> variable, with the list of the other flavors as variable value. For
->>> now, do
->>> it just for libbfd.
->>>
->>> In verbose mode, of if no group is defined for a feature, show the
->>> feature
->>> detection result as before.
->>
->> Looks cool, tested and added this to the commit log message here in
->> my
->> local branch, that will go public after further tests for the other
->> csets in it:
->>
->> Committer testing:
->>
->> Collecting the output from:
->>
->>   $ make -C tools/bpf/bpftool/ clean
->>   $ make -C tools/bpf/bpftool/ |& grep "Auto-detecting system
->> features" -A10
->>
->>   $ diff -u before after
->>   --- before    2022-08-18 10:06:40.422086966 -0300
->>   +++ after     2022-08-18 10:07:59.202138282 -0300
->>   @@ -1,6 +1,4 @@
->>    Auto-detecting system features:
->>    ...                                  libbfd: [ on  ]
->>   -...                          libbfd-liberty: [ on  ]
->>   -...                        libbfd-liberty-z: [ on  ]
->>    ...                                  libcap: [ on  ]
->>    ...                         clang-bpf-co-re: [ on  ]
->>   $
->>
->> Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
->>
->> Thanks for working on this!
-> 
-> Thanks for testing and for adapting/pushing the other patches!
-> 
-> Roberto
-> 
+As discussed in commit 73a21fa817f0 ("dpaa_eth: support all modes with
+rate adapting PHYs"), we must add a workaround for Aquantia phys with
+in-tree support in order to keep 1G support working. Update this
+workaround for the AQR113C phy found on revision C LS1046ARDB boards.
 
-Tested locally for bpftool and I also observe "libbfd: [ on  ]" only.
-This looks much better, thank you Roberto for following up on this!
+Fixes: 12cf1b89a668 ("net: phy: Add support for AQR113C EPHY")
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+Acked-by: Camelia Groza <camelia.groza@nxp.com>
+---
+This commit was split off from [1], as it is a bugfix and should go on
+net/master.
 
-Quentin
+[1] https://lore.kernel.org/netdev/20220725153730.2604096-1-sean.anderson@seco.com/
+
+ drivers/net/ethernet/freescale/dpaa/dpaa_eth.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+index 45634579adb6..a770bab4d1ed 100644
+--- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
++++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+@@ -2886,6 +2886,7 @@ static void dpaa_adjust_link(struct net_device *net_dev)
+ 
+ /* The Aquantia PHYs are capable of performing rate adaptation */
+ #define PHY_VEND_AQUANTIA	0x03a1b400
++#define PHY_VEND_AQUANTIA2	0x31c31c00
+ 
+ static int dpaa_phy_init(struct net_device *net_dev)
+ {
+@@ -2893,6 +2894,7 @@ static int dpaa_phy_init(struct net_device *net_dev)
+ 	struct mac_device *mac_dev;
+ 	struct phy_device *phy_dev;
+ 	struct dpaa_priv *priv;
++	u32 phy_vendor;
+ 
+ 	priv = netdev_priv(net_dev);
+ 	mac_dev = priv->mac_dev;
+@@ -2905,9 +2907,11 @@ static int dpaa_phy_init(struct net_device *net_dev)
+ 		return -ENODEV;
+ 	}
+ 
++	phy_vendor = phy_dev->drv->phy_id & GENMASK(31, 10);
+ 	/* Unless the PHY is capable of rate adaptation */
+ 	if (mac_dev->phy_if != PHY_INTERFACE_MODE_XGMII ||
+-	    ((phy_dev->drv->phy_id & GENMASK(31, 10)) != PHY_VEND_AQUANTIA)) {
++	    (phy_vendor != PHY_VEND_AQUANTIA &&
++	     phy_vendor != PHY_VEND_AQUANTIA2)) {
+ 		/* remove any features not supported by the controller */
+ 		ethtool_convert_legacy_u32_to_link_mode(mask,
+ 							mac_dev->if_support);
+-- 
+2.35.1.1320.gc452695387.dirty
+

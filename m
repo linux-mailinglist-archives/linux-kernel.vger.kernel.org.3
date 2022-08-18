@@ -2,266 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB6C598533
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4EF598531
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245624AbiHROEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
+        id S245212AbiHROES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245610AbiHROEo (ORCPT
+        with ESMTP id S245534AbiHROEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:04:44 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F924B7D3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:04:37 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-333b049f231so44063717b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=+kv66vxJ0YAn/r791jElf5y4ZMDzSN2X5TyTuKb96rI=;
-        b=Au0+wmSCKtfaRR52iCMDAqCL12HsLn0096khZpro0Ew0t8wYVhkNmnONrg/gtX4k96
-         KqU6CYvipoE2ICrlq95wJSsHspIK/o59+FhEYt7MQMKWobALXS0x1LsWuzqHMFehUxCi
-         YP0NeqB5JRfRg5J2YPhbH/BLR9DJxpFCLU9HV7RdYVjX9Isft/lBxda118WZbu5BnSMs
-         Kyo6KpXeDbTmZ800Z4BwXZYzPm846I1ECGc4S8aoIBePMG2BUy9mKnT8Ch2JLiY1vxPi
-         Eu0W99CN6+L/UtTpVF6GeCVFx6gVAsBYqO9qS/Ps0Q2eYalNOwaGY1UvjyIB/GF4mKOi
-         r2uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=+kv66vxJ0YAn/r791jElf5y4ZMDzSN2X5TyTuKb96rI=;
-        b=nPUZvAYpvYQqeFh3AaY1vhhdR/D9BYjWeopUK2YTmyIRdBDZjOZxMDIUgYnbBk2mB7
-         mszubXdt+j81g6T6Jq3kdLu0PfzKJezmopldLYwZRJRZ5SC/gPgkAf5zGiXfnqJ5ilqc
-         1Uo2OnxDqQZq2syP3M8q+0JMSdFWxwGg8qONHWsxdzy6hwEQU7SGr3LWyblkXHRrMrjh
-         URDPwgtAgJhJhMM1vQaXjkNufzRf2n85Z33uLowzRVzaWblofqDfWOF779ClFN497Cl3
-         bpX7JeGli0+5xyr43zjXpkyol3+oVNal8tta+wmhJifG6HzoO3rTQETzYs4ao6NSJna1
-         g/Ow==
-X-Gm-Message-State: ACgBeo1MsBqy/1yMmQxDnBLn0qzOq2b+CZu26QKjRK1drKFgTShiMWkU
-        74E6BDKRtW7RBKcFuz7SDxOEXr44+QPA2a7W8nlWBw==
-X-Google-Smtp-Source: AA6agR7q18DufKU0IAifoEXyfBzC9Ih5o9isetdzMCKDhC+zW7uCM8Mj8lYx0qEqPIvSPiHSqmk3+VqMyDhz+qXZCw4=
-X-Received: by 2002:a25:4986:0:b0:67b:c97f:6975 with SMTP id
- w128-20020a254986000000b0067bc97f6975mr2745146yba.520.1660831476550; Thu, 18
- Aug 2022 07:04:36 -0700 (PDT)
+        Thu, 18 Aug 2022 10:04:15 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AB965818;
+        Thu, 18 Aug 2022 07:04:13 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 14:04:09 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660831451;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=huKV1HiKrxpeYRytT3hwqTJSmcg8WjeKNN8yQta+aBw=;
+        b=j5uEBC8LnwbrTC9dEYtJFn675wVWODruUgBKIy/+kIkO9F044qRzcHQI5sQYeDsSA+UBIP
+        no61jQxgyXGc4YM2mAJP3BJDxUd99c9eoT9gQ2N7LRecoEdUMja2UlIb/bGDYPb4NNIFOR
+        UuAk9MgSvhpcJZVGzymlblHPEnPmQdiuI1qm00jQM3jjkDw6KGlTiXCiDBBmWFD5ibItWT
+        TeaUIDMzLHKwaa6ghDyKzQWLbdxE+eHPO0ekCrV6Nb1zaorTglEg64zdAUqOpZf+xhsMZ+
+        WSVFvyt3SiI01MjyUJMrDDceritJgRRdXPQjz2oTRmoXrxL0Lu8mwgQhAH7YjA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660831451;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=huKV1HiKrxpeYRytT3hwqTJSmcg8WjeKNN8yQta+aBw=;
+        b=1Cx7ALrLxCxNcBpoD8J/5kVspU6/qFxY28wXPNK+5u2Qtnk65Amo3X9ytWcENU927I5hPN
+        gkzMxpw4VDUx2NBA==
+From:   "tip-bot2 for Pawan Gupta" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/bugs: Add "unknown" reporting for MMIO Stale Data
+Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: =?utf-8?q?=3Ca932c154772f2121794a5f2eded1a11013114711=2E16578?=
+ =?utf-8?q?46269=2Egit=2Epawan=2Ekumar=2Egupta=40linux=2Eintel=2Ecom=3E?=
+References: =?utf-8?q?=3Ca932c154772f2121794a5f2eded1a11013114711=2E165784?=
+ =?utf-8?q?6269=2Egit=2Epawan=2Ekumar=2Egupta=40linux=2Eintel=2Ecom=3E?=
 MIME-Version: 1.0
-References: <20220817080757.352021-1-bchihi@baylibre.com> <20220817080757.352021-3-bchihi@baylibre.com>
- <18164de9-ad28-939c-a802-69647fc65a37@linaro.org>
-In-Reply-To: <18164de9-ad28-939c-a802-69647fc65a37@linaro.org>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Thu, 18 Aug 2022 16:04:00 +0200
-Message-ID: <CAGuA+op3tFL6M=H2rzAB4DJn+7ve4W5vUuRc+zBrq7zQY2CX7w@mail.gmail.com>
-Subject: Re: [PATCH v9,2/7] dt-bindings: thermal: Add dt-binding document for
- LVTS thermal controllers
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        mka@chromium.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com, abailon@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-ID: <166083144940.401.2981933695783238161.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+The following commit has been merged into the x86/urgent branch of tip:
 
-Thank you for the reviews.
-Would you please explain the meaning of "Rebase your patchset on
-decent kernel tree. You seem to use something a bit old"?
-It is rebased on top of linux-6.0.0-rc1.
-Am I missing something?
+Commit-ID:     7df548840c496b0141fb2404b889c346380c2b22
+Gitweb:        https://git.kernel.org/tip/7df548840c496b0141fb2404b889c346380c2b22
+Author:        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+AuthorDate:    Wed, 03 Aug 2022 14:41:32 -07:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Thu, 18 Aug 2022 15:35:22 +02:00
 
-Best regards,
-Balsam
+x86/bugs: Add "unknown" reporting for MMIO Stale Data
 
-On Thu, Aug 18, 2022 at 3:48 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 17/08/2022 11:07, bchihi@baylibre.com wrote:
-> > From: Alexandre Bailon <abailon@baylibre.com>
-> >
-> > Add dt-binding document for mt8192 and mt8195 LVTS thermal controllers.
->
-> Rebase your patchset on decent kernel tree. You seem to use something a
-> bit old.
->
-> >
-> > Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> > Co-developed-by: Balsam CHIHI <bchihi@baylibre.com>
-> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> > ---
-> >  .../thermal/mediatek,lvts-thermal.yaml        | 152 ++++++++++++++++++
-> >  1 file changed, 152 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> > new file mode 100644
-> > index 000000000000..31d9e220513a
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> > @@ -0,0 +1,152 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/thermal/mediatek,lvts-thermal.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: MediaTek SoC LVTS thermal controller
-> > +
-> > +maintainers:
-> > +  - Yu-Chia Chang <ethan.chang@mediatek.com>
-> > +  - Ben Tseng <ben.tseng@mediatek.com>
-> > +
-> > +description: |
-> > +  LVTS (Low Voltage Thermal Sensor).
-> > +  The architecture will be first used on mt8192 and mt8195.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt8192-lvts-ap
-> > +      - mediatek,mt8192-lvts-mcu
-> > +      - mediatek,mt8195-lvts-ap
-> > +      - mediatek,mt8195-lvts-mcu
-> > +
-> > +  "#thermal-sensor-cells":
-> > +    const: 1
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +    description: LVTS instance registers.
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +    description: LVTS instance interrupts.
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +    description: LVTS instance clock.
->
-> Skip all these three descriptions. They are obvious.
->
-> > +
-> > +  resets:
-> > +    maxItems: 1
-> > +    description: |
-> > +      LVTS instance SW reset for HW AP/MCU domain to clean temporary data
-> > +      on HW initialization/resume.
-> > +
-> > +  nvmem-cells:
-> > +    minItems: 1
-> > +    maxItems: 2
-> > +    description: Calibration efuse data for LVTS
-> > +
-> > +  nvmem-cell-names:
-> > +    minItems: 1
-> > +    maxItems: 2
-> > +    description: Calibration efuse cell names for LVTS
-> > +
-> > +allOf:
-> > +  - $ref: thermal-sensor.yaml#
-> > +
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - mediatek,mt8192-lvts-ap
-> > +              - mediatek,mt8192-lvts-mcu
-> > +    then:
-> > +      properties:
-> > +        nvmem-cells:
-> > +          items:
-> > +            - description: Calibration efuse data for LVTS
-> > +
-> > +        nvmem-cell-names:
-> > +          items:
-> > +            - const: lvts_calib_data1
-> > +
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - mediatek,mt8195-lvts-ap
-> > +              - mediatek,mt8195-lvts-mcu
-> > +    then:
-> > +      properties:
-> > +        nvmem-cells:
-> > +          items:
-> > +            - description: Calibration efuse data 1 for LVTS
-> > +            - description: Calibration efuse data 2 for LVTS
-> > +
-> > +        nvmem-cell-names:
-> > +          items:
-> > +            - const: lvts_calib_data1
-> > +            - const: lvts_calib_data2
-> > +
-> > +required:
-> > +  - compatible
-> > +  - '#thermal-sensor-cells'
->
-> Use consistent quotes: either ' or "
->
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +  - resets
-> > +  - nvmem-cells
-> > +  - nvmem-cell-names
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/clock/mt8192-clk.h>
-> > +    #include <dt-bindings/reset/mt8192-resets.h>
-> > +
-> > +    soc {
-> > +      #address-cells = <2>;
-> > +      #size-cells = <2>;
-> > +
-> > +      lvts_ap: thermal-sensor@1100b000 {
-> > +        compatible = "mediatek,mt8192-lvts-ap";
-> > +        #thermal-sensor-cells = <1>;
-> > +        reg = <0 0x1100b000 0 0x1000>;
->
-> Convention is: compatible, then reg, then the rest of properties
->
-> > +        interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +        clocks = <&infracfg CLK_INFRA_THERM>;
-> > +        resets = <&infracfg MT8192_INFRA_RST0_THERM_CTRL_SWRST>;
-> > +        nvmem-cells = <&lvts_e_data1>;
-> > +        nvmem-cell-names = "lvts_calib_data1";
-> > +      };
-> > +
-> > +      lvts_mcu: thermal-sensor@11278000 {
-> > +        compatible = "mediatek,mt8192-lvts-mcu";
-> > +        #thermal-sensor-cells = <1>;
-> > +        reg = <0 0x11278000 0 0x1000>;
-> > +        interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
-> > +        clocks = <&infracfg CLK_INFRA_THERM>;
-> > +        resets = <&infracfg MT8192_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
-> > +        nvmem-cells = <&lvts_e_data1>;
-> > +        nvmem-cell-names = "lvts_calib_data1";
-> > +      };
-> > +    };
->
-> This part is the same as previous, so just skip it or replace with an
-> example which is different somehow.
->
-> Best regards,
-> Krzysztof
+Older Intel CPUs that are not in the affected processor list for MMIO
+Stale Data vulnerabilities currently report "Not affected" in sysfs,
+which may not be correct. Vulnerability status for these older CPUs is
+unknown.
+
+Add known-not-affected CPUs to the whitelist. Report "unknown"
+mitigation status for CPUs that are not in blacklist, whitelist and also
+don't enumerate MSR ARCH_CAPABILITIES bits that reflect hardware
+immunity to MMIO Stale Data vulnerabilities.
+
+Mitigation is not deployed when the status is unknown.
+
+  [ bp: Massage, fixup. ]
+
+Fixes: 8d50cdf8b834 ("x86/speculation/mmio: Add sysfs reporting for Processor MMIO Stale Data")
+Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Suggested-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com
+---
+ Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst | 14 ++++++++++++++
+ arch/x86/include/asm/cpufeatures.h                              |  5 +++--
+ arch/x86/kernel/cpu/bugs.c                                      | 14 ++++++++++++--
+ arch/x86/kernel/cpu/common.c                                    | 42 +++++++++++++++++++++++++++---------------
+ 4 files changed, 56 insertions(+), 19 deletions(-)
+
+diff --git a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
+index 9393c50..c98fd11 100644
+--- a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
++++ b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
+@@ -230,6 +230,20 @@ The possible values in this file are:
+      * - 'Mitigation: Clear CPU buffers'
+        - The processor is vulnerable and the CPU buffer clearing mitigation is
+          enabled.
++     * - 'Unknown: No mitigations'
++       - The processor vulnerability status is unknown because it is
++	 out of Servicing period. Mitigation is not attempted.
++
++Definitions:
++------------
++
++Servicing period: The process of providing functional and security updates to
++Intel processors or platforms, utilizing the Intel Platform Update (IPU)
++process or other similar mechanisms.
++
++End of Servicing Updates (ESU): ESU is the date at which Intel will no
++longer provide Servicing, such as through IPU or other similar update
++processes. ESU dates will typically be aligned to end of quarter.
+ 
+ If the processor is vulnerable then the following information is appended to
+ the above information:
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 235dc85..ef4775c 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -457,7 +457,8 @@
+ #define X86_BUG_ITLB_MULTIHIT		X86_BUG(23) /* CPU may incur MCE during certain page attribute changes */
+ #define X86_BUG_SRBDS			X86_BUG(24) /* CPU may leak RNG bits if not mitigated */
+ #define X86_BUG_MMIO_STALE_DATA		X86_BUG(25) /* CPU is affected by Processor MMIO Stale Data vulnerabilities */
+-#define X86_BUG_RETBLEED		X86_BUG(26) /* CPU is affected by RETBleed */
+-#define X86_BUG_EIBRS_PBRSB		X86_BUG(27) /* EIBRS is vulnerable to Post Barrier RSB Predictions */
++#define X86_BUG_MMIO_UNKNOWN		X86_BUG(26) /* CPU is too old and its MMIO Stale Data status is unknown */
++#define X86_BUG_RETBLEED		X86_BUG(27) /* CPU is affected by RETBleed */
++#define X86_BUG_EIBRS_PBRSB		X86_BUG(28) /* EIBRS is vulnerable to Post Barrier RSB Predictions */
+ 
+ #endif /* _ASM_X86_CPUFEATURES_H */
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 510d852..da7c361 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -433,7 +433,8 @@ static void __init mmio_select_mitigation(void)
+ 	u64 ia32_cap;
+ 
+ 	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
+-	    cpu_mitigations_off()) {
++	     boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN) ||
++	     cpu_mitigations_off()) {
+ 		mmio_mitigation = MMIO_MITIGATION_OFF;
+ 		return;
+ 	}
+@@ -538,6 +539,8 @@ out:
+ 		pr_info("TAA: %s\n", taa_strings[taa_mitigation]);
+ 	if (boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA))
+ 		pr_info("MMIO Stale Data: %s\n", mmio_strings[mmio_mitigation]);
++	else if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
++		pr_info("MMIO Stale Data: Unknown: No mitigations\n");
+ }
+ 
+ static void __init md_clear_select_mitigation(void)
+@@ -2275,6 +2278,9 @@ static ssize_t tsx_async_abort_show_state(char *buf)
+ 
+ static ssize_t mmio_stale_data_show_state(char *buf)
+ {
++	if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
++		return sysfs_emit(buf, "Unknown: No mitigations\n");
++
+ 	if (mmio_mitigation == MMIO_MITIGATION_OFF)
+ 		return sysfs_emit(buf, "%s\n", mmio_strings[mmio_mitigation]);
+ 
+@@ -2421,6 +2427,7 @@ static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr
+ 		return srbds_show_state(buf);
+ 
+ 	case X86_BUG_MMIO_STALE_DATA:
++	case X86_BUG_MMIO_UNKNOWN:
+ 		return mmio_stale_data_show_state(buf);
+ 
+ 	case X86_BUG_RETBLEED:
+@@ -2480,7 +2487,10 @@ ssize_t cpu_show_srbds(struct device *dev, struct device_attribute *attr, char *
+ 
+ ssize_t cpu_show_mmio_stale_data(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+-	return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
++	if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
++		return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_UNKNOWN);
++	else
++		return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
+ }
+ 
+ ssize_t cpu_show_retbleed(struct device *dev, struct device_attribute *attr, char *buf)
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 64a73f4..3e508f2 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1135,7 +1135,8 @@ static void identify_cpu_without_cpuid(struct cpuinfo_x86 *c)
+ #define NO_SWAPGS		BIT(6)
+ #define NO_ITLB_MULTIHIT	BIT(7)
+ #define NO_SPECTRE_V2		BIT(8)
+-#define NO_EIBRS_PBRSB		BIT(9)
++#define NO_MMIO			BIT(9)
++#define NO_EIBRS_PBRSB		BIT(10)
+ 
+ #define VULNWL(vendor, family, model, whitelist)	\
+ 	X86_MATCH_VENDOR_FAM_MODEL(vendor, family, model, whitelist)
+@@ -1158,6 +1159,11 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
+ 	VULNWL(VORTEX,	6, X86_MODEL_ANY,	NO_SPECULATION),
+ 
+ 	/* Intel Family 6 */
++	VULNWL_INTEL(TIGERLAKE,			NO_MMIO),
++	VULNWL_INTEL(TIGERLAKE_L,		NO_MMIO),
++	VULNWL_INTEL(ALDERLAKE,			NO_MMIO),
++	VULNWL_INTEL(ALDERLAKE_L,		NO_MMIO),
++
+ 	VULNWL_INTEL(ATOM_SALTWELL,		NO_SPECULATION | NO_ITLB_MULTIHIT),
+ 	VULNWL_INTEL(ATOM_SALTWELL_TABLET,	NO_SPECULATION | NO_ITLB_MULTIHIT),
+ 	VULNWL_INTEL(ATOM_SALTWELL_MID,		NO_SPECULATION | NO_ITLB_MULTIHIT),
+@@ -1176,9 +1182,9 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
+ 	VULNWL_INTEL(ATOM_AIRMONT_MID,		NO_L1TF | MSBDS_ONLY | NO_SWAPGS | NO_ITLB_MULTIHIT),
+ 	VULNWL_INTEL(ATOM_AIRMONT_NP,		NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT),
+ 
+-	VULNWL_INTEL(ATOM_GOLDMONT,		NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT),
+-	VULNWL_INTEL(ATOM_GOLDMONT_D,		NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT),
+-	VULNWL_INTEL(ATOM_GOLDMONT_PLUS,	NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_EIBRS_PBRSB),
++	VULNWL_INTEL(ATOM_GOLDMONT,		NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
++	VULNWL_INTEL(ATOM_GOLDMONT_D,		NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
++	VULNWL_INTEL(ATOM_GOLDMONT_PLUS,	NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO | NO_EIBRS_PBRSB),
+ 
+ 	/*
+ 	 * Technically, swapgs isn't serializing on AMD (despite it previously
+@@ -1193,18 +1199,18 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
+ 	VULNWL_INTEL(ATOM_TREMONT_D,		NO_ITLB_MULTIHIT | NO_EIBRS_PBRSB),
+ 
+ 	/* AMD Family 0xf - 0x12 */
+-	VULNWL_AMD(0x0f,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
+-	VULNWL_AMD(0x10,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
+-	VULNWL_AMD(0x11,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
+-	VULNWL_AMD(0x12,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
++	VULNWL_AMD(0x0f,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
++	VULNWL_AMD(0x10,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
++	VULNWL_AMD(0x11,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
++	VULNWL_AMD(0x12,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
+ 
+ 	/* FAMILY_ANY must be last, otherwise 0x0f - 0x12 matches won't work */
+-	VULNWL_AMD(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
+-	VULNWL_HYGON(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
++	VULNWL_AMD(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
++	VULNWL_HYGON(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
+ 
+ 	/* Zhaoxin Family 7 */
+-	VULNWL(CENTAUR,	7, X86_MODEL_ANY,	NO_SPECTRE_V2 | NO_SWAPGS),
+-	VULNWL(ZHAOXIN,	7, X86_MODEL_ANY,	NO_SPECTRE_V2 | NO_SWAPGS),
++	VULNWL(CENTAUR,	7, X86_MODEL_ANY,	NO_SPECTRE_V2 | NO_SWAPGS | NO_MMIO),
++	VULNWL(ZHAOXIN,	7, X86_MODEL_ANY,	NO_SPECTRE_V2 | NO_SWAPGS | NO_MMIO),
+ 	{}
+ };
+ 
+@@ -1358,10 +1364,16 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
+ 	 * Affected CPU list is generally enough to enumerate the vulnerability,
+ 	 * but for virtualization case check for ARCH_CAP MSR bits also, VMM may
+ 	 * not want the guest to enumerate the bug.
++	 *
++	 * Set X86_BUG_MMIO_UNKNOWN for CPUs that are neither in the blacklist,
++	 * nor in the whitelist and also don't enumerate MSR ARCH_CAP MMIO bits.
+ 	 */
+-	if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
+-	    !arch_cap_mmio_immune(ia32_cap))
+-		setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
++	if (!arch_cap_mmio_immune(ia32_cap)) {
++		if (cpu_matches(cpu_vuln_blacklist, MMIO))
++			setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
++		else if (!cpu_matches(cpu_vuln_whitelist, NO_MMIO))
++			setup_force_cpu_bug(X86_BUG_MMIO_UNKNOWN);
++	}
+ 
+ 	if (!cpu_has(c, X86_FEATURE_BTC_NO)) {
+ 		if (cpu_matches(cpu_vuln_blacklist, RETBLEED) || (ia32_cap & ARCH_CAP_RSBA))

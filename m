@@ -2,187 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC4C597C29
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7F2597C33
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240479AbiHRDRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 23:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
+        id S243078AbiHRDSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 23:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242979AbiHRDRF (ORCPT
+        with ESMTP id S240708AbiHRDSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 23:17:05 -0400
-Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6349AA831D;
-        Wed, 17 Aug 2022 20:17:02 -0700 (PDT)
-Received: from mta90.sjtu.edu.cn (unknown [10.118.0.90])
-        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id 07BE91008B389;
-        Thu, 18 Aug 2022 11:16:59 +0800 (CST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mta90.sjtu.edu.cn (Postfix) with ESMTP id D920F37C894;
-        Thu, 18 Aug 2022 11:16:59 +0800 (CST)
-X-Virus-Scanned: amavisd-new at 
-Received: from mta90.sjtu.edu.cn ([127.0.0.1])
-        by localhost (mta90.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id g2F2qLtILvBE; Thu, 18 Aug 2022 11:16:59 +0800 (CST)
-Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
-        by mta90.sjtu.edu.cn (Postfix) with ESMTP id A3DBD37C893;
-        Thu, 18 Aug 2022 11:16:59 +0800 (CST)
-Date:   Thu, 18 Aug 2022 11:16:59 +0800 (CST)
-From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        eperezma <eperezma@redhat.com>, jasowang <jasowang@redhat.com>,
-        sgarzare <sgarzare@redhat.com>, Michael Tsirkin <mst@redhat.com>
-Message-ID: <1091620326.8333566.1660792619533.JavaMail.zimbra@sjtu.edu.cn>
-In-Reply-To: <1660792318.4436166-3-xuanzhuo@linux.alibaba.com>
-References: <20220817135718.2553-1-qtxuning1999@sjtu.edu.cn> <20220817135718.2553-7-qtxuning1999@sjtu.edu.cn> <1660792318.4436166-3-xuanzhuo@linux.alibaba.com>
-Subject: Re: [RFC v2 6/7] virtio: in order support for virtio_ring
+        Wed, 17 Aug 2022 23:18:38 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01D422B2E
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:18:31 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VMZAdDx_1660792707;
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VMZAdDx_1660792707)
+          by smtp.aliyun-inc.com;
+          Thu, 18 Aug 2022 11:18:29 +0800
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     will@kernel.org, Jonathan.Cameron@Huawei.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     rdunlap@infradead.org, robin.murphy@arm.com, mark.rutland@arm.com,
+        baolin.wang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
+        xueshuai@linux.alibaba.com
+Subject: [PATCH v4 0/3] drivers/perf: add DDR Sub-System Driveway PMU driver for Yitian 710 SoC
+Date:   Thu, 18 Aug 2022 11:18:19 +0800
+Message-Id: <20220818031822.38415-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220617111825.92911-1-xueshuai@linux.alibaba.com>
+References: <20220617111825.92911-1-xueshuai@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=GB2312
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [36.148.65.198]
-X-Mailer: Zimbra 8.8.15_GA_4308 (ZimbraWebClient - GC103 (Mac)/8.8.15_GA_3928)
-Thread-Topic: virtio: in order support for virtio_ring
-Thread-Index: V9KFug4AVD63FIQF+R2n8Bnz0889Jw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Will,
 
+I am wondering that do you have any comments to this patch set? If/when you're
+happy with them, cloud you please queue them up?
 
------ Original Message -----
-> From: "Xuan Zhuo" <xuanzhuo@linux.alibaba.com>
-> To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>
-> Cc: "netdev" <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>,
-> "virtualization" <virtualization@lists.linux-foundation.org>, "Guo Zhi" <qtxuning1999@sjtu.edu.cn>, "eperezma"
-> <eperezma@redhat.com>, "jasowang" <jasowang@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael Tsirkin"
-> <mst@redhat.com>
-> Sent: Thursday, August 18, 2022 11:11:58 AM
-> Subject: Re: [RFC v2 6/7] virtio: in order support for virtio_ring
+Thank you :)
 
-> On Wed, 17 Aug 2022 21:57:17 +0800, Guo Zhi <qtxuning1999@sjtu.edu.cn> wrote:
->> If in order feature negotiated, we can skip the used ring to get
->> buffer's desc id sequentially.
->>
->> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
->> ---
->>  drivers/virtio/virtio_ring.c | 53 ++++++++++++++++++++++++++++++------
->>  1 file changed, 45 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
->> index 1c1b3fa376a2..143184ebb5a1 100644
->> --- a/drivers/virtio/virtio_ring.c
->> +++ b/drivers/virtio/virtio_ring.c
->> @@ -144,6 +144,9 @@ struct vring_virtqueue {
->>  			/* DMA address and size information */
->>  			dma_addr_t queue_dma_addr;
->>  			size_t queue_size_in_bytes;
->> +
->> +			/* In order feature batch begin here */
->> +			u16 next_desc_begin;
->>  		} split;
->>
->>  		/* Available for packed ring */
->> @@ -702,8 +705,13 @@ static void detach_buf_split(struct vring_virtqueue *vq,
->> unsigned int head,
->>  	}
->>
->>  	vring_unmap_one_split(vq, i);
->> -	vq->split.desc_extra[i].next = vq->free_head;
->> -	vq->free_head = head;
->> +	/* In order feature use desc in order,
->> +	 * that means, the next desc will always be free
->> +	 */
->> +	if (!virtio_has_feature(vq->vq.vdev, VIRTIO_F_IN_ORDER)) {
-> 
-> Call virtio_has_feature() here is not good.
-> 
-> Thanks.
-> 
+Cheers,
+Shuai.
 
-Maybe I can use a variable like vq->indiret?
-Thanks.
+Changes since v3:
+- add Reviewed-by of Baolin
+- Rebase on Linux v6.0 rc1
 
->> +		vq->split.desc_extra[i].next = vq->free_head;
->> +		vq->free_head = head;
->> +	}
->>
->>  	/* Plus final descriptor */
->>  	vq->vq.num_free++;
->> @@ -745,7 +753,7 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
->> *_vq,
->>  {
->>  	struct vring_virtqueue *vq = to_vvq(_vq);
->>  	void *ret;
->> -	unsigned int i;
->> +	unsigned int i, j;
->>  	u16 last_used;
->>
->>  	START_USE(vq);
->> @@ -764,11 +772,38 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
->> *_vq,
->>  	/* Only get used array entries after they have been exposed by host. */
->>  	virtio_rmb(vq->weak_barriers);
->>
->> -	last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
->> -	i = virtio32_to_cpu(_vq->vdev,
->> -			vq->split.vring.used->ring[last_used].id);
->> -	*len = virtio32_to_cpu(_vq->vdev,
->> -			vq->split.vring.used->ring[last_used].len);
->> +	if (virtio_has_feature(_vq->vdev, VIRTIO_F_IN_ORDER)) {
->> +		/* Skip used ring and get used desc in order*/
->> +		i = vq->split.next_desc_begin;
->> +		j = i;
->> +		/* Indirect only takes one descriptor in descriptor table */
->> +		while (!vq->indirect && (vq->split.desc_extra[j].flags & VRING_DESC_F_NEXT))
->> +			j = (j + 1) % vq->split.vring.num;
->> +		/* move to next */
->> +		j = (j + 1) % vq->split.vring.num;
->> +		/* Next buffer will use this descriptor in order */
->> +		vq->split.next_desc_begin = j;
->> +		if (!vq->indirect) {
->> +			*len = vq->split.desc_extra[i].len;
->> +		} else {
->> +			struct vring_desc *indir_desc =
->> +				vq->split.desc_state[i].indir_desc;
->> +			u32 indir_num = vq->split.desc_extra[i].len, buffer_len = 0;
->> +
->> +			if (indir_desc) {
->> +				for (j = 0; j < indir_num / sizeof(struct vring_desc); j++)
->> +					buffer_len += indir_desc[j].len;
->> +			}
->> +
->> +			*len = buffer_len;
->> +		}
->> +	} else {
->> +		last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
->> +		i = virtio32_to_cpu(_vq->vdev,
->> +				    vq->split.vring.used->ring[last_used].id);
->> +		*len = virtio32_to_cpu(_vq->vdev,
->> +				       vq->split.vring.used->ring[last_used].len);
->> +	}
->>
->>  	if (unlikely(i >= vq->split.vring.num)) {
->>  		BAD_RING(vq, "id %u out of range\n", i);
->> @@ -2236,6 +2271,8 @@ struct virtqueue *__vring_new_virtqueue(unsigned int
->> index,
->>  	vq->split.avail_flags_shadow = 0;
->>  	vq->split.avail_idx_shadow = 0;
->>
->> +	vq->split.next_desc_begin = 0;
->> +
->>  	/* No callback?  Tell other side not to bother us. */
->>  	if (!callback) {
->>  		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
->> --
->> 2.17.1
->>
+Changes since v2:
+- relaxe build constraints and add COMPILE_TEST
+- explicitly include dependent headers
+- add Reviewed-by, thanks Jonathan Cameron and Randy Dunlap for their
+  valuable review and comments
+- Link: https://lore.kernel.org/linux-arm-kernel/20220715151310.90091-4-xueshuai@linux.alibaba.com/T/#m1116abc4b0bda1943ab436a45d95359f9bbe0858
+
+Changes since v1:
+- add high level workflow about DDRC so that user cloud better understand
+  the PMU hardware mechanism
+- rewrite patch description and add interrupt sharing constraints
+- delete event perf prefix
+- add a condition to fix bug in ali_drw_pmu_isr
+- perfer CPU in the same Node when migrating irq
+- use FIELD_PREP and FIELD_GET to make code more readable
+- add T-Head HID and leave ARMHD700 as CID for compatibility
+- Link: https://lore.kernel.org/linux-arm-kernel/eb50310d-d4a0-c7ff-7f1c-b4ffd919b10c@linux.alibaba.com/T/
+
+This patchset adds support for Yitian 710 DDR Sub-System Driveway PMU driver,
+which custom-built by Alibaba Group's chip development business, T-Head.
+
+Shuai Xue (3):
+  docs: perf: Add description for Alibaba's T-Head PMU driver
+  drivers/perf: add DDR Sub-System Driveway PMU driver for Yitian 710
+    SoC
+  MAINTAINERS: add maintainers for Alibaba' T-Head PMU driver
+
+ .../admin-guide/perf/alibaba_pmu.rst          | 100 +++
+ Documentation/admin-guide/perf/index.rst      |   1 +
+ MAINTAINERS                                   |   6 +
+ drivers/perf/Kconfig                          |   7 +
+ drivers/perf/Makefile                         |   1 +
+ drivers/perf/alibaba_uncore_drw_pmu.c         | 810 ++++++++++++++++++
+ 6 files changed, 925 insertions(+)
+ create mode 100644 Documentation/admin-guide/perf/alibaba_pmu.rst
+ create mode 100644 drivers/perf/alibaba_uncore_drw_pmu.c
+
+-- 
+2.20.1.12.g72788fdb
+

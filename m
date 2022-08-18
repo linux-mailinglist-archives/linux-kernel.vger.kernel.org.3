@@ -2,332 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2322A5990F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 01:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FAA3599109
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 01:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244947AbiHRXLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 19:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S1343536AbiHRXLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 19:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238901AbiHRXLN (ORCPT
+        with ESMTP id S238901AbiHRXLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 19:11:13 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D97CE469;
-        Thu, 18 Aug 2022 16:11:12 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id w138so234108pfc.10;
-        Thu, 18 Aug 2022 16:11:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=oO4Bc2hWKfVwXdlktiQE0jBPW25iYRkPbwFVfrYw1rQ=;
-        b=JQuWyaiCbdfm4q7rdAUBaYGXABfyu6g7jJP8XT0ZFn2i7em6oGtpQ626yXJS/IC7mt
-         UnAO6uMMKGBmlv2M38QCdTXuD1IbAJBSni4s7Tia8dMUAFMQ5JMnN7ggrf4DO+jGiFl/
-         suaAnQFNmffAZJrYYVHLcBqHN44FWNgn8U5hY5gondQOpMZCSQqNFmTGcXHP3u+0i2Wl
-         mIr8cWkVa3tPWEDOpPdINO8MUIGSZ2Udw6rdChDz9TYYrzhfk7H5r7hiNvB9QPhZsmz+
-         Eyd0YEnEODLEZJDZ++0YZz6fLq3a3bbrKgMwJPnq6292IK9lDdEeFaT/A/yyjPRM/q29
-         ctkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=oO4Bc2hWKfVwXdlktiQE0jBPW25iYRkPbwFVfrYw1rQ=;
-        b=1Bjo8flT2Qh+SuvSv675ZX+16x0HGIG58Jj3/sALGomUn3JXwKJdNghM+s9dkg4T9o
-         UtdFzm+BGx6UBhao/bpfH76N5/mOxUcsNnOg6yzeZ5uiXqZLr8ZGd5CJI7oQjRRqYTAF
-         9FJbYQmCXw1sD8BkSYwL6AV6m8EIkXYXSX5btqtAPBVlMCF1McjtXNcxMB5FZ5JP0NlM
-         zEpUZmu2OXMSHhu0zsB4S5LQJq1yXgFqdlPo7G2CFQVKJLhdpAX5I2p6Gb2g8PGhbT3C
-         t8e/XlvUy3f+6RaHWuA6Mmv7puFa8VKPbbno/3dEbRiKc3LM0rnP5w8llln9ldBYojr/
-         dK5Q==
-X-Gm-Message-State: ACgBeo2XOBD3KrhRf7NoQqJQiRgJCbXEH9oucAptTL7v3prNkNFsOTFK
-        vlsdhmZ9YcmKSKS0Hws1wXs=
-X-Google-Smtp-Source: AA6agR5joEcXdVJZVS7Q2KreZvxoBSDoC8abh7gvhtYJOQriux0crv7KcIKjdUMBbYniIRC1llBTJQ==
-X-Received: by 2002:a63:1a53:0:b0:41f:5298:9b5f with SMTP id a19-20020a631a53000000b0041f52989b5fmr4009107pgm.244.1660864271773;
-        Thu, 18 Aug 2022 16:11:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e8-20020aa79808000000b0052d8b663c37sm2150757pfl.195.2022.08.18.16.11.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 16:11:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 18 Aug 2022 16:11:06 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
-        rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 16/16] hwmon: (mr75203) add debugfs to read and write
- temperature coefficients
-Message-ID: <20220818231106.GA3505191@roeck-us.net>
-References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-17-farbere@amazon.com>
+        Thu, 18 Aug 2022 19:11:33 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE6BCE471
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 16:11:32 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IMrC9L011384;
+        Thu, 18 Aug 2022 23:11:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=LwMe9vWTBIKzX8q+kA+JWETXwlgC1hWx7z5/AwjqoIg=;
+ b=AY73Xy/KGHNTwZHgBpUWWLzgqJEXxKfgpJPcf4IVDE+Uk+64Srg7aMZJQ7geeRR5jEqU
+ n8/ewv+FE5/q7ejCN4T/zG8zAlsVBhWLMdwCr13XNupB0VYxbZlFP3viI7HG8EM4u4R5
+ nCH5YK9s7jz/xQcmEJwRLu3DQYNux9lyN71AHg4EPnMkHwu8bM/7UO/ASUmhe92OJH/J
+ mRVvDrxt8mW9ANs9HwOZqTAuOrm+DvD2mg/xPyQos181xnwgD/oEzTPwYwbdHMDQT757
+ hjmp6/TYclBaNJgK9+b4GADEimdCccEH/2D3qL71PQZ9KI0tgHiuLEl4wWFewuagM99Y kw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j1hhp2u79-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 23:11:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27INBLMT019869
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 23:11:21 GMT
+Received: from [10.111.166.229] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 18 Aug
+ 2022 16:11:19 -0700
+Message-ID: <eca58cbc-dc7e-98d3-7618-858742b82614@quicinc.com>
+Date:   Thu, 18 Aug 2022 16:11:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817054321.6519-17-farbere@amazon.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Freedreno] [PATCH] drm/msm/dsi: Set panel orientation when
+ directly connected
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@gmail.com>
+CC:     freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        <patches@lists.linux.dev>, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>, Sean Paul <sean@poorly.run>
+References: <20220706191442.1150634-1-swboyd@chromium.org>
+ <CAD=FV=UrYCwm2ByN_5EN3fq-ayMJNjmWfJ5sooRy51ZiCoMcjA@mail.gmail.com>
+ <CAF6AEGt_J6f1T+-6KtyCrUJrY2fh7Sz10L1AV1FSe8hueGREtQ@mail.gmail.com>
+ <CAD=FV=W+VWtpTKAoyQpYMFteZy8iYB7-o=ACqkjr7YX7uCxZvg@mail.gmail.com>
+ <CAD=FV=W9Gr9MyCg2rsKaA-ssSi5e3W5zO9sC56At+ceN4A2XtA@mail.gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <CAD=FV=W9Gr9MyCg2rsKaA-ssSi5e3W5zO9sC56At+ceN4A2XtA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: FAtIbuZ2YlaJUXcNJf6H83gb0f5mPJda
+X-Proofpoint-ORIG-GUID: FAtIbuZ2YlaJUXcNJf6H83gb0f5mPJda
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-18_16,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
+ adultscore=0 suspectscore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 spamscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208180085
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:43:21AM +0000, Eliav Farber wrote:
-> This change adds debugfs to read and write TS coefficients - g, h, j and
-> cal5.
-> 
-> The coefficients can vary between product and product, so to calibrate
-> them it can be very useful to to be able to modify them on the fly.
-> 
-> e.g.
-> 
-> cat /sys/kernel/debug/940f23d0000.pvt/ts_coeff_cal5
-> 4096
-> 
-> echo 83000 > sys/kernel/debug/940f23d0000.pvt/ts_coeff_g
-> 
+Hi Doug
 
-What happens if you write 0 into all those attributes, or 0xffffffff ?
-
-Guenter
-
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->  drivers/hwmon/mr75203.c | 196 ++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 196 insertions(+)
+On 8/17/2022 1:48 PM, Doug Anderson wrote:
+> Hi,
 > 
-> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-> index 2898565afaab..ce34a44237e8 100644
-> --- a/drivers/hwmon/mr75203.c
-> +++ b/drivers/hwmon/mr75203.c
-> @@ -9,6 +9,7 @@
->   */
->  #include <linux/bits.h>
->  #include <linux/clk.h>
-> +#include <linux/debugfs.h>
->  #include <linux/hwmon.h>
->  #include <linux/module.h>
->  #include <linux/mod_devicetable.h>
-> @@ -127,6 +128,7 @@ struct pvt_device {
->  	struct clk		*clk;
->  	struct reset_control	*rst;
->  	struct voltage_device	*vd;
-> +	struct dentry		*dbgfs_dir;
->  	u32			t_num;
->  	u32			p_num;
->  	u32			v_num;
-> @@ -139,6 +141,198 @@ struct pvt_device {
->  	u8			vm_ch_total;
->  };
->  
-> +static ssize_t pvt_ts_coeff_h_read(struct file *file,
-> +				   char __user *user_buf,
-> +				   size_t count, loff_t *ppos)
-> +{
-> +	struct pvt_device *pvt = file->private_data;
-> +	char buf[16];
-> +	unsigned int len;
-> +
-> +	len = sprintf(buf, "%u\n", pvt->ts_coeff_h);
-> +
-> +	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
-> +}
-> +
-> +static ssize_t pvt_ts_coeff_h_write(struct file *file,
-> +				    const char __user *user_buf,
-> +				    size_t count, loff_t *ppos)
-> +{
-> +	struct pvt_device *pvt = file->private_data;
-> +	int ret;
-> +	u32 coeff;
-> +
-> +	ret = kstrtou32_from_user(user_buf, count, 0, &coeff);
-> +	if (ret)
-> +		return ret;
-> +
-> +	pvt->ts_coeff_h = coeff;
-> +
-> +	return count;
-> +}
-> +
-> +static const struct file_operations pvt_ts_coeff_h_fops = {
-> +	.read = pvt_ts_coeff_h_read,
-> +	.write = pvt_ts_coeff_h_write,
-> +	.open = simple_open,
-> +	.owner = THIS_MODULE,
-> +	.llseek = default_llseek,
-> +};
-> +
-> +static ssize_t pvt_ts_coeff_g_read(struct file *file,
-> +				   char __user *user_buf,
-> +				   size_t count, loff_t *ppos)
-> +{
-> +	struct pvt_device *pvt = file->private_data;
-> +	char buf[16];
-> +	unsigned int len;
-> +
-> +	len = sprintf(buf, "%u\n", pvt->ts_coeff_g);
-> +
-> +	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
-> +}
-> +
-> +static ssize_t pvt_ts_coeff_g_write(struct file *file,
-> +				    const char __user *user_buf,
-> +				    size_t count, loff_t *ppos)
-> +{
-> +	struct pvt_device *pvt = file->private_data;
-> +	int ret;
-> +	u32 coeff;
-> +
-> +	ret = kstrtou32_from_user(user_buf, count, 0, &coeff);
-> +	if (ret)
-> +		return ret;
-> +
-> +	pvt->ts_coeff_g = coeff;
-> +
-> +	return count;
-> +}
-> +
-> +static const struct file_operations pvt_ts_coeff_g_fops = {
-> +	.read = pvt_ts_coeff_g_read,
-> +	.write = pvt_ts_coeff_g_write,
-> +	.open = simple_open,
-> +	.owner = THIS_MODULE,
-> +	.llseek = default_llseek,
-> +};
-> +
-> +static ssize_t pvt_ts_coeff_j_read(struct file *file,
-> +				   char __user *user_buf,
-> +				   size_t count, loff_t *ppos)
-> +{
-> +	struct pvt_device *pvt = file->private_data;
-> +	char buf[16];
-> +	unsigned int len;
-> +
-> +	len = sprintf(buf, "%d\n", pvt->ts_coeff_j);
-> +
-> +	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
-> +}
-> +
-> +static ssize_t pvt_ts_coeff_j_write(struct file *file,
-> +				    const char __user *user_buf,
-> +				    size_t count, loff_t *ppos)
-> +{
-> +	struct pvt_device *pvt = file->private_data;
-> +	int ret;
-> +	s32 coeff;
-> +
-> +	ret = kstrtos32_from_user(user_buf, count, 0, &coeff);
-> +	if (ret)
-> +		return ret;
-> +
-> +	pvt->ts_coeff_j = coeff;
-> +
-> +	return count;
-> +}
-> +
-> +static const struct file_operations pvt_ts_coeff_j_fops = {
-> +	.read = pvt_ts_coeff_j_read,
-> +	.write = pvt_ts_coeff_j_write,
-> +	.open = simple_open,
-> +	.owner = THIS_MODULE,
-> +	.llseek = default_llseek,
-> +};
-> +
-> +static ssize_t pvt_ts_coeff_cal5_read(struct file *file,
-> +				      char __user *user_buf,
-> +				      size_t count, loff_t *ppos)
-> +{
-> +	struct pvt_device *pvt = file->private_data;
-> +	char buf[16];
-> +	unsigned int len;
-> +
-> +	len = sprintf(buf, "%u\n", pvt->ts_coeff_cal5);
-> +
-> +	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
-> +}
-> +
-> +static ssize_t pvt_ts_coeff_cal5_write(struct file *file,
-> +				       const char __user *user_buf,
-> +				       size_t count, loff_t *ppos)
-> +{
-> +	struct pvt_device *pvt = file->private_data;
-> +	int ret;
-> +	u32 coeff;
-> +
-> +	ret = kstrtou32_from_user(user_buf, count, 0, &coeff);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (coeff == 0)
-> +		return -EINVAL;
-> +
-> +	pvt->ts_coeff_cal5 = coeff;
-> +
-> +	return count;
-> +}
-> +
-> +static const struct file_operations pvt_ts_coeff_cal5_fops = {
-> +	.read = pvt_ts_coeff_cal5_read,
-> +	.write = pvt_ts_coeff_cal5_write,
-> +	.open = simple_open,
-> +	.owner = THIS_MODULE,
-> +	.llseek = default_llseek,
-> +};
-> +
-> +static void devm_pvt_ts_dbgfs_remove(void *data)
-> +{
-> +	struct pvt_device *pvt = (struct pvt_device *)data;
-> +
-> +	debugfs_remove_recursive(pvt->dbgfs_dir);
-> +	pvt->dbgfs_dir = NULL;
-> +}
-> +
-> +static int pvt_ts_dbgfs_create(struct pvt_device *pvt, struct device *dev)
-> +{
-> +	int ret;
-> +
-> +	pvt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
-> +	if (!pvt->dbgfs_dir) {
-> +		dev_err(dev, "Failed to create dbgfs_dir\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	debugfs_create_file("ts_coeff_h", 0644, pvt->dbgfs_dir, pvt,
-> +			    &pvt_ts_coeff_h_fops);
-> +	debugfs_create_file("ts_coeff_g", 0644, pvt->dbgfs_dir, pvt,
-> +			    &pvt_ts_coeff_g_fops);
-> +	debugfs_create_file("ts_coeff_j", 0644, pvt->dbgfs_dir, pvt,
-> +			    &pvt_ts_coeff_j_fops);
-> +	debugfs_create_file("ts_coeff_cal5", 0644, pvt->dbgfs_dir,  pvt,
-> +			    &pvt_ts_coeff_cal5_fops);
-> +
-> +	ret = devm_add_action_or_reset(dev, devm_pvt_ts_dbgfs_remove, pvt);
-> +	if (ret) {
-> +		dev_err(dev, "failed to add action to remove pvt dbgfs (%d)\n",
-> +			ret);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static umode_t pvt_is_visible(const void *data, enum hwmon_sensor_types type,
->  			      u32 attr, int channel)
->  {
-> @@ -655,6 +849,8 @@ static int mr75203_probe(struct platform_device *pdev)
->  		dev_dbg(dev, "ts-coeff: h = %u, g = %u, j = %d, cal5 = %u\n",
->  			pvt->ts_coeff_h, pvt->ts_coeff_g, pvt->ts_coeff_j,
->  			pvt->ts_coeff_cal5);
-> +
-> +		pvt_ts_dbgfs_create(pvt, dev);
->  	}
->  
->  	if (pd_num) {
+> On Wed, Jul 20, 2022 at 3:42 PM Doug Anderson <dianders@chromium.org> wrote:
+>>
+>> Hi,
+>>
+>> On Wed, Jul 20, 2022 at 1:46 PM Rob Clark <robdclark@gmail.com> wrote:
+>>>
+>>> On Fri, Jul 8, 2022 at 8:25 AM Doug Anderson <dianders@chromium.org> wrote:
+>>>>
+>>>> Hi,
+>>>>
+>>>> On Wed, Jul 6, 2022 at 12:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>>>>>
+>>>>> Set the panel orientation in drm when the panel is directly connected,
+>>>>> i.e. we're not using an external bridge. The external bridge case is
+>>>>> already handled by the panel bridge code, so we only update the path we
+>>>>> take when the panel is directly connected/internal. This silences a
+>>>>> warning splat coming from __drm_mode_object_add() on Wormdingler boards.
+>>>>>
+>>>>> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+>>>>> Cc: Douglas Anderson <dianders@chromium.org>
+>>>>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+>>>>> ---
+>>>>>
+>>>>> This relies on commit 5e41b01a7808 ("drm/panel: Add an API to allow drm
+>>>>> to set orientation from panel") which is in drm-misc
+>>>>>
+>>>>>   drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 ++
+>>>>>   1 file changed, 2 insertions(+)
+>>>>
+>>>> I don't personally have objections to this, but (to my understanding)
+>>>> "the future" is that everyone should use panel_bridge. If we made the
+>>>> move to panel_bridge today then we wouldn't need to do this. In
+>>>> general I think panel_bridge would end up letting us delete a bunch of
+>>>> code...
+>>>>
+>>>> See commit 4e5763f03e10 ("drm/bridge: ti-sn65dsi86: Wrap panel with
+>>>> panel-bridge") for when this was done by ti-sn65dsi86.
+>>>>
+>>>> Then again, I spent a small amount of time looking into this and it's
+>>>> definitely non-trivial. Still likely worthwhile, but not worth
+>>>> blocking a tiny fix like this. It also should be fairly obvious that
+>>>> we should delete this when we switch to panel_bridge.
+>>>>
+>>>> Thus:
+>>>>
+>>>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>>>>
+>>>> I'll assume that we'll just snooze this commit until drm-misc-next
+>>>> merges into a tree that msm-next is based on, which will probably be
+>>>> the next -rc1. If desired and Acked I could land this in
+>>>> drm-misc-next, but it's probably not worth it?
+>>>
+>>> if you want to land this patch via drm-misc, which might be the
+>>> easier/faster route, then:
+>>>
+>>> Acked-by: Rob Clark <robdclark@gmail.com>
+>>
+>> As per discussion on IRC, I'm not going to apply this to drm-misc-next.
+>>
+>> Given where we are in the cycle landing in drm-misc-next means it
+>> won't be in mainline for a couple versions and I suspect that'll cause
+>> merge conflicts with Dmitry's series [1]. ...and, of course, if
+>> Dmitry's series lands then we don't even need ${SUBJECT} patch...
+>>
+>> So I think the plan is:
+>>
+>> 1. Snooze waiting for the next -rc1 since
+>> drm_connector_set_orientation_from_panel() won't be in mainline until
+>> then.
+>>
+>> 2. If Dmitry's series looks like a long way off, we could land
+>> ${SUBJECT} patch in msm-next as a stopgap fix.
+>>
+>>
+>> [1] https://lore.kernel.org/r/20220711094320.368062-5-dmitry.baryshkov@linaro.org/
+> 
+> Just checking up. What's the latest thinking here? Do we want to land
+> Stephen's change as a stopgap?
+> drm_connector_set_orientation_from_panel() is available in v6.0-rc1.
+> 
+> -Doug
+
+As per todays discussion with Rob on IRC, we will start preparing the 
+tree for the next release. So lets drop this one and take the panel 
+bridge change instead since my comments on that were minor and can also 
+be addressed in a follow up change, will take it up and send it over to 
+Rob with some other changes.
+
+Thanks
+
+Abhinav

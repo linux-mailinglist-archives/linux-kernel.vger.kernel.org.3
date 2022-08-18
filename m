@@ -2,110 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F55598AE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29D3598AEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345322AbiHRSKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 14:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
+        id S1345325AbiHRSOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 14:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239465AbiHRSKV (ORCPT
+        with ESMTP id S241491AbiHRSO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 14:10:21 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A468FC742B
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:10:20 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 202so1873148pgc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:10:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=JxS+AoR5Z3foSOY0+Ar8q8SgaAJrMyNQbT23W/mzpcs=;
-        b=pDBiETRhCQPgQUMPJo71oWtyuM2YJ25T136p6RiNEeBwMmgO+CWZTnya8KTA4m5aq3
-         DpQ6s4oTeP6yCi93Dy7qah50UvleNLcY8xCyhCzlJ41h7uwycxitT1LhPzNXBwpB2gqp
-         4q0CzdmVwiJ3jraKBVByv5unK4FB4d7xnrCld0UMe6QkALZLByDyPwUhfhSLyTpx2GwQ
-         Aubv6CASvbRBw9aiWZU978ZQ+4daVaWN38aAcGajYrTwIVRgdb0IAxWVl1bnxoUuAXDy
-         2FixKOT1ZUyRd222rkNgmNBks3/oUaIMpio2nkPcwFqKUe/IcPKw0mq1jO9oO7OqD+uq
-         Lkyg==
+        Thu, 18 Aug 2022 14:14:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF076B9FBC
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:14:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660846465;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=W0yvrJCNySNCn52+IL1OETOtNI6hUhlyn5gBnr+tlWk=;
+        b=ARbqba80eB7qM1voAbLfp5f2MUFtRbTzyBLJ/iDW7jpDgvr16TFy60VZdoi5Le1MgFRiQx
+        ki6QFKmft03RXqQRP3BVa7Qni79JLCS/GHNLN64m5oXvA6JINEVFU09ZJikxFI5fg3F9nx
+        TmBLBoyQOAqFjMV1c/mNF2nbHbMq3xw=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-633-wTWxvxHwMdmY-rvIUJ7Y_g-1; Thu, 18 Aug 2022 14:14:23 -0400
+X-MC-Unique: wTWxvxHwMdmY-rvIUJ7Y_g-1
+Received: by mail-pj1-f72.google.com with SMTP id s5-20020a17090a2f0500b001fab8938907so1356531pjd.7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:14:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=JxS+AoR5Z3foSOY0+Ar8q8SgaAJrMyNQbT23W/mzpcs=;
-        b=0YOZeE0C2bxB7mf+rEHxT4VziXYRdJ32dGe03l1MIukc9APGSE+LYFHdMwbA/xRvnb
-         qDZoXeCjSoZ2sVEUBqiWv7aAP6JXBbPIuGWL2qHDaLafFLZUkjt+yAXNNs+8LB3OLb88
-         T1FdAqAPovgathohR336TmS0DGEr5Rf+BwcmDbFGg5NvzWVGX6qwfwFQrz58L3Bd7RuD
-         o8BPfk13YYkij7WRVtub1Qlwm7zghWmct/ZGlYknUL7ggk7G03bA4etuSmyWDHYHTBIm
-         Z499iODsmLWWYKFm4fcY9A/4XbhGl2GrsrNkRI49ozAFuVD4/8KWmCS5MbrrXWTgSyqx
-         ey/g==
-X-Gm-Message-State: ACgBeo2JB1CKUDd4kTqSMW2iSiCKFuELZAZIh03eD+eFnKeuDLbj9ycK
-        OQjXr/xxUNhe7J5fNFX/nEgXSw==
-X-Google-Smtp-Source: AA6agR4BI3KaPSuln0eVBIyiHQX2Ue/QaphJ0hLcxgWVqBfdmn4xufVw6pb/sNnVV5E86GTTiIxiag==
-X-Received: by 2002:a63:91c2:0:b0:41c:66a3:cecb with SMTP id l185-20020a6391c2000000b0041c66a3cecbmr3192398pge.288.1660846220080;
-        Thu, 18 Aug 2022 11:10:20 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l17-20020a170903121100b0017286f83fadsm1752822plh.135.2022.08.18.11.10.19
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=W0yvrJCNySNCn52+IL1OETOtNI6hUhlyn5gBnr+tlWk=;
+        b=ecqgEEEqG4BW94JVdAyHZo16vQxoR+kYHys0ZL9wTT2CWW2dGmwLzrZqJ5CH1JRwIe
+         Pb8ml2SOTouOoCcYq5Ytzr+Z3xycuqPRLycEtpv5AWzgoJBwVisLrhvHcqe9QxIh+xhv
+         L5qECd89N4G77q+ci2tIDqM+nX/4tF9sSUyNOefTZyauUPGOJJm3RgCGlhiRG51gmy5R
+         mNXuhC+NlCWsRNNsotdfFrmlwalmd+MQgd+sDeyEG3+elmg1mSZ1BFMg67oBsl4bzADb
+         1ztAun6Pqx5UpfZVnDZJcNvMFN+sCR4+r9QmAyoFSRL8qo7H5CsfQIEeqZPHfpE58sDs
+         LsTQ==
+X-Gm-Message-State: ACgBeo2toOhh7ht0i1D5qjPfXSGqYLD1GXv1oAug/QU7gRJPEfNu2Ewl
+        jMDidZScYIdhC1jpS/Pl+Et3B7+87S0bFFrRdwW4+zxE9IUlOh76A3puSETru26fxx2H3e0SOjW
+        Sn0t4chkMUWF3+fC4rSCYPEUR
+X-Received: by 2002:a17:90b:1c82:b0:1ee:eb41:b141 with SMTP id oo2-20020a17090b1c8200b001eeeb41b141mr4285207pjb.143.1660846462853;
+        Thu, 18 Aug 2022 11:14:22 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6QokUB9XAiZHout1FdGj0TFG42x0+7uXqK5dl1kBebaN2yKIVrrTUm09/AgqN1PfwicrccCw==
+X-Received: by 2002:a17:90b:1c82:b0:1ee:eb41:b141 with SMTP id oo2-20020a17090b1c8200b001eeeb41b141mr4285195pjb.143.1660846462606;
+        Thu, 18 Aug 2022 11:14:22 -0700 (PDT)
+Received: from xps13.. ([240d:1a:c0d:9f00:4f2f:926a:23dd:8588])
+        by smtp.gmail.com with ESMTPSA id c16-20020a056a00009000b0052dce4edceesm1960592pfj.169.2022.08.18.11.14.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 11:10:19 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 18:10:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     dmatlack@google.com, pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: selftests: Run dirty_log_perf_test on specific cpus
-Message-ID: <Yv6AiPtRbHv4OSL5@google.com>
-References: <20220817152956.4056410-1-vipinsh@google.com>
- <Yv0kRhSjSqz0i0lG@google.com>
- <CAHVum0fT7zJ0qj39xG7OnAObBqeBiz_kAp+chsh9nFytosf9Yg@mail.gmail.com>
- <Yv1ds4zVCt6hbxC4@google.com>
- <CAHVum0dJBwtc5yNzK=n2OQn8YZohTxgFST0XBPUWweQ+KuSeWQ@mail.gmail.com>
+        Thu, 18 Aug 2022 11:14:22 -0700 (PDT)
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     deller@gmx.de
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Shigeru Yoshida <syoshida@redhat.com>,
+        syzbot+a168dbeaaa7778273c1b@syzkaller.appspotmail.com
+Subject: [PATCH] fbcon: Properly revert changes when vc_resize() failed
+Date:   Fri, 19 Aug 2022 03:13:36 +0900
+Message-Id: <20220818181336.3504010-1-syoshida@redhat.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHVum0dJBwtc5yNzK=n2OQn8YZohTxgFST0XBPUWweQ+KuSeWQ@mail.gmail.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022, Vipin Sharma wrote:
-> On Wed, Aug 17, 2022 at 2:29 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Wed, Aug 17, 2022, Vipin Sharma wrote:
-> > > On Wed, Aug 17, 2022 at 10:25 AM Sean Christopherson <seanjc@google.com> wrote:
-> 
-> > > We need error checking here to make sure that the user really wants
-> > > cpu 0 and it was not a mistake in typing.
-> > > I was thinking of using parse_num API for other places as well instead
-> > > of atoi() in dirty_log_perf_test.
-> >
-> > Yes, definitely.  And maybe give it a name like atoi_paranoid()?
-> 
-> Lol. Absolutely, if that's what you want!
+fbcon_do_set_font() calls vc_resize() when font size is changed.
+However, if if vc_resize() failed, current implementation doesn't
+revert changes for font size, and this causes inconsistent state.
 
-The goal is to capture that it's effectively atoi(), but with checking.  E.g. most
-developers will be familiar with atoi() and won't have to think too hard if they
-see e.g. atoi_paranoid().  On the other hand, parse_num() leaves the reader
-wondering if it's parsing hex, decimal, octal, etc..., why selftests just doesn't
-use atoi(), etc...
+syzbot reported unable to handle page fault due to this issue [1].
+syzbot's repro uses fault injection which cause failure for memory
+allocation, so vc_resize() failed.
 
-> Okay, I will remove -d and only keep -c. I will extend it to support
-> pinning the main worker and vcpus. Arguments to -c will be like:
-> <main woker lcpu>, <vcpu0's lcpu>, <vcpu1's lcpu>, <vcpu2's lcpu>,...
-> Example:
-> ./dirty_log_perf_test -v 3 -c 1,20,21,22
-> 
-> Main worker will run on 1 and 3 vcpus  will run on logical cpus 20, 21 and 22.
+This patch fixes this issue by properly revert changes for font
+related date when vc_resize() failed.
 
-I think it makes sense to have the vCPUs be first.  That way vcpu0 => task_map[0],
-and we can also extend the option in the future without breaking existing command
-lines, e.g. to add more workers and/or redefine the behavior of the "trailing"
-numbers to say that all workers are affined to those CPUs (to allow sequestering
-the main worker from vCPUs without pinning it to a single CPU).
+Link: https://syzkaller.appspot.com/bug?id=3443d3a1fa6d964dd7310a0cb1696d165a3e07c4 [1]
+Reported-by: syzbot+a168dbeaaa7778273c1b@syzkaller.appspotmail.com
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+---
+ drivers/video/fbdev/core/fbcon.c | 27 +++++++++++++++++++++++++--
+ 1 file changed, 25 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
+index cf9ac4da0a82..825b012debe7 100644
+--- a/drivers/video/fbdev/core/fbcon.c
++++ b/drivers/video/fbdev/core/fbcon.c
+@@ -2401,15 +2401,21 @@ static int fbcon_do_set_font(struct vc_data *vc, int w, int h, int charcount,
+ 	struct fb_info *info = fbcon_info_from_console(vc->vc_num);
+ 	struct fbcon_ops *ops = info->fbcon_par;
+ 	struct fbcon_display *p = &fb_display[vc->vc_num];
+-	int resize;
++	int resize, ret, old_userfont, old_width, old_height, old_charcount;
+ 	char *old_data = NULL;
+ 
+ 	resize = (w != vc->vc_font.width) || (h != vc->vc_font.height);
+ 	if (p->userfont)
+ 		old_data = vc->vc_font.data;
+ 	vc->vc_font.data = (void *)(p->fontdata = data);
++	old_userfont = p->userfont;
+ 	if ((p->userfont = userfont))
+ 		REFCOUNT(data)++;
++
++	old_width = vc->vc_font.width;
++	old_height = vc->vc_font.height;
++	old_charcount = vc->vc_font.charcount;
++
+ 	vc->vc_font.width = w;
+ 	vc->vc_font.height = h;
+ 	vc->vc_font.charcount = charcount;
+@@ -2425,7 +2431,9 @@ static int fbcon_do_set_font(struct vc_data *vc, int w, int h, int charcount,
+ 		rows = FBCON_SWAP(ops->rotate, info->var.yres, info->var.xres);
+ 		cols /= w;
+ 		rows /= h;
+-		vc_resize(vc, cols, rows);
++		ret = vc_resize(vc, cols, rows);
++		if (ret)
++			goto err_out;
+ 	} else if (con_is_visible(vc)
+ 		   && vc->vc_mode == KD_TEXT) {
+ 		fbcon_clear_margins(vc, 0);
+@@ -2435,6 +2443,21 @@ static int fbcon_do_set_font(struct vc_data *vc, int w, int h, int charcount,
+ 	if (old_data && (--REFCOUNT(old_data) == 0))
+ 		kfree(old_data - FONT_EXTRA_WORDS * sizeof(int));
+ 	return 0;
++
++err_out:
++	p->fontdata = old_data;
++	vc->vc_font.data = (void *)old_data;
++
++	if (userfont) {
++		p->userfont = old_userfont;
++		REFCOUNT(data)--;
++	}
++
++	vc->vc_font.width = old_width;
++	vc->vc_font.height = old_height;
++	vc->vc_font.charcount = old_charcount;
++
++	return ret;
+ }
+ 
+ /*
+-- 
+2.37.1
+

@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5CF597BCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15AC7597BCE
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242795AbiHRC7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 22:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
+        id S242911AbiHRC70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 22:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242747AbiHRC7R (ORCPT
+        with ESMTP id S242901AbiHRC7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 22:59:17 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D8943E49
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 19:59:16 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VMYvMC6_1660791553;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VMYvMC6_1660791553)
-          by smtp.aliyun-inc.com;
-          Thu, 18 Aug 2022 10:59:14 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     airlied@linux.ie
-Cc:     daniel@ffwll.ch, harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] drm/amd/display: remove unneeded semicolon
-Date:   Thu, 18 Aug 2022 10:59:12 +0800
-Message-Id: <20220818025912.87327-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 17 Aug 2022 22:59:24 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC76445F69;
+        Wed, 17 Aug 2022 19:59:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ASEUGz7cWLg+rQ8611/fIqPtCeFG8olFVXzJbYSDQzs=; b=Pueurmcq0kfuZIQ+jCxKjdrRP9
+        Kg241jyA1XznTr/9t2Dfz1ODc36s+/y73GuvXl7uBs2Akp03PgjoitVPNuYM4v5Km/L/U57VYn9Gq
+        UGdcNsCVkNzOQkS+h057cz3jWOXDDQ3DGZdccjj/1rNnH2nxTpBYluxy1QypaA0bC6ddT/6fxC3mD
+        1U5JinSOFv0kYDwFbD+yKQq4JJUQPAOfU1p6zMKJ1lMxA2wDtU9F5YNQeKX6r9LXE1g1nUu9HR3SN
+        YJPW4od+SXh6w/rIHuh+KAqHyJf790Eq8WXmEL/5GA1AAFR8EAaq7D8tVY/kzJTsGT5BRRDmsTRRr
+        5E+rWbzg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oOVkg-005abP-Ac;
+        Thu, 18 Aug 2022 02:59:22 +0000
+Date:   Thu, 18 Aug 2022 03:59:22 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH 4/5] ksmbd: don't open-code %pf
+Message-ID: <Yv2rCqD7M8fAhq5v@ZenIV>
+References: <Yv2qoNQg48rtymGE@ZenIV>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yv2qoNQg48rtymGE@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Semicolon is not required after curly braces.
-
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=1918
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- drivers/gpu/drm/amd/display/dc/clk_mgr/dcn314/dcn314_clk_mgr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ksmbd/vfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn314/dcn314_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn314/dcn314_clk_mgr.c
-index beb025cd3dc2..1995e1d708d9 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn314/dcn314_clk_mgr.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn314/dcn314_clk_mgr.c
-@@ -614,7 +614,7 @@ static void dcn314_clk_mgr_helper_populate_bw_params(struct clk_mgr_internal *cl
- 		bw_params->clk_table.entries[i].dppclk_mhz = max_dppclk;
- 		bw_params->clk_table.entries[i].wck_ratio = convert_wck_ratio(
- 			clock_table->DfPstateTable[min_pstate].WckRatio);
--	};
-+	}
+diff --git a/fs/ksmbd/vfs.c b/fs/ksmbd/vfs.c
+index 78d01033604c..a0fafba8b5d0 100644
+--- a/fs/ksmbd/vfs.c
++++ b/fs/ksmbd/vfs.c
+@@ -1743,11 +1743,11 @@ int ksmbd_vfs_copy_file_ranges(struct ksmbd_work *work,
+ 	*total_size_written = 0;
  
- 	/* Make sure to include at least one entry at highest pstate */
- 	if (max_pstate != min_pstate || i == 0) {
+ 	if (!(src_fp->daccess & (FILE_READ_DATA_LE | FILE_EXECUTE_LE))) {
+-		pr_err("no right to read(%pd)\n", src_fp->filp->f_path.dentry);
++		pr_err("no right to read(%pf)\n", src_fp->filp);
+ 		return -EACCES;
+ 	}
+ 	if (!(dst_fp->daccess & (FILE_WRITE_DATA_LE | FILE_APPEND_DATA_LE))) {
+-		pr_err("no right to write(%pd)\n", dst_fp->filp->f_path.dentry);
++		pr_err("no right to write(%pf)\n", dst_fp->filp);
+ 		return -EACCES;
+ 	}
+ 
 -- 
-2.20.1.7.g153144c
+2.30.2
 

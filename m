@@ -2,123 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0658C598907
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8CB59891A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344561AbiHRQii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 12:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        id S1344862AbiHRQkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 12:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239763AbiHRQif (ORCPT
+        with ESMTP id S1344950AbiHRQko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 12:38:35 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CBD491C4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 09:38:34 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id c39so2612299edf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 09:38:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=2B8tvc8B2hGOQWJ0UIEwuS9k9Pi3iffbpMUFMt6cRTA=;
-        b=ErGEvsdDtIIHCcxD24M8zXwYEB9SpeIIeJzzWl1gJpkkCmePawUmhzzEyHMxG94Ate
-         GsURqbvPPl0c5qKNQiCNovk95SuLeVZazP7OmbqjwmpgPnpySNqwHgPlhjlPT1ccG1Bu
-         Fns8MY8lhCRWCcYo8V/9qKS67ZVgGzkhMkhOg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=2B8tvc8B2hGOQWJ0UIEwuS9k9Pi3iffbpMUFMt6cRTA=;
-        b=OEfWgeQ9YhYgpMBngbRal8J+4af1+cnbZ8F7gpABz0xijxJa8AOL86MC8LpkcIZAre
-         L3dsCBFzejlZtIypTxlAEIMnVe56VaIg4dmz3j8jO0P74PTgKUzOwOg7wV4D7RBx8HkP
-         YfKL8XZZwBLFlZ9naD/q7msJjOZnqsPLE3qZfBOpMpaqTviES2cCEarOgrgcFfzpGtPx
-         1HY2dH/gL9aO1/fuu2r8NfDZlMGPFdjpInaHfZVey83L9dfVlJw+Dlag+rsXEz+y2fjP
-         t6O0+BpQZ/9K0mbw3gcOEatkcY9rLviBTMi/DILseUAkF5LqFDW75ZdI+Shwki8GYn01
-         PnXQ==
-X-Gm-Message-State: ACgBeo3/cuqBQC9d1y+lErljqHMcUZvKLbMaeqX6OkfxAPtAqwIebgAG
-        g4SXh5cJ2pzJhWvebdse/jlzmE1IruhGV8Iy
-X-Google-Smtp-Source: AA6agR6TBLTt/7Gv3Tl5ktbDTOSKFS8GymPJnHCdd6kR0uOj9JrPPa9qnEY3IUuAtk54R4fCPJV1jg==
-X-Received: by 2002:a05:6402:1e8a:b0:43e:93ab:5ab8 with SMTP id f10-20020a0564021e8a00b0043e93ab5ab8mr2889777edf.211.1660840712427;
-        Thu, 18 Aug 2022 09:38:32 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id ck30-20020a0564021c1e00b00445d760fc69sm1444027edb.50.2022.08.18.09.38.30
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 09:38:31 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id m10-20020a05600c3b0a00b003a603fc3f81so1246781wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 09:38:30 -0700 (PDT)
-X-Received: by 2002:a05:600c:2195:b0:3a6:b3c:c100 with SMTP id
- e21-20020a05600c219500b003a60b3cc100mr2371564wme.8.1660840710358; Thu, 18 Aug
- 2022 09:38:30 -0700 (PDT)
+        Thu, 18 Aug 2022 12:40:44 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D716BFAB4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 09:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660840844; x=1692376844;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=llLrcHc/wK3CfmeEcVnkYQChSaB5jpfMLinYxM/52ds=;
+  b=hFcBN1VrYHOudZFKwi9iquJO65AzlqyQeOWIS+eklaMwIPjBiY2KZTDh
+   Cbd0x3jwX7IaohW+vNGC3VHe6fW0MJHX/jwzk4fzj81VWwMWxnMdgBGfK
+   RhML5y/1xI40+YtL9ddvx7e0f9/puqZt/Jnyl1yw5F2yuq4tZlnO+E3th
+   pfcK3PnV+Snk2pmwqsOeSoQvVa+ZUmTLfLwRZFtkABtBuVoMAPx4Kd3sD
+   kznHD5RxIetYqtjAAvlOgNUkoOJifns2Sxlu9vzeLaJ4IQ0LGA16PptNy
+   hNtqBQMz0Bqa3LhqQ3azFxD3gSUpTG2qKc+rMe+Yaw2MsTtsBWVoboHoc
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="272582263"
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="272582263"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 09:39:20 -0700
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="853473562"
+Received: from amalikya-mobl.amr.corp.intel.com (HELO [10.212.238.171]) ([10.212.238.171])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 09:39:20 -0700
+Message-ID: <8a09b9d5-d5c6-7a1f-1e44-9525b5b18661@intel.com>
+Date:   Thu, 18 Aug 2022 09:39:19 -0700
 MIME-Version: 1.0
-References: <20220818110859.1918035-1-jens.wiklander@linaro.org>
-In-Reply-To: <20220818110859.1918035-1-jens.wiklander@linaro.org>
-From:   Linus Torvalds <torvalds@linuxfoundation.org>
-Date:   Thu, 18 Aug 2022 09:38:14 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiEqhzrMskE=7_q4E+X+zPyxm6xvuADhaBxh8gD5p57kA@mail.gmail.com>
-Message-ID: <CAHk-=wiEqhzrMskE=7_q4E+X+zPyxm6xvuADhaBxh8gD5p57kA@mail.gmail.com>
-Subject: Re: [PATCH v2] tee: add overflow check in register_shm_helper()
-To:     Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Sumit Garg <sumit.garg@linaro.org>, stable@vger.kernel.org,
-        Nimish Mishra <neelam.nimish@gmail.com>,
-        Anirban Chakraborty <ch.anirban00727@gmail.com>,
-        Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>,
-        Jerome Forissier <jerome.forissier@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 5/7] mm: Remember young/dirty bit for page migrations
+Content-Language: en-US
+To:     Nadav Amit <nadav.amit@gmail.com>, Peter Xu <peterx@redhat.com>
+Cc:     "Huang, Ying" <ying.huang@intel.com>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andi Kleen <andi.kleen@intel.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+References: <20220809220100.20033-1-peterx@redhat.com>
+ <20220809220100.20033-6-peterx@redhat.com> <YvUeB0jc6clz59z5@xz-m1.local>
+ <87pmh6dwdr.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <YvqcGq44oonHNyCO@xz-m1.local>
+ <5B21352C-2BE6-4070-BB6B-C1B7A5D4D225@gmail.com>
+ <E37036E0-566E-40C7-AD15-720CDB003227@gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <E37036E0-566E-40C7-AD15-720CDB003227@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 4:09 AM Jens Wiklander
-<jens.wiklander@linaro.org> wrote:
->
-> Fix this by adding an overflow check when calculating the end of the
-> memory range. Also add an explicit call to access_ok() in
-> tee_shm_register_user_buf() to catch an invalid user space address
-> early.
+On 8/15/22 14:03, Nadav Amit wrote:
+>>
+>> At least on x86, the hardware is not supposed to do so. The only case I
+>> remember (and sometimes misremembers) is with KNL erratum, which perhaps
+>> needs to be considered:
+>>
+>> https://lore.kernel.org/all/20160708001911.9A3FD2B6@viggo.jf.intel.com/
+> I keep not remembering this erratum correctly. IIRC, the erratum says that
+> the access/dirty might be set, but it does not mean that a write is possible
+> after the PTE is cleared (i.e., the dirty/access might be set on the
+> non-present PTE, but the access itself would fail). So it is not an issue in
+> this case - losing A/D would not impact correctness since the access should
+> fail.
+> 
+> Dave Hansen hates when I get confused with this one, but I cc him if he
+> wants to confirm.
 
-I applied the access_ok() part of this which was clearly missing.
+Right.
 
-The check_add_overflow() should be pointless with that.
+The issue is strictly with the page walker setting Accessed/Dirty in a
+racy way.  The TLB still has accurate contents at all times.
 
-And the "roundup() overflows" check should just check for a zero
-result - if it is actually needed. Which I don't think it is on any
-relevant platform (the TEE subsystem only works on arm and x86).
-
-I do think it might be worth discussing whether
-ALTERNATE_USER_ADDRESS_SPACE (and no-MMU) architectures should still
-have access_ok() check that it doesn't actually wrap around in the
-address space, so I've added linux-arch here.
-
-That's m68k, PA-RISC, S390 and sparc.
-
-In fact, I wonder if some or all of those might want to have the
-TASK_SIZE limit anyway - they may have a separate user address space,
-but several ones have some limits even then, and probably should have
-access_ok() check them rather than depend on the hardware then giving
-page fault.
-
-For example, sparc32 has a user address space, but defines TASK_SIZE
-to 0xF0000000. m68k has several different case. parisc also has an
-actual limit.
-
-And s390 uses
-
-    #define TASK_SIZE_MAX         (-PAGE_SIZE)
-
-which is a good value and leaves a guard page at the top.
-
-So I think the "roundup overflows" would probably be best fixed by
-just admitting that every architecture in practice has a TASK_SIZE_MAX
-anyway, and we should just make access_ok() check it.
-
-              Linus

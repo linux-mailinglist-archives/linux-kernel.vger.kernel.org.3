@@ -2,122 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C910D5984F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D276E5984ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245453AbiHRNys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        id S245393AbiHRN4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245445AbiHRNyO (ORCPT
+        with ESMTP id S245396AbiHRN4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:54:14 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5F62DAB1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:53:44 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27ID17H7016364;
-        Thu, 18 Aug 2022 13:52:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=WvC02gQFYYKWacteP6HCP3xymg9DFXvKYpKxmSy1xWU=;
- b=WKvHqgQa1Uub/T3ffOMmsRrnJXW5DOXkzOeL3rRrNAoSHBgmJqP7Vofo4IJn89Er4U+g
- 3a/W9fGXMg8pJ5w/klprJ0ZL2nCceFPqt7PJoavVtm2YMfpwmgAMWGby+BhWy8qZ/FPG
- 8/MD5VrWkMB/DHsuugcw2vQQ8DS6NnBozqN49QeB2awwXxj3IEgDoV5JgYnttwMutx4H
- brcPVxoVSfUwRdMcWANdhtIUhtWPNyuEB+h6VStiXvSZO5u1s0hFYK7B6bfsl7FwYKLL
- 6AVNp1UXX+pJdQMpxC0BMTuommpXOows25mMZ0gZYldXbmPWh631SF+TZlV30wjmyHUL bA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1nxkhram-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 13:52:37 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27ID16ZX016322;
-        Thu, 18 Aug 2022 13:52:37 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1nxkhr9w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 13:52:37 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27IDqZbL031553;
-        Thu, 18 Aug 2022 13:52:35 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3hx3k8vf99-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 13:52:34 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27IDqWsh28049724
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Aug 2022 13:52:32 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8006D4C044;
-        Thu, 18 Aug 2022 13:52:32 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2B7244C040;
-        Thu, 18 Aug 2022 13:52:28 +0000 (GMT)
-Received: from [9.43.111.107] (unknown [9.43.111.107])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Aug 2022 13:52:27 +0000 (GMT)
-Message-ID: <c4c37505-0320-2a00-0f8f-0490f39486ff@linux.ibm.com>
-Date:   Thu, 18 Aug 2022 19:22:26 +0530
+        Thu, 18 Aug 2022 09:56:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD58B7284;
+        Thu, 18 Aug 2022 06:55:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1AFE616F4;
+        Thu, 18 Aug 2022 13:55:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D466C433D6;
+        Thu, 18 Aug 2022 13:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660830939;
+        bh=fHzcBNlzGIZpl1xhXWFZNUDkhjIsfNqXuL0NTcnbSpk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=a1Rz0rDFPWuA7x8HY71a9klDTS7phrO7CnzcNYqrI/L2GvFT+RZWZyoewgnd3RMoG
+         3V1zaan4Wz2R1xAXJ5Pvrwoi9ky/RDZGOzCFsMhiIVd11yOr3RIr25wBN5VyaAVJUX
+         cMyEaaJGETJ/OS892Rjm1jP7uo02MXutvpbI7b30rOaNWAgSoKnZ/XuLBvVUH0OuMq
+         buenYGD5g12Wtfp3Jh+iPkwxWxUj1UDyvXSTpK11YHA+JcXOQC/ZC6i+HIVtMRema+
+         XERxdZknt9iTB3KXMzp0sz8ZSvkWFS2BVNNEmzz09TETaH0JS0MvNCskXudG5AQWiq
+         Wgl/naXAHsAZA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Qin Jian <qinjian@cqplus1.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>, Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shannon Nelson <snelson@pensando.io>,
+        Peter Chen <peter.chen@nxp.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Felipe Balbi <balbi@ti.com>, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 00/11] ARM: defconfig cleanup
+Date:   Thu, 18 Aug 2022 15:55:21 +0200
+Message-Id: <20220818135522.3143514-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v15 01/10] mm/demotion: Add support for explicit memory
- tiers
-Content-Language: en-US
-To:     linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Bharata B Rao <bharata@amd.com>
-References: <20220818131042.113280-1-aneesh.kumar@linux.ibm.com>
- <20220818131042.113280-2-aneesh.kumar@linux.ibm.com>
-From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-In-Reply-To: <20220818131042.113280-2-aneesh.kumar@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iIX3MxSMWOvmEyFsZWaUftfha6n9RdZP
-X-Proofpoint-ORIG-GUID: ya2mL6W8-HU1nqEDCYnTqE-0DXT9Nvkc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_12,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=978 impostorscore=0 bulkscore=0 suspectscore=0 adultscore=0
- phishscore=0 priorityscore=1501 clxscore=1015 malwarescore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180047
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 6:40 PM, Aneesh Kumar K.V wrote:
+From: Arnd Bergmann <arnd@arndb.de>
 
-> + */
-> +#define MEMTIER_CHUNK_BITS	7
-> +#define MEMTIER_CHUNK_SIZE	(1 << MEMTIER_CHUNK_BITS)
-> +/*
-> + * Smaller abstract distance values imply faster(higher) memory tiers. Offset
-> + * the DRAM adistance so that we can accommodate devices with a slightly lower
-> + * adistance value (slightly slower) than default DRAM adistance to be part of
+I have continued the cleanup of the multi_*_defconfig files, and
+reordered the other files according to the 'make savedefconfig'
+output as before.
 
-                      (^^^ slightly faster)
-> + * the same memory tier.
-> + */
->
+I would like to queue these up for 6.1, though the last two
+should probably be considered bugfixes and merged for 6.0.
+
+Since a third of the defconfig files are for machines that
+are now marked as unused, I skipped those files. There are still
+a few things that get removed by 'make savedefconfig' as they
+now get selected by some driver:
+
+-CONFIG_SERIAL_BCM63XX=y
+-CONFIG_SND_AUDIO_GRAPH_CARD=m
+-CONFIG_NEW_LEDS=y
+-CONFIG_LEDS_TRIGGERS=y
+-CONFIG_TEGRA20_APB_DMA=y
+
+I think for those we should follow up with patches to remove the
+'select' statements.
+
+       Arnd
+
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Liviu Dudau <liviu.dudau@arm.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Gregory Clement <gregory.clement@bootlin.com>
+Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Magnus Damm <magnus.damm@gmail.com>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: Qin Jian <qinjian@cqplus1.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Chen-Yu Tsai <wens@csie.org>
+Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc: Samuel Holland <samuel@sholland.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: Bin Liu <b-liu@ti.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: "Łukasz Stelmach" <l.stelmach@samsung.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: Richard Cochran <richardcochran@gmail.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Shannon Nelson <snelson@pensando.io>
+Cc: Peter Chen <peter.chen@nxp.com>
+Cc: Stefan Wahren <stefan.wahren@i2se.com>
+Cc: Felipe Balbi <balbi@ti.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: linux-omap@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-sunxi@lists.linux.dev
+Cc: linux-tegra@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+
+
+Arnd Bergmann (11):
+  ARM: defconfig: reorder defconfig files
+  ARM: defconfig: clean up multi_v4t and multi_v5 configs
+  ARM: defconfig: drop CONFIG_NET_VENDOR_ASIX=y
+  ARM: defconfig: drop CONFIG_SERIAL_OMAP references
+  ARM: defconfig: drop CONFIG_DRM_RCAR_LVDS
+  ARM: defconfig: drop CONFIG_PTP_1588_CLOCK=y
+  ARM: defconfig: drop CONFIG_SND_SOC_FSL_SAI
+  ARM: defconfig: drop CONFIG_USB_FSL_USB2
+  ARM: defconfig: drop CONFIG_MICROCHIP_PIT64B
+  ARM: defconfig: fix CONFIG_SND_SOC_AC97_CODEC name
+  musb: fix USB_MUSB_TUSB6010 dependency
+
+ arch/arm/configs/at91_dt_defconfig   |  2 +-
+ arch/arm/configs/dove_defconfig      |  2 +-
+ arch/arm/configs/exynos_defconfig    |  2 +-
+ arch/arm/configs/imx_v6_v7_defconfig |  2 +-
+ arch/arm/configs/keystone_defconfig  |  7 +++----
+ arch/arm/configs/lpc18xx_defconfig   |  2 +-
+ arch/arm/configs/mmp2_defconfig      |  2 +-
+ arch/arm/configs/mps2_defconfig      |  2 +-
+ arch/arm/configs/multi_v4t_defconfig |  2 --
+ arch/arm/configs/multi_v5_defconfig  |  3 +--
+ arch/arm/configs/multi_v7_defconfig  | 22 +++++++---------------
+ arch/arm/configs/mvebu_v5_defconfig  |  2 +-
+ arch/arm/configs/mxs_defconfig       |  4 ++--
+ arch/arm/configs/omap1_defconfig     |  2 +-
+ arch/arm/configs/omap2plus_defconfig |  7 ++-----
+ arch/arm/configs/orion5x_defconfig   |  2 +-
+ arch/arm/configs/pxa168_defconfig    |  2 +-
+ arch/arm/configs/pxa910_defconfig    |  2 +-
+ arch/arm/configs/pxa_defconfig       |  2 +-
+ arch/arm/configs/s3c6400_defconfig   |  2 +-
+ arch/arm/configs/s5pv210_defconfig   |  2 +-
+ arch/arm/configs/sama5_defconfig     |  6 +++---
+ arch/arm/configs/sama7_defconfig     |  4 ++--
+ arch/arm/configs/shmobile_defconfig  |  2 +-
+ arch/arm/configs/socfpga_defconfig   |  6 +++---
+ arch/arm/configs/sp7021_defconfig    |  2 +-
+ arch/arm/configs/spear13xx_defconfig |  2 +-
+ arch/arm/configs/spear3xx_defconfig  |  2 +-
+ arch/arm/configs/spear6xx_defconfig  |  2 +-
+ arch/arm/configs/stm32_defconfig     |  2 +-
+ arch/arm/configs/sunxi_defconfig     |  2 +-
+ arch/arm/configs/tegra_defconfig     |  2 +-
+ arch/arm/configs/vexpress_defconfig  |  2 +-
+ drivers/usb/musb/Kconfig             |  2 +-
+ 34 files changed, 48 insertions(+), 63 deletions(-)
+
+-- 
+2.29.2
+

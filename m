@@ -2,84 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE6C598754
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DBF59875B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344252AbiHRPWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
+        id S1344315AbiHRPWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245691AbiHRPWD (ORCPT
+        with ESMTP id S1344258AbiHRPWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:22:03 -0400
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AD57539F;
-        Thu, 18 Aug 2022 08:21:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1660836089; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=ANI7IPRR551PJTpRtyF/vzZcTFfEc84mHr+GpDLqExtKSLVOTV+sY42RwadRJxrSjig2PIz1/9oyCgz5rEwez47HmXxfvJtH//rJbf4yF7P3BdQVkuCPLC1GulheaMi2rb73QoeR2shRpq4ivJZ0JgeqGfB/TK9oK/u0Q0LECTk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1660836089; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=VU/9NQq/tY4qE6lA3If/jM8YrDr0mazxoc1R8N5jJzM=; 
-        b=Gm4TZbzpKIAdX5WgaCIyI3RaM2qsBnQa2OrbXs99nBA5w4Xz5BQpNk+zUQHXfJTdPL+WFIF4FJIPAU7pT3sGIab9e0OoJ2r4yC4XwQmAis2awbxmm8tXrMVdfTggiKgz5QezJz1dx1KzyfGv8xUeK1/BbjCtn4mKPvJdFQxK53M=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1660836089;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=VU/9NQq/tY4qE6lA3If/jM8YrDr0mazxoc1R8N5jJzM=;
-        b=RMmO85lSetrrrFF2xKPs/f6gejNaB5fSXzegfG46VK5pASIAXAWgJTmJl/TbEZyW
-        SYieXMe1kcpvE9mG1rek2hKz/TFiAC6pHbIRMeyKfcilX6BPzCnBuP24yAMYhN8ROKY
-        6duj9GjcU7N5BttFAwNM6og9uNbI0ScOme2elwzk=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1660836076966185.1731467950858; Thu, 18 Aug 2022 20:51:16 +0530 (IST)
-Date:   Thu, 18 Aug 2022 20:51:16 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Matthew Wilcox" <willy@infradead.org>
-Cc:     "david" <david@fromorbit.com>, "djwong" <djwong@kernel.org>,
-        "fgheet255t" <fgheet255t@gmail.com>, "hch" <hch@infradead.org>,
-        "linux-ext4" <linux-ext4@vger.kernel.org>,
-        "linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "linux-xfs" <linux-xfs@vger.kernel.org>,
-        "riteshh" <riteshh@linux.ibm.com>,
-        "syzbot+a8e049cd3abd342936b6" 
-        <syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com>,
-        "syzkaller-bugs" <syzkaller-bugs@googlegroups.com>
-Message-ID: <182b18b5d92.7a2e2b1623166.1514589417142553905@siddh.me>
-In-Reply-To: <Yv5RmsUvRh+RKpXH@casper.infradead.org>
-References: <20220818110031.89467-1-code@siddh.me>
- <20220818111117.102681-1-code@siddh.me> <Yv5RmsUvRh+RKpXH@casper.infradead.org>
-Subject: Re: [syzbot] WARNING in iomap_iter
+        Thu, 18 Aug 2022 11:22:19 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C6C76757
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:22:03 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id k14so1869952pfh.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=rhQW8wtozjWF3HGibH/hmWhRxd+6MVNHu/SAHJnuLEc=;
+        b=f6//pOErDLPHd1qSNJ6w7EtZZP4/zk0eXgK/NqZ4rp9ZIZ9+nXwDrJL8Yw2ms9c4V+
+         q5IpxVxScLGFYwKqNz+zjrAkdGx86VokP+XBDEn3iZMSTHDeWgpPDWnatT0RQafS0goZ
+         OkVfnHhwCLHp4BN/vYZMDsL/sIn3BIWsrhlQIyf8K0FcVZt0oMlX02n6UqFB5UchDYLt
+         6mcNkn95UkGiGa2/3E8bNMO4mRpXGtk2zDC6ptlHJ6PUyZhWvOS0tz7ekEljcsa0gkBu
+         2dupBQln9wtns+ZxbM8UNXKtUBprK8Zla5FoFoCNBUJT2XL2sBXHcsYKq2Yr541a+TD6
+         HxuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=rhQW8wtozjWF3HGibH/hmWhRxd+6MVNHu/SAHJnuLEc=;
+        b=IInConOI8S2Cr9ux3ec3HctI0G8upwG6nVPyIuIlNMTni3DFFC6gMfpokj+msk25uh
+         eYnDOEMYAO2HC3q16U/5jjK5Lh8gBZ6jVXRKMzYptYygmhHEOtPA7TqK2cJKIphECc5n
+         8sMOE8EWODh0f2R0NS6S8URZTdbqbGCd4QmF+2JyXiGqhgh5Gq6cHtnI4MbPEkeh/YHx
+         g7njhX6S6pQQd4kAhWFipo9XENFzYdW/DlpeUro1jPDcjTcTCFL5qBvYV6nTRDldUASS
+         PPGK3D8pVoM9YFW+C48pHeCrt29sm9pkMtdaOeugXkJK39/Duz1hS4tvk8BozvIJtDtX
+         wG0A==
+X-Gm-Message-State: ACgBeo3Ren8/ThaLWyIxbHryGAZkIIdxYX54UItNzbrU9bjUJZpv6uqT
+        OZd+n0erTnucISdJaqtQP9f1tQ==
+X-Google-Smtp-Source: AA6agR5vNg4AZiDCWVBlsHoSfs5B2gPrwRDzidwiEq69ooGPNnoP7C38ZuFXqwZu2MlDx6G13n/pJw==
+X-Received: by 2002:a63:f003:0:b0:429:fde8:4992 with SMTP id k3-20020a63f003000000b00429fde84992mr2676470pgh.134.1660836122834;
+        Thu, 18 Aug 2022 08:22:02 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n11-20020a63a50b000000b0041c8e489cc2sm1423692pgf.19.2022.08.18.08.22.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 08:22:02 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 15:21:58 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 03/26] x86/hyperv: Update 'struct hv_enlightened_vmcs'
+ definition
+Message-ID: <Yv5ZFgztDHzzIQJ+@google.com>
+References: <20220802160756.339464-1-vkuznets@redhat.com>
+ <20220802160756.339464-4-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802160756.339464-4-vkuznets@redhat.com>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 Aug 2022 20:20:02 +0530  Matthew Wilcox  wrote:
-> I don't think changing these from u64 to s64 is the right way to go.
+On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
+> Updated Hyper-V Enlightened VMCS specification lists several new
+> fields for the following features:
+> 
+> - PerfGlobalCtrl
+> - EnclsExitingBitmap
+> - Tsc Scaling
+> - GuestLbrCtl
+> - CET
+> - SSP
+> 
+> Update the definition. The updated definition is available only when
+> CPUID.0x4000000A.EBX BIT(0) is '1'. Add a define for it as well.
+> 
+> Note: The latest TLFS is available at
+> https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/tlfs
+> 
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/include/asm/hyperv-tlfs.h | 26 ++++++++++++++++++++++++--
+>  1 file changed, 24 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 6f0acc45e67a..ebc27017fa48 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -138,6 +138,17 @@
+>  #define HV_X64_NESTED_GUEST_MAPPING_FLUSH		BIT(18)
+>  #define HV_X64_NESTED_MSR_BITMAP			BIT(19)
+>  
+> +/*
+> + * Nested quirks. These are HYPERV_CPUID_NESTED_FEATURES.EBX bits.
 
-Why do you think so? Is there somnething I overlooked?
+The "quirks" part is very confusing, largely because KVM has a well-established
+quirks mechanism.  I also don't see "quirks" anywhere in the TLFS documentation.
+Can the "Nested quirks" part simply be dropped?
 
-I think it won't intorduce regression, since if something is working,
-it will continue to work. If something does break, then they were
-relying on overflows, which is anyways an incorrect way to go about.
+> + *
+> + * Note: HV_X64_NESTED_EVMCS1_2022_UPDATE is not currently documented in any
+> + * published TLFS version. When the bit is set, nested hypervisor can use
+> + * 'updated' eVMCSv1 specification (perf_global_ctrl, s_cet, ssp, lbr_ctl,
+> + * encls_exiting_bitmap, tsc_multiplier fields which were missing in 2016
+> + * specification).
+> + */
+> +#define HV_X64_NESTED_EVMCS1_2022_UPDATE		BIT(0)
 
-Also, it seems even the 32-bit compatibility structure uses signed
-types.
+This bit is now defined[*], but the docs says it's only for perf_global_ctrl.  Are
+we expecting an update to the TLFS?
 
-Thanks,
-Siddh
+	Indicates support for the GuestPerfGlobalCtrl and HostPerfGlobalCtrl fields
+	in the enlightened VMCS.
+
+[*] https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/feature-discovery#hypervisor-nested-virtualization-features---0x4000000a
+
+> +
+>  /*
+>   * This is specific to AMD and specifies that enlightened TLB flush is
+>   * supported. If guest opts in to this feature, ASID invalidations only
+> @@ -559,9 +570,20 @@ struct hv_enlightened_vmcs {
+>  	u64 partition_assist_page;
+>  	u64 padding64_4[4];
+>  	u64 guest_bndcfgs;
+> -	u64 padding64_5[7];
+> +	u64 guest_ia32_perf_global_ctrl;
+> +	u64 guest_ia32_s_cet;
+> +	u64 guest_ssp;
+> +	u64 guest_ia32_int_ssp_table_addr;
+> +	u64 guest_ia32_lbr_ctl;
+> +	u64 padding64_5[2];
+>  	u64 xss_exit_bitmap;
+> -	u64 padding64_6[7];
+> +	u64 encls_exiting_bitmap;
+> +	u64 host_ia32_perf_global_ctrl;
+> +	u64 tsc_multiplier;
+> +	u64 host_ia32_s_cet;
+> +	u64 host_ssp;
+> +	u64 host_ia32_int_ssp_table_addr;
+> +	u64 padding64_6;
+>  } __packed;
+>  
+>  #define HV_VMX_ENLIGHTENED_CLEAN_FIELD_NONE			0
+> -- 
+> 2.35.3
+> 

@@ -2,100 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80C72597B32
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 03:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343F7597B37
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 03:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241705AbiHRBxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 21:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
+        id S231627AbiHRByx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 21:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234003AbiHRBxk (ORCPT
+        with ESMTP id S229802AbiHRByu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 21:53:40 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082D0DFBA;
-        Wed, 17 Aug 2022 18:53:37 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M7SbH5Y6hz4x1d;
-        Thu, 18 Aug 2022 11:53:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1660787612;
-        bh=WCDa6lDwZpaaukzC/fCvtuvGLQ5zzB7/SPUXlj6aLLY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NWDxSxU6qwo3rh8jFIg9+/naoTb69OY+Q0cLikz4qbnH+hnVt6a0wYGKbiFVlgEAb
-         RtFrtUNxFX6lbat19d2UF2gD++2TrdI8TE4i63ZfK431L6LISpDrTf5KymcdPcMyJD
-         JcL5nN3NqoplBihEIv6Uokp4SORhuFxobiqYfHapx9dVahIigGAlbYzC0i4Ap4wQSg
-         TQAoYHRLiKEaB3ZuHuGuwJQupKp8CB1lDy+gQ7mMs0C+JvRJ/NYB055WXG2k00nR9p
-         iXWX1IljY9R/X6S26WzN9rz4q6ucvKq5adZSWz59xNExnR6kgVwKQhV7rPwPYbQyWQ
-         Mz/rvMWRfqyTw==
-Date:   Thu, 18 Aug 2022 11:53:26 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the icc tree
-Message-ID: <20220818115326.407aa3e0@canb.auug.org.au>
+        Wed, 17 Aug 2022 21:54:50 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C34F44563;
+        Wed, 17 Aug 2022 18:54:48 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M7SZB1yK4zmVwD;
+        Thu, 18 Aug 2022 09:52:34 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 18 Aug 2022 09:54:46 +0800
+Message-ID: <803e4ab0-e336-5434-2827-a5091eefad59@huawei.com>
+Date:   Thu, 18 Aug 2022 09:54:45 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TiqgLJk9=M38NphCtopWxKl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 2/2] ext4: add inode table check in __ext4_get_inode_loc
+ to aovid possible infinite loop
+Content-Language: en-US
+To:     Jan Kara <jack@suse.cz>
+CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
+        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
+        <lczerner@redhat.com>, <enwlinux@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yebin10@huawei.com>, <yukuai3@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>
+References: <20220817132701.3015912-1-libaokun1@huawei.com>
+ <20220817132701.3015912-3-libaokun1@huawei.com>
+ <20220817143138.7krkxzoa3skruiyx@quack3>
+From:   Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <20220817143138.7krkxzoa3skruiyx@quack3>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/TiqgLJk9=M38NphCtopWxKl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 8/17/2022 10:31 PM, Jan Kara wrote:
+> On Wed 17-08-22 21:27:01, Baokun Li wrote:
+>> In do_writepages, if the value returned by ext4_writepages is "-ENOMEM"
+>> and "wbc->sync_mode == WB_SYNC_ALL", retry until the condition is not met.
+>>
+>> In __ext4_get_inode_loc, if the bh returned by sb_getblk is NULL,
+>> the function returns -ENOMEM.
+>>
+>> In __getblk_slow, if the return value of grow_buffers is less than 0,
+>> the function returns NULL.
+>>
+>> When the three processes are connected in series like the following stack,
+>> an infinite loop may occur:
+>>
+>> do_writepages					<--- keep retrying
+>>   ext4_writepages
+>>    mpage_map_and_submit_extent
+>>     mpage_map_one_extent
+>>      ext4_map_blocks
+>>       ext4_ext_map_blocks
+>>        ext4_ext_handle_unwritten_extents
+>>         ext4_ext_convert_to_initialized
+>>          ext4_split_extent
+>>           ext4_split_extent_at
+>>            __ext4_ext_dirty
+>>             __ext4_mark_inode_dirty
+>>              ext4_reserve_inode_write
+>>               ext4_get_inode_loc
+>>                __ext4_get_inode_loc		<--- return -ENOMEM
+>>                 sb_getblk
+>>                  __getblk_gfp
+>>                   __getblk_slow			<--- return NULL
+>>                    grow_buffers
+>>                     grow_dev_page		<--- return -ENXIO
+>>                      ret = (block < end_block) ? 1 : -ENXIO;
+>>
+>> In this issue, bg_inode_table_hi is overwritten as an incorrect value.
+>> As a result, `block < end_block` cannot be met in grow_dev_page.
+>> Therefore, __ext4_get_inode_loc always returns '-ENOMEM' and do_writepages
+>> keeps retrying. As a result, the writeback process is in the D state due
+>> to an infinite loop.
+>>
+>> Add a check on inode table block in the __ext4_get_inode_loc function by
+>> referring to ext4_read_inode_bitmap to avoid this infinite loop.
+>>
+>> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> Thanks for the fixes. Normally, we check that inode table is fine in
+> ext4_check_descriptors() (and those checks are much stricter) so it seems
+Yes, when I first found this problem, I thought that the inode table was 
+an abnormal value
+when the disk was mounted. However, in ext4_ check_ Descriptors see the 
+inspection of inode table.
+ext4_ check_ Descriptors is more strict, and it also checks blocks_ 
+Bitmap and inode_ bitmap。
 
-Hi all,
+However, in addition to mounting, I can't find any changes to 
+bg_inode_table_hi  in other parts of
+the kernel, which makes me very confused. It wasn't until I tracked the 
+address of the variable that
+I found it was modified by memcpy.
 
-After merging the icc tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+This check is added here to facilitate us to find problems and avoid 
+dead loops. Otherwise,
+we may not find problems until the write back process is stuck in the D 
+state for several hours.
+  At this time, the file system may be in a mess.
+> unnecessary to check it again here. I understand that in your case it was
+> resize that corrupted the group descriptor after the filesystem was mounted
+> which is nasty but there's much more metadata that can be corrupted like
+> this and it's infeasible to check each metadata block before we use it.
+Indeed, But is it true that checking for inode_bitmap in 
+ext4_read_inode_bitmap and
+checking for block_bitmap in ext4_read_block_bitmap_nowait also 
+unnecessary?
+After all, inode_bitmap and block_bitmap may be faulty only when the 
+metadata  is corrupted.
+I think it seems unreasonable that both block_bitmap and inode_bitmap 
+have checks and inode_table does not.
+>
+> IMHO a proper fix to this class of issues would be for sb_getblk() to
+> return proper error so that we can distinguish ENOMEM from other errors.
 
-drivers/interconnect/imx/imx8mp.c: In function 'imx8mp_icc_remove':
-drivers/interconnect/imx/imx8mp.c:245:16: error: void value not ignored as =
-it ought to be
-  245 |         return imx_icc_unregister(pdev);
-      |                ^~~~~~~~~~~~~~~~~~~~~~~~
-drivers/interconnect/imx/imx8mp.c:246:1: error: control reaches end of non-=
-void function [-Werror=3Dreturn-type]
-  246 | }
-      | ^
+Totally agree! There is a FIXME in the comments of __getblk_gfp:
 
-Caused by commit
+` ` `
+__getblk_gfp() will lock up the machine if grow_dev_page's
+try_to_free_buffers() attempt is failing. FIXME, perhaps?
+` ` `
 
-  d761e0e9c8f2 ("interconnect: imx: Make imx_icc_unregister() return void")
+This is the same as this issue because the return value of the 
+grow_buffers function is not propagated correctly.
 
-I have used the icc tree from next-20220817 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/TiqgLJk9=M38NphCtopWxKl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL9m5YACgkQAVBC80lX
-0GwyjAf7BEiMq1C4FsM2quJmn1VIpNU6Wajrt5n1RajvxAwT2FN4IqaiybseftYe
-ZLeu+14uKER4ncbjgEqgvt/h16VFe/Ko937JYyXKaq8XvICXEl7o4L9eedTgkRrO
-OZBd/farxd7y3wAJq3Tft+vVM6HNWcduv6CovGuvIr19bB+8Cvf5Adz5fby7IOx9
-9mJ9TmJdc+N5mG7pQu+PEgr2k4iPrFOfb+2PXgWmkbP5WOJqboGCsHEQfav1UnzP
-BH1Opo4pElX65Q83qWtmLJulDhCVov1eJNylUaXvIzScuM5O0THzV0ol3ZUoehth
-a6WYJzVu4VeLC2IqMFmkxv5bDGJgSg==
-=Lmuj
------END PGP SIGNATURE-----
-
---Sig_/TiqgLJk9=M38NphCtopWxKl--
+> But that will be a larger undertaking...
+>
+> 								Honza
+Yes, this function can be called in many places, and external interface 
+changes are involved.
+>> ---
+>>   fs/ext4/inode.c | 10 +++++++++-
+>>   1 file changed, 9 insertions(+), 1 deletion(-)
+Thanks!
+-- 
+With Best Regards,
+Baokun Li

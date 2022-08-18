@@ -2,116 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BD0598F83
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 23:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990C1598F7B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 23:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346014AbiHRV0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 17:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S1347145AbiHRV1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 17:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346995AbiHRV0A (ORCPT
+        with ESMTP id S1347131AbiHRV07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 17:26:00 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96A8DEB59
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:17:44 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id p184so2026618iod.6
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:17:44 -0700 (PDT)
+        Thu, 18 Aug 2022 17:26:59 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2C8DA3D9
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:19:15 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id r15-20020a17090a1bcf00b001fabf42a11cso3044163pjr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:19:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=Vy8D1pkwyXAsiF4MUgRh4hwYH42zrsLDINWKukfqLXo=;
-        b=KQJIUsGaq+atx0WDA+Q6GC29q+wr7kk6ZI9yxsBSeiLJM5vGupunTC77EeaW1K2itz
-         g7MuiArWBexrJrcHWIaeGBh20KkvcIJRQOr/QA0pK/AfTOCXiMm5gTaAZXJHZf3Mpwtl
-         a2jPAtB8rDhvhg5JBX8fi7fZe7+QfKR4PGmPs=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=tTJTjqw4MggpWtxGKCzfbFeqFxFbwJEwUmHLuAFNlC4=;
+        b=KLY0b+bh0hfzUpqKcJhe/wX0zYM3DwWqLn+1EFPX/z/mvu9FX8S6481IG9EwIwKlr0
+         sksbXHJQ4Kh7CSdeJ54/AGd442l6xfwUSwbgjuIY7cPkTmb/P8QcpBZsFw1/AEgW7BxO
+         Z7vFc1cM6wHyTLrXmXs4BpPTKJqKJm4CDzUsmuDRJO5YqQ2oTdhgmDQfcISIZdvLXi+a
+         iIdIuaNiTdK6EZBOyO8Sqr7BsD7W8hLLdMZHw8f/Q35ywyTfALa1cNGq5gHNhppDaPfZ
+         O+kBBnOCDICeLF6quWO+kUt7vyDNo8jD0dQqib2ZIPNPKJ57Uq0YHy8r7Fi2W5SNMe/A
+         HD3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=Vy8D1pkwyXAsiF4MUgRh4hwYH42zrsLDINWKukfqLXo=;
-        b=DMKfuBFthbd9DYPc2YTQhaak7+x9fZZSy23lqH98pSKknrB+oy9shSAje6bBX17F5B
-         Qpw/K/LuHDk5OtEwY5CEIWvtbPgtjbWYZ3wS50n/wPz+R21+G9t7XzSqhUbDMGWmkMfU
-         6iJQS58USqevXw77a8GH8k0iJY8wkEduKdouTDE+dONw465KNDa3OwqJYzxNwom60Fxm
-         EBJNr2FcmtmX5bEMhSHXZMfOQM9kCSqRXYqLIB0MEg2StXy+/1UNSCitLzaqfJH53Zpn
-         HmWJ7Os+/QO1RILbAB+SsjGWgeGBsOlRo59YvZ0NC3mOgys2auU8kU6Bg6SDtZpPqbRW
-         uoUg==
-X-Gm-Message-State: ACgBeo3J+QWBNwumVAMeD/aCXHCWEeFOj7HAUFVnLVH+fa6vK25afqRx
-        E/WK4mwOd9MVHK1/YmM972eC5Q==
-X-Google-Smtp-Source: AA6agR4bswICfvXUKfkVpv1Cfozq/7hljLHJfKR0TxubStkAuF2jjINJdZImJp8sQ2e7aRn0HqGZXg==
-X-Received: by 2002:a6b:3ec2:0:b0:67c:6baf:a51f with SMTP id l185-20020a6b3ec2000000b0067c6bafa51fmr2235618ioa.160.1660857461762;
-        Thu, 18 Aug 2022 14:17:41 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id b1-20020a056638388100b003416ac35529sm1022582jav.26.2022.08.18.14.17.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 14:17:41 -0700 (PDT)
-Subject: Re: [PATCH] usb: move from strlcpy with unused retval to strscpy
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Duncan Sands <duncan.sands@free.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <edda5842-fa82-dfb0-b4b2-14a83673ea6c@linuxfoundation.org>
-Date:   Thu, 18 Aug 2022 15:17:40 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=tTJTjqw4MggpWtxGKCzfbFeqFxFbwJEwUmHLuAFNlC4=;
+        b=TZVDtsVQ0jhqTnLy2dAOfVWuMYnmXtqfmK4UtYB7QoELyUpQkbgDskT84YRKdMd29L
+         UwEcPCHba7n5dvH74bIFQpjHDQZyqRFd87ul5QHtO7mbSjeAnSrKgWPPVJQPnnIKC5Uy
+         JzqGybtsRlCVb4NA4Rgf467gi4caw1RaQsV9ajRz3xHyKbyMGRpV3hdN5Ol4dKe9J6j1
+         eMXwYN4In3FgkzGSlWbSVDj8OsW0SxLKjtnc6JRBEC1HwTcx2/CuJ/F6XhpLgjjNzsBN
+         ttORvfH9Ake0ukqHEuaVSNHHo1Zf5IhpFrA14eKSuU9StX8v4yuGnRlkPBEjbMqAfSjk
+         wBrg==
+X-Gm-Message-State: ACgBeo0WAHNik1P7qyp+66iUW8fc5OS+pnIsr5sphDU1TEvWz9piSGm5
+        OpJC0xb3zoMJkEAZwUzriXSDgA==
+X-Google-Smtp-Source: AA6agR6y0AhMETJyQ+vXl0SNQkEBxWGMTcxU9uSEZQLV6JUuiIN57zfeFgll2QLSPF2S39iiIToTNg==
+X-Received: by 2002:a17:90b:4c4b:b0:1f4:d176:aa5a with SMTP id np11-20020a17090b4c4b00b001f4d176aa5amr4899401pjb.233.1660857553755;
+        Thu, 18 Aug 2022 14:19:13 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id h8-20020a170902f54800b0016ee328fd61sm1819751plf.198.2022.08.18.14.19.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 14:19:13 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 21:19:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kyle Huey <me@kylehuey.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Borislav Petkov <bp@suse.de>, kvm@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] x86/fpu: Allow PKRU to be (once again) written by
+ ptrace.
+Message-ID: <Yv6szXuKGv75wWmm@google.com>
+References: <20220808141538.102394-1-khuey@kylehuey.com>
+ <87ilmpzunz.ffs@tglx>
+ <CAP045Ao7hb4kXajkWnMxqawBzFGUZJtSuRRn1kbmjOF=mcTcoA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP045Ao7hb4kXajkWnMxqawBzFGUZJtSuRRn1kbmjOF=mcTcoA@mail.gmail.com>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 3:01 PM, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
+On Thu, Aug 18, 2022, Kyle Huey wrote:
+> On Thu, Aug 18, 2022 at 3:57 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> > On Mon, Aug 08 2022 at 07:15, Kyle Huey wrote:
+> > > When management of the PKRU register was moved away from XSTATE, emulation
+> > > of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
+> > > for APIs that write XSTATE. This can be seen by running gdb and executing
+> > > `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
+> > > write to the PKRU register (which gdb performs through ptrace) is ignored.
+> > >
+> > > There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
+> > > sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
+> > > make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
+> > > down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
+> > > and sigreturn pass in pointers to the appropriate PKRU value.
+> > >
+> > > This also adds code to initialize the PKRU value to the hardware init value
+> > > (namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
+> > > This is a change to the current KVM_SET_XSAVE behavior.
+> >
+> > You are stating a fact here, but provide 0 justification why this is
+> > correct.
 > 
+> Well, the justification is that this *is* the behavior we want for
+> ptrace/sigreturn, and it's very likely the existing KVM_SET_XSAVE
+> behavior in this edge case is an oversight rather than intentional,
+> and in the absence of confirmation that KVM wants the existing
+> behavior (the KVM mailing list and maintainer are CCd) one correct
+> code path is better than one correct code path and one buggy code
+> path.
 
-Please elaborate and summarize why this change makses sense in the
-commit log? It will be easier for reviewers - saves time checking
-the link.
+Sorry, I missed the KVM-relevant flags.
 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->   drivers/usb/atm/usbatm.c               | 2 +-
->   drivers/usb/core/devio.c               | 2 +-
->   drivers/usb/gadget/function/f_fs.c     | 2 +-
->   drivers/usb/gadget/function/f_uvc.c    | 2 +-
->   drivers/usb/gadget/function/u_ether.c  | 8 ++++----
->   drivers/usb/gadget/function/uvc_v4l2.c | 6 +++---
->   drivers/usb/gadget/udc/omap_udc.c      | 2 +-
->   drivers/usb/misc/usb251xb.c            | 6 +++---
->   drivers/usb/storage/onetouch.c         | 2 +-
->   drivers/usb/typec/tcpm/fusb302.c       | 2 +-
->   drivers/usb/usbip/stub_main.c          | 2 +-
+Hrm, the current behavior has been KVM ABI for a very long time.
 
-I don't have any problems with the change itself. I would ike to
-see the commit log clealrly state why this change is good. With
-that for usbip change:
+It's definitely odd because all other components will be initialized due to their
+bits being cleared in the header during kvm_load_guest_fpu(), and it probably
+wouldn't cause problems in practice as most VMMs likely do "all or nothing" loads.
+But, in theory, userspace could save/restore a subset of guest XSTATE and rely on
+the kernel not overwriting guest PKRU when its bit is cleared in the header.
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+All that said, I don't see any reason to force KVM to change at this time, it's
+trivial enough to handle KVM's oddities while providing sane behavior for others.
+Nullify the pointer in the guest path and then update copy_uabi_to_xstate() to
+play nice with a NULL pointer, e.g. 
 
-thanks,
--- Shuah
+	/*
+	 * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
+	 * in the header.  KVM's odd ABI is to leave PKRU untouched in this
+	 * case (all other components are eventually re-initialized).
+	 */
+	if (!(kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU))
+		vpkru = NULL;
+
+	return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);

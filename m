@@ -2,128 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DB75986B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F280D5986BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343953AbiHRPAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
+        id S1343954AbiHRPBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344021AbiHRPAg (ORCPT
+        with ESMTP id S1343943AbiHRPAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:00:36 -0400
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3105326D8;
-        Thu, 18 Aug 2022 08:00:34 -0700 (PDT)
-Received: by mail-qk1-f181.google.com with SMTP id f14so1312440qkm.0;
-        Thu, 18 Aug 2022 08:00:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=C69f4QDvaAb9KHdDEuFrDGdZguxo1xk19InMWxRMIz0=;
-        b=SnPs7tHjwmilKKq/1xVr4hC88b7djKcN7QOc68uiEkARQj//KF0UDAAYSOCxD6BTXS
-         xn1sDIij0+y9tX475IzI0Q/X2GIfUuAEF8VGfnui/1xLlm17O9oYSaZ+V3H/poASezJ4
-         rt9CUoSBh4RONn0PJZJt4vIw6mTcdG+Yg5wHajTKsctCVbFvdVdURHMFLkBhbWII8LYw
-         nkRNM0OdwDKqV5qc6Nsxnrtgc97IFvM3Vyl1zOSlmBMIkSraqxa8xVJcDbcNAyGxf9Sp
-         N2i0N0Xc7BG9Mv+AA0eLqcQ7zZSI42O0FmlgUe+/O684dHx+iaWfLYkGu95HcQt2Mzg3
-         9msQ==
-X-Gm-Message-State: ACgBeo0zSM+TpnC2Ud/LyOmInrih/Aa2+mvQY3mNzNPks6XmiUvJzEsV
-        Yf/x+DmkW5/xkBIuU26sH/apXA48EWfZbw==
-X-Google-Smtp-Source: AA6agR4wjx1QvGtwMNEukY/38l2yQhJk/JV6dw6kHuFsrbXUjD1ITzTh1NfSY3uGnUlKE62LijZyfg==
-X-Received: by 2002:a05:620a:2409:b0:6ba:e98f:d2ab with SMTP id d9-20020a05620a240900b006bae98fd2abmr2275036qkn.343.1660834833857;
-        Thu, 18 Aug 2022 08:00:33 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id q13-20020a37f70d000000b006b629f86244sm1483984qkj.50.2022.08.18.08.00.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 08:00:32 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-324ec5a9e97so48130407b3.7;
-        Thu, 18 Aug 2022 08:00:32 -0700 (PDT)
-X-Received: by 2002:a81:f47:0:b0:31f:434b:5ee with SMTP id 68-20020a810f47000000b0031f434b05eemr3267925ywp.383.1660834831754;
- Thu, 18 Aug 2022 08:00:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220815151451.23293-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220815151451.23293-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 18 Aug 2022 17:00:20 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUaketBpEfoSKeSJ4SuYwOTLoqJ_FCp=G8HmVudhv3zWw@mail.gmail.com>
-Message-ID: <CAMuHMdUaketBpEfoSKeSJ4SuYwOTLoqJ_FCp=G8HmVudhv3zWw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/8] dt-bindings: soc: renesas: renesas.yaml: Document
- Renesas RZ/Five SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+        Thu, 18 Aug 2022 11:00:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFFB32BA4;
+        Thu, 18 Aug 2022 08:00:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D302B821CE;
+        Thu, 18 Aug 2022 15:00:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E77C433D7;
+        Thu, 18 Aug 2022 15:00:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660834846;
+        bh=w6/ETLvl6ZG2+0UlR1OeUzSwR5sjy2rVzbgpetE7Jao=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jyemUVkbI7r0kIO7aSwt8dj+8DwO9ot3ryBxDCUv3IuhyBu7QbX65Dj2DoBUJ1aRA
+         IfTgDRH5H5dfm0lkURf6lstrZgWK2sl1EOE9JhkVrS5pkqvYeaNAjcc/Bnorgjord9
+         ZMme4Z1TfbRACGT2vZdJ12ucPykQdtRzPaslvb/c=
+Date:   Thu, 18 Aug 2022 17:00:44 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Conor Dooley <Conor.Dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Magnus Damm <magnus.damm@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v1 0/9] fw_devlink improvements
+Message-ID: <Yv5UHLOk9jh8KB6c@kroah.com>
+References: <20220810060040.321697-1-saravanak@google.com>
+ <YvYiF36M09dX9ASm@atomide.com>
+ <CAGETcx-t0O0B+5i0FWwm5w2=ccOD5zVAaUvgQoP8PT9SOT_btw@mail.gmail.com>
+ <Yvog4K0barAvvVeb@atomide.com>
+ <CAGETcx-k+ca5uG42XvW5yiK8RWDYfeRs9va5boqnp33s45AGRg@mail.gmail.com>
+ <Yv3kqoMo3R/7onlw@atomide.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yv3kqoMo3R/7onlw@atomide.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+On Thu, Aug 18, 2022 at 10:05:14AM +0300, Tony Lindgren wrote:
+> Hi,
+> 
+> * Saravana Kannan <saravanak@google.com> [220815 18:16]:
+> > On Mon, Aug 15, 2022 at 3:33 AM Tony Lindgren <tony@atomide.com> wrote:
+> > >
+> > > * Saravana Kannan <saravanak@google.com> [220813 00:45]:
+> > > > On Fri, Aug 12, 2022 at 2:49 AM Tony Lindgren <tony@atomide.com> wrote:
+> > > > >
+> > > > > * Saravana Kannan <saravanak@google.com> [220810 05:54]:
+> > > > > > Tony,
+> > > > > >
+> > > > > > This should handle the odd case of the child being the supplier of the
+> > > > > > parent. Can you please give this a shot? I want to make sure the cycle
+> > > > > > detection code handles this properly and treats it like it's NOT a cycle.
+> > > > >
+> > > > > Yup, this series works for me, so feel free to add:
+> > > > >
+> > > > > Tested-by: Tony Lindgren <tony@atomide.com>
+> > > >
+> > > > Thanks for testing!
+> > > >
+> > > > Btw, out of curiosity, how many different boards did you test this on?
+> > > > IIRC you had an issue only in one board, right? Not to say I didn't
+> > > > break anything else, I'm just trying to see how much confidence we
+> > > > have on this series so far. I'm hoping the rest of the folks I listed
+> > > > in the email will get around to testing this series.
+> > >
+> > > Sorry if I was not clear earlier. The issue affects several generations
+> > > of TI 32-bit SoCs at least, not just one board.
+> > 
+> > But this series fixes the issues for all of them or are you still
+> > seeing some broken boot with this series?
+> 
+> Yes. However, I'm now getting confused what exactly you're proposing to fix
+> the regressions for v6.0-rc series.
 
-On Mon, Aug 15, 2022 at 5:16 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Document Renesas RZ/Five (R9A07G043) SoC.
->
-> More info about RZ/Five SoC:
-> https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-mpus/rzfive-risc-v-general-purpose-microprocessors-risc-v-cpu-core-andes-ax45mp-single-10-ghz-2ch-gigabit-ethernet
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+So am I :(
 
-Thanks for your patch!
+> I'd like to see just the fixes series for v6.0-rc series. With proper fixes
+> tags, and possibly reverts.
 
-> --- a/Documentation/devicetree/bindings/arm/renesas.yaml
-> +++ b/Documentation/devicetree/bindings/arm/renesas.yaml
-> @@ -415,11 +415,12 @@ properties:
->                - renesas,rzn1d400-db # RZN1D-DB (RZ/N1D Demo Board for the RZ/N1D 400 pins package)
->            - const: renesas,r9a06g032
->
-> -      - description: RZ/G2UL (R9A07G043)
-> +      - description: RZ/Five and RZ/G2UL (R9A07G043)
->          items:
->            - enum:
->                - renesas,smarc-evk # SMARC EVK
->            - enum:
-> +              - renesas,r9a07g043f01 # RZ/Five (RISC-V core)
+Agreed, that would help out a lot here.
 
-Should we be consistent, and leave out the "(RISC-V core)" comment,
-or add it everywhere?
+> Then discussing patches for Linux next can be done based on the fixes :)
 
-Note that several of the SoCs listed in this file have SuperH or
-RealTime ARM cores, so going for the former means a lot of work.
+Agreed.
 
->                - renesas,r9a07g043u11 # RZ/G2UL Type-1
->                - renesas,r9a07g043u12 # RZ/G2UL Type-2
->            - const: renesas,r9a07g043
+I'll drop this whole series from my queue now and wait for a new one.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+thanks,
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+greg k-h

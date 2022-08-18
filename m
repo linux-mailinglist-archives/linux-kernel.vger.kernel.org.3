@@ -2,237 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC428598C4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E15598C51
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345402AbiHRTDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
+        id S238777AbiHRTEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233465AbiHRTDA (ORCPT
+        with ESMTP id S233465AbiHRTEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:03:00 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472FAC00EE;
-        Thu, 18 Aug 2022 12:02:59 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IIxZot013238;
-        Thu, 18 Aug 2022 19:02:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=tKMju3sjzSo3xIdBg1oTDtDo+ZlGlwx9HD+6llrIQ/o=;
- b=TvtzL7V2+td6MH5PmXRHo0LgZYSpez4ZH+VgnVV7AAGfGONfbNwYw5WARUdF0PqSq8b4
- rCiTQNyN+raRb7+FfrdZ7Cy5ZlIfxoOqR1W6KoQi/ecbKclEVu1ZwuOs+eYSBEppeeb8
- ZfGY4BA14zzXPN0O06QX+sL3X9k94tqjzucGoIiccdkE8g41CL0gjTI5Ri1MMRZYTpX6
- Nj/BQ+L0fyqDnyVHl8FOVEDOYTQWsnkqc9uqDy5LceSfFlxPV9l1yctH9RDqu6upTuu4
- JlNWbhAESPfcV9duPiVJLfC7aebOOsZKniB+KH03N7hR6OLixswwsx1Mhn+DNa6NuMS1 Tg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1u6ng27n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 19:02:56 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27IJ0wm3021328;
-        Thu, 18 Aug 2022 19:02:56 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1u6ng27d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 19:02:56 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27IIor0l007012;
-        Thu, 18 Aug 2022 19:02:55 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma04wdc.us.ibm.com with ESMTP id 3hx3ka0ka5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 19:02:55 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27IJ2sME35324620
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Aug 2022 19:02:54 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34774BE054;
-        Thu, 18 Aug 2022 19:02:54 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3CE94BE04F;
-        Thu, 18 Aug 2022 19:02:53 +0000 (GMT)
-Received: from [9.160.64.167] (unknown [9.160.64.167])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Aug 2022 19:02:52 +0000 (GMT)
-Message-ID: <1ff0ff82-f0e6-96d7-7e9a-f46a4957813c@linux.ibm.com>
-Date:   Thu, 18 Aug 2022 15:02:52 -0400
+        Thu, 18 Aug 2022 15:04:41 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2BC8A1FC;
+        Thu, 18 Aug 2022 12:04:39 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id l18so1841442qvt.13;
+        Thu, 18 Aug 2022 12:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=nX5kZmoj9p73LSdvjfbhbZUq4ZnpvLi6/MC0mtc9D0M=;
+        b=oqibi37FPnZI3Pu0tNhInuUW8/oJVzWJD3X2LCD/7fjFR8WD6b6d6XmqWVEIZS9rEn
+         Yke7v/D2Pk5cu0PJpVxN6GGdQt45ChetQv1AqfDjv4B5N7eHme8oIROn3XQCzZvRjcKK
+         9v10gxPr8MnGlVZe6ylFL5XGzIzSbsxyyihCmsL6J5lmkepwcFC51QB1GjntU8baoECZ
+         KwLOcF1EFIlwRyo9ek0dqwjHrXF67/rrv+jPmNHNIWaCXi949yYW3pnLdRSpwTB3Te39
+         9VJDmCbnug/2rmZdysP6psMO2QFl/yWpMX8msM1jWnSUXYf11z7aMBwV3GhmvyISAnN/
+         CsVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=nX5kZmoj9p73LSdvjfbhbZUq4ZnpvLi6/MC0mtc9D0M=;
+        b=6W0DH/FLbDmxMEJOeVIHcCRfmc4xrtx018BJrNU+6yPG3H6aj1C72tS+HwoO9uxdLW
+         AOMsxF7qJpV+8vQjxYE9cO7cFXRnufCtdAcJIS7zPgVUn4dVr2Vq0yBwRjQ5v4+4Yxno
+         SK2JwGzmrz2O7vckwWbW1gDj3ftsTkFETNssGtN6XXOdLd+yBaof73n42HJbm1MckbEu
+         bCTtCkblQV/wa/dF3QXTcWaWeF1zyVm7L4l2jGOR0motn2PVE22+0+n7i2GSonV2Meus
+         px1unzgQ6uWBGdw/28rbyu0BJiiz9XhDmXTWbr7oJ0U2ArhzedCNwcdRSiLHI0A/XI1l
+         UzBg==
+X-Gm-Message-State: ACgBeo05gJ3PpHiTwqQQ6sWeATUU3+5mylVfgg3zlP8OzePvxjPkBqVK
+        9sBDnfR3WopPd6rcEqsUISmDgi6gJqScWOI6xM8=
+X-Google-Smtp-Source: AA6agR6fKUEhV/fg8HheOm3MKcS51tDj4hrn3SawVAOKe5szVEnjJq37JG0WrPnyLbK2yKpifS5kr3wELkD+/zj0cWU=
+X-Received: by 2002:a05:6214:d07:b0:476:c32f:f4f4 with SMTP id
+ 7-20020a0562140d0700b00476c32ff4f4mr3782049qvh.11.1660849478391; Thu, 18 Aug
+ 2022 12:04:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/2] s390/vfio-ap: fix hang during removal of mdev
- after duplicate assignment
-Content-Language: en-US
-To:     Halil Pasic <pasic@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jjherne@linux.ibm.com, borntraeger@de.ibm.com,
-        cohuck@redhat.com, mjrosato@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com, stable@vger.kernel.org
-References: <20220818132606.13321-1-akrowiak@linux.ibm.com>
- <20220818132606.13321-2-akrowiak@linux.ibm.com>
- <20220818161255.2fe5a542.pasic@linux.ibm.com>
-From:   Anthony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <20220818161255.2fe5a542.pasic@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: PSZdRyd5im51UYa6Rc2cUOEsr88_M5g7
-X-Proofpoint-GUID: 8RPhnrfQ4IwVpbRYDqKJQdkY6Xz2IRoY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_14,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 bulkscore=0
- impostorscore=0 mlxlogscore=999 clxscore=1015 adultscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180069
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220817175812.671843-1-vschneid@redhat.com> <20220817175812.671843-2-vschneid@redhat.com>
+ <20220818100820.3b45808b@gandalf.local.home> <xhsmh35dtbjr0.mognet@vschneid.remote.csb>
+ <20220818130041.5b7c955f@gandalf.local.home>
+In-Reply-To: <20220818130041.5b7c955f@gandalf.local.home>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 18 Aug 2022 22:04:01 +0300
+Message-ID: <CAHp75VcaSwfy7kOm_d28-87QKQ5KPB69=X=Z9OYUzJJKwRCSmQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] bitops: Introduce find_next_andnot_bit()
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:HFI1 DRIVER" <linux-rdma@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gal Pressman <gal@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 8/18/22 10:12 AM, Halil Pasic wrote:
-> On Thu, 18 Aug 2022 09:26:05 -0400
-> Tony Krowiak <akrowiak@linux.ibm.com> wrote:
+On Thu, Aug 18, 2022 at 8:18 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> On Thu, 18 Aug 2022 17:26:43 +0100
+> Valentin Schneider <vschneid@redhat.com> wrote:
 >
-> Subject: s390/vfio-ap: fix hang during removal of mdev after duplicate
-> assignment
+> > How about:
 >
-> It would have made sense to do it this way in the first place, even
-> if the link code were to take care of the duplicates. It did not really
-> make sense to do the whole filtering biz and everything else.
-
-
-No, it did not; however, nobody caught it in review either. In fact, 
-this probably should have been done prior to hot plug.
-
-
->   Maybe we
-> should spin the short description and the rest of the commit message so
-> it reflects the code more.
-
-
-I'm not sure what you mean here, are you suggesting the first two 
-paragraphs should be eliminated?
-
-
->   
+> >
+> >   find the next set bit in (*addr1 & ~*addr2)
 >
->> When the same adapter or domain is assigned more than one time prior to
->> removing the matrix mdev to which it is assigned, the remove operation
->> will hang. The reason is because the same vfio_ap_queue objects with an
->> APQN containing the APID of the adapter or APQI of the domain being
->> assigned will get added to the hashtable that holds them multiple times.
->> This results in the pprev and next pointers of the hlist_node (mdev_qnode
->> field in the vfio_ap_queue object) pointing to the queue object itself.
->> This causes an interminable loop when the mdev is removed and the queue
->> table is iterated to reset the queues.
->>
->> To fix this problem, the assignment operation is bypassed when assigning
->> an adapter or domain if it is already assigned to the matrix mdev.
->>
->> Since it is not necessary to assign a resource already assigned or to
->> unassign a resource that has not been assigned, this patch will bypass
->> all assignment/unassignment operations for an adapter, domain or
->> control domain under these circumstances.
->>
->> Cc: stable@vger.kernel.org
->> Fixes: 771e387d5e79 ("s390/vfio-ap: manage link between queue struct and matrix mdev")
-> Not 11cb2419fafe ("s390/vfio-ap: manage link between queue struct and
-> matrix mdev")
->
-> Is my repo borked?
+> I understand the above better. But to convert that into English, we could
+> say:
 >
 >
->> Reported-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
->> ---
->>   drivers/s390/crypto/vfio_ap_ops.c | 30 ++++++++++++++++++++++++++++++
->>   1 file changed, 30 insertions(+)
->>
->> diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
->> index 6c8c41fac4e1..ee82207b4e60 100644
->> --- a/drivers/s390/crypto/vfio_ap_ops.c
->> +++ b/drivers/s390/crypto/vfio_ap_ops.c
->> @@ -984,6 +984,11 @@ static ssize_t assign_adapter_store(struct device *dev,
->>   		goto done;
->>   	}
->>   
->> +	if (test_bit_inv(apid, matrix_mdev->matrix.apm)) {
->> +		ret = count;
->> +		goto done;
->> +	}
->> +
->>   	set_bit_inv(apid, matrix_mdev->matrix.apm);
->>   
->>   	ret = vfio_ap_mdev_validate_masks(matrix_mdev);
->> @@ -1109,6 +1114,11 @@ static ssize_t unassign_adapter_store(struct device *dev,
->>   		goto done;
->>   	}
->>   
->> +	if (!test_bit_inv(apid, matrix_mdev->matrix.apm)) {
->> +		ret = count;
->> +		goto done;
->> +	}
->> +
->>   	clear_bit_inv((unsigned long)apid, matrix_mdev->matrix.apm);
->>   	vfio_ap_mdev_hot_unplug_adapter(matrix_mdev, apid);
->>   	ret = count;
->> @@ -1183,6 +1193,11 @@ static ssize_t assign_domain_store(struct device *dev,
->>   		goto done;
->>   	}
->>   
->> +	if (test_bit_inv(apqi, matrix_mdev->matrix.aqm)) {
->> +		ret = count;
->> +		goto done;
->> +	}
->> +
->>   	set_bit_inv(apqi, matrix_mdev->matrix.aqm);
->>   
->>   	ret = vfio_ap_mdev_validate_masks(matrix_mdev);
->> @@ -1286,6 +1301,11 @@ static ssize_t unassign_domain_store(struct device *dev,
->>   		goto done;
->>   	}
->>   
->> +	if (!test_bit_inv(apqi, matrix_mdev->matrix.aqm)) {
->> +		ret = count;
->> +		goto done;
->> +	}
->> +
->>   	clear_bit_inv((unsigned long)apqi, matrix_mdev->matrix.aqm);
->>   	vfio_ap_mdev_hot_unplug_domain(matrix_mdev, apqi);
->>   	ret = count;
->> @@ -1329,6 +1349,11 @@ static ssize_t assign_control_domain_store(struct device *dev,
->>   		goto done;
->>   	}
->>   
->> +	if (test_bit_inv(id, matrix_mdev->matrix.adm)) {
->> +		ret = count;
->> +		goto done;
->> +	}
->> +
->>   	/* Set the bit in the ADM (bitmask) corresponding to the AP control
->>   	 * domain number (id). The bits in the mask, from most significant to
->>   	 * least significant, correspond to IDs 0 up to the one less than the
->> @@ -1378,6 +1403,11 @@ static ssize_t unassign_control_domain_store(struct device *dev,
->>   		goto done;
->>   	}
->>   
->> +	if (!test_bit_inv(domid, matrix_mdev->matrix.adm)) {
->> +		ret = count;
->> +		goto done;
->> +	}
->> +
->>   	clear_bit_inv(domid, matrix_mdev->matrix.adm);
->>   
->>   	if (test_bit_inv(domid, matrix_mdev->shadow_apcb.adm)) {
+>   Find the next bit in *addr1 excluding all the bits in *addr2.
+>
+> or
+>
+>   Find the next bit in *addr1 that is not set in *addr2.
+
+With this explanation I'm wondering how different this is to
+bitmap_bitremap(), with adjusting to using an inverted mask. If they
+have something in common, perhaps make them in the same namespace with
+similar naming convention?
+
+-- 
+With Best Regards,
+Andy Shevchenko

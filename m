@@ -2,52 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E755988EA
+	by mail.lfdr.de (Postfix) with ESMTP id 933BE5988EC
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344817AbiHRQct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 12:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43418 "EHLO
+        id S1343723AbiHRQdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 12:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344800AbiHRQck (ORCPT
+        with ESMTP id S1344815AbiHRQdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 12:32:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C09B72856;
-        Thu, 18 Aug 2022 09:32:39 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 18:32:37 +0200
+        Thu, 18 Aug 2022 12:33:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759371704B;
+        Thu, 18 Aug 2022 09:33:31 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 18:33:28 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660840358;
+        s=2020; t=1660840410;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=eRWjvTJioZag0NL+kWuQAJgjY2OnnzM0BJxuNTpvQzY=;
-        b=mbGcKzxS+qB5xSvStj9dpA9H4TOAHWwkS1PTIqeQyi2gsgd2a/Fb/UgemvsAhSPd0chOZb
-        GKXKABd84cUonoMmt/8mVioyyO3FcHeMg13E6VXdNtsHzXdBECS0ZMl7VsoxP6o2W/aH3o
-        boGHcBh52ve9rGMGFwg9zZfH+SDuD2zBEHyxw/BqwYjVYhEXXWIQzMqqqLk78MOhrDEWmu
-        wlnvvGwv+ZlkKFt49EaDnTQ0qb/EPVdo0SSZ/hGUzaXyA1Kxc7A+g+HVDr3c5zPdVFptX6
-        UQ4UVPC9xirjNFQKH1kCCvGOBZOpjxdfreFuuPIE0PnfP9j8iNa8nZyQR16Rlw==
+        bh=p8G/qFmUGW/BNQytAyJX+Ki4HfNnrYJzfFV7g5CzBno=;
+        b=yxPOe4Bm2C2U6jGLDCHYvCFzUQuEuqZhVqSoejm4cG+fy0ac0NY5XS11qa0xYgI8iqJqE7
+        rYMDhnf0lEvCtBU/808yY3JKmAEI/gDNC2OtdAtDHJ0Cp5jhIytTOfjbLZjpP6WQI+itQy
+        8vXYZm4wyqBPuu+mnyvplxz8WxW5JW6/iwHkGg2Y8QQ/O5pGsFq/cIX4Sm0tQn/MdfUnFC
+        RqY9wymEgc5Zfuc25YIvLRCzbfk3W056WDrG+WDme83rZvXXuRgbXHXVg5ikHAM0gP0Ejt
+        6eIJBA5uwFQhjZy4VYotP3GnPuZRKilYoK2pLWrSY9uk6lKahK8P4pHJYMV7Uw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660840358;
+        s=2020e; t=1660840410;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=eRWjvTJioZag0NL+kWuQAJgjY2OnnzM0BJxuNTpvQzY=;
-        b=aRiygy3jAMbToG5V+llK9UZ2dRmLzGWkArvNLdtFSKyqqr5UU53FvgpUBMrCZNWNt4LzSp
-        qMaJGAiAxXxNj0BA==
+        bh=p8G/qFmUGW/BNQytAyJX+Ki4HfNnrYJzfFV7g5CzBno=;
+        b=oxOkjT3VB0bl0Ks27qtnGE/9M+MXKPmQKuVRW0g6WRq+V4uXL2Zy7j7VFEMO3l5rP1zU4z
+        2ztGb1JJ0IgwnaDg==
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Yajun Deng <yajun.deng@linux.dev>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org
-Subject: Re: [PATCH 5.10-rt] locking/rtmutex: switch to EXPORT_SYMBOL() for
- ww_mutex_lock{,_interruptible}()
-Message-ID: <Yv5ppS3wDbKFs9tv@linutronix.de>
-References: <20220803062430.1307312-1-yajun.deng@linux.dev>
+To:     Joe Korty <joe.korty@concurrent-rt.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux RT users <linux-rt-users@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [RT BUG] Mismatched get_uid/free_uid usage in signals in some
+ rts (2nd try)
+Message-ID: <Yv5p2E9e5B897V4I@linutronix.de>
+References: <VI1PR09MB358214376379A2D6B024A689A0B39@VI1PR09MB3582.eurprd09.prod.outlook.com>
+ <YrXtH1z2JSmwLS7W@T470>
+ <20220624184431.GA4386@zipoli.concurrent-rt.com>
+ <20220626123019.GA51149@zipoli.concurrent-rt.com>
+ <Yv5j8NQ72KXu60nL@linutronix.de>
+ <20220818163126.GA47319@zipoli.concurrent-rt.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220803062430.1307312-1-yajun.deng@linux.dev>
+In-Reply-To: <20220818163126.GA47319@zipoli.concurrent-rt.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -58,18 +66,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-03 14:24:30 [+0800], Yajun Deng wrote:
-> We can use EXPORT_SYMBOL() instead of EXPORT_SYMBOL_GPL() in
-> ww_mutex_lock_interruptible() and ww_mutex_lock(). That match
-> ww_mutex_unlock() well. And also good for 3rd kernel modules.
+On 2022-08-18 12:31:26 [-0400], Joe Korty wrote:
+> Hi Sebastian,
+Hi Joe,
 
-Not that I am fan of this but it will sync the symbols with what landed
-upstream as of commit
-   f8635d509d807 ("locking/ww_mutex: Implement rtmutex based ww_mutex API functions")
+> I just verified that 4.9.319-rt195 has this fix.
 
-therefore it would be good to have.
-Luis?
+Good to hear. And the v4.9 series was the only broken, right?
 
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+> Regards,
+> Joe
 
 Sebastian

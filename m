@@ -2,93 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E97598AF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2D6598AFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345370AbiHRSRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 14:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
+        id S1345376AbiHRSTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 14:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240531AbiHRSRe (ORCPT
+        with ESMTP id S231651AbiHRSTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 14:17:34 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB87CD526;
-        Thu, 18 Aug 2022 11:17:33 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IFrqn0010501;
-        Thu, 18 Aug 2022 18:17:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=E8RRng8RjHC13MQf1/mlyowg8xuWf1FmKpLYu4bJ3u4=;
- b=lMXtF+3f3WoYRCaEU7Nh3rGtSCRIq3G5kxPPnZxj26A2/A0rmhEkPQOg+gGDGM23SF0I
- y6W+DE6OmewOoBHJPMPgvpUk2pP7wKYhMaHNLpZxrGZLOSQBncjQdWvUxsf0uAe5ZH4A
- ecumIfow2Pk2rhqbGVIiMY4Xn6hBS0ANaygqmy9QKJGsu0c6vN7hTtj+9Wn+BRBjex2M
- RpHaFxZK6xLAvDPLe9S6zPhFFis2kaTm8c9KC8r6fBLQ3mroBfG+3iehqdGJbid36SPu
- SkzrQw+PdayWjjtRRHFxGvxlIT+xs5LKRlUjgUf9fo7gw7PkFD5qFBduzduKHAMQwSVl 4w== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j12hhnckx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 18:17:27 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27IIHQ8O028195
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 18:17:26 GMT
-Received: from [10.110.31.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 18 Aug
- 2022 11:17:25 -0700
-Message-ID: <e22d4f8e-0ca7-056e-e5ec-4fc97cbaf08b@quicinc.com>
-Date:   Thu, 18 Aug 2022 11:17:24 -0700
+        Thu, 18 Aug 2022 14:19:47 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FD5B69EF;
+        Thu, 18 Aug 2022 11:19:46 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3378303138bso23306237b3.9;
+        Thu, 18 Aug 2022 11:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=hsfwWpmgExzWlmbZDKLSyuPDLh/uObZ0VNKfsXtXMuw=;
+        b=dvhZE5h4dCmIqJy4VGVxeGkNi4ssy0JxthqBuXfA+I1ljmRwFgAB00+bdKrl1CN1u6
+         UovJbjpmOUSsZtvFusj6eRbJWHXHWj7M4ihDY22ZSATSHYwapy4A4g35tlnfGuuz/6Ak
+         Lx7oS4ourgghCf7qYsg6ob7CpALUl2mXllPL7gcD5Rh3xsyoWd6JCUm0R4Ycf5QaSAPD
+         HPxPvu8LtSyBfGBP53gryTRw0nQ3UVuZW5ro9BHs8iJq1xz3V7JOu+9uFSXhJNsX6gsk
+         W8f6rDt7Pdrj8f+26pd/G0sOnOhHrbxvGc93tfOE1/xl2U2RG/j1ljzyxEgCzNueSVnu
+         3NlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=hsfwWpmgExzWlmbZDKLSyuPDLh/uObZ0VNKfsXtXMuw=;
+        b=fq/diKEf/aZmfvRypK0/oIHmsKn0gtPIYg0ZnDP2AuZ0474cBjXSxcDiL3jrAior3c
+         wFdybtM0gTBUtvRJtPPF36JtBjj/iIKiz5tWZVzCVM4RRW3Z/5JLyFlmWfWHspXytcGi
+         o1riWL3NDxbdfTB5X3U6ZvH2ynF+VFK9zn7CoS/cvIpddaae/9YzgZQHbIGeT+Lalr0v
+         f9la8uUwUyc1I6PWVHGdkNGtb0JEYBRS+ZGt9t9lcyIiVAjW/SsE6Li/YOq5dKW0U63U
+         oKF8ZGT2SPQev+iPkchT0a4+u97G4dwWpDr3jVZkdYZTQ6DJs3sNX/ftsY+obt+y7hsD
+         B1CA==
+X-Gm-Message-State: ACgBeo3/ETbRIZkqIIPAMRfgvAHp1bIgYBZ6klmSduaCxuGgMcn3vhLi
+        LChyaIc5R+oJS+LLHsvLr1i7rosIMgHpVyv5WrM=
+X-Google-Smtp-Source: AA6agR7U/oVpzPHvchwsE54U6r7OKVjyYC6QkwgfBzrzIUX5YaKC8KGeQyILJ2Z8F/pH21bfHWi7erMANy19NPP7t9c=
+X-Received: by 2002:a81:6c0f:0:b0:334:c01f:fa10 with SMTP id
+ h15-20020a816c0f000000b00334c01ffa10mr4117792ywc.382.1660846785474; Thu, 18
+ Aug 2022 11:19:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/5] usb: gadget: Add function wakeup support
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_mrana@quicinc.com" <quic_mrana@quicinc.com>
-References: <1659467920-9095-1-git-send-email-quic_eserrao@quicinc.com>
- <1659467920-9095-3-git-send-email-quic_eserrao@quicinc.com>
- <049219f1-8c68-e4cc-7bf9-1e8c214e80aa@synopsys.com>
- <32a0765e-00d9-1a67-bf36-4060c5fcb008@quicinc.com>
- <8705d52e-2181-aebd-43b8-2c8d021339c7@synopsys.com>
- <5ad70f41-622e-2d75-7c53-89aba1255a5f@quicinc.com>
- <ac8e012f-08f3-baed-ead0-231f0527864c@synopsys.com>
- <b123b543-6c82-2787-9730-addd3e6e70a3@quicinc.com>
- <98966b47-0bc5-6ec0-ec80-5eff1d71d9fd@synopsys.com>
- <e3bcfd4c-efdb-c7b0-4e94-1afcd3b8eb73@synopsys.com>
- <1fac4c0f-4e8b-f333-7208-c50353a806f4@synopsys.com>
- <dc5cdba3-fcbc-79a2-797e-2553c727cba5@quicinc.com>
- <6e8de558-7183-d3f1-9ba7-83a612675e17@synopsys.com>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <6e8de558-7183-d3f1-9ba7-83a612675e17@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: DRtVcOFG_WVCFC2y4-a0rDnqtX6Oe-SO
-X-Proofpoint-ORIG-GUID: DRtVcOFG_WVCFC2y4-a0rDnqtX6Oe-SO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_14,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- malwarescore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 adultscore=0 suspectscore=0 mlxscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208180066
+References: <20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220815151451.23293-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdW29Q40hypWZ05KRj5cc=DY8XjnDwOPVw3kJPNUrnL0fA@mail.gmail.com>
+In-Reply-To: <CAMuHMdW29Q40hypWZ05KRj5cc=DY8XjnDwOPVw3kJPNUrnL0fA@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 18 Aug 2022 19:19:18 +0100
+Message-ID: <CA+V-a8sVpEx==R6QXF8qxhVSsv2mVnZ_R3N2wTt+JPcQWNqCWQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/8] RISC-V: Kconfig.socs: Add Renesas RZ/Five SoC
+ kconfig option
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Conor Dooley <Conor.Dooley@microchip.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,180 +80,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Geert,
 
+Thank you for the review.
 
-On 8/16/2022 4:51 PM, Thinh Nguyen wrote:
-> On 8/16/2022, Elson Serrao wrote:
->>
->>
->> On 8/12/2022 5:46 PM, Thinh Nguyen wrote:
->>> On 8/11/2022, Thinh Nguyen wrote:
->>>> On 8/11/2022, Thinh Nguyen wrote:
->>>>> On 8/11/2022, Elson Serrao wrote:
->>>>>>
->>>>>>
->>>>>> On 8/9/2022 6:08 PM, Thinh Nguyen wrote:
->>>>>
->>>>> <snip>
->>>>>
->>>>>
->>>>>>> To summarize the points:
->>>>>>>
->>>>>>> 1) The host only arms function remote wakeup if the device is
->>>>>>> capable of
->>>>>>> remote wakeup (check USB_CONFIG_ATT_WAKEUP in bmAttributes and
->>>>>>> hardware
->>>>>>> capability)
->>>>>>>
->>>>>>> 2) If the device is in suspend, the device can do remote wakeup
->>>>>>> (through
->>>>>>> LFPS handshake) if the function is armed for remote wakeup (through
->>>>>>> SET_FEATURE(FUNC_SUSPEND)).
->>>>>>>
->>>>>>> 3) If the link transitions to U0 after the device triggering a remote
->>>>>>> wakeup, the device will also send device notification function
->>>>>>> wake for
->>>>>>> all the interfaces armed with remote wakeup.
->>>>>>>
->>>>>>> 4) If the device is not in suspend, the device can send device
->>>>>>> notification function wake if it's in U0.
->>>>>>>
->>>>>>>
->>>>>>> Now, remote wakeup and function wake device notification are 2
->>>>>>> separate
->>>>>>> operations. We have the usb_gadget_ops->wakeup() for remote wakeup. I
->>>>>>> suggested to maybe add
->>>>>>> usb_gadget_ops->send_wakeup_notification(gadget,
->>>>>>> intf_id) for the device notification. What you did was combining both
->>>>>>> operations in usb_gadget_ops->func_wakeup(). That may only work for
->>>>>>> point 4) (assuming you fix the U0 check), but not point 3).
->>>>>>
->>>>>> Thank you for your feedback and summary. I will rename func_wakeup to
->>>>>> send_wakeup_notification to better align with the approach. The
->>>>>> reason I
->>>>>> have combined remote_wakeup and function wake notification in
->>>>>> usb_gadget_ops->func_wakeup() is because since the implementation
->>>>>> is at
->>>>>> function/composite level it has no knowledge on the link state. So I
->>>>>> have delegated that task to controller driver to handle the
->>>>>> notification
->>>>>> accordingly. That is do a LFPS handshake first if the device is
->>>>>> suspended and then send notification (explained below). But we can
->>>>>> definitely separate this by adding an additional flag in the composite
->>>>>> layer to set the link state based on the gadget suspend callback
->>>>>> called
->>>>>> when U3 SUSPEND interrupt is received. Let me know if you feel
->>>>>> separating the two is a better approach.
->>>>>>
->>>>>
->>>>> The reason I think we need to separate it is because of point 3. As I
->>>>> note earlier, the spec states that "If remote wake event occurs in
->>>>> multiple functions, each function shall send a Function Wake
->>>>> Notification."
->>>>>
->>>>> But if there's no remote wake event, and the host brought the device up
->>>>> instead, then the function suspend state is retained.
->>>>>
->>>>> If we separate these 2 operations, the caller can check whether the
->>>>> operation went through properly. For example, if the wakeup() is
->>>>> initiated properly, but the function wake device notification didn't go
->>>>> through. We would only need to resend the device notification rather
->>>>> than initiate remote wakeup again.
->>>>
->>>> If we don't have to send device notification for other interfaces, we
->>>> can combine the operations here as you did.
->>>>
->>>
->>> I still think it's better to split up the operations. The way you're
->>> handling it now is not clear.
->>>
->>> If the func_awake() returns -EAGAIN, I'd expect that the remote wake did
->>> not go through and expect user to retry again. But here it does initiate
->>> remote wake, but it just does not send device notification yet. This is
->>> confusing.
->>>
->>> Also, instead of all the function wake handling coming from the function
->>> driver, now we depend on the controller driver to call function resume()
->>> on state change to U0, which will trigger device notification. What
->>> happen if it doesn't call resume(). There's too many dependencies and it
->>> seems fragile.
->>>
->>> I think all this can be handled in the function driver. You can fix the
->>> dwc3 wakeup() and poll for U0/ON state rather than RECOVERY state, which
->>> is what it's supposed to poll.
->>
->> For transitioning from U3 to U0, the current upstream implementation is
->> to poll for U0 state when dwc3_gadget_wakeup() is called and it is a
->> blocking call. (this is a common API for both HS and SS)
->>
->>      /* poll until Link State changes to ON */
->>      retries = 20000;
->>
->>      while (retries--) {
->>          reg = dwc3_readl(dwc->regs, DWC3_DSTS);
->>
->>          /* in HS, means ON */
->>          if (DWC3_DSTS_USBLNKST(reg) == DWC3_LINK_STATE_U0)
->>              break;
->>      }
->>
->> In my experiments I found that certain hosts take longer time to drive
->> HS resume signalling between the remote wakeup and the resume K and this
->> time varies across hosts. Hence the above polling timer is not generic
->> across hosts. So how do we converge on a polling timer value to work
->> across HS/SS and without blocking the system for a long time?
-> 
-> Can't we take the upper limit of both base on experiment? And it
-> shouldn't be blocking the whole system.
+On Thu, Aug 18, 2022 at 4:16 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Mon, Aug 15, 2022 at 5:16 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > Introduce SOC_RENESAS_RZFIVE config option to enable Renesas RZ/Five
+> > (R9A07G043) SoC, along side also add ARCH_RENESAS config option as most
+> > of the Renesas drivers depend on this config option.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Thanks for your patch!
+>
+> The technical part LGTM, so
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> > --- a/arch/riscv/Kconfig.socs
+> > +++ b/arch/riscv/Kconfig.socs
+> > @@ -80,4 +80,18 @@ config SOC_CANAAN_K210_DTB_SOURCE
+> >
+> >  endif # SOC_CANAAN
+> >
+> > +config ARCH_RENESAS
+>
+> We definitely want ARCH_RENESAS, as it serves as a gatekeeper for
+> Kconfig options for IP cores found on Renesas ARM and RISC-V SoCs.
+>
+Agreed, or else we will end up touching too many Kconfig files.
 
-On the host I was experimenting with, the time it took was around 110ms 
-in HS case. That would translate to a retry count of about ~181,000 in 
-the above polling loop. Wouldn't that be a very large value for polling?
-And not sure if there are other hosts that take even longer time
-> 
->>
->> Some data layers like TCP/IP hold a TX lock while sending data (that
->> causes a remote wakeup event) and hence this wakeup() may run in atomic
->> context.
-> 
-> Why hold the lock while waiting for the host to wakeup? The host is
-> still inactive. Also, the usb_gadget_wakeup() API doesn't specify that
-> it may run in atomic context.
-> 
+> > +       bool
+> > +       select GPIOLIB
+> > +       select PINCTRL
+> > +       select SOC_BUS
+> > +
+> > +config SOC_RENESAS_RZFIVE
+>
+> Do we need this symbol? You could as well make ARCH_RENESAS above
+> visible, and defer the actual SoC selection to ARCH_R9A07G043 in
+> drivers/soc/renesas/Kconfig[1].
+>
+I think we could drop it and just defer the actual SoC selection to
+ARCH_R9A07G043 as you said.
 
-The lock might be held by upper layers who are unaware/independent of 
-underlying transport medium. The above TX lock I was referring to was
-that held by Linux networking stack. It just pushes out data the same 
-way it would when USB is active. It is the function/composite layer 
-being aware of the function suspend would now sense this as a remote 
-wake event and perform this additional step of bringing out the link 
-from u3 and then sending device wakeup notification.
+> I don't know what is the policy on RISC-V. ARM64 has a "single-symbol
+> in arch/arm64/Kconfig.platforms"-policy, so we handle SoC selection
+> in drivers/soc/renesas/Kconfig, and that is fine, as it avoids merge
+> conflicts.
+>
+Agreed.
 
-In our current upstream implementation of dwc3_gadget_wakeup() API we 
-hold a spinlock as well. But yeah that can be rectified
+@Conor - Does the above sound OK?
 
-static int dwc3_gadget_wakeup(struct usb_gadget *g)
-{
-	struct dwc3		*dwc = gadget_to_dwc(g);
-	unsigned long		flags;
-	int			ret;
-
-	spin_lock_irqsave(&dwc->lock, flags);
-	ret = __dwc3_gadget_wakeup(dwc);
-	spin_unlock_irqrestore(&dwc->lock, flags);
-
-	return ret;
-}
-
-
->>
->> To make this generic across hosts, I had switched to interrupt based
->> approach, enabling link state events and return error value immediately
->> from the dwc3_gadget_wakeup() API after doing a LFPS handshake. But
->> yeah, then we have to rely on the resume callback as an indication that
->> link is transitioned to ON state.
->>
-> 
-> BR,
-> Thinh
-> 
+Cheers,
+Prabhakar

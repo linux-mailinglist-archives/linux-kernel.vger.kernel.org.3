@@ -2,72 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E690598233
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A08C59823F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244412AbiHRLZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 07:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S244424AbiHRL2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 07:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231675AbiHRLY7 (ORCPT
+        with ESMTP id S231675AbiHRL2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 07:24:59 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3045C36B;
-        Thu, 18 Aug 2022 04:24:58 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id e20so882332wri.13;
-        Thu, 18 Aug 2022 04:24:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=BfkpuYhWWV3z0UBvbVgMJJbzhNR8JpIXBKTTsE8aT90=;
-        b=BCcruAbNhnvE2FO99nIU8oKrInNU391CRjvwpRjdMG2qMb6mV59maUjV62qGUUrS6J
-         9AifLDn8+lcaxSN81r3KI1uSfEPhNc1k70FxPAXW2+XQhz/47iRXEpte3XuRdMbgSbxm
-         S/2XoFcC73UyKVyjEmZKElU7CFEMryxk8V4xtiyy87hgW7/tUUEL3mvs2IxmzKLBAWDX
-         bPJDMmjRZlAeEZNVp2+3qBp4Pqn7tVn/Ecm9ZqlwrNnCWXRtCgui9aUCkN7KbnOpjHQp
-         U9hElOPmPJSbh4hT6CQ1LDtzMVLQy77Al5y2UQChm1IfzWh0avE3TxmuCDy2/ay6IWiR
-         pJtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=BfkpuYhWWV3z0UBvbVgMJJbzhNR8JpIXBKTTsE8aT90=;
-        b=XSdBPOijK+HeNL7ogtlOS/rj4vOJ8UG9PkEdR7hhy8CeSshmT0KKQ7lqTQXE6OvHB4
-         nHiPXzX/Z9Sa93ZaeXi9HWIc8Xx62hol6LeKr9qpg1FjvTWmaf3dTYw+YZKRVV+89X+h
-         DgTdzgPGvkRlp7notRHS4ne9VJwO3uNIUNjDi8G5/cIXrUF621H6R8vtWcDMrnx4tWzV
-         flLXrrX5njY5R2uqM97tNbd87bIjoVJsLdcwdm5YNy4t+xwcgVrSXYE3/eAQBZqgxpV9
-         tLLEV487Q93Y9ScYqORv7ZKZ+06KgdV3yhWD6UHX0WCOi2TUBJ3RgeIAduqrmO30ae4N
-         IoGQ==
-X-Gm-Message-State: ACgBeo3puvdFYnaoWFp067z5cWoEHGTol4Y3s5BfL+1vBCMCtEAo9W8O
-        1H0xEyUbb3NNr2XV/Ip2J/k=
-X-Google-Smtp-Source: AA6agR4IoZ6AZQzAK9nsfNkFBUH4LqxEKtZcnlG6DCMZ0TYxSKyfUFlJcXqwdQu6InBFtrblolkI2Q==
-X-Received: by 2002:a5d:5983:0:b0:221:7cbd:df50 with SMTP id n3-20020a5d5983000000b002217cbddf50mr1356294wri.420.1660821896767;
-        Thu, 18 Aug 2022 04:24:56 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id i11-20020adffdcb000000b0021eed2414c9sm1157080wrs.40.2022.08.18.04.24.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 04:24:56 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 12:24:54 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-alpha@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>
-Subject: build failure of next-20220818 due to 81c0386c1376 ("regmap: mmio:
- Support accelerared noinc operations")
-Message-ID: <Yv4hhoTTcRuk/2Kl@debian>
+        Thu, 18 Aug 2022 07:28:05 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2AF5E337;
+        Thu, 18 Aug 2022 04:28:02 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4M7jJM30FDzGpc5;
+        Thu, 18 Aug 2022 19:26:27 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 18 Aug 2022 19:28:00 +0800
+Received: from [10.174.178.31] (10.174.178.31) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 18 Aug 2022 19:28:00 +0800
+Subject: Re: [v2] cachefiles: fix error return code in
+ cachefiles_ondemand_copen()
+To:     JeffleXu <jefflexu@linux.alibaba.com>, <dhowells@redhat.com>
+CC:     <linux-cachefs@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+References: <20220818111935.1683062-1-sunke32@huawei.com>
+ <e4e18421-7820-f1e3-6762-5959c2bd7ea4@linux.alibaba.com>
+From:   Sun Ke <sunke32@huawei.com>
+Message-ID: <adf4b4c2-75a2-705d-8870-df130fb583fb@huawei.com>
+Date:   Thu, 18 Aug 2022 19:27:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <e4e18421-7820-f1e3-6762-5959c2bd7ea4@linux.alibaba.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.31]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,53 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
-
-Not sure if it has been reported, builds of alpha allmodconfig have
-failed to build next-20220818 with the error:
-
-drivers/base/regmap/regmap-mmio.c: In function 'regmap_mmio_noinc_write':
-drivers/base/regmap/regmap-mmio.c:221:17: error: implicit declaration of function 'writesb'; did you mean 'writeb'? [-Werror=implicit-function-declaration]
-  221 |                 writesb(ctx->regs + reg, (const u8 *)val, val_count);
-      |                 ^~~~~~~
-      |                 writeb
-drivers/base/regmap/regmap-mmio.c:224:17: error: implicit declaration of function 'writesw'; did you mean 'writew'? [-Werror=implicit-function-declaration]
-  224 |                 writesw(ctx->regs + reg, (const u16 *)val, val_count);
-      |                 ^~~~~~~
-      |                 writew
-drivers/base/regmap/regmap-mmio.c:227:17: error: implicit declaration of function 'writesl'; did you mean 'writel'? [-Werror=implicit-function-declaration]
-  227 |                 writesl(ctx->regs + reg, (const u32 *)val, val_count);
-      |                 ^~~~~~~
-      |                 writel
-drivers/base/regmap/regmap-mmio.c:231:17: error: implicit declaration of function 'writesq'; did you mean 'writeq'? [-Werror=implicit-function-declaration]
-  231 |                 writesq(ctx->regs + reg, (const u64 *)val, val_count);
-      |                 ^~~~~~~
-      |                 writeq
-drivers/base/regmap/regmap-mmio.c: In function 'regmap_mmio_noinc_read':
-drivers/base/regmap/regmap-mmio.c:358:17: error: implicit declaration of function 'readsb'; did you mean 'readb'? [-Werror=implicit-function-declaration]
-  358 |                 readsb(ctx->regs + reg, (u8 *)val, val_count);
-      |                 ^~~~~~
-      |                 readb
-drivers/base/regmap/regmap-mmio.c:361:17: error: implicit declaration of function 'readsw'; did you mean 'readw'? [-Werror=implicit-function-declaration]
-  361 |                 readsw(ctx->regs + reg, (u16 *)val, val_count);
-      |                 ^~~~~~
-      |                 readw
-drivers/base/regmap/regmap-mmio.c:364:17: error: implicit declaration of function 'readsl'; did you mean 'readl'? [-Werror=implicit-function-declaration]
-  364 |                 readsl(ctx->regs + reg, (u32 *)val, val_count);
-      |                 ^~~~~~
-      |                 readl
-drivers/base/regmap/regmap-mmio.c:368:17: error: implicit declaration of function 'readsq'; did you mean 'readq'? [-Werror=implicit-function-declaration]
-  368 |                 readsq(ctx->regs + reg, (u64 *)val, val_count);
-      |                 ^~~~~~
-      |                 readq
 
 
-git bisect pointed to 81c0386c1376 ("regmap: mmio: Support accelerared noinc operations")
-And, reverting that commit has fixed the build failure.
+在 2022/8/18 19:14, JeffleXu 写道:
+> 
+> 
+> On 8/18/22 7:19 PM, Sun Ke wrote:
+>> If size < 0; open request will fail, but cachefiles_ondemand_copen return 0.
+>> Fix to return a negative error code.
+> 
+> Could you please also update the commit log?
 
-I will be happy to test any patch or provide any extra log if needed.
+The cache_size field of copen is specified by the user daemon. If 
+cache_size < 0, then the OPEN request is expected to fail, while copen 
+itself shall succeed. However, return 0 is indeed unexpected when 
+cache_size is an invalid error code.
+Fix to return a negative error code.
 
-
---
-Regards
-Sudip
+right?
+> 
+> Otherwise LGTM.
+> 
+> Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+> 
+> 
+> BTW, also cc linux-fsdevel@vger.kernel.org
+> 
+>>
+>> Fixes: c8383054506c ("cachefiles: notify the user daemon when looking up cookie")
+>> Signed-off-by: Sun Ke <sunke32@huawei.com>
+>> ---
+>>   fs/cachefiles/ondemand.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/fs/cachefiles/ondemand.c b/fs/cachefiles/ondemand.c
+>> index 1fee702d5529..ea8a1e8317d9 100644
+>> --- a/fs/cachefiles/ondemand.c
+>> +++ b/fs/cachefiles/ondemand.c
+>> @@ -159,7 +159,7 @@ int cachefiles_ondemand_copen(struct cachefiles_cache *cache, char *args)
+>>   	/* fail OPEN request if daemon reports an error */
+>>   	if (size < 0) {
+>>   		if (!IS_ERR_VALUE(size))
+>> -			size = -EINVAL;
+>> +			ret = size = -EINVAL;
+>>   		req->error = size;
+>>   		goto out;
+>>   	}
+> 

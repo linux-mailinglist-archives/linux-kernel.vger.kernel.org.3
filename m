@@ -2,112 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF41C5990F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 01:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2322A5990F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 01:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244734AbiHRXIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 19:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S244947AbiHRXLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 19:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240507AbiHRXIo (ORCPT
+        with ESMTP id S238901AbiHRXLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 19:08:44 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C2C20F7B;
-        Thu, 18 Aug 2022 16:08:41 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2FED08B;
-        Fri, 19 Aug 2022 01:08:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1660864119;
-        bh=4PW0JoB03TlII/YoouL7jQizC1IyM+yy8mabacxO+gQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UdH6mVd6rDYDxPUVxru3l0Xei79gzGoJTMrC3IqfTFzlgYczifoyZ+XZI6wN7opwA
-         r3rvhu0vH4/QbL6DbYoJIz0EYFn58xavLauFrbdVivwbKWp45Km1qvzifRgxAYK68B
-         jU/Gix7Cw+IRHCUy6NrvEM4+iFchBirF0GTZMMwU=
-Date:   Fri, 19 Aug 2022 02:08:35 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hsia-Jun Li <randy.li@synaptics.com>
-Cc:     dri-devel@lists.freedesktop.org, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, airlied@linux.ie,
-        daniel@ffwll.ch, mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, sakari.ailus@linux.intel.com,
-        ribalda@chromium.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tfiga@chromium.org,
-        sebastian.hesselbarth@gmail.com, jszhang@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/2] Add pixel formats used in Synatpics SoC
-Message-ID: <Yv7Gc+mSEXBnV0Oc@pendragon.ideasonboard.com>
-References: <20220808162750.828001-1-randy.li@synaptics.com>
+        Thu, 18 Aug 2022 19:11:13 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D97CE469;
+        Thu, 18 Aug 2022 16:11:12 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id w138so234108pfc.10;
+        Thu, 18 Aug 2022 16:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=oO4Bc2hWKfVwXdlktiQE0jBPW25iYRkPbwFVfrYw1rQ=;
+        b=JQuWyaiCbdfm4q7rdAUBaYGXABfyu6g7jJP8XT0ZFn2i7em6oGtpQ626yXJS/IC7mt
+         UnAO6uMMKGBmlv2M38QCdTXuD1IbAJBSni4s7Tia8dMUAFMQ5JMnN7ggrf4DO+jGiFl/
+         suaAnQFNmffAZJrYYVHLcBqHN44FWNgn8U5hY5gondQOpMZCSQqNFmTGcXHP3u+0i2Wl
+         mIr8cWkVa3tPWEDOpPdINO8MUIGSZ2Udw6rdChDz9TYYrzhfk7H5r7hiNvB9QPhZsmz+
+         Eyd0YEnEODLEZJDZ++0YZz6fLq3a3bbrKgMwJPnq6292IK9lDdEeFaT/A/yyjPRM/q29
+         ctkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=oO4Bc2hWKfVwXdlktiQE0jBPW25iYRkPbwFVfrYw1rQ=;
+        b=1Bjo8flT2Qh+SuvSv675ZX+16x0HGIG58Jj3/sALGomUn3JXwKJdNghM+s9dkg4T9o
+         UtdFzm+BGx6UBhao/bpfH76N5/mOxUcsNnOg6yzeZ5uiXqZLr8ZGd5CJI7oQjRRqYTAF
+         9FJbYQmCXw1sD8BkSYwL6AV6m8EIkXYXSX5btqtAPBVlMCF1McjtXNcxMB5FZ5JP0NlM
+         zEpUZmu2OXMSHhu0zsB4S5LQJq1yXgFqdlPo7G2CFQVKJLhdpAX5I2p6Gb2g8PGhbT3C
+         t8e/XlvUy3f+6RaHWuA6Mmv7puFa8VKPbbno/3dEbRiKc3LM0rnP5w8llln9ldBYojr/
+         dK5Q==
+X-Gm-Message-State: ACgBeo2XOBD3KrhRf7NoQqJQiRgJCbXEH9oucAptTL7v3prNkNFsOTFK
+        vlsdhmZ9YcmKSKS0Hws1wXs=
+X-Google-Smtp-Source: AA6agR5joEcXdVJZVS7Q2KreZvxoBSDoC8abh7gvhtYJOQriux0crv7KcIKjdUMBbYniIRC1llBTJQ==
+X-Received: by 2002:a63:1a53:0:b0:41f:5298:9b5f with SMTP id a19-20020a631a53000000b0041f52989b5fmr4009107pgm.244.1660864271773;
+        Thu, 18 Aug 2022 16:11:11 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e8-20020aa79808000000b0052d8b663c37sm2150757pfl.195.2022.08.18.16.11.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 16:11:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 18 Aug 2022 16:11:06 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
+        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
+        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
+        rtanwar@maxlinear.com
+Subject: Re: [PATCH v2 16/16] hwmon: (mr75203) add debugfs to read and write
+ temperature coefficients
+Message-ID: <20220818231106.GA3505191@roeck-us.net>
+References: <20220817054321.6519-1-farbere@amazon.com>
+ <20220817054321.6519-17-farbere@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220808162750.828001-1-randy.li@synaptics.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220817054321.6519-17-farbere@amazon.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hsia-Jun,
-
-On Tue, Aug 09, 2022 at 12:27:48AM +0800, Hsia-Jun Li wrote:
-> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+On Wed, Aug 17, 2022 at 05:43:21AM +0000, Eliav Farber wrote:
+> This change adds debugfs to read and write TS coefficients - g, h, j and
+> cal5.
 > 
-> Those pixel formats are used in Synaptics's VideoSmart series SoCs,
-> likes VS640, VS680.  I just disclose the pixel formats used in the video
-> codecs and display pipeline this time. Actually any device with a MTR
-> module could support those tiled and compressed pixel formats. The more
-> detail about MTR module could be found in the first patch of this serial
-> of mail.
+> The coefficients can vary between product and product, so to calibrate
+> them it can be very useful to to be able to modify them on the fly.
 > 
-> We may not be able to post any drivers here in a short time, the most of
-> work in this platform is done in the Trusted Execution Environment and
-> we didn't use the optee framework.
-
-Is that so for the display side too, or only for the video decoder ?
-
-> Please notice that, the memory planes used for video codecs would be 5
-> when the compression is invoked while it would be 4 for display, the
-> extra planes in the video codecs is for the decoding internally usage,
-> it can't append the luma or chroma buffer as many other drivers do,
-> because this buffer could be only accessed by the video codecs itself,
-> it requests a different memory security attributes. Any other reason is
-> described in the v4l pixel formats's patch. I don't know whether a
-> different numbers of memory planes between drm and v4l2 is acceptable.
-
-I don't think that's a problem as such, as long as both the V4L2 and DRM
-formats make sense on their own.
-
-> I only posted the compression fourcc for the v4l2, because it is really
-> hard to put the uncompression version of pixel formats under the fourcc.
-> I would be better that we could have something likes format modifers in
-> drm here.
-
-Agreed, we need modifiers support in V4L2. This has been discussed
-previously ([1]), and a proposal ([2]) has been submitted two years ago,
-it needs to be revived.
-
-[1] https://lore.kernel.org/linux-media/20170821155203.GB38943@e107564-lin.cambridge.arm.com/
-[2] https://lore.kernel.org/linux-media/20200804192939.2251988-1-helen.koike@collabora.com/
-
-> https://synaptics.com/products/multimedia-solutions
+> e.g.
 > 
-> Hsia-Jun(Randy) Li (2):
->   drm/fourcc: Add Synaptics VideoSmart tiled modifiers
->   [WIP]: media: Add Synaptics compressed tiled format
+> cat /sys/kernel/debug/940f23d0000.pvt/ts_coeff_cal5
+> 4096
 > 
->  drivers/media/v4l2-core/v4l2-common.c |  1 +
->  drivers/media/v4l2-core/v4l2-ioctl.c  |  2 ++
->  include/uapi/drm/drm_fourcc.h         | 49 +++++++++++++++++++++++++++
->  include/uapi/linux/videodev2.h        |  2 ++
->  4 files changed, 54 insertions(+)
+> echo 83000 > sys/kernel/debug/940f23d0000.pvt/ts_coeff_g
+> 
 
--- 
-Regards,
+What happens if you write 0 into all those attributes, or 0xffffffff ?
 
-Laurent Pinchart
+Guenter
+
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+>  drivers/hwmon/mr75203.c | 196 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 196 insertions(+)
+> 
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> index 2898565afaab..ce34a44237e8 100644
+> --- a/drivers/hwmon/mr75203.c
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -9,6 +9,7 @@
+>   */
+>  #include <linux/bits.h>
+>  #include <linux/clk.h>
+> +#include <linux/debugfs.h>
+>  #include <linux/hwmon.h>
+>  #include <linux/module.h>
+>  #include <linux/mod_devicetable.h>
+> @@ -127,6 +128,7 @@ struct pvt_device {
+>  	struct clk		*clk;
+>  	struct reset_control	*rst;
+>  	struct voltage_device	*vd;
+> +	struct dentry		*dbgfs_dir;
+>  	u32			t_num;
+>  	u32			p_num;
+>  	u32			v_num;
+> @@ -139,6 +141,198 @@ struct pvt_device {
+>  	u8			vm_ch_total;
+>  };
+>  
+> +static ssize_t pvt_ts_coeff_h_read(struct file *file,
+> +				   char __user *user_buf,
+> +				   size_t count, loff_t *ppos)
+> +{
+> +	struct pvt_device *pvt = file->private_data;
+> +	char buf[16];
+> +	unsigned int len;
+> +
+> +	len = sprintf(buf, "%u\n", pvt->ts_coeff_h);
+> +
+> +	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
+> +}
+> +
+> +static ssize_t pvt_ts_coeff_h_write(struct file *file,
+> +				    const char __user *user_buf,
+> +				    size_t count, loff_t *ppos)
+> +{
+> +	struct pvt_device *pvt = file->private_data;
+> +	int ret;
+> +	u32 coeff;
+> +
+> +	ret = kstrtou32_from_user(user_buf, count, 0, &coeff);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pvt->ts_coeff_h = coeff;
+> +
+> +	return count;
+> +}
+> +
+> +static const struct file_operations pvt_ts_coeff_h_fops = {
+> +	.read = pvt_ts_coeff_h_read,
+> +	.write = pvt_ts_coeff_h_write,
+> +	.open = simple_open,
+> +	.owner = THIS_MODULE,
+> +	.llseek = default_llseek,
+> +};
+> +
+> +static ssize_t pvt_ts_coeff_g_read(struct file *file,
+> +				   char __user *user_buf,
+> +				   size_t count, loff_t *ppos)
+> +{
+> +	struct pvt_device *pvt = file->private_data;
+> +	char buf[16];
+> +	unsigned int len;
+> +
+> +	len = sprintf(buf, "%u\n", pvt->ts_coeff_g);
+> +
+> +	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
+> +}
+> +
+> +static ssize_t pvt_ts_coeff_g_write(struct file *file,
+> +				    const char __user *user_buf,
+> +				    size_t count, loff_t *ppos)
+> +{
+> +	struct pvt_device *pvt = file->private_data;
+> +	int ret;
+> +	u32 coeff;
+> +
+> +	ret = kstrtou32_from_user(user_buf, count, 0, &coeff);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pvt->ts_coeff_g = coeff;
+> +
+> +	return count;
+> +}
+> +
+> +static const struct file_operations pvt_ts_coeff_g_fops = {
+> +	.read = pvt_ts_coeff_g_read,
+> +	.write = pvt_ts_coeff_g_write,
+> +	.open = simple_open,
+> +	.owner = THIS_MODULE,
+> +	.llseek = default_llseek,
+> +};
+> +
+> +static ssize_t pvt_ts_coeff_j_read(struct file *file,
+> +				   char __user *user_buf,
+> +				   size_t count, loff_t *ppos)
+> +{
+> +	struct pvt_device *pvt = file->private_data;
+> +	char buf[16];
+> +	unsigned int len;
+> +
+> +	len = sprintf(buf, "%d\n", pvt->ts_coeff_j);
+> +
+> +	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
+> +}
+> +
+> +static ssize_t pvt_ts_coeff_j_write(struct file *file,
+> +				    const char __user *user_buf,
+> +				    size_t count, loff_t *ppos)
+> +{
+> +	struct pvt_device *pvt = file->private_data;
+> +	int ret;
+> +	s32 coeff;
+> +
+> +	ret = kstrtos32_from_user(user_buf, count, 0, &coeff);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pvt->ts_coeff_j = coeff;
+> +
+> +	return count;
+> +}
+> +
+> +static const struct file_operations pvt_ts_coeff_j_fops = {
+> +	.read = pvt_ts_coeff_j_read,
+> +	.write = pvt_ts_coeff_j_write,
+> +	.open = simple_open,
+> +	.owner = THIS_MODULE,
+> +	.llseek = default_llseek,
+> +};
+> +
+> +static ssize_t pvt_ts_coeff_cal5_read(struct file *file,
+> +				      char __user *user_buf,
+> +				      size_t count, loff_t *ppos)
+> +{
+> +	struct pvt_device *pvt = file->private_data;
+> +	char buf[16];
+> +	unsigned int len;
+> +
+> +	len = sprintf(buf, "%u\n", pvt->ts_coeff_cal5);
+> +
+> +	return simple_read_from_buffer(user_buf, count, ppos, buf, len);
+> +}
+> +
+> +static ssize_t pvt_ts_coeff_cal5_write(struct file *file,
+> +				       const char __user *user_buf,
+> +				       size_t count, loff_t *ppos)
+> +{
+> +	struct pvt_device *pvt = file->private_data;
+> +	int ret;
+> +	u32 coeff;
+> +
+> +	ret = kstrtou32_from_user(user_buf, count, 0, &coeff);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (coeff == 0)
+> +		return -EINVAL;
+> +
+> +	pvt->ts_coeff_cal5 = coeff;
+> +
+> +	return count;
+> +}
+> +
+> +static const struct file_operations pvt_ts_coeff_cal5_fops = {
+> +	.read = pvt_ts_coeff_cal5_read,
+> +	.write = pvt_ts_coeff_cal5_write,
+> +	.open = simple_open,
+> +	.owner = THIS_MODULE,
+> +	.llseek = default_llseek,
+> +};
+> +
+> +static void devm_pvt_ts_dbgfs_remove(void *data)
+> +{
+> +	struct pvt_device *pvt = (struct pvt_device *)data;
+> +
+> +	debugfs_remove_recursive(pvt->dbgfs_dir);
+> +	pvt->dbgfs_dir = NULL;
+> +}
+> +
+> +static int pvt_ts_dbgfs_create(struct pvt_device *pvt, struct device *dev)
+> +{
+> +	int ret;
+> +
+> +	pvt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
+> +	if (!pvt->dbgfs_dir) {
+> +		dev_err(dev, "Failed to create dbgfs_dir\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	debugfs_create_file("ts_coeff_h", 0644, pvt->dbgfs_dir, pvt,
+> +			    &pvt_ts_coeff_h_fops);
+> +	debugfs_create_file("ts_coeff_g", 0644, pvt->dbgfs_dir, pvt,
+> +			    &pvt_ts_coeff_g_fops);
+> +	debugfs_create_file("ts_coeff_j", 0644, pvt->dbgfs_dir, pvt,
+> +			    &pvt_ts_coeff_j_fops);
+> +	debugfs_create_file("ts_coeff_cal5", 0644, pvt->dbgfs_dir,  pvt,
+> +			    &pvt_ts_coeff_cal5_fops);
+> +
+> +	ret = devm_add_action_or_reset(dev, devm_pvt_ts_dbgfs_remove, pvt);
+> +	if (ret) {
+> +		dev_err(dev, "failed to add action to remove pvt dbgfs (%d)\n",
+> +			ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static umode_t pvt_is_visible(const void *data, enum hwmon_sensor_types type,
+>  			      u32 attr, int channel)
+>  {
+> @@ -655,6 +849,8 @@ static int mr75203_probe(struct platform_device *pdev)
+>  		dev_dbg(dev, "ts-coeff: h = %u, g = %u, j = %d, cal5 = %u\n",
+>  			pvt->ts_coeff_h, pvt->ts_coeff_g, pvt->ts_coeff_j,
+>  			pvt->ts_coeff_cal5);
+> +
+> +		pvt_ts_dbgfs_create(pvt, dev);
+>  	}
+>  
+>  	if (pd_num) {

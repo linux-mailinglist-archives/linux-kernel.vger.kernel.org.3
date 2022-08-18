@@ -2,89 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA9C597B83
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF19597B8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242802AbiHRCbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 22:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
+        id S242762AbiHRCcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 22:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238901AbiHRCbE (ORCPT
+        with ESMTP id S233588AbiHRCcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 22:31:04 -0400
+        Wed, 17 Aug 2022 22:32:16 -0400
 Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2BB1019;
-        Wed, 17 Aug 2022 19:31:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E1758085;
+        Wed, 17 Aug 2022 19:32:15 -0700 (PDT)
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id CC5F75812BA;
-        Wed, 17 Aug 2022 22:31:00 -0400 (EDT)
+        by mailnew.nyi.internal (Postfix) with ESMTP id C72B15809F1;
+        Wed, 17 Aug 2022 22:32:14 -0400 (EDT)
 Received: from imap50 ([10.202.2.100])
-  by compute3.internal (MEProxy); Wed, 17 Aug 2022 22:31:00 -0400
+  by compute3.internal (MEProxy); Wed, 17 Aug 2022 22:32:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         colorremedies.com; h=cc:cc:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1660789860; x=
-        1660793460; bh=lO/JKX725MxkaV2mB43UwzOt6HEFIjiXCMp5dmQPbbQ=; b=f
-        rC09OacJ36xtRXw3Og6jfy4pD0h9dzuyZQ/Q+sb9t7XQCTfRpIzeB5a1wVgt87TH
-        oIvDFjHQv/4EK/R1kpRTbS/NinshF6E5M5ZpS+TVn6JN+bgxZGe3VOro1YPKsi5q
-        ien4DuwAZwhaBI3QZjEX4jwPHnMILcwUhtU8HXvAHNHPVcKVkO6tKhLH8VRtla6G
-        YQ289oJWkiV6SlrY5goV80i0uMQoYJUywuv4iO2ooJZqrOPoMBdoedcI8VcGTJFJ
-        pJWZpaulj4B1GH1b8PpCE4EXMKG+D4WK/by5KCemFsG6kOrCXrO5t7bdVPXrMWAW
-        P8GMqdo+mpWyT3PuObU4Q==
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1660789934; x=
+        1660793534; bh=Dg3lZIUBn8ktbKE2tjHQauC07j8CEBmMwKDQfaoiWGo=; b=w
+        LOFrKFri4BUQ3b7AR5n36w9aw3yzWBnGKS51gkKgYdYUC5ZFD4pfU//TUgfDfKUd
+        MJeG9qPO/43xOU/QDtSRscMZtopaGyxD7Ms7pEWHSur6yrEqA/3Uv/bj4SdPW7Po
+        GGPcxsTD8h+enKHaR3u9D4YrqlR2Vsuxh6eSC+IWWM9QIjD6b5hlsxgm4rrp+FnK
+        AZGHR2Ac7wfDlkHkHvkS3q7Y6t9zA80uqNJuUa5m0I5cjCSN5foeYIiqlXFDSgp5
+        iYE8nbNsmxALWYyWIQr1+nDXvy52LRt9B3HxEzJ1J9Xf8aBvKpkCzJF2YQhs+z94
+        OVnMVga4J/9wInCAyQiyg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660789860; x=1660793460; bh=lO/JKX725MxkaV2mB43UwzOt6HEF
-        IjiXCMp5dmQPbbQ=; b=MDssPZFWLeCbfkYiSecfWW++fc0xPwXpOawEH5sA7gif
-        iFlRMcNrXMs+keVMJrmm/i7CRPreS4SVNdTEulHRy4tledhSD2ck0GIFJ5/A3Zz9
-        kcCKLjvtBjIPFaDxfVUIwTmQp89/945LlAfN0FqK8Vkejoq3niavc/GsYThQwM9j
-        FUz5Aw1YImYh/McBwNZjrSxFKAsdf5055p3E9bCWoPQxWSh3TYcXRFXnOyMIrwDA
-        Eivs3unx4CetA0JdCO0jRPL1toE9qrbcyHA368Apbr7byt2QDgzeR8knw7l+L88t
-        gy+0DxqwwoEqbBRzroElE4p6/R/KJJuNyHxPTV+xrA==
-X-ME-Sender: <xms:ZKT9YpKoDce_WSshZZJMb65UFlxNKNGX1ybNTiSIEoKhgJeQUx_KxQ>
-    <xme:ZKT9YlIO0lCOc5i4l5NcRPqBzqcC_bWHk_32R0cTIgv291VL1vhLfIbtEDMJvWLl9
-    a1U2c5ZAbyVeya5LPE>
+        fm1; t=1660789934; x=1660793534; bh=Dg3lZIUBn8ktbKE2tjHQauC07j8C
+        EBmMwKDQfaoiWGo=; b=qvQmIIwTNsdAQNov9+uqL5k2CdiUgbUqpg1PY5v1FBRj
+        8hcWJa3lswiXU/s3TBsFHH1/fHoHPMOGbeSwKo/giHqFYfvu5XBukxyJFU/+7dFP
+        uBmtA+HtT0GEabsrCj/rmbIGoE7FDLKT3UIdRsniX1ag2jq9Vp6ZAiZYwdNk6EAd
+        1rWHG0I3OXqLkhF+d8EP0Tkf+OXUImRrzQNhWHmgrUmCstyup0dHJPPJKNuUlMiE
+        cTNaTXgcW1XRgejzJvl/6dFzUOffcC0AY5pT1NtR1JDdIFuZkCAwTnpv3z0F5W1W
+        txPZikRKc2HwN2UPlFsuSHiRg/WmN3ktrEpuKsryiw==
+X-ME-Sender: <xms:rqT9Yjs2bbuyTpQPYQcLX-eHKYCeWdSN7fR8jGlbP_IIAYD7kRYZ-Q>
+    <xme:rqT9Ykc1k1x4xjitOuzA6U_dZu1yXIBBXlTydVfjqFjMNwJn7mg8ZS8R75a-DB4b0
+    wOUlZWkLD8wHCtrWwM>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehjedgieduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepofgfggfkjghffffhvfev
-    ufgtsehttdertderredtnecuhfhrohhmpedfvehhrhhishcuofhurhhphhihfdcuoehlih
-    hsthhssegtohhlohhrrhgvmhgvughivghsrdgtohhmqeenucggtffrrghtthgvrhhnpeef
-    heeliedugeeuleetffeuheegkeetgfdtveevudffgfejvdegveeljefhvdefhfenucffoh
-    hmrghinhepghhoohhglhgvrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
-    rghmpehmrghilhhfrhhomheplhhishhtshestgholhhorhhrvghmvgguihgvshdrtghomh
-X-ME-Proxy: <xmx:ZKT9YhsdRmmKHbwdWVW41fHo1YRsF3j0PcTOcrYK_7yVX5oT4NMgDg>
-    <xmx:ZKT9YqYSyFR9kAGxqE3aoUB0fEEduwyOSuXVDUX-hOTRa_Kc0Y4D-w>
-    <xmx:ZKT9YgbZPDtPPLSxT813cUhoR-BUOfEvWXpvEuAlDSN-HFsGh_Nihw>
-    <xmx:ZKT9Yg7RA1k74RxvLAV1miJerXvznOwy6_EVd2GKBLuOU_5RgxxZNA>
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfvehh
+    rhhishcuofhurhhphhihfdcuoehlihhsthhssegtohhlohhrrhgvmhgvughivghsrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpefgvdeukedtfefgfefgtdelffdvieeltefgfedutdff
+    leeuieevieevkeehtdehueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehlihhsthhssegtohhlohhrrhgvmhgvughivghsrdgtohhm
+X-ME-Proxy: <xmx:rqT9YmzRX1N5uSCS9PWh1fjtlkzkpIRS5yCF943-KJV3HIrTCihxYA>
+    <xmx:rqT9YiOfZpLiMoAOalTt5n5EvswMod1lQFwCD6NHkBVxaJR11hkUMw>
+    <xmx:rqT9Yj_4MtNG46BO0RV1oJ1Id0FBpEA6buDS_KMqbA4i77YYuQMZXQ>
+    <xmx:rqT9YjygUM_LxVTbXR-Fu9xoHaj9CnoFNDUI3otnocctc9QtYG-WIg>
 Feedback-ID: i06494636:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1EE441700082; Wed, 17 Aug 2022 22:31:00 -0400 (EDT)
+        id 6AE601700082; Wed, 17 Aug 2022 22:32:14 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
 Mime-Version: 1.0
-Message-Id: <568465de-5c3b-4d94-a74b-5b83ce2f942f@www.fastmail.com>
-In-Reply-To: <Yv2P0zyoVvz35w/m@T590>
-References: <61e5ccda-a527-4fea-9850-91095ffa91c4@www.fastmail.com>
- <4995baed-c561-421d-ba3e-3a75d6a738a3@www.fastmail.com>
- <dcd8beea-d2d9-e692-6e5d-c96b2d29dfd1@suse.com>
+Message-Id: <c233d75c-c8d5-4fba-b102-925fe537aad3@www.fastmail.com>
+In-Reply-To: <2f252399-0e30-4465-8c02-3f42c145174a@www.fastmail.com>
+References: <dcd8beea-d2d9-e692-6e5d-c96b2d29dfd1@suse.com>
  <2b8a38fa-f15f-45e8-8caa-61c5f8cd52de@www.fastmail.com>
- <CAFj5m9+6Vj3NdSg_n3nw1icscY1qr9f9SOvkWYyqpEtFBb_-1g@mail.gmail.com>
- <b236ca6e-2e69-4faf-9c95-642339d04543@www.fastmail.com>
- <Yv0A6UhioH3rbi0E@T590>
- <f633c476-bdc9-40e2-a93f-29601979f833@www.fastmail.com>
- <Yv0KmT8UYos2/4SX@T590>
- <35f0d608-7448-4276-8922-19a23d8f9049@www.fastmail.com>
- <Yv2P0zyoVvz35w/m@T590>
-Date:   Wed, 17 Aug 2022 22:30:39 -0400
+ <7c830487-95a6-b008-920b-8bc4a318f10a@applied-asynchrony.com>
+ <20220817114933.66c4g4xjsi4df2tg@quack3>
+ <85a141ae-56a7-4dcd-b75a-04be4b276b3a@www.fastmail.com>
+ <20220817163059.kigrvdfmxfswmhls@quack3>
+ <f6f899a5-97e2-460f-ad73-73d4b5e38eb6@www.fastmail.com>
+ <51cd43f9-ab6b-4dd6-814f-e0c1ace3143c@www.fastmail.com>
+ <20220817181554.znqljc6mmci45ukd@quack3>
+ <e4c260da-2df7-49a3-a8dc-1d3fc7ca12a0@www.fastmail.com>
+ <20220817183335.47a4ao26wjopavo2@quack3>
+ <2f252399-0e30-4465-8c02-3f42c145174a@www.fastmail.com>
+Date:   Wed, 17 Aug 2022 22:31:54 -0400
 From:   "Chris Murphy" <lists@colorremedies.com>
-To:     "Ming Lei" <ming.lei@redhat.com>
-Cc:     "Nikolay Borisov" <nborisov@suse.com>,
-        "Jens Axboe" <axboe@kernel.dk>, "Jan Kara" <jack@suse.cz>,
+To:     "Jan Kara" <jack@suse.cz>
+Cc:     =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        "Nikolay Borisov" <nborisov@suse.com>,
+        "Jens Axboe" <axboe@kernel.dk>,
         "Paolo Valente" <paolo.valente@linaro.org>,
-        "Btrfs BTRFS" <linux-btrfs@vger.kernel.org>,
         Linux-RAID <linux-raid@vger.kernel.org>,
         linux-block <linux-block@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
@@ -103,49 +103,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On Wed, Aug 17, 2022, at 9:03 PM, Ming Lei wrote:
-> On Wed, Aug 17, 2022 at 12:34:42PM -0400, Chris Murphy wrote:
->> 
->> 
->> On Wed, Aug 17, 2022, at 11:34 AM, Ming Lei wrote:
->> 
->> > From the 2nd log of blockdebugfs-all.txt, still not see any in-flight IO on
->> > request based block devices, but sda is _not_ included in this log, and
->> > only sdi, sdg and sdf are collected, is that expected?
->> 
->> While the problem was happening I did
->> 
->> cd /sys/kernel/debug/block
->> find . -type f -exec grep -aH . {} \;
->> 
->> The file has the nodes out of order, but I don't know enough about the interface to see if there are things that are missing, or what it means.
->> 
->> 
->> > BTW, all request based block devices should be observed in blk-mq debugfs.
->> 
->> /sys/kernel/debug/block contains
->> 
->> drwxr-xr-x.  2 root root 0 Aug 17 15:20 md0
->> drwxr-xr-x. 51 root root 0 Aug 17 15:20 sda
->> drwxr-xr-x. 51 root root 0 Aug 17 15:20 sdb
->> drwxr-xr-x. 51 root root 0 Aug 17 15:20 sdc
->> drwxr-xr-x. 51 root root 0 Aug 17 15:20 sdd
->> drwxr-xr-x. 51 root root 0 Aug 17 15:20 sde
->> drwxr-xr-x. 51 root root 0 Aug 17 15:20 sdf
->> drwxr-xr-x. 51 root root 0 Aug 17 15:20 sdg
->> drwxr-xr-x. 51 root root 0 Aug 17 15:20 sdh
->> drwxr-xr-x.  4 root root 0 Aug 17 15:20 sdi
->> drwxr-xr-x.  2 root root 0 Aug 17 15:20 zram0
+On Wed, Aug 17, 2022, at 2:54 PM, Chris Murphy wrote:
+> On Wed, Aug 17, 2022, at 2:33 PM, Jan Kara wrote:
+>> On Wed 17-08-22 14:18:01, Chris Murphy wrote:
+>>> 
+>>> 
+>>> On Wed, Aug 17, 2022, at 2:15 PM, Jan Kara wrote:
+>>> 
+>>> > OK, if this indeed passes then b6e68ee82585 ("blk-mq: Improve performance
+>>> > of non-mq IO schedulers with multiple HW queues") might be what's causing
+>>> > issues (although I don't know how yet...).
+>>> 
+>>> I can revert it from 5.12.0 and try. Let me know which next test is preferred :)
+>>
+>> Let's try to revert this first so that we have it narrowed down what
+>> started causing the issues. 
 >
-> OK, so lots of devices are missed in your log, and the following command
-> is supposed to work for collecting log from all block device's debugfs:
->
-> (cd /sys/kernel/debug/block/ && find . -type f -exec grep -aH . {} \;)
+> OK I've reverted b6e68ee82585, and removing 
+> megaraid_sas.host_tagset_enable=0, and will restart the workload...
 
-OK here it is:
-
-https://drive.google.com/file/d/18nEOx2Ghsqx8uII6nzWpCFuYENHuQd-f/view?usp=sharing
-
+I ran this for 7 hours and the problem didn't happen.
 
 -- 
 Chris Murphy

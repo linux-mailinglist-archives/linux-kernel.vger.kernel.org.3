@@ -2,142 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124DA598735
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE78859872C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344186AbiHRPQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S245742AbiHRPRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245219AbiHRPQe (ORCPT
+        with ESMTP id S245219AbiHRPRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:16:34 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCECC7B79A;
-        Thu, 18 Aug 2022 08:16:33 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id w28so1331688qtc.7;
-        Thu, 18 Aug 2022 08:16:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=fNAryURHxGVgmjXYIDSK6dvngkhik8cAD5MGphiVLyw=;
-        b=XU253U80V4kJNEIc9yNpxgbUC/z6aqclz0KqNZqpzPe+W8j0JumtqbzPomeRWqZm9Y
-         eP6T3gBo75Fcxs+we2oo6yRCVs/6/IJAnNlUecgttXcd+hx7eeO5Sk3uwF8P+qQ7ZiAl
-         zRDHa2rEOGIZ4WiOhMZEAXmpFLKDlSmYBoKJd02i7YhGYMsfykUa4fsDDKgGnzcpCFor
-         L1nUky2l+q4CUuIf+WYFRyPpNZw7n+nyRQKOMWKFqKJlz1TcPUshB3Fyt+DMyj8pOMzV
-         9s+zb7zhAD5Gr4wP/+4JluPI940O1KyHcx/s91lLtH1YVSD+NPD+I1oSGRvSWx4O9fBR
-         NAZg==
-X-Gm-Message-State: ACgBeo2/NuxcW6zqSQH6fpILiidWQrJcKUn64t2GLcf2Ce2WRzoL3Pi9
-        ZlArYYOPBmcc3KRPe8XBpTYgL2qC2GDa2Q==
-X-Google-Smtp-Source: AA6agR6b7uNb5yJfAVZ9E74dm/uGNc05W06ZLWjqONKxyVVLED2vrJEdtbAEov/g+tK0SqHOUMDunA==
-X-Received: by 2002:ac8:7f4f:0:b0:344:6974:51fe with SMTP id g15-20020ac87f4f000000b00344697451femr3071043qtk.382.1660835792538;
-        Thu, 18 Aug 2022 08:16:32 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id bs43-20020a05620a472b00b006b9b7879964sm1725316qkb.28.2022.08.18.08.16.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 08:16:32 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-3375488624aso20473387b3.3;
-        Thu, 18 Aug 2022 08:16:31 -0700 (PDT)
-X-Received: by 2002:a81:658:0:b0:334:a23e:6caa with SMTP id
- 85-20020a810658000000b00334a23e6caamr3123682ywg.283.1660835791476; Thu, 18
- Aug 2022 08:16:31 -0700 (PDT)
+        Thu, 18 Aug 2022 11:17:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FF07C1B3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:17:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76105B8203A
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 15:17:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9111FC433D6;
+        Thu, 18 Aug 2022 15:17:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660835828;
+        bh=Tm/++sxgfnVoUcC4gyi/rncDNqWMbIga+LlQ3XDx8SM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rYBGymDhV0ftY4+m0bqDhyt0iCQnqsojgJGDO/hXCWjMFHjtcZffxBV2VTeyMTYwx
+         WeI2euwwjNggqk9okmcQHh4pli8WOA5ZnTRDSUsxoG/PYOZycsOj+hwASeJcC3djG+
+         jzQEzOLg/HuXgcO7K2A2goqKiOpLGixWoivB81DvrSThl+KnfSgNN36+CHlswdy767
+         ftdh/OVO6GO2bjEgbV3KQoVUmILeqXpiCbgak0xXUkxNTGNC29Q+xcv+q+pLIPig0o
+         L3mgj79EERloFuRWWP0IPMpHiKXiUwrmsluI3Nd+pVU89MpAg/B7gCxrVrkxy9OQtM
+         Kc0SfJZvtEyTg==
+Date:   Thu, 18 Aug 2022 08:17:05 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Pengfei Xu <pengfei.xu@intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Su, Heng" <heng.su@intel.com>, linux-kernel@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>, pbonzini@redhat.com,
+        x86@kernel.org
+Subject: Re: [PATCH] x86/kvm, objtool: Avoid fastop ENDBR from being sealed
+Message-ID: <20220818151705.alu2y52rknp2mgsa@treble>
+References: <PH0PR11MB4839B4D2FB8B8D8D52A62C7F9A629@PH0PR11MB4839.namprd11.prod.outlook.com>
+ <YvzJTxOwmikAlZ6j@worktop.programming.kicks-ass.net>
+ <20220818011045.v4baekgxajylqxvh@treble>
+ <Yv3qHNGBM2aU2NuA@worktop.programming.kicks-ass.net>
+ <Yv3sha0zujQxW1X8@xpf.sh.intel.com>
+ <Yv4dKABja9CxqcDS@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220815151451.23293-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220815151451.23293-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 18 Aug 2022 17:16:19 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW29Q40hypWZ05KRj5cc=DY8XjnDwOPVw3kJPNUrnL0fA@mail.gmail.com>
-Message-ID: <CAMuHMdW29Q40hypWZ05KRj5cc=DY8XjnDwOPVw3kJPNUrnL0fA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/8] RISC-V: Kconfig.socs: Add Renesas RZ/Five SoC
- kconfig option
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <Conor.Dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yv4dKABja9CxqcDS@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+On Thu, Aug 18, 2022 at 01:06:16PM +0200, Peter Zijlstra wrote:
+> On Thu, Aug 18, 2022 at 03:38:45PM +0800, Pengfei Xu wrote:
+> >   And this "Missing ENDBR: andw_ax_dx+0x0/0x10 [kvm]" issue was
+> >   reproduced again after ran syzkaller 5min on ADL-P.
+> 
+> Ha, indeed :/
+> 
+> > > > +/*
+> > > > + * Create a dummy function pointer reference to prevent objtool from marking
+> > > > + * the function as needing to be "sealed" (i.e. ENDBR converted to NOP by
+> > > > + * apply_ibt_endbr()).
+> > > > + */
+> > > > +#define IBT_NOSEAL(fname)				\
+> > > > +	".pushsection .discard.endbr.noseal\n\t"	\
+> > > > +	_ASM_PTR fname "\n\t"				\
+> > > > +	".popsection\n\t"
+> > > > +
+> 
+> objtool/check.c:validate_ibt():
+> 
+>                 if (!strncmp(sec->name, ".discard", 8)                  ||
+> 		    ...)
+> 		    continue;
+> 
+> So yeah, that'll just get ignored. So at the very least we need to
+> special case this section.
 
-On Mon, Aug 15, 2022 at 5:16 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Introduce SOC_RENESAS_RZFIVE config option to enable Renesas RZ/Five
-> (R9A07G043) SoC, along side also add ARCH_RENESAS config option as most
-> of the Renesas drivers depend on this config option.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Indeed.  I swear that patch worked last night.
 
-Thanks for your patch!
+I also found that not all fastops use __FOP_FUNC().
 
-The technical part LGTM, so
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Anyway I'll post a new (official) pair of patches shortly.
 
-> --- a/arch/riscv/Kconfig.socs
-> +++ b/arch/riscv/Kconfig.socs
-> @@ -80,4 +80,18 @@ config SOC_CANAAN_K210_DTB_SOURCE
->
->  endif # SOC_CANAAN
->
-> +config ARCH_RENESAS
-
-We definitely want ARCH_RENESAS, as it serves as a gatekeeper for
-Kconfig options for IP cores found on Renesas ARM and RISC-V SoCs.
-
-> +       bool
-> +       select GPIOLIB
-> +       select PINCTRL
-> +       select SOC_BUS
-> +
-> +config SOC_RENESAS_RZFIVE
-
-Do we need this symbol? You could as well make ARCH_RENESAS above
-visible, and defer the actual SoC selection to ARCH_R9A07G043 in
-drivers/soc/renesas/Kconfig[1].
-
-I don't know what is the policy on RISC-V. ARM64 has a "single-symbol
-in arch/arm64/Kconfig.platforms"-policy, so we handle SoC selection
-in drivers/soc/renesas/Kconfig, and that is fine, as it avoids merge
-conflicts.
-
-> +       bool "Renesas RZ/Five SoC"
-> +       select ARCH_R9A07G043
-> +       select ARCH_RENESAS
-> +       select RESET_CONTROLLER
-> +       help
-> +         This enables support for Renesas RZ/Five SoC.
-> +
->  endmenu # "SoC selection"
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/commit/?h=renesas-drivers-for-v6.1&id=ebd0e06f3063cc2e3a689112904b29720579c6d2
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Josh

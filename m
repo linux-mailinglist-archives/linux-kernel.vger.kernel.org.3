@@ -2,174 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5C959871C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDF1598721
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344160AbiHRPML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
+        id S1343596AbiHRPMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344118AbiHRPL6 (ORCPT
+        with ESMTP id S1344179AbiHRPMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:11:58 -0400
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E65BFA8B;
-        Thu, 18 Aug 2022 08:11:53 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso1276800otb.6;
-        Thu, 18 Aug 2022 08:11:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=WfG6z66abqmikTTPic3DpB5e3H4wBaNLiClJ/rnvyVc=;
-        b=pucIdsytBnSNMGKOlVgFv3STr5Snk0UhtGcRmUKRjc4bdrWWDQYhYVXjamSzRZHy6p
-         hPF1R5isHYgas+hSi2WZl4QgedPu6Kp48hmz7IWIQunNfS8XRX0jIY3t3Vfr/BISj/4D
-         npF2cw4mBemgkzafMr46F/RWnNvw6Au4Rhu06XdB//41cwfliJf3IsUNP8wJrcm/oIxh
-         BEKFrqvhlnUifiZX5zWWM+QOCKhcccWunvY5HADyYp8f3/123vdVYnxXgF/o4Zpy77/W
-         vPkNtfL87m1QzHboXV89XKdbP3ZBbThaxJpnA0J7OmXJ2OwOecoojVRsTzQ4sSZW2EII
-         Fh4g==
-X-Gm-Message-State: ACgBeo3WjPRZ1gVa9FVCzsFga6v1TJc8UPHSZ+dafCHl1n80UyR/y1aQ
-        Y2qupVrEIpXtPrjRzXYfywk2oACb3g==
-X-Google-Smtp-Source: AA6agR6o7rSkFIPBKN9it7S6e36TvpRIoeN+/X1zhFrbsie8UcZ/YzC4dQpBxe2obE3oQFSaW2ODvA==
-X-Received: by 2002:a9d:12a2:0:b0:638:937a:f620 with SMTP id g31-20020a9d12a2000000b00638937af620mr1239118otg.29.1660835512452;
-        Thu, 18 Aug 2022 08:11:52 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:5fe0:b4f5:6e22:4704:df60:73a3])
-        by smtp.gmail.com with ESMTPSA id v43-20020a056870b52b00b00116d5103487sm493752oap.31.2022.08.18.08.11.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 08:11:52 -0700 (PDT)
-Received: (nullmailer pid 1877668 invoked by uid 1000);
-        Thu, 18 Aug 2022 15:11:50 -0000
-Date:   Thu, 18 Aug 2022 09:11:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Khalil Blaiech <kblaiech@nvidia.com>
-Subject: Re: [PATCH v1 6/7] i2c-mlxbf.c: support BlueField-3 SoC
-Message-ID: <20220818151150.GK1829017-robh@kernel.org>
-References: <20220816225412.9095-1-asmaa@nvidia.com>
- <20220816225412.9095-7-asmaa@nvidia.com>
+        Thu, 18 Aug 2022 11:12:33 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC989BFA8D;
+        Thu, 18 Aug 2022 08:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=IaeNReyR52ej9/tS6s/KAFhEesm0POJXHliyXuIE5Ho=; b=DFphwx+kUSC2kPYk8B5cLq0V2v
+        DLWvFY8986Tb+7pbZRCd6hf5vmkAeX3AFl/mGcI0YSVwpefRCttymkqv+DxOhILfRxFQU3AcUUAIa
+        cUrjm6Fu2/v4RdkBqwvWXl4l1u1wtixjWuMV/pIREomlKh1T5UyzuSYKf/UcQClWRmUY9wwsZ11kV
+        s2S2cH7ZtRNmF/9VV9QCaPD9JSXOqYIVmseB4D8TGiOjCDqkYsZcxd76cQ7/7n+psKtnZGyHSYCUH
+        2S7DfOX1dPPfSNLggpNtLmHkvq1aigmnddpEDnR61DYecB3tASKgwXcs+kffUyGlQYKdnl4QjJa0U
+        Ow/3imWV1swdHtYBOdGFrBN65BgPaKoCr7blg5OmHECpMqwYpSL+o5kDodFawBEcCmlwgM/jcgpHi
+        93fVwJObhkUoEsG4l31zN14OpP/UIBo8wZQrMxpOQxeV2OR/iiXYGuafJ+2DIkHnVJx4dnRMR0ZnO
+        MBqVVDObXDyMERo9qMPNkZ2jjP7s3gqEhKeLDp96LsXZK3S4fUjrHdhspwyBXrBvW/GHPjGq4U1lu
+        rzHgXYym/J96vzKHh5ckA4x8Td7IznksQpj2llWpRAhEjHRN+OPT7NyvtEEoUJK20UekpPZAtXXNT
+        +6Ar+5m3839LWTt9KOi5z5RwNRzZQJ8PbvkFIibEM=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     syzbot <syzbot+de52531662ebb8823b26@syzkaller.appspotmail.com>,
+        asmadeus@codewreck.org
+Cc:     davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org, lucho@ionkov.net,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
+Subject: Re: [syzbot] KASAN: use-after-free Read in p9_req_put
+Date:   Thu, 18 Aug 2022 17:12:17 +0200
+Message-ID: <2207113.SgyDDyVIbp@silver>
+In-Reply-To: <YvyD053bdbGE9xoo@codewreck.org>
+References: <0000000000001c3efc05e6693f06@google.com> <YvyD053bdbGE9xoo@codewreck.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816225412.9095-7-asmaa@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 06:54:11PM -0400, Asmaa Mnebhi wrote:
-> BlueField-3 SoC has the same I2C IP logic as previous
-> BlueField-1 and 2 SoCs but it has different registers' addresses.
-> This is an effort to keep this driver generic accross all
-> BlueField generations.
-> This patch breaks down the "smbus" resource into 3 separate
-> resources to enable us to use common registers' offsets for all
-> BlueField SoCs:
-> struct mlxbf_i2c_resource *timer;
-> struct mlxbf_i2c_resource *mst;
-> struct mlxbf_i2c_resource *slv;
+On Mittwoch, 17. August 2022 07:59:47 CEST asmadeus@codewreck.org wrote:
+> syzbot having a fresh look at 9p?
 > 
-> Of course, all offsets had to be adjusted accordingly, and we took
-> this chance to reorganize the macros depending on the register block
-> they target.
+> Well at least that one should be easy enough, the following (untested)
+> probably should work around that issue:
 > 
-> There are only 2 registers' offsets that do not fit within this
-> schema so their offsets are passed as SoC-specific parameters:
-> smbus_master_rs_bytes_off
-> smbus_master_fsm_off
+> -----
+> From 433138e5d36a5b29b46b043c542e14b9dc908460 Mon Sep 17 00:00:00 2001
+> From: Dominique Martinet <asmadeus@codewreck.org>
+> Date: Wed, 17 Aug 2022 14:49:29 +0900
+> Subject: [PATCH] 9p: p9_client_create: use p9_client_destroy on failure
 > 
-> Reviewed-by: Khalil Blaiech <kblaiech@nvidia.com>
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
-> ---
->  .../bindings/i2c/mellanox,i2c-mlxbf.yaml      |  30 +-
-
-Bindings go in a separate patch.
-
->  MAINTAINERS                                   |   1 +
->  drivers/i2c/busses/i2c-mlxbf.c                | 397 ++++++++++--------
->  3 files changed, 258 insertions(+), 170 deletions(-)
+> If trans was connected it's somehow possible to fail with requests in
+> flight that could still be accessed after free if we just free the clnt
+> on failure.
+> Just use p9_client_destroy instead that has proper safeguards.
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-> index 93198d5d43a6..cb3a012914e0 100644
-> --- a/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml
-> @@ -8,6 +8,7 @@ title: Mellanox I2C SMBus on BlueField SoCs
->  
->  maintainers:
->    - Khalil Blaiech <kblaiech@nvidia.com>
-> +  - Asmaa Mnebhi <asmaa@nvidia.com>
->  
->  allOf:
->    - $ref: /schemas/i2c/i2c-controller.yaml#
-> @@ -17,11 +18,15 @@ properties:
->      enum:
->        - mellanox,i2c-mlxbf1
->        - mellanox,i2c-mlxbf2
-> +      - mellanox,i2c-mlxbf3
->  
->    reg:
-> -    minItems: 3
-> +    minItems: 5
+> Reported-by: syzbot+de52531662ebb8823b26@syzkaller.appspotmail.com
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+> 
+> diff --git a/net/9p/client.c b/net/9p/client.c
+> index 5bf4dfef0c70..da5d43848600 100644
+> --- a/net/9p/client.c
+> +++ b/net/9p/client.c
+> @@ -948,7 +948,7 @@ struct p9_client *p9_client_create(const char *dev_name,
+> char *options)
+> 
+>  	err = parse_opts(options, clnt);
+>  	if (err < 0)
+> -		goto free_client;
+> +		goto out;
+> 
+>  	if (!clnt->trans_mod)
+>  		clnt->trans_mod = v9fs_get_default_trans();
+> @@ -957,7 +957,7 @@ struct p9_client *p9_client_create(const char *dev_name,
+> char *options) err = -EPROTONOSUPPORT;
+>  		p9_debug(P9_DEBUG_ERROR,
+>  			 "No transport defined or default transport\n");
+> -		goto free_client;
+> +		goto out;
+>  	}
+> 
+>  	p9_debug(P9_DEBUG_MUX, "clnt %p trans %p msize %d protocol %d\n",
+> @@ -965,7 +965,7 @@ struct p9_client *p9_client_create(const char *dev_name,
+> char *options)
+> 
+>  	err = clnt->trans_mod->create(clnt, dev_name, options);
+>  	if (err)
+> -		goto put_trans;
+> +		goto out;
+> 
+>  	if (clnt->msize > clnt->trans_mod->maxsize) {
+>  		clnt->msize = clnt->trans_mod->maxsize;
+> @@ -979,12 +979,12 @@ struct p9_client *p9_client_create(const char
+> *dev_name, char *options) p9_debug(P9_DEBUG_ERROR,
+>  			 "Please specify a msize of at least 4k\n");
+>  		err = -EINVAL;
+> -		goto close_trans;
+> +		goto out;
+>  	}
+> 
+>  	err = p9_client_version(clnt);
+>  	if (err)
+> -		goto close_trans;
+> +		goto out;
+> 
+>  	/* P9_HDRSZ + 4 is the smallest packet header we can have that is
+>  	 * followed by data accessed from userspace by read
+> @@ -997,12 +997,8 @@ struct p9_client *p9_client_create(const char
+> *dev_name, char *options)
+> 
+>  	return clnt;
+> 
+> -close_trans:
+> -	clnt->trans_mod->close(clnt);
+> -put_trans:
+> -	v9fs_put_trans(clnt->trans_mod);
+> -free_client:
+> -	kfree(clnt);
+> +out:
+> +	p9_client_destroy(clnt);
+>  	return ERR_PTR(err);
+>  }
+>  EXPORT_SYMBOL(p9_client_create);
 
-You just broke platforms with 3 entries.
+Looks like a nice reduction to me!
 
-> +    maxItems: 6
->      items:
-> -      - description: Smbus block registers
-> +      - description: Smbus timer registers
-> +      - description: Smbus master registers
-> +      - description: Smbus slave registers
+As p9_client_destroy() is doing a bit more than current code, I would probably 
+additionally do s/kmalloc/kzmalloc/ at the start of the function, which would 
+add more safety & reduction.
 
-You can't add new registers at the beginning of the list for existing 
-users.
-
-Either add to the end or it has to be conditional (if/then schema).
-
->        - description: Cause master registers
->        - description: Cause slave registers
->        - description: Cause coalesce registers
-> @@ -58,7 +63,9 @@ examples:
->    - |
->      i2c@2804000 {
->          compatible = "mellanox,i2c-mlxbf1";
-> -        reg = <0x02804000 0x800>,
-> +        reg = <0x02804000 0x40>,
-> +              <0x02804200 0x200>,
-> +              <0x02804400 0x200>,
->                <0x02801200 0x020>,
->                <0x02801260 0x020>;
->          interrupts = <57>;
-> @@ -68,10 +75,25 @@ examples:
->    - |
->      i2c@2808800 {
->          compatible = "mellanox,i2c-mlxbf2";
-> -        reg = <0x02808800 0x600>,
-> +        reg = <0x02808800 0x40>,
-> +              <0x02808a00 0x200>,
-> +              <0x02808c00 0x200>,
->                <0x02808e00 0x020>,
->                <0x02808e20 0x020>,
->                <0x02808e40 0x010>;
->          interrupts = <57>;
->          clock-frequency = <400000>;
->      };
+> -----
+> 
+> I'll test and submit to Linus over the next few weeks.
+> 
+> I had a quick look at the other new syzbot warnings and:
+>  - 'possible deadlock in p9_req_put' is clear enough, we can just drop
+> the lock before running through the cancel list and I don't think
+> that'll cause any problem as everything has been moved to a local list
+> and that lock is abused by trans fd for its local stuff. I'll also send
+> that after quick testing.
+> ----
+> From c46435a4af7c119bd040922886ed2ea3a2a842d7 Mon Sep 17 00:00:00 2001
+> From: Dominique Martinet <asmadeus@codewreck.org>
+> Date: Wed, 17 Aug 2022 14:58:44 +0900
+> Subject: [PATCH] 9p: trans_fd/p9_conn_cancel: drop client lock earlier
+> 
+> syzbot reported a double-lock here and we no longer need this
+> lock after requests have been moved off to local list:
+> just drop the lock earlier.
+> 
+> Reported-by: syzbot+50f7e8d06c3768dd97f3@syzkaller.appspotmail.com
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+> 
+> diff --git a/net/9p/trans_fd.c b/net/9p/trans_fd.c
+> index e758978b44be..60fcc6b30b46 100644
+> --- a/net/9p/trans_fd.c
+> +++ b/net/9p/trans_fd.c
+> @@ -205,6 +205,8 @@ static void p9_conn_cancel(struct p9_conn *m, int err)
+>  		list_move(&req->req_list, &cancel_list);
+>  	}
+> 
+> +	spin_unlock(&m->client->lock);
 > +
-> +  - |
-> +    i2c@2808800 {
-> +        compatible = "mellanox,i2c-mlxbf3";
-> +        reg = <0x13404480 0x40>,
-> +              <0x13404200 0x200>,
-> +              <0x13404000 0x200>,
-> +              <0x13404400 0x020>,
-> +              <0x13404420 0x020>,
-> +              <0x13404440 0x010>;
-> +        interrupts = <35>;
-> +        clock-frequency = <400000>;
-> +    };
+>  	list_for_each_entry_safe(req, rtmp, &cancel_list, req_list) {
+>  		p9_debug(P9_DEBUG_ERROR, "call back req %p\n", req);
+>  		list_del(&req->req_list);
+> @@ -212,7 +214,6 @@ static void p9_conn_cancel(struct p9_conn *m, int err)
+>  			req->t_err = err;
+>  		p9_client_cb(m->client, req, REQ_STATUS_ERROR);
+>  	}
+> -	spin_unlock(&m->client->lock);
+>  }
+
+Are you sure that would resolve that (other) syzbot report? I just had a 
+glimpse at it yet, but I don't see this list iteration portion being involved 
+in the backtrace provided by the report, is it?
+
+> 
+>  static __poll_t
+> ----
+> 
+>  - but I don't get the two 'inconsistent lock state', the hint says it's
+> possibly an interrupt while the lock was held but that doesn't seem to
+> be the case from the stack trace (unless we leaked the lock, at which
+> point anything goes)
+> I'd need to take time to look at it, feel free to beat me to these.
+> 
+> --
+> Dominique
+
+
+
+

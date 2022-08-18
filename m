@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE33F5987A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6D15987AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343802AbiHRPmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
+        id S238915AbiHRPmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245389AbiHRPl6 (ORCPT
+        with ESMTP id S245389AbiHRPmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:41:58 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EB0B8F18;
-        Thu, 18 Aug 2022 08:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=TCONSFUsRiagPq8Y40nHQ8cdEkcQObBuoVvqxp3VPVI=; b=XTdRIFx7hhK+o9Af9S2VM8waHw
-        Z94lt+y/o42hKc3JZfKXkuz+9X6tzBKTxATr1wZY4NMlSWHsuKlx0CylpmcA2Gqet2WcfpY3p+Iau
-        L4bQF8cG8/cscxcO+nge6zaM9n34xUJY+p/PL2gDs/14zidYwznu9IcAZFIxBUeq4g/M=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oOheR-00Dldv-Kj; Thu, 18 Aug 2022 17:41:43 +0200
-Date:   Thu, 18 Aug 2022 17:41:43 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     netdev@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        Bhadram Varka <vbhadram@nvidia.com>,
-        Camelia Alexandra Groza <camelia.groza@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 00/11] net: phy: Add support for rate adaptation
-Message-ID: <Yv5dt1Scht2Tmdfg@lunn.ch>
-References: <20220725153730.2604096-1-sean.anderson@seco.com>
- <f6707ee4-b735-52ad-4f02-be2f58eb3f9b@seco.com>
+        Thu, 18 Aug 2022 11:42:19 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6ECB81C1;
+        Thu, 18 Aug 2022 08:42:16 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b98ec329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98ec:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 81A1B1EC0529;
+        Thu, 18 Aug 2022 17:42:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660837331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=xq97BbKXuhMjjyID6xy9W4YK5RoR7G8Hq8nOXVqA+LQ=;
+        b=l6/j4H5N6zrC8x4ZRh1VW2ocqe5Sc0R2tIBooInTNUa7Oa1JddaPbOz6BFjpgLWxzDkfFE
+        JEp7HsHY+x7x/aa1mQ5XgUoz1ai9U/447nRSdvnnooQ/DPwPG5C7VX95YDN6SaU26eDEdg
+        U/mmwpuLIOAV0A1VkhBMPvStUmZlvgk=
+Date:   Thu, 18 Aug 2022 17:42:07 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jia He <justin.he@arm.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, devel@acpica.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
+        toshi.kani@hpe.com, nd@arm.com
+Subject: Re: [PATCH v2 2/7] EDAC/ghes: Add notifier to report ghes_edac mem
+ error
+Message-ID: <Yv5dzyiI1TPtAO5F@zn.tnic>
+References: <20220817143458.335938-1-justin.he@arm.com>
+ <20220817143458.335938-3-justin.he@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <f6707ee4-b735-52ad-4f02-be2f58eb3f9b@seco.com>
+In-Reply-To: <20220817143458.335938-3-justin.he@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,19 +65,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:21:10AM -0400, Sean Anderson wrote:
-> 
-> 
-> On 7/25/22 11:37 AM, Sean Anderson wrote:
-> > This adds support for phy rate adaptation: when a phy adapts between
-> > differing phy interface and link speeds. It was originally submitted as
-> > part of [1], which is considered "v1" of this series.
- 
-> ping?
-> 
-> Are there any comments on this series other than about the tags for patch 6?
+On Wed, Aug 17, 2022 at 02:34:53PM +0000, Jia He wrote:
+> Subject: Re: [PATCH v2 2/7] EDAC/ghes: Add notifier to report ghes_edac mem error
 
-Anything that old is going to need a rebase. So you may as well repost
-rather than ping.
+Subject: ...: Add a notifier for reporting memory errors.
 
-       Andrew
+> To modularize ghes_edac driver, any ghes_edac codes should not be invoked
+
+s/modularize/make a proper module/
+
+and replace that everywhere.
+
+There's no such thing as "codes" - please try to write proper English.
+
+> in ghes. Add a notifier of registering the ghes_edac_report_mem_error() to
+> resolve the build dependency.
+
+"Add a notifier for reporting memory errors."
+
+When you say "to resolve the build dependency" it sounds like this is
+some kind of a nuisance. But it isn't one - it is simply an improvement.
+
+> The atomic notifier is used because
+> ghes_proc_in_irq() can be in the irq context.
+
+"Use an atomic notifier because calls sites like ghes_proc_in_irq() run
+in interrupt context."
+
+> Suggested-by: Borislav Petkov <bp@alien8.de>
+> Signed-off-by: Jia He <justin.he@arm.com>
+> ---
+>  drivers/acpi/apei/ghes.c | 16 +++++++++++++++-
+>  drivers/edac/ghes_edac.c | 19 +++++++++++++++++--
+>  include/acpi/ghes.h      | 10 +++-------
+>  3 files changed, 35 insertions(+), 10 deletions(-)
+
+Patch itself looks ok.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

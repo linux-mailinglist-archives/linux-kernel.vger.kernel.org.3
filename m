@@ -2,136 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142BC598F69
+	by mail.lfdr.de (Postfix) with ESMTP id D5E0E598F6B
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 23:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346947AbiHRVXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 17:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
+        id S1347109AbiHRVYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 17:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346856AbiHRVWn (ORCPT
+        with ESMTP id S1346998AbiHRVXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 17:22:43 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49998DDA98;
-        Thu, 18 Aug 2022 14:15:52 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id b16so3411173edd.4;
-        Thu, 18 Aug 2022 14:15:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=urJ4x4daK3qEX9oZLw5VGbCPYDe2Pbjud3LODXMY5SI=;
-        b=MRXUnPkxgf54nxSOsWezWiISbU/cpg5JJ1xBtg4OeUeCbDBzOpvRdl7K1+aZSMaPTl
-         b5B5NYHcQ31pwH0+64T3jgim2hyrGw+PXzwz3I8Z8JwZObRLgnjj0bcyrqigI4WvLkZt
-         i1PxthtGyCrvyaQMQ4InhNghYV4BcfhDniwaqp1R6sr2uq1ES7MSlmcZeEuX8uroDy37
-         UMVA8Dw3Qj5I2KKo/zlMm8Y4eBqK4xHpAH0lADBlzEHbqRDVxm4N8s0nV55aVyObxjF0
-         +vX9Dej0AgZm9X5odtb2Jnucwt9f6PFwCjAT5VryMlaC61gMt7INwKVMqtXpRyVBGA/0
-         agzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=urJ4x4daK3qEX9oZLw5VGbCPYDe2Pbjud3LODXMY5SI=;
-        b=yjGzG4AAufcIQE98Ng+HmKgzoA6JwkvXlB7IGZvGRgH1njZn2IuiYY6PTnicYSPjJ5
-         Y+4to0aJMzNT0qWQUT8xvLKBG9NNBz/aIBxW4gNZuuMMGl6hL614qTjzODgcU8AUW4jK
-         FboitFVbsofyrhxEuwhipyPMMY935U5QWK81+Ogw03RWJXQUn/mqKWZsZkIG9QQAlciV
-         7FAUaPEdegEkMss0JHUBRwDu4e7xFKGYwyVtsIS1w0PvuLMSWpMEuu8dZJOfX7XPmHm9
-         CLwh1PtJKZ+GrYv8SDs6o8ZYn4clssXHFdlK8ihymBQLBYCzQWUzhfuE2QFOKNvMfpvn
-         KgpQ==
-X-Gm-Message-State: ACgBeo0sdO0ct42Y+5J1nT7fvk2tNHRoyGpGAvHxyaKFVQ4DCi4HX1Xc
-        byDqpxEMh5c0/4t13cB+atk=
-X-Google-Smtp-Source: AA6agR7mk/qo3ML0Xn/O6OL7EXQmf1zRRwbeq/JFAERAUzD0GpKWOmHQb+fyOv4fNfIl01CQmIGLRA==
-X-Received: by 2002:a05:6402:190e:b0:43e:1588:4c32 with SMTP id e14-20020a056402190e00b0043e15884c32mr3623547edz.76.1660857274874;
-        Thu, 18 Aug 2022 14:14:34 -0700 (PDT)
-Received: from krava ([83.240.63.36])
-        by smtp.gmail.com with ESMTPSA id p21-20020a170906141500b00730a234b863sm1329344ejc.77.2022.08.18.14.14.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 14:14:34 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 18 Aug 2022 23:14:32 +0200
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-Message-ID: <Yv6ruI/UFqztRaD2@krava>
-References: <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
- <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
- <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
- <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
- <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
- <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
- <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
- <YvppJ7TjMXD3cSdZ@worktop.programming.kicks-ass.net>
- <Yv6gm09CMdZ/HMr5@krava>
- <20220818165024.433f56fd@gandalf.local.home>
+        Thu, 18 Aug 2022 17:23:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B9969F68
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:16:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 443BC61640
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 21:16:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ABBBC433D7;
+        Thu, 18 Aug 2022 21:15:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660857359;
+        bh=soe7WkpVDL0rQ3DepAGZmwBW25rHj0k0Dx4IE3FtFio=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lacB4lImkey8cNH3JqHzjgC+/r9sa6Ioyqet0e8tgdVjFCkz8zNntMBfxJl6MfsiQ
+         av721qEqGT562V6DCYFKxIGxzO/UDyUr1KEXiaMfJIxnT0afyK8spDwkxrVEZ/3XML
+         ojXySeRlJRAFxhPXJkXTjIQhJCzELNXvMqR+RAAa/CQY6dfJjDR4Uw2pnNS6M6xpP3
+         K57LKr9LpohuPFLnoCnxf3/7zyFFIsT0LN0bmRxlZ1tBk9aUEcRX0PNxamgoj0Xdk3
+         S3STddbVP5f+cdwn5ByKsE8jw/Qjd1sTLrXfIFRMYewTBH+YVYRyEf/gkrNDT0f4NP
+         itiWm7Hq673Wg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 0/4] ARM: footbridge: cleanups
+Date:   Thu, 18 Aug 2022 23:15:46 +0200
+Message-Id: <20220818211550.3272321-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818165024.433f56fd@gandalf.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 04:50:24PM -0400, Steven Rostedt wrote:
-> On Thu, 18 Aug 2022 22:27:07 +0200
-> Jiri Olsa <olsajiri@gmail.com> wrote:
-> 
-> > ok, so the problem with __attribute__((patchable_function_entry(5))) is that
-> > it puts function address into __patchable_function_entries section, which is
-> > one of ftrace locations source:
-> > 
-> >   #define MCOUNT_REC()    . = ALIGN(8);     \
-> >     __start_mcount_loc = .;                 \
-> >     KEEP(*(__mcount_loc))                   \
-> >     KEEP(*(__patchable_function_entries))   \
-> >     __stop_mcount_loc = .;                  \
-> >    ...
-> > 
-> > 
-> > it looks like __patchable_function_entries is used for other than x86 archs,
-> > so we perhaps we could have x86 specific MCOUNT_REC macro just with
-> > __mcount_loc section?
-> 
-> So something like this:
-> 
-> #ifdef CONFIG_X86
-> # define NON_MCOUNT_PATCHABLE KEEP(*(__patchable_function_entries))
-> # define MCOUNT_PATCHABLE
-> #else
-> # define NON_MCOUNT_PATCHABLE
-> # define MCOUNT_PATCHABLE  KEEP(*(__patchable_function_entries))
-> #endif
-> 
->   #define MCOUNT_REC()    . = ALIGN(8);     \
->     __start_mcount_loc = .;                 \
->     KEEP(*(__mcount_loc))                   \
->     MCOUNT_PATCHABLE			    \
->     __stop_mcount_loc = .;                  \
->     NON_MCOUNT_PATCHABLE		    \
->    ...
-> 
+From: Arnd Bergmann <arnd@arndb.de>
 
-is there a reason to keep NON_MCOUNT_PATCHABLE section for x86?  otherwise LGTM
+I had an older patch to remove the addin mode for footbridge,
+which nobody is using any more, and I found a few other small
+cleanups that are worth doing here.
 
-jirka
+Footbridge is now the only platform with a custom __virt_to_bus()
+for ISA DMA, and a custom phys_to_dma() for PCI devices. Both
+just add a fixed offset, so there is probably a better way
+of doing the same without a custom helper function.
+
+     Arnd
+
+Arnd Bergmann (4):
+  ARM: footbridge: remove addin mode
+  ARM: footbridge: remove leftover from personal-server
+  ARM: footbridge: move isa-dma support into footbridge
+  ARM: footbridge: limit CONFIG_ISA to CATS
+
+ arch/arm/Kconfig                              |  5 --
+ arch/arm/include/asm/hardware/dec21285.h      | 13 ----
+ arch/arm/kernel/Makefile                      |  1 -
+ arch/arm/mach-footbridge/Kconfig              | 30 +-------
+ arch/arm/mach-footbridge/Makefile             |  5 +-
+ arch/arm/mach-footbridge/common.c             | 73 ++-----------------
+ arch/arm/mach-footbridge/dc21285.c            | 61 +++++-----------
+ .../arm/{kernel => mach-footbridge}/dma-isa.c |  7 +-
+ arch/arm/mach-footbridge/dma.c                | 58 ---------------
+ .../mach-footbridge/include/mach/isa-dma.h    | 14 +---
+ .../arm/mach-footbridge/include/mach/memory.h | 22 ------
+ arch/arm/mach-footbridge/isa.c                | 14 ++--
+ drivers/tty/serial/21285.c                    |  3 -
+ 13 files changed, 42 insertions(+), 264 deletions(-)
+ rename arch/arm/{kernel => mach-footbridge}/dma-isa.c (98%)
+ delete mode 100644 arch/arm/mach-footbridge/dma.c
+
+-- 
+2.29.2
+
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Marc Zyngier <maz@kernel.org>

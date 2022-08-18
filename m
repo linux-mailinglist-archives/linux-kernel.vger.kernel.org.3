@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C577F598CCE
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A787E598CD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345127AbiHRTop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
+        id S1345620AbiHRTrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243724AbiHRTom (ORCPT
+        with ESMTP id S236627AbiHRTri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:44:42 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EA35C372;
-        Thu, 18 Aug 2022 12:44:41 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id f21so2677473pjt.2;
-        Thu, 18 Aug 2022 12:44:41 -0700 (PDT)
+        Thu, 18 Aug 2022 15:47:38 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68ED6DF4A;
+        Thu, 18 Aug 2022 12:47:37 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id 2so2398369pll.0;
+        Thu, 18 Aug 2022 12:47:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc;
-        bh=W5e17+6oMWWVgLvMfPt1qnfpuP7V0mz0KRYnC4cgIVo=;
-        b=HpqQOsLa5ecdX7tYB3ulW6lzQI9ks3T2jeG4Kpym11YEQcQz4c+9sL7uJK/2hrw5tz
-         ykan/swKvpwVrFhhUT2Cyyt9E5bFftqcbHZWreEYQazkNWx4HbeeM3lPvjXEqXAZxYAX
-         TY2XQ1vYu5BwHBW0fPB4Vftlj3Jb9BZEMHVS5OjnbB/F/xv1SPNikfjZzDR1Pgsf7EHe
-         3Z/KZhIYbsAN3H5IxHNH1K+zfdugfWswvP2wxKkHh6LaShRswPBaDfOSAoPlc59qAe/c
-         eJqA40KOl4907vNgkZS/ID2Z4SFgm70OFpSkW4o4aKwMFDGnXuI2o0U/V7uKpDq4mXDS
-         T5WQ==
+        bh=D+Y8CteJgMixNET3rM8bosPRl8cJEoA+Fl+sHN052Sc=;
+        b=OBifYf4Jna9bbUewT4D+0/ADl/ZLgiwW0AOV9sjFoTFpE/M0+1RybUFYw1GsfwpDlW
+         Pjkp/Ht62GbswAO6ds5PTKbyC8IG1ZsF+HUx/UzWS2CdbDb8b/8nTpYzm0bNpLWjkne2
+         ESZtUgyodyoyW4qZ7Oh+1t/utJ03zqlJicddU5ilTSzPSO2itTaIG04b/eqD6N7B90B2
+         t0LdmURHW8dI1vpNnMs1nkMKMFkHOlm+xGfABPn9dBbc4hiP0mTckUsNImI+1jq94X1B
+         W/McfL0RlXEPTToLGfMvSrmJl7XOUMyDO1hwx2K5NEUj3eXDWrAr8mWEI9YiwfJcK40M
+         e3tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=W5e17+6oMWWVgLvMfPt1qnfpuP7V0mz0KRYnC4cgIVo=;
-        b=fpXP+G0x7nCw2svgAtKdcdvtoeG+FzGB6f4oLHuXXB7wMtvSXX54+hg7gcUi5Z+GxQ
-         53qPzPvdjye79iLoj9ktVVH74NChVaLmX/JW346HAHtNnS+0qbmh9oTZf6hXdgnLx57i
-         uEcw9U+OSC0yohTylLK3Ey5RlLcEFqyUE7wI8BgesM3ubqW5Aa92+CE21qOhoXd9/sKq
-         00/X9xIYlzUmxG4o+92aLqcOa6gGrWtPolqRWI6SjqLtuELhWYFwO8JLvy+d51Nm2VQ/
-         YWoBBLmWJ32FegPNsT6nH5wLegLvVnio83DAQ8Lot+MRzSkBKLNlQdQm17Z7W2oPHAsz
-         7dKQ==
-X-Gm-Message-State: ACgBeo24Y4Zxp6L+KKMoGqaBrVdiPiUGVy+Pdx3yDViPd2dAK3ycfj12
-        MwsmD6Vtw1JVC+FiEXdXp1c=
-X-Google-Smtp-Source: AA6agR5eZF5pR7nr99GV0b64Rd0OjCavWMRpEiftpGEjOFlcRq1OF0Q7+E5NJ379ZDa13a9N0J1+1A==
-X-Received: by 2002:a17:902:cf4c:b0:170:5b7a:8f89 with SMTP id e12-20020a170902cf4c00b001705b7a8f89mr3816249plg.121.1660851881184;
-        Thu, 18 Aug 2022 12:44:41 -0700 (PDT)
+        bh=D+Y8CteJgMixNET3rM8bosPRl8cJEoA+Fl+sHN052Sc=;
+        b=qfFlq0cwT0G0nDglXJNnCmC3KHMLPb4dvldNzT4TUT5rrm78FotKZ/q5bM1V8Q1zUi
+         zDeTlSaN6hiP2YWQn3SQw0Wsov3LA4lE96OYW9/Vcg6HKLk5Q7XVQBKTDl02rF6rhzHc
+         rbYaMIzffj29iZW7+q2Scq63hodUh2Tce5FgjZqYNMGpn9OJKHTfm72nOj/ET3jMneG/
+         3jzuqhSX2cHmQsj5nQRGRV2FQZR/GT2veovgOL2jM96wm77a5R5eYPRzILyaK2ZupOO6
+         ztV1C7BFOqpUzC0oCsbu1TjoDG1rvQT7Fr5PqGBDBgBmMSsTOZj1TpEoJZTb+xMfwXEN
+         hWvQ==
+X-Gm-Message-State: ACgBeo0kvstSjNiFbv7cJL4ytWM31avmzaM0l8sOvrV6nkewrMy/sxTj
+        Wf4MXg/AU2vCv7BzSA23F6s=
+X-Google-Smtp-Source: AA6agR5eVP/JuOmNRZ2PnXGZmybLUtrlEy9/6hn594HN8kcLmV4rDc0B13E/HZoUuegH1JRv6mjymg==
+X-Received: by 2002:a17:902:e3d5:b0:172:a78f:dbc with SMTP id r21-20020a170902e3d500b00172a78f0dbcmr3844013ple.144.1660852056984;
+        Thu, 18 Aug 2022 12:47:36 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s7-20020a170902ea0700b0016f1aa00abbsm1772297plg.195.2022.08.18.12.44.39
+        by smtp.gmail.com with ESMTPSA id li2-20020a17090b48c200b001f320faea95sm1910798pjb.2.2022.08.18.12.47.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 12:44:40 -0700 (PDT)
+        Thu, 18 Aug 2022 12:47:36 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 18 Aug 2022 12:44:38 -0700
+Date:   Thu, 18 Aug 2022 12:47:35 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Eliav Farber <farbere@amazon.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
@@ -59,15 +59,15 @@ Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
         itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
         amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
         rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 02/16] hwmon: (mr75203) update pvt->v_num to the
- actual number of used sensors
-Message-ID: <20220818194438.GA3216536@roeck-us.net>
+Subject: Re: [PATCH v2 03/16] hwmon: (mr75203) update Moortec PVT controller
+ intel,vm-map property
+Message-ID: <20220818194735.GA3279179@roeck-us.net>
 References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-3-farbere@amazon.com>
+ <20220817054321.6519-4-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817054321.6519-3-farbere@amazon.com>
+In-Reply-To: <20220817054321.6519-4-farbere@amazon.com>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -79,35 +79,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:43:07AM +0000, Eliav Farber wrote:
-> This issue is relevant when intel,vm-map is set, and defines a lower
-> number of VMs than actually supported.
-> 
-> This change is needed for all places that use pvt->v_num later on in the
-> code.
+On Wed, Aug 17, 2022 at 05:43:08AM +0000, Eliav Farber wrote:
+> The "intel,vm-map property" is optional and not required.
 > 
 > Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->  drivers/hwmon/mr75203.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-> index 0e29877a1a9c..f89f7bb5d698 100644
-> --- a/drivers/hwmon/mr75203.c
-> +++ b/drivers/hwmon/mr75203.c
-> @@ -605,6 +605,7 @@ static int mr75203_probe(struct platform_device *pdev)
->  					break;
->  
->  			vm_num = i;
-> +			pvt->v_num = i;
 
-This code is changed to no longer set pvt->v_num in the previous patch.
-Do not send patches which fix issues introduced in an earlier patch of
-the same series. Besides, again, regarding "when intel,vm-map is set":
-That is not an optional property.
+Ah. This patch should come first, before making associated
+code changes, and there would need to be an explanation
+_why_ it is not a mandatory property. Also, some action
+is taken in the previous patches if the property is not
+there. That indicates that the driver is expected to
+use some defaults if the property is indeed not provided,
+and that expected default should be documented.
 
 Guenter
 
->  		}
+> ---
+>  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> index 6f3e3c01f717..f9e849cc73e0 100644
+> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> @@ -48,12 +48,12 @@ required:
+>    - compatible
+>    - reg
+>    - reg-names
+> -  - intel,vm-map
+>    - clocks
+>    - resets
+>    - "#thermal-sensor-cells"
 >  
->  		in_config = devm_kcalloc(dev, vm_num + 1,
+> -additionalProperties: false
+> +additionalProperties:
+> +  - intel,vm-map
+>  
+>  examples:
+>    - |

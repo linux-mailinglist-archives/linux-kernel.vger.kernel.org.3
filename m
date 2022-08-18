@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1388C5980E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0144959811C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241712AbiHRJiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 05:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
+        id S232903AbiHRJxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 05:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbiHRJiK (ORCPT
+        with ESMTP id S235407AbiHRJxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 05:38:10 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAE6B14CE;
-        Thu, 18 Aug 2022 02:38:09 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M7fqT2R7Qz1N7JQ;
-        Thu, 18 Aug 2022 17:34:45 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 17:38:07 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600010.china.huawei.com
- (7.193.23.86) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 18 Aug
- 2022 17:38:06 +0800
-From:   Sun Ke <sunke32@huawei.com>
-To:     <dhowells@redhat.com>
-CC:     <linux-cachefs@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, <jefflexu@linux.alibaba.com>,
-        <sunke32@huawei.com>
-Subject: [PATCH] cachefiles: fix error return code in cachefiles_ondemand_copen()
-Date:   Thu, 18 Aug 2022 17:49:39 +0800
-Message-ID: <20220818094939.1548183-1-sunke32@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 18 Aug 2022 05:53:20 -0400
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31792E44;
+        Thu, 18 Aug 2022 02:53:12 -0700 (PDT)
+X-QQ-mid: bizesmtp79t1660816263t2r7wq2p
+Received: from localhost.localdomain ( [123.114.60.34])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 18 Aug 2022 17:51:01 +0800 (CST)
+X-QQ-SSF: 01400000002000D0U000B00A0000000
+X-QQ-FEAT: CR3LFp2JE4kURDf+4uuh2+zQhPnPITI1fI4gczptBrkPfssSVdeqy5HVNYgoy
+        43l7uVO6L0BCDUgiGR3TabhUghhlUQTqjU6dR2XRicWt9v6p3xBXGv6mxfZSSFS8Yc5n5wd
+        393aFiT+PHViazcxL8TPsBZBi+i5sbLDtrNmfT0QXOuHSlQpaR74bfsBcKmyYQwAg6S/mkR
+        IeObbFMT/Ye2O3C7CLrXerzV99GOA8NRyng4wOLDeMX/kDhE3BbgG9pcY4kp3k0Fq4iA3qN
+        UROKQwnq6gX4FFXWLsSjozhsHwbWCuy23Ff6d7GkUz9uCT9OwMVT/R3IcwLHoO3QSl/oPOO
+        +yusaqWqIRhb05xnAX6h+a0DcYAqL3P3mtiwkwEZz/sdn9rxGhd95u0tCypN2HIlj1xIzKi
+X-QQ-GoodBg: 2
+From:   zhaoxiao <zhaoxiao@uniontech.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, morbo@google.com, weiyongjun1@huawei.com,
+        colin.king@intel.com
+Cc:     tobias@waldekranz.com, andrew@lunn.ch, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhaoxiao <zhaoxiao@uniontech.com>
+Subject: [PATCH] net: freescale: xgmac: Do not dereference fwnode in struct device
+Date:   Thu, 18 Aug 2022 17:50:59 +0800
+Message-Id: <20220818095059.8870-1-zhaoxiao@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If size < 0; open request will fail, but cachefiles_ondemand_copen return 0.
-Fix to return a negative error code.
+In order to make the underneath API easier to change in the future,
+prevent users from dereferencing fwnode from struct device.
+Instead, use the specific dev_fwnode() API for that.
 
-Fixes: c8383054506c ("cachefiles: notify the user daemon when looking up cookie")
-Signed-off-by: Sun Ke <sunke32@huawei.com>
+Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
 ---
- fs/cachefiles/ondemand.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/freescale/xgmac_mdio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/cachefiles/ondemand.c b/fs/cachefiles/ondemand.c
-index 1fee702d5529..a31d3ff0ce5f 100644
---- a/fs/cachefiles/ondemand.c
-+++ b/fs/cachefiles/ondemand.c
-@@ -161,6 +161,7 @@ int cachefiles_ondemand_copen(struct cachefiles_cache *cache, char *args)
- 		if (!IS_ERR_VALUE(size))
- 			size = -EINVAL;
- 		req->error = size;
-+		ret = -EINVAL;
- 		goto out;
- 	}
+diff --git a/drivers/net/ethernet/freescale/xgmac_mdio.c b/drivers/net/ethernet/freescale/xgmac_mdio.c
+index ec90da1de030..d7d39a58cd80 100644
+--- a/drivers/net/ethernet/freescale/xgmac_mdio.c
++++ b/drivers/net/ethernet/freescale/xgmac_mdio.c
+@@ -355,7 +355,7 @@ static int xgmac_mdio_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
  
+-	fwnode = pdev->dev.fwnode;
++	fwnode = dev_fwnode(&pdev->dev);
+ 	if (is_of_node(fwnode))
+ 		ret = of_mdiobus_register(bus, to_of_node(fwnode));
+ 	else if (is_acpi_node(fwnode))
 -- 
-2.31.1
+2.20.1
 

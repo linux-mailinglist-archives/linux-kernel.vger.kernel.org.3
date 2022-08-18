@@ -2,115 +2,387 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBED65983F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 879285983F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244993AbiHRNSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
+        id S245004AbiHRNTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244978AbiHRNSl (ORCPT
+        with ESMTP id S244998AbiHRNTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:18:41 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A92A89900;
-        Thu, 18 Aug 2022 06:18:39 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27ID0jY2004791;
-        Thu, 18 Aug 2022 13:18:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ssj/yDLBypS6mx8/sQN/396WrOf9FQBZQ6GN+dBtpC8=;
- b=j989wUjvd/fkkatCFKJu5cnpyzolQOtNLf8AD42t1QlBX0Z+Xb2Wh5no3noQPSvInNsG
- f4ULduI67PUp0oj4TqfOWAG4m96kaXxDYASkbvDZ6rAfJJAYhTuO5V7vRbc3YZtjQTsb
- 9HKQIawvf8Uyeph0Zs9UaT6vUdIZLDl4p0adIoDdCNsqDB6ZgYiHwfMn3P30BCZshnqC
- W9tVQ+lbFfosSGccqhqdHDr3fpZQh2Co1QWXH3NrIRvxAF7eAJj2AFWqO15bfrEs6aan
- k5DGQB8du41wBQOMXoY1mBNULIAQcKkeO918F82b1EKt0OUCSfczJDcnBseiqIN08SJ2 7g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1nxerp73-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 13:18:37 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27ID34vq017629;
-        Thu, 18 Aug 2022 13:18:36 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1nxerp6n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 13:18:36 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27ID63o6017162;
-        Thu, 18 Aug 2022 13:18:36 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02wdc.us.ibm.com with ESMTP id 3hx3ka6y7t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 13:18:36 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27IDIYnX9241150
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Aug 2022 13:18:34 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D4B0FBE051;
-        Thu, 18 Aug 2022 13:18:34 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C22EABE053;
-        Thu, 18 Aug 2022 13:18:33 +0000 (GMT)
-Received: from [9.160.64.167] (unknown [9.160.64.167])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Aug 2022 13:18:33 +0000 (GMT)
-Message-ID: <05640a9f-ef84-8ab6-48ee-8a7906ea477f@linux.ibm.com>
-Date:   Thu, 18 Aug 2022 09:18:33 -0400
+        Thu, 18 Aug 2022 09:19:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACEA979F5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:19:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6370C615D4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 13:19:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEFADC433C1;
+        Thu, 18 Aug 2022 13:19:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660828774;
+        bh=ahSXjudbifFbRFNfNsLeVJJHunzVQQq/qhvn+lEgc8o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vJvs78PQmpoj0va8eo3EUBXSXJqsiPnyGGYIHHqhfMRAbZtuHhI/KTARrNhz9KXJ4
+         jhRY3wwWv665QppnPKBcKsiilrVgEvRN0+wPw91h7XYtYyM2T0WMjlpJhlNtgbt6rX
+         Eq+KJDk9rQ3RE9810sqyHlls4Gs8oeKQlSaz36tDBR0Uas70Zb2i4u7cbj1/lCxBt6
+         P4fAYg74pY2zSulyCXWb6lEWBnX4LbV64oO6sE0hI8ck1EPTsU23vE4UxNwSS1Ez2t
+         r6NUZK9hRobDgiAYMNKTti2O9O98vGLeEF3e60xfj6Yd0RLRIsVXZ8q+p+QvrbKqdj
+         u32jWvfzXXwGw==
+Date:   Thu, 18 Aug 2022 15:19:28 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>, mkoutny@suse.com,
+        tj@kernel.org, gregkh@linuxfoundation.org, hannes@cmpxchg.org,
+        kernel@openvz.org, linux-kernel@vger.kernel.org, mhocko@suse.com,
+        shakeelb@google.com, songmuchun@bytedance.com,
+        viro@zeniv.linux.org.uk
+Subject: Re: [RFC PATCH] simple_xattr: switch from list to rb_tree
+Message-ID: <20220818131928.6zymceds5ka7hg4u@wittgenstein>
+References: <62188f37-f816-08e9-cdd5-8df23131746d@openvz.org>
+ <d73bd478-e373-f759-2acb-2777f6bba06f@openvz.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/2] s390/vfio-ap: fix two problems discovered in the
- vfio_ap driver
-Content-Language: en-US
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jjherne@linux.ibm.com, borntraeger@de.ibm.com,
-        cohuck@redhat.com, mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20220817225242.188805-1-akrowiak@linux.ibm.com>
- <Yv3ynhVYegld5MsO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-From:   Anthony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <Yv3ynhVYegld5MsO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 85-_5jbEEr4eZczMr6qQZSV9GB3ZbUxH
-X-Proofpoint-ORIG-GUID: aEi3v0sf_JBrPZBrZ5bgRDu9nHMNAStu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_12,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- mlxlogscore=890 malwarescore=0 lowpriorityscore=0 impostorscore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180045
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d73bd478-e373-f759-2acb-2777f6bba06f@openvz.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Aug 18, 2022 at 12:12:30PM +0300, Vasily Averin wrote:
+> The patch was announced here:
+> https://lore.kernel.org/all/62188f37-f816-08e9-cdd5-8df23131746d@openvz.org/
+> "5) simple_xattrs: replace list to rb-tree
+>   This significantly reduces the search time for existing entries."
+> 
+> It was compiled but was not tested yet.
+> ---
+> Currently simple_xattr uses a list to store existing entries.
+> If the list grows, the presence check may be slow and potentially
+> lead to problems. Red-black tree should work more efficiently
+> in this situation.
+> 
+> This patch replaces list to rb_tree and switches simple_xattr_* calls
+> to its using.
+> 
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
+> ---
 
-On 8/18/22 4:04 AM, Alexander Gordeev wrote:
-> On Wed, Aug 17, 2022 at 06:52:40PM -0400, Tony Krowiak wrote:
->> Two problems have been discovered with the vfio_ap device driver since the
->> hot plug support was recently introduced:
-> Hi Tony,
->
-> Could you please add Fixes tags to the patches?
+I think the background for the performance issues in the commit message
+would be helpful and I have a few comments. Also, trying to test whether the
+lockups are gone due to the rbtree switch would be +1. 
+
+This will likely conflict with some acl/xattr changes I have lined up so
+if we decide to proceed I wouldn't mind dealing with this series if
+there are no objections.
+
+>  fs/xattr.c            | 109 ++++++++++++++++++++++++++++++++----------
+>  include/linux/xattr.h |  13 +++--
+>  2 files changed, 92 insertions(+), 30 deletions(-)
+> 
+> diff --git a/fs/xattr.c b/fs/xattr.c
+> index 6401703707f2..672f2214fcfd 100644
+> --- a/fs/xattr.c
+> +++ b/fs/xattr.c
+> @@ -1021,6 +1021,60 @@ struct simple_xattr *simple_xattr_alloc(const void *value, size_t size)
+>  	return new_xattr;
+>  }
+>  
+> +static struct simple_xattr *simple_xattr_rb_search(struct rb_root *root,
+> +						   const char* name)
+> +{
+> +	struct rb_node **new = &(root->rb_node), *parent = NULL;
+
+I'd suggest to not name this "new" but rather just "cur" or "node".
+
+> +
+> +	/* Figure out where to put new node */
+> +	while (*new)
+> +	{
+
+nit: that "{" should be on the same line as the while
+
+> +		struct simple_xattr *xattr;
+> +		int result;
+> +
+> +		xattr = container_of(*new, struct simple_xattr, node);
+> +		result = strcmp(xattr->name, name);
+> +
+> +		parent = *new;
+
+That variable and assignment seems unnecessary?
+
+> +		if (result < 0)
+> +			new = &((*new)->rb_left);
+> +		else if (result > 0)
+> +			new = &((*new)->rb_right);
+> +		else
+> +			return xattr;
+> +	}
+> +	return NULL;
+> +}
+> +
+> +static bool simple_xattr_rb_insert(struct rb_root *root,
+> +				   struct simple_xattr *new_xattr)
+> +{
+> +	struct rb_node **new = &(root->rb_node), *parent = NULL;
+> +
+> +	/* Figure out where to put new node */
+> +	while (*new) {
+> +		struct simple_xattr *xattr;
+> +		int result;
+> +
+> +		xattr = container_of(*new, struct simple_xattr, node);
+> +		result = strcmp(xattr->name, new_xattr->name);
+> +
+> +		parent = *new;
+> +		if (result < 0)
+> +			new = &((*new)->rb_left);
+> +		else if (result > 0)
+> +			new = &((*new)->rb_right);
+> +		else
+> +			return false;
+> +	}
+> +
+> +	/* Add new node and rebalance tree. */
+> +	rb_link_node(&new_xattr->node, parent, new);
+> +	rb_insert_color(&new_xattr->node, root);
+> +
+> +	return true;
+> +}
+> +
+>  /*
+>   * xattr GET operation for in-memory/pseudo filesystems
+>   */
+> @@ -1031,10 +1085,8 @@ int simple_xattr_get(struct simple_xattrs *xattrs, const char *name,
+>  	int ret = -ENODATA;
+>  
+>  	spin_lock(&xattrs->lock);
+> -	list_for_each_entry(xattr, &xattrs->head, list) {
+> -		if (strcmp(name, xattr->name))
+> -			continue;
+> -
+> +	xattr = simple_xattr_rb_search(&xattrs->rb_root, name);
+> +	if (xattr) {
+>  		ret = xattr->size;
+>  		if (buffer) {
+>  			if (size < xattr->size)
+> @@ -1042,7 +1094,6 @@ int simple_xattr_get(struct simple_xattrs *xattrs, const char *name,
+>  			else
+>  				memcpy(buffer, xattr->value, xattr->size);
+>  		}
+> -		break;
+>  	}
+>  	spin_unlock(&xattrs->lock);
+>  	return ret;
+> @@ -1067,7 +1118,7 @@ int simple_xattr_set(struct simple_xattrs *xattrs, const char *name,
+>  		     const void *value, size_t size, int flags,
+>  		     ssize_t *removed_size)
+>  {
+> -	struct simple_xattr *xattr;
+> +	struct simple_xattr *xattr = NULL;
+>  	struct simple_xattr *new_xattr = NULL;
+>  	int err = 0;
+>  
+> @@ -1088,31 +1139,36 @@ int simple_xattr_set(struct simple_xattrs *xattrs, const char *name,
+>  	}
+>  
+>  	spin_lock(&xattrs->lock);
+> -	list_for_each_entry(xattr, &xattrs->head, list) {
+> -		if (!strcmp(name, xattr->name)) {
+> -			if (flags & XATTR_CREATE) {
+> -				xattr = new_xattr;
+> -				err = -EEXIST;
+> -			} else if (new_xattr) {
+> -				list_replace(&xattr->list, &new_xattr->list);
+> +	if ((flags & XATTR_CREATE) && new_xattr) {
+> +		/* create new */
+> +		if (!simple_xattr_rb_insert(&xattrs->rb_root, new_xattr)) {
+> +			/* already exist */
+> +			xattr = new_xattr;
+> +			err = -EEXIST;
+> +		}
+> +	} else {
+> +		/* replace or remove */
+> +		xattr = simple_xattr_rb_search(&xattrs->rb_root, name);
+> +		if (xattr) {
+> +			/* found */
+> +			if (!new_xattr) {
+> +				/* remove existing */
+> +				rb_erase(&xattr->node, &xattrs->rb_root);
+>  				if (removed_size)
+>  					*removed_size = xattr->size;
+>  			} else {
+> -				list_del(&xattr->list);
+> +				/* replace existing */
+> +				rb_replace_node(&xattr->node, &new_xattr->node,
+> +						&xattrs->rb_root);
+>  				if (removed_size)
+>  					*removed_size = xattr->size;
+>  			}
+> -			goto out;
+> +		} else if (new_xattr) {
+> +			/* not found, incorrect replace */
+> +			xattr = new_xattr;
+> +			err = -ENODATA;
+>  		}
+>  	}
+> -	if (flags & XATTR_REPLACE) {
+
+I think keeping this rather close to the original code might be nicer.
+I find the code more difficult to follow afterwards. So how about
+(COMPLETELY UNTESTED) sm like:
+
+@@ -1077,30 +1139,40 @@ int simple_xattr_set(struct simple_xattrs *xattrs, const char *name,
+        }
+
+        spin_lock(&xattrs->lock);
+-       list_for_each_entry(xattr, &xattrs->head, list) {
+-               if (!strcmp(name, xattr->name)) {
+-                       if (flags & XATTR_CREATE) {
+-                               xattr = new_xattr;
+-                               err = -EEXIST;
+-                       } else if (new_xattr) {
+-                               list_replace(&xattr->list, &new_xattr->list);
+-                               if (removed_size)
+-                                       *removed_size = xattr->size;
+-                       } else {
+-                               list_del(&xattr->list);
+-                               if (removed_size)
+-                                       *removed_size = xattr->size;
+-                       }
+-                       goto out;
++       /* Find any matching xattr by name. */
++       xattr = simple_xattr_rb_search(&xattrs->rb_root, name);
++       if (xattr) {
++               if (flags & XATTR_CREATE) {
++                       /* Creating request but the xattr already existed. */
++                       xattr = new_xattr;
++                       err = -EEXIST;
++               } else if (new_xattr) {
++                       /* Replace the existing xattr. */
++                       rb_replace_node(&xattr->node, &new_xattr->node,
++                                       &xattrs->rb_root);
++                       if (removed_size)
++                               *removed_size = xattr->size;
++               } else {
++                       /* No new xattr specified so wipe the existing xattr. */
++                       rb_erase(&xattr->node, &xattrs->rb_root);
++                       if (removed_size)
++                               *removed_size = xattr->size;
+                }
++               goto out;
+        }
++
+        if (flags & XATTR_REPLACE) {
++               /* There's no matching xattr so fail on replace. */
+                xattr = new_xattr;
+                err = -ENODATA;
+        } else {
+-               list_add(&new_xattr->list, &xattrs->head);
+-               xattr = NULL;
++               /*
++                * We're holding the lock and verified that there's no
++                * pre-existing xattr so this should always succeed.
++                */
++               WARN_ON(!simple_xattr_rb_insert(&xattrs->rb_root, new_xattr))
+        }
++
+ out:
+        spin_unlock(&xattrs->lock);
+        if (xattr) {
 
 
-Will do.
-
-
->
-> Thanks!
+> -		xattr = new_xattr;
+> -		err = -ENODATA;
+> -	} else {
+> -		list_add(&new_xattr->list, &xattrs->head);
+> -		xattr = NULL;
+> -	}
+> -out:
+>  	spin_unlock(&xattrs->lock);
+>  	if (xattr) {
+>  		kfree(xattr->name);
+> @@ -1149,6 +1205,7 @@ ssize_t simple_xattr_list(struct inode *inode, struct simple_xattrs *xattrs,
+>  {
+>  	bool trusted = capable(CAP_SYS_ADMIN);
+>  	struct simple_xattr *xattr;
+> +	struct rb_node *node;
+>  	ssize_t remaining_size = size;
+>  	int err = 0;
+>  
+> @@ -1170,7 +1227,9 @@ ssize_t simple_xattr_list(struct inode *inode, struct simple_xattrs *xattrs,
+>  #endif
+>  
+>  	spin_lock(&xattrs->lock);
+> -	list_for_each_entry(xattr, &xattrs->head, list) {
+> +	for (node = rb_first(&xattrs->rb_root); node; node = rb_next(node)) {
+> +		xattr = container_of(node, struct simple_xattr, node);
+> +
+>  		/* skip "trusted." attributes for unprivileged callers */
+>  		if (!trusted && xattr_is_trusted(xattr->name))
+>  			continue;
+> @@ -1191,6 +1250,6 @@ void simple_xattr_list_add(struct simple_xattrs *xattrs,
+>  			   struct simple_xattr *new_xattr)
+>  {
+>  	spin_lock(&xattrs->lock);
+> -	list_add(&new_xattr->list, &xattrs->head);
+> +	simple_xattr_rb_insert(&xattrs->rb_root, new_xattr);
+>  	spin_unlock(&xattrs->lock);
+>  }
+> diff --git a/include/linux/xattr.h b/include/linux/xattr.h
+> index 979a9d3e5bfb..bbe81cfb7a4d 100644
+> --- a/include/linux/xattr.h
+> +++ b/include/linux/xattr.h
+> @@ -80,12 +80,12 @@ static inline const char *xattr_prefix(const struct xattr_handler *handler)
+>  }
+>  
+>  struct simple_xattrs {
+> -	struct list_head head;
+> +	struct rb_root rb_root;
+>  	spinlock_t lock;
+>  };
+>  
+>  struct simple_xattr {
+> -	struct list_head list;
+> +	struct rb_node node;
+>  	char *name;
+>  	size_t size;
+>  	char value[];
+> @@ -96,7 +96,7 @@ struct simple_xattr {
+>   */
+>  static inline void simple_xattrs_init(struct simple_xattrs *xattrs)
+>  {
+> -	INIT_LIST_HEAD(&xattrs->head);
+> +	xattrs->rb_root = RB_ROOT;
+>  	spin_lock_init(&xattrs->lock);
+>  }
+>  
+> @@ -105,9 +105,12 @@ static inline void simple_xattrs_init(struct simple_xattrs *xattrs)
+>   */
+>  static inline void simple_xattrs_free(struct simple_xattrs *xattrs)
+>  {
+> -	struct simple_xattr *xattr, *node;
+> +	struct simple_xattr *xattr;
+> +	struct rb_node *node;
+>  
+> -	list_for_each_entry_safe(xattr, node, &xattrs->head, list) {
+> +	while ((node = rb_first(&xattrs->rb_root))) {
+> +		rb_erase(node, &xattrs->rb_root);
+> +		xattr = container_of(node, struct simple_xattr, node);
+>  		kfree(xattr->name);
+>  		kvfree(xattr);
+>  	}
+> -- 
+> 2.34.1
+> 
+> 

@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF71B5982C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E4E5982D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244553AbiHRL6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 07:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
+        id S244305AbiHRMAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 08:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244541AbiHRL6X (ORCPT
+        with ESMTP id S241012AbiHRMAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 07:58:23 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085C9AE9DA
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 04:57:57 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b98ec329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98ec:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 18 Aug 2022 08:00:18 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE886277
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:00:15 -0700 (PDT)
+Received: from [192.168.1.101] (abxi168.neoplus.adsl.tpnet.pl [83.9.2.168])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7F4981EC0541;
-        Thu, 18 Aug 2022 13:57:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660823871;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=jDJ2RPkIaKDz7QoK2j/9ib6w/4i1ZuYxpSgJIBoQXwA=;
-        b=qDAkk4Oy3ukbQU2QNwb8Km0VJfU3dD29i3JiD7/Dohu/QDmKn43dnmpc4ax3OJTTjy+XN+
-        0PC/Wuw9Hynz8GF/ShbaVt2jD/L5Zzsa0RrJKcl3pXNFiFmfSP2HTDsbqMSpdldWDNpy8V
-        B8WGLDTF49GmlweBpxNLvp9HDBs1eCw=
-Date:   Thu, 18 Aug 2022 13:57:47 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-Cc:     ssengar@microsoft.com, mikelley@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, peterz@infradead.org, tim.c.chen@linux.intel.com,
-        will@kernel.org, song.bao.hua@hisilicon.com,
-        suravee.suthikulpanit@amd.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/cacheinfo: Don't use cpu_llc_shared_map for
- !CONFIG_SMP
-Message-ID: <Yv4pOz01nAkafiwd@zn.tnic>
-References: <1660148115-302-1-git-send-email-ssengar@linux.microsoft.com>
- <Yv1ELaWHbRfvdt/p@zn.tnic>
- <20220818045225.GA9054@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id B596B3F347;
+        Thu, 18 Aug 2022 14:00:11 +0200 (CEST)
+Message-ID: <0de2d418-7489-db57-af64-68a35711c567@somainline.org>
+Date:   Thu, 18 Aug 2022 14:00:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220818045225.GA9054@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFT PATCH v2 02/14] arm64: dts: qcom: msm8996: split TCSR halt
+ regs out of mutex
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220817130342.568396-1-krzysztof.kozlowski@linaro.org>
+ <20220817130342.568396-3-krzysztof.kozlowski@linaro.org>
+ <fd1492fa-4244-b283-d2a6-b4ffac7d53d6@somainline.org>
+ <2823e662-55a1-0d9f-e95d-40d6f3b93723@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <2823e662-55a1-0d9f-e95d-40d6f3b93723@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 09:52:25PM -0700, Saurabh Singh Sengar wrote:
-> Shall I mention here "Non-SMP AMD processor" instead ?
 
-You should explain what that is.
 
-Is that a CONFIG_SMP=n kernel which you boot on a AMD CPU?
+On 18.08.2022 09:02, Krzysztof Kozlowski wrote:
+> On 17/08/2022 23:57, Konrad Dybcio wrote:
+>>
+>>
+>> On 17.08.2022 15:03, Krzysztof Kozlowski wrote:
+>>> The TCSR halt regs are next to TCSR mutex, so before converting the TCSR
+>>> mutex into device with address space, we need to split the halt regs to
+>>> its own syscon device.  This also describes more accurately the devices
+>>> and their IO address space.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>> Not tested on a device, but looks good to the eye:
+>> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>
+>> On a note, are they really named TCSR_1 and TCSR_2 in the docs?
+>> Qualcomm is usually more exquisite in their naming :P
+> 
+> This is not entirely separate address space, therefore it does not have
+> a separate name. The address space name is still TCSR_MUTEX which
+> consists of actual MUTEX regs, halt regs and bunch of others. The second
+> one 0x7a0000 (where label I renamed to tcsr_2) is called TCSR_REGS.
+> 
+> This applies to other patches as well, so maybe you prefer to have
+> labels matching the spec? The first would be tcsr_mutex_regs, although
+> it is not entirely correct, because it does not include now the TCSR
+> mutex regs...
+I think it's fine as it is.
 
-IOW, how do I reproduce the issue you're describing below, here locally?
-
-Send dmesg pls.
-
-Also, what is the use case?
-
-Why would you even build with SMP off?
-
-Feel free to explain more verbosely what you're trying to accomplish.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Konrad
+> 
+> 
+> 
+> Best regards,
+> Krzysztof

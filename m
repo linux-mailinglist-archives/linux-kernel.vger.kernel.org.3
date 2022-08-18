@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D73597E7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E1B597E7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243545AbiHRGRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 02:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
+        id S243583AbiHRGSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 02:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239174AbiHRGRS (ORCPT
+        with ESMTP id S243195AbiHRGSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 02:17:18 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE6194ED3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:17:17 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id u9so842732lfg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=3lKvSLctByK0zaQtA6Zi8eoMtQj42Hrxz02cVPPHF9Y=;
-        b=WdtbeKlQvJsYj2WMvztp7RbB2d27anQdkC/S8ppbLUke62xlXRV6AL70R59/rktGaD
-         aMriqETm0kF/5YRl0jMh7Fmj+udKG73AevbuWz1ounWn4GFPTSrNV4gKVz0iTFp5QZlC
-         E5MWyvADKw2du/r86rc6W+IsvgdKIS6IC+MpOKHi+9SieWDtOBYWtF7x2cqidmnRxqsV
-         a4zJyFcrcSF70SZu1Xe0e38qk8opfjxzhKv9MYbtlcMMiiFnA4Eo1bOqj+LVb3mXgRfP
-         zM7aQPpRSxoOLpVkxwCx8pkUKXOyexhWoeD4KYQNbeXALzUgqyQ46Qe4O+F13tqzLzOO
-         c5VA==
+        Thu, 18 Aug 2022 02:18:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DD8696D9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:18:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660803521;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0NAawQ9XBYnysJg3OwdeE4npc8jcs/ow05KJCd8jCZk=;
+        b=TbNlaemT3ybw3lHAWM4iq9AlI7b9AM3CFjLWTeLCQE/XgZEo1B5N4OLT+WRajB+t7IUpAc
+        tH0l99UMF2/RKMbnK3kh5I94aofxNHhB1n7xYk+jn9VayrIXL462J3rHk0eAO78LetWXD7
+        YOUhJ3ypDZNSEYuAm/8Lm8dxxxBc3zA=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-39-KrdojIf1PSy8ZZaY93NXNQ-1; Thu, 18 Aug 2022 02:18:38 -0400
+X-MC-Unique: KrdojIf1PSy8ZZaY93NXNQ-1
+Received: by mail-qv1-f72.google.com with SMTP id c1-20020a0cfb01000000b00495ad218c74so460314qvp.20
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:18:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=3lKvSLctByK0zaQtA6Zi8eoMtQj42Hrxz02cVPPHF9Y=;
-        b=TzbsRYyTXwxOfVGH2W/yDkpvhYbUa7uTDwuAxBXIAUNbAcgcTO+6E50hpyG6SePewx
-         0qFBT3qdyv6Vh8DO1LrjjFIE+QEgXQHpbWyJMa2nZUG8RlolcYmiQMGYIOvLOvblHs7F
-         GHrphuJn1UmCvqCG7xVqIJku72THUwak2uaDp/9Sc6IoeABuRDDkII8BZ9JGnEc5aNAJ
-         TgTwCcCn5QJg+vWdXp7Gqa5wCtuADt02Ws39yQfR3BZWUms85yl+JnrPTn73iQsbR6Q2
-         qUj/95eL04GlLWRoK/+AWf0czwPZDdiU6q7vnIBHp2RhGi3NMc7IRrHx6JxVmVkYdYnl
-         e09A==
-X-Gm-Message-State: ACgBeo3l+0u3Whc5olR3uDbWiWhzdlNsYXAjfMGyS0Jaepia9Cg13P3P
-        awKM2s54jpxxzV3EAMk1V+K1Fir5QRQGpH0G
-X-Google-Smtp-Source: AA6agR4rPJNr1Z23bdYVXjYbH/epwMhSaP+1kE6as9hyHWK9eejt9hdliKqVf3C3FTtv751W8tpIrA==
-X-Received: by 2002:a05:6512:3b88:b0:492:ae89:d6d0 with SMTP id g8-20020a0565123b8800b00492ae89d6d0mr455491lfv.381.1660803435694;
-        Wed, 17 Aug 2022 23:17:15 -0700 (PDT)
-Received: from krzk-bin.. (d15l54bxv1k5c31plwt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:671:aa32:2bd5:8994])
-        by smtp.gmail.com with ESMTPSA id t11-20020ac243ab000000b0048b2ba11520sm92734lfl.165.2022.08.17.23.17.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 23:17:15 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] dt-bindings: gpu: arm,mali: restrict opp-table to objects
-Date:   Thu, 18 Aug 2022 09:17:13 +0300
-Message-Id: <20220818061713.9611-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=0NAawQ9XBYnysJg3OwdeE4npc8jcs/ow05KJCd8jCZk=;
+        b=1xLxL1XMdr2NNIriwSdku3PNlXumrmq9Gye7Dw9k6PUlOhgxjzh5O9Hlz4Od7UWxWV
+         ULPNJPzbtXCBAqLAvT21qLXEaCeKqWjiex8wEYzEsyz95dIvG549XGzGW3g0Y8ULwI5o
+         0tMGmjk2gcU5vuu9jcuZTDSt9+xJMqA6thE/dMUp+T5dnm/svb063LRKsnRpWWRjYfxb
+         rKrUStE9/c4E968XozqjWq9Jg2dgG/sQ3aZMM88G/raDRTnRHa1DDz5Xk9QK8paJ3jRY
+         9bmzfk2FEgxUzBS89bpO1d+zLnDZaSszmNi4FcdsGAv7DIjsNK5f9WvBtFvGCSviNIVQ
+         Qy4g==
+X-Gm-Message-State: ACgBeo31Q7A+EppPrtOyl04OD7nOkgttmdqeVl1C8A1fjBaGHJSQejG7
+        Js6I5mfpl71tFTO6lepggMrx+IpyI1zjdaUpoXidgqJ9hACgQtDH3yiSfEWis7dbs4jTfUlPp7g
+        0YkIxsZQQrAdym54BdI409DTCAi0bchKqKl1ivvxR
+X-Received: by 2002:ad4:5bc7:0:b0:48b:e9ed:47a8 with SMTP id t7-20020ad45bc7000000b0048be9ed47a8mr1226315qvt.108.1660803517637;
+        Wed, 17 Aug 2022 23:18:37 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7i9tzI1gIYnxOQajZ5xPDocGxVzPwJg4mYMy5d4vyh7LD7T4c/zanv9nEMIkZnzlA6roXFACDL2aVIZunCvdQ=
+X-Received: by 2002:ad4:5bc7:0:b0:48b:e9ed:47a8 with SMTP id
+ t7-20020ad45bc7000000b0048be9ed47a8mr1226308qvt.108.1660803517434; Wed, 17
+ Aug 2022 23:18:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220817135718.2553-1-qtxuning1999@sjtu.edu.cn> <20220817135718.2553-3-qtxuning1999@sjtu.edu.cn>
+In-Reply-To: <20220817135718.2553-3-qtxuning1999@sjtu.edu.cn>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Thu, 18 Aug 2022 08:18:01 +0200
+Message-ID: <CAJaqyWdTjREaPLHLfo8ZyHoA3u5PpdX_=5-iTZOfa9fGpLMnfw@mail.gmail.com>
+Subject: Re: [RFC v2 2/7] vhost_test: batch used buffer
+To:     Guo Zhi <qtxuning1999@sjtu.edu.cn>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Michael Tsirkin <mst@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simple 'opp-table:true' accepts a boolean property as opp-table, so
-restrict it to object to properly enforce real OPP table nodes.
+On Wed, Aug 17, 2022 at 3:58 PM Guo Zhi <qtxuning1999@sjtu.edu.cn> wrote:
+>
+> Only add to used ring when a batch of buffer have all been used.  And if
+> in order feature negotiated, only add the last used descriptor for a
+> batch of buffer.
+>
+> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
+> ---
+>  drivers/vhost/test.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/vhost/test.c b/drivers/vhost/test.c
+> index bc8e7fb1e635..57cdb3a3edf6 100644
+> --- a/drivers/vhost/test.c
+> +++ b/drivers/vhost/test.c
+> @@ -43,6 +43,9 @@ struct vhost_test {
+>  static void handle_vq(struct vhost_test *n)
+>  {
+>         struct vhost_virtqueue *vq = &n->vqs[VHOST_TEST_VQ];
+> +       struct vring_used_elem *heads = kmalloc(sizeof(*heads)
+> +                       * vq->num, GFP_KERNEL);
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+It seems to me we can use kmalloc_array here.
 
----
+Thanks!
 
-Changes since v1:
-1. Correct typo in msg.
----
- Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml | 3 ++-
- Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml  | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
-index d209f272625d..2a25384ca3ef 100644
---- a/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
-+++ b/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
-@@ -74,7 +74,8 @@ properties:
-       - const: bus
- 
-   mali-supply: true
--  opp-table: true
-+  opp-table:
-+    type: object
- 
-   power-domains:
-     maxItems: 1
-diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml
-index eceaa176bd57..318122d95eb5 100644
---- a/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml
-+++ b/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml
-@@ -101,7 +101,8 @@ properties:
- 
-   mali-supply: true
- 
--  opp-table: true
-+  opp-table:
-+    type: object
- 
-   power-domains:
-     maxItems: 1
--- 
-2.34.1
+> +       int batch_idx = 0;
+>         unsigned out, in;
+>         int head;
+>         size_t len, total_len = 0;
+> @@ -84,11 +87,14 @@ static void handle_vq(struct vhost_test *n)
+>                         vq_err(vq, "Unexpected 0 len for TX\n");
+>                         break;
+>                 }
+> -               vhost_add_used_and_signal(&n->dev, vq, head, 0);
+> +               heads[batch_idx].id = cpu_to_vhost32(vq, head);
+> +               heads[batch_idx++].len = cpu_to_vhost32(vq, len);
+>                 total_len += len;
+>                 if (unlikely(vhost_exceeds_weight(vq, 0, total_len)))
+>                         break;
+>         }
+> +       if (batch_idx)
+> +               vhost_add_used_and_signal_n(&n->dev, vq, heads, batch_idx);
+>
+>         mutex_unlock(&vq->mutex);
+>  }
+> --
+> 2.17.1
+>
 

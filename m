@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D21B598900
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 848D7598906
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344832AbiHRQg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 12:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
+        id S245595AbiHRQiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 12:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343580AbiHRQg5 (ORCPT
+        with ESMTP id S244557AbiHRQiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 12:36:57 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE3ABD28E;
-        Thu, 18 Aug 2022 09:36:55 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id z72so1480198iof.12;
-        Thu, 18 Aug 2022 09:36:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=EsZP3ELRo6TTGsFBmByT42JNw5wBc7RlaMRIBETg5Gc=;
-        b=Zp2w9mVrisi8zlrYNsIIKp9yEvxq/4/fQRSqXMDGCG+MXBk6OqDys0DJoeVMgvIO4X
-         De1eJmQGlA4ZR8f+0LaXP0eLLF7A2TZO9/rwwNxejv7lG1EXOOS+90RNFvxSKw3qzmE4
-         K8uL0SQ19ui8oCwNAYi2QnO1ruTYBGDxVBkH/a53XyMK0dIMn0lkl6QXAUUxftF7Mwes
-         FD2jFtuxTP4nXs1uJ4xOaVSlbnCTLH9Kp1UCo9KJz8ire6Kfx8qC9TvyqvlkwJK5ha/V
-         +lsgftTnXKTnOA5uJE9DbBR2TSXMRsQUrdqsHUsPicNJYDjNu/XQuTI/xqwGFfxFQI/t
-         1wFw==
-X-Gm-Message-State: ACgBeo0VbclgPS7c71bpk+pHlqRiH/kDQVAjxJJ/LUNCouAmsDTtunHb
-        UxV2FOKD1VilVpnDfM84rA==
-X-Google-Smtp-Source: AA6agR7XYb4e6JSFTnrS/q7WlPl4E2gg4SEWAy++LgChjlcloI3dnrD9XsgcrfX8E4rSums27VI5/w==
-X-Received: by 2002:a05:6602:330e:b0:67b:9fed:49db with SMTP id b14-20020a056602330e00b0067b9fed49dbmr1740842ioz.54.1660840614873;
-        Thu, 18 Aug 2022 09:36:54 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:647:4ff2:3529:f8cd:d6cd:ac54])
-        by smtp.gmail.com with ESMTPSA id b40-20020a0295ab000000b003427281824csm756542jai.128.2022.08.18.09.36.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 09:36:54 -0700 (PDT)
-Received: (nullmailer pid 1996636 invoked by uid 1000);
-        Thu, 18 Aug 2022 16:36:48 -0000
-Date:   Thu, 18 Aug 2022 10:36:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org
-Subject: Re: [PATCH v3 2/4] dt-bindings: interrupt-controller: sifive,plic:
- add legacy riscv compatible
-Message-ID: <20220818163648.GD1978870-robh@kernel.org>
-References: <20220817201212.990712-1-mail@conchuod.ie>
- <20220817201212.990712-3-mail@conchuod.ie>
+        Thu, 18 Aug 2022 12:38:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C908BD1FE;
+        Thu, 18 Aug 2022 09:38:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE01D615E6;
+        Thu, 18 Aug 2022 16:38:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2553C433C1;
+        Thu, 18 Aug 2022 16:37:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660840680;
+        bh=VW8K1mvPZ7SyPQLEyZKedWfXCdz3ufIQB1jTJflM0Qc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U2S9UobrcB5GYkBgLGRacrpNp5tPyIHF9asfLL+g1hAEqvD+vbFK5UsHaoBN6qaBw
+         P3VISmCIi4seWDg+ACUG7tWs4dEACj6yzRuco9XCPT4U1xdKBP0npdSyumuq4y7PNG
+         1U9EX7wXu5jeydv7ind2ova39+xGBMT0VCRfkKOxwExe4OJBgXLcrqLUaEihSZe4Ft
+         WZEgHjbuG/SngIga+tBHLXCGcI7PcNx7JNDrWiOS7XMhJ1ClktiAeBcUbisGLcgQwl
+         D9C6/vcptywUyzqCZ+c0VBQ2NkzeyftJ3FoYuBonDJ99L1L/30PFKze/kKUeFNmv4R
+         PFEAXfG9mqMOQ==
+Received: by pali.im (Postfix)
+        id 00D04622; Thu, 18 Aug 2022 18:37:56 +0200 (CEST)
+Date:   Thu, 18 Aug 2022 18:37:56 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marek =?utf-8?B?QmVow7pu?= <marek.behun@nic.cz>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: Assign PCI domain by ida_alloc()
+Message-ID: <20220818163756.qmyopspdn5xywe5s@pali>
+References: <20220702204737.7719-1-pali@kernel.org>
+ <20220714184130.5436-1-pali@kernel.org>
+ <20220818135009.zlivavgw6547hh4s@pali>
+ <Yv5T1dcIIOPy3KvB@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220817201212.990712-3-mail@conchuod.ie>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yv5T1dcIIOPy3KvB@lunn.ch>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,26 +63,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 09:12:11PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Thursday 18 August 2022 16:59:33 Andrew Lunn wrote:
+> On Thu, Aug 18, 2022 at 03:50:09PM +0200, Pali Rohár wrote:
+> > PING?
 > 
-> While "real" hardware might not use the compatible string "riscv,plic0"
-> it is present in the driver & QEMU uses it for automatically generated
-> virt machine dtbs. To avoid dt-validate problems with QEMU produced
-> dtbs, such as the following, add it to the binding.
+> Pretty much anything sent during the merge window, and just before the
+> merge window gets thrown away. Please rebase onto the current pci tree
+> and repost.
 > 
-> riscv-virt.dtb: plic@c000000: compatible: 'oneOf' conditional failed, one must be fixed:
->         'sifive,plic-1.0.0' is not one of ['sifive,fu540-c000-plic', 'starfive,jh7100-plic', 'canaan,k210-plic']
->         'sifive,plic-1.0.0' is not one of ['allwinner,sun20i-d1-plic']
->         'sifive,plic-1.0.0' was expected
->         'thead,c900-plic' was expected
-> riscv-virt.dtb: plic@c000000: '#address-cells' is a required property
-> 
-> Reported-by: Rob Herring <robh@kernel.org>
-> Link: https://lore.kernel.org/linux-riscv/20220803170552.GA2250266-robh@kernel.org/
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml     | 5 +++++
->  1 file changed, 5 insertions(+)
+>     Andrew
+>  
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Please write it pretty clear that you are not interested in those
+patches, and not hiding this info behind asking me after month of
+waiting for another work of rebase with sending them at eight o'clock
+during full moon. It is pretty ridiculous how to say "go away". Thanks.

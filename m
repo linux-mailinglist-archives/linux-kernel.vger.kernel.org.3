@@ -2,233 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47615597C5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1393597C83
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243172AbiHRDsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 23:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
+        id S243133AbiHRDs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 23:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243173AbiHRDrv (ORCPT
+        with ESMTP id S243182AbiHRDsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 23:47:51 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF49A98CA;
-        Wed, 17 Aug 2022 20:47:13 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id j17so311707qtp.12;
-        Wed, 17 Aug 2022 20:47:13 -0700 (PDT)
+        Wed, 17 Aug 2022 23:48:04 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B026898582
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:47:44 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id k3so251591ilv.11
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:47:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=gwd1fCexYX3TeFcSSvodLVxxRVE24qi0qHFu+66HlUw=;
-        b=pz/F0d0BTzHUl9tcLeRyqrVzroA0Hl9QBIvmSnJOd94WZUI45LcTus7SaaNvsUOA1X
-         4+iufz8v7dM69M2dXLK0XvWOm20U8zSPrEnfzNTmKN6NtGqHbmWJ+FldLtNQVdyIGiix
-         BIUM+XWxhSkhR1NTwIu0vrjqB3YGhv1achVfvy/oSrTg2ZdjPKhWcDnxOo+t9L7REoBC
-         3RcvNX2F+TohskWQ7nGox3AracDCV5MwXCiKDF0c++OrZp8w3viz9FL4J2a4+rnCk6W3
-         RlsetkyoyIwmI5nZweBLnStJZMECiSDnB35i9aMJv+phbwqCMOl1iTss6hZBAaU9uyEy
-         EUfQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=awFGwwSRocOeifmjAPEDB1aSCbnwQlgCGRRbkk5b0mw=;
+        b=HuuwBZomHQD9jDKeuTr2VNO9olgvvd8D0ZYsRVU+dLL2RPb2ssLOWCDp2onOIcQ1PZ
+         kfoCj9T0R0Xfbfx7lF24moS/6w5INxaWGwptve9xDhrNP2Adv4KzaBkwltgUq1z21AWm
+         uHVDVvnl6LcFUbGVTqMFFxCD/aL6FhbjXqH7OMB/7kfR1fPv0czzY1fd//fIMposD07f
+         b9aTXeoPVIk/RWKntVLDYbMIHvqFhziJDS0KKv60RjWzmPM4vTWW81Fe2uEsoEo0KPwq
+         5EJFihNKM43HercJ872rCFaYNpPZ/exlMZgcpbYowu087PnQKgRbawlj5pxDv6RAdF1V
+         bqaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=gwd1fCexYX3TeFcSSvodLVxxRVE24qi0qHFu+66HlUw=;
-        b=JxrI694OMA/gxrycJW9P/AwpvRTsbOXHn6I5xyK+Vc9/1g4Oo6GLe1ETwXQz5f+Iu0
-         P+2rLypLEPME08TIuYisx9Pl5sbTZV54bKVHnzVFTv8LkVj/4wbpwH2djWwRDsR7aa8Q
-         DGWxjz6QfAWsgHY2KZLifEHw22IGGvlKZtFJlYrEQ9r/PNISQJg7cITkCjRj8al/tdOa
-         aH/Eq7LyeLwbg3mY40deu7iHXuOLTmY731FPOeZALpImwHhwHJi+MD2GLR7wSkelPbIj
-         Re2cOwOFk2QuCNQfsruQOckC7BRM67UW6Tm/zC6A5Vp/vlvmebWlWOlRQWrhDkXihetT
-         BRdg==
-X-Gm-Message-State: ACgBeo304msjh3FThWs2pmWLZfgdV2ilksqe6mo8IdCAqap3KzbaTMOe
-        6hks+3Gv37RkDlKVACGpk6EIbY9gpGM=
-X-Google-Smtp-Source: AA6agR7HVP+1pE/Mgg2CkR1Z5T+A0vF50ElaxWc/p+nO7S9N3eOQ+vXG14dUNPubDaZ6m+nGX1/ERA==
-X-Received: by 2002:ac8:7f53:0:b0:343:652:ce62 with SMTP id g19-20020ac87f53000000b003430652ce62mr1083589qtk.514.1660794432634;
-        Wed, 17 Aug 2022 20:47:12 -0700 (PDT)
-Received: from [192.168.1.201] (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
-        by smtp.gmail.com with ESMTPSA id d18-20020a05620a241200b006b919c6749esm727633qkn.91.2022.08.17.20.47.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 20:47:12 -0700 (PDT)
-Subject: Re: [RFT PATCH] clk: ls1c: Fix PLL rate calculation
-To:     Kelvin Cheung <keguang.zhang@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Du Huanpeng <dhu@hodcarrier.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        Yang Ling <gnaygnil@gmail.com>
-References: <20220419051114.1569291-1-seanga2@gmail.com>
- <CAJhJPsUM=LrgrKcoA8xT=4JWt8uxjn6yDxP9vjuZmvb4WvjPZQ@mail.gmail.com>
-From:   Sean Anderson <seanga2@gmail.com>
-Message-ID: <216aebfc-c1c1-c64c-eae3-ad711f310c3a@gmail.com>
-Date:   Wed, 17 Aug 2022 23:47:11 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=awFGwwSRocOeifmjAPEDB1aSCbnwQlgCGRRbkk5b0mw=;
+        b=bh9yrK71I2PMJ2K8/Z3nRg4qAK1QghQYP9I1RvqoB7ebBr4tsiVIV7v9Cs8SPtsTVG
+         9CtWdUPkU6G3yRnYHvzblV7BpZ0WvD+KxZOzbV4XvvoFHdkchsRP0zSPee2Z8Gfb5jST
+         6ydoKCNbJ1bbbTi8aSQ2DA14s90D89VCDVnbsa5QMVuHMP8V/r4D36K/u5A/7lhmdQSW
+         1RBYpi3GBNEwFBej620SqYa2QI3XdMypebBNhrNFYquA2q7xDp1GOxD9pWjfXJo+IMNx
+         PNJtcG1osafcYqwrTOI+AEC40WH1oKpnkHzj+1yViNXTXZC1hgGzq2dYJB0whKZPvDFD
+         r8nw==
+X-Gm-Message-State: ACgBeo1sqtsVESzkvSrPcrfkqwcA6rZ1AqPK8wTMP1PSjduMkoxfhLNG
+        SWc4XY372BhRJdzR4QrCnKsFDjLViJz6HUW+5AjeFg==
+X-Google-Smtp-Source: AA6agR4qMa4OQ91sIzkDhZ6sJxq3ep4yI+PyN9yclK8K6pKbEhOC904SXmSnOpmJe9LJ12apxNw4HTohCoA9TKmMWt0=
+X-Received: by 2002:a92:3652:0:b0:2df:4133:787 with SMTP id
+ d18-20020a923652000000b002df41330787mr590419ilf.39.1660794463902; Wed, 17 Aug
+ 2022 20:47:43 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAJhJPsUM=LrgrKcoA8xT=4JWt8uxjn6yDxP9vjuZmvb4WvjPZQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1655761627.git.ashish.kalra@amd.com> <34246866043db7bab34a92fe22f359667ab155a0.1655761627.git.ashish.kalra@amd.com>
+In-Reply-To: <34246866043db7bab34a92fe22f359667ab155a0.1655761627.git.ashish.kalra@amd.com>
+From:   Alper Gun <alpergun@google.com>
+Date:   Wed, 17 Aug 2022 20:47:33 -0700
+Message-ID: <CABpDEukAEGwb9w12enO=fhSbHbchypsOdO2dkR4Jei3wDW6NWg@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 39/49] KVM: SVM: Introduce ops for the post gfn
+ map and unmap
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, michael.roth@amd.com, vbabka@suse.cz,
+        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        dgilbert@redhat.com, jarkko@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kelvin,
+On Mon, Jun 20, 2022 at 4:12 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
+>
+> From: Brijesh Singh <brijesh.singh@amd.com>
+>
+> When SEV-SNP is enabled in the guest VM, the guest memory pages can
+> either be a private or shared. A write from the hypervisor goes through
+> the RMP checks. If hardware sees that hypervisor is attempting to write
+> to a guest private page, then it triggers an RMP violation #PF.
+>
+> To avoid the RMP violation with GHCB pages, added new post_{map,unmap}_gfn
+> functions to verify if its safe to map GHCB pages.  Uses a spinlock to
+> protect against the page state change for existing mapped pages.
+>
+> Need to add generic post_{map,unmap}_gfn() ops that can be used to verify
+> that its safe to map a given guest page in the hypervisor.
+>
+> This patch will need to be revisited later after consensus is reached on
+> how to manage guest private memory as probably UPM private memslots will
+> be able to handle this page state change more gracefully.
+>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> Signed-off by: Ashish Kalra <ashish.kalra@amd.com>
+> ---
+>  arch/x86/include/asm/kvm-x86-ops.h |  1 +
+>  arch/x86/include/asm/kvm_host.h    |  3 ++
+>  arch/x86/kvm/svm/sev.c             | 48 ++++++++++++++++++++++++++++--
+>  arch/x86/kvm/svm/svm.c             |  3 ++
+>  arch/x86/kvm/svm/svm.h             | 11 +++++++
+>  5 files changed, 64 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index e0068e702692..2dd2bc0cf4c3 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -130,6 +130,7 @@ KVM_X86_OP(vcpu_deliver_sipi_vector)
+>  KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
+>  KVM_X86_OP(alloc_apic_backing_page)
+>  KVM_X86_OP_OPTIONAL(rmp_page_level_adjust)
+> +KVM_X86_OP(update_protected_guest_state)
+>
+>  #undef KVM_X86_OP
+>  #undef KVM_X86_OP_OPTIONAL
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 49b217dc8d7e..8abc0e724f5c 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1522,7 +1522,10 @@ struct kvm_x86_ops {
+>         unsigned long (*vcpu_get_apicv_inhibit_reasons)(struct kvm_vcpu *vcpu);
+>
+>         void *(*alloc_apic_backing_page)(struct kvm_vcpu *vcpu);
+> +
+>         void (*rmp_page_level_adjust)(struct kvm *kvm, kvm_pfn_t pfn, int *level);
+> +
+> +       int (*update_protected_guest_state)(struct kvm_vcpu *vcpu);
+>  };
+>
+>  struct kvm_x86_nested_ops {
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index cb2d1bbb862b..4ed90331bca0 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -341,6 +341,7 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>                 if (ret)
+>                         goto e_free;
+>
+> +               spin_lock_init(&sev->psc_lock);
+>                 ret = sev_snp_init(&argp->error);
+>         } else {
+>                 ret = sev_platform_init(&argp->error);
+> @@ -2828,19 +2829,28 @@ static inline int svm_map_ghcb(struct vcpu_svm *svm, struct kvm_host_map *map)
+>  {
+>         struct vmcb_control_area *control = &svm->vmcb->control;
+>         u64 gfn = gpa_to_gfn(control->ghcb_gpa);
+> +       struct kvm_vcpu *vcpu = &svm->vcpu;
+>
+> -       if (kvm_vcpu_map(&svm->vcpu, gfn, map)) {
+> +       if (kvm_vcpu_map(vcpu, gfn, map)) {
+>                 /* Unable to map GHCB from guest */
+>                 pr_err("error mapping GHCB GFN [%#llx] from guest\n", gfn);
+>                 return -EFAULT;
+>         }
+>
+> +       if (sev_post_map_gfn(vcpu->kvm, map->gfn, map->pfn)) {
+> +               kvm_vcpu_unmap(vcpu, map, false);
+> +               return -EBUSY;
+> +       }
+> +
+>         return 0;
+>  }
+>
+>  static inline void svm_unmap_ghcb(struct vcpu_svm *svm, struct kvm_host_map *map)
+>  {
+> -       kvm_vcpu_unmap(&svm->vcpu, map, true);
+> +       struct kvm_vcpu *vcpu = &svm->vcpu;
+> +
+> +       kvm_vcpu_unmap(vcpu, map, true);
+> +       sev_post_unmap_gfn(vcpu->kvm, map->gfn, map->pfn);
+>  }
+>
+>  static void dump_ghcb(struct vcpu_svm *svm)
+> @@ -3383,6 +3393,8 @@ static int __snp_handle_page_state_change(struct kvm_vcpu *vcpu, enum psc_op op,
+>                                 return PSC_UNDEF_ERR;
+>                 }
+>
+> +               spin_lock(&sev->psc_lock);
+> +
+>                 write_lock(&kvm->mmu_lock);
+>
+>                 rc = kvm_mmu_get_tdp_walk(vcpu, gpa, &pfn, &npt_level);
+> @@ -3417,6 +3429,8 @@ static int __snp_handle_page_state_change(struct kvm_vcpu *vcpu, enum psc_op op,
+>
+>                 write_unlock(&kvm->mmu_lock);
+>
+> +               spin_unlock(&sev->psc_lock);
 
-On 8/17/22 11:36 PM, Kelvin Cheung wrote:
-> Sean, Du,
-> I saw you are discussing the PLL rate calculation issue.
-> My question is whether the upstream kernel works on your ls1c300?
-> For me, it never works, even the earliest version which LS1C support wa=
-s merged.
-> After the kernel is loaded by PMON, there is no console output at all.
-> I also confirm this issue with Yang.
-> BTW, my board is 1C300B.
-> Are your board is different from me? Or your bootloader?
+There is a corner case where the psc_lock is not released. If
+kvm_mmu_get_tdp_walk fails, the lock will be kept and will cause soft
+lockup.
 
-Unfortunately, I do not have an ls1c300 to test with. This is why I
-marked the patch as RFT when I submitted it.
-
---Sean
-
->=20
-> Sean Anderson <seanga2@gmail.com> =E4=BA=8E2022=E5=B9=B44=E6=9C=8819=E6=
-=97=A5=E5=91=A8=E4=BA=8C 13:11=E5=86=99=E9=81=93=EF=BC=9A
->>
->> While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1]=
-, I
->> noticed the following calculation, which is copied from
->> drivers/clk/loongson1/clk-loongson1c.c:
->>
->> ulong ls1c300_pll_get_rate(struct clk *clk)
->> {
->>          unsigned int mult;
->>          long long parent_rate;
->>          void *base;
->>          unsigned int val;
->>
->>          parent_rate =3D clk_get_parent_rate(clk);
->>          base =3D (void *)clk->data;
->>
->>          val =3D readl(base + START_FREQ);
->>          mult =3D FIELD_GET(FRAC_N, val) + FIELD_GET(M_PLL, val);
->>          return (mult * parent_rate) / 4;
->> }
->>
->> I would like to examine the use of M_PLL and FRAC_N to calculate the m=
-ultiplier
->> for the PLL. The datasheet has the following to say:
->>
->> START_FREQ =E4=BD=8D    =E7=BC=BA=E7=9C=81=E5=80=BC      =E6=8F=8F=E8=BF=
-=B0
->> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> FRAC_N     23:16 0           PLL =E5=80=8D=E9=A2=91=E7=B3=BB=E6=95=B0=E7=
-=9A=84=E5=B0=8F=E6=95=B0=E9=83=A8=E5=88=86
->>
->>                   =E7=94=B1          PLL =E5=80=8D=E9=A2=91=E7=B3=BB=E6=
-=95=B0=E7=9A=84=E6=95=B4=E6=95=B0=E9=83=A8=E5=88=86
->> M_PLL      15:8  NAND_D[3:0] (=E7=90=86=E8=AE=BA=E5=8F=AF=E4=BB=A5=E8=BE=
-=BE=E5=88=B0 255=EF=BC=8C=E5=BB=BA=E8=AE=AE=E4=B8=8D=E8=A6=81=E8=B6=85=E8=
-=BF=87 100)
->>                   =E9=85=8D=E7=BD=AE
->>
->> which according to google translate means
->>
->> START_FREQ Bits  Default       Description
->> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
->> FRAC_N     23:16 0             Fractional part of the PLL multiplicati=
-on factor
->>
->>                   Depends on    Integer part of PLL multiplication fac=
-tor
->> M_PLL      15:8  NAND_D[3:0]   (Theoretically it can reach 255, [but] =
-it is
->>                   configuration  recommended not to exceed 100)
->>
->> So just based on this description, I would expect that the formula to =
-be
->> something like
->>
->>          rate =3D parent * (255 * M_PLL + FRAC_N) / 255 / 4
->>
->> However, the datasheet also gives the following formula:
->>
->>          rate =3D parent * (M_PLL + FRAC_N) / 4
->>
->> which is what the Linux driver has implemented. I find this very unusu=
-al.
->> First, the datasheet specifically says that these fields are the integ=
-er and
->> fractional parts of the multiplier. Second, I think such a construct d=
-oes not
->> easily map to traditional PLL building blocks. Implementing this formu=
-la in
->> hardware would likely require an adder, just to then set the threshold=
- of a
->> clock divider.
->>
->> I think it is much more likely that the first formula is correct. The =
-author of
->> the datasheet may think of a multiplier of (say) 3.14 as
->>
->>          M_PLL =3D 3
->>          FRAC_N =3D 0.14
->>
->> which together sum to the correct multiplier, even though the actual v=
-alue
->> stored in FRAC_N would be 36.
->>
->> I suspect that this has slipped by unnoticed because when FRAC_N is 0,=
- there is
->> no difference in the formulae. The following patch is untested, but I =
-suspect
->> it will fix this issue. I would appreciate if anyone with access to th=
-e
->> hardware could measure the output of the PLL (or one of its derived cl=
-ocks) and
->> determine the correct formula.
->>
->> [1] https://lore.kernel.org/u-boot/20220418204519.19991-1-dhu@hodcarri=
-er.org/T/#u
->>
->> Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
->> Signed-off-by: Sean Anderson <seanga2@gmail.com>
->> ---
->>
->>   drivers/clk/loongson1/clk-loongson1c.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loon=
-gson1/clk-loongson1c.c
->> index 703f87622cf5..2b98a116c1ea 100644
->> --- a/drivers/clk/loongson1/clk-loongson1c.c
->> +++ b/drivers/clk/loongson1/clk-loongson1c.c
->> @@ -21,9 +21,9 @@ static unsigned long ls1x_pll_recalc_rate(struct clk=
-_hw *hw,
->>          u32 pll, rate;
->>
->>          pll =3D __raw_readl(LS1X_CLK_PLL_FREQ);
->> -       rate =3D ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
->> +       rate =3D (pll & 0xff00) + ((pll >> 16) & 0xff);
->>          rate *=3D OSC;
->> -       rate >>=3D 2;
->> +       rate >>=3D 10;
->>
->>          return rate;
->>   }
->> --
->> 2.35.1
->>
->=20
->=20
-
-
+> +
+>                 if (rc) {
+>                         pr_err_ratelimited("Error op %d gpa %llx pfn %llx level %d rc %d\n",
+>                                            op, gpa, pfn, level, rc);
+> @@ -3965,3 +3979,33 @@ void sev_rmp_page_level_adjust(struct kvm *kvm, kvm_pfn_t pfn, int *level)
+>         /* Adjust the level to keep the NPT and RMP in sync */
+>         *level = min_t(size_t, *level, rmp_level);
+>  }
+> +
+> +int sev_post_map_gfn(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn)
+> +{
+> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> +       int level;
+> +
+> +       if (!sev_snp_guest(kvm))
+> +               return 0;
+> +
+> +       spin_lock(&sev->psc_lock);
+> +
+> +       /* If pfn is not added as private then fail */
+> +       if (snp_lookup_rmpentry(pfn, &level) == 1) {
+> +               spin_unlock(&sev->psc_lock);
+> +               pr_err_ratelimited("failed to map private gfn 0x%llx pfn 0x%llx\n", gfn, pfn);
+> +               return -EBUSY;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +void sev_post_unmap_gfn(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn)
+> +{
+> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> +
+> +       if (!sev_snp_guest(kvm))
+> +               return;
+> +
+> +       spin_unlock(&sev->psc_lock);
+> +}
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index b24e0171cbf2..1c8e035ba011 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4734,7 +4734,10 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>         .vcpu_get_apicv_inhibit_reasons = avic_vcpu_get_apicv_inhibit_reasons,
+>
+>         .alloc_apic_backing_page = svm_alloc_apic_backing_page,
+> +
+>         .rmp_page_level_adjust = sev_rmp_page_level_adjust,
+> +
+> +       .update_protected_guest_state = sev_snp_update_protected_guest_state,
+>  };
+>
+>  /*
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 54ff56cb6125..3fd95193ed8d 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -79,19 +79,25 @@ struct kvm_sev_info {
+>         bool active;            /* SEV enabled guest */
+>         bool es_active;         /* SEV-ES enabled guest */
+>         bool snp_active;        /* SEV-SNP enabled guest */
+> +
+>         unsigned int asid;      /* ASID used for this guest */
+>         unsigned int handle;    /* SEV firmware handle */
+>         int fd;                 /* SEV device fd */
+> +
+>         unsigned long pages_locked; /* Number of pages locked */
+>         struct list_head regions_list;  /* List of registered regions */
+> +
+>         u64 ap_jump_table;      /* SEV-ES AP Jump Table address */
+> +
+>         struct kvm *enc_context_owner; /* Owner of copied encryption context */
+>         struct list_head mirror_vms; /* List of VMs mirroring */
+>         struct list_head mirror_entry; /* Use as a list entry of mirrors */
+>         struct misc_cg *misc_cg; /* For misc cgroup accounting */
+>         atomic_t migration_in_progress;
+> +
+>         u64 snp_init_flags;
+>         void *snp_context;      /* SNP guest context page */
+> +       spinlock_t psc_lock;
+>  };
+>
+>  struct kvm_svm {
+> @@ -702,6 +708,11 @@ void sev_es_prepare_switch_to_guest(struct sev_es_save_area *hostsa);
+>  void sev_es_unmap_ghcb(struct vcpu_svm *svm);
+>  struct page *snp_safe_alloc_page(struct kvm_vcpu *vcpu);
+>  void sev_rmp_page_level_adjust(struct kvm *kvm, kvm_pfn_t pfn, int *level);
+> +int sev_post_map_gfn(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn);
+> +void sev_post_unmap_gfn(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn);
+> +void handle_rmp_page_fault(struct kvm_vcpu *vcpu, gpa_t gpa, u64 error_code);
+> +void sev_snp_init_protected_guest_state(struct kvm_vcpu *vcpu);
+> +int sev_snp_update_protected_guest_state(struct kvm_vcpu *vcpu);
+>
+>  /* vmenter.S */
+>
+> --
+> 2.25.1
+>

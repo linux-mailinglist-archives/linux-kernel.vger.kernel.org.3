@@ -2,272 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D40597CA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 06:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7BC597CB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 06:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243202AbiHREDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 00:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
+        id S239758AbiHREE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 00:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238358AbiHRECn (ORCPT
+        with ESMTP id S231547AbiHREEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 00:02:43 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C37EAE9E5
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 21:02:25 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3246910dac3so9777577b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 21:02:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=vZWaLwi4OI4P2yBOO7iHi8OjD+yrIHD7EpKzmYHp8yE=;
-        b=ZOQ4yB2IP0Eyzor8G49BxvPeCy+8iVDHTBahxAt+s5kV0IEQcuNdg7y5OChPn1I/yt
-         mZ9BNfPF/5YII4LVl2/5sMO0lo8j5Slx/njaEBn/r4QvzcVi25P5b0xhoIRJyzTwAUnO
-         55Wo25wbv1EaQskogoX8xojQu0PfpFaAuNs+HL+N8N5zkqWrxgEwNg6wLJPSe3131AYH
-         DsoiVKXd0YUpLwh2VkC4A6ySDe6HGIY+515IuIRLRCDp5Uxguq2UiOenenR0zcu5olhi
-         xlSnqjNC7uRZhmEx1kJQ4PzCfHoCWCP1E1T4ZMrrdowqv0lJTC3Wxt/j+PQJ4nEQn6X7
-         OKKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=vZWaLwi4OI4P2yBOO7iHi8OjD+yrIHD7EpKzmYHp8yE=;
-        b=Q7eo8dmruFuTFr1Etj1NBCEFjvPkEYLSYDZ19W7JGNdZlixeW54bqFmEa0TxI2XNWr
-         7xJJKy6JS1RRRZp/MMi0vqAhwVPTge3rlGNdMyPTlZ/LfVB7xGc0IgVFBX51L4CKCPnC
-         qU1Q3dlZMbm64BX7V8yk/33ZBv2w4eCHwLSeC6R0YfBaYGdWxGStYlLSgz8kxy31qdla
-         MXj3kRTVVHMWZQ4R29quwxoxm4+H/3JWKBlreEknmSfHGtOa2OUoxCTRUbUZy2iTjCmy
-         HGc6NfzLjlM53Q+aPQrvj3UuliFgVDbUZmFC9LQ6Vk2D9iRKzZfkes/e3YbaYsw8A7h9
-         2lbw==
-X-Gm-Message-State: ACgBeo2bl/R+LtfED/JB7+0gGJ+hSlMXtLhT4+u5D4/xmfg/y1hjBA0+
-        U7hoiLnIeRxw9jlFddfqT7/LGhM+kkg06BzEivlgiQ==
-X-Google-Smtp-Source: AA6agR7omARfT2P4pD03dPpFF7DeBhVYfNaA8l6C1M1Rs4cD0bFjWaNLazg6bEL0NCQju+C5VxULU+CPWqHC3UyZ5N8=
-X-Received: by 2002:a0d:ca0b:0:b0:32f:dce5:8093 with SMTP id
- m11-20020a0dca0b000000b0032fdce58093mr1191922ywd.159.1660795344363; Wed, 17
- Aug 2022 21:02:24 -0700 (PDT)
+        Thu, 18 Aug 2022 00:04:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7500A2208;
+        Wed, 17 Aug 2022 21:04:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64A1D61561;
+        Thu, 18 Aug 2022 04:04:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E93C433D7;
+        Thu, 18 Aug 2022 04:04:18 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: [PATCH] Input: i8042 - Add PNP checking hook for Loongson
+Date:   Thu, 18 Aug 2022 12:04:13 +0800
+Message-Id: <20220818040413.2865849-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220808141538.102394-1-khuey@kylehuey.com>
-In-Reply-To: <20220808141538.102394-1-khuey@kylehuey.com>
-From:   Kyle Huey <me@kylehuey.com>
-Date:   Wed, 17 Aug 2022 21:02:00 -0700
-Message-ID: <CAP045AppDqyEfwXWgoJCsH7NUEUZSoJ9pXjLR492b5k_rnYbPw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] x86/fpu: Allow PKRU to be (once again) written by ptrace.
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "Robert O'Callahan" <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        Borislav Petkov <bp@suse.de>, kvm@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 7:15 AM Kyle Huey <me@kylehuey.com> wrote:
->
-> From: Kyle Huey <me@kylehuey.com>
->
-> When management of the PKRU register was moved away from XSTATE, emulation
-> of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
-> for APIs that write XSTATE. This can be seen by running gdb and executing
-> `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
-> write to the PKRU register (which gdb performs through ptrace) is ignored.
->
-> There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
-> sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
-> make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
-> down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
-> and sigreturn pass in pointers to the appropriate PKRU value.
->
-> This also adds code to initialize the PKRU value to the hardware init value
-> (namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
-> This is a change to the current KVM_SET_XSAVE behavior.
->
-> Changelog since v4:
-> - Selftest additionally checks PKRU readbacks through ptrace.
-> - Selftest flips all PKRU bits (except the key used for PROT_EXEC).
->
-> Changelog since v3:
-> - The v3 patch is now part 1 of 2.
-> - Adds a selftest in part 2 of 2.
->
-> Changelog since v2:
-> - Removed now unused variables in fpu_copy_uabi_to_guest_fpstate
->
-> Changelog since v1:
-> - Handles the error case of copy_to_buffer().
->
-> Signed-off-by: Kyle Huey <me@kylehuey.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Borislav Petkov <bp@suse.de>
-> Cc: kvm@vger.kernel.org # For edge case behavior of KVM_SET_XSAVE
-> Cc: stable@vger.kernel.org # 5.14+
-> Fixes: e84ba47e313d ("x86/fpu: Hook up PKRU into ptrace()")
-> ---
->  arch/x86/kernel/fpu/core.c   | 13 +------------
->  arch/x86/kernel/fpu/regset.c |  2 +-
->  arch/x86/kernel/fpu/signal.c |  2 +-
->  arch/x86/kernel/fpu/xstate.c | 28 +++++++++++++++++++++++-----
->  arch/x86/kernel/fpu/xstate.h |  4 ++--
->  5 files changed, 28 insertions(+), 21 deletions(-)
->
-> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-> index 3b28c5b25e12..46b935bc87c8 100644
-> --- a/arch/x86/kernel/fpu/core.c
-> +++ b/arch/x86/kernel/fpu/core.c
-> @@ -391,8 +391,6 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
->  {
->         struct fpstate *kstate = gfpu->fpstate;
->         const union fpregs_state *ustate = buf;
-> -       struct pkru_state *xpkru;
-> -       int ret;
->
->         if (!cpu_feature_enabled(X86_FEATURE_XSAVE)) {
->                 if (ustate->xsave.header.xfeatures & ~XFEATURE_MASK_FPSSE)
-> @@ -406,16 +404,7 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
->         if (ustate->xsave.header.xfeatures & ~xcr0)
->                 return -EINVAL;
->
-> -       ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
-> -       if (ret)
-> -               return ret;
-> -
-> -       /* Retrieve PKRU if not in init state */
-> -       if (kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU) {
-> -               xpkru = get_xsave_addr(&kstate->regs.xsave, XFEATURE_PKRU);
-> -               *vpkru = xpkru->pkru;
-> -       }
-> -       return 0;
-> +       return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
->  }
->  EXPORT_SYMBOL_GPL(fpu_copy_uabi_to_guest_fpstate);
->  #endif /* CONFIG_KVM */
-> diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
-> index 75ffaef8c299..6d056b68f4ed 100644
-> --- a/arch/x86/kernel/fpu/regset.c
-> +++ b/arch/x86/kernel/fpu/regset.c
-> @@ -167,7 +167,7 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
->         }
->
->         fpu_force_restore(fpu);
-> -       ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf);
-> +       ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf, &target->thread.pkru);
->
->  out:
->         vfree(tmpbuf);
-> diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
-> index 91d4b6de58ab..558076dbde5b 100644
-> --- a/arch/x86/kernel/fpu/signal.c
-> +++ b/arch/x86/kernel/fpu/signal.c
-> @@ -396,7 +396,7 @@ static bool __fpu_restore_sig(void __user *buf, void __user *buf_fx,
->
->         fpregs = &fpu->fpstate->regs;
->         if (use_xsave() && !fx_only) {
-> -               if (copy_sigframe_from_user_to_xstate(fpu->fpstate, buf_fx))
-> +               if (copy_sigframe_from_user_to_xstate(tsk, buf_fx))
->                         return false;
->         } else {
->                 if (__copy_from_user(&fpregs->fxsave, buf_fx,
-> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> index c8340156bfd2..e01d3514ae68 100644
-> --- a/arch/x86/kernel/fpu/xstate.c
-> +++ b/arch/x86/kernel/fpu/xstate.c
-> @@ -1197,7 +1197,7 @@ static int copy_from_buffer(void *dst, unsigned int offset, unsigned int size,
->
->
->  static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
-> -                              const void __user *ubuf)
-> +                              const void __user *ubuf, u32 *pkru)
->  {
->         struct xregs_state *xsave = &fpstate->regs.xsave;
->         unsigned int offset, size;
-> @@ -1235,6 +1235,24 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
->         for (i = 0; i < XFEATURE_MAX; i++) {
->                 mask = BIT_ULL(i);
->
-> +               if (i == XFEATURE_PKRU) {
-> +                       /*
-> +                        * Retrieve PKRU if not in init state, otherwise
-> +                        * initialize it.
-> +                        */
-> +                       if (hdr.xfeatures & mask) {
-> +                               struct pkru_state xpkru = {0};
-> +
-> +                               if (copy_from_buffer(&xpkru, xstate_offsets[i],
-> +                                                    sizeof(xpkru), kbuf, ubuf))
-> +                                       return -EFAULT;
-> +
-> +                               *pkru = xpkru.pkru;
-> +                       } else {
-> +                               *pkru = 0;
-> +                       }
-> +               }
-> +
->                 if (hdr.xfeatures & mask) {
->                         void *dst = __raw_xsave_addr(xsave, i);
->
-> @@ -1264,9 +1282,9 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
->   * Convert from a ptrace standard-format kernel buffer to kernel XSAVE[S]
->   * format and copy to the target thread. Used by ptrace and KVM.
->   */
-> -int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
-> +int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru)
->  {
-> -       return copy_uabi_to_xstate(fpstate, kbuf, NULL);
-> +       return copy_uabi_to_xstate(fpstate, kbuf, NULL, pkru);
->  }
->
->  /*
-> @@ -1274,10 +1292,10 @@ int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
->   * XSAVE[S] format and copy to the target thread. This is called from the
->   * sigreturn() and rt_sigreturn() system calls.
->   */
-> -int copy_sigframe_from_user_to_xstate(struct fpstate *fpstate,
-> +int copy_sigframe_from_user_to_xstate(struct task_struct *tsk,
->                                       const void __user *ubuf)
->  {
-> -       return copy_uabi_to_xstate(fpstate, NULL, ubuf);
-> +       return copy_uabi_to_xstate(tsk->thread.fpu.fpstate, NULL, ubuf, &tsk->thread.pkru);
->  }
->
->  static bool validate_independent_components(u64 mask)
-> diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
-> index 5ad47031383b..a4ecb04d8d64 100644
-> --- a/arch/x86/kernel/fpu/xstate.h
-> +++ b/arch/x86/kernel/fpu/xstate.h
-> @@ -46,8 +46,8 @@ extern void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
->                                       u32 pkru_val, enum xstate_copy_mode copy_mode);
->  extern void copy_xstate_to_uabi_buf(struct membuf to, struct task_struct *tsk,
->                                     enum xstate_copy_mode mode);
-> -extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf);
-> -extern int copy_sigframe_from_user_to_xstate(struct fpstate *fpstate, const void __user *ubuf);
-> +extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru);
-> +extern int copy_sigframe_from_user_to_xstate(struct task_struct *tsk, const void __user *ubuf);
->
->
->  extern void fpu__init_cpu_xstate(void);
-> --
-> 2.37.1
->
+Add PNP checking related functions for Loongson, so that i8042 driver
+can work well under the ACPI firmware with PNP typed keyboard and mouse
+configured in DSDT.
 
-Bump.
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ drivers/input/serio/i8042-loongsonio.h | 330 +++++++++++++++++++++++++
+ drivers/input/serio/i8042.h            |   2 +
+ 2 files changed, 332 insertions(+)
+ create mode 100644 drivers/input/serio/i8042-loongsonio.h
 
-If there are no further comments/complaints, can we get this queued up
-via x86/urgent (or something)? We're eager to get this moving and
-eventually onto stable to fix rr users on 5.15.
+diff --git a/drivers/input/serio/i8042-loongsonio.h b/drivers/input/serio/i8042-loongsonio.h
+new file mode 100644
+index 000000000000..2ea83b14f13d
+--- /dev/null
++++ b/drivers/input/serio/i8042-loongsonio.h
+@@ -0,0 +1,330 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * i8042-loongsonio.h
++ *
++ * Copyright (C) 2020 Loongson Technology Corporation Limited
++ * Author: Jianmin Lv <lvjianmin@loongson.cn>
++ *         Huacai Chen <chenhuacai@loongson.cn>
++ */
++
++#ifndef _I8042_LOONGSONIO_H
++#define _I8042_LOONGSONIO_H
++
++/*
++ * Names.
++ */
++
++#define I8042_KBD_PHYS_DESC "isa0060/serio0"
++#define I8042_AUX_PHYS_DESC "isa0060/serio1"
++#define I8042_MUX_PHYS_DESC "isa0060/serio%d"
++
++/*
++ * IRQs.
++ */
++#define I8042_MAP_IRQ(x)	(x)
++
++#define I8042_KBD_IRQ	i8042_kbd_irq
++#define I8042_AUX_IRQ	i8042_aux_irq
++
++static int i8042_kbd_irq;
++static int i8042_aux_irq;
++
++/*
++ * Register numbers.
++ */
++
++#define I8042_COMMAND_REG	i8042_command_reg
++#define I8042_STATUS_REG	i8042_command_reg
++#define I8042_DATA_REG		i8042_data_reg
++
++static int i8042_command_reg = 0x64;
++static int i8042_data_reg = 0x60;
++
++
++static inline int i8042_read_data(void)
++{
++	return inb(I8042_DATA_REG);
++}
++
++static inline int i8042_read_status(void)
++{
++	return inb(I8042_STATUS_REG);
++}
++
++static inline void i8042_write_data(int val)
++{
++	outb(val, I8042_DATA_REG);
++}
++
++static inline void i8042_write_command(int val)
++{
++	outb(val, I8042_COMMAND_REG);
++}
++
++#ifdef CONFIG_PNP
++#include <linux/pnp.h>
++
++static bool i8042_pnp_kbd_registered;
++static unsigned int i8042_pnp_kbd_devices;
++static bool i8042_pnp_aux_registered;
++static unsigned int i8042_pnp_aux_devices;
++
++static int i8042_pnp_command_reg;
++static int i8042_pnp_data_reg;
++static int i8042_pnp_kbd_irq;
++static int i8042_pnp_aux_irq;
++
++static char i8042_pnp_kbd_name[32];
++static char i8042_pnp_aux_name[32];
++
++static void i8042_pnp_id_to_string(struct pnp_id *id, char *dst, int dst_size)
++{
++	strlcpy(dst, "PNP:", dst_size);
++
++	while (id) {
++		strlcat(dst, " ", dst_size);
++		strlcat(dst, id->id, dst_size);
++		id = id->next;
++	}
++}
++
++static int i8042_pnp_kbd_probe(struct pnp_dev *dev,
++		const struct pnp_device_id *did)
++{
++	if (pnp_port_valid(dev, 0) && pnp_port_len(dev, 0) == 1)
++		i8042_pnp_data_reg = pnp_port_start(dev, 0);
++
++	if (pnp_port_valid(dev, 1) && pnp_port_len(dev, 1) == 1)
++		i8042_pnp_command_reg = pnp_port_start(dev, 1);
++
++	if (pnp_irq_valid(dev, 0))
++		i8042_pnp_kbd_irq = pnp_irq(dev, 0);
++
++	strlcpy(i8042_pnp_kbd_name, did->id, sizeof(i8042_pnp_kbd_name));
++	if (strlen(pnp_dev_name(dev))) {
++		strlcat(i8042_pnp_kbd_name, ":", sizeof(i8042_pnp_kbd_name));
++		strlcat(i8042_pnp_kbd_name, pnp_dev_name(dev),
++				sizeof(i8042_pnp_kbd_name));
++	}
++	i8042_pnp_id_to_string(dev->id, i8042_kbd_firmware_id,
++			       sizeof(i8042_kbd_firmware_id));
++
++	/* Keyboard ports are always supposed to be wakeup-enabled */
++	device_set_wakeup_enable(&dev->dev, true);
++
++	i8042_pnp_kbd_devices++;
++	return 0;
++}
++
++static int i8042_pnp_aux_probe(struct pnp_dev *dev,
++		const struct pnp_device_id *did)
++{
++	if (pnp_port_valid(dev, 0) && pnp_port_len(dev, 0) == 1)
++		i8042_pnp_data_reg = pnp_port_start(dev, 0);
++
++	if (pnp_port_valid(dev, 1) && pnp_port_len(dev, 1) == 1)
++		i8042_pnp_command_reg = pnp_port_start(dev, 1);
++
++	if (pnp_irq_valid(dev, 0))
++		i8042_pnp_aux_irq = pnp_irq(dev, 0);
++
++	strlcpy(i8042_pnp_aux_name, did->id, sizeof(i8042_pnp_aux_name));
++	if (strlen(pnp_dev_name(dev))) {
++		strlcat(i8042_pnp_aux_name, ":", sizeof(i8042_pnp_aux_name));
++		strlcat(i8042_pnp_aux_name, pnp_dev_name(dev),
++				sizeof(i8042_pnp_aux_name));
++	}
++	i8042_pnp_id_to_string(dev->id, i8042_aux_firmware_id,
++			       sizeof(i8042_aux_firmware_id));
++
++	i8042_pnp_aux_devices++;
++	return 0;
++}
++
++static const struct pnp_device_id pnp_kbd_devids[] = {
++	{ .id = "PNP0300", .driver_data = 0 },
++	{ .id = "PNP0301", .driver_data = 0 },
++	{ .id = "PNP0302", .driver_data = 0 },
++	{ .id = "PNP0303", .driver_data = 0 },
++	{ .id = "PNP0304", .driver_data = 0 },
++	{ .id = "PNP0305", .driver_data = 0 },
++	{ .id = "PNP0306", .driver_data = 0 },
++	{ .id = "PNP0309", .driver_data = 0 },
++	{ .id = "PNP030a", .driver_data = 0 },
++	{ .id = "PNP030b", .driver_data = 0 },
++	{ .id = "PNP0320", .driver_data = 0 },
++	{ .id = "PNP0343", .driver_data = 0 },
++	{ .id = "PNP0344", .driver_data = 0 },
++	{ .id = "PNP0345", .driver_data = 0 },
++	{ .id = "CPQA0D7", .driver_data = 0 },
++	{ .id = "", },
++};
++MODULE_DEVICE_TABLE(pnp, pnp_kbd_devids);
++
++static struct pnp_driver i8042_pnp_kbd_driver = {
++	.name           = "i8042 kbd",
++	.id_table       = pnp_kbd_devids,
++	.probe          = i8042_pnp_kbd_probe,
++	.driver         = {
++		.probe_type = PROBE_FORCE_SYNCHRONOUS,
++		.suppress_bind_attrs = true,
++	},
++};
++
++static const struct pnp_device_id pnp_aux_devids[] = {
++	{ .id = "AUI0200", .driver_data = 0 },
++	{ .id = "FJC6000", .driver_data = 0 },
++	{ .id = "FJC6001", .driver_data = 0 },
++	{ .id = "PNP0f03", .driver_data = 0 },
++	{ .id = "PNP0f0b", .driver_data = 0 },
++	{ .id = "PNP0f0e", .driver_data = 0 },
++	{ .id = "PNP0f12", .driver_data = 0 },
++	{ .id = "PNP0f13", .driver_data = 0 },
++	{ .id = "PNP0f19", .driver_data = 0 },
++	{ .id = "PNP0f1c", .driver_data = 0 },
++	{ .id = "SYN0801", .driver_data = 0 },
++	{ .id = "", },
++};
++MODULE_DEVICE_TABLE(pnp, pnp_aux_devids);
++
++static struct pnp_driver i8042_pnp_aux_driver = {
++	.name           = "i8042 aux",
++	.id_table       = pnp_aux_devids,
++	.probe          = i8042_pnp_aux_probe,
++	.driver         = {
++		.probe_type = PROBE_FORCE_SYNCHRONOUS,
++		.suppress_bind_attrs = true,
++	},
++};
++
++static void i8042_pnp_exit(void)
++{
++	if (i8042_pnp_kbd_registered) {
++		i8042_pnp_kbd_registered = false;
++		pnp_unregister_driver(&i8042_pnp_kbd_driver);
++	}
++
++	if (i8042_pnp_aux_registered) {
++		i8042_pnp_aux_registered = false;
++		pnp_unregister_driver(&i8042_pnp_aux_driver);
++	}
++}
++#ifdef CONFIG_ACPI
++#include <linux/acpi.h>
++#endif
++static int __init i8042_pnp_init(void)
++{
++	char kbd_irq_str[4] = { 0 }, aux_irq_str[4] = { 0 };
++	bool pnp_data_busted = false;
++	int err;
++
++	if (i8042_nopnp) {
++		pr_info("PNP detection disabled\n");
++		return 0;
++	}
++
++	err = pnp_register_driver(&i8042_pnp_kbd_driver);
++	if (!err)
++		i8042_pnp_kbd_registered = true;
++
++	err = pnp_register_driver(&i8042_pnp_aux_driver);
++	if (!err)
++		i8042_pnp_aux_registered = true;
++
++	if (!i8042_pnp_kbd_devices && !i8042_pnp_aux_devices) {
++		i8042_pnp_exit();
++		pr_info("PNP: No PS/2 controller found.\n");
++#ifdef CONFIG_ACPI
++		if (acpi_disabled == 0)
++			return -ENODEV;
++#endif
++		pr_info("Probing ports directly.\n");
++		return 0;
++	}
++
++	if (i8042_pnp_kbd_devices)
++		snprintf(kbd_irq_str, sizeof(kbd_irq_str),
++			"%d", i8042_pnp_kbd_irq);
++	if (i8042_pnp_aux_devices)
++		snprintf(aux_irq_str, sizeof(aux_irq_str),
++			"%d", i8042_pnp_aux_irq);
++
++	pr_info("PNP: PS/2 Controller [%s%s%s] at %#x,%#x irq %s%s%s\n",
++		i8042_pnp_kbd_name,
++		(i8042_pnp_kbd_devices && i8042_pnp_aux_devices) ? "," : "",
++		i8042_pnp_aux_name,
++		i8042_pnp_data_reg, i8042_pnp_command_reg,
++		kbd_irq_str,
++		(i8042_pnp_kbd_devices && i8042_pnp_aux_devices) ? "," : "",
++		aux_irq_str);
++
++	if (((i8042_pnp_data_reg & ~0xf) == (i8042_data_reg & ~0xf) &&
++	      i8042_pnp_data_reg != i8042_data_reg) ||
++	    !i8042_pnp_data_reg) {
++		pr_warn("PNP: PS/2 controller has invalid data port %#x; using default %#x\n",
++			i8042_pnp_data_reg, i8042_data_reg);
++		i8042_pnp_data_reg = i8042_data_reg;
++		pnp_data_busted = true;
++	}
++
++	if (((i8042_pnp_command_reg & ~0xf) == (i8042_command_reg & ~0xf) &&
++	      i8042_pnp_command_reg != i8042_command_reg) ||
++	    !i8042_pnp_command_reg) {
++		pr_warn("PNP: PS/2 controller has invalid command port %#x; using default %#x\n",
++			i8042_pnp_command_reg, i8042_command_reg);
++		i8042_pnp_command_reg = i8042_command_reg;
++		pnp_data_busted = true;
++	}
++
++	if (!i8042_nokbd && !i8042_pnp_kbd_irq) {
++		pr_warn("PNP: PS/2 controller doesn't have KBD irq; using default %d\n",
++			i8042_kbd_irq);
++		i8042_pnp_kbd_irq = i8042_kbd_irq;
++		pnp_data_busted = true;
++	}
++
++	if (!i8042_noaux && !i8042_pnp_aux_irq) {
++		if (!pnp_data_busted && i8042_pnp_kbd_irq) {
++			pr_warn("PNP: PS/2 appears to have AUX port disabled, "
++				"if this is incorrect please boot with i8042.nopnp\n");
++			i8042_noaux = true;
++		} else {
++			pr_warn("PNP: PS/2 controller doesn't have AUX irq; using default %d\n",
++				i8042_aux_irq);
++			i8042_pnp_aux_irq = i8042_aux_irq;
++		}
++	}
++
++	i8042_data_reg = i8042_pnp_data_reg;
++	i8042_command_reg = i8042_pnp_command_reg;
++	i8042_kbd_irq = i8042_pnp_kbd_irq;
++	i8042_aux_irq = i8042_pnp_aux_irq;
++
++	return 0;
++}
++
++#else  /* !CONFIG_PNP */
++static inline int i8042_pnp_init(void) { return 0; }
++static inline void i8042_pnp_exit(void) { }
++#endif /* CONFIG_PNP */
++
++static int __init i8042_platform_init(void)
++{
++	int retval;
++
++	i8042_kbd_irq = I8042_MAP_IRQ(1);
++	i8042_aux_irq = I8042_MAP_IRQ(12);
++
++	retval = i8042_pnp_init();
++	if (retval)
++		return retval;
++
++	return retval;
++}
++
++static inline void i8042_platform_exit(void)
++{
++	i8042_pnp_exit();
++}
++
++#endif /* _I8042_LOONGSONIO_H */
+diff --git a/drivers/input/serio/i8042.h b/drivers/input/serio/i8042.h
+index 55381783dc82..166bd69841cf 100644
+--- a/drivers/input/serio/i8042.h
++++ b/drivers/input/serio/i8042.h
+@@ -19,6 +19,8 @@
+ #include "i8042-snirm.h"
+ #elif defined(CONFIG_SPARC)
+ #include "i8042-sparcio.h"
++#elif defined(CONFIG_MACH_LOONGSON64)
++#include "i8042-loongsonio.h"
+ #elif defined(CONFIG_X86) || defined(CONFIG_IA64)
+ #include "i8042-x86ia64io.h"
+ #else
+-- 
+2.31.1
 
-- Kyle

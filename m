@@ -2,64 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54910598757
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB4D598761
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344271AbiHRPXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S1344283AbiHRPXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343630AbiHRPW7 (ORCPT
+        with ESMTP id S1344263AbiHRPXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:22:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAE2B6D6D
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:22:57 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 17:22:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660836175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8yxb0BK/v/93Xq0pa1I9UCRiP9ec/brO7gpNu4/9X1I=;
-        b=N0sOwP6Y1tb0uxw/BYDqiGHTaDkmgHYONONd4OzKlQlsepQD6QwroOxuY4eaN7Gf4yaTPm
-        jV+d5tas7FuBcUWJpskBib6YDNx9ne+pA6SKpgsgz/pnZjtRjxvY4qCiEwErAA5xYiqQuC
-        EGVnrneAfnVcRMSppGhJsqc3TpmdJA+EPATNQyjQupTc7LcgzE6ZGljlMI1fUGHVuBemr3
-        H5v51gGZAjEwVYKv6qiGoW6cAudBobHBzJNilmVdCM04W8zDBiGKg58lMHpImldTx6wC4N
-        ulUZv9LfAJ85H0Tqa5ZXOgErhXs1Vy2aicTfGC+TfXg6g4Bk+QHcDo0kPAUr8Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660836175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8yxb0BK/v/93Xq0pa1I9UCRiP9ec/brO7gpNu4/9X1I=;
-        b=dmenoKVG6VL28Mv4WKSd3gfipU49QQ0XlOgJfkhoKvR2lKtquKwtrYIEc2TVlo2m8sL8GC
-        xaS/J1l+pxZr3WCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Christoph Lameter <cl@gentwo.de>, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>, linux-mm@kvack.org
-Subject: Re: [PATCH 1/9] slub: Make PREEMPT_RT support less convoluted
-Message-ID: <Yv5ZTXMmk9LupRae@linutronix.de>
-References: <20220817162703.728679-1-bigeasy@linutronix.de>
- <20220817162703.728679-2-bigeasy@linutronix.de>
- <alpine.DEB.2.22.394.2208181136560.1901102@gentwo.de>
- <5679405a-b3c3-6dc5-783f-7ebeda7c9bf0@suse.cz>
+        Thu, 18 Aug 2022 11:23:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB90B56F9;
+        Thu, 18 Aug 2022 08:23:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2794611D2;
+        Thu, 18 Aug 2022 15:23:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21788C433C1;
+        Thu, 18 Aug 2022 15:23:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660836187;
+        bh=P7CtgSx5YHgcTgxx/fr42kFzQ+hTMnSl8R1LHlSJRmM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=FcTQmlRTZ+UvOR88PryUwtmvA0reoXBbCBkSq3pZo8JV8nHOk6rgL+IwzcBuyjBkr
+         ClaFocuMu8+o6d9Hogm8mBQU6GV4b1UWhIdMB4bADjlJxMonFNvz4890QKid9MqLnK
+         YeAxLF/0B2euHYCVM8g2Z9EPbnu7DDjUs9OtZrOKfbqMgfv7nwztVWSOH73x4uLteE
+         vls+nbzYaeEwGH06K3LDzf198398vodM+6DELIY3KpmSbfsb/u040+JxSr3dwgKZP7
+         1pH0ylgefYlZbTZ5Fle8kkeA1k08r8RP9iIQnPYZFZYd/Cn7Mq0zYGJDdkn80hiiDT
+         JYnu5LWdwE1RQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Sanjay R Mehta <sanju.mehta@amd.com>
+Cc:     kernel@collabora.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220818010059.403776-1-cristian.ciocaltea@collabora.com>
+References: <20220818010059.403776-1-cristian.ciocaltea@collabora.com>
+Subject: Re: [PATCH] spi: amd: Setup all xfers before opcode execution
+Message-Id: <166083618586.142781.17878622622780104083.b4-ty@kernel.org>
+Date:   Thu, 18 Aug 2022 16:23:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5679405a-b3c3-6dc5-783f-7ebeda7c9bf0@suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fe10a
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,21 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-18 16:37:06 [+0200], Vlastimil Babka wrote:
-> > The slub fastpath does not interfere with slow path operations and the
+On Thu, 18 Aug 2022 04:00:59 +0300, Cristian Ciocaltea wrote:
+> The AMD SPI controller hardware seems to expect the FIFO buffer to be
+> fully setup with the details of all transfers in the SPI message before
+> it is able to start processing the data in a reliable way.
 > 
-> That's true on !PREEMPT_RT because a slowpath operation under
-> local_lock_irqsave() will disable interrupts, so there can't be a
-> fastpath operation in an interrupt handler appearing in the middle of a
-> slowpath operation.
+> Furthermore, it imposes a strict ordering restriction, in the sense that
+> all TX transfers must be handled prior any RX transfer.
 > 
-> On PREEMPT_RT local_lock_irqsave() doesn't actually disable interrupts,
-> so that can happen. IIRC we learned that the hard way when Mike
-> Galbraith was testing early versions of my PREEMPT_RT changes for SLUB.
+> [...]
 
-I think the point is that local_lock_irqsave() does not disable
-preemption. So the lock owner (within the local_lock_irqsave() section)
-can be preempted and another task can use the fast path which does not
-involve the lock and things go boom from here.
+Applied to
 
-Sebastian
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: amd: Setup all xfers before opcode execution
+      commit: 9d08f700ab78fd96cbe5922c261051743cb9c86e
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

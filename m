@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B280598A70
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53BD598A61
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344606AbiHRR0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
+        id S1344815AbiHRR0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345594AbiHRRZz (ORCPT
+        with ESMTP id S1345590AbiHRRZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:25:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3182F1106;
-        Thu, 18 Aug 2022 10:25:54 -0700 (PDT)
+        Thu, 18 Aug 2022 13:25:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4FCE48;
+        Thu, 18 Aug 2022 10:25:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE226B822AF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4536D616FD;
+        Thu, 18 Aug 2022 17:25:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 767AFC433C1;
         Thu, 18 Aug 2022 17:25:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C743C433D6;
-        Thu, 18 Aug 2022 17:25:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660843551;
-        bh=/kX8/xJvzlk63YHJxHvCeay4OTEnd/qOB0+uZ1qvLv8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XD5Z1Fg71/LjOfAkq/NK8YE9J0Xxh0K7IFwLdmt2ge+IAsJK2a2hoa0pBVjFMhqpg
-         +WkeGmhKGGP7AEtUk5YHD3vpNFN+Kxns7JRkmfUB2DhAqhejIh1PY34E5JWzsMFGJ6
-         6BoCqzHyVYytUqR1rGdAshnTgzvNn5ZSWFtUGhL4y0y+KrO6cRZtBVJaso8ZAK4aaj
-         9ByH7bLb9NlaEl5bS9Vm3wWHzZ2FifXTrEidIaJ44d58r4YK34Mv4RDXtEHBQv+1sJ
-         XqvOqAIinwCMs020ppzBPQlEZHESoWoWCeaCIJKyoVEBzLS7sFMsHD9T3Aij2wOPdb
-         boQqQMgkLIBOA==
+        s=k20201202; t=1660843552;
+        bh=U4ulU7LUfIxOOKY+jPEQdeirsitxhl7mzZqSCLj9pLk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DI/wDz+hwFetaviDPUx/S35ihafJz/fiirF4hzWGi7bbpJIGg0lMUybl5TenFCb/j
+         JKqXVUHPN7WspTnqf7Efoo75RAUb8y3cHEwfZBT22+0Z76MdwvJSJ9zlVAR9Sl+wEm
+         5tOcALdJgW3DV5+62WeoqvaUTKkVx1DVfWl+tjnkj1zWqHMdOnnmphf8ypMqzgsmzx
+         QSPHUXWyB646qiVqtHnR9l9E1AUBebDkaUyYWtM9NCKC8STKCs7nUl7ZqqxuckF4lz
+         ouFexmlD9E1CAR0cNYa0GUttQwFXLGdGTdiYoV5X8mKgWj6uN8Y/Y82SWKEatrrFrs
+         x1De1mfYJt6hg==
 Received: by pali.im (Postfix)
-        id B2933622; Thu, 18 Aug 2022 19:25:48 +0200 (CEST)
+        id E05782868; Thu, 18 Aug 2022 19:25:49 +0200 (CEST)
 From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -41,10 +41,12 @@ To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
         =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] dt-bindings: leds: register-bit-led: Add active-low property
-Date:   Thu, 18 Aug 2022 19:25:27 +0200
-Message-Id: <20220818172528.23062-1-pali@kernel.org>
+Subject: [PATCH 2/2] leds: syscon: Implement support for active-low property
+Date:   Thu, 18 Aug 2022 19:25:28 +0200
+Message-Id: <20220818172528.23062-2-pali@kernel.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220818172528.23062-1-pali@kernel.org>
+References: <20220818172528.23062-1-pali@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,30 +60,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow to define inverted logic (0 - enable LED, 1 - disable LED) via
-active-low property.
+This new active-low property specify that LED has inverted logic
+(0 - enable LED, 1 - disable LED).
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- Documentation/devicetree/bindings/leds/register-bit-led.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/leds/leds-syscon.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/leds/register-bit-led.yaml b/Documentation/devicetree/bindings/leds/register-bit-led.yaml
-index 79b8fc0f9d23..5c6ef26f1a94 100644
---- a/Documentation/devicetree/bindings/leds/register-bit-led.yaml
-+++ b/Documentation/devicetree/bindings/leds/register-bit-led.yaml
-@@ -43,6 +43,11 @@ properties:
-         0x100000, 0x200000, 0x400000, 0x800000, 0x1000000, 0x2000000, 0x4000000,
-         0x8000000, 0x10000000, 0x20000000, 0x40000000, 0x80000000 ]
+diff --git a/drivers/leds/leds-syscon.c b/drivers/leds/leds-syscon.c
+index 7eddb8ecb44e..5e605d8438e9 100644
+--- a/drivers/leds/leds-syscon.c
++++ b/drivers/leds/leds-syscon.c
+@@ -29,6 +29,7 @@ struct syscon_led {
+ 	struct regmap *map;
+ 	u32 offset;
+ 	u32 mask;
++	bool active_low;
+ 	bool state;
+ };
  
-+  active-low:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description:
-+      LED is ON when bit in register is not set
-+
-   offset:
-     description:
-       register offset to the register controlling this LED
+@@ -41,10 +42,10 @@ static void syscon_led_set(struct led_classdev *led_cdev,
+ 	int ret;
+ 
+ 	if (value == LED_OFF) {
+-		val = 0;
++		val = sled->active_low ? sled->mask : 0;
+ 		sled->state = false;
+ 	} else {
+-		val = sled->mask;
++		val = sled->active_low ? 0 : sled->mask;
+ 		sled->state = true;
+ 	}
+ 
+@@ -85,6 +86,8 @@ static int syscon_led_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	if (of_property_read_u32(np, "mask", &sled->mask))
+ 		return -EINVAL;
++	if (of_find_property(np, "active-low", NULL))
++		sled->active_low = true;
+ 
+ 	state = of_get_property(np, "default-state", NULL);
+ 	if (state) {
+@@ -95,17 +98,20 @@ static int syscon_led_probe(struct platform_device *pdev)
+ 			if (ret < 0)
+ 				return ret;
+ 			sled->state = !!(val & sled->mask);
++			if (sled->active_low)
++				sled->state = !sled->state;
+ 		} else if (!strcmp(state, "on")) {
+ 			sled->state = true;
+ 			ret = regmap_update_bits(map, sled->offset,
+ 						 sled->mask,
+-						 sled->mask);
++						 sled->active_low ? 0 : sled->mask);
+ 			if (ret < 0)
+ 				return ret;
+ 		} else {
+ 			sled->state = false;
+ 			ret = regmap_update_bits(map, sled->offset,
+-						 sled->mask, 0);
++						 sled->mask,
++						 sled->active_low ? sled->mask : 0);
+ 			if (ret < 0)
+ 				return ret;
+ 		}
 -- 
 2.20.1
 

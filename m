@@ -2,67 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88A2598030
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 10:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B566559802A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 10:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241471AbiHRIgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 04:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S241752AbiHRIhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 04:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiHRIgw (ORCPT
+        with ESMTP id S231424AbiHRIhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 04:36:52 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CF9B029D
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Q6fIoPbFyzYKNKdjMKH1CBJNejIE1XTrbd73RU1e9sc=; b=r2KCmCMNPaVpKNnzK4I6t/KGCp
-        nJAo8/Pe/IaYWeoc676+RE0YIGu+Cq7lB+NS7WemPdKInZJbHVMGiZv5q1EGfVIqONtTLOLnPQfVY
-        iWZvKHGfpMxffGOe6rfDcjwiFybGY7qCIaSM9zzVLH2QtKrQY+FgatDj0CwqsfbVbACu3DBeAvSFe
-        cbbqX9BgNevjA7xcswwSwPWtygiTvsdyS3ytRVPOQ9/36dmlmpDd00Vv4oTWNfkQUUpcjtHZcHm6k
-        rySlB7r5tKsZntzLK6QDZoGKjCMXJxbPEdArhfEVmAvzvcSe1X5iAETqkuyk7JsMsDj+C7n2djaki
-        1+yXj7Cg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oOb0x-009XA4-Ko; Thu, 18 Aug 2022 08:36:31 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2969C9801D4; Thu, 18 Aug 2022 10:36:30 +0200 (CEST)
-Date:   Thu, 18 Aug 2022 10:36:30 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Stephane Eranian <eranian@google.com>
-Cc:     linux-kernel@vger.kernel.org, kan.liang@intel.com,
-        ak@linux.intel.com, acme@redhat.com, namhyung@kernel.org,
-        irogers@google.com
-Subject: Re: [PATCH] perf/x86/intel/ds: fix precise store latency handling
-Message-ID: <Yv36DrUKLz8UWnbX@worktop.programming.kicks-ass.net>
-References: <20220818054613.1548130-1-eranian@google.com>
+        Thu, 18 Aug 2022 04:37:50 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B016B02AA
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:37:49 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VMZx3Mr_1660811864;
+Received: from 30.178.80.93(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VMZx3Mr_1660811864)
+          by smtp.aliyun-inc.com;
+          Thu, 18 Aug 2022 16:37:46 +0800
+Message-ID: <dfd23dfd-e0dc-7329-261c-946b179d9bc5@linux.alibaba.com>
+Date:   Thu, 18 Aug 2022 16:37:44 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818054613.1548130-1-eranian@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [PATCH v2] mm/dmapool.c: avoid duplicate memset within
+ dma_pool_alloc
+To:     Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>, akpm@linux-foundation.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+References: <1658125690-76930-1-git-send-email-liusong@linux.alibaba.com>
+ <CGME20220816123958eucas1p1b03a5efa1f5804245a5c1a9b27529015@eucas1p1.samsung.com>
+ <1dbe63ff-5575-745b-653a-a992ae53e1aa@samsung.com>
+ <413d8666-7a82-efd7-6716-13658016ca10@arm.com>
+ <20220817053628.GA28747@lst.de>
+From:   Liu Song <liusong@linux.alibaba.com>
+In-Reply-To: <20220817053628.GA28747@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 10:46:13PM -0700, Stephane Eranian wrote:
-> With the existing code in store_latency_data(), the memory operation (mem_op)
-> returned to the user is always OP_LOAD where in fact, it should be OP_STORE.
-> This comes from the fact that the function is simply grabbing the information
-> from a data source map which covers only load accesses. Intel 12th gen CPU
-> offers precise store sampling that captures both the data source and latency.
-> Therefore it can use the data source mapping table but must override the
-> memory operation to reflect stores instead of loads.
-> 
-> Fixes: 61b985e3e775 ("perf/x86/intel: Add perf core PMU support for Sapphire Rapids")
-> Signed-off-by: Stephane Eranian <eranian@google.com>
+A helper function "use_dev_coherent_memory" is introduced here to
+
+>>>> determine whether the memory is allocated by "dma_alloc_from_dev_coherent".
+>>>>
+>>>> And use "get_dma_ops" to determine whether the memory is allocated by
+>>>> "dma_direct_alloc".
+> WTF?  get_dma_ops is privat to the DMA API layer, and dmapool has no
+> business even using that.  Even independent of this particular case,
+> consumers of an API never have any business looking at the implementation
+> of the API, that is the whole point of the abstraction.
+>
+>> It's not even that, the change here is just obviously broken, since it ends
+>> up entirely ignoring want_init_on_alloc() for devices using dma-direct.
+>> Sure, the memory backing a dma_page is zeroed *once* by its initial
+>> dma-coherent allocation, but who says we're not not reallocating pool
+>> entries from an existing dma_page?
+> And yes, in addition to that it also is completely broken.
+
+After reading everyone's comments, I found that fixing this patch will
+
+make the code look strange, so the benefits of the changes will be
+
+dispensable, so I also agree to discard this patch.
+
+Sorry for this trouble again.
+
 
 Thanks
+
+

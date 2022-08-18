@@ -2,211 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765C5598D7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4C2598D7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345897AbiHRUJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 16:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
+        id S1345066AbiHRULn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 16:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240933AbiHRUJS (ORCPT
+        with ESMTP id S1346052AbiHRUKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:09:18 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B163B9413;
-        Thu, 18 Aug 2022 13:04:14 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id pm17so2702589pjb.3;
-        Thu, 18 Aug 2022 13:04:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=9PaorD7ptOW+52yf4c1JDmGGs6/j3AuHVebm2R4Z+Hk=;
-        b=pedI4ABZKurUA/d45RDd5khivUXZ8QnGeNZ/azvY3tRsY0ULVjsazPK8KceoC/7uWA
-         xheEWWmaPDm1UypPXIuGyOCp8qGQI8WkJWx0fA4ffURS5NV9l0fnjypKqpCTbO98E8bV
-         SN7+3eWFUOmhVs5+z5jRYHI6r3eUe169xmusgRfwaH0jZbPMlux1O3Yhml2g8EP83A45
-         Akx3DEnT8gCpwht646xC9TmUyDaPuQygELVCVF9qSBGncIspRCMtexDmVdJcdGUVeEsQ
-         LobdYHGdwh0eoS3IFWAI31tJH8WsLIvTitWZntpGdCWnDgpPK3cTdwxBnsBb/9RsjNic
-         ClKA==
+        Thu, 18 Aug 2022 16:10:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E43D87C5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 13:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660853135;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ekfMu/NlgHnoEql9XLmlRVPwjxrh2EoMdj4w3IuDChw=;
+        b=gIkfl+iIskONqH2P9sOLoVhnZDRWp/4eW7oQX4jqBSHTaVgMEXgkhLJo+xewgheH/h+Y6V
+        lrF1SRkrIaO6tOjCbT0Y9nVJWt1rfWbkZQ1peC5p9JvegID9sgy1sImbk5H+bSFlOC8TiQ
+        ro+2als5gfsMmQtJQNQBKkBwdOhp5yU=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-270-TOrKIyNPNBu1nSye5c9T9A-1; Thu, 18 Aug 2022 16:05:34 -0400
+X-MC-Unique: TOrKIyNPNBu1nSye5c9T9A-1
+Received: by mail-qt1-f198.google.com with SMTP id cj19-20020a05622a259300b003446920ea91so1940939qtb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 13:05:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=9PaorD7ptOW+52yf4c1JDmGGs6/j3AuHVebm2R4Z+Hk=;
-        b=0PIUWfYME3zXwk2s6K+ZNhbRwFF4lZpAQePo9XkLKMeLgJs4irotY3vYkOeBW9KeMQ
-         ZZIy+Ah50UgaiCw7TYFdmI7MCFyvLUBk98V2obScy3e92zCFwt8GdFvlhPVhspwqaDLa
-         Djj7jwCrKkiLTQAKCfStJvyyx+e5wPk2XSWi9RjIvFjBzF0afehaBgnI+E5/dD849QO9
-         wo79H7Q4DomXALS7DRKem9oic8FzmHz7z19bsJSeMr61IRk2RuEjNwFCyxM+lrBfYXQS
-         863HlBmJ2k9ozcBCtLVae5CtkxzJ+q1T91KzwSUpbc1tyWTUr4rY0SWGNuYuFsacWxHj
-         fEsA==
-X-Gm-Message-State: ACgBeo1zUnEJz4dmRMI+4vZY9hOxRqi613AJ4FY+W8uC1/mUoQ1oQIgQ
-        PSZGJDOP8izb5i3Lskhdm1s=
-X-Google-Smtp-Source: AA6agR66ckJGxLP/0hrH7I8sjnhPx7o7drf2O1fuc4b+RQNt3wRKXBSG+3e0BMis36MWLZ15T3WnjA==
-X-Received: by 2002:a17:902:7b87:b0:172:8ae9:2015 with SMTP id w7-20020a1709027b8700b001728ae92015mr4002415pll.112.1660853032104;
-        Thu, 18 Aug 2022 13:03:52 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170902680700b0016d4f05eb95sm1736192plk.272.2022.08.18.13.03.50
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=ekfMu/NlgHnoEql9XLmlRVPwjxrh2EoMdj4w3IuDChw=;
+        b=j7px0Gr6HRMhzv0/wupfYyQR8++vocEjasR730kL0/5NEyT2xzXDSRJsF1ceD8KCv+
+         PIJ7y5gkc7F+OwgkYMGhs7P/Wh42rgfGxZpOdHgWRWswM2wHqQAxWK/EUu40FZ9qdXrc
+         fm0Kjs1AurJnwG3EfterUEnPHwq0fTHi616UdFHvPx9jtfgX2qMnM13NaaA2yIdcmIkq
+         vLWuytXBsU2+l0uGB4IfnqHw16Eg2xj+12c5vloQiyhXdeJ6xM7CI5ZZTy1PfnySPRBC
+         o+TJcuEzjcu4Dd80U5p1XdijK7TBtcrjG7lQ1c6jN48E7OWgOHMm6kaQwaTJyrUHFUQm
+         6AwA==
+X-Gm-Message-State: ACgBeo3GRFLA60MLiiEY4hMnmFgxFSph9AkzdihO1Rex2QHyS5dGpZaJ
+        fp/q/NhxnSaWrGRzveJKizFCUodCWU037HnN1+Eq4oZlqL4PcFzJ/36b2nf2QJi3RTh3PZHkhUp
+        Im0CYtKdYYAveS//JjZQYYIxZ
+X-Received: by 2002:a05:6214:20cb:b0:496:ae48:d2e8 with SMTP id 11-20020a05621420cb00b00496ae48d2e8mr3767814qve.113.1660853134093;
+        Thu, 18 Aug 2022 13:05:34 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7dHzQ3nxL/TMyb38jqS9VwCzXhHQeOQHvaHmUhUqlkC39MNQ5tbo9wHlGuZ25bF1KoAQmfWw==
+X-Received: by 2002:a05:6214:20cb:b0:496:ae48:d2e8 with SMTP id 11-20020a05621420cb00b00496ae48d2e8mr3767788qve.113.1660853133830;
+        Thu, 18 Aug 2022 13:05:33 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::1e])
+        by smtp.gmail.com with ESMTPSA id bb27-20020a05622a1b1b00b00342f917444csm1551151qtb.85.2022.08.18.13.05.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 13:03:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 18 Aug 2022 13:03:50 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
-        rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 06/16] hwmon: (mr75203) fix multi-channel voltage
- reading
-Message-ID: <20220818200350.GA3287916@roeck-us.net>
-References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-7-farbere@amazon.com>
+        Thu, 18 Aug 2022 13:05:33 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 15:05:30 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Johan Hovold <johan@kernel.org>, Brian Masney <bmasney@redhat.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 8/8] PCI: qcom: Sort device-id table
+Message-ID: <20220818200530.lab2zlcaetekcclq@halaneylaptop>
+References: <20220714071348.6792-1-johan+linaro@kernel.org>
+ <20220714071348.6792-9-johan+linaro@kernel.org>
+ <YtAny03L/RLk9nv6@xps13>
+ <YtEaqHT7NdXPhK+y@hovoldconsulting.com>
+ <YvvAfQJChCVX4cPH@lpieralisi>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817054321.6519-7-farbere@amazon.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YvvAfQJChCVX4cPH@lpieralisi>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:43:11AM +0000, Eliav Farber wrote:
-> - Fix voltage reading to support number of channels in VM IP (CH_NUM).
-> - Configure the ip-polling register to enable polling for all channels.
-> 
+Hi Lorenzo,
 
-That fails to explain what is actually wrong in the current code.
-Also, one fix per patch, please.
-
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->  drivers/hwmon/mr75203.c | 40 +++++++++++++++++++++++++++++++---------
->  1 file changed, 31 insertions(+), 9 deletions(-)
+On Tue, Aug 16, 2022 at 06:06:21PM +0200, Lorenzo Pieralisi wrote:
+> On Fri, Jul 15, 2022 at 09:43:36AM +0200, Johan Hovold wrote:
+> > On Thu, Jul 14, 2022 at 10:27:23AM -0400, Brian Masney wrote:
+> > > On Thu, Jul 14, 2022 at 09:13:48AM +0200, Johan Hovold wrote:
+> > > > Sort the device-id table entries alphabetically by compatible string to
+> > > > make it easier to find entries and add new ones.
+> > > > 
+> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > > ---
+> > > >  drivers/pci/controller/dwc/pcie-qcom.c | 12 ++++++------
+> > > >  1 file changed, 6 insertions(+), 6 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > > > index 8dddb72f8647..fea921cca8fa 100644
+> > > > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > > > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > > > @@ -1749,24 +1749,24 @@ static int qcom_pcie_remove(struct platform_device *pdev)
+> > > >  }
+> > > >  
+> > > >  static const struct of_device_id qcom_pcie_match[] = {
+> > > > +	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
+> > > >  	{ .compatible = "qcom,pcie-apq8084", .data = &cfg_1_0_0 },
+> > > > +	{ .compatible = "qcom,pcie-ipq6018", .data = &cfg_2_9_0 },
+> > > >  	{ .compatible = "qcom,pcie-ipq8064", .data = &cfg_2_1_0 },
+> > > >  	{ .compatible = "qcom,pcie-ipq8064-v2", .data = &cfg_2_1_0 },
+> > > > -	{ .compatible = "qcom,pcie-apq8064", .data = &cfg_2_1_0 },
+> > > > -	{ .compatible = "qcom,pcie-msm8996", .data = &cfg_2_3_2 },
+> > > >  	{ .compatible = "qcom,pcie-ipq8074", .data = &cfg_2_3_3 },
+> > > >  	{ .compatible = "qcom,pcie-ipq4019", .data = &cfg_2_4_0 },
+> > > 
+> > > qcom,pcie-ipq4019 should be moved up above qcom,pcie-ipq6018.
+> > 
+> > If we only had some sort of machine that could sort strings for us... ;)
+> > I'll rely on vim for this from now on.
+> > 
+> > Perhaps Bjorn H can fix that up when applying unless I'll be sending a
+> > v3 for some other reason. This series still depends on the MSI rework to
+> > be applied first.
 > 
-> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-> index bec63b611eb4..4419e481d47c 100644
-> --- a/drivers/hwmon/mr75203.c
-> +++ b/drivers/hwmon/mr75203.c
-> @@ -69,8 +69,9 @@
->  
->  /* VM Individual Macro Register */
->  #define VM_COM_REG_SIZE	0x200
-> -#define VM_SDIF_DONE(n)	(VM_COM_REG_SIZE + 0x34 + 0x200 * (n))
-> -#define VM_SDIF_DATA(n)	(VM_COM_REG_SIZE + 0x40 + 0x200 * (n))
-> +#define VM_SDIF_DONE(vm)	(VM_COM_REG_SIZE + 0x34 + 0x200 * (vm))
-> +#define VM_SDIF_DATA(vm, ch)	\
-> +	(VM_COM_REG_SIZE + 0x40 + 0x200 * (vm) + 0x4 * (ch))
->  
->  /* SDA Slave Register */
->  #define IP_CTRL			0x00
-> @@ -116,6 +117,7 @@ struct pvt_device {
->  	u32			t_num;
->  	u32			p_num;
->  	u32			v_num;
-> +	u32			c_num;
->  	u32			ip_freq;
->  	u8			*vm_idx;
->  };
-> @@ -181,12 +183,14 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
->  	struct regmap *v_map = pvt->v_map;
->  	u32 n, stat;
->  	u8 vm_idx;
-> +	u8 ch_idx;
->  	int ret;
->  
-> -	if (channel >= pvt->v_num)
-> +	if (channel >= pvt->v_num * pvt->c_num)
->  		return -EINVAL;
->  
-> -	vm_idx = pvt->vm_idx[channel];
-> +	vm_idx = pvt->vm_idx[channel / pvt->c_num];
-> +	ch_idx = channel % pvt->c_num;
->  
->  	switch (attr) {
->  	case hwmon_in_input:
-> @@ -197,7 +201,7 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
->  		if (ret)
->  			return ret;
->  
-> -		ret = regmap_read(v_map, VM_SDIF_DATA(vm_idx), &n);
-> +		ret = regmap_read(v_map, VM_SDIF_DATA(vm_idx, ch_idx), &n);
->  		if(ret < 0)
->  			return ret;
->  
-> @@ -386,6 +390,20 @@ static int pvt_init(struct pvt_device *pvt)
->  		if (ret)
->  			return ret;
->  
-> +		val = GENMASK(pvt->c_num - 1, 0) | VM_CH_INIT |
-> +		      IP_POLL << SDIF_ADDR_SFT |
-> +		      SDIF_WRN_W | SDIF_PROG;
-> +		ret = regmap_write(v_map, SDIF_W, val);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
-> +					       val, !(val & SDIF_BUSY),
-> +					       PVT_POLL_DELAY_US,
-> +					       PVT_POLL_TIMEOUT_US);
-> +		if (ret)
-> +			return ret;
-> +
->  		val = CFG1_VOL_MEAS_MODE | CFG1_PARALLEL_OUT |
->  		      CFG1_14_BIT | IP_CFG << SDIF_ADDR_SFT |
->  		      SDIF_WRN_W | SDIF_PROG;
-> @@ -501,7 +519,7 @@ static int pvt_reset_control_deassert(struct device *dev, struct pvt_device *pvt
->  static int mr75203_probe(struct platform_device *pdev)
->  {
->  	const struct hwmon_channel_info **pvt_info;
-> -	u32 ts_num, vm_num, pd_num, val, index, i;
-> +	u32 ts_num, vm_num, pd_num, ch_num, val, index, i;
->  	struct device *dev = &pdev->dev;
->  	u32 *temp_config, *in_config;
->  	struct device *hwmon_dev;
-> @@ -547,9 +565,11 @@ static int mr75203_probe(struct platform_device *pdev)
->  	ts_num = (val & TS_NUM_MSK) >> TS_NUM_SFT;
->  	pd_num = (val & PD_NUM_MSK) >> PD_NUM_SFT;
->  	vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
-> +	ch_num = (val & CH_NUM_MSK) >> CH_NUM_SFT;
->  	pvt->t_num = ts_num;
->  	pvt->p_num = pd_num;
->  	pvt->v_num = vm_num;
-> +	pvt->c_num = ch_num;
->  	val = 0;
->  	if (ts_num)
->  		val++;
-> @@ -586,6 +606,8 @@ static int mr75203_probe(struct platform_device *pdev)
->  	}
->  
->  	if (vm_num) {
-> +		u32 total_ch = ch_num * vm_num;
-> +
->  		ret = pvt_get_regmap(pdev, "vm", pvt);
->  		if (ret)
->  			return ret;
-> @@ -614,13 +636,13 @@ static int mr75203_probe(struct platform_device *pdev)
->  			pvt->v_num = i;
->  		}
->  
-> -		in_config = devm_kcalloc(dev, vm_num + 1,
-> +		in_config = devm_kcalloc(dev, total_ch + 1,
->  					 sizeof(*in_config), GFP_KERNEL);
->  		if (!in_config)
->  			return -ENOMEM;
->  
-> -		memset32(in_config, HWMON_I_INPUT, vm_num);
-> -		in_config[vm_num] = 0;
-> +		memset32(in_config, HWMON_I_INPUT, total_ch);
-> +		in_config[total_ch] = 0;
->  		pvt_in.config = in_config;
->  
->  		pvt_info[index++] = &pvt_in;
+> I can do it while applying. A link to the lore archive for the MSI
+> rework please (I don't think it was merged for v6.0) ? I was away for
+> two months, catching up with threads.
+
+I don't see a reply to this, so here I am following up out of interest
+for getting this in mainline for my x13s laptop to use.
+
+It appears the MSI rework[0] (which is in the cover letter here so I
+know I grabbed the right thing) was applied in 6.0:
+
+    ahalaney@halaneylaptop ~/git/linux (git)-[remotes/upstream/HEAD] % git log --oneline --abbrev=12 --grep=2436629 v6.0-rc1 -- drivers/pci/controller/dwc/ 
+    cd761378e62c PCI: dwc: Handle MSIs routed to multiple GIC interrupts
+    db388348acff PCI: dwc: Convert struct pcie_port.msi_irq to an array
+    226ec087497a PCI: dwc: Split MSI IRQ parsing/allocation to a separate function
+    3c62f878a969 PCI: dwc: Correct msi_irq condition in dw_pcie_free_msi()
+    ahalaney@halaneylaptop ~/git/linux (git)-[remotes/upstream/HEAD] %
+
+Just a friendly FYI, hope that helps!
+
+[0] https://lore.kernel.org/all/20220707134733.2436629-6-dmitry.baryshkov@linaro.org/
+
+Thanks,
+Andrew
+
+> 
+> Thanks,
+> Lorenzo
+> 
+> > Thanks for reviewing.
+> > 
+> > Johan
+

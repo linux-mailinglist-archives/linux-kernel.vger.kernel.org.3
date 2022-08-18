@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5798F597B76
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAAEB597B71
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242608AbiHRCXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 22:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
+        id S242623AbiHRCYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 22:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234661AbiHRCXv (ORCPT
+        with ESMTP id S236382AbiHRCYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 22:23:51 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2202E520BF;
-        Wed, 17 Aug 2022 19:23:46 -0700 (PDT)
-X-UUID: 281874f6fb504b1380983b1d6bb40172-20220818
-X-CPASD-INFO: 2646bc0e11794639b8f47462f07b1dfb@e4ZuVo-VXpVdUXmFg3l-
-        c4JplmRnYFaBqGpXkl-
-        UkoKVgnxsTV5qXFWCgGpQYWNdYlV3fGtQYmBgZFB5i4Jyj1RgXmCCVHSTgHRwVGaQkw==
-X-CLOUD-ID: 2646bc0e11794639b8f47462f07b1dfb
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:173.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:166.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:1,DUF:2660,ACD:52,DCD:52,SL:0,EISP:0,AG:0,CFC:0.416,CFSR:0.068,UAT:0,RA
-        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
-        AF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 281874f6fb504b1380983b1d6bb40172-20220818
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 281874f6fb504b1380983b1d6bb40172-20220818
-X-User: huanglei@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <huanglei@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1783756006; Thu, 18 Aug 2022 10:23:48 +0800
-From:   huanglei <huanglei@kylinos.cn>
-To:     laurent.pinchart@ideasonboard.com
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, huanglei <huanglei@kylinos.cn>
-Subject: [PATCH v2] media: uvcvideo: limit power line control for Sonix Technology
-Date:   Thu, 18 Aug 2022 10:23:38 +0800
-Message-Id: <20220818022338.13374-1-huanglei@kylinos.cn>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+        Wed, 17 Aug 2022 22:24:01 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE25D6CF5B;
+        Wed, 17 Aug 2022 19:23:59 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4M7TDd0WW9zGpdW;
+        Thu, 18 Aug 2022 10:22:25 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 18 Aug 2022 10:23:58 +0800
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 18 Aug 2022 10:23:57 +0800
+Subject: Re: [PATCH v3] perf/core: Fix reentry problem in
+ perf_output_read_group
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     <rostedt@goodmis.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
+References: <20220816091103.257702-1-yangjihong1@huawei.com>
+ <YvumDL1qz1NjpfEC@worktop.programming.kicks-ass.net>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <42e62907-2895-1267-8942-fcad544dca35@huawei.com>
+Date:   Thu, 18 Aug 2022 10:23:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+MIME-Version: 1.0
+In-Reply-To: <YvumDL1qz1NjpfEC@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device does not implement the power line control correctly. Add a
-corresponding control mapping override.
+Hello,
 
-Bus 003 Device 003: ID 3277:0072 Sonix Technology Co., Ltd. USB 2.0 Camera
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x3277
-  idProduct          0x0072
-  bcdDevice            1.00
-  iManufacturer           2 Sonix Technology Co., Ltd.
-  iProduct                1 USB 2.0 Camera
-  iSerial                 3 REV0001
-  bNumConfigurations      1
+On 2022/8/16 22:13, Peter Zijlstra wrote:
+> On Tue, Aug 16, 2022 at 05:11:03PM +0800, Yang Jihong wrote:
+>> perf_output_read_group may respond to IPI request of other cores and invoke
+>> __perf_install_in_context function. As a result, hwc configuration is modified.
+>> As a result, the hwc configuration is modified, causing inconsistency and
+>> unexpected consequences.
+> 
+>>   read_pmevcntrn+0x1e4/0x1ec arch/arm64/kernel/perf_event.c:423
+>>   armv8pmu_read_evcntr arch/arm64/kernel/perf_event.c:467 [inline]
+>>   armv8pmu_read_hw_counter arch/arm64/kernel/perf_event.c:475 [inline]
+>>   armv8pmu_read_counter+0x10c/0x1f0 arch/arm64/kernel/perf_event.c:528
+>>   armpmu_event_update+0x9c/0x1bc drivers/perf/arm_pmu.c:247
+>>   armpmu_read+0x24/0x30 drivers/perf/arm_pmu.c:264
+>>   perf_output_read_group+0x4cc/0x71c kernel/events/core.c:6806
+>>   perf_output_read+0x78/0x1c4 kernel/events/core.c:6845
+>>   perf_output_sample+0xafc/0x1000 kernel/events/core.c:6892
+>>   __perf_event_output kernel/events/core.c:7273 [inline]
+>>   perf_event_output_forward+0xd8/0x130 kernel/events/core.c:7287
+>>   __perf_event_overflow+0xbc/0x20c kernel/events/core.c:8943
+>>   perf_swevent_overflow kernel/events/core.c:9019 [inline]
+>>   perf_swevent_event+0x274/0x2c0 kernel/events/core.c:9047
+>>   do_perf_sw_event kernel/events/core.c:9160 [inline]
+>>   ___perf_sw_event+0x150/0x1b4 kernel/events/core.c:9191
+>>   __perf_sw_event+0x58/0x7c kernel/events/core.c:9203
+>>   perf_sw_event include/linux/perf_event.h:1177 [inline]
+> 
+>> Interrupts is not disabled when perf_output_read_group reads PMU counter.
+> 
+> s/is/are/ due to 'interrupts' being plural
+> 
+> Anyway, yes, I suppose this is indeed so. That code expects to run with
+> IRQs disabled but in the case of software events that isn't so.
+> 
+The v4 patch only corrects the commit message because it is not 
+determined whether to check the software event.
+If processing is improper, please tell me and will resend the patch.
 
-Signed-off-by: huanglei <huanglei@kylinos.cn>
----
- drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 9c05776f11d1..218db3f1db5d 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -3282,6 +3282,15 @@ static const struct usb_device_id uvc_ids[] = {
- 	  .bInterfaceSubClass	= 1,
- 	  .bInterfaceProtocol	= 0,
- 	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
-+	/* Sonix Technology USB 2.0 Camera */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x3277,
-+	  .idProduct		= 0x0072,
-+	  .bInterfaceClass	= USB_CLASS_VENDOR_SPEC,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0,
-+	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
- 	/* Generic USB Video Class */
- 	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_UNDEFINED) },
- 	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_15) },
--- 
-2.17.1
-
-
-No virus found
-		Checked by Hillstone Network AntiVirus
+Thanks,
+Yang

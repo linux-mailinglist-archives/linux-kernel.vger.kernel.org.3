@@ -2,229 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A99C59862E
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C56659862C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244891AbiHROl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
+        id S1343675AbiHROnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343609AbiHROlq (ORCPT
+        with ESMTP id S1343670AbiHROnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:41:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A19ABB6A4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:41:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3349FB821C7
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:41:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08482C433D6;
-        Thu, 18 Aug 2022 14:41:40 +0000 (UTC)
-Date:   Thu, 18 Aug 2022 10:41:51 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Alexandre Vicenzi <alexandre.vicenzi@suse.com>,
-        Ben Hutchings <benh@debian.org>
-Subject: [GIT PULL] rtla: Fixes for 6.0
-Message-ID: <20220818104151.524f3df2@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 18 Aug 2022 10:43:35 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F886277;
+        Thu, 18 Aug 2022 07:43:32 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id s3-20020a17090a2f0300b001facfc6fdbcso1379195pjd.1;
+        Thu, 18 Aug 2022 07:43:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=7IrASqplrkVpiIiYhE5AJVZ21/g9GJs8NehtB1NbKQo=;
+        b=O1rX+4vyvcZ1+ChzNRfjvogwelOlPltwxrBtxH+m5zikEWlAoFoEfUhIXnF7XZFA7B
+         g20deZBsLSDbxFSjn7MTh1GX1sWzPiwthgt6lSoqQUQyhU1F7RhSseXP6uT1p9fek5IT
+         xT+nKp5EnkJarL6eMOV2ecvzJtR5Z8z91Xy3ElYPUgcxWbeS2ODQY/BYm9Tz+gB/9iYu
+         I6XBAriZ96RNuBkcI7RSsK+y3YYXUmRkTk8XVeIO7MbK54X5QiSERfgOoislkzjolEHo
+         29dFr8nKnee4h87j6tMK/2To8mShxAwLZHQLeEVbLv1oQob01D3yRMq3/lfBR8RUtkE6
+         ZanA==
+X-Gm-Message-State: ACgBeo083RBP6XqPr0Jl6rldDUip+fWJgxirQk2M+txSHazLB8kVPK/Q
+        GGPgS8+RUmwp4mI/Jc9m6w==
+X-Google-Smtp-Source: AA6agR4Ukpo8yvJAoeBSb8oFuIf6y3f7mzBWJQVcAch9qQg64UnhWee8W2i84xMGO7MLrU5vbciCvg==
+X-Received: by 2002:a17:902:ecce:b0:16e:e6e9:69ba with SMTP id a14-20020a170902ecce00b0016ee6e969bamr3177308plh.97.1660833812118;
+        Thu, 18 Aug 2022 07:43:32 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:80c2:7290:7acd:8d54:3db6:21d4])
+        by smtp.gmail.com with ESMTPSA id y8-20020a170902864800b0016f8e8032c4sm762868plt.129.2022.08.18.07.43.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 07:43:31 -0700 (PDT)
+Received: (nullmailer pid 1837696 invoked by uid 1000);
+        Thu, 18 Aug 2022 14:43:26 -0000
+Date:   Thu, 18 Aug 2022 08:43:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     lee.jones@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        kishon@ti.com, vkoul@kernel.org, dan.carpenter@oracle.com,
+        grygorii.strashko@ti.com, rogerq@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: phy: ti: phy-gmii-sel: Add bindings
+ for J7200
+Message-ID: <20220818144326.GA1829017-robh@kernel.org>
+References: <20220816055848.111482-1-s-vadapalli@ti.com>
+ <20220816055848.111482-2-s-vadapalli@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816055848.111482-2-s-vadapalli@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 16, 2022 at 11:28:47AM +0530, Siddharth Vadapalli wrote:
+> TI's J7200 SoC supports additional PHY modes like QSGMII and SGMII
+> that are not supported on earlier SoCs. Add a compatible for it.
+> 
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> ---
+>  .../mfd/ti,j721e-system-controller.yaml       |  5 ++++
+>  .../bindings/phy/ti,phy-gmii-sel.yaml         | 27 ++++++++++++++++++-
+>  2 files changed, 31 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+> index 73cffc45e056..527fd47b648b 100644
+> --- a/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
+> @@ -54,6 +54,11 @@ patternProperties:
+>      description:
+>        Clock provider for TI EHRPWM nodes.
+>  
+> +  "phy@[0-9a-f]+$":
+> +    type: object
+> +    description:
+> +      This is the register to set phy mode through phy-gmii-sel driver.
 
-Linus,
+No properties for this node? A whole node for 1 register?
 
-Fixes for the RTLA tooling:
+Or this node is ti,phy-gmii-sel.yaml? If so, add a $ref to it.
 
-- Fix tracer name in comments and prints
+> +
+>  required:
+>    - compatible
+>    - reg
+> diff --git a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+> index ff8a6d9eb153..54da408d0360 100644
+> --- a/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+> +++ b/Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml
+> @@ -53,12 +53,21 @@ properties:
+>        - ti,am43xx-phy-gmii-sel
+>        - ti,dm814-phy-gmii-sel
+>        - ti,am654-phy-gmii-sel
+> +      - ti,j7200-cpsw5g-phy-gmii-sel
+>  
+>    reg:
+>      maxItems: 1
+>  
+>    '#phy-cells': true
+>  
+> +  ti,qsgmii-main-ports:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description: |
+> +      Required only for QSGMII mode. Array to select the port for
+> +      QSGMII main mode. Rest of the ports are selected as QSGMII_SUB
+> +      ports automatically. Any one of the 4 CPSW5G ports can act as the
+> +      main port with the rest of them being the QSGMII_SUB ports.
 
-- Fix setting up symlinks
+Constraints? 
 
-- Allow extra flags to be set in build
+> +
+>  allOf:
+>    - if:
+>        properties:
+> @@ -73,6 +82,22 @@ allOf:
+>          '#phy-cells':
+>            const: 1
+>            description: CPSW port number (starting from 1)
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - ti,j7200-cpsw5g-phy-gmii-sel
+> +    then:
+> +      properties:
+> +        '#phy-cells':
+> +          const: 1
+> +          description: CPSW port number (starting from 1)
+> +        ti,qsgmii-main-ports:
+> +          maxItems: 1
 
-- Consolidate and show all necessary libraries not found in build error
+An array, but only 1 entry allowed?
 
+> +          items:
+> +            minimum: 1
+> +            maximum: 4
 
-Please pull the latest trace-rtla-v6.0 tree, which can be found at:
+Can't this be up above?
 
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-trace-rtla-v6.0
-
-Tag SHA1: a54079a2b9a25f6cf1229b053ef2f4fa71d6cee5
-Head SHA1: 20aec89aac7761e3c096004f5c819aacc86fc542
-
-
-Alexandre Vicenzi (1):
-      rtla: Fix tracer name
-
-Ben Hutchings (2):
-      tools/rtla: Fix command symlinks
-      tools/rtla: Build with EXTRA_{C,LD}FLAGS
-
-Steven Rostedt (Google) (1):
-      rtla: Consolidate and show all necessary libraries that failed for building
-
-----
- Documentation/tools/rtla/rtla-timerlat-hist.rst |  2 +-
- tools/tracing/rtla/Makefile                     | 70 ++++++++++++++-----------
- tools/tracing/rtla/src/timerlat_hist.c          |  2 +-
- tools/tracing/rtla/src/timerlat_top.c           |  2 +-
- 4 files changed, 43 insertions(+), 33 deletions(-)
----------------------------
-diff --git a/Documentation/tools/rtla/rtla-timerlat-hist.rst b/Documentation/tools/rtla/rtla-timerlat-hist.rst
-index e12eae1f3301..6bf7f0ca4556 100644
---- a/Documentation/tools/rtla/rtla-timerlat-hist.rst
-+++ b/Documentation/tools/rtla/rtla-timerlat-hist.rst
-@@ -33,7 +33,7 @@ EXAMPLE
- =======
- In the example below, **rtla timerlat hist** is set to run for *10* minutes,
- in the cpus *0-4*, *skipping zero* only lines. Moreover, **rtla timerlat
--hist** will change the priority of the *timelat* threads to run under
-+hist** will change the priority of the *timerlat* threads to run under
- *SCHED_DEADLINE* priority, with a *10us* runtime every *1ms* period. The
- *1ms* period is also passed to the *timerlat* tracer::
- 
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index 1bea2d16d4c1..22e28b76f800 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -30,8 +30,8 @@ WOPTS	:= 	-Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_A
- 
- TRACEFS_HEADERS	:= $$($(PKG_CONFIG) --cflags libtracefs)
- 
--CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(MOPTS) $(WOPTS) $(TRACEFS_HEADERS)
--LDFLAGS	:=	-ggdb
-+CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(MOPTS) $(WOPTS) $(TRACEFS_HEADERS) $(EXTRA_CFLAGS)
-+LDFLAGS	:=	-ggdb $(EXTRA_LDFLAGS)
- LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs)
- 
- SRC	:=	$(wildcard src/*.c)
-@@ -61,40 +61,50 @@ endif
- LIBTRACEEVENT_MIN_VERSION = 1.5
- LIBTRACEFS_MIN_VERSION = 1.3
- 
-+.PHONY:	all warnings show_warnings
-+all:	warnings rtla
-+
- TEST_LIBTRACEEVENT = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEEVENT_MIN_VERSION) libtraceevent > /dev/null 2>&1 || echo n")
- ifeq ("$(TEST_LIBTRACEEVENT)", "n")
--.PHONY: warning_traceevent
--warning_traceevent:
--	@echo "********************************************"
--	@echo "** NOTICE: libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher not found"
--	@echo "**"
--	@echo "** Consider installing the latest libtraceevent from your"
--	@echo "** distribution, e.g., 'dnf install libtraceevent' on Fedora,"
--	@echo "** or from source:"
--	@echo "**"
--	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ "
--	@echo "**"
--	@echo "********************************************"
-+WARNINGS = show_warnings
-+MISSING_LIBS += echo "**   libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher";
-+MISSING_PACKAGES += "libtraceevent-devel"
-+MISSING_SOURCE += echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ ";
- endif
- 
- TEST_LIBTRACEFS = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEFS_MIN_VERSION) libtracefs > /dev/null 2>&1 || echo n")
- ifeq ("$(TEST_LIBTRACEFS)", "n")
--.PHONY: warning_tracefs
--warning_tracefs:
--	@echo "********************************************"
--	@echo "** NOTICE: libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher not found"
--	@echo "**"
--	@echo "** Consider installing the latest libtracefs from your"
--	@echo "** distribution, e.g., 'dnf install libtracefs' on Fedora,"
--	@echo "** or from source:"
--	@echo "**"
--	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ "
--	@echo "**"
--	@echo "********************************************"
-+WARNINGS = show_warnings
-+MISSING_LIBS += echo "**   libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher";
-+MISSING_PACKAGES += "libtracefs-devel"
-+MISSING_SOURCE += echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ ";
- endif
- 
--.PHONY:	all
--all:	rtla
-+define show_dependencies
-+	@echo "********************************************";				\
-+	echo "** NOTICE: Failed build dependencies";					\
-+	echo "**";									\
-+	echo "** Required Libraries:";							\
-+	$(MISSING_LIBS)									\
-+	echo "**";									\
-+	echo "** Consider installing the latest libtracefs from your";			\
-+	echo "** distribution, e.g., 'dnf install $(MISSING_PACKAGES)' on Fedora,";	\
-+	echo "** or from source:";							\
-+	echo "**";									\
-+	$(MISSING_SOURCE)								\
-+	echo "**";									\
-+	echo "********************************************"
-+endef
-+
-+show_warnings:
-+	$(call show_dependencies);
-+
-+ifneq ("$(WARNINGS)", "")
-+ERROR_OUT = $(error Please add the necessary dependencies)
-+
-+warnings: $(WARNINGS)
-+	$(ERROR_OUT)
-+endif
- 
- rtla: $(OBJ)
- 	$(CC) -o rtla $(LDFLAGS) $(OBJ) $(LIBS)
-@@ -108,9 +118,9 @@ install: doc_install
- 	$(INSTALL) rtla -m 755 $(DESTDIR)$(BINDIR)
- 	$(STRIP) $(DESTDIR)$(BINDIR)/rtla
- 	@test ! -f $(DESTDIR)$(BINDIR)/osnoise || rm $(DESTDIR)$(BINDIR)/osnoise
--	ln -s $(DESTDIR)$(BINDIR)/rtla $(DESTDIR)$(BINDIR)/osnoise
-+	ln -s rtla $(DESTDIR)$(BINDIR)/osnoise
- 	@test ! -f $(DESTDIR)$(BINDIR)/timerlat || rm $(DESTDIR)$(BINDIR)/timerlat
--	ln -s $(DESTDIR)$(BINDIR)/rtla $(DESTDIR)$(BINDIR)/timerlat
-+	ln -s rtla $(DESTDIR)$(BINDIR)/timerlat
- 
- .PHONY: clean tarball
- clean: doc_clean
-diff --git a/tools/tracing/rtla/src/timerlat_hist.c b/tools/tracing/rtla/src/timerlat_hist.c
-index f3ec628f5e51..4b48af8a8309 100644
---- a/tools/tracing/rtla/src/timerlat_hist.c
-+++ b/tools/tracing/rtla/src/timerlat_hist.c
-@@ -892,7 +892,7 @@ int timerlat_hist_main(int argc, char *argv[])
- 	return_value = 0;
- 
- 	if (trace_is_off(&tool->trace, &record->trace)) {
--		printf("rtla timelat hit stop tracing\n");
-+		printf("rtla timerlat hit stop tracing\n");
- 		if (params->trace_output) {
- 			printf("  Saving trace to %s\n", params->trace_output);
- 			save_trace_to_file(record->trace.inst, params->trace_output);
-diff --git a/tools/tracing/rtla/src/timerlat_top.c b/tools/tracing/rtla/src/timerlat_top.c
-index 35452a1d45e9..334271935222 100644
---- a/tools/tracing/rtla/src/timerlat_top.c
-+++ b/tools/tracing/rtla/src/timerlat_top.c
-@@ -687,7 +687,7 @@ int timerlat_top_main(int argc, char *argv[])
- 	return_value = 0;
- 
- 	if (trace_is_off(&top->trace, &record->trace)) {
--		printf("rtla timelat hit stop tracing\n");
-+		printf("rtla timerlat hit stop tracing\n");
- 		if (params->trace_output) {
- 			printf("  Saving trace to %s\n", params->trace_output);
- 			save_trace_to_file(record->trace.inst, params->trace_output);
+>    - if:
+>        properties:
+>          compatible:
+> @@ -97,7 +122,7 @@ additionalProperties: false
+>  
+>  examples:
+>    - |
+> -    phy_gmii_sel: phy-gmii-sel@650 {
+> +    phy_gmii_sel: phy@650 {
+>          compatible = "ti,am3352-phy-gmii-sel";
+>          reg = <0x650 0x4>;
+>          #phy-cells = <2>;
+> -- 
+> 2.25.1
+> 

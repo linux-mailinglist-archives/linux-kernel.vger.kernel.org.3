@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C26598FFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27532599013
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244702AbiHRWGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 18:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
+        id S1344953AbiHRWGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 18:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbiHRWGd (ORCPT
+        with ESMTP id S239768AbiHRWGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 18:06:33 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396ABD21F7;
-        Thu, 18 Aug 2022 15:06:32 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id w19so5670395ejc.7;
-        Thu, 18 Aug 2022 15:06:32 -0700 (PDT)
+        Thu, 18 Aug 2022 18:06:34 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587FCD21FD;
+        Thu, 18 Aug 2022 15:06:33 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id t5so3525900edc.11;
+        Thu, 18 Aug 2022 15:06:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=JCTh8kG/kYdyoUHtyXB+jjX01mOnfuolr7Ild9fizAg=;
-        b=Elp+bln4oYJ2TL8Kz11eRwuDXELrurfYX7F96HcVgoDhNrih84Wi1fwB5zaEPrordD
-         UP1Blce+6zK/CiMXxfzsnNOEelFQuLC2uLO7v0btgAW614L1OTem1BW8lvPVfanvWKL7
-         fFeyj7k1uobaoghg+g0CHxn2vLI4CWqcXRxaruzE/L2QrxzaffSxSwgfZF4HBxnXXIcE
-         l89PNc9mbU8jA8XFk7qBnIO8C0LRoY9U6RfPzFCtuqesZdEswP90weWEmz/xTs1k+3+0
-         Uyq+Gzka5gO0s6bxUSdMOPYVcz+BOxgMJ+pttNBJ4XYifLOJQ4z0UgcqA7KYegBK1j7k
-         lozw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=G2AMVsOrIUOLF7qOXeTIv39jlg5CAbzNTt2ny2QTgn4=;
+        b=TxXiPRhsg+uZrhV4DrN+n8u/s0qBbirzhKotirjIiSAQ5s5Imopy5k0PaAY9sy+KNT
+         GAY4uuZrsEqfNgBFZq6LH4uJrNW+WpkuhuyPXqXTMXpSaVjv9KqXK0/DrYctXLwHOryT
+         UOjwGWTGtsElS6VDkq0oe2VV3NPWTrz9+RCoR/zD3dhQQzWdHP3cCA54tAc8xmxmwzZ4
+         ff3whgF/Iz8p3PNomMO54Dwv7YXO0VHnuINyAqiCbZXBdW+Nw83hR2Ac9dK1oiMa7PxV
+         esw679Y8Px8Cl3zTP3O0VTjBz4q5IOxOUygZcUa/UhU89vQD5+0jNLBeiQjVkzf+V4iK
+         r/Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=JCTh8kG/kYdyoUHtyXB+jjX01mOnfuolr7Ild9fizAg=;
-        b=CpVQyuwPVCeb5mdbHyFAT3V4kTH68YdswM+5g/BG0mIxQ4zuBpi092ju26AtjOrDuV
-         lvcZbXwXSWh0Wmqusux2uC6aYRFr8cNH+aLMtc86SeppHxJcB5pIQRr23sYVRN/eZrI1
-         qwQ7okKcwx1WwVHlDLxLr6WN1VxVUfFhST4k4BUY1ugjSa1GF/s9ASgHawOAdzUWzk3B
-         blwhwD1jjJmyEagZOfF5WtLJb1hVOx4GlHyrI0vbMBM32Awi9AVrUJrhITe4LOjaOphM
-         Dm3pmwDc04tYfB2WC82wKoAUTbKfaBN4tYv2VHjpe1k6u1o2gprot2ElzjXRVMGk0/kq
-         H7MA==
-X-Gm-Message-State: ACgBeo3WYqo8KfglYXSMQfJBCDjC19csaU0jkqYck9bBYQ7aHmulHRYA
-        cwttXi0vlf64Glq4/8mRMrE=
-X-Google-Smtp-Source: AA6agR4xImEt3gc0hR6OSGR8kI9kikSTupIwRDS50TI7JIiPFifM6tDC+Iykx66rN2W8OEDh6lfH9w==
-X-Received: by 2002:a17:907:608b:b0:731:8a9d:5a2d with SMTP id ht11-20020a170907608b00b007318a9d5a2dmr3104711ejc.443.1660860390741;
-        Thu, 18 Aug 2022 15:06:30 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=G2AMVsOrIUOLF7qOXeTIv39jlg5CAbzNTt2ny2QTgn4=;
+        b=A/S3u0o78lLrf2YZm+coKLLIHmAqtrxNNK66ZpEimm5tc0szNLzixZv10+4Cwf5xy5
+         od4lAKUMtQMkTfJXjW3seP7l/gIdEw/nIjxg9KQNZXu7efkBKWFhAlmcuIpGJHva+xU2
+         aXxmvQOst2Vmsk9g0tY0a2RFjT4MO7lYoPX2TBGP9kaczv8Q+oMERvGpHcjMBvVo/Ed6
+         TnwNT1Wnv30ne4kiz560NNBew32qiYhPoU3I9/vigSmRSNk55KiLTGZBjNb8I6GpW6dK
+         IDsKfCqQ3gTRtUsxlECisy/mdRXPdfSQVUJQssTPhIO8kBEkCo4HWjK2KxN1Et8YzHHQ
+         EN+Q==
+X-Gm-Message-State: ACgBeo3fYERqa/m+kHcvjOFEN1E3NIg+MLCslnYFwim2Zwy8wVinVQRA
+        ooMmm4k0fZxRcFJ2nQTvBnF5YyyXTRY=
+X-Google-Smtp-Source: AA6agR7MLYAGrhAAe5zzSzARCBj2p8fb63sVh+4ikZ0b8qjDY0GDsMle/rmdFYj4rhi65iqOsJMQtA==
+X-Received: by 2002:a05:6402:e86:b0:440:d1be:20c7 with SMTP id h6-20020a0564020e8600b00440d1be20c7mr3732546eda.349.1660860391880;
+        Thu, 18 Aug 2022 15:06:31 -0700 (PDT)
 Received: from fedora.robimarko.hr (cpe-94-253-165-74.zg.cable.xnet.hr. [94.253.165.74])
-        by smtp.googlemail.com with ESMTPSA id dk5-20020a0564021d8500b00442d5054a51sm1851584edb.87.2022.08.18.15.06.29
+        by smtp.googlemail.com with ESMTPSA id dk5-20020a0564021d8500b00442d5054a51sm1851584edb.87.2022.08.18.15.06.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 15:06:30 -0700 (PDT)
+        Thu, 18 Aug 2022 15:06:31 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         konrad.dybcio@somainline.org, mturquette@baylibre.com,
@@ -56,12 +56,13 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org,
         dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v3 1/9] clk: qcom: clk-rcg2: add rcg2 mux ops
-Date:   Fri, 19 Aug 2022 00:06:20 +0200
-Message-Id: <20220818220628.339366-1-robimarko@gmail.com>
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v3 2/9] clk: qcom: apss-ipq6018: fix apcs_alias0_clk_src
+Date:   Fri, 19 Aug 2022 00:06:21 +0200
+Message-Id: <20220818220628.339366-2-robimarko@gmail.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220818220628.339366-1-robimarko@gmail.com>
+References: <20220818220628.339366-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,56 +75,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Marangi <ansuelsmth@gmail.com>
+While working on IPQ8074 APSS driver it was discovered that IPQ6018 and
+IPQ8074 use almost the same PLL and APSS clocks, however APSS driver is
+currently broken.
 
-An RCG may act as a mux that switch between 2 parents.
-This is the case on IPQ6018 and IPQ8074 where the APCS core clk that feeds
-the CPU cluster clock just switches between XO and the PLL that feeds it.
+More precisely apcs_alias0_clk_src is broken, it was added as regmap_mux
+clock.
+However after debugging why it was always stuck at 800Mhz, it was figured
+out that its not regmap_mux compatible at all.
+It is a simple mux but it uses RCG2 register layout and control bits, so
+utilize the new clk_rcg2_mux_closest_ops to correctly drive it while not
+having to provide a dummy frequency table.
 
-Add the required ops to add support for this special configuration and use
-the generic mux function to determine the rate.
+While we are here, use ARRAY_SIZE for number of parents.
 
-This way we dont have to keep a essentially dummy frequency table to use
-RCG2 as a mux.
+Tested on IPQ6018-CP01-C1 reference board and multiple IPQ8074 boards.
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Fixes: 5e77b4ef1b19 ("clk: qcom: Add ipq6018 apss clock controller")
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/clk/qcom/clk-rcg.h  | 1 +
- drivers/clk/qcom/clk-rcg2.c | 7 +++++++
- 2 files changed, 8 insertions(+)
+ drivers/clk/qcom/apss-ipq6018.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
-index 012e745794fd..01581f4d2c39 100644
---- a/drivers/clk/qcom/clk-rcg.h
-+++ b/drivers/clk/qcom/clk-rcg.h
-@@ -167,6 +167,7 @@ struct clk_rcg2_gfx3d {
+diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
+index d78ff2f310bf..be952d417ded 100644
+--- a/drivers/clk/qcom/apss-ipq6018.c
++++ b/drivers/clk/qcom/apss-ipq6018.c
+@@ -16,7 +16,7 @@
+ #include "clk-regmap.h"
+ #include "clk-branch.h"
+ #include "clk-alpha-pll.h"
+-#include "clk-regmap-mux.h"
++#include "clk-rcg.h"
  
- extern const struct clk_ops clk_rcg2_ops;
- extern const struct clk_ops clk_rcg2_floor_ops;
-+extern const struct clk_ops clk_rcg2_mux_closest_ops;
- extern const struct clk_ops clk_edp_pixel_ops;
- extern const struct clk_ops clk_byte_ops;
- extern const struct clk_ops clk_byte2_ops;
-diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-index 28019edd2a50..609c10f8d0d9 100644
---- a/drivers/clk/qcom/clk-rcg2.c
-+++ b/drivers/clk/qcom/clk-rcg2.c
-@@ -509,6 +509,13 @@ const struct clk_ops clk_rcg2_floor_ops = {
+ enum {
+ 	P_XO,
+@@ -33,16 +33,15 @@ static const struct parent_map parents_apcs_alias0_clk_src_map[] = {
+ 	{ P_APSS_PLL_EARLY, 5 },
  };
- EXPORT_SYMBOL_GPL(clk_rcg2_floor_ops);
  
-+const struct clk_ops clk_rcg2_mux_closest_ops = {
-+	.determine_rate = __clk_mux_determine_rate_closest,
-+	.get_parent = clk_rcg2_get_parent,
-+	.set_parent = clk_rcg2_set_parent,
-+};
-+EXPORT_SYMBOL_GPL(clk_rcg2_mux_closest_ops);
-+
- struct frac_entry {
- 	int num;
- 	int den;
+-static struct clk_regmap_mux apcs_alias0_clk_src = {
+-	.reg = 0x0050,
+-	.width = 3,
+-	.shift = 7,
++static struct clk_rcg2 apcs_alias0_clk_src = {
++	.cmd_rcgr = 0x0050,
++	.hid_width = 5,
+ 	.parent_map = parents_apcs_alias0_clk_src_map,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "apcs_alias0_clk_src",
+ 		.parent_data = parents_apcs_alias0_clk_src,
+-		.num_parents = 2,
+-		.ops = &clk_regmap_mux_closest_ops,
++		.num_parents = ARRAY_SIZE(parents_apcs_alias0_clk_src),
++		.ops = &clk_rcg2_mux_closest_ops,
+ 		.flags = CLK_SET_RATE_PARENT,
+ 	},
+ };
 -- 
 2.37.2
 

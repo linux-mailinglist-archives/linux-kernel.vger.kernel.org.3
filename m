@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FAE598143
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0AA159814A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243980AbiHRKEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 06:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
+        id S243999AbiHRKIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 06:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232910AbiHRKEu (ORCPT
+        with ESMTP id S243975AbiHRKIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 06:04:50 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7CB474FC;
-        Thu, 18 Aug 2022 03:04:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 18 Aug 2022 06:08:38 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4E04CA3B;
+        Thu, 18 Aug 2022 03:08:34 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b98ec329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98ec:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 31652353CA;
-        Thu, 18 Aug 2022 10:04:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660817088; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yGB57PLr3/XCzM4eFzUWiwdrtPGGJcwk3YhcDibPx8M=;
-        b=gvEy9i+g+y8d7rIZ0U0o86DQsVZwmbcNxlRYSpGPZr0T18g6ijVFRl1wyUxyWXaJJFfxPx
-        9qoD12WHed4RQwOShceW3e3jpd7+bBtOWgXhiU9NWNAk7soVGUTTfqS40al6REZE5TWySi
-        1MximM3wxgOE7vjWSPav2gtm55geZkg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DA66E139B7;
-        Thu, 18 Aug 2022 10:04:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Kkw+NL8O/mJLCgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 18 Aug 2022 10:04:47 +0000
-Date:   Thu, 18 Aug 2022 12:04:46 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] Revert "memcg: cleanup racy sum avoidance code"
-Message-ID: <20220818100446.GA789@blackbody.suse.cz>
-References: <20220817172139.3141101-1-shakeelb@google.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 51DD11EC056D;
+        Thu, 18 Aug 2022 12:08:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660817309;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=O4EgIYZ64hmyiZkormnNEy3aMOezDlwYFaPWr1H3z4I=;
+        b=N2cZKh1232bwCm0szW2TX51kDArsuJiJJlpJPcfR7WoNMA1FMs2LpLcaElPYPBBSwigkWH
+        /Pb8v8U2dmaZmsJ6IfXLxC5XFgA2V2tIQU8SQ2BXyoa5O8q9jJ/+gO5Wm0uxPOgvP/9ow6
+        V65dxZcgRQpf2ePLeH77IsktPKjl0RI=
+Date:   Thu, 18 Aug 2022 12:08:24 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tony.luck@intel.com,
+        antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [PATCH v2] x86/bugs: Add "unknown" reporting for MMIO Stale Data
+Message-ID: <Yv4PmGS98IDZ7ujH@zn.tnic>
+References: <79d2455c75bdbad4e68a3843fe1c1e67826008e6.1659562129.git.pawan.kumar.gupta@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220817172139.3141101-1-shakeelb@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <79d2455c75bdbad4e68a3843fe1c1e67826008e6.1659562129.git.pawan.kumar.gupta@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:21:39PM +0000, Shakeel Butt <shakeelb@google.com> wrote:
-> $ grep "sock " /mnt/memory/job/memory.stat
-> sock 253952
-> total_sock 18446744073708724224
-> 
-> Re-run after couple of seconds
-> 
-> $ grep "sock " /mnt/memory/job/memory.stat
-> sock 253952
-> total_sock 53248
-> 
-> For now we are only seeing this issue on large machines (256 CPUs) and
-> only with 'sock' stat. I think the networking stack increase the stat on
-> one cpu and decrease it on another cpu much more often. So, this
-> negative sock is due to rstat flusher flushing the stats on the CPU that
-> has seen the decrement of sock but missed the CPU that has increments. A
-> typical race condition.
+On Wed, Aug 03, 2022 at 02:41:32PM -0700, Pawan Gupta wrote:
+> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> index 6761668100b9..fe3f7e762b80 100644
+> --- a/arch/x86/kernel/cpu/bugs.c
+> +++ b/arch/x86/kernel/cpu/bugs.c
+> @@ -433,7 +433,8 @@ static void __init mmio_select_mitigation(void)
+>  	u64 ia32_cap;
+>  
+>  	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
+> -	    cpu_mitigations_off()) {
+> +	     boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN) ||
+> +	     cpu_mitigations_off()) {
+>  		mmio_mitigation = MMIO_MITIGATION_OFF;
+>  		return;
+>  	}
 
-This theory adds up :-) (Provided the numbers.)
+Needs also:
 
-> For easy stable backport, revert is the most simple solution.
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index d08c5589fa59..da7c361f47e0 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -539,6 +539,8 @@ static void __init md_clear_update_mitigation(void)
+ 		pr_info("TAA: %s\n", taa_strings[taa_mitigation]);
+ 	if (boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA))
+ 		pr_info("MMIO Stale Data: %s\n", mmio_strings[mmio_mitigation]);
++	else if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
++		pr_info("MMIO Stale Data: Unknown: No mitigations\n");
+ }
+ 
+ static void __init md_clear_select_mitigation(void)
 
-Sounds reasonable.
+I've added it.
 
-> For long term solution, I am thinking of two directions. First is just
-> reduce the race window by optimizing the rstat flusher. Second is if
-> the reader sees a negative stat value, force flush and restart the
-> stat collection.  Basically retry but limited.
+-- 
+Regards/Gruss,
+    Boris.
 
-Or just stick with the revert since it already reduces the observed
-error by rounding to zero in simple way.
-
-(Or if the imprecision was worth extra storage, use two-stage flushing
-to accumulate (cpus x cgroups) and assign in two steps.)
-
-Thanks,
-Michal
+https://people.kernel.org/tglx/notes-about-netiquette

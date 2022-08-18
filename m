@@ -2,65 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3034A5980CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABABD5980C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241602AbiHRJ3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 05:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
+        id S241184AbiHRJXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 05:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiHRJ3q (ORCPT
+        with ESMTP id S233114AbiHRJXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 05:29:46 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429297F112;
-        Thu, 18 Aug 2022 02:29:43 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4M7fgv49wJzKMvT;
-        Thu, 18 Aug 2022 17:28:11 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAXHfqDBv5ibCYCAg--.62434S3;
-        Thu, 18 Aug 2022 17:29:41 +0800 (CST)
-Subject: Re: [PATCH v7 9/9] blk-throttle: clean up flag 'THROTL_TG_PENDING'
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
- <20220802140415.2960284-10-yukuai1@huaweicloud.com>
- <Yvv6kk/RD5LT+3dk@slm.duckdns.org>
- <65d93ec6-2465-35f1-314f-f092ce631100@huaweicloud.com>
- <Yv0rR9gBL0qbYeXp@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <841b7b5a-b908-649a-c09d-32c8de5f1c14@huaweicloud.com>
-Date:   Thu, 18 Aug 2022 17:29:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 18 Aug 2022 05:23:09 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47B3A2204;
+        Thu, 18 Aug 2022 02:23:06 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M7fV61hg2zkWVc;
+        Thu, 18 Aug 2022 17:19:42 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 18 Aug 2022 17:23:04 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 18 Aug
+ 2022 17:23:04 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <ap420073@gmail.com>, <davem@davemloft.net>
+Subject: [PATCH -next] amt: remove unneccessary skb pointer check
+Date:   Thu, 18 Aug 2022 17:31:14 +0800
+Message-ID: <20220818093114.2449179-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <Yv0rR9gBL0qbYeXp@slm.duckdns.org>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAXHfqDBv5ibCYCAg--.62434S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrZr1xAr1xGFyfAr13Xw1fWFg_yoWkZFbE93
-        4YkrZ7Kwn5ZrsxAanxKrn0va9rWF1rWry7Xry8Jw1DXryfXFn8GFWqqw4fuay5C3yfAFnx
-        ur1DJa18Ar12gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,43 +49,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Tejun!
+The skb pointer will be checked in kfree_skb(), so remove the outside check.
 
-ÔÚ 2022/08/18 1:54, Tejun Heo Ð´µÀ:
-> Hello,
-> 
-> On Wed, Aug 17, 2022 at 09:45:13AM +0800, Yu Kuai wrote:
->>> I don't know whether this is better or not. It's minutely less lines of code
->>> but also makes the code a bit more fragile. I'm ambivalent. At any rate,
->>> please move these trivial patches to the head of the series or post them
->>> separately.
->>
->> Can I ask why do you think this patch makes the code a bit more fragile?
-> 
-> It's just one step further removed. Before, the flag was trivially in sync
-> with the on queue status. After, the relationship is more indirect and
-> easier to break accidentally. Not that it's a major problem. Just not sure
-> what the benefit of the change is.
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/net/amt.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-If you are worried about that, I can keep the flag, then the last two
-patches will cleanup:
-
-Before, the flag will be set and cleared frequently when each each bio
-is handled.
-
-After, the flag will only set then the first bio is throttled, and
-it's cleared when last bio is dispatched.
-
-Of course, if you think this cleanup is not necessary, I'll drop the
-last two patches.
-
-Thanks,
-Kuai
-> 
->> By the way, I'll post these trivial patches separately.
-> 
-> Sounds great.
-> 
-> Thanks.
-> 
+diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+index 9a247eb7679c..2d20be6ffb7e 100644
+--- a/drivers/net/amt.c
++++ b/drivers/net/amt.c
+@@ -2894,8 +2894,7 @@ static void amt_event_work(struct work_struct *work)
+ 			amt_event_send_request(amt);
+ 			break;
+ 		default:
+-			if (skb)
+-				kfree_skb(skb);
++			kfree_skb(skb);
+ 			break;
+ 		}
+ 	}
+@@ -3033,8 +3032,7 @@ static int amt_dev_stop(struct net_device *dev)
+ 	cancel_work_sync(&amt->event_wq);
+ 	for (i = 0; i < AMT_MAX_EVENTS; i++) {
+ 		skb = amt->events[i].skb;
+-		if (skb)
+-			kfree_skb(skb);
++		kfree_skb(skb);
+ 		amt->events[i].event = AMT_EVENT_NONE;
+ 		amt->events[i].skb = NULL;
+ 	}
+-- 
+2.25.1
 

@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2CB597F98
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3EF597F97
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239383AbiHRHzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 03:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S243957AbiHRHzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 03:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239693AbiHRHzl (ORCPT
+        with ESMTP id S243964AbiHRHzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 03:55:41 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6DA5A89B;
-        Thu, 18 Aug 2022 00:55:40 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id m17-20020a7bce11000000b003a5bedec07bso2193139wmc.0;
-        Thu, 18 Aug 2022 00:55:40 -0700 (PDT)
+        Thu, 18 Aug 2022 03:55:52 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B812B7EFDF
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:55:50 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id s9so952746ljs.6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=N8163GDxT/V70KLJ/27Rndv21wKXDLINtjwcMLb2kOA=;
-        b=Jdd9X9K+VkVBPE+9TBX1m+lOy5EdIcVIIYm/gJLhd22iEKZTqgyH6JgCSDZumjVMM4
-         orEaVkVr5L/FhKSueIwVQIeghAVaNROoFnjZELWJujqKYJym+eMkT2B0nW2YeX07QHFm
-         yuyy9fY4r8LdDeco3SRyGIwNFdzEd6Q1C8rxa9xVTHaIO/0caJvWOi3ONzkh0v9V63pN
-         /aam/EqPMvUkJEjeu0dYHDkGrwEjifDSDQts5ywuf33kQODKK6ji1xvIcjozoMUzhOQz
-         j4LOAMMsy2elIO0M5lycE+3b7uCLSjmmbKuCKRUm73hdp8SpTVPcJbXe8eI/DRie2RbT
-         rwUA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=dawxEcQT0OhFPG9l9jRrsFoKv486Saz+4v6DaJSObPA=;
+        b=EmOrw6T67t6JXnuPoMeZH07x7nMOn5ucQd9RoTd9bOMFEKuUgtrZta0s5paZoxZ9Je
+         qHtrH+AQmv/+uh0Wkvu4yEo4vvvOhgYGeHDj6dINWfirYLVZvHjh4oBwWWXujjwuYK7W
+         IyhV+YsFaoube+2i/I3eRX+qjTCQ5pbINij6ehzTR/F46fRZT2POawSEQhx7Cxmj6Qkw
+         91lOK8BpeWpSNFUMzUazcGLXvoQxnH6SbpqvDnkgNqU7QlKfX3AMqye8CvLEhFYY5qpp
+         E9/CCwT5A937l9YPLB1sVhzaCcRscQjVwFgdybaMnE6WtPfNFNxYOFNPZxSEiRU3tyK+
+         gUbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=N8163GDxT/V70KLJ/27Rndv21wKXDLINtjwcMLb2kOA=;
-        b=gtEl+ZvYhiw6iwMhpJkB0z9l/Ey8zvULVD8X9ME8nptXZt8/V+FNVaUxIx0B1VIA//
-         wxOqn6jl5QaIOvpIrbwJP/1yZuQgPU2NYTLmvOHC2kiWixxkDKWDawN1WknnJz6QOXd5
-         CNv29GAwy+JSk/9VKJY5HhpIDp+F3xWuizN+niRhKhwokUM2+H9+k6Q+VRjntgL+4k6M
-         07Ee7xIgRfDOTokxSSXHTMpyWiuy9RmXVfDheKkgSsYUvCRpRTSOpOn/KeFhsdPyNxF5
-         xgWbE40NDJHQYjNlizthPkhlbz2VSwMGtidY2p5Znypa7zOyK380h2f/ivYlU85hlOGx
-         HuZA==
-X-Gm-Message-State: ACgBeo0WxlOMWQHLXWZSo363nWKp/K/6xddxm6BTLp6oEprFJ05w9AWN
-        +wWVHTwhycD/Y3EXDxcMiIk=
-X-Google-Smtp-Source: AA6agR7TsG+ox8UNe7WR1JIRWeyTOZdcW8xXglKJt+5UNt/Tj3yrnuAzIK0GhjF4XKQaRDLerIZthw==
-X-Received: by 2002:a05:600c:2cc5:b0:3a5:4fae:1288 with SMTP id l5-20020a05600c2cc500b003a54fae1288mr4316159wmc.79.1660809338692;
-        Thu, 18 Aug 2022 00:55:38 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id p22-20020a7bcc96000000b003a52969e89csm4448559wma.4.2022.08.18.00.55.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 00:55:38 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] btrfs: Fix spelling mistake "deivce" -> "device"
-Date:   Thu, 18 Aug 2022 08:55:37 +0100
-Message-Id: <20220818075537.117851-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=dawxEcQT0OhFPG9l9jRrsFoKv486Saz+4v6DaJSObPA=;
+        b=SPv066l2dw6hR7Tbpbrh1sgqbfXnZ8bt8XkuK7/01s8F/fiXqrRkg28UQM/duHE5Yl
+         qvuhXqpZsKhMyZgLHi9jp6EdoGw3LLllB2xsWzBfSbJOFrV++VYoRaf/DBLa+SGrwqRy
+         X9lEwNO8U/sQhtSAMuITQnDWXE7Eb0rMu2bgyeopNhOwxiFLS5809ix0oL19PgJRCwo/
+         e+6cJaiN0h1R/nM8EVCEtDKuC5PiRR5PnP1FOiSkZ002DzOqR7VDILz+j/YmPLOBqC69
+         YkgRX0Yzqx7iEiVqTEG3D/rdPJSyVxx/aSUuPi6P4hJB1hJkRGA5LTEFvdKTLLIHEd28
+         GVBw==
+X-Gm-Message-State: ACgBeo0nWmKRYKIo+y3GhNgk8a4TRHhKGMFsANhBYKJRuCF2uoYaV599
+        DpXYsaTvjV2aCcJxjv/oIMhl1w==
+X-Google-Smtp-Source: AA6agR5VQUbfnby25Lc9unAu/HapmYL6K0oRaQ5+TLbZmOxeBd1NTB+IoxnuUO/L553aVNdK54dOwA==
+X-Received: by 2002:a2e:bc12:0:b0:25e:59e7:8def with SMTP id b18-20020a2ebc12000000b0025e59e78defmr563029ljf.249.1660809349142;
+        Thu, 18 Aug 2022 00:55:49 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
+        by smtp.gmail.com with ESMTPSA id u18-20020a056512129200b0048afa870525sm127379lfs.65.2022.08.18.00.55.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 00:55:48 -0700 (PDT)
+Message-ID: <88393f56-69b5-65d8-9acd-373e069c750f@linaro.org>
+Date:   Thu, 18 Aug 2022 10:55:47 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/4] dt-bindings: soc: qcom: Introduce PMIC GLINK binding
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
+ <20220818031512.319310-2-bjorn.andersson@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220818031512.319310-2-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a btrfs_info message. Fix it.
+On 18/08/2022 06:15, Bjorn Andersson wrote:
+> The PMIC GLINK service, running on a coprocessor on some modern Qualcomm
+> platforms and implement USB Type-C handling and battery management.
+> This binding describes the component in the OS used to communicate with
+> the firmware and connect it's resources to those described in the
+> Devicetree, particularly the USB Type-C controllers relationship with
+> USB and DisplayPort components.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  .../bindings/soc/qcom/qcom,pmic-glink.yaml    | 98 +++++++++++++++++++
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/btrfs/dev-replace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/btrfs/dev-replace.c b/fs/btrfs/dev-replace.c
-index 7202b76ce59f..773f1caab126 100644
---- a/fs/btrfs/dev-replace.c
-+++ b/fs/btrfs/dev-replace.c
-@@ -167,7 +167,7 @@ int btrfs_init_dev_replace(struct btrfs_fs_info *fs_info)
- 			btrfs_err(fs_info,
- 			"replace devid present without an active replace item");
- 			btrfs_info(fs_info,
--	"mount after the command 'btrfs deivce scan --forget <devpath-of-id-0>'");
-+	"mount after the command 'btrfs device scan --forget <devpath-of-id-0>'");
- 			ret = -EUCLEAN;
- 		} else {
- 			dev_replace->srcdev = NULL;
--- 
-2.37.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof

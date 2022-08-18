@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452C45981D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FE95981D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244224AbiHRLBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 07:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
+        id S244234AbiHRLCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 07:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244217AbiHRLBe (ORCPT
+        with ESMTP id S239816AbiHRLCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 07:01:34 -0400
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AB297D64
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 04:01:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1660820437; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=BTMANjpPQ649xN1Ilw1xe5PDp07xqQayiOObxnMnehCh0whAnkBvvKzF96CLAtFZp4YQ8ODaEjbyfxO+8O3f/gIsCrn3d6QS0J7Ec5vbrkdOL7AdTYuhDWEn0Ytbzy53JRClJKXWGM2IHiZXzEaVpHOx4vYLVjY+pkiYXP8DU0I=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1660820437; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=w3q3/luKQmtc+VjV/Gf2sz+X/or73ffditweh+vTyCw=; 
-        b=RmUvCSOkclpZwMa6RoA6xFuaJBY/zqVsEm+96Q2v/o3+19cq7Jj+Cy1SOxYqBYt1p7y89zQmwA8ZtL63NN/GcveCbgYuiP+CjjbGq4SzrNz3Eff23eS6+YvUPTXaFpKSL3LcUceRTPAPCWioyQMgL5PvnmFoIk9DH7SRFqhNRho=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1660820437;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=w3q3/luKQmtc+VjV/Gf2sz+X/or73ffditweh+vTyCw=;
-        b=IPmmJF2k6/1SqT02GUNG6cNF9PRrVOBVauI7Gxr3vl6IzUfgHFmetHP6xEJSEs+f
-        UTnuUpVVI0CfxUgWtgfQkowITG0Lu07mgkTl5c/ddZaVDBGWcELlHyYMeBgo7rIUoqi
-        U2aUCQNU7weOGb/EPhCeuYwTPXiR65CFg0+dX/NQ=
-Received: from localhost.localdomain (103.86.19.2 [103.86.19.2]) by mx.zoho.in
-        with SMTPS id 1660820435766507.18754371954867; Thu, 18 Aug 2022 16:30:35 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     david@fromorbit.com
-Cc:     djwong@kernel.org, fgheet255t@gmail.com, hch@infradead.org,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        riteshh@linux.ibm.com,
-        syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com
-Message-ID: <20220818110031.89467-1-code@siddh.me>
-Subject: Re: [syzbot] WARNING in iomap_iter
-Date:   Thu, 18 Aug 2022 16:30:31 +0530
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214025849.GP59729@dread.disaster.area>
-References: <20220214025849.GP59729@dread.disaster.area>
+        Thu, 18 Aug 2022 07:02:36 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6368E98C9E;
+        Thu, 18 Aug 2022 04:02:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7F34CCE2034;
+        Thu, 18 Aug 2022 11:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66FFFC433D6;
+        Thu, 18 Aug 2022 11:02:24 +0000 (UTC)
+Message-ID: <b0b4ff87-355e-1910-c6d2-a9690f3d7543@xs4all.nl>
+Date:   Thu, 18 Aug 2022 13:02:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v25 4/4] media: platform: mtk-mdp3: add MediaTek MDP3
+ driver
+Content-Language: en-US
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        cellopoint.kai@gmail.com, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>
+References: <20220817095629.29911-1-moudy.ho@mediatek.com>
+ <20220817095629.29911-5-moudy.ho@mediatek.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220817095629.29911-5-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,42 +65,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is probably due to mismatch in types between userspace API struct
-and the kernel's internal struct, which leads to offset being overflowed
-after getting converted from __u64 (unsigned long long) to loff_t (signed
-long long), resulting in ridiculously negative offset value.
+Hi Moudy,
 
-#syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
+I noticed one more thing (and it is probably better to post a v26 after all):
 
----
- include/uapi/linux/loop.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+On 17/08/2022 11:56, Moudy Ho wrote:
+> This patch adds driver for MediaTek's Media Data Path ver.3 (MDP3).
+> It provides the following functions:
+>   color transform, format conversion, resize, crop, rotate, flip
+>   and additional image quality enhancement.
+> 
+> The MDP3 driver is mainly used for Google Chromebook products to
+> import the new architecture to set the HW settings as shown below:
+>   User -> V4L2 framework
+>     -> MDP3 driver -> SCP (setting calculations)
+>       -> MDP3 driver -> CMDQ (GCE driver) -> HW
+> 
+> Each modules' related operation control is sited in mtk-mdp3-comp.c
+> Each modules' register table is defined in file with "mdp_reg_" prefix
+> GCE related API, operation control  sited in mtk-mdp3-cmdq.c
+> V4L2 m2m device functions are implemented in mtk-mdp3-m2m.c
+> Probe, power, suspend/resume, system level functions are defined in
+> mtk-mdp3-core.c
+> 
+> v4l2-compliance 1.22.1, 32 bits, 32-bit time_t
 
-diff --git a/include/uapi/linux/loop.h b/include/uapi/linux/loop.h
-index 6f63527dd2ed..33c07c467da4 100644
---- a/include/uapi/linux/loop.h
-+++ b/include/uapi/linux/loop.h
-@@ -53,12 +53,12 @@ struct loop_info64 {
- =09__u64=09=09   lo_device;=09=09=09/* ioctl r/o */
- =09__u64=09=09   lo_inode;=09=09=09/* ioctl r/o */
- =09__u64=09=09   lo_rdevice;=09=09=09/* ioctl r/o */
--=09__u64=09=09   lo_offset;
--=09__u64=09=09   lo_sizelimit;/* bytes, 0 =3D=3D max available */
--=09__u32=09=09   lo_number;=09=09=09/* ioctl r/o */
--=09__u32=09=09   lo_encrypt_type;=09=09/* obsolete, ignored */
--=09__u32=09=09   lo_encrypt_key_size;=09=09/* ioctl w/o */
--=09__u32=09=09   lo_flags;
-+=09__s64=09=09   lo_offset;
-+=09__s64=09=09   lo_sizelimit;=09/* bytes, 0 =3D=3D max available */
-+=09__s32=09=09   lo_number;=09=09=09/* ioctl r/o */
-+=09__s32=09=09   lo_encrypt_type;=09=09/* obsolete, ignored */
-+=09__s32=09=09   lo_encrypt_key_size;=09=09/* ioctl w/o */
-+=09__s32=09=09   lo_flags;
- =09__u8=09=09   lo_file_name[LO_NAME_SIZE];
- =09__u8=09=09   lo_crypt_name[LO_NAME_SIZE];
- =09__u8=09=09   lo_encrypt_key[LO_KEY_SIZE]; /* ioctl w/o */
---=20
-2.35.1
+First of all, the v4l2-compliance output belongs to the cover letter, not
+to a commit log for a patch.
 
+More importantly, I can tell that v4l2-compliance was a prepackaged version,
+but you need to compile it from the git repo yourself:
+
+git clone git://linuxtv.org/v4l-utils.git
+cd v4l-utils
+./bootstrap.sh
+./configure
+make
+sudo make install
+
+Running v4l2-compliance should start with this (or something close):
+
+v4l2-compliance 1.23.0-4941, 64 bits, 64-bit time_t
+v4l2-compliance SHA: 71112d214762 2022-07-28 15:31:13
+
+I need to see the SHA to confirm that you tested with a sufficiently new
+v4l2-compliance version. Prepackaged v4l2-compliance binaries tend to
+be too old, at least for the purpose of compliance checking a new driver.
+
+Regards,
+
+	Hans
+
+> Compliance test for mtk-mdp3 device /dev/video0:
+> Driver Info:
+> 	Driver name      : mtk-mdp3
+> 	Card type        : MediaTek MDP3
+> 	Bus info         : platform:14001000.mdp3-rdma0
+> 	Driver version   : 6.0.0
+> 	Capabilities     : 0x84204000
+> 		Video Memory-to-Memory Multiplanar
+> 		Streaming
+> 		Extended Pix Format
+> 		Device Capabilities
+> 	Device Caps      : 0x04204000
+> 		Video Memory-to-Memory Multiplanar
+> 		Streaming
+> 		Extended Pix Format
 

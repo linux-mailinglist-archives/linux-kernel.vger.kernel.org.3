@@ -2,260 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CC4599032
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E549959903E
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345890AbiHRWJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 18:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
+        id S1345940AbiHRWKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 18:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345894AbiHRWJG (ORCPT
+        with ESMTP id S232990AbiHRWKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 18:09:06 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AFD71BC3;
-        Thu, 18 Aug 2022 15:09:03 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 66DC64A8;
-        Fri, 19 Aug 2022 00:09:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1660860541;
-        bh=yK5DGUy6ji18JC82rJey4AgBbKLHZ6jd5XbTUc0hPI0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qa8QQJ7lo8Urm8bIiVxT38PUHWjluQ5Hanrydf8wM3+fi8Cz0gyH8TMVUq+dL8l4g
-         znXHedD4r0cm2A4fcxrn0O9XM8AcnGeb1f/T0DVd8Dg3a9zNR3sBb2QZusKGiqr0aA
-         1LYbCehPtWsyY2UMNOsxdaudhxoLTJI3MDwPAwsc=
-Date:   Fri, 19 Aug 2022 01:08:58 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-kernel@vger.kernel.org, Duncan Sands <duncan.sands@free.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH] usb: move from strlcpy with unused retval to strscpy
-Message-ID: <Yv64eoZlywNXQ/OB@pendragon.ideasonboard.com>
-References: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
+        Thu, 18 Aug 2022 18:10:01 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E882B74DD4;
+        Thu, 18 Aug 2022 15:09:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=rhe9mRJIjYEKwxbWZZXiWC3KccVlD0FV8SeE2CPzCxk=; b=emHQbCQYIBaojp9O77oJuGSh9t
+        Ha3atEwW9Ozs6ZJi5gNsPgvfANBMXT3YLiX5ddzwgNr/M2fpl6MWDycLqRR8lwYM/IeEbpgeNDaRx
+        ZB7DEXdXrcJyTZ/NQI9wfnMtB1Hq2oDOL2X6DUh0A3JuevdWF1NGZN0JtJuWhT9lTs7mYMwCmJPKv
+        gkfeIONW84YV0a+MQmoE1qgTfGtMtH0lVbCE6DkQ9fP7/c6UT6+0IzECvJpaQ/9Jd2UIwGrwXfxSO
+        jr3tvRYeCw0SOjLF5SrbpJHjbr3bxpWiwugWRQB7FcM2LXZKLY28nSn6e4dtckefAEG+mktoc3miB
+        kggujMOQ==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oOni5-00AGgL-RJ; Thu, 18 Aug 2022 22:09:54 +0000
+Message-ID: <c323f4ed-1083-8eb6-95ba-10b0def2c936@infradead.org>
+Date:   Thu, 18 Aug 2022 15:09:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] Bluetooth: move from strlcpy with unused retval to
+ strscpy
+Content-Language: en-US
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+References: <20220818210207.8323-1-wsa+renesas@sang-engineering.com>
+ <CABBYNZ+Z=3kiA1jSiGH1KQCG6SHSDPp6MCA1pqU8CjtGRNYqqQ@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CABBYNZ+Z=3kiA1jSiGH1KQCG6SHSDPp6MCA1pqU8CjtGRNYqqQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
 
-Thank you for the patch.
 
-On Thu, Aug 18, 2022 at 11:01:15PM +0200, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
+On 8/18/22 15:07, Luiz Augusto von Dentz wrote:
+> Hi Wolfram,
 > 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-
-> ---
->  drivers/usb/atm/usbatm.c               | 2 +-
->  drivers/usb/core/devio.c               | 2 +-
->  drivers/usb/gadget/function/f_fs.c     | 2 +-
->  drivers/usb/gadget/function/f_uvc.c    | 2 +-
->  drivers/usb/gadget/function/u_ether.c  | 8 ++++----
->  drivers/usb/gadget/function/uvc_v4l2.c | 6 +++---
->  drivers/usb/gadget/udc/omap_udc.c      | 2 +-
->  drivers/usb/misc/usb251xb.c            | 6 +++---
->  drivers/usb/storage/onetouch.c         | 2 +-
->  drivers/usb/typec/tcpm/fusb302.c       | 2 +-
->  drivers/usb/usbip/stub_main.c          | 2 +-
->  11 files changed, 18 insertions(+), 18 deletions(-)
+> On Thu, Aug 18, 2022 at 2:05 PM Wolfram Sang
+> <wsa+renesas@sang-engineering.com> wrote:
+>>
+>> Follow the advice of the below link and prefer 'strscpy' in this
+>> subsystem. Conversion is 1:1 because the return value is not used.
+>> Generated by a coccinelle script.
 > 
-> diff --git a/drivers/usb/atm/usbatm.c b/drivers/usb/atm/usbatm.c
-> index 362217189ef3..1cdb8758ae01 100644
-> --- a/drivers/usb/atm/usbatm.c
-> +++ b/drivers/usb/atm/usbatm.c
-> @@ -1026,7 +1026,7 @@ int usbatm_usb_probe(struct usb_interface *intf, const struct usb_device_id *id,
->  	/* public fields */
->  
->  	instance->driver = driver;
-> -	strlcpy(instance->driver_name, driver->driver_name,
-> +	strscpy(instance->driver_name, driver->driver_name,
->  		sizeof(instance->driver_name));
->  
->  	instance->usb_dev = usb_dev;
-> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> index b5b85bf80329..837f3e57f580 100644
-> --- a/drivers/usb/core/devio.c
-> +++ b/drivers/usb/core/devio.c
-> @@ -1434,7 +1434,7 @@ static int proc_getdriver(struct usb_dev_state *ps, void __user *arg)
->  	if (!intf || !intf->dev.driver)
->  		ret = -ENODATA;
->  	else {
-> -		strlcpy(gd.driver, intf->dev.driver->name,
-> +		strscpy(gd.driver, intf->dev.driver->name,
->  				sizeof(gd.driver));
->  		ret = (copy_to_user(arg, &gd, sizeof(gd)) ? -EFAULT : 0);
->  	}
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index e0fa4b186ec6..98dc2291e9a1 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -3700,7 +3700,7 @@ int ffs_name_dev(struct ffs_dev *dev, const char *name)
->  
->  	existing = _ffs_do_find_dev(name);
->  	if (!existing)
-> -		strlcpy(dev->name, name, ARRAY_SIZE(dev->name));
-> +		strscpy(dev->name, name, ARRAY_SIZE(dev->name));
->  	else if (existing != dev)
->  		ret = -EBUSY;
->  
-> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-> index 71669e0e4d00..f4f6cf75930b 100644
-> --- a/drivers/usb/gadget/function/f_uvc.c
-> +++ b/drivers/usb/gadget/function/f_uvc.c
-> @@ -430,7 +430,7 @@ uvc_register_video(struct uvc_device *uvc)
->  	uvc->vdev.vfl_dir = VFL_DIR_TX;
->  	uvc->vdev.lock = &uvc->video.mutex;
->  	uvc->vdev.device_caps = V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_STREAMING;
-> -	strlcpy(uvc->vdev.name, cdev->gadget->name, sizeof(uvc->vdev.name));
-> +	strscpy(uvc->vdev.name, cdev->gadget->name, sizeof(uvc->vdev.name));
->  
->  	video_set_drvdata(&uvc->vdev, uvc);
->  
-> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-> index 7887def05dc2..e06022873df1 100644
-> --- a/drivers/usb/gadget/function/u_ether.c
-> +++ b/drivers/usb/gadget/function/u_ether.c
-> @@ -144,10 +144,10 @@ static void eth_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *p)
->  {
->  	struct eth_dev *dev = netdev_priv(net);
->  
-> -	strlcpy(p->driver, "g_ether", sizeof(p->driver));
-> -	strlcpy(p->version, UETH__VERSION, sizeof(p->version));
-> -	strlcpy(p->fw_version, dev->gadget->name, sizeof(p->fw_version));
-> -	strlcpy(p->bus_info, dev_name(&dev->gadget->dev), sizeof(p->bus_info));
-> +	strscpy(p->driver, "g_ether", sizeof(p->driver));
-> +	strscpy(p->version, UETH__VERSION, sizeof(p->version));
-> +	strscpy(p->fw_version, dev->gadget->name, sizeof(p->fw_version));
-> +	strscpy(p->bus_info, dev_name(&dev->gadget->dev), sizeof(p->bus_info));
->  }
->  
->  /* REVISIT can also support:
-> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-> index fd8f73bb726d..511f106f9843 100644
-> --- a/drivers/usb/gadget/function/uvc_v4l2.c
-> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-> @@ -67,9 +67,9 @@ uvc_v4l2_querycap(struct file *file, void *fh, struct v4l2_capability *cap)
->  	struct uvc_device *uvc = video_get_drvdata(vdev);
->  	struct usb_composite_dev *cdev = uvc->func.config->cdev;
->  
-> -	strlcpy(cap->driver, "g_uvc", sizeof(cap->driver));
-> -	strlcpy(cap->card, cdev->gadget->name, sizeof(cap->card));
-> -	strlcpy(cap->bus_info, dev_name(&cdev->gadget->dev),
-> +	strscpy(cap->driver, "g_uvc", sizeof(cap->driver));
-> +	strscpy(cap->card, cdev->gadget->name, sizeof(cap->card));
-> +	strscpy(cap->bus_info, dev_name(&cdev->gadget->dev),
->  		sizeof(cap->bus_info));
->  	return 0;
->  }
-> diff --git a/drivers/usb/gadget/udc/omap_udc.c b/drivers/usb/gadget/udc/omap_udc.c
-> index 61cabb9de6ae..b0567c63d754 100644
-> --- a/drivers/usb/gadget/udc/omap_udc.c
-> +++ b/drivers/usb/gadget/udc/omap_udc.c
-> @@ -2558,7 +2558,7 @@ omap_ep_setup(char *name, u8 addr, u8 type,
->  
->  	/* set up driver data structures */
->  	BUG_ON(strlen(name) >= sizeof ep->name);
-> -	strlcpy(ep->name, name, sizeof ep->name);
-> +	strscpy(ep->name, name, sizeof(ep->name));
->  	INIT_LIST_HEAD(&ep->queue);
->  	INIT_LIST_HEAD(&ep->iso);
->  	ep->bEndpointAddress = addr;
-> diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-> index 04c4e3fed094..87035ac09834 100644
-> --- a/drivers/usb/misc/usb251xb.c
-> +++ b/drivers/usb/misc/usb251xb.c
-> @@ -547,7 +547,7 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
->  		hub->boost_up = USB251XB_DEF_BOOST_UP;
->  
->  	cproperty_char = of_get_property(np, "manufacturer", NULL);
-> -	strlcpy(str, cproperty_char ? : USB251XB_DEF_MANUFACTURER_STRING,
-> +	strscpy(str, cproperty_char ? : USB251XB_DEF_MANUFACTURER_STRING,
->  		sizeof(str));
->  	hub->manufacturer_len = strlen(str) & 0xFF;
->  	memset(hub->manufacturer, 0, USB251XB_STRING_BUFSIZE);
-> @@ -557,7 +557,7 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
->  			      USB251XB_STRING_BUFSIZE);
->  
->  	cproperty_char = of_get_property(np, "product", NULL);
-> -	strlcpy(str, cproperty_char ? : data->product_str, sizeof(str));
-> +	strscpy(str, cproperty_char ? : data->product_str, sizeof(str));
->  	hub->product_len = strlen(str) & 0xFF;
->  	memset(hub->product, 0, USB251XB_STRING_BUFSIZE);
->  	len = min_t(size_t, USB251XB_STRING_BUFSIZE / 2, strlen(str));
-> @@ -566,7 +566,7 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
->  			      USB251XB_STRING_BUFSIZE);
->  
->  	cproperty_char = of_get_property(np, "serial", NULL);
-> -	strlcpy(str, cproperty_char ? : USB251XB_DEF_SERIAL_STRING,
-> +	strscpy(str, cproperty_char ? : USB251XB_DEF_SERIAL_STRING,
->  		sizeof(str));
->  	hub->serial_len = strlen(str) & 0xFF;
->  	memset(hub->serial, 0, USB251XB_STRING_BUFSIZE);
-> diff --git a/drivers/usb/storage/onetouch.c b/drivers/usb/storage/onetouch.c
-> index 1db2eefeea22..01f3c2779ccf 100644
-> --- a/drivers/usb/storage/onetouch.c
-> +++ b/drivers/usb/storage/onetouch.c
-> @@ -201,7 +201,7 @@ static int onetouch_connect_input(struct us_data *ss)
->  	onetouch->dev = input_dev;
->  
->  	if (udev->manufacturer)
-> -		strlcpy(onetouch->name, udev->manufacturer,
-> +		strscpy(onetouch->name, udev->manufacturer,
->  			sizeof(onetouch->name));
->  	if (udev->product) {
->  		if (udev->manufacturer)
-> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-> index 96c55eaf3f80..ab89c014606e 100644
-> --- a/drivers/usb/typec/tcpm/fusb302.c
-> +++ b/drivers/usb/typec/tcpm/fusb302.c
-> @@ -151,7 +151,7 @@ static void _fusb302_log(struct fusb302_chip *chip, const char *fmt,
->  
->  	if (fusb302_log_full(chip)) {
->  		chip->logbuffer_head = max(chip->logbuffer_head - 1, 0);
-> -		strlcpy(tmpbuffer, "overflow", sizeof(tmpbuffer));
-> +		strscpy(tmpbuffer, "overflow", sizeof(tmpbuffer));
->  	}
->  
->  	if (chip->logbuffer_head < 0 ||
-> diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
-> index 77a5b3f8736a..e8c3131a8543 100644
-> --- a/drivers/usb/usbip/stub_main.c
-> +++ b/drivers/usb/usbip/stub_main.c
-> @@ -100,7 +100,7 @@ static int add_match_busid(char *busid)
->  	for (i = 0; i < MAX_BUSID; i++) {
->  		spin_lock(&busid_table[i].busid_lock);
->  		if (!busid_table[i].name[0]) {
-> -			strlcpy(busid_table[i].name, busid, BUSID_SIZE);
-> +			strscpy(busid_table[i].name, busid, BUSID_SIZE);
->  			if ((busid_table[i].status != STUB_BUSID_ALLOC) &&
->  			    (busid_table[i].status != STUB_BUSID_REMOV))
->  				busid_table[i].status = STUB_BUSID_ADDED;
+> The link below doesn't seem to work.
+
+Works for me.
+
+>> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+>> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>> ---
+>>  net/bluetooth/hidp/core.c | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/net/bluetooth/hidp/core.c b/net/bluetooth/hidp/core.c
+>> index 5940744a8cd8..cc20e706c639 100644
+>> --- a/net/bluetooth/hidp/core.c
+>> +++ b/net/bluetooth/hidp/core.c
+>> @@ -83,14 +83,14 @@ static void hidp_copy_session(struct hidp_session *session, struct hidp_conninfo
+>>                 ci->product = session->input->id.product;
+>>                 ci->version = session->input->id.version;
+>>                 if (session->input->name)
+>> -                       strlcpy(ci->name, session->input->name, 128);
+>> +                       strscpy(ci->name, session->input->name, 128);
+>>                 else
+>> -                       strlcpy(ci->name, "HID Boot Device", 128);
+>> +                       strscpy(ci->name, "HID Boot Device", 128);
+>>         } else if (session->hid) {
+>>                 ci->vendor  = session->hid->vendor;
+>>                 ci->product = session->hid->product;
+>>                 ci->version = session->hid->version;
+>> -               strlcpy(ci->name, session->hid->name, 128);
+>> +               strscpy(ci->name, session->hid->name, 128);
+>>         }
+>>  }
+>>
+>> --
+>> 2.35.1
+>>
+> 
+> 
 
 -- 
-Regards,
-
-Laurent Pinchart
+~Randy

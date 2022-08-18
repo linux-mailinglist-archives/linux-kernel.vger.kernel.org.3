@@ -2,104 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A291D598B02
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDEA598B04
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345388AbiHRSUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 14:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S1345406AbiHRSU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 14:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbiHRSUv (ORCPT
+        with ESMTP id S231651AbiHRSUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 14:20:51 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C23ACE306;
-        Thu, 18 Aug 2022 11:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660846851; x=1692382851;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ULlY3fpvctgrPTNh/dIyRvXpP5N6EgQSL6XrK00sqzY=;
-  b=hvou1AxCNquka03XZa2GztBXvLyI00wmt3bCfLRd/nLeHuZWSEZtQOPc
-   XUbAuxosHHH/MVAm8RqNi/+8kv6XeGgj3A2lHJbibJzkCo1IcpeuTc2Hz
-   EIS72gwmi5LzQfw62rr/hRwuI2FtvpTrvjnvMxqPDQNQzQoppayQnwMf4
-   nQ6DHDAMJaa654orhG300XbXf3UreMxGrOv0IHLzL90KvMI7cQFm5bthH
-   iuP/amk62gqMYfqEgejNOMU3ZGjIsEGoerXeKyojzinyHfngXPfhECDYe
-   JX+MqAKXUQI9AnrKu496Ye9jIXO2irMKW8E/w7GaDOpjAQasuDOuxxW2z
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="354573989"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="354573989"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 11:20:50 -0700
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="558638429"
-Received: from rvmiele-mobl1.amr.corp.intel.com (HELO desk) ([10.209.23.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 11:20:50 -0700
-Date:   Thu, 18 Aug 2022 11:20:48 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tony.luck@intel.com,
-        antonio.gomez.iglesias@linux.intel.com,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [PATCH v2] x86/bugs: Add "unknown" reporting for MMIO Stale Data
-Message-ID: <20220818182048.lsgtc52g6va376v2@desk>
-References: <79d2455c75bdbad4e68a3843fe1c1e67826008e6.1659562129.git.pawan.kumar.gupta@linux.intel.com>
- <Yv4PmGS98IDZ7ujH@zn.tnic>
+        Thu, 18 Aug 2022 14:20:55 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00CECE317;
+        Thu, 18 Aug 2022 11:20:54 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id q190so2307154vsb.7;
+        Thu, 18 Aug 2022 11:20:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:reply-to:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=lMF2ztp3tPvmby8RlqQj2pCwCgvYCLFHjZJy/lMPygI=;
+        b=F+V9f9AfmeMaTMaR6bbmTZRw7iJsPm6daOVlefQqb8iDYLt19HnlWEqxmP6oZsbVrO
+         VpWYs6iV+IuE3juZKHOvAKL4sT9ebM5eyBMnC9n1SZScDFVGW+4gn5RdXUvMpvIuuQQT
+         1NvnE310e1UDeYdaslidCU35zwVLaLoJLIqkIapWSTvDdkGdVXnjq3rJMLYeqmBhqeBm
+         tlEIEHOTDgJTgQRy0ACxXUFXYBXrVIaW8gpTMorWg/yHuz4MZK/H98V8aMxkWuv/Hx44
+         vRc9CsF08kgPYh6zBTbMRoKQ1r50I+LH9Xf0rFjkm3XauuNgluEft5t2MBybDfqm0xO7
+         xPAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:reply-to:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=lMF2ztp3tPvmby8RlqQj2pCwCgvYCLFHjZJy/lMPygI=;
+        b=NtFjuNSWRsHv8KmFwNzQzDMBVBvbwnmOtg5Ir9gBIRVSxP2CedRZhlh47we+wQVGIc
+         XiXLr9MwpEATgv1DFFHQ1xUI8j9R5YpFgopf9PURm23ok7bJl4zVtBMtEjDlKcHyzoG8
+         pc9h0M4zlvY8BteGelXIS7pkq+8kA6Cg37pVjpgu4knHpmyZNs4GL/8HmAQhUPk17fyA
+         eHbDal6nuJ3gd9KcdjyR4dBG1baa1iUlilMJbfs0G1/DgVxKVvNjb9QYPZwk9utggsuo
+         gVHwZrldOYFLmKa6oRQztwW6554MvvaCJ5p0UwwCAsMsmroOOuj3ydgnN5nEHX1pd9rK
+         djlQ==
+X-Gm-Message-State: ACgBeo27BIWfUyXTi6ilFDFiQPX3NNPxX2ZrTVUO39jwWV2ooPrqie2B
+        I1TvqlhNRL5fM1bMcO5McHk=
+X-Google-Smtp-Source: AA6agR7pHn9a5z1VdEGpR+unUU53VkoOXBQlOhLjONOkYOp2+qLbnAk6K7e214bOfFMokyobiK3qzA==
+X-Received: by 2002:a67:b003:0:b0:35a:1d46:16d with SMTP id z3-20020a67b003000000b0035a1d46016dmr1659968vse.21.1660846853933;
+        Thu, 18 Aug 2022 11:20:53 -0700 (PDT)
+Received: from ?IPV6:2804:14c:4c2:8202::1001? ([2804:14c:4c2:8202::1001])
+        by smtp.gmail.com with ESMTPSA id e21-20020a67eb95000000b0038dee4ac58csm1156087vso.25.2022.08.18.11.20.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 11:20:53 -0700 (PDT)
+Message-ID: <03535c9e-d3e7-eeca-2650-2ecf7ab4c34e@gmail.com>
+Date:   Thu, 18 Aug 2022 15:20:48 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yv4PmGS98IDZ7ujH@zn.tnic>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 0/4] Documentation: KUnit: minor fixes
+Content-Language: en-US
+To:     Sadiya Kazi <sadiyakazi@google.com>,
+        David Gow <davidgow@google.com>
+Cc:     Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
+        mwen@igalia.com, andrealmeid@riseup.net, mairacanal@riseup.net,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        brendanhiggins@google.com, corbet@lwn.net
+References: <20220813042055.136832-1-tales.aparecida@gmail.com>
+Reply-To: 20220813042055.136832-1-tales.aparecida@gmail.com
+From:   Tales Lelo da Aparecida <tales.aparecida@gmail.com>
+In-Reply-To: <20220813042055.136832-1-tales.aparecida@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 12:08:24PM +0200, Borislav Petkov wrote:
-> On Wed, Aug 03, 2022 at 02:41:32PM -0700, Pawan Gupta wrote:
-> > diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> > index 6761668100b9..fe3f7e762b80 100644
-> > --- a/arch/x86/kernel/cpu/bugs.c
-> > +++ b/arch/x86/kernel/cpu/bugs.c
-> > @@ -433,7 +433,8 @@ static void __init mmio_select_mitigation(void)
-> >  	u64 ia32_cap;
-> >  
-> >  	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
-> > -	    cpu_mitigations_off()) {
-> > +	     boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN) ||
-> > +	     cpu_mitigations_off()) {
-> >  		mmio_mitigation = MMIO_MITIGATION_OFF;
-> >  		return;
-> >  	}
+On 13/08/2022 01:20, Tales Aparecida wrote:
+> Hi,
 > 
-> Needs also:
+> This is a short series of minor fixes to the Kunit documentation,
+> they probably can be squashed but I suppose it's easier
+> to review them individually.
 > 
-> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> index d08c5589fa59..da7c361f47e0 100644
-> --- a/arch/x86/kernel/cpu/bugs.c
-> +++ b/arch/x86/kernel/cpu/bugs.c
-> @@ -539,6 +539,8 @@ static void __init md_clear_update_mitigation(void)
->  		pr_info("TAA: %s\n", taa_strings[taa_mitigation]);
->  	if (boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA))
->  		pr_info("MMIO Stale Data: %s\n", mmio_strings[mmio_mitigation]);
-> +	else if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
-> +		pr_info("MMIO Stale Data: Unknown: No mitigations\n");
->  }
->  
->  static void __init md_clear_select_mitigation(void)
+> Thanks for any feedbacks,
+> Tales
 > 
-> I've added it.
+> Tales Aparecida (4):
+>    Documentation: kunit: fix trivial typo
+>    Documentation: Kunit: Fix inconsistent titles
+>    Documentation: KUnit: Fix non-uml anchor
+>    Documentation: Kunit: Add ref for other kinds of tests
+> 
+>   Documentation/dev-tools/kunit/architecture.rst | 4 ++--
+>   Documentation/dev-tools/kunit/faq.rst          | 8 +++++---
+>   Documentation/dev-tools/kunit/index.rst        | 2 ++
+>   Documentation/dev-tools/kunit/run_wrapper.rst  | 4 +++-
+>   Documentation/dev-tools/kunit/usage.rst        | 4 ++--
+>   5 files changed, 14 insertions(+), 8 deletions(-)
+> 
 
-Thanks
+Hello,
+
+Thanks for the reviews, everyone!
+Should I send a V2 with squashed commits or will a committer handle that?
+
+Kind regards,
+Tales

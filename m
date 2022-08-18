@@ -2,252 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A906559831F
+	by mail.lfdr.de (Postfix) with ESMTP id 231F959831E
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244643AbiHRMZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 08:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S244667AbiHRMZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 08:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244099AbiHRMZh (ORCPT
+        with ESMTP id S244660AbiHRMZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 08:25:37 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8086A4F676
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:25:36 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27ICFgVK005148;
-        Thu, 18 Aug 2022 12:25:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=bBUtAJUoZNhGimQV8w6zRvR+wgmSvqiC/9eTqbWmPgE=;
- b=CQojlGTD7ga5JVDjY8Cr6a73b2iK5tVGEAjTFjinnWpqdp/sOdyrXh3R0PFt2XKU8fpH
- Y7LYVCR8gGFZfqKvExB5vw4PFDLqWFqyJUa7YRKN7EnWl9Kw6wlu8KJhn2Yui4Kw7WVW
- b+gk7KfX786vuBuczLrwMjKzvENBq6CuNSmliyRl1Wu/FRTvSWrfKazngtkZw9Zuzn3C
- osgGANjcPS2mYNCmnNPTtSvsg6PJ6TquJpv6fZGzj4gVXPsn8iCghQUSrw1GIavmjJM0
- AhdYrX9/uRrXMlAQufkkiGmReFzK+uSnIuwBmdJW4mDOnAWBCC2xjwWAmvHu6R7pSEjz HA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1n9a097c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 12:25:12 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27ICFwqS005799;
-        Thu, 18 Aug 2022 12:25:11 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1n9a096d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 12:25:11 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27ICKdi8009339;
-        Thu, 18 Aug 2022 12:25:09 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3hx37jdx0w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 12:25:09 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27ICPPMq34537890
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Aug 2022 12:25:25 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B304442041;
-        Thu, 18 Aug 2022 12:25:06 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 377E24203F;
-        Thu, 18 Aug 2022 12:25:06 +0000 (GMT)
-Received: from localhost (unknown [9.43.73.112])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Aug 2022 12:25:06 +0000 (GMT)
-Date:   Thu, 18 Aug 2022 17:55:04 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH 01/16] powerpc: Replace unreachable() with it's builtin
- variant in WARN_ON()
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>
-References: <20220808114908.240813-1-sv@linux.ibm.com>
-        <20220808114908.240813-2-sv@linux.ibm.com>
-        <82eec792-b71f-17cc-d905-368fd5ca62f2@csgroup.eu>
-        <1660817468.4x4re2ul0k.naveen@linux.ibm.com>
-        <06b7a93b-5148-4d92-0b56-5956afdfd3fb@csgroup.eu>
-In-Reply-To: <06b7a93b-5148-4d92-0b56-5956afdfd3fb@csgroup.eu>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1660824799.vnjff6w3m0.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: snzh_C56VDGLhgv1qqH-oIUtyQqqipvb
-X-Proofpoint-GUID: l8CYaXPg3IuQZ2UJotzNpNO1WmWyRP45
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 18 Aug 2022 08:25:54 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739EB51A1F
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:25:52 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id uj29so3003018ejc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=x0RShv55l/W/hrmKR8OYqxZUhnouhDYQRtTeXp8f/Qw=;
+        b=lZ9fW+MCVefOON5qJ+e2DPSKF5jc/FVhapsMLSbW36/Aoxpf8P3q9JjAR4x9BkyWSW
+         GIzQsuap3wNpnXkMbS0c61U4Q/4lvGcjQSRSvQSul/sbVOBgqxVgnLjsM2D0milhZDfK
+         WKAfAduMVIfUfT7NaGekeIAmtsyC/bceHS5BtOwWxyVzXFOUyux0GBc/wDUrg2tU5ExF
+         TLTP06xtOrnGtd5cWuoaC1nYPN1Z6vrIapM4EVLtlowPno7Y14WaBSv1PPgl7aydcjOq
+         HfVY38U0TB+sCZLNzPBX3BFEMqj/p25Cx+p2PDpcEvaGWU2tgJGBExICeiPPRzWtT/P4
+         SfAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=x0RShv55l/W/hrmKR8OYqxZUhnouhDYQRtTeXp8f/Qw=;
+        b=M8sgtfyynHzpZwH2TNsWVd/7UJuBUQSX5gNn/vxk6nXF1DJOvAqRnAUMitHl/DGBR/
+         zdb8mAKLO23OOhlu+TgC6jv0qtnVXSPKxBQYXUSgL089n367UvkrIqtXskl6BbiZixAc
+         X6exWIALQFaxFGb564tygg0eNivrAJf4vzYkRRE+RW9RyykY2omq+Lxaae73GW+bR0+f
+         j/fJSHM5n0bC6f9n4rRmjCt6QSDK/WCJkw5bTKkV3glc/6ND2IocqjZgqUwStcfBKK5S
+         AEadjjy9uwuc6kNDQzXAdVskp2Q6nv+9HM+6mJrEhd8Hk5yywQz8u/9HPs6+CQIaIOUl
+         1p/A==
+X-Gm-Message-State: ACgBeo3YAXVk4+dWZZwYx9Oh40zGUAU+qL0WIQn+zNPLaXeSj0/QiF5K
+        omVvcoTNcLt0id2kPEkPJvdSCU0bvuQivmxXick3rA==
+X-Google-Smtp-Source: AA6agR5CE0C/0zXbtuj+66ciKdo9mpd1YPbVFePdX1QU77PTiyuZXegpfkZn+8D69HVLOBrXNL00Nz+vaZxgIKdqlxE=
+X-Received: by 2002:a17:906:58c8:b0:6fe:91d5:18d2 with SMTP id
+ e8-20020a17090658c800b006fe91d518d2mr1801717ejs.190.1660825551004; Thu, 18
+ Aug 2022 05:25:51 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_12,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 spamscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=999 bulkscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180042
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
+ <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com>
+ <CAK8P3a1Vh1Uehuin-u5QrTO5qh+t0aK_hA-QZwqc00Db_+MKcw@mail.gmail.com>
+ <CACRpkdbhbwBe=jU5prifXCYUXPqULhst0se3ZRH+sWOh9XeoLQ@mail.gmail.com> <CAK8P3a0j-54_OkXC7x3NSNaHhwJ+9umNgbpsrPxUB4dwewK63A@mail.gmail.com>
+In-Reply-To: <CAK8P3a0j-54_OkXC7x3NSNaHhwJ+9umNgbpsrPxUB4dwewK63A@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 18 Aug 2022 14:25:39 +0200
+Message-ID: <CACRpkda0+iy8H0YmyowSDn8RbYgnVbC1k+o5F67inXg4Qb934Q@mail.gmail.com>
+Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Courbot <gnurou@gmail.com>,
+        Alexandre Courbot <acourbot@nvidia.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy wrote:
->=20
->=20
-> Le 18/08/2022 =C3=A0 12:46, Naveen N. Rao a =C3=A9crit=C2=A0:
->> Christophe Leroy wrote:
->>>
->>>
->>> Le 08/08/2022 =C3=A0 13:48, Sathvika Vasireddy a =C3=A9crit=C2=A0:
->>>> objtool is throwing *unannotated intra-function call*
->>>> warnings with a few instructions that are marked
->>>> unreachable. Replace unreachable() with __builtin_unreachable()
->>>> to fix these warnings, as the codegen remains same
->>>> with unreachable() and __builtin_unreachable().
->>>
->>> I think it is necessary to explain why using unreachable() is not=20
->>> necessary for powerpc, or even why using unreachable() is wrong.
->>>
->>> Allthough we are getting rid of the problem here by replacing=20
->>> unreachable() by __builtin_unreachable(), it might still be a problem=20
->>> in core parts of kernel which still use unreachable.
->>=20
->> I did a kernel build with this series applied, with a variant of=20
->> ppc64le_defconfig. I then did another build with the same config, but=20
->> with the below hunk to disable objtool:
->>=20
->> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
->> index 6be2e68fa9eb64..4c466acdc70d4c 100644
->> --- a/arch/powerpc/Kconfig
->> +++ b/arch/powerpc/Kconfig
->> @@ -237,8 +237,6 @@ config PPC
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_MOD_ARCH_SPECIFIC
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_NMI=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if PERF_EVENTS || (PPC6=
-4=20
->> && PPC_BOOK3S)
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_OPTPROBES
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_OBJTOOL=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if PPC32 || MPROFILE_KERNEL
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_OBJTOOL_MCOUNT=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if=
- HAVE_OBJTOOL
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_PERF_EVENTS
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_PERF_EVENTS_NMI=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if PPC64
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select HAVE_PERF_REGS
->>=20
->> This has the effect of disabling annotations for unreachable().
->>=20
->> When I compared the resulting object files, I did not see changes in=20
->> codegen relating to the annotation, like we do with using unreachable()=
-=20
->> in __WARN_FLAGS().
->>=20
->> More specifically, arch/powerpc/kvm/book3s.o:kvmppc_h_logical_ci_load()=
-=20
->> uses BUG(), and the generated code remains the same with/without the=20
->> unreachable() annotation.
->>=20
->> This suggests that the bad codegen we are seeing with the annotation in=
-=20
->> unreachable() is limited to its use in __WARN_FLAGS(), which I suspect=20
->> is due to an interaction with the use of asm_volatile_goto() for=20
->> WARN_ENTRY().
->>=20
->> If I revert this patch (patch 01/16), gcc seems to add a label 8 bytes=20
->> before _some_ function in this object file, which happens to hold a=20
->> relocation against .TOC., and emits a bl to that symbol. Otherwise, gcc=
-=20
->> either emits no new instruction for the annotation, or a 'nop' in some=20
->> cases.
->>=20
->> If I add a 'nop' between WARN_ENTRY() and unreachable() in=20
->> __WARN_FLAGS(), or convert WARN_ENTRY to BUG_ENTRY thereby removing use=
-=20
->> of asm_volatile_goto(), the problem goes away and no bl is emitted:
->>=20
->> diff --git a/arch/powerpc/include/asm/bug.h=20
->> b/arch/powerpc/include/asm/bug.h
->> index 61a4736355c244..88e0027c20ba5c 100644
->> --- a/arch/powerpc/include/asm/bug.h
->> +++ b/arch/powerpc/include/asm/bug.h
->> @@ -99,6 +99,7 @@
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __label__ __label_warn_on;=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 \
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 \
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 WARN_ENTRY("twi 31, 0, 0", BUGFLAG=
-_WARNING | (flags),=20
->> __label_warn_on); \
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __asm__ __volatile__("nop");=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 \
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unreachable();=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 \
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 \
->> __label_warn_on:
->>=20
->>=20
->> In summary, I think the annotation itself is fine and we are only seeing=
-=20
->> an issue with its usage after WARN_ENTRY() due to use of=20
->> asm_volatile_goto. Other uses of unreachable() don't seem to exhibit=20
->> this problem.
->>=20
->> As such, I think this patch is appropriate for this series, though I=20
->> think we should capture some of this information in the changelog.
->>=20
->> Note also that if and when we start utlizing the annotation, if we=20
->> classify twui as INSN_BUG, this change will continue to be appropriate.
->>=20
->=20
-> INSN_TRAP instead of INSN_BUG ?
+On Thu, Aug 18, 2022 at 1:33 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Thu, Aug 18, 2022 at 1:13 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 
-INSN_BUG, in line with your suggestion here:
-http://lkml.kernel.org/r/ff623097-9f18-3914-5eae-bc6e4cd1510f@csgroup.eu
+> > static inline bool gpio_is_valid(int number)
+> > {
+> >         return number >= 0 && number < ARCH_NR_GPIOS;
+> > }
+> >
+> > ?
+> >
+> > If using GPIO descriptors, any descriptor != NULL is valid,
+> > this one is just used with legacy GPIOs. Maybe we should just
+> > delete gpio_is_valid() everywhere and then drop the cap?
+>
+> I think it makes sense to keep gpio_is_valid() for as long as we
+> support the numbers.
 
-Peter was of the opinion that INSN_TRAP may not be what we want:
-http://lkml.kernel.org/r/YsLSU6idNME/BtwH@hirez.programming.kicks-ass.net
+Hmmm....
 
-If we classify twui as INSN_BUG, then objtool will know to stop control=20
-flow here without the need for an annotation. Parsing extable will=20
-then show that control flow continues with the label subsequently.
+> > I think there may be systems and users that still depend on GPIO base
+> > numbers being assigned from ARCH_NR_GPIOS and
+> > downwards (userspace GPIO numbers in sysfs will also change...)
+> > otherwise we could assign from 0 and up.
+>
+> Is it possible to find in-kernel users that depend on well-known
+> numbers for dynamically assigned gpios? I would argue
+> that those are always broken.
 
+Most in-kernel users hard-code the base to something like
+0 etc it's only the ones that code -1 into .base that are in
+trouble because that will activate dynamic assignment for the
+base.
 
-- Naveen
+git grep 'base = -1' yields these suspects:
+
+arch/arm/common/sa1111.c:       sachip->gc.base = -1;
+arch/arm/common/scoop.c:        devptr->gpio.base = -1;
+arch/powerpc/platforms/52xx/mpc52xx_gpt.c:      gpt->gc.base = -1;
+arch/powerpc/platforms/83xx/mcu_mpc8349emitx.c: gc->base = -1;
+
+That's all! We could just calculate these to 512-ngpios and
+hardcode that instead.
+
+> Even for the sysfs interface, it is questionable to rely on
+> specific numbers because at least in an arm multiplatform
+> kernel the top number changes based on kernel configuration.
+
+Yeah :/ still these users tend to angrily report any breakage
+due to expected (fragile) behaviour.
+
+> > Right now the safest would be:
+> > Assign from 512 and downwards until we hit 0 then assign
+> > from something high, like U32_MAX and downward.
+> >
+> > That requires dropping gpio_is_valid() everywhere.
+> >
+> > If we wanna be bold, just delete gpio_is_valid() and assign
+> > bases from 0 and see what happens. But I think that will
+> > lead to regressions.
+>
+> I'm still unsure how removing gpio_is_valid() would help.
+
+If we allow GPIO base all the way to U32_MAX
+this function becomes:
+
+static inline bool gpio_is_valid(int number)
+{
+        return number >= 0 && number < U32_MAX;
+}
+
+and we can then just
+
+#define gpio_is_valid true
+
+and in that case it is better to delete the use of this function
+altogether since it can not fail.
+
+> What I could imagine as a next step would be to mark all
+> consumer drivers and the sysfs interface that use gpio
+> numbers as 'depends on GPIO_LEGACY' and then only
+> provide the corresponding drivers if that option is set.
+
+Hm I wonder what Bartosz and Alexandre Courbot and thinks
+about a GPIO_LEGACY symbol to phase out the global
+GPIO numberspace. I kind of like the idea.
+
+I made the sysfs depend on CONFIG_EXPERT to at least make it less
+accessible and not provide users with guns to shoot themselves
+in the foot.
+
+Yours,
+Linus Walleij

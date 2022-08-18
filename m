@@ -2,243 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D60D5986F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB455986E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344151AbiHRPG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344150AbiHRPGy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1344141AbiHRPGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 18 Aug 2022 11:06:54 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2080.outbound.protection.outlook.com [40.107.212.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF6877554;
-        Thu, 18 Aug 2022 08:06:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q8rmfXkfOI+vgbShaeok3R65bLFiqjXcEgkvLSieu0kmbqcevg4/7h68QBGLw/cQcHtRJLNFITD9iNMdYCSMYDhtO8BH6SFJKlwlFcvYIUrACb6KsJlXDDx/fyo5RgIVbX3XN7Lg9sout3r/o3rZGzU00CWlrk7pN+r1kncf+AB/7C7O760cYDIDS6rl58iaiMq+oyNWm8cpTwHaVEbs2cUnTzleShoIrq24+H0PBsTiwlRvywkzl22a6y+VL33UjnDx35wvElAPU5HSFISUg2sHE5wQGAPwgpJxS5GuNJNWDD4FK7naTKqIRbn3TCZO8mHhbR+QMkvw4GVHOyvMuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tg4DJCjOA/zkWLnbAoEaUxIQxBhEHzCCNXce2UuRXeo=;
- b=Xrp/LVKftjR9CJLwZkE+BOVTwgnBP3amNHbwfWUftdtQpyJteb/JHYNQPSQ+hGnuecc0Il0PckWiJ/n7IpAi6y83xhGrap0Go+7Hhs68JZ9kKddvPczYaMJxxIjz2kjPh7y/ooXrA/Ix9ZYWplp7jo0I404H2Pr8RR+9qu9yum5lWeiDfPo84N/CdKFAQox8Bdx+HNYhJGv/q9q2xWbWlRXhDhba9zb2M4KGw6fxrBao2CVeRUUknm8d+4rZapJ3lJ+Njul8zL6N9h3AwiOyNpLzW/U+cuSREqCY89erBNNIoE4PG+zK/+h5YGtYAYejIl4viQhXHCuI0tUx4ytEUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tg4DJCjOA/zkWLnbAoEaUxIQxBhEHzCCNXce2UuRXeo=;
- b=Ua9BQaoY+kcTYQ48inbXXMPDXVZMFWQb1nBUlJGMZimAYfNYMVoPfyQzCOL6yn/SuBbNWaq8gQ851HNeonXOKsF957Y2X0PvAOKwiHvqsVUctg+sLGwrXGOiij3GIw7XQlnE1Udojh/1iw9wDlvKJOo62g1iiFA4KTQOvGe7Etg=
-Received: from BN9PR03CA0177.namprd03.prod.outlook.com (2603:10b6:408:f4::32)
- by CY4PR02MB2678.namprd02.prod.outlook.com (2603:10b6:903:124::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Thu, 18 Aug
- 2022 15:06:48 +0000
-Received: from BN1NAM02FT049.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:f4:cafe::bc) by BN9PR03CA0177.outlook.office365.com
- (2603:10b6:408:f4::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.18 via Frontend
- Transport; Thu, 18 Aug 2022 15:06:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT049.mail.protection.outlook.com (10.13.2.89) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5546.15 via Frontend Transport; Thu, 18 Aug 2022 15:06:47 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 18 Aug 2022 08:06:42 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 18 Aug 2022 08:06:42 -0700
-Envelope-to: git@xilinx.com,
- linux@roeck-us.net,
- krzysztof.kozlowski+dt@linaro.org,
- wim@linux-watchdog.org,
- linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org,
- linux-watchdog@vger.kernel.org,
- git@amd.com
-Received: from [172.23.66.193] (port=45740 helo=xhdsneeli40u.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1oOh6X-0001z5-Rw; Thu, 18 Aug 2022 08:06:42 -0700
-From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
-To:     <linux@roeck-us.net>, <krzysztof.kozlowski+dt@linaro.org>,
-        <wim@linux-watchdog.org>, <michal.simek@xilinx.com>,
-        <shubhrajyoti.datta@xilinx.com>, <srinivas.neeli@xilinx.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <git@xilinx.com>, <git@amd.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Subject: [PATCH V2] dt-bindings: watchdog: Convert Xilinx watchdog bindings to json-schema
-Date:   Thu, 18 Aug 2022 20:36:37 +0530
-Message-ID: <20220818150637.815-1-srinivas.neeli@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344008AbiHRPGu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 18 Aug 2022 11:06:50 -0400
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC857171C;
+        Thu, 18 Aug 2022 08:06:48 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id b2so1385459qvp.1;
+        Thu, 18 Aug 2022 08:06:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=R/U2IBOmuOYUnAlD0g8GnvyYlwS/o8azETiK5CuXS9k=;
+        b=ROaOE9iEAYruBmAdM5vowXfkHVssTeEKD565fdHMvL2MBwO3wo9JjPIxnHwuWYD5wT
+         RRLt8FmsquxMNbWuAyZ5/X+eEuxZaQV/NpFIk8fKQpaSUUWD9A7BMSHyNV+SCFNm3dni
+         WUE64coc6sjNEEO44Uax1K48rGFhfkwvJw05X6BOPrcqI0ubxLK2r8FfrZ9LtcnySaQy
+         rDIJySb2DaUvV/M98nhflG4jDxb7R698M2+ySAqwn54OWO5FTcEmVdvYLs6K9jXgGSYf
+         506VnNJgz09QcQ277AezUzsnIvBh0feNxClierQgrGce9fNW8MgK/1dTwODj/QUmOaKG
+         5sGw==
+X-Gm-Message-State: ACgBeo0Kj4lpuIBrxvtY7cyMwdh9b6NCKuTDS0HbeEy/vF25gbpU8vTr
+        U+kZDGVTliUfM5vmw2xvyQ==
+X-Google-Smtp-Source: AA6agR6gVKIy8t5d6GRbn5GV0AsGrWcjUGteoJZwZZ0GXaadLL065WXo3TvZe22l7DzyPrKRW0hn3Q==
+X-Received: by 2002:a0c:c684:0:b0:494:d65c:f495 with SMTP id d4-20020a0cc684000000b00494d65cf495mr3145337qvj.24.1660835207884;
+        Thu, 18 Aug 2022 08:06:47 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:5fe0:b4f5:6e22:4704:df60:73a3])
+        by smtp.gmail.com with ESMTPSA id dt2-20020a05620a478200b006bb024c5021sm1755015qkb.25.2022.08.18.08.06.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 08:06:47 -0700 (PDT)
+Received: (nullmailer pid 1870414 invoked by uid 1000);
+        Thu, 18 Aug 2022 15:06:45 -0000
+Date:   Thu, 18 Aug 2022 09:06:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 2/6] dt-bindings: PCI: microchip,pcie-host: fix
+ missing clocks properties
+Message-ID: <20220818150644.GJ1829017-robh@kernel.org>
+References: <20220816182547.3454843-1-mail@conchuod.ie>
+ <20220816182547.3454843-3-mail@conchuod.ie>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1e474de7-9bec-4382-271d-08da812b45d1
-X-MS-TrafficTypeDiagnostic: CY4PR02MB2678:EE_
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D/cjwekRlnHeOAJpJ13aEynpOYODjL6fBUeIqfLD1XPu8f/oxMdnVeWNJielzOsj8RzsJC8G11ePQAWVEi67RuG0/jiQJAsZO8mFNvbZziGO3IW9gDiwm7dstX4I5hcU+Nyz+G1M2hYXNvgD6fmpWwIGLe9CFcsHZLymfMdzEJYG9d+MoHRR0tSDpWr377RsXSP7kjkt6MiOqUn5BPWmgiS4LNAr9KhCYXeL8vLg4FEx+rI1I+eCL7bN3aVhPPskPJK1fI0YXkSoxRVUMpwLaSULDsWdSX9HsjbT3xWy2uSlPFjOdt7LvXTL4BcSApGOT1GOxxePL46p81B0ypEkLyX0hx1BR9dMIiprg/xIqvZF1RjAaeygBHVHAgvGtp9UipzKFPXrbuR5uRd3Q2L6omeJSmqmybfmhBEBHlrL1uUOrD9uKL7glLfrOnJSvo34KLAzfcQzImhVn0tQhGXKUJP7vSij3MHRD9xJFGR6H8Z66p8P+zj/R0h9tTw6ogRNUvVoUEYMxSZBaYG+0bgCGfcCz1EFRi3Xn67539MlxYaLCTue2TY+F551qt2agLuwH70/sOctrSnDPJb5K7JEILRgIi8Y4O1Z894nJEuiS0fQNEigmdlHkpJUSK2mkshSRkHBl1wCl3pNTI+gEOIglMIiLWwvrD0VijKJQoqVyy0syB3nm2sXIHwe30PztEfkWvN2RO5vzI8Ks48kP2l6jinkm77Q6CLoLOifB2DbeP12jX05dx66t2Lxn3zwzGDyWkRaPhGToBA4mH5g306D1jY5Zc05HCsAzBLnHfCq3r2lKaJwdLVVtTQ4epywUU8LKG8Q8cypjvLNhRXDuI9yaQ==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(346002)(39860400002)(136003)(40470700004)(46966006)(36840700001)(6666004)(7696005)(478600001)(966005)(26005)(41300700001)(83380400001)(36860700001)(186003)(336012)(426003)(1076003)(2616005)(47076005)(107886003)(44832011)(2906002)(8936002)(5660300002)(9786002)(40460700003)(82310400005)(40480700001)(54906003)(110136005)(316002)(70206006)(70586007)(4326008)(8676002)(7049001)(7636003)(356005)(82740400003)(36756003)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 15:06:47.9852
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e474de7-9bec-4382-271d-08da812b45d1
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT049.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2678
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816182547.3454843-3-mail@conchuod.ie>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Xilinx watchdog bindings to DT schema format using json-schema
+On Tue, Aug 16, 2022 at 07:25:44PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Recent versions of dt-schema warn about unevaluatedProperties:
+> arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dtb: pcie@2000000000: Unevaluated properties are not allowed ('clock-names', 'clocks', 'legacy-interrupt-controller', 'microchip,axi-m-atr0' were unexpected)
+>         From schema: Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+> 
+> The clocks are required to enable interfaces between the FPGA fabric
+> and the core complex, so add them to the binding.
+> 
+> Fixes: 6ee6c89aac35 ("dt-bindings: PCI: microchip: Add Microchip PolarFire host binding")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> dt-schema v2022.08 is required to replicate
+> ---
+>  .../bindings/pci/microchip,pcie-host.yaml     | 25 +++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+> index edb4f81253c8..6bbde8693ef8 100644
+> --- a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+> +++ b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+> @@ -25,6 +25,31 @@ properties:
+>        - const: cfg
+>        - const: apb
+>  
+> +  clocks:
+> +    description:
+> +      Fabric Interface Controllers, FICs, are the interface between the FPGA
+> +      fabric and the core complex on PolarFire SoC. The FICs require two clocks,
+> +      one from each side of the interface. The "FIC clocks" described by this
+> +      property are on the core complex side & communication through a FIC is not
+> +      possible unless it's corresponding clock is enabled. A clock must be
+> +      enabled for each of the interfaces the root port is connected through.
+> +      This could in theory be all 4 interfaces, one interface or any combination
+> +      in between.
+> +    minItems: 1
+> +    items:
+> +      - description: FIC0's clock
+> +      - description: FIC1's clock
+> +      - description: FIC2's clock
+> +      - description: FIC3's clock
+> +
+> +  clock-names:
+> +    description:
+> +      As any FIC connection combination is possible, the names should match the
+> +      order in the clocks property and take the form "ficN" where N is a number
+> +      0-3
+> +    minItems: 1
+> +    maxItems: 4
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
----
-Changes in V2:
-- Updated file name with compatible.
-- Added subsystem name in subject prefix.
-- Address minior comments.
----
- .../bindings/watchdog/of-xilinx-wdt.txt       | 26 -------
- .../watchdog/xlnx,xps-timebase-wdt.yaml       | 68 +++++++++++++++++++
- 2 files changed, 68 insertions(+), 26 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
+items:
+  pattern: '^fic[0-3]$'
 
-diff --git a/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt b/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
-deleted file mode 100644
-index c6ae9c9d5e3e..000000000000
---- a/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Xilinx AXI/PLB soft-core watchdog Device Tree Bindings
-----------------------------------------------------------
--
--Required properties:
--- compatible		: Should be "xlnx,xps-timebase-wdt-1.00.a" or
--			  "xlnx,xps-timebase-wdt-1.01.a".
--- reg			: Physical base address and size
--
--Optional properties:
--- clocks		: Input clock specifier. Refer to common clock
--			  bindings.
--- clock-frequency	: Frequency of clock in Hz
--- xlnx,wdt-enable-once	: 0 - Watchdog can be restarted
--			  1 - Watchdog can be enabled just once
--- xlnx,wdt-interval	: Watchdog timeout interval in 2^<val> clock cycles,
--			  <val> is integer from 8 to 31.
--
--Example:
--axi-timebase-wdt@40100000 {
--	clock-frequency = <50000000>;
--	compatible = "xlnx,xps-timebase-wdt-1.00.a";
--	clocks = <&clkc 15>;
--	reg = <0x40100000 0x10000>;
--	xlnx,wdt-enable-once = <0x0>;
--	xlnx,wdt-interval = <0x1b>;
--} ;
-diff --git a/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
-new file mode 100644
-index 000000000000..493a1c954707
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
-@@ -0,0 +1,68 @@
-+# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/xlnx,xps-timebase-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Xilinx AXI/PLB softcore and window Watchdog Timer
-+
-+maintainers:
-+  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-+  - Srinivas Neeli <srinivas.neeli@xilinx.com>
-+
-+description:
-+  The Timebase watchdog timer(WDT) is a free-running 32 bit counter.
-+  WDT uses a dual-expiration architecture. After one expiration of
-+  the timeout interval, an interrupt is generated and the WDT state
-+  bit is set to one in the status register. If the state bit is not
-+  cleared (by writing a one to the state bit) before the next
-+  expiration of the timeout interval, a WDT reset is generated.
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - xlnx,xps-timebase-wdt-1.01.a
-+      - xlnx,xps-timebase-wdt-1.00.a
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-frequency:
-+    description: Frequency of clock in Hz
-+
-+  xlnx,wdt-interval:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Watchdog timeout interval
-+    minimum: 8
-+    maximum: 32
-+
-+  xlnx,wdt-enable-once:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [0, 1]
-+    description: If watchdog is configured as enable once,
-+                 then the watchdog cannot be disabled after
-+                 it has been enabled.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    watchdog@40100000 {
-+      compatible = "xlnx,xps-timebase-wdt-1.00.a";
-+      reg = <0x40100000 0x1000>;
-+      clock-frequency = <50000000>;
-+      clocks = <&clkc 15>;
-+      xlnx,wdt-enable-once = <0x0>;
-+      xlnx,wdt-interval = <0x1b>;
-+    };
-+...
--- 
-2.17.1
-
+> +
+>    interrupts:
+>      minItems: 1
+>      items:
+> -- 
+> 2.37.1
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv

@@ -2,50 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D686597F2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1E1597F2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243841AbiHRHXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 03:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
+        id S243680AbiHRHXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 03:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243791AbiHRHXf (ORCPT
+        with ESMTP id S243238AbiHRHXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 03:23:35 -0400
-X-Greylist: delayed 91376 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Aug 2022 00:23:31 PDT
-Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3F461DAB
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:23:30 -0700 (PDT)
-X-QQ-mid: bizesmtp90t1660807358thkgk558
-Received: from localhost.localdomain ( [123.114.60.34])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 18 Aug 2022 15:22:36 +0800 (CST)
-X-QQ-SSF: 01400000002000D0U000B00A0000000
-X-QQ-FEAT: eCJvJF4ptHBiBmR9azarm3lgcJ4dN65tE+tjAFsTWkhYPsqr/69XgUGBD+grm
-        yR7HtMUrVdsfxz2r73Dl3qSc+ZIzIxF7xdtYffxYAUwW+v1GB93w9ae0izDtxWhoGpHfRgI
-        yyjhBmJb1PyglhGtlONaCLJEEKFFVDixfKO9hMEA9KNsIXHvOqiY9uwtJLukLTdD1Y2vkV2
-        u1bTHEohr7O9wO9llyQiSb/7nGsYSLa0o0JfFa8AiGyzrb8YLM3I49D+Imkehu68pVryty6
-        YGrvsfsXi8k0kxfekvlptbZDoO0riJcwg+IAHsYDVdMUeGn1OAi/xFvlFOk50fE32l+wthU
-        wtxq7ZE5iTdFNjs0z88xZpSMOR9V8WEj4wwUS2dLLIuRztK1aXx9if4iNPFew==
-X-QQ-GoodBg: 2
-From:   zhaoxiao <zhaoxiao@uniontech.com>
-To:     thierry.reding@gmail.com, narmstrong@baylibre.com,
-        khilman@baylibre.com
-Cc:     u.kleine-koenig@pengutronix.de, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com, linux-pwm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        zhaoxiao <zhaoxiao@uniontech.com>
-Subject: [PATCH] pwm: meson: Simplify probe function with dev_err_probe()
-Date:   Thu, 18 Aug 2022 15:22:34 +0800
-Message-Id: <20220818072234.9640-1-zhaoxiao@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Thu, 18 Aug 2022 03:23:15 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0DE5FA5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:23:12 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id r83-20020a1c4456000000b003a5cb389944so2126843wma.4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:23:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=uvXm0RZumj0mZgTh7JDm1cAJdvIkjg/M0gZNRFsBcbE=;
+        b=WctPc8ihRxgLEWgb8uuHyWvfBh9syJKPte5nZSCDHMMvQjY4s0tCWphV0veBT2KQDI
+         r6bJVpXK3Gr3Swbbn7Q125sT7V7X/nFvF0RiX9S+mADB59V13sdKcruTgbCP7f3KXEdn
+         kboE0EwDAX1uEHWrdor2e15L6NbvYQiI1SG4Uhf2hxblkKyaux+ovasAZdNLe41L4zpr
+         mUGApu6cMNMCW1jdtodNm1VZohGK1BaaeWoWMeOWs98rBKlYHFnJ9MjfI3UDK5vaZ56n
+         O/n/+HoUlA6GWeqsZzBvBfo4fuQ6K+fE6/3Mo5zSkgLFlP8fY0ZbTpg6AHCFthZPQkCE
+         P7iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=uvXm0RZumj0mZgTh7JDm1cAJdvIkjg/M0gZNRFsBcbE=;
+        b=HmtdP5tJ9TIWr67eIFMt2i356g7P6raOnqrx0UL3P2PHdoHXBbsf8eo3pUW/o6S+z9
+         //2tmQjMt+G7cIFJNDOZho+JL9D0E2RAMaHfZNvdAIhVg94eBUZVJLSzycEZFGQinu6/
+         OltZ3udqxHrDXKCnvJTRRHT1qLthoiUVT1kUuKfCtXZOWcJdS91WydcNLIjfPrzy8ff6
+         P8lvu7YF9+O6J8/TSx3jptRojWdIvb0ZjEHESQdkyPg73h0hoRzWPnm+3QyqKL8JsddN
+         lExkJ01mqy6D+FReYGIhzhQH0LXq4whWcEfY2EuEl4dfKweTvnOqQpVEeSikKa42FkEs
+         GyEg==
+X-Gm-Message-State: ACgBeo3YW1CKYmzWrCmiGtjQJYH6xZC9eeeSzJcuXkm3dZoju6vXUOq/
+        1UtcNiIwASEAwrTNH7ACD11YzQ==
+X-Google-Smtp-Source: AA6agR6nObt5E7+iDPx/bOg98ioOd1CfUD4q5gu+vTlcSGOcSpqZzeCm7LadDRmozdqUZ0oNlPTFlw==
+X-Received: by 2002:a7b:c5c5:0:b0:3a5:3e42:fa18 with SMTP id n5-20020a7bc5c5000000b003a53e42fa18mr943938wmk.178.1660807390890;
+        Thu, 18 Aug 2022 00:23:10 -0700 (PDT)
+Received: from [192.168.42.79] ([37.171.155.54])
+        by smtp.googlemail.com with ESMTPSA id r14-20020a056000014e00b00223678fe95asm732216wrx.18.2022.08.18.00.23.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 00:23:10 -0700 (PDT)
+Message-ID: <5008ef00-6e64-ca89-7ff0-0bcf85bd4b54@linaro.org>
+Date:   Thu, 18 Aug 2022 09:23:09 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4] Revert "mlxsw: core: Add the hottest thermal zone
+ detection"
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>, Ido Schimmel <idosch@nvidia.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org, vadimp@mellanox.com,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vadimp@nvidia.com, petrm@nvidia.com,
+        edumazet@google.com, pabeni@redhat.com
+References: <20220817153040.2464245-1-daniel.lezcano@linaro.org>
+ <Yv0TIH0LsjFJwV0L@shredder> <20220817112110.6ad4c3ef@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220817112110.6ad4c3ef@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,116 +79,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch to dev_err_probe() to remove all dev_err() -> return repeated
-patterns, simplifying and shortening the probe function.
+On 17/08/2022 20:21, Jakub Kicinski wrote:
+> On Wed, 17 Aug 2022 19:11:12 +0300 Ido Schimmel wrote:
+>> Jakub, Daniel wants to route this patch via his tree. Do you mind?
+>> I spoke with Vadim earlier this week and we do not expect changes to
+>> this file during the current cycle.
+> 
+> I don't understand why this couldn't have gotten in during the merge
+> window for 6.0, avoiding the risk of conflicts. But yeah, you said
+> conflicts are unlikely here anyway, so no objections:
+> 
+> Acked-by: Jakub Kicinski <kuba@kernel.org>
 
-Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
----
- drivers/pwm/pwm-meson.c | 53 ++++++++++++++---------------------------
- 1 file changed, 18 insertions(+), 35 deletions(-)
+Applied, thanks
 
-diff --git a/drivers/pwm/pwm-meson.c b/drivers/pwm/pwm-meson.c
-index 57112f438c6d..43ce8d9a33d2 100644
---- a/drivers/pwm/pwm-meson.c
-+++ b/drivers/pwm/pwm-meson.c
-@@ -126,20 +126,16 @@ static int meson_pwm_request(struct pwm_chip *chip, struct pwm_device *pwm)
- 
- 	if (channel->clk_parent) {
- 		err = clk_set_parent(channel->clk, channel->clk_parent);
--		if (err < 0) {
--			dev_err(dev, "failed to set parent %s for %s: %d\n",
-+		if (err < 0)
-+			return dev_err_probe(dev, err, "failed to set parent %s for %s\n",
- 				__clk_get_name(channel->clk_parent),
--				__clk_get_name(channel->clk), err);
--			return err;
--		}
-+				__clk_get_name(channel->clk));
- 	}
- 
- 	err = clk_prepare_enable(channel->clk);
--	if (err < 0) {
--		dev_err(dev, "failed to enable clock %s: %d\n",
--			__clk_get_name(channel->clk), err);
--		return err;
--	}
-+	if (err < 0)
-+		return dev_err_probe(dev, err, "failed to enable clock %s\n",
-+			__clk_get_name(channel->clk));
- 
- 	return 0;
- }
-@@ -166,24 +162,18 @@ static int meson_pwm_calc(struct meson_pwm *meson, struct pwm_device *pwm,
- 		duty = period - duty;
- 
- 	fin_freq = clk_get_rate(channel->clk);
--	if (fin_freq == 0) {
--		dev_err(meson->chip.dev, "invalid source clock frequency\n");
--		return -EINVAL;
--	}
-+	if (fin_freq == 0)
-+		return dev_err_probe(meson->chip.dev, -EINVAL, "invalid source clock frequency\n");
- 
- 	dev_dbg(meson->chip.dev, "fin_freq: %lu Hz\n", fin_freq);
- 
- 	pre_div = div64_u64(fin_freq * (u64)period, NSEC_PER_SEC * 0xffffLL);
--	if (pre_div > MISC_CLK_DIV_MASK) {
--		dev_err(meson->chip.dev, "unable to get period pre_div\n");
--		return -EINVAL;
--	}
-+	if (pre_div > MISC_CLK_DIV_MASK)
-+		return dev_err_probe(meson->chip.dev, -EINVAL, "unable to get period pre_div\n");
- 
- 	cnt = div64_u64(fin_freq * (u64)period, NSEC_PER_SEC * (pre_div + 1));
--	if (cnt > 0xffff) {
--		dev_err(meson->chip.dev, "unable to get period cnt\n");
--		return -EINVAL;
--	}
-+	if (cnt > 0xffff)
-+		return dev_err_probe(meson->chip.dev, -EINVAL, "unable to get period cnt\n");
- 
- 	dev_dbg(meson->chip.dev, "period=%u pre_div=%u cnt=%u\n", period,
- 		pre_div, cnt);
-@@ -200,10 +190,8 @@ static int meson_pwm_calc(struct meson_pwm *meson, struct pwm_device *pwm,
- 		/* Then check is we can have the duty with the same pre_div */
- 		duty_cnt = div64_u64(fin_freq * (u64)duty,
- 				     NSEC_PER_SEC * (pre_div + 1));
--		if (duty_cnt > 0xffff) {
--			dev_err(meson->chip.dev, "unable to get duty cycle\n");
--			return -EINVAL;
--		}
-+		if (duty_cnt > 0xffff)
-+			return dev_err_probe(meson->chip.dev, -EINVAL, "unable to get duty cycle\n");
- 
- 		dev_dbg(meson->chip.dev, "duty=%u pre_div=%u duty_cnt=%u\n",
- 			duty, pre_div, duty_cnt);
-@@ -509,11 +497,8 @@ static int meson_pwm_init_channels(struct meson_pwm *meson)
- 		channel->mux.hw.init = &init;
- 
- 		channel->clk = devm_clk_register(dev, &channel->mux.hw);
--		if (IS_ERR(channel->clk)) {
--			err = PTR_ERR(channel->clk);
--			dev_err(dev, "failed to register %s: %d\n", name, err);
--			return err;
--		}
-+		if (IS_ERR(channel->clk))
-+			return dev_err_probe(dev, PTR_ERR(channel->clk), "failed to register %s\n", name);
- 
- 		snprintf(name, sizeof(name), "clkin%u", i);
- 
-@@ -550,10 +535,8 @@ static int meson_pwm_probe(struct platform_device *pdev)
- 		return err;
- 
- 	err = devm_pwmchip_add(&pdev->dev, &meson->chip);
--	if (err < 0) {
--		dev_err(&pdev->dev, "failed to register PWM chip: %d\n", err);
--		return err;
--	}
-+	if (err < 0)
-+		return dev_err_probe(&pdev->dev, err, "failed to register PWM chip\n");
- 
- 	return 0;
- }
 -- 
-2.20.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

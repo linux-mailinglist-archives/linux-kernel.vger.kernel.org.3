@@ -2,162 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343F7597B37
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 03:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D453A597B3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbiHRByx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 21:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
+        id S239688AbiHRB6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 21:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiHRByu (ORCPT
+        with ESMTP id S234661AbiHRB6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 21:54:50 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C34F44563;
-        Wed, 17 Aug 2022 18:54:48 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M7SZB1yK4zmVwD;
-        Thu, 18 Aug 2022 09:52:34 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+        Wed, 17 Aug 2022 21:58:37 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F157441D01
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 18:58:34 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4M7SgJ1bcPzGpXS;
+        Thu, 18 Aug 2022 09:57:00 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 09:54:46 +0800
-Message-ID: <803e4ab0-e336-5434-2827-a5091eefad59@huawei.com>
-Date:   Thu, 18 Aug 2022 09:54:45 +0800
+ 15.1.2375.24; Thu, 18 Aug 2022 09:58:33 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 18 Aug 2022 09:58:33 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <rostedt@goodmis.org>, <chenzhongjin@huawei.com>
+Subject: [PATCH] x86/unwind/orc: unwind ftrace trampolines with correct orc
+Date:   Thu, 18 Aug 2022 09:55:25 +0800
+Message-ID: <20220818015525.222053-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 2/2] ext4: add inode table check in __ext4_get_inode_loc
- to aovid possible infinite loop
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <lczerner@redhat.com>, <enwlinux@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yebin10@huawei.com>, <yukuai3@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-References: <20220817132701.3015912-1-libaokun1@huawei.com>
- <20220817132701.3015912-3-libaokun1@huawei.com>
- <20220817143138.7krkxzoa3skruiyx@quack3>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20220817143138.7krkxzoa3skruiyx@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500021.china.huawei.com (7.185.36.21)
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/17/2022 10:31 PM, Jan Kara wrote:
-> On Wed 17-08-22 21:27:01, Baokun Li wrote:
->> In do_writepages, if the value returned by ext4_writepages is "-ENOMEM"
->> and "wbc->sync_mode == WB_SYNC_ALL", retry until the condition is not met.
->>
->> In __ext4_get_inode_loc, if the bh returned by sb_getblk is NULL,
->> the function returns -ENOMEM.
->>
->> In __getblk_slow, if the return value of grow_buffers is less than 0,
->> the function returns NULL.
->>
->> When the three processes are connected in series like the following stack,
->> an infinite loop may occur:
->>
->> do_writepages					<--- keep retrying
->>   ext4_writepages
->>    mpage_map_and_submit_extent
->>     mpage_map_one_extent
->>      ext4_map_blocks
->>       ext4_ext_map_blocks
->>        ext4_ext_handle_unwritten_extents
->>         ext4_ext_convert_to_initialized
->>          ext4_split_extent
->>           ext4_split_extent_at
->>            __ext4_ext_dirty
->>             __ext4_mark_inode_dirty
->>              ext4_reserve_inode_write
->>               ext4_get_inode_loc
->>                __ext4_get_inode_loc		<--- return -ENOMEM
->>                 sb_getblk
->>                  __getblk_gfp
->>                   __getblk_slow			<--- return NULL
->>                    grow_buffers
->>                     grow_dev_page		<--- return -ENXIO
->>                      ret = (block < end_block) ? 1 : -ENXIO;
->>
->> In this issue, bg_inode_table_hi is overwritten as an incorrect value.
->> As a result, `block < end_block` cannot be met in grow_dev_page.
->> Therefore, __ext4_get_inode_loc always returns '-ENOMEM' and do_writepages
->> keeps retrying. As a result, the writeback process is in the D state due
->> to an infinite loop.
->>
->> Add a check on inode table block in the __ext4_get_inode_loc function by
->> referring to ext4_read_inode_bitmap to avoid this infinite loop.
->>
->> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> Thanks for the fixes. Normally, we check that inode table is fine in
-> ext4_check_descriptors() (and those checks are much stricter) so it seems
-Yes, when I first found this problem, I thought that the inode table was 
-an abnormal value
-when the disk was mounted. However, in ext4_ check_ Descriptors see the 
-inspection of inode table.
-ext4_ check_ Descriptors is more strict, and it also checks blocks_ 
-Bitmap and inode_ bitmap。
+When meeting ftrace trampolines in orc unwinding, unwinder uses address
+of ftrace_{regs_}call address to find the orc, which gets next frame at
+sp+176.
 
-However, in addition to mounting, I can't find any changes to 
-bg_inode_table_hi  in other parts of
-the kernel, which makes me very confused. It wasn't until I tracked the 
-address of the variable that
-I found it was modified by memcpy.
+If there is an irq hitting at sub $0xa8,%rsp, the next frame should be
+sp+8 instead of 176. It makes unwinder skip correct frame and throw
+warnings such as "wrong direction" or "can't access registers", etc,
+depending on the content of the wrong frame address.
 
-This check is added here to facilitate us to find problems and avoid 
-dead loops. Otherwise,
-we may not find problems until the write back process is stuck in the D 
-state for several hours.
-  At this time, the file system may be in a mess.
-> unnecessary to check it again here. I understand that in your case it was
-> resize that corrupted the group descriptor after the filesystem was mounted
-> which is nasty but there's much more metadata that can be corrupted like
-> this and it's infeasible to check each metadata block before we use it.
-Indeed, But is it true that checking for inode_bitmap in 
-ext4_read_inode_bitmap and
-checking for block_bitmap in ext4_read_block_bitmap_nowait also 
-unnecessary?
-After all, inode_bitmap and block_bitmap may be faulty only when the 
-metadata  is corrupted.
-I think it seems unreasonable that both block_bitmap and inode_bitmap 
-have checks and inode_table does not.
->
-> IMHO a proper fix to this class of issues would be for sb_getblk() to
-> return proper error so that we can distinguish ENOMEM from other errors.
+By adding the base address ftrace_{regs_}caller with the offset
+*ip - ops->trampoline*,
+we can get the correct address to find orc.
 
-Totally agree! There is a FIXME in the comments of __getblk_gfp:
+Also change "caller" to "tramp_addr" to make variable name conform to
+its content.
 
-` ` `
-__getblk_gfp() will lock up the machine if grow_dev_page's
-try_to_free_buffers() attempt is failing. FIXME, perhaps?
-` ` `
+Fixes: 6be7fa3c74d1 ("ftrace, orc, x86: Handle ftrace dynamically allocated trampolines")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ arch/x86/kernel/unwind_orc.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-This is the same as this issue because the return value of the 
-grow_buffers function is not propagated correctly.
-
-> But that will be a larger undertaking...
->
-> 								Honza
-Yes, this function can be called in many places, and external interface 
-changes are involved.
->> ---
->>   fs/ext4/inode.c | 10 +++++++++-
->>   1 file changed, 9 insertions(+), 1 deletion(-)
-Thanks!
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index 38185aedf7d1..a938c5d0ed6f 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -93,22 +93,25 @@ static struct orc_entry *orc_find(unsigned long ip);
+ static struct orc_entry *orc_ftrace_find(unsigned long ip)
+ {
+ 	struct ftrace_ops *ops;
+-	unsigned long caller;
++	unsigned long tramp_addr, offset;
+ 
+ 	ops = ftrace_ops_trampoline(ip);
+ 	if (!ops)
+ 		return NULL;
+ 
+ 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS)
+-		caller = (unsigned long)ftrace_regs_call;
++		tramp_addr = (unsigned long)ftrace_regs_caller;
+ 	else
+-		caller = (unsigned long)ftrace_call;
++		tramp_addr = (unsigned long)ftrace_caller;
++
++	offset = ip - ops->trampoline;
++	tramp_addr += offset;
+ 
+ 	/* Prevent unlikely recursion */
+-	if (ip == caller)
++	if (ip == tramp_addr)
+ 		return NULL;
+ 
+-	return orc_find(caller);
++	return orc_find(tramp_addr);
+ }
+ #else
+ static struct orc_entry *orc_ftrace_find(unsigned long ip)
 -- 
-With Best Regards,
-Baokun Li
+2.17.1
+

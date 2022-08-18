@@ -2,147 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53508598518
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04520598511
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245465AbiHRN6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S245570AbiHRN7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245485AbiHRN6P (ORCPT
+        with ESMTP id S245530AbiHRN6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:58:15 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39D82E3;
-        Thu, 18 Aug 2022 06:58:11 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4M7mgQ0Yqsz9sf4;
-        Thu, 18 Aug 2022 15:58:10 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Mh1iG2BKyRO9; Thu, 18 Aug 2022 15:58:10 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4M7mgP6sZWz9sdy;
-        Thu, 18 Aug 2022 15:58:09 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id DC8B78B767;
-        Thu, 18 Aug 2022 15:58:09 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id LlPoFkLgpU30; Thu, 18 Aug 2022 15:58:09 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.235.236])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9D11C8B763;
-        Thu, 18 Aug 2022 15:58:09 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 27IDw0Vu1993063
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 15:58:00 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 27IDw09J1993060;
-        Thu, 18 Aug 2022 15:58:00 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH v3] spi: Add capability to perform some transfer with chipselect off
-Date:   Thu, 18 Aug 2022 15:57:49 +0200
-Message-Id: <fabbc87627e5ddc2c913b368ae99386668d8dcfb.1660830866.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Thu, 18 Aug 2022 09:58:38 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D89E1015
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:58:31 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso2635077wma.2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:58:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=o9Ay2vEp02yCz7wtoapfe+JbYqIRcJhSEcb1z+0LYVA=;
+        b=n7fh4Wb0yRW3KJURFLMocGfucbu0vFwY1MdMv/WAVHNRMs+YiFSTYRkDe5EZ3nBuci
+         797g12ZiwLhBQ4R5nKrv2WpDF8fPENnhXu+Ep7L7VPXRLhM12k7CoHj26V12dWPkSH5Z
+         fnQqYTf/+LpQLUuQnb++12zB02auXV/sI8jojV54zb8q0aK5pAW9fVo1fq3e2pIY7Cj6
+         tYWpnjFjE72aELypeq92ItC5N4y695ce3Ylk0T3qioaM6g7DTihaGxVqnqdNDLLYm9SG
+         QcjrGtrWlo7eReWvgAz1NH5XPRm8CsookvJ/gWwaOzfBQcJIM6+SU6vkB6NiDEu8oEWF
+         AufQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=o9Ay2vEp02yCz7wtoapfe+JbYqIRcJhSEcb1z+0LYVA=;
+        b=lPTsHgjuV1d0NxIhm3nVNUeVrPPajrez4WhxlKZwi6W5erfnPxH+vnruj549UN7PKn
+         dcdED15WaTbEFkDvDzM7VaereQxizW0WEys6IOKrWEoxFOFpYMp0e50ps/6xabyB2Sbf
+         J3rAiZuv64mrjhvn9bF9odcYhRdbaozdXa0CLvSlBW9rX9eWkkyR/CqmvTREMb1tlKeo
+         wtwYG/4cigx6SuGBS8L+n6MPrGQ/Bldy1cgH6OC0l45TCJD6MJP02XzXGUd83+cmdZtq
+         T0cOoohwq0E2P79iD28V9gLTzjk+iIVlSiDguv7Cpw5b10Luegtqgf1L/F5KpXyZHwlT
+         m7vA==
+X-Gm-Message-State: ACgBeo2bUIToxWBYASSpVbwIAPa/a7mWdVJHwMt51XAr9Y3ZxMEY/K3u
+        33RTucpxg/ZPuFpNG/taUjcB2A==
+X-Google-Smtp-Source: AA6agR5x3XYSteyGAwK5Qw85QEMJ/Q0oUaeWSFRKKd6fh1okhbFxUgsKVpK/fY5E3H1oaGjbTyMgiQ==
+X-Received: by 2002:a05:600c:4e8d:b0:3a5:f7ed:873 with SMTP id f13-20020a05600c4e8d00b003a5f7ed0873mr5343453wmq.170.1660831109242;
+        Thu, 18 Aug 2022 06:58:29 -0700 (PDT)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id l24-20020a1c7918000000b003a5ca627333sm5335937wme.8.2022.08.18.06.58.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 06:58:28 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        perex@perex.cz, tiwai@suse.com,
+        pierre-louis.bossart@linux.intel.com,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 0/6] ASoC: qcom: add support for sc8280xp machine
+Date:   Thu, 18 Aug 2022 14:58:14 +0100
+Message-Id: <20220818135817.10142-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1660831067; l=3497; s=20211009; h=from:subject:message-id; bh=pBEp2sV1HSEbreVLmDNueVNSIkEvPWM2zi6OQ+L8A3M=; b=ruZBrXja6jNd1n+ZvqAsoBgHCZ9iAZPljuFSoWxEqAaOztZftEi4UMQVPPKMcs+KQxOnaWQ/yslv 5ExyNtw1AaL2/5vYPGW7ZLIbVNRNFIBeTu9RkgKriygiTi0QfmlV
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some components require a few clock cycles with chipselect off before
-or/and after the data transfer done with CS on.
+THis patchset adds support for SC8280XP SoC machine driver.
 
-Typically IDT 801034 QUAD PCM CODEC datasheet states "Note *: CCLK
-should have one cycle before CS goes low, and two cycles after
-CS goes high".
+First patch moves some of the commonly used code to common from sm8250 machine driver
+and the follow on code adds minimal support for sc8280xp.
 
-The cycles "before" are implicitely provided by all previous activity
-on the SPI bus. But the cycles "after" must be provided in order to
-terminate the SPI transfer.
+Currently this driver is only tested with SmartSpeakers and Headset
+on Lenovo Thinkpad X13s.
 
-In order to use that kind of component, add a cs_off flag to
-spi_transfer struct. When this flag is set, the transfer is performed
-with chipselect off. This allows consummer to add a dummy transfer
-at the end of the transfer list which is performed with chipselect
-OFF, providing the required additional clock cycles.
+Support for sm8450 is tested and I will post the patches soon.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-This is a change in the approach. Now we offer the driver/consumer a way to perform an additional transfer with chipselect off.
+Thanks,
+Srini
 
-v2 is at https://patchwork.kernel.org/project/spi-devel-general/list/?series=618784&state=*&archive=both
+Srinivas Kandagatla (3):
+  ASoC: dt-bindings: qcom,sm8250: add compatibles for sm8450 and sm8250
+  ASoC: qcom: sm8250: move some code to common
+  ASoC: qcom: add machine driver for sc8280xp
 
- drivers/spi/spi.c       | 12 +++++++++---
- include/linux/spi/spi.h |  2 ++
- 2 files changed, 11 insertions(+), 3 deletions(-)
+ .../bindings/sound/qcom,sm8250.yaml           |   2 +
+ sound/soc/qcom/Kconfig                        |  11 ++
+ sound/soc/qcom/Makefile                       |   2 +
+ sound/soc/qcom/common.c                       | 169 ++++++++++++++++++
+ sound/soc/qcom/common.h                       |  12 ++
+ sound/soc/qcom/sc8280xp.c                     | 157 ++++++++++++++++
+ sound/soc/qcom/sm8250.c                       | 152 +---------------
+ 7 files changed, 360 insertions(+), 145 deletions(-)
+ create mode 100644 sound/soc/qcom/sc8280xp.c
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 2a472dcf081e..ca71723d44a7 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1418,7 +1418,8 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
- 	struct spi_statistics *statm = &ctlr->statistics;
- 	struct spi_statistics *stats = &msg->spi->statistics;
- 
--	spi_set_cs(msg->spi, true, false);
-+	xfer = list_first_entry(&msg->transfers, struct spi_transfer, transfer_list);
-+	spi_set_cs(msg->spi, !xfer->cs_off, false);
- 
- 	SPI_STATISTICS_INCREMENT_FIELD(statm, messages);
- 	SPI_STATISTICS_INCREMENT_FIELD(stats, messages);
-@@ -1486,10 +1487,15 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
- 					 &msg->transfers)) {
- 				keep_cs = true;
- 			} else {
--				spi_set_cs(msg->spi, false, false);
-+				if (!xfer->cs_off)
-+					spi_set_cs(msg->spi, false, false);
- 				_spi_transfer_cs_change_delay(msg, xfer);
--				spi_set_cs(msg->spi, true, false);
-+				if (!list_next_entry(xfer, transfer_list)->cs_off)
-+					spi_set_cs(msg->spi, true, false);
- 			}
-+		} else if (!list_is_last(&xfer->transfer_list, &msg->transfers) &&
-+			   xfer->cs_off != list_next_entry(xfer, transfer_list)->cs_off) {
-+			spi_set_cs(msg->spi, xfer->cs_off, false);
- 		}
- 
- 		msg->actual_length += xfer->len;
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 7ab3fed7b804..cbb787f6b9ff 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -818,6 +818,7 @@ struct spi_res {
-  *      for this transfer. If 0 the default (from @spi_device) is used.
-  * @dummy_data: indicates transfer is dummy bytes transfer.
-  * @cs_change: affects chipselect after this transfer completes
-+ * @cs_off: performs the transfer with chipselect off.
-  * @cs_change_delay: delay between cs deassert and assert when
-  *      @cs_change is set and @spi_transfer is not the last in @spi_message
-  * @delay: delay to be introduced after this transfer before
-@@ -930,6 +931,7 @@ struct spi_transfer {
- 	unsigned	cs_change:1;
- 	unsigned	tx_nbits:3;
- 	unsigned	rx_nbits:3;
-+	unsigned	cs_off:1;
- #define	SPI_NBITS_SINGLE	0x01 /* 1bit transfer */
- #define	SPI_NBITS_DUAL		0x02 /* 2bits transfer */
- #define	SPI_NBITS_QUAD		0x04 /* 4bits transfer */
 -- 
-2.37.1
+2.21.0
 

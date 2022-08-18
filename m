@@ -2,168 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59419598C9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D947C598CA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344590AbiHRTcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
+        id S241003AbiHRTe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234283AbiHRTb6 (ORCPT
+        with ESMTP id S230500AbiHRTex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:31:58 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2665CCCE34;
-        Thu, 18 Aug 2022 12:31:58 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 741CB3200912;
-        Thu, 18 Aug 2022 15:31:56 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 18 Aug 2022 15:31:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660851115; x=1660937515; bh=N34gQPDvkw
-        MyOkC3GrCuym5zwS0Pzq+Cxj1ER7CAjUM=; b=NrL8bYm4JIEZp86igNy2yRBLc/
-        IDVVNyhH2xn+VNrhWAyd5BCMaZp+D7Cu9o1pw0Zb/4FcIB3yrV0sRIR53COzjXbw
-        Snh5ytq/tBnh4QH6smBuKIOfkR3T+WHS4BaNJNTA+lD1VYPVPtyclAkT/xEvieHn
-        WjV320NzBN34YpdluhIU3XORPtzMv76Mz924qd1lXh8paEOP3zS1vOBfWsvFDJNb
-        rJX+OOQQAdRNxs8hLVHK9vXyHABLeg2rUAHj/4QhYruXlBkZJe3OuM7jb5TTv9WI
-        XTumdUELROwi9aAAmC1svRIqj/uNTOpHJAt3Xv1TYZoCALjG3R8RMu5FG2MQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660851115; x=1660937515; bh=N34gQPDvkwMyOkC3GrCuym5zwS0P
-        zq+Cxj1ER7CAjUM=; b=XY4feljb7VAY8mhgojciE7utjdWlrN4xCYTs2ujZTIW/
-        jb3QmoDCTov9Dys02S4VC/FhsoYAKmNZv21GnS2WAGdWcgysqP9+gXg9Pci7o9O8
-        4M34U2gfHBVu0rENeum4Zsh3401gjS+JIyrI355+/S/ohAvwjeuG+XFWnVVX1lLg
-        RJTAgbZnGNG6+cLA/qvxRGjy72xuznKlddi429b6m92GP0jbWMpyRxBMnDkfqhS3
-        kpCxPFIYo0s/i3EaGZs806FYTsHTUcaQWCYW40qu+eC97knst2IBaBuEkJUIGyZ5
-        iX7AyrpBiH41pai+eySfvHJCGvW1keDFKiNy6UUF3A==
-X-ME-Sender: <xms:q5P-YoeVGxjYqHKgGMetgDQzzQLMga2vHYpIasWgw_Ng7rhXzdwrFQ>
-    <xme:q5P-YqMQgD4m5_yQPhD3xieWEJ4FGqsb1aAQcwviKuY905wr56e2Qr1ZEluvTzSta
-    eSuWaaAKZrCeOlTng>
-X-ME-Received: <xmr:q5P-YpjfHVPfIYvUWQ6-lbMoqRWYKoGQNn2HiDN9hL0aH416Dd18mfae4bfH_e-B6biTIrm-3YV4oNvFXk6DzlqkUG6KYeE24E3->
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehledgudduudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredt
-    tddtvdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpeevuddugeeihfdtffehgffgudeggeegheetgfevhfekkeei
-    leeuieejleekiedvgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:q5P-Yt8vnm8CygyL_eUwAsUU5fi-qacNH9OMbGZAEuzlES_7uObG1w>
-    <xmx:q5P-YkuANGXjq-FfMOSG8CQJ0AA1yzXZ7EbJXD7hzXwmCR1q8etLMA>
-    <xmx:q5P-YkGeqBI-noWwMDUNWQQBOnbzjGL7qI6PqHvIO8a4dZOJmubaMg>
-    <xmx:q5P-YlEM1H1-ug7APxyiT8jmTonkTF55Dz_JPaKcIYF0shilIawD-w>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 18 Aug 2022 15:31:54 -0400 (EDT)
-Date:   Thu, 18 Aug 2022 13:31:53 -0600
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>,
-        netfilter-devel <netfilter-devel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 3/4] bpf: Add support for writing to
- nf_conn:mark
-Message-ID: <20220818193153.wysd2wizpf5kgaqu@kashmir.localdomain>
-References: <cover.1660761470.git.dxu@dxuuu.xyz>
- <edbca42217a73161903a50ba07ec63c5fa5fde00.1660761470.git.dxu@dxuuu.xyz>
- <CAADnVQ+G0Hju-OeN6e=JLPQzODxGXCsP7OuVbex1y-EYr6Z5Yw@mail.gmail.com>
- <20220817220501.kiftkkaqepooforu@kafai-mbp>
+        Thu, 18 Aug 2022 15:34:53 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE229CE47B;
+        Thu, 18 Aug 2022 12:34:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=eQTG/989/DAu6Exi05B4ixu+5J4EP6ThaWhb/xNoy+s=; b=Xf4Ah/68SvKJXBUh3t+EzcI/kl
+        p0SaEWsgfgYL4IeuEygr6avs8qZMXojf5td0sD+sqXd0PjU+5Wp324p1dQEG59JiMaCV9jYqBhk5x
+        tKdsy7i29Vixdm2oe2vuctWNtujThsTu4TcEuoKxdAsLtNPQWe9Am+KylYFNWVErk+6SQDxXi/tVh
+        3DIsSAN1x/v2RipIg5LRRH8Gm/03DpxvzJdT/t43hmlUaAkWMHAoJXkSubNqBPtTO+oma6YUAcVYV
+        UwV4JGX7IyuLLckngrOo5vh/XVkh+vQM0X3RlMSfUJme6tsYaWWTWkhhUCHQMYni9V/kAPNvzJo/8
+        vHEtPcxQ==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oOlHz-008gDy-TP; Thu, 18 Aug 2022 19:34:48 +0000
+Message-ID: <df284479-9981-9983-7775-81d7d7875dac@infradead.org>
+Date:   Thu, 18 Aug 2022 12:34:46 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817220501.kiftkkaqepooforu@kafai-mbp>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: build failure of next-20220817 for amdgpu due to 7bc913085765
+ ("drm/amdkfd: Try to schedule bottom half on same core")
+Content-Language: en-US
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-next <linux-next@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <Yv1lepjhg/6QKyQl@debian>
+ <CADnq5_Od9W1iuzYpsmODOB=Xem97ogeH_t0JrjWC-S8h0XM9fA@mail.gmail.com>
+ <5638aaf1-b808-bdc6-d84a-820f24facea6@infradead.org>
+ <CADVatmNA6-qCJEHNn-gRO6Nx88SsTrPsJn_F5J0NiFhyvijNxA@mail.gmail.com>
+ <c1869a4b-ead1-2ae5-c9ec-61834b578216@infradead.org>
+ <CADVatmPCd5KQ0mAfQGHvqVGFJtK+fyQPB4XUktgfc3fzYJvyCg@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CADVatmPCd5KQ0mAfQGHvqVGFJtK+fyQPB4XUktgfc3fzYJvyCg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 03:05:01PM -0700, Martin KaFai Lau wrote:
-> On Wed, Aug 17, 2022 at 02:30:01PM -0700, Alexei Starovoitov wrote:
-> > On Wed, Aug 17, 2022 at 11:43 AM Daniel Xu <dxu@dxuuu.xyz> wrote:
-> > >
-> > > +/* Check writes into `struct nf_conn` */
-> > > +int nf_conntrack_btf_struct_access(struct bpf_verifier_log *log,
-> > > +                                  const struct btf *btf,
-> > > +                                  const struct btf_type *t, int off,
-> > > +                                  int size, enum bpf_access_type atype,
-> > > +                                  u32 *next_btf_id,
-> > > +                                  enum bpf_type_flag *flag)
-> > > +{
-> > > +       const struct btf_type *nct = READ_ONCE(nf_conn_type);
-> > > +       s32 type_id;
-> > > +       size_t end;
-> > > +
-> > > +       if (!nct) {
-> > > +               type_id = btf_find_by_name_kind(btf, "nf_conn", BTF_KIND_STRUCT);
-> > > +               if (type_id < 0)
-> > > +                       return -EINVAL;
-> > > +
-> > > +               nct = btf_type_by_id(btf, type_id);
-> > > +               WRITE_ONCE(nf_conn_type, nct);
-> > > +       }
-> > > +
-> > > +       if (t != nct) {
-> > > +               bpf_log(log, "only read is supported\n");
-> > > +               return -EACCES;
-> > > +       }
-> > > +
-> > > +       switch (off) {
-> > > +#if defined(CONFIG_NF_CONNTRACK_MARK)
-> > > +       case offsetof(struct nf_conn, mark):
-> > > +               end = offsetofend(struct nf_conn, mark);
-> > > +               break;
-> > > +#endif
-> > > +       default:
-> > > +               bpf_log(log, "no write support to nf_conn at off %d\n", off);
-> > > +               return -EACCES;
-> > > +       }
-> > > +
-> > > +       if (off + size > end) {
-> > > +               bpf_log(log,
-> > > +                       "write access at off %d with size %d beyond the member of nf_conn ended at %zu\n",
-> > > +                       off, size, end);
-> > > +               return -EACCES;
-> > > +       }
-> > > +
-> > > +       return NOT_INIT;
-> > 
-> > Took me a long time to realize that this is a copy-paste
-> > from net/ipv4/bpf_tcp_ca.c.
-> > It's not wrong, but misleading.
-> > When atype == BPF_READ the return value from
-> > btf_struct_access should only be error<0, SCALAR_VALUE, PTR_TO_BTF_ID.
-> > For atype == BPF_WRITE we should probably standardize on
-> > error<0, or 0.
-> > 
-> > The NOT_INIT happens to be zero, but explicit 0
-> > is cleaner to avoid confusion that this is somehow enum bpf_reg_type.
-> > 
-> > Martin,
-> > since you've added this code in bpf_tcp_ca, wdyt?
-> Yep, sgtm.  This will be less confusing.
+Hi--
 
-Ok, will fix both occurrences. 
+On 8/18/22 12:15, Sudip Mukherjee wrote:
+> On Thu, Aug 18, 2022 at 4:10 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>>
+>>
+>> On 8/18/22 03:43, Sudip Mukherjee wrote:
+>>> On Thu, Aug 18, 2022 at 3:09 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 8/17/22 19:01, Alex Deucher wrote:
+>>>>> On Wed, Aug 17, 2022 at 6:03 PM Sudip Mukherjee (Codethink)
+>>>>> <sudipm.mukherjee@gmail.com> wrote:
+>>>>>>
+>>>>>> Hi All,
+>>>>>>
+>>>>>> Not sure if it has been reported, build of next-20220817 fails with the
+>>>>>> error:
+>>>>>>
+>>>>>> ERROR: modpost: "cpu_smallcore_map" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+>>>>>>
+>>>>>> Trying to do a git bisect to find out the offending commit.
+>>>>>>
+>>>>>
+>>>>> Thanks.  I don't see that symbol in the driver at all.  Not sure where
+>>>>> it is coming from.
+>>>>>
+>>>>
+>>>> It's powerpc only.
+>>>>
+>>>> Sudip, is it non-CONFIG_SMP by any chance?
+>>>
+>>> Ohhh.. really sorry for the incomplete report. I should not try to
+>>> mail while travelling.
+>>>
+>>> The error is seen with powerpc allmodconfig and it has CONFIG_SMP=y.
+>>
+>> OK, I see that also, but it doesn't make any sense (to me).
+>>
+>> I did 'objdump' on the code file (amdgpu.o) and it's listed as
+>> undefined but there are no code references to it.
+> 
+> cpu_smt_mask() is called by drivers/gpu/drm/amd/amdkfd/kfd_device.c.
+> and cpu_smt_mask() is an inline function in
+> arch/powerpc/include/asm/smp.h which is doing "return
+> per_cpu(cpu_smallcore_map, cpu);"
+> 
+> So, the offending commit is 7bc913085765 ("drm/amdkfd: Try to schedule
+> bottom half on same core").
 
-Thanks,
-Daniel
+Thanks for digging that up.
+
+It just needs to have that symbol exported I think.
+This builds cleanly now.
+I can submit it or one of the AMD gfx developers can do so.
+
+
+---
+ arch/powerpc/kernel/smp.c |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/arch/powerpc/kernel/smp.c
++++ b/arch/powerpc/kernel/smp.c
+@@ -86,6 +86,7 @@ DEFINE_PER_CPU(cpumask_var_t, cpu_core_m
+ static DEFINE_PER_CPU(cpumask_var_t, cpu_coregroup_map);
+ 
+ EXPORT_PER_CPU_SYMBOL(cpu_sibling_map);
++EXPORT_PER_CPU_SYMBOL(cpu_smallcore_map);
+ EXPORT_PER_CPU_SYMBOL(cpu_l2_cache_map);
+ EXPORT_PER_CPU_SYMBOL(cpu_core_map);
+ EXPORT_SYMBOL_GPL(has_big_cores);
+
+
+-- 
+~Randy

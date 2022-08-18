@@ -2,139 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990C1598F7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 23:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2729A598F8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 23:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347145AbiHRV1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 17:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
+        id S242552AbiHRVav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 17:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347131AbiHRV07 (ORCPT
+        with ESMTP id S1347171AbiHRVab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 17:26:59 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2C8DA3D9
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:19:15 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id r15-20020a17090a1bcf00b001fabf42a11cso3044163pjr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:19:15 -0700 (PDT)
+        Thu, 18 Aug 2022 17:30:31 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63D3B8F1C
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:29:14 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-32a09b909f6so76383057b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:29:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=tTJTjqw4MggpWtxGKCzfbFeqFxFbwJEwUmHLuAFNlC4=;
-        b=KLY0b+bh0hfzUpqKcJhe/wX0zYM3DwWqLn+1EFPX/z/mvu9FX8S6481IG9EwIwKlr0
-         sksbXHJQ4Kh7CSdeJ54/AGd442l6xfwUSwbgjuIY7cPkTmb/P8QcpBZsFw1/AEgW7BxO
-         Z7vFc1cM6wHyTLrXmXs4BpPTKJqKJm4CDzUsmuDRJO5YqQ2oTdhgmDQfcISIZdvLXi+a
-         iIdIuaNiTdK6EZBOyO8Sqr7BsD7W8hLLdMZHw8f/Q35ywyTfALa1cNGq5gHNhppDaPfZ
-         O+kBBnOCDICeLF6quWO+kUt7vyDNo8jD0dQqib2ZIPNPKJ57Uq0YHy8r7Fi2W5SNMe/A
-         HD3w==
+        d=atishpatra.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=lAZWTD/ZICVg0LDV29If/DkOf/M6td1O8C85lbuNtx4=;
+        b=Jw2fwjJxFysS6dly4T7qMHiVlXuUDJnlFgx69LZliYnmBo7zmEErUGMNbIcd5mFJ3l
+         T5L2JOuj40RPJbtngjWgicprKfi+Qp+SXbdVdtyX5SfapH4IwU0TV1qhIXJl060ox0G9
+         k00nBwD1V5o5EcvEG06md00j8wP9t8xp1ewuU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=tTJTjqw4MggpWtxGKCzfbFeqFxFbwJEwUmHLuAFNlC4=;
-        b=TZVDtsVQ0jhqTnLy2dAOfVWuMYnmXtqfmK4UtYB7QoELyUpQkbgDskT84YRKdMd29L
-         UwEcPCHba7n5dvH74bIFQpjHDQZyqRFd87ul5QHtO7mbSjeAnSrKgWPPVJQPnnIKC5Uy
-         JzqGybtsRlCVb4NA4Rgf467gi4caw1RaQsV9ajRz3xHyKbyMGRpV3hdN5Ol4dKe9J6j1
-         eMXwYN4In3FgkzGSlWbSVDj8OsW0SxLKjtnc6JRBEC1HwTcx2/CuJ/F6XhpLgjjNzsBN
-         ttORvfH9Ake0ukqHEuaVSNHHo1Zf5IhpFrA14eKSuU9StX8v4yuGnRlkPBEjbMqAfSjk
-         wBrg==
-X-Gm-Message-State: ACgBeo0WAHNik1P7qyp+66iUW8fc5OS+pnIsr5sphDU1TEvWz9piSGm5
-        OpJC0xb3zoMJkEAZwUzriXSDgA==
-X-Google-Smtp-Source: AA6agR6y0AhMETJyQ+vXl0SNQkEBxWGMTcxU9uSEZQLV6JUuiIN57zfeFgll2QLSPF2S39iiIToTNg==
-X-Received: by 2002:a17:90b:4c4b:b0:1f4:d176:aa5a with SMTP id np11-20020a17090b4c4b00b001f4d176aa5amr4899401pjb.233.1660857553755;
-        Thu, 18 Aug 2022 14:19:13 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h8-20020a170902f54800b0016ee328fd61sm1819751plf.198.2022.08.18.14.19.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 14:19:13 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 21:19:09 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kyle Huey <me@kylehuey.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Robert O'Callahan <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        Borislav Petkov <bp@suse.de>, kvm@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] x86/fpu: Allow PKRU to be (once again) written by
- ptrace.
-Message-ID: <Yv6szXuKGv75wWmm@google.com>
-References: <20220808141538.102394-1-khuey@kylehuey.com>
- <87ilmpzunz.ffs@tglx>
- <CAP045Ao7hb4kXajkWnMxqawBzFGUZJtSuRRn1kbmjOF=mcTcoA@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=lAZWTD/ZICVg0LDV29If/DkOf/M6td1O8C85lbuNtx4=;
+        b=q5MARUay87oROoeGOJry5VczTfc6l8M7vATi+P3sKTYPT5+nyy3d0/1HVn4/J4xEqm
+         vlRFjr7igInTBYlueNGky5VmIYpuHihVQy2PJIanASGWhFBFTiUvbYcfxbptWuxT1KXh
+         dj80t7jfRLAVuxKu4GPCyRbe6Q0wrL1C4ptcftL+VS8c2900hXxI1f5SUf59JcujUP8Q
+         V53lCUWNXVsmiLMuXNCvU276DCoVTLLbZ6FwRSTnNk8ReN7NJYwFX4bOfA0Ko3LTC/pR
+         2gD6ukIJYpcfawH66sUJcW4NO9UYzCTqjQoPVX2OPPYmKa/ABcwgkqdC3pCjlKZf3xsg
+         qCpA==
+X-Gm-Message-State: ACgBeo1yGA/NqgbTE9sBKrS+ETT5uxpb3LJBYL9i3DCpgCQsc5nfrVFR
+        lmOaeku+HONHhinVvmLQd8F023adngMEn0t6WrFB
+X-Google-Smtp-Source: AA6agR6gTUMES80CQ41uaydLm3+tG//C1C6nybqXPGXeiBU9JHT0M2je0AYehFCgFl9XqCTTnUW5KY4BWhSwdd3P+zs=
+X-Received: by 2002:a81:10c9:0:b0:337:6e4a:af6c with SMTP id
+ 192-20020a8110c9000000b003376e4aaf6cmr2333072ywq.508.1660858154077; Thu, 18
+ Aug 2022 14:29:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP045Ao7hb4kXajkWnMxqawBzFGUZJtSuRRn1kbmjOF=mcTcoA@mail.gmail.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220420112408.155561-1-apatel@ventanamicro.com> <CAAhSdy15v3-_2bbJuCVm5zp1nNHHLjtypAESOoPkcChjgFsssw@mail.gmail.com>
+In-Reply-To: <CAAhSdy15v3-_2bbJuCVm5zp1nNHHLjtypAESOoPkcChjgFsssw@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 18 Aug 2022 14:29:03 -0700
+Message-ID: <CAOnJCUKUTt1VfU+wMfxE4P21ttW5uaegXD+0oq4O4KgpGOWhaQ@mail.gmail.com>
+Subject: Re: [PATCH v3] RISC-V: Increase range and default value of NR_CPUS
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022, Kyle Huey wrote:
-> On Thu, Aug 18, 2022 at 3:57 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> > On Mon, Aug 08 2022 at 07:15, Kyle Huey wrote:
-> > > When management of the PKRU register was moved away from XSTATE, emulation
-> > > of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
-> > > for APIs that write XSTATE. This can be seen by running gdb and executing
-> > > `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
-> > > write to the PKRU register (which gdb performs through ptrace) is ignored.
-> > >
-> > > There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
-> > > sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
-> > > make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
-> > > down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
-> > > and sigreturn pass in pointers to the appropriate PKRU value.
-> > >
-> > > This also adds code to initialize the PKRU value to the hardware init value
-> > > (namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
-> > > This is a change to the current KVM_SET_XSAVE behavior.
+On Tue, May 24, 2022 at 5:08 AM Anup Patel <anup@brainfault.org> wrote:
+>
+> Hi Palmer,
+>
+> On Wed, Apr 20, 2022 at 4:54 PM Anup Patel <apatel@ventanamicro.com> wrote:
 > >
-> > You are stating a fact here, but provide 0 justification why this is
-> > correct.
-> 
-> Well, the justification is that this *is* the behavior we want for
-> ptrace/sigreturn, and it's very likely the existing KVM_SET_XSAVE
-> behavior in this edge case is an oversight rather than intentional,
-> and in the absence of confirmation that KVM wants the existing
-> behavior (the KVM mailing list and maintainer are CCd) one correct
-> code path is better than one correct code path and one buggy code
-> path.
+> > Currently, the range and default value of NR_CPUS is too restrictive
+> > for high-end RISC-V systems with large number of HARTs. The latest
+> > QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
+> > restrictive for QEMU as well. Other major architectures (such as
+> > ARM64, x86_64, MIPS, etc) have a much higher range and default
+> > value of NR_CPUS.
+> >
+> > This patch increases NR_CPUS range to 2-512 and default value to
+> > XLEN (i.e. 32 for RV32 and 64 for RV64).
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+>
+> Can this PATCH be considered for 5.19 ?
+>
+> Thanks,
+> Anup
+>
+> > ---
+> > Changes since v2:
+> >  - Rebased on Linux-5.18-rc3
+> >  - Use a different range when SBI v0.1 is enabled
+> > Changes since v1:
+> >  - Updated NR_CPUS range to 2-512 which reflects maximum number of
+> >    CPUs supported by QEMU virt machine.
+> > ---
+> >  arch/riscv/Kconfig | 9 ++++++---
+> >  1 file changed, 6 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 00fd9c548f26..1823f281069f 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -275,10 +275,13 @@ config SMP
+> >           If you don't know what to do here, say N.
+> >
+> >  config NR_CPUS
+> > -       int "Maximum number of CPUs (2-32)"
+> > -       range 2 32
+> > +       int "Maximum number of CPUs (2-512)"
+> >         depends on SMP
+> > -       default "8"
+> > +       range 2 512 if !SBI_V01
+> > +       range 2 32 if SBI_V01 && 32BIT
+> > +       range 2 64 if SBI_V01 && 64BIT
+> > +       default "32" if 32BIT
+> > +       default "64" if 64BIT
+> >
+> >  config HOTPLUG_CPU
+> >         bool "Support for hot-pluggable CPUs"
+> > --
+> > 2.25.1
+> >
 
-Sorry, I missed the KVM-relevant flags.
 
-Hrm, the current behavior has been KVM ABI for a very long time.
+Ping ?
+It would be useful to include this patch sooner than later to enable
+high HART count testing by default.
 
-It's definitely odd because all other components will be initialized due to their
-bits being cleared in the header during kvm_load_guest_fpu(), and it probably
-wouldn't cause problems in practice as most VMMs likely do "all or nothing" loads.
-But, in theory, userspace could save/restore a subset of guest XSTATE and rely on
-the kernel not overwriting guest PKRU when its bit is cleared in the header.
 
-All that said, I don't see any reason to force KVM to change at this time, it's
-trivial enough to handle KVM's oddities while providing sane behavior for others.
-Nullify the pointer in the guest path and then update copy_uabi_to_xstate() to
-play nice with a NULL pointer, e.g. 
-
-	/*
-	 * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
-	 * in the header.  KVM's odd ABI is to leave PKRU untouched in this
-	 * case (all other components are eventually re-initialized).
-	 */
-	if (!(kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU))
-		vpkru = NULL;
-
-	return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
+-- 
+Regards,
+Atish

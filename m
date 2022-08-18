@@ -2,288 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4EF598531
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F8359852C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245212AbiHROES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
+        id S245592AbiHROEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245534AbiHROEP (ORCPT
+        with ESMTP id S245574AbiHROE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:04:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AB965818;
-        Thu, 18 Aug 2022 07:04:13 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 14:04:09 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660831451;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=huKV1HiKrxpeYRytT3hwqTJSmcg8WjeKNN8yQta+aBw=;
-        b=j5uEBC8LnwbrTC9dEYtJFn675wVWODruUgBKIy/+kIkO9F044qRzcHQI5sQYeDsSA+UBIP
-        no61jQxgyXGc4YM2mAJP3BJDxUd99c9eoT9gQ2N7LRecoEdUMja2UlIb/bGDYPb4NNIFOR
-        UuAk9MgSvhpcJZVGzymlblHPEnPmQdiuI1qm00jQM3jjkDw6KGlTiXCiDBBmWFD5ibItWT
-        TeaUIDMzLHKwaa6ghDyKzQWLbdxE+eHPO0ekCrV6Nb1zaorTglEg64zdAUqOpZf+xhsMZ+
-        WSVFvyt3SiI01MjyUJMrDDceritJgRRdXPQjz2oTRmoXrxL0Lu8mwgQhAH7YjA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660831451;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=huKV1HiKrxpeYRytT3hwqTJSmcg8WjeKNN8yQta+aBw=;
-        b=1Cx7ALrLxCxNcBpoD8J/5kVspU6/qFxY28wXPNK+5u2Qtnk65Amo3X9ytWcENU927I5hPN
-        gkzMxpw4VDUx2NBA==
-From:   "tip-bot2 for Pawan Gupta" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/bugs: Add "unknown" reporting for MMIO Stale Data
-Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Ca932c154772f2121794a5f2eded1a11013114711=2E16578?=
- =?utf-8?q?46269=2Egit=2Epawan=2Ekumar=2Egupta=40linux=2Eintel=2Ecom=3E?=
-References: =?utf-8?q?=3Ca932c154772f2121794a5f2eded1a11013114711=2E165784?=
- =?utf-8?q?6269=2Egit=2Epawan=2Ekumar=2Egupta=40linux=2Eintel=2Ecom=3E?=
+        Thu, 18 Aug 2022 10:04:27 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C466165818
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:04:25 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id v2so2259503lfi.6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=/fleTIpnS9IEBTbF8wo3ueeoCXUGjNkQO4k9xiqRrj4=;
+        b=WXgDg4S099HTx4GYgF7438X6p5+shS7CVHR1tjTv5vT25xR45B6IpZ9jhDZz24MFIE
+         QYgcE82wPnA6kp/yoF5KRHFg2R1O1rA0Hj3teQ/VwW6ecJCoTpgo1t1hwWTLfUqm7isa
+         wPhcprIQQyMzd5VP3nJthYZeUSeel/FnDfuu8sVUdrc9ivIl0o9G/FLaK4i83CbCUR95
+         dPmZq615cmnqNWTE8xGMASQ5tJP/6xGoFpVrz611Tyy0YuQz/kvNwF22eEsEO7mWuqll
+         UDQIMCwYqn7bOluibttIYU6Mn5Cei8pA13Vu99//76sJQFaN5oyc3DG6XTjq0FOjoFFJ
+         /Uvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=/fleTIpnS9IEBTbF8wo3ueeoCXUGjNkQO4k9xiqRrj4=;
+        b=KwAwjtrJFtmsEM1+/PlGLhzv1sW5VXYps6BdXyoi2ZdGhrog89WkQ+QLn3CCG9VZvB
+         XuAKjcVGLtUmoBWolf5i1DAAssiKJELdNmhdsqR4ZZoIcB9N9C6NYH3PX+46qOuY3mv3
+         8Qg6VHwh4Hbkrc6mcHHqShyxJUsd5Q+6ZLG+Y4u468dTEzQBlW8Ajra+1UuKlmTWjiBU
+         H9eT7cHtNzIOOorzn+Fr9PJ55oHl1BwRU4i3yd/lfgIAvfyEOGu/jH6rvQO7sWYOq126
+         EihcuWs6BCQWllE/XQPYZKBsajEdGKo8nc0VV5Ri3aKKhZLhGrOmAazgDxhsJjo6JUeU
+         ujVg==
+X-Gm-Message-State: ACgBeo1e7CjysNSmcDRrXtMrHe8D/ncZVqp4+fGr3MLu1OgAYVSyg8+h
+        JqIWtaxnb2h6WJAJiMoL+3XifQ==
+X-Google-Smtp-Source: AA6agR5VgtXwrxbtl+luU09vE2LQ9Ag6BfzzlNsOlvu+CLmU3emPg2IrZYFkOC0AmgjlyeHuX66LQA==
+X-Received: by 2002:a05:6512:159b:b0:492:c1c0:5aab with SMTP id bp27-20020a056512159b00b00492c1c05aabmr477299lfb.523.1660831463816;
+        Thu, 18 Aug 2022 07:04:23 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
+        by smtp.gmail.com with ESMTPSA id a2-20020a05651c030200b002619257da21sm241529ljp.118.2022.08.18.07.04.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 07:04:23 -0700 (PDT)
+Message-ID: <00614b8f-0fdd-3d7e-0153-3846be5bb645@linaro.org>
+Date:   Thu, 18 Aug 2022 17:04:20 +0300
 MIME-Version: 1.0
-Message-ID: <166083144940.401.2981933695783238161.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/3] dt-bings: net: fsl,fec: update compatible item
+Content-Language: en-US
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Wei Fang <wei.fang@nxp.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        s.hauer@pengutronix.de, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        peng.fan@nxp.com, ping.bai@nxp.com, sudeep.holla@arm.com,
+        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com
+References: <20220704101056.24821-1-wei.fang@nxp.com>
+ <20220704101056.24821-2-wei.fang@nxp.com>
+ <ef7e501a-b351-77f9-c4f7-74ab10283ed6@linaro.org>
+ <20220818013344.GE149610@dragon>
+ <fd41a409-d0e0-0026-4644-9058d1177c45@linaro.org>
+ <20220818092257.GF149610@dragon>
+ <a08b230c-d655-75ee-0f0c-8281b13b477b@linaro.org>
+ <20220818135727.GG149610@dragon>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220818135727.GG149610@dragon>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On 18/08/2022 16:57, Shawn Guo wrote:
+> On Thu, Aug 18, 2022 at 12:46:33PM +0300, Krzysztof Kozlowski wrote:
+>> On 18/08/2022 12:22, Shawn Guo wrote:
+>>> On Thu, Aug 18, 2022 at 10:51:02AM +0300, Krzysztof Kozlowski wrote:
+>>>> On 18/08/2022 04:33, Shawn Guo wrote:
+>>>>> On Mon, Jul 04, 2022 at 11:12:09AM +0200, Krzysztof Kozlowski wrote:
+>>>>>>> diff --git a/Documentation/devicetree/bindings/net/fsl,fec.yaml b/Documentation/devicetree/bindings/net/fsl,fec.yaml
+>>>>>>> index daa2f79a294f..6642c246951b 100644
+>>>>>>> --- a/Documentation/devicetree/bindings/net/fsl,fec.yaml
+>>>>>>> +++ b/Documentation/devicetree/bindings/net/fsl,fec.yaml
+>>>>>>> @@ -40,6 +40,10 @@ properties:
+>>>>>>>            - enum:
+>>>>>>>                - fsl,imx7d-fec
+>>>>>>>            - const: fsl,imx6sx-fec
+>>>>>>> +      - items:
+>>>>>>> +          - enum:
+>>>>>>> +              - fsl,imx8ulp-fec
+>>>>>>> +          - const: fsl,imx6ul-fec
+>>>>>>
+>>>>>> This is wrong.  fsl,imx6ul-fec has to be followed by fsl,imx6q-fec. I
+>>>>>> think someone made similar mistakes earlier so this is a mess.
+>>>>>
+>>>>> Hmm, not sure I follow this.  Supposing we want to have the following
+>>>>> compatible for i.MX8ULP FEC, why do we have to have "fsl,imx6q-fec"
+>>>>> here?
+>>>>>
+>>>>> 	fec: ethernet@29950000 {
+>>>>> 		compatible = "fsl,imx8ulp-fec", "fsl,imx6ul-fec";
+>>>>> 		...
+>>>>> 	};
+>>>>
+>>>> Because a bit earlier this bindings is saying that fsl,imx6ul-fec must
+>>>> be followed by fsl,imx6q-fec.
+>>>
+>>> The FEC driver OF match table suggests that fsl,imx6ul-fec and fsl,imx6q-fec
+>>> are not really compatible.
+>>>
+>>> static const struct of_device_id fec_dt_ids[] = {
+>>>         { .compatible = "fsl,imx25-fec", .data = &fec_devtype[IMX25_FEC], },
+>>>         { .compatible = "fsl,imx27-fec", .data = &fec_devtype[IMX27_FEC], },
+>>>         { .compatible = "fsl,imx28-fec", .data = &fec_devtype[IMX28_FEC], },
+>>>         { .compatible = "fsl,imx6q-fec", .data = &fec_devtype[IMX6Q_FEC], },
+>>>         { .compatible = "fsl,mvf600-fec", .data = &fec_devtype[MVF600_FEC], },
+>>>         { .compatible = "fsl,imx6sx-fec", .data = &fec_devtype[IMX6SX_FEC], },
+>>>         { .compatible = "fsl,imx6ul-fec", .data = &fec_devtype[IMX6UL_FEC], },
+>>
+>> I don't see here any incompatibility. Binding driver with different
+>> driver data is not a proof of incompatible devices.
+> 
+> To me, different driver data is a good sign of incompatibility.  It
+> mostly means that software needs to program the hardware block
+> differently.
 
-Commit-ID:     7df548840c496b0141fb2404b889c346380c2b22
-Gitweb:        https://git.kernel.org/tip/7df548840c496b0141fb2404b889c346380c2b22
-Author:        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-AuthorDate:    Wed, 03 Aug 2022 14:41:32 -07:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 18 Aug 2022 15:35:22 +02:00
+Any device being 100% compatible with old one and having additional
+features will have different driver data... so no, it's not a proof.
+There are many of such examples and we call them compatible, because the
+device could operate when bound by the fallback compatible.
 
-x86/bugs: Add "unknown" reporting for MMIO Stale Data
+If this is the case here - how do I know? I raised and the answer was
+affirmative...
 
-Older Intel CPUs that are not in the affected processor list for MMIO
-Stale Data vulnerabilities currently report "Not affected" in sysfs,
-which may not be correct. Vulnerability status for these older CPUs is
-unknown.
+> 
+> 
+>> Additionally, the
+>> binding describes the hardware, not the driver.
+>>
+>>>         { .compatible = "fsl,imx8mq-fec", .data = &fec_devtype[IMX8MQ_FEC], },
+>>>         { .compatible = "fsl,imx8qm-fec", .data = &fec_devtype[IMX8QM_FEC], },
+>>>         { /* sentinel */ }
+>>> };
+>>> MODULE_DEVICE_TABLE(of, fec_dt_ids);
+>>>
+>>> Should we fix the binding doc?
+>>
+>> Maybe, I don't know. The binding describes the hardware, so based on it
+>> the devices are compatible. Changing this, except ABI impact, would be
+>> possible with proper reason, but not based on Linux driver code.
+> 
+> Well, if Linux driver code is written in the way that hardware requires,
+> I guess that's just based on hardware characteristics.
+> 
+> To me, having a device compatible to two devices that require different
+> programming model is unnecessary and confusing.
 
-Add known-not-affected CPUs to the whitelist. Report "unknown"
-mitigation status for CPUs that are not in blacklist, whitelist and also
-don't enumerate MSR ARCH_CAPABILITIES bits that reflect hardware
-immunity to MMIO Stale Data vulnerabilities.
+It's the first time anyone mentions here the programming model is
+different... If it is different, the devices are likely not compatible.
 
-Mitigation is not deployed when the status is unknown.
+However when I raised this issue last time, there were no concerns with
+calling them all compatible. Therefore I wonder if the folks working on
+this driver actually know what's there... I don't know, I gave
+recommendations based on what is described in the binding and expect the
+engineer to come with that knowledge.
 
-  [ bp: Massage, fixup. ]
 
-Fixes: 8d50cdf8b834 ("x86/speculation/mmio: Add sysfs reporting for Processor MMIO Stale Data")
-Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Suggested-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com
----
- Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst | 14 ++++++++++++++
- arch/x86/include/asm/cpufeatures.h                              |  5 +++--
- arch/x86/kernel/cpu/bugs.c                                      | 14 ++++++++++++--
- arch/x86/kernel/cpu/common.c                                    | 42 +++++++++++++++++++++++++++---------------
- 4 files changed, 56 insertions(+), 19 deletions(-)
-
-diff --git a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-index 9393c50..c98fd11 100644
---- a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-+++ b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-@@ -230,6 +230,20 @@ The possible values in this file are:
-      * - 'Mitigation: Clear CPU buffers'
-        - The processor is vulnerable and the CPU buffer clearing mitigation is
-          enabled.
-+     * - 'Unknown: No mitigations'
-+       - The processor vulnerability status is unknown because it is
-+	 out of Servicing period. Mitigation is not attempted.
-+
-+Definitions:
-+------------
-+
-+Servicing period: The process of providing functional and security updates to
-+Intel processors or platforms, utilizing the Intel Platform Update (IPU)
-+process or other similar mechanisms.
-+
-+End of Servicing Updates (ESU): ESU is the date at which Intel will no
-+longer provide Servicing, such as through IPU or other similar update
-+processes. ESU dates will typically be aligned to end of quarter.
- 
- If the processor is vulnerable then the following information is appended to
- the above information:
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 235dc85..ef4775c 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -457,7 +457,8 @@
- #define X86_BUG_ITLB_MULTIHIT		X86_BUG(23) /* CPU may incur MCE during certain page attribute changes */
- #define X86_BUG_SRBDS			X86_BUG(24) /* CPU may leak RNG bits if not mitigated */
- #define X86_BUG_MMIO_STALE_DATA		X86_BUG(25) /* CPU is affected by Processor MMIO Stale Data vulnerabilities */
--#define X86_BUG_RETBLEED		X86_BUG(26) /* CPU is affected by RETBleed */
--#define X86_BUG_EIBRS_PBRSB		X86_BUG(27) /* EIBRS is vulnerable to Post Barrier RSB Predictions */
-+#define X86_BUG_MMIO_UNKNOWN		X86_BUG(26) /* CPU is too old and its MMIO Stale Data status is unknown */
-+#define X86_BUG_RETBLEED		X86_BUG(27) /* CPU is affected by RETBleed */
-+#define X86_BUG_EIBRS_PBRSB		X86_BUG(28) /* EIBRS is vulnerable to Post Barrier RSB Predictions */
- 
- #endif /* _ASM_X86_CPUFEATURES_H */
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 510d852..da7c361 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -433,7 +433,8 @@ static void __init mmio_select_mitigation(void)
- 	u64 ia32_cap;
- 
- 	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
--	    cpu_mitigations_off()) {
-+	     boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN) ||
-+	     cpu_mitigations_off()) {
- 		mmio_mitigation = MMIO_MITIGATION_OFF;
- 		return;
- 	}
-@@ -538,6 +539,8 @@ out:
- 		pr_info("TAA: %s\n", taa_strings[taa_mitigation]);
- 	if (boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA))
- 		pr_info("MMIO Stale Data: %s\n", mmio_strings[mmio_mitigation]);
-+	else if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
-+		pr_info("MMIO Stale Data: Unknown: No mitigations\n");
- }
- 
- static void __init md_clear_select_mitigation(void)
-@@ -2275,6 +2278,9 @@ static ssize_t tsx_async_abort_show_state(char *buf)
- 
- static ssize_t mmio_stale_data_show_state(char *buf)
- {
-+	if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
-+		return sysfs_emit(buf, "Unknown: No mitigations\n");
-+
- 	if (mmio_mitigation == MMIO_MITIGATION_OFF)
- 		return sysfs_emit(buf, "%s\n", mmio_strings[mmio_mitigation]);
- 
-@@ -2421,6 +2427,7 @@ static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr
- 		return srbds_show_state(buf);
- 
- 	case X86_BUG_MMIO_STALE_DATA:
-+	case X86_BUG_MMIO_UNKNOWN:
- 		return mmio_stale_data_show_state(buf);
- 
- 	case X86_BUG_RETBLEED:
-@@ -2480,7 +2487,10 @@ ssize_t cpu_show_srbds(struct device *dev, struct device_attribute *attr, char *
- 
- ssize_t cpu_show_mmio_stale_data(struct device *dev, struct device_attribute *attr, char *buf)
- {
--	return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
-+	if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
-+		return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_UNKNOWN);
-+	else
-+		return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
- }
- 
- ssize_t cpu_show_retbleed(struct device *dev, struct device_attribute *attr, char *buf)
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 64a73f4..3e508f2 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1135,7 +1135,8 @@ static void identify_cpu_without_cpuid(struct cpuinfo_x86 *c)
- #define NO_SWAPGS		BIT(6)
- #define NO_ITLB_MULTIHIT	BIT(7)
- #define NO_SPECTRE_V2		BIT(8)
--#define NO_EIBRS_PBRSB		BIT(9)
-+#define NO_MMIO			BIT(9)
-+#define NO_EIBRS_PBRSB		BIT(10)
- 
- #define VULNWL(vendor, family, model, whitelist)	\
- 	X86_MATCH_VENDOR_FAM_MODEL(vendor, family, model, whitelist)
-@@ -1158,6 +1159,11 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
- 	VULNWL(VORTEX,	6, X86_MODEL_ANY,	NO_SPECULATION),
- 
- 	/* Intel Family 6 */
-+	VULNWL_INTEL(TIGERLAKE,			NO_MMIO),
-+	VULNWL_INTEL(TIGERLAKE_L,		NO_MMIO),
-+	VULNWL_INTEL(ALDERLAKE,			NO_MMIO),
-+	VULNWL_INTEL(ALDERLAKE_L,		NO_MMIO),
-+
- 	VULNWL_INTEL(ATOM_SALTWELL,		NO_SPECULATION | NO_ITLB_MULTIHIT),
- 	VULNWL_INTEL(ATOM_SALTWELL_TABLET,	NO_SPECULATION | NO_ITLB_MULTIHIT),
- 	VULNWL_INTEL(ATOM_SALTWELL_MID,		NO_SPECULATION | NO_ITLB_MULTIHIT),
-@@ -1176,9 +1182,9 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
- 	VULNWL_INTEL(ATOM_AIRMONT_MID,		NO_L1TF | MSBDS_ONLY | NO_SWAPGS | NO_ITLB_MULTIHIT),
- 	VULNWL_INTEL(ATOM_AIRMONT_NP,		NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT),
- 
--	VULNWL_INTEL(ATOM_GOLDMONT,		NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT),
--	VULNWL_INTEL(ATOM_GOLDMONT_D,		NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT),
--	VULNWL_INTEL(ATOM_GOLDMONT_PLUS,	NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_EIBRS_PBRSB),
-+	VULNWL_INTEL(ATOM_GOLDMONT,		NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
-+	VULNWL_INTEL(ATOM_GOLDMONT_D,		NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
-+	VULNWL_INTEL(ATOM_GOLDMONT_PLUS,	NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO | NO_EIBRS_PBRSB),
- 
- 	/*
- 	 * Technically, swapgs isn't serializing on AMD (despite it previously
-@@ -1193,18 +1199,18 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
- 	VULNWL_INTEL(ATOM_TREMONT_D,		NO_ITLB_MULTIHIT | NO_EIBRS_PBRSB),
- 
- 	/* AMD Family 0xf - 0x12 */
--	VULNWL_AMD(0x0f,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
--	VULNWL_AMD(0x10,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
--	VULNWL_AMD(0x11,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
--	VULNWL_AMD(0x12,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
-+	VULNWL_AMD(0x0f,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
-+	VULNWL_AMD(0x10,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
-+	VULNWL_AMD(0x11,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
-+	VULNWL_AMD(0x12,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
- 
- 	/* FAMILY_ANY must be last, otherwise 0x0f - 0x12 matches won't work */
--	VULNWL_AMD(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
--	VULNWL_HYGON(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
-+	VULNWL_AMD(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
-+	VULNWL_HYGON(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
- 
- 	/* Zhaoxin Family 7 */
--	VULNWL(CENTAUR,	7, X86_MODEL_ANY,	NO_SPECTRE_V2 | NO_SWAPGS),
--	VULNWL(ZHAOXIN,	7, X86_MODEL_ANY,	NO_SPECTRE_V2 | NO_SWAPGS),
-+	VULNWL(CENTAUR,	7, X86_MODEL_ANY,	NO_SPECTRE_V2 | NO_SWAPGS | NO_MMIO),
-+	VULNWL(ZHAOXIN,	7, X86_MODEL_ANY,	NO_SPECTRE_V2 | NO_SWAPGS | NO_MMIO),
- 	{}
- };
- 
-@@ -1358,10 +1364,16 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
- 	 * Affected CPU list is generally enough to enumerate the vulnerability,
- 	 * but for virtualization case check for ARCH_CAP MSR bits also, VMM may
- 	 * not want the guest to enumerate the bug.
-+	 *
-+	 * Set X86_BUG_MMIO_UNKNOWN for CPUs that are neither in the blacklist,
-+	 * nor in the whitelist and also don't enumerate MSR ARCH_CAP MMIO bits.
- 	 */
--	if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
--	    !arch_cap_mmio_immune(ia32_cap))
--		setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-+	if (!arch_cap_mmio_immune(ia32_cap)) {
-+		if (cpu_matches(cpu_vuln_blacklist, MMIO))
-+			setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-+		else if (!cpu_matches(cpu_vuln_whitelist, NO_MMIO))
-+			setup_force_cpu_bug(X86_BUG_MMIO_UNKNOWN);
-+	}
- 
- 	if (!cpu_has(c, X86_FEATURE_BTC_NO)) {
- 		if (cpu_matches(cpu_vuln_blacklist, RETBLEED) || (ia32_cap & ARCH_CAP_RSBA))
+Best regards,
+Krzysztof

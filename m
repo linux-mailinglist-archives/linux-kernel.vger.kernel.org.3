@@ -2,97 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D0E5983A3
+	by mail.lfdr.de (Postfix) with ESMTP id B75395983A5
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244903AbiHRNBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51382 "EHLO
+        id S244929AbiHRNCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244884AbiHRNBG (ORCPT
+        with ESMTP id S244217AbiHRNC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:01:06 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F86074DFF;
-        Thu, 18 Aug 2022 06:01:05 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id cb8so1035783qtb.0;
-        Thu, 18 Aug 2022 06:01:05 -0700 (PDT)
+        Thu, 18 Aug 2022 09:02:28 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAB3B4422
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:02:16 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo4655047pjd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:02:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=iyJ8a0+Q11wpj6Xm1lfvhar/WsSf14ZnhDpis/hRpGc=;
+        b=nUN1J9TlzwwbgCx+cs97MtgVnPoAfhc7Z6wLYnhf9XlftasErYgstZqCOOP+poaERd
+         15bfVK3uM8nx83r/3B4gJjAs7YLniAF1qcg7dLYDEBufJS6HtoaW42J5tvHxTwINnFoq
+         Hpj7PnDXHI216Uf7pAH35zGiMX765S/x6bNgMegD+xFS6I0xVHNQAKQphgKVDZiNj1bl
+         6UvSb/c3XTKBzqsqmu2M/lrasRG1+1rvSTkIU24BnKsDITp1HfQE98auGeUTyLzFuifJ
+         vnLw4PV9A4zKHNY9bqDWk24yw67Hc5hZSN8vMw/oKKSnWmx9Pzw0Fm3CcnYwzec0KiwS
+         kZsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=zGVvOzOw3FBTHFQT/EuMN6lMzvUv1N/cJk4RG5KAwTQ=;
-        b=q8xBcp8cW6k6dOo2NKY3ST6SjuKpyRpBGiTQ/IPluo5tJj7ivPqh6ZtYEQsMN8gW2X
-         NMzsba8ULXCPqH4xOdG5glt7L0G2tj3bAaMcUoFK3+ZhsvU8kAayny+w704u+d/p/KuS
-         m6PWySkMJfdsCG28U+oG5MqTlw7xgUjw2K0Tq0Uff6d43+HIhG7lM32GnlRLujDRAWVS
-         LXTQK6HvgyTmbvSBBdlTkddprUWhZxCVuRjhdIO9OWTbtVkGuG67+nzWQevfU852rw0I
-         I7obdl1neCLku8+qN8Pp6Za7hvwx97JIoN1z3HrnVtG4CwDlhdMg/+wQi93NXzSs0xk0
-         om7w==
-X-Gm-Message-State: ACgBeo0WnqHU6xnqmCeHKtzG+Z24l87HGg9mumqKFSgSpHKyCw13pr9I
-        muU1ftC/xAgwDGm0WI6AXs+rlUqwbPBoMQ==
-X-Google-Smtp-Source: AA6agR4EWymEQnVwzGos0SwShLSkMgIIIGxXWpaQ1osgKbyN29PSDGXzMC0pipY4rBsM3XTvlfJdiw==
-X-Received: by 2002:a05:622a:614:b0:343:487:45d1 with SMTP id z20-20020a05622a061400b00343048745d1mr2319514qta.443.1660827664284;
-        Thu, 18 Aug 2022 06:01:04 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id dt2-20020a05620a478200b006bb024c5021sm1514500qkb.25.2022.08.18.06.01.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 06:01:04 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-33365a01f29so39033197b3.2;
-        Thu, 18 Aug 2022 06:01:03 -0700 (PDT)
-X-Received: by 2002:a25:250b:0:b0:68f:425b:3ee0 with SMTP id
- l11-20020a25250b000000b0068f425b3ee0mr2722232ybl.89.1660827643670; Thu, 18
- Aug 2022 06:00:43 -0700 (PDT)
+        bh=iyJ8a0+Q11wpj6Xm1lfvhar/WsSf14ZnhDpis/hRpGc=;
+        b=S0Lt16MRmJOPMTnRmFSkOpeAmiosql59W8j35KWLoI3c0tDPVxeAUYQzslcX456a+q
+         3gP8InSNKiY5EQYVNP42HRvmbOtuNfGlCRZ8dw7DAQV3dzZYik6eIX3dFHW7vnzMUmI2
+         qUWg1EGYj6zCs3KvJWiH+1+W3+e90yzPqREkp9B/bk1OYZqLhTKwnyYxfItqArbViiqw
+         r9siiVT82l63lI2ABsnrIH0aMYThRJR/Gci6so99ywCwBoBtfcEkzCuhR5dfJCpiyjU/
+         7tKD6byRVqukrzNNRLlDKN/Gh/lH+DCA6cZSagd4Q/gXGhvnsr0IxXehT2C0G0RRCC/x
+         mQ0w==
+X-Gm-Message-State: ACgBeo37qJeLtFuflKzhXE5NQm6CeZTWYabZDRf9hurbwdX+qL31bKps
+        2ZxIZXyJpH3budzBdFl4X7C/YrrAjFFNUhKibHH2ww==
+X-Google-Smtp-Source: AA6agR4sBbRQd4QKg5AWU+KEIOhLag4MaYRCgpj9yY17U4L9qL49ZcnhJD+sEi1CLkaHh5moqrBmC5rRkk+tvmQl/lg=
+X-Received: by 2002:a17:902:d50b:b0:172:a41f:b204 with SMTP id
+ b11-20020a170902d50b00b00172a41fb204mr2543037plg.70.1660827735062; Thu, 18
+ Aug 2022 06:02:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220815151451.23293-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220815151451.23293-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 18 Aug 2022 15:00:31 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU+srXk8Wv1POMeLaoUnEt6TWUK3KVq-YBAbLtnk9AGjw@mail.gmail.com>
-Message-ID: <CAMuHMdU+srXk8Wv1POMeLaoUnEt6TWUK3KVq-YBAbLtnk9AGjw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] dt-bindings: riscv: Sort the CPU core list alphabetically
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <Conor.Dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220818110859.1918035-1-jens.wiklander@linaro.org> <CAFA6WYO9ZoVNt+Npj7R+2=5rJ-Gxwy+QGEMziP7Z=eFupjjECQ@mail.gmail.com>
+In-Reply-To: <CAFA6WYO9ZoVNt+Npj7R+2=5rJ-Gxwy+QGEMziP7Z=eFupjjECQ@mail.gmail.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 18 Aug 2022 15:02:04 +0200
+Message-ID: <CAHUa44HoS4QgDzVgcsZkgAhK81wGXKQyqLWbLe9tqqrQELx=MA@mail.gmail.com>
+Subject: Re: [PATCH v2] tee: add overflow check in register_shm_helper()
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        stable@vger.kernel.org, Nimish Mishra <neelam.nimish@gmail.com>,
+        Anirban Chakraborty <ch.anirban00727@gmail.com>,
+        Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>,
+        Jerome Forissier <jerome.forissier@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 5:16 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Sort the CPU cores list alphabetically for maintenance.
+Hi Sumit,
+
+On Thu, Aug 18, 2022 at 2:41 PM Sumit Garg <sumit.garg@linaro.org> wrote:
 >
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Hi Jens,
+>
+> On Thu, 18 Aug 2022 at 16:39, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+> >
+> > With special lengths supplied by user space, register_shm_helper() has
+> > an integer overflow when calculating the number of pages covered by a
+> > supplied user space memory region. This causes
+> > internal_get_user_pages_fast() a helper function of
+> > pin_user_pages_fast() to do a NULL pointer dereference.
+> >
+> > [   14.141620] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+> > [   14.142556] Mem abort info:
+> > [   14.142829]   ESR = 0x0000000096000044
+> > [   14.143237]   EC = 0x25: DABT (current EL), IL = 32 bits
+> > [   14.143742]   SET = 0, FnV = 0
+> > [   14.144052]   EA = 0, S1PTW = 0
+> > [   14.144348]   FSC = 0x04: level 0 translation fault
+> > [   14.144767] Data abort info:
+> > [   14.145053]   ISV = 0, ISS = 0x00000044
+> > [   14.145394]   CM = 0, WnR = 1
+> > [   14.145766] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004278e000
+> > [   14.146279] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
+> > [   14.147435] Internal error: Oops: 96000044 [#1] PREEMPT SMP
+> > [   14.148026] Modules linked in:
+> > [   14.148595] CPU: 1 PID: 173 Comm: optee_example_a Not tainted 5.19.0 #11
+> > [   14.149204] Hardware name: QEMU QEMU Virtual Machine, BIOS 0.0.0 02/06/2015
+> > [   14.149832] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > [   14.150481] pc : internal_get_user_pages_fast+0x474/0xa80
+> > [   14.151640] lr : internal_get_user_pages_fast+0x404/0xa80
+> > [   14.152408] sp : ffff80000a88bb30
+> > [   14.152711] x29: ffff80000a88bb30 x28: 0000fffff836d000 x27: 0000fffff836e000
+> > [   14.153580] x26: fffffc0000000000 x25: fffffc0000f4a1c0 x24: ffff00000289fb70
+> > [   14.154634] x23: ffff000002702e08 x22: 0000000000040001 x21: ffff8000097eec60
+> > [   14.155378] x20: 0000000000f4a1c0 x19: 00e800007d287f43 x18: 0000000000000000
+> > [   14.156215] x17: 0000000000000000 x16: 0000000000000000 x15: 0000fffff836cfb0
+> > [   14.157068] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+> > [   14.157747] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+> > [   14.158576] x8 : ffff00000276ec80 x7 : 0000000000000000 x6 : 000000000000003f
+> > [   14.159243] x5 : 0000000000000000 x4 : ffff000041ec4eac x3 : ffff000002774cb8
+> > [   14.159977] x2 : 0000000000000004 x1 : 0000000000000010 x0 : 0000000000000000
+> > [   14.160883] Call trace:
+> > [   14.161166]  internal_get_user_pages_fast+0x474/0xa80
+> > [   14.161763]  pin_user_pages_fast+0x24/0x4c
+> > [   14.162227]  register_shm_helper+0x194/0x330
+> > [   14.162734]  tee_shm_register_user_buf+0x78/0x120
+> > [   14.163290]  tee_ioctl+0xd0/0x11a0
+> > [   14.163739]  __arm64_sys_ioctl+0xa8/0xec
+> > [   14.164227]  invoke_syscall+0x48/0x114
+> > [   14.164653]  el0_svc_common.constprop.0+0x44/0xec
+> > [   14.165130]  do_el0_svc+0x2c/0xc0
+> > [   14.165498]  el0_svc+0x2c/0x84
+> > [   14.165847]  el0t_64_sync_handler+0x1ac/0x1b0
+> > [   14.166258]  el0t_64_sync+0x18c/0x190
+> > [   14.166878] Code: 91002318 11000401 b900f7e1 f9403be1 (f820d839)
+> > [   14.167666] ---[ end trace 0000000000000000 ]---
+> >
+> > Fix this by adding an overflow check when calculating the end of the
+> > memory range. Also add an explicit call to access_ok() in
+> > tee_shm_register_user_buf() to catch an invalid user space address
+> > early.
+> >
+> > Fixes: 033ddf12bcf5 ("tee: add register user memory")
+> > Cc: stable@vger.kernel.org
+> > Reported-by: Nimish Mishra <neelam.nimish@gmail.com>
+> > Reported-by: Anirban Chakraborty <ch.anirban00727@gmail.com>
+> > Reported-by: Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>
+> > Suggested-by: Jerome Forissier <jerome.forissier@linaro.org>
+> > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> > ---
+> >  drivers/tee/tee_shm.c | 23 +++++++++++++++++++----
+> >  1 file changed, 19 insertions(+), 4 deletions(-)
+> >
+>
+> I can't see the v1 and neither a changelog for v2, so my comments
+> below may be duplicate.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Fair point. The original patch wasn't posted publicly, but in order to
+avoid confusion with that patch I chose to publish this as V2.
 
-Gr{oetje,eeting}s,
+>
+> > diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+> > index f2b1bcefcadd..f71651021c8d 100644
+> > --- a/drivers/tee/tee_shm.c
+> > +++ b/drivers/tee/tee_shm.c
+> > @@ -231,15 +231,30 @@ EXPORT_SYMBOL_GPL(tee_shm_alloc_priv_buf);
+> >
+> >  static struct tee_shm *
+> >  register_shm_helper(struct tee_context *ctx, unsigned long addr,
+> > -                   size_t length, u32 flags, int id)
+> > +                   unsigned long length, u32 flags, int id)
+> >  {
+> >         struct tee_device *teedev = ctx->teedev;
+> > +       unsigned long end_addr;
+> >         struct tee_shm *shm;
+> >         unsigned long start;
+> >         size_t num_pages;
+> >         void *ret;
+> >         int rc;
+> >
+> > +       /* Check for overflows, this may be input from user space */
+>
+> IMO, this bound checking should be part of the parent function (like
+> tee_shm_register_user_buf() in this case).
 
-                        Geert
+I don't see any harm in checking it here even if it will then check
+input from tee_shm_register_kernel_buf() too. Then I'm also reusing
+the result in the roundup() and that should be done in this function.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> > +       addr = untagged_addr(addr);
+> > +       start = rounddown(addr, PAGE_SIZE);
+> > +       if (check_add_overflow(addr, length, &end_addr))
+> > +               return ERR_PTR(-EINVAL);
+>
+> Isn't this check redundant after access_ok()? AFAICS, access_ok()
+> should limit the upper bound to TASK_SIZE_MAX which should detect any
+> overflows.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+It may be redundant, depending on the configuration. It's likely
+redundant on all platforms we care about at the moment, but who knows
+where this will be used in the future.
+
+>
+> > +       end_addr = roundup(end_addr, PAGE_SIZE);
+> > +       if (end_addr < start)
+> > +               return ERR_PTR(-EINVAL);
+>
+> Ditto?
+
+Yeah, same argument.
+
+Thanks,
+Jens
+
+>
+> -Sumit
+>
+> > +       num_pages = (end_addr - start) / PAGE_SIZE;
+> > +
+> > +       /* Error out early if no pages are to be registered */
+> > +       if (!num_pages)
+> > +               return ERR_PTR(-EINVAL);
+> > +
+> >         if (!tee_device_get(teedev))
+> >                 return ERR_PTR(-EINVAL);
+> >
+> > @@ -261,11 +276,8 @@ register_shm_helper(struct tee_context *ctx, unsigned long addr,
+> >         shm->flags = flags;
+> >         shm->ctx = ctx;
+> >         shm->id = id;
+> > -       addr = untagged_addr(addr);
+> > -       start = rounddown(addr, PAGE_SIZE);
+> >         shm->offset = addr - start;
+> >         shm->size = length;
+> > -       num_pages = (roundup(addr + length, PAGE_SIZE) - start) / PAGE_SIZE;
+> >         shm->pages = kcalloc(num_pages, sizeof(*shm->pages), GFP_KERNEL);
+> >         if (!shm->pages) {
+> >                 ret = ERR_PTR(-ENOMEM);
+> > @@ -326,6 +338,9 @@ struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
+> >         void *ret;
+> >         int id;
+> >
+> > +       if (!access_ok((void __user *)addr, length))
+> > +               return ERR_PTR(-EFAULT);
+> > +
+> >         mutex_lock(&teedev->mutex);
+> >         id = idr_alloc(&teedev->idr, NULL, 1, 0, GFP_KERNEL);
+> >         mutex_unlock(&teedev->mutex);
+> > --
+> > 2.31.1
+> >

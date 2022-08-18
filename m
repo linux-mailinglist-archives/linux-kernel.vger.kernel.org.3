@@ -2,108 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E58599102
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 01:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DDF598FF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345808AbiHRXMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 19:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
+        id S1345206AbiHRWCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 18:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344997AbiHRXMD (ORCPT
+        with ESMTP id S232055AbiHRWCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 19:12:03 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040F8D020F
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 16:12:03 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id u10so2260168qvp.12
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 16:12:02 -0700 (PDT)
+        Thu, 18 Aug 2022 18:02:52 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0233CD11FD;
+        Thu, 18 Aug 2022 15:02:51 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id i14so5660038ejg.6;
+        Thu, 18 Aug 2022 15:02:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Qu2TGN9CjzD6yBI864XHlOsKzcqX8LEumSWv7yTr8E4=;
-        b=cTlnrtwCj7fKbVCMWOP/7ScYWUlMmukWmTTFb2XdY90Tz/AP4dF+ykyJzJ7/idgkd2
-         4aHh/bEcy4TIOIJYoXzJO/J3vkU9qH06467V+eRGumgqLs5YkNHeKz/o5kIWJVp+EgCk
-         0UaKfzjbcg7GV8YsKuJalVI1rUyrc1+Wef47/9RWH6jEJ00yaR6G1XJ4vR5leuYaeaTk
-         sPPqNb3pICpAzSW4xsrlb86cTligYLSUwhAwZZj6z3+X6/aXNTACOJis4R7mrLVBgbUx
-         26h8nVjIBsLhpfX28dw5LCewnIFXpj0FMlSmibtJUbHL0yKk0RUkComkY+oPSGVjpwBy
-         i+rg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=Qe87Wl0jdR/rbisfvd/66HbPbB+87sIw/zxL0DX/eMA=;
+        b=Bha8rcflPbh3XcQUGNlHyg3yurdgx6NJ17VqWwagL5iyYSAIM9m4z9+/ePvElPV9D1
+         zYp6OBL2/YbV1wU4Uixf3dQ7V2oIBf0+VRdCepHkJZVMafU/VKr4khEADZs2ubP1v+Tf
+         c+A8iy76xNSGtsJC/sjvQDc3/yqJFErEc7QfhgumxWIOixYGqhCBxqZJWIsn4MxZ+Dv/
+         fv/mEW8XA2r23KAvTWH2LdEw5kupckzW248FL62k5q2ck+Suqd56xeDihhh3s1QuR/++
+         IsoLZymBfFHAWfpiS1dw5O5Ie+/u16TiEwugyxueqomYC27/7EsOW9iGX5a3vcviVIfl
+         ZjOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Qu2TGN9CjzD6yBI864XHlOsKzcqX8LEumSWv7yTr8E4=;
-        b=h+nTzU+nRWa2wsHQ0eZnvAFpKzqi4VE4HggMZy16d+/KavD2JOc39nQ9MJOLG7xFo2
-         LcHfwXandPGn0MCkFcNlx+lhFj8YmgOZxGkgjbiubgfQFadoE8MD3uTJ0BsdC03QBdvR
-         HliDdBQtPobO+9LaIsmmkEOgjquLm++RNAZCf1lmqxBvGZLKIErI6jgcHNiPC/dHliH7
-         Vwtwg33aHZ+0Cnq5PmH+d3Z8BM2I1mU1BmfAT7xW1I9sYYXGPZ35myc/7XXuflsTH2aN
-         v9d4XEpAWqJVJgoZMS7BPYAnGQQPcEZ+CsLVDQsOJqfDrmI3A1MjwLsjUaIKQ/gJEtTS
-         vbug==
-X-Gm-Message-State: ACgBeo0jlaqiYpOJwGCSbWGJRSPkUNuGkdHKuSUjNgQjxlYvyKeU+4Wq
-        Z65JDmbGJ+7ZgVwIEl3Zo5ATzA==
-X-Google-Smtp-Source: AA6agR5h9prYuf/tQ2t5gzKdwitmkasVnnvFulc/++B9Z/rQtTvdgQnhTj9W8wGOHlcPPeACKF/J9A==
-X-Received: by 2002:a05:6214:19e1:b0:476:95b7:1dc9 with SMTP id q1-20020a05621419e100b0047695b71dc9mr4442306qvc.124.1660864322045;
-        Thu, 18 Aug 2022 16:12:02 -0700 (PDT)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id h16-20020a05620a245000b006b5f06186aesm2864801qkn.65.2022.08.18.16.12.01
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=Qe87Wl0jdR/rbisfvd/66HbPbB+87sIw/zxL0DX/eMA=;
+        b=rBgSJx/pYFHp3Zg3jTeOUXYEgIEJH25cWQ9RF/87LPu1MF+Rg9gs5a0LBzlJKn8C02
+         2+RaOZ1xn9hVWfCOBrnV6CJ0uXLJdQJlpqTnQ8I20BzPjHV2lk6cRfo4WZQ3XHCEYl3I
+         wJKNiNSP4vWTRYihxaXIsqjKHGV6wQGQ9DDyjHTR2yxfGMdsfjVnF5+d1aUPgm0IzwSh
+         ec/AxMrKXaeU20j5kjNP6CJARW0rEt1OGKtesOKNgZXZQ+Ip3wpq6cILyV+CM6yzerfR
+         D9BruY+FQiA6kaAG0/XP1ZDCAhW+ntOTC2MQrTdGKiCMk+mRY2lj/0lF5oVWlPHyG2S9
+         P7uQ==
+X-Gm-Message-State: ACgBeo2CSbrmcYmlers3MmbbkkSluSE/F9ApS3Lf/ZsNiLeCXV8NrBL3
+        zWMGm67n+s8UCvrbykqajh+t71vc5QM=
+X-Google-Smtp-Source: AA6agR6vhlbo4MujI4u/TcCOIu57608t0NQHe5wHP4KkmyhBndA+3AZpBAtDA1n2g3ytlxj1joz/vQ==
+X-Received: by 2002:a17:907:7605:b0:73c:f264:aa7a with SMTP id jx5-20020a170907760500b0073cf264aa7amr173617ejc.766.1660860169449;
+        Thu, 18 Aug 2022 15:02:49 -0700 (PDT)
+Received: from fedora.robimarko.hr (cpe-94-253-165-74.zg.cable.xnet.hr. [94.253.165.74])
+        by smtp.googlemail.com with ESMTPSA id l7-20020a170906230700b0072fa1571c99sm1379297eja.137.2022.08.18.15.02.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 16:12:01 -0700 (PDT)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     linux-iio@vger.kernel.or, linux-gpio@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
-        brgl@bgdev.pl, William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH 6/6] gpio: ws16c48: Ensure number of irq matches number of base
-Date:   Thu, 18 Aug 2022 12:28:15 -0400
-Message-Id: <f90ee47388495677191edf3cfb94801cce09a6f6.1660839809.git.william.gray@linaro.org>
+        Thu, 18 Aug 2022 15:02:48 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v7 1/5] dt-bindings: thermal: tsens: Add ipq8074 compatible
+Date:   Fri, 19 Aug 2022 00:02:41 +0200
+Message-Id: <20220818220245.338396-1-robimarko@gmail.com>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <cover.1660839809.git.william.gray@linaro.org>
-References: <cover.1660839809.git.william.gray@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ws16c48 module calls devm_request_irq() for each device. If the
-number of irq passed to the module does not match the number of base, a
-default value of 0 is passed to devm_request_irq(). IRQ 0 is probably
-not what the user wants, so utilize the module_isa_driver_with_irq macro
-to ensure the number of irq matches the number of base.
+Qualcomm IPQ8074 has tsens v2.3.0 block, though unlike existing v2 IP it
+only uses one IRQ, so tsens v2 compatible cannot be used as the fallback.
 
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+We also have to make sure that correct interrupts are set according to
+compatibles, so populate interrupt information per compatibles.
+
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/gpio/gpio-ws16c48.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Changes in v4:
+* Add the forgotten Reviewed-by tag from Krzysztof
 
-diff --git a/drivers/gpio/gpio-ws16c48.c b/drivers/gpio/gpio-ws16c48.c
-index b098f2dc196b..88410da91aaf 100644
---- a/drivers/gpio/gpio-ws16c48.c
-+++ b/drivers/gpio/gpio-ws16c48.c
-@@ -27,7 +27,8 @@ module_param_hw_array(base, uint, ioport, &num_ws16c48, 0);
- MODULE_PARM_DESC(base, "WinSystems WS16C48 base addresses");
+Changes in v3:
+* Remove implied min/maxItem properties as pointed by Rob
+
+Changes in v2:
+* No need for a list in compatible check
+* Specify minItems and maxItems for interrupt and interrupt-names
+---
+ .../bindings/thermal/qcom-tsens.yaml          | 76 ++++++++++++++++---
+ 1 file changed, 65 insertions(+), 11 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index 038d81338fcf..fee2b6281417 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -59,6 +59,10 @@ properties:
+               - qcom,sm8350-tsens
+           - const: qcom,tsens-v2
  
- static unsigned int irq[MAX_NUM_WS16C48];
--module_param_hw_array(irq, uint, irq, NULL, 0);
-+static unsigned int num_irq;
-+module_param_hw_array(irq, uint, irq, &num_irq, 0);
- MODULE_PARM_DESC(irq, "WinSystems WS16C48 interrupt line numbers");
++      - description: v2 of TSENS with combined interrupt
++        enum:
++          - qcom,ipq8074-tsens
++
+   reg:
+     items:
+       - description: TM registers
+@@ -66,15 +70,11 @@ properties:
  
- /**
-@@ -497,7 +498,7 @@ static struct isa_driver ws16c48_driver = {
- 	},
- };
+   interrupts:
+     minItems: 1
+-    items:
+-      - description: Combined interrupt if upper or lower threshold crossed
+-      - description: Interrupt if critical threshold crossed
++    maxItems: 2
  
--module_isa_driver(ws16c48_driver, num_ws16c48);
-+module_isa_driver_with_irq(ws16c48_driver, num_ws16c48, num_irq);
+   interrupt-names:
+     minItems: 1
+-    items:
+-      - const: uplow
+-      - const: critical
++    maxItems: 2
  
- MODULE_AUTHOR("William Breathitt Gray <vilhelm.gray@gmail.com>");
- MODULE_DESCRIPTION("WinSystems WS16C48 GPIO driver");
+   nvmem-cells:
+     minItems: 1
+@@ -128,22 +128,61 @@ allOf:
+     then:
+       properties:
+         interrupts:
+-          maxItems: 1
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
+         interrupt-names:
+-          maxItems: 1
++          items:
++            - const: uplow
+ 
+-    else:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,msm8953-tsens
++              - qcom,msm8996-tsens
++              - qcom,msm8998-tsens
++              - qcom,sc7180-tsens
++              - qcom,sc7280-tsens
++              - qcom,sc8180x-tsens
++              - qcom,sdm630-tsens
++              - qcom,sdm845-tsens
++              - qcom,sm8150-tsens
++              - qcom,sm8250-tsens
++              - qcom,sm8350-tsens
++              - qcom,tsens-v2
++    then:
++      properties:
++        interrupts:
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
++            - description: Interrupt if critical threshold crossed
++        interrupt-names:
++          items:
++            - const: uplow
++            - const: critical
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,ipq8074-tsens
++    then:
+       properties:
+         interrupts:
+-          minItems: 2
++          items:
++            - description: Combined interrupt if upper, lower or critical thresholds crossed
+         interrupt-names:
+-          minItems: 2
++          items:
++            - const: combined
+ 
+   - if:
+       properties:
+         compatible:
+           contains:
+             enum:
++              - qcom,ipq8074-tsens
+               - qcom,tsens-v0_1
+               - qcom,tsens-v1
+               - qcom,tsens-v2
+@@ -226,4 +265,19 @@ examples:
+            #qcom,sensors = <13>;
+            #thermal-sensor-cells = <1>;
+     };
++
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    // Example 4 (for any IPQ8074 based SoC-s):
++    tsens4: thermal-sensor@4a9000 {
++           compatible = "qcom,ipq8074-tsens";
++           reg = <0x4a9000 0x1000>,
++                 <0x4a8000 0x1000>;
++
++           interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
++           interrupt-names = "combined";
++
++           #qcom,sensors = <16>;
++           #thermal-sensor-cells = <1>;
++    };
+ ...
 -- 
 2.37.2
 

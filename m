@@ -2,151 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE785986D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D135986CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344039AbiHRPFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
+        id S1344080AbiHRPFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344028AbiHRPFP (ORCPT
+        with ESMTP id S1344082AbiHRPFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:05:15 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6A056BAA;
-        Thu, 18 Aug 2022 08:05:14 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id h21so1304778qta.3;
-        Thu, 18 Aug 2022 08:05:14 -0700 (PDT)
+        Thu, 18 Aug 2022 11:05:34 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A0167159
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:05:31 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id 2so1771621pll.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=EFkAYh0z8p6dDchXCdKyOPkHI5qUVRlY/OH0x2X9QdU=;
+        b=lec1BDhYxL+pL38T2Y4JdIZswIOD+NJoiCwMh0jT2NXvKlAkc5z/C8EBJYeylt+bUk
+         /mMxEPRzZzS4IQa9JHyb/zALhhF4S/8B99PtQ+hrkYCn8DVD/1NKnyV7GXAUvwM/w1Rb
+         Lv+UdBX7PhKlNKUYO8rQpBfUEaUJ+JSObhjOxiXKlTQLLWaPUqLgsiBvPHlIm1AqC82i
+         8gXdUCEQQTWuxbobNi3XNYzlkk12nFAVu58q8HhBNa5slr2CE+SF/VmU7y1Sl1/ToQL5
+         AjJxyQV2saNsRcKSit5rDkstL47OuwRytJ3CpXtGM0/OFG9oY/Ir1d83fxvFViNLIVNY
+         DvDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=UuLLOoIfXDmSYWjZC290GUw+IzJXaVpWsPuShy/dmPI=;
-        b=B5Ujm8eW2Q1/s7Z+vq8H1AizL2iy91WEZB4ME7JRAsBsBx9ZJRbcBpUYrgeam78M35
-         6tQ5PGNoNlKPmqg8Wrpth9W3EAAYsx/j1XoFHV14pOSmuKyUAd5kKgOGYzAK+2RvA7Yb
-         s6gZKTmaw5bvhYHDsG4Soqeha/hXEQvfGdukx6ebSuG6WRklRCHEPrhX9xgRCsfH8tb/
-         tIc4N814gw4pir+dUW3xQSPaUWvHPI9SQWP9O60/lhnRDWv3F8hiUHQGKeD39U3gOE2s
-         1cKTHxJDziOdZA70pCZeEPADm/covHtOJe7k8g6rNWXXjmnBh4DlFDjmrFZXqavlGRe1
-         iReQ==
-X-Gm-Message-State: ACgBeo0k4h6Jt++rSH53ILbdw9JU9KQrS/Cm67Eer30IqGRpLiBChieY
-        kyKNJg1KAPEKcdmZZwd5WQ==
-X-Google-Smtp-Source: AA6agR4JUcSJgb/u8fdF/2bXPaKAB3WimFqT3XSc0IWlU8K2rDZ891Q/oFgGD9Ass8SXa2uJp5YBDQ==
-X-Received: by 2002:ac8:5d49:0:b0:344:9232:be56 with SMTP id g9-20020ac85d49000000b003449232be56mr2377878qtx.122.1660835113502;
-        Thu, 18 Aug 2022 08:05:13 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:5fe0:b4f5:6e22:4704:df60:73a3])
-        by smtp.gmail.com with ESMTPSA id o10-20020ac87c4a000000b0034305a91aaesm1220545qtv.83.2022.08.18.08.05.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 08:05:13 -0700 (PDT)
-Received: (nullmailer pid 1868209 invoked by uid 1000);
-        Thu, 18 Aug 2022 15:05:10 -0000
-Date:   Thu, 18 Aug 2022 09:05:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, mark.rutland@arm.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
-        rtanwar@maxlinear.com
-Subject: Re: [PATCH 13/16] hwmon: (mr75203) add thermal coefficient
- properties for Moortec PVT controller
-Message-ID: <20220818150510.GI1829017-robh@kernel.org>
-References: <20220816082757.11990-1-farbere@amazon.com>
- <20220816082757.11990-14-farbere@amazon.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=EFkAYh0z8p6dDchXCdKyOPkHI5qUVRlY/OH0x2X9QdU=;
+        b=szNgkjTnAeUOcu2NZNpUubOAhjLI4iyHcEJXS19uMYPcbxkA++iReEDyLKheSuvuCb
+         +IChnrHaHzdsrVP5waVgLx9Y3QwiLkFsIcWtd61QH0hS5QSGUuuJ6q9lbLP059sZaiYJ
+         QaXncR4Zmko1zLzutlmWrEmKRafzuEyDT6XQ44ui07MXZJ9EBJUTZZm8p6mCwc8bcgz/
+         +pPguT9m42//NaSpneDn/2IW6wKy7uToQxJv51lBrsX7rrz+B5oY52IBLOA2wMWNYW6o
+         LKuclHRx9DWXdkdfbTjz52VhxYvnFJmnIU9cJwCrBZsiV9Z4j7ZErfh+AO0jCQOW9lpC
+         yKHQ==
+X-Gm-Message-State: ACgBeo24mnPWUTyWJvFXrunW2FadtJeGRN5HkMXhXKKyE8vrOIcVe2fm
+        bYyF15e1U2BhzjCKCw2EgErGp5JQi6ckELz+gjg=
+X-Google-Smtp-Source: AA6agR4ZTw9MlJSQnno2jpOdyO4JbHpLah8MTH+Yxl+U5wXTyF4gPB4pr+d2yhn26LBII+UCjwdg2vUuIOxaEEUFV6o=
+X-Received: by 2002:a17:903:189:b0:16f:24e4:1614 with SMTP id
+ z9-20020a170903018900b0016f24e41614mr3018679plg.103.1660835131185; Thu, 18
+ Aug 2022 08:05:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816082757.11990-14-farbere@amazon.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220628145552.349839-1-xiehuan09@gmail.com> <CAEr6+EDVhMwF1cok1StkYPSd_AMdMsn9Kw9U+Bt5p9i7CYZG4A@mail.gmail.com>
+ <20220705134946.01cff121@rorschach.local.home>
+In-Reply-To: <20220705134946.01cff121@rorschach.local.home>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Thu, 18 Aug 2022 23:05:19 +0800
+Message-ID: <CAEr6+ECutZuYZNYzv-oD7Ss5nfg8eFAdwDG75E5NhM3UtkmH1A@mail.gmail.com>
+Subject: Re: [PATCH v14 0/4] trace: Introduce objtrace trigger to trace the
+ kernel object
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mingo@redhat.com, Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org,
+        Song Chen <chensong_2000@189.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 08:27:54AM +0000, Eliav Farber wrote:
-> Add optional "ts-coeff-g", "ts-coeff-h", "ts-coeff-cal5" and
-> "ts-coeff-j" properties to be used instead of defaults for the
-> thermal equasion.
-> 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
-> ---
->  .../bindings/hwmon/moortec,mr75203.yaml       | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> index e2a55001eefc..867664bd937f 100644
-> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-> @@ -62,6 +62,30 @@ properties:
->        used to normalzie the voltage output results.
->      $ref: /schemas/types.yaml#definitions/uint32
->  
-> +  ts-coeff-g:
+Hi steve,
 
-Needs a vendor prefix
+I would like to ask whether this patch set may be merged into v6.1  ;-)
+The kernel development is indeed very different from what I originally imagined.
+I originally thought that objtrace would soon enter the kernel
+community, but I know
+it may take one to two years, or longer or discarded, I have slowly
+come to accept this reality ;-)
 
-> +    description:
-> +      G coefficient for thermal equation.
-> +    maxItems: 1
 
-It's a scalar. 'maxItems' is for arrays/matrices.
+On Wed, Jul 6, 2022 at 1:49 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Tue, 5 Jul 2022 23:30:46 +0800
+> Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> > Hi Steve,
+> >
+> > I'm curious if you have any comments on this patchset ;-)
+>
+> Hi Jeff,
+>
+> I haven't forgotten you. You're still in the queue (which is finally
+> moving forward). I have a few other patch sets ahead of yours that I
+> need to go over. Yes, those patches have been waiting longer :-p
+>
+> -- Steve
 
-> +    $ref: /schemas/types.yaml#definitions/uint32
-> +
-> +  ts-coeff-h:
-> +    description:
-> +      H coefficient for thermal equation.
-> +    maxItems: 1
-> +    $ref: /schemas/types.yaml#definitions/uint32
-> +
-> +  ts-coeff-cal5:
-> +    description:
-> +      cal5 coefficient for thermal equation (can't be 0).
-
-minimum: 1
-
-Other constraints on all these?
-
-> +    maxItems: 1
-> +    $ref: /schemas/types.yaml#definitions/uint32
-> +
-> +  ts-coeff-j:
-> +    description:
-> +      J coefficient for thermal equation.
-> +    maxItems: 1
-> +    $ref: /schemas/types.yaml#definitions/int32
-> +
->  required:
->    - compatible
->    - reg
-> @@ -75,6 +99,10 @@ additionalProperties:
->    - reset-control-skip
->    - vm-active-channels
->    - vm-pre-scalar-ch#
-> +  - ts-coeff-g
-> +  - ts-coeff-h
-> +  - ts-coeff-cal5
-> +  - ts-coeff-j
->  
->  examples:
->    - |
-> @@ -90,5 +118,10 @@ examples:
->          resets = <&rcu0 0x40 7>;
->          vm-active-channels = [08 10 02];
->          vm-pre-scalar-ch5 = <2>;
-> +        ts-coeff-g = <57400>;
-> +        ts-coeff-h = <249400>;
-> +        ts-coeff-cal5 = <4096>;
-> +        ts-coeff-j = <0>;
-> +
->          #thermal-sensor-cells = <1>;
->      };
-> -- 
-> 2.37.1
-> 
+-- 
+Thanks,
+JeffXie

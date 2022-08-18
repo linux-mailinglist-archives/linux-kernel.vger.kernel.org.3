@@ -2,152 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F45C5982F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBB459832F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244544AbiHRMKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 08:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        id S244688AbiHRMaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 08:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239157AbiHRMJ6 (ORCPT
+        with ESMTP id S243967AbiHRMac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 08:09:58 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D4F5851F;
-        Thu, 18 Aug 2022 05:09:56 -0700 (PDT)
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M7kGC3nF5z688XS;
-        Thu, 18 Aug 2022 20:09:39 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 14:09:54 +0200
-Received: from [10.48.157.252] (10.48.157.252) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 13:09:53 +0100
-Message-ID: <eb3465a2-335e-a605-ba8a-4cce790b5b02@huawei.com>
-Date:   Thu, 18 Aug 2022 13:09:53 +0100
+        Thu, 18 Aug 2022 08:30:32 -0400
+X-Greylist: delayed 93 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Aug 2022 05:30:31 PDT
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8BAA1D7C;
+        Thu, 18 Aug 2022 05:30:31 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4M7kDd51zfz9v7Gc;
+        Thu, 18 Aug 2022 20:08:17 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwA38hluLP5ipRkyAA--.42926S2;
+        Thu, 18 Aug 2022 13:11:34 +0100 (CET)
+From:   roberto.sassu@huaweicloud.com
+To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, quentin@isovalent.com
+Cc:     linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 1/3] tools/build: Fix feature detection output due to eval expansion
+Date:   Thu, 18 Aug 2022 14:09:55 +0200
+Message-Id: <20220818120957.319995-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2 2/6] scsi: libsas: Add sas_ata_device_link_abort()
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <jinpu.wang@cloud.ionos.com>, <yangxingui@huawei.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <hare@suse.de>
-References: <1660747934-60059-1-git-send-email-john.garry@huawei.com>
- <1660747934-60059-3-git-send-email-john.garry@huawei.com>
- <0bb6b134-7bad-7c39-ad6d-25d57bd343eb@opensource.wdc.com>
- <018080d5-fbc4-7f04-0d3f-587f2397cd20@huawei.com>
- <baf63982-810c-85eb-b28f-99ab0517c6ba@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <baf63982-810c-85eb-b28f-99ab0517c6ba@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.157.252]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwA38hluLP5ipRkyAA--.42926S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuFy7KryDCFWxKFW7Xr15twb_yoW7XF1kpa
+        yrCF1UAr4DGF4Fya18Ar4UuF45Gr4fJay3J3sIk34UA3WUGrnI9r4ayFWvvFZ3u3y3XF13
+        KF13KFWUAw1UCwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9ab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1j6r18M7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwAKzVCY
+        07xG64k0F24lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
+        0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+        zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Wr1j
+        6rW3Jr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr
+        UvcSsGvfC2KfnxnUUI43ZEXa7IU0fb1UUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/08/2022 18:14, Damien Le Moal wrote:
->> The ATA autopsy has a found medium error and decided that reset is not
->> required - this is similar in that regard to the "unaligned write to a
->> sequential write required zone on SMR" error you mentioned from your
->> test previously. The problem in this is that for hisi_sas we depend on
->> disk reset to release driver resources associated with ATA QCs. That is
->> because it is only after reset that we can guarantee that no IO
->> associated with the disk will complete in HW and it is safe to release
->> the resources.
-> If you had an error, then you already are guaranteed that you will not see any
-> completion at all since the SATA drive is in error mode already. But I see the
-> point here. The HBA internal qc resources need to be cleared and that seems to
-> be done only with a device reset big hammer.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Yeah, unfortunately
+As the first eval expansion is used only to generate Makefile statements,
+messages should not be displayed at this stage, as for example conditional
+expressions are not evaluated.
 
-> 
->> But pm8001 seems different here with regards releasing resources. I find
->> that when EH kicks in from NCQ error and libsas tries to abort missing
->> commands, the pm8001_abort_task() -> sas_execute_internal_abort_single()
->> causes the original IO to complete as aborted - this is good, as then we
->> may release the resources there. hisi_sas has no such feature.
->>
->> But the pm8001 manual and current driver indicate that the
->> OPC_INB_SATA_ABORT command should be sent after read log ext when
->> handling NCQ error, regardless of an autopsy. I send OPC_INB_SATA_ABORT
->> in ata_eh_reset() -> pm8001_I_T_nexus_reset() -> pm8001_send_abort_all()
-> You lost me: ata_eh_recover() will call ata_eh_reset() only if the ATA_EH_RESET
-> action flag is set. So are you saying that even though it is not needed, you
-> still need to set ATA_EH_RESET for pm8001 ?
+It can be seen for example in the output of feature detection for bpftool,
+where the number of detected features does not change, despite turning on
+the verbose mode (VF = 1) and there are additional features to display.
 
-As below, it was the only location I found suitable to call 
-pm8001_send_abort_all().
+Fix this issue by escaping the $ before $(info) statements, to ensure that
+messages are printed only when the function containing them is actually
+executed, and not when it is expanded.
 
-However I am not really sure it is required now. For pm8001 NCQ error 
-handling we require 2x steps:
-- read log ext
-- Send OPC_INB_SATA_ABORT - we do this in pm8001_send_abort_all()
+In addition, move the $(info) statement out of feature_print_status, due to
+the fact that is called both inside and outside an eval context, and place
+it to the caller so that the $ can be escaped when necessary. For symmetry,
+move the $(info) statement also out of feature_print_text, and place it to
+the caller.
 
-pm8001_send_abort_all() sends OPC_INB_SATA_ABORT in "device abort all" 
-mode, meaning any IO in the HBA is aborted for the device. But we are 
-also earlier in EH sending OPC_INB_SATA_ABORT for individual IOs in 
-sas_eh_handle_sas_errors() -> sas_scsi_find_task() -> 
-pm8001_abort_task() -> sas_execute_internal_abort_single() -> ... 
-send_abort_task()
+Force the TMP variable evaluation in verbose mode, to display the features
+in FEATURE_TESTS that are not in FEATURE_DISPLAY.
 
-So I don't think that the pm8001_send_abort_all() call has any effect, 
-as we're already aborting any outstanding IO earlier.
+Reorder perf feature detection messages (first non-verbose, then verbose
+ones) by moving the call to feature_display_entries earlier, before the VF
+environment variable check.
 
-Admittedly the order of the 2x steps is different, but 
-OPC_INB_SATA_ABORT does not send any protocol message to the disk, so 
-would not affect anything subsequently read with read log ext.
+Also, remove the newline from that function, as perf might display
+additional messages. Move the newline to perf Makefile, and display another
+one if displaying the detection result is not deferred as in the case of
+bpftool.
 
-Having said all that, it may be wise to still send 
-pm8001_send_abort_all()...
+Fixes: 0afc5cad387db ("perf build: Separate feature make support into config/Makefile.feature")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ tools/build/Makefile.feature | 19 ++++++++-----------
+ tools/perf/Makefile.config   | 15 ++++++++-------
+ 2 files changed, 16 insertions(+), 18 deletions(-)
 
-> 
->> As I mentioned before, I saw nowhere better to call
->> pm8001_send_abort_all() for this. I would rather not do it in
->> ata_eh_reset() -> pm8001_I_T_nexus_reset()
-> We could add a new op ->eh_link_autopsy which we can call if defined after the
-> call to ata_eh_analyze_ncq_error() in ata_eh_link_autopsy(). With that, you can
-> set ATA_EH_RESET for the hisi driver and only do pm8001_send_abort_all() for
-> pm8001 (that will be done after the read log 10h).
+diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+index fc6ce0b2535a..9d3afbc37e15 100644
+--- a/tools/build/Makefile.feature
++++ b/tools/build/Makefile.feature
+@@ -177,7 +177,7 @@ endif
+ #
+ # Print the result of the feature test:
+ #
+-feature_print_status = $(eval $(feature_print_status_code)) $(info $(MSG))
++feature_print_status = $(eval $(feature_print_status_code))
+ 
+ define feature_print_status_code
+   ifeq ($(feature-$(1)), 1)
+@@ -187,7 +187,7 @@ define feature_print_status_code
+   endif
+ endef
+ 
+-feature_print_text = $(eval $(feature_print_text_code)) $(info $(MSG))
++feature_print_text = $(eval $(feature_print_text_code))
+ define feature_print_text_code
+     MSG = $(shell printf '...%30s: %s' $(1) $(2))
+ endef
+@@ -247,21 +247,18 @@ endif
+ feature_display_entries = $(eval $(feature_display_entries_code))
+ define feature_display_entries_code
+   ifeq ($(feature_display),1)
+-    $(info )
+-    $(info Auto-detecting system features:)
+-    $(foreach feat,$(FEATURE_DISPLAY),$(call feature_print_status,$(feat),))
+-    ifneq ($(feature_verbose),1)
+-      $(info )
+-    endif
++    $$(info )
++    $$(info Auto-detecting system features:)
++    $(foreach feat,$(FEATURE_DISPLAY),$(call feature_print_status,$(feat),) $$(info $(MSG)))
+   endif
+ 
+   ifeq ($(feature_verbose),1)
+-    TMP := $(filter-out $(FEATURE_DISPLAY),$(FEATURE_TESTS))
+-    $(foreach feat,$(TMP),$(call feature_print_status,$(feat),))
+-    $(info )
++    $(eval TMP := $(filter-out $(FEATURE_DISPLAY),$(FEATURE_TESTS)))
++    $(foreach feat,$(TMP),$(call feature_print_status,$(feat),) $$(info $(MSG)))
+   endif
+ endef
+ 
+ ifeq ($(FEATURE_DISPLAY_DEFERRED),)
+   $(call feature_display_entries)
++  $(info )
+ endif
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 0661a1cf9855..f4de6e16fbe2 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -1304,11 +1304,15 @@ define print_var_code
+     MSG = $(shell printf '...%30s: %s' $(1) $($(1)))
+ endef
+ 
++ifeq ($(feature_display),1)
++  $(call feature_display_entries)
++endif
++
+ ifeq ($(VF),1)
+   # Display EXTRA features which are detected manualy
+   # from here with feature_check call and thus cannot
+   # be partof global state output.
+-  $(foreach feat,$(FEATURE_TESTS_EXTRA),$(call feature_print_status,$(feat),))
++  $(foreach feat,$(FEATURE_TESTS_EXTRA),$(call feature_print_status,$(feat),) $(info $(MSG)))
+   $(call print_var,prefix)
+   $(call print_var,bindir)
+   $(call print_var,libdir)
+@@ -1318,11 +1322,12 @@ ifeq ($(VF),1)
+   $(call print_var,JDIR)
+ 
+   ifeq ($(dwarf-post-unwind),1)
+-    $(call feature_print_text,"DWARF post unwind library", $(dwarf-post-unwind-text))
++    $(call feature_print_text,"DWARF post unwind library", $(dwarf-post-unwind-text)) $(info $(MSG))
+   endif
+-  $(info )
+ endif
+ 
++$(info )
++
+ $(call detected_var,bindir_SQ)
+ $(call detected_var,PYTHON_WORD)
+ ifneq ($(OUTPUT),)
+@@ -1352,7 +1357,3 @@ endif
+ # tests.
+ $(shell rm -f $(FEATURE_DUMP_FILENAME))
+ $(foreach feat,$(FEATURE_TESTS),$(shell echo "$(call feature_assign,$(feat))" >> $(FEATURE_DUMP_FILENAME)))
+-
+-ifeq ($(feature_display),1)
+-  $(call feature_display_entries)
+-endif
+-- 
+2.25.1
 
-hmmmm.... seems unfortunate if we need to add a new op just for this.
-
-If we supported ata_port_operations.softreset CB for libsas, then it 
-seems a good location to issue pm8001_send_abort_all(). However, ATA EH 
-always prefers hardreset over softreset if both supported - do you see 
-any scope to change this so that we could use softreset?
-
-> 
->> How about this modified approach:
->> - Continue to set ATA_EH_RESET in sas_ata_device_link_abort()
->> - pm8001_I_T_nexus_reset() will only call pm8001_send_abort_all() when
->> the driver is in NCQ error state and not do a hard reset in that case.
->> 	- But I am not sure if that works as the autopsy for NCQ error may have
->> decided that a hardreset was really required. Hmmm..
-> See the above. the new op may decided a reset is needed (hisi case) and even if
-> the standard autopsy does not make that decision, the flag is set and
-> ata_eh_recover() will reset the device. For the pm8001 case, no reset set with
-> the new op, only pm8001_send_abort_all(). And even if ata_eh_link_autopsy()
-> decides that a reset is needed after calling the new op, that would still be OK
-> I think.
-
-I just think that for hisi_sas a reset is always required unfortunately 
-- either an ATA softreset or hardreset. For pm8001, as you say, we can 
-let autopsy decide whether the big hammer (hard) reset is required.
-
-Thanks,
-John

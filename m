@@ -2,178 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF23597BA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 215C5597BA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239877AbiHRCqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 22:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
+        id S242654AbiHRCrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 22:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238821AbiHRCqh (ORCPT
+        with ESMTP id S238821AbiHRCrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 22:46:37 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56180A284A;
-        Wed, 17 Aug 2022 19:46:35 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M7Thb34zNzZflN;
-        Thu, 18 Aug 2022 10:43:11 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 10:46:33 +0800
-Received: from [10.67.109.184] (10.67.109.184) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 10:46:33 +0800
-Subject: Re: [PATCH bpf] bpf: Fix kernel BUG in purge_effective_progs
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, <bpf@vger.kernel.org>,
-        <stable@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        "Tadeusz Struk" <tadeusz.struk@linaro.org>,
-        Song Liu <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "Hao Luo" <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-References: <20220813134030.1972696-1-pulehui@huawei.com>
- <CAEf4BzaciJNVP1YsuJTiS9v7wBvTpShj+kMtwkzk8ijnpL_yzw@mail.gmail.com>
-From:   Pu Lehui <pulehui@huawei.com>
-Message-ID: <7cbb4aa6-c576-8671-ea5e-d845a8310394@huawei.com>
-Date:   Thu, 18 Aug 2022 10:46:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 17 Aug 2022 22:47:04 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9CFA344A
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 19:47:03 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id s206so251467pgs.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 19:47:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=alPEvxydueQmrF5sLjOKQbzP+nxZ4cu5QX1AAdr+1ko=;
+        b=JufshKMurP0UG6Ji0McuN2G/3dA5KU2MBHye8wYeI2VoGuB3ZzvEIm65YT0FJ8ysle
+         Udtd/UhzaB9K3eSAijhzzKLyvk2kJvknivAZ5SYuHFxCzuPQxBwqp/9mZS6Ie04Sgg9l
+         moEVzhuf2cRb9bfcBzk5U6E2r2/HDq5deoVIsOh6LnD5qL4x+HttsydEwpcW07LebqFc
+         zb9n6Ly5j+Amf8FVss+u2ntOJNPwOMi9IzBrziBeNQ6RIL1bWH7ZkrM3Ag9g7IZvsNZi
+         a9gY+Vvh7DdM9DGxpmhKbpe5m7YSNqfchXTDBtxyiwbQUmpHpBNuykHYbGwtmicBj5Oh
+         bXVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=alPEvxydueQmrF5sLjOKQbzP+nxZ4cu5QX1AAdr+1ko=;
+        b=nMfRmNMMp00Q6eG0AxfixiA2xLhcIaZyQO4X0g0jWFG/PsfeOJWQkAuYHF4DlwHX9b
+         2n9rt9IQ0M8TJTMsDGIrskax2XjKrPFO+NICPvOvrOZmENZhMwzum1q9qmNjIP3whaXh
+         JLWuV0ZzA4fCCr1858MCw8WT713XjVV7KatXz7+XJ2XyOrVqkZMzmWAmXAJCnoTKQKOO
+         mISxKnmxKIz3lpltDE3fHrYZ6GivcyONJ6nDO9fT1lQWDGYZ25UmT4S0CXY+FA+QBAGL
+         wFy9Dh0oO4rV6U4rJrAvdC0AgtWhNJvE+1DjjM8N23jJ8C/BGgFLbKG0vA+4G+PT8ch+
+         sCzw==
+X-Gm-Message-State: ACgBeo2XNyOOUHQEF9GMkTV23kuwHCadoCuo7IzrWDBzYjVt75QQvIKS
+        u2tAdUyIH0UbWpm9PmNjLwWeqw==
+X-Google-Smtp-Source: AA6agR7wiN+FMUWQLPNCdCXrA3IGvEbcfkiEj9oeIrmVO37x32QO3/4ssKk/v/A0QwfSQBr6sqyzBQ==
+X-Received: by 2002:a63:bd49:0:b0:41b:8a07:a6ed with SMTP id d9-20020a63bd49000000b0041b8a07a6edmr909312pgp.124.1660790822732;
+        Wed, 17 Aug 2022 19:47:02 -0700 (PDT)
+Received: from [10.94.58.189] ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id q15-20020a17090311cf00b00172b0272f1asm154595plh.51.2022.08.17.19.46.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Aug 2022 19:47:02 -0700 (PDT)
+Message-ID: <9a63b371-9940-caee-7fa1-2c230bec0bd1@bytedance.com>
+Date:   Thu, 18 Aug 2022 10:46:55 +0800
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzaciJNVP1YsuJTiS9v7wBvTpShj+kMtwkzk8ijnpL_yzw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH v2] sched/fair: Introduce priority load balance to reduce
+ interference from IDLE tasks
 Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>,
+        "zhangsong (J)" <zhangsong34@huawei.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <20220810015636.3865248-1-zhangsong34@huawei.com>
+ <b62804cb-2b60-a534-5096-56785a1940bd@bytedance.com>
+ <e2c9eccc-dd86-16e9-c43e-8415f99f413e@huawei.com>
+ <13a7a412-5e2e-6ef8-acd6-a761aad66c3a@bytedance.com>
+ <6ae319c0-e6ed-4aad-64b8-d3f6cbea688d@huawei.com>
+ <CAKfTPtAcEstoqC+9-y9ubaXDSGbfLdMhFboMPn433QNPD114dQ@mail.gmail.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <CAKfTPtAcEstoqC+9-y9ubaXDSGbfLdMhFboMPn433QNPD114dQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/8/17 4:39, Andrii Nakryiko wrote:
-> On Sat, Aug 13, 2022 at 6:11 AM Pu Lehui <pulehui@huawei.com> wrote:
+On 8/17/22 8:58 PM, Vincent Guittot Wrote:
+> On Tue, 16 Aug 2022 at 04:53, zhangsong (J) <zhangsong34@huawei.com> wrote:
 >>
->> Syzkaller reported kernel BUG as follows:
+>> For co-location with NORMAL and IDLE tasks, when CFS trigger load balance,
+>> it is reasonable to prefer migrating NORMAL(Latency Sensitive) tasks from
+>> the busy src CPU to dst CPU, and migrating IDLE tasks lastly.
 >>
->> ------------[ cut here ]------------
->> kernel BUG at kernel/bpf/cgroup.c:925!
->> invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
->> CPU: 1 PID: 194 Comm: detach Not tainted 5.19.0-14184-g69dac8e431af #8
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
->> rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
->> RIP: 0010:__cgroup_bpf_detach+0x1f2/0x2a0
->> Code: 00 e8 92 60 30 00 84 c0 75 d8 4c 89 e0 31 f6 85 f6 74 19 42 f6 84
->> 28 48 05 00 00 02 75 0e 48 8b 80 c0 00 00 00 48 85 c0 75 e5 <0f> 0b 48
->> 8b 0c5
->> RSP: 0018:ffffc9000055bdb0 EFLAGS: 00000246
->> RAX: 0000000000000000 RBX: ffff888100ec0800 RCX: ffffc900000f1000
->> RDX: 0000000000000000 RSI: 0000000000000001 RDI: ffff888100ec4578
->> RBP: 0000000000000000 R08: ffff888100ec0800 R09: 0000000000000040
->> R10: 0000000000000000 R11: 0000000000000000 R12: ffff888100ec4000
->> R13: 000000000000000d R14: ffffc90000199000 R15: ffff888100effb00
->> FS:  00007f68213d2b80(0000) GS:ffff88813bc80000(0000)
->> knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 000055f74a0e5850 CR3: 0000000102836000 CR4: 00000000000006e0
->> Call Trace:
->>   <TASK>
->>   cgroup_bpf_prog_detach+0xcc/0x100
->>   __sys_bpf+0x2273/0x2a00
->>   __x64_sys_bpf+0x17/0x20
->>   do_syscall_64+0x3b/0x90
->>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> RIP: 0033:0x7f68214dbcb9
->> Code: 08 44 89 e0 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 48 89 f8 48 89
->> f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
->> f0 ff8
->> RSP: 002b:00007ffeb487db68 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
->> RAX: ffffffffffffffda RBX: 000000000000000b RCX: 00007f68214dbcb9
->> RDX: 0000000000000090 RSI: 00007ffeb487db70 RDI: 0000000000000009
->> RBP: 0000000000000003 R08: 0000000000000012 R09: 0000000b00000003
->> R10: 00007ffeb487db70 R11: 0000000000000246 R12: 00007ffeb487dc20
->> R13: 0000000000000004 R14: 0000000000000001 R15: 000055f74a1011b0
->>   </TASK>
->> Modules linked in:
->> ---[ end trace 0000000000000000 ]---
 >>
->> Repetition steps:
->> For the following cgroup tree,
+>> Considering the large weight difference between normal and idle tasks,
+>> does the re-ordering really change things? It would be helpful if you
+>> can offer more detailed info.
 >>
->> root
->>   |
->> cg1
->>   |
->> cg2
+>> Please consider the situation that CPU A has several normal tasks and hundreds of idle tasks
+>> while CPU B is idle, and CPU B needs to pull some tasks from CPU A, but the cfs_tasks in CPU A
+>> are not in order of priority, and the max number of pulling tasks depends on env->loop_max,
+>> which value is sysctl_sched_nr_migrate, i.e. 32.
 >>
->> 1. attach prog2 to cg2, and then attach prog1 to cg1, both bpf progs
->> attach type is NONE or OVERRIDE.
->> 2. write 1 to /proc/thread-self/fail-nth for failslab.
->> 3. detach prog1 for cg1, and then kernel BUG occur.
 >>
->> Failslab injection will cause kmalloc fail and fall back to
->> purge_effective_progs. The problem is that cg2 have attached another prog,
->> so when go through cg2 layer, iteration will add pos to 1, and subsequent
->> operations will be skipped by the following condition, and cg will meet
->> NULL in the end.
+>> The case you elaborated above is really rare, the only possibility I
+>> can imagine is that all these tasks are affined to one single cpu and
+>> suddenly remove the affinity constrain. Otherwise, the load balancing
+>> including wakeup cpu selection logic will make things right.
 >>
->> `if (pos && !(cg->bpf.flags[atype] & BPF_F_ALLOW_MULTI))`
 >>
->> The NULL cg means no link or prog match, this is as expected, and it's not
->> a bug. So here just skip the no match situation.
+>> Yes, this is usually a corner case, but suppose that some non-idle tasks bounds to CPU 1-2
 >>
->> Fixes: 4c46091ee985 ("bpf: Fix KASAN use-after-free Read in compute_effective_progs")
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
->> ---
->>   kernel/bpf/cgroup.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
+>> and idle tasks bounds to CPU 0-1, so CPU 1 may has many idle tasks and some non-idle
 >>
->> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
->> index 59b7eb60d5b4..4a400cd63731 100644
->> --- a/kernel/bpf/cgroup.c
->> +++ b/kernel/bpf/cgroup.c
->> @@ -921,8 +921,10 @@ static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog *prog,
->>                                  pos++;
->>                          }
->>                  }
->> +
->> +               /* no link or prog match, skip the cgroup of this layer */
->> +               continue;
->>   found:
->> -               BUG_ON(!cg);
+>> tasks while idle tasks on CPU 1 can not be pulled to CPU 2, when trigger load balance if
+>>
+>> CPU 2 should pull some tasks from CPU 1, the bad result is idle tasks of CPU 1 cannot be
+>>
+>> migrated and non-idle tasks also cannot be migrated in case of env->loop_max constraint.
 > 
-> I don't think it's necessary to remove this BUG_ON(), but it also
-> feels unnecessary for purge_effective_progs, so I don't mind it.
+> env->loop_max adds a break but load_balance will continue with next
+> tasks so it also tries to pull your non idle task at the end after
+> several breaks.
+
+Loop will be terminated without LBF_NEED_BREAK if exceeds loop_max :)
+
 > 
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> 
-
-Hi,
-
-Will this patch be accepted? I think we should CC stable.
-
-Thanks,
-Lehui
-
->>                  progs = rcu_dereference_protected(
->>                                  desc->bpf.effective[atype],
->>                                  lockdep_is_held(&cgroup_mutex));
->> --
->> 2.25.1
 >>
-> .
+>> This will cause non-idle  tasks cannot achieve  more CPU utilization.
 > 
+> Your problem is not linked to IDLE vs NORMAL tasks but to the large
+> number of pinned tasks that can't migrate on CPU2. You can end with
+> the same behavior without using IDLE tasks but only NORMAL tasks.
+
+I feel the same thing.
+
+Best,
+Abel

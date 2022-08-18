@@ -2,95 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1115598557
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECE559853A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245101AbiHROIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
+        id S245505AbiHRODo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245730AbiHROIC (ORCPT
+        with ESMTP id S245404AbiHRODl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:08:02 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167CDB958B
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:07:58 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IAWwak023044;
-        Thu, 18 Aug 2022 14:01:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=1g/BkFyX8It6eFh6KePQfu0ZOeCiGrJHX0cQQC2SOyk=;
- b=TTsBMXiw56AD9S0aHodHRMIzGde785Ie46GovzTCoDf9DsSzq2WZBFSdCcuieyo8WqNY
- rNlDkeEPwg4PjwAYJrivfxLW+Lrk1WRAlR6wwUScLSsnTyBMjWs5i1elm/MKBBZZUtzt
- MMt0n7FpJY59Z4xIjfJt9RUicaWRJMRoowXlfWSJqgUupx+6kDws2J4ss60o6jth+bvX
- 111v6gpYh9oS6ge73Kh2j10cERRTBrjWP0PQFoY5o3KgyTUgMl0T0Gn4QXc8KeS4Itjc
- h0hcD65VD1e8jAQyAGICYDSIXp44RuUfWK04FJy4uLu29l7zlvWE7FrEnv2czO26vdsz RA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j1hhp1b4f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 14:01:15 +0000
-Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27IE1FYK021171;
-        Thu, 18 Aug 2022 14:01:15 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 3hywar3xk3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 14:01:15 +0000
-Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27IE1EfS021164;
-        Thu, 18 Aug 2022 14:01:14 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 27IE1EYP021162
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 14:01:14 +0000
-Received: from [10.214.20.211] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 18 Aug
- 2022 07:01:10 -0700
-Message-ID: <be4bb3d5-2658-752b-826c-f2dc1359e92d@quicinc.com>
-Date:   Thu, 18 Aug 2022 19:31:05 +0530
+        Thu, 18 Aug 2022 10:03:41 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6582C491E0;
+        Thu, 18 Aug 2022 07:03:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660831421; x=1692367421;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=N8Exyabhbam3MkofX1Yeu2yKsFSXBX5cY+mvOiY0qhk=;
+  b=jCCtxU63iLuwUlBXoj5q6AdIYir7k007+0A/iJ0rCqXhCfT+4EnZB5Pi
+   Zn82CUKsttmZRzQVVBS2wm5mltS90iYDAaynUIvXLv4ZYoEqS8f2f31dv
+   B8a3jNkqzUHqNUUng1m8Zc1O2Mpj8ZvnT14MGo3knl9BlLqJ3vnjfctzq
+   1GCiB6B6x9l4wBLQY7jp2QsEGdVDt+QU2C4KCXTsaIUfRoEdp9+/9fElO
+   HQgLaBGCdetkZHa6okWv3UGwHhWEq0e97R1xJofbEE77a6aCOwqvi+bCv
+   WWgDfGzRn4GPn59Fobz1ru/I/WvArRYsNjcjvAfYAC9fsTvAF/PXGlJCN
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="290329980"
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="290329980"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 07:03:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="607834993"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga002.jf.intel.com with ESMTP; 18 Aug 2022 07:03:32 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 27IE3PC8018169;
+        Thu, 18 Aug 2022 15:03:26 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        linux-kbuild@vger.kernel.org, live-patching@vger.kernel.org,
+        lkp@intel.com, stable@vger.kernel.org
+Subject: Re: [RFC PATCH 1/3] modpost: fix TO_NATIVE() with expressions and consts
+Date:   Thu, 18 Aug 2022 16:01:53 +0200
+Message-Id: <20220818140153.1113308-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <Yv4v5vwXDER3GA2y@kroah.com>
+References: <20220818115306.1109642-1-alexandr.lobakin@intel.com> <20220818115306.1109642-2-alexandr.lobakin@intel.com> <Yv4v5vwXDER3GA2y@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V3] mm: fix use-after free of page_ext after race with
- memory-offline
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-CC:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <pasha.tatashin@soleen.com>, <sieberf@amazon.com>,
-        <shakeelb@google.com>, <sjpark@amazon.de>, <dhowells@redhat.com>,
-        <willy@infradead.org>, <quic_pkondeti@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-References: <1660056403-20894-1-git-send-email-quic_charante@quicinc.com>
- <Yvpg6odyDsXrjw5i@dhcp22.suse.cz>
- <286e47e7-3d63-133c-aa6c-05100b557d42@quicinc.com>
- <YvvCpW0ep9N8CbDr@dhcp22.suse.cz>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <YvvCpW0ep9N8CbDr@dhcp22.suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xZS7wHPDsPq84jrGmyNyKiHEySmNd5Xy
-X-Proofpoint-ORIG-GUID: xZS7wHPDsPq84jrGmyNyKiHEySmNd5Xy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_12,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- adultscore=0 suspectscore=0 priorityscore=1501 impostorscore=0
- mlxlogscore=262 spamscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180050
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,42 +79,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+From: Greg KH <gregkh@linuxfoundation.org>
+Date: Thu, 18 Aug 2022 14:26:14 +0200
 
-On 8/16/2022 9:45 PM, Michal Hocko wrote:
->>>> @@ -183,19 +184,26 @@ static inline void __set_page_owner_handle(struct page_ext *page_ext,
->>>>  noinline void __set_page_owner(struct page *page, unsigned short order,
->>>>  					gfp_t gfp_mask)
->>>>  {
->>>> -	struct page_ext *page_ext = lookup_page_ext(page);
->>>> +	struct page_ext *page_ext = page_ext_get(page);
->>>>  	depot_stack_handle_t handle;
->>>>  
->>>>  	if (unlikely(!page_ext))
->>>>  		return;
->>> Either add a comment like this
->>> 	/* save_stack can sleep in general so we have to page_ext_put */
->>
->> Vlastimil suggested to go for save stack first since !page_ext is mostly
->> unlikely.  Snip from his comments:
->> Why not simply do the save_stack() first and then page_ext_get() just
->> once? It should be really rare that it's NULL, so I don't think we save
->> much by avoiding an unnecessary save_stack(), while the overhead of
->> doing two get/put instead of one will affect every call.
-> right see below
->> https://lore.kernel.org/all/f5fd4942-b03e-1d1c-213b-9cd5283ced91@suse.cz/
->>>> +	page_ext_put();
->>>>  
->>>>  	handle = save_stack(gfp_mask);
->>> or just drop the initial page_ext_get altogether. This function is
->>> called only when page_ext is supposed to be initialized and !page_ext
->>> case above should be very unlikely. Or is there any reason to keep this?
-I don't think that !page_ext check is really required as
-__set_page_owner() is called means page_ext should have been
-initialized.  Will raise a separate change for this suggestion. For now
-V4 is raised with the earlier suggestion of dropping the initial
-page_ext.
-https://lore.kernel.org/all/1660830600-9068-1-git-send-email-quic_charante@quicinc.com/.
+> On Thu, Aug 18, 2022 at 01:53:04PM +0200, Alexander Lobakin wrote:
+> > Macro TO_NATIVE() directly takes a reference to its argument @x
+> > without making an intermediate variable. This makes compilers
+> > emit build warnings and errors if @x is an expression or a deref
+> > of a const pointer (when target Endianness != host Endianness):
+> > 
+> > >> scripts/mod/modpost.h:87:18: error: lvalue required as unary '&' operand
+> >       87 |         __endian(&(x), &(__x), sizeof(__x));                    \
+> >          |                  ^
+> >    scripts/mod/sympath.c:19:25: note: in expansion of macro 'TO_NATIVE'
+> >       19 | #define t(x)            TO_NATIVE(x)
+> >          |                         ^~~~~~~~~
+> >    scripts/mod/sympath.c:100:31: note: in expansion of macro 't'
+> >      100 |                 eh->e_shoff = t(h(eh->e_shoff) + off);
+> > 
+> > >> scripts/mod/modpost.h:87:24: warning: passing argument 2 of '__endian'
+> > discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+> >       87 |         __endian(&(x), &(__x), sizeof(__x));                    \
+> >          |                        ^~~~~~
+> >    scripts/mod/sympath.c:18:25: note: in expansion of macro 'TO_NATIVE'
+> >       18 | #define h(x)            TO_NATIVE(x)
+> >          |                         ^~~~~~~~~
+> >    scripts/mod/sympath.c:178:48: note: in expansion of macro 'h'
+> >      178 |              iter < end; iter = (void *)iter + h(eh->e_shentsize)) {
+> 
+> How come this hasn't shown up in cross-builds today?
+
+It doesn't happen with the current code.
+
+> 
+> 
+> > 
+> > Create a temporary variable, assign @x to it and don't use @x after
+> > that. This makes it possible to pass expressions as an argument.
+> > Also, do a cast-away for the second argument when calling __endian()
+> > to avoid 'discarded qualifiers' warning, as typeof() preserves
+> > qualifiers and makes compilers think that we're passing pointer
+> > to a const.
+> > 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> > Cc: stable@vger.kernel.org # 4.9+
+> 
+> Where are these build warnings showing up at that we don't see them
+> today, yet this is needed to go back to all stable trees?
+
+I thought all fixes should go to the applicable stable trees, am I
+wrong? If so, I'll drop the tag in the next spin.
+
+I remember we had such discussion already regarding fixing stuff in
+modpost, which can happen only with never mainlained GCC LTO or with
+the in-dev code. At the end that fix made it into the stables IIRC.
+
+> 
+> still confused,
+> 
+> greg k-h
 
 Thanks,
-Charan
+Olek

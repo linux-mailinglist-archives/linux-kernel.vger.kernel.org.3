@@ -2,96 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B007E597B5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC24E597B5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242679AbiHRCJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 22:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        id S242685AbiHRCK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 22:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242672AbiHRCJc (ORCPT
+        with ESMTP id S239681AbiHRCK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 22:09:32 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3F96CF47;
-        Wed, 17 Aug 2022 19:09:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=OSvVOdfA6FOAs8kDqxv//qJumZqVNEgMpVWHYd6sYHE=; b=ys1VzU4EM8SGT6HcPcATTxTCBz
-        YhGNIaQuwsVtux+02LwQJ/ONRdIWcjxqbhHsZnXNkUYHiHeWn6xuTfqAi7a138FzBqBGJNXsOYVkM
-        5+xI3dUvYbZkXDnDkqMkIm0KmCG1M9hmg4ckZ5uSEs0euHB1SyEHVKvNGUHXSrH1m/diER7q9Es0E
-        9oBnFdFbT78A2q9ZPvgQaNcuNy5cgi9ObJIkMW5Lc/palxBvc7GZ1MV5ugbLwZZJVYWkxOcsdz+IM
-        LNMbfnGN06rM+MEEUGTWUnOv7Eu5db00otKav1YD6eWbQuGZlnlF/kBK40DoSO9RJeu7X1+L4umRk
-        ASA7BsYw==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oOUyN-00AzBi-GK; Thu, 18 Aug 2022 02:09:27 +0000
-Message-ID: <5638aaf1-b808-bdc6-d84a-820f24facea6@infradead.org>
-Date:   Wed, 17 Aug 2022 19:09:26 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: build failure of next-20220817 for amdgpu
-Content-Language: en-US
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-next@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        Wed, 17 Aug 2022 22:10:56 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD398D3C0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 19:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660788655; x=1692324655;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xKYu4GjaWrbMicsFF/yHeiHF/pFqFu1LXL7lGjPvXgk=;
+  b=iKdiyAru6Qh0jtm21gic6Fyp8uvrU/bbGBWOf5DoPnfqXk7YVQ9fq5v9
+   n8PngXgZxjeD7MntjyStbU1V5HbHOZSPlbMPhlbUDQYG366QNjr3AAgOv
+   ZEi3CZAU0zoxDqusFBUKVkKbX7Y4+tlvJqpcO5EbijNG/8S1ZN4lRNHcd
+   hom2rfZmmrtRpvSS5Xp10WXLwht54aVI5mpHGeqPzkAAxj8xpKO17NpEC
+   VJacL2+KFCvTjxt8eyvQrplCcJlwApLvQDMSxnzkQoyOXndp8eWdw2CRh
+   KtSu6y9+bYqkWqeMzCpNDQTsuQL5/XU6zWxlCDu2CB11Zv+7Otlbdo74x
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="318662589"
+X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
+   d="scan'208";a="318662589"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 19:10:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
+   d="scan'208";a="584009803"
+Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 17 Aug 2022 19:10:53 -0700
+Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oOUzl-0001bu-0a;
+        Thu, 18 Aug 2022 02:10:53 +0000
+Date:   Thu, 18 Aug 2022 10:10:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     kbuild-all@lists.01.org, Mike Rapoport <rppt@kernel.org>,
         linux-kernel@vger.kernel.org
-References: <Yv1lepjhg/6QKyQl@debian>
- <CADnq5_Od9W1iuzYpsmODOB=Xem97ogeH_t0JrjWC-S8h0XM9fA@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CADnq5_Od9W1iuzYpsmODOB=Xem97ogeH_t0JrjWC-S8h0XM9fA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [rppt:crash-kernel/arm64-remap/v0.1 4/5]
+ arch/arm64/mm/init.c:133:17: error: 'crashkres_protection_possible'
+ undeclared
+Message-ID: <202208181058.X0xvGjhJ-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git crash-kernel/arm64-remap/v0.1
+head:   083629d699170f5a86078d0a7afbe647c3a571cb
+commit: 3aaa4a222ab056611236c4c42499d24c8317bc96 [4/5] arm64/mm: remap crash kernel with base pages even if rodata_full disabled
+config: arm64-randconfig-r021-20220818 (https://download.01.org/0day-ci/archive/20220818/202208181058.X0xvGjhJ-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=3aaa4a222ab056611236c4c42499d24c8317bc96
+        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
+        git fetch --no-tags rppt crash-kernel/arm64-remap/v0.1
+        git checkout 3aaa4a222ab056611236c4c42499d24c8317bc96
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/arm64/mm/init.c: In function 'reserve_remap_crashkernel':
+>> arch/arm64/mm/init.c:133:17: error: 'crashkres_protection_possible' undeclared (first use in this function)
+     133 |                 crashkres_protection_possible = true;
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/mm/init.c:133:17: note: each undeclared identifier is reported only once for each function it appears in
 
 
-On 8/17/22 19:01, Alex Deucher wrote:
-> On Wed, Aug 17, 2022 at 6:03 PM Sudip Mukherjee (Codethink)
-> <sudipm.mukherjee@gmail.com> wrote:
->>
->> Hi All,
->>
->> Not sure if it has been reported, build of next-20220817 fails with the
->> error:
->>
->> ERROR: modpost: "cpu_smallcore_map" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
->>
->> Trying to do a git bisect to find out the offending commit.
->>
-> 
-> Thanks.  I don't see that symbol in the driver at all.  Not sure where
-> it is coming from.
-> 
+vim +/crashkres_protection_possible +133 arch/arm64/mm/init.c
 
-It's powerpc only.
-
-Sudip, is it non-CONFIG_SMP by any chance?
-
-> 
-> 
->> I will be happy to test any patch or provide any extra log if needed.
->>
->>
->> --
->> Regards
->> Sudip
+   119	
+   120	static unsigned long long __init
+   121	reserve_remap_crashkernel(unsigned long long crash_base,
+   122				  unsigned long long crash_size,
+   123				  unsigned long long crash_max)
+   124	{
+   125		unsigned long long size;
+   126	
+   127		/*
+   128		 * If linear map uses base pages or there is no ZONE_DMA/ZONE_DMA32
+   129		 * the crashk_res will be mapped with PTEs in mmu::map_mem()
+   130		 */
+   131		if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE) ||
+   132		    !have_zone_dma()) {
+ > 133			crashkres_protection_possible = true;
+   134			return 0;
+   135		}
+   136	
+   137		if (crash_base)
+   138			return 0;
+   139	
+   140		size = ALIGN(crash_size, PUD_SIZE);
+   141	
+   142		crash_base = memblock_phys_alloc_range(size, PUD_SIZE, 0, crash_max);
+   143		if (!crash_base)
+   144			return 0;
+   145	
+   146		if (remap_crashkernel(crash_base, crash_size, size)) {
+   147			memblock_phys_free(crash_base, size);
+   148			return 0;
+   149		}
+   150	
+   151		crashkres_protection_possible = true;
+   152		memblock_phys_free(crash_base + crash_size, size - crash_size);
+   153	
+   154		return crash_base;
+   155	}
+   156	
 
 -- 
-~Randy
+0-DAY CI Kernel Test Service
+https://01.org/lkp

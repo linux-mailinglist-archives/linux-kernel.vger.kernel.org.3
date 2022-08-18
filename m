@@ -2,164 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C05598382
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 793D5598387
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244552AbiHRM4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 08:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
+        id S244478AbiHRM6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 08:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244143AbiHRMz4 (ORCPT
+        with ESMTP id S244539AbiHRM6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 08:55:56 -0400
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2048321838;
-        Thu, 18 Aug 2022 05:55:55 -0700 (PDT)
-Received: by mail-vk1-xa29.google.com with SMTP id j11so715262vkk.11;
-        Thu, 18 Aug 2022 05:55:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=hdLIdfFHv3QXdsm7syIIcLHy/dA4pzmBakkxNtwnQ88=;
-        b=o4AQJs4EQBaaxaXP2SBezP608FaT/gCyKwh720xEW0SYsAhVydbNQ+ULcm3QbmaDWq
-         qGlstBouChh9bl8Wdu9MAfLXofhrblPQLZI8lnnMFCTJOERS/2tPGk7gjWdADDqdU0rl
-         dGIKKEU4G5D/69S0+9GVWzTe8dJKEiAX4iQsHLp4WpzGXT8pmTbnD7QllvxZ+6XBKw6u
-         OYS+2GVEsB5qDOwEVEGKypcfap13E1QWghJdayKM4k2EoJyqE8i46hCe5KlqMmfoxecP
-         RnqsZRVdalrunv3Nzo8vUcMaZKeE+EnsKBHn1fP8gW6Ji9PprHdWYAbpPvrSDyK/fZO7
-         etIg==
+        Thu, 18 Aug 2022 08:58:14 -0400
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E30EF64
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:58:12 -0700 (PDT)
+Received: by mail-qk1-f174.google.com with SMTP id g16so990635qkl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:58:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=hdLIdfFHv3QXdsm7syIIcLHy/dA4pzmBakkxNtwnQ88=;
-        b=RQJHat+onoXbgkiqclwrU8jG5YGR8N2bRDO+MJ0JRhHUhtfB6ScJ0nubcYmP6E6Tsu
-         zUWfM6lHnJ5uqxbT9QIXSgeeE9D11C7cXyNVBSdHP5s0mZog1MOcnppK9K1SqQ1K+CsR
-         3GZyx4btzHe8gLxe9WKRse2YgwFGTG3egEOCRCXCc07tStAXsZjzIhNDa84NOQ9CRfYP
-         8viF630jwBruZVV22lKK3Fsg61zT/6fdcwNebp3Wb7/JVbAQc1+JpcTixnCDVlIazU7g
-         neof+KeeQ0E/1dyb2ALpg8+d3xtp9Zh20g9HK15npxwZcUsPxTSfiiflgEQFULBCyZmp
-         zZYw==
-X-Gm-Message-State: ACgBeo1ZcPqchMzbmdQ4kT9UHRlTLPBQRiXt9K/SAJ8Dzdi0nn3G/vLd
-        PA1YEBDpm19SExAhdZSCKft3SpvMWtsOV984CqK2GnXV
-X-Google-Smtp-Source: AA6agR515wlLrzNdYxk5EBy6qTgyBURqAAfnHWw4Yfs+cfqheuhvLpxfV7SJ4xHBR9yfkOPjA13VjUYxqn9wF8x/tpY=
-X-Received: by 2002:a1f:2b47:0:b0:380:59c5:8b8f with SMTP id
- r68-20020a1f2b47000000b0038059c58b8fmr1095475vkr.20.1660827354101; Thu, 18
- Aug 2022 05:55:54 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=JREs+R+hOdRL2M18w+Jk20r5RGbAGO+48abMsau2ww8=;
+        b=XudvdfXtPoxRK++fiykD4IW0KRzLqHGAuPOBIitZfilOAtB93RtnE/0DLxdikqRKRF
+         a/MRAgITuR13Iig/d0ExrYbrkEEST27DeJdl/kafsCHckQ0jHyRM9ezKhhU4fjYdyZ7s
+         +h/cK3E4fzMOYr94PtYYhtOsftkMD/H2sy0r6hOAgKqjoE5NC+lJWv1V21IUCLYZZSIQ
+         I3/KyHh8qCywErGXWQiPE1JNopzSUPH4Yg2dMHXsePJYYZyJJqU+YLrP9MFHKagdWy2d
+         j5M+ruZZy7gKbs6mIO/c3WW//pq2ORmDPn7r1NC7KMGI4hMyzSG2sSelr1BFUP6C8Ykj
+         EvuA==
+X-Gm-Message-State: ACgBeo0ye1q+lVu7AlgmfJMK7vjgvUZ/ud/wGTi70tI2Q3ZJcAeDUqFz
+        7pcHOj0xFpHbzIljslaPeuEqUsIS3QRsTQ==
+X-Google-Smtp-Source: AA6agR7IMW/7sU7kj7lkqXZ4EXJAo4JGxYN5OLRms7h1DkEQq0lMwFetFp+2eFU9AEbWVOmTgGHmLw==
+X-Received: by 2002:ae9:e906:0:b0:6b5:f0ec:ed92 with SMTP id x6-20020ae9e906000000b006b5f0eced92mr1877561qkf.59.1660827491433;
+        Thu, 18 Aug 2022 05:58:11 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id q22-20020a05620a2a5600b006b945519488sm1506461qkp.88.2022.08.18.05.58.08
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 05:58:09 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-32a17d3bba2so38337397b3.9
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:58:08 -0700 (PDT)
+X-Received: by 2002:a25:cf83:0:b0:692:78ad:f44c with SMTP id
+ f125-20020a25cf83000000b0069278adf44cmr2546178ybg.604.1660827488283; Thu, 18
+ Aug 2022 05:58:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <CANXPkT6mYusYe8O0dbq3vW+24SsUZ19PqhOL+wLFRnbFXwu0Zg@mail.gmail.com>
- <CANXPkT7nOhH+5bD0ycyRBT9FKQBBszCVuWkqp4tFtVRf2+8DFg@mail.gmail.com>
- <CANXPkT5k9Pw4ka6CihyCg0oTd-32Te-ox=f3=9rtCphVgrdctA@mail.gmail.com>
- <165590120140.1149771.2257818527859865760@Monstersaurus> <4883f0a7-6a1b-31bd-33fe-db8f6dcf73fa@selasky.org>
- <CANXPkT73ssg6RRyfDtp7c_8sO60a-UT0-Y4S1_=D=M_mcLNN9g@mail.gmail.com> <CANXPkT4qYOYPL+F=-Pi_NbQErq9WwrR-M-BHe=gP9Ay4bSs+=w@mail.gmail.com>
-In-Reply-To: <CANXPkT4qYOYPL+F=-Pi_NbQErq9WwrR-M-BHe=gP9Ay4bSs+=w@mail.gmail.com>
-From:   =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>
-Date:   Thu, 18 Aug 2022 21:55:43 +0900
-Message-ID: <CANXPkT5=ryAFvb1cO+Wb0CQYmytwedS2dqVTYqt2Km1fkK4w9Q@mail.gmail.com>
-Subject: Re: [PATCH] media: dvb_ringbuffer : Fix a bug in dvb_ringbuffer.c
-To:     Hans Petter Selasky <hps@selasky.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org
-Cc:     0215yys@hanmail.net,
-        =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-4-3d53ae722097@cerno.tech>
+ <CAMuHMdUrwzPYjA0wdR7ADj5Ov6+m03JbnY8fBYzRYyWDuNm5=g@mail.gmail.com>
+ <20220816132636.3tmwqmrox64pu3lt@houat> <CAMuHMdUNLPbjs=usYQBim5FxsrC1oJLuF+3JB7auzHHRoOqavQ@mail.gmail.com>
+ <20220817075351.4xpsqdngjgtiqvob@houat> <CAMuHMdUusnhYodWGCxJBu-1Hd2KW-xdT8jxE_iVdQjDo8b3Y5Q@mail.gmail.com>
+ <20220817131454.qcuywcuc4ts4hswm@houat> <CAMuHMdVPEgnnsY-4uuf=FDJ0YxWpch-0kZWFT_TZfcDvXLtwWQ@mail.gmail.com>
+ <20220818123934.eim2bfrgbxsmviqx@houat>
+In-Reply-To: <20220818123934.eim2bfrgbxsmviqx@houat>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 18 Aug 2022 14:57:55 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWXbHkrBZgsmUnU=q52+q7UZZNO3tgQW7Men+msQ1JDwQ@mail.gmail.com>
+Message-ID: <CAMuHMdWXbHkrBZgsmUnU=q52+q7UZZNO3tgQW7Men+msQ1JDwQ@mail.gmail.com>
+Subject: Re: [PATCH v1 04/35] drm/modes: Introduce 480i and 576i modes
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear All,
+Hi Maxime,
 
-Can you pay your attention to this patch ?
-This is a very simple modification.
-But, too much time has already passed since I sent the first E-mail.
+On Thu, Aug 18, 2022 at 2:39 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> On Wed, Aug 17, 2022 at 04:01:48PM +0200, Geert Uytterhoeven wrote:
+> > > I've looked around and it looks like the entire blanking area is
+> > > supposed to be 40 pixels in interlaced, but I couldn't find anywhere how
+> >
+> > 625 lines - 575[*] visible lines = 50 lines.
+> >
+> > [*] BT.656 uses 576 visible lines as that's a multiple of 2, for splitting
+> >      a frame in two fields of equal size.
+> >
+> > "visible" is relative, as it includes the overscan region.
+> > Some PAL monitors used with computers had knobs to control width/height
+> > and position of the screen, so you could make use of most or all of
+> > the overscan region
+>
+> It brings back some memories :)
+>
+> > but on a real TV you're limited to ca. 640x512 (on PAL) which is what
+> > an Amiga used by default (with a 14 MHz pixclock).
+>
+> > > it's supposed to be split between the upper and lower margins and the
+> > > sync period.
+> >
+> > "Field Synchronization of PAL System" on
+> > http://martin.hinner.info/vga/pal.html shows the split.
+>
+> Thanks, that's excellent as well.
+>
+> I'm mostly done with a function that creates a PAL mode, but I still
+> have one question.
+>
+> If I understand well, the blanking period is made up (interlace) of 16
+> pulses for the first field, 14 for the second, each pulse taking half a
+> line. That amount to 30 pulses, so 15 lines.
+>
+> I first assumed that the pre-equalizing pulses would be the back porch,
+> the long sync pulses the vsync, and the post-equalizing pulses the front
+> porch. But... we're still missing 35 lines to amount to 625 lines, that
+> seems to be counted in the field itself (305 lines == (575 + 35) / 2)
+>
+> So I guess my assumption was wrong to begin with.
 
-2022=EB=85=84 8=EC=9B=94 3=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 9:04, =
-=EC=9C=A0=EC=9A=A9=EC=88=98 <yongsuyoo0215@gmail.com>=EB=8B=98=EC=9D=B4 =EC=
-=9E=91=EC=84=B1:
->
-> Dear All.
-> Too much time has already passed since I first sent this Email.
-> Can you share how this patch is going ?
->
-> 2022=EB=85=84 6=EC=9B=94 23=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 6:11,=
- =EC=9C=A0=EC=9A=A9=EC=88=98 <yongsuyoo0215@gmail.com>=EB=8B=98=EC=9D=B4 =
-=EC=9E=91=EC=84=B1:
-> >
-> > Dear Kieran Bingham
-> >
-> > I sent E-mail again by Linux terminal by using the command " ... git
-> > send-email .."
-> > I believe that you will surely get the diff file.
-> >
-> > Thank you
-> >
-> > 2022=EB=85=84 6=EC=9B=94 22=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 10:=
-12, Hans Petter Selasky <hps@selasky.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=
-=B1:
-> > >
-> > > Hi Kieran,
-> > >
-> > > The consumed variable should not be negative. This bug has been there
-> > > since the beginning of the GIT at Linux from what I can see.
-> > >
-> > > +1
-> > >
-> > > --HPS
-> > >
-> > >  From 108c6acb2cc4bc4314b96f6f254a04b2873a096c Mon Sep 17 00:00:00 20=
-01
-> > > From: YongSu Yoo <yongsuyoo0215@gmail.com>
-> > > Date: Sun, 22 May 2022 04:53:12 +0000
-> > > Subject: [PATCH] media: dvb_ringbuffer : Fix a bug in dvb_ringbuffer.=
-c
-> > >
-> > > Signed-off-by:Yongsu Yoo <yongsuyoo0215@gmail.com>
-> > >
-> > > The function dvb_ringbuffer_pkt_next in
-> > > /linux-next/drviers/media/dvb-core/dvb_ringbuffer.c,
-> > > which searches the idx of the next valid packet in the ring
-> > > buffer of the ca->slot_info[slot].rx_buffer at
-> > > /linux-next/drivers/media/dvb-core/dvb_ca_en50221.c,
-> > > has the following problem.
-> > > In calculating the amounts of the consumed address of the ring
-> > > buffer, if the read address(rbuf->pread) of the ring buffer is
-> > > smaller than the idx, the amounts of the searched address
-> > > should be (idx - rbuf->pread),
-> > > whereas if the read address(rbuf->pread) of the ring buffer is
-> > > larger than the idx, the amounts of the consumed address should
-> > > be (idx - rbuf->pread + rbug->size). But there exists an
-> > > incorrect logic that the rbug-size was not properly added on
-> > > (idx - rbug->pread) in the later case. With this commit, we
-> > > fixed this bug.
-> > > ---
-> > >   drivers/media/dvb-core/dvb_ringbuffer.c | 4 +++-
-> > >   1 file changed, 3 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/media/dvb-core/dvb_ringbuffer.c
-> > > b/drivers/media/dvb-core/dvb_ringbuffer.c
-> > > index d1d471af0636..7d4558de8e83 100644
-> > > --- a/drivers/media/dvb-core/dvb_ringbuffer.c
-> > > +++ b/drivers/media/dvb-core/dvb_ringbuffer.c
-> > > @@ -335,7 +335,9 @@ ssize_t dvb_ringbuffer_pkt_next(struct
-> > > dvb_ringbuffer *rbuf, size_t idx, size_t*
-> > >                 idx =3D (idx + curpktlen + DVB_RINGBUFFER_PKTHDRSIZE)=
- % rbuf->size;
-> > >         }
-> > >
-> > > -       consumed =3D (idx - rbuf->pread) % rbuf->size;
-> > > +       consumed =3D (idx - rbuf->pread);
-> > > +       if (consumed < 0)
-> > > +               consumed +=3D rbuf->size;
-> > >
-> > >         while((dvb_ringbuffer_avail(rbuf) - consumed) >
-> > > DVB_RINGBUFFER_PKTHDRSIZE) {
-> > >
-> > > --
-> > > 2.17.1
+The back porch is the number of lines between the last "visible" line
+and the start of the synchronization pulse, i.e. "l" in the "Field
+Synchronization of PAL System" drawing.
+Virtual sync length is "m".
+The front porch is the number of lines between the end of
+the synchronization pulse, and the first "visible" line, i.e.
+"j - l - m" (I think you used "n", thus missing lines 6-23 and 319-335).
+
+> You seem to have used a fixed vsync in amifb to 4 lines, and I don't
+
+Actually "m" is 2.5 lines in the first field, and 3 lines in the second field,
+so "4" is not that much off of 2.5 + 3.
+
+> understand how you come up with the upper and lower margins (or rather,
+> how they are linked to what's described in that page)
+
+These margins probably came from the Amiga hardware reference manual,
+for the default 640x512 (PAL) and 640x400 (NTSC) modes.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

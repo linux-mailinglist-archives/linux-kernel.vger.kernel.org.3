@@ -2,154 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53855598298
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03285598285
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244241AbiHRLxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 07:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
+        id S244312AbiHRLy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 07:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244197AbiHRLxs (ORCPT
+        with ESMTP id S243934AbiHRLyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 07:53:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6D272B76
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 04:53:47 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IBkfkR014068;
-        Thu, 18 Aug 2022 11:51:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=2niajSUWwyfNezhmeCwyuZ51ZScavh+uEqc8QUsfdjw=;
- b=V4Qyk2YL0ZcuuOMN9quDWDXaUbkkXrajdBwmZPVICCAaGoOwJMhj22szYOT33WXmcITR
- O7Moqi6SGsoFq9hQgyi43FG/f/XnoEKWB9RHN0BkhVeEYk73k/+IdjAZNlYlLT5OFtrN
- GGzQ+OBeE/pAyfKBWcrzdX+4KM9tMXfiVkDuuhRSmkaMGmsd4A9/vd6UUIJYZuFOZb8E
- KVKUNh8jeTu9qhtv2b20XDUJKlHrfQJrdFzw/zvSeeFTCwrkuR3fDV10lhPxt5KoH9Es
- vYgoctqphN9jVFsOyEcmzk/HDvflbEabGElc5QmWNWTgPKP2iAfunuyHVNTlHysxHrf3 Uw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1mupg39n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 11:51:58 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27IBlZd1022443;
-        Thu, 18 Aug 2022 11:51:57 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1mupg38r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 11:51:57 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27IBptQG028038;
-        Thu, 18 Aug 2022 11:51:55 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3hx3k8vbvq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 11:51:54 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27IBppuK26804614
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Aug 2022 11:51:51 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D3E16A405B;
-        Thu, 18 Aug 2022 11:51:51 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0F395A4054;
-        Thu, 18 Aug 2022 11:51:51 +0000 (GMT)
-Received: from thinkpad (unknown [9.171.7.173])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Thu, 18 Aug 2022 11:51:50 +0000 (GMT)
-Date:   Thu, 18 Aug 2022 13:51:49 +0200
-From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Wang, Haiyue" <haiyue.wang@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "david@redhat.com" <david@redhat.com>,
-        "apopple@nvidia.com" <apopple@nvidia.com>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "naoya.horiguchi@linux.dev" <naoya.horiguchi@linux.dev>,
-        "alex.sierra@amd.com" <alex.sierra@amd.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH v6 1/2] mm: migration: fix the FOLL_GET failure on
- following huge page
-Message-ID: <20220818135149.7b043a58@thinkpad>
-In-Reply-To: <20220816224322.33e0dfbcbf522fcdc2026f0e@linux-foundation.org>
-References: <20220812084921.409142-1-haiyue.wang@intel.com>
-        <20220816022102.582865-1-haiyue.wang@intel.com>
-        <20220816022102.582865-2-haiyue.wang@intel.com>
-        <20220816175838.211a1b1e85bc68c439101995@linux-foundation.org>
-        <BYAPR11MB3495F747CBF95E079E8FC8A5F76A9@BYAPR11MB3495.namprd11.prod.outlook.com>
-        <20220816224322.33e0dfbcbf522fcdc2026f0e@linux-foundation.org>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 18 Aug 2022 07:54:54 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EAC7FFAD;
+        Thu, 18 Aug 2022 04:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660823693; x=1692359693;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HsOPy0Z5++etcYrSFF3B5HZWLyK0D1O3GxxmVs0sLSg=;
+  b=izyX/pymDfYB4qgMUZIUpYDra3Q5fIx9SBuvGGtXRIl7YOA6reXREuJ+
+   2Z5u61uAx/IWtTAcnTcGOmMoVpDPQletoO37RJBC2Pg3Sb8b90oqxH8ot
+   Y6/3XiBf/IW6dWPu/fQSASTm0FqHAgT5fl2px+tiYw4vxVMwh9gJHZsEh
+   tKzTTRyCWr5Q9duXXtH/so2M+UiqsbmOIzZDsuhOaPdWE60FzsLol9AZJ
+   vhgc3NKwDLAXBNSQHsBsk92dpeQkLNiB8hTqm2f/Kzdg1qlqnwpXx6nyF
+   kOYwIszSRth9S0rlrlElor6b1WWVlB3J1yBC9tNVq3JOtqd2ucdPLQ7+B
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="290304652"
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="290304652"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 04:54:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="935783750"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Aug 2022 04:54:49 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 27IBsmfr013911;
+        Thu, 18 Aug 2022 12:54:48 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        linux-kbuild@vger.kernel.org, live-patching@vger.kernel.org,
+        lkp@intel.com, stable@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>
+Subject: [RFC PATCH 0/3] kallsyms: add option to include relative filepaths into kallsyms
+Date:   Thu, 18 Aug 2022 13:53:03 +0200
+Message-Id: <20220818115306.1109642-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: knKAC2mxPJcLC3W1uyqRiO_FoewM-wzI
-X-Proofpoint-ORIG-GUID: mc_Fvgv_KXXsVr_p5tcssbH3JiBSfKO_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_12,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- suspectscore=0 adultscore=0 spamscore=0 malwarescore=0 phishscore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 impostorscore=0 clxscore=1011
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180040
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 22:43:22 -0700
-Andrew Morton <akpm@linux-foundation.org> wrote:
+This is an early RFC to not rewrite stuff one more time later on if
+the implementation is not acceptable or any major design changes are
+required. For the TODO list, please scroll to the end.
 
-> On Wed, 17 Aug 2022 03:31:37 +0000 "Wang, Haiyue" <haiyue.wang@intel.com> wrote:
-> 
-> > > >  		}
-> > > 
-> > > I would be better to fix this for real at those three client code sites?
-> > 
-> > Then 5.19 will break for a while to wait for the final BIG patch ?
-> 
-> If that's the proposal then your [1/2] should have had a cc:stable and
-> changelog words describing the plan for 6.0.
-> 
-> But before we do that I'd like to see at least a prototype of the final
-> fixes to s390 and hugetlb, so we can assess those as preferable for
-> backporting.  I don't think they'll be terribly intrusive or risky?
-> 
+Make kallsyms independent of symbols positions in vmlinux (or module)
+by including relative filepath in each symbol's kallsyms value. I.e.
 
-The private follow_huge_pud() for s390 is just some leftover, and the
-only reason is / was that the generic version was using pte_page()
-instead of pud_page(), which would not work for s390. See also commit
-97534127012f ("mm/hugetlb: use pmd_page() in follow_huge_pmd()").
+dev_gro_receive -> net/core/gro.c:dev_gro_receive
 
-Since commit 3a194f3f8ad01 ("mm/hugetlb: make pud_huge() and
-follow_huge_pud() aware of non-present pud entry") made
-follow_huge_pud() behave similar to follow_huge_pmd(), in particular
-also adding pud_page(), we can now switch to the generic version.
+For the implementation details, please look at the patch 3/3.
+Patch 2/3 is just a stub, I plan to reuse kallsyms enhancement from
+the Rust series for it.
+Patch 1/3 is a fix of one modpost macro straight from 2.6.12-rc2.
 
-Note that we cannot support migration / hwpoison for hugetlb or THP,
-because of different layout for PTE and PMD/PUD on s390. The generic
-swp_entry functions all require proper PTEs, which wouldn't work on
-PMD/PUD entries. In theory, at least for hugetlb, due to the "fake
-PTE" conversion logic in huge_ptep_get(), we might be able to also
-fake swp_entries, but the other problem is that we do not have enough
-free bits in the PMD/PUD, so there probably will never be migration
-support for huge pages on s390.
+A nice side effect is that it's now easier to debug the kernel, as
+stacktraces will now tell every call's place in the file tree:
 
-Anyway, that should not matter wrt to switching to the generic
-follow_huge_pud(), because is_hugetlb_entry_migration() should always
-return false, and no special change to pud_huge() check should be
-needed like on x86.
+[    0.733191] Call Trace:
+[    0.733668]  <TASK>
+[    0.733980]  lib/dump_stack.c:dump_stack_lvl+0x48/0x68
+[    0.734689]  kernel/panic.c:panic+0xf8/0x2ae
+[    0.735291]  init/do_mounts.c:mount_block_root+0x143/0x1ea
+[    0.736046]  init/do_mounts.c:prepare_namespace+0x13f/0x16e
+[    0.736798]  init/main.c:kernel_init_freeable+0x240/0x24f
+[    0.737549]  ? init/main.c:rest_init+0xc0/0xc0
+[    0.738171]  init/main.c:kernel_init+0x1a/0x140
+[    0.738765]  arch/x86/entry/entry_64.S:ret_from_fork+0x1f/0x30
+[    0.739529]  </TASK>
+
+Here are some stats:
+
+Despite running a small utility on each object file and a script on
+each built-in.a plus one at the kallsyms generation process, it adds
+only 3 seconds to the whole clean build time:
+
+make -j$(($(nproc) + 1)) all compile_commands.json  19071.12s user 3481.97s system 4587% cpu 8:11.64 total
+make -j$(($(nproc) + 1)) all compile_commands.json  19202.88s user 3598.80s system 4607% cpu 8:14.85 total
+
+Compressed kallsyms become bigger by 1.4 Mbytes on x86_64 standard
+distroconfig - 60% of the kallsyms and 2.4% of the decompressed
+vmlinux in the memory:
+
+ffffffff8259ab30 D kallsyms_offsets
+ffffffff82624ed0 D kallsyms_relative_base
+ffffffff82624ed8 D kallsyms_num_syms
+ffffffff82624ee0 D kallsyms_names
+ffffffff827e9c68 D kallsyms_markers
+ffffffff827ea510 D kallsyms_token_table
+ffffffff827ea8c0 D kallsyms_token_index
+ffffffff827eaac0 d .LC1
+
+->
+
+ffffffff8259ac30 D kallsyms_offsets
+ffffffff82624fb8 D kallsyms_relative_base
+ffffffff82624fc0 D kallsyms_num_syms
+ffffffff82624fc8 D kallsyms_names
+ffffffff8294de50 D kallsyms_markers
+ffffffff8294e6f8 D kallsyms_token_table
+ffffffff8294eac8 D kallsyms_token_index
+ffffffff8294ecc8 d .LC1
+
+TODO:
+ * ELF rel and MIPS relocation support (only rela currently, just
+   to test on x86_64);
+ * modules support. Currently, the kernel reuses standard ELF strtab
+   for module kallsyms. My plan is to create a new section which will
+   have the same symbol order as symtab, but point to new complete
+   strings with filepaths, and use this section solely for kallsyms
+   (leaving symtab alone);
+ * LTO support (now relies on that object files are ELFs);
+ * the actual kallsyms/livepatching/probes code which will use
+   filepaths instead of indexes/positions.
+
+Have fun!
+
+Alexander Lobakin (3):
+  modpost: fix TO_NATIVE() with expressions and consts
+  [STUB] increase kallsyms length limit
+  kallsyms: add option to include relative filepaths into kallsyms
+
+ .gitignore                |   1 +
+ Makefile                  |   2 +-
+ include/linux/kallsyms.h  |   2 +-
+ init/Kconfig              |  26 ++-
+ kernel/livepatch/core.c   |   4 +-
+ scripts/Makefile.build    |   7 +-
+ scripts/Makefile.lib      |  10 +-
+ scripts/Makefile.modfinal |   3 +-
+ scripts/gen_sympaths.pl   | 270 ++++++++++++++++++++++++++
+ scripts/kallsyms.c        |  89 +++++++--
+ scripts/link-vmlinux.sh   |  14 +-
+ scripts/mod/.gitignore    |   1 +
+ scripts/mod/Makefile      |   9 +
+ scripts/mod/modpost.h     |   7 +-
+ scripts/mod/sympath.c     | 385 ++++++++++++++++++++++++++++++++++++++
+ 15 files changed, 796 insertions(+), 34 deletions(-)
+ create mode 100755 scripts/gen_sympaths.pl
+ create mode 100644 scripts/mod/sympath.c
+
+-- 
+2.37.2
+

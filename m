@@ -2,79 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DAB598A4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 623F6598A63
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345236AbiHRRWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S1344842AbiHRRXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344791AbiHRRV4 (ORCPT
+        with ESMTP id S1344699AbiHRRWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:21:56 -0400
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256422CCAA;
-        Thu, 18 Aug 2022 10:21:21 -0700 (PDT)
-Received: by mail-pj1-f53.google.com with SMTP id e19so1123888pju.1;
-        Thu, 18 Aug 2022 10:21:21 -0700 (PDT)
+        Thu, 18 Aug 2022 13:22:34 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE61F5B6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:22:32 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id b15so1131745ilq.10
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc;
+        bh=jH2VlH2vwqX5qxVWjudYS+DqwE3jxZzRobXXOdNN1PA=;
+        b=fIMLDjhPlqtyKIGWal957mZqvdDJwRo/FxSUBuh9Zg2aufKTVm+F5hPo7qYebI/OnS
+         YsaOrfi5k9v3CF8ptF2rlnSdiVXHNAuST2BPEgU9ZIaGaVai45462/2h7xe/8JzhyO7k
+         i0rVwx9VnqAZy1S5AFLmfD2ZbKKwhpL4Cby+4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=vanZygsLh7oEj5y254592X3RdUXrhVJF3OLlXailxjk=;
-        b=7F0Uu1mDJIo/Hf5FyXeMv989Wz2p8I5njd+yNqW8hkkyKlbhHBC+9p7r2nFubxhxCK
-         6TvRvdZPgoBHLd5xu05I06st3NSzX0sTk1AkGbpOHMThBhasNVEedgU3Qiw6lo4QDIfm
-         Y7PSVEZC8u5UHAM+5YgN13wWoIG9qGQ5ILpcxH0MSopXDmnqUv58ZMmB5KdfBeLD29JD
-         htfkOStn5H6oic3h6lv1RtMcI5rrLr8Kv1umi9mqidJguC0340EjO+W/5w1fXipb5iRQ
-         xiWYeIeVNYd7FkMdrRxMdYbtq+81bFBcnRvILNUMmDAwA5zlOZked0OBbsg8eL1XgKEk
-         k6Yw==
-X-Gm-Message-State: ACgBeo13jAB95fDCcC2iZYBPlW0FhpLlzglJQLE1KujrydkbPNhxVSVv
-        OebDXjQJRseV8Kdb0xLM94qnjQxEcg==
-X-Google-Smtp-Source: AA6agR7IVR3vJCScPvq4DpLDESckyA04q28EqUlUq4SYrZ+JK1pHP4nu6RmPbgMkAcvrhWT7LsZw4g==
-X-Received: by 2002:a17:90a:a08:b0:1fa:b43d:68cf with SMTP id o8-20020a17090a0a0800b001fab43d68cfmr9002070pjo.41.1660843280416;
-        Thu, 18 Aug 2022 10:21:20 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:647:4ff2:3529:f8cd:d6cd:ac54])
-        by smtp.gmail.com with ESMTPSA id d11-20020a170902aa8b00b00172b5adb78asm1424901plr.147.2022.08.18.10.21.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 10:21:19 -0700 (PDT)
-Received: (nullmailer pid 2058883 invoked by uid 1000);
-        Thu, 18 Aug 2022 17:21:16 -0000
-Date:   Thu, 18 Aug 2022 11:21:16 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     andrei.tachici@stud.acs.upb.ro
-Cc:     linux-kernel@vger.kernel.org, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        vegard.nossum@oracle.com, joel@jms.id.au, l.stelmach@samsung.com,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org
-Subject: Re: [net-next v4 3/3] dt-bindings: net: adin1110: Add docs
-Message-ID: <20220818172116.GA2055664-robh@kernel.org>
-References: <20220817160236.53586-1-andrei.tachici@stud.acs.upb.ro>
- <20220817160236.53586-4-andrei.tachici@stud.acs.upb.ro>
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=jH2VlH2vwqX5qxVWjudYS+DqwE3jxZzRobXXOdNN1PA=;
+        b=o+avUmwRwwkCJb25tj4lpWUHIrGlpvm+A4NxTIBy0T/58MhyOuN/mQTgvomMEBXgn2
+         rVdNjEcc8baiwCUoCnkhoAN+asnpQeVuIOISDC9W2oSHJ1JKMzTa3RKkzeZdpxHw0fTi
+         O/lnW4HBxjsfmCUyLhROiH2yQ+YQaxRUurFl4z3oK8jJ86QXshTENjR3HUTqFKc365cv
+         Mrys++d7hwRYsTGFJXHTi0cma9pCVBMQgIoLSqC6j6R4EO88nGDH8Gw97t8/WrY1Somu
+         54Cx+4Y8IaxKB/6yjV1isThspQ8tHZVcjNeEWjkzUDcjjAtnPOdqRV4s3/DwyF2CxvY6
+         9DJg==
+X-Gm-Message-State: ACgBeo0ZRcY9rwFPCevGRrC0gGYrC367x416YDYyWNzywwunYFdrlunE
+        q46ROQcucWh19/awsMy6Q4zEE55o2cVb9xh5cEedOWKtyU6Xsg==
+X-Google-Smtp-Source: AA6agR56YpcxhvGBL8DRhBX8nAjPsZ11NEeok4yV/vqvGdMAe6CkrAzrZjozA/qqKnWkAI1TnNwn9b7JPLpuymji6fE=
+X-Received: by 2002:a05:6e02:20eb:b0:2df:302c:fb10 with SMTP id
+ q11-20020a056e0220eb00b002df302cfb10mr1931040ilv.35.1660843351572; Thu, 18
+ Aug 2022 10:22:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817160236.53586-4-andrei.tachici@stud.acs.upb.ro>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220809034517.3867176-1-joel@joelfernandes.org> <20220809034517.3867176-5-joel@joelfernandes.org>
+In-Reply-To: <20220809034517.3867176-5-joel@joelfernandes.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 18 Aug 2022 13:22:20 -0400
+Message-ID: <CAEXW_YSMYj6DN+ps09SkU2t1hNNg+xGf-6c0rL8dBoy262_-ew@mail.gmail.com>
+Subject: Re: [PATCH v3 resend 4/6] fs: Move call_rcu() to call_rcu_lazy() in
+ some paths
+To:     LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 07:02:36PM +0300, andrei.tachici@stud.acs.upb.ro wrote:
-> From: Alexandru Tachici <alexandru.tachici@analog.com>
-> 
-> Add bindings for the ADIN1110/2111 MAC-PHY/SWITCH.
-> 
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
-> ---
->  .../devicetree/bindings/net/adi,adin1110.yaml | 77 +++++++++++++++++++
->  1 file changed, 77 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/adi,adin1110.yaml
+On Mon, Aug 8, 2022 at 11:45 PM Joel Fernandes (Google)
+<joel@joelfernandes.org> wrote:
+>
+> This is required to prevent callbacks triggering RCU machinery too
+> quickly and too often, which adds more power to the system.
+>
+> When testing, we found that these paths were invoked often when the
+> system is not doing anything (screen is ON but otherwise idle).
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Unfortunately, I am seeing a slow down in ChromeOS boot performance
+after applying this particular patch. It is the first time I could
+test ChromeOS boot times with the series since it was hard to find a
+ChromeOS device that runs the upstream kernel.
+
+Anyway, Vlad, Neeraj, do you guys also see slower boot times with this
+patch? I wonder if the issue is with wake up interaction with the nocb
+GP threads.
+
+We ought to disable lazy RCU during boot since it would have little
+benefit anyway. But I am also concerned about some deeper problem I
+did not catch before.
+
+I'll look into tracing the fs paths to see if I can narrow down what's
+causing it. Will also try a newer kernel, I am currently testing on
+5.19-rc4.
+
+Thanks,
+
+ - Joel
+
+>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  fs/dcache.c     | 4 ++--
+>  fs/eventpoll.c  | 2 +-
+>  fs/file_table.c | 2 +-
+>  fs/inode.c      | 2 +-
+>  4 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/fs/dcache.c b/fs/dcache.c
+> index 93f4f5ee07bf..7f51bac390c8 100644
+> --- a/fs/dcache.c
+> +++ b/fs/dcache.c
+> @@ -366,7 +366,7 @@ static void dentry_free(struct dentry *dentry)
+>         if (unlikely(dname_external(dentry))) {
+>                 struct external_name *p = external_name(dentry);
+>                 if (likely(atomic_dec_and_test(&p->u.count))) {
+> -                       call_rcu(&dentry->d_u.d_rcu, __d_free_external);
+> +                       call_rcu_lazy(&dentry->d_u.d_rcu, __d_free_external);
+>                         return;
+>                 }
+>         }
+> @@ -374,7 +374,7 @@ static void dentry_free(struct dentry *dentry)
+>         if (dentry->d_flags & DCACHE_NORCU)
+>                 __d_free(&dentry->d_u.d_rcu);
+>         else
+> -               call_rcu(&dentry->d_u.d_rcu, __d_free);
+> +               call_rcu_lazy(&dentry->d_u.d_rcu, __d_free);
+>  }
+>
+>  /*
+> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+> index 971f98af48ff..57b3f781760c 100644
+> --- a/fs/eventpoll.c
+> +++ b/fs/eventpoll.c
+> @@ -729,7 +729,7 @@ static int ep_remove(struct eventpoll *ep, struct epitem *epi)
+>          * ep->mtx. The rcu read side, reverse_path_check_proc(), does not make
+>          * use of the rbn field.
+>          */
+> -       call_rcu(&epi->rcu, epi_rcu_free);
+> +       call_rcu_lazy(&epi->rcu, epi_rcu_free);
+>
+>         percpu_counter_dec(&ep->user->epoll_watches);
+>
+> diff --git a/fs/file_table.c b/fs/file_table.c
+> index 5424e3a8df5f..417f57e9cb30 100644
+> --- a/fs/file_table.c
+> +++ b/fs/file_table.c
+> @@ -56,7 +56,7 @@ static inline void file_free(struct file *f)
+>         security_file_free(f);
+>         if (!(f->f_mode & FMODE_NOACCOUNT))
+>                 percpu_counter_dec(&nr_files);
+> -       call_rcu(&f->f_u.fu_rcuhead, file_free_rcu);
+> +       call_rcu_lazy(&f->f_u.fu_rcuhead, file_free_rcu);
+>  }
+>
+>  /*
+> diff --git a/fs/inode.c b/fs/inode.c
+> index bd4da9c5207e..38fe040ddbd6 100644
+> --- a/fs/inode.c
+> +++ b/fs/inode.c
+> @@ -312,7 +312,7 @@ static void destroy_inode(struct inode *inode)
+>                         return;
+>         }
+>         inode->free_inode = ops->free_inode;
+> -       call_rcu(&inode->i_rcu, i_callback);
+> +       call_rcu_lazy(&inode->i_rcu, i_callback);
+>  }
+>
+>  /**
+> --
+> 2.37.1.559.g78731f0fdb-goog
+>

@@ -2,80 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A3B598223
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B6B598221
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244380AbiHRLRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 07:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S244386AbiHRLSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 07:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237435AbiHRLRr (ORCPT
+        with ESMTP id S244383AbiHRLSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 07:17:47 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853E2AE23A
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 04:17:46 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id j8so2598586ejx.9
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 04:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=E1NipNzUWLZ2palbEix1QtbCTNgOpAKdVPPFyst0N7o=;
-        b=YCwY2+ZOwZePVXHIed870W0AMBgz2YE11uL8soFdD2/JiKrKB7+vx5++xVceVEdfv4
-         f+3HWdO1z9ehFa6qO4t68/0/LzqpthaY/C6NCXUI1zp4UheqE64y4qTyK2KQzD2tnFiO
-         jIAkKAGKTeTAnV0OdfZwZoG5dGzccmnChgDjGByCmSXCxjOJFDalhFBdk4jGtDTd4TKT
-         VOiT1pJizr8p3mr9rGhr8Cc9eWbUZVB+oclTSvJGwHNQ+rXa16IgiG7190sjPR99Xski
-         vSwf/zjuFbcqVkEyDGyc7mHpL89dRdJkK4PhO4CY3g0nCTgARc+BXL5F18pAu+RVAyMu
-         1+RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=E1NipNzUWLZ2palbEix1QtbCTNgOpAKdVPPFyst0N7o=;
-        b=1GMJHVlURc+B8IgMhlUDFowpuQyn7C+klyOwQOYvSYiNVExoCVun99pA9UxKr+FJ4G
-         uaEAXnESQRnDoR8qdFzHWiv/QrhoRT53AUrV/j6/r4w0CBw2nTOsgC1LcofJNoBO5t8r
-         /JEMsuasp5INibiWv5/sxFsXnFHeC4Bl5Ex1XvG/YtK3ZqluuZ2w6+JWVIzbAw+3sAu1
-         MKQMtGBvBQVp6VHWa/0qZ6hi/teogyK59iwqlF3a0mwsqwLKpoK8XhtOwty2fhfnOObn
-         fyKV5YGLutFCwrAKYL5vd7uAT441+4afzVlreOVsbS9Jnc3qhOIHnkTnwDlaSu3vBfXv
-         wbjQ==
-X-Gm-Message-State: ACgBeo3ECDc0Jbkcchxf7EDOt47GgnUp7FLh3BAzft3K2jbFdh4kMSt5
-        +BuZA44LSneNGr6V6TD9IrZBwu0EtqF3msYK9MmLag==
-X-Google-Smtp-Source: AA6agR5b8bP+fivEf8sWhn4cjq7X6RpjZuI0sL1iRR2iThKSe11tnOp6MF2tDz+lsllpLbtZOzvSG3NbTnoaTALTQtY=
-X-Received: by 2002:a17:907:6d98:b0:731:2bb3:8e17 with SMTP id
- sb24-20020a1709076d9800b007312bb38e17mr1597869ejc.203.1660821465138; Thu, 18
- Aug 2022 04:17:45 -0700 (PDT)
+        Thu, 18 Aug 2022 07:18:39 -0400
+Received: from syslogsrv (unknown [217.20.186.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632F93FA21;
+        Thu, 18 Aug 2022 04:18:35 -0700 (PDT)
+Received: from fg200.ow.s ([172.20.254.44] helo=localhost.localdomain)
+        by syslogsrv with esmtp (Exim 4.90_1)
+        (envelope-from <maksym.glubokiy@plvision.eu>)
+        id 1oOdXb-0009d4-RR; Thu, 18 Aug 2022 14:18:23 +0300
+From:   Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+To:     Taras Chornyi <tchornyi@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Yevhen Orlov <yevhen.orlov@plvision.eu>,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+Cc:     Maksym Glubokiy <maksym.glubokiy@plvision.eu>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] net: prestera: cache port state for non-phylink ports too
+Date:   Thu, 18 Aug 2022 14:18:21 +0300
+Message-Id: <20220818111821.415972-1-maksym.glubokiy@plvision.eu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <202208180333.1pfLpmaj-lkp@intel.com>
-In-Reply-To: <202208180333.1pfLpmaj-lkp@intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 18 Aug 2022 13:17:34 +0200
-Message-ID: <CACRpkdYkRL0Yavgrg378Kte3mpeCTXoPu-Wnr0T7deNDyt2zoA@mail.gmail.com>
-Subject: Re: [broonie-regmap:for-next 4/4] include/asm-generic/io.h:187:18:
- error: redefinition of 'readb'
-To:     kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
+        HELO_NO_DOMAIN,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 9:53 PM kernel test robot <lkp@intel.com> wrote:
+Port event data must stored to port-state cache regardless of whether
+the port uses phylink or not since this data is used by ethtool.
 
->    In file included from arch/hexagon/include/asm/io.h:311:
-> >> include/asm-generic/io.h:187:18: error: redefinition of 'readb'
->    static inline u8 readb(const volatile void __iomem *addr)
->                     ^
+Fixes: 52323ef75414 ("net: marvell: prestera: add phylink support")
+Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+---
+ .../ethernet/marvell/prestera/prestera_main.c | 36 +++++++++----------
+ 1 file changed, 17 insertions(+), 19 deletions(-)
 
-Aha. I'll hunt down a hexagon cross compiler and provide a fix on top
-of the regmap tree for-next.
+diff --git a/drivers/net/ethernet/marvell/prestera/prestera_main.c b/drivers/net/ethernet/marvell/prestera/prestera_main.c
+index ede3e53b9790..3489b80ae0d6 100644
+--- a/drivers/net/ethernet/marvell/prestera/prestera_main.c
++++ b/drivers/net/ethernet/marvell/prestera/prestera_main.c
+@@ -797,32 +797,30 @@ static void prestera_port_handle_event(struct prestera_switch *sw,
+ 
+ 		caching_dw = &port->cached_hw_stats.caching_dw;
+ 
+-		if (port->phy_link) {
+-			memset(&smac, 0, sizeof(smac));
+-			smac.valid = true;
+-			smac.oper = pevt->data.mac.oper;
+-			if (smac.oper) {
+-				smac.mode = pevt->data.mac.mode;
+-				smac.speed = pevt->data.mac.speed;
+-				smac.duplex = pevt->data.mac.duplex;
+-				smac.fc = pevt->data.mac.fc;
+-				smac.fec = pevt->data.mac.fec;
+-				phylink_mac_change(port->phy_link, true);
+-			} else {
+-				phylink_mac_change(port->phy_link, false);
+-			}
+-			prestera_port_mac_state_cache_write(port, &smac);
++		memset(&smac, 0, sizeof(smac));
++		smac.valid = true;
++		smac.oper = pevt->data.mac.oper;
++		if (smac.oper) {
++			smac.mode = pevt->data.mac.mode;
++			smac.speed = pevt->data.mac.speed;
++			smac.duplex = pevt->data.mac.duplex;
++			smac.fc = pevt->data.mac.fc;
++			smac.fec = pevt->data.mac.fec;
+ 		}
++		prestera_port_mac_state_cache_write(port, &smac);
+ 
+ 		if (port->state_mac.oper) {
+-			if (!port->phy_link)
++			if (port->phy_link)
++				phylink_mac_change(port->phy_link, true);
++			else
+ 				netif_carrier_on(port->dev);
+ 
+ 			if (!delayed_work_pending(caching_dw))
+ 				queue_delayed_work(prestera_wq, caching_dw, 0);
+-		} else if (netif_running(port->dev) &&
+-			   netif_carrier_ok(port->dev)) {
+-			if (!port->phy_link)
++		} else {
++			if (port->phy_link)
++				phylink_mac_change(port->phy_link, false);
++			else if (netif_running(port->dev) && netif_carrier_ok(port->dev))
+ 				netif_carrier_off(port->dev);
+ 
+ 			if (delayed_work_pending(caching_dw))
+-- 
+2.25.1
 
-Yours,
-Linus Walleij

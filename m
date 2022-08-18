@@ -2,97 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D33E598680
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFC6598688
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343804AbiHROyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S1343808AbiHROyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343768AbiHROye (ORCPT
+        with ESMTP id S1343768AbiHROys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:54:34 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5E158504
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:54:33 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id a15so1279044qko.4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:54:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc;
-        bh=hcxf4nrKLmomhmzX0ig09AZrpv2UbK3GaLkKfXfMQZc=;
-        b=HhA5fDrmzi9qNfm3ZS/2pEZ/XaNpIC2qHSvH9QReheXboKuaEp3on5w0CLFSDc+gQw
-         zBwcH5WrTQZ7P/20zyrDf82+SfyXPQlyiDQi3NyAzLh5G3CimoV+A34dFFYnpCpZfHaE
-         WiU18Q11o6+yxvQVMUXY5rd8dR2tC6+E1GppMu6HjAfX81DhcVZrZ1LdThZciRfMl/q5
-         FY2maZK0wZWAPwcy/R88d2cGry4UOw0kU3UiOYC/2ts8AwTFuEzSBRftVdXnHJQU5ZCP
-         XYyZOlbspr5dXq9QxpCtBhk6rpihbZ9Z+pJqm5S6QGjN8JsrqqEe9BDxJTUE2MmOxd+t
-         orWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc;
-        bh=hcxf4nrKLmomhmzX0ig09AZrpv2UbK3GaLkKfXfMQZc=;
-        b=exT+QRPXIEv9aqO+QG8X3ZvEpZJ3PL7z6wWJl/OWaarlFcrVj8rbALrcU7WSKjOv2q
-         bGkkDYEJwjTM5WSTlUUzovIPAlsgPF7MWSa34O9yYpeveENvN48pX6LGhAiRQK6yp5ql
-         SCxYCOLe85NCJJ62KQ5TDCscAxiHoOdwl0PUe0FIIBlyKfcC5aBlk3Fk9LdHuVcFsAld
-         CE8Ej8So2XiK+EaCNw+fm/Dc5Tcg/lcgxOCIxddq1X8R7C+hy0K1CdGZ8b0NReJnNHal
-         8LmHLjTFRPRH3pt7DjCc5PQPMw8bHW7jvX+ffll44p+xNvzbVw0VkQ4KpAxQamR7ew8p
-         ZO6A==
-X-Gm-Message-State: ACgBeo32jUqQb9I+FtP71BMOmHLsT5dI7YvbV3n4zD4/sbdNEGfa8AVe
-        lesCjJ853N4EXZEVCGlelZ0pOUU4t2E=
-X-Google-Smtp-Source: AA6agR7qtDGktx535tr9lRahEn5NIgi8DAsYkmzX3y1QbfXPLIomS1816kpH9mlsSmjbQ98upfQUUg==
-X-Received: by 2002:a05:620a:b15:b0:6bb:c6d8:5058 with SMTP id t21-20020a05620a0b1500b006bbc6d85058mr1037906qkg.698.1660834472227;
-        Thu, 18 Aug 2022 07:54:32 -0700 (PDT)
-Received: from spruce (c-71-206-142-238.hsd1.va.comcast.net. [71.206.142.238])
-        by smtp.gmail.com with ESMTPSA id q22-20020a05620a2a5600b006b945519488sm1730546qkp.88.2022.08.18.07.54.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 07:54:31 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 10:54:29 -0400
-From:   Joe Simmons-Talbott <joetalbott@gmail.com>
-To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: checkpatch.pl bug for EXPORT_SYMBOL when struct initialization
- follows define
-Message-ID: <Yv5Spab6mC0U5w/v@spruce>
-References: <Yrt8XgMe+mMIlHxM@spruce>
+        Thu, 18 Aug 2022 10:54:48 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39654BB031
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:54:47 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id 01D4F2B05FC5;
+        Thu, 18 Aug 2022 10:54:41 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 18 Aug 2022 10:54:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660834481; x=1660841681; bh=dPX9hXeCy6
+        yKTnRmZoO6RMIl8noeu+daJnSyaEODPnQ=; b=ICKzLeV9qiOuOqiD3gZpMPLDAm
+        VopW9x7Yud0hY2YkD1D1wPjg6LOPc+ccq6gPG0quHxhjhpsLPeF1o2Y9DhtgYaFh
+        46BU7z1WbxqfeTsqgqHPq+GOxrupa0qDWX/Y2Syz4ZSiV6pSOHq358XmYyCIw2u/
+        SmLzoGbsPKfUuh5lf80MIZkmUijMep9qslXjhZGwl1laHWrTdmBsTf6/1JYEMIVh
+        aeUUYqFNm2zb8CzRmb3I4uh8c3rtrl3u1ieoM8t2Q10RwC0NlPPrcLXZPEyqqykB
+        5KOwLeIZDnafnfciCbYT9WiVDncaHHoTmtWwbAGlTWt6j5dD5QIPyc/TycPA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660834481; x=1660841681; bh=dPX9hXeCy6yKTnRmZoO6RMIl8noe
+        u+daJnSyaEODPnQ=; b=VRnogI9eKVOUowQt1qjzRFHTEVI5kpt8dDDdSzKRC/X5
+        bRgGe32rHxmxPVEAZvEEjVLuu6eV/s+xsvilUK4n/7KPF59XBiAnv8LNVLn9yRlH
+        RRDvj94NOCXcycKGTJ48i3oaxWM63vqrPlUsP58PNd6tBYleZOQ0vyAMexcp+jud
+        F/zLcankqKpacLDKmFn4iqLktv0pWE+Y1j+VC5KtOtOIBB17tSVXLKTMFevfL2ta
+        s7yot5w4u0Q7dEs3sI8VWle5sFF2sOn7g7A7Bi6EHzOcBVU5hO7S0R4IOBM6j8qN
+        4y8ZWX7ve1Kn3sTR7n0xf3lk6bHltGCDjfcS8WqiJw==
+X-ME-Sender: <xms:sFL-YhD1iR7pj0Yea3FsE-PZysP7MkfhaiYuiAIJxWYeyqnwaPUuzA>
+    <xme:sFL-YvjTnwUk4xVM3tgqFaDnB8s-Jmxeme0x6PPnQznCxQBw5S3bnhqQQ95vpJ6tv
+    xpZvR35bwzGcVspkug>
+X-ME-Received: <xmr:sFL-Yslofm3_AhDWt9NoeIe09vyXDlMi7thgA--2ltAGWDjj1FpNAPTf4w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehledgheeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
+    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:sFL-YryfJl1H-i55cxpYlVDJo45W3V68mSsAJFDUJIieouwnYwOhxg>
+    <xmx:sFL-YmSviOJXIErg6esKHEGxNLf6O6TfDRKr42cuHW-M_WzeGPEm2A>
+    <xmx:sFL-YuYh3SrgPZwP0YzRb13Wr36aefYYf6Ci8UjcN50At--92KdraA>
+    <xmx:sVL-YlDXbjbFVR1olH2o2EIxq3hulc3Z6nPpQLXWxpzu7wpUBR5esrxYnjM>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 18 Aug 2022 10:54:39 -0400 (EDT)
+Date:   Thu, 18 Aug 2022 16:54:36 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+Message-ID: <20220818145436.vqojnhmvhjxdzooe@houat>
+References: <20220816141116.5nuszmilqv2exdb3@houat>
+ <CAMuHMdXq_xGPx46bdnUFGDiG4kcgdxtXaRGTucFd3TRq8353dg@mail.gmail.com>
+ <20220816154956.pkdpxmmw27mia5ix@houat>
+ <CAMuHMdX0L6cO_jYXKZTv0sm9V39Eiy_STiknSkdRQG4k-9GJeg@mail.gmail.com>
+ <20220817074710.w4c4xwj7edly2b5p@houat>
+ <CAMuHMdXeBakWr6geOWGxnjQYaU9Pi4tRvVFFtubyMJZTT2nPnw@mail.gmail.com>
+ <20220817111454.pn2iltvyo2drebq7@houat>
+ <CAMuHMdU57g1rNoLo65jhLK8mk4YkNEbMz1E7XKWk2dnCxTr=gg@mail.gmail.com>
+ <20220817131854.jwmhqvhfhp77bbr3@houat>
+ <CAMuHMdXrfH9MArXesfNCvqayiq17u7XaqtSvXTNt4V10=obSHQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rgjjcrwq24n3fk6k"
 Content-Disposition: inline
-In-Reply-To: <Yrt8XgMe+mMIlHxM@spruce>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdXrfH9MArXesfNCvqayiq17u7XaqtSvXTNt4V10=obSHQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 06:10:41PM -0400, Joe Simmons-Talbott wrote:
-> I believe I've found a bug in checkpatch.pl where an EXPORT_SYMBOL for
-> an initialized struct following a simple #define without an intervening
-> blank line falsely reports that EXPORT_SYMBOL doesn't follow the symbol
-> definition.  Here's an example:
-> 
-> 	#define SOMETHING_ELSE 1
-> 	struct blah foo = {
-> 		.a = 1
-> 	};
-> 	EXPORT_SYMBOL(foo);
-> 
-> You can see from the debug print that the full statement has not been
-> identified.
-> 
-> 	FOO A<+EXPORT_SYMBOL(foo);> stat<+      .a = 1
-> 	 };> name<foo>
-> 
-> Unfortunately my perl skills were not sufficient to find a fix.
 
-I created the following BZ https://bugzilla.kernel.org/show_bug.cgi?id=216374
+--rgjjcrwq24n3fk6k
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Joe
+On Wed, Aug 17, 2022 at 04:04:24PM +0200, Geert Uytterhoeven wrote:
+> Hi Maxime,
+>=20
+> On Wed, Aug 17, 2022 at 3:19 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > On Wed, Aug 17, 2022 at 03:05:52PM +0200, Geert Uytterhoeven wrote:
+> > > On Wed, Aug 17, 2022 at 1:15 PM Maxime Ripard <maxime@cerno.tech> wro=
+te:
+> > > > On Wed, Aug 17, 2022 at 10:35:07AM +0200, Geert Uytterhoeven wrote:
+> > > > > On Wed, Aug 17, 2022 at 9:47 AM Maxime Ripard <maxime@cerno.tech>=
+ wrote:
+> > > > > > On Wed, Aug 17, 2022 at 09:31:18AM +0200, Geert Uytterhoeven wr=
+ote:
+> > > > > > > On Tue, Aug 16, 2022 at 5:50 PM Maxime Ripard <maxime@cerno.t=
+ech> wrote:
+> > > > > > > > On Tue, Aug 16, 2022 at 04:43:44PM +0200, Geert Uytterhoeve=
+n wrote:
+> > > > > > > > > > > > > Either you have to add them here (e.g. "hd720p50"=
+ and "hd720p60"), or
+> > > > > > > > > > > > > handle them through "@<refresh>".  The latter wou=
+ld impact "[PATCH v1
+> > > > > > > > > > > > > 09/35] drm/modes: Move named modes parsing to a s=
+eparate function", as
+> > > > > > > > > > > > > currently a named mode and a refresh rate can't b=
+e specified both.
+> > > > > > > > > > > >
+> > > > > > > > > > > > I think the former would make more sense. It simpli=
+fies a bit the
+> > > > > > > > > > > > parser, and we're going to use a named mode anyway.
+> > > > > > > > > > > >
+> > > > > > > > > > > > > As "[PATCH v1 34/35] drm/modes: Introduce the tv_=
+mode property as a
+> > > > > > > > > > > > > command-line option" uses a separate "tv_mode" op=
+tion, and not the main
+> > > > > > > > > > > > > mode name, I think you want to add them here.
+> > > > > > > > > > > >
+> > > > > > > > > > > > It's a separate story I think, we could have a name=
+d mode hd720p50,
+> > > > > > > > > > > > which would be equivalent to 1280x720,tv_mode=3Dhd7=
+20p
+> > > > > > > > > > >
+> > > > > > > > > > > So where's the field rate in "1280x720,tv_mode=3Dhd72=
+0p"?
+> > > > > > > > > >
+> > > > > > > > > > Yeah, sorry I meant 1280x720@50,tv_mode=3Dhd720p
+> > > > > > > > >
+> > > > > > > > > Above you said "I think the former would make more sense"=
+, so that
+> > > > > > > > > should be "1280x720,tv_mode=3Dhd720p50"?
+> > > > > > > >
+> > > > > > > > No, 720p at 50Hz would be either hd720p50 or 1280x720@50,tv=
+_mode=3Dhd720p
+> > > > > > > > and 60Hz would be hd720p60 or 1280x720@60,tv_mode=3Dhd720p
+> > > > > > >
+> > > > > > > I disagree: hd720p50 and hd720p60 are different TV modes.
+> > > > > >
+> > > > > > I agree, and I don't see how that command-line doesn't express =
+that?
+> > > > >
+> > > > > Oh, I see what you mean: yes, it expresses that.
+> > > > > But it is inconsistent with the NTSC/PAL/SECAM/hd{480,576}[ip] mo=
+des,
+> > > > > where the TV mode specifies both number of lines and frame rate.
+> > > >
+> > > > Only if we're using a named mode, and naming is hard :)
+> > >
+> > > That's not true: "640x480,tv_mode=3DPAL-N" would give me a mode with
+> > > 625 lines and 25 frames/s, "640x480,tv_mode=3DPAL-M" would give me a
+> > > mode with 525 lines and 30 frames/s.
+> >
+> > In that series, "640x480,tv_mode=3DPAL-N" would be rejected as invalid:
+> >
+> > https://lore.kernel.org/dri-devel/20220728-rpi-analog-tv-properties-v1-=
+14-3d53ae722097@cerno.tech/
+>=20
+> It would become supported once the ideas from thread "[PATCH v1 04/35]
+> drm/modes: Introduce 480i and 576i modes" are implemented...
+
+Indeed, but I'm still not sure what your concern is here.
+"640x480,tv_mode=3DPAL-N" and "640x480,tv_mode=3DPAL-M" are both fairly
+obvious.
+
+You were initially saying that you had concern over the inconsistency of
+NTSC/PAL/SECAM where the TV mode would specify a number of lines and
+frame rate, but hd720p50 also specifies a number of line and frame rate?
+
+Maxime
+
+--rgjjcrwq24n3fk6k
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYv5SrAAKCRDj7w1vZxhR
+xXOeAP4xRmnMVN7/AVY7/uaHcHK2PeXpYI7/wh8vab/NDtQGWAD+LBoFZbUfz3kt
+HC6p3zpvWUaMbbbcZkWajF4mKGTE3QE=
+=VOq1
+-----END PGP SIGNATURE-----
+
+--rgjjcrwq24n3fk6k--

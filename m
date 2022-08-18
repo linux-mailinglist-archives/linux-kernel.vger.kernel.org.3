@@ -2,54 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB88598C3F
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC90598C3D
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245304AbiHRS4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 14:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
+        id S1344776AbiHRS5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 14:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbiHRS4q (ORCPT
+        with ESMTP id S231651AbiHRS5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 14:56:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F7CB7761
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:56:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64EDE61772
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 18:56:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DDA5C433D6;
-        Thu, 18 Aug 2022 18:56:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660849004;
-        bh=H+e1o3z+EIvloH3jGaC8QlTHg9zDiaO1G6mOigQ5TV8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FxMjeacjnuYkWE/tGgpNnH1OaEB0yih7jfLd///izx9ZAxAb5VNZGaVncM8Xps9HJ
-         uXZi50lUaszFjM+E30aTF/c1RMOrMn2i1gPxQi2M+KN/BgEr7AO0K9KHX/2E/HnbwG
-         yxtKUcdp3OVbWeSPS+IofWoNMSUCDmezB9iDjojBxBshcgNW3ZgwGypUxTbsEugGnu
-         v23ZQUM99G2y9Dn1M6Iytof7Hkxo5mHjVY1VMn4ej6HreCkPSB5bSO61Scz08x68Ou
-         tM5IObnnlYDMey+rzk9TKoosYLY4VaVpQMFvGK03XflHHfxL9hMEj0cr1fsOmCy0f8
-         54GkQgvxkGd6w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5A2114035A; Thu, 18 Aug 2022 15:56:42 -0300 (-03)
-Date:   Thu, 18 Aug 2022 15:56:42 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Tao Xu <tao3.xu@intel.com>
-Subject: [PATCH FYI 1/1] tools headers UAPI: Sync KVM's kvm.h and vmx.h
- headers with the kernel sources
-Message-ID: <Yv6LavXMZ+njijpq@kernel.org>
+        Thu, 18 Aug 2022 14:57:15 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66282C00C1;
+        Thu, 18 Aug 2022 11:57:14 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-335624d1e26so66154557b3.4;
+        Thu, 18 Aug 2022 11:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=jK0n39xQ810MROGPsbeMRM5qQPZlNI1veyppbstNpHA=;
+        b=X0UqfG9ae4aeJjWWYWcm7t7ngzCRgqJ0PGL4FEzY2q8pDCUF+w8GwGA8o7zJZhoQB+
+         lW94C2Edsin8khebe+w6bWBFfq5zOy+rqDYLWUerDVWbJr/uiLFsW/mWTE7sQpBsKNWD
+         drKyYXQhShk9sO3noKDEPSsfL4OkUPQn1GHfkJVvLTjd6/JGi/VXx4OS7Ub8GxRHQhmn
+         w4DEptzeV2AqeYjI/b1lv67U6NavhMMjHEWF+mDBuCWTnIz0YZYUhkvBw/n0UdS+h95R
+         F4IqIJXofGSY2TrOLdzIgR0VaCe8fvHtqLpHMi1sbj5XzdlQrAD2tdjV/pva7Y9uQ0s6
+         Iw3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=jK0n39xQ810MROGPsbeMRM5qQPZlNI1veyppbstNpHA=;
+        b=CUjY8Bw5fmDK1XwtJmXYTecIiy5qhGLsH1YWC2qpeEUCXO8zKRtJdiP3Z6wO17t0o8
+         4euV6i9I3i8EH8F//iMx8Ttw4lbmqOOrcXHLbC5nnWu/VfK/N5VaTgIaBoF+tj6Pg1rr
+         JoHzC9em5d4UkPRxqgJXdQf7sH3dQWvHd7HxDSkggs45yj0oow6ck8BdvHJGlj9Zy5R4
+         bwCWUQHDHlRsT8Ax+fIAtLXzZGhPrmMwXVRo6a/er3FYehwjisddnxS2nqP6bxreIyqH
+         GZ5LkDKqheZh6bAhpsinqO2SodViD0JKZko9/j4wfJfFBbtLH+4VxEWSga1I3CXFEdsC
+         fJnQ==
+X-Gm-Message-State: ACgBeo0dblMfSNb4ibpPFOKjROXbiqCOh2C9tr6DzkCR9joSyYm8nhvR
+        8N7hTc/wHdKeX3JpY/Xi2kYBviXE1s0cGJg9uDo=
+X-Google-Smtp-Source: AA6agR7II+Y32947N8bMB/RkKLPAm/USuhInjF24TROpCOOsXqL/2Y6U2RnLr4HNyQQGUbQULXgzQCV6+S6+4bh/8Kc=
+X-Received: by 2002:a25:22c5:0:b0:694:dfa2:9d0 with SMTP id
+ i188-20020a2522c5000000b00694dfa209d0mr420217ybi.107.1660849033550; Thu, 18
+ Aug 2022 11:57:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <CANXV_XwgZMCGXijfoUyZ9+KyM6Rgeqiq-sCfubyj_16d-2CN=A@mail.gmail.com>
+ <20220815013317.26121-1-dmitrii.bundin.a@gmail.com> <CAK7LNAQzVto=rEpASc-JOF_TW0KhNT93jD0E2gfk8UES3PWFiw@mail.gmail.com>
+In-Reply-To: <CAK7LNAQzVto=rEpASc-JOF_TW0KhNT93jD0E2gfk8UES3PWFiw@mail.gmail.com>
+From:   Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+Date:   Thu, 18 Aug 2022 21:57:02 +0300
+Message-ID: <CANXV_XzGHQ8_X2t37DwRjS7kKFX0kWDpwHEg3k+zZ4YfV98gjw@mail.gmail.com>
+Subject: Re: [PATCH v3] kbuild: add debug level and macro defs options
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        =?UTF-8?B?Ru+/ve+/ve+/vW5nLXJ177+977+977+9IFPvv73vv73vv71uZw==?= 
+        <maskray@google.com>, Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,97 +80,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+On Thu, Aug 18, 2022 at 7:14 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> -g1 is only possible via DEBUG_INFO_LEVEL, but
+> presumably it is not your main interest
+> (and not sure if there is anybody interested)
+> because the main motivation for your v1
+> is to generate macro debug data.
 
-- Arnaldo
+I tested the build process with -g1 and it turned out to generate an
+image that is 20% lesser in size.
+This is indeed not really my use-case, but are you sure it might not
+be helpful in general?
 
-Full explanation:
+The reason to add DEBUG_INFO_LEVEL was also motivated by the
+GCC11+/Clang12+ behavior of -gsplit-dwarf to provide an orthogonal
+debug level config.
+"The later -g<level> wins" behavior in turns works identically for
+both older and newer compiler versions so such an implementation
+provides version independent build behavior.
+Testing on gcc-11, -gdwarf-<level>/-gdwarf still implies -g2.
+It seemed a clearer way to me to explicitly set a debug level that
+just wins instead of relying on implicits.
 
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
-
-The way these headers are used in perf are not restricted to just
-including them to compile something.
-
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
-
-E.g.:
-
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
-
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
----
-
-To pick the changes in:
-
-  2f4073e08f4cc5a4 ("KVM: VMX: Enable Notify VM exit")
-
-That makes 'perf kvm-stat' aware of this new NOTIFY exit reason, thus
-addressing the following perf build warning:
-
-  Warning: Kernel ABI header at 'tools/arch/x86/include/uapi/asm/vmx.h' differs from latest version at 'arch/x86/include/uapi/asm/vmx.h'
-  diff -u tools/arch/x86/include/uapi/asm/vmx.h arch/x86/include/uapi/asm/vmx.h
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Tao Xu <tao3.xu@intel.com>
-Link: http://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/x86/include/uapi/asm/vmx.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/arch/x86/include/uapi/asm/vmx.h b/tools/arch/x86/include/uapi/asm/vmx.h
-index 946d761adbd3df33..a5faf6d88f1bf614 100644
---- a/tools/arch/x86/include/uapi/asm/vmx.h
-+++ b/tools/arch/x86/include/uapi/asm/vmx.h
-@@ -91,6 +91,7 @@
- #define EXIT_REASON_UMWAIT              67
- #define EXIT_REASON_TPAUSE              68
- #define EXIT_REASON_BUS_LOCK            74
-+#define EXIT_REASON_NOTIFY              75
- 
- #define VMX_EXIT_REASONS \
- 	{ EXIT_REASON_EXCEPTION_NMI,         "EXCEPTION_NMI" }, \
-@@ -153,7 +154,8 @@
- 	{ EXIT_REASON_XRSTORS,               "XRSTORS" }, \
- 	{ EXIT_REASON_UMWAIT,                "UMWAIT" }, \
- 	{ EXIT_REASON_TPAUSE,                "TPAUSE" }, \
--	{ EXIT_REASON_BUS_LOCK,              "BUS_LOCK" }
-+	{ EXIT_REASON_BUS_LOCK,              "BUS_LOCK" }, \
-+	{ EXIT_REASON_NOTIFY,                "NOTIFY" }
- 
- #define VMX_EXIT_REASON_FLAGS \
- 	{ VMX_EXIT_REASONS_FAILED_VMENTRY,	"FAILED_VMENTRY" }
--- 
-2.37.1
-
+Regards
+Dmitrii

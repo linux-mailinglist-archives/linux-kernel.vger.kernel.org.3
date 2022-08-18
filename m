@@ -2,89 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1E0598B2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 838C1598B47
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345536AbiHRSad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 14:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
+        id S242046AbiHRSeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 14:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345488AbiHRSaW (ORCPT
+        with ESMTP id S238773AbiHRSd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 14:30:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52342B5A73;
-        Thu, 18 Aug 2022 11:30:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10ED7B82370;
-        Thu, 18 Aug 2022 18:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B707AC433B5;
-        Thu, 18 Aug 2022 18:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660847417;
-        bh=0tcBwhvU3IwbrGMz2RXkuGs7v8beKzHJW6W7ZezoMqE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VyzWQ4W7Zxq4YYDdLa1ZMFGldOAczo3Z92T0pE6Wk37y+NUFm/wtT6At4YbpfPEFa
-         XZ0UQPKD3qePJ4TpiJr/TsDeLYocZtqMxd46/xEcpsSPvjYIa+Z7Vz3e/YZvg7XG69
-         D0RWOPhHBAxQxJmgKXXgdbhQwWSKYtMriZCAt3DTd8tleePyPY0kuIJybPJaW04A25
-         Twqba6D8KRryriGSBlqyLrS/xD2P0AYQEPpt+8xM4OJ64diZf8YeQspki3muPnVZKG
-         IZTFe2Mt+NaM1kWYf9P7udiulll/+HDBHIdmghTvh3+U/+QB5BpHzOL5WwPojROrB7
-         V9iQ8r6XBuBRw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9A75EE2A058;
-        Thu, 18 Aug 2022 18:30:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 18 Aug 2022 14:33:59 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEBE3ED50;
+        Thu, 18 Aug 2022 11:33:59 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id x23so2205259pll.7;
+        Thu, 18 Aug 2022 11:33:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=0G+MNwZPdu7nDAjzhpc0BZJ//VhJQrF/VMJ0HoUI71U=;
+        b=QsB0EaNuA6DeH+2PPtb3I5UiWoe/iZeAKfbM7TT6rl5V+BbrA6/BSlnELwQMNSGCN3
+         YABqSVKDTqRCHtH4bbMojYMnbkoWCu/3Hma/kpYLWwaP2aXOmR8nzuS5RZZXmXBln4lr
+         BLiSCp42aEuh6ZpRVObYvHu9niwPBtULbQBFhtcljMkTYkPCvLJx9pcDynzSuy8sVxSV
+         AwESClvi2kl0M/3mrtL5I+KmAJFdTYR6b1esz6IbqUlq2H2yFNHVZohhTCqFS6ygwg/G
+         Vcdi7GP3dmL5GDj25+Hwgij/kjdSsO4OmBjthJvmV9IvkGIsUc0rGrxqjxkOv/FHaIHH
+         rpnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=0G+MNwZPdu7nDAjzhpc0BZJ//VhJQrF/VMJ0HoUI71U=;
+        b=sF6b7j9tpIsME+sar/gG8eODvNevBI6RaA18eJTurpx3BR8z+56b9YGg2sbKBrkAL2
+         G9mumHdtCxg0ZLQj4qJ61W8aSVgww0U3VIBhmZLdCZ2/Gq8aWdzwDAqxyxq1R6VtDmui
+         o5UUn8TlTwPbX7BmF9hM6fF8GJSgaoFAtEiADSWvSAZkvP8y2T3OKA+iyXfn54dIyLN6
+         WAsDcvXKBoBZKlopy/gMmOGvloLZamjCJXQ3xhCrJ1x7eX5YAWTbKYX9CRXrKYHXYgMT
+         yCROcTrGhl6NIpeTCqKlD22bjKu23iLhE3BhSIsF66UQ+rzg3tJJtpXDtSS1RdQbGfHm
+         +JWg==
+X-Gm-Message-State: ACgBeo363vgyLTGmYVOAtHMSE8B44xFUbVRien3VEW0qkzT/E7sPomGL
+        FIGB+SWX1Eyc++VYdDOlblWVb5eSpN6zq6eCIp8=
+X-Google-Smtp-Source: AA6agR5OOLeBPJqavrXLl1cr+dy8fiXYyPbPBZJ+iNV6tD9JT7p31d7niFGbXNPecrW2sn0SX80bDoOfu9o57tpnwzQ=
+X-Received: by 2002:a17:902:d50b:b0:172:a41f:b204 with SMTP id
+ b11-20020a170902d50b00b00172a41fb204mr3636592plg.70.1660847638528; Thu, 18
+ Aug 2022 11:33:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] dt-bindings: Fix incorrect "the the" corrections
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166084741762.25395.6372912472329150051.git-patchwork-notify@kernel.org>
-Date:   Thu, 18 Aug 2022 18:30:17 +0000
-References: <c5743c0a1a24b3a8893797b52fed88b99e56b04b.1660755148.git.geert+renesas@glider.be>
-In-Reply-To: <c5743c0a1a24b3a8893797b52fed88b99e56b04b.1660755148.git.geert+renesas@glider.be>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        slark_xiao@163.com, kuba@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, niklas.soderlund@ragnatech.se,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAPXMrf-C5XEUfOJd3GCtgtHOkc8DxDGbLxE5=GFmr+Py0zKxJA@mail.gmail.com>
+ <Yv3M8wqMkLwlaHxa@kroah.com>
+In-Reply-To: <Yv3M8wqMkLwlaHxa@kroah.com>
+From:   RAJESH DASARI <raajeshdasari@gmail.com>
+Date:   Thu, 18 Aug 2022 21:33:47 +0300
+Message-ID: <CAPXMrf-E0di5=0RpNRXUEF3VRtQNSqoaAZ9bzGq9jMtiQ3xgXQ@mail.gmail.com>
+Subject: Re: bpf selftest failed in 5.4.210 kernel
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jean-philippe@linaro.org, df@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+I tried with git bisect between v5.4.210(bad) and v5.4.209(good).
+Everytime I did bisect I compiled the kernel , booted my instance with
+the new kernel and ran the selftests after trying out for 3 times ,
+git bisect pointed to the  below commit as a first bad commit.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+git bisect bad
+9d6f67365d9cdb389fbdac2bb5b00e59e345930e is the first bad commit
+commit 9d6f67365d9cdb389fbdac2bb5b00e59e345930e
+Author: John Fastabend <john.fastabend@gmail.com>
+Date:   Wed Aug 3 17:50:03 2022 +0300
 
-On Wed, 17 Aug 2022 18:54:51 +0200 you wrote:
-> Lots of double occurrences of "the" were replaced by single occurrences,
-> but some of them should become "to the" instead.
-> 
-> Fixes: 12e5bde18d7f6ca4 ("dt-bindings: Fix typo in comment")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> v2:
->   - Drop blank line between Fixes and SoB tags.
-> 
-> [...]
+    bpf: Test_verifier, #70 error message updates for 32-bit right shift
 
-Here is the summary with links:
-  - [v2] dt-bindings: Fix incorrect "the the" corrections
-    https://git.kernel.org/netdev/net/c/8aa48ade7db4
+Thanks,
+Rajesh Dasari.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+On Thu, Aug 18, 2022 at 8:24 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Aug 17, 2022 at 09:22:00PM +0300, RAJESH DASARI wrote:
+> > Hi ,
+> >
+> > We are running bpf selftests on 5.4.210 kernel version and we see that
+> > test case 11 of  test_align failed. Please find the below error.
+> >
+> > selftests: bpf: test_align
+> > Test  11: pointer variable subtraction ... Failed to find match 16:
+> > R5_w=pkt(id=2,off=0,r=0,umin_value=2,umax_value=1082,var_off=(0x2;
+> > 0xfffffffc)
+> > # func#0 @0
+> > # 0: R1=ctx(id=0,off=0,imm=0) R10=fp0
+> > # 0: (61) r2 = *(u32 *)(r1 +76)
+> > # 1: R1=ctx(id=0,off=0,imm=0) R2_w=pkt(id=0,off=0,r=0,imm=0) R10=fp0
+> > # 1: (61) r3 = *(u32 *)(r1 +80)
+> >
+> > For complete errors please see the attached file. The same test case
+> > execution was successful in the 5.4.209 version , could you please let
+> > me know any known issue with the recent changes in 5.4.210 and how to
+> > fix these errors.
+>
+> Can you use 'git bisect' to find the offending commit?
+>
+> thanks,
+>
+> greg k-h

@@ -2,154 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F81597EB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFE1597E95
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243701AbiHRGe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 02:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
+        id S243627AbiHRGYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 02:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbiHRGey (ORCPT
+        with ESMTP id S243477AbiHRGYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 02:34:54 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF1D4BD23;
-        Wed, 17 Aug 2022 23:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660804493; x=1692340493;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=+do2uA89fmz0CDWVL3JlfrwCb7Glq9Xqu12lfvGSbEI=;
-  b=E2JpuFH0NyTb24nDfISeq8f4j+T9xq2+gzNDP6wBMn8ABcjJLjXhWjHf
-   buCd6nXjF428W3zfQobab/2T5XBukYByRrOrWK5QI76UTc6ZoX1U+ud+9
-   R8k+y+iZA3EVLpAQuyfneyLfGAMhVGu6+FQVT/oZb2p9uRrMkWMAg/nQs
-   RylP6/wJWz2muDNU4wsTye6UNzwrbrjmLGfuOqxEWPLOkEZoiD4aYp0qn
-   1HSmuFqdsnJfhfIjHRvAFikfQcMShEfijF5QGM3uUE+mqnHdbc8D1aMA5
-   k/wZTTOhQ20eKvY+apEIVkEOQFWAA0x/KWxrVdEUMUhaSfUGGNfVy4rrk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="290245533"
-X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
-   d="scan'208";a="290245533"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 23:34:52 -0700
-X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
-   d="scan'208";a="935680965"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 23:34:48 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Nadav Amit <nadav.amit@gmail.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
-        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
-References: <6e77914685ede036c419fa65b6adc27f25a6c3e9.1660635033.git-series.apopple@nvidia.com>
-        <CAC=cRTPGiXWjk=CYnCrhJnLx3mdkGDXZpvApo6yTbeW7+ZGajA@mail.gmail.com>
-        <Yvv/eGfi3LW8WxPZ@xz-m1.local> <871qtfvdlw.fsf@nvdebian.thelocal>
-        <YvxWUY9eafFJ27ef@xz-m1.local> <87o7wjtn2g.fsf@nvdebian.thelocal>
-        <87tu6bbaq7.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <1D2FB37E-831B-445E-ADDC-C1D3FF0425C1@gmail.com>
-        <Yv1BJKb5he3dOHdC@xz-m1.local>
-Date:   Thu, 18 Aug 2022 14:34:45 +0800
-In-Reply-To: <Yv1BJKb5he3dOHdC@xz-m1.local> (Peter Xu's message of "Wed, 17
-        Aug 2022 15:27:32 -0400")
-Message-ID: <87czcyawl6.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 18 Aug 2022 02:24:23 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8B265541;
+        Wed, 17 Aug 2022 23:24:21 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4M7ZZ11GNkzKPyP;
+        Thu, 18 Aug 2022 14:22:49 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP2 (Coremail) with SMTP id Syh0CgCnkb0R2_1i+pULAg--.32172S4;
+        Thu, 18 Aug 2022 14:24:19 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
+Subject: [PATCH -next] blk-mq: remove unused function blk_mq_queue_stopped()
+Date:   Thu, 18 Aug 2022 14:35:55 +0800
+Message-Id: <20220818063555.3741222-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgCnkb0R2_1i+pULAg--.32172S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF4DWw47Cw1DtF13tF1xAFb_yoW8ZryrpF
+        ZxGa12kw4vgw4UZ348Jw4xZrnxWws0krW7J3yftrWFvw1qkr1rXr10ya1UXrW0yrZ5AFW3
+        CrnrJrWDGr1kXrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+        xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Xu <peterx@redhat.com> writes:
+From: Yu Kuai <yukuai3@huawei.com>
 
-> On Wed, Aug 17, 2022 at 02:41:19AM -0700, Nadav Amit wrote:
->> 4. Having multiple TLB flushing infrastructures makes all of these
->> discussions very complicated and unmaintainable. I need to convince myse=
-lf
->> in every occasion (including this one) whether calls to
->> flush_tlb_batched_pending() and tlb_flush_pending() are needed or not.
->>=20
->> What I would like to have [3] is a single infrastructure that gets a
->> =E2=80=9Cticket=E2=80=9D (generation when the batching started), the old=
- PTE and the new PTE
->> and checks whether a TLB flush is needed based on the arch behavior and =
-the
->> current TLB generation. If needed, it would update the =E2=80=9Cticket=
-=E2=80=9D to the new
->> generation. Andy wanted a ring for pending TLB flushes, but I think it i=
-s an
->> overkill with more overhead and complexity than needed.
->>=20
->> But the current situation in which every TLB flush is a basis for long
->> discussions and prone to bugs is impossible.
->>=20
->> I hope it helps. Let me know if you want me to revive the patch-set or o=
-ther
->> feedback.
->>=20
->> [1] https://lore.kernel.org/all/20220711034615.482895-5-21cnbao@gmail.co=
-m/
->> [2] https://lore.kernel.org/all/20220718120212.3180-13-namit@vmware.com/
->> [3] https://lore.kernel.org/all/20210131001132.3368247-16-namit@vmware.c=
-om/
->
-> I need more reading on tlb code and also [3] which looks useful to me.
-> It's definitely sad to make tlb flushing so complicated.  It'll be great =
-if
-> things can be sorted out someday.
->
-> In this specific case, the only way to do safe tlb batching in my mind is:
->
-> 	pte_offset_map_lock();
-> 	arch_enter_lazy_mmu_mode();
->         // If any pending tlb, do it now
->         if (mm_tlb_flush_pending())
-> 		flush_tlb_range(vma, start, end);
->         else
->                 flush_tlb_batched_pending();
+blk_mq_queue_stopped() doesn't have any caller, which was found by
+code coverage test, thus remove it.
 
-I don't think we need the above 4 lines.  Because we will flush TLB
-before we access the pages.  Can you find any issue if we don't use the
-above 4 lines?
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ block/blk-mq.c         | 20 --------------------
+ include/linux/blk-mq.h |  1 -
+ 2 files changed, 21 deletions(-)
 
-Best Regards,
-Huang, Ying
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 5ee62b95f3e5..5568c7d09114 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -2229,26 +2229,6 @@ void blk_mq_delay_run_hw_queues(struct request_queue *q, unsigned long msecs)
+ }
+ EXPORT_SYMBOL(blk_mq_delay_run_hw_queues);
+ 
+-/**
+- * blk_mq_queue_stopped() - check whether one or more hctxs have been stopped
+- * @q: request queue.
+- *
+- * The caller is responsible for serializing this function against
+- * blk_mq_{start,stop}_hw_queue().
+- */
+-bool blk_mq_queue_stopped(struct request_queue *q)
+-{
+-	struct blk_mq_hw_ctx *hctx;
+-	unsigned long i;
+-
+-	queue_for_each_hw_ctx(q, hctx, i)
+-		if (blk_mq_hctx_stopped(hctx))
+-			return true;
+-
+-	return false;
+-}
+-EXPORT_SYMBOL(blk_mq_queue_stopped);
+-
+ /*
+  * This function is often used for pausing .queue_rq() by driver when
+  * there isn't enough resource or some conditions aren't satisfied, and
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index effee1dc715a..92294a5fb083 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -857,7 +857,6 @@ void blk_mq_kick_requeue_list(struct request_queue *q);
+ void blk_mq_delay_kick_requeue_list(struct request_queue *q, unsigned long msecs);
+ void blk_mq_complete_request(struct request *rq);
+ bool blk_mq_complete_request_remote(struct request *rq);
+-bool blk_mq_queue_stopped(struct request_queue *q);
+ void blk_mq_stop_hw_queue(struct blk_mq_hw_ctx *hctx);
+ void blk_mq_start_hw_queue(struct blk_mq_hw_ctx *hctx);
+ void blk_mq_stop_hw_queues(struct request_queue *q);
+-- 
+2.31.1
 
->         loop {
->                 ...
->                 pte =3D ptep_get_and_clear();
->                 ...
->                 if (pte_present())
->                         unmapped++;
->                 ...
->         }
-> 	if (unmapped)
-> 		flush_tlb_range(walk->vma, start, end);
-> 	arch_leave_lazy_mmu_mode();
-> 	pte_unmap_unlock();
->
-> I may miss something, but even if not it already doesn't look pretty.
->
-> Thanks,

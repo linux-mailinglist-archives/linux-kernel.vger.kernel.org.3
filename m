@@ -2,93 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D534598B35
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1E0598B2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345445AbiHRS3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 14:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S1345536AbiHRSad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 14:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241954AbiHRS3e (ORCPT
+        with ESMTP id S1345488AbiHRSaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 14:29:34 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C443DAF0F7
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:29:32 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id m3so2287440ljp.8
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:29:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=3S29CJf5siLb6c/lIz+fobVK21gASOrKQYD0JCFerP4=;
-        b=b363KFtkhLYyvkLVjQQuPUhDgfqsqjy2lVX95L6ZZ7X5C0lKiQcnSGnBoeHchAVG5E
-         G0ZYB0lodAv8InopFWg1SzCJRArHWmvxsrV+TYuqzSxsIO9WriwOy5k8diw5T+osf6f1
-         lJL9dop6SAyNWUPCdqmF2RQFniu5VJwVXWKNlEYIqQDZwE8LqeNpBoC4D1r3ibuo4YTu
-         KLN8tifFbvSlXfUItU8TJHBtIqCw+TL5XAuAou3g2ju0dmXf+N1WsF15OW8jxq1GZVTc
-         XCtLnVqWOnwcwR3TtXfRDoIoFyRDEGQ5GS7nc2Pv5CB0zTPw8IMoo1GMpwer17G6hidO
-         CZ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=3S29CJf5siLb6c/lIz+fobVK21gASOrKQYD0JCFerP4=;
-        b=sQyGh2MnfQE3a/q1xvk26z8aMF8JaXzNfzWv2rgzFiHMw8gfsAWSjJn7QbRSDj0www
-         dR26frqinO5yGoFk11AC6VwhfPFLNFlhzNceYRdcJY/UMtPJOUqi5k7nR8vKCmsvvUgs
-         rJ9koZ2pU4ASewjdPWbYogh5kUaMHdSMrFdEkAFfc17klFcez6Ut2NogKMi+oQ3TMr0Q
-         HBiWOrlK/UWedFMiRb3fpJslOeGXoj27r6ofUWRVXagliXmE4HBzLcLT5Spo055xIi/v
-         OqOGA8nR5lNLkqAjMT+umPJFUuVQopt5jFCVTdFGltARPCna0HMCH013yxlIXZ9RX4y7
-         Pt+A==
-X-Gm-Message-State: ACgBeo0zRxWuABwqLJ8M4pc0GbR37JZVpSVq6qQkucGDTEPppxT/rgoD
-        rSX/skpRTX70V+V6b0yIofZyVz/gfzejTcE3fMuoPIIi+fw=
-X-Google-Smtp-Source: AA6agR76LAhlDxQa9VsIZifhFJe/1ypc6DdiOn0X3HcKcfm6o19fiuSJsYJzo8kuwFLn9/kC/RUKD94S3/ysP6FjdJg=
-X-Received: by 2002:a2e:a589:0:b0:261:b223:488b with SMTP id
- m9-20020a2ea589000000b00261b223488bmr1233546ljp.33.1660847370896; Thu, 18 Aug
- 2022 11:29:30 -0700 (PDT)
+        Thu, 18 Aug 2022 14:30:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52342B5A73;
+        Thu, 18 Aug 2022 11:30:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10ED7B82370;
+        Thu, 18 Aug 2022 18:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B707AC433B5;
+        Thu, 18 Aug 2022 18:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660847417;
+        bh=0tcBwhvU3IwbrGMz2RXkuGs7v8beKzHJW6W7ZezoMqE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=VyzWQ4W7Zxq4YYDdLa1ZMFGldOAczo3Z92T0pE6Wk37y+NUFm/wtT6At4YbpfPEFa
+         XZ0UQPKD3qePJ4TpiJr/TsDeLYocZtqMxd46/xEcpsSPvjYIa+Z7Vz3e/YZvg7XG69
+         D0RWOPhHBAxQxJmgKXXgdbhQwWSKYtMriZCAt3DTd8tleePyPY0kuIJybPJaW04A25
+         Twqba6D8KRryriGSBlqyLrS/xD2P0AYQEPpt+8xM4OJ64diZf8YeQspki3muPnVZKG
+         IZTFe2Mt+NaM1kWYf9P7udiulll/+HDBHIdmghTvh3+U/+QB5BpHzOL5WwPojROrB7
+         V9iQ8r6XBuBRw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9A75EE2A058;
+        Thu, 18 Aug 2022 18:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220817152956.4056410-1-vipinsh@google.com> <Yv0kRhSjSqz0i0lG@google.com>
- <CAHVum0fT7zJ0qj39xG7OnAObBqeBiz_kAp+chsh9nFytosf9Yg@mail.gmail.com>
- <Yv1ds4zVCt6hbxC4@google.com> <CAHVum0dJBwtc5yNzK=n2OQn8YZohTxgFST0XBPUWweQ+KuSeWQ@mail.gmail.com>
- <Yv6AiPtRbHv4OSL5@google.com>
-In-Reply-To: <Yv6AiPtRbHv4OSL5@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Thu, 18 Aug 2022 11:28:54 -0700
-Message-ID: <CAHVum0dpZiG2KWC+Qm+OUiYPwt_bV5qTaY8-pMa16yfJS+joOQ@mail.gmail.com>
-Subject: Re: [PATCH] KVM: selftests: Run dirty_log_perf_test on specific cpus
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     dmatlack@google.com, pbonzini@redhat.com, kvm@vger.kernel.org,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] dt-bindings: Fix incorrect "the the" corrections
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166084741762.25395.6372912472329150051.git-patchwork-notify@kernel.org>
+Date:   Thu, 18 Aug 2022 18:30:17 +0000
+References: <c5743c0a1a24b3a8893797b52fed88b99e56b04b.1660755148.git.geert+renesas@glider.be>
+In-Reply-To: <c5743c0a1a24b3a8893797b52fed88b99e56b04b.1660755148.git.geert+renesas@glider.be>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        slark_xiao@163.com, kuba@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, niklas.soderlund@ragnatech.se,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:10 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Thu, Aug 18, 2022, Vipin Sharma wrote:
-> > On Wed, Aug 17, 2022 at 2:29 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> > Okay, I will remove -d and only keep -c. I will extend it to support
-> > pinning the main worker and vcpus. Arguments to -c will be like:
-> > <main woker lcpu>, <vcpu0's lcpu>, <vcpu1's lcpu>, <vcpu2's lcpu>,...
-> > Example:
-> > ./dirty_log_perf_test -v 3 -c 1,20,21,22
-> >
-> > Main worker will run on 1 and 3 vcpus  will run on logical cpus 20, 21 and 22.
->
-> I think it makes sense to have the vCPUs be first.  That way vcpu0 => task_map[0],
-> and we can also extend the option in the future without breaking existing command
-> lines, e.g. to add more workers and/or redefine the behavior of the "trailing"
-> numbers to say that all workers are affined to those CPUs (to allow sequestering
-> the main worker from vCPUs without pinning it to a single CPU).
+Hello:
 
-Make sense. vcpus first followed by worker cpus.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Thanks
+On Wed, 17 Aug 2022 18:54:51 +0200 you wrote:
+> Lots of double occurrences of "the" were replaced by single occurrences,
+> but some of them should become "to the" instead.
+> 
+> Fixes: 12e5bde18d7f6ca4 ("dt-bindings: Fix typo in comment")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> v2:
+>   - Drop blank line between Fixes and SoB tags.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] dt-bindings: Fix incorrect "the the" corrections
+    https://git.kernel.org/netdev/net/c/8aa48ade7db4
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

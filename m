@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566BE598CEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7C9598CE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242584AbiHRTwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S1345100AbiHRTw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244114AbiHRTwN (ORCPT
+        with ESMTP id S242745AbiHRTw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:52:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A4ABD082;
-        Thu, 18 Aug 2022 12:52:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B30F61350;
-        Thu, 18 Aug 2022 19:52:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69D5DC433D6;
-        Thu, 18 Aug 2022 19:52:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660852331;
-        bh=m1qLH1khdhLgXXJ8Oum2nCd1dLUuylNG5JT3wUqtFRI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=QrnBzcj5gpY87uXumC4RCuNvtSb4lwZjE4IxY3z5QesW18+AHDhuPEPWaQoX4ZqNe
-         WKx/54z+tLAbUFWZDlnwuOxfEBXkMVO2wZ/b60fPo3s7cvpc/i2H/e2vdVS2s3Oi3Z
-         tBiIsYJ4Cx7RLyKYJFDkCGkJ0rGMWzOXz7jOW6C7pNooe2Owq0cyrLrlvQoIYbjgFd
-         Wi6F8U0gUhn8r6O+QdnFH45spaLBT6Pc1+dYs3Rhg4/tSjOw1L8/Iz8UTVKxkypDWa
-         loUSuYf2ZwgX8rDG6UzLGO2+FccZSOXGJgVMGEDPgwscqrJ8O7JcFOea1Bke1eqOOb
-         oLApkUI2c4lQA==
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 8966155FAC7; Thu, 18 Aug 2022 21:52:08 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
-To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Cc:     pablo@netfilter.org, fw@strlen.de, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 3/4] bpf: Add support for writing to
- nf_conn:mark
-In-Reply-To: <edbca42217a73161903a50ba07ec63c5fa5fde00.1660761470.git.dxu@dxuuu.xyz>
-References: <cover.1660761470.git.dxu@dxuuu.xyz>
- <edbca42217a73161903a50ba07ec63c5fa5fde00.1660761470.git.dxu@dxuuu.xyz>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 18 Aug 2022 21:52:08 +0200
-Message-ID: <87pmgxuy6v.fsf@toke.dk>
+        Thu, 18 Aug 2022 15:52:27 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5E19A97C;
+        Thu, 18 Aug 2022 12:52:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=3h1hpF2gVXT4E0fClqlbNqbC6Ysb7gES9vj8YGM41WM=; b=xa
+        rjqNzN7eVwSKe+eVpuEXGFj62YX5OAzJPYy4WC4jfTdyAa/O05qYnoI88g5B1xvI54kVDQuI3jct8
+        ztXwqU0y7fgSfNpFoQBuQdFDddlorMpshWZ2RvEGio5/q/zDILZ8M5w5EsyKH8IA3eshRYW8Duj7a
+        78wjcQOxjKBqYRM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oOlYx-00Dpsg-SD; Thu, 18 Aug 2022 21:52:19 +0200
+Date:   Thu, 18 Aug 2022 21:52:19 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 4/4] ARM: dts: dove: Add definitions for PCIe error
+ interrupts
+Message-ID: <Yv6Yc2ULD8mspDoJ@lunn.ch>
+References: <20220817230036.817-1-pali@kernel.org>
+ <20220817230036.817-5-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220817230036.817-5-pali@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daniel Xu <dxu@dxuuu.xyz> writes:
+On Thu, Aug 18, 2022 at 01:00:36AM +0200, Pali Rohár wrote:
+> First PCIe controller on Dove SoC reports error interrupt via IRQ 15
+> and second PCIe controller via IRQ 17.
+> 
+> Signed-off-by: Pali Rohár <pali@kernel.org>
 
-> Support direct writes to nf_conn:mark from TC and XDP prog types. This
-> is useful when applications want to store per-connection metadata. This
-> is also particularly useful for applications that run both bpf and
-> iptables/nftables because the latter can trivially access this
-> metadata.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Looking closer at the nf_conn definition, the mark field (and possibly
-secmark) seems to be the only field that is likely to be feasible to
-support direct writes to, as everything else either requires special
-handling (like status and timeout), or they are composite field that
-will require helpers anyway to use correctly.
-
-Which means we're in the process of creating an API where users have to
-call helpers to fill in all fields *except* this one field that happens
-to be directly writable. That seems like a really confusing and
-inconsistent API, so IMO it strengthens the case for just making a
-helper for this field as well, even though it adds a bit of overhead
-(and then solving the overhead issue in a more generic way such as by
-supporting clever inlining).
-
--Toke
+    Andrew

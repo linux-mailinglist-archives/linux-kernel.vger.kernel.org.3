@@ -2,160 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B278598DF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC31598E02
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345981AbiHRU1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 16:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S1346047AbiHRU1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 16:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234198AbiHRU1N (ORCPT
+        with ESMTP id S1346007AbiHRU1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:27:13 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F592DEE;
-        Thu, 18 Aug 2022 13:27:11 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id o22so3262270edc.10;
-        Thu, 18 Aug 2022 13:27:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=I/1x6/iHbBuNqucpvMeT3iP7IohY0BCErMO71CeWc6A=;
-        b=lLyif36eNB+DAogNmA5rnBXdV/1pETqV7lgGpvKAhSEYYdb1pAZfd2RwZEc2T7x9OE
-         NCxLOysq7OH6CwI5g6fTQUhus7zn4IbH8C/77i2svSh1GokhKe6yn8lEPq8UTB98F5G7
-         aIYtXX9tKlBmqRSk0AZKVNd355lHaYvzlxKzYN1lqC0axaPMAmlUBfOXwLV6QJrkMj9G
-         tLTOKQNoAnwmIBs2V6yZKyUHbNMbQfP/5SjX4/x3iNj3N7sZC6tWxUK/q4VjFdipZhD7
-         2Gqh+8xNmZtSTRIpg6trp4Y5kBXUzYU71HeKWmGgjmbpBSgAssjNcMXhbDDguo8Zqqqz
-         JXwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=I/1x6/iHbBuNqucpvMeT3iP7IohY0BCErMO71CeWc6A=;
-        b=qu1jGvtXl/g1M1FQ3iuTkVHLszrFt7RhWfThZMZvdLqv6A1sLNExnBzRwuDC2619Ef
-         0e4iqzFx/jDXMXQ4OB6lj+i3SvfkyKej4bEa7s2HniIoSoBdDrR3kDcU0gcvCd4M30yz
-         b7qbLpMzq+HPw2g0HiovFdysjgTxtMyHwbqL4zanhra8bKb3x6j/dCw8AzJWvqSQgODe
-         sJWsmJBC91+jSjvkTOon/vVRROTzEh8HnkOOFmtfkUlx0nnHbu5qPO54FTfBsqzzfVu4
-         YcpTjT283oFKo1WMcyHLHBgHuLb0v8PWxI3lJ6TWjyN6LSxMCSbuyBph1i/Ou+l2I8/F
-         qFtw==
-X-Gm-Message-State: ACgBeo1Nk1QiZj2Z0GgHDPpTgNPjv2Ac3DewYnyXn0Pynlfyip3QN9Mq
-        boo8lT0G4/RkXQVFVt1uCdk=
-X-Google-Smtp-Source: AA6agR7M243Vcesn4ldSGw0kbmEGw+WsqdE1ru718eTLRausIEArDnC9nXlkVqfieFHIbDx40Pw0Tg==
-X-Received: by 2002:a05:6402:28ca:b0:43b:5235:f325 with SMTP id ef10-20020a05640228ca00b0043b5235f325mr3481566edb.320.1660854430167;
-        Thu, 18 Aug 2022 13:27:10 -0700 (PDT)
-Received: from krava ([83.240.63.36])
-        by smtp.gmail.com with ESMTPSA id h17-20020a056402095100b0044629b54b00sm633182edz.46.2022.08.18.13.27.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 13:27:09 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 18 Aug 2022 22:27:07 +0200
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-Message-ID: <Yv6gm09CMdZ/HMr5@krava>
-References: <Yvn9xR7qhXW7FnFL@worktop.programming.kicks-ass.net>
- <YvoVgMzMuQbAEayk@krava>
- <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
- <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
- <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
- <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
- <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
- <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
- <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
- <YvppJ7TjMXD3cSdZ@worktop.programming.kicks-ass.net>
+        Thu, 18 Aug 2022 16:27:35 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E2E12D09;
+        Thu, 18 Aug 2022 13:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=pYW7sT3jh29AWNhJvTI8IlA/O24S5q/YAiEWOzJFAt8=; b=LB
+        OZg4+L7ld0yvUo5vbEosaxy60S2JN+n31F0W6bAtTFxLs6MQHJpgBz+L31v9WbvWlpUf41AMDwhhO
+        XYWuUBnJkNcFq8kiK1vx0Jh6LC0lDUoHRL5aQkgtR97Kc66Rn6kcDbYfQVzbLwD8fwFAnvozum9Dv
+        LGhS1mJtgGWliC0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oOm6u-00DqE5-L3; Thu, 18 Aug 2022 22:27:24 +0200
+Date:   Thu, 18 Aug 2022 22:27:24 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/4] PCI: mvebu: Implement support for interrupts on
+ emulated bridge
+Message-ID: <Yv6grNn5BDFjctFP@lunn.ch>
+References: <20220817230036.817-1-pali@kernel.org>
+ <20220817230036.817-3-pali@kernel.org>
+ <Yv6YOZ2FuTn8D5qS@lunn.ch>
+ <20220818200737.7w2wqh62arfrskks@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YvppJ7TjMXD3cSdZ@worktop.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220818200737.7w2wqh62arfrskks@pali>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 05:41:27PM +0200, Peter Zijlstra wrote:
-> On Mon, Aug 15, 2022 at 05:28:02PM +0200, Peter Zijlstra wrote:
-> > On Mon, Aug 15, 2022 at 08:17:42AM -0700, Alexei Starovoitov wrote:
-> > > It's hiding a fake function from ftrace, since it's not a function
-> > > and ftrace infra shouldn't show it tracing logs.
-> > > In other words it's a _notrace_ function with nop5.
+On Thu, Aug 18, 2022 at 10:07:37PM +0200, Pali Rohár wrote:
+> On Thursday 18 August 2022 21:51:21 Andrew Lunn wrote:
+> > > -static irqreturn_t mvebu_pcie_irq_handler(int irq, void *arg)
+> > > +static irqreturn_t mvebu_pcie_error_irq_handler(int irq, void *arg)
+> > > +{
+> > > +	struct mvebu_pcie_port *port = arg;
+> > > +	struct device *dev = &port->pcie->pdev->dev;
+> > > +	u32 cause, unmask, status;
+> > > +
+> > > +	cause = mvebu_readl(port, PCIE_INT_CAUSE_OFF);
+> > > +	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
+> > > +	status = cause & unmask;
+> > > +
+> > > +	/* "error" interrupt handler does not process INTX interrupts */
+> > > +	status &= ~(PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
+> > > +		    PCIE_INT_INTX(2) | PCIE_INT_INTX(3));
 > > 
-> > Then make it a notrace function with a nop5 in it. That isn't hard.
+> > Just for my understanding...
 > > 
-> > The whole problem is that it isn't a notrace function and you're abusing
-> > a __fentry__ site.
+> > There are two interrupts
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?h=x86/fineibt&id=8d075bdf11193f1d276bf19fa56b4b8dfe24df9e
+> yes
 > 
-> foo.c:
+> > but the status information what those
+> > interrupts actually mean are all packed into one register?
 > 
-> __attribute__((__no_instrument_function__))
-> __attribute__((patchable_function_entry(5)))
-> void my_func(void)
-> {
-> }
+> yes
 > 
-> void my_foo(void)
-> {
-> }
+> for masking individual interrupt events there is just one shared
+> register for both "intx" and "error" interrupt source.
 > 
-> gcc -c foo.c -pg -mfentry -mcmodel=kernel -fno-PIE -O2
+> and also there is also just one shared "cause" register which says which
+> individual interrupt events happened.
 > 
-> foo.o:     file format elf64-x86-64
+> > I assume reading the clause register does not clear set bits?
 > 
+> yes, reading does not clear any interrupt event.
 > 
-> Disassembly of section .text:
+> > Otherwise there
+> > would be a race condition.
 > 
-> 0000000000000000 <my_func>:
->    0:   f3 0f 1e fa             endbr64 
->    4:   90                      nop
->    5:   90                      nop
->    6:   90                      nop
->    7:   90                      nop
->    8:   90                      nop
->    9:   c3                      ret    
->    a:   66 0f 1f 44 00 00       nopw   0x0(%rax,%rax,1)
+> > Are these actually level interrupts
 > 
-> 0000000000000010 <my_foo>:
->   10:   f3 0f 1e fa             endbr64 
->   14:   e8 00 00 00 00          call   19 <my_foo+0x9>  15: R_X86_64_PLT32      __fentry__-0x4
->   19:   c3                      ret    
+> yes
 > 
+> > and in order to clear them you need to poke some other register?
+> 
+> to clear individual interrupt event you have to write corresponding 1b
+> bit into that cause register.
+> 
+> so if interrupts events BIT(24), BIT(16) and BIT(17) happened and
+> BIT(24), BIT(25), BIT(26), BIT(27) and BIT(16) are unmasked then CPU
+> receives two interrupts (one for intx:24-27 and one for err:16). kernel
+> will call interrupt handlers for both intx and err (possible also in
+> parallel if it unmasked on different CPUs) and each handler just clears
+> events which process. So writing BIT(16) into cause register clears only
+> event 16 and all other (24-27, 17) are still active. And level interrupt
+> (the correct one intx or err) is then triggered again.
 
-ok, so the problem with __attribute__((patchable_function_entry(5))) is that
-it puts function address into __patchable_function_entries section, which is
-one of ftrace locations source:
+Thanks for the explanation.
 
-  #define MCOUNT_REC()    . = ALIGN(8);     \
-    __start_mcount_loc = .;                 \
-    KEEP(*(__mcount_loc))                   \
-    KEEP(*(__patchable_function_entries))   \
-    __stop_mcount_loc = .;                  \
-   ...
+I don't know enough about PCI to be able to give a meaningful
+Reviewed-by, so i will leave that to the PCI maintainer. But the DT
+bits look good to me.
 
-
-it looks like __patchable_function_entries is used for other than x86 archs,
-so we perhaps we could have x86 specific MCOUNT_REC macro just with
-__mcount_loc section?
-
-jirka
+     Andrew

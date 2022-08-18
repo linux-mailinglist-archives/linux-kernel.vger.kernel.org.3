@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E38598AC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97AE6598AC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345272AbiHRR6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
+        id S1345285AbiHRR7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242519AbiHRR6n (ORCPT
+        with ESMTP id S242519AbiHRR7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:58:43 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E77BD75D
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:58:41 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id w15so2439921ljw.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:58:41 -0700 (PDT)
+        Thu, 18 Aug 2022 13:59:20 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3738C6CCA
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:59:19 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id r141so1665978iod.4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:59:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=WNfjFt9m9xPrC6sMtqNFXjJdIECd9U1HI5Wb3V+wx4o=;
-        b=FAZ1Ob+rhfUlGNvVJ57i7sIbExAWg5Ly7qnaPm1VfM7fdaOLZyCCKgokgVpfouzF3p
-         /Xfi9wV2R2TEhwtmjzoiCgnzNJTDBcDaAIc+lKDme1LPglCnZV2oYzszTZ31G2tntFJi
-         0wqIbRMjqFbhr4cIEMyPR33y30vx/sMNczAGqniQyFmZXU6D4vKA6ReJ7L1Q9LJh9ikU
-         ZY4nMDc9CTgPSUXNechHQk4hu/Nsso99VtJtHpNBEUSVLUQS82NQ3awZbJwRV4VE2PIu
-         wTse0wNBD/0uwHNIeRx5gC+1KQBg9Xk37/xrpJyMfFynB2Fk8hUMHlJ6Hnwh/KlFBMU1
-         b5ZQ==
+        bh=7oe2Eodvo4cHSy2YtCc59ePq/pRiQuqwvHx5VzBYsYs=;
+        b=edIm4Rg6BSJsMQXvCvLFwwFXy0SgZL16xDx+ddO+pIxGoxGhVBW1JCUG4UJ4nMUG8M
+         h9wXvegj3gt22AUMb2wOXjwfw2exTUiCTBBx/czTYs8MX1XFi3rftEoMeav0o1sDi4PH
+         T5O1xzJMMPnXq9Tm/Z2EFTSP1YGgWu/FUpjClXnfOiUHoAd4VQvibkoMme4W9oxkJhWm
+         9GMqef+W/Vs+jkHaqJVlLMkA+d4lhvKd+F6yj/327zqFExvFnlp9sarw3XYr4YD+WO7X
+         FfTLBskgqGWvD6e+k6RBRl9E7jBeyHO2EstWlzSxL9MHnzGU6oG0h9vOvrFHR4B9mVtJ
+         6C3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=WNfjFt9m9xPrC6sMtqNFXjJdIECd9U1HI5Wb3V+wx4o=;
-        b=dG5cbvEgAPbelc3VFq/RkfPikPrF4uXsbGRg8RpVSvyFdNTPbE4Cz1x/obife7tnq6
-         BfXXQn3oyK6NzTU/D+Ap/mGmh+2YYnGcW0MqYQJKkQkoPKVU7n1+eX5A8Z0aK26poi+l
-         nPwYklIPakjWLNRgTKHiDNgGToXSbVse64/bWMMd25KQeF4sTa2hGX0M02rGAQUdzPbT
-         AE7iQjyKepbamOuIOT5oYocd8X4IsNyMSndT4ixbNmYd+1a1aV6r3awYfDh45znZ2+40
-         4EqaWhZze/9u5y3IjjuIXW3LFHe/EsNJx0GdQlOxFLCaSVFH41io8qs5WsaO91qf1tYa
-         P3Xg==
-X-Gm-Message-State: ACgBeo0A36u08laxLSAyn1KVS3tz5ncpD84TnYXyXzoc/18rdgU3JnFv
-        ti6GGZp7QFoMhwwOcpcYLThlvl0lrgM0mk4iRytKhA==
-X-Google-Smtp-Source: AA6agR5JQV/VYQZk1/zJsIXbRAgRBXF+HQIVTf6BSJMQFgfBO9W2E/zmGk3XBpkuTRAtm9arB3OZpHK5nLPhavEgNuE=
-X-Received: by 2002:a2e:84ca:0:b0:25d:77e0:2566 with SMTP id
- q10-20020a2e84ca000000b0025d77e02566mr1251066ljh.78.1660845519988; Thu, 18
- Aug 2022 10:58:39 -0700 (PDT)
+        bh=7oe2Eodvo4cHSy2YtCc59ePq/pRiQuqwvHx5VzBYsYs=;
+        b=qLYFtOpSr6iqD+raVmdJX6AskAoqSKJLMi1skefXfZrTjPsDT6sr2zXXGsg5qlEAUF
+         j1rt/p9NieNNUvkpcImyqNrcuSTbEDpfBSYGMm6fojppwYiujYYxJ/Ao9OeW3SlQOCuk
+         3Ogo94hLjXWoAVctxCrvD4ilq2tI9Dqx0puDSt3ej5roOJ0h4DDfU2zpet0cBzywNaJu
+         79oGeCItJCIr5wi0xWaqPgg2XRzfqTiymJEQE00mmGTA4NjavYm3ZUhRQQ582o1fru6w
+         j+ikF5t9Zj20K9SubebNDXeNmBrqPbaUvHb0cP1bpqavasuZvswyKF8+7dAERmqcJrfK
+         fmbQ==
+X-Gm-Message-State: ACgBeo2jJFX64XhhwvXTSzPA0xjKMQNlGEmlNzSnoSTMVc9XEp6U626z
+        YMPO2hCZGUgoy4nUb14o9UlLCAcG9wB02XJD2Uw01g==
+X-Google-Smtp-Source: AA6agR4U+57gHVzGKChcaUfF5FOoGlpZMDiAtZPsr1UjDP45RsQZeuVCHp+BILRKLZOZ5NtZ/tNWWI+NXk0bJOcx7N0=
+X-Received: by 2002:a02:7a4d:0:b0:346:b4db:f4da with SMTP id
+ z13-20020a027a4d000000b00346b4dbf4damr1863490jad.52.1660845558863; Thu, 18
+ Aug 2022 10:59:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220817152956.4056410-1-vipinsh@google.com> <Yv0kRhSjSqz0i0lG@google.com>
- <CAHVum0fT7zJ0qj39xG7OnAObBqeBiz_kAp+chsh9nFytosf9Yg@mail.gmail.com> <Yv1ds4zVCt6hbxC4@google.com>
-In-Reply-To: <Yv1ds4zVCt6hbxC4@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Thu, 18 Aug 2022 10:58:03 -0700
-Message-ID: <CAHVum0dJBwtc5yNzK=n2OQn8YZohTxgFST0XBPUWweQ+KuSeWQ@mail.gmail.com>
-Subject: Re: [PATCH] KVM: selftests: Run dirty_log_perf_test on specific cpus
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     dmatlack@google.com, pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220817211356.273019-1-axelrasmussen@google.com> <190edda8-1f37-0fa5-1cc1-ada97518698a@nvidia.com>
+In-Reply-To: <190edda8-1f37-0fa5-1cc1-ada97518698a@nvidia.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 18 Aug 2022 10:58:43 -0700
+Message-ID: <CAJHvVcgktSjo5CncC25+2j1amXvn3TjnsfOCV6CxNDp5joey9Q@mail.gmail.com>
+Subject: Re: [PATCH] selftests/vm: fix inability to build any vm tests
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -68,114 +71,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 2:29 PM Sean Christopherson <seanjc@google.com> wrote:
+On Wed, Aug 17, 2022 at 3:15 PM John Hubbard <jhubbard@nvidia.com> wrote:
 >
-> On Wed, Aug 17, 2022, Vipin Sharma wrote:
-> > On Wed, Aug 17, 2022 at 10:25 AM Sean Christopherson <seanjc@google.com> wrote:
-
-> > We need error checking here to make sure that the user really wants
-> > cpu 0 and it was not a mistake in typing.
-> > I was thinking of using parse_num API for other places as well instead
-> > of atoi() in dirty_log_perf_test.
->
-> Yes, definitely.  And maybe give it a name like atoi_paranoid()?
-
-Lol. Absolutely, if that's what you want!
-
->
-> > Yeah, it was either my almost duplicate functions or have the one
-> > function do two things via if-else.  I am not happy with both
-> > approaches.
+> On 8/17/22 14:13, Axel Rasmussen wrote:
+> > Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> > ---
+> >   tools/testing/selftests/vm/Makefile | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
 > >
-> > I think I will pass an integer array which this parsing function will
-> > fill up and return an int denoting how many elements were filled. The
-> > caller then can use the array as they wish, to copy it in
-> > vcpu_to_lcpu_map or cpuset.
->
-> Eh, I doubt that'll be a net improvement, e.g. the CPUSET case will then need to
-> re-loop, which seems silly.  If the exclusive cpuset vs. array is undesirable, we
-> could have the API require at least one instead of exactly one, i.e.
->
->         TEST_ASSERT(cpuset || vcpu_map);
->
->         ...
->
->                 cpu = atoi(cpustr);
->                 TEST_ASSERT(cpu >= 0, "Invalid cpu number: %d\n", cpu);
->                 if (vcpu_map)
->                         vcpu_map[i++] = cpu;
->                 if (cpuset)
->                         CPU_SET(cpu, cpuset);
->
-> If we somehow end up with a third type of destination, then we can revisit this,
-> but that seems unlikely at this point.
->
-
-I am removing the -d option, so this is not needed anymore.
-
-
-> > > I wonder if we should make -c and -d mutually exclusive.  Tweak -c to include the
-> > > application thread, i.e. TEST_ASSERT(nr_lcpus == nr_vcpus+1) and require 1:1 pinning
-> > > for all tasks.  E.g. allowing "-c ..., -d 0,1,22" seems unnecessary.
-> > >
+> > diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> > index d9fa6a9ea584..f2a12494f2d8 100644
+> > --- a/tools/testing/selftests/vm/Makefile
+> > +++ b/tools/testing/selftests/vm/Makefile
+> > @@ -1,7 +1,7 @@
+> >   # SPDX-License-Identifier: GPL-2.0
+> >   # Makefile for vm selftests
 > >
-> > One downside I can think of will be if we add some worker threads
-> > which are not vcpus then all of those threads will end up running on a
-> > single cpu unless we edit this parsing logic again.
+> > -LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
+> > +LOCAL_HDRS += $(selfdir)/vm/local_config.h $(selfdir)/../../../mm/gup_test.h
 >
-> But adding worker threads also requires a code change, i.e. it won't require a
-> separate commit/churn.  And if we get to the point where we want multiple workers,
-> it should be relatively straightforward to support pinning an arbitrary number of
-> workers, e.g.
+> Hi Alex,
 >
->         enum memtest_worker_type {
->                 MAIN_WORKER,
->                 MINION_1,
->                 MINION_2,
->                 NR_MEMTEST_WORKERS,
->         }
+> Thanks for fixing up this build, it's always frustrating to finally
+> finish working on something, only to find that the selftests build is
+> broken!
+>
+> This looks correct, and also I've tested it locally, and it works. So
+> please feel free to add:
+>
+> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 >
 >
->         TEST_ASSERT(nr_lcpus == nr_vcpus + NR_MEMTEST_WORKERS);
+> A couple of follow-up thoughts:
 >
-> void spawn_worker(enum memtest_worker_type type, <function pointer>)
-> {
->         cpu_set_t cpuset;
+> 1) I recalled that hmm-tests.c in the same directory also needs
+> gup_test.h, and wondered if that was covered. And it turns out the the
+> relative "up and over" include path is done in hmm-tests.c itself,
+> instead of in the Makefile, like this:
 >
->         CPU_ZERO(&cpuset);
->         CPU_SET(task_map[nr_vcpus + type], &cpuset);
+> /*
+>   * This is a private UAPI to the kernel test module so it isn't exported
+>   * in the usual include/uapi/... directory.
+>   */
+> #include "../../../../lib/test_hmm_uapi.h"
+> #include "../../../../mm/gup_test.h"
 >
->         <set affinity and spawn>
-> }
->
-> > Current implementation gives vcpus special treatment via -c and for
-> > the whole application via -d. This gives good separation of concerns
-> > via flags.
->
-> But they aren't separated, e.g. using -d without -c means vCPUs are thrown into
-> the same pool as worker threads.  And if we ever do add more workers, -d doesn't
-> allow the user to pin workers 1:1 with logical CPUs.
->
-> Actually, if -c is extended to pin workers, then adding -d is unnecessary.  If the
-> user wants to affine tasks to CPUs but not pin 1:1, it can do that with e.g. taskset.
-> What the user can't do is pin 1:1.
->
-> If we don't want to _require_ the caller to pin the main worker, then we could do
->
->         TEST_ASSERT(nr_lcpus >= nr_vcpus &&
->                     nr_lcpus <= nr_vcpus + NR_MEMTEST_WORKERS);
->
-> to _require_ pinning all vCPUs, and allow but not require pinning non-vCPU tasks.
+> It would be nice (maybe follow-up polishing for someone) if this were
+> done once, instead of twice (or more?) via different (source code vs.
+> Makefile) mechanisms.
 
-Okay, I will remove -d and only keep -c. I will extend it to support
-pinning the main worker and vcpus. Arguments to -c will be like:
-<main woker lcpu>, <vcpu0's lcpu>, <vcpu1's lcpu>, <vcpu2's lcpu>,...
-Example:
-./dirty_log_perf_test -v 3 -c 1,20,21,22
+Hmm, I suppose the way to clean this up would be to have the Makefile
+compute this once, and pass in "-I $(selfdir)/../../.." to the
+compiler so we could just "#include <mm/gup_test.h>" directly?
 
-Main worker will run on 1 and 3 vcpus  will run on logical cpus 20, 21 and 22.
+If there aren't objections to something like that being too weird, I
+can write a follow-up patch which does that.
 
-Sounds good?
+>
+> 2) Commit f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+> claims that it is now required to "make headers_install" before building
+> the selftests. However, after applying your fix (not to imply that there
+> is anything wrong with the fix; it's fine), I am still able to build
+> vm/selftests, directly after a top-level "make clean".
+>
+> I believe that this is because the selftests are directly including
+> gup_test.h, via relative up-and-over paths. And I recall (and also did a
+> quick dry run, to be sure) that this internal gup_test.h header is not
+> part of the headers_install list. So that seems to be all working as
+> intended. But I wanted to say all of this out loud, in order to be sure
+> I fully understand these build steps.
 
-Thanks
-Vipin
+I agree this is working as intended, my understanding is that "make
+headers_install" is really for the stuff under include/uapi/*, whereas
+headers under mm/ or lib/ aren't really meant to be "exposed to
+userspace" except for these particular selftests. So including them
+directly instead of looking for them under usr/include/ is
+intentional.
+
+>
+>
+> thanks,
+> --
+> John Hubbard
+> NVIDIA

@@ -2,161 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B280599179
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 01:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFA359917E
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 01:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238901AbiHRXpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 19:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
+        id S245103AbiHRXv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 19:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343538AbiHRXpl (ORCPT
+        with ESMTP id S240173AbiHRXvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 19:45:41 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6F16E88E
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 16:45:40 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id m2so2778365pls.4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 16:45:40 -0700 (PDT)
+        Thu, 18 Aug 2022 19:51:21 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2062.outbound.protection.outlook.com [40.107.244.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DB4CE48A;
+        Thu, 18 Aug 2022 16:51:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lZZyYkEd9RS9DMuogdsXNXiHWbxNl/osP37KGRhDNob1WptUlpnCgFZ/VsqHojyEjSHhFN7YBlVZtvVgTtjyLT0KzwYbbUJanmO+X1/ZA4WqXpfk7EneXzLDjMGzVmxxTMaQNdoGyxhLFk/1O/QEIJ1M+gs+VD8mztuV6LbKi1/DyhDOzujmElvdfZlT//pBqVr1wJGEy6AE1+69MH5rG4BdqZ5lb5LT/4q/vNY/PHjPXw9NnKFBNx+xllycuBdvR4InDQUShjnm5XXDDOgk7TyUP6G0FRlRD0YpWT3xxD9IxQ8czQm++HuvkTaiB9YygCNlwBg6SgusmMPQmaJWgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ppoabToR5LM01Dhd1mrdXujKFY/CqXcf3jeq9eSB2Fw=;
+ b=NKNp30migI2Vo0NeBMzDMAwnJm76h4Np6yGFCvLW/kC2Qy5dCDM9GbyyWGjOHoSwprUCQ+M6lhKuc/D7oQ2xLSXWKTnjwMWWzK0n7Uk7OwjkzfEk4vUmVdLWLe/UdckZ6sNdTmXTnYpHyES0/2Lk4U7n7WRDjk/HJnw42OpNlibZJVgLC2MfFTwkP7oJvkSapJkAaVfU/jsZH/FGeLYvDg6tuxhKzc3ZzFjJ5ccj5L2S82Mr4XSUvggqKrjKykbSGmhipOCrUT8sOZnE5e64Km6o6vBmo6qVM9Lz7yRbWHInbzQgOo/hWig3OH2kqgLsRTJ/KS3KP4aOAP6CcNxcFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synaptics.com; dmarc=pass action=none
+ header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=rnP1Bh0lpl5qrPJmmGeDlykdaH++zpEsQwksAv0VGOc=;
-        b=JF6CZHeTOxIrWzrIsYHyhNeJWXKWms2pYm2C77yKrxewRVxRjUWXgIYsoIUd9SPPdC
-         NXMTzag5jmE96TMficR1A1qul0Vd/57H5mGaTrfsNwhVJZGu2PFVjxG0vkWMCzT+glZ/
-         HPxx4Ey1jAfflJzX/mB3CmmhmXJ5+piLg7v1INa12YrVpx1i6xcIidQ9AnTrESPcLE5T
-         Qum9sUB/8w1BY3OVvYbYw1GqBec0M4SfetPMkYNk8h0QiG++8J6McCZazb4TQ/KKYM3j
-         L42IAWd6KpZK/Dix5eokGcaHsZHTv8botOeFEFsV3ZOPzBbSfuNoyv6svM7diMkEa06M
-         pNdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=rnP1Bh0lpl5qrPJmmGeDlykdaH++zpEsQwksAv0VGOc=;
-        b=P5lOcoehL1eymORXD/g0e6nDPxsAKjxygsE8Lwl5kCbh+9goDTgqEfxDFDOetxVEVm
-         c3E9guCClLMhMTQeZvOF/3U6Vhs57q1Mnf7H530dCWW0MEZESZeR9RYbq3Qpo41sjoIp
-         dtTbdqC140E4bnSKewncBWzKRz4OcngmMfcJXlB6T8c0jWCXR4xj9tCtr9koOVCTJMun
-         a/1IyltI9i/PX6JNkfoDysSS51bfkXoomp5BwIdS/78cgieOoutaStr8aIW0f8HbrCdV
-         C3Ql5d8prXkiB/YN1DoXvRx5lFCEBrZG1Mqfd5fKoJ4rRDdF5lZ1NiLrjQ1fCP+/y6T3
-         4V+w==
-X-Gm-Message-State: ACgBeo1MY91g8PGz3SHTsIxx5SMMwbZlzzWZEccN4YzRHeql4WbBJCww
-        wP8lSQYg9CyeLUmVlCepP8pEzQ==
-X-Google-Smtp-Source: AA6agR4i2vPSZlYoMjygsa+gewEk5KPFWp3tffr14cDGfnHl4biS2t19ei+5L35fry9dmB00Ak0YQQ==
-X-Received: by 2002:a17:90b:3e8c:b0:1f7:3792:d336 with SMTP id rj12-20020a17090b3e8c00b001f73792d336mr5513681pjb.0.1660866339687;
-        Thu, 18 Aug 2022 16:45:39 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c138-20020a624e90000000b00528a097aeffsm2192919pfb.118.2022.08.18.16.45.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 16:45:39 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 23:45:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Yan Zhao <yan.y.zhao@intel.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v3 3/8] KVM: x86/mmu: Rename NX huge pages
- fields/functions for consistency
-Message-ID: <Yv7PHx2qSB0PwkP/@google.com>
-References: <20220805230513.148869-1-seanjc@google.com>
- <20220805230513.148869-4-seanjc@google.com>
- <YvhL6jKfKCj0+74w@google.com>
- <YvrAoyhgNzTcvzkU@google.com>
- <YvwHpjxS9CCEVER7@google.com>
- <Yv0Tk0WAdxymSyUt@google.com>
- <Yv65c/t23GqpLPg3@google.com>
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ppoabToR5LM01Dhd1mrdXujKFY/CqXcf3jeq9eSB2Fw=;
+ b=Be3s54ierORr4hmz2h3I+w+QV0xQHV6F35KWxmxhgNl3K2K7dQv2beWq+adz4f7bnHfwn1vU4ETjCwmR5Ygq5dEl87MRJxPMGyZdmAHEq4vzpnHbAERtalEw+3LRggTPDb2Y5YeKhxLwjI6WSGQGe0kqsHCtVEh+UBO5F9GQoxM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synaptics.com;
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
+ by SJ0PR03MB5744.namprd03.prod.outlook.com (2603:10b6:a03:2df::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Thu, 18 Aug
+ 2022 23:51:14 +0000
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::c832:eea0:1883:a19c]) by DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::c832:eea0:1883:a19c%3]) with mapi id 15.20.5546.016; Thu, 18 Aug 2022
+ 23:51:14 +0000
+Message-ID: <871126cc-a3ca-2009-8f1d-a8eb5852e033@synaptics.com>
+Date:   Fri, 19 Aug 2022 07:51:03 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/2] [WIP]: media: Add Synaptics compressed tiled format
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Tomasz Figa <tfiga@chromium.org>, dri-devel@lists.freedesktop.org,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, sakari.ailus@linux.intel.com,
+        ribalda@chromium.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sebastian.hesselbarth@gmail.com,
+        jszhang@kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220808162750.828001-1-randy.li@synaptics.com>
+ <20220808162750.828001-3-randy.li@synaptics.com>
+ <CAAFQd5AKjpJ+fPAeCqdNnJbS4R7SdaHkfyW4qG1xXr-sE801pQ@mail.gmail.com>
+ <13d37c15-79f3-4e16-8cf4-fc37846f4a04@synaptics.com>
+ <Yv7HnHE7bLmgq5D0@pendragon.ideasonboard.com>
+From:   Hsia-Jun Li <Randy.Li@synaptics.com>
+In-Reply-To: <Yv7HnHE7bLmgq5D0@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR05CA0184.namprd05.prod.outlook.com
+ (2603:10b6:a03:330::9) To DM6PR03MB5196.namprd03.prod.outlook.com
+ (2603:10b6:5:24a::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yv65c/t23GqpLPg3@google.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 05d5ea7d-a164-498b-cbd6-08da81748953
+X-MS-TrafficTypeDiagnostic: SJ0PR03MB5744:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V6juqjWWXS37BqDtGTaQgsUFk3jhW2Tl6p17CMWnSxp/oSXRt5sTmoBq2SRrnhFxYu7jlKsarlMoQb/wY633FPvFE2zAyXyBvd3tOsCwmdVtGQJc8KSGRia5XVSZbRLmtuQp5CKnYbkXpabJGPOr3GgWaCpvxndBgH2h0Qmr9kcfJa86c/KsLFv5KXgJlqrwZ+hrUmIRekXic10Q+o7gR3PK99Hku9sf/iQ53p2glI6PLMKbwu11jrqlQNRbyHcHllWuWNwbwrmFfBCZpS/QH5ZcKO79x2fW7Uc4y/NxFA6d78cDnD/GAq3bykNPx3AgSCVk7C3HvjmJr2VYr0cLk+6cJidDVUBk9ehul1qfSkS03N69wMZXLo4iCT3Kp8iGFbns8N+6bQrESaW9Pauo1Y+dfWPSI1NGedhanGS22f1FGoO005+Bsb5AcEWFjml88DLkpY334cy/xK0YMZ2nPMfIe6mTHH7T09NNE1S9/knK8pj4pjrWUaiuGQtkztBknMqrvbVYenFWuSMZo3+nnLwOg19YtmauSvxXJQMvetPFGFz6Xgh4PX9ZqwcOK9ZNQkdq1cz/b2YfIWOyP7Hsn2XKf7K+9+mn+t4Pc+RDwpEwkcYe+0nXZtslNQ3HoyyoE9ttqJsZnbKPCnZhwBzWHPD9ePE3L/b3XvN9tGSSv5I4FgrhIhllm9KEu/VUdBSHZnOCP8SYusSQGg1svniNPUshsqox5LBV9n5SIMRTbXhmrhbyGgyCk+2VpMSprtAz9grR17gh0UQF6rixBVx+HAc7sTfXySLnLLN9hweNK4ejC4bqIOhF41i6TjtwKnWKG9U7IZtOc2CHREFFc1z2R/YmA+cAy+B65nkKzdIa/Ik=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(376002)(136003)(39860400002)(396003)(186003)(36756003)(7416002)(31686004)(31696002)(86362001)(316002)(2906002)(5660300002)(2616005)(83380400001)(8936002)(8676002)(4326008)(26005)(38350700002)(66556008)(966005)(6486002)(66476007)(6512007)(38100700002)(53546011)(66946007)(6506007)(52116002)(41300700001)(6666004)(6916009)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R21tSnYrM3FsekpIMzFmV1l6VmxST2NKU0Jwc2s0RDFkS1lvTzIvc2w4dWp0?=
+ =?utf-8?B?a2xOSWY1YXllcEQ5N0VMWWNzM3BuSDB1NmF4NFl3WjJ1SWdQS3d2TU10M0FH?=
+ =?utf-8?B?dWkxaXFrN3hiZWh0bWZFSzh1UUdMLzZoWTUvMHFNT1VjRC9YYU02M1Ywd1Vz?=
+ =?utf-8?B?ZWRscFR3YmVSUVAxVlR2ZCtVbzVYZnRrYXlUNXhveUZNT3RsWTluZjFHcFB0?=
+ =?utf-8?B?MTk1QmllSGg0UUJ5TktZNHFzVWF6djdaL2lkMkRQVUViOE5Bb3J0bmx5dzhJ?=
+ =?utf-8?B?a3F2UDFNWUZYNzlOQVNrd0N4blJOajI2UlRMdEdaR1ZRanh2ZWxjVWpUQ3FZ?=
+ =?utf-8?B?SFNWMGNncFNld2d5dlJqNmdRTU0wRlR5OXZLR3E1REVmeWRoaDdMMFowUk9h?=
+ =?utf-8?B?dFd5SzNyaytuMHRpRzcvcTZlRFFrWmV3dGtrT21EYndLbmdqaG16dW9CWmtB?=
+ =?utf-8?B?bHMyMldONzdOK0lJOGFQd3ZYR01PWGdFZmtXL3FDbnZTdFEwSXhOUzVmZUds?=
+ =?utf-8?B?Z1ppNHp4SEd5WFFLUWMzeGEwRnA5aVJydy95ZGRNK2hLYWdGTHl4cXZWSUgx?=
+ =?utf-8?B?ZlJtOXViLytEY1lQazlDd0ZvUm9tYmtUOG9hS0RFM1VSRkg4bGFsK0wxbWhk?=
+ =?utf-8?B?YkZVK2dHM1pBcVZndHovWFpyaC9vaFVmS2Q4VHdPZk1PRjhRNG5ReHVYaWNh?=
+ =?utf-8?B?K01lbGdhL2xYT1NVUDBuY0pydFJXL1dHd0RYZTRXMjRZTkZsdTh3OUlDd0U3?=
+ =?utf-8?B?cXY1UGJkSlY2cm13L3NtMFdvQ0U3ZUQ0cXArcXA2dXB4SmhUU1FRTFRnQzZi?=
+ =?utf-8?B?TEJpelM1NHZHR3NUb3dGSnRhRW9rZUNIb0hlQStKNE52M2l5OGU0VzdaL0dO?=
+ =?utf-8?B?dGFSUW5nL0xFUnZ3VlZUaFBLTk5ZMEM1OXphNkV6c3RYWi9YMUVLbkFBeWd6?=
+ =?utf-8?B?NDZkY1BrNzlQYWEwek8wRHZvazhEVGo3T2N5OTg2MUpORHY5UVBtS0VrMHRU?=
+ =?utf-8?B?Rm5KdC94RCtaaTBVWTcwdG5oQXZ5dDIvbVNFdzIzdFE0YW03WndoUklsa0oy?=
+ =?utf-8?B?ZE1ndGVlZlhWYkUvVHFVNnhlak1CcFd0V29Zcmk0cmhjUnNSOVl0VTN5eFcy?=
+ =?utf-8?B?SWt5S2NtMFhVSFZndkIydlVQc2JobXpTRnROSFpPOVoxN2t4bVE3cURpVnZr?=
+ =?utf-8?B?VEljL0VmOEU4dkV4TEVMYWdxK3JNVmtwVHhRTEw1dzd0Q1gyQlZ3dzFkRWo0?=
+ =?utf-8?B?YThmYjdUNUtoMWJRcmV4M1paR2lTWDIwMEd4enVWRlc2RWpzMCtpdC9rWnFh?=
+ =?utf-8?B?MVhrWDBROTM3VmZ0MTR0QmlhQmkvNHVObU9aNklMTHhZL21mNWtyeEdtYXM1?=
+ =?utf-8?B?SitZWHJyekt4QVY2cGpLL05sUlp1b21mWXBKSU5WdlpLaHBVZmlNNlFZaTR1?=
+ =?utf-8?B?VjZkN2cvZlJqUFZ3dDVSY05tQWpwSG1IcjB3S1pwNDFDa0dLaVR3cTI1TFg3?=
+ =?utf-8?B?dCtFVmtUc2gvb3kwbklBNzVDMHJjbWJHMjFubUhkRG9EZFl0N0xFa2RGM0U3?=
+ =?utf-8?B?bnZTdzRTY3Mvcm5MYkZiU3FQdHkxb1R5dXV5NTV5TkkyRmxKWWQ3U2tOWm9a?=
+ =?utf-8?B?a1cvUmlCT0ErUmU5SjVMUzViSzAzNGVjMWlxakZwcnl2MUtWRFphVUhpWDlE?=
+ =?utf-8?B?WnFZM2dqaEFGY21jS0FENGhqQ05naVJmdGhLOFNDdmFNZUtQU09PekZpTU1Y?=
+ =?utf-8?B?NGcrY3dDN3ZmQ01MTStJaHk5ZVF6QWRLSE9LcnV0aHFXdTFJM0h2dWVKbEdS?=
+ =?utf-8?B?bE42amprMEM2cGxQMEhvcDFIbDJYeFpveC9BWmRYaHJvL3hEUVRRdFhyczZi?=
+ =?utf-8?B?RGtZNDVxR1h6djZ2QmRXVHdTdVdFRjdBSG1FMi94L1QzU1FJTHlxa0E3aWVM?=
+ =?utf-8?B?ODdJSHBGUFc4RXZnQk82OUlDdXppZXZzVEwvQjhITFFrekl4YUxWWUQ3WStI?=
+ =?utf-8?B?MUhOVjlaWXA1UWdhb3FpSTBHSVkvRkFBUlRlYi9GU2RsV2NDU0lkcEdSYUpL?=
+ =?utf-8?B?N3g3VC9rcFlPUTZUcnYrcDYrZGRVbmdIRTl5VWFkaDZxcDBRV1NZdUJQK09t?=
+ =?utf-8?Q?5F8ONErWuhNS5O35ni/dwSlqy?=
+X-OriginatorOrg: synaptics.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05d5ea7d-a164-498b-cbd6-08da81748953
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 23:51:14.7443
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: evDWh7Z9KAAANG6NbOXOggInHAqQBkR0jr7jWoGa3cibmle6QN5ieFm38nMyPCbcPPP4ORJT6Ewk5f6h/XT4pw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB5744
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022, Mingwei Zhang wrote:
-> On Wed, Aug 17, 2022, Sean Christopherson wrote:
-> > Yes, they are shadow pages that the NX recovery thread should zap, but the reason
-> > they should be zapped is because (a) the shadow page has at least one execute child
-> > SPTE, (b) zapping the shadow page will also zap its child SPTEs, and (c) eliminating
-> > all executable child SPTEs means KVM _might_ be able to instantiate an NX huge page.
-> > 
+
+
+On 8/19/22 07:13, Laurent Pinchart wrote:
+> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
 > 
-> oh, I scratched my head and finaly got your point. hmm. So the shadow
-> pages are the 'blockers' to (re)create a NX huge page because of at
-> least one present child executable spte. So, really, whether these
-> shadow pages themselves are NX huge or not does not really matter. All
-> we need to know is that they will be zapped in the future to help making
-> recovery of an NX huge page possible.
-
-More precisely, we want to zap shadow pages with executable children if and only
-if they can _possibly_ be replaced with an NX huge page.  The "possibly" is saying
-that zapping _may or may not_ result in an NX huge page.  And it also conveys that
-pages that _cannot_ be replaced with an NX huge page are not on the list.
-
-If the guest is still using any of the huge page for execution, then KVM can't
-create an NX huge page (or it may temporarily create one and then zap it when the
-gets takes an executable fault), but KVM can't know that until it zaps and the
-guest takes a fault.  Thus, possibly.
-
-> > > `nx_huge_page_disallowed` is easy to understand because it literally say
-> > > 'nx_huge_page is not allowed', which is correct.
-> > 
-> > No, it's not correct.  The list isn't simply the set of shadow pages that disallow
-> > NX huge pages, it's the set of shadow pages that disallow NX huge pages _and_ that
-> > can possibly be replaced by an NX huge page if the shadow page and all its
-> > (executable) children go away.
-> > 
 > 
-> hmm, I think this naming is correct. The flag is used to talk to the
-> 'fault handler' to say 'hey, don't create nx huge page, stupid'. Of
-> course, it is also used to by the 'nx huge recovery thread', but the
-> recovery thread will only check it for sanity purpose, which really does
-> not matter, i.e., the thread will zap the pages anyway.
-
-Ah, sorry, I thought you were suggesting "nx_huge_page_disallowed" for the list
-name, but you were talking about the flag.  Yes, 100% agree that the flag is
-appropriately named.
-
-> > > But this one, it says 'possible nx_huge_pages', but they are not
-> > > nx huge pages at all.
-> > 
-> > Yes, but they _can be_ NX huge pages, hence the "possible".  A super verbose name
-> > would be something like mmu_pages_that_can_possibly_be_replaced_by_nx_huge_pages.
-> > 
+> On Thu, Aug 18, 2022 at 02:33:42PM +0800, Hsia-Jun Li wrote:
+>> On 8/18/22 14:06, Tomasz Figa wrote:
+>>> On Tue, Aug 9, 2022 at 1:28 AM Hsia-Jun Li <randy.li@synaptics.com> wrote:
+>>>>
+>>>> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+>>>>
+>>>> The most of detail has been written in the drm.
 > 
-> I can make a dramtic example as why 'possible' may not help:
+> This patch still needs a description of the format, which should go to
+> Documentation/userspace-api/media/v4l/.
+
+I just want t tell people we need an extra plane for MVTP and I don't 
+have enough space here to place all the pixel formats.
+
+Besides, I was thinking a modifer in v4l2_ext_pix_format is not enough.
+Let's take a compression NV12 tile format as an example, we need
+1. luma planes
+2. chroma planes
+3. compression meta data for luma
+4. compression meta data for chroma
+5. mvtp
+and a single data planer version would be
+1. luma and chroma data
+2. compression meta data
+3. mvtp
+
+You see, we actually have 3 kind of data here(not including the 
+compression options that I am thinking of storing them somewhere else).
 > 
-> /* Flag that decides something important. */
-> bool possible_one;
+>>>> Please notice that the tiled formats here request
+>>>> one more plane for storing the motion vector metadata.
+>>>> This buffer won't be compressed, so you can't append
+>>>> it to luma or chroma plane.
+>>>
+>>> Does the motion vector buffer need to be exposed to userspace? Is the
+>>> decoder stateless (requires userspace to specify the reference frames)
+>>> or stateful (manages the entire decoding process internally)?
+>>
+>> No, users don't need to access them at all. Just they need a different
+>> dma-heap.
+>>
+>> You would only get the stateful version of both encoder and decoder.
 > 
-> The information we (readers) gain from reading the above is _0_.
+> Shouldn't the motion vectors be stored in a separate V4L2 buffer,
+> submitted through a different queue then ?
+Yes, I like that.
+Proposal: A third buffer type for the reconstruction buffers in V4L2 M2M 
+encoder
+https://www.spinics.net/lists/linux-media/msg214565.html
 
-But that's only half the story.  If we also had an associated flag
+Although the major usage for the decoder here is producing the non-tile 
+buffers, the decoder of us could product the NV12 or the pixel formats 
+that GPU likes, but it must happen at the same time a frame is decoded.
+Still the reference buffer or we call them the real decoded frame would 
+stay in a tiled format. More than one queue would be need here.
+> 
+>>>> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
+>>>> ---
+>>>>    drivers/media/v4l2-core/v4l2-common.c | 1 +
+>>>>    drivers/media/v4l2-core/v4l2-ioctl.c  | 2 ++
+>>>>    include/uapi/linux/videodev2.h        | 2 ++
+>>>>    3 files changed, 5 insertions(+)
+>>>>
+>>>> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+>>>> index e0fbe6ba4b6c..f645278b3055 100644
+>>>> --- a/drivers/media/v4l2-core/v4l2-common.c
+>>>> +++ b/drivers/media/v4l2-core/v4l2-common.c
+>>>> @@ -314,6 +314,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+>>>>                   { .format = V4L2_PIX_FMT_SGBRG12,       .pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>>>>                   { .format = V4L2_PIX_FMT_SGRBG12,       .pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>>>>                   { .format = V4L2_PIX_FMT_SRGGB12,       .pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>>>> +               { .format = V4L2_PIX_FMT_NV12M_V4H1C, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 5, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2, .block_w = { 128, 128 }, .block_h = { 128, 128 } },
+>>>>           };
+>>>>           unsigned int i;
+>>>>
+>>>> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>> index e6fd355a2e92..8f65964aff08 100644
+>>>> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>> @@ -1497,6 +1497,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>>>>                   case V4L2_PIX_FMT_MT21C:        descr = "Mediatek Compressed Format"; break;
+>>>>                   case V4L2_PIX_FMT_QC08C:        descr = "QCOM Compressed 8-bit Format"; break;
+>>>>                   case V4L2_PIX_FMT_QC10C:        descr = "QCOM Compressed 10-bit Format"; break;
+>>>> +               case V4L2_PIX_FMT_NV12M_V4H1C:  descr = "Synaptics Compressed 8-bit tiled Format";break;
+>>>> +               case V4L2_PIX_FMT_NV12M_10_V4H3P8C:     descr = "Synaptics Compressed 10-bit tiled Format";break;
+>>>>                   default:
+>>>>                           if (fmt->description[0])
+>>>>                                   return;
+>>>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+>>>> index 01e630f2ec78..7e928cb69e7c 100644
+>>>> --- a/include/uapi/linux/videodev2.h
+>>>> +++ b/include/uapi/linux/videodev2.h
+>>>> @@ -661,6 +661,8 @@ struct v4l2_pix_format {
+>>>>    #define V4L2_PIX_FMT_NV12MT_16X16 v4l2_fourcc('V', 'M', '1', '2') /* 12  Y/CbCr 4:2:0 16x16 tiles */
+>>>>    #define V4L2_PIX_FMT_NV12M_8L128      v4l2_fourcc('N', 'A', '1', '2') /* Y/CbCr 4:2:0 8x128 tiles */
+>>>>    #define V4L2_PIX_FMT_NV12M_10BE_8L128 v4l2_fourcc_be('N', 'T', '1', '2') /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
+>>>> +#define V4L2_PIX_FMT_NV12M_V4H1C v4l2_fourcc('S', 'Y', '1', '2')   /* 12  Y/CbCr 4:2:0 tiles */
+>>>> +#define V4L2_PIX_FMT_NV12M_10_V4H3P8C v4l2_fourcc('S', 'Y', '1', '0')   /* 12  Y/CbCr 4:2:0 10-bits tiles */
+>>>>
+>>>>    /* Bayer formats - see https://urldefense.proofpoint.com/v2/url?u=http-3A__www.siliconimaging.com_RGB-2520Bayer.htm&d=DwIBaQ&c=7dfBJ8cXbWjhc0BhImu8wVIoUFmBzj1s88r8EGyM0UY&r=P4xb2_7biqBxD4LGGPrSV6j-jf3C3xlR7PXU-mLTeZE&m=87M5Aa5fG3kdTTjlJrLIgv0E7O10QAj_4RqDlVsCAFdbfJzJ_P0s8wkBqaR0VBUO&s=8AsoiLPt9hQnn4ta51tT-RUXRLoKKYrePdAwtdvxuDo&e=   */
+>>>>    #define V4L2_PIX_FMT_SBGGR8  v4l2_fourcc('B', 'A', '8', '1') /*  8  BGBG.. GRGR.. */
+> 
+> --
+> Regards,
+> 
+> Laurent Pinchart
 
-  bool one_disallowed;
-
-a.k.a. nx_huge_page_disallowed, then when viewed together, readers know that the
-existince of this struct disallows "one", but that structs with one_disallowed=true
-_and_ possible_one=true _might_ be converted to "one", whereas structs with
-possible_one=false _cannot_ be converted to "one".
-
-> With that, since you already mentioned the name:
-> 'mmu_pages_that_can_possibly_be_replaced_by_nx_huge_pages',
-> why can't we shorten it by using 'mmu_pages_to_recover_nx_huge' or
-> 'pages_to_recover_nx_huge'? 'recover' is the word that immediately
-> connects with the 'recovery thread', which I think makes more sense on
-> readability.
-
-mmu_pages_to_recover_nx_huge doesn't capture that recovery isn't guaranteed.
-IMO it also does a poor job of capturing _why_ pages are on the list, i.e. a
-reader knows they are pages that will be "recovered", but it doesn't clarify that
-they'll be recovered/zapped because KVM might be able to be replace them with NX
-huge pages.  In other words, it doesn't help the reader understand why some, but
-not all, nx_huge_page_disallowed are on the recovery list.
+-- 
+Hsia-Jun(Randy) Li

@@ -2,227 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92661598180
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5A459817D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244101AbiHRKao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 06:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
+        id S244113AbiHRKbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 06:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244097AbiHRKam (ORCPT
+        with ESMTP id S244105AbiHRKaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 06:30:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E2E7E80C
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 03:30:41 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oOcnL-0005Pa-2u; Thu, 18 Aug 2022 12:30:35 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1B924CD6BB;
-        Thu, 18 Aug 2022 10:30:33 +0000 (UTC)
-Date:   Thu, 18 Aug 2022 12:30:31 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com, Dario Binacchi <dariobin@libero.it>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 4/4] can: bxcan: add support for ST bxCAN controller
-Message-ID: <20220818103031.m7bl6gbzcc76etig@pengutronix.de>
-References: <20220817143529.257908-1-dario.binacchi@amarulasolutions.com>
- <20220817143529.257908-5-dario.binacchi@amarulasolutions.com>
+        Thu, 18 Aug 2022 06:30:52 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09237EFFE;
+        Thu, 18 Aug 2022 03:30:50 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id o22so1298274edc.10;
+        Thu, 18 Aug 2022 03:30:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=9vZKSAmG8I4EgDVUcYaHeGxa/jI1j+UCbOHpxXjMwqc=;
+        b=eCt769iz680T564gsrZwVhkuutB9GSfw3qDqOUTK1YlumPDVNF5fwumLp1OFQt90Ru
+         eXWjF4hQagG1RnxctP8B53aKdP58tJXD8M3LSZr2Z4V+zkUnXSurv2BPUSlU4AMHD4xi
+         lE9xObpZ9iwbov6Qd8PcHu56/Ze5M9X/VvUePgpkV8kapSEPtb4L+6fCxDcYcjn55FgP
+         aU45C3njQJDLRzwhRu3Fc5KCAD6JK75tQrPkoJ78jobMg3Ugh847WU38NqIbacYyLd6h
+         jYeSLMgnKYGP2wuBfCqEwtgko0HIpxrXtJJHxSEfxhDQMM6S/aG00nUNZGOTh+ew3mZq
+         Ml0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=9vZKSAmG8I4EgDVUcYaHeGxa/jI1j+UCbOHpxXjMwqc=;
+        b=vvki00Ez9kJzfh4AH6GTuR4q0/7w3zCosi8/XzT8GPPCizgWvTea1TwoybGpM4QqvY
+         sJg9+bDmZgvj3Yh5a+S7NHWZettKZCxVS9TVYAlrAPciZlSYr+2khotFfKnOn+wdbe+7
+         OB3aeo8Z36PHNzxQFqu6f55wOhDLJyjmDLg2mhll7l8zzliKPshSkMnI7fDlVdwdIccB
+         ikZheqY7XVMuolPogS/3+bIwdHah+8me+bpKt7n4a8xTmbeswam85ZTXskrCBKlhIpnu
+         oazBJ2ypOO+ZYvZyr3WAiLKxlt8aYBdSN9dzkAAqyjnjMHFfds7jryA/nE+Jm176gy8N
+         E6+Q==
+X-Gm-Message-State: ACgBeo1i6G8Xl4Eo1VIlupCmkxc2iMv8f5dZAgeVJs13lbCyPfxnaKTQ
+        2QpHGPVk347H6za50HUvSBLXB4a5B2j8ns9hXdls2oQE
+X-Google-Smtp-Source: AA6agR5sF3SG3SknPo6+Xa7a9bQt2OyzxDtrsi4BxnhNiMk7JbjzFgQX7RMQSQY8ftDc6akBUs+7MZnNg748Z6IMaTA=
+X-Received: by 2002:a05:6402:438d:b0:43d:b383:660f with SMTP id
+ o13-20020a056402438d00b0043db383660fmr1725007edc.283.1660818649081; Thu, 18
+ Aug 2022 03:30:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pdvj4caxzadjx4i4"
-Content-Disposition: inline
-In-Reply-To: <20220817143529.257908-5-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1660785696-9010-1-git-send-email-u0084500@gmail.com>
+ <1660785696-9010-3-git-send-email-u0084500@gmail.com> <85193de5-244c-2cda-e442-656769b97b14@linaro.org>
+ <CADiBU3_RUTiG0T5vEKe0qHmHHQDXyMQL2BxFA+YgL_u-VGUNkA@mail.gmail.com> <a6f3d97e-547a-9797-1469-bbe5d80a3bb8@linaro.org>
+In-Reply-To: <a6f3d97e-547a-9797-1469-bbe5d80a3bb8@linaro.org>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Thu, 18 Aug 2022 18:30:38 +0800
+Message-ID: <CADiBU3_3MgowozeR13iG5ZksdbodLufc06tsEuKugipxBCYjLA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] power: supply: rt9471: Add Richtek RT9471 charger driver
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
+        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---pdvj4caxzadjx4i4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-One step at a time, let's look at the TX path:
-
-On 17.08.2022 16:35:29, Dario Binacchi wrote:
-> +static netdev_tx_t bxcan_start_xmit(struct sk_buff *skb,
-> +				    struct net_device *ndev)
-> +{
-> +	struct bxcan_priv *priv = netdev_priv(ndev);
-> +	struct can_frame *cf = (struct can_frame *)skb->data;
-> +	struct bxcan_regs *regs = priv->regs;
-> +	struct bxcan_mb *mb_regs;
-
-__iomem?
-
-> +	unsigned int mb_id;
-> +	u32 id, tsr;
-> +	int i, j;
-> +
-> +	if (can_dropped_invalid_skb(ndev, skb))
-> +		return NETDEV_TX_OK;
-> +
-> +	tsr = readl(&regs->tsr);
-> +	mb_id = ffs((tsr & BXCAN_TSR_TME) >> BXCAN_TSR_TME_SHIFT);
-
-We want to send the CAN frames in the exact order they are pushed into
-the driver, so don't pick the first free mailbox you find. How a
-priorities for the TX mailboxes handled?
-
-Is the mailbox with the lowest number send first? Is there a priority
-field in the mailbox?
-
-If the mail with the lowest number is transmitted first, it's best to
-have a tx_head and tx_tail counter, e.g:
-
-struct bxcan_priv {
-        ...
-        unsigned int tx_head;
-        unsigned int tx_tail;
-        ...
-};
-
-They both start with 0. The xmit function pushes the CAN frame into the
-"priv->tx_head % 3" mailbox. Before triggering the xmit in hardware the
-tx_head is incremented.
-
-In your TX complete ISR look at priv->tx_tail % 3 for completion,
-increment tx_tail, loop.
-
-> +	if (mb_id == 0)
-> +		return NETDEV_TX_BUSY;
-> +
-> +	mb_id -= 1;
-> +	mb_regs = &regs->tx_mb[mb_id];
-> +
-> +	if (cf->can_id & CAN_EFF_FLAG)
-> +		id = BXCAN_TIxR_EXID(cf->can_id & CAN_EFF_MASK) |
-> +			BXCAN_TIxR_IDE;
-> +	else
-> +		id = BXCAN_TIxR_STID(cf->can_id & CAN_SFF_MASK);
-> +
-> +	if (cf->can_id & CAN_RTR_FLAG)
-> +		id |= BXCAN_TIxR_RTR;
-> +
-> +	bxcan_rmw(&mb_regs->dlc, BXCAN_TDTxR_DLC_MASK,
-> +		  BXCAN_TDTxR_DLC(cf->len));
-> +	priv->tx_dlc[mb_id] = cf->len;
-
-Please use can_put_echo_skb() for this.
-
-> +
-> +	for (i = 0, j = 0; i < cf->len; i += 4, j++)
-> +		writel(*(u32 *)(cf->data + i), &mb_regs->data[j]);
-> +
-> +	/* Start transmission */
-> +	writel(id | BXCAN_TIxR_TXRQ, &mb_regs->id);
-> +	/* Stop the queue if we've filled all mailbox entries */
-> +	if (!(readl(&regs->tsr) & BXCAN_TSR_TME))
-> +		netif_stop_queue(ndev);
-
-This is racy. You have to stop the queue before triggering the
-transmission.
-
-Have a look at the mcp251xfd driver:
-
-| https://elixir.bootlin.com/linux/latest/source/drivers/net/can/spi/mcp251xfd/mcp251xfd-tx.c#L187
-
-The check for NETDEV_TX_BUSY is a bit more complicated, too:
-
-| https://elixir.bootlin.com/linux/latest/source/drivers/net/can/spi/mcp251xfd/mcp251xfd-tx.c#L178
-
-The mcp251xfd has a proper hardware FIFO ring buffer for TX, the bxcan
-probably doesn't. The get_tx_free() check is a bit different. Look at
-c_can_get_tx_free() in:
-
-| https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=28e86e9ab522e65b08545e5008d0f1ac5b19dad1
-
-This patch is a good example for the relevant changes.
-
-> +
-> +	return NETDEV_TX_OK;
-> +}
-
-[...]
-
-> +static irqreturn_t bxcan_tx_isr(int irq, void *dev_id)
-> +{
-> +	struct net_device *ndev = dev_id;
-> +	struct bxcan_priv *priv = netdev_priv(ndev);
-> +	struct bxcan_regs __iomem *regs = priv->regs;
-> +	struct net_device_stats *stats = &ndev->stats;
-> +	u32 tsr, rqcp_bit = BXCAN_TSR_RQCP0;
-> +	int i;
-> +
-> +	tsr = readl(&regs->tsr);
-> +	for (i = 0; i < BXCAN_TX_MB_NUM; rqcp_bit <<= 8, i++) {
-
-This might break the order of TX completion CAN frames.
-
-> +		if (!(tsr & rqcp_bit))
-> +			continue;
-> +
-> +		stats->tx_packets++;
-> +		stats->tx_bytes += priv->tx_dlc[i];
-
-Use can_get_echo_skb() here.
-
-> +	}
-> +
-> +	writel(tsr, &regs->tsr);
-> +
-> +	if (netif_queue_stopped(ndev))
-> +		netif_wake_queue(ndev);
-
-With tx_head and tx_tail this should look like this:
-
-| https://elixir.bootlin.com/linux/v5.19/source/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c#L251
-
-> +
-> +	return IRQ_HANDLED;
-> +}
-
-Marc
-
---
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---pdvj4caxzadjx4i4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmL+FMUACgkQrX5LkNig
-0106dQgAo2rMUTt1kopLbWrAtOMPOEZUJovNqrwB3AfWul/nZ02JCSbx1YUzFTSH
-EYvaqWdbEMXcMGeUg23m59IQKCHvROCtNI1WiznlqwARz8hlR1ElEa8kGm+V86W+
-DrBkf04DhIKU/ni+ykU4xBgxbR3/K0EmT9uuatq29rN8UtM9ZGOy6Khd4fEgqj0u
-BP9ncUjSb2qhMqZVJ2csWUSXIIjOuZ2NplECgddfhQCW51AkygdEEwDI+zDUyS+F
-5V1U8Ca0dTdjSBPO3hoGVLlFSrKlHw955HPk3wUfDP5WMx+W1igIwaROGpfmecuc
-WiLxU9NazC+j3Uz8THRt48ZtycmvEQ==
-=fPoa
------END PGP SIGNATURE-----
-
---pdvj4caxzadjx4i4--
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
+=B48=E6=9C=8818=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=886:18=E5=AF=AB=
+=E9=81=93=EF=BC=9A
+>
+> On 18/08/2022 13:16, ChiYuan Huang wrote:
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=
+=B9=B48=E6=9C=8818=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=884:09=E5=AF=
+=AB=E9=81=93=EF=BC=9A
+> >>
+> >> On 18/08/2022 04:21, cy_huang wrote:
+> >>> From: ChiYuan Huang <cy_huang@richtek.com>
+> >>>
+> >>> Add support for the RT9471 3A 1-Cell Li+ battery charger.
+> >>>
+> >>> The RT9471 is a highly-integrated 3A switch mode battery charger with
+> >>> low impedance power path to better optimize the charging efficiency.
+> >>>
+> >>> Co-developed-by: Alina Yu <alina_yu@richtek.com>
+> >>> Signed-off-by: Alina Yu <alina_yu@richtek.com>
+> >>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> >>> ---
+> >>> Since v2:
+> >>> - Fix checkpatch error about 'foo * bar' to 'foo *bar' in psy_device_=
+to_chip function.
+> >>> - Specify the member name directly for the use of linear range.
+> >>>
+> >>> ---
+> >>
+> >> (...)
+> >>
+> >>> +
+> >>> +static DEVICE_ATTR_RW(sysoff_enable);
+> >>> +static DEVICE_ATTR_RW(charge_term_enable);
+> >>> +static DEVICE_ATTR_RW(port_detect_enable);
+> >>> +
+> >>> +static struct attribute *rt9471_sysfs_entries[] =3D {
+> >>> +     &dev_attr_sysoff_enable.attr,
+> >>> +     &dev_attr_charge_term_enable.attr,
+> >>> +     &dev_attr_port_detect_enable.attr,
+> >>> +     NULL
+> >>
+> >> You need to document the sysfs ABI in Documentation.
+> > Can it be define in 'sysfs-class-power' or a dedicated file called
+> > 'sysfs-class-power-rt9471'?
+> > Not sure which one is better.
+>
+> I don't know what is Sebastian's preference. You can wait for his input
+> or do similarly as last patches reviewed/picked up by him.
+M... OK.
+Whatever the preference is, at least, I can prepare the ABI contents first.
+>
+> Best regards,
+> Krzysztof

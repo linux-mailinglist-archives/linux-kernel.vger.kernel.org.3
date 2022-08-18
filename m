@@ -2,129 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53BD598A61
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9EE598A5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344815AbiHRR0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
+        id S1345078AbiHRR0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345590AbiHRRZy (ORCPT
+        with ESMTP id S1344942AbiHRR0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:25:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4FCE48;
-        Thu, 18 Aug 2022 10:25:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4536D616FD;
-        Thu, 18 Aug 2022 17:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 767AFC433C1;
-        Thu, 18 Aug 2022 17:25:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660843552;
-        bh=U4ulU7LUfIxOOKY+jPEQdeirsitxhl7mzZqSCLj9pLk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DI/wDz+hwFetaviDPUx/S35ihafJz/fiirF4hzWGi7bbpJIGg0lMUybl5TenFCb/j
-         JKqXVUHPN7WspTnqf7Efoo75RAUb8y3cHEwfZBT22+0Z76MdwvJSJ9zlVAR9Sl+wEm
-         5tOcALdJgW3DV5+62WeoqvaUTKkVx1DVfWl+tjnkj1zWqHMdOnnmphf8ypMqzgsmzx
-         QSPHUXWyB646qiVqtHnR9l9E1AUBebDkaUyYWtM9NCKC8STKCs7nUl7ZqqxuckF4lz
-         ouFexmlD9E1CAR0cNYa0GUttQwFXLGdGTdiYoV5X8mKgWj6uN8Y/Y82SWKEatrrFrs
-         x1De1mfYJt6hg==
-Received: by pali.im (Postfix)
-        id E05782868; Thu, 18 Aug 2022 19:25:49 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] leds: syscon: Implement support for active-low property
-Date:   Thu, 18 Aug 2022 19:25:28 +0200
-Message-Id: <20220818172528.23062-2-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220818172528.23062-1-pali@kernel.org>
-References: <20220818172528.23062-1-pali@kernel.org>
+        Thu, 18 Aug 2022 13:26:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21794D24F
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:26:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660843564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kaf0MkKhKvnMfHmWNydWqWYsE73+Hvoylc8uSsXc2Yc=;
+        b=h3jQhyaogZb2rJuIjO3QDjWtGvwOOna2nCWbfYtnzf2Dz7lqAIjryUZGzJnTIxPwPq/gno
+        4XQ2av4dNHYLNGxH84xNET51rbX1LgqZ10wrf91W9tzeBcdwzU/T+imyA3EwvCYmvXVF9C
+        c95Qn8N9lL1MmtMw/U7v5Z5ZBT9cMn4=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-447-XclQCTj0PZWc4MQYsvfxyQ-1; Thu, 18 Aug 2022 13:26:00 -0400
+X-MC-Unique: XclQCTj0PZWc4MQYsvfxyQ-1
+Received: by mail-ej1-f69.google.com with SMTP id gs35-20020a1709072d2300b00730e14fd76eso909148ejc.15
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:26:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Kaf0MkKhKvnMfHmWNydWqWYsE73+Hvoylc8uSsXc2Yc=;
+        b=nW5ucL9q9HbbKZLIyJFqCsV5ZNKkGxjpGMQuHyYnsuP6XKiRVmEnP/kzydzNTVDwUi
+         syLBpzSU5+zBzQq7N1cCR+FQqkEr1rFgUPQg55GjB87VcxS4qGKOqXyAqhpqufOtOoH/
+         DARBdF833gdUh711R0Xb/YzxknMtmYwNO+tAUYcHl+9gjgnQao35p57ZcLXdh4ScSmXT
+         8VSpNWoljxFGF6IL0FsU2qE2Jz5xQJlHHffXpbYOzx6wktedsBblf3z7mWnLq1fTu20q
+         YNochekHy3zQonEnGd05aG4OjY4R3cVYgd93+Yx7U6eRj4HHlM47iEK2wR3Q9BhHC6KN
+         8gRg==
+X-Gm-Message-State: ACgBeo1gcbExe3eMaS8psZmRL50d19Ut9xnLIetv8ZvD/CroUbBkeLlE
+        tXNakeaLNtbeQQ59pFcoul2ZDis2BxAR8eBJkFFK5m1yDVABfIPzXWYFLYP5sP1EYD5jvKEKvJk
+        7KVUmXL9wDLMwvycOYJ16T/xl
+X-Received: by 2002:a05:6402:1294:b0:445:eb35:1af3 with SMTP id w20-20020a056402129400b00445eb351af3mr2958951edv.392.1660843559109;
+        Thu, 18 Aug 2022 10:25:59 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4+hQY/Uhq0AS9HRrx7LJQnY88Hi3zEbNhJMMPdUiDld7WQHe7G2JdILyjpMqvKN/cboEN/lw==
+X-Received: by 2002:a05:6402:1294:b0:445:eb35:1af3 with SMTP id w20-20020a056402129400b00445eb351af3mr2958937edv.392.1660843558908;
+        Thu, 18 Aug 2022 10:25:58 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id m5-20020a50cc05000000b0043cf2e0ce1csm1459332edi.48.2022.08.18.10.25.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 10:25:58 -0700 (PDT)
+Message-ID: <64365019-57dc-b449-8178-30428e09adf8@redhat.com>
+Date:   Thu, 18 Aug 2022 19:25:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 0/3] x86/kvm, objtool: Fix KVM "missing ENDBR" bug
+Content-Language: en-US
+To:     Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Pengfei Xu <pengfei.xu@intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Su, Heng" <heng.su@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <cover.1660837839.git.jpoimboe@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <cover.1660837839.git.jpoimboe@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This new active-low property specify that LED has inverted logic
-(0 - enable LED, 1 - disable LED).
+On 8/18/22 17:53, Josh Poimboeuf wrote:
+> Fix the "missing ENDBR" KVM bug, along with a couple of preparatory
+> patches.
+> 
+> Josh Poimboeuf (3):
+>    x86/ibt, objtool: Add IBT_NOSEAL()
+>    x86/kvm: Simplify FOP_SETCC()
+>    x86/kvm: Fix "missing ENDBR" BUG for fastop functions
+> 
+>   arch/x86/include/asm/ibt.h | 10 ++++++++++
+>   arch/x86/kvm/emulate.c     | 26 ++++++--------------------
+>   tools/objtool/check.c      |  3 ++-
+>   3 files changed, 18 insertions(+), 21 deletions(-)
+> 
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
- drivers/leds/leds-syscon.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+Queued, thanks!
 
-diff --git a/drivers/leds/leds-syscon.c b/drivers/leds/leds-syscon.c
-index 7eddb8ecb44e..5e605d8438e9 100644
---- a/drivers/leds/leds-syscon.c
-+++ b/drivers/leds/leds-syscon.c
-@@ -29,6 +29,7 @@ struct syscon_led {
- 	struct regmap *map;
- 	u32 offset;
- 	u32 mask;
-+	bool active_low;
- 	bool state;
- };
- 
-@@ -41,10 +42,10 @@ static void syscon_led_set(struct led_classdev *led_cdev,
- 	int ret;
- 
- 	if (value == LED_OFF) {
--		val = 0;
-+		val = sled->active_low ? sled->mask : 0;
- 		sled->state = false;
- 	} else {
--		val = sled->mask;
-+		val = sled->active_low ? 0 : sled->mask;
- 		sled->state = true;
- 	}
- 
-@@ -85,6 +86,8 @@ static int syscon_led_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	if (of_property_read_u32(np, "mask", &sled->mask))
- 		return -EINVAL;
-+	if (of_find_property(np, "active-low", NULL))
-+		sled->active_low = true;
- 
- 	state = of_get_property(np, "default-state", NULL);
- 	if (state) {
-@@ -95,17 +98,20 @@ static int syscon_led_probe(struct platform_device *pdev)
- 			if (ret < 0)
- 				return ret;
- 			sled->state = !!(val & sled->mask);
-+			if (sled->active_low)
-+				sled->state = !sled->state;
- 		} else if (!strcmp(state, "on")) {
- 			sled->state = true;
- 			ret = regmap_update_bits(map, sled->offset,
- 						 sled->mask,
--						 sled->mask);
-+						 sled->active_low ? 0 : sled->mask);
- 			if (ret < 0)
- 				return ret;
- 		} else {
- 			sled->state = false;
- 			ret = regmap_update_bits(map, sled->offset,
--						 sled->mask, 0);
-+						 sled->mask,
-+						 sled->active_low ? sled->mask : 0);
- 			if (ret < 0)
- 				return ret;
- 		}
--- 
-2.20.1
+Paolo
 

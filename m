@@ -2,130 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5A459817D
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D35598179
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244113AbiHRKbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 06:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55412 "EHLO
+        id S244082AbiHRKb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 06:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244105AbiHRKaw (ORCPT
+        with ESMTP id S240270AbiHRKb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 06:30:52 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09237EFFE;
-        Thu, 18 Aug 2022 03:30:50 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id o22so1298274edc.10;
-        Thu, 18 Aug 2022 03:30:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=9vZKSAmG8I4EgDVUcYaHeGxa/jI1j+UCbOHpxXjMwqc=;
-        b=eCt769iz680T564gsrZwVhkuutB9GSfw3qDqOUTK1YlumPDVNF5fwumLp1OFQt90Ru
-         eXWjF4hQagG1RnxctP8B53aKdP58tJXD8M3LSZr2Z4V+zkUnXSurv2BPUSlU4AMHD4xi
-         lE9xObpZ9iwbov6Qd8PcHu56/Ze5M9X/VvUePgpkV8kapSEPtb4L+6fCxDcYcjn55FgP
-         aU45C3njQJDLRzwhRu3Fc5KCAD6JK75tQrPkoJ78jobMg3Ugh847WU38NqIbacYyLd6h
-         jYeSLMgnKYGP2wuBfCqEwtgko0HIpxrXtJJHxSEfxhDQMM6S/aG00nUNZGOTh+ew3mZq
-         Ml0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=9vZKSAmG8I4EgDVUcYaHeGxa/jI1j+UCbOHpxXjMwqc=;
-        b=vvki00Ez9kJzfh4AH6GTuR4q0/7w3zCosi8/XzT8GPPCizgWvTea1TwoybGpM4QqvY
-         sJg9+bDmZgvj3Yh5a+S7NHWZettKZCxVS9TVYAlrAPciZlSYr+2khotFfKnOn+wdbe+7
-         OB3aeo8Z36PHNzxQFqu6f55wOhDLJyjmDLg2mhll7l8zzliKPshSkMnI7fDlVdwdIccB
-         ikZheqY7XVMuolPogS/3+bIwdHah+8me+bpKt7n4a8xTmbeswam85ZTXskrCBKlhIpnu
-         oazBJ2ypOO+ZYvZyr3WAiLKxlt8aYBdSN9dzkAAqyjnjMHFfds7jryA/nE+Jm176gy8N
-         E6+Q==
-X-Gm-Message-State: ACgBeo1i6G8Xl4Eo1VIlupCmkxc2iMv8f5dZAgeVJs13lbCyPfxnaKTQ
-        2QpHGPVk347H6za50HUvSBLXB4a5B2j8ns9hXdls2oQE
-X-Google-Smtp-Source: AA6agR5sF3SG3SknPo6+Xa7a9bQt2OyzxDtrsi4BxnhNiMk7JbjzFgQX7RMQSQY8ftDc6akBUs+7MZnNg748Z6IMaTA=
-X-Received: by 2002:a05:6402:438d:b0:43d:b383:660f with SMTP id
- o13-20020a056402438d00b0043db383660fmr1725007edc.283.1660818649081; Thu, 18
- Aug 2022 03:30:49 -0700 (PDT)
+        Thu, 18 Aug 2022 06:31:27 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7F878231
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 03:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660818686; x=1692354686;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=t8Rq1gQAoemnCUCEVfnVYlyYdtJjUbQsitsuxWe88dw=;
+  b=EpnfCuDD3fdJHqd6G+M2hyTs1ud1XK2lajFfruZ4ytRFCjtu41mDi/fa
+   wQJ2tMX1s3Wjz079q/ukzfOAn3GSnO1j0MO3pBzP49fFTvEITFWPpSM7y
+   ZiauBp9GWXKlf7WrkBkgp8aiirD3OGi9YVZBMC2BU9YgzUw11AVaS0AhD
+   25SMPExXNkB2xKVJs+to8SgDMBStz6hFcKPPNyx4X2UATpuVYTBM6zkLS
+   LiRz5shqGzj77q0fSOlMtIZkPS1DXaBI4Oh4XZbxlBrQYyyk39ev2rK4t
+   vA7Yq+cfsmBvepNarWf6dhpW9r5oRWR087Q4DXyCZy09iQcmBseqhyf0F
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="279690785"
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="279690785"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 03:31:26 -0700
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="668048685"
+Received: from mwiniars-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.40.166])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 03:31:23 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Doug Anderson <dianders@chromium.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>
+Subject: Re: [RFC PATCH] drm/edid: Make 144 Hz not preferred on Sharp
+ LQ140M1JW46
+In-Reply-To: <CAD=FV=W9sK2dKMnDZmW_ipLGZJFrrvNHz6zHsXVaSCD_u4JpiA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220721152314.RFC.1.Ie333b3e4aff6e4a5b58c4aa805e030e561be8773@changeid>
+ <269f2610-425b-f296-dcfc-89bdc2e1d587@quicinc.com>
+ <CAD=FV=XSVXasU5PMR2kL0WQjQ458xDePuTGd1m14_v9JO5B6oA@mail.gmail.com>
+ <CAF6AEGv_Vikf80v-7ccz90fvGPrk5pV1tOxRoWKxKHYuEW8=aA@mail.gmail.com>
+ <5c8ca71c-5f0b-d5f5-9f16-e312dec0d01b@quicinc.com>
+ <CAD=FV=UGYV1mZenDCRrbpC+gpE12-Uis7fm_=H3PeEjK=t36yA@mail.gmail.com>
+ <20220729075118.ofnpk52tk4usm3n3@penduick>
+ <CAD=FV=WUB68-DQ-pAFjGaG-kid33ve4Qc3iqb8OUh61xTBohmg@mail.gmail.com>
+ <20220729164136.opucqg64qz4ypmvo@penduick>
+ <CAD=FV=UKYksHjuVR27DPdUFFtJrQKB2KbT08qjeYLNW_3y_Mfg@mail.gmail.com>
+ <20220815064543.g7loqfb6rtwkookl@houat>
+ <CAD=FV=W9sK2dKMnDZmW_ipLGZJFrrvNHz6zHsXVaSCD_u4JpiA@mail.gmail.com>
+Date:   Thu, 18 Aug 2022 13:31:21 +0300
+Message-ID: <8735dtq1vq.fsf@intel.com>
 MIME-Version: 1.0
-References: <1660785696-9010-1-git-send-email-u0084500@gmail.com>
- <1660785696-9010-3-git-send-email-u0084500@gmail.com> <85193de5-244c-2cda-e442-656769b97b14@linaro.org>
- <CADiBU3_RUTiG0T5vEKe0qHmHHQDXyMQL2BxFA+YgL_u-VGUNkA@mail.gmail.com> <a6f3d97e-547a-9797-1469-bbe5d80a3bb8@linaro.org>
-In-Reply-To: <a6f3d97e-547a-9797-1469-bbe5d80a3bb8@linaro.org>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Thu, 18 Aug 2022 18:30:38 +0800
-Message-ID: <CADiBU3_3MgowozeR13iG5ZksdbodLufc06tsEuKugipxBCYjLA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] power: supply: rt9471: Add Richtek RT9471 charger driver
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
-        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
-=B48=E6=9C=8818=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=886:18=E5=AF=AB=
-=E9=81=93=EF=BC=9A
+On Wed, 17 Aug 2022, Doug Anderson <dianders@chromium.org> wrote:
+> Hi,
 >
-> On 18/08/2022 13:16, ChiYuan Huang wrote:
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=
-=B9=B48=E6=9C=8818=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=884:09=E5=AF=
-=AB=E9=81=93=EF=BC=9A
-> >>
-> >> On 18/08/2022 04:21, cy_huang wrote:
-> >>> From: ChiYuan Huang <cy_huang@richtek.com>
-> >>>
-> >>> Add support for the RT9471 3A 1-Cell Li+ battery charger.
-> >>>
-> >>> The RT9471 is a highly-integrated 3A switch mode battery charger with
-> >>> low impedance power path to better optimize the charging efficiency.
-> >>>
-> >>> Co-developed-by: Alina Yu <alina_yu@richtek.com>
-> >>> Signed-off-by: Alina Yu <alina_yu@richtek.com>
-> >>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> >>> ---
-> >>> Since v2:
-> >>> - Fix checkpatch error about 'foo * bar' to 'foo *bar' in psy_device_=
-to_chip function.
-> >>> - Specify the member name directly for the use of linear range.
-> >>>
-> >>> ---
-> >>
-> >> (...)
-> >>
-> >>> +
-> >>> +static DEVICE_ATTR_RW(sysoff_enable);
-> >>> +static DEVICE_ATTR_RW(charge_term_enable);
-> >>> +static DEVICE_ATTR_RW(port_detect_enable);
-> >>> +
-> >>> +static struct attribute *rt9471_sysfs_entries[] =3D {
-> >>> +     &dev_attr_sysoff_enable.attr,
-> >>> +     &dev_attr_charge_term_enable.attr,
-> >>> +     &dev_attr_port_detect_enable.attr,
-> >>> +     NULL
-> >>
-> >> You need to document the sysfs ABI in Documentation.
-> > Can it be define in 'sysfs-class-power' or a dedicated file called
-> > 'sysfs-class-power-rt9471'?
-> > Not sure which one is better.
+> On Sun, Aug 14, 2022 at 11:46 PM Maxime Ripard <maxime@cerno.tech> wrote:
+>>
+>> On Fri, Jul 29, 2022 at 12:57:40PM -0700, Doug Anderson wrote:
+>> > Hi,
+>> >
+>> > On Fri, Jul 29, 2022 at 9:41 AM Maxime Ripard <maxime@cerno.tech> wrote:
+>> > > You raise some good points, but most of the discussion around that patch
+>> > > were mostly around performances, power consumption and so on.
+>> > >
+>> > > This is very much a policy decision, and if there is some panel where
+>> > > the EDID reports 60Hz but is broken, then that panel should be the
+>> > > exception to the policy
+>> > >
+>> > > But doing it for a single panel is just odd
+>> >
+>> > OK, fair enough. I'll abandon this patch at least as far as mainline
+>> > is concerned, then.
+>>
+>> That wasn't really my point though :)
+>>
+>> If you think that this change is needed, then we should totally discuss
+>> it and I'm not opposed to it.
+>>
+>> What I don't really like about this patch is that it's about a single
+>> panel: if we're doing it we should do it for all the panels.
+>>
+>> Where we do it can also be discussed, but we should remain consistent
+>> there.
 >
-> I don't know what is Sebastian's preference. You can wait for his input
-> or do similarly as last patches reviewed/picked up by him.
-M... OK.
-Whatever the preference is, at least, I can prepare the ABI contents first.
+> I was never massively confident about it, which is why I added the
+> "RFC" tag to begin with. ;-) In general I suspect that either change
+> will make people upset. In other words, if we programmatically always
+> try to put the "high refresh rate" first for all displays then people
+> will be upset and if we programmatically always try to put the "60 Hz
+> rate" first then people will be upset. Unless someone wants to stand
+> up and say that one side or the other is wrong, I think we're going to
+> simply leave this up to the whim of individual panels. Someone could
+> stand up and demand that it go one way or the other, but I certainly
+> don't have that clout.
 >
-> Best regards,
-> Krzysztof
+> The spec, as far as I can tell, says that it's up to the panel vendor
+> to use whatever means they want to decide on the "preferred" refresh
+> rate. Thus, as far as the spec is concerned this decision is made on
+> an individual panel basis. ;-) This was really the justification for
+> why my patch was just on one panel.
+>
+> In any case, as I said I'm OK w/ dropping this. We'll find other ways
+> to work around the issue.
+
+FWIW, if the EDID reported preferred mode works, I also think that's
+what we should prefer.
+
+BR,
+Jani.
+
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center

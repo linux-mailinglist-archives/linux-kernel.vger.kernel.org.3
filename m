@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31C8598780
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0BB598812
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245061AbiHRP3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
+        id S1344384AbiHRPvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344351AbiHRP3T (ORCPT
+        with ESMTP id S1344438AbiHRPue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:29:19 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D88F2DEC;
-        Thu, 18 Aug 2022 08:29:18 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id x7-20020a4aaf47000000b0044884ebb925so414766oon.2;
-        Thu, 18 Aug 2022 08:29:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=bSswJuC75R6XDrPIU1WtI9zMLCP/ryjDK45Y39QAIBs=;
-        b=WVLz0ZhteIVm8DwmWZJCFDReaQFtEKLr4YOfY6pPUkOM3wueITItVW8yGEUJ/WBW9A
-         7FYiF6lIMhlkVUcXYrIUWzsfmUtiVZbikXj/itp9CWQAt0M2/m43S9brEFKjQB/VN80V
-         pmv/4NqyLFWq+vS35tC7geqg1GhFMJfd8vadyGyoiQbJxNFN4QNYMVwIDtfWB/60ZMDI
-         TLQBuJKPP1hF8My7yA+apaBW8/dVPfC0pD60lzv5DEqGkXylaFlJQC2j/DcrzF7Vv76T
-         QXs70w2yPbt5dbmcSXHZSNYnza4VVsyZW7zzy/fVgUKJ8wtW/D/v2KTXJu8vZ5De3SFn
-         ZXPw==
-X-Gm-Message-State: ACgBeo01pPEvsvUsnwm8AFe+UckUDFHmd/UeEKtNTKsgAlWngaZF6KAF
-        JHrRZFXW1bpdJuaSPV0ay2toxM2ZYA==
-X-Google-Smtp-Source: AA6agR7xwZCJnyPO6SbLNaIEgg5t/Izwz4ra7rD9omGf98iEzXjjM8IaFZpVK/cbz/Gbp8B4CH9v3Q==
-X-Received: by 2002:a4a:e54e:0:b0:44a:fb57:7022 with SMTP id s14-20020a4ae54e000000b0044afb577022mr617657oot.91.1660836557832;
-        Thu, 18 Aug 2022 08:29:17 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:5fe0:b4f5:6e22:4704:df60:73a3])
-        by smtp.gmail.com with ESMTPSA id g128-20020a4a5b86000000b004489258c9d2sm371872oob.2.2022.08.18.08.29.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 08:29:16 -0700 (PDT)
-Received: (nullmailer pid 1902294 invoked by uid 1000);
-        Thu, 18 Aug 2022 15:29:14 -0000
-Date:   Thu, 18 Aug 2022 09:29:14 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Chengci.Xu" <chengci.xu@mediatek.com>
-Cc:     Yong Wu <yong.wu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        yi.kuo@mediatek.com, anthony.huang@mediatek.com,
-        wendy-st.lin@mediatek.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v5 1/4] dt-bindings: memory: mediatek: Add mt8188 smi
- binding
-Message-ID: <20220818152914.GO1829017-robh@kernel.org>
-References: <20220817124608.10062-1-chengci.xu@mediatek.com>
- <20220817124608.10062-2-chengci.xu@mediatek.com>
+        Thu, 18 Aug 2022 11:50:34 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2448B642D8;
+        Thu, 18 Aug 2022 08:50:30 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4M7pf238j1z9v7Yh;
+        Thu, 18 Aug 2022 23:27:06 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAX5hHpWv5iycQwAA--.23244S3;
+        Thu, 18 Aug 2022 16:30:13 +0100 (CET)
+From:   roberto.sassu@huaweicloud.com
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
+        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v12 01/10] bpf: Allow kfuncs to be used in LSM programs
+Date:   Thu, 18 Aug 2022 17:29:20 +0200
+Message-Id: <20220818152929.402605-2-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
+References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817124608.10062-2-chengci.xu@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwAX5hHpWv5iycQwAA--.23244S3
+X-Coremail-Antispam: 1UD129KBjvdXoWruF15tF4kCFWUGF1kZFyxXwb_yoWfXrX_Cw
+        4jg3WxArn8CFWIqa10kF4Sqry7Ka45tFn5uwn8KrZ3Jwn8G3yDAw1F9Fy3tFykX3y8Xw43
+        tFn3CrZxtr17XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbDxYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Jr0_Jr4l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r18M2
+        8IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
+        021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F
+        4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
+        Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lw4CEc2x0rVAKj4
+        xxMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
+        Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x
+        0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWx
+        JVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMI
+        IF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU7-txDUUU
+        U
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAIBF1jj34W2AAIsH
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 08:46:05PM +0800, Chengci.Xu wrote:
-> Add mt8188 smi supporting in the bindings.
-> 
-> In mt8188, there are two smi-common HW, one is for vdo(video output),
-> the other is for vpp(video processing pipe). They connect with different
-> smi-larbs, then some setting(bus_sel) is different. Differentiate them
-> with the compatible string.
-> 
-> Something like this:
-> 
->    IOMMU(VDO)          IOMMU(VPP)
->        |                   |
-> SMI_COMMON_VDO       SMI_COMMON_VPP
-> ----------------     ----------------
->    |     |   ...       |     |    ...
->  larb0 larb2 ...     larb1 larb3  ...
-> 
-> Signed-off-by: Chengci.Xu <chengci.xu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Yong Wu <yong.wu@mediatek.com>
-> ---
->  .../bindings/memory-controllers/mediatek,smi-common.yaml      | 4 +++-
->  .../bindings/memory-controllers/mediatek,smi-larb.yaml        | 3 +++
->  2 files changed, 6 insertions(+), 1 deletion(-)
+From: KP Singh <kpsingh@kernel.org>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+In preparation for the addition of new kfuncs, allow kfuncs defined in the
+tracing subsystem to be used in LSM programs by mapping the LSM program
+type to the TRACING hook.
+
+Signed-off-by: KP Singh <kpsingh@kernel.org>
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ kernel/bpf/btf.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 903719b89238..e49b3b6d48ad 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -7243,6 +7243,7 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
+ 	case BPF_PROG_TYPE_STRUCT_OPS:
+ 		return BTF_KFUNC_HOOK_STRUCT_OPS;
+ 	case BPF_PROG_TYPE_TRACING:
++	case BPF_PROG_TYPE_LSM:
+ 		return BTF_KFUNC_HOOK_TRACING;
+ 	case BPF_PROG_TYPE_SYSCALL:
+ 		return BTF_KFUNC_HOOK_SYSCALL;
+-- 
+2.25.1
+

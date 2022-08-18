@@ -2,122 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D76E5980DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5C85980DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238703AbiHRJdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 05:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
+        id S242597AbiHRJdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 05:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiHRJdQ (ORCPT
+        with ESMTP id S241034AbiHRJda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 05:33:16 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBE71B7A3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 02:33:13 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id gb36so2151797ejc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 02:33:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=lNkwc/mVYl5zhZCnfILTVnkAJhpHpkpeN6USQ5l2Exk=;
-        b=h3d+8hwJhEG7EaO8QJTr5CbSPJrJ9j7aiRcbvgMRvJNVmnZDQMetcty1p/W1Eb9wPL
-         icgGdcIlWPp8pc83H/ZYZ/VwprIE9VD/MKGWy/BS5WzV3ov05boquCuLkZz6tRqvfZlg
-         qOJY756WmSqcbSMUggqdbyKvFLmzYz6YyhY3/U1x6Tf/tn2jbshL5fEhxAb07m57HuV4
-         9ZrGLNWBZz7nDxgZxVS5QjG3dvqyt8VId3k98hQpaYstfA1Ap1Y0pYk8QQa81v96tkHJ
-         MQwQwc126xDjMYNthi06Wy8S7brXp3aas0hHC3dijePWPsA2NuB78J0mwrKjv5OK9YaX
-         FDxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=lNkwc/mVYl5zhZCnfILTVnkAJhpHpkpeN6USQ5l2Exk=;
-        b=RvFiIY6Y2A63jZ7isJNvf/TiXBveXIMhQJnRiGuyTE7NtUzgzHw9L07Gxaowp13+2p
-         8uSLIFLCysnMzMHsCSTSoaUAGKh8QgO8lYQP6ptmyar2PyLK/9pSzkzk2Tohdf6dXL48
-         qNjTs9nQQ6C57ufN7IF0Hz03vk7Ci9r5GyFGxyOpK6VTz6gH/Bptc2fs/IyACTeUn6Ey
-         69oRsDWvQnwn9z4Hn2SkXALCCfUsSBV6R70c2m+So0ZoQ24LAixC/T4lBjmYoPzl1reJ
-         ido9eUmIUxw3ZUP05Nyw4fgHOYoYTpyt7gRmwzdA/i3uKopNfgxtSh5UfFNpPtDbD2QL
-         DThA==
-X-Gm-Message-State: ACgBeo0Se/tuKDlBdOW4xCEvKNgfoB8yJ+WjhmjtmrCt+5Tkt0As/FLi
-        xk7jdsEaF/H7qYar3i5+zRbQqjvBRpXfc+oW55Cdyg==
-X-Google-Smtp-Source: AA6agR4bxVNxsCDVOCHM/BOnShAbzXwKgql72h0RYIw5KqHSKPniV5WlS0EoWj8j9kkQwQk82uJmagSLmLgY+dAW0AQ=
-X-Received: by 2002:a17:907:6d98:b0:731:2bb3:8e17 with SMTP id
- sb24-20020a1709076d9800b007312bb38e17mr1380725ejc.203.1660815192380; Thu, 18
- Aug 2022 02:33:12 -0700 (PDT)
+        Thu, 18 Aug 2022 05:33:30 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FCC5140D;
+        Thu, 18 Aug 2022 02:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660815209; x=1692351209;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=I5dKYuDrB71KM4fEc3whMUt3eto6UsWX18hDbHqb8XM=;
+  b=D9g6biUXIcrVgVCrVQ1yTcXUkPbdkWfkFRpXhkSIdLwPafnCHsbjmV+z
+   l9/RrtoEg/JZMa31nQ5Ftusgeug4HvXb7Uejy+7Ymx9sLRMpjQEQ9Lddj
+   4EymG3Ak3WI6NvGI/Cc1scWAC07sqGjwq8mAsq/zwK1fWjuZ+GsJuedNQ
+   8Pko2rEKuLssnJ5oR+xD5X73uhMfYemr8t6L/QpBVCYHn5uJS/8GM6/FY
+   H0fzAed5nb4l+sYu7kFw5UuWmuEiZbdh7S6AYOG3Ibw7YXS/uuOoOz1Ha
+   LM7l99/v3H42IKBW8/5rebme98O5hESUfdkzlbE4UQark93aUV4q5efL3
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="379007254"
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="379007254"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 02:33:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="640792473"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga001.jf.intel.com with ESMTP; 18 Aug 2022 02:33:28 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 18 Aug 2022 02:33:27 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 18 Aug 2022 02:33:27 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Thu, 18 Aug 2022 02:33:27 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.40) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Thu, 18 Aug 2022 02:33:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f6s8x+GGBR3mlgtlCIF7IrE8VGwR2SPwvT2Ac2docyerp2dHDv5B/nkIJrLeLBMYK/zwpxWMt2bDwrD/KdHq51KaS6cvj5LmtuS+sv2gwAg1qzcuz9h/eIjhScIKFYskQW/UdrXYt9WCO+qKbV0emYFHhi6eHpDOy3fqQjgbdrpNTFsNUz0s89b5ikh0D4YnVJSHuB9qdhicEmMas5oAZQqHH9dhxnGcRv1HTxCv/Hsyeo6ayGtV13IxmhHqEjYDqYNF8FeNYzzEpJYu8Q66BSWzQ4WAR9LHgHoSMpCvLczRuV7ogrjbpCi9aVf95CilgZ6wFthuvFR1L39sJrnL1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I5dKYuDrB71KM4fEc3whMUt3eto6UsWX18hDbHqb8XM=;
+ b=fV7nYgRAFHt7t7QeCTOiVgat6/48a0OK6SMaWiOCbqlSpKL73kpynC1sfCuq+ZD7Rnto13UBWBRW+c7A8lfJaj2UFX8u0PjX+eD+dC69LtAnVK7PF2KlrGt+GplRiX+KDnhB+Em5F1bOyXcklhGZATPlrYXSM2UOZP/BzdNDyaLG2+KbgEBopnzMn2pdIwCR9RpfezWqEMfiBtM2GAMOtxv6MrkalAlYEGVo6M0xKNVGbWAXhVIop/oQu/ldlCsddzw2xrQMzDdr02XjH4Aofc7TzXL5NnEG8CNCx73T+jI7D5Afj6XhG/FgGIUyCBQwzhEQDGI5yNXUr2P0Ds78NA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by BY5PR11MB4498.namprd11.prod.outlook.com (2603:10b6:a03:1c2::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Thu, 18 Aug
+ 2022 09:33:23 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::1d3c:4dc0:6155:2aee]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::1d3c:4dc0:6155:2aee%4]) with mapi id 15.20.5525.010; Thu, 18 Aug 2022
+ 09:33:23 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "bagasdotme@gmail.com" <bagasdotme@gmail.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v5 22/22] Documentation/x86: Add documentation for TDX
+ host support
+Thread-Topic: [PATCH v5 22/22] Documentation/x86: Add documentation for TDX
+ host support
+Thread-Index: AQHYhihSpwv7r1LcZ0uwUkfOuUb9Ka20Y6yAgABbIAA=
+Date:   Thu, 18 Aug 2022 09:33:23 +0000
+Message-ID: <b7771040f1976f8c2d168a8d74231e7915e9ae3a.camel@intel.com>
+References: <cover.1655894131.git.kai.huang@intel.com>
+         <0712bc0b05a0c6c42437fba68f82d9268ab3113e.1655894131.git.kai.huang@intel.com>
+         <Yv268Z0i+rq7r/oR@debian.me>
+In-Reply-To: <Yv268Z0i+rq7r/oR@debian.me>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7b01db78-e2e6-4b5a-76d2-08da80fcb1f1
+x-ms-traffictypediagnostic: BY5PR11MB4498:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1tomBsIpUQogT/s++x4gR/8qury7i1eA2rf6WvVCnyHz/cij80VXEuWsIDgRBeG4sWqpyQ68sn6B8jBdnd+0LoZ1EOc31qt4q3lqJOz7719bO10j5FKE02Y2nquUc7xqK0syqpPCB1ZLmqW+me1Vr6MYcv2z9z/pvC19WQGksgRnnUgwxAWYtE34G4g55gU2g9vLH0NhbWY0YfmGsNaYYtjVEyvNLFobaka4qry+TLVb1ixdbzcoQ1lDCrsJZR+7SWkJIZ7xPCYxstLpseLYm9TArrmF40A0YVNpZIhPXd6qrfb3EygapvVZCanhESiSuA3xXsOWmezB8WOW+McTc7F+D6aqQzF2zIiCkKjMbs+PJCjheuYsnFQ88rUVjt207eKBkc9P5wiuB747q3+8M7SsUswlV5Vkrp7dSIQowB1pI8ERz1KIzGczYg2ryyG1nnANIJbXlUyrKZYw32IjVn26UdHd6WDolj4riRx65KQ6QGtzx0LlkPVqiI3lT2jeSrIjXWltg3B3iIkTxwPM4bwJmGGEVgdJHnZQkVlZsu0ST9AGgtzPsJqARwkxDYm0zcVp636eXlnPW7ocoht+kyVZGdgM4jmhYcXggDy2b/MpBmjjV5j1VxnbifaE0IqIxz8kfJ8XvZ2NiaeBGHSSXa441h5pG2HV7CqgZo/nYjmt1XXHkWeBxXLuTJ6Bgu5kqG04dTnLQ5wCdo5lPYjZCiOgVYyM/AGdR9Tiqo6BFNfM7EfsQJq6s7WiAQ741Q3oeKi/+09jM4fUT7EEKWvjOA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(136003)(346002)(376002)(366004)(396003)(86362001)(38100700002)(66556008)(4326008)(76116006)(64756008)(6486002)(122000001)(2906002)(71200400001)(66446008)(8936002)(91956017)(5660300002)(66476007)(38070700005)(83380400001)(82960400001)(54906003)(6916009)(66946007)(8676002)(7416002)(6506007)(36756003)(186003)(2616005)(41300700001)(316002)(478600001)(26005)(6512007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cm1HM0o4NjlaOFFsRmVHYkJkSmJLTXlBaklyVnVPVGxrQWkzK1dkWThKanF1?=
+ =?utf-8?B?MGdHemZPeTFHOVh1TVJZRHM0Z3EvTWhZUElIZ2N4UkVBVkZVUzBjZmpkSGJq?=
+ =?utf-8?B?WnJ3TGxBeGlKNTFKRmFucVY0aVJEVy9IVzhtT1MvTUdXRkdqMlk0M2c0UzVR?=
+ =?utf-8?B?MWVYRkh3M0d6dEIvaTBmTkNBQ0F1Vk53NTdjUVM1R0ZQNFE0VklwSGZVdGlN?=
+ =?utf-8?B?NmdMZ3p0bWdlYldoY0V0NDRNQ3FkUUFFaTR4cVpRNlZxMUV6OE9BdmtsbUVm?=
+ =?utf-8?B?TndmYU5rZC85ZnNPR0M3NmdrM2pGdncyRjI3enZORkRFZnR1Qy95SEkrSk1J?=
+ =?utf-8?B?N1lhNTRHTkFZRXBFM21zcVB2Vk9TcGo3czNLaXd5SER4ejRPSDRQalZsbVpr?=
+ =?utf-8?B?K3l0QkZQSVFBRk1DS2dXeThDaDRjdXFtMHVyVWhwdFFyRkpxb2ozOUhNYksy?=
+ =?utf-8?B?c3VuRHJnS0FVRkM0OW8rVjRXcVZvN2wxd1Y2OUlHd3VQN0krT1ZFQ2hGOGRK?=
+ =?utf-8?B?cWkzOG1jYTgzbkE0dWNXcEMzaVNhQWFGNkF5Nkt3U1d0THBOUEg2dm0zd3JT?=
+ =?utf-8?B?Z3lFdFJQejlJeHFhZ080M0p4WEkrTFlCWkxleDgvVU9JZEdxTW11UnRYbUw0?=
+ =?utf-8?B?bjM5Vmlkd0dWVWFNcFpUN2JlVDhyVUNsY29ITVErV0YwaU05RDg2VXdZb1By?=
+ =?utf-8?B?RE9Xd1VLb3puWnFWcUNWZ1dCTzlHUjhGMW81OU9vUmZqYzkrYTd4azMyV1kx?=
+ =?utf-8?B?bXJ3UU9NQks5a2pDMTRtekJtSVd2SVFQdjl1dXlUTHVHL2VjYlZEMGYxQW9Y?=
+ =?utf-8?B?RWt0MkVya0ZHUzdOdHlPTXdTbmtwTXdYbEgzM2E4cFhhRjZBSEdCV3JrVk4v?=
+ =?utf-8?B?Vk1xa2VDTHRDTG8wTk9KMGo5SGZwQXIvQzhGeldaVjNIcDVGandmWlMyeFpY?=
+ =?utf-8?B?NUtpZHBqUFlydzRjNWNFQThGZkhOZTNtSWFkNEhDdVY2TVc0OFhGakdKclRj?=
+ =?utf-8?B?emdqODlCaFlnZHo4L01YSXIxZy9YWnpzb2ZIOXNNUm1nWm9rZ0FZN1RaQ1V6?=
+ =?utf-8?B?QkhVdUJ2a0xLWjh2SWlYMFhVNSsyUUtsTnhUNWdXTHFpbVRWRFpodHg3MFpi?=
+ =?utf-8?B?TzhRdVZGdkFhMFl1bWdRQU92S1F1UGV5QkVWYlovTnNwUHNLUmx4b2hzd0tQ?=
+ =?utf-8?B?WmVFTk1FT2RSRGlsdFloeFRKRU5vRXRCVFBQaU9MOVNETWh3WUN1aThPNzBa?=
+ =?utf-8?B?K2dmeWlpRzBFajNuSUFTTGRCZHhSdGk5SExVTWdxb1RFclF4Zy92YmJiUFFt?=
+ =?utf-8?B?OTlsdUNLdG0zUzNhM1Q2N0RNVHpmblJxbEJIK0JPZUVhREg5VDJ6dUNrUTdN?=
+ =?utf-8?B?UHl6Ry9rNjNsZzh4OWNaQW1jTFpFWEhCYWYyZlJiVWFXZkg3V0lkdjRtV05M?=
+ =?utf-8?B?emNBUFFvWlQrR2JwdU94ODFkbkh4aXBqaUo1ZWVvOWVMdUlmOEVHUThxZ0x1?=
+ =?utf-8?B?TDc3bDZZbEtkWnMweVRPMWY5MW52UWxuUll6RmRlQzRkRjVBbldWVDY3WEhF?=
+ =?utf-8?B?OTM5ZG5vZVRnd2RWSzV3YW1lSWFQcHdreXBYK1RTUG9MZEFad3ZWY1Jzb21L?=
+ =?utf-8?B?ZWxJUHZQejlpWUpzUGRpdDB3d2xJZWl0MWpkUFkyalJIc1J2TmFQb2VkQVha?=
+ =?utf-8?B?a09jNE95Mm5UUHNEOTlhNHg0TE5yR0RlamlmblA2Q01jdDVoN2l1NU94SmFz?=
+ =?utf-8?B?YUZIVDdyUWpZeitHZ0cvaDFxOEVPSzZCZ2h2NitpV2RJSGxnNzkwcDlyam9m?=
+ =?utf-8?B?UktzdytRczlOc2pGTGhtSmhnUzNjWDZBNDRuYTdoYlE0bVNIN2NaZE1NT05m?=
+ =?utf-8?B?YWFOcUU2c2kxbXgyR28zdDRiNGtNTWlNQi9LRzVqd2d2bGtMUUoxVzdjNHNa?=
+ =?utf-8?B?M3lQTVllR3J2aFRIMXVrMFdrRDFNcEYzL0Z2UkFFbHFBOVZUYllpZ0tpZDV6?=
+ =?utf-8?B?blVhQzJyK0NiekdqNkxvSExrNU1WeUIyL1FtNjM5MEZDOVhqYkhEQllBQ1Bl?=
+ =?utf-8?B?b2NpUTIzd3h4eWVQeFp5UGVtY3pyWFpqZllpRHZkQ1dEZWZHeWtOSFBXaGda?=
+ =?utf-8?B?QzJMT0d6ai9ZTXQxOEJ4bHpLYkxCSTNuWGNRcEswcFVKbGl1VUMwVFdQdU5h?=
+ =?utf-8?B?bXc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D7B07D60EC7B9C4B9DA0BD19363A9FEA@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 18 Aug 2022 11:33:01 +0200
-Message-ID: <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b01db78-e2e6-4b5a-76d2-08da80fcb1f1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2022 09:33:23.1539
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aYliNlEJhilbAQhnZ4fCFIjuewXM4xRLaR0OVp+6vsN0GErG6ro2d3IGcmCqS+3G7WjFRfYMJAYOMg9xJFe9BQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4498
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 12:41 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-
-> At the time being, the default maximum number of GPIOs is set to 512
-> and can only get customised via an architecture specific
-> CONFIG_ARCH_NR_GPIO.
->
-> The maximum number of GPIOs might be dependent on the number of
-> interface boards and is somewhat independent of architecture.
->
-> Allow the user to select that maximum number outside of any
-> architecture configuration. To enable that, re-define a
-> core CONFIG_ARCH_NR_GPIO for architectures which don't already
-> define one. Guard it with a new hidden CONFIG_ARCH_HAS_NR_GPIO.
->
-> Only two architectures will need CONFIG_ARCH_HAS_NR_GPIO: x86 and arm.
->
-> On arm, do like x86 and set 512 as the default instead of 0, that
-> allows simplifying the logic in asm-generic/gpio.h
->
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-
-I see what you're trying to do and this might be a possible interim solution.
-
-I would like some comments sprinkled into the patched sites that this is
-supposed to go away.
-
-The GPIO descriptor refactoring which has been ongoing for a few
-years, see drivers/gpio/TODO (please read), has the end goal of making
-descriptor allocation fully dynamic. Once we free ourselves from
-the fixed GPIO numberspace, there is nothing preventing us from
-just kmalloc() ing a new descriptor whenever one is needed.
-
-Help with rooting out the remaining fixed GPIO number clients
-is much appreciated!
-
-The per-arch GPIO number only exist for one reason: embedded
-GPIOs (think SoC:s) that refer to fixed numbers in numberspace in
-the board support code. This makes it necessary to allocate
-descriptors up front in some compiled-in GPIO chips.
-
-Yours,
-Linus Walleij
+T24gVGh1LCAyMDIyLTA4LTE4IGF0IDExOjA3ICswNzAwLCBCYWdhcyBTYW5qYXlhIHdyb3RlOg0K
+PiBPbiBXZWQsIEp1biAyMiwgMjAyMiBhdCAxMToxNzo1MFBNICsxMjAwLCBLYWkgSHVhbmcgd3Jv
+dGU6DQo+ID4gK0tlcm5lbCBkZXRlY3RzIFREWCBhbmQgdGhlIFREWCBwcml2YXRlIEtleUlEcyBk
+dXJpbmcga2VybmVsIGJvb3QuICBVc2VyDQo+ID4gK2NhbiBzZWUgYmVsb3cgZG1lc2cgaWYgVERY
+IGlzIGVuYWJsZWQgYnkgQklPUzoNCj4gPiArDQo+ID4gK3wgIFsuLl0gdGR4OiBTRUFNUlIgZW5h
+YmxlZC4NCj4gPiArfCAgWy4uXSB0ZHg6IFREWCBwcml2YXRlIEtleUlEIHJhbmdlOiBbMTYsIDY0
+KS4NCj4gPiArfCAgWy4uXSB0ZHg6IFREWCBlbmFibGVkIGJ5IEJJT1MuDQo+ID4gKw0KPiA8c25p
+cHBlZD4NCj4gPiArSW5pdGlhbGl6aW5nIHRoZSBURFggbW9kdWxlIGNvbnN1bWVzIHJvdWdobHkg
+fjEvMjU2dGggc3lzdGVtIFJBTSBzaXplIHRvDQo+ID4gK3VzZSBpdCBhcyAnbWV0YWRhdGEnIGZv
+ciB0aGUgVERYIG1lbW9yeS4gIEl0IGFsc28gdGFrZXMgYWRkaXRpb25hbCBDUFUNCj4gPiArdGlt
+ZSB0byBpbml0aWFsaXplIHRob3NlIG1ldGFkYXRhIGFsb25nIHdpdGggdGhlIFREWCBtb2R1bGUg
+aXRzZWxmLiAgQm90aA0KPiA+ICthcmUgbm90IHRyaXZpYWwuICBDdXJyZW50IGtlcm5lbCBkb2Vz
+bid0IGNob29zZSB0byBhbHdheXMgaW5pdGlhbGl6ZSB0aGUNCj4gPiArVERYIG1vZHVsZSBkdXJp
+bmcga2VybmVsIGJvb3QsIGJ1dCBwcm92aWRlcyBhIGZ1bmN0aW9uIHRkeF9pbml0KCkgdG8NCj4g
+PiArYWxsb3cgdGhlIGNhbGxlciB0byBpbml0aWFsaXplIFREWCB3aGVuIGl0IHRydWx5IHdhbnRz
+IHRvIHVzZSBURFg6DQo+ID4gKw0KPiA+ICsgICAgICAgIHJldCA9IHRkeF9pbml0KCk7DQo+ID4g
+KyAgICAgICAgaWYgKHJldCkNCj4gPiArICAgICAgICAgICAgICAgIGdvdG8gbm9fdGR4Ow0KPiA+
+ICsgICAgICAgIC8vIFREWCBpcyByZWFkeSB0byB1c2UNCj4gPiArDQo+IA0KPiBIaSwNCj4gDQo+
+IFRoZSBjb2RlIGJsb2NrIGFib3ZlIHByb2R1Y2VzIFNwaGlueCB3YXJuaW5nczoNCj4gDQo+IERv
+Y3VtZW50YXRpb24veDg2L3RkeC5yc3Q6Njk6IFdBUk5JTkc6IFVuZXhwZWN0ZWQgaW5kZW50YXRp
+b24uDQo+IERvY3VtZW50YXRpb24veDg2L3RkeC5yc3Q6NzA6IFdBUk5JTkc6IEJsb2NrIHF1b3Rl
+IGVuZHMgd2l0aG91dCBhIGJsYW5rIGxpbmU7IHVuZXhwZWN0ZWQgdW5pbmRlbnQuDQo+IA0KPiBJ
+IGhhdmUgYXBwbGllZCB0aGUgZml4dXA6DQo+IA0KDQpUaGFuayB5b3UhIHdpbGwgZml4IGluIG5l
+eHQgdmVyc2lvbi4NCg0KDQotLSANClRoYW5rcywNCi1LYWkNCg0KDQo=

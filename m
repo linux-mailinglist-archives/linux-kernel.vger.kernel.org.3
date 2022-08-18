@@ -2,95 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3190659872D
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 258F2598726
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245588AbiHRPOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
+        id S245719AbiHRPPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245734AbiHRPON (ORCPT
+        with ESMTP id S244793AbiHRPO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:14:13 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3626DDEC5
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:14:13 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so2166618pjl.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:14:13 -0700 (PDT)
+        Thu, 18 Aug 2022 11:14:57 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A85C21E26;
+        Thu, 18 Aug 2022 08:14:55 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id kb8so3833665ejc.4;
+        Thu, 18 Aug 2022 08:14:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=OB3CiFphujl95/ikK08Kwi2ZSaKPWn5t2tIbw4ADKb4=;
-        b=MoRQzBYpqTjN4SKXMnU8Gpx1idcrpgx7tNmrtPEoRwv2We84uBjuxrdmq8fgw3o6Jq
-         rhWGHTd+9fKQxjtxeveD6pZd+iyRS6bsVNh3NuvDMRjorvfpT708Xs5M3rC1WhjUlbTG
-         SuP+vhpZqN+vV1x/nANcanuXt1EETfPXXD8QeYskz11vu/2e4/xFVyWfqqAzh+HDAkIg
-         2aCW124CDujPgylRppn4HbcD/YFjsul+KxtgkFja1FWFeNemiUVQL11B/+0nbOKP2Q9t
-         DqNH5df8HBSc1fxHbQIfUpAhmBQ9jJG4h0ZnSr5I+iCfyIwJK319NV71kuSwoG1/kY81
-         j8mw==
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc;
+        bh=3pOHW2UUGPUYRmj5n0C5eVZOuZ5kPsT1vN7tqKPTQYk=;
+        b=D2G2KZXLAUdE1Fm0wzIy2EYYRXCxenhhIBPQQHoqptOZ/IBsVeAwcbCNRUgcPU0crP
+         wRe2mayNESZsOXgZhMDcpoeNlrAn9T4dYLiEheHko2NkBkZIInT5pKlIOzxIOqm8axnh
+         JPy2Xho8kocriIaCzF+epwilx03xTvkk077F8+oaXcZ22nw59VXOyGJBnhp5PHfWlbCI
+         t5p+mI6CMkRAiJqD+CTPnXp82pFU9rb/xbAdgOYsorNkTVVQdmptcOt7U62TfIB3NFE3
+         lgMhC4L5cTMRnW/nCLjOK6hWOVXEgXZLdOWBgNe8a60CpuCIeccFYsdSkZ/ZVtgguMr2
+         zOpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=OB3CiFphujl95/ikK08Kwi2ZSaKPWn5t2tIbw4ADKb4=;
-        b=jVBgClYPG2Ou3tgQM+1yEkBmia+MOok1xWutssolRGkhFC3FRAgKKa9HSwOXLuCoQZ
-         3ZVLHPuel+hrjb0GrTklzqL8IHiG5hTaOM5aevZa+QLqRHPa8lXB1nsMeiUT9XEH5APr
-         X62F9+a6VRvDbuhgiImLubHXUn27y27SV6sN82sJyo/tS81xUGExRZmz1929AyjMZuCE
-         IJ/sMjJtmpVLvRezSH4l9a+aPHw9vwtPE4jtKgQzWK9Jq5KHx6J9euDKWAIFar13EwtV
-         JVSNO71q/7Bq3rZxLTLdfg0duPCMG577aKC7EtTQ/TDopBdyxGHrWb5zfX8/T2sb1vLj
-         VWhg==
-X-Gm-Message-State: ACgBeo0Dg2N3dDJ6ZPKUd2GKy2dvHUUexg/7YDSGt4tnZ050K3nwh4qt
-        DEfsh4G//P5nwrlq5B8RLdVWOGzUupG2YA==
-X-Google-Smtp-Source: AA6agR4VL90LrNjDhIEWa1qfqaZidElIQRHhTojkDkxNcgkza16BHoEv97dS7nqEJj1crC25CK3RMw==
-X-Received: by 2002:a17:90b:3849:b0:1f4:89bb:14dc with SMTP id nl9-20020a17090b384900b001f489bb14dcmr3665168pjb.144.1660835652623;
-        Thu, 18 Aug 2022 08:14:12 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y17-20020a17090322d100b00172938b2376sm1554793plg.74.2022.08.18.08.14.10
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=3pOHW2UUGPUYRmj5n0C5eVZOuZ5kPsT1vN7tqKPTQYk=;
+        b=c4wqRDh9tVkTHa41mw5UUONZorqz8g32qpqT/GsRYv3uoXKS5/AMFTIKQbAt5hAu2c
+         xJVuI5IT7z9rcvsJROuSOa8ag/rwrdHEzdXNyU2+TRQN9Uq0d9pO44Ea6Lsq0EFF9Mic
+         u/NRZ3bUznTmyjIdRJ+9kC3NtesWsFlJSb3E7aBIlhcjutNMjgjL2piN7Ce13w8pCdhM
+         2wg2VuuVBsu5cqK9iVns0pk3nEbf6IH+Mp29BCY7fm1zcXg18SH+0YukRnqra2uCTNSc
+         Vb7aNeyoy3PMAQpZVl8tHxwDmGRg8N9kbjCjWeKKBVR9BvYQ4X3x42tAsi3hizBG6NG6
+         pQYg==
+X-Gm-Message-State: ACgBeo3vpiRhlNSfoPMNXDG1FtOVW+4PGar1LaiohTfK/hY0Lkoku2Dh
+        Kfh2ub8uYHGkTrWazz5kewM=
+X-Google-Smtp-Source: AA6agR6v/d+71iY3JL6JH/HiKRWZnEUhpdlbWxQanh4o5o/aKE/AR9u0Ijpzg7mKKE/5QPGC4paLVw==
+X-Received: by 2002:a17:907:1361:b0:730:e5c4:6eba with SMTP id yo1-20020a170907136100b00730e5c46ebamr2168073ejb.597.1660835693547;
+        Thu, 18 Aug 2022 08:14:53 -0700 (PDT)
+Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id r11-20020a170906704b00b007315c723ac8sm932020ejj.224.2022.08.18.08.14.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 08:14:10 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 15:14:06 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 01/26] KVM: x86: hyper-v: Expose access to debug MSRs
- in the partition privilege flags
-Message-ID: <Yv5XPnSRwKduznWI@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-2-vkuznets@redhat.com>
+        Thu, 18 Aug 2022 08:14:51 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 17:14:50 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Petlozu Pravareshwar <petlozup@nvidia.com>
+Cc:     jonathanh@nvidia.com, p.zabel@pengutronix.de,
+        dmitry.osipenko@collabora.com, ulf.hansson@linaro.org,
+        kkartik@nvidia.com, cai.huoqing@linux.dev, spatra@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc/tegra: pmc: Print reset info during probe
+Message-ID: <Yv5XarzacTOkTL1k@orome>
+References: <20220817184456.1184459-1-petlozup@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="C/vs0DuZb0Diixxt"
 Content-Disposition: inline
-In-Reply-To: <20220802160756.339464-2-vkuznets@redhat.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220817184456.1184459-1-petlozup@nvidia.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
-> For some features, Hyper-V spec defines two separate CPUID bits: one
-> listing whether the feature is supported or not and another one showing
-> whether guest partition was granted access to the feature ("partition
-> privilege mask"). 'Debug MSRs available' is one of such features. Add
-> the missing 'access' bit.
-> 
-> Note: hv_check_msr_access() deliberately keeps checking
-> HV_FEATURE_DEBUG_MSRS_AVAILABLE bit instead of the new HV_ACCESS_DEBUG_MSRS
-> to not break existing VMMs (QEMU) which only expose one bit. Normally, VMMs
-> should set either both these bits or none.
 
-This is not the right approach long term.  If KVM absolutely cannot unconditionally
-switch to checking HV_ACCESS_DEBUG_MSRS because it would break QEMU users, then we
-should add a quirk, but sweeping the whole thing under the rug is wrong.
+--C/vs0DuZb0Diixxt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Aug 17, 2022 at 06:44:56PM +0000, Petlozu Pravareshwar wrote:
+> During PMC probe, print previous reset related info
+> such as reset reason and reset level.
+>=20
+> Signed-off-by: Petlozu Pravareshwar <petlozup@nvidia.com>
+> ---
+>  drivers/soc/tegra/pmc.c | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+
+We already expose this information in sysfs, why do we need to print it
+during boot?
+
+Thierry
+
+--C/vs0DuZb0Diixxt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmL+V2oACgkQ3SOs138+
+s6FjChAAvNUHWb9fpfLIFcVCgRQIpwNJH5MC+XiVINBic0EW3xPSatpUp8cFsXwq
+QWkiiIONVWAcmPvWYiXUlWMNeKJSZbPFIWRL2MkCLdSb4ENw3UUPg7mzww8bUm6R
+i/nsKOEYkLW3PBBU8RtHK0XjvxzKRAMJUcEfdRXWziH85044ONv2Jz6nNfcoEjjj
+mnqM6hjro2O+OY7SnjO3TGSIahtJ+fqM7RNPI3njyGZq11PEEEPoeefZNg+NuBfT
+qDOLi7uYblINcxJAWzwjm9T5ZGEpco8fVzpiVh2kU09BUsFrfvLMjxmhLHOswsvL
+3fdWJXB0r4R8ud/QafoElChP9aKSEV91F5lDHIzd59ygMVQBzpkjsBeZNw2mhxxU
+E87Iehn0KLAl096ea+2yUpsZ4SUSyYJYU6Mz5nDCPoKPzi/m9qxJxhBh/MMp50fu
+uW4ihTxdGE0XI/k2ZZLaDuRqGYFGzEB8S4KpGJvX2wobJoEs+FkFKUiyGRKZUAQF
+s80qdInRiy6+D740jQ1mWqNXrxCIbb4MStc+aRsKk86OXb/oi2mGKBeEY4UBRkPN
+q3baneodA49o4Dfl8qj10dzkIoqmXevSB6s5hkeHbv+qOkJNkTG3hG/84lkAxLjs
+3plJbq6Rz9shIlfJoOAT7bZb9H51xt5uBO+yADFiHfEIW8NUos8=
+=06pU
+-----END PGP SIGNATURE-----
+
+--C/vs0DuZb0Diixxt--

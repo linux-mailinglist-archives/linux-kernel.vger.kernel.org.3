@@ -2,89 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 793D5598387
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3419459838C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244478AbiHRM6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 08:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
+        id S244435AbiHRM7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 08:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244539AbiHRM6O (ORCPT
+        with ESMTP id S244842AbiHRM7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 08:58:14 -0400
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E30EF64
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:58:12 -0700 (PDT)
-Received: by mail-qk1-f174.google.com with SMTP id g16so990635qkl.11
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:58:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JREs+R+hOdRL2M18w+Jk20r5RGbAGO+48abMsau2ww8=;
-        b=XudvdfXtPoxRK++fiykD4IW0KRzLqHGAuPOBIitZfilOAtB93RtnE/0DLxdikqRKRF
-         a/MRAgITuR13Iig/d0ExrYbrkEEST27DeJdl/kafsCHckQ0jHyRM9ezKhhU4fjYdyZ7s
-         +h/cK3E4fzMOYr94PtYYhtOsftkMD/H2sy0r6hOAgKqjoE5NC+lJWv1V21IUCLYZZSIQ
-         I3/KyHh8qCywErGXWQiPE1JNopzSUPH4Yg2dMHXsePJYYZyJJqU+YLrP9MFHKagdWy2d
-         j5M+ruZZy7gKbs6mIO/c3WW//pq2ORmDPn7r1NC7KMGI4hMyzSG2sSelr1BFUP6C8Ykj
-         EvuA==
-X-Gm-Message-State: ACgBeo0ye1q+lVu7AlgmfJMK7vjgvUZ/ud/wGTi70tI2Q3ZJcAeDUqFz
-        7pcHOj0xFpHbzIljslaPeuEqUsIS3QRsTQ==
-X-Google-Smtp-Source: AA6agR7IMW/7sU7kj7lkqXZ4EXJAo4JGxYN5OLRms7h1DkEQq0lMwFetFp+2eFU9AEbWVOmTgGHmLw==
-X-Received: by 2002:ae9:e906:0:b0:6b5:f0ec:ed92 with SMTP id x6-20020ae9e906000000b006b5f0eced92mr1877561qkf.59.1660827491433;
-        Thu, 18 Aug 2022 05:58:11 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id q22-20020a05620a2a5600b006b945519488sm1506461qkp.88.2022.08.18.05.58.08
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 05:58:09 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-32a17d3bba2so38337397b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:58:08 -0700 (PDT)
-X-Received: by 2002:a25:cf83:0:b0:692:78ad:f44c with SMTP id
- f125-20020a25cf83000000b0069278adf44cmr2546178ybg.604.1660827488283; Thu, 18
- Aug 2022 05:58:08 -0700 (PDT)
+        Thu, 18 Aug 2022 08:59:02 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21D1B5A836;
+        Thu, 18 Aug 2022 05:58:57 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 27ICwCR51029865, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 27ICwCR51029865
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Thu, 18 Aug 2022 20:58:12 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 18 Aug 2022 20:58:25 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 18 Aug 2022 20:58:24 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::d902:19b0:8613:5b97]) by
+ RTEXMBS04.realtek.com.tw ([fe80::d902:19b0:8613:5b97%5]) with mapi id
+ 15.01.2375.007; Thu, 18 Aug 2022 20:58:24 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     "arnd@kernel.org" <arnd@kernel.org>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Gary Chang <gary.chang@realtek.com>,
+        "nathan@kernel.org" <nathan@kernel.org>
+Subject: Re: build failure of next-20220818 due to 341dd1f7de4c ("wifi: rtw88: add the update channel flow to support setting by parameters")
+Thread-Topic: build failure of next-20220818 due to 341dd1f7de4c ("wifi:
+ rtw88: add the update channel flow to support setting by parameters")
+Thread-Index: AQHYsvdH+VODKjoKikSt5m62qYeAPq20BvSAgAARZQA=
+Date:   Thu, 18 Aug 2022 12:58:24 +0000
+Message-ID: <d707e413e8dc3a615b64ca2e8941072f41143184.camel@realtek.com>
+References: <Yv4lFKIoek8Fhv44@debian>
+         <CAK8P3a2_YDCS0Ate7b_nBibsbinjNqvMj9h5foA83NJjq8nE0g@mail.gmail.com>
+In-Reply-To: <CAK8P3a2_YDCS0Ate7b_nBibsbinjNqvMj9h5foA83NJjq8nE0g@mail.gmail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.1-2 
+x-originating-ip: [125.224.85.133]
+x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzgvMTgg5LiK5Y2IIDExOjAzOjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <59B3755ACDCB28419BB1E779583124BD@realtek.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-4-3d53ae722097@cerno.tech>
- <CAMuHMdUrwzPYjA0wdR7ADj5Ov6+m03JbnY8fBYzRYyWDuNm5=g@mail.gmail.com>
- <20220816132636.3tmwqmrox64pu3lt@houat> <CAMuHMdUNLPbjs=usYQBim5FxsrC1oJLuF+3JB7auzHHRoOqavQ@mail.gmail.com>
- <20220817075351.4xpsqdngjgtiqvob@houat> <CAMuHMdUusnhYodWGCxJBu-1Hd2KW-xdT8jxE_iVdQjDo8b3Y5Q@mail.gmail.com>
- <20220817131454.qcuywcuc4ts4hswm@houat> <CAMuHMdVPEgnnsY-4uuf=FDJ0YxWpch-0kZWFT_TZfcDvXLtwWQ@mail.gmail.com>
- <20220818123934.eim2bfrgbxsmviqx@houat>
-In-Reply-To: <20220818123934.eim2bfrgbxsmviqx@houat>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 18 Aug 2022 14:57:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWXbHkrBZgsmUnU=q52+q7UZZNO3tgQW7Men+msQ1JDwQ@mail.gmail.com>
-Message-ID: <CAMuHMdWXbHkrBZgsmUnU=q52+q7UZZNO3tgQW7Men+msQ1JDwQ@mail.gmail.com>
-Subject: Re: [PATCH v1 04/35] drm/modes: Introduce 480i and 576i modes
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,76 +86,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
-
-On Thu, Aug 18, 2022 at 2:39 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> On Wed, Aug 17, 2022 at 04:01:48PM +0200, Geert Uytterhoeven wrote:
-> > > I've looked around and it looks like the entire blanking area is
-> > > supposed to be 40 pixels in interlaced, but I couldn't find anywhere how
-> >
-> > 625 lines - 575[*] visible lines = 50 lines.
-> >
-> > [*] BT.656 uses 576 visible lines as that's a multiple of 2, for splitting
-> >      a frame in two fields of equal size.
-> >
-> > "visible" is relative, as it includes the overscan region.
-> > Some PAL monitors used with computers had knobs to control width/height
-> > and position of the screen, so you could make use of most or all of
-> > the overscan region
->
-> It brings back some memories :)
->
-> > but on a real TV you're limited to ca. 640x512 (on PAL) which is what
-> > an Amiga used by default (with a 14 MHz pixclock).
->
-> > > it's supposed to be split between the upper and lower margins and the
-> > > sync period.
-> >
-> > "Field Synchronization of PAL System" on
-> > http://martin.hinner.info/vga/pal.html shows the split.
->
-> Thanks, that's excellent as well.
->
-> I'm mostly done with a function that creates a PAL mode, but I still
-> have one question.
->
-> If I understand well, the blanking period is made up (interlace) of 16
-> pulses for the first field, 14 for the second, each pulse taking half a
-> line. That amount to 30 pulses, so 15 lines.
->
-> I first assumed that the pre-equalizing pulses would be the back porch,
-> the long sync pulses the vsync, and the post-equalizing pulses the front
-> porch. But... we're still missing 35 lines to amount to 625 lines, that
-> seems to be counted in the field itself (305 lines == (575 + 35) / 2)
->
-> So I guess my assumption was wrong to begin with.
-
-The back porch is the number of lines between the last "visible" line
-and the start of the synchronization pulse, i.e. "l" in the "Field
-Synchronization of PAL System" drawing.
-Virtual sync length is "m".
-The front porch is the number of lines between the end of
-the synchronization pulse, and the first "visible" line, i.e.
-"j - l - m" (I think you used "n", thus missing lines 6-23 and 319-335).
-
-> You seem to have used a fixed vsync in amifb to 4 lines, and I don't
-
-Actually "m" is 2.5 lines in the first field, and 3 lines in the second field,
-so "4" is not that much off of 2.5 + 3.
-
-> understand how you come up with the upper and lower margins (or rather,
-> how they are linked to what's described in that page)
-
-These margins probably came from the Amiga hardware reference manual,
-for the default 640x512 (PAL) and 640x400 (NTSC) modes.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+T24gVGh1LCAyMDIyLTA4LTE4IGF0IDEzOjU2ICswMjAwLCBBcm5kIEJlcmdtYW5uIHdyb3RlOg0K
+PiBPbiBUaHUsIEF1ZyAxOCwgMjAyMiBhdCAxOjQwIFBNIFN1ZGlwIE11a2hlcmplZSAoQ29kZXRo
+aW5rKQ0KPiA8c3VkaXBtLm11a2hlcmplZUBnbWFpbC5jb20+IHdyb3RlOg0KPiA+IEhpIEFsbCwN
+Cj4gPiANCj4gPiBOb3Qgc3VyZSBpZiBpdCBoYXMgYmVlbiByZXBvcnRlZCwgY2xhbmcgYnVpbGRz
+IG9mIGFybTY0IGFsbG1vZGNvbmZpZyBoYXZlDQo+ID4gZmFpbGVkIHRvIGJ1aWxkIG5leHQtMjAy
+MjA4MTggd2l0aCB0aGUgZXJyb3I6DQo+ID4gDQo+ID4gZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVh
+bHRlay9ydHc4OC9tYWluLmM6NzMxOjI6IGVycm9yOiB2YXJpYWJsZSAncHJpbWFyeV9jaGFubmVs
+X2lkeCcgaXMgdXNlZA0KPiA+IHVuaW5pdGlhbGl6ZWQgd2hlbmV2ZXIgc3dpdGNoIGRlZmF1bHQg
+aXMgdGFrZW4gWy1XZXJyb3IsLVdzb21ldGltZXMtdW5pbml0aWFsaXplZF0NCj4gPiAgICAgICAg
+IGRlZmF1bHQ6DQo+ID4gICAgICAgICBefn5+fn5+DQo+ID4gZHJpdmVycy9uZXQvd2lyZWxlc3Mv
+cmVhbHRlay9ydHc4OC9tYWluLmM6NzU0OjM5OiBub3RlOiB1bmluaXRpYWxpemVkIHVzZSBvY2N1
+cnMgaGVyZQ0KPiA+ICAgICAgICAgaGFsLT5jdXJyZW50X3ByaW1hcnlfY2hhbm5lbF9pbmRleCA9
+IHByaW1hcnlfY2hhbm5lbF9pZHg7DQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fg0KPiA+IA0KPiA+IGdpdCBiaXNlY3Qg
+cG9pbnRlZCB0byAzNDFkZDFmN2RlNGMgKCJ3aWZpOiBydHc4ODogYWRkIHRoZSB1cGRhdGUgY2hh
+bm5lbCBmbG93IHRvIHN1cHBvcnQgc2V0dGluZw0KPiA+IGJ5IHBhcmFtZXRlcnMiKS4NCj4gPiBB
+bmQsIHJldmVydGluZyB0aGF0IGNvbW1pdCBoYXMgZml4ZWQgdGhlIGJ1aWxkIGZhaWx1cmUuDQo+
+ID4gDQo+ID4gSSB3aWxsIGJlIGhhcHB5IHRvIHRlc3QgYW55IHBhdGNoIG9yIHByb3ZpZGUgYW55
+IGV4dHJhIGxvZyBpZiBuZWVkZWQuDQo+IA0KPiBIaSBTdWRlZXAsDQo+IA0KPiBpbiBteSBleHBl
+cmllbmNlLCB5b3UgZ2V0IHRoZSBiZXN0IHJlc3VsdHMgYnkgcG9zdGluZyBhIHBhdGNoIGluc3Rl
+YWQNCj4gb2YgYSBidWcgcmVwb3J0DQo+IHdoZW4geW91IHNwb3QgYSBuZXcgd2FybmluZy4gSWYg
+eW91IGFyZSB1bnN1cmUgaXQncyB0aGUgcmlnaHQgZml4LA0KPiBqdXN0IHN0YXRlIHRoYXQNCj4g
+aW4gdGhlIGRlc2NyaXB0aW9uLiBUaGUgbWFpbnRhaW5lcnMgd2lsbCB0aGVuIGVpdGhlciBiZSBh
+YmxlIHRvIGp1c3QNCj4gcGljayBpdCB1cCBpZg0KPiBpdCBsb29rcyBjb3JyZWN0LCBvciBiZSBt
+b3RpdmF0ZWQgdG8gZG8gYSBiZXR0ZXIgcGF0Y2ggaWYgdGhleSBkb24ndA0KPiBsaWtlIGl0LiA7
+LSkNCj4gDQo+IEluIHRoaXMgY2FzZSwgSSB0aGluayB0aGUgYmVzdCBmaXggd291bGQgYmUgdG8g
+bWVyZ2VkIHRoZSAnZGVmYXVsdCcNCj4gd2l0aCB0aGUgJ2Nhc2UNCj4gUlRXX0NIQU5ORUxfV0lE
+VEhfMjAnIGluIHRoZSBzd2l0Y2ggc3RhdGVtZW50LCBhbmQgdXNlDQo+IFJUV19TQ19ET05UX0NB
+UkUuIE9mIGNvdXJzZSwgSSBoYXZlIG5vIGlkZWEgaWYgdGhhdCBpcyB0aGUgcmlnaHQgZml4LA0K
+PiBidXQgaXQgd291bGQgbWFrZSBzZW5zZS4NCj4gDQo+IEp1c3QgdHJ5IHRvIGF2b2lkIGFkZGlu
+ZyBpbml0aWFsaXphdGlvbnMgdG8gdGhlIHZhcmlhYmxlIGRlY2xhcmF0aW9uLCBhcyB0aGF0DQo+
+IHdvdWxkIHByZXZlbnQgdGhlIGNvbXBpbGVyIGZyb20gd2FybmluZyBpZiB0aGVyZSBpcyBhIG5l
+dyB1bmluaXRpYWxpemVkIHVzZS4NCj4gDQoNCkkgaGF2ZSBzZW50IGEgcGF0Y2ggdG8gZml4IHRo
+aXM6IA0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtd2lyZWxlc3MvMjAyMjA4MTUwNjIw
+MDQuMjI5MjAtMS1wa3NoaWhAcmVhbHRlay5jb20vVC8jdQ0KDQpQaW5nLUtlDQoNCg0K

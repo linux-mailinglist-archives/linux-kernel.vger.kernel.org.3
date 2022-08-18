@@ -2,70 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61DE8598326
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523505982E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244677AbiHRM2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 08:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
+        id S244507AbiHRMD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 08:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244673AbiHRM22 (ORCPT
+        with ESMTP id S244479AbiHRMDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 08:28:28 -0400
-X-Greylist: delayed 1830 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Aug 2022 05:28:17 PDT
-Received: from delivery.e-purifier.com (delivery.e-purifier.com [197.234.175.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CF29FC0;
-        Thu, 18 Aug 2022 05:28:16 -0700 (PDT)
-Authentication-Results: delivery.e-purifier.com;
-        spf=pass (e-purifier.com: domain of shandud@telkomsa.net designates 105.224.1.22 as permitted sender) smtp.mailfrom=shandud@telkomsa.net;
-Received: from zmmtaout1.telkomsa.net ([105.224.1.22])
-        by delivery.e-purifier.com  with ESMTP id 27IBuiqY021649-27IBuiqa021649
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Thu, 18 Aug 2022 13:56:45 +0200
-Received: from localhost (localhost [127.0.0.1])
-        by zmmtaout1.telkomsa.net (Postfix) with ESMTP id 8501C40C97;
-        Thu, 18 Aug 2022 13:56:41 +0200 (SAST)
-Received: from zmmtaout1.telkomsa.net ([127.0.0.1])
-        by localhost (zmmtaout1.telkomsa.net [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Uf5_VPouWiAE; Thu, 18 Aug 2022 13:56:40 +0200 (SAST)
-Received: from localhost (localhost [127.0.0.1])
-        by zmmtaout1.telkomsa.net (Postfix) with ESMTP id BCA1D43574;
-        Thu, 18 Aug 2022 13:56:39 +0200 (SAST)
-X-Virus-Scanned: amavisd-new at zmmtaout1.telkomsa.net
-Received: from zmmtaout1.telkomsa.net ([127.0.0.1])
-        by localhost (zmmtaout1.telkomsa.net [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id k99u89ZNWg6u; Thu, 18 Aug 2022 13:56:39 +0200 (SAST)
-Received: from zmstore6.telkomsa.net (unknown [105.224.1.35])
-        by zmmtaout1.telkomsa.net (Postfix) with ESMTP id 6B51140BF9;
-        Thu, 18 Aug 2022 13:56:19 +0200 (SAST)
-Date:   Thu, 18 Aug 2022 13:56:19 +0200 (SAST)
-From:   shandud@telkomsa.net
-Message-ID: <295667432.5597905.1660823779355.JavaMail.zimbra@telkomsa.net>
-Subject: Your Urgent Responds Is Highly Needed
+        Thu, 18 Aug 2022 08:03:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C3C582855
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:03:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB685106F;
+        Thu, 18 Aug 2022 05:03:54 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F18643F70D;
+        Thu, 18 Aug 2022 05:03:52 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 13:03:51 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, James Morse <james.morse@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH v2] arm64: errata: add detection for AMEVCNTR01
+ incrementing incorrectly
+Message-ID: <Yv4qp9xar9EBQaD8@arm.com>
+References: <20220817121551.21790-1-ionela.voinescu@arm.com>
+ <Yv0eVVmrnPp7fjaB@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [185.174.159.18]
-X-Mailer: Zimbra 8.8.15_GA_4372 (zclient/8.8.15_GA_4372)
-Thread-Index: 2k8tG4stwGUeSn2s1DC9XfsNTgJfbg==
-Thread-Topic: Your Urgent Responds Is Highly Needed
-X-FE-Last-Public-Client-IP: 105.224.1.22
-X-FE-Policy-ID: 5:3:2:SYSTEM
-X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,MISSING_HEADERS,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yv0eVVmrnPp7fjaB@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good Day,
+Hi Catalin,
 
-I hope my message meets you well! I'm contacting you regarding a proposal that has something in common with your profile on linkdin, kindly contact me as urgent as possible for more details on my private email here: nikkifenton79@gmail.com
+On Wednesday 17 Aug 2022 at 17:59:01 (+0100), Catalin Marinas wrote:
+> Hi Ionela,
+> 
+> On Wed, Aug 17, 2022 at 01:15:51PM +0100, Ionela Voinescu wrote:
+> > diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+> > index 7e6289e709fc..810dd3c39882 100644
+> > --- a/arch/arm64/kernel/cpu_errata.c
+> > +++ b/arch/arm64/kernel/cpu_errata.c
+> > @@ -654,6 +654,16 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
+> >  		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
+> >  	},
+> >  #endif
+> > +#ifdef CONFIG_ARM64_ERRATUM_2457168
+> > +	{
+> > +		.desc = "ARM erratum 2457168",
+> > +		.capability = ARM64_WORKAROUND_2457168,
+> > +		.type = ARM64_CPUCAP_WEAK_LOCAL_CPU_FEATURE,
+> > +
+> > +		/* Cortex-A510 r0p0-r1p1 */
+> > +		CAP_MIDR_RANGE(MIDR_CORTEX_A510, 0, 0, 1, 1)
+> > +	},
+> > +#endif
+> >  #ifdef CONFIG_ARM64_ERRATUM_2038923
+> >  	{
+> >  		.desc = "ARM erratum 2038923",
+> > diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> > index 907401e4fffb..af4de817d712 100644
+> > --- a/arch/arm64/kernel/cpufeature.c
+> > +++ b/arch/arm64/kernel/cpufeature.c
+> > @@ -1870,7 +1870,10 @@ static void cpu_amu_enable(struct arm64_cpu_capabilities const *cap)
+> >  		pr_info("detected CPU%d: Activity Monitors Unit (AMU)\n",
+> >  			smp_processor_id());
+> >  		cpumask_set_cpu(smp_processor_id(), &amu_cpus);
+> > -		update_freq_counters_refs();
+> > +
+> > +		/* 0 reference values signal broken/disabled counters */
+> > +		if (!this_cpu_has_cap(ARM64_WORKAROUND_2457168))
+> > +			update_freq_counters_refs();
+> >  	}
+> >  }
+> 
+> From a CPU errata workaround, this part looks fine to me.
+> 
+> >  
+> > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> > index 869ffc4d4484..5d7efb15f7cf 100644
+> > --- a/arch/arm64/kernel/topology.c
+> > +++ b/arch/arm64/kernel/topology.c
+> > @@ -301,7 +301,8 @@ static void cpu_read_corecnt(void *val)
+> >  
+> >  static void cpu_read_constcnt(void *val)
+> >  {
+> > -	*(u64 *)val = read_constcnt();
+> > +	*(u64 *)val = this_cpu_has_cap(ARM64_WORKAROUND_2457168) ?
+> > +		      0UL : read_constcnt();
+> >  }
+> >  
+> >  static inline
+> > @@ -328,7 +329,12 @@ int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
+> >   */
+> >  bool cpc_ffh_supported(void)
+> >  {
+> > -	return freq_counters_valid(get_cpu_with_amu_feat());
+> > +	int cpu = get_cpu_with_amu_feat();
+> > +
+> > +	if ((cpu >= nr_cpu_ids) || !cpumask_test_cpu(cpu, cpu_present_mask))
+> > +		return false;
+> > +
+> > +	return true;
+> >  }
+> 
+> So here we tell the core code that FFH is supported but always return 0
+> via cpc_read_ffh() if the const counter is requested. I assume the core
+> code figures this out and doesn't use the value on the affected CPUs. I
+> was hoping cpc_ffh_supported() would be per-CPU and the core code simply
+> skips calling cpc_read() on the broken cores.
 
-Regards,
-Nikki Fenton
-nikkifenton79@gmail.com
+I used to think the same, but I've realised that the current approach is
+best, in my opinion.
+
+There are two users of these counters exposed though FFH in the kernel:
+CPPC-based frequency invariance(FIE) and reading current frequency through
+sysfs. If AMU counters are disabled or the CPU is affected by this
+erratum, a single read of 0 for any of the counters will result in
+cppc_get_perf_ctrs() returning -EFAULT which:
+
+- (cppc_cpufreq_cpu_fie_init()) Will disable the use of FIE for that
+  policy, and those counters will never be read again for that CPU, for
+  the purpose of FIE. This is the operation that would result in reading
+  those counters most often, which in this case won't happen.
+
+- Will return -EFAULT from cppc_cpufreq_get_rate() signaling to the user
+  that it cannot return a proper frequency using those counters. That's
+  cast to unsigned int so the user would have to be knowledgeable on the
+  matter :), but that's an existing problem.
+
+Therefore, error checking based on a counter read of 0 would be
+equivalent here to checking a potential ffh_supported(cpu). Also, in the
+future we might use FFH to not only read these counters. So it's better
+to keep ffh_supported() to just reflect whether generically FFH is
+supported, even if in some cases the "backend" (AMUs here) is disabled
+or broken.
+
+Also, given that it's most likely for a platform to use the same method
+for all CPU for reading counters, forgetting or not considering errata,
+together with the current use of ffh_supported() as gate-keeper of a CPU
+probe based on validity of all CPC methods, even if cpc_ffh_supported()
+was per-CPU, it's still better to probe the CPU and let the users of
+counters deal with breakage, especially given that these usecases are
+not critical.
+
+> Is the other register read by cpc_read_ffh() still useful without the
+> const one?
+
+Not for the current uses, and unlikely to be in the future - I don't see
+how the core counter value can be useful without a constant reference.
+
+
+> While the Kconfig entry describes the behaviour, I'd rather have a
+> comment in cpc_ffh_supported() and maybe cpu_read_constcnt() on why we
+> do these tricks.
+> 
+
+Will do!
+
+Thanks,
+Ionela.
+
+> Thanks.
+> 
+> -- 
+> Catalin

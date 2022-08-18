@@ -2,136 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEB5598424
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7AD59841B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244717AbiHRN0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
+        id S245097AbiHRN0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245087AbiHRN0Q (ORCPT
+        with ESMTP id S245122AbiHRN0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:26:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0E6B2493;
-        Thu, 18 Aug 2022 06:26:15 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27ICimRF025753;
-        Thu, 18 Aug 2022 13:26:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=gGbwGSZztbIxZzV+S0y6tRfatsi96ZLFsT2xrbTxVng=;
- b=YtM71PizdDHkHPacgMW0VgCr3q+LDSAX5yia6fontFe92kETBiijUW549D79YdcsIixt
- vHiZ0WFewByCXQuOuPqfIaMokWcpMf+8+IEB6HIlPO4/1moRuiTEXdYq2ZTy/QL5Kpzf
- Ik4cvC9r81wDonn2Y6FCEcH205GCJHEqoLb3/YFqUl259A+8sTtGofG389WDYnBbdRrn
- 2OVPjlpzDenwt81alPp0Hf2/JJ9NJBKvggU0qJhVyArpQTMPtMvCGWv5t3u2fPx+/Uyh
- Dm6vzrEVIETP1u1WZAFgs3yzHsfgRVqDrW3wVWJJZ58PFdVGmEEYFD71iXkl8edAarlY dg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1npxhcpu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 13:26:14 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27ICwYRd032374;
-        Thu, 18 Aug 2022 13:26:13 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1npxhcpf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 13:26:13 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27IDKjMZ003771;
-        Thu, 18 Aug 2022 13:26:12 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma04dal.us.ibm.com with ESMTP id 3hx3kaek2d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 13:26:12 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27IDQBZw50725132
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Aug 2022 13:26:11 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 181306E050;
-        Thu, 18 Aug 2022 13:26:11 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 133346E04E;
-        Thu, 18 Aug 2022 13:26:10 +0000 (GMT)
-Received: from li-2c1e724c-2c76-11b2-a85c-ae42eaf3cb3d.ibm.com.com (unknown [9.160.64.167])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Aug 2022 13:26:09 +0000 (GMT)
-From:   Tony Krowiak <akrowiak@linux.ibm.com>
-To:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     jjherne@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com, stable@vger.kernel.org
-Subject: [PATCH v2 2/2] s390/vfio-ap: fix unlinking of queues from the mdev
-Date:   Thu, 18 Aug 2022 09:26:06 -0400
-Message-Id: <20220818132606.13321-3-akrowiak@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220818132606.13321-1-akrowiak@linux.ibm.com>
-References: <20220818132606.13321-1-akrowiak@linux.ibm.com>
+        Thu, 18 Aug 2022 09:26:13 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF83FB5151
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:26:12 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id h20-20020a056830165400b00638ac7ddba5so1094478otr.4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:26:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=Rzp7QF7DBG8UX3VH0GtIQF30AFU/7lko0NVgn7RL1ns=;
+        b=N8DQwjDxCLUsV60GnV2rd1DgWuyoqluY1WiQ4ICBA7eyL1I2SEZfk7qRxqfdADImCU
+         79AiML9EbBAWrwiFIwV4NZH7AFB2RH6thduAM+Knf21Z6fcserJD3hW5u49OWUkrURiE
+         6YIEW7/S1nh1ODzGU3kXgJhm5Kkxa2Q607FxXnbDNauS0hC3zI59CfOjUX/O/By37OJE
+         lkkPmPkUIJuX1hZ3EefzXRcPXt7uI/jso00WIDs+m33wT1vNY8D40i80bX0aH8p/2ySj
+         mNpcjMrPuMUcejSn2yErEQdXJUcq8qZHqV08ce8J4nz9rv519DjH3GmcHIE7SaofofMb
+         32zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=Rzp7QF7DBG8UX3VH0GtIQF30AFU/7lko0NVgn7RL1ns=;
+        b=GgMA9GtWVR4PEMCEQG72idexEcceSE1mtkumNzaCpDl6KvMPK27xUp2+OE68rkMKsE
+         zN3QlfXcTLiz0VhEQZR0R1Ng48gW+Q6e0sRxuHwI3k/z1xMsXTsnPyuULu8ua/d24LBB
+         AAgH+DTBlGMj10/cbjRK6sZA+qj1iGNJkHDBBXw9Oh8271njymq5W69601XrWCKNWXHD
+         If1e1U6SR8YGwjKhFCtD3kw1JrFXhZw4Y7k9Nqzkbq+mIxH19Inq4iB/nIL0QMiCVn2I
+         mGZN8bQFFiUpjBofvbr5UvC6adt+nNPxbbygTugK3brMfZh03wvLReIRuyVo/8n31vne
+         YDQA==
+X-Gm-Message-State: ACgBeo352exuCsxUuHxHh7Y5Hx8tRnsKYlLWbHjFXjiO7XWrT/6gGN31
+        H7qtoidWqsUiqewwbPYQW5QU+FdwXG2FG3gs1Ww=
+X-Google-Smtp-Source: AA6agR4IQMKF3tTYE9KA//LwUhef25Er7iAak8mfPpJ+HOrJzXwoc8p14xOFHzf9bIoad3ykIiyyxS9m/WLTRneyFDw=
+X-Received: by 2002:a9d:73cf:0:b0:638:a617:98ed with SMTP id
+ m15-20020a9d73cf000000b00638a61798edmr1118039otk.198.1660829171930; Thu, 18
+ Aug 2022 06:26:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NSKZkpMTEJpZWlXcSOuXS1I3RvXps_y0
-X-Proofpoint-GUID: Uuf19tzZwRiT3p_Qth9vnnowfmEdz48y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_12,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 clxscore=1015 bulkscore=0 mlxlogscore=926 adultscore=0
- suspectscore=0 mlxscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180045
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:7213:b0:ab:a214:b610 with HTTP; Thu, 18 Aug 2022
+ 06:26:11 -0700 (PDT)
+Reply-To: un.imftg@gmail.com
+From:   UN IMF <wuoffice.net.togo@gmail.com>
+Date:   Thu, 18 Aug 2022 13:26:11 +0000
+Message-ID: <CAJZorP9OETkmXCK99fOg7CW34hk77Xaf7QEYAfpqwDDYo5b7+g@mail.gmail.com>
+Subject: URGENTLY !!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:32a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [wuoffice.net.togo[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vfio_ap_mdev_unlink_adapter and vfio_ap_mdev_unlink_domain functions
-add the associated vfio_ap_queue objects to the hashtable that links them
-to the matrix mdev to which their APQN is assigned. In order to unlink
-them, they must be deleted from the hashtable; if not, they will continue
-to be reset whenever userspace closes the mdev fd or removes the mdev.
-This patch fixes that issue.
+Hello,we  have emailed you earlier without any response from you. I've
+an important information for you and it needs your urgent attention.
 
-Cc: stable@vger.kernel.org
-Fixes: 2838ba5bdcd6 ("s390/vfio-ap: reset queues after adapter/domain unassignment")
-Reported-by: Tony Krowiak <akrowiak@linux.ibm.com>
-Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
----
- drivers/s390/crypto/vfio_ap_ops.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
-index ee82207b4e60..2493926b5dfb 100644
---- a/drivers/s390/crypto/vfio_ap_ops.c
-+++ b/drivers/s390/crypto/vfio_ap_ops.c
-@@ -1049,8 +1049,7 @@ static void vfio_ap_mdev_unlink_adapter(struct ap_matrix_mdev *matrix_mdev,
- 		if (q && qtable) {
- 			if (test_bit_inv(apid, matrix_mdev->shadow_apcb.apm) &&
- 			    test_bit_inv(apqi, matrix_mdev->shadow_apcb.aqm))
--				hash_add(qtable->queues, &q->mdev_qnode,
--					 q->apqn);
-+				vfio_ap_unlink_queue_fr_mdev(q);
- 		}
- 	}
- }
-@@ -1236,8 +1235,7 @@ static void vfio_ap_mdev_unlink_domain(struct ap_matrix_mdev *matrix_mdev,
- 		if (q && qtable) {
- 			if (test_bit_inv(apid, matrix_mdev->shadow_apcb.apm) &&
- 			    test_bit_inv(apqi, matrix_mdev->shadow_apcb.aqm))
--				hash_add(qtable->queues, &q->mdev_qnode,
--					 q->apqn);
-+				vfio_ap_unlink_queue_fr_mdev(q);
- 		}
- 	}
- }
--- 
-2.31.1
-
+Best regards.
+C.O UN IMF

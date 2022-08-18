@@ -2,140 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2D6598AFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A291D598B02
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345376AbiHRSTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 14:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        id S1345388AbiHRSUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 14:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbiHRSTr (ORCPT
+        with ESMTP id S231651AbiHRSUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 14:19:47 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FD5B69EF;
-        Thu, 18 Aug 2022 11:19:46 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3378303138bso23306237b3.9;
-        Thu, 18 Aug 2022 11:19:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=hsfwWpmgExzWlmbZDKLSyuPDLh/uObZ0VNKfsXtXMuw=;
-        b=dvhZE5h4dCmIqJy4VGVxeGkNi4ssy0JxthqBuXfA+I1ljmRwFgAB00+bdKrl1CN1u6
-         UovJbjpmOUSsZtvFusj6eRbJWHXHWj7M4ihDY22ZSATSHYwapy4A4g35tlnfGuuz/6Ak
-         Lx7oS4ourgghCf7qYsg6ob7CpALUl2mXllPL7gcD5Rh3xsyoWd6JCUm0R4Ycf5QaSAPD
-         HPxPvu8LtSyBfGBP53gryTRw0nQ3UVuZW5ro9BHs8iJq1xz3V7JOu+9uFSXhJNsX6gsk
-         W8f6rDt7Pdrj8f+26pd/G0sOnOhHrbxvGc93tfOE1/xl2U2RG/j1ljzyxEgCzNueSVnu
-         3NlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=hsfwWpmgExzWlmbZDKLSyuPDLh/uObZ0VNKfsXtXMuw=;
-        b=fq/diKEf/aZmfvRypK0/oIHmsKn0gtPIYg0ZnDP2AuZ0474cBjXSxcDiL3jrAior3c
-         wFdybtM0gTBUtvRJtPPF36JtBjj/iIKiz5tWZVzCVM4RRW3Z/5JLyFlmWfWHspXytcGi
-         o1riWL3NDxbdfTB5X3U6ZvH2ynF+VFK9zn7CoS/cvIpddaae/9YzgZQHbIGeT+Lalr0v
-         f9la8uUwUyc1I6PWVHGdkNGtb0JEYBRS+ZGt9t9lcyIiVAjW/SsE6Li/YOq5dKW0U63U
-         oKF8ZGT2SPQev+iPkchT0a4+u97G4dwWpDr3jVZkdYZTQ6DJs3sNX/ftsY+obt+y7hsD
-         B1CA==
-X-Gm-Message-State: ACgBeo3/ETbRIZkqIIPAMRfgvAHp1bIgYBZ6klmSduaCxuGgMcn3vhLi
-        LChyaIc5R+oJS+LLHsvLr1i7rosIMgHpVyv5WrM=
-X-Google-Smtp-Source: AA6agR7U/oVpzPHvchwsE54U6r7OKVjyYC6QkwgfBzrzIUX5YaKC8KGeQyILJ2Z8F/pH21bfHWi7erMANy19NPP7t9c=
-X-Received: by 2002:a81:6c0f:0:b0:334:c01f:fa10 with SMTP id
- h15-20020a816c0f000000b00334c01ffa10mr4117792ywc.382.1660846785474; Thu, 18
- Aug 2022 11:19:45 -0700 (PDT)
+        Thu, 18 Aug 2022 14:20:51 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C23ACE306;
+        Thu, 18 Aug 2022 11:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660846851; x=1692382851;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ULlY3fpvctgrPTNh/dIyRvXpP5N6EgQSL6XrK00sqzY=;
+  b=hvou1AxCNquka03XZa2GztBXvLyI00wmt3bCfLRd/nLeHuZWSEZtQOPc
+   XUbAuxosHHH/MVAm8RqNi/+8kv6XeGgj3A2lHJbibJzkCo1IcpeuTc2Hz
+   EIS72gwmi5LzQfw62rr/hRwuI2FtvpTrvjnvMxqPDQNQzQoppayQnwMf4
+   nQ6DHDAMJaa654orhG300XbXf3UreMxGrOv0IHLzL90KvMI7cQFm5bthH
+   iuP/amk62gqMYfqEgejNOMU3ZGjIsEGoerXeKyojzinyHfngXPfhECDYe
+   JX+MqAKXUQI9AnrKu496Ye9jIXO2irMKW8E/w7GaDOpjAQasuDOuxxW2z
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="354573989"
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="354573989"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 11:20:50 -0700
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="558638429"
+Received: from rvmiele-mobl1.amr.corp.intel.com (HELO desk) ([10.209.23.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 11:20:50 -0700
+Date:   Thu, 18 Aug 2022 11:20:48 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tony.luck@intel.com,
+        antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        andrew.cooper3@citrix.com, Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [PATCH v2] x86/bugs: Add "unknown" reporting for MMIO Stale Data
+Message-ID: <20220818182048.lsgtc52g6va376v2@desk>
+References: <79d2455c75bdbad4e68a3843fe1c1e67826008e6.1659562129.git.pawan.kumar.gupta@linux.intel.com>
+ <Yv4PmGS98IDZ7ujH@zn.tnic>
 MIME-Version: 1.0
-References: <20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220815151451.23293-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdW29Q40hypWZ05KRj5cc=DY8XjnDwOPVw3kJPNUrnL0fA@mail.gmail.com>
-In-Reply-To: <CAMuHMdW29Q40hypWZ05KRj5cc=DY8XjnDwOPVw3kJPNUrnL0fA@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 18 Aug 2022 19:19:18 +0100
-Message-ID: <CA+V-a8sVpEx==R6QXF8qxhVSsv2mVnZ_R3N2wTt+JPcQWNqCWQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/8] RISC-V: Kconfig.socs: Add Renesas RZ/Five SoC
- kconfig option
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yv4PmGS98IDZ7ujH@zn.tnic>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Thu, Aug 18, 2022 at 12:08:24PM +0200, Borislav Petkov wrote:
+> On Wed, Aug 03, 2022 at 02:41:32PM -0700, Pawan Gupta wrote:
+> > diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> > index 6761668100b9..fe3f7e762b80 100644
+> > --- a/arch/x86/kernel/cpu/bugs.c
+> > +++ b/arch/x86/kernel/cpu/bugs.c
+> > @@ -433,7 +433,8 @@ static void __init mmio_select_mitigation(void)
+> >  	u64 ia32_cap;
+> >  
+> >  	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
+> > -	    cpu_mitigations_off()) {
+> > +	     boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN) ||
+> > +	     cpu_mitigations_off()) {
+> >  		mmio_mitigation = MMIO_MITIGATION_OFF;
+> >  		return;
+> >  	}
+> 
+> Needs also:
+> 
+> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> index d08c5589fa59..da7c361f47e0 100644
+> --- a/arch/x86/kernel/cpu/bugs.c
+> +++ b/arch/x86/kernel/cpu/bugs.c
+> @@ -539,6 +539,8 @@ static void __init md_clear_update_mitigation(void)
+>  		pr_info("TAA: %s\n", taa_strings[taa_mitigation]);
+>  	if (boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA))
+>  		pr_info("MMIO Stale Data: %s\n", mmio_strings[mmio_mitigation]);
+> +	else if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
+> +		pr_info("MMIO Stale Data: Unknown: No mitigations\n");
+>  }
+>  
+>  static void __init md_clear_select_mitigation(void)
+> 
+> I've added it.
 
-Thank you for the review.
-
-On Thu, Aug 18, 2022 at 4:16 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Mon, Aug 15, 2022 at 5:16 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > Introduce SOC_RENESAS_RZFIVE config option to enable Renesas RZ/Five
-> > (R9A07G043) SoC, along side also add ARCH_RENESAS config option as most
-> > of the Renesas drivers depend on this config option.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Thanks for your patch!
->
-> The technical part LGTM, so
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> > --- a/arch/riscv/Kconfig.socs
-> > +++ b/arch/riscv/Kconfig.socs
-> > @@ -80,4 +80,18 @@ config SOC_CANAAN_K210_DTB_SOURCE
-> >
-> >  endif # SOC_CANAAN
-> >
-> > +config ARCH_RENESAS
->
-> We definitely want ARCH_RENESAS, as it serves as a gatekeeper for
-> Kconfig options for IP cores found on Renesas ARM and RISC-V SoCs.
->
-Agreed, or else we will end up touching too many Kconfig files.
-
-> > +       bool
-> > +       select GPIOLIB
-> > +       select PINCTRL
-> > +       select SOC_BUS
-> > +
-> > +config SOC_RENESAS_RZFIVE
->
-> Do we need this symbol? You could as well make ARCH_RENESAS above
-> visible, and defer the actual SoC selection to ARCH_R9A07G043 in
-> drivers/soc/renesas/Kconfig[1].
->
-I think we could drop it and just defer the actual SoC selection to
-ARCH_R9A07G043 as you said.
-
-> I don't know what is the policy on RISC-V. ARM64 has a "single-symbol
-> in arch/arm64/Kconfig.platforms"-policy, so we handle SoC selection
-> in drivers/soc/renesas/Kconfig, and that is fine, as it avoids merge
-> conflicts.
->
-Agreed.
-
-@Conor - Does the above sound OK?
-
-Cheers,
-Prabhakar
+Thanks

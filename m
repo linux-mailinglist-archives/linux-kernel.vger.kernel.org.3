@@ -2,215 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D701597C01
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 585E7597BF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242953AbiHRDGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 23:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
+        id S242944AbiHRDGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 23:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240247AbiHRDG1 (ORCPT
+        with ESMTP id S239620AbiHRDF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 23:06:27 -0400
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8BF5142D;
-        Wed, 17 Aug 2022 20:06:26 -0700 (PDT)
-Received: by mail-qv1-f52.google.com with SMTP id j1so364735qvv.8;
-        Wed, 17 Aug 2022 20:06:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=RDgEoVmmSarhmlMbEJyzA9UImN4LT8sVx+e0kSfp4lk=;
-        b=FeReqvJowShkeXUzVBMd3+9BB9N6ftS/mtqQLmiDiGHtD+j84YogMfLUqfeOduIV6E
-         JJu7fJ6bDAEmruJVNbymW9+wZyG33+jbj86KFrYl/UYm3eCF9dd2x7HFs5L3aa7Hbrrt
-         gR3cFOfY0LKA3ScE/F1Et2H5WqcV22i+F+er7jdwzYcjZz48Ngan1AnyoGFikch1kgdq
-         6Nu3x4sZloEYWztHTh55XaABbP6JJEZggaEX1wa0HO4gYpsuMMvnXxsUXCedPWAN2iI7
-         iDxmDH6ptOUreoxfYvC0F3lB+LarJ9EaHYluCysnxOjwzSTMLIM+owvp+apnINsP6zdU
-         odxg==
-X-Gm-Message-State: ACgBeo0Q7INTgmGGRPHnJza12nbf9X7xtJALzQay3dKO+xZDyxADVDfM
-        RFhZZYVqWx4MA+E0kwL8n8DCmLpJw7uedyS3
-X-Google-Smtp-Source: AA6agR4qzV3WuJsBLJpych3STIfEvJaK1hLBCr/u16wYXdpKUNSw9BZkbmMJ/FdNeQ2+188tk12d+A==
-X-Received: by 2002:a05:6214:dcc:b0:495:613d:f516 with SMTP id 12-20020a0562140dcc00b00495613df516mr853054qvt.75.1660791985559;
-        Wed, 17 Aug 2022 20:06:25 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::a5ed])
-        by smtp.gmail.com with ESMTPSA id az44-20020a05620a172c00b006bb87c4833asm487661qkb.109.2022.08.17.20.06.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 20:06:25 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 22:05:45 -0500
-From:   David Vernet <void@manifault.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
-        joannelkoong@gmail.com, linux-kernel@vger.kernel.org,
-        Kernel-team@fb.com
-Subject: Re: [PATCH 4/5] bpf: Add libbpf logic for user-space ring buffer
-Message-ID: <Yv2siYR0STsAem5L@maniforge.dhcp.thefacebook.com>
-References: <20220808155341.2479054-1-void@manifault.com>
- <20220808155341.2479054-4-void@manifault.com>
- <CAEf4BzYVLgd=rHaxzZjyv0WJBzBpMqGSStgVhXG9XOHpB7qDRQ@mail.gmail.com>
- <YvaNx8L076scJR4K@maniforge.dhcp.thefacebook.com>
- <CAEf4BzbH-=hifMj9dnGoUkOR-JUkn+wuNMrM2w97FtbjnN=-CQ@mail.gmail.com>
- <Yvz05lW8tCJFKrUO@maniforge.DHCP.thefacebook.com>
+        Wed, 17 Aug 2022 23:05:58 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D9E4D17D;
+        Wed, 17 Aug 2022 20:05:55 -0700 (PDT)
+Received: (Authenticated sender: n@nfraprado.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 52B6E60003;
+        Thu, 18 Aug 2022 03:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nfraprado.net;
+        s=gm1; t=1660791954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mporQ/LMRdbnsbYtlIILmMxfCBfZDzlTdMBUAjIPcsg=;
+        b=IcpIcdUTRD7DmskU8pFPNOkmZ5xlc8f7kqV4rN/V1AfHwYOK6Kmdg3vDzbkHwnSwg/Tz1J
+        KE9DNgMmdTC9zwE0w4Y3d4bLoliajolZ/VmkQrl9LugMmSTrHpVHBjHznYTIigPc1k0cSI
+        BeEJwtG/gooZsFCQphqv7gfwxQ1+BCJTtdcmrRoXufkm5ATwApPIl9G81XTZgujG9S3MVw
+        DDFBvVNI16MqHQzZFHF2MkkNnvUfW9m7uqHWKOR++VZK2ndaWtIAFf51ICm4P6DcwYBbER
+        Uuaa1zEmLu669G3kTT1pKg+T/0cyCnMvWF1CsDufk3OWPVbXmq0C3wNQ7T2jig==
+Date:   Wed, 17 Aug 2022 23:05:47 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <n@nfraprado.net>
+To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, martijn@brixit.nl, ayufan@ayufan.eu, megi@xff.cz,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] arm64: dts: rockchip: Add initial support for
+ Pine64 PinePhone Pro
+Message-ID: <20220818030547.eblbmchutmnn6jih@notapiano>
+References: <20220815123004.252014-1-tom@tom-fitzhenry.me.uk>
+ <20220815123004.252014-3-tom@tom-fitzhenry.me.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yvz05lW8tCJFKrUO@maniforge.DHCP.thefacebook.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220815123004.252014-3-tom@tom-fitzhenry.me.uk>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 09:02:14AM -0500, David Vernet wrote:
+Hi Tom,
 
-[...]
+thanks for getting the upstreaming of this DT going. Some comments below.
 
-> > > > > +/* Poll for available space in the ringbuffer, and reserve a record when it
-> > > > > + * becomes available.
-> > > > > + */
-> > > > > +void *ring_buffer_user__poll(struct ring_buffer_user *rb, uint32_t size,
-> > > > > +                            int timeout_ms)
-> > > > > +{
-> > > > > +       int cnt;
-> > > > > +
-> > > > > +       cnt = epoll_wait(rb->epoll_fd, &rb->event, 1, timeout_ms);
-> > > > > +       if (cnt < 0)
-> > > > > +               return NULL;
-> > > > > +
-> > > > > +       return ring_buffer_user__reserve(rb, size);
-> > > >
-> > > > it's not clear how just doing epoll_wait() guarantees that we have >=
-> > > > size of space available?.. Seems like some tests are missing?
-> > >
-> > > Right now, the kernel only kicks the polling writer once it's drained all
-> > > of the samples from the ring buffer. So at this point, if there's not
-> > > enough size in the buffer, there would be nothing we could do regardless.
-> > > This seemed like reasonable, simple behavior for the initial
-> > > implementation. I can make it a bit more intelligent if you'd like, and
-> > > return EPOLLRWNORM as soon as there is any space in the buffer, and have
-> > > libbpf potentially make multiple calls to epoll_wait() until enough space
-> > > has become available.
-> > 
-> > So this "drain all samples" notion is not great: you can end drain
-> > prematurely and thus not really drain all the data in ringbuf.With
-> > multiple producers there could also be always more data coming in in
-> > parallel. Plus, when in the future we'll have BPF program associated
-> > with such ringbuf on the kernel side, we won't have a notion of
-> > draining queue, we'll be just submitting record and letting kernel
-> > handle it eventually.
+On Mon, Aug 15, 2022 at 10:30:04PM +1000, Tom Fitzhenry wrote:
+> From: Martijn Braam <martijn@brixit.nl>
 > 
-> I don't disagree with any of your points. I think what we'll have to
-> decide-on is a trade-off between performance and usability. As you pointed
-> out, if we only kick user-space once the ringbuffer is empty, that imposes
-> the requirement on the kernel that it will always drain the ringbuffer.
-> That might not even be possible though if we have multiple producers
-> posting data in parallel.
+> This is a basic DT containing regulators and UART, intended to be a
+> base that myself and others can add additional nodes in future patches.
 > 
-> More on this below, but the TL;DR is that I agree with you, and I think
-> having a model where we kick user-space whenever a sample is consumed from
-> the buffer is a lot easier to reason about, and probably our only option if
-> our plan is to make the ringbuffer MPMC. I'll make this change in v3.
-> 
-> > So I think yeah, you'd have to send notification when at least one
-> > sample gets consumed. The problem is that it's going to be a
-> > performance hit, potentially, if you are going to do this notification
-> > for each consumed sample. BPF ringbuf gets somewhat around that by
-> > using heuristic to avoid notification if we see that consumer is still
-> > behind kernel when kernel submits a new sample.
-> 
-> Something perhaps worth pointing out here is that this heuristic works
-> because the kernel-producer ringbuffer is MPSC. If it were MPMC, we'd
-> potentially have the same problem you pointed out above where you'd never
-> wake up an epoll-waiter because other consumers would drain the buffer, and
-> by the time the kernel got around to posting another sample, could observe
-> that consumer_pos == producer_pos, and either wouldn't wake up anyone on
-> the waitq, or wouldn't return any events from ringbuf_map_poll(). If our
-> intention is to make user-space ringbuffers MPMC, it becomes more difficult
-> to use these nice heuristics.
-> 
-> > I don't know if we can do anything clever here for waiting for some
-> > space to be available...  Any thoughts?
-> 
-> Hmmm, yeah, nothing clever is coming to mind. The problem is that we can't
-> make assumptions about why user-space would be epoll-waiting on the
-> ringbuffer because because it's a producer, and the user-space producer is
-> free to post variably sized samples.
-> 
-> For example, I was initially considering whether we could do a heuristic
-> where we notify the producer only if the buffer was previously full /
-> producer_pos was ringbuf size away from consumer_pos when we drained a
-> sample, but that doesn't work at all because there could be space in the
-> ringbuffer, but user-space is epoll-waiting for *more* space to become
-> available for some large sample that it wants to publish.
-> 
-> I think the only options we have are:
-> 
-> 1. Send a notification (i.e. schedule bpf_ringbuf_notify() using
->    irq_work_queue(), and then return EPOLLOUT | EPOLLWRNORM if
->    the ringbuffer is not full), every time a sample is drained.
-> 
-> 2. Keep the behavior in v1, wherein we have a contract that the kernel will
->    always eventually drain the ringbuffer, and will kick user-space when the
->    buffer is empty. I think a requirement here would also be that the
->    ringbuffer would be SPMC, or we decide that it's acceptable for some
->    producers to sleep indefinitely if other producers keep reading samples,
->    and that the caller just needs to be aware of this as a possibility.
-> 
-> My two cents are that we go with (1), and then consider our options later
-> if we need to optimize.
+> Tested to work: booting from eMMC, output over UART.
 
-Unfortunately this causes the system to hang because of how many times
-we're invoking irq_work_queue() in rapid succession.
+You're also adding the SD controller here. Does it work as is? If so add it to
+the commit description as well.
 
-So, I'm not sure that notifying the user-space producer after _every_
-sample is going to work. Another option that occurred to me, however, is to
-augment the initial approach taken in v1. Rather than only sending a
-notification when the ringbuffer is empty, we could instead guarantee that
-we'll always send a notification when bpf_ringbuf_drain() is called and at
-least one message was consumed. This is slightly stronger than our earlier
-guarantee because we may send a notification even if the ringbuffer is only
-partially drained, and it avoids some of the associated pitfalls that you
-pointed out (e.g. that a BPF program is now responsible for always draining
-the ringbuffer in order to ensure that an epoll-waiting user-space producer
-will always be woken up).
+> 
+[..]
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+> @@ -0,0 +1,394 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2020 Martijn Braam <martijn@brixit.nl>
+> + * Copyright (c) 2021 Kamil Trzciński <ayufan@ayufan.eu>
+> + */
+> +
+> +/* PinePhone Pro datasheet:
 
-The down-side of this is that it still may not be aggressive enough in
-waking up user-space producers who could have had data to post as soon as
-space was available in the ringbuffer. It won't potentially cause them to
-block indefinitely as the first approach did, but they'll still have to
-wait for the end of bpf_ringbuf_drain() to be woken up, when they could
-potentially have been woken up sooner to start publishing samples. It's
-hard to say whether this will be prohibitive to the feature being usable,
-but in my opinion it's more useful to have this functionality (and make its
-behavior very clearly described in comments and the public documentation
-for the APIs) in an imperfect form than to not have it at all.
+First comment line should be empty following the coding style [1]. Like you did
+for the copyrights above.
 
-Additionally, a plus-side to this approach is that it gives us some
-flexibility to send more event notifications if we want to. For example, we
-could add a heuristic where we always send a notification if the buffer was
-previously full before a sample was consumed (in contrast to always
-invoking irq_work_queue() _whenever_ a sample is consumed), and then always
-send a notification at the end of bpf_ringbuf_drain() to catch any
-producers who were waiting for a larger sample than what was afforded by
-the initial heuristic notification. I think this should address the likely
-common use-case of samples being statically sized (so posting an event as
-soon as the ringbuffer is no longer empty should almost always be
-sufficient).
+[1] https://www.kernel.org/doc/html/latest/process/coding-style.html#commenting
 
-We discussed this offline, so I'll go ahead and implement it for the next
-version. One thing we didn't discuss was the example heuristic described
-above, but I'm going to include that because it seems like the
-complementary behavior to what we do for kernel-producer ringbuffers. If
-folks aren't a fan, we can remove it in favor of only sending a single
-notification in bpf_ringbuf_drain().
+> + * https://files.pine64.org/doc/PinePhonePro/PinephonePro-Schematic-V1.0-20211127.pdf
+> + */
+[..]
+> +	vcc_sysin: vcc-sysin-regulator {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc_sysin";
+
+This signal is called vcc_sys in the datasheet, so I suggest we keep that name
+here. It's not everyday that we get a device with a publicly available datasheet
+:^).
+
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+[..]
+> +	rk818: pmic@1c {
+> +		compatible = "rockchip,rk818";
+> +		reg = <0x1c>;
+> +		interrupt-parent = <&gpio1>;
+> +		interrupts = <RK_PC5 IRQ_TYPE_LEVEL_LOW>;
+> +		#clock-cells = <1>;
+> +		clock-output-names = "xin32k", "rk808-clkout2";
+
+What about keeping the datasheet names here too? clk32kout1, clk32kout2
+
+> +		pinctrl-names = "default";
+[..]
+> +			vcc_1v8: vcc_wl: DCDC_REG4 {
+
+From the datasheet, vcc_wl is actually wired to vcc3v3_sys. But looks like
+vcc_wl is only used for bluetooth and you're not enabling it yet anyway, so just
+drop this extra label, and it can be added when bluetooth is added (or not, and
+then the bluetooth supply just points directly to vcc3v3_sys).
+
+> +				regulator-name = "vcc_1v8";
+[..]
+> +			vcc_power_on: LDO_REG4 {
+> +				regulator-name = "vcc_power_on";
+
+The name on the datasheet for this one is rk818_pwr_on.
+
+> +				regulator-always-on;
+[..]
+> +&cluster0_opp {
+> +	opp04 {
+> +		status = "disabled";
+> +	};
+> +
+> +	opp05 {
+> +		status = "disabled";
+> +	};
+> +};
+
+I saw the discussion on the previous version about using the rk3399-opp.dtsi
+here, but the thing is, this OPP has greater values for the max voltage than the
+maximum allowed on the OPP table you posted previously (for RK3399-T)...
+
+Same thing for the GPU OPP.
+
+> +
+> +&cluster1_opp {
+> +	opp06 {
+> +		status = "disabled";
+> +	};
+
+There's actually an opp06 node in the OPP for RK3399-T, only that the frequency
+is slightly lower. Maybe you could keep it enabled but override the frequency?
+
+Or given the above point about the max voltages, maybe it would be best to have
+a separate OPP table after all?
+
+> +
+> +	opp07 {
+> +		status = "disabled";
+> +	};
+> +};
+> +
+> +&io_domains {
+> +	status = "okay";
+
+Let's keep the status at the end of the node for consistency with the rest.
+
+With these points addressed:
+
+Reviewed-by: Nícolas F. R. A. Prado <n@nfraprado.net>
+
+I'll also try to give this a test shortly.
 
 Thanks,
-David
+Nícolas
+
+> +
+> +	bt656-supply = <&vcc1v8_dvp>;
+> +	audio-supply = <&vcca1v8_codec>;
+> +	sdmmc-supply = <&vccio_sd>;
+> +	gpio1830-supply = <&vcc_3v0>;
+> +};
+[..]

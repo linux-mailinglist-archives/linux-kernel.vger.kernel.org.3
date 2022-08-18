@@ -2,135 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15304597C52
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF61597C63
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242742AbiHRDj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 23:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S242784AbiHRDm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 23:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiHRDjy (ORCPT
+        with ESMTP id S230520AbiHRDmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 23:39:54 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C255C910AC
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:39:52 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1660793991;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KUyb1pCJ/oDKXbqiOy+EBzbV0azHcNvfFJQrGl3ZoHw=;
-        b=gIhBAaU7YmXiHcaDggk8vcGCT/7goON9W/+NsVTSgVmBy6E225FzyIxchhWQApf2XJrVie
-        V21+ZScwyj2b3RR3WN4NscXIwuFvxme4sQB+4d7KVTA/NIfjk5omvZGiF0r+v2TUhS8TB8
-        24xGn49o7Z9SXlFXOQRwLvA0orm9wXk=
+        Wed, 17 Aug 2022 23:42:24 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062EA915C0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:42:22 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M7Vwy6FcFz1N7Q5;
+        Thu, 18 Aug 2022 11:38:58 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 18 Aug 2022 11:42:20 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 18 Aug
+ 2022 11:42:20 +0800
+Message-ID: <24556707-99b3-ec3c-c176-cb73e1d030d8@huawei.com>
+Date:   Thu, 18 Aug 2022 11:42:17 +0800
 MIME-Version: 1.0
-Subject: Re: [PATCH] mm/damon: Validate if the pmd entry is present before
- accessing
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <ceaa1e54-e79a-86c7-cf35-d4159088f0f3@linux.alibaba.com>
-Date:   Thu, 18 Aug 2022 11:39:04 +0800
-Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        damon@lists.linux.dev, Linux MM <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <6F99AE03-3C74-4E5B-87E1-6F3232BEEBB5@linux.dev>
-References: <2838b6737bc259cf575ff11fd1c4b7fdb340fa73.1660717122.git.baolin.wang@linux.alibaba.com>
- <5173E308-2403-4667-9162-865CF7F11838@linux.dev>
- <ceaa1e54-e79a-86c7-cf35-d4159088f0f3@linux.alibaba.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH] x86/unwind/orc: unwind ftrace trampolines with correct
+ orc
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     <linux-kernel@vger.kernel.org>, <jpoimboe@kernel.org>,
+        <peterz@infradead.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>
+References: <20220818015525.222053-1-chenzhongjin@huawei.com>
+ <20220817222836.72aa77bd@gandalf.local.home>
+Content-Language: en-US
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <20220817222836.72aa77bd@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks for review!
 
 
-> On Aug 18, 2022, at 10:57, Baolin Wang <baolin.wang@linux.alibaba.com> =
-wrote:
->=20
->=20
->=20
-> =E5=9C=A8 8/18/2022 10:41 AM, Muchun Song =E5=86=99=E9=81=93:
->>> On Aug 17, 2022, at 14:21, Baolin Wang =
-<baolin.wang@linux.alibaba.com> wrote:
->>>=20
->>> The pmd_huge() is used to validate if the pmd entry is mapped by a =
-huge
->>> page, also including the case of non-present (migration or =
-hwpoisoned)
->>> pmd entry on arm64 or x86 architectures. Thus we should validate if =
-it
->>> is present before making the pmd entry old or getting young state,
->>> otherwise we can not get the correct corresponding page.
->>>=20
->>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>> ---
->>> mm/damon/vaddr.c | 10 ++++++++++
->>> 1 file changed, 10 insertions(+)
->>>=20
->>> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
->>> index 3c7b9d6..1d16c6c 100644
->>> --- a/mm/damon/vaddr.c
->>> +++ b/mm/damon/vaddr.c
->>> @@ -304,6 +304,11 @@ static int damon_mkold_pmd_entry(pmd_t *pmd, =
-unsigned long addr,
->>>=20
->>> 	if (pmd_huge(*pmd)) {
->>> 		ptl =3D pmd_lock(walk->mm, pmd);
->>> +		if (!pmd_present(*pmd)) {
->> Unluckily, we should use pte_present here. See commit c9d398fa23788. =
-We can use
->> huge_ptep_get() to get a hugetlb pte, so it=E2=80=99s better to put =
-the check after
->> pmd_huge.
->=20
-> IMO this is not the case for hugetlb, and the hugetlb case will be =
-handled by damon_mkold_hugetlb_entry(), which already used pte_present() =
-for hugetlb case.
+On 2022/8/18 10:28, Steven Rostedt wrote:
+> On Thu, 18 Aug 2022 09:55:25 +0800
+> Chen Zhongjin <chenzhongjin@huawei.com> wrote:
+>
+>
+>>   arch/x86/kernel/unwind_orc.c | 13 ++++++++-----
+>>   1 file changed, 8 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+>> index 38185aedf7d1..a938c5d0ed6f 100644
+>> --- a/arch/x86/kernel/unwind_orc.c
+>> +++ b/arch/x86/kernel/unwind_orc.c
+>> @@ -93,22 +93,25 @@ static struct orc_entry *orc_find(unsigned long ip);
+>>   static struct orc_entry *orc_ftrace_find(unsigned long ip)
+>>   {
+>>   	struct ftrace_ops *ops;
+>> -	unsigned long caller;
+>> +	unsigned long tramp_addr, offset;
+>>   
+>>   	ops = ftrace_ops_trampoline(ip);
+>>   	if (!ops)
+>>   		return NULL;
+>>   
+> Now if this is that unlikely recursion mentioned below then ops->trampoline
+> will be NULL, and if we do that offset addition, it will be incorrect.
+>
+> Perhaps we should add here:
+>
+> 	if (!ops->trampoline)
+> 		return NULL;
 
-Well, I thought it is hugetlb related since I saw the usage of pmd_huge. =
-If it is THP case, why
-not use pmd_trans_huge?
+I think when this will return NULL and then stop at orc_find:`if (ip == 
+0)` and return null_orc_entry.
 
-Thanks.
+And in ftrace_ops_trampoline: `if (op->trampoline && 
+op->trampoline_size)` which promise !ops->trampoline when !ops.
 
->=20
->> Cc Mike to make sure I am not missing something.
->> Muchun,
->> Thanks.
->>> +			spin_unlock(ptl);
->>> +			return 0;
->>> +		}
->>> +
->>> 		if (pmd_huge(*pmd)) {
->>> 			damon_pmdp_mkold(pmd, walk->mm, addr);
->>> 			spin_unlock(ptl);
->>> @@ -431,6 +436,11 @@ static int damon_young_pmd_entry(pmd_t *pmd, =
-unsigned long addr,
->>> #ifdef CONFIG_TRANSPARENT_HUGEPAGE
->>> 	if (pmd_huge(*pmd)) {
->>> 		ptl =3D pmd_lock(walk->mm, pmd);
->>> +		if (!pmd_present(*pmd)) {
->>> +			spin_unlock(ptl);
->>> +			return 0;
->>> +		}
->>> +
->>> 		if (!pmd_huge(*pmd)) {
->>> 			spin_unlock(ptl);
->>> 			goto regular_page;
->>> --=20
->>> 1.8.3.1
+
+IIUC the In unlikely recursion below means if orc_find(ftrace_call) 
+can't find any orc it will enter orc_ftrace_find(ftrace_call).
+
+If we dont check ip==caller then,
+
+ftrace_ops_trampoline(ftrace_call) causes orc_find(ftrace_call) again 
+(I'm not 100% sure it will)
+
+and it will be trapped in recursion
+
+
+When here is an offset we can still protect this scenario when 
+orc_find(ftrace_caller + offset) and check ip == ftrace_caller + offset.
+
+>
+> Let's add some comments.
+
+Makes sense.
+
+If the above explanation logic is fine, I'll add this comment and send v2.
+
+>
+> 	/* Set tramp_addr to the start of the code copied by the trampoline */
+>
+>>   	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS)
+>> -		caller = (unsigned long)ftrace_regs_call;
+>> +		tramp_addr = (unsigned long)ftrace_regs_caller;
+>>   	else
+>> -		caller = (unsigned long)ftrace_call;
+>> +		tramp_addr = (unsigned long)ftrace_caller;
+>> +
+> 	/* Now place tramp_addr to the location within the trampoline ip is at */
+>
+>> +	offset = ip - ops->trampoline;
+>> +	tramp_addr += offset;
+>>   
+>>   	/* Prevent unlikely recursion */
+>> -	if (ip == caller)
+>> +	if (ip == tramp_addr)
+>>   		return NULL;
+>>   
+>> -	return orc_find(caller);
+>> +	return orc_find(tramp_addr);
+>>   }
+>>   #else
+>>   static struct orc_entry *orc_ftrace_find(unsigned long ip)
+
+Best,
+
+Chen
+
 

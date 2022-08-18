@@ -2,71 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A64598CDD
+	by mail.lfdr.de (Postfix) with ESMTP id CC610598CDE
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242480AbiHRTsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
+        id S1345631AbiHRTst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241954AbiHRTso (ORCPT
+        with ESMTP id S1345624AbiHRTsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:48:44 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A141A5B7B9
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:48:39 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-335624d1e26so69575747b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:48:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=pN7pqer4VDQBcNszwXCuWriKzSK5JQuQKVaTrQYaltM=;
-        b=eJZZyDCvZFocEY1mnX4gNhf3oRrBiDSGvqtESvQlFghziy9F09FK0NXWYew7+Kje/t
-         EYiUjzXF8F1SfwY5eTJn/SlOMC0eAYlX6vXlI6BBe3iss3srKpP32vCLpr1Tm1oKMUMN
-         zg87bqYehNGX06yEK48vPXzcnNUkWK0MFSTmjqiX9GT4kQYkEBsKVx36aCMAt82aWbJe
-         I3tpfUL3jqS3znRjqVz6Nais3mhbhgsyExZDigC6az9B/idmpcCqQsrbFUurVcbQ03qr
-         VBPmy9U+vgbenggQVkmWLrNUBZx6y+nko5YSj1QAgdiIO6xqEJT7OVRswPbW8u68PuP3
-         71lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=pN7pqer4VDQBcNszwXCuWriKzSK5JQuQKVaTrQYaltM=;
-        b=li4/JMMoQL8OBmhee3aCrKKbSP9g0Oz+wNrqCf9qNzeqFWHzs7F2SR89r764I0e0H/
-         vBEAhu3SHF6cAht2AjMe/ymhHMXYNufvQWIKW/ARhr96mp/pensEnV323aIJQDqIFTdl
-         odoWzxxsCCtrRRNzs5UR5n+DfqETjt/3pDFS0e2LLCWMNeRZujRSqLdSkeU8VXecmcWb
-         CQ7NyNPTg74uW9ync6GxkZyfw9AjDbqchbDR/x508PkHC5yL2OdW9t9Qwm7O8TAym3tc
-         g49w+0bST7kcIRcU1IXDk1CpPlqdpYSLKiPDfwHtsp7lJaAUJEcTPp/YhglfZezLLl4F
-         gItw==
-X-Gm-Message-State: ACgBeo31OkCFZR4wsZKDw1WTVTDWE8Q8neUTZa1hrTlTe2UwLNVM+xmF
-        V+pwXM7XAx4U6WplB4Yl7zLsEO/J7QBkHKuOR4u6mmPBr4lYmA==
-X-Google-Smtp-Source: AA6agR4vFLdh+IPAYOERtSDAXoJ0znqtPFPClNRqMqibtcNloaQO1xQtmwFz06X3LDoLAF00jqv2MeLkBbP6KHyle2c=
-X-Received: by 2002:a25:bd3:0:b0:691:d47a:be78 with SMTP id
- 202-20020a250bd3000000b00691d47abe78mr4145138ybl.574.1660852118761; Thu, 18
- Aug 2022 12:48:38 -0700 (PDT)
+        Thu, 18 Aug 2022 15:48:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869FE5A813
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:48:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36149B82415
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:48:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07503C433C1;
+        Thu, 18 Aug 2022 19:48:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660852114;
+        bh=LbfCHFjKk6kzGgxEEUBJgU/bUqUM3IB8CCxE0P4a6bY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OzoOBygBfdk21arMXR12/gapkYCLUl5DIZIjGoyLdNfq6LLBUnayGq4VlmnHl323L
+         iZx3xye5Bssk3Ez9gQME9SMvSAdHMUaNueGBEKGwyKqLyF/Z3A/8vDgmzU7vzj+YNw
+         /dPIV2coNRspoY2u0ns/Kb+OTFDInFA9saWHLRn66nOcXEeVl1eXzOTBvbcjbhI3GX
+         ueICF1IHxevnJkimJ5YUZ3bj14htoUYrdSQTyrUFmGovJVl1rh8VQd6p2LnCzKJO0C
+         M1R/9YezXiYJoWBw/nhVmU/GAhwePb02Ze6VKUNtoKK31e03j8DEFjuqjYdhHvrBBJ
+         bFRPejkcm5irw==
+Date:   Thu, 18 Aug 2022 21:48:28 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linux Phy <linux-phy@lists.infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        josef.schlehofer@nic.cz
+Subject: Re: [PATCH linux-phy v2 1/4] string.h: Add str_has_proper_prefix()
+Message-ID: <20220818214828.22023dc7@thinkpad>
+In-Reply-To: <CAHp75VecURpGCBY3WVKqhd64Ngobjvi-w=PuHQBH2V-MqCzkuw@mail.gmail.com>
+References: <20220817200335.911-1-kabel@kernel.org>
+        <20220817200335.911-2-kabel@kernel.org>
+        <CAHp75VecURpGCBY3WVKqhd64Ngobjvi-w=PuHQBH2V-MqCzkuw@mail.gmail.com>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220808141538.102394-1-khuey@kylehuey.com> <87ilmpzunz.ffs@tglx>
-In-Reply-To: <87ilmpzunz.ffs@tglx>
-From:   Kyle Huey <me@kylehuey.com>
-Date:   Thu, 18 Aug 2022 12:48:23 -0700
-Message-ID: <CAP045Ao7hb4kXajkWnMxqawBzFGUZJtSuRRn1kbmjOF=mcTcoA@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] x86/fpu: Allow PKRU to be (once again) written by ptrace.
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "Robert O'Callahan" <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        Borislav Petkov <bp@suse.de>, kvm@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,138 +67,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 3:57 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> Kyle!
+On Thu, 18 Aug 2022 22:10:58 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-Hi.
-
-> On Mon, Aug 08 2022 at 07:15, Kyle Huey wrote:
-> > When management of the PKRU register was moved away from XSTATE, emulation
-> > of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
-> > for APIs that write XSTATE. This can be seen by running gdb and executing
-> > `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
-> > write to the PKRU register (which gdb performs through ptrace) is ignored.
+> On Wed, Aug 17, 2022 at 11:06 PM Marek Beh=C3=BAn <kabel@kernel.org> wrot=
+e:
 > >
-> > There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
-> > sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
-> > make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
-> > down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
-> > and sigreturn pass in pointers to the appropriate PKRU value.
+> > Add str_has_proper_prefix(), similar to str_has_prefix(), but requires
+> > that the prefix is proper: the string itself must be longer than the
+> > prefix.
 > >
-> > This also adds code to initialize the PKRU value to the hardware init value
-> > (namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
-> > This is a change to the current KVM_SET_XSAVE behavior.
->
-> You are stating a fact here, but provide 0 justification why this is
-> correct.
+> > Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
+> > ---
+> > Andy, Kees, could you ack this if it is ok? =20
+>=20
+> Seems to me there are too many strlen():s. One is hidden in strncmp().
 
-Well, the justification is that this *is* the behavior we want for
-ptrace/sigreturn, and it's very likely the existing KVM_SET_XSAVE
-behavior in this edge case is an oversight rather than intentional,
-and in the absence of confirmation that KVM wants the existing
-behavior (the KVM mailing list and maintainer are CCd) one correct
-code path is better than one correct code path and one buggy code
-path.
+I thought this was ok cause gcc has optimizations for this in
+https://github.com/gcc-mirror/gcc/blob/master/gcc/tree-ssa-strlen.cc
 
-> >
-> > Changelog since v4:
->
-> Can you please put the change log past the --- seperator line, so it
-> gets stripped off when the patch is applied? That spares manual fixups.
+But now I see that kernel does not declare these functions as inline
+that call __builtin_strlen()... so probably the optimizations are not
+used.
 
-Ok.
+> Besides not the good naming (what 'proper' means),
 
-> >
-> > Signed-off-by: Kyle Huey <me@kylehuey.com>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Borislav Petkov <bp@suse.de>
-> > Cc: kvm@vger.kernel.org # For edge case behavior of KVM_SET_XSAVE
-> > Cc: stable@vger.kernel.org # 5.14+
-> > Fixes: e84ba47e313d ("x86/fpu: Hook up PKRU into ptrace()")
->
-> Can you please use the documented tag ordering?
->
-> https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#patch-submission-notes
+The naming comes from similar naming in math: proper subset is as
+subset that is not equal to the superset. See
+https://en.wikipedia.org/wiki/Substring :
+  "A proper prefix of a string is not equal to the string itself"
 
-Ok.
+> the entire function is not needed. You may simply call
+>=20
+>   str_has_prefix() && p[len] !=3D '\0';
+>=20
+> Correct?
 
-> > @@ -1235,6 +1235,24 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
-> >       for (i = 0; i < XFEATURE_MAX; i++) {
-> >               mask = BIT_ULL(i);
-> >
-> > +             if (i == XFEATURE_PKRU) {
-> > +                     /*
-> > +                      * Retrieve PKRU if not in init state, otherwise
-> > +                      * initialize it.
-> > +                      */
-> > +                     if (hdr.xfeatures & mask) {
-> > +                             struct pkru_state xpkru = {0};
-> > +
-> > +                             if (copy_from_buffer(&xpkru, xstate_offsets[i],
-> > +                                                  sizeof(xpkru), kbuf, ubuf))
-> > +                                     return -EFAULT;
-> > +
-> > +                             *pkru = xpkru.pkru;
-> > +                     } else {
-> > +                             *pkru = 0;
-> > +                     }
-> > +             }
->
-> That's really horrible and there is no point in copying the stuff from
-> the buffer twice:
->
-> @@ -1246,6 +1246,15 @@ static int copy_uabi_to_xstate(struct fp
->                 }
->         }
->
-> +       /* Update the user protection key storage */
-> +       *pkru = 0;
-> +       if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
-> +               struct pkru_state *xpkru;
-> +
-> +               xpkru = get_xsave_addr(xsave, XFEATURE_PKRU);
-> +               *pkru = xpkru->pkru;
-> +       }
-> +
->
-> Hmm?
+Do you mean that I should implement this function to simply return
+  str_has_prefix() && p[len] !=3D '\0'
+or that this function should not exist at all and I should do that in
+the code where I would have used the function?
 
-It took me a bit to figure out what this is actually trying to do. To
-work, it would need to come at the very end of copy_uabi_to_xstate
-after xsave->header.xfeatures is updated. If you just want to avoid
-two copies I would counter-propose this though:
+Thanks.
 
-@@ -1235,7 +1235,19 @@ static int copy_uabi_to_xstate(struct fpstate
-*fpstate, const void *kbuf,
-        for (i = 0; i < XFEATURE_MAX; i++) {
-                mask = BIT_ULL(i);
-
--               if (hdr.xfeatures & mask) {
-+               if (i == XFEATURE_PKRU) {
-+                       /* Update the user protection key storage */
-+                       *pkru = 0;
-+                       if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
-+                               struct pkru_state xpkru = {0};
-+
-+                               if (copy_from_buffer(&xpkru, xstate_offsets[i],
-+                                                    sizeof(xpkru), kbuf, ubuf))
-+                                       return -EFAULT;
-+
-+                               *pkru = xpkru.pkru;
-+                       }
-+               } else if (hdr.xfeatures & mask) {
-                        void *dst = __raw_xsave_addr(xsave, i);
-
-                        offset = xstate_offsets[i];
-
-Thoughts? This avoids a second copy and avoids having to calculate the
-offset into the (now potentially compressed) XSTATE.
-
-- Kyle
-
->
-> Thanks,
->
->         tglx
+Marek

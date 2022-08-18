@@ -2,116 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83DBB5988CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3775988D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343684AbiHRQ0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 12:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
+        id S1343896AbiHRQ1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 12:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344574AbiHRQ0q (ORCPT
+        with ESMTP id S1344344AbiHRQ0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 12:26:46 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE2911C14
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 09:26:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660840005; x=1692376005;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TDTCqvwONJ9lvtiZl8rJs38Odt3/WFT0/x2OJAds0j0=;
-  b=mvfmbGhoZy9cZr0ZbUz6EUVFxnE/+kLwH7emD8RbE5pBceBHK6RgOK5i
-   u/ra8xZ7i6rZvbsZ/O7C/xKwL8x64v4uqv/t5N8zeYxGarKLKJ5XzmLR6
-   pV5MLMefGvL+Y5chuGy89yXnpiNaCi18mFMgdz7Z6HfeAwXJt7hGxaaw5
-   4RKuTN8mQUxZHzltz5gqmmjNJZC30+IXycpz0PA50TYCy5GEN25lCed7c
-   4fV8xYgib5S8GA7huPfZLpa6r8KW6dpiUgbsW1IjJsZYhDIL8hOXIdgRe
-   PxtllWmHa1VbTeIuDxDHuSeV/mBA9qKJYe4Y0Ij+GIHe9eHUSQdJh1XfU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="275851033"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="275851033"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 09:25:59 -0700
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="853467645"
-Received: from amalikya-mobl.amr.corp.intel.com (HELO [10.212.238.171]) ([10.212.238.171])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 09:25:58 -0700
-Message-ID: <7b246fd0-d54e-2419-26b6-8c7088a280d0@intel.com>
-Date:   Thu, 18 Aug 2022 09:25:57 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v9 1/6] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thu, 18 Aug 2022 12:26:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A401B6579
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 09:26:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660840008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bJKdNPCrAwflq0B+vpkU8Zee5XF8y4ubBjbkDVet4tY=;
+        b=OZwOjeNkvSpdbDpMQvmbN+dhqaqeJs5lQIMXFD8wOZTl4QuV9Rio8IQn4IcJUB+veWWhyf
+        xBcPQMTVQRGVmuRN2AfOmqPp/dy4ypeU8qUsYq0f2kIUk5WYOHfANUMxW7IBy1MLsauUwp
+        I14QN5PeUzaoVMTh9k2t7Yn5k47+H4c=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-131-D_kD5Qg7Mcy17aULiwAJNw-1; Thu, 18 Aug 2022 12:26:47 -0400
+X-MC-Unique: D_kD5Qg7Mcy17aULiwAJNw-1
+Received: by mail-wm1-f72.google.com with SMTP id i7-20020a1c3b07000000b003a534ec2570so1420979wma.7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 09:26:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=bJKdNPCrAwflq0B+vpkU8Zee5XF8y4ubBjbkDVet4tY=;
+        b=HpoqcN8NesYG1V3y2LSV64gSKwmn1Uay4B09HIi7DHm5jKDciVD4TZDH5eBBqU3ito
+         ZKypjt4PXtEoviWYicv0u++iooDFav3u0S3I78Nt1dcEmuwPbulydcFo1T0+cQNgl4W6
+         Zx12EmliWuCYs0UrGlwG5Uw+bQiax9+ANnzGP0hkZA8A4VdJHJjfcZdU4wef5mkiesmD
+         lM2AFZ6QQ96kGKanj+rRCQozWLnJ9nS00weVtMaMlZsMRFtG7UvqH1VVmxSv79ckU8EH
+         3sM4fstnXsnrLkVhjoMJMXYYDksTejQ0GJDpmwJtIlQlr9vR/gW1NewyPuJNyv+YmnGn
+         Hv+w==
+X-Gm-Message-State: ACgBeo3vU20D+Bcybt50iZSWn4hUw9h8dua/vAawnu3eVSA2nGyMn/kr
+        DmKiZKLmcvfjn5f3rLn2FyOScuHI0OUEOvEbeuI0PBK1LJESRJahhka/srvzXFhbc43isUEzKv9
+        I3xYsmsN+JHrPsplv1vlkDY++
+X-Received: by 2002:a05:600c:6009:b0:3a5:b069:5d34 with SMTP id az9-20020a05600c600900b003a5b0695d34mr2380601wmb.115.1660840006236;
+        Thu, 18 Aug 2022 09:26:46 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5KITbJ8qgB+07lErslmt5pcI8kN96IiPvyxnCel1X9v6mNS9hTnhSgQY4lQsTxkRNwRZDdaw==
+X-Received: by 2002:a05:600c:6009:b0:3a5:b069:5d34 with SMTP id az9-20020a05600c600900b003a5b0695d34mr2380597wmb.115.1660840006087;
+        Thu, 18 Aug 2022 09:26:46 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id q6-20020a1ce906000000b003a342933727sm5893947wmc.3.2022.08.18.09.26.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 09:26:45 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
         Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220728034420.648314-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Yv5KNyX992ddvVtD@zn.tnic>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Yv5KNyX992ddvVtD@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gal Pressman <gal@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>
+Subject: Re: [PATCH v2 1/5] bitops: Introduce find_next_andnot_bit()
+In-Reply-To: <20220818100820.3b45808b@gandalf.local.home>
+References: <20220817175812.671843-1-vschneid@redhat.com>
+ <20220817175812.671843-2-vschneid@redhat.com>
+ <20220818100820.3b45808b@gandalf.local.home>
+Date:   Thu, 18 Aug 2022 17:26:43 +0100
+Message-ID: <xhsmh35dtbjr0.mognet@vschneid.remote.csb>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 07:18, Borislav Petkov wrote:
->> +	/*
->> +	 * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
->> +	 *
->> +	 * Get the TDREPORT using REPORTDATA as input. Refer to
->> +	 * section 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0
->> +	 * Specification for detailed information.
->> +	 */
->> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
->> +				virt_to_phys(reportdata), req.subtype,
-> That subtype you're not checking either.
+On 18/08/22 10:08, Steven Rostedt wrote:
+> On Wed, 17 Aug 2022 18:58:08 +0100
+> Valentin Schneider <vschneid@redhat.com> wrote:
+>
+>> +#ifndef find_next_andnot_bit
+>> +/**
+>> + * find_next_andnot_bit - find the next set bit in one memory region
+>> + *                        but not in the other
+>> + * @addr1: The first address to base the search on
+>> + * @addr2: The second address to base the search on
+>> + * @size: The bitmap size in bits
+>> + * @offset: The bitnumber to start searching at
+>> + *
+>> + * Returns the bit number for the next set bit
+>> + * If no bits are set, returns @size.
+>
+> Can we make the above documentation more descriptive. Because I read this
+> three times, and I still have no idea what it does.
+>
+> The tag line sounds like the nursery song "One of these things is not like
+> the others".
+>
 
-I'll chime in here a bit since you're touching on something that bugged
-me too.  This whole mechanism is because of two TDX shortcuts.  (calling
-them shortcuts is generous, but I digress...)
+How about:
 
-     1. TDX guest attestation relies on SGX.  TDX does not have its own
-	attestation mechanism.
-     2. TDX guests can not run SGX enclaves.  Only TDX hosts can.
+  find the next set bit in ((first region) AND NOT(second region))
 
-As a result, any TDX guest that wants to do the attestation dance has to
-talk to the host, who them talks to the SGX enclave.  There's actually a
-nice diagram of it in here (Figure 5.8):
+Or
 
-> https://www.intel.com/content/dam/develop/external/us/en/documents/tdx-whitepaper-v4.pdf
+  find the next set bit in (*addr1 & ~*addr2)
 
-This "talking" can be done via any old communication mechanism.  Shared
-memory, virtio, morse code, whatever.  TDX_GET_REPORT just happens to be
-yet another communication mechanism dedicated *only* to these
-attestation reports.
+?
 
-So, this is not a *STRICTLY* required ABI.  Guests _can_ use other
-mechanisms to talk to an SGX attestation (quoting) enclave.  Second,
-this ABI *is* TDX-specific because no other hardware architectures have
-made the same design "choices".
+> -- Steve
 
-That's why this was jettisoned for v10.  It might reappear later, though.

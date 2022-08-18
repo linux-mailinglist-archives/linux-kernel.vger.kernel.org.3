@@ -2,100 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3EF597F97
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FAF597FB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 10:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243957AbiHRHzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 03:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
+        id S243977AbiHRH6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 03:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243964AbiHRHzw (ORCPT
+        with ESMTP id S243963AbiHRH6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 03:55:52 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B812B7EFDF
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:55:50 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id s9so952746ljs.6
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=dawxEcQT0OhFPG9l9jRrsFoKv486Saz+4v6DaJSObPA=;
-        b=EmOrw6T67t6JXnuPoMeZH07x7nMOn5ucQd9RoTd9bOMFEKuUgtrZta0s5paZoxZ9Je
-         qHtrH+AQmv/+uh0Wkvu4yEo4vvvOhgYGeHDj6dINWfirYLVZvHjh4oBwWWXujjwuYK7W
-         IyhV+YsFaoube+2i/I3eRX+qjTCQ5pbINij6ehzTR/F46fRZT2POawSEQhx7Cxmj6Qkw
-         91lOK8BpeWpSNFUMzUazcGLXvoQxnH6SbpqvDnkgNqU7QlKfX3AMqye8CvLEhFYY5qpp
-         E9/CCwT5A937l9YPLB1sVhzaCcRscQjVwFgdybaMnE6WtPfNFNxYOFNPZxSEiRU3tyK+
-         gUbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=dawxEcQT0OhFPG9l9jRrsFoKv486Saz+4v6DaJSObPA=;
-        b=SPv066l2dw6hR7Tbpbrh1sgqbfXnZ8bt8XkuK7/01s8F/fiXqrRkg28UQM/duHE5Yl
-         qvuhXqpZsKhMyZgLHi9jp6EdoGw3LLllB2xsWzBfSbJOFrV++VYoRaf/DBLa+SGrwqRy
-         X9lEwNO8U/sQhtSAMuITQnDWXE7Eb0rMu2bgyeopNhOwxiFLS5809ix0oL19PgJRCwo/
-         e+6cJaiN0h1R/nM8EVCEtDKuC5PiRR5PnP1FOiSkZ002DzOqR7VDILz+j/YmPLOBqC69
-         YkgRX0Yzqx7iEiVqTEG3D/rdPJSyVxx/aSUuPi6P4hJB1hJkRGA5LTEFvdKTLLIHEd28
-         GVBw==
-X-Gm-Message-State: ACgBeo0nWmKRYKIo+y3GhNgk8a4TRHhKGMFsANhBYKJRuCF2uoYaV599
-        DpXYsaTvjV2aCcJxjv/oIMhl1w==
-X-Google-Smtp-Source: AA6agR5VQUbfnby25Lc9unAu/HapmYL6K0oRaQ5+TLbZmOxeBd1NTB+IoxnuUO/L553aVNdK54dOwA==
-X-Received: by 2002:a2e:bc12:0:b0:25e:59e7:8def with SMTP id b18-20020a2ebc12000000b0025e59e78defmr563029ljf.249.1660809349142;
-        Thu, 18 Aug 2022 00:55:49 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
-        by smtp.gmail.com with ESMTPSA id u18-20020a056512129200b0048afa870525sm127379lfs.65.2022.08.18.00.55.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 00:55:48 -0700 (PDT)
-Message-ID: <88393f56-69b5-65d8-9acd-373e069c750f@linaro.org>
-Date:   Thu, 18 Aug 2022 10:55:47 +0300
+        Thu, 18 Aug 2022 03:58:41 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8D5237E8;
+        Thu, 18 Aug 2022 00:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660809519; x=1692345519;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZkYsJyWoE3iamxvXBLDRveMD2fLKX3azr/jNrlg8M1s=;
+  b=IGPiOJsFkQlAldDqmRyCjjOiMB9XB6OrwVDqCxOBVjes+kixoeXS9v2v
+   wji9mwfdZ0Fw5N9EFGaIw0aJ+o2VtWtBec0ijexVo0SKVyv9nsw9UptEt
+   A7Si7f1vekB9wDfQBT4HFXRTeybDbiaPOFIwd/Oi+BClBHFlr0itcXIU+
+   6cUQd/i3ucIsrdzq3HE7oRLjkTC0eLagk7PfIb5waPCrGU90N8jRsb/CS
+   Hwh2fBiZ3UGfhQivet5wmwfWwzY0W6gc4lgFZ/5kkiBTnQmNNa8BIBwnF
+   iWCvu2jDv+t+kYmshwnRATivjEY8URbstsBHkP79oDbl0+rpY6OymioMV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="356686301"
+X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
+   d="scan'208";a="356686301"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 00:58:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
+   d="scan'208";a="607735232"
+Received: from lkp-server01.sh.intel.com (HELO 6cc724e23301) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 18 Aug 2022 00:58:35 -0700
+Received: from kbuild by 6cc724e23301 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oOaQE-0000Dv-2p;
+        Thu, 18 Aug 2022 07:58:34 +0000
+Date:   Thu, 18 Aug 2022 15:58:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     guoren@kernel.org, xianting.tian@linux.alibaba.com,
+        palmer@dabbelt.com, heiko@sntech.de
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, liaochang1@huawei.com,
+        mick@ics.forth.gr, jszhang@kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>
+Subject: Re: [PATCH 2/2] riscv: kexec: Implement crash_smp_send_stop with
+ percpu crash_save_cpu
+Message-ID: <202208181520.fYQOePu6-lkp@intel.com>
+References: <20220816012701.561435-3-guoren@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/4] dt-bindings: soc: qcom: Introduce PMIC GLINK binding
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
- <20220818031512.319310-2-bjorn.andersson@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220818031512.319310-2-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816012701.561435-3-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/08/2022 06:15, Bjorn Andersson wrote:
-> The PMIC GLINK service, running on a coprocessor on some modern Qualcomm
-> platforms and implement USB Type-C handling and battery management.
-> This binding describes the component in the OS used to communicate with
-> the firmware and connect it's resources to those described in the
-> Devicetree, particularly the USB Type-C controllers relationship with
-> USB and DisplayPort components.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  .../bindings/soc/qcom/qcom,pmic-glink.yaml    | 98 +++++++++++++++++++
+Hi,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.0-rc1 next-20220818]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-kexec-Support-crash_save-percpu-and-machine_kexec_mask_interrupts/20220816-144442
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+config: riscv-randconfig-r035-20220818 (https://download.01.org/0day-ci/archive/20220818/202208181520.fYQOePu6-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/0abdaf7e1f44634e1cee484e3cf01b7e8c851950
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review guoren-kernel-org/riscv-kexec-Support-crash_save-percpu-and-machine_kexec_mask_interrupts/20220816-144442
+        git checkout 0abdaf7e1f44634e1cee484e3cf01b7e8c851950
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/riscv/kernel/machine_kexec.c:217:7: error: call to undeclared function 'smp_crash_stop_failed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           WARN(smp_crash_stop_failed(),
+                ^
+   1 error generated.
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+vim +/smp_crash_stop_failed +217 arch/riscv/kernel/machine_kexec.c
 
+   193	
+   194	/*
+   195	 * machine_kexec - Jump to the loaded kimage
+   196	 *
+   197	 * This function is called by kernel_kexec which is called by the
+   198	 * reboot system call when the reboot cmd is LINUX_REBOOT_CMD_KEXEC,
+   199	 * or by crash_kernel which is called by the kernel's arch-specific
+   200	 * trap handler in case of a kernel panic. It's the final stage of
+   201	 * the kexec process where the pre-loaded kimage is ready to be
+   202	 * executed. We assume at this point that all other harts are
+   203	 * suspended and this hart will be the new boot hart.
+   204	 */
+   205	void __noreturn
+   206	machine_kexec(struct kimage *image)
+   207	{
+   208		struct kimage_arch *internal = &image->arch;
+   209		unsigned long jump_addr = (unsigned long) image->start;
+   210		unsigned long first_ind_entry = (unsigned long) &image->head;
+   211		unsigned long this_cpu_id = __smp_processor_id();
+   212		unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
+   213		unsigned long fdt_addr = internal->fdt_addr;
+   214		void *control_code_buffer = page_address(image->control_code_page);
+   215		riscv_kexec_method kexec_method = NULL;
+   216	
+ > 217		WARN(smp_crash_stop_failed(),
 
-Best regards,
-Krzysztof
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

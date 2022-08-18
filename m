@@ -2,80 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D803598E12
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD756598E0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346085AbiHRUbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 16:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
+        id S1346087AbiHRUcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 16:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346067AbiHRUbf (ORCPT
+        with ESMTP id S242194AbiHRUcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:31:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C60CD52F;
-        Thu, 18 Aug 2022 13:31:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=iZYwlrrYfLQDglwnkyIXQe5gASgdsUP8JcbChxhpLxo=; b=kopqNJUVePtv167FLrWcxwxEpV
-        1c0aCCnbVQDuQNc0kZRrXmRaVucktlUI4VcZ+ijW73MRl3RMlxiZ66W1nHrt6BOsvAzmOt9rlCBHg
-        pFN/ui8tux9HhYU7WjUqX1nJKNMVBZh114k6xBIo/9mIZQYkyFMT+DXrtnAnWYVp9zNwEPt/b5YVP
-        m2tliXUNU8fugq1Mq90ZCRYIIAXnlaEq3ePmNC1R1alhstSv3skQHGMtuX0Aiv8KzwMHhoOnDfB8t
-        7n97sAb6OP3KJv1jliFkp6/R5oa5vZXBF+FHfZEPIq/6yOiXmq5AH86jIv8WdokbgMq8nxrZSspCN
-        u5N1RvSQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oOmAj-00AEzQ-L2; Thu, 18 Aug 2022 20:31:21 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B48E198026B; Thu, 18 Aug 2022 22:31:19 +0200 (CEST)
-Date:   Thu, 18 Aug 2022 22:31:19 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Joseph Salisbury <joseph.salisbury@canonical.com>
-Cc:     linux-rt-users@vger.kernel.org, williams@redhat.com,
-        bigeasy@linutronix.de, valentin.schneider@arm.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC} Commit 8a99b6833c88 Moves Important Real-time Settings To
- DebugFS
-Message-ID: <Yv6hl3D2TRL6jzrL@worktop.programming.kicks-ass.net>
-References: <9e6a7216-9cb9-cba4-f150-1a0eaf56353c@canonical.com>
+        Thu, 18 Aug 2022 16:32:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38867D0751;
+        Thu, 18 Aug 2022 13:31:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E33073F439;
+        Thu, 18 Aug 2022 20:31:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1660854717; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rz8+CJ524hy506pPTiAxc3Bk5R74WhisuRkg2AR0eYo=;
+        b=aJgiGIrU08Lb2Zf7pOG8scXFWd0Sq3h60Skr1iEvjJ7qqOqgsn6bTfatzGPAtUIdIhDDaA
+        EQo1B5k1BHUTALLADvLYIVrg+1u7zs7LYLrXyxq6CxLV1/oNWaicqvfTzYxUAc3bV44ZS5
+        gqs2DRRNK25mdnhrnZ2K+bcJG+wypkw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1660854717;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rz8+CJ524hy506pPTiAxc3Bk5R74WhisuRkg2AR0eYo=;
+        b=SoqMd1NndFbHikpkz1cHgNzol0/w14RMDblrtNcvvrZYOTpzQBRfZ48wiE3hwDyJj5uhIr
+        xeOaa9E0norKTnBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B13F3139B7;
+        Thu, 18 Aug 2022 20:31:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KhpQKb2h/mIKAgAAMHmgww
+        (envelope-from <mliska@suse.cz>); Thu, 18 Aug 2022 20:31:57 +0000
+Message-ID: <84e3d6cc-75cf-d6f3-9bb8-be02075aaf6d@suse.cz>
+Date:   Thu, 18 Aug 2022 22:31:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9e6a7216-9cb9-cba4-f150-1a0eaf56353c@canonical.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
+Subject: [PATCH v3] docs/arm64: elf_hwcaps: unify newlines in HWCAP lists
+To:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     broonie@kernel.org, corbet@lwn.net,
+        linux-arm-kernel@lists.infradead.org
+References: <Yv50RxlDf0qpK9v8@sirena.org.uk>
+Content-Language: en-US
+In-Reply-To: <Yv50RxlDf0qpK9v8@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 03:53:28PM -0400, Joseph Salisbury wrote:
-> Hello,
-> 
-> Some Ubuntu users are using the tuned package with a 5.15.x based real-time
-> kernel.  Tuned adjusts various sysctl options based on a specified profile. 
-> This userspace package has stopped working > 5.13 due to the following
-> commit:
-> 
-> 8a99b6833c88 "(sched: Move SCHED_DEBUG sysctl to debugfs)"
-> 
-> This commit moved some important real-time sysctl knobs to debugfs in
-> 5.13-rc1.  It also appears some of the sysctl options were not moved,
-> sched_min_granularity_ns, for example.
-> 
-> I was hoping to get some feedback on how to approach this.  Would upstream
-> real-time consider accepting a patch to the 5.15 real-time patch set that
-> reverts this commit?  Or a new patch that adds the sysctl settings back? 
-> Any other ideas or feedback would be appreciated!
+Unify horizontal spacing (remove extra newlines) which
+are sensitive to visual presentation by Sphinx.
 
-None of those knobs were available when SCHED_DEBUG=n, so relying on
-them is your error to begin with.
+Fixes: 5e64b862c482 (arm64/sme: Basic enumeration support)
+Signed-off-by: Martin Liska <mliska@suse.cz>
+Reviewed-by: Mark Brown <broonie@kernel.org>
+---
+ Documentation/arm64/elf_hwcaps.rst | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-Secondly, real-time? Which if those values affects anything in
-SCHED_FIFO/RR/DEADLINE ?
+diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
+index 52b75a25c205..311021f2e560 100644
+--- a/Documentation/arm64/elf_hwcaps.rst
++++ b/Documentation/arm64/elf_hwcaps.rst
+@@ -242,44 +242,34 @@ HWCAP2_MTE3
+     by Documentation/arm64/memory-tagging-extension.rst.
+ 
+ HWCAP2_SME
+-
+     Functionality implied by ID_AA64PFR1_EL1.SME == 0b0001, as described
+     by Documentation/arm64/sme.rst.
+ 
+ HWCAP2_SME_I16I64
+-
+     Functionality implied by ID_AA64SMFR0_EL1.I16I64 == 0b1111.
+ 
+ HWCAP2_SME_F64F64
+-
+     Functionality implied by ID_AA64SMFR0_EL1.F64F64 == 0b1.
+ 
+ HWCAP2_SME_I8I32
+-
+     Functionality implied by ID_AA64SMFR0_EL1.I8I32 == 0b1111.
+ 
+ HWCAP2_SME_F16F32
+-
+     Functionality implied by ID_AA64SMFR0_EL1.F16F32 == 0b1.
+ 
+ HWCAP2_SME_B16F32
+-
+     Functionality implied by ID_AA64SMFR0_EL1.B16F32 == 0b1.
+ 
+ HWCAP2_SME_F32F32
+-
+     Functionality implied by ID_AA64SMFR0_EL1.F32F32 == 0b1.
+ 
+ HWCAP2_SME_FA64
+-
+     Functionality implied by ID_AA64SMFR0_EL1.FA64 == 0b1.
+ 
+ HWCAP2_WFXT
+-
+     Functionality implied by ID_AA64ISAR2_EL1.WFXT == 0b0010.
+ 
+ HWCAP2_EBF16
+-
+     Functionality implied by ID_AA64ISAR1_EL1.BF16 == 0b0010.
+ 
+ 4. Unused AT_HWCAP bits
+-- 
+2.37.2
+

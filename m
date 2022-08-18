@@ -2,120 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F8559873D
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25498598748
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344323AbiHRPVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
+        id S1344236AbiHRPVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343603AbiHRPUb (ORCPT
+        with ESMTP id S1344315AbiHRPU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:20:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34A05A8BC
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:20:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660836029;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3GQGhpbZE8ROB+knhR1egNzmPjUJp4WnI2UO3qznnGI=;
-        b=TiCxWfNfaoo7OG2GAolITqe0T+j8XORHAX2lDhUnB7ffAkPIWKU/hbtg/A6AOV2WhSfUYP
-        i8RQUYcio62tVNM9xNUG4nGNupjA0Wn+76IMN1alMX8IAETf5Pmlry+oQ7u7ZuSa4vnEQb
-        tJj8SajWeLA2nZw/NJGSQ4LxCpVDi5k=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-131-oH6b6v52NzGSaYvtyIKEEg-1; Thu, 18 Aug 2022 11:20:28 -0400
-X-MC-Unique: oH6b6v52NzGSaYvtyIKEEg-1
-Received: by mail-ed1-f70.google.com with SMTP id o2-20020a056402438200b0043d552deb2aso1142100edc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:20:26 -0700 (PDT)
+        Thu, 18 Aug 2022 11:20:59 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FD766123
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:20:58 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id y18so1346291qtv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:20:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=3GQGhpbZE8ROB+knhR1egNzmPjUJp4WnI2UO3qznnGI=;
-        b=iW3li0UReQEDPUfQv9nYOBmBpbr5E9HPfjaj2RaJrmpqE4ODlVH85UNzEclJVrgjyJ
-         KrzNfD2wNp4W6uLJOkHJkpQxT7fnvT0tD1HwnP3uAKof3KArN4MmAiVOlfKHVMTA2ipa
-         edcJxtNNo4CDLacMQJHB5qPqN/j2bKkaQ3oh+fwzrB1ErL+ZuPGb39FkjNJCyrBCOIda
-         d8drd8ZenkvzUlmKs1auqPCOl+kM+djJ74YfIDLBm2n+rXFeFrHhSYAJqPOQ2Bp5oWuE
-         AUhOdMR/AJTR0jGgmhGQArnFg4nDjI/LaNtlvUFtAqnB7KwExr/sI6GfkDoTPGKVZTN7
-         7mKA==
-X-Gm-Message-State: ACgBeo1PQLaZFYNre/x3htPAEpZwj2l6DNqhPmi92zcwCALaNMUcFUdp
-        15DxKmmdOOdPfol3dKXhNrra0sA6oB7I7cD8v5wd16wRzyKuIz+uzO0TkC3vQeHmGZS0XLdkD/6
-        KPO+oHk8c2nRRQWGgHjOysGUNCndRUpA6unYdKVXfIlqgFJCvjtNV6ZR5JKqb38hoxXNLX/CmLt
-        rj
-X-Received: by 2002:a17:906:9b09:b0:730:9480:9729 with SMTP id eo9-20020a1709069b0900b0073094809729mr2228173ejc.588.1660836026009;
-        Thu, 18 Aug 2022 08:20:26 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7bh4JrZAPWDBf+wZbX/JS8gz/ZAVA15O/nNLBF7TBz5gRTyDxEDV3jKJnQao0yfUYyQPmZUg==
-X-Received: by 2002:a17:906:9b09:b0:730:9480:9729 with SMTP id eo9-20020a1709069b0900b0073094809729mr2228146ejc.588.1660836025686;
-        Thu, 18 Aug 2022 08:20:25 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id p6-20020a05640210c600b0043df40e4cfdsm1308866edu.35.2022.08.18.08.20.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 08:20:25 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 01/26] KVM: x86: hyper-v: Expose access to debug MSRs
- in the partition privilege flags
-In-Reply-To: <Yv5XPnSRwKduznWI@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-2-vkuznets@redhat.com>
- <Yv5XPnSRwKduznWI@google.com>
-Date:   Thu, 18 Aug 2022 17:20:24 +0200
-Message-ID: <878rnltw7b.fsf@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=T9A28BLo2B0nLzuZtZ0Ejl0zLIHzqGciO6GeX7JAOrM=;
+        b=lgBc9DoW7EKRPuC+cP42dPk4UvU6Rik/GYPaQkHEIMFMLQU7i46UltqammHm4TmTXZ
+         QATESz3amJncCUjeqAT9Do6TWDXwqiMPd9XrUXamzmjTsbWxP6vqKwo/etCgAEHdIRlf
+         u83OgE3fAkA0to6afaCzRitL8qC5UIkRgBzv+OprfYqJybV73d9wiZ+JIPS4CMGzd09M
+         tp32YIrlI0SuFUpKReaJJoRRQFWVvNAjCwN24Ohm87AOXRrqF/eJDaLsp1t88uubBJE5
+         454GjQf9Y5gq+03m8mAtE44AUp+x1Xu0bBH3fgSADVq3Mfy4BSoaRrJx3fyrhciZ16fy
+         PV8g==
+X-Gm-Message-State: ACgBeo0AW1GFff107iYjSNBETzuBJEVBcQyBbX/GWisNP8Xl20veN96C
+        oALFnRpB7QbmbGmyTQriFQZlHCvTZFwExg==
+X-Google-Smtp-Source: AA6agR5xRtWJj2hkTtU2PycB1Y3B0C07H6esxlDCSiveM1PJ74vurMRwRyyEtDtVfJMB3Mv3VDXmDA==
+X-Received: by 2002:a05:622a:6027:b0:343:5691:93de with SMTP id he39-20020a05622a602700b00343569193demr3020500qtb.165.1660836057268;
+        Thu, 18 Aug 2022 08:20:57 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id v16-20020a05620a0f1000b006b97151d2b3sm1787602qkl.67.2022.08.18.08.20.55
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 08:20:56 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-3376851fe13so16492137b3.6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:20:55 -0700 (PDT)
+X-Received: by 2002:a25:250b:0:b0:68f:425b:3ee0 with SMTP id
+ l11-20020a25250b000000b0068f425b3ee0mr3357401ybl.89.1660836055065; Thu, 18
+ Aug 2022 08:20:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220816141116.5nuszmilqv2exdb3@houat> <CAMuHMdXq_xGPx46bdnUFGDiG4kcgdxtXaRGTucFd3TRq8353dg@mail.gmail.com>
+ <20220816154956.pkdpxmmw27mia5ix@houat> <CAMuHMdX0L6cO_jYXKZTv0sm9V39Eiy_STiknSkdRQG4k-9GJeg@mail.gmail.com>
+ <20220817074710.w4c4xwj7edly2b5p@houat> <CAMuHMdXeBakWr6geOWGxnjQYaU9Pi4tRvVFFtubyMJZTT2nPnw@mail.gmail.com>
+ <20220817111454.pn2iltvyo2drebq7@houat> <CAMuHMdU57g1rNoLo65jhLK8mk4YkNEbMz1E7XKWk2dnCxTr=gg@mail.gmail.com>
+ <20220817131854.jwmhqvhfhp77bbr3@houat> <CAMuHMdXrfH9MArXesfNCvqayiq17u7XaqtSvXTNt4V10=obSHQ@mail.gmail.com>
+ <20220818145436.vqojnhmvhjxdzooe@houat>
+In-Reply-To: <20220818145436.vqojnhmvhjxdzooe@houat>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 18 Aug 2022 17:20:42 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW5kTUeg59fym7QxfN5oisTZHWbiAPeSYKJVShZWduJcA@mail.gmail.com>
+Message-ID: <CAMuHMdW5kTUeg59fym7QxfN5oisTZHWbiAPeSYKJVShZWduJcA@mail.gmail.com>
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+Hi Maxime,
 
-> On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
->> For some features, Hyper-V spec defines two separate CPUID bits: one
->> listing whether the feature is supported or not and another one showing
->> whether guest partition was granted access to the feature ("partition
->> privilege mask"). 'Debug MSRs available' is one of such features. Add
->> the missing 'access' bit.
->> 
->> Note: hv_check_msr_access() deliberately keeps checking
->> HV_FEATURE_DEBUG_MSRS_AVAILABLE bit instead of the new HV_ACCESS_DEBUG_MSRS
->> to not break existing VMMs (QEMU) which only expose one bit. Normally, VMMs
->> should set either both these bits or none.
+On Thu, Aug 18, 2022 at 4:54 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> On Wed, Aug 17, 2022 at 04:04:24PM +0200, Geert Uytterhoeven wrote:
+> > On Wed, Aug 17, 2022 at 3:19 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > > On Wed, Aug 17, 2022 at 03:05:52PM +0200, Geert Uytterhoeven wrote:
+> > > > On Wed, Aug 17, 2022 at 1:15 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > > > > On Wed, Aug 17, 2022 at 10:35:07AM +0200, Geert Uytterhoeven wrote:
+> > > > > > On Wed, Aug 17, 2022 at 9:47 AM Maxime Ripard <maxime@cerno.tech> wrote:
+> > > > > > > On Wed, Aug 17, 2022 at 09:31:18AM +0200, Geert Uytterhoeven wrote:
+> > > > > > > > On Tue, Aug 16, 2022 at 5:50 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > > > > > > > > On Tue, Aug 16, 2022 at 04:43:44PM +0200, Geert Uytterhoeven wrote:
+> > > > > > > > > > > > > > Either you have to add them here (e.g. "hd720p50" and "hd720p60"), or
+> > > > > > > > > > > > > > handle them through "@<refresh>".  The latter would impact "[PATCH v1
+> > > > > > > > > > > > > > 09/35] drm/modes: Move named modes parsing to a separate function", as
+> > > > > > > > > > > > > > currently a named mode and a refresh rate can't be specified both.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > I think the former would make more sense. It simplifies a bit the
+> > > > > > > > > > > > > parser, and we're going to use a named mode anyway.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > > As "[PATCH v1 34/35] drm/modes: Introduce the tv_mode property as a
+> > > > > > > > > > > > > > command-line option" uses a separate "tv_mode" option, and not the main
+> > > > > > > > > > > > > > mode name, I think you want to add them here.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > It's a separate story I think, we could have a named mode hd720p50,
+> > > > > > > > > > > > > which would be equivalent to 1280x720,tv_mode=hd720p
+> > > > > > > > > > > >
+> > > > > > > > > > > > So where's the field rate in "1280x720,tv_mode=hd720p"?
+> > > > > > > > > > >
+> > > > > > > > > > > Yeah, sorry I meant 1280x720@50,tv_mode=hd720p
+> > > > > > > > > >
+> > > > > > > > > > Above you said "I think the former would make more sense", so that
+> > > > > > > > > > should be "1280x720,tv_mode=hd720p50"?
+> > > > > > > > >
+> > > > > > > > > No, 720p at 50Hz would be either hd720p50 or 1280x720@50,tv_mode=hd720p
+> > > > > > > > > and 60Hz would be hd720p60 or 1280x720@60,tv_mode=hd720p
+> > > > > > > >
+> > > > > > > > I disagree: hd720p50 and hd720p60 are different TV modes.
+> > > > > > >
+> > > > > > > I agree, and I don't see how that command-line doesn't express that?
+> > > > > >
+> > > > > > Oh, I see what you mean: yes, it expresses that.
+> > > > > > But it is inconsistent with the NTSC/PAL/SECAM/hd{480,576}[ip] modes,
+> > > > > > where the TV mode specifies both number of lines and frame rate.
+> > > > >
+> > > > > Only if we're using a named mode, and naming is hard :)
+> > > >
+> > > > That's not true: "640x480,tv_mode=PAL-N" would give me a mode with
+> > > > 625 lines and 25 frames/s, "640x480,tv_mode=PAL-M" would give me a
+> > > > mode with 525 lines and 30 frames/s.
+> > >
+> > > In that series, "640x480,tv_mode=PAL-N" would be rejected as invalid:
+> > >
+> > > https://lore.kernel.org/dri-devel/20220728-rpi-analog-tv-properties-v1-14-3d53ae722097@cerno.tech/
+> >
+> > It would become supported once the ideas from thread "[PATCH v1 04/35]
+> > drm/modes: Introduce 480i and 576i modes" are implemented...
 >
-> This is not the right approach long term.  If KVM absolutely cannot unconditionally
-> switch to checking HV_ACCESS_DEBUG_MSRS because it would break QEMU users, then we
-> should add a quirk, but sweeping the whole thing under the rug is wrong.
+> Indeed, but I'm still not sure what your concern is here.
+> "640x480,tv_mode=PAL-N" and "640x480,tv_mode=PAL-M" are both fairly
+> obvious.
 >
+> You were initially saying that you had concern over the inconsistency of
+> NTSC/PAL/SECAM where the TV mode would specify a number of lines and
+> frame rate, but hd720p50 also specifies a number of line and frame rate?
 
-First, this patch is kind of unrelated to the series so in case it's the
-only thing which blocks it from being merged -- let's just pull it out
-and discuss separately.
+My concern is that you want to call the TV mode "hd720p", which
+does not dictate the frame rate.
+I would like to have both "720p50" and "720p60", as they do dictate
+the frame rate, like all the non-hd modes.
 
-My personal opinion is that in this particular case we actually can
-switch to checking HV_ACCESS_DEBUG_MSRS and possibly backport this patch
-to stable@ and be done with it as SynDBG is a debug feature which is not
-supposed to be used much in the wild. This, however, will not give us
-much besides 'purity' in KVM as no sane VMM is supposed to set just one
-of the HV_FEATURE_DEBUG_MSRS_AVAILABLE/HV_ACCESS_DEBUG_MSRS bits. TL;DR:
-I'm not against the change.
+Gr{oetje,eeting}s,
 
--- 
-Vitaly
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

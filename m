@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E500359844F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59107598450
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245043AbiHRNj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
+        id S245170AbiHRNjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245124AbiHRNjK (ORCPT
+        with ESMTP id S245126AbiHRNjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 18 Aug 2022 09:39:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D7657E35;
-        Thu, 18 Aug 2022 06:39:08 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B07C3AE47;
+        Thu, 18 Aug 2022 06:39:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39361616A0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B12F3616BD;
         Thu, 18 Aug 2022 13:39:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70B27C43140;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879DFC43144;
         Thu, 18 Aug 2022 13:39:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1660829947;
-        bh=/u+oKcPW6ChqPyJvj84EmuaOgNhqaFaZAyoGnBvxnqY=;
+        bh=Gr+WTBMpsUX+XAe05AEyOnHiXOlilMHU7yC/Y/6/lMM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hwvQJkMP7sKAup+IMRAOJNCY/nR4UeVdNyY2tX4e7ZQsZanBK+lHhogPva3aYdsDG
-         gy4izYE4OrQgFZNdfjd2LTIV6emUljpX9KX4Tk3bc3PlsFIahl0GnFkr/UBtauykhM
-         /Npqeb0StGezUcBbZobOdkRiHVrag8XH80kgaLEee/yPQHO2ldQHgFMsuUUEpDCRuX
-         P0OV8x9XNvESfil84IBv6N3Iu+Su0eCttqi52LYDgwofn7qQIAwGpswtyuTeLnX/dJ
-         /iGU/k8CvnbTOMskvWketZ4l/IRVBca6b0gz60lc9sSo79Rbvhkq4zDWVo8MiCRHZk
-         3y/fm7ozACUeg==
+        b=RSnWzXOFd5o4iXvFNL3WRvxE6qY1gux2sGl5Ud43H6kboOxE5edq360GzqbCigMv9
+         r83oaUMFqR9YOu1zwNL0zMyqUq3FqMVM2LHE8wgpcYD7V7K9QwL3sK9IIknrVI05tE
+         guDfkC9M9rbBM6lGR8GhFWw1tU0q3Qyhd+sWZgp1okQldF341jfQL24ENTiFjkvtvw
+         6qVwDI0OsoIfavnKIIStVc2ghnLOivsJ5lsYc5Y1+ziBZ9QSlvrj2FYY+QucVnE//9
+         VDqwJeg5AxVHNkL+fJLRyINTdndnmSoXkjQKFInsA02QW3btXHpU/phKG6Qe5TjEqM
+         neEWJa0f5f/zQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1oOfjl-00AY7V-CG;
+        id 1oOfjl-00AY7Z-E7;
         Thu, 18 Aug 2022 15:39:05 +0200
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>, corbet@lwn.net
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
         Leo Yan <leo.yan@linaro.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh@kernel.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 05/13] dt-bindings: arm: update arm,coresight-cpu-debug.yaml reference
-Date:   Thu, 18 Aug 2022 15:38:51 +0200
-Message-Id: <20815dbff3d27f5d3e6876363f052d2a08ad2e72.1660829433.git.mchehab@kernel.org>
+Subject: [PATCH 06/13] Documentation: coresight: fix a documentation build warning
+Date:   Thu, 18 Aug 2022 15:38:52 +0200
+Message-Id: <ff5c57f03d106dc5cc14448ec0db224267fb1bfb.1660829433.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <cover.1660829433.git.mchehab@kernel.org>
 References: <cover.1660829433.git.mchehab@kernel.org>
@@ -65,34 +64,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changeset 66d052047ca8 ("dt-bindings: arm: Convert CoreSight CPU debug to DT schema")
-renamed: Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt
-to: Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml.
+Using wildcards for cross-reference doesn't work, as the Sphinx
+automarkup plugin is not smart enough. So, changeset
+c06475910b52 ("Documentation: coresight: Escape coresight bindings file wildcard")
+tried to fix it, but at the wrong way, as it the building system
+will keep producing warnings about that:
 
-Update its cross-reference accordingly.
+	Warning: Documentation/trace/coresight/coresight.rst references a file that doesn't exist: Documentation/devicetree/bindings/arm/arm,coresight-
 
-Fixes: 66d052047ca8 ("dt-bindings: arm: Convert CoreSight CPU debug to DT schema")
+As automarkup will still try (and fail) to create a cross reference.
+So, instead, change the markup to ensure that the warning won't be
+reported.
+
+Fixes: c06475910b52 ("Documentation: coresight: Escape coresight bindings file wildcard")
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 See [PATCH 00/13] at: https://lore.kernel.org/all/cover.1660829433.git.mchehab@kernel.org/
 
- Documentation/trace/coresight/coresight-cpu-debug.rst | 2 +-
+ Documentation/trace/coresight/coresight.rst | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/trace/coresight/coresight-cpu-debug.rst b/Documentation/trace/coresight/coresight-cpu-debug.rst
-index 993dd294b81b..79bbe587e5e8 100644
---- a/Documentation/trace/coresight/coresight-cpu-debug.rst
-+++ b/Documentation/trace/coresight/coresight-cpu-debug.rst
-@@ -117,7 +117,7 @@ divide into below cases:
+diff --git a/Documentation/trace/coresight/coresight.rst b/Documentation/trace/coresight/coresight.rst
+index 4a71ea6cb390..826e59a698da 100644
+--- a/Documentation/trace/coresight/coresight.rst
++++ b/Documentation/trace/coresight/coresight.rst
+@@ -130,7 +130,7 @@ Misc:
  Device Tree Bindings
  --------------------
  
--See Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt for details.
-+See Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml for details.
+-See Documentation/devicetree/bindings/arm/arm,coresight-\*.yaml for details.
++See ``Documentation/devicetree/bindings/arm/arm,coresight-*.yaml`` for details.
  
- 
- How to use the module
+ As of this writing drivers for ITM, STMs and CTIs are not provided but are
+ expected to be added as the solution matures.
 -- 
 2.37.1
 

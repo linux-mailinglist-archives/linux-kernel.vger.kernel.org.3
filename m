@@ -2,99 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F02C5598165
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB70598168
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244047AbiHRKTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 06:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
+        id S244063AbiHRKUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 06:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244040AbiHRKS7 (ORCPT
+        with ESMTP id S239631AbiHRKUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 06:18:59 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558473DF0A
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 03:18:58 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 27I9xIau030186;
-        Thu, 18 Aug 2022 17:59:19 +0800 (GMT-8)
-        (envelope-from billy_tsai@aspeedtech.com)
-Received: from BillyTsai-pc.aspeed.com (192.168.2.149) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 18 Aug
- 2022 18:18:11 +0800
-From:   Billy Tsai <billy_tsai@aspeedtech.com>
-To:     <andrew@aj.id.au>, <linus.walleij@linaro.org>, <joel@jms.id.au>,
-        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] pinctrl: aspeed: Force to disable the function's signal
-Date:   Thu, 18 Aug 2022 18:18:39 +0800
-Message-ID: <20220818101839.28860-1-billy_tsai@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 18 Aug 2022 06:20:16 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5134B71BC3;
+        Thu, 18 Aug 2022 03:20:14 -0700 (PDT)
+Received: from fsav112.sakura.ne.jp (fsav112.sakura.ne.jp [27.133.134.239])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 27IAK98G072182;
+        Thu, 18 Aug 2022 19:20:09 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav112.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp);
+ Thu, 18 Aug 2022 19:20:09 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 27IAK9M8072179
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 18 Aug 2022 19:20:09 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <0c65db46-ec21-a3e5-87a8-6b3f2fadb607@I-love.SAKURA.ne.jp>
+Date:   Thu, 18 Aug 2022 19:20:08 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.149]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 27I9xIau030186
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [linux] [5.19.0] task hung for indefinite time with call traces
+ when rebooted with Kexec
+Content-Language: en-US
+To:     Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
+Cc:     abdhalee@linux.vnet.ibm.com, mputtash@linux.vnet.com,
+        sachinp@linux.vnet.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <4c93ce0b-8e04-1f03-e4ce-7c763719169c@linux.vnet.ibm.com>
+ <6b5267ee-9372-3862-614a-298f7bd9ae60@I-love.SAKURA.ne.jp>
+ <0d1621b1-6654-34f1-9630-7cf5881a8eaf@linux.vnet.ibm.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <0d1621b1-6654-34f1-9630-7cf5881a8eaf@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the driver want to disable the signal of the function, it doesn't
-need to query the state of the mux function's signal on a pin. The
-condition below will miss the disable of the signal:
-Ball | Default | P0 Signal | P0 Expression               | Other
------+---------+-----------+-----------------------------+----------
- E21   GPIOG0    SD2CLK      SCU4B4[16]=1 & SCU450[1]=1    GPIOG0
------+---------+-----------+-----------------------------+----------
- B22   GPIOG1    SD2CMD      SCU4B4[17]=1 & SCU450[1]=1    GPIOG1
------+---------+-----------+-----------------------------+----------
-Assume the register status like below:
-SCU4B4[16] == 1 & SCU4B4[17] == 1 & SCU450[1]==1
-After the driver set the Ball E21 to the GPIOG0:
-SCU4B4[16] == 0 & SCU4B4[17] == 1 & SCU450[1]==0
-When the driver want to set the Ball B22 to the GPIOG1, the condition of
-the SD2CMD will be false causing SCU4B4[17] not to be cleared.
+Please check https://elinux.org/images/1/14/Linuxkerneldebugging.pdf for example.
 
-Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
----
- drivers/pinctrl/aspeed/pinctrl-aspeed.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+e.g. ./scripts/faddr2line vmlinux scsi_remove_target+0x314/0x390
 
-diff --git a/drivers/pinctrl/aspeed/pinctrl-aspeed.c b/drivers/pinctrl/aspeed/pinctrl-aspeed.c
-index 83d47ff1cea8..a30912a92f05 100644
---- a/drivers/pinctrl/aspeed/pinctrl-aspeed.c
-+++ b/drivers/pinctrl/aspeed/pinctrl-aspeed.c
-@@ -92,19 +92,10 @@ static int aspeed_sig_expr_enable(struct aspeed_pinmux_data *ctx,
- static int aspeed_sig_expr_disable(struct aspeed_pinmux_data *ctx,
- 				   const struct aspeed_sig_expr *expr)
- {
--	int ret;
--
- 	pr_debug("Disabling signal %s for %s\n", expr->signal,
- 		 expr->function);
- 
--	ret = aspeed_sig_expr_eval(ctx, expr, true);
--	if (ret < 0)
--		return ret;
--
--	if (ret)
--		return aspeed_sig_expr_set(ctx, expr, false);
--
--	return 0;
-+	return aspeed_sig_expr_set(ctx, expr, false);
- }
- 
- /**
--- 
-2.25.1
+On 2022/08/18 18:43, Tasmiya Nalatwad wrote:
+> Please find the location in source code from where i am seeing the call traces generating
+> 
+> On 8/6/22 15:30, Tetsuo Handa wrote:
+>> On 2022/08/05 15:54, Tasmiya Nalatwad wrote:
+>>> Greetings,
+>>>
+>>> [linux] [5.19.0] task hung for indefinite time with call traces when rebooted with Kexec, A restart is required to recover the machine.
+>>
+>> kexec is waiting for workqueues ("kworker/3:1" and "kworker/3:0") to complete.
+>> If this problem happens only when rebooting with kexec, something in kexec path
+>> might be preventing these workqueues from completing.
+>>
+>> Anyway, please repost with locations in source code like syzbot report does.
 

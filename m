@@ -2,217 +2,755 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 181DF598A81
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4338A598A7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344983AbiHRR3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
+        id S1345032AbiHRR3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344394AbiHRR3C (ORCPT
+        with ESMTP id S1345011AbiHRR3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:29:02 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA346C130
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:29:00 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33352499223so36972187b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:29:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=XF7rMgkGkogE1LDudIb7xz7osN0RWeSRX+mI0Z+KjmI=;
-        b=RVpLZYDS3msVWhWN86uj5XmiWsuInRaiz08hd32GGW2Jjj+IcPb2r6tOC85wlkvnUR
-         maN2snFEEFZR1cdwdxaSXWGcGWw1WWo22fI913gqORbWqkONMl36pl4M90LVTpYvN8l8
-         qR/p88+6tFGJP9KD1Mupsgsn9LAoIXzLgx7ugcVwW+W86tKGr8N+M28jMHFMyKosdrGQ
-         ZhHQBN7y7F+xfd5aFRheZLuVlvloVbBOLft/hd9VZDCXjIKfhzrb88XhvTy9w4yhMwa9
-         TeDmIpbclLj3GYw9lSYNEo0uiqWmqTW106mQqe3j3d2KW1sqtqQ/QUOatcazbvDSlmn1
-         cM7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=XF7rMgkGkogE1LDudIb7xz7osN0RWeSRX+mI0Z+KjmI=;
-        b=Ne/JDtqgza79J4UlHFhAceAMvPPZsUDfbFwotY0xGJzN6IguwhCZcQ14xw0Kk+lmjQ
-         kQdgi2uA8EB5aZHavlTcvkKedbNImBIt2csfwakhPgpaThbaTtMINDOSh20S7VANmOsI
-         2PUVWzPMTlLbxB06D0cus87O7UkODdk39H8WwzPQXP16/qOzYH3LN7b2NYsRHpnbCaJX
-         MiWvdpKfLrz/6WqIAT6srF8+fBw7H/Zw5h6uvTTFIYGoyk/MmwnyZqM3ysSTp/hG/KrO
-         q3QD9juYgQ5DH34SA4DWZwSV1QFwR4PKz0Vu5RCMWGCgsQwuUm00BFMbrIfmCRhjftJe
-         ifEQ==
-X-Gm-Message-State: ACgBeo0c/T9EPpbHeZw3c7QQpXoCEsADTfUBlPvfVXzJoIM9Q9e+5eBh
-        sXm5G5Fg3f+no+8ghzTz3LDu8zZJg2xhIIwn1cF5zg==
-X-Google-Smtp-Source: AA6agR6sB4LlpbMJED7ZTSMa5nF65b47m2WBlliFZBVD/kQiv2gHKFh3hiJGL3Q9oEiznGv6nA/xvVqMs4MSOIgovRv8Hg==
-X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:aa25:fe91:7e28:16bc])
- (user=isaacmanjarres job=sendgmr) by 2002:a25:2543:0:b0:67f:d33d:53f1 with
- SMTP id l64-20020a252543000000b0067fd33d53f1mr3867449ybl.412.1660843739883;
- Thu, 18 Aug 2022 10:28:59 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 10:28:51 -0700
-Message-Id: <20220818172852.3548-1-isaacmanjarres@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v2] amba: Fix use-after-free in amba_read_periphid()
-From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Saravana Kannan <saravanak@google.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
-        patches@armlinux.org.uk, Guenter Roeck <linux@roeck-us.net>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 18 Aug 2022 13:29:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A595F12764
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:29:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F92223A;
+        Thu, 18 Aug 2022 10:29:16 -0700 (PDT)
+Received: from [10.57.14.91] (unknown [10.57.14.91])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C873B3F67D;
+        Thu, 18 Aug 2022 10:29:13 -0700 (PDT)
+Message-ID: <5e3c911c-14bb-bd0f-680a-0694935c24f0@arm.com>
+Date:   Thu, 18 Aug 2022 18:29:08 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH RESEND] iommu/iova: Optimize alloc_iova with
+ rbtree_augmented
+Content-Language: en-GB
+To:     Peng Zhang <zhangpeng.00@bytedance.com>, joro@8bytes.org,
+        will@kernel.org
+Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220818121703.20977-1-zhangpeng.00@bytedance.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220818121703.20977-1-zhangpeng.00@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device
-addition"), it became possible for amba_read_periphid() to be invoked
-concurrently from two threads for a particular AMBA device.
+On 2022-08-18 13:17, Peng Zhang wrote:
+> From: "zhangpeng.00" <zhangpeng.00@bytedance.com>
+> 
+> The current algorithm of alloc_iova is to scan all iovas until it finds
+> a gap that satisfies the condition to allocate. This can be very slow in
+> some scenarios. We can optimize alloc_iova() from time complexity O(n)
+> to O(log(n)).
+> 
+> For example, construct some special calls to make the low 4g space
+> almost full, the performance of alloc_iova() is as follows.
 
-Consider the case where a thread (T0) is registering an AMBA driver, and
-searching for all of the devices it can match with on the AMBA bus.
-Suppose that another thread (T1) is executing the deferred probe work,
-and is searching through all of the AMBA drivers on the bus for a driver
-that matches a particular AMBA device. Assume that both threads begin
-operating on the same AMBA device and the device's peripheral ID is
-still unknown.
+Can you clarify what exactly is being tested here and how? Is it a 
+synthetic test harness generating alloc_iova() calls directly, something 
+at a higher level like dma-map-benchmark via iommu-dma, or some 
+real-world end-to-end workload? What range of sizes are being allocated, 
+and are they all with the same allocation limit? Is it single-threaded 
+or subject to parallel contention? Are all the allocations eventually 
+successful, and if not, what proportion are expected to fail and what 
+proportion actually do fail?
 
-In this scenario, the amba_match() function will be invoked for the
-same AMBA device by both threads, which means amba_read_periphid()
-can also be invoked by both threads, and both threads will be able
-to manipulate the AMBA device's pclk pointer without any synchronization.
-It's possible that one thread will initialize the pclk pointer, then the
-other thread will re-initialize it, overwriting the previous value, and
-both will race to free the same pclk, resulting in a use-after-free for
-whichever thread frees the pclk last.
+> Before improvement:
+> Tracing 1 functions for "alloc_iova"...
+>     nsecs              : count        distribution
+>       128 -> 255       : 1           |                                  |
+>       256 -> 511       : 1023938     |**********************************|
+>       512 -> 1023      : 7533        |                                  |
+>      1024 -> 2047      : 17148       |                                  |
+>      2048 -> 4095      : 1904        |                                  |
+>      4096 -> 8191      : 820         |                                  |
+>      8192 -> 16383     : 54          |                                  |
+>     16384 -> 32767     : 7           |                                  |
+>     32768 -> 65535     : 6           |                                  |
+>     65536 -> 131071    : 12          |                                  |
+>    131072 -> 262143    : 31          |                                  |
+>    262144 -> 524287    : 55          |                                  |
+>    524288 -> 1048575   : 91          |                                  |
+>   1048576 -> 2097151   : 218         |                                  |
+>   2097152 -> 4194303   : 398         |                                  |
+>   4194304 -> 8388607   : 661         |                                  |
+>   8388608 -> 16777215  : 901         |                                  |
+> 16777216 -> 33554431  : 6021        |                                  |
+> 33554432 -> 67108863  : 6           |                                  |
+> 
+> avg = 172781 nsecs, total: 183115104832 nsecs, count: 1059805
+> 
+> With improvement:
+> Tracing 1 functions for "alloc_iova"...
+> nsecs                 : count        distribution
+>    256 -> 511          : 669679      |***********                       |
+>    512 -> 1023         : 2428013     |**********************************|
+>   1024 -> 2047         : 39917       |                                  |
+>   2048 -> 4095         : 3836        |                                  |
+>   4096 -> 8191         : 3923        |                                  |
+>   8192 -> 16383        : 346         |                                  |
+> 16384 -> 32767        : 14          |                                  |
+> 32768 -> 65535        : 1           |                                  |
+> 
+> avg = 633 nsecs, total: 1992472326 nsecs, count: 3145729
 
-Add a lock per AMBA device to synchronize the handling with detecting the
-peripheral ID to avoid the use-after-free scenario.
+What I see here is that it's tightened up the distribution, sure, but 
+the peak has also moved such that the overwhelmingly typical case is now 
+almost twice as slow. That is concerning. Big O notation is all very 
+well, but it notoriously ignores the significance of constant factors. 
+Putting considerable effort into optimising for the worst case at the 
+expense of hurting the normal case needs a *very* strong and convicing 
+justification.
 
-The following KFENCE bug report helped detect this problem:
-==================================================================
-BUG: KFENCE: use-after-free read in clk_disable+0x14/0x34
+Thanks,
+Robin.
 
-Use-after-free read at 0x(ptrval) (in kfence-#19):
- clk_disable+0x14/0x34
- amba_read_periphid+0xdc/0x134
- amba_match+0x3c/0x84
- __driver_attach+0x20/0x158
- bus_for_each_dev+0x74/0xc0
- bus_add_driver+0x154/0x1e8
- driver_register+0x88/0x11c
- do_one_initcall+0x8c/0x2fc
- kernel_init_freeable+0x190/0x220
- kernel_init+0x10/0x108
- ret_from_fork+0x14/0x3c
- 0x0
-
-kfence-#19: 0x(ptrval)-0x(ptrval), size=36, cache=kmalloc-64
-
-allocated by task 8 on cpu 0 at 11.629931s:
- clk_hw_create_clk+0x38/0x134
- amba_get_enable_pclk+0x10/0x68
- amba_read_periphid+0x28/0x134
- amba_match+0x3c/0x84
- __device_attach_driver+0x2c/0xc4
- bus_for_each_drv+0x80/0xd0
- __device_attach+0xb0/0x1f0
- bus_probe_device+0x88/0x90
- deferred_probe_work_func+0x8c/0xc0
- process_one_work+0x23c/0x690
- worker_thread+0x34/0x488
- kthread+0xd4/0xfc
- ret_from_fork+0x14/0x3c
- 0x0
-
-freed by task 8 on cpu 0 at 11.630095s:
- amba_read_periphid+0xec/0x134
- amba_match+0x3c/0x84
- __device_attach_driver+0x2c/0xc4
- bus_for_each_drv+0x80/0xd0
- __device_attach+0xb0/0x1f0
- bus_probe_device+0x88/0x90
- deferred_probe_work_func+0x8c/0xc0
- process_one_work+0x23c/0x690
- worker_thread+0x34/0x488
- kthread+0xd4/0xfc
- ret_from_fork+0x14/0x3c
- 0x0
-
-Cc: Saravana Kannan <saravanak@google.com>
-Cc: patches@armlinux.org.uk
-Fixes: f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device addition")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
----
-KernelVersion: rmk/for-next
-
- drivers/amba/bus.c       | 8 +++++++-
- include/linux/amba/bus.h | 1 +
- 2 files changed, 8 insertions(+), 1 deletion(-)
-
-v1 -> v2:
-- Applied on rmk/for-next
-
-diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
-index 32b0e0b930c1..110a535648d2 100644
---- a/drivers/amba/bus.c
-+++ b/drivers/amba/bus.c
-@@ -209,6 +209,7 @@ static int amba_match(struct device *dev, struct device_driver *drv)
- 	struct amba_device *pcdev = to_amba_device(dev);
- 	struct amba_driver *pcdrv = to_amba_driver(drv);
- 
-+	mutex_lock(&pcdev->periphid_lock);
- 	if (!pcdev->periphid) {
- 		int ret = amba_read_periphid(pcdev);
- 
-@@ -218,11 +219,14 @@ static int amba_match(struct device *dev, struct device_driver *drv)
- 		 * permanent failure in reading pid and cid, simply map it to
- 		 * -EPROBE_DEFER.
- 		 */
--		if (ret)
-+		if (ret) {
-+			mutex_unlock(&pcdev->periphid_lock);
- 			return -EPROBE_DEFER;
-+		}
- 		dev_set_uevent_suppress(dev, false);
- 		kobject_uevent(&dev->kobj, KOBJ_ADD);
- 	}
-+	mutex_unlock(&pcdev->periphid_lock);
- 
- 	/* When driver_override is set, only bind to the matching driver */
- 	if (pcdev->driver_override)
-@@ -532,6 +536,7 @@ static void amba_device_release(struct device *dev)
- 
- 	if (d->res.parent)
- 		release_resource(&d->res);
-+	mutex_destroy(&d->periphid_lock);
- 	kfree(d);
- }
- 
-@@ -584,6 +589,7 @@ static void amba_device_initialize(struct amba_device *dev, const char *name)
- 	dev->dev.dma_mask = &dev->dev.coherent_dma_mask;
- 	dev->dev.dma_parms = &dev->dma_parms;
- 	dev->res.name = dev_name(&dev->dev);
-+	mutex_init(&dev->periphid_lock);
- }
- 
- /**
-diff --git a/include/linux/amba/bus.h b/include/linux/amba/bus.h
-index e94cdf235f1d..5001e14c5c06 100644
---- a/include/linux/amba/bus.h
-+++ b/include/linux/amba/bus.h
-@@ -67,6 +67,7 @@ struct amba_device {
- 	struct clk		*pclk;
- 	struct device_dma_parameters dma_parms;
- 	unsigned int		periphid;
-+	struct mutex		periphid_lock;
- 	unsigned int		cid;
- 	struct amba_cs_uci_id	uci;
- 	unsigned int		irq[AMBA_NR_IRQS];
--- 
-2.37.1.595.g718a3a8f04-goog
-
+> 
+> Introduce the improved algorithm:
+> 
+> ------------------------------------------------------------------------
+> | gap1  |iova1| gap2 |iova2| gap3 |iova3|   gap4  |iova4| gap5  |anchor|
+> ------------------------------------------------------------------------
+> 
+>                      ____________
+>                    /    iova2     \      subtree_gap_flag =
+>                   |    gap2_flag   |     left_child->subtree_gap_flag  |
+>                    \ sub_gap_flag /      right_child->subtree_gap_flag |
+>                      ------------        gap_flag
+>                     /            \
+>                    /              \
+>      ____________                    ____________
+>    /    iova1     \                /    iova4     \
+>   |    gap1_flag   |              |    gap4_flag   |
+>    \ sub_gap_flag /                \ sub_gap_flag /
+>      ------------                    ------------
+>                                     /            \
+>                                    /              \
+>                      ____________                    ____________
+>                    /    iova3     \                /    anchor    \
+>                   |    gap3_flag   |              |    gap4_flag   |
+>                    \ sub_gap_flag /                \ sub_gap_flag /
+>                      ------------                    ------------
+> 
+> Define the gap of a iova is the gap between the iova and it's previous
+> iova. Such as the gap of iova3 is gap3.This gap can be used to allocate.
+> 
+> Add three variables to struct iova.
+> prev_iova:
+>           point to the previous iova, sush as iova3->prev_iova point to
+>           iova2.
+> 
+> gap_flag:
+>           gap_flag is computed by a given gap's range. It is a bits map
+>           shows what size we can allocate from the gap.
+>           We can allocate 2^order size area without any fragmentation
+>           in range [low, high) if the corresponding bit is set.
+> 
+>           How to compute gap_flag? If low == 0, it is like this:
+>           while (high) {
+>                  order = ffs(high);
+>                  delta = 1UL << order;
+>                  gap_flag |= delta;
+>                  high -= delta;
+>           }
+> 
+> subtree_gap_flag:
+>           subtree_gap_flag is OR result of all iova's gap_flag in the
+>           subtree.
+> 
+>           subtree_gap_flag =
+>                             left_child->subtree_gap_flag  |
+>                             right_child->subtree_gap_flag |
+>                             gap_flag
+> 
+> We can use rbtree_augmented to maintain subtree_gap_flag in time
+> complexity O(log(n)).
+> 
+> In the rbtree, with the extra subtree_gap_flag and gap_flag information,
+> searching the best gap to allocate is fast and the time complexity is
+> O(logn).
+> 
+> Because the subtree_gap_flag has all the gap information of the subtree
+> we can determine whether there is a suitable gap to allocate in a
+> sub_tree and avoid useless search overhead.
+> 
+> Signed-off-by: zhangpeng.00 <zhangpeng.00@bytedance.com>
+> ---
+>   drivers/iommu/iova.c | 437 +++++++++++++++++++++++++++++++------------
+>   include/linux/iova.h |   8 +-
+>   2 files changed, 325 insertions(+), 120 deletions(-)
+> 
+> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+> index db77aa675145..b9fbaf01ee0b 100644
+> --- a/drivers/iommu/iova.c
+> +++ b/drivers/iommu/iova.c
+> @@ -43,6 +43,175 @@ static struct iova *to_iova(struct rb_node *node)
+>   	return rb_entry(node, struct iova, node);
+>   }
+>   
+> +/*
+> + * gap_flag is a bits map.
+> + * We can allocate 2^order size area without any fragmentation
+> + * in range [low, high) if the corresponding bit was set.
+> + *
+> + * This function computes gap_flag for a given range [low, high)
+> + * in time complexity O(log(n)).
+> + */
+> +static unsigned long __compute_gap_flag(unsigned long low, unsigned long high)
+> +{
+> +	unsigned long gap_flag = 0;
+> +
+> +	while (low < high) {
+> +		int order = __ffs64(high);
+> +		unsigned long delta;
+> +
+> +		if (low > high - (1UL << order))
+> +			order = fls_long(high - low) - 1;
+> +		delta = 1UL << order;
+> +		gap_flag |= delta;
+> +		high -= delta;
+> +	}
+> +	return gap_flag;
+> +}
+> +
+> +/*
+> + * This function return a start address within [low, high) which is
+> + * 2^split_order aligned and can be used to allocate the maximum
+> + * 2^split_order size area.
+> + *
+> + * The time complexity of this function is O(log(n)).
+> + */
+> +static
+> +unsigned long split(unsigned long low, unsigned long high, int split_order)
+> +{
+> +	unsigned long best_low = ~0UL;
+> +	int best_order = 128;
+> +
+> +	while (low < high) {
+> +		int order = __ffs64(high);
+> +		unsigned long delta;
+> +
+> +		if (low > high - (1UL << order))
+> +			order = fls_long(high - low) - 1;
+> +		delta = 1UL << order;
+> +		if (order < best_order && order >= split_order) {
+> +			best_low = high - (1UL << split_order);
+> +			if (order == split_order)
+> +				break;
+> +			best_order = order;
+> +		}
+> +		high -= delta;
+> +	}
+> +	return best_low;
+> +}
+> +
+> +static inline unsigned long prev_iova_high(struct iova *iova)
+> +{
+> +	return iova->prev_iova ? iova->prev_iova->pfn_hi + 1 : 0;
+> +}
+> +
+> +static inline unsigned long iova_compute_gap_flag(struct iova *iova)
+> +{
+> +	return __compute_gap_flag(prev_iova_high(iova), iova->pfn_lo);
+> +}
+> +
+> +/*
+> + * Called by rbtree_augmented to maintain subtree_gap_flag.
+> + *
+> + * iova->subtree_gap_flag =
+> + * rb_entry(iova->node.rb_left) ->subtree_gap_flag |
+> + * rb_entry(iova->node.rb_right)->subtree_gap_flag |
+> + * iova->gap_flag
+> + */
+> +static inline bool iova_gap_callbacks_compute_or(struct iova *iova, bool __unused)
+> +{
+> +	struct iova *child;
+> +	unsigned long subtree_gap_flag = iova->gap_flag;
+> +
+> +	if (iova->node.rb_left) {
+> +		child = rb_entry(iova->node.rb_left, struct iova, node);
+> +		subtree_gap_flag |= child->subtree_gap_flag;
+> +	}
+> +	if (iova->node.rb_right) {
+> +		child = rb_entry(iova->node.rb_right, struct iova, node);
+> +		subtree_gap_flag |= child->subtree_gap_flag;
+> +	}
+> +	if (iova->subtree_gap_flag == subtree_gap_flag)
+> +		return true;
+> +	iova->subtree_gap_flag = subtree_gap_flag;
+> +	return false;
+> +}
+> +
+> +RB_DECLARE_CALLBACKS(static, iova_gap_callbacks, struct iova, node,
+> +			subtree_gap_flag,
+> +			iova_gap_callbacks_compute_or)
+> +
+> +/*
+> + * If a iova's gap_flag has been chanegd, we should call this function to
+> + * maintain the subtree_gap_flag in rbtree.
+> + *
+> + * The time complexity of this function is O(log(n)).
+> + */
+> +static inline void iova_subtree_gap_flag_update(struct iova *iova)
+> +{
+> +	iova_gap_callbacks_propagate(&iova->node, NULL);
+> +}
+> +
+> +static inline int __better_gap_flag(unsigned long first_flag,
+> +					unsigned long second_flag)
+> +{
+> +	return __ffs64(second_flag) < __ffs64(first_flag) ? 2 : 1;
+> +}
+> +
+> +/*
+> + * Compare two gap_flag to choose the more suitable gap to allocate.
+> + * If they are the same, return the first one.
+> + * return 1: first gap is better
+> + * return 2: second gap is better
+> + * return 0: they are all not satisfied
+> + */
+> +static int better_gap_flag(unsigned long first_flag,
+> +				unsigned long second_flag, int order)
+> +{
+> +	first_flag >>= order;
+> +	second_flag >>= order;
+> +
+> +	if (first_flag) {
+> +		if (second_flag)
+> +			return __better_gap_flag(first_flag, second_flag);
+> +		return 1;
+> +	}
+> +	return second_flag ? 2 : 0;
+> +}
+> +
+> +/*
+> + * Compare current iova's gap with the best_iova' gap,
+> + * if better update the best_iova.
+> + */
+> +static inline void choose_better_gap(struct iova *iova,
+> +				     struct iova **best_iova,
+> +				     unsigned long *best_gap_flag,
+> +				     bool *check_subtree,
+> +				     unsigned long order)
+> +{
+> +	if (better_gap_flag(*best_gap_flag, iova->gap_flag, order) == 2) {
+> +		*best_iova = iova;
+> +		*best_gap_flag = iova->gap_flag;
+> +		*check_subtree = false;
+> +	}
+> +}
+> +
+> +/*
+> + * Compare all gaps in a subtree with the best_iova, if better update
+> + * the best_iova and mark the check_subtree with true.
+> + */
+> +static inline void choose_better_gap_subtree(struct iova *iova,
+> +					     struct iova **best_iova,
+> +					     unsigned long *best_gap_flag,
+> +					     bool *check_subtree,
+> +					     unsigned long order)
+> +{
+> +	if (better_gap_flag(*best_gap_flag, iova->subtree_gap_flag, order) == 2) {
+> +		*best_iova = iova;
+> +		*best_gap_flag = iova->subtree_gap_flag;
+> +		*check_subtree = true;
+> +	}
+> +}
+> +
+>   void
+>   init_iova_domain(struct iova_domain *iovad, unsigned long granule,
+>   	unsigned long start_pfn)
+> @@ -56,90 +225,39 @@ init_iova_domain(struct iova_domain *iovad, unsigned long granule,
+>   
+>   	spin_lock_init(&iovad->iova_rbtree_lock);
+>   	iovad->rbroot = RB_ROOT;
+> -	iovad->cached_node = &iovad->anchor.node;
+> -	iovad->cached32_node = &iovad->anchor.node;
+>   	iovad->granule = granule;
+>   	iovad->start_pfn = start_pfn;
+>   	iovad->dma_32bit_pfn = 1UL << (32 - iova_shift(iovad));
+> -	iovad->max32_alloc_size = iovad->dma_32bit_pfn;
+> +
+>   	iovad->anchor.pfn_lo = iovad->anchor.pfn_hi = IOVA_ANCHOR;
+> +	iovad->anchor.prev_iova = NULL;
+> +	iovad->anchor.gap_flag = __compute_gap_flag(0, IOVA_ANCHOR);
+> +	iovad->anchor.subtree_gap_flag = iovad->anchor.gap_flag;
+> +
+>   	rb_link_node(&iovad->anchor.node, NULL, &iovad->rbroot.rb_node);
+>   	rb_insert_color(&iovad->anchor.node, &iovad->rbroot);
+> -}
+> -EXPORT_SYMBOL_GPL(init_iova_domain);
+> -
+> -static struct rb_node *
+> -__get_cached_rbnode(struct iova_domain *iovad, unsigned long limit_pfn)
+> -{
+> -	if (limit_pfn <= iovad->dma_32bit_pfn)
+> -		return iovad->cached32_node;
+> -
+> -	return iovad->cached_node;
+> -}
+>   
+> -static void
+> -__cached_rbnode_insert_update(struct iova_domain *iovad, struct iova *new)
+> -{
+> -	if (new->pfn_hi < iovad->dma_32bit_pfn)
+> -		iovad->cached32_node = &new->node;
+> -	else
+> -		iovad->cached_node = &new->node;
+> +	if (start_pfn)
+> +		reserve_iova(iovad, 0, start_pfn - 1);
+>   }
+> +EXPORT_SYMBOL_GPL(init_iova_domain);
+>   
+> -static void
+> -__cached_rbnode_delete_update(struct iova_domain *iovad, struct iova *free)
+> +static struct rb_node *iova_find_limit(struct iova_domain *iovad,
+> +						unsigned long limit_pfn)
+>   {
+> -	struct iova *cached_iova;
+> +	struct rb_node *curr = iovad->rbroot.rb_node;
+>   
+> -	cached_iova = to_iova(iovad->cached32_node);
+> -	if (free == cached_iova ||
+> -	    (free->pfn_hi < iovad->dma_32bit_pfn &&
+> -	     free->pfn_lo >= cached_iova->pfn_lo))
+> -		iovad->cached32_node = rb_next(&free->node);
+> +	while (curr) {
+> +		struct iova *iova = to_iova(curr);
+>   
+> -	if (free->pfn_lo < iovad->dma_32bit_pfn)
+> -		iovad->max32_alloc_size = iovad->dma_32bit_pfn;
+> -
+> -	cached_iova = to_iova(iovad->cached_node);
+> -	if (free->pfn_lo >= cached_iova->pfn_lo)
+> -		iovad->cached_node = rb_next(&free->node);
+> -}
+> -
+> -static struct rb_node *iova_find_limit(struct iova_domain *iovad, unsigned long limit_pfn)
+> -{
+> -	struct rb_node *node, *next;
+> -	/*
+> -	 * Ideally what we'd like to judge here is whether limit_pfn is close
+> -	 * enough to the highest-allocated IOVA that starting the allocation
+> -	 * walk from the anchor node will be quicker than this initial work to
+> -	 * find an exact starting point (especially if that ends up being the
+> -	 * anchor node anyway). This is an incredibly crude approximation which
+> -	 * only really helps the most likely case, but is at least trivially easy.
+> -	 */
+> -	if (limit_pfn > iovad->dma_32bit_pfn)
+> -		return &iovad->anchor.node;
+> -
+> -	node = iovad->rbroot.rb_node;
+> -	while (to_iova(node)->pfn_hi < limit_pfn)
+> -		node = node->rb_right;
+> -
+> -search_left:
+> -	while (node->rb_left && to_iova(node->rb_left)->pfn_lo >= limit_pfn)
+> -		node = node->rb_left;
+> -
+> -	if (!node->rb_left)
+> -		return node;
+> -
+> -	next = node->rb_left;
+> -	while (next->rb_right) {
+> -		next = next->rb_right;
+> -		if (to_iova(next)->pfn_lo >= limit_pfn) {
+> -			node = next;
+> -			goto search_left;
+> -		}
+> +		if (limit_pfn - 1 > iova->pfn_hi)
+> +			curr = curr->rb_right;
+> +		else if (limit_pfn <= prev_iova_high(iova))
+> +			curr = curr->rb_left;
+> +		else
+> +			break;
+>   	}
+> -
+> -	return node;
+> +	return curr;
+>   }
+>   
+>   /* Insert the iova into domain rbtree by holding writer lock */
+> @@ -148,6 +266,7 @@ iova_insert_rbtree(struct rb_root *root, struct iova *iova,
+>   		   struct rb_node *start)
+>   {
+>   	struct rb_node **new, *parent = NULL;
+> +	struct iova *next_iova;
+>   
+>   	new = (start) ? &start : &(root->rb_node);
+>   	/* Figure out where to put new node */
+> @@ -166,69 +285,148 @@ iova_insert_rbtree(struct rb_root *root, struct iova *iova,
+>   		}
+>   	}
+>   	/* Add new node and rebalance tree. */
+> +
+>   	rb_link_node(&iova->node, parent, new);
+> -	rb_insert_color(&iova->node, root);
+> +
+> +	next_iova = to_iova(rb_next(&iova->node));
+> +	iova->prev_iova = next_iova->prev_iova;
+> +	next_iova->prev_iova = iova;
+> +
+> +	iova->gap_flag = iova_compute_gap_flag(iova);
+> +	next_iova->gap_flag = iova_compute_gap_flag(next_iova);
+> +
+> +	/*
+> +	 * Do't swap the following two lines, because next_iova is the ancestor
+> +	 * of iova and updating iova first is faster.
+> +	 */
+> +	iova_subtree_gap_flag_update(iova);
+> +	iova_subtree_gap_flag_update(next_iova);
+> +
+> +	rb_insert_augmented(&iova->node, root, &iova_gap_callbacks);
+>   }
+>   
+> +/*
+> + * This function is complicated.
+> + * First, we find the iova with the largest address within limit_pfn and check
+> + * it and it's left subtree.
+> + *
+> + * Second, go to it's parent, if from left child we skip it otherwise check it
+> + * and it's left subtree. Loop this step until parent is NULL.
+> + *
+> + * Then if check_subtree is true we should find the best_iova in a subtree and
+> + * update best_iova.
+> + *
+> + * Finaly split best_iova's gap to allocate.
+> + *
+> + * The time complexity of this function is O(log(n)).
+> + */
+>   static int __alloc_and_insert_iova_range(struct iova_domain *iovad,
+>   		unsigned long size, unsigned long limit_pfn,
+>   			struct iova *new, bool size_aligned)
+>   {
+> -	struct rb_node *curr, *prev;
+> -	struct iova *curr_iova;
+> +	int order = fls_long(size - 1);
+>   	unsigned long flags;
+> -	unsigned long new_pfn, retry_pfn;
+> -	unsigned long align_mask = ~0UL;
+> -	unsigned long high_pfn = limit_pfn, low_pfn = iovad->start_pfn;
+> +	struct rb_node *curr;
+> +	struct rb_node *parent;
+> +	struct iova *curr_iova;
+> +	unsigned long start_pfn;
+> +	bool ignore = false;
+> +	struct iova *best_iova  = NULL;
+> +	unsigned long best_gap_flag;
+> +	bool check_subtree;
+>   
+> -	if (size_aligned)
+> -		align_mask <<= fls_long(size - 1);
+> +	if (limit_pfn == 0)
+> +		return -ENOMEM;
+>   
+> -	/* Walk the tree backwards */
+>   	spin_lock_irqsave(&iovad->iova_rbtree_lock, flags);
+> -	if (limit_pfn <= iovad->dma_32bit_pfn &&
+> -			size >= iovad->max32_alloc_size)
+> -		goto iova32_full;
+> +	curr = iova_find_limit(iovad, limit_pfn);
+>   
+> -	curr = __get_cached_rbnode(iovad, limit_pfn);
+>   	curr_iova = to_iova(curr);
+> -	retry_pfn = curr_iova->pfn_hi + 1;
+> +	best_gap_flag = __compute_gap_flag(prev_iova_high(curr_iova),
+> +					min(limit_pfn, curr_iova->pfn_lo));
+>   
+> -retry:
+> -	do {
+> -		high_pfn = min(high_pfn, curr_iova->pfn_lo);
+> -		new_pfn = (high_pfn - size) & align_mask;
+> -		prev = curr;
+> -		curr = rb_prev(curr);
+> -		curr_iova = to_iova(curr);
+> -	} while (curr && new_pfn <= curr_iova->pfn_hi && new_pfn >= low_pfn);
+> -
+> -	if (high_pfn < size || new_pfn < low_pfn) {
+> -		if (low_pfn == iovad->start_pfn && retry_pfn < limit_pfn) {
+> -			high_pfn = limit_pfn;
+> -			low_pfn = retry_pfn;
+> -			curr = iova_find_limit(iovad, limit_pfn);
+> +	/*
+> +	 * Check limit_iova's gap whether it can allocate from
+> +	 * the gap between it and it's previous iova's.
+> +	 */
+> +	if (better_gap_flag(0, best_gap_flag, order) == 2) {
+> +		best_iova = curr_iova;
+> +		check_subtree = false;
+> +	}
+> +
+> +	while (true) {
+> +		/*
+> +		 * Check the left sub_tree whether it has a better gap.
+> +		 */
+> +		if (!ignore && curr->rb_left) {
+> +			curr_iova = to_iova(curr->rb_left);
+> +			choose_better_gap_subtree(curr_iova, &best_iova,
+> +				&best_gap_flag, &check_subtree, order);
+> +		}
+> +
+> +		parent = rb_parent(curr);
+> +		if (parent == NULL)
+> +			break;
+> +		/*
+> +		 * If current node is the left child of it's parent,
+> +		 * the parent node and the parent's right sub_tree should not
+> +		 * to be checked because they exceed the limit_pfn.
+> +		 */
+> +		ignore = parent->rb_left == curr;
+> +		curr = parent;
+> +
+> +		/*
+> +		 * Check the current rbtree_node whether it is better.
+> +		 */
+> +		if (!ignore) {
+>   			curr_iova = to_iova(curr);
+> -			goto retry;
+> +			choose_better_gap(curr_iova, &best_iova,
+> +					&best_gap_flag, &check_subtree, order);
+>   		}
+> -		iovad->max32_alloc_size = size;
+> -		goto iova32_full;
+>   	}
+>   
+> -	/* pfn_lo will point to size aligned address if size_aligned is set */
+> -	new->pfn_lo = new_pfn;
+> -	new->pfn_hi = new->pfn_lo + size - 1;
+> +	if (!best_iova) {
+> +		spin_unlock_irqrestore(&iovad->iova_rbtree_lock, flags);
+> +		return -ENOMEM;
+> +	}
+>   
+> -	/* If we have 'prev', it's a valid place to start the insertion. */
+> -	iova_insert_rbtree(&iovad->rbroot, new, prev);
+> -	__cached_rbnode_insert_update(iovad, new);
+> +	/*
+> +	 * If best_gap is in a sub_tree, we should find where it is.
+> +	 */
+> +	if (check_subtree) {
+> +		int best_order = __ffs(best_gap_flag & (~0UL << order));
+> +
+> +		curr = &best_iova->node;
+> +		while (true) {
+> +			if (curr->rb_right &&
+> +				to_iova(curr->rb_right)->subtree_gap_flag &
+> +					(1UL << best_order)) {
+> +				curr = curr->rb_right;
+> +				continue;
+> +			}
+>   
+> -	spin_unlock_irqrestore(&iovad->iova_rbtree_lock, flags);
+> -	return 0;
+> +			if (to_iova(curr)->gap_flag & (1UL << best_order))
+> +				break;
+>   
+> -iova32_full:
+> +			curr = curr->rb_left;
+> +			/*
+> +			 * Due to the subtree_gap_flag, curr is NULL should be
+> +			 * impossible. We must find the best suitable gap
+> +			 * to allocate.
+> +			 */
+> +			BUG_ON(!curr);
+> +		}
+> +		best_iova = to_iova(curr);
+> +	}
+> +
+> +	start_pfn = split(prev_iova_high(best_iova),
+> +				min(best_iova->pfn_lo, limit_pfn), order);
+> +
+> +	new->pfn_lo = start_pfn;
+> +	new->pfn_hi = start_pfn + size - 1;
+> +	iova_insert_rbtree(&iovad->rbroot, new, &best_iova->node);
+>   	spin_unlock_irqrestore(&iovad->iova_rbtree_lock, flags);
+> -	return -ENOMEM;
+> +	return 0;
+>   }
+>   
+>   static struct kmem_cache *iova_cache;
+> @@ -324,7 +522,6 @@ alloc_iova(struct iova_domain *iovad, unsigned long size,
+>   		free_iova_mem(new_iova);
+>   		return NULL;
+>   	}
+> -
+>   	return new_iova;
+>   }
+>   EXPORT_SYMBOL_GPL(alloc_iova);
+> @@ -352,9 +549,14 @@ private_find_iova(struct iova_domain *iovad, unsigned long pfn)
+>   
+>   static void remove_iova(struct iova_domain *iovad, struct iova *iova)
+>   {
+> +	struct iova *next_iova;
+>   	assert_spin_locked(&iovad->iova_rbtree_lock);
+> -	__cached_rbnode_delete_update(iovad, iova);
+> -	rb_erase(&iova->node, &iovad->rbroot);
+> +
+> +	next_iova = to_iova(rb_next(&iova->node));
+> +	next_iova->prev_iova = iova->prev_iova;
+> +	next_iova->gap_flag = iova_compute_gap_flag(next_iova);
+> +	iova_subtree_gap_flag_update(next_iova);
+> +	rb_erase_augmented(&iova->node, &iovad->rbroot, &iova_gap_callbacks);
+>   }
+>   
+>   /**
+> @@ -554,8 +756,11 @@ static void
+>   __adjust_overlap_range(struct iova *iova,
+>   	unsigned long *pfn_lo, unsigned long *pfn_hi)
+>   {
+> -	if (*pfn_lo < iova->pfn_lo)
+> +	if (*pfn_lo < iova->pfn_lo) {
+>   		iova->pfn_lo = *pfn_lo;
+> +		iova->gap_flag = iova_compute_gap_flag(iova);
+> +		iova_subtree_gap_flag_update(iova);
+> +	}
+>   	if (*pfn_hi > iova->pfn_hi)
+>   		*pfn_lo = iova->pfn_hi + 1;
+>   }
+> diff --git a/include/linux/iova.h b/include/linux/iova.h
+> index 320a70e40233..e6d7700add87 100644
+> --- a/include/linux/iova.h
+> +++ b/include/linux/iova.h
+> @@ -11,7 +11,7 @@
+>   
+>   #include <linux/types.h>
+>   #include <linux/kernel.h>
+> -#include <linux/rbtree.h>
+> +#include <linux/rbtree_augmented.h>
+>   #include <linux/dma-mapping.h>
+>   
+>   /* iova structure */
+> @@ -19,6 +19,9 @@ struct iova {
+>   	struct rb_node	node;
+>   	unsigned long	pfn_hi; /* Highest allocated pfn */
+>   	unsigned long	pfn_lo; /* Lowest allocated pfn */
+> +	struct iova	*prev_iova;
+> +	unsigned long	gap_flag;
+> +	unsigned long	subtree_gap_flag;
+>   };
+>   
+>   
+> @@ -28,12 +31,9 @@ struct iova_rcache;
+>   struct iova_domain {
+>   	spinlock_t	iova_rbtree_lock; /* Lock to protect update of rbtree */
+>   	struct rb_root	rbroot;		/* iova domain rbtree root */
+> -	struct rb_node	*cached_node;	/* Save last alloced node */
+> -	struct rb_node	*cached32_node; /* Save last 32-bit alloced node */
+>   	unsigned long	granule;	/* pfn granularity for this domain */
+>   	unsigned long	start_pfn;	/* Lower limit for this domain */
+>   	unsigned long	dma_32bit_pfn;
+> -	unsigned long	max32_alloc_size; /* Size of last failed allocation */
+>   	struct iova	anchor;		/* rbtree lookup anchor */
+>   
+>   	struct iova_rcache	*rcaches;

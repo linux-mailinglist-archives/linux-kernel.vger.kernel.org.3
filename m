@@ -2,211 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5809159861B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D784C59867C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245380AbiHROeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
+        id S1343780AbiHROyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343574AbiHROdv (ORCPT
+        with ESMTP id S1343768AbiHROyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:33:51 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517F2615B
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:33:23 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id jl18so1673646plb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=HWbE7nxZeJfwuUY4/XEf3Ajumi8SbFWH/E//uWxRMRk=;
-        b=Nsv++hAy8IrMXCMq87Hq/hpcGfzZuDbUYXdVlghQxsvD2nbwj/pVQGDWMhrSYB1F+s
-         17ESjKPJtLXZvx8UlEvPxcQba7mCGCe7LXo9pH0Ey2rNib0nszA7AsuahEqdplajRGn5
-         BDh/cVQ2MdxrUSnN6wstN/D3WsDUcOLwqjhvnsJxKN4jflP5Dp7P/wDa+PCFVgftVJCn
-         7atFwwLD25tngmjB8eRvcnZj9e0v047mxVeTotXgl6Pgv6ESlz1vS7HH/O63Q5vYqBEP
-         nvqjh6fgoyEVfXVyVhMngzfO1zvaEAinSYBBdKLLlm907jD0m8ewP7utuK3ORaRCtz7Y
-         uVzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=HWbE7nxZeJfwuUY4/XEf3Ajumi8SbFWH/E//uWxRMRk=;
-        b=YOiqV6S1m0oYu3tXzKQBaCZkxd+ZsJRuIwHLi+Tl4i8D2PoUBH0lQ+6KE5c1sl/51k
-         YOQHMEyahRELxxLeWshiR3u0PYkDQ1lUw2TOnFpKrdXqKDJUQdoRcohSetzUlG35rove
-         lHf0x9ftsJLJoEA/XC/RxWjFBOJiHI+g/5DW+uoVm6VvLnG5uTsuYj6qwHly9AzCO0aC
-         ubnPjo7VZ/65fuat2hJESBZR/glb/V7PzyIuvvFdbim1O9KJQIcLf1t0GduLZQ1urJf3
-         jKmZfmolbc6OZPhGNs2bnTANqVh1bfB6Il3LSi51BfoAhUFWdqpEw7CmyoY846vlfaO3
-         VK4w==
-X-Gm-Message-State: ACgBeo37AxbvIkDRRU8kn5PVOQVCCMFTy1pzHLx+MNlQ/9VLkcOmcivM
-        iAcemMjgVMCMLKqSyk/hyhfbVKmHF+E=
-X-Google-Smtp-Source: AA6agR4FCAIdQjEMiMPXrkeI8t5hIHNBuNjBM94q6/QZSDKUd5Xxur5uWgJjNmGXLKrVHUU99X5dpQ==
-X-Received: by 2002:a17:902:7602:b0:172:a064:4a2f with SMTP id k2-20020a170902760200b00172a0644a2fmr3060577pll.56.1660833199426;
-        Thu, 18 Aug 2022 07:33:19 -0700 (PDT)
-Received: from localhost ([198.11.178.15])
-        by smtp.gmail.com with ESMTPSA id r5-20020a63ce45000000b00429f6579d81sm1384444pgi.29.2022.08.18.07.33.18
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Aug 2022 07:33:18 -0700 (PDT)
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Zqiang <qiang1.zhang@intel.com>
-Subject: [PATCH] workqueue: Protects wq_unbound_cpumask with wq_pool_attach_mutex
-Date:   Thu, 18 Aug 2022 22:33:48 +0800
-Message-Id: <20220818143348.1134136-1-jiangshanlai@gmail.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <Yvrb3hfZuUzSpX5e@slm.duckdns.org>
-References: <Yvrb3hfZuUzSpX5e@slm.duckdns.org>
+        Thu, 18 Aug 2022 10:54:05 -0400
+X-Greylist: delayed 596 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Aug 2022 07:54:03 PDT
+Received: from rfvt.org.uk (rfvt.org.uk [37.187.119.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB0A51A31;
+        Thu, 18 Aug 2022 07:54:02 -0700 (PDT)
+Received: from wylie.me.uk (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by rfvt.org.uk (Postfix) with ESMTPS id BEC6282429;
+        Thu, 18 Aug 2022 15:36:44 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wylie.me.uk;
+        s=mydkim005; t=1660833404;
+        bh=J/dd6iRcaMLMhF9nSV5GJIRzNBiCXO5bfnju6DcceSk=;
+        h=Date:From:To:Cc:Subject;
+        b=r546b75Oyf5q25xou88rrGy/63M/W7zceGRCdBz9oSTDju/5EiscOsZzZYEvAA4Ic
+         Sw2n3bJVb5fgMEfCwy0xxvbTMxB/Xv3LgJExXGHyhNWPNATw9XJgkYJfFpT8QbT1jd
+         37lHexyyAMAAUXVBfTDhy3Qd8OMqrBP9yITnQM7h2H+6LQf2/SeJ09NFhcYsz3eJW9
+         AVdIqxAfHu+oPJ3ME0wAecgfu2nEVH+4g76T0SiST/Qc98glGgAiYWox9GbRncu3QJ
+         76gr3nt31u2E16R5MV/GTlFfEry+Rq0zV0zMvLAS5JkwsMUZEsOIMz7wv8GH++rtbp
+         0BOznopINnIhA==
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-ID: <25342.20092.262450.330346@wylie.me.uk>
+Date:   Thu, 18 Aug 2022 15:36:44 +0100
+From:   "Alan J. Wylie" <alan@wylie.me.uk>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Regression in 5.19.0: USB errors during boot
+X-Mailer: VM 8.2.0b under 27.2 (x86_64-pc-linux-gnu)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-When unbind_workers() reads wq_unbound_cpumask to set the affinity of
-freshly-unbound kworkers, it only holds wq_pool_attach_mutex. This isn't
-sufficient as wq_unbound_cpumask is only protected by wq_pool_mutex.
+Apologies for the delay in reporting this: I messed up my first attempt at
+bisecting, then I've spent a week going to, enjoying, returning from and
+recovering from a music festival.
 
-Make wq_unbound_cpumask protected with wq_pool_attach_mutex and also
-remove the need of temporary saved_cpumask.
+Up to and including 5.18.18 things are fine. With 5.19.0 (and .1 and .2)  I see
+lots of errors and hangs on the USB2 chipset, e.g.
 
-Fixes: 10a5a651e3af ("workqueue: Restrict kworker in the offline CPU pool running on housekeeping CPUs")
-Reported-by: Valentin Schneider <vschneid@redhat.com>
-Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
----
- kernel/workqueue.c | 41 ++++++++++++++++-------------------------
- 1 file changed, 16 insertions(+), 25 deletions(-)
+$ grep "usb 9-4" dmesg.5.19.2
+[    6.669075] usb 9-4: new full-speed USB device number 2 using ohci-pci
+[    6.829087] usb 9-4: device descriptor read/64, error -32
+[    7.097094] usb 9-4: device descriptor read/64, error -32
+[    7.361087] usb 9-4: new full-speed USB device number 3 using ohci-pci
+[    7.521152] usb 9-4: device descriptor read/64, error -32
+[    7.789066] usb 9-4: device descriptor read/64, error -32
+[    8.081070] usb 9-4: new full-speed USB device number 4 using ohci-pci
+[    8.497138] usb 9-4: device not accepting address 4, error -32
+[    8.653140] usb 9-4: new full-speed USB device number 5 using ohci-pci
+[    9.069141] usb 9-4: device not accepting address 5, error -32
+$
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 6b2b66940530..eaea73e7e365 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -327,7 +327,7 @@ static struct rcuwait manager_wait = __RCUWAIT_INITIALIZER(manager_wait);
- static LIST_HEAD(workqueues);		/* PR: list of all workqueues */
- static bool workqueue_freezing;		/* PL: have wqs started freezing? */
- 
--/* PL: allowable cpus for unbound wqs and work items */
-+/* PL&A: allowable cpus for unbound wqs and work items */
- static cpumask_var_t wq_unbound_cpumask;
- 
- /* CPU where unbound work was last round robin scheduled from this CPU */
-@@ -3933,7 +3933,8 @@ static void apply_wqattrs_cleanup(struct apply_wqattrs_ctx *ctx)
- /* allocate the attrs and pwqs for later installation */
- static struct apply_wqattrs_ctx *
- apply_wqattrs_prepare(struct workqueue_struct *wq,
--		      const struct workqueue_attrs *attrs)
-+		      const struct workqueue_attrs *attrs,
-+		      const cpumask_var_t unbound_cpumask)
- {
- 	struct apply_wqattrs_ctx *ctx;
- 	struct workqueue_attrs *new_attrs, *tmp_attrs;
-@@ -3949,14 +3950,15 @@ apply_wqattrs_prepare(struct workqueue_struct *wq,
- 		goto out_free;
- 
- 	/*
--	 * Calculate the attrs of the default pwq.
-+	 * Calculate the attrs of the default pwq with unbound_cpumask
-+	 * which is wq_unbound_cpumask or to set to wq_unbound_cpumask.
- 	 * If the user configured cpumask doesn't overlap with the
- 	 * wq_unbound_cpumask, we fallback to the wq_unbound_cpumask.
- 	 */
- 	copy_workqueue_attrs(new_attrs, attrs);
--	cpumask_and(new_attrs->cpumask, new_attrs->cpumask, wq_unbound_cpumask);
-+	cpumask_and(new_attrs->cpumask, new_attrs->cpumask, unbound_cpumask);
- 	if (unlikely(cpumask_empty(new_attrs->cpumask)))
--		cpumask_copy(new_attrs->cpumask, wq_unbound_cpumask);
-+		cpumask_copy(new_attrs->cpumask, unbound_cpumask);
- 
- 	/*
- 	 * We may create multiple pwqs with differing cpumasks.  Make a
-@@ -4053,7 +4055,7 @@ static int apply_workqueue_attrs_locked(struct workqueue_struct *wq,
- 		wq->flags &= ~__WQ_ORDERED;
- 	}
- 
--	ctx = apply_wqattrs_prepare(wq, attrs);
-+	ctx = apply_wqattrs_prepare(wq, attrs, wq_unbound_cpumask);
- 	if (!ctx)
- 		return -ENOMEM;
- 
-@@ -5311,7 +5313,7 @@ void thaw_workqueues(void)
- }
- #endif /* CONFIG_FREEZER */
- 
--static int workqueue_apply_unbound_cpumask(void)
-+static int workqueue_apply_unbound_cpumask(const cpumask_var_t unbound_cpumask)
- {
- 	LIST_HEAD(ctxs);
- 	int ret = 0;
-@@ -5327,7 +5329,7 @@ static int workqueue_apply_unbound_cpumask(void)
- 		if (wq->flags & __WQ_ORDERED)
- 			continue;
- 
--		ctx = apply_wqattrs_prepare(wq, wq->unbound_attrs);
-+		ctx = apply_wqattrs_prepare(wq, wq->unbound_attrs, unbound_cpumask);
- 		if (!ctx) {
- 			ret = -ENOMEM;
- 			break;
-@@ -5342,6 +5344,11 @@ static int workqueue_apply_unbound_cpumask(void)
- 		apply_wqattrs_cleanup(ctx);
- 	}
- 
-+	if (!ret) {
-+		mutex_lock(&wq_pool_attach_mutex);
-+		cpumask_copy(wq_unbound_cpumask, unbound_cpumask);
-+		mutex_unlock(&wq_pool_attach_mutex);
-+	}
- 	return ret;
- }
- 
-@@ -5360,7 +5367,6 @@ static int workqueue_apply_unbound_cpumask(void)
- int workqueue_set_unbound_cpumask(cpumask_var_t cpumask)
- {
- 	int ret = -EINVAL;
--	cpumask_var_t saved_cpumask;
- 
- 	/*
- 	 * Not excluding isolated cpus on purpose.
-@@ -5374,23 +5380,8 @@ int workqueue_set_unbound_cpumask(cpumask_var_t cpumask)
- 			goto out_unlock;
- 		}
- 
--		if (!zalloc_cpumask_var(&saved_cpumask, GFP_KERNEL)) {
--			ret = -ENOMEM;
--			goto out_unlock;
--		}
--
--		/* save the old wq_unbound_cpumask. */
--		cpumask_copy(saved_cpumask, wq_unbound_cpumask);
--
--		/* update wq_unbound_cpumask at first and apply it to wqs. */
--		cpumask_copy(wq_unbound_cpumask, cpumask);
--		ret = workqueue_apply_unbound_cpumask();
--
--		/* restore the wq_unbound_cpumask when failed. */
--		if (ret < 0)
--			cpumask_copy(wq_unbound_cpumask, saved_cpumask);
-+		ret = workqueue_apply_unbound_cpumask(cpumask);
- 
--		free_cpumask_var(saved_cpumask);
- out_unlock:
- 		apply_wqattrs_unlock();
- 	}
+$ grep "usb 1-2" dmesg.5.19.2
+[    5.917102] usb 1-2: new high-speed USB device number 2 using ehci-pci
+[    6.277076] usb 1-2: device descriptor read/64, error -71
+[    6.513143] usb 1-2: device descriptor read/64, error -32
+[    6.753146] usb 1-2: new high-speed USB device number 3 using ehci-pci
+[    6.881143] usb 1-2: device descriptor read/64, error -32
+[    7.117144] usb 1-2: device descriptor read/64, error -32
+[    7.429141] usb 1-2: new high-speed USB device number 4 using ehci-pci
+[    7.845134] usb 1-2: device not accepting address 4, error -32
+[    7.977142] usb 1-2: new high-speed USB device number 5 using ehci-pci
+[    8.393158] usb 1-2: device not accepting address 5, error -32
+$
+
+the USB port is then no longer usable
+
+This is not reproducible on the other chipset (USB3) on this machine,
+nor on two other systems. Swapping USB cables doesn't help.
+
+I have bisected it to
+
+$ git bisect bad
+78013eaadf696d2105982abb4018fbae394ca08f is the first bad commit
+commit 78013eaadf696d2105982abb4018fbae394ca08f
+Author: Christoph Hellwig <hch@lst.de>
+Date:   Mon Feb 14 14:11:44 2022 +0100
+
+    x86: remove the IOMMU table infrastructure
+
+however it will not easily revert
+
+I'll be more than happy to assist with any debugging/testing.
+
+$ git revert 78013eaadf696d2105982abb4018fbae394ca08f
+Auto-merging arch/x86/include/asm/dma-mapping.h
+CONFLICT (content): Merge conflict in arch/x86/include/asm/dma-mapping.h
+Auto-merging arch/x86/include/asm/iommu.h
+Auto-merging arch/x86/include/asm/xen/swiotlb-xen.h
+Auto-merging arch/x86/kernel/Makefile
+Auto-merging arch/x86/kernel/pci-dma.c
+CONFLICT (content): Merge conflict in arch/x86/kernel/pci-dma.c
+Auto-merging arch/x86/kernel/vmlinux.lds.S
+Auto-merging drivers/iommu/amd/init.c
+Auto-merging drivers/iommu/amd/iommu.c
+CONFLICT (content): Merge conflict in drivers/iommu/amd/iommu.c
+Auto-merging drivers/iommu/intel/dmar.c
+error: could not revert 78013eaadf69... x86: remove the IOMMU table infrastructure
+
+# dmidecode  | grep -A2 "^Base Board"
+Base Board Information
+     Manufacturer: Gigabyte Technology Co., Ltd.
+     Product Name: 970A-DS3P
+#
+
+# lspci -nn | grep -i usb
+00:12.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller [1002:4397]
+00:12.2 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller [1002:4396]
+00:13.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller [1002:4397]
+00:13.2 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller [1002:4396]
+00:14.5 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI2 Controller [1002:4399]
+00:16.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller [1002:4397]
+00:16.2 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller [1002:4396]
+02:00.0 USB controller [0c03]: VIA Technologies, Inc. VL805/806 xHCI USB 3.0 Controller [1106:3483] (rev 01)
+#
+
+# lspci -v -s 00:12
+00:12.0 USB controller: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller (prog-if 10 [OHCI])
+	Subsystem: Gigabyte Technology Co., Ltd GA-880GMA-USB3
+	Flags: bus master, 66MHz, medium devsel, latency 32, IRQ 18
+	Memory at fe50a000 (32-bit, non-prefetchable) [size=4K]
+	Kernel driver in use: ohci-pci
+				 	Kernel modules: ohci_pci
+00:12.2 USB controller: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller (prog-if 20 [EHCI])
+	Subsystem: Gigabyte Technology Co., Ltd GA-880GMA-USB3
+	Flags: bus master, 66MHz, medium devsel, latency 32, IRQ 17
+	Memory at fe509000 (32-bit, non-prefetchable) [size=256]
+	Capabilities: [c0] Power Management version 2
+	Capabilities: [e4] Debug port: BAR=1 offset=00e0
+	Kernel driver in use: ehci-pci
+	Kernel modules: ehci_pci
+#
+
+# lsusb
+Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 009 Device 002: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial Port / Mobile Action MA-8910P
+Bus 009 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 008 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 004 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 007 Device 002: ID 03f0:0317 HP, Inc LaserJet 1200
+Bus 007 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 001 Device 002: ID 04e8:6860 Samsung Electronics Co., Ltd Galaxy A5 (MTP)
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 006 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 003 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 002 Device 002: ID 2109:3431 VIA Labs, Inc. Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+#
+
+$ git bisect log
+git bisect start
+# good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
+git bisect good 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
+# good: [07e0b709cab7dc987b5071443789865e20481119] Linux 5.18.18
+git bisect good 07e0b709cab7dc987b5071443789865e20481119
+# bad: [3d7cb6b04c3f3115719235cc6866b10326de34cd] Linux 5.19
+git bisect bad 3d7cb6b04c3f3115719235cc6866b10326de34cd
+# bad: [c011dd537ffe47462051930413fed07dbdc80313] Merge tag 'arm-soc-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect bad c011dd537ffe47462051930413fed07dbdc80313
+# good: [7e062cda7d90543ac8c7700fc7c5527d0c0f22ad] Merge tag 'net-next-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
+git bisect good 7e062cda7d90543ac8c7700fc7c5527d0c0f22ad
+# good: [f8122500a039abeabfff41b0ad8b6a2c94c1107d] Merge branch 'etnaviv/next' of https://git.pengutronix.de/git/lst/linux into drm-next
+git bisect good f8122500a039abeabfff41b0ad8b6a2c94c1107d
+# good: [2518f226c60d8e04d18ba4295500a5b0b8ac7659] Merge tag 'drm-next-2022-05-25' of git://anongit.freedesktop.org/drm/drm
+git bisect good 2518f226c60d8e04d18ba4295500a5b0b8ac7659
+# good: [f7a344468105ef8c54086dfdc800e6f5a8417d3e] ASoC: max98090: Move check for invalid values before casting in max98090_put_enab_tlv()
+git bisect good f7a344468105ef8c54086dfdc800e6f5a8417d3e
+# good: [fbe86daca0ba878b04fa241b85e26e54d17d4229] Merge tag 'scsi-misc' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+git bisect good fbe86daca0ba878b04fa241b85e26e54d17d4229
+# good: [709c8632597c3276cd21324b0256628f1a7fd4df] xfs: rework deferred attribute operation setup
+git bisect good 709c8632597c3276cd21324b0256628f1a7fd4df
+# bad: [babf0bb978e3c9fce6c4eba6b744c8754fd43d8e] Merge tag 'xfs-5.19-for-linus' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux
+git bisect bad babf0bb978e3c9fce6c4eba6b744c8754fd43d8e
+# bad: [8b728edc5be161799434cc17e1279db2f8eabe29] Merge tag 'fs_for_v5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs
+git bisect bad 8b728edc5be161799434cc17e1279db2f8eabe29
+# bad: [3f70356edf5611c28a68d8d5a9c2b442c9eb81e6] swiotlb: merge swiotlb-xen initialization into swiotlb
+git bisect bad 3f70356edf5611c28a68d8d5a9c2b442c9eb81e6
+# good: [f39f8d0eb081407e470396fd4cc376c526d13066] MIPS/octeon: use swiotlb_init instead of open coding it
+git bisect good f39f8d0eb081407e470396fd4cc376c526d13066
+# bad: [c6af2aa9ffc9763826607bc2664ef3ea4475ed18] swiotlb: make the swiotlb_init interface more useful
+git bisect bad c6af2aa9ffc9763826607bc2664ef3ea4475ed18
+# bad: [a3e230926708125205ffd06d3dc2175a8263ae7e] x86: centralize setting SWIOTLB_FORCE when guest memory encryption is enabled
+git bisect bad a3e230926708125205ffd06d3dc2175a8263ae7e
+# bad: [78013eaadf696d2105982abb4018fbae394ca08f] x86: remove the IOMMU table infrastructure
+git bisect bad 78013eaadf696d2105982abb4018fbae394ca08f
+# first bad commit: [78013eaadf696d2105982abb4018fbae394ca08f] x86: remove the IOMMU table infrastructure
+$
+
+
 -- 
-2.19.1.6.gb485710b
+Alan J. Wylie                                          https://www.wylie.me.uk/
 
+Dance like no-one's watching. / Encrypt like everyone is.
+Security is inversely proportional to convenience

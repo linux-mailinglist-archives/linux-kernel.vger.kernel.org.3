@@ -2,166 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB29B598636
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A99C59862E
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343641AbiHROnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
+        id S244891AbiHROl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245512AbiHROnE (ORCPT
+        with ESMTP id S1343609AbiHROlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:43:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828DBBB682
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:43:02 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 18 Aug 2022 10:41:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A19ABB6A4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:41:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3FFE05C0E6;
-        Thu, 18 Aug 2022 14:43:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660833781; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ehxxtYiT/7vGJ/TPD19SxbCiDD4CS1ffwYO+jD11F24=;
-        b=x2Oooyr1rv5hXpbjYlHXDOOrE7K3hD6lAiVEA/XSyALwUdztMiSJmLy/KS/ZdGualdBWTt
-        e/krfuSrm5lscR0XntpSI3/pHprH8hNZt/eLknXIuEzKfhpbu0cyb6e7VQmHAGONS1IeOv
-        ytEJ2cMsMP8GH/7JrD6tFG8Pmvc2vE0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660833781;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ehxxtYiT/7vGJ/TPD19SxbCiDD4CS1ffwYO+jD11F24=;
-        b=moUWDkKjDbNLwr6Zj/MMtN8mOrAGY4g+PoTls3SPvljI+DDA29zMEAeHT0nC40swNDfHxf
-        Nza99WP4WdzTTkAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C8032133B5;
-        Thu, 18 Aug 2022 14:43:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zlr7LfRP/mJNAwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 18 Aug 2022 14:43:00 +0000
-Message-ID: <9ef46ec0-f0fc-3712-b140-53e1471dd5d2@suse.cz>
-Date:   Thu, 18 Aug 2022 16:41:28 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3349FB821C7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:41:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08482C433D6;
+        Thu, 18 Aug 2022 14:41:40 +0000 (UTC)
+Date:   Thu, 18 Aug 2022 10:41:51 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Alexandre Vicenzi <alexandre.vicenzi@suse.com>,
+        Ben Hutchings <benh@debian.org>
+Subject: [GIT PULL] rtla: Fixes for 6.0
+Message-ID: <20220818104151.524f3df2@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v9] mm/page_owner.c: add llseek for page_owner
-Content-Language: en-US
-To:     Kassey Li <quic_yingangl@quicinc.com>, akpm@linux-foundation.org,
-        vbabka@kernel.org
-Cc:     minchan@kernel.org, iamjoonsoo.kim@lge.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20220818022425.31056-1-quic_yingangl@quicinc.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220818022425.31056-1-quic_yingangl@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 04:24, Kassey Li wrote:
-> It is too slow to dump all the pages, in some usage we just want dump
-> a given start pfn, for example: CMA range or a single page.
-> 
-> To speed up and save time, this change allows specify start pfn
-> by add llseek for page_onwer.
-> 
-> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-> Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Linus,
 
-> ---
->  Documentation/mm/page_owner.rst |  5 +++++
->  mm/page_owner.c                 | 24 +++++++++++++++++++++---
->  2 files changed, 26 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/mm/page_owner.rst b/Documentation/mm/page_owner.rst
-> index f5c954afe97c..f18fd8907049 100644
-> --- a/Documentation/mm/page_owner.rst
-> +++ b/Documentation/mm/page_owner.rst
-> @@ -94,6 +94,11 @@ Usage
->  	Page allocated via order XXX, ...
->  	PFN XXX ...
->  	// Detailed stack
-> +    By default, it will do full pfn dump, to start with a given pfn,
-> +    page_owner supports fseek.
-> +
-> +    FILE *fp = fopen("/sys/kernel/debug/page_owner", "r");
-> +    fseek(fp, pfn_start, SEEK_SET);
->  
->     The ``page_owner_sort`` tool ignores ``PFN`` rows, puts the remaining rows
->     in buf, uses regexp to extract the page order value, counts the times
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index e4c6f3f1695b..25720d81bc26 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
-> @@ -497,8 +497,10 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
->  		return -EINVAL;
->  
->  	page = NULL;
-> -	pfn = min_low_pfn + *ppos;
-> -
-> +	if (*ppos == 0)
-> +		pfn = min_low_pfn;
-> +	else
-> +		pfn = *ppos;
->  	/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
->  	while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
->  		pfn++;
-> @@ -561,7 +563,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
->  			continue;
->  
->  		/* Record the next PFN to read in the file offset */
-> -		*ppos = (pfn - min_low_pfn) + 1;
-> +		*ppos = pfn + 1;
->  
->  		return print_page_owner(buf, count, pfn, page,
->  				page_owner, handle);
-> @@ -570,6 +572,21 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
->  	return 0;
->  }
->  
-> +static loff_t lseek_page_owner(struct file *file, loff_t offset, int orig)
-> +{
-> +	switch (orig) {
-> +	case SEEK_SET:
-> +		file->f_pos = offset;
-> +		break;
-> +	case SEEK_CUR:
-> +		file->f_pos += offset;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	return file->f_pos;
-> +}
-> +
->  static void init_pages_in_zone(pg_data_t *pgdat, struct zone *zone)
->  {
->  	unsigned long pfn = zone->zone_start_pfn;
-> @@ -660,6 +677,7 @@ static void init_early_allocated_pages(void)
->  
->  static const struct file_operations proc_page_owner_operations = {
->  	.read		= read_page_owner,
-> +	.llseek		= lseek_page_owner,
->  };
->  
->  static int __init pageowner_init(void)
+Fixes for the RTLA tooling:
 
+- Fix tracer name in comments and prints
+
+- Fix setting up symlinks
+
+- Allow extra flags to be set in build
+
+- Consolidate and show all necessary libraries not found in build error
+
+
+Please pull the latest trace-rtla-v6.0 tree, which can be found at:
+
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
+trace-rtla-v6.0
+
+Tag SHA1: a54079a2b9a25f6cf1229b053ef2f4fa71d6cee5
+Head SHA1: 20aec89aac7761e3c096004f5c819aacc86fc542
+
+
+Alexandre Vicenzi (1):
+      rtla: Fix tracer name
+
+Ben Hutchings (2):
+      tools/rtla: Fix command symlinks
+      tools/rtla: Build with EXTRA_{C,LD}FLAGS
+
+Steven Rostedt (Google) (1):
+      rtla: Consolidate and show all necessary libraries that failed for building
+
+----
+ Documentation/tools/rtla/rtla-timerlat-hist.rst |  2 +-
+ tools/tracing/rtla/Makefile                     | 70 ++++++++++++++-----------
+ tools/tracing/rtla/src/timerlat_hist.c          |  2 +-
+ tools/tracing/rtla/src/timerlat_top.c           |  2 +-
+ 4 files changed, 43 insertions(+), 33 deletions(-)
+---------------------------
+diff --git a/Documentation/tools/rtla/rtla-timerlat-hist.rst b/Documentation/tools/rtla/rtla-timerlat-hist.rst
+index e12eae1f3301..6bf7f0ca4556 100644
+--- a/Documentation/tools/rtla/rtla-timerlat-hist.rst
++++ b/Documentation/tools/rtla/rtla-timerlat-hist.rst
+@@ -33,7 +33,7 @@ EXAMPLE
+ =======
+ In the example below, **rtla timerlat hist** is set to run for *10* minutes,
+ in the cpus *0-4*, *skipping zero* only lines. Moreover, **rtla timerlat
+-hist** will change the priority of the *timelat* threads to run under
++hist** will change the priority of the *timerlat* threads to run under
+ *SCHED_DEADLINE* priority, with a *10us* runtime every *1ms* period. The
+ *1ms* period is also passed to the *timerlat* tracer::
+ 
+diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
+index 1bea2d16d4c1..22e28b76f800 100644
+--- a/tools/tracing/rtla/Makefile
++++ b/tools/tracing/rtla/Makefile
+@@ -30,8 +30,8 @@ WOPTS	:= 	-Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_A
+ 
+ TRACEFS_HEADERS	:= $$($(PKG_CONFIG) --cflags libtracefs)
+ 
+-CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(MOPTS) $(WOPTS) $(TRACEFS_HEADERS)
+-LDFLAGS	:=	-ggdb
++CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(MOPTS) $(WOPTS) $(TRACEFS_HEADERS) $(EXTRA_CFLAGS)
++LDFLAGS	:=	-ggdb $(EXTRA_LDFLAGS)
+ LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs)
+ 
+ SRC	:=	$(wildcard src/*.c)
+@@ -61,40 +61,50 @@ endif
+ LIBTRACEEVENT_MIN_VERSION = 1.5
+ LIBTRACEFS_MIN_VERSION = 1.3
+ 
++.PHONY:	all warnings show_warnings
++all:	warnings rtla
++
+ TEST_LIBTRACEEVENT = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEEVENT_MIN_VERSION) libtraceevent > /dev/null 2>&1 || echo n")
+ ifeq ("$(TEST_LIBTRACEEVENT)", "n")
+-.PHONY: warning_traceevent
+-warning_traceevent:
+-	@echo "********************************************"
+-	@echo "** NOTICE: libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher not found"
+-	@echo "**"
+-	@echo "** Consider installing the latest libtraceevent from your"
+-	@echo "** distribution, e.g., 'dnf install libtraceevent' on Fedora,"
+-	@echo "** or from source:"
+-	@echo "**"
+-	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ "
+-	@echo "**"
+-	@echo "********************************************"
++WARNINGS = show_warnings
++MISSING_LIBS += echo "**   libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher";
++MISSING_PACKAGES += "libtraceevent-devel"
++MISSING_SOURCE += echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ ";
+ endif
+ 
+ TEST_LIBTRACEFS = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEFS_MIN_VERSION) libtracefs > /dev/null 2>&1 || echo n")
+ ifeq ("$(TEST_LIBTRACEFS)", "n")
+-.PHONY: warning_tracefs
+-warning_tracefs:
+-	@echo "********************************************"
+-	@echo "** NOTICE: libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher not found"
+-	@echo "**"
+-	@echo "** Consider installing the latest libtracefs from your"
+-	@echo "** distribution, e.g., 'dnf install libtracefs' on Fedora,"
+-	@echo "** or from source:"
+-	@echo "**"
+-	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ "
+-	@echo "**"
+-	@echo "********************************************"
++WARNINGS = show_warnings
++MISSING_LIBS += echo "**   libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher";
++MISSING_PACKAGES += "libtracefs-devel"
++MISSING_SOURCE += echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ ";
+ endif
+ 
+-.PHONY:	all
+-all:	rtla
++define show_dependencies
++	@echo "********************************************";				\
++	echo "** NOTICE: Failed build dependencies";					\
++	echo "**";									\
++	echo "** Required Libraries:";							\
++	$(MISSING_LIBS)									\
++	echo "**";									\
++	echo "** Consider installing the latest libtracefs from your";			\
++	echo "** distribution, e.g., 'dnf install $(MISSING_PACKAGES)' on Fedora,";	\
++	echo "** or from source:";							\
++	echo "**";									\
++	$(MISSING_SOURCE)								\
++	echo "**";									\
++	echo "********************************************"
++endef
++
++show_warnings:
++	$(call show_dependencies);
++
++ifneq ("$(WARNINGS)", "")
++ERROR_OUT = $(error Please add the necessary dependencies)
++
++warnings: $(WARNINGS)
++	$(ERROR_OUT)
++endif
+ 
+ rtla: $(OBJ)
+ 	$(CC) -o rtla $(LDFLAGS) $(OBJ) $(LIBS)
+@@ -108,9 +118,9 @@ install: doc_install
+ 	$(INSTALL) rtla -m 755 $(DESTDIR)$(BINDIR)
+ 	$(STRIP) $(DESTDIR)$(BINDIR)/rtla
+ 	@test ! -f $(DESTDIR)$(BINDIR)/osnoise || rm $(DESTDIR)$(BINDIR)/osnoise
+-	ln -s $(DESTDIR)$(BINDIR)/rtla $(DESTDIR)$(BINDIR)/osnoise
++	ln -s rtla $(DESTDIR)$(BINDIR)/osnoise
+ 	@test ! -f $(DESTDIR)$(BINDIR)/timerlat || rm $(DESTDIR)$(BINDIR)/timerlat
+-	ln -s $(DESTDIR)$(BINDIR)/rtla $(DESTDIR)$(BINDIR)/timerlat
++	ln -s rtla $(DESTDIR)$(BINDIR)/timerlat
+ 
+ .PHONY: clean tarball
+ clean: doc_clean
+diff --git a/tools/tracing/rtla/src/timerlat_hist.c b/tools/tracing/rtla/src/timerlat_hist.c
+index f3ec628f5e51..4b48af8a8309 100644
+--- a/tools/tracing/rtla/src/timerlat_hist.c
++++ b/tools/tracing/rtla/src/timerlat_hist.c
+@@ -892,7 +892,7 @@ int timerlat_hist_main(int argc, char *argv[])
+ 	return_value = 0;
+ 
+ 	if (trace_is_off(&tool->trace, &record->trace)) {
+-		printf("rtla timelat hit stop tracing\n");
++		printf("rtla timerlat hit stop tracing\n");
+ 		if (params->trace_output) {
+ 			printf("  Saving trace to %s\n", params->trace_output);
+ 			save_trace_to_file(record->trace.inst, params->trace_output);
+diff --git a/tools/tracing/rtla/src/timerlat_top.c b/tools/tracing/rtla/src/timerlat_top.c
+index 35452a1d45e9..334271935222 100644
+--- a/tools/tracing/rtla/src/timerlat_top.c
++++ b/tools/tracing/rtla/src/timerlat_top.c
+@@ -687,7 +687,7 @@ int timerlat_top_main(int argc, char *argv[])
+ 	return_value = 0;
+ 
+ 	if (trace_is_off(&top->trace, &record->trace)) {
+-		printf("rtla timelat hit stop tracing\n");
++		printf("rtla timerlat hit stop tracing\n");
+ 		if (params->trace_output) {
+ 			printf("  Saving trace to %s\n", params->trace_output);
+ 			save_trace_to_file(record->trace.inst, params->trace_output);

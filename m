@@ -2,92 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40940597EEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D66597EEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243768AbiHRHFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 03:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
+        id S243773AbiHRHFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 03:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243762AbiHRHFL (ORCPT
+        with ESMTP id S243770AbiHRHFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 03:05:11 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3F586FFB;
-        Thu, 18 Aug 2022 00:05:09 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id s129so621091vsb.11;
-        Thu, 18 Aug 2022 00:05:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=AjriiNks9RHRoCBN7ZUJ6jtj7TS2aTJuQAkCqUAkW5Y=;
-        b=OveoAobst4dQgzVcV+b2hUYKC6v8Bu1nEkiCbdf5FW37KCqyv7XSu0oLbibqxi+P2I
-         JSVBCOQ3WWAceNJsnm/Zhwd/xIVJAd+M9IrJ48Cb52rDvVi0eb52FvtUIj4/+Xld+MPr
-         qBgTd99HbHfHUA9Hrg6Bh0CZOOEy1ozS3724GEhA0ki99vdSYKASgLbgNpxYHBKne+LL
-         aRs/q4iSpgR72FZYFsqU5vun7DfI3ru4dlg3Fw7EVEbdIxWzq0yPgfmP/e4HSx8qgOT7
-         gug5se3NsFe2RVzQU5JzrnQoTlZYnNemIwDMFA1gss78x4jizikMd+gDBllm0l6pEV0E
-         CGEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=AjriiNks9RHRoCBN7ZUJ6jtj7TS2aTJuQAkCqUAkW5Y=;
-        b=oTUW4mMcGfDZ5mSL+Fb6MhtyJaPQJzlKy21vdC/V1dyTiDNJPXv9W1A73hibRlzdbY
-         sFZUehRT94Z6VAn09oQxKCBAHjEO104i39W3Cv+b7eFxzHEhl7sFDVI0JUNYIVaTDrEq
-         JA4b04eM7vG+FMgvmPiYUABBKVYUMjiDzyRhIlYywLVlSPWKxhflcfu9Fl4Y0gc90Fb4
-         bJrrh8jAoFAyswWEm2u4bK47/LnL2+TQTCdLsAz00Qz3irM7qu5u3+dNpRtgAT/TCrD6
-         majlsIv9uyK4OCUVwXsi3gQE9ay5yR6QrBARdme01YfgTIThkTrabdFFOdoqf4+/L9Ox
-         nmgw==
-X-Gm-Message-State: ACgBeo2v0L0hI9O7g/AxXyMIMuG9PW8Z+SG/xW5pFSGJVdPzjCLFV+gU
-        OXqCohr2WCmxADUTCe9cJD0rqRBR+LGqAxBSnV8=
-X-Google-Smtp-Source: AA6agR4SXRtluW797qZbkdraB+aWdq4UMbY/7gnYhTK9K3tJvmg7YIGhYwFKeNd/Azfqw6j+kBLhK3/iwIRasxLKc3A=
-X-Received: by 2002:a05:6102:2139:b0:38d:1e1f:7230 with SMTP id
- f25-20020a056102213900b0038d1e1f7230mr510987vsg.47.1660806309000; Thu, 18 Aug
- 2022 00:05:09 -0700 (PDT)
+        Thu, 18 Aug 2022 03:05:18 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38E80876BF;
+        Thu, 18 Aug 2022 00:05:16 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id BA069807E;
+        Thu, 18 Aug 2022 06:58:18 +0000 (UTC)
+Date:   Thu, 18 Aug 2022 10:05:14 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v1 0/9] fw_devlink improvements
+Message-ID: <Yv3kqoMo3R/7onlw@atomide.com>
+References: <20220810060040.321697-1-saravanak@google.com>
+ <YvYiF36M09dX9ASm@atomide.com>
+ <CAGETcx-t0O0B+5i0FWwm5w2=ccOD5zVAaUvgQoP8PT9SOT_btw@mail.gmail.com>
+ <Yvog4K0barAvvVeb@atomide.com>
+ <CAGETcx-k+ca5uG42XvW5yiK8RWDYfeRs9va5boqnp33s45AGRg@mail.gmail.com>
 MIME-Version: 1.0
-References: <1660787634-28550-1-git-send-email-shengjiu.wang@nxp.com> <1660787634-28550-2-git-send-email-shengjiu.wang@nxp.com>
-In-Reply-To: <1660787634-28550-2-git-send-email-shengjiu.wang@nxp.com>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Thu, 18 Aug 2022 10:04:55 +0300
-Message-ID: <CAEnQRZB19WxVYxabOdN3ee+pp9cbwgY7p=k+6P1BqONCEJjjnQ@mail.gmail.com>
-Subject: Re: [Sound-open-firmware] [RESEND PATCH v2 2/2] ASoC: SOF: imx: Add
- i.MX8ULP HW support
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com,
-        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        daniel.baluta@nxp.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        shengjiu.wang@gmail.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        sound-open-firmware@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGETcx-k+ca5uG42XvW5yiK8RWDYfeRs9va5boqnp33s45AGRg@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 5:12 AM Shengjiu Wang <shengjiu.wang@nxp.com> wrote:
->
-> From: Zhang Peng <peng.zhang_8@nxp.com>
->
-> This adds skeleton support for the audio DSP hardware found on
-> NXP i.MX8ULP platform.
->
-> On i.MX8ULP resources (clocks, power, etc) are managed by the
-> System Integration Module in LPAV domain and XRDC which is handled
-> by arm trusted firmware.
->
-> Signed-off-by: Zhang Peng <peng.zhang_8@nxp.com>
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+Hi,
 
-Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
+* Saravana Kannan <saravanak@google.com> [220815 18:16]:
+> On Mon, Aug 15, 2022 at 3:33 AM Tony Lindgren <tony@atomide.com> wrote:
+> >
+> > * Saravana Kannan <saravanak@google.com> [220813 00:45]:
+> > > On Fri, Aug 12, 2022 at 2:49 AM Tony Lindgren <tony@atomide.com> wrote:
+> > > >
+> > > > * Saravana Kannan <saravanak@google.com> [220810 05:54]:
+> > > > > Tony,
+> > > > >
+> > > > > This should handle the odd case of the child being the supplier of the
+> > > > > parent. Can you please give this a shot? I want to make sure the cycle
+> > > > > detection code handles this properly and treats it like it's NOT a cycle.
+> > > >
+> > > > Yup, this series works for me, so feel free to add:
+> > > >
+> > > > Tested-by: Tony Lindgren <tony@atomide.com>
+> > >
+> > > Thanks for testing!
+> > >
+> > > Btw, out of curiosity, how many different boards did you test this on?
+> > > IIRC you had an issue only in one board, right? Not to say I didn't
+> > > break anything else, I'm just trying to see how much confidence we
+> > > have on this series so far. I'm hoping the rest of the folks I listed
+> > > in the email will get around to testing this series.
+> >
+> > Sorry if I was not clear earlier. The issue affects several generations
+> > of TI 32-bit SoCs at least, not just one board.
+> 
+> But this series fixes the issues for all of them or are you still
+> seeing some broken boot with this series?
+
+Yes. However, I'm now getting confused what exactly you're proposing to fix
+the regressions for v6.0-rc series.
+
+I'd like to see just the fixes series for v6.0-rc series. With proper fixes
+tags, and possibly reverts.
+
+Then discussing patches for Linux next can be done based on the fixes :)
+
+Regards,
+
+Tony

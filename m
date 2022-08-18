@@ -2,244 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC887598E31
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3504598E34
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345721AbiHRUjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 16:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
+        id S1345574AbiHRUjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 16:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346109AbiHRUjJ (ORCPT
+        with ESMTP id S1344443AbiHRUjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:39:09 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEF9CB5E2;
-        Thu, 18 Aug 2022 13:39:04 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IKXo3C003864;
-        Thu, 18 Aug 2022 20:38:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=v148aeGtidlwolKhgufJrMAFl/TLk02HAbEbOB3OYe0=;
- b=FGO4UwANhlN800M0LY7gPRPQj+0cOEdUiwPTSBdzmJrH5aGJKpsOLQpJ9SVxu4EMuO2U
- KYKJug+FIQGLc55JqwNWGwC8ZKLjwrhCIjojkA4XIhZxdNYyBdYdiqQYqXt3zhcdR0A0
- ot+04ax2f28gZtVtIJDdcT+HG8CEaP1IrDIAppzM+PLuLJvuH6YouUNu/xCNyxBMIppu
- uxhMfPHPJKwmf1uEkbMqOBXJTELNIzR+F4RQw27sG7MRZwfxDCQyZ+snE4jejOOeF20L
- F1ferf/R3pQyoXcWqUB4R5F32t9T3hN+/7A7nZmICMrZhTaKWJLUPuYQtEvEi9D9QfHG XA== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1vjtg2us-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 20:38:36 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27IKKjJQ001509;
-        Thu, 18 Aug 2022 20:38:35 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma04wdc.us.ibm.com with ESMTP id 3hx3ka10g9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 20:38:35 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27IKcYHd62980476
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Aug 2022 20:38:34 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C00F1124052;
-        Thu, 18 Aug 2022 20:38:34 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A67E124053;
-        Thu, 18 Aug 2022 20:38:32 +0000 (GMT)
-Received: from [9.211.138.234] (unknown [9.211.138.234])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Aug 2022 20:38:31 +0000 (GMT)
-Message-ID: <3450ba5f-d6f4-d04c-3501-8cf375389347@linux.ibm.com>
-Date:   Thu, 18 Aug 2022 16:38:31 -0400
+        Thu, 18 Aug 2022 16:39:37 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4BDCAC94
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 13:39:36 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ba1so3003310wrb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 13:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=xygn6gbcrMpkU6O3LJ14UZxn1nCFuKxX8e/wHh/7Pno=;
+        b=hDoGWC05/Y3Yjy5+Kzqp+U5WYRjYFZycwb09fnHn9n+Hz8YHHFWEiDh28HyuITaWr5
+         oMZQ0tVlU5Nf8UWEUmE3qYgwV1V1J/4KpyybLUNGfdRF8zaSl2SmU8922xVh+1bzHszb
+         ssDsor3eAuiOnlSouoY68hI0LeObyV8tYmJmqLVt3VDzaWhgcpypZt2qbrRd8CsPkZ62
+         C56HijPTJlxO2iIo3EAU708uoANyraQjmFv9A+4f2aEhg+xx2NtUaQnNswbrspysvBLG
+         XrkJYoWjiH3NJJaxzRQLU9ZWKHqHF76X4Wh40Pl1JMlbEOsEx41tI17N5oqMrKTrpIZz
+         cBjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=xygn6gbcrMpkU6O3LJ14UZxn1nCFuKxX8e/wHh/7Pno=;
+        b=kpnjYXh/H81UNQcH3Bj9SwxadC0rFJNQT2dZlgC8scOYPfdJUixjcpaVAV1d7eKVuR
+         V//+Z2HXUZQsIc3GHCdtEkrDchpArVumfMWFe4XIYnUDTUXi00caYCO7LBeWaccOejSa
+         b8lqB2LGClXIcq+xHgFySVDYYMR5ZkEDhWwd10Hlycb7yunqrzNbkw6mjnk7Tkr7sls7
+         r0dxRffFl3tsHEUl9wesa8sM281QoXxn6/ReZPVEEOTVZVMLxIrh3zvOv4qhxwmeMhfX
+         KoxZ/M3u+QgUI4pe0XqwzvK6+kqY+vlaMUl/lf0VpoWh9ZJwSaHRrSW1ZQUpVGVQYnrO
+         zuBQ==
+X-Gm-Message-State: ACgBeo0/yqwwaK189ijP8KWzY3CnFzLvW8EWLaWEDEzHgOZZUhKv1m6H
+        e8QvMgk9oQA77xET4BkHvK3gdNFoYZQODA==
+X-Google-Smtp-Source: AA6agR63LHfoemL/kg5QS25U8mqGufbAT7XDxsG8MKNfAZ5DniFWkDDq8xOXZipXmh3DKHD3pH49pw==
+X-Received: by 2002:adf:f64c:0:b0:225:28cb:3334 with SMTP id x12-20020adff64c000000b0022528cb3334mr2485613wrp.700.1660855174760;
+        Thu, 18 Aug 2022 13:39:34 -0700 (PDT)
+Received: from localhost.localdomain (2a01cb000c0d3d00cc34c67bc193cac8.ipv6.abo.wanadoo.fr. [2a01:cb00:c0d:3d00:cc34:c67b:c193:cac8])
+        by smtp.gmail.com with ESMTPSA id u18-20020a05600c19d200b003a54d610e5fsm1571648wmq.26.2022.08.18.13.39.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 13:39:33 -0700 (PDT)
+From:   "=?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?=" <peron.clem@gmail.com>
+X-Google-Original-From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <cpe@outsight.tech>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] arm64: defconfig: Enable devfreq cooling device
+Date:   Thu, 18 Aug 2022 22:39:25 +0200
+Message-Id: <20220818203928.131059-2-cpe@outsight.tech>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220818203928.131059-1-cpe@outsight.tech>
+References: <20220818203928.131059-1-cpe@outsight.tech>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] KVM: s390: pci: Hook to access KVM lowlevel from VFIO
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>
-Cc:     rdunlap@infradead.org, linux-kernel@vger.kernel.org, lkp@intel.com,
-        borntraeger@linux.ibm.com, farman@linux.ibm.com,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, schnelle@linux.ibm.com, frankja@linux.ibm.com
-References: <20220818164652.269336-1-pmorel@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20220818164652.269336-1-pmorel@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Nu1bnRBHlHpqoOulw5WF2Rko1pAY89Ei
-X-Proofpoint-ORIG-GUID: Nu1bnRBHlHpqoOulw5WF2Rko1pAY89Ei
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_14,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- phishscore=0 bulkscore=0 clxscore=1015 suspectscore=0 mlxlogscore=999
- impostorscore=0 lowpriorityscore=0 mlxscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180075
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 12:46 PM, Pierre Morel wrote:
-> We have a cross dependency between KVM and VFIO when using
-> s390 vfio_pci_zdev extensions for PCI passthrough
-> To be able to keep both subsystem modular we add a registering
-> hook inside the S390 core code.
-> 
-> This fixes a build problem when VFIO is built-in and KVM is built
-> as a module.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
-> Fixes: 09340b2fca007 ("KVM: s390: pci: add routines to start/stop inter..")
-> Cc: <stable@vger.kernel.org>
-> ---
->  arch/s390/include/asm/kvm_host.h | 17 ++++++-----------
->  arch/s390/kvm/pci.c              | 10 ++++++----
->  arch/s390/pci/Makefile           |  2 ++
->  arch/s390/pci/pci_kvm_hook.c     | 11 +++++++++++
->  drivers/vfio/pci/vfio_pci_zdev.c |  8 ++++++--
->  5 files changed, 31 insertions(+), 17 deletions(-)
->  create mode 100644 arch/s390/pci/pci_kvm_hook.c
-> 
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index f39092e0ceaa..b1e98a9ed152 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -1038,16 +1038,11 @@ static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
->  #define __KVM_HAVE_ARCH_VM_FREE
->  void kvm_arch_free_vm(struct kvm *kvm);
->  
-> -#ifdef CONFIG_VFIO_PCI_ZDEV_KVM
-> -int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm);
-> -void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev);
-> -#else
-> -static inline int kvm_s390_pci_register_kvm(struct zpci_dev *dev,
-> -					    struct kvm *kvm)
-> -{
-> -	return -EPERM;
-> -}
-> -static inline void kvm_s390_pci_unregister_kvm(struct zpci_dev *dev) {}
-> -#endif
-> +struct zpci_kvm_hook {
-> +	int (*kvm_register)(void *opaque, struct kvm *kvm);
-> +	void (*kvm_unregister)(void *opaque);
-> +};
-> +
-> +extern struct zpci_kvm_hook zpci_kvm_hook;
->  
->  #endif
-> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
-> index 4946fb7757d6..22c025538323 100644
-> --- a/arch/s390/kvm/pci.c
-> +++ b/arch/s390/kvm/pci.c
-> @@ -431,8 +431,9 @@ static void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
->   * available, enable them and let userspace indicate whether or not they will
->   * be used (specify SHM bit to disable).
->   */
-> -int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm)
-> +static int kvm_s390_pci_register_kvm(void *opaque, struct kvm *kvm)
->  {
-> +	struct zpci_dev *zdev = opaque;
->  	int rc;
->  
->  	if (!zdev)
-> @@ -510,10 +511,10 @@ int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm)
->  	kvm_put_kvm(kvm);
->  	return rc;
->  }
-> -EXPORT_SYMBOL_GPL(kvm_s390_pci_register_kvm);
->  
-> -void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev)
-> +static void kvm_s390_pci_unregister_kvm(void *opaque)
->  {
-> +	struct zpci_dev *zdev = opaque;
->  	struct kvm *kvm;
->  
->  	if (!zdev)
-> @@ -566,7 +567,6 @@ void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev)
->  
->  	kvm_put_kvm(kvm);
->  }
-> -EXPORT_SYMBOL_GPL(kvm_s390_pci_unregister_kvm);
->  
->  void kvm_s390_pci_init_list(struct kvm *kvm)
->  {
-> @@ -678,6 +678,8 @@ int kvm_s390_pci_init(void)
->  
->  	spin_lock_init(&aift->gait_lock);
->  	mutex_init(&aift->aift_lock);
-> +	zpci_kvm_hook.kvm_register = kvm_s390_pci_register_kvm;
-> +	zpci_kvm_hook.kvm_unregister = kvm_s390_pci_unregister_kvm;
->  
->  	return 0;
->  }
+From: Clément Péron <peron.clem@gmail.com>
 
-You should also set these to NULL in kvm_s390_pci_exit (which is called from kvm_arch_exit).  In practice, the kvm module would need to be loaded again before we have a nonzero vdev->vdev.kvm so it should never be an issue - but we should clean up anyway when the module is removed.
+Devfreq cooling device framework is used in Panfrost
+to throttle GPU in order to regulate its temperature.
 
-With that change:
+Enable this driver for ARM64 SoC.
 
-Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Signed-off-by: Clément Péron <peron.clem@gmail.com>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-> diff --git a/arch/s390/pci/Makefile b/arch/s390/pci/Makefile
-> index bf557a1b789c..c02dbfb415d9 100644
-> --- a/arch/s390/pci/Makefile
-> +++ b/arch/s390/pci/Makefile
-> @@ -7,3 +7,5 @@ obj-$(CONFIG_PCI)	+= pci.o pci_irq.o pci_dma.o pci_clp.o pci_sysfs.o \
->  			   pci_event.o pci_debug.o pci_insn.o pci_mmio.o \
->  			   pci_bus.o
->  obj-$(CONFIG_PCI_IOV)	+= pci_iov.o
-> +
-> +obj-y += pci_kvm_hook.o
-> diff --git a/arch/s390/pci/pci_kvm_hook.c b/arch/s390/pci/pci_kvm_hook.c
-> new file mode 100644
-> index 000000000000..ff34baf50a3e
-> --- /dev/null
-> +++ b/arch/s390/pci/pci_kvm_hook.c
-> @@ -0,0 +1,11 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * VFIO ZPCI devices support
-> + *
-> + * Copyright (C) IBM Corp. 2022.  All rights reserved.
-> + *	Author(s): Pierre Morel <pmorel@linux.ibm.com>
-> + */
-> +#include <linux/kvm_host.h>
-> +
-> +struct zpci_kvm_hook zpci_kvm_hook;
-> +EXPORT_SYMBOL_GPL(zpci_kvm_hook);
-> diff --git a/drivers/vfio/pci/vfio_pci_zdev.c b/drivers/vfio/pci/vfio_pci_zdev.c
-> index e163aa9f6144..0cbdcd14f1c8 100644
-> --- a/drivers/vfio/pci/vfio_pci_zdev.c
-> +++ b/drivers/vfio/pci/vfio_pci_zdev.c
-> @@ -151,7 +151,10 @@ int vfio_pci_zdev_open_device(struct vfio_pci_core_device *vdev)
->  	if (!vdev->vdev.kvm)
->  		return 0;
->  
-> -	return kvm_s390_pci_register_kvm(zdev, vdev->vdev.kvm);
-> +	if (zpci_kvm_hook.kvm_register)
-> +		return zpci_kvm_hook.kvm_register(zdev, vdev->vdev.kvm);
-> +
-> +	return -ENOENT;
->  }
->  
->  void vfio_pci_zdev_close_device(struct vfio_pci_core_device *vdev)
-> @@ -161,5 +164,6 @@ void vfio_pci_zdev_close_device(struct vfio_pci_core_device *vdev)
->  	if (!zdev || !vdev->vdev.kvm)
->  		return;
->  
-> -	kvm_s390_pci_unregister_kvm(zdev);
-> +	if (zpci_kvm_hook.kvm_unregister)
-> +		zpci_kvm_hook.kvm_unregister(zdev);
->  }
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index d5b2d2dd4904..109004e44d21 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -584,6 +584,7 @@ CONFIG_SENSORS_INA2XX=m
+ CONFIG_SENSORS_INA3221=m
+ CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
+ CONFIG_CPU_THERMAL=y
++CONFIG_DEVFREQ_THERMAL=y
+ CONFIG_THERMAL_EMULATION=y
+ CONFIG_IMX_SC_THERMAL=m
+ CONFIG_IMX8MM_THERMAL=m
+-- 
+2.34.1
 

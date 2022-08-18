@@ -2,49 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB161598654
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23142598664
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245144AbiHROrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
+        id S245416AbiHROtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233992AbiHROrT (ORCPT
+        with ESMTP id S235036AbiHROtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:47:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0338ABB926;
-        Thu, 18 Aug 2022 07:47:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9416260B3F;
-        Thu, 18 Aug 2022 14:47:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B4DC433C1;
-        Thu, 18 Aug 2022 14:47:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660834036;
-        bh=vkra+54wSOIY+Y+8ajG7f72gPrM+M8yjbxSyC4XndDc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LNjBIGy2aDIQKn0/m/2vLz7gWbb+Mhtvi8/RiYREGS5rL0/rCC8RMXAJH1lcKRkgk
-         1DpHRpQulWGffTzE7e0P22n32+4zkTU5YSNvxPqsYi4ACCI+IINgdQ8S/3YlXAHwCg
-         0bhIipR3qJReZrwZn4JEXdShmonF/fexjAtdpBW4=
-Date:   Thu, 18 Aug 2022 16:47:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Alan J. Wylie" <alan@wylie.me.uk>, linux-usb@vger.kernel.org
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: Regression in 5.19.0: USB errors during boot
-Message-ID: <Yv5Q8gDvVTGOHd8k@kroah.com>
-References: <25342.20092.262450.330346@wylie.me.uk>
+        Thu, 18 Aug 2022 10:49:47 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9556875CD0;
+        Thu, 18 Aug 2022 07:49:46 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 24so1467440pgr.7;
+        Thu, 18 Aug 2022 07:49:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=wPb3XQDUpxdE9gEclp2HbSBEcH0O3377//QUXGa74XM=;
+        b=TiRrv65fnbBroKxmHZtJIagfFET8v1QzaLF7p8X/LrqVe+hqiGBKBDcEi+IFy0utjw
+         R1DXZ5jIAEcsunP49HpG/KDSM6eRdgVYIzoH1p0Eu47b+/2+ejR3msqX18wSpEsUFZkO
+         sJRvVth9RrzcL5Ms6bAZV/gxYmAFEHBSpwvb+B4D5rWTG1l5Y7NshlTZ4zTeIACBDL3u
+         zW34tI7IqJ0TyZzH7dsmb5WDTaK/CS37lXYlMWLBnvma8lAUb35SoktfbVNkJU0dNlnF
+         y9gLbJZrPOUdDbYsWIxUqC3cirtV7bn41ejwy2fTDsqQqpfFXQBdPeZ/jGK/FYqtnQoQ
+         cbSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=wPb3XQDUpxdE9gEclp2HbSBEcH0O3377//QUXGa74XM=;
+        b=DUP8ev8wOiVRp7IcpuyMTqdwBesmyVCmHdzETitc7NManfPUjuk00T40nUDC54XGFj
+         618qe7Krxm2yNunaCEj4KCsGJKAE9PwkCYpB+n5cquapJ4ZPwhzLofQ57j7Qcb03jKIf
+         uqj9ScIZ47Fwr3PadHEXJ3onUdlaOztDryeBN7q5KqbQQNPZYglhrHHPiCIpud+VZn0/
+         +IVLG+wCjSkQxCE85Jk6kMmVRcK50qXDPhkhwdVohFTqmMC+tn6nogU39j6rFW0WM6nR
+         fk1EcFOgb5djm9Tna8/9JI/mVTOj++GFoXrzETAUQIrEwPh83ZkLO+mzmvAojhlCzcQG
+         s+xA==
+X-Gm-Message-State: ACgBeo0Jwqy8QuqQLhUrCim/YmwmwBt5rslfgZYu8MCcd70TqR7rbNbq
+        KsvqLDBIjBrPj4BO980PwG+Gkm777jQ=
+X-Google-Smtp-Source: AA6agR7TN1titVzwyCuzCLVy6hIYX8uKZ8hzg3AUeDjIk7KQcf/eiT+NQngvIbsYpKWevsObbPhJ+w==
+X-Received: by 2002:aa7:8f0a:0:b0:52d:8135:64e0 with SMTP id x10-20020aa78f0a000000b0052d813564e0mr3340259pfr.0.1660834185859;
+        Thu, 18 Aug 2022 07:49:45 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id b9-20020a17090a5a0900b001f3e643ebbfsm3721196pjd.0.2022.08.18.07.49.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 07:49:44 -0700 (PDT)
+Message-ID: <63d7a132-1d6d-b771-27d7-e0049f51b445@gmail.com>
+Date:   Thu, 18 Aug 2022 23:49:35 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <25342.20092.262450.330346@wylie.me.uk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 03/13] docs: ja_JP: remove SubmittingPatches
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        corbet@lwn.net
+Cc:     Jiri Kosina <jkosina@suse.cz>,
+        Kosuke Fujimoto <fujimotokosuke0@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Tsugikazu Shibata <shibata@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+References: <cover.1660829433.git.mchehab@kernel.org>
+ <2902bc232970588d4ca59b5df0afbabb0c345d6f.1660829433.git.mchehab@kernel.org>
+ <9d80455f-60aa-58b6-777d-ce1a03ed280a@gmail.com>
+In-Reply-To: <9d80455f-60aa-58b6-777d-ce1a03ed280a@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,123 +82,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Adding in linux-usb@vger]
+On Thu, 18 Aug 2022 23:27:34 +0900, Akira Yokosawa wrote:
+> Hi Mauro,
+> 
+> On Thu, 18 Aug 2022 15:38:49 +0200, Mauro Carvalho Chehab wrote:
+>> This file is outdated as the original document was removed. So, drop
+>> it too.
+>>
+>> Fixes: 9db370de2780 ("docs: process: remove outdated submitting-drivers.rst")
+>> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> 
+> Yes, this is quite outdated, but a change set was merged recently during
+> the v5.19 merge window [1, 2].
+Uhm, it looks like you confused SubmittingPatches with submitting-drivers.rst
+and are trying to remove SubmittingPatches, which should be kept...
 
+Anyway, please don't remove it!
 
-On Thu, Aug 18, 2022 at 03:36:44PM +0100, Alan J. Wylie wrote:
 > 
-> Apologies for the delay in reporting this: I messed up my first attempt at
-> bisecting, then I've spent a week going to, enjoying, returning from and
-> recovering from a music festival.
-> 
-> Up to and including 5.18.18 things are fine. With 5.19.0 (and .1 and .2)  I see
-> lots of errors and hangs on the USB2 chipset, e.g.
-> 
-> $ grep "usb 9-4" dmesg.5.19.2
-> [    6.669075] usb 9-4: new full-speed USB device number 2 using ohci-pci
-> [    6.829087] usb 9-4: device descriptor read/64, error -32
-> [    7.097094] usb 9-4: device descriptor read/64, error -32
-> [    7.361087] usb 9-4: new full-speed USB device number 3 using ohci-pci
-> [    7.521152] usb 9-4: device descriptor read/64, error -32
-> [    7.789066] usb 9-4: device descriptor read/64, error -32
-> [    8.081070] usb 9-4: new full-speed USB device number 4 using ohci-pci
-> [    8.497138] usb 9-4: device not accepting address 4, error -32
-> [    8.653140] usb 9-4: new full-speed USB device number 5 using ohci-pci
-> [    9.069141] usb 9-4: device not accepting address 5, error -32
-> $
-> 
-> $ grep "usb 1-2" dmesg.5.19.2
-> [    5.917102] usb 1-2: new high-speed USB device number 2 using ehci-pci
-> [    6.277076] usb 1-2: device descriptor read/64, error -71
-> [    6.513143] usb 1-2: device descriptor read/64, error -32
-> [    6.753146] usb 1-2: new high-speed USB device number 3 using ehci-pci
-> [    6.881143] usb 1-2: device descriptor read/64, error -32
-> [    7.117144] usb 1-2: device descriptor read/64, error -32
-> [    7.429141] usb 1-2: new high-speed USB device number 4 using ehci-pci
-> [    7.845134] usb 1-2: device not accepting address 4, error -32
-> [    7.977142] usb 1-2: new high-speed USB device number 5 using ehci-pci
-> [    8.393158] usb 1-2: device not accepting address 5, error -32
-> $
-> 
-> the USB port is then no longer usable
-> 
-> This is not reproducible on the other chipset (USB3) on this machine,
-> nor on two other systems. Swapping USB cables doesn't help.
-> 
-> I have bisected it to
-> 
-> $ git bisect bad
-> 78013eaadf696d2105982abb4018fbae394ca08f is the first bad commit
-> commit 78013eaadf696d2105982abb4018fbae394ca08f
-> Author: Christoph Hellwig <hch@lst.de>
-> Date:   Mon Feb 14 14:11:44 2022 +0100
-> 
->     x86: remove the IOMMU table infrastructure
-> 
-> however it will not easily revert
-> 
-> I'll be more than happy to assist with any debugging/testing.
-> 
-> $ git revert 78013eaadf696d2105982abb4018fbae394ca08f
-> Auto-merging arch/x86/include/asm/dma-mapping.h
-> CONFLICT (content): Merge conflict in arch/x86/include/asm/dma-mapping.h
-> Auto-merging arch/x86/include/asm/iommu.h
-> Auto-merging arch/x86/include/asm/xen/swiotlb-xen.h
-> Auto-merging arch/x86/kernel/Makefile
-> Auto-merging arch/x86/kernel/pci-dma.c
-> CONFLICT (content): Merge conflict in arch/x86/kernel/pci-dma.c
-> Auto-merging arch/x86/kernel/vmlinux.lds.S
-> Auto-merging drivers/iommu/amd/init.c
-> Auto-merging drivers/iommu/amd/iommu.c
-> CONFLICT (content): Merge conflict in drivers/iommu/amd/iommu.c
-> Auto-merging drivers/iommu/intel/dmar.c
-> error: could not revert 78013eaadf69... x86: remove the IOMMU table infrastructure
-> 
-> # dmidecode  | grep -A2 "^Base Board"
-> Base Board Information
->      Manufacturer: Gigabyte Technology Co., Ltd.
->      Product Name: 970A-DS3P
-> #
-> 
-> # lspci -nn | grep -i usb
-> 00:12.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller [1002:4397]
-> 00:12.2 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller [1002:4396]
-> 00:13.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller [1002:4397]
-> 00:13.2 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller [1002:4396]
-> 00:14.5 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI2 Controller [1002:4399]
-> 00:16.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller [1002:4397]
-> 00:16.2 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller [1002:4396]
-> 02:00.0 USB controller [0c03]: VIA Technologies, Inc. VL805/806 xHCI USB 3.0 Controller [1106:3483] (rev 01)
+> Please keep it and the other outdated files under ja_JP/ so that I
+> can continue updating them!
 
-So this only happens with the on-board USB 2 controller?
+I'll submit a patch removing a ref to submitting-drivers.rst in it.
+I didn't notice the dangling reference as the doc is still in plain-text.
 
-This is odd, I would not expect one PCI controller to work, but the
-other one not.
+        Thanks, Akira
 
-
-> #
 > 
-> # lspci -v -s 00:12
-> 00:12.0 USB controller: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller (prog-if 10 [OHCI])
-> 	Subsystem: Gigabyte Technology Co., Ltd GA-880GMA-USB3
-> 	Flags: bus master, 66MHz, medium devsel, latency 32, IRQ 18
-> 	Memory at fe50a000 (32-bit, non-prefetchable) [size=4K]
-> 	Kernel driver in use: ohci-pci
-> 				 	Kernel modules: ohci_pci
-> 00:12.2 USB controller: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller (prog-if 20 [EHCI])
-> 	Subsystem: Gigabyte Technology Co., Ltd GA-880GMA-USB3
-> 	Flags: bus master, 66MHz, medium devsel, latency 32, IRQ 17
-> 	Memory at fe509000 (32-bit, non-prefetchable) [size=256]
-> 	Capabilities: [c0] Power Management version 2
-> 	Capabilities: [e4] Debug port: BAR=1 offset=00e0
-> 	Kernel driver in use: ehci-pci
-> 	Kernel modules: ehci_pci
-> #
+> [1]: e29b3abcb2b6 ("docs/ja_JP/SubmittingPatches: Request summaries for commit references")
+> [2]: https://lore.kernel.org/linux-doc/20220503102429.48304-1-akiyks@gmail.com/
+> 
+>         Thanks, Akira
+> 
+>> ---
+[...]
 
-What is the output of the lspci -v for the USB 3 controller?
-
-Christoph, any ideas?
-
-thanks,
-
-greg k-h

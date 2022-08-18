@@ -2,128 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43FA598D70
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E4FA598D73
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345908AbiHRUIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 16:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
+        id S1345866AbiHRUHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 16:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345529AbiHRUIY (ORCPT
+        with ESMTP id S1344438AbiHRUHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:08:24 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134D13AE59;
-        Thu, 18 Aug 2022 13:03:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660853006; x=1692389006;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hK4joLjW67roEfSg9L3o4RSW3LVg032fexmMiJB4qHE=;
-  b=GkDAWOARvETiowcvSZ4tteFXcJrlxFrfCe5AHfrbu16u9Wj7WV70WEcQ
-   gLSanioLOadt4kCSOC7NVO8RbgzaH1sTlxCtU3ZWYbnEjV5naMPe6UQeB
-   UJrTaZYuLGUGOy4c4pK0KrWQUSNXRT9AA8n8Hh3Fv7ajHVuFXNrFik7+E
-   KKpbtj7eD1QIiXUXcM8bDQ3o+bNXO4DjPxb3wKz/W/+jlcu3R9h5INmob
-   AS6rtmtsMpaq0lBAGqlN0eOdPG11JV8GsmuuEpVitS314RaKQ+niuPkGP
-   qDaEB1GDUWDeafAt46lfPqXdZ5Hu0v/pvJdyB37nvehljvKIiwmG6KSjY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="293648497"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="293648497"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 13:02:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="734179034"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Aug 2022 13:02:07 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oOliR-0000WH-01;
-        Thu, 18 Aug 2022 20:02:07 +0000
-Date:   Fri, 19 Aug 2022 04:01:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
-        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add support for writing to nf_conn:mark
-Message-ID: <202208190318.HygywK17-lkp@intel.com>
-References: <f850bb7e20950736d9175c61d7e0691098e06182.1660592020.git.dxu@dxuuu.xyz>
+        Thu, 18 Aug 2022 16:07:15 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C10D2EB6;
+        Thu, 18 Aug 2022 13:01:57 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d16so2376632pll.11;
+        Thu, 18 Aug 2022 13:01:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=newzkmQUzujson7EueJWeL6KafDp3tWYzRmXIinSpck=;
+        b=LbWXzPDPIJnzBvBCuHqGYaktwpuVJXJNXnNAOOUvoMJP1qrn3rhXXAWE+3U0bqg1Ds
+         KddsXqzbWB/x3u0VN63w5ML89naR2sReYQ8xU+mXmt8UCW5zxXNHnf8e+LsZSaRFbZc5
+         b2fuHAFmnnECXn7pH97L6Xv/+vweM7ifsqR0v8VzAYziIC87tmwv6gprUMUa8R99S7WO
+         LV6QlWem4VKDYviRA3xzulChoT/PdU8hXoKR9/f/7bFLizlNWTHk4u9bCl8eSdblTuIB
+         6MAfFd44xE2FXTQEE81r6THLpJH5XKMsRkG/ME0gwiDNZs4uV1+dAPYWPp9pQRPyhz59
+         xwBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=newzkmQUzujson7EueJWeL6KafDp3tWYzRmXIinSpck=;
+        b=rnrH7QkOf4Z2vFZUPOZXdLZjNY69ycFbqjQnZY7M7HPzNoLVeMww/L0tM28WuO2pZw
+         jxZcHcKAhoUIq33yYbM7GP7nBMsPdpMFAQnajVkrXBnXhF1zzUWQ1144qPxoO2ZljoO3
+         MZpogTq4DnWwRL1w8N+xWI1aDVztGU+qi/TG5NxbQciaHOoK8TKlK18HRR8QAXGaM4s/
+         7W551Kt8tV0RlaVg9Ayoplb3qBiZ6uSx3OJkrtVfTpDKQU4isdESUrBfuGoQPwe2YTvU
+         CpCnkRcQ/1cD4sDhWpEdYbw3WXI1x/jO/NU2uljGF4iuBUwNbIy/5v3qDV6JNNhWxVTF
+         7pWA==
+X-Gm-Message-State: ACgBeo36VGhclmEFnDq+oDdLSfwAL/Kd+k0AbUoGGKUJXt8ikw/S+u/6
+        OfAz6DV+DgOUATpwjnt9oF8=
+X-Google-Smtp-Source: AA6agR7t0BR3+os83cK8htKnmIBZHqLnfhYRUc3qgjeRF6BNxBmbyyp0Y9i1ZMw7nCakzzywCp4VBw==
+X-Received: by 2002:a17:902:788f:b0:170:8b18:8812 with SMTP id q15-20020a170902788f00b001708b188812mr3878338pll.1.1660852901678;
+        Thu, 18 Aug 2022 13:01:41 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x63-20020a623142000000b00528c066678csm2054256pfx.72.2022.08.18.13.01.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 13:01:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 18 Aug 2022 13:01:38 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
+        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
+        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
+        rtanwar@maxlinear.com
+Subject: Re: [PATCH v2 04/16] hwmon: (mr75203) add Moortec PVT controller
+ reset-control-skip property
+Message-ID: <20220818195742.GA3287145@roeck-us.net>
+References: <20220817054321.6519-1-farbere@amazon.com>
+ <20220817054321.6519-5-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f850bb7e20950736d9175c61d7e0691098e06182.1660592020.git.dxu@dxuuu.xyz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220817054321.6519-5-farbere@amazon.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Wed, Aug 17, 2022 at 05:43:09AM +0000, Eliav Farber wrote:
+> Adding a "reset-control-skip" bool property to the mr75203 node will
+> avoid looking up and obtaining a reference to a reset controller.
+> 
 
-Thank you for the patch! Yet something to improve:
+This seems overly complex. WHy not just declare the "resets"
+property optional ?
 
-[auto build test ERROR on bpf-next/master]
+Guenter
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/Support-direct-writes-to-nf_conn-mark/20220816-060429
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: arm-versatile_defconfig (https://download.01.org/0day-ci/archive/20220819/202208190318.HygywK17-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/c7b21d163eb9c61514dd86baf4281deb4d4387bb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Xu/Support-direct-writes-to-nf_conn-mark/20220816-060429
-        git checkout c7b21d163eb9c61514dd86baf4281deb4d4387bb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> net/core/filter.c:8723:10: error: call to undeclared function 'btf_struct_access'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
-                          ^
-   net/core/filter.c:8797:10: error: call to undeclared function 'btf_struct_access'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
-                          ^
-   2 errors generated.
-
-
-vim +/btf_struct_access +8723 net/core/filter.c
-
-  8714	
-  8715	static int tc_cls_act_btf_struct_access(struct bpf_verifier_log *log,
-  8716						const struct btf *btf,
-  8717						const struct btf_type *t, int off,
-  8718						int size, enum bpf_access_type atype,
-  8719						u32 *next_btf_id,
-  8720						enum bpf_type_flag *flag)
-  8721	{
-  8722		if (atype == BPF_READ)
-> 8723			return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
-  8724						 flag);
-  8725	
-  8726		return nf_conntrack_btf_struct_access(log, btf, t, off, size, atype,
-  8727						      next_btf_id, flag);
-  8728	}
-  8729	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml          | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> index f9e849cc73e0..da9c3cdcb6f0 100644
+> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> @@ -44,6 +44,11 @@ properties:
+>    "#thermal-sensor-cells":
+>      const: 1
+>  
+> +  reset-control-skip:
+> +    description:
+> +      reset-control-skip bool property defines if obtaining a
+> +      reference to a reset controller should be skipped.
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -54,6 +59,7 @@ required:
+>  
+>  additionalProperties:
+>    - intel,vm-map
+> +  - reset-control-skip
+>  
+>  examples:
+>    - |

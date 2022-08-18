@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD1B598368
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D5159836C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244752AbiHRMsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 08:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
+        id S244739AbiHRMsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 08:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244483AbiHRMsT (ORCPT
+        with ESMTP id S244483AbiHRMsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 08:48:19 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6126012A9A
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:48:18 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso1939468pjh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:48:18 -0700 (PDT)
+        Thu, 18 Aug 2022 08:48:25 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9403126108
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:48:22 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 24so1218502pgr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:48:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=SMq0cA2jEsn6WUyEAj1aw0vQrzMP34F5/Qh2zJxCnf8=;
-        b=8F/j6dgpNdtCdvGjJwoeXeGFkbJpvyprWVFaTMVY0I04GiTIWWX9BlGy5aMX/FZqBc
-         wSvdwLVXA8rUx0L3/j72vCOnKOE4YUATu38FDrESPwXie6DXG1hpVFhrYNJ5Ppe2yls6
-         bsEjtPhuhypyi9AObjyA4yDccxYkhGf4wATPgia3GD1AIcW9/fYqIBTWGty4/kvQb3dp
-         1HyHWaH9xfuoMCQbesTLLrUwyh651YyEZUX5zH80+/Oxf6Uspa2TUl5n9vi8Pyi+xib+
-         UH2v7u0e51Y75IhU6ONR7RgZz9ManOiVJZUgH8q5K5heAxKcy2ANAdtGRj6S6ZE96Nm1
-         x89w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=pWnT33mPHdMvZcJ8SNdBSZ87EcCdDL5ffg44dY+n5ac=;
+        b=yb5KLdXUXulR/7gbFuViIcRGvsePBu5ewFDaPy5og+Aojdgeg9N0K0S0JbZ3pqWHxE
+         hEj23JrDQhWiGrybp82Bp2EDvXvDCfvGK9ICkLOEQLCIOFrTS22P6imp37hY3Zm0qREn
+         WDd5SyUGy5kyW3LpzIIm5DvvrkZlLSzxCIvoJ3I4E6W6RRA16co3sRZJjHSIb69Bzark
+         m25dyQe9uNhfFijDoIMU0ZjAlw7umwxkwhYox95rVOTPcN32ydP09IGkmhclalI0HG6Z
+         rPoyrDGiWVNtKcRL7To5IFEEvYnuzLTdfJ2j/DCpupCzIFsfjW2b9oYaURXBn46fm2+0
+         EWRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=SMq0cA2jEsn6WUyEAj1aw0vQrzMP34F5/Qh2zJxCnf8=;
-        b=Tfx4Oupp3ekPJKadbDHZ6lQZKhnH6nuHbR1UcfYgxOhyzGoIokh84myReml7nR7Hlk
-         Rv9z47w2YxjZlf0mibA//JXHTzS6wyuC59py8j3TkLIN3oMhjQfJwwT3T/rmFwiZv1W4
-         +RrFwBdv956nhc4aTE3qfz5SMFupkO+ZEzfV2Er2UNEvl9EQIqzq6aC+WbidOkWi475h
-         tl+Wmz+t5mXIpaYq/Z/bFuZkQLt2bxN/CiKzJGk5A1fGvZ9EM47wLfNetFb+MGwkgJpc
-         4Wmo1jR8kFreZxDeDB4d2DsMSUB5/v6fUI8FfmyUPYKBl9dhbbWonwNCPieVry9uRJ3S
-         B9sg==
-X-Gm-Message-State: ACgBeo02OmrWn5mIrtBgQ+yJaf3m2ZjFDaFrhGCQn7aHG40P0Qr6LAyu
-        lcRqYISIZ/dujst6fJSAqZGYoA==
-X-Google-Smtp-Source: AA6agR5tyBTcCYcVMENIvyQyB3mc6gL9geKpMkd8MDRKN1UQ8YhRNv8srMvQPh1H+evwhM4/9NPOPQ==
-X-Received: by 2002:a17:90b:38cb:b0:1f5:2321:63cb with SMTP id nn11-20020a17090b38cb00b001f5232163cbmr8908237pjb.110.1660826897816;
-        Thu, 18 Aug 2022 05:48:17 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=pWnT33mPHdMvZcJ8SNdBSZ87EcCdDL5ffg44dY+n5ac=;
+        b=G/T+uR654Z2A+FWjGMA5+u0Phl8+O81OY3vclygDaKs1GBS9mdAjdY0hGhZ9Kjylit
+         ZLA8i5U8x1oTUNGB/22/v2aD/Kg9gZFGsH2by/ksz5aoTklKeS062D1KEDETZQGqhuU8
+         zGAmdSCQlHOK/faH005AAXSaVZZ/QdmZulOm+m9/TyvR/7xNsxM/lWtuT2ht8EFNBriZ
+         W+srxvdSqynNLF0LGqO1UtItuNpZSnhh6A5U8Ceo3cxWK9wdCLboCiuaJlAIYI99HiF1
+         9kQhake9WES/6TZtV43BANjzROBna46peuz/FnX4WXCQZmjHStDlf7fStEOhJAXi2Nhy
+         ryLg==
+X-Gm-Message-State: ACgBeo1xRsuJHzu/fIwEBqWy8Q7W6N8dQf5mHJzzVDIgP8tHjEJ4W9Wk
+        DMDyySU8QUPGar7OJjGR6Ldecg==
+X-Google-Smtp-Source: AA6agR6A/+NDPmoxO2HtCCBQavads7LcUaDt81u7HLGsoN+scpZqsbK+QOfdUvI40Yu+FTZT1jJh3Q==
+X-Received: by 2002:a63:41c4:0:b0:429:8c1b:61df with SMTP id o187-20020a6341c4000000b004298c1b61dfmr2364558pga.518.1660826902124;
+        Thu, 18 Aug 2022 05:48:22 -0700 (PDT)
 Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id c16-20020a621c10000000b0052f3a7bc29fsm1477449pfc.202.2022.08.18.05.48.13
+        by smtp.gmail.com with ESMTPSA id c16-20020a621c10000000b0052f3a7bc29fsm1477449pfc.202.2022.08.18.05.48.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 05:48:17 -0700 (PDT)
+        Thu, 18 Aug 2022 05:48:21 -0700 (PDT)
 From:   Chengming Zhou <zhouchengming@bytedance.com>
 To:     vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
         mingo@redhat.com, peterz@infradead.org, rostedt@goodmis.org,
         bsegall@google.com, vschneid@redhat.com
 Cc:     linux-kernel@vger.kernel.org, tj@kernel.org,
         Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v6 0/9] sched/fair: task load tracking optimization and cleanup
-Date:   Thu, 18 Aug 2022 20:47:56 +0800
-Message-Id: <20220818124805.601-1-zhouchengming@bytedance.com>
+Subject: [PATCH v6 1/9] sched/fair: maintain task se depth in set_task_rq()
+Date:   Thu, 18 Aug 2022 20:47:57 +0800
+Message-Id: <20220818124805.601-2-zhouchengming@bytedance.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220818124805.601-1-zhouchengming@bytedance.com>
+References: <20220818124805.601-1-zhouchengming@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,82 +71,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Previously we only maintain task se depth in task_move_group_fair(),
+if a !fair task change task group, its se depth will not be updated,
+so commit eb7a59b2c888 ("sched/fair: Reset se-depth when task switched to FAIR")
+fix the problem by updating se depth in switched_to_fair() too.
 
-This patch series is optimization and cleanup for task load tracking when
-task migrate CPU/cgroup or switched_from/to_fair(), based on tip/sched/core.
+Then commit daa59407b558 ("sched/fair: Unify switched_{from,to}_fair()
+and task_move_group_fair()") unified these two functions, moved se.depth
+setting to attach_task_cfs_rq(), which further into attach_entity_cfs_rq()
+with commit df217913e72e ("sched/fair: Factorize attach/detach entity").
 
-There are three types of detach/attach_entity_load_avg (except fork and exit)
-for a fair task:
-1. task migrate CPU (on_rq migrate or wake_up migrate)
-2. task migrate cgroup (detach and attach)
-3. task switched_from/to_fair (detach later attach)
+This patch move task se depth maintenance from attach_entity_cfs_rq()
+to set_task_rq(), which will be called when CPU/cgroup change, so its
+depth will always be correct.
 
-patch 1-3 cleanup the task change cgroup case by remove cpu_cgrp_subsys->fork(),
-since we already do the same thing in sched_cgroup_fork().
+This patch is preparation for the next patch.
 
-patch 5/9 optimize the task migrate CPU case by combine detach into dequeue.
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+---
+ kernel/sched/fair.c  | 8 --------
+ kernel/sched/sched.h | 1 +
+ 2 files changed, 1 insertion(+), 8 deletions(-)
 
-patch 6/9 fix another detach on unattached task case which has been woken up
-by try_to_wake_up() but is waiting for actually being woken up by
-sched_ttwu_pending().
-
-patch 7/9 remove unnecessary limitation that we would fail when change
-cgroup of forked task which hasn't been woken up by wake_up_new_task().
-
-patch 8-9 optimize post_init_entity_util_avg() for fair task and skip
-setting util_avg and runnable_avg for !fair task at the fork time.
-
-Thanks!
-
-
-Changes in v6:
- - Use TASK_NEW to check new forked task which hasn't been woken up
-   by wake_up_new_task(), suggested by Peter Zijlstra. Thanks!
- - Update comments related to post_init_entity_util_avg() in patch 8/9.
-
-Changes in v5:
- - Don't do code movements in patch 6/9, which complicate code review,
-   as suggested by Vincent. Thanks!
- - Fix a build error of typo in patch 7/9.
-
-Changes in v4:
- - Drop detach/attach_entity_cfs_rq() refactor patch in the last version.
- - Move new forked task check to task_change_group_fair().
-
-Changes in v3:
- - One big change is this series don't freeze PELT sum/avg values to be
-   used as initial values when re-entering fair any more, since these
-   PELT values become much less relevant.
- - Reorder patches and collect tags from Vincent and Dietmar. Thanks!
- - Fix detach on unattached task which has been woken up by try_to_wake_up()
-   but is waiting for actually being woken up by sched_ttwu_pending().
- - Delete TASK_NEW which limit forked task from changing cgroup.
- - Don't init util_avg and runnable_avg for !fair taks at fork time.
-
-Changes in v2:
- - split task se depth maintenance into a separate patch3, suggested
-   by Peter.
- - reorder patch6-7 before patch8-9, since we need update_load_avg()
-   to do conditional attach/detach to avoid corner cases like twice
-   attach problem.
-
-Chengming Zhou (9):
-  sched/fair: maintain task se depth in set_task_rq()
-  sched/fair: remove redundant cpu_cgrp_subsys->fork()
-  sched/fair: reset sched_avg last_update_time before set_task_rq()
-  sched/fair: update comments in enqueue/dequeue_entity()
-  sched/fair: combine detach into dequeue when migrating task
-  sched/fair: fix another detach on unattached task corner case
-  sched/fair: allow changing cgroup of new forked task
-  sched/fair: move task sched_avg attach to enqueue_task_fair()
-  sched/fair: don't init util/runnable_avg for !fair task
-
- kernel/sched/core.c  |  52 ++++---------------
- kernel/sched/fair.c  | 120 ++++++++++++++++++++-----------------------
- kernel/sched/sched.h |   6 +--
- 3 files changed, 66 insertions(+), 112 deletions(-)
-
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index a71d6686149b..c5ee08b187ec 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -11726,14 +11726,6 @@ static void attach_entity_cfs_rq(struct sched_entity *se)
+ {
+ 	struct cfs_rq *cfs_rq = cfs_rq_of(se);
+ 
+-#ifdef CONFIG_FAIR_GROUP_SCHED
+-	/*
+-	 * Since the real-depth could have been changed (only FAIR
+-	 * class maintain depth value), reset depth properly.
+-	 */
+-	se->depth = se->parent ? se->parent->depth + 1 : 0;
+-#endif
+-
+ 	/* Synchronize entity with its cfs_rq */
+ 	update_load_avg(cfs_rq, se, sched_feat(ATTACH_AGE_LOAD) ? 0 : SKIP_AGE_LOAD);
+ 	attach_entity_load_avg(cfs_rq, se);
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index ddcfc7837595..628ffa974123 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1932,6 +1932,7 @@ static inline void set_task_rq(struct task_struct *p, unsigned int cpu)
+ 	set_task_rq_fair(&p->se, p->se.cfs_rq, tg->cfs_rq[cpu]);
+ 	p->se.cfs_rq = tg->cfs_rq[cpu];
+ 	p->se.parent = tg->se[cpu];
++	p->se.depth = tg->se[cpu] ? tg->se[cpu]->depth + 1 : 0;
+ #endif
+ 
+ #ifdef CONFIG_RT_GROUP_SCHED
 -- 
 2.37.2
 

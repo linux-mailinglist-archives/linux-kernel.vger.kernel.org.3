@@ -2,110 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E799B59906A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88198599073
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345699AbiHRWSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 18:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
+        id S240917AbiHRWTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 18:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346149AbiHRWS0 (ORCPT
+        with ESMTP id S233329AbiHRWTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 18:18:26 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3A82D1E1;
-        Thu, 18 Aug 2022 15:18:24 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id i14so5715647ejg.6;
-        Thu, 18 Aug 2022 15:18:24 -0700 (PDT)
+        Thu, 18 Aug 2022 18:19:41 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B75D8067
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 15:19:40 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d16so2626050pll.11
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 15:19:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=zgCw3mKNf4aTWBiNXJ2c1smABguVN3Ohi5HNGBK9C8Y=;
-        b=glfrKr6hJcuMhL5NoNE/J8v5XoYm0swZWQKzvokqRhlfQ91oGUUD/P/Ti+CHCeb523
-         iaEBFn+1DWlNyy5cLfyXPm+dPL1w/OD5lpyafSzZSpUciZVvUUdttERzGCY9qQYLauzF
-         XEVCcjIhweq1tXUev8J6lTUTyDwEAsQ0yCeFN2Safwq88baUHUlMerubjhnjb5v4vyBs
-         /5O///u0JdNVSKrzITmMNhJkg2PxTRg30rOcnla5ySrY4aPfZqzk9sQNJYEJv8zp8ozR
-         Tw7gLzRNvQbAaagCIihrKOB9qi8INCJflpMv7L7xmd5TJobEKcXEzmDOVW2dt3+qvaF9
-         VP1A==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=4OHgz+NZLaoZjICCYz+Egjh5BDduLjWdCOrDB1pAeYE=;
+        b=WLq5/ycGz4fNey4PuVsl/ltrgeNvfVvtsgPqVd0ZwGrPjme+VIjLPT5j6kDg8EXAgk
+         81C7OcFUXvWPfozGMtrCf5Ay/8Y7q9WZzngB5BC+1TIVnNlZDST8s24dzKmMxuwCBgK4
+         3GmDKZgPbtQkBE/6pnvhnODhln5G1hYf0ZA70=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=zgCw3mKNf4aTWBiNXJ2c1smABguVN3Ohi5HNGBK9C8Y=;
-        b=33kpBS8JfFllnSYmfovwCJc5+UI8w1XR620AdvXjKVrGLcSInUiwj5G99L6ODTC15g
-         QuJrCGS+wq+uGcZFOrH5fFifFMGraZZ9JqqNmySpSw6+6T0xi5YZV/Tl3dHo6JSBIIC2
-         KwGVGWUd55CR0vnPUH1JGXXXyEp6ak7cKdkQr118mvY+i/cd0gWa1VBEywYkgtg5H9yA
-         cxZ2XDAG21wT0hOI5e2rIdbuQ+ZsHAC3qE3lQOTX8fcwI18P9JyGpyjjScmkdXkVAnuc
-         tfccsuOzBXl8WUg0y1GqCQiTXPaNXiSbD0HnGpdpr8lAh0aEEdihY5Ml0Sg6QSdJvo1e
-         I8eQ==
-X-Gm-Message-State: ACgBeo0qRy+IY1y3LZ3QBZUqopp+i7Piha8xwdX4mrxI822oq48NHCR5
-        UZf+DubejKYaKIbeIsMItjkU1+jMnxE=
-X-Google-Smtp-Source: AA6agR5p978Qsjc8SGa18Fvi4tsfZqp5hptsT0eVUbtV812S+4dOCZSEE002GYtT/9kquLLVGI2BRw==
-X-Received: by 2002:a17:907:8a1a:b0:731:6475:68f7 with SMTP id sc26-20020a1709078a1a00b00731647568f7mr3000313ejc.359.1660861102953;
-        Thu, 18 Aug 2022 15:18:22 -0700 (PDT)
-Received: from fedora.robimarko.hr (cpe-94-253-165-74.zg.cable.xnet.hr. [94.253.165.74])
-        by smtp.googlemail.com with ESMTPSA id t19-20020a1709060c5300b00731747c3107sm1378315ejf.73.2022.08.18.15.18.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 15:18:22 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
-        lars@metafoo.de, sboyd@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v8 5/5] arm64: dts: qcom: ipq8074-hk01: add VQMMC supply
-Date:   Fri, 19 Aug 2022 00:18:15 +0200
-Message-Id: <20220818221815.346233-5-robimarko@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220818221815.346233-1-robimarko@gmail.com>
-References: <20220818221815.346233-1-robimarko@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=4OHgz+NZLaoZjICCYz+Egjh5BDduLjWdCOrDB1pAeYE=;
+        b=vwysjWIXtqBdMtLXqR0S5ooZHYZ2VOUKXvh7sE73nkUr+dKavpQkRRzLx1RfT+sbld
+         D1pWpt/iPTf4AAxbw0R3AoD/j5PhZes/1U+AjGmisz8PEb1xIfHN/8ELMoJcJG33xjSa
+         bbMYRj/KwpbgBHOvxx4qZ3vQmqlLpGXS+rDF2J8f/Iw0AZ8J0wqmVA7A0MlscZb3BsEE
+         MOtfr3ma2pSjRgi0HabzX/Mv8BohGvZ5rC4kkpV2EqWQ+nm86NnaOPydtI3rl/P5fk1D
+         VK4RH5a1ctx3bx9S7qwkKmJjaAs36YD9eSSQ6bV9JkhkcxT7H7xk9WnoyZXoP6MY27YO
+         hQSw==
+X-Gm-Message-State: ACgBeo2Ek23DvMj7oI3EOYHPpCik0dYpPHCui6Pln2GG6e4v1dpMFfpU
+        2ZObD/Pdh+16AUxDVoFCZ9QDXA==
+X-Google-Smtp-Source: AA6agR5QtCiBxJHIFJ+sMsZwugUeJqCqBwHaAb+LNJD9cN99ptnvRXUeihMOqQmqgJUoQYiOL/QR/A==
+X-Received: by 2002:a17:902:7242:b0:171:398d:9e66 with SMTP id c2-20020a170902724200b00171398d9e66mr4674652pll.19.1660861179656;
+        Thu, 18 Aug 2022 15:19:39 -0700 (PDT)
+Received: from [192.168.0.114] ([107.126.92.34])
+        by smtp.gmail.com with ESMTPSA id b20-20020a621b14000000b005327beb318asm2154667pfb.128.2022.08.18.15.19.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 15:19:39 -0700 (PDT)
+Message-ID: <60b5b49b-eb7a-c552-fcf1-3d3a360f8e25@chromium.org>
+Date:   Thu, 18 Aug 2022 15:19:37 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] arm64: dts: qcom: sc7180: Add sleep state for alc5682
+ codec
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Alexandru Stan <amstan@chromium.org>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20220818084216.1.I5c2b6fea19c4c0dec67fd4931f03df8e5ccaca95@changeid>
+ <CAE-0n52GzxXEsToWzfU1TMuASuC6TKK7NXxYbBQWxNmM74FxZA@mail.gmail.com>
+ <CAD=FV=WNuqtpnCr2Zn0z_L1OCiwD8dNzhDxvhfHYuYVmciPbuQ@mail.gmail.com>
+From:   "Joseph S. Barrera III" <joebar@chromium.org>
+In-Reply-To: <CAD=FV=WNuqtpnCr2Zn0z_L1OCiwD8dNzhDxvhfHYuYVmciPbuQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since now we have control over the PMP8074 PMIC providing various system
-voltages including L11 which provides the SDIO/eMMC I/O voltage set it as
-the SDHCI VQMMC supply.
+On 8/18/22 1:34 PM, Doug Anderson wrote:
+> I tend to agree with Stephen's analysis. We actually need to keep the
+> pullup enabled unless we are actually turning power off to the codec,
+> which we don't seem to be doing.
+> 
+> I guess I'm a little surprised that we don't even seem to turn any of
+> this codec's regulators off in S3. That seems like it would be drawing
+> power that we don't want. Maybe the "low power" mode of the codec is
+> low enough and we need to avoid powering it off to avoid pops / hisses
+> in S3 or something? If that's true, this might be one of those places
+> where the "LPM" of the regulators might actually be useful...
 
-This allows SDHCI controller to switch to 1.8V I/O mode and support high
-speed modes like HS200 and HS400.
-
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- arch/arm64/boot/dts/qcom/ipq8074-hk01.dts | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts b/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-index 81dc3a0bcd7d..b788e1605476 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-@@ -3,6 +3,7 @@
- /* Copyright (c) 2017, The Linux Foundation. All rights reserved.
-  */
- #include "ipq8074.dtsi"
-+#include "pmp8074.dtsi"
- 
- / {
- 	model = "Qualcomm Technologies, Inc. IPQ8074-HK01";
-@@ -84,6 +85,7 @@ nand@0 {
- 
- &sdhc_1 {
- 	status = "okay";
-+	vqmmc-supply = <&l11>;
- };
- 
- &qusb_phy_0 {
--- 
-2.37.2
+OK, fair enough, so suggestions on what I should do instead? Should I
+look at why or how to turn the regulators off? Should I look into LPM?
+Are there existing bugs for such work?
 

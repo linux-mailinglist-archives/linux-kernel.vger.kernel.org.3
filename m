@@ -2,113 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686CE598D8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA088598D94
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345479AbiHRUPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 16:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
+        id S236712AbiHRUPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 16:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345914AbiHRUOn (ORCPT
+        with ESMTP id S1345946AbiHRUPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:14:43 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D39CB5E7;
-        Thu, 18 Aug 2022 13:14:02 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id jm11so2395933plb.13;
-        Thu, 18 Aug 2022 13:14:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=egYSJNbQxtbIjtuZxTLb7Op2z9efDIBz0CVG82pd35Q=;
-        b=OrdgxQZHf0g36dqgz8oBTc9Pw5flV5lUnAKO+L/BXl1IbHMz6Y0SdtGaYvkVBINho4
-         lDQxJFuriCNhvRWKDJNhT68uzk2DPMhppFWOYNcSIqRtXgQ007eDkXLtc+jww6Lj5KLD
-         bi5Hl0bUgFcwQCWbAGu7DenppWIMcGBnYco7S8QPnPoDXHha8aQzzDXNw1MH45MtU5YD
-         h79Ex5qk3hBSkTCq5yMPSmY4oysetZiE+lOLmlZG0IiY73TIsd5bixD5Ch64z4MmscdV
-         7xJE0+dTV8j1ZGcn7S3l71FVgayPZcdCrd1NjyNiOIJhXeHyVtH+Ok8VxHPO6GsW1++T
-         q1ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=egYSJNbQxtbIjtuZxTLb7Op2z9efDIBz0CVG82pd35Q=;
-        b=RLE+omWKLqZU1kiF1oKN0jXPYrYf+X3C+PFVXDU5LIicpP6m5L+3c5vetN9Jxn28Ls
-         dpQSw27C3gdcCn2NYTpmEgE1IubqgVW9hyx8SMFwY8LBM2yuu0QJv2wNF0FF3A0Q6eg/
-         FA3lCUAg4kDDaUQlB6yckvnqrtvBn7Xt6LLHj2ldH6tFZqVmYAETT9/xTb1v4WG/YoSv
-         KnqzD9kStnlTJWWUDoVzcVreBCtot73sH2dPvjsAyndsGofDVFrbYPwf0iov9DsugTsQ
-         j4BwwOPlC6sH5ZtilECeiPt4layNNxOO/r1lyxVN0Sq8ZOKZ0oJAsCxFB3AgstzCUO9Y
-         dVqQ==
-X-Gm-Message-State: ACgBeo0VRBv4ln+k2cNfhOVOkNK9RovyIuMy82PARqvRdJXr1RxW2YLR
-        gvq1OZ8mz3CeR9J3fDP4hvE=
-X-Google-Smtp-Source: AA6agR4k9h5ht6adNQ4cG6aZIayrOdx0qxU/jk7nZlcuvmViw6faXm9ppDtDbTHN6V4LU/YdyEvwDA==
-X-Received: by 2002:a17:90b:4653:b0:1f3:1ce3:2cb with SMTP id jw19-20020a17090b465300b001f31ce302cbmr10134904pjb.176.1660853641591;
-        Thu, 18 Aug 2022 13:14:01 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n3-20020aa79843000000b0052dd7d0ad04sm2058779pfq.88.2022.08.18.13.14.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 13:14:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 18 Aug 2022 13:13:59 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
-        rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 11/16] hwmon: (mr75203) add protection for negative
- voltage value
-Message-ID: <20220818201359.GA3430651@roeck-us.net>
-References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-12-farbere@amazon.com>
+        Thu, 18 Aug 2022 16:15:06 -0400
+Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F0113DE0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 13:14:53 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id OlujoUzUBXaJmOlujo7dck; Thu, 18 Aug 2022 22:14:51 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 18 Aug 2022 22:14:51 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <b4daf694-1188-a8f6-615f-7e416cef9be0@wanadoo.fr>
+Date:   Thu, 18 Aug 2022 22:14:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220817054321.6519-12-farbere@amazon.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] pwm: rockchip: Convert to use dev_err_probe()
+Content-Language: en-GB
+To:     zhaoxiao <zhaoxiao@uniontech.com>, thierry.reding@gmail.com,
+        heiko@sntech.de
+Cc:     u.kleine-koenig@pengutronix.de, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220818075503.18442-1-zhaoxiao@uniontech.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220818075503.18442-1-zhaoxiao@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:43:16AM +0000, Eliav Farber wrote:
-> This change makes sure the returned voltage vlaue is 0 or positive.
+Le 18/08/2022 à 09:55, zhaoxiao a écrit :
+> It's fine to call dev_err_probe() in ->probe() when error code is known.
+> Convert the driver to use dev_err_probe().
 > 
-> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
 > ---
->  drivers/hwmon/mr75203.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+>   v2: remove the %d in the message.
+Hi,
+
+You did more than that.
+
 > 
-> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-> index 24a00339cfd8..e3191f590167 100644
-> --- a/drivers/hwmon/mr75203.c
-> +++ b/drivers/hwmon/mr75203.c
-> @@ -218,6 +218,13 @@ static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
->  			return ret;
->  
->  		n &= SAMPLE_DATA_MSK;
-> +
-> +		/* Voltage can't be negative */
+>   drivers/pwm/pwm-rockchip.c | 10 +++-------
+>   1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/pwm/pwm-rockchip.c b/drivers/pwm/pwm-rockchip.c
+> index f3647b317152..c6e088c1a6bf 100644
+> --- a/drivers/pwm/pwm-rockchip.c
+> +++ b/drivers/pwm/pwm-rockchip.c
+> @@ -330,16 +330,12 @@ static int rockchip_pwm_probe(struct platform_device *pdev)
+>   
+>   	if (IS_ERR(pc->pclk)) {
+>   		ret = PTR_ERR(pc->pclk);
+> -		if (ret != -EPROBE_DEFER)
+> -			dev_err(&pdev->dev, "Can't get APB clk: %d\n", ret);
+> -		return ret;
+> +		return dev_err_probe(&pdev->dev, ret, "Can't get APB clk\n");
+>   	}
 
-Who says, and what does that mean ? Under which conditions would
-the value be negative, and why would that be a problem / bug ?
-After all, negative voltages do exist.
+You could use PTR_ERR(pc->pclk) directly. There is no need to assign it 
+to 'ret'. This would simplify even further the code. ({} can be removed)
 
-Guenter
 
-> +		if (PVT_N_CONST * n < PVT_R_CONST) {
-> +			*val = 0;
-> +			return 0;
-> +		}
-> +
->  		/* Convert the N bitstream count into voltage */
->  		*val = pvt->vd[channel].pre_scaler;
->  		*val *= (PVT_N_CONST * n - PVT_R_CONST);
+>   
+>   	ret = clk_prepare_enable(pc->clk);
+> -	if (ret) {
+> -		dev_err(&pdev->dev, "Can't prepare enable PWM clk: %d\n", ret);
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		dev_err_probe(&pdev->dev, ret, "Can't prepare enable PWM clk\n");
+
+Is a 'return' before dev_err_probe() missing?
+
+Before we were returning the error code, now we ignore it and continue.
+If done on purpose, you should explain why in the commit log.
+
+
+>   
+>   	ret = clk_prepare_enable(pc->pclk);
+>   	if (ret) {
+
+Why just converting 2 dev_err() and leaving the other one in the probe 
+untouched?
+
+CJ

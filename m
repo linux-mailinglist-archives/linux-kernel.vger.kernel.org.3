@@ -2,78 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA324597E82
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D73597E7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240832AbiHRGRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 02:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
+        id S243545AbiHRGRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 02:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239174AbiHRGRD (ORCPT
+        with ESMTP id S239174AbiHRGRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 02:17:03 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F2A94EEE
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:17:01 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id e15so917156lfs.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:17:01 -0700 (PDT)
+        Thu, 18 Aug 2022 02:17:18 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE6194ED3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:17:17 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id u9so842732lfg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:17:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=ho+Nb4Kl/C/aIXeakRLVlBshDy8+kHxnGlegszRANBE=;
-        b=HniK3cF6yOKlCinfqd4fC1nP8cvW8vbpSR3UViT4wbZGZ+6LjIgxfCjNomG6n1ZtcR
-         9u4t4zP68qB1w8AlQwsPu3IEL02mKJny/ZNe4+Cn9jRHhu3Cod0rrHTFy8Imt88ljjHD
-         IDe8wCELy7QoNBYlm6WGXrnIKcCikE52O6U2ekSh9YgnnHj+rMWaquhsREZo4sz5Jz/d
-         D0i9zICO4Up63mCL4Cv7pLb3lZclbtIJjsILnEP+19VBKos43BZZl29T1xbdCO1bB9o7
-         g1miJ0F7Qbgv1RnamzyjkIQ7m2xvOmxDjBIgPVZH8w7nNnmfbSCb5pbtu7BgU90Ld+hU
-         cluw==
+        bh=3lKvSLctByK0zaQtA6Zi8eoMtQj42Hrxz02cVPPHF9Y=;
+        b=WdtbeKlQvJsYj2WMvztp7RbB2d27anQdkC/S8ppbLUke62xlXRV6AL70R59/rktGaD
+         aMriqETm0kF/5YRl0jMh7Fmj+udKG73AevbuWz1ounWn4GFPTSrNV4gKVz0iTFp5QZlC
+         E5MWyvADKw2du/r86rc6W+IsvgdKIS6IC+MpOKHi+9SieWDtOBYWtF7x2cqidmnRxqsV
+         a4zJyFcrcSF70SZu1Xe0e38qk8opfjxzhKv9MYbtlcMMiiFnA4Eo1bOqj+LVb3mXgRfP
+         zM7aQPpRSxoOLpVkxwCx8pkUKXOyexhWoeD4KYQNbeXALzUgqyQ46Qe4O+F13tqzLzOO
+         c5VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=ho+Nb4Kl/C/aIXeakRLVlBshDy8+kHxnGlegszRANBE=;
-        b=I+Z9WLJCBY1AXTbMsAjS9UlKVPPtVTw00du107qE7Sxmr+R3NUvvIzdaHfKEuLCd8K
-         X/SlFw7Uao7U0E89fOq9CzTWBmukM6h4LzYCqLTeeBf+wnPRrmyBzzxBngnLNEWmOGOF
-         AlXEIIuZWey2rqas5r0ShfNgK6hH5JxyiNkVpipOfO0W2gnqGWfw5wEIBuscgURyJ9mJ
-         8KNodI9xvxA56dYvZ80azjQtUTeHZqOJFRYnie4v0poKGYjby0VG3cx9BE8N7E6GEITJ
-         ng2xuPpuV05ZxL8AdcxDdJnGUeT7HU41RS+rPhXlWayWnAvN2FqeZ+h8VDMcf1Bw2Mua
-         rtyA==
-X-Gm-Message-State: ACgBeo0XRGGdBiKeB8L4uvMEzc3o2CJTz6+8r8NZSkylAXWDuAxgxEfl
-        RucyotQ9vmqMsPz5hh/HOHsDsQ==
-X-Google-Smtp-Source: AA6agR4Hie8Ptl9watzP9q3wSRaT1DJ6LQ5bGSYAymhnHao4U9kBrUHbr6CC3vfKu5GI47yddxEqpQ==
-X-Received: by 2002:a05:6512:3e07:b0:48b:131:616 with SMTP id i7-20020a0565123e0700b0048b01310616mr544949lfv.475.1660803419504;
-        Wed, 17 Aug 2022 23:16:59 -0700 (PDT)
+        bh=3lKvSLctByK0zaQtA6Zi8eoMtQj42Hrxz02cVPPHF9Y=;
+        b=TzbsRYyTXwxOfVGH2W/yDkpvhYbUa7uTDwuAxBXIAUNbAcgcTO+6E50hpyG6SePewx
+         0qFBT3qdyv6Vh8DO1LrjjFIE+QEgXQHpbWyJMa2nZUG8RlolcYmiQMGYIOvLOvblHs7F
+         GHrphuJn1UmCvqCG7xVqIJku72THUwak2uaDp/9Sc6IoeABuRDDkII8BZ9JGnEc5aNAJ
+         TgTwCcCn5QJg+vWdXp7Gqa5wCtuADt02Ws39yQfR3BZWUms85yl+JnrPTn73iQsbR6Q2
+         qUj/95eL04GlLWRoK/+AWf0czwPZDdiU6q7vnIBHp2RhGi3NMc7IRrHx6JxVmVkYdYnl
+         e09A==
+X-Gm-Message-State: ACgBeo3l+0u3Whc5olR3uDbWiWhzdlNsYXAjfMGyS0Jaepia9Cg13P3P
+        awKM2s54jpxxzV3EAMk1V+K1Fir5QRQGpH0G
+X-Google-Smtp-Source: AA6agR4rPJNr1Z23bdYVXjYbH/epwMhSaP+1kE6as9hyHWK9eejt9hdliKqVf3C3FTtv751W8tpIrA==
+X-Received: by 2002:a05:6512:3b88:b0:492:ae89:d6d0 with SMTP id g8-20020a0565123b8800b00492ae89d6d0mr455491lfv.381.1660803435694;
+        Wed, 17 Aug 2022 23:17:15 -0700 (PDT)
 Received: from krzk-bin.. (d15l54bxv1k5c31plwt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:671:aa32:2bd5:8994])
-        by smtp.gmail.com with ESMTPSA id k4-20020ac257c4000000b0047f71771969sm93282lfo.113.2022.08.17.23.16.57
+        by smtp.gmail.com with ESMTPSA id t11-20020ac243ab000000b0048b2ba11520sm92734lfl.165.2022.08.17.23.17.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 23:16:58 -0700 (PDT)
+        Wed, 17 Aug 2022 23:17:15 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Georgi Djakov <djakov@kernel.org>,
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org
+        Maxime Ripard <mripard@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] dt-bindings: interconnect: restrict opp-table to objects
-Date:   Thu, 18 Aug 2022 09:16:53 +0300
-Message-Id: <20220818061653.9524-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] dt-bindings: gpu: arm,mali: restrict opp-table to objects
+Date:   Thu, 18 Aug 2022 09:17:13 +0300
+Message-Id: <20220818061713.9611-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -97,53 +83,38 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Changes since v1:
 1. Correct typo in msg.
 ---
- .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml        | 3 ++-
- .../devicetree/bindings/interconnect/mediatek,cci.yaml         | 3 ++-
- .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml   | 3 ++-
- 3 files changed, 6 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml | 3 ++-
+ Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml  | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-index fa4f7685ab2b..f7a5e31c506e 100644
---- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
-@@ -47,7 +47,8 @@ properties:
+diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
+index d209f272625d..2a25384ca3ef 100644
+--- a/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
++++ b/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
+@@ -74,7 +74,8 @@ properties:
+       - const: bus
+ 
+   mali-supply: true
+-  opp-table: true
++  opp-table:
++    type: object
+ 
+   power-domains:
      maxItems: 1
+diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml
+index eceaa176bd57..318122d95eb5 100644
+--- a/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml
++++ b/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml
+@@ -101,7 +101,8 @@ properties:
  
-   operating-points-v2: true
+   mali-supply: true
+ 
 -  opp-table: true
 +  opp-table:
 +    type: object
  
-   fsl,ddrc:
-     $ref: "/schemas/types.yaml#/definitions/phandle"
-diff --git a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-index 449c7c988229..58611ba2a0f4 100644
---- a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-@@ -36,7 +36,8 @@ properties:
-       - const: intermediate
- 
-   operating-points-v2: true
--  opp-table: true
-+  opp-table:
-+    type: object
- 
-   proc-supply:
-     description:
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-index c2e697f6e6cf..a4743386c4c1 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-@@ -35,7 +35,8 @@ properties:
+   power-domains:
      maxItems: 1
- 
-   operating-points-v2: true
--  opp-table: true
-+  opp-table:
-+    type: object
- 
-   reg:
-     # BWMON v4 (currently described) and BWMON v5 use one register address
 -- 
 2.34.1
 

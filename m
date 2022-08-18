@@ -2,152 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF61597C63
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECE4597C5A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242784AbiHRDm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 23:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
+        id S241124AbiHRDpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 23:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiHRDmY (ORCPT
+        with ESMTP id S239401AbiHRDpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 23:42:24 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062EA915C0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:42:22 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M7Vwy6FcFz1N7Q5;
-        Thu, 18 Aug 2022 11:38:58 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 11:42:20 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 18 Aug
- 2022 11:42:20 +0800
-Message-ID: <24556707-99b3-ec3c-c176-cb73e1d030d8@huawei.com>
-Date:   Thu, 18 Aug 2022 11:42:17 +0800
+        Wed, 17 Aug 2022 23:45:41 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491A494135
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:45:40 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id bh13so330930pgb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:45:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=PQOI5B5Wt5r/rxb9bDxD+BIMmAwOC6jUY51cH5dbBys=;
+        b=6ROSN/hGMMs7AnBvDBrn5pOv0+dj9KAmLblY5ozr0/ERIAU6EjdKPQEjEn3g941fbF
+         hJOKNDGKTZDYwb1iqqAXgzE4tiS3frYPIJ3TaS7Iu+TVgbCKRZctbd6oxphDvNnB49gS
+         YEANIoRIGvJcOQVziQ5srWN4G7r6Se+KpJAyueDQUHZNHZHgdQz6W/KinSu6sIU7vCM3
+         xFwSBk+lyCxYkDXk4dSCQwACAzNnd817R4xEfBEbKMGjkpOEfZYkVF7seIlPgE38U57b
+         TOQpo8fOQ2pmnx/Lc4M/lc8yTn8XIO0GuiS3n92bgV2VAlCHXj7aMn+QHxUCNpWvIduI
+         icNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=PQOI5B5Wt5r/rxb9bDxD+BIMmAwOC6jUY51cH5dbBys=;
+        b=qyW9V1tajFgBwKEYmyHFE9rkm1iwiC4oeMTu6AUrsr2nELkfLwrNse3h5BpWHUB6iv
+         bxoVhoMBf15ON/JURgVV0E+Ig+rRShEWbrRSqHPM7JRKGJ/FR+PZGSJBF82KyjXxWhbJ
+         AYcsXp//RmxCE9a1OpwOZIyuPIygkJtY5ttq4Tb/XuyxComrcJQBq0mwBEU+9RITpWzm
+         N1+NbInQhCuBpYE5QndbZNa9hf39dq50o+sGUD8kiectaWOaIIzrroJ077o8hfblUYAw
+         7nhKrpTKG4a/bs+cWX8eXgfp9pbiQB4fXUjfc1XeqyCwC4Z8V5d5WCC1bsmmqlPjihGr
+         oN7Q==
+X-Gm-Message-State: ACgBeo3pIVmokxPw9Bj7kY9E9N2NWlN0wW1RntIBDJP3WAa2EEv1IlY5
+        9K+6y670HDCSgTPz4qFVtpa7Zu3JXBmaoQ==
+X-Google-Smtp-Source: AA6agR4xDSwYz52KfcOYGhexY4KgGxIiB1SeUO8QbtliX+QJa0AWSZHERKOC6YR9HqpDWkOtEakqHA==
+X-Received: by 2002:a05:6a00:855:b0:52e:f01d:723a with SMTP id q21-20020a056a00085500b0052ef01d723amr1140625pfk.31.1660794339730;
+        Wed, 17 Aug 2022 20:45:39 -0700 (PDT)
+Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.246])
+        by smtp.gmail.com with ESMTPSA id m11-20020a65564b000000b00419acadde52sm268700pgs.46.2022.08.17.20.45.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 20:45:39 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        mingo@redhat.com, peterz@infradead.org, rostedt@goodmis.org,
+        bsegall@google.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, tj@kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH v5 0/9] sched/fair: task load tracking optimization and cleanup
+Date:   Thu, 18 Aug 2022 11:43:34 +0800
+Message-Id: <20220818034343.87625-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] x86/unwind/orc: unwind ftrace trampolines with correct
- orc
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     <linux-kernel@vger.kernel.org>, <jpoimboe@kernel.org>,
-        <peterz@infradead.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
-        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>
-References: <20220818015525.222053-1-chenzhongjin@huawei.com>
- <20220817222836.72aa77bd@gandalf.local.home>
-Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <20220817222836.72aa77bd@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for review!
+Hi all,
 
+This patch series is optimization and cleanup for task load tracking when
+task migrate CPU/cgroup or switched_from/to_fair(), based on tip/sched/core.
 
-On 2022/8/18 10:28, Steven Rostedt wrote:
-> On Thu, 18 Aug 2022 09:55:25 +0800
-> Chen Zhongjin <chenzhongjin@huawei.com> wrote:
->
->
->>   arch/x86/kernel/unwind_orc.c | 13 ++++++++-----
->>   1 file changed, 8 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
->> index 38185aedf7d1..a938c5d0ed6f 100644
->> --- a/arch/x86/kernel/unwind_orc.c
->> +++ b/arch/x86/kernel/unwind_orc.c
->> @@ -93,22 +93,25 @@ static struct orc_entry *orc_find(unsigned long ip);
->>   static struct orc_entry *orc_ftrace_find(unsigned long ip)
->>   {
->>   	struct ftrace_ops *ops;
->> -	unsigned long caller;
->> +	unsigned long tramp_addr, offset;
->>   
->>   	ops = ftrace_ops_trampoline(ip);
->>   	if (!ops)
->>   		return NULL;
->>   
-> Now if this is that unlikely recursion mentioned below then ops->trampoline
-> will be NULL, and if we do that offset addition, it will be incorrect.
->
-> Perhaps we should add here:
->
-> 	if (!ops->trampoline)
-> 		return NULL;
+There are three types of detach/attach_entity_load_avg (except fork and exit)
+for a fair task:
+1. task migrate CPU (on_rq migrate or wake_up migrate)
+2. task migrate cgroup (detach and attach)
+3. task switched_from/to_fair (detach later attach)
 
-I think when this will return NULL and then stop at orc_find:`if (ip == 
-0)` and return null_orc_entry.
+patch 1-3 cleanup the task change cgroup case by remove cpu_cgrp_subsys->fork(),
+since we already do the same thing in sched_cgroup_fork().
 
-And in ftrace_ops_trampoline: `if (op->trampoline && 
-op->trampoline_size)` which promise !ops->trampoline when !ops.
+patch 5/9 optimize the task migrate CPU case by combine detach into dequeue.
 
+patch 6/9 fix another detach on unattached task case which has been woken up
+by try_to_wake_up() but is waiting for actually being woken up by
+sched_ttwu_pending().
 
-IIUC the In unlikely recursion below means if orc_find(ftrace_call) 
-can't find any orc it will enter orc_ftrace_find(ftrace_call).
+patch 7/9 remove unnecessary limitation that we would fail when change
+cgroup of forked task which hasn't been woken up by wake_up_new_task().
 
-If we dont check ip==caller then,
+patch 8-9 optimize post_init_entity_util_avg() for fair task and skip
+setting util_avg and runnable_avg for !fair task at the fork time.
 
-ftrace_ops_trampoline(ftrace_call) causes orc_find(ftrace_call) again 
-(I'm not 100% sure it will)
+Thanks!
 
-and it will be trapped in recursion
+Changes in v5:
+ - Don't do code movements in patch 6/9, which complicate code review,
+   as suggested by Vincent. Thanks!
+ - Fix a build error of typo in patch 7/9.
 
+Changes in v4:
+ - Drop detach/attach_entity_cfs_rq() refactor patch in the last version.
+ - Move new forked task check to task_change_group_fair().
 
-When here is an offset we can still protect this scenario when 
-orc_find(ftrace_caller + offset) and check ip == ftrace_caller + offset.
+Changes in v3:
+ - One big change is this series don't freeze PELT sum/avg values to be
+   used as initial values when re-entering fair any more, since these
+   PELT values become much less relevant.
+ - Reorder patches and collect tags from Vincent and Dietmar. Thanks!
+ - Fix detach on unattached task which has been woken up by try_to_wake_up()
+   but is waiting for actually being woken up by sched_ttwu_pending().
+ - Delete TASK_NEW which limit forked task from changing cgroup.
+ - Don't init util_avg and runnable_avg for !fair taks at fork time.
 
->
-> Let's add some comments.
+Changes in v2:
+ - split task se depth maintenance into a separate patch3, suggested
+   by Peter.
+ - reorder patch6-7 before patch8-9, since we need update_load_avg()
+   to do conditional attach/detach to avoid corner cases like twice
+   attach problem.
 
-Makes sense.
+Chengming Zhou (9):
+  sched/fair: maintain task se depth in set_task_rq()
+  sched/fair: remove redundant cpu_cgrp_subsys->fork()
+  sched/fair: reset sched_avg last_update_time before set_task_rq()
+  sched/fair: update comments in enqueue/dequeue_entity()
+  sched/fair: combine detach into dequeue when migrating task
+  sched/fair: fix another detach on unattached task corner case
+  sched/fair: allow changing cgroup of new forked task
+  sched/fair: defer task sched_avg attach to enqueue_entity()
+  sched/fair: don't init util/runnable_avg for !fair task
 
-If the above explanation logic is fine, I'll add this comment and send v2.
+ include/linux/sched.h |   5 +-
+ kernel/sched/core.c   |  57 ++++-----------------
+ kernel/sched/fair.c   | 113 +++++++++++++++++++-----------------------
+ kernel/sched/sched.h  |   6 +--
+ 4 files changed, 67 insertions(+), 114 deletions(-)
 
->
-> 	/* Set tramp_addr to the start of the code copied by the trampoline */
->
->>   	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS)
->> -		caller = (unsigned long)ftrace_regs_call;
->> +		tramp_addr = (unsigned long)ftrace_regs_caller;
->>   	else
->> -		caller = (unsigned long)ftrace_call;
->> +		tramp_addr = (unsigned long)ftrace_caller;
->> +
-> 	/* Now place tramp_addr to the location within the trampoline ip is at */
->
->> +	offset = ip - ops->trampoline;
->> +	tramp_addr += offset;
->>   
->>   	/* Prevent unlikely recursion */
->> -	if (ip == caller)
->> +	if (ip == tramp_addr)
->>   		return NULL;
->>   
->> -	return orc_find(caller);
->> +	return orc_find(tramp_addr);
->>   }
->>   #else
->>   static struct orc_entry *orc_ftrace_find(unsigned long ip)
-
-Best,
-
-Chen
-
+-- 
+2.37.2
 

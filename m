@@ -2,85 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D595059893D
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4721659895C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345095AbiHRQup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 12:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
+        id S1345065AbiHRQv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 12:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345188AbiHRQue (ORCPT
+        with ESMTP id S1345012AbiHRQvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 12:50:34 -0400
-Received: from hop.stappers.nl (hop.stappers.nl [IPv6:2a02:2308:0:14e::686f:7030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25342DFC8;
-        Thu, 18 Aug 2022 09:50:29 -0700 (PDT)
-Received: from gpm.stappers.nl (gpm.stappers.nl [IPv6:2a02:a46d:659e:1::696e:626f])
-        by hop.stappers.nl (Postfix) with ESMTP id 0F5DB200C8;
-        Thu, 18 Aug 2022 16:50:27 +0000 (UTC)
-Received: by gpm.stappers.nl (Postfix, from userid 1000)
-        id B118C304049; Thu, 18 Aug 2022 18:50:26 +0200 (CEST)
-Date:   Thu, 18 Aug 2022 18:50:26 +0200
-From:   Geert Stappers <stappers@stappers.nl>
-To:     Kees Cook <keescook@chromium.org>, Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thu, 18 Aug 2022 12:51:25 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F094DE0AE;
+        Thu, 18 Aug 2022 09:51:23 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id fy5so4341672ejc.3;
+        Thu, 18 Aug 2022 09:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=RncwsDAl9D9YrGT5yUZLBhI7CeCArAJv9CfHaqtop+w=;
+        b=I7B1lEpDZoEUNKIRXhWCHXz47RM5OfX5Vu+g5brJthx82bxdV6TSVg2R0P+YY0Lnu1
+         KFS905yausRwdQ+nl9Qh0+hB7Gij1yt2NQjWTVjue6rC7+hsgze1QrSr9L3K7uz9RIFN
+         YdkspZmmThvEZI9WbMKdcsZX5SLxbK4ZU1scawZap2+sC44avpiP1TTX8yan+1wU8Kt6
+         ztvNuJxebaORfZjlr1lfcbZOhTxBna76XEyU/OUmc8d2LCegYjFY0JP4GSuddDQyN9uq
+         asz9HgOYTuTZvUSD1gOA0EuC0CKT4ZrhdrsXw7tHUMKapQ0m5NZh+DpULQcGu2/Lo7nc
+         /RIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=RncwsDAl9D9YrGT5yUZLBhI7CeCArAJv9CfHaqtop+w=;
+        b=JNj465BhSAWPcfDLaz/PdjnCsqY+czqKp8vMLHTaBXHqJZE/1pe3pSboBsAZmXHgHH
+         3MKlfSsf1hTe4AB7tNwLTX+VmpCGX8qjS73zBDktTwZFGgLNfPzHQVwL03ds4M4a+t+H
+         HUkeev89woIbe69sIPdNf5quuGCHCemfD7v9PfJaYlxJw0t2X456OLGeucl/MWtjoyfW
+         sdmFX+smBuIhRUSEMgFPtQ2H8nTazhZ/HYqmNvuFtuX0m6lnd7/sKBnuXp03nFppw2R5
+         ZhGcHRx5l29ZTR+qNg/DiuIfT6Os2ypR288phN3YndK7I1LuZc/CKxrCsevedphjc/U4
+         2hkg==
+X-Gm-Message-State: ACgBeo2I2izTw/hbgXB52r0Dv4MCeHYacFjeLvIsl/AnXByJevwBqRxW
+        DLD6jX5jNegATik9EHQ22Bg=
+X-Google-Smtp-Source: AA6agR5Hwxc4dbJo1jshhS+saNZAKTuKJs+Jl8/ezr7al5ARjpXSYJW+qel9q7bjWcn4kraAf0RL6Q==
+X-Received: by 2002:a17:907:3da6:b0:739:282d:987f with SMTP id he38-20020a1709073da600b00739282d987fmr2471037ejc.222.1660841482357;
+        Thu, 18 Aug 2022 09:51:22 -0700 (PDT)
+Received: from skbuf ([188.25.231.137])
+        by smtp.gmail.com with ESMTPSA id v17-20020aa7dbd1000000b0043cc66d7accsm1445985edt.36.2022.08.18.09.51.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 09:51:21 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 19:51:19 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH v9 02/27] kallsyms: avoid hardcoding buffer size
-Message-ID: <20220818165025.ighwic3zqe2xh6be@gpm.stappers.nl>
-References: <20220805154231.31257-1-ojeda@kernel.org>
- <20220805154231.31257-3-ojeda@kernel.org>
- <202208171236.9CA3B9D579@keescook>
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH net-next] net: dsa: qca8k: convert to regmap
+ read/write API
+Message-ID: <20220818165119.c5cgk5og7jhmzpo6@skbuf>
+References: <20220806192253.7567-1-ansuelsmth@gmail.com>
+ <20220806192253.7567-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202208171236.9CA3B9D579@keescook>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220806192253.7567-1-ansuelsmth@gmail.com>
+ <20220806192253.7567-1-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 12:37:40PM -0700, Kees Cook wrote:
-> On Fri, Aug 05, 2022 at 05:41:47PM +0200, Miguel Ojeda wrote:
-> > From: Boqun Feng <boqun.feng@gmail.com>
-> > 
-> > This introduces `KSYM_NAME_LEN_BUFFER` in place of the previously
-> > hardcoded size of the input buffer.
-> > 
-> > It will also make it easier to update the size in a single place
-> > in a later patch.
-> > 
-> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-> > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+On Sat, Aug 06, 2022 at 09:22:53PM +0200, Christian Marangi wrote:
+> Convert qca8k to regmap read/write bulk API. The mgmt eth can write up
+> to 16 bytes of data at times. Currently we use a custom function to do
+> it but regmap now supports declaration of read/write bulk even without a
+> bus.
 > 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Drop the custom function and rework the regmap function to this new
+> implementation.
 > 
-> Does someone want to commit to taking these "prereq" patches? These
-> clean-ups are nice even without adding Rust.
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
 
-Qouting Message-ID: <CANiq72mXDne_WkUCo2oRe+sip7nQWESnouOJrcCYzyJMkG8F6A@mail.gmail.com>
-https://lore.kernel.org/lkml/CANiq72mXDne_WkUCo2oRe+sip7nQWESnouOJrcCYzyJMkG8F6A@mail.gmail.com/
-Miguel Ojeda, 2022-08-05: 
-| > And I think that this patch and all other "rust" kallsyms patches
-| > allready should have been accepted in the v3 or v5 series.
-| 
-| Yeah, it could be a good idea to get the prerequisites in first.
-| Let's see if the patches get some Reviewed-bys
-
-Now that there is a 'Reviewed-by: Kees Cook <keescook@chromium.org>'
-
-
-Regards
-Geert Stappers
-In an attempt to help making Rust for Linux happen.
--- 
-Silence is hard to parse
+Nothing in this change jumps out as wrong to me, but maybe you should
+copy Mark Brown too when you submit it proper, as the first user of the
+bulk regmap read/write over Ethernet, IIUC.

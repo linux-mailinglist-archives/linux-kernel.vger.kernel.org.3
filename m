@@ -2,157 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C276A597F00
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CDA5597F07
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243546AbiHRHJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 03:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S243836AbiHRHKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 03:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242093AbiHRHJI (ORCPT
+        with ESMTP id S243799AbiHRHKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 03:09:08 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF39B868AE
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:09:06 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id y13so1557339ejp.13
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:09:06 -0700 (PDT)
+        Thu, 18 Aug 2022 03:10:31 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E872E8A1C7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:10:29 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id a9so972497lfm.12
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:10:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=uB1dny6tZXinATmuz0fIf4H2QaK3MjZ8vYEWovRHfu4=;
-        b=8WejKLL+aMqLWC0O3FQnTQmsIGmJCsnGHI2BDlBU8o4VWw/LcfeBgWzHmX3qQ0kNdP
-         i2wsCNg8dEG2PeAx3BljZBM7q9E11q3FuTEevJM6v/fsy6yCCds3XLZ0KNJgMEwickhT
-         5pX++joOCNvyGmso9a/ojzehd7Cu+02vF5ZdH+w627ZOLQGf12vEwqgwdFkq2GSxyk3o
-         qKVx23t5WYxxqDzVDlUxryvOZHIM45E9l9h0uZxMmePvFva3B4rfwF+trq833C+5x8YJ
-         SqjNNHj/sd925+/MH11H9yWzWNmxhAGk+W5tp0j6FKddjOmqYwdrEqQ2VLWtuHStlIh3
-         ns3Q==
+        bh=4AkHVnmH3Qgljaq8kspzBsE5mDKEXgmNmBcNRLyZpfo=;
+        b=gZpAZJTQ8l5SemqKeTwFepwZXG7wa1f6L0zrraK6KM5GRT2GfnEYaougqWwQRTJJ3R
+         tlGuMAGBrfDDtjT8pks99gfOWY72Be1YUWjrYzeTLja605yzJegKFQauEfHWnj7Yoq7m
+         UEVGM+trkCYe22YUFEGun9AyKKldYjuOoRa7dyvN7AhsjEOyVd266XcZDIghdjHyF4/A
+         ca3ezFZ8E89j/fDFlb54QHxDJbfcy/GWC0O0cyD/U4rmE4DL/R1Ow7ZmDip8wG3LE61Q
+         LbH35rWVo8ULcDGxY6pbLmqiVUo7xR1S3B5Mr2/G559dnG9g7QscHBJ/t6T7ibcWCs2O
+         nDGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=uB1dny6tZXinATmuz0fIf4H2QaK3MjZ8vYEWovRHfu4=;
-        b=z0Gwrj+CpDUjFpns6/ViS6fMnPhmmpx0AmzjmzKzxHAyeVJWmqureJo73ONMHwnXD8
-         3S5ZVRYjqvonT3CDKh3QArTUSmrCRgGYIa23LE8gfTwOlWudmW/IS+czklG2KJORMXXx
-         cvE68NwP3qqXGo4PYqibodgDdFMFYBpWDoyHdsop0ik+Yc1p+s+ocwQxEk45cPMoCZm/
-         h74AbdqxgdBytf3iPbuFdacMr70OGK7HGlZKUI/43cQXVFMOiXDe9cX5TGRhETPDPbzA
-         PHtOA9OOMaPozorwSokUxXQK/VH+4wSOqH6qw/IyLwXzC/HgYFIyxyrIhr7qMSPMjl11
-         JDtw==
-X-Gm-Message-State: ACgBeo0jbio7D+8hXXtc9wVVNI58X/ZKEKTeV+YNg2g9Eh0r1gEEc0BZ
-        MhfMT5OYR9/SP/04kMrdk9CEkA==
-X-Google-Smtp-Source: AA6agR6L6Nq587p/lJCgXhHMIohS0fuUSvnisu370SwFRdqGr62Y3rWmL+GZ/dHscdaOTusJwrlmKQ==
-X-Received: by 2002:a17:906:6a2a:b0:730:a3f1:aee with SMTP id qw42-20020a1709066a2a00b00730a3f10aeemr1105108ejc.387.1660806544983;
-        Thu, 18 Aug 2022 00:09:04 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id f28-20020a056402329c00b004418c7d633bsm594454eda.18.2022.08.18.00.09.01
+        bh=4AkHVnmH3Qgljaq8kspzBsE5mDKEXgmNmBcNRLyZpfo=;
+        b=4vCfbxRqnchjUWmpwLuWBjXKSqRKHF7CVv+YefQdwO6W32XtZlOfTU5okG6te4HJs7
+         H5W3gmYLYJGJayqcrPgpCUXQaqfeWM0MPfzVYQdUQ0Ko8G7suuIJRkG0PkKpvO2G/2Hr
+         2lGm9qNlku79MaRjp/fczYFnQ1LZeaUMCTytrurg9UMcKIdtazLBVYCESux6CQmBRtNZ
+         2yRenozsnjUYnGXk0IPyHVXYpeje1V5NXPLLMcetx9NQCuCLMr752uW0R9lmQCCaGpfn
+         VW8ZkWG9FmrIxnCVwAceESf/qs1mFEq6wGn579s1OS4LrsUCn9zntMdufE/FMpk+p7Ny
+         Lp5g==
+X-Gm-Message-State: ACgBeo2ROkZdUiSXzTtduo6qiSGF05wlUJ6og03xcq7ypDtK9WZjrWBF
+        xPNPRfxH0l0iQcXURb35QrG4hQ==
+X-Google-Smtp-Source: AA6agR5zsBQpMggDPWPhCVXkH4YrDgWCTxmfyFBqg6rPVwRLM6tjQlIRLnwexY8i61elDwn4FUH6Ag==
+X-Received: by 2002:a05:6512:114a:b0:492:84b9:b376 with SMTP id m10-20020a056512114a00b0049284b9b376mr555220lfg.450.1660806628262;
+        Thu, 18 Aug 2022 00:10:28 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
+        by smtp.gmail.com with ESMTPSA id c10-20020a056512074a00b0048aee10096fsm112529lfs.82.2022.08.18.00.10.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 00:09:04 -0700 (PDT)
-Message-ID: <10091e35-491a-c10f-35ec-044357f09e3e@blackwall.org>
-Date:   Thu, 18 Aug 2022 10:09:00 +0300
+        Thu, 18 Aug 2022 00:10:27 -0700 (PDT)
+Message-ID: <5a22d41a-f7cc-0be0-8bd1-d7d2c2133ace@linaro.org>
+Date:   Thu, 18 Aug 2022 10:10:25 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net-next] Remove DECnet support from kernel
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 2/5] clk: qcom: Allow custom reset ops
 Content-Language: en-US
-To:     Stephen Hemminger <stephen@networkplumber.org>,
-        netdev@vger.kernel.org
-Cc:     David Ahern <dsahern@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>, Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Akhmat Karakotov <hmukos@yandex-team.ru>,
-        Antoine Tenart <atenart@kernel.org>,
-        Xin Long <lucien.xin@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Suma Hegde <suma.hegde@amd.com>, Chen Yu <yu.c.chen@intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kees Cook <keescook@chromium.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Wang Qing <wangqing@vivo.com>, Yu Zhe <yuzhe@nfschina.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
-        "open list:NETFILTER" <coreteam@netfilter.org>
-References: <20220818004357.375695-1-stephen@networkplumber.org>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220818004357.375695-1-stephen@networkplumber.org>
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1660748274-39239-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220817202609.v2.2.I75baff799a363bbb960376539e3a0f737377c3f1@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220817202609.v2.2.I75baff799a363bbb960376539e3a0f737377c3f1@changeid>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/08/2022 03:43, Stephen Hemminger wrote:
-> DECnet is an obsolete network protocol that receives more attention
-> from kernel janitors than users. It belongs in computer protocol
-> history museum not in Linux kernel.
-> 
-> It has been "Orphaned" in kernel since 2010. The iproute2 support
-> for DECnet was dropped in 5.0 release. The documentation link on
-> Sourceforge says it is abandoned there as well.
-> 
-> Leave the UAPI alone to keep userspace programs compiling.
-> This means that there is still an empty neighbour table
-> for AF_DECNET.
-> 
-> The table of /proc/sys/net entries was updated to match
-> current directories and reformatted to be alphabetical.
-> 
-> Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
-> Acked-by: David Ahern <dsahern@kernel.org>
-> ---
-> 
-> Incorporates feedback from the initial RFC.
-> The MPLS neighbour table to family table is left alone.
-> 
+On 17/08/2022 17:57, Akhil P Oommen wrote:
 
-Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
+Thank you for your patch. There is something to discuss/improve.
+
+>  
+>  	return regmap_update_bits(rst->regmap, map->reg, mask, 0);
+> diff --git a/drivers/clk/qcom/reset.h b/drivers/clk/qcom/reset.h
+> index 2a08b5e..d4213b4 100644
+> --- a/drivers/clk/qcom/reset.h
+> +++ b/drivers/clk/qcom/reset.h
+> @@ -8,9 +8,17 @@
+>  
+>  #include <linux/reset-controller.h>
+>  
+> +struct qcom_reset_ops {
+> +	int (*reset)(void *priv);
+> +	int (*assert)(void *priv);
+> +	int (*deassert)(void *priv);
+> +};
+> +
+>  struct qcom_reset_map {
+>  	unsigned int reg;
+>  	u8 bit;
+> +	struct qcom_reset_ops *ops;
+
+This should be pointer to const.
 
 
-
-
+Best regards,
+Krzysztof

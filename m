@@ -2,97 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E77759861A
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1194598628
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245509AbiHROiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
+        id S1343576AbiHROjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244793AbiHROiB (ORCPT
+        with ESMTP id S1343538AbiHROjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:38:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8786527F
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:38:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660833480;
+        Thu, 18 Aug 2022 10:39:06 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB741CB21;
+        Thu, 18 Aug 2022 07:39:05 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b98ec329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98ec:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B9A951EC0575;
+        Thu, 18 Aug 2022 16:38:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660833539;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=55iMMmbwkaAqw4I8aj14bQmLqWfqTrm37aZFBETpBEc=;
-        b=Ru09/ZDKDCObZDmnQ0+w2gXF6TL6ZzcYz/M+0yO5HivuT7YxINNVR9mVxXHzgs6rOj6JDv
-        IIYZQSW96qgFFf0/rrG3WN/x4uqiiVpccm4ezTQyU80M+2AMtE5uzz0rtnRxLh3OnqVgB3
-        LQSaPoqNwZw77MGQHGGvkK98W8mbDYo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-511-M4bmjfZDOWKfskDloj51Ww-1; Thu, 18 Aug 2022 10:37:56 -0400
-X-MC-Unique: M4bmjfZDOWKfskDloj51Ww-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 258CD101A586;
-        Thu, 18 Aug 2022 14:37:55 +0000 (UTC)
-Received: from [10.22.9.156] (unknown [10.22.9.156])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CB81740CFD05;
-        Thu, 18 Aug 2022 14:37:51 +0000 (UTC)
-Message-ID: <58f4533b-6d0e-dc5f-2b8c-986212598125@redhat.com>
-Date:   Thu, 18 Aug 2022 07:37:51 -0700
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=g2YL7kh6clXEuknks5MxIzMwgBzNRg9SU8LpO1P7yIE=;
+        b=UUPNhVpC1nJs8S6GR9rbE/LCJ5GGypAQXnws+gBg8kpr0anG6hrMsxpKD3JOAYD+5jPAce
+        RblEzbEkn40zlzyyz95apBsukGMkp6Y6gfOfgThZtHGefttQmdKNjYIrlNQ6+Trz2usFaX
+        qRUHlNVpUkfrxN57kjKdGmbzi2nF0m4=
+Date:   Thu, 18 Aug 2022 16:38:55 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jia He <justin.he@arm.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, devel@acpica.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
+        toshi.kani@hpe.com, nd@arm.com
+Subject: Re: [PATCH v2 1/7] efi/cper: export several helpers for ghes edac to
+ use
+Message-ID: <Yv5O/9WZ6sKwKWF8@zn.tnic>
+References: <20220817143458.335938-1-justin.he@arm.com>
+ <20220817143458.335938-2-justin.he@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 1/3] sched: Use user_cpus_ptr for saving user provided
- cpumask in sched_setaffinity()
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220816192734.67115-1-longman@redhat.com>
- <20220816192734.67115-2-longman@redhat.com>
- <YvymwlTkdsVDtmRB@worktop.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YvymwlTkdsVDtmRB@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220817143458.335938-2-justin.he@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/17/22 04:28, Peter Zijlstra wrote:
-> On Tue, Aug 16, 2022 at 03:27:32PM -0400, Waiman Long wrote:
->
->> This will be some changes in behavior for arm64 systems with asymmetric
->> CPUs in some corner cases. For instance, if sched_setaffinity()
->> has never been called and there is a cpuset change before
->> relax_compatible_cpus_allowed_ptr() is called, its subsequent call will
->> follow what the cpuset allows but not what the previous cpu affinity
->> setting allows.
-> That's arguably a correctness fix, no? That is, the save/restore should
-> not have been allowed to revert to an earlier cpuset state.
+On Wed, Aug 17, 2022 at 02:34:52PM +0000, Jia He wrote:
+> Subject: Re: [PATCH v2 1/7] efi/cper: export several helpers for ghes edac to use
 
-Yes, it is a correctness fix in a sense. I just want to highlight that 
-there will be some slight changes in behavior in some corner cases for 
-the arm64 arch.
+"ghes_edac"
 
-Cheers,
-Longman
+> Before the ghes_edac codes are modularized, export several efi/cper helpers
 
+"Before ghes_edac can be turned back into a proper module again, export
+several helpers which are going to be used by it."
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

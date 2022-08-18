@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7801D599030
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BB1599028
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345989AbiHRWHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 18:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43218 "EHLO
+        id S1345755AbiHRWIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 18:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345210AbiHRWGq (ORCPT
+        with ESMTP id S1344516AbiHRWHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 18:06:46 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D529D25D7;
-        Thu, 18 Aug 2022 15:06:41 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id j21so294121ejs.0;
-        Thu, 18 Aug 2022 15:06:41 -0700 (PDT)
+        Thu, 18 Aug 2022 18:07:54 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF2AD31FA;
+        Thu, 18 Aug 2022 15:07:29 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id l1so3323965lfk.8;
+        Thu, 18 Aug 2022 15:07:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=/p7wEsx40ftm7k1b0tuUKI3U1MknbT3BVCyH8Q6QIMU=;
-        b=O7gPhKqOA0e5MnX3kqEysQ7xDxR0LdWdJTtp0H1JYMxXNafSfWudGmq7yFKqCD4U2X
-         ZGW6JhJjTqhBSY8Wqxekj6ZUq40biTjtb+vzGF9EFk5FRMJUy9S+pA2yCIq+Thn3B+ib
-         2VSz38MptPDZlsrJEuO6pwRL7+Rl7bMI5yfe9XtPthli/btDuO2JnthwjwhHs+2Ke7il
-         Wbsdo5FdpQ/x8ZvehO/d1prc8dFPbYqQuPXu1/k7t+264B8OEv9TLeJTOhJkiaZVyyP9
-         788fkhpjdD8jDLLvF70xgyluNBXrJAU3veWN+gefn8dU0BaEii8kNzWuYwpI0F9BcksO
-         hgDA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=+yl8RAHKGrw9azpH8jGfAjFkV6Z6RsFEnaQjPufoQPA=;
+        b=cN5F6QslIcwGT6/dfOprpGCV5dVAvcXHysxqBMyCu/jmn57/4WS3DHrGdVXI6SXOHu
+         hhL3jZlaLj8fyM01SYuKS9X32lbjuW54Daytwq5HFx6qxt/BG4EHMa2h/UCPIPblr9k8
+         KuWrUaf7wjcFeCgqgPByTJWiaaLE/bJxw86UF2zZjvaEoq8LbnmYoyZ29BSKiuBX1zVf
+         TETkMEfA54mFwyYTTIv3oHNXGdx+1hVAb65da6BvzL5WrxMy1aMjhpsfDcHyyyW8hStZ
+         yJ7DfNnDgxxcHmm0yMz/Mknw2krIkZGBmcOB2mJDtsibIm1+p9wvFVEAOrNjCaT8Emha
+         q5eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=/p7wEsx40ftm7k1b0tuUKI3U1MknbT3BVCyH8Q6QIMU=;
-        b=ENbeHRJf9oj6DDlpzC6ifHUHx2r2DPeJOLeyrAMYh6aUM41kAZfmZL3X7CBc9IF++n
-         +mfVCzTN3ilamZO4eVCa27b2fo/9Mhrvpd/FzKbnWkPjqdGyvBLVWw3smX6sFCj265Pj
-         WYlYOVpwYbTgISIcGLpHpyzDLSdaTY+66W0maZn1F8tPLTBKa5EtwYhcF3QIqErshQAS
-         kqocMg9fEKK5MTMQxp0ZB3YuzinDaPYae8PnIdKm2zdrGS2mF1k6E/1z1keUC1LfpKbI
-         PlFeHDZr05L/ft+ITj6mDZJzs7Aydvn6UoEBDAms3bGCu8HOe3lXJYPbcsFqnc16uWFf
-         kesg==
-X-Gm-Message-State: ACgBeo2C5X1njPrtosvWMwAMGypKWr1vWf1CYXADTDDMEwtsvEIMSywU
-        MDdPifcjadd8IH0uCo+U7cI=
-X-Google-Smtp-Source: AA6agR4fdYnQnGN3buSCRWdAQjBgFY2MsSDF7MfCymXNJOZKGU1skM3Y2SD1j+dAwwTgceh1EvRqwQ==
-X-Received: by 2002:a17:906:b2d4:b0:731:4594:8ba1 with SMTP id cf20-20020a170906b2d400b0073145948ba1mr3088359ejb.288.1660860399732;
-        Thu, 18 Aug 2022 15:06:39 -0700 (PDT)
-Received: from fedora.robimarko.hr (cpe-94-253-165-74.zg.cable.xnet.hr. [94.253.165.74])
-        by smtp.googlemail.com with ESMTPSA id dk5-20020a0564021d8500b00442d5054a51sm1851584edb.87.2022.08.18.15.06.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 15:06:39 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sivaprak@codeaurora.org,
-        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v3 9/9] arm64: dts: qcom: ipq8074: add A53 PLL node
-Date:   Fri, 19 Aug 2022 00:06:28 +0200
-Message-Id: <20220818220628.339366-9-robimarko@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220818220628.339366-1-robimarko@gmail.com>
-References: <20220818220628.339366-1-robimarko@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=+yl8RAHKGrw9azpH8jGfAjFkV6Z6RsFEnaQjPufoQPA=;
+        b=md5DtfKp6ZL8+oy43rbhrLBZZgwZjiQXgwtwcrLGtMfb5SPw1g14rD87d2IC76Ojf/
+         Nxxa1a51eVwSZOFhDW5W2l9xq5kRXf3Qvobwz1C3PgcjDiPp/i/Jodhfy0Lu6yrR8fEy
+         tljUGpxITC0CT8Hbjcw+A50pXsNiJjDdr3g4YkmPOxaAAn7S9S7OX4T3RqTkrFmR4vHS
+         PNyKFPzvYQ9v+QdjOgEDgNGC9DEhRlucPeu4qB6yF/mlO7lcqd7ZPbFHbv9IChrPRhh2
+         +36QJkBEdKK85g/p3eg6+YXrdJNmCF6cDNSXmiBqYbFP1Mf0Q30LBcd25VFyl/mdtWdI
+         l3Ig==
+X-Gm-Message-State: ACgBeo0LeofyOahOPMtF8nATpooeskulyHztwVnPtcI4c0/0jPulU/cR
+        FzUfXu2aMgt3UiKHULACq9ewZERebV/sHQc9f4I=
+X-Google-Smtp-Source: AA6agR5I5SyNWeoIXRkrTr0mrCf8ys41KVuUPF4EqcfpqkG4wwaLuV3zQu72gC/MnSVKrWrwH4LSr6pBwfbmAJlBagI=
+X-Received: by 2002:a05:6512:3fa8:b0:48c:ffd1:625d with SMTP id
+ x40-20020a0565123fa800b0048cffd1625dmr1378923lfa.251.1660860446956; Thu, 18
+ Aug 2022 15:07:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220818210207.8323-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220818210207.8323-1-wsa+renesas@sang-engineering.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Thu, 18 Aug 2022 15:07:15 -0700
+Message-ID: <CABBYNZ+Z=3kiA1jSiGH1KQCG6SHSDPp6MCA1pqU8CjtGRNYqqQ@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: move from strlcpy with unused retval to strscpy
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,33 +73,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the required node for A53 PLL which will be used to provide the CPU
-clock via APCS for APSS scaling.
+Hi Wolfram,
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On Thu, Aug 18, 2022 at 2:05 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 5b62d7590fc6..bace14b742a1 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -709,6 +709,14 @@ apcs_glb: mailbox@b111000 {
- 			#mbox-cells = <1>;
- 		};
- 
-+		a53pll: clock@b116000 {
-+			compatible = "qcom,ipq8074-a53pll";
-+			reg = <0x0b116000 0x40>;
-+			#clock-cells = <0>;
-+			clocks = <&xo>;
-+			clock-names = "xo";
-+		};
-+
- 		timer@b120000 {
- 			#address-cells = <1>;
- 			#size-cells = <1>;
+The link below doesn't seem to work.
+
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  net/bluetooth/hidp/core.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/net/bluetooth/hidp/core.c b/net/bluetooth/hidp/core.c
+> index 5940744a8cd8..cc20e706c639 100644
+> --- a/net/bluetooth/hidp/core.c
+> +++ b/net/bluetooth/hidp/core.c
+> @@ -83,14 +83,14 @@ static void hidp_copy_session(struct hidp_session *session, struct hidp_conninfo
+>                 ci->product = session->input->id.product;
+>                 ci->version = session->input->id.version;
+>                 if (session->input->name)
+> -                       strlcpy(ci->name, session->input->name, 128);
+> +                       strscpy(ci->name, session->input->name, 128);
+>                 else
+> -                       strlcpy(ci->name, "HID Boot Device", 128);
+> +                       strscpy(ci->name, "HID Boot Device", 128);
+>         } else if (session->hid) {
+>                 ci->vendor  = session->hid->vendor;
+>                 ci->product = session->hid->product;
+>                 ci->version = session->hid->version;
+> -               strlcpy(ci->name, session->hid->name, 128);
+> +               strscpy(ci->name, session->hid->name, 128);
+>         }
+>  }
+>
+> --
+> 2.35.1
+>
+
+
 -- 
-2.37.2
-
+Luiz Augusto von Dentz

@@ -2,326 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA646598C9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3C0598C99
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345582AbiHRTcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
+        id S242262AbiHRTce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234283AbiHRTcJ (ORCPT
+        with ESMTP id S238851AbiHRTcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:32:09 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7A0CD516
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:32:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660851126; x=1692387126;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ek5IqYX+bKNFUtYq9X05isuDAUFHxFw32/iXVOIytRs=;
-  b=gf+spBrP2R84+hEk0tO0pjJ4uKogJU3PqCW3CjoVzU9jAOP1ZyRsCZyZ
-   QZfx3XCvIlRitI+3evH/rx4XYVOLnioN9fnW4CwWZYa9OR/SvZAL3FtP0
-   NTPpsOKXkduo3pWp6d1HzK9iDXTdZiS/JwzTgZqdSnmsvWBWM0VaVWMzp
-   68cQpT7nJH4pRqRyJnT6R78aywOs432pwiOUas+I4kxjI+/5xXQWbjF9p
-   9a22u3rPSpB90LXUsw+EsCtGESpirA8zqWqJLcR4T7rP49+cjsOZ1hAHO
-   B01De4iMA9CD+bCU5kIurFc31Ox7802hD5aw6fEVGHuNyHNIoJubilhuF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="354591029"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="354591029"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 12:32:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="558665972"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 18 Aug 2022 12:32:04 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oOlFM-0000TB-0b;
-        Thu, 18 Aug 2022 19:32:04 +0000
-Date:   Fri, 19 Aug 2022 03:31:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: net/ipv6/seg6_local.c:43:8: warning: Excessive padding in 'struct
- seg6_action_desc' (8 padding bytes, where 0 is optimal). Optimal fields
- order: attrs, optattrs, input, slwt_ops, action, static_headroom, consider
- reordering the fields or adding explicit p...
-Message-ID: <202208190350.HZ1vBJzy-lkp@intel.com>
+        Thu, 18 Aug 2022 15:32:25 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF970CC314
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:32:23 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 27IJW6rw021713
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:32:07 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 27IJW6rw021713
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1660851127;
+        bh=NcvUJaEQ6y315S3poHspeF5ySWLtVyWcy6yD+juzm2Y=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DM5yvujMwCDGQ2RMS+YN1Ig2malegXoHWowQQfCbOcctkiItYyi+SlR8M5IymD7dd
+         eX7blbVXg6wex3vrDKvApBc9i+MGbckVUgCPf2ju4DlHSOS9lRIi291EkZe1v0/eC9
+         LzZLBb8LgVdSLqAnj84xx9d75xwMAZAvxy3+NqZ85COoLl38RQmwlLC6QaJdQTIScP
+         j8Yr81rPXNQyJwEVCSrS7H0wVr7WlZKHvhe4g5398HRXb1KgrAUfEs8ljsLnzRnwal
+         5z6qwC36ErxYrbVkviMDor3C5c7GrIaFrSjpuhlQAOCnGJzJ0od2sE/vh/shWU3V9x
+         BVNERv27CJ42w==
+X-Nifty-SrcIP: [209.85.221.49]
+Received: by mail-wr1-f49.google.com with SMTP id n7so2842953wrv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:32:07 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1lpgvMpxe4VMNHGEsxc0QAdRx8pECwBS5y1ZB7ZsaX1xsp/Cut
+        Du6yWzixlsMJ5Qf3iv1lz10bGL1LoZgSJh5SnXI=
+X-Google-Smtp-Source: AA6agR6ftUsRsJrkQr0reVqKHXlXymwPfQaYkHisXC4DU3zbYS56buTiIYGOB4Et+wAwd214SsYH1CQM2LrzxIeaC90=
+X-Received: by 2002:a05:6000:1acb:b0:223:5de3:f8bf with SMTP id
+ i11-20020a0560001acb00b002235de3f8bfmr2356542wry.691.1660851125479; Thu, 18
+ Aug 2022 12:32:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220804190320.262510-1-alexandre.belloni@bootlin.com>
+ <CAKwvOd=3N8_Rx1P8J7pVnjM6sEzJA233BnwmD1VyMRqgujq2_Q@mail.gmail.com>
+ <7eacd1d9-42ba-fd61-7f37-0635cebcb33d@infradead.org> <e902a360e3759c7f87d98d71d79a0d5cbe935e3e.camel@linuxfoundation.org>
+In-Reply-To: <e902a360e3759c7f87d98d71d79a0d5cbe935e3e.camel@linuxfoundation.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 19 Aug 2022 04:31:18 +0900
+X-Gmail-Original-Message-ID: <CAK7LNART2XQYy2hN1afODbuCMj+_VX9Ojh5nVCoY-hwXRAwSWA@mail.gmail.com>
+Message-ID: <CAK7LNART2XQYy2hN1afODbuCMj+_VX9Ojh5nVCoY-hwXRAwSWA@mail.gmail.com>
+Subject: Re: [PATCH] init/Kconfig: fix CC_HAS_ASM_GOTO_TIED_OUTPUT test with dash
+To:     Richard Purdie <richard.purdie@linuxfoundation.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   573ae4f13f630d6660008f1974c0a8a29c30e18a
-commit: cfdf64a03406351a9d6c1fe568a141a9a85d4710 seg6: add callbacks for customizing the creation/destruction of a behavior
-date:   1 year, 8 months ago
-config: riscv-randconfig-c006-20220815 (https://download.01.org/0day-ci/archive/20220819/202208190350.HZ1vBJzy-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cfdf64a03406351a9d6c1fe568a141a9a85d4710
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout cfdf64a03406351a9d6c1fe568a141a9a85d4710
-        # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=riscv clang-analyzer 
+On Thu, Aug 18, 2022 at 6:14 PM Richard Purdie
+<richard.purdie@linuxfoundation.org> wrote:
+>
+> On Wed, 2022-08-17 at 16:52 -0700, Randy Dunlap wrote:
+> >
+> > On 8/17/22 16:46, Nick Desaulniers wrote:
+> > > On Thu, Aug 4, 2022 at 12:03 PM <alexandre.belloni@bootlin.com> wrote:
+> > > >
+> > > > From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > > >
+> > > > When using dash as /bin/sh, the CC_HAS_ASM_GOTO_TIED_OUTPUT test fails
+> > > > with a syntax error which is not the one we are looking for:
+> > >
+> > > Thanks for the patch, though I think I'd rather see `/bin/bash`
+> > > hardcoded. Bash is a non-optional requirement as of
+> > > commit da4288b95baa ("scripts/check-local-export: avoid 'wait $!' for
+> > > process substitution")
+> > > scripts/ is kind of a mess...
+> > >
+> >
+> > Well, once upon a time, we took patches to remove bash-isms (convert to
+> > standard shell)...
+> > No longer, AFAICT.
+>
+> This problem is a little more subtle.
+>
+> As far as I could work out, exec() is used on entries like this in
+> kConfig. exec() falls back to /bin/sh so it is hard to see where this
+> would be changed to be /bin/bash.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
 
-clang-analyzer warnings: (new ones prefixed by >>)
-                       ^~~~~
-   drivers/memstick/core/ms_block.c:1762:2: note: Taking false branch
-           dbg("Parallel mode supported: %d", !!(msb->caps & MEMSTICK_CAP_PAR4));
-           ^
-   drivers/memstick/core/ms_block.h:284:27: note: expanded from macro 'dbg'
-   #define dbg(format, ...)                __dbg(1, format, ## __VA_ARGS__)
-                                           ^
-   drivers/memstick/core/ms_block.h:279:3: note: expanded from macro '__dbg'
-                   if (debug >= level) \
-                   ^
-   drivers/memstick/core/ms_block.c:1762:2: note: Loop condition is false.  Exiting loop
-           dbg("Parallel mode supported: %d", !!(msb->caps & MEMSTICK_CAP_PAR4));
-           ^
-   drivers/memstick/core/ms_block.h:284:27: note: expanded from macro 'dbg'
-   #define dbg(format, ...)                __dbg(1, format, ## __VA_ARGS__)
-                                           ^
-   drivers/memstick/core/ms_block.h:278:2: note: expanded from macro '__dbg'
-           do { \
-           ^
-   drivers/memstick/core/ms_block.c:1763:2: note: 'debug' is < 1
-           dbg("Read only: %d", msb->read_only);
-           ^
-   drivers/memstick/core/ms_block.h:284:27: note: expanded from macro 'dbg'
-   #define dbg(format, ...)                __dbg(1, format, ## __VA_ARGS__)
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/memstick/core/ms_block.h:279:7: note: expanded from macro '__dbg'
-                   if (debug >= level) \
-                       ^~~~~
-   drivers/memstick/core/ms_block.c:1763:2: note: Taking false branch
-           dbg("Read only: %d", msb->read_only);
-           ^
-   drivers/memstick/core/ms_block.h:284:27: note: expanded from macro 'dbg'
-   #define dbg(format, ...)                __dbg(1, format, ## __VA_ARGS__)
-                                           ^
-   drivers/memstick/core/ms_block.h:279:3: note: expanded from macro '__dbg'
-                   if (debug >= level) \
-                   ^
-   drivers/memstick/core/ms_block.c:1763:2: note: Loop condition is false.  Exiting loop
-           dbg("Read only: %d", msb->read_only);
-           ^
-   drivers/memstick/core/ms_block.h:284:27: note: expanded from macro 'dbg'
-   #define dbg(format, ...)                __dbg(1, format, ## __VA_ARGS__)
-                                           ^
-   drivers/memstick/core/ms_block.h:278:2: note: expanded from macro '__dbg'
-           do { \
-           ^
-   drivers/memstick/core/ms_block.c:1772:6: note: 'error' is 0
-           if (error)
-               ^~~~~
-   drivers/memstick/core/ms_block.c:1772:2: note: Taking false branch
-           if (error)
-           ^
-   drivers/memstick/core/ms_block.c:1775:10: note: Calling 'msb_ftl_initialize'
-           error = msb_ftl_initialize(msb);
-                   ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/memstick/core/ms_block.c:1332:6: note: Assuming field 'ftl_initialized' is false
-           if (msb->ftl_initialized)
-               ^~~~~~~~~~~~~~~~~~~~
-   drivers/memstick/core/ms_block.c:1332:2: note: Taking false branch
-           if (msb->ftl_initialized)
-           ^
-   drivers/memstick/core/ms_block.c:1344:6: note: Assuming field 'used_blocks_bitmap' is null
-           if (!msb->used_blocks_bitmap || !msb->lba_to_pba_table ||
-               ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/memstick/core/ms_block.c:1344:31: note: Left side of '||' is true
-           if (!msb->used_blocks_bitmap || !msb->lba_to_pba_table ||
-                                        ^
-   drivers/memstick/core/ms_block.c:1347:3: note: Memory is released
-                   kfree(msb->lba_to_pba_table);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/memstick/core/ms_block.c:1775:10: note: Returning; memory was released
-           error = msb_ftl_initialize(msb);
-                   ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/memstick/core/ms_block.c:1776:6: note: 'error' is -12
-           if (error)
-               ^~~~~
-   drivers/memstick/core/ms_block.c:1776:2: note: Taking true branch
-           if (error)
-           ^
-   drivers/memstick/core/ms_block.c:2180:7: note: Returning; memory was released
-           rc = msb_init_card(card);
-                ^~~~~~~~~~~~~~~~~~~
-   drivers/memstick/core/ms_block.c:2181:6: note: 'rc' is -12
-           if (rc)
-               ^~
-   drivers/memstick/core/ms_block.c:2181:2: note: Taking true branch
-           if (rc)
-           ^
-   drivers/memstick/core/ms_block.c:2182:3: note: Control jumps to line 2192
-                   goto out_free;
-                   ^
-   drivers/memstick/core/ms_block.c:2193:2: note: Calling 'msb_data_clear'
-           msb_data_clear(msb);
-           ^~~~~~~~~~~~~~~~~~~
-   drivers/memstick/core/ms_block.c:1957:2: note: Attempt to free released memory
-           kfree(msb->lba_to_pba_table);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Suppressed 8 warnings (8 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   17 warnings generated.
->> net/ipv6/seg6_local.c:43:8: warning: Excessive padding in 'struct seg6_action_desc' (8 padding bytes, where 0 is optimal). Optimal fields order: attrs, optattrs, input, slwt_ops, action, static_headroom, consider reordering the fields or adding explicit padding members [clang-analyzer-optin.performance.Padding]
-   struct seg6_action_desc {
-   ~~~~~~~^~~~~~~~~~~~~~~~~~
-   net/ipv6/seg6_local.c:43:8: note: Excessive padding in 'struct seg6_action_desc' (8 padding bytes, where 0 is optimal). Optimal fields order: attrs, optattrs, input, slwt_ops, action, static_headroom, consider reordering the fields or adding explicit padding members
-   struct seg6_action_desc {
-   ~~~~~~~^~~~~~~~~~~~~~~~~~
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   16 warnings generated.
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   17 warnings generated.
-   Suppressed 17 warnings (16 in non-user code, 1 with check filters).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   16 warnings generated.
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   16 warnings generated.
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   19 warnings generated.
-   net/ipv6/ip6_vti.c:194:2: warning: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
-           strcpy(t->parms.name, dev->name);
-           ^~~~~~
-   net/ipv6/ip6_vti.c:194:2: note: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119
-           strcpy(t->parms.name, dev->name);
-           ^~~~~~
-   net/ipv6/ip6_vti.c:849:4: warning: Value stored to 'err' is never read [clang-analyzer-deadcode.DeadStores]
-                           err = vti6_update(t, &p1, false);
-                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/ipv6/ip6_vti.c:849:4: note: Value stored to 'err' is never read
-                           err = vti6_update(t, &p1, false);
-                           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/ipv6/ip6_vti.c:1166:2: warning: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119 [clang-analyzer-security.insecureAPI.strcpy]
-           strcpy(t->parms.name, ip6n->fb_tnl_dev->name);
-           ^~~~~~
-   net/ipv6/ip6_vti.c:1166:2: note: Call to function 'strcpy' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcpy'. CWE-119
-           strcpy(t->parms.name, ip6n->fb_tnl_dev->name);
-           ^~~~~~
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   16 warnings generated.
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   16 warnings generated.
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   16 warnings generated.
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   16 warnings generated.
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   16 warnings generated.
-   Suppressed 16 warnings (16 in non-user code).
-   Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-   17 warnings generated.
-   net/atm/common.c:238:2: warning: Assigned value is garbage or undefined [clang-analyzer-core.uninitialized.Assign]
-           skb_queue_walk_safe(&queue, skb, tmp) {
-           ^
-   include/linux/skbuff.h:3459:33: note: expanded from macro 'skb_queue_walk_safe'
-                   for (skb = (queue)->next, tmp = skb->next;                      \
-                                                 ^ ~~~~~~~~~
-   net/atm/common.c:231:2: note: Calling '__skb_queue_head_init'
-           __skb_queue_head_init(&queue);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/atm/common.c:231:2: note: Returning from '__skb_queue_head_init'
-           __skb_queue_head_init(&queue);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/atm/common.c:234:2: note: Loop condition is false.  Exiting loop
-           spin_lock_irqsave(&rq->lock, flags);
-           ^
-   include/linux/spinlock.h:384:2: note: expanded from macro 'spin_lock_irqsave'
-           raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
-           ^
-   include/linux/spinlock.h:250:2: note: expanded from macro 'raw_spin_lock_irqsave'
-           do {                                            \
-           ^
-   net/atm/common.c:234:2: note: Loop condition is false.  Exiting loop
-           spin_lock_irqsave(&rq->lock, flags);
-           ^
-   include/linux/spinlock.h:382:43: note: expanded from macro 'spin_lock_irqsave'
-   #define spin_lock_irqsave(lock, flags)                          \
-                                                                   ^
-   net/atm/common.c:235:2: note: Calling 'skb_queue_splice_init'
-           skb_queue_splice_init(rq, &queue);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/skbuff.h:1957:6: note: Assuming the condition is false
-           if (!skb_queue_empty(list)) {
-               ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/skbuff.h:1957:2: note: Taking false branch
-           if (!skb_queue_empty(list)) {
-           ^
-   net/atm/common.c:235:2: note: Returning from 'skb_queue_splice_init'
-           skb_queue_splice_init(rq, &queue);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/atm/common.c:238:2: note: Assigned value is garbage or undefined
-           skb_queue_walk_safe(&queue, skb, tmp) {
-           ^
-   include/linux/skbuff.h:3459:33: note: expanded from macro 'skb_queue_walk_safe'
-                   for (skb = (queue)->next, tmp = skb->next;                      \
 
-vim +43 net/ipv6/seg6_local.c
+Kconfig uses popen() to execute a shell command.
 
-cfdf64a03406351 Andrea Mayer 2020-12-02  42  
-d1df6fd8a1d22d3 David Lebrun 2017-08-05 @43  struct seg6_action_desc {
-d1df6fd8a1d22d3 David Lebrun 2017-08-05  44  	int action;
-d1df6fd8a1d22d3 David Lebrun 2017-08-05  45  	unsigned long attrs;
-0a3021f1d4e553d Andrea Mayer 2020-12-02  46  
-0a3021f1d4e553d Andrea Mayer 2020-12-02  47  	/* The optattrs field is used for specifying all the optional
-0a3021f1d4e553d Andrea Mayer 2020-12-02  48  	 * attributes supported by a specific behavior.
-0a3021f1d4e553d Andrea Mayer 2020-12-02  49  	 * It means that if one of these attributes is not provided in the
-0a3021f1d4e553d Andrea Mayer 2020-12-02  50  	 * netlink message during the behavior creation, no errors will be
-0a3021f1d4e553d Andrea Mayer 2020-12-02  51  	 * returned to the userspace.
-0a3021f1d4e553d Andrea Mayer 2020-12-02  52  	 *
-0a3021f1d4e553d Andrea Mayer 2020-12-02  53  	 * Each attribute can be only of two types (mutually exclusive):
-0a3021f1d4e553d Andrea Mayer 2020-12-02  54  	 * 1) required or 2) optional.
-0a3021f1d4e553d Andrea Mayer 2020-12-02  55  	 * Every user MUST obey to this rule! If you set an attribute as
-0a3021f1d4e553d Andrea Mayer 2020-12-02  56  	 * required the same attribute CANNOT be set as optional and vice
-0a3021f1d4e553d Andrea Mayer 2020-12-02  57  	 * versa.
-0a3021f1d4e553d Andrea Mayer 2020-12-02  58  	 */
-0a3021f1d4e553d Andrea Mayer 2020-12-02  59  	unsigned long optattrs;
-0a3021f1d4e553d Andrea Mayer 2020-12-02  60  
-d1df6fd8a1d22d3 David Lebrun 2017-08-05  61  	int (*input)(struct sk_buff *skb, struct seg6_local_lwt *slwt);
-d1df6fd8a1d22d3 David Lebrun 2017-08-05  62  	int static_headroom;
-cfdf64a03406351 Andrea Mayer 2020-12-02  63  
-cfdf64a03406351 Andrea Mayer 2020-12-02  64  	struct seg6_local_lwtunnel_ops slwt_ops;
-d1df6fd8a1d22d3 David Lebrun 2017-08-05  65  };
-d1df6fd8a1d22d3 David Lebrun 2017-08-05  66  
+See do_shell() in scripts/kconfig/preprocess.c
 
-:::::: The code at line 43 was first introduced by commit
-:::::: d1df6fd8a1d22d37cffa0075ab8ad423ce656777 ipv6: sr: define core operations for seg6local lightweight tunnel
 
-:::::: TO: David Lebrun <david.lebrun@uclouvain.be>
-:::::: CC: David S. Miller <davem@davemloft.net>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+popen(3) says that
+"the command is passed to /bin/sh using the -c flag.
+interpretation, if any, is performed by the shell."
+
+
+
+GNU Make is the same.
+Make uses /bin/sh to execute commands in
+recipe lines and $(shell ...) functions.
+You can change the default shell via 'SHELL' variable.
+
+
+
+
+
+>
+> I have no issue with bash being required and used and if someone can
+> work out how to make that happen for the exec() calls, I'm fine with
+> that. It would probably require some parsing of the "code" being passed
+> to kConfig to decide how to call exec().
+>
+> What worries me is seeing the kernel behaviour changing depending on
+> whether /bin/sh is dash or bash and I think that should be fixed as a
+> more urgent matter.
+>
+> I'd hope Alexandre's patch could be taken in the meantime as it doesn't
+> really hurt anything and does fix a very unexpected behaviour change
+> depending on the host system setup.
+
+
+
+Agree.
+
+We should apply a simple patch to fix this particular case
+(I suggest to drop '\n' unless there is a reason to have it)
+but discussion is needed to avoid portability issues like this.
+
+
+
+
+
+
+One way is to encourage writing really portable code.
+We used to strive for this (so we avoided bashism where possible)
+because we believed sticking to POSIX was always good.
+
+Some people make an effort in this direction [1], stating that
+bash may not be installed, and bash is slower than dash.
+
+In shell commands, we can use only commands/options defined in POSIX.
+This is fragile because we do not have real /bin/sh,
+and it is difficult to know what is POSIX-compliant.
+
+People submit a script with #!/bin/sh but only tested on
+environments where /bin/sh is a symlink to bash.
+
+
+
+
+
+
+
+
+Another (and the opposite) way is to force users to use a particular
+program like bash.
+
+Actually, Googlers suggest this way.
+
+Shell Style Guide [2] says:
+"Bash is the only shell scripting language permitted for executables."
+
+
+If we are forced to use bash, it should work in the same way for everyone.
+We do not need to know what is POSIX-defined, and what is bashism.
+
+I was thinking this way for a long time.
+I wrote some patches to switch the default shell for Kbuild and Kconfig to bash
+some time ago, but I did not submit them after some consideration.
+I have patches in my local repository, I can share them.
+
+
+
+
+
+
+
+BTW, Richard is here, so let me ask about BitBake.
+
+The manual [3] clearly says:
+
+"When you create these types of functions in your recipe or class files,
+you need to follow the shell programming rules. The scripts are
+executed by /bin/sh,
+which may not be a bash shell but might be something such as dash.
+You should not use Bash-specific script (bashisms)"
+
+I just thought BitBake ran shell code in bash before,
+but I might have misunderstood.
+Do OE/Yocto allow only POSIX shell code?
+
+
+
+
+[1]: https://lore.kernel.org/linux-kbuild/CAK7LNAT+4fOkJ5WDb9t5qXCqS+GhnbnG8wBffxNa1ZJ3=4Ps3Q@mail.gmail.com/T/#m74e382837a8a47a2278d892bc5d7f8bdbb86dba4
+[2]: https://google.github.io/styleguide/shellguide.html
+[3]: https://docs.yoctoproject.org/1.6/bitbake-user-manual/bitbake-user-manual.html
+
+
+
+
+--
+Best Regards
+Masahiro Yamada

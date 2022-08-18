@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39132599029
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7801D599030
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234626AbiHRWHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 18:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        id S1345989AbiHRWHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 18:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345707AbiHRWGq (ORCPT
+        with ESMTP id S1345210AbiHRWGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 18 Aug 2022 18:06:46 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E06D2753;
-        Thu, 18 Aug 2022 15:06:39 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id e13so3506737edj.12;
-        Thu, 18 Aug 2022 15:06:39 -0700 (PDT)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D529D25D7;
+        Thu, 18 Aug 2022 15:06:41 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id j21so294121ejs.0;
+        Thu, 18 Aug 2022 15:06:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=gwYDRHCLyvIG0hzZx/1wWa1CYvcFrSAVpZX2Hp0kcmU=;
-        b=H78nhzPQj2CiZRP5EzXW7psCXuxBq7jJkgaQBfsnAuLG3GYpjwqvl/urxI9rh6DTrV
-         zRpBFYYSIsQjXRI1hAIB9USyI8aGRkGiIlW9aWuh/a6kZDKMzFhWfdWTXynLhCryz9Sf
-         2NVanzEsFGkvMOE8tVfQwTvkf/Va0DG4Cvl+ggIaYJMNgTS5d6AzBo7OTHitieI2VgNh
-         JeVjcbgAqgwavgnRkCvqW1g18um2C8oXeTqUulPWwyE/jsVuVebcS5qrwvgo0gX5XnwU
-         nryJs6jkELH2CGewUK5pInSh78SsKNB/S/ilW2jRZ1LHQaiW9Az4YdL0Dp0XxJ7Y8aaU
-         4ZIg==
+        bh=/p7wEsx40ftm7k1b0tuUKI3U1MknbT3BVCyH8Q6QIMU=;
+        b=O7gPhKqOA0e5MnX3kqEysQ7xDxR0LdWdJTtp0H1JYMxXNafSfWudGmq7yFKqCD4U2X
+         ZGW6JhJjTqhBSY8Wqxekj6ZUq40biTjtb+vzGF9EFk5FRMJUy9S+pA2yCIq+Thn3B+ib
+         2VSz38MptPDZlsrJEuO6pwRL7+Rl7bMI5yfe9XtPthli/btDuO2JnthwjwhHs+2Ke7il
+         Wbsdo5FdpQ/x8ZvehO/d1prc8dFPbYqQuPXu1/k7t+264B8OEv9TLeJTOhJkiaZVyyP9
+         788fkhpjdD8jDLLvF70xgyluNBXrJAU3veWN+gefn8dU0BaEii8kNzWuYwpI0F9BcksO
+         hgDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=gwYDRHCLyvIG0hzZx/1wWa1CYvcFrSAVpZX2Hp0kcmU=;
-        b=02I/nJ6uvBKwtUtBimWSzj4A8avZVB3Z+8SYZvhbHidJqBZE0bBt7ZPRfOBCEKTFJv
-         WJMSqxOhO7iocuyFG4gm4MG15RTa1uzjyKe9phIg3xb4ai9gviKgPOhYbGLZT6S73WVi
-         fXPyflBEx61CtwXWUqSEED/Q4mg4J5vgWcZ3BEC+3m6PAHxmzpdl73J3CvDAh4v2Q27T
-         /QsE5XsLxjmuGtID1zuLm0bY7KyTeoIrUbUaI1fw3HJ+hYVtpPiPLgaz3mRHZVI6BC3y
-         kmXpwM9rHcWKzBOt3PAs69yWgYOmzSmQdiX41YLYZb/JuGFmKUwMjEDm4rrQqCyc9NZ7
-         DAhA==
-X-Gm-Message-State: ACgBeo1R98IgLFs4M2KjQiK6t2GUOebcJft5j8LledjQ7MMi+GcOR/N/
-        4j76yo2zA2Dvkeef9XeihHg=
-X-Google-Smtp-Source: AA6agR4ymEF8d31W/DQMQr9RGspNJvr+iK2oLJ9vpS+bdmPhTHUIYxu5iKfq0dR1ej+Y4waRyjHfgw==
-X-Received: by 2002:a05:6402:332:b0:446:3427:5c62 with SMTP id q18-20020a056402033200b0044634275c62mr815100edw.141.1660860398575;
-        Thu, 18 Aug 2022 15:06:38 -0700 (PDT)
+        bh=/p7wEsx40ftm7k1b0tuUKI3U1MknbT3BVCyH8Q6QIMU=;
+        b=ENbeHRJf9oj6DDlpzC6ifHUHx2r2DPeJOLeyrAMYh6aUM41kAZfmZL3X7CBc9IF++n
+         +mfVCzTN3ilamZO4eVCa27b2fo/9Mhrvpd/FzKbnWkPjqdGyvBLVWw3smX6sFCj265Pj
+         WYlYOVpwYbTgISIcGLpHpyzDLSdaTY+66W0maZn1F8tPLTBKa5EtwYhcF3QIqErshQAS
+         kqocMg9fEKK5MTMQxp0ZB3YuzinDaPYae8PnIdKm2zdrGS2mF1k6E/1z1keUC1LfpKbI
+         PlFeHDZr05L/ft+ITj6mDZJzs7Aydvn6UoEBDAms3bGCu8HOe3lXJYPbcsFqnc16uWFf
+         kesg==
+X-Gm-Message-State: ACgBeo2C5X1njPrtosvWMwAMGypKWr1vWf1CYXADTDDMEwtsvEIMSywU
+        MDdPifcjadd8IH0uCo+U7cI=
+X-Google-Smtp-Source: AA6agR4fdYnQnGN3buSCRWdAQjBgFY2MsSDF7MfCymXNJOZKGU1skM3Y2SD1j+dAwwTgceh1EvRqwQ==
+X-Received: by 2002:a17:906:b2d4:b0:731:4594:8ba1 with SMTP id cf20-20020a170906b2d400b0073145948ba1mr3088359ejb.288.1660860399732;
+        Thu, 18 Aug 2022 15:06:39 -0700 (PDT)
 Received: from fedora.robimarko.hr (cpe-94-253-165-74.zg.cable.xnet.hr. [94.253.165.74])
-        by smtp.googlemail.com with ESMTPSA id dk5-20020a0564021d8500b00442d5054a51sm1851584edb.87.2022.08.18.15.06.37
+        by smtp.googlemail.com with ESMTPSA id dk5-20020a0564021d8500b00442d5054a51sm1851584edb.87.2022.08.18.15.06.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 15:06:38 -0700 (PDT)
+        Thu, 18 Aug 2022 15:06:39 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         konrad.dybcio@somainline.org, mturquette@baylibre.com,
@@ -57,9 +57,9 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v3 8/9] arm64: dts: qcom: ipq8074: correct APCS register space size
-Date:   Fri, 19 Aug 2022 00:06:27 +0200
-Message-Id: <20220818220628.339366-8-robimarko@gmail.com>
+Subject: [PATCH v3 9/9] arm64: dts: qcom: ipq8074: add A53 PLL node
+Date:   Fri, 19 Aug 2022 00:06:28 +0200
+Message-Id: <20220818220628.339366-9-robimarko@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220818220628.339366-1-robimarko@gmail.com>
 References: <20220818220628.339366-1-robimarko@gmail.com>
@@ -75,33 +75,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-APCS DTS addition that was merged, was not supposed to get merged as it
-was part of patch series that was superseded by 2 more patch series
-that resolved issues with this one and greatly simplified things.
+Add the required node for A53 PLL which will be used to provide the CPU
+clock via APCS for APSS scaling.
 
-Since it already got merged, start by correcting the register space
-size as APCS will not be providing regmap for PLL and it will conflict
-with the standalone A53 PLL node.
-
-Fixes: 50ed9fffec3a ("arm64: dts: qcom: ipq8074: add APCS node")
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 5985dfff073d..5b62d7590fc6 100644
+index 5b62d7590fc6..bace14b742a1 100644
 --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
 +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -703,7 +703,7 @@ watchdog: watchdog@b017000 {
- 
- 		apcs_glb: mailbox@b111000 {
- 			compatible = "qcom,ipq8074-apcs-apps-global";
--			reg = <0x0b111000 0x6000>;
-+			reg = <0x0b111000 0x1000>;
- 
- 			#clock-cells = <1>;
+@@ -709,6 +709,14 @@ apcs_glb: mailbox@b111000 {
  			#mbox-cells = <1>;
+ 		};
+ 
++		a53pll: clock@b116000 {
++			compatible = "qcom,ipq8074-a53pll";
++			reg = <0x0b116000 0x40>;
++			#clock-cells = <0>;
++			clocks = <&xo>;
++			clock-names = "xo";
++		};
++
+ 		timer@b120000 {
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
 -- 
 2.37.2
 

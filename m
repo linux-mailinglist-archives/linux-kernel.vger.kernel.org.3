@@ -2,99 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5625986AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70225986B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343949AbiHRO7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
+        id S1343895AbiHRO7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343904AbiHRO7B (ORCPT
+        with ESMTP id S1343959AbiHRO7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:59:01 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A9137190;
-        Thu, 18 Aug 2022 07:58:45 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 22:58:18 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1660834723;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PUxQG9E/JOlLTHeBkFAkSNSYI+XFzfu1BhI66/Ss6h8=;
-        b=unUva2CYC3tZebs7tkMt9Ffula7ZWOGCQLK37/XZ5AZnb61zjY/+vOWxI3M8w8JjezSyFi
-        FhsLycP3A8/YMYaBPV9OqqDJ+9f++Iw3adlE83tlIhPFDZ6C4udmZ7nNM693FSWS+FYgyH
-        oEdVjpXuSnJgbwx2Nf9b09LRonJaOGQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Wu XiangCheng <wu.xiangcheng@linux.dev>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>, corbet@lwn.net,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Wu XiangCheng <bobwxc@email.cn>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 02/13] docs: update vmemmap_dedup.rst reference
-Message-ID: <Yv5TimOuTK45ZHyH@bobwxc.mipc>
-References: <cover.1660829433.git.mchehab@kernel.org>
- <2c81bc7ef207f0a84387a5d714601513f4bf1960.1660829433.git.mchehab@kernel.org>
+        Thu, 18 Aug 2022 10:59:12 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFEB3D5AE;
+        Thu, 18 Aug 2022 07:58:51 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id l5so1286462qtv.4;
+        Thu, 18 Aug 2022 07:58:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=fPoxGBPf5NZE66FQhKWYb3s56+gNdfQUrK1EC5WHaTg=;
+        b=vTjqruJbEUjKzzkzrmLbrucZ925+PMA7buaADNLtUmbboJBwhNuYXwehHpcGAP5DKM
+         rvWm1De3sxong74kvTjOslfHzthqIkAO4lrm74mQ6RvgF5p1kPz20qo6MnSt6q9PvKHM
+         wFp22fOvVP+ytRkTm5g5zWix33PUEtZzzhFeu7pQrcsiJJXUHHkSTNq2pQPyX3hqthC/
+         27Nd2SBTSE8MN2Pt4s35lMiFRYOGpi1Wg5H6QSMRUzVGlbZOrhMUguBseNmh/KvjhplV
+         bRYlJ79zbWruxz/BQsyxH7JhinlXg7eosZwwEpc4bdMxAYhADt1a4+kmkDylK/J36vlO
+         CAZg==
+X-Gm-Message-State: ACgBeo02g33GQUp0l0tNrBS/GtS0Gkra+maQjYxp+uN0SuqbuSX+RwQc
+        HEyfTaWb9AzuJ7HkrkPnEA==
+X-Google-Smtp-Source: AA6agR6nblJYoeb1H2gBXIhyMUJf+lUVbU/lrXRwPfE27ZZOAGg07tCHpKSQCRMpP9h7iUKbmKd9ug==
+X-Received: by 2002:a05:622a:410:b0:33b:72b2:6038 with SMTP id n16-20020a05622a041000b0033b72b26038mr3024805qtx.627.1660834730751;
+        Thu, 18 Aug 2022 07:58:50 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:c63:5705:782e:33fb:22e5:50bd])
+        by smtp.gmail.com with ESMTPSA id b22-20020a05620a119600b006b9576cd060sm1614260qkk.21.2022.08.18.07.58.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 07:58:50 -0700 (PDT)
+Received: (nullmailer pid 1859341 invoked by uid 1000);
+        Thu, 18 Aug 2022 14:58:48 -0000
+Date:   Thu, 18 Aug 2022 08:58:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: pinctrl: samsung: stop using
+ bindings header with constants
+Message-ID: <20220818145848.GG1829017-robh@kernel.org>
+References: <20220816133016.77553-1-krzysztof.kozlowski@linaro.org>
+ <20220816133016.77553-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2c81bc7ef207f0a84387a5d714601513f4bf1960.1660829433.git.mchehab@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220816133016.77553-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-话说 Mauro Carvalho Chehab 于 2022-08-18 (四) 15:38:48 +0200 曰过：
-> Changeset ee65728e103b ("docs: rename Documentation/vm to Documentation/mm")
-> renamed: Documentation/vm/vmemmap_dedup.rst
-> to: Documentation/mm/vmemmap_dedup.rst.
+On Tue, Aug 16, 2022 at 04:30:15PM +0300, Krzysztof Kozlowski wrote:
+> The bindings header with pin controller register values is being
+> deprecated and DTS already switched to a DTS-local header.
 > 
-> Update its cross-reference accordingly.
+> Do not reference the bindings header in schema and replace the defines
+> with raw values.
 > 
-> Fixes: ee65728e103b ("docs: rename Documentation/vm to Documentation/mm")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-
-Acked-by: Wu XiangCheng <bobwxc@email.cn>
-
-Thanks,
-
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
-> 
-> See [PATCH 00/13] at: https://lore.kernel.org/all/cover.1660829433.git.mchehab@kernel.org/
-> 
->  mm/hugetlb_vmemmap.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/hugetlb_vmemmap.h b/mm/hugetlb_vmemmap.h
-> index 25bd0e002431..b8fc23c8763f 100644
-> --- a/mm/hugetlb_vmemmap.h
-> +++ b/mm/hugetlb_vmemmap.h
-> @@ -16,7 +16,7 @@ void hugetlb_vmemmap_optimize(const struct hstate *h, struct page *head);
->  
->  /*
->   * Reserve one vmemmap page, all vmemmap addresses are mapped to it. See
-> - * Documentation/vm/vmemmap_dedup.rst.
-> + * Documentation/mm/vmemmap_dedup.rst.
->   */
->  #define HUGETLB_VMEMMAP_RESERVE_SIZE	PAGE_SIZE
->  
-> -- 
-> 2.37.1
-> 
+>  .../pinctrl/samsung,pinctrl-pins-cfg.yaml     |  1 -
+>  .../bindings/pinctrl/samsung,pinctrl.yaml     | 63 ++++++++-----------
+>  2 files changed, 27 insertions(+), 37 deletions(-)
 
--- 
-Wu XiangCheng	0x32684A40BCA7AEA7
-
+Reviewed-by: Rob Herring <robh@kernel.org>

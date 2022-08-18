@@ -2,123 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7647E598330
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DACA0598338
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244624AbiHRM33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 08:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S244147AbiHRMjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 08:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244528AbiHRM31 (ORCPT
+        with ESMTP id S244470AbiHRMjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 08:29:27 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E7248C472
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:29:27 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id DF7B0210924B; Thu, 18 Aug 2022 05:29:25 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DF7B0210924B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1660825765;
-        bh=N0KtEpoBu3th64oZcAZTDMjWHKbXWYEYW8YhIfYFUrs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M08rrkPuCAid237xUFj2fYP6FZmsUPt/pBxVVKZy24w0fkEd3RFu9jQz3Yl072uoW
-         yDTWQqqnwTwRuSvI+MVb6SMxS1KLFZhtd+hP0GfSyM9fJuws5sGfu6vl3itiRvO73S
-         Oq7kHwstvTzamswUrWEgr1GuPGpvUo7JtH2l0IeM=
-Date:   Thu, 18 Aug 2022 05:29:25 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     ssengar@microsoft.com, mikelley@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, peterz@infradead.org, tim.c.chen@linux.intel.com,
-        will@kernel.org, song.bao.hua@hisilicon.com,
-        suravee.suthikulpanit@amd.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/cacheinfo: Don't use cpu_llc_shared_map for
- !CONFIG_SMP
-Message-ID: <20220818122925.GA8507@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1660148115-302-1-git-send-email-ssengar@linux.microsoft.com>
- <Yv1ELaWHbRfvdt/p@zn.tnic>
- <20220818045225.GA9054@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <Yv4pOz01nAkafiwd@zn.tnic>
+        Thu, 18 Aug 2022 08:39:47 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A585B061
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:39:45 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id D00832B05E6A;
+        Thu, 18 Aug 2022 08:39:39 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 18 Aug 2022 08:39:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660826379; x=1660833579; bh=YRrkqYfUey
+        d/afvSZhJ0kvziJy3S8LJDEtRjqUfFPSo=; b=IHz9beHjK6BmV92EOKI1gLLc0M
+        P9t82G2uluVqd7svl2yZLWMAJoeAjLoGLogb98PqFknQRGD1gtJZ6LtiUoi1SBky
+        IDyfMCqUl7rOPRZ/q0daavXQU/hdPPdM+38Le4gYw/FJg+DjGAZSmIuyBS57YrsB
+        e63wCjCvBy8K+nrRoPsw5EnywFBAD8u5plPWclrho6XuiOChzZc609mjM6oqKhQI
+        SWQZT4a8qwcJonb/0eZ6aTEXpRmdN6oTtLBmev2evIFDRvsr9fyiTsd0X1xdVoP2
+        Aq4HbOt2ei1w/d6+L2su/JzudsXQNLB7KETrs2DkncF2s/uqNzDSXvAnYg3g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660826379; x=1660833579; bh=YRrkqYfUeyd/afvSZhJ0kvziJy3S
+        8LJDEtRjqUfFPSo=; b=qAvK/y25kdOixORQ1DcGPmxPcHWSUKsl3RV+tTDS1EO5
+        NOPj/sCCY7oGDwQwvyJWkJzhPy2M/OOY5ydNH2EDdTJe/u8NLQGUEffJ3ICIDg9z
+        8Yk7ItX8XgPmjfb5zXPdgWKTuWIoSrYxKdCndlpJivExLPhVOq0KSKs/XGioJy+I
+        HqjVn5aKmUL328f1qyZjr9lU+Ponwbefox24cnMfTYvkq8Cy0/utT+EUWgx7YCW2
+        N5UHkZgC8btjVzhbarvvdtUT9roMh2sottdMTFausmjJdvPjoNC7NNqXf/JSso6c
+        RDM6b/ga/jMLUuMKsEP3dxx6+PrxnKHvw62M20jSBg==
+X-ME-Sender: <xms:CjP-YnGeVVLXM3mzZ2v7VHy6wrITCBDi8qvzdW9m3h4S-iQHge4HEA>
+    <xme:CjP-YkUY8FAcAVAWFOjI3fi74PkJhzACWS0q2oO31_xTk-QBUY7lRUkG4yw09Tiq5
+    ht1P6FoKXVh_KiOL6Q>
+X-ME-Received: <xmr:CjP-YpKrBFnbVIv4SfmxGlO5dZ9yKsaoNXWsZVsdtyKSyjbfZ2VcCUx3wA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehledgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpedvfeevudfgvefhtdefjedtfeelheeigfeghfeijedvgfegffevkefggfff
+    ueejtdenucffohhmrghinhephhhinhhnvghrrdhinhhfohenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
+    tghh
+X-ME-Proxy: <xmx:CjP-YlGlnSTXDodYwXRenPdTbe0fyyRAuyKpHoL9iwEKs46SIOyukA>
+    <xmx:CjP-YtXtlRp3s-IM5r0fC_58DTQfQNWdBhMJjzDFUH7UhTxIFe3R-Q>
+    <xmx:CjP-YgM-xnxj1Q2js1x6rE3FxXTBMgsvWAPPM37LKl4j_CxHuIJHhQ>
+    <xmx:CzP-YjHFF5LGbBDa_NV776KyH5859ooLfz0LmsNpe-VwQBt3g9IFmv5w2gQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 18 Aug 2022 08:39:37 -0400 (EDT)
+Date:   Thu, 18 Aug 2022 14:39:34 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>
+Subject: Re: [PATCH v1 04/35] drm/modes: Introduce 480i and 576i modes
+Message-ID: <20220818123934.eim2bfrgbxsmviqx@houat>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-4-3d53ae722097@cerno.tech>
+ <CAMuHMdUrwzPYjA0wdR7ADj5Ov6+m03JbnY8fBYzRYyWDuNm5=g@mail.gmail.com>
+ <20220816132636.3tmwqmrox64pu3lt@houat>
+ <CAMuHMdUNLPbjs=usYQBim5FxsrC1oJLuF+3JB7auzHHRoOqavQ@mail.gmail.com>
+ <20220817075351.4xpsqdngjgtiqvob@houat>
+ <CAMuHMdUusnhYodWGCxJBu-1Hd2KW-xdT8jxE_iVdQjDo8b3Y5Q@mail.gmail.com>
+ <20220817131454.qcuywcuc4ts4hswm@houat>
+ <CAMuHMdVPEgnnsY-4uuf=FDJ0YxWpch-0kZWFT_TZfcDvXLtwWQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lcxbafgaqwff7pps"
 Content-Disposition: inline
-In-Reply-To: <Yv4pOz01nAkafiwd@zn.tnic>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdVPEgnnsY-4uuf=FDJ0YxWpch-0kZWFT_TZfcDvXLtwWQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 01:57:47PM +0200, Borislav Petkov wrote:
-> On Wed, Aug 17, 2022 at 09:52:25PM -0700, Saurabh Singh Sengar wrote:
-> > Shall I mention here "Non-SMP AMD processor" instead ?
-> 
-> You should explain what that is.
-> 
-> Is that a CONFIG_SMP=n kernel which you boot on a AMD CPU?
 
-Yes, thats correct.
+--lcxbafgaqwff7pps
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> IOW, how do I reproduce the issue you're describing below, here locally?
+Hi!
 
-Boot latest linux kernel on AMD CPU, having CONGIG_SMP=n.
-Once booted execute lscpu (just lscpu without any argument ), this will cause segfault.
-Please make a note issue is observed with 2.34 version (default lscpu version with
-Ubuntu 20.04.4) of lscpu.
+On Wed, Aug 17, 2022 at 04:01:48PM +0200, Geert Uytterhoeven wrote:
+> > > > > Vertically, it's simpler, as the number of lines is discrete.
+> > > > > You do have to take into account interlace and doublescan, and
+> > > > > progressive modes with 262/312 lines.
+> > > >
+> > > > So we only have to deal with 525 and 625 lines total (without taking
+> > > > interlace and doublescan into account), right?
+> > >
+> > > Yes.
+> > >
+> > > > I guess we still have the same question, we probably want to center=
+ it,
+> > > > so top =3D=3D bottom, but what about the vsync length?
+> > >
+> > > Unfortunately that table does not mention top and bottom margins.
+> > > But according to drivers/video/fbdev/amifb.c (see the "Broadcast
+> > > video timings" comment block and the definitions of the "ntsc-lace"
+> > > and "pal-lace" video modes), they are asymmetrical, too.
+> > >
+> > > Vsync length is 0.576ms, so that's 9 scan lines (I guess I didn't
+> > > have that info when I wrote amifb, as I used 4 lines there).
+> >
+> > Thanks, that's some great info already.
+> >
+> > It's mentioned though that the settings for NTSC are "straightforward",
+> > but it's definitely not for me :)
+>=20
+> As in NTSC just uses different pixel clock and horizontal/vertical sync
+> rate values...
 
-Also, if for the above test we take linux kernel code before below commit,
-shared_cpu_map file gets created and lscpu just works fine.
-b81dce77ced ("cpumask: Fix invalid uniprocessor mask assumption")
+Oh, so the constants differ but the calculation is the same, ack.
 
-> 
-> Send dmesg pls.
-> 
+> > I've looked around and it looks like the entire blanking area is
+> > supposed to be 40 pixels in interlaced, but I couldn't find anywhere how
+>=20
+> 625 lines - 575[*] visible lines =3D 50 lines.
+>=20
+> [*] BT.656 uses 576 visible lines as that's a multiple of 2, for splitting
+>      a frame in two fields of equal size.
+>=20
+> "visible" is relative, as it includes the overscan region.
+> Some PAL monitors used with computers had knobs to control width/height
+> and position of the screen, so you could make use of most or all of
+> the overscan region
 
-dmesg :
-We get only 2 lines of dmesg for this segfault.
-Step 1: dmesg -c
-Step 2: lscpu
-Step 3: dmesg
-below is the output of step 3.
+It brings back some memories :)
 
-Dmesg:
-[ 6951.530138] lscpu[99034]: segfault at 0 ip 00005557bc9c35ba sp 00007ffced2681c8 error 4 in lscpu[5557bc9c0000+e000]
-[ 6951.530145] Code: 4d 39 c2 76 33 48 c1 e9 06 49 89 c8 4c 8d 2c cd 00 00 00 00 44 89 c9 4f 8b 04 c3 83 e1 3f 4d 0f a3 c8 73 14 4c 8b 02 4d 8b 00 <4f> 8b 04 28 49 d3 e8 41 83 e0 01 44 01 c3 48 89 c1 49 39 c4 74 38
+> but on a real TV you're limited to ca. 640x512 (on PAL) which is what
+> an Amiga used by default (with a 14 MHz pixclock).
 
-> Also, what is the use case?
-> 
+> > it's supposed to be split between the upper and lower margins and the
+> > sync period.
+>=20
+> "Field Synchronization of PAL System" on
+> http://martin.hinner.info/vga/pal.html shows the split.
 
-Explained above, putting here more precise steps:
-Step 1: Build linux kernel for AMD processor supporting L3 cache with CONFIG_SMP=n.
-Step 2: Boot this kernel.
-Step 3: Once in command prompt, enter lscpu
+Thanks, that's excellent as well.
 
-If lspu is version 2.34 like the one I have (default with Ubuntu 20.04.4),
-segfault will be observed.
+I'm mostly done with a function that creates a PAL mode, but I still
+have one question.
 
+If I understand well, the blanking period is made up (interlace) of 16
+pulses for the first field, 14 for the second, each pulse taking half a
+line. That amount to 30 pulses, so 15 lines.
 
-> Why would you even build with SMP off?
+I first assumed that the pre-equalizing pulses would be the back porch,
+the long sync pulses the vsync, and the post-equalizing pulses the front
+porch. But... we're still missing 35 lines to amount to 625 lines, that
+seems to be counted in the field itself (305 lines =3D=3D (575 + 35) / 2)
 
-This is caught in our testing.
+So I guess my assumption was wrong to begin with.
 
-> 
-> Feel free to explain more verbosely what you're trying to accomplish.
-> 
-> Thx.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+You seem to have used a fixed vsync in amifb to 4 lines, and I don't
+understand how you come up with the upper and lower margins (or rather,
+how they are linked to what's described in that page)
 
-Please let me know if any thing is unclear or need more info reproducing the scenario.
+Maxime
 
-- Saurabh
+--lcxbafgaqwff7pps
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYv4zBgAKCRDj7w1vZxhR
+xYV3AQDMVX9EP9IeMgn/VC77iWNl8fZWLl3pV3GsUW4BHyIW6QEAnOHXzzmKBAoR
+Ta1eHGvbrbL9eJf0qR3cPhqIhbYH2Q0=
+=lHS5
+-----END PGP SIGNATURE-----
+
+--lcxbafgaqwff7pps--

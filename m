@@ -2,194 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBB2598C5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 648B7598C5A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344613AbiHRTIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
+        id S1345544AbiHRTJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiHRTIh (ORCPT
+        with ESMTP id S239990AbiHRTJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:08:37 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890EB65673
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:08:36 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id x12so1032116uaf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:08:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc;
-        bh=Nk/TSk6npACedUkDRKBdfkyA8nrRp6tv3CfMxkua8M8=;
-        b=TeLH3knRpD86yyCWkf3u6UY4g5yake+4GXZUxUE43r+RGpMzv6xjh1HeumfSbXa+2v
-         AiG3uATukDaTeffq8+p8VynFz1V4GHjpZ7vBwrCdNpuZVLjGuSv5OjZjvMfjuDqA44sq
-         JSbo++IQA0XdoqEO0+RefLyA3pnpEyRAEJU5RhV3kjzhOPWkPln7mtteU1+C+IT6jTx5
-         skqFwglAYih6/PlAWYm245S95A+gQWanT0M9qr6EbmbKwcYK39z/psRyCYE2kiO0wt6o
-         OFIEmTT5fnFGKsUe0pcnwzIMlHoj1gxyk8UoNSWkcWy9r8TSqtdQxOOJy7yY2Y8jbmgx
-         8CeA==
+        Thu, 18 Aug 2022 15:09:10 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB94BC00E7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:09:08 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id k9-20020a056e021a8900b002e5bd940e96so1703688ilv.13
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:09:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc;
-        bh=Nk/TSk6npACedUkDRKBdfkyA8nrRp6tv3CfMxkua8M8=;
-        b=xRDUodT/TAC1B13d+aaEBCqoi8MKjmGB0TSevpYQxnSo2AO43GnFyarjptBlXcp535
-         cCZwZlxuuP83ZkCq0x8dBXQpVb5zjMpns1A65T9qqRTn/soQk3D5kWeQ81qWBiosg0V+
-         5A2xr3mRqQ/B5TEsajQffNs2/9a9CG/3pACqPZIzF3VCVH2eQj2ngmIqhgKUzzv6knXW
-         hiz60chuxmPeBLESwJU2a5NbTScb6oKZk7wOItKIDXJ8GvvqQUrsyw7HFiaDmvH+AhTV
-         xBqVTNajKl9318Q17ekaN0oy0Ro1NCoP2qeQ36KKbJRodwqbi4HJa1Jdc8O16086+FNa
-         PnmA==
-X-Gm-Message-State: ACgBeo3QZ62Rmn0jhZo5kFUS4xUzkymd7xtdtQ2UnEpR3IOasrGQ+eZK
-        fzaStzLFpqVcdC1oolnMRhI=
-X-Google-Smtp-Source: AA6agR4aU85in+KQYK4uJRjhGpcgKe4zWWyyJiC9LJzfEAiLEDk3RIQ3gHgAhN5WOzhqtZ0f63Fd1w==
-X-Received: by 2002:ab0:7706:0:b0:399:17f3:fef1 with SMTP id z6-20020ab07706000000b0039917f3fef1mr1643953uaq.72.1660849715565;
-        Thu, 18 Aug 2022 12:08:35 -0700 (PDT)
-Received: from quaco.ghostprotocols.net ([187.19.239.32])
-        by smtp.gmail.com with ESMTPSA id f11-20020ab0300b000000b003693e4797f6sm1285395ual.15.2022.08.18.12.08.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 12:08:35 -0700 (PDT)
-From:   arnaldo.melo@gmail.com
-X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6520E4035A; Thu, 18 Aug 2022 16:08:32 -0300 (-03)
-Date:   Thu, 18 Aug 2022 16:08:32 -0300
-To:     linux-kernel@vger.kernel.org
-Cc:     Chenyi Qiang <chenyi.qiang@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Durrant <pdurrant@amazon.com>
-Subject: [PATCH FYI 1/1] tools headers UAPI: Sync x86's asm/kvm.h with the
- kernel sources
-Message-ID: <Yv6OMPKYqYSbUxwZ@kernel.org>
+        bh=QUXH+lX3oULeMPlpniIOe/Q0nv+D1dRLUrR/j75zlr0=;
+        b=yFE25pv4zClibjhfj3NHd4TrzIazY4qNN6Qam+l7i0WWlloZ4QFmlJCJ0VACwwGitn
+         R+QMFdYSV7T5cxrUVlxtE/OlTVM8ekD1m84h6L6zu/7kVMKbJdfp0u9WL/YkDmpDIORb
+         WEGe/WZF/kaxCb5zcHxIFwem8uFh7QJ9Rt1mP7XYXzojkYDDLOX8u/tB23qHqK2TPwmj
+         hkbsBIibQGWCr4+KHW7ih3X/zcrQ7aBBC2O3uOGFm03hgS18MgUAhCFaChsUTpJEcFsD
+         OLTHyrO0dRsNTbPNT3rDHClJGz82lhmiHbbGrZlXzxbsel2mjo6dO0FNALW0D+D/g/a4
+         S+ug==
+X-Gm-Message-State: ACgBeo0sfxbmLKzDcCcsg6OQ+IItcmKe6DRMJD3kgFXjW56UHAhcL+1A
+        lmhZ1jHrZuyfSrCUWLuSn8VJZeguI3LWOJXG0rWXu3gOvEr2
+X-Google-Smtp-Source: AA6agR4hMKwNK0pL6It4a5YyUKx1x4WqiZ9bx8NxTz4LJ0szJel9fneotzoL5nhB0WbZSCxk5N6zlIv8dT3pDiXpeJaforTVk0N8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:14ce:b0:2e5:3548:aaaf with SMTP id
+ o14-20020a056e0214ce00b002e53548aaafmr1965344ilk.192.1660849748264; Thu, 18
+ Aug 2022 12:09:08 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 12:09:08 -0700
+In-Reply-To: <20220818110031.89467-1-code@siddh.me>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000045503f05e688b7b0@google.com>
+Subject: Re: [syzbot] WARNING in iomap_iter
+From:   syzbot <syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com>
+To:     code@siddh.me, david@fromorbit.com, djwong@kernel.org,
+        fgheet255t@gmail.com, hch@infradead.org,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        riteshh@linux.ibm.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+Hello,
 
-- Arnaldo
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in iomap_iter
 
-Full explanation:
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 11 at fs/iomap/iter.c:33 iomap_iter_done fs/iomap/iter.c:33 [inline]
+WARNING: CPU: 1 PID: 11 at fs/iomap/iter.c:33 iomap_iter+0xd8c/0x1100 fs/iomap/iter.c:78
+Modules linked in:
+CPU: 1 PID: 11 Comm: kworker/u4:1 Not tainted 6.0.0-rc1-syzkaller-00067-g573ae4f13f63-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Workqueue: loop3 loop_workfn
+RIP: 0010:iomap_iter_done fs/iomap/iter.c:33 [inline]
+RIP: 0010:iomap_iter+0xd8c/0x1100 fs/iomap/iter.c:78
+Code: ff e8 28 60 87 ff 0f 0b e9 f1 f9 ff ff e8 1c 60 87 ff 0f 0b e9 86 f7 ff ff e8 10 60 87 ff 0f 0b e9 5e f7 ff ff e8 04 60 87 ff <0f> 0b e9 1a f7 ff ff e8 f8 5f 87 ff e8 73 b4 8a 07 31 ff 89 c5 89
+RSP: 0018:ffffc90000107668 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffffc90000107800 RCX: 0000000000000000
+RDX: ffff888011a9bb00 RSI: ffffffff81f4ab4c RDI: 0000000000000006
+RBP: 0000000000000000 R08: 0000000000000006 R09: 0000000000000000
+R10: d70e000000000000 R11: 0000000000000004 R12: 0000000000000000
+R13: d70e000000000000 R14: ffffc90000107828 R15: ffffc90000107870
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fae015980a0 CR3: 000000007f2cd000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ __iomap_dio_rw+0x6c6/0x1c20 fs/iomap/direct-io.c:601
+ iomap_dio_rw+0x3c/0xa0 fs/iomap/direct-io.c:690
+ ext4_dio_read_iter fs/ext4/file.c:79 [inline]
+ ext4_file_read_iter+0x434/0x600 fs/ext4/file.c:130
+ call_read_iter include/linux/fs.h:2181 [inline]
+ lo_rw_aio.isra.0+0xa54/0xc50 drivers/block/loop.c:454
+ do_req_filebacked drivers/block/loop.c:498 [inline]
+ loop_handle_cmd drivers/block/loop.c:1859 [inline]
+ loop_process_work+0x969/0x2050 drivers/block/loop.c:1894
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
+Tested on:
 
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
-
-E.g.:
-
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
-
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
----
-
-To pick the changes in:
-
-  43bb9e000ea4c621 ("KVM: x86: Tweak name of MONITOR/MWAIT #UD quirk to make it #UD specific")
-  94dfc73e7cf4a31d ("treewide: uapi: Replace zero-length arrays with flexible-array members")
-  bfbcc81bb82cbbad ("KVM: x86: Add a quirk for KVM's "MONITOR/MWAIT are NOPs!" behavior")
-  b172862241b48499 ("KVM: x86: PIT: Preserve state of speaker port data bit")
-  ed2351174e38ad4f ("KVM: x86: Extend KVM_{G,S}ET_VCPU_EVENTS to support pending triple fault")
-
-That just rebuilds kvm-stat.c on x86, no change in functionality.
-
-This silences these perf build warning:
-
-  Warning: Kernel ABI header at 'tools/arch/x86/include/uapi/asm/kvm.h' differs from latest version at 'arch/x86/include/uapi/asm/kvm.h'
-  diff -u tools/arch/x86/include/uapi/asm/kvm.h arch/x86/include/uapi/asm/kvm.h
-
-Cc: Chenyi Qiang <chenyi.qiang@intel.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Paul Durrant <pdurrant@amazon.com>
-Link: https://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/x86/include/uapi/asm/kvm.h | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/tools/arch/x86/include/uapi/asm/kvm.h b/tools/arch/x86/include/uapi/asm/kvm.h
-index ec53c9fa1da967d6..46de10a809ecbd81 100644
---- a/tools/arch/x86/include/uapi/asm/kvm.h
-+++ b/tools/arch/x86/include/uapi/asm/kvm.h
-@@ -306,7 +306,8 @@ struct kvm_pit_state {
- 	struct kvm_pit_channel_state channels[3];
- };
- 
--#define KVM_PIT_FLAGS_HPET_LEGACY  0x00000001
-+#define KVM_PIT_FLAGS_HPET_LEGACY     0x00000001
-+#define KVM_PIT_FLAGS_SPEAKER_DATA_ON 0x00000002
- 
- struct kvm_pit_state2 {
- 	struct kvm_pit_channel_state channels[3];
-@@ -325,6 +326,7 @@ struct kvm_reinject_control {
- #define KVM_VCPUEVENT_VALID_SHADOW	0x00000004
- #define KVM_VCPUEVENT_VALID_SMM		0x00000008
- #define KVM_VCPUEVENT_VALID_PAYLOAD	0x00000010
-+#define KVM_VCPUEVENT_VALID_TRIPLE_FAULT	0x00000020
- 
- /* Interrupt shadow states */
- #define KVM_X86_SHADOW_INT_MOV_SS	0x01
-@@ -359,7 +361,10 @@ struct kvm_vcpu_events {
- 		__u8 smm_inside_nmi;
- 		__u8 latched_init;
- 	} smi;
--	__u8 reserved[27];
-+	struct {
-+		__u8 pending;
-+	} triple_fault;
-+	__u8 reserved[26];
- 	__u8 exception_has_payload;
- 	__u64 exception_payload;
- };
-@@ -434,6 +439,7 @@ struct kvm_sync_regs {
- #define KVM_X86_QUIRK_OUT_7E_INC_RIP		(1 << 3)
- #define KVM_X86_QUIRK_MISC_ENABLE_NO_MWAIT	(1 << 4)
- #define KVM_X86_QUIRK_FIX_HYPERCALL_INSN	(1 << 5)
-+#define KVM_X86_QUIRK_MWAIT_NEVER_UD_FAULTS	(1 << 6)
- 
- #define KVM_STATE_NESTED_FORMAT_VMX	0
- #define KVM_STATE_NESTED_FORMAT_SVM	1
--- 
-2.37.1
+commit:         573ae4f1 tee: add overflow check in register_shm_helpe..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=11c4af0d080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d9d854f607a68b32
+dashboard link: https://syzkaller.appspot.com/bug?extid=a8e049cd3abd342936b6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13ba8e5b080000
 

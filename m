@@ -2,180 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E005981BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AD55981BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244185AbiHRKzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 06:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
+        id S242315AbiHRK4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 06:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244196AbiHRKz0 (ORCPT
+        with ESMTP id S243178AbiHRK4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 06:55:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D6C8D3D9;
-        Thu, 18 Aug 2022 03:55:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73568B81DEB;
-        Thu, 18 Aug 2022 10:55:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3CC0C433C1;
-        Thu, 18 Aug 2022 10:55:17 +0000 (UTC)
-Message-ID: <e716f649-dec7-ec71-8054-05f05167a042@xs4all.nl>
-Date:   Thu, 18 Aug 2022 12:55:15 +0200
+        Thu, 18 Aug 2022 06:56:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B818C474
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 03:56:04 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IAqApa027599;
+        Thu, 18 Aug 2022 10:55:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=V05XG+furiG9o1tKinGyILRRe6fuw2NRAwO08YRhd1k=;
+ b=OdRrNuh/H2W2ZEql5pYGNwC8dXU1ZNx0FCRMVSNpkh7uUkW3rsexveaTYx3D63vdM1Ji
+ qt/0GyAxJPcFmSNaeVVevmlaWYs4WsXvnXyGT6URZcvNpaw6WVHN5axXIpwxHnMnj0uC
+ rcsgFWm8S4rq1XU8g4U3IC40KiFDPx9MpqGEy9FCVOt6MkcP0TIbqObe4GtGffZEVIBK
+ 01URvVFngksIFbTIssyylZAtlKMirW8sv8/ldjon4dPR02wfyCiHY40OdQE0JwWf4RO3
+ gosg7/P1GlcwgYcfafZ6NVpqcGGs2XGhoeQTfg+koFed/Hsll+/ra9JMylsUJH11jDTC dw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1m2502cy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 10:55:38 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27IArAw5030058;
+        Thu, 18 Aug 2022 10:55:37 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1m2502c4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 10:55:36 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27IAp604021172;
+        Thu, 18 Aug 2022 10:55:34 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma05fra.de.ibm.com with ESMTP id 3hyp8sjsne-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 10:55:34 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27IAqiGs25887032
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 Aug 2022 10:52:44 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 03CA111C058;
+        Thu, 18 Aug 2022 10:55:32 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AFF3111C04A;
+        Thu, 18 Aug 2022 10:55:28 +0000 (GMT)
+Received: from [9.109.198.207] (unknown [9.109.198.207])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 18 Aug 2022 10:55:28 +0000 (GMT)
+Message-ID: <c429f624-a25b-fe80-56c8-01cb733c3909@linux.vnet.ibm.com>
+Date:   Thu, 18 Aug 2022 16:25:27 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v25 4/4] media: platform: mtk-mdp3: add MediaTek MDP3
- driver
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 03/16] powerpc: Fix objtool unannotated intra-function
+ call warnings
 Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
-        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        cellopoint.kai@gmail.com, Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>
-References: <20220817095629.29911-1-moudy.ho@mediatek.com>
- <20220817095629.29911-5-moudy.ho@mediatek.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20220817095629.29911-5-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Cc:     "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>
+References: <20220808114908.240813-1-sv@linux.ibm.com>
+ <20220808114908.240813-4-sv@linux.ibm.com>
+ <d3022c04-8fd5-d357-e22d-041e8f70aac8@csgroup.eu>
+From:   Sathvika Vasireddy <sv@linux.vnet.ibm.com>
+In-Reply-To: <d3022c04-8fd5-d357-e22d-041e8f70aac8@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: jqRNJPAX4DlREWWVQ1vT6jfLohQ0xeE7
+X-Proofpoint-GUID: rsguQs3nhjwFX_kXC3uhLfeUHQcvVBRD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-18_11,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ impostorscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=999
+ malwarescore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208180036
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Moudy,
 
-Just two nitpicks:
+On 10/08/22 14:02, Christophe Leroy wrote:
+>
+> Le 08/08/2022 à 13:48, Sathvika Vasireddy a écrit :
+>> objtool throws unannotated intra-function call warnings
+>> in the following assembly files.
+>>
+>> arch/powerpc/kernel/vector.o: warning: objtool: .text+0x53c: unannotated intra-function call
+>>
+>> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x60: unannotated intra-function call
+>> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x124: unannotated intra-function call
+>> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x5d4: unannotated intra-function call
+>> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x5dc: unannotated intra-function call
+>> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0xcb8: unannotated intra-function call
+>> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0xd0c: unannotated intra-function call
+>> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x1030: unannotated intra-function call
+>>
+>> arch/powerpc/kernel/head_64.o: warning: objtool: .text+0x358: unannotated intra-function call
+>> arch/powerpc/kernel/head_64.o: warning: objtool: .text+0x728: unannotated intra-function call
+>> arch/powerpc/kernel/head_64.o: warning: objtool: .text+0x4d94: unannotated intra-function call
+>> arch/powerpc/kernel/head_64.o: warning: objtool: .text+0x4ec4: unannotated intra-function call
+>>
+>> arch/powerpc/kvm/book3s_hv_interrupts.o: warning: objtool: .text+0x6c: unannotated intra-function call
+>> arch/powerpc/kernel/misc_64.o: warning: objtool: .text+0x64: unannotated intra-function call
+>>
+> Before explaining how you fix it, can you explain why we get it ?
+Sure.
 
-On 17/08/2022 11:56, Moudy Ho wrote:
-> This patch adds driver for MediaTek's Media Data Path ver.3 (MDP3).
-> It provides the following functions:
->   color transform, format conversion, resize, crop, rotate, flip
->   and additional image quality enhancement.
-> 
-> The MDP3 driver is mainly used for Google Chromebook products to
-> import the new architecture to set the HW settings as shown below:
->   User -> V4L2 framework
->     -> MDP3 driver -> SCP (setting calculations)
->       -> MDP3 driver -> CMDQ (GCE driver) -> HW
-> 
-> Each modules' related operation control is sited in mtk-mdp3-comp.c
-> Each modules' register table is defined in file with "mdp_reg_" prefix
-> GCE related API, operation control  sited in mtk-mdp3-cmdq.c
-> V4L2 m2m device functions are implemented in mtk-mdp3-m2m.c
-> Probe, power, suspend/resume, system level functions are defined in
-> mtk-mdp3-core.c
+objtool does not add STT_NOTYPE symbols with size 0 to the rbtree, which 
+is why find_call_destination()
+function is not able to find the destination symbol for 'bl' 
+instruction. For such symbols, objtool is throwing
+unannotated intra-function call warnings in assembly files. Fix these 
+warnings by adding
+SYM_FUNC_START_LOCAL() and SYM_FUNC_END() annotations to those symbols 
+to be able to set symbol
+type to STT_FUNC and set size of these symbols accordingly.
 
-<snip>
+I'll add this explanation to the commit message.
 
-> diff --git a/drivers/media/platform/mediatek/mdp3/Kconfig b/drivers/media/platform/mediatek/mdp3/Kconfig
-> new file mode 100644
-> index 000000000000..e8c593c1eb69
-> --- /dev/null
-> +++ b/drivers/media/platform/mediatek/mdp3/Kconfig
-> @@ -0,0 +1,20 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +config VIDEO_MEDIATEK_MDP3
-> +	tristate "MediaTek MDP v3 driver"
-> +	depends on MTK_IOMMU || COMPILE_TEST
-> +	depends on VIDEO_DEV
-> +	depends on ARCH_MEDIATEK || COMPILE_TEST
-> +	depends on MTK_MMSYS
+Thanks for reviewing.
 
-This needs to be MTK_MMSYS || COMPILE_TEST.
-
-> +	depends on HAS_DMA
-> +	select VIDEOBUF2_DMA_CONTIG
-> +	select V4L2_MEM2MEM_DEV
-> +	select VIDEO_MEDIATEK_VPU
-> +	select MTK_CMDQ
-> +	select MTK_SCP
-> +	default n
-> +	help
-> +	    It is a v4l2 driver and present in MediaTek MT8183 SoC.
-> +	    The driver supports scaling and color space conversion.
-> +
-> +	    To compile this driver as a module, choose M here: the
-> +	    module will be called mtk-mdp3.
-
-<snip>
-
-> diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
-> new file mode 100644
-> index 000000000000..0c1675c6dce2
-> --- /dev/null
-> +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
-> @@ -0,0 +1,724 @@
-
-<snip>
-
-> +static int mdp_m2m_s_selection(struct file *file, void *fh,
-> +			       struct v4l2_selection *s)
-> +{
-> +	struct mdp_m2m_ctx *ctx = fh_to_ctx(fh);
-> +	struct mdp_frame *frame = ctx_get_frame(ctx, s->type);
-> +	struct mdp_frame *capture;
-> +	struct v4l2_rect r;
-> +	struct device *dev = &ctx->mdp_dev->pdev->dev;
-> +	bool valid = false;
-> +	int ret;
-> +
-> +	if (s->type == V4L2_BUF_TYPE_VIDEO_OUTPUT)
-> +		valid = (s->target == V4L2_SEL_TGT_CROP);
-> +	else if (s->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
-> +		valid = (s->target == V4L2_SEL_TGT_COMPOSE);
-> +
-> +	if (!valid) {
-> +		dev_err(dev, "[%s:%d] invalid type:%u target:%u", __func__,
-> +			ctx->id, s->type, s->target);
-
-This needs to be dev_dbg: you don't want to spam the kernel log for
-userspace errors.
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = mdp_try_crop(ctx, &r, s, frame);
-> +	if (ret)
-> +		return ret;
-> +	capture = ctx_get_frame(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-> +
-> +	if (mdp_target_is_crop(s->target))
-> +		capture->crop.c = r;
-> +	else
-> +		capture->compose = r;
-> +
-> +	s->r = r;
-> +
-> +	return 0;
-> +}
-
-I can modify these two changes myself if you are OK with that. Just let me know.
-
-If you prefer to post a v26 that's OK too.
-
-Regards,
-
-	Hans
+- Sathvika

@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820C1597F87
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218B4597F89
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243884AbiHRHvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 03:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37874 "EHLO
+        id S243918AbiHRHwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 03:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243945AbiHRHvJ (ORCPT
+        with ESMTP id S243919AbiHRHwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 03:51:09 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE4DAF0D1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:51:07 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id v4so993790ljg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=fS1GbInIBT62wufy84Arx4epUlW3RObiFTS+tgetyTk=;
-        b=keoomPMpM4w81nF3xeLMz5h7ETgxWI5I+rea3IIfD55BByvaFz8fKdMtR1w2iFWkJX
-         lUTuHQFSgWhz50sNlYzKYea6JqOBhUESVmoakyAVcjNjTl43RUrfnUmGfEKxn0u2ukzC
-         itf1Zpb3/vEtjuiEjrJClt6FiGtk0mJXqptM8nzyy4wxp8dqLrNhApj6KJsGn5C5Uu3r
-         K9OupUSvUFbMhXBR+qGgosGqoZRzuG7HgU2eAG1QNwAto2tJwQKt78a0EUyubOsAii76
-         kDC3KEDvScwCatOLqz97elXndGbbVGc0CadOMfq67AGL4XIwSz4NmsgsbxuMs8FuLmsf
-         6aJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=fS1GbInIBT62wufy84Arx4epUlW3RObiFTS+tgetyTk=;
-        b=OUnWO7XBc6nb+zpJhsE5scA4uqGXFLJk+3+YZGhgC+Y375WqKjbWQWa6dFEkILuRzQ
-         Unchq8ZKE43U+DnDPl9bPzcGT6SKqcpVI9cK382IT9flNuSbDNh6z4uBz1EZlf3NjWw1
-         aPDwM9JCNlJGFcFD9gCXsQq83Z/fa8BdfY3ftpFE6fKxslVZ8o9N+Zz4Erie5EiiGL81
-         AJQNx+J5Oti2f/gjdYDtNeoAUuAVlpVydT+h47/J1FbOzpROZ9d88gGoaC4ZqxDK8YYu
-         8uL5aO11tBowfUUXHiCtkfUU1DaaaD49xdJ4MzFORJ4953RMzbfSB/rQa93d7Rrvnky1
-         akJg==
-X-Gm-Message-State: ACgBeo2mvTXtQJMhRNMCeAO7r9hlMQ4+2Bi2408/h7hLh3Kn2wqfDMda
-        6VnOFQJPgd5RLewDMzwZBqA2cg==
-X-Google-Smtp-Source: AA6agR6v3Fx6yHipuVXtDQ6ZQZ8fmzkCw46l3zsAq+co+6vRBTz5d/VZLwaRBZo9SEw6jVuSep0pEw==
-X-Received: by 2002:a2e:6e13:0:b0:25e:87b1:fda8 with SMTP id j19-20020a2e6e13000000b0025e87b1fda8mr491865ljc.250.1660809065387;
-        Thu, 18 Aug 2022 00:51:05 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
-        by smtp.gmail.com with ESMTPSA id bf12-20020a056512258c00b0048a88c07bcdsm127225lfb.20.2022.08.18.00.51.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 00:51:04 -0700 (PDT)
-Message-ID: <fd41a409-d0e0-0026-4644-9058d1177c45@linaro.org>
-Date:   Thu, 18 Aug 2022 10:51:02 +0300
+        Thu, 18 Aug 2022 03:52:07 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B011CAF0CA
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:52:05 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M7cT50MGQzkWPd;
+        Thu, 18 Aug 2022 15:48:41 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 18 Aug 2022 15:52:02 +0800
+Subject: Re: [PATCH 4/6] mm: hugetlb_vmemmap: add missing smp_wmb() before
+ set_pte_at()
+To:     Muchun Song <muchun.song@linux.dev>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Linux MM <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220816130553.31406-1-linmiaohe@huawei.com>
+ <20220816130553.31406-5-linmiaohe@huawei.com>
+ <D8C00BDA-160D-40CE-AFBD-9488F85E76CE@linux.dev>
+ <ea67ab10-667e-f361-b80f-dafb13da4808@huawei.com>
+ <0EAF1279-6A1C-41FA-9A32-414C36B3792A@linux.dev>
+ <019c1272-9d01-9d51-91a0-2d656b25c318@intel.com>
+ <18adbf89-473e-7ba6-9a2b-522e1592bdc6@huawei.com>
+ <9c791de0-b702-1bbe-38a4-30e87d9d1b95@intel.com>
+ <931536E2-3948-40AB-88A7-E36F67954AAA@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <7be98c64-88a1-3bee-7f92-67bb1f4f495b@huawei.com>
+Date:   Thu, 18 Aug 2022 15:52:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/3] dt-bings: net: fsl,fec: update compatible item
+In-Reply-To: <931536E2-3948-40AB-88A7-E36F67954AAA@linux.dev>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Wei Fang <wei.fang@nxp.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        s.hauer@pengutronix.de, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        peng.fan@nxp.com, ping.bai@nxp.com, sudeep.holla@arm.com,
-        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com
-References: <20220704101056.24821-1-wei.fang@nxp.com>
- <20220704101056.24821-2-wei.fang@nxp.com>
- <ef7e501a-b351-77f9-c4f7-74ab10283ed6@linaro.org>
- <20220818013344.GE149610@dragon>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220818013344.GE149610@dragon>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/08/2022 04:33, Shawn Guo wrote:
-> On Mon, Jul 04, 2022 at 11:12:09AM +0200, Krzysztof Kozlowski wrote:
->>> diff --git a/Documentation/devicetree/bindings/net/fsl,fec.yaml b/Documentation/devicetree/bindings/net/fsl,fec.yaml
->>> index daa2f79a294f..6642c246951b 100644
->>> --- a/Documentation/devicetree/bindings/net/fsl,fec.yaml
->>> +++ b/Documentation/devicetree/bindings/net/fsl,fec.yaml
->>> @@ -40,6 +40,10 @@ properties:
->>>            - enum:
->>>                - fsl,imx7d-fec
->>>            - const: fsl,imx6sx-fec
->>> +      - items:
->>> +          - enum:
->>> +              - fsl,imx8ulp-fec
->>> +          - const: fsl,imx6ul-fec
+On 2022/8/18 10:47, Muchun Song wrote:
+> 
+> 
+>> On Aug 18, 2022, at 10:00, Yin, Fengwei <fengwei.yin@intel.com> wrote:
 >>
->> This is wrong.  fsl,imx6ul-fec has to be followed by fsl,imx6q-fec. I
->> think someone made similar mistakes earlier so this is a mess.
+>>
+>>
+>> On 8/18/2022 9:55 AM, Miaohe Lin wrote:
+>>>>>> 	/*
+>>>>>> 	 * The memory barrier inside __SetPageUptodate makes sure that
+>>>>>> 	 * preceding stores to the page contents become visible before
+>>>>>> 	 * the set_pte_at() write.
+>>>>>> 	 */
+>>>>>> 	__SetPageUptodate(page);
+>>>>> IIUC, the case here we should make sure others (CPUs) can see new page’s
+>>>>> contents after they have saw PG_uptodate is set. I think commit 0ed361dec369
+>>>>> can tell us more details.
+>>>>>
+>>>>> I also looked at commit 52f37629fd3c to see why we need a barrier before
+>>>>> set_pte_at(), but I didn’t find any info to explain why. I guess we want
+>>>>> to make sure the order between the page’s contents and subsequent memory
+>>>>> accesses using the corresponding virtual address, do you agree with this?
+>>>> This is my understanding also. Thanks.
+>>> That's also my understanding. Thanks both.
+>> I have an unclear thing (not related with this patch directly): Who is response
+>> for the read barrier in the read side in this case?
+>>
+>> For SetPageUptodate, there are paring write/read memory barrier.
+>>
 > 
-> Hmm, not sure I follow this.  Supposing we want to have the following
-> compatible for i.MX8ULP FEC, why do we have to have "fsl,imx6q-fec"
-> here?
-> 
-> 	fec: ethernet@29950000 {
-> 		compatible = "fsl,imx8ulp-fec", "fsl,imx6ul-fec";
-> 		...
-> 	};
+> I have the same question. So I think the example proposed by Miaohe is a little
+> difference from the case (hugetlb_vmemmap) here.
 
-Because a bit earlier this bindings is saying that fsl,imx6ul-fec must
-be followed by fsl,imx6q-fec.
+Per my understanding, memory barrier in PageUptodate() is needed because user might access the
+page contents using page_address() (corresponding pagetable entry already exists) soon. But for
+the above proposed case, if user wants to access the page contents, the corresponding pagetable
+should be visible first or the page contents can't be accessed. So there should be a data dependency
+acting as memory barrier between pagetable entry is loaded and page contents is accessed.
+Or am I miss something?
 
-Best regards,
-Krzysztof
+Thanks,
+Miaohe Lin

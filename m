@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2909D598C8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF44598C8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344949AbiHRT3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
+        id S245740AbiHRTaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236142AbiHRT3T (ORCPT
+        with ESMTP id S238998AbiHRTaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:29:19 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970D0CAC94;
-        Thu, 18 Aug 2022 12:29:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=m2TqgJNIWwyazWLkcfL5XAqqJsNhYd/phFt1LrX7IWI=; b=pqC0tvA1f7M1sE//R6GUZWzhPY
-        ijf52Tp9m+74M4K2fWmgGTAHW4gProQ0js2fwOR/EsFjAzOkggrVwPLaqWt0TYQVIZfAjOsok7ftx
-        01qLB2sevp7Axe1iwzczxKRex4W0ofZzC9I8nmmgghUJvesFrWC+8fZ9GqodM3zjbtBc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oOlCV-00Dplv-O9; Thu, 18 Aug 2022 21:29:07 +0200
-Date:   Thu, 18 Aug 2022 21:29:07 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     wei.fang@nxp.com
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        f.fainelli@gmail.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 net 2/2] net: phy: at803x: add disable hibernation
- mode support
-Message-ID: <Yv6TA9xfx4m2+YrH@lunn.ch>
-References: <20220818030054.1010660-1-wei.fang@nxp.com>
- <20220818030054.1010660-3-wei.fang@nxp.com>
+        Thu, 18 Aug 2022 15:30:09 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E86CB5E7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:30:08 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id i20-20020a056e020d9400b002e377b02d4cso1733225ilj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:30:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=+AlttEUJA20N8NczqgtZNbuuO2ikQ4TymwOUxEi3ryw=;
+        b=WJMxKYBy3z3a+B6rskX5iZZj6fV+ojcs41iaSdNs7uyFHTWQWl70FQVPcZkTteXOOi
+         6nipr89yK+c9hEXtfyfwhXjkH/R/P+HXjYAlRSXCWmvUCSqdMzf4od6/HSd+9pju3pfA
+         g27VqL60jvOnb4MCvLQmJFDEwz4wmXYDaDzstVGalV76T3ox1xr8fFO0GMvLtKT0+dVd
+         uYpAiOdMpUFwT+BWdKU2vWJF0xjXlEo91JZBmudRDIY4YPTbun0/FWNHK2PdIsoL9bAd
+         MM3vUSZNC1B7ps1ca66Nv/hR240H+s/ZXo+YbuMui0mps+/SFQASZVHiWTCvB+VeXqDl
+         u7aw==
+X-Gm-Message-State: ACgBeo3MJUhn9j8CrPUaTQ3mZ/4fm8e5QU2wPYp047Zk2eCIAw/Nl5vl
+        IY68JzdkV8yZc930p7HU0ePeyYZwLBhOWvDOdsi5fFy0rr5L
+X-Google-Smtp-Source: AA6agR4UAmMezLXz1QdL+Jr/HN7ZuXxWjt6l79XDTRgUmOm2Q3m/Ad0paUKaIsuluGGFd2/gPgZAmRNnn2rPNDCOfdhWSkBvggvZ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818030054.1010660-3-wei.fang@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6e02:198c:b0:2e0:8759:f959 with SMTP id
+ g12-20020a056e02198c00b002e08759f959mr2099905ilf.223.1660851008232; Thu, 18
+ Aug 2022 12:30:08 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 12:30:08 -0700
+In-Reply-To: <20220818111117.102681-1-code@siddh.me>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005ee4d705e6890242@google.com>
+Subject: Re: [syzbot] WARNING in iomap_iter
+From:   syzbot <syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com>
+To:     code@siddh.me, david@fromorbit.com, djwong@kernel.org,
+        fgheet255t@gmail.com, hch@infradead.org,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        riteshh@linux.ibm.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:00:54AM +0800, wei.fang@nxp.com wrote:
-> From: Wei Fang <wei.fang@nxp.com>
-> 
-> When the cable is unplugged, the Atheros AR803x PHYs will enter
-> hibernation mode after about 10 seconds if the hibernation mode
-> is enabled and will not provide any clock to the MAC. But for
-> some MACs, this feature might cause unexpected issues due to the
-> logic of MACs.
-> Taking SYNP MAC (stmmac) as an example, if the cable is unplugged
-> and the "eth0" interface is down, the AR803x PHY will enter
-> hibernation mode. Then perform the "ifconfig eth0 up" operation,
-> the stmmac can't be able to complete the software reset operation
-> and fail to init it's own DMA. Therefore, the "eth0" interface is
-> failed to ifconfig up. Why does it cause this issue? The truth is
-> that the software reset operation of the stmmac is designed to
-> depend on the RX_CLK of PHY.
-> So, this patch offers an option for the user to determine whether
-> to disable the hibernation mode of AR803x PHYs.
-> 
-> Signed-off-by: Wei Fang <wei.fang@nxp.com>
+Hello,
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-    Andrew
+Reported-and-tested-by: syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         573ae4f1 tee: add overflow check in register_shm_helpe..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=1334aaeb080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d9d854f607a68b32
+dashboard link: https://syzkaller.appspot.com/bug?extid=a8e049cd3abd342936b6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=117e96d3080000
+
+Note: testing is done by a robot and is best-effort only.

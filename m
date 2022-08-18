@@ -2,110 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6D15987AA
+	by mail.lfdr.de (Postfix) with ESMTP id 838775987AB
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238915AbiHRPmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S1344106AbiHRPmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245389AbiHRPmT (ORCPT
+        with ESMTP id S1343703AbiHRPmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:42:19 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6ECB81C1;
-        Thu, 18 Aug 2022 08:42:16 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b98ec329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98ec:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 81A1B1EC0529;
-        Thu, 18 Aug 2022 17:42:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660837331;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=xq97BbKXuhMjjyID6xy9W4YK5RoR7G8Hq8nOXVqA+LQ=;
-        b=l6/j4H5N6zrC8x4ZRh1VW2ocqe5Sc0R2tIBooInTNUa7Oa1JddaPbOz6BFjpgLWxzDkfFE
-        JEp7HsHY+x7x/aa1mQ5XgUoz1ai9U/447nRSdvnnooQ/DPwPG5C7VX95YDN6SaU26eDEdg
-        U/mmwpuLIOAV0A1VkhBMPvStUmZlvgk=
-Date:   Thu, 18 Aug 2022 17:42:07 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jia He <justin.he@arm.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, devel@acpica.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
-        toshi.kani@hpe.com, nd@arm.com
-Subject: Re: [PATCH v2 2/7] EDAC/ghes: Add notifier to report ghes_edac mem
- error
-Message-ID: <Yv5dzyiI1TPtAO5F@zn.tnic>
-References: <20220817143458.335938-1-justin.he@arm.com>
- <20220817143458.335938-3-justin.he@arm.com>
+        Thu, 18 Aug 2022 11:42:36 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C658BB038
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:42:34 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id q19so1879268pfg.8
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=sHRh70H4OUvKCUuJJP8BBsSyMCn2NNdEL5xmssRDNTE=;
+        b=lHrRRqOOxZK10H8JwJArUrFeXTQ1EHIyqk98PjrUvxUAC43jYOqu9gwUuCWI956OPA
+         zrGMPAtXLF8gmEz9ddQHNEuaFPxAB3XnI4EGZuRoR7eQmH2suhdogQ1G2O5WMqE67sT4
+         S7iclpjIF7SFSHFEYuqghkKri79KBuxr5L9Ug=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=sHRh70H4OUvKCUuJJP8BBsSyMCn2NNdEL5xmssRDNTE=;
+        b=FEV0DeSVxKt0uHqC5341e8l0U2qzjS5i2vEx6hzDYdL8sYAd+1UCssApO+rQKs78vS
+         lkd3B5YU9r1Fgxtc+3LJjh026QbSJPx52I8uAYrQzN2svNXGBlurK7kaVlSmxs0AEQUO
+         zRuc9vA/Xa5Amq96qSStQwfl4TnUplzoIbpj4JFNXphKRdcIA8+L+nu2NDt1COKg4F4h
+         rQPKVB3Mrus7w0JM/YvIr3Q6sdb8SdK4+fg+McNK0G5hK/RM8ws3NotWoEQWqTwd0/oF
+         XvAscZ6z1jTu1h2YykgPMR11FtsQ5CAaPQWshAMDzqZ8ww73Je+LvqQwBEk7Qak6Vah1
+         6/rg==
+X-Gm-Message-State: ACgBeo1rtYMdLFtkhcpLnyj51ozaThJKCtw/hBcCJxuruon8juF0BbFZ
+        79HLcE6KPp79MzHPMFG6kzdudgVsR1QSFw==
+X-Google-Smtp-Source: AA6agR5/aQD3e/yKEWGTJULQTbWQi4dfd6y5K7ulk5wSdOGvAIxSoGD7zg7+p5TW8rdoa3T1PN7ybA==
+X-Received: by 2002:a05:6a00:17a8:b0:52e:6e3e:9ff with SMTP id s40-20020a056a0017a800b0052e6e3e09ffmr3547859pfg.42.1660837353707;
+        Thu, 18 Aug 2022 08:42:33 -0700 (PDT)
+Received: from localhost.localdomain ([107.126.92.34])
+        by smtp.gmail.com with ESMTPSA id r5-20020a63ce45000000b00429f6579d81sm1457177pgi.29.2022.08.18.08.42.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 08:42:33 -0700 (PDT)
+From:   "Joseph S. Barrera III" <joebar@chromium.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Alexandru Stan <amstan@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sc7180: Add sleep state for alc5682 codec
+Date:   Thu, 18 Aug 2022 08:42:19 -0700
+Message-Id: <20220818084216.1.I5c2b6fea19c4c0dec67fd4931f03df8e5ccaca95@changeid>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220817143458.335938-3-justin.he@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 02:34:53PM +0000, Jia He wrote:
-> Subject: Re: [PATCH v2 2/7] EDAC/ghes: Add notifier to report ghes_edac mem error
+Add sleep state to acl5682. In default, gpio28 (HP_IRQ) is bias-pull-up.
+To save power, in the new sleep state, gpio28 is bias-disable.
 
-Subject: ...: Add a notifier for reporting memory errors.
+sleeping, /sys/kernel/debug/gpio shows gpio28 as "no pull". When codec
+is awake (microphone plugged in and in use), it shows gpio28 as "pull up".
 
-> To modularize ghes_edac driver, any ghes_edac codes should not be invoked
+Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
+---
 
-s/modularize/make a proper module/
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-and replace that everywhere.
-
-There's no such thing as "codes" - please try to write proper English.
-
-> in ghes. Add a notifier of registering the ghes_edac_report_mem_error() to
-> resolve the build dependency.
-
-"Add a notifier for reporting memory errors."
-
-When you say "to resolve the build dependency" it sounds like this is
-some kind of a nuisance. But it isn't one - it is simply an improvement.
-
-> The atomic notifier is used because
-> ghes_proc_in_irq() can be in the irq context.
-
-"Use an atomic notifier because calls sites like ghes_proc_in_irq() run
-in interrupt context."
-
-> Suggested-by: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Jia He <justin.he@arm.com>
-> ---
->  drivers/acpi/apei/ghes.c | 16 +++++++++++++++-
->  drivers/edac/ghes_edac.c | 19 +++++++++++++++++--
->  include/acpi/ghes.h      | 10 +++-------
->  3 files changed, 35 insertions(+), 10 deletions(-)
-
-Patch itself looks ok.
-
-Thx.
-
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+index b5f534db135a..94dd6c34d997 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+@@ -755,8 +755,9 @@ hp_i2c: &i2c9 {
+ 	alc5682: codec@1a {
+ 		compatible = "realtek,rt5682i";
+ 		reg = <0x1a>;
+-		pinctrl-names = "default";
++		pinctrl-names = "default", "sleep";
+ 		pinctrl-0 = <&hp_irq>;
++		pinctrl-1 = <&hp_sleep>;
+ 
+ 		#sound-dai-cells = <1>;
+ 
+@@ -1336,6 +1337,18 @@ pinconf {
+ 		};
+ 	};
+ 
++	hp_sleep: hp-sleep {
++		pinmux {
++			pins = "gpio28";
++			function = "gpio";
++		};
++
++		pinconf {
++			pins = "gpio28";
++			bias-disable;
++		};
++	};
++
+ 	pen_irq_l: pen-irq-l {
+ 		pinmux {
+ 			pins = "gpio21";
 -- 
-Regards/Gruss,
-    Boris.
+2.31.0
 
-https://people.kernel.org/tglx/notes-about-netiquette

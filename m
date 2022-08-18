@@ -2,86 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B683D597FB1
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 10:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C836597FBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 10:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244003AbiHRIBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 04:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S244014AbiHRIFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 04:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243928AbiHRIBN (ORCPT
+        with ESMTP id S240356AbiHRIE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 04:01:13 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BDBAF0E3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0WDxrfmpMQZzXx9CVRCybqD/x6pT8kyfE3mZ4TXsYpg=; b=PzsrIjQqIrXWU/HCnE5RvcgMEv
-        jSDsHlj/qNilblrmnmM4l0NorDTJkm6ZUS649TPpvEHnsZIwJtQesH8n1PrFnJTvwIzBxmRcOmq7m
-        0WK0XyEBmp8dwK60Nj12OUsygPerCTOCKxhJYIFoPTAbUSSX3l06wXl3xRnJDXdd7sgYsBX0Nwm/y
-        F57w7Px3An5LW91jqSFpmUk6ns1z9JMX9En3WOC3SAzm7Y2qCjJ/gJR7qg6LYJ4JMqImqSFWEHitM
-        h9b6PxD95ZPr3rsFOpDEnR2I8StyQXpUhzf/a0edNT9e4QtKwcW8labUHDywKX9DykGXCD7l/Qkms
-        rNipSmbg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oOaSa-009Us4-AL; Thu, 18 Aug 2022 08:01:00 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 604BA9801D4; Thu, 18 Aug 2022 10:00:59 +0200 (CEST)
-Date:   Thu, 18 Aug 2022 10:00:59 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/build: Move '-mindirect-branch-cs-prefix' out of
- GCC-only block
-Message-ID: <Yv3xu7f3NDC1is6o@worktop.programming.kicks-ass.net>
-References: <20220817185410.1174782-1-nathan@kernel.org>
- <CAKwvOd=0R76r6YqNiOhGNt_XrA_t_ZbuBbNNdNXV4CWpDy0+Bg@mail.gmail.com>
- <Yv3uI/MoJVctmBCh@worktop.programming.kicks-ass.net>
+        Thu, 18 Aug 2022 04:04:58 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB8B6B8FA;
+        Thu, 18 Aug 2022 01:04:56 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27I7qSC8004059;
+        Thu, 18 Aug 2022 08:04:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=d9/IoJLc0k+bSkJU+0AY+sj4CSQp3FbnOb1W0cKbLhU=;
+ b=mt1/f/jim1XscfPoRTnECBp6YObFTg6Et9t51fryFByIhu2FLPHuH1zvuVDBQEWjPqEI
+ 0NSOagKErprQQEgmXUeOzQ/OhsFqb9x6f6Tb0VIn7NKdxK4qt4aJkssowmnd9EHUzyOA
+ BltqIkirDVrmwo9F3nQOP14hgLu5roDQB8lZj4CQKso79DyNvTGdtwe9NLWOBbYYjSV1
+ qtjjB52OU/0HCUyvvudq1uRO2Zoo8kTqPaOVZEEoxdZpcFRCEO3n2lsyPERQvRYf4MBk
+ t25wteHWFwu/Ka9rnX/jjVa2+ZspfUfQRyDIP/TrQBJzeIjbx+0pCJXkorwKPYbysetz AQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1hdp8ba3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 08:04:54 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27I7vxUg020795;
+        Thu, 18 Aug 2022 08:04:54 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1hdp8b97-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 08:04:53 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27I7oH6u019867;
+        Thu, 18 Aug 2022 08:04:51 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3hx3k8whyp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 08:04:51 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27I821xo25035086
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 Aug 2022 08:02:01 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 416B2AE053;
+        Thu, 18 Aug 2022 08:04:48 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A5B71AE045;
+        Thu, 18 Aug 2022 08:04:47 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.17.18])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 18 Aug 2022 08:04:47 +0000 (GMT)
+Date:   Thu, 18 Aug 2022 10:04:46 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Tony Krowiak <akrowiak@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, jjherne@linux.ibm.com, borntraeger@de.ibm.com,
+        cohuck@redhat.com, mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+Subject: Re: [PATCH 0/2] s390/vfio-ap: fix two problems discovered in the
+ vfio_ap driver
+Message-ID: <Yv3ynhVYegld5MsO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20220817225242.188805-1-akrowiak@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yv3uI/MoJVctmBCh@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220817225242.188805-1-akrowiak@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Z3PFzFEDMlgNzjNt9aMokVoMQc4ZMlzO
+X-Proofpoint-GUID: HxUaGertC9txwSh598lezo0-xotfAzUI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-18_02,2022-08-16_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=777 malwarescore=0 spamscore=0 priorityscore=1501 bulkscore=0
+ clxscore=1011 impostorscore=0 suspectscore=0 adultscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208180025
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 09:45:39AM +0200, Peter Zijlstra wrote:
+On Wed, Aug 17, 2022 at 06:52:40PM -0400, Tony Krowiak wrote:
+> Two problems have been discovered with the vfio_ap device driver since the
+> hot plug support was recently introduced:
 
-> The thing to do is boot with (warning, *very* verbose):
-> 
-> 	"spectre_v2=retpoline,lfence debug-alternative"
-> 
-> and observe that the retpoline sites all replace:
-> 
-> 	"cs call __x86_indirect_thunk_r11" (6 bytes)
-> 
-> with:
-> 
-> 	"lfence; jmp *%r11" (6 bytes)
+Hi Tony,
 
-		^^ call, ofc, unless the original was jmp then jmp...
+Could you please add Fixes tags to the patches?
 
-/me goes get more morning juice in an attempt to wake up.
-
-> 
-> 
-> This being clang, you'll ofcourse still have a few weird:
-> 
-> 	"Jcc.d32 __x86_indirect_thunk_r11"
-> 
-> sites that will not be able to be replaced, but there's nothing I can do
-> about that other than to continue to encourage y'all to stop emitting
-> them ;-)
+Thanks!

@@ -2,205 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E679E59869B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E225986D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343877AbiHRO5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        id S1344022AbiHRPEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343825AbiHRO4z (ORCPT
+        with ESMTP id S1344013AbiHRPEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:56:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B03BCCFE
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:56:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 18 Aug 2022 11:04:05 -0400
+X-Greylist: delayed 427 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Aug 2022 08:04:03 PDT
+Received: from rfvt.org.uk (rfvt.org.uk [37.187.119.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A939F40BE7;
+        Thu, 18 Aug 2022 08:04:03 -0700 (PDT)
+Received: from wylie.me.uk (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46230612FE
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:56:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F85CC433D7;
-        Thu, 18 Aug 2022 14:56:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660834613;
-        bh=ezX5UU1asPXPTgpHCHPVGm4xP/s54A8YsDjVnU6X4vM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QagzPj3DbZBasCuAInN1YxC1ZjhQ03z5N84MC95qF+eCsEtEvOf2S0PcNGJzAMfTG
-         /3Y0O07XKHmewILZ3JopAB6dLRUWYd1HyWjaYphBs+05ozODmWgk+eX9RKpiw6QkcF
-         PsrbtFpL8QPegKQAz4cVnTbE7avW8B8gXlA6WjUcFjhLguzTx4euY5zIcuZ/VLxdzl
-         7LfzAwLjGxCFLngyjlOR50RKyrsF6Awt/lKqvPZkpl8zuleS2mILewHru5K8Qq0nfl
-         W1SrO0ObLpLawYrmhz/vhlHWWSjmEj8Oiu4SOPNoR8FdyfSx5q1MLxZl5UH+TJF3Xp
-         3ZUUCh8VquRLg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Subject: [PATCH 5/5] ARM: make ARCH_MULTIPLATFORM user-visible
-Date:   Thu, 18 Aug 2022 16:56:16 +0200
-Message-Id: <20220818145616.3156379-6-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220818145616.3156379-1-arnd@kernel.org>
-References: <20220818145616.3156379-1-arnd@kernel.org>
+        by rfvt.org.uk (Postfix) with ESMTPS id 697A682429;
+        Thu, 18 Aug 2022 15:56:52 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wylie.me.uk;
+        s=mydkim005; t=1660834612;
+        bh=2w2zcJmK/iAiFwIuyHBL4kajpnEz6z0D5iINur8oCq0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=Z74qpOCb/fvH7I3B031m8v/PyjVt5PvNX77vVY9B74FN1LxCtdHJFB+Koau3maS+w
+         5uBNTIRValVGP242zJBOwUAU2qKscMTiXPrBmM6Edv35WK+BvQ6gEIG8NGvY8RRuy3
+         BsN/siJsN3zzEXsNt3k7BOA9NdG3WNJmoFHSQKf4KUx9uGUuLc8pac91XEndrsIgo/
+         Ve1OHVVqtWce1Hpwj91ZJp0d9D/UjWo8keIuZodRld55O4HAXmLTxA2EZE2LC1texi
+         EBK4yk0j3pVYnxAvCJBM5IM5qOR4mYWEKm7CtFcSZ7FgOmdQnZfl9RgaozqpBICKvt
+         SBLLTGOffGWNA==
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-ID: <25342.21300.105848.619006@wylie.me.uk>
+Date:   Thu, 18 Aug 2022 15:56:52 +0100
+From:   "Alan J. Wylie" <alan@wylie.me.uk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: Regression in 5.19.0: USB errors during boot
+In-Reply-To: <Yv5Q8gDvVTGOHd8k@kroah.com>
+References: <25342.20092.262450.330346@wylie.me.uk>
+        <Yv5Q8gDvVTGOHd8k@kroah.com>
+X-Mailer: VM 8.2.0b under 27.2 (x86_64-pc-linux-gnu)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+at 16:47 on Thu 18-Aug-2022 Greg Kroah-Hartman (gregkh@linuxfoundation.org) wrote:
+> [Adding in linux-usb@vger]
+> 
+> 
+> On Thu, Aug 18, 2022 at 03:36:44PM +0100, Alan J. Wylie wrote:
+> > 
+> > Apologies for the delay in reporting this: I messed up my first attempt at
+> > bisecting, then I've spent a week going to, enjoying, returning from and
+> > recovering from a music festival.
+> > 
+> > Up to and including 5.18.18 things are fine. With 5.19.0 (and .1 and .2)  I see
+> > lots of errors and hangs on the USB2 chipset, e.g.
+> > 
+> > $ grep "usb 9-4" dmesg.5.19.2
+> > [    6.669075] usb 9-4: new full-speed USB device number 2 using ohci-pci
+> > [    6.829087] usb 9-4: device descriptor read/64, error -32
+> > [    7.097094] usb 9-4: device descriptor read/64, error -32
+> > [    7.361087] usb 9-4: new full-speed USB device number 3 using ohci-pci
+> > [    7.521152] usb 9-4: device descriptor read/64, error -32
+> > [    7.789066] usb 9-4: device descriptor read/64, error -32
+> > [    8.081070] usb 9-4: new full-speed USB device number 4 using ohci-pci
+> > [    8.497138] usb 9-4: device not accepting address 4, error -32
+> > [    8.653140] usb 9-4: new full-speed USB device number 5 using ohci-pci
+> > [    9.069141] usb 9-4: device not accepting address 5, error -32
+> > $
+> > 
+> > $ grep "usb 1-2" dmesg.5.19.2
+> > [    5.917102] usb 1-2: new high-speed USB device number 2 using ehci-pci
+> > [    6.277076] usb 1-2: device descriptor read/64, error -71
+> > [    6.513143] usb 1-2: device descriptor read/64, error -32
+> > [    6.753146] usb 1-2: new high-speed USB device number 3 using ehci-pci
+> > [    6.881143] usb 1-2: device descriptor read/64, error -32
+> > [    7.117144] usb 1-2: device descriptor read/64, error -32
+> > [    7.429141] usb 1-2: new high-speed USB device number 4 using ehci-pci
+> > [    7.845134] usb 1-2: device not accepting address 4, error -32
+> > [    7.977142] usb 1-2: new high-speed USB device number 5 using ehci-pci
+> > [    8.393158] usb 1-2: device not accepting address 5, error -32
+> > $
+> > 
+> > the USB port is then no longer usable
+> > 
+> > This is not reproducible on the other chipset (USB3) on this machine,
+> > nor on two other systems. Swapping USB cables doesn't help.
+> > 
+> > I have bisected it to
+> > 
+> > $ git bisect bad
+> > 78013eaadf696d2105982abb4018fbae394ca08f is the first bad commit
+> > commit 78013eaadf696d2105982abb4018fbae394ca08f
+> > Author: Christoph Hellwig <hch@lst.de>
+> > Date:   Mon Feb 14 14:11:44 2022 +0100
+> > 
+> >     x86: remove the IOMMU table infrastructure
+> > 
+> > however it will not easily revert
+> > 
+> > I'll be more than happy to assist with any debugging/testing.
+> > 
+> > $ git revert 78013eaadf696d2105982abb4018fbae394ca08f
+> > Auto-merging arch/x86/include/asm/dma-mapping.h
+> > CONFLICT (content): Merge conflict in arch/x86/include/asm/dma-mapping.h
+> > Auto-merging arch/x86/include/asm/iommu.h
+> > Auto-merging arch/x86/include/asm/xen/swiotlb-xen.h
+> > Auto-merging arch/x86/kernel/Makefile
+> > Auto-merging arch/x86/kernel/pci-dma.c
+> > CONFLICT (content): Merge conflict in arch/x86/kernel/pci-dma.c
+> > Auto-merging arch/x86/kernel/vmlinux.lds.S
+> > Auto-merging drivers/iommu/amd/init.c
+> > Auto-merging drivers/iommu/amd/iommu.c
+> > CONFLICT (content): Merge conflict in drivers/iommu/amd/iommu.c
+> > Auto-merging drivers/iommu/intel/dmar.c
+> > error: could not revert 78013eaadf69... x86: remove the IOMMU table infrastructure
+> > 
+> > # dmidecode  | grep -A2 "^Base Board"
+> > Base Board Information
+> >      Manufacturer: Gigabyte Technology Co., Ltd.
+> >      Product Name: 970A-DS3P
+> > #
+> > 
+> > # lspci -nn | grep -i usb
+> > 00:12.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller [1002:4397]
+> > 00:12.2 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller [1002:4396]
+> > 00:13.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller [1002:4397]
+> > 00:13.2 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller [1002:4396]
+> > 00:14.5 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI2 Controller [1002:4399]
+> > 00:16.0 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller [1002:4397]
+> > 00:16.2 USB controller [0c03]: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller [1002:4396]
+> > 02:00.0 USB controller [0c03]: VIA Technologies, Inc. VL805/806 xHCI USB 3.0 Controller [1106:3483] (rev 01)
+> 
+> So this only happens with the on-board USB 2 controller?
 
-Some options like CONFIG_DEBUG_UNCOMPRESS and CONFIG_CMDLINE_FORCE are
-fundamentally incompatible with portable kernels but are currently allowed
-in all configurations. Other options like XIP_KERNEL are essentially
-useless after the completion of the multiplatform conversion.
+That is correct
 
-Repurpose the existing CONFIG_ARCH_MULTIPLATFORM option to decide
-whether the resulting kernel image is meant to be portable or not,
-and using this to guard all of the known incompatible options.
+> This is odd, I would not expect one PCI controller to work, but the
+> other one not.
+> 
+> 
+> > #
+> > 
+> > # lspci -v -s 00:12
+> > 00:12.0 USB controller: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB OHCI0 Controller (prog-if 10 [OHCI])
+> > 	Subsystem: Gigabyte Technology Co., Ltd GA-880GMA-USB3
+> > 	Flags: bus master, 66MHz, medium devsel, latency 32, IRQ 18
+> > 	Memory at fe50a000 (32-bit, non-prefetchable) [size=4K]
+> > 	Kernel driver in use: ohci-pci
+> > 				 	Kernel modules: ohci_pci
+> > 00:12.2 USB controller: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller (prog-if 20 [EHCI])
+> > 	Subsystem: Gigabyte Technology Co., Ltd GA-880GMA-USB3
+> > 	Flags: bus master, 66MHz, medium devsel, latency 32, IRQ 17
+> > 	Memory at fe509000 (32-bit, non-prefetchable) [size=256]
+> > 	Capabilities: [c0] Power Management version 2
+> > 	Capabilities: [e4] Debug port: BAR=1 offset=00e0
+> > 	Kernel driver in use: ehci-pci
+> > 	Kernel modules: ehci_pci
+> > #
+> 
+> What is the output of the lspci -v for the USB 3 controller?
 
-This is similar to how the RISC-V kernel handles the CONFIG_NONPORTABLE
-option (with the opposite polarity).
+# lspci -v -s 02:00
+02:00.0 USB controller: VIA Technologies, Inc. VL805/806 xHCI USB 3.0 Controller (rev 01) (prog-if 30 [XHCI])
+	Subsystem: Gigabyte Technology Co., Ltd VL805/806 xHCI USB 3.0 Controller
+	Flags: bus master, fast devsel, latency 0, IRQ 36
+	Memory at fe400000 (64-bit, non-prefetchable) [size=4K]
+	Capabilities: [80] Power Management version 3
+	Capabilities: [90] MSI: Enable+ Count=1/4 Maskable- 64bit+
+	Capabilities: [c4] Express Endpoint, MSI 00
+	Capabilities: [100] Advanced Error Reporting
+	Kernel driver in use: xhci_hcd
+	Kernel modules: xhci_pci
 
-A few references to CONFIG_ARCH_MULTIPLATFORM were left behind by
-earlier clanups and have to be removed now up.
+> 
+> Christoph, any ideas?
+> 
+> thanks,
+> 
+> greg k-h
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/Kconfig               | 15 ++++++++++++++-
- arch/arm/Kconfig.debug         |  1 +
- arch/arm/kernel/devtree.c      |  2 --
- arch/arm/mach-dove/Makefile    |  2 +-
- arch/arm/mach-mv78xx0/Makefile |  2 +-
- arch/arm/mach-mvebu/Makefile   |  2 +-
- arch/arm/mach-orion5x/Makefile |  2 +-
- 7 files changed, 19 insertions(+), 7 deletions(-)
-
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 3066ce82cffc..9cbac5bf8b3a 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -320,7 +320,19 @@ config ARCH_MMAP_RND_BITS_MAX
- 	default 16
- 
- config ARCH_MULTIPLATFORM
--	def_bool MMU && !(ARCH_FOOTBRIDGE || ARCH_RPC || ARCH_SA1100)
-+	bool "Require kernel to be portable to multiple machines" if EXPERT
-+	depends on MMU && !(ARCH_FOOTBRIDGE || ARCH_RPC || ARCH_SA1100)
-+	default y
-+	help
-+	  In general, all Arm machines can be supported in a single
-+	  kernel image, covering either Armv4/v5 or Armv6/v7.
-+
-+	  However, some configuration options require hardcoding machine
-+	  specific physical addresses or enable errata workarounds that may
-+	  break other machines.
-+
-+	  Selecting N here allows using those options, including
-+	  DEBUG_UNCOMPRESS, XIP_KERNEL and ZBOOT_ROM. If unsure, say Y.
- 
- menu "Platform selection"
- 	depends on MMU
-@@ -1609,6 +1621,7 @@ config CMDLINE_EXTEND
- 
- config CMDLINE_FORCE
- 	bool "Always use the default kernel command string"
-+	depends on !ARCH_MULTIPLATFORM
- 	help
- 	  Always use the default kernel command string, even if the boot
- 	  loader passes other arguments to the kernel.
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index 655f84ada30f..c345775f035b 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -1904,6 +1904,7 @@ config DEBUG_UART_8250_PALMCHIP
- 
- config DEBUG_UNCOMPRESS
- 	bool "Enable decompressor debugging via DEBUG_LL output"
-+	depends on !ARCH_MULTIPLATFORM
- 	depends on !(ARCH_FOOTBRIDGE || ARCH_RPC || ARCH_SA1100)
- 	depends on DEBUG_LL && !DEBUG_OMAP2PLUS_UART && \
- 		     (!DEBUG_TEGRA_UART || !ZBOOT_ROM) && \
-diff --git a/arch/arm/kernel/devtree.c b/arch/arm/kernel/devtree.c
-index 02839d8b6202..264827281113 100644
---- a/arch/arm/kernel/devtree.c
-+++ b/arch/arm/kernel/devtree.c
-@@ -194,14 +194,12 @@ const struct machine_desc * __init setup_machine_fdt(void *dt_virt)
- {
- 	const struct machine_desc *mdesc, *mdesc_best = NULL;
- 
--#if defined(CONFIG_ARCH_MULTIPLATFORM) || defined(CONFIG_ARM_SINGLE_ARMV7M)
- 	DT_MACHINE_START(GENERIC_DT, "Generic DT based system")
- 		.l2c_aux_val = 0x0,
- 		.l2c_aux_mask = ~0x0,
- 	MACHINE_END
- 
- 	mdesc_best = &__mach_desc_GENERIC_DT;
--#endif
- 
- 	if (!dt_virt || !early_init_dt_verify(dt_virt))
- 		return NULL;
-diff --git a/arch/arm/mach-dove/Makefile b/arch/arm/mach-dove/Makefile
-index e83f6492834d..da373a5768ba 100644
---- a/arch/arm/mach-dove/Makefile
-+++ b/arch/arm/mach-dove/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--ccflags-$(CONFIG_ARCH_MULTIPLATFORM) := -I$(srctree)/arch/arm/plat-orion/include
-+ccflags-y := -I$(srctree)/arch/arm/plat-orion/include
- 
- obj-y				+= common.o
- obj-$(CONFIG_DOVE_LEGACY)	+= irq.o mpp.o
-diff --git a/arch/arm/mach-mv78xx0/Makefile b/arch/arm/mach-mv78xx0/Makefile
-index a839e960b8c6..50aff70065f2 100644
---- a/arch/arm/mach-mv78xx0/Makefile
-+++ b/arch/arm/mach-mv78xx0/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--ccflags-$(CONFIG_ARCH_MULTIPLATFORM) := -I$(srctree)/arch/arm/plat-orion/include
-+ccflags-y := -I$(srctree)/arch/arm/plat-orion/include
- 
- obj-y				+= common.o mpp.o irq.o pcie.o
- obj-$(CONFIG_MACH_DB78X00_BP)	+= db78x00-bp-setup.o
-diff --git a/arch/arm/mach-mvebu/Makefile b/arch/arm/mach-mvebu/Makefile
-index cb106899dd7c..c21733cbb4fa 100644
---- a/arch/arm/mach-mvebu/Makefile
-+++ b/arch/arm/mach-mvebu/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--ccflags-$(CONFIG_ARCH_MULTIPLATFORM) := -I$(srctree)/arch/arm/plat-orion/include
-+ccflags-y := -I$(srctree)/arch/arm/plat-orion/include
- 
- AFLAGS_coherency_ll.o		:= -Wa,-march=armv7-a
- CFLAGS_pmsu.o			:= -march=armv7-a
-diff --git a/arch/arm/mach-orion5x/Makefile b/arch/arm/mach-orion5x/Makefile
-index 1a585a62d5e6..572c3520f7fe 100644
---- a/arch/arm/mach-orion5x/Makefile
-+++ b/arch/arm/mach-orion5x/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
--ccflags-$(CONFIG_ARCH_MULTIPLATFORM) := -I$(srctree)/arch/arm/plat-orion/include
-+ccflags-y := -I$(srctree)/arch/arm/plat-orion/include
- 
- obj-y				+= common.o pci.o irq.o mpp.o
- obj-$(CONFIG_MACH_DB88F5281)	+= db88f5281-setup.o
 -- 
-2.29.2
+Alan J. Wylie                                          https://www.wylie.me.uk/
 
+Dance like no-one's watching. / Encrypt like everyone is.
+Security is inversely proportional to convenience

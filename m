@@ -2,150 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5068E5984E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C910D5984F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245370AbiHRNxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
+        id S245453AbiHRNys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245358AbiHRNxJ (ORCPT
+        with ESMTP id S245445AbiHRNyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:53:09 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454EE659E3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:53:01 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d10so1558751plr.6
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Q3+sIJxzAESYgoNj/gGe5uNrnE6V3K6wR3w/d3iHqFA=;
-        b=S891HZY7IwVovb2S3pGJmF1I/jxpC/Cx58Dz4VCcrS4LeuU4B38PvPKR5jL412EoTx
-         aDDFzA13FGGTTUEj58LsCYckux/M88Dkv0kW7w/z0s5j/pdNOwqjM+1qussJde2Fq8qF
-         XPZ+Xawp1IkhHX2GzDtxavXary6tCvassvl+reP9Yr/wYd384decJjrLBVHLyBI+jgEl
-         wXH12rGaBVfnLd+NjWklNxO8uD9ZXocT7byuy1ngo2Q2EKF9bgMnMUYM3f3JX5Lf4fnT
-         K9R2w+nQ6t1taVE6456VKK5iV/7/PmPbYzULchJNYuAlckTsA1segPi+0CmmXvY5T92q
-         15/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Q3+sIJxzAESYgoNj/gGe5uNrnE6V3K6wR3w/d3iHqFA=;
-        b=I1iUb96G15ArZyj5k+1jbIbEYHvoJK3qy8cFtz4ea1DD91Zkm25AGr3xRYxTcL8npR
-         MrKeWUCPyJbXvoH6MpqUxjNlgtGqDRRZeYXfejQ+w0hJhm0KFev8dltHk0+rjsGjfH8a
-         Ih19fyUj5jacDdC2tV7cE6e5NR+BV1Yzq/SknIOFlfsXrd2eADkdIZELiPrFljtCm7Ky
-         V+EHAMUp492MOxl4PHdN/ZaL2OgJ/kgL8vee+TYAMs93ijaJ/ek3A6IV+CIwwWIWU+IE
-         HbyiPqazkWmFFcM2R9QZvDirT+81PGWv1Piowjx6MqReovj35X5TAEB3pc8Rmzwi5kYO
-         2QDg==
-X-Gm-Message-State: ACgBeo0rEFe4GB6X/utAmSwaSdKfKSGFZ3/bZyjTENBNrwdO2s9+1Y7p
-        GKrIfoYeuZdoDQqnsBSbUHa8WQ==
-X-Google-Smtp-Source: AA6agR5vruAaYauuniDR7hv2XcV4ouNLjLvo+7M8xNDwBLLOR4XyoMvqf+cSfddJh/MTqflxloa2LA==
-X-Received: by 2002:a17:90b:3952:b0:1fa:7f18:110f with SMTP id oe18-20020a17090b395200b001fa7f18110fmr3237446pjb.19.1660830780916;
-        Thu, 18 Aug 2022 06:53:00 -0700 (PDT)
-Received: from C02G705SMD6V.bytedance.net ([139.177.225.242])
-        by smtp.gmail.com with ESMTPSA id k17-20020a170902ce1100b0016db0d877e4sm1385697plg.221.2022.08.18.06.52.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 06:53:00 -0700 (PDT)
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-To:     dhowells@redhat.com, xiang@kernel.org, jefflexu@linux.alibaba.com
-Cc:     linux-cachefs@redhat.com, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yinxin.x@bytedance.com, Jia Zhu <zhujia.zj@bytedance.com>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [RFC PATCH 5/5] cachefiles: add restore command to recover inflight ondemand read requests
-Date:   Thu, 18 Aug 2022 21:52:04 +0800
-Message-Id: <20220818135204.49878-6-zhujia.zj@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20220818135204.49878-1-zhujia.zj@bytedance.com>
-References: <20220818135204.49878-1-zhujia.zj@bytedance.com>
+        Thu, 18 Aug 2022 09:54:14 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5F62DAB1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:53:44 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27ID17H7016364;
+        Thu, 18 Aug 2022 13:52:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=WvC02gQFYYKWacteP6HCP3xymg9DFXvKYpKxmSy1xWU=;
+ b=WKvHqgQa1Uub/T3ffOMmsRrnJXW5DOXkzOeL3rRrNAoSHBgmJqP7Vofo4IJn89Er4U+g
+ 3a/W9fGXMg8pJ5w/klprJ0ZL2nCceFPqt7PJoavVtm2YMfpwmgAMWGby+BhWy8qZ/FPG
+ 8/MD5VrWkMB/DHsuugcw2vQQ8DS6NnBozqN49QeB2awwXxj3IEgDoV5JgYnttwMutx4H
+ brcPVxoVSfUwRdMcWANdhtIUhtWPNyuEB+h6VStiXvSZO5u1s0hFYK7B6bfsl7FwYKLL
+ 6AVNp1UXX+pJdQMpxC0BMTuommpXOows25mMZ0gZYldXbmPWh631SF+TZlV30wjmyHUL bA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1nxkhram-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 13:52:37 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27ID16ZX016322;
+        Thu, 18 Aug 2022 13:52:37 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1nxkhr9w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 13:52:37 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27IDqZbL031553;
+        Thu, 18 Aug 2022 13:52:35 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3hx3k8vf99-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 13:52:34 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27IDqWsh28049724
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 Aug 2022 13:52:32 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8006D4C044;
+        Thu, 18 Aug 2022 13:52:32 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B7244C040;
+        Thu, 18 Aug 2022 13:52:28 +0000 (GMT)
+Received: from [9.43.111.107] (unknown [9.43.111.107])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 18 Aug 2022 13:52:27 +0000 (GMT)
+Message-ID: <c4c37505-0320-2a00-0f8f-0490f39486ff@linux.ibm.com>
+Date:   Thu, 18 Aug 2022 19:22:26 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v15 01/10] mm/demotion: Add support for explicit memory
+ tiers
+Content-Language: en-US
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Bharata B Rao <bharata@amd.com>
+References: <20220818131042.113280-1-aneesh.kumar@linux.ibm.com>
+ <20220818131042.113280-2-aneesh.kumar@linux.ibm.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <20220818131042.113280-2-aneesh.kumar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: iIX3MxSMWOvmEyFsZWaUftfha6n9RdZP
+X-Proofpoint-ORIG-GUID: ya2mL6W8-HU1nqEDCYnTqE-0DXT9Nvkc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-18_12,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=978 impostorscore=0 bulkscore=0 suspectscore=0 adultscore=0
+ phishscore=0 priorityscore=1501 clxscore=1015 malwarescore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208180047
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, in ondemand read scenario, if the anonymous fd was closed by
-user daemon, inflight and subsequent read requests would return EIO.
-As long as the device connection is not released, user daemon can hold
-and restore inflight requests by setting the request flag to
-CACHEFILES_REQ_NEW.
+On 8/18/22 6:40 PM, Aneesh Kumar K.V wrote:
 
-Suggested-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-Signed-off-by: Jia Zhu <zhujia.zj@bytedance.com>
-Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
----
- fs/cachefiles/daemon.c   |  1 +
- fs/cachefiles/internal.h |  3 +++
- fs/cachefiles/ondemand.c | 23 +++++++++++++++++++++++
- 3 files changed, 27 insertions(+)
+> + */
+> +#define MEMTIER_CHUNK_BITS	7
+> +#define MEMTIER_CHUNK_SIZE	(1 << MEMTIER_CHUNK_BITS)
+> +/*
+> + * Smaller abstract distance values imply faster(higher) memory tiers. Offset
+> + * the DRAM adistance so that we can accommodate devices with a slightly lower
+> + * adistance value (slightly slower) than default DRAM adistance to be part of
 
-diff --git a/fs/cachefiles/daemon.c b/fs/cachefiles/daemon.c
-index c74bd1f4ecf5..014369266cb2 100644
---- a/fs/cachefiles/daemon.c
-+++ b/fs/cachefiles/daemon.c
-@@ -77,6 +77,7 @@ static const struct cachefiles_daemon_cmd cachefiles_daemon_cmds[] = {
- 	{ "tag",	cachefiles_daemon_tag		},
- #ifdef CONFIG_CACHEFILES_ONDEMAND
- 	{ "copen",	cachefiles_ondemand_copen	},
-+	{ "restore",	cachefiles_ondemand_restore	},
- #endif
- 	{ "",		NULL				}
- };
-diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
-index b4af67f1cbd6..d504c61a5f03 100644
---- a/fs/cachefiles/internal.h
-+++ b/fs/cachefiles/internal.h
-@@ -303,6 +303,9 @@ extern ssize_t cachefiles_ondemand_daemon_read(struct cachefiles_cache *cache,
- extern int cachefiles_ondemand_copen(struct cachefiles_cache *cache,
- 				     char *args);
- 
-+extern int cachefiles_ondemand_restore(struct cachefiles_cache *cache,
-+					char *args);
-+
- extern int cachefiles_ondemand_init_object(struct cachefiles_object *object);
- extern void cachefiles_ondemand_clean_object(struct cachefiles_object *object);
- 
-diff --git a/fs/cachefiles/ondemand.c b/fs/cachefiles/ondemand.c
-index 79ffb19380cd..5b1c447da976 100644
---- a/fs/cachefiles/ondemand.c
-+++ b/fs/cachefiles/ondemand.c
-@@ -178,6 +178,29 @@ int cachefiles_ondemand_copen(struct cachefiles_cache *cache, char *args)
- 	return ret;
- }
- 
-+int cachefiles_ondemand_restore(struct cachefiles_cache *cache, char *args)
-+{
-+	struct cachefiles_req *req;
-+
-+	XA_STATE(xas, &cache->reqs, 0);
-+
-+	if (!test_bit(CACHEFILES_ONDEMAND_MODE, &cache->flags))
-+		return -EOPNOTSUPP;
-+
-+	/*
-+	 * Search the requests which being processed before
-+	 * the user daemon crashed.
-+	 * Set the CACHEFILES_REQ_NEW flag and user daemon will reprocess it.
-+	 */
-+	xas_lock(&xas);
-+	xas_for_each(&xas, req, ULONG_MAX)
-+		xas_set_mark(&xas, CACHEFILES_REQ_NEW);
-+	xas_unlock(&xas);
-+
-+	wake_up_all(&cache->daemon_pollwq);
-+	return 0;
-+}
-+
- static int cachefiles_ondemand_get_fd(struct cachefiles_req *req)
- {
- 	struct cachefiles_object *object;
--- 
-2.20.1
-
+                      (^^^ slightly faster)
+> + * the same memory tier.
+> + */
+>

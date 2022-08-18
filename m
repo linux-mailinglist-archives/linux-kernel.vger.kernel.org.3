@@ -2,133 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA301598CE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64DD2598CE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242498AbiHRTv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S239677AbiHRTwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234438AbiHRTv5 (ORCPT
+        with ESMTP id S242868AbiHRTwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:51:57 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DC5AB183;
-        Thu, 18 Aug 2022 12:51:56 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id kb8so5158327ejc.4;
-        Thu, 18 Aug 2022 12:51:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=hJQEc74fhcb/IA4FjfVIxRsmkNGKKuU8/s6b05HKDVw=;
-        b=H3XqHBnTsowEj35kTeZMzczYvTj/qwZKg02AuUot3sIpeFGcR9rytnrUuM8Q4tEO1t
-         moQh+s6MpBEYbcErUYZEgIJwtKwax1HsBVI7dNdaeny2Vzv76NvMjgu0gQRSBGU/DCUo
-         QMfJqxJz+SQmLPQX3VQMRXWY1KHt0tFiC4D9b2hk2/yvuo0xvXo/WyapelfmX2c2AsEf
-         Yn6qZBMtxAqgzBcX00Rq4OGLC+CkXYbD0jS6Efw6FymdFD/NNGUURAPzId0MmD/zX5pI
-         Xp1gxWPGdCnsFHo0/TKkN1oH3ndxIlF9EE18uFpPtyCKD4n0AGM4DK263dsrB6gKvuyb
-         MyvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=hJQEc74fhcb/IA4FjfVIxRsmkNGKKuU8/s6b05HKDVw=;
-        b=UE4WwTfN78HqHqG9c0NINw23+gn5D8vu64gDD9z9PC1QM5L5GhEu2k3HhQba0ahggQ
-         EAvKEotzK46JruIp1/p8TBOnolNCXlXXxe0XFiesaFRH7xUQafqgb3CXohSkJESyP21L
-         Y7ko22X9ElmUuYFU7axuhqKQE/jIN6kEDHAS0ceHjLFZBjp+IskIHa+DQ3bLujj8p/VH
-         VNrzUPHiukfvyEP0HYYcuDadQjo029pF0FjGzXHUItCuExwz0IjKSIt8dsrUoDWa2wCy
-         g1ljBAXxA9aFLGd4ND/gr8aRQWLZ2DwcMepxt+3qX6Afl6gJ5tmd+PIbzrh3wrJeUEcs
-         +vEQ==
-X-Gm-Message-State: ACgBeo2onzAnOvYAh0ttHSR2xNtghjidF+oH2fWKam49sARWQ2OQ4j83
-        Zw/DlVtvo2GcijP1Vm3/drvPLjk9q14=
-X-Google-Smtp-Source: AA6agR7SjEliTbXNOzNZVuLEGKA10UdE5Izsy+pOAEeZo7pC7l5MrZHQBt9tetDeJpgHegsDC6ieCg==
-X-Received: by 2002:a17:907:6d12:b0:731:8595:9784 with SMTP id sa18-20020a1709076d1200b0073185959784mr2736646ejc.323.1660852314497;
-        Thu, 18 Aug 2022 12:51:54 -0700 (PDT)
-Received: from skbuf ([188.25.231.137])
-        by smtp.gmail.com with ESMTPSA id jw12-20020a17090776ac00b00730fd9ccf84sm1244751ejc.90.2022.08.18.12.51.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 12:51:53 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 22:51:51 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 02/11] net: phy: Add 1000BASE-KX interface mode
-Message-ID: <20220818195151.3aeaib54xjdhk3ch@skbuf>
-References: <20220725153730.2604096-1-sean.anderson@seco.com>
- <20220725153730.2604096-3-sean.anderson@seco.com>
- <20220818165303.zzp57kd7wfjyytza@skbuf>
- <8a7ee3c9-3bf9-cfd1-67ab-bb11c1a0c82a@seco.com>
- <35779736-8787-f4cb-4160-4ff35946666d@seco.com>
- <20220818171255.ntfdxasulitkzinx@skbuf>
- <cfe3d910-adee-a3bf-96e2-ce1c10109e58@seco.com>
+        Thu, 18 Aug 2022 15:52:05 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9279A97C;
+        Thu, 18 Aug 2022 12:52:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=dObx+PX0Vk5nSc7FO3kmhNywModBXG19A8zPdZ1mbds=; b=NK
+        d3kTDwHhqaqWDIi9SMngVNaC8RpDZq8nHrvx8PQTphLK0ELke91sw1UmM+Gi6pDCMTJT1bGb39Ov/
+        69Ne+hvolkdKEymB7Tif7rmP6+pCi+YaqO4F0FbPhwbz6GU37NTrdhDR6u8nhyJZn2auPVxQKAflp
+        j2627upYfZ+KZpc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oOlYa-00DpsC-O9; Thu, 18 Aug 2022 21:51:56 +0200
+Date:   Thu, 18 Aug 2022 21:51:56 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 3/4] ARM: dts: kirkwood: Add definitions for PCIe error
+ interrupts
+Message-ID: <Yv6YXCwRCSa5i5WM@lunn.ch>
+References: <20220817230036.817-1-pali@kernel.org>
+ <20220817230036.817-4-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <cfe3d910-adee-a3bf-96e2-ce1c10109e58@seco.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220817230036.817-4-pali@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 01:28:19PM -0400, Sean Anderson wrote:
-> That's not what's documented:
+On Thu, Aug 18, 2022 at 01:00:35AM +0200, Pali Rohár wrote:
+> First PCIe controller on Kirkwood SoC reports error interrupt via IRQ 44
+> and second PCIe controller via IRQ 45.
 > 
-> > ``PHY_INTERFACE_MODE_10GBASER``
-> >     This is the IEEE 802.3 Clause 49 defined 10GBASE-R protocol used with
-> >     various different mediums. Please refer to the IEEE standard for a
-> >     definition of this.
-> > 
-> >     Note: 10GBASE-R is just one protocol that can be used with XFI and SFI.
-> >     XFI and SFI permit multiple protocols over a single SERDES lane, and
-> >     also defines the electrical characteristics of the signals with a host
-> >     compliance board plugged into the host XFP/SFP connector. Therefore,
-> >     XFI and SFI are not PHY interface types in their own right.
-> > 
-> > ``PHY_INTERFACE_MODE_10GKR``
-> >     This is the IEEE 802.3 Clause 49 defined 10GBASE-R with Clause 73
-> >     autonegotiation. Please refer to the IEEE standard for further
-> >     information.
-> > 
-> >     Note: due to legacy usage, some 10GBASE-R usage incorrectly makes
-> >     use of this definition.
-> 
-> so indeed you get a new phy interface mode when you add c73 AN. The
-> clarification only applies to *incorrect* usage.
+> Signed-off-by: Pali Rohár <pali@kernel.org>
 
-I challenge you to the following thought experiment. Open clause 73 from
-IEEE 802.3, and see what is actually exchanged through auto-negotiation.
-You'll discover that the *use* of the 10GBase-KR operating mode is
-*established* through clause 73 AN (the Technology Ability field).
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-So what sense does it make to define 10GBase-KR as "10Base-R with clause 73 AN"
-as the document you've quoted does? None whatsoever. The K in KR stands
-for bacKplane, and typical of this type of PMD are the signaling and
-link training procedures described in the previous clause, 72.
-Clause 73 AN is not something that is a property of 10GBase-KR, but
-something that exists outside of it.
-
-So if clause 73 *establishes* the use of 10GBase-KR (or 1000Base-KX or
-others) through autonegotiation, then what sense does it have to put
-phy-mode = "1000base-kx" in the device tree? Does it mean "use C73 AN",
-or "don't use it, I already know what operating mode I want to use"?
-
-If it means "use C73 AN", then what advertisement do you use for the
-Technology Ability field? There's a priority resolution function for
-C73, just like there is one for C28/C40 for the twisted pair medium (aka
-that thing that allows you to fall back to the highest supported common
-link speed). So why would you populate just one bit in Technology
-Ability based on DT, if you can potentially support multiple operating
-modes? And why would you even create your advertisement based on the
-device tree, for that matter? Twisted pair PHYs don't do this.
+    Andrew

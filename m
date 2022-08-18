@@ -2,412 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7BC597CB3
+	by mail.lfdr.de (Postfix) with ESMTP id 16095597CB2
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 06:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239758AbiHREE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 00:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
+        id S242492AbiHREHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 00:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbiHREEZ (ORCPT
+        with ESMTP id S231490AbiHREHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 00:04:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7500A2208;
-        Wed, 17 Aug 2022 21:04:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64A1D61561;
-        Thu, 18 Aug 2022 04:04:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E93C433D7;
-        Thu, 18 Aug 2022 04:04:18 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-Subject: [PATCH] Input: i8042 - Add PNP checking hook for Loongson
-Date:   Thu, 18 Aug 2022 12:04:13 +0800
-Message-Id: <20220818040413.2865849-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
+        Thu, 18 Aug 2022 00:07:18 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A499BADCCB;
+        Wed, 17 Aug 2022 21:07:17 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id s4-20020a17090a5d0400b001fabc6bb0baso1883463pji.1;
+        Wed, 17 Aug 2022 21:07:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=AnPSl2fv4YbAZeiwPXo9GgV/ehsBxgGdylPQL3o6spM=;
+        b=ptP4Ji8viXhGPjcOy/fbF85TK2SNGt84RoM9E2TFEclO1YX8mbAUVonYhmRU6BtHw+
+         5GqYH2phWi1AEkCQbqRaUi1lQnoVb4XWq/hMig/WcWRtuksHhNJ2Yo3q+e39oYFiicUY
+         mzRbIqKedFQkKtKzyfVXSRXOcLU7bPO26OKFjpkYH1X8oMnFEbnLAp+9AFJtTeWzxtpY
+         qIQKHIOHmPo0PWDJbQLqdH1U4YSLA7vKI/QARIFFcpkETwK96m6VfSeGqpbnSeTEJKyM
+         R6HuYgnvA36S9gRNLMHqFmX9oWFT4eqAYJNbgPF9KuPyTYNduVkJEAQlQgXzuR3AR6Ik
+         gkRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=AnPSl2fv4YbAZeiwPXo9GgV/ehsBxgGdylPQL3o6spM=;
+        b=Us2EImYP5agHcx9w7ZHesiz74XXmc7zctZU5RG+xJdCpz6vEQ/o2VYsScKI7w68t4N
+         vGcRWOimyMXiccDfyAzELILk4me/X98uBYmHC8++KfvYe8UoJvo5/vGK2mCuo2GFKz6X
+         AY5DOo9+BZUgBDAXAyiSzz1K4ltO3HQ3xUPYs/jfoBBX0V2QDG7Pcp0f04uxDvhDOUVY
+         EmindKs2MyMIybZFf0cH1RE7bMIPcNdyXWY3RCk6u6ntOGbJyjRsFHYvJHB7t/1lbcQH
+         PxsgvnGNj8oFJ6INvR6t3yiuIwWvC+oSC6eXYpfnxWi3EeIe9MaPahMjG/LpzIDDvFo/
+         ok7A==
+X-Gm-Message-State: ACgBeo2j0S7YQqRnFaabR9X3gmf76TjGoX9mBUw+fWbiejk7KNrhz14i
+        hze+S5DPOXGsTPu1QUnLkCk=
+X-Google-Smtp-Source: AA6agR7RbEswr8TlmgOgVJ5hVBPXC7kT3XKkzbljcTfqyQdLIIUjyNgP3g30gvDtmk2IMAUI1RWbmQ==
+X-Received: by 2002:a17:902:ea04:b0:172:a8e1:d076 with SMTP id s4-20020a170902ea0400b00172a8e1d076mr1299368plg.133.1660795637070;
+        Wed, 17 Aug 2022 21:07:17 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-86.three.co.id. [180.214.233.86])
+        by smtp.gmail.com with ESMTPSA id b2-20020a170902d50200b0016a0bf0ce32sm253726plg.70.2022.08.17.21.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 21:07:16 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 587B1101BD7; Thu, 18 Aug 2022 11:07:13 +0700 (WIB)
+Date:   Thu, 18 Aug 2022 11:07:13 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        kvm@vger.kernel.org, seanjc@google.com, pbonzini@redhat.com,
+        dave.hansen@intel.com, len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+Subject: Re: [PATCH v5 22/22] Documentation/x86: Add documentation for TDX
+ host support
+Message-ID: <Yv268Z0i+rq7r/oR@debian.me>
+References: <cover.1655894131.git.kai.huang@intel.com>
+ <0712bc0b05a0c6c42437fba68f82d9268ab3113e.1655894131.git.kai.huang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="7MH2uFN9Wf7hT8bf"
+Content-Disposition: inline
+In-Reply-To: <0712bc0b05a0c6c42437fba68f82d9268ab3113e.1655894131.git.kai.huang@intel.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PNP checking related functions for Loongson, so that i8042 driver
-can work well under the ACPI firmware with PNP typed keyboard and mouse
-configured in DSDT.
 
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- drivers/input/serio/i8042-loongsonio.h | 330 +++++++++++++++++++++++++
- drivers/input/serio/i8042.h            |   2 +
- 2 files changed, 332 insertions(+)
- create mode 100644 drivers/input/serio/i8042-loongsonio.h
+--7MH2uFN9Wf7hT8bf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/input/serio/i8042-loongsonio.h b/drivers/input/serio/i8042-loongsonio.h
-new file mode 100644
-index 000000000000..2ea83b14f13d
---- /dev/null
-+++ b/drivers/input/serio/i8042-loongsonio.h
-@@ -0,0 +1,330 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * i8042-loongsonio.h
-+ *
-+ * Copyright (C) 2020 Loongson Technology Corporation Limited
-+ * Author: Jianmin Lv <lvjianmin@loongson.cn>
-+ *         Huacai Chen <chenhuacai@loongson.cn>
-+ */
-+
-+#ifndef _I8042_LOONGSONIO_H
-+#define _I8042_LOONGSONIO_H
-+
-+/*
-+ * Names.
-+ */
-+
-+#define I8042_KBD_PHYS_DESC "isa0060/serio0"
-+#define I8042_AUX_PHYS_DESC "isa0060/serio1"
-+#define I8042_MUX_PHYS_DESC "isa0060/serio%d"
-+
-+/*
-+ * IRQs.
-+ */
-+#define I8042_MAP_IRQ(x)	(x)
-+
-+#define I8042_KBD_IRQ	i8042_kbd_irq
-+#define I8042_AUX_IRQ	i8042_aux_irq
-+
-+static int i8042_kbd_irq;
-+static int i8042_aux_irq;
-+
-+/*
-+ * Register numbers.
-+ */
-+
-+#define I8042_COMMAND_REG	i8042_command_reg
-+#define I8042_STATUS_REG	i8042_command_reg
-+#define I8042_DATA_REG		i8042_data_reg
-+
-+static int i8042_command_reg = 0x64;
-+static int i8042_data_reg = 0x60;
-+
-+
-+static inline int i8042_read_data(void)
-+{
-+	return inb(I8042_DATA_REG);
-+}
-+
-+static inline int i8042_read_status(void)
-+{
-+	return inb(I8042_STATUS_REG);
-+}
-+
-+static inline void i8042_write_data(int val)
-+{
-+	outb(val, I8042_DATA_REG);
-+}
-+
-+static inline void i8042_write_command(int val)
-+{
-+	outb(val, I8042_COMMAND_REG);
-+}
-+
-+#ifdef CONFIG_PNP
-+#include <linux/pnp.h>
-+
-+static bool i8042_pnp_kbd_registered;
-+static unsigned int i8042_pnp_kbd_devices;
-+static bool i8042_pnp_aux_registered;
-+static unsigned int i8042_pnp_aux_devices;
-+
-+static int i8042_pnp_command_reg;
-+static int i8042_pnp_data_reg;
-+static int i8042_pnp_kbd_irq;
-+static int i8042_pnp_aux_irq;
-+
-+static char i8042_pnp_kbd_name[32];
-+static char i8042_pnp_aux_name[32];
-+
-+static void i8042_pnp_id_to_string(struct pnp_id *id, char *dst, int dst_size)
-+{
-+	strlcpy(dst, "PNP:", dst_size);
-+
-+	while (id) {
-+		strlcat(dst, " ", dst_size);
-+		strlcat(dst, id->id, dst_size);
-+		id = id->next;
-+	}
-+}
-+
-+static int i8042_pnp_kbd_probe(struct pnp_dev *dev,
-+		const struct pnp_device_id *did)
-+{
-+	if (pnp_port_valid(dev, 0) && pnp_port_len(dev, 0) == 1)
-+		i8042_pnp_data_reg = pnp_port_start(dev, 0);
-+
-+	if (pnp_port_valid(dev, 1) && pnp_port_len(dev, 1) == 1)
-+		i8042_pnp_command_reg = pnp_port_start(dev, 1);
-+
-+	if (pnp_irq_valid(dev, 0))
-+		i8042_pnp_kbd_irq = pnp_irq(dev, 0);
-+
-+	strlcpy(i8042_pnp_kbd_name, did->id, sizeof(i8042_pnp_kbd_name));
-+	if (strlen(pnp_dev_name(dev))) {
-+		strlcat(i8042_pnp_kbd_name, ":", sizeof(i8042_pnp_kbd_name));
-+		strlcat(i8042_pnp_kbd_name, pnp_dev_name(dev),
-+				sizeof(i8042_pnp_kbd_name));
-+	}
-+	i8042_pnp_id_to_string(dev->id, i8042_kbd_firmware_id,
-+			       sizeof(i8042_kbd_firmware_id));
-+
-+	/* Keyboard ports are always supposed to be wakeup-enabled */
-+	device_set_wakeup_enable(&dev->dev, true);
-+
-+	i8042_pnp_kbd_devices++;
-+	return 0;
-+}
-+
-+static int i8042_pnp_aux_probe(struct pnp_dev *dev,
-+		const struct pnp_device_id *did)
-+{
-+	if (pnp_port_valid(dev, 0) && pnp_port_len(dev, 0) == 1)
-+		i8042_pnp_data_reg = pnp_port_start(dev, 0);
-+
-+	if (pnp_port_valid(dev, 1) && pnp_port_len(dev, 1) == 1)
-+		i8042_pnp_command_reg = pnp_port_start(dev, 1);
-+
-+	if (pnp_irq_valid(dev, 0))
-+		i8042_pnp_aux_irq = pnp_irq(dev, 0);
-+
-+	strlcpy(i8042_pnp_aux_name, did->id, sizeof(i8042_pnp_aux_name));
-+	if (strlen(pnp_dev_name(dev))) {
-+		strlcat(i8042_pnp_aux_name, ":", sizeof(i8042_pnp_aux_name));
-+		strlcat(i8042_pnp_aux_name, pnp_dev_name(dev),
-+				sizeof(i8042_pnp_aux_name));
-+	}
-+	i8042_pnp_id_to_string(dev->id, i8042_aux_firmware_id,
-+			       sizeof(i8042_aux_firmware_id));
-+
-+	i8042_pnp_aux_devices++;
-+	return 0;
-+}
-+
-+static const struct pnp_device_id pnp_kbd_devids[] = {
-+	{ .id = "PNP0300", .driver_data = 0 },
-+	{ .id = "PNP0301", .driver_data = 0 },
-+	{ .id = "PNP0302", .driver_data = 0 },
-+	{ .id = "PNP0303", .driver_data = 0 },
-+	{ .id = "PNP0304", .driver_data = 0 },
-+	{ .id = "PNP0305", .driver_data = 0 },
-+	{ .id = "PNP0306", .driver_data = 0 },
-+	{ .id = "PNP0309", .driver_data = 0 },
-+	{ .id = "PNP030a", .driver_data = 0 },
-+	{ .id = "PNP030b", .driver_data = 0 },
-+	{ .id = "PNP0320", .driver_data = 0 },
-+	{ .id = "PNP0343", .driver_data = 0 },
-+	{ .id = "PNP0344", .driver_data = 0 },
-+	{ .id = "PNP0345", .driver_data = 0 },
-+	{ .id = "CPQA0D7", .driver_data = 0 },
-+	{ .id = "", },
-+};
-+MODULE_DEVICE_TABLE(pnp, pnp_kbd_devids);
-+
-+static struct pnp_driver i8042_pnp_kbd_driver = {
-+	.name           = "i8042 kbd",
-+	.id_table       = pnp_kbd_devids,
-+	.probe          = i8042_pnp_kbd_probe,
-+	.driver         = {
-+		.probe_type = PROBE_FORCE_SYNCHRONOUS,
-+		.suppress_bind_attrs = true,
-+	},
-+};
-+
-+static const struct pnp_device_id pnp_aux_devids[] = {
-+	{ .id = "AUI0200", .driver_data = 0 },
-+	{ .id = "FJC6000", .driver_data = 0 },
-+	{ .id = "FJC6001", .driver_data = 0 },
-+	{ .id = "PNP0f03", .driver_data = 0 },
-+	{ .id = "PNP0f0b", .driver_data = 0 },
-+	{ .id = "PNP0f0e", .driver_data = 0 },
-+	{ .id = "PNP0f12", .driver_data = 0 },
-+	{ .id = "PNP0f13", .driver_data = 0 },
-+	{ .id = "PNP0f19", .driver_data = 0 },
-+	{ .id = "PNP0f1c", .driver_data = 0 },
-+	{ .id = "SYN0801", .driver_data = 0 },
-+	{ .id = "", },
-+};
-+MODULE_DEVICE_TABLE(pnp, pnp_aux_devids);
-+
-+static struct pnp_driver i8042_pnp_aux_driver = {
-+	.name           = "i8042 aux",
-+	.id_table       = pnp_aux_devids,
-+	.probe          = i8042_pnp_aux_probe,
-+	.driver         = {
-+		.probe_type = PROBE_FORCE_SYNCHRONOUS,
-+		.suppress_bind_attrs = true,
-+	},
-+};
-+
-+static void i8042_pnp_exit(void)
-+{
-+	if (i8042_pnp_kbd_registered) {
-+		i8042_pnp_kbd_registered = false;
-+		pnp_unregister_driver(&i8042_pnp_kbd_driver);
-+	}
-+
-+	if (i8042_pnp_aux_registered) {
-+		i8042_pnp_aux_registered = false;
-+		pnp_unregister_driver(&i8042_pnp_aux_driver);
-+	}
-+}
-+#ifdef CONFIG_ACPI
-+#include <linux/acpi.h>
-+#endif
-+static int __init i8042_pnp_init(void)
-+{
-+	char kbd_irq_str[4] = { 0 }, aux_irq_str[4] = { 0 };
-+	bool pnp_data_busted = false;
-+	int err;
-+
-+	if (i8042_nopnp) {
-+		pr_info("PNP detection disabled\n");
-+		return 0;
-+	}
-+
-+	err = pnp_register_driver(&i8042_pnp_kbd_driver);
-+	if (!err)
-+		i8042_pnp_kbd_registered = true;
-+
-+	err = pnp_register_driver(&i8042_pnp_aux_driver);
-+	if (!err)
-+		i8042_pnp_aux_registered = true;
-+
-+	if (!i8042_pnp_kbd_devices && !i8042_pnp_aux_devices) {
-+		i8042_pnp_exit();
-+		pr_info("PNP: No PS/2 controller found.\n");
-+#ifdef CONFIG_ACPI
-+		if (acpi_disabled == 0)
-+			return -ENODEV;
-+#endif
-+		pr_info("Probing ports directly.\n");
-+		return 0;
-+	}
-+
-+	if (i8042_pnp_kbd_devices)
-+		snprintf(kbd_irq_str, sizeof(kbd_irq_str),
-+			"%d", i8042_pnp_kbd_irq);
-+	if (i8042_pnp_aux_devices)
-+		snprintf(aux_irq_str, sizeof(aux_irq_str),
-+			"%d", i8042_pnp_aux_irq);
-+
-+	pr_info("PNP: PS/2 Controller [%s%s%s] at %#x,%#x irq %s%s%s\n",
-+		i8042_pnp_kbd_name,
-+		(i8042_pnp_kbd_devices && i8042_pnp_aux_devices) ? "," : "",
-+		i8042_pnp_aux_name,
-+		i8042_pnp_data_reg, i8042_pnp_command_reg,
-+		kbd_irq_str,
-+		(i8042_pnp_kbd_devices && i8042_pnp_aux_devices) ? "," : "",
-+		aux_irq_str);
-+
-+	if (((i8042_pnp_data_reg & ~0xf) == (i8042_data_reg & ~0xf) &&
-+	      i8042_pnp_data_reg != i8042_data_reg) ||
-+	    !i8042_pnp_data_reg) {
-+		pr_warn("PNP: PS/2 controller has invalid data port %#x; using default %#x\n",
-+			i8042_pnp_data_reg, i8042_data_reg);
-+		i8042_pnp_data_reg = i8042_data_reg;
-+		pnp_data_busted = true;
-+	}
-+
-+	if (((i8042_pnp_command_reg & ~0xf) == (i8042_command_reg & ~0xf) &&
-+	      i8042_pnp_command_reg != i8042_command_reg) ||
-+	    !i8042_pnp_command_reg) {
-+		pr_warn("PNP: PS/2 controller has invalid command port %#x; using default %#x\n",
-+			i8042_pnp_command_reg, i8042_command_reg);
-+		i8042_pnp_command_reg = i8042_command_reg;
-+		pnp_data_busted = true;
-+	}
-+
-+	if (!i8042_nokbd && !i8042_pnp_kbd_irq) {
-+		pr_warn("PNP: PS/2 controller doesn't have KBD irq; using default %d\n",
-+			i8042_kbd_irq);
-+		i8042_pnp_kbd_irq = i8042_kbd_irq;
-+		pnp_data_busted = true;
-+	}
-+
-+	if (!i8042_noaux && !i8042_pnp_aux_irq) {
-+		if (!pnp_data_busted && i8042_pnp_kbd_irq) {
-+			pr_warn("PNP: PS/2 appears to have AUX port disabled, "
-+				"if this is incorrect please boot with i8042.nopnp\n");
-+			i8042_noaux = true;
-+		} else {
-+			pr_warn("PNP: PS/2 controller doesn't have AUX irq; using default %d\n",
-+				i8042_aux_irq);
-+			i8042_pnp_aux_irq = i8042_aux_irq;
-+		}
-+	}
-+
-+	i8042_data_reg = i8042_pnp_data_reg;
-+	i8042_command_reg = i8042_pnp_command_reg;
-+	i8042_kbd_irq = i8042_pnp_kbd_irq;
-+	i8042_aux_irq = i8042_pnp_aux_irq;
-+
-+	return 0;
-+}
-+
-+#else  /* !CONFIG_PNP */
-+static inline int i8042_pnp_init(void) { return 0; }
-+static inline void i8042_pnp_exit(void) { }
-+#endif /* CONFIG_PNP */
-+
-+static int __init i8042_platform_init(void)
-+{
-+	int retval;
-+
-+	i8042_kbd_irq = I8042_MAP_IRQ(1);
-+	i8042_aux_irq = I8042_MAP_IRQ(12);
-+
-+	retval = i8042_pnp_init();
-+	if (retval)
-+		return retval;
-+
-+	return retval;
-+}
-+
-+static inline void i8042_platform_exit(void)
-+{
-+	i8042_pnp_exit();
-+}
-+
-+#endif /* _I8042_LOONGSONIO_H */
-diff --git a/drivers/input/serio/i8042.h b/drivers/input/serio/i8042.h
-index 55381783dc82..166bd69841cf 100644
---- a/drivers/input/serio/i8042.h
-+++ b/drivers/input/serio/i8042.h
-@@ -19,6 +19,8 @@
- #include "i8042-snirm.h"
- #elif defined(CONFIG_SPARC)
- #include "i8042-sparcio.h"
-+#elif defined(CONFIG_MACH_LOONGSON64)
-+#include "i8042-loongsonio.h"
- #elif defined(CONFIG_X86) || defined(CONFIG_IA64)
- #include "i8042-x86ia64io.h"
- #else
--- 
-2.31.1
+On Wed, Jun 22, 2022 at 11:17:50PM +1200, Kai Huang wrote:
+> +Kernel detects TDX and the TDX private KeyIDs during kernel boot.  User
+> +can see below dmesg if TDX is enabled by BIOS:
+> +
+> +|  [..] tdx: SEAMRR enabled.
+> +|  [..] tdx: TDX private KeyID range: [16, 64).
+> +|  [..] tdx: TDX enabled by BIOS.
+> +
+<snipped>
+> +Initializing the TDX module consumes roughly ~1/256th system RAM size to
+> +use it as 'metadata' for the TDX memory.  It also takes additional CPU
+> +time to initialize those metadata along with the TDX module itself.  Both
+> +are not trivial.  Current kernel doesn't choose to always initialize the
+> +TDX module during kernel boot, but provides a function tdx_init() to
+> +allow the caller to initialize TDX when it truly wants to use TDX:
+> +
+> +        ret =3D tdx_init();
+> +        if (ret)
+> +                goto no_tdx;
+> +        // TDX is ready to use
+> +
 
+Hi,
+
+The code block above produces Sphinx warnings:
+
+Documentation/x86/tdx.rst:69: WARNING: Unexpected indentation.
+Documentation/x86/tdx.rst:70: WARNING: Block quote ends without a blank lin=
+e; unexpected unindent.
+
+I have applied the fixup:
+
+---- >8 ----
+
+diff --git a/Documentation/x86/tdx.rst b/Documentation/x86/tdx.rst
+index 6c6b09ca6ba407..4430912a2e4f05 100644
+--- a/Documentation/x86/tdx.rst
++++ b/Documentation/x86/tdx.rst
+@@ -62,7 +62,7 @@ use it as 'metadata' for the TDX memory.  It also takes a=
+dditional CPU
+ time to initialize those metadata along with the TDX module itself.  Both
+ are not trivial.  Current kernel doesn't choose to always initialize the
+ TDX module during kernel boot, but provides a function tdx_init() to
+-allow the caller to initialize TDX when it truly wants to use TDX:
++allow the caller to initialize TDX when it truly wants to use TDX::
+=20
+         ret =3D tdx_init();
+         if (ret)
+
+> +If the TDX module is not loaded, dmesg shows below:
+> +
+> +|  [..] tdx: TDX module is not loaded.
+> +
+> +If the TDX module is initialized successfully, dmesg shows something
+> +like below:
+> +
+> +|  [..] tdx: TDX module: vendor_id 0x8086, major_version 1, minor_versio=
+n 0, build_date 20211209, build_num 160
+> +|  [..] tdx: 65667 pages allocated for PAMT.
+> +|  [..] tdx: TDX module initialized.
+> +
+> +If the TDX module failed to initialize, dmesg shows below:
+> +
+> +|  [..] tdx: Failed to initialize TDX module.  Shut it down.
+<snipped>
+> +There are basically two memory hot-add cases that need to be prevented:
+> +ACPI memory hot-add and driver managed memory hot-add.  The kernel
+> +rejectes the driver managed memory hot-add too when TDX is enabled by
+> +BIOS.  For instance, dmesg shows below error when using kmem driver to
+> +add a legacy PMEM as system RAM:
+> +
+> +|  [..] tdx: Unable to add memory [0x580000000, 0x600000000) on TDX enab=
+led platform.
+> +|  [..] kmem dax0.0: mapping0: 0x580000000-0x5ffffffff memory add failed
+> +
+
+For dmesg ouput, use literal code block instead of line blocks, like:
+
+---- >8 ----
+
+diff --git a/Documentation/x86/tdx.rst b/Documentation/x86/tdx.rst
+index 4430912a2e4f05..1eaeb7cd14d76f 100644
+--- a/Documentation/x86/tdx.rst
++++ b/Documentation/x86/tdx.rst
+@@ -41,11 +41,11 @@ TDX boot-time detection
+ -----------------------
+=20
+ Kernel detects TDX and the TDX private KeyIDs during kernel boot.  User
+-can see below dmesg if TDX is enabled by BIOS:
++can see below dmesg if TDX is enabled by BIOS::
+=20
+-|  [..] tdx: SEAMRR enabled.
+-|  [..] tdx: TDX private KeyID range: [16, 64).
+-|  [..] tdx: TDX enabled by BIOS.
++  [..] tdx: SEAMRR enabled.
++  [..] tdx: TDX private KeyID range: [16, 64).
++  [..] tdx: TDX enabled by BIOS.
+=20
+ TDX module detection and initialization
+ ---------------------------------------
+@@ -79,20 +79,20 @@ caller.
+ User can consult dmesg to see the presence of the TDX module, and whether
+ it has been initialized.
+=20
+-If the TDX module is not loaded, dmesg shows below:
++If the TDX module is not loaded, dmesg shows below::
+=20
+-|  [..] tdx: TDX module is not loaded.
++  [..] tdx: TDX module is not loaded.
+=20
+ If the TDX module is initialized successfully, dmesg shows something
+-like below:
++like below::
+=20
+-|  [..] tdx: TDX module: vendor_id 0x8086, major_version 1, minor_version =
+0, build_date 20211209, build_num 160
+-|  [..] tdx: 65667 pages allocated for PAMT.
+-|  [..] tdx: TDX module initialized.
++  [..] tdx: TDX module: vendor_id 0x8086, major_version 1, minor_version 0=
+, build_date 20211209, build_num 160
++  [..] tdx: 65667 pages allocated for PAMT.
++  [..] tdx: TDX module initialized.
+=20
+-If the TDX module failed to initialize, dmesg shows below:
++If the TDX module failed to initialize, dmesg shows below::
+=20
+-|  [..] tdx: Failed to initialize TDX module.  Shut it down.
++  [..] tdx: Failed to initialize TDX module.  Shut it down.
+=20
+ TDX Interaction to Other Kernel Components
+ ------------------------------------------
+@@ -143,10 +143,10 @@ There are basically two memory hot-add cases that nee=
+d to be prevented:
+ ACPI memory hot-add and driver managed memory hot-add.  The kernel
+ rejectes the driver managed memory hot-add too when TDX is enabled by
+ BIOS.  For instance, dmesg shows below error when using kmem driver to
+-add a legacy PMEM as system RAM:
++add a legacy PMEM as system RAM::
+=20
+-|  [..] tdx: Unable to add memory [0x580000000, 0x600000000) on TDX enable=
+d platform.
+-|  [..] kmem dax0.0: mapping0: 0x580000000-0x5ffffffff memory add failed
++  [..] tdx: Unable to add memory [0x580000000, 0x600000000) on TDX enabled=
+ platform.
++  [..] kmem dax0.0: mapping0: 0x580000000-0x5ffffffff memory add failed
+=20
+ However, adding new memory to ZONE_DEVICE should not be prevented as
+ those pages are not managed by the page allocator.  Therefore,
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--7MH2uFN9Wf7hT8bf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYv266wAKCRD2uYlJVVFO
+oyx0AP0YyAWyVtjuQQqW4JTzVnNEYTyqobjaY+aeJY4Vn+CWxQEAzzi4fFqlZR3c
+pjH6M71UkIpsnblFe05YyFOFN7r6aAA=
+=J01X
+-----END PGP SIGNATURE-----
+
+--7MH2uFN9Wf7hT8bf--

@@ -2,154 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88AD55981BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3605981CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242315AbiHRK4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 06:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S244201AbiHRK5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 06:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243178AbiHRK4F (ORCPT
+        with ESMTP id S242917AbiHRK5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 06:56:05 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B818C474
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 03:56:04 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IAqApa027599;
-        Thu, 18 Aug 2022 10:55:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=V05XG+furiG9o1tKinGyILRRe6fuw2NRAwO08YRhd1k=;
- b=OdRrNuh/H2W2ZEql5pYGNwC8dXU1ZNx0FCRMVSNpkh7uUkW3rsexveaTYx3D63vdM1Ji
- qt/0GyAxJPcFmSNaeVVevmlaWYs4WsXvnXyGT6URZcvNpaw6WVHN5axXIpwxHnMnj0uC
- rcsgFWm8S4rq1XU8g4U3IC40KiFDPx9MpqGEy9FCVOt6MkcP0TIbqObe4GtGffZEVIBK
- 01URvVFngksIFbTIssyylZAtlKMirW8sv8/ldjon4dPR02wfyCiHY40OdQE0JwWf4RO3
- gosg7/P1GlcwgYcfafZ6NVpqcGGs2XGhoeQTfg+koFed/Hsll+/ra9JMylsUJH11jDTC dw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1m2502cy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 10:55:38 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27IArAw5030058;
-        Thu, 18 Aug 2022 10:55:37 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1m2502c4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 10:55:36 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27IAp604021172;
-        Thu, 18 Aug 2022 10:55:34 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma05fra.de.ibm.com with ESMTP id 3hyp8sjsne-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 10:55:34 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27IAqiGs25887032
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Aug 2022 10:52:44 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 03CA111C058;
-        Thu, 18 Aug 2022 10:55:32 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AFF3111C04A;
-        Thu, 18 Aug 2022 10:55:28 +0000 (GMT)
-Received: from [9.109.198.207] (unknown [9.109.198.207])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Aug 2022 10:55:28 +0000 (GMT)
-Message-ID: <c429f624-a25b-fe80-56c8-01cb733c3909@linux.vnet.ibm.com>
-Date:   Thu, 18 Aug 2022 16:25:27 +0530
+        Thu, 18 Aug 2022 06:57:12 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A75E8F96E;
+        Thu, 18 Aug 2022 03:57:11 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660820224;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QwcESLCmW8ulJw28LxzClSHwzOuNQQyl6cJVugvBlps=;
+        b=PvT/spCWBQOdm3augbdnEd1SsHd2Cq8bLGAFh+lRxf5dNDv4nC3W0+C4AionWanAuCyLZo
+        ZFVGBAxx0/G8H6vuenX5a/CA8+OMJoUHLTSFsq7wl9fzBbUasvh4fU4EF/JKc5ERMKjHnN
+        ICSk+i7vmA9fHnaTmb6kI9a13Rv6ZXY86IONlsnoLPeSdSH2Di1nhIKtnE5n5KVlVpfGuY
+        wrC5KOyd1VHob6rjM6Ewx3IzCKtctan9cRt7klfSM8V3tSyeZa6Cl3aMAsfLmdFz2LXYYS
+        M/Wn0oAKDclgPfDLdUZ2KvM6oE7RmBWn+DmtpPzU3xOBi+mgGDVcjjfzMCS3VQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660820224;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QwcESLCmW8ulJw28LxzClSHwzOuNQQyl6cJVugvBlps=;
+        b=HKzI6hTHmw6EN0x7oU06xuzrV/0EqzveJFcwGkkIlcqOaCZG12gPEsy922Z4MyvcyjrWPo
+        ka6x/zC7WO5xAvCw==
+To:     Kyle Huey <me@kylehuey.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Kyle Huey <me@kylehuey.com>, Borislav Petkov <bp@suse.de>,
+        kvm@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] x86/fpu: Allow PKRU to be (once again) written
+ by ptrace.
+In-Reply-To: <20220808141538.102394-1-khuey@kylehuey.com>
+References: <20220808141538.102394-1-khuey@kylehuey.com>
+Date:   Thu, 18 Aug 2022 12:57:04 +0200
+Message-ID: <87ilmpzunz.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 03/16] powerpc: Fix objtool unannotated intra-function
- call warnings
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Cc:     "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>
-References: <20220808114908.240813-1-sv@linux.ibm.com>
- <20220808114908.240813-4-sv@linux.ibm.com>
- <d3022c04-8fd5-d357-e22d-041e8f70aac8@csgroup.eu>
-From:   Sathvika Vasireddy <sv@linux.vnet.ibm.com>
-In-Reply-To: <d3022c04-8fd5-d357-e22d-041e8f70aac8@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: jqRNJPAX4DlREWWVQ1vT6jfLohQ0xeE7
-X-Proofpoint-GUID: rsguQs3nhjwFX_kXC3uhLfeUHQcvVBRD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_11,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=999
- malwarescore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180036
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Kyle!
 
-On 10/08/22 14:02, Christophe Leroy wrote:
+On Mon, Aug 08 2022 at 07:15, Kyle Huey wrote:
+> When management of the PKRU register was moved away from XSTATE, emulation
+> of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
+> for APIs that write XSTATE. This can be seen by running gdb and executing
+> `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
+> write to the PKRU register (which gdb performs through ptrace) is ignored.
 >
-> Le 08/08/2022 à 13:48, Sathvika Vasireddy a écrit :
->> objtool throws unannotated intra-function call warnings
->> in the following assembly files.
->>
->> arch/powerpc/kernel/vector.o: warning: objtool: .text+0x53c: unannotated intra-function call
->>
->> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x60: unannotated intra-function call
->> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x124: unannotated intra-function call
->> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x5d4: unannotated intra-function call
->> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x5dc: unannotated intra-function call
->> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0xcb8: unannotated intra-function call
->> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0xd0c: unannotated intra-function call
->> arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x1030: unannotated intra-function call
->>
->> arch/powerpc/kernel/head_64.o: warning: objtool: .text+0x358: unannotated intra-function call
->> arch/powerpc/kernel/head_64.o: warning: objtool: .text+0x728: unannotated intra-function call
->> arch/powerpc/kernel/head_64.o: warning: objtool: .text+0x4d94: unannotated intra-function call
->> arch/powerpc/kernel/head_64.o: warning: objtool: .text+0x4ec4: unannotated intra-function call
->>
->> arch/powerpc/kvm/book3s_hv_interrupts.o: warning: objtool: .text+0x6c: unannotated intra-function call
->> arch/powerpc/kernel/misc_64.o: warning: objtool: .text+0x64: unannotated intra-function call
->>
-> Before explaining how you fix it, can you explain why we get it ?
-Sure.
+> There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
+> sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
+> make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
+> down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
+> and sigreturn pass in pointers to the appropriate PKRU value.
+>
+> This also adds code to initialize the PKRU value to the hardware init value
+> (namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
+> This is a change to the current KVM_SET_XSAVE behavior.
 
-objtool does not add STT_NOTYPE symbols with size 0 to the rbtree, which 
-is why find_call_destination()
-function is not able to find the destination symbol for 'bl' 
-instruction. For such symbols, objtool is throwing
-unannotated intra-function call warnings in assembly files. Fix these 
-warnings by adding
-SYM_FUNC_START_LOCAL() and SYM_FUNC_END() annotations to those symbols 
-to be able to set symbol
-type to STT_FUNC and set size of these symbols accordingly.
+You are stating a fact here, but provide 0 justification why this is
+correct.
 
-I'll add this explanation to the commit message.
+>
+> Changelog since v4:
 
-Thanks for reviewing.
+Can you please put the change log past the --- seperator line, so it
+gets stripped off when the patch is applied? That spares manual fixups.
 
-- Sathvika
+>
+> Signed-off-by: Kyle Huey <me@kylehuey.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: kvm@vger.kernel.org # For edge case behavior of KVM_SET_XSAVE
+> Cc: stable@vger.kernel.org # 5.14+
+> Fixes: e84ba47e313d ("x86/fpu: Hook up PKRU into ptrace()")
+
+Can you please use the documented tag ordering?
+
+https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#patch-submission-notes
+
+> @@ -1235,6 +1235,24 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+>  	for (i = 0; i < XFEATURE_MAX; i++) {
+>  		mask = BIT_ULL(i);
+>  
+> +		if (i == XFEATURE_PKRU) {
+> +			/*
+> +			 * Retrieve PKRU if not in init state, otherwise
+> +			 * initialize it.
+> +			 */
+> +			if (hdr.xfeatures & mask) {
+> +				struct pkru_state xpkru = {0};
+> +
+> +				if (copy_from_buffer(&xpkru, xstate_offsets[i],
+> +						     sizeof(xpkru), kbuf, ubuf))
+> +					return -EFAULT;
+> +
+> +				*pkru = xpkru.pkru;
+> +			} else {
+> +				*pkru = 0;
+> +			}
+> +		}
+
+That's really horrible and there is no point in copying the stuff from
+the buffer twice:
+
+@@ -1246,6 +1246,15 @@ static int copy_uabi_to_xstate(struct fp
+ 		}
+ 	}
+ 
++	/* Update the user protection key storage */
++	*pkru = 0;
++	if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
++		struct pkru_state *xpkru;
++
++		xpkru = get_xsave_addr(xsave, XFEATURE_PKRU);
++		*pkru = xpkru->pkru;
++	}
++
+
+Hmm?
+
+Thanks,
+
+        tglx

@@ -2,84 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABABD5980C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D9B5980D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241184AbiHRJXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 05:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
+        id S241825AbiHRJcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 05:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233114AbiHRJXJ (ORCPT
+        with ESMTP id S233816AbiHRJcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 05:23:09 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47B3A2204;
-        Thu, 18 Aug 2022 02:23:06 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M7fV61hg2zkWVc;
-        Thu, 18 Aug 2022 17:19:42 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 17:23:04 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 18 Aug
- 2022 17:23:04 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <ap420073@gmail.com>, <davem@davemloft.net>
-Subject: [PATCH -next] amt: remove unneccessary skb pointer check
-Date:   Thu, 18 Aug 2022 17:31:14 +0800
-Message-ID: <20220818093114.2449179-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 18 Aug 2022 05:32:14 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E509A954
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 02:32:12 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VMaE0Lu_1660815129;
+Received: from 30.227.66.106(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VMaE0Lu_1660815129)
+          by smtp.aliyun-inc.com;
+          Thu, 18 Aug 2022 17:32:10 +0800
+Message-ID: <16a13735-1349-9927-0f7b-1c5622198e2a@linux.alibaba.com>
+Date:   Thu, 18 Aug 2022 17:32:09 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [Linux-cachefs] [PATCH v2] fscache: fix misdocumented parameter
+Content-Language: en-US
+To:     Khalid Masum <khalid.masum.92@gmail.com>, linux-cachefs@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>
+References: <20220818040738.12036-1-khalid.masum.92@gmail.com>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20220818040738.12036-1-khalid.masum.92@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The skb pointer will be checked in kfree_skb(), so remove the outside check.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/net/amt.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-index 9a247eb7679c..2d20be6ffb7e 100644
---- a/drivers/net/amt.c
-+++ b/drivers/net/amt.c
-@@ -2894,8 +2894,7 @@ static void amt_event_work(struct work_struct *work)
- 			amt_event_send_request(amt);
- 			break;
- 		default:
--			if (skb)
--				kfree_skb(skb);
-+			kfree_skb(skb);
- 			break;
- 		}
- 	}
-@@ -3033,8 +3032,7 @@ static int amt_dev_stop(struct net_device *dev)
- 	cancel_work_sync(&amt->event_wq);
- 	for (i = 0; i < AMT_MAX_EVENTS; i++) {
- 		skb = amt->events[i].skb;
--		if (skb)
--			kfree_skb(skb);
-+		kfree_skb(skb);
- 		amt->events[i].event = AMT_EVENT_NONE;
- 		amt->events[i].skb = NULL;
- 	}
+On 8/18/22 12:07 PM, Khalid Masum wrote:
+> This patch fixes two warnings generated by make docs. The functions
+> fscache_use_cookie and fscache_unuse_cookie, both have a parameter
+> named cookie. But they are documented with the name "object" with
+> unclear description. Which generates the warning when creating docs.
+> 
+> This commit will replace the currently misdocumented parameter names
+> with the correct ones while adding proper descriptions.
+> 
+> CC: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+
+LGTM.
+
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
+> ---
+> Changes since v1:
+> - Update commit message.
+> - Link: https://lore.kernel.org/lkml/20220521142446.4746-1-khalid.masum.92@gmail.com/
+> 
+>  include/linux/fscache.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/fscache.h b/include/linux/fscache.h
+> index 720874e6ee94..36e5dd84cf59 100644
+> --- a/include/linux/fscache.h
+> +++ b/include/linux/fscache.h
+> @@ -258,7 +258,7 @@ struct fscache_cookie *fscache_acquire_cookie(struct fscache_volume *volume,
+>  
+>  /**
+>   * fscache_use_cookie - Request usage of cookie attached to an object
+> - * @object: Object description
+> + * @cookie: The cookie representing the cache object
+>   * @will_modify: If cache is expected to be modified locally
+>   *
+>   * Request usage of the cookie attached to an object.  The caller should tell
+> @@ -274,7 +274,7 @@ static inline void fscache_use_cookie(struct fscache_cookie *cookie,
+>  
+>  /**
+>   * fscache_unuse_cookie - Cease usage of cookie attached to an object
+> - * @object: Object description
+> + * @cookie: The cookie representing the cache object
+>   * @aux_data: Updated auxiliary data (or NULL)
+>   * @object_size: Revised size of the object (or NULL)
+>   *
+
 -- 
-2.25.1
-
+Thanks,
+Jingbo

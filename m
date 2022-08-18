@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE9C597AD5
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 03:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9E1597AD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 03:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242349AbiHRBFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 21:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
+        id S242490AbiHRBIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 21:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239618AbiHRBFv (ORCPT
+        with ESMTP id S239618AbiHRBIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 21:05:51 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E213719B8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 18:05:49 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VMYSBOp_1660784746;
-Received: from 30.97.48.48(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VMYSBOp_1660784746)
-          by smtp.aliyun-inc.com;
-          Thu, 18 Aug 2022 09:05:46 +0800
-Message-ID: <d7f85c9f-ca36-4731-e51c-840907cf1660@linux.alibaba.com>
-Date:   Thu, 18 Aug 2022 09:05:58 +0800
+        Wed, 17 Aug 2022 21:08:30 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653422D1DE
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 18:08:26 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id C44C55C01C1;
+        Wed, 17 Aug 2022 21:08:23 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 17 Aug 2022 21:08:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1660784903; x=1660871303; bh=WmFWT9Wj5/
+        JuOHgFegqTlFpnEJ5IUU83+EJpdPWqW/w=; b=quI3kB4wEkefeGCSr3rxiFLRSc
+        7d9OZXkTpm76sK12vCLfvYrs5TPmdrk7irIsiWwo4FaG792oOVk84uuq6t0kwuSQ
+        31yEgjmFmyTtQALQIrTi1b3BuuAjXtsPaHMYTpYJ/h/yKeafoS0m1tBh4GBJdVbS
+        uT60bxT4Qyrc1bFWf88XUqQMMso+j2WvuwWbwgvHNp6uXtZQLta/SW3wE4x5dywO
+        2cJWJzBL5dnQrlWjwtbkjb2ai/MGtNBLvCOgsh4hzVvjRNZacch/6FLDQV/lYr3V
+        WB6AinZH/IWybX8jCUGPA8QaSSljlr4V+Gy5P5Lq6ic55s57QqVH5pYn0wqQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660784903; x=1660871303; bh=WmFWT9Wj5/JuOHgFegqTlFpnEJ5I
+        UU83+EJpdPWqW/w=; b=M1lPXFJWvPbDg+qY1TznBhN9xRwXMPZK81r/mGUqeQ6M
+        f/B4rJjYEs+Ie7hJZpVuXiV2WjeZUbTQDcfSp4L2CzkqZSlAPbpH+87cbUlJIS5q
+        58HzD5uVE/DDqUEV3tc21K9F9M2GYbSR0YVxEMPIbsmBsR8YArWJzL+PuRtn1eT6
+        QGBAX0w1JDyz7XNSxuy4qP5VESlNy8bnKPS1+3OwwU9+Z4OHrcKshG5YeCT4FNgw
+        pPfrTcjn8Kh6WyZ43zETqmfM4qbEy48hxbLM58q4kKjVd8WK8Ed4QwHeuxEjvsq4
+        F7QuJ0xeGqJGcsVXeNDCULRPmiuBxt32PHu5m3z/nQ==
+X-ME-Sender: <xms:B5H9YqkWtJc_svelOjO_YNE6AiUqFh3UQN7tOJDVJqFng53ZijlFtg>
+    <xme:B5H9Yh2Yyx2vZS80qmkEFZ3ch8riKJftaoKvcNUPNQYkv2IUXbceHaXkC_Ghb3B1J
+    rq-yRRTz1cazZViiQ>
+X-ME-Received: <xmr:B5H9YooqdvIaFh76B44j3FNqch_NmjvyiVHQKABpLJ0Tzh_YH2U8jARerxFxc9nxs_1ECyfrWHmgs83sXBW2oMe_YFRogVC1U4eFIEt5CxM-nRsYQkfNM_bpucyV>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehjedggeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughr
+    vghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuggftrf
+    grthhtvghrnhephfegjedtudegveffteefjeeljedvgeetueelffdtffejgeffgeeggeff
+    teegheeunecuffhomhgrihhnpegtihhrrhhushdqtghirdgtohhmnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghnughrvghssegrnhgrrhgr
+    iigvlhdruggv
+X-ME-Proxy: <xmx:B5H9YumEo46BVCIODZdTWsIxMoFLlyDwNbGvogw4AgsHv1gO6Y2_2Q>
+    <xmx:B5H9Yo2xGHZxsI1WdXJmJ681Jb2jUtIjr3GZbdgEV6N1Aa9MBgP5vg>
+    <xmx:B5H9Ylvj6uz7LSeSMS5hagW0rou-bLMXLT2yXiMnkG0BpvFQfOmMPg>
+    <xmx:B5H9YmCDoYgcVIVzByyfEoXE9I10UhMSNSKsBKcicO-0ODPRKN2z5g>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 17 Aug 2022 21:08:23 -0400 (EDT)
+Date:   Wed, 17 Aug 2022 18:08:22 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: upstream kernel crashes
+Message-ID: <20220818010822.hhqn353ddn3n2de6@awork3.anarazel.de>
+References: <20220814212610.GA3690074@roeck-us.net>
+ <CAHk-=wgsnBpMfUDgD=mxzEWhA6=ff3D3qssva0DFkE_55DXkLA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] mm/damon: Validate if the pmd entry is present before
- accessing
-To:     SeongJae Park <sj@kernel.org>
-Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220817160902.98613-1-sj@kernel.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220817160902.98613-1-sj@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgsnBpMfUDgD=mxzEWhA6=ff3D3qssva0DFkE_55DXkLA@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 8/18/2022 12:09 AM, SeongJae Park wrote:
-> Hi Baolin,
+On 2022-08-17 10:12:18 -0700, Linus Torvalds wrote:
+> On Sun, Aug 14, 2022 at 2:26 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > syscaller reports lots of crashes with the mainline kernel. The latest
+> > I have seen, based on the current ToT, is attached. Backtraces are not
+> > always the same, but this one is typical.
 > 
-> 
-> Thank you always for your great patch!
-> 
-> On Wed, 17 Aug 2022 14:21:12 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> 
->> The pmd_huge() is used to validate if the pmd entry is mapped by a huge
->> page, also including the case of non-present (migration or hwpoisoned)
->> pmd entry on arm64 or x86 architectures. Thus we should validate if it
->> is present before making the pmd entry old or getting young state,
->> otherwise we can not get the correct corresponding page.
-> 
-> Maybe I'm missing something, but... I'm unsure if the page is present or not
-> really matters from the perspective of access checking.  In the case, DAMON
-> could simply report the page has accessed once for the first check after the
-> page being non-present if it really accessed before, and then report the page
-> as not accessed, which is true.
+> Ok, I just pushed out the pull of the virtio fixes, so hopefully this
+> is all behind us.
 
-Yes, that's the patch's goal to make the accesses correct. However if 
-the PMD entry is not present, we can not get the correct page object by 
-pmd_pfn(*pmd), since the non-present pmd entry will contain swap type 
-and swap offset with below format on ARM64, that means the pfn number is 
-saved in bits 8-57 in a migration or poisoned entry, but pmd_pfn() still 
-treat bits 12-47 as the pfn number on ARM64, which may get an incorrect 
-page struct (also maybe is NULL by pfn_to_online_page()) to make the 
-access statistics incorrect.
+FWIW, my much smaller automation turned green, building 274a2eebf80c
+https://cirrus-ci.com/task/6357530606567424?logs=build_image#L3814
+previously it failed to come back up after a reboot at that point.
 
-/*
-  * Encode and decode a swap entry:
-  *	bits 0-1:	present (must be zero)
-  *	bits 2:		remember PG_anon_exclusive
-  *	bits 3-7:	swap type
-  *	bits 8-57:	swap offset
-  *	bit  58:	PTE_PROT_NONE (must be zero)
-  */
+And the first run of postgres' tests using that newly built image also passed,
+so I'm reasonably confident that the issue is fixed, rather than made less
+common.  Not that that is as likely to find problems as syscaller.
 
+Greetings,
 
-Moreoever I don't think we should still waste time to get the page of 
-the non-present entry, just treat it as not-accessed and skip it, that 
-keeps consistent with non-present pte level entry.
-
-Does that make sense for you? Thanks.
+Andres Freund

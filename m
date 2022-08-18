@@ -2,156 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC34597BC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD044597BFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242874AbiHRC5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 22:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50722 "EHLO
+        id S242974AbiHRDHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 23:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239067AbiHRC5k (ORCPT
+        with ESMTP id S240598AbiHRDHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 22:57:40 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50997A6C0F;
-        Wed, 17 Aug 2022 19:57:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=F1vJoryCVMtuws0pPBOXFjXCep49VgErsKZNNDCOJYQ=; b=sKZFc9FLaiCKeXO7bE+jSttT6P
-        PJ3B6EHGQpk7UMP4u0Sz5mmi6KRfIHUYSVI1OFOOv9bEjDXj2FT7yibhL22a+lfFQD8N+Rf5AzONS
-        BrrjtMhDFVWWQI+v6DFy+GvrOAd++iEpFDLNE1ZsGsWoHJphOy4T1TD+YvbUB1qdCzMMJVt58/MRC
-        h058FGLOoybGQoXjLYlR4Y+ydRhiafng4jtMJkbE2Wbm3f9PACo4QCCi+aN5/dvB+Pl8g+58HPFq/
-        ug10cuwTN9eiPAQwrDbxzcrEhfp2oTVYm7gnuP+UtXLM5A3Zzlzo9Evh0pEdE2PckWHtTMfxwhGAt
-        DuuK94zw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oOViy-005aXn-Nu;
-        Thu, 18 Aug 2022 02:57:36 +0000
-Date:   Thu, 18 Aug 2022 03:57:36 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 1/5] dynamic_dname(): drop unused dentry argument
-Message-ID: <Yv2qoNQg48rtymGE@ZenIV>
+        Wed, 17 Aug 2022 23:07:15 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CEE51419;
+        Wed, 17 Aug 2022 20:07:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660792034; x=1692328034;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=paaeyTrbMBIZzJAEm8UJW/v3a75y7c1pQy4y5buXMcY=;
+  b=PuLPEBAc656ipuKBPMPEY4sSOlQP9kASR1fUqR2HWBirv7+W7Au5TDc7
+   f2/b195BReI42A2BoSapPbPXO8h5d78Yd8xETtGuDUZlthY5vlo+tQ/Hx
+   xWptsNGTlN5aKu/XC5TPrXbaoaAfpRjc+4NS4GmYTXhbhDtJ0xi8rhBac
+   cG7fb6J2XBqxs6NKv4Aqkkd5+j1Mbs95fLBDxrRwWT9HYQX2YFYFWJFfe
+   QnaxU1CG2fL2ZSu5IhwTXZpTJynFQaFSCacU2pplbUSxMwxAOhOW8ngtO
+   iDqAgRn9FawC2jc7iQ4ON68xOQa8uxFhd6DrbX/+4ITFhAHS3e7fu25Bm
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="292651209"
+X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
+   d="scan'208";a="292651209"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 20:07:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
+   d="scan'208";a="636638805"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga008.jf.intel.com with ESMTP; 17 Aug 2022 20:07:10 -0700
+Date:   Thu, 18 Aug 2022 10:58:03 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     "Manne, Nava kishore" <nava.kishore.manne@amd.com>
+Cc:     Nava kishore Manne <nava.manne@xilinx.com>,
+        "mdf@kernel.org" <mdf@kernel.org>,
+        "hao.wu@intel.com" <hao.wu@intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "git@xilinx.com" <git@xilinx.com>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 2/3] fpga: region: Add fpga-region 'power-domains'
+ property
+Message-ID: <Yv2qu2pUh7U5ntcl@yilunxu-OptiPlex-7050>
+References: <20220523134517.4056873-1-nava.manne@xilinx.com>
+ <20220523134517.4056873-3-nava.manne@xilinx.com>
+ <20220624162815.GA2142910@yilunxu-OptiPlex-7050>
+ <DM6PR12MB39937A19AE147CD9105C8D52CD8C9@DM6PR12MB3993.namprd12.prod.outlook.com>
+ <20220721065454.GA1689481@yilunxu-OptiPlex-7050>
+ <DM6PR12MB39935950EC1E2998075E0A1DCD6B9@DM6PR12MB3993.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <DM6PR12MB39935950EC1E2998075E0A1DCD6B9@DM6PR12MB3993.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- drivers/dma-buf/dma-buf.c | 2 +-
- fs/anon_inodes.c          | 2 +-
- fs/d_path.c               | 3 +--
- fs/nsfs.c                 | 2 +-
- fs/pipe.c                 | 2 +-
- include/linux/dcache.h    | 4 ++--
- net/socket.c              | 2 +-
- 7 files changed, 8 insertions(+), 9 deletions(-)
+On 2022-08-16 at 10:22:28 +0000, Manne, Nava kishore wrote:
+> Hi Yilun,
+> 
+> 	Please find my response inline.
+> 
+> > -----Original Message-----
+> > From: Xu Yilun <yilun.xu@intel.com>
+> > Sent: Thursday, July 21, 2022 12:25 PM
+> > To: Manne, Nava kishore <nava.kishore.manne@amd.com>
+> > Cc: Nava kishore Manne <nava.manne@xilinx.com>; mdf@kernel.org;
+> > hao.wu@intel.com; trix@redhat.com; robh+dt@kernel.org;
+> > krzysztof.kozlowski+dt@linaro.org; michal.simek@xilinx.com; linux-
+> > fpga@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> > git@xilinx.com; Rob Herring <robh@kernel.org>
+> > Subject: Re: [PATCH v2 2/3] fpga: region: Add fpga-region 'power-domains'
+> > property
+> > 
+> > On Mon, Jul 18, 2022 at 06:46:32AM +0000, Manne, Nava kishore wrote:
+> > > Hi Yilun,
+> > >
+> > > 	Please find my response inline.
+> > >
+> > > > -----Original Message-----
+> > > > From: Xu Yilun <yilun.xu@intel.com>
+> > > > Sent: Friday, June 24, 2022 9:58 PM
+> > > > To: Nava kishore Manne <nava.manne@xilinx.com>
+> > > > Cc: mdf@kernel.org; hao.wu@intel.com; trix@redhat.com;
+> > > > robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> > > > michal.simek@xilinx.com; linux-fpga@vger.kernel.org;
+> > > > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
+> > > > kernel@lists.infradead.org; git@xilinx.com; Rob Herring
+> > > > <robh@kernel.org>
+> > > > Subject: Re: [PATCH v2 2/3] fpga: region: Add fpga-region 'power-
+> > domains'
+> > > > property
+> > > >
+> > > > CAUTION: This message has originated from an External Source. Please
+> > > > use proper judgment and caution when opening attachments, clicking
+> > > > links, or responding to this email.
+> > > >
+> > > >
+> > > > On Mon, May 23, 2022 at 07:15:16PM +0530, Nava kishore Manne wrote:
+> > > > > Add fpga-region 'power-domains' property to allow to handle the
+> > > > > FPGA/PL power domains.
+> > > > >
+> > > > > Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
+> > > > > Acked-by: Rob Herring <robh@kernel.org>
+> > > > > ---
+> > > > > Changes for v2:
+> > > > >               - Updated power-domains description.
+> > > > >
+> > > > >  .../devicetree/bindings/fpga/fpga-region.txt       | 14 ++++++++++++++
+> > > > >  1 file changed, 14 insertions(+)
+> > > > >
+> > > > > diff --git
+> > > > > a/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > > > > b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > > > > index 7d3515264838..f299c3749505 100644
+> > > > > --- a/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > > > > +++ b/Documentation/devicetree/bindings/fpga/fpga-region.txt
+> > > > > @@ -196,6 +196,20 @@ Optional properties:
+> > > > >  - config-complete-timeout-us : The maximum time in microseconds
+> > > > > time
+> > > > for the
+> > > > >       FPGA to go to operating mode after the region has been
+> > programmed.
+> > > > >  - child nodes : devices in the FPGA after programming.
+> > > > > +- power-domains : A phandle and power domain specifier pair to
+> > > > > +the
+> > > > power domain
+> > > > > +     which is responsible for turning on/off the power to the
+> > > > > + FPGA/PL
+> > > > region.
+> > > >
+> > > > Could you help explain what is PL?
+> > > >
+> > > > > +Example:
+> > > > > +     fpga_full: fpga-full {
+> > > > > +                compatible = "fpga-region";
+> > > > > +                fpga-mgr = <&zynqmp_pcap>;
+> > > > > +                #address-cells = <2>;
+> > > > > +                #size-cells = <2>;
+> > > > > +                ranges;
+> > > > > +                power-domains = <&zynqmp_firmware PL_PD>;
+> > > > > +        };
+> > > > > +
+> > > > > +     The PL_PD power domain will be turned on before loading the
+> > > > > +bitstream and turned off while removing/unloading the bitstream
+> > > > > +using
+> > > > overlays.
+> > > >
+> > > > I think the single power-domain may not cover some use cases that
+> > > > of-fpga- region driver supports.
+> > >
+> > > I am not sure which use case you are talking about. Can you please point
+> > me the exact use case here?
+> > >
+> > > > It is possible there are already devices in fpga-region for static
+> > > > OF tree, or an overlay with no 'firmware-name' but 'external-fpga-
+> > > > config'. In these cases power domains may still be needed, is it?
+> > > >
+> > >
+> > > It's an optional property user can decide whether he needs this
+> > > support or not for 'external-fpga-config Use case.
+> > 
+> > If an external-fpga-config FPGA region needs to enable a power domain
+> > before sub devices population, how could it config the DT? I assume in this
+> > patch "power-domains" property is only used before & after reconfiguration
+> > but external-fpga-config FPGA region may need no reconfiguration.
+> > 
+> I agree, For 'external-fpga-config' use case this patch is not capable of supporting the dynamic PM.
+> I Will explore and get back to you to handle this use case.
+> 
+> > >
+> > > > Another case is the fpga-region may need multiple power domains?
+> > > >
+> > >
+> > > In our use case full region and relevant partial regions have
+> > > different power domains and this patch is capable of handle different
+> > > power domain regions (full and partial regions)
+> > 
+> > If a FPGA region needs 2 or more power domains for partial reconfiguration,
+> > how could we find out and enable them all?
+> > 
+> > From the 2 cases, I see as a generic driver, there may be need to enable
+> > different power domains at different moments. And I'm afraid a simple
+> > implementation of pm_runtime_get before reconfiguration may limit the
+> > usage of "power-domains" property for of-fpga-region.
+> > 
+> 
+> Can you please point me any references to handle the multiple power domains?
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index efb4990b29e1..5ec2f314b6e9 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -53,7 +53,7 @@ static char *dmabuffs_dname(struct dentry *dentry, char *buffer, int buflen)
- 		ret = strlcpy(name, dmabuf->name, DMA_BUF_NAME_LEN);
- 	spin_unlock(&dmabuf->name_lock);
- 
--	return dynamic_dname(dentry, buffer, buflen, "/%s:%s",
-+	return dynamic_dname(buffer, buflen, "/%s:%s",
- 			     dentry->d_name.name, ret > 0 ? name : "");
- }
- 
-diff --git a/fs/anon_inodes.c b/fs/anon_inodes.c
-index e0c3e33c4177..24192a7667ed 100644
---- a/fs/anon_inodes.c
-+++ b/fs/anon_inodes.c
-@@ -32,7 +32,7 @@ static struct inode *anon_inode_inode;
-  */
- static char *anon_inodefs_dname(struct dentry *dentry, char *buffer, int buflen)
- {
--	return dynamic_dname(dentry, buffer, buflen, "anon_inode:%s",
-+	return dynamic_dname(buffer, buflen, "anon_inode:%s",
- 				dentry->d_name.name);
- }
- 
-diff --git a/fs/d_path.c b/fs/d_path.c
-index e4e0ebad1f15..ce8d9d49e1e7 100644
---- a/fs/d_path.c
-+++ b/fs/d_path.c
-@@ -297,8 +297,7 @@ EXPORT_SYMBOL(d_path);
- /*
-  * Helper function for dentry_operations.d_dname() members
-  */
--char *dynamic_dname(struct dentry *dentry, char *buffer, int buflen,
--			const char *fmt, ...)
-+char *dynamic_dname(char *buffer, int buflen, const char *fmt, ...)
- {
- 	va_list args;
- 	char temp[64];
-diff --git a/fs/nsfs.c b/fs/nsfs.c
-index 800c1d0eb0d0..3506f6074288 100644
---- a/fs/nsfs.c
-+++ b/fs/nsfs.c
-@@ -28,7 +28,7 @@ static char *ns_dname(struct dentry *dentry, char *buffer, int buflen)
- 	struct inode *inode = d_inode(dentry);
- 	const struct proc_ns_operations *ns_ops = dentry->d_fsdata;
- 
--	return dynamic_dname(dentry, buffer, buflen, "%s:[%lu]",
-+	return dynamic_dname(buffer, buflen, "%s:[%lu]",
- 		ns_ops->name, inode->i_ino);
- }
- 
-diff --git a/fs/pipe.c b/fs/pipe.c
-index 74ae9fafd25a..42c7ff41c2db 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -860,7 +860,7 @@ static struct vfsmount *pipe_mnt __read_mostly;
-  */
- static char *pipefs_dname(struct dentry *dentry, char *buffer, int buflen)
- {
--	return dynamic_dname(dentry, buffer, buflen, "pipe:[%lu]",
-+	return dynamic_dname(buffer, buflen, "pipe:[%lu]",
- 				d_inode(dentry)->i_ino);
- }
- 
-diff --git a/include/linux/dcache.h b/include/linux/dcache.h
-index 92c78ed02b54..54d46518c481 100644
---- a/include/linux/dcache.h
-+++ b/include/linux/dcache.h
-@@ -287,8 +287,8 @@ static inline unsigned d_count(const struct dentry *dentry)
- /*
-  * helper function for dentry_operations.d_dname() members
-  */
--extern __printf(4, 5)
--char *dynamic_dname(struct dentry *, char *, int, const char *, ...);
-+extern __printf(3, 4)
-+char *dynamic_dname(char *, int, const char *, ...);
- 
- extern char *__d_path(const struct path *, const struct path *, char *, int);
- extern char *d_absolute_path(const struct path *, char *, int);
-diff --git a/net/socket.c b/net/socket.c
-index 9b27c5e4e5ba..d183e83e0cdf 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -355,7 +355,7 @@ static const struct super_operations sockfs_ops = {
-  */
- static char *sockfs_dname(struct dentry *dentry, char *buffer, int buflen)
- {
--	return dynamic_dname(dentry, buffer, buflen, "socket:[%lu]",
-+	return dynamic_dname(buffer, buflen, "socket:[%lu]",
- 				d_inode(dentry)->i_ino);
- }
- 
--- 
-2.30.2
+Some devices may need multiple domains to work properly, for example:
 
+	power-domains = <&pd_disp>, <&pd_pci>;
+	power-domain-names = "pcie", "pcie_phy";
+
+I'm not sure if there is need for some fpga region, but think it could be
+a valid usecase.
+
+Thanks,
+Yilun
+
+> 
+> This implementation is region specific which means it can handle both full and partial power domains
+> Independently based on the power domains info exists in the DT.
+> For example:
+> 
+> Base DT: For full
+> fpga_full: fpga-full {
+>                 compatible = "fpga-region";
+>                 fpga-mgr = <&zynqmp_pcap>;
+>                 #address-cells = <2>;
+>                 #size-cells = <2>;
+>                 ranges;
+>                 power-domains = <&zynqmp_firmware PL_PD>;
+> };
+> 
+> Overlay DT: For Partial
+> fragment@0 {
+> 	target = <&fpga_full>;
+> 	#address-cells = <2>;
+> 	#size-cells = <2>;
+> 	 __overlay__ {
+> 		#address-cells = <2>;
+> 		#size-cells = <2>;
+> 		firmware-name = "full.bin";
+> 		fpga_PR0: fpga-PR0 {
+> 			compatible = "fpga-region";
+> 			#address-cells = <2>;
+> 			#size-cells = <2>;
+> 			ranges;
+> 			power-domains = <&zynqmp_firmware PL_PR_PD>;
+> 		};
+> 	 };
+> };
+> 
+> Regards,
+> Navakishore.

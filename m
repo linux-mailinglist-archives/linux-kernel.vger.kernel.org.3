@@ -2,282 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD07597ECC
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E70597ED3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 08:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243722AbiHRGtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 02:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S241630AbiHRGyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 02:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243530AbiHRGtu (ORCPT
+        with ESMTP id S243362AbiHRGyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 02:49:50 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2064.outbound.protection.outlook.com [40.107.237.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B017266A4B;
-        Wed, 17 Aug 2022 23:49:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jSP61beXfglQUJ4+eM3lgDLOE2jqRze+5H07lAOf2HsJkk22ADkusN9eCW3th5/jTM54uKWe0z13JpK8/Qx1lpvkJx4pxnqvLCnVsUPC9vQpOmmgVulXAkdbPbPxh+PkQgbfydKvBbrKcbsyWn9+BbZWn7RE6UjSWPI/kuPzpsk8mjop/nb1o/oOBGxsElB2cp8WX/D3DzjzjW5Xl2Zx8ZJ9CeFHVyQXhpj7kXZ5wCQlqIJEHALid8ukNk+o+mymVEv5TfCYIoYKf8fPZXb/e/E1Td34rjVOVUVc8htw89JKUTKcVRN8IUPmzaS78jlLqw/JJbQQSA6pRVie7Nin+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FRZ5xPWDe4EnGW2UtR56LWZXa6n+nydAWsl6Yp+iokw=;
- b=JKqSMvmG46wMH3epZ16SvYd8EoYu6lfpDizbbgE7I0LGdPKBkc31C30l/MHcTL5Db5ydN6dWU7txbgHiPqB7Hfnupsr5aksIP4KHs/JCj4fZ71+U1cIx6ziNHH6I3keXks00IW2au/DUJNSQSKYIxYULiad/CfXJIHNKmdA5Xq2zmv2NeMpZ+sN7g13dnfKXxY2ngZ77KSb+9IoyRds+42+1QbImaTvrReeOGA/PA5ZrSLnP37olnoDxUtr+Qov/hU3LUksMB+fOrDUy8zKNXWXK+NdzUHbMAOO5f24Xkc0eZfwlXx2JXltmH+MDw6vwBYrT0mkcff77TGKtBfQJ3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synaptics.com; dmarc=pass action=none
- header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FRZ5xPWDe4EnGW2UtR56LWZXa6n+nydAWsl6Yp+iokw=;
- b=kNB/dX2+2xpj2IWzFTEcuO7dH0ko7wigs72Qb61utjfIprFfTcOagvuTjMyAcFKfa1a5rx6Kzh4ZrPR+wYLD5AtWzj8TXPc47seej1uj0Uz7LB/sl/QXUYUZP8fI0sK4hSnCD/LjarbZ1XyLT8pvIsOYtH7xSHkvr8c2dRURt6c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synaptics.com;
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
- by MW4PR03MB6538.namprd03.prod.outlook.com (2603:10b6:303:125::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.19; Thu, 18 Aug
- 2022 06:49:46 +0000
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::c832:eea0:1883:a19c]) by DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::c832:eea0:1883:a19c%3]) with mapi id 15.20.5525.011; Thu, 18 Aug 2022
- 06:49:46 +0000
-Message-ID: <3a665809-9795-ed13-73af-90b1ed608ad4@synaptics.com>
-Date:   Thu, 18 Aug 2022 14:49:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] drm/fourcc: Add Synaptics VideoSmart tiled modifiers
-Content-Language: en-US
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     dri-devel@lists.freedesktop.org, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, airlied@linux.ie,
-        daniel@ffwll.ch, mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, ezequiel@vanguardiasur.com.ar,
-        sakari.ailus@linux.intel.com, ribalda@chromium.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sebastian.hesselbarth@gmail.com, jszhang@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220808162750.828001-1-randy.li@synaptics.com>
- <20220808162750.828001-2-randy.li@synaptics.com>
- <CAAFQd5A+ueaiW8=cZZLomBLVtSNd8k89FUhYRp23yayQfXnT9A@mail.gmail.com>
-From:   Hsia-Jun Li <Randy.Li@synaptics.com>
-In-Reply-To: <CAAFQd5A+ueaiW8=cZZLomBLVtSNd8k89FUhYRp23yayQfXnT9A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR10CA0007.namprd10.prod.outlook.com
- (2603:10b6:a03:255::12) To DM6PR03MB5196.namprd03.prod.outlook.com
- (2603:10b6:5:24a::19)
+        Thu, 18 Aug 2022 02:54:32 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321725F9BA
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:54:31 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id j5-20020a056e02218500b002de1cf2347bso605729ila.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 23:54:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=mbKOrYZyWFLRbX6wKHcAdeItOh4MyQXTN8N19xwN808=;
+        b=6RXgmHQbaK6O9ojxVZIszNNRw23gtE4b9A5YwCgE/LkVebEq+e7Eh2TaF87cpHjpMH
+         USsTVq0FupTNralCjFPh2zwH7kAOHm/piHs8SFtppzxOW7lsnS16lNwi9HU7aya1KJGM
+         kT9mPnQMdrOpfXyOpBT6k8dNe8ywtX26utSoVuaFNrVQzVm4k3YI0BtPKSmCMdEjwefF
+         XAD1y2aDOYp9fQKm5fghz7l9rjtYUSDBeifG4q9948ZQg1nSoQMJSaGW+RACUpGMKFj1
+         OXdPDCdhFp4mY2i6oDq2JnoAt5bqF/L4mOrYgIh5RH8SPMBeZsjy7m0Baj2BwkgpfKGr
+         1dfA==
+X-Gm-Message-State: ACgBeo0ozO1dqsA6cyP+fnmWxzqdBRpUjqw3g/aB/ky6shHUYmFQbRd5
+        4RufcHHn3gPik3EucR/2VbItBtPfCJwPlKzUaJuZiTS4A+Up
+X-Google-Smtp-Source: AA6agR7W8W1iFYrka1GoA6jhbjHyzIaN9HihBhgzPg4web5i0xn3MVpG7nIpU2HC5SNTs3qUWhVlzfpfbQciZNMxz8xKrDHbDHUh
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 696ef8ca-33a8-4e1c-f3bb-08da80e5d6bb
-X-MS-TrafficTypeDiagnostic: MW4PR03MB6538:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Qh8O/3vburSo4Zw6CNaouOXUws/QMvcCcRi8g0xmHc+M74P8D02NcTguX03V5S4AKUNDB+mlNzEWlK0L9Fm5AdiWpBKtjbfxAANFenKbY5aG56aGRCzkp5HvoP9NzheM3o6KZWK0DlAqxn4HAOcuaU8avyKVz0BOiZAaCCpjUAlB7wRuQ23pS8jlv8CfMQvvr4ed2A8FFXXqRSsTAtPoEa5Z/E92BHUvXly8OsO12fu66r2rLZIuXS4UYAfnDWODSTo/YA4rRFz7ijHAIXBY1rOqWfNpf1QWk7OvLe7ACAcinAPeZZ0EV+f7ffSqL56XFXUUA6HO/nh5VwPuDp0djl5MgswuIsHQET/oZ0j2BCvDWnwnEKFcGw6WeTLxjEqDyas1MqMSqJdfJhXyZ8C8Zf0bOtizr8XrxE0GgzjLjznNmQ47IDEX5nUFbeZqvv6gKlhfisUgNDOpRVBb742IMMAlVC2Wg76HyEtoSRiFWq1MEPVdYH4nocKLOGNTcRmwu4kEM5M4ady7kdaZPBRRFIEikaziPfuOeTFfg1VMn/vzp4dxjgSCeCoaFnxnfX8dQleIGEtBekYqiCFm+qLOVPemzeEpZ8rzqBNT1+jVgejMU7jLdO5lVM1BUD8SrmNuXwyuEXdZLSwP5Eb5Pe5X8DVXDFGlzcsM21f2wAGTId2s0kInSQ6wdUs4XpX2mpchrg/8uxalEu/dyrfvzfm+6vdv3mKHnvSJVnutp7RjPrzd1b1HsqGjToA+wuafjl0/YtZqy8dUCIWN6vRhmPY3Gv/evfHXMpVR1uQi3lI+nZUBlb5Zg1BVZK0b2hPOGiZ2
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(396003)(346002)(136003)(366004)(39860400002)(41300700001)(5660300002)(36756003)(478600001)(7416002)(316002)(6916009)(6666004)(66946007)(6486002)(66556008)(8936002)(66476007)(8676002)(31686004)(2906002)(4326008)(26005)(31696002)(53546011)(52116002)(186003)(2616005)(6506007)(86362001)(6512007)(83380400001)(38100700002)(38350700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OSt6eVlVbEJYMTFwVk5yY0lqQ2NtSndMa1FQT0RCbnF0QkdweEV6cWdlZkxG?=
- =?utf-8?B?Q21hQ1Z6V24wbFpTajJQUW9kaGN5RzlTZ05MZGpiYzNBZXFrM0dBQVBjdmtH?=
- =?utf-8?B?eEl3TmR5bEpONVRrZVVSTFVQUEV4VWpCNnNIM2sxZWF4Q1pxVXFZOW11c2Yv?=
- =?utf-8?B?Y0N1SUt2U2lKU1NNdUhESFhDSG41aGRtTTViQXJ3ekFlNys5aFhMRitIQjFG?=
- =?utf-8?B?czBrNktMczdWN2F6aGlWK3pBMVFwSWpYc2FObFFyMEdMeE9JMU1VTGdlRnlF?=
- =?utf-8?B?UnUrbHdGQWZrVHpPT0plc2pLMnhXQmdoVGRoWGVGallwamY2L29LU2hldmEy?=
- =?utf-8?B?RkVGRitwdFFjLzl4UVFmZUlHdEY3OWFMNUtUY3hLK1Bkb0xDWXhxdjdhOEVZ?=
- =?utf-8?B?ZmJQaElrZlVFUjJtZXZDenhUaTZtU0FsUG1wWVhzalVxTG51S0EwUXlkbWhD?=
- =?utf-8?B?STFrMjRsb3RCZDVQZXlySmNneVF6RE8zZ1ZnVFB1SjNMSDVrT2hDYkZlNUY1?=
- =?utf-8?B?VW1HUkF0RVp5ME9XRnZZRUZCdFlKNFB5YUdYdi8wVHRWdFJINnl3ZzdVOVA4?=
- =?utf-8?B?NDFSWlIySmVUdXdkSWEwcG40YlF0ZkJXaWN4WGhBOEFqTFJKNDFrVkMvQ3RZ?=
- =?utf-8?B?bFdTYjdWVW92NVk1WjFIeW1XanFEak10RGgyV3VDS1ZtSU1aU0E3dWRYYUZn?=
- =?utf-8?B?aE4zVUxOZ1IvZE0veGwyMXlMWDhsVk0wZEVNSlVVZlIxSGJKMWhrS0VvdzNZ?=
- =?utf-8?B?SUNqWVZ1RElKUnZVSGFiQ0xCTHJIYzRDNmxIU3BMN3lzb1FtV05ZenNubVlL?=
- =?utf-8?B?R3dmVHpnNnFUVTZYWGJ5dVRwZDB6YWo5YnFSVW9ITm9OTDd5M0R2MVFpTWpv?=
- =?utf-8?B?NUJieU1STkNkajJSTG1ScW5Yb3Q3N3BaYTJlbFB4Nkp1MmYzNW1nTjVRN0dZ?=
- =?utf-8?B?UnBrTXhEQk1WdlR3RTV4Ny8xQVdKVDMwbzkwSjRkUHNHalJNcU9JUTVMdE4v?=
- =?utf-8?B?OTRlcmlCWnNyQ2g0WWRMVDN6Y1lWWFRNVDNJN09xRTBnbktTRHJCcnpWVk1w?=
- =?utf-8?B?VDVtR1BMRkwxTVlJQ2F0UUZza3ZMdTBJaitnYi8rdUY4UWx2dkZ0NzJtTS92?=
- =?utf-8?B?ME05UjRrVUJHeUM4RjUxME94T2VQS2p5alpjNGRneHQvVWdBcm81cVVPa3Jw?=
- =?utf-8?B?Tng2cU9vT2tESis0VkRGUHdlaHFSQVh1Y3VIdktoYTQ4QkJua2l3RTZZUjBX?=
- =?utf-8?B?bFhjM05SOVRpLy9CRms3ZUdqTklSdmFEWkxDRDFPZ1NJYXd1eXQxV3BVRHBu?=
- =?utf-8?B?MTZHQkJaRDNDR1FNOTNsYVV5VXV1ckt6RUloeGl3NHV6ZzZDa1BjUWtDWXRJ?=
- =?utf-8?B?OW81YmZjMUROTkozVThHc1lCazdwV0lsMlZSb0hRNjJyaUwxeTIyU01aZ2xp?=
- =?utf-8?B?UStZMXZtYXFLM0ZwbG5OQTRrTFJqVWFhUTc5OFl6YkYxKzJUOWtuVEFZcWZK?=
- =?utf-8?B?eGJSOGVDS0FLVFM3bWxwOFlSUEpicS9VZ28zeFN4RU5paThIY1FsK0V6bnNY?=
- =?utf-8?B?UlN1Z0U3a3NTSU1PUG1jckJueDVUMnRWc1Q2Rnp4QW8xanlTcFl0eW9uZXU2?=
- =?utf-8?B?Wk15MFYvZ2FDQmh5c1NzRk01bXp5K1czZzZZdFcvV1pHMDlNcDBHaCtzVDM5?=
- =?utf-8?B?aTM1anZhOUhtYmNHSDFRVXdKUFc2cFVjYWZuL0JjMTV3cDE4eHEwajRzZXBx?=
- =?utf-8?B?RWw5Y1RtQVJubzNySmhyTGpIMlhMSkZWZVYvdHFsQWlHN0NtMHRvM2FnT0t4?=
- =?utf-8?B?Rkh6UWwwd3BRTzFGMkJoYnRnUGtGSjZMRExSQ0xGKzhGb0ZaalB1aDJrNy9D?=
- =?utf-8?B?VnFYdHowL3RkMVpQeDlRQmtzS0NUNTRmWjVDOVNKVHdUTmtPcjF3djY5R3hS?=
- =?utf-8?B?b3Z4M0dHWWVsbUsybVNRNCtXemR6RlNEL1kyR3ZvYVJWZVZMS2pMU28vUlRU?=
- =?utf-8?B?RXVSL3NtWlM1TlQxZ1ZDbzRIM1dpRTlMTDVjMkUvRXdiL0hPei9OWmFCUUlk?=
- =?utf-8?B?cVhONHczN1Yydm9WNnZwQ01MK3Y5aDhtcnN3WnZUS2RYcVBNdnNuN0VTSUt6?=
- =?utf-8?Q?pFJG0rayJPT/B6FqOkdAmrhmN?=
-X-OriginatorOrg: synaptics.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 696ef8ca-33a8-4e1c-f3bb-08da80e5d6bb
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 06:49:46.5791
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G8CMg/pjf+mbg2JgN6G0/bxtyCadUthc6e/+rm792za0sZkMRYvcMf1ehNmL04W9eU7ZslxONUbf+aezUJfFDQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR03MB6538
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:e816:0:b0:688:c999:d08c with SMTP id
+ f22-20020a6be816000000b00688c999d08cmr874708ioh.100.1660805670466; Wed, 17
+ Aug 2022 23:54:30 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 23:54:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000077caa05e67e7461@google.com>
+Subject: [syzbot] general protection fault in tls_strp_load_anchor_with_queue
+From:   syzbot <syzbot+7b9133d0ed61f27a4f7d@syzkaller.appspotmail.com>
+To:     borisp@nvidia.com, davem@davemloft.net, edumazet@google.com,
+        john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    7ebfc85e2cd7 Merge tag 'net-6.0-rc1' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1750b16b080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=924833c12349a8c0
+dashboard link: https://syzkaller.appspot.com/bug?extid=7b9133d0ed61f27a4f7d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7b9133d0ed61f27a4f7d@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc000000000e: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000070-0x0000000000000077]
+CPU: 1 PID: 9070 Comm: syz-executor.1 Not tainted 5.19.0-syzkaller-13930-g7ebfc85e2cd7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:tls_strp_load_anchor_with_queue+0x111/0x360 net/tls/tls_strp.c:329
+Code: 48 c1 ea 03 80 3c 02 00 0f 85 26 02 00 00 4c 8b 73 18 41 01 f4 48 b8 00 00 00 00 00 fc ff df 49 8d 7e 70 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e e3 01 00 00 48 b8 00 00 00 00
+RSP: 0018:ffffc900051c7b88 EFLAGS: 00010212
+RAX: dffffc0000000000 RBX: ffff88801fe3f0d0 RCX: ffffc9000ac99000
+RDX: 000000000000000e RSI: 0000000000000000 RDI: 0000000000000070
+RBP: ffff8880174dcb40 R08: 0000000000000004 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: 1ffff92000a38f72 R14: 0000000000000000 R15: ffff88801fe3f0e8
+FS:  00007fc847b72700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc847b71ff8 CR3: 0000000079991000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ tls_strp_read_sock+0x3a4/0x840 net/tls/tls_strp.c:379
+ tls_strp_check_rcv+0x79/0xb0 net/tls/tls_strp.c:404
+ do_tls_setsockopt_conf net/tls/tls_main.c:731 [inline]
+ do_tls_setsockopt net/tls/tls_main.c:801 [inline]
+ tls_setsockopt+0xecb/0x1240 net/tls/tls_main.c:829
+ __sys_setsockopt+0x2d6/0x690 net/socket.c:2252
+ __do_sys_setsockopt net/socket.c:2263 [inline]
+ __se_sys_setsockopt net/socket.c:2260 [inline]
+ __x64_sys_setsockopt+0xba/0x150 net/socket.c:2260
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc846a89279
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fc847b72168 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 00007fc846b9bf80 RCX: 00007fc846a89279
+RDX: 0000000000000002 RSI: 000000000000011a RDI: 0000000000000003
+RBP: 00007fc847b721d0 R08: 0000000000000038 R09: 0000000000000000
+R10: 00000000200004c0 R11: 0000000000000246 R12: 0000000000000001
+R13: 00007fffd9012e3f R14: 00007fc847b72300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:tls_strp_load_anchor_with_queue+0x111/0x360 net/tls/tls_strp.c:329
+Code: 48 c1 ea 03 80 3c 02 00 0f 85 26 02 00 00 4c 8b 73 18 41 01 f4 48 b8 00 00 00 00 00 fc ff df 49 8d 7e 70 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e e3 01 00 00 48 b8 00 00 00 00
+RSP: 0018:ffffc900051c7b88 EFLAGS: 00010212
+RAX: dffffc0000000000 RBX: ffff88801fe3f0d0 RCX: ffffc9000ac99000
+RDX: 000000000000000e RSI: 0000000000000000 RDI: 0000000000000070
+RBP: ffff8880174dcb40 R08: 0000000000000004 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: 1ffff92000a38f72 R14: 0000000000000000 R15: ffff88801fe3f0e8
+FS:  00007fc847b72700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc280ded718 CR3: 0000000079991000 CR4: 0000000000350ef0
+----------------
+Code disassembly (best guess):
+   0:	48 c1 ea 03          	shr    $0x3,%rdx
+   4:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   8:	0f 85 26 02 00 00    	jne    0x234
+   e:	4c 8b 73 18          	mov    0x18(%rbx),%r14
+  12:	41 01 f4             	add    %esi,%r12d
+  15:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  1c:	fc ff df
+  1f:	49 8d 7e 70          	lea    0x70(%r14),%rdi
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	84 c0                	test   %al,%al
+  30:	74 08                	je     0x3a
+  32:	3c 03                	cmp    $0x3,%al
+  34:	0f 8e e3 01 00 00    	jle    0x21d
+  3a:	48                   	rex.W
+  3b:	b8 00 00 00 00       	mov    $0x0,%eax
 
 
-On 8/18/22 14:07, Tomasz Figa wrote:
-> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
-> 
-> 
-> Hi Randy,
-> 
-> On Tue, Aug 9, 2022 at 1:28 AM Hsia-Jun Li <randy.li@synaptics.com> wrote:
->>
->> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
->>
->> Memory Traffic Reduction(MTR) is a module in Synaptics
->> VideoSmart platform could process lossless compression image
->> and cache the tile memory line.
->>
->> Those modifiers only record the parameters would effort pixel
->> layout or memory layout. Whether physical memory page mapping
->> is used is not a part of format.
->>
->> We would allocate the same size of memory for uncompressed
->> and compressed luma and chroma data, while the compressed buffer
->> would request two extra planes holding the metadata for
->> the decompression.
->>
->> The reason why we need to allocate the same size of memory for
->> the compressed frame:
->> 1. The compression ratio is not fixed and differnt platforms could
->> use a different compression protocol. These protocols are complete
->> vendor proprietaries, the other device won't be able to use them.
->> It is not necessary to define the version of them here.
->>
->> 2. Video codec could discard the compression attribute when the
->> intra block copy applied to this frame. It would waste lots of
->> time on re-allocation.
->>
->> I am wondering if it is better to add an addtional plane property to
->> describe whether the current framebuffer is compressed?
->> While the compression flag is still a part of format modifier,
->> because it would have two extra meta data planes in the compression
->> version.
->>
->> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
->> ---
->>   include/uapi/drm/drm_fourcc.h | 49 +++++++++++++++++++++++++++++++++++
->>   1 file changed, 49 insertions(+)
->>
->> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
->> index 0206f812c569..b67884e8bc69 100644
->> --- a/include/uapi/drm/drm_fourcc.h
->> +++ b/include/uapi/drm/drm_fourcc.h
->> @@ -381,6 +381,7 @@ extern "C" {
->>   #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
->>   #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
->>   #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
->> +#define DRM_FORMAT_MOD_VENDOR_SYNAPTICS 0x0b
->>
->>   /* add more to the end as needed */
->>
->> @@ -1452,6 +1453,54 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 modifier)
->>   #define AMD_FMT_MOD_CLEAR(field) \
->>          (~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
->>
->> +/*
->> + * Synaptics VideoSmart modifiers
->> + *
->> + *       Macro
->> + * Bits  Param Description
->> + * ----  ----- -----------------------------------------------------------------
->> + *
->> + *  7:0  f     Scan direction description.
->> + *
->> + *               0 = Invalid
->> + *               1 = V4, the scan would always start from vertical for 4 pixel
->> + *                   then move back to the start pixel of the next horizontal
->> + *                   direction.
->> + *               2 = Reserved for future use.
-> 
-> I guess 2..255 are all reserved for future use?
-Likes the Intel has y-tile and x-tile.
-> 
->> + *
->> + * 15:8  m     The times of pattern repeat in the right angle direction from
->> + *             the first scan direction.
->> + *
->> + * 19:16 p     The padding bits after the whole scan, could be zero.
-> 
-> What is the meaning of "scan" and "whole scan" here?
-For example a NV15 tiled format,
-(0, 0) (0, 1) (0, 2)
-(1, 0) (1, 1)
-(2, 0) (2, 1)
-(3, 0)
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-(0, 0) (1, 0) (2, 0) (3, 0) (0, 1) (1, 1) (2, 1) ... (3, 2) are 120bits, 
-then fill it with an extra 8 bits, (0, 3) would be placed that the first 
-128bits in the memory.
-
-Besides, I found even with four 64bits modifiers, it is not possible to 
-store all the compression options we need there. I need to borrow what 
-Intel did, hiding the tile flags somewhere(I would not use the userspace 
-gmmlib way, our codecs is based on v4l2, even drm framework may not be a 
-good place).
-
-Although the compression options could affect the memory layout but 
-userspace really don't need to know that.
-> 
-> Best regards,
-> Tomasz
-> 
->> + *
->> + * 35:20 -     Reserved for future use.  Must be zero.
->> + *
->> + * 36:36 c     Compression flag.
->> + *
->> + * 55:37 -     Reserved for future use.  Must be zero.
->> + *
->> + */
->> +
->> +#define DRM_FORMAT_MOD_SYNA_V4_TILED           fourcc_mod_code(SYNAPTICS, 1)
->> +
->> +#define DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(f, m, p, c) \
->> +       fourcc_mod_code(SYNAPTICS, (((f) & 0xff) | \
->> +                                (((m) & 0xff) << 8) | \
->> +                                (((p) & 0xf) << 16) | \
->> +                                (((c) & 0x1) << 36)))
->> +
->> +#define DRM_FORMAT_MOD_SYNA_V4H1 \
->> +       DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 0)
->> +
->> +#define DRM_FORMAT_MOD_SYNA_V4H3P8 \
->> +       DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 0)
->> +
->> +#define DRM_FORMAT_MOD_SYNA_V4H1_COMPRESSED \
->> +       DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 1)
->> +
->> +#define DRM_FORMAT_MOD_SYNA_V4H3P8_COMPRESSED \
->> +       DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 1)
->> +
->>   #if defined(__cplusplus)
->>   }
->>   #endif
->> --
->> 2.17.1
->>
-
--- 
-Hsia-Jun(Randy) Li
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,338 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC47598FFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C26598FFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241312AbiHRWGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 18:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S244702AbiHRWGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 18:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbiHRWGA (ORCPT
+        with ESMTP id S232990AbiHRWGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 18:06:00 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DB1D21FE
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 15:05:58 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0E2338B;
-        Fri, 19 Aug 2022 00:05:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1660860355;
-        bh=xD92V269nPxYBK40XY1d1B25dDlefBuRONroqzpcmFY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QUU/hQ32HHQF3Iy3QdDKQ8vHxfX3BWD5YwCe6g4cz4OhMabwyKJRwPSxJmDyMWfOe
-         o9mQzoOLH8HQPNXzMdOtcgTe04KFBTzwsFMw3jNG7eIiJcaagzZGYK2Sguonkg5VxJ
-         5c+cckw7toR6l9FhivXRTvYjNMNTgfP1UdrLaxS8=
-Date:   Fri, 19 Aug 2022 01:05:52 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Evan Quan <evan.quan@amd.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH] gpu: move from strlcpy with unused retval to strscpy
-Message-ID: <Yv63wP0jpCoVzuE+@pendragon.ideasonboard.com>
-References: <20220818210008.6721-1-wsa+renesas@sang-engineering.com>
+        Thu, 18 Aug 2022 18:06:33 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396ABD21F7;
+        Thu, 18 Aug 2022 15:06:32 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id w19so5670395ejc.7;
+        Thu, 18 Aug 2022 15:06:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=JCTh8kG/kYdyoUHtyXB+jjX01mOnfuolr7Ild9fizAg=;
+        b=Elp+bln4oYJ2TL8Kz11eRwuDXELrurfYX7F96HcVgoDhNrih84Wi1fwB5zaEPrordD
+         UP1Blce+6zK/CiMXxfzsnNOEelFQuLC2uLO7v0btgAW614L1OTem1BW8lvPVfanvWKL7
+         fFeyj7k1uobaoghg+g0CHxn2vLI4CWqcXRxaruzE/L2QrxzaffSxSwgfZF4HBxnXXIcE
+         l89PNc9mbU8jA8XFk7qBnIO8C0LRoY9U6RfPzFCtuqesZdEswP90weWEmz/xTs1k+3+0
+         Uyq+Gzka5gO0s6bxUSdMOPYVcz+BOxgMJ+pttNBJ4XYifLOJQ4z0UgcqA7KYegBK1j7k
+         lozw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=JCTh8kG/kYdyoUHtyXB+jjX01mOnfuolr7Ild9fizAg=;
+        b=CpVQyuwPVCeb5mdbHyFAT3V4kTH68YdswM+5g/BG0mIxQ4zuBpi092ju26AtjOrDuV
+         lvcZbXwXSWh0Wmqusux2uC6aYRFr8cNH+aLMtc86SeppHxJcB5pIQRr23sYVRN/eZrI1
+         qwQ7okKcwx1WwVHlDLxLr6WN1VxVUfFhST4k4BUY1ugjSa1GF/s9ASgHawOAdzUWzk3B
+         blwhwD1jjJmyEagZOfF5WtLJb1hVOx4GlHyrI0vbMBM32Awi9AVrUJrhITe4LOjaOphM
+         Dm3pmwDc04tYfB2WC82wKoAUTbKfaBN4tYv2VHjpe1k6u1o2gprot2ElzjXRVMGk0/kq
+         H7MA==
+X-Gm-Message-State: ACgBeo3WYqo8KfglYXSMQfJBCDjC19csaU0jkqYck9bBYQ7aHmulHRYA
+        cwttXi0vlf64Glq4/8mRMrE=
+X-Google-Smtp-Source: AA6agR4xImEt3gc0hR6OSGR8kI9kikSTupIwRDS50TI7JIiPFifM6tDC+Iykx66rN2W8OEDh6lfH9w==
+X-Received: by 2002:a17:907:608b:b0:731:8a9d:5a2d with SMTP id ht11-20020a170907608b00b007318a9d5a2dmr3104711ejc.443.1660860390741;
+        Thu, 18 Aug 2022 15:06:30 -0700 (PDT)
+Received: from fedora.robimarko.hr (cpe-94-253-165-74.zg.cable.xnet.hr. [94.253.165.74])
+        by smtp.googlemail.com with ESMTPSA id dk5-20020a0564021d8500b00442d5054a51sm1851584edb.87.2022.08.18.15.06.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 15:06:30 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sivaprak@codeaurora.org,
+        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v3 1/9] clk: qcom: clk-rcg2: add rcg2 mux ops
+Date:   Fri, 19 Aug 2022 00:06:20 +0200
+Message-Id: <20220818220628.339366-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220818210008.6721-1-wsa+renesas@sang-engineering.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+From: Christian Marangi <ansuelsmth@gmail.com>
 
-Thank you for the patch.
+An RCG may act as a mux that switch between 2 parents.
+This is the case on IPQ6018 and IPQ8074 where the APCS core clk that feeds
+the CPU cluster clock just switches between XO and the PLL that feeds it.
 
-On Thu, Aug 18, 2022 at 11:00:07PM +0200, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
-> 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Add the required ops to add support for this special configuration and use
+the generic mux function to determine the rate.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+This way we dont have to keep a essentially dummy frequency table to use
+RCG2 as a mux.
 
-> ---
->  drivers/gpu/drm/amd/amdgpu/atom.c                   | 2 +-
->  drivers/gpu/drm/amd/pm/legacy-dpm/legacy_dpm.c      | 2 +-
->  drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c | 6 +++---
->  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c           | 2 +-
->  drivers/gpu/drm/display/drm_dp_helper.c             | 2 +-
->  drivers/gpu/drm/display/drm_dp_mst_topology.c       | 2 +-
->  drivers/gpu/drm/drm_mipi_dsi.c                      | 2 +-
->  drivers/gpu/drm/i2c/tda998x_drv.c                   | 2 +-
->  drivers/gpu/drm/i915/selftests/i915_perf.c          | 2 +-
->  drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c             | 2 +-
->  drivers/gpu/drm/radeon/radeon_atombios.c            | 4 ++--
->  drivers/gpu/drm/radeon/radeon_combios.c             | 4 ++--
->  drivers/gpu/drm/rockchip/inno_hdmi.c                | 2 +-
->  drivers/gpu/drm/rockchip/rk3066_hdmi.c              | 2 +-
->  drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c              | 2 +-
->  15 files changed, 19 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/amdgpu/atom.c b/drivers/gpu/drm/amd/amdgpu/atom.c
-> index 1c5d9388ad0b..5f610e9a5f0f 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/atom.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/atom.c
-> @@ -1509,7 +1509,7 @@ struct atom_context *amdgpu_atom_parse(struct card_info *card, void *bios)
->  	str = CSTR(idx);
->  	if (*str != '\0') {
->  		pr_info("ATOM BIOS: %s\n", str);
-> -		strlcpy(ctx->vbios_version, str, sizeof(ctx->vbios_version));
-> +		strscpy(ctx->vbios_version, str, sizeof(ctx->vbios_version));
->  	}
->  
->  	atom_rom_header = (struct _ATOM_ROM_HEADER *)CSTR(base);
-> diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/legacy_dpm.c b/drivers/gpu/drm/amd/pm/legacy-dpm/legacy_dpm.c
-> index d3fe149d8476..81fb4e5dd804 100644
-> --- a/drivers/gpu/drm/amd/pm/legacy-dpm/legacy_dpm.c
-> +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/legacy_dpm.c
-> @@ -794,7 +794,7 @@ void amdgpu_add_thermal_controller(struct amdgpu_device *adev)
->  				struct i2c_board_info info = { };
->  				const char *name = pp_lib_thermal_controller_names[controller->ucType];
->  				info.addr = controller->ucI2cAddress >> 1;
-> -				strlcpy(info.type, name, sizeof(info.type));
-> +				strscpy(info.type, name, sizeof(info.type));
->  				i2c_new_client_device(&adev->pm.i2c_bus->adapter, &info);
->  			}
->  		} else {
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
-> index 7d2ed0ed2fe2..4efb62bcdb63 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-ahb-audio.c
-> @@ -542,8 +542,8 @@ static int snd_dw_hdmi_probe(struct platform_device *pdev)
->  	if (ret < 0)
->  		return ret;
->  
-> -	strlcpy(card->driver, DRIVER_NAME, sizeof(card->driver));
-> -	strlcpy(card->shortname, "DW-HDMI", sizeof(card->shortname));
-> +	strscpy(card->driver, DRIVER_NAME, sizeof(card->driver));
-> +	strscpy(card->shortname, "DW-HDMI", sizeof(card->shortname));
->  	snprintf(card->longname, sizeof(card->longname),
->  		 "%s rev 0x%02x, irq %d", card->shortname, revision,
->  		 data->irq);
-> @@ -561,7 +561,7 @@ static int snd_dw_hdmi_probe(struct platform_device *pdev)
->  
->  	dw->pcm = pcm;
->  	pcm->private_data = dw;
-> -	strlcpy(pcm->name, DRIVER_NAME, sizeof(pcm->name));
-> +	strscpy(pcm->name, DRIVER_NAME, sizeof(pcm->name));
->  	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_dw_hdmi_ops);
->  
->  	/*
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> index 25a60eb4d67c..4f3ae976e677 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> @@ -533,7 +533,7 @@ static struct i2c_adapter *dw_hdmi_i2c_adapter(struct dw_hdmi *hdmi)
->  	adap->owner = THIS_MODULE;
->  	adap->dev.parent = hdmi->dev;
->  	adap->algo = &dw_hdmi_algorithm;
-> -	strlcpy(adap->name, "DesignWare HDMI", sizeof(adap->name));
-> +	strscpy(adap->name, "DesignWare HDMI", sizeof(adap->name));
->  	i2c_set_adapdata(adap, hdmi);
->  
->  	ret = i2c_add_adapter(adap);
-> diff --git a/drivers/gpu/drm/display/drm_dp_helper.c b/drivers/gpu/drm/display/drm_dp_helper.c
-> index e5bab236b3ae..10a39b36a661 100644
-> --- a/drivers/gpu/drm/display/drm_dp_helper.c
-> +++ b/drivers/gpu/drm/display/drm_dp_helper.c
-> @@ -2058,7 +2058,7 @@ int drm_dp_aux_register(struct drm_dp_aux *aux)
->  	aux->ddc.owner = THIS_MODULE;
->  	aux->ddc.dev.parent = aux->dev;
->  
-> -	strlcpy(aux->ddc.name, aux->name ? aux->name : dev_name(aux->dev),
-> +	strscpy(aux->ddc.name, aux->name ? aux->name : dev_name(aux->dev),
->  		sizeof(aux->ddc.name));
->  
->  	ret = drm_dp_aux_register_devnode(aux);
-> diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> index 57e65423e50d..6bdf39937054 100644
-> --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
-> @@ -5780,7 +5780,7 @@ static int drm_dp_mst_register_i2c_bus(struct drm_dp_mst_port *port)
->  	aux->ddc.dev.parent = parent_dev;
->  	aux->ddc.dev.of_node = parent_dev->of_node;
->  
-> -	strlcpy(aux->ddc.name, aux->name ? aux->name : dev_name(parent_dev),
-> +	strscpy(aux->ddc.name, aux->name ? aux->name : dev_name(parent_dev),
->  		sizeof(aux->ddc.name));
->  
->  	return i2c_add_adapter(&aux->ddc);
-> diff --git a/drivers/gpu/drm/drm_mipi_dsi.c b/drivers/gpu/drm/drm_mipi_dsi.c
-> index c40bde96cfdf..9820b85a34c7 100644
-> --- a/drivers/gpu/drm/drm_mipi_dsi.c
-> +++ b/drivers/gpu/drm/drm_mipi_dsi.c
-> @@ -223,7 +223,7 @@ mipi_dsi_device_register_full(struct mipi_dsi_host *host,
->  
->  	dsi->dev.of_node = info->node;
->  	dsi->channel = info->channel;
-> -	strlcpy(dsi->name, info->type, sizeof(dsi->name));
-> +	strscpy(dsi->name, info->type, sizeof(dsi->name));
->  
->  	ret = mipi_dsi_device_add(dsi);
->  	if (ret) {
-> diff --git a/drivers/gpu/drm/i2c/tda998x_drv.c b/drivers/gpu/drm/i2c/tda998x_drv.c
-> index f8eb6f69be05..d49f0bd8d02c 100644
-> --- a/drivers/gpu/drm/i2c/tda998x_drv.c
-> +++ b/drivers/gpu/drm/i2c/tda998x_drv.c
-> @@ -1949,7 +1949,7 @@ static int tda998x_create(struct device *dev)
->  	 * offset.
->  	 */
->  	memset(&cec_info, 0, sizeof(cec_info));
-> -	strlcpy(cec_info.type, "tda9950", sizeof(cec_info.type));
-> +	strscpy(cec_info.type, "tda9950", sizeof(cec_info.type));
->  	cec_info.addr = priv->cec_addr;
->  	cec_info.platform_data = &priv->cec_glue;
->  	cec_info.irq = client->irq;
-> diff --git a/drivers/gpu/drm/i915/selftests/i915_perf.c b/drivers/gpu/drm/i915/selftests/i915_perf.c
-> index 88db2e3d81d0..8f5285654d7a 100644
-> --- a/drivers/gpu/drm/i915/selftests/i915_perf.c
-> +++ b/drivers/gpu/drm/i915/selftests/i915_perf.c
-> @@ -28,7 +28,7 @@ alloc_empty_config(struct i915_perf *perf)
->  	oa_config->perf = perf;
->  	kref_init(&oa_config->ref);
->  
-> -	strlcpy(oa_config->uuid, TEST_OA_CONFIG_UUID, sizeof(oa_config->uuid));
-> +	strscpy(oa_config->uuid, TEST_OA_CONFIG_UUID, sizeof(oa_config->uuid));
->  
->  	mutex_lock(&perf->metrics_lock);
->  
-> diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c b/drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c
-> index 6207eac88550..19541d197047 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c
-> @@ -292,7 +292,7 @@ static int mtk_hdmi_ddc_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> -	strlcpy(ddc->adap.name, "mediatek-hdmi-ddc", sizeof(ddc->adap.name));
-> +	strscpy(ddc->adap.name, "mediatek-hdmi-ddc", sizeof(ddc->adap.name));
->  	ddc->adap.owner = THIS_MODULE;
->  	ddc->adap.class = I2C_CLASS_DDC;
->  	ddc->adap.algo = &mtk_hdmi_ddc_algorithm;
-> diff --git a/drivers/gpu/drm/radeon/radeon_atombios.c b/drivers/gpu/drm/radeon/radeon_atombios.c
-> index 28c4413f4dc8..62fbbd6181bc 100644
-> --- a/drivers/gpu/drm/radeon/radeon_atombios.c
-> +++ b/drivers/gpu/drm/radeon/radeon_atombios.c
-> @@ -2104,7 +2104,7 @@ static int radeon_atombios_parse_power_table_1_3(struct radeon_device *rdev)
->  			const char *name = thermal_controller_names[power_info->info.
->  								    ucOverdriveThermalController];
->  			info.addr = power_info->info.ucOverdriveControllerAddress >> 1;
-> -			strlcpy(info.type, name, sizeof(info.type));
-> +			strscpy(info.type, name, sizeof(info.type));
->  			i2c_new_client_device(&rdev->pm.i2c_bus->adapter, &info);
->  		}
->  	}
-> @@ -2354,7 +2354,7 @@ static void radeon_atombios_add_pplib_thermal_controller(struct radeon_device *r
->  				struct i2c_board_info info = { };
->  				const char *name = pp_lib_thermal_controller_names[controller->ucType];
->  				info.addr = controller->ucI2cAddress >> 1;
-> -				strlcpy(info.type, name, sizeof(info.type));
-> +				strscpy(info.type, name, sizeof(info.type));
->  				i2c_new_client_device(&rdev->pm.i2c_bus->adapter, &info);
->  			}
->  		} else {
-> diff --git a/drivers/gpu/drm/radeon/radeon_combios.c b/drivers/gpu/drm/radeon/radeon_combios.c
-> index 783a6b8802d5..795c3667f6d6 100644
-> --- a/drivers/gpu/drm/radeon/radeon_combios.c
-> +++ b/drivers/gpu/drm/radeon/radeon_combios.c
-> @@ -2702,7 +2702,7 @@ void radeon_combios_get_power_modes(struct radeon_device *rdev)
->  				struct i2c_board_info info = { };
->  				const char *name = thermal_controller_names[thermal_controller];
->  				info.addr = i2c_addr >> 1;
-> -				strlcpy(info.type, name, sizeof(info.type));
-> +				strscpy(info.type, name, sizeof(info.type));
->  				i2c_new_client_device(&rdev->pm.i2c_bus->adapter, &info);
->  			}
->  		}
-> @@ -2719,7 +2719,7 @@ void radeon_combios_get_power_modes(struct radeon_device *rdev)
->  				struct i2c_board_info info = { };
->  				const char *name = "f75375";
->  				info.addr = 0x28;
-> -				strlcpy(info.type, name, sizeof(info.type));
-> +				strscpy(info.type, name, sizeof(info.type));
->  				i2c_new_client_device(&rdev->pm.i2c_bus->adapter, &info);
->  				DRM_INFO("Possible %s thermal controller at 0x%02x\n",
->  					 name, info.addr);
-> diff --git a/drivers/gpu/drm/rockchip/inno_hdmi.c b/drivers/gpu/drm/rockchip/inno_hdmi.c
-> index 87b2243ea23e..98ed6cc931d0 100644
-> --- a/drivers/gpu/drm/rockchip/inno_hdmi.c
-> +++ b/drivers/gpu/drm/rockchip/inno_hdmi.c
-> @@ -797,7 +797,7 @@ static struct i2c_adapter *inno_hdmi_i2c_adapter(struct inno_hdmi *hdmi)
->  	adap->dev.parent = hdmi->dev;
->  	adap->dev.of_node = hdmi->dev->of_node;
->  	adap->algo = &inno_hdmi_algorithm;
-> -	strlcpy(adap->name, "Inno HDMI", sizeof(adap->name));
-> +	strscpy(adap->name, "Inno HDMI", sizeof(adap->name));
->  	i2c_set_adapdata(adap, hdmi);
->  
->  	ret = i2c_add_adapter(adap);
-> diff --git a/drivers/gpu/drm/rockchip/rk3066_hdmi.c b/drivers/gpu/drm/rockchip/rk3066_hdmi.c
-> index cf2cf51091a3..bf2924730d84 100644
-> --- a/drivers/gpu/drm/rockchip/rk3066_hdmi.c
-> +++ b/drivers/gpu/drm/rockchip/rk3066_hdmi.c
-> @@ -730,7 +730,7 @@ static struct i2c_adapter *rk3066_hdmi_i2c_adapter(struct rk3066_hdmi *hdmi)
->  	adap->dev.parent = hdmi->dev;
->  	adap->dev.of_node = hdmi->dev->of_node;
->  	adap->algo = &rk3066_hdmi_algorithm;
-> -	strlcpy(adap->name, "RK3066 HDMI", sizeof(adap->name));
-> +	strscpy(adap->name, "RK3066 HDMI", sizeof(adap->name));
->  	i2c_set_adapdata(adap, hdmi);
->  
->  	ret = i2c_add_adapter(adap);
-> diff --git a/drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c b/drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c
-> index c7d7e9fff91c..d1a65a921f5a 100644
-> --- a/drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c
-> +++ b/drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c
-> @@ -304,7 +304,7 @@ int sun4i_hdmi_i2c_create(struct device *dev, struct sun4i_hdmi *hdmi)
->  	adap->owner = THIS_MODULE;
->  	adap->class = I2C_CLASS_DDC;
->  	adap->algo = &sun4i_hdmi_i2c_algorithm;
-> -	strlcpy(adap->name, "sun4i_hdmi_i2c adapter", sizeof(adap->name));
-> +	strscpy(adap->name, "sun4i_hdmi_i2c adapter", sizeof(adap->name));
->  	i2c_set_adapdata(adap, hdmi);
->  
->  	ret = i2c_add_adapter(adap);
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ drivers/clk/qcom/clk-rcg.h  | 1 +
+ drivers/clk/qcom/clk-rcg2.c | 7 +++++++
+ 2 files changed, 8 insertions(+)
 
+diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
+index 012e745794fd..01581f4d2c39 100644
+--- a/drivers/clk/qcom/clk-rcg.h
++++ b/drivers/clk/qcom/clk-rcg.h
+@@ -167,6 +167,7 @@ struct clk_rcg2_gfx3d {
+ 
+ extern const struct clk_ops clk_rcg2_ops;
+ extern const struct clk_ops clk_rcg2_floor_ops;
++extern const struct clk_ops clk_rcg2_mux_closest_ops;
+ extern const struct clk_ops clk_edp_pixel_ops;
+ extern const struct clk_ops clk_byte_ops;
+ extern const struct clk_ops clk_byte2_ops;
+diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+index 28019edd2a50..609c10f8d0d9 100644
+--- a/drivers/clk/qcom/clk-rcg2.c
++++ b/drivers/clk/qcom/clk-rcg2.c
+@@ -509,6 +509,13 @@ const struct clk_ops clk_rcg2_floor_ops = {
+ };
+ EXPORT_SYMBOL_GPL(clk_rcg2_floor_ops);
+ 
++const struct clk_ops clk_rcg2_mux_closest_ops = {
++	.determine_rate = __clk_mux_determine_rate_closest,
++	.get_parent = clk_rcg2_get_parent,
++	.set_parent = clk_rcg2_set_parent,
++};
++EXPORT_SYMBOL_GPL(clk_rcg2_mux_closest_ops);
++
+ struct frac_entry {
+ 	int num;
+ 	int den;
 -- 
-Regards,
+2.37.2
 
-Laurent Pinchart

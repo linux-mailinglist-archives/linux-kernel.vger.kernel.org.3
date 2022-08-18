@@ -2,125 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5624F598F77
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 23:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BD0598F83
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 23:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245575AbiHRVZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 17:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
+        id S1346014AbiHRV0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 17:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347037AbiHRVZQ (ORCPT
+        with ESMTP id S1346995AbiHRV0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 17:25:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14649EA160;
-        Thu, 18 Aug 2022 14:17:26 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 10B05660037D;
-        Thu, 18 Aug 2022 22:17:11 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660857433;
-        bh=KE0bQCqNtR+z+ksSI4I4sg0fOlUJH2F/9l/R0xeYO+U=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=DQfoSdbAkNSPx81fc4H4bxwQbs7bvPPoYktXNZCJ7bB2f3xrzadMZxR2D/0hk/+Jq
-         UbhfJZsWzD4NfTQ4mKM4P/320wJoRYHOIuMWn8/rb6sIc+weuRBCbe6lUBrC9QkJD+
-         Sp6s34Ae66PjHnspNfxF08vtHrwOLIBUnDJx/IOyFIkki58/PTI0d4IAHd8UxYI0pg
-         irPIPFf6QODS+LuzvfkhTzDlu/wh5rnHeZe76qBx4nXPHBDcWAvmVRoAA5SiYLHV64
-         prkIEfGfgAu1weyyppxzD9T7wuTrrLDD7FE7EApyRpwysOdGJG2aPQBg41t7bKPAFc
-         5JbRy9nso92tA==
-Message-ID: <212924d309cb8594fc61e1c5bb2ad07d5bb9312d.camel@collabora.com>
-Subject: Re: [PATCH v1 3/3] media: cedrus: Fix endless loop in
- cedrus_h265_skip_bits()
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-media@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     kernel@collabora.com, stable@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Thu, 18 Aug 2022 17:26:00 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96A8DEB59
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:17:44 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id p184so2026618iod.6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 14:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=Vy8D1pkwyXAsiF4MUgRh4hwYH42zrsLDINWKukfqLXo=;
+        b=KQJIUsGaq+atx0WDA+Q6GC29q+wr7kk6ZI9yxsBSeiLJM5vGupunTC77EeaW1K2itz
+         g7MuiArWBexrJrcHWIaeGBh20KkvcIJRQOr/QA0pK/AfTOCXiMm5gTaAZXJHZf3Mpwtl
+         a2jPAtB8rDhvhg5JBX8fi7fZe7+QfKR4PGmPs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc;
+        bh=Vy8D1pkwyXAsiF4MUgRh4hwYH42zrsLDINWKukfqLXo=;
+        b=DMKfuBFthbd9DYPc2YTQhaak7+x9fZZSy23lqH98pSKknrB+oy9shSAje6bBX17F5B
+         Qpw/K/LuHDk5OtEwY5CEIWvtbPgtjbWYZ3wS50n/wPz+R21+G9t7XzSqhUbDMGWmkMfU
+         6iJQS58USqevXw77a8GH8k0iJY8wkEduKdouTDE+dONw465KNDa3OwqJYzxNwom60Fxm
+         EBJNr2FcmtmX5bEMhSHXZMfOQM9kCSqRXYqLIB0MEg2StXy+/1UNSCitLzaqfJH53Zpn
+         HmWJ7Os+/QO1RILbAB+SsjGWgeGBsOlRo59YvZ0NC3mOgys2auU8kU6Bg6SDtZpPqbRW
+         uoUg==
+X-Gm-Message-State: ACgBeo3J+QWBNwumVAMeD/aCXHCWEeFOj7HAUFVnLVH+fa6vK25afqRx
+        E/WK4mwOd9MVHK1/YmM972eC5Q==
+X-Google-Smtp-Source: AA6agR4bswICfvXUKfkVpv1Cfozq/7hljLHJfKR0TxubStkAuF2jjINJdZImJp8sQ2e7aRn0HqGZXg==
+X-Received: by 2002:a6b:3ec2:0:b0:67c:6baf:a51f with SMTP id l185-20020a6b3ec2000000b0067c6bafa51fmr2235618ioa.160.1660857461762;
+        Thu, 18 Aug 2022 14:17:41 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id b1-20020a056638388100b003416ac35529sm1022582jav.26.2022.08.18.14.17.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 14:17:41 -0700 (PDT)
+Subject: Re: [PATCH] usb: move from strlcpy with unused retval to strscpy
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-kernel@vger.kernel.org
-Date:   Thu, 18 Aug 2022 17:17:02 -0400
-In-Reply-To: <2182ae07-4c0a-5937-7acc-3fad68d28baa@collabora.com>
-References: <20220818203308.439043-1-nicolas.dufresne@collabora.com>
-         <20220818203308.439043-4-nicolas.dufresne@collabora.com>
-         <2182ae07-4c0a-5937-7acc-3fad68d28baa@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+Cc:     Duncan Sands <duncan.sands@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <edda5842-fa82-dfb0-b4b2-14a83673ea6c@linuxfoundation.org>
+Date:   Thu, 18 Aug 2022 15:17:40 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220818210116.7517-1-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeudi 18 ao=C3=BBt 2022 =C3=A0 23:39 +0300, Dmitry Osipenko a =C3=A9crit=
-=C2=A0:
-> On 8/18/22 23:33, Nicolas Dufresne wrote:
-> > From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> >=20
-> > The busy status bit may never de-assert if number of programmed skip
-> > bits is incorrect, resulting in a kernel hang because the bit is polled
-> > endlessly in the code. Fix it by adding timeout for the bit-polling.
-> > This problem is reproducible by setting the data_bit_offset field of
-> > the HEVC slice params to a wrong value by userspace.
-> >=20
-> > Cc: stable@vger.kernel.org
-> > Reported-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> > Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> > ---
-> >  drivers/staging/media/sunxi/cedrus/cedrus_h265.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers=
-/staging/media/sunxi/cedrus/cedrus_h265.c
-> > index f703c585d91c5..f0bc118021b0a 100644
-> > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-> > @@ -227,6 +227,7 @@ static void cedrus_h265_pred_weight_write(struct ce=
-drus_dev *dev,
-> >  static void cedrus_h265_skip_bits(struct cedrus_dev *dev, int num)
-> >  {
-> >  	int count =3D 0;
-> > +	u32 reg;
->=20
-> This "reg" variable isn't needed anymore after switching to
-> cedrus_wait_for(). Sorry, I missed it :)
+On 8/18/22 3:01 PM, Wolfram Sang wrote:
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+> 
 
-Good catch thanks, will fix.
+Please elaborate and summarize why this change makses sense in the
+commit log? It will be easier for reviewers - saves time checking
+the link.
 
->=20
-> >  	while (count < num) {
-> >  		int tmp =3D min(num - count, 32);
-> > @@ -234,8 +235,9 @@ static void cedrus_h265_skip_bits(struct cedrus_dev=
- *dev, int num)
-> >  		cedrus_write(dev, VE_DEC_H265_TRIGGER,
-> >  			     VE_DEC_H265_TRIGGER_FLUSH_BITS |
-> >  			     VE_DEC_H265_TRIGGER_TYPE_N_BITS(tmp));
-> > -		while (cedrus_read(dev, VE_DEC_H265_STATUS) & VE_DEC_H265_STATUS_VLD=
-_BUSY)
-> > -			udelay(1);
-> > +
-> > +		if (cedrus_wait_for(dev, VE_DEC_H265_STATUS, VE_DEC_H265_STATUS_VLD_=
-BUSY))
-> > +			dev_err_ratelimited(dev->dev, "timed out waiting to skip bits\n");
-> > =20
-> >  		count +=3D tmp;
-> >  	}
->=20
->=20
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>   drivers/usb/atm/usbatm.c               | 2 +-
+>   drivers/usb/core/devio.c               | 2 +-
+>   drivers/usb/gadget/function/f_fs.c     | 2 +-
+>   drivers/usb/gadget/function/f_uvc.c    | 2 +-
+>   drivers/usb/gadget/function/u_ether.c  | 8 ++++----
+>   drivers/usb/gadget/function/uvc_v4l2.c | 6 +++---
+>   drivers/usb/gadget/udc/omap_udc.c      | 2 +-
+>   drivers/usb/misc/usb251xb.c            | 6 +++---
+>   drivers/usb/storage/onetouch.c         | 2 +-
+>   drivers/usb/typec/tcpm/fusb302.c       | 2 +-
+>   drivers/usb/usbip/stub_main.c          | 2 +-
 
+I don't have any problems with the change itself. I would ike to
+see the commit log clealrly state why this change is good. With
+that for usbip change:
+
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

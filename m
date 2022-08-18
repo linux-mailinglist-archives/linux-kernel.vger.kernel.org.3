@@ -2,62 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3C0598C99
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55808598C93
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242262AbiHRTce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
+        id S1345404AbiHRTbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238851AbiHRTcZ (ORCPT
+        with ESMTP id S234283AbiHRTbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:32:25 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF970CC314
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:32:23 -0700 (PDT)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 27IJW6rw021713
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:32:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 27IJW6rw021713
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1660851127;
-        bh=NcvUJaEQ6y315S3poHspeF5ySWLtVyWcy6yD+juzm2Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DM5yvujMwCDGQ2RMS+YN1Ig2malegXoHWowQQfCbOcctkiItYyi+SlR8M5IymD7dd
-         eX7blbVXg6wex3vrDKvApBc9i+MGbckVUgCPf2ju4DlHSOS9lRIi291EkZe1v0/eC9
-         LzZLBb8LgVdSLqAnj84xx9d75xwMAZAvxy3+NqZ85COoLl38RQmwlLC6QaJdQTIScP
-         j8Yr81rPXNQyJwEVCSrS7H0wVr7WlZKHvhe4g5398HRXb1KgrAUfEs8ljsLnzRnwal
-         5z6qwC36ErxYrbVkviMDor3C5c7GrIaFrSjpuhlQAOCnGJzJ0od2sE/vh/shWU3V9x
-         BVNERv27CJ42w==
-X-Nifty-SrcIP: [209.85.221.49]
-Received: by mail-wr1-f49.google.com with SMTP id n7so2842953wrv.4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:32:07 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1lpgvMpxe4VMNHGEsxc0QAdRx8pECwBS5y1ZB7ZsaX1xsp/Cut
-        Du6yWzixlsMJ5Qf3iv1lz10bGL1LoZgSJh5SnXI=
-X-Google-Smtp-Source: AA6agR6ftUsRsJrkQr0reVqKHXlXymwPfQaYkHisXC4DU3zbYS56buTiIYGOB4Et+wAwd214SsYH1CQM2LrzxIeaC90=
-X-Received: by 2002:a05:6000:1acb:b0:223:5de3:f8bf with SMTP id
- i11-20020a0560001acb00b002235de3f8bfmr2356542wry.691.1660851125479; Thu, 18
- Aug 2022 12:32:05 -0700 (PDT)
+        Thu, 18 Aug 2022 15:31:36 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA98CCE26;
+        Thu, 18 Aug 2022 12:31:34 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id C5C2E3200912;
+        Thu, 18 Aug 2022 15:31:30 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 18 Aug 2022 15:31:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660851090; x=1660937490; bh=6ZLA0ZxxOs
+        vZ7EcJtLoaAaNIn+eskICnHUlHLXCBjGY=; b=V9SKVDb/20RhGaAKqsOP3qSg6L
+        r6wSoJ6CYVL9KG09dah3XDrMpeoq7d73iGJcUuNsAPpiGdROInKyJmKDKMKgKIv4
+        todFY5WzEno1B4FCPl+zcbhB6cVWyMZZfPRx0bDphGhu7lxX2gy6VlOtd9FRYfbT
+        JnyOHSuT3C2DCHD3qw2VJ92HV+8nzV+U4NMZQR4l49Tk68f7/Fqxn28w9jXJW0ZA
+        w9qnKy1QYrH2Hc6u5Ilw3OkxGIDWUqSS5Z7JnCI+ELPcFjToCVv4C+q/Qi2n5/om
+        Yx/W4zantiSo8kZnDmahQ/g7bOj53rGqynGWakC10NEeUSZvNiAEapvNGwFw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660851090; x=1660937490; bh=6ZLA0ZxxOsvZ7EcJtLoaAaNIn+es
+        kICnHUlHLXCBjGY=; b=U6jx24CsqYwpjLnFJ+4HgjhVVCtX8Eb7ZYz599E3dO6V
+        aru8yoQI/HJ85+eYJx8qBDyIU0SzbkHvXkREilEWvNQVF80Cbj7tlg3eG328qlrL
+        2Gwm/WmrMaliQw3uS3T803kUqm32oM/SI81bFAKTtk2QYtNg9ZOlw6pyxhs9qbEp
+        b9OrAhulz7lXOv2wgO5B1729tpOifIRUlHD+Wnpl0Q7ScIryS2B+CdrnF7f3C52+
+        HqWwoKqsv+oDfjv7Dg/wuvJ9OAFMgKjPXsVi3OxH9xvAN5Rr+ZEx56RZ30E0iac4
+        B1Rm0nsSWz91R3mDj4ldzbPWzgYoo6S9WIWm2mxpUQ==
+X-ME-Sender: <xms:kZP-YmzFwbPRKcB1Cm4Fs2kgDCDF4bWOVLdCW90hC0SWvpRlO69J_Q>
+    <xme:kZP-YiQzZpAuheheWqmRCJs50BxKGl7EbvRM3Tn0_E572q3K9cvPpOXpp8Iq5JKdl
+    2UNg23uEOaukxxIsA>
+X-ME-Received: <xmr:kZP-YoV2BqKmXr1vlzPi_l1mTqOYX5XkyKMvqKsQS44wsP113r4cRBveBvk2L8na0mWjooa7KnRhCp18dS9ZApBDETDFjr3qD4H6>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehledgudduvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhepff
+    fhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepffgrnhhivghlucgiuhcu
+    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeevuddugeeihfdtff
+    ehgffgudeggeegheetgfevhfekkeeileeuieejleekiedvgfenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:kZP-Yshgu6iaUbk7Uc6aHVeHipbse-neN5k8_RsAbvFG9w-TEu1oUQ>
+    <xmx:kZP-YoCpXxVl8LmtBSlqoBeq-eAtF6aK-UAywQLqe0zdSRzwk_48ZQ>
+    <xmx:kZP-YtLH6s5LSpMmfHwylLYE8eQlOcrtejC2wWGrbLhw7fGiOZT23w>
+    <xmx:kpP-YotDCkaSiKtWrgHklaLTY7gf9SI091tU1ubD0Fr3hZWGdcl9NQ>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 18 Aug 2022 15:31:28 -0400 (EDT)
+Date:   Thu, 18 Aug 2022 13:31:27 -0600
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, pablo@netfilter.org, fw@strlen.de,
+        toke@kernel.org, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 3/4] bpf: Add support for writing to
+ nf_conn:mark
+Message-ID: <20220818193127.ykwoinzpoyxqwevg@kashmir.localdomain>
+References: <cover.1660761470.git.dxu@dxuuu.xyz>
+ <edbca42217a73161903a50ba07ec63c5fa5fde00.1660761470.git.dxu@dxuuu.xyz>
+ <CAP01T75P5uM9EyX38bcoF4L2cbQ8orNVNhZsdoMXRThX5fd6JQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220804190320.262510-1-alexandre.belloni@bootlin.com>
- <CAKwvOd=3N8_Rx1P8J7pVnjM6sEzJA233BnwmD1VyMRqgujq2_Q@mail.gmail.com>
- <7eacd1d9-42ba-fd61-7f37-0635cebcb33d@infradead.org> <e902a360e3759c7f87d98d71d79a0d5cbe935e3e.camel@linuxfoundation.org>
-In-Reply-To: <e902a360e3759c7f87d98d71d79a0d5cbe935e3e.camel@linuxfoundation.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 19 Aug 2022 04:31:18 +0900
-X-Gmail-Original-Message-ID: <CAK7LNART2XQYy2hN1afODbuCMj+_VX9Ojh5nVCoY-hwXRAwSWA@mail.gmail.com>
-Message-ID: <CAK7LNART2XQYy2hN1afODbuCMj+_VX9Ojh5nVCoY-hwXRAwSWA@mail.gmail.com>
-Subject: Re: [PATCH] init/Kconfig: fix CC_HAS_ASM_GOTO_TIED_OUTPUT test with dash
-To:     Richard Purdie <richard.purdie@linuxfoundation.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP01T75P5uM9EyX38bcoF4L2cbQ8orNVNhZsdoMXRThX5fd6JQ@mail.gmail.com>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,154 +88,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 6:14 PM Richard Purdie
-<richard.purdie@linuxfoundation.org> wrote:
->
-> On Wed, 2022-08-17 at 16:52 -0700, Randy Dunlap wrote:
+On Wed, Aug 17, 2022 at 09:48:31PM +0200, Kumar Kartikeya Dwivedi wrote:
+> On Wed, 17 Aug 2022 at 20:43, Daniel Xu <dxu@dxuuu.xyz> wrote:
+[...]
+> > diff --git a/include/net/netfilter/nf_conntrack_bpf.h b/include/net/netfilter/nf_conntrack_bpf.h
+> > index a473b56842c5..0f584c2bd475 100644
+> > --- a/include/net/netfilter/nf_conntrack_bpf.h
+> > +++ b/include/net/netfilter/nf_conntrack_bpf.h
+> > @@ -3,6 +3,7 @@
+> >  #ifndef _NF_CONNTRACK_BPF_H
+> >  #define _NF_CONNTRACK_BPF_H
 > >
-> > On 8/17/22 16:46, Nick Desaulniers wrote:
-> > > On Thu, Aug 4, 2022 at 12:03 PM <alexandre.belloni@bootlin.com> wrote:
-> > > >
-> > > > From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > > >
-> > > > When using dash as /bin/sh, the CC_HAS_ASM_GOTO_TIED_OUTPUT test fails
-> > > > with a syntax error which is not the one we are looking for:
-> > >
-> > > Thanks for the patch, though I think I'd rather see `/bin/bash`
-> > > hardcoded. Bash is a non-optional requirement as of
-> > > commit da4288b95baa ("scripts/check-local-export: avoid 'wait $!' for
-> > > process substitution")
-> > > scripts/ is kind of a mess...
-> > >
+> > +#include <linux/bpf.h>
+> >  #include <linux/btf.h>
+> >  #include <linux/kconfig.h>
 > >
-> > Well, once upon a time, we took patches to remove bash-isms (convert to
-> > standard shell)...
-> > No longer, AFAICT.
->
-> This problem is a little more subtle.
->
-> As far as I could work out, exec() is used on entries like this in
-> kConfig. exec() falls back to /bin/sh so it is hard to see where this
-> would be changed to be /bin/bash.
+> > @@ -10,6 +11,12 @@
+> >      (IS_MODULE(CONFIG_NF_CONNTRACK) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
+> >
+> >  extern int register_nf_conntrack_bpf(void);
+> > +extern int nf_conntrack_btf_struct_access(struct bpf_verifier_log *log,
+> > +                                         const struct btf *btf,
+> > +                                         const struct btf_type *t, int off,
+> > +                                         int size, enum bpf_access_type atype,
+> > +                                         u32 *next_btf_id,
+> > +                                         enum bpf_type_flag *flag);
+> >
+> >  #else
+> >
+> > @@ -18,6 +25,17 @@ static inline int register_nf_conntrack_bpf(void)
+> >         return 0;
+> >  }
+> >
+> > +static inline int
+> > +nf_conntrack_btf_struct_access(struct bpf_verifier_log *log,
+> > +                              const struct btf *btf,
+> > +                              const struct btf_type *t, int off,
+> > +                              int size, enum bpf_access_type atype,
+> > +                              u32 *next_btf_id,
+> > +                              enum bpf_type_flag *flag)
+> > +{
+> > +       return -EACCES;
+> > +}
+> > +
+> 
+> We should make it work when nf_conntrack is a kernel module as well,
+> not just when it is compiled in. The rest of the stuff already works
+> when it is a module. For that, you can have a global function pointer
+> for this callback, protected by a mutex. register/unregister sets
+> it/unsets it. Each time you call it requires mutex to be held during
+> the call.
+> 
+> Later when we have more modules that supply btf_struct_access callback
+> for their module types we can generalize it, for now it should be ok
+> to hardcode it for nf_conn.
 
+Ok, will look into that.
 
+> 
+> >  #endif
+> >
+> >  #endif /* _NF_CONNTRACK_BPF_H */
+[...]
+> >
+> > +/* Check writes into `struct nf_conn` */
+> > +int nf_conntrack_btf_struct_access(struct bpf_verifier_log *log,
+> > +                                  const struct btf *btf,
+> > +                                  const struct btf_type *t, int off,
+> > +                                  int size, enum bpf_access_type atype,
+> > +                                  u32 *next_btf_id,
+> > +                                  enum bpf_type_flag *flag)
+> > +{
+> > +       const struct btf_type *nct = READ_ONCE(nf_conn_type);
+> > +       s32 type_id;
+> > +       size_t end;
+> > +
+> > +       if (!nct) {
+> > +               type_id = btf_find_by_name_kind(btf, "nf_conn", BTF_KIND_STRUCT);
+> > +               if (type_id < 0)
+> > +                       return -EINVAL;
+> > +
+> > +               nct = btf_type_by_id(btf, type_id);
+> > +               WRITE_ONCE(nf_conn_type, nct);
+> 
+> Instead of this, why not just use BTF_ID_LIST_SINGLE to get the
+> type_id and then match 't' to the result of btf_type_by_id?
+> btf_type_by_id is not expensive.
 
-Kconfig uses popen() to execute a shell command.
+Ah yeah, good idea. Will fix.
 
-See do_shell() in scripts/kconfig/preprocess.c
+[...]
 
-
-
-popen(3) says that
-"the command is passed to /bin/sh using the -c flag.
-interpretation, if any, is performed by the shell."
-
-
-
-GNU Make is the same.
-Make uses /bin/sh to execute commands in
-recipe lines and $(shell ...) functions.
-You can change the default shell via 'SHELL' variable.
-
-
-
-
-
->
-> I have no issue with bash being required and used and if someone can
-> work out how to make that happen for the exec() calls, I'm fine with
-> that. It would probably require some parsing of the "code" being passed
-> to kConfig to decide how to call exec().
->
-> What worries me is seeing the kernel behaviour changing depending on
-> whether /bin/sh is dash or bash and I think that should be fixed as a
-> more urgent matter.
->
-> I'd hope Alexandre's patch could be taken in the meantime as it doesn't
-> really hurt anything and does fix a very unexpected behaviour change
-> depending on the host system setup.
-
-
-
-Agree.
-
-We should apply a simple patch to fix this particular case
-(I suggest to drop '\n' unless there is a reason to have it)
-but discussion is needed to avoid portability issues like this.
-
-
-
-
-
-
-One way is to encourage writing really portable code.
-We used to strive for this (so we avoided bashism where possible)
-because we believed sticking to POSIX was always good.
-
-Some people make an effort in this direction [1], stating that
-bash may not be installed, and bash is slower than dash.
-
-In shell commands, we can use only commands/options defined in POSIX.
-This is fragile because we do not have real /bin/sh,
-and it is difficult to know what is POSIX-compliant.
-
-People submit a script with #!/bin/sh but only tested on
-environments where /bin/sh is a symlink to bash.
-
-
-
-
-
-
-
-
-Another (and the opposite) way is to force users to use a particular
-program like bash.
-
-Actually, Googlers suggest this way.
-
-Shell Style Guide [2] says:
-"Bash is the only shell scripting language permitted for executables."
-
-
-If we are forced to use bash, it should work in the same way for everyone.
-We do not need to know what is POSIX-defined, and what is bashism.
-
-I was thinking this way for a long time.
-I wrote some patches to switch the default shell for Kbuild and Kconfig to bash
-some time ago, but I did not submit them after some consideration.
-I have patches in my local repository, I can share them.
-
-
-
-
-
-
-
-BTW, Richard is here, so let me ask about BitBake.
-
-The manual [3] clearly says:
-
-"When you create these types of functions in your recipe or class files,
-you need to follow the shell programming rules. The scripts are
-executed by /bin/sh,
-which may not be a bash shell but might be something such as dash.
-You should not use Bash-specific script (bashisms)"
-
-I just thought BitBake ran shell code in bash before,
-but I might have misunderstood.
-Do OE/Yocto allow only POSIX shell code?
-
-
-
-
-[1]: https://lore.kernel.org/linux-kbuild/CAK7LNAT+4fOkJ5WDb9t5qXCqS+GhnbnG8wBffxNa1ZJ3=4Ps3Q@mail.gmail.com/T/#m74e382837a8a47a2278d892bc5d7f8bdbb86dba4
-[2]: https://google.github.io/styleguide/shellguide.html
-[3]: https://docs.yoctoproject.org/1.6/bitbake-user-manual/bitbake-user-manual.html
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+Thanks,
+Daniel

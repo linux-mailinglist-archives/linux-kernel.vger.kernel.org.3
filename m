@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C85597AF2
+	by mail.lfdr.de (Postfix) with ESMTP id 991F6597AF1
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 03:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242565AbiHRBVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 21:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
+        id S242583AbiHRBV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 21:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiHRBVp (ORCPT
+        with ESMTP id S242552AbiHRBVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 21:21:45 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB229C515;
-        Wed, 17 Aug 2022 18:21:44 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id f28so238766pfk.1;
-        Wed, 17 Aug 2022 18:21:44 -0700 (PDT)
+        Wed, 17 Aug 2022 21:21:49 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3D19D64B;
+        Wed, 17 Aug 2022 18:21:48 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 24so119089pgr.7;
+        Wed, 17 Aug 2022 18:21:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=bQ9h3/m4DKwQOMZt0ypQf8mAiw8P/AmyzNZlTqdNR8s=;
-        b=EEACGvg7LkDUIb/BCBN3mMig8Jx1dR4mAUNTTMR6YnL/eSymKP9UH2i42LnSp5HeFU
-         err8JQj/S1jC19rfWxVf5iHOsLF38v35mNDNP662nUdC6x2haaFRefEExiam2mcMpsI0
-         5XW82fuH0/sljZMvi0QvnbXqpeBtvQQx9V2LvLKbIRuQljvZcTqhFitvFZRxQ68RcVWT
-         wStFqIowg9PUFbsg0g/LAlyq1vzk2xV107VM8AUpubEVZGT2jFHwYKpE4SKa4X0QVvX6
-         0TO9WD6AR021fVPBNcrcZecNx7uCq8KKMQ6KVKQHVjEexyhflY/3S+OmEGT/gsUv7HOU
-         tluA==
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc;
+        bh=WdPMA2pH0mS9gX0lH3J9f/5y/00ONBhVpJZxWxuBUaU=;
+        b=CkYSDkBBJYxGWz3G0h1YEt/KwAYDNYKXngBwfOVl52pr+5WSBQqCOti77yYdKdCvlp
+         WhL0tdVXxZe4RDz3EJTiMbnzZKHqLOhTIv4KgC8iZODXmEzpPwzFvhh5Mrkrrhzat9ML
+         rTrS3jNiF+vINWkw2+Yh7ufriRGbnJyClkvLMdr6VDg83DfHvCIewTGW880tb2vbTqAw
+         pmb0R+LdCdwtjLNZtRH3PuNEY6Qo4WyObUyowuonqqGfTC716SfkoCjWL7YpHTt4zRh3
+         VfoyJ/RcRyX4/jTea3+g7aZPDnYrLEWpXhjY0kTLDYPr03Nb3HG6WSzIsoGeoc4K7eYU
+         7x3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=bQ9h3/m4DKwQOMZt0ypQf8mAiw8P/AmyzNZlTqdNR8s=;
-        b=2LEr26HT5m6m0KRaJQyQbs2CxsoCvL4VqMlt6busCuW+BaYFRfn7i6HAJXj97j5FXg
-         mm0Q0w9farbcZuoOb9P36kzQFtc2o3aJrpS4cdb8bm+zRRni7veUhIDoCNIsAlPpR2BC
-         3uiL1/HAk8zCiIxRltW2hJSa5x5BvBxzOz75wdmrOgQBMeGPMjaP3K1y4UltK2/EAawt
-         Sxjt7CoeIvnbWIVticDIgqs0ZY+raX0se5jmqwrIUyAcNBJmvEGNohuwhhDd47szRtP+
-         8x4mqrZN4CPHf/wIBZP4qHDf+zXGWoZ0+OhRLc6aL12LM3/t0TsR8JVGIt+mxatT8YUu
-         p5jQ==
-X-Gm-Message-State: ACgBeo3z9iemENhH3tVgbXBb/x8VpfePhEKesr5vQ8DTtAbk2aMDWT1Y
-        5PLJR1fy75pCBNqju04vT4M=
-X-Google-Smtp-Source: AA6agR6ithQHu1bJS1mVjIkXIiyjpWfTqXuGGPEgJeN7grWQGgaFD+WoySBH7K9DD2nx5FumpKwmdg==
-X-Received: by 2002:a05:6a00:1910:b0:52f:13d7:44c4 with SMTP id y16-20020a056a00191000b0052f13d744c4mr769959pfi.32.1660785704323;
-        Wed, 17 Aug 2022 18:21:44 -0700 (PDT)
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc;
+        bh=WdPMA2pH0mS9gX0lH3J9f/5y/00ONBhVpJZxWxuBUaU=;
+        b=cJmlOkqpVb0UEd56meEJSQIx5C/vYNn1NaxdqFi4c9qBPVrRGRGpPFQaPioiZG+4WN
+         K/0KPj7iMvb8/swyYPEWUJ+yMKXk9qiehhsFKG/n23Qsaip5dVR3TouLU+9lfIiggTZw
+         UVPvxfVXI3AbDiRjgdToQd8r4um+v7i+9QppzEs3mqu+o7uYXLcoQjspUJOty2oyrktg
+         WL0hjZ0Lh4SGlHZe7zmBVnh1ruPOaecshGyEK8676izjZveP2WRhatcb/rR3SwuC36v3
+         YozYnuWuJEdbptd2B2RVoWcuiBIm2v1i5J+8+L2GZfQezGCYJof6Z4WHbHA1PYJt9Eb2
+         G0ig==
+X-Gm-Message-State: ACgBeo3iuaMZs3DStjwnLG5vdqj8Fm5YQDiSZBTzcM6dw0gRnCqOAdQ6
+        qjCvhO2fgbEs+IKxTD/7Ldy/Pe0l/sk=
+X-Google-Smtp-Source: AA6agR7cyJK+JuUJ0woz60kbQMlSzf/+PfyOjrpF3LU4bo5Paeudmn1MO5jRma4x8pmBYPKGscwssg==
+X-Received: by 2002:a63:86c7:0:b0:429:a424:62d6 with SMTP id x190-20020a6386c7000000b00429a42462d6mr731097pgd.16.1660785707940;
+        Wed, 17 Aug 2022 18:21:47 -0700 (PDT)
 Received: from localhost.localdomain ([2402:7500:57a:2602:4c40:2a8:e5c1:f4fa])
-        by smtp.gmail.com with ESMTPSA id l15-20020a170903120f00b0016bb24f5d19sm51691plh.209.2022.08.17.18.21.40
+        by smtp.gmail.com with ESMTPSA id l15-20020a170903120f00b0016bb24f5d19sm51691plh.209.2022.08.17.18.21.44
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Aug 2022 18:21:43 -0700 (PDT)
+        Wed, 17 Aug 2022 18:21:47 -0700 (PDT)
 From:   cy_huang <u0084500@gmail.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         sre@kernel.org
@@ -53,14 +55,17 @@ Cc:     mazziesaccount@gmail.com, alina_yu@richtek.com,
         cy_huang@richtek.com, alinayu829@gmail.com,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/2] Add Richtek RT9471 3A battery charger support
-Date:   Thu, 18 Aug 2022 09:21:34 +0800
-Message-Id: <1660785696-9010-1-git-send-email-u0084500@gmail.com>
+Subject: [PATCH v3 1/2] dt-bindings: power: supply: Add Richtek RT9471 battery charger
+Date:   Thu, 18 Aug 2022 09:21:35 +0800
+Message-Id: <1660785696-9010-2-git-send-email-u0084500@gmail.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1660785696-9010-1-git-send-email-u0084500@gmail.com>
+References: <1660785696-9010-1-git-send-email-u0084500@gmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,40 +74,107 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ChiYuan Huang <cy_huang@richtek.com>
 
-This patch set is to add Richtek RT9471 charger support.
+Add bindings for the Richtek RT9471 I2C controlled battery charger.
 
-The RT9471/D is a highly-integrated 3A switch mode battery charge management
-and system power path management device for single cell Li-Ion and Li-polymer
-battery. The low impedance power path optimizes switch-mode operation
-efficiency, reduces battery charging time and extends battery life during
-discharging phase.
-
-Since v3:
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Co-developed-by: Alina Yu <alina_yu@richtek.com>
+Signed-off-by: Alina Yu <alina_yu@richtek.com>
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+---
+Since v3
 - Move unevaluatedProperties line after $ref for binding patch.
 - Add Reviewed-by tag for binding patch.
 
-Since v2:
+Since v2
 - Remove the properties for interrupt controller things in the binding documentation.
 - Fix dtc error for typo, it's 'regulator-name', not 'regulator-compatible'.
 - Add regulator min/max microamp to allow otg vbus current adjustable in example.
 - Specify the active-level for charge-enable-gpios in binding example.
-- Fix checkpatch error about 'foo * bar' to 'foo *bar' in psy_device_to_chip function.
-- Specify the member name directly for the use of linear range.
 
-ChiYuan Huang (2):
-  dt-bindings: power: supply: Add Richtek RT9471 battery charger
-  power: supply: rt9471: Add Richtek RT9471 charger driver
-
- .../bindings/power/supply/richtek,rt9471.yaml      |  73 ++
- drivers/power/supply/Kconfig                       |  16 +
- drivers/power/supply/Makefile                      |   1 +
- drivers/power/supply/rt9471.c                      | 953 +++++++++++++++++++++
- drivers/power/supply/rt9471.h                      |  76 ++
- 5 files changed, 1119 insertions(+)
+---
+ .../bindings/power/supply/richtek,rt9471.yaml      | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
- create mode 100644 drivers/power/supply/rt9471.c
- create mode 100644 drivers/power/supply/rt9471.h
 
+diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
+new file mode 100644
+index 00000000..fbb54cf
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
+@@ -0,0 +1,73 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/supply/richtek,rt9471.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Richtek RT9471 3A Single Cell Switching Battery charger
++
++maintainers:
++  - Alina Yu <alina_yu@richtek.com>
++  - ChiYuan Huang <cy_huang@richtek.com>
++
++description: |
++  RT9471 is a switch-mode single cell Li-Ion/Li-Polymer battery charger for
++  portable applications. It supports USB BC1.2 port detection, current and
++  voltage regulations in both charging and boost mode.
++
++  Datasheet is available at
++  https://www.richtek.com/assets/product_file/RT9471=RT9471D/DS9471D-02.pdf
++
++properties:
++  compatible:
++    const: richtek,rt9471
++
++  reg:
++    maxItems: 1
++
++  charge-enable-gpios:
++    description: GPIO used to turn on and off charging.
++    maxItems: 1
++
++  wakeup-source: true
++
++  interrupts:
++    maxItems: 1
++
++  usb-otg-vbus-regulator:
++    type: object
++    $ref: /schemas/regulator/regulator.yaml#
++    unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++  - wakeup-source
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      charger@53 {
++        compatible = "richtek,rt9471";
++        reg = <0x53>;
++        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_LOW>;
++        wakeup-source;
++        interrupts-extended = <&gpio_intc 32 IRQ_TYPE_EDGE_FALLING>;
++
++        usb-otg-vbus-regulator {
++          regulator-name = "usb-otg-vbus";
++          regulator-min-microvolt = <4850000>;
++          regulator-max-microvolt = <5300000>;
++          regulator-min-microamp = <500000>;
++          regulator-max-microamp = <1200000>;
++        };
++      };
++    };
 -- 
 2.7.4
 

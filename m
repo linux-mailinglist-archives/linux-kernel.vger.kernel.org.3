@@ -2,149 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47375990C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 01:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 975B25990CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 01:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243521AbiHRXAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 19:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        id S242190AbiHRXBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 19:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiHRXAZ (ORCPT
+        with ESMTP id S230128AbiHRXBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 19:00:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7D6C9E89;
-        Thu, 18 Aug 2022 16:00:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4664DB82472;
-        Thu, 18 Aug 2022 23:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C89C433D6;
-        Thu, 18 Aug 2022 23:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660863622;
-        bh=2la/ff+NBqPCkMvAfag+oGxK/IDDz4CPd6xHU8h3PkQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=StUvr8pU9gmccO8uwX9Udvmo7WHQHhBTkSE0A/o7zd+SXcB3qER26ODW1SGPEw/HK
-         dbtgkSzm6hNGSbJ4uUWKGiGCt8FX5naksjoS61NsXP2dF4uQL1SMWcZKqUVW90DYNq
-         gRxxOMG/HHa2xmhNO08SIr3Txp1rTx7SvkzhgcobNxy+PgdI1BGx1KQmpNeEX00m4f
-         tvRWBD/MU65l7cYaFCJBMXf9Dourv0aroZ4l19Gs46sXcVaaXilhDqN8R0Ykp+wajb
-         LCW/I+s7vH37DXKLRotbNgRlq8dADo65T0Kjb7cbGUFAdZ2aJVujBdkKdHAstjtPsy
-         Yhb8k2nNzI9KA==
-Date:   Thu, 18 Aug 2022 18:00:20 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 04/13] PCI: Allow PASID only when ACS enforced on
- upstreaming path
-Message-ID: <20220818230020.GA2401272@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cf4399d3-ee71-b209-4996-12e9a5ffe118@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 18 Aug 2022 19:01:51 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16843C9EBA
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 16:01:50 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id c24so2386002pgg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 16:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc;
+        bh=SxaLsX428RZ1ZZyMkLyl/R5gnokZLMcHhNXNy7HvM88=;
+        b=4+Y1eqAiSxrv3E//VJOhwkg21D0C7aB4SuNyn+JjsLKC7DbPsOtjZWhnGw2mRfsutM
+         E1PX4UErDhJZVs/98LTU5RAjvUaEsGOHujGX2T6KDVh09ayC3+dR94khPNTnpFIdouJ0
+         lLzYwf38HARVztEwMQiEmwDSvIi/B7FG79sHmkaEPCcPmD0zh42aDtjfdYHz2rj16o8F
+         s+ZVFOrbD8ECGqHSvvnEVgTB9rta8Wi4SJjKz2igTa6HOeNHozFPDAtu/Vc+4aDXqHCS
+         BB09QsEy1rjSqkN6cxqtm6giw80SjKkQYNnlgL/DpyY9Sznb4t5OfxPAbom5ehHVNfq7
+         9t0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc;
+        bh=SxaLsX428RZ1ZZyMkLyl/R5gnokZLMcHhNXNy7HvM88=;
+        b=BbTj8r/HGSwSJyD+AHsHk6BWsPSF0X+9gsFiuSBc4eNsWlpB6QXz6ISpCGlvYIEipR
+         nvGqZzwRj6GxnrqgBg9jAWLtePsep1dsABAcYHW0sF9Y5c98c9DzcbRTOefCg4QowUR9
+         BVbL2KO2YZ92/B5zKHMjsk1kdZxIsSAdytJETQbcpJwk6+51g7CnoWWj4j6uiMOBcPyy
+         YZGZiWWvBQ3GxrmAOb/yahjWUoSiJsKMI+DCzapX6IUIHV38BSPHVL/wNUn1ZCEHBoDo
+         KOo6OREV5FLVJmpUuuB9BVPoWQ1hxsvcfWT1v9DTKfd15aEXn5O+H5V6/mxjwgiEOi7P
+         HfqA==
+X-Gm-Message-State: ACgBeo3XT8AQI91hU0gL3iack6pnSm8QfwOyXi81F7PPUhriCSsBb32I
+        1sBEzryjkmKWfNL+ZvxfcjCcVg==
+X-Google-Smtp-Source: AA6agR4QWYuIV+qJ9p70dFLi1/xjsepfLeYAl9faAJ8phNMASnzbYpPMSRRVeZfJRDtc7u1ZjwizFQ==
+X-Received: by 2002:a05:6a00:2409:b0:534:98c0:e53a with SMTP id z9-20020a056a00240900b0053498c0e53amr4995295pfh.11.1660863709462;
+        Thu, 18 Aug 2022 16:01:49 -0700 (PDT)
+Received: from localhost ([50.221.140.186])
+        by smtp.gmail.com with ESMTPSA id b13-20020a17090a6e0d00b001f2fa09786asm2041811pjk.19.2022.08.18.16.01.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 16:01:48 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 16:01:48 -0700 (PDT)
+X-Google-Original-Date: Thu, 18 Aug 2022 14:36:50 PDT (-0700)
+Subject:     Re: [PATCH] perf: riscv legacy: fix kerneldoc comment warning
+In-Reply-To: <20220812143532.1962623-1-conor.dooley@microchip.com>
+CC:     atishp@atishpatra.org, anup@brainfault.org,
+        Will Deacon <will@kernel.org>, mark.rutland@arm.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        conor.dooley@microchip.com
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     conor.dooley@microchip.com
+Message-ID: <mhng-1907479c-dc4c-40c0-8cf1-4c4fb2b8a804@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 07:53:15PM +0800, Baolu Lu wrote:
-> On 2022/8/18 05:17, Bjorn Helgaas wrote:
-> > On Wed, Aug 17, 2022 at 09:20:15AM +0800, Lu Baolu wrote:
-> > > Some configurations of the PCI fabric will route device originated TLP
-> > > packets based on the memory addresses.
-> > This makes it sound like a few unusual configurations will route TLPs
-> > based on memory addresses, but address routing is the default for all
-> > PCIe Memory Requests, and ACS provides a way to override that default.
-> > 
-> > > These configurations are incompatible with PASID as the PASID
-> > > packets form a distinct address space.
-> > I would say "the Requester ID/PASID combination forms a distinct
-> > address space."
-> > 
-> > > For instance, any configuration where switches are present
-> > > without ACS enabled is incompatible.
-> > > 
-> > > This enhances the pci_enable_pasid() interface by requiring the ACS to
-> > > support Source Validation, Request Redirection, Completer Redirection,
-> > > and Upstream Forwarding. This effectively means that devices cannot
-> > > spoof their requester ID, requests and completions cannot be redirected,
-> > > and all transactions are forwarded upstream, even as it passes through a
-> > > bridge where the target device is downstream.
-> >
-> > I think your patch actually requires all those features to be not just
-> > "supported" but actually*enabled*  for the entire path leading to the
-> > device.
-> > 
-> > To use the terms from the spec:
-> > 
-> >    "P2P Request Redirect"
-> >    "P2P Completion Redirect"
-> >    "Requester ID, Requests, and Completions"
-> > 
-> > and maybe something like:
-> > 
-> >    ... even if the TLP looks like a P2P Request because its memory
-> >    address (ignoring the PASID) would fall in a bridge window and would
-> >    normally be routed downstream.
-> 
-> Thank you for the suggestions. I will rephrase the commit message
-> accordingly like this:
-> 
-> 
-> PCI: Allow PASID only when ACS enforced on upstreaming path
+On Fri, 12 Aug 2022 07:35:32 PDT (-0700), conor.dooley@microchip.com wrote:
+> Fix the warning:
+> drivers/perf/riscv_pmu_legacy.c:76: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>
+> Fixes: 9b3e150e310e ("RISC-V: Add a simple platform driver for RISC-V legacy perf")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  drivers/perf/riscv_pmu_legacy.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/perf/riscv_pmu_legacy.c b/drivers/perf/riscv_pmu_legacy.c
+> index 342778782359..2c20b0de8cb0 100644
+> --- a/drivers/perf/riscv_pmu_legacy.c
+> +++ b/drivers/perf/riscv_pmu_legacy.c
+> @@ -72,7 +72,7 @@ static void pmu_legacy_ctr_start(struct perf_event *event, u64 ival)
+>  	local64_set(&hwc->prev_count, initial_val);
+>  }
+>
+> -/**
+> +/*
+>   * This is just a simple implementation to allow legacy implementations
+>   * compatible with new RISC-V PMU driver framework.
+>   * This driver only allows reading two counters i.e CYCLE & INSTRET.
 
-PCI: Enable PASID only when ACS RR & UF enabled on upstream path
-
-The Requester ID/Process Address Space ID (PASID) combination
-identifies an address space distinct from the PCI bus address space,
-e.g., an address space defined by an IOMMU.
-
-But the PCIe fabric routes Memory Requests based on the TLP address,
-ignoring any PASID (PCIe r6.0, sec 2.2.10.4), so a TLP with PASID that
-*should* go upstream to the IOMMU may instead be routed as a P2P
-Request if its address falls in a bridge window.
-
-To ensure that all Memory Requests with PASID are routed upstream,
-only enable PASID if ACS P2P Request Redirect and Upstream Forwarding
-are enabled for the path leading to the device.
-
-> The PCIe fabric routes TLPs based on memory addresses for all PCIe Memory
-> Requests regardless of whether TLPs have PASID prefixes. This is stated in
-> section "2.2.10.2 End-End TLP Prefix Processing" of the specification:
-> 
->   The presence of an End-End TLP Prefix does not alter the routing of a
->   TLP. TLPs are routed based on the routing rules covered in Section
->   2.2.4 .
-> 
-> As the Requester ID/PASID combination forms a distinct address space. The
-> memory address based routing is not compatible for PASID TLPs anymore.
-> Therefore we have to rely on ACS to override that default.
-> 
-> This enhances pci_enable_pasid() interface by requiring the ACS features
-> to be enabled for the entire path leading to the device. So that even if
-> the TLP looks like a P2P Request because its memory address (ignoring the
-> PASID) would fall in a bridge window and would normally be routed
-> downstream.
-> 
-> Best regards,
-> baolu
+Thanks, this is on riscv/fixes -- given how trivial the actual diff is 
+I'm OK just taking it without the Ack/Review from anyone else, doubly so 
+because I probably broke it the first place.

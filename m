@@ -2,74 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302845984AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1185984AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245223AbiHRNs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
+        id S245249AbiHRNt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245241AbiHRNsq (ORCPT
+        with ESMTP id S245239AbiHRNtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:48:46 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A74710F8
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:48:45 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id a8so1728481pjg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:48:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
-        bh=HD+7cWtKNM0dXBvDhCWxrvtLlT8HapdLzulw25Ng/z8=;
-        b=fOB7FulDhDA4IhXPIoMefNJDOLDcLY1SxmOPOYbFef8q9MFBBgu+GS5ucLxp1GIi3e
-         /VyH+nnw3UIWJMPVmIWppf2aTSTZOIIrTbnC9Du+uSGge+i4OGqOEH6f9FSwuKFwusda
-         v59sXtvLZ4FYvZAQhEqAqbZK3Q04GXxz72V27a18GbF787u41frsjvUGYj8+qYIR5nti
-         L3qYpZDFLImyY10KSjcBYqiQepxRJ7d6ApZ/pPMcRa5rCqB7WQ8ZGo8jYSwy7iXWvptt
-         k8i14gqLUMMxw23SSiL6yyp+jD8bks0FtmsqxHDVYb76Z6iYhMj8O2aJlHcMN5mvcXxI
-         NZ4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=HD+7cWtKNM0dXBvDhCWxrvtLlT8HapdLzulw25Ng/z8=;
-        b=rsQcylouT4z18+u7n+J/2HaFhp0XAzg33FueJv9Yp+Zw3CLrrRqgP2szo3LOWNZ25O
-         ALa6t7JgD9E65t85NMTO1Apyuk+8pu8AlXnTeq+7ONI0xit18SRrkh/gNK0TVzna+DLW
-         CfLe0gAppQPpJBNRcK7IJisM4q393E0LT1DkZMWFqkwb/9JN57Q2XGSL10NVVIotPgvR
-         PoKeE58+ChGG5p+4UhKpIyAhq90h/YujZdF6UfuUSFKJFLWvwP+CC0rW+o3bMdBuE+lK
-         PtwH9GFtcePHEm6GqzB0OYlxgD7LLrbvfSlJcpjRJh2yBAHmw1jEfgP1gwKha6650d0E
-         RQwg==
-X-Gm-Message-State: ACgBeo3TRY32yzfAds7qyLkvCvkf1SwvzoQc+Etj8+lKS7RFj1LEst1y
-        MGJj9PjvC7j+S5meZY2NHvYBgoD4wrthC8yo//w=
-X-Google-Smtp-Source: AA6agR6pYbL2LK8+WtYyYMx2q1u8N3i2j8XZeu2nf7ru2+iDO78IvS75IhoahmaHFicHRpnVtpO9bCmjDAsrMiVayoY=
-X-Received: by 2002:a17:90b:4a02:b0:1fa:c277:125e with SMTP id
- kk2-20020a17090b4a0200b001fac277125emr3354847pjb.152.1660830524558; Thu, 18
- Aug 2022 06:48:44 -0700 (PDT)
-MIME-Version: 1.0
-Sender: issoufsawadogo381@gmail.com
-Received: by 2002:a05:6a10:6d29:b0:2d4:363f:2fc6 with HTTP; Thu, 18 Aug 2022
- 06:48:44 -0700 (PDT)
-From:   SGT LINDA WILSON <ssgtlindawilson@gmail.com>
-Date:   Thu, 18 Aug 2022 06:48:44 -0700
-X-Google-Sender-Auth: 6VIqXAX-KyqbOPrk3l5rBa_4qvU
-Message-ID: <CAEznJc3wvcnt+_T5sDxTi1yrx5fhkLrTTBeLUA48PUH05EThkw@mail.gmail.com>
-Subject: I NEED YOUR URGENT REPLY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
+        Thu, 18 Aug 2022 09:49:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226AA3D586
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:49:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2CF0616EC
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 13:49:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E76CC433D6;
+        Thu, 18 Aug 2022 13:49:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660830563;
+        bh=IXFzUYkPxzgfGBkAIA7XymuuI3EYkVxklX6Y1+AO06c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=A0GpfWblTuyAUV49vwUrhrhF4mcdVfGHYDZDT04X4S2rjoL0s1x6pJFKdd7nsI/N+
+         HJ/AIJIHJXR6v9mbvOWqvmyWbmw89d2BElJA2amdRQcCOwhl23+OZ0tdZ0lU70UeY9
+         Pdz35+lLOUvsp2E9+x/diqRbPfCErk1CcwcTPcZU09U+YFfAoxKQS43V5I9ZExh85K
+         p5MOC2Oc4xe7sNYPbepV7r+P9id5g8btuHur+z0u/XiKP6xTCEDuQMs7SUrxIoz8Z7
+         6cte+uNKZhfZZA7smt+3GK1UcMrip6dbhVylakp6PDv6f7UqHrNz6YXLyWPkqeY4we
+         7E9bu7we+qkOw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oOftg-00402o-Sp;
+        Thu, 18 Aug 2022 14:49:20 +0100
+Date:   Thu, 18 Aug 2022 14:49:20 +0100
+Message-ID: <87mtc1wtjz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     "broonie@kernel.org" <broonie@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "linux@rasmusvillemoes.dk>" <linux@rasmusvillemoes.dk>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] regmap: introduce value tracing for regmap bulk operations
+In-Reply-To: <20220818121515.6azkxyqetnunwsc6@CAB-WSD-L081021.sigma.sbrf.ru>
+References: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
+        <20220818121515.6azkxyqetnunwsc6@CAB-WSD-L081021.sigma.sbrf.ru>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: DDRokosov@sberdevices.ru, broonie@kernel.org, gregkh@linuxfoundation.org, rafael@kernel.org, jic23@kernel.org, linux@rasmusvillemoes.dk, tglx@linutronix.de, andy.shevchenko@gmail.com, kernel@sberdevices.ru, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HELLO DEAR ONE
-AM SGT LINDA WILSON
-AM CONTACTING YOU FOR AN IMPORTANT AND VERY URGENT COOPERATION WITH YOU.
-PLS REPLY TO ME AS SOON AS FOR MOER DETAILS
-REGARDS
-SGT L WILSON
+On Thu, 18 Aug 2022 13:15:00 +0100,
+Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+> 
+> +Thomas, Rasmus and Marc
+> 
+> On Tue, Aug 16, 2022 at 06:14:48PM +0000, Dmitry Rokosov wrote:
+> > Currently, only one-register io operations support tracepoints with
+> > value logging. For the regmap bulk operations developer can view
+> > hw_start/hw_done tracepoints with starting reg number and registers
+> > count to be reading or writing. This patch injects tracepoints with
+> > dumping registers values in the hex format to regmap bulk reading
+> > and writing.
+
+I don't care much about regmap as a MMIO backend, but it strikes me as
+odd that you end up with multiple ways of logging the same stuff (with
+a memcpy in the middle of it).
+
+Why can't this be done with a small amount of trace post-processing?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

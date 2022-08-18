@@ -2,107 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC07598203
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABF459820D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244317AbiHRLMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 07:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
+        id S241050AbiHRLNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 07:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243897AbiHRLMm (ORCPT
+        with ESMTP id S244325AbiHRLNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 07:12:42 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCC8A5706
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 04:12:41 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IAqCBj027648;
-        Thu, 18 Aug 2022 11:12:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=m5xFRYbqQ/2lXXY1pQSEa2jDiReGuiBLzYwDkADrplE=;
- b=M2Bngfz7d4VqP77Src4wPCnEmqXKT6WT3sLE6z1uvfiwN6MlwzpD5Oy8ngDALfjJhGWj
- jbcWhmNcAVUNwpl0C2hYSea91OU3Cd7SqcVCf9NNXuEYi2gHpvE3KUeRvVHfstA4cRE5
- yUlqqwxUHAmxDCYgXXIRZvRZdrOWPjZbyuqKMX1GS/RbJ1not/aP0PLTWrhPo3Q9wHS8
- 4vXVna0Yp7cTyyvLL9byM7QxiCcMd23Y+CsBs2oEmxL+gQ2o/AFrmqURsEJTVNwowVJu
- H7qcOGbI2PAoHjVU/UJLbRMYIBjajQS7jwONe0BdytPOanCttGSXlfa93vdo349+w7F2 IA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1m250jq8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 11:12:21 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27IArAwY030058;
-        Thu, 18 Aug 2022 11:12:20 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1m250jpc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 11:12:20 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27IB6ctP004824;
-        Thu, 18 Aug 2022 11:12:18 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3hx3k9ds81-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 11:12:17 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27IBCFBm24117694
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Aug 2022 11:12:15 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9255011C050;
-        Thu, 18 Aug 2022 11:12:15 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B130111C04C;
-        Thu, 18 Aug 2022 11:12:12 +0000 (GMT)
-Received: from [9.109.198.207] (unknown [9.109.198.207])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Aug 2022 11:12:12 +0000 (GMT)
-Message-ID: <07a21891-1571-95ac-8afd-93ff1b92ef4b@linux.vnet.ibm.com>
-Date:   Thu, 18 Aug 2022 16:42:11 +0530
+        Thu, 18 Aug 2022 07:13:19 -0400
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784FDC1B;
+        Thu, 18 Aug 2022 04:13:15 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id 2883F20538;
+        Thu, 18 Aug 2022 13:13:14 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id lked6gCadlW7; Thu, 18 Aug 2022 13:13:13 +0200 (CEST)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id A1C2820519;
+        Thu, 18 Aug 2022 13:13:13 +0200 (CEST)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout2.secunet.com (Postfix) with ESMTP id 8ED5B80004A;
+        Thu, 18 Aug 2022 13:13:13 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 18 Aug 2022 13:13:13 +0200
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 18 Aug
+ 2022 13:13:13 +0200
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id AB11A3182AA7; Thu, 18 Aug 2022 13:13:12 +0200 (CEST)
+Date:   Thu, 18 Aug 2022 13:13:12 +0200
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Gautam Menghani <gautammenghani201@gmail.com>
+CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <shuah@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Subject: Re: [PATCH v3] selftests/net: Refactor xfrm_fill_key() to use array
+ of structs
+Message-ID: <20220818111312.GH566407@gauss3.secunet.de>
+References: <55c8de7e-a6e8-fc79-794d-53536ad7a65d@collabora.com>
+ <20220806163530.70182-1-gautammenghani201@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 05/16] powerpc: Skip objtool from running on
- drivers/crypto/vmx/aesp8-ppc.o
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Cc:     "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-References: <20220808114908.240813-1-sv@linux.ibm.com>
- <20220808114908.240813-6-sv@linux.ibm.com>
- <fad7cc16-7dfb-de90-50e7-f2524525e1c3@csgroup.eu>
-From:   Sathvika Vasireddy <sv@linux.vnet.ibm.com>
-In-Reply-To: <fad7cc16-7dfb-de90-50e7-f2524525e1c3@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: u77vzHn5j6OLoMBp3u99w8-jXYTOmXBn
-X-Proofpoint-GUID: I7V-918uXgSUN3wJksp4lQ7YQiYuCSZl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_12,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=999
- malwarescore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180038
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220806163530.70182-1-gautammenghani201@gmail.com>
+X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,45 +69,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Aug 06, 2022 at 10:05:30PM +0530, Gautam Menghani wrote:
+> A TODO in net/ipsec.c asks to refactor the code in xfrm_fill_key() to
+> use set/map to avoid manually comparing each algorithm with the "name" 
+> parameter passed to the function as an argument. This patch refactors 
+> the code to create an array of structs where each struct contains the 
+> algorithm name and its corresponding key length.
+> 
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
 
-On 10/08/22 14:04, Christophe Leroy wrote:
->
-> Le 08/08/2022 à 13:48, Sathvika Vasireddy a écrit :
->> With objtool enabled, below warnings are seen when trying to build:
->>
->> drivers/crypto/vmx/aesp8-ppc.o: warning: objtool: aes_p8_set_encrypt_key+0x44: unannotated intra-function call
->>
->> drivers/crypto/vmx/aesp8-ppc.o: warning: objtool: .text+0x2448: unannotated intra-function call
->>
->> drivers/crypto/vmx/aesp8-ppc.o: warning: objtool: .text+0x2d68: unannotated intra-function call
->>
->> Skip objtool from running on this file, as
->> there are no calls to _mcount.
-> Why not fix it the same way as for other files ? Please explain.
-For two main reasons:
-
-1. Since this file comes from OpenSSL, and since it is a perl file which 
-generates a .S file,  it may not
-     be the best choice to make too many code changes to such files, 
-unless absolutely necessary.
-
-2. Second reason is that, at least as far as the objtool --mcount 
-functionality is concerned, we do not
-     have to run objtool on that file because that file does not have 
-any calls to _mcount.
->
->> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
->> ---
->>    drivers/crypto/vmx/Makefile | 2 ++
->>    1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/crypto/vmx/Makefile b/drivers/crypto/vmx/Makefile
->> index 2560cfea1dec..7b41f0da6807 100644
->> --- a/drivers/crypto/vmx/Makefile
->> +++ b/drivers/crypto/vmx/Makefile
->> @@ -9,3 +9,5 @@ targets += aesp8-ppc.S ghashp8-ppc.S
->>    
->>    $(obj)/aesp8-ppc.S $(obj)/ghashp8-ppc.S: $(obj)/%.S: $(src)/%.pl FORCE
->>    	$(call if_changed,perl)
->> +
->> +OBJECT_FILES_NON_STANDARD_aesp8-ppc.o := y
+Applied to ipsec-next, thanks!

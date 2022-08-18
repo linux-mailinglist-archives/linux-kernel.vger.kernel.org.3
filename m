@@ -2,128 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8DA598297
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A660E5982B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244076AbiHRLym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 07:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S244510AbiHRL4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 07:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244197AbiHRLyi (ORCPT
+        with ESMTP id S244275AbiHRLzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 07:54:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702CB7F12D;
-        Thu, 18 Aug 2022 04:54:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22C1EB8203A;
-        Thu, 18 Aug 2022 11:54:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB17C433C1;
-        Thu, 18 Aug 2022 11:54:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660823673;
-        bh=OOp4XCPaOSFAdQWQdL7x7S/vwQa/o7fKz+ynmdHyLg4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DV2MuYBkRWWKa0Rs0voJoSLDxQUKzzOSYe//JgzHbHdSieYD7vWcHpu2Q8LoPSaI3
-         FnZqOspjyW2rNi6V6qpw1SQK2+fwaxpAGvK2k4+LSD9O3ZLiUXeoCq1F54Jjv3OeOF
-         NYuTsRPKmmWPX6JVM3bvHxW6aOcu6+OoZgK9EhnW/YuvhBAMoICkRcaP0kJBFre+Dm
-         JMxHe1yocZDaGtIZwU2vsmxf55iLt12gUUG2tjGMk5a7ko/bARUZAV7vcn5ZTVqOja
-         21TqUfUXsYqq0IH+tl6Opvtn5sB38Fu5rm0QFGx7bKdL0fLyrkFSOyysCuQRPZCgdU
-         IeQpBLkC3FoHA==
-Date:   Thu, 18 Aug 2022 12:54:22 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        dri-devel@lists.freedesktop.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-amlogic@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-doc@vger.kernel.org,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        linux-hwmon@vger.kernel.org, linux-clk@vger.kernel.org,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        David Airlie <airlied@linux.ie>, linux-iio@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
-Message-ID: <Yv4obo9MUw+Lc+nr@sirena.org.uk>
-References: <cover.1660292316.git.mazziesaccount@gmail.com>
- <166057828406.697572.228317501909350108.b4-ty@kernel.org>
- <52d307d7-04f2-89fd-ff4b-9a6c0d247350@gmail.com>
+        Thu, 18 Aug 2022 07:55:48 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5AA956A3;
+        Thu, 18 Aug 2022 04:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660823746; x=1692359746;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DD+pip86U2bqu7K4Tuuk0WgzgcsZjPfeOIsmlcT149M=;
+  b=cFh9pzsCTkgchIZ96O7YPny8ZYHqRe5RektcbWhPBpniuWsCnIpPgdRP
+   4E8eYjwlJCExgpAXFxTOPBFxwiIStiQTWJFH1ILbRTBP5ADEk1mRrvzHu
+   QzmLBzHjTOrYQHqPODHUnLC2MSUDB865ZwjdDueGxItJDspKeTJ4mhLXb
+   bYDvp5X3vFtqOwN9bFZ1KwPYwOOatWjAIy7ArCI+K+cr2ANrWzqklob+R
+   z5ttcS+PXOuGxciPZ6VLMiZayT5O5E8CRFTP9lpt9784AV/P2btyzsneW
+   i9TIESa9gp1pb92jH6g8sxno/WfQP19zEXup7PgZ9hz/iO5+ilKZPxLlz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="273130053"
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="273130053"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 04:55:33 -0700
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="668072477"
+Received: from gaoshunl-mobl.ccr.corp.intel.com (HELO [10.254.209.211]) ([10.254.209.211])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 04:55:29 -0700
+Message-ID: <c0de76f1-6b8e-2fc0-a7e7-5d2c29df4509@linux.intel.com>
+Date:   Thu, 18 Aug 2022 19:55:28 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MKmYY9GsmMLl3nVC"
-Content-Disposition: inline
-In-Reply-To: <52d307d7-04f2-89fd-ff4b-9a6c0d247350@gmail.com>
-X-Cookie: Logic is the chastity belt of the mind!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 04/13] PCI: Allow PASID only when ACS enforced on
+ upstreaming path
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+References: <20220817012024.3251276-5-baolu.lu@linux.intel.com>
+ <20220817211743.GA2274788@bhelgaas> <Yv1wVfCWHnTdvPOc@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <Yv1wVfCWHnTdvPOc@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/8/18 06:48, Jason Gunthorpe wrote:
+> On Wed, Aug 17, 2022 at 04:17:43PM -0500, Bjorn Helgaas wrote:
+> 
+>> Does the PCIe spec really allow TLPs with PASID to be routed anywhere
+>> except upstream?
+> I think yes:
+> 
+>   2.2.10.2 End-End TLP Prefix Processing:
+> 
+>   The presence of an End-End TLP Prefix does not alter the routing of a
+>   TLP. TLPs are routed based on the routing rules covered in Section
+>   2.2.4 .
+> 
+> Which I read as saying that routing is done after stripping all the
+> prefixes. PASID is a prefix.
+> 
+> Lu, you may want to quote the spec in the commit message to make it
+> clear.
 
---MKmYY9GsmMLl3nVC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yes. Sure thing. Thank you!
 
-On Thu, Aug 18, 2022 at 02:33:53PM +0300, Matti Vaittinen wrote:
-> On 8/15/22 18:44, Mark Brown wrote:
-
-> > [2/7] regulator: Add devm helpers for get and enable
-> >        (no commit info)
-
-> I was planning to send out the v3 (where IIO patches are no longer squashed
-> into one). I didn't spot the above mentioned patch 2/7 from
-> regulator/for-next. I'd just like to get confirmation the 2/7 was not merged
-> even though it's mentioned in this mail before re-spinning the series with
-> it.
-
-It's not there yet (that's the "no commit info"), but it is queued for
-today.
-
---MKmYY9GsmMLl3nVC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL+KG4ACgkQJNaLcl1U
-h9ChKgf+MqQYNLGgZ/WEAylHrK/Uzrw+LnjUXAyMBb/vZjdl3DVYOv+/LtcGpk2B
-vMl+H2cT2aA3eF56DroX4dIyRauM8a7w9PNeqKCTRYzdeJ91Vp1q0gOUIbKHxfmu
-LJkxtl3b2n7/O7J+OrJ1HljR3z2JxBD4lmqH4+vKKMNwPIh0fn5GAbg8/O2M0yv5
-NEJYI6TxlO4FG1bncptZI3H7tlGjV+MAYgemtJlJnLkpiS3OaOfTS6QeDAtgI0QE
-oU6UoQtU2ZSP0W/dlLys3zAGz2wI7/vlprZAeabP2UyUWDIRlRN8GjTI/YkwClpr
-VsgNrCyAZbv1afHLckm3stj8/Czk8Q==
-=mvEp
------END PGP SIGNATURE-----
-
---MKmYY9GsmMLl3nVC--
+Best regards,
+baolu

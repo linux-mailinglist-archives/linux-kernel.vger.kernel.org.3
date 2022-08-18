@@ -2,262 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75605981E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8932D598139
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 12:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244008AbiHRLFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 07:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
+        id S243961AbiHRKBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 06:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239909AbiHRLFH (ORCPT
+        with ESMTP id S233335AbiHRKA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 07:05:07 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74EB9D67D;
-        Thu, 18 Aug 2022 04:05:00 -0700 (PDT)
-X-UUID: 8f7625e34bd946ab971afd30d2c71a9e-20220818
-X-Spam-Fingerprint: 0
-X-GW-Reason: 11109
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
-X-Content-Feature: ica/max.line-size 103
-        audit/email.address 1
-        dict/adv 1
-        dict/notice 1
-        meta/cnt.alert 1
-X-UUID: 8f7625e34bd946ab971afd30d2c71a9e-20220818
-X-User: oushixiong@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <oushixiong@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1436180143; Thu, 18 Aug 2022 17:45:31 +0800
-From:   oushixiong <oushixiong@kylinos.cn>
-To:     Dave Airlie <airlied@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        oushixiong <oushixiong@kylinos.cn>
-Subject: [PATCH v2] drm/ast: add dmabuf/prime buffer sharing support
-Date:   Thu, 18 Aug 2022 17:45:17 +0800
-Message-Id: <20220818094517.214421-1-oushixiong@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 18 Aug 2022 06:00:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676AA8E995
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 03:00:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5192B82131
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:00:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77919C433B5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:00:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660816852;
+        bh=tXtuArrAzWG5jhfgb+zOZA/1Co/OAJtYIqCfLsXWGDM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nhsjyJ4dg4b3NR6rKj+N58B2oZdidRq23ugaRZ3QmrZzzoMifAsssMYVA9EWa5gHT
+         z4D1MusoJRaSC1QPShQ9iieuHBlEb4czWTBox62hWC367xWLhGb20EISN1/LPoAgyw
+         pHuY+F/JUNWqvCQ2q9VMhI4+DQMr+Zq1LhZQ73lxIYaeYK7s+Zfm2P5a0SZG5mropH
+         pnUtuwPvXYfWkJ3cauuK6HZ/w1zJfIDOO3MeUlLaZq1ycOzzPUvM+qLPATyfH16jB+
+         ej5F0u8Vr9k0VXmIPvKCXIyQRdgEG6XH7OBabQZ8ylpDoq1iqkNZ6hCJkJvuaR9pVW
+         tj9PoSzGxYH2w==
+Received: by mail-wm1-f47.google.com with SMTP id k18-20020a05600c0b5200b003a5dab49d0bso651072wmr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 03:00:52 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2ERkkT9d8FOcylb4jX/ujNAG052XQHiYl0lVmvcQxwWuaL4xfC
+        1X9Y8P2YIc9hBsF7tUNrRL9AvTSCpwcT+WV9qIY=
+X-Google-Smtp-Source: AA6agR6elH7PGceZPPudd6UOUhoew0Dsy1k4hauzfNRHmsAPwomVJwAD4eBbFrAUSEA2GCuccGawB2a0RAWRDYN0oyY=
+X-Received: by 2002:a7b:c354:0:b0:39c:6753:21f8 with SMTP id
+ l20-20020a7bc354000000b0039c675321f8mr1387579wmj.113.1660816850708; Thu, 18
+ Aug 2022 03:00:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+References: <20220817154022.3974645-1-mark.rutland@arm.com>
+In-Reply-To: <20220817154022.3974645-1-mark.rutland@arm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 18 Aug 2022 12:00:39 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHWjZ5zt6CB9kwGYTwy57KqdBMrAAV7gEMjHpvict64PA@mail.gmail.com>
+Message-ID: <CAMj1kXHWjZ5zt6CB9kwGYTwy57KqdBMrAAV7gEMjHpvict64PA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: fix rodata=full
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        andy.shevchenko@gmail.com, catalin.marinas@arm.com,
+        jvgediya@linux.ibm.com, rdunlap@infradead.org, will@kernel.org,
+        willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds ast specific codes for DRM prime feature, this is to
-allow for offloading of rending in one direction and outputs in other.
+On Wed, 17 Aug 2022 at 17:40, Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On arm64, "rodata=full" has been suppored (but not documented) since
+> commit:
+>
+>   c55191e96caa9d78 ("arm64: mm: apply r/o permissions of VM areas to its linear alias as well")
+>
+> As it's necessary to determine the rodata configuration early during
+> boot, arm64 has an early_param() handler for this, whereas init/main.c
+> has a __setup() handler which is run later.
+>
+> Unfortunately, this split meant that since commit:
+>
+>   f9a40b0890658330 ("init/main.c: return 1 from handled __setup() functions")
+>
+> ... passing "rodata=full" would result in a spurious warning from the
+> __setup() handler (though RO permissions would be configured
+> appropriately).
+>
+> Further, "rodata=full" has been broken since commit:
+>
+>   0d6ea3ac94ca77c5 ("lib/kstrtox.c: add "false"/"true" support to kstrtobool()")
+>
+> ... which caused strtobool() to parse "full" as false (in addition to
+> many other values not documented for the "rodata=" kernel parameter.
+>
+> This patch fixes this breakage by:
+>
+> * Moving the core parameter parser to an __early_param(), such that it
+>   is available early.
+>
+> * Adding an (optional) arch hook which arm64 can use to parse "full".
+>
+> * Updating the documentation to mention that "full" is valid for arm64.
+>
+> * Having the core parameter parser handle "on" and "off" explicitly,
+>   such that any undocumented values (e.g. typos such as "ful") are
+>   reported as errors rather than being silently accepted.
+>
+> Note that __setup() and early_param() have opposite conventions for
+> their return values, where __setup() uses 1 to indicate a parameter was
+> handled and early_param() uses 0 to indicate a parameter was handled.
+>
+> Fixes: f9a40b0890658330 ("init/main.c: return 1 from handled __setup() functions")
+> Fixes: 0d6ea3ac94ca77c5 ("lib/kstrtox.c: add "false"/"true" support to kstrtobool()")
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Jagdish Gediya <jvgediya@linux.ibm.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Will Deacon <will@kernel.org>
 
-v1->v2:
-  - Fix the comment.
+Yuck, thanks for cleaning that up.
 
-Signed-off-by: oushixiong <oushixiong@kylinos.cn>
----
- drivers/gpu/drm/ast/ast_drv.c  |  22 ++++++
- drivers/gpu/drm/ast/ast_mode.c | 125 ++++++++++++++++++++++++++++++++-
- 2 files changed, 146 insertions(+), 1 deletion(-)
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 
-diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
-index 7465c4f0156a..6c1f75174368 100644
---- a/drivers/gpu/drm/ast/ast_drv.c
-+++ b/drivers/gpu/drm/ast/ast_drv.c
-@@ -28,6 +28,7 @@
- 
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/dma-buf.h>
- 
- #include <drm/drm_aperture.h>
- #include <drm/drm_atomic_helper.h>
-@@ -50,6 +51,23 @@ module_param_named(modeset, ast_modeset, int, 0400);
- 
- DEFINE_DRM_GEM_FOPS(ast_fops);
- 
-+static struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
-+					struct dma_buf_attachment *attach,
-+					struct sg_table *sg)
-+{
-+	struct drm_gem_vram_object *gbo;
-+	struct dma_resv *resv = attach->dmabuf->resv;
-+
-+	ww_mutex_lock(&resv->lock, NULL);
-+	gbo = drm_gem_vram_create(dev, attach->dmabuf->size, 0);
-+	ww_mutex_unlock(&resv->lock);
-+
-+	if (IS_ERR(gbo))
-+		return NULL;
-+
-+	return &gbo->bo.base;
-+}
-+
- static const struct drm_driver ast_driver = {
- 	.driver_features = DRIVER_ATOMIC |
- 			   DRIVER_GEM |
-@@ -63,6 +81,10 @@ static const struct drm_driver ast_driver = {
- 	.minor = DRIVER_MINOR,
- 	.patchlevel = DRIVER_PATCHLEVEL,
- 
-+	.prime_handle_to_fd = drm_gem_prime_handle_to_fd,
-+	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
-+	.gem_prime_import_sg_table = ast_gem_prime_import_sg_table,
-+
- 	DRM_GEM_VRAM_DRIVER
- };
- 
-diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-index 45b56b39ad47..ebe732705e34 100644
---- a/drivers/gpu/drm/ast/ast_mode.c
-+++ b/drivers/gpu/drm/ast/ast_mode.c
-@@ -48,6 +48,8 @@
- #include "ast_drv.h"
- #include "ast_tables.h"
- 
-+MODULE_IMPORT_NS(DMA_BUF);
-+
- static inline void ast_load_palette_index(struct ast_private *ast,
- 				     u8 index, u8 red, u8 green,
- 				     u8 blue)
-@@ -1535,8 +1537,129 @@ static const struct drm_mode_config_helper_funcs ast_mode_config_helper_funcs =
- 	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
- };
- 
-+static int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
-+					int width, int height)
-+{
-+	struct drm_gem_vram_object *dst_bo = NULL;
-+	void *dst = NULL;
-+	int ret = 0, i;
-+	unsigned long offset = 0;
-+	bool unmap = false;
-+	unsigned int bytesPerPixel;
-+	struct iosys_map map;
-+	struct iosys_map dmabuf_map;
-+
-+	bytesPerPixel = fb->format->cpp[0];
-+
-+	if (!fb->obj[0]->import_attach)
-+		return -EINVAL;
-+
-+	if (!fb->obj[0]->import_attach->dmabuf->vmap_ptr.vaddr) {
-+		ret = dma_buf_vmap(fb->obj[0]->import_attach->dmabuf, &dmabuf_map);
-+		if (ret)
-+			return 0;
-+	} else
-+		dmabuf_map.vaddr = fb->obj[0]->import_attach->dmabuf->vmap_ptr.vaddr;
-+
-+	dst_bo = drm_gem_vram_of_gem(fb->obj[0]);
-+
-+	ret = drm_gem_vram_pin(dst_bo, 0);
-+	if (ret) {
-+		DRM_ERROR("ast_bo_pin failed\n");
-+		goto error;
-+	}
-+
-+	if (!dst_bo->map.vaddr) {
-+		ret = drm_gem_vram_vmap(dst_bo, &map);
-+		if (ret) {
-+			DRM_ERROR("failed to vmap fbcon\n");
-+			drm_gem_vram_unpin(dst_bo);
-+			goto error;
-+		}
-+		unmap = true;
-+	}
-+	dst = dst_bo->map.vaddr;
-+
-+	for (i = y; i < y + height; i++) {
-+		offset = i * fb->pitches[0] + (x * bytesPerPixel);
-+		memcpy_toio(dst + offset, dmabuf_map.vaddr + offset,
-+			width * bytesPerPixel);
-+	}
-+
-+	if (unmap)
-+		drm_gem_vram_vunmap(dst_bo, &map);
-+
-+	drm_gem_vram_unpin(dst_bo);
-+error:
-+	return 0;
-+}
-+
-+
-+static int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
-+				struct drm_file *file,
-+				unsigned int flags,
-+				unsigned int color,
-+				struct drm_clip_rect *clips,
-+				unsigned int num_clips)
-+{
-+	int i, ret = 0;
-+
-+	drm_modeset_lock_all(fb->dev);
-+	if (fb->obj[0]->import_attach) {
-+		ret = dma_buf_begin_cpu_access(fb->obj[0]->import_attach->dmabuf,
-+				DMA_FROM_DEVICE);
-+		if (ret)
-+			goto unlock;
-+	}
-+
-+	for (i = 0; i < num_clips; i++) {
-+		ret = ast_handle_damage(fb, clips[i].x1, clips[i].y1,
-+				clips[i].x2 - clips[i].x1, clips[i].y2 - clips[i].y1);
-+		if (ret)
-+			break;
-+	}
-+
-+	if (fb->obj[0]->import_attach) {
-+		dma_buf_end_cpu_access(fb->obj[0]->import_attach->dmabuf,
-+				DMA_FROM_DEVICE);
-+	}
-+
-+unlock:
-+	drm_modeset_unlock_all(fb->dev);
-+
-+	return ret;
-+}
-+
-+static void ast_user_framebuffer_destroy(struct drm_framebuffer *fb)
-+{
-+	struct iosys_map dmabuf_map;
-+
-+	if (fb->obj[0]->import_attach) {
-+		dmabuf_map.vaddr = fb->obj[0]->import_attach->dmabuf->vmap_ptr.vaddr;
-+		if (dmabuf_map.vaddr)
-+			dma_buf_vunmap(fb->obj[0]->import_attach->dmabuf,
-+					&dmabuf_map);
-+	}
-+
-+	drm_gem_fb_destroy(fb);
-+}
-+
-+static const struct drm_framebuffer_funcs ast_gem_fb_funcs_dirtyfb = {
-+	.destroy	= ast_user_framebuffer_destroy,
-+	.create_handle	= drm_gem_fb_create_handle,
-+	.dirty		= ast_user_framebuffer_dirty,
-+};
-+
-+static struct drm_framebuffer *
-+ast_gem_fb_create_with_dirty(struct drm_device *dev, struct drm_file *file,
-+				const struct drm_mode_fb_cmd2 *mode_cmd)
-+{
-+	return drm_gem_fb_create_with_funcs(dev, file, mode_cmd,
-+					&ast_gem_fb_funcs_dirtyfb);
-+}
-+
- static const struct drm_mode_config_funcs ast_mode_config_funcs = {
--	.fb_create = drm_gem_fb_create,
-+	.fb_create = ast_gem_fb_create_with_dirty,
- 	.mode_valid = drm_vram_helper_mode_valid,
- 	.atomic_check = drm_atomic_helper_check,
- 	.atomic_commit = drm_atomic_helper_commit,
--- 
-2.17.1
-
+> ---
+>  .../admin-guide/kernel-parameters.txt          |  2 ++
+>  arch/arm64/include/asm/setup.h                 | 17 +++++++++++++++++
+>  arch/arm64/mm/mmu.c                            | 18 ------------------
+>  init/main.c                                    | 18 +++++++++++++++---
+>  4 files changed, 34 insertions(+), 21 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index d7f30902fda02..426fa892d311a 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -5331,6 +5331,8 @@
+>         rodata=         [KNL]
+>                 on      Mark read-only kernel memory as read-only (default).
+>                 off     Leave read-only kernel memory writable for debugging.
+> +               full    Mark read-only kernel memory and aliases as read-only
+> +                       [arm64]
+>
+>         rockchip.usb_uart
+>                         Enable the uart passthrough on the designated usb port
+> diff --git a/arch/arm64/include/asm/setup.h b/arch/arm64/include/asm/setup.h
+> index 6437df6617009..f4af547ef54ca 100644
+> --- a/arch/arm64/include/asm/setup.h
+> +++ b/arch/arm64/include/asm/setup.h
+> @@ -3,6 +3,8 @@
+>  #ifndef __ARM64_ASM_SETUP_H
+>  #define __ARM64_ASM_SETUP_H
+>
+> +#include <linux/string.h>
+> +
+>  #include <uapi/asm/setup.h>
+>
+>  void *get_early_fdt_ptr(void);
+> @@ -14,4 +16,19 @@ void early_fdt_map(u64 dt_phys);
+>  extern phys_addr_t __fdt_pointer __initdata;
+>  extern u64 __cacheline_aligned boot_args[4];
+>
+> +static inline bool arch_parse_debug_rodata(char *arg)
+> +{
+> +       extern bool rodata_enabled;
+> +       extern bool rodata_full;
+> +
+> +       if (arg && !strcmp(arg, "full")) {
+> +               rodata_enabled = true;
+> +               rodata_full = true;
+> +               return true;
+> +       }
+> +
+> +       return false;
+> +}
+> +#define arch_parse_debug_rodata arch_parse_debug_rodata
+> +
+>  #endif
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index db7c4e6ae57bb..e7ad44585f40a 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -642,24 +642,6 @@ static void __init map_kernel_segment(pgd_t *pgdp, void *va_start, void *va_end,
+>         vm_area_add_early(vma);
+>  }
+>
+> -static int __init parse_rodata(char *arg)
+> -{
+> -       int ret = strtobool(arg, &rodata_enabled);
+> -       if (!ret) {
+> -               rodata_full = false;
+> -               return 0;
+> -       }
+> -
+> -       /* permit 'full' in addition to boolean options */
+> -       if (strcmp(arg, "full"))
+> -               return -EINVAL;
+> -
+> -       rodata_enabled = true;
+> -       rodata_full = true;
+> -       return 0;
+> -}
+> -early_param("rodata", parse_rodata);
+> -
+>  #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
+>  static int __init map_entry_trampoline(void)
+>  {
+> diff --git a/init/main.c b/init/main.c
+> index 91642a4e69be6..1fe7942f5d4a8 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -1446,13 +1446,25 @@ static noinline void __init kernel_init_freeable(void);
+>
+>  #if defined(CONFIG_STRICT_KERNEL_RWX) || defined(CONFIG_STRICT_MODULE_RWX)
+>  bool rodata_enabled __ro_after_init = true;
+> +
+> +#ifndef arch_parse_debug_rodata
+> +static inline bool arch_parse_debug_rodata(char *str) { return false; }
+> +#endif
+> +
+>  static int __init set_debug_rodata(char *str)
+>  {
+> -       if (strtobool(str, &rodata_enabled))
+> +       if (arch_parse_debug_rodata(str))
+> +               return 0;
+> +
+> +       if (str && !strcmp(str, "on"))
+> +               rodata_enabled = true;
+> +       else if (str && !strcmp(str, "off"))
+> +               rodata_enabled = false;
+> +       else
+>                 pr_warn("Invalid option string for rodata: '%s'\n", str);
+> -       return 1;
+> +       return 0;
+>  }
+> -__setup("rodata=", set_debug_rodata);
+> +early_param("rodata", set_debug_rodata);
+>  #endif
+>
+>  #ifdef CONFIG_STRICT_KERNEL_RWX
+> --
+> 2.30.2
+>

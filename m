@@ -2,177 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE572597F6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9EA597F77
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243876AbiHRHoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 03:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
+        id S243895AbiHRHqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 03:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243851AbiHRHo1 (ORCPT
+        with ESMTP id S243879AbiHRHp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 03:44:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7C03FA23;
-        Thu, 18 Aug 2022 00:44:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 424D2B82000;
-        Thu, 18 Aug 2022 07:44:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E95CC433C1;
-        Thu, 18 Aug 2022 07:44:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660808664;
-        bh=rZJCPHnb+2HsbxREnzF2lobCub/SFK5teShfdO609Do=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eANVzcjfvEGkQ1M6v0JZSaxj4aAmlTQIbKUaSFbuboIkPY/gakbqOyE2Se0eekpJ+
-         A1W9vY8NoT6DZOvjabNWsggRGcdaOzads/L7z6LhXa5xuSRaWBqfqO7oojTfJmT90+
-         9A3/SKocy451RB55T/EmmZ+IjiCJC427DCz+jwhUBqz2C9BnDB/BGxW95lKkaVkyp5
-         sjxchJgTMfKb1X6nfS3bExk8KIXQrLTp7CAqF/MmvNM0p1oP+/vPt6BDABShvxImxt
-         XuefMPJpHZtJfeQrrl3lBAOAyM4jhZAofJAVb82QWjnG5rQEk1Nj/BLYf8KeHy5rZ6
-         A3NkGmpXgK+cw==
-Message-ID: <fa213bd3-6f59-2ada-8aa7-0909b5fc9e37@kernel.org>
-Date:   Thu, 18 Aug 2022 10:44:20 +0300
+        Thu, 18 Aug 2022 03:45:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF514F190
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:45:57 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oOaDo-0000J2-AM; Thu, 18 Aug 2022 09:45:44 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oOaDm-000T5y-RS; Thu, 18 Aug 2022 09:45:42 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oOaDm-00CU0p-5z; Thu, 18 Aug 2022 09:45:42 +0200
+Date:   Thu, 18 Aug 2022 09:45:39 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     zhaoxiao <zhaoxiao@uniontech.com>
+Cc:     thierry.reding@gmail.com, narmstrong@baylibre.com,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pwm: meson: Simplify probe function with dev_err_probe()
+Message-ID: <20220818074539.j6vrkj622hpg5n7y@pengutronix.de>
+References: <20220818072234.9640-1-zhaoxiao@uniontech.com>
 MIME-Version: 1.0
-Subject: Re: linux-next: build failure after merge of the icc tree
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220818115326.407aa3e0@canb.auug.org.au>
- <47aa5e68-a41c-bb22-bce6-ab11a33b3d9c@kernel.org>
- <20220818064922.fejqbxpvc6epuqfr@pengutronix.de>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20220818064922.fejqbxpvc6epuqfr@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5fayku33dtf3ylbe"
+Content-Disposition: inline
+In-Reply-To: <20220818072234.9640-1-zhaoxiao@uniontech.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Uwe,
 
-On 18.08.22 9:49, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Thu, Aug 18, 2022 at 08:00:51AM +0300, Georgi Djakov wrote:
->> On 18.08.22 4:53, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> After merging the icc tree, today's linux-next build (x86_64 allmodconfig)
->>> failed like this:
->>>
->>> drivers/interconnect/imx/imx8mp.c: In function 'imx8mp_icc_remove':
->>> drivers/interconnect/imx/imx8mp.c:245:16: error: void value not ignored as it ought to be
->>>     245 |         return imx_icc_unregister(pdev);
->>>         |                ^~~~~~~~~~~~~~~~~~~~~~~~
->>> drivers/interconnect/imx/imx8mp.c:246:1: error: control reaches end of non-void function [-Werror=return-type]
->>>     246 | }
->>>         | ^
->>>
->>> Caused by commit
->>>
->>>     d761e0e9c8f2 ("interconnect: imx: Make imx_icc_unregister() return void")
->>>
->>> I have used the icc tree from next-20220817 for today.
-> 
-> I tried to understand what went wrong here. The problem is that the
-> patch "interconnect: imx: Make imx_icc_unregister() return void" was
-> developed on top of v5.19-rc1, which doesn't contain
-> drivers/interconnect/imx/imx8mp.c. This was only introduced in
-> 
-> 	c14ec5c93dc8 ("interconnect: imx: Add platform driver for imx8mp")
-> 
-> for v6.0-rc1.
+--5fayku33dtf3ylbe
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes, exactly.
+On Thu, Aug 18, 2022 at 03:22:34PM +0800, zhaoxiao wrote:
+> Switch to dev_err_probe() to remove all dev_err() -> return repeated
+> patterns, simplifying and shortening the probe function.
+>=20
+> Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
+> ---
+>  drivers/pwm/pwm-meson.c | 53 ++++++++++++++---------------------------
+>  1 file changed, 18 insertions(+), 35 deletions(-)
+>=20
+> diff --git a/drivers/pwm/pwm-meson.c b/drivers/pwm/pwm-meson.c
+> index 57112f438c6d..43ce8d9a33d2 100644
+> --- a/drivers/pwm/pwm-meson.c
+> +++ b/drivers/pwm/pwm-meson.c
+> @@ -126,20 +126,16 @@ static int meson_pwm_request(struct pwm_chip *chip,=
+ struct pwm_device *pwm)
+> =20
+>  	if (channel->clk_parent) {
+>  		err =3D clk_set_parent(channel->clk, channel->clk_parent);
+> -		if (err < 0) {
+> -			dev_err(dev, "failed to set parent %s for %s: %d\n",
+> +		if (err < 0)
+> +			return dev_err_probe(dev, err, "failed to set parent %s for %s\n",
+>  				__clk_get_name(channel->clk_parent),
+> -				__clk_get_name(channel->clk), err);
+> -			return err;
+> -		}
+> +				__clk_get_name(channel->clk));
+>  	}
+> =20
+>  	err =3D clk_prepare_enable(channel->clk);
+> -	if (err < 0) {
+> -		dev_err(dev, "failed to enable clock %s: %d\n",
+> -			__clk_get_name(channel->clk), err);
+> -		return err;
+> -	}
+> +	if (err < 0)
+> +		return dev_err_probe(dev, err, "failed to enable clock %s\n",
+> +			__clk_get_name(channel->clk));
 
-> 
->> Thanks Stephen! Fixed.
-> 
-> The history in the icc tree now looks as follows:
-> 
-> $ git lgg linus/master..FETCH_HEAD
-> *   8c9b6a59edb7 Merge branch 'icc-ignore-return-val' into icc-next
-> |\
-> | * f62e3f595c5f interconnect: imx: Make imx_icc_unregister() return void
-> * |   c86cfdbaf8e3 Merge branch 'icc-ignore-return-val' into icc-next
-> |\ \
-> | * | d761e0e9c8f2 interconnect: imx: Make imx_icc_unregister() return void
-> | |/
-> | * 680f8666baf6 interconnect: Make icc_provider_del() return void
-> | * fa80a2994d35 interconnect: sm8450: Ignore return value of icc_provider_del() in .remove()
-> | * f221bd781f25 interconnect: osm-l3: Ignore return value of icc_provider_del() in .remove()
-> | * 919d4e1a207e interconnect: msm8974: Ignore return value of icc_provider_del() in .remove()
-> | * 4681086c9bec interconnect: icc-rpmh: Ignore return value of icc_provider_del() in .remove()
-> | * 8ef2ca20754d interconnect: icc-rpm: Ignore return value of icc_provider_del() in .remove()
-> | * 7ec26b8dcc5c interconnect: imx: Ignore return value of icc_provider_del() in .remove()
-> |/
-> o 568035b01cfb (tag: v6.0-rc1) Linux 6.0-rc1
-> 
-> So the commit that doesn't build is still included and might annoy
-> bisection. Also in my eyes it's kind of ugly to have two commits with
-> identical commit log and nearly identical content in the same tree.
-> 
-> I don't know your preferences about not rewriting your tree once it was
-> exposed to the public, but if you are willing to rewrite your tree to
-> improve, the possibilities (in order of my preference) are:
-> 
->   - Drop the broken commit and only include the fixed
->     icc-ignore-return-val branch.
+It's wrong to use dev_err_probe in .request(). The function is only
+supposed to be used in the .probe() call.
 
-Yes, that was actually my intention, but looks like i merged the fixed branch on top (without
-un-merging the previous one). Sorry about that. It should be fine now.
+>  	return 0;
+>  }
+> @@ -166,24 +162,18 @@ static int meson_pwm_calc(struct meson_pwm *meson, =
+struct pwm_device *pwm,
+>  		duty =3D period - duty;
+> =20
+>  	fin_freq =3D clk_get_rate(channel->clk);
+> -	if (fin_freq =3D=3D 0) {
+> -		dev_err(meson->chip.dev, "invalid source clock frequency\n");
+> -		return -EINVAL;
+> -	}
+> +	if (fin_freq =3D=3D 0)
+> +		return dev_err_probe(meson->chip.dev, -EINVAL, "invalid source clock f=
+requency\n");
+> =20
+>  	dev_dbg(meson->chip.dev, "fin_freq: %lu Hz\n", fin_freq);
+> =20
+>  	pre_div =3D div64_u64(fin_freq * (u64)period, NSEC_PER_SEC * 0xffffLL);
+> -	if (pre_div > MISC_CLK_DIV_MASK) {
+> -		dev_err(meson->chip.dev, "unable to get period pre_div\n");
+> -		return -EINVAL;
+> -	}
+> +	if (pre_div > MISC_CLK_DIV_MASK)
+> +		return dev_err_probe(meson->chip.dev, -EINVAL, "unable to get period p=
+re_div\n");
+> =20
+>  	cnt =3D div64_u64(fin_freq * (u64)period, NSEC_PER_SEC * (pre_div + 1));
+> -	if (cnt > 0xffff) {
+> -		dev_err(meson->chip.dev, "unable to get period cnt\n");
+> -		return -EINVAL;
+> -	}
+> +	if (cnt > 0xffff)
+> +		return dev_err_probe(meson->chip.dev, -EINVAL, "unable to get period c=
+nt\n");
+> =20
+>  	dev_dbg(meson->chip.dev, "period=3D%u pre_div=3D%u cnt=3D%u\n", period,
+>  		pre_div, cnt);
+> @@ -200,10 +190,8 @@ static int meson_pwm_calc(struct meson_pwm *meson, s=
+truct pwm_device *pwm,
+>  		/* Then check is we can have the duty with the same pre_div */
+>  		duty_cnt =3D div64_u64(fin_freq * (u64)duty,
+>  				     NSEC_PER_SEC * (pre_div + 1));
+> -		if (duty_cnt > 0xffff) {
+> -			dev_err(meson->chip.dev, "unable to get duty cycle\n");
+> -			return -EINVAL;
+> -		}
+> +		if (duty_cnt > 0xffff)
+> +			return dev_err_probe(meson->chip.dev, -EINVAL, "unable to get duty cy=
+cle\n");
+> =20
+>  		dev_dbg(meson->chip.dev, "duty=3D%u pre_div=3D%u duty_cnt=3D%u\n",
+>  			duty, pre_div, duty_cnt);
+> @@ -509,11 +497,8 @@ static int meson_pwm_init_channels(struct meson_pwm =
+*meson)
+>  		channel->mux.hw.init =3D &init;
+> =20
+>  		channel->clk =3D devm_clk_register(dev, &channel->mux.hw);
+> -		if (IS_ERR(channel->clk)) {
+> -			err =3D PTR_ERR(channel->clk);
+> -			dev_err(dev, "failed to register %s: %d\n", name, err);
+> -			return err;
+> -		}
+> +		if (IS_ERR(channel->clk))
+> +			return dev_err_probe(dev, PTR_ERR(channel->clk), "failed to register =
+%s\n", name);
 
-Thanks!
-Georgi
+This is the first conversion that is OK, as meson_pwm_init_channels() is
+(only) called by meson_pwm_probe().
 
-> 
->   - On top of the broken branch add a commit that only fixes the problem
->     but doesn't duplicate most of d761e0e9c8f2, yielding something like:
-> 
-> 	*   bcdefghijlkm Merge branch 'icc-ignore-return-val' into icc-next
-> 	|\
-> 	| * abcdefghijkl interconnect: imx: Fix imx8mp build
-> 	| * d761e0e9c8f2 interconnect: imx: Make imx_icc_unregister() return void
-> 	| * 680f8666baf6 interconnect: Make icc_provider_del() return void
-> 	| * fa80a2994d35 interconnect: sm8450: Ignore return value of icc_provider_del() in .remove()
-> 	| * f221bd781f25 interconnect: osm-l3: Ignore return value of icc_provider_del() in .remove()
-> 	| * 919d4e1a207e interconnect: msm8974: Ignore return value of icc_provider_del() in .remove()
-> 	| * 4681086c9bec interconnect: icc-rpmh: Ignore return value of icc_provider_del() in .remove()
-> 	| * 8ef2ca20754d interconnect: icc-rpm: Ignore return value of icc_provider_del() in .remove()
-> 	| * 7ec26b8dcc5c interconnect: imx: Ignore return value of icc_provider_del() in .remove()
-> 	|/
-> 	o 568035b01cfb (tag: v6.0-rc1) Linux 6.0-rc1
-> 
->     or
-> 
-> 	* abcdefghijkm interconnect: imx: Fix imx8mp build
-> 	*   c86cfdbaf8e3 Merge branch 'icc-ignore-return-val' into icc-next
-> 	|\
-> 	| * d761e0e9c8f2 interconnect: imx: Make imx_icc_unregister() return void
-> 	| * 680f8666baf6 interconnect: Make icc_provider_del() return void
-> 	| * fa80a2994d35 interconnect: sm8450: Ignore return value of icc_provider_del() in .remove()
-> 	| * f221bd781f25 interconnect: osm-l3: Ignore return value of icc_provider_del() in .remove()
-> 	| * 919d4e1a207e interconnect: msm8974: Ignore return value of icc_provider_del() in .remove()
-> 	| * 4681086c9bec interconnect: icc-rpmh: Ignore return value of icc_provider_del() in .remove()
-> 	| * 8ef2ca20754d interconnect: icc-rpm: Ignore return value of icc_provider_del() in .remove()
-> 	| * 7ec26b8dcc5c interconnect: imx: Ignore return value of icc_provider_del() in .remove()
-> 	|/
-> 	o 568035b01cfb (tag: v6.0-rc1) Linux 6.0-rc1
-> 
->   - At least point out in the fixed variant, what and why it was
->     necessary to redo the commit.
-> 
-> Thanks
-> Uwe
-> 
+> =20
+>  		snprintf(name, sizeof(name), "clkin%u", i);
 
+Here follows another return that could benefit for a conversion to
+dev_err_probe. Currently it only returns an error code and doesn't emit
+a message, but a message would be good.
+
+> @@ -550,10 +535,8 @@ static int meson_pwm_probe(struct platform_device *p=
+dev)
+>  		return err;
+> =20
+>  	err =3D devm_pwmchip_add(&pdev->dev, &meson->chip);
+> -	if (err < 0) {
+> -		dev_err(&pdev->dev, "failed to register PWM chip: %d\n", err);
+> -		return err;
+> -	}
+> +	if (err < 0)
+> +		return dev_err_probe(&pdev->dev, err, "failed to register PWM chip\n");
+> =20
+>  	return 0;
+>  }
+
+This hunk is fine.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--5fayku33dtf3ylbe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmL97iAACgkQwfwUeK3K
+7Aloowf8DNE8Ty+jmb5ZdrGY5MKJET0h1cpJIMOw+WsplfWN4AMck2XDGapTwCUy
+K93fyvtByX2AJxlcHtUELqO2pATd0m/oS4SIHIhSeKCyZ4MND+FxGURycAPkWeJb
+HXXiZXHGQYcY6UjbWQRJiCW3fzKcFxHlOaqVCoTSJoHsGzXJuEURtPVSLr5mRCk2
+bod5upR4BKqOrISOxFBy301qstUusEQGJ2KtbqtMJoax2iKb4mQ7DiSBzbj7diJc
+DbebzC43HhOVM9Bxx8ODIYLQa9dNxhFAtvEWYW7DjDifruZy6N8eRH/3KYMpHx3N
+nhPMf669dNoAPNrQkyQyZlRqEeEZZA==
+=+YW5
+-----END PGP SIGNATURE-----
+
+--5fayku33dtf3ylbe--

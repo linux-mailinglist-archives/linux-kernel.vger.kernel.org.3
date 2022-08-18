@@ -2,100 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8CB59891A
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00E3598918
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 18:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344862AbiHRQkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 12:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
+        id S1344869AbiHRQkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 12:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344950AbiHRQko (ORCPT
+        with ESMTP id S1344848AbiHRQkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 12:40:44 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D716BFAB4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 09:40:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660840844; x=1692376844;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=llLrcHc/wK3CfmeEcVnkYQChSaB5jpfMLinYxM/52ds=;
-  b=hFcBN1VrYHOudZFKwi9iquJO65AzlqyQeOWIS+eklaMwIPjBiY2KZTDh
-   Cbd0x3jwX7IaohW+vNGC3VHe6fW0MJHX/jwzk4fzj81VWwMWxnMdgBGfK
-   RhML5y/1xI40+YtL9ddvx7e0f9/puqZt/Jnyl1yw5F2yuq4tZlnO+E3th
-   pfcK3PnV+Snk2pmwqsOeSoQvVa+ZUmTLfLwRZFtkABtBuVoMAPx4Kd3sD
-   kznHD5RxIetYqtjAAvlOgNUkoOJifns2Sxlu9vzeLaJ4IQ0LGA16PptNy
-   hNtqBQMz0Bqa3LhqQ3azFxD3gSUpTG2qKc+rMe+Yaw2MsTtsBWVoboHoc
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="272582263"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="272582263"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 09:39:20 -0700
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="853473562"
-Received: from amalikya-mobl.amr.corp.intel.com (HELO [10.212.238.171]) ([10.212.238.171])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 09:39:20 -0700
-Message-ID: <8a09b9d5-d5c6-7a1f-1e44-9525b5b18661@intel.com>
-Date:   Thu, 18 Aug 2022 09:39:19 -0700
+        Thu, 18 Aug 2022 12:40:08 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E623A5C78
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 09:40:07 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id j7so2376494wrh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 09:40:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=GexUlF4ShsbvM/5+FHZTW5WNt/VoSURza5qmXJXUOss=;
+        b=4Bt5Ng7gp6Cz4HNi5h74gAu47EzSTvO8GPxcrnNA5KcEfSGM/+mkSOLTpT1KHtQmQC
+         nyc05lkJswlBcFQrpM3M8pLq1p+AdsQuczSs55nYJUb7czQgXTxvZU64Noz6YK6XBgoE
+         0Z/9zVwOHSa4XgjHnm7r1OjEdyqYgGnu2KO81Ha8K1LrsIopy9tp+GGlRfraLtyGas0B
+         5vo935PmV/vJII+nvOKg5lnfdLa8fD0bdQA5fsLrG2XZi/MyTy663jF8ZT8guGOOsOlT
+         YOY21xNRWC1iKX+68AYjhhif8lICvVvVWqn60jXhSWK/wDxeZxUdQxqQF8dPHB8jLztN
+         xtpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=GexUlF4ShsbvM/5+FHZTW5WNt/VoSURza5qmXJXUOss=;
+        b=URfghbZtYx/gwb55oeVuNQstZqux/ww7v9e9OLSTAQNlWC7dmO22zAy018c0cI3L1r
+         gLZ3yQvjbxxPsxGLTj0hK9wirb6pLdJRuelwgveKLwW91WLIKfJXE6aP+WdaWfs3ceLo
+         feq7JvKhy6Ncex3h5591AU5VerMI9YK7i8lhJkSnnP/bMRplF/wnpl9T9AycimyKkpqN
+         tJFVGnLdcxg7mZ9wmeBW33WlNFFs7snX27lAIkzOj6Cl3JyzwDY/b2dzkvt1hxe3owwL
+         fOGkviM/Zc+GLeSO07nqZpIwzz6L00FH0FvHS7MFZJ/p2GouxJBXccUWqlJuPXnTNSxM
+         u90Q==
+X-Gm-Message-State: ACgBeo1Hg3o/Nd4KKjOhyQpp+tRDJgJvHNs547zkdS/MaG9hIyX7rfCh
+        b4FE+vgh+6GJeXYQEVEa7bGIUQ==
+X-Google-Smtp-Source: AA6agR4OebAoKoxymPHgrWb1d98AXrHPQ3vhI+HZKG4LtXNDBBpK4goEN7GMVn6C5YBzSQl+F4e3mQ==
+X-Received: by 2002:adf:fa81:0:b0:224:f260:2523 with SMTP id h1-20020adffa81000000b00224f2602523mr2075676wrr.26.1660840805703;
+        Thu, 18 Aug 2022 09:40:05 -0700 (PDT)
+Received: from [192.168.178.32] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id i20-20020a1c5414000000b003a327f19bf9sm6621432wmb.14.2022.08.18.09.40.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 09:40:05 -0700 (PDT)
+Message-ID: <23da162e-1018-9bfa-bc5c-ec09eba9428b@isovalent.com>
+Date:   Thu, 18 Aug 2022 17:40:04 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 5/7] mm: Remember young/dirty bit for page migrations
-Content-Language: en-US
-To:     Nadav Amit <nadav.amit@gmail.com>, Peter Xu <peterx@redhat.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20220809220100.20033-1-peterx@redhat.com>
- <20220809220100.20033-6-peterx@redhat.com> <YvUeB0jc6clz59z5@xz-m1.local>
- <87pmh6dwdr.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <YvqcGq44oonHNyCO@xz-m1.local>
- <5B21352C-2BE6-4070-BB6B-C1B7A5D4D225@gmail.com>
- <E37036E0-566E-40C7-AD15-720CDB003227@gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <E37036E0-566E-40C7-AD15-720CDB003227@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 3/3] tools/build: Display logical OR of a feature flavors
+Content-Language: en-GB
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20220818120957.319995-1-roberto.sassu@huaweicloud.com>
+ <20220818120957.319995-3-roberto.sassu@huaweicloud.com>
+ <Yv46EW6KbUe9zjur@kernel.org>
+ <71544d2970e246e1f0d5f5ec065ea2437df58cd9.camel@huaweicloud.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <71544d2970e246e1f0d5f5ec065ea2437df58cd9.camel@huaweicloud.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/15/22 14:03, Nadav Amit wrote:
+On 18/08/2022 14:25, Roberto Sassu wrote:
+> On Thu, 2022-08-18 at 10:09 -0300, Arnaldo Carvalho de Melo wrote:
+>> Em Thu, Aug 18, 2022 at 02:09:57PM +0200, 
+>> roberto.sassu@huaweicloud.com escreveu:
+>>> From: Roberto Sassu <roberto.sassu@huawei.com>
+>>>
+>>> Sometimes, features are simply different flavors of another
+>>> feature, to
+>>> properly detect the exact dependencies needed by different Linux
+>>> distributions.
+>>>
+>>> For example, libbfd has three flavors: libbfd if the distro does
+>>> not
+>>> require any additional dependency; libbfd-liberty if it requires
+>>> libiberty;
+>>> libbfd-liberty-z if it requires libiberty and libz.
+>>>
+>>> It might not be clear to the user whether a feature has been
+>>> successfully
+>>> detected or not, given that some of its flavors will be set to OFF,
+>>> others
+>>> to ON.
+>>>
+>>> Instead, display only the feature main flavor if not in verbose
+>>> mode
+>>> (VF != 1), and set it to ON if at least one of its flavors has been
+>>> successfully detected (logical OR), OFF otherwise. Omit the other
+>>> flavors.
+>>>
+>>> Accomplish that by declaring a FEATURE_GROUP_MEMBERS-<feature main
+>>> flavor>
+>>> variable, with the list of the other flavors as variable value. For
+>>> now, do
+>>> it just for libbfd.
+>>>
+>>> In verbose mode, of if no group is defined for a feature, show the
+>>> feature
+>>> detection result as before.
 >>
->> At least on x86, the hardware is not supposed to do so. The only case I
->> remember (and sometimes misremembers) is with KNL erratum, which perhaps
->> needs to be considered:
+>> Looks cool, tested and added this to the commit log message here in
+>> my
+>> local branch, that will go public after further tests for the other
+>> csets in it:
 >>
->> https://lore.kernel.org/all/20160708001911.9A3FD2B6@viggo.jf.intel.com/
-> I keep not remembering this erratum correctly. IIRC, the erratum says that
-> the access/dirty might be set, but it does not mean that a write is possible
-> after the PTE is cleared (i.e., the dirty/access might be set on the
-> non-present PTE, but the access itself would fail). So it is not an issue in
-> this case - losing A/D would not impact correctness since the access should
-> fail.
+>> Committer testing:
+>>
+>> Collecting the output from:
+>>
+>>   $ make -C tools/bpf/bpftool/ clean
+>>   $ make -C tools/bpf/bpftool/ |& grep "Auto-detecting system
+>> features" -A10
+>>
+>>   $ diff -u before after
+>>   --- before    2022-08-18 10:06:40.422086966 -0300
+>>   +++ after     2022-08-18 10:07:59.202138282 -0300
+>>   @@ -1,6 +1,4 @@
+>>    Auto-detecting system features:
+>>    ...                                  libbfd: [ on  ]
+>>   -...                          libbfd-liberty: [ on  ]
+>>   -...                        libbfd-liberty-z: [ on  ]
+>>    ...                                  libcap: [ on  ]
+>>    ...                         clang-bpf-co-re: [ on  ]
+>>   $
+>>
+>> Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+>>
+>> Thanks for working on this!
 > 
-> Dave Hansen hates when I get confused with this one, but I cc him if he
-> wants to confirm.
+> Thanks for testing and for adapting/pushing the other patches!
+> 
+> Roberto
+> 
 
-Right.
+Tested locally for bpftool and I also observe "libbfd: [ on  ]" only.
+This looks much better, thank you Roberto for following up on this!
 
-The issue is strictly with the page walker setting Accessed/Dirty in a
-racy way.  The TLB still has accurate contents at all times.
-
+Quentin

@@ -2,124 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 838775987AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 410E95987B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344106AbiHRPmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S1343984AbiHRPn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343703AbiHRPmg (ORCPT
+        with ESMTP id S244743AbiHRPnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:42:36 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C658BB038
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:42:34 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id q19so1879268pfg.8
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:42:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=sHRh70H4OUvKCUuJJP8BBsSyMCn2NNdEL5xmssRDNTE=;
-        b=lHrRRqOOxZK10H8JwJArUrFeXTQ1EHIyqk98PjrUvxUAC43jYOqu9gwUuCWI956OPA
-         zrGMPAtXLF8gmEz9ddQHNEuaFPxAB3XnI4EGZuRoR7eQmH2suhdogQ1G2O5WMqE67sT4
-         S7iclpjIF7SFSHFEYuqghkKri79KBuxr5L9Ug=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=sHRh70H4OUvKCUuJJP8BBsSyMCn2NNdEL5xmssRDNTE=;
-        b=FEV0DeSVxKt0uHqC5341e8l0U2qzjS5i2vEx6hzDYdL8sYAd+1UCssApO+rQKs78vS
-         lkd3B5YU9r1Fgxtc+3LJjh026QbSJPx52I8uAYrQzN2svNXGBlurK7kaVlSmxs0AEQUO
-         zRuc9vA/Xa5Amq96qSStQwfl4TnUplzoIbpj4JFNXphKRdcIA8+L+nu2NDt1COKg4F4h
-         rQPKVB3Mrus7w0JM/YvIr3Q6sdb8SdK4+fg+McNK0G5hK/RM8ws3NotWoEQWqTwd0/oF
-         XvAscZ6z1jTu1h2YykgPMR11FtsQ5CAaPQWshAMDzqZ8ww73Je+LvqQwBEk7Qak6Vah1
-         6/rg==
-X-Gm-Message-State: ACgBeo1rtYMdLFtkhcpLnyj51ozaThJKCtw/hBcCJxuruon8juF0BbFZ
-        79HLcE6KPp79MzHPMFG6kzdudgVsR1QSFw==
-X-Google-Smtp-Source: AA6agR5/aQD3e/yKEWGTJULQTbWQi4dfd6y5K7ulk5wSdOGvAIxSoGD7zg7+p5TW8rdoa3T1PN7ybA==
-X-Received: by 2002:a05:6a00:17a8:b0:52e:6e3e:9ff with SMTP id s40-20020a056a0017a800b0052e6e3e09ffmr3547859pfg.42.1660837353707;
-        Thu, 18 Aug 2022 08:42:33 -0700 (PDT)
-Received: from localhost.localdomain ([107.126.92.34])
-        by smtp.gmail.com with ESMTPSA id r5-20020a63ce45000000b00429f6579d81sm1457177pgi.29.2022.08.18.08.42.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 08:42:33 -0700 (PDT)
-From:   "Joseph S. Barrera III" <joebar@chromium.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Alexandru Stan <amstan@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sc7180: Add sleep state for alc5682 codec
-Date:   Thu, 18 Aug 2022 08:42:19 -0700
-Message-Id: <20220818084216.1.I5c2b6fea19c4c0dec67fd4931f03df8e5ccaca95@changeid>
-X-Mailer: git-send-email 2.31.0
+        Thu, 18 Aug 2022 11:43:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A028F26AC4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 08:43:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E911B821DE
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 15:43:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3AC1C433C1;
+        Thu, 18 Aug 2022 15:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660837430;
+        bh=PwDWnl8jsSFSU2ydLgqZWVtZxs2IzrpY5IiDLBGjrsI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P8oG8vgMTQQI2q3UyHsBX3OjWZ9DD3sWabJ53ySQOu7UkAMnqvsId927LwleRhmVd
+         qiJrsrHTmaQVk2jPmz28cImprPLxfE9U4hBuzaxbgttMy4dJwEq5fbZoLY6qJJyjo6
+         McUO2FtVH8Bqb6bNqCNqOo2xixaxhwg2YBv3goxn0eD5hckEsT95uRCqfrFeTeQaWl
+         OuLUfS5aRS6v0/kD+WGkTsZThxR805HRJ8Vs41YuM92X/AYWC0AkPM389QzgnvytHU
+         /ZN9FT9krrJxMS90gTvhffExWlm1b8hSZquJNn7I7mRo5kSVcSId8ElT7tGZk3YrLC
+         f3oU+IpCFT5Kw==
+Date:   Thu, 18 Aug 2022 16:43:45 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "linux@rasmusvillemoes.dk>" <linux@rasmusvillemoes.dk>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] regmap: introduce value tracing for regmap bulk
+ operations
+Message-ID: <Yv5eMcmNOmyLmd++@sirena.org.uk>
+References: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
+ <20220818121515.6azkxyqetnunwsc6@CAB-WSD-L081021.sigma.sbrf.ru>
+ <87mtc1wtjz.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yXgvcwPzZDoaKgt3"
+Content-Disposition: inline
+In-Reply-To: <87mtc1wtjz.wl-maz@kernel.org>
+X-Cookie: Logic is the chastity belt of the mind!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add sleep state to acl5682. In default, gpio28 (HP_IRQ) is bias-pull-up.
-To save power, in the new sleep state, gpio28 is bias-disable.
 
-sleeping, /sys/kernel/debug/gpio shows gpio28 as "no pull". When codec
-is awake (microphone plugged in and in use), it shows gpio28 as "pull up".
+--yXgvcwPzZDoaKgt3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
----
+On Thu, Aug 18, 2022 at 02:49:20PM +0100, Marc Zyngier wrote:
 
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+> I don't care much about regmap as a MMIO backend, but it strikes me as
+> odd that you end up with multiple ways of logging the same stuff (with
+> a memcpy in the middle of it).
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index b5f534db135a..94dd6c34d997 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -755,8 +755,9 @@ hp_i2c: &i2c9 {
- 	alc5682: codec@1a {
- 		compatible = "realtek,rt5682i";
- 		reg = <0x1a>;
--		pinctrl-names = "default";
-+		pinctrl-names = "default", "sleep";
- 		pinctrl-0 = <&hp_irq>;
-+		pinctrl-1 = <&hp_sleep>;
- 
- 		#sound-dai-cells = <1>;
- 
-@@ -1336,6 +1337,18 @@ pinconf {
- 		};
- 	};
- 
-+	hp_sleep: hp-sleep {
-+		pinmux {
-+			pins = "gpio28";
-+			function = "gpio";
-+		};
-+
-+		pinconf {
-+			pins = "gpio28";
-+			bias-disable;
-+		};
-+	};
-+
- 	pen_irq_l: pen-irq-l {
- 		pinmux {
- 			pins = "gpio21";
--- 
-2.31.0
+> Why can't this be done with a small amount of trace post-processing?
 
+At the minute we don't put the actual data for the bulk transfers into
+the trace so the information simply isn't there.
+
+--yXgvcwPzZDoaKgt3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL+XjAACgkQJNaLcl1U
+h9Azwgf+OQrTlWEKH+gPInBDTTWcBUE/irY6Xk1piglxtw2ua09tM6HTWJLE/Ybx
+JdLIpYISG2yBr/VZnjI7jx53J5B+SH/k9y1KlU0bPSlGQNR0WC/rs6Ydv2BVqZHN
+dgFUvzhoBOmg5BI88LRfL6Pr9LN9GZmYRkK5XAyH3OQbyZlRX4KRcGHv2H9hl75k
+K7dXU/PlDUGCBfUPIfJ8/yq/MuWNZsLcjSwNnU7JFWojCCLImg6NY/yflzMePwCw
+JBTWoRQ+CDnP4ouJBdwSWxs6DjeZ+7isG9pPe1DNTIiVHVWNKntBmZIdMiP5rPYC
+xu4uYTdCjZRvVjDi+fFgeza9mO3x4A==
+=sCie
+-----END PGP SIGNATURE-----
+
+--yXgvcwPzZDoaKgt3--

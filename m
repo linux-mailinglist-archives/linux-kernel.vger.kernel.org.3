@@ -2,80 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABF459820D
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9E1598217
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 13:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241050AbiHRLNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 07:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
+        id S244338AbiHRLN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 07:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244325AbiHRLNT (ORCPT
+        with ESMTP id S244316AbiHRLNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 07:13:19 -0400
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784FDC1B;
-        Thu, 18 Aug 2022 04:13:15 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 2883F20538;
-        Thu, 18 Aug 2022 13:13:14 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id lked6gCadlW7; Thu, 18 Aug 2022 13:13:13 +0200 (CEST)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id A1C2820519;
-        Thu, 18 Aug 2022 13:13:13 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout2.secunet.com (Postfix) with ESMTP id 8ED5B80004A;
-        Thu, 18 Aug 2022 13:13:13 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 13:13:13 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 18 Aug
- 2022 13:13:13 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id AB11A3182AA7; Thu, 18 Aug 2022 13:13:12 +0200 (CEST)
-Date:   Thu, 18 Aug 2022 13:13:12 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Gautam Menghani <gautammenghani201@gmail.com>
-CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <shuah@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kernel-mentees@lists.linuxfoundation.org>
-Subject: Re: [PATCH v3] selftests/net: Refactor xfrm_fill_key() to use array
- of structs
-Message-ID: <20220818111312.GH566407@gauss3.secunet.de>
-References: <55c8de7e-a6e8-fc79-794d-53536ad7a65d@collabora.com>
- <20220806163530.70182-1-gautammenghani201@gmail.com>
+        Thu, 18 Aug 2022 07:13:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AC51132;
+        Thu, 18 Aug 2022 04:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660821199; x=1692357199;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Q6bejHNbuks/D/XWIoTaxaxn4NjhAHgyJDnpMYChr3o=;
+  b=U/tsV3EtIAGbvTShxtHg5ZXJRGLSMvS+841v9gqKsGNKfqB4AzU3+5N9
+   hLCnvSy1MXvtl6px8tpuILftuZtdau1BEJ9FvrUOQCIIYxQRhLr4TwEdt
+   orrM4AZG5ub35xnUcF7iHG4eCixOoxK6kxS7+xf4uO3auNi1bddOw3JUv
+   /nWEw1BCPBFww/zVUWib8ebGx00m/qYew6/QAg4ZEox1xUUcb+AeW4Iyu
+   raxWyvsOasEIY6n/me4q3ufr9GuTea6YWk7ke9IPBeCyOW8HCUn91k+gu
+   E+egternAVIXmdpq/MghFHWweA0/NQvb9vdm4fY2SxHafEApM3si2VWSN
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="294007767"
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="294007767"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 04:13:18 -0700
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="668061559"
+Received: from gaoshunl-mobl.ccr.corp.intel.com (HELO [10.254.209.211]) ([10.254.209.211])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 04:13:15 -0700
+Message-ID: <11e8ceac-97a5-c8ea-73c3-760929bca263@linux.intel.com>
+Date:   Thu, 18 Aug 2022 19:13:13 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220806163530.70182-1-gautammenghani201@gmail.com>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>,
+        "Jin, Wen" <wen.jin@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 1/1] iommu/vt-d: Fix kdump kernels boot failure with
+ scalable mode
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+References: <20220817011035.3250131-1-baolu.lu@linux.intel.com>
+ <BN9PR11MB5276364739832848F15932B68C6D9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB5276364739832848F15932B68C6D9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 06, 2022 at 10:05:30PM +0530, Gautam Menghani wrote:
-> A TODO in net/ipsec.c asks to refactor the code in xfrm_fill_key() to
-> use set/map to avoid manually comparing each algorithm with the "name" 
-> parameter passed to the function as an argument. This patch refactors 
-> the code to create an array of structs where each struct contains the 
-> algorithm name and its corresponding key length.
+On 2022/8/18 16:32, Tian, Kevin wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>> Sent: Wednesday, August 17, 2022 9:11 AM
+>>
+>> The translation table copying code for kdump kernels is currently based
+>> on the extended root/context entry formats of ECS mode defined in older
+>> VT-d v2.5, and doesn't handle the scalable mode formats. This causes
+>> the kexec capture kernel boot failure with DMAR faults if the IOMMU was
+>> enabled in scalable mode by the previous kernel.
+>>
+>> The ECS mode has already been deprecated by the VT-d spec since v3.0 and
+>> Intel IOMMU driver doesn't support this mode as there's no real hardware
+>> implementation. Hence this converts ECS checking in copying table code
+>> into scalable mode.
+>>
+>> The existing copying code consumes a bit in the context entry as a mark
+>> of copied entry. This marker needs to work for the old format as well as
+>> for extended context entries. It's hard to find such a bit for both
 > 
-> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> The 2nd sentence "This marker..." is misleading. better removed.
 
-Applied to ipsec-next, thanks!
+Okay. I will make it like "It needs to work for ...".
+
+> 
+>> legacy and scalable mode context entries. This replaces it with a per-
+>> IOMMU bitmap.
+>>
+>> Fixes: 7373a8cc38197 ("iommu/vt-d: Setup context and enable RID2PASID
+>> support")
+>> Cc: stable@vger.kernel.org
+>> Reported-by: Jerry Snitselaar <jsnitsel@redhat.com>
+>> Tested-by: Wen Jin <wen.jin@intel.com>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ...
+>> @@ -2735,8 +2693,8 @@ static int copy_translation_tables(struct
+>> intel_iommu *iommu)
+>>   	bool new_ext, ext;
+>>
+>>   	rtaddr_reg = dmar_readq(iommu->reg + DMAR_RTADDR_REG);
+>> -	ext        = !!(rtaddr_reg & DMA_RTADDR_RTT);
+>> -	new_ext    = !!ecap_ecs(iommu->ecap);
+>> +	ext        = !!(rtaddr_reg & DMA_RTADDR_SMT);
+>> +	new_ext    = !!ecap_smts(iommu->ecap);
+> 
+> should be !!sm_supported()
+
+Not really. The IOMMU was setup by the previous kernel. Here we just
+check whether the scalable mode was enabled there.
+
+> 
+>>
+>>   	/*
+>>   	 * The RTT bit can only be changed when translation is disabled,
+>> @@ -2747,6 +2705,10 @@ static int copy_translation_tables(struct
+>> intel_iommu *iommu)
+>>   	if (new_ext != ext)
+>>   		return -EINVAL;
+>>
+>> +	iommu->copied_tables = bitmap_zalloc(BIT_ULL(16), GFP_KERNEL);
+>> +	if (!iommu->copied_tables)
+>> +		return -ENOMEM;
+>> +
+>>   	old_rt_phys = rtaddr_reg & VTD_PAGE_MASK;
+>>   	if (!old_rt_phys)
+>>   		return -EINVAL;
+> 
+> Out of curiosity. What is the rationale that we copy root table and
+> context tables but not pasid tables?
+
+We only copy the context table and reconstruct it when the default
+domain is attached. Before that, there's no need to reconstruct the
+pasid table, hence it's safe to use the previous pasid tables.
+
+Best regards,
+baolu

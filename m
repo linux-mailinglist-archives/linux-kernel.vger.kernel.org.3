@@ -2,129 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DC0598CC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABDB598CC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345179AbiHRTlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S244031AbiHRTls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiHRTlv (ORCPT
+        with ESMTP id S232038AbiHRTlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:41:51 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0294D0221;
-        Thu, 18 Aug 2022 12:41:50 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id a15so1917298qko.4;
-        Thu, 18 Aug 2022 12:41:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Vyt7thzr39zGzD+jwdjbrUMpFKsnWCaeVnONmE4AFgo=;
-        b=ZaAxj2QMNxNhWbyxxYbh/wlzc/lpYiubkJrWfBxxjEfKiHktq4rm02nEIXrkN8VFun
-         1tRITvqVUBVN9GNgwp9AbLrwVQSXbg5LwG2PCo+3jpvlGkms8M0URVFecJn0SfNKxjYv
-         3GeRd4GhGgGXpekECxGR/ZuNKN0eGiEIogh1YrKwKmJFS4ta+ILQD7b0GGpScYI6vwmT
-         8wRAhYJH9Tu3YfsXGbS91FMH6F+YkKRfVL3vbfk2hEYthFocbBNBkzmwv8v8bdlu20GP
-         O6Ul9o7QjPt9kwTh+Z3BgwPmistP029PrzXxoi++xfWN82b99hOHFd9LUXM7Y+GulQ2f
-         Xj2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Vyt7thzr39zGzD+jwdjbrUMpFKsnWCaeVnONmE4AFgo=;
-        b=KsQXvHI1BvQSAmJijyfBFbmaN7mI+A9mSjCygkdivIVMu19ub5ZxS5Ck0dUrGX3QVT
-         LbY89MlhNPRHClNQaMIdd7nleOQ5lp3FiDgkMSqRjTnDk+MXbEdXcxGWjJvRN8QrvG7/
-         mWUyw5QplSxqO/ffv3/K6cCAaNWC0+eu2YXs+TSXv7bd1xD4TLUVet04HukOj7fGq6PO
-         rMa3AxwBxuaYiJX15+M15H3DTqkp3tTQAAMefoBdtzUzm8JohgUrzge9cqMmqyo4XAJ6
-         rCRHAK5jiFkWqwhCOT1htU5HcyS9TQFaGWb7Gb6lzeLPRHStRwVaiZXlPaEu3proWFAE
-         CT2Q==
-X-Gm-Message-State: ACgBeo2U19GcHkjPXpi/VEU2JaqmTJanEaeonynn7Z8aZw53DDSM1O/f
-        ccnLEgvqSmW6grj28UtAdK1vE8zrktaA/ISyo75xYA2AsnBzcw==
-X-Google-Smtp-Source: AA6agR55NBQavXJrL399ar0NBCJ0wyWApu/5N7JexytNdIVdh1872u0lTxHVpzyXu1b2kmiBZetgCwmLFvhIzL7/rF0=
-X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
- s13-20020a05620a254d00b006ab84b825ebmr3270736qko.383.1660851710030; Thu, 18
- Aug 2022 12:41:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <1660649244-146842-1-git-send-email-john.garry@huawei.com> <1660649244-146842-3-git-send-email-john.garry@huawei.com>
-In-Reply-To: <1660649244-146842-3-git-send-email-john.garry@huawei.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 18 Aug 2022 22:41:13 +0300
-Message-ID: <CAHp75VdhCovo1uT3oxQAymEO9X+29oDet7LjYkLvpmj+r15Tfg@mail.gmail.com>
-Subject: Re: [PATCH PoC 2/3] ACPI: platform: Refactor acpi_create_platform_device()
-To:     John Garry <john.garry@huawei.com>
-Cc:     Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Thu, 18 Aug 2022 15:41:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4754ED021A
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:41:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5C256132A
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:41:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FFE4C433D6;
+        Thu, 18 Aug 2022 19:41:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660851704;
+        bh=4FgQMLBChYeexHrpum2+OfTBS1r6DlALKEiuH7ZxKDI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YHY0zAbBPDFN4L8RsInVQ4m+k4k5VJPaoLl2/0QS9nwcUV/mW5/GJx9zGFO9LcbTA
+         g5KzQLlYX9dfc86QvJrtTR8IRe9I2eqB4Tf5o8OfU4ldSwjGev3SFiCUC3S4z1nt89
+         brucRxbGWs79V1FeavgEzOgP2Jx88Uu/rgYBjh4M7lWNV3oZy16leFf/JoppMmaPFx
+         mN5PL2NNNv/6zA+nkDE4xm+4IXN4Py7bEVddgtGoOVICoWKU8zCwtglWl9NRaTOfei
+         H9iW4LSU2N84jDebgaB2uwaMP/zs4MDLosbaLlb5QAxnYcn0i1Y5KpVLpjWs5ZncDT
+         sa54P3PUUqYQA==
+Date:   Thu, 18 Aug 2022 21:41:37 +0200
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linux Phy <linux-phy@lists.infradead.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Kees Cook <keescook@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Pali =?UTF-8?B?Um9o?= =?UTF-8?B?w6Fy?= <pali@kernel.org>,
+        josef.schlehofer@nic.cz
+Subject: Re: [PATCH linux-phy v2 2/4] device property: Add
+ {fwnode/device}_get_tx_p2p_amplitude()
+Message-ID: <20220818214137.29ccb13a@thinkpad>
+In-Reply-To: <CAHp75Vcn1MXEB_+kJuR3qY8qxi6oq0pEFFSFrmKv2-tE-YP-zA@mail.gmail.com>
+References: <20220817200335.911-1-kabel@kernel.org>
+        <20220817200335.911-3-kabel@kernel.org>
+        <CAHp75Vcn1MXEB_+kJuR3qY8qxi6oq0pEFFSFrmKv2-tE-YP-zA@mail.gmail.com>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 2:33 PM John Garry <john.garry@huawei.com> wrote:
+On Thu, 18 Aug 2022 22:22:31 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+
+> On Wed, Aug 17, 2022 at 11:09 PM Marek Beh=C3=BAn <kabel@kernel.org> wrot=
+e:
+> >
+> > Add functions fwnode_get_tx_p2p_amplitude() and
+> > device_get_tx_p2p_amplitude() that parse the 'tx-p2p-microvolt' and
+> > 'tx-p2p-microvolt-names' properties and return peak to peak transmit
+> > amplitude in microvolts for given PHY mode.
+> >
+> > The functions search for mode name in 'tx-p2p-microvolt-names' property,
+> > and return amplitude at the corresponding index in the 'tx-p2p-microvol=
+t'
+> > property.
+> >
+> > If given mode is not matched in 'tx-p2p-microvolt-names' array, the mode
+> > name is generalized (for example "pcie3" -> "pcie" -> "default", or
+> > "usb-ss" -> "usb" -> "default").
+> >
+> > If the 'tx-p2p-microvolt-names' is not present, the 'tx-p2p-microvolt'
+> > property is expected to contain only one value, which is considered
+> > default, and will be returned for any mode. =20
+>=20
+> It's very specific to a domain. NAK for putting it to the generic
+> code, otherwise explain how it can be useful outside of the PHY world.
+
+The property may be also useful for drivers that don't depend on
+generic PHY subsystem. At least the mv88e6xxx DSA driver already reads
+the property [1] although it simply uses of_property_read_u32(),
+because it does not expect more complicated definition yet.
+
+There are three subsystem which may want to use this function: generic
+PHY, ethernet PHY and DSA. Since ethernet PHY subsystem nor DSA
+subsystem do not depend on generic PHY, I thought putting it in base
+would be sensible.
+
+If you think it should be in generic PHY subsystem anyway, and that
+other drivers needing it should depend on GENERIC_PHY, I can move it.
+
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/dri=
+vers/net/dsa/mv88e6xxx/chip.c?h=3Dv6.0-rc1#n3504
+
+>=20
+> ...
+>=20
+> > +       cnt =3D fwnode_property_string_array_count(fwnode, names_prop);
+> > +       if (!cnt || cnt =3D=3D -EINVAL)
+> > +               /*
+> > +                * If the names property does not exist or is empty, we=
+ expect
+> > +                * the values property to contain only one, default val=
+ue.
+> > +                */
+> > +               return fwnode_property_read_u32(fwnode, vals_prop, ampl=
+itude);
+> > +       else if (cnt < 0)
+> > +               return cnt; =20
+>=20
+> You may count the values and read them all,
+
+What do you mean? Count the values and read them all via one
+call to fwnode_property_string_array_count() ?
+
+> and then check the names
+> and compare count to the read values. In such a case you don't need
+> too many (overlapped) checks. I think the current implementation is
+> far from being optimal. Take your time and try to get rid of 20% of
+> lines in this function. I believe it's doable.
 >
-> There is commonality between acpi_create_platform_device() and
-> hisi_lpc_acpi_add_child(), in that it covers 2x main steps:
-> - Read resources for the acpi_device
-> - Create platform device
->
-> Refactor acpi_create_platform_device() so that it may be reused by
-> hisi_lpc_acpi_add_child() to reduce duplication.
+> ...
+>=20
+> > + * Gets the peak to peak transmit amplitude in microvolts for a given =
+PHY mode
+> > + * by parsing the 'tx-p2p-microvolt' and 'tx-p2p-microvolt-names' prop=
+erties.
+> > + * If amplitude is not specified for @mode exactly, tries a more gener=
+ic mode,
+> > + * and if that isn't specified, tries "default". =20
+>=20
+> Gets --> Get
+> tries --> try
+>=20
+> Otherwise add a subject to the sentences.
+>=20
 
-...
-
-> + * acpi_create_platform_device_ops - Create platform device for ACPI device node
-
-Not sure I understand why _ops is a suffix for the function. I would
-expect _ops to be a data struct where the ->xlate() and perhaps other
-callbacks may be collected. It may be that I have missed that portion
-in the previous discussion.
-
-...
-
-> +       if (name)
-> +               pdevinfo.name = name;
-> +       else
-> +               pdevinfo.name = dev_name(&adev->dev);
-
-> +       pdevinfo.data = data;
-> +       pdevinfo.size_data = size_data;
-
-It rather reminds me of platform device registration full with this
-device info. May be what you need is
-struct acpi_platfrom_device_info {
-  properties;
-  name;
-  id;
-  ->xlate();
-  ...
-};
-
-?
-
-...
-
-> +struct platform_device *acpi_create_platform_device_ops(
-> +                               struct acpi_device *adev,
-> +                               const char *name,
-> +                               const struct property_entry *properties,
-> +                               void *data, size_t size_data,
-> +                               int (*xlat)(struct acpi_device *adev,
-> +                                           struct resource *res,
-> +                                           void *data, size_t size_data),
-> +                               int id);
-
-...because this looks  a bit too much from the amount of parameters
-point of view.
-
--- 
-With Best Regards,
-Andy Shevchenko

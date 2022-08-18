@@ -2,74 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D295598C60
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115E5598C66
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 21:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244647AbiHRTLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 15:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
+        id S1344857AbiHRTM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 15:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240608AbiHRTLg (ORCPT
+        with ESMTP id S240608AbiHRTMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 15:11:36 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC66C57A8
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:11:35 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id p4so1883110qvr.5
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 12:11:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=vQ+wMNUUyM62PQcZ3cfsQhJSizHDV14WzncaejOXp/k=;
-        b=iaATwjGuxNwb8WbMrrIWp+6tVJK8LPlvDTL1a19hjbpXAw+QyforsjimHjwpdTgbwu
-         Iu81lywD9hDn65obB/PjUMeU9ImsiCE5kBLEAmgYodgc5wqRqX3RS1Nci/indqo4Rgxs
-         S4BNcjL0peWMtgeLmglQjyaaZI/hi7eKJFUxqKh56fZHLReI8D3UH3M7LmUwBLTQ2xxE
-         ejtymN1qc+Yfyq8mxR9hx6EGS2kjgRU5fe3MFRMjDmY0lebYCvJNRUJbTMGxJDryscpp
-         Ybv2rAC5Qu4fc8EW37a+a5fCHBfIfssj+bu5qrPXdPoHq7qdJNWWoteAVPi6kjhA2WZ8
-         DayA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=vQ+wMNUUyM62PQcZ3cfsQhJSizHDV14WzncaejOXp/k=;
-        b=oByKdAHp9DWs4L0tVmjCccH2BNYI/oRYxZre4wfk+5BrQJKVAoGJh7FEAPKveBMP/G
-         mVpuWgtquHdvN511WL7rTv7t7K/JVRk6cRYDA6SFZ1Ojp7ELB4kJAnzh3sb0ZISkgbcy
-         Vk/ElcwVtK6nwr3k6VjB6t7Z6GrAhU1fCTOb3w0/UPjBlchcZSWauyrIC+naUuaCDkYu
-         ISOqluD0XsSKEP9T5QZ9/rFOIM1RDrMk9thueF00ZKlZRJY1WaiKnRG0CuUfuxnwkt/c
-         yq0P5rIXMnDpl/5VvdLvheIpzt9AZA8KfUL3NgoOuMSj0napeEvQZ1ofL1wImzgc4ZY6
-         +PWw==
-X-Gm-Message-State: ACgBeo3rCbuyWiQXeUOlHPAKXp8PRw/KtWQmjV8ux5VJ4mpEkXbDypZb
-        W2Rll1ZViaeMfl2KrNBoWN+xQTwTA6B7P+W8miI=
-X-Google-Smtp-Source: AA6agR6DgHQppr2QHoAw1TkFyFvxTa4iDpvfxYu+a264DfSMj+psNtafEvdIeaYlC7SUlmrZ7r4Qprpb/IftYJ9ady8=
-X-Received: by 2002:a05:6214:e69:b0:476:b991:586f with SMTP id
- jz9-20020a0562140e6900b00476b991586fmr3697817qvb.48.1660849894713; Thu, 18
- Aug 2022 12:11:34 -0700 (PDT)
+        Thu, 18 Aug 2022 15:12:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CB1C6948;
+        Thu, 18 Aug 2022 12:12:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CDFD3B823E5;
+        Thu, 18 Aug 2022 19:12:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1A1C433C1;
+        Thu, 18 Aug 2022 19:12:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660849969;
+        bh=Xo4hTvNR0cypUl1rvNXLIgHT1qK0Tu+nac3EmkuNcFU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rMqhnxp8MllYPWvKyVTOEcgtlV5P1z29Y5dsaowynW3Q3Cti7QrHjZmQUO8B4O16t
+         zn0S7Zbdvhn4UASs7DHAm0O9M8j8F5H72clZJVsLhVquGG0L1X0cLo4R2TcKWO4sy6
+         DG51Jrh+O0jI37U7QC/jgqlwvgx3F+0D5C8Yybk4=
+Date:   Thu, 18 Aug 2022 21:12:46 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Utkarsh Patel <utkarsh.h.patel@intel.com>,
+        rajmohan.mani@intel.com, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/6] ACPI: New helper function
+ acpi_dev_get_memory_resources() and a new ACPI ID
+Message-ID: <Yv6PLl4aLPzHTJTQ@kroah.com>
+References: <20220816101629.69054-1-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-References: <20220817200335.911-1-kabel@kernel.org> <20220817200335.911-2-kabel@kernel.org>
-In-Reply-To: <20220817200335.911-2-kabel@kernel.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 18 Aug 2022 22:10:58 +0300
-Message-ID: <CAHp75VecURpGCBY3WVKqhd64Ngobjvi-w=PuHQBH2V-MqCzkuw@mail.gmail.com>
-Subject: Re: [PATCH linux-phy v2 1/4] string.h: Add str_has_proper_prefix()
-To:     =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linux Phy <linux-phy@lists.infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        josef.schlehofer@nic.cz
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816101629.69054-1-heikki.krogerus@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,25 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 11:06 PM Marek Beh=C3=BAn <kabel@kernel.org> wrote:
->
-> Add str_has_proper_prefix(), similar to str_has_prefix(), but requires
-> that the prefix is proper: the string itself must be longer than the
-> prefix.
->
-> Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
-> ---
-> Andy, Kees, could you ack this if it is ok?
+On Tue, Aug 16, 2022 at 01:16:23PM +0300, Heikki Krogerus wrote:
+> Hi,
+> 
+> The helper function returns all memory resources described for a
+> device regardless of the ACPI descriptor type (as long as it's
+> memory), but the first patch introduces new ACPI ID for the IOM
+> controller on Intel Meteor Lake and also separately modifies the
+> driver so that it can get the memory resource from Address Space
+> Resource Descriptor.
+> 
+> An alternative would have been to introduce that helper function first
+> so we would not need to modify the driver when the new ID is added,
+> but then the helper would also need to be applied to the stable kernel
+> releases, and that does not feel necessary or appropriate in this
+> case, at least not IMO.
+> 
+> So that's why I'm proposing here that we first add the ID, and only
+> after that introduce the helper, and only for mainline. That way the
+> patch introducing the ID is the only that goes to the stable releases.
+> 
+> If that's okay, and these don't have any other problems, I assume it's
+> OK if Rafael takes all of these, including the ID?
 
-Seems to me there are too many strlen():s. One is hidden in strncmp().
+I took the id now, for 6.0-final as it seems to be totally independant
+of the other commits (otherwise you would not have tagged it for the
+stable tree.)
 
-Besides not the good naming (what 'proper' means), the entire function
-is not needed. You may simply call
+The remainder should probably be resent and send through the acpi tree.
 
-  str_has_prefix() && p[len] !=3D '\0';
+thanks,
 
-Correct?
-
---=20
-With Best Regards,
-Andy Shevchenko
+greg k-h

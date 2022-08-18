@@ -2,71 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD756598E0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A00598E1D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346087AbiHRUcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 16:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
+        id S1346090AbiHRUd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 16:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242194AbiHRUcA (ORCPT
+        with ESMTP id S238275AbiHRUdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:32:00 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38867D0751;
-        Thu, 18 Aug 2022 13:31:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Thu, 18 Aug 2022 16:33:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EE633A0E;
+        Thu, 18 Aug 2022 13:33:51 -0700 (PDT)
+Received: from whitebuilder.lan (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E33073F439;
-        Thu, 18 Aug 2022 20:31:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660854717; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Rz8+CJ524hy506pPTiAxc3Bk5R74WhisuRkg2AR0eYo=;
-        b=aJgiGIrU08Lb2Zf7pOG8scXFWd0Sq3h60Skr1iEvjJ7qqOqgsn6bTfatzGPAtUIdIhDDaA
-        EQo1B5k1BHUTALLADvLYIVrg+1u7zs7LYLrXyxq6CxLV1/oNWaicqvfTzYxUAc3bV44ZS5
-        gqs2DRRNK25mdnhrnZ2K+bcJG+wypkw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660854717;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Rz8+CJ524hy506pPTiAxc3Bk5R74WhisuRkg2AR0eYo=;
-        b=SoqMd1NndFbHikpkz1cHgNzol0/w14RMDblrtNcvvrZYOTpzQBRfZ48wiE3hwDyJj5uhIr
-        xeOaa9E0norKTnBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B13F3139B7;
-        Thu, 18 Aug 2022 20:31:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KhpQKb2h/mIKAgAAMHmgww
-        (envelope-from <mliska@suse.cz>); Thu, 18 Aug 2022 20:31:57 +0000
-Message-ID: <84e3d6cc-75cf-d6f3-9bb8-be02075aaf6d@suse.cz>
-Date:   Thu, 18 Aug 2022 22:31:57 +0200
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 026F96601B46;
+        Thu, 18 Aug 2022 21:33:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660854830;
+        bh=pggMW/0Bxy8VjFzlvpemyaipfIDNrL2BmOAkso3LhhQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=V2yfagMG57Nh3EXsVf9/Smr/3esiSEbIWwaYOIiLAHA+6nV2niIE9P/2HYaJiywov
+         G8QzDCDnzOeAeslg/Tnf6Y9Fa3il7jyPDhLjVbM7IVs/H25Cncmgrkt9lNIanNMXIH
+         osCQAXJsYJM/LZFnYttXjTZGnrlrEAZGby67oDBvlz6EPuX9kn5AGAraiJ8vISeafA
+         KZV1o2iv9NY/0c63k5T/OFe3i3YohHc1x0KoPwBvSjXyfhTNG0GaSs3gFmR3bVKV1j
+         rwpyCFPLSBmjLyK3NVkNNEQlz6x/P9B6B1wKrascvZhZh9JV39AGv6CnYK47ccsQ/a
+         wNOz5rtW8yh6Q==
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     linux-media@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        stable@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/3] media: cedrus: Fix watchdog race condition
+Date:   Thu, 18 Aug 2022 16:33:06 -0400
+Message-Id: <20220818203308.439043-2-nicolas.dufresne@collabora.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220818203308.439043-1-nicolas.dufresne@collabora.com>
+References: <20220818203308.439043-1-nicolas.dufresne@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
-Subject: [PATCH v3] docs/arm64: elf_hwcaps: unify newlines in HWCAP lists
-To:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Cc:     broonie@kernel.org, corbet@lwn.net,
-        linux-arm-kernel@lists.infradead.org
-References: <Yv50RxlDf0qpK9v8@sirena.org.uk>
-Content-Language: en-US
-In-Reply-To: <Yv50RxlDf0qpK9v8@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,65 +65,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unify horizontal spacing (remove extra newlines) which
-are sensitive to visual presentation by Sphinx.
+The watchdog needs to be schedule before we trigger the decode
+operation, otherwise there is a risk that the decoder IRQ will be
+called before we have schedule the watchdog. As a side effect, the
+watchdog would never be cancelled and its function would be called
+at an inappropriate time.
 
-Fixes: 5e64b862c482 (arm64/sme: Basic enumeration support)
-Signed-off-by: Martin Liska <mliska@suse.cz>
-Reviewed-by: Mark Brown <broonie@kernel.org>
+This was observed while running Fluster with GStreamer as a backend.
+Some programming error would cause the decoder IRQ to be call very
+quickly after the trigger. Later calls into the driver would deadlock
+due to the unbalanced state.
+
+Cc: stable@vger.kernel.org
+Fixes: 7c38a551bda1 ("media: cedrus: Add watchdog for job completion")
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 ---
- Documentation/arm64/elf_hwcaps.rst | 10 ----------
- 1 file changed, 10 deletions(-)
+ drivers/staging/media/sunxi/cedrus/cedrus_dec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
-index 52b75a25c205..311021f2e560 100644
---- a/Documentation/arm64/elf_hwcaps.rst
-+++ b/Documentation/arm64/elf_hwcaps.rst
-@@ -242,44 +242,34 @@ HWCAP2_MTE3
-     by Documentation/arm64/memory-tagging-extension.rst.
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+index 3b6aa78a2985f..e7f7602a5ab40 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+@@ -106,11 +106,11 @@ void cedrus_device_run(void *priv)
  
- HWCAP2_SME
+ 	/* Trigger decoding if setup went well, bail out otherwise. */
+ 	if (!error) {
+-		dev->dec_ops[ctx->current_codec]->trigger(ctx);
 -
-     Functionality implied by ID_AA64PFR1_EL1.SME == 0b0001, as described
-     by Documentation/arm64/sme.rst.
- 
- HWCAP2_SME_I16I64
--
-     Functionality implied by ID_AA64SMFR0_EL1.I16I64 == 0b1111.
- 
- HWCAP2_SME_F64F64
--
-     Functionality implied by ID_AA64SMFR0_EL1.F64F64 == 0b1.
- 
- HWCAP2_SME_I8I32
--
-     Functionality implied by ID_AA64SMFR0_EL1.I8I32 == 0b1111.
- 
- HWCAP2_SME_F16F32
--
-     Functionality implied by ID_AA64SMFR0_EL1.F16F32 == 0b1.
- 
- HWCAP2_SME_B16F32
--
-     Functionality implied by ID_AA64SMFR0_EL1.B16F32 == 0b1.
- 
- HWCAP2_SME_F32F32
--
-     Functionality implied by ID_AA64SMFR0_EL1.F32F32 == 0b1.
- 
- HWCAP2_SME_FA64
--
-     Functionality implied by ID_AA64SMFR0_EL1.FA64 == 0b1.
- 
- HWCAP2_WFXT
--
-     Functionality implied by ID_AA64ISAR2_EL1.WFXT == 0b0010.
- 
- HWCAP2_EBF16
--
-     Functionality implied by ID_AA64ISAR1_EL1.BF16 == 0b0010.
- 
- 4. Unused AT_HWCAP bits
+ 		/* Start the watchdog timer. */
+ 		schedule_delayed_work(&dev->watchdog_work,
+ 				      msecs_to_jiffies(2000));
++
++		dev->dec_ops[ctx->current_codec]->trigger(ctx);
+ 	} else {
+ 		v4l2_m2m_buf_done_and_job_finish(ctx->dev->m2m_dev,
+ 						 ctx->fh.m2m_ctx,
 -- 
 2.37.2
 

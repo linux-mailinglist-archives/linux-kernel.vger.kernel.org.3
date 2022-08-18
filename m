@@ -2,185 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F8359852C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A43C598537
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245592AbiHROEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
+        id S245612AbiHROEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245574AbiHROE1 (ORCPT
+        with ESMTP id S245582AbiHROEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:04:27 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C466165818
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:04:25 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id v2so2259503lfi.6
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=/fleTIpnS9IEBTbF8wo3ueeoCXUGjNkQO4k9xiqRrj4=;
-        b=WXgDg4S099HTx4GYgF7438X6p5+shS7CVHR1tjTv5vT25xR45B6IpZ9jhDZz24MFIE
-         QYgcE82wPnA6kp/yoF5KRHFg2R1O1rA0Hj3teQ/VwW6ecJCoTpgo1t1hwWTLfUqm7isa
-         wPhcprIQQyMzd5VP3nJthYZeUSeel/FnDfuu8sVUdrc9ivIl0o9G/FLaK4i83CbCUR95
-         dPmZq615cmnqNWTE8xGMASQ5tJP/6xGoFpVrz611Tyy0YuQz/kvNwF22eEsEO7mWuqll
-         UDQIMCwYqn7bOluibttIYU6Mn5Cei8pA13Vu99//76sJQFaN5oyc3DG6XTjq0FOjoFFJ
-         /Uvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=/fleTIpnS9IEBTbF8wo3ueeoCXUGjNkQO4k9xiqRrj4=;
-        b=KwAwjtrJFtmsEM1+/PlGLhzv1sW5VXYps6BdXyoi2ZdGhrog89WkQ+QLn3CCG9VZvB
-         XuAKjcVGLtUmoBWolf5i1DAAssiKJELdNmhdsqR4ZZoIcB9N9C6NYH3PX+46qOuY3mv3
-         8Qg6VHwh4Hbkrc6mcHHqShyxJUsd5Q+6ZLG+Y4u468dTEzQBlW8Ajra+1UuKlmTWjiBU
-         H9eT7cHtNzIOOorzn+Fr9PJ55oHl1BwRU4i3yd/lfgIAvfyEOGu/jH6rvQO7sWYOq126
-         EihcuWs6BCQWllE/XQPYZKBsajEdGKo8nc0VV5Ri3aKKhZLhGrOmAazgDxhsJjo6JUeU
-         ujVg==
-X-Gm-Message-State: ACgBeo1e7CjysNSmcDRrXtMrHe8D/ncZVqp4+fGr3MLu1OgAYVSyg8+h
-        JqIWtaxnb2h6WJAJiMoL+3XifQ==
-X-Google-Smtp-Source: AA6agR5VgtXwrxbtl+luU09vE2LQ9Ag6BfzzlNsOlvu+CLmU3emPg2IrZYFkOC0AmgjlyeHuX66LQA==
-X-Received: by 2002:a05:6512:159b:b0:492:c1c0:5aab with SMTP id bp27-20020a056512159b00b00492c1c05aabmr477299lfb.523.1660831463816;
-        Thu, 18 Aug 2022 07:04:23 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
-        by smtp.gmail.com with ESMTPSA id a2-20020a05651c030200b002619257da21sm241529ljp.118.2022.08.18.07.04.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 07:04:23 -0700 (PDT)
-Message-ID: <00614b8f-0fdd-3d7e-0153-3846be5bb645@linaro.org>
-Date:   Thu, 18 Aug 2022 17:04:20 +0300
+        Thu, 18 Aug 2022 10:04:35 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779156BCC5;
+        Thu, 18 Aug 2022 07:04:34 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 14:04:31 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660831473;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JOLHnIeMHdmlmqIRC4FMtd5V/VVnLhr6GHqiOjZvxo4=;
+        b=hLfJ8VCep78uWB6A7tRGOGat0UoAAT5E0jE1PqdAQ9R4kaUxzoBlfCd/cQS2IOMIpFa6Eo
+        qSbLoeX3koSb1/aPuKYTIW+onAX7rIR+6vctxb/VIwi8QVtUa+Q2svxuuYAroQo/zbukK7
+        vBAlPNrJrDpEJLg1txuQPQXIqq1p8AaOflzzd/7KP/7/fBTvW9Ql3+fzCATgXDHWuPz4uC
+        R513lQzhwZyEjjQBsJDhY3Cl4UOsxkwYidztuA4x2EsoqE9/8jD9haoQfsjMvMG6eUMAZL
+        NVeL7Xc+BrhskNXx5/GfZ4AI/QMn7BJzk45e0Yovzdg3L3ubRrY3JEk4mJ/1wg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660831473;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JOLHnIeMHdmlmqIRC4FMtd5V/VVnLhr6GHqiOjZvxo4=;
+        b=KYZZnD6jfMLRTHEc0fwrFuSn3lVOzCYKqt4T0HFmiJwyzb+JRVz5vY8lBb0NFOEv/KWK9p
+        lGeZXq+mDeviSsBQ==
+From:   "tip-bot2 for Ashok Raj" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/microcode] x86/microcode: Document the whole late loading problem
+Cc:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@suse.de>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220813223825.3164861-2-ashok.raj@intel.com>
+References: <20220813223825.3164861-2-ashok.raj@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/3] dt-bings: net: fsl,fec: update compatible item
-Content-Language: en-US
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Wei Fang <wei.fang@nxp.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        s.hauer@pengutronix.de, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        peng.fan@nxp.com, ping.bai@nxp.com, sudeep.holla@arm.com,
-        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com
-References: <20220704101056.24821-1-wei.fang@nxp.com>
- <20220704101056.24821-2-wei.fang@nxp.com>
- <ef7e501a-b351-77f9-c4f7-74ab10283ed6@linaro.org>
- <20220818013344.GE149610@dragon>
- <fd41a409-d0e0-0026-4644-9058d1177c45@linaro.org>
- <20220818092257.GF149610@dragon>
- <a08b230c-d655-75ee-0f0c-8281b13b477b@linaro.org>
- <20220818135727.GG149610@dragon>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220818135727.GG149610@dragon>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <166083147193.401.12808282338823061069.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/08/2022 16:57, Shawn Guo wrote:
-> On Thu, Aug 18, 2022 at 12:46:33PM +0300, Krzysztof Kozlowski wrote:
->> On 18/08/2022 12:22, Shawn Guo wrote:
->>> On Thu, Aug 18, 2022 at 10:51:02AM +0300, Krzysztof Kozlowski wrote:
->>>> On 18/08/2022 04:33, Shawn Guo wrote:
->>>>> On Mon, Jul 04, 2022 at 11:12:09AM +0200, Krzysztof Kozlowski wrote:
->>>>>>> diff --git a/Documentation/devicetree/bindings/net/fsl,fec.yaml b/Documentation/devicetree/bindings/net/fsl,fec.yaml
->>>>>>> index daa2f79a294f..6642c246951b 100644
->>>>>>> --- a/Documentation/devicetree/bindings/net/fsl,fec.yaml
->>>>>>> +++ b/Documentation/devicetree/bindings/net/fsl,fec.yaml
->>>>>>> @@ -40,6 +40,10 @@ properties:
->>>>>>>            - enum:
->>>>>>>                - fsl,imx7d-fec
->>>>>>>            - const: fsl,imx6sx-fec
->>>>>>> +      - items:
->>>>>>> +          - enum:
->>>>>>> +              - fsl,imx8ulp-fec
->>>>>>> +          - const: fsl,imx6ul-fec
->>>>>>
->>>>>> This is wrong.  fsl,imx6ul-fec has to be followed by fsl,imx6q-fec. I
->>>>>> think someone made similar mistakes earlier so this is a mess.
->>>>>
->>>>> Hmm, not sure I follow this.  Supposing we want to have the following
->>>>> compatible for i.MX8ULP FEC, why do we have to have "fsl,imx6q-fec"
->>>>> here?
->>>>>
->>>>> 	fec: ethernet@29950000 {
->>>>> 		compatible = "fsl,imx8ulp-fec", "fsl,imx6ul-fec";
->>>>> 		...
->>>>> 	};
->>>>
->>>> Because a bit earlier this bindings is saying that fsl,imx6ul-fec must
->>>> be followed by fsl,imx6q-fec.
->>>
->>> The FEC driver OF match table suggests that fsl,imx6ul-fec and fsl,imx6q-fec
->>> are not really compatible.
->>>
->>> static const struct of_device_id fec_dt_ids[] = {
->>>         { .compatible = "fsl,imx25-fec", .data = &fec_devtype[IMX25_FEC], },
->>>         { .compatible = "fsl,imx27-fec", .data = &fec_devtype[IMX27_FEC], },
->>>         { .compatible = "fsl,imx28-fec", .data = &fec_devtype[IMX28_FEC], },
->>>         { .compatible = "fsl,imx6q-fec", .data = &fec_devtype[IMX6Q_FEC], },
->>>         { .compatible = "fsl,mvf600-fec", .data = &fec_devtype[MVF600_FEC], },
->>>         { .compatible = "fsl,imx6sx-fec", .data = &fec_devtype[IMX6SX_FEC], },
->>>         { .compatible = "fsl,imx6ul-fec", .data = &fec_devtype[IMX6UL_FEC], },
->>
->> I don't see here any incompatibility. Binding driver with different
->> driver data is not a proof of incompatible devices.
-> 
-> To me, different driver data is a good sign of incompatibility.  It
-> mostly means that software needs to program the hardware block
-> differently.
+The following commit has been merged into the x86/microcode branch of tip:
 
-Any device being 100% compatible with old one and having additional
-features will have different driver data... so no, it's not a proof.
-There are many of such examples and we call them compatible, because the
-device could operate when bound by the fallback compatible.
+Commit-ID:     3ecf671f1d354f40228e407ab350abd41034410b
+Gitweb:        https://git.kernel.org/tip/3ecf671f1d354f40228e407ab350abd41034410b
+Author:        Ashok Raj <ashok.raj@intel.com>
+AuthorDate:    Sat, 13 Aug 2022 22:38:21 
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Thu, 18 Aug 2022 15:57:53 +02:00
 
-If this is the case here - how do I know? I raised and the answer was
-affirmative...
+x86/microcode: Document the whole late loading problem
 
-> 
-> 
->> Additionally, the
->> binding describes the hardware, not the driver.
->>
->>>         { .compatible = "fsl,imx8mq-fec", .data = &fec_devtype[IMX8MQ_FEC], },
->>>         { .compatible = "fsl,imx8qm-fec", .data = &fec_devtype[IMX8QM_FEC], },
->>>         { /* sentinel */ }
->>> };
->>> MODULE_DEVICE_TABLE(of, fec_dt_ids);
->>>
->>> Should we fix the binding doc?
->>
->> Maybe, I don't know. The binding describes the hardware, so based on it
->> the devices are compatible. Changing this, except ABI impact, would be
->> possible with proper reason, but not based on Linux driver code.
-> 
-> Well, if Linux driver code is written in the way that hardware requires,
-> I guess that's just based on hardware characteristics.
-> 
-> To me, having a device compatible to two devices that require different
-> programming model is unnecessary and confusing.
+Commit
 
-It's the first time anyone mentions here the programming model is
-different... If it is different, the devices are likely not compatible.
+  d23d33ea0fcd ("x86/microcode: Taint and warn on late loading")
 
-However when I raised this issue last time, there were no concerns with
-calling them all compatible. Therefore I wonder if the folks working on
-this driver actually know what's there... I don't know, I gave
-recommendations based on what is described in the binding and expect the
-engineer to come with that knowledge.
+started tainting the kernel after microcode late loading.
 
+There is some history behind why x86 microcode started doing the late
+loading stop_machine() rendezvous. Document the whole situation.
 
-Best regards,
-Krzysztof
+No functional changes.
+
+  [ bp: Fix typos, heavily massage. ]
+
+Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220813223825.3164861-2-ashok.raj@intel.com
+---
+ Documentation/admin-guide/tainted-kernels.rst |   6 +-
+ Documentation/x86/microcode.rst               | 116 +++++++++++++++--
+ 2 files changed, 113 insertions(+), 9 deletions(-)
+
+diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
+index 7d80e8c..92a8a07 100644
+--- a/Documentation/admin-guide/tainted-kernels.rst
++++ b/Documentation/admin-guide/tainted-kernels.rst
+@@ -134,6 +134,12 @@ More detailed explanation for tainting
+        scsi/snic on something else than x86_64, scsi/ips on non
+        x86/x86_64/itanium, have broken firmware settings for the
+        irqchip/irq-gic on arm64 ...).
++     - x86/x86_64: Microcode late loading is dangerous and will result in
++       tainting the kernel. It requires that all CPUs rendezvous to make sure
++       the update happens when the system is as quiescent as possible. However,
++       a higher priority MCE/SMI/NMI can move control flow away from that
++       rendezvous and interrupt the update, which can be detrimental to the
++       machine.
+ 
+  3)  ``R`` if a module was force unloaded by ``rmmod -f``, ``' '`` if all
+      modules were unloaded normally.
+diff --git a/Documentation/x86/microcode.rst b/Documentation/x86/microcode.rst
+index a320d37..b627c6f 100644
+--- a/Documentation/x86/microcode.rst
++++ b/Documentation/x86/microcode.rst
+@@ -6,6 +6,7 @@ The Linux Microcode Loader
+ 
+ :Authors: - Fenghua Yu <fenghua.yu@intel.com>
+           - Borislav Petkov <bp@suse.de>
++	  - Ashok Raj <ashok.raj@intel.com>
+ 
+ The kernel has a x86 microcode loading facility which is supposed to
+ provide microcode loading methods in the OS. Potential use cases are
+@@ -92,15 +93,8 @@ vendor's site.
+ Late loading
+ ============
+ 
+-There are two legacy user space interfaces to load microcode, either through
+-/dev/cpu/microcode or through /sys/devices/system/cpu/microcode/reload file
+-in sysfs.
+-
+-The /dev/cpu/microcode method is deprecated because it needs a special
+-userspace tool for that.
+-
+-The easier method is simply installing the microcode packages your distro
+-supplies and running::
++You simply install the microcode packages your distro supplies and
++run::
+ 
+   # echo 1 > /sys/devices/system/cpu/microcode/reload
+ 
+@@ -110,6 +104,110 @@ The loading mechanism looks for microcode blobs in
+ /lib/firmware/{intel-ucode,amd-ucode}. The default distro installation
+ packages already put them there.
+ 
++Since kernel 5.19, late loading is not enabled by default.
++
++The /dev/cpu/microcode method has been removed in 5.19.
++
++Why is late loading dangerous?
++==============================
++
++Synchronizing all CPUs
++----------------------
++
++The microcode engine which receives the microcode update is shared
++between the two logical threads in a SMT system. Therefore, when
++the update is executed on one SMT thread of the core, the sibling
++"automatically" gets the update.
++
++Since the microcode can "simulate" MSRs too, while the microcode update
++is in progress, those simulated MSRs transiently cease to exist. This
++can result in unpredictable results if the SMT sibling thread happens to
++be in the middle of an access to such an MSR. The usual observation is
++that such MSR accesses cause #GPs to be raised to signal that former are
++not present.
++
++The disappearing MSRs are just one common issue which is being observed.
++Any other instruction that's being patched and gets concurrently
++executed by the other SMT sibling, can also result in similar,
++unpredictable behavior.
++
++To eliminate this case, a stop_machine()-based CPU synchronization was
++introduced as a way to guarantee that all logical CPUs will not execute
++any code but just wait in a spin loop, polling an atomic variable.
++
++While this took care of device or external interrupts, IPIs including
++LVT ones, such as CMCI etc, it cannot address other special interrupts
++that can't be shut off. Those are Machine Check (#MC), System Management
++(#SMI) and Non-Maskable interrupts (#NMI).
++
++Machine Checks
++--------------
++
++Machine Checks (#MC) are non-maskable. There are two kinds of MCEs.
++Fatal un-recoverable MCEs and recoverable MCEs. While un-recoverable
++errors are fatal, recoverable errors can also happen in kernel context
++are also treated as fatal by the kernel.
++
++On certain Intel machines, MCEs are also broadcast to all threads in a
++system. If one thread is in the middle of executing WRMSR, a MCE will be
++taken at the end of the flow. Either way, they will wait for the thread
++performing the wrmsr(0x79) to rendezvous in the MCE handler and shutdown
++eventually if any of the threads in the system fail to check in to the
++MCE rendezvous.
++
++To be paranoid and get predictable behavior, the OS can choose to set
++MCG_STATUS.MCIP. Since MCEs can be at most one in a system, if an
++MCE was signaled, the above condition will promote to a system reset
++automatically. OS can turn off MCIP at the end of the update for that
++core.
++
++System Management Interrupt
++---------------------------
++
++SMIs are also broadcast to all CPUs in the platform. Microcode update
++requests exclusive access to the core before writing to MSR 0x79. So if
++it does happen such that, one thread is in WRMSR flow, and the 2nd got
++an SMI, that thread will be stopped in the first instruction in the SMI
++handler.
++
++Since the secondary thread is stopped in the first instruction in SMI,
++there is very little chance that it would be in the middle of executing
++an instruction being patched. Plus OS has no way to stop SMIs from
++happening.
++
++Non-Maskable Interrupts
++-----------------------
++
++When thread0 of a core is doing the microcode update, if thread1 is
++pulled into NMI, that can cause unpredictable behavior due to the
++reasons above.
++
++OS can choose a variety of methods to avoid running into this situation.
++
++
++Is the microcode suitable for late loading?
++-------------------------------------------
++
++Late loading is done when the system is fully operational and running
++real workloads. Late loading behavior depends on what the base patch on
++the CPU is before upgrading to the new patch.
++
++This is true for Intel CPUs.
++
++Consider, for example, a CPU has patch level 1 and the update is to
++patch level 3.
++
++Between patch1 and patch3, patch2 might have deprecated a software-visible
++feature.
++
++This is unacceptable if software is even potentially using that feature.
++For instance, say MSR_X is no longer available after an update,
++accessing that MSR will cause a #GP fault.
++
++Basically there is no way to declare a new microcode update suitable
++for late-loading. This is another one of the problems that caused late
++loading to be not enabled by default.
++
+ Builtin microcode
+ =================
+ 

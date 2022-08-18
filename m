@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCC7598A24
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76BA598A5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345003AbiHRRUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
+        id S1345117AbiHRRWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344440AbiHRRT6 (ORCPT
+        with ESMTP id S1344311AbiHRRVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:19:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C79A181;
-        Thu, 18 Aug 2022 10:18:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BC3BB82305;
-        Thu, 18 Aug 2022 17:18:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89CB3C433C1;
-        Thu, 18 Aug 2022 17:18:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660843083;
-        bh=Fvr29lWD5OIUEN35R23Bjt8QeBsONWcWpcpJpOcymIU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pRnCaxOFGvyUfTtD5W+19BBAQpvjB3MxSsGi48BpacNyVtfyKzpF4amNJBsB8ScIn
-         OH8K9FTD2N4n1zCxqNG81VN1/DpfeGG56QSORAJrih1j69YF6ghLFspJ3nNOpj70wJ
-         pV6057MGc86jiuR7U2fdz+md6d+yLFS4+qTZJB22U4CUZnu6pq7nsnBz3tOFJ2k88Y
-         n7x9xsPHTeShbYJJ/EDf/ta7+APT2sUXDTb1Cr6OTOVxo+QfjmQK7g1vdsWTRwTA90
-         sfg2l2pC1LxfpxSCobQS+n3hDqB8ozF/k5UWEHwH7ZcnS/3MIRnt/G9Kh0/E58OUsY
-         tpeLzSwhhuBsA==
-Date:   Thu, 18 Aug 2022 18:17:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] docs/arm64: elf_hwcaps: unify newlines in HWCAP lists
-Message-ID: <Yv50RxlDf0qpK9v8@sirena.org.uk>
-References: <49253b17-738d-795e-f539-55857fdaee64@suse.cz>
- <2bac83ef-d5a9-b8c4-0fb3-cef4272e7156@suse.cz>
+        Thu, 18 Aug 2022 13:21:38 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E4542AF1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:20:02 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id jl18so2065130plb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:20:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=oxkIL7t6QF/08WGCg7LwevIs7IPtvy2DWZ/yQUzyzpw=;
+        b=oT+xYcRJe+BsVSbihqkOFFsJHOzKLtYkEKpL4xy/l86phwOS/hn1nfDHoIBrWVL+w9
+         yb4lD5vXPHhmw9hoIden1DXoX4ZswlfgFRk4JpVJC+Lmrg80cADPMJFkmxPktCzR4+ox
+         5e/2+8r2fq0NiBtOgp6LWKEZPuRWXa3vwy+wCHnSgtkwXnl+F+c4aJpQ9412goyf2NXx
+         0h+uV3o02Lr+qzjOrh8H5JI/OthbOr+dH/vIaFpJptjvcJebu87c3bewsBZOqFcxHRqi
+         OUtEb2kgvtJ34aL4CLvE+S9TSacRrBrtc4zlGXufA0EikQNpSCCX7QapEQ05qZuBJQCf
+         L1Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=oxkIL7t6QF/08WGCg7LwevIs7IPtvy2DWZ/yQUzyzpw=;
+        b=Kc/MVHVVnyaB8la5Up9HY6F26XBajwXwl4o5qaWupGzGjTVRiJFOn0TWrhCF7zFRDH
+         l4srO94CXgENUn4vBkEmgtqCoFGakh9UHZMmkOaekH2qETPvW3Q0YwGVG5QDqUnSQmRQ
+         XAHz0jYVk4SFFlkQ0t+glwTeORDqS6hJLvbRglNxDfh+R2k0O2Z1XLU4A/X53jkYtdgR
+         AHLq3obvAp2zrY7pPPpBIRte/WvRTd/P0Tmb3saA+/T3Dw90TGgWIJleRZgpGd0CBPLd
+         tDMkYN3V1ozLHRACnKXZM0YaEGG0I8PanhAaxMVWwn9ErlxNtc9i7+8w4kh1uGYBusPh
+         NtXg==
+X-Gm-Message-State: ACgBeo14gNLncRsPvXu19rbG3ufQJL0vW3R2HkAkgE1mcwkOPR8kV1KO
+        TK9Y3he7yFbHGuaWEMhI0DDcuA==
+X-Google-Smtp-Source: AA6agR7Rl/cE0F+L87ZcmO12psnHHsz5CQgapTnbh6BHn8bRtzBKIoh2Dmn5hldKJ5+/F+R/OjqLjg==
+X-Received: by 2002:a17:902:efd2:b0:172:b0a5:fd79 with SMTP id ja18-20020a170902efd200b00172b0a5fd79mr3704461plb.87.1660843202321;
+        Thu, 18 Aug 2022 10:20:02 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id k1-20020a170902ce0100b0016f04c098ddsm1624592plg.226.2022.08.18.10.20.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 10:20:01 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 17:19:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 09/26] KVM: VMX: nVMX: Support TSC scaling and
+ PERF_GLOBAL_CTRL with enlightened VMCS
+Message-ID: <Yv50vWGoLQ9n+6MO@google.com>
+References: <20220802160756.339464-1-vkuznets@redhat.com>
+ <20220802160756.339464-10-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JCZdgl1Eo0V8MWR1"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2bac83ef-d5a9-b8c4-0fb3-cef4272e7156@suse.cz>
-X-Cookie: Logic is the chastity belt of the mind!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220802160756.339464-10-vkuznets@redhat.com>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
+> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
+> index f886a8ff0342..4b809c79ae63 100644
+> --- a/arch/x86/kvm/vmx/evmcs.h
+> +++ b/arch/x86/kvm/vmx/evmcs.h
+> @@ -37,16 +37,9 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
+>   *	EPTP_LIST_ADDRESS               = 0x00002024,
+>   *	VMREAD_BITMAP                   = 0x00002026,
+>   *	VMWRITE_BITMAP                  = 0x00002028,
+> - *
+> - *	TSC_MULTIPLIER                  = 0x00002032,
+>   *	PLE_GAP                         = 0x00004020,
+>   *	PLE_WINDOW                      = 0x00004022,
+>   *	VMX_PREEMPTION_TIMER_VALUE      = 0x0000482E,
+> - *      GUEST_IA32_PERF_GLOBAL_CTRL     = 0x00002808,
+> - *      HOST_IA32_PERF_GLOBAL_CTRL      = 0x00002c04,
+> - *
+> - * Currently unsupported in KVM:
+> - *	GUEST_IA32_RTIT_CTL		= 0x00002814,
 
---JCZdgl1Eo0V8MWR1
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Almost forgot: is deleting this chunk of the comment intentional?
 
-On Mon, Aug 15, 2022 at 03:37:58PM +0200, Martin Li=C5=A1ka wrote:
-> In git revision 94bdaa7d9a9d778d893c670d494c06d8e007c1cd I unified
-> vertical spaces in a list of features.
-
-The normal way of describing commits in a human readable fashion is to
-include their title as is done in Fixes: tags.
-
-> Since the revision, another commits added new features that have a differ=
-ent
-> horizontal spacing.
-> Fix these extra newlines.
-
-This new format .rst is forcing does seem less than ideal for people
-reading the actual file but oh well
-
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
---JCZdgl1Eo0V8MWR1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL+dEYACgkQJNaLcl1U
-h9ACcAf+Lg5+ZgAxlKsyQN51MJ8HJxveKjnMSstP0dARwR4ZNx3qcJOgAF0iyhbV
-5rejBUUwdmHpSCP1JC756Eh3cW/z+cEIX4lKUZvKl5161Njpl+2xIGKHU7nEISnu
-goBRBfFuUqBklZvZMr8uVELcvq4EXy/jv5lTxUsShuEuKEpZKYL9uiVplfnLE872
-h/Q7T5ZgIUYsg+VhYcRoFlKKABJEKniSkyrWrc/Xku9tNlBoHCe1X9+ezD3g81qK
-gue8lJHkLTZESos7enzxR7dq1sfm6rLAn4DKhIdbDCtjn+CJDwBrsJaMiKaIbaLm
-VlNIn/14Ye3Xlpb6KviND/d4NDELWg==
-=zsTW
------END PGP SIGNATURE-----
-
---JCZdgl1Eo0V8MWR1--
+>   */
+>  #define EVMCS1_UNSUPPORTED_PINCTRL (PIN_BASED_POSTED_INTR | \
+>  				    PIN_BASED_VMX_PREEMPTION_TIMER)

@@ -2,53 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696BF598414
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F6A598401
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245083AbiHRNZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
+        id S245020AbiHRNXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245066AbiHRNYz (ORCPT
+        with ESMTP id S242702AbiHRNXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:24:55 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EF761D51
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:24:54 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M7ls40W2dzkWPY;
-        Thu, 18 Aug 2022 21:21:28 +0800 (CST)
-Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 21:24:50 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- dggpeml500002.china.huawei.com (7.185.36.158) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 18 Aug 2022 21:24:50 +0800
-From:   Junhao He <hejunhao3@huawei.com>
-To:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>
-CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
-        <rdunlap@infradead.org>, <liuqi115@huawei.com>,
-        <f.fangjian@huawei.com>, <prime.zeng@hisilicon.com>,
-        <hejunhao3@huawei.com>
-Subject: [PATCH v9 2/2] Documentation: Add document for UltraSoc SMB drivers
-Date:   Thu, 18 Aug 2022 21:22:31 +0800
-Message-ID: <20220818132231.28240-3-hejunhao3@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220818132231.28240-1-hejunhao3@huawei.com>
-References: <20220818132231.28240-1-hejunhao3@huawei.com>
+        Thu, 18 Aug 2022 09:23:39 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D56B611152
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:23:36 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6523F106F;
+        Thu, 18 Aug 2022 06:23:37 -0700 (PDT)
+Received: from pluto.. (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CCEB23F70D;
+        Thu, 18 Aug 2022 06:23:34 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        f.fainelli@gmail.com, vincent.guittot@linaro.org,
+        lukasz.luba@arm.com, Cristian Marussi <cristian.marussi@arm.com>
+Subject: [PATCH 0/1] Harmonize SCMI traces formats
+Date:   Thu, 18 Aug 2022 14:23:08 +0100
+Message-Id: <20220818132309.584042-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500002.china.huawei.com (7.185.36.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,144 +41,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qi Liu <liuqi115@huawei.com>
+Hi,
 
-This patch bring in documentation for UltraSoc SMB drivers.
-It simply describes the device, sysfs interface and the
-firmware bindings.
+after having recently added new scmi_msg_dump traces I realized the
+general format of the various other SCMI traces is not consistent.
 
-Signed-off-by: Qi Liu <liuqi115@huawei.com>
-Signed-off-by: Junhao He <hejunhao3@huawei.com>
----
- .../sysfs-bus-coresight-devices-ultra_smb     | 31 +++++++
- .../trace/coresight/ultrasoc-smb.rst          | 80 +++++++++++++++++++
- 2 files changed, 111 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
- create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+As an example the full traces of a simple PERF_LEVEL_SET is now:
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
-new file mode 100644
-index 000000000000..acc0f6e82c25
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
-@@ -0,0 +1,31 @@
-+What:		/sys/bus/coresight/devices/ultra_smb<N>/enable_sink
-+Date:		August 2022
-+KernelVersion:	6.0
-+Contact:	Qi Liu <liuqi115@huawei.com>
-+Description:	(RW) Add/remove a SMB device from a trace path. There can be
-+		multiple sources for a single SMB device.
-+
-+What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/buf_size
-+Date:		August 2022
-+KernelVersion:	6.0
-+Contact:	Qi Liu <liuqi115@huawei.com>
-+Description:	(Read) Shows the buffer size of each UltraSoc SMB device.
-+
-+What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/buf_status
-+Date:		August 2022
-+KernelVersion:	6.0
-+Contact:	Qi Liu <liuqi115@huawei.com>
-+Description:	(Read) Shows the value held by UltraSoc SMB status register.
-+		BIT(0) is zero means buffer is empty.
-+
-+What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/read_pos
-+Date:		August 2022
-+KernelVersion:	6.0
-+Contact:	Qi Liu <liuqi115@huawei.com>
-+Description:	(Read) Shows the value held by UltraSoc SMB Read Pointer register.
-+
-+What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/write_pos
-+Date:		August 2022
-+KernelVersion:	6.0
-+Contact:	Qi Liu <liuqi115@huawei.com>
-+Description:	(Read) Shows the value held by UltraSoc SMB Write Pointer register.
-diff --git a/Documentation/trace/coresight/ultrasoc-smb.rst b/Documentation/trace/coresight/ultrasoc-smb.rst
-new file mode 100644
-index 000000000000..6d28ef0f6c88
---- /dev/null
-+++ b/Documentation/trace/coresight/ultrasoc-smb.rst
-@@ -0,0 +1,80 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+======================================
-+UltraSoc - HW Assisted Tracing on SoC
-+======================================
-+   :Author:   Qi Liu <liuqi115@huawei.com>
-+   :Date:     March 2022
-+
-+Introduction
-+------------
-+
-+UltraSoc SMB is a per SCCL(Super CPU Cluster) hardware, and it provides a
-+way to buffer and store CPU trace messages in a region of shared system
-+memory. SMB is plugged as a coresight sink device and the corresponding
-+trace generators (ETM) are plugged in as source devices.
-+
-+Sysfs files and directories
-+---------------------------
-+
-+The SMB devices appear on the existing coresight bus alongside the other
-+coresight devices::
-+
-+	$# ls /sys/bus/coresight/devices/
-+	ultra_smb0   ultra_smb1   ultra_smb2   ultra_smb3
-+
-+The ``ultra_smb<N>`` named SMB associated with SCCL.::
-+
-+	$# ls /sys/bus/coresight/devices/ultra_smb0
-+	enable_sink   mgmt
-+	$# ls /sys/bus/coresight/devices/ultra_smb0/mgmt
-+	buf_size  buf_status  read_pos  write_pos
-+
-+*Key file items are:-*
-+   * ``read_pos``: Shows the value held by UltraSoc SMB Read Pointer register.
-+   * ``write_pos``: Shows the value held by UltraSoc SMB Write Pointer register.
-+   * ``buf_status``: Shows the value held by UltraSoc SMB status register.
-+		     BIT(0) is zero means buffer is empty.
-+   * ``buf_size``: Shows the buffer size of each UltraSoc SMB device.
-+
-+Firmware Bindings
-+---------------------------
-+
-+SMB device is only supported with ACPI, and ACPI binding of SMB device
-+describes SMB device indentifier, resource information and graph structure.
-+
-+SMB is identified by ACPI HID "HISI03A1", resource of device is declared using
-+the _CRS method. Each SMB must present two base address, the first one is the
-+configuration base address of SMB device, the second one is the base address of
-+shared system memory.
-+
-+examples::
-+
-+    Device(USMB) {                                               \
-+      Name(_HID, "HISI03A1")                                     \
-+      Name(_CRS, ResourceTemplate() {                            \
-+          MEM_RESRC(0x95100000, 0x951FFFFF, 0x100000)            \
-+          MEM_RESRC(0x50000000, 0x53FFFFFF, 0x4000000)           \
-+      })                                                         \
-+      Name(_DSD, Package() {                                     \
-+        ToUUID("ab02a46b-74c7-45a2-bd68-f7d344ef2153"),          \
-+	/* Use CoreSight Graph ACPI bindings to describe connections topology */
-+        Package() {                                              \
-+          0,                                                     \
-+          1,                                                     \
-+          Package() {                                            \
-+            1,                                                   \
-+            ToUUID("3ecbc8b6-1d0e-4fb3-8107-e627f805c6cd"),      \
-+            8,                                                   \
-+            Package() {0x8, 0, \_SB.S00.SL11.CL28.F008, 0},       \
-+            Package() {0x9, 0, \_SB.S00.SL11.CL29.F009, 0},       \
-+            Package() {0xa, 0, \_SB.S00.SL11.CL2A.F010, 0},       \
-+            Package() {0xb, 0, \_SB.S00.SL11.CL2B.F011, 0},       \
-+            Package() {0xc, 0, \_SB.S00.SL11.CL2C.F012, 0},       \
-+            Package() {0xd, 0, \_SB.S00.SL11.CL2D.F013, 0},       \
-+            Package() {0xe, 0, \_SB.S00.SL11.CL2E.F014, 0},       \
-+            Package() {0xf, 0, \_SB.S00.SL11.CL2F.F015, 0},       \
-+          }                                                      \
-+        }                                                        \
-+      })                                                         \
-+    }
+     cpufreq-set-276     [000] .....   139.905639: scmi_xfer_begin: transfer_id=145 msg_id=7 protocol_id=19 seq=145 poll=0
+     cpufreq-set-276     [000] .....   139.905724: scmi_msg_dump: pt=13 t=CMND msg_id=07 seq=0091 s=0 pyld=000000008066ab13
+     cpufreq-set-276     [000] .....   139.905725: scmi_xfer_response_wait: transfer_id=145 msg_id=7 protocol_id=19 seq=145 tmo_ms=5000 poll=0
+          <idle>-0       [000] d.h2.   139.906493: scmi_msg_dump: pt=13 t=RESP msg_id=07 seq=0091 s=0 pyld=
+          <idle>-0       [000] d.h2.   139.906521: scmi_rx_done: transfer_id=145 msg_id=7 protocol_id=19 seq=145 msg_type=0
+     cpufreq-set-276     [000] .....   139.906651: scmi_xfer_end: transfer_id=145 msg_id=7 protocol_id=19 seq=145 status=0
+
+... where same information is reported using different names (protocol_id= vs pt=)
+and even worst different bases, which is hard to read and to parse.
+
+So this tiny patch aims to unify this, using the same naming and ordering
+of the fields (wherever possible) and moving all the protocol related
+fields to base-16 while keeping in base-10 timeouts, res_id and values, so
+that the new traces would be like:
+
+     cpufreq-set-274     [001] .....   100.242894: scmi_xfer_begin: pt=13 msg_id=07 seq=0092 transfer_id=92 poll=0
+     cpufreq-set-274     [001] .....   100.242906: scmi_msg_dump: pt=13 t=CMND msg_id=07 seq=0092 s=0 pyld=000000008066ab13
+     cpufreq-set-274     [001] .....   100.242907: scmi_xfer_response_wait: pt=13 msg_id=07 seq=0092 transfer_id=92 tmo_ms=5000 poll=0
+             cat-256     [000] d.h1.   100.243084: scmi_msg_dump: pt=13 t=RESP msg_id=07 seq=0092 s=0 pyld=
+             cat-256     [000] d.h1.   100.243094: scmi_rx_done: pt=13 msg_id=07 seq=0092 transfer_id=92 msg_type=0
+     cpufreq-set-274     [002] .....   100.243120: scmi_xfer_end: pt=13 msg_id=07 seq=0092 transfer_id=92 s=0
+
+Being just a proposal I'm open to any variation of this that could help
+improving realiability and parsing, any feedback welcome !
+
+Thanks,
+Cristian
+
+Cristian Marussi (1):
+  include: trace: Harmonize SCMI tracing message format
+
+ include/trace/events/scmi.h | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
+
 -- 
-2.33.0
+2.37.2
 

@@ -2,133 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4EF598A7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F05598A7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344478AbiHRRb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
+        id S1344172AbiHRRbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233857AbiHRRbx (ORCPT
+        with ESMTP id S244502AbiHRRbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:31:53 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B54B6D5F
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:31:49 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4M7sPv4Jg5z9sgY;
-        Thu, 18 Aug 2022 19:31:47 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zZe8s5pfT7-t; Thu, 18 Aug 2022 19:31:47 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4M7sPv35YDz9sgX;
-        Thu, 18 Aug 2022 19:31:47 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5ADAF8B767;
-        Thu, 18 Aug 2022 19:31:47 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id Xc826FIAeJiJ; Thu, 18 Aug 2022 19:31:47 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.235.236])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 24DD68B763;
-        Thu, 18 Aug 2022 19:31:47 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 27IHVbbt2052476
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 19:31:37 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 27IHVZd02052471;
-        Thu, 18 Aug 2022 19:31:35 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] powerpc/vdso: Don't map VDSO at a fixed address on PPC32
+        Thu, 18 Aug 2022 13:31:32 -0400
+X-Greylist: delayed 104301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Aug 2022 10:31:30 PDT
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF73B69DB;
+        Thu, 18 Aug 2022 10:31:30 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0ED321BF208;
+        Thu, 18 Aug 2022 17:31:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1660843888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G4Sx8YHiIBk8CDg/pgMG+ASQ6ZfIgiFp1vi8DJgM4Kg=;
+        b=iUuy3ghhB26M8dgMWyv6KJtesBVwkIUhOS+cXciT02owrrRbx89Vz5CiQSXLtgt54DTy96
+        rbjjbXOYOOAXA9rOZN6o0NASTuEx3hv4XcuCiY455wPktWuXCSeXvSHjOHhGBedeK4/fZZ
+        8apXYHi/dOJiKvLBw45ttAQHGCOHXU+SieD+mLT4X+Pd4PNSdMqwUIYxPlE0+zOVDrVgIF
+        Zc40pOZLDcZf735Z682VtUaRVvhuuc1fBCSknWKwb/ryvZy4O4WZpnipTznUr4fk1Kmhvq
+        pbTLK9PWp1wq/ikXGBd5iu1SopNwr60pvQTG6doKllmreZMu1SsI0PDDYJCM1g==
 Date:   Thu, 18 Aug 2022 19:31:25 +0200
-Message-Id: <cba76f5a5b01fcc49415e632d92c11c1c5998cab.1660843877.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Richard Cochran <richardcochran@gmail.com>,
+        Joyce Ooi <joyce.ooi@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net] net: ethernet: altera: Add use of
+ ethtool_op_get_ts_info
+Message-ID: <20220818193125.41f08bcf@pc-10.home>
+In-Reply-To: <20220818102656.5913ef0d@kernel.org>
+References: <20220817095725.97444-1-maxime.chevallier@bootlin.com>
+        <20220818102656.5913ef0d@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1660843884; l=2296; s=20211009; h=from:subject:message-id; bh=hyN+Cekjwhv6w4forXDxgFeHYyRixzXym2N4NX5o8kY=; b=X0mS0tn9tr2VkijrzyuEzAy5sxXf3adu47I90pPCErAtd+yhL5ssrp0+u4Vco7ibWTR+EfZlNWuD x8fwBgkqAn3wxHv7vpk8lvlFVgmvgcctTzngRc8GIiBq7NwbQbgM
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PPC64 removed default mapping address from VDSO in
-commit 30d0b3682887 ("powerpc: Move 64bit VDSO to improve context
-switch performance").
+Hello Jakub,
 
-Do like PPC64 and let get_unmapped_area() place the VDSO mapping
-at the address it wants, don't force a default address.
+On Thu, 18 Aug 2022 10:26:56 -0700
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-This allows randomisation of VDSO address.
+> On Wed, 17 Aug 2022 11:57:25 +0200 Maxime Chevallier wrote:
+> > Add the ethtool_op_get_ts_info() callback to ethtool ops, so that
+> > we can at least use software timestamping.
+> > 
+> > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>  
+> 
+> I think our definition of bug is too narrow to fit this. It falls into
+> "never worked" category AFAICT so to net-next it goes.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/vdso.h |  3 ---
- arch/powerpc/kernel/vdso.c      | 13 ++-----------
- 2 files changed, 2 insertions(+), 14 deletions(-)
+My bad, I actually meant to target it to net-next, that was a silly
+mistake from me...
 
-diff --git a/arch/powerpc/include/asm/vdso.h b/arch/powerpc/include/asm/vdso.h
-index 8542e9bbeead..7650b6ce14c8 100644
---- a/arch/powerpc/include/asm/vdso.h
-+++ b/arch/powerpc/include/asm/vdso.h
-@@ -2,9 +2,6 @@
- #ifndef _ASM_POWERPC_VDSO_H
- #define _ASM_POWERPC_VDSO_H
- 
--/* Default map addresses for 32bit vDSO */
--#define VDSO32_MBASE	0x100000
--
- #define VDSO_VERSION_STRING	LINUX_2.6.15
- 
- #ifndef __ASSEMBLY__
-diff --git a/arch/powerpc/kernel/vdso.c b/arch/powerpc/kernel/vdso.c
-index 0da287544054..bf9574ec26ce 100644
---- a/arch/powerpc/kernel/vdso.c
-+++ b/arch/powerpc/kernel/vdso.c
-@@ -200,28 +200,19 @@ static int __arch_setup_additional_pages(struct linux_binprm *bprm, int uses_int
- 	if (is_32bit_task()) {
- 		vdso_spec = &vdso32_spec;
- 		vdso_size = &vdso32_end - &vdso32_start;
--		vdso_base = VDSO32_MBASE;
- 	} else {
- 		vdso_spec = &vdso64_spec;
- 		vdso_size = &vdso64_end - &vdso64_start;
--		/*
--		 * On 64bit we don't have a preferred map address. This
--		 * allows get_unmapped_area to find an area near other mmaps
--		 * and most likely share a SLB entry.
--		 */
--		vdso_base = 0;
- 	}
- 
- 	mappings_size = vdso_size + vvar_size;
- 	mappings_size += (VDSO_ALIGNMENT - 1) & PAGE_MASK;
- 
- 	/*
--	 * pick a base address for the vDSO in process space. We try to put it
--	 * at vdso_base which is the "natural" base for it, but we might fail
--	 * and end up putting it elsewhere.
-+	 * Pick a base address for the vDSO in process space.
- 	 * Add enough to the size so that the result can be aligned.
- 	 */
--	vdso_base = get_unmapped_area(NULL, vdso_base, mappings_size, 0, 0);
-+	vdso_base = get_unmapped_area(NULL, 0, mappings_size, 0, 0);
- 	if (IS_ERR_VALUE(vdso_base))
- 		return vdso_base;
- 
--- 
-2.37.1
+Do I need to resend ?
 
+Best regards,
+
+Maxime

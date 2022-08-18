@@ -2,176 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27B3598108
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DACBE59810B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243495AbiHRJoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 05:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
+        id S243663AbiHRJqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 05:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242603AbiHRJoR (ORCPT
+        with ESMTP id S243538AbiHRJqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 05:44:17 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD89AFAD5;
-        Thu, 18 Aug 2022 02:44:15 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27I9iBDg006855;
-        Thu, 18 Aug 2022 09:44:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : references : cc : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=JiF/cybh1Bde9Wop9QTcigKTsMN5Hvkz8vlESEossD8=;
- b=gPeO2JbN5aELFVU0zwsUodWHPGYqiHlrm8d5vnQoUy/0JgJPrkB/df8Lcs+jsz6vh7M5
- Z29njVqcbPSElZd8WGeri94bMUJfCU1qSYnc7mPaJhqcQ1CdBKh6DouhaAO1uiEjKRts
- ZlvnIBRMC8qlDUdmYJbj6p7NIX8gfRuUurlhWWPYaGTrqzSu5GNuu8144dprFuvvLJaf
- 7aXodaz674SIvAX261/sGcGvZnj/35+so1J+esgjEOMn2VRnl9lcyP/pBwEs0ydocE4G
- BteIgUfksBSqfpDgaP0zNtTx8d7DEHTho2YEN8DxZlCt6VYZyd9cz9BeyaU8pa58O+0Z AQ== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1k22800x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 09:44:11 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27I9LYNL031432;
-        Thu, 18 Aug 2022 09:44:10 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02dal.us.ibm.com with ESMTP id 3hx3kadg91-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Aug 2022 09:44:10 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27I9i9be47055254
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Aug 2022 09:44:09 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 64DAB6A051;
-        Thu, 18 Aug 2022 09:44:09 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B3DFA6A047;
-        Thu, 18 Aug 2022 09:44:00 +0000 (GMT)
-Received: from [9.43.127.90] (unknown [9.43.127.90])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 18 Aug 2022 09:43:58 +0000 (GMT)
-Message-ID: <0d1621b1-6654-34f1-9630-7cf5881a8eaf@linux.vnet.ibm.com>
-Date:   Thu, 18 Aug 2022 15:13:56 +0530
+        Thu, 18 Aug 2022 05:46:39 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9879BB0B25
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 02:46:37 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id z6so1421186lfu.9
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 02:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=MFmEDhXxgZF7KULdzona+7TtwCBEXCBX6WNuKW7to/k=;
+        b=o/H8DL4GCtp0fpBXwBnHt5oN/hZyiyzj799GcdO01ig5EyiRWN0swEVeq6HE/3v0nH
+         xzXSB9nR2VfYvc6KaZYdR6389lhlOoS/gh6+l68vRvVpDQJWKQM/tk7vFHaxIRG7dsTU
+         lEp85ri6wwQeqsB0pZFS2IHrFOyQxHC2C5iNQ82EsU+V2luHYnOBve933fbYDmfZew3r
+         96seiWYyn285tf6agIdAA4MUXu5DoL4JXguuYJ89sf7JNCYSfzM4GkW90nJZIplLoU9Q
+         u+UmSgJnmbxyYBCgdKWHlJwcWvMsMNzqRMnVwFJAawBrjGV9vS0BJ0VLJLjfjeV4XtiV
+         E7pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=MFmEDhXxgZF7KULdzona+7TtwCBEXCBX6WNuKW7to/k=;
+        b=O+Ru/CzjInMVvCMnejXdIRNu+w6B10BSHQnyE+T9L8MHeX7cqEtPr4s+CHxs+VF8wr
+         YleF0jdDLTK1uBrMhmitP+andiFtoW1mPm/nsEHU7KEI2WLNV+n0K6z/F9x670C5Dkni
+         CzePSZ75HGbiwoVFyTYCYS2MnVF2A92e8F1b0D0pAlFOFsXgpUBdRICfIxJiGQaKyhTL
+         q2jGWKDG8F2XJNKuYf1zovzW6yAVlmEReSIr1UEJnaIebrBM17L9NFCCbu8wQhgEACl3
+         SjHs5wuW8ilz7NlIgVRU+4IQFuyp/NmqjOJwoakZ2QUSUaWJygr5aVfh9/VMfYQw4CMO
+         YsDA==
+X-Gm-Message-State: ACgBeo0GVoiEuACb4bKE3yVEgKy7IrLql87MbghzdugSrVYa+IcpXDll
+        O+g8HNKBSDru4QYWu7YJrBU09w==
+X-Google-Smtp-Source: AA6agR4zbj03HwNiKvNCAMqjbPAZBOEZ5IFS9rP9aP7B53I/HuQKSj52sakcI3/ZRNQcW0rIS0Ap1w==
+X-Received: by 2002:a05:6512:39ce:b0:48c:f4d8:d418 with SMTP id k14-20020a05651239ce00b0048cf4d8d418mr724314lfu.635.1660815995938;
+        Thu, 18 Aug 2022 02:46:35 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
+        by smtp.gmail.com with ESMTPSA id p4-20020a056512234400b00492adcfefc1sm155757lfu.198.2022.08.18.02.46.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 02:46:35 -0700 (PDT)
+Message-ID: <a08b230c-d655-75ee-0f0c-8281b13b477b@linaro.org>
+Date:   Thu, 18 Aug 2022 12:46:33 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [linux] [5.19.0] task hung for indefinite time with call traces
- when rebooted with Kexec
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/3] dt-bings: net: fsl,fec: update compatible item
 Content-Language: en-US
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <4c93ce0b-8e04-1f03-e4ce-7c763719169c@linux.vnet.ibm.com>
- <6b5267ee-9372-3862-614a-298f7bd9ae60@I-love.SAKURA.ne.jp>
-Cc:     abdhalee@linux.vnet.ibm.com, mputtash@linux.vnet.com,
-        sachinp@linux.vnet.com
-From:   Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
-In-Reply-To: <6b5267ee-9372-3862-614a-298f7bd9ae60@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Wei Fang <wei.fang@nxp.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        s.hauer@pengutronix.de, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        peng.fan@nxp.com, ping.bai@nxp.com, sudeep.holla@arm.com,
+        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com
+References: <20220704101056.24821-1-wei.fang@nxp.com>
+ <20220704101056.24821-2-wei.fang@nxp.com>
+ <ef7e501a-b351-77f9-c4f7-74ab10283ed6@linaro.org>
+ <20220818013344.GE149610@dragon>
+ <fd41a409-d0e0-0026-4644-9058d1177c45@linaro.org>
+ <20220818092257.GF149610@dragon>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220818092257.GF149610@dragon>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Sfz9BJZy_UGEzcY5BkfPVp80frY8apST
-X-Proofpoint-GUID: Sfz9BJZy_UGEzcY5BkfPVp80frY8apST
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_02,2022-08-16_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- impostorscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
- malwarescore=0 priorityscore=1501 suspectscore=0 adultscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208180031
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
-
-
-Please find the location in source code from where i am seeing the call 
-traces generating
-
-File : kernel/hung_task.c
-
-         /*
-          * Ok, the task did not get scheduled for more than 2 minutes,
-          * complain:
-          */
-         if (sysctl_hung_task_warnings) {
-                 if (sysctl_hung_task_warnings > 0)
-                         sysctl_hung_task_warnings--;
-                 pr_err("INFO: task %s:%d blocked for more than %ld 
-seconds.\n",
-                        t->comm, t->pid, (jiffies - t->last_switch_time) 
-/ HZ);
-                 pr_err("      %s %s %.*s\n",
-                         print_tainted(), init_utsname()->release,
-                         (int)strcspn(init_utsname()->version, " "),
-                         init_utsname()->version);
-                 pr_err("\"echo 0 > 
-/proc/sys/kernel/hung_task_timeout_secs\""
-                         " disables this message.\n");
-                 sched_show_task(t);
-                 hung_task_show_lock = true;
-
-                 if (sysctl_hung_task_all_cpu_backtrace)
-                         hung_task_show_all_bt = true;
-         }
-
-         touch_nmi_watchdog();
-}
-
-
-On 8/6/22 15:30, Tetsuo Handa wrote:
-> On 2022/08/05 15:54, Tasmiya Nalatwad wrote:
->> Greetings,
+On 18/08/2022 12:22, Shawn Guo wrote:
+> On Thu, Aug 18, 2022 at 10:51:02AM +0300, Krzysztof Kozlowski wrote:
+>> On 18/08/2022 04:33, Shawn Guo wrote:
+>>> On Mon, Jul 04, 2022 at 11:12:09AM +0200, Krzysztof Kozlowski wrote:
+>>>>> diff --git a/Documentation/devicetree/bindings/net/fsl,fec.yaml b/Documentation/devicetree/bindings/net/fsl,fec.yaml
+>>>>> index daa2f79a294f..6642c246951b 100644
+>>>>> --- a/Documentation/devicetree/bindings/net/fsl,fec.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/net/fsl,fec.yaml
+>>>>> @@ -40,6 +40,10 @@ properties:
+>>>>>            - enum:
+>>>>>                - fsl,imx7d-fec
+>>>>>            - const: fsl,imx6sx-fec
+>>>>> +      - items:
+>>>>> +          - enum:
+>>>>> +              - fsl,imx8ulp-fec
+>>>>> +          - const: fsl,imx6ul-fec
+>>>>
+>>>> This is wrong.  fsl,imx6ul-fec has to be followed by fsl,imx6q-fec. I
+>>>> think someone made similar mistakes earlier so this is a mess.
+>>>
+>>> Hmm, not sure I follow this.  Supposing we want to have the following
+>>> compatible for i.MX8ULP FEC, why do we have to have "fsl,imx6q-fec"
+>>> here?
+>>>
+>>> 	fec: ethernet@29950000 {
+>>> 		compatible = "fsl,imx8ulp-fec", "fsl,imx6ul-fec";
+>>> 		...
+>>> 	};
 >>
->> [linux] [5.19.0] task hung for indefinite time with call traces when rebooted with Kexec, A restart is required to recover the machine.
+>> Because a bit earlier this bindings is saying that fsl,imx6ul-fec must
+>> be followed by fsl,imx6q-fec.
 > 
-> kexec is waiting for workqueues ("kworker/3:1" and "kworker/3:0") to complete.
-> If this problem happens only when rebooting with kexec, something in kexec path
-> might be preventing these workqueues from completing.
+> The FEC driver OF match table suggests that fsl,imx6ul-fec and fsl,imx6q-fec
+> are not really compatible.
 > 
-> Anyway, please repost with locations in source code like syzbot report does.
-> 
-> [ 1104.673153] task:kworker/3:1     state:D stack:    0 pid:  221 ppid:     2 flags:0x00000800
-> [ 1104.673160] Workqueue: fc_wq_0 fc_rport_final_delete [scsi_transport_fc]
-> [ 1104.673170] Call Trace:
-> [ 1104.673173] [c0000000060eb860] [0000000000000004] 0x4 (unreliable)
-> [ 1104.673178] [c0000000060eba50] [c00000000001e378] __switch_to+0x288/0x4a0
-> [ 1104.673185] [c0000000060ebab0] [c000000000d23e84] __schedule+0x2c4/0x8c0
-> [ 1104.673190] [c0000000060ebb80] [c000000000d244e8] schedule+0x68/0x130
-> [ 1104.673196] [c0000000060ebbb0] [c0000000008d4574] scsi_remove_target+0x314/0x390
-> 
-> [ 1104.673233] task:kworker/3:0     state:D stack:    0 pid:227332 ppid:     2 flags:0x00000880
-> [ 1104.673237] Workqueue: fc_wq_0 fc_rport_final_delete [scsi_transport_fc]
-> [ 1104.673243] Call Trace:
-> [ 1104.673244] [c0000000726bb860] [c0000000001b9cb4] enqueue_entity+0x184/0x4f0 (unreliable)
-> [ 1104.673250] [c0000000726bba50] [c00000000001e378] __switch_to+0x288/0x4a0
-> [ 1104.673254] [c0000000726bbab0] [c000000000d23e84] __schedule+0x2c4/0x8c0
-> [ 1104.673258] [c0000000726bbb80] [c000000000d244e8] schedule+0x68/0x130
-> [ 1104.673262] [c0000000726bbbb0] [c0000000008d4574] scsi_remove_target+0x314/0x390
-> [
-> [ 1104.673295] task:kexec           state:D stack:    0 pid:228289 ppid:     1 flags:0x00040080
-> [ 1104.673299] Call Trace:
-> [ 1104.673301] [c000000069147510] [c00000000001e378] __switch_to+0x288/0x4a0
-> [ 1104.673305] [c000000069147570] [c000000000d23e84] __schedule+0x2c4/0x8c0
-> [ 1104.673309] [c000000069147640] [c000000000d244e8] schedule+0x68/0x130
-> [ 1104.673313] [c000000069147670] [c000000000d2e028] schedule_timeout+0x348/0x3f0
-> [ 1104.673317] [c000000069147750] [c000000000d2554c] wait_for_completion+0xcc/0x2b0
-> [ 1104.673321] [c0000000691477d0] [c00000000017cbe8] flush_workqueue+0x158/0x520
-> [ 1104.673325] [c000000069147870] [c00000000017d068] drain_workqueue+0xb8/0x240
-> [ 1104.673329] [c000000069147930] [c0000000001825e0] destroy_workqueue+0x60/0x420
-> [ 1104.673333] [c0000000691479c0] [c0080000009291e4] fc_remove_host+0x21c/0x280 [scsi_transport_fc]
-> 
-> 
+> static const struct of_device_id fec_dt_ids[] = {
+>         { .compatible = "fsl,imx25-fec", .data = &fec_devtype[IMX25_FEC], },
+>         { .compatible = "fsl,imx27-fec", .data = &fec_devtype[IMX27_FEC], },
+>         { .compatible = "fsl,imx28-fec", .data = &fec_devtype[IMX28_FEC], },
+>         { .compatible = "fsl,imx6q-fec", .data = &fec_devtype[IMX6Q_FEC], },
+>         { .compatible = "fsl,mvf600-fec", .data = &fec_devtype[MVF600_FEC], },
+>         { .compatible = "fsl,imx6sx-fec", .data = &fec_devtype[IMX6SX_FEC], },
+>         { .compatible = "fsl,imx6ul-fec", .data = &fec_devtype[IMX6UL_FEC], },
 
--- 
-Regards,
-Tasmiya Nalatwad
-IBM Linux Technology Center
+I don't see here any incompatibility. Binding driver with different
+driver data is not a proof of incompatible devices. Additionally, the
+binding describes the hardware, not the driver.
+
+>         { .compatible = "fsl,imx8mq-fec", .data = &fec_devtype[IMX8MQ_FEC], },
+>         { .compatible = "fsl,imx8qm-fec", .data = &fec_devtype[IMX8QM_FEC], },
+>         { /* sentinel */ }
+> };
+> MODULE_DEVICE_TABLE(of, fec_dt_ids);
+> 
+> Should we fix the binding doc?
+
+Maybe, I don't know. The binding describes the hardware, so based on it
+the devices are compatible. Changing this, except ABI impact, would be
+possible with proper reason, but not based on Linux driver code.
+
+
+Best regards,
+Krzysztof

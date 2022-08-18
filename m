@@ -2,140 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB455986E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138AA5986F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344141AbiHRPGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        id S1344078AbiHRPHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344008AbiHRPGu (ORCPT
+        with ESMTP id S1344113AbiHRPHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:06:50 -0400
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC857171C;
-        Thu, 18 Aug 2022 08:06:48 -0700 (PDT)
-Received: by mail-qv1-f44.google.com with SMTP id b2so1385459qvp.1;
-        Thu, 18 Aug 2022 08:06:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=R/U2IBOmuOYUnAlD0g8GnvyYlwS/o8azETiK5CuXS9k=;
-        b=ROaOE9iEAYruBmAdM5vowXfkHVssTeEKD565fdHMvL2MBwO3wo9JjPIxnHwuWYD5wT
-         RRLt8FmsquxMNbWuAyZ5/X+eEuxZaQV/NpFIk8fKQpaSUUWD9A7BMSHyNV+SCFNm3dni
-         WUE64coc6sjNEEO44Uax1K48rGFhfkwvJw05X6BOPrcqI0ubxLK2r8FfrZ9LtcnySaQy
-         rDIJySb2DaUvV/M98nhflG4jDxb7R698M2+ySAqwn54OWO5FTcEmVdvYLs6K9jXgGSYf
-         506VnNJgz09QcQ277AezUzsnIvBh0feNxClierQgrGce9fNW8MgK/1dTwODj/QUmOaKG
-         5sGw==
-X-Gm-Message-State: ACgBeo0Kj4lpuIBrxvtY7cyMwdh9b6NCKuTDS0HbeEy/vF25gbpU8vTr
-        U+kZDGVTliUfM5vmw2xvyQ==
-X-Google-Smtp-Source: AA6agR6gVKIy8t5d6GRbn5GV0AsGrWcjUGteoJZwZZ0GXaadLL065WXo3TvZe22l7DzyPrKRW0hn3Q==
-X-Received: by 2002:a0c:c684:0:b0:494:d65c:f495 with SMTP id d4-20020a0cc684000000b00494d65cf495mr3145337qvj.24.1660835207884;
-        Thu, 18 Aug 2022 08:06:47 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:5fe0:b4f5:6e22:4704:df60:73a3])
-        by smtp.gmail.com with ESMTPSA id dt2-20020a05620a478200b006bb024c5021sm1755015qkb.25.2022.08.18.08.06.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 08:06:47 -0700 (PDT)
-Received: (nullmailer pid 1870414 invoked by uid 1000);
-        Thu, 18 Aug 2022 15:06:45 -0000
-Date:   Thu, 18 Aug 2022 09:06:44 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 2/6] dt-bindings: PCI: microchip,pcie-host: fix
- missing clocks properties
-Message-ID: <20220818150644.GJ1829017-robh@kernel.org>
-References: <20220816182547.3454843-1-mail@conchuod.ie>
- <20220816182547.3454843-3-mail@conchuod.ie>
+        Thu, 18 Aug 2022 11:07:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805D19C53D;
+        Thu, 18 Aug 2022 08:07:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 142526135F;
+        Thu, 18 Aug 2022 15:07:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20718C433D6;
+        Thu, 18 Aug 2022 15:06:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660835219;
+        bh=WkrNCbKYD3xZKpJJ81qL8Xck1IuTybQeeZNEiImLgSQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VMDbJXG35jSoumiaoCsmU82g7/aLhi4RiQpct4YTnPDkJaqqXE4mYRFxCzn4ruLzL
+         8AHcJr1atGYjPOo28gFL4fz2xH6p0aLhE67gJGgVfq87WuDI7EDyhFy6Xe15zvM6Zt
+         esN+nxXBVuQNKf7tqC2jLC7cwwd2qHtT5b+79LKI=
+Date:   Thu, 18 Aug 2022 17:06:56 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] USB: trancevibrator: simplify tv_probe
+Message-ID: <Yv5VkNvk6CDBFgNK@kroah.com>
+References: <20220812061805.88627-1-dzm91@hust.edu.cn>
+ <20220812061805.88627-2-dzm91@hust.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220816182547.3454843-3-mail@conchuod.ie>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220812061805.88627-2-dzm91@hust.edu.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 07:25:44PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Fri, Aug 12, 2022 at 02:18:02PM +0800, Dongliang Mu wrote:
+> From: Dongliang Mu <mudongliangabcd@gmail.com>
 > 
-> Recent versions of dt-schema warn about unevaluatedProperties:
-> arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dtb: pcie@2000000000: Unevaluated properties are not allowed ('clock-names', 'clocks', 'legacy-interrupt-controller', 'microchip,axi-m-atr0' were unexpected)
->         From schema: Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+> The function tv_probe does not need to invoke kfree when the
+> allocation fails. So let's simplify the code of tv_probe.
 > 
-> The clocks are required to enable interfaces between the FPGA fabric
-> and the core complex, so add them to the binding.
-> 
-> Fixes: 6ee6c89aac35 ("dt-bindings: PCI: microchip: Add Microchip PolarFire host binding")
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 > ---
-> dt-schema v2022.08 is required to replicate
-> ---
->  .../bindings/pci/microchip,pcie-host.yaml     | 25 +++++++++++++++++++
->  1 file changed, 25 insertions(+)
+> v2->v3: fix the truncated subject of PATCH 2/2.
+> v1->v2: no change
 > 
-> diff --git a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> index edb4f81253c8..6bbde8693ef8 100644
-> --- a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> +++ b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> @@ -25,6 +25,31 @@ properties:
->        - const: cfg
->        - const: apb
->  
-> +  clocks:
-> +    description:
-> +      Fabric Interface Controllers, FICs, are the interface between the FPGA
-> +      fabric and the core complex on PolarFire SoC. The FICs require two clocks,
-> +      one from each side of the interface. The "FIC clocks" described by this
-> +      property are on the core complex side & communication through a FIC is not
-> +      possible unless it's corresponding clock is enabled. A clock must be
-> +      enabled for each of the interfaces the root port is connected through.
-> +      This could in theory be all 4 interfaces, one interface or any combination
-> +      in between.
-> +    minItems: 1
-> +    items:
-> +      - description: FIC0's clock
-> +      - description: FIC1's clock
-> +      - description: FIC2's clock
-> +      - description: FIC3's clock
-> +
-> +  clock-names:
-> +    description:
-> +      As any FIC connection combination is possible, the names should match the
-> +      order in the clocks property and take the form "ficN" where N is a number
-> +      0-3
-> +    minItems: 1
-> +    maxItems: 4
+>  drivers/usb/misc/trancevibrator.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
 
-items:
-  pattern: '^fic[0-3]$'
+Note, I would recommend you work on basic "clean up" patches in the
+drivers/staging/ directory so as to get experience on how to submit
+patches properly before working in other parts of the kernel tree.  That
+way subsystems that don't normally take "cleanup" patches don't get
+bogged down in basic patch-process issues like this one did.
 
-> +
->    interrupts:
->      minItems: 1
->      items:
-> -- 
-> 2.37.1
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+thanks,
+
+greg k-h

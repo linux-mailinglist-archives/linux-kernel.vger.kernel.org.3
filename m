@@ -2,82 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07F3598A33
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5FD598A2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344303AbiHRRRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
+        id S245539AbiHRRRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344995AbiHRRQq (ORCPT
+        with ESMTP id S1345330AbiHRRQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:16:46 -0400
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2E810FFE;
-        Thu, 18 Aug 2022 10:11:15 -0700 (PDT)
-Received: by mail-pl1-f169.google.com with SMTP id m2so2038853pls.4;
-        Thu, 18 Aug 2022 10:11:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=UkBra3gVOO8ib+l1PZXu0p1ulXBzkwr8s3bUgaBZ/K8=;
-        b=E6OC5YabVe0YV4FZEz1aEuJMfJyzp294Qzv581wUl5pLLor045eeP7XolWqITLIe3U
-         WsmEahN5NWUH7ClUd6cEBLMaBEUnIM9rFXJ75eF63bmWlJSke6ne4ieElda1HTmYuiHk
-         nRn3R2lx8EPCex3Zd/G/jtfsDOftz4OVBwKJPvrGT2S5/Vce3vMqZ1A32oPfDJoHDZH1
-         WmOwgCqOOhcXIUnVMiKAnZkjWmSFJa7+AweOf17FICCmY7cvIAwc02L6ADzXnxOPK/MR
-         KfvlqJu2fCUTYgbDkuzwReDBYUndRucT9hzKnwt24XRGtF/WrCPSeVipIySJeha7Kpla
-         3Onw==
-X-Gm-Message-State: ACgBeo0YAxbWiZRFZyOjyoD0PfyJowpm/xHsePRxPdU/+2lRx5hqaVlX
-        eMRH9N8bVj1otl0Cp1ca/w==
-X-Google-Smtp-Source: AA6agR7B6dYCsFfF4wBcu8MtvLiFnN/aVGCtQghP/Tl/gPgbvyxd+EHMIWOZik0LVYNMxuQPMADzrw==
-X-Received: by 2002:a17:90b:48d0:b0:1fa:b438:1b20 with SMTP id li16-20020a17090b48d000b001fab4381b20mr9048996pjb.239.1660842674884;
-        Thu, 18 Aug 2022 10:11:14 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:647:4ff2:3529:f8cd:d6cd:ac54])
-        by smtp.gmail.com with ESMTPSA id q4-20020a170902eb8400b0016c9e5f291bsm1592907plg.111.2022.08.18.10.11.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 10:11:14 -0700 (PDT)
-Received: (nullmailer pid 2044597 invoked by uid 1000);
-        Thu, 18 Aug 2022 17:11:11 -0000
-Date:   Thu, 18 Aug 2022 11:11:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     broonie@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        perex@perex.cz, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] ASoC: qcom: dt-bindings: add sm8450 and sc8280xp
- compatibles
-Message-ID: <20220818171111.GF1978870-robh@kernel.org>
-References: <20220818134619.3432-1-srinivas.kandagatla@linaro.org>
- <20220818134619.3432-2-srinivas.kandagatla@linaro.org>
+        Thu, 18 Aug 2022 13:16:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7352610C
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:11:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B777761645
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 17:11:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2644C433D7;
+        Thu, 18 Aug 2022 17:11:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660842708;
+        bh=Mc/teE1LL9vULZCSDU4ycYT9u3eYQsCxpUOtyauN4pA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AWZJlPCUjq7p7vu1Bz1r9kJMchqJkGqlekx/lzPT6Oj4nq7WfVIZWD8OhWHR2XkVX
+         ZnKbvC1td2JxmqeAdI92wUok2KK0c+EGdwAkUYukMT0fkHzjx++xPTyA00oZfxDQsU
+         oObrS3/4Qeb8iKzTN3NRGKr2Hqg0xImh2Zp0BOkmRMrE/lzEOtzH2nV3907a3fZRpf
+         jXcDflt8dDHueJRaAPrBJ+5KerzThkqKlYnEssdtOjzTBPv+jNv7wM7iov/uUCc/Hl
+         agnxm4gTMg5MrPk4VELdphBGUPn8P0x5dNqePLwdV5MNnFfetscJh8KZYrUCkUs/FV
+         Cf5Qi8CnwkXOA==
+From:   SeongJae Park <sj@kernel.org>
+To:     Xin Hao <xhao@linux.alibaba.com>
+Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 1/2] mm/damon/lru_sort: Move target memory region check to head of func
+Date:   Thu, 18 Aug 2022 17:11:45 +0000
+Message-Id: <20220818171145.51607-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220818105732.34492-2-xhao@linux.alibaba.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818134619.3432-2-srinivas.kandagatla@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 02:46:14PM +0100, Srinivas Kandagatla wrote:
-> This patch adds SM8450 and SC8280XP compatible entry for LPASS TX, RX, WSA
-> and VA codec macros.
-> 
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  .../devicetree/bindings/sound/qcom,lpass-rx-macro.yaml          | 2 ++
->  .../devicetree/bindings/sound/qcom,lpass-tx-macro.yaml          | 2 ++
->  .../devicetree/bindings/sound/qcom,lpass-va-macro.yaml          | 2 ++
->  .../devicetree/bindings/sound/qcom,lpass-wsa-macro.yaml         | 2 ++
->  4 files changed, 8 insertions(+)
+Hi Xin,
 
-Acked-by: Rob Herring <robh@kernel.org>
 
+On Thu, 18 Aug 2022 18:57:31 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
+
+> In damon_lru_sort_apply_parameters(), if "monitor_region_start"
+> and "monitor_region_end" is not a valid physical address range,
+> There no need to run the remainder codes in it.
+
+The function, 'damon_lru_sort_apply_parameters()', checks validity of
+parameters and construct the DAMON context one by one.  For example,
+'damon_set_attrs()' returns an error if the parameters are invalid.  So the
+intended flow is,
+
+1. check DAMON attributes parameters,
+2. apply DAMON attributes parameters,
+3. check scheme parameters,
+4. apply scheme parameters,
+5. check target region parameters, and
+6. apply target region parameters.
+
+Therefore what this patch does is making the target regions validity check to
+be done earlier than validity checks of other parameters.  There is no special
+reason to check the region earlier than others.  Also, this change makes the
+flow of the function a little bit weird in my humble opinion, as the flow will
+be
+
+1. check target region parameters,
+2. check DAMON attributes parameters,
+3. apply DAMON attributes parameters,
+4. check scheme parameters,
+5. apply scheme parameters, and
+6. apply target region parameters.
+
+So I'd argue this patch seems not really needed, sorry.
+
+
+Thanks,
+SJ
+
+[...]

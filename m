@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97AE6598AC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2197598ADA
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345285AbiHRR7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
+        id S1343955AbiHRSEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 14:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242519AbiHRR7U (ORCPT
+        with ESMTP id S234570AbiHRSEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:59:20 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3738C6CCA
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:59:19 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id r141so1665978iod.4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:59:19 -0700 (PDT)
+        Thu, 18 Aug 2022 14:04:38 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FE2A7AA3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:04:36 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id m10-20020a05600c3b0a00b003a603fc3f81so1365393wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:04:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=7oe2Eodvo4cHSy2YtCc59ePq/pRiQuqwvHx5VzBYsYs=;
-        b=edIm4Rg6BSJsMQXvCvLFwwFXy0SgZL16xDx+ddO+pIxGoxGhVBW1JCUG4UJ4nMUG8M
-         h9wXvegj3gt22AUMb2wOXjwfw2exTUiCTBBx/czTYs8MX1XFi3rftEoMeav0o1sDi4PH
-         T5O1xzJMMPnXq9Tm/Z2EFTSP1YGgWu/FUpjClXnfOiUHoAd4VQvibkoMme4W9oxkJhWm
-         9GMqef+W/Vs+jkHaqJVlLMkA+d4lhvKd+F6yj/327zqFExvFnlp9sarw3XYr4YD+WO7X
-         FfTLBskgqGWvD6e+k6RBRl9E7jBeyHO2EstWlzSxL9MHnzGU6oG0h9vOvrFHR4B9mVtJ
-         6C3Q==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=GlpTqivy0tIzGkwP7ejOAS9UIgP5mpapG/8trM9+O8s=;
+        b=flz/+Chioex0V5uN0j7jxB1BCIqc7jyvF8jHUeSIQ2x884HLiWijSc2da85H8hVGdo
+         Q4lp6mTxxV8ZogvfT1Aezb8jJhmEbAwkH0STSBS1D+TxnocOZtqLe8ySx0mMrYQSpa47
+         /GyYmOMw/8eINm3Df319PEHMsn1l0VmeS1NOgoHUmcyyhx2Hj9zRjKMBxtq2ejs0pKkU
+         OGmKZh3pAzgWteDqXJtm1adhlXJJH03Rh04pbciP2nu5ldDwFSq8+L9iGgGPrdPaUkDp
+         IO2BJPTn4SHIHC8+676XiZQg/WABYpgb7U1Ug66lTHHE21ZcYSYAnKv13kSFeTcYGlKM
+         ABxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=7oe2Eodvo4cHSy2YtCc59ePq/pRiQuqwvHx5VzBYsYs=;
-        b=qLYFtOpSr6iqD+raVmdJX6AskAoqSKJLMi1skefXfZrTjPsDT6sr2zXXGsg5qlEAUF
-         j1rt/p9NieNNUvkpcImyqNrcuSTbEDpfBSYGMm6fojppwYiujYYxJ/Ao9OeW3SlQOCuk
-         3Ogo94hLjXWoAVctxCrvD4ilq2tI9Dqx0puDSt3ej5roOJ0h4DDfU2zpet0cBzywNaJu
-         79oGeCItJCIr5wi0xWaqPgg2XRzfqTiymJEQE00mmGTA4NjavYm3ZUhRQQ582o1fru6w
-         j+ikF5t9Zj20K9SubebNDXeNmBrqPbaUvHb0cP1bpqavasuZvswyKF8+7dAERmqcJrfK
-         fmbQ==
-X-Gm-Message-State: ACgBeo2jJFX64XhhwvXTSzPA0xjKMQNlGEmlNzSnoSTMVc9XEp6U626z
-        YMPO2hCZGUgoy4nUb14o9UlLCAcG9wB02XJD2Uw01g==
-X-Google-Smtp-Source: AA6agR4U+57gHVzGKChcaUfF5FOoGlpZMDiAtZPsr1UjDP45RsQZeuVCHp+BILRKLZOZ5NtZ/tNWWI+NXk0bJOcx7N0=
-X-Received: by 2002:a02:7a4d:0:b0:346:b4db:f4da with SMTP id
- z13-20020a027a4d000000b00346b4dbf4damr1863490jad.52.1660845558863; Thu, 18
- Aug 2022 10:59:18 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=GlpTqivy0tIzGkwP7ejOAS9UIgP5mpapG/8trM9+O8s=;
+        b=V6NLitLZsKlwnkTuVmCnXgVgQoZT6UPqTQPYalwrX1aTSnHcmpFBHPC/WhfLvgpKu8
+         tEFSWHn3bBbQzJKHOGvlS9F7GCvxaAGA56ffZiQYiSsBQ8NPHFkv9hgSgVJcJV8KP2vV
+         GlHNU8vorJFWJw9cXieJBNCrlrM2ywQ44QOMaOUrDu1rK20r1KHP0oWu0NzSCfAcQyBe
+         hK6d1GENZ41u7f1cnETma8U7byp1ZE+aXKzewFX3cJTo+KxmBSb3bGolu/jl/IHw/O5O
+         OzTvlbJvQkywUbHqiyQmZB8GiowYPrT9fryaL/zJZbBd0freYsVfi3xPzldKcmYmFS5J
+         iouw==
+X-Gm-Message-State: ACgBeo0oNkj5uJaWzjshBDF1dS2/htFv2TEIZIK881uOo+zuhodukvd/
+        RAyrZtWgGnrXgdNC95PWcBdGBw==
+X-Google-Smtp-Source: AA6agR5nwxqBrsO5buNoFzw4KTHCE5WRDDDX00NomWvkOTF3NeHI3vRmJEi25qV1Uyv9RjgIL4mKEA==
+X-Received: by 2002:a05:600c:35d4:b0:3a6:18ba:1585 with SMTP id r20-20020a05600c35d400b003a618ba1585mr5017823wmq.48.1660845875137;
+        Thu, 18 Aug 2022 11:04:35 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id 8-20020a05600c024800b003a5537bb2besm2876217wmj.25.2022.08.18.11.04.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 11:04:34 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 21:04:32 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Caleb Connolly <caleb.connolly@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC 2/2] soc: qcom_stats: Add dynamic debugfs entries for
+ subsystems
+Message-ID: <Yv5/MCC6c3lgud+v@linaro.org>
+References: <20220818142215.2282365-1-abel.vesa@linaro.org>
+ <20220818142215.2282365-2-abel.vesa@linaro.org>
 MIME-Version: 1.0
-References: <20220817211356.273019-1-axelrasmussen@google.com> <190edda8-1f37-0fa5-1cc1-ada97518698a@nvidia.com>
-In-Reply-To: <190edda8-1f37-0fa5-1cc1-ada97518698a@nvidia.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 18 Aug 2022 10:58:43 -0700
-Message-ID: <CAJHvVcgktSjo5CncC25+2j1amXvn3TjnsfOCV6CxNDp5joey9Q@mail.gmail.com>
-Subject: Re: [PATCH] selftests/vm: fix inability to build any vm tests
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818142215.2282365-2-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,87 +75,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 3:15 PM John Hubbard <jhubbard@nvidia.com> wrote:
->
-> On 8/17/22 14:13, Axel Rasmussen wrote:
-> > Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> > ---
-> >   tools/testing/selftests/vm/Makefile | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> > index d9fa6a9ea584..f2a12494f2d8 100644
-> > --- a/tools/testing/selftests/vm/Makefile
-> > +++ b/tools/testing/selftests/vm/Makefile
-> > @@ -1,7 +1,7 @@
-> >   # SPDX-License-Identifier: GPL-2.0
-> >   # Makefile for vm selftests
-> >
-> > -LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
-> > +LOCAL_HDRS += $(selfdir)/vm/local_config.h $(selfdir)/../../../mm/gup_test.h
->
-> Hi Alex,
->
-> Thanks for fixing up this build, it's always frustrating to finally
-> finish working on something, only to find that the selftests build is
-> broken!
->
-> This looks correct, and also I've tested it locally, and it works. So
-> please feel free to add:
->
-> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
->
->
-> A couple of follow-up thoughts:
->
-> 1) I recalled that hmm-tests.c in the same directory also needs
-> gup_test.h, and wondered if that was covered. And it turns out the the
-> relative "up and over" include path is done in hmm-tests.c itself,
-> instead of in the Makefile, like this:
->
-> /*
->   * This is a private UAPI to the kernel test module so it isn't exported
->   * in the usual include/uapi/... directory.
->   */
-> #include "../../../../lib/test_hmm_uapi.h"
-> #include "../../../../mm/gup_test.h"
->
-> It would be nice (maybe follow-up polishing for someone) if this were
-> done once, instead of twice (or more?) via different (source code vs.
-> Makefile) mechanisms.
+On 22-08-18 17:22:15, Abel Vesa wrote:
+> Register per-subsystem notifier using qcom_register_ssr_notifier().
+> This will allow the order of between the remoteprocs actually starting and
+> qcom_stats driver probing to become more relaxed.
+> 
+> When the notifier callback gets called, depending on whether the remoteproc is
+> starting up or shutting down, either create or remove the related debugfs
+> entry. Also, in order to make sure we're not missing an already started
+> remoteproc, after the notifier has been set up, we go though the subsystems
+> list and try to create the entry for it, as it was doing before, but this time
+> we store the dentry to use it later on for removal, if necessary.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>  drivers/soc/qcom/qcom_stats.c | 77 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 75 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/soc/qcom/qcom_stats.c b/drivers/soc/qcom/qcom_stats.c
+> index fa30540b6583..baaa820c9a77 100644
+> --- a/drivers/soc/qcom/qcom_stats.c
+> +++ b/drivers/soc/qcom/qcom_stats.c
+> @@ -7,8 +7,10 @@
+>  #include <linux/device.h>
+>  #include <linux/io.h>
+>  #include <linux/module.h>
+> +#include <linux/notifier.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/remoteproc/qcom_rproc.h>
+>  #include <linux/seq_file.h>
+>  
+>  #include <linux/soc/qcom/smem.h>
+> @@ -68,11 +70,20 @@ struct appended_stats {
+>  	u32 reserved[3];
+>  };
+>  
+> +struct subsystem_priv {
+> +	const struct subsystem_data *subsystem;
+> +	struct dentry *root;
+> +	struct dentry *dentry;
+> +	struct notifier_block nb;
+> +	void *notifier;
+> +};
+> +
+>  struct qcom_stats_priv {
+>  	struct device dev;
+>  	struct stats_data *data;
+>  	struct dentry *root;
+>  	const struct stats_config *config;
+> +	struct subsystem_priv ss_priv[ARRAY_SIZE(subsystems)];
+>  };
+>  
+>  static void qcom_print_stats(struct seq_file *s, const struct sleep_stats *stat)
+> @@ -177,6 +188,57 @@ static void qcom_create_soc_sleep_stat_files(struct qcom_stats_priv *stats,
+>  	}
+>  }
+>  
+> +static int qcom_stats_subsys_ssr_notify(struct notifier_block *nb,
+> +				    unsigned long action,
+> +				    void *data)
+> +{
+> +	struct subsystem_priv *ss_priv = container_of(nb, struct subsystem_priv, nb);
+> +
+> +	switch (action) {
+> +	case QCOM_SSR_AFTER_POWERUP:
+> +		ss_priv->dentry = debugfs_create_file(ss_priv->subsystem->name, 0400, ss_priv->root,
+> +							(void *)ss_priv->subsystem,
+> +							&qcom_subsystem_sleep_stats_fops);
+> +		break;
+> +	case QCOM_SSR_BEFORE_SHUTDOWN:
+> +		debugfs_remove(ss_priv->dentry);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+> +static void qcom_register_subsystem_notifiers(struct qcom_stats_priv *stats)
+> +{
+> +	struct device *dev = &stats->dev;
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(subsystems); i++) {
+> +		const struct subsystem_data *subsystem = &subsystems[i];
+> +		struct subsystem_priv *ss_priv = &stats->ss_priv[i];
+> +
+> +		ss_priv->subsystem = subsystem;
+> +		ss_priv->root = stats->root;
+> +		ss_priv->nb.notifier_call = qcom_stats_subsys_ssr_notify;
+> +		ss_priv->notifier = qcom_register_ssr_notifier(subsystem->name, &ss_priv->nb);
+> +		if (IS_ERR(ss_priv->notifier))
+> +			dev_err(dev, "failed to register ssr notifier for %s (%ld)",
+> +				subsystem->name, PTR_ERR(ss_priv->notifier));
+> +	}
+> +}
+> +
+> +static void qcom_unregister_subsystem_notifiers(struct qcom_stats_priv *stats)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(subsystems); i++)
+> +		if (stats->ss_priv[i].notifier)
+> +			qcom_unregister_ssr_notifier(stats->ss_priv[i].notifier,
+> +							&stats->ss_priv[i].nb);
+> +}
+> +
+>  static void qcom_create_subsystem_stat_files(struct qcom_stats_priv *stats)
+>  {
+>  	const struct sleep_stats *stat;
+> @@ -188,12 +250,20 @@ static void qcom_create_subsystem_stat_files(struct qcom_stats_priv *stats)
+>  		return;
+>  
+>  	for (i = 0; i < ARRAY_SIZE(subsystems); i++) {
+> +		struct subsystem_priv *ss_priv = &stats->ss_priv[i];
+> +
+>  		stat = qcom_smem_get(subsystems[i].pid, subsystems[i].smem_item, NULL);
+>  		if (IS_ERR(stat))
+>  			continue;
+>  
+> -		debugfs_create_file(subsystems[i].name, 0400, root, (void *)&subsystems[i],
+> -				    &qcom_subsystem_sleep_stats_fops);
+> +		/*
+> +		 * At this point some subsystems have already started
+> +		 * and so we already missed the startup notification,
+> +		 * so let's create the entry post-startup.
+> +		 */
+> +		ss_priv->dentry = debugfs_create_file(&subsystems[i]->name, 0400, root,
 
-Hmm, I suppose the way to clean this up would be to have the Makefile
-compute this once, and pass in "-I $(selfdir)/../../.." to the
-compiler so we could just "#include <mm/gup_test.h>" directly?
+Please do not apply. There is a build issue here. Should be: subsystems[i].name
 
-If there aren't objections to something like that being too weird, I
-can write a follow-up patch which does that.
-
->
-> 2) Commit f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
-> claims that it is now required to "make headers_install" before building
-> the selftests. However, after applying your fix (not to imply that there
-> is anything wrong with the fix; it's fine), I am still able to build
-> vm/selftests, directly after a top-level "make clean".
->
-> I believe that this is because the selftests are directly including
-> gup_test.h, via relative up-and-over paths. And I recall (and also did a
-> quick dry run, to be sure) that this internal gup_test.h header is not
-> part of the headers_install list. So that seems to be all working as
-> intended. But I wanted to say all of this out loud, in order to be sure
-> I fully understand these build steps.
-
-I agree this is working as intended, my understanding is that "make
-headers_install" is really for the stuff under include/uapi/*, whereas
-headers under mm/ or lib/ aren't really meant to be "exposed to
-userspace" except for these particular selftests. So including them
-directly instead of looking for them under usr/include/ is
-intentional.
-
->
->
-> thanks,
-> --
-> John Hubbard
-> NVIDIA
+> +							(void *)&subsystems[i],
+> +							&qcom_subsystem_sleep_stats_fops);
+>  	}
+>  }
+>  
+> @@ -232,6 +302,7 @@ static int qcom_stats_probe(struct platform_device *pdev)
+>  	stats->data = d;
+>  	stats->root = root;
+>  
+> +	qcom_register_subsystem_notifiers(stats);
+>  	qcom_create_subsystem_stat_files(stats);
+>  	qcom_create_soc_sleep_stat_files(stats, reg);
+>  
+> @@ -245,6 +316,8 @@ static int qcom_stats_remove(struct platform_device *pdev)
+>  	struct qcom_stats_priv *stats = platform_get_drvdata(pdev);
+>  	struct dentry *root = stats->root;
+>  
+> +	qcom_unregister_subsystem_notifiers(stats);
+> +
+>  	debugfs_remove_recursive(root);
+>  
+>  	return 0;
+> -- 
+> 2.34.1
+> 

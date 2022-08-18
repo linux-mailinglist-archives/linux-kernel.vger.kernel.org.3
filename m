@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BC5598527
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB29598526
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245529AbiHROBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        id S245493AbiHROBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245508AbiHROAA (ORCPT
+        with ESMTP id S245618AbiHROAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:00:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722225756B
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:59:51 -0700 (PDT)
+        Thu, 18 Aug 2022 10:00:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7356D540;
+        Thu, 18 Aug 2022 07:00:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 108FFB82197
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 13:59:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A3B9C433C1;
-        Thu, 18 Aug 2022 13:59:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64C62B82197;
+        Thu, 18 Aug 2022 14:00:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC1BCC433C1;
+        Thu, 18 Aug 2022 13:59:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660831188;
-        bh=iZdCvpq6klP65xsk0NEvlBhn7btsT3f1Nqu32XzvKvM=;
+        s=k20201202; t=1660831199;
+        bh=GXZIItypEHjQWFs8f6Waz69s/m0DTcToAM/9CwRqUN8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o4b8FqCOfvm2yUHXDxTpD75aPTrN0e7BoWekb33I0YqDfpbxT+rP2YO2qAIKyl5rx
-         xnZi8LGk4DRbjLjtbgMA0bDajwYphTDFsXu8jP+QhynNakUOIcaRT6UY1BxaHG22Tb
-         /sD8iwWxiIco9hygUnv/JXCXMzvxlGGQCwJr0XI1exbMBoh7ySUlLq74hboW5STu4l
-         9/SHDqSOh8knREx27AZPRZJYbnOgPzZ3diuME/bPfNler5yBWSXHrp2sQoFxd/l29v
-         vP3AGbvsuFlDFRegFCODBFuv1E4gFdHpA866IENqHaXkSldDb27n9SpoOBob2rOSfl
-         N+AH0+ijyIOoA==
+        b=RVXozCtzXhgUvTEJmptj3ciD8Y3SvvJPtLtFjqJrlWq+NEDwuaNBfuLEayPrc42CN
+         yyCJibjvmPhDzJ05Jun4jCorRHUE3+mhdzJD2z1p4ZLQAKM6w2EaUwumVBoAAD370q
+         6PI5Hgal/UJZIvctJuuhDH2p7c7Kun3gkrdewZX9ZSsgK76a/lfPbL6s4JuPB5OlVT
+         Rh0OdOHBBo2jLas0MLN5j37p61NXafVpYLQ+Xf2F7qBv44m/lQMX9z34hHfIripXPq
+         WdbHZySdEhh5IijqL8mGmd5mLoGmqFlIwCumbIJwGUE40qIH5bkpfbJY8pDG/WcIr1
+         TYK5uVG5htO2g==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        William Zhang <william.zhang@broadcom.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org
-Subject: [PATCH 10/11] ARM: defconfig: fix CONFIG_SND_SOC_AC97_CODEC name
-Date:   Thu, 18 Aug 2022 15:57:19 +0200
-Message-Id: <20220818135737.3143895-9-arnd@kernel.org>
+To:     linux-arm-kernel@lists.infradead.org, Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Felipe Balbi <balbi@ti.com>, Tony Lindgren <tony@atomide.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 11/11] musb: fix USB_MUSB_TUSB6010 dependency
+Date:   Thu, 18 Aug 2022 15:57:20 +0200
+Message-Id: <20220818135737.3143895-10-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220818135737.3143895-1-arnd@kernel.org>
 References: <20220818135522.3143514-1-arnd@kernel.org>
@@ -63,30 +62,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The CONFIG_SND_SOC_AC97 symbol was recently enabled but does not
-actually exist. From the patch description, I assume that this
-was meant to be CONFIG_SND_SOC_AC97_CODEC, which is used in
-imx_v6_v7_defconfig.
+Turning on NOP_USB_XCEIV as builtin broke the TUSB6010 driver because
+of an older issue with the depencency.
 
-Fixes: 2cc1cd26e913 ("ARM: configs: Enable ASoC AC'97 glue")
+It is not necessary to forbid NOP_USB_XCEIV=y in combination with
+USB_MUSB_HDRC=m, but only the reverse, which causes the link failure
+from the original Kconfig change.
+
+Use the correct dependency to still allow NOP_USB_XCEIV=n or
+NOP_USB_XCEIV=y but forbid NOP_USB_XCEIV=m when USB_MUSB_HDRC=m
+to fix the multi_v7_defconfig for tusb.
+
+Fixes: ab37a7a890c1 ("ARM: multi_v7_defconfig: Make NOP_USB_XCEIV driver built-in")
+Fixes: c0442479652b ("usb: musb: Fix randconfig build issues for Kconfig options")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/configs/multi_v7_defconfig | 2 +-
+ drivers/usb/musb/Kconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 2b564defe33e..af79b21e2000 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -814,7 +814,7 @@ CONFIG_SND_SOC_TEGRA_TRIMSLICE=m
- CONFIG_SND_SOC_TEGRA_ALC5632=m
- CONFIG_SND_SOC_TEGRA_MAX98090=m
- CONFIG_SND_SOC_DAVINCI_MCASP=m
--CONFIG_SND_SOC_AC97=m
-+CONFIG_SND_SOC_AC97_CODEC=m
- CONFIG_SND_SOC_AK4642=m
- CONFIG_SND_SOC_CPCAP=m
- CONFIG_SND_SOC_CS42L51_I2C=m
+diff --git a/drivers/usb/musb/Kconfig b/drivers/usb/musb/Kconfig
+index f906dfd360d3..6c8f7763e75e 100644
+--- a/drivers/usb/musb/Kconfig
++++ b/drivers/usb/musb/Kconfig
+@@ -86,7 +86,7 @@ config USB_MUSB_TUSB6010
+ 	tristate "TUSB6010"
+ 	depends on HAS_IOMEM
+ 	depends on ARCH_OMAP2PLUS || COMPILE_TEST
+-	depends on NOP_USB_XCEIV = USB_MUSB_HDRC # both built-in or both modules
++	depends on NOP_USB_XCEIV!=m || USB_MUSB_HDRC=m
+ 
+ config USB_MUSB_OMAP2PLUS
+ 	tristate "OMAP2430 and onwards"
 -- 
 2.29.2
 

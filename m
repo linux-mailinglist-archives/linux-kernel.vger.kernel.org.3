@@ -2,142 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B19C59851E
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53508598518
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245400AbiHRN5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S245465AbiHRN6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245356AbiHRN5h (ORCPT
+        with ESMTP id S245485AbiHRN6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:57:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE90B5A48;
-        Thu, 18 Aug 2022 06:57:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C886616EA;
-        Thu, 18 Aug 2022 13:57:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43DD5C433D6;
-        Thu, 18 Aug 2022 13:57:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660831055;
-        bh=qqw2ZRKAM/HopXMmPqWG8KqLHJLGqfDq1lckUaBBS8Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cy10ULQIGxDyatCWqA/3oow8PAmwyVzNy7YkqEZxmZKow0w5Jle1X0Yjd0Xhd9yyh
-         kT7GDu4HtPhWfvw+9RX2zDgtjPuHSUYWwUyu1nK3MnHITs/ge3k9sJYhjCmkBf4dCo
-         J8J/HbpmfS4SMrgrNTzJHwgTCU6uAMA6501rT8hu03C7AFx74utljnrtVJ8w0viSX4
-         0k9ykb6DQ4h+FxBxCgEId1kTbFGG4mZtCQ2CyrWgBFpx9rluHCQSmIwKutI0Pj8okm
-         +encPvqOmVeKMqdHXtfC+8ePZIEY3In5ET6OQHUDpS6nkczYafXSeWo3GRCW6Y9/EC
-         LhVcicOuVd/CA==
-Date:   Thu, 18 Aug 2022 21:57:27 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Wei Fang <wei.fang@nxp.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        s.hauer@pengutronix.de, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        peng.fan@nxp.com, ping.bai@nxp.com, sudeep.holla@arm.com,
-        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com
-Subject: Re: [PATCH 1/3] dt-bings: net: fsl,fec: update compatible item
-Message-ID: <20220818135727.GG149610@dragon>
-References: <20220704101056.24821-1-wei.fang@nxp.com>
- <20220704101056.24821-2-wei.fang@nxp.com>
- <ef7e501a-b351-77f9-c4f7-74ab10283ed6@linaro.org>
- <20220818013344.GE149610@dragon>
- <fd41a409-d0e0-0026-4644-9058d1177c45@linaro.org>
- <20220818092257.GF149610@dragon>
- <a08b230c-d655-75ee-0f0c-8281b13b477b@linaro.org>
+        Thu, 18 Aug 2022 09:58:15 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39D82E3;
+        Thu, 18 Aug 2022 06:58:11 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4M7mgQ0Yqsz9sf4;
+        Thu, 18 Aug 2022 15:58:10 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Mh1iG2BKyRO9; Thu, 18 Aug 2022 15:58:10 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4M7mgP6sZWz9sdy;
+        Thu, 18 Aug 2022 15:58:09 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id DC8B78B767;
+        Thu, 18 Aug 2022 15:58:09 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id LlPoFkLgpU30; Thu, 18 Aug 2022 15:58:09 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.235.236])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9D11C8B763;
+        Thu, 18 Aug 2022 15:58:09 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 27IDw0Vu1993063
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 15:58:00 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 27IDw09J1993060;
+        Thu, 18 Aug 2022 15:58:00 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: [PATCH v3] spi: Add capability to perform some transfer with chipselect off
+Date:   Thu, 18 Aug 2022 15:57:49 +0200
+Message-Id: <fabbc87627e5ddc2c913b368ae99386668d8dcfb.1660830866.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a08b230c-d655-75ee-0f0c-8281b13b477b@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1660831067; l=3497; s=20211009; h=from:subject:message-id; bh=pBEp2sV1HSEbreVLmDNueVNSIkEvPWM2zi6OQ+L8A3M=; b=ruZBrXja6jNd1n+ZvqAsoBgHCZ9iAZPljuFSoWxEqAaOztZftEi4UMQVPPKMcs+KQxOnaWQ/yslv 5ExyNtw1AaL2/5vYPGW7ZLIbVNRNFIBeTu9RkgKriygiTi0QfmlV
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 12:46:33PM +0300, Krzysztof Kozlowski wrote:
-> On 18/08/2022 12:22, Shawn Guo wrote:
-> > On Thu, Aug 18, 2022 at 10:51:02AM +0300, Krzysztof Kozlowski wrote:
-> >> On 18/08/2022 04:33, Shawn Guo wrote:
-> >>> On Mon, Jul 04, 2022 at 11:12:09AM +0200, Krzysztof Kozlowski wrote:
-> >>>>> diff --git a/Documentation/devicetree/bindings/net/fsl,fec.yaml b/Documentation/devicetree/bindings/net/fsl,fec.yaml
-> >>>>> index daa2f79a294f..6642c246951b 100644
-> >>>>> --- a/Documentation/devicetree/bindings/net/fsl,fec.yaml
-> >>>>> +++ b/Documentation/devicetree/bindings/net/fsl,fec.yaml
-> >>>>> @@ -40,6 +40,10 @@ properties:
-> >>>>>            - enum:
-> >>>>>                - fsl,imx7d-fec
-> >>>>>            - const: fsl,imx6sx-fec
-> >>>>> +      - items:
-> >>>>> +          - enum:
-> >>>>> +              - fsl,imx8ulp-fec
-> >>>>> +          - const: fsl,imx6ul-fec
-> >>>>
-> >>>> This is wrong.  fsl,imx6ul-fec has to be followed by fsl,imx6q-fec. I
-> >>>> think someone made similar mistakes earlier so this is a mess.
-> >>>
-> >>> Hmm, not sure I follow this.  Supposing we want to have the following
-> >>> compatible for i.MX8ULP FEC, why do we have to have "fsl,imx6q-fec"
-> >>> here?
-> >>>
-> >>> 	fec: ethernet@29950000 {
-> >>> 		compatible = "fsl,imx8ulp-fec", "fsl,imx6ul-fec";
-> >>> 		...
-> >>> 	};
-> >>
-> >> Because a bit earlier this bindings is saying that fsl,imx6ul-fec must
-> >> be followed by fsl,imx6q-fec.
-> > 
-> > The FEC driver OF match table suggests that fsl,imx6ul-fec and fsl,imx6q-fec
-> > are not really compatible.
-> > 
-> > static const struct of_device_id fec_dt_ids[] = {
-> >         { .compatible = "fsl,imx25-fec", .data = &fec_devtype[IMX25_FEC], },
-> >         { .compatible = "fsl,imx27-fec", .data = &fec_devtype[IMX27_FEC], },
-> >         { .compatible = "fsl,imx28-fec", .data = &fec_devtype[IMX28_FEC], },
-> >         { .compatible = "fsl,imx6q-fec", .data = &fec_devtype[IMX6Q_FEC], },
-> >         { .compatible = "fsl,mvf600-fec", .data = &fec_devtype[MVF600_FEC], },
-> >         { .compatible = "fsl,imx6sx-fec", .data = &fec_devtype[IMX6SX_FEC], },
-> >         { .compatible = "fsl,imx6ul-fec", .data = &fec_devtype[IMX6UL_FEC], },
-> 
-> I don't see here any incompatibility. Binding driver with different
-> driver data is not a proof of incompatible devices.
+Some components require a few clock cycles with chipselect off before
+or/and after the data transfer done with CS on.
 
-To me, different driver data is a good sign of incompatibility.  It
-mostly means that software needs to program the hardware block
-differently.
+Typically IDT 801034 QUAD PCM CODEC datasheet states "Note *: CCLK
+should have one cycle before CS goes low, and two cycles after
+CS goes high".
 
+The cycles "before" are implicitely provided by all previous activity
+on the SPI bus. But the cycles "after" must be provided in order to
+terminate the SPI transfer.
 
-> Additionally, the
-> binding describes the hardware, not the driver.
-> 
-> >         { .compatible = "fsl,imx8mq-fec", .data = &fec_devtype[IMX8MQ_FEC], },
-> >         { .compatible = "fsl,imx8qm-fec", .data = &fec_devtype[IMX8QM_FEC], },
-> >         { /* sentinel */ }
-> > };
-> > MODULE_DEVICE_TABLE(of, fec_dt_ids);
-> > 
-> > Should we fix the binding doc?
-> 
-> Maybe, I don't know. The binding describes the hardware, so based on it
-> the devices are compatible. Changing this, except ABI impact, would be
-> possible with proper reason, but not based on Linux driver code.
+In order to use that kind of component, add a cs_off flag to
+spi_transfer struct. When this flag is set, the transfer is performed
+with chipselect off. This allows consummer to add a dummy transfer
+at the end of the transfer list which is performed with chipselect
+OFF, providing the required additional clock cycles.
 
-Well, if Linux driver code is written in the way that hardware requires,
-I guess that's just based on hardware characteristics.
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+This is a change in the approach. Now we offer the driver/consumer a way to perform an additional transfer with chipselect off.
 
-To me, having a device compatible to two devices that require different
-programming model is unnecessary and confusing.
+v2 is at https://patchwork.kernel.org/project/spi-devel-general/list/?series=618784&state=*&archive=both
 
-Shawn
+ drivers/spi/spi.c       | 12 +++++++++---
+ include/linux/spi/spi.h |  2 ++
+ 2 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 2a472dcf081e..ca71723d44a7 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1418,7 +1418,8 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
+ 	struct spi_statistics *statm = &ctlr->statistics;
+ 	struct spi_statistics *stats = &msg->spi->statistics;
+ 
+-	spi_set_cs(msg->spi, true, false);
++	xfer = list_first_entry(&msg->transfers, struct spi_transfer, transfer_list);
++	spi_set_cs(msg->spi, !xfer->cs_off, false);
+ 
+ 	SPI_STATISTICS_INCREMENT_FIELD(statm, messages);
+ 	SPI_STATISTICS_INCREMENT_FIELD(stats, messages);
+@@ -1486,10 +1487,15 @@ static int spi_transfer_one_message(struct spi_controller *ctlr,
+ 					 &msg->transfers)) {
+ 				keep_cs = true;
+ 			} else {
+-				spi_set_cs(msg->spi, false, false);
++				if (!xfer->cs_off)
++					spi_set_cs(msg->spi, false, false);
+ 				_spi_transfer_cs_change_delay(msg, xfer);
+-				spi_set_cs(msg->spi, true, false);
++				if (!list_next_entry(xfer, transfer_list)->cs_off)
++					spi_set_cs(msg->spi, true, false);
+ 			}
++		} else if (!list_is_last(&xfer->transfer_list, &msg->transfers) &&
++			   xfer->cs_off != list_next_entry(xfer, transfer_list)->cs_off) {
++			spi_set_cs(msg->spi, xfer->cs_off, false);
+ 		}
+ 
+ 		msg->actual_length += xfer->len;
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 7ab3fed7b804..cbb787f6b9ff 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -818,6 +818,7 @@ struct spi_res {
+  *      for this transfer. If 0 the default (from @spi_device) is used.
+  * @dummy_data: indicates transfer is dummy bytes transfer.
+  * @cs_change: affects chipselect after this transfer completes
++ * @cs_off: performs the transfer with chipselect off.
+  * @cs_change_delay: delay between cs deassert and assert when
+  *      @cs_change is set and @spi_transfer is not the last in @spi_message
+  * @delay: delay to be introduced after this transfer before
+@@ -930,6 +931,7 @@ struct spi_transfer {
+ 	unsigned	cs_change:1;
+ 	unsigned	tx_nbits:3;
+ 	unsigned	rx_nbits:3;
++	unsigned	cs_off:1;
+ #define	SPI_NBITS_SINGLE	0x01 /* 1bit transfer */
+ #define	SPI_NBITS_DUAL		0x02 /* 2bits transfer */
+ #define	SPI_NBITS_QUAD		0x04 /* 4bits transfer */
+-- 
+2.37.1
+

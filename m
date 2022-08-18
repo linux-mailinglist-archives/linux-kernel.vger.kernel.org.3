@@ -2,118 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BF6597AE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 03:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62235597AED
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 03:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235218AbiHRBQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 21:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
+        id S241785AbiHRBUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 21:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiHRBQf (ORCPT
+        with ESMTP id S231627AbiHRBT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 21:16:35 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EDA91D30;
-        Wed, 17 Aug 2022 18:16:32 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4M7Rks366zz6R9dc;
-        Thu, 18 Aug 2022 09:15:01 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP1 (Coremail) with SMTP id cCh0CgBXXOnskv1ixcflAQ--.22050S3;
-        Thu, 18 Aug 2022 09:16:30 +0800 (CST)
-Subject: Re: [PATCH v7 4/9] blk-throttle: fix io hung due to configuration
- updates
-To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai3@huawei.com >> yukuai (C)" <yukuai3@huawei.com>
-References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
- <20220802140415.2960284-5-yukuai1@huaweicloud.com>
- <Yvv3jcycOguuEbA3@slm.duckdns.org>
- <215b4842-c09f-d622-7127-c8b1d9ce3aa9@huaweicloud.com>
- <Yv0q7T5Eg6MzOIuU@slm.duckdns.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <d82305ef-1672-a648-f0b6-882bef1659f1@huaweicloud.com>
-Date:   Thu, 18 Aug 2022 09:16:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 17 Aug 2022 21:19:57 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3257C9C1E5;
+        Wed, 17 Aug 2022 18:19:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660785596; x=1692321596;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wjx0XqD9cFjWyD1bNJ9K30XZBXls3j00dj3A2yk+2NU=;
+  b=Ws1fJsFzAVqCOD2weFdZHBJmKPOHYHt/VYQWn+KscKc+l9m8Vopp0fJs
+   XmpWNcVzTiasJIrp4zdNcIK+rmxvvUdxiEsdug0+atphMMkAI8lfC5i1B
+   KJwbDQMGVZsXPV0TUGlr3qqFzQMNQ6GNv5oNF9dBwOgqgqyc7M/PVnpsI
+   ndXLKWX1Dvz66iS4M40jYG6ceFeOfWV16pokQNQaVvSUsjQb9FtO4kkha
+   AUzOegH6JMqkrFd8idO5uUkiYNhLGd1ilzKkn0ExuGPpkXYUYfx0MK/4G
+   GTRqS03uPkK5ZrLgRBYYna7HW16MYyOFHYBuQ6FDFBO+GeTR/pxjOEYjm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="293431273"
+X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
+   d="scan'208";a="293431273"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 18:19:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,244,1654585200"; 
+   d="scan'208";a="640670392"
+Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 17 Aug 2022 18:19:51 -0700
+Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oOUCN-0001YI-0L;
+        Thu, 18 Aug 2022 01:19:51 +0000
+Date:   Thu, 18 Aug 2022 09:19:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Zhen Lei <thunder.leizhen@huawei.com>
+Subject: Re: [PATCH v3 2/2] rcu: Simplify the code logic of rcu_init_nohz()
+Message-ID: <202208180940.Jks0rOXz-lkp@intel.com>
+References: <20220816124839.1911-3-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <Yv0q7T5Eg6MzOIuU@slm.duckdns.org>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgBXXOnskv1ixcflAQ--.22050S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw1kWFWfJw47KF45CFyxuFg_yoW8XrW8pr
-        48tF4kta1DX3srA3ZFv3W2qwnYyr48WFW5Jr98G3Wrt3Z8WryIgrs2kr4rCFy09r48Jay0
-        v34Sq3s5Ars5AFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816124839.1911-3-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Tejun!
+Hi Zhen,
 
-ÔÚ 2022/08/18 1:52, Tejun Heo Ð´µÀ:
-> On Wed, Aug 17, 2022 at 09:30:30AM +0800, Yu Kuai wrote:
->>> Would it be easier if the fields were signed? It's fragile and odd to
->>> explain "these are unsigned but if they underflow they behave just like
->>> signed when added" when they can just be signed. Also, I have a hard time
->>> understand what "preempt" means above.
->>
->> I think preempt shound never happen based on current FIFO
->> implementation, perhaps
-> 
-> Can you elaborate what "preempt" is?
+Thank you for the patch! Yet something to improve:
 
-Here preempt means that the bio that is throttled later somehow get
-dispatched earlier, Michal thinks it's better to comment that the code
-still works fine in this particular scenario.
+[auto build test ERROR on paulmck-rcu/dev]
+[also build test ERROR on linus/master v6.0-rc1 next-20220817]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> 
->>>> +	if (bps_limit != U64_MAX)
->>>> +		tg->bytes_skipped[rw] +=
->>>> +			calculate_bytes_allowed(bps_limit, jiffy_elapsed) -
->>>> +			tg->bytes_disp[rw];
->>>> +	if (iops_limit != UINT_MAX)
->>>> +		tg->io_skipped[rw] +=
->>>> +			calculate_io_allowed(iops_limit, jiffy_elapsed) -
->>>> +			tg->io_disp[rw];
->>>
->>> So, this is calculating the budgets to carry over. Can we name them
->>> accordingly? I don't know what "skipped" means.
->>
->> Yeah, thanks for you advice, art of naming is a little hard for me...
->> How do you think about these name: extended_bytes/io_budget?
-> 
-> How about carryover_{ios|bytes}?
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/rcu-nocb-Delete-local-variable-need_rcu_nocb_mask-in-rcu_init_nohz/20220816-205131
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
+config: hexagon-randconfig-r041-20220818 (https://download.01.org/0day-ci/archive/20220818/202208180940.Jks0rOXz-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a1d5079765918764de3ff6e3e63fa2db7f7c14df
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zhen-Lei/rcu-nocb-Delete-local-variable-need_rcu_nocb_mask-in-rcu_init_nohz/20220816-205131
+        git checkout a1d5079765918764de3ff6e3e63fa2db7f7c14df
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/
 
-Yes, that sounds good.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-By the way, should I use 'ios' here instead of 'io'? I was confused
-because there are many places that is using 'io' currently.
+All errors (new ones prefixed by >>):
 
-Thanks,
-Kuai
-> 
-> Thanks.
-> 
+   In file included from kernel/rcu/tree.c:4801:
+>> kernel/rcu/tree_nocb.h:1216:10: error: assigning to 'struct cpumask *' from 'const struct cpumask *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           cpumask = cpu_possible_mask;
+                   ^ ~~~~~~~~~~~~~~~~~
+   1 error generated.
 
+
+vim +1216 kernel/rcu/tree_nocb.h
+
+  1208	
+  1209	void __init rcu_init_nohz(void)
+  1210	{
+  1211		int cpu;
+  1212		struct rcu_data *rdp;
+  1213		struct cpumask *cpumask = NULL;
+  1214	
+  1215	#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
+> 1216		cpumask = cpu_possible_mask;
+  1217	#elif defined(CONFIG_NO_HZ_FULL)
+  1218		if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
+  1219			cpumask = tick_nohz_full_mask;
+  1220	#endif
+  1221	
+  1222		if (cpumask) {
+  1223			if (!cpumask_available(rcu_nocb_mask)) {
+  1224				if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
+  1225					pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
+  1226					return;
+  1227				}
+  1228			}
+  1229	
+  1230			cpumask_or(rcu_nocb_mask, rcu_nocb_mask, cpumask);
+  1231		}
+  1232	
+  1233		if (!cpumask_available(rcu_nocb_mask))
+  1234			return;
+  1235	
+  1236		if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
+  1237			pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
+  1238			cpumask_and(rcu_nocb_mask, cpu_possible_mask,
+  1239				    rcu_nocb_mask);
+  1240		}
+  1241		if (cpumask_empty(rcu_nocb_mask))
+  1242			pr_info("\tOffload RCU callbacks from CPUs: (none).\n");
+  1243		else
+  1244			pr_info("\tOffload RCU callbacks from CPUs: %*pbl.\n",
+  1245				cpumask_pr_args(rcu_nocb_mask));
+  1246		if (rcu_nocb_poll)
+  1247			pr_info("\tPoll for callbacks from no-CBs CPUs.\n");
+  1248	
+  1249		for_each_cpu(cpu, rcu_nocb_mask) {
+  1250			rdp = per_cpu_ptr(&rcu_data, cpu);
+  1251			if (rcu_segcblist_empty(&rdp->cblist))
+  1252				rcu_segcblist_init(&rdp->cblist);
+  1253			rcu_segcblist_offload(&rdp->cblist, true);
+  1254			rcu_segcblist_set_flags(&rdp->cblist, SEGCBLIST_KTHREAD_CB | SEGCBLIST_KTHREAD_GP);
+  1255			rcu_segcblist_clear_flags(&rdp->cblist, SEGCBLIST_RCU_CORE);
+  1256		}
+  1257		rcu_organize_nocb_kthreads();
+  1258	}
+  1259	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

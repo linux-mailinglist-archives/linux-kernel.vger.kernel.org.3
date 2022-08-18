@@ -2,119 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31B4597C80
+	by mail.lfdr.de (Postfix) with ESMTP id 89749597C7F
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 05:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242797AbiHRDvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 23:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
+        id S242824AbiHRDwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 23:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240247AbiHRDvN (ORCPT
+        with ESMTP id S240247AbiHRDwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 23:51:13 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1936D60FF
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:51:12 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id p128so368990oif.9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 20:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=z/kt4xsiqT5uh1tSKfd39tJzduEkjiNNtsPz4ODYScQ=;
-        b=hUsX8rTlrvTeQvHroIs2XSAw7rftVr3j4T1DMDpJAOhE75zyhypDjS8nZn2dJ1PAtV
-         PyyiE9zWnK4AdZgnzKyYo5SaIU4lzFOnMQhymG4K/BunYWpJmPqfh2ayCKiRVtyMXUSa
-         qWJ/8Kn31W0eviW63LQ0bNlJd7r6XSayEsgXrpJrTkzbtn676A0CSZlXget+ct41QgUJ
-         6pnc/4akLOnoonrqqS59n0HN3I+svs8h75IiIISyBFN+rKSSBroei3IQKCB+ACuprsL1
-         ysf9YPNasyRTNxgNyKrZrBFrU7rRsKPFfAWfn2JKWrr+VV6hdcFI5VeL8KpweMamYNQs
-         J9Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=z/kt4xsiqT5uh1tSKfd39tJzduEkjiNNtsPz4ODYScQ=;
-        b=Ihnlp6tXHfR0DimR60OumVpiaDVoBefXLur0U5vkJFzbSxEq4mY3blsh9j92FNkg32
-         8z/Stu1yGvagFEzWq3QZkEKOzRbxBiswEf+jNRzrX58wp2aayU2Hi7qZIUVLrtR6N82D
-         qz1AaXLZJBM3r+Jv7FzNfG74ANvP8v1qQdZ3xW3csuiEjha9DSAippCSoHXeRb7WyXnD
-         InkuJ2RvlmdGI9Z24p6bwt8ziS/HxwyDMYANUuJ6rHWVT8sRCemu0i4BHBQovuOgKBEH
-         zgHsXmt+8eSwNtLyVHMTvf1A6h0+2gQEFLP3YBtYu1wQ+syDuESP1eGRrLFwYFaDrRGP
-         Wmdw==
-X-Gm-Message-State: ACgBeo0VqU1zl+C3FM+iFpFZ0DJUxTxzhTj+g14ItQulZUVP8AyPpWGa
-        3z8JGhUG7dnmHk6LbEuJX3af0A==
-X-Google-Smtp-Source: AA6agR5nK0pO97s1k3xUg01xcKqTwc3MTVG/hu97TQDzw0VbKl4p+cqjklTjMetgLlKH5V34+pGaOA==
-X-Received: by 2002:a05:6808:200f:b0:343:470a:cd22 with SMTP id q15-20020a056808200f00b00343470acd22mr2776801oiw.52.1660794671410;
-        Wed, 17 Aug 2022 20:51:11 -0700 (PDT)
-Received: from localhost (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id b6-20020a9d5d06000000b0063695ad0cbesm142984oti.66.2022.08.17.20.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 20:51:10 -0700 (PDT)
-From:   Steev Klimaszewski <steev@kali.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     Amit Pundir <amit.pundir@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] soundwire: qcom: remove unneeded check
-Date:   Wed, 17 Aug 2022 22:51:05 -0500
-Message-Id: <20220818035105.5510-1-steev@kali.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 17 Aug 2022 23:52:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3F16527F;
+        Wed, 17 Aug 2022 20:52:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DB1561542;
+        Thu, 18 Aug 2022 03:52:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79D45C433D6;
+        Thu, 18 Aug 2022 03:52:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660794758;
+        bh=NSlez/1Y8KI9kkSJxWI8jwfTv3VmOAFhtcUY0bfupfk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=j2ZO9whBC0e2Fm6KyvLDdPeo34tA7YwXGmDJfOxL90rai22v4AwXxUzg7wUHtEM+Q
+         z1zkLK/LRvkNnXQbcSZ5mccBcneYNc0xGOEOyrRSQRv6CH8sAkBM+X07jyXxSBEPgS
+         alcRGtwemQEXBWjYHXgt85mQBsWqyQXHGDqpJHmAlh3Kl2AgdFzBn5U9FqCjW95cS4
+         Gxxv8IY8t6kJzTwHJy4LX1scN0EYzhBUPW8XMBtr5WkVMx4ZG4KBU2VFOAnZkFlqRg
+         ATjlIn6HUaWShLIqxW/3TN4G/bl4wyt5Rob+zzSbJWcsqntNzew/gnjLF7PiiNeyPb
+         ktU5qo5YhXFcw==
+Date:   Wed, 17 Aug 2022 20:52:37 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     cgel.zte@gmail.com
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xu.xin16@zte.com.cn
+Subject: Re: [PATCH 0/2] Namespaceify two sysctls related with route
+Message-ID: <20220817205237.3e701f0b@kernel.org>
+In-Reply-To: <20220816022522.81772-1-xu.xin16@zte.com.cn>
+References: <20220816022522.81772-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 1fd0d85affe4d6 ("soundwire: qcom: Add flag for software clock gating check") 
-added a flag for software clock gating check, however in commit
-33ba01788889666 ("soundwire: qcom: Add support for controlling audio CGCR from HLOS")
-the same check was added without the flag, so we would still end up failing
-the software clock gating check.
+On Tue, 16 Aug 2022 02:25:22 +0000 cgel.zte@gmail.com wrote:
+> Different netns has different requirements on the setting of error_cost
+> and error_burst, which are related with limiting the frequency of sending
+> ICMP_DEST_UNREACH packets or outputing error message to dmesg.
 
-Originally reported by Amit Pundir on DB845c, I also saw it on the
-Lenovo Yoga C630, right before the splat, we would see
+Could you add a bit more detail about why you need this knob per netns?
+The code looks fine, no objections there, what I'm confused by is that
+we don't have this knob for IPv6. So is it somehow important enough for
+v4 to be per-ns and yet not important enough to exist at all on v6?
 
-qcom-soundwire wcd934x-soundwire.6.auto: Failed to get audio_cgcr reset required for soundwire-v1.6.0
+Could you add Documentation in Documentation/admin-guide/sysctl/net.rst
+while at it, and use READ_ONCE / WRITE_ONCE when accessing the sysctl?
 
-however, SDM845 has a soundwire-v1.3.0
-
-Since the flag was added in 1fd0d85affe, lets just remove this one.
-
-Fixes: 33ba01788889 ("soundwire: qcom: Add support for controlling audio CGCR from HLOS")
-Signed-off-by: Steev Klimaszewski <steev@kali.org>
-Reported-by: Amit Pundir <amit.pundir@linaro.org>
----
- drivers/soundwire/qcom.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-index 709a7c1e0704..b621f7fb866f 100644
---- a/drivers/soundwire/qcom.c
-+++ b/drivers/soundwire/qcom.c
-@@ -1355,10 +1355,6 @@ static int qcom_swrm_probe(struct platform_device *pdev)
- 	ctrl->bus.compute_params = &qcom_swrm_compute_params;
- 	ctrl->bus.clk_stop_timeout = 300;
- 
--	ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
--	if (IS_ERR(ctrl->audio_cgcr))
--		dev_err(dev, "Failed to get audio_cgcr reset required for soundwire-v1.6.0\n");
--
- 	ret = qcom_swrm_get_port_config(ctrl);
- 	if (ret)
- 		goto err_clk;
--- 
-2.35.1
-
+Please make sure to CC the relevant maintainers. IP maintainers were
+not CCed here. The get_maintainers script will tell you who to CC,
+please use it.

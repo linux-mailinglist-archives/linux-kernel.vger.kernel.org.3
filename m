@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD44959846A
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1ED959845C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245235AbiHRNk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
+        id S244679AbiHRNkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244844AbiHRNjN (ORCPT
+        with ESMTP id S245144AbiHRNjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:39:13 -0400
+        Thu, 18 Aug 2022 09:39:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808E65B054;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802985AC7F;
         Thu, 18 Aug 2022 06:39:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE10C616C1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4C77616C6;
         Thu, 18 Aug 2022 13:39:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01D1C43151;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA50DC4315D;
         Thu, 18 Aug 2022 13:39:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1660829947;
-        bh=9XS4hip4BrJAqy/9+ozgOsQC/UqbifDwKLRcpBNPQ1Y=;
+        bh=88BIzikTkD6g/4hks5fn4fU/mpPMY8uzoxDnFybpsys=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lrYCoYBkRRODPD2MY7dTOBdzdN7m+zOQtiq2/wO0k3s+x4KWqoAdBHaipmR82MsRf
-         WlEYDV9BFKeOxvFG3zgeikNtkkSJA7t/NBJv4x3S6hTpasuXWG7bcvI/+jpR3+S33g
-         N9j1FCps9TTpdgBTqV/SPjxVnFYFcoEzCXiKHuMTSuH5QFMM+TGoJAuI9cEZmDdf3t
-         SI63gua6n9kQwZ9YqM7WliTsImB6dYT+LCkODXblvhM4xzCxKiU5QZYkkApefckWMl
-         TSwvrmPlT0G0B0XH1iK7rIONsOuAzTi7HcyupdAhtrQhmzQ2LXQLBUi2W5lsRIc4SD
-         qNHtpv2P/gQLw==
+        b=PTaFOkjHzurVV3Tb/YV8czaY695Zf+l3dMmGduldqbhO75P0wI7P1i09Zz2CVFZyI
+         6kG4CqYv4eX2vytjODKqCA/QZw2G+CVhAImouywlYvf4CNx2jCZt1m9xylUxsL2Ny0
+         1GQBD8kqb9Q7IN3whc81R4sPwl/6z/HUYxWK90Pio2gfT1dw7k4Wj2gPa08SJLqrv9
+         ebeCeBX2sQN7yVTcCq0lCPAsVxiZOj8RLP9Yh3UltQBlSmQKE/o6J1E+bvBAcWQFth
+         qOFUy2HKz376fkmLzn8Tx93uWxb8zD0kzc1/SC+d5vjXwy+HTn3udjzKoAYMav5YUY
+         MD1NoAtpgdVxA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1oOfjl-00AY7x-L7;
+        id 1oOfjl-00AY81-MM;
         Thu, 18 Aug 2022 15:39:05 +0200
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>, corbet@lwn.net
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 12/13] serial: document start_rx member at struct uart_ops
-Date:   Thu, 18 Aug 2022 15:38:58 +0200
-Message-Id: <5d07ae2eec8fbad87e623160f9926b178bef2744.1660829433.git.mchehab@kernel.org>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Xiubo Li <xiubli@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH 13/13] fs/dcache: fix a kernel-doc markup
+Date:   Thu, 18 Aug 2022 15:38:59 +0200
+Message-Id: <9d2676a83ebee327b97b82f3c2ab76a2e53756d1.1660829433.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <cover.1660829433.git.mchehab@kernel.org>
 References: <cover.1660829433.git.mchehab@kernel.org>
@@ -59,36 +62,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix this doc build warning:
-	./include/linux/serial_core.h:397: warning: Function parameter or member 'start_rx' not described in 'uart_ops'
+There's no such thing of using the same kernel-doc markup for multiple
+functions. Trying to be creative using a single one with a comma meant
+for it to serve two functions will do the wrong thing and produce a
+warning:
+
+	./include/linux/dcache.h:310: warning: expecting prototype for dget, dget_dlock(). Prototype was for dget_dlock() instead
+
+Address it by duplicating the comment.
+
+Yet, it probably makes sense to explain when/why someone has to use
+each variant of it.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
 See [PATCH 00/13] at: https://lore.kernel.org/all/cover.1660829433.git.mchehab@kernel.org/
 
- include/linux/serial_core.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ include/linux/dcache.h | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-index aef3145f2032..6e4f4765d209 100644
---- a/include/linux/serial_core.h
-+++ b/include/linux/serial_core.h
-@@ -141,6 +141,14 @@ struct gpio_desc;
-  *	Locking: none.
-  *	Interrupts: caller dependent.
+diff --git a/include/linux/dcache.h b/include/linux/dcache.h
+index 92c78ed02b54..5f254284bb83 100644
+--- a/include/linux/dcache.h
++++ b/include/linux/dcache.h
+@@ -299,7 +299,7 @@ extern char *dentry_path(const struct dentry *, char *, int);
+ /* Allocation counts.. */
+ 
+ /**
+- *	dget, dget_dlock -	get a reference to a dentry
++ *	dget_dlock -	get a reference to a dentry
+  *	@dentry: dentry to get a reference to
   *
-+ * @start_rx: ``void ()(struct uart_port *port)``
+  *	Given a dentry or %NULL pointer increment the reference count
+@@ -313,6 +313,14 @@ static inline struct dentry *dget_dlock(struct dentry *dentry)
+ 	return dentry;
+ }
+ 
++/**
++ *	dget -	get a reference to a dentry
++ *	@dentry: dentry to get a reference to
 + *
-+ *	Start receiving characters.
-+ *
-+ *	Locking: @port->lock taken.
-+ *	Interrupts: locally disabled.
-+ *	This call must not sleep
-+ *
-  * @stop_rx: ``void ()(struct uart_port *port)``
-  *
-  *	Stop receiving characters; the @port is in the process of being closed.
++ *	Given a dentry or %NULL pointer increment the reference count
++ *	if appropriate and return the dentry. A dentry will not be
++ *	destroyed when it has references.
++ */
+ static inline struct dentry *dget(struct dentry *dentry)
+ {
+ 	if (dentry)
 -- 
 2.37.1
 

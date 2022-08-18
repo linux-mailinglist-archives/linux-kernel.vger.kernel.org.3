@@ -2,123 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C5C598AB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E78598ABC
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345121AbiHRRtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
+        id S1344718AbiHRRyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241671AbiHRRts (ORCPT
+        with ESMTP id S239324AbiHRRyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:49:48 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E64C00CF
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:49:46 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id jm11so2094250plb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:49:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=9DsDwT22PvIrk8KHMwJ4ojUKw5VmQXY3VeVmmTdugFY=;
-        b=dWVWBD0NtA2732x4FF3h3VXV9QrF8WCyK9Xq3/5pIPDN5c86oYi6pd3E9Tqzmih61D
-         XnsOe6zN2dBFud6HcHR2TkmRnpUN4cbSmB6/ezyBroFT1kk1jpFkmivR4jYnNugQ8FCC
-         BPR07fC/5T+Bhdaj7/2hzP3SiucmLnoMKltgU0WQYGyMOMiTax5IVuAaE0BhlUR80QW2
-         0z+vUjonVlwZtRBhiS8KckiRKkzQp0Dvl97cyMHVh9HwpFXUc5/ZzSTltF/N2xqtr1vV
-         iurbgm6EKrbjvJUwUSpZP1hN02Xu1jzOe4/p7363eNgCDdKQuhlWoxy6WYYvyO4G0tDR
-         W1eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=9DsDwT22PvIrk8KHMwJ4ojUKw5VmQXY3VeVmmTdugFY=;
-        b=IqjF9GXMsUowrQlACS6NAhbpEORkylScXj+yTZAET5S0ODyrLfhJ79sL9rZYwEpMPv
-         5wG6rCD8rLVD/0ADD5f6ddd5l95KI/l6aIONI+Zhi8NXBTvahtcsz9LZnboM/kXsHNFK
-         cNm012J8m67vSy3vwrJGYwC6gBMV9pVi5YTGWb++43loC1UPpsgWnVXTXzERnldUd+8g
-         8F/ktx5+PyiNEh1Oa/albfhjZpxF2rVUg36Ld7gadg4MuylmGv+dk25qJIyysnVbjjqL
-         ImeK64/nV9N0XATZ5tQZ7DJ4kAc6p5Q76BnmetnzWqWWAbg9eCR29XLZIEBmnO8JfFxq
-         cL/w==
-X-Gm-Message-State: ACgBeo3dkhgKRW4WJshzmvzGl4of1BlV1T+o8f7s3lb05VgYBAphgXzZ
-        GUHOMlHlrsTK1wCkVkVZg6OX9A==
-X-Google-Smtp-Source: AA6agR4xdRGg/7F/tdy10J4KT9KsESLpZLsqDBIGuLR0y4Zg077lgqYhN6Lj/jXTbwiQ/RkkA+Tc8Q==
-X-Received: by 2002:a17:90b:4f42:b0:1f5:6976:7021 with SMTP id pj2-20020a17090b4f4200b001f569767021mr4302756pjb.30.1660844985933;
-        Thu, 18 Aug 2022 10:49:45 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 186-20020a6219c3000000b00535f293bac6sm736695pfz.14.2022.08.18.10.49.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 10:49:45 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 17:49:42 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 22/26] KVM: VMX: Move LOAD_IA32_PERF_GLOBAL_CTRL
- errata handling out of setup_vmcs_config()
-Message-ID: <Yv57tmu09nOQcFrf@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-23-vkuznets@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802160756.339464-23-vkuznets@redhat.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        Thu, 18 Aug 2022 13:54:20 -0400
+Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE408688A;
+        Thu, 18 Aug 2022 10:54:15 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1660845251; bh=bQPe7B4ZCavRnagWoIqyzCrbJt6mWXMyQjixEkuQ6Pw=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=a/dSJC3iVkkSKzJdT7hR9v/d2iSqsuWf88EYWvE13FKdozwM/bLdOa6wA/iTod2nv
+         u7tjP1v3jHurbWNjso9Pz2J9HNikex5HMSruwf9aqyJr5TisMYl8mo/QBgInduRM40
+         A7gIo5oxuEsgxEZ1vhUcs3RsC5e/xbqJl5TDWMqg=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH 2/3] ASoC: apple: mca: Start new platform driver
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
+In-Reply-To: <82B580B4-85BF-4ABA-B098-98E3CA9EE247@cutebit.org>
+Date:   Thu, 18 Aug 2022 19:54:09 +0200
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>, asahi@lists.linux.dev,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <414CEE0D-AED4-4900-88BE-A3BD993D79DD@cutebit.org>
+References: <20220808224153.3634-1-povik+lin@cutebit.org>
+ <20220808224153.3634-3-povik+lin@cutebit.org>
+ <53c8f062-a760-c65f-479e-53e7991b3f66@linaro.org>
+ <82B580B4-85BF-4ABA-B098-98E3CA9EE247@cutebit.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
-> While it seems reasonable to not expose LOAD_IA32_PERF_GLOBAL_CTRL controls
-> to L1 hypervisor on buggy CPUs, such change would inevitably break live
-> migration from older KVMs where the controls are exposed. Keep the status quo
-> for now, L1 hypervisor itself is supposed to take care of the errata.
 
-As noted before, this statement is wrong as it requires guest FMS == host FMS,
-but it's irrelevant because KVM can emulate the control unconditionally.  I'll
-test and fold in my suggested patch[*] (assuming it works) and reword this part
-of the changelog.  Ah, and I'll also need to fold in a patch to actually emulate
-the controls without hardware support.
 
-[*] https://lore.kernel.org/all/YtnZmCutdd5tpUmz@google.com
+> On 9. 8. 2022, at 10:54, Martin Povi=C5=A1er <povik+lin@cutebit.org> =
+wrote:
+>=20
+>=20
+>> On 9. 8. 2022, at 10:47, Krzysztof Kozlowski =
+<krzysztof.kozlowski@linaro.org> wrote:
+>>=20
+>> On 09/08/2022 01:41, Martin Povi=C5=A1er wrote:
 
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 59 +++++++++++++++++++++++++-----------------
->  1 file changed, 35 insertions(+), 24 deletions(-)
-> 
+(...)
 
-...
+>>> +
+>>> +	mca->rstc =3D devm_reset_control_get_shared(&pdev->dev, NULL);
+>>> +	if (IS_ERR(mca->rstc)) {
+>>> +		dev_dbg(&pdev->dev, "couldn't obtain reset control: =
+%pe\n", mca->rstc);
+>>> +		mca->rstc =3D NULL;
+>>> +	}
+>>=20
+>> Similar question.
+>=20
+> Same as above, there=E2=80=99s supposed to be
+>=20
+>  resets:
+>    maxItems: 1
+>=20
+> in the schema.
 
-> @@ -8192,6 +8199,10 @@ static __init int hardware_setup(void)
->  	if (setup_vmcs_config(&vmcs_config, &vmx_capability) < 0)
->  		return -EIO;
->  
-> +	if (cpu_has_perf_global_ctrl_bug())
-> +		pr_warn_once("kvm: VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL "
-> +			     "does not work properly. Using workaround\n");
+Preparing an iteration of the series, I see there *was* the reset in
+the schema. Let me know if there is some issue with it.
 
-Any objections to opportunistically tweaking this?
+Martin
 
-		pr_warn_once("kvm: CPU has VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL erratum,"
-			     "using MSR load/store lists for PERF_GLOBAL_CTRL\n");
+>=20
+>> Best regards,
+>> Krzysztof
+>>=20
+>=20
+> Martin
+>=20
 
-> +
->  	if (boot_cpu_has(X86_FEATURE_NX))
->  		kvm_enable_efer_bits(EFER_NX);
->  
-> -- 
-> 2.35.3
-> 

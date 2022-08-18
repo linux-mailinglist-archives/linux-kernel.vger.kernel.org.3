@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DB5598A8E
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B64C598A90
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344914AbiHRRez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
+        id S1344816AbiHRRen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242760AbiHRRet (ORCPT
+        with ESMTP id S1344666AbiHRRej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:34:49 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DB8B8A52
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:34:48 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id gk3so4513956ejb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:34:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=8C8Dlbh6hGdjbOzzw+aOgiCLWngIvwE1cGPWagEPaog=;
-        b=SoX+TY0L/rFLydx6islcW0cPp3zArfZX1L5teZW57X9csGqiO6VZGcHCnZmjqss5ZB
-         8LVaZlv0G2jdvgvLG035gdYCm0vbOdZxpv+GQLfINDFBiaPtRfu44FxFUD+kYM8eXwih
-         eR8dFlewXiXk3bVOa9S/0ZqHWvRKs+n5rwSHI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=8C8Dlbh6hGdjbOzzw+aOgiCLWngIvwE1cGPWagEPaog=;
-        b=mvqFUa2Z9AYuAX3WUZoQIaHY0excphtn1bQqaJHUA4/K/bs1yHxixTgv/NcP4kKmSO
-         H63zZ/yokNDiPyjeTo4qwQ+wDhF0BMe3ixQA6mD+75EeouYMzDuvLXUwfc7YNfgMG61D
-         DUIu/bnABFynYpeOPWfg+aCmaA3CXIgyzzrubbEwmpGk82RWjb9hPiFc8TEHvUjuLW8q
-         Upki99njXbx3tR2lCjRWc3GD1aYMV0Iwfp6NEZuXf9BhwaAkAO2LT0beEj7Hzq6qxT6v
-         mRkmZX/mPVGH/TFzi8kSmCeSYd+N7Ug1D2JDoTptp3vw5Ye2/R9XZObpfbSjeB5wz6KB
-         M+7g==
-X-Gm-Message-State: ACgBeo1qKRhs4PFI9CtjKeODziXUkRXwjNtMzVR/O3XUh3/+rPfiFQi8
-        cn+ovmR82iywFlF4pBxIIFDwTn4uExtH1MaE
-X-Google-Smtp-Source: AA6agR4l11/YDBAzONYL3RdN5+IbSj5kxC5JdG+AJMqFaB+MoQMH6nDs2Zlu3+OC0RcCjI4zfujf7Q==
-X-Received: by 2002:a17:906:cc4d:b0:730:b5fd:8986 with SMTP id mm13-20020a170906cc4d00b00730b5fd8986mr2442643ejb.428.1660844086770;
-        Thu, 18 Aug 2022 10:34:46 -0700 (PDT)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id a2-20020a1709066d4200b00730df07629fsm1125889ejt.174.2022.08.18.10.34.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 10:34:45 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id s23so1170253wmj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:34:44 -0700 (PDT)
-X-Received: by 2002:a05:600c:4ece:b0:3a6:28:bc59 with SMTP id
- g14-20020a05600c4ece00b003a60028bc59mr5714170wmq.154.1660844084283; Thu, 18
- Aug 2022 10:34:44 -0700 (PDT)
+        Thu, 18 Aug 2022 13:34:39 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4907BB7ECE
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:34:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660844079; x=1692380079;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=j9dyTTvzViV+de7VJ/NUqqrzYps/6g0N6F+mX6NZ13I=;
+  b=Aphw9cQBymMXeWqgA/XzNEydQe0nUbbqG4x7GG05lHRZF409YHh7h/Xh
+   S4n4fTWKRCqu8WoSk/1Bugjwz7PsfI/g+yr1FhXKcSExfSiXqiApZ0SOk
+   fJHx+IXvdbj7yyzJaRYOjEt4rJd7dBXphfrCeutc0c7pMQtCRTMpClkau
+   6NuOyFFwf2DxXCOMRF/u2povqnPtvhUz76iDpxjzflIu8nxfbEyoDwDOm
+   tpQ5cbjgwFYAelCMWpyzZzMRyvbK7ksEIMD0YlNvihgw9HwOk5ahJ1BmJ
+   06eJwAm/muuAfzmP2nhL4r2VM5BNkI9LKrlsUd4Y6LCTYjAfP0KFc5Q8Q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="318846747"
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="318846747"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 10:34:37 -0700
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="853491041"
+Received: from amalikya-mobl.amr.corp.intel.com (HELO [10.212.238.171]) ([10.212.238.171])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 10:34:37 -0700
+Message-ID: <8b2b0155-31a8-4470-c0ed-9747b21d66c9@intel.com>
+Date:   Thu, 18 Aug 2022 10:34:36 -0700
 MIME-Version: 1.0
-References: <20220817162703.728679-1-bigeasy@linutronix.de> <20220817162703.728679-2-bigeasy@linutronix.de>
-In-Reply-To: <20220817162703.728679-2-bigeasy@linutronix.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 18 Aug 2022 10:34:28 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgCRJx74T0NyRrpWi6XRwy50y8Wzap5XK_3-hN8dbuxTw@mail.gmail.com>
-Message-ID: <CAHk-=wgCRJx74T0NyRrpWi6XRwy50y8Wzap5XK_3-hN8dbuxTw@mail.gmail.com>
-Subject: Re: [PATCH 1/9] slub: Make PREEMPT_RT support less convoluted
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/5] x86/microcode/intel: Allow a late-load only if a min
+ rev is specified
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ashok Raj <ashok.raj@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+References: <20220813223825.3164861-1-ashok.raj@intel.com>
+ <20220813223825.3164861-4-ashok.raj@intel.com>
+ <Yvn5vBRNz9z8Y4A9@worktop.programming.kicks-ass.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Yvn5vBRNz9z8Y4A9@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 9:27 AM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
->
-> The slub code already has a few helpers depending on PREEMPT_RT. Add a few
-> more and get rid of the CONFIG_PREEMPT_RT conditionals all over the place.
->
-> No functional change.
+On 8/15/22 00:46, Peter Zijlstra wrote:
+> What if any validation do you have to ensure min_rev does as promised?
+> That is, ucode can very easily lie about the number and still remove an
+> MSR or CPUID enumerated feature.
 
-Looks like a fine cleanup, but I'd prefer that
+We can absolutely add sanity checks to this.  It would not be hard at
+all to, for instance, dump out all the CPUID leaves we can get our hands
+on and diff them before and after a ucode update.
 
-  #define use_lockless_fast_path()       {(true)/(false)}
+That said, min_rev is *architectural*.  It includes an architectural
+promise from Intel that the ucode won't lie.  If Intel is breaking
+architectural promises, it has bigger problems on its hands.
 
-to look much less like it's some function call. The first read-through
-it looked like some very dynamic thing to me.
-
-Just doing
-
-   #define USE_LOCKLESS_FAST_PATH       ..
-
-would make it much more visually obvious that it's not some kind of
-complex run-time decision.
-
-               Linus
+Bugs happen, of course -- even bugs in architectural features.  If there
+are enough bugs that we can't trust min_rev, late-loading will just get
+disabled again, probably permanently.  Our Intel colleagues should have
+all the incentive in the world to be very, very careful with min_rev.

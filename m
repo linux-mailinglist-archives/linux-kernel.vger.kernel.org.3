@@ -2,173 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364A0598362
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD1B598368
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 14:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244733AbiHRMrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 08:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56358 "EHLO
+        id S244752AbiHRMsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 08:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244446AbiHRMrC (ORCPT
+        with ESMTP id S244483AbiHRMsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 08:47:02 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4296A494
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:47:00 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id e20so1122832wri.13
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:46:59 -0700 (PDT)
+        Thu, 18 Aug 2022 08:48:19 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6126012A9A
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:48:18 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso1939468pjh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 05:48:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=tA1R14Sg29SD+OU/KrtHL4uyHeuXBhNpWPoNMcJBZBc=;
-        b=KGZRJ7mnecJzTW9KKPgbHSz9k+hCFduy9ztHKv9FJHxLUw5es+Te9JWtvk08tZkiMG
-         b7FAVfUf1pbTfq9G+9v+rQDCFT68/GOhTblK5DmfrOhTxwj1XBa+ujasgC3eCMd3telC
-         TXOr6WMgOsLwU9oXp0Kuk1MJuRKyXf0xOCGC2CFkc8HZ064b1PcHiWsNNB4EHK7WA82F
-         0glADvqN5hFRHpxIbMQ4qHClMWqwihuxZ9exY1xCDEKv6QmMfDOdp46jEkgauOOjlDwk
-         hEZ8wDv9KBaOdQlh0oR+xZ+V46TSQ0Dl1yxAvFzJ8pjuSRaq4fu3rQcldJTe7EtmweMw
-         AJWw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=SMq0cA2jEsn6WUyEAj1aw0vQrzMP34F5/Qh2zJxCnf8=;
+        b=8F/j6dgpNdtCdvGjJwoeXeGFkbJpvyprWVFaTMVY0I04GiTIWWX9BlGy5aMX/FZqBc
+         wSvdwLVXA8rUx0L3/j72vCOnKOE4YUATu38FDrESPwXie6DXG1hpVFhrYNJ5Ppe2yls6
+         bsEjtPhuhypyi9AObjyA4yDccxYkhGf4wATPgia3GD1AIcW9/fYqIBTWGty4/kvQb3dp
+         1HyHWaH9xfuoMCQbesTLLrUwyh651YyEZUX5zH80+/Oxf6Uspa2TUl5n9vi8Pyi+xib+
+         UH2v7u0e51Y75IhU6ONR7RgZz9ManOiVJZUgH8q5K5heAxKcy2ANAdtGRj6S6ZE96Nm1
+         x89w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=tA1R14Sg29SD+OU/KrtHL4uyHeuXBhNpWPoNMcJBZBc=;
-        b=ScYJHJDKCldE6krd751wLf54PD7WP0qK/X2Ux3bRcRIPhTsY9iTzGYj2CRSWIFw+32
-         Fwtcj0y/N3iSUlxUxOuE02tf1bMKX+CrWSVyQX01v+C+MNZn6u5pyB9QY6xg2+DfuhgL
-         0H7VphXaEdv/3NFePhqUOQiZ9/KijZ6FsmBg4IjrN2Lf+wmNG4ofBPayTKHzBG1WeRYk
-         sjOS57iz1qLf+aXK+EXR5P6H79K4bb6Bw38LW3OZDp00f0rw3q+MxFM40F/Xa+bUQ5PE
-         +K14YMIpBokQYM0Fen5nBSWGR22vLB/U/Xm3pxnsJ5YG0zrQ2DjdWfybolvAxEGU77h0
-         eSdQ==
-X-Gm-Message-State: ACgBeo0BoY5o8VyLrZXFtjSHA+2NXZ83rCMjy9mEJBLZ5PXkw3xETZgb
-        7KF0RMxt872VwFCAfTcMP7TssQ==
-X-Google-Smtp-Source: AA6agR530W/+EKo2o0KHAo/XNpXNqu6Oo57BaqO6dvk2mtHtcuvLeT62hVx9REO/7HO5AUtUiLOaMg==
-X-Received: by 2002:a05:6000:3c6:b0:220:5efd:423c with SMTP id b6-20020a05600003c600b002205efd423cmr1616366wrg.214.1660826818469;
-        Thu, 18 Aug 2022 05:46:58 -0700 (PDT)
-Received: from p330.kohl.home (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
-        by smtp.gmail.com with ESMTPSA id t24-20020a7bc3d8000000b003a5bd5ea215sm1975741wmj.37.2022.08.18.05.46.57
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=SMq0cA2jEsn6WUyEAj1aw0vQrzMP34F5/Qh2zJxCnf8=;
+        b=Tfx4Oupp3ekPJKadbDHZ6lQZKhnH6nuHbR1UcfYgxOhyzGoIokh84myReml7nR7Hlk
+         Rv9z47w2YxjZlf0mibA//JXHTzS6wyuC59py8j3TkLIN3oMhjQfJwwT3T/rmFwiZv1W4
+         +RrFwBdv956nhc4aTE3qfz5SMFupkO+ZEzfV2Er2UNEvl9EQIqzq6aC+WbidOkWi475h
+         tl+Wmz+t5mXIpaYq/Z/bFuZkQLt2bxN/CiKzJGk5A1fGvZ9EM47wLfNetFb+MGwkgJpc
+         4Wmo1jR8kFreZxDeDB4d2DsMSUB5/v6fUI8FfmyUPYKBl9dhbbWonwNCPieVry9uRJ3S
+         B9sg==
+X-Gm-Message-State: ACgBeo02OmrWn5mIrtBgQ+yJaf3m2ZjFDaFrhGCQn7aHG40P0Qr6LAyu
+        lcRqYISIZ/dujst6fJSAqZGYoA==
+X-Google-Smtp-Source: AA6agR5tyBTcCYcVMENIvyQyB3mc6gL9geKpMkd8MDRKN1UQ8YhRNv8srMvQPh1H+evwhM4/9NPOPQ==
+X-Received: by 2002:a17:90b:38cb:b0:1f5:2321:63cb with SMTP id nn11-20020a17090b38cb00b001f5232163cbmr8908237pjb.110.1660826897816;
+        Thu, 18 Aug 2022 05:48:17 -0700 (PDT)
+Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.230])
+        by smtp.gmail.com with ESMTPSA id c16-20020a621c10000000b0052f3a7bc29fsm1477449pfc.202.2022.08.18.05.48.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 05:46:57 -0700 (PDT)
-From:   =?UTF-8?q?Christian=20Kohlschu=CC=88tter?= 
-        <christian@kohlschutter.com>
-To:     broonie@kernel.org
-Cc:     christian@kohlschutter.com, heiko@sntech.de, lgirdwood@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        m.reichl@fivetechno.de, robin.murphy@arm.com,
-        vincent.legoll@gmail.com, wens@kernel.org
-Subject: [PATCH v4] regulator: core: Resolve supply name earlier to prevent double-init
-Date:   Thu, 18 Aug 2022 12:46:47 +0000
-Message-Id: <20220818124646.6005-1-christian@kohlschutter.com>
-X-Mailer: git-send-email 2.36.2
-In-Reply-To: <YvorNPDQQr2SH/NF@sirena.org.uk>
-References: <YvorNPDQQr2SH/NF@sirena.org.uk>
+        Thu, 18 Aug 2022 05:48:17 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        mingo@redhat.com, peterz@infradead.org, rostedt@goodmis.org,
+        bsegall@google.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, tj@kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH v6 0/9] sched/fair: task load tracking optimization and cleanup
+Date:   Thu, 18 Aug 2022 20:47:56 +0800
+Message-Id: <20220818124805.601-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Kohlschütter <christian@kohlschutter.com>
+Hi all,
 
-Previously, an unresolved regulator supply reference upon calling
-regulator_register on an always-on or boot-on regulator caused
-set_machine_constraints to be called twice.
+This patch series is optimization and cleanup for task load tracking when
+task migrate CPU/cgroup or switched_from/to_fair(), based on tip/sched/core.
 
-This in turn may initialize the regulator twice, leading to voltage
-glitches that are timing-dependent. A simple, unrelated configuration
-change may be enough to hide this problem, only to be surfaced by
-chance.
+There are three types of detach/attach_entity_load_avg (except fork and exit)
+for a fair task:
+1. task migrate CPU (on_rq migrate or wake_up migrate)
+2. task migrate cgroup (detach and attach)
+3. task switched_from/to_fair (detach later attach)
 
-One such example is the SD-Card voltage regulator in a NanoPI R4S that
-would not initialize reliably unless the registration flow was just
-complex enough to allow the regulator to properly reset between calls.
+patch 1-3 cleanup the task change cgroup case by remove cpu_cgrp_subsys->fork(),
+since we already do the same thing in sched_cgroup_fork().
 
-Fix this by re-arranging regulator_register, trying resolve the
-regulator's supply early enough that set_machine_constraints does not
-need to be called twice.
+patch 5/9 optimize the task migrate CPU case by combine detach into dequeue.
 
-Signed-off-by: Christian Kohlschütter <christian@kohlschutter.com>
----
- drivers/regulator/core.c | 52 +++++++++++++++++++++++++---------------
- 1 file changed, 33 insertions(+), 19 deletions(-)
+patch 6/9 fix another detach on unattached task case which has been woken up
+by try_to_wake_up() but is waiting for actually being woken up by
+sched_ttwu_pending().
 
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index d8373cb04f9..a5033c6ba01 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -5496,7 +5496,39 @@ regulator_register(const struct regulator_desc *regulator_desc,
- 	BLOCKING_INIT_NOTIFIER_HEAD(&rdev->notifier);
- 	INIT_DELAYED_WORK(&rdev->disable_work, regulator_disable_work);
- 
--	/* preform any regulator specific init */
-+	/* set regulator constraints */
-+	if (init_data)
-+		rdev->constraints = kmemdup(&init_data->constraints,
-+					    sizeof(*rdev->constraints),
-+					    GFP_KERNEL);
-+	else
-+		rdev->constraints = kzalloc(sizeof(*rdev->constraints),
-+					    GFP_KERNEL);
-+	if (!rdev->constraints) {
-+		ret = -ENOMEM;
-+		goto clean;
-+	}
-+
-+	if (init_data && init_data->supply_regulator)
-+		rdev->supply_name = init_data->supply_regulator;
-+	else if (regulator_desc->supply_name)
-+		rdev->supply_name = regulator_desc->supply_name;
-+
-+	if ((rdev->supply_name && !rdev->supply) &&
-+			(rdev->constraints->always_on ||
-+			 rdev->constraints->boot_on)) {
-+		/* Try to resolve the name of the supplying regulator here first
-+		 * so we prevent double-initializing the regulator, which may
-+		 * cause timing-specific voltage brownouts/glitches that are
-+		 * hard to debug.
-+		 */
-+		ret = regulator_resolve_supply(rdev);
-+		if (ret)
-+			rdev_dbg(rdev, "unable to resolve supply early: %pe\n",
-+					 ERR_PTR(ret));
-+	}
-+
-+	/* perform any regulator specific init */
- 	if (init_data && init_data->regulator_init) {
- 		ret = init_data->regulator_init(rdev->reg_data);
- 		if (ret < 0)
-@@ -5522,24 +5554,6 @@ regulator_register(const struct regulator_desc *regulator_desc,
- 		    (unsigned long) atomic_inc_return(&regulator_no));
- 	dev_set_drvdata(&rdev->dev, rdev);
- 
--	/* set regulator constraints */
--	if (init_data)
--		rdev->constraints = kmemdup(&init_data->constraints,
--					    sizeof(*rdev->constraints),
--					    GFP_KERNEL);
--	else
--		rdev->constraints = kzalloc(sizeof(*rdev->constraints),
--					    GFP_KERNEL);
--	if (!rdev->constraints) {
--		ret = -ENOMEM;
--		goto wash;
--	}
--
--	if (init_data && init_data->supply_regulator)
--		rdev->supply_name = init_data->supply_regulator;
--	else if (regulator_desc->supply_name)
--		rdev->supply_name = regulator_desc->supply_name;
--
- 	ret = set_machine_constraints(rdev);
- 	if (ret == -EPROBE_DEFER) {
- 		/* Regulator might be in bypass mode and so needs its supply
+patch 7/9 remove unnecessary limitation that we would fail when change
+cgroup of forked task which hasn't been woken up by wake_up_new_task().
+
+patch 8-9 optimize post_init_entity_util_avg() for fair task and skip
+setting util_avg and runnable_avg for !fair task at the fork time.
+
+Thanks!
+
+
+Changes in v6:
+ - Use TASK_NEW to check new forked task which hasn't been woken up
+   by wake_up_new_task(), suggested by Peter Zijlstra. Thanks!
+ - Update comments related to post_init_entity_util_avg() in patch 8/9.
+
+Changes in v5:
+ - Don't do code movements in patch 6/9, which complicate code review,
+   as suggested by Vincent. Thanks!
+ - Fix a build error of typo in patch 7/9.
+
+Changes in v4:
+ - Drop detach/attach_entity_cfs_rq() refactor patch in the last version.
+ - Move new forked task check to task_change_group_fair().
+
+Changes in v3:
+ - One big change is this series don't freeze PELT sum/avg values to be
+   used as initial values when re-entering fair any more, since these
+   PELT values become much less relevant.
+ - Reorder patches and collect tags from Vincent and Dietmar. Thanks!
+ - Fix detach on unattached task which has been woken up by try_to_wake_up()
+   but is waiting for actually being woken up by sched_ttwu_pending().
+ - Delete TASK_NEW which limit forked task from changing cgroup.
+ - Don't init util_avg and runnable_avg for !fair taks at fork time.
+
+Changes in v2:
+ - split task se depth maintenance into a separate patch3, suggested
+   by Peter.
+ - reorder patch6-7 before patch8-9, since we need update_load_avg()
+   to do conditional attach/detach to avoid corner cases like twice
+   attach problem.
+
+Chengming Zhou (9):
+  sched/fair: maintain task se depth in set_task_rq()
+  sched/fair: remove redundant cpu_cgrp_subsys->fork()
+  sched/fair: reset sched_avg last_update_time before set_task_rq()
+  sched/fair: update comments in enqueue/dequeue_entity()
+  sched/fair: combine detach into dequeue when migrating task
+  sched/fair: fix another detach on unattached task corner case
+  sched/fair: allow changing cgroup of new forked task
+  sched/fair: move task sched_avg attach to enqueue_task_fair()
+  sched/fair: don't init util/runnable_avg for !fair task
+
+ kernel/sched/core.c  |  52 ++++---------------
+ kernel/sched/fair.c  | 120 ++++++++++++++++++++-----------------------
+ kernel/sched/sched.h |   6 +--
+ 3 files changed, 66 insertions(+), 112 deletions(-)
+
 -- 
-2.36.2
+2.37.2
 

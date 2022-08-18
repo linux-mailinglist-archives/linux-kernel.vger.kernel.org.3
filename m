@@ -2,114 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC5A597EE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A42E597F19
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 09:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243738AbiHRHCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 03:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
+        id S243827AbiHRHTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 03:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235733AbiHRHCh (ORCPT
+        with ESMTP id S241323AbiHRHTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 03:02:37 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B101C86B6F
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:02:33 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id z20so862422ljq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 00:02:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Ue7+dLTS9HtxTPrFYVqCFYSq/oTJauCpRZyChqde9i4=;
-        b=i0NkYkwb9axhr+B/PWooFtVIbh5+86wm/+fbgKl/dKuQA2D61nFTdV6OI+wEVniZeE
-         x238BpbsQ1x4a7RHM64nYIUjxzTp/7HF4SIKzMK6XQFHhtOGHDVmVBgdeD9cCIunGBHp
-         83w7KPlyM59kNFOIkViS1F5HaYY7koaX4sYPKlAHmEFvOq4CvkiXWc7LK2zIecbCJBv7
-         /SVxpM8i/clE+3+6D/yAi3lckJC36pmJTsMIEjvGJIiDDGstfNnmYnpziZTQP8QV9Fpu
-         CsQfKGmXNOJBFNy87Mq+pIFXPKbZbmlMP+GeGN4bgwDcx5yl+WOU3CgEFI7MqnqiyFkR
-         Yg0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Ue7+dLTS9HtxTPrFYVqCFYSq/oTJauCpRZyChqde9i4=;
-        b=Dtrwge085LH4ynZGj2nUdLD3OID9g1Ttxjo9dMycaUv6eOcTILkQLN4/Xa1cFdnkXI
-         ZxkxqIT3cf4clNNlBW0kDBu4eZqvi2PI6x5EBXDbuADQp6BTIBGntBKw+Ddr+46PJzae
-         Y+HLjPgfmqc7lNVWgW3YBF/Vgh0Uks5M4pMceReyr/ycRuFRT1OLPS+RXmzSGDiSpnZl
-         lUVSUqxScXXOhprQgUy160o3ynS9Qq+WCWsGlhNHlgqayQwPuKJvLmlA99csvZ5GjoBk
-         9jTK3UZdMSO/qo7RG41NBmHOhzYWhbvQ1z4JPjURx3UcHCV0oPe1CC+eJURhT9AmBu7W
-         RZQw==
-X-Gm-Message-State: ACgBeo15b0OmVhGEcghCmzMCk8Sja9+l9zyQjYGg2Shml7pmMwQtPHA8
-        AcuZTolvow7LCY9CNLIVdds54w==
-X-Google-Smtp-Source: AA6agR47H/AvKjCxlUoA9J8rhI+zKwWJcqe09u39XlOJFuSv7PI5ijvh+4mTedgjzI2slrvSuUI1zA==
-X-Received: by 2002:a05:651c:543:b0:25f:dbbb:9cd4 with SMTP id q3-20020a05651c054300b0025fdbbb9cd4mr453724ljp.495.1660806152102;
-        Thu, 18 Aug 2022 00:02:32 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
-        by smtp.gmail.com with ESMTPSA id c22-20020a056512325600b0048b998be041sm98016lfr.309.2022.08.18.00.02.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 00:02:31 -0700 (PDT)
-Message-ID: <2823e662-55a1-0d9f-e95d-40d6f3b93723@linaro.org>
-Date:   Thu, 18 Aug 2022 10:02:29 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFT PATCH v2 02/14] arm64: dts: qcom: msm8996: split TCSR halt
- regs out of mutex
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220817130342.568396-1-krzysztof.kozlowski@linaro.org>
- <20220817130342.568396-3-krzysztof.kozlowski@linaro.org>
- <fd1492fa-4244-b283-d2a6-b4ffac7d53d6@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fd1492fa-4244-b283-d2a6-b4ffac7d53d6@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 18 Aug 2022 03:19:42 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A045C8E47F;
+        Thu, 18 Aug 2022 00:19:41 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 520542006BA;
+        Thu, 18 Aug 2022 09:19:40 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E632F2006AF;
+        Thu, 18 Aug 2022 09:19:39 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 149BE1820F57;
+        Thu, 18 Aug 2022 15:19:38 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org, vkoul@kernel.org,
+        alexander.stein@ew.tq-group.com, marex@denx.de
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com, Richard Zhu <hongxing.zhu@nxp.com>
+Subject: [PATCH v3 3/6] phy: freescale: imx8m-pcie: Add iMX8MP PCIe PHY support
+Date:   Thu, 18 Aug 2022 15:02:30 +0800
+Message-Id: <1660806153-29001-4-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1660806153-29001-1-git-send-email-hongxing.zhu@nxp.com>
+References: <1660806153-29001-1-git-send-email-hongxing.zhu@nxp.com>
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/08/2022 23:57, Konrad Dybcio wrote:
-> 
-> 
-> On 17.08.2022 15:03, Krzysztof Kozlowski wrote:
->> The TCSR halt regs are next to TCSR mutex, so before converting the TCSR
->> mutex into device with address space, we need to split the halt regs to
->> its own syscon device.  This also describes more accurately the devices
->> and their IO address space.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
-> Not tested on a device, but looks good to the eye:
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> 
-> On a note, are they really named TCSR_1 and TCSR_2 in the docs?
-> Qualcomm is usually more exquisite in their naming :P
+Add the i.MX8MP PCIe PHY support
 
-This is not entirely separate address space, therefore it does not have
-a separate name. The address space name is still TCSR_MUTEX which
-consists of actual MUTEX regs, halt regs and bunch of others. The second
-one 0x7a0000 (where label I renamed to tcsr_2) is called TCSR_REGS.
+Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+---
+ drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 150 ++++++++++++++-------
+ 1 file changed, 104 insertions(+), 46 deletions(-)
 
-This applies to other patches as well, so maybe you prefer to have
-labels matching the spec? The first would be tcsr_mutex_regs, although
-it is not entirely correct, because it does not include now the TCSR
-mutex regs...
+diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+index ad7d2edfc414..3463b4299f2f 100644
+--- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
++++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+@@ -11,6 +11,8 @@
+ #include <linux/mfd/syscon.h>
+ #include <linux/mfd/syscon/imx7-iomuxc-gpr.h>
+ #include <linux/module.h>
++#include <linux/of_address.h>
++#include <linux/of_device.h>
+ #include <linux/phy/phy.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+@@ -31,12 +33,10 @@
+ #define IMX8MM_PCIE_PHY_CMN_REG065	0x194
+ #define  ANA_AUX_RX_TERM		(BIT(7) | BIT(4))
+ #define  ANA_AUX_TX_LVL			GENMASK(3, 0)
+-#define IMX8MM_PCIE_PHY_CMN_REG75	0x1D4
+-#define  PCIE_PHY_CMN_REG75_PLL_DONE	0x3
++#define IMX8MM_PCIE_PHY_CMN_REG075	0x1D4
++#define  ANA_PLL_DONE			0x3
+ #define PCIE_PHY_TRSV_REG5		0x414
+-#define  PCIE_PHY_TRSV_REG5_GEN1_DEEMP	0x2D
+ #define PCIE_PHY_TRSV_REG6		0x418
+-#define  PCIE_PHY_TRSV_REG6_GEN2_DEEMP	0xF
+ 
+ #define IMX8MM_GPR_PCIE_REF_CLK_SEL	GENMASK(25, 24)
+ #define IMX8MM_GPR_PCIE_REF_CLK_PLL	FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x3)
+@@ -47,16 +47,29 @@
+ #define IMX8MM_GPR_PCIE_SSC_EN		BIT(16)
+ #define IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE	BIT(9)
+ 
++#define IMX8MP_GPR_REG0			0x0
++#define IMX8MP_GPR_PHY_APB_RST		BIT(4)
++#define IMX8MP_GPR_PHY_INIT_RST		BIT(5)
++
++enum imx8_pcie_phy_type {
++	IMX8MM,
++	IMX8MP,
++};
++
+ struct imx8_pcie_phy {
+ 	void __iomem		*base;
++	struct device		*dev;
+ 	struct clk		*clk;
+ 	struct phy		*phy;
++	struct regmap		*hsio_blk_ctrl;
+ 	struct regmap		*iomuxc_gpr;
+ 	struct reset_control	*reset;
++	struct reset_control	*perst;
+ 	u32			refclk_pad_mode;
+ 	u32			tx_deemph_gen1;
+ 	u32			tx_deemph_gen2;
+ 	bool			clkreq_unused;
++	enum imx8_pcie_phy_type	variant;
+ };
+ 
+ static int imx8_pcie_phy_init(struct phy *phy)
+@@ -68,31 +81,27 @@ static int imx8_pcie_phy_init(struct phy *phy)
+ 	reset_control_assert(imx8_phy->reset);
+ 
+ 	pad_mode = imx8_phy->refclk_pad_mode;
+-	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
+-	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+-			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
+-			   imx8_phy->clkreq_unused ?
+-			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
+-	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+-			   IMX8MM_GPR_PCIE_AUX_EN,
+-			   IMX8MM_GPR_PCIE_AUX_EN);
+-	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+-			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
+-	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+-			   IMX8MM_GPR_PCIE_SSC_EN, 0);
+-
+-	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+-			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
+-			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
+-			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
+-			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
+-	usleep_range(100, 200);
+-
+-	/* Do the PHY common block reset */
+-	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+-			   IMX8MM_GPR_PCIE_CMN_RST,
+-			   IMX8MM_GPR_PCIE_CMN_RST);
+-	usleep_range(200, 500);
++	switch (imx8_phy->variant) {
++	case IMX8MM:
++		/* Tune PHY de-emphasis setting to pass PCIe compliance. */
++		if (imx8_phy->tx_deemph_gen1)
++			writel(imx8_phy->tx_deemph_gen1,
++			       imx8_phy->base + PCIE_PHY_TRSV_REG5);
++		if (imx8_phy->tx_deemph_gen2)
++			writel(imx8_phy->tx_deemph_gen2,
++			       imx8_phy->base + PCIE_PHY_TRSV_REG6);
++		break;
++	case IMX8MP:
++		reset_control_assert(imx8_phy->perst);
++
++		/* release pcie_phy_apb_reset and pcie_phy_init_resetn */
++		regmap_update_bits(imx8_phy->hsio_blk_ctrl, IMX8MP_GPR_REG0,
++				   IMX8MP_GPR_PHY_APB_RST |
++				   IMX8MP_GPR_PHY_INIT_RST,
++				   IMX8MP_GPR_PHY_APB_RST |
++				   IMX8MP_GPR_PHY_INIT_RST);
++		break;
++	}
+ 
+ 	if (pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ||
+ 	    pad_mode == IMX8_PCIE_REFCLK_PAD_UNUSED) {
+@@ -120,20 +129,44 @@ static int imx8_pcie_phy_init(struct phy *phy)
+ 		       imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG065);
+ 	}
+ 
+-	/* Tune PHY de-emphasis setting to pass PCIe compliance. */
+-	if (imx8_phy->tx_deemph_gen1)
+-		writel(imx8_phy->tx_deemph_gen1,
+-		       imx8_phy->base + PCIE_PHY_TRSV_REG5);
+-	if (imx8_phy->tx_deemph_gen2)
+-		writel(imx8_phy->tx_deemph_gen2,
+-		       imx8_phy->base + PCIE_PHY_TRSV_REG6);
++	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
++	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
++			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
++			   imx8_phy->clkreq_unused ?
++			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
++	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
++			   IMX8MM_GPR_PCIE_AUX_EN,
++			   IMX8MM_GPR_PCIE_AUX_EN);
++	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
++			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
++	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
++			   IMX8MM_GPR_PCIE_SSC_EN, 0);
++
++	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
++			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
++			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
++			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
++			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
++	usleep_range(100, 200);
+ 
+-	reset_control_deassert(imx8_phy->reset);
++	/* Do the PHY common block reset */
++	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
++			   IMX8MM_GPR_PCIE_CMN_RST,
++			   IMX8MM_GPR_PCIE_CMN_RST);
++
++	switch (imx8_phy->variant) {
++	case IMX8MP:
++		reset_control_deassert(imx8_phy->perst);
++		fallthrough;
++	case IMX8MM:
++		reset_control_deassert(imx8_phy->reset);
++		usleep_range(200, 500);
++		break;
++	}
+ 
+ 	/* Polling to check the phy is ready or not. */
+-	ret = readl_poll_timeout(imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG75,
+-				 val, val == PCIE_PHY_CMN_REG75_PLL_DONE,
+-				 10, 20000);
++	ret = readl_poll_timeout(imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG075,
++				 val, val == ANA_PLL_DONE, 10, 20000);
+ 	return ret;
+ }
+ 
+@@ -160,18 +193,33 @@ static const struct phy_ops imx8_pcie_phy_ops = {
+ 	.owner		= THIS_MODULE,
+ };
+ 
++static const struct of_device_id imx8_pcie_phy_of_match[] = {
++	{.compatible = "fsl,imx8mm-pcie-phy", .data = (void *)IMX8MM},
++	{.compatible = "fsl,imx8mp-pcie-phy", .data = (void *)IMX8MP},
++	{ },
++};
++MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
++
+ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+ {
+ 	struct phy_provider *phy_provider;
+ 	struct device *dev = &pdev->dev;
++	const struct of_device_id *of_id;
+ 	struct device_node *np = dev->of_node;
+ 	struct imx8_pcie_phy *imx8_phy;
+ 	struct resource *res;
+ 
++	of_id = of_match_device(imx8_pcie_phy_of_match, dev);
++	if (!of_id)
++		return -EINVAL;
++
+ 	imx8_phy = devm_kzalloc(dev, sizeof(*imx8_phy), GFP_KERNEL);
+ 	if (!imx8_phy)
+ 		return -ENOMEM;
+ 
++	imx8_phy->dev = dev;
++	imx8_phy->variant = (enum imx8_pcie_phy_type)of_id->data;
++
+ 	/* get PHY refclk pad mode */
+ 	of_property_read_u32(np, "fsl,refclk-pad-mode",
+ 			     &imx8_phy->refclk_pad_mode);
+@@ -208,6 +256,22 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+ 		dev_err(dev, "Failed to get PCIEPHY reset control\n");
+ 		return PTR_ERR(imx8_phy->reset);
+ 	}
++	if (imx8_phy->variant == IMX8MP) {
++		/* Grab HSIO MIX config register range */
++		imx8_phy->hsio_blk_ctrl =
++			 syscon_regmap_lookup_by_compatible("fsl,imx8mp-hsio-blk-ctrl");
++		if (IS_ERR(imx8_phy->hsio_blk_ctrl)) {
++			dev_err(dev, "Unable to find HSIO MIX registers\n");
++			return PTR_ERR(imx8_phy->hsio_blk_ctrl);
++		}
++
++		imx8_phy->perst =
++			devm_reset_control_get_exclusive(dev, "perst");
++		if (IS_ERR(imx8_phy->perst)) {
++			dev_err(dev, "Failed to get PCIE PHY PERST control\n");
++			return PTR_ERR(imx8_phy->perst);
++		}
++	}
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	imx8_phy->base = devm_ioremap_resource(dev, res);
+@@ -225,12 +289,6 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+ 	return PTR_ERR_OR_ZERO(phy_provider);
+ }
+ 
+-static const struct of_device_id imx8_pcie_phy_of_match[] = {
+-	{.compatible = "fsl,imx8mm-pcie-phy",},
+-	{ },
+-};
+-MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
+-
+ static struct platform_driver imx8_pcie_phy_driver = {
+ 	.probe	= imx8_pcie_phy_probe,
+ 	.driver = {
+-- 
+2.25.1
 
-
-
-Best regards,
-Krzysztof

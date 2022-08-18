@@ -2,121 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BF8597B79
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F23597B72
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 04:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242750AbiHRCU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 Aug 2022 22:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S242743AbiHRCYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 Aug 2022 22:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242744AbiHRCU5 (ORCPT
+        with ESMTP id S233588AbiHRCYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 Aug 2022 22:20:57 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2384490C50
-        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 19:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660789256; x=1692325256;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RW94JfL1RSFVdNhd7XTObyaK9QdzniX0J+xar8BEqWI=;
-  b=MtKjMNkpgcjfq6abKhSn+euqiBQjay6S1Ict00a3APHnObBQntrgTTqG
-   E/tUD1zjpvI06WT2FSSLrhwJwBOPpOByJEG0oQ8SRm9Kwfk/jt7oFMTt7
-   f/kIXQ7Dauco+Dk6pgX5dEz8mxaQ4tjXW5Of6VJpISFnHl6zrKkvhyfKz
-   P34fJbjJcXRKfld4tU3/KOz/eKSSl2vW9IZShsjEt/eVAt/2tUB/hKmeo
-   L3LEq3CsCG0qAj5EgSM2w2fTa7PdKltWPLEWRmOnlzMQoyoL8VbR2atGZ
-   0577pFko456nghQx7c+wTTapNtsK1oP91mrYGr2q1ufYcNFs50y1u7ISU
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="356640434"
-X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
-   d="scan'208";a="356640434"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2022 19:20:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
-   d="scan'208";a="640683882"
-Received: from lkp-server02.sh.intel.com (HELO 81d7e1ade3ba) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 17 Aug 2022 19:20:54 -0700
-Received: from kbuild by 81d7e1ade3ba with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oOV9R-0001cD-1M;
-        Thu, 18 Aug 2022 02:20:53 +0000
-Date:   Thu, 18 Aug 2022 10:20:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bo Jiao <Bo.Jiao@mediatek.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Felix Fietkau <nbd@nbd.name>,
-        Sujuan Chen <sujuan.chen@mediatek.com>,
-        Ryder Lee <ryder.lee@mediatek.com>
-Subject: drivers/net/wireless/mediatek/mt76/mt7915/mmio.c:341
- __mt7915_reg_addr() warn: always true condition '(addr <= 4294967295) =>
- (0-u32max <= u32max)'
-Message-ID: <202208181013.Jmha89rK-lkp@intel.com>
+        Wed, 17 Aug 2022 22:24:30 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B3871BFD;
+        Wed, 17 Aug 2022 19:24:28 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M7TB61KXxzXdpZ;
+        Thu, 18 Aug 2022 10:20:14 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 18 Aug 2022 10:24:26 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.61) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 18 Aug 2022 10:24:25 +0800
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <rostedt@goodmis.org>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <namhyung@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>
+CC:     <yangjihong1@huawei.com>
+Subject: [PATCH v4] perf/core: Fix reentry problem in perf_output_read_group
+Date:   Thu, 18 Aug 2022 10:21:21 +0800
+Message-ID: <20220818022121.116939-1-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.61]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3b06a2755758937add738545ba4a544fc5a1c56d
-commit: cd4c314a65d3cce6486f8303e42aca04fd9f9011 mt76: mt7915: refine register definition
-date:   7 months ago
-config: ia64-randconfig-m031-20220814 (https://download.01.org/0day-ci/archive/20220818/202208181013.Jmha89rK-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
+perf_output_read_group may respond to IPI request of other cores and invoke
+__perf_install_in_context function. As a result, hwc configuration is modified.
+causing inconsistency and unexpected consequences.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Syzkaller has reported a problem with this scenario:
 
-smatch warnings:
-drivers/net/wireless/mediatek/mt76/mt7915/mmio.c:341 __mt7915_reg_addr() warn: always true condition '(addr <= 4294967295) => (0-u32max <= u32max)'
+Internal error: Oops - undefined instruction: 0 [#1] SMP
+Modules linked in:
+CPU: 1 PID: 15523 Comm: syz-executor.3 Not tainted 5.10.0 #6
+Hardware name: linux,dummy-virt (DT)
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO BTYPE=--)
+pc : read_pmevcntrn+0x1e4/0x1ec arch/arm64/kernel/perf_event.c:423
+lr : read_pmevcntrn+0x1e4/0x1ec arch/arm64/kernel/perf_event.c:423
+sp : ffffa000174d6ee0
+x29: ffffa000174d6ee0 x28: ffffedbca6b17a40
+x27: ffffa000174d7310 x26: ffff4b3ec102e398
+x25: 00000000ffffffff x24: 00000000ffffffff
+x23: ffff4b3ed8afb000 x22: ffff4b3ed8afb160
+x21: ffff4b3ed8afb184 x20: ffffedbca46aa3e0
+x19: ffffedbca2a524bc x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000
+x15: 0000000020000100 x14: 0000000000000000
+x13: 0000000000000000 x12: ffff8967db15f63d
+x11: 1fffe967db15f63c x10: ffff8967db15f63c
+x9 : ffffedbca2a5273c x8 : ffff4b3ed8afb1e7
+x7 : 0000000000000001 x6 : ffff8967db15f63c
+x5 : ffff4b3f08b89400 x4 : 0000000000000000
+x3 : ffffedbca2a00000 x2 : ffffedbca4690000
+x1 : ffff4b3f08b89400 x0 : 0000000000000000
+Call trace:
+ read_pmevcntrn+0x1e4/0x1ec arch/arm64/kernel/perf_event.c:423
+ armv8pmu_read_evcntr arch/arm64/kernel/perf_event.c:467 [inline]
+ armv8pmu_read_hw_counter arch/arm64/kernel/perf_event.c:475 [inline]
+ armv8pmu_read_counter+0x10c/0x1f0 arch/arm64/kernel/perf_event.c:528
+ armpmu_event_update+0x9c/0x1bc drivers/perf/arm_pmu.c:247
+ armpmu_read+0x24/0x30 drivers/perf/arm_pmu.c:264
+ perf_output_read_group+0x4cc/0x71c kernel/events/core.c:6806
+ perf_output_read+0x78/0x1c4 kernel/events/core.c:6845
+ perf_output_sample+0xafc/0x1000 kernel/events/core.c:6892
+ __perf_event_output kernel/events/core.c:7273 [inline]
+ perf_event_output_forward+0xd8/0x130 kernel/events/core.c:7287
+ __perf_event_overflow+0xbc/0x20c kernel/events/core.c:8943
+ perf_swevent_overflow kernel/events/core.c:9019 [inline]
+ perf_swevent_event+0x274/0x2c0 kernel/events/core.c:9047
+ do_perf_sw_event kernel/events/core.c:9160 [inline]
+ ___perf_sw_event+0x150/0x1b4 kernel/events/core.c:9191
+ __perf_sw_event+0x58/0x7c kernel/events/core.c:9203
+ perf_sw_event include/linux/perf_event.h:1177 [inline]
+ mm_account_fault mm/memory.c:4707 [inline]
+ handle_mm_fault+0x364/0x3f0 mm/memory.c:4758
+ __do_page_fault arch/arm64/mm/fault.c:438 [inline]
+ do_page_fault+0x334/0x8f0 arch/arm64/mm/fault.c:537
+ do_translation_fault+0x188/0x1e0 arch/arm64/mm/fault.c:619
+ do_mem_abort+0x68/0x120 arch/arm64/mm/fault.c:743
+ el1_abort+0xc0/0x150 arch/arm64/kernel/entry-common.c:119
+ el1_sync_handler+0x118/0x150 arch/arm64/kernel/entry-common.c:202
+ el1_sync+0x74/0x100 arch/arm64/kernel/entry.S:665
+ __arch_clear_user+0x20/0xa0 arch/arm64/lib/clear_user.S:25
+ read_iter_zero+0x90/0x16c drivers/char/mem.c:718
+ call_read_iter include/linux/fs.h:1954 [inline]
+ do_iter_readv_writev+0x394/0x414 fs/read_write.c:735
+ do_iter_read+0x1b0/0x280 fs/read_write.c:798
+ vfs_readv+0xf0/0x150 fs/read_write.c:918
+ do_readv+0x108/0x270 fs/read_write.c:955
+ __do_sys_readv fs/read_write.c:1046 [inline]
+ __se_sys_readv fs/read_write.c:1043 [inline]
+ __arm64_sys_readv+0x54/0x64 fs/read_write.c:1043
+ __invoke_syscall arch/arm64/kernel/syscall.c:36 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:48 [inline]
+ el0_svc_common.constprop.0+0xf4/0x414 arch/arm64/kernel/syscall.c:155
+ do_el0_svc+0x50/0x11c arch/arm64/kernel/syscall.c:217
+ el0_svc+0x20/0x30 arch/arm64/kernel/entry-common.c:353
+ el0_sync_handler+0xe4/0x1e0 arch/arm64/kernel/entry-common.c:369
+ el0_sync+0x148/0x180 arch/arm64/kernel/entry.S:683
+Code: 940c387b d53be813 17ffff9c 940c3878 (d53bebd3)
+---[ end trace 6aab9f4b33ebf0aa ]---
+----------------
+Code disassembly (best guess):
+   0:	940c387b 	bl	0x30e1ec
+   4:	d53be813 	mrs	x19, pmevcntr0_el0
+   8:	17ffff9c 	b	0xfffffffffffffe78
+   c:	940c3878 	bl	0x30e1ec
+* 10:	d53bebd3 	mrs	x19, pmevcntr30_el0 <-- trapping instruction
 
-vim +341 drivers/net/wireless/mediatek/mt76/mt7915/mmio.c
+Interrupts are not disabled when perf_output_read_group reads PMU counter.
+In this case, IPI request may be received from other cores.
+As a result, PMU configuration is modified and an error occurs when
+reading PMU counter:
 
-   311	
-   312	static u32 __mt7915_reg_addr(struct mt7915_dev *dev, u32 addr)
-   313	{
-   314		int i;
-   315	
-   316		if (addr < 0x100000)
-   317			return addr;
-   318	
-   319		if (!dev->reg.map) {
-   320			dev_err(dev->mt76.dev, "err: reg_map is null\n");
-   321			return addr;
-   322		}
-   323	
-   324		for (i = 0; i < dev->reg.map_size; i++) {
-   325			u32 ofs;
-   326	
-   327			if (addr < dev->reg.map[i].phys)
-   328				continue;
-   329	
-   330			ofs = addr - dev->reg.map[i].phys;
-   331			if (ofs > dev->reg.map[i].size)
-   332				continue;
-   333	
-   334			return dev->reg.map[i].maps + ofs;
-   335		}
-   336	
-   337		if ((addr >= MT_INFRA_BASE && addr < MT_WFSYS0_PHY_START) ||
-   338		    (addr >= MT_WFSYS0_PHY_START && addr < MT_WFSYS1_PHY_START) ||
-   339		    (addr >= MT_WFSYS1_PHY_START && addr <= MT_WFSYS1_PHY_END) ||
-   340		    (addr >= MT_CBTOP1_PHY_START && addr <= MT_CBTOP1_PHY_END) ||
- > 341		    (addr >= MT_CBTOP2_PHY_START && addr <= MT_CBTOP2_PHY_END))
-   342			return mt7915_reg_map_l1(dev, addr);
-   343	
-   344		return mt7915_reg_map_l2(dev, addr);
-   345	}
-   346	
+                   CPU0                                         CPU1
+                                                    __se_sys_perf_event_open
+                                                      perf_install_in_context
+perf_output_read_group                                  smp_call_function_single
+  for_each_sibling_event(sub, leader) {                   generic_exec_single
+    if ((sub != event) &&                                   remote_function
+        (sub->state == PERF_EVENT_STATE_ACTIVE))                    |
+<enter IPI handler: __perf_install_in_context>   <----RAISE IPI-----+
+__perf_install_in_context
+  ctx_resched
+    event_sched_out
+      armpmu_del
+        ...
+        hwc->idx = -1; // event->hwc.idx is set to -1
+...
+<exit IPI>
+            sub->pmu->read(sub);
+              armpmu_read
+                armv8pmu_read_counter
+                  armv8pmu_read_hw_counter
+                    int idx = event->hw.idx; // idx = -1
+                    u64 val = armv8pmu_read_evcntr(idx);
+                      u32 counter = ARMV8_IDX_TO_COUNTER(idx); // invalid counter = 30
+                      read_pmevcntrn(counter) // undefined instruction
 
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+---
+Changes since v3:
+  - Modify commit message according to Peter's suggestion.
+
+Changes since v2:
+  - Update commit message.
+
+Changes since v1:
+  - Adapt patch to mainline branch to solve compilation problem.
+
+ kernel/events/core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 2621fd24ad26..752a9079a807 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -6895,6 +6895,13 @@ static void perf_output_read_group(struct perf_output_handle *handle,
+ 	u64 read_format = event->attr.read_format;
+ 	u64 values[6];
+ 	int n = 0;
++	unsigned long flags;
++
++	/*
++	 * Disabling interrupts avoids all counter scheduling
++	 * (context switches, timer based rotation and IPIs).
++	 */
++	local_irq_save(flags);
+ 
+ 	values[n++] = 1 + leader->nr_siblings;
+ 
+@@ -6931,6 +6938,8 @@ static void perf_output_read_group(struct perf_output_handle *handle,
+ 
+ 		__output_copy(handle, values, n * sizeof(u64));
+ 	}
++
++	local_irq_restore(flags);
+ }
+ 
+ #define PERF_FORMAT_TOTAL_TIMES (PERF_FORMAT_TOTAL_TIME_ENABLED|\
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.GIT
+

@@ -2,117 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E67598092
+	by mail.lfdr.de (Postfix) with ESMTP id 9ACF1598091
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 11:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237136AbiHRJKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 05:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
+        id S243886AbiHRJKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 05:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239788AbiHRJJ5 (ORCPT
+        with ESMTP id S236969AbiHRJKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 05:09:57 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825C877554;
-        Thu, 18 Aug 2022 02:09:56 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id qn6so2045907ejc.11;
-        Thu, 18 Aug 2022 02:09:56 -0700 (PDT)
+        Thu, 18 Aug 2022 05:10:50 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93289B0B14
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 02:10:48 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id z25so1351308lfr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 02:10:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=OM28IoofemszvZBGCPnenf9hx1PitiC3j3mv8pJzzLY=;
-        b=ij1yc1LQl9Wf3pW5R1RqykES0Aufpt68J+25lcVedl/CpmlFqJG/3XGLjyW2MHoLNc
-         RATABqbitRRkNkbzTUPBN+b00N4M50Y7j/0ODEeCK4DJ1JxY6f4rpDPPWv/L1cl0a3G9
-         sAXVvVEsJtSRSRthDDyQtU3BfZ7y/6/7XEt+z2ltD4pkwWTqhWOhuCsB62txeENhXVbe
-         +mMm1pX2BJT/74i8I6amFdoHLlwihES/nKklvXI3VtoaDAYi9ugEu++7ZTBVUoALiTH9
-         N3WC3/Fq94Hur7bPMP7JJwb2EwBBorftYgTT0A/a/fS4RdJtnmRaHQgCu7FbcBd3pI8j
-         XqSw==
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc;
+        bh=kY0MMevg40jim6mAL9TDwvOzR5lSB6bqOjTnccKKtxg=;
+        b=zOppZpCO2j6y6MCNiWAOq9c+lKr6BRYOJSK4LFSz4GCzTcXo+eaPfQqP/OtzJzotUr
+         MRQdS9YH+Hd1kxK0YFJMs3zUl1SSyBTllhrzjwi6j5X+z0gcnl+vPOl+5fYkeQYqfpV9
+         3W42BXA+ZLX7qDjA4Z2Y1IK5QEuQRQBzb5cmfNOC/I0mTnXSqq5cXXly84EQWvVyHiqe
+         JlhzRl5wtwJTI5/JvhcHfdR3ZL1cpZguIZHCnu0W0Kyt6zcIbtAU9Gda99SN3mfeX+Fq
+         akR5g96/OWhsT+mgZ+rn5Iq6rYTPRH4x1xJ+ReSqWFVIjEM2wAMxk5kNQ+u4/xv82Z9G
+         a6hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=OM28IoofemszvZBGCPnenf9hx1PitiC3j3mv8pJzzLY=;
-        b=Ur+Y5w8CIy2R+TI7ezdwfcFFtZ4jLiQEotfBsJDRmg/AeDHzwsE4lVmNt5ZvNeFURh
-         VZDMXF5QglDz0nFe/MQYh4P379YwKCcZm56QTXMWhLNT8jotoHs+h/HPsrJ8mA6doT+W
-         KypirXTBqp5eD9RyS3wtD27RRx/oDWQfNWVjB97GDFvwY7Q0LRhTWMX0EqpFCdreQuDe
-         bY7u1/FpZXY9DWj8isgUhyoL2PlmNBTaW33NRlsnxAbKnPVmh2gDAIL92wp1MFogMuc9
-         rWuzqwZY5Rh4jDeF3JifWsbusWQ5q7IOkFLUm0JhSpElYjHLWbMo8qClM6hfDIvgYWxR
-         5rIg==
-X-Gm-Message-State: ACgBeo0GoZFikspsPdGJUjmF/NpkilsqH4f3B5TF0fpn7BzOwRZHwY/q
-        QBLSYOImrwE9BuvxdF4BOek=
-X-Google-Smtp-Source: AA6agR7J/9/o1YBQevKgS2HfGCsS2gahP6q9ngCobHspK0yQln3/vemjVdtjZipLOMqNIx4sDBaa7Q==
-X-Received: by 2002:a17:907:a057:b0:730:a2d8:d5ac with SMTP id gz23-20020a170907a05700b00730a2d8d5acmr1327595ejc.764.1660813795048;
-        Thu, 18 Aug 2022 02:09:55 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id ck30-20020a0564021c1e00b00445d760fc69sm772722edb.50.2022.08.18.02.09.52
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=kY0MMevg40jim6mAL9TDwvOzR5lSB6bqOjTnccKKtxg=;
+        b=XD/iFLGqzslCOMk55Ly7VEi0pZILvUl9dIU2l+XKkFtnz/EB4X9sZvLRKvBSMR6RvG
+         Z+M3ae5agwbquSFHj5KMY1H40PGmqUKBC7BIUgpDhSdEs3k6UTICaJ9En1q7pP4pADv4
+         Kj4097LL7RrYrwHkBaYDqc2VKmLTB0YE5jbm/WlBySjyf0yM/X+hhIlmYW1o08mU76sX
+         ybUAeJS8k2oUCzVXPBbFQo9dancTieKg5288RHJzGepEc5N3ePLUb6qWbZd5ROuNM1FO
+         fTv6KrAkOD7eg2Q+cCOX8Uji9mBQecAqLHDGGygxP1nReFwDfpkFEEPjHqdKw0VoQXAC
+         WXpQ==
+X-Gm-Message-State: ACgBeo3tmnQ760QRs248iY6VNJLR/KfxXXmMgk+U/4EY8Lw0eKt54zg5
+        oCB0AmULfYLGm+iYXq6kXfYSIzXN4aun4w==
+X-Google-Smtp-Source: AA6agR4P+EXG7C9RxTL+4JeR8q6biSKTwCART0mW/4IGRfq6suMaZ9ZdnZGQ9fJSl1RyK9jeDZwbug==
+X-Received: by 2002:a19:9101:0:b0:48a:f4ad:758d with SMTP id t1-20020a199101000000b0048af4ad758dmr636632lfd.181.1660813846929;
+        Thu, 18 Aug 2022 02:10:46 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.143])
+        by smtp.gmail.com with ESMTPSA id a23-20020ac25e77000000b0048b97c7260csm144530lfr.222.2022.08.18.02.10.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 02:09:54 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <b13f84e2-d402-d686-a365-d13cd09b2a01@redhat.com>
-Date:   Thu, 18 Aug 2022 11:09:52 +0200
+        Thu, 18 Aug 2022 02:10:46 -0700 (PDT)
+Message-ID: <f58bd7c8-0053-316c-db06-ced13ffcf867@openvz.org>
+Date:   Thu, 18 Aug 2022 12:10:45 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
+ Thunderbird/91.11.0
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [RFC PATCH] memcg: adjust memcg used to charge for new simple_xattrs
+ objects
+To:     Roman Gushchin <roman.gushchin@linux.dev>, mkoutny@suse.com,
+        tj@kernel.org
+Cc:     gregkh@linuxfoundation.org, hannes@cmpxchg.org, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, mhocko@suse.com, shakeelb@google.com,
+        songmuchun@bytedance.com, viro@zeniv.linux.org.uk,
+        Christian Brauner <brauner@kernel.org>
+References: <62188f37-f816-08e9-cdd5-8df23131746d@openvz.org>
 Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
- <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
- <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
- <20220817234120.mw2j3cgshmuyo2vw@box.shutemov.name>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220817234120.mw2j3cgshmuyo2vw@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <62188f37-f816-08e9-cdd5-8df23131746d@openvz.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 01:41, Kirill A. Shutemov wrote:
-> Note, that userfaultfd is only relevant for shared memory as it requires
-> VMA which we don't have for MFD_INACCESSIBLE.
+The patch was announced here:
+https://lore.kernel.org/all/62188f37-f816-08e9-cdd5-8df23131746d@openvz.org/
+"3) adjust active memcg for simple_xattr accounting
+  sysfs and tmpfs are in-memory file system, 
+  for extended attributes they uses simple_xattr infrastructure.
+  The patch forces sys_set[f]xattr calls to account xattr object
+  to predictable memcg: for kernfs memcg will be taken from kernfs node,
+  for shmem -- from shmem_info.
+  Like 1) case, this allows to understand which memcg should be used
+  for object accounting and simplify debugging of possible troubles."
 
-Oh, you're right!  So yeah, looks like userfaultfd is not a problem.
+It was compiled but was not tested yet.
+---
+sys_set[f]xattr uses simple_xattr infrastructure to create a new
+extended attribute for in-memory file systems like sysfs and tmpfs.
+Number and size of allocated objects are controlled by user space,
+they are always living in memory and its lifetime is indefinitely long.
+Therefore this memory should be properly accounted.
 
-Paolo
+By default new memory is accounted to memcg of creator process.
+As a result, neighboring xattrs of the same inode can be charged to
+different memcgs. This looks unexpected and makes hard the
+investigation of the memcg accounting issues.
+
+This patch adjust memcg used for such allocations. For kernfs
+it gives memcg from kernfs node, for shmem -- from shmem_info.
+This allows to cahrge all inode-sepcific objects to the same
+memory cgroup.
+
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+ fs/kernfs/inode.c | 31 ++++++++++++++++++++++++-------
+ mm/shmem.c        | 10 +++++++++-
+ 2 files changed, 33 insertions(+), 8 deletions(-)
+
+diff --git a/fs/kernfs/inode.c b/fs/kernfs/inode.c
+index 3d783d80f5da..975532b32e7c 100644
+--- a/fs/kernfs/inode.c
++++ b/fs/kernfs/inode.c
+@@ -14,6 +14,7 @@
+ #include <linux/slab.h>
+ #include <linux/xattr.h>
+ #include <linux/security.h>
++#include <linux/memcontrol.h>
+ 
+ #include "kernfs-internal.h"
+ 
+@@ -335,8 +336,16 @@ static int kernfs_vfs_xattr_set(const struct xattr_handler *handler,
+ {
+ 	const char *name = xattr_full_name(handler, suffix);
+ 	struct kernfs_node *kn = inode->i_private;
++	struct mem_cgroup *old, *memcg;
++	int ret;
++
++	memcg = mem_cgroup_or_root(get_mem_cgroup_from_obj(kn));
++	old = set_active_memcg(memcg);
+ 
+-	return kernfs_xattr_set(kn, name, value, size, flags);
++	ret = kernfs_xattr_set(kn, name, value, size, flags);
++	set_active_memcg(old);
++	mem_cgroup_put(memcg);
++	return ret;
+ }
+ 
+ static int kernfs_vfs_user_xattr_add(struct kernfs_node *kn,
+@@ -403,21 +412,29 @@ static int kernfs_vfs_user_xattr_set(const struct xattr_handler *handler,
+ 	const char *full_name = xattr_full_name(handler, suffix);
+ 	struct kernfs_node *kn = inode->i_private;
+ 	struct kernfs_iattrs *attrs;
++	struct mem_cgroup *old, *memcg;
++	int ret = -ENOMEM;
+ 
+ 	if (!(kernfs_root(kn)->flags & KERNFS_ROOT_SUPPORT_USER_XATTR))
+ 		return -EOPNOTSUPP;
+ 
++	memcg = mem_cgroup_or_root(get_mem_cgroup_from_obj(kn));
++	old = set_active_memcg(memcg);
++
+ 	attrs = kernfs_iattrs(kn);
+ 	if (!attrs)
+-		return -ENOMEM;
++		goto out;
+ 
+ 	if (value)
+-		return kernfs_vfs_user_xattr_add(kn, full_name, &attrs->xattrs,
+-						 value, size, flags);
+-	else
+-		return kernfs_vfs_user_xattr_rm(kn, full_name, &attrs->xattrs,
++		ret = kernfs_vfs_user_xattr_add(kn, full_name, &attrs->xattrs,
+ 						value, size, flags);
+-
++	else
++		ret = kernfs_vfs_user_xattr_rm(kn, full_name, &attrs->xattrs,
++					       value, size, flags);
++out:
++	set_active_memcg(old);
++	mem_cgroup_put(memcg);
++	return ret;
+ }
+ 
+ static const struct xattr_handler kernfs_trusted_xattr_handler = {
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 5783f11351bb..291c15774340 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -3255,9 +3255,17 @@ static int shmem_xattr_handler_set(const struct xattr_handler *handler,
+ 				   size_t size, int flags)
+ {
+ 	struct shmem_inode_info *info = SHMEM_I(inode);
++	struct mem_cgroup *old, *memcg;
++	int ret;
++
++	memcg = mem_cgroup_or_root(get_mem_cgroup_from_obj(info));
++	old = set_active_memcg(memcg);
+ 
+ 	name = xattr_full_name(handler, name);
+-	return simple_xattr_set(&info->xattrs, name, value, size, flags, NULL);
++	ret = simple_xattr_set(&info->xattrs, name, value, size, flags, NULL);
++	set_active_memcg(old);
++	mem_cgroup_put(memcg);
++	return ret;
+ }
+ 
+ static const struct xattr_handler shmem_security_xattr_handler = {
+-- 
+2.34.1
+

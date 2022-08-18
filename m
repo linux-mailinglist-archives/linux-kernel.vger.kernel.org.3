@@ -2,255 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A43C598537
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF7E59854A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245612AbiHROEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
+        id S245654AbiHROGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245582AbiHROEf (ORCPT
+        with ESMTP id S245673AbiHROFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:04:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779156BCC5;
-        Thu, 18 Aug 2022 07:04:34 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 14:04:31 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660831473;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JOLHnIeMHdmlmqIRC4FMtd5V/VVnLhr6GHqiOjZvxo4=;
-        b=hLfJ8VCep78uWB6A7tRGOGat0UoAAT5E0jE1PqdAQ9R4kaUxzoBlfCd/cQS2IOMIpFa6Eo
-        qSbLoeX3koSb1/aPuKYTIW+onAX7rIR+6vctxb/VIwi8QVtUa+Q2svxuuYAroQo/zbukK7
-        vBAlPNrJrDpEJLg1txuQPQXIqq1p8AaOflzzd/7KP/7/fBTvW9Ql3+fzCATgXDHWuPz4uC
-        R513lQzhwZyEjjQBsJDhY3Cl4UOsxkwYidztuA4x2EsoqE9/8jD9haoQfsjMvMG6eUMAZL
-        NVeL7Xc+BrhskNXx5/GfZ4AI/QMn7BJzk45e0Yovzdg3L3ubRrY3JEk4mJ/1wg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660831473;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JOLHnIeMHdmlmqIRC4FMtd5V/VVnLhr6GHqiOjZvxo4=;
-        b=KYZZnD6jfMLRTHEc0fwrFuSn3lVOzCYKqt4T0HFmiJwyzb+JRVz5vY8lBb0NFOEv/KWK9p
-        lGeZXq+mDeviSsBQ==
-From:   "tip-bot2 for Ashok Raj" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/microcode] x86/microcode: Document the whole late loading problem
-Cc:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@suse.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220813223825.3164861-2-ashok.raj@intel.com>
-References: <20220813223825.3164861-2-ashok.raj@intel.com>
+        Thu, 18 Aug 2022 10:05:41 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2078.outbound.protection.outlook.com [40.107.21.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B917465823;
+        Thu, 18 Aug 2022 07:05:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HD47dzQ1bNdp5p6bHJbmtdoMaPwQ1EtGPeSmLb9s86aPlE/Q+96XhtSdDcsclR/4KK7frVLdqSIU2fWW59V+WY4D7lMWW0tfDUfVQU6PsG6+Twn1M71oGxMEBfSIqsH3NI3cPAN8UwB9kOKMKL9bDp/uahBsm/0GvmBER/K+bqGW+eadOqYWXQB6KSrkkZdsyBSkStyax/PJ0lPyEl/tFvyXRwFOOXxiKuepjnJrboKsiRS0m68tyEUC+56ku3Hu19E+asREg6qfa4pNUNQ2GXxkGs4+MZnddhyE97AtfExjSlZqlo0+CrcDuOaeTWnScGpsavTAvW3ORQsOPumHNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S1sQqh7aVGxhRu+Xon140SackMTmmwu0lxm8zTTRpgI=;
+ b=S5B9QtQUAzShKnTwAKNoj7RgXsdzIioC+zCD8naNO5rtv+YA76j3CZyksyU7cqd1/jOOFZIzJoyyScYM+nIkN8iCT5bPOfJcTJNeeNVKudb5eXdPLHR4HgWVKl7RVFZsbmoRJSnqizd3gfvoQJKvJyjF5uY7CvwopsIJoqg68GTJGdOLAd5Wl+twAiD67yChkbyqx/H/ud+5GsfwFoCy8dq/2Fy741zYO2OuK3b11zucbxit5BB/7ys4S3kZRZtdOxVYXC3KTfzNe5/s5qMUtbO8e0AXGNf7nnCm+jh+50F+ZrumHBlHwthumBtLqSsL79dFZ42HRc9F0W1EIpnVUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S1sQqh7aVGxhRu+Xon140SackMTmmwu0lxm8zTTRpgI=;
+ b=OOowQzThHR0KZSrz0ZX+o0rTUc5+IjNt1ZKjbRdzdYGDtm9oePJCsxKyAuDa6JJ1Sw7yOe1G4zuFv2p1YyTjNoz9SK50nLVbjo+7rdJ9dRE7uGEEie4uXF9RlRl9tAAM7jiqcuuUGhZQZnGiKwu4weOnLgcVFX5Xe5WwJZRgShE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by DB3PR0402MB3883.eurprd04.prod.outlook.com (2603:10a6:8:e::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Thu, 18 Aug
+ 2022 14:05:37 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::71b7:8ed1:e4e0:3857]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::71b7:8ed1:e4e0:3857%4]) with mapi id 15.20.5525.011; Thu, 18 Aug 2022
+ 14:05:37 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     devicetree@vger.kernel.org
+Cc:     netdev@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH devicetree 0/3] NXP LS1028A DT changes for multiple switch CPU ports
+Date:   Thu, 18 Aug 2022 17:05:16 +0300
+Message-Id: <20220818140519.2767771-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AS4P190CA0023.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d0::9) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
-Message-ID: <166083147193.401.12808282338823061069.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0eb09f98-ea24-4133-cdb0-08da8122b9a5
+X-MS-TrafficTypeDiagnostic: DB3PR0402MB3883:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kqhDFLCoJC17RuNNj81gnkTRgpsAYxf4dB1CEeHK+2tq/27OkDvpcmM/dwaHDgT/1vsc1EakmK3MWQFGOgSJvywQd8T8jCO6ansS79dWFrYWSaT7/YsQ7FUt9HASO2E/me/rN0mnUFMeaMcDmxZDe+H7Zl5MYAQndVyS+v0TtxPDM80KCVCbIztWiWkxKcqkWx4e+lv2EV9Pl+PV4svfHQ9WXLL5unEHjBU1TBRIOuFP1Qpvjf13e+BWpFEYuZQ2277O+cV3qatXYRRjbL6NTm03aJHN03p29kQmp6jQjlkFKNHXdunnki8HdQQfSEPNaJfsjhrm9/U0TbVtRYY/O9bUJSspLOAD6dsbggADwxKLvbPy1cXbIogKbQm4uBi8grMWTVzDmlD4QmCnb3tsUC3qcjE0LAESovTs+zImY3xAiLSc/GLjYDVvZgYuhLIo8/cIf2lKP9xSxT9pVji7N0YV5QupnPW68Sy2uVDCWomxjNPhoMUMSI2x3ANMY25SoX8kj3GWL6CbLr9K41TKUbbioeJsI/wngUDmoWwyh10ZWl/a56LsKmhtEMDFsVHO6Q4/QRRpfGLAEKMi15+UqxYcD0aQQt12PC+D10ekZyZ0vYhmRirymgADIBr+XhOhAQS4Pax7GaNxm5oBC8d5hRtHzJnkPa2Mmvb3Azz6R1qSlR3xeIxKyEocNy5MD4NPQRQH1ZAmDxBhjBrhxn8/6lAHxdbcFdsLRgEy5yEyqpjhQlJK/FeApgsX0GbpnfX/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(39860400002)(396003)(376002)(346002)(66476007)(66946007)(5660300002)(44832011)(8936002)(4326008)(8676002)(6916009)(54906003)(86362001)(316002)(38100700002)(38350700002)(66556008)(2906002)(36756003)(478600001)(6666004)(6486002)(41300700001)(83380400001)(26005)(52116002)(6512007)(6506007)(1076003)(186003)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?f+Xx9w2kwR3OJruhNctr3/fs+CoFcw8rX0GhMkOe+6e+8+3DEQeoIz5pQIj4?=
+ =?us-ascii?Q?dZJsQDW0rbp9+TQIuEUkqu/paemWBHpZsrL9wG+gEB5z8SBFgUj+aKkxeWL5?=
+ =?us-ascii?Q?eAW5vNKunQsOElbYhviEkvN3D7lszYbIIpFRKGsOnNYqvy5Ased50+KrRwSH?=
+ =?us-ascii?Q?fknsOgx3C274pu6M5BDE1vEworQhOVIR5mdSzSbj+46q0sm+yYhJTWlyTA5u?=
+ =?us-ascii?Q?dZZbdaYg/wQIlTNhblYmBI6o5BX9W0x0ams0twxg1O2xi7fzpB6dlIpPSjuo?=
+ =?us-ascii?Q?8xI9HGvFPfn1C/CFa+sYMXVH0L1PfdufeiHhr4Gfc9wzMSPtckRg2olN8dEF?=
+ =?us-ascii?Q?ZB9ybqVc55c1LmPcsKac2LJNQUd2R5l52ltFrj2FVJK6hR/d0hLP4RlB3fnE?=
+ =?us-ascii?Q?b5XtbkYg/ZolLL+c5aeguuCevRqx+t0Xn1f7NyJvogL7bA/+htI0i00as5Ki?=
+ =?us-ascii?Q?rxopEWJIdfLv5jmoaERf+esgSzbhH1Z8Gq/j81W0ka+nuEAzjZ7IWfLSkuyT?=
+ =?us-ascii?Q?pfZ62Lp2UAgc5UfDuN1Li5bU6FBONi9VDVsZdn5mKgLKv1zTDoXKIpk7ZDbg?=
+ =?us-ascii?Q?/E1RVJZ2sVXei3DTp0ghRdN55yq52gME8Uhr3GpYOX7Gw6zKmBx37uL8xT6k?=
+ =?us-ascii?Q?EbP5jL7Gr0GgjCe3AGnPnCGmncdBDjX00kfSeybF7/X+CKmfBnJAloBs47OJ?=
+ =?us-ascii?Q?tsJxovUrNJorzymZdgPXSCfJ8LmEnoPIRGgPDmco1SLi1Y+797He/8XuegPI?=
+ =?us-ascii?Q?2vHuTXmCkoZawj4FJKqi7S7VrckHav+4ji/WmKzSOBg4HCVr9ywmFypnd/e3?=
+ =?us-ascii?Q?UQ7L/+buXu7w3YADkemwA3TLnhz+PjEB/4dyFliizcQbaDWwoo0+aSLv9h0I?=
+ =?us-ascii?Q?Ez7B5LfFDhZ1hMZtogugY3Z98msEp6iNIgoRAgz2Pqm9qQRjuLr3h/RiYyfZ?=
+ =?us-ascii?Q?4zikwikxgvuzWnQuuYsoEfgoz12tNahwnQGt5Ab7FAA+jpG3yuKBZeZ3CP1a?=
+ =?us-ascii?Q?pEISZtjX9reVvDdHIu22b5D3A7OdmaxJUOtotPkGwCemC6eSqkDtWVBSAzRI?=
+ =?us-ascii?Q?ahMyuA9bkAlAI63FaeUFpjRoUjCvruetxXZ59narfWLnj6km0gOdms/ZN5Va?=
+ =?us-ascii?Q?Mx5U5WQiZldCGZ9i7A7SNd9NewRenUG4NtRbC1HHeNzvA5F1C+pZw7DKRXap?=
+ =?us-ascii?Q?5q0xrkzSCHFc3JjYmgH830ZNCilCrw8dsQ0t1/fhDeH5x18IbBmtCOgqB2Yx?=
+ =?us-ascii?Q?DoCi9GDnY43qPN+lurCOv5wm3zvEkQ0g0nEjKkkg1PKXVESzk8AwwL5VO6zU?=
+ =?us-ascii?Q?8DcfokYd5mDSdtBkdY+l2H8rHORtewAwd1uufruc99mRLLXLWxjf2PhBVesE?=
+ =?us-ascii?Q?nkr0KvAYywvOs4BKJpbChkOKzIdNAhBwh27LfMrXQxpAm/VCOwF8o53i0tAv?=
+ =?us-ascii?Q?wbV0KKWIPQ8VlNzgWmfyLc2xcRdFIbXEes1+aJ/HkG/Mlm96ybCELfWlzh5F?=
+ =?us-ascii?Q?5FdzNAv/8H4wtMYSerX9v2k7/VqNNFZ8bDPakSZaqiCUS0JH1cVEOStJRBB9?=
+ =?us-ascii?Q?CnxCn7qAdurEwOBVK4UHUH0JnWq9/UsoH2J3Ybz4UsrqRv8+X0LD9oGughzC?=
+ =?us-ascii?Q?Ug=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0eb09f98-ea24-4133-cdb0-08da8122b9a5
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 14:05:37.1743
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 91mk0gqz3UK1zZAbPg01ukK6XVpuZ7TVZxdydPGkPQEysbWcwgGpjWJ/7YZaqxi0mWxTaIzUUteSGNUAp2jYWQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3883
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/microcode branch of tip:
+The Ethernet switch embedded within the NXP LS1028A has 2 Ethernet ports
+towards the host, for local packet termination. In current device trees,
+only the first port is enabled. Enabling the second port allows having a
+higher termination throughput.
 
-Commit-ID:     3ecf671f1d354f40228e407ab350abd41034410b
-Gitweb:        https://git.kernel.org/tip/3ecf671f1d354f40228e407ab350abd41034410b
-Author:        Ashok Raj <ashok.raj@intel.com>
-AuthorDate:    Sat, 13 Aug 2022 22:38:21 
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 18 Aug 2022 15:57:53 +02:00
+Care has been taken that this change does not produce regressions when
+using updated device trees with old kernels that do not support multiple
+DSA CPU ports. The only difference for old kernels will be the
+appearance of a new net device (for &enetc_port3) which will not be very
+useful for much of anything.
 
-x86/microcode: Document the whole late loading problem
+Vladimir Oltean (3):
+  arm64: dts: ls1028a: move DSA CPU port property to the common SoC dtsi
+  arm64: dts: ls1028a: mark enetc port 3 as a DSA master too
+  arm64: dts: ls1028a: enable swp5 and eno3 for all boards
 
-Commit
+ .../dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dts  | 9 ++++++++-
+ .../boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dts | 9 ++++++++-
+ arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dts        | 9 ++++++++-
+ arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi           | 2 ++
+ 4 files changed, 26 insertions(+), 3 deletions(-)
 
-  d23d33ea0fcd ("x86/microcode: Taint and warn on late loading")
+-- 
+2.34.1
 
-started tainting the kernel after microcode late loading.
-
-There is some history behind why x86 microcode started doing the late
-loading stop_machine() rendezvous. Document the whole situation.
-
-No functional changes.
-
-  [ bp: Fix typos, heavily massage. ]
-
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220813223825.3164861-2-ashok.raj@intel.com
----
- Documentation/admin-guide/tainted-kernels.rst |   6 +-
- Documentation/x86/microcode.rst               | 116 +++++++++++++++--
- 2 files changed, 113 insertions(+), 9 deletions(-)
-
-diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
-index 7d80e8c..92a8a07 100644
---- a/Documentation/admin-guide/tainted-kernels.rst
-+++ b/Documentation/admin-guide/tainted-kernels.rst
-@@ -134,6 +134,12 @@ More detailed explanation for tainting
-        scsi/snic on something else than x86_64, scsi/ips on non
-        x86/x86_64/itanium, have broken firmware settings for the
-        irqchip/irq-gic on arm64 ...).
-+     - x86/x86_64: Microcode late loading is dangerous and will result in
-+       tainting the kernel. It requires that all CPUs rendezvous to make sure
-+       the update happens when the system is as quiescent as possible. However,
-+       a higher priority MCE/SMI/NMI can move control flow away from that
-+       rendezvous and interrupt the update, which can be detrimental to the
-+       machine.
- 
-  3)  ``R`` if a module was force unloaded by ``rmmod -f``, ``' '`` if all
-      modules were unloaded normally.
-diff --git a/Documentation/x86/microcode.rst b/Documentation/x86/microcode.rst
-index a320d37..b627c6f 100644
---- a/Documentation/x86/microcode.rst
-+++ b/Documentation/x86/microcode.rst
-@@ -6,6 +6,7 @@ The Linux Microcode Loader
- 
- :Authors: - Fenghua Yu <fenghua.yu@intel.com>
-           - Borislav Petkov <bp@suse.de>
-+	  - Ashok Raj <ashok.raj@intel.com>
- 
- The kernel has a x86 microcode loading facility which is supposed to
- provide microcode loading methods in the OS. Potential use cases are
-@@ -92,15 +93,8 @@ vendor's site.
- Late loading
- ============
- 
--There are two legacy user space interfaces to load microcode, either through
--/dev/cpu/microcode or through /sys/devices/system/cpu/microcode/reload file
--in sysfs.
--
--The /dev/cpu/microcode method is deprecated because it needs a special
--userspace tool for that.
--
--The easier method is simply installing the microcode packages your distro
--supplies and running::
-+You simply install the microcode packages your distro supplies and
-+run::
- 
-   # echo 1 > /sys/devices/system/cpu/microcode/reload
- 
-@@ -110,6 +104,110 @@ The loading mechanism looks for microcode blobs in
- /lib/firmware/{intel-ucode,amd-ucode}. The default distro installation
- packages already put them there.
- 
-+Since kernel 5.19, late loading is not enabled by default.
-+
-+The /dev/cpu/microcode method has been removed in 5.19.
-+
-+Why is late loading dangerous?
-+==============================
-+
-+Synchronizing all CPUs
-+----------------------
-+
-+The microcode engine which receives the microcode update is shared
-+between the two logical threads in a SMT system. Therefore, when
-+the update is executed on one SMT thread of the core, the sibling
-+"automatically" gets the update.
-+
-+Since the microcode can "simulate" MSRs too, while the microcode update
-+is in progress, those simulated MSRs transiently cease to exist. This
-+can result in unpredictable results if the SMT sibling thread happens to
-+be in the middle of an access to such an MSR. The usual observation is
-+that such MSR accesses cause #GPs to be raised to signal that former are
-+not present.
-+
-+The disappearing MSRs are just one common issue which is being observed.
-+Any other instruction that's being patched and gets concurrently
-+executed by the other SMT sibling, can also result in similar,
-+unpredictable behavior.
-+
-+To eliminate this case, a stop_machine()-based CPU synchronization was
-+introduced as a way to guarantee that all logical CPUs will not execute
-+any code but just wait in a spin loop, polling an atomic variable.
-+
-+While this took care of device or external interrupts, IPIs including
-+LVT ones, such as CMCI etc, it cannot address other special interrupts
-+that can't be shut off. Those are Machine Check (#MC), System Management
-+(#SMI) and Non-Maskable interrupts (#NMI).
-+
-+Machine Checks
-+--------------
-+
-+Machine Checks (#MC) are non-maskable. There are two kinds of MCEs.
-+Fatal un-recoverable MCEs and recoverable MCEs. While un-recoverable
-+errors are fatal, recoverable errors can also happen in kernel context
-+are also treated as fatal by the kernel.
-+
-+On certain Intel machines, MCEs are also broadcast to all threads in a
-+system. If one thread is in the middle of executing WRMSR, a MCE will be
-+taken at the end of the flow. Either way, they will wait for the thread
-+performing the wrmsr(0x79) to rendezvous in the MCE handler and shutdown
-+eventually if any of the threads in the system fail to check in to the
-+MCE rendezvous.
-+
-+To be paranoid and get predictable behavior, the OS can choose to set
-+MCG_STATUS.MCIP. Since MCEs can be at most one in a system, if an
-+MCE was signaled, the above condition will promote to a system reset
-+automatically. OS can turn off MCIP at the end of the update for that
-+core.
-+
-+System Management Interrupt
-+---------------------------
-+
-+SMIs are also broadcast to all CPUs in the platform. Microcode update
-+requests exclusive access to the core before writing to MSR 0x79. So if
-+it does happen such that, one thread is in WRMSR flow, and the 2nd got
-+an SMI, that thread will be stopped in the first instruction in the SMI
-+handler.
-+
-+Since the secondary thread is stopped in the first instruction in SMI,
-+there is very little chance that it would be in the middle of executing
-+an instruction being patched. Plus OS has no way to stop SMIs from
-+happening.
-+
-+Non-Maskable Interrupts
-+-----------------------
-+
-+When thread0 of a core is doing the microcode update, if thread1 is
-+pulled into NMI, that can cause unpredictable behavior due to the
-+reasons above.
-+
-+OS can choose a variety of methods to avoid running into this situation.
-+
-+
-+Is the microcode suitable for late loading?
-+-------------------------------------------
-+
-+Late loading is done when the system is fully operational and running
-+real workloads. Late loading behavior depends on what the base patch on
-+the CPU is before upgrading to the new patch.
-+
-+This is true for Intel CPUs.
-+
-+Consider, for example, a CPU has patch level 1 and the update is to
-+patch level 3.
-+
-+Between patch1 and patch3, patch2 might have deprecated a software-visible
-+feature.
-+
-+This is unacceptable if software is even potentially using that feature.
-+For instance, say MSR_X is no longer available after an update,
-+accessing that MSR will cause a #GP fault.
-+
-+Basically there is no way to declare a new microcode update suitable
-+for late-loading. This is another one of the problems that caused late
-+loading to be not enabled by default.
-+
- Builtin microcode
- =================
- 

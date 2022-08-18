@@ -2,276 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B69598434
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 993AF59843C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245122AbiHRNa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
+        id S244847AbiHRNdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244638AbiHRNay (ORCPT
+        with ESMTP id S244720AbiHRNdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:30:54 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FFA5A2C5
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:30:53 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-333a4a5d495so40741037b3.10
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ijwCkfPW2UYMQmBDOFjxhcjsIxF5f4vvRDNvHTdaPyI=;
-        b=oIuVX4WiaBGggwX+X0EkGDfWfkiZ9e9n86gChg8gyDIkceUBK6EzG0IJW0BEaeLYxM
-         Xn5THdb+0jvfaAZW70qFAmVPDIU6Wtg4JRXttjMMlNg/0vQPhRwLpS5NqmmRPyvyLhFO
-         GNBWZV/vghE/7sA63lvc1rELyazKd6nQxrB0N9s2NSmBCRr0l0LGFh0CbQ1QYQ3d5WGW
-         CeQYYlC2FZ45IyzEvhF+cdI980gClDQpqaq+lyJbl/oe8XbUH/+3hKTShnA5B7J5CaNJ
-         555k/W4Uy372sCT2HbVLTAQVMUz0bvsOFqzcJRF9/xWxuOTuc7e5HN1QZZXY3FI+GpIj
-         S/4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ijwCkfPW2UYMQmBDOFjxhcjsIxF5f4vvRDNvHTdaPyI=;
-        b=RPlGzFDaO+fh8b50ElS0XInJOOrWJccda2ZS7TtiBRJ9UYaDKmWZutkrVMTDWSOh8F
-         FLJlG4ZoHF5NUko3eU3JZfUwFTsi2t0c4RiykjB3IqYf15+5G6Tx9j+e9YM2kFYX3CB9
-         LDc9jphaFF5LTo2D6ziPbErNIf5MzyLnJY3fMLwUg+OkXbywLHK2nQqC/m/Je73ZdR63
-         +AgBmdj6feAVw1/o44zJS2wlhzrIIx91iDLv8vpI7E9CSmo3EPj/+8Manrt/ASMtAGl5
-         W52KxEyrWFPxiVNVoI2C0d1lmKOotIZpqwwmfTPnizW7c+KIAhSPQgNPl3IXEJ6l938o
-         016Q==
-X-Gm-Message-State: ACgBeo2o7i7ma6l/ONoN6h42bmT/vzFDyPxrfoqbabwtpTNxxRxi5J1l
-        lH1lDa+WQrMvpAVptKtGrjS7JX5gl8M2MrR+FHwsNg==
-X-Google-Smtp-Source: AA6agR65oOzD5YJqAouKNl30cT4/Yf1oUCRs9F7cxO3Qn+h2PXGv5YDbZ9MurCN8ek4unJTHEhkvCvt2/nnAPadjcOw=
-X-Received: by 2002:a05:6902:124b:b0:67b:5d4e:c98d with SMTP id
- t11-20020a056902124b00b0067b5d4ec98dmr3043084ybu.475.1660829452051; Thu, 18
- Aug 2022 06:30:52 -0700 (PDT)
+        Thu, 18 Aug 2022 09:33:49 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD03D167C3;
+        Thu, 18 Aug 2022 06:33:47 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IDTspd022346;
+        Thu, 18 Aug 2022 13:33:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=R8CNdpXEHjm/fM7K2zmtKSr5PXMDDWSGeamCGIZR4A8=;
+ b=HZvn/TK1dLgjx66xRKL1x8dAEkiCeu7F1WbQY8ZB89DMHVvSN8SPUw9nvDz+mWkoVCNa
+ aJECI9ky7n3kRpDdECV3LLs3mEsB1gvzbGwnFFosT3GaJuDUiUoLqvS2BHq4TPXnjFry
+ 82VJDB3wCrJQH3HSjEMHeMYgl4syIeFdKGpj8RcxwI2Zi+kfZLAvknqyz16Gj+R2CTLw
+ KLg1SfqsRBlYeNXLPl+wPy2oDaZaWbWL71uOaVX6AW+c+2NoZHlWz5vB6a50ir0WzQBV
+ gsnW5MjZqDK8w8T+CeeKJGNVkNl/JP/D+rM6vfWuehRx4sBuYTZ56d5jV+UvlWRbfD2J qg== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j1pc3r4ak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 13:33:39 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27IDKgpP003754;
+        Thu, 18 Aug 2022 13:33:37 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma04dal.us.ibm.com with ESMTP id 3hx3kaemaa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 13:33:37 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27IDXa5w16057152
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 Aug 2022 13:33:37 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DFCEE124054;
+        Thu, 18 Aug 2022 13:33:36 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CB1EC124052;
+        Thu, 18 Aug 2022 13:33:34 +0000 (GMT)
+Received: from [9.211.138.234] (unknown [9.211.138.234])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 18 Aug 2022 13:33:34 +0000 (GMT)
+Message-ID: <f797373e-c420-718a-443d-ae98ea0368c7@linux.ibm.com>
+Date:   Thu, 18 Aug 2022 09:33:33 -0400
 MIME-Version: 1.0
-References: <20220818110859.1918035-1-jens.wiklander@linaro.org>
- <CAFA6WYO9ZoVNt+Npj7R+2=5rJ-Gxwy+QGEMziP7Z=eFupjjECQ@mail.gmail.com> <CAHUa44HoS4QgDzVgcsZkgAhK81wGXKQyqLWbLe9tqqrQELx=MA@mail.gmail.com>
-In-Reply-To: <CAHUa44HoS4QgDzVgcsZkgAhK81wGXKQyqLWbLe9tqqrQELx=MA@mail.gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 18 Aug 2022 19:00:41 +0530
-Message-ID: <CAFA6WYOwXZU6-BUGPg59AcH4QB6oS=Z=Cq9ZwZdfkDa+X5nB-w@mail.gmail.com>
-Subject: Re: [PATCH v2] tee: add overflow check in register_shm_helper()
-To:     Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        stable@vger.kernel.org, Nimish Mishra <neelam.nimish@gmail.com>,
-        Anirban Chakraborty <ch.anirban00727@gmail.com>,
-        Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>,
-        Jerome Forissier <jerome.forissier@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] KVM: s390: pci: Hook to access KVM lowlevel from VFIO
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>
+Cc:     rdunlap@infradead.org, linux-kernel@vger.kernel.org, lkp@intel.com,
+        borntraeger@linux.ibm.com, farman@linux.ibm.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org, gor@linux.ibm.com,
+        hca@linux.ibm.com, schnelle@linux.ibm.com
+References: <1f2dd65e-b79b-44df-cc6a-8b3aa8fd61af@linux.ibm.com>
+ <20220818102305.250702-1-pmorel@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20220818102305.250702-1-pmorel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: FigZBCJFWbFgQBLROQY8dciMYS1QdHAO
+X-Proofpoint-GUID: FigZBCJFWbFgQBLROQY8dciMYS1QdHAO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-18_12,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 clxscore=1015
+ phishscore=0 impostorscore=0 adultscore=0 suspectscore=0 mlxscore=0
+ bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208180047
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 Aug 2022 at 18:32, Jens Wiklander <jens.wiklander@linaro.org> wrote:
->
-> Hi Sumit,
->
-> On Thu, Aug 18, 2022 at 2:41 PM Sumit Garg <sumit.garg@linaro.org> wrote:
-> >
-> > Hi Jens,
-> >
-> > On Thu, 18 Aug 2022 at 16:39, Jens Wiklander <jens.wiklander@linaro.org> wrote:
-> > >
-> > > With special lengths supplied by user space, register_shm_helper() has
-> > > an integer overflow when calculating the number of pages covered by a
-> > > supplied user space memory region. This causes
-> > > internal_get_user_pages_fast() a helper function of
-> > > pin_user_pages_fast() to do a NULL pointer dereference.
-> > >
-> > > [   14.141620] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
-> > > [   14.142556] Mem abort info:
-> > > [   14.142829]   ESR = 0x0000000096000044
-> > > [   14.143237]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > > [   14.143742]   SET = 0, FnV = 0
-> > > [   14.144052]   EA = 0, S1PTW = 0
-> > > [   14.144348]   FSC = 0x04: level 0 translation fault
-> > > [   14.144767] Data abort info:
-> > > [   14.145053]   ISV = 0, ISS = 0x00000044
-> > > [   14.145394]   CM = 0, WnR = 1
-> > > [   14.145766] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004278e000
-> > > [   14.146279] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
-> > > [   14.147435] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-> > > [   14.148026] Modules linked in:
-> > > [   14.148595] CPU: 1 PID: 173 Comm: optee_example_a Not tainted 5.19.0 #11
-> > > [   14.149204] Hardware name: QEMU QEMU Virtual Machine, BIOS 0.0.0 02/06/2015
-> > > [   14.149832] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > > [   14.150481] pc : internal_get_user_pages_fast+0x474/0xa80
-> > > [   14.151640] lr : internal_get_user_pages_fast+0x404/0xa80
-> > > [   14.152408] sp : ffff80000a88bb30
-> > > [   14.152711] x29: ffff80000a88bb30 x28: 0000fffff836d000 x27: 0000fffff836e000
-> > > [   14.153580] x26: fffffc0000000000 x25: fffffc0000f4a1c0 x24: ffff00000289fb70
-> > > [   14.154634] x23: ffff000002702e08 x22: 0000000000040001 x21: ffff8000097eec60
-> > > [   14.155378] x20: 0000000000f4a1c0 x19: 00e800007d287f43 x18: 0000000000000000
-> > > [   14.156215] x17: 0000000000000000 x16: 0000000000000000 x15: 0000fffff836cfb0
-> > > [   14.157068] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-> > > [   14.157747] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-> > > [   14.158576] x8 : ffff00000276ec80 x7 : 0000000000000000 x6 : 000000000000003f
-> > > [   14.159243] x5 : 0000000000000000 x4 : ffff000041ec4eac x3 : ffff000002774cb8
-> > > [   14.159977] x2 : 0000000000000004 x1 : 0000000000000010 x0 : 0000000000000000
-> > > [   14.160883] Call trace:
-> > > [   14.161166]  internal_get_user_pages_fast+0x474/0xa80
-> > > [   14.161763]  pin_user_pages_fast+0x24/0x4c
-> > > [   14.162227]  register_shm_helper+0x194/0x330
-> > > [   14.162734]  tee_shm_register_user_buf+0x78/0x120
-> > > [   14.163290]  tee_ioctl+0xd0/0x11a0
-> > > [   14.163739]  __arm64_sys_ioctl+0xa8/0xec
-> > > [   14.164227]  invoke_syscall+0x48/0x114
-> > > [   14.164653]  el0_svc_common.constprop.0+0x44/0xec
-> > > [   14.165130]  do_el0_svc+0x2c/0xc0
-> > > [   14.165498]  el0_svc+0x2c/0x84
-> > > [   14.165847]  el0t_64_sync_handler+0x1ac/0x1b0
-> > > [   14.166258]  el0t_64_sync+0x18c/0x190
-> > > [   14.166878] Code: 91002318 11000401 b900f7e1 f9403be1 (f820d839)
-> > > [   14.167666] ---[ end trace 0000000000000000 ]---
-> > >
-> > > Fix this by adding an overflow check when calculating the end of the
-> > > memory range. Also add an explicit call to access_ok() in
-> > > tee_shm_register_user_buf() to catch an invalid user space address
-> > > early.
-> > >
-> > > Fixes: 033ddf12bcf5 ("tee: add register user memory")
-> > > Cc: stable@vger.kernel.org
-> > > Reported-by: Nimish Mishra <neelam.nimish@gmail.com>
-> > > Reported-by: Anirban Chakraborty <ch.anirban00727@gmail.com>
-> > > Reported-by: Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>
-> > > Suggested-by: Jerome Forissier <jerome.forissier@linaro.org>
-> > > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-> > > ---
-> > >  drivers/tee/tee_shm.c | 23 +++++++++++++++++++----
-> > >  1 file changed, 19 insertions(+), 4 deletions(-)
-> > >
-> >
-> > I can't see the v1 and neither a changelog for v2, so my comments
-> > below may be duplicate.
->
-> Fair point. The original patch wasn't posted publicly, but in order to
-> avoid confusion with that patch I chose to publish this as V2.
->
-> >
-> > > diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-> > > index f2b1bcefcadd..f71651021c8d 100644
-> > > --- a/drivers/tee/tee_shm.c
-> > > +++ b/drivers/tee/tee_shm.c
-> > > @@ -231,15 +231,30 @@ EXPORT_SYMBOL_GPL(tee_shm_alloc_priv_buf);
-> > >
-> > >  static struct tee_shm *
-> > >  register_shm_helper(struct tee_context *ctx, unsigned long addr,
-> > > -                   size_t length, u32 flags, int id)
-> > > +                   unsigned long length, u32 flags, int id)
-> > >  {
-> > >         struct tee_device *teedev = ctx->teedev;
-> > > +       unsigned long end_addr;
-> > >         struct tee_shm *shm;
-> > >         unsigned long start;
-> > >         size_t num_pages;
-> > >         void *ret;
-> > >         int rc;
-> > >
-> > > +       /* Check for overflows, this may be input from user space */
-> >
-> > IMO, this bound checking should be part of the parent function (like
-> > tee_shm_register_user_buf() in this case).
->
-> I don't see any harm in checking it here even if it will then check
-> input from tee_shm_register_kernel_buf() too. Then I'm also reusing
-> the result in the roundup() and that should be done in this function.
->
-> >
-> > > +       addr = untagged_addr(addr);
-> > > +       start = rounddown(addr, PAGE_SIZE);
-> > > +       if (check_add_overflow(addr, length, &end_addr))
-> > > +               return ERR_PTR(-EINVAL);
-> >
-> > Isn't this check redundant after access_ok()? AFAICS, access_ok()
-> > should limit the upper bound to TASK_SIZE_MAX which should detect any
-> > overflows.
->
-> It may be redundant, depending on the configuration. It's likely
-> redundant on all platforms we care about at the moment, but who knows
-> where this will be used in the future.
->
+On 8/18/22 6:23 AM, Pierre Morel wrote:
+> We have a cross dependency between KVM and VFIO.
 
-Firstly, access_ok() is the common kernel way to check for valid
-user-space access as per quote below from
-include/asm-generic/access_ok.h:
+maybe add something like 'when using s390 vfio_pci_zdev extensions for PCI passthrough'
 
-  /*
-   * 'size' is a compile-time constant for most callers, so optimize for
-   * this case to turn the check into a single comparison against a constant
-   * limit and catch all possible overflows.
-   * On architectures with separate user address space (m68k, s390, parisc,
-   * sparc64) or those without an MMU, this should always return true.
-   *
-   * This version was originally contributed by Jonas Bonn for the
-   * OpenRISC architecture, and was found to be the most efficient
-   * for constant 'size' and 'limit' values.
-   */
+> To be able to keep both subsystem modular we add a registering
+> hook inside the S390 core code.
+> 
+> This fixes a build problem when VFIO is built-in and KVM is built
+> as a module or excluded.
 
-So we shouldn't invent a redundant method to check if there is a buggy
-arch override for access_ok(). Also, results from check_add_overflow()
-are still inaccurate as it can allow addresses greater than
-TASK_SIZE_MAX.
+s/or excluded//
 
-Secondly, a redundant check which is anticipated to fix a future arch
-bug doesn't qualify for a fix patch.
+There's no problem when KVM is excluded, that forces CONFIG_VFIO_PCI_ZDEV_KVM=n because of the 'depends on S390 && KVM'.
 
--Sumit
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+> Fixes: 09340b2fca007 ("KVM: s390: pci: add routines to start/stop inter..")
+> Cc: <stable@vger.kernel.org>
+> ---
+>  arch/s390/include/asm/kvm_host.h | 17 ++++++-----------
+>  arch/s390/kvm/pci.c              | 10 ++++++----
+>  arch/s390/pci/Makefile           |  2 ++
+>  arch/s390/pci/pci_kvm_hook.c     | 11 +++++++++++
+>  drivers/vfio/pci/vfio_pci_zdev.c |  8 ++++++--
+>  5 files changed, 31 insertions(+), 17 deletions(-)
+>  create mode 100644 arch/s390/pci/pci_kvm_hook.c
+> 
+> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
+> index f39092e0ceaa..8312ed9d1937 100644
+> --- a/arch/s390/include/asm/kvm_host.h
+> +++ b/arch/s390/include/asm/kvm_host.h
+> @@ -1038,16 +1038,11 @@ static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
+>  #define __KVM_HAVE_ARCH_VM_FREE
+>  void kvm_arch_free_vm(struct kvm *kvm);
+>  
+> -#ifdef CONFIG_VFIO_PCI_ZDEV_KVM
+> -int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm);
+> -void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev);
+> -#else
+> -static inline int kvm_s390_pci_register_kvm(struct zpci_dev *dev,
+> -					    struct kvm *kvm)
+> -{
+> -	return -EPERM;
+> -}
+> -static inline void kvm_s390_pci_unregister_kvm(struct zpci_dev *dev) {}
+> -#endif
+> +struct kvm_register_hook {
 
-> >
-> > > +       end_addr = roundup(end_addr, PAGE_SIZE);
-> > > +       if (end_addr < start)
-> > > +               return ERR_PTR(-EINVAL);
-> >
-> > Ditto?
->
-> Yeah, same argument.
->
-> Thanks,
-> Jens
->
-> >
-> > -Sumit
-> >
-> > > +       num_pages = (end_addr - start) / PAGE_SIZE;
-> > > +
-> > > +       /* Error out early if no pages are to be registered */
-> > > +       if (!num_pages)
-> > > +               return ERR_PTR(-EINVAL);
-> > > +
-> > >         if (!tee_device_get(teedev))
-> > >                 return ERR_PTR(-EINVAL);
-> > >
-> > > @@ -261,11 +276,8 @@ register_shm_helper(struct tee_context *ctx, unsigned long addr,
-> > >         shm->flags = flags;
-> > >         shm->ctx = ctx;
-> > >         shm->id = id;
-> > > -       addr = untagged_addr(addr);
-> > > -       start = rounddown(addr, PAGE_SIZE);
-> > >         shm->offset = addr - start;
-> > >         shm->size = length;
-> > > -       num_pages = (roundup(addr + length, PAGE_SIZE) - start) / PAGE_SIZE;
-> > >         shm->pages = kcalloc(num_pages, sizeof(*shm->pages), GFP_KERNEL);
-> > >         if (!shm->pages) {
-> > >                 ret = ERR_PTR(-ENOMEM);
-> > > @@ -326,6 +338,9 @@ struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
-> > >         void *ret;
-> > >         int id;
-> > >
-> > > +       if (!access_ok((void __user *)addr, length))
-> > > +               return ERR_PTR(-EFAULT);
-> > > +
-> > >         mutex_lock(&teedev->mutex);
-> > >         id = idr_alloc(&teedev->idr, NULL, 1, 0, GFP_KERNEL);
-> > >         mutex_unlock(&teedev->mutex);
-> > > --
-> > > 2.31.1
-> > >
+Nit: zpci_kvm_register_hook ?  Just to make it clear it's for zpci.
+
+> +	int (*kvm_register)(void *opaque, struct kvm *kvm);
+> +	void (*kvm_unregister)(void *opaque);
+> +};
+> +
+> +extern struct kvm_register_hook kvm_pci_hook;
+
+Nit: kvm_zpci_hook ?
+
+>  
+>  #endif
+> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+> index 4946fb7757d6..e173fce64c4f 100644
+> --- a/arch/s390/kvm/pci.c
+> +++ b/arch/s390/kvm/pci.c
+> @@ -431,8 +431,9 @@ static void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
+>   * available, enable them and let userspace indicate whether or not they will
+>   * be used (specify SHM bit to disable).
+>   */
+> -int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm)
+> +static int kvm_s390_pci_register_kvm(void *opaque, struct kvm *kvm)
+>  {
+> +	struct zpci_dev *zdev = opaque;
+>  	int rc;
+>  
+>  	if (!zdev)
+> @@ -510,10 +511,10 @@ int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm)
+>  	kvm_put_kvm(kvm);
+>  	return rc;
+>  }
+> -EXPORT_SYMBOL_GPL(kvm_s390_pci_register_kvm);
+>  
+> -void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev)
+> +static void kvm_s390_pci_unregister_kvm(void *opaque)
+>  {
+> +	struct zpci_dev *zdev = opaque;
+>  	struct kvm *kvm;
+>  
+>  	if (!zdev)
+> @@ -566,7 +567,6 @@ void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev)
+>  
+>  	kvm_put_kvm(kvm);
+>  }
+> -EXPORT_SYMBOL_GPL(kvm_s390_pci_unregister_kvm);
+>  
+>  void kvm_s390_pci_init_list(struct kvm *kvm)
+>  {
+> @@ -678,6 +678,8 @@ int kvm_s390_pci_init(void)
+>  
+>  	spin_lock_init(&aift->gait_lock);
+>  	mutex_init(&aift->aift_lock);
+> +	kvm_pci_hook.kvm_register = kvm_s390_pci_register_kvm;
+> +	kvm_pci_hook.kvm_unregister = kvm_s390_pci_unregister_kvm;
+>  
+>  	return 0;
+>  }
+> diff --git a/arch/s390/pci/Makefile b/arch/s390/pci/Makefile
+> index bf557a1b789c..c02dbfb415d9 100644
+> --- a/arch/s390/pci/Makefile
+> +++ b/arch/s390/pci/Makefile
+> @@ -7,3 +7,5 @@ obj-$(CONFIG_PCI)	+= pci.o pci_irq.o pci_dma.o pci_clp.o pci_sysfs.o \
+>  			   pci_event.o pci_debug.o pci_insn.o pci_mmio.o \
+>  			   pci_bus.o
+>  obj-$(CONFIG_PCI_IOV)	+= pci_iov.o
+> +
+> +obj-y += pci_kvm_hook.o
+
+I guess it doesn't harm anything to add this unconditionally, but I think it would also be OK to just include this in the CONFIG_PCI list - vfio_pci_zdev and arch/s390/kvm/pci all rely on CONFIG_PCI via CONFIG_VFIO_PCI_ZDEV_KVM which implies PCI via VFIO_PCI.
+
+> diff --git a/arch/s390/pci/pci_kvm_hook.c b/arch/s390/pci/pci_kvm_hook.c
+> new file mode 100644
+> index 000000000000..9d8799b72dbf
+> --- /dev/null
+> +++ b/arch/s390/pci/pci_kvm_hook.c
+> @@ -0,0 +1,11 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * VFIO ZPCI devices support
+> + *
+> + * Copyright (C) IBM Corp. 2022.  All rights reserved.
+> + *	Author(s): Pierre Morel <pmorel@linux.ibm.com>
+> + */
+> +#include <linux/kvm_host.h>
+> +
+> +struct kvm_register_hook kvm_pci_hook;
+> +EXPORT_SYMBOL_GPL(kvm_pci_hook);
+
+Following the comments above, zpci_kvm_register_hook, kvm_zpci_hook ?
+
+I'm not sure if this really needs to be in a separate file or if it could just go into arch/s390/pci.c with the zpci_aipb -- If going the route of a separate file, up to Niklas whether he wants this under the S390 PCI maintainership or added to the list for s390 vfio-pci like arch/kvm/pci* and vfio_pci_zdev.
+
+> diff --git a/drivers/vfio/pci/vfio_pci_zdev.c b/drivers/vfio/pci/vfio_pci_zdev.c
+> index e163aa9f6144..3b7a707e2fe5 100644
+> --- a/drivers/vfio/pci/vfio_pci_zdev.c
+> +++ b/drivers/vfio/pci/vfio_pci_zdev.c
+> @@ -151,7 +151,10 @@ int vfio_pci_zdev_open_device(struct vfio_pci_core_device *vdev)
+>  	if (!vdev->vdev.kvm)
+>  		return 0;
+>  
+> -	return kvm_s390_pci_register_kvm(zdev, vdev->vdev.kvm);
+> +	if (kvm_pci_hook.kvm_register)
+> +		return kvm_pci_hook.kvm_register(zdev, vdev->vdev.kvm);
+> +
+> +	return -ENOENT;
+>  }
+>  
+>  void vfio_pci_zdev_close_device(struct vfio_pci_core_device *vdev)
+> @@ -161,5 +164,6 @@ void vfio_pci_zdev_close_device(struct vfio_pci_core_device *vdev)
+>  	if (!zdev || !vdev->vdev.kvm)
+>  		return;
+>  
+> -	kvm_s390_pci_unregister_kvm(zdev);
+> +	if (kvm_pci_hook.kvm_unregister)
+> +		return kvm_pci_hook.kvm_unregister(zdev);
+
+No need for the return here, this is a void function calling a void function.
+
+
+Overall, this looks good to me and survives a series of compile and device passthrough tests on my end, just a matter of a few of these minor comments above.  Thanks for tackling this Pierre!

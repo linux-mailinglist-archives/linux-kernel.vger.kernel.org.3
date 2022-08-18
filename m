@@ -2,81 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A7059863B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D591F598639
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 16:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343687AbiHROox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 10:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
+        id S245703AbiHROo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 10:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245723AbiHROou (ORCPT
+        with ESMTP id S1343551AbiHROow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:44:50 -0400
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0D83E764;
-        Thu, 18 Aug 2022 07:44:48 -0700 (PDT)
-Received: by mail-pj1-f54.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so2050108pjf.2;
-        Thu, 18 Aug 2022 07:44:48 -0700 (PDT)
+        Thu, 18 Aug 2022 10:44:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CBC3CBE8
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660833890;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZlNW+boxKqgfwr0TWqSRLZOIUoJTEM6tD/36NIupE70=;
+        b=eWM0kZleNy9WMT6fUahmrH5J3EhHBQP3V9TiaybrazKqb7TMvtoj/yKglHjEezEKrM4MGo
+        jIrPIlwvWNECpxkdT7JgMkD7tOiPEhfC0eWFTNX1dIc7W0uTbGWlibHJeMrRGpyCaY1zLA
+        oSYJ+8j98RUHwuMGaChoDGPHMwKLpZc=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-344-RgxRC0mINz6HdoB7qjCs9g-1; Thu, 18 Aug 2022 10:44:49 -0400
+X-MC-Unique: RgxRC0mINz6HdoB7qjCs9g-1
+Received: by mail-qt1-f198.google.com with SMTP id y12-20020ac8708c000000b00342f1bb8428so1292185qto.5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 07:44:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=7v4XktmQiYSbnjprvETwVVhTiVD9OLc1xcjNusmMMB0=;
-        b=II0pZdYtOeXttQieTWPsI7peyuGSd4tLirdxbt+wXw4wVRcl95sjo05tFAFD88Wdfw
-         XxiX1Llc0CRlFVptNg0sirQxpFPMvFgolVgrKWx9ECTnQtVXL7M8en8whUqK3hCmVOBS
-         HlyhF2w2pgWU3S3NY9dfaLNPEO6Ho15eEyDTtNWs9DzuEA48NBOdt4Q/QnslyfHmhoaz
-         AMJhHVSo96kCqBnZFAGMmHlKMW6C9ueyrioPp0sxMUR4IF4VI9PWfZn4dzC1NMRd9Xbl
-         9IIvniSCeJBBCIOvEbM+N+Aw0dj+4nH77S6sCcucgvapuDUW+wn1frAD+gKcoUlqGfkj
-         Tcyw==
-X-Gm-Message-State: ACgBeo1/praCQ4uPmhG+fCc7E9sqmuLdlV7cmt5sbS+8ztYUtl7ajqRR
-        huo1u+MxAILjG3HWyBRqUQ==
-X-Google-Smtp-Source: AA6agR4gZIoeLMHhdkO0CcwKC98NvtuC+kOjfzlxXMvMc09CYmNSc8Qa2z7wSvYYQVvm8ZhiD/nQdg==
-X-Received: by 2002:a17:90b:3b47:b0:1fa:d988:c916 with SMTP id ot7-20020a17090b3b4700b001fad988c916mr329024pjb.240.1660833887856;
-        Thu, 18 Aug 2022 07:44:47 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:80c2:7290:7acd:8d54:3db6:21d4])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090264cf00b00172a8e628e7sm1476467pli.190.2022.08.18.07.44.43
+        bh=ZlNW+boxKqgfwr0TWqSRLZOIUoJTEM6tD/36NIupE70=;
+        b=K8q87pmd+i0yiXlA01mGlaLp0gtXwAgeztJfluZPOdO6AuJzSfCDmPDB1UcNHEnwGU
+         7xYBjRuEKqtVpjxRp0M03kp20TsbOt/T74Y509gg0ZabdHuXvRkBzhQaYzurdiAYcudP
+         AwA7nbICA5cnNYvHp7pgh0X1U+aNJrZef+q9VdwhyE2gSgBHppCT1xaZiLY9lEfumQAR
+         CreCeWgkm9XEoUdn/xxcXOfmYtcOAwanr5+EUJLzRnSRKf5JsqUvNyzq9/RbXxd+rWmp
+         29MO/NVBPomKV4x0Xnf7dntxLHRAUCUWkTjuzwpYYt25QZQ4nx5PJ+Ma6qyr7+BlBGQz
+         OWfA==
+X-Gm-Message-State: ACgBeo2RtRxj4EL5cDwdSSSCDK2twmTMIpbmngoLxnvKtSOYu6aqhG5B
+        YKRR30c0BOHO4XcYTDz7ecbpvzO3pJ5W+T0F0rRcbCFemu3wSO5intU6EtTFDzProndtBO1UKhu
+        /0hdQJl66+lRepD1MNN35wwaG
+X-Received: by 2002:a05:622a:1c3:b0:344:56b5:f14b with SMTP id t3-20020a05622a01c300b0034456b5f14bmr2982401qtw.152.1660833888691;
+        Thu, 18 Aug 2022 07:44:48 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6Y7IFVVzndjOAS+SeXLhYlIl9eakAp1CbXrmWdBV9kzpU04h8jW0ij46cg9iIRTWVE+UYkxA==
+X-Received: by 2002:a05:622a:1c3:b0:344:56b5:f14b with SMTP id t3-20020a05622a01c300b0034456b5f14bmr2982368qtw.152.1660833888473;
+        Thu, 18 Aug 2022 07:44:48 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id y10-20020a05622a120a00b003435a198849sm1216076qtx.47.2022.08.18.07.44.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 18 Aug 2022 07:44:47 -0700 (PDT)
-Received: (nullmailer pid 1839513 invoked by uid 1000);
-        Thu, 18 Aug 2022 14:44:42 -0000
-Date:   Thu, 18 Aug 2022 08:44:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Marvin Lin <milkfafa@gmail.com>
-Cc:     linux-edac@vger.kernel.org, rric@kernel.org, james.morse@arm.com,
-        tony.luck@intel.com, mchehab@kernel.org, bp@alien8.de,
-        linux-kernel@vger.kernel.org, KWLIU@nuvoton.com, YSCHU@nuvoton.com,
-        benjaminfair@google.com, devicetree@vger.kernel.org,
-        avifishman70@gmail.com, venture@google.com,
-        openbmc@lists.ozlabs.org, KFTING@nuvoton.com, JJLIU0@nuvoton.com,
-        tali.perry1@gmail.com, ctcchien@nuvoton.com, kflin@nuvoton.com,
-        tmaimon77@gmail.com
-Subject: Re: [PATCH v13 2/3] dt-bindings: edac: nuvoton: Add document for
- NPCM memory controller
-Message-ID: <20220818144442.GB1829017-robh@kernel.org>
-References: <20220816094641.8484-1-milkfafa@gmail.com>
- <20220816094641.8484-3-milkfafa@gmail.com>
+Date:   Thu, 18 Aug 2022 10:44:46 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Nadav Amit <nadav.amit@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        huang ying <huang.ying.caritas@gmail.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, paulus@ozlabs.org,
+        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/migrate_device.c: Copy pte dirty bit to page
+Message-ID: <Yv5QXkS4Bm9pTBeG@xz-m1.local>
+References: <6e77914685ede036c419fa65b6adc27f25a6c3e9.1660635033.git-series.apopple@nvidia.com>
+ <CAC=cRTPGiXWjk=CYnCrhJnLx3mdkGDXZpvApo6yTbeW7+ZGajA@mail.gmail.com>
+ <Yvv/eGfi3LW8WxPZ@xz-m1.local>
+ <871qtfvdlw.fsf@nvdebian.thelocal>
+ <YvxWUY9eafFJ27ef@xz-m1.local>
+ <87o7wjtn2g.fsf@nvdebian.thelocal>
+ <87tu6bbaq7.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <1D2FB37E-831B-445E-ADDC-C1D3FF0425C1@gmail.com>
+ <Yv1BJKb5he3dOHdC@xz-m1.local>
+ <87czcyawl6.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220816094641.8484-3-milkfafa@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <87czcyawl6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 05:46:40PM +0800, Marvin Lin wrote:
-> Add dt-bindings document for Nuvoton NPCM memory controller.
+On Thu, Aug 18, 2022 at 02:34:45PM +0800, Huang, Ying wrote:
+> > In this specific case, the only way to do safe tlb batching in my mind is:
+> >
+> > 	pte_offset_map_lock();
+> > 	arch_enter_lazy_mmu_mode();
+> >         // If any pending tlb, do it now
+> >         if (mm_tlb_flush_pending())
+> > 		flush_tlb_range(vma, start, end);
+> >         else
+> >                 flush_tlb_batched_pending();
 > 
-> Signed-off-by: Marvin Lin <milkfafa@gmail.com>
-> ---
->  .../edac/nuvoton,npcm-memory-controller.yaml  | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+> I don't think we need the above 4 lines.  Because we will flush TLB
+> before we access the pages.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Could you elaborate?
+
+> Can you find any issue if we don't use the above 4 lines?
+
+It seems okay to me to leave stall tlb at least within the scope of this
+function. It only collects present ptes and flush propoerly for them.  I
+don't quickly see any other implications to other not touched ptes - unlike
+e.g. mprotect(), there's a strong barrier of not allowing further write
+after mprotect() returns.
+
+Still I don't know whether there'll be any side effect of having stall tlbs
+in !present ptes because I'm not familiar enough with the private dev swap
+migration code.  But I think having them will be safe, even if redundant.
+
+Thanks,
+
+-- 
+Peter Xu
+

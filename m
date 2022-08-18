@@ -2,124 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00C3597D61
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 06:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D4F597D4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 06:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243308AbiHREVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 00:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
+        id S243270AbiHREVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 00:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243297AbiHREU4 (ORCPT
+        with ESMTP id S243187AbiHREVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 00:20:56 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2957B4A800;
-        Wed, 17 Aug 2022 21:19:34 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 6369D581196;
-        Thu, 18 Aug 2022 00:19:14 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute3.internal (MEProxy); Thu, 18 Aug 2022 00:19:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        colorremedies.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1660796354; x=
-        1660799954; bh=4YQTSfdZ352kAuAPv5CKShp5kenO9X49X3f9t0ZeXxk=; b=b
-        ocDj0vLvQqz2vqNZ60dUWMdGbOuI9sRv8IEcKy/U2vYgds1oBLK4MzGF4Qq11LzB
-        9ybNOkpGfEwIvUEejEl05hBedTgeghwkeMC3SgYNjY60sw6AdbOySSgbj04ytGN8
-        nvRXb+Tyh1cuhpVRXezmiy9D9JtAbrtDR5tYEeT5RABU/YJgjaPWH7FOslyvMw7x
-        vaNJPaxw0GhFeYmVGKUBV80RVmRESMq4PysL36tajxGJBTcoyyXccf1cKlb0t9v8
-        6XED6nt/ZzKgHIIaSK2yuod4gyiSyaENzbipVt2DV3QeOQ+mrSV0kCL5QfGz4T6P
-        QiZU1z/HQpuyEl4V0E6Kg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660796354; x=1660799954; bh=4YQTSfdZ352kAuAPv5CKShp5kenO
-        9X49X3f9t0ZeXxk=; b=PR9SKN1sttok8qkfJSNCUuMvn9VvvaYFljJjKepnyuQ1
-        t515RLdkgS0tPw3WKYVjdKxvs8jc4632zL0sDtQj+vCnJ3XhBsIP23puDKOzPf49
-        cu9qmsgZuN1ffNjQNm7jkHUQFn8MGINTnJ4cH80Nu6f/PHXr1jE6wzAXen2wxx6n
-        4+Qpb4oXPrhXn44nJxQn7BP8KipG0hjioT0Mmvuy/cIvY82XkpXD9Jlib4CZU4I2
-        eaxeL1uFaJnjNm/f6p48O6N1TwTBtbGgxjw2CD+6LsMVWQbftxL7Lm8qPnSy9RIP
-        /IxQtSW0ber6ReTcHptO6IMZF7gfAEAPkuhrCtDwnw==
-X-ME-Sender: <xms:wb39YmgFW7oj307eYJGenkvy_zM4ypiiCempItWLnS9qev4rtpHD9A>
-    <xme:wb39YnDZcpPzdvvMzcF_mFXCAIofBptUGok5Nzsp1v7uSiLPFjr9Yxlozd4JnTs5h
-    ZeOkXS2idsPfESmZpU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehjedgkedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepofgfggfkjghffffhvfev
-    ufgtsehttdertderredtnecuhfhrohhmpedfvehhrhhishcuofhurhhphhihfdcuoehlih
-    hsthhssegtohhlohhrrhgvmhgvughivghsrdgtohhmqeenucggtffrrghtthgvrhhnpeef
-    heeliedugeeuleetffeuheegkeetgfdtveevudffgfejvdegveeljefhvdefhfenucffoh
-    hmrghinhepghhoohhglhgvrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
-    rghmpehmrghilhhfrhhomheplhhishhtshestgholhhorhhrvghmvgguihgvshdrtghomh
-X-ME-Proxy: <xmx:wr39YuGM4YE6JkNNGS4-RsTYWiyPeT4r2dNcshmQVTFJ-uiysXegvw>
-    <xmx:wr39YvSN6jNSinWrbnBiZ2gwfXl4x0mNz-2OUA9KHLUc7StfVAB7pQ>
-    <xmx:wr39Yjxtm4cFLUpkexUuKS7v9um5Px_bObYV70g6lmtx8a76IPX__w>
-    <xmx:wr39YqyfBc8VFuvaoZQbuxg1C1bdcKjvtRRfuCBvRfxjEnb9rQEuOA>
-Feedback-ID: i06494636:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E73591700083; Thu, 18 Aug 2022 00:19:13 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <a817431f-276f-4aab-9ff8-c3e397494339@www.fastmail.com>
-In-Reply-To: <9f2f608a-cd5f-4736-9e6d-07ccc2eca12c@www.fastmail.com>
-References: <dcd8beea-d2d9-e692-6e5d-c96b2d29dfd1@suse.com>
- <2b8a38fa-f15f-45e8-8caa-61c5f8cd52de@www.fastmail.com>
- <CAFj5m9+6Vj3NdSg_n3nw1icscY1qr9f9SOvkWYyqpEtFBb_-1g@mail.gmail.com>
- <b236ca6e-2e69-4faf-9c95-642339d04543@www.fastmail.com>
- <Yv0A6UhioH3rbi0E@T590>
- <f633c476-bdc9-40e2-a93f-29601979f833@www.fastmail.com>
- <Yv0KmT8UYos2/4SX@T590>
- <35f0d608-7448-4276-8922-19a23d8f9049@www.fastmail.com>
- <Yv2P0zyoVvz35w/m@T590>
- <568465de-5c3b-4d94-a74b-5b83ce2f942f@www.fastmail.com>
- <Yv2w+Tuhw1RAoXI5@T590>
- <9f2f608a-cd5f-4736-9e6d-07ccc2eca12c@www.fastmail.com>
-Date:   Thu, 18 Aug 2022 00:18:29 -0400
-From:   "Chris Murphy" <lists@colorremedies.com>
-To:     "Ming Lei" <ming.lei@redhat.com>
-Cc:     "Nikolay Borisov" <nborisov@suse.com>,
-        "Jens Axboe" <axboe@kernel.dk>, "Jan Kara" <jack@suse.cz>,
-        "Paolo Valente" <paolo.valente@linaro.org>,
-        "Btrfs BTRFS" <linux-btrfs@vger.kernel.org>,
-        Linux-RAID <linux-raid@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Josef Bacik" <josef@toxicpanda.com>
-Subject: Re: stalling IO regression since linux 5.12, through 5.18
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 18 Aug 2022 00:21:36 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484ECC7F
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 21:20:30 -0700 (PDT)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 27I4K1MZ017997
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 13:20:02 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 27I4K1MZ017997
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1660796402;
+        bh=X+KYz3bvnotGhgU6LfGTpOOtP+9exfgnFUa2R1hO/Sw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EAvAOmy+hIeZZdWvxAw2098N9bpcv9TJw+7fwxGBO+GWTchOTz/tcdsQTpbdGe4de
+         S7jYcP5U9NlCnIvWAFVaTYZwPg/B05RPJ3USLJKhJeDhXbJsx8tUu40flatqqHKxEU
+         Jc6Of0VMT05yFGdydrdR6eMnNnfK8zL2mijc6+C6yr1A3sVosCIoloCV9hPqjiz+x3
+         Q3Qm0k1E5ue1+X0hFM2BlrDHQBEB3j4/7jrJqArVWh/w+mV4RnJPuxx5A++4B+CioR
+         JaiRgWln0FksarNJZay+2unk8O0VE2MhKjCGMNov/acHK9Z/ccdWNyLzGmP+8ZgNMK
+         0Dd6qpuVnQjoA==
+X-Nifty-SrcIP: [209.85.128.47]
+Received: by mail-wm1-f47.google.com with SMTP id k18-20020a05600c0b5200b003a5dab49d0bso304801wmr.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 Aug 2022 21:20:02 -0700 (PDT)
+X-Gm-Message-State: ACgBeo11j111qPn2GL8ViDkFN3h9nREygmRSalfYvgUNVq0I0vc2iMn6
+        f64FdyXGv/Nfo/WUK7YCaQniGQjU2IZA7UZnqBQ=
+X-Google-Smtp-Source: AA6agR7IOS4x6IdQMvHvGiYpWgJP+NC2pa9X4foDLvWbfo5Q5MSp9wdke92+HWr4Qy3S5VrzEb+RHB2eVswSdSR8Hzg=
+X-Received: by 2002:a05:600c:5102:b0:3a5:a46d:5d4b with SMTP id
+ o2-20020a05600c510200b003a5a46d5d4bmr619439wms.68.1660796400821; Wed, 17 Aug
+ 2022 21:20:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <1659635174-2376-1-git-send-email-quic_gurus@quicinc.com> <CAKwvOdnbMs-pLRfo4O-MHOF=9=kAvDuktkeeeX7bkmnLi8LWnw@mail.gmail.com>
+In-Reply-To: <CAKwvOdnbMs-pLRfo4O-MHOF=9=kAvDuktkeeeX7bkmnLi8LWnw@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 18 Aug 2022 13:19:16 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATbtrKTgNcoBu=o6rNDmjW4Fdc+2spgZZr52YV2axyfMA@mail.gmail.com>
+Message-ID: <CAK7LNATbtrKTgNcoBu=o6rNDmjW4Fdc+2spgZZr52YV2axyfMA@mail.gmail.com>
+Subject: Re: [PATCH] scripts/clang-tools: Remove DeprecatedOrUnsafeBufferHandling
+ check
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Thu, Aug 18, 2022, at 12:12 AM, Chris Murphy wrote:
-> On Wed, Aug 17, 2022, at 11:41 PM, Ming Lei wrote:
+On Thu, Aug 18, 2022 at 8:40 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
->> OK, can you post the blk-mq debugfs log after you trigger it on v5.17?
+> On Thu, Aug 4, 2022 at 10:46 AM Guru Das Srinagesh
+> <quic_gurus@quicinc.com> wrote:
+> >
+> > This `clang-analyzer` check flags the use of memset(), suggesting a more
+> > secure version of the API, such as memset_s(), which does not exist in
+> > the kernel:
+> >
+> >   warning: Call to function 'memset' is insecure as it does not provide
+> >   security checks introduced in the C11 standard. Replace with analogous
+> >   functions that support length arguments or provides boundary checks such
+> >   as 'memset_s' in case of C11
+> >   [clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling]
+> >
+> > Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+> > ---
+> >  scripts/clang-tools/run-clang-tools.py | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+> > index f754415a..1337ced 100755
+> > --- a/scripts/clang-tools/run-clang-tools.py
+> > +++ b/scripts/clang-tools/run-clang-tools.py
+> > @@ -51,6 +51,7 @@ def run_analysis(entry):
+> >          checks += "linuxkernel-*"
+> >      else:
+> >          checks += "clang-analyzer-*"
+> > +        checks += ",-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling"
 >
-> https://drive.google.com/file/d/1n8f66pVLCwQTJ0PMd71EiUZoeTWQk3dB/view?usp=sharing
+> Thanks for the patch! I think it makes sense to add this.  I suspect
+> the list of checks we might want to disable may grow. Maybe when it
+> does, we could put these in an array and join them at the end.
 >
-> This time it happened pretty quickly. This log is soon after triple 
-> digit load and no IO, but not as fully developed as before. The system 
-> has become entirely unresponsive to new commands, so I have to issue 
-> sysrq+b - if I let it go too long even that won't work.
+> Anyways, LGTM
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> Masahiro, would you mind picking this up for us, please?
 
-OK by the time I clicked send, the system had recovered. That also sometimes happens but then later IO stalls again and won't recover.  So I haven't issued sysrq+b on this run yet. Here is a second blk-mq debugfs log...
 
-https://drive.google.com/file/d/1irHcns0qe7e7DJaDfanX8vSiqE1Nj5xl/view?usp=sharing
+
+
+Sure.
+Applied to linux-kbuild/fixes.
+Thanks.
+
+
+
+
+
+> >      p = subprocess.run(["clang-tidy", "-p", args.path, checks, entry["file"]],
+> >                         stdout=subprocess.PIPE,
+> >                         stderr=subprocess.STDOUT,
+> > --
+> > 2.7.4
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
 
 
 -- 
-Chris Murphy
+Best Regards
+Masahiro Yamada

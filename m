@@ -2,161 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 643EA5986CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE785986D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 17:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344030AbiHRPE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 11:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
+        id S1344039AbiHRPFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 11:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344033AbiHRPEV (ORCPT
+        with ESMTP id S1344028AbiHRPFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 11:04:21 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EFA3CBC8;
-        Thu, 18 Aug 2022 08:04:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1687DCE20C3;
-        Thu, 18 Aug 2022 15:04:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12DA1C433B5;
-        Thu, 18 Aug 2022 15:04:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660835056;
-        bh=vBhKqDvpAfhoNzcM9gcsVCR1KKZq7v+wp1Li/loUVDw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DvGMZKAhoCDn2oqCGr++nUr+qzxOYRcBRb6wIfhTu8WZ9gxneHoW4E0e3oJ5MdJRb
-         ESq4tKFiAtwzj7HEzhPKNKkdYZ2bpiWxc9UGtlwLk4kndv5D+5VinOQwRJZ89nfzZ6
-         Khy5GIWLX2HCKmXo58wSG+1RsXjSxwjSVuushzzo=
-Date:   Thu, 18 Aug 2022 17:04:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
-Cc:     oneukum@suse.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thierry.guibert@free.fr
-Subject: Re: [PATCH] CDC-ACM : Add Icom PMR F3400 support (0c26:0020)
-Message-ID: <Yv5U7Xw5gHSY5EH0@kroah.com>
-References: <20220817102440.117640-1-thierry.guibert@croix-rouge.fr>
+        Thu, 18 Aug 2022 11:05:15 -0400
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6A056BAA;
+        Thu, 18 Aug 2022 08:05:14 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id h21so1304778qta.3;
+        Thu, 18 Aug 2022 08:05:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=UuLLOoIfXDmSYWjZC290GUw+IzJXaVpWsPuShy/dmPI=;
+        b=B5Ujm8eW2Q1/s7Z+vq8H1AizL2iy91WEZB4ME7JRAsBsBx9ZJRbcBpUYrgeam78M35
+         6tQ5PGNoNlKPmqg8Wrpth9W3EAAYsx/j1XoFHV14pOSmuKyUAd5kKgOGYzAK+2RvA7Yb
+         s6gZKTmaw5bvhYHDsG4Soqeha/hXEQvfGdukx6ebSuG6WRklRCHEPrhX9xgRCsfH8tb/
+         tIc4N814gw4pir+dUW3xQSPaUWvHPI9SQWP9O60/lhnRDWv3F8hiUHQGKeD39U3gOE2s
+         1cKTHxJDziOdZA70pCZeEPADm/covHtOJe7k8g6rNWXXjmnBh4DlFDjmrFZXqavlGRe1
+         iReQ==
+X-Gm-Message-State: ACgBeo0k4h6Jt++rSH53ILbdw9JU9KQrS/Cm67Eer30IqGRpLiBChieY
+        kyKNJg1KAPEKcdmZZwd5WQ==
+X-Google-Smtp-Source: AA6agR4JUcSJgb/u8fdF/2bXPaKAB3WimFqT3XSc0IWlU8K2rDZ891Q/oFgGD9Ass8SXa2uJp5YBDQ==
+X-Received: by 2002:ac8:5d49:0:b0:344:9232:be56 with SMTP id g9-20020ac85d49000000b003449232be56mr2377878qtx.122.1660835113502;
+        Thu, 18 Aug 2022 08:05:13 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:5fe0:b4f5:6e22:4704:df60:73a3])
+        by smtp.gmail.com with ESMTPSA id o10-20020ac87c4a000000b0034305a91aaesm1220545qtv.83.2022.08.18.08.05.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 08:05:13 -0700 (PDT)
+Received: (nullmailer pid 1868209 invoked by uid 1000);
+        Thu, 18 Aug 2022 15:05:10 -0000
+Date:   Thu, 18 Aug 2022 09:05:10 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, mark.rutland@arm.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
+        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
+        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
+        rtanwar@maxlinear.com
+Subject: Re: [PATCH 13/16] hwmon: (mr75203) add thermal coefficient
+ properties for Moortec PVT controller
+Message-ID: <20220818150510.GI1829017-robh@kernel.org>
+References: <20220816082757.11990-1-farbere@amazon.com>
+ <20220816082757.11990-14-farbere@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817102440.117640-1-thierry.guibert@croix-rouge.fr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220816082757.11990-14-farbere@amazon.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 12:24:40PM +0200, Thierry GUIBERT wrote:
-> Supports for ICOM F3400 and ICOM F4400 PMR radios in CDC-ACM driver
-> enabling the AT serial port.
-> The Vendor Id is 0x0C26
-> The Product ID is 0x0020
+On Tue, Aug 16, 2022 at 08:27:54AM +0000, Eliav Farber wrote:
+> Add optional "ts-coeff-g", "ts-coeff-h", "ts-coeff-cal5" and
+> "ts-coeff-j" properties to be used instead of defaults for the
+> thermal equasion.
 > 
-> Output of lsusb :
-> Bus 001 Device 009: ID 0c26:0020 Prolific Technology Inc. ICOM Radio
-> Couldn't open device, some information will be missing
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass            2 Communications
->   bDeviceSubClass         0
->   bDeviceProtocol         0
->   bMaxPacketSize0        64
->   idVendor           0x0c26 Prolific Technology Inc.
->   idProduct          0x0020
->   bcdDevice            0.00
->   iManufacturer           1 ICOM Inc.
->   iProduct                2 ICOM Radio
->   iSerial                 3 *obfuscated*
->   bNumConfigurations      1
->   Configuration Descriptor:
->     bLength                 9
->     bDescriptorType         2
->     wTotalLength       0x0030
->     bNumInterfaces          2
->     bConfigurationValue     1
->     iConfiguration          0
->     bmAttributes         0xc0
->       Self Powered
->     MaxPower                0mA
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        0
->       bAlternateSetting       0
->       bNumEndpoints           1
->       bInterfaceClass         2 Communications
->       bInterfaceSubClass      2 Abstract (modem)
->       bInterfaceProtocol      1 AT-commands (v.25ter)
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x83  EP 3 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval              12
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        1
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass        10 CDC Data
->       bInterfaceSubClass      0
->       bInterfaceProtocol      0
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x82  EP 2 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x02  EP 2 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0200  1x 512 bytes
->         bInterval               0
-> 
-> Signed-off-by: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
 > ---
->  drivers/usb/class/cdc-acm.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  .../bindings/hwmon/moortec,mr75203.yaml       | 33 +++++++++++++++++++
+>  1 file changed, 33 insertions(+)
 > 
-> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> index 9b9aea24d58c..7735c6edce73 100644
-> --- a/drivers/usb/class/cdc-acm.c
-> +++ b/drivers/usb/class/cdc-acm.c
-> @@ -1813,6 +1813,9 @@ static const struct usb_device_id acm_ids[] = {
->  	{ USB_DEVICE(0x0ca6, 0xa050), /* Castles VEGA3000 */
->  	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
->  	},
-> +	{ USB_DEVICE(0x0c26, 0x0020), /* Icom ICF3400 Serie */
-> +	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
-> +	},
+> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> index e2a55001eefc..867664bd937f 100644
+> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> @@ -62,6 +62,30 @@ properties:
+>        used to normalzie the voltage output results.
+>      $ref: /schemas/types.yaml#definitions/uint32
+>  
+> +  ts-coeff-g:
 
-These were all in sorted order, until your entry :(
+Needs a vendor prefix
 
-Can you fix this up to be in the correct order and resend a v2?
+> +    description:
+> +      G coefficient for thermal equation.
+> +    maxItems: 1
 
-thanks,
+It's a scalar. 'maxItems' is for arrays/matrices.
 
-greg k-h
+> +    $ref: /schemas/types.yaml#definitions/uint32
+> +
+> +  ts-coeff-h:
+> +    description:
+> +      H coefficient for thermal equation.
+> +    maxItems: 1
+> +    $ref: /schemas/types.yaml#definitions/uint32
+> +
+> +  ts-coeff-cal5:
+> +    description:
+> +      cal5 coefficient for thermal equation (can't be 0).
+
+minimum: 1
+
+Other constraints on all these?
+
+> +    maxItems: 1
+> +    $ref: /schemas/types.yaml#definitions/uint32
+> +
+> +  ts-coeff-j:
+> +    description:
+> +      J coefficient for thermal equation.
+> +    maxItems: 1
+> +    $ref: /schemas/types.yaml#definitions/int32
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -75,6 +99,10 @@ additionalProperties:
+>    - reset-control-skip
+>    - vm-active-channels
+>    - vm-pre-scalar-ch#
+> +  - ts-coeff-g
+> +  - ts-coeff-h
+> +  - ts-coeff-cal5
+> +  - ts-coeff-j
+>  
+>  examples:
+>    - |
+> @@ -90,5 +118,10 @@ examples:
+>          resets = <&rcu0 0x40 7>;
+>          vm-active-channels = [08 10 02];
+>          vm-pre-scalar-ch5 = <2>;
+> +        ts-coeff-g = <57400>;
+> +        ts-coeff-h = <249400>;
+> +        ts-coeff-cal5 = <4096>;
+> +        ts-coeff-j = <0>;
+> +
+>          #thermal-sensor-cells = <1>;
+>      };
+> -- 
+> 2.37.1
+> 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BB1599012
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC3E599005
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 00:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244861AbiHRWGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 18:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        id S1345725AbiHRWGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 18:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245098AbiHRWGf (ORCPT
+        with ESMTP id S232990AbiHRWGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 18:06:35 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE6FD21F7;
-        Thu, 18 Aug 2022 15:06:34 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id c39so3563201edf.0;
-        Thu, 18 Aug 2022 15:06:34 -0700 (PDT)
+        Thu, 18 Aug 2022 18:06:36 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883F7D21FD;
+        Thu, 18 Aug 2022 15:06:35 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id o22so3517121edc.10;
+        Thu, 18 Aug 2022 15:06:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=rXCQ8SbozupG6ha1H9wZwHDGGr1UUdJ24PVvc1F+k98=;
-        b=qn5CAoIVHpQInp9BIT7gOkNmrutb2Ci1prwWfuAddCgSkrpdbHfyntWsKKfgPkgs44
-         8UQYym3h8qBk9LSWTscOy/GeZxsfbxAPjcxIycTTWYuqsG3gx7N6gnckZCqHWSKpJJxO
-         j9lOR9f6am7jmSfxx3VizQModuY3HRLCfBz+FnT9hjMXV1OD2289Ca5BPcdyfQCxv8G6
-         FfQYhoIcD5eb+Y+nlBAAw+jzzXUzamGpRQolLg/WPKViRWshv+FywVcOb+4WtSMDeM05
-         9nediODEpyS2l1vaPfbF8JpR16TVhcpZj6C0dG2NCVTJEJSeGeoeY+Hjtoq5ZFc4j+6G
-         uldg==
+        bh=+/nnw6P3VjEE7fxsWw9HS7hocIb1CR7Edy+bXNA5xbE=;
+        b=GqVlQND4Ffnhd10O5kdtYmasl4lYsiHuOHijvyeuejZibxkh6pgTGB/1Q4+P2pXXtf
+         QHXifGoBLmD3+rFuaIYZfWGreKWAEwGrw8qJH4/og6VfOk/5B3MqUpuJbCEd59Rimtav
+         112M7O33GK1xc3fRWSo2AGMy691pRXYs6omlu1bhEtlQR7TkmiJ5LqYNVe/olde2I9hm
+         U7b0gfzV431wEYeS8guM70bHKjbu5NXAeqSYNUuNDMDjrE3319qknMz64TOHCYi6cqvn
+         mMKsTNZ3OFN9lig95nuTqoxcbv7w6Sk9/26DPdBgKHQz/JjTcS8HiT7hZodsmb72D9Du
+         hKpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=rXCQ8SbozupG6ha1H9wZwHDGGr1UUdJ24PVvc1F+k98=;
-        b=zIOCTpLs0/NdRCvzM6bNNhAaYlTncCUhOqvNPz0iMrg+foaYcGu0CBVdyr47dThkGp
-         hZ0im3PCJE82d3gMQGdFFPdBpLUo/Now8sCeakszfF/Q45DR2db5cP6h8Gqlqjyp5Vg4
-         YeNOXuJVQGnHlJKprNtahEO/qfNhdeExktKCGHjWqD0mvpjBKrB0UMHRQXKLqXZwQECw
-         bGBiJQrnueXEIjpnPlDy4UNQwNJTax9yLNH/XcHp9TlpwzzjPPRLN54PAljZ05U+Q2l/
-         p6Hp/rCQfxveDRAWQJVww/6BvVuq8ezpKmD4bvCrclvIFsCWPwbRHyWdLPOL7i1zjORR
-         ZvsA==
-X-Gm-Message-State: ACgBeo0Fp2ar2/z0AFGm+dT0A+iSCrXBXf/A/vIDU9qQU+yzQ/NxYNZW
-        MEtfaK5Smlur2F9EGfoUNerWUDYeO2A=
-X-Google-Smtp-Source: AA6agR455XAlEKvdEXZh03rSWl/Cq/MwRL5ESK3iNkYuBOdA+v4ZUCmSFXNbYbvPrz93DjwqLNvMUQ==
-X-Received: by 2002:aa7:d802:0:b0:445:e618:fae8 with SMTP id v2-20020aa7d802000000b00445e618fae8mr3817005edq.182.1660860393009;
-        Thu, 18 Aug 2022 15:06:33 -0700 (PDT)
+        bh=+/nnw6P3VjEE7fxsWw9HS7hocIb1CR7Edy+bXNA5xbE=;
+        b=6e+rxu21MuM0C1St9Q5FtiRLRS8DntFDSZqtuGI1qO69matfgByRwHyEd8kSieOOZT
+         rgp8iIBA3tD+lyKVHr00yas5NGgDDZDJkKHZDXcwtk87mYpueA2e4LPOu3ajcqt7Gcfi
+         A5RzGy7C9JluoLBs6lYDiZz+Z/9PToukW5PsTtjVuiCD2Oe/5PdUuc74k5vbCVt3axWH
+         i43vEhItCQNllulZ2/nvBD4MxyyDYDScp9igZN5LRN0fAv1y9r/gIJ/Fu6Bk/TleTW8m
+         2zFj2BRHJCsG+sUrjcEDESSk7JznNzXixbxYflhOqJfkOHfuKDeKUEIY8HSAk8M1ieZJ
+         fIJA==
+X-Gm-Message-State: ACgBeo36AEaJjiPSGfrI/mIkD/+eVy1CUTKeucmJOAADVb4jwSe8RacD
+        Qj4D6kHdOrqQoT6SBp97gXo=
+X-Google-Smtp-Source: AA6agR7cQrTvw/gSZQdLR46VStoL3nBL64dfZY9uQj7dx0rSXb/S/dW226Tf5G+7CHNsTp0e65cezQ==
+X-Received: by 2002:a50:9f44:0:b0:445:dfca:87da with SMTP id b62-20020a509f44000000b00445dfca87damr3660384edf.105.1660860394145;
+        Thu, 18 Aug 2022 15:06:34 -0700 (PDT)
 Received: from fedora.robimarko.hr (cpe-94-253-165-74.zg.cable.xnet.hr. [94.253.165.74])
-        by smtp.googlemail.com with ESMTPSA id dk5-20020a0564021d8500b00442d5054a51sm1851584edb.87.2022.08.18.15.06.32
+        by smtp.googlemail.com with ESMTPSA id dk5-20020a0564021d8500b00442d5054a51sm1851584edb.87.2022.08.18.15.06.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 15:06:32 -0700 (PDT)
+        Thu, 18 Aug 2022 15:06:33 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         konrad.dybcio@somainline.org, mturquette@baylibre.com,
@@ -56,10 +56,11 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org,
         dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v3 3/9] clk: qcom: apss-ipq6018: mark apcs_alias0_core_clk as critical
-Date:   Fri, 19 Aug 2022 00:06:22 +0200
-Message-Id: <20220818220628.339366-3-robimarko@gmail.com>
+Cc:     Robert Marko <robimarko@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 4/9] dt-bindings: clock: qcom,a53pll: add IPQ8074 compatible
+Date:   Fri, 19 Aug 2022 00:06:23 +0200
+Message-Id: <20220818220628.339366-4-robimarko@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220818220628.339366-1-robimarko@gmail.com>
 References: <20220818220628.339366-1-robimarko@gmail.com>
@@ -75,33 +76,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While fixing up the driver I noticed that my IPQ8074 board was hanging
-after CPUFreq switched the frequency during boot, WDT would eventually
-reset it.
+Add IPQ8074 compatible to A53 PLL bindings.
 
-So mark apcs_alias0_core_clk as critical since its the clock feeding the
-CPU cluster and must never be disabled.
-
-Fixes: 5e77b4ef1b19 ("clk: qcom: Add ipq6018 apss clock controller")
 Signed-off-by: Robert Marko <robimarko@gmail.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/clk/qcom/apss-ipq6018.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/clock/qcom,a53pll.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
-index be952d417ded..f2f502e2d5a4 100644
---- a/drivers/clk/qcom/apss-ipq6018.c
-+++ b/drivers/clk/qcom/apss-ipq6018.c
-@@ -56,7 +56,7 @@ static struct clk_branch apcs_alias0_core_clk = {
- 			.parent_hws = (const struct clk_hw *[]){
- 				&apcs_alias0_clk_src.clkr.hw },
- 			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
-+			.flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
+diff --git a/Documentation/devicetree/bindings/clock/qcom,a53pll.yaml b/Documentation/devicetree/bindings/clock/qcom,a53pll.yaml
+index fbd758470b88..76830816982e 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,a53pll.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,a53pll.yaml
+@@ -17,6 +17,7 @@ properties:
+   compatible:
+     enum:
+       - qcom,ipq6018-a53pll
++      - qcom,ipq8074-a53pll
+       - qcom,msm8916-a53pll
+       - qcom,msm8939-a53pll
+ 
 -- 
 2.37.2
 

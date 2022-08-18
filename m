@@ -2,82 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 730BA598017
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 10:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8794598015
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 10:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239891AbiHRI2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 04:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
+        id S238336AbiHRI17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 04:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238978AbiHRI2U (ORCPT
+        with ESMTP id S231430AbiHRI15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 04:28:20 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DFE9584
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:28:17 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1660811295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GmDACFAww771N8QDTZCRoxaYGKF8g2ZcH88LHpMyuOQ=;
-        b=i4uEb4xT2CK5L/Y7PRLMc1NDACaYTmcgl7O+fTwj0efVvaC5BIkWasWWIr2OB3DVx3xZ3y
-        y3Ifi+LMJIloPqAoSVDM1Fva9sR5PCHap83JuCcv7BKLjYajA4bbvKrUurUoLIz/2yKSPM
-        s45TYx25iDkJwsGxBbITbsfZUI977HY=
+        Thu, 18 Aug 2022 04:27:57 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FEFAF4BF
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:27:56 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id 130so898366pfy.6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=EmRObFLBYlo/QTIFOmKwyNbAwrACrTIX9zYb5ZW9YpQ=;
+        b=ZnFbnLt+FmH/S92YpyR3SthYc2Q1rZs+3KQgNhRfnSuREc+qoFxX6gtyU3tRPSBXlQ
+         ywvhMZRNfJw2m16v1N8UNmBzIWu/K+ar8pEtCvgXYfOcrzWZHezwXsdko0iBBBoec0zG
+         2u9/hXyGsaaJKrnqpEoaHCSbauNEoaUB7ms8jnTIuikzM77pfGuqn58nDXiXAXYAHmSA
+         0gGj3P9rJo5p8/gVuDiQxalHRsb8Uqe2uzB54CoE1OUtP+L2Gc2deo27RhrgntpbUspc
+         NpuDf2+WvZ443nhrYEjvcwDb0+3zB/lJaOyqZahjtFwmaI8KVmdu7BGxOaowdS7P1QeA
+         l69Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=EmRObFLBYlo/QTIFOmKwyNbAwrACrTIX9zYb5ZW9YpQ=;
+        b=5eyrHx2DDwgf9Int+S9Titk2Y9OwOlDL4MbzpLNu+KqMa/Qw5VI7+TJdmAxAiuVzmS
+         f4UiklWg8ucnUis7YgI8eXfJKnSbC9mDmlpFmy4MmqheUtrt0bgWN7FQ3vf4kV9rGwc3
+         FPGSGUIbyaDR+p4arWCrfPSODIgj1XbdPKmxLCmuRSKAYUfnvzH+PVEFq76Tbvhgc68z
+         x+LagYJfir09S3lTaS4bwM/L2WlmbLgS7ysYMIcmOiTJQhgjFTD4uLuSC5nXbbsvdqp1
+         4XBPraQZfhv8VguAHSIDQ5K92/UIHicsc4YYCWrX0mvsxmNMrMbD3Ox2I68CT++FwsOF
+         AVjQ==
+X-Gm-Message-State: ACgBeo2tUkrT9bsi6Itdw/egxe8jlaKG8XliUya8DXQudUCScXJZbStc
+        9pR6QnROoSdaGglyKrZVGt+LGw==
+X-Google-Smtp-Source: AA6agR5DTxmJDTqZ0OLuFeuGqsM5XgRBq8GRImtxLazznsQnmAtoenqlD5ZooU2acz1nq4rvKV7k/w==
+X-Received: by 2002:a63:82c6:0:b0:41c:d253:a446 with SMTP id w189-20020a6382c6000000b0041cd253a446mr1623984pgd.125.1660811275880;
+        Thu, 18 Aug 2022 01:27:55 -0700 (PDT)
+Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id 83-20020a621756000000b0052b84ca900csm971920pfx.62.2022.08.18.01.27.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 01:27:55 -0700 (PDT)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH] mm: thp: remove redundant pgtable check in set_huge_zero_page()
+Date:   Thu, 18 Aug 2022 16:27:48 +0800
+Message-Id: <20220818082748.40021-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 1/2] mm/damon: validate if the pmd entry is present
- before accessing
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <58b1d1f5fbda7db49ca886d9ef6783e3dcbbbc98.1660805030.git.baolin.wang@linux.alibaba.com>
-Date:   Thu, 18 Aug 2022 16:27:41 +0800
-Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A18421D4-7BD6-41E6-A284-846C4EF53B2F@linux.dev>
-References: <58b1d1f5fbda7db49ca886d9ef6783e3dcbbbc98.1660805030.git.baolin.wang@linux.alibaba.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When the pgtable is NULL in the set_huge_zero_page(), we should
+not increment the count of PTE page table pages by calling
+mm_inc_nr_ptes(). Otherwise we may receive the following warning
+when the mm exits:
 
+	BUG: non-zero pgtables_bytes on freeing mm
 
-> On Aug 18, 2022, at 15:37, Baolin Wang <baolin.wang@linux.alibaba.com> =
-wrote:
->=20
-> The pmd_huge() is used to validate if the pmd entry is mapped by a =
-huge
-> page, also including the case of non-present (migration or hwpoisoned)
-> pmd entry on arm64 or x86 architectures. That means the pmd_pfn() can
-> not get the correct pfn number for the non-present pmd entry, which
-> will cause damon_get_page() to get an incorrect page struct (also
-> may be NULL by pfn_to_online_page()) to make the access statistics
-> incorrect.
->=20
-> Moreover it does not make sense that we still waste time to get the
-> page of the non-present entry, just treat it as not-accessed and skip =
-it,
-> that keeps consistent with non-present pte level entry.
->=20
-> Thus adding a pmd entry present validation to fix above issues.
->=20
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Reviewed-by: SeongJae Park <sj@kernel.org>
+Now we can't observe the above warning since only
+do_huge_pmd_anonymous_page() invokes set_huge_zero_page() and the
+pgtable can not be NULL.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Therefore, instead of moving mm_inc_nr_ptes() to the non-NULL
+branch of pgtable, it is better to remove the redundant pgtable
+check directly.
 
-Thanks.
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+---
+ mm/huge_memory.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 83c47a989260..655da0b4fea0 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -770,8 +770,7 @@ static void set_huge_zero_page(pgtable_t pgtable, struct mm_struct *mm,
+ 		return;
+ 	entry = mk_pmd(zero_page, vma->vm_page_prot);
+ 	entry = pmd_mkhuge(entry);
+-	if (pgtable)
+-		pgtable_trans_huge_deposit(mm, pmd, pgtable);
++	pgtable_trans_huge_deposit(mm, pmd, pgtable);
+ 	set_pmd_at(mm, haddr, pmd, entry);
+ 	mm_inc_nr_ptes(mm);
+ }
+-- 
+2.20.1
 

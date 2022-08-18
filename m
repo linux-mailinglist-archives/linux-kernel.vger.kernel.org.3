@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D189598D82
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD59598D88
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 22:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240985AbiHRUM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 16:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        id S1345450AbiHRUMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 16:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345902AbiHRUME (ORCPT
+        with ESMTP id S235941AbiHRUMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 16:12:04 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E818AD2EB7
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 13:07:35 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id C994A397075;
-        Thu, 18 Aug 2022 16:07:34 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id gsVIAdTyPiF4; Thu, 18 Aug 2022 16:07:34 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 3C466397074;
-        Thu, 18 Aug 2022 16:07:34 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 3C466397074
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1660853254;
-        bh=SkZgC0RsN7P2tBsmQlIQmAIwtS4a7HORxyttVgTFO/A=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=nxwd5oaSIs2ve2F2VZlRFptFl+Z7R/VEpslfn5tF1WUT0HNYsRhh6d/dW+guBhE7D
-         O+FXv68je/ptwbOWJ1Fgh4oIjzUjwXSC92b+h9OVszY0hdM72/sWJr9KYvkwfPmHNl
-         dU5/7nIPkzJd2U1dcHEzVR6czu2C8HSsAsjw1RL2lZwEtdtDgSvpXQg9RWyOssCArn
-         Ik/Tza17hDfylF8t8y6XDNu7ntDtw0HQRaMUh0QEa/BpP0TKfYW5s/JNu6WmrxGfoZ
-         F7XuyuD7EsOeqBcSzWqyDcYw8KKMoRSohqwIkrWa0E0H07Sm1AWz8UnBEriM+3PnH9
-         GtwTzX6OQdtTQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id fyzT_UDvwwWd; Thu, 18 Aug 2022 16:07:34 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 2EEC3397694;
-        Thu, 18 Aug 2022 16:07:34 -0400 (EDT)
-Date:   Thu, 18 Aug 2022 16:07:34 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     linux-kernel <linux-kernel@vger.kernel.org>,
-        lttng-dev <lttng-dev@lists.lttng.org>, rp <rp@svcs.cs.pdx.edu>
-Cc:     paulmck <paulmck@kernel.org>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, lwn <lwn@lwn.net>
-Message-ID: <1089391319.15796.1660853254177.JavaMail.zimbra@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.12.4 and 0.13.2
+        Thu, 18 Aug 2022 16:12:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8A8D31D2;
+        Thu, 18 Aug 2022 13:07:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C3A661445;
+        Thu, 18 Aug 2022 20:07:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A2B0C433D6;
+        Thu, 18 Aug 2022 20:07:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660853260;
+        bh=HqRuYKPKoRqwJbJeLclSyLBrd/IVtnMuG7MQd/VevCw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jPsTfP/aPrMrzYy/HpSpqIzUeZYAjyghO9GBUtSIE7C0oEeVCPg3kyjMeYnLmDehn
+         y/y7rqgCzbcVi8piPG/I3bhmbJtVTps5aj4CHhf9VBd2LiZiK0dByHsk7rA0IktQM+
+         ZzFoncm1N2UJKVPqlQv/+ZYSzYxpj3qmNAuJwCimQmUQqp8ZRUQYZTV5M03xRX7/vD
+         Ael/mvXjJ+lwloqa1+vlKsYH+xDmqp46EulFfORNGBxQSFF9FsKPf0gqZfG8vrf5re
+         17kx56JqBYn0XOPTEjJNc1aZzev6m9zz4M/o0QfNUtNynHIbJF9hp5jf3GCZBZNfq9
+         lkWIlrUDb0hVQ==
+Received: by pali.im (Postfix)
+        id 8AD44622; Thu, 18 Aug 2022 22:07:37 +0200 (CEST)
+Date:   Thu, 18 Aug 2022 22:07:37 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/4] PCI: mvebu: Implement support for interrupts on
+ emulated bridge
+Message-ID: <20220818200737.7w2wqh62arfrskks@pali>
+References: <20220817230036.817-1-pali@kernel.org>
+ <20220817230036.817-3-pali@kernel.org>
+ <Yv6YOZ2FuTn8D5qS@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - FF103 (Linux)/8.8.15_GA_4372)
-Thread-Index: bwIKiKBCPmydWVq5CpBZdRA1UQ0RxA==
-Thread-Topic: Userspace RCU 0.12.4 and 0.13.2
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yv6YOZ2FuTn8D5qS@lunn.ch>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,39 +67,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ re-sending without html headers. My email client managed to add those without me realizing it. ]
+On Thursday 18 August 2022 21:51:21 Andrew Lunn wrote:
+> > -static irqreturn_t mvebu_pcie_irq_handler(int irq, void *arg)
+> > +static irqreturn_t mvebu_pcie_error_irq_handler(int irq, void *arg)
+> > +{
+> > +	struct mvebu_pcie_port *port = arg;
+> > +	struct device *dev = &port->pcie->pdev->dev;
+> > +	u32 cause, unmask, status;
+> > +
+> > +	cause = mvebu_readl(port, PCIE_INT_CAUSE_OFF);
+> > +	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
+> > +	status = cause & unmask;
+> > +
+> > +	/* "error" interrupt handler does not process INTX interrupts */
+> > +	status &= ~(PCIE_INT_INTX(0) | PCIE_INT_INTX(1) |
+> > +		    PCIE_INT_INTX(2) | PCIE_INT_INTX(3));
+> 
+> Just for my understanding...
+> 
+> There are two interrupts
 
-Hi,
+yes
 
-This is stable release announcement for the Userspace RCU project.
-It covers the two currently maintained stable branches: 0.12 and 0.13,
-respectively with releases v0.12.4 and v0.13.2.
+> but the status information what those
+> interrupts actually mean are all packed into one register?
 
-Especially for the spurious futex wakeup fix, users of the 0.12 and 0.13 (or older)
-liburcu branches are recommended to upgrade.
+yes
 
-* Noteworthy in these releases:
+for masking individual interrupt events there is just one shared
+register for both "intx" and "error" interrupt source.
 
-- Handle spurious futex wakeups in urcu-qsbr, urcu, urcu-wait, defer_rcu, call_rcu,
-  and workqueue code. This has been known to cause issues where the workqueue
-  worker thread spuriously takes nearly 100% of CPU time.
+and also there is also just one shared "cause" register which says which
+individual interrupt events happened.
 
-- Change method used by _rcu_dereference ot strip type constness.
-  Rather than using pointer arithmetic (which does not work with opaque types),
-  rely on a statement expression trick.
+> I assume reading the clause register does not clear set bits?
 
-- Fix support for Linux systems where sysconf(_SC_NPROCESSORS_CONF) can
-  return a value less than max cpu id.
+yes, reading does not clear any interrupt event.
 
-Project website: https://liburcu.org
+> Otherwise there
+> would be a race condition.
 
-Feedback is welcome!
+> Are these actually level interrupts
 
-Thanks,
+yes
 
-Mathieu
+> and in order to clear them you need to poke some other register?
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+to clear individual interrupt event you have to write corresponding 1b
+bit into that cause register.
+
+so if interrupts events BIT(24), BIT(16) and BIT(17) happened and
+BIT(24), BIT(25), BIT(26), BIT(27) and BIT(16) are unmasked then CPU
+receives two interrupts (one for intx:24-27 and one for err:16). kernel
+will call interrupt handlers for both intx and err (possible also in
+parallel if it unmasked on different CPUs) and each handler just clears
+events which process. So writing BIT(16) into cause register clears only
+event 16 and all other (24-27, 17) are still active. And level interrupt
+(the correct one intx or err) is then triggered again.
+
+> > +	/*
+> > +	 * Old DT bindings do not contain "error" interrupt
+> > +	 * so do not fail probing driver when interrupt does not exist.
+> > +	 */
+> > +	port->error_irq = of_irq_get_byname(child, "error");
+> > +	if (port->error_irq == -EPROBE_DEFER) {
+> > +		ret = port->error_irq;
+> > +		goto err;
+> > +	}
+> > +	if (port->error_irq <= 0) {
+> > +		dev_warn(dev, "%s: interrupts on Root Port are unsupported, "
+> 
+> Maybe that should be "Error interrupts on Root..." ?
+> 
+>       Andrew
+
+From PCIe Root Port point of view, it can be _any_ interrupt which can
+PCIe Root Port (as PCI device) reports (it does not have to be PCIe AER
+- error). Without this support PCIe Root Port cannot trigger or generate
+any interrupt. Note that from PCIe point of view, this Marvell Root Port
+never generates INTx interrupt. INTx interrupts are generated only by
+endpoint devices. Marvell Root Port reports all events via those
+_custom_ Marvell interrupts triggered by "error" source. So "error" here
+means "Marvell error", not "PCIe error" (e.g. PCIe AER). For example
+also PME events are reported via this "error" source. And PME is not
+error.

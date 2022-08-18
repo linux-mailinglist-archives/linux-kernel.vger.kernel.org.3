@@ -2,242 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A5B598AF8
+	by mail.lfdr.de (Postfix) with ESMTP id 72E97598AF9
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344856AbiHRSRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 14:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
+        id S1345370AbiHRSRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 14:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240531AbiHRSR3 (ORCPT
+        with ESMTP id S240531AbiHRSRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 14:17:29 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55F7CD531
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:17:26 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id v128so2280318vsb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:17:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=rT2H7zlcI3RbMs94rTqf1TBmQjKXhRQAfwkbwmUxhx8=;
-        b=ZAe8Fo690UR35gXYrC8n1f6/45PnTs0JqPtd/wzOqd21vWG8HzQqnUef38dnjI+jIo
-         F/AF3v6Go4ZhQy72p3BLVZ9xq1OM/OjXCeqaFXW+JjQeDXrr0C+vAA2luAnzsiZ05IZG
-         uuofD+JCbEEFQvKGcSU6Zm59tINvNljz/buqfNO4Jvk8342/bQ3dFu7G9B+R8nT9Z6Ei
-         HlCJXTJC3OWgwntsTuf+AR1j0Wq2z+FZfgwCWnAWuXyZOvfKMx1jKHzomLG4L74Qd90Y
-         I2qZ1eQ9SPy8Hh+oiQmkmn1fZsEU7atoma6CQbCywU2aoxKcsVpKJ6AcQiRaWSAzI5VD
-         EvXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=rT2H7zlcI3RbMs94rTqf1TBmQjKXhRQAfwkbwmUxhx8=;
-        b=qRzS7LBGlVWHaoq4Ao3pwQxIvdNBRDfg9qfjZNo+xHLu3jugp+EYMQ3+5fOIxhdAJI
-         v12H/vE31k50gqgAX66zwpYDcRix6LB374FTIvuPn7Sl58P82+xzriIVtCNaCaNqcQG6
-         nhnz7Givjb4xOc26f8SxWRK0vRgdwzwhE27Hl3USqJqzqhPgEkNQ2lNEnHg9IkN7EK92
-         3uD/KDBJYA+A83Zyr+XojuIibaYO//9Qr7dGP7SkYbqmCc8dAxDWt8A4Rx3LeflqUcJC
-         dwJiMy3Bl3C99szQnI3B2CKezTA3kQdg3+3lIS1NihL7plyA9Wgnz9POVVZ4vvSliCfM
-         5CMQ==
-X-Gm-Message-State: ACgBeo1WT45Xn49/ncLOe9CV2QS9H3ABxNzBhhPi0CAXT9fu/8xd0f5F
-        9TmcIGs5gBSXwjJdn+ujF5oYKLDxuRLjbsXnpYqx/w==
-X-Google-Smtp-Source: AA6agR5+uj3uGbdRY155vc58puxQAjmKpFPCCn8f/lDMgE/7pqVk3fGVMYvkjQkSYIi/zK78CfDGYqSChiTxMLjRj1Q=
-X-Received: by 2002:a67:d105:0:b0:38d:c73d:fe21 with SMTP id
- u5-20020a67d105000000b0038dc73dfe21mr1675728vsi.36.1660846645628; Thu, 18 Aug
- 2022 11:17:25 -0700 (PDT)
+        Thu, 18 Aug 2022 14:17:34 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB87CD526;
+        Thu, 18 Aug 2022 11:17:33 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27IFrqn0010501;
+        Thu, 18 Aug 2022 18:17:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=E8RRng8RjHC13MQf1/mlyowg8xuWf1FmKpLYu4bJ3u4=;
+ b=lMXtF+3f3WoYRCaEU7Nh3rGtSCRIq3G5kxPPnZxj26A2/A0rmhEkPQOg+gGDGM23SF0I
+ y6W+DE6OmewOoBHJPMPgvpUk2pP7wKYhMaHNLpZxrGZLOSQBncjQdWvUxsf0uAe5ZH4A
+ ecumIfow2Pk2rhqbGVIiMY4Xn6hBS0ANaygqmy9QKJGsu0c6vN7hTtj+9Wn+BRBjex2M
+ RpHaFxZK6xLAvDPLe9S6zPhFFis2kaTm8c9KC8r6fBLQ3mroBfG+3iehqdGJbid36SPu
+ SkzrQw+PdayWjjtRRHFxGvxlIT+xs5LKRlUjgUf9fo7gw7PkFD5qFBduzduKHAMQwSVl 4w== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j12hhnckx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 18:17:27 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27IIHQ8O028195
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Aug 2022 18:17:26 GMT
+Received: from [10.110.31.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 18 Aug
+ 2022 11:17:25 -0700
+Message-ID: <e22d4f8e-0ca7-056e-e5ec-4fc97cbaf08b@quicinc.com>
+Date:   Thu, 18 Aug 2022 11:17:24 -0700
 MIME-Version: 1.0
-References: <20220817053930.769840-1-irogers@google.com> <20220817053930.769840-6-irogers@google.com>
- <CAM9d7ciBh2DhH7wEVFfXucxtvaog_BBVkuYcNC4vX_XQDx-QCw@mail.gmail.com>
-In-Reply-To: <CAM9d7ciBh2DhH7wEVFfXucxtvaog_BBVkuYcNC4vX_XQDx-QCw@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 18 Aug 2022 11:17:14 -0700
-Message-ID: <CAP-5=fWPgfSa5ck9DLUZaMd4g6y=3hY1Q-=vjgZxNS0Et6Qjuw@mail.gmail.com>
-Subject: Re: [PATCH v1 5/6] perf mutex: Fix thread safety analysis
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Weiguo Li <liwg06@foxmail.com>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Dario Petrillo <dario.pk1@gmail.com>,
-        Wenyu Liu <liuwenyu7@huawei.com>,
-        Hewenliang <hewenliang4@huawei.com>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        William Cohen <wcohen@redhat.com>,
-        Andres Freund <andres@anarazel.de>,
-        Song Liu <songliubraving@fb.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
-        Colin Ian King <colin.king@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Fangrui Song <maskray@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Lexi Shao <shaolexi@huawei.com>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/5] usb: gadget: Add function wakeup support
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        "quic_mrana@quicinc.com" <quic_mrana@quicinc.com>
+References: <1659467920-9095-1-git-send-email-quic_eserrao@quicinc.com>
+ <1659467920-9095-3-git-send-email-quic_eserrao@quicinc.com>
+ <049219f1-8c68-e4cc-7bf9-1e8c214e80aa@synopsys.com>
+ <32a0765e-00d9-1a67-bf36-4060c5fcb008@quicinc.com>
+ <8705d52e-2181-aebd-43b8-2c8d021339c7@synopsys.com>
+ <5ad70f41-622e-2d75-7c53-89aba1255a5f@quicinc.com>
+ <ac8e012f-08f3-baed-ead0-231f0527864c@synopsys.com>
+ <b123b543-6c82-2787-9730-addd3e6e70a3@quicinc.com>
+ <98966b47-0bc5-6ec0-ec80-5eff1d71d9fd@synopsys.com>
+ <e3bcfd4c-efdb-c7b0-4e94-1afcd3b8eb73@synopsys.com>
+ <1fac4c0f-4e8b-f333-7208-c50353a806f4@synopsys.com>
+ <dc5cdba3-fcbc-79a2-797e-2553c727cba5@quicinc.com>
+ <6e8de558-7183-d3f1-9ba7-83a612675e17@synopsys.com>
+From:   Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <6e8de558-7183-d3f1-9ba7-83a612675e17@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: DRtVcOFG_WVCFC2y4-a0rDnqtX6Oe-SO
+X-Proofpoint-ORIG-GUID: DRtVcOFG_WVCFC2y4-a0rDnqtX6Oe-SO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-18_14,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ malwarescore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 adultscore=0 suspectscore=0 mlxscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208180066
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 9:41 AM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> On Tue, Aug 16, 2022 at 10:39 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Add annotations to describe lock behavior. Add missing unlocks to
-> > perf_sched__replay. Alter hist_iter__top_callback as the thread-safety
-> > analysis cannot follow pointers through local variables.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/builtin-sched.c | 8 ++++++++
-> >  tools/perf/builtin-top.c   | 5 +++--
-> >  2 files changed, 11 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-> > index 0f52f73be896..a8a765ed28ce 100644
-> > --- a/tools/perf/builtin-sched.c
-> > +++ b/tools/perf/builtin-sched.c
-> > @@ -658,6 +658,8 @@ static void *thread_func(void *ctx)
-> >  }
-> >
-> >  static void create_tasks(struct perf_sched *sched)
-> > +       EXCLUSIVE_LOCK_FUNCTION(sched->start_work_mutex)
-> > +       EXCLUSIVE_LOCK_FUNCTION(sched->work_done_wait_mutex)
-> >  {
-> >         struct task_desc *task;
-> >         pthread_attr_t attr;
-> > @@ -687,6 +689,8 @@ static void create_tasks(struct perf_sched *sched)
-> >  }
-> >
-> >  static void wait_for_tasks(struct perf_sched *sched)
-> > +       EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> > +       EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
-> >  {
-> >         u64 cpu_usage_0, cpu_usage_1;
-> >         struct task_desc *task;
-> > @@ -738,6 +742,8 @@ static void wait_for_tasks(struct perf_sched *sched)
-> >  }
-> >
-> >  static void run_one_test(struct perf_sched *sched)
-> > +       EXCLUSIVE_LOCKS_REQUIRED(sched->work_done_wait_mutex)
-> > +       EXCLUSIVE_LOCKS_REQUIRED(sched->start_work_mutex)
-> >  {
-> >         u64 T0, T1, delta, avg_delta, fluct;
-> >
-> > @@ -3314,6 +3320,8 @@ static int perf_sched__replay(struct perf_sched *sched)
-> >         for (i = 0; i < sched->replay_repeat; i++)
-> >                 run_one_test(sched);
-> >
-> > +       mutex_unlock(&sched->start_work_mutex);
-> > +       mutex_unlock(&sched->work_done_wait_mutex);
->
-> But this would wake up the replay tasks and let them burn cpus unnecessarily.
-> Maybe we can make them exit at the moment.
 
-I think I've stumbled on a can of worms. Why would you spin and not
-use a condition variable? Anyway, I can remove this by just saying
-this function leaves these locked.
 
->
-> >         return 0;
-> >  }
-> >
-> > diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-> > index 3757292bfe86..e832f04e3076 100644
-> > --- a/tools/perf/builtin-top.c
-> > +++ b/tools/perf/builtin-top.c
-> > @@ -196,6 +196,7 @@ static void perf_top__record_precise_ip(struct perf_top *top,
-> >                                         struct hist_entry *he,
-> >                                         struct perf_sample *sample,
-> >                                         struct evsel *evsel, u64 ip)
-> > +       EXCLUSIVE_LOCKS_REQUIRED(he->hists->lock)
-> >  {
-> >         struct annotation *notes;
-> >         struct symbol *sym = he->ms.sym;
-> > @@ -724,13 +725,13 @@ static void *display_thread(void *arg)
-> >  static int hist_iter__top_callback(struct hist_entry_iter *iter,
-> >                                    struct addr_location *al, bool single,
-> >                                    void *arg)
-> > +       EXCLUSIVE_LOCKS_REQUIRED(iter->he->hists->lock)
-> >  {
-> >         struct perf_top *top = arg;
-> > -       struct hist_entry *he = iter->he;
-> >         struct evsel *evsel = iter->evsel;
-> >
-> >         if (perf_hpp_list.sym && single)
-> > -               perf_top__record_precise_ip(top, he, iter->sample, evsel, al->addr);
-> > +               perf_top__record_precise_ip(top, iter->he, iter->sample, evsel, al->addr);
-> >
-> >         hist__account_cycles(iter->sample->branch_stack, al, iter->sample,
-> >                      !(top->record_opts.branch_stack & PERF_SAMPLE_BRANCH_ANY),
->
-> Looks like a separate change.
+On 8/16/2022 4:51 PM, Thinh Nguyen wrote:
+> On 8/16/2022, Elson Serrao wrote:
+>>
+>>
+>> On 8/12/2022 5:46 PM, Thinh Nguyen wrote:
+>>> On 8/11/2022, Thinh Nguyen wrote:
+>>>> On 8/11/2022, Thinh Nguyen wrote:
+>>>>> On 8/11/2022, Elson Serrao wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 8/9/2022 6:08 PM, Thinh Nguyen wrote:
+>>>>>
+>>>>> <snip>
+>>>>>
+>>>>>
+>>>>>>> To summarize the points:
+>>>>>>>
+>>>>>>> 1) The host only arms function remote wakeup if the device is
+>>>>>>> capable of
+>>>>>>> remote wakeup (check USB_CONFIG_ATT_WAKEUP in bmAttributes and
+>>>>>>> hardware
+>>>>>>> capability)
+>>>>>>>
+>>>>>>> 2) If the device is in suspend, the device can do remote wakeup
+>>>>>>> (through
+>>>>>>> LFPS handshake) if the function is armed for remote wakeup (through
+>>>>>>> SET_FEATURE(FUNC_SUSPEND)).
+>>>>>>>
+>>>>>>> 3) If the link transitions to U0 after the device triggering a remote
+>>>>>>> wakeup, the device will also send device notification function
+>>>>>>> wake for
+>>>>>>> all the interfaces armed with remote wakeup.
+>>>>>>>
+>>>>>>> 4) If the device is not in suspend, the device can send device
+>>>>>>> notification function wake if it's in U0.
+>>>>>>>
+>>>>>>>
+>>>>>>> Now, remote wakeup and function wake device notification are 2
+>>>>>>> separate
+>>>>>>> operations. We have the usb_gadget_ops->wakeup() for remote wakeup. I
+>>>>>>> suggested to maybe add
+>>>>>>> usb_gadget_ops->send_wakeup_notification(gadget,
+>>>>>>> intf_id) for the device notification. What you did was combining both
+>>>>>>> operations in usb_gadget_ops->func_wakeup(). That may only work for
+>>>>>>> point 4) (assuming you fix the U0 check), but not point 3).
+>>>>>>
+>>>>>> Thank you for your feedback and summary. I will rename func_wakeup to
+>>>>>> send_wakeup_notification to better align with the approach. The
+>>>>>> reason I
+>>>>>> have combined remote_wakeup and function wake notification in
+>>>>>> usb_gadget_ops->func_wakeup() is because since the implementation
+>>>>>> is at
+>>>>>> function/composite level it has no knowledge on the link state. So I
+>>>>>> have delegated that task to controller driver to handle the
+>>>>>> notification
+>>>>>> accordingly. That is do a LFPS handshake first if the device is
+>>>>>> suspended and then send notification (explained below). But we can
+>>>>>> definitely separate this by adding an additional flag in the composite
+>>>>>> layer to set the link state based on the gadget suspend callback
+>>>>>> called
+>>>>>> when U3 SUSPEND interrupt is received. Let me know if you feel
+>>>>>> separating the two is a better approach.
+>>>>>>
+>>>>>
+>>>>> The reason I think we need to separate it is because of point 3. As I
+>>>>> note earlier, the spec states that "If remote wake event occurs in
+>>>>> multiple functions, each function shall send a Function Wake
+>>>>> Notification."
+>>>>>
+>>>>> But if there's no remote wake event, and the host brought the device up
+>>>>> instead, then the function suspend state is retained.
+>>>>>
+>>>>> If we separate these 2 operations, the caller can check whether the
+>>>>> operation went through properly. For example, if the wakeup() is
+>>>>> initiated properly, but the function wake device notification didn't go
+>>>>> through. We would only need to resend the device notification rather
+>>>>> than initiate remote wakeup again.
+>>>>
+>>>> If we don't have to send device notification for other interfaces, we
+>>>> can combine the operations here as you did.
+>>>>
+>>>
+>>> I still think it's better to split up the operations. The way you're
+>>> handling it now is not clear.
+>>>
+>>> If the func_awake() returns -EAGAIN, I'd expect that the remote wake did
+>>> not go through and expect user to retry again. But here it does initiate
+>>> remote wake, but it just does not send device notification yet. This is
+>>> confusing.
+>>>
+>>> Also, instead of all the function wake handling coming from the function
+>>> driver, now we depend on the controller driver to call function resume()
+>>> on state change to U0, which will trigger device notification. What
+>>> happen if it doesn't call resume(). There's too many dependencies and it
+>>> seems fragile.
+>>>
+>>> I think all this can be handled in the function driver. You can fix the
+>>> dwc3 wakeup() and poll for U0/ON state rather than RECOVERY state, which
+>>> is what it's supposed to poll.
+>>
+>> For transitioning from U3 to U0, the current upstream implementation is
+>> to poll for U0 state when dwc3_gadget_wakeup() is called and it is a
+>> blocking call. (this is a common API for both HS and SS)
+>>
+>>      /* poll until Link State changes to ON */
+>>      retries = 20000;
+>>
+>>      while (retries--) {
+>>          reg = dwc3_readl(dwc->regs, DWC3_DSTS);
+>>
+>>          /* in HS, means ON */
+>>          if (DWC3_DSTS_USBLNKST(reg) == DWC3_LINK_STATE_U0)
+>>              break;
+>>      }
+>>
+>> In my experiments I found that certain hosts take longer time to drive
+>> HS resume signalling between the remote wakeup and the resume K and this
+>> time varies across hosts. Hence the above polling timer is not generic
+>> across hosts. So how do we converge on a polling timer value to work
+>> across HS/SS and without blocking the system for a long time?
+> 
+> Can't we take the upper limit of both base on experiment? And it
+> shouldn't be blocking the whole system.
 
-This is subtle and relates to how the thread safety pass in clang is
-implemented. I'll waffle but the TL;DR is that without this change we
-can't enable Wthread-safety so I'd say it is part of the same change.
-The waffley bit:
+On the host I was experimenting with, the time it took was around 110ms 
+in HS case. That would translate to a retry count of about ~181,000 in 
+the above polling loop. Wouldn't that be a very large value for polling?
+And not sure if there are other hosts that take even longer time
+> 
+>>
+>> Some data layers like TCP/IP hold a TX lock while sending data (that
+>> causes a remote wakeup event) and hence this wakeup() may run in atomic
+>> context.
+> 
+> Why hold the lock while waiting for the host to wakeup? The host is
+> still inactive. Also, the usb_gadget_wakeup() API doesn't specify that
+> it may run in atomic context.
+> 
 
-Thread safety checking puts the annotation on to the variable and not
-the type. We know that:
-const char *x = "hi";
-char *y = x;
-will give a compile time error on the assignment to y as const-ness
-was lost. With the thread safety checks you could have:
-char *x PT_GUARDED_BY(lock) = ...;
-char *y = x;
-And if you used x without holding "lock" you'd get an error but you
-wouldn't get the same error from y, even though behind the scenes it
-is the same memory. It is the same case here, on entry we know that
-"iter->he->hists->lock" is held but the assignment to "he" means clang
-doesn't know that "he->hists->lock" is held. This then fails the check
-on perf_top__record_precise_ip that the lock be held as we pass "he"
-rather than "iter->he".
+The lock might be held by upper layers who are unaware/independent of 
+underlying transport medium. The above TX lock I was referring to was
+that held by Linux networking stack. It just pushes out data the same 
+way it would when USB is active. It is the function/composite layer 
+being aware of the function suspend would now sense this as a remote 
+wake event and perform this additional step of bringing out the link 
+from u3 and then sending device wakeup notification.
 
-Thanks,
-Ian
+In our current upstream implementation of dwc3_gadget_wakeup() API we 
+hold a spinlock as well. But yeah that can be rectified
 
-> Thanks,
-> Namhyung
->
->
-> > --
-> > 2.37.1.595.g718a3a8f04-goog
-> >
+static int dwc3_gadget_wakeup(struct usb_gadget *g)
+{
+	struct dwc3		*dwc = gadget_to_dwc(g);
+	unsigned long		flags;
+	int			ret;
+
+	spin_lock_irqsave(&dwc->lock, flags);
+	ret = __dwc3_gadget_wakeup(dwc);
+	spin_unlock_irqrestore(&dwc->lock, flags);
+
+	return ret;
+}
+
+
+>>
+>> To make this generic across hosts, I had switched to interrupt based
+>> approach, enabling link state events and return error value immediately
+>> from the dwc3_gadget_wakeup() API after doing a LFPS handshake. But
+>> yeah, then we have to rely on the resume callback as an indication that
+>> link is transitioned to ON state.
+>>
+> 
+> BR,
+> Thinh
+> 

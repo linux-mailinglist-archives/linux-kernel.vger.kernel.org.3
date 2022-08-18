@@ -2,122 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F037C598A6B
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC9F598A69
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344501AbiHRRW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S1345243AbiHRRXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345163AbiHRRW0 (ORCPT
+        with ESMTP id S1345149AbiHRRXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:22:26 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECA4260F;
-        Thu, 18 Aug 2022 10:22:25 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id AA3C7380;
-        Thu, 18 Aug 2022 17:22:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net AA3C7380
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1660843344; bh=eYsIsnvHJN/VRUKL8GXFeyjNGIwW+qATM1xhlORPWNM=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Kx7Qr1ZfNF19fwW4BtAdtyEINV6IniYegmu6NXd/VB5PU9oshTm4FkYnyim9jYfh6
-         hVjRPYiLSbxVvF7lad4IlfSg9xVpT8y38mbCClWnTUU8pgM3cf27yqCVhms9kMFnWP
-         3xZW8cSn3JaDFfsPcQtbQn4ujbOohgCe4XZ/ubljHCaRJCq8pNRrHmXtNDMySrrJx1
-         zhz30z2lF4cD+tyWFr38/956J4DsYFg+TMHa9bIk/8dxpR67l1g0zA74A2tWGut/US
-         1c1aylQ3bWAFdMW697uR3Dhn3U4AajruswgfGFUfXVoDi37ux/LUM3rFTJ1757cwvE
-         jDgIsBKa4j4RQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Akira Yokosawa <akiyks@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-doc@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH v2 1/3] docs/conf.py: Treat mathjax as fallback math
- renderer
-In-Reply-To: <a45f1aec-a2cb-0ef2-7100-378a5130c492@gmail.com>
-References: <c41cab17-afd6-bc99-56a1-e4e73b8c1ef6@gmail.com>
- <a45f1aec-a2cb-0ef2-7100-378a5130c492@gmail.com>
-Date:   Thu, 18 Aug 2022 11:22:24 -0600
-Message-ID: <87wnb5bh67.fsf@meer.lwn.net>
+        Thu, 18 Aug 2022 13:23:25 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C773DBD6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:23:04 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id z72so1578663iof.12
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:23:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Bd32rmK/FOJLR3DhtOUdTvKf+a9Teo/sBKjuQ/ElSZg=;
+        b=XlCrOgXemDYs5Gm1ZIOksFTqGZKJJh1hGJ5FiZ/gBNvZlCJoKWIFIhrOP6jcsNcZg8
+         nsUv5cuyppKGA9pojhWsrVbxqQNk9M+rs6BsIhJvbCKfFS7En6R216VnbucNPbV6UqJu
+         gFhqNjW0Z3wyX/v6unNEZXn/nYFuw58v1FdugaIM8korrBWM0ULmCWalgxkcsTvstTYF
+         2dpqn3K+xtvSW+ChNPAlFgqvqaJcQR1TiMmUcWlah6pmdFqo7CJY1Lhcjc2my+dwuDFF
+         He4LDfJIcqaWnuQBMW0MitXidT3AJ0yuvz4ZsinCZ3Oz4svSW745OwxEYBDWuSYgJjBb
+         0gAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Bd32rmK/FOJLR3DhtOUdTvKf+a9Teo/sBKjuQ/ElSZg=;
+        b=oKNh96VxIrMjug24lZKDMxfn+QWMRNtYaLJr2FMU6YaqcFnALcUBEcAC+5AfCtmorv
+         CbYoGMCC/uimo0UgmoNN+Rj9Cd6UQyfZbJOV7wGJCtWiher3KFvof8vz+jydBZ6wQseD
+         WhM2MYiGrjElZiK04Plr0LFdd4hWedGEdT8ba7LHos4qMb6aE14pyl5iXyJVJvOWexLX
+         4i5quq0WYnev8/qoMfVu52igLH7B727V6dkH8wHH2TIVE/n9L7wM5kCRHd0B0KPfhK8F
+         ytjIp9yFjReMMX+ziUuLcqW4qpkdpahamYSwzqB+NMWkuGNISJZ2aTutxQJe0/kv6PpV
+         CNaw==
+X-Gm-Message-State: ACgBeo2WF+E9/6VvKv6edraowPFLWwPAu9G3Hls7wLXQM0q6gglWIki/
+        7PURjYYnwBcEV0Zu+NJmwDmRELrYB0veuITk/BNQMw==
+X-Google-Smtp-Source: AA6agR7BxSEK9TZMmEIhvaOX697zBF3ihw3R6j2eoMtnNit2ewt69TP6LFyP0vkczM3B3jRpPt3WlelDN3UHLFuji6A=
+X-Received: by 2002:a05:6602:2f03:b0:678:9c7c:97a5 with SMTP id
+ q3-20020a0566022f0300b006789c7c97a5mr1830797iow.32.1660843383117; Thu, 18 Aug
+ 2022 10:23:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220817214728.489904-1-axelrasmussen@google.com>
+ <20220817214728.489904-3-axelrasmussen@google.com> <Yv3bnouKb7242Ama@kroah.com>
+ <Yv3c9jYkyWfe2zMM@kroah.com>
+In-Reply-To: <Yv3c9jYkyWfe2zMM@kroah.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 18 Aug 2022 10:22:27 -0700
+Message-ID: <CAJHvVcjSjk15TVRTi9x+CMjrWoNeUJBiZiH1boQvQzwd-pdOtQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/5] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-security-module@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Akira Yokosawa <akiyks@gmail.com> writes:
-
-> Currently, math expressions using the "math::" directive or
-> the ":math:" role of Sphinx need the imgmath extension for proper
-> rendering in html and epub builds.
-> imgmath requires dvipng (and latex).
-> Otherwise, "make htmldocs" will complain of missing commands.
+On Wed, Aug 17, 2022 at 11:32 PM Greg KH <gregkh@linuxfoundation.org> wrote:
 >
-> As a matter of fact, the mathjax extension is loaded by default since
-> Sphinx v1.8 and it is good enough for html docs without any dependency
-> on texlive packages.
+> On Thu, Aug 18, 2022 at 08:26:38AM +0200, Greg KH wrote:
+> > On Wed, Aug 17, 2022 at 02:47:25PM -0700, Axel Rasmussen wrote:
+> > > +static int userfaultfd_dev_open(struct inode *inode, struct file *file)
+> > > +{
+> > > +   return 0;
+> >
+> > If your open does nothing, no need to list it here at all, right?
+> >
+> > > +}
+> > > +
+> > > +static long userfaultfd_dev_ioctl(struct file *file, unsigned int cmd, unsigned long flags)
+> > > +{
+> > > +   if (cmd != USERFAULTFD_IOC_NEW)
+> > > +           return -EINVAL;
+> > > +
+> > > +   return new_userfaultfd(flags);
+> > > +}
+> > > +
+> > > +static const struct file_operations userfaultfd_dev_fops = {
+> > > +   .open = userfaultfd_dev_open,
+> > > +   .unlocked_ioctl = userfaultfd_dev_ioctl,
+> > > +   .compat_ioctl = userfaultfd_dev_ioctl,
+> >
+> > Why do you need to set compat_ioctl?  Shouldn't it just default to the
+> > existing one?
+> >
+> > And why is this a device node at all?  Shouldn't the syscall handle all
+> > of this (to be honest, I didn't read anything but the misc code, sorry.)
 >
-> Stop loading the imgmath extension for html docs unless requirements
-> for imgmath are met.
+> Ah, read the documentation now.  Seems you want to make it easier for
+> people to get permissions on a system.  Doesn't seem wise, but hey, it's
+> not my feature...
+
+Thanks for taking a look Greg!
+
+WIth the syscall, the only way to get access to this feature is to
+have CAP_SYS_PTRACE. Which gives you access to this, *plus* a bunch
+more stuff.
+
+My basic goal is to grant access to just this feature by itself, not
+really just to make it easier to access. I think a device node is the
+simplest way to achieve that (see the cover letter for considered
+alternatives).
+
+The other feedback looks like good simplification to me - I'll send
+another version with those changes. I have to admit this is the first
+time I've messed with misc device nodes, so apologies for being overly
+explicit. :)
+
 >
-> For epub docs, keep the same behavior of always loading imgmath.
+> thanks,
 >
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> Changes sinve v1:
->  - Acked-by from Mauro
->
-> --
->  Documentation/conf.py | 34 +++++++++++++++++++++++++++++++++-
->  1 file changed, 33 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/conf.py b/Documentation/conf.py
-> index 934727e23e0e..3ec1f845c839 100644
-> --- a/Documentation/conf.py
-> +++ b/Documentation/conf.py
-> @@ -15,6 +15,23 @@
->  import sys
->  import os
->  import sphinx
-> +from subprocess import check_output
-> +
-> +# helper
-> +# ------
-> +
-> +def have_command(cmd, ver_opt, str_in_ver):
-> +    """Run ```cmd`` with ``ver_opt`` and see if ``str_in_ver`` is found
-> +    or not.
-> +    """
-> +
-> +    try:
-> +        ver_str = check_output([cmd, ver_opt]).decode('utf-8', 'ignore')
-> +        have_cmd = str_in_ver in ver_str
-> +    except:
-> +        have_cmd = False
-> +
-> +    return have_cmd
-
-So this is adding infrastructure that isn't really mentioned in the
-changelog.
-
-A more fundamental comment, though, is that I have learned (the hard
-way, repeatedly) that good things do not come from bare "except"
-statements.  They always hide bugs.  If there is an exception you're
-worried about here, please list it explicitly.
-
-Otherwise seems good.
-
-Thanks,
-
-jon
+> greg k-h

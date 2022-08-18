@@ -2,85 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC9F598A69
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E14A598A6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345243AbiHRRXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
+        id S1345424AbiHRRYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345149AbiHRRXZ (ORCPT
+        with ESMTP id S1345353AbiHRRXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:23:25 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C773DBD6
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:23:04 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id z72so1578663iof.12
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:23:04 -0700 (PDT)
+        Thu, 18 Aug 2022 13:23:43 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF8A2BB31
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:23:20 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id y187so1613149iof.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:23:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=joelfernandes.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=Bd32rmK/FOJLR3DhtOUdTvKf+a9Teo/sBKjuQ/ElSZg=;
-        b=XlCrOgXemDYs5Gm1ZIOksFTqGZKJJh1hGJ5FiZ/gBNvZlCJoKWIFIhrOP6jcsNcZg8
-         nsUv5cuyppKGA9pojhWsrVbxqQNk9M+rs6BsIhJvbCKfFS7En6R216VnbucNPbV6UqJu
-         gFhqNjW0Z3wyX/v6unNEZXn/nYFuw58v1FdugaIM8korrBWM0ULmCWalgxkcsTvstTYF
-         2dpqn3K+xtvSW+ChNPAlFgqvqaJcQR1TiMmUcWlah6pmdFqo7CJY1Lhcjc2my+dwuDFF
-         He4LDfJIcqaWnuQBMW0MitXidT3AJ0yuvz4ZsinCZ3Oz4svSW745OwxEYBDWuSYgJjBb
-         0gAg==
+        bh=X1PRfiTW0ZbzrjEzYLkrMF9zmX77XAZwlizZppwE8xo=;
+        b=HFpZqiw6dLHvq5WZeg7bibs3hsyLVsFFUbuqCGHj3ldaaTjWem7qmiSBSRW+4hYkCH
+         ujoMpndvofRjFOGnHx+r7Q63iZcIM4J1gLBFkrl7tp3m5PQi4yT9ZAPqHpW3H/sYwF9w
+         9Ffz8E72GXntPMRDj7Ca9IbL5MgWSCSZzqHOo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=Bd32rmK/FOJLR3DhtOUdTvKf+a9Teo/sBKjuQ/ElSZg=;
-        b=oKNh96VxIrMjug24lZKDMxfn+QWMRNtYaLJr2FMU6YaqcFnALcUBEcAC+5AfCtmorv
-         CbYoGMCC/uimo0UgmoNN+Rj9Cd6UQyfZbJOV7wGJCtWiher3KFvof8vz+jydBZ6wQseD
-         WhM2MYiGrjElZiK04Plr0LFdd4hWedGEdT8ba7LHos4qMb6aE14pyl5iXyJVJvOWexLX
-         4i5quq0WYnev8/qoMfVu52igLH7B727V6dkH8wHH2TIVE/n9L7wM5kCRHd0B0KPfhK8F
-         ytjIp9yFjReMMX+ziUuLcqW4qpkdpahamYSwzqB+NMWkuGNISJZ2aTutxQJe0/kv6PpV
-         CNaw==
-X-Gm-Message-State: ACgBeo2WF+E9/6VvKv6edraowPFLWwPAu9G3Hls7wLXQM0q6gglWIki/
-        7PURjYYnwBcEV0Zu+NJmwDmRELrYB0veuITk/BNQMw==
-X-Google-Smtp-Source: AA6agR7BxSEK9TZMmEIhvaOX697zBF3ihw3R6j2eoMtnNit2ewt69TP6LFyP0vkczM3B3jRpPt3WlelDN3UHLFuji6A=
-X-Received: by 2002:a05:6602:2f03:b0:678:9c7c:97a5 with SMTP id
- q3-20020a0566022f0300b006789c7c97a5mr1830797iow.32.1660843383117; Thu, 18 Aug
- 2022 10:23:03 -0700 (PDT)
+        bh=X1PRfiTW0ZbzrjEzYLkrMF9zmX77XAZwlizZppwE8xo=;
+        b=v3q5JXrjVo6z/4g5zip8GUTdrTq6NLQwCEFjNqdKReaMJJltntbZSKElQI/QmThiIm
+         L6KoaLsqCkjjyIpNAVuOR4B4aa+ovS6NjjvIG2C6jrK/2/SPaj3ATSIdP+gtb/0tFOWB
+         S3DWE+C4I5O7odSxAPqfmlN2QivjMZeDMtXD4h7MNHdIqAH0Z4kGYGszP9l/NIEmCy4G
+         ogT112uCG4223TyY2hDzlJez5BPQGOHjdnf5LkNGTl++6331Id6S3aZwPTbec6PnDgap
+         keMuBhvvdojMRPkpH8mqJtFKrmiVJXLSoz4TeAQDs8rgBADaCPUo/AvXCIRmivVr59/3
+         G3tQ==
+X-Gm-Message-State: ACgBeo3psqYQxWvUxhZ1XSBcx2KutwLhcCxmZ1qQxMtiO0HM3SQfJHGV
+        z3B1gcw2cY/qp2DqjIEycpmYUTUitSZw7mgwcRSdpN68jLwpOg==
+X-Google-Smtp-Source: AA6agR4l8raOuQK2CppY5jN2dwbZhcb6zQJgquto+Y2BrwuVdXQKVlLlCTe0Zu6/A4D6iwx/cU4OH+XIOypB5uHgvyY=
+X-Received: by 2002:a05:6602:26c7:b0:67b:72ef:b87b with SMTP id
+ g7-20020a05660226c700b0067b72efb87bmr1867182ioo.175.1660843399015; Thu, 18
+ Aug 2022 10:23:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220817214728.489904-1-axelrasmussen@google.com>
- <20220817214728.489904-3-axelrasmussen@google.com> <Yv3bnouKb7242Ama@kroah.com>
- <Yv3c9jYkyWfe2zMM@kroah.com>
-In-Reply-To: <Yv3c9jYkyWfe2zMM@kroah.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 18 Aug 2022 10:22:27 -0700
-Message-ID: <CAJHvVcjSjk15TVRTi9x+CMjrWoNeUJBiZiH1boQvQzwd-pdOtQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/5] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-security-module@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
+References: <20220809034517.3867176-1-joel@joelfernandes.org> <20220809034517.3867176-5-joel@joelfernandes.org>
+In-Reply-To: <20220809034517.3867176-5-joel@joelfernandes.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 18 Aug 2022 13:23:07 -0400
+Message-ID: <CAEXW_YQuGga9Eivq4G6o1XjvPn-nMMDiM8FOY6HXJTMzwv1Emg@mail.gmail.com>
+Subject: Re: [PATCH v3 resend 4/6] fs: Move call_rcu() to call_rcu_lazy() in
+ some paths
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, rcu <rcu@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,58 +68,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 11:32 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+[Sorry, adding back the CC list]
+
+On Mon, Aug 8, 2022 at 11:45 PM Joel Fernandes (Google)
+<joel@joelfernandes.org> wrote:
 >
-> On Thu, Aug 18, 2022 at 08:26:38AM +0200, Greg KH wrote:
-> > On Wed, Aug 17, 2022 at 02:47:25PM -0700, Axel Rasmussen wrote:
-> > > +static int userfaultfd_dev_open(struct inode *inode, struct file *file)
-> > > +{
-> > > +   return 0;
-> >
-> > If your open does nothing, no need to list it here at all, right?
-> >
-> > > +}
-> > > +
-> > > +static long userfaultfd_dev_ioctl(struct file *file, unsigned int cmd, unsigned long flags)
-> > > +{
-> > > +   if (cmd != USERFAULTFD_IOC_NEW)
-> > > +           return -EINVAL;
-> > > +
-> > > +   return new_userfaultfd(flags);
-> > > +}
-> > > +
-> > > +static const struct file_operations userfaultfd_dev_fops = {
-> > > +   .open = userfaultfd_dev_open,
-> > > +   .unlocked_ioctl = userfaultfd_dev_ioctl,
-> > > +   .compat_ioctl = userfaultfd_dev_ioctl,
-> >
-> > Why do you need to set compat_ioctl?  Shouldn't it just default to the
-> > existing one?
-> >
-> > And why is this a device node at all?  Shouldn't the syscall handle all
-> > of this (to be honest, I didn't read anything but the misc code, sorry.)
+> This is required to prevent callbacks triggering RCU machinery too
+> quickly and too often, which adds more power to the system.
 >
-> Ah, read the documentation now.  Seems you want to make it easier for
-> people to get permissions on a system.  Doesn't seem wise, but hey, it's
-> not my feature...
+> When testing, we found that these paths were invoked often when the
+> system is not doing anything (screen is ON but otherwise idle).
 
-Thanks for taking a look Greg!
+Unfortunately, I am seeing a slow down in ChromeOS boot performance
+after applying this particular patch. It is the first time I could
+test ChromeOS boot times with the series since it was hard to find a
+ChromeOS device that runs the upstream kernel.
 
-WIth the syscall, the only way to get access to this feature is to
-have CAP_SYS_PTRACE. Which gives you access to this, *plus* a bunch
-more stuff.
+Anyway, Vlad, Neeraj, do you guys also see slower boot times with this
+patch? I wonder if the issue is with wake up interaction with the nocb
+GP threads.
 
-My basic goal is to grant access to just this feature by itself, not
-really just to make it easier to access. I think a device node is the
-simplest way to achieve that (see the cover letter for considered
-alternatives).
+We ought to disable lazy RCU during boot since it would have little
+benefit anyway. But I am also concerned about some deeper problem I
+did not catch before.
 
-The other feedback looks like good simplification to me - I'll send
-another version with those changes. I have to admit this is the first
-time I've messed with misc device nodes, so apologies for being overly
-explicit. :)
+I'll look into tracing the fs paths to see if I can narrow down what's
+causing it. Will also try a newer kernel, I am currently testing on
+5.19-rc4.
 
->
-> thanks,
->
-> greg k-h
+Thanks,
+
+ - Joel

@@ -2,162 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27946598A88
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE19A598A9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 19:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344635AbiHRRgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 13:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60438 "EHLO
+        id S1344557AbiHRRkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 13:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345038AbiHRRgA (ORCPT
+        with ESMTP id S1345219AbiHRRkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:36:00 -0400
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E13C59E9
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 10:35:57 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id E549824002A
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:35:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1660844155; bh=qnhd6HdPquVSm0kh0TC8MijB3p2ZP/IpLjvgG/ZYqJQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iwGsXNcg519jBoFq8qXIbpeagtK6pWC2ePR9B0Fyea0BF9+YXq7x/Ac3hWaQaSTG1
-         0t8cdaI/rw8dXJaeh1D1GeyPKLdREjsF3sobEr8yCvTfYgbFwnVpdBhXjfJ9HwqsSE
-         uqqNwXafjKYZX+fBgZxpo7vcbXP2BvKaib2WzwU6aD3jQjZO99anO1X+8tlI/ybHez
-         4T2aHw2CyxDD7a4hITme6LloaitAqZLsni2TPU4C9dEGfJgBw18K2NpubsH4qVPIJa
-         mEiz8NTfxDUnBDTF3WLOtRBxlu8GgZ2AZhxpf/jkMH+04XZb4/ScCtuKKvITGiX4TJ
-         D5ojkZJYssXuw==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4M7sVR5G6Yz9rxW;
-        Thu, 18 Aug 2022 19:35:42 +0200 (CEST)
-Date:   Thu, 18 Aug 2022 17:35:39 +0000
-From:   Daniel =?utf-8?Q?M=C3=BCller?= <deso@posteo.net>
-To:     roberto.sassu@huaweicloud.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
-        bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v12 07/10] selftests/bpf: Compile kernel with everything
- as built-in
-Message-ID: <20220818173539.q47uycc2oy5kkezl@muellerd-fedora-PC2BDTX9>
-References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
- <20220818152929.402605-8-roberto.sassu@huaweicloud.com>
+        Thu, 18 Aug 2022 13:40:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D7F696FF;
+        Thu, 18 Aug 2022 10:40:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 060F3B82357;
+        Thu, 18 Aug 2022 17:40:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C93FC433C1;
+        Thu, 18 Aug 2022 17:40:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660844436;
+        bh=yNeFws/1Db4rGKVqEFTLGuONzvqcqQUN7ZodpwwhCmU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=fgLXQbFEcJQkozcIVtrGPmx0kFbkR0CRxU8sgIUbagwA8UnFrHtD0A2z0rF4L+Zzq
+         sCYvgLVILtpUERgXpzSekRXMQoUux0EOztlOJb+xSdA3btxru7Mwl97ykGR07raqvD
+         WRCxR4IT+/NB+UtIhL/RxuSi6wQutEXFnYi+QcdTplP4q+FRjy47228anQoatr1VGQ
+         Yemk+5CcrEU39LLSnQyyGQLCKtHrTbTYpICaD2jEATdI6Pj9aIoDWugGkTuZLNplhm
+         Q/GIxBlub1f06XFnyFkXl7yIJIljxqf6adxOuv8O4TnNH7PDk23brfdFXfAcgDfb/E
+         3UoNLMOkAOszg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5DBDDE2A058;
+        Thu, 18 Aug 2022 17:40:36 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220818152929.402605-8-roberto.sassu@huaweicloud.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 1/2] stmmac: intel: Add a missing clk_disable_unprepare()
+ call in intel_eth_pci_remove()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166084443637.19225.202296976141883530.git-patchwork-notify@kernel.org>
+Date:   Thu, 18 Aug 2022 17:40:36 +0000
+References: <d7c8c1dadf40df3a7c9e643f76ffadd0ccc1ad1b.1660659689.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <d7c8c1dadf40df3a7c9e643f76ffadd0ccc1ad1b.1660659689.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        qiangqing.zhang@nxp.com, andrew@lunn.ch,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 05:29:26PM +0200, roberto.sassu@huaweicloud.com wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Since the eBPF CI does not support kernel modules, change the kernel config
-> to compile everything as built-in.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  tools/testing/selftests/bpf/config        | 26 +++++++++++------------
->  tools/testing/selftests/bpf/config.x86_64 |  2 +-
->  2 files changed, 14 insertions(+), 14 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-> index 3fc46f9cfb22..0fdd11e6b742 100644
-> --- a/tools/testing/selftests/bpf/config
-> +++ b/tools/testing/selftests/bpf/config
-> @@ -7,9 +7,9 @@ CONFIG_BPF_LSM=y
->  CONFIG_BPF_STREAM_PARSER=y
->  CONFIG_BPF_SYSCALL=y
->  CONFIG_CGROUP_BPF=y
-> -CONFIG_CRYPTO_HMAC=m
-> -CONFIG_CRYPTO_SHA256=m
-> -CONFIG_CRYPTO_USER_API_HASH=m
-> +CONFIG_CRYPTO_HMAC=y
-> +CONFIG_CRYPTO_SHA256=y
-> +CONFIG_CRYPTO_USER_API_HASH=y
->  CONFIG_DYNAMIC_FTRACE=y
->  CONFIG_FPROBE=y
->  CONFIG_FTRACE_SYSCALLS=y
-> @@ -24,30 +24,30 @@ CONFIG_IP_NF_FILTER=y
->  CONFIG_IP_NF_RAW=y
->  CONFIG_IP_NF_TARGET_SYNPROXY=y
->  CONFIG_IPV6=y
-> -CONFIG_IPV6_FOU=m
-> -CONFIG_IPV6_FOU_TUNNEL=m
-> +CONFIG_IPV6_FOU=y
-> +CONFIG_IPV6_FOU_TUNNEL=y
->  CONFIG_IPV6_GRE=y
->  CONFIG_IPV6_SEG6_BPF=y
-> -CONFIG_IPV6_SIT=m
-> +CONFIG_IPV6_SIT=y
->  CONFIG_IPV6_TUNNEL=y
->  CONFIG_LIRC=y
->  CONFIG_LWTUNNEL=y
->  CONFIG_MPLS=y
-> -CONFIG_MPLS_IPTUNNEL=m
-> -CONFIG_MPLS_ROUTING=m
-> +CONFIG_MPLS_IPTUNNEL=y
-> +CONFIG_MPLS_ROUTING=y
->  CONFIG_MPTCP=y
->  CONFIG_NET_CLS_ACT=y
->  CONFIG_NET_CLS_BPF=y
-> -CONFIG_NET_CLS_FLOWER=m
-> -CONFIG_NET_FOU=m
-> +CONFIG_NET_CLS_FLOWER=y
-> +CONFIG_NET_FOU=y
->  CONFIG_NET_FOU_IP_TUNNELS=y
->  CONFIG_NET_IPGRE=y
->  CONFIG_NET_IPGRE_DEMUX=y
->  CONFIG_NET_IPIP=y
-> -CONFIG_NET_MPLS_GSO=m
-> +CONFIG_NET_MPLS_GSO=y
->  CONFIG_NET_SCH_INGRESS=y
->  CONFIG_NET_SCHED=y
-> -CONFIG_NETDEVSIM=m
-> +CONFIG_NETDEVSIM=y
->  CONFIG_NETFILTER=y
->  CONFIG_NETFILTER_SYNPROXY=y
->  CONFIG_NETFILTER_XT_CONNMARK=y
-> @@ -60,7 +60,7 @@ CONFIG_NF_DEFRAG_IPV6=y
->  CONFIG_RC_CORE=y
->  CONFIG_SECURITY=y
->  CONFIG_SECURITYFS=y
-> -CONFIG_TEST_BPF=m
-> +CONFIG_TEST_BPF=y
->  CONFIG_USERFAULTFD=y
->  CONFIG_VXLAN=y
->  CONFIG_XDP_SOCKETS=y
-> diff --git a/tools/testing/selftests/bpf/config.x86_64 b/tools/testing/selftests/bpf/config.x86_64
-> index f0859a1d37ab..ce70c9509204 100644
-> --- a/tools/testing/selftests/bpf/config.x86_64
-> +++ b/tools/testing/selftests/bpf/config.x86_64
-> @@ -47,7 +47,7 @@ CONFIG_CPU_IDLE_GOV_LADDER=y
->  CONFIG_CPUSETS=y
->  CONFIG_CRC_T10DIF=y
->  CONFIG_CRYPTO_BLAKE2B=y
-> -CONFIG_CRYPTO_DEV_VIRTIO=m
-> +CONFIG_CRYPTO_DEV_VIRTIO=y
->  CONFIG_CRYPTO_SEQIV=y
->  CONFIG_CRYPTO_XXHASH=y
->  CONFIG_DCB=y
-> -- 
-> 2.25.1
+Hello:
 
-The change looks good to me. Thanks for making it.
+This series was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Acked-by: Daniel Müller <deso@posteo.net>
+On Tue, 16 Aug 2022 16:23:57 +0200 you wrote:
+> Commit 09f012e64e4b ("stmmac: intel: Fix clock handling on error and remove
+> paths") removed this clk_disable_unprepare()
+> 
+> This was partly revert by commit ac322f86b56c ("net: stmmac: Fix clock
+> handling on remove path") which removed this clk_disable_unprepare()
+> because:
+> "
+>    While unloading the dwmac-intel driver, clk_disable_unprepare() is
+>    being called twice in stmmac_dvr_remove() and
+>    intel_eth_pci_remove(). This causes kernel panic on the second call.
+> "
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,1/2] stmmac: intel: Add a missing clk_disable_unprepare() call in intel_eth_pci_remove()
+    https://git.kernel.org/netdev/net/c/5c23d6b717e4
+  - [v2,2/2] stmmac: intel: Simplify intel_eth_pci_remove()
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

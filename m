@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DADE7597FAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 10:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3251A597FAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 10:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243987AbiHRIAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 04:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
+        id S243997AbiHRIA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 04:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243978AbiHRIAS (ORCPT
+        with ESMTP id S243928AbiHRIA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 04:00:18 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371668050D
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 01:00:16 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1660809614;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rx2a0SfNDi1opj3mz7ReHR+gfYYq0rf6lV0w0JKT45s=;
-        b=CgBP/vjkXrSV9tONNBZxXxt01X41B9cfBPakuv0gy9jMP771/oxkOS2DChxlcKEUBCpdsy
-        Jchfuky/4rojGbFz24Mh+FSMVc2OnxdsUSjwz8mnXWcxFoENRqU+Ol9whopaLCzgWh2WAd
-        S07y+1PZwzE0zwNxLdq5pE2I8KTHGTA=
+        Thu, 18 Aug 2022 04:00:57 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB23BAEDA7;
+        Thu, 18 Aug 2022 01:00:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660809656; x=1692345656;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eAy8aSdTk5OKQzWybqKrFUdpqxDntwotIfbfSmRhmTA=;
+  b=g5eQIHXjIB9t2q0ujnBvPrbIkft1sS5QTKuqQowNKbHzZ2jdd/mvn0i8
+   g66pwiRsU4n4KgRGxyU+UlUAMxUt0X4vR1OAg6VR0lYfKYqWBNyHJa6B1
+   LAIM9Qfa2wggmTiYL5okJzYkYcNw4isRk4i0v9Q0peBBjjMvhiZskRiS8
+   6QQ/fu3bQzbt1eZacX0teZvq3x4lIscdbJDePBP0RM7diSTUV5v8RvSyj
+   ov16n9F93IwtVnyv8Uq70YiXBo6UU+uPiqGsaQErR2KlMrkdoAmLkHZz7
+   yNVfAKDe/vOdKT+RkJW+hYv0zz6XJ+1b58NTAstuK3ctAhpZJofsgQJQU
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="292692798"
+X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
+   d="scan'208";a="292692798"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 01:00:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
+   d="scan'208";a="750014755"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 18 Aug 2022 01:00:40 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 18 Aug 2022 11:00:40 +0300
+Date:   Thu, 18 Aug 2022 11:00:40 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v3] usb: typec: tcpm: Return ENOTSUPP for power supply
+ prop writes
+Message-ID: <Yv3xqCCmIeSnsQDz@kuha.fi.intel.com>
+References: <20220817215410.1807477-1-badhri@google.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH 4/6] mm: hugetlb_vmemmap: add missing smp_wmb() before
- set_pte_at()
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <7be98c64-88a1-3bee-7f92-67bb1f4f495b@huawei.com>
-Date:   Thu, 18 Aug 2022 15:59:43 +0800
-Cc:     "Yin, Fengwei" <fengwei.yin@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Linux MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3B1463C2-9DC4-43D0-93EC-2D2334A20502@linux.dev>
-References: <20220816130553.31406-1-linmiaohe@huawei.com>
- <20220816130553.31406-5-linmiaohe@huawei.com>
- <D8C00BDA-160D-40CE-AFBD-9488F85E76CE@linux.dev>
- <ea67ab10-667e-f361-b80f-dafb13da4808@huawei.com>
- <0EAF1279-6A1C-41FA-9A32-414C36B3792A@linux.dev>
- <019c1272-9d01-9d51-91a0-2d656b25c318@intel.com>
- <18adbf89-473e-7ba6-9a2b-522e1592bdc6@huawei.com>
- <9c791de0-b702-1bbe-38a4-30e87d9d1b95@intel.com>
- <931536E2-3948-40AB-88A7-E36F67954AAA@linux.dev>
- <7be98c64-88a1-3bee-7f92-67bb1f4f495b@huawei.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817215410.1807477-1-badhri@google.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,75 +64,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 17, 2022 at 02:54:10PM -0700, Badhri Jagan Sridharan wrote:
+> When the port does not support USB PD, prevent transition to PD
+> only states when power supply property is written. In this case,
+> TCPM transitions to SNK_NEGOTIATE_CAPABILITIES
+> which should not be the case given that the port is not pd_capable.
+> 
+> [   84.308251] state change SNK_READY -> SNK_NEGOTIATE_CAPABILITIES [rev3 NONE_AMS]
+> [   84.308335] Setting usb_comm capable false
+> [   84.323367] set_auto_vbus_discharge_threshold mode:3 pps_active:n vbus:5000 ret:0
+> [   84.323376] state change SNK_NEGOTIATE_CAPABILITIES -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
+> 
+> Fixes: e9e6e164ed8f6 ("usb: typec: tcpm: Support non-PD mode")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> On Aug 18, 2022, at 15:52, Miaohe Lin <linmiaohe@huawei.com> wrote:
->=20
-> On 2022/8/18 10:47, Muchun Song wrote:
->>=20
->>=20
->>> On Aug 18, 2022, at 10:00, Yin, Fengwei <fengwei.yin@intel.com> =
-wrote:
->>>=20
->>>=20
->>>=20
->>> On 8/18/2022 9:55 AM, Miaohe Lin wrote:
->>>>>>> 	/*
->>>>>>> 	 * The memory barrier inside __SetPageUptodate makes =
-sure that
->>>>>>> 	 * preceding stores to the page contents become visible =
-before
->>>>>>> 	 * the set_pte_at() write.
->>>>>>> 	 */
->>>>>>> 	__SetPageUptodate(page);
->>>>>> IIUC, the case here we should make sure others (CPUs) can see new =
-page=E2=80=99s
->>>>>> contents after they have saw PG_uptodate is set. I think commit =
-0ed361dec369
->>>>>> can tell us more details.
->>>>>>=20
->>>>>> I also looked at commit 52f37629fd3c to see why we need a barrier =
-before
->>>>>> set_pte_at(), but I didn=E2=80=99t find any info to explain why. =
-I guess we want
->>>>>> to make sure the order between the page=E2=80=99s contents and =
-subsequent memory
->>>>>> accesses using the corresponding virtual address, do you agree =
-with this?
->>>>> This is my understanding also. Thanks.
->>>> That's also my understanding. Thanks both.
->>> I have an unclear thing (not related with this patch directly): Who =
-is response
->>> for the read barrier in the read side in this case?
->>>=20
->>> For SetPageUptodate, there are paring write/read memory barrier.
->>>=20
->>=20
->> I have the same question. So I think the example proposed by Miaohe =
-is a little
->> difference from the case (hugetlb_vmemmap) here.
->=20
-> Per my understanding, memory barrier in PageUptodate() is needed =
-because user might access the
-> page contents using page_address() (corresponding pagetable entry =
-already exists) soon. But for
-> the above proposed case, if user wants to access the page contents, =
-the corresponding pagetable
-> should be visible first or the page contents can't be accessed. So =
-there should be a data dependency
-> acting as memory barrier between pagetable entry is loaded and page =
-contents is accessed.
-> Or am I miss something?
+> ---
+> Changes since v1:
+> - Add Fixes tag.
+> Changes since v2:
+> - CCed stable
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index ea5a917c51b1..904c7b4ce2f0 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -6320,6 +6320,13 @@ static int tcpm_psy_set_prop(struct power_supply *psy,
+>  	struct tcpm_port *port = power_supply_get_drvdata(psy);
+>  	int ret;
+>  
+> +	/*
+> +	 * All the properties below are related to USB PD. The check needs to be
+> +	 * property specific when a non-pd related property is added.
+> +	 */
+> +	if (!port->pd_supported)
+> +		return -EOPNOTSUPP;
+> +
+>  	switch (psp) {
+>  	case POWER_SUPPLY_PROP_ONLINE:
+>  		ret = tcpm_psy_set_online(port, val);
+> -- 
+> 2.37.1.595.g718a3a8f04-goog
 
-Yep, it is a data dependency. The difference between hugetlb_vmemmap and =
-PageUptodate() is that
-the page table (a pointer to the mapped page frame) is loaded by MMU =
-while PageUptodate() is
-loaded by CPU. Seems like the data dependency should be inserted between =
-the MMU access and the CPU
-access. Maybe it is hardware=E2=80=99s guarantee?
-
->=20
-> Thanks,
-> Miaohe Lin
-
+-- 
+heikki

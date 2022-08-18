@@ -2,68 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347CE59847F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D2C59847B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 15:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243213AbiHRNn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 09:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
+        id S245018AbiHRNoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 09:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245183AbiHRNnE (ORCPT
+        with ESMTP id S245040AbiHRNng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:43:04 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79244B69D4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:42:10 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id y18so1104281qtv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:42:10 -0700 (PDT)
+        Thu, 18 Aug 2022 09:43:36 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECCB10FEB
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:43:27 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id k9so1822331wri.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 06:43:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=fEl5/MZkqTMXgHOWXV9A2H8cNKuuMZWcnutD4sufu6s=;
-        b=ht8Gx8e2Ikbg0xL5tTN9yUSBAnaJAa9W+z/ivanBDORHCh4gJXk+iF7rZkapcUDT97
-         cCmTExnGDOR9IyskxbtWp08xaDh3dXDI7lw1zQ16mvB58eixGo3bnK3wmWUnIyTG3mva
-         dR0MOIH3M+4e60hYD3I23ne5WHqUAlfnrkrWBr/UYhBj/YG38gSvDtoT02LIqlVHXFT9
-         dgB13Ynn/hKXojCTppcehXAS8KXH/jdUdZBkG3rZGwTczQtTx2ZbC7RSxznJoDhPcw39
-         GoIx8Oad3MeL0EhBMfmiGLoupUgz999ABEz+WE1VR5atJcn7BGnfuQpJGhBvNDKDkEJh
-         Fkyw==
+        d=sifive.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=gdtFXgHWhh+XIigks5RLtKKk7+/QyECdBRgxpIDg+rY=;
+        b=CRQRkmx9QJakJCitP0xE2kHRoJI7Q1h3WCopqGkW2W7VW3fBk4YPkR/W36fzpl+vs3
+         w3Pzdr+nFyqeyn/yZW44/GwgBIGNLlDSW2YHUmSqh/XFHZE1GsyCmvn5KL2wxM3A3JMh
+         G8gr0HOLL3rYLXmjdLcrHRv7sXrBdp/WQLryZs4Dqc8c8AWSznHP+q+iutARgounarEP
+         P8uaffvE53aJodK6nG1LADChr09p743rBIQjl9l3f07d7sVbd4LBfXhr4qLMEK00KyDQ
+         mzy2ISaLOHE+bgt6GhPzubLjK+0dYMPQvTSwfy44FWs8RY7h6uO9MXW0sO88U40Qas7g
+         6s5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=fEl5/MZkqTMXgHOWXV9A2H8cNKuuMZWcnutD4sufu6s=;
-        b=YNkg/0f8yEdq6zSkSJAoNZ7JTnfImAKNBun+UuTDYWjtZSfUEl0kk0uUrcZWnExhGi
-         TgAdqTK+tHcTLkRr9U+3pezxE+rX4HPRA7JiWcm7w/sb3RV4uD6Yv2Nf88aWz9+bt2dZ
-         nTIkHYnCJ9DlxS1LwpmWJyWf5ISmvg03pjtU6TsV334AjwAVg/7iopjrHihRZnwvHLfC
-         Zi662BDkidciM8//aDK+buBTotWlALOhQFjTU5ZZL455rp0o1R6SdOU+wUGtitz6fctn
-         j43yVxHoDuSiSmd3/VyFDpEITMrStPtB5qfOUMEWPeTMjcDhfaIu+s/PHazBGimKQxLa
-         3udA==
-X-Gm-Message-State: ACgBeo2ElqLQU8B52JGdEoVMiP2mR7wymYw3wwGjrV3FNEizDG69GZ2U
-        gedwLVZtd0hLeRsQQg54+1pCYQ==
-X-Google-Smtp-Source: AA6agR4jTgrZJP0jHnhpoEcJLuhZqFp9nVJLbFrYqbcB6Yo9V3tEpfH7+LK6oECe9AWPfVpNq4DZyQ==
-X-Received: by 2002:a05:622a:44c:b0:343:7b8e:2cb with SMTP id o12-20020a05622a044c00b003437b8e02cbmr2527312qtx.617.1660830129554;
-        Thu, 18 Aug 2022 06:42:09 -0700 (PDT)
-Received: from localhost.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id bm30-20020a05620a199e00b006bb11f9a859sm1493430qkb.122.2022.08.18.06.42.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 06:42:09 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: ipa: don't assume SMEM is page-aligned
-Date:   Thu, 18 Aug 2022 08:42:05 -0500
-Message-Id: <20220818134206.567618-1-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=gdtFXgHWhh+XIigks5RLtKKk7+/QyECdBRgxpIDg+rY=;
+        b=uAFw2l3N3qWB8tRZfsF9fNflUYS+mI7sJlwdqGaqOQGtAoyxKmdq6rK0SIdDnMakTi
+         kZhX/JYxAOCs+3p+Z3gY28o2axRszq35byuwFznPoTFZCW1/6ETTyt/waX6DfDE+ooGv
+         Y/jW7y+8epfvFS7GO7WfcOb910fpyX1oGGPDAvMzNVEmZ7Dz5wwCcv3DDXf4YxcnrPjm
+         3GVaKKVrWK1uZOaEKmEpYmdEON5hykBq4FMpSvbQTt8MDyl9NkGu8zU8x1ssfZE9BstH
+         FXZDn6BJd/2RfLv8UdxIZYtRoYj0Km8MqNDxlBY+c/RtUOtEWEl3JGNSO0Xj+jgMFwvM
+         jhZA==
+X-Gm-Message-State: ACgBeo2m2gTJMLemmkpWTVs/pgijs+zef0qD1YHlAFWU3VGD+V6GAUEg
+        NkPZXARr66GQ3vDvGDRsqCWPH1jcvwIHwQ==
+X-Google-Smtp-Source: AA6agR670uQSVwx9Q/I3W7D6pg4XeV0tOb6A7chSd5qk3c3U5X0VadcWSaPFIUHhH+t+9q2f22hOKg==
+X-Received: by 2002:a5d:64c1:0:b0:222:ce3e:bd35 with SMTP id f1-20020a5d64c1000000b00222ce3ebd35mr1646220wri.520.1660830205663;
+        Thu, 18 Aug 2022 06:43:25 -0700 (PDT)
+Received: from [192.168.0.17] (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net. [86.15.83.122])
+        by smtp.gmail.com with ESMTPSA id z11-20020a5d4c8b000000b002252f57865asm1536525wrs.15.2022.08.18.06.43.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 06:43:25 -0700 (PDT)
+Message-ID: <b3605922-a0ef-7d44-7e83-3146b6c17068@sifive.com>
+Date:   Thu, 18 Aug 2022 14:43:24 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Re: [RFC v4 01/10] dt-bindings: pwm: Document Synopsys DesignWare
+ snps,pwm-dw-apb-timers-pwm2
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-pwm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        u.kleine-koenig@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        jarkko.nikula@linux.intel.com,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+References: <20220816211454.237751-1-ben.dooks@sifive.com>
+ <20220816211454.237751-2-ben.dooks@sifive.com>
+ <f07d2072-4056-bf2e-82d5-271d8b8792e6@linaro.org>
+From:   Ben Dooks <ben.dooks@sifive.com>
+In-Reply-To: <f07d2072-4056-bf2e-82d5-271d8b8792e6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,39 +86,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ipa_smem_init(), a Qualcomm SMEM region is allocated (if needed)
-and then its virtual address is fetched using qcom_smem_get().  The
-physical address associated with that region is also fetched.
+On 17/08/2022 06:58, Krzysztof Kozlowski wrote:
+> On 17/08/2022 00:14, Ben Dooks wrote:
+>> Add documentation for the bindings for Synopsys' DesignWare PWM block
+>> as we will be adding DT/platform support to the Linux driver soon.
+>>
+>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+>> ---
+>> v4:
+>>   - fixed typos, added reg
+>> v3:
+>>   - add description and example
+>>   - merge the snps,pwm-number into this patch
+>>   - rename snps,pwm to snps,dw-apb-timers-pwm2
+>> v2:
+>>   - fix #pwm-cells to be 3
+>>   - fix indentation and ordering issues
+>> ---
+>>   .../bindings/pwm/snps,dw-apb-timers-pwm2.yaml | 69 +++++++++++++++++++
+>>   1 file changed, 69 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.yaml b/Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.yaml
+>> new file mode 100644
+>> index 000000000000..e7feae6d4404
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/pwm/snps,dw-apb-timers-pwm2.yaml
+>> @@ -0,0 +1,69 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +# Copyright (C) 2022 SiFive, Inc.
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/pwm/snps,dw-apb-timers-pwm2.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Synopsys DW-APB timers PWM controller
+>> +
+>> +maintainers:
+>> +  - Ben Dooks <ben.dooks@sifive.com>
+>> +
+>> +description:
+>> +  This describes the DesignWare APB timers module when used in the PWM
+>> +  mode. The IP core can be generated with various options which can
+>> +  control the functionality, the number of PWMs available and other
+>> +  internal controls the designer requires.
+>> +
+>> +  The IP block has a version register so this can be used for detection
+>> +  instead of having to encode the IP version number in the device tree
+>> +  comaptible.
+>> +
+>> +allOf:
+>> +  - $ref: pwm.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: snps,dw-apb-timers-pwm2
+>> +
+>> +  "#pwm-cells":
+>> +    const: 3
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: Interface bus clock
+>> +      - description: PWM reference clock
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: bus
+>> +      - const: timer
+>> +
+>> +  snps,pwm-number:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: The number of PWM channels configured for this instance
+>> +    enum: [1, 2, 3, 4, 5, 6, 7, 8]
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - "#pwm-cells"
+>> +  - compatible
+>> +  - reg
+> 
+> Keep the same order as list of properties.
 
-The physical address is adjusted so that it is page-aligned, and an
-attempt is made to update the size of the region to compensate for
-any non-zero adjustment.
+ok, will fix.
 
-But that adjustment isn't done properly.  The physical address is
-aligned twice, and as a result the size is never actually adjusted.
+>> +  - clocks
+>> +  - clock-names
+>> +
+>> +additionalProperties: false
+>> +
+>> +
+> 
+> Just one blank line.
+> 
+>> +examples:
+>> +  - |
+>> +    pwm: pwm@180000 {
+>> +      #pwm-cells = <3>;
+>> +      compatible = "snps,dw-apb-timers-pwm2";
+>> +      reg = <0x180000 0x200>;
+> 
+> The convention of DTS is: compatible, then reg, then rest of properties.
+> 
+>> +      clocks = <&bus &timer>;
+> 
+> You put here one item, not two. This has to be <&bus>, <&timer>
+> 
+>> +      clock-names = "bus", "timer";
+>> +    };
 
-Fix this by *not* aligning the "addr" local variable, and instead
-making the "phys" local variable be the adjusted "addr" value.
+Argh, thanks, I completely missed this as our platform only has
+one clock provider for this (the bus and timer clocks are the
+same)
 
-Fixes: a0036bb413d5b ("net: ipa: define SMEM memory region for IPA")
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/ipa_mem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ipa/ipa_mem.c b/drivers/net/ipa/ipa_mem.c
-index 1e9eae208e44f..53a1dbeaffa6d 100644
---- a/drivers/net/ipa/ipa_mem.c
-+++ b/drivers/net/ipa/ipa_mem.c
-@@ -568,7 +568,7 @@ static int ipa_smem_init(struct ipa *ipa, u32 item, size_t size)
- 	}
- 
- 	/* Align the address down and the size up to a page boundary */
--	addr = qcom_smem_virt_to_phys(virt) & PAGE_MASK;
-+	addr = qcom_smem_virt_to_phys(virt);
- 	phys = addr & PAGE_MASK;
- 	size = PAGE_ALIGN(size + addr - phys);
- 	iova = phys;	/* We just want a direct mapping */
--- 
-2.34.1
+> Best regards,
+> Krzysztof
 
+Thanks for the review.
+
+I guess this is now too late for 6.0-rc ?

@@ -2,187 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE85F598C28
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1E8598C26
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 Aug 2022 20:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242592AbiHRSzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 14:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        id S244648AbiHRS4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 14:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiHRSzr (ORCPT
+        with ESMTP id S239225AbiHRS4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 14:55:47 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2085.outbound.protection.outlook.com [40.107.223.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666A6BFAA6;
-        Thu, 18 Aug 2022 11:55:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P509bn2PtG3xtVX/w63HZatsRnLkwj0teFaTR4ePO17hBAu8Omwe9N3Acg77jMRynGyHeVJcy/SmV1oFP20sgQhi1YbnYlTQTiXqQH/QePKAldBeMZGlTLNHt6kz+FfyhusWr+XDduDIs7a702+t7/CaD8tG511nwWW7IYHyABcqIhv7aFQ93suuPUF0VgFBPmYZYdmwBYXXk+Fpe8BsIWQjixsFA+uFrl3EN6eLtrXZPQQL8yZBWb48mRYVTstamHvcFev+5VTrSnHzuoifYNf5PxZBo4Sk906pAp/IvdcytvxoDS5VfZL4yCpco3M1GqLt3xyvZjzt7xtCVhcXwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rfB21sXzxaLZiBdXgJI4q6xDHypQmirp5Rp5iExqf98=;
- b=c4YrtlixN1MFiLbcvJP+5GLhRQswJs8hhaa39EP1iGBJp7qDFeoWnaLw4nQLezJBOQJ2bFYctWSpqrO2wS0akyIfcSPVIr+MLPOCSig8gQND387xsMit1xk/3fhjIjDBAd7vluq9X1dZVuxNYYHl+cQWPWbldWnZ9nJNe4ftJyyA+jvEXxF1F/4/hmfNxNX7VcLtuakTtkIXaP8SYN0WJFgO+4oFlcEmlKWU7J+T7LxJrmxTgLKlRfj50aVa7ckkI140rrqu5Ysrm/gWMjd7RHyHXC8fYqtGPM4mbAPj2jA6BQh4g1Yq+9vtKshKjctRLXFmN/9Cdl/nmGpj6nNIxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rfB21sXzxaLZiBdXgJI4q6xDHypQmirp5Rp5iExqf98=;
- b=XZYnNCs7LY9PjmIHIIFoNRVTj9lDUdqHCJY2agJXo1J+VF96rA8xSa6LMkkEHe8NzuicyHhgvtnaIrANAgVnr/TJmqLsbTPFqwkzc0GdsF4hTMHz38LobUDxf8hcIAq/kerm7c7sTrxBG9JpNe7PthWb0IduCw9RwfsFUmeLUwDduGfnp42WLswZmNXE+pQvzjka9O99x+vvpiraPJnrcXC34eRelMoXsVR8zsflSP41WuoqQ4LEMylE8SppQ2j+LSqMiu5t3b5Co3ZBetKXxdRwCAB/GsDXJQYbx+fOw+LSKPt5LI1fDikLYCBBNLoRPx1+xS5SAzZ0CHNpeXbkzg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by DM5PR12MB2582.namprd12.prod.outlook.com (2603:10b6:4:b5::37) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Thu, 18 Aug
- 2022 18:55:44 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5%8]) with mapi id 15.20.5546.016; Thu, 18 Aug 2022
- 18:55:44 +0000
-Message-ID: <251cf8bf-a649-2812-1aa6-39c7b23d5e03@nvidia.com>
-Date:   Thu, 18 Aug 2022 11:55:40 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] selftests/vm: fix inability to build any vm tests
-Content-Language: en-US
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220817211356.273019-1-axelrasmussen@google.com>
- <190edda8-1f37-0fa5-1cc1-ada97518698a@nvidia.com>
- <CAJHvVcgktSjo5CncC25+2j1amXvn3TjnsfOCV6CxNDp5joey9Q@mail.gmail.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <CAJHvVcgktSjo5CncC25+2j1amXvn3TjnsfOCV6CxNDp5joey9Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR03CA0012.namprd03.prod.outlook.com
- (2603:10b6:a03:39a::17) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        Thu, 18 Aug 2022 14:56:00 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E19DBBA7E
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:55:59 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id o3so1266167ilf.7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 11:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=o9IqWqTExqfvAFZ3y/aPtmNVxALGEdclMGoLQukyCMs=;
+        b=UpgEzYK8fvk/arvCh/WKzNm+H/ueOgS7/lFGRNPT7ffAwaZk7iLif5Ej4qyizteQM/
+         jGOyzZ/shwlzi+uBcSvJjlcO6hxfCTDOZwa7TGYutJ3eXUqzHkzBUQbVEwynj1fnXhmQ
+         v9haHLPPuushmrmvU2QJ2eIFgPDdb6R30w4K8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=o9IqWqTExqfvAFZ3y/aPtmNVxALGEdclMGoLQukyCMs=;
+        b=joUHkBa5wiTdyOb77WIh0jN+WNE6OFhUHyA2x5P7g/UDmAPli2SIE5K5K+OhtaHc6v
+         /we3dP7QtFJgH9mIFG4+a7/EZuHpXWayH/fsHDLat4vfyDffNljFMpOdNCMXG5sCQ2vb
+         9CWa8YNtBsqwLrS+HwzRVOSCA8+wumlz9aVw9YR2uoOTCBrcVCjijPjWyy7by112uFw+
+         DQ7nLkla7Zbh5yrx0e6GKZ1NUeypfwCw4ikYitMUJw2tHul7zLIvv4yYcFUoe3vFVvnn
+         sdAlo8GB+V4/IJR9VKO22vlovUGJHd6uLKBeWikHEYVD/RLUxIAdMLaNNfdv9iTro07f
+         AAfw==
+X-Gm-Message-State: ACgBeo0HYPujEIeT6GjLwZyAA1GsqHWnikJjAmwUlBzs1hMAzQxDDSF+
+        FJIP2C91rpm2dhtncSDjk8q2i0MGkPQIfGLQtrZQ0CZZEno=
+X-Google-Smtp-Source: AA6agR4DrI/Jhj5BsFj/OILFnVRNJfDhmvWXyKUgfnFsK76LWPDPerPHF3jneiEap7xzxQhz/8yowLU6hRy0PRVt8Ks=
+X-Received: by 2002:a05:6e02:1c84:b0:2e5:b635:c6bd with SMTP id
+ w4-20020a056e021c8400b002e5b635c6bdmr2088909ill.190.1660848958971; Thu, 18
+ Aug 2022 11:55:58 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5b2ec4da-c607-491d-b888-08da814b413f
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2582:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yqbIC5w4zeMx4Kr7exBg4Eih7gVGsNk4F1LhXcJe0/Sop0wq4DLThCo0eXoOfcKpmVsFrbb8LHWwjaO9065P5bFaONSNMVjcDrfb4csCG3q9B/W0jFFcBpGxu13JPdK4UzBmENVYxg3/tTwuGPAMRPw1fG6B9Z2BOxhvtbY2dqWAKwEtFIvK+dxryy9QnlSsun9Dt3/czsB1/lEd7t0oO2Mrc4mTdmrJgxXzobeLO7HtMU3NW+EoOrEhgFlKPflxk5dc/gT8R1gKPxp46XaAv8umn+AWqFkrEeIYWq98plsnYnVVDjwc9TkaYc3g3lGj9ggYLpM8fkstyRjVSQWqH/zgE1F/VoefhUD4RfyfddAptxYzy24oZE449MW50/mg/ZZXiGwNsKlbq9jEM0j0fV99NvK1Z80i2wbFoRd3YdGGmnYd6y9ECte4gjSIxDNT2uVbBfP2bnYm2KHp00/8x3pVPmE9/8i7CpLlTj3072ZoGu8H6YO2S1Z9i2Py2MHloujH35XVBm16KosfrVg3hbTAp3cxNQeQuvKSBrnn5ZWFzx3oqXAvYpCjq4nwJqbfEI+R37B0D5vldF0qSNS8ZJR6krSIbGOv1hCc7cYdRLz6RIg4Hv+2ym/cvAwkoqglmIEfCMOHdRa32Y4eWO2bfwz1SLUJLpn4vHVfhPIHo6AeKYYdUVB+M9MG3RuIG+/RnWhfutaGw7VXLnEM6t+OWMj+cqlDW+0RN++7o6hRvHCuOVHXqBx4CLjHq7pS8sEquxtZ/i30lu6f+5jqcMXEJJEw3ESrLWBDWvBqqEPfhJg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(346002)(39860400002)(396003)(376002)(54906003)(38100700002)(41300700001)(2616005)(186003)(53546011)(478600001)(6486002)(31696002)(6916009)(316002)(26005)(6666004)(86362001)(66556008)(8936002)(31686004)(6506007)(6512007)(2906002)(4326008)(66946007)(8676002)(5660300002)(66476007)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a0xVcmhTY2pwbzZaVytMdDdKWjlLNXRQNjdEMU1TUVQ4YWgzbDRPeGxnbUY3?=
- =?utf-8?B?NThBRFJoRlh6S0dqRE1YTG05d0lBNmVhMmIwYXVnWm9yWUJNakRJdmtCYTFW?=
- =?utf-8?B?OU5oTXkrY2NydHpLN2x5aWNKZHhqUkhzNXd6dk95QUd1WURKSElrS1lOMXFx?=
- =?utf-8?B?T2l6U2JjTjVDOFlKSUs0Y0NYMVBIeUF6eC9tZU9HREZsV0lSR05CNEFSYVE1?=
- =?utf-8?B?dm5QWFAvRiszYjB1clVGbVBCMDFlcW1iVWI1MFZBbVE2c3FqUUtzM0ozL1VK?=
- =?utf-8?B?VzR0NU5QZEIzQ0tRTjB2TUh2a056dU1uMkR3UlRzN2lWT0R1UEpJT2pSZUVi?=
- =?utf-8?B?NzdzVEM2bDh1OE5RSGZsNnN3U0F0RTJ1OGZYTGNyVExicE1MMDd0RUhWVlFX?=
- =?utf-8?B?OXQ0RjRRSTJ6cEZCZjR4dndsWkFiYlhPWTQ5anZMclVCbTA5UXgrcUErTjZj?=
- =?utf-8?B?WUtLT0FkNDFpeXd0a1JIYjVQR3lzZUxJY0FGb3FjU1NPcnRiYy9sc1BoeGhN?=
- =?utf-8?B?Z2xONWkxdmxsTldUNVdYL3MzTmZTc2t4SzgyR3RZTTZlRG1aNUxLdTdWY2pu?=
- =?utf-8?B?cHNSRk5YTVc0cTROdWVIdUdWelk0M2hndVcvaG5hNnNOaThPSi91TU5TSyt0?=
- =?utf-8?B?aGZOU29PTnovSXd1TWZXbVh5aDlrcHlPTkF3aDdaZFdlT3FNMTJhY1dNYXZH?=
- =?utf-8?B?QkIwWHo5TGlPVEZIeCt1TUl0RmVEUXFxMEd2Z3pINWxLZmtoNjUzYVhEQWls?=
- =?utf-8?B?MFprcWRlWFZpeXZPc0FObGQzVXBZQmxuMXVsbjlGVit1c1FvWDRRbG81RXFD?=
- =?utf-8?B?bXJPKzQvMEx3TUhMOFR6WVl0akl6WWZjejFTRjJ1K3hDVjROWkRITUlWUTlx?=
- =?utf-8?B?SDcxb3pxeVVTR3NRM0J4WGV0cFpFQmlMSStkNzV5c05VU3diQmgrVmVFTS8x?=
- =?utf-8?B?blgrcGhEK1Z2RTU0ckFnOTJSZUwwUUY4Sk1wRjUwVVBOcDFnaHVZb1N2KzdR?=
- =?utf-8?B?cEduRmRsUTF0Mjc5UU15emx2VnlNWXBXUDBzdkVIY3d5dUF0T0YzT0FJdGRQ?=
- =?utf-8?B?dStLNnlJTTBIWWdMeExkWkh5MWZXMDZpYWliSHFnazVHL2VwR04rNWxOZTVo?=
- =?utf-8?B?N05PMVlsSXo3azVzNmZLQlNKcjFxMnpueWsvWW1QOVppcG9lU1N5bGRMMVUy?=
- =?utf-8?B?bllCOUt6ZFkvTzlPSlVwWFlKRS9kWjJSTmhtT1NXR2xDazBUeE1zNEsxN3lO?=
- =?utf-8?B?Y1lacWNVOUJjVnFJQTk1aXhtZ2lKOTRZdm9BSVJtVDNoTW5TR3BSVFoxUTZP?=
- =?utf-8?B?OHZHNDQ5MXNqeEx5Y0x6TVhERThBSWMvQXNrYlhFdU5GZmFoSXpHZ1lENGd4?=
- =?utf-8?B?bzNqeDdDbTJhSzk0eFo2cXVaSFVZUWtodGF2MjVURmV4cmdqbDBwYjFnWHNT?=
- =?utf-8?B?U3VIRnJzL0h4eDlXM2g3YXpYb1oxRmg4R2pPTnZXeTYvdkk1dDcwWFVUa1Fq?=
- =?utf-8?B?ZVBiWVJ2UTZ3dHRja29uVFZVbFFIb2k3TC9VdzBockptb2pzbklPcksrdDlk?=
- =?utf-8?B?bFlnYTg3ajU1MEhZNjRwbGZMdFNZZDM1OGlTREZTR3hLN2tNZ0U4Qlh4WkMx?=
- =?utf-8?B?UWJMMWg5eFdldmxqaURTMUpnU25LK0pWazljT25iL0xKazBuNUZFT25MN1VB?=
- =?utf-8?B?eks0UWdIYnNycDJ1Vm5VTjdVOVIrem9uRUYybFl4MlFlWTlsOVNPcE1vZ2xZ?=
- =?utf-8?B?OEI2WXhBaDYybm5nMXZPWUZYemxqTDJvMUkyTmNKUDUzLzdaUkdsc3RwYTE0?=
- =?utf-8?B?MFlESUhZV1N0dEdBaU9NL0xuekJKdzF6QjlyeUtOQjJObHFxZHpxQ0ZPS0Va?=
- =?utf-8?B?U0d1WSt4Y3FORGdSbGFFZUFseGVPbHNlWGFZQjB2aVFzbUhnVFZnQWxKY1Yz?=
- =?utf-8?B?YWxnc3ZyWTRBUVBIdDBhMDlnQ3NxbnR5N1FpY21pNHJZalJ0ZjNnc1VvVkx2?=
- =?utf-8?B?ZHNxZ2t6cXZMNjBxaHNqaUZkd2NrZWRvRW01TG9hWjREVEFZNjZNNTZ4SGtN?=
- =?utf-8?B?N3E1N0tJSkJubmphNVRGQnp2eDJ4NmpoUDQraFk5eThFcklOYUxVVUhYblRK?=
- =?utf-8?Q?vfoBtMxzxxq6pEz9mDsN3Ap3C?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b2ec4da-c607-491d-b888-08da814b413f
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 18:55:44.5134
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OG4erW98s4+gj9WNy8B8b+0hDLXKkWEXhLUPPIzC0OzyysUf6kMLOLjItYXl89tvEz21uOSGyP39IcoOg6hn0A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2582
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220628145552.349839-1-xiehuan09@gmail.com> <20220628145552.349839-5-xiehuan09@gmail.com>
+ <Yv5gkKnufS7CUq9A@google.com> <CAEr6+ED7UovW1BbrK4s5tCRrTrfkESpa4m3VO4a4PBAY9nK_JA@mail.gmail.com>
+ <CAEXW_YQAFVJRe9mUnR1HAXvYDiQ3jCwrKhO52t8O=bxb_qSCzQ@mail.gmail.com> <CAEr6+EBC3MfqGZQ8zqLhr6P1VFkU2Hs9JsM-mqGBXWKLcAXkAA@mail.gmail.com>
+In-Reply-To: <CAEr6+EBC3MfqGZQ8zqLhr6P1VFkU2Hs9JsM-mqGBXWKLcAXkAA@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 18 Aug 2022 14:55:47 -0400
+Message-ID: <CAEXW_YTJGbGWZkmCndVqXaM=N_6ZuvmcxDrcgTaHjCEMyvXeuQ@mail.gmail.com>
+Subject: Re: [PATCH v14 4/4] Documentation: trace/objtrace: Add documentation
+ for objtrace
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, chensong_2000@189.cn,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 10:58, Axel Rasmussen wrote:
->> 1) I recalled that hmm-tests.c in the same directory also needs
->> gup_test.h, and wondered if that was covered. And it turns out the the
->> relative "up and over" include path is done in hmm-tests.c itself,
->> instead of in the Makefile, like this:
->>
->> /*
->>    * This is a private UAPI to the kernel test module so it isn't exported
->>    * in the usual include/uapi/... directory.
->>    */
->> #include "../../../../lib/test_hmm_uapi.h"
->> #include "../../../../mm/gup_test.h"
->>
->> It would be nice (maybe follow-up polishing for someone) if this were
->> done once, instead of twice (or more?) via different (source code vs.
->> Makefile) mechanisms.
-> 
-> Hmm, I suppose the way to clean this up would be to have the Makefile
-> compute this once, and pass in "-I $(selfdir)/../../.." to the
-> compiler so we could just "#include <mm/gup_test.h>" directly?
+On Thu, Aug 18, 2022 at 1:34 PM Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> Hi Joel,
+>
+> On Fri, Aug 19, 2022 at 1:05 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+> >
+> > On Thu, Aug 18, 2022 at 12:38 PM Jeff Xie <xiehuan09@gmail.com> wrote:
+> > >
+> > > Hi Joel,
+> > >
+> > > Thank you for your review.
+> > >
+> > > On Thu, Aug 18, 2022 at 11:53 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> > > >
+> > > > On Tue, Jun 28, 2022 at 10:55:52PM +0800, Jeff Xie wrote:
+> > > > > Add documentation explaining how to use objtrace trigger to get the value
+> > > > > of the object.
+> > > > >
+> > > > > Cc: Jonathan Corbet <corbet@lwn.net>
+> > > > > Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+> > > > > Cc: linux-doc@vger.kernel.org
+> > > > > Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
+> > > > > Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > > > ---
+> > > > > Changelog:
+> > > > > v14:
+> > > > > - make documentation more readable and fix literal code block by Bagas Sanjaya
+> > > > >
+> > > > >  Documentation/trace/events.rst | 87 ++++++++++++++++++++++++++++++++++
+> > > > >  1 file changed, 87 insertions(+)
+> > > > >
+> > > > > diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
+> > > > > index c47f381d0c00..c15f1d25d4a0 100644
+> > > > > --- a/Documentation/trace/events.rst
+> > > > > +++ b/Documentation/trace/events.rst
+> > > > > @@ -546,6 +546,93 @@ The following commands are supported:
+> > > > >
+> > > > >    See Documentation/trace/histogram.rst for details and examples.
+> > > > >
+> > > > > +- objtrace
+> > > > > +
+> > > > > +  This command provides a way to get the value of any object, The object
+> > > > > +  can be obtained from the dynamic event (kprobe_event/uprobe_event) or the
+> > > > > +  static event (tracepoint).
+> > > > > +
+> > > > > +  Usage:
+> > > > > +  When using the kprobe event, by only need to set the objtrace (a new
+> > > > > +  trigger), we can get the value of object that is set by kprobe event.
+> > > > > +
+> > > > > +  For example, for the function bio_add_page():
+> > > > > +
+> > > > > +  .. code-block:: c
+> > > > > +
+> > > > > +     int bio_add_page(struct bio *bio, struct page *page,
+> > > > > +                   unsigned int len, unsigned int offset)
+> > > > > +
+> > > > > +  Firstly, we can set the base of the object as first parameter (arg1) to
+> > > > > +  to the function:
+> > > > > +
+> > > > > +  .. code-block::
+> > > > > +
+> > > > > +     # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+> > > > > +
+> > > > > +  Secondly, we can get the value dynamically based on the object:
+> > > > > +
+> > > > > +  .. code-block::
+> > > > > +
+> > > > > +     find the offset of the bi_size in struct bio:
+> > > > > +     $ gdb vmlinux
+> > > > > +     (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
+> > > > > +     $1 = (unsigned int *) 0x28
+> > > > > +
+> > > > > +     # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
+> > > > > +       p_bio_add_page_0/trigger
+> > > > > +
+> > > > > +     # cd /sys/kernel/debug/tracing/
+> > > > > +     # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+> > > > > +     # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
+> > > >
+> > > > No offense but this documentation is not well written and hard to read.
+> > > >
+> > > > Admittedly though I am just casually browsing through, so apologies.
+> > > >
+> > > > So basically, 0x28 is the offset of the u32 within the bio, that you want to
+> > > > track down, as it passes through functions?
+> > >
+> > > Yes, Not only track the bio, but also get a value with an offset of
+> > > 0x28 relative to the bio.
+> >
+> > Right.
+> >
+> > > >
+> > > > The example is good, but I suggest breakdown each of the commands separated
+> > > > by ':' and document those as well.
+> > >
+> > > I don't know how to explain it in more detail, maybe need to be
+> > > familiar with kprobe event and trigger in advance ;-)
+> >
+> > That's not a strong argument IMO.
+> >
+> > Shouldn't it be super easy to add the following to the documentation
+> > since you already mentioned it in the commit log? Or am I missing
+> > something?
+> >
+> > Syntax:
+> >         objtrace:add:obj[,offset][:type][:count][if <filter>]
+>
+> I'am so sorry, I misunderstood you, I thought it needed to be
+> explained every word like this, e.g.
+> objtrace:
+>     ...
+> add:
+>     ...
+> ...
+>
+> Thanks,  I will add the above syntax in the next version.
+>
 
-Yes, it's better to have the Makefile know where the include paths are,
-rather than each source file, so that looks better.
+Yeah no problem, I am also OK with that being a follow-up patch
+instead of the series if it matches with Steven's review timing
+better.
 
-But hold on, now I see that selftests/vm/Makefile already uses what is
-effectively a src_topdir, anyway! Here:
+Thanks,
 
-CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
-
-...which makes me think that real fix for the original problem should be
-simply this:
-
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 947fc72413e9..d44c72b3abe3 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -40,6 +40,7 @@ ifeq (0,$(MAKELEVEL))
-      endif
-  endif
-  selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
-+top_srcdir = $(selfdir)/../../..
-
-  # The following are built by lib.mk common compile rules.
-  # TEST_CUSTOM_PROGS should be used by tests that require
-
-
-...and then the follow up cleanup can use top_srcdir to cleanup CFLAGS and
-also pull the relative paths out of the source files and into the Makefile.
-
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+ - Joel

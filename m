@@ -2,314 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C22599B4D
+	by mail.lfdr.de (Postfix) with ESMTP id 68839599B4E
 	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348663AbiHSLrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
+        id S1348677AbiHSLtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348309AbiHSLrB (ORCPT
+        with ESMTP id S1348061AbiHSLtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:47:01 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE57E8683;
-        Fri, 19 Aug 2022 04:46:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660909619; x=1692445619;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4sxJIM+BHWY9O0qQyEAm4kfuYvS3K5+yYTeL3uKnO6Q=;
-  b=k5M3SEEz0s/Te3I8Av9Mq2ao51Gz6uwkOz4BaKSL6xzfm5jWe9p80Rp8
-   xCA8/Beby0Li/LK3J3JsjlOinDb84AkwhJjDQaPjgQsuWgUyP+mrYkH5L
-   NCva4A69MqGKM9xQsf0FShtc1H1fvF/qAz4hNof5MO7Hb0+8AXpYNtL7W
-   O7tU9C0HY3uPWzBvA6hZi0Dwen1xFODXvfDCHujtjc6X43b67HoYlScey
-   lRGqU9dCiFhE8CtaI1UQdMD6d8hvCv8l8LKC5DnD/usHa0U9gZmeSq063
-   4y2n5YYsl3XWnwaD+yAvgp163yIL6NP+M9YBruzEKTbhltnJ+JnBKtUws
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="273388836"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="273388836"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 04:46:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="750501984"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Aug 2022 04:46:54 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oP0Sj-0001PS-1n;
-        Fri, 19 Aug 2022 11:46:53 +0000
-Date:   Fri, 19 Aug 2022 19:45:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gireesh.Hiremath@in.bosch.com, linux-omap@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, bcousson@baylibre.com,
-        tony@atomide.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dmitry.torokhov@gmail.com,
-        mkorpershoek@baylibre.com, davidgow@google.com,
-        m.felsch@pengutronix.de, swboyd@chromium.org,
-        fengping.yu@mediatek.com, y.oudjana@protonmail.com,
-        rdunlap@infradead.org, colin.king@intel.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        sjoerd.simons@collabora.co.uk, VinayKumar.Shettar@in.bosch.com,
-        Govindaraji.Sivanantham@in.bosch.com, anaclaudia.dias@de.bosch.com
-Subject: Re: [PATCH v3 2/3] driver: input: matric-keypad: add reduced matrix
- support
-Message-ID: <202208191937.Y6z0Gjrt-lkp@intel.com>
-References: <20220819065946.9572-2-Gireesh.Hiremath@in.bosch.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819065946.9572-2-Gireesh.Hiremath@in.bosch.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 19 Aug 2022 07:49:42 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E112BE86B3;
+        Fri, 19 Aug 2022 04:49:41 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JBNqXv027771;
+        Fri, 19 Aug 2022 11:49:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=eMYxvmLsm5iUEOW6SBmPUb7Z+2GvFGXcg+1PfhEYPkg=;
+ b=i4ACEMZQ0aKj2CEuprWNtZAiP2N4QjeWrC5z3THOqv9mo8Jhm/sV5AzZn5Fx2xOy/YsI
+ RzJoh43Uq5We7g303KX+W07of2sAkYUkwlCLz8Adem8dgyXdvYIMLzeFDxpPRziYytQ4
+ orJ3BURZmgGHjkeNey9YbSrH45cTKZcA/b2mvLZpV8Va+TfofeXusN/G6ErY/b1dWZCP
+ DtLG2GM1nkUVbANZH96Ys7GgCVAsj3MxONCxgEUi7LUAjW+EmmRokGPC25RyzSR+m8g3
+ lWHK1yraVSczoXquHTx+lMPHoUFjPkA0kagy1L/ao0bATLilwQG64/yAHzk1svCzAtkM FQ== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j29m1ghqt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Aug 2022 11:49:35 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27JBLEus029171;
+        Fri, 19 Aug 2022 11:49:33 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma05fra.de.ibm.com with ESMTP id 3hyp8skttd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Aug 2022 11:49:33 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27JBnUpU33423776
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Aug 2022 11:49:30 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D24C42041;
+        Fri, 19 Aug 2022 11:49:30 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ADD154203F;
+        Fri, 19 Aug 2022 11:49:29 +0000 (GMT)
+Received: from sig-9-145-84-131.uk.ibm.com (unknown [9.145.84.131])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 19 Aug 2022 11:49:29 +0000 (GMT)
+Message-ID: <5c06e9dae0848e21168a70183f2cfa4e55793586.camel@linux.ibm.com>
+Subject: Re: [PATCH] KVM: s390: pci: Hook to access KVM lowlevel from VFIO
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Pierre Morel <pmorel@linux.ibm.com>, mjrosato@linux.ibm.com
+Cc:     rdunlap@infradead.org, linux-kernel@vger.kernel.org, lkp@intel.com,
+        borntraeger@linux.ibm.com, farman@linux.ibm.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org, gor@linux.ibm.com,
+        hca@linux.ibm.com, frankja@linux.ibm.com
+Date:   Fri, 19 Aug 2022 13:49:29 +0200
+In-Reply-To: <b22977d5-6df7-13e0-802f-6201e6445d72@linux.ibm.com>
+References: <20220818164652.269336-1-pmorel@linux.ibm.com>
+         <2ae0bf9abffe2eb3eb2fb3f84873720d39f73d4d.camel@linux.ibm.com>
+         <0d7d055d-f323-acba-cb79-f859b5e182b4@linux.ibm.com>
+         <ae19135f580e1f510e99d1567514cc2dfe3571be.camel@linux.ibm.com>
+         <b22977d5-6df7-13e0-802f-6201e6445d72@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: AyeLoIx0s6d3qrs920OQHpAddIe_F9GL
+X-Proofpoint-ORIG-GUID: AyeLoIx0s6d3qrs920OQHpAddIe_F9GL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-19_06,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 suspectscore=0
+ mlxscore=0 phishscore=0 impostorscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208190044
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+---8<---
+> > > > > diff --git a/arch/s390/pci/Makefile b/arch/s390/pci/Makefile
+> > > > > index bf557a1b789c..c02dbfb415d9 100644
+> > > > > --- a/arch/s390/pci/Makefile
+> > > > > +++ b/arch/s390/pci/Makefile
+> > > > > @@ -7,3 +7,5 @@ obj-$(CONFIG_PCI)	+= pci.o pci_irq.o pci_dma.o pci_clp.o pci_sysfs.o \
+> > > > >    			   pci_event.o pci_debug.o pci_insn.o pci_mmio.o \
+> > > > >    			   pci_bus.o
+> > > > >    obj-$(CONFIG_PCI_IOV)	+= pci_iov.o
+> > > > > +
+> > > > > +obj-y += pci_kvm_hook.o
+> > > > 
+> > > > I thought we wanted to compile this only for CONFIG_PCI?
+> > > 
+> > > Ah sorry, that is indeed what I understood with Matt but then I
+> > > misunderstood your own answer from yesterday.
+> > > I change to
+> > > obj-$(CONFIG_PCI) += pci_kvm_hook.o
+> > > 
+> > > > > diff --git a/arch/s390/pci/pci_kvm_hook.c b/arch/s390/pci/pci_kvm_hook.c
+> > > > > new file mode 100644
+> > > > > index 000000000000..ff34baf50a3e
+> > > > ---8<---
+> > > > 
+> > 
+> > Ok with the two things above plus the comment by Matt incorporated:
+> > 
+> > Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > 
+> 
+> Just a little correction, it changes nothing if the pci_kvm_hook.c goes 
+> on same lines as other CONFIG_PCI depending files.
+> So I put it on the same line.
+> 
+> Thanks
+> 
+> Pierre
+> 
 
-Thank you for the patch! Perhaps something to improve:
+Of course yes. Thanks for fixing this and I'm assuming this would
+either go through the KVM or vfio trees, correct?
 
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on linus/master v6.0-rc1 next-20220819]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gireesh-Hiremath-in-bosch-com/driver-input-matric-keypad-switch-to-gpiod/20220819-151155
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-config: s390-randconfig-r044-20220819 (https://download.01.org/0day-ci/archive/20220819/202208191937.Y6z0Gjrt-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/a0b420e08e3b8775a3dbc4857f6ef4831db1c2b3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Gireesh-Hiremath-in-bosch-com/driver-input-matric-keypad-switch-to-gpiod/20220819-151155
-        git checkout a0b420e08e3b8775a3dbc4857f6ef4831db1c2b3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/input/keyboard/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/input/keyboard/matrix_keypad.c:14:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/input/keyboard/matrix_keypad.c:14:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/input/keyboard/matrix_keypad.c:14:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/input/keyboard/matrix_keypad.c:857:3: warning: variable 'err' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (!keypad->button_array) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/input/keyboard/matrix_keypad.c:932:9: note: uninitialized use occurs here
-           return err;
-                  ^~~
-   drivers/input/keyboard/matrix_keypad.c:857:3: note: remove the 'if' if its condition is always false
-                   if (!keypad->button_array) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   drivers/input/keyboard/matrix_keypad.c:828:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
->> drivers/input/keyboard/matrix_keypad.c:65:33: warning: unused variable 'keypad_infos' [-Wunused-const-variable]
-   static const struct keypad_info keypad_infos[] = {
-                                   ^
-   14 warnings generated.
-
-
-vim +857 drivers/input/keyboard/matrix_keypad.c
-
-   822	
-   823	static int matrix_keypad_probe(struct platform_device *pdev)
-   824	{
-   825		const struct matrix_keypad_platform_data *pdata;
-   826		struct matrix_keypad *keypad;
-   827		struct input_dev *input_dev;
- > 828		int err;
-   829	
-   830		pdata = dev_get_platdata(&pdev->dev);
-   831		if (!pdata) {
-   832			pdata = matrix_keypad_parse_dt(&pdev->dev);
-   833			if (IS_ERR(pdata))
-   834				return PTR_ERR(pdata);
-   835		} else if (!pdata->keymap_data) {
-   836			dev_err(&pdev->dev, "no keymap data defined\n");
-   837			return -EINVAL;
-   838		}
-   839	
-   840		keypad = kzalloc(sizeof(struct matrix_keypad), GFP_KERNEL);
-   841		input_dev = input_allocate_device();
-   842		if (!keypad || !input_dev) {
-   843			err = -ENOMEM;
-   844			goto err_free_mem;
-   845		}
-   846	
-   847		keypad->input_dev = input_dev;
-   848		keypad->pdata = pdata;
-   849		keypad->row_shift = get_count_order(pdata->num_col_gpios);
-   850		keypad->stopped = true;
-   851	
-   852		if (pdata->mode == REDUCED) {
-   853			keypad->button_array = devm_kzalloc(
-   854				&pdev->dev,
-   855				sizeof(struct button) * (pdata->num_of_buttons),
-   856				GFP_KERNEL);
- > 857			if (!keypad->button_array) {
-   858				dev_err(&pdev->dev,
-   859					"could not allocate memory for button array\n");
-   860				goto err_free_mem;
-   861				;
-   862			}
-   863	
-   864			poll_prepare(keypad);
-   865	
-   866			err = input_setup_polling(input_dev, matrix_keypad_poll);
-   867			if (err) {
-   868				dev_err(&pdev->dev,
-   869					"unable to set up polling, err=%d\n", err);
-   870				return err;
-   871			}
-   872	
-   873			input_set_poll_interval(input_dev, pdata->poll_interval_ms);
-   874		} else {
-   875			INIT_DELAYED_WORK(&keypad->work, matrix_keypad_scan);
-   876		}
-   877		spin_lock_init(&keypad->lock);
-   878	
-   879		input_dev->name = pdev->name;
-   880		input_dev->id.bustype = BUS_HOST;
-   881		input_dev->dev.parent = &pdev->dev;
-   882		input_dev->open = matrix_keypad_start;
-   883		input_dev->close = matrix_keypad_stop;
-   884	
-   885		if (pdata->mode == REDUCED) {
-   886			err = matrix_keypad_build_keymap(pdata->keymap_data, NULL,
-   887							 pdata->num_line_gpios,
-   888							 pdata->num_line_gpios, NULL,
-   889							 input_dev);
-   890			if (err) {
-   891				dev_err(&pdev->dev, "failed to build keymap for reduced mode\n");
-   892				goto err_free_mem;
-   893			}
-   894		} else {
-   895			err = matrix_keypad_build_keymap(pdata->keymap_data, NULL,
-   896							 pdata->num_row_gpios,
-   897							 pdata->num_col_gpios, NULL,
-   898							 input_dev);
-   899			if (err) {
-   900				dev_err(&pdev->dev, "failed to build keymap for generic mode\n");
-   901				goto err_free_mem;
-   902			}
-   903		}
-   904	
-   905		if (!pdata->no_autorepeat)
-   906			__set_bit(EV_REP, input_dev->evbit);
-   907		input_set_capability(input_dev, EV_MSC, MSC_SCAN);
-   908		input_set_drvdata(input_dev, keypad);
-   909	
-   910		if (pdata->mode == REDUCED) {
-   911			button_hdl_init(keypad);
-   912		} else {
-   913			err = matrix_keypad_init_gpio(pdev, keypad);
-   914			if (err)
-   915				goto err_free_mem;
-   916		}
-   917	
-   918		err = input_register_device(keypad->input_dev);
-   919		if (err)
-   920			goto err_free_gpio;
-   921	
-   922		device_init_wakeup(&pdev->dev, pdata->wakeup);
-   923		platform_set_drvdata(pdev, keypad);
-   924	
-   925		return 0;
-   926	
-   927	err_free_gpio:
-   928		matrix_keypad_free_gpio(keypad);
-   929	err_free_mem:
-   930		input_free_device(input_dev);
-   931		kfree(keypad);
-   932		return err;
-   933	}
-   934	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

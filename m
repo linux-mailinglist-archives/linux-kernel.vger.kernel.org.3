@@ -2,262 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B221E59A354
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B8959A4F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349976AbiHSSBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 14:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        id S1349813AbiHSSBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 14:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350512AbiHSSAV (ORCPT
+        with ESMTP id S1350823AbiHSSA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 14:00:21 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AF31EC6F
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660931228; x=1692467228;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FOynmcElN88ZHiDBBPM4LouI5ZrjwbxW2G62gb61PWQ=;
-  b=ASQpoXFcNDreqcDf1F3qZ6rsPXUYxeladTM04ziV+sxcgIku7DjYQr8e
-   gDATPLpRW+lR317tTAmgxLcNwVQn+neonB5Cy9Dtxdw36L/bzTNrY9E83
-   olw82ScN+Zj/2eU4J85VV9SgfmP4uRf7r5DcmDElIBT8EwcwZdoH+jcCC
-   KW5GwhkYcLeX55x+iRDdJRz7+RHoKqVw5p6BZ21MG0BAF6snNOLXR9mNK
-   CqdysmgumhhIJLaXkizri43+FvWOnMkw3lfu6RGJ/cy1NDol0aMqslEp3
-   ht59FrGw8sVhmYN5aOAk0nI9Ve5RSe1Sd9t9yPv/xn0YawAuhkFtCZTAr
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="293064895"
-X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
-   d="scan'208";a="293064895"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 10:47:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
-   d="scan'208";a="936300666"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Aug 2022 10:47:06 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oP65J-0001gL-2b;
-        Fri, 19 Aug 2022 17:47:05 +0000
-Date:   Sat, 20 Aug 2022 01:46:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org, songmuchun@bytedance.com,
-        mike.kravetz@oracle.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] mm/gup: fix races when looking up a CONT-PTE size
- hugetlb page
-Message-ID: <202208200109.XEXN0wPy-lkp@intel.com>
-References: <0f3df6604059011bf78a286c2cf5da5c4b41ccb1.1660902741.git.baolin.wang@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f3df6604059011bf78a286c2cf5da5c4b41ccb1.1660902741.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 19 Aug 2022 14:00:27 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245A7108F14
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:47:23 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3360c0f0583so87502607b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=68jCmlJPTWjEgDH8dkKvsN/Vy+R3D5xwsjHMw72NqNI=;
+        b=NM4HyjtIBQ7etrlOFPYIvVk5AscNC7t026h95x4fzfrTKG/0tt7n8peKjYT7elXEKv
+         5BSLtW4bMFgrN6ymudRaSc7o4eyszTLMILhkqSMcAqk71Belo4theQvOvFbAcyBdR8mT
+         Y4QMGBFg2QZjPAMu4HURM9fZg+m22w7PyufoX4YXFtboyXUAJdt/ZV6gs285xyx7Iike
+         tRhpzNBUbMUhjBe3WxyNncJ8Cs5trM/tdh/JmemktXFM6HyhKPNUeUbtacvl39ZlCxvi
+         kXY9fTvnMgGaNeXrmCP5Z0gVeTtDXo8zc32GSnUCNmN2PrGd8kbdZhvTHmfWN1cMv30n
+         VbMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=68jCmlJPTWjEgDH8dkKvsN/Vy+R3D5xwsjHMw72NqNI=;
+        b=U8xwq7DeNn6rYzE/YLg2GYyDCp/mU0pwQ7mXTtnUQgYQMC3ko+yOpcE+DE9y61q04g
+         BEtJ4uPoJyOjEfu2Vy9DWLpQe4xAjMlANN0YF8nz2zDtlSE3qGxOgY1K1k+34fPC6epE
+         /EqvMdgpiH/gSekP5iVKRj4OgzgKCDW+NZFAKdk5EkHwI97aCH7eeK+3Zwhs1P3U9kuY
+         xqokKoW7Ip02C1kcA3HQZfpaDtcePYzYvzdKerPdCgWehBY25TXrPH7t5FIyy+6nM1jp
+         yqQcd7PazEvARhFnEBaflPmoT00DBX3UDHsCC9K0gmSYEsdF9DY+1L3/0uxU1G3UAXVq
+         bQBA==
+X-Gm-Message-State: ACgBeo1qWeuL8a+ObNTym+zSvCBPAI0vfFIYbpt+9Rs/QIpp8MPzdbFC
+        1pVvcLlxbVqq8yii+IY+H6V6FhILoeyQNCTh
+X-Google-Smtp-Source: AA6agR6DIUG9NXvjt9p2KBgUlc6EhGutVC6loa8Jf8FHQddKVVlyc1IRm//fxEaRXHCuyKWYVdFq1MWl3jfvMPqb
+X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
+ (user=vannapurve job=sendgmr) by 2002:a25:bd3:0:b0:691:d47a:be78 with SMTP id
+ 202-20020a250bd3000000b00691d47abe78mr8120620ybl.574.1660931242410; Fri, 19
+ Aug 2022 10:47:22 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 17:46:53 +0000
+Message-Id: <20220819174659.2427983-1-vannapurve@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [RFC V3 PATCH 0/6] selftests: KVM: selftests for fd-based private memory
+From:   Vishal Annapurve <vannapurve@google.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, shuah@kernel.org, yang.zhong@intel.com,
+        drjones@redhat.com, ricarkol@google.com, aaronlewis@google.com,
+        wei.w.wang@intel.com, kirill.shutemov@linux.intel.com,
+        corbet@lwn.net, hughd@google.com, jlayton@kernel.org,
+        bfields@fieldses.org, akpm@linux-foundation.org,
+        chao.p.peng@linux.intel.com, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, nikunj@amd.com, seanjc@google.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com,
+        Vishal Annapurve <vannapurve@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolin,
+This v3 series implements selftests targeting the feature floated by Chao
+via:
+https://lore.kernel.org/linux-mm/20220706082016.2603916-12-chao.p.peng@linux.intel.com/T/
 
-I love your patch! Yet something to improve:
+Below changes aim to test the fd based approach for guest private memory
+in context of normal (non-confidential) VMs executing on non-confidential
+platforms.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.0-rc1 next-20220819]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+private_mem_test.c file adds selftest to access private memory from the
+guest via private/shared accesses and checking if the contents can be
+leaked to/accessed by vmm via shared memory view before/after conversions.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/Fix-some-issues-when-looking-up-hugetlb-page/20220819-182017
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: riscv-randconfig-r042-20220819 (https://download.01.org/0day-ci/archive/20220820/202208200109.XEXN0wPy-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/c0add09e9de4b39c58633c89ea25ba10ed12d134
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Baolin-Wang/Fix-some-issues-when-looking-up-hugetlb-page/20220819-182017
-        git checkout c0add09e9de4b39c58633c89ea25ba10ed12d134
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Updates in V3:
+1) Series is based on v7 series from Chao
+2) Changes are introduced in KVM to help execute private mem selftests
+3) Selftests are executing from private memory
+4) Test implementation is simplified to contain implicit/explicit memory
+conversion paths according to feedback from Sean.
+5) Addressed comments from Sean and Shuah.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This series has dependency on following patches:
+1) V7 series patches from Chao mentioned above.
+2) https://lore.kernel.org/lkml/20220810152033.946942-1-pgonda@google.com/T/#u
+  - Series posted by Peter containing patches from Michael and Sean.
 
-All errors (new ones prefixed by >>):
+Github link for the patches posted as part of this series:
+https://github.com/vishals4gh/linux/commits/priv_memfd_selftests_rfc_v3
 
->> mm/gup.c:551:9: error: implicit declaration of function 'huge_ptep_get' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   pte = huge_ptep_get(ptep);
-                         ^
->> mm/gup.c:551:7: error: assigning to 'pte_t' from incompatible type 'int'
-                   pte = huge_ptep_get(ptep);
-                       ^ ~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+Vishal Annapurve (6):
+  kvm: x86: Add support for testing private memory
+  selftests: kvm: Add support for private memory
+  selftests: kvm: ucall: Allow querying ucall pool gpa
+  selftests: kvm: x86: Execute hypercall as per the cpu
+  selftests: kvm: x86: Execute VMs with private memory
+  sefltests: kvm: x86: Add selftest for private memory
 
-
-vim +/huge_ptep_get +551 mm/gup.c
-
-   518	
-   519	static struct page *follow_page_pte(struct vm_area_struct *vma,
-   520			unsigned long address, pmd_t *pmd, unsigned int flags,
-   521			struct dev_pagemap **pgmap)
-   522	{
-   523		struct mm_struct *mm = vma->vm_mm;
-   524		struct page *page;
-   525		spinlock_t *ptl;
-   526		pte_t *ptep, pte;
-   527		int ret;
-   528	
-   529		/* FOLL_GET and FOLL_PIN are mutually exclusive. */
-   530		if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
-   531				 (FOLL_PIN | FOLL_GET)))
-   532			return ERR_PTR(-EINVAL);
-   533	retry:
-   534		if (unlikely(pmd_bad(*pmd)))
-   535			return no_page_table(vma, flags);
-   536	
-   537		/*
-   538		 * Considering PTE level hugetlb, like continuous-PTE hugetlb on
-   539		 * ARM64 architecture.
-   540		 */
-   541		if (is_vm_hugetlb_page(vma)) {
-   542			struct hstate *hstate = hstate_vma(vma);
-   543			unsigned long size = huge_page_size(hstate);
-   544	
-   545			ptep = huge_pte_offset(mm, address, size);
-   546			if (!ptep)
-   547				return no_page_table(vma, flags);
-   548	
-   549			ptl = huge_pte_lockptr(hstate, mm, ptep);
-   550			spin_lock(ptl);
- > 551			pte = huge_ptep_get(ptep);
-   552		} else {
-   553			ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
-   554			pte = *ptep;
-   555		}
-   556	
-   557		if (!pte_present(pte)) {
-   558			swp_entry_t entry;
-   559			/*
-   560			 * KSM's break_ksm() relies upon recognizing a ksm page
-   561			 * even while it is being migrated, so for that case we
-   562			 * need migration_entry_wait().
-   563			 */
-   564			if (likely(!(flags & FOLL_MIGRATION)))
-   565				goto no_page;
-   566			if (pte_none(pte))
-   567				goto no_page;
-   568			entry = pte_to_swp_entry(pte);
-   569			if (!is_migration_entry(entry))
-   570				goto no_page;
-   571			pte_unmap_unlock(ptep, ptl);
-   572			migration_entry_wait(mm, pmd, address);
-   573			goto retry;
-   574		}
-   575		if ((flags & FOLL_NUMA) && pte_protnone(pte))
-   576			goto no_page;
-   577	
-   578		page = vm_normal_page(vma, address, pte);
-   579	
-   580		/*
-   581		 * We only care about anon pages in can_follow_write_pte() and don't
-   582		 * have to worry about pte_devmap() because they are never anon.
-   583		 */
-   584		if ((flags & FOLL_WRITE) &&
-   585		    !can_follow_write_pte(pte, page, vma, flags)) {
-   586			page = NULL;
-   587			goto out;
-   588		}
-   589	
-   590		if (!page && pte_devmap(pte) && (flags & (FOLL_GET | FOLL_PIN))) {
-   591			/*
-   592			 * Only return device mapping pages in the FOLL_GET or FOLL_PIN
-   593			 * case since they are only valid while holding the pgmap
-   594			 * reference.
-   595			 */
-   596			*pgmap = get_dev_pagemap(pte_pfn(pte), *pgmap);
-   597			if (*pgmap)
-   598				page = pte_page(pte);
-   599			else
-   600				goto no_page;
-   601		} else if (unlikely(!page)) {
-   602			if (flags & FOLL_DUMP) {
-   603				/* Avoid special (like zero) pages in core dumps */
-   604				page = ERR_PTR(-EFAULT);
-   605				goto out;
-   606			}
-   607	
-   608			if (is_zero_pfn(pte_pfn(pte))) {
-   609				page = pte_page(pte);
-   610			} else {
-   611				ret = follow_pfn_pte(vma, address, ptep, flags);
-   612				page = ERR_PTR(ret);
-   613				goto out;
-   614			}
-   615		}
-   616	
-   617		if (!pte_write(pte) && gup_must_unshare(flags, page)) {
-   618			page = ERR_PTR(-EMLINK);
-   619			goto out;
-   620		}
-   621	
-   622		VM_BUG_ON_PAGE((flags & FOLL_PIN) && PageAnon(page) &&
-   623			       !PageAnonExclusive(page), page);
-   624	
-   625		/* try_grab_page() does nothing unless FOLL_GET or FOLL_PIN is set. */
-   626		if (unlikely(!try_grab_page(page, flags))) {
-   627			page = ERR_PTR(-ENOMEM);
-   628			goto out;
-   629		}
-   630		/*
-   631		 * We need to make the page accessible if and only if we are going
-   632		 * to access its content (the FOLL_PIN case).  Please see
-   633		 * Documentation/core-api/pin_user_pages.rst for details.
-   634		 */
-   635		if (flags & FOLL_PIN) {
-   636			ret = arch_make_page_accessible(page);
-   637			if (ret) {
-   638				unpin_user_page(page);
-   639				page = ERR_PTR(ret);
-   640				goto out;
-   641			}
-   642		}
-   643		if (flags & FOLL_TOUCH) {
-   644			if ((flags & FOLL_WRITE) &&
-   645			    !pte_dirty(pte) && !PageDirty(page))
-   646				set_page_dirty(page);
-   647			/*
-   648			 * pte_mkyoung() would be more correct here, but atomic care
-   649			 * is needed to avoid losing the dirty bit: it is easier to use
-   650			 * mark_page_accessed().
-   651			 */
-   652			mark_page_accessed(page);
-   653		}
-   654	out:
-   655		pte_unmap_unlock(ptep, ptl);
-   656		return page;
-   657	no_page:
-   658		pte_unmap_unlock(ptep, ptl);
-   659		if (!pte_none(pte))
-   660			return NULL;
-   661		return no_page_table(vma, flags);
-   662	}
-   663	
+ arch/x86/include/uapi/asm/kvm_para.h          |   2 +
+ arch/x86/kvm/Kconfig                          |   1 +
+ arch/x86/kvm/mmu/mmu.c                        |  19 ++
+ arch/x86/kvm/mmu/mmu_internal.h               |   2 +-
+ arch/x86/kvm/x86.c                            |  67 +++-
+ include/linux/kvm_host.h                      |  12 +
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   2 +
+ .../selftests/kvm/include/kvm_util_base.h     |  12 +-
+ .../selftests/kvm/include/ucall_common.h      |   2 +
+ .../kvm/include/x86_64/private_mem.h          |  51 +++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  40 ++-
+ .../testing/selftests/kvm/lib/ucall_common.c  |  12 +
+ .../selftests/kvm/lib/x86_64/private_mem.c    | 297 ++++++++++++++++++
+ .../selftests/kvm/lib/x86_64/processor.c      |  15 +-
+ .../selftests/kvm/x86_64/private_mem_test.c   | 262 +++++++++++++++
+ virt/kvm/Kconfig                              |   9 +
+ virt/kvm/kvm_main.c                           |  90 +++++-
+ 18 files changed, 887 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/private_mem.h
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/private_mem.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/private_mem_test.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1.595.g718a3a8f04-goog
+

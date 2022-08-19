@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7D9599B23
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E771599B2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346735AbiHSLgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
+        id S1348411AbiHSLho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347810AbiHSLgr (ORCPT
+        with ESMTP id S1347971AbiHSLhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:36:47 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A97DCFD1;
-        Fri, 19 Aug 2022 04:36:46 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id w11-20020a17090a380b00b001f73f75a1feso7283684pjb.2;
-        Fri, 19 Aug 2022 04:36:46 -0700 (PDT)
+        Fri, 19 Aug 2022 07:37:42 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDE9F0745
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:37:40 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id o2so5783689lfb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:37:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=5LGW9rYSz18XgZMkFUADUvSFUMOH4ST+9Q4YxH0TzZ0=;
-        b=SSN3q/LRlgZ4zRACIl3XpnnOjXUdgJez0tg5vV9UlA0xStqFjcp/BwLsG1KpsWnhVk
-         r9DdTNXy54KcbBnGJrjGT5p91WlHb2W+CrdJlTH4BvSxiWFrxqAtLOu3ZJTFrrsu+4mb
-         ycqlR0+wd+5A+8XiCDcEpB1t3CMJTK/GWb7wqSLcC3/3ePeaRTwW734iKrMUl6dwnNSc
-         5Jk47UgLJh9PLUEInRdhwyQ2JVtEWmeczRZ5P7qmP+Bkip8ZXyjoeLVoEvCrvwr9qh+b
-         7gqqnbNFqxYNLgiScUh8lieOcngCAa33V7J1onUDYhw699WXqiH2yxfVt7GTTK6owL6n
-         XcnA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=lHgy8XrEK9EH8gMtXevMZ8OhZpXuFAeH18nZ4CtlnC0=;
+        b=JsXFK+7tESqFY4cci/SkxtZOAcPIBWE3n4jatcpJefKHiKqYECX12eyujyt4Y2mK8Q
+         kNid1iKfa8yy6jx5UpG1yFsBQ06r9bXlP1JxaSahMSMSHi08qaHrMULxTP3SkxnHMeLQ
+         KLe6BnLE1nKX8B+AQoQjlddQic+DzaHDTWMTSm3r4Vpv9G7M6E9aLzLyTg/JKg7huXDt
+         8dEF5lKGv4uddEWErzzzDyaAFk3ekHA7mo4QYtryGdfULSQlPzfcaxKkNH9KBLQixNPZ
+         2+3F4nJ+lq+xRtYJLiJS8Yqq3uChIlB5Ju/XpqdLE8t5t2NSSdURgPIqDHH9JzQNULFk
+         zDLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=5LGW9rYSz18XgZMkFUADUvSFUMOH4ST+9Q4YxH0TzZ0=;
-        b=GOCACliS5/337IUDyqZrHELOqaFunxqnk8kG6IAyXnPKjXhk7JBdJDuhCq6Rq4rm0M
-         H+aGc6agmovnFqYmmAh70aUL5aOqyJDvlgRDVDp32+uGQ7jBW8b4DmLdA6tUpd0hTl+n
-         ysVTha9U5CmM/j0zwBiXawlj82K3inA432Z9VGa6//D1M/af/rVGzxBnAn6w9MSB9qn9
-         sfwU2D7htoBaP+1d9AopI705Y00Gfbjq8JMncNiDu51uAuPITL3SFR2lm+aMNiZsM5Yb
-         JctEIVCBIDYxMJEnA/4pfpJ69uEneC2/jOIegq/f0Ib5wVkLYnAbeLbGgJFL3NvIUAZ4
-         HO2w==
-X-Gm-Message-State: ACgBeo36d0sRGkavdbD+ngTW9Cm4LdG0UYAWetVpy0h3Hvau8fEubtPD
-        6vxr4b6Xnot1+jtxJtZLfuQ=
-X-Google-Smtp-Source: AA6agR5X3RgKedGWLlR95mP2bpbnswyG229Mo+h3QEGQIaEPXJZE9XcQgnah/ROXIUHWDRGgBQm4eg==
-X-Received: by 2002:a17:90a:c782:b0:1f7:a6cf:2f41 with SMTP id gn2-20020a17090ac78200b001f7a6cf2f41mr13578699pjb.128.1660909005679;
-        Fri, 19 Aug 2022 04:36:45 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x6-20020aa79a46000000b0053602e1d6fcsm1421765pfj.105.2022.08.19.04.36.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 04:36:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 19 Aug 2022 04:36:44 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
-        rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 14/16] hwmon: (mr75203) parse thermal coefficients
- from device-tree
-Message-ID: <20220819113644.GC3106213@roeck-us.net>
-References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-15-farbere@amazon.com>
- <20220818202839.GA3431511@roeck-us.net>
- <e0b133e7-ac81-acf4-3783-44edf58d6426@amazon.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=lHgy8XrEK9EH8gMtXevMZ8OhZpXuFAeH18nZ4CtlnC0=;
+        b=WtrqEeTnPbqOsPHm7lJDHYEvo/bKch7QoQB9LtA2xLwXbKAr0feueCukwuCTo3eXWa
+         yEkY0oxacx0CG7IwlR9Bknj9fcOLffnxnS4wzNNkFqbwXLvBjv8MR2Rn6tF5NXZkTrtO
+         01MIKRm8yB1/X45Q0nmsdPk0eBJYN44LEHR1jROpisae5kmRjkyPEOhSNgz9Jx1buuOe
+         fzrrsLh6qoHpS9+7ydgNbWfLGtSvpWHW+0nz7lujjQyxB2LudOoGUWq0FfHN6wLQ+E9J
+         ur8uhF5M4s4/SovUGLCp56LXScqu0xhZnms39eP4tPbSIhntTC92z5sBgpJIrmTPvGmn
+         ABlQ==
+X-Gm-Message-State: ACgBeo2wsl6AsXQTXkZmNJk6+sQRJZUT5AWRIM5ZEfl7Nnsls+YQoSdB
+        8/CyuAMdQDhrEfrcPt0Otk10JA==
+X-Google-Smtp-Source: AA6agR5Te7ahz2V+cHlZ9H+U9DJXNEpjlMP2ULm4k3InUeRNY/fBPFAy8b7dcgKzGTVBiqC/s74I2w==
+X-Received: by 2002:a05:6512:2589:b0:48a:f56d:2912 with SMTP id bf9-20020a056512258900b0048af56d2912mr2573221lfb.370.1660909059296;
+        Fri, 19 Aug 2022 04:37:39 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
+        by smtp.gmail.com with ESMTPSA id v15-20020ac2560f000000b0048af4dc964asm610445lfd.73.2022.08.19.04.37.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 04:37:38 -0700 (PDT)
+Message-ID: <9ec575ba-784d-74f7-8861-da2f62fe0773@linaro.org>
+Date:   Fri, 19 Aug 2022 14:37:36 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e0b133e7-ac81-acf4-3783-44edf58d6426@amazon.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH net-next 1/2] dt-bindings: net: tja11xx: add nxp,refclk_in
+ property
+Content-Language: en-US
+To:     Wei Fang <wei.fang@nxp.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220819074729.1496088-1-wei.fang@nxp.com>
+ <20220819074729.1496088-2-wei.fang@nxp.com>
+ <f0f6e8af-4006-e0e8-544b-f2f892d79a1f@linaro.org>
+ <DB9PR04MB81064199835C0E44B997DE06886C9@DB9PR04MB8106.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DB9PR04MB81064199835C0E44B997DE06886C9@DB9PR04MB8106.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 10:57:58AM +0300, Farber, Eliav wrote:
-> On 8/18/2022 11:28 PM, Guenter Roeck wrote:
-> > The calculation was just changed to use new defaults in a previous
-> > patch. This patch makes it quite clear that the coefficients
-> > are implementation (?) dependent. So the previous patch just changes
-> > the defaults to (presumably) the coefficients used in your system.
-> > That is inappropriate. Adding non-default corefficients is ok
-> > and makes sense is supported by the chip, but changing defaults
-> > isn't.
-> The calculation was changed in previous patch to match series 5 of the
-> Moortec Embedded Temperature Sensor (METS) datasheet.
-> In our SOC we use series 6 which has a slightly different equation and
-> different coefficients.
-> I did the changes in steps.
-> With this last change, both series 5 and 6 are supported, in addition to
-> calibrated vs. non-calibrated modes.
-> In addition the data sheet just recommends default values but they also
-> specifically mention that actual values might vary from product to product.
-> 
-Please mention all this in the commit description.
+On 19/08/2022 12:37, Wei Fang wrote:
+>>
+>>> +          in RMII mode. This clock signal is provided by the PHY and is
+>>> +          typically derived from an external 25MHz crystal. Alternatively,
+>>> +          a 50MHz clock signal generated by an external oscillator can be
+>>> +          connected to pin REF_CLK. A third option is to connect a 25MHz
+>>> +          clock to pin CLK_IN_OUT. So, the REF_CLK should be configured
+>>> +          as input or output according to the actual circuit connection.
+>>> +          If present, indicates that the REF_CLK will be configured as
+>>> +          interface reference clock input when RMII mode enabled.
+>>> +          If not present, the REF_CLK will be configured as interface
+>>> +          reference clock output when RMII mode enabled.
+>>> +          Only supported on TJA1100 and TJA1101.
+>>
+>> Then disallow it on other variants.
+>>
+>> Shouldn't this be just "clocks" property?
+>>
+>>
+> This property is to configure the pin REF_CLK of PHY as a input pin through phy register,
+> indicates that the REF_CLK signal is provided by an external oscillator. so I don't think it's a
+> "clock" property.
 
-Guenter
+clocks, not clock.
 
-> --
-> Regards, Eliav
+You just repeated pieces of description as an counter-argument, so this
+does not explain anything.
+
+If it is external oscillator shouldn't it be represented in DTS and then
+obtained by driver (clk_get + clk_prepare_enable)? Otherwise how are you
+sure that clock is actually enabled? And the lack of presence of the
+external clock means it is derived from PHY?
+
+Best regards,
+Krzysztof

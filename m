@@ -2,152 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B223A59A8EF
+	by mail.lfdr.de (Postfix) with ESMTP id 2116459A8ED
 	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 00:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243272AbiHSWxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 18:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S243350AbiHSWz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 18:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243127AbiHSWxJ (ORCPT
+        with ESMTP id S243303AbiHSWzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 18:53:09 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981BA10E78F
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:53:07 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id 20so5247504plo.10
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:53:07 -0700 (PDT)
+        Fri, 19 Aug 2022 18:55:20 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AA010DCE3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:55:19 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31f445bd486so157576777b3.13
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:55:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=bxsKzsoodl9uJzFJZZrQwWPMoj9Im81AmgcsZB9Gfmw=;
-        b=qt/sbuA4OKmJaHmOuxnwa2lGGy6KF/9YxtJ8CEBc62ECZi8/Xq0wY0tron+FkYYdUs
-         X9/M4egtRP0lG6q4e8/IWltnCwwAIXqgqPcmV59AnmXMmxflSpitxJaAXuVmi8jeOb7u
-         ZYWkCe4cfUOnwv+GJ6FAghcaXtVFWtU/VjFn+HZAKAe7LVuzmplI1YXQYgelBcp8xph3
-         XxuS2HQx3IoH2+jqfCiCLhnkIeS5J/e3C/uJb7oa4kLmq1AEXHLKDQEqspeDUi54j69u
-         rkCsWutnedC/95sn0+Cf9uinQ+8ih+35v91Myr1oidh4MK/5DNYfVzYMeF+QXp50vSUG
-         yQZw==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=cS/kuLnPP2ycMAb+4GFjyKvYClGwacVOaG/GdCCcX3E=;
+        b=Isiv0LJrfAWVrYWLGTYqoFk7nqIAox7SkpjdLcd6nWTP5m1SY/fz8TO9LKhoAPrw+T
+         qBPEb/knPbfBD1lNbRdzMKznlxaWBVCi0IfWiQtZdkp8azSyBbimy4ezRgRoEstgl+Wj
+         yt3en8fzROvDSehUAtEuq3lxurwKa6ZdoD86M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=bxsKzsoodl9uJzFJZZrQwWPMoj9Im81AmgcsZB9Gfmw=;
-        b=Rq0DinPd73QuutoWkIfOjdbO0eeXZod/btrlSP4i9EvlI2jPholHsqPh1m6crSQF82
-         6tC9zf9O9H++sB0Zq53oWJ5OofHKP9cl32D8w3Gw9lnhnR2a176uVWj1wKsNX+ubuz5y
-         yTsHieLKDkUmam4tp8F/TzpyPL/T4JVP+dCdmTdvpPBOpKdxCAAOTMTumw32qvMNcvRv
-         nqNlpD4fWqRm5NO9ouOvnEGHHgvwk67k5prLFUQcdeCmv5L5xeRtdEhm0VfL/6Wpeldw
-         hvyhNLp/8LOaVySMuRwuenNT/uh5lSCFu7IwzBvkpqe8XPmdFzJNVztDHyVs49kpa9Qk
-         08Xw==
-X-Gm-Message-State: ACgBeo3UOse722OOJykq0Uz2iRkD7gL6wvXby+cWbF0GmY3nc7CRwcu2
-        f6LKE1DQh5MJFbQU/gUEU2twcA==
-X-Google-Smtp-Source: AA6agR5KPMZr3qT4HevDmGgIVF/eFJY3pV4hPcGRLPDFcNa+kb45vL5UZGGsRX6sXCEs8crjgoKfEw==
-X-Received: by 2002:a17:90b:1b4a:b0:1f5:5578:6398 with SMTP id nv10-20020a17090b1b4a00b001f555786398mr10621956pjb.122.1660949586764;
-        Fri, 19 Aug 2022 15:53:06 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h2-20020a63c002000000b0040cb1f55391sm3280975pgg.2.2022.08.19.15.53.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 15:53:06 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 22:53:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <YwAUTk5BOkUQSF3B@google.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
- <20220818132421.6xmjqduempmxnnu2@box>
- <Yv7XTON3MwuC1Q3U@google.com>
- <226ab26d-9aa8-dce2-c7f0-9e3f5b65b63@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=cS/kuLnPP2ycMAb+4GFjyKvYClGwacVOaG/GdCCcX3E=;
+        b=F2VSwxA2dAe2QJSSKtl3kERfCmY4k1N5OVPmAUD3ucHHw3obAiFWRKaZCB43Mlfep6
+         XZtiCH4Dp/dy/Jy2wF5pHik2HF7o4ATcY5pgQVl2Us4XCaT3Q3W35CIzcWv22A1QZaRK
+         mqAnVZu/XPETat7ySS+nGHpVydOUJy5kLeXTeOsrzMLx7oDlwYxVYNHAsRsS/lM+lgV2
+         8XO9EeiTvGHwTpgMQUjoeF9zz6UR6mq/KAb7ULWvUb9H7YMnsXjPThSnquqvqx6UPtAj
+         1HsB1WfxtM5kCh4lfSwHUvrHwU/SjKld4g0b8nYJnFeLZzFYRUcMIRmQVVp+MtZTDale
+         9xFA==
+X-Gm-Message-State: ACgBeo0vx1baBtmeF8eSwrYTFByE3wJEn72/Eixsa5+3clyo1B7otQyw
+        8iPnkV5LDvqfbK5b3jYXCGhuN/XJbBGcWXs/tLGI/A==
+X-Google-Smtp-Source: AA6agR6LKOU/mYIufJm2GU7IunlNwXFZrwVteZWtS4q01qi8fIqF26flbEbDiy37n+tk6dUFoayZwQ0X0SPCZ2ffjJ4=
+X-Received: by 2002:a81:658:0:b0:334:a23e:6caa with SMTP id
+ 85-20020a810658000000b00334a23e6caamr9413958ywg.283.1660949718288; Fri, 19
+ Aug 2022 15:55:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <226ab26d-9aa8-dce2-c7f0-9e3f5b65b63@google.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220810204750.3672362-1-bjorn.andersson@linaro.org>
+ <20220810204750.3672362-2-bjorn.andersson@linaro.org> <a13bce60-25b4-d075-d56a-d1283e91e3ba@linaro.org>
+ <20220814210104.GA690892-robh@kernel.org> <Yv1y9Wjp16CstJvK@baldur>
+ <CAE-0n53AjJ_G6yZoTALWpKvZUdF+8nFZ+TQh=Ch=8xgdMVqDkw@mail.gmail.com>
+ <CACeCKadP-AZ8OU4A=7CrwAz7yuLvMvjvAcw7K-FORFmkMvx7cA@mail.gmail.com> <YwAIGf59H9iKUhXF@builder.lan>
+In-Reply-To: <YwAIGf59H9iKUhXF@builder.lan>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Fri, 19 Aug 2022 15:55:07 -0700
+Message-ID: <CACeCKadt3aoz8MZvy+tGHCxiHOPty4cLcG7AGS+oMEVnREt4sw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Pin-yen Lin <treapking@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022, Hugh Dickins wrote:
-> On Fri, 19 Aug 2022, Sean Christopherson wrote:
-> > On Thu, Aug 18, 2022, Kirill A . Shutemov wrote:
-> > > On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
-> > > > If your memory could be migrated, that would be some reason to use
-> > > > filesystem page cache (because page migration happens to understand
-> > > > that type of memory): but it cannot be migrated.
-> > > 
-> > > Migration support is in pipeline. It is part of TDX 1.5 [1]. 
-> > 
-> > And this isn't intended for just TDX (or SNP, or pKVM).  We're not _that_ far off
-> > from being able to use UPM for "regular" VMs as a way to provide defense-in-depth
-> 
-> UPM? That's an acronym from your side of the fence, I spy references to
-> it in the mail threads, but haven't tracked down a definition.  I'll
-> just take it to mean the fd-based memory we're discussing.
+On Fri, Aug 19, 2022 at 3:01 PM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+>
+> You can't physically connect 1, 2 or 4 lanes of DP from a DP chip to
+> your usb-c-connector at the same time as you physically connect 0, 2 or
+> 4 lanes of USB from a USB PHY.
 
-Ya, sorry, UPM is what we came up with as shorthand for "Unmapping guest Private
-Memory".  Your assumption is spot on, it's just a fancy way of saying "guest is
-backed with inaccessible fd-based memory".
+I apologize in case I'm misunderstanding, but why is that not possible?
+anx7625 allows that configuration (2 lane DP + 2 lane USB going to
+a single USB-C-connector)
 
-> > without having to take on the overhead of confidential VMs.  At that point,
-> > migration and probably even swap are on the table.
-> 
-> Good, the more "flexible" that memory is, the better for competing users
-> of memory.  But an fd supplied by KVM gives you freedom to change to a
-> better implementation of allocation underneath, whenever it suits you.
-> Maybe shmem beneath is good from the start, maybe not.
+Since the discussion is to support various conceivable hardware configurations
+That same anx7625 can support 1 1-lane DP (or 2 1-lane DPs), and 1
+2-lane Type-C output.
+The cross-point switch allows for that level of configuration.
 
-The main flaw with KVM providing the fd is that it forces KVM to get into the
-memory management business, which us KVM folks really, really do not want to do.
-And based on the types of bugs KVM has had in the past related to memory management,
-it's a safe bet to say the mm folks don't want us getting involved either :-)
+> > So, how about 4 endpoints (1 for each SS lane) in the usb-c-connector port@1?
+> > That should support every conceivable configuration and bridge/PHY hardware.
+> > and also allows a way to specify any lane remapping (similar to what
+> > "data lanes" does)
+> > if that is required.
+>
+> Wouldn't that prevent you from handling orientation switching, given
+> that the graph is static?
 
-The combination of gup()/follow_pte() and mmu_notifiers has worked very well.
-KVM gets a set of (relatively) simple rules to follow and doesn't have to be taught
-new things every time a new backing type comes along.  And from the other side, KVM
-has very rarely had to go poke into other subsystems' code to support exposing a
-new type of memory to guests.
+It depends. If the end-points from the usb-c-connector
+go to the same switch, then it should allow orientation switching
+(anx7625 allows
+this). The port driver would just tell the orientation switch(es) attached to
+it that we are in NORMAL or REVERSE orientation.
 
-What we're trying to do with UPM/fd-based memory is establish a similar contract
-between mm and KVM, but without requiring mm to also map memory into host userspace.
+The graph is static, since the hardware line routing between components
+doesn't change (e.g SSTX1 from the Type-C port is always routed to Pin
+X1,X2 on the switch hardware), but that is what the switch is for.
+Note that in this case, the expectation is that
+the switch driver only registers 1 switch (it can figure out that all
+4 endpoints
+go to the same Type-C port).
 
-The only way having KVM provide the fd works out in the long run is if KVM is the
-only subsystem that ever wants to make use of memory that isn't accessible from
-userspace and isn't tied to a specific backing type, _and_ if the set of backing
-types that KVM ever supports is kept to an absolute minimum.
+The limitation to orientation switching would depend on how the
+hardware is routed.

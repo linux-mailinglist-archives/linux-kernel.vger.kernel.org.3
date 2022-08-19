@@ -2,81 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A90F599BA7
+	by mail.lfdr.de (Postfix) with ESMTP id 38AA7599BA6
 	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348847AbiHSMFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
+        id S1348862AbiHSMFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348540AbiHSMFi (ORCPT
+        with ESMTP id S1348540AbiHSMFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:05:38 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0205EE4A3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:05:36 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id g8so72231plq.11
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:05:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=nLF30amAk6vL579WqQVIBktWPPH4Um2+WcN9QKXX5zk=;
-        b=hODOYdOY15vPYwZzoOow1TUmucyiWqLh87p/zVtdtDz9SDOKZED6uu/bDPi1fDlQvU
-         o7qNyD8dlG4QwTsnmxhlh2QN6WzUwmjSuQkKpeMdB9xYMTJYQUzpQBju1pV5wsjsddCn
-         IZ0AQB1Xk+DA9qX6dzWB2DCsil6vMkui9oplY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=nLF30amAk6vL579WqQVIBktWPPH4Um2+WcN9QKXX5zk=;
-        b=lWGrLXXIgdFDqiZe25xj5CJMnI0EcL3RFppmLt0FyTNfOrCG5j/USnaSF6mvjnYaKe
-         SsYwIaLe5c/7D0nUBK+7kWtBSsweyxdGasRqNqh7XkjRIK96zBRoOupyf66ZVu4yBp1u
-         hPYzEugo5NZ+R5+P/cWOHk2uAkGoAG/obJdvd5UFhw0EJjJ7B5pBxYgcJ0gRq8hnf6BM
-         /WKXLlJhP6qOMa8HLuqV4gsGVUM83rmIGomR4PXJ+g1EpRaMzGEsFkdnMvQ0j9oRD6tu
-         EtowEHJWrysRg5O2gbsynGEZMhzKdmy32kMfOQUl2tJePnkcL0RfG16c978thV6JGKxu
-         5CoQ==
-X-Gm-Message-State: ACgBeo1SALyvBkNtW1NgwaZ6Bu+m87BWLz+7LG7Q5akGnxndrdfepJHH
-        Hc9nFR1JdweEg5UFa3P6bQmDvQ==
-X-Google-Smtp-Source: AA6agR4f7UYNK6rcXVoNBbb3KrKkDAbFm2B6jYhKcmmuZX87wJaBp6EK2y8EH0FRIrl9d1MriX5v7w==
-X-Received: by 2002:a17:90a:d90c:b0:1fa:c99f:757d with SMTP id c12-20020a17090ad90c00b001fac99f757dmr8202541pjv.240.1660910736266;
-        Fri, 19 Aug 2022 05:05:36 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:7527:6400:5770:d67d])
-        by smtp.gmail.com with ESMTPSA id y187-20020a6232c4000000b0052b9351737fsm3409378pfy.92.2022.08.19.05.05.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 05:05:35 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 21:05:30 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Guangbin Huang <huangguangbin2@huawei.com>
-Cc:     pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        lipeng321@huawei.com, shenjian15@huawei.com
-Subject: Re: [PATCH] lib/vnsprintf: add const modifier for param 'bitmap'
-Message-ID: <Yv98imNv6BDTU0Bd@google.com>
-References: <20220816144557.30779-1-huangguangbin2@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816144557.30779-1-huangguangbin2@huawei.com>
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Fri, 19 Aug 2022 08:05:45 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A384DEE694
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:05:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 58716352FF;
+        Fri, 19 Aug 2022 12:05:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1660910742; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Da9ibTQcKE40AQfRCOZrvs+8F21E+Wv8031Z1+Wthkw=;
+        b=zYSPi4tvNYlRU9Ppl9GQL+BXOdgP34XYoAG2VBZHPymM7Nb+cWPUv1K+TwV1DZjRTKsqO0
+        k+1NMtxkT4hNu0dDeji8eEdOn7n92gv+dBEGZX2grVRh0i2Eyc/CXASNTqwuc411/tKQ/J
+        Zvh6PXw2Lfe8bnE7u3FVcVybjVAGdHk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1660910742;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Da9ibTQcKE40AQfRCOZrvs+8F21E+Wv8031Z1+Wthkw=;
+        b=ROP8sjPtS2ED69Uca3zrbuopCWdHyU+42owgAZnmznQaaJF1Z3Tqp0eh67VmKYZPYgtMgz
+        CdB+hPRi8cUCvcDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2ABD013AC1;
+        Fri, 19 Aug 2022 12:05:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xRHJCZZ8/2JOPQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 19 Aug 2022 12:05:42 +0000
+Date:   Fri, 19 Aug 2022 14:05:41 +0200
+Message-ID: <87ilmoo2ui.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Amadeusz =?ISO-8859-2?Q?S=B3awi=F1ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>
+Subject: Re: [PATCH v2 0/4] hda: Minor cleanups
+In-Reply-To: <20220818141517.109280-1-amadeuszx.slawinski@linux.intel.com>
+References: <20220818141517.109280-1-amadeuszx.slawinski@linux.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-2
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/08/16 22:45), Guangbin Huang wrote:
-> There is no modification for param bitmap in function
-> bitmap_string() and bitmap_list_string(), so add const
-> modifier for it.
+On Thu, 18 Aug 2022 16:15:13 +0200,
+Amadeusz S³awiñski wrote:
 > 
-> Signed-off-by: Jian Shen <shenjian15@huawei.com>
-> Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+> First two patches are small refactoring of code to use poll macros
+> instead of open coding register checks.
+> Following two patches remove unused defines from code.
+> 
+> v2:
+>  * Fix includes
+> 
+> Amadeusz S³awiñski (4):
+>   ALSA: hda: Move stream-register polling macros
+>   ALSA: hda: Rework snd_hdac_stream_reset() to use macros
+>   ALSA: hda: Remove unused MAX_PIN_CONFIGS constant
+>   ALSA: hda: Remove unused defines
 
-FWIW
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Thanks, applied now to for-next branch.
+
+
+Takashi

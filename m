@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39AF359951A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C362D599513
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345819AbiHSGIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 02:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
+        id S1346549AbiHSGIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 02:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344671AbiHSGIG (ORCPT
+        with ESMTP id S1344745AbiHSGIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 02:08:06 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BE4C6CC4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:05 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id r4so4435673edi.8
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:05 -0700 (PDT)
+        Fri, 19 Aug 2022 02:08:07 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A084C6536
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:07 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id i14so6976699ejg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ionos.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=d7GvD5Hf8tzx2V16UHtbEc4zSmsYhgs5namwMdUKQPg=;
-        b=MhZXIA8I23JAIDOSl3TCJR3q/kt7QCewH4booO6zJhMTlRoCIj2YrHJWmRntoYmFZ4
-         cCICmyZD35lqNDMMhceY0JFfaabpWnJJf2qmkH/FO63KEApecHeOjFH+Yqbl7Q/bQxkf
-         uLH/JfGQIXPyqlBKdA8KLnyZdTuzSGv9208i2ifxxEKU8FuiK4B9KqzLAz2tAXqGA5M7
-         sWbY+tDBkBDFpsMlzfGIclABRJdCNM3ql+JKkqi1EI6GzViOKCqcYMqRlps+VtuhLoD5
-         UWz/NpnKfCt2qatasN41qjKo3BlIT1OVofSK6spGJfpB5yruAfcuyp/F2uvD4qupU9MU
-         5YAg==
+        bh=8hlJvz8Cg/RSrujn6eg6W9O1c50l+s7v5Bap/Ro2DSs=;
+        b=QpTQj96OHSBiF7tI4jxZPrwsWxnv4EMkhARwtlJprTIv0jkFZqhlyuPYYGl9KsPENl
+         V2MRG7o8n1+53/ashGW+rbaOAwckPTDDZDNRLjDq7/V7AYlSfCrPfInQ9W6vxdbNp/wF
+         ZRFqu6lJtWWZ75FOnCHvpGQtfg3P657Qk/k00u8/4fg2escTuXxi4US8QHzEhCkwf5ub
+         oScgZsOAZ9OSr/s7CTzJOLQN1cMzXs2UdmC9xtl4D4MRU0C8CvYTVWQ4TkuTvaQFbonH
+         BSXM8qdXESIWM1gpwM9CIahklf7IxLUpxK6WtBRkVSTcgKBgAzhi/jaloiDTsDuEUGHv
+         5Y6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=d7GvD5Hf8tzx2V16UHtbEc4zSmsYhgs5namwMdUKQPg=;
-        b=7k14jvqA82/MpDIq7cvmwBZDDYOm2t/fE2FALCi/9xgPl8H4G9edgKIZpzA9WABAFb
-         LxS40Ro98qprWRkR8/+43ww8uGQi4An6FPJ5qQs5tTyXOwO7C82OZ9F8m8ID4kvARHNK
-         A+kRQ+YyYleG/GzMKkzenIJEXGl9iNlo0MkzMP/9ylUje/aEvXpNQK8ParwcytYoCgcW
-         T7qH0NIlFneHs1vDQz0WziBnUaRuaNIvCnNIfD4m4EZLRupQDWmVxiwICBvCy/wg3IjF
-         576z3N1dPBXFTNyJc0tP5cczpqMzcBA5V6ibWkUdV5xUZ2qDH9Q5c9GNgHEinv/SrW4p
-         Vo9w==
-X-Gm-Message-State: ACgBeo0Jq0fxL+RhjRrpnV4xgZYtLZ6Y8KArQks0MoIe4EyXsvR2GceA
-        FfLbb/B6/yI+gfnd8C6Av2slt1gQ3f8bog==
-X-Google-Smtp-Source: AA6agR6VOX0FP5IFx9rLPlxKuktifaZCc/3o6UZBEaQfuWiyiMm5mBEw4iXoGvfBDwtrfxXU17dgYQ==
-X-Received: by 2002:aa7:dd42:0:b0:440:916e:9a38 with SMTP id o2-20020aa7dd42000000b00440916e9a38mr4842487edw.302.1660889284012;
-        Thu, 18 Aug 2022 23:08:04 -0700 (PDT)
+        bh=8hlJvz8Cg/RSrujn6eg6W9O1c50l+s7v5Bap/Ro2DSs=;
+        b=rEXIUiH2gwQo+y/Ru1ETspsgxElE+lf7Rftq6GAwlAkZXoOVh6iZv5Bv2M+wh5Wm2v
+         kVa0oGdVQLMrY1X/9qAYo+8f7HXMUrFj5NiYb1ew2zQpWWbpeaIdsdhh+fH0ueP5TUOa
+         ErYvSEZuumJIx+s16InA+3c/P17JB/0/aAn2bNfszidFCkglT7RiJz5GDeqR7kYC6led
+         WcafH5vDk3XwwJRwvZI2a0mApqaphbJt1/XgQzxrBexoWXpcPwMhp10kVxYiSagi5LHg
+         EMF6y2F6LgK9thNIn9rZKFgsVqZM1FMMZIKYobc0VM2sRCbezXKz3L2/TOOV1BCN6iih
+         /4VQ==
+X-Gm-Message-State: ACgBeo05QDf+PTxT3dxhwHtUE3VOpt8xCPAjNsPmRC5Qx3V4dm4rqFQk
+        KFAizZNtM5ZbjXW2NPQmI6Q4E2Y/xE3WHg==
+X-Google-Smtp-Source: AA6agR7/JhpdOMPLzO6RkZBvrR6nCK3+sQ6xgvqtcn+PCOKPalLO6+fAFWB2nSXAP9dj6tiCFYn9Uw==
+X-Received: by 2002:a17:906:8b81:b0:733:183b:988e with SMTP id nr1-20020a1709068b8100b00733183b988emr3834146ejc.457.1660889285398;
+        Thu, 18 Aug 2022 23:08:05 -0700 (PDT)
 Received: from lb02065.fritz.box ([2001:9e8:143b:fd00:5207:8c7f:747a:b80d])
-        by smtp.gmail.com with ESMTPSA id y14-20020a1709063a8e00b0073a644ef803sm1809660ejd.101.2022.08.18.23.08.02
+        by smtp.gmail.com with ESMTPSA id y14-20020a1709063a8e00b0073a644ef803sm1809660ejd.101.2022.08.18.23.08.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 23:08:03 -0700 (PDT)
+        Thu, 18 Aug 2022 23:08:04 -0700 (PDT)
 From:   Jack Wang <jinpu.wang@ionos.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Jassi Brar <jassisinghbrar@gmail.com>
-Subject: [PATCH v1 01/19] mailbox: bcm-ferxrm-mailbox: Fix error check for dma_map_sg
-Date:   Fri, 19 Aug 2022 08:07:43 +0200
-Message-Id: <20220819060801.10443-2-jinpu.wang@ionos.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Kees Cook <keescook@chromium.org>,
+        =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
+        linux-rdma@vger.kernel.org
+Subject: [PATCH v1 02/19] infiniband/mthca: Fix dma_map_sg error check
+Date:   Fri, 19 Aug 2022 08:07:44 +0200
+Message-Id: <20220819060801.10443-3-jinpu.wang@ionos.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220819060801.10443-1-jinpu.wang@ionos.com>
 References: <20220819060801.10443-1-jinpu.wang@ionos.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,40 +74,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dma_map_sg return 0 on error, fix the error check, and return -EIO
-to caller.
+dma_map_sg return 0 on error, in case of error set
+EIO as return code.
 
-Cc: Jassi Brar <jassisinghbrar@gmail.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: "Håkon Bugge" <haakon.bugge@oracle.com>
+Cc: linux-rdma@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
 ---
- drivers/mailbox/bcm-flexrm-mailbox.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/infiniband/hw/mthca/mthca_memfree.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mailbox/bcm-flexrm-mailbox.c b/drivers/mailbox/bcm-flexrm-mailbox.c
-index fda16f76401e..bf6e86b0ed09 100644
---- a/drivers/mailbox/bcm-flexrm-mailbox.c
-+++ b/drivers/mailbox/bcm-flexrm-mailbox.c
-@@ -622,15 +622,15 @@ static int flexrm_spu_dma_map(struct device *dev, struct brcm_message *msg)
+diff --git a/drivers/infiniband/hw/mthca/mthca_memfree.c b/drivers/infiniband/hw/mthca/mthca_memfree.c
+index f2734a5c5f26..44fd5fdf64d5 100644
+--- a/drivers/infiniband/hw/mthca/mthca_memfree.c
++++ b/drivers/infiniband/hw/mthca/mthca_memfree.c
+@@ -189,7 +189,7 @@ struct mthca_icm *mthca_alloc_icm(struct mthca_dev *dev, int npages,
+ 						   chunk->npages,
+ 						   DMA_BIDIRECTIONAL);
  
- 	rc = dma_map_sg(dev, msg->spu.src, sg_nents(msg->spu.src),
- 			DMA_TO_DEVICE);
--	if (rc < 0)
--		return rc;
-+	if (!rc)
-+		return -EIO;
+-				if (chunk->nsg <= 0)
++				if (!chunk->nsg)
+ 					goto fail;
+ 			}
  
- 	rc = dma_map_sg(dev, msg->spu.dst, sg_nents(msg->spu.dst),
- 			DMA_FROM_DEVICE);
--	if (rc < 0) {
-+	if (!rc) {
- 		dma_unmap_sg(dev, msg->spu.src, sg_nents(msg->spu.src),
- 			     DMA_TO_DEVICE);
--		return rc;
-+		return -EIO;
+@@ -208,7 +208,7 @@ struct mthca_icm *mthca_alloc_icm(struct mthca_dev *dev, int npages,
+ 		chunk->nsg = dma_map_sg(&dev->pdev->dev, chunk->mem,
+ 					chunk->npages, DMA_BIDIRECTIONAL);
+ 
+-		if (chunk->nsg <= 0)
++		if (!chunk->nsg)
+ 			goto fail;
  	}
  
- 	return 0;
+@@ -482,8 +482,9 @@ int mthca_map_user_db(struct mthca_dev *dev, struct mthca_uar *uar,
+ 
+ 	ret = dma_map_sg(&dev->pdev->dev, &db_tab->page[i].mem, 1,
+ 			 DMA_TO_DEVICE);
+-	if (ret < 0) {
++	if (!ret) {
+ 		unpin_user_page(pages[0]);
++		ret = -EIO;
+ 		goto out;
+ 	}
+ 
 -- 
 2.34.1
 

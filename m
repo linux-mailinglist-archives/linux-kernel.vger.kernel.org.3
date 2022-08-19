@@ -2,135 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BAAB599DE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D4C599DC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349544AbiHSOtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 10:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
+        id S1349625AbiHSOuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 10:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349497AbiHSOtl (ORCPT
+        with ESMTP id S1349621AbiHSOua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 10:49:41 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609A2D8E2E
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:49:40 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id bf22so4834468pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:49:40 -0700 (PDT)
+        Fri, 19 Aug 2022 10:50:30 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69831EEC6A
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:50:29 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo7742203pjd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:50:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=uRT1dfCACycQqNXmcC8HP5/+bX38g4rLbOY9bQx0QKs=;
-        b=ish7ZOCTD7n29s4ja2n6fBm1QfHXkE6KMyKyZs+QOfQm6L8DM4YqFjCS8viMyjsnBc
-         5C69v5tlpeq8PhzwvJPyE9sb8Na2PrLboUSwEanyMCE6KOUfJ84ydT2evoNQWH9K0tyq
-         yw0rApG1TdNwk/NZeTAXFkhViMu/9mPt0XKnJDRQYWv2LhQfRG767bGCjxcW0P8uxpIQ
-         EFRNGyzsBI2P+z756RV1YpPzHCb8dsf3iVV8SuIf77mfBn5Gq7JY9BkLtbWMend+Qx5+
-         Q3svzgWq7R5mfkCpgGdT8xI/JSwO753FEbKO0Iov3H45k+GT9JVGquxSsRnJCzlf6tKS
-         pqtg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=w3d+3YhZ/r7ChwcKNWsYqhB84K9Ro3O4Ausk/FNYHKM=;
+        b=DngatJNk+TxbfhHfZBaeRNYYA7ZTT0AblMXDYjq2quy9YriJzZb4s3KkNdUEgDe06H
+         4sJvIoD04525v1sG+ua5AeZAPYxegm4l4M4HzwUPskBCSDhDG6CDXqAXo2ZfXaN0C1aU
+         PSnSooVznAAtccH3dU+W2AQetFhxBKDZdCmHgFipWv0QYVRw/NvPoTGiQAGAgOisWElU
+         Nd7Eo4xdxLp9wYG8bDMUncxKnGzHnYvZeU5D93CdaMx7Hfv0n1TAaRQ1hSYJC4YN3cZE
+         Kt0xmyPJvwFLUwAgmvatNJitSvBKdzsdltaofQLt4cHq1tQTt5gfEYMADy5kqJtdCOtI
+         coDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=uRT1dfCACycQqNXmcC8HP5/+bX38g4rLbOY9bQx0QKs=;
-        b=jtNIBG3fdXM3v+lGPdcJxjucvZEOKb/784vXh+WjGKPXkHTWU1Lg01pa8IHCotkrjK
-         iZw6jpdRVRCnKt7AydBvPq/p25A0b7OrKedsUIoVw0G5lx2A/u9GcRmLm2i/s+RlGIvS
-         DP2ojUzBMYBf6v3qCbsxkpWcrhnTbkOTuMn7KyDd+NPSloiSvlR6nMtLtFb2+Qm6QubJ
-         CINj8GzojQPmsjkofGu5MzfYrrtuZWXHzY/m75GISApow5j9nw06JBVmJrRFrFFX8rkp
-         RJE+aXmSZ7fxm3yTZQVUxmsTSQqu/TcajBRkL8WnQNIiZ6flC6i+5KECUpCAs/CfmdDn
-         k3DA==
-X-Gm-Message-State: ACgBeo05ZqhRhUcaNxB5u9VOXAjmf3O36f+X7M4/uZZrOyxrTyQ0NQn+
-        kMNSw8xLCaGyzgM9edxS/J3GRA==
-X-Google-Smtp-Source: AA6agR6Ni20ut6dVdgRtMYnrfm3+VwwBk3uL3D6coMcgFeqx4bqlmxKgg8G9I3PPvhuYPCPAwCO2VA==
-X-Received: by 2002:a17:90a:e7cc:b0:1f7:26c9:ee9f with SMTP id kb12-20020a17090ae7cc00b001f726c9ee9fmr8865506pjb.75.1660920579765;
-        Fri, 19 Aug 2022 07:49:39 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h9-20020aa796c9000000b005360813cabasm1581787pfq.69.2022.08.19.07.49.39
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=w3d+3YhZ/r7ChwcKNWsYqhB84K9Ro3O4Ausk/FNYHKM=;
+        b=Vm84e0mKjOqGEtwC9wxQ/+Pr8nK7+M8inPbsIUHvJfYccon3vxqlOfSBEFVZ6AfIXs
+         L5NnAXbzytJqAUlT9Ivwq4eFzVaOeKf+vy4keeRw/Oc49NAS5HECEDC0i2GJiIMv+5Wd
+         FUNIR6af+JC2u79vg+T8HCdTWVQKEP1s9BoHktpUmi/d4tq1ay+G9uA12Tbv08l+xH47
+         ci7VVNc/WJf1YxYjC2MCscKiSwZu+z5K8oL/lXtQTqjJMKM2u3lbDUbBa4NVzHWWEJra
+         0SYON4fNAEt0MHj0/Udj18Ut3NGz1do4U93Tj4FTEj8YW//8rnSGpo2qVjmpCk/exSVE
+         Tprw==
+X-Gm-Message-State: ACgBeo3NktrNMXlPZNJ29m9b3uysVKkrK+FDMcCa1gC+zLEr+cNffSJ/
+        Rn6tN8H9e8mbZbUpl0yMqvva
+X-Google-Smtp-Source: AA6agR5+ZfhQ5pgolJX1p5Pz1LzGs6GVil1VIDXcfVsKXuJHpsxUOoOxrusEPQiji3+rgycCO5KyOA==
+X-Received: by 2002:a17:90b:1a81:b0:1f4:f9ff:9028 with SMTP id ng1-20020a17090b1a8100b001f4f9ff9028mr15017906pjb.44.1660920628416;
+        Fri, 19 Aug 2022 07:50:28 -0700 (PDT)
+Received: from localhost.localdomain ([117.217.188.127])
+        by smtp.gmail.com with ESMTPSA id x24-20020a17090a789800b001f312e7665asm3268380pjk.47.2022.08.19.07.50.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 07:49:39 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 14:49:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 09/26] KVM: VMX: nVMX: Support TSC scaling and
- PERF_GLOBAL_CTRL with enlightened VMCS
-Message-ID: <Yv+i/wuObvLf7QZE@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-10-vkuznets@redhat.com>
- <Yv50vWGoLQ9n+6MO@google.com>
- <87zgg0smqr.fsf@redhat.com>
+        Fri, 19 Aug 2022 07:50:27 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     kishon@ti.com, gregkh@linuxfoundation.org, lpieralisi@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mie@igel.co.jp, kw@linux.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 0/5] pci_endpoint_test: Fix the return value of IOCTLs
+Date:   Fri, 19 Aug 2022 20:20:13 +0530
+Message-Id: <20220819145018.35732-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87zgg0smqr.fsf@redhat.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> 
-> > On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
-> >> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
-> >> index f886a8ff0342..4b809c79ae63 100644
-> >> --- a/arch/x86/kvm/vmx/evmcs.h
-> >> +++ b/arch/x86/kvm/vmx/evmcs.h
-> >> @@ -37,16 +37,9 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
-> >>   *	EPTP_LIST_ADDRESS               = 0x00002024,
-> >>   *	VMREAD_BITMAP                   = 0x00002026,
-> >>   *	VMWRITE_BITMAP                  = 0x00002028,
-> >> - *
-> >> - *	TSC_MULTIPLIER                  = 0x00002032,
-> >>   *	PLE_GAP                         = 0x00004020,
-> >>   *	PLE_WINDOW                      = 0x00004022,
-> >>   *	VMX_PREEMPTION_TIMER_VALUE      = 0x0000482E,
-> >> - *      GUEST_IA32_PERF_GLOBAL_CTRL     = 0x00002808,
-> >> - *      HOST_IA32_PERF_GLOBAL_CTRL      = 0x00002c04,
-> >> - *
-> >> - * Currently unsupported in KVM:
-> >> - *	GUEST_IA32_RTIT_CTL		= 0x00002814,
-> >
-> > Almost forgot: is deleting this chunk of the comment intentional?
-> >
-> 
-> Intentional or not (I forgot :-), GUEST_IA32_RTIT_CTL is supported/used
-> by KVM since
-> 
-> commit f99e3daf94ff35dd4a878d32ff66e1fd35223ad6
-> Author: Chao Peng <chao.p.peng@linux.intel.com>
-> Date:   Wed Oct 24 16:05:10 2018 +0800
-> 
->     KVM: x86: Add Intel PT virtualization work mode
-> 
-> ...
->  
-> commit bf8c55d8dc094c85a3f98cd302a4dddb720dd63f
-> Author: Chao Peng <chao.p.peng@linux.intel.com>
-> Date:   Wed Oct 24 16:05:14 2018 +0800
-> 
->     KVM: x86: Implement Intel PT MSRs read/write emulation
-> 
-> but there's no corresponding field in eVMCS. It would probably be better
-> to remove "Currently unsupported in KVM:" line leaving
-> 
-> "GUEST_IA32_RTIT_CTL             = 0x00002814" 
-> 
-> in place. 
+During the review of a patch for pci_endpoint_test driver [1], Greg spotted
+the wrong usage of the return value of IOCTLs in the driver. This series
+fixes that by returning 0 for success and negative error code for failure.
+Relevant change is also made to the userspace tool and the Documentation.
 
-GUEST_IA32_RTIT_CTL isn't supported for nested VMX though, which is how I
-interpreted the "Currently unsupported in KVM:".  Would it be accurate to extend
-that part of the comment to "Currently unsupported in KVM for nested VMX:"?
+Along with those, there are couple more patches fixing other small issues
+I noted.
+
+NOTE: I have just compile tested this series. So it'd be good if someone
+can test it on the PCI endpoint setup.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/all/20220816100617.90720-1-mie@igel.co.jp/
+
+Manivannan Sadhasivam (5):
+  misc: pci_endpoint_test: Remove unnecessary WARN_ON
+  misc: pci_endpoint_test: Fix the return value of IOCTL
+  tools: PCI: Fix parsing the return value of IOCTLs
+  tools: PCI: Fix memory leak
+  Documentation: PCI: endpoint: Use the correct return value of
+    pcitest.sh
+
+ Documentation/PCI/endpoint/pci-test-howto.rst | 152 ++++++++--------
+ drivers/misc/pci_endpoint_test.c              | 167 ++++++++----------
+ tools/pci/pcitest.c                           |  48 ++---
+ 3 files changed, 179 insertions(+), 188 deletions(-)
+
+-- 
+2.25.1
+

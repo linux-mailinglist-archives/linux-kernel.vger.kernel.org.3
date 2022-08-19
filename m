@@ -2,165 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A95599D93
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E22A599D86
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349002AbiHSOW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 10:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
+        id S1349190AbiHSOYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 10:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348895AbiHSOW4 (ORCPT
+        with ESMTP id S1348619AbiHSOYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 10:22:56 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BC2BC10D
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:22:54 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id s1so3538719lfp.6
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:22:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=W6XLvvBGoke5+DVCHO7jgqha7YhANK6x+3Vpkq+XWDE=;
-        b=D8TRi6N573AdxP8uKx/TO+c6SXG/77vA7hDcrIL8d3gsE1xQJjQ699vUK+9c88fr/F
-         PAiowGh1zHmR8r4PPKnEbTlr4WpE9O0mq9qzYs9ZQ9AAkWkFvwxlKowTS0l1rl5yCQGP
-         S1qCUwCEYxBTAu/IaaflLGnomugR39kEjvFQlr8alzIst6MYdeHVmkXfldw6M0WUXGcy
-         zgaHi6WX+Tqvd6U+vtNRmAA3SgLTnygrf2nBxheJ6M/W1Ms2VFTDJSoENXq/1+T20RF/
-         RSy1Smu+6gHpoSmgLVKxkvlyaEB4fNrPBNQqwcekbL0mNQIxcqo+IuTGvhg5AZlXravn
-         pNUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=W6XLvvBGoke5+DVCHO7jgqha7YhANK6x+3Vpkq+XWDE=;
-        b=FG6tNRBXQQzvBh+gkh86eDq2EzEAXHVmu7xhIIP2U2NzZPwBewQLPX30FECHGKFpuZ
-         +VVi+6qt1ndzK8gyyXdIR/SVoCvbnZTwapb4dENHLF0Z/D7asR3TgTe8QYm3q9sNNfen
-         OqnbtS4tZ28NLSMm5zxI1uLn+0rqsIhg/cbtbHqW+3fQgS03t94To5H+UF//pf5Muin0
-         55oAMwvMky8v5MJrSczO5ay0hzbqOeTk8sZfBLEIQKnlAhqnb6gUWgn1xoL4RP/4zLBH
-         vwecVcuj207oH3w4sUgzQ4NrYe/FoGzqWOU4a4zpTrPb34LCQG5qKUouQTQLLyEPbQUV
-         e/ww==
-X-Gm-Message-State: ACgBeo2bBtzDNknZ7IueTi2hiiyxBjkqxpCbviZSiUsPZHvLYdGtv8sj
-        wovm3lWWlK3C0FmkCIM0wHRkRg==
-X-Google-Smtp-Source: AA6agR6fwp6wpOn4Rzpjtks40Fom/eMSJFk8J9dE0Zc7x0M4BR6878593MBNvSYv+LbauP3H96P2tw==
-X-Received: by 2002:a05:6512:4011:b0:492:cd8a:e22 with SMTP id br17-20020a056512401100b00492cd8a0e22mr739256lfb.248.1660918973099;
-        Fri, 19 Aug 2022 07:22:53 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id u3-20020a2eb803000000b0025e5a7bd522sm630556ljo.30.2022.08.19.07.22.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 07:22:52 -0700 (PDT)
-Message-ID: <4e12e8c3-2170-eaab-d910-f674bcc93f79@linaro.org>
-Date:   Fri, 19 Aug 2022 17:22:50 +0300
+        Fri, 19 Aug 2022 10:24:12 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624CC543CD
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:24:10 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4M8PBv6Glkz9shj;
+        Fri, 19 Aug 2022 16:24:07 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ChCBnivmaNgi; Fri, 19 Aug 2022 16:24:07 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4M8PBv5P0wz9shX;
+        Fri, 19 Aug 2022 16:24:07 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A75B48B77C;
+        Fri, 19 Aug 2022 16:24:07 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id w2O8PlFKf6bu; Fri, 19 Aug 2022 16:24:07 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.4.22])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 703118B763;
+        Fri, 19 Aug 2022 16:24:07 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 27JENsXx2215266
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 19 Aug 2022 16:23:54 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 27JENqoV2215261;
+        Fri, 19 Aug 2022 16:23:52 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] powerpc: Remove stale declarations in mmu_decl.h
+Date:   Fri, 19 Aug 2022 16:23:43 +0200
+Message-Id: <a821e8397dd56b8177ecc04966d3b3a7c4bda6d4.1660919016.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 6/6] riscv: dts: microchip: add the mpfs' fabric clock
- control
-Content-Language: en-US
-To:     Conor.Dooley@microchip.com, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
-        Daire.McNamara@microchip.com
-Cc:     paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20220819122259.183600-1-conor.dooley@microchip.com>
- <20220819122259.183600-7-conor.dooley@microchip.com>
- <3df8d4bd-3d38-cecd-6589-ccc1be01b886@linaro.org>
- <3ffba600-bda9-8ffa-a435-9a6f94e072b8@microchip.com>
- <f3d8be5c-737b-8c71-9926-a4036c797769@linaro.org>
- <19ca2ca1-c678-c669-4214-e92416e37191@microchip.com>
- <138af26e-8e36-63a0-d3a0-5af866318839@linaro.org>
- <f8496006-7487-7b7e-1a53-ec38492dfe70@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f8496006-7487-7b7e-1a53-ec38492dfe70@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1660919021; l=1797; s=20211009; h=from:subject:message-id; bh=ag94Vf3Rakr/RdZ8kJ3Gqco/qFeLKkcm0jj7TlBwhgw=; b=fjdYcgWvTLMismOARo/EcN529KzFHN+iYs9G6CEfVCDkxC2P04zrgQG53TcPY+PjRcn5L7+v6Qd6 j5ukViuQAoHjgZuthJOwG0wHnCd3jz/3KGx3uuLY+p/z6QYVIry3
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 17:14, Conor.Dooley@microchip.com wrote:
-> On 19/08/2022 15:06, Krzysztof Kozlowski wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> On 19/08/2022 16:48, Conor.Dooley@microchip.com wrote:
->>> On 19/08/2022 14:28, Krzysztof Kozlowski wrote:
->>>>> Maybe that is me exploiting the "should", but I was not sure how to
->>>>> include the location in the devicetree.
->>>>
->>>> Neither node names nor clock names are considered an ABI, but some
->>>> pieces like to rely on them. Now you created such dependency so imagine
->>>> someone prepares a DTSI/DTS with "clock-controller" names for all four
->>>> blocks. How you driver would behave?
->>>
->>> -EEXIST, registration fails in the core.
->>>
->>>> The DTS would be perfectly valid but driver would not accept it
->>>> (conflicting names) or behave incorrect.
->>>>
->>>> I think what you need is the clock-output-names property. The core
->>>> schema dtschema/schemas/clock/clock.yaml recommends unified
->>>> interpretation of it - list of names for all the clocks - but accepts
->>>> other uses, e.g. as a prefix.
->>>
->>> So could I do `clock-output-names = "ccc_nw";`. That would work for me,
->>> with one question:
->>> How would I enforce the unique-ness of this property, since it would be
->>> a per CCC/clock-controller property? Maybe I missed something, but I
->>> gave it a shot with two different CCC nodes having "ccc_nw" & dtbs_check
->>> did not complain. Up to me to explain the restriction in the dt-bindings
->>> description?
->>
->> Uniqueness among entire DTS? I don't think you can, except of course
->> mentioning it in description. Your driver should handle such DTS -
->> minimally by gracefully failing but better behaving in some default way.
-> 
-> It fails not-too-gracefully at the moment, but that could easily be
-> changed. Truncated base address I suppose would be a meaningful thing
-> to fall back to afterwards.
-> 
->>
->>>
->>> FWIW I would then have:
->>> ccc_sw: clock-controller@38400000 {
->>>        compatible = "microchip,mpfs-ccc";
->>>        reg = <0x0 0x38400000 0x0 0x1000>, <0x0 0x38800000 0x0 0x1000>,
->>>              <0x0 0x39400000 0x0 0x1000>, <0x0 0x39800000 0x0 0x1000>;
->>>        #clock-cells = <1>;
->>>        clock-output-names = "ccc_sw";
->>>        status = "disabled";
->>> };
->>>
->>> & in the binding:
->>>     clock-output-names:
->>>       pattern: ^ccc_[ns][ew]$
->>
->> Yes, although this won't enforce uniqueness.
-> 
-> I know :( I'll respin next week I guess, thanks again.
+rtas_size and rtas_data are not used anymore since at least
+commit 7c8c6b9776fb ("powerpc: Merge lmb.c and make MM initialization
+use it.")
 
+Remove them.
 
-The issue with this is that we are getting close to tying bindings with
-your Linux implementation. What if other implementation does not use
-these names as prefix and instead creates some other clock names (as
-clock names are not considered ABI)? Your binding would still enforce
-such property with a specific pattern.
+Since commit 4b74a35fc7e9 ("powerpc/32s: Make Hash var static")
+the forward declaration of struct hash_pte is unneeded.
 
-The clock names should not really matter, so if you have conflict of
-names among multiple controllers, I think driver should embed unit
-address in the name (as fallback of clock-output-name) and the binding
-should not enforce specific pattern.
+Remove it.
 
-I can easily imagine a real hardware board design with
-"sexy_duck_ccc_pll1_out3" clock names. :)
+__initial_memory_limit_addr was removed by commit e63075a3c937 ("memblock:
+Introduce default allocation limit and use it to replace explicit ones")
 
-Best regards,
-Krzysztof
+Remove the declaration.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/include/asm/setup.h | 1 -
+ arch/powerpc/mm/mmu_decl.h       | 4 ----
+ 2 files changed, 5 deletions(-)
+
+diff --git a/arch/powerpc/include/asm/setup.h b/arch/powerpc/include/asm/setup.h
+index d8c28902cf59..dd461b2c825c 100644
+--- a/arch/powerpc/include/asm/setup.h
++++ b/arch/powerpc/include/asm/setup.h
+@@ -7,7 +7,6 @@
+ #ifndef __ASSEMBLY__
+ extern void ppc_printk_progress(char *s, unsigned short hex);
+ 
+-extern unsigned int rtas_data;
+ extern unsigned long long memory_limit;
+ extern void *zalloc_maybe_bootmem(size_t size, gfp_t mask);
+ 
+diff --git a/arch/powerpc/mm/mmu_decl.h b/arch/powerpc/mm/mmu_decl.h
+index 229c72e49198..8f5afad1b6af 100644
+--- a/arch/powerpc/mm/mmu_decl.h
++++ b/arch/powerpc/mm/mmu_decl.h
+@@ -92,15 +92,11 @@ extern void mapin_ram(void);
+ extern void setbat(int index, unsigned long virt, phys_addr_t phys,
+ 		   unsigned int size, pgprot_t prot);
+ 
+-extern unsigned int rtas_data, rtas_size;
+-
+-struct hash_pte;
+ extern u8 early_hash[];
+ 
+ #endif /* CONFIG_PPC32 */
+ 
+ extern unsigned long __max_low_memory;
+-extern phys_addr_t __initial_memory_limit_addr;
+ extern phys_addr_t total_memory;
+ extern phys_addr_t total_lowmem;
+ extern phys_addr_t memstart_addr;
+-- 
+2.37.1
+

@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF3A5995EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8175995DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243277AbiHSHSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 03:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
+        id S1346991AbiHSHUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 03:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345958AbiHSHSu (ORCPT
+        with ESMTP id S1345710AbiHSHU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 03:18:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CD54BA63
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:18:46 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oOwH3-00036h-Ss; Fri, 19 Aug 2022 09:18:33 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oOwH2-0006Jc-S7; Fri, 19 Aug 2022 09:18:32 +0200
-Date:   Fri, 19 Aug 2022 09:18:32 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org, akinobu.mita@gmail.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 4/4] media: mt9m111: remove .s_power callback
-Message-ID: <20220819071832.3mr7u7jhp2ud4fv6@pengutronix.de>
-References: <20220818144712.997477-1-m.felsch@pengutronix.de>
- <20220818144712.997477-4-m.felsch@pengutronix.de>
- <20220818161408.76ofg2rjvp5whtof@uno.localdomain>
+        Fri, 19 Aug 2022 03:20:27 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB69C9925
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:20:25 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M8ClJ152MznTV7;
+        Fri, 19 Aug 2022 15:18:04 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 19 Aug 2022 15:20:17 +0800
+Subject: Re: [bug report] mm/hugetlb: various bugs with avoid_reserve case in
+ alloc_huge_page()
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <d449c6d1-314f-5b90-6d68-3773e2722d7f@huawei.com>
+ <Yv7AlZyNaAgpB4Qg@monkey>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <5b1b60d6-e699-2330-0b6f-14c8dd5d78d4@huawei.com>
+Date:   Fri, 19 Aug 2022 15:20:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818161408.76ofg2rjvp5whtof@uno.localdomain>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <Yv7AlZyNaAgpB4Qg@monkey>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,76 +54,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacopo,
-
-thanks for your fast feedback :)
-
-On 22-08-18, Jacopo Mondi wrote:
-> Hi Marco
+On 2022/8/19 6:43, Mike Kravetz wrote:
+> On 08/17/22 16:31, Miaohe Lin wrote:
+>> Hi all:
+>>     When I investigate the mm/hugetlb.c code again, I found there are a few possible issues
+>> with avoid_reserve case. (It's really hard to follow the relevant code for me.) Please take
+>> a look at the below analysis:
 > 
-> On Thu, Aug 18, 2022 at 04:47:12PM +0200, Marco Felsch wrote:
-> > This is in preparation of switching to the generic dev PM mechanism.
-> > Since the .s_power callback will be removed in the near future move the
-> > powering into the .s_stream callback. So this driver no longer depends
-> > on the .s_power mechanism.
-> >
-> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> Thank you for taking a close look at this code!
 > 
-> If you want to move to runtime_pm, I would implement it first and have
-> s_power call the _resume and _suspend routines, as some platform
-> drivers still use s_power() and some of them might depend on it.
+> I agree that the code is hard to follow.  I have spent many hours/days/weeks
+> chasing down the cause of incorrect reservation counts.  I imagine there could
+> be more issues, especially when you add the uncommon avoid_reserve and
+> MAP_NORESERVE processing.
 
-Do we really have platforms which depend on this? IMHO if that is the
-case than we should fix those platfoms. Since new drivers shouldn't use
-this callback anymore.
+Many thanks for your time and reply, Mike!
 
-In my case, I worked on [1] and wondered why the sensor was enabled
-before I told him to do so. Since I didn't implement the s_power()
-callback, I had no chance to get enabled before.
-
-Can we please decide:
- - Do we wanna get rid of the s_power() callback?
- - If not, how do we handle those devices then with drivers not
-   implementing this callback?
-
-[1] https://lore.kernel.org/all/20220818143307.967150-1-m.felsch@pengutronix.de/
-
-> It's a slippery slope.. I would love to get rid of s_power() but if
-> any platform uses it with this sensor, it would stop working after
-> this change.
 > 
-> > ---
-> >  drivers/media/i2c/mt9m111.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
-> > index cd74c408e110..8e8ba5a8e6ea 100644
-> > --- a/drivers/media/i2c/mt9m111.c
-> > +++ b/drivers/media/i2c/mt9m111.c
-> > @@ -1065,7 +1065,6 @@ static const struct v4l2_ctrl_ops mt9m111_ctrl_ops = {
-> >  };
-> >
-> >  static const struct v4l2_subdev_core_ops mt9m111_subdev_core_ops = {
-> > -	.s_power	= mt9m111_s_power,
-> >  	.log_status = v4l2_ctrl_subdev_log_status,
-> >  	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
-> >  	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
-> > @@ -1136,8 +1135,14 @@ static int mt9m111_enum_mbus_code(struct v4l2_subdev *sd,
-> >  static int mt9m111_s_stream(struct v4l2_subdev *sd, int enable)
-> >  {
-> >  	struct mt9m111 *mt9m111 = container_of(sd, struct mt9m111, subdev);
-> > +	int ret;
-> >
-> >  	mt9m111->is_streaming = !!enable;
-> > +
-> > +	ret = mt9m111_s_power(sd, enable);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> >  	return 0;
-> >  }
-> >
-> > --
-> > 2.30.2
-> >
+>> 1.avoid_reserve issue with h->resv_huge_pages in alloc_huge_page.
 > 
+> Did you actually see this issue, or is it just based on code inspection?
+
+No, it's based on code inspection. ;)
+
+> I tried to recreate, but could not.  When looking closer, this may not
+> even be possible.
+> 
+>>     Assume:
+>> 	h->free_huge_pages 60
+>> 	h->resv_huge_pages 30
+>> 	spool->rsv_hpages  30
+> 
+> OK.
+> 
+>>
+>>     When avoid_reserve is true, after alloc_huge_page(), we will have:
+> 
+> Take a close look at the calling paths for alloc_huge_page when avoid_reserve
+> is true.  There are only two such call paths.
+> 1) copy_hugetlb_page_range - We allocate pages in the 'early COW' processing.
+>    In such cases, the pages are private and not associated with a file, or
+>    filesystem or subpool (spool).  Therefore, there should be no spool
+>    modifications.
+
+Agree.
+
+> 2) hugetlb_wp (formerly called hugetlb_cow) - Again, we are allocating a
+>    private page and should not be modifying spool.
+
+Agree.
+
+> 
+> If the above is correct, then we will not modify spool->rsv_hpages which
+> leads to the inconsistent results.
+
+I missed to verify whether spool will be modified in avoid_reserve case. Sorry about that.
+
+> 
+> It is confusing that MAP_NORESERVE does not imply avoid_reserve will be
+> passed to alloc_huge_page.
+
+It's introduced to guarantee that COW faults for a process that called mmap(MAP_PRIVATE) will succeed via commit
+04f2cbe35699 ("hugetlb: guarantee that COW faults for a process that called mmap(MAP_PRIVATE) on hugetlbfs will succeed").
+It seems it has nothing to do with MAP_NORESERVE.
+
+> 
+>> 	spool->rsv_hpages  29 /* hugepage_subpool_get_pages decreases it. */
+>> 	h->free_huge_pages 59
+>> 	h->resv_huge_pages 30 /* rsv_hpages is used, but *h->resv_huge_pages is not modified accordingly*. */
+>>
+>>     If the hugetlb page is freed later, we will have:
+>> 	spool->rsv_hpages  30 /* hugepage_subpool_put_pages increases it. */
+>> 	h->free_huge_pages 60
+>> 	h->resv_huge_pages 31 /* *increased wrongly* due to hugepage_subpool_put_pages(spool, 1) == 0. */
+>> 			   ^^
+>>
+> 
+> I'll take a closer look at 2 and 3 when we determine if 1 is a possible
+> issue or not.
+
+I want to propose removing the avoid_reserve code. When called from above case 1) or 2), vma_needs_reservation()
+will always return 1 as there's no reservation for it. Also hugepage_subpool_get_pages() will always return 1 as
+it's not associated with a spool. So when avoid_reserve == true, map_chg and gbl_chg must be 1 and vma_has_reserves()
+will always return "false". As a result, passing in avoid_reserve == true will do nothing in fact. So it can be simply
+removed. Or am I miss something again?
+
+If avoid_reserve code can be removed, below issue 2 and 3 won't be possible as they rely on avoid_reserve doing its work.
+
+Thanks!
+Miaohe Lin

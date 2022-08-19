@@ -2,113 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73AE5599BBB
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A90F599BA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348105AbiHSME7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S1348847AbiHSMFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348084AbiHSME4 (ORCPT
+        with ESMTP id S1348540AbiHSMFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:04:56 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E27EC4EF
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:04:54 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id by6so4307777ljb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:04:54 -0700 (PDT)
+        Fri, 19 Aug 2022 08:05:38 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0205EE4A3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:05:36 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id g8so72231plq.11
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:05:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=AiiavDzYSZGUIztBfno9z4N7pQ7TlVNfOCCAVwE9hcE=;
-        b=fcrPitOJWPMSCaIFodXOuiGjsjZ3YG++th1NSR69d04k4xiIIxW/vAJTIwA0xfCNCh
-         mBrThOoUWZ0bzwd8E0+Y0xg1gbCgKtVeea7xsWTxhXHjBUQ6z6zlUBuyl66T6hgQUEjU
-         UPThXCW2kyIGg/3Fb8NHvKLqHBB3ZA2AkyjtbaS+QG9yjzJtXYi7A3zKXEGfC7dnngEr
-         dVDhfSoKX8zdnCURcP7oNgylvP+Lz5FO6vGUVw5YeHpJ6RzM9FTUUYGrmidcbbHcxD6p
-         QdKB+RjaIH94jw6lG2zwbGhkqY3QUS2IM3kiF62tXgbQ8egLYzhDcNOe6LAO5jWQF0uF
-         y6wA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=nLF30amAk6vL579WqQVIBktWPPH4Um2+WcN9QKXX5zk=;
+        b=hODOYdOY15vPYwZzoOow1TUmucyiWqLh87p/zVtdtDz9SDOKZED6uu/bDPi1fDlQvU
+         o7qNyD8dlG4QwTsnmxhlh2QN6WzUwmjSuQkKpeMdB9xYMTJYQUzpQBju1pV5wsjsddCn
+         IZ0AQB1Xk+DA9qX6dzWB2DCsil6vMkui9oplY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=AiiavDzYSZGUIztBfno9z4N7pQ7TlVNfOCCAVwE9hcE=;
-        b=tBt1KYYcxepvK+n5SaucArOkomRsz+eQUZlXJ6ANnCBcFKTjGckWF9iIqitWrIvJOL
-         pTe6jbjyCIYir3CSjHZLXBfqpFHrfuR/aunU/4HeZ20apzlz+2PYYpQp9liYJpfX9+hO
-         ddMy74fwZn5qOVYJ+5ULOl1ENdHXnF/lgCo2zGFSm+hfBDOC1Acb9hiiyYKWZ37ZOl07
-         sZSyBd7sadBRRIE6fHTdA9/T/awVb7ISn9fl47HCaTKYBybi2Y+hYRF+OGy8kSeyCSBv
-         jUb9ZeOJGYiRvOFUNPb0NtB4a99o6e84Qkp2UJsICEV6XD81wgidbIe6qbJm8qirYFg+
-         BQbA==
-X-Gm-Message-State: ACgBeo1GA3d63eZq0f18BXNSgmXaJ3gLM088y3m7/qzgc/p4J68RIoCy
-        8+kaHr6LujMQodi3ZCkcY4cO+Q==
-X-Google-Smtp-Source: AA6agR62NsOl6RRwRFqNAw94cpa4kOYCLcjYJwk01j7896M6g6Q2MZGyA4hvWzdOuTvsQf2wGycn+Q==
-X-Received: by 2002:a2e:8484:0:b0:25e:c325:c94f with SMTP id b4-20020a2e8484000000b0025ec325c94fmr2210517ljh.310.1660910692805;
-        Fri, 19 Aug 2022 05:04:52 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id q5-20020ac25fc5000000b0048b04d494c6sm620337lfg.51.2022.08.19.05.04.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 05:04:52 -0700 (PDT)
-Message-ID: <9d9c2f78-db3e-71aa-2cdd-e2d9aa2b30cf@linaro.org>
-Date:   Fri, 19 Aug 2022 15:04:50 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=nLF30amAk6vL579WqQVIBktWPPH4Um2+WcN9QKXX5zk=;
+        b=lWGrLXXIgdFDqiZe25xj5CJMnI0EcL3RFppmLt0FyTNfOrCG5j/USnaSF6mvjnYaKe
+         SsYwIaLe5c/7D0nUBK+7kWtBSsweyxdGasRqNqh7XkjRIK96zBRoOupyf66ZVu4yBp1u
+         hPYzEugo5NZ+R5+P/cWOHk2uAkGoAG/obJdvd5UFhw0EJjJ7B5pBxYgcJ0gRq8hnf6BM
+         /WKXLlJhP6qOMa8HLuqV4gsGVUM83rmIGomR4PXJ+g1EpRaMzGEsFkdnMvQ0j9oRD6tu
+         EtowEHJWrysRg5O2gbsynGEZMhzKdmy32kMfOQUl2tJePnkcL0RfG16c978thV6JGKxu
+         5CoQ==
+X-Gm-Message-State: ACgBeo1SALyvBkNtW1NgwaZ6Bu+m87BWLz+7LG7Q5akGnxndrdfepJHH
+        Hc9nFR1JdweEg5UFa3P6bQmDvQ==
+X-Google-Smtp-Source: AA6agR4f7UYNK6rcXVoNBbb3KrKkDAbFm2B6jYhKcmmuZX87wJaBp6EK2y8EH0FRIrl9d1MriX5v7w==
+X-Received: by 2002:a17:90a:d90c:b0:1fa:c99f:757d with SMTP id c12-20020a17090ad90c00b001fac99f757dmr8202541pjv.240.1660910736266;
+        Fri, 19 Aug 2022 05:05:36 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:7527:6400:5770:d67d])
+        by smtp.gmail.com with ESMTPSA id y187-20020a6232c4000000b0052b9351737fsm3409378pfy.92.2022.08.19.05.05.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 05:05:35 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 21:05:30 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Guangbin Huang <huangguangbin2@huawei.com>
+Cc:     pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        lipeng321@huawei.com, shenjian15@huawei.com
+Subject: Re: [PATCH] lib/vnsprintf: add const modifier for param 'bitmap'
+Message-ID: <Yv98imNv6BDTU0Bd@google.com>
+References: <20220816144557.30779-1-huangguangbin2@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 1/3] dt-bindings: net: ti: k3-am654-cpsw-nuss: Update
- bindings for J7200 CPSW5G
-Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org, linux@armlinux.org.uk,
-        vladimir.oltean@nxp.com, grygorii.strashko@ti.com, vigneshr@ti.com,
-        nsekhar@ti.com, netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kishon@ti.com
-References: <20220816060139.111934-1-s-vadapalli@ti.com>
- <20220816060139.111934-2-s-vadapalli@ti.com>
- <79e58157-f8f2-6ca8-1aa6-b5cf6c83d9e6@linaro.org>
- <31c3a5b0-17cc-ad7b-6561-5834cac62d3e@ti.com>
- <9c331cdc-e34a-1146-fb83-84c2107b2e2a@linaro.org>
- <176ab999-e274-e22a-97d8-31f655b16800@ti.com>
- <da82e71f-e32c-7adb-250e-0c80cc6e30bd@ti.com>
- <0ca78aad-2145-c88b-a26e-9ababa38df6e@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0ca78aad-2145-c88b-a26e-9ababa38df6e@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816144557.30779-1-huangguangbin2@huawei.com>
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 13:43, Siddharth Vadapalli wrote:
-
->>>> Anyway the location is not correct. Regardless if this is if-then or
->>>> allOf-if-then, put it just like example schema is suggesting.
->>>
->>> I will move the if-then statements to the lines above the
->>> "additionalProperties: false" line. Also, I will add an allOf for this
->>
->> I had a look at the example at [1] and it uses allOf after the
->> "additionalProperties: false" line. Would it be fine then for me to add
->> allOf and the single if-then statement below the "additionalProperties:
->> false" line? Please let me know.
->>
->> [1] -> https://github.com/devicetree-org/dt-schema/blob/mai/test/schemas/conditionals-allof-example.yaml
+On (22/08/16 22:45), Guangbin Huang wrote:
+> There is no modification for param bitmap in function
+> bitmap_string() and bitmap_list_string(), so add const
+> modifier for it.
 > 
-> Sorry, the correct link is:
-> https://github.com/devicetree-org/dt-schema/blob/main/test/schemas/conditionals-allof-example.yaml
+> Signed-off-by: Jian Shen <shenjian15@huawei.com>
+> Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
 
-You are referring to tests? I did not suggest that. Please put it in
-place like example schema is suggesting:
-
-https://elixir.bootlin.com/linux/v5.19/source/Documentation/devicetree/bindings/example-schema.yaml
-
-Best regards,
-Krzysztof
+FWIW
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>

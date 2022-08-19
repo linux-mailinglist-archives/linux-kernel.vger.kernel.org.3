@@ -2,73 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E48DA599E9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DB1599E8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349809AbiHSPhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 11:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
+        id S1349824AbiHSPhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 11:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349778AbiHSPhQ (ORCPT
+        with ESMTP id S1349817AbiHSPhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:37:16 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73232E7278
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:37:15 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id l20-20020a056e02067400b002dfa7256498so3442735ilt.4
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:37:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=94x0AlTYME7JTO0C9915l6NdfFJ2DgOCgcBChltqQWQ=;
-        b=DfRTs/AiqFTjISArTZqnXOppAUbBhDTDT6gWbgVsBZiVpmntFRu0QdqWaJ8b2AHuQr
-         0G5PbdxM3F8Urr83IdaO4NIY1i4KqbEwFQpWIHH2ecHz9JPDnu38UkTIO6+PSk+qcMQL
-         sOFcxltrS5m2y4ZVU4oeQChSAUUMhX6s1F3LnHrlWCJJAESw4x/TeYgKDqchjUD6GHq8
-         JP5YkHlgNfXJd8aA1Z9UV4K8wSL5qY4Tgklc3rVzpFQaznh8arfwKwZLn+XvByGid8up
-         ZAG+Cn8VtEl9DAPk5yjsE4TKoI66wpShufMbsZDXSh8JWcKaKi//u3szhMo/5cdhwrKg
-         27aA==
-X-Gm-Message-State: ACgBeo2ECyQBqA9B3d9rLdkOnzebVYAH/6rVISKsK4k9fa/L2FeDamdc
-        g8G0oVrXISoeKXG/DOcmSyUaVosAWWbTBZBKf+ey9pwa1556
-X-Google-Smtp-Source: AA6agR6REEtECibZlVkEcLW2dWMbYRRJEN7GzrH1VDNE6U1RZW/iX20V98CfBnA8jKHQNaBk0P/h0urd5PvrgC7OEU7xMZb0Mt6I
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3897:b0:346:83f6:9609 with SMTP id
- b23-20020a056638389700b0034683f69609mr3684945jav.40.1660923434842; Fri, 19
- Aug 2022 08:37:14 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 08:37:14 -0700
-In-Reply-To: <20220819110950.1479-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005544bd05e699dfe5@google.com>
-Subject: Re: [syzbot] WARNING: ODEBUG bug in __cancel_work
-From:   syzbot <syzbot+83672956c7aa6af698b3@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+        Fri, 19 Aug 2022 11:37:36 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15ACE831F;
+        Fri, 19 Aug 2022 08:37:35 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CEFC36601DC1;
+        Fri, 19 Aug 2022 16:37:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660923453;
+        bh=yPtWZ9dIeoSnNCWNTE1Z+qUHDWr0Ag6n3/7+J9VVv8s=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=YPyLcdiuSpMv6Qmg1v2M1IdOBzsVHjTCwxcqM/eVA5UQqG0DxkbKaMW4tTqCfl4Xt
+         GpmOwmCRrvzvkpqsZ9iFJo9+h/QofDgaI3+Qzd/7lT/EEVf/wBKaiuLstvdh2kPyeT
+         tmrybLzL/faEvfdmudArNQhS2hKEFxnKDVZs/BNIiSe+7TG1riqXhff15tUd1wfYxq
+         VT7nllVpMuW3ENKXdWS393D/qsgSoyQtHbzQcgSRWE2McS0CuurppiLmDHmC91455Z
+         WLl9a2zBjsqubtRWacvH2nAxEQvsFPetiivf5nTO/3Ikm7rNb9P37HKaPaTtQhhi+M
+         FQJbeXK/gDvgA==
+Message-ID: <47ce07adc73887b5afaf9815a78b793d0e9a6b54.camel@collabora.com>
+Subject: Re: [PATCH v1 2/3] media: cedrus: Set the platform driver data
+ earlier
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        linux-media@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     kernel@collabora.com,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        stable@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 19 Aug 2022 11:37:20 -0400
+In-Reply-To: <4418189.LvFx2qVVIh@jernej-laptop>
+References: <20220818203308.439043-1-nicolas.dufresne@collabora.com>
+         <20220818203308.439043-3-nicolas.dufresne@collabora.com>
+         <4418189.LvFx2qVVIh@jernej-laptop>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Le vendredi 19 ao=C3=BBt 2022 =C3=A0 06:17 +0200, Jernej =C5=A0krabec a =C3=
+=A9crit=C2=A0:
+> Dne =C4=8Detrtek, 18. avgust 2022 ob 22:33:07 CEST je Nicolas Dufresne na=
+pisal(a):
+> > From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> >=20
+> > The cedrus_hw_resume() crashes with NULL deference on driver probe if
+> > runtime PM is disabled because it uses platform data that hasn't been
+> > set up yet. Fix this by setting the platform data earlier during probe.
+>=20
+> Does it even work without PM? Maybe it would be better if Cedrus would se=
+lect=20
+> PM in Kconfig.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+I cannot comment myself on this, but it does not seem to invalidate this
+Dmitry's fix.
 
-Reported-and-tested-by: syzbot+83672956c7aa6af698b3@syzkaller.appspotmail.com
+>=20
+> Best regards,
+> Jernej
+>=20
+> >=20
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> > ---
+> >  drivers/staging/media/sunxi/cedrus/cedrus.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > b/drivers/staging/media/sunxi/cedrus/cedrus.c index
+> > 960a0130cd620..55c54dfdc585c 100644
+> > --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > @@ -448,6 +448,8 @@ static int cedrus_probe(struct platform_device *pde=
+v)
+> >  	if (!dev)
+> >  		return -ENOMEM;
+> >=20
+> > +	platform_set_drvdata(pdev, dev);
+> > +
+> >  	dev->vfd =3D cedrus_video_device;
+> >  	dev->dev =3D &pdev->dev;
+> >  	dev->pdev =3D pdev;
+> > @@ -521,8 +523,6 @@ static int cedrus_probe(struct platform_device *pde=
+v)
+> >  		goto err_m2m_mc;
+> >  	}
+> >=20
+> > -	platform_set_drvdata(pdev, dev);
+> > -
+> >  	return 0;
+> >=20
+> >  err_m2m_mc:
+>=20
+>=20
+>=20
+>=20
 
-Tested on:
-
-commit:         6c8f4797 Add linux-next specific files for 20220809
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=104e8e5b080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a5ae8cfa8d7075d1
-dashboard link: https://syzkaller.appspot.com/bug?extid=83672956c7aa6af698b3
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=106ced2d080000
-
-Note: testing is done by a robot and is best-effort only.

@@ -2,198 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D029D599340
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 05:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3897159934A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 05:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344625AbiHSC5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 22:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        id S1345330AbiHSDBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 23:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234988AbiHSC5c (ORCPT
+        with ESMTP id S1344539AbiHSDBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 22:57:32 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC0CD4765;
-        Thu, 18 Aug 2022 19:57:31 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27J2orfM022561;
-        Fri, 19 Aug 2022 02:57:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=eOWeYvnq+hhJ6pgEMpEp5YO8QoMaKAyHxvKs//mf80Y=;
- b=IYTMnKDmJ4CW1hVPP1PtdYAiTw/23EXiawBn8n3jWPsX4aFl73BOLYRyXoGjSQm+AfFO
- W7pageVwfsjjiqexdeMY2eF+kjE/Ctv1eM0OlGbdgKCrU1xJ9/sn1fIQi1kvyF3ncBwT
- /jspt5vui7MTr3kpO1jtFiOWOQJ8BLPdOZkyv4QqjgePMS513T4SVGkx1lqvC6vUyrSj
- A0/pi7WEJVPiMjhA+41UrC5IGYbOZ2EFi+2bySPVtaQG04PUtfk58Q6tY1Ezemx3VM9P
- XmT1UuayHFr1FW68d7NmAQeVA5e56rJfJkBf54NNgLW81EOE6gVWbuXKYu1cyR1feuTT Cg== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j21v5017c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 02:57:13 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27J2vCT3025982
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 02:57:12 GMT
-Received: from [10.110.112.204] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 18 Aug
- 2022 19:57:12 -0700
-Message-ID: <cd1c0266-a1be-f6c3-fbf3-0b75ecf4e3df@quicinc.com>
-Date:   Thu, 18 Aug 2022 19:57:11 -0700
+        Thu, 18 Aug 2022 23:01:02 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B18D5E81
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 20:00:59 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id f4so2512491qkl.7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 20:00:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc;
+        bh=SqzHyhYdK1V4JBswn3yCW3hnqnnsbZPFsQYu2RllJTY=;
+        b=MxC5bzVaVdTyRqcXd62vZSPNLWDIJzWO3NZV9BGtCGtukJbO3aGq8wTVM4NPvqGiXM
+         Gwc6h1B2pl0StsRb9qHw1ezYc+eQKsJIFXHOJkJLQK56Yba/yXH12A/qAvt/GHNn4Nya
+         D707Il8MyVwvmgV3dWYtEIyhdJZzXlXNrItW6N159s2XcDc/5O67GqerWAOl040sCh35
+         4zpUkW1pYDENJhKanUxKdo667PCS62uqKq4XmxXxPY4k3OmC4ujqf2Q1wmpbT3OoINdz
+         1+IaFPCzNeCdYyUh7KL9Q1cBjUgSUMCQLB6oYTt/hylhnCM1omtR0JcwyZbN6lcakGds
+         Oplg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc;
+        bh=SqzHyhYdK1V4JBswn3yCW3hnqnnsbZPFsQYu2RllJTY=;
+        b=SrE9V4j8SWzuO+2qXcL0uskNf6R52Vsfe4/hTi0BAT7MLrD3Oo+0ka9aQ5AYcZBbKJ
+         HivHPMEQWKOPKVSAG+IsKIUcqz0yayw96EYvXhrdI3zGBGVdctW4/ekHwXh8EiFylEP1
+         DVUELfXE2bUjPCv4mlKOtbSHcu/nzJY/qf5L8nSMazHLjtBSnT6ckTWqr4YOvBolqH/C
+         Ya8b/3sD7daZDubkftd1HOL9DGhlKteYI1BOawJiXRTR/JCyOmoPdHLJ2BZE6FVdL3hh
+         EovunsiqwhcHnQvXpNLBdgoLjeiRAygDuHvoouSV5wgMChQripel5Co8VNrzKBBxskq2
+         7yLg==
+X-Gm-Message-State: ACgBeo1aBV+VsDSlBwCcySFooAWnK707ykF0IquvqV5F1ErwgbkLfjeH
+        9gWumU1qLOOt3jPwZWx2MpNJtQ==
+X-Google-Smtp-Source: AA6agR7KQTVz3JYFrJLB5lhd2uJBBP000qbAVx/oSm/fFTrnVR58FRN6Fmbj1fOpDd+LLvaHPxpv8g==
+X-Received: by 2002:a05:620a:1d0e:b0:6ba:c419:81a1 with SMTP id dl14-20020a05620a1d0e00b006bac41981a1mr4066120qkb.526.1660878058827;
+        Thu, 18 Aug 2022 20:00:58 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id a18-20020ac844b2000000b0031ef69c9024sm2045363qto.91.2022.08.18.20.00.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 20:00:58 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 20:00:41 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+In-Reply-To: <20220818132421.6xmjqduempmxnnu2@box>
+Message-ID: <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com> <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com> <20220818132421.6xmjqduempmxnnu2@box>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [RFC PATCH v2 1/2] scsi: ufs: Add Multi-Circular Queue support
-To:     Manivannan Sadhasivam <mani@kernel.org>,
-        Can Guo <quic_cang@quicinc.com>
-CC:     <quic_nguyenb@quicinc.com>, <quic_xiaosenh@quicinc.com>,
-        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
-        <bvanassche@acm.org>, <beanhuo@micron.com>, <avri.altman@wdc.com>,
-        <linux-scsi@vger.kernel.org>, <kernel-team@android.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        jongmin jeong <jjmin.jeong@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1660213984-37793-1-git-send-email-quic_cang@quicinc.com>
- <1660213984-37793-2-git-send-email-quic_cang@quicinc.com>
- <20220812091012.GB4956@thinkpad>
-From:   "Asutosh Das (asd)" <quic_asutoshd@quicinc.com>
-In-Reply-To: <20220812091012.GB4956@thinkpad>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: oMKno0sqaVorl75j_usux10ICB_V-32r
-X-Proofpoint-GUID: oMKno0sqaVorl75j_usux10ICB_V-32r
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-18_18,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 mlxscore=0 adultscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208190010
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Manivannan,
+On Thu, 18 Aug 2022, Kirill A . Shutemov wrote:
+> On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
+> > 
+> > If your memory could be swapped, that would be enough of a good reason
+> > to make use of shmem.c: but it cannot be swapped; and although there
+> > are some references in the mailthreads to it perhaps being swappable
+> > in future, I get the impression that will not happen soon if ever.
+> > 
+> > If your memory could be migrated, that would be some reason to use
+> > filesystem page cache (because page migration happens to understand
+> > that type of memory): but it cannot be migrated.
+> 
+> Migration support is in pipeline. It is part of TDX 1.5 [1]. And swapping
+> theoretically possible, but I'm not aware of any plans as of now.
+> 
+> [1] https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
 
-Thanks for taking a look.
+I always forget, migration means different things to different audiences.
+As an mm person, I was meaning page migration, whereas a virtualization
+person thinks VM live migration (which that reference appears to be about),
+a scheduler person task migration, an ornithologist bird migration, etc.
 
-Sorry for the late reponse, was a bit caught up.
-
-On 8/12/2022 2:10 AM, Manivannan Sadhasivam wrote:
-> On Thu, Aug 11, 2022 at 03:33:03AM -0700, Can Guo wrote:
->> From: Asutosh Das <quic_asutoshd@quicinc.com>
->>
->> Adds MCQ support to UFS.
->>
->> The design uses shared tags across all the hw queues.
->> The queue-depth is chosen within range supported by controller &
->> device. It also takes EXT_IID into account while choosing the queue
->> depth.
->>
->> It supports default, read, poll and a dev cmd queue.
->> It enables MCQ after determining the queue-depth that the ufs
->> device supports.
->>
->> Co-developed-by: Can Guo <quic_cang@quicinc.com>
-> 
-> As per the Documentation, "Co-developed-by" should be followed by
-> "Signed-off-by" of the author. So you can just move this "Co-developed-by"
-> below Asutosh's S-o-b and that should be fine.
-> 
-Ok.
->> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
->> Signed-off-by: Can Guo <quic_cang@quicinc.com>
->> ---
->>   drivers/ufs/core/Makefile  |   2 +-
->>   drivers/ufs/core/ufs-mcq.c | 524 +++++++++++++++++++++++++++++++++++++++++++++
->>   drivers/ufs/core/ufshcd.c  | 394 ++++++++++++++++++++++++++--------
->>   include/ufs/ufs.h          |   5 +
->>   include/ufs/ufshcd.h       | 223 ++++++++++++++++++-
->>   include/ufs/ufshci.h       |  77 +++++++
->>   6 files changed, 1135 insertions(+), 90 deletions(-)
-> 
-> This patch is too big to review. Could you please split it into multiple
-> patches?
-> 
-The current changes make up a single functional base MCQ driver.
-Usually splitting into multiple changes are per feature based.
-Since this is a single feature, it makes sense to be separated out into 
-core and host only. Refer 7a3e97b0d - the base ufs driver.
+But you're an mm person too: you may have cited that reference in the
+knowledge that TDX 1.5 Live Migration will entail page migration of the
+kind I'm thinking of.  (Anyway, it's not important to clarify that here.)
 
 > 
+> > Some of these impressions may come from earlier iterations of the
+> > patchset (v7 looks better in several ways than v5).  I am probably
+> > underestimating the extent to which you have taken on board other
+> > usages beyond TDX and SEV private memory, and rightly want to serve
+> > them all with similar interfaces: perhaps there is enough justification
+> > for shmem there, but I don't see it.  There was mention of userfaultfd
+> > in one link: does that provide the justification for using shmem?
+> > 
+> > I'm afraid of the special demands you may make of memory allocation
+> > later on - surprised that huge pages are not mentioned already;
+> > gigantic contiguous extents? secretmem removed from direct map?
 > 
-> s/qd/depth
-> 
-Here queue depth is abbreviated to qd which I think is inline with what 
-the function does. So I prefer to keep it as qd.
+> The design allows for extension to hugetlbfs if needed. Combination of
+> MFD_INACCESSIBLE | MFD_HUGETLB should route this way. There should be zero
+> implications for shmem. It is going to be separate struct memfile_backing_store.
 
->> +
->> +	val = ufshcd_readl(hba, REG_UFS_MCQ_CFG);
-> 
-> 
->> +struct ufs_hw_queue {
->> +	void *sqe_base_addr;
-> 
-> s/sqe_base_addr/sqe_base
->  >> +	dma_addr_t sqe_dma_addr;
-> 
-> s/sqe_dma_addr/sqe_dma
-> 
->> +	struct cq_entry *cqe_base_addr;
-> 
-> s/cqe_base_addr/cqe_base
-> 
->> +	dma_addr_t cqe_dma_addr;
-> 
-> s/cqe_dma_addr/cqe_dma
-> 
-Existing ufs driver dma addresses have the suffix addr, Refer struct 
-ufshcd_lrb. So it is in line with the current naming convention.
+Last year's MFD_HUGEPAGE proposal would have allowed you to do it with
+memfd via tmpfs without needing to involve hugetlbfs; but you may prefer
+the determinism of hugetlbfs, relying on /proc/sys/vm/nr_hugepages etc.
 
->> +	u32 max_entries;
->> +	u32 id;
->> +
->> +	void __iomem *mcq_sq_hp;
->> +	void __iomem *mcq_sq_tp;
->> +	void __iomem *mcq_cq_hp;
->> +	void __iomem *mcq_cq_tp;
-[...]
+But I've yet to see why you want to involve this or that filesystem
+(with all its filesystem-icity suppressed) at all.  The backing store
+is host memory, and tmpfs and hugetlbfs just impose their own
+idiosyncrasies on how that memory is allocated; but I think you would
+do better to choose your own idiosyncrasies in allocation directly -
+you don't need a different "backing store" to choose between 4k or 2M
+or 1G or whatever allocations.
 
->> +			      MCQ_CFG_n(REG_SQATTR, i));
-> If you are writing to the same memory region, like in this case "mcq_base",
-> then you should be able to use _relaxed variants as the writes to the same
-> device memory are guaranteed to be in-order.
+tmpfs and hugetlbfs and page cache are designed around sharing memory:
+TDX is designed around absolutely not sharing memory; and the further
+uses which Sean foresees appear not to need it as page cache either.
+
+Except perhaps for page migration reasons.  It's somewhat incidental,  
+but of course page migration knows how to migrate page cache, so
+masquerading as page cache will give a short cut to page migration,
+when page migration becomes at all possible.
+
 > 
-Not sure if I understand this correctly. Let me check this internally 
-and get back.
-
-> This also removes the overhead associated with __iowmb included in writel.
+> I'm not sure secretmem is a fit here as we want to extend MFD_INACCESSIBLE
+> to be movable if platform supports it and secretmem is not migratable by
+> design (without direct mapping fragmentations).
 > 
-> Please audit this change throught the driver and use _relaxed variants where
-> applicable.
+> > Here's what I would prefer, and imagine much easier for you to maintain;
+> > but I'm no system designer, and may be misunderstanding throughout.
+> > 
+> > QEMU gets fd from opening /dev/kvm_something, uses ioctls (or perhaps
+> > the fallocate syscall interface itself) to allocate and free the memory,
+> > ioctl for initializing some of it too.  KVM in control of whether that
+> > fd can be read or written or mmap'ed or whatever, no need to prevent it
+> > in shmem.c, no need for flags, seals, notifications to and fro because
+> > KVM is already in control and knows the history.  If shmem actually has
+> > value, call into it underneath - somewhat like SysV SHM, and /dev/zero
+> > mmap, and i915/gem make use of it underneath.  If shmem has nothing to
+> > add, just allocate and free kernel memory directly, recorded in your
+> > own xarray.
 > 
+> I guess shim layer on top of shmem *can* work. I don't see immediately why
+> it would not. But I'm not sure it is right direction. We risk creating yet
+> another parallel VM with own rules/locking/accounting that opaque to
+> core-mm.
 
--asd
+You are already proposing a new set of rules, foreign to how tmpfs works
+for others.  You're right that KVM allocating large amounts of memory,
+opaque to core-mm, carries risk: and you'd be right to say that shmem.c
+provides some clues (security_vm_enough_memory checks, memcg charging,
+user_shm_lock accounting) on what to remember.
 
->> -- 
->> Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
->>
+But I'm not up to the job of being the one to police you there,
+and you don't want to be waiting on me either.
+
+To take a rather silly example: Ted just added chattr support to tmpfs,
+and it fits in well.  But I don't now want to have to decide whether
+"chattr +i" FS_IMMUTABLE_FL is or is not compatible with
+MEMFILE_F_USER_INACCESSIBLE.  They are from different worlds,
+and I'd prefer KVM to carry the weight of imposing INACCESSIBLE:
+which seems easily done if it manages the fd, without making the
+memory allocated to that fd accessible to those who hold the fd.
+
 > 
+> Note that on machines that run TDX guests such memory would likely be the
+> bulk of memory use. Treating it as a fringe case may bite us one day.
 
+Yes, I suspected that machines running TDX guests might well consume
+most of the memory that way, but glad(?) to hear it confirmed.
+
+I am not suggesting that this memory be treated as a fringe case, rather
+the reverse: a different case, not something to hide away inside shmem.c.
+
+Is there a notion that /proc/meminfo "Shmem:" is going to be a good hint
+of this usage?  Whether or not it's also included in "Shmem:", I expect
+that its different characteristics will deserve its own display.
+
+Hugh

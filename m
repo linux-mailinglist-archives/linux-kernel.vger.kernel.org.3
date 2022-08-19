@@ -2,145 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F255991C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 02:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D3F5991C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 02:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240806AbiHSAdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 20:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
+        id S242661AbiHSAfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 20:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiHSAdR (ORCPT
+        with ESMTP id S239622AbiHSAfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 20:33:17 -0400
-Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984A1FD00;
-        Thu, 18 Aug 2022 17:33:15 -0700 (PDT)
-Received: from 213.219.160.184.adsl.dyn.edpnet.net ([213.219.160.184] helo=deadeye)
-        by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1oOpwj-0000wB-3a; Fri, 19 Aug 2022 02:33:09 +0200
-Received: from ben by deadeye with local (Exim 4.96)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1oOpwi-000a0S-0N;
-        Fri, 19 Aug 2022 02:33:08 +0200
-Date:   Fri, 19 Aug 2022 02:33:08 +0200
-From:   Ben Hutchings <ben@decadent.org.uk>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, 1017425@bugs.debian.org,
-        =?iso-8859-1?Q?Martin-=C9ric?= Racine <martin-eric.racine@iki.fi>,
-        stable@vger.kernel.org, regressions@lists.linux.dev,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Subject: [PATCH] x86/speculation: Avoid LFENCE in FILL_RETURN_BUFFER on CPUs
- that lack it
-Message-ID: <Yv7aRJ/SvVhSdnSB@decadent.org.uk>
+        Thu, 18 Aug 2022 20:35:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2413FD7407;
+        Thu, 18 Aug 2022 17:35:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD7A960A2C;
+        Fri, 19 Aug 2022 00:35:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27A1DC43144;
+        Fri, 19 Aug 2022 00:35:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660869313;
+        bh=Jj6QaMzYytoQyWIf74AXya0oZmQ9hNahkdCnnbw4nLk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ISYnhaLdHw0CetX3806/kgbLf5Ku5YvEFDUTn61y+gMIDMGKEV/wjxNoxXoBUda23
+         bNyrs4AzWMqIGI6x4du1h3jVB0LfcrUj1Iog3gUa3GFmZQt8VoYxC+NXukPdrbqzdP
+         Vir/Cn37g7UFzGU/di14TTTGaLsxECu2PRQSEuCofHJ5LCajkiKvdHp88Q9uBwq8td
+         qS8/hdrkNsmAVodpTr/Yh2+5xc5Y1WajhyyMso2uTNSAY5aebaZ7kL9W+8cji5pWGP
+         mfePQ7OeUPG8pISYVUNG2eie4/yzhS4wyqoqcOvu/zN9fuiYdwh+1Wtjcg/w9ud0YQ
+         kQ8qukYpH53wg==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-11ba6e79dd1so3614415fac.12;
+        Thu, 18 Aug 2022 17:35:13 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0PyTEfcQUZWE5OihP6dCg2hEuA0eI4AfpdtSL3VKmX2Qobpqz+
+        88RUPGnpGyuGXnO97I/3wvJL4LPtYOQf/sTB53w=
+X-Google-Smtp-Source: AA6agR7G9Tvye6mFaZwo5kwGfhqNYR9Y0qsd6PWGmcMkNJCGqp08gjlaI3/OWVhmguVjf2VJB/PV0gmkcC5p2OLG5X0=
+X-Received: by 2002:a05:6870:8a13:b0:10e:7c08:36ba with SMTP id
+ p19-20020a0568708a1300b0010e7c0836bamr5327167oaq.19.1660869312123; Thu, 18
+ Aug 2022 17:35:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eT0M3T1LYdQ/WIvW"
-Content-Disposition: inline
-X-SA-Exim-Connect-IP: 213.219.160.184
-X-SA-Exim-Mail-From: ben@decadent.org.uk
-X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220816012701.561435-3-guoren@kernel.org> <202208181520.fYQOePu6-lkp@intel.com>
+In-Reply-To: <202208181520.fYQOePu6-lkp@intel.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 19 Aug 2022 08:34:59 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRA-UfM17jxTn3_Mdf3Xy5Sw9EdhEsA6i6T4veyowYxrg@mail.gmail.com>
+Message-ID: <CAJF2gTRA-UfM17jxTn3_Mdf3Xy5Sw9EdhEsA6i6T4veyowYxrg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] riscv: kexec: Implement crash_smp_send_stop with
+ percpu crash_save_cpu
+To:     kernel test robot <lkp@intel.com>
+Cc:     xianting.tian@linux.alibaba.com, palmer@dabbelt.com,
+        heiko@sntech.de, llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, liaochang1@huawei.com,
+        mick@ics.forth.gr, jszhang@kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thx, It's a bug from !SMP. I would fixup it in the next version.
 
---eT0M3T1LYdQ/WIvW
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Aug 18, 2022 at 3:58 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi,
+>
+> I love your patch! Yet something to improve:
+>
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v6.0-rc1 next-20220818]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-kexec-Support-crash_save-percpu-and-machine_kexec_mask_interrupts/20220816-144442
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+> config: riscv-randconfig-r035-20220818 (https://download.01.org/0day-ci/archive/20220818/202208181520.fYQOePu6-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install riscv cross compiling tool for clang build
+>         # apt-get install binutils-riscv64-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/0abdaf7e1f44634e1cee484e3cf01b7e8c851950
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review guoren-kernel-org/riscv-kexec-Support-crash_save-percpu-and-machine_kexec_mask_interrupts/20220816-144442
+>         git checkout 0abdaf7e1f44634e1cee484e3cf01b7e8c851950
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+> >> arch/riscv/kernel/machine_kexec.c:217:7: error: call to undeclared function 'smp_crash_stop_failed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>            WARN(smp_crash_stop_failed(),
+>                 ^
+>    1 error generated.
+>
+>
+> vim +/smp_crash_stop_failed +217 arch/riscv/kernel/machine_kexec.c
+>
+>    193
+>    194  /*
+>    195   * machine_kexec - Jump to the loaded kimage
+>    196   *
+>    197   * This function is called by kernel_kexec which is called by the
+>    198   * reboot system call when the reboot cmd is LINUX_REBOOT_CMD_KEXEC,
+>    199   * or by crash_kernel which is called by the kernel's arch-specific
+>    200   * trap handler in case of a kernel panic. It's the final stage of
+>    201   * the kexec process where the pre-loaded kimage is ready to be
+>    202   * executed. We assume at this point that all other harts are
+>    203   * suspended and this hart will be the new boot hart.
+>    204   */
+>    205  void __noreturn
+>    206  machine_kexec(struct kimage *image)
+>    207  {
+>    208          struct kimage_arch *internal = &image->arch;
+>    209          unsigned long jump_addr = (unsigned long) image->start;
+>    210          unsigned long first_ind_entry = (unsigned long) &image->head;
+>    211          unsigned long this_cpu_id = __smp_processor_id();
+>    212          unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
+>    213          unsigned long fdt_addr = internal->fdt_addr;
+>    214          void *control_code_buffer = page_address(image->control_code_page);
+>    215          riscv_kexec_method kexec_method = NULL;
+>    216
+>  > 217          WARN(smp_crash_stop_failed(),
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
 
-=46rom: Ben Hutchings <benh@debian.org>
 
-The mitigation for PBRSB includes adding LFENCE instructions to the
-RSB filling sequence.  However, RSB filling is done on some older CPUs
-that don't support the LFENCE instruction.
 
-Define and use a BARRIER_NOSPEC macro which makes the LFENCE
-conditional on X86_FEATURE_LFENCE_RDTSC, like the barrier_nospec()
-macro defined for C code in <asm/barrier.h>.
-
-Reported-by: Martin-=C9ric Racine <martin-eric.racine@iki.fi>
-References: https://bugs.debian.org/1017425
-Cc: stable@vger.kernel.org
-Cc: regressions@lists.linux.dev
-Cc: Daniel Sneddon <daniel.sneddon@linux.intel.com>
-Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Fixes: 2b1299322016 ("x86/speculation: Add RSB VM Exit protections")
-Fixes: ba6e31af2be9 ("x86/speculation: Add LFENCE to RSB fill sequence")
-Signed-off-by: Ben Hutchings <benh@debian.org>
----
-Re-sending this with properly matched From address and server.
-Apologies if you got 2 copies.
-
-Ben.
-
- arch/x86/include/asm/nospec-branch.h | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/no=
-spec-branch.h
-index e64fd20778b6..b1029fd88474 100644
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -34,6 +34,11 @@
-=20
- #define RSB_CLEAR_LOOPS		32	/* To forcibly overwrite all entries */
-=20
-+#ifdef __ASSEMBLY__
-+
-+/* Prevent speculative execution past this barrier. */
-+#define BARRIER_NOSPEC ALTERNATIVE "", "lfence", X86_FEATURE_LFENCE_RDTSC
-+
- /*
-  * Google experimented with loop-unrolling and this turned out to be
-  * the optimal version - two calls, each with their own speculation
-@@ -62,9 +67,7 @@
- 	dec	reg;				\
- 	jnz	771b;				\
- 	/* barrier for jnz misprediction */	\
--	lfence;
--
--#ifdef __ASSEMBLY__
-+	BARRIER_NOSPEC;
-=20
- /*
-  * This should be used immediately before an indirect jump/call. It tells
-@@ -138,7 +141,7 @@
- 	int3
- .Lunbalanced_ret_guard_\@:
- 	add $(BITS_PER_LONG/8), %_ASM_SP
--	lfence
-+	BARRIER_NOSPEC
- .endm
-=20
-  /*
-
---eT0M3T1LYdQ/WIvW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmL+2j0ACgkQ57/I7JWG
-EQlPgA/+JoIOscO32lmTqexszlIn0F8EUMhfZfCh6h3mSgt0w8B1r4oBmEZTs9x5
-HOHjeG0ZtdQvTKm10bCn2eCQq9xhH35m/OSNoysS64lFsQLyKmvXoV2U36nvxSnu
-S7Dd0pt1Mgxs6o7+l/Gxhd1Jva6JagwjZjcOe3cPmcMtgbBZfPsmAofkSbq/89u4
-iBeUm7YE5i7zRB5DZWHbMs+GIEGdyRplu1u7pYxRSg9XQg/zSdNdS02c5v8/PLx2
-NgTGVR+t858WG791oTNXqkV1SG1s3LNuimJej155QCxyMNrJgAqre713cv9x5uEA
-tU/VRZdPoYkee/L6d31p77C9+BV1PD2wy1pUFVBEvXV7cbDXvpXNjb5ZRAHPSBIa
-1LBP1jrvCfeq7r4qQPIjIU5T8mU6ClJKkHLnf0ZjFwDvyNOEHy9dlH5ShjYy/oFX
-Wedrbb7Y/sk39fxF5km0ns8gL/s689HbT1quEbqE2NhjfurOlSTuejwE4kZv8+O9
-OTvzIPOoM0rjNZOWKn89zLwSygZxJeEczWiA6dml6vuqdU9p0TAI5b7DCvbcr71J
-KziLwMJAGHIik+FYKS34tKsQaHTUIIbgNV3H1GLZnQrcYH0zfSDvO0q+X8bVcSWB
-5k23Kkd4wwcu/WEVBSAIkiMoHmQrxUauVOcIDBXOoi0je9B67kQ=
-=/q8V
------END PGP SIGNATURE-----
-
---eT0M3T1LYdQ/WIvW--
+-- 
+Best Regards
+ Guo Ren

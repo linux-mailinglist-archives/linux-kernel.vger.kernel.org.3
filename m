@@ -2,189 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CB259979D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3DA35997A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347647AbiHSIoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        id S1347635AbiHSIod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347451AbiHSIoN (ORCPT
+        with ESMTP id S1347626AbiHSIo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:44:13 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D205EA2238;
-        Fri, 19 Aug 2022 01:44:10 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 6D8EF5CAE2;
-        Fri, 19 Aug 2022 08:44:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660898649; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H5tXJcZv4COItgEylzDrHIVXxkXoVVSo3B0NiZmuD0k=;
-        b=qb45fxhS/BdpsC6AF0gXSI+sqVVC915+dS8ajwor8QZhNex+OPJyMlRibLAnGOMzQbpZSF
-        3fnE1tuZNeeLCRrMeAVnUV+wpFJEtOOcGKX7haW6j7Vd1m4Ibisq8FHYH4dFo9g+13ZeQB
-        eNcH+W8qOOxBKF2yfFqLSHOugLF0Hx8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660898649;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H5tXJcZv4COItgEylzDrHIVXxkXoVVSo3B0NiZmuD0k=;
-        b=uMKrchLuLw4WKN+ao/oCGvqDeSmpea7YmjYBkl55OtKh4/IWAf2jixCO3LaMJXx0hSfGtb
-        kvSD2VOzBDEy+FDw==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DAF1D2C141;
-        Fri, 19 Aug 2022 08:44:08 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 51297A0635; Fri, 19 Aug 2022 10:44:08 +0200 (CEST)
-Date:   Fri, 19 Aug 2022 10:44:08 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-Cc:     Jan Kara <jack@suse.cz>, Baokun Li <libaokun1@huawei.com>,
-        linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, lczerner@redhat.com, enwlinux@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yebin10@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH 2/2] ext4: add inode table check in __ext4_get_inode_loc
- to aovid possible infinite loop
-Message-ID: <20220819084408.vh6hdgs2racglg5g@quack3>
-References: <20220817132701.3015912-1-libaokun1@huawei.com>
- <20220817132701.3015912-3-libaokun1@huawei.com>
- <20220817143138.7krkxzoa3skruiyx@quack3>
- <20220818144353.q6cq3b7huwkopk5b@riteshh-domain>
- <20220818172316.jfsjb3efohml3yt3@quack3>
- <20220818231541.bgxdistuf7hnepto@riteshh-domain>
+        Fri, 19 Aug 2022 04:44:27 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21007B7EEC;
+        Fri, 19 Aug 2022 01:44:25 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27J8Gu3L022264;
+        Fri, 19 Aug 2022 08:44:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=+v9nT8ZKH5nQZXkGNwDvqukouuQUqGry8Hdy6T8DPAY=;
+ b=kB/tv/IzObAQjKJ5pJkzJHnejJaIoaO9+UqvSRi1IDf/wQ/9k2ye6IjbDqFPTbYvwEh2
+ N4HgycFDsUSWUT1eMrMi/8YIly4nO87AYmSEX5/h5eIitLo5s70RuprbvumxKzcoGVdK
+ KCNkIrgRYZevIBSD/QLzGZoUHDmmpUZovLT04kY6EIoe/G5uLv9VZcES4NJnADVCI+js
+ +C4sWTLIs+CNY1l/HmPtwfqB64n9laRDA7tKT3Wux0vLUtchsiRl22oiJvcL2hv90dDF
+ tTJKvIDifu3u1pYZVuDfkaR3ykLX6PfZUU/QMtkxpqV99FKBAY2eKfhUpvnKwxxVyg5Z Gg== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j26vd8m93-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Aug 2022 08:44:17 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27J8KwLh024220;
+        Fri, 19 Aug 2022 08:44:15 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3hx3k957kt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Aug 2022 08:44:15 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27J8iVWo25297284
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Aug 2022 08:44:31 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D68B7AE045;
+        Fri, 19 Aug 2022 08:44:11 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B7073AE053;
+        Fri, 19 Aug 2022 08:44:10 +0000 (GMT)
+Received: from [9.171.49.238] (unknown [9.171.49.238])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 19 Aug 2022 08:44:10 +0000 (GMT)
+Message-ID: <0d7d055d-f323-acba-cb79-f859b5e182b4@linux.ibm.com>
+Date:   Fri, 19 Aug 2022 10:44:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818231541.bgxdistuf7hnepto@riteshh-domain>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] KVM: s390: pci: Hook to access KVM lowlevel from VFIO
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>, mjrosato@linux.ibm.com
+Cc:     rdunlap@infradead.org, linux-kernel@vger.kernel.org, lkp@intel.com,
+        borntraeger@linux.ibm.com, farman@linux.ibm.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org, gor@linux.ibm.com,
+        hca@linux.ibm.com, frankja@linux.ibm.com
+References: <20220818164652.269336-1-pmorel@linux.ibm.com>
+ <2ae0bf9abffe2eb3eb2fb3f84873720d39f73d4d.camel@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <2ae0bf9abffe2eb3eb2fb3f84873720d39f73d4d.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: aPDdiq_Kpt3i5btmzuGdKT24gvc8NZin
+X-Proofpoint-GUID: aPDdiq_Kpt3i5btmzuGdKT24gvc8NZin
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-19_04,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ suspectscore=0 impostorscore=0 malwarescore=0 adultscore=0 spamscore=0
+ lowpriorityscore=0 mlxscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208190033
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 19-08-22 04:45:41, Ritesh Harjani (IBM) wrote:
-> On 22/08/18 07:23PM, Jan Kara wrote:
-> > On Thu 18-08-22 20:13:53, Ritesh Harjani (IBM) wrote:
-> > > On 22/08/17 04:31PM, Jan Kara wrote:
-> > > > On Wed 17-08-22 21:27:01, Baokun Li wrote:
-> > > > > In do_writepages, if the value returned by ext4_writepages is "-ENOMEM"
-> > > > > and "wbc->sync_mode == WB_SYNC_ALL", retry until the condition is not met.
-> > > > >
-> > > > > In __ext4_get_inode_loc, if the bh returned by sb_getblk is NULL,
-> > > > > the function returns -ENOMEM.
-> > > > >
-> > > > > In __getblk_slow, if the return value of grow_buffers is less than 0,
-> > > > > the function returns NULL.
-> > > > >
-> > > > > When the three processes are connected in series like the following stack,
-> > > > > an infinite loop may occur:
-> > > > >
-> > > > > do_writepages					<--- keep retrying
-> > > > >  ext4_writepages
-> > > > >   mpage_map_and_submit_extent
-> > > > >    mpage_map_one_extent
-> > > > >     ext4_map_blocks
-> > > > >      ext4_ext_map_blocks
-> > > > >       ext4_ext_handle_unwritten_extents
-> > > > >        ext4_ext_convert_to_initialized
-> > > > >         ext4_split_extent
-> > > > >          ext4_split_extent_at
-> > > > >           __ext4_ext_dirty
-> > > > >            __ext4_mark_inode_dirty
-> > > > >             ext4_reserve_inode_write
-> > > > >              ext4_get_inode_loc
-> > > > >               __ext4_get_inode_loc		<--- return -ENOMEM
-> > > > >                sb_getblk
-> > > > >                 __getblk_gfp
-> > > > >                  __getblk_slow			<--- return NULL
-> > > > >                   grow_buffers
-> > > > >                    grow_dev_page		<--- return -ENXIO
-> > > > >                     ret = (block < end_block) ? 1 : -ENXIO;
-> > > > >
-> > > > > In this issue, bg_inode_table_hi is overwritten as an incorrect value.
-> > > > > As a result, `block < end_block` cannot be met in grow_dev_page.
-> > > > > Therefore, __ext4_get_inode_loc always returns '-ENOMEM' and do_writepages
-> > > > > keeps retrying. As a result, the writeback process is in the D state due
-> > > > > to an infinite loop.
-> > > > >
-> > > > > Add a check on inode table block in the __ext4_get_inode_loc function by
-> > > > > referring to ext4_read_inode_bitmap to avoid this infinite loop.
-> > > > >
-> > > > > Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> > > >
-> > > > Thanks for the fixes. Normally, we check that inode table is fine in
-> > > > ext4_check_descriptors() (and those checks are much stricter) so it seems
-> > > > unnecessary to check it again here. I understand that in your case it was
-> > > > resize that corrupted the group descriptor after the filesystem was mounted
-> > > > which is nasty but there's much more metadata that can be corrupted like
-> > > > this and it's infeasible to check each metadata block before we use it.
-> > > >
-> > > > IMHO a proper fix to this class of issues would be for sb_getblk() to
-> > > > return proper error so that we can distinguish ENOMEM from other errors.
-> > > > But that will be a larger undertaking...
-> > > >
-> > >
-> > > Hi Jan,
-> > >
-> > > How about adding a wrapper around sb_getblk() which will do the basic block
-> > > bound checks for ext4. Then we can carefully convert all the callers of
-> > > sb_getblk() in ext4 to call ext4_sb_getblk().
-> > >
-> > > ext4_sb_getblk() will then return either of below -
-> > > 1. ERR_PTR(-EFSCORRUPTED)
-> > > 2. NULL
-> > > 3. struct buffer_head*
-> > >
-> > > It's caller can then implement the proper error handling.
-> > >
-> > > Folding a small patch to implement the simple bound check. Is this the right
-> > > approach?
-> >
-> > Yep, looks sensible to me. Maybe I'd just make ext4_sb_getblk() return bh
-> > or ERR_PTR so something like ERR_PTR(-EFSCORRUPTED), ERR_PTR(-ENXIO), or bh
-> > pointer.
-> 
-> Sure, Thanks Jan. Will do that once I clear some confusion w.r.t
-> 	"start_blk <= le32_to_cpu(sbi->s_es->s_first_data_block)"
-> 
-> At some places this is checked with "<= s_first_data_block"
-> 	e.g. fs/ext4/ialloc.c, ext4_sb_block_valid()
-> 
-> while at some places I see it to be "< s_first_data_block"
-> 	e.g. fs/ext4/mballoc.c, fs/ext4/mmp.c
 
-Well, superblock is stored at s_first_data_block offset. So strictly
-speaking the check should be < s_first_data_block because that block is a
-valid filesystem block. OTOH in most places you are not supposed to look at
-block with the superblock so stricter <= s_first_data_block is fine.
 
-> Will spend sometime to understand why the difference and if there is anything
-> I might miss here for off-by-one check.
+On 8/19/22 09:14, Niklas Schnelle wrote:
+> On Thu, 2022-08-18 at 18:46 +0200, Pierre Morel wrote:
+>> We have a cross dependency between KVM and VFIO when using
+>> s390 vfio_pci_zdev extensions for PCI passthrough
+>> To be able to keep both subsystem modular we add a registering
+>> hook inside the S390 core code.
+>>
+>> This fixes a build problem when VFIO is built-in and KVM is built
+>> as a module.
+>>
+>> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+>> Fixes: 09340b2fca007 ("KVM: s390: pci: add routines to start/stop inter..")
 > 
-> Adding more to the confusion would be difference w.r.t blocksize = 1024 v/s
-> other blocksizes. Based on the blocksize value I guess, s_first_data_block can
-> be different (0/1??). Or can bigalloc can change this...
-> ...Will look more into this.
+> Please don't shorten the Fixes tag, the subject line is likely also
+> checked by some automated tools. It's okay for this line to be over the
+> column limit and checkpatch.pl --strict also accepts it.
+> 
 
-That's what we discussed on our ext4 call yesterday. Normally,
-s_first_data_block is 1 for blocksize 1k and 0 for blocksize > 1k. So for
-1k blocksize the first group begins with block 1 and not block 0.
-Effectively the whole filesystem is shifted by 1 block with 1k blocksize.
-When bigalloc comes to play and blocksize is 1k, things are even more
-interesting because there, the first group starts at block 0 while
-s_first_data_block is still 1, because superblock is stored in block 1 of
-cluster 0.
+OK
 
-								Honza
+>> Cc: <stable@vger.kernel.org>
+>> ---
+>>   arch/s390/include/asm/kvm_host.h | 17 ++++++-----------
+>>   arch/s390/kvm/pci.c              | 10 ++++++----
+>>   arch/s390/pci/Makefile           |  2 ++
+>>   arch/s390/pci/pci_kvm_hook.c     | 11 +++++++++++
+>>   drivers/vfio/pci/vfio_pci_zdev.c |  8 ++++++--
+>>   5 files changed, 31 insertions(+), 17 deletions(-)
+>>   create mode 100644 arch/s390/pci/pci_kvm_hook.c
+>>
+>>
+> ---8<---
+>>   
+>>   	kvm_put_kvm(kvm);
+>>   }
+>> -EXPORT_SYMBOL_GPL(kvm_s390_pci_unregister_kvm);
+>>   
+>>   void kvm_s390_pci_init_list(struct kvm *kvm)
+>>   {
+>> @@ -678,6 +678,8 @@ int kvm_s390_pci_init(void)
+>>   
+>>   	spin_lock_init(&aift->gait_lock);
+>>   	mutex_init(&aift->aift_lock);
+>> +	zpci_kvm_hook.kvm_register = kvm_s390_pci_register_kvm;
+>> +	zpci_kvm_hook.kvm_unregister = kvm_s390_pci_unregister_kvm;
+>>   
+>>   	return 0;
+>>   }
+>> diff --git a/arch/s390/pci/Makefile b/arch/s390/pci/Makefile
+>> index bf557a1b789c..c02dbfb415d9 100644
+>> --- a/arch/s390/pci/Makefile
+>> +++ b/arch/s390/pci/Makefile
+>> @@ -7,3 +7,5 @@ obj-$(CONFIG_PCI)	+= pci.o pci_irq.o pci_dma.o pci_clp.o pci_sysfs.o \
+>>   			   pci_event.o pci_debug.o pci_insn.o pci_mmio.o \
+>>   			   pci_bus.o
+>>   obj-$(CONFIG_PCI_IOV)	+= pci_iov.o
+>> +
+>> +obj-y += pci_kvm_hook.o
+> 
+> I thought we wanted to compile this only for CONFIG_PCI?
+
+Ah sorry, that is indeed what I understood with Matt but then I 
+misunderstood your own answer from yesterday.
+I change to
+obj-$(CONFIG_PCI) += pci_kvm_hook.o
+
+> 
+>> diff --git a/arch/s390/pci/pci_kvm_hook.c b/arch/s390/pci/pci_kvm_hook.c
+>> new file mode 100644
+>> index 000000000000..ff34baf50a3e
+> ---8<---
+> 
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Pierre Morel
+IBM Lab Boeblingen

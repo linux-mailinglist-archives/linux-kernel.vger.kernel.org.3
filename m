@@ -2,62 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEF3599BAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94CC599BAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348383AbiHSMNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
+        id S1348942AbiHSMPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348495AbiHSMNK (ORCPT
+        with ESMTP id S1348748AbiHSMP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:13:10 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22C9100F2D
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:13:08 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4M8LHm2YrCz9tKP;
-        Fri, 19 Aug 2022 12:13:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1660911188; bh=plrV05ojK26Wf/yBYf8XRy+dwdDvjPN7FxVlOsShQQA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FJ03wUpv4yvEWrQXGKyKMhg600RJxxGWDQB8RYdxfMJcx0+5mp8kwn44cZmcSZJ0i
-         IWuViaCOEZ8CcR4fWz5JNPkSel+O+k/04z9tXIc7gbjfQCTtLR3XBWc3k2/b4aq5fQ
-         6RrwxBIHbREQjdM/Gbo5jCBMZPiDDYGlF2+n5KVI=
-X-Riseup-User-ID: 883DDC69CA82767B5BE2DB0AD100FF4FFB80C35EBC2D4B584B6F27B16357C36F
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4M8LHk20KVz5vcM;
-        Fri, 19 Aug 2022 12:13:05 +0000 (UTC)
-Message-ID: <a588de9f-958a-fce9-b4d3-2ea45d092b44@riseup.net>
-Date:   Fri, 19 Aug 2022 09:13:04 -0300
+        Fri, 19 Aug 2022 08:15:26 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AB0FBA4D
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:15:22 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id qn6so8419117ejc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:15:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=xXVWZhjqeAkNlLD6nIdsDN330sAu6yXoB2pmNWkfjq8=;
+        b=6rZKvojny92lNHiwCXBDB7+e4XLb0SUSI8xNptuHRv3mpR4VbPEopPQKFCoCaH9ZKD
+         5RulSf2FQdeaBH67QhgtpUFRiiAlEgE1eARGx2G4lAqES3VPgaMnY4jXjKRC8ZfVPtaI
+         JWBz2VNlnT9K+wmrc+1oEyF2SjD0xiVh4Ng+pYdHH3TBCqsjQnplzoGXjV1zEabF2uGZ
+         6Vwxr0mmTY79eJmqzd4sJr8Xoj5cHVNz/qThKqkptWP+CK37XRQj2kn5IKRovEMSiF7i
+         Oe2FKbkKWMuILnmksVxVZQ7A7OhS1tn0HyvnRm/L6uNekVcnY20ZWh/2FDqeaJitkccp
+         Gdog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=xXVWZhjqeAkNlLD6nIdsDN330sAu6yXoB2pmNWkfjq8=;
+        b=uXKzm4JuTATmegw0NOzP9JG0M7pxCwCO/lwW72p0RecuyZFx/rWazXJgQO+aLK0w1w
+         g6gV7i2FatLac/e1Jl8EZwnarm5HoS8VbslWbCQ+QJyCC9PT4ABeKAjwyMhnJ+tR8VnS
+         PnBQTeYq1825QNqXaoctxboNpFeVviXTFcuONr84MzQBPd1Ou28r0UTf7MsE8tOspPf7
+         ar7r/yCTIzhOgECoBzjP5ENad9VSANEoqLDuttlvvg2DrVJ4elfniV7Mi4uHMBugSKBG
+         hplO139In9XozrkwAOrZbDk3ydYFS9p8BiBbO4zKbK9S3TB9Q3A/gI27qABygbCVVjLU
+         ov6g==
+X-Gm-Message-State: ACgBeo3qlZgs70SfxTT7wWKO4VcQnrFjTNcxDMO8ZQtoZdksgjoBWA3Y
+        XKPjuUMw7frYxl77UKtyzc4E7lh8kwvsFhiKOzU=
+X-Google-Smtp-Source: AA6agR7GtKamrSDVG3lUy3KiEGlgb6UL9opr0vEUmz8GOGyER6fJlE6kBDeerafsCu3XHGzhZJ83tQ==
+X-Received: by 2002:a17:906:98c9:b0:730:a23e:2785 with SMTP id zd9-20020a17090698c900b00730a23e2785mr4686376ejb.622.1660911320892;
+        Fri, 19 Aug 2022 05:15:20 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906218a00b0072af2460cd6sm2260910eju.30.2022.08.19.05.15.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 05:15:20 -0700 (PDT)
+Message-ID: <c9bc0382-fd0d-c596-5f61-365a8e0cbb21@blackwall.org>
+Date:   Fri, 19 Aug 2022 15:15:19 +0300
 MIME-Version: 1.0
-Subject: Re: [BUG][5.20] refcount_t: underflow; use-after-free
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH net v2] net: neigh: don't call kfree_skb() under
+ spin_lock_irqsave()
 Content-Language: en-US
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     Melissa Wen <mwen@igalia.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-References: <CABXGCsM58-8fxVKAVkwsshg+33B_1_t_WesG160AtVBe1ZvKiw@mail.gmail.com>
- <be6f1ce4-46b1-7a80-230c-b99f203ce8ad@riseup.net>
- <CABXGCsMFYnE+Wn2EAWuC8DSVj=TVprj6ABZwRK-hXcw-1hnMyw@mail.gmail.com>
- <CABXGCsMpGabZ32j_ObEHa_har2W8M8RWuqnx3d=yJT2NX_ztNg@mail.gmail.com>
- <20220817160751.moqhebkiuiydraka@mail.igalia.com>
- <CABXGCsOM9An-+EeaGWm0OA1FN2p94=BF210Lhy0tiO6ye9onWQ@mail.gmail.com>
- <dd2ee57a-2ab2-db94-36d9-8faced18fe61@riseup.net>
- <CABXGCsMc_D_iJ-r-_s8q13Vq6dgfQg1tnp-0aojfv5Q8izTrfw@mail.gmail.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <CABXGCsMc_D_iJ-r-_s8q13Vq6dgfQg1tnp-0aojfv5Q8izTrfw@mail.gmail.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     den@openvz.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org
+References: <20220819044724.961356-1-yangyingliang@huawei.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20220819044724.961356-1-yangyingliang@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,115 +77,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/17/22 17:57, Mikhail Gavrilov wrote:
-> On Wed, Aug 17, 2022 at 11:43 PM Maíra Canal <mairacanal@riseup.net> wrote:
->>
->> Hi Mikhail,
->>
->> Looks like 45ecaea738830b9d521c93520c8f201359dcbd95 ("drm/sched: Partial
->> revert of 'drm/sched: Keep s_fence->parent pointer'") introduced the
->> error. Try reverting it and check if the use-after-free still happens.
+On 19/08/2022 07:47, Yang Yingliang wrote:
+> It is not allowed to call kfree_skb() from hardware interrupt
+> context or with interrupts being disabled. So add all skb to
+> a tmp list, then free them after spin_unlock_irqrestore() at
+> once.
 > 
-> Thanks, but unfortunately, this did not lead to the expected result.
-> Again happens use-after-free in an incomprehensible context.
-> From the new: added warning "suspicious RCU usage" but it looks like
-> it is completely not related to the use-after-free issue.
+> Fixes: 66ba215cb513 ("neigh: fix possible DoS due to net iface start/stop loop")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  net/core/neighbour.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
+> diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+> index 5b669eb80270..d21c7de1ff1a 100644
+> --- a/net/core/neighbour.c
+> +++ b/net/core/neighbour.c
+> @@ -309,14 +309,17 @@ static int neigh_del_timer(struct neighbour *n)
+>  
+>  static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
+>  {
+> +	struct sk_buff_head tmp;
+>  	unsigned long flags;
+>  	struct sk_buff *skb;
+>  
+> +	skb_queue_head_init(&tmp);
+>  	spin_lock_irqsave(&list->lock, flags);
+>  	skb = skb_peek(list);
+>  	while (skb != NULL) {
+>  		struct sk_buff *skb_next = skb_peek_next(skb, list);
+>  		struct net_device *dev = skb->dev;
+> +
+>  		if (net == NULL || net_eq(dev_net(dev), net)) {
+>  			struct in_device *in_dev;
+>  
+> @@ -328,11 +331,16 @@ static void :q
 
-Hi Mikhail,
+(struct sk_buff_head *list, struct net *net)
+>  			__skb_unlink(skb, list);
+>  
+>  			dev_put(dev);
+> -			kfree_skb(skb);
+> +			dev_kfree_skb_irq(skb);
 
-Could you please specify the steps to reproduce this use-after-free? I
-will try to reproduce it on the RX5700 XT and bisect the issue.
+this is still doing dev_kfree_skb_irq() instead of attaching the skb to tmp, in fact
+tmp seems unused so the loop below does nothing
 
-Best Regards,
-- Maíra Canal
+>  		}
+>  		skb = skb_next;
+>  	}
+>  	spin_unlock_irqrestore(&list->lock, flags);
+> +
+> +	while ((skb = __skb_dequeue(&tmp))) {
+> +		dev_put(skb->dev);
 
-> [ 215.434115] ------------[ cut here ]------------
-> [ 215.434184] refcount_t: underflow; use-after-free.
-> [ 215.434204] WARNING: CPU: 7 PID: 1258 at lib/refcount.c:28
-> refcount_warn_saturate+0xba/0x110
-> [ 215.434214] Modules linked in: uinput rfcomm snd_seq_dummy
-> snd_hrtimer nft_objref nf_conntrack_netbios_ns nf_conntrack_broadcast
-> nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet
-> nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat
-> nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nf_tables nfnetlink
-> qrtr bnep sunrpc binfmt_misc snd_seq_midi snd_seq_midi_event
-> intel_rapl_msr intel_rapl_common snd_hda_codec_realtek vfat
-> snd_hda_codec_generic snd_hda_codec_hdmi mt76x2u fat mt76x2_common
-> snd_hda_intel mt76x02_usb snd_intel_dspcfg snd_intel_sdw_acpi mt76_usb
-> iwlmvm edac_mce_amd snd_usb_audio snd_hda_codec mt76x02_lib
-> snd_hda_core snd_usbmidi_lib snd_hwdep snd_rawmidi uvcvideo mt76
-> kvm_amd snd_seq videobuf2_vmalloc videobuf2_memops snd_seq_device
-> mac80211 videobuf2_v4l2 videobuf2_common kvm btusb iwlwifi snd_pcm
-> btrtl videodev libarc4 eeepc_wmi btbcm asus_wmi iwlmei btintel
-> ledtrig_audio xpad irqbypass sparse_keymap btmtk platform_profile
-> joydev
-> [ 215.434436] hid_logitech_hidpp rapl ff_memless mc snd_timer
-> bluetooth cfg80211 video pcspkr wmi_bmof snd soundcore k10temp
-> i2c_piix4 rfkill mei asus_ec_sensors acpi_cpufreq zram amdgpu
-> drm_ttm_helper ttm iommu_v2 ucsi_ccg gpu_sched crct10dif_pclmul
-> crc32_pclmul typec_ucsi drm_buddy crc32c_intel ghash_clmulni_intel ccp
-> igb sp5100_tco typec drm_display_helper nvme dca nvme_core cec wmi
-> ip6_tables ip_tables fuse
-> [ 215.434528] Unloaded tainted modules: amd64_edac():1 amd64_edac():1
-> amd64_edac():1 amd64_edac():1 amd64_edac():1 amd64_edac():1
-> amd64_edac():1 amd64_edac():1 amd64_edac():1 amd64_edac():1
-> amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> pcc_cpufreq():1 amd64_edac():1 amd64_edac():1 pcc_cpufreq():1
-> pcc_cpufreq():1 amd64_edac():1 amd64_edac():1 pcc_cpufreq():1
-> amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> amd64_edac():1 pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1
-> amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1
-> amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1
-> pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1
-> amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1 amd64_edac():1
-> pcc_cpufreq():1 amd64_edac():1 pcc_cpufreq():1 pcc_cpufreq():1
-> pcc_cpufreq():1 pcc_cpufreq():1 pcc_cpufreq():1 fjes():1
-> [ 215.434672] pcc_cpufreq():1 fjes():1 pcc_cpufreq():1 fjes():1
-> pcc_cpufreq():1 fjes():1 fjes():1 fjes():1 fjes():1 fjes():1
-> [ 215.434702] CPU: 7 PID: 1258 Comm: kworker/7:3 Tainted: G W L
-> ------- --- 6.0.0-0.rc1.20220817git3cc40a443a04.14.fc38.x86_64 #1
-> [ 215.434709] Hardware name: System manufacturer System Product
-> Name/ROG STRIX X570-I GAMING, BIOS 4403 04/27/2022
-> [ 215.434715] Workqueue: events drm_sched_entity_kill_jobs_work [gpu_sched]
-> [ 215.434728] RIP: 0010:refcount_warn_saturate+0xba/0x110
-> [ 215.434734] Code: 01 01 e8 59 59 6f 00 0f 0b e9 22 46 a5 00 80 3d be
-> 7d be 01 00 75 85 48 c7 c7 c0 99 8e 92 c6 05 ae 7d be 01 01 e8 36 59
-> 6f 00 <0f> 0b e9 ff 45 a5 00 80 3d 99 7d be 01 00 0f 85 5e ff ff ff 48
-> c7
-> [ 215.434740] RSP: 0018:ffff9ccb0237fe60 EFLAGS: 00010286
-> [ 215.434747] RAX: 0000000000000026 RBX: ffff8d531f6f2828 RCX: 0000000000000000
-> [ 215.434753] RDX: 0000000000000001 RSI: ffffffff928d07a4 RDI: 00000000ffffffff
-> [ 215.434757] RBP: ffff8d61e47f5600 R08: 0000000000000000 R09: ffff9ccb0237fd10
-> [ 215.434762] R10: 0000000000000003 R11: ffff8d622e2fffe8 R12: ffff8d61e47fc800
-> [ 215.434767] R13: ffff8d5313e95500 R14: ffff8d61e47fc805 R15: ffff8d531f6f2830
-> [ 215.434772] FS: 0000000000000000(0000) GS:ffff8d61e4600000(0000)
-> knlGS:0000000000000000
-> [ 215.434777] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [ 215.434782] CR2: 00007f0c8b815048 CR3: 00000001ab0e8000 CR4: 0000000000350ee0
-> [ 215.434788] Call Trace:
-> [ 215.434792] <TASK>
-> [ 215.434797] process_one_work+0x2a0/0x600
-> [ 215.434819] worker_thread+0x4f/0x3a0
-> [ 215.434830] ? process_one_work+0x600/0x600
-> [ 215.434836] kthread+0xf5/0x120
-> [ 215.434842] ? kthread_complete_and_exit+0x20/0x20
-> [ 215.434854] ret_from_fork+0x22/0x30
-> [ 215.434881] </TASK>
-> [ 215.434885] irq event stamp: 134873
-> [ 215.434890] hardirqs last enabled at (134881): [<ffffffff9118ce7e>]
-> __up_console_sem+0x5e/0x70
-> [ 215.434897] hardirqs last disabled at (134888): [<ffffffff9118ce63>]
-> __up_console_sem+0x43/0x70
-> [ 215.434903] softirqs last enabled at (131264): [<ffffffff910ff769>]
-> __irq_exit_rcu+0xf9/0x170
-> [ 215.434910] softirqs last disabled at (131257): [<ffffffff910ff769>]
-> __irq_exit_rcu+0xf9/0x170
-> [ 215.434917] ---[ end trace 0000000000000000 ]---
-> 
-> Full kerner log: https://pastebin.com/qED477Pz
-> 
+Also note that there's already a dev_put() above
+
+> +		kfree_skb(skb);
+> +	}
+>  }
+>  
+>  static void neigh_flush_dev(struct neigh_table *tbl, struct net_device *dev,
+

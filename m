@@ -2,93 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0459599E38
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7573F599E8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349658AbiHSPWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 11:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
+        id S1349777AbiHSPc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 11:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349637AbiHSPWN (ORCPT
+        with ESMTP id S1349756AbiHSPcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:22:13 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7BFFF8CE;
-        Fri, 19 Aug 2022 08:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=tb0EOcj/cP/ZuwLYxWcP43h5C3E6flLzxmX2a1wEjWs=; b=Q5keVqP0r9w7d9aLb3DgGx7Ytw
-        5UBgPFlT3NnvngRx82tAQhpQmKXgysZ3PFvV1gDsRBGB2a+s9IBjZsvS8fMKv2tanvmNoj619SOil
-        CouctGihln6nnZfiOtGIhl0rEVKsFC5VmZPyoGAOSEvzjTsJQmCrVxAQCu7viSwktTwFbZJjB13K/
-        BcUKVoyTWq1DpTsP6/Z6pCwJ3fsu1RcTSossiXXHE1a4KGo+omusLuRZBROtlerIoeYSREp9fkQa/
-        SgjARaqLNZhtzbBl3rBx6AyCS3M9juEwPlF3jm+xR7WmYgPPvV7xoMw39jsnlEKo1TuyEjw8xJXyl
-        PZQYEHzg==;
-Received: from [2600:1702:3c30:6ca0:77cd:43b1:3d69:dd7b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oP3ow-00BHmH-Fb; Fri, 19 Aug 2022 15:22:02 +0000
-Message-ID: <66f8a3a6-22d5-8a1b-e011-c50de8e19e6c@infradead.org>
-Date:   Fri, 19 Aug 2022 08:21:56 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] block: move from strlcpy with unused retval to strscpy
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>, Jim Paris <jim@jtan.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-block@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linuxppc-dev@lists.ozlabs.org
-References: <20220818205958.6552-1-wsa+renesas@sang-engineering.com>
-From:   Geoff Levand <geoff@infradead.org>
-In-Reply-To: <20220818205958.6552-1-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 19 Aug 2022 11:32:52 -0400
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA218101C72;
+        Fri, 19 Aug 2022 08:32:49 -0700 (PDT)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 27JFLw53006284;
+        Fri, 19 Aug 2022 10:21:58 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 27JFLvQc006283;
+        Fri, 19 Aug 2022 10:21:57 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Fri, 19 Aug 2022 10:21:57 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>, kuba@kernel.org,
+        miguel.ojeda.sandonis@gmail.com, ojeda@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        asml.silence@gmail.com, imagedong@tencent.com,
+        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
+        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Subject: Re: [PATCH net-next v4] net: skb: prevent the split of kfree_skb_reason() by gcc
+Message-ID: <20220819152157.GO25951@gate.crashing.org>
+References: <20220816032846.2579217-1-imagedong@tencent.com> <CAKwvOd=accNK7t_SOmybo3e4UcBKoZ6TBPjCHT3eSSpSUouzEA@mail.gmail.com> <CADxym3Yxq0k_W43kVjrofjNoUUag3qwmpRGLLAQL1Emot3irPQ@mail.gmail.com> <20220818165838.GM25951@gate.crashing.org> <CADxym3YEfSASDg9ppRKtZ16NLh_NhH253frd5LXZLGTObsVQ9g@mail.gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADxym3YEfSASDg9ppRKtZ16NLh_NhH253frd5LXZLGTObsVQ9g@mail.gmail.com>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 13:59, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
-> 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-...
-> diff --git a/drivers/block/ps3vram.c b/drivers/block/ps3vram.c
-> index e1d080f680ed..c76e0148eada 100644
-> --- a/drivers/block/ps3vram.c
-> +++ b/drivers/block/ps3vram.c
-> @@ -745,7 +745,7 @@ static int ps3vram_probe(struct ps3_system_bus_device *dev)
->  	gendisk->flags |= GENHD_FL_NO_PART;
->  	gendisk->fops = &ps3vram_fops;
->  	gendisk->private_data = dev;
-> -	strlcpy(gendisk->disk_name, DEVICE_NAME, sizeof(gendisk->disk_name));
-> +	strscpy(gendisk->disk_name, DEVICE_NAME, sizeof(gendisk->disk_name));
->  	set_capacity(gendisk, priv->size >> 9);
->  	blk_queue_max_segments(gendisk->queue, BLK_MAX_SEGMENTS);
->  	blk_queue_max_segment_size(gendisk->queue, BLK_MAX_SEGMENT_SIZE);
+Hi!
 
-Seems OK for ps3vram.
+On Fri, Aug 19, 2022 at 10:55:42PM +0800, Menglong Dong wrote:
+> Thanks for your explanation about the usage of 'noinline' and 'no_icf'!
+> I think 'noclone' seems enough in this case? As the function
+> 'kfree_skb_reason' we talk about is a global function, I think that the
+> compiler has no reason to make it inline, or be merged with another
+> function.
 
-Acked-by: Geoff Levand <geoff@infradead.org>
+Whether something is inlined is decided per instance (except for
+always_inline and noinline functions).  Of course the function body has
+to be available for anything to be inlined, so barring LTO this can only
+happen for function uses in the same source file.  Not very likely
+indeed, but not entirely impossible either.
 
+A function can be merged if there is another function that does exactly
+the same thing.  This is unlikely with functions that do some serious
+work of course, but it is likely with stub-like functions.
+
+gl;hf,
+
+
+Segher

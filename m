@@ -2,129 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2AF599AAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BF0599AC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348770AbiHSLMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
+        id S1348754AbiHSLNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348763AbiHSLML (ORCPT
+        with ESMTP id S229601AbiHSLNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:12:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9785FF219
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:11:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660907508;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 19 Aug 2022 07:13:34 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5AF66128;
+        Fri, 19 Aug 2022 04:13:31 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id DB31D2012A;
+        Fri, 19 Aug 2022 11:13:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1660907609; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=uyKEBhi8LTEdHgQsAAcWCSRvZCyy+0QioGOBKWMSHow=;
-        b=X8xC0/OuPyx62BMUE7JHErlLRaMHlE/TN2UpAMW7XpkvUVLM+b6ykmCc6YqQkvIkzAzufS
-        LAI922oJgXw4cmZyy9OdrCchDTtPRWMrq4rJyHBBOZXgt6PPR9znxz1u8ZqrF5s0usLvSA
-        1ehQ9/DB+ne4c6Lczn1AOTCuKUH6erQ=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-290-6J8M7J88OpSAwtR3T8CH7A-1; Fri, 19 Aug 2022 07:11:46 -0400
-X-MC-Unique: 6J8M7J88OpSAwtR3T8CH7A-1
-Received: by mail-ed1-f70.google.com with SMTP id y16-20020a056402359000b0043db5186943so2651816edc.3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:11:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=uyKEBhi8LTEdHgQsAAcWCSRvZCyy+0QioGOBKWMSHow=;
-        b=xWX2fOQ5Mqc44t78E2xhQHU0jSQVMjzlf/9991SCLT6deHHQdt5hLqxnJp4Bc1ONCA
-         FevHzpcG2z8EnDTWA+aCzFxmFaL7JkiGuMrdNWYN+PhGkcM2ETRJWY0QqvPRVGR2nYZ0
-         wuLF3Cx5/YKrHYsqIIEo5rbmPTkXU7E2UcfpR2JCxUCSXO7X7AJSukxegxqRiz3t6XOU
-         iFQf7TvRziG6NyptWgNzXD8ZXHIF6cgoq9OjxufpYa6k9Wq06apKo+loLOlcKw5J6FDj
-         gcbozMvSqXHnjtGnqOI0vQKiKP5pLt/MTeCFgWB9fzoU0p/a8sIiO1YDIHWHGhXbuzx0
-         PgIg==
-X-Gm-Message-State: ACgBeo0caf4MstfnqXld5lkM9n7eqZoc7p0OgWNj65oMvAjqk7K0a61j
-        3ugiRN0x9WPDxWlWsfTyj5k8tVemlmbFs8LuSaZdl0JnERB51fx5Bt7ZOJVUHcRU4r+SL709oEx
-        pRhBJw5ePWQVFcTHqieraZMgX
-X-Received: by 2002:a17:907:7678:b0:730:e1ad:b128 with SMTP id kk24-20020a170907767800b00730e1adb128mr4657552ejc.67.1660907505125;
-        Fri, 19 Aug 2022 04:11:45 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5xkOeu4QqxyH3VwQMyC9h/lwMvmB9njj2Lcfg4Kwtf1gfWbGe05LGL/eKjTj7SpwlbIl6McQ==
-X-Received: by 2002:a17:907:7678:b0:730:e1ad:b128 with SMTP id kk24-20020a170907767800b00730e1adb128mr4657547ejc.67.1660907504981;
-        Fri, 19 Aug 2022 04:11:44 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:4b40:2ee8:642:1aff:fe31:a15c? ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id g9-20020a50d0c9000000b00445dba95be9sm2998781edf.30.2022.08.19.04.11.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 04:11:44 -0700 (PDT)
-Message-ID: <01bc2efd-7a3f-3c46-a163-5b19adc72f6e@redhat.com>
-Date:   Fri, 19 Aug 2022 13:11:43 +0200
+        bh=HDiDqL4eZ1S6ynqk3mNLxZ6ZUEZmbiyxsoE9XpxMsmA=;
+        b=pf6mw92r9UxMsHr+gbnPE/wonUtoKd4stGwfPKc/CAz90htMEef1ipxKM7aSzL/giTr7KW
+        VPCocLRJD/BlU1GWaJztpYrSL+KdlgP6HWh8buSZQQ6OzEjvgnYzttQFeXEZzah462uGAY
+        edK5rMNKCfo18sh0HXvPS+nhAaFV8Po=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1660907609;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HDiDqL4eZ1S6ynqk3mNLxZ6ZUEZmbiyxsoE9XpxMsmA=;
+        b=e2jfLCPD7kHQP7PsKpLuOJdFNZnKuKfJpcYCEA39438+liET3XSMKWJHE1ZRLSlpa61HDp
+        ydwVYEOJcqATwOCQ==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 761F62C141;
+        Fri, 19 Aug 2022 11:13:29 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id DF38AA0635; Fri, 19 Aug 2022 13:13:28 +0200 (CEST)
+Date:   Fri, 19 Aug 2022 13:13:28 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v4 2/4] fanotify: define struct members to hold response
+ decision context
+Message-ID: <20220819111328.2j6u53sfmxsj2nyt@quack3>
+References: <cover.1659996830.git.rgb@redhat.com>
+ <8767f3a0d43d6a994584b86c03eb659a662cc416.1659996830.git.rgb@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH drm-misc-next 2/3] drm/vc4: plane: protect device
- resources after removal
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220819002905.82095-1-dakr@redhat.com>
- <20220819002905.82095-3-dakr@redhat.com>
- <20220819072614.dthfuugbkk65o3ps@houat>
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <20220819072614.dthfuugbkk65o3ps@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8767f3a0d43d6a994584b86c03eb659a662cc416.1659996830.git.rgb@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+Hello Richard!
 
-On 8/19/22 09:26, Maxime Ripard wrote:
-> Hi,
+On Tue 09-08-22 13:22:53, Richard Guy Briggs wrote:
+> This patch adds a flag, FAN_INFO and an extensible buffer to provide
+> additional information about response decisions.  The buffer contains
+> one or more headers defining the information type and the length of the
+> following information.  The patch defines one additional information
+> type, FAN_RESPONSE_INFO_AUDIT_RULE, an audit rule number.  This will
+> allow for the creation of other information types in the future if other
+> users of the API identify different needs.
 > 
-> On Fri, Aug 19, 2022 at 02:29:04AM +0200, Danilo Krummrich wrote:
->> (Hardware) resources which are bound to the driver and device lifecycle
->> must not be accessed after the device and driver are unbound.
->>
->> However, the DRM device isn't freed as long as the last user closed it,
->> hence userspace can still call into the driver.
->>
->> Therefore protect the critical sections which are accessing those
->> resources with drm_dev_enter() and drm_dev_exit().
-> 
-> Ah good catch, thanks
-> 
->> Fixes: 9872c7a31921 ("drm/vc4: plane: Switch to drmm_universal_plane_alloc()")
->> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
->> ---
->>   drivers/gpu/drm/vc4/vc4_drv.h   |  1 +
->>   drivers/gpu/drm/vc4/vc4_plane.c | 25 +++++++++++++++++++++++++
->>   2 files changed, 26 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/vc4/vc4_drv.h b/drivers/gpu/drm/vc4/vc4_drv.h
->> index 418a8242691f..80da9a9337cc 100644
->> --- a/drivers/gpu/drm/vc4/vc4_drv.h
->> +++ b/drivers/gpu/drm/vc4/vc4_drv.h
->> @@ -341,6 +341,7 @@ struct vc4_hvs {
->>   
->>   struct vc4_plane {
->>   	struct drm_plane base;
->> +	struct drm_device *dev;
-> 
-> That pointer already exists in struct drm_plane
-Oops, I've sent a v2. Also addressing your comment from the other patch.
+> Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> Link: https://lore.kernel.org/r/2745105.e9J7NaK4W3@x2
+> Suggested-by: Jan Kara <jack@suse.cz>
+> Link: https://lore.kernel.org/r/20201001101219.GE17860@quack2.suse.cz
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> ---
+>  fs/notify/fanotify/fanotify.c      |  10 ++-
+>  fs/notify/fanotify/fanotify.h      |   2 +
+>  fs/notify/fanotify/fanotify_user.c | 104 +++++++++++++++++++++++------
+>  include/linux/fanotify.h           |   5 ++
+>  include/uapi/linux/fanotify.h      |  27 +++++++-
+>  5 files changed, 123 insertions(+), 25 deletions(-)
 
-- Danilo
-> 
-> Looks good otherwise
-> 
-> Maxime
+Amir and Matthew covered most of the comments so let me add just a few I
+have on top:
 
+> diff --git a/fs/notify/fanotify/fanotify.h b/fs/notify/fanotify/fanotify.h
+> index abfa3712c185..14c30e173632 100644
+> --- a/fs/notify/fanotify/fanotify.h
+> +++ b/fs/notify/fanotify/fanotify.h
+> @@ -428,6 +428,8 @@ struct fanotify_perm_event {
+>  	u32 response;			/* userspace answer to the event */
+>  	unsigned short state;		/* state of the event */
+>  	int fd;		/* fd we passed to userspace for this event */
+> +	size_t info_len;
+> +	char *info_buf;
+>  };
+
+Rather than this, I'd expand struct fanotify_perm_event by adding:
+
+	union info {
+		struct fanotify_response_info_header hdr;
+		struct fanotify_response_info_audit_rule audit_rule;
+	}
+
+at the end of the struct. Currently that is more memory efficient, easier
+to code, and more CPU efficient as well. The 'hdr' member of the union can
+be used to look at type of the info and then appropriate union member can
+be used to get the data. If we ever grow additional info that has
+non-trivial size, changing the code to use dynamically allocated buffer as
+you do now is very easy. But until that moment it is just overengineering.
+
+> diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
+> index ff67ca0d25cc..a4ae953f0e62 100644
+> --- a/fs/notify/fanotify/fanotify_user.c
+> +++ b/fs/notify/fanotify/fanotify_user.c
+> @@ -289,13 +289,18 @@ static int create_fd(struct fsnotify_group *group, struct path *path,
+>   */
+>  static void finish_permission_event(struct fsnotify_group *group,
+>  				    struct fanotify_perm_event *event,
+> -				    u32 response)
+> +				    struct fanotify_response *response,
+
+Why do you pass struct fanotify_response here instead of plain u32? I don't
+see you'd use it anywhere and it introduces some unnecessary churn in other
+places.
+
+> +				    size_t info_len, char *info_buf)
+>  				    __releases(&group->notification_lock)
+>  {
+>  	bool destroy = false;
+>  
+>  	assert_spin_locked(&group->notification_lock);
+> -	event->response = response;
+> +	event->response = response->response & ~FAN_INFO;
+
+Why do you mask out FAN_INFO here? I don't see a good reason for that.
+
+> +	if (response->response & FAN_INFO) {
+> +		event->info_len = info_len;
+> +		event->info_buf = info_buf;
+> +	}
+>  	if (event->state == FAN_EVENT_CANCELED)
+>  		destroy = true;
+>  	else
+...
+
+> diff --git a/include/uapi/linux/fanotify.h b/include/uapi/linux/fanotify.h
+> index f1f89132d60e..4d08823a5698 100644
+> --- a/include/uapi/linux/fanotify.h
+> +++ b/include/uapi/linux/fanotify.h
+> @@ -180,15 +180,40 @@ struct fanotify_event_info_error {
+>  	__u32 error_count;
+>  };
+>  
+> +/*
+> + * User space may need to record additional information about its decision.
+> + * The extra information type records what kind of information is included.
+> + * The default is none. We also define an extra information buffer whose
+> + * size is determined by the extra information type.
+> + *
+> + * If the context type is Rule, then the context following is the rule number
+> + * that triggered the user space decision.
+> + */
+> +
+> +#define FAN_RESPONSE_INFO_NONE		0
+
+Why do you define this? I don't see it being used anywhere (in a meaningful
+way). You can as well make FAN_RESPONSE_INFO_AUDIT_RULE be type 0...
+
+> +#define FAN_RESPONSE_INFO_AUDIT_RULE	1
+> +
+>  struct fanotify_response {
+>  	__s32 fd;
+>  	__u32 response;
+>  };
+>  
+> +struct fanotify_response_info_header {
+> +	__u8 type;
+> +	__u8 pad;
+> +	__u16 len;
+> +};
+> +
+> +struct fanotify_response_info_audit_rule {
+> +	struct fanotify_response_info_header hdr;
+> +	__u32 audit_rule;
+> +};
+> +
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

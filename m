@@ -2,37 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590F8599A42
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD6E599A40
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348227AbiHSLCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
+        id S1347760AbiHSLDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348476AbiHSLCQ (ORCPT
+        with ESMTP id S1348495AbiHSLCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:02:16 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360E1F6191;
-        Fri, 19 Aug 2022 04:02:13 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oOzlO-00Cpe4-M5; Fri, 19 Aug 2022 21:02:07 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 19 Aug 2022 19:02:06 +0800
-Date:   Fri, 19 Aug 2022 19:02:06 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     cgel.zte@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        ye.xingchen@zte.com.cn, zealci@zte.com.cn
-Subject: Re: [PATCH linux-next] crypto: sun8i-ce:using the
- pm_runtime_resume_and_get  to simplify the code
-Message-ID: <Yv9trrHQ010I1/EF@gondor.apana.org.au>
+        Fri, 19 Aug 2022 07:02:43 -0400
+Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1ACFF61A8;
+        Fri, 19 Aug 2022 04:02:42 -0700 (PDT)
+Received: from 213.219.160.184.adsl.dyn.edpnet.net ([213.219.160.184] helo=deadeye)
+        by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1oOzlk-0002zN-5f; Fri, 19 Aug 2022 13:02:28 +0200
+Received: from ben by deadeye with local (Exim 4.96)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1oOzli-000aat-1m;
+        Fri, 19 Aug 2022 13:02:26 +0200
+Message-ID: <2d899b4a9a08f79396a071eb8c06d524ae6033b0.camel@decadent.org.uk>
+Subject: Re: [PATCH] x86/speculation: Avoid LFENCE in FILL_RETURN_BUFFER on
+ CPUs that lack it
+From:   Ben Hutchings <ben@decadent.org.uk>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        1017425@bugs.debian.org,
+        =?ISO-8859-1?Q?Martin-=C9ric?= Racine <martin-eric.racine@iki.fi>,
+        stable@vger.kernel.org, regressions@lists.linux.dev,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Date:   Fri, 19 Aug 2022 13:02:17 +0200
+In-Reply-To: <Yv9OGVc+WpoDAB0X@worktop.programming.kicks-ass.net>
+References: <Yv7aRJ/SvVhSdnSB@decadent.org.uk>
+         <Yv9OGVc+WpoDAB0X@worktop.programming.kicks-ass.net>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-YjhQggnj2zhMxQngHr7f"
+User-Agent: Evolution 3.44.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802074820.1648786-1-ye.xingchen@zte.com.cn>
-X-Newsgroups: apana.lists.os.linux.cryptoapi,apana.lists.os.linux.kernel
+X-SA-Exim-Connect-IP: 213.219.160.184
+X-SA-Exim-Mail-From: ben@decadent.org.uk
+X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -42,20 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cgel.zte@gmail.com wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Using pm_runtime_resume_and_get() to instade of  pm_runtime_get_sync
-> and pm_runtime_put_noidle.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
-> drivers/crypto/allwinner/sun8i-ce/sun8i-ce-trng.c | 3 +--
-> 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Patch applied.  Thanks.
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+--=-YjhQggnj2zhMxQngHr7f
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, 2022-08-19 at 10:47 +0200, Peter Zijlstra wrote:
+> On Fri, Aug 19, 2022 at 02:33:08AM +0200, Ben Hutchings wrote:
+> > From: Ben Hutchings <benh@debian.org>
+> >=20
+> > The mitigation for PBRSB includes adding LFENCE instructions to the
+> > RSB filling sequence.  However, RSB filling is done on some older CPUs
+> > that don't support the LFENCE instruction.
+> >=20
+>=20
+> Wait; what? There are chips that enable the RSB mitigations and DONT
+> have LFENCE ?!?
+
+Yes, X86_FEATURE_RSB_CTXSW is enabled if any other Spectre v2
+mitigation is enabled.  And all Intel family 6 (except some early
+Atoms) and AMD family 5+ get Spectre v2 mitigation by default.
+
+Ben.
+
+--=20
+Ben Hutchings
+Beware of bugs in the above code;
+I have only proved it correct, not tried it. - Donald Knuth
+
+--=-YjhQggnj2zhMxQngHr7f
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmL/bbkACgkQ57/I7JWG
+EQmxQg//ZS3fq6QOEM160thdxrPitpXbg0ygRoO4bBjmDY8G/+2sne8MEPRq2r2U
+gKHbq5O6TTLbGDQjZBwGwMEg1omi8dLHt9m9I8YKBxBwqOHdqO4UrZa9cuvVQnF4
+TDTGeBO7sGMRPcuaff7HPKMgjQL2E6+Db2DbZhxvtPkKyRRuoCRONajy7z/W+K0F
+9nHY/offfF5EXLySFwqSE1ypm/MTBVro4EGPFKMe/znSx5y4jFh6Dci39BAVb+rf
+YyzI1y5bmbBnRhy/GGbb/zVhPiQxnwjKCq4o9SUGCh+cWDLfrU8nmkttzxwb2J29
+KEK488/fxi7sI4WB7IxPMTI8REqyrxBq8ybWW0i1HBWt+VieHYroqMrsi9kjrgOU
+6ae6V5PPi773/WzLK/sYnKlKB74V7svRRsFXgk5p5GKVoIGngaWhNQNAknDpdhPK
+Sl8sQTsgS8mUnPIKitwtEgNX+XzvKUuSz8ep0tO/a96ZMahoBSbKO2dt2n+jv7e5
+FU17Q8IKFnqpb9SybcUhD/BGiTLJ7sWcb+sR20Nlxk2ji0j67gzkKcmtVU+qsgLB
+3IzG38XZsd5X+RwTUyO+ZRvTdjKTcj7phIywd+PgYBaWbck1y2OGygJt4U2FDe7a
+MPMJwbDp3jIE3lt/k+XDWY9x2HvXF5C1ZuOdhSapp+eRW4yVkzs=
+=QDsX
+-----END PGP SIGNATURE-----
+
+--=-YjhQggnj2zhMxQngHr7f--

@@ -2,43 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E9159A452
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C22E59A447
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353546AbiHSQik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 12:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        id S1353556AbiHSQis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 12:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353382AbiHSQfh (ORCPT
+        with ESMTP id S1353234AbiHSQgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 12:35:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4561B107AF3;
-        Fri, 19 Aug 2022 09:07:24 -0700 (PDT)
+        Fri, 19 Aug 2022 12:36:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3AF123093;
+        Fri, 19 Aug 2022 09:07:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7892B82813;
-        Fri, 19 Aug 2022 16:07:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18DDDC433C1;
-        Fri, 19 Aug 2022 16:07:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF9DFB82820;
+        Fri, 19 Aug 2022 16:07:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD82EC433C1;
+        Fri, 19 Aug 2022 16:07:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660925233;
-        bh=ylVkh8v+450dEiwjru0VBg5cl/Fq58A+w4Oz09L0Oco=;
+        s=korg; t=1660925236;
+        bh=e25EplunFs+xhOssElaZHcLWfqW4P+ZY5UR2hRo+Ob0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qo4Gsn9lWrliddcyb1ORKSl3JUWJ+m6slNc2Vb/5WVwktOeYZzqF39hGLf0zNEJiN
-         4PQyAUUIugUv7d8a6yj4ibeeZDBlpU6SgIKAz/gRc0bwXnOeVFUpmJ9c1voEp7bsrm
-         I1U+zIdB5Anm6PwPO+PZNNqFE8sZ6RpAi1dT84L4=
+        b=t5x6EQC82OBx9vBhOuBvjbNHmV9kyE+r6imHruH2+os4TaDi+mA1SkBa+Ko/8apTA
+         KC1Jm26StT7QB6nl8QYcEC90NGR56ZWSiJoDIB6bAtAsZaBvtuwuje5JIqhMhtPaE0
+         6pK5LQ/mgDjHDAvKryBYaZJHQ0ZEneu2tIxTu3HE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        =?UTF-8?q?=E8=B0=AD=E6=A2=93=E7=85=8A?= <tanzixuan.me@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 426/545] powerpc/pci: Fix PHB numbering when using opal-phbid
-Date:   Fri, 19 Aug 2022 17:43:16 +0200
-Message-Id: <20220819153848.477906421@linuxfoundation.org>
+Subject: [PATCH 5.10 427/545] genelf: Use HAVE_LIBCRYPTO_SUPPORT, not the never defined HAVE_LIBCRYPTO
+Date:   Fri, 19 Aug 2022 17:43:17 +0200
+Message-Id: <20220819153848.523952231@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220819153829.135562864@linuxfoundation.org>
 References: <20220819153829.135562864@linuxfoundation.org>
@@ -56,56 +65,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-[ Upstream commit f4b39e88b42d13366b831270306326b5c20971ca ]
+[ Upstream commit 91cea6be90e436c55cde8770a15e4dac9d3032d0 ]
 
-The recent change to the PHB numbering logic has a logic error in the
-handling of "ibm,opal-phbid".
+When genelf was introduced it tested for HAVE_LIBCRYPTO not
+HAVE_LIBCRYPTO_SUPPORT, which is the define the feature test for openssl
+defines, fix it.
 
-When an "ibm,opal-phbid" property is present, &prop is written to and
-ret is set to zero.
+This also adds disables the deprecation warning, someone has to fix this
+to build with openssl 3.0 before the warning becomes a hard error.
 
-The following call to of_alias_get_id() is skipped because ret == 0.
-
-But then the if (ret >= 0) is true, and the body of that if statement
-sets prop = ret which throws away the value that was just read from
-"ibm,opal-phbid".
-
-Fix the logic by only doing the ret >= 0 check in the of_alias_get_id()
-case.
-
-Fixes: 0fe1e96fef0a ("powerpc/pci: Prefer PCI domain assignment via DT 'linux,pci-domain' and alias")
-Reviewed-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220802105723.1055178-1-mpe@ellerman.id.au
+Fixes: 9b07e27f88b9cd78 ("perf inject: Add jitdump mmap injection support")
+Reported-by: 谭梓煊 <tanzixuan.me@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Nick Terrell <terrelln@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Link: http://lore.kernel.org/lkml/YulpPqXSOG0Q4J1o@kernel.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/pci-common.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ tools/perf/util/genelf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/kernel/pci-common.c b/arch/powerpc/kernel/pci-common.c
-index 7af00a880e16..f9d35c9ea4ae 100644
---- a/arch/powerpc/kernel/pci-common.c
-+++ b/arch/powerpc/kernel/pci-common.c
-@@ -89,11 +89,13 @@ static int get_phb_number(struct device_node *dn)
- 	}
- 	if (ret)
- 		ret = of_property_read_u64(dn, "ibm,opal-phbid", &prop);
--	if (ret)
+diff --git a/tools/perf/util/genelf.c b/tools/perf/util/genelf.c
+index aed49806a09b..953338b9e887 100644
+--- a/tools/perf/util/genelf.c
++++ b/tools/perf/util/genelf.c
+@@ -30,7 +30,11 @@
+ 
+ #define BUILD_ID_URANDOM /* different uuid for each run */
+ 
+-#ifdef HAVE_LIBCRYPTO
++// FIXME, remove this and fix the deprecation warnings before its removed and
++// We'll break for good here...
++#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 +
-+	if (ret) {
- 		ret = of_alias_get_id(dn, "pci");
--	if (ret >= 0) {
--		prop = ret;
--		ret = 0;
-+		if (ret >= 0) {
-+			prop = ret;
-+			ret = 0;
-+		}
- 	}
- 	if (ret) {
- 		u32 prop_32;
++#ifdef HAVE_LIBCRYPTO_SUPPORT
+ 
+ #define BUILD_ID_MD5
+ #undef BUILD_ID_SHA	/* does not seem to work well when linked with Java */
 -- 
 2.35.1
 

@@ -2,120 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8A7599821
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACEF599823
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345825AbiHSJC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
+        id S1347391AbiHSJEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346731AbiHSJC0 (ORCPT
+        with ESMTP id S1346731AbiHSJEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:02:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95420F23C8
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:02:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660899744;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k2hCRGU8uolgt6AszyDmYkNdB78RbK6mGmWkx2eq+Dw=;
-        b=ha35y184v2BPXqQ9niRl+24vNE+47kJHZ2LFZxTw+dKaCwPeIDlqkygXt2nsyZXfg8o4Cb
-        S2eJSLMJmgIEwzVIqSc2wJa8rq1vEsgIC7/CdmLbXZECv/JvjTvyH2HFC+0Ll6QOlYdJz0
-        pmqFRzFM0AG9y9dA+apsdh3CwOpwlt0=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-55-pReHpZ1vM0aXagFfHByP0A-1; Fri, 19 Aug 2022 05:02:23 -0400
-X-MC-Unique: pReHpZ1vM0aXagFfHByP0A-1
-Received: by mail-ed1-f71.google.com with SMTP id b6-20020a056402278600b0043e686058feso2492488ede.10
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:02:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=k2hCRGU8uolgt6AszyDmYkNdB78RbK6mGmWkx2eq+Dw=;
-        b=AYalplO9pAlkX+TdkbfVRzt3blDyH48DSn+t8jdyxFNmebb2BtcWwiA9HnijJh/GxD
-         iWQtVd2r05fT6Tlle/aak0RMRzSrDknRsRJyGB/DS4e5tDeKOcxc3/t0mPUqFk+h2YXQ
-         M5yErNgZqzD1us3JNMpz/4Do2XW4w02Dxd9qOB3VbfnGLI8S2PoyAkWRMYXE1sgT3LDJ
-         bADyyN2jowfau/Ygw5VweR63Efp6jXcHWrF5WebWBzNxZEQXtltfPe48Vmm047yrPjMU
-         ZlLp/Pp8iu2p8vzjfXRCdy1pV/SpxqJU47IhxXuDMRsDdgTUWx8JAtosvUzJt9WEVwM2
-         D4Gg==
-X-Gm-Message-State: ACgBeo1d7O68xBblHi3ER7V/yHs+cDqvvlQ8l4r1ALDQqr0Um2G7sh75
-        Cr9C8aXAi38MI+VObQvgaCVrWZIcC0IEBzZWWKOZ1xERKjUSFTHohBnfAeIYEkxUX94j/uWEWTq
-        36LnR7yoC+cwJZBYrJDKs7N8E
-X-Received: by 2002:a05:6402:2216:b0:445:eb9a:bfb5 with SMTP id cq22-20020a056402221600b00445eb9abfb5mr5497661edb.36.1660899742538;
-        Fri, 19 Aug 2022 02:02:22 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4eSBN9FVsNr1HGfl52khWYN1MKvWaGEJavx9fVkDeTBRmlQ/2uknC0GX8kHPSkQSLMjA8+7A==
-X-Received: by 2002:a05:6402:2216:b0:445:eb9a:bfb5 with SMTP id cq22-20020a056402221600b00445eb9abfb5mr5497645edb.36.1660899742323;
-        Fri, 19 Aug 2022 02:02:22 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id la26-20020a170907781a00b0073c23616cb1sm1677531ejc.12.2022.08.19.02.02.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 02:02:21 -0700 (PDT)
-Message-ID: <159f2466-44b8-07c8-fe14-e177e962c50b@redhat.com>
-Date:   Fri, 19 Aug 2022 11:02:21 +0200
+        Fri, 19 Aug 2022 05:04:47 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF44E97C6
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:04:45 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oOxvi-0002YL-Ml; Fri, 19 Aug 2022 11:04:38 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oOxvi-0003su-40; Fri, 19 Aug 2022 11:04:38 +0200
+Date:   Fri, 19 Aug 2022 11:04:38 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, akinobu.mita@gmail.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 1/4] media: mt9m111: add V4L2_CID_PIXEL_RATE support
+Message-ID: <20220819090438.72vlat6by3ag6pvd@pengutronix.de>
+References: <20220818144712.997477-1-m.felsch@pengutronix.de>
+ <20220818161108.dlmi77o6j7wcyayc@uno.localdomain>
+ <20220819075615.a3nuakrac54kn7t3@pengutronix.de>
+ <20220819081548.q6c5pwio2z2ambqq@uno.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] virt: move from strlcpy with unused retval to strscpy
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20220818210120.7565-1-wsa+renesas@sang-engineering.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220818210120.7565-1-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819081548.q6c5pwio2z2ambqq@uno.localdomain>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 8/18/22 23:01, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
+On 22-08-19, Jacopo Mondi wrote:
+> Hi Marco
 > 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> On Fri, Aug 19, 2022 at 09:56:15AM +0200, Marco Felsch wrote:
+> > Hi Jacopo,
+> >
+> > On 22-08-18, Jacopo Mondi wrote:
+> > > Hi Marco
+> > >
+> > > On Thu, Aug 18, 2022 at 04:47:09PM +0200, Marco Felsch wrote:
+> > > > Add support to report the PIXEL_RATE so a host or bridge device can ask
+> > > > the sensor.
+> > > >
+> > > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > > > ---
+> > > >  drivers/media/i2c/mt9m111.c | 15 ++++++++++++++-
+> > > >  1 file changed, 14 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
+> > > > index afc86efa9e3e..cdaf283e1309 100644
+> > > > --- a/drivers/media/i2c/mt9m111.c
+> > > > +++ b/drivers/media/i2c/mt9m111.c
+> > > > @@ -908,6 +908,8 @@ static int mt9m111_s_ctrl(struct v4l2_ctrl *ctrl)
+> > > >  		return mt9m111_set_test_pattern(mt9m111, ctrl->val);
+> > > >  	case V4L2_CID_COLORFX:
+> > > >  		return mt9m111_set_colorfx(mt9m111, ctrl->val);
+> > > > +	case V4L2_CID_PIXEL_RATE:
+> > > > +		return 0;
+> > >
+> > > By default PIXEL_RATE is read-only.
+> > > Do you get a call to s_ctrl for it ?
+> >
+> > You're absolutly right, we don't need to do this.
+> >
+> > > >  	}
+> > > >
+> > > >  	return -EINVAL;
+> > > > @@ -1249,6 +1251,7 @@ static int mt9m111_probe(struct i2c_client *client)
+> > > >  {
+> > > >  	struct mt9m111 *mt9m111;
+> > > >  	struct i2c_adapter *adapter = client->adapter;
+> > > > +	unsigned long mclk_rate;
+> > > >  	int ret;
+> > > >
+> > > >  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA)) {
+> > > > @@ -1271,6 +1274,13 @@ static int mt9m111_probe(struct i2c_client *client)
+> > > >  	if (IS_ERR(mt9m111->clk))
+> > > >  		return PTR_ERR(mt9m111->clk);
+> > > >
+> > > > +	ret = clk_prepare_enable(mt9m111->clk);
+> > > > +	if (ret < 0)
+> > > > +		return ret;
+> > > > +
+> > >
+> > > Do you need to enable clock to read its rate ?
+> >
+> > Yes, accroding the API [1].
+> >
+> > [1] https://elixir.bootlin.com/linux/v6.0-rc1/source/include/linux/clk.h#L682
+> 
+> So weird! none of the drivers I checked do that. The most common
+> pattern is
+> 
+>         clk = devm_clk_get();
+>         rate = clk_get_rate(clk)
+>         if (rate != RATE)
+>                 ...
 
-Thanks, patch looks good to me:
+Yep, I know. There are a lot of drivers not respecting this.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> >
+> > > > +	mclk_rate = clk_get_rate(mt9m111->clk);
+> > > > +	clk_disable_unprepare(mt9m111->clk);
+> > > > +
+> > > >  	mt9m111->regulator = devm_regulator_get(&client->dev, "vdd");
+> > > >  	if (IS_ERR(mt9m111->regulator)) {
+> > > >  		dev_err(&client->dev, "regulator not found: %ld\n",
+> > > > @@ -1285,7 +1295,7 @@ static int mt9m111_probe(struct i2c_client *client)
+> > > >  	mt9m111->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+> > > >  				 V4L2_SUBDEV_FL_HAS_EVENTS;
+> > > >
+> > > > -	v4l2_ctrl_handler_init(&mt9m111->hdl, 7);
+> > > > +	v4l2_ctrl_handler_init(&mt9m111->hdl, 8);
+> > > >  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
+> > > >  			V4L2_CID_VFLIP, 0, 1, 1, 0);
+> > > >  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
+> > > > @@ -1309,6 +1319,9 @@ static int mt9m111_probe(struct i2c_client *client)
+> > > >  				BIT(V4L2_COLORFX_NEGATIVE) |
+> > > >  				BIT(V4L2_COLORFX_SOLARIZATION)),
+> > > >  			V4L2_COLORFX_NONE);
+> > > > +	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops, V4L2_CID_PIXEL_RATE,
+> > > > +			  mclk_rate, mclk_rate, 1, mclk_rate);
+> > > > +
+> > >
+> > > I don't have a datasheet but it seems a little weird that the mclk
+> > > frequency is the same as the pixel clock rate ?
+> >
+> > I see your confusion here. I can only speak for the MT9M131 device which
+> > is covered by this driver as well. This device is composed of a
+> > internal-sensor and a internal-isp. The internal-sensor is clocked by
+> > mclk/2 but the final image device/sensor output-fifo is clocked by mclk.
+> 
+> No PLL, no rate multiplier/divider ? Does this sensor only work with
+> one pixel rate that is defined by the input clock rate ?
+> 
+> > There are options to devide the output clock as well, but these options
+> > are not enabled yet. So yes, the pixel clock rate == mclk rate. To avoid
+> 
+> Ah ok
+> 
+> Could you share your setup mclk, resolution and frame rate to show how
+> the pixel rate and the mclk rate are related ?
+
+
+mclk:      54 MHz (input)
+pixelclk:  54 MHz (output)
+res:       1280x1024
+fps:       15
+bus-width: 8
+bpp:       16
+
+After re-reading the PIXEL_RATE, maybe I missunderstood the control. As
+of now I thought it is the amount of bytes per second send on the bus.
+But the documentation says pixels per second... Is there a control to
+expose the current pixelclk on the mbus? What I wanna do in the end is
+to calculate the througput on the (parallel-)bus.
+
+> > confusion I could rename the mclk_rate to extclk_rate but then clock
+> > request is not 100% correct since we are requesting a "mclk", this
+> > should be "extclk".
+> 
+> Doesn't really make a difference!
+> 
+> A comment in the code to explain what happens would help though!
+
+I did that right now, after your confusion :)
 
 Regards,
+  Marco
 
-Hans
-
-
-> ---
->  drivers/virt/vboxguest/vboxguest_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/virt/vboxguest/vboxguest_core.c b/drivers/virt/vboxguest/vboxguest_core.c
-> index 0b43efddea22..dfd69bd77f53 100644
-> --- a/drivers/virt/vboxguest/vboxguest_core.c
-> +++ b/drivers/virt/vboxguest/vboxguest_core.c
-> @@ -198,7 +198,7 @@ static int vbg_report_guest_info(struct vbg_dev *gdev)
->  	req2->additions_revision = VBG_SVN_REV;
->  	req2->additions_features =
->  		VMMDEV_GUEST_INFO2_ADDITIONS_FEATURES_REQUESTOR_INFO;
-> -	strlcpy(req2->name, VBG_VERSION_STRING,
-> +	strscpy(req2->name, VBG_VERSION_STRING,
->  		sizeof(req2->name));
->  
->  	/*
-
+> >
+> > Regards,
+> >   Marco
+> >
+> > > >  	mt9m111->subdev.ctrl_handler = &mt9m111->hdl;
+> > > >  	if (mt9m111->hdl.error) {
+> > > >  		ret = mt9m111->hdl.error;
+> > > > --
+> > > > 2.30.2
+> > > >
+> > >
+> 

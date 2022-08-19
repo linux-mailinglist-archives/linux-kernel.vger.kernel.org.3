@@ -2,100 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23D859A664
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F82C59A64F
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351588AbiHSTVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 15:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
+        id S1351548AbiHSTVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 15:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351547AbiHSTVJ (ORCPT
+        with ESMTP id S1351497AbiHSTUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 15:21:09 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55889115587;
-        Fri, 19 Aug 2022 12:20:53 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 3D19358036A;
-        Fri, 19 Aug 2022 15:20:47 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute3.internal (MEProxy); Fri, 19 Aug 2022 15:20:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        colorremedies.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660936847; x=
-        1660940447; bh=CvyHEbh2ZUEdzkoT+B+txpRgO4O1L+8cWUke1mfGNqg=; b=j
-        +ZEf1oMeiB338QYixL3bIOoDb0NNjvkmt7hQU1i4eIOF50eddqy8v9pAGxh0m46q
-        RnRhVW136WStCAel6iih1ILI4Q2k94glo/uEyhZ9TW6Po0yCjQEH3btLar0K72H3
-        x7We5MSIn48pNkLR3NdCSx+dIzTjxxEYN7aYzHN7lS0jbx9xU3bfrGBSepJoKQmN
-        q9ipu4sZWpY1YP34AGAJQNBN3J2PPpfD+tx3POr+BBYU49oKgl7vrfuGbG2Hp3xo
-        Kd3CN2mN1BSPqE5N2xgIdeN1jrLsW8Obv5Vp5ApXCoGkSZ29rvW9y651r18p+yvR
-        ktFJbeFJ1PJCMZV73uhqw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660936847; x=1660940447; bh=CvyHEbh2ZUEdzkoT+B+txpRgO4O1
-        L+8cWUke1mfGNqg=; b=UPZCIu6efQhc7D2iSor4+HmuPDRBdw7/wvPEEw49GPLM
-        ns11K54N67th5zKCsCfukPtXGpMw4eYtr/VYBbuuP0iH0X9nobO2uDA5DJBlsAF+
-        0vYR8DzLO851e7u2ZGaez4AixR1fFqkGSzqB5FFOyBL2mVNH5pZqeLPhhEd6MxDd
-        ODk+A8bXtImj4jNKT3Svkocq/nagtXhCi5X8T3ERQ7JnA9FR327gR/E8LcPSiMoI
-        M2F8Tv2I5pWPA+/hfMeLfyE67Z6oS7RvASaG1evpaMNu/mHbQFADy9vWBCTgfOg7
-        EN2ABWXldiVMol87q3Ype5MMLuMZ8/Id7gkIdyBriw==
-X-ME-Sender: <xms:juL_Yg3OcJJLrKDOOZGUaRBGawGPz72En179-B6wxuwg6ANlVbuiyA>
-    <xme:juL_YrGFGTXDdHGZR9vMIuPvnweVCUhUj_6Esoc9OI6SxHO5qkh0opC21RSjO78Z-
-    EZSBaU_DWW4Up1UKSo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeiuddgudeflecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpefofgggkfgjfhffhffv
-    vefutgesthdtredtreertdenucfhrhhomhepfdevhhhrihhsucfouhhrphhhhidfuceolh
-    hishhtshestgholhhorhhrvghmvgguihgvshdrtghomheqnecuggftrfgrthhtvghrnhep
-    feehleeiudegueelteffueehgeektefgtdevvedufffgjedvgeevleejhfdvfefhnecuff
-    homhgrihhnpehgohhoghhlvgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgr
-    rhgrmhepmhgrihhlfhhrohhmpehlihhsthhssegtohhlohhrrhgvmhgvughivghsrdgtoh
-    hm
-X-ME-Proxy: <xmx:juL_Yo5Khz7EQFsOc9QNRbOxGW2Jhj_gFmWWzIHnfhLVdQ6s-WRc1A>
-    <xmx:juL_Yp2-YVDJEq6af8iXFwSkcytbw61NzY1m8vshjwOJNcUXZaxhhA>
-    <xmx:juL_YjH73iV4Yf-TF3DetbtSJcnztdNAdJKpit10kCT83bppXWixqQ>
-    <xmx:j-L_Yi3eI5Ve0w4acMgNG9LwFJ9p6v7mTEVBMaewD_OGDJCtB-lmYA>
-Feedback-ID: i06494636:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3607717003FD; Fri, 19 Aug 2022 15:20:46 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <0f731b0a-fbd5-4e7b-a3df-0ed63360c1e0@www.fastmail.com>
-In-Reply-To: <Yv3NIQlDL0T3lstU@T590>
-References: <Yv0A6UhioH3rbi0E@T590>
- <f633c476-bdc9-40e2-a93f-29601979f833@www.fastmail.com>
- <Yv0KmT8UYos2/4SX@T590>
- <35f0d608-7448-4276-8922-19a23d8f9049@www.fastmail.com>
- <Yv2P0zyoVvz35w/m@T590>
- <568465de-5c3b-4d94-a74b-5b83ce2f942f@www.fastmail.com>
- <Yv2w+Tuhw1RAoXI5@T590>
- <9f2f608a-cd5f-4736-9e6d-07ccc2eca12c@www.fastmail.com>
- <a817431f-276f-4aab-9ff8-c3e397494339@www.fastmail.com>
- <5426d0f9-6539-477d-8feb-2b49136b960f@www.fastmail.com>
- <Yv3NIQlDL0T3lstU@T590>
-Date:   Fri, 19 Aug 2022 15:20:25 -0400
-From:   "Chris Murphy" <lists@colorremedies.com>
-To:     "Ming Lei" <ming.lei@redhat.com>
-Cc:     "Nikolay Borisov" <nborisov@suse.com>,
-        "Jens Axboe" <axboe@kernel.dk>, "Jan Kara" <jack@suse.cz>,
-        "Paolo Valente" <paolo.valente@linaro.org>,
-        "Btrfs BTRFS" <linux-btrfs@vger.kernel.org>,
-        Linux-RAID <linux-raid@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Josef Bacik" <josef@toxicpanda.com>
-Subject: Re: stalling IO regression since linux 5.12, through 5.18
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 19 Aug 2022 15:20:47 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB36811521A;
+        Fri, 19 Aug 2022 12:20:39 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id s1so4511584lfp.6;
+        Fri, 19 Aug 2022 12:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=xN5m22WfaWqHbczZVUXbDhaaAcllqpHvQCGoo7vtQ3Q=;
+        b=oGku/UZ6JGk6V0C5bLYbPWu66MUuJjgYpY3NGBPivcZhtS7WFLDvjIC8N3BUUM+ojm
+         XrqzbPZ7BrMhKgw6iqLfOiywA2/e+V1CI1Bv+ibOwljypZIiJAJvqWYl5GdTGvHtfSGD
+         AjC8c/AA3lgjgppMd1cIaGUH2dRgdYoZWaD8x6OXrTYVzs/Sv572IV2k0tCdTTzuCx3t
+         2ikwrDFd4TfQyxs2LX1weme559lC2wREdRcP6Dc7/B3NufUGyFdifmPs2+vqf1zmp4X2
+         gc4AimqIJ4eobRPhboGYfD+oUL8eSDviG7Sv1YPnqbnnXUpkKhIJwyz8+6Ut4CAQV+ES
+         OCMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=xN5m22WfaWqHbczZVUXbDhaaAcllqpHvQCGoo7vtQ3Q=;
+        b=rb86DLwfnmcmt8EIlrK28WfImb5QpWQKawf0p0FzjDUmbuaaxrfvo4P7Uti9Uo9yZY
+         VHl4Y2pNeV9GlOtcA1/2Jbb2SRUdHv+/ArKL2MNww2p9SqZ8lwNNpEDl0RmIGH7d6JV7
+         HKsA1u18rl0USXGpWTNTiYs38kWNEN3Lh1aPhIOu8h1w3V4xCqJjtLM9FKibeqM414Ua
+         +Y09JcDEMuq1SzgAPAOFmwJcqD2Tu4DJg1iBSZ11WbzDxndX/LOrOjgEhucFVtXHtXWt
+         zGIEyhc5KzKlpxRJE6abGL0fuOmdvgrO4xOa1uHtct88eV6IU+wn1hw9xEEeX6ZzwdMM
+         94XA==
+X-Gm-Message-State: ACgBeo2PvdqTdf+00OVr9Bzun5vsRHJshWivUKjMduLFxUR+F5J0nBlL
+        sWvygERrGQfmD3bvUCB9TQ4=
+X-Google-Smtp-Source: AA6agR6BPAMdFFb/vkSsLm2HrUQWrAH7AmJz5zOLk+hoeikQiaWUiHe1ZL4CVAhLy51sQSCSL2zS7Q==
+X-Received: by 2002:a05:6512:3686:b0:492:bd6f:ad4 with SMTP id d6-20020a056512368600b00492bd6f0ad4mr2926283lfs.151.1660936837811;
+        Fri, 19 Aug 2022 12:20:37 -0700 (PDT)
+Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id p4-20020a19f004000000b0048aeef1b2bcsm725453lfc.294.2022.08.19.12.20.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 12:20:37 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 22:20:32 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Alexandru Lazar <alazar@startmail.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 12/14] iio: max1241: simplify using
+ devm_regulator_get_enable()
+Message-ID: <7c759bf6c06e72ae70bffeebc1939d9903427278.1660934107.git.mazziesaccount@gmail.com>
+References: <cover.1660934107.git.mazziesaccount@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9JDXN8VFq+K/+z7s"
+Content-Disposition: inline
+In-Reply-To: <cover.1660934107.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -103,47 +79,109 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--9JDXN8VFq+K/+z7s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 18, 2022, at 1:24 AM, Ming Lei wrote:
-> On Thu, Aug 18, 2022 at 12:27:04AM -0400, Chris Murphy wrote:
->> 
->> 
->> On Thu, Aug 18, 2022, at 12:18 AM, Chris Murphy wrote:
->> > On Thu, Aug 18, 2022, at 12:12 AM, Chris Murphy wrote:
->> >> On Wed, Aug 17, 2022, at 11:41 PM, Ming Lei wrote:
->> >>
->> >>> OK, can you post the blk-mq debugfs log after you trigger it on v5.17?
->> 
->> Same boot, 3rd log. But the load is above 300 so I kinda need to sysrq+b soon.
->> 
->> https://drive.google.com/file/d/1375H558kqPTdng439rvG6LuXXWPXLToo/view?usp=sharing
->> 
->
-> Also please test the following one too:
->
->
-> diff --git a/block/blk-mq.c b/block/blk-mq.c
-> index 5ee62b95f3e5..d01c64be08e2 100644
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -1991,7 +1991,8 @@ bool blk_mq_dispatch_rq_list(struct blk_mq_hw_ctx 
-> *hctx, struct list_head *list,
->  		if (!needs_restart ||
->  		    (no_tag && list_empty_careful(&hctx->dispatch_wait.entry)))
->  			blk_mq_run_hw_queue(hctx, true);
-> -		else if (needs_restart && needs_resource)
-> +		else if (needs_restart && (needs_resource ||
-> +					blk_mq_is_shared_tags(hctx->flags)))
->  			blk_mq_delay_run_hw_queue(hctx, BLK_MQ_RESOURCE_DELAY);
-> 
->  		blk_mq_update_dispatch_busy(hctx, true);
->
+Drop open-coded pattern: 'devm_regulator_get(), regulator_enable(),
+add_action_or_reset(regulator_disable)' and use the
+devm_regulator_get_enable() and drop the pointer to the regulator.
+This simplifies code and makes it less tempting to add manual control
+for the regulator which is also controlled by devm.
+
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
+---
+v2 =3D> v3:
+New patch
+---
+ drivers/iio/adc/max1241.c | 28 +++-------------------------
+ 1 file changed, 3 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/iio/adc/max1241.c b/drivers/iio/adc/max1241.c
+index a815ad1f6913..500bb09ab19b 100644
+--- a/drivers/iio/adc/max1241.c
++++ b/drivers/iio/adc/max1241.c
+@@ -22,7 +22,6 @@ enum max1241_id {
+ struct max1241 {
+ 	struct spi_device *spi;
+ 	struct mutex lock;
+-	struct regulator *vdd;
+ 	struct regulator *vref;
+ 	struct gpio_desc *shutdown;
+=20
+@@ -110,17 +109,6 @@ static const struct iio_info max1241_info =3D {
+ 	.read_raw =3D max1241_read_raw,
+ };
+=20
+-static void max1241_disable_vdd_action(void *data)
+-{
+-	struct max1241 *adc =3D data;
+-	struct device *dev =3D &adc->spi->dev;
+-	int err;
+-
+-	err =3D regulator_disable(adc->vdd);
+-	if (err)
+-		dev_err(dev, "could not disable vdd regulator.\n");
+-}
+-
+ static void max1241_disable_vref_action(void *data)
+ {
+ 	struct max1241 *adc =3D data;
+@@ -147,20 +135,10 @@ static int max1241_probe(struct spi_device *spi)
+ 	adc->spi =3D spi;
+ 	mutex_init(&adc->lock);
+=20
+-	adc->vdd =3D devm_regulator_get(dev, "vdd");
+-	if (IS_ERR(adc->vdd))
+-		return dev_err_probe(dev, PTR_ERR(adc->vdd),
+-				     "failed to get vdd regulator\n");
+-
+-	ret =3D regulator_enable(adc->vdd);
++	ret =3D devm_regulator_get_enable(dev, "vdd");
+ 	if (ret)
+-		return ret;
+-
+-	ret =3D devm_add_action_or_reset(dev, max1241_disable_vdd_action, adc);
+-	if (ret) {
+-		dev_err(dev, "could not set up vdd regulator cleanup action\n");
+-		return ret;
+-	}
++		return dev_err_probe(dev, ret,
++				     "failed to get/enable vdd regulator\n");
+=20
+ 	adc->vref =3D devm_regulator_get(dev, "vref");
+ 	if (IS_ERR(adc->vref))
+--=20
+2.37.1
 
 
-With just this patch on top of 5.17.0, it still hangs. I've captured block debugfs log:
-https://drive.google.com/file/d/1ic4YHxoL9RrCdy_5FNdGfh_q_J3d_Ft0/view?usp=sharing
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
 
+--9JDXN8VFq+K/+z7s
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Chris Murphy
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL/4oAACgkQeFA3/03a
+ocVahQf/bf5z/JOjpwhdbVqyTOIhVJiXKcr2FtWmeaAb4/xAmNwBJYo6vMV4J6Dn
+qtkbc5ry14odNgSxCiwh9qRbk0oOwlJ7/xqTJzuqKjrKhfsgN13NZPT7IWz40AlG
+2N992o+zmmUjrNN1JC0PEsDz9PC5jOhq6KU09rbvgkKAbp4iNq+2lSb3XgDUVn/b
+5m5oJERV1lhUeRVFb8I8Qeh51lTQMeQRptyuuOnQVko8XcKx192ruBhjD+Li84iH
+juueuRb73kCaLjau7eVyt/v3gtsH/0kBb8K0TUyizesoTTijWSJ6FKZ7VPXPThPB
+02tdAJSx3U120ITPw1Qjx0j7KUGk2Q==
+=VAIW
+-----END PGP SIGNATURE-----
+
+--9JDXN8VFq+K/+z7s--

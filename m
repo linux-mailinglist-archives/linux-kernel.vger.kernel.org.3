@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7421F59A7DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3F359A7ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238956AbiHSVnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 17:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
+        id S238730AbiHSVnt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 19 Aug 2022 17:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbiHSVnC (ORCPT
+        with ESMTP id S234924AbiHSVnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 17:43:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4381010DCD5
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:43:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660945380;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TF8rNb8UgO6lfW4pRfX+5WK+hLe/xJvdy6+pJrx+mzo=;
-        b=Eg4QeJa2Uinq9RKGhOZGKOIth06jpOYyrsnVqn9eitjqxUbUEPInsHRP2qL8JgWQ4abfeT
-        E2eeylD1AvaAjAmI7K8obWnhN1KeRhpiN6nF3unhPraPYHg2GsBBtqEbcH35KhaICzNM/4
-        oOheyNDujAYc1tEdFq7bZKPq24UhtgM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-54-qTr8DUvZPf6knxIM81wOjw-1; Fri, 19 Aug 2022 17:42:57 -0400
-X-MC-Unique: qTr8DUvZPf6knxIM81wOjw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E307B811E76;
-        Fri, 19 Aug 2022 21:42:56 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.48.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 974FD492C3B;
-        Fri, 19 Aug 2022 21:42:55 +0000 (UTC)
-Date:   Fri, 19 Aug 2022 17:42:53 -0400
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Steve Grubb <sgrubb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v4 4/4] fanotify,audit: deliver fan_info as a hex-encoded
- string
-Message-ID: <YwAD3SmDUeKc+5ht@madcap2.tricolour.ca>
-References: <cover.1659996830.git.rgb@redhat.com>
- <2d8159cec4392029dabfc39b55ac5fbd0faa9fbd.1659996830.git.rgb@redhat.com>
- <4767361.31r3eYUQgx@x2>
+        Fri, 19 Aug 2022 17:43:47 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53961B7CE
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:43:46 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-47-4RE9sXC-OQ6fYpbHD6dEYg-1; Fri, 19 Aug 2022 22:43:43 +0100
+X-MC-Unique: 4RE9sXC-OQ6fYpbHD6dEYg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.38; Fri, 19 Aug 2022 22:43:42 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.040; Fri, 19 Aug 2022 22:43:42 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Hamza Mahfooz' <hamza.mahfooz@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Nathan Chancellor <nathan@kernel.org>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?iso-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        =?iso-8859-1?Q?Ma=EDra_Canal?= <mairacanal@riseup.net>,
+        =?iso-8859-1?Q?Andr=E9_Almeida?= <andrealmeid@igalia.com>,
+        Bing Guo <Bing.Guo@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Subject: RE: [PATCH] drm/amd/display: fix i386 frame size warning
+Thread-Topic: [PATCH] drm/amd/display: fix i386 frame size warning
+Thread-Index: AQHYsyK3bLhoYPUGX0aEEgc6M/SYOq22wp5Q
+Date:   Fri, 19 Aug 2022 21:43:42 +0000
+Message-ID: <f9f6fa60ae8c4e949ef9cce5b47f95bd@AcuMS.aculab.com>
+References: <20220818164848.68729-1-hamza.mahfooz@amd.com>
+In-Reply-To: <20220818164848.68729-1-hamza.mahfooz@amd.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4767361.31r3eYUQgx@x2>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,102 +72,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-16 09:37, Steve Grubb wrote:
-> Hello Richard,
+From: Hamza Mahfooz
+> Sent: 18 August 2022 17:49
 > 
-> Although I have it working, I have some comments below that might improve
-> things.
+> Addresses the following warning:
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3596:6: error: stack frame
+> size (2092) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-
+> larger-than]
+> void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+>      ^
 > 
-> On Tuesday, August 9, 2022 1:22:55 PM EDT Richard Guy Briggs wrote:
-> > Currently the only type of fanotify info that is defined is an audit
-> > rule number, but convert it to hex encoding to future-proof the field.
-> > 
-> > Sample record:
-> >   type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0
-> > fan_info=3F
-> > 
-> > Suggested-by: Paul Moore <paul@paul-moore.com>
-> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > ---
-> >  kernel/auditsc.c | 28 +++++++++++++++++++++-------
-> >  1 file changed, 21 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > index f000fec52360..0f747015c577 100644
-> > --- a/kernel/auditsc.c
-> > +++ b/kernel/auditsc.c
-> > @@ -2908,22 +2908,36 @@ void __audit_fanotify(u32 response, size_t len,
-> > char *buf)
-> > 
-> >  	if (!(len && buf)) {
-> >  		audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> > -			  "resp=%u fan_type=0 fan_info=?", response);
-> > +			  "resp=%u fan_type=0 fan_info=3F", response); /* "?" */
-> >  		return;
-> >  	}
-> >  	while (c >= sizeof(struct fanotify_response_info_header)) {
-> > +		struct audit_context *ctx = audit_context();
-> > +		struct audit_buffer *ab;
-> > +
-> >  		friar = (struct fanotify_response_info_audit_rule *)buf;
-> >  		switch (friar->hdr.type) {
-> >  		case FAN_RESPONSE_INFO_AUDIT_RULE:
-> >  			if (friar->hdr.len < sizeof(*friar)) {
-> > -				audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> > -					  "resp=%u fan_type=%u fan_info=(incomplete)",
-> > -					  response, friar->hdr.type);
-> > +				ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
-> > +				if (ab) {
-> > +					audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
-> > +							 response, friar->hdr.type);
-> > +#define INCOMPLETE "(incomplete)"
-> > +					audit_log_n_hex(ab, INCOMPLETE, sizeof(INCOMPLETE));
-> > +					audit_log_end(ab);
-> > +				}
-> >  				return;
-> >  			}
-> > -			audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> > -				  "resp=%u fan_type=%u fan_info=%u",
-> > -				  response, friar->hdr.type, friar->audit_rule);
-> > +			ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
-> > +			if (ab) {
-> > +				audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
-> > +						 response, friar->hdr.type);
-> > +				audit_log_n_hex(ab, (char *)&friar->audit_rule,
-> > +						sizeof(friar->audit_rule));
+> UseMinimumDCFCLK() is eating away at
+> dml30_ModeSupportAndSystemConfigurationFull()'s stack space, so use a
+> pointer to struct vba_vars_st instead of passing lots of large arrays
+> as parameters by value.
 > 
-> One thing to point out, the structure has a member audit_rule. It is
-> probably better to call it rule_number. This is because it has nothing to
-> do with any actual audit rule. It is a rule number meant to be recorded by
-> the audit system.
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+> ---
+>  .../dc/dml/dcn30/display_mode_vba_30.c        | 295 ++++--------------
+>  1 file changed, 63 insertions(+), 232 deletions(-)
 > 
-> Also, that member is a __u32 type. Hex encoding that directly gives back a
-> __u32 when decoded - which is a bit unexpected since everything else is
-> strings. It would be better to convert the u32 to a base 10 string and then
-> hex encode that. A buffer of 12 bytes should be sufficient.
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> index 876b321b30ca..b7fa003ffe06 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
+> @@ -396,64 +396,10 @@ static void CalculateUrgentBurstFactor(
+> 
+>  static void UseMinimumDCFCLK(
+>  		struct display_mode_lib *mode_lib,
+> -		int MaxInterDCNTileRepeaters,
+> +		struct vba_vars_st *v,
 
-Sure, these seem reasonable.
+You should probably add 'const' in there.
+Thinks will likely break if v->xxx gets changed.
 
-> Thanks,
-> -Steve
-> 
-> > +				audit_log_end(ab);
-> > +
-> > +			}
-> >  		}
-> >  		c -= friar->hdr.len;
-> >  		ib += friar->hdr.len;
-> 
-> 
-> 
-> 
+	David
 
-- RGB
-
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

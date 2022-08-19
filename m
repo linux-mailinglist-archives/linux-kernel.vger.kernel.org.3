@@ -2,145 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CF859A693
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9211959A697
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350705AbiHSTfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 15:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
+        id S1351504AbiHSTgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 15:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiHSTfL (ORCPT
+        with ESMTP id S229469AbiHSTgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 15:35:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7CB421837
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 12:35:09 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oP7lr-0003qd-5V; Fri, 19 Aug 2022 21:35:07 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oP7lp-000lsq-Ln; Fri, 19 Aug 2022 21:35:05 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oP7lo-00Cni9-Kn; Fri, 19 Aug 2022 21:35:04 +0200
-Date:   Fri, 19 Aug 2022 21:35:01 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.19 0191/1157] hwmon: (sht15) Fix wrong assumptions in
- device remove callback
-Message-ID: <20220819193501.glb43pf64zkl7n3p@pengutronix.de>
-References: <20220815180439.416659447@linuxfoundation.org>
- <20220815180447.391756473@linuxfoundation.org>
- <20220815214911.wy7p5sqbog6r6tcg@pengutronix.de>
- <Yvt0Ms9ur2aSj2Zz@kroah.com>
+        Fri, 19 Aug 2022 15:36:37 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67ADC2FA5;
+        Fri, 19 Aug 2022 12:36:36 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id r14-20020a17090a4dce00b001faa76931beso8451469pjl.1;
+        Fri, 19 Aug 2022 12:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=RGQInboxZApXDt02Ut7F/gX7q5m4BMuZBtDGjZ3GBqg=;
+        b=XoY5HbkeUs1Z1cPPS5VrIn5lnw/qF0mSlhb0qSo9SZmJWyoHoAnIRivwFzRbIB+C38
+         jSuiNJWcQtO5a2AMEQ1sfy1IH61nyB1Fb+ygSDdJqHVd/DMbifRohEGhX/lTZQjaIyfh
+         srToJBrF/XTDMelu/Ym0YYGRHidpJyxgFNtR3fOS7EjKnq1vWbg7qsruh3xr0LDpE1W1
+         aI3C8BB2xJD74jJdKGS+b7MHD+bnoTM1p3tGJzQcODpXDOiiCuCVkwnwMOqnwpXlDufZ
+         nbod4lfG3yelvnz/as6gcoOwB8OKCocV1THadfnXf3iChwGGvRgWf4FgJJ4u9/Srqqcp
+         TRfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=RGQInboxZApXDt02Ut7F/gX7q5m4BMuZBtDGjZ3GBqg=;
+        b=rhHNTmuouZYBDstglRypSxEuXFdss4UwbLsmHzjp2VZ8Q4C5nU0nNEY2Kk8FN3Wvo0
+         fzX+p0RV1kbDzXjjK8zH3gGS42+V7nirREzSl4tafwK+XvYTB9O94X4NqigfcSBjWqDJ
+         dwG9Sv/hPF2GTWoypQizSM4Z5HLTuv/JXRLuQ+rHajUp+bUbl4vHOF+znVKzkzIWX3p5
+         gwXGBA2Ml1DlokMxLV3Wg0W6dUlxQQ5m/U29UYhEMp5QAFeM5VIZ8oDQW61S+bHobw6a
+         c0QQzlNArZgnnFCk21oA+mL4xKsm0/ULRRwnNYd4eZhhNGRVdjdO5QFhAI1wQfLbOcE6
+         DR2A==
+X-Gm-Message-State: ACgBeo3cV/BZjrzdKJ/3xIGSEAPyedm/Qrq9+i+SkZItV6ycYvhzMe3l
+        ifrvPtPhaNPDnzcO6JcDNNXOD1tGyQI=
+X-Google-Smtp-Source: AA6agR5sX008bzvMYeo8Dw+0EFf5/eaf5A4G1UPYTAB1q7yU+974jWXMyulUjO2f9YDipA6hId+AwQ==
+X-Received: by 2002:a17:903:120d:b0:171:4fa0:7b4a with SMTP id l13-20020a170903120d00b001714fa07b4amr8662135plh.45.1660937796270;
+        Fri, 19 Aug 2022 12:36:36 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k63-20020a17090a4cc500b001facb7bc1adsm3420475pjh.26.2022.08.19.12.36.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 12:36:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 19 Aug 2022 12:36:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 05/14] hwmon: adm1177: simplify using
+ devm_regulator_get_enable()
+Message-ID: <20220819193633.GA3150608@roeck-us.net>
+References: <cover.1660934107.git.mazziesaccount@gmail.com>
+ <718e4ea3a54c036dcb59ff55c338e253735e516b.1660934107.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="m7u2qoobcl7vkpee"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yvt0Ms9ur2aSj2Zz@kroah.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <718e4ea3a54c036dcb59ff55c338e253735e516b.1660934107.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Aug 19, 2022 at 10:18:46PM +0300, Matti Vaittinen wrote:
+> Drop open-coded pattern: 'devm_regulator_get(), regulator_enable(),
+> add_action_or_reset(regulator_disable)' and use the
+> devm_regulator_get_enable() and drop the pointer to the regulator.
+> This simplifies code and makes it less tempting to add manual control
+> for the regulator which is also controlled by devm.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
---m7u2qoobcl7vkpee
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Hello Greg,
+> 
+> ---
+> v2 => v3:
+> New patch
+> ---
+>  drivers/hwmon/adm1177.c | 27 +++------------------------
+>  1 file changed, 3 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/hwmon/adm1177.c b/drivers/hwmon/adm1177.c
+> index 0c5dbc5e33b4..be17a26a84f1 100644
+> --- a/drivers/hwmon/adm1177.c
+> +++ b/drivers/hwmon/adm1177.c
+> @@ -26,14 +26,12 @@
+>  /**
+>   * struct adm1177_state - driver instance specific data
+>   * @client:		pointer to i2c client
+> - * @reg:		regulator info for the power supply of the device
+>   * @r_sense_uohm:	current sense resistor value
+>   * @alert_threshold_ua:	current limit for shutdown
+>   * @vrange_high:	internal voltage divider
+>   */
+>  struct adm1177_state {
+>  	struct i2c_client	*client;
+> -	struct regulator	*reg;
+>  	u32			r_sense_uohm;
+>  	u32			alert_threshold_ua;
+>  	bool			vrange_high;
+> @@ -189,13 +187,6 @@ static const struct hwmon_chip_info adm1177_chip_info = {
+>  	.info = adm1177_info,
+>  };
+>  
+> -static void adm1177_remove(void *data)
+> -{
+> -	struct adm1177_state *st = data;
+> -
+> -	regulator_disable(st->reg);
+> -}
+> -
+>  static int adm1177_probe(struct i2c_client *client)
+>  {
+>  	struct device *dev = &client->dev;
+> @@ -210,21 +201,9 @@ static int adm1177_probe(struct i2c_client *client)
+>  
+>  	st->client = client;
+>  
+> -	st->reg = devm_regulator_get_optional(&client->dev, "vref");
+> -	if (IS_ERR(st->reg)) {
+> -		if (PTR_ERR(st->reg) == -EPROBE_DEFER)
+> -			return -EPROBE_DEFER;
+> -
+> -		st->reg = NULL;
+> -	} else {
+> -		ret = regulator_enable(st->reg);
+> -		if (ret)
+> -			return ret;
+> -		ret = devm_add_action_or_reset(&client->dev, adm1177_remove,
+> -					       st);
+> -		if (ret)
+> -			return ret;
+> -	}
+> +	ret = devm_regulator_get_enable_optional(&client->dev, "vref");
+> +	if (ret == -EPROBE_DEFER)
+> +		return -EPROBE_DEFER;
+>  
+>  	if (device_property_read_u32(dev, "shunt-resistor-micro-ohms",
+>  				     &st->r_sense_uohm))
+> -- 
+> 2.37.1
+> 
+> 
+> -- 
+> Matti Vaittinen, Linux device drivers
+> ROHM Semiconductors, Finland SWDC
+> Kiviharjunlenkki 1E
+> 90220 OULU
+> FINLAND
+> 
+> ~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+> Simon says - in Latin please.
+> ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+> Thanks to Simon Glass for the translation =] 
 
-On Tue, Aug 16, 2022 at 12:40:50PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Aug 15, 2022 at 11:49:11PM +0200, Uwe Kleine-K=F6nig wrote:
-> > On Mon, Aug 15, 2022 at 07:52:27PM +0200, Greg Kroah-Hartman wrote:
-> > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > >=20
-> > > [ Upstream commit 7d4edccc9bbfe1dcdff641343f7b0c6763fbe774 ]
-> > >=20
-> > > Taking a lock at the beginning of .remove() doesn't prevent new reade=
-rs.
-> > > With the existing approach it can happen, that a read occurs just when
-> > > the lock was taken blocking the reader until the lock is released at =
-the
-> > > end of the remove callback which then accessed *data that is already
-> > > freed then.
-> > >=20
-> > > To actually fix this problem the hwmon core needs some adaption. Until
-> > > this is implemented take the optimistic approach of assuming that all
-> > > readers are gone after hwmon_device_unregister() and
-> > > sysfs_remove_group() as most other drivers do. (And once the core
-> > > implements that, taking the lock would deadlock.)
-> > >=20
-> > > So drop the lock, move the reset to after device unregistration to ke=
-ep
-> > > the device in a workable state until it's deregistered. Also add a er=
-ror
-> > > message in case the reset fails and return 0 anyhow. (Returning an er=
-ror
-> > > code, doesn't stop the platform device unregistration and only results
-> > > in a little helpful error message before the devm cleanup handlers are
-> > > called.)
-> > >=20
-> > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > > Link: https://lore.kernel.org/r/20220725194344.150098-1-u.kleine-koen=
-ig@pengutronix.de
-> > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> >=20
-> > Does this mean my concerns I expressed in the mail with Message-Id:
-> > 20220814155638.idxnihylofsxqlql@pengutronix.de were not taken into
-> > consideration?
->=20
-> I can't find that message-id on lore.kernel.org, do you have a link?
 
-Oh, I missed your request earlier. No I don't have a link, the mail was
-sent to Sasha Levin, Jean Delvare, Guenter Roeck and stable-commits as I
-just replied to the "note to let you know that I've just added the patch
-titled [...] to the 5.19-stable tree".
-
-I wrote:
-> I'd say adding this patch to stable isn't right. The problem existed
-> since v3.0 (commit cc15c7ebb424e45ba2c5ceecbe52d025219ee970) and was
-> never reported to be hit in practise. And given that the problem doesn't
-> go away completely but (AFAICT) just opens the possibility for a hwmon
-> core fix, I'd say it's not worth a backport.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---m7u2qoobcl7vkpee
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmL/5eIACgkQwfwUeK3K
-7AkGfwf+L+JbxtND792d9fKcXW+J9kb3VlkKrMzaMHmzVTKCHbG3WbO4CV2ZBCTV
-sVssp8PP1hpqIjI9/9hYekKhjyROkpJDQM3ADjaIDKvHcwk5ZA4Qrhy9FD/YSAPi
-4bXP9ZP/crrSHZwHoyTEdIyh3ys9W/mdGRg9+PuJ3nB6xkNEvF5gVMdB/68wSV6C
-z9gP69dfLMG5cFpaKKhSdD/rJaVqw9A+GgKnQnd+yIbAd/AqBb9Mrn2XBTG/97Lk
-+KK2stEqVG/sHhvCQsvBwj3XGmElSja+FWcWGnQdXM+57i8IVE4poyTuj2JWAupe
-UJcWje/F3xofJJu3InLakL5VZ+nqRA==
-=H/ju
------END PGP SIGNATURE-----
-
---m7u2qoobcl7vkpee--

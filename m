@@ -2,71 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C39599D37
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7376F599D3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349505AbiHSNzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 09:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
+        id S1349502AbiHSNz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 09:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349502AbiHSNzm (ORCPT
+        with ESMTP id S1348475AbiHSNzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 09:55:42 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52336D7412
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:55:40 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id s1so3435060lfp.6
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc;
-        bh=qz+s4Lp+1rNmUcFb2WvMXoDlDkJBMF0AImdXZ84Zq2Q=;
-        b=b2qPJwI1tvDFb5SSvsztBjBlbvMLCdljfj7HbLEKPKoiMjYaHinlgcNbssiLU19TsA
-         rDANCGi0KhfynTCEopOYs7YZLZZZSZjhESlknMcCel+vwnX26JCbn01/FQzwku56QoQX
-         LBC7/fd+Oudwpc/qf5pLqSuSyvZelrH+llgZwrFqim1KQe4+KbTlpa1aKCS6XW1k6P3/
-         xy0RyLR0T8Wy1bX11SPDbWswB3IlmhSNFfCAfmRsfpaeQpr/9/4Bf1r+lyMnRQVydhiN
-         Mifei2iFuYInXiOZsfF2z75zaIeC1YfTI30ViA0Kzn7DFtAY4/5psWRaKPLAfIMgO7yC
-         ULaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc;
-        bh=qz+s4Lp+1rNmUcFb2WvMXoDlDkJBMF0AImdXZ84Zq2Q=;
-        b=375XiiK9+a1kiiK+FjKdLuIzmNcgJKZn/ggKt7mU5LxPOe9k73CNv2joQY3L03Wxez
-         4KlPIn5csHvB7qhMRMvRS6s0dSMJLpSGY2CDzg8NQYjyz+GVO7w9bUDd9iU0T6wrmw9l
-         09tn/iXzwiGCkOK+412RTGaFMvyo0SuXYmG4K/SrIFVbrnoa9F2u1dL8b6lMGB59mUof
-         4pJ4ZbNQoj+LzWktsj4lbwkODlSPxPVA+9aQSpXwV2arErn5vqWEThwzTlOV0Tvq39EA
-         MUYcLtm5T5KIIqmb3EeQ43tHxNmwQ5x+6gyJc/uY4YR6rbWXDv89HrWTh8FUMh+g+FYX
-         3Tzw==
-X-Gm-Message-State: ACgBeo3Zd5r65PWIS2Cw7nn6mHfSLVwvSWxQf8Gxe+EonpZ/vaf3LXiu
-        txM18DNlWPL7iMyYZ5zBLuRCdQ==
-X-Google-Smtp-Source: AA6agR4hZSxYhPPfmqGv6yv5rwo91nhjhiJwwdev9U1WMc5eWfLZgok57gjZGhaFuKCx+uPr0IP3mQ==
-X-Received: by 2002:a05:6512:168d:b0:491:3206:b63 with SMTP id bu13-20020a056512168d00b0049132060b63mr2376458lfb.149.1660917338688;
-        Fri, 19 Aug 2022 06:55:38 -0700 (PDT)
-Received: from krzk-bin.. (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id z2-20020a2e8e82000000b0025dd5b3fabesm598519ljk.102.2022.08.19.06.55.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 06:55:38 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski@linaro.org, tomasz.figa@gmail.com,
-        robh+dt@kernel.org, alim.akhtar@samsung.com,
-        linux-samsung-soc@vger.kernel.org, s.nawrocki@samsung.com,
-        linus.walleij@linaro.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] pinctrl/arm: dt-bindings: deprecate header with register constants
-Date:   Fri, 19 Aug 2022 16:55:35 +0300
-Message-Id: <166091732992.90087.5461624467254256635.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220816133016.77553-1-krzysztof.kozlowski@linaro.org>
-References: <20220816133016.77553-1-krzysztof.kozlowski@linaro.org>
+        Fri, 19 Aug 2022 09:55:55 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CDEAE211;
+        Fri, 19 Aug 2022 06:55:53 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 36BCC2D7;
+        Fri, 19 Aug 2022 13:55:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 36BCC2D7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1660917353; bh=xxoEfJJqE8JslHY5gkAIae7dMgC9uE88hH40n9nxHi8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=SCJpO8D9cRS7XwxlWlkwMl08EuEddMkZ1DZ/f0QOlcxLLVIt4cxcjasZ4bL/IzfRC
+         dk7vcxYT5jVs76iOckX47JcILK9yiMoB4HZmCdefP+oPZd5BETXubDC0/qDfflTzWv
+         NGcenoQGz3tlv51NGl2qy4zvhhZ1lTo800G+vI1EZ308EZ9z3UMMXwksFvpZ63fdOA
+         EbsYL7iqQkW58h1K3GBVcvKaLGGPETzBMPwXvEN7yG/HPzWu7GmJTawfdbWwLHWThv
+         cszT1+1YMvt6O0LsQU0AHaR+XjXDDj5L98DIslF+HGb9onywRXOyuZIJ1CnnXrR4Of
+         719AWnSNVszxg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tsugikazu Shibata <shibata@linuxfoundation.org>
+Subject: Re: [PATCH] docs/ja_JP/SubmittingPatches: Remove reference to
+ submitting-drivers.rst
+In-Reply-To: <83347b74-5075-90ad-1f8e-575bf4cdaf50@gmail.com>
+References: <acaf13cd-52f0-c7c2-add0-0644cb1e77e4@gmail.com>
+ <87edxdcwnj.fsf@meer.lwn.net>
+ <83347b74-5075-90ad-1f8e-575bf4cdaf50@gmail.com>
+Date:   Fri, 19 Aug 2022 07:55:52 -0600
+Message-ID: <878rnkbamv.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,26 +57,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 Aug 2022 16:30:14 +0300, Krzysztof Kozlowski wrote:
-> Changes since v3
-> ================
-> 1. Add patch 1 - bindings example fixes.
-> 2. All dependencies were merged, so this can go via Samsung pinctrl tree.
-> 
-> Changes since v2
-> ================
-> 1. Split last bindings patch per driver changes and bindings.
-> 2. Add tags.
-> 
-> [...]
+Akira Yokosawa <akiyks@gmail.com> writes:
 
-Applied, thanks!
+> On Thu, 18 Aug 2022 11:02:40 -0600, Jonathan Corbet wrote:
+>> Akira Yokosawa <akiyks@gmail.com> writes:
+>> 
+>>> Reflect changes made in commit 9db370de2780 ("docs: process: remove
+>>> outdated submitting-drivers.rst")
+>>>
+>>> Reported-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+>>> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+>>> Fixes: 9db370de2780 ("docs: process: remove outdated submitting-drivers.rst")
+>>> Cc: Tsugikazu Shibata <shibata@linuxfoundation.org>
+>> 
+>> So I can't get this patch to apply; I'm not really sure what the problem
+>> is.  Does it apply on your side?
+>
+> Looks like thunderbird used "Content-Transfer-Encoding: base64".
+> Resent using "git send-email" with "Content-Transfer-Encoding: 8bit"
+> Hopefully it works for you.
 
-[1/2] dt-bindings: pinctrl: samsung: stop using bindings header with constants
-      https://git.kernel.org/pinctrl/samsung/c/df805304a820ed10fc3d038dd64b85821c9ee606
-[2/2] dt-bindings: pinctrl: samsung: deprecate header with register constants
-      https://git.kernel.org/pinctrl/samsung/c/9d9292576810d0b36897718c24dfbc1a2835314b
+I'd noticed that, but "git am" can handle the decoding - it was able to
+show me the patch it couldn't apply.  Dunno...in any case, the new patch
+applied just fine, thanks.
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+jon

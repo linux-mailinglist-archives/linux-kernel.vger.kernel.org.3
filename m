@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B3B599505
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A385994FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346556AbiHSGKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 02:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S1346614AbiHSGKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 02:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346642AbiHSGJD (ORCPT
+        with ESMTP id S1346725AbiHSGKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 02:09:03 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F073ECDD
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:33 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id z2so4457977edc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:33 -0700 (PDT)
+        Fri, 19 Aug 2022 02:10:20 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AC05B051
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:09:00 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id l1so4338325lfk.8
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:09:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=MQQ5ueYXwF1mgVuBzhpDoSiarWWxcP+kFd0K52asQnw=;
-        b=UJ8fUY4TBBq/TG6MOQupt3Ca8oMqHbkfKb3rW32eIJXKGf8rriXtcQuht5HRT+uI+b
-         /1I/3QlQTBiYtQyoCjG3k8PmdewX1V/uYmtVT9QY4yVxm9VZ7arJUigNUV//Z6LZj1ts
-         UP6L4uHCOc8l1xbbiZPLnLO9Lu3mj2x0J4S9A9ZshmFeIPMpzFFoGn4rIxOhHdCNlp3v
-         ks8QLaHIx2sYfETf4glt1lcF4B1ty3UFK4WsMunfm8bv0UoPjy7V0NA5t4JFcwwU6z1y
-         mvfHq/oAbzId5oj+M3S89Vds8ALHVVB/ojTU0sWRNMVajI/dW+sLa9z3o3F3pOPVYaBq
-         73hA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Xp2c5pFCOLrl7+po3ij5+B4vFWZhRzSXs1VLLppjgg4=;
+        b=qg0XIBi/5efpkZ/OAXqtzgC4qVpxlU0UbGn+Radq4W+kZ8xPOc9GpZXVy+Dg/MR+Ai
+         6uPFIGjq3Ii0ob7pE65JDVB97lvL31mt/y2i21vzxjjxbH1J7FcbHclPRryafxIGLLPX
+         UYl/RnB6Unc/TzDO5hYhdzIs9vCpfR3h1X1lq5hyisAPVztS0UgIoPkVTzOM92fxCmKa
+         M8InKN4SE7HpArmBAUtJXWvoWSaFomcGyGgknkqscnNZ8a/b3k6GddVCGEjVzhvE/e2R
+         KNNfNyw7e7BpxeVGTFN7o/FlfKmQNM61gv0fPno+saxA+dAlSQ1iOBovMq1mi+SkvA9P
+         Pj9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=MQQ5ueYXwF1mgVuBzhpDoSiarWWxcP+kFd0K52asQnw=;
-        b=YyVljrNnT/JpoDKYA+qf+joIJLsftt5GzdHK3GcwAKfMNUsYFGjHRxArG5K1gNRZNK
-         jIbB1EyG5t+vM35htBQsl4mFQ1zMr6h3PdPvIhnDtUMuXLXcn8HkAivzzdygxnDfrbh9
-         nhp93BUdFLUcFxsqM01SX5wWIrFDJYhgVPLpS7vvoDjeKTg92VjRCBbZFe+A2iNWAODJ
-         et5j+b3FauZpx7GAfCf9irOQy29MFEgUXXJIiQFVW6aw42vgyQ+EBb2EOffI9kXG8mcL
-         Eupp+BTqKT7k5BNrVw5VxrIbUjaJQ9OMrxUYbONY9xc9HwISXyJ+Df6oOZZ1fv072XdF
-         7liA==
-X-Gm-Message-State: ACgBeo0zT9gGMy8Cwm5NSbkCjYlDrwrY9XuECg1oiRfIElRDnYw5iNn4
-        PrHFiM3qGNc8fv7hAShb0+D1b7cjW1PQ5DhW
-X-Google-Smtp-Source: AA6agR5qrhKSw7oa0pDZk68ViIpC2FB5ZmkkWaDCBIhx8mIj19+nf9D2Fwy8CN4MThe75Z3lcCNpuw==
-X-Received: by 2002:aa7:dd50:0:b0:440:3e9d:784 with SMTP id o16-20020aa7dd50000000b004403e9d0784mr4859887edw.195.1660889313038;
-        Thu, 18 Aug 2022 23:08:33 -0700 (PDT)
-Received: from lb02065.fritz.box ([2001:9e8:143b:fd00:5207:8c7f:747a:b80d])
-        by smtp.gmail.com with ESMTPSA id y14-20020a1709063a8e00b0073a644ef803sm1809660ejd.101.2022.08.18.23.08.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 23:08:32 -0700 (PDT)
-From:   Jack Wang <jinpu.wang@ionos.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: [PATCH v1 19/19] net/mlx4: Fix error check for dma_map_sg
-Date:   Fri, 19 Aug 2022 08:08:01 +0200
-Message-Id: <20220819060801.10443-20-jinpu.wang@ionos.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220819060801.10443-1-jinpu.wang@ionos.com>
-References: <20220819060801.10443-1-jinpu.wang@ionos.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Xp2c5pFCOLrl7+po3ij5+B4vFWZhRzSXs1VLLppjgg4=;
+        b=fVghek1n4FgKNeAVpM0R8CvOVr1UpYjRhbu3BAnPIY8wDTgWcuj3gmcu90UNhSyRU0
+         npLWyLYgstw0/baKGZn9TO3rOo0BnEAwp5E6p9mKhudvhp+i6s9ngonYL8nLWe97kCWQ
+         fpFO7O7H9RAbP/z51BzEKtOORM9YdaFdOxfHqny663sQDP4+c3qckP7Oo2LE8pFFfbET
+         7L5KGZjGAIDhIDv0HAE9JR+qnJygSb2M+1kar01us2ZMg58lug0IVb/bB39YUNd3PpAa
+         +mt6DJbAU+0ZkSXNjLE6l7mRZSYPqCVHM5rWE5pDf7jGq4tHpXu0nw8CEBKqKDFLFGgT
+         5eYQ==
+X-Gm-Message-State: ACgBeo26PU4xUh76A+v3drzzXuGBWflGHss1I0iimJMatUyBz7/3okKi
+        u29nG2E3nri9mDQP4vk4tuWNDg==
+X-Google-Smtp-Source: AA6agR7UzgH5UTsBnwxbvuRzyJKCTfID4WLnQkd9FvwR0hWwoOUk4cYrfd9owT7O3xzArFodV093uA==
+X-Received: by 2002:ac2:4466:0:b0:492:ca0f:d5f2 with SMTP id y6-20020ac24466000000b00492ca0fd5f2mr520740lfl.155.1660889338499;
+        Thu, 18 Aug 2022 23:08:58 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
+        by smtp.gmail.com with ESMTPSA id f27-20020a05651c03db00b00261b6faab6dsm342618ljp.115.2022.08.18.23.08.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 23:08:58 -0700 (PDT)
+Message-ID: <228e6194-b7e9-5f15-1815-6d1299190852@linaro.org>
+Date:   Fri, 19 Aug 2022 09:08:56 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2] dt-bindings: phy: Update Pratyush Yadav's email
+Content-Language: en-US
+To:     Pratyush Yadav <pratyush@kernel.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
+References: <20220816132131.75591-1-krzysztof.kozlowski@linaro.org>
+ <20220818194409.zicuzhcg36qw5her@yadavpratyush.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220818194409.zicuzhcg36qw5her@yadavpratyush.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,44 +80,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dma_map_sg return 0 on error.
+On 18/08/2022 22:44, Pratyush Yadav wrote:
+> Hi,
+> 
+> On 16/08/22 04:21PM, Krzysztof Kozlowski wrote:
+>> Emails to Pratyush Yadav bounce ("550 Invalid recipient"), so update to
+>> match one in commit 92714596cdbe ("MAINTAINERS: Use my kernel.org
+>> email").
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Acked-by: Rob Herring <robh@kernel.org>
+> 
+> I am not yet sure if I will have the bandwidth to review the patches for 
+> these. But anyway
+> 
+> Acked-by: Pratyush Yadav <pratyush@kernel.org>
 
-Cc: Tariq Toukan <tariqt@nvidia.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Cc: linux-rdma@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Then maybe it should be someone from TI? My v1 was changing the
+maintainer to Kishon Vijay Abraham I.
 
-Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
----
- drivers/net/ethernet/mellanox/mlx4/icm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx4/icm.c b/drivers/net/ethernet/mellanox/mlx4/icm.c
-index d89a3da89e5a..59b8b3c73582 100644
---- a/drivers/net/ethernet/mellanox/mlx4/icm.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/icm.c
-@@ -208,7 +208,7 @@ struct mlx4_icm *mlx4_alloc_icm(struct mlx4_dev *dev, int npages,
- 						chunk->sg, chunk->npages,
- 						DMA_BIDIRECTIONAL);
- 
--			if (chunk->nsg <= 0)
-+			if (!chunk->nsg)
- 				goto fail;
- 		}
- 
-@@ -222,7 +222,7 @@ struct mlx4_icm *mlx4_alloc_icm(struct mlx4_dev *dev, int npages,
- 		chunk->nsg = dma_map_sg(&dev->persist->pdev->dev, chunk->sg,
- 					chunk->npages, DMA_BIDIRECTIONAL);
- 
--		if (chunk->nsg <= 0)
-+		if (!chunk->nsg)
- 			goto fail;
- 	}
- 
--- 
-2.34.1
-
+Best regards,
+Krzysztof

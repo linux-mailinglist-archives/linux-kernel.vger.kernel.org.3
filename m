@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D7C59A54E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99AA59A576
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350634AbiHSSXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 14:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        id S1350639AbiHSSYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 14:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350291AbiHSSXI (ORCPT
+        with ESMTP id S229520AbiHSSYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 14:23:08 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3EDBCC26
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:23:07 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id cp14-20020a056a00348e00b0053632d32716so522609pfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:23:07 -0700 (PDT)
+        Fri, 19 Aug 2022 14:24:14 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B28BD1FD
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:24:11 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id gk3so10279751ejb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:24:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=q6KGI9Syk3DETLlMjkc4p6X3oD6H1Sce59yzAdrHv9I=;
-        b=dYp8LmBpls9sKCojA7hC8ie4GaU/vb9ZQR5d5rfmpp8r5dvZVRu2Y3IdsP0Xet8c6s
-         Elf52OrkccDJlui4irWLDP6KPCzV8rzKzAEP/Gi/4Jdu2eOf7xH0vxDqRPXgNbeXfYx8
-         w+eUDBv1HC9X/6zMDOMdrWXhLX49Xs31oYUmQybGH3wZlHoxy7dI4WFHzZdDBwGJacDK
-         mlosSMEqQuylU/LLOlNCaDpPCYsR6Y4Z4Q6hoNWaxWa8sFtBIpQ4rLmt4HpXKXhfT0PA
-         sSveP90DLxiUTNRhKq2R0s8A4SJrSbDF5pk7sF89a77b07gzbv1ekR7sCMJU9Yd48/tN
-         3GPg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=ooRQXzLUe97i7byO6R46BlbFBy3Y8r9AZv+oUBRyyNk=;
+        b=dC52cK47M+GcQ3HfB94JWV83L1H1/nK+0AbkeRCfkyYQSw3gNCJnPK0k2eZL2gbb2i
+         TL3WtRZ7Q+j7IgkZhr6qEs46gKHzUN5d/c6y8iF2ydpvzLsTocAa2zs5f6HZFM2w38JI
+         2uOWl/qcqTyLT68btQ4NE5Rfve9hnZnjChVgRYblXHqfTSeaSmLvWZILgkd3OSiO13Q9
+         PGAu06+Tu8R0NrwVKl2ASyH8x6W2Teiq4GP6tpjer+oO/AeZFMJBkCAs5c4ObVK8k3DE
+         DuT5bfdtdPnaIcayNi+xrk3HVRylqyHh72Snb/xpvILolYE+06LCX7vL38wN4xA/rfKj
+         q3WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=q6KGI9Syk3DETLlMjkc4p6X3oD6H1Sce59yzAdrHv9I=;
-        b=ENwrxAKm/lQu3bLHVU8s6Rp81gy1t4C4OY3w9OX7EH1wVDAxcG2WXI2+dGONw5RwL0
-         H8BQk2PzIXATc1luVpxPBZ/WSblAzorn6m9H4GrIyYnaJCLn3NN557WMhT4MXIRn83WS
-         Fish3dTDAqK1B4q+N43pN5G4NDgMLHoxET2EPbTB2M12M0Wl1HYqwDM1ysEHNxzPo5ad
-         Pt2dIkRqXh3bSvMaKriTrltGEHkva2i65RLlU2FtlbtP0Ib7Dk1HcAiE2HOYRpsYCgdg
-         89zjvhnrFdQ9vxyMTqZDf+lvywuOVF3RxdQxGXAtgBFmQcLgzqagZBxJaGOt1OTld4/0
-         MtjQ==
-X-Gm-Message-State: ACgBeo2cHTTLtChOmmgBku0KXVYfqihRp2tn6MOHGPjTHuH+Qqc4Q3xA
-        Iyc+2lgq2THoVDjUtc5HGcviMGV5Gd2j
-X-Google-Smtp-Source: AA6agR5BnOtXR7mbS2J4iyctv5Xrw2jkTvIDPsI52C3aKVCk8ttOa2n1F9D2pvLo9CAnflh0Gv0AuIvqMW5y
-X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a05:6a00:f92:b0:535:e39c:a6b4 with SMTP id
- ct18-20020a056a000f9200b00535e39ca6b4mr7429055pfb.46.1660933387036; Fri, 19
- Aug 2022 11:23:07 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 11:22:58 -0700
-Message-Id: <20220819182258.588335-1-vipinsh@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH] KVM: x86: Fix mce_banks memory leak on mci_ctl2_banks
- allocation failure
-From:   Vipin Sharma <vipinsh@google.com>
-To:     seanjc@google.com, pbonzini@redhat.com, jmattson@google.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=ooRQXzLUe97i7byO6R46BlbFBy3Y8r9AZv+oUBRyyNk=;
+        b=7Nq+V6i+2ogcj/pVX9SI/QaRhGz6qHIXigfxB0sB/2KE/eOmnoSz3B2m+zR3DIql6g
+         To3feC7wMSWs3RoAJjbjgWQ90z7MtiyFPxR+LzqCYW1wBbD4UVpMGi6uCbmZLbKUC1wm
+         BCdTI6Tdfav9+l+G1R14whjyJEO1R0JyL3vS0IkOmzp66iutKR5xPQL3QWxD/xrb8bXP
+         hMkMGanuN2zTOE5nDLaKfelnZh0B+QiB8IwoUN8+T4Pc5tAvcz6IfB0dP7XTgcXkh/Vq
+         2chx+hxtAnTWxOCysgJa3zU2RyDZ6mY21o0RPngjlC7AVMArDgmb2ZnTU1nlYdFsnL0V
+         cBww==
+X-Gm-Message-State: ACgBeo2KgaTJdjrpMV3d/CeGLMq3bmcVKBXYAU0wHf47Tq+MK6wGDl97
+        Yw4bUs5JvUYZ3Y+PgxpShL4lHY/W/C8=
+X-Google-Smtp-Source: AA6agR6xQQLYgWhvB9yg+ScZlzpdyA/QuJ7PLcpSHm5sR9ANU3GSgcySus7auP2o6Qn+owfE8qiFTw==
+X-Received: by 2002:a17:907:2cf3:b0:730:8b8c:6d55 with SMTP id hz19-20020a1709072cf300b007308b8c6d55mr5417331ejc.535.1660933450606;
+        Fri, 19 Aug 2022 11:24:10 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb77.dynamic.kabel-deutschland.de. [95.90.187.119])
+        by smtp.gmail.com with ESMTPSA id d2-20020a170906304200b0073c37199b86sm2159974ejd.159.2022.08.19.11.24.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 11:24:10 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH] staging: r8188eu: remove ODM_ConfigRFWithHeaderFile()
+Date:   Fri, 19 Aug 2022 20:23:59 +0200
+Message-Id: <20220819182359.24141-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,57 +69,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If mci_ctl2_banks allocation fails, kvm goes to fail_free_pio_data and
-forgets about freeing mce_banks memory causing memory leak.
+The function ODM_ConfigRFWithHeaderFile() is just a wrapper around
+ODM_ReadAndConfig_RadioA_1T_8188E(). Remove the wrapper and call
+ODM_ReadAndConfig_RadioA_1T_8188E() directly.
 
-Individually check memory allocation status and free memory in the correct
-order.
-
-Fixes: 281b52780b57 ("KVM: x86: Add emulation for MSR_IA32_MCx_CTL2 MSRs.")
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- arch/x86/kvm/x86.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/staging/r8188eu/hal/odm_HWConfig.c     | 5 -----
+ drivers/staging/r8188eu/hal/rtl8188e_rf6052.c  | 2 +-
+ drivers/staging/r8188eu/include/odm_HWConfig.h | 1 -
+ 3 files changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index d7374d768296..4b2c7a4f175f 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11560,15 +11560,19 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+diff --git a/drivers/staging/r8188eu/hal/odm_HWConfig.c b/drivers/staging/r8188eu/hal/odm_HWConfig.c
+index 54cc3d7789cd..035d94b3458e 100644
+--- a/drivers/staging/r8188eu/hal/odm_HWConfig.c
++++ b/drivers/staging/r8188eu/hal/odm_HWConfig.c
+@@ -347,8 +347,3 @@ void ODM_PhyStatusQuery(struct odm_dm_struct *dm_odm,
+ 	odm_RxPhyStatus92CSeries_Parsing(dm_odm, pPhyInfo, pPhyStatus, pPktinfo, adapt);
+ 	odm_Process_RSSIForDM(dm_odm, pPhyInfo, pPktinfo);
+ }
+-
+-enum HAL_STATUS ODM_ConfigRFWithHeaderFile(struct odm_dm_struct *dm_odm)
+-{
+-	return ODM_ReadAndConfig_RadioA_1T_8188E(dm_odm);
+-}
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c b/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
+index d043b7bc4142..237232432f37 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
+@@ -396,7 +396,7 @@ static int phy_RF6052_Config_ParaFile(struct adapter *Adapter)
+ 	udelay(1);/* PlatformStallExecution(1); */
  
- 	vcpu->arch.mce_banks = kcalloc(KVM_MAX_MCE_BANKS * 4, sizeof(u64),
- 				       GFP_KERNEL_ACCOUNT);
-+	if (!vcpu->arch.mce_banks)
-+		goto fail_free_pio_data;
-+
- 	vcpu->arch.mci_ctl2_banks = kcalloc(KVM_MAX_MCE_BANKS, sizeof(u64),
- 					    GFP_KERNEL_ACCOUNT);
--	if (!vcpu->arch.mce_banks || !vcpu->arch.mci_ctl2_banks)
--		goto fail_free_pio_data;
-+	if (!vcpu->arch.mci_ctl2_banks)
-+		goto fail_free_mce_banks;
-+
- 	vcpu->arch.mcg_cap = KVM_MAX_MCE_BANKS;
+ 	/*----Initialize RF fom connfiguration file----*/
+-	if (HAL_STATUS_FAILURE == ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv))
++	if (ODM_ReadAndConfig_RadioA_1T_8188E(&pHalData->odmpriv) == HAL_STATUS_FAILURE)
+ 		rtStatus = _FAIL;
  
- 	if (!zalloc_cpumask_var(&vcpu->arch.wbinvd_dirty_mask,
- 				GFP_KERNEL_ACCOUNT))
--		goto fail_free_mce_banks;
-+		goto fail_free_mci_ctl2_banks;
+ 	/*----Restore RFENV control type----*/;
+diff --git a/drivers/staging/r8188eu/include/odm_HWConfig.h b/drivers/staging/r8188eu/include/odm_HWConfig.h
+index b37962edb2ed..3f7185780e87 100644
+--- a/drivers/staging/r8188eu/include/odm_HWConfig.h
++++ b/drivers/staging/r8188eu/include/odm_HWConfig.h
+@@ -66,5 +66,4 @@ void ODM_PhyStatusQuery(struct odm_dm_struct *pDM_Odm,
+ 			struct odm_per_pkt_info *pPktinfo,
+ 			struct adapter *adapt);
  
- 	if (!alloc_emulate_ctxt(vcpu))
- 		goto free_wbinvd_dirty_mask;
-@@ -11614,9 +11618,10 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
- 	kmem_cache_free(x86_emulator_cache, vcpu->arch.emulate_ctxt);
- free_wbinvd_dirty_mask:
- 	free_cpumask_var(vcpu->arch.wbinvd_dirty_mask);
-+fail_free_mci_ctl2_banks:
-+	kfree(vcpu->arch.mci_ctl2_banks);
- fail_free_mce_banks:
- 	kfree(vcpu->arch.mce_banks);
--	kfree(vcpu->arch.mci_ctl2_banks);
- fail_free_pio_data:
- 	free_page((unsigned long)vcpu->arch.pio_data);
- fail_free_lapic:
+-enum HAL_STATUS ODM_ConfigRFWithHeaderFile(struct odm_dm_struct *pDM_Odm);
+ #endif
 -- 
-2.37.1.595.g718a3a8f04-goog
+2.37.2
 

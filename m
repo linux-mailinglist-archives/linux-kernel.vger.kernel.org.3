@@ -2,232 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8135A5999E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17EEE5999D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348441AbiHSKkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
+        id S1348398AbiHSKjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348409AbiHSKkX (ORCPT
+        with ESMTP id S1348275AbiHSKjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:40:23 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648A5E42F7;
-        Fri, 19 Aug 2022 03:40:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1660905573;
-        bh=52OQy1D24i3g+gSCIBd1HEVjSy9Xm2D1b7NLko9jJJ0=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=GF5zxf9cQNzp0n5x/XoMzH+AfX/1M7W+RVRZ6iQFoHHq9bnWywnB0hSRw0ZZrlssR
-         XSJyeOHrmKu4yGAF2ZYvtwvYkciZQBgSG5n8uZy72IqJDK4G7Wqjtlrnv3Qius0ep4
-         Hn07QVbRPRI1jZL1XpCCfqJ3fc8+lFaY/74dRPgE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.153.160]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MvbG2-1nWcPD1tjC-00si2Y; Fri, 19
- Aug 2022 12:39:33 +0200
-Message-ID: <cca91e0d-2e7b-fcd3-30a9-2dcfcb11c2e0@gmx.de>
-Date:   Fri, 19 Aug 2022 12:38:33 +0200
+        Fri, 19 Aug 2022 06:39:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8C07F124;
+        Fri, 19 Aug 2022 03:38:57 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JAN17X004661;
+        Fri, 19 Aug 2022 10:38:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to : sender :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=HRTeMWW3i3o/opZMcyPGHs+ShmWqQhyfthD2N/T6Img=;
+ b=Ed1Pj4jDIxxZ4lXVHeZT+yyL66LF3ce0+bNUTTYE1Gw6sFg0t73rWpxnuuDi8E0PSXoj
+ 0pRkHl2h16GqEJlYKpgCXO1Ce7h279pXlRumfbfxedbqhG0hUqpQ8vr/o12yjLEw6UsA
+ vTmST1smBItxlGSLJhFemkOA2aS5B0+rLwKofJielgSZmQLXL99mv/RND6Bj2hdLFp/N
+ 5Tz+DvIhS5mF3tIttVUgP2GxHi67LdtYvK74ZFv068djCrWeAQBnz7M08xz5Bo8HsfKB
+ 7tjQWQrautqM2o1vhXhL7boY+/Z9pZUfB5wqSy338wS+1LFGc3mGlblzBrlJ1a0TJN9q jA== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j28qg89pj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Aug 2022 10:38:53 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27JAa99w026546;
+        Fri, 19 Aug 2022 10:38:51 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma02fra.de.ibm.com with ESMTP id 3j0dc3as1f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Aug 2022 10:38:51 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27JAclNj22610196
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Aug 2022 10:38:47 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9256D52051;
+        Fri, 19 Aug 2022 10:38:47 +0000 (GMT)
+Received: from t480-pf1aa2c2 (unknown [9.145.93.213])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 743235204E;
+        Fri, 19 Aug 2022 10:38:47 +0000 (GMT)
+Received: from bblock by t480-pf1aa2c2 with local (Exim 4.95)
+        (envelope-from <bblock@linux.ibm.com>)
+        id 1oOzOo-004DLx-Lt;
+        Fri, 19 Aug 2022 12:38:46 +0200
+Date:   Fri, 19 Aug 2022 10:38:46 +0000
+From:   Benjamin Block <bblock@linux.ibm.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Steffen Maier <maier@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] s390: move from strlcpy with unused retval to strscpy
+Message-ID: <Yv9oNvet5dMcCDbv@t480-pf1aa2c2.fritz.box>
+References: <20220818210102.7301-1-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20220818210102.7301-1-wsa+renesas@sang-engineering.com>
+Sender: Benjamin Block <bblock@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZTlR8yj2u-R4cx63QBTd_WcdyhsQOX1J
+X-Proofpoint-ORIG-GUID: ZTlR8yj2u-R4cx63QBTd_WcdyhsQOX1J
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: linux-parisc compile failure in current git
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Parisc List <linux-parisc@vger.kernel.org>,
-        Meelis Roos <mroos@linux.ee>,
-        Linux Kernel Development <linux-kernel@vger.kernel.org>
-References: <892b6ab7-862c-1c0a-2996-0f8408e5043d@linux.ee>
- <89515325-fc21-31da-d238-6f7a9abbf9a0@gmx.de>
- <CAK7LNATuzry1MUj-VruOVUwU_nH2xJd_2SxD_s_Z1QBb3PVnQw@mail.gmail.com>
- <5dfd81eb-c8ca-b7f5-e80e-8632767c022d@gmx.de>
- <CAK7LNATO_30uHzAe-Vsy+hgu=wwEN_aPGET4Ys78rc3=nSuJsg@mail.gmail.com>
- <YNOafsB81ZcP2r7z@ls3530>
- <f599c358-815f-088e-f2aa-b064ccb64e44@infradead.org>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <f599c358-815f-088e-f2aa-b064ccb64e44@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:C4OA6ZvCk7/Iq3vmg4H3PIWfj7EV3qYg+0nLSBSVlIZT/7YfwPd
- TL++xGShtDLkVwEzWqDxBirajQ0XM1qrk+Pt0Y9zXmW4n/g4FyjdaheAeCU91EPj8mnLCE7
- EN9zM0u6sGk+4eYJpO0a0QZ4gYmWyGYZIkJz3MO2BbCPPKSyg7gk6+8V+AaxRuYumzSQ2++
- DVX5UwsJVd+N2iVTUQqHg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ACfwtN4CquE=:jDYM+F7JgamLxnlhKWhnmt
- Ft0aFDIHt/92AR5jLba18QK/47+MyfP2vvYrAGHtH/iD70jJjRiSX2zS/LGKEMWdWOW1wpFhm
- nLxj15PnZ28V1qmgnEMWw3bvw3rOftXQjO3Zhok3bKL+Z1zaac91P9Gn+4M9s8hJrnV86lSYw
- lRVFYzTPoCZVvFzNQbKw+5eu0b5JqBcDX2XIRPDCqCd5W8EbnasQeJ7pLxEjiPDIpN7p6Ub39
- xGOn3fSqcG0oTl8VztZAXTqE4i9ik1v6+FDxyWOeNahad8U5mtsYWIoKJHBTyzuFHIcdrW9Kf
- CUENRMe5602F6uOpoKyruAkaxjA2c4LN1JXfJ42tJOdmWL1i9hO+I5VBYZkE6JhxtsTNlt5Qj
- w3RPYn48a4VOc44V4pHEqqqaJZFeUe55VWMvPSeoKH4MvnVvk5d+mKQkkvxt12ruQpWUS9dMk
- IbkTDY6gmGwmaMbtTD7YLqMk6w1DdvK/Y4kJrR1Ytcf+AnCWq3KEAukGjpL75cwO8Cenyj9V3
- zT5wKzDcRtN6b09GPrrTZY7Kh9X/nxQG/9VnNnXQjfbb4V+QeuCXJdosahZ4AvNeS1aPCax0w
- 7rON0Mkc34AePp/fJYrze+JbR7ZOafdWlWqtv07fwd2PJgYmVGdfENobVFFnlwz7/NDt5Y1xw
- gRedmU7dc5P3YAQCOHX1lCZMGMG1igUzK1RRCdqM9EICJaP9LqouQ4vXhBS+Y0xzvjuoOLjTQ
- Ob6Eeh78qVboa2fNnN5ewCDmjeruPTIbExNRFISDiS11NfRB+MvntPOywCCJFALEiQJy94ZlQ
- tfRRe/52ErqHbtHjn52hHHxmwwD6AmaDB8TCAnnbxn2LrgGzAy4YFRTxSFXuzPY+v/KxK7xvv
- XmBxvuAAvEY+R1/5zW+DiB39nucHiFbuZp9RisWuP1+aMLGYk1X70lZ1QZHvlXo2cn3Nsd7io
- 5J96SlK4n6YIUjWSgbYBYdaqz/VpkztQE3DIhM1CdczjLgIJuPaLSelohQAGAI9YPpOOyh3ik
- TWj12vKdfe4hHWxTcQC1v3nFM2x6Xd1/aZdo+oFDHvhmAQIGzzmpNCHp+lk4eg+EwRRYAKceL
- hy7T5v/2A5X6n8lHiSsCFnEif7CcDAm6UArSPmh/W6fwz+w0ars1gLMMQ==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-19_06,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ malwarescore=0 bulkscore=0 priorityscore=1501 suspectscore=0 phishscore=0
+ impostorscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1011 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208190041
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/17/22 22:59, Randy Dunlap wrote:
-> Hi--
->
-> On 6/23/21 13:33, Helge Deller wrote:
->> * Masahiro Yamada <masahiroy@kernel.org>:
->>> On Thu, Jun 10, 2021 at 4:04 PM Helge Deller <deller@gmx.de> wrote:
->>>>
->>>> Hi Masahiro,
->>>>
->>>> On 6/10/21 4:03 AM, Masahiro Yamada wrote:
->>>>> On Thu, Jun 10, 2021 at 7:50 AM Helge Deller <deller@gmx.de> wrote:
->
-> [snip]
->
->>>>> But, please keep in mind that there is an issue remaining.
->>>>>
->>>>> Please see this code:
->>>>>
->>>>> ifdef CONFIG_64BIT
->>>>> UTS_MACHINE :=3D parisc64
->>>>> CHECKFLAGS +=3D -D__LP64__=3D1
->>>>> CC_ARCHES =3D hppa64
->>>>> LD_BFD :=3D elf64-hppa-linux
->>>>> else # 32-bit
->>>>> CC_ARCHES =3D hppa hppa2.0 hppa1.1
->>>>> LD_BFD :=3D elf32-hppa-linux
->>>>> endif
->>>>>
->>>>>
->>>>> UTS_MACHINE is determined by CONFIG_64BIT.
->>>>>
->>>>> CONFIG_64BIT is defined only after Kconfig is finished.
->>>>> When you are trying to configure the .config,
->>>>> CONFIG_64BIT is not defined yet.
->>>>> So UTS_MACHINE is always 'parisc'.
->>>>
->>>> Yes.
->>>> See above, but it worked when I had SUBARCH=3Dx86 (when running my la=
-ptop).
->>>>
->>>>
->>>>> As you know, Kconfig files now have a bunch of 'cc-option' syntax
->>>>> to check the compiler capability in Kconfig time.
->>>>> Hence, you need to provide a proper compiler in Kconfig time too.
->>>>>
->>>>> When you build a 64-bit parisc kernel on a 32-bit parisc machine,
->>>>
->>>> Please note, that we don't have a 64-bit parisc userspace yet (just k=
-ernel).
->>>> This means, that all builds on parisc machines are 32bit and do a
->>>> cross-compilation to a parisc64 kernel if requested in the .config.
->>>>
->>>>> Kconfig is passed with CC=3Dgcc since SUBARCH=3D=3DUTS_MACHINE=3D=3D=
-parisc.
->>>>> After Kconfig, CROSS_COMPILE=3Dhppa64-* is set,
->>>>> and the kernel is built by CC=3Dhppa64-*-gcc.
->>>>
->>>> Right. That is the old behaviour. Based on the CONFIG_64BIT option
->>>> the hppa64 compiler is choosen for CROSS_COMPILE.
->>>>
->>>>> So, Kconfig evaluated a compiletely different compiler. This is poin=
-tless.
->>>>
->>>> Yes, probably.
->>>>
->>>>
->>>>> There are some options
->>>>>
->>>>> [option 1]
->>>>>    revert the parisc bit of 23243c1ace9fb4eae2f75e0fe0ece8e3219fb4f3
->>>>>    This will restore the functionality you may want, but
->>>>>    as I said above, Kconfig is doing pointless things.
->>>>
->>>> as mentioned above: Doesn't solve the issue.
->>>>
->>>>> [option 2]
->>>>>     Stop using cc-cross-prefix, and pass CROSS_COMPILE explicitly.
->>>>>     This is what many architectures including arm, arm64 do.
->>>>>     You need to explicitly pass CROSS_COMPILE=3Daarch64-linux-gnu- e=
-tc.
->>>>>     if you are cross-compiling arm64.
->>>>
->>>> Might be an option, but it's not as handy as simply choosing CONFIG_6=
-4BIT
->>>> and then things are done automatically.
->>>>
->>>>> [option 3]
->>>>>     Introduce ARCH=3Dparisc64.
->>>>>
->>>>>     When you are building 64-bit kernel, you can pass ARCH=3Dparisc6=
-4
->>>>>      A patch attached.  (but not tested much)
->>>>
->>>> Tried it, but doesn't work.
->>>> asm-offsets.c is still preprocessed with 32bit compiler (gcc, not hpp=
-a20-gcc).
->>>>
->>>> Thanks for your help so far!
->>>> If you like I'm happy to give you an account on a hppa64 machine to r=
-eproduce yourself.
->>>> I'll now try to bisect where it goes wrong. There must be something e=
-lse before commit 23243c1ace9fb4eae2f75e0fe0ece8e3219fb4f3.
->>>>
->>>> Helge
->>>
->>>
->>> Sorry for my late reply.
->>
->> Me too.... :-(
->
-> Sorry to jump in even later, but:
->
-> I see that
-> $ make ARCH=3Dparisc64 defconfig
-> does set CONFIG_64BIT.
->
-> Is there a way to do
-> $ make ARCH=3Dparisc64 allmodconfig
-> ?
-> That does not set CONFIG_64BIT in my testing.
-> (testing on linux-next-20220817)
+On Thu, Aug 18, 2022 at 11:01:01PM +0200, Wolfram Sang wrote:
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+> 
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/s390/block/dasd_devmap.c | 2 +-
+>  drivers/s390/block/dasd_eer.c    | 4 ++--
+>  drivers/s390/block/dcssblk.c     | 2 +-
+>  drivers/s390/char/hmcdrv_cache.c | 2 +-
+>  drivers/s390/char/tape_class.c   | 4 ++--
+>  drivers/s390/cio/qdio_debug.c    | 2 +-
+>  drivers/s390/net/ctcm_main.c     | 2 +-
+>  drivers/s390/net/fsm.c           | 2 +-
+>  drivers/s390/net/qeth_ethtool.c  | 4 ++--
+>  drivers/s390/scsi/zfcp_aux.c     | 2 +-
+>  drivers/s390/scsi/zfcp_fc.c      | 2 +-
+>  11 files changed, 14 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/s390/cio/qdio_debug.c b/drivers/s390/cio/qdio_debug.c
+> index 4bb7965daa0f..1a9714af51e4 100644
+> --- a/drivers/s390/cio/qdio_debug.c
+> +++ b/drivers/s390/cio/qdio_debug.c
+> @@ -87,7 +87,7 @@ int qdio_allocate_dbf(struct qdio_irq *irq_ptr)
+>  			debug_unregister(irq_ptr->debug_area);
+>  			return -ENOMEM;
+>  		}
+> -		strlcpy(new_entry->dbf_name, text, QDIO_DBF_NAME_LEN);
+> +		strscpy(new_entry->dbf_name, text, QDIO_DBF_NAME_LEN);
+>  		new_entry->dbf_info = irq_ptr->debug_area;
+>  		mutex_lock(&qdio_dbf_list_mutex);
+>  		list_add(&new_entry->dbf_list, &qdio_dbf_list);
+> diff --git a/drivers/s390/scsi/zfcp_aux.c b/drivers/s390/scsi/zfcp_aux.c
+> index fd2f1c31bd21..df782646e856 100644
+> --- a/drivers/s390/scsi/zfcp_aux.c
+> +++ b/drivers/s390/scsi/zfcp_aux.c
+> @@ -103,7 +103,7 @@ static void __init zfcp_init_device_setup(char *devstr)
+>  	token = strsep(&str, ",");
+>  	if (!token || strlen(token) >= ZFCP_BUS_ID_SIZE)
+>  		goto err_out;
+> -	strlcpy(busid, token, ZFCP_BUS_ID_SIZE);
+> +	strscpy(busid, token, ZFCP_BUS_ID_SIZE);
+>  
+>  	token = strsep(&str, ",");
+>  	if (!token || kstrtoull(token, 0, (unsigned long long *) &wwpn))
+> diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
+> index b61acbb09be3..77917b339870 100644
+> --- a/drivers/s390/scsi/zfcp_fc.c
+> +++ b/drivers/s390/scsi/zfcp_fc.c
+> @@ -885,7 +885,7 @@ static int zfcp_fc_gspn(struct zfcp_adapter *adapter,
+>  			 dev_name(&adapter->ccw_device->dev),
+>  			 init_utsname()->nodename);
+>  	else
+> -		strlcpy(fc_host_symbolic_name(adapter->scsi_host),
+> +		strscpy(fc_host_symbolic_name(adapter->scsi_host),
+>  			gspn_rsp->gspn.fp_name, FC_SYMBOLIC_NAME_SIZE);
+>  
+>  	return 0;
+> -- 
+> 2.35.1
+> 
 
-Right. It seems to delete the CONFIG_64BIT which was set earlier.
+Those look good to me.
 
-> I would like to have a command-line method to do that,
-> without editing the .config file.
+As far as zFCP and QDIO go:
 
-I found your patch for riscv:
-https://lore.kernel.org/all/20210912034538.19404-1-rdunlap@infradead.org/
-and added a similiar one for parisc into my for-next git tree:
-https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git/co=
-mmit/?h=3Dfor-next&id=3D34793a5d09d9122f90acfa7e8f705436d5090d4d
+Acked-by: Benjamin Block <bblock@linux.ibm.com>
 
-Does that help?
-
-Although, I'd prefer a generic solution for this problem, e.g.
-a new KCONFIG_MIN_RAND_CONFIG=3D$(srctree)/arch/parisc/configs/32-bit.conf=
-ig
-option which is used by randconfig/allmodconfig/....
-Then it could be set once, and we can get rid of adding similiar patches
-to the arches, e.g. in arch/parisc/Makefile it could be:
-ifeq ($(ARCH),parisc64)
-        KBUILD_DEFCONFIG :=3D generic-64bit_defconfig
-	KCONFIG_MIN_RAND_CONFIG =3D $(srctree)/arch/parisc/configs/64-bit.config
-else
-        KBUILD_DEFCONFIG :=3D generic-32bit_defconfig
-	KCONFIG_MIN_RAND_CONFIG =3D $(srctree)/arch/parisc/configs/32-bit.config
-endif
-Thoughts?
-
-Helge
+-- 
+Best Regards, Benjamin Block  / Linux on IBM Z Kernel Development / IBM Systems
+IBM Deutschland Research & Development GmbH    /    https://www.ibm.com/privacy
+Vorsitz. AufsR.: Gregor Pillen         /         Geschäftsführung: David Faller
+Sitz der Gesellschaft: Böblingen / Registergericht: AmtsG Stuttgart, HRB 243294

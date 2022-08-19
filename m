@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A52F59A6DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 22:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4FC359A6ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 22:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351698AbiHSUJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 16:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
+        id S1351737AbiHSUJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 16:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351558AbiHSUJO (ORCPT
+        with ESMTP id S1351558AbiHSUJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 16:09:14 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D01A9D11E
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:09:13 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-32a09b909f6so150506227b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:09:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=YuF+xqYANb0UpSKdFXaPIjdGoUsETegDwAlHIfHh17s=;
-        b=SmwVsSxLi/TN3be8ePf4Zt26MSe+mpgAQ9Yj1M7BSIb+2/45bT5dcu90JsXbPBl5vH
-         caJzUu+A8tA+CqBs274jJpfoLUC/7GmPmhVg8b6otV8Dg+XUbZaq4LVnJUo5r2JnpOd1
-         oZC+HNnX9iXvL2IpKtVVL/slYa6BOXTlJ7kWQ=
+        Fri, 19 Aug 2022 16:09:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D937104472
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:09:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660939778;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4WKsTj80+KlAOcyLxVq2MH02vD1fdMO95DXY/VPgDU4=;
+        b=bo+c7wwj9NWoNQf2mVjNEB8yu6Dhiymgq8cavu0w/xqveKZEjXbXDklObkdJlaZ0SEM1Zl
+        FygO+k0IyjZvMo9fT4tYP15WDy++/7c1YfquprAqnTaeLMYVIM9e3JK8/mqgE8bKjb2YpH
+        D2rQNKPt6H1ioitmoJzLEpvJRMq83Ok=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-675-L6uXd-_1NuqufzODojM1uA-1; Fri, 19 Aug 2022 16:09:37 -0400
+X-MC-Unique: L6uXd-_1NuqufzODojM1uA-1
+Received: by mail-wm1-f70.google.com with SMTP id c64-20020a1c3543000000b003a61987ffb3so2835686wma.6
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:09:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=YuF+xqYANb0UpSKdFXaPIjdGoUsETegDwAlHIfHh17s=;
-        b=6DLY+Piig78XU31U4zRz1FOCDRCHBu6Ir8N2XxQzzF/8jaTYqlHJMHHiXNskPjjvAg
-         I2qWq+8iybfEQZafHAZAI3nyJ4LreS8t7+wXElW7leXqtkIC+hXhClD+a1vvgRR8S/Hk
-         JOQ+I6rSgYYya5pubNUtrZSdV6HPqAagwof0wvSxni3h0g6imPhEEniU1mbHoIk8S/NY
-         9NMFiIt+QeuO4DEGKB4raL99NaI1kFdpF1ZB5vwk3Zg2PZGNL8Rjlunrxwrb3X/BHlat
-         DMwknjzjgzcpDzMzVLovtbiukL9bv0iIvUZljUZuwjTrE1g55grUgslS0rtdmOu/3Cnh
-         HoMA==
-X-Gm-Message-State: ACgBeo2Q9sm+vWgkVRn81YgvSf4vcoubYzyJqK/AigjXltkkmNubjl/R
-        4l71hJMPJUqMJSFYvGY8FK2QMkgInOaDh7SGYyHC
-X-Google-Smtp-Source: AA6agR7wQ8oKJPNlIuB55kWztWUPT4TZ4pt1foHS2qP00B5/o+HsUbPTDI0y9sCaodK5ZH30pxM3xwnr92xLtnZ6tlU=
-X-Received: by 2002:a25:5105:0:b0:692:17f6:62b6 with SMTP id
- f5-20020a255105000000b0069217f662b6mr8381453ybb.361.1660939752536; Fri, 19
- Aug 2022 13:09:12 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=4WKsTj80+KlAOcyLxVq2MH02vD1fdMO95DXY/VPgDU4=;
+        b=o04G/AYlGigtfWR9iUSALSdP6M5Nr7FdH8j/du+ncGF7cUVa5yZV/IFK63q6dUzIT6
+         0pW2SjoWcPXJ+bukNY9VLg5O9pb09D6Qm3XNkPTon3hWH5mH7V8tviu8Au3SVFSowgWo
+         9MN/tSaRjFoGEcDiWL/dKuukrL0YMKCPp/bxSry9ADN+36Glo23+NYm3iedbXUPMeZPA
+         xx9U9pG6yKdnj6Tv8NhUj1kZDLv54S3sNE9AeHqdOZ8e2BdWAIUHrVspfi48E8UTHp3+
+         irHb403wkv2cB+jsU9HlYvRFh6YwFir+ViNRZxR3xiL7JGgh1cBfC1Lqi8kZblrb4Mds
+         /ZZg==
+X-Gm-Message-State: ACgBeo2L2lAzjtXDbv3lBYfpajmmH4P5NwPga+l51SN0YoCl665f9zEw
+        rglTpSjk5VvzFKO8hXmFzWqFxXHZFcqlNvEz2cuDpbJJ49WEsYLgddZRkeVl3kndwLPnWdGZNOU
+        6y+OZbd+Gt373MLO0r3bFJCionKeLjd1tBA9jN26yMRf6BW5ub2jxvaahexpGKxonIIswcszIDy
+        8=
+X-Received: by 2002:a05:6000:18c:b0:21f:170d:446e with SMTP id p12-20020a056000018c00b0021f170d446emr5029341wrx.304.1660939775796;
+        Fri, 19 Aug 2022 13:09:35 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR41MvAqMhAqH36jAsYe/x4lLfhc9bERm3BktAuEeK79ImvBnIv/1szPfEWDOHxRsmuy+tKIGA==
+X-Received: by 2002:a05:6000:18c:b0:21f:170d:446e with SMTP id p12-20020a056000018c00b0021f170d446emr5029327wrx.304.1660939775474;
+        Fri, 19 Aug 2022 13:09:35 -0700 (PDT)
+Received: from kherbst.pingu.com ([31.16.187.72])
+        by smtp.gmail.com with ESMTPSA id u18-20020adfdb92000000b0021eaf4138aesm5991920wri.108.2022.08.19.13.09.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 13:09:34 -0700 (PDT)
+From:   Karol Herbst <kherbst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ben Skeggs <bskeggs@redhat.com>, Lyude Paul <lyude@redhat.com>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        Karol Herbst <kherbst@redhat.com>, stable@vger.kernel.org
+Subject: [PATCH] nouveau: explicitly wait on the fence in nouveau_bo_move_m2mf
+Date:   Fri, 19 Aug 2022 22:09:28 +0200
+Message-Id: <20220819200928.401416-1-kherbst@redhat.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20220814141237.493457-1-mail@conchuod.ie> <20220814141237.493457-2-mail@conchuod.ie>
-In-Reply-To: <20220814141237.493457-2-mail@conchuod.ie>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 19 Aug 2022 13:09:01 -0700
-Message-ID: <CAOnJCU+gvVfqN6DHQRMtJ82xU4ZajHrANfeDjt21i9Om4r43eg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] riscv: kvm: vcpu_timer: fix unused variable warnings
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Tong Tiangen <tongtiangen@huawei.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,68 +76,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 7:12 AM Conor Dooley <mail@conchuod.ie> wrote:
->
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> In two places, csr is set but never used:
->
-> arch/riscv/kvm/vcpu_timer.c:302:23: warning: variable 'csr' set but not used [-Wunused-but-set-variable]
->         struct kvm_vcpu_csr *csr;
->                              ^
-> arch/riscv/kvm/vcpu_timer.c:327:23: warning: variable 'csr' set but not used [-Wunused-but-set-variable]
->         struct kvm_vcpu_csr *csr;
->                              ^
->
-> Remove the variable.
->
-> Fixes: 8f5cb44b1bae ("RISC-V: KVM: Support sstc extension")
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  arch/riscv/kvm/vcpu_timer.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/arch/riscv/kvm/vcpu_timer.c b/arch/riscv/kvm/vcpu_timer.c
-> index 16f50c46ba39..185f2386a747 100644
-> --- a/arch/riscv/kvm/vcpu_timer.c
-> +++ b/arch/riscv/kvm/vcpu_timer.c
-> @@ -299,7 +299,6 @@ static void kvm_riscv_vcpu_update_timedelta(struct kvm_vcpu *vcpu)
->
->  void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
->  {
-> -       struct kvm_vcpu_csr *csr;
->         struct kvm_vcpu_timer *t = &vcpu->arch.timer;
->
->         kvm_riscv_vcpu_update_timedelta(vcpu);
-> @@ -307,7 +306,6 @@ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
->         if (!t->sstc_enabled)
->                 return;
->
-> -       csr = &vcpu->arch.guest_csr;
->  #if defined(CONFIG_32BIT)
->         csr_write(CSR_VSTIMECMP, (u32)t->next_cycles);
->         csr_write(CSR_VSTIMECMPH, (u32)(t->next_cycles >> 32));
-> @@ -324,13 +322,11 @@ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
->
->  void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu)
->  {
-> -       struct kvm_vcpu_csr *csr;
->         struct kvm_vcpu_timer *t = &vcpu->arch.timer;
->
->         if (!t->sstc_enabled)
->                 return;
->
-> -       csr = &vcpu->arch.guest_csr;
->         t = &vcpu->arch.timer;
->  #if defined(CONFIG_32BIT)
->         t->next_cycles = csr_read(CSR_VSTIMECMP);
-> --
-> 2.37.1
->
+It is a bit unlcear to us why that's helping, but it does and unbreaks
+suspend/resume on a lot of GPUs without any known drawbacks.
 
-Thanks for fixing this. Sorry for missing those.
+Cc: stable@vger.kernel.org # v5.15+
+Closes: https://gitlab.freedesktop.org/drm/nouveau/-/issues/156
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+---
+ drivers/gpu/drm/nouveau/nouveau_bo.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
+diff --git a/drivers/gpu/drm/nouveau/nouveau_bo.c b/drivers/gpu/drm/nouveau/nouveau_bo.c
+index 35bb0bb3fe61..126b3c6e12f9 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_bo.c
++++ b/drivers/gpu/drm/nouveau/nouveau_bo.c
+@@ -822,6 +822,15 @@ nouveau_bo_move_m2mf(struct ttm_buffer_object *bo, int evict,
+ 		if (ret == 0) {
+ 			ret = nouveau_fence_new(chan, false, &fence);
+ 			if (ret == 0) {
++				/* TODO: figure out a better solution here
++				 *
++				 * wait on the fence here explicitly as going through
++				 * ttm_bo_move_accel_cleanup somehow doesn't seem to do it.
++				 *
++				 * Without this the operation can timeout and we'll fallback to a
++				 * software copy, which might take several minutes to finish.
++				 */
++				nouveau_fence_wait(fence, false, false);
+ 				ret = ttm_bo_move_accel_cleanup(bo,
+ 								&fence->base,
+ 								evict, false,
+-- 
+2.37.1
 
---
-Regards,
-Atish

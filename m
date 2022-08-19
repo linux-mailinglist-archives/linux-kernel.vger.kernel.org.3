@@ -2,96 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99EC599CC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B9B599CB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349237AbiHSNKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 09:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
+        id S1349255AbiHSNKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 09:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349227AbiHSNK1 (ORCPT
+        with ESMTP id S1349227AbiHSNKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 09:10:27 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01177C924F;
-        Fri, 19 Aug 2022 06:10:25 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 422631C0003; Fri, 19 Aug 2022 15:10:24 +0200 (CEST)
-Date:   Fri, 19 Aug 2022 15:10:23 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Liang He <windhl@126.com>, Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.15 218/779] regulator: of: Fix refcount leak bug in
- of_get_regulation_constraints()
-Message-ID: <20220819131023.GB11901@duo.ucw.cz>
-References: <20220815180337.130757997@linuxfoundation.org>
- <20220815180346.599459531@linuxfoundation.org>
+        Fri, 19 Aug 2022 09:10:48 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA1FC9EBE
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:10:39 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id q16so3908829ljp.7
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:10:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=uKFrZ3vwlxdwh09/xsXJgvCvu9VTWbdfsRBA6e1vjpU=;
+        b=euNg5qGd5JSbk0p62h3iLNXxpYDNpd3Pud46E21UOO4yFUwilUzbaOyfjUBFTbwM+8
+         5fhJCkXr/y7kvnQTReBHuIOBTkPiHKtCOu8Ek7b4GNDriiNeEA5gHh5xmCtV/5e58qHx
+         /XrZMOsBMRKzmAoVoOAnPf+2SaE9TSUrd5vvbDZqVfoR5E04RHf4/lAqq/37RK0vlzvE
+         14t8H/5bSCUbL/lLCYzcx0dT5tV27tVABcQhp0OpmH8G4a8oMF1hfUwYra6YGgwXU9V9
+         ASKQ7FDbP41u9ICYJtNvDQl83179Fv64dq1Z20V7sSAxD+OkrQGXonQIuEDkHlBDr2Lm
+         1TWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=uKFrZ3vwlxdwh09/xsXJgvCvu9VTWbdfsRBA6e1vjpU=;
+        b=bahNqKpZiOneNOZERMmDVV1ZrZeQTTHxZ/RQRuAvWOubUzppJN9I9yt+UOJ7ZpbxaA
+         ygjcgk1ySWmWe4ZTL5sl7Ms/AkuATOW4OZzqXUoDqF6iK+I8Zdk0g2eu9KHS5kux63yw
+         qK49gNX1Lu6VbHeDwp4mJYH9KGvBmQCExPU4E9clzpld86bwT2wq7drXGsZaMav4TT6e
+         uE7KV23G8Ry01uYfOhDDREwr2vLiFsSaoGIGzgjPsM1jjLYMW+wz5R4pOVF/BVZMUMLW
+         Jvj+Lf1E9+Y1sVa1W1+r2gesBySZnspKKelLBrqe2h57gP5aUy/g61klLW1gJkhK8otn
+         k40g==
+X-Gm-Message-State: ACgBeo2/s79XOsPziZq21l/Cjt8LpWJvda2smaCabj/96WbWjcmPttS6
+        XDv24o5hbFroiFR5W5vDpL3YSlNvtlGQWmf9rrH1HPLv/UUHFFj/
+X-Google-Smtp-Source: AA6agR7jIzNJmDIALATvhAL4BwEEaasrwuluEUsfyaF5qZIoqrmW0Q71qVKl/IlJGdTDHzNTMVTybT7YA4wvGpND+sM=
+X-Received: by 2002:a05:651c:1695:b0:261:b5d4:371a with SMTP id
+ bd21-20020a05651c169500b00261b5d4371amr1758306ljb.154.1660914636944; Fri, 19
+ Aug 2022 06:10:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="E39vaYmALEf/7YXx"
-Content-Disposition: inline
-In-Reply-To: <20220815180346.599459531@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220819053234.241501-1-tales.aparecida@gmail.com> <20220819053234.241501-3-tales.aparecida@gmail.com>
+In-Reply-To: <20220819053234.241501-3-tales.aparecida@gmail.com>
+From:   Sadiya Kazi <sadiyakazi@google.com>
+Date:   Fri, 19 Aug 2022 18:40:25 +0530
+Message-ID: <CAO2JNKXCiHOD9jNSwdAWaWA3=knYg1eprJBGpzn6gOfncSAV=A@mail.gmail.com>
+Subject: Re: [PATCH 2/8] Documentation: KUnit: avoid repeating "kunit.py run"
+ in start.rst
+To:     Tales Aparecida <tales.aparecida@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        David Gow <davidgow@google.com>, corbet@lwn.net,
+        brendan.higgins@linux.dev, Trevor Woerner <twoerner@gmail.com>,
+        siqueirajordao@riseup.net, mwen@igalia.com, andrealmeid@riseup.net,
+        mairacanal@riseup.net, Isabella Basso <isabbasso@riseup.net>,
+        magalilemes00@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks Tales,
+Please see my suggestions inline below.
 
---E39vaYmALEf/7YXx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Regards,
+Sadiya Kazi
 
-Hi!
 
-> From: Liang He <windhl@126.com>
->=20
-> [ Upstream commit 66efb665cd5ad69b27dca8571bf89fc6b9c628a4 ]
->=20
-> We should call the of_node_put() for the reference returned by
-> of_get_child_by_name() which has increased the refcount.
+On Fri, Aug 19, 2022 at 11:02 AM Tales Aparecida
+<tales.aparecida@gmail.com> wrote:
+>
+> Combine two sections mentioning "kunit.py run" to streamline the
+> getting-started guide.
+>
+> Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
+> ---
+>  Documentation/dev-tools/kunit/start.rst | 38 ++++++++++---------------
+>  1 file changed, 15 insertions(+), 23 deletions(-)
+>
+> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+> index e730df1f468e..165d7964aa13 100644
+> --- a/Documentation/dev-tools/kunit/start.rst
+> +++ b/Documentation/dev-tools/kunit/start.rst
+> @@ -19,7 +19,21 @@ can run kunit_tool:
+>
+>         ./tools/testing/kunit/kunit.py run
+>
+> -For more information on this wrapper, see:
+> +If everything worked correctly, you should see the following:
+> +
+> +.. code-block::
+> +
+> +       Generating .config ...
+I also see this as "Configuring KUnit Kernel" when I run
+./tools/testing/kunit/kunit.py.
 
-Looks okay,
+> +       Building KUnit Kernel ...
+> +       Starting KUnit Kernel ...
+> +
+> +The tests will pass or fail.
+> +
+> +.. note ::
+> +   Because it is building a lot of sources for the first time, the
+> +   ``Building KUnit kernel`` may take a while.
+> +
+> +For detailed information on this wrapper, see:
+>  Documentation/dev-tools/kunit/run_wrapper.rst.
+>
+>  Creating a ``.kunitconfig``
+> @@ -74,28 +88,6 @@ you if you have not included dependencies for the options used.
+>     tools like ``make menuconfig O=.kunit``. As long as its a superset of
+>     ``.kunitconfig``, kunit.py won't overwrite your changes.
+>
+> -Running Tests (KUnit Wrapper)
+> ------------------------------
+> -1. To make sure that everything is set up correctly, invoke the Python
+> -   wrapper from your kernel repository:
+> -
+> -.. code-block:: bash
+> -
+> -       ./tools/testing/kunit/kunit.py run
+> -
+> -If everything worked correctly, you should see the following:
+> -
+> -.. code-block::
+> -
+> -       Generating .config ...
 
-> +++ b/drivers/regulator/of_regulator.c
-> @@ -264,8 +264,12 @@ static int of_get_regulation_constraints(struct devi=
-ce *dev,
->  		}
-> =20
->  		suspend_np =3D of_get_child_by_name(np, regulator_states[i]);
-> -		if (!suspend_np || !suspend_state)
-> +		if (!suspend_np)
->  			continue;
-> +		if (!suspend_state) {
-> +			of_node_put(suspend_np);
-> +			continue;
-> +		}
-> =20
+Same comment as above
 
-but note that of_node_put(NULL) should be okay, so this can be cleaned
-up.
+> -       Building KUnit Kernel ...
+> -       Starting KUnit Kernel ...
+> -
+> -The tests will pass or fail.
+> -
+> -.. note ::
+> -   Because it is building a lot of sources for the first time, the
+> -   ``Building KUnit kernel`` may take a while.
 
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Minor nit: Because it is building a lot of sources for the first time,
+the ``Building KUnit kernel`` step may take a while.
 
---E39vaYmALEf/7YXx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYv+LvwAKCRAw5/Bqldv6
-8p0oAJ0TPKM6K3efzN4HCt1pYNDKkDVDLgCdGa7YicDIRb2Q2bd1/AA7pD9hzjE=
-=DwFx
------END PGP SIGNATURE-----
-
---E39vaYmALEf/7YXx--
+>
+>  Running Tests without the KUnit Wrapper
+>  =======================================
+> --
+> 2.37.1
+>

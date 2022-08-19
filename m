@@ -2,86 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BD8599D9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D0C599DA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349576AbiHSOfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 10:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
+        id S1349349AbiHSOin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 10:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349557AbiHSOfR (ORCPT
+        with ESMTP id S1349361AbiHSOih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 10:35:17 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43075EC4CD
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:35:16 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id a9so6348873lfm.12
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=SeHZ27XNszROnXvDUYzNdYyTiRb4BIM2jQzW5MqSyEc=;
-        b=fbb2z35hagDVu/Vg+G7F5H05F7hWxuAt0ZwmlDzFzuM4i1aO4sFlU2Y00/zuyo7/5T
-         8FlxQNdqmf3CE1KeZC3pwOhWFEibAmKmjH+OF9IkzzlGmMVM2bLySkK0Jyjz+90FiV4R
-         db6WpvpkhZxEFJb2lhcNXg10wOC1Yg6bv+kseazCF2v3BFGbeoJDa5GEL17uqf5zHoVV
-         WJFEt1ZOzRgc/MAQDMj72DDJc5KYg9GUStNnZwVF2dAdnNX6Vg/8VDTK16kSO+l5kBl3
-         zSPhOzBx7G3NlCNRMTUmOOPxL++gXO14fdgr/yxsuQBLSTaOUrq/8Sr38zi8/kFOCdO3
-         jCoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=SeHZ27XNszROnXvDUYzNdYyTiRb4BIM2jQzW5MqSyEc=;
-        b=4MqTyNHVWv1t/AiBFhkbFq/Pcce9BXVazfpbvlPWyw50eQhRQ6kYWh/slkJrTr9YYi
-         QkWhQyYfshGMIJuETWawz9bcXX9wmXy8nI0tbUespBQVRNIuQgUhoXWj3ANDTbA6qiRo
-         X97lqW2lFLRrL0WLMLUUL3bDFeAxQETRZaCzeJ5uzPu7Pse90B7JGg02RpmmjLu0nfZE
-         aQbghvCC8ccSyrXDD+OCecDa9J5z4DYYNinQhGi6sDk8Veq3BmxQLMJErLdu69po/smE
-         LEm6vQcOY/2hDMAeQrmgaQU9uOvH5d8aObVpv/wBi6A5CIe+EPEjVkdHNjxSYug/XrPW
-         BYIQ==
-X-Gm-Message-State: ACgBeo2pb+Iye+S/RH08scrz4ImQcdHlN5VqqHzpMnc/qIOHGuWQKJIX
-        4W0OM71PD5Udg4vfOU+wHv21HA==
-X-Google-Smtp-Source: AA6agR7Zi6Ib+jSmmdNrH2FE8pP3qnIypeXUxNqJmIpV/7jD9ZnC1uDf4dVnk9URUxLDS2lqc7BDHA==
-X-Received: by 2002:a05:6512:1193:b0:492:7e33:870 with SMTP id g19-20020a056512119300b004927e330870mr2642782lfr.37.1660919714599;
-        Fri, 19 Aug 2022 07:35:14 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id s25-20020a05651c049900b00261c241d4a1sm35245ljc.59.2022.08.19.07.35.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 07:35:14 -0700 (PDT)
-Message-ID: <200e3faf-e377-9fab-7cb2-bbea07be00cf@linaro.org>
-Date:   Fri, 19 Aug 2022 17:35:12 +0300
+        Fri, 19 Aug 2022 10:38:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6943F4CA2E
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:38:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22344B827E9
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:38:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA86BC433C1;
+        Fri, 19 Aug 2022 14:38:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660919912;
+        bh=TvKxoPTWbVRabhPk9a4rPqMy4W63RDOrWmCVASuqvME=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DEw47xgVqQEc1ADODU8BOwMIN++XRhfxnJMDhqIpSrFIOm8UKx0XIP43U+0Z7e6nO
+         K6nMS2zbJOu0JMRqJWKn9it4HYcxAYgo7hycLxzfKs/S2pJZzOvfG2OggbFz7tJ2My
+         MhFb5P915YjGQyzAcmOiSKdzavmPZeKXzotNBrpnXn4h3vTagxWRXUkvd4H2c3j/eq
+         VZj+uGVGwCGClhhydiXBDP5lp7agNisAixBkhJJ7U29kpqRIVvBJLS7+xz7MrUdhtm
+         5IuaTEYM+zgIb4avftvHqVX1ftelNpfrhgfVp5RISdOi4xtRPo9Ni7Na7olPpWWdzx
+         lGdk33jLIJPbA==
+Date:   Fri, 19 Aug 2022 15:38:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        gregkh@linuxfoundation.org, rafael@kernel.org, jic23@kernel.org,
+        "linux@rasmusvillemoes.dk>" <linux@rasmusvillemoes.dk>,
+        tglx@linutronix.de, andy.shevchenko@gmail.com,
+        kernel <kernel@sberdevices.ru>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] regmap: introduce value tracing for regmap bulk
+ operations
+Message-ID: <Yv+gY34CRfqu3sCS@sirena.org.uk>
+References: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
+ <20220818121515.6azkxyqetnunwsc6@CAB-WSD-L081021.sigma.sbrf.ru>
+ <87mtc1wtjz.wl-maz@kernel.org>
+ <Yv5eMcmNOmyLmd++@sirena.org.uk>
+ <5793e1a9ef6d5a8fafd3f22cda0bb5e4@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 6/6] riscv: dts: microchip: add the mpfs' fabric clock
- control
-Content-Language: en-US
-To:     Conor.Dooley@microchip.com, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
-        Daire.McNamara@microchip.com
-Cc:     paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20220819122259.183600-1-conor.dooley@microchip.com>
- <20220819122259.183600-7-conor.dooley@microchip.com>
- <3df8d4bd-3d38-cecd-6589-ccc1be01b886@linaro.org>
- <3ffba600-bda9-8ffa-a435-9a6f94e072b8@microchip.com>
- <f3d8be5c-737b-8c71-9926-a4036c797769@linaro.org>
- <19ca2ca1-c678-c669-4214-e92416e37191@microchip.com>
- <138af26e-8e36-63a0-d3a0-5af866318839@linaro.org>
- <f8496006-7487-7b7e-1a53-ec38492dfe70@microchip.com>
- <4e12e8c3-2170-eaab-d910-f674bcc93f79@linaro.org>
- <560e80df-4819-1062-50ee-eb1d1d19bae1@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <560e80df-4819-1062-50ee-eb1d1d19bae1@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LxcsmEkn3CkIR9C+"
+Content-Disposition: inline
+In-Reply-To: <5793e1a9ef6d5a8fafd3f22cda0bb5e4@kernel.org>
+X-Cookie: Price does not include taxes.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,35 +64,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 17:32, Conor.Dooley@microchip.com wrote:
->> The clock names should not really matter, so if you have conflict of
->> names among multiple controllers, I think driver should embed unit
->> address in the name (as fallback of clock-output-name) and the binding
->> should not enforce specific pattern.
-> 
-> Not sure if you just passed over it, but I agree:
->>> Truncated base address I suppose would be a meaningful thing
->>> to fall back to afterwards.
 
-Yeah, indeed, you mentioned it.
+--LxcsmEkn3CkIR9C+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
-> But if the names aren't an ABI, then either there's not much point in
-> having the regex at all for clock-output-names or failing the check for
-> it does not matter. I'll have a think over the weekend about what
-> exactly to do, but I think the driver side of this is clear to me now &
-> what not to do in the binding is too.
+On Fri, Aug 19, 2022 at 03:25:44PM +0100, Marc Zyngier wrote:
+> On 2022-08-18 16:43, Mark Brown wrote:
+> > On Thu, Aug 18, 2022 at 02:49:20PM +0100, Marc Zyngier wrote:
 
-Yes.
+> > > I don't care much about regmap as a MMIO backend, but it strikes me as
+> > > odd that you end up with multiple ways of logging the same stuff (with
+> > > a memcpy in the middle of it).
 
-> 
->> I can easily imagine a real hardware board design with
->> "sexy_duck_ccc_pll1_out3" clock names. :)
-> 
-> If Alestorm made a board with our FPGA, I could see that..
-> I'd buy the t-shirt too!
-> 
+> > > Why can't this be done with a small amount of trace post-processing?
 
+> > At the minute we don't put the actual data for the bulk transfers into
+> > the trace so the information simply isn't there.
 
-Best regards,
-Krzysztof
+> But isn't that what this patch should do?
+
+I'd imagine so based on a quick glance at the description, I've not
+actually reviewed it yet, but in that case I'm not sure what your
+concern is here?
+
+> We also have recently merged the CONFIG_TRACE_MMIO_ACCESS which
+> already dumps all sort of MMIO crap^Winformation.
+
+Yes, that'd also cover it for MMIO based regmaps when enabled but
+obviously other buses exist and can also be accessed via regmap.
+
+> Surely there should be a more common approach to this.
+
+There's an argument for tracing at each abstraction layer since they're
+generally all doing *something*, people will look to the layer they're
+accessing and for things like tracing register accesses with buses like
+I2C and SPI regmap is adding the register semantics on top of a bus
+that's just a byte stream.  Even on buses with a native concept of an
+address there's stuff like paging which might be added on depending on
+the device.  They should probably all follow a similar pattern but I'm
+not sure we can do everything at once.
+
+--LxcsmEkn3CkIR9C+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL/oGIACgkQJNaLcl1U
+h9DX6Qf+OoBjfgFoO3Xhy+eR2uouLwxbrGR8U/XABS5j60khFX9z7qeEFen0sTLC
+0hbhuRHdXALOdsn8VW3xRINy0OEyVqngLxRGJwFBihY8tChOHkyI9F1gKc0VhjYM
+B1afQt28gy//Ci4yrYFg+mqOuEZJOKiygQSHNtkRZthn5nd83Oz06Zjik0APr6n+
+RPomVD9CMlaX8Naz6BeF7NHL2zrSU33sBEdMpqU2Ze4sWAP523cLkICC7sX4R0Za
+Cjag/ctllqxmCVLxghbZJL+mK1YxNN0l+zkJ5OOpmhi+LZFU8OBuQrTtf0mdFe2o
+vAjgi9Lq8RfTOeodMV9gB0vBiVCKdw==
+=RN6r
+-----END PGP SIGNATURE-----
+
+--LxcsmEkn3CkIR9C+--

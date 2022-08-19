@@ -2,144 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948805998F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75ED0599921
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347625AbiHSJoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
+        id S1348229AbiHSJ6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347149AbiHSJo1 (ORCPT
+        with ESMTP id S1348345AbiHSJ6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:44:27 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422D24AD63;
-        Fri, 19 Aug 2022 02:44:24 -0700 (PDT)
-Received: from toolbox.int.toradex.com ([213.55.225.138]) by
- mrelay.perfora.net (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id
- 0MGTcU-1oBnG52lV2-00DHxp; Fri, 19 Aug 2022 11:44:02 +0200
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] ARM: dts: vf610: ddr pinmux
-Date:   Fri, 19 Aug 2022 11:43:54 +0200
-Message-Id: <20220819094354.247273-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 19 Aug 2022 05:58:02 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2063.outbound.protection.outlook.com [40.107.100.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56CEF4CAF;
+        Fri, 19 Aug 2022 02:57:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PcaJuQG0XkQzFIY9mgl+8irI75pfe809eopZlTey9vP7P/oR23/E8U/YKVytoUaqfTkK5SNWRZ+xSU/2s4E2gviwhz1ygQGhjuKBel3x/TOQLazYn8pvpnVw+EfQ+0koIZQlB54JYMgrvp1L0fCQAknEDc3iauRYZCVvUJ3qigHdOM1X/+l2joWd3US3jO2gFOEyM+kVWT6O01FT0bUi2EKd79aPZd0DVwulVrB0+zhZJsprgQ0KxrZ5UcdIjce36xM0LFEWywdeSaFbyKxVdgxEZ93p5BEo1IGqISPXBhVlXEWeZdhOBEzo3/J44ehuyRgmxPVVI4MhlIek+4pb3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6XHmpPXHXsN5X8FzVkM1VXaPsNM7xF7KPABsKSyEVD4=;
+ b=k10dqk9iSbgC8ccrwAh6i/Wmy7FYwifHm6J93MhwvOFaTIZfqWHWCtcn2tzPdLCeKMBhB8v5lFz2FT9pYH0wylchKtlcErIFXSUSQmZhGXOdGKlFzL8Zv5zYmXAXfmh6jGHsGEjVv9YkBguWIZ475YMWKsphrwkYHDmOyiS7A0G7ZXj1kNIvfKfDllqhXsbDp6wmpoDCiryBn4Q7g0esz35l7dIuXnpSMoi/QAqVdWw0GH01hWZDv1Jh2pLLiOm7iqJ9mpV4GMHKEG8RjtFTpRY9dKwpazUW5HBWGKF0kzqfOFL2r91TpRBPUp1EEa3cyxwMtdPwzXJJiYzkFEfauQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6XHmpPXHXsN5X8FzVkM1VXaPsNM7xF7KPABsKSyEVD4=;
+ b=NBUetO0dqeW17KPo4n7HaVHQ6ux8MnZH5zxzZz6OQnNnuEQhWR20eCEZWqJlUUNJ6ws8vb32NT18Oa+RDeZYM0wCgr7KGdL59KOl26x4YtVexRHtdUJ2paH0iyS2BXgchPPu5sJM2AWUH2+09XU5HcglMEtF+UW5tVuIDkRgw5R2K5HWG4y8FuYsiGx37cNy7s3vPwCviMPDBAljvdNSB7SldUW75YqRxNnoleGoNTFi/ZbT5fY+vuWGFg0n+udy+GckRhzpU4hjK0BCMxFWHkWUCldcHifNY5p5e6erRWvDxBB/FvmddfHlPLQUW4tL1Rio8B/6CWNYXKAtmSTLSQ==
+Received: from DS7PR03CA0139.namprd03.prod.outlook.com (2603:10b6:5:3b4::24)
+ by SJ1PR12MB6364.namprd12.prod.outlook.com (2603:10b6:a03:452::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.28; Fri, 19 Aug
+ 2022 09:57:30 +0000
+Received: from DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b4:cafe::ae) by DS7PR03CA0139.outlook.office365.com
+ (2603:10b6:5:3b4::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.14 via Frontend
+ Transport; Fri, 19 Aug 2022 09:57:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.236) by
+ DM6NAM11FT101.mail.protection.outlook.com (10.13.172.208) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5546.7 via Frontend Transport; Fri, 19 Aug 2022 09:57:29 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Fri, 19 Aug
+ 2022 09:57:28 +0000
+Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 19 Aug
+ 2022 02:57:23 -0700
+References: <20220818210050.7108-1-wsa+renesas@sang-engineering.com>
+User-agent: mu4e 1.6.6; emacs 28.1
+From:   Petr Machata <petrm@nvidia.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        Ido Schimmel <idosch@nvidia.com>, <netdev@vger.kernel.org>
+Subject: Re: [PATCH] net: move from strlcpy with unused retval to strscpy
+Date:   Fri, 19 Aug 2022 11:45:57 +0200
+In-Reply-To: <20220818210050.7108-1-wsa+renesas@sang-engineering.com>
+Message-ID: <87czcwmu82.fsf@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:+kwEpCR2FMedMP8II0ZiZZWP/w6ychwvgRYCvG4l1RpzTRuEcJW
- U+VeTwdN0SX91wFuVeaJe0mGBABRrDDn0ga+guMmj/apHj7Uhdybn2iq4Rbtz/t05gZSELM
- u+cZzp2FJLruwibDBFUdoadZzTtPlR46PrfxQMTXMwEX4CX3ejQ7zOz8BqtnWXsOliCCJAM
- QsrHow8or+WFQD7FIXZKA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3OYq7tY+gQw=:MfcKlhbf3BAUk3g+hI+O9j
- GlhV6wUYW6FkTlP4GBqLbXN8TxdggD0FJMyngKh3bwjZytBDZOAIpgL3d8G+xR3vi2S2mXZHX
- SPsQXeZXata8g0/fUXi8ZCeHs3puyNh47vn6lGlG7z5rLhy1ttBb+YTZ8GKBIfjN6DShyP+Cw
- wdF2MtoTQ0pDAzFjx4rGYAkRywJlj07maGU7hP7foJrBVTrSJ5GAdJ16YtzrGfYl5Fz35z7tw
- 2BNd8IiRccMOOqmQa1+MfSodfeyZ0K4+DEeNrttI7e6J0IEqurVpmw+tOVGePa+bi36J96IRS
- 9U+KNIIQRWvKYIqArgtEC/Qj5dYPK8DNfb6LtjRrUp/KlIkFoEmGsoNcsq4ON4VMM9sptrbwr
- XF8vBI7GZnvfNP+Up+POhw4NP56mUJXRVwxOw/pZMk9VJwi8vZ9szQKiaZcPSXUJbGIN8IXAR
- /LDpl3JQKWanMIy7mNnYGflygTEEoU+87h6dVe+7hqx+U9CqU2evNK0KwrcYDyk4K1Pe7zHIn
- JO2ERqcSniasWWhsppBau9Uo6RcSpcMjr/shmPMoOs4xnii6YOjZKzbb2jeHtBGjREBCv8cng
- p3KEQyNqDZDax6BXiBx5cyOsu/lWwtCFcrsjA8JFhWrLE1seyPvK/sTGu+M/7yq2n/YdXOWDA
- L/rVLtdDRD92F/XELSQbj5PWn6p9LHMffNsj2QQ9IeSuNxW7VFgbEzddeQFfx6+PGa1+sepdO
- cfB84mJ31mFZENTJE5hBy0eq7EZDOpYkmlNoQb7B7UBt1zOLgQ61pWN8W6I=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7593c910-40af-434f-9dc7-08da81c93a7f
+X-MS-TrafficTypeDiagnostic: SJ1PR12MB6364:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wWuakk+IshSPWBii1Sdot7s0Q6Yc0QDjPqCNv7fq9RrOF42257I+EzcRZcy83Dr1nsT08UKmucDmUNuiJy7wYN4KIpj/saB3vA0ENvh3o7c8/ulwiXHkcd/01MAJNdtEpBIi0Y97tKTFgeq4B7Hf4ZxGM/bWUimh5TX9cb0eTcQG0Fey7N/NcBETGG2WzSEu0ugNXI2ntH8DL2yZtx/B75OHhhvrnphPXiojAOSh6NNL79c5Uw5xhtCeisQhc/NKR7NtXuIm7dXJKQ6BkzjN6sw+5IcEhAuFrtqeU71cWHzUg1Jabm3xKkEbzdlKLWn+E4ogFoklOe5altxo9SUjkjaVgkvuCUbbnKRpb2OGQDZEAwALuhKwfo11Oq+R/e52FU40cNwDdcJYqfAtJ40RPPVSQ8IQzv4Rttv7t7QKnZ3t0+DGO4hjST2MpQaK8DCceLO14tmSfDDrgVXhuwYqttP5GzG6SpgSe49CObzNbmCf75WPgMQjrcDXFRBjArxbvYI4hz2VAxnVZdEakozwpQuheIpdKb2PcQuXkypYwK4t5A+ERG9OoFiIKElu7LbN7laddm6YDWDJ9S82IPFFbrb/oPYjC9CtxjJ73Id2tZwhDAWRPMMJfwCp6k2RViHX5yn0SZs71cp7voj99JtMDOpfBckO8QhYSEQH1Fvy+KyZF1rveXkoo+RBgx6ndiPl7IjfIF1wXC1BuY2UQdkz4MZ7OAit1yy2pPO+QWEetOyN59SbHwv+92xbsMFvjEboTdVMEFmT9AemK1CaKlSXYGSDP5S83pmYFmk94dBrF50CfJGAyszbHXIUXEm9nsO3j3dXIFwTsyD0oBqeALO7kw==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(376002)(136003)(346002)(46966006)(36840700001)(40470700004)(8676002)(26005)(478600001)(4326008)(86362001)(40460700003)(6666004)(336012)(36860700001)(41300700001)(186003)(2616005)(47076005)(426003)(16526019)(2906002)(8936002)(36756003)(5660300002)(70206006)(356005)(82740400003)(82310400005)(316002)(54906003)(81166007)(40480700001)(70586007)(156123004)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2022 09:57:29.4948
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7593c910-40af-434f-9dc7-08da81c93a7f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6364
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Add DDR pinmux which may be used in U-Boot after synchronising all
-them device trees (and includes) from Linux.
+Wolfram Sang <wsa+renesas@sang-engineering.com> writes:
 
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+>  drivers/net/ethernet/mellanox/mlxsw/core.c       |  2 +-
+>  drivers/net/ethernet/mellanox/mlxsw/minimal.c    |  4 ++--
+>  .../ethernet/mellanox/mlxsw/spectrum_ethtool.c   |  6 +++---
 
----
+Reviewed-by: Petr Machata <petrm@nvidia.com> # For drivers/net/ethernet/mellanox/mlxsw
 
- arch/arm/boot/dts/vf610-pinfunc.h | 52 ++++++++++++++++++++++++++++++-
- 1 file changed, 51 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm/boot/dts/vf610-pinfunc.h b/arch/arm/boot/dts/vf610-pinfunc.h
-index f1e5a7cf58a9..b7b7322a2d1b 100644
---- a/arch/arm/boot/dts/vf610-pinfunc.h
-+++ b/arch/arm/boot/dts/vf610-pinfunc.h
-@@ -420,7 +420,7 @@
- #define VF610_PAD_PTD29__FTM3_CH2		0x104 0x000 ALT4 0x0
- #define VF610_PAD_PTD29__DSPI2_SIN		0x104 0x000 ALT5 0x0
- #define VF610_PAD_PTD29__DEBUG_OUT11		0x104 0x000 ALT7 0x0
--#define VF610_PAD_PTD28__GPIO_66	 	0x108 0x000 ALT0 0x0
-+#define VF610_PAD_PTD28__GPIO_66		0x108 0x000 ALT0 0x0
- #define VF610_PAD_PTD28__FB_AD28		0x108 0x000 ALT1 0x0
- #define VF610_PAD_PTD28__NF_IO12		0x108 0x000 ALT2 0x0
- #define VF610_PAD_PTD28__I2C2_SCL		0x108 0x34C ALT3 0x1
-@@ -802,5 +802,55 @@
- #define VF610_PAD_PTE28__EWM_OUT		0x214 0x000 ALT7 0x0
- #define VF610_PAD_PTA7__GPIO_134		0x218 0x000 ALT0 0x0
- #define VF610_PAD_PTA7__VIU_PIX_CLK		0x218 0x3AC ALT1 0x1
-+#define VF610_PAD_DDR_RESETB			0x21c 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A15__DDR_A_15		0x220 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A14__DDR_A_14		0x224 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A13__DDR_A_13		0x228 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A12__DDR_A_12		0x22c 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A11__DDR_A_11		0x230 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A10__DDR_A_10		0x234 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A9__DDR_A_9		0x238 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A8__DDR_A_8		0x23c 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A7__DDR_A_7		0x240 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A6__DDR_A_6		0x244 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A5__DDR_A_5		0x248 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A4__DDR_A_4		0x24c 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A3__DDR_A_3		0x250 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A2__DDR_A_2		0x254 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A1__DDR_A_1		0x258 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_A0__DDR_A_0		0x25c 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_BA2__DDR_BA_2		0x260 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_BA1__DDR_BA_1		0x264 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_BA0__DDR_BA_0		0x268 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_CAS__DDR_CAS_B		0x26c 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_CKE__DDR_CKE_0		0x270 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_CLK__DDR_CLK_0		0x274 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_CS__DDR_CS_B_0		0x278 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D15__DDR_D_15		0x27c 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D14__DDR_D_14		0x280 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D13__DDR_D_13		0x284 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D12__DDR_D_12		0x288 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D11__DDR_D_11		0x28c 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D10__DDR_D_10		0x290 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D9__DDR_D_9		0x294 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D8__DDR_D_8		0x298 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D7__DDR_D_7		0x29c 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D6__DDR_D_6		0x2a0 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D5__DDR_D_5		0x2a4 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D4__DDR_D_4		0x2a8 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D3__DDR_D_3		0x2ac 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D2__DDR_D_2		0x2b0 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D1__DDR_D_1		0x2b4 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_D0__DDR_D_0		0x2b8 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_DQM1__DDR_DQM_1		0x2bc 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_DQM0__DDR_DQM_0		0x2c0 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_DQS1__DDR_DQS_1		0x2c4 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_DQS0__DDR_DQS_0		0x2c8 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_RAS__DDR_RAS_B		0x2cc 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_WE__DDR_WE_B		0x2d0 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_ODT1__DDR_ODT_0		0x2d4 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_ODT0__DDR_ODT_1		0x2d8 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_DDRBYTE1__DDR_DDRBYTE1	0x2dc 0x000 ALT0 0x0
-+#define VF610_PAD_DDR_DDRBYTE2__DDR_DDRBYTE2	0x2e0 0x000 ALT0 0x0
- 
- #endif
--- 
-2.36.1
-
+> diff --git a/drivers/net/ethernet/mellanox/mlxsw/core.c b/drivers/net/ethernet/mellanox/mlxsw/core.c
+> index 75553eb2c7f2..7331635607f7 100644
+> --- a/drivers/net/ethernet/mellanox/mlxsw/core.c
+> +++ b/drivers/net/ethernet/mellanox/mlxsw/core.c
+> @@ -633,7 +633,7 @@ static void mlxsw_emad_process_string_tlv(const struct sk_buff *skb,
+>  		return;
+>  
+>  	string = mlxsw_emad_string_tlv_string_data(string_tlv);
+> -	strlcpy(trans->emad_err_string, string,
+> +	strscpy(trans->emad_err_string, string,
+>  		MLXSW_EMAD_STRING_TLV_STRING_LEN);
+>  }
+>  
+> diff --git a/drivers/net/ethernet/mellanox/mlxsw/minimal.c b/drivers/net/ethernet/mellanox/mlxsw/minimal.c
+> index bb1cd4bae82e..e3c045a82ae2 100644
+> --- a/drivers/net/ethernet/mellanox/mlxsw/minimal.c
+> +++ b/drivers/net/ethernet/mellanox/mlxsw/minimal.c
+> @@ -94,14 +94,14 @@ static void mlxsw_m_module_get_drvinfo(struct net_device *dev,
+>  	struct mlxsw_m_port *mlxsw_m_port = netdev_priv(dev);
+>  	struct mlxsw_m *mlxsw_m = mlxsw_m_port->mlxsw_m;
+>  
+> -	strlcpy(drvinfo->driver, mlxsw_m->bus_info->device_kind,
+> +	strscpy(drvinfo->driver, mlxsw_m->bus_info->device_kind,
+>  		sizeof(drvinfo->driver));
+>  	snprintf(drvinfo->fw_version, sizeof(drvinfo->fw_version),
+>  		 "%d.%d.%d",
+>  		 mlxsw_m->bus_info->fw_rev.major,
+>  		 mlxsw_m->bus_info->fw_rev.minor,
+>  		 mlxsw_m->bus_info->fw_rev.subminor);
+> -	strlcpy(drvinfo->bus_info, mlxsw_m->bus_info->device_name,
+> +	strscpy(drvinfo->bus_info, mlxsw_m->bus_info->device_name,
+>  		sizeof(drvinfo->bus_info));
+>  }
+>  
+> diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_ethtool.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_ethtool.c
+> index 915dffb85a1c..dcd79d7e2af4 100644
+> --- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_ethtool.c
+> +++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_ethtool.c
+> @@ -14,16 +14,16 @@ static void mlxsw_sp_port_get_drvinfo(struct net_device *dev,
+>  	struct mlxsw_sp_port *mlxsw_sp_port = netdev_priv(dev);
+>  	struct mlxsw_sp *mlxsw_sp = mlxsw_sp_port->mlxsw_sp;
+>  
+> -	strlcpy(drvinfo->driver, mlxsw_sp->bus_info->device_kind,
+> +	strscpy(drvinfo->driver, mlxsw_sp->bus_info->device_kind,
+>  		sizeof(drvinfo->driver));
+> -	strlcpy(drvinfo->version, mlxsw_sp_driver_version,
+> +	strscpy(drvinfo->version, mlxsw_sp_driver_version,
+>  		sizeof(drvinfo->version));
+>  	snprintf(drvinfo->fw_version, sizeof(drvinfo->fw_version),
+>  		 "%d.%d.%d",
+>  		 mlxsw_sp->bus_info->fw_rev.major,
+>  		 mlxsw_sp->bus_info->fw_rev.minor,
+>  		 mlxsw_sp->bus_info->fw_rev.subminor);
+> -	strlcpy(drvinfo->bus_info, mlxsw_sp->bus_info->device_name,
+> +	strscpy(drvinfo->bus_info, mlxsw_sp->bus_info->device_name,
+>  		sizeof(drvinfo->bus_info));
+>  }

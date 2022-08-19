@@ -2,103 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001AB59930F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 04:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94EC599316
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 04:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242075AbiHSChB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 22:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+        id S242604AbiHSCh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 22:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbiHSCg7 (ORCPT
+        with ESMTP id S230441AbiHSCh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 22:36:59 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290DBCC313
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=CKrpIC9UicO12gvCLgzg1YisGV2nQ8KKc9GDBljdtno=; b=s2qv2DW8TUzba6vu0OWg5HOlCQ
-        kTxa5aTj2JaAUKJUQ3Wo6ZLAF1VHudAEhEJY70q6EDADlS1OB4ubh1mKT+CWWI6lm4lvVRKKOZ+Fp
-        NlgEKxnD1akZX5T6yUtvOF+/4UDC+il1qqyuSyLu0kb7dIgH4tMoPbjVLf11e0RdR6yGA/g2FzJ5I
-        +PvN3QP4PKsazr0b8az9jY2eSciOwa6hMSoLs41JLBzSppc2MYNerGQ2PZzFPiWPRpv7dtplq0fGb
-        CYgY7Y9/hOG2gzwabhoNU/NK62yVKTuuru0KE8Vh68MmVbJjougkmCV1ZruNVhWybMR9OhukQ2wi9
-        J3H3zpPA==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oOrsF-00Ef0B-Sl; Fri, 19 Aug 2022 02:36:40 +0000
-Message-ID: <fe6636a1-19a3-2243-e22e-1a8bad8e23a4@infradead.org>
-Date:   Thu, 18 Aug 2022 19:36:39 -0700
+        Thu, 18 Aug 2022 22:37:27 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F206ACC308
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:37:25 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4M85Td3QV7zGpg4;
+        Fri, 19 Aug 2022 10:35:49 +0800 (CST)
+Received: from [10.67.110.176] (10.67.110.176) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 19 Aug 2022 10:37:23 +0800
+Subject: Re: [PATCH -next] mtd/ftl: Fix memleak in ftl_add_mtd()
+To:     Richard Weinberger <richard@nod.at>, <cuigaosheng1@huawei.com>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        <gongruiqi1@huawei.com>, <wangweiyang2@huawei.com>
+References: <20220715071105.2321311-1-cuigaosheng1@huawei.com>
+ <6733eee6-bfb6-7ee9-1331-2a739520fcd5@huawei.com>
+ <1160016027.119085.1660805967979.JavaMail.zimbra@nod.at>
+From:   cuigaosheng <cuigaosheng1@huawei.com>
+Message-ID: <df18397e-bcbe-7d3b-d316-5f22dd4cff9b@huawei.com>
+Date:   Fri, 19 Aug 2022 10:37:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: drivers/tty/serial/sunplus-uart.c:671: undefined reference to
- `uart_remove_one_port'
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, Qin Jian <qinjian@cqplus1.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-References: <202208161624.f6SCFLBq-lkp@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202208161624.f6SCFLBq-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1160016027.119085.1660805967979.JavaMail.zimbra@nod.at>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.176]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> There seems to be a problem with your caps lock key. ;-)
 
+I wil adjust my caps lock key, Thanks for reminding.
 
-On 8/16/22 01:59, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-> commit: 0aa94eea8d955c82014e5368a843da93f1dc58f8 ARM: sunplus: Add initial support for Sunplus SP7021 SoC
-> date:   6 weeks ago
-> config: arm-randconfig-r012-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161624.f6SCFLBq-lkp@intel.com/config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0aa94eea8d955c82014e5368a843da93f1dc58f8
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 0aa94eea8d955c82014e5368a843da93f1dc58f8
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+> Is this leak observable via kmemleak or such?
+> I always thought ->remove_dev() unconditionally do a cleanup later.
 
-Fix is here:
-https://lore.kernel.org/lkml/20220806025705.7759-1-rdunlap@infradead.org/
+When I'm working on other issues with mtd,I needed to analyze the mtd driver
+initialization process,during reading the code, refer to other driver
+implementation，I found this problem, not kmemleak. Thanks.
 
-> 
-> All errors (new ones prefixed by >>):
-
-
-[snip]
-
-> 
-> Kconfig warnings: (for reference only)
->    WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS
->    Depends on [n]: TTY [=n] && HAS_IOMEM [=y] && (ARCH_SUNPLUS [=y] || COMPILE_TEST [=y])
->    Selected by [y]:
->    - SOC_SP7021 [=y] && ARCH_SUNPLUS [=y]
->    WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS_CONSOLE
->    Depends on [n]: TTY [=n] && HAS_IOMEM [=y] && SERIAL_SUNPLUS [=y]
->    Selected by [y]:
->    - SOC_SP7021 [=y] && ARCH_SUNPLUS [=y]
-
-No, this is the primary problem. The build error happen due to this.
- 
-
--- 
-~Randy
+在 2022/8/18 14:59, Richard Weinberger 写道:
+> ----- Ursprüngliche Mail -----
+>> Von: "cuigaosheng" <cuigaosheng1@huawei.com>
+>>
+>> PING
+> There seems to be a problem with your caps lock key. ;-)
+>   
+>> 在 2022/7/15 15:11, Gaosheng Cui 写道:
+>>> When add_mtd_blktrans_dev failed, partition's memory will be freed
+>>> by kfree, but there are some structure members that are allocated
+>>> for memory independently, such as partition->VirtualBlockMap,
+>>> partition->EUNInfo, partition->ZferInfo, and partition->bam_cache,
+>>> so kfree(partition) may cause memory leaks, using ftl_freepart(partition)
+>>> will fix it.
+> Is this leak observable via kmemleak or such?
+> I always thought ->remove_dev() unconditionally do a cleanup later.
+>
+>>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+>>> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+>>> ---
+>>>    drivers/mtd/ftl.c | 1 +
+>>>    1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/mtd/ftl.c b/drivers/mtd/ftl.c
+>>> index f655d2905270..200271bdc7aa 100644
+>>> --- a/drivers/mtd/ftl.c
+>>> +++ b/drivers/mtd/ftl.c
+>>> @@ -1031,6 +1031,7 @@ static void ftl_add_mtd(struct mtd_blktrans_ops *tr,
+>>> struct mtd_info *mtd)
+>>>    		partition->mbd.devnum = -1;
+>>>    		if (!add_mtd_blktrans_dev(&partition->mbd))
+>>>    			return;
+>>> +		ftl_freepart(partition);
+>>>    	}
+>>>    
+>>>    	kfree(partition);
+> .

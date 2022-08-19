@@ -2,255 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA7A599971
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA43599983
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348330AbiHSKGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
+        id S1348292AbiHSKIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348314AbiHSKGa (ORCPT
+        with ESMTP id S1348205AbiHSKIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:06:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83500EEF1E
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 03:06:29 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oOytN-0003b6-Nm; Fri, 19 Aug 2022 12:06:17 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oOytM-0007Hx-PP; Fri, 19 Aug 2022 12:06:16 +0200
-Date:   Fri, 19 Aug 2022 12:06:16 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org, akinobu.mita@gmail.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 1/4] media: mt9m111: add V4L2_CID_PIXEL_RATE support
-Message-ID: <20220819100616.askwm5e675ov6y3p@pengutronix.de>
-References: <20220818144712.997477-1-m.felsch@pengutronix.de>
- <20220818161108.dlmi77o6j7wcyayc@uno.localdomain>
- <20220819075615.a3nuakrac54kn7t3@pengutronix.de>
- <20220819081548.q6c5pwio2z2ambqq@uno.localdomain>
- <20220819090438.72vlat6by3ag6pvd@pengutronix.de>
- <20220819094659.tgngnhr5taup2lhl@uno.localdomain>
+        Fri, 19 Aug 2022 06:08:17 -0400
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AA8A2AD9;
+        Fri, 19 Aug 2022 03:08:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=0hZX+
+        tOMDMPZsSCoOTot4Hawr1ODy8yH0Xermr/g8hc=; b=YrpnbZcbkI4rvNwQD6G3e
+        WCac95eZFD7PgE7uXsgfjYCA/pqkoArqW4W/7yGH9Ze4c/yBjFn01uMCN2HVz1PW
+        bTyCTKUZJbTYI17R1wFt40qucQH3kqgb2GwrtZMy/IPfW4JUafViq7GcqU2WMXuJ
+        8Xy+ZAxPDxvC6i8D+REXcg=
+Received: from localhost.localdomain (unknown [114.247.186.98])
+        by smtp2 (Coremail) with SMTP id GtxpCgC3KKXpYP9iFfSYWg--.31202S2;
+        Fri, 19 Aug 2022 18:07:38 +0800 (CST)
+From:   "longguang.yue" <bigclouds@163.com>
+To:     horms@verge.net.au
+Cc:     ja@ssi.bg, kadlec@netfilter.org, fw@strlen.de, pablo@netfilter.org,
+        lvs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "longguang.yue" <bigclouds@163.com>
+Subject: [PATCH] ipvs: add a sysctl switch to control ipvs to bypass OUTPUT chain or not
+Date:   Fri, 19 Aug 2022 18:07:02 +0800
+Message-Id: <20220819100702.14889-1-bigclouds@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819094659.tgngnhr5taup2lhl@uno.localdomain>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GtxpCgC3KKXpYP9iFfSYWg--.31202S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWr45Jw45ur4UWr47Ar18Xwb_yoWrCF18pF
+        90yrWa9r4UJF13Jwn3ArWxuryagr40y34a9F4ak39Yy3WDJr9YqF4YyryYvFyI9rs5WFWr
+        XF1Yq3y3Cws8AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziBHq3UUUUU=
+X-Originating-IP: [114.247.186.98]
+X-CM-SenderInfo: peljuzprxg2qqrwthudrp/xtbBZwpiQ1et8efQQAAAsw
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-08-19, Jacopo Mondi wrote:
-> Hi Marco,
-> 
-> On Fri, Aug 19, 2022 at 11:04:38AM +0200, Marco Felsch wrote:
-> > On 22-08-19, Jacopo Mondi wrote:
-> > > Hi Marco
-> > >
-> > > On Fri, Aug 19, 2022 at 09:56:15AM +0200, Marco Felsch wrote:
-> > > > Hi Jacopo,
-> > > >
-> > > > On 22-08-18, Jacopo Mondi wrote:
-> > > > > Hi Marco
-> > > > >
-> > > > > On Thu, Aug 18, 2022 at 04:47:09PM +0200, Marco Felsch wrote:
-> > > > > > Add support to report the PIXEL_RATE so a host or bridge device can ask
-> > > > > > the sensor.
-> > > > > >
-> > > > > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > > > > > ---
-> > > > > >  drivers/media/i2c/mt9m111.c | 15 ++++++++++++++-
-> > > > > >  1 file changed, 14 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
-> > > > > > index afc86efa9e3e..cdaf283e1309 100644
-> > > > > > --- a/drivers/media/i2c/mt9m111.c
-> > > > > > +++ b/drivers/media/i2c/mt9m111.c
-> > > > > > @@ -908,6 +908,8 @@ static int mt9m111_s_ctrl(struct v4l2_ctrl *ctrl)
-> > > > > >  		return mt9m111_set_test_pattern(mt9m111, ctrl->val);
-> > > > > >  	case V4L2_CID_COLORFX:
-> > > > > >  		return mt9m111_set_colorfx(mt9m111, ctrl->val);
-> > > > > > +	case V4L2_CID_PIXEL_RATE:
-> > > > > > +		return 0;
-> > > > >
-> > > > > By default PIXEL_RATE is read-only.
-> > > > > Do you get a call to s_ctrl for it ?
-> > > >
-> > > > You're absolutly right, we don't need to do this.
-> > > >
-> > > > > >  	}
-> > > > > >
-> > > > > >  	return -EINVAL;
-> > > > > > @@ -1249,6 +1251,7 @@ static int mt9m111_probe(struct i2c_client *client)
-> > > > > >  {
-> > > > > >  	struct mt9m111 *mt9m111;
-> > > > > >  	struct i2c_adapter *adapter = client->adapter;
-> > > > > > +	unsigned long mclk_rate;
-> > > > > >  	int ret;
-> > > > > >
-> > > > > >  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA)) {
-> > > > > > @@ -1271,6 +1274,13 @@ static int mt9m111_probe(struct i2c_client *client)
-> > > > > >  	if (IS_ERR(mt9m111->clk))
-> > > > > >  		return PTR_ERR(mt9m111->clk);
-> > > > > >
-> > > > > > +	ret = clk_prepare_enable(mt9m111->clk);
-> > > > > > +	if (ret < 0)
-> > > > > > +		return ret;
-> > > > > > +
-> > > > >
-> > > > > Do you need to enable clock to read its rate ?
-> > > >
-> > > > Yes, accroding the API [1].
-> > > >
-> > > > [1] https://elixir.bootlin.com/linux/v6.0-rc1/source/include/linux/clk.h#L682
-> > >
-> > > So weird! none of the drivers I checked do that. The most common
-> > > pattern is
-> > >
-> > >         clk = devm_clk_get();
-> > >         rate = clk_get_rate(clk)
-> > >         if (rate != RATE)
-> > >                 ...
-> >
-> > Yep, I know. There are a lot of drivers not respecting this.
-> >
-> 
-> I wonder if it's really necessary then :)
+Netfilter's rules are matched in sequence, more rules worse performance.
+IPVS is a special system, its traffic is clear and definite, for better
+performance, should better not be interfered heavily. This patch adds a
+sysctl switch and enable ipvs to control traffic to pass netfilter
+OUTPUT chain or not.
 
-I would rather keep in sync with the official API ^^
+Signed-off-by: longguang.yue <bigclouds@163.com>
+---
+ include/net/ip_vs.h             | 11 +++++++++++
+ net/netfilter/ipvs/ip_vs_ctl.c  |  8 ++++++++
+ net/netfilter/ipvs/ip_vs_xmit.c | 31 ++++++++++++++++++++++++-------
+ 3 files changed, 43 insertions(+), 7 deletions(-)
 
-> > > >
-> > > > > > +	mclk_rate = clk_get_rate(mt9m111->clk);
-> > > > > > +	clk_disable_unprepare(mt9m111->clk);
-> > > > > > +
-> > > > > >  	mt9m111->regulator = devm_regulator_get(&client->dev, "vdd");
-> > > > > >  	if (IS_ERR(mt9m111->regulator)) {
-> > > > > >  		dev_err(&client->dev, "regulator not found: %ld\n",
-> > > > > > @@ -1285,7 +1295,7 @@ static int mt9m111_probe(struct i2c_client *client)
-> > > > > >  	mt9m111->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-> > > > > >  				 V4L2_SUBDEV_FL_HAS_EVENTS;
-> > > > > >
-> > > > > > -	v4l2_ctrl_handler_init(&mt9m111->hdl, 7);
-> > > > > > +	v4l2_ctrl_handler_init(&mt9m111->hdl, 8);
-> > > > > >  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
-> > > > > >  			V4L2_CID_VFLIP, 0, 1, 1, 0);
-> > > > > >  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
-> > > > > > @@ -1309,6 +1319,9 @@ static int mt9m111_probe(struct i2c_client *client)
-> > > > > >  				BIT(V4L2_COLORFX_NEGATIVE) |
-> > > > > >  				BIT(V4L2_COLORFX_SOLARIZATION)),
-> > > > > >  			V4L2_COLORFX_NONE);
-> > > > > > +	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops, V4L2_CID_PIXEL_RATE,
-> > > > > > +			  mclk_rate, mclk_rate, 1, mclk_rate);
-> > > > > > +
-> > > > >
-> > > > > I don't have a datasheet but it seems a little weird that the mclk
-> > > > > frequency is the same as the pixel clock rate ?
-> > > >
-> > > > I see your confusion here. I can only speak for the MT9M131 device which
-> > > > is covered by this driver as well. This device is composed of a
-> > > > internal-sensor and a internal-isp. The internal-sensor is clocked by
-> > > > mclk/2 but the final image device/sensor output-fifo is clocked by mclk.
-> > >
-> > > No PLL, no rate multiplier/divider ? Does this sensor only work with
-> > > one pixel rate that is defined by the input clock rate ?
-> > >
-> > > > There are options to devide the output clock as well, but these options
-> > > > are not enabled yet. So yes, the pixel clock rate == mclk rate. To avoid
-> > >
-> > > Ah ok
-> > >
-> > > Could you share your setup mclk, resolution and frame rate to show how
-> > > the pixel rate and the mclk rate are related ?
-> >
-> >
-> > mclk:      54 MHz (input)
-> > pixelclk:  54 MHz (output)
-> > res:       1280x1024
-> 
-> You should take blankings into account as well, even if I havent'
-> found where they are programmed in the driver
+diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
+index ff1804a0c469..c1232ef3a1b5 100644
+--- a/include/net/ip_vs.h
++++ b/include/net/ip_vs.h
+@@ -932,6 +932,7 @@ struct netns_ipvs {
+ 	int			sysctl_schedule_icmp;
+ 	int			sysctl_ignore_tunneled;
+ 	int			sysctl_run_estimation;
++	int			sysctl_output_bypass;
+ 
+ 	/* ip_vs_lblc */
+ 	int			sysctl_lblc_expiration;
+@@ -1077,6 +1078,11 @@ static inline int sysctl_run_estimation(struct netns_ipvs *ipvs)
+ 	return ipvs->sysctl_run_estimation;
+ }
+ 
++static inline int sysctl_output_bypass(struct netns_ipvs *ipvs)
++{
++	return ipvs->sysctl_output_bypass;
++}
++
+ #else
+ 
+ static inline int sysctl_sync_threshold(struct netns_ipvs *ipvs)
+@@ -1174,6 +1180,11 @@ static inline int sysctl_run_estimation(struct netns_ipvs *ipvs)
+ 	return 1;
+ }
+ 
++static inline int sysctl_output_bypass(struct netns_ipvs *ipvs)
++{
++	return 0;
++}
++
+ #endif
+ 
+ /* IPVS core functions
+diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
+index efab2b06d373..8a08a783e85e 100644
+--- a/net/netfilter/ipvs/ip_vs_ctl.c
++++ b/net/netfilter/ipvs/ip_vs_ctl.c
+@@ -2019,6 +2019,12 @@ static struct ctl_table vs_vars[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec,
+ 	},
++	{
++		.procname	= "output_bypass",
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec,
++	},
+ #ifdef CONFIG_IP_VS_DEBUG
+ 	{
+ 		.procname	= "debug_level",
+@@ -4094,6 +4100,8 @@ static int __net_init ip_vs_control_net_init_sysctl(struct netns_ipvs *ipvs)
+ 	tbl[idx++].data = &ipvs->sysctl_ignore_tunneled;
+ 	ipvs->sysctl_run_estimation = 1;
+ 	tbl[idx++].data = &ipvs->sysctl_run_estimation;
++	ipvs->sysctl_output_bypass = 1;
++	tbl[idx++].data = &ipvs->sysctl_output_bypass;
+ #ifdef CONFIG_IP_VS_DEBUG
+ 	/* Global sysctls must be ro in non-init netns */
+ 	if (!net_eq(net, &init_net))
+diff --git a/net/netfilter/ipvs/ip_vs_xmit.c b/net/netfilter/ipvs/ip_vs_xmit.c
+index 029171379884..46a34dd2555e 100644
+--- a/net/netfilter/ipvs/ip_vs_xmit.c
++++ b/net/netfilter/ipvs/ip_vs_xmit.c
+@@ -653,8 +653,12 @@ static inline int ip_vs_nat_send_or_cont(int pf, struct sk_buff *skb,
+ 		skb_forward_csum(skb);
+ 		if (skb->dev)
+ 			skb_clear_tstamp(skb);
+-		NF_HOOK(pf, NF_INET_LOCAL_OUT, cp->ipvs->net, NULL, skb,
+-			NULL, skb_dst(skb)->dev, dst_output);
++		if (sysctl_output_bypass(cp->ipvs)) {
++			dst_output(cp->ipvs->net, NULL, skb);
++		} else {
++			NF_HOOK(pf, NF_INET_LOCAL_OUT, cp->ipvs->net, NULL, skb,
++				NULL, skb_dst(skb)->dev, dst_output);
++		}
+ 	} else
+ 		ret = NF_ACCEPT;
+ 
+@@ -675,8 +679,12 @@ static inline int ip_vs_send_or_cont(int pf, struct sk_buff *skb,
+ 		skb_forward_csum(skb);
+ 		if (skb->dev)
+ 			skb_clear_tstamp(skb);
+-		NF_HOOK(pf, NF_INET_LOCAL_OUT, cp->ipvs->net, NULL, skb,
+-			NULL, skb_dst(skb)->dev, dst_output);
++		if (sysctl_output_bypass(cp->ipvs)) {
++			dst_output(cp->ipvs->net, NULL, skb);
++		} else {
++			NF_HOOK(pf, NF_INET_LOCAL_OUT, cp->ipvs->net, NULL, skb,
++				NULL, skb_dst(skb)->dev, dst_output);
++		}
+ 	} else
+ 		ret = NF_ACCEPT;
+ 	return ret;
+@@ -1262,10 +1270,19 @@ ip_vs_tunnel_xmit(struct sk_buff *skb, struct ip_vs_conn *cp,
+ 	skb->ignore_df = 1;
+ 
+ 	ret = ip_vs_tunnel_xmit_prepare(skb, cp);
+-	if (ret == NF_ACCEPT)
+-		ip_local_out(net, skb->sk, skb);
+-	else if (ret == NF_DROP)
++	if (ret == NF_ACCEPT) {
++		if (sysctl_output_bypass(cp->ipvs)) {
++			struct iphdr *iph = ip_hdr(skb);
++
++			iph->tot_len = htons(skb->len);
++			ip_send_check(iph);
++			dst_output(cp->ipvs->net, NULL, skb);
++		} else {
++			ip_local_out(net, skb->sk, skb);
++		}
++	} else if (ret == NF_DROP) {
+ 		kfree_skb(skb);
++	}
+ 
+ 	LeaveFunction(10);
+ 
+-- 
+2.34.1
 
-Yes, thats right. This is only the actice pixel array.
-
-> > fps:       15
-> > bus-width: 8
-> > bpp:       16
-> >
-> > After re-reading the PIXEL_RATE, maybe I missunderstood the control. As
-> > of now I thought it is the amount of bytes per second send on the bus.
-> 
-> Not bytes but pixels :)
-> 
-> And the above gives me a 19.660.800 Hz pixel rate
-
-Yep, I re-calced this on my side as well and got the same.
-
-> > But the documentation says pixels per second... Is there a control to
-> > expose the current pixelclk on the mbus? What I wanna do in the end is
-> > to calculate the througput on the (parallel-)bus.
-> 
-> Not for parallel busses as far as I'm aware as my understanding is
-> that CID_LINK_FREQ applies to CSI-2 setups only.
-
-Yes, while I was working on this topic (4 years back) this was the case.
-After your good thoughts I re-checked the control and now it is within
-[1] and there the parallel bus is mentioned as well. So this is the
-correct control :)
-
-[1] ext-ctrls-image-process.rst
-
-> To get the byte rate on the bus I would simply multiply the pixel
-> clock by the number of bytes per pixel, in this case 2.
-
-Please see above. My goal is to request the bus-frequency from the
-sensor. With that and the knowledge about the bus-width, we can
-calculate the bus throughput.
-
-Regards,
-  Marco
-
-> >
-> > > > confusion I could rename the mclk_rate to extclk_rate but then clock
-> > > > request is not 100% correct since we are requesting a "mclk", this
-> > > > should be "extclk".
-> > >
-> > > Doesn't really make a difference!
-> > >
-> > > A comment in the code to explain what happens would help though!
-> >
-> > I did that right now, after your confusion :)
-> >
-> > Regards,
-> >   Marco
-> >
-> > >
-> > > >
-> > > > Regards,
-> > > >   Marco
-> > > >
-> > > > > >  	mt9m111->subdev.ctrl_handler = &mt9m111->hdl;
-> > > > > >  	if (mt9m111->hdl.error) {
-> > > > > >  		ret = mt9m111->hdl.error;
-> > > > > > --
-> > > > > > 2.30.2
-> > > > > >
-> > > > >
-> > >
-> 

@@ -2,155 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC2D599CC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9D0599CCA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349362AbiHSNNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 09:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
+        id S1349340AbiHSNN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 09:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349317AbiHSNNA (ORCPT
+        with ESMTP id S1349349AbiHSNNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 09:13:00 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA69CD399E
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:12:57 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id z25so6106023lfr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:12:57 -0700 (PDT)
+        Fri, 19 Aug 2022 09:13:22 -0400
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9A0D8B3D;
+        Fri, 19 Aug 2022 06:13:09 -0700 (PDT)
+Received: by mail-ua1-x930.google.com with SMTP id s5so1760576uar.1;
+        Fri, 19 Aug 2022 06:13:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=1+BR4rDQN1hkhfT6kogWluPYgnRMjeAFXBEVDjlIhyY=;
-        b=Mm+XwoLhbjB1cUquH2nI6XAsgf46x6z5xxfd/c+vvysAgHSw4MKjDKPGH8Le0gKS2o
-         E/mWThe9V6JEJrV6o3wW2VE5On3tZIxDhJbCyprkN5gMm/Qr61nLrG0uoOkuf2Ec7wWb
-         VobSFgaN449vit9p5Xoo3E9qLUgOV9ZsjdX/L82dR4XhfsOmYCop69ZyK6p7q8jKW2f9
-         Cv8NutBtvaDQWaRA553UHNkfGavuESsZWgkj3pOeNfeK/OjzDlUXDuHf1Ddin+fePMrZ
-         Divj6CFTaGgWhdC4bRTjxIBZW91wfbXgttfP69q5GGFfpBZNqoeBpjM6GaReWXIfDaoa
-         L12g==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=hUDdWXxm7BsuydsAQtCOOvlHqEqkIuN6xiZIae2gIqY=;
+        b=kHdaSIXI/tyWxSuuzmByH9Y7W+5ewFJ5CYAel9EU17+WmgnA+ujfgRTEGh5Tap0oKc
+         o7Bu/SOXmroG6hmAt1M/i1MfdDH3FDlu0iPD6iYjtKtm9IcFnVptoxOlaxBiGXvYAFCn
+         6cxSD+WxaVDUAJGHfbmvpZcVpBQlzU7yTbeWWHWVm8YsPadjG7K1OXYuYW2kPwBMoaKq
+         15ez9Dy6uf0BOZUVItq5860hQ25Kp8YvYTY4SGBEukDH8VpQq5GKIMP5CEJiyOiYqtnW
+         nvoyCSf1uhM76oNwPuOsrFsJBr4RjRCZYYiEI62JD6lZi8GUwraUl/znqertYTAGSYCx
+         RtUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=1+BR4rDQN1hkhfT6kogWluPYgnRMjeAFXBEVDjlIhyY=;
-        b=RxZJWyD/3r5oF5F2s01xh/1bE5ozUJQ39gH0G977JUXCBVPSZnTYIhvhoONykn0aKN
-         8O20lzVGqoEapmYcJ1qBkgJe24/KSDZ3IPX+oN4eu24LAAIwuUUf8x+0bnN6u4jtY2wB
-         hd9NMWX8RbZLfd/M1+v+UvmNpHgvlEW+7Wp8X8jfnL0gTTHr7kQAxWeyGhtDhMJorAD1
-         IuG32jzYxHMdE+uFyZzsDEMLN91oQOJb51l3G44I7uOmTxPTSM65iUJfJpZPPS1ADhrT
-         vbvEzH1vtUAUc2Don8wpLHsc60v87ZCMBlLSCVebXlSrNYZOAFzSDgkgAsSQwgfDK/LZ
-         /IHw==
-X-Gm-Message-State: ACgBeo0UpFnDmU2dxfmDri9BO04cluMrotEpeyIQ9O/gz3o7mRVaczrh
-        Elwbv/0Ff6MC2RSWf8Lc4m85JQ==
-X-Google-Smtp-Source: AA6agR7Jl+hYFxUbkuB2Ukvk+i6QTFpmW4GiQyzt6DOiMyZCjAWZly+NaiGCSEV5xqMzEGUFKAlTAQ==
-X-Received: by 2002:a05:6512:281f:b0:48b:824:9741 with SMTP id cf31-20020a056512281f00b0048b08249741mr2615778lfb.135.1660914775898;
-        Fri, 19 Aug 2022 06:12:55 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id be24-20020a05651c171800b0025dfe45c031sm613986ljb.27.2022.08.19.06.12.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 06:12:55 -0700 (PDT)
-Message-ID: <38094e2d-c75c-920b-4b4d-aa377971f615@linaro.org>
-Date:   Fri, 19 Aug 2022 16:12:53 +0300
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=hUDdWXxm7BsuydsAQtCOOvlHqEqkIuN6xiZIae2gIqY=;
+        b=Gan05Yi8MKPxqjM7xBXYDI/4CZjR4FdoB6V2ozPwxZ4KQZSIoxQu+5JlhcZ5Wm7ELR
+         GclbzFgCKbFxRxnNfY73ZJWMOzcRKgpP6iYaKUwDV839Wh4PZTp5v7d4Su9066s2dJqN
+         A/YfmIE+HNyZ0EY9uTvTWtcg50vzaVeSRlN/1yzx5jBEdVtgvgYtU0bJ3nzuGhGYEWaR
+         ukxAHRIa/4XUH78Jgmtbo38LgxJiWTM1ECk/QJjkOm9SmYGdBLHXE2Gh37whzkRdp914
+         TKceUr9LM0sGRxfvKXKObgaR3QfFIlFmZe0EoEFSO3HHjvFoT0AJe0BDmUX2BzlbM1Bk
+         M2Iw==
+X-Gm-Message-State: ACgBeo27qH/qUWv29OmON4uxFlFQJ8UkqaI7YhMoQM8jtZ9wgsDe14Gs
+        qsPOwxTYYh7JtDdSTtChVrkiaMq2rEZNg/C/QNeWYSwreK8=
+X-Google-Smtp-Source: AA6agR7XK2z3N9Sy6KDGYmuv5Myk29eJEv/u19msKcOzxYfJCdewiDQPTwLFjYtq6CzjtUa0Sb++efnLAiUx/194cDo=
+X-Received: by 2002:ab0:6dcb:0:b0:395:e519:9f70 with SMTP id
+ r11-20020ab06dcb000000b00395e5199f70mr2925027uaf.120.1660914787563; Fri, 19
+ Aug 2022 06:13:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 2/4] arm64: dts: apple: t8103: Add MCA and its support
-Content-Language: en-US
-To:     =?UTF-8?Q?Martin_Povi=c5=a1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+References: <20220615070813.7720-1-romain.perier@gmail.com>
+ <20220615070813.7720-3-romain.perier@gmail.com> <20220619213520.qonqdv4e7zkvpeo7@pengutronix.de>
+In-Reply-To: <20220619213520.qonqdv4e7zkvpeo7@pengutronix.de>
+From:   Romain Perier <romain.perier@gmail.com>
+Date:   Fri, 19 Aug 2022 15:12:56 +0200
+Message-ID: <CABgxDo+_uZyO2vV4QxmVLTo2ohpAxzC89jcGJ3oksT6XxEBCmA@mail.gmail.com>
+Subject: Re: [PATCH 2/5] pwm: Add support for the MSTAR MSC313 PWM
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220819125430.4920-1-povik+lin@cutebit.org>
- <20220819125430.4920-3-povik+lin@cutebit.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220819125430.4920-3-povik+lin@cutebit.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 15:54, Martin Povišer wrote:
-> Add the MCA I2S transceiver node and its supporting NCO, ADMAC nodes.
-> 
-> Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-> ---
->  arch/arm64/boot/dts/apple/t8103.dtsi | 70 ++++++++++++++++++++++++++++
->  1 file changed, 70 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
-> index 51a63b29d404..2dc3125aca5b 100644
-> --- a/arch/arm64/boot/dts/apple/t8103.dtsi
-> +++ b/arch/arm64/boot/dts/apple/t8103.dtsi
-> @@ -532,6 +532,76 @@ port02: pci@2,0 {
->  						<0 0 0 4 &port02 0 0 0 3>;
->  			};
->  		};
-> +
-> +		dart_sio: iommu@235004000 {
-> +			compatible = "apple,t8103-dart", "apple,dart";
-> +			reg = <0x2 0x35004000 0x0 0x4000>;
-> +			interrupt-parent = <&aic>;
-> +			interrupts = <AIC_IRQ 635 IRQ_TYPE_LEVEL_HIGH>;
-> +			#iommu-cells = <1>;
-> +			power-domains = <&ps_sio_cpu>;
-> +		};
-> +
-> +		nco_clkref: clock-ref {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <900000000>;
-> +			clock-output-names = "nco_ref";
-> +		};
+Hi,
 
-Reference clocks are usually physically outside of SoC (e.g. on the
-board), so:
-1. Not part of "soc" node.
-2. It should be defined by board. At least clock-frequency should be there.
+Le dim. 19 juin 2022 =C3=A0 23:35, Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> a =C3=A9crit :
+> > diff --git a/drivers/pwm/pwm-msc313e.c b/drivers/pwm/pwm-msc313e.c
+> > new file mode 100644
+> > index 000000000000..f20419c6b9be
+> > --- /dev/null
+> > +++ b/drivers/pwm/pwm-msc313e.c
+> > @@ -0,0 +1,242 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2021 Daniel Palmer <daniel@thingy.jp>
+> > + * Copyright (C) 2022 Romain Perier <romain.perier@gmail.com>
+> > + */
+> > +
+> > +#include <linux/clk.h>
+> > +#include <linux/of_device.h>
+> > +#include <linux/pwm.h>
+> > +#include <linux/regmap.h>
+> > +
+> > +#define DRIVER_NAME "msc313e-pwm"
+> > +
+> > +#define CHANNEL_OFFSET       0x80
+> > +#define REG_DUTY     0x8
+> > +#define REG_PERIOD   0x10
+> > +#define REG_DIV              0x18
+> > +#define REG_CTRL     0x1c
+> > +#define REG_SWRST    0x1fc
+> > +
+> > +struct msc313e_pwm_channel {
+> > +     struct regmap_field *clkdiv;
+> > +     struct regmap_field *polarity;
+> > +     struct regmap_field *dutyl;
+> > +     struct regmap_field *dutyh;
+> > +     struct regmap_field *periodl;
+> > +     struct regmap_field *periodh;
+> > +     struct regmap_field *swrst;
+> > +};
+> > +
+> > +struct msc313e_pwm {
+> > +     struct regmap *regmap;
+> > +     struct pwm_chip pwmchip;
+> > +     struct clk *clk;
+> > +     struct msc313e_pwm_channel channels[];
+> > +};
+> > +
+> > +struct msc313e_pwm_info {
+> > +     unsigned int channels;
+> > +};
+> > +
+> > +#define to_msc313e_pwm(ptr) container_of(ptr, struct msc313e_pwm, pwmc=
+hip)
+> > +
+> > +static const struct regmap_config msc313e_pwm_regmap_config =3D {
+> > +     .reg_bits =3D 16,
+> > +     .val_bits =3D 16,
+> > +     .reg_stride =3D 4,
+> > +};
+> > +
+> > +static const struct msc313e_pwm_info msc313e_data =3D {
+> > +     .channels =3D 8,
+> > +};
+> > +
+> > +static const struct msc313e_pwm_info ssd20xd_data =3D {
+> > +     .channels =3D 4,
+> > +};
+> > +
+> > +static void msc313e_pwm_writecounter(struct regmap_field *low, struct =
+regmap_field *high, u32 value)
+> > +{
+> > +     regmap_field_write(low, value);
+> > +     regmap_field_write(high, value >> 16);
+>
+> Is this racy? E.g. if the hw is running and the low register overflows
+> before the high register is updated?
+>
 
-> +
-> +		nco: nco@23b044000 {
-> +			compatible = "apple,t8103-nco", "apple,nco";
-> +			reg = <0x2 0x3b044000 0x0 0x14000>;
-> +			clocks = <&nco_clkref>;
-> +			#clock-cells = <1>;
-> +		};
-> +
-> +		admac: dma-controller@238200000 {
-> +			compatible = "apple,t8103-admac", "apple,admac";
-> +			reg = <0x2 0x38200000 0x0 0x34000>;
-> +			dma-channels = <24>;
-> +			interrupts-extended = <0>,
-> +					      <&aic AIC_IRQ 626 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <0>,
-> +					      <0>;
-> +			#dma-cells = <1>;
-> +			iommus = <&dart_sio 2>;
-> +			power-domains = <&ps_sio_adma>;
-> +		};
-> +
-> +		mca: mca@38400000 {
+Ack, I am re-working most of the stuff you noticed. The problem with
+this IP blocks (and others...) is we have close registers
+but we only need to write or read 16 bits in each of these (it is
+mainly reverse engineered from vendor source or runtime most of the
+time) . You cannot really do a single read (except by doing an obscur
+thing via readq ? ...)
 
-Here node name is as well wrong.
+. We had exactly the same issue with the rtc driver see [1]
 
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+1. https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree=
+/drivers/rtc/rtc-msc313.c#n50
+.
 
-
-
-Best regards,
-Krzysztof
+Regards,
+Romain

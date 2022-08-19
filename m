@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A49599E65
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BD5599EA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350043AbiHSPlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 11:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
+        id S1350005AbiHSPmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 11:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349924AbiHSPku (ORCPT
+        with ESMTP id S1349721AbiHSPlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:40:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DF810228B;
-        Fri, 19 Aug 2022 08:40:41 -0700 (PDT)
+        Fri, 19 Aug 2022 11:41:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56841101D20;
+        Fri, 19 Aug 2022 08:41:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AD9FB8280C;
-        Fri, 19 Aug 2022 15:40:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C4B0C433D6;
-        Fri, 19 Aug 2022 15:40:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 749D3615FC;
+        Fri, 19 Aug 2022 15:41:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FDA5C433C1;
+        Fri, 19 Aug 2022 15:41:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660923638;
-        bh=q01TiepYCgbd3YDF3Teq86Su7fa1NExU5eO/8Pw2Xpc=;
+        s=korg; t=1660923667;
+        bh=QXKbbD2rBMM2SVJ7jtAh4BSriiVTIwVcRFRHymGJ04g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=inDF4Cwoo7ABxjN+YhYvvw4ANZWmqd2vqAXHKruCZ9hMbOoG3d77t1Mx8bjNe8XkG
-         FGRGlLeINtiwKZMyhh3G0GbKQ75ICa5lZMHvNHWuRr/rbKsOlp65YF9q9JuGFOs06x
-         AFg0PtkbzT9bVA2bv/QBJyymTc1V1Yu3SNfD/n7k=
+        b=hHa2v3hybS9+H/eLQFowKQJiHAJ/hkS8sxY6jZoazvF5vtxWVSm6K2QQPGIzwy7uk
+         4kfCQF8wwIrcyy1VYAaUtOVH7yrNAzRPQS0hgeg25vQ0AxjgAN3CYtkE8qykJm0Mpi
+         6rC1aGgRTnslyPTMOT9xR4PnGMY8veAbwwEwnZ4E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baoquan He <bhe@redhat.com>,
-        kexec@lists.infradead.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Michal Suchanek <msuchanek@suse.de>,
-        Will Deacon <will@kernel.org>, Coiby Xu <coxu@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH 5.18 6/6] arm64: kexec_file: use more system keyrings to verify kernel image signature
-Date:   Fri, 19 Aug 2022 17:40:18 +0200
-Message-Id: <20220819153710.669386636@linuxfoundation.org>
+        stable@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 03/14] net_sched: cls_route: disallow handle of 0
+Date:   Fri, 19 Aug 2022 17:40:19 +0200
+Message-Id: <20220819153711.787764500@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220819153710.430046927@linuxfoundation.org>
-References: <20220819153710.430046927@linuxfoundation.org>
+In-Reply-To: <20220819153711.658766010@linuxfoundation.org>
+References: <20220819153711.658766010@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,68 +55,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Coiby Xu <coxu@redhat.com>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
 
-commit 0d519cadf75184a24313568e7f489a7fc9b1be3b upstream.
+commit 02799571714dc5dd6948824b9d080b44a295f695 upstream.
 
-Currently, when loading a kernel image via the kexec_file_load() system
-call, arm64 can only use the .builtin_trusted_keys keyring to verify
-a signature whereas x86 can use three more keyrings i.e.
-.secondary_trusted_keys, .machine and .platform keyrings. For example,
-one resulting problem is kexec'ing a kernel image  would be rejected
-with the error "Lockdown: kexec: kexec of unsigned images is restricted;
-see man kernel_lockdown.7".
+Follows up on:
+https://lore.kernel.org/all/20220809170518.164662-1-cascardo@canonical.com/
 
-This patch set enables arm64 to make use of the same keyrings as x86 to
-verify the signature kexec'ed kernel image.
+handle of 0 implies from/to of universe realm which is not very
+sensible.
 
-Fixes: 732b7b93d849 ("arm64: kexec_file: add kernel signature verification support")
-Cc: stable@vger.kernel.org # 105e10e2cf1c: kexec_file: drop weak attribute from functions
-Cc: stable@vger.kernel.org # 34d5960af253: kexec: clean up arch_kexec_kernel_verify_sig
-Cc: stable@vger.kernel.org # 83b7bb2d49ae: kexec, KEYS: make the code in bzImage64_verify_sig generic
-Acked-by: Baoquan He <bhe@redhat.com>
-Cc: kexec@lists.infradead.org
-Cc: keyrings@vger.kernel.org
-Cc: linux-security-module@vger.kernel.org
-Co-developed-by: Michal Suchanek <msuchanek@suse.de>
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-Acked-by: Will Deacon <will@kernel.org>
-Signed-off-by: Coiby Xu <coxu@redhat.com>
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Lets see what this patch will do:
+$sudo tc qdisc add dev $DEV root handle 1:0 prio
+
+//lets manufacture a way to insert handle of 0
+$sudo tc filter add dev $DEV parent 1:0 protocol ip prio 100 \
+route to 0 from 0 classid 1:10 action ok
+
+//gets rejected...
+Error: handle of 0 is not valid.
+We have an error talking to the kernel, -1
+
+//lets create a legit entry..
+sudo tc filter add dev $DEV parent 1:0 protocol ip prio 100 route from 10 \
+classid 1:10 action ok
+
+//what did the kernel insert?
+$sudo tc filter ls dev $DEV parent 1:0
+filter protocol ip pref 100 route chain 0
+filter protocol ip pref 100 route chain 0 fh 0x000a8000 flowid 1:10 from 10
+	action order 1: gact action pass
+	 random type none pass val 0
+	 index 1 ref 1 bind 1
+
+//Lets try to replace that legit entry with a handle of 0
+$ sudo tc filter replace dev $DEV parent 1:0 protocol ip prio 100 \
+handle 0x000a8000 route to 0 from 0 classid 1:10 action drop
+
+Error: Replacing with handle of 0 is invalid.
+We have an error talking to the kernel, -1
+
+And last, lets run Cascardo's POC:
+$ ./poc
+0
+0
+-22
+-22
+-22
+
+Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Acked-by: Stephen Hemminger <stephen@networkplumber.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kernel/kexec_image.c |   11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ net/sched/cls_route.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/arch/arm64/kernel/kexec_image.c
-+++ b/arch/arm64/kernel/kexec_image.c
-@@ -14,7 +14,6 @@
- #include <linux/kexec.h>
- #include <linux/pe.h>
- #include <linux/string.h>
--#include <linux/verification.h>
- #include <asm/byteorder.h>
- #include <asm/cpufeature.h>
- #include <asm/image.h>
-@@ -130,18 +129,10 @@ static void *image_load(struct kimage *i
- 	return NULL;
- }
+--- a/net/sched/cls_route.c
++++ b/net/sched/cls_route.c
+@@ -424,6 +424,11 @@ static int route4_set_parms(struct net *
+ 			return -EINVAL;
+ 	}
  
--#ifdef CONFIG_KEXEC_IMAGE_VERIFY_SIG
--static int image_verify_sig(const char *kernel, unsigned long kernel_len)
--{
--	return verify_pefile_signature(kernel, kernel_len, NULL,
--				       VERIFYING_KEXEC_PE_SIGNATURE);
--}
--#endif
--
- const struct kexec_file_ops kexec_image_ops = {
- 	.probe = image_probe,
- 	.load = image_load,
- #ifdef CONFIG_KEXEC_IMAGE_VERIFY_SIG
--	.verify_sig = image_verify_sig,
-+	.verify_sig = kexec_kernel_verify_pe_sig,
- #endif
- };
++	if (!nhandle) {
++		NL_SET_ERR_MSG(extack, "Replacing with handle of 0 is invalid");
++		return -EINVAL;
++	}
++
+ 	h1 = to_hash(nhandle);
+ 	b = rtnl_dereference(head->table[h1]);
+ 	if (!b) {
+@@ -477,6 +482,11 @@ static int route4_change(struct net *net
+ 	int err;
+ 	bool new = true;
+ 
++	if (!handle) {
++		NL_SET_ERR_MSG(extack, "Creating with handle of 0 is invalid");
++		return -EINVAL;
++	}
++
+ 	if (opt == NULL)
+ 		return handle ? -EINVAL : 0;
+ 
 
 

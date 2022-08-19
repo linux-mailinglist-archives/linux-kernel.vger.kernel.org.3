@@ -2,501 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9314599B49
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AC7599C24
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348690AbiHSLxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S1349026AbiHSMoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348061AbiHSLxG (ORCPT
+        with ESMTP id S1348487AbiHSMoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:53:06 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83289FFF69
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:53:04 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4M8Krb3GW5z9tKV;
-        Fri, 19 Aug 2022 11:53:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1660909983; bh=8QucbOcvkNhWTY2kVSyMizI9tqQs9c3yrrlqW7F3DI0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pa/NpLqPKxw88sYEAjvC3UH/iuOdRM1m5TPvnDct7MArl/7r4WkWWn+1q0YGWh3hE
-         ojLCUimFaaujZKtOEMTIuZ9x3Z9YNStSLqimTcBj9gfZ2skuP5uob9CQT/rIeYG75r
-         9k2xnEpm68agYu4/228bWGEmp0M0fLx+7YQOmPJA=
-X-Riseup-User-ID: 5AA46C779814B76761A5D63E5F0B5D96E2D835964D302A7931066C02051EB27E
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4M8KrT2PhKz5vTJ;
-        Fri, 19 Aug 2022 11:52:57 +0000 (UTC)
-Message-ID: <3cdb3f6c-3891-a440-a92a-0e392c5f33fe@riseup.net>
-Date:   Fri, 19 Aug 2022 08:52:55 -0300
+        Fri, 19 Aug 2022 08:44:02 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A272C2E9C6;
+        Fri, 19 Aug 2022 05:43:56 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id D00811884F89;
+        Fri, 19 Aug 2022 12:43:27 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 980F72503314;
+        Fri, 19 Aug 2022 12:43:24 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 18BE8A1A5528; Fri, 19 Aug 2022 08:28:10 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Subject: Re: [PATCH] drm/amd/display: fix i386 frame size warning
-Content-Language: en-US
-To:     Hamza Mahfooz <hamza.mahfooz@amd.com>, linux-kernel@vger.kernel.org
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        Bing Guo <Bing.Guo@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-References: <20220818164848.68729-1-hamza.mahfooz@amd.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220818164848.68729-1-hamza.mahfooz@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Fri, 19 Aug 2022 10:28:09 +0200
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 5/6] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <20220717004725.ngix64ou2mz566is@skbuf>
+References: <20220707152930.1789437-1-netdev@kapio-technology.com>
+ <20220707152930.1789437-6-netdev@kapio-technology.com>
+ <20220717004725.ngix64ou2mz566is@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <b6d95362926772bb513022ad8a45282d@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hamza,
+On 2022-07-17 02:47, Vladimir Oltean wrote:
+>> @@ -1721,11 +1735,11 @@ static int mv88e6xxx_vtu_get(struct 
+>> mv88e6xxx_chip *chip, u16 vid,
+>>  	return err;
+>>  }
+>> 
+>>  int mv88e6xxx_port_set_lock(struct mv88e6xxx_chip *chip, int port,
+>>  			    bool locked)
+>>  {
+>> @@ -1257,13 +1270,18 @@ int mv88e6xxx_port_set_lock(struct 
+>> mv88e6xxx_chip *chip, int port,
+>>  	if (err)
+>>  		return err;
+>> 
+>> -	err = mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, 
+>> &reg);
+>> -	if (err)
+>> -		return err;
+>> +	if (!locked) {
+>> +		err = mv88e6xxx_atu_locked_entry_flush(chip->ds, port);
+> 
+> Did you re-run the selftest with v4? Because this deadlocks due to the
+> double reg_lock illustrated below:
 
-On 8/18/22 13:48, Hamza Mahfooz wrote:
-> Addresses the following warning:
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3596:6: error: stack frame size (2092) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-> void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
->      ^
-
-Could you please specify how you generated this error? I was trying to
-test the patch and I couldn't reproduce this error on i386.
-
-I ran on amd-staging-drm-next without your patch:
-
-$ make -skj"$(nproc)" ARCH=i386 LLVM=1 mrproper allmodconfig
-drivers/gpu/drm/amd/amdgpu/
-
-which didn't generated warnings on display_mode_vba_30.
-
-Moreover, I applied your patch on amd-staging-drm-next and ran:
-
-$ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 mrproper allmodconfig
-drivers/gpu/drm/amd/amdgpu/
-
-and I still get the warning:
-
-drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3542:6:
-error: stack frame size (2184) exceeds limit (2048) in
-'dml30_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
-void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib
-*mode_lib)
-     ^
-1 error generated.
-
-Best Regards,
-- Maíra Canal
+I did some selftest, but I didn't experience the problem of the double 
+chip lock as it only happens on unlock which is only called where the 
+MAB test ends.
 
 > 
-> UseMinimumDCFCLK() is eating away at
-> dml30_ModeSupportAndSystemConfigurationFull()'s stack space, so use a
-> pointer to struct vba_vars_st instead of passing lots of large arrays
-> as parameters by value.
+> + vrf_name=vlan1
+> + ip vrf exec vlan1 ping 192.0.2.2 -c 10 -i 0.1 -w 5
+> + check_err 1 'Ping did not work after locking port and adding FDB 
+> entry'
+> + local err=1
+> + local 'msg=Ping did not work after locking port and adding FDB entry'
+> + [[ 0 -eq 0 ]]
+> + [[ 1 -ne 0 ]]
+> + RET=1
+> + retmsg='Ping did not work after locking port and adding FDB entry'
+> + bridge link set dev lan2 locked off
+> [  733.273994]
+> [  733.275515] ============================================
+> [  733.280823] WARNING: possible recursive locking detected
+> [  733.286133] 5.19.0-rc6-07010-ga9b9500ffaac-dirty #3293 Not tainted
+> [  733.292311] --------------------------------------------
+> [  733.297613] kworker/0:0/601 is trying to acquire lock:
+> [  733.302751] ffff00000213c110 (&chip->reg_lock){+.+.}-{4:4}, at:
+> mv88e6xxx_atu_locked_entry_purge+0x70/0x1a4
+> [  733.312524]
+> [  733.312524] but task is already holding lock:
+> [  733.318351] ffff00000213c110 (&chip->reg_lock){+.+.}-{4:4}, at:
+> mv88e6xxx_port_bridge_flags+0x48/0x234
+> [  733.327674]
+> [  733.327674] other info that might help us debug this:
+> [  733.334198]  Possible unsafe locking scenario:
+> [  733.334198]
+> [  733.340109]        CPU0
+> [  733.342549]        ----
+> [  733.344990]   lock(&chip->reg_lock);
+> [  733.348567]   lock(&chip->reg_lock);
+> [  733.352149]
+> [  733.352149]  *** DEADLOCK ***
+> [  733.352149]
+> [  733.358063]  May be due to missing lock nesting notation
+> [  733.358063]
+> [  733.364846] 6 locks held by kworker/0:0/601:
+> [  733.369115]  #0: ffff00000000b748
+> ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x1f4/0x6c4
+> [  733.378541]  #1: ffff80000c43bdc8
+> (deferred_process_work){+.+.}-{0:0}, at: process_one_work+0x1f4/0x6c4
+> [  733.387966]  #2: ffff80000b020cb0 (rtnl_mutex){+.+.}-{4:4}, at:
+> rtnl_lock+0x1c/0x30
+> [  733.395660]  #3: ffff80000b073370
+> ((switchdev_blocking_notif_chain).rwsem){++++}-{4:4}, at:
+> blocking_notifier_call_chain+0x34/0xa0
+> [  733.407432]  #4: ffff00000213c110 (&chip->reg_lock){+.+.}-{4:4},
+> at: mv88e6xxx_port_bridge_flags+0x48/0x234
+> [  733.417202]  #5: ffff00000213e0f0 (&p->ale_list_lock){+.+.}-{4:4},
+> at: mv88e6xxx_atu_locked_entry_flush+0x4c/0xc0
+> [  733.427495]
+> [  733.427495] stack backtrace:
+> [  733.431858] CPU: 0 PID: 601 Comm: kworker/0:0 Not tainted
+> 5.19.0-rc6-07010-ga9b9500ffaac-dirty #3293
+> [  733.440992] Hardware name: CZ.NIC Turris Mox Board (DT)
+> [  733.446219] Workqueue: events switchdev_deferred_process_work
+> [  733.451982] Call trace:
+> [  733.454424]  dump_backtrace.part.0+0xcc/0xe0
+> [  733.458702]  show_stack+0x18/0x6c
+> [  733.462028]  dump_stack_lvl+0x8c/0xb8
+> [  733.465703]  dump_stack+0x18/0x34
+> [  733.469029]  __lock_acquire+0x1074/0x1fd0
+> [  733.473052]  lock_acquire.part.0+0xe4/0x220
+> [  733.477244]  lock_acquire+0x68/0x8c
+> [  733.480744]  __mutex_lock+0x9c/0x460
+> [  733.484332]  mutex_lock_nested+0x40/0x50
+> [  733.488268]  mv88e6xxx_atu_locked_entry_purge+0x70/0x1a4
+> [  733.493592]  mv88e6xxx_atu_locked_entry_flush+0x7c/0xc0
+> [  733.498827]  mv88e6xxx_port_set_lock+0xfc/0x10c
+> [  733.503374]  mv88e6xxx_port_bridge_flags+0x200/0x234
+> [  733.508351]  dsa_port_bridge_flags+0x44/0xe0
+> [  733.512635]  dsa_slave_port_attr_set+0x1ec/0x230
+> [  733.517268]  __switchdev_handle_port_attr_set+0x58/0x100
+> [  733.522594]  switchdev_handle_port_attr_set+0x10/0x24
+> [  733.527659]  dsa_slave_switchdev_blocking_event+0x8c/0xd4
+> [  733.533074]  blocking_notifier_call_chain+0x6c/0xa0
+> [  733.537968]  switchdev_port_attr_notify.constprop.0+0x4c/0xb0
+> [  733.543729]  switchdev_port_attr_set_deferred+0x24/0x80
+> [  733.548967]  switchdev_deferred_process+0x90/0x164
+> [  733.553774]  switchdev_deferred_process_work+0x14/0x2c
+> [  733.558926]  process_one_work+0x28c/0x6c4
+> [  733.562949]  worker_thread+0x74/0x450
+> [  733.566623]  kthread+0x118/0x11c
+> [  733.569860]  ret_from_fork+0x10/0x20
+> ++ mac_get lan1
+> ++ local if_name=lan1
+> ++ jq -r '.[]["address"]'
+> ++ ip -j link show dev lan1
 > 
-> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
-> ---
->  .../dc/dml/dcn30/display_mode_vba_30.c        | 295 ++++--------------
->  1 file changed, 63 insertions(+), 232 deletions(-)
+> I've tentatively fixed this in my tree by taking the register lock more
+> localized to the sub-functions of mv88e6xxx_port_bridge_flags(), and 
+> not
+> taking it at caller side for mv88e6xxx_port_set_lock(), but rather
+> letting the callee take it:
+
+Yes, the double chip lock came from calling 
+mv88e6xxx_atu_locked_entry_flush() in mv88e6xxx_port_set_lock() that is 
+called from mv88e6xxx_port_bridge_flags() whic has the lock taken. I 
+have fixed this now, but when I unlock a port with locked entries, I 
+cannot have notify the bridge to clear the same locked entries by having 
+mv88e6xxx_atu_locked_entry_flush() calling with the notify on, thus 
+taking the rtnl lock, as this also results in a double lock.
+To remove the locked entries in the bridge FDB it is then necessary as I 
+see it, to take the link down or have a userspace daemon clear them. I 
+hope that is okay if documented?
+
 > 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-> index 876b321b30ca..b7fa003ffe06 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-> @@ -396,64 +396,10 @@ static void CalculateUrgentBurstFactor(
->  
->  static void UseMinimumDCFCLK(
->  		struct display_mode_lib *mode_lib,
-> -		int MaxInterDCNTileRepeaters,
-> +		struct vba_vars_st *v,
->  		int MaxPrefetchMode,
-> -		double FinalDRAMClockChangeLatency,
-> -		double SREnterPlusExitTime,
-> -		int ReturnBusWidth,
-> -		int RoundTripPingLatencyCycles,
-> -		int ReorderingBytes,
-> -		int PixelChunkSizeInKByte,
-> -		int MetaChunkSize,
-> -		bool GPUVMEnable,
-> -		int GPUVMMaxPageTableLevels,
-> -		bool HostVMEnable,
-> -		int NumberOfActivePlanes,
-> -		double HostVMMinPageSize,
-> -		int HostVMMaxNonCachedPageTableLevels,
-> -		bool DynamicMetadataVMEnabled,
-> -		enum immediate_flip_requirement ImmediateFlipRequirement,
-> -		bool ProgressiveToInterlaceUnitInOPP,
-> -		double MaxAveragePercentOfIdealSDPPortBWDisplayCanUseInNormalSystemOperation,
-> -		double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelMixedWithVMData,
-> -		double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyVMDataOnly,
-> -		double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelDataOnly,
-> -		int VTotal[],
-> -		int VActive[],
-> -		int DynamicMetadataTransmittedBytes[],
-> -		int DynamicMetadataLinesBeforeActiveRequired[],
-> -		bool Interlace[],
-> -		double RequiredDPPCLK[][2][DC__NUM_DPP__MAX],
-> -		double RequiredDISPCLK[][2],
-> -		double UrgLatency[],
-> -		unsigned int NoOfDPP[][2][DC__NUM_DPP__MAX],
-> -		double ProjectedDCFCLKDeepSleep[][2],
-> -		double MaximumVStartup[][2][DC__NUM_DPP__MAX],
-> -		double TotalVActivePixelBandwidth[][2],
-> -		double TotalVActiveCursorBandwidth[][2],
-> -		double TotalMetaRowBandwidth[][2],
-> -		double TotalDPTERowBandwidth[][2],
-> -		unsigned int TotalNumberOfActiveDPP[][2],
-> -		unsigned int TotalNumberOfDCCActiveDPP[][2],
-> -		int dpte_group_bytes[],
-> -		double PrefetchLinesY[][2][DC__NUM_DPP__MAX],
-> -		double PrefetchLinesC[][2][DC__NUM_DPP__MAX],
-> -		unsigned int swath_width_luma_ub_all_states[][2][DC__NUM_DPP__MAX],
-> -		unsigned int swath_width_chroma_ub_all_states[][2][DC__NUM_DPP__MAX],
-> -		int BytePerPixelY[],
-> -		int BytePerPixelC[],
-> -		int HTotal[],
-> -		double PixelClock[],
-> -		double PDEAndMetaPTEBytesPerFrame[][2][DC__NUM_DPP__MAX],
-> -		double DPTEBytesPerRow[][2][DC__NUM_DPP__MAX],
-> -		double MetaRowBytes[][2][DC__NUM_DPP__MAX],
-> -		bool DynamicMetadataEnable[],
-> -		double VActivePixelBandwidth[][2][DC__NUM_DPP__MAX],
-> -		double VActiveCursorBandwidth[][2][DC__NUM_DPP__MAX],
-> -		double ReadBandwidthLuma[],
-> -		double ReadBandwidthChroma[],
-> -		double DCFCLKPerState[],
-> -		double DCFCLKState[][2]);
-> +		int ReorderingBytes);
-> +
->  static void CalculatePixelDeliveryTimes(
->  		unsigned int NumberOfActivePlanes,
->  		double VRatio[],
-> @@ -4692,66 +4638,7 @@ void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
+> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c 
+> b/drivers/net/dsa/mv88e6xxx/chip.c
+> index 7b57ac121589..ec5954f32774 100644
+> --- a/drivers/net/dsa/mv88e6xxx/chip.c
+> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
+> @@ -6557,41 +6557,47 @@ static int mv88e6xxx_port_bridge_flags(struct
+> dsa_switch *ds, int port,
+>  	struct mv88e6xxx_chip *chip = ds->priv;
+>  	int err = -EOPNOTSUPP;
+> 
+> -	mv88e6xxx_reg_lock(chip);
+> -
+>  	if (flags.mask & BR_LEARNING) {
+>  		bool learning = !!(flags.val & BR_LEARNING);
+>  		u16 pav = learning ? (1 << port) : 0;
+> 
+> +		mv88e6xxx_reg_lock(chip);
+>  		err = mv88e6xxx_port_set_assoc_vector(chip, port, pav);
+> +		mv88e6xxx_reg_unlock(chip);
+>  		if (err)
+> -			goto out;
+> +			return err;
 >  	}
->  
->  	if (v->UseMinimumRequiredDCFCLK == true) {
-> -		UseMinimumDCFCLK(
-> -				mode_lib,
-> -				v->MaxInterDCNTileRepeaters,
-> -				MaxPrefetchMode,
-> -				v->FinalDRAMClockChangeLatency,
-> -				v->SREnterPlusExitTime,
-> -				v->ReturnBusWidth,
-> -				v->RoundTripPingLatencyCycles,
-> -				ReorderingBytes,
-> -				v->PixelChunkSizeInKByte,
-> -				v->MetaChunkSize,
-> -				v->GPUVMEnable,
-> -				v->GPUVMMaxPageTableLevels,
-> -				v->HostVMEnable,
-> -				v->NumberOfActivePlanes,
-> -				v->HostVMMinPageSize,
-> -				v->HostVMMaxNonCachedPageTableLevels,
-> -				v->DynamicMetadataVMEnabled,
-> -				v->ImmediateFlipRequirement[0],
-> -				v->ProgressiveToInterlaceUnitInOPP,
-> -				v->MaxAveragePercentOfIdealSDPPortBWDisplayCanUseInNormalSystemOperation,
-> -				v->PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelMixedWithVMData,
-> -				v->PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyVMDataOnly,
-> -				v->PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelDataOnly,
-> -				v->VTotal,
-> -				v->VActive,
-> -				v->DynamicMetadataTransmittedBytes,
-> -				v->DynamicMetadataLinesBeforeActiveRequired,
-> -				v->Interlace,
-> -				v->RequiredDPPCLK,
-> -				v->RequiredDISPCLK,
-> -				v->UrgLatency,
-> -				v->NoOfDPP,
-> -				v->ProjectedDCFCLKDeepSleep,
-> -				v->MaximumVStartup,
-> -				v->TotalVActivePixelBandwidth,
-> -				v->TotalVActiveCursorBandwidth,
-> -				v->TotalMetaRowBandwidth,
-> -				v->TotalDPTERowBandwidth,
-> -				v->TotalNumberOfActiveDPP,
-> -				v->TotalNumberOfDCCActiveDPP,
-> -				v->dpte_group_bytes,
-> -				v->PrefetchLinesY,
-> -				v->PrefetchLinesC,
-> -				v->swath_width_luma_ub_all_states,
-> -				v->swath_width_chroma_ub_all_states,
-> -				v->BytePerPixelY,
-> -				v->BytePerPixelC,
-> -				v->HTotal,
-> -				v->PixelClock,
-> -				v->PDEAndMetaPTEBytesPerFrame,
-> -				v->DPTEBytesPerRow,
-> -				v->MetaRowBytes,
-> -				v->DynamicMetadataEnable,
-> -				v->VActivePixelBandwidth,
-> -				v->VActiveCursorBandwidth,
-> -				v->ReadBandwidthLuma,
-> -				v->ReadBandwidthChroma,
-> -				v->DCFCLKPerState,
-> -				v->DCFCLKState);
-> +		UseMinimumDCFCLK(mode_lib, v, MaxPrefetchMode, ReorderingBytes);
->  
->  		if (v->ClampMinDCFCLK) {
->  			/* Clamp calculated values to actual minimum */
-> @@ -6610,77 +6497,21 @@ static double CalculateUrgentLatency(
->  	return ret;
+> 
+>  	if (flags.mask & BR_FLOOD) {
+>  		bool unicast = !!(flags.val & BR_FLOOD);
+> 
+> +		mv88e6xxx_reg_lock(chip);
+>  		err = chip->info->ops->port_set_ucast_flood(chip, port,
+>  							    unicast);
+> +		mv88e6xxx_reg_unlock(chip);
+>  		if (err)
+> -			goto out;
+> +			return err;
+>  	}
+> 
+>  	if (flags.mask & BR_MCAST_FLOOD) {
+>  		bool multicast = !!(flags.val & BR_MCAST_FLOOD);
+> 
+> +		mv88e6xxx_reg_lock(chip);
+>  		err = chip->info->ops->port_set_mcast_flood(chip, port,
+>  							    multicast);
+> +		mv88e6xxx_reg_unlock(chip);
+>  		if (err)
+> -			goto out;
+> +			return err;
+>  	}
+> 
+>  	if (flags.mask & BR_BCAST_FLOOD) {
+>  		bool broadcast = !!(flags.val & BR_BCAST_FLOOD);
+> 
+> +		mv88e6xxx_reg_lock(chip);
+>  		err = mv88e6xxx_port_broadcast_sync(chip, port, broadcast);
+> +		mv88e6xxx_reg_unlock(chip);
+>  		if (err)
+> -			goto out;
+> +			return err;
+>  	}
+> 
+>  	if (flags.mask & BR_PORT_LOCKED) {
+> @@ -6599,10 +6605,8 @@ static int mv88e6xxx_port_bridge_flags(struct
+> dsa_switch *ds, int port,
+> 
+>  		err = mv88e6xxx_port_set_lock(chip, port, locked);
+>  		if (err)
+> -			goto out;
+> +			return err;
+>  	}
+> -out:
+> -	mv88e6xxx_reg_unlock(chip);
+> 
+>  	return err;
 >  }
->  
-> -
->  static void UseMinimumDCFCLK(
->  		struct display_mode_lib *mode_lib,
-> -		int MaxInterDCNTileRepeaters,
-> +		struct vba_vars_st *v,
->  		int MaxPrefetchMode,
-> -		double FinalDRAMClockChangeLatency,
-> -		double SREnterPlusExitTime,
-> -		int ReturnBusWidth,
-> -		int RoundTripPingLatencyCycles,
-> -		int ReorderingBytes,
-> -		int PixelChunkSizeInKByte,
-> -		int MetaChunkSize,
-> -		bool GPUVMEnable,
-> -		int GPUVMMaxPageTableLevels,
-> -		bool HostVMEnable,
-> -		int NumberOfActivePlanes,
-> -		double HostVMMinPageSize,
-> -		int HostVMMaxNonCachedPageTableLevels,
-> -		bool DynamicMetadataVMEnabled,
-> -		enum immediate_flip_requirement ImmediateFlipRequirement,
-> -		bool ProgressiveToInterlaceUnitInOPP,
-> -		double MaxAveragePercentOfIdealSDPPortBWDisplayCanUseInNormalSystemOperation,
-> -		double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelMixedWithVMData,
-> -		double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyVMDataOnly,
-> -		double PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelDataOnly,
-> -		int VTotal[],
-> -		int VActive[],
-> -		int DynamicMetadataTransmittedBytes[],
-> -		int DynamicMetadataLinesBeforeActiveRequired[],
-> -		bool Interlace[],
-> -		double RequiredDPPCLK[][2][DC__NUM_DPP__MAX],
-> -		double RequiredDISPCLK[][2],
-> -		double UrgLatency[],
-> -		unsigned int NoOfDPP[][2][DC__NUM_DPP__MAX],
-> -		double ProjectedDCFCLKDeepSleep[][2],
-> -		double MaximumVStartup[][2][DC__NUM_DPP__MAX],
-> -		double TotalVActivePixelBandwidth[][2],
-> -		double TotalVActiveCursorBandwidth[][2],
-> -		double TotalMetaRowBandwidth[][2],
-> -		double TotalDPTERowBandwidth[][2],
-> -		unsigned int TotalNumberOfActiveDPP[][2],
-> -		unsigned int TotalNumberOfDCCActiveDPP[][2],
-> -		int dpte_group_bytes[],
-> -		double PrefetchLinesY[][2][DC__NUM_DPP__MAX],
-> -		double PrefetchLinesC[][2][DC__NUM_DPP__MAX],
-> -		unsigned int swath_width_luma_ub_all_states[][2][DC__NUM_DPP__MAX],
-> -		unsigned int swath_width_chroma_ub_all_states[][2][DC__NUM_DPP__MAX],
-> -		int BytePerPixelY[],
-> -		int BytePerPixelC[],
-> -		int HTotal[],
-> -		double PixelClock[],
-> -		double PDEAndMetaPTEBytesPerFrame[][2][DC__NUM_DPP__MAX],
-> -		double DPTEBytesPerRow[][2][DC__NUM_DPP__MAX],
-> -		double MetaRowBytes[][2][DC__NUM_DPP__MAX],
-> -		bool DynamicMetadataEnable[],
-> -		double VActivePixelBandwidth[][2][DC__NUM_DPP__MAX],
-> -		double VActiveCursorBandwidth[][2][DC__NUM_DPP__MAX],
-> -		double ReadBandwidthLuma[],
-> -		double ReadBandwidthChroma[],
-> -		double DCFCLKPerState[],
-> -		double DCFCLKState[][2])
-> +		int ReorderingBytes)
->  {
->  	double   NormalEfficiency = 0;
->  	double   PTEEfficiency = 0;
->  	double   TotalMaxPrefetchFlipDPTERowBandwidth[DC__VOLTAGE_STATES][2] = { { 0 } };
->  	unsigned int i, j, k;
->  
-> -	NormalEfficiency =  (HostVMEnable == true ? PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelMixedWithVMData
-> -			: PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelDataOnly) / 100.0;
-> -	PTEEfficiency =  (HostVMEnable == true ? PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyVMDataOnly
-> -			/ PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelMixedWithVMData : 1.0);
-> +	NormalEfficiency =  (v->HostVMEnable == true ? v->PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelMixedWithVMData
-> +			: v->PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelDataOnly) / 100.0;
-> +	PTEEfficiency =  (v->HostVMEnable == true ? v->PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyVMDataOnly
-> +			/ v->PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelMixedWithVMData : 1.0);
->  	for (i = 0; i < mode_lib->soc.num_states; ++i) {
->  		for (j = 0; j <= 1; ++j) {
->  			double PixelDCFCLKCyclesRequiredInPrefetch[DC__NUM_DPP__MAX] = { 0 };
-> @@ -6698,58 +6529,58 @@ static void UseMinimumDCFCLK(
->  			double MinimumTvmPlus2Tr0 = 0;
->  
->  			TotalMaxPrefetchFlipDPTERowBandwidth[i][j] = 0;
-> -			for (k = 0; k < NumberOfActivePlanes; ++k) {
-> +			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
->  				TotalMaxPrefetchFlipDPTERowBandwidth[i][j] = TotalMaxPrefetchFlipDPTERowBandwidth[i][j]
-> -					+ NoOfDPP[i][j][k] * DPTEBytesPerRow[i][j][k] / (15.75 * HTotal[k] / PixelClock[k]);
-> +					+ v->NoOfDPP[i][j][k] * v->DPTEBytesPerRow[i][j][k] / (15.75 * v->HTotal[k] / v->PixelClock[k]);
->  			}
->  
-> -			for (k = 0; k <= NumberOfActivePlanes - 1; ++k) {
-> -				NoOfDPPState[k] = NoOfDPP[i][j][k];
-> +			for (k = 0; k <= v->NumberOfActivePlanes - 1; ++k) {
-> +				NoOfDPPState[k] = v->NoOfDPP[i][j][k];
->  			}
->  
-> -			MinimumTWait = CalculateTWait(MaxPrefetchMode, FinalDRAMClockChangeLatency, UrgLatency[i], SREnterPlusExitTime);
-> -			NonDPTEBandwidth = TotalVActivePixelBandwidth[i][j] + TotalVActiveCursorBandwidth[i][j] + TotalMetaRowBandwidth[i][j];
-> -			DPTEBandwidth =  (HostVMEnable == true || ImmediateFlipRequirement == dm_immediate_flip_required) ?
-> -					TotalMaxPrefetchFlipDPTERowBandwidth[i][j] : TotalDPTERowBandwidth[i][j];
-> -			DCFCLKRequiredForAverageBandwidth = dml_max3(ProjectedDCFCLKDeepSleep[i][j],
-> -					(NonDPTEBandwidth + TotalDPTERowBandwidth[i][j]) / ReturnBusWidth / (MaxAveragePercentOfIdealSDPPortBWDisplayCanUseInNormalSystemOperation / 100),
-> -					(NonDPTEBandwidth + DPTEBandwidth / PTEEfficiency) / NormalEfficiency / ReturnBusWidth);
-> -
-> -			ExtraLatencyBytes = CalculateExtraLatencyBytes(ReorderingBytes, TotalNumberOfActiveDPP[i][j], PixelChunkSizeInKByte, TotalNumberOfDCCActiveDPP[i][j],
-> -					MetaChunkSize, GPUVMEnable, HostVMEnable, NumberOfActivePlanes, NoOfDPPState, dpte_group_bytes,
-> -					PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelMixedWithVMData, PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyVMDataOnly,
-> -					HostVMMinPageSize, HostVMMaxNonCachedPageTableLevels);
-> -			ExtraLatencyCycles = RoundTripPingLatencyCycles + 32 + ExtraLatencyBytes / NormalEfficiency / ReturnBusWidth;
-> -			for (k = 0; k < NumberOfActivePlanes; ++k) {
-> +			MinimumTWait = CalculateTWait(MaxPrefetchMode, v->FinalDRAMClockChangeLatency, v->UrgLatency[i], v->SREnterPlusExitTime);
-> +			NonDPTEBandwidth = v->TotalVActivePixelBandwidth[i][j] + v->TotalVActiveCursorBandwidth[i][j] + v->TotalMetaRowBandwidth[i][j];
-> +			DPTEBandwidth =  (v->HostVMEnable == true || v->ImmediateFlipRequirement[0] == dm_immediate_flip_required) ?
-> +					TotalMaxPrefetchFlipDPTERowBandwidth[i][j] : v->TotalDPTERowBandwidth[i][j];
-> +			DCFCLKRequiredForAverageBandwidth = dml_max3(v->ProjectedDCFCLKDeepSleep[i][j],
-> +					(NonDPTEBandwidth + v->TotalDPTERowBandwidth[i][j]) / v->ReturnBusWidth / (v->MaxAveragePercentOfIdealSDPPortBWDisplayCanUseInNormalSystemOperation / 100),
-> +					(NonDPTEBandwidth + DPTEBandwidth / PTEEfficiency) / NormalEfficiency / v->ReturnBusWidth);
-> +
-> +			ExtraLatencyBytes = CalculateExtraLatencyBytes(ReorderingBytes, v->TotalNumberOfActiveDPP[i][j], v->PixelChunkSizeInKByte, v->TotalNumberOfDCCActiveDPP[i][j],
-> +					v->MetaChunkSize, v->GPUVMEnable, v->HostVMEnable, v->NumberOfActivePlanes, NoOfDPPState, v->dpte_group_bytes,
-> +					v->PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyPixelMixedWithVMData, v->PercentOfIdealDRAMFabricAndSDPPortBWReceivedAfterUrgLatencyVMDataOnly,
-> +					v->HostVMMinPageSize, v->HostVMMaxNonCachedPageTableLevels);
-> +			ExtraLatencyCycles = v->RoundTripPingLatencyCycles + 32 + ExtraLatencyBytes / NormalEfficiency / v->ReturnBusWidth;
-> +			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
->  				double DCFCLKCyclesRequiredInPrefetch = { 0 };
->  				double ExpectedPrefetchBWAcceleration = { 0 };
->  				double PrefetchTime = { 0 };
->  
-> -				PixelDCFCLKCyclesRequiredInPrefetch[k] = (PrefetchLinesY[i][j][k] * swath_width_luma_ub_all_states[i][j][k] * BytePerPixelY[k]
-> -					+ PrefetchLinesC[i][j][k] * swath_width_chroma_ub_all_states[i][j][k] * BytePerPixelC[k]) / NormalEfficiency / ReturnBusWidth;
-> -				DCFCLKCyclesRequiredInPrefetch = 2 * ExtraLatencyCycles / NoOfDPPState[k] + PDEAndMetaPTEBytesPerFrame[i][j][k] / PTEEfficiency
-> -					/ NormalEfficiency / ReturnBusWidth *  (GPUVMMaxPageTableLevels > 2 ? 1 : 0) + 2 * DPTEBytesPerRow[i][j][k] / PTEEfficiency
-> -					/ NormalEfficiency / ReturnBusWidth + 2 * MetaRowBytes[i][j][k] / NormalEfficiency / ReturnBusWidth + PixelDCFCLKCyclesRequiredInPrefetch[k];
-> -				PrefetchPixelLinesTime[k] = dml_max(PrefetchLinesY[i][j][k], PrefetchLinesC[i][j][k]) * HTotal[k] / PixelClock[k];
-> -				ExpectedPrefetchBWAcceleration = (VActivePixelBandwidth[i][j][k] + VActiveCursorBandwidth[i][j][k]) / (ReadBandwidthLuma[k] + ReadBandwidthChroma[k]);
-> -				DynamicMetadataVMExtraLatency[k] = (GPUVMEnable == true && DynamicMetadataEnable[k] == true && DynamicMetadataVMEnabled == true) ?
-> -						UrgLatency[i] * GPUVMMaxPageTableLevels *  (HostVMEnable == true ? HostVMMaxNonCachedPageTableLevels + 1 : 1) : 0;
-> -				PrefetchTime = (MaximumVStartup[i][j][k] - 1) * HTotal[k] / PixelClock[k] - MinimumTWait - UrgLatency[i] * ((GPUVMMaxPageTableLevels <= 2 ? GPUVMMaxPageTableLevels
-> -						: GPUVMMaxPageTableLevels - 2) * (HostVMEnable == true ? HostVMMaxNonCachedPageTableLevels + 1 : 1) - 1) - DynamicMetadataVMExtraLatency[k];
-> +				PixelDCFCLKCyclesRequiredInPrefetch[k] = (v->PrefetchLinesY[i][j][k] * v->swath_width_luma_ub_all_states[i][j][k] * v->BytePerPixelY[k]
-> +					+ v->PrefetchLinesC[i][j][k] * v->swath_width_chroma_ub_all_states[i][j][k] * v->BytePerPixelC[k]) / NormalEfficiency / v->ReturnBusWidth;
-> +				DCFCLKCyclesRequiredInPrefetch = 2 * ExtraLatencyCycles / NoOfDPPState[k] + v->PDEAndMetaPTEBytesPerFrame[i][j][k] / PTEEfficiency
-> +					/ NormalEfficiency / v->ReturnBusWidth *  (v->GPUVMMaxPageTableLevels > 2 ? 1 : 0) + 2 * v->DPTEBytesPerRow[i][j][k] / PTEEfficiency
-> +					/ NormalEfficiency / v->ReturnBusWidth + 2 * v->MetaRowBytes[i][j][k] / NormalEfficiency / v->ReturnBusWidth + PixelDCFCLKCyclesRequiredInPrefetch[k];
-> +				PrefetchPixelLinesTime[k] = dml_max(v->PrefetchLinesY[i][j][k], v->PrefetchLinesC[i][j][k]) * v->HTotal[k] / v->PixelClock[k];
-> +				ExpectedPrefetchBWAcceleration = (v->VActivePixelBandwidth[i][j][k] + v->VActiveCursorBandwidth[i][j][k]) / (v->ReadBandwidthLuma[k] + v->ReadBandwidthChroma[k]);
-> +				DynamicMetadataVMExtraLatency[k] = (v->GPUVMEnable == true && v->DynamicMetadataEnable[k] == true && v->DynamicMetadataVMEnabled == true) ?
-> +						v->UrgLatency[i] * v->GPUVMMaxPageTableLevels *  (v->HostVMEnable == true ? v->HostVMMaxNonCachedPageTableLevels + 1 : 1) : 0;
-> +				PrefetchTime = (v->MaximumVStartup[i][j][k] - 1) * v->HTotal[k] / v->PixelClock[k] - MinimumTWait - v->UrgLatency[i] * ((v->GPUVMMaxPageTableLevels <= 2 ? v->GPUVMMaxPageTableLevels
-> +						: v->GPUVMMaxPageTableLevels - 2) * (v->HostVMEnable == true ? v->HostVMMaxNonCachedPageTableLevels + 1 : 1) - 1) - DynamicMetadataVMExtraLatency[k];
->  
->  				if (PrefetchTime > 0) {
->  					double ExpectedVRatioPrefetch = { 0 };
->  					ExpectedVRatioPrefetch = PrefetchPixelLinesTime[k] / (PrefetchTime * PixelDCFCLKCyclesRequiredInPrefetch[k] / DCFCLKCyclesRequiredInPrefetch);
->  					DCFCLKRequiredForPeakBandwidthPerPlane[k] = NoOfDPPState[k] * PixelDCFCLKCyclesRequiredInPrefetch[k] / PrefetchPixelLinesTime[k]
->  						* dml_max(1.0, ExpectedVRatioPrefetch) * dml_max(1.0, ExpectedVRatioPrefetch / 4) * ExpectedPrefetchBWAcceleration;
-> -					if (HostVMEnable == true || ImmediateFlipRequirement == dm_immediate_flip_required) {
-> +					if (v->HostVMEnable == true || v->ImmediateFlipRequirement[0] == dm_immediate_flip_required) {
->  						DCFCLKRequiredForPeakBandwidthPerPlane[k] = DCFCLKRequiredForPeakBandwidthPerPlane[k]
-> -							+ NoOfDPPState[k] * DPTEBandwidth / PTEEfficiency / NormalEfficiency / ReturnBusWidth;
-> +							+ NoOfDPPState[k] * DPTEBandwidth / PTEEfficiency / NormalEfficiency / v->ReturnBusWidth;
->  					}
->  				} else {
-> -					DCFCLKRequiredForPeakBandwidthPerPlane[k] = DCFCLKPerState[i];
-> +					DCFCLKRequiredForPeakBandwidthPerPlane[k] = v->DCFCLKPerState[i];
->  				}
-> -				if (DynamicMetadataEnable[k] == true) {
-> +				if (v->DynamicMetadataEnable[k] == true) {
->  					double TsetupPipe = { 0 };
->  					double TdmbfPipe = { 0 };
->  					double TdmsksPipe = { 0 };
-> @@ -6757,49 +6588,49 @@ static void UseMinimumDCFCLK(
->  					double AllowedTimeForUrgentExtraLatency = { 0 };
->  
->  					CalculateDynamicMetadataParameters(
-> -							MaxInterDCNTileRepeaters,
-> -							RequiredDPPCLK[i][j][k],
-> -							RequiredDISPCLK[i][j],
-> -							ProjectedDCFCLKDeepSleep[i][j],
-> -							PixelClock[k],
-> -							HTotal[k],
-> -							VTotal[k] - VActive[k],
-> -							DynamicMetadataTransmittedBytes[k],
-> -							DynamicMetadataLinesBeforeActiveRequired[k],
-> -							Interlace[k],
-> -							ProgressiveToInterlaceUnitInOPP,
-> +							v->MaxInterDCNTileRepeaters,
-> +							v->RequiredDPPCLK[i][j][k],
-> +							v->RequiredDISPCLK[i][j],
-> +							v->ProjectedDCFCLKDeepSleep[i][j],
-> +							v->PixelClock[k],
-> +							v->HTotal[k],
-> +							v->VTotal[k] - v->VActive[k],
-> +							v->DynamicMetadataTransmittedBytes[k],
-> +							v->DynamicMetadataLinesBeforeActiveRequired[k],
-> +							v->Interlace[k],
-> +							v->ProgressiveToInterlaceUnitInOPP,
->  							&TsetupPipe,
->  							&TdmbfPipe,
->  							&TdmecPipe,
->  							&TdmsksPipe);
-> -					AllowedTimeForUrgentExtraLatency = MaximumVStartup[i][j][k] * HTotal[k] / PixelClock[k] - MinimumTWait - TsetupPipe
-> +					AllowedTimeForUrgentExtraLatency = v->MaximumVStartup[i][j][k] * v->HTotal[k] / v->PixelClock[k] - MinimumTWait - TsetupPipe
->  							- TdmbfPipe - TdmecPipe - TdmsksPipe - DynamicMetadataVMExtraLatency[k];
->  					if (AllowedTimeForUrgentExtraLatency > 0) {
->  						DCFCLKRequiredForPeakBandwidthPerPlane[k] = dml_max(DCFCLKRequiredForPeakBandwidthPerPlane[k],
->  								ExtraLatencyCycles / AllowedTimeForUrgentExtraLatency);
->  					} else {
-> -						DCFCLKRequiredForPeakBandwidthPerPlane[k] = DCFCLKPerState[i];
-> +						DCFCLKRequiredForPeakBandwidthPerPlane[k] = v->DCFCLKPerState[i];
->  					}
->  				}
->  			}
->  			DCFCLKRequiredForPeakBandwidth = 0;
-> -			for (k = 0; k <= NumberOfActivePlanes - 1; ++k) {
-> +			for (k = 0; k <= v->NumberOfActivePlanes - 1; ++k) {
->  				DCFCLKRequiredForPeakBandwidth = DCFCLKRequiredForPeakBandwidth + DCFCLKRequiredForPeakBandwidthPerPlane[k];
->  			}
-> -			MinimumTvmPlus2Tr0 = UrgLatency[i] * (GPUVMEnable == true ? (HostVMEnable == true ?
-> -					(GPUVMMaxPageTableLevels + 2) * (HostVMMaxNonCachedPageTableLevels + 1) - 1 : GPUVMMaxPageTableLevels + 1) : 0);
-> -			for (k = 0; k < NumberOfActivePlanes; ++k) {
-> +			MinimumTvmPlus2Tr0 = v->UrgLatency[i] * (v->GPUVMEnable == true ? (v->HostVMEnable == true ?
-> +					(v->GPUVMMaxPageTableLevels + 2) * (v->HostVMMaxNonCachedPageTableLevels + 1) - 1 : v->GPUVMMaxPageTableLevels + 1) : 0);
-> +			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
->  				double MaximumTvmPlus2Tr0PlusTsw = { 0 };
-> -				MaximumTvmPlus2Tr0PlusTsw = (MaximumVStartup[i][j][k] - 2) * HTotal[k] / PixelClock[k] - MinimumTWait - DynamicMetadataVMExtraLatency[k];
-> +				MaximumTvmPlus2Tr0PlusTsw = (v->MaximumVStartup[i][j][k] - 2) * v->HTotal[k] / v->PixelClock[k] - MinimumTWait - DynamicMetadataVMExtraLatency[k];
->  				if (MaximumTvmPlus2Tr0PlusTsw <= MinimumTvmPlus2Tr0 + PrefetchPixelLinesTime[k] / 4) {
-> -					DCFCLKRequiredForPeakBandwidth = DCFCLKPerState[i];
-> +					DCFCLKRequiredForPeakBandwidth = v->DCFCLKPerState[i];
->  				} else {
->  					DCFCLKRequiredForPeakBandwidth = dml_max3(DCFCLKRequiredForPeakBandwidth, 2 * ExtraLatencyCycles
->  							/ (MaximumTvmPlus2Tr0PlusTsw - MinimumTvmPlus2Tr0 - PrefetchPixelLinesTime[k] / 4),
->  						(2 * ExtraLatencyCycles + PixelDCFCLKCyclesRequiredInPrefetch[k]) / (MaximumTvmPlus2Tr0PlusTsw - MinimumTvmPlus2Tr0));
->  				}
->  			}
-> -			DCFCLKState[i][j] = dml_min(DCFCLKPerState[i], 1.05 * (1 + mode_lib->vba.PercentMarginOverMinimumRequiredDCFCLK / 100)
-> +			v->DCFCLKState[i][j] = dml_min(v->DCFCLKPerState[i], 1.05 * (1 + mode_lib->vba.PercentMarginOverMinimumRequiredDCFCLK / 100)
->  					* dml_max(DCFCLKRequiredForAverageBandwidth, DCFCLKRequiredForPeakBandwidth));
->  		}
+> diff --git a/drivers/net/dsa/mv88e6xxx/port.c 
+> b/drivers/net/dsa/mv88e6xxx/port.c
+> index 5e4d5e9265a4..2a60aded6fbe 100644
+> --- a/drivers/net/dsa/mv88e6xxx/port.c
+> +++ b/drivers/net/dsa/mv88e6xxx/port.c
+> @@ -1222,15 +1222,19 @@ int mv88e6xxx_port_set_lock(struct
+> mv88e6xxx_chip *chip, int port,
+>  	u16 reg;
+>  	int err;
+> 
+> +	mv88e6xxx_reg_lock(chip);
+>  	err = mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_CTL0, &reg);
+> -	if (err)
+> +	if (err) {
+> +		mv88e6xxx_reg_unlock(chip);
+>  		return err;
+> +	}
+> 
+>  	reg &= ~MV88E6XXX_PORT_CTL0_SA_FILT_MASK;
+>  	if (locked)
+>  		reg |= MV88E6XXX_PORT_CTL0_SA_FILT_DROP_ON_LOCK;
+> 
+>  	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_CTL0, reg);
+> +	mv88e6xxx_reg_unlock(chip);
+>  	if (err)
+>  		return err;
+> 
+> @@ -1247,7 +1251,11 @@ int mv88e6xxx_port_set_lock(struct
+> mv88e6xxx_chip *chip, int port,
+>  			MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
 >  	}
+> 
+> -	return mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, 
+> reg);
+> +	mv88e6xxx_reg_lock(chip);
+> +	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, 
+> reg);
+> +	mv88e6xxx_reg_unlock(chip);
+> +
+> +	return err;
+>  }
+> 
+>  int mv88e6xxx_port_set_8021q_mode(struct mv88e6xxx_chip *chip, int 
+> port,
+> 
+>> +		if (err)
+>> +			return err;
+>> +	}
+>> 
+>> -	reg &= ~MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
+>> -	if (locked)
+>> -		reg |= MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
+>> +	reg = 0;
+>> +	if (locked) {
+>> +		reg = (1 << port);
+>> +		reg |= MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG |
+>> +			MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT;
+>> +	}
+>> 
+>>  	return mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_ASSOC_VECTOR, 
+>> reg);
+>>  }
+>> diff --git a/drivers/net/dsa/mv88e6xxx/port.h 
+>> b/drivers/net/dsa/mv88e6xxx/port.h
+>> index e0a705d82019..5c1d485e7442 100644
+>> --- a/drivers/net/dsa/mv88e6xxx/port.h
+>> +++ b/drivers/net/dsa/mv88e6xxx/port.h
+>> @@ -231,6 +231,7 @@
+>>  #define MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT		0x2000
+>>  #define MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG	0x1000
+>>  #define MV88E6XXX_PORT_ASSOC_VECTOR_REFRESH_LOCKED	0x0800
+>> +#define MV88E6XXX_PORT_ASSOC_VECTOR_PAV_MASK		0x07ff
+>> 
+>>  /* Offset 0x0C: Port ATU Control */
+>>  #define MV88E6XXX_PORT_ATU_CTL		0x0c
+>> @@ -374,6 +375,7 @@ int mv88e6xxx_port_set_fid(struct mv88e6xxx_chip 
+>> *chip, int port, u16 fid);
+>>  int mv88e6xxx_port_get_pvid(struct mv88e6xxx_chip *chip, int port, 
+>> u16 *pvid);
+>>  int mv88e6xxx_port_set_pvid(struct mv88e6xxx_chip *chip, int port, 
+>> u16 pvid);
+>> 
+>> +bool mv88e6xxx_port_is_locked(struct mv88e6xxx_chip *chip, int port);
+>>  int mv88e6xxx_port_set_lock(struct mv88e6xxx_chip *chip, int port,
+>>  			    bool locked);
+>> 

@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2227759978D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C1B5997AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346240AbiHSIhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
+        id S1347204AbiHSIhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347222AbiHSIgr (ORCPT
+        with ESMTP id S1347347AbiHSIgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:36:47 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFC252801;
-        Fri, 19 Aug 2022 01:34:35 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id 2so3604898pll.0;
-        Fri, 19 Aug 2022 01:34:35 -0700 (PDT)
+        Fri, 19 Aug 2022 04:36:50 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D85606A1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:34:43 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id by8so1525504uab.12
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:34:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc;
-        bh=jnKcopMVpJ1ujZZ1JOt5IM3P6FS7UvXDlx9XIFw0IK0=;
-        b=R4uAZOJM8pW+RKOydL4zQmNBIkcKVwdY2q9AApJFTE6YMgMaqRPJb7BKvMDNYXhxyX
-         RDesuGNKz+NLwFlprQQqzdMPXZqWbN4WGscVqnu2k8wY2lDyWR9mVdVk4ruMshrfVdSv
-         v25ZeM6wKu+3Wbzsmizzw2NGAlSRtJ2uXytLGIAHxzNqdK22AOPT2qnXU77TNCho1IgV
-         zOLr7LcvrCltREIPFM8uKh961AiKiOd09/bAVzLeAFi5xwqT/x+3t/9prUq3etS6Rybx
-         MIi/5P3jkXG69yZirrWkYdsNmbgt3nTAFUKRsccX3RhyGmcFSyvWIrRfmirMCpZxqFeW
-         i7cw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=FIWWrde7a/JqcshJyKxI1HIVfMGJjyPquwX+/hncQxU=;
+        b=oFjxsUG3a87JQoZd+PORVHqi6PEHnZ5vNlDfRiaD2q/RvCAcsNwsAFtDnPH+pqy7Lm
+         kl7oY5yiVxKrAqaERhg6gDgt5uUYAc3pvLOWJXeeJ51hk0Zh13lenrZ1UZr+g89OQxup
+         kluS81G8bs7+I9B+bxVUGPiBT/hN+yHuNeDtqQuW/Ir/kRpAS6RLZVvILO4luGb+vYdI
+         LosPoa/Co1/EO/Lbzmz2662BGDbIlYlYe6wenJ7w/GQeW7mkd/6pZyAZj9DYM+6A7Uw4
+         0/uyrCM4F2sVcE6s2a+VLuhOL8xEVcRXFy7aGYq/tZLLV/G2sy+oUDYg5+fTnaJyGXSD
+         0IYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc;
-        bh=jnKcopMVpJ1ujZZ1JOt5IM3P6FS7UvXDlx9XIFw0IK0=;
-        b=bJcfJknx/Uo2oYsZEejxJO1+L3UMTi1D5A7a7BfiC7lzDQBObMJ/YEJar71hAT+ETa
-         Ywt0/4VVNwgb+V6Jd6+xpRsi7+VdbypR55Wl89VHUIyHIOgNrW9oixa9LyxOduyFC7Cz
-         qZXms3BL5ImohKYYmdQOpRdEzX8Va/oeYLR5j2kstvVDn+DUIox1/Ft04JvvIsrElySA
-         JnECZ3Zxelwb5n90dtreM1IIPWwbi+h2CbCZj8ZguxeE249JaQ9+E3+yyOx+K9vC4O8l
-         AMZBGdA2J6quL55M3Um/5swDD9foyw5XbuJt4THwQxYbm/hH2Exwly4zNj3ykYFaN8cX
-         W6uw==
-X-Gm-Message-State: ACgBeo2K5M63mTc/uCwKGGPAE0Ffj0zUSGvsvFbFOV29wDW6w2zYrVQ9
-        jap0F7p+ZaLohHONT82hTwCV04Asp3vjrQ==
-X-Google-Smtp-Source: AA6agR50l+1rM1GLTAv/4/qfnBkeE8RlgJN68Ec+GzsTmciohw49K/WfRNdWoVC6imB/rbLS1f4ikg==
-X-Received: by 2002:a17:902:eccb:b0:16f:9355:c117 with SMTP id a11-20020a170902eccb00b0016f9355c117mr6277060plh.167.1660898072946;
-        Fri, 19 Aug 2022 01:34:32 -0700 (PDT)
-Received: from smtpclient.apple ([139.177.225.232])
-        by smtp.gmail.com with ESMTPSA id u125-20020a626083000000b0052f3b2a8ee5sm2957215pfb.81.2022.08.19.01.34.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Aug 2022 01:34:32 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH RFC] jbd2: detect old record when do journal scan
-From:   fengnan chang <fengnanchang@gmail.com>
-In-Reply-To: <62FF430D.9040405@huawei.com>
-Date:   Fri, 19 Aug 2022 16:34:28 +0800
-Cc:     "tytso@mit.edu" <tytso@mit.edu>, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A602BE93-1AE5-43D7-B42B-D991E24AC933@gmail.com>
-References: <20220810013442.3474533-1-yebin10@huawei.com>
- <62FF430D.9040405@huawei.com>
-To:     yebin <yebin10@huawei.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=FIWWrde7a/JqcshJyKxI1HIVfMGJjyPquwX+/hncQxU=;
+        b=Q2WPUk1OkUEpVca363H6Klm+x/Fx8iRh8hAoBh/cK8RbTTuwa0Yc/Pn7fpm6CfAbsf
+         X2wGvYLjVWHqbhxJ0v7CjjwzPhAYMh1N1JLCbXHlJaTcWoUCA6yACf8MSjCPhvZRkc0L
+         h0i/PwxulEM3FFuZ+WywGIpmK5XJbNxJ7JElp/zNqgfjnIwM2g/DrFU0B72dgLJ02zyq
+         oI8Vexc/n3UESHh5UqVuvt9UzbTAws7xhNtoOZhPaoNMS339BwWNxYIuTkCRhNwsC7bm
+         rvHMWpJb7d9qBizaCmp49bENEXJUerMprcGrw5vDJM4wbIOc+HjMpFCSDoL76SFYiAP+
+         pJIQ==
+X-Gm-Message-State: ACgBeo3f4yQhf35i0zSEyuRGDna+hfEgW2kW9Y+sfDzMW8XTAvdpiO3z
+        /Z0g9Bi4Y1Vmlq1pfg2aSGTJrghLVns+K6YMC4oqVQ==
+X-Google-Smtp-Source: AA6agR6js/rZ7cAl5nKI4lPs0swl+3Wn3I7GmyFLifwGBDzbErMpFq+37uj8xdHx2xP5xOZ1ORWrqjlx4iguaeloXiA=
+X-Received: by 2002:ab0:3b09:0:b0:39a:82bc:88e5 with SMTP id
+ n9-20020ab03b09000000b0039a82bc88e5mr2276360uaw.26.1660898082867; Fri, 19 Aug
+ 2022 01:34:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220817164851.3574140-1-joefradley@google.com> <20220817164851.3574140-3-joefradley@google.com>
+In-Reply-To: <20220817164851.3574140-3-joefradley@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 19 Aug 2022 16:34:31 +0800
+Message-ID: <CABVgOSkRRMDz14cpsYBi7SaefbOhGc9V+z+pY_tULkk12Fb-EA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kunit: no longer call module_info(test, "Y") for
+ kunit modules
+To:     Joe Fradley <joefradley@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        kernel-team@android.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000404fda05e693f8d3"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,57 +75,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there has system time calibration, system time has become smaller, =
-what will be happen?
-the journal maybe thought as corrupt?
+--000000000000404fda05e693f8d3
+Content-Type: text/plain; charset="UTF-8"
 
+On Thu, Aug 18, 2022 at 12:49 AM Joe Fradley <joefradley@google.com> wrote:
+>
+> Because KUnit test execution is not a guarantee with the kunit.enable
+> parameter we want to be careful to only taint the kernel only if an
+> actual test runs. Calling module_info(test, "Y") for every KUnit module
+> automatically causes the kernel to be tainted upon module load. Therefore,
+> we're removing this call and relying on the KUnit framework to taint the
+> kernel or not.
+>
+> Signed-off-by: Joe Fradley <joefradley@google.com>
+> ---
 
-> 2022=E5=B9=B48=E6=9C=8819=E6=97=A5 16:00=EF=BC=8Cyebin =
-<yebin10@huawei.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> ping...
->=20
-> On 2022/8/10 9:34, Ye Bin wrote:
->> As https://github.com/tytso/e2fsprogs/issues/120 describe tune2fs do =
-not update
->> j_tail_sequence when do journal recovery. This maybe recover old =
-journal record,
->> then will lead to file system corruption.
->> To avoid file system corruption in this case, if detect current =
-transaction's
->> commit time earlier than previous transaction's commit time when do =
-journal
->> scan, just return error.
->>=20
->> Signed-off-by: Ye Bin <yebin10@huawei.com>
->> ---
->>  fs/jbd2/recovery.c | 11 ++++++++++-
->>  1 file changed, 10 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/fs/jbd2/recovery.c b/fs/jbd2/recovery.c
->> index f548479615c6..f3def21a96a5 100644
->> --- a/fs/jbd2/recovery.c
->> +++ b/fs/jbd2/recovery.c
->> @@ -812,8 +812,17 @@ static int do_one_pass(journal_t *journal,
->>  					break;
->>  				}
->>  			}
->> -			if (pass =3D=3D PASS_SCAN)
->> +			if (pass =3D=3D PASS_SCAN) {
->> +				if (commit_time < =
-last_trans_commit_time) {
->> +					pr_err("JBD2: old journal record =
-found "
->> +					       "in transaction %u\n",
->> +					       next_commit_ID);
->> +					err =3D -EFSBADCRC;
->> +					brelse(bh);
->> +					goto failed;
->> +				}
->>  				last_trans_commit_time =3D commit_time;
->> +			}
->>  			brelse(bh);
->>  			next_commit_ID++;
->>  			continue;
->=20
+Thanks!
 
+This definitely fixes an assumption I'd had about KUnit-usage which
+definitely doesn't hold: that all KUnit tests would be in their own
+modules (or at least that those modules wouldn't need to be loaded on
+otherwise production systems). Given this isn't the case for a number
+of modules (thuderbolt, apparmor, probably soon amdgpu), it makles
+sense to get rid of this and only taint the kernel when the test is
+actually run, not just when it's loaded.
+
+This could be considered a fix for c272612cb4a2 ("kunit: Taint the
+kernel when KUnit tests are run"), as it'd already be possible to
+load, e.g., thunderbolt, but prevent the tests from executing with a
+filter glob which doesn't match any tests. That possibly shouldn't
+taint the kernel.
+
+Reviewed-by: David Gow <davidgow@google.com>
+Fixes: c272612cb4a2 ("kunit: Taint the kernel when KUnit tests are run")
+
+Cheers,
+-- David
+
+>  include/kunit/test.h | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index c958855681cc..f23d3954aa17 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -251,7 +251,6 @@ static inline int kunit_run_all_tests(void)
+>  #endif /* IS_BUILTIN(CONFIG_KUNIT) */
+>
+>  #define __kunit_test_suites(unique_array, ...)                                \
+> -       MODULE_INFO(test, "Y");                                                \
+>         static struct kunit_suite *unique_array[]                              \
+>         __aligned(sizeof(struct kunit_suite *))                                \
+>         __used __section(".kunit_test_suites") = { __VA_ARGS__ }
+> --
+> 2.37.1.595.g718a3a8f04-goog
+>
+
+--000000000000404fda05e693f8d3
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA3
+FKMv0rb2xHk3DirulJdRHhbiP8FNxamZGB5WRakw5zAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA4MTkwODM0NDNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEARxi3ltyQ8jHqlPurYczC
+i2+KJDMHF+h9W9WJcsMRyKiTil0H9OU7RjgwTq8tCpOAVjXjIJeyVOjdfo8rVrHQ+GHSANAIhIdD
+kOCq+yQcBAYummKaWCxpFduYmiQQ/4Zv+m5FKmGOnEQOiNE2tnZhVe8mtITb5gFPX5bRdh7uNORG
+QjIHlZGjI0ZG9P9svV7L+mYwn3/DM2Q9+zCFfH1bGmc9vgomSTvvEZK6JD6KK9ZeMFXf52vZrLU/
+IwYNK/QpUnbsTzBVJi6rA8NxtlL/3xGyS9rTy/VhrfsShoFnpdEK9UyscMTkZvHCkbT09byDX4O5
+C8AUgQ8TBDWRJoUgyQ==
+--000000000000404fda05e693f8d3--

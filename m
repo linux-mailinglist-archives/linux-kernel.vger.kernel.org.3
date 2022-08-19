@@ -2,47 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4395599E89
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0663599EB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349798AbiHSPeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 11:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S1349789AbiHSPgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 11:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349788AbiHSPeA (ORCPT
+        with ESMTP id S1349770AbiHSPgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:34:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6ED9F2CCBD
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:33:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0AAE5175A;
-        Fri, 19 Aug 2022 08:33:59 -0700 (PDT)
-Received: from pierre123.arm.com (unknown [10.57.43.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 89B463F66F;
-        Fri, 19 Aug 2022 08:33:54 -0700 (PDT)
-From:   Pierre Gondois <pierre.gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     qperret@google.com, Pierre Gondois <pierre.gondois@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: [PATCH 2/2] sched/fair: Use IRQ scaling for all sched classes
-Date:   Fri, 19 Aug 2022 17:33:20 +0200
-Message-Id: <20220819153320.291720-3-pierre.gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220819153320.291720-1-pierre.gondois@arm.com>
-References: <20220819153320.291720-1-pierre.gondois@arm.com>
+        Fri, 19 Aug 2022 11:36:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112AD120B6;
+        Fri, 19 Aug 2022 08:36:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1006B82800;
+        Fri, 19 Aug 2022 15:36:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDF83C433D6;
+        Fri, 19 Aug 2022 15:36:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660923368;
+        bh=1CeiB4K9FMDSHYlregecvn7xyN/t+buSajCbr7nqGoA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mtKYiVdPGXpCn3pe820y/PbYDk2D7fLcAW2IntqrbOVYlvpEYXiPpehBmqwP0cxjV
+         NnjsZyrIkEPQqAJ0IQ596eb3DYZhsD6CxkHlIfhRTdwBeyAF9xOMkprgSR6qXMvvcH
+         wOY/Q1HSaDfhdFvfVzVkGk10dqYs9Imi7JodyeKA=
+Date:   Fri, 19 Aug 2022 17:36:05 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dragos-Marian Panait <dragos.panait@windriver.com>
+Cc:     stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
+        Sujith <Sujith.Manoharan@atheros.com>,
+        Senthil Balasubramanian <senthilkumar@atheros.com>,
+        "John W . Linville" <linville@tuxdriver.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.10 0/1] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+Message-ID: <Yv+t5fd/ge36XzNM@kroah.com>
+References: <20220819103852.902332-1-dragos.panait@windriver.com>
+ <Yv9ymGE9ZNPfUjBm@kroah.com>
+ <57b4c8e6-4a32-cc03-f469-c4bd6dd1eaca@windriver.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <57b4c8e6-4a32-cc03-f469-c4bd6dd1eaca@windriver.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,90 +65,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The time spent executing IRQ handlers is not reflected in the
-utilization of CPU. IRQ scaling reduces rq CFS, RT and DL
-util by reflecting the CPU capacity reduction due to IRQs.
+On Fri, Aug 19, 2022 at 03:18:26PM +0300, Dragos-Marian Panait wrote:
+> Hi Greg,
+> 
+> On 19.08.2022 14:23, Greg KH wrote:
+> > [Please note: This e-mail is from an EXTERNAL e-mail address]
+> > 
+> > On Fri, Aug 19, 2022 at 01:38:51PM +0300, Dragos-Marian Panait wrote:
+> > > The following commit is needed to fix CVE-2022-1679:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0ac4827f78c7ffe8eef074bc010e7e34bc22f533
+> > > 
+> > > Pavel Skripkin (1):
+> > >    ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+> > > 
+> > >   drivers/net/wireless/ath/ath9k/htc.h          | 10 +++++-----
+> > >   drivers/net/wireless/ath/ath9k/htc_drv_init.c |  3 ++-
+> > >   2 files changed, 7 insertions(+), 6 deletions(-)
+> > > 
+> > > 
+> > > base-commit: 6eae1503ddf94b4c3581092d566b17ed12d80f20
+> > > --
+> > > 2.37.1
+> > > 
+> > This is already queued up for 5.10.  You forgot the backports to older
+> > kernels, which is also already queued up.
+> Are you sure of this?
+> I can not find any patch for older kernels in the stable mailing list(except
+> for 5.15, 5.18, 5.19).
 
-commit 9033ea11889f ("cpufreq/schedutil: Take time spent in interrupts
-into account")
-introduced the notion of IRQ scaling for the now called
-effective_cpu_util() function with the following expression (for the
-CPU util):
-  IRQ util_avg + (max_cap - IRQ util_avg / max_cap ) * /Sum rq util_avg
+Look in the stable-queue.git tree on git.kernel.org.
 
-commit 523e979d3164 ("sched/core: Use PELT for scale_rt_capacity()")
-introduced IRQ scaling for scale_rt_capacity(), but without scaling
-RT and DL rq util.
+thanks,
 
-scale_rt_capacity() excludes RT and DL rq signals from IRQ scaling.
-Only the available capacity is scaled. However RT and DL rq util
-should also be scaled.
-
-Applying IRQ scaling allows to extract the IRQ util avg. So IRQ util
-avg should also be subtracted from the available capacity.
-Thermal pressure is not execution time but reduces the maximum
-possible capacity of a CPU. So IRQ scaling should not be applied.
-
-Thus, in this order:
- - subtract thermal pressure
- - apply IRQ scaling on the remaining capacity (RT + DL + CFS + free)
- - subtract IRQ util
-
-Also, sort variables in reverse tree order.
-
-Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
----
- kernel/sched/fair.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index bcae7bdd5582..546e490d6753 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -8468,16 +8468,23 @@ static inline void init_sd_lb_stats(struct sd_lb_stats *sds)
- 
- static unsigned long scale_rt_capacity(int cpu)
- {
--	struct rq *rq = cpu_rq(cpu);
- 	unsigned long max = arch_scale_cpu_capacity(cpu);
-+	struct rq *rq = cpu_rq(cpu);
-+	unsigned long irq, thermal;
- 	unsigned long used, free;
--	unsigned long irq;
- 
- 	irq = cpu_util_irq(rq);
- 
- 	if (unlikely(irq >= max))
- 		return 1;
- 
-+	thermal = thermal_load_avg(rq);
-+	if (unlikely(thermal >= max))
-+		return 1;
-+
-+	free = max - thermal;
-+	free = scale_irq_capacity(free, irq, max);
-+
- 	/*
- 	 * avg_rt.util_avg and avg_dl.util_avg track binary signals
- 	 * (running and not running) with weights 0 and 1024 respectively.
-@@ -8486,14 +8493,12 @@ static unsigned long scale_rt_capacity(int cpu)
- 	 */
- 	used = READ_ONCE(rq->avg_rt.util_avg);
- 	used += READ_ONCE(rq->avg_dl.util_avg);
--	used += thermal_load_avg(rq);
-+	used += irq;
- 
--	if (unlikely(used >= max))
-+	if (unlikely(used >= free))
- 		return 1;
- 
--	free = max - used;
--
--	return scale_irq_capacity(free, irq, max);
-+	return free - used;
- }
- 
- static void update_cpu_capacity(struct sched_domain *sd, int cpu)
--- 
-2.25.1
-
+greg k-h

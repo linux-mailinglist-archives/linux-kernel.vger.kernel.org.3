@@ -2,113 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C79599ABA
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A0E599ACC
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348680AbiHSLJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
+        id S1347745AbiHSLJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348647AbiHSLJD (ORCPT
+        with ESMTP id S1348499AbiHSLJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:09:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1D4EEF29
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:09:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660907341;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xeNvcv3iZHDY3QjzCkS4zy97GwENP8IMr7bik18mtU0=;
-        b=Gln7bXqrcbCIqhdBa/susbfo05myEyPHCUJe/Xl4+J5OsemjA3V93GzgBL7+AOT5FmSzju
-        lAloRTbw2/8agFsPO4sKi32OOUIvSQ8ebgWHgJ0bKY6IW6S+lw6zzwuv4Hvpps8P4kRKdo
-        SkVqbHdEB50cQKhpVzdmn6Dw5TI3vrg=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-609-Tpu2x3-yOcqoLf6nmKL_2g-1; Fri, 19 Aug 2022 07:08:59 -0400
-X-MC-Unique: Tpu2x3-yOcqoLf6nmKL_2g-1
-Received: by mail-ej1-f72.google.com with SMTP id gb41-20020a170907962900b00730961131a7so1388531ejc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:08:59 -0700 (PDT)
+        Fri, 19 Aug 2022 07:09:48 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CFDEEF29;
+        Fri, 19 Aug 2022 04:09:47 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id m3-20020a05600c3b0300b003a5e0557150so3770294wms.0;
+        Fri, 19 Aug 2022 04:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc;
+        bh=N1+SQP9/NNEeMXRgIAtNMNNPsYesv58EgfwcQ2TqP80=;
+        b=S46/LPn6eUw1mXd3EnYZ/rw4+v9qEbEUjrviABS48ma7s69nVa0g+uQfs1Dq82slMH
+         ROPd5ydcib/qy3b+5W4ga3AWw6vybxp2vbyW87dPKcyCq/cOjsPzAXb0JpPX+YEj0ktj
+         0useeDJY5oMfkDLSNy86a+FO+YJrxYYB9moxcguERDTimV2ZpgyImwFjc0atukt9Ufnk
+         wlLuhdovNL9TnUl95MpEcLNuLYYOMMLSMKYou97uUBsRSks5ZQw0awRYnc2MfIWrrVLp
+         y4h6qdUbvKFsssLIuQfbxEb7RGPrd7czpQWA+YeKplkVYs06YBsL/vFvmg9OGKq1WXUa
+         mcmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=xeNvcv3iZHDY3QjzCkS4zy97GwENP8IMr7bik18mtU0=;
-        b=PX08sWFhB7cxhokWkz4YhQl3JWa2NUonWUY1IHo+UEaxg4H3u/7FWvCOvj7bdwD4I7
-         oD92tAb0RBHuuosjxx+gB5X8Hx9+r0CQvQ0I2qfajhxtzH+r3pm0OL6xdeHJYQlbxu2A
-         nmOLuwi1e2adLOT4qzOGry5ZRCVAatIbdcbdvGjYw22bmsXNUz/9ZBfyUre311QEMN4A
-         kZVQOeIBpnJmYXyADn6w1I1+JfWUZoZBP4FmxPtTUvoczho/UbTs7RW7aHJz9YBppr2E
-         3DoeQeoxqD4ZyerdJju4Z11jg4NWvXen6Kd9lZte5tAnvOsjKSPVvtUtCOBz9mJrvSvu
-         PyCw==
-X-Gm-Message-State: ACgBeo0RLHyJlGAhdxNGSxwr8OsGdurVpqiH4AUQBJ7BC6LN4wZmnT6b
-        TYN/Pww5l1i9shd/ZaElNDXsu5QgokD0/HrCfFOSh/lBAmNAIHq1kspU5KTDnY6Z2rdu+78zmn6
-        Ux2rScLaV3SYL3v/zFiRwxJ6b
-X-Received: by 2002:a05:6402:1603:b0:446:5617:55dd with SMTP id f3-20020a056402160300b00446561755ddmr537911edv.170.1660907338838;
-        Fri, 19 Aug 2022 04:08:58 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4JCMLkkgfrx66zUb5RMS4kd93el/Xb9OFRWhrYuzNFFkdMFyxj+rXOpo1fErhN9Ev0M+lasA==
-X-Received: by 2002:a05:6402:1603:b0:446:5617:55dd with SMTP id f3-20020a056402160300b00446561755ddmr537899edv.170.1660907338647;
-        Fri, 19 Aug 2022 04:08:58 -0700 (PDT)
-Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id l17-20020a1709060cd100b007308fab3eb7sm2167827ejh.195.2022.08.19.04.08.57
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc;
+        bh=N1+SQP9/NNEeMXRgIAtNMNNPsYesv58EgfwcQ2TqP80=;
+        b=j86KbabbcVa+Q2Dy30OjUMcmVOvLdf1P0ZuTpL+8SvstPhcAjZEm5HPCQ+r2XHKM6e
+         13ZFjiW9Zo3ariLsIplz/yNZukE8q+O93tdgPpbrSmzkoxXci11lZIjyoqAu5gPluGRl
+         Rhl66WXp2alrsnFPj2JVOal9/VpZ6f7GBhrbt80CIqVW52PvsyhKkdgKhxK70JqBFEra
+         BtM1ydrgnhL7aXQebN1eihq72/Xl359WdQ/jD6itRwnNsUJBeRWLhy8LKCTxl2D0Qa60
+         Z2JC20RtRftp4cqdT3vsqR3svHdxERJ8DdWzSAbg+5SKsR+v+olClaPtqz1XjegtuiKG
+         2Vxg==
+X-Gm-Message-State: ACgBeo3lbjgwQz729DdP+2sicShiOE1iasDiI8PL+McO81e9y019IuGl
+        QcYwKyQT5/fie0FDrP3Z7qI=
+X-Google-Smtp-Source: AA6agR75FbIKZGPSpxBNj5h9oWPX52jL+AmyluIEK9LMg40HfqZM4n9G7Ou95KKB+qaSuE3srDGE6g==
+X-Received: by 2002:a05:600c:4f05:b0:3a5:ffec:b6b with SMTP id l5-20020a05600c4f0500b003a5ffec0b6bmr7525600wmq.199.1660907385752;
+        Fri, 19 Aug 2022 04:09:45 -0700 (PDT)
+Received: from DreamMachine2.lan (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
+        by smtp.gmail.com with ESMTPSA id a13-20020a05600c348d00b003a5dfd7e9eesm5127117wmq.44.2022.08.19.04.09.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 04:08:58 -0700 (PDT)
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
-        mripard@kernel.org
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next v2 4/4] drm/vc4: hvs: protect drm_print_regset32()
-Date:   Fri, 19 Aug 2022 13:08:49 +0200
-Message-Id: <20220819110849.192037-5-dakr@redhat.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220819110849.192037-1-dakr@redhat.com>
-References: <20220819110849.192037-1-dakr@redhat.com>
+        Fri, 19 Aug 2022 04:09:45 -0700 (PDT)
+Message-ID: <269bf90a6cccb16e59f063b58f088ca6cd39c4b3.camel@gmail.com>
+Subject: Re: [PATCH] iio: pressure: bmp280: fix datasheet links
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     linux-iio <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Fri, 19 Aug 2022 13:09:44 +0200
+In-Reply-To: <CAHp75VeSsVD8rMz-Cj6kFovqdQQPjbH7rUXWS6paRtsBaB-Kww@mail.gmail.com>
+References: <6e908cc827c70b95dae683717592aff0b003e7c9.1660606478.git.ang.iglesiasg@gmail.com>
+         <CAHp75VdTZ_JYB2aYVdQTOx9QW1HPKhwYyQH-0tVCtpjHV=VcaQ@mail.gmail.com>
+         <8a1f372f34be71895268e874bb3fbbf105dfabdb.camel@gmail.com>
+         <CAHp75VeSsVD8rMz-Cj6kFovqdQQPjbH7rUXWS6paRtsBaB-Kww@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (by Flathub.org) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In vc4_hvs_dump_state() potentially freed resources are protected from
-being accessed with drm_dev_enter()/drm_dev_exit().
+On Fri, 2022-08-19 at 13:33 +0300, Andy Shevchenko wrote:
+> On Fri, Aug 19, 2022 at 1:31 PM Angel Iglesias <ang.iglesiasg@gmail.com>
+> wrote:
+> > On Fri, 2022-08-19 at 12:37 +0300, Andy Shevchenko wrote:
+> > > On Tue, Aug 16, 2022 at 2:39 AM Angel Iglesias <ang.iglesiasg@gmail.c=
+om>
+> > > wrote:
+> > > >=20
+> > > > Updated links for BMP280 and BME280 datasheets on Bosch website.
+> > >=20
+> > > > Datasheet of BMP180 is no longer available on the manufacturer's
+> > > > website,
+> > > > changed the link to a copy hosted by a third party.
+> > >=20
+> > > Note, that the version is downgraded (from 12.1 to 9).
+> >=20
+> > Apologies, I forgot to add a note about this. Changelog on datasheet 12=
+.1
+> > listed
+> > these three changes from version 9:
+> > * Page 26: Changed document referral from ANP015 to BST-MPS-AN004-00
+> > * Chapter 3.5: New equation for B3 (adds a long cast to AC1)
+> > * Page 26: Updated RoHS directive to 2011/65/EU effective 8 June 2011
+>=20
+> Perhaps you may add this to the comment below into the code.
 
-Also include drm_print_regset32() in the protected section, since
-drm_print_regset32() does access memory that is typically mapped via
-devm_* calls.
+Will do, thanks
 
-Fixes: 969cfae1f01d ("drm/vc4: hvs: Protect device resources after removal")
-Signed-off-by: Danilo Krummrich <dakr@redhat.com>
----
- drivers/gpu/drm/vc4/vc4_hvs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> > Unfortunately, I couldn't find the most updated version in good quality
+> > hosted
+> > in a trustworthy place.
+>=20
+> Me neither.
+>=20
+> > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>=20
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hvs.c b/drivers/gpu/drm/vc4/vc4_hvs.c
-index 9e823e0de197..4ac9f5a2d5f9 100644
---- a/drivers/gpu/drm/vc4/vc4_hvs.c
-+++ b/drivers/gpu/drm/vc4/vc4_hvs.c
-@@ -71,11 +71,11 @@ void vc4_hvs_dump_state(struct vc4_hvs *hvs)
- 	struct drm_printer p = drm_info_printer(&hvs->pdev->dev);
- 	int idx, i;
- 
--	drm_print_regset32(&p, &hvs->regset);
--
- 	if (!drm_dev_enter(drm, &idx))
- 		return;
- 
-+	drm_print_regset32(&p, &hvs->regset);
-+
- 	DRM_INFO("HVS ctx:\n");
- 	for (i = 0; i < 64; i += 4) {
- 		DRM_INFO("0x%08x (%s): 0x%08x 0x%08x 0x%08x 0x%08x\n",
--- 
-2.37.2
-
+Kind regards,
+Angel

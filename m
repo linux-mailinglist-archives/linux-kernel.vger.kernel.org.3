@@ -2,65 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FFC599BA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A80599B9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348899AbiHSMIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S1348919AbiHSMIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347538AbiHSMIP (ORCPT
+        with ESMTP id S1348909AbiHSMIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:08:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C80D10097B
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:07:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7FB1B82790
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 12:07:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506AFC433D6;
-        Fri, 19 Aug 2022 12:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660910873;
-        bh=GKR6cf+ldrZjNesplWeFBQHuH0NOM2NdOJNlvYtu2FM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Kc/HTRt+na3qz4LFA7uQNqhkqEf6BM+S592CcyZVRVU0MCOYfWxy3MAPVaDRhjZyM
-         9OTrCogWUWBrIZVVrLB1+EHMc3Uao2Ww8r6/Kr6y2ti4OaFFOozaFTPn2BkrIRhtpy
-         HvKsNJtBAuxQGXyvsSRU/s0RZZsnwgZqsKENhYqGnT9KOKj4SsweYT9+DYU6lETgfI
-         MbcF6fU386fwY7HG+/Rd/wvkcB425qlAmhraKmUqK5lOKE+oe8/88D28D4sPz34xmq
-         jh6X49HuCAej5B7yQ6Yuu8OCzJNegKIA9cDNwSXLimZa44UqY5qdGUpK3oE97pdiXc
-         PaYJgh64WjYQg==
-Date:   Fri, 19 Aug 2022 13:07:47 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "linux@rasmusvillemoes.dk>" <linux@rasmusvillemoes.dk>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] regmap: introduce value tracing for regmap bulk
- operations
-Message-ID: <Yv99E0mrPI0qG66I@sirena.org.uk>
-References: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
- <20220818121515.6azkxyqetnunwsc6@CAB-WSD-L081021.sigma.sbrf.ru>
- <87mtc1wtjz.wl-maz@kernel.org>
- <Yv5eMcmNOmyLmd++@sirena.org.uk>
- <20220818174441.arh7otvrkzg5uk3s@CAB-WSD-L081021.sigma.sbrf.ru>
+        Fri, 19 Aug 2022 08:08:41 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C55440E01
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:08:33 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id x25so4334700ljm.5
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=gYlvSOH2ZR9yG5YZYS73Kks2lSHpxherM/3sStGglc4=;
+        b=AKhBopHyjkUUD476uCKPXZ5kZ6ivNsGEekgLzlL5gUSf/81dCqgMambzpDHAL/7k+U
+         bmJR+ty8AhG9TfyVnceVHuxsvUVa0KEmCGn564GbAPcm1aVr5HhPyadAbJR2WK3EwxYQ
+         e51htsDMYPPnUu2KrhJHVjHR/mNFY74nJCIeZMMnUbzaizyKvRZ+7b1fusxNapEgV5rf
+         +lG4t90FG+3BAn1/beHjVzbM2KENz/91MLkC1YBXlHS+KtEKapadviz6+bw16RgFNZOU
+         2RYCThIzGC0hwZ5q+m1YpfZ5NaVbe25AIQ1Edoi4rX+cERbQLsG7L/FCw0EboKYDEzki
+         UsLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=gYlvSOH2ZR9yG5YZYS73Kks2lSHpxherM/3sStGglc4=;
+        b=nj7or0dYElrwdJ75Ze7t+WybbWx6+93A5PPvksciezdJCVS86cSss31DZNbVoM0ojK
+         IrF9Z1OtzKqNGRILMcdSi+EarhVL9eruTrmRy91XVN7mDb1IrsENK25WxOUUdRfIBIBl
+         Kpz87x6UHWwEjvTJtBxA8tvd2apm6hnDVCOgV5vzeR+jW4oCGu/UNLhoiMhrKZwr4a0F
+         7NCfUZIGm2z4VJOHH9RtSdEMenhIWHErvwGUF4nuehiZidlolqGOu7OK3Ctc9h3LzJOr
+         ey5i8URNVG4Xi0kib1QNxvQjUxb1U65GchBS8PZN/TZveONlQd3ymhV0A9vjB26sn1XE
+         casA==
+X-Gm-Message-State: ACgBeo1inZzn2nR7jBIinuJo7xOg6YtRt6029DMJ/Yuh7596FcFR1+J8
+        e5IbYKnbLnOIDDBrem60tdzGQDeYN+r3jCEq
+X-Google-Smtp-Source: AA6agR4BSkJikacdrzsgi9+x3yFGN1+/XRQnM3CVNSTuiVQe3d9K9BmB1TO0kshDrImlqJDE9oUeKA==
+X-Received: by 2002:a2e:a44c:0:b0:25e:7181:dc7a with SMTP id v12-20020a2ea44c000000b0025e7181dc7amr2026838ljn.504.1660910911386;
+        Fri, 19 Aug 2022 05:08:31 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
+        by smtp.gmail.com with ESMTPSA id i9-20020a198c49000000b0048b31fa9f3asm616101lfj.179.2022.08.19.05.08.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 05:08:30 -0700 (PDT)
+Message-ID: <a2d671da-ff4d-5c7e-7136-63cd51098207@linaro.org>
+Date:   Fri, 19 Aug 2022 15:08:29 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YR63lD1u5B2qJWoJ"
-Content-Disposition: inline
-In-Reply-To: <20220818174441.arh7otvrkzg5uk3s@CAB-WSD-L081021.sigma.sbrf.ru>
-X-Cookie: Price does not include taxes.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/3] driver: input: matric-keypad: switch to gpiod
+Content-Language: en-US
+To:     Gireesh.Hiremath@in.bosch.com, linux-omap@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org, bcousson@baylibre.com,
+        tony@atomide.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dmitry.torokhov@gmail.com,
+        mkorpershoek@baylibre.com, davidgow@google.com,
+        m.felsch@pengutronix.de, swboyd@chromium.org,
+        fengping.yu@mediatek.com, y.oudjana@protonmail.com,
+        rdunlap@infradead.org, colin.king@intel.com
+Cc:     sjoerd.simons@collabora.co.uk, VinayKumar.Shettar@in.bosch.com,
+        Govindaraji.Sivanantham@in.bosch.com, anaclaudia.dias@de.bosch.com
+References: <20220819065946.9572-1-Gireesh.Hiremath@in.bosch.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220819065946.9572-1-Gireesh.Hiremath@in.bosch.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,39 +83,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 19/08/2022 09:59, Gireesh.Hiremath@in.bosch.com wrote:
+> From: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
+> 
+> Switch from gpio API to gpiod API
+> 
+> Signed-off-by: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
+> 
+> Gbp-Pq: Topic apertis/guardian
+> Gbp-Pq: Name driver-input-matric-keypad-switch-gpio-to-gpiod.patch
 
---YR63lD1u5B2qJWoJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+What's that? I don't recall such tags in Linux kernel process... Is it
+documented anywhere?
 
-On Thu, Aug 18, 2022 at 05:44:23PM +0000, Dmitry Rokosov wrote:
-> On Thu, Aug 18, 2022 at 04:43:45PM +0100, Mark Brown wrote:
-
-> > At the minute we don't put the actual data for the bulk transfers into
-> > the trace so the information simply isn't there.
-
-> What do you think about the patch? Can we use the separate trace event
-> class, or do we have to add these tracepoints to some existing class, like
-> regmap_block?
-
-I didn't realise that was even a question, but then there seems to be
-some discussion I've not seen given the CCing going on.  The biggest
-issue is do we even want the overhead but I'll need to find time to look
-at this properly.
-
---YR63lD1u5B2qJWoJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL/fRMACgkQJNaLcl1U
-h9DY0gf+I1M0xYDoLL6v/aKBEP8Gxj/kQw0umt9tfn7r8KbNZL4Zkrh8JaH5WAZj
-tW5rpR1JRRm5e9FzdGJ8f+hDx3vF33BGIe6lJPXwBTRKU1YfMRisN+XFYT8onrqG
-a6PBksOY6PdKm2OhgW4680GNKLi5zFyUk+FDzidBzLn5am50YNYzmhvtrKbczMq/
-WTgD9xpkTxxBfWbZsWb8Tq4IBYSTXSKDPv+O0zd0yYXmj5daxLgZdPGjopwqEgi0
-sOtXLs1NTsI2oSXrMSL9gAJ5yWM2i864v9rJrWMnOBkBGio3GMRL+xNFSwOmeGcq
-+ZcOyOyGz494B73VcSyt2Rfq+qoLew==
-=WIkd
------END PGP SIGNATURE-----
-
---YR63lD1u5B2qJWoJ--
+Best regards,
+Krzysztof

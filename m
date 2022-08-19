@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626705991C2
+	by mail.lfdr.de (Postfix) with ESMTP id 13B8F5991C1
 	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 02:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243402AbiHSA3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 20:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
+        id S240896AbiHSA30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 20:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239966AbiHSA3R (ORCPT
+        with ESMTP id S231424AbiHSA3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 20:29:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933A56BD7A
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 17:29:16 -0700 (PDT)
+        Thu, 18 Aug 2022 20:29:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2039772EE5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 17:29:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660868955;
+        s=mimecast20190719; t=1660868957;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AJnA1gWIAKMVWb7er1TKy0XozOPw4mLsXagd+kCHnAI=;
-        b=IlEaZ1QLJTS1nTjC5fYZf79ahuDDsf8+7jAae4/u6iolYZ8Gq1gJ2jIC8CodAjLEvVveru
-        Tdd2+GF/HueQmaqbJHs2yEE62xe+OozzRfCTmzpMpxAuUaaITvPTHUlmFwbrXL3c9ny8MC
-        sNYNVgEdEwbi8RdDoxz+daNfR5sEeQ4=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=nZkz/OabS5gsWkkQKjM89j1/6sZadLuGX+5mWMwAoOc=;
+        b=Ozy6dr5GgILkZIv2s6jb4Fbw4InbqoleQT3/1uHs8H44jTKeYmw7YWEfC3neNj5lJtGJQJ
+        09HLvhyLjlYqeTOZwGxX7j5DdftGGNejwKYq9NxAuDMmE7JFNcRhkFtRmCFIxxGR8OS2Xo
+        899IzOev64Sp9NpT1U8vfTIK8zzp47s=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-318-wI_ZBhyiP127I2RAQFn04Q-1; Thu, 18 Aug 2022 20:29:14 -0400
-X-MC-Unique: wI_ZBhyiP127I2RAQFn04Q-1
-Received: by mail-ed1-f70.google.com with SMTP id j19-20020a05640211d300b0043ddce5c23aso1838373edw.14
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 17:29:14 -0700 (PDT)
+ us-mta-21-CpF31JujOwiOZR8wZITIig-1; Thu, 18 Aug 2022 20:29:15 -0400
+X-MC-Unique: CpF31JujOwiOZR8wZITIig-1
+Received: by mail-ed1-f72.google.com with SMTP id q32-20020a05640224a000b004462f105fa9so738934eda.4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 17:29:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=AJnA1gWIAKMVWb7er1TKy0XozOPw4mLsXagd+kCHnAI=;
-        b=WK8/SBYccj9e0vaIhEuroUAMkz9k/iY/6nI+AH1rkImZHrWrAmZ7CCoClMfgtH52aA
-         M9cfSkK5Y0gwv+74OAOmo+NxeDMzE1x5O5nWU7i7nkK4+wYPL0rGwJxJQiTgux9333hc
-         h7c5GCAYMhwLlmbWeKse9QoEcZM8kv1D90GSFyTTy69Wcw85YmAG28dsQDtzcb+gab7T
-         E47ffHZLmKJ6l3kz4dyc4Gja1zK5oQXKcHtzjOZ7xGjDbpY/XXgI5X3YI7rSn9OHZWdA
-         KnbF0ttklpCO3+/SUcX84blGO6l/+HHfBQeA4Z1CoWjFtcMmmUjaRt4CEAxWsurNCSou
-         47wA==
-X-Gm-Message-State: ACgBeo3j59vEFR/9pJKCEsnYY7Re7RPp3Z8NLZpXwpv+N9H12NYsO0uB
-        PBSKXosBnEuiU9aJ/AgBn878lKsEe4rR3p5Fuzhy/FbV/LzvFbXvRJCXSRxzBHuTKd+ICM4yVzi
-        frxUGzhVrsjqp5sbuUcHuYkZd
-X-Received: by 2002:a17:907:a07b:b0:735:6744:c6be with SMTP id ia27-20020a170907a07b00b007356744c6bemr3118221ejc.685.1660868953214;
-        Thu, 18 Aug 2022 17:29:13 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4bPd1mGGbe4dYNjuUk6IBg2CW64/qzKlChk1S6e92cEUNZnl9nwhQOXUa5thhN1mFXZmO1Mw==
-X-Received: by 2002:a17:907:a07b:b0:735:6744:c6be with SMTP id ia27-20020a170907a07b00b007356744c6bemr3118217ejc.685.1660868953026;
-        Thu, 18 Aug 2022 17:29:13 -0700 (PDT)
+        bh=nZkz/OabS5gsWkkQKjM89j1/6sZadLuGX+5mWMwAoOc=;
+        b=4z458NPtovL/rxP7J3UP5MGK2qerwaF79Me/C18Qvr6Mwz3yeVWK7uCGLxtg1/qBXg
+         D+dEpqdnd/mNPTs2wmeEWKGIEUS1D5lEaa2KQdD04HQjcBeMBWczpMQHWye5CyIWnZKB
+         Oppqry8Ag3Lg9W4vJ1xzmKFa088FA04OC/UktHS4gO3yFEuEHomki696jKAASg+MFNVk
+         Z6sGMEHntfTgg/o8IrHvqr3b6hcAIxILRwoB774kFsWEryKNyHHodzhkDad4Hf6aJF0l
+         gMTOR7Favnez+uEZV/rfJFrvK0qsRUFboHq973fr8ERgRKXei2kMy76YnbaaIDLq6kN0
+         hyyg==
+X-Gm-Message-State: ACgBeo2RQ591r3lVPrL0K9N6c28fanMF6PrnBurCjxZ+sc+fcRhWLCgt
+        I8xHTN2Dkh+1cMly+OA4y/zFv4lKG57JfJDUb9hi47FuqqXFVmk1Zwclh3KzdFZAXYbtxLMwK6w
+        zMIJmcV8gOR+ito6PdZmqllG7
+X-Received: by 2002:a17:907:69b0:b0:730:a1f0:63e7 with SMTP id ra48-20020a17090769b000b00730a1f063e7mr3230741ejc.364.1660868954669;
+        Thu, 18 Aug 2022 17:29:14 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR69VOlMq30KnwZaAQTSrGpxNLSfPxSOQvLe3+fq+Fwv51y4m04N1qfRfTUdN5d2gTKsUNEPdQ==
+X-Received: by 2002:a17:907:69b0:b0:730:a1f0:63e7 with SMTP id ra48-20020a17090769b000b00730a1f063e7mr3230736ejc.364.1660868954509;
+        Thu, 18 Aug 2022 17:29:14 -0700 (PDT)
 Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id b26-20020aa7cd1a000000b004460b020ffdsm2027913edw.83.2022.08.18.17.29.11
+        by smtp.gmail.com with ESMTPSA id b26-20020aa7cd1a000000b004460b020ffdsm2027913edw.83.2022.08.18.17.29.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 17:29:12 -0700 (PDT)
+        Thu, 18 Aug 2022 17:29:14 -0700 (PDT)
 From:   Danilo Krummrich <dakr@redhat.com>
 To:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
         mripard@kernel.org
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next 2/3] drm/vc4: plane: protect device resources after removal
-Date:   Fri, 19 Aug 2022 02:29:04 +0200
-Message-Id: <20220819002905.82095-3-dakr@redhat.com>
+Subject: [PATCH drm-misc-next 3/3] drm/vc4: crtc: protect device resources after removal
+Date:   Fri, 19 Aug 2022 02:29:05 +0200
+Message-Id: <20220819002905.82095-4-dakr@redhat.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220819002905.82095-1-dakr@redhat.com>
 References: <20220819002905.82095-1-dakr@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,126 +87,141 @@ hence userspace can still call into the driver.
 Therefore protect the critical sections which are accessing those
 resources with drm_dev_enter() and drm_dev_exit().
 
-Fixes: 9872c7a31921 ("drm/vc4: plane: Switch to drmm_universal_plane_alloc()")
+Fixes: 7cc4214c27cf ("drm/vc4: crtc: Switch to drmm_kzalloc")
 Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 ---
- drivers/gpu/drm/vc4/vc4_drv.h   |  1 +
- drivers/gpu/drm/vc4/vc4_plane.c | 25 +++++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ drivers/gpu/drm/vc4/vc4_crtc.c | 41 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_drv.h b/drivers/gpu/drm/vc4/vc4_drv.h
-index 418a8242691f..80da9a9337cc 100644
---- a/drivers/gpu/drm/vc4/vc4_drv.h
-+++ b/drivers/gpu/drm/vc4/vc4_drv.h
-@@ -341,6 +341,7 @@ struct vc4_hvs {
- 
- struct vc4_plane {
- 	struct drm_plane base;
-+	struct drm_device *dev;
- };
- 
- static inline struct vc4_plane *
-diff --git a/drivers/gpu/drm/vc4/vc4_plane.c b/drivers/gpu/drm/vc4/vc4_plane.c
-index eff9c63adfa7..cb13bb583546 100644
---- a/drivers/gpu/drm/vc4/vc4_plane.c
-+++ b/drivers/gpu/drm/vc4/vc4_plane.c
-@@ -19,6 +19,7 @@
- #include <drm/drm_atomic_helper.h>
+diff --git a/drivers/gpu/drm/vc4/vc4_crtc.c b/drivers/gpu/drm/vc4/vc4_crtc.c
+index 2def6e2ad6f0..51daf190196e 100644
+--- a/drivers/gpu/drm/vc4/vc4_crtc.c
++++ b/drivers/gpu/drm/vc4/vc4_crtc.c
+@@ -39,6 +39,7 @@
  #include <drm/drm_atomic_uapi.h>
- #include <drm/drm_blend.h>
-+#include <drm/drm_drv.h>
  #include <drm/drm_fb_dma_helper.h>
- #include <drm/drm_fourcc.h>
  #include <drm/drm_framebuffer.h>
-@@ -1218,14 +1219,22 @@ static void vc4_plane_atomic_update(struct drm_plane *plane,
- u32 vc4_plane_write_dlist(struct drm_plane *plane, u32 __iomem *dlist)
++#include <drm/drm_drv.h>
+ #include <drm/drm_print.h>
+ #include <drm/drm_probe_helper.h>
+ #include <drm/drm_vblank.h>
+@@ -295,10 +296,17 @@ struct drm_encoder *vc4_get_crtc_encoder(struct drm_crtc *crtc,
+ static void vc4_crtc_pixelvalve_reset(struct drm_crtc *crtc)
  {
- 	struct vc4_plane_state *vc4_state = to_vc4_plane_state(plane->state);
-+	struct vc4_plane *vc4_plane = to_vc4_plane(plane);
- 	int i;
+ 	struct vc4_crtc *vc4_crtc = to_vc4_crtc(crtc);
++	struct drm_device *dev = crtc->dev;
 +	int idx;
- 
- 	vc4_state->hw_dlist = dlist;
- 
-+	if (!drm_dev_enter(vc4_plane->dev, &idx))
-+		goto out;
 +
- 	/* Can't memcpy_toio() because it needs to be 32-bit writes. */
- 	for (i = 0; i < vc4_state->dlist_count; i++)
- 		writel(vc4_state->dlist[i], &dlist[i]);
- 
-+	drm_dev_exit(idx);
-+
-+out:
- 	return vc4_state->dlist_count;
- }
- 
-@@ -1243,8 +1252,10 @@ u32 vc4_plane_dlist_size(const struct drm_plane_state *state)
- void vc4_plane_async_set_fb(struct drm_plane *plane, struct drm_framebuffer *fb)
- {
- 	struct vc4_plane_state *vc4_state = to_vc4_plane_state(plane->state);
-+	struct vc4_plane *vc4_plane = to_vc4_plane(plane);
- 	struct drm_gem_dma_object *bo = drm_fb_dma_get_gem_obj(fb, 0);
- 	uint32_t addr;
-+	int idx;
- 
- 	/* We're skipping the address adjustment for negative origin,
- 	 * because this is only called on the primary plane.
-@@ -1252,12 +1263,17 @@ void vc4_plane_async_set_fb(struct drm_plane *plane, struct drm_framebuffer *fb)
- 	WARN_ON_ONCE(plane->state->crtc_x < 0 || plane->state->crtc_y < 0);
- 	addr = bo->dma_addr + fb->offsets[0];
- 
-+	if (!drm_dev_enter(vc4_plane->dev, &idx))
++	if (!drm_dev_enter(dev, &idx))
 +		return;
-+
- 	/* Write the new address into the hardware immediately.  The
- 	 * scanout will start from this address as soon as the FIFO
- 	 * needs to refill with pixels.
- 	 */
- 	writel(addr, &vc4_state->hw_dlist[vc4_state->ptr0_offset]);
  
-+	drm_dev_exit(idx);
-+
- 	/* Also update the CPU-side dlist copy, so that any later
- 	 * atomic updates that don't do a new modeset on our plane
- 	 * also use our updated address.
-@@ -1271,6 +1287,8 @@ static void vc4_plane_atomic_async_update(struct drm_plane *plane,
- 	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(state,
- 										 plane);
- 	struct vc4_plane_state *vc4_state, *new_vc4_state;
-+	struct vc4_plane *vc4_plane = to_vc4_plane(plane);
-+	int idx;
- 
- 	swap(plane->state->fb, new_plane_state->fb);
- 	plane->state->crtc_x = new_plane_state->crtc_x;
-@@ -1323,6 +1341,9 @@ static void vc4_plane_atomic_async_update(struct drm_plane *plane,
- 	vc4_state->dlist[vc4_state->ptr0_offset] =
- 		new_vc4_state->dlist[vc4_state->ptr0_offset];
- 
-+	if (!drm_dev_enter(vc4_plane->dev, &idx))
-+		return;
-+
- 	/* Note that we can't just call vc4_plane_write_dlist()
- 	 * because that would smash the context data that the HVS is
- 	 * currently using.
-@@ -1333,6 +1354,8 @@ static void vc4_plane_atomic_async_update(struct drm_plane *plane,
- 	       &vc4_state->hw_dlist[vc4_state->pos2_offset]);
- 	writel(vc4_state->dlist[vc4_state->ptr0_offset],
- 	       &vc4_state->hw_dlist[vc4_state->ptr0_offset]);
+ 	/* The PV needs to be disabled before it can be flushed */
+ 	CRTC_WRITE(PV_CONTROL, CRTC_READ(PV_CONTROL) & ~PV_CONTROL_EN);
+ 	CRTC_WRITE(PV_CONTROL, CRTC_READ(PV_CONTROL) | PV_CONTROL_FIFO_CLR);
 +
 +	drm_dev_exit(idx);
  }
  
- static int vc4_plane_atomic_async_check(struct drm_plane *plane,
-@@ -1521,6 +1544,8 @@ struct drm_plane *vc4_plane_init(struct drm_device *dev,
- 					       modifiers, type, NULL);
- 	if (IS_ERR(vc4_plane))
- 		return ERR_CAST(vc4_plane);
+ static void vc4_crtc_config_pv(struct drm_crtc *crtc, struct drm_encoder *encoder,
+@@ -321,6 +329,10 @@ static void vc4_crtc_config_pv(struct drm_crtc *crtc, struct drm_encoder *encode
+ 	u32 format = is_dsi1 ? PV_CONTROL_FORMAT_DSIV_24 : PV_CONTROL_FORMAT_24;
+ 	u8 ppc = pv_data->pixels_per_clock;
+ 	bool debug_dump_regs = false;
++	int idx;
 +
-+	vc4_plane->dev = dev;
- 	plane = &vc4_plane->base;
++	if (!drm_dev_enter(dev, &idx))
++		return;
  
- 	if (vc4->is_vc5)
+ 	if (debug_dump_regs) {
+ 		struct drm_printer p = drm_info_printer(&vc4_crtc->pdev->dev);
+@@ -410,6 +422,8 @@ static void vc4_crtc_config_pv(struct drm_crtc *crtc, struct drm_encoder *encode
+ 			 drm_crtc_index(crtc));
+ 		drm_print_regset32(&p, &vc4_crtc->regset);
+ 	}
++
++	drm_dev_exit(idx);
+ }
+ 
+ static void require_hvs_enabled(struct drm_device *dev)
+@@ -430,13 +444,18 @@ static int vc4_crtc_disable(struct drm_crtc *crtc,
+ 	struct vc4_crtc *vc4_crtc = to_vc4_crtc(crtc);
+ 	struct drm_device *dev = crtc->dev;
+ 	struct vc4_dev *vc4 = to_vc4_dev(dev);
+-	int ret;
++	int idx, ret;
++
++	if (!drm_dev_enter(dev, &idx))
++		return -ENODEV;
+ 
+ 	CRTC_WRITE(PV_V_CONTROL,
+ 		   CRTC_READ(PV_V_CONTROL) & ~PV_VCONTROL_VIDEN);
+ 	ret = wait_for(!(CRTC_READ(PV_V_CONTROL) & PV_VCONTROL_VIDEN), 1);
+ 	WARN_ONCE(ret, "Timeout waiting for !PV_VCONTROL_VIDEN\n");
+ 
++	drm_dev_exit(idx);
++
+ 	/*
+ 	 * This delay is needed to avoid to get a pixel stuck in an
+ 	 * unflushable FIFO between the pixelvalve and the HDMI
+@@ -588,6 +607,7 @@ static void vc4_crtc_atomic_enable(struct drm_crtc *crtc,
+ 	struct vc4_crtc *vc4_crtc = to_vc4_crtc(crtc);
+ 	struct drm_encoder *encoder = vc4_get_crtc_encoder(crtc, new_state);
+ 	struct vc4_encoder *vc4_encoder = to_vc4_encoder(encoder);
++	int idx;
+ 
+ 	drm_dbg(dev, "Enabling CRTC %s (%u) connected to Encoder %s (%u)",
+ 		crtc->name, crtc->base.id, encoder->name, encoder->base.id);
+@@ -606,6 +626,9 @@ static void vc4_crtc_atomic_enable(struct drm_crtc *crtc,
+ 
+ 	vc4_crtc_config_pv(crtc, encoder, state);
+ 
++	if (!drm_dev_enter(dev, &idx))
++		return;
++
+ 	CRTC_WRITE(PV_CONTROL, CRTC_READ(PV_CONTROL) | PV_CONTROL_EN);
+ 
+ 	if (vc4_encoder->pre_crtc_enable)
+@@ -617,6 +640,8 @@ static void vc4_crtc_atomic_enable(struct drm_crtc *crtc,
+ 	CRTC_WRITE(PV_V_CONTROL,
+ 		   CRTC_READ(PV_V_CONTROL) | PV_VCONTROL_VIDEN);
+ 
++	drm_dev_exit(idx);
++
+ 	if (vc4_encoder->post_crtc_enable)
+ 		vc4_encoder->post_crtc_enable(encoder, state);
+ }
+@@ -711,17 +736,31 @@ static int vc4_crtc_atomic_check(struct drm_crtc *crtc,
+ static int vc4_enable_vblank(struct drm_crtc *crtc)
+ {
+ 	struct vc4_crtc *vc4_crtc = to_vc4_crtc(crtc);
++	struct drm_device *dev = crtc->dev;
++	int idx;
++
++	if (!drm_dev_enter(dev, &idx))
++		return -ENODEV;
+ 
+ 	CRTC_WRITE(PV_INTEN, PV_INT_VFP_START);
+ 
++	drm_dev_exit(idx);
++
+ 	return 0;
+ }
+ 
+ static void vc4_disable_vblank(struct drm_crtc *crtc)
+ {
+ 	struct vc4_crtc *vc4_crtc = to_vc4_crtc(crtc);
++	struct drm_device *dev = crtc->dev;
++	int idx;
++
++	if (!drm_dev_enter(dev, &idx))
++		return;
+ 
+ 	CRTC_WRITE(PV_INTEN, 0);
++
++	drm_dev_exit(idx);
+ }
+ 
+ static void vc4_crtc_handle_page_flip(struct vc4_crtc *vc4_crtc)
 -- 
 2.37.2
 

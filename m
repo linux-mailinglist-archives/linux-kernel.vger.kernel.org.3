@@ -2,80 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F5659A3DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA10459A49C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351382AbiHSRsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 13:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
+        id S1350102AbiHSRxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 13:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352097AbiHSRr4 (ORCPT
+        with ESMTP id S1352000AbiHSRww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 13:47:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CABB2844;
-        Fri, 19 Aug 2022 10:15:04 -0700 (PDT)
+        Fri, 19 Aug 2022 13:52:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842D847B99
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:28:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8F84617D7;
-        Fri, 19 Aug 2022 17:15:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C463DC433C1;
-        Fri, 19 Aug 2022 17:15:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660929303;
-        bh=YMX+KaIq1TQ+gLn7mH2jPjTivQfw0jkmJhCSzBgZXaw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oF5gRvBjJBHYMHiArma6zy/FxKEx6nu09qgf2RhpCWCP8UTRls+hXdEWDjDQAPid9
-         hcL8S7EmfKPxvNKF4gFFrvDbldYGrBOVe3fRHFOfbACn2zTqIt6GItapqvHioOAgc1
-         Re4tGl3mypmeOXNWYnqa91HFzxi3ZrF5yK22VDFqR+a2jKbyesWeIhgxvlsQvF5vtK
-         1wBnC+LqN0RFtRW4xwt6+fdXQIs0+uIIr62K7Ve482jSpNSf5YUS4gA/dmd98BQ/s2
-         bxq9CeL7iDllZoWXJFyxJOrEaxgGOPk5zYtvDwcKTakrETK37a+nMRKiD52FSJKTuO
-         m1h4unFnJdtHQ==
-Date:   Fri, 19 Aug 2022 18:25:39 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH] iio: move from strlcpy with unused retval to strscpy
-Message-ID: <20220819182539.44de60c8@jic23-huawei>
-In-Reply-To: <CAHp75Ve+xuqRAiRO=7wQBBmjKm9P-_iEiHWt23E7c82RcFutVA@mail.gmail.com>
-References: <20220818210017.6817-1-wsa+renesas@sang-engineering.com>
-        <CAHp75Ve+xuqRAiRO=7wQBBmjKm9P-_iEiHWt23E7c82RcFutVA@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2096A61825
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 17:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6027EC433D6;
+        Fri, 19 Aug 2022 17:28:00 +0000 (UTC)
+Date:   Fri, 19 Aug 2022 13:28:12 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <jpoimboe@kernel.org>,
+        <peterz@infradead.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>
+Subject: Re: [PATCH v2] x86/unwind/orc: unwind ftrace trampolines with
+ correct orc
+Message-ID: <20220819132812.391619d2@gandalf.local.home>
+In-Reply-To: <20220819084334.244016-1-chenzhongjin@huawei.com>
+References: <20220819084334.244016-1-chenzhongjin@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 11:07:56 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+On Fri, 19 Aug 2022 16:43:34 +0800
+Chen Zhongjin <chenzhongjin@huawei.com> wrote:
 
-> On Fri, Aug 19, 2022 at 12:02 AM Wolfram Sang
-> <wsa+renesas@sang-engineering.com> wrote:
-> >
-> > Follow the advice of the below link and prefer 'strscpy' in this
-> > subsystem. Conversion is 1:1 because the return value is not used.
-> > Generated by a coccinelle script.  
+> When meeting ftrace trampolines in orc unwinding, unwinder uses address
+> of ftrace_{regs_}call address to find the orc, which gets next frame at
+> sp+176.
 > 
-> Same comments as per similar patch you submit to PDx86.
+> If there is an irq hitting at sub $0xa8,%rsp, the next frame should be
+> sp+8 instead of 176. It makes unwinder skip correct frame and throw
+> warnings such as "wrong direction" or "can't access registers", etc,
+> depending on the content of the wrong frame address.
 > 
+> By adding the base address ftrace_{regs_}caller with the offset
+> *ip - ops->trampoline*,
+> we can get the correct address to find orc.
+> 
+> Also change "caller" to "tramp_addr" to make variable name conform to
+> its content.
+> 
+> Fixes: 6be7fa3c74d1 ("ftrace, orc, x86: Handle ftrace dynamically allocated trampolines")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 
-Given it was an easy split, I've turned this into two patches
-and applied those to the togreg branch of iio.git - initially pushed
-out as testing for 0-day to poke at it.
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Thanks,
+Would someone from the tip tree care to pull this in?
 
-Jonathan
-
+-- Steve

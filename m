@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51610599347
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 05:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5E1599341
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 05:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241716AbiHSCzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 22:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
+        id S1345260AbiHSC6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 22:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344900AbiHSCzN (ORCPT
+        with ESMTP id S1344655AbiHSC6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 22:55:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C85BD39B4;
-        Thu, 18 Aug 2022 19:55:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F59B6149F;
-        Fri, 19 Aug 2022 02:55:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D25A2C433C1;
-        Fri, 19 Aug 2022 02:55:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660877712;
-        bh=+m/z9t7difm+T7Kf5VxuNeNPtaHK+1MlGIRm7crGn/M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b/KIBp6hGb/CV7ctjyoNlVNQctbDKqvWvOycBri2jc8hs9jUBTknd3RUQZctSwBLL
-         yxSkFw0wSgftsks4Jezn7Vkx/H3bXALoSoIeBckdBjW9MMbGpWsWOjeRdf7u3z5SIU
-         i6JkQUV3k0hBw1x10fSsb1DSNVGOVd6XnafE0lln8m68gdOiySWihoy1hal61YTPhL
-         JVx1X0kgAnAr3Q3mh1rJwygcyxhoEyqMe//CRj+Au8ixgPCs3/lUYs5fY4Aaj3qp6R
-         Y2aOOyquD6emEJypZunLgSQEEWmPr8Rt85PLL1Hrtdg4QeqLhKpPq/SjH/8sWci13v
-         zeg/00VCA9i0Q==
-From:   guoren@kernel.org
-To:     xianting.tian@linux.alibaba.com, palmer@dabbelt.com,
-        heiko@sntech.de, guoren@kernel.org, conor.dooley@microchip.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, liaochang1@huawei.com,
-        mick@ics.forth.gr, jszhang@kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>, x86@kernel.org
-Subject: [PATCH V3 3/3] arch: crash: Remove duplicate declaration in smp.h
-Date:   Thu, 18 Aug 2022 22:54:44 -0400
-Message-Id: <20220819025444.2121315-4-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220819025444.2121315-1-guoren@kernel.org>
-References: <20220819025444.2121315-1-guoren@kernel.org>
+        Thu, 18 Aug 2022 22:58:34 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3C633406
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:58:30 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M85vs02bQz1N7RY;
+        Fri, 19 Aug 2022 10:55:05 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 19 Aug 2022 10:58:27 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.174) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 19 Aug 2022 10:58:26 +0800
+From:   Li Huafei <lihuafei1@huawei.com>
+To:     <guoren@kernel.org>, <mhiramat@kernel.org>, <palmer@dabbelt.com>
+CC:     <rostedt@goodmis.org>, <mingo@redhat.com>,
+        <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
+        <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
+        <davem@davemloft.net>, <jszhang@kernel.org>,
+        <peterz@infradead.org>, <liaochang1@huawei.com>, <me@packi.ch>,
+        <penberg@kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 1/2] riscv: ftrace: Fix the comments about the number of ftrace instruction
+Date:   Fri, 19 Aug 2022 10:55:21 +0800
+Message-ID: <20220819025522.154189-1-lihuafei1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.174]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,45 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+When DYNAMIC_FTRACE is enabled, we put 8 16-bit instructions in front of
+the function for ftrace use, not 5.
 
-Remove crash_smp_send_stop declarations in arm64, x86 asm/smp.h which
-has been done in include/linux/smp.h.
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: x86@kernel.org
+Fixes: afc76b8b8011 ("riscv: Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")
+Suggested-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 ---
- arch/arm64/include/asm/smp.h | 1 -
- arch/x86/include/asm/crash.h | 1 -
- 2 files changed, 2 deletions(-)
+v1: https://lore.kernel.org/lkml/20220426015751.88582-1-lihuafei1@huawei.com/
 
-diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
-index fc55f5a57a06..a108ac93fd8f 100644
---- a/arch/arm64/include/asm/smp.h
-+++ b/arch/arm64/include/asm/smp.h
-@@ -141,7 +141,6 @@ static inline void cpu_panic_kernel(void)
-  */
- bool cpus_are_stuck_in_kernel(void);
+Changlog in v1 -> v2:
+ - Add the fix tag.
+ - Delete the expression "4 instructions".
+
+ arch/riscv/kernel/ftrace.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+index 2086f6585773..552088e9acc4 100644
+--- a/arch/riscv/kernel/ftrace.c
++++ b/arch/riscv/kernel/ftrace.c
+@@ -71,8 +71,8 @@ static int __ftrace_modify_call(unsigned long hook_pos, unsigned long target,
+ }
  
--extern void crash_smp_send_stop(void);
- extern bool smp_crash_stop_failed(void);
- extern void panic_smp_self_stop(void);
- 
-diff --git a/arch/x86/include/asm/crash.h b/arch/x86/include/asm/crash.h
-index 8b6bd63530dc..6a9be4907c82 100644
---- a/arch/x86/include/asm/crash.h
-+++ b/arch/x86/include/asm/crash.h
-@@ -7,6 +7,5 @@ struct kimage;
- int crash_load_segments(struct kimage *image);
- int crash_setup_memmap_entries(struct kimage *image,
- 		struct boot_params *params);
--void crash_smp_send_stop(void);
- 
- #endif /* _ASM_X86_CRASH_H */
+ /*
+- * Put 5 instructions with 16 bytes at the front of function within
+- * patchable function entry nops' area.
++ * Put 16 bytes at the front of the function within the patchable function
++ * entry nops' area.
+  *
+  * 0: REG_S  ra, -SZREG(sp)
+  * 1: auipc  ra, 0x?
 -- 
-2.36.1
+2.17.1
 

@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620C15991D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 02:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DC15991CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 02:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244968AbiHSAhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 20:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        id S238384AbiHSAhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 20:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243317AbiHSAgw (ORCPT
+        with ESMTP id S244397AbiHSAg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 20:36:52 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F47D758B;
-        Thu, 18 Aug 2022 17:36:51 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c2so2862008plo.3;
-        Thu, 18 Aug 2022 17:36:51 -0700 (PDT)
+        Thu, 18 Aug 2022 20:36:59 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFD1DEA57;
+        Thu, 18 Aug 2022 17:36:52 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id s31-20020a17090a2f2200b001faaf9d92easo6143144pjd.3;
+        Thu, 18 Aug 2022 17:36:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc;
-        bh=aFH5O6viJ6NTA25wi2Aiw0FQRIeUfCBP+ZrmMXU/R8U=;
-        b=UTqo95W5sFEGm/9q+KSY2LR4JqUs07dpgbh7hpFuDmbzAKCMEs4XwEgeQHpDeeUCoT
-         n00p/IQBTIJKG2YDW+8/Qc9ZPGPF9nL3T3zGalSEmPX+k6j6S94heO8kAAVxjmiJQpDk
-         25rugz+4wWjqfQ/zduySx69w+eDJLsYiFuBYnIw4fHZyuwRMiQ3TWvKDY9UAnal0AOO4
-         026Xo9Fn4pypDWO6GIUiHgpSmTY5yqN0Lbb66+FPPoRFobHIU2PqQfZNXBJLpZlGhUj3
-         8T/yb1ivSlbSrm4q7NiAPMRbImf1wHiwC1ETjzDk00jmepT4Pqu1CjrcuS1qd7ilEia/
-         SZeQ==
+        bh=04mrbdeAlasHwvT3Fh9Z1ZRe3mssxYDaUL9Qw3iJ218=;
+        b=W67ugkdGRf0QFsI7qCuz7kAaniBXo08JQsE+T0990WjQpCPoatY6g6RzcvXEevKV8e
+         m5Kow55avUG2gvSP+t0M3O+IGDfrp+WRJ4UkHB/08Z5/LAysqR0MXnck/BPfB6IaADJi
+         ByCud6oazyltIyfKQpCojCeF0/26OUvHqd92Q2MCk0wcRWP1czUuof2jH2UwhBRteomK
+         rMU1ysaPIk2enyeM9yXo5JTG6y9wUNjeCRM7dv1bw/NQ2BXf2Qju73TaVUcdY0jJjqcj
+         c/3gikL8w8Y0+Y/1nS2aoA0pLcIAD77jCYpnCxwElId+sd7nebL0A4B7UOXZ0wm/AwX5
+         Ybaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc;
-        bh=aFH5O6viJ6NTA25wi2Aiw0FQRIeUfCBP+ZrmMXU/R8U=;
-        b=v7p6iJIMEJ+wu+eaVnPHBGOCccjAClZWG7AMkokhInbMXjAWVLH91O0W5wI1ZgiJko
-         GQXQDeETc7K1qSLzFnfnYw27Z5blKckb793khOJII+miNXJsKTHm55gGH0ubiL6zIskU
-         1YYGnDSJY63Z8acl3fgKh+nmhp8W+TFin/GS0Bt3noofR0fmkPnnlcDZrlOdhR6DtP22
-         Z8mN1UvFHArkCUcLxOHWyHVNUdAcRZFI4Iof1UDzvJ8hFinEPpwbWLs72dTc8IHBS91W
-         eri9YpnuD+iwJzXSedsTNOIJEjpdZph8SuMpHQI+QfEJnMDrhtTSI5e8VrNZTYEvCvd2
-         rXDg==
-X-Gm-Message-State: ACgBeo2JuP/a8zmcxe/E+PCKA8w1QKd1kG9sFHsxO1sLQK2Ve382PpeQ
-        +YKQCrFDZE9rZ7JGs3TAG9g=
-X-Google-Smtp-Source: AA6agR4vJY63i3QMAtr3pWndk1kgYzx6VfMmP1iLYxbkheNdQijcOndbFavj+1bYsuUFJbYiw6BelA==
-X-Received: by 2002:a17:903:1c7:b0:16f:1228:f632 with SMTP id e7-20020a17090301c700b0016f1228f632mr4968982plh.65.1660869410452;
-        Thu, 18 Aug 2022 17:36:50 -0700 (PDT)
+        bh=04mrbdeAlasHwvT3Fh9Z1ZRe3mssxYDaUL9Qw3iJ218=;
+        b=LZTbAFegImgoXi8PUg1XVbfVcdD0Tc9yc3tRLABE9tA2Dh13l2Dj0WG12AzjCAKxiI
+         QGbGKXUutue+6TY3CO0NCC5Lk71/IewVmpHgv3lqHzZBHKS8+p4xn9v5zVk9wK0UZUai
+         NgO0RUIPAGflprGeMZkjvFF49gRot/Ha5Xx9utsuJPqJckAdSYM7ShtuIZIu5ioQmi8J
+         dcGCus7fbinnvTbGCy3VL8fbxeVNzlR2gKYpgqBCDHE9DOFKylsB1WNhIZTjq1LQ8bFt
+         sL4C4DC9aghXQy1LDF5skYgKTnmYqgnlhfqmZYXIYWbmXSD6H0lIAjIHfm/uQ/it+68n
+         eG5w==
+X-Gm-Message-State: ACgBeo2iDSF7r03oRrHiQWuhxVR0pmXUMAEiUAsvkMMtLPLXC5MJLkdu
+        3Ece7cijA/bijIcSLKz2N4sJhABKTEXiyg==
+X-Google-Smtp-Source: AA6agR6hBL12ERR9NACDSfitNt3h81d91kkilJsGr0aC9QzGPirXScD1LcBdrOpJq5wcZDhIlYk3Ng==
+X-Received: by 2002:a17:902:ba96:b0:170:9f15:b997 with SMTP id k22-20020a170902ba9600b001709f15b997mr4693786pls.34.1660869411608;
+        Thu, 18 Aug 2022 17:36:51 -0700 (PDT)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:1040:436c:3fa9:2b77:a856])
-        by smtp.gmail.com with ESMTPSA id e5-20020a17090a4a0500b001f303d149casm2057567pjh.50.2022.08.18.17.36.49
+        by smtp.gmail.com with ESMTPSA id e5-20020a17090a4a0500b001f303d149casm2057567pjh.50.2022.08.18.17.36.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 17:36:49 -0700 (PDT)
+        Thu, 18 Aug 2022 17:36:51 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -58,9 +58,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Ian Rogers <irogers@google.com>,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH 3/4] tools lib perf: Add a test case for read formats
-Date:   Thu, 18 Aug 2022 17:36:43 -0700
-Message-Id: <20220819003644.508916-4-namhyung@kernel.org>
+Subject: [PATCH 4/4] perf tools: Support reading PERF_FORMAT_LOST
+Date:   Thu, 18 Aug 2022 17:36:44 -0700
+Message-Id: <20220819003644.508916-5-namhyung@kernel.org>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
 In-Reply-To: <20220819003644.508916-1-namhyung@kernel.org>
 References: <20220819003644.508916-1-namhyung@kernel.org>
@@ -77,206 +77,380 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It checks a various combination of the read format settings and verify
-it return the value in a proper position.  The test uses task-clock
-software events to guarantee it's always active and sets enabled/running
-time.
+The recent kernel added lost count can be read from either read(2) or
+ring buffer data with PERF_SAMPLE_READ.  As it's a variable length data
+we need to access it according to the format info.
+
+But for perf tools use cases, PERF_FORMAT_ID is always set.  So we can
+only check PERF_FORMAT_LOST bit to determine the data format.
+
+Add sample_read_value_size() and next_sample_read_value() helpers to
+make it a bit easier to access.  Use them in all places where it reads
+the struct sample_read_value.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/lib/perf/tests/test-evsel.c | 161 ++++++++++++++++++++++++++++++
- 1 file changed, 161 insertions(+)
+ tools/perf/tests/sample-parsing.c             | 14 +++++---
+ tools/perf/util/event.h                       | 21 ++++++++++-
+ tools/perf/util/evsel.c                       | 29 +++++++++------
+ .../scripting-engines/trace-event-python.c    | 19 +++++++---
+ tools/perf/util/session.c                     | 35 +++++++++++--------
+ tools/perf/util/synthetic-events.c            | 32 +++++++++++++----
+ 6 files changed, 108 insertions(+), 42 deletions(-)
 
-diff --git a/tools/lib/perf/tests/test-evsel.c b/tools/lib/perf/tests/test-evsel.c
-index 89be89afb24d..a11fc51bfb68 100644
---- a/tools/lib/perf/tests/test-evsel.c
-+++ b/tools/lib/perf/tests/test-evsel.c
-@@ -1,10 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <stdarg.h>
- #include <stdio.h>
-+#include <string.h>
- #include <linux/perf_event.h>
-+#include <linux/kernel.h>
- #include <perf/cpumap.h>
- #include <perf/threadmap.h>
- #include <perf/evsel.h>
-+#include <internal/evsel.h>
- #include <internal/tests.h>
- #include "tests.h"
+diff --git a/tools/perf/tests/sample-parsing.c b/tools/perf/tests/sample-parsing.c
+index 07f2411b0ad4..20930dd48ee0 100644
+--- a/tools/perf/tests/sample-parsing.c
++++ b/tools/perf/tests/sample-parsing.c
+@@ -86,10 +86,15 @@ static bool samples_same(const struct perf_sample *s1,
+ 			COMP(read.time_running);
+ 		/* PERF_FORMAT_ID is forced for PERF_SAMPLE_READ */
+ 		if (read_format & PERF_FORMAT_GROUP) {
+-			for (i = 0; i < s1->read.group.nr; i++)
+-				MCOMP(read.group.values[i]);
++			for (i = 0; i < s1->read.group.nr; i++) {
++				/* FIXME: check values without LOST */
++				if (read_format & PERF_FORMAT_LOST)
++					MCOMP(read.group.values[i]);
++			}
+ 		} else {
+ 			COMP(read.one.id);
++			if (read_format & PERF_FORMAT_LOST)
++				COMP(read.one.lost);
+ 		}
+ 	}
  
-@@ -189,6 +192,163 @@ static int test_stat_user_read(int event)
- 	return 0;
+@@ -263,7 +268,7 @@ static int do_test(u64 sample_type, u64 sample_regs, u64 read_format)
+ 			.data	= (void *)aux_data,
+ 		},
+ 	};
+-	struct sample_read_value values[] = {{1, 5}, {9, 3}, {2, 7}, {6, 4},};
++	struct sample_read_value values[] = {{1, 5, 0}, {9, 3, 0}, {2, 7, 0}, {6, 4, 1},};
+ 	struct perf_sample sample_out, sample_out_endian;
+ 	size_t i, sz, bufsz;
+ 	int err, ret = -1;
+@@ -286,6 +291,7 @@ static int do_test(u64 sample_type, u64 sample_regs, u64 read_format)
+ 	} else {
+ 		sample.read.one.value = 0x08789faeb786aa87ULL;
+ 		sample.read.one.id    = 99;
++		sample.read.one.lost  = 1;
+ 	}
+ 
+ 	sz = perf_event__sample_event_size(&sample, sample_type, read_format);
+@@ -370,7 +376,7 @@ static int do_test(u64 sample_type, u64 sample_regs, u64 read_format)
+  */
+ static int test__sample_parsing(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+ {
+-	const u64 rf[] = {4, 5, 6, 7, 12, 13, 14, 15};
++	const u64 rf[] = {4, 5, 6, 7, 12, 13, 14, 15, 20, 21, 22, 28, 29, 30, 31};
+ 	u64 sample_type;
+ 	u64 sample_regs;
+ 	size_t i;
+diff --git a/tools/perf/util/event.h b/tools/perf/util/event.h
+index a7b0931d5137..058d07923f04 100644
+--- a/tools/perf/util/event.h
++++ b/tools/perf/util/event.h
+@@ -65,7 +65,8 @@ struct stack_dump {
+ 
+ struct sample_read_value {
+ 	u64 value;
+-	u64 id;
++	u64 id;   /* only if PERF_FORMAT_ID */
++	u64 lost; /* only if PERF_FORMAT_LOST */
+ };
+ 
+ struct sample_read {
+@@ -80,6 +81,24 @@ struct sample_read {
+ 	};
+ };
+ 
++static inline size_t sample_read_value_size(u64 read_format)
++{
++	/* PERF_FORMAT_ID is forced for PERF_SAMPLE_READ */
++	if (read_format & PERF_FORMAT_LOST)
++		return sizeof(struct sample_read_value);
++	else
++		return offsetof(struct sample_read_value, lost);
++}
++
++static inline struct sample_read_value *
++next_sample_read_value(struct sample_read_value *v, u64 read_format)
++{
++	return (void *)v + sample_read_value_size(read_format);
++}
++
++#define sample_read_group__for_each(v, nr, rf)		\
++	for (int __i = 0; __i < (int)nr; v = next_sample_read_value(v, rf), __i++)
++
+ struct ip_callchain {
+ 	u64 nr;
+ 	u64 ips[];
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 4852089e1d79..18c3eb864d55 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -1541,7 +1541,7 @@ static int evsel__read_one(struct evsel *evsel, int cpu_map_idx, int thread)
  }
  
-+static int test_stat_read_format_single(struct perf_event_attr *attr, struct perf_thread_map *threads)
-+{
-+	struct perf_evsel *evsel;
-+	struct perf_counts_values counts;
-+	volatile int count = 0x100000;
-+	int err;
-+
-+	evsel = perf_evsel__new(attr);
-+	__T("failed to create evsel", evsel);
-+
-+	/* skip old kernels that don't support the format */
-+	err = perf_evsel__open(evsel, NULL, threads);
-+	if (err < 0)
-+		return 0;
-+
-+	while (count--) ;
-+
-+	memset(&counts, -1, sizeof(counts));
-+	perf_evsel__read(evsel, 0, 0, &counts);
-+
-+	__T("failed to read value", counts.val);
-+	if (attr->read_format & PERF_FORMAT_TOTAL_TIME_ENABLED)
-+		__T("failed to read TOTAL_TIME_ENABLED", counts.ena);
-+	if (attr->read_format & PERF_FORMAT_TOTAL_TIME_RUNNING)
-+		__T("failed to read TOTAL_TIME_RUNNING", counts.run);
-+	if (attr->read_format & PERF_FORMAT_ID)
-+		__T("failed to read ID", counts.id);
-+	if (attr->read_format & PERF_FORMAT_LOST)
-+		__T("failed to read LOST", counts.lost == 0);
-+
-+	perf_evsel__close(evsel);
-+	perf_evsel__delete(evsel);
-+	return 0;
-+}
-+
-+static int test_stat_read_format_group(struct perf_event_attr *attr, struct perf_thread_map *threads)
-+{
-+	struct perf_evsel *leader, *member;
-+	struct perf_counts_values counts;
-+	volatile int count = 0x100000;
-+	int err;
-+
-+	attr->read_format |= PERF_FORMAT_GROUP;
-+	leader = perf_evsel__new(attr);
-+	__T("failed to create leader", leader);
-+
-+	attr->read_format &= ~PERF_FORMAT_GROUP;
-+	member = perf_evsel__new(attr);
-+	__T("failed to create member", member);
-+
-+	member->leader = leader;
-+	leader->nr_members = 2;
-+
-+	/* skip old kernels that don't support the format */
-+	err = perf_evsel__open(leader, NULL, threads);
-+	if (err < 0)
-+		return 0;
-+	err = perf_evsel__open(member, NULL, threads);
-+	if (err < 0)
-+		return 0;
-+
-+	while (count--) ;
-+
-+	memset(&counts, -1, sizeof(counts));
-+	perf_evsel__read(leader, 0, 0, &counts);
-+
-+	__T("failed to read leader value", counts.val);
-+	if (attr->read_format & PERF_FORMAT_TOTAL_TIME_ENABLED)
-+		__T("failed to read leader TOTAL_TIME_ENABLED", counts.ena);
-+	if (attr->read_format & PERF_FORMAT_TOTAL_TIME_RUNNING)
-+		__T("failed to read leader TOTAL_TIME_RUNNING", counts.run);
-+	if (attr->read_format & PERF_FORMAT_ID)
-+		__T("failed to read leader ID", counts.id);
-+	if (attr->read_format & PERF_FORMAT_LOST)
-+		__T("failed to read leader LOST", counts.lost == 0);
-+
-+	memset(&counts, -1, sizeof(counts));
-+	perf_evsel__read(member, 0, 0, &counts);
-+
-+	__T("failed to read member value", counts.val);
-+	if (attr->read_format & PERF_FORMAT_TOTAL_TIME_ENABLED)
-+		__T("failed to read member TOTAL_TIME_ENABLED", counts.ena);
-+	if (attr->read_format & PERF_FORMAT_TOTAL_TIME_RUNNING)
-+		__T("failed to read member TOTAL_TIME_RUNNING", counts.run);
-+	if (attr->read_format & PERF_FORMAT_ID)
-+		__T("failed to read member ID", counts.id);
-+	if (attr->read_format & PERF_FORMAT_LOST)
-+		__T("failed to read member LOST", counts.lost == 0);
-+
-+	perf_evsel__close(member);
-+	perf_evsel__close(leader);
-+	perf_evsel__delete(member);
-+	perf_evsel__delete(leader);
-+	return 0;
-+}
-+
-+static int test_stat_read_format(void)
-+{
-+	struct perf_thread_map *threads;
-+	struct perf_event_attr attr = {
-+		.type	= PERF_TYPE_SOFTWARE,
-+		.config	= PERF_COUNT_SW_TASK_CLOCK,
-+	};
-+	int err, i;
-+
-+#define FMT(_fmt)  PERF_FORMAT_ ## _fmt
-+#define FMT_TIME  (FMT(TOTAL_TIME_ENABLED) | FMT(TOTAL_TIME_RUNNING))
-+
-+	uint64_t test_formats [] = {
-+		0,
-+		FMT_TIME,
-+		FMT(ID),
-+		FMT(LOST),
-+		FMT_TIME | FMT(ID),
-+		FMT_TIME | FMT(LOST),
-+		FMT_TIME | FMT(ID) | FMT(LOST),
-+		FMT(ID) | FMT(LOST),
-+	};
-+
-+#undef FMT
-+#undef FMT_TIME
-+
-+	threads = perf_thread_map__new_dummy();
-+	__T("failed to create threads", threads);
-+
-+	perf_thread_map__set_pid(threads, 0, 0);
-+
-+	for (i = 0; i < (int)ARRAY_SIZE(test_formats); i++) {
-+		attr.read_format = test_formats[i];
-+		__T_VERBOSE("testing single read with read_format: %lx\n",
-+			    (unsigned long)test_formats[i]);
-+
-+		err = test_stat_read_format_single(&attr, threads);
-+		__T("failed to read single format", err == 0);
-+	}
-+
-+	perf_thread_map__put(threads);
-+
-+	threads = perf_thread_map__new_array(2, NULL);
-+	__T("failed to create threads", threads);
-+
-+	perf_thread_map__set_pid(threads, 0, 0);
-+	perf_thread_map__set_pid(threads, 1, 0);
-+
-+	for (i = 0; i < (int)ARRAY_SIZE(test_formats); i++) {
-+		attr.read_format = test_formats[i];
-+		__T_VERBOSE("testing group read with read_format: %lx\n",
-+			    (unsigned long)test_formats[i]);
-+
-+		err = test_stat_read_format_group(&attr, threads);
-+		__T("failed to read group format", err == 0);
-+	}
-+
-+	perf_thread_map__put(threads);
-+	return 0;
-+}
-+
- int test_evsel(int argc, char **argv)
+ static void evsel__set_count(struct evsel *counter, int cpu_map_idx, int thread,
+-			     u64 val, u64 ena, u64 run)
++			     u64 val, u64 ena, u64 run, u64 lost)
  {
- 	__T_START;
-@@ -200,6 +360,7 @@ int test_evsel(int argc, char **argv)
- 	test_stat_thread_enable();
- 	test_stat_user_read(PERF_COUNT_HW_INSTRUCTIONS);
- 	test_stat_user_read(PERF_COUNT_HW_CPU_CYCLES);
-+	test_stat_read_format();
+ 	struct perf_counts_values *count;
  
- 	__T_END;
- 	return tests_failed == 0 ? 0 : -1;
+@@ -1550,6 +1550,7 @@ static void evsel__set_count(struct evsel *counter, int cpu_map_idx, int thread,
+ 	count->val    = val;
+ 	count->ena    = ena;
+ 	count->run    = run;
++	count->lost   = lost;
+ 
+ 	perf_counts__set_loaded(counter->counts, cpu_map_idx, thread, true);
+ }
+@@ -1558,7 +1559,7 @@ static int evsel__process_group_data(struct evsel *leader, int cpu_map_idx, int
+ {
+ 	u64 read_format = leader->core.attr.read_format;
+ 	struct sample_read_value *v;
+-	u64 nr, ena = 0, run = 0, i;
++	u64 nr, ena = 0, run = 0, lost = 0;
+ 
+ 	nr = *data++;
+ 
+@@ -1571,18 +1572,18 @@ static int evsel__process_group_data(struct evsel *leader, int cpu_map_idx, int
+ 	if (read_format & PERF_FORMAT_TOTAL_TIME_RUNNING)
+ 		run = *data++;
+ 
+-	v = (struct sample_read_value *) data;
+-
+-	evsel__set_count(leader, cpu_map_idx, thread, v[0].value, ena, run);
+-
+-	for (i = 1; i < nr; i++) {
++	v = (void *)data;
++	sample_read_group__for_each(v, nr, read_format) {
+ 		struct evsel *counter;
+ 
+-		counter = evlist__id2evsel(leader->evlist, v[i].id);
++		counter = evlist__id2evsel(leader->evlist, v->id);
+ 		if (!counter)
+ 			return -EINVAL;
+ 
+-		evsel__set_count(counter, cpu_map_idx, thread, v[i].value, ena, run);
++		if (read_format & PERF_FORMAT_LOST)
++			lost = v->lost;
++
++		evsel__set_count(counter, cpu_map_idx, thread, v->value, ena, run, lost);
+ 	}
+ 
+ 	return 0;
+@@ -2475,8 +2476,8 @@ int evsel__parse_sample(struct evsel *evsel, union perf_event *event,
+ 
+ 			if (data->read.group.nr > max_group_nr)
+ 				return -EFAULT;
+-			sz = data->read.group.nr *
+-			     sizeof(struct sample_read_value);
++
++			sz = data->read.group.nr * sample_read_value_size(read_format);
+ 			OVERFLOW_CHECK(array, sz, max_size);
+ 			data->read.group.values =
+ 					(struct sample_read_value *)array;
+@@ -2485,6 +2486,12 @@ int evsel__parse_sample(struct evsel *evsel, union perf_event *event,
+ 			OVERFLOW_CHECK_u64(array);
+ 			data->read.one.id = *array;
+ 			array++;
++
++			if (read_format & PERF_FORMAT_LOST) {
++				OVERFLOW_CHECK_u64(array);
++				data->read.one.lost = *array;
++				array++;
++			}
+ 		}
+ 	}
+ 
+diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
+index 9ef2406e0ede..1f2040f36d4e 100644
+--- a/tools/perf/util/scripting-engines/trace-event-python.c
++++ b/tools/perf/util/scripting-engines/trace-event-python.c
+@@ -642,15 +642,19 @@ static PyObject *python_process_brstacksym(struct perf_sample *sample,
+ 	return pylist;
+ }
+ 
+-static PyObject *get_sample_value_as_tuple(struct sample_read_value *value)
++static PyObject *get_sample_value_as_tuple(struct sample_read_value *value,
++					   u64 read_format)
+ {
+ 	PyObject *t;
+ 
+-	t = PyTuple_New(2);
++	t = PyTuple_New(3);
+ 	if (!t)
+ 		Py_FatalError("couldn't create Python tuple");
+ 	PyTuple_SetItem(t, 0, PyLong_FromUnsignedLongLong(value->id));
+ 	PyTuple_SetItem(t, 1, PyLong_FromUnsignedLongLong(value->value));
++	if (read_format & PERF_FORMAT_LOST)
++		PyTuple_SetItem(t, 2, PyLong_FromUnsignedLongLong(value->lost));
++
+ 	return t;
+ }
+ 
+@@ -681,12 +685,17 @@ static void set_sample_read_in_dict(PyObject *dict_sample,
+ 		Py_FatalError("couldn't create Python list");
+ 
+ 	if (read_format & PERF_FORMAT_GROUP) {
+-		for (i = 0; i < sample->read.group.nr; i++) {
+-			PyObject *t = get_sample_value_as_tuple(&sample->read.group.values[i]);
++		struct sample_read_value *v = sample->read.group.values;
++
++		i = 0;
++		sample_read_group__for_each(v, sample->read.group.nr, read_format) {
++			PyObject *t = get_sample_value_as_tuple(v, read_format);
+ 			PyList_SET_ITEM(values, i, t);
++			i++;
+ 		}
+ 	} else {
+-		PyObject *t = get_sample_value_as_tuple(&sample->read.one);
++		PyObject *t = get_sample_value_as_tuple(&sample->read.one,
++							read_format);
+ 		PyList_SET_ITEM(values, 0, t);
+ 	}
+ 	pydict_set_item_string_decref(dict_sample, "values", values);
+diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+index 98e16659a149..40a907d95639 100644
+--- a/tools/perf/util/session.c
++++ b/tools/perf/util/session.c
+@@ -1283,21 +1283,25 @@ static void sample_read__printf(struct perf_sample *sample, u64 read_format)
+ 		       sample->read.time_running);
+ 
+ 	if (read_format & PERF_FORMAT_GROUP) {
+-		u64 i;
++		struct sample_read_value *value = sample->read.group.values;
+ 
+ 		printf(".... group nr %" PRIu64 "\n", sample->read.group.nr);
+ 
+-		for (i = 0; i < sample->read.group.nr; i++) {
+-			struct sample_read_value *value;
+-
+-			value = &sample->read.group.values[i];
++		sample_read_group__for_each(value, sample->read.group.nr, read_format) {
+ 			printf("..... id %016" PRIx64
+-			       ", value %016" PRIx64 "\n",
++			       ", value %016" PRIx64,
+ 			       value->id, value->value);
++			if (read_format & PERF_FORMAT_LOST)
++				printf(", lost %" PRIu64, value->lost);
++			printf("\n");
+ 		}
+-	} else
+-		printf("..... id %016" PRIx64 ", value %016" PRIx64 "\n",
++	} else {
++		printf("..... id %016" PRIx64 ", value %016" PRIx64,
+ 			sample->read.one.id, sample->read.one.value);
++		if (read_format & PERF_FORMAT_LOST)
++			printf(", lost %" PRIu64, sample->read.one.lost);
++		printf("\n");
++	}
+ }
+ 
+ static void dump_event(struct evlist *evlist, union perf_event *event,
+@@ -1411,6 +1415,9 @@ static void dump_read(struct evsel *evsel, union perf_event *event)
+ 
+ 	if (read_format & PERF_FORMAT_ID)
+ 		printf("... id           : %" PRI_lu64 "\n", read_event->id);
++
++	if (read_format & PERF_FORMAT_LOST)
++		printf("... lost         : %" PRI_lu64 "\n", read_event->lost);
+ }
+ 
+ static struct machine *machines__find_for_cpumode(struct machines *machines,
+@@ -1479,14 +1486,14 @@ static int deliver_sample_group(struct evlist *evlist,
+ 				struct perf_tool *tool,
+ 				union  perf_event *event,
+ 				struct perf_sample *sample,
+-				struct machine *machine)
++				struct machine *machine,
++				u64 read_format)
+ {
+ 	int ret = -EINVAL;
+-	u64 i;
++	struct sample_read_value *v = sample->read.group.values;
+ 
+-	for (i = 0; i < sample->read.group.nr; i++) {
+-		ret = deliver_sample_value(evlist, tool, event, sample,
+-					   &sample->read.group.values[i],
++	sample_read_group__for_each(v, sample->read.group.nr, read_format) {
++		ret = deliver_sample_value(evlist, tool, event, sample, v,
+ 					   machine);
+ 		if (ret)
+ 			break;
+@@ -1510,7 +1517,7 @@ static int evlist__deliver_sample(struct evlist *evlist, struct perf_tool *tool,
+ 	/* For PERF_SAMPLE_READ we have either single or group mode. */
+ 	if (read_format & PERF_FORMAT_GROUP)
+ 		return deliver_sample_group(evlist, tool, event, sample,
+-					    machine);
++					    machine, read_format);
+ 	else
+ 		return deliver_sample_value(evlist, tool, event, sample,
+ 					    &sample->read.one, machine);
+diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
+index 2ae59c03ae77..24df0d9755e4 100644
+--- a/tools/perf/util/synthetic-events.c
++++ b/tools/perf/util/synthetic-events.c
+@@ -1432,11 +1432,12 @@ size_t perf_event__sample_event_size(const struct perf_sample *sample, u64 type,
+ 			result += sizeof(u64);
+ 		/* PERF_FORMAT_ID is forced for PERF_SAMPLE_READ */
+ 		if (read_format & PERF_FORMAT_GROUP) {
+-			sz = sample->read.group.nr *
+-			     sizeof(struct sample_read_value);
+-			result += sz;
++			sz = sample_read_value_size(read_format);
++			result += sz * sample->read.group.nr;
+ 		} else {
+ 			result += sizeof(u64);
++			if (read_format & PERF_FORMAT_LOST)
++				result += sizeof(u64);
+ 		}
+ 	}
+ 
+@@ -1521,6 +1522,20 @@ void __weak arch_perf_synthesize_sample_weight(const struct perf_sample *data,
+ 	*array = data->weight;
+ }
+ 
++static __u64 *copy_read_group_values(__u64 *array, __u64 read_format,
++				     const struct perf_sample *sample)
++{
++	size_t sz = sample_read_value_size(read_format);
++	struct sample_read_value *v = sample->read.group.values;
++
++	sample_read_group__for_each(v, sample->read.group.nr, read_format) {
++		/* PERF_FORMAT_ID is forced for PERF_SAMPLE_READ */
++		memcpy(array, v, sz);
++		array = (void *)array + sz;
++	}
++	return array;
++}
++
+ int perf_event__synthesize_sample(union perf_event *event, u64 type, u64 read_format,
+ 				  const struct perf_sample *sample)
+ {
+@@ -1602,13 +1617,16 @@ int perf_event__synthesize_sample(union perf_event *event, u64 type, u64 read_fo
+ 
+ 		/* PERF_FORMAT_ID is forced for PERF_SAMPLE_READ */
+ 		if (read_format & PERF_FORMAT_GROUP) {
+-			sz = sample->read.group.nr *
+-			     sizeof(struct sample_read_value);
+-			memcpy(array, sample->read.group.values, sz);
+-			array = (void *)array + sz;
++			array = copy_read_group_values(array, read_format,
++						       sample);
+ 		} else {
+ 			*array = sample->read.one.id;
+ 			array++;
++
++			if (read_format & PERF_FORMAT_LOST) {
++				*array = sample->read.one.lost;
++				array++;
++			}
+ 		}
+ 	}
+ 
 -- 
 2.37.1.595.g718a3a8f04-goog
 

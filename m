@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD1059993A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3A4599955
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348280AbiHSJ4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S1348288AbiHSJ43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348254AbiHSJzb (ORCPT
+        with ESMTP id S1348272AbiHSJzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:55:31 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88596F4CA4;
-        Fri, 19 Aug 2022 02:55:12 -0700 (PDT)
+        Fri, 19 Aug 2022 05:55:33 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A835EF00B;
+        Fri, 19 Aug 2022 02:55:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1660902912; x=1692438912;
+  t=1660902914; x=1692438914;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=sgjU7S3Jp8TY5e/zoYxCXMLoM+CHD6Vu7ShuGPypjH8=;
-  b=ARIlkXj0Q6VXpeODCzI88O118yxHuMbx2HdP8LvkRB+q/4mnfaA/+0on
-   LVhGt47uzQrVLKNUxGPMo4L5n4DKa+Cx9/CuJqf16714p9yWrWjRU7IJG
-   uXppSrrO83PwNY3fo0yiUYKzl291fIeD6eYvnch7gQa9ineCkAzc41Wj7
-   Uw+i7FM0sZjoKkZvx2R//OMVPMKdwDUeF/e+zHMPdNTPp5h8XFQPulKGs
-   1xEbum1fC4UB0wtD92atA6uE+dQb84l/SlA4N4iRsDvH4BBgsG8M5Ptlz
-   T6df6WSAb2ECTsZTWWT7qD84SnweViWPJCSnbjDnZXaTH+40Rmlz1fqhI
-   w==;
+  bh=AZY5MC50jGtE/QqRVA/CrE8FUo/vmaMJ6VgRdOdFWAs=;
+  b=N48BqhO4pN76WNJCV89rc6hLYuScA09EnBRUfCdgUGt1yCkVq9EyFmw8
+   LvNM9f1+evwzuNjWYJiJ+JHvVYVSCq+xvlpu4fTNKTfiqE0SI3INlRJAr
+   wAmk2mIrN7RcXQ/2c6w9juZHZIB7zOyEifEmDzjnscGOcFoPfjzxcUAsA
+   QlkiqfKJqMS92L6uiUMGOGNkJjfAcvNzBKJsjucZts9v1iBmXceynj9NC
+   fHYB6EISU2eUTEp3giEyqDz0NuHct1jrHrXzZsRoRzdJrPNOtzPLAfLPK
+   jRYAvtkSiCzeoK1HKfKnOa5+LrsiM64z6clbLg86bA2Fqflgc1+KhTr5x
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="170010405"
+   d="scan'208";a="177053985"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Aug 2022 02:55:11 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Aug 2022 02:55:12 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 19 Aug 2022 02:55:07 -0700
+ 15.1.2507.12; Fri, 19 Aug 2022 02:55:10 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
  (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Fri, 19 Aug 2022 02:55:04 -0700
+ Transport; Fri, 19 Aug 2022 02:55:07 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -52,9 +52,9 @@ CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Albert Ou <aou@eecs.berkeley.edu>, <linux-clk@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>
-Subject: [PATCH v3 12/13] clk: microchip: mpfs: convert periph_clk to clk_gate
-Date:   Fri, 19 Aug 2022 10:53:20 +0100
-Message-ID: <20220819095320.40006-13-conor.dooley@microchip.com>
+Subject: [PATCH v3 13/13] clk: microchip: mpfs: update module authorship & licencing
+Date:   Fri, 19 Aug 2022 10:53:21 +0100
+Message-ID: <20220819095320.40006-14-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220819095320.40006-1-conor.dooley@microchip.com>
 References: <20220819095320.40006-1-conor.dooley@microchip.com>
@@ -71,125 +71,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the reset code moved to the recently added reset controller, there
-is no need for custom ops any longer. Remove the custom ops and the
-custom struct by converting to a clk_gate.
+Padmarao wrote the driver in its original, pre upstream form.
+Daire & myself have been responsible for getting it upstreamable and
+subsequent development.
+Move Daire out of the blurb & into a MODULE_AUTHOR entry & add entries
+for myself and Padmarao.
+
+While we are at it, convert the MODULE_LICENSE field to its preferred
+form of "GPL".
 
 Reviewed-by: Daire McNamara <daire.mcnamara@microchip.com>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- drivers/clk/microchip/clk-mpfs.c | 72 +++-----------------------------
- 1 file changed, 6 insertions(+), 66 deletions(-)
+ drivers/clk/microchip/clk-mpfs.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/clk/microchip/clk-mpfs.c b/drivers/clk/microchip/clk-mpfs.c
-index 8af532f03d24..35a67d2b7845 100644
+index 35a67d2b7845..dceae0c9b9d1 100644
 --- a/drivers/clk/microchip/clk-mpfs.c
 +++ b/drivers/clk/microchip/clk-mpfs.c
-@@ -58,19 +58,11 @@ struct mpfs_cfg_hw_clock {
- 	u32 reg_offset;
- };
- 
--struct mpfs_periph_clock {
--	void __iomem *reg;
--	u8 shift;
--};
--
- struct mpfs_periph_hw_clock {
--	struct mpfs_periph_clock periph;
--	struct clk_hw hw;
-+	struct clk_gate periph;
- 	unsigned int id;
- };
- 
--#define to_mpfs_periph_clk(_hw) container_of(_hw, struct mpfs_periph_hw_clock, hw)
--
+@@ -1,7 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0-only
  /*
-  * mpfs_clk_lock prevents anything else from writing to the
-  * mpfs clk block while a software locked register is being written.
-@@ -273,64 +265,12 @@ static int mpfs_clk_register_cfgs(struct device *dev, struct mpfs_cfg_hw_clock *
-  * peripheral clocks - devices connected to axi or ahb buses.
+- * Daire McNamara,<daire.mcnamara@microchip.com>
+- * Copyright (C) 2020 Microchip Technology Inc.  All rights reserved.
++ * PolarFire SoC MSS/core complex clock control
++ *
++ * Copyright (C) 2020-2022 Microchip Technology Inc. All rights reserved.
   */
+ #include <linux/auxiliary_bus.h>
+ #include <linux/clk-provider.h>
+@@ -513,4 +514,7 @@ static void __exit clk_mpfs_exit(void)
+ module_exit(clk_mpfs_exit);
  
--static int mpfs_periph_clk_enable(struct clk_hw *hw)
--{
--	struct mpfs_periph_hw_clock *periph_hw = to_mpfs_periph_clk(hw);
--	struct mpfs_periph_clock *periph = &periph_hw->periph;
--	u32 reg, val;
--	unsigned long flags;
--
--	spin_lock_irqsave(&mpfs_clk_lock, flags);
--
--	reg = readl_relaxed(periph->reg);
--	val = reg | (1u << periph->shift);
--	writel_relaxed(val, periph->reg);
--
--	spin_unlock_irqrestore(&mpfs_clk_lock, flags);
--
--	return 0;
--}
--
--static void mpfs_periph_clk_disable(struct clk_hw *hw)
--{
--	struct mpfs_periph_hw_clock *periph_hw = to_mpfs_periph_clk(hw);
--	struct mpfs_periph_clock *periph = &periph_hw->periph;
--	u32 reg, val;
--	unsigned long flags;
--
--	spin_lock_irqsave(&mpfs_clk_lock, flags);
--
--	reg = readl_relaxed(periph->reg);
--	val = reg & ~(1u << periph->shift);
--	writel_relaxed(val, periph->reg);
--
--	spin_unlock_irqrestore(&mpfs_clk_lock, flags);
--}
--
--static int mpfs_periph_clk_is_enabled(struct clk_hw *hw)
--{
--	struct mpfs_periph_hw_clock *periph_hw = to_mpfs_periph_clk(hw);
--	struct mpfs_periph_clock *periph = &periph_hw->periph;
--	u32 reg;
--
--	reg = readl_relaxed(periph->reg);
--	if (reg & (1u << periph->shift))
--		return 1;
--
--	return 0;
--}
--
--static const struct clk_ops mpfs_periph_clk_ops = {
--	.enable = mpfs_periph_clk_enable,
--	.disable = mpfs_periph_clk_disable,
--	.is_enabled = mpfs_periph_clk_is_enabled,
--};
--
- #define CLK_PERIPH(_id, _name, _parent, _shift, _flags) {			\
- 	.id = _id,								\
--	.periph.shift = _shift,							\
--	.hw.init = CLK_HW_INIT_HW(_name, _parent, &mpfs_periph_clk_ops,		\
-+	.periph.bit_idx = _shift,						\
-+	.periph.hw.init = CLK_HW_INIT_HW(_name, _parent, &clk_gate_ops,		\
- 				  _flags),					\
-+	.periph.lock = &mpfs_clk_lock,						\
- }
- 
- #define PARENT_CLK(PARENT) (&mpfs_cfg_clks[CLK_##PARENT].cfg.hw)
-@@ -390,13 +330,13 @@ static int mpfs_clk_register_periphs(struct device *dev, struct mpfs_periph_hw_c
- 		struct mpfs_periph_hw_clock *periph_hw = &periph_hws[i];
- 
- 		periph_hw->periph.reg = data->base + REG_SUBBLK_CLOCK_CR;
--		ret = devm_clk_hw_register(dev, &periph_hw->hw);
-+		ret = devm_clk_hw_register(dev, &periph_hw->periph.hw);
- 		if (ret)
- 			return dev_err_probe(dev, ret, "failed to register clock id: %d\n",
- 					     periph_hw->id);
- 
- 		id = periph_hws[i].id;
--		data->hw_data.hws[id] = &periph_hw->hw;
-+		data->hw_data.hws[id] = &periph_hw->periph.hw;
- 	}
- 
- 	return 0;
+ MODULE_DESCRIPTION("Microchip PolarFire SoC Clock Driver");
+-MODULE_LICENSE("GPL v2");
++MODULE_AUTHOR("Padmarao Begari <padmarao.begari@microchip.com>");
++MODULE_AUTHOR("Daire McNamara <daire.mcnamara@microchip.com>");
++MODULE_AUTHOR("Conor Dooley <conor.dooley@microchip.com>");
++MODULE_LICENSE("GPL");
 -- 
 2.36.1
 

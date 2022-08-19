@@ -2,82 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5820F599627
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11681599643
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347105AbiHSHma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 03:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
+        id S1347165AbiHSHmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 03:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347144AbiHSHm2 (ORCPT
+        with ESMTP id S1347144AbiHSHmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 03:42:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAB4CCE31
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:42:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660894946;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7BU0NBgcPwvMpt86ttJZWI4g3XAVpmUhw+WmsruDrgM=;
-        b=M4+AsEIXJ3g8YdG28lrIZdwjPoBUzD+WWxRvModwUOc+8ut1Wx64iCNAww9SSb15hQzrbo
-        eWNfw/D0oo4uxzd70FzEEVOldjsFH58DRIQ/vnuhkUqIOffDmkY1ALJONLIBNfqR/BEBl3
-        HhxapyeUAV0jL5efOq3IgIJ7iOFeB1E=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-612-gpWLIWjvMv6Zq6iKiuUZ_Q-1; Fri, 19 Aug 2022 03:42:23 -0400
-X-MC-Unique: gpWLIWjvMv6Zq6iKiuUZ_Q-1
-Received: by mail-ed1-f72.google.com with SMTP id z6-20020a05640240c600b0043e1d52fd98so2427670edb.22
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:42:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=7BU0NBgcPwvMpt86ttJZWI4g3XAVpmUhw+WmsruDrgM=;
-        b=k58056ksoZlpQAxKMlL8V6y1FctYNvgtIJ7iAq5TKyNbTIxm/4MGsC36PtaAwZseJr
-         6ZNTEKkGiq0xYF86ANDYbPAHKdHw99GTUSr2fiaCP1fiFfoxTnb8gauGcbwlDyr8g/tL
-         gZoAiND1UzFsYa4ehKwrJg7UMws2D01AOIoQH1y40dxUNeECLrHgLnSLxblyEzyxlrh2
-         T1eNc6fLtJDgokn22BelaC3UmONWyKVkfM+Q3EbRc2a595rgOIt8kby76WRAroVz46yo
-         L93/CJDdaQr7s02K1P+e+xf/mib2K4e6nJCIAp4+WAjq4PAIAHd+77lTMji8x4KVtZT1
-         Xmog==
-X-Gm-Message-State: ACgBeo2opDnkLbZKlzN2wL7168qXAQOX0zbIhHmSADcrHOl0Hohbj0fl
-        55xAPUQyJO89wfTWc/uq9HhcF3eNK2QX32uqHp8xumr8X/IRPCSYGPfxxsZpIxYuWfLJJtKQn2v
-        Vm3rGuDV4t5k67S96PBCTgTBLWqDcsZ40nI02CzFHDr+lZiy9Fb0SnIyfVcTDMm5NDM7wbCESRT
-        kl
-X-Received: by 2002:a05:6402:510a:b0:43d:ab25:7d68 with SMTP id m10-20020a056402510a00b0043dab257d68mr5038510edd.102.1660894942571;
-        Fri, 19 Aug 2022 00:42:22 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR67XQIhNJjNTGL7G9Zsj1eHRrSxDAKaWyqDLtY6JVbFAVDwTNGYQgZ5YsaDFAM5m6i3SREV8A==
-X-Received: by 2002:a05:6402:510a:b0:43d:ab25:7d68 with SMTP id m10-20020a056402510a00b0043dab257d68mr5038482edd.102.1660894942290;
-        Fri, 19 Aug 2022 00:42:22 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id w8-20020a50fa88000000b0043a7134b381sm2564438edr.11.2022.08.19.00.42.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 00:42:21 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 09/26] KVM: VMX: nVMX: Support TSC scaling and
- PERF_GLOBAL_CTRL with enlightened VMCS
-In-Reply-To: <Yv50vWGoLQ9n+6MO@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-10-vkuznets@redhat.com>
- <Yv50vWGoLQ9n+6MO@google.com>
-Date:   Fri, 19 Aug 2022 09:42:20 +0200
-Message-ID: <87zgg0smqr.fsf@redhat.com>
+        Fri, 19 Aug 2022 03:42:42 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFD7CCE3E;
+        Fri, 19 Aug 2022 00:42:37 -0700 (PDT)
+X-UUID: ac2a3019fb664eaebc80487541f66bf5-20220819
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=xRra99ybeDU1VvzdrVMw86yXkS8LgIZdc8GNqbtCaOw=;
+        b=p7ToznoCPDfmE76ARNVQLvU6hK9DWBauDsmYSbnCvzFvOQrCMRx6j5P4XwCwYMFfQjrAWnR2zKmT5aRN4kdPZ28s9XmFd7frgxf/+Qe32+Hx4RpKKK4Ti8rkNflcyecRGHCzu7tr7ntpTQXBHIQxT8D2U0eeOxqMYDSK4q308qw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:6c3d19b9-27de-4aff-a722-8d1ab8afefd8,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
+        Ham,ACTION:release,TS:0
+X-CID-META: VersionHash:84eae18,CLOUDID:2477219d-da39-4e3b-a854-56c7d2111b46,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: ac2a3019fb664eaebc80487541f66bf5-20220819
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 312840282; Fri, 19 Aug 2022 15:42:31 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 19 Aug 2022 15:42:29 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 19 Aug 2022 15:42:29 +0800
+Message-ID: <c6e34df9896a1da0c3a72aff5b170a81a4252f1b.camel@mediatek.com>
+Subject: Re: [PATCH v25 4/4] media: platform: mtk-mdp3: add MediaTek MDP3
+ driver
+From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <cellopoint.kai@gmail.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>
+Date:   Fri, 19 Aug 2022 15:42:29 +0800
+In-Reply-To: <b0b4ff87-355e-1910-c6d2-a9690f3d7543@xs4all.nl>
+References: <20220817095629.29911-1-moudy.ho@mediatek.com>
+         <20220817095629.29911-5-moudy.ho@mediatek.com>
+         <b0b4ff87-355e-1910-c6d2-a9690f3d7543@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,55 +85,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On Thu, 2022-08-18 at 13:02 +0200, Hans Verkuil wrote:
+> Hi Moudy,
+> 
+> I noticed one more thing (and it is probably better to post a v26
+> after all):
+> 
+> On 17/08/2022 11:56, Moudy Ho wrote:
+> > This patch adds driver for MediaTek's Media Data Path ver.3 (MDP3).
+> > It provides the following functions:
+> >   color transform, format conversion, resize, crop, rotate, flip
+> >   and additional image quality enhancement.
+> > 
+> > The MDP3 driver is mainly used for Google Chromebook products to
+> > import the new architecture to set the HW settings as shown below:
+> >   User -> V4L2 framework
+> >     -> MDP3 driver -> SCP (setting calculations)
+> >       -> MDP3 driver -> CMDQ (GCE driver) -> HW
+> > 
+> > Each modules' related operation control is sited in mtk-mdp3-comp.c
+> > Each modules' register table is defined in file with "mdp_reg_"
+> > prefix
+> > GCE related API, operation control  sited in mtk-mdp3-cmdq.c
+> > V4L2 m2m device functions are implemented in mtk-mdp3-m2m.c
+> > Probe, power, suspend/resume, system level functions are defined in
+> > mtk-mdp3-core.c
+> > 
+> > v4l2-compliance 1.22.1, 32 bits, 32-bit time_t
+> 
+> First of all, the v4l2-compliance output belongs to the cover letter,
+> not
+> to a commit log for a patch.
+> 
+> More importantly, I can tell that v4l2-compliance was a prepackaged
+> version,
+> but you need to compile it from the git repo yourself:
+> 
+> git clone git://linuxtv.org/v4l-utils.git
+> cd v4l-utils
+> ./bootstrap.sh
+> ./configure
+> make
+> sudo make install
+> 
+> Running v4l2-compliance should start with this (or something close):
+> 
+> v4l2-compliance 1.23.0-4941, 64 bits, 64-bit time_t
+> v4l2-compliance SHA: 71112d214762 2022-07-28 15:31:13
+> 
+> I need to see the SHA to confirm that you tested with a sufficiently
+> new
+> v4l2-compliance version. Prepackaged v4l2-compliance binaries tend to
+> be too old, at least for the purpose of compliance checking a new
+> driver.
+> 
+> Regards,
+> 
+> 	Hans
+> 
 
-> On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
->> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
->> index f886a8ff0342..4b809c79ae63 100644
->> --- a/arch/x86/kvm/vmx/evmcs.h
->> +++ b/arch/x86/kvm/vmx/evmcs.h
->> @@ -37,16 +37,9 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
->>   *	EPTP_LIST_ADDRESS               = 0x00002024,
->>   *	VMREAD_BITMAP                   = 0x00002026,
->>   *	VMWRITE_BITMAP                  = 0x00002028,
->> - *
->> - *	TSC_MULTIPLIER                  = 0x00002032,
->>   *	PLE_GAP                         = 0x00004020,
->>   *	PLE_WINDOW                      = 0x00004022,
->>   *	VMX_PREEMPTION_TIMER_VALUE      = 0x0000482E,
->> - *      GUEST_IA32_PERF_GLOBAL_CTRL     = 0x00002808,
->> - *      HOST_IA32_PERF_GLOBAL_CTRL      = 0x00002c04,
->> - *
->> - * Currently unsupported in KVM:
->> - *	GUEST_IA32_RTIT_CTL		= 0x00002814,
->
-> Almost forgot: is deleting this chunk of the comment intentional?
->
+Hello Hans,
 
-Intentional or not (I forgot :-), GUEST_IA32_RTIT_CTL is supported/used
-by KVM since
+Because there are some issues for Moudy's mail account, I help him
+reply the mail:
 
-commit f99e3daf94ff35dd4a878d32ff66e1fd35223ad6
-Author: Chao Peng <chao.p.peng@linux.intel.com>
-Date:   Wed Oct 24 16:05:10 2018 +0800
+Thanks for your review and comment, those two errors you mentioned have
+been corrected accordingly.
 
-    KVM: x86: Add Intel PT virtualization work mode
+I will test it with the latest version of v4l2-compliance, and it will
+be released in v26 together with the testing report.
 
-...
- 
-commit bf8c55d8dc094c85a3f98cd302a4dddb720dd63f
-Author: Chao Peng <chao.p.peng@linux.intel.com>
-Date:   Wed Oct 24 16:05:14 2018 +0800
+BRs,
+Bo-Chen
 
-    KVM: x86: Implement Intel PT MSRs read/write emulation
-
-but there's no corresponding field in eVMCS. It would probably be better
-to remove "Currently unsupported in KVM:" line leaving
-
-"GUEST_IA32_RTIT_CTL             = 0x00002814" 
-
-in place. 
-
--- 
-Vitaly
+> > Compliance test for mtk-mdp3 device /dev/video0:
+> > Driver Info:
+> > 	Driver name      : mtk-mdp3
+> > 	Card type        : MediaTek MDP3
+> > 	Bus info         : platform:14001000.mdp3-rdma0
+> > 	Driver version   : 6.0.0
+> > 	Capabilities     : 0x84204000
+> > 		Video Memory-to-Memory Multiplanar
+> > 		Streaming
+> > 		Extended Pix Format
+> > 		Device Capabilities
+> > 	Device Caps      : 0x04204000
+> > 		Video Memory-to-Memory Multiplanar
+> > 		Streaming
+> > 		Extended Pix Format
+> 
+> 
 

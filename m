@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36EF59A4C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4355059A347
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354689AbiHSRfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 13:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
+        id S1351970AbiHSRnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 13:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354683AbiHSRen (ORCPT
+        with ESMTP id S1351163AbiHSRm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 13:34:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD19481FE
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 09:53:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC86B6188D
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 16:50:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2563AC433B5;
-        Fri, 19 Aug 2022 16:50:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660927804;
-        bh=q0RICIStAfuq9Tir8Gn3wiw1jHY3/wzAS6hGfEsXP4w=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=iHbswFwMMyN1WO8UD5jzvSWJxAyJoxN/QnQRyDzympYTaqdO9bMnWWBYRx1BFlD7g
-         wcFe9uH4QJTgy7duXjH9/0rfBebNsxSfm4Cgj6YR9Vdchsm3X1XdRcrI50UsgMOdhy
-         J5hX5MqC2YLfeq99l5nhaSPqjMbqNPycTSET3K9SNq3gPIZwoRhrjUhQ9sItHD9pRl
-         /fFJm+EEHD7x5nqLcrusGaG1N7ozTC2OvCSOBXBmM+PwtP9GW+z9GJT74LwWT11nWX
-         u+Qtd99m3/UDunhWqKXiUxe8OU1MuyD0/ObpmmH6jaJIhNP7T59ncFMQzs211h85wy
-         4i9TsJ8WxESdw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0F533C43142;
-        Fri, 19 Aug 2022 16:50:04 +0000 (UTC)
-Subject: Re: [GIT PULL] sound fixes for 6.0-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <87bksg7jws.wl-tiwai@suse.de>
-References: <87bksg7jws.wl-tiwai@suse.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <87bksg7jws.wl-tiwai@suse.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.0-rc2
-X-PR-Tracked-Commit-Id: 90d74fdbd8059bf041ac797092c9b1d461555280
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 963a70bee5880640d0fd83ed29dc1e7ec0d2bd4a
-Message-Id: <166092780405.6250.6766988017882920320.pr-tracker-bot@kernel.org>
-Date:   Fri, 19 Aug 2022 16:50:04 +0000
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 19 Aug 2022 13:42:59 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B747120A7
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:02:21 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id q18so4052670ljg.12
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:02:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
+        bh=8srtPqHGa40CVslrURYXsHSOfQqBi5LmheASbuMqgVc=;
+        b=jJ37Fk8GIH4JZCwpBidq4P0p8uYDVP83QsO7Kl+7YzYtOdwO3HdUIKjefD9FX11KLV
+         rthljv39xhetKTDdR5IOwGqlPmZiBBgrZd24YwuednVpS/OLtDCl2l94NOr6GZ+KnSFS
+         XedgQ0at1pZJKnf5mpqwCegrkZU96RpGFR0ymCCHRgWH/cPklPAchxbpL2LokGrfp1d+
+         Vl13zVCCCrkAxeTnx27liER76xBGoo5Hov4Nbw/g29/tA2TLygHQQvHo24D1c8EiH1LP
+         OnIKvjXfCWqkkS/iAXlgTZVWNAlPZ/ERFLS4OK9r8Mjd5GfJsmsD5sevUYAGndMbbEwX
+         1rXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=8srtPqHGa40CVslrURYXsHSOfQqBi5LmheASbuMqgVc=;
+        b=Xe5FARX0SNPWPPYJ4QAjZJSyzGrY4lVD/4LulboGn1/Elf9liGxOoVzyQ5UGzCfGOD
+         orxTzsB4xCb6b9qszBp7ZiboBRrjNcBbCotNQ9FioZBE16faHpKh9SKFPN0T6AJk22Ai
+         pY1DEBTWJlfCNNFstCMXn7l8qiwyGGCWszuI4Xa75GpMthpljnb+enFFz7gxJaENZua1
+         lXMC4cyS/SjqcrjydwqPahq3gTovp/3JWoxbdDQks2KiJcSfILZc2CSYe/y/lFykNKFc
+         XZwkkgslyYF0QS39FWvMC/4XcPgiDO0i32XwZ4P+BB0uJEZG7jAS9a+i8WFJ3c7wK0Ct
+         +PtA==
+X-Gm-Message-State: ACgBeo1wraf5REuqLp12/MU8r4NKpjUsep5EttxsgMOLKc1WCC56+fO0
+        efqmcRk59UWD3l/z/JJBWoD69xDt5U6ZknCFxut1/frnioxUug==
+X-Google-Smtp-Source: AA6agR45oHyYTu2IkGYDDh0LaYi7NGrbn0axS3SPggOY+GDiWxOT0SylJr4aRqK4hXKNvudpq/fKEOdVPXvqXVN/0OE=
+X-Received: by 2002:a17:907:2c4a:b0:73d:1d15:4a8f with SMTP id
+ hf10-20020a1709072c4a00b0073d1d154a8fmr2139829ejc.573.1660927811209; Fri, 19
+ Aug 2022 09:50:11 -0700 (PDT)
+MIME-Version: 1.0
+Sender: lila.lucass112@gmail.com
+Received: by 2002:a17:907:7e9e:0:0:0:0 with HTTP; Fri, 19 Aug 2022 09:50:10
+ -0700 (PDT)
+From:   Sophia Erick <sdltdkggl3455@gmail.com>
+Date:   Fri, 19 Aug 2022 18:50:10 +0200
+X-Google-Sender-Auth: lYYDFiFObIAEXAX3qlxo4ogpQKI
+Message-ID: <CAPvtrUeg0nTmk7DGY0zR6WC01mhDVUQ1bny_G-x2HhGPYCh-fQ@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,HK_RANDOM_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 19 Aug 2022 09:49:07 +0200:
+Dearly Beloved In Christ,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.0-rc2
+Please forgive me for stressing you with my predicaments as I directly
+believe that you will be honest to fulfill my final wish before i die.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/963a70bee5880640d0fd83ed29dc1e7ec0d2bd4a
+I am Mrs.Sophia Erick, and i was Diagnosed with Cancer about 2 years
+ago, before i go for a surgery i have to do this by helping the
+Orphanages home, Motherless babies home, less privileged and disable
+citizens and widows around the world,
 
-Thank you!
+So If you are interested to fulfill my final wish by using the sum of
+$ 11,000,000.00, Eleven Million Dollars, to help them as I mentioned,
+kindly get back to me for more information on how the fund will be
+transferred to your account.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Warm Regards,
+Sincerely Mrs. Sophia Erick.

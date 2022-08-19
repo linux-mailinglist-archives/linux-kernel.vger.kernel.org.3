@@ -2,191 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4C859A897
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 00:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C1C59A89C
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 00:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241857AbiHSWeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 18:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
+        id S242513AbiHSWeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 18:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240224AbiHSWeJ (ORCPT
+        with ESMTP id S242363AbiHSWee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 18:34:09 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3384D5AA31
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:34:08 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id f21so5871793pjt.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=kbE/65DRjPYqdTnyqLepSgX1Hekk23DazggKsiasbMI=;
-        b=f1awwJtCJkd9zjKnF7QVDXZjvTiGVaFt0oxrlKLtFsWuLPaTJoNT/d93siF9E9L5nb
-         A09Otekuu+kbq6hDCFdhfmHhRVJK70vsNcnmFlQ5ud+bOKwd0TNNB+HFDzN7wq5FAdzZ
-         0dOroiYEIYB349JxDlU6+NvPWq64pVr2cl8zbeehi6J/bcBWejcQtWwV3o6W9KF1mZDY
-         6vE7PSGIBQkrGY/YqNR50hcdJHrJIz4xW1mJhA4QgtjUnpvw47bIuMaiCR71a28XnbuQ
-         kfXnLJf6lVCFBdBXZrwNR+cLYkjHJqTsuMxNKQOF+u3ByMqdsPutwmn9DofQW7skOWL3
-         6SCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=kbE/65DRjPYqdTnyqLepSgX1Hekk23DazggKsiasbMI=;
-        b=U4/5qDDhZV7d04C+Cg0GiPTQXBAu1yLJtWD1SXeY8P7arxh7cFh0JZ/enkScyHKf4h
-         p+dW5s0k8h2rZupCPl+qWIgdAJaQZKXaVaFH1taPvqUPI5imEA7qSqK2JGN7p2Qlbbf2
-         3jEI08DhujIJWsskzE6+qth9gBqiYxYnUTNX1eOOZQvJkaelsL2VdXS8TsN1RX3YZ++6
-         xIQaGIZ/b10MZyCDui8CctX91yenC12e3dGG3iTAntkHbHFYUw0yHcq9ITxMizCGhFsa
-         lK0PklnT22OCRBuiRoYm1nkOF5SLyB6Uz7LTAqsTpn+R1zpDn+31H1y/y1WJ4X8p+4Rv
-         djMg==
-X-Gm-Message-State: ACgBeo1SrtmrHcGTTyJW6ZbsRcdjXt0gznvQ0SSfcJzhIz+nPUaSh6vu
-        74aCNlKZeJwwICA9Noq/9dkJJg==
-X-Google-Smtp-Source: AA6agR7xiaNGZGxj1jhH+TXInm/skq5rrDbAzx1asotOTsbjHl4pO/58qVGlo7ah4r3QB25jHbb/nw==
-X-Received: by 2002:a17:902:6ac8:b0:172:cdd5:182a with SMTP id i8-20020a1709026ac800b00172cdd5182amr1484083plt.56.1660948447246;
-        Fri, 19 Aug 2022 15:34:07 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id p4-20020a1709026b8400b001729da53673sm3658748plk.14.2022.08.19.15.34.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 15:34:06 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 15:34:01 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: selftests: Run dirty_log_perf_test on specific
- cpus
-Message-ID: <YwAP2dM/9vfjlAMb@google.com>
-References: <20220819210737.763135-1-vipinsh@google.com>
- <YwAC1f5wTYpTdeh+@google.com>
- <CAHVum0ecr7S9QS4+3kS3Yd-eQJ5ZY_GicQWurVFnAif6oOYhOg@mail.gmail.com>
+        Fri, 19 Aug 2022 18:34:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FA76A4B8
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=srw+B0lt25Uk8V1RVsMgpEZ2IPWMbJUx+/4Q3wVt0bA=; b=reYgRlcmliYnCdzsm2mAVcPYgB
+        CtidlA7Bqsu15v1f7j8GEehKhdqKu0N7ufjGrQAZVPR71+YDw1u3evzzW3ocdp9aDuDn0pSI4ZwTW
+        yjxBB4qdh5l7DpheNC0oYb8AK5rKF2qTD32nNwIvdFQo88sevY4VZPLOM7MhjICee3UPzCCWOmCum
+        cGjcvgrk/LNrED/1OxFe465et0dAjiYsBjaMfdpkEZSn8yZNs26f/7IVleBTpwqUpQfVMr4T1nuKD
+        4SqGBaljOX1PAp7QOxrMDydALnLVvtxSkjaqk0lYmS02I3J3jki18kGWZDMUfvoNMnx57zsVXqxEi
+        7o/ZPQCg==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oPAZD-00Cvld-FQ; Fri, 19 Aug 2022 22:34:15 +0000
+Message-ID: <35c0ff6a-387d-3c01-66b3-f659cfe67c2a@infradead.org>
+Date:   Fri, 19 Aug 2022 15:34:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHVum0ecr7S9QS4+3kS3Yd-eQJ5ZY_GicQWurVFnAif6oOYhOg@mail.gmail.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] powerpc: Add support for early debugging via Serial 16550
+ console
+Content-Language: en-US
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Nick Child <nick.child@ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20220819211254.22192-1-pali@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220819211254.22192-1-pali@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 03:20:06PM -0700, Vipin Sharma wrote:
-> On Fri, Aug 19, 2022 at 2:38 PM David Matlack <dmatlack@google.com> wrote:
-> >
-> > On Fri, Aug 19, 2022 at 02:07:37PM -0700, Vipin Sharma wrote:
-> > > +static int atoi_paranoid(const char *num_str)
-> > > +{
-> > > +     int num;
-> > > +     char *end_ptr;
-> > > +
-> > > +     errno = 0;
-> > > +     num = (int)strtol(num_str, &end_ptr, 10);
-> > > +     TEST_ASSERT(errno == 0, "Conversion error: %d\n", errno);
-> > > +     TEST_ASSERT(num_str != end_ptr && *end_ptr == '\0',
-> > > +                 "Invalid number string.\n");
-> > > +
-> > > +     return num;
-> > > +}
-> >
-> > Introduce atoi_paranoid() and upgrade existing atoi() users in a
-> > separate commit. Also please put it in e.g. test_util.c so that it can
-> > be used by other tests (and consider upgrading other tests to use it in
-> > your commit).
-> >
-> 
-> Sure, I will add a separate commit.
-> 
-> 
-> > > -     while ((opt = getopt(argc, argv, "eghi:p:m:nb:f:v:os:x:")) != -1) {
-> > > +     while ((opt = getopt(argc, argv, "c:eghi:p:m:nb:f:v:os:x:")) != -1) {
-> > >               switch (opt) {
-> > > +             case 'c':
-> > > +                     nr_lcpus = parse_cpu_list(optarg, lcpu_list, KVM_MAX_VCPUS + 1);
-> >
-> > I think we should move all the logic to pin threads to perf_test_util.c.
-> > The only thing dirty_log_perf_test.c should do is pass optarg into
-> > perf_test_util.c. This will make it trivial for any other test based on
-> > pef_test_util.c to also use pinning.
-> >
-> > e.g. All a test needs to do to use pinning is add a flag to the optlist
-> > and add a case statement like:
-> >
-> >         case 'c':
-> >                 perf_test_setup_pinning(optarg);
-> >                 break;
-> >
-> > perf_test_setup_pinning() would:
-> >  - Parse the list and populate perf_test_vcpu_args with each vCPU's
-> >    assigned pCPU.
-> >  - Pin the current thread to it's assigned pCPU if one is provided.
-> >
-> 
-> This will assume all tests have the same pinning requirement and
-> format. What if some tests have more than one worker threads after the
-> vcpus?
+Hi--
 
-Even if a test has other worker threads, this proposal would still be
-logically consistent. The flag is defined to only control the vCPU
-threads and the main threads. If some test has some other threads
-besides that, this flag will not affect them (which is exactly how it's
-defined to behave). If such a test wants to pin those other threads, it
-would make sense to have a test-specific flag for that pinning (and we
-can figure out the right way to do that if/when we encounter that
-situation).
+On 8/19/22 14:12, Pali Rohár wrote:
+> Currently powerpc early debugging contains lot of platform specific
+> options, but does not support standard UART / serial 16550 console.
+> 
+> Later legacy_serial.c code supports registering UART as early debug console
+> from device tree but it is not early during booting, but rather later after
+> machine description code finishes.
+> 
+> So for real early debugging via UART is current code unsuitable.
+> 
+> Add support for new early debugging option CONFIG_PPC_EARLY_DEBUG_16550
+> which enable Serial 16550 console on address defined by new option
+> CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR and by stride by option
+> CONFIG_PPC_EARLY_DEBUG_16550_STRIDE.
+> 
+> With this change it is possible to debug powerpc machine descriptor code.
+> For example this early debugging code can print on serial console also
+> "No suitable machine description found" error which is done before
+> legacy_serial.c code.
+> 
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+> Tested on P2020 board. It allowed me do debug and implement this patch series:
+> https://lore.kernel.org/linuxppc-dev/20220819191557.28116-1-pali@kernel.org/
+> ---
+>  arch/powerpc/Kconfig.debug       | 14 ++++++++++++++
+>  arch/powerpc/include/asm/udbg.h  |  1 +
+>  arch/powerpc/kernel/udbg.c       |  2 ++
+>  arch/powerpc/kernel/udbg_16550.c | 33 ++++++++++++++++++++++++++++++++
+>  4 files changed, 50 insertions(+)
+> 
+> diff --git a/arch/powerpc/Kconfig.debug b/arch/powerpc/Kconfig.debug
+> index 9f363c143d86..a4e7d90a45d2 100644
+> --- a/arch/powerpc/Kconfig.debug
+> +++ b/arch/powerpc/Kconfig.debug
+> @@ -276,6 +276,11 @@ config PPC_EARLY_DEBUG_OPAL_HVSI
+>  	  Select this to enable early debugging for the PowerNV platform
+>  	  using an "hvsi" console
+>  
+> +config PPC_EARLY_DEBUG_16550
+> +	bool "Serial 16550"
+> +	help
+> +	  Select this to enable early debugging via Serial 16550 console
+> +
+>  config PPC_EARLY_DEBUG_MEMCONS
+>  	bool "In memory console"
+>  	help
+> @@ -355,6 +360,15 @@ config PPC_EARLY_DEBUG_CPM_ADDR
+>  	  platform probing is done, all platforms selected must
+>  	  share the same address.
+>  
+> +config PPC_EARLY_DEBUG_16550_PHYSADDR
+> +	hex "Early debug Serial 16550 physical address"
+> +	depends on PPC_EARLY_DEBUG_16550
 
-> 
-> Maybe I should:
-> 1. Create a generic function which parses a csv of integers, put it in
-> test_util.c
-> 2. Provide a function to populate perf_test_vcpus_args in perf_test_util.c
-> 3. Provide a function to migrate self to some cpu in perf_test_util.c.
-> This will work for now, but in future if there are more than 1 worker
-> we need to revisit it.
-> 
-> I will also be fine implementing what you suggested and keep working
-> under the precondition that there will be only one worker thread, if
-> that is okay to assume.
-> 
-> > Validating that the number of pCPUs == number of vCPUs is a little
-> > tricky. But that could be done as part of
-> > perf_test_start_vcpu_threads(). Alternatively, you could set up pinning
-> > after getting the number of vCPUs. e.g.
-> >
-> >         const char *cpu_list = NULL;
-> >
-> >         ...
-> >
-> >         while ((opt = getopt(...)) != -1) {
-> >                 switch (opt) {
-> >                 case 'c':
-> >                         cpu_list = optarg;  // is grabbing optarg here safe?
-> 
-> I am not sure how it is internally implemented. API doesn't mention
-> anything. Better to be safe and assume it is not valid later.
+Is there any chance that you could provide a default value here
+so that 'make olddefconfig' does not end up like it does
+without having a default value?
 
-I think it should be fine. I assume optarg is pointing into [a copy of?]
-argv with null characters inserted, so the pointer will still be valid
-after the loop. But I just wanted to call out that I wasn't 100% sure :)
+CONFIG_PPC_EARLY_DEBUG_16550=y
+# CONFIG_PPC_EARLY_DEBUG_MEMCONS is not set
+CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR=
+CONFIG_PPC_EARLY_DEBUG_16550_STRIDE=1
 
-> 
-> >                         break;
-> >                 }
-> >                 ...
-> >         }
-> >
-> >         if (cpu_list)
-> >                 perf_test_setup_pinning(cpu_list, nr_vcpus);
-> >
-> 
-> Better to have a copy of the argument or just get list of cpus after
-> parsing and then do the verification. What is the point in doing all
-> extra parsing work when we are gonna abort the process due to some
-> invalid condition.
+which then causes a kconfig prompt when starting
+the build...
 
-Yeah and I also realized perf_test_setup_pinning() will need to know how
-many vCPUs there are so it can determine which element is the main
-thread's pCPU assignment.
+> +
+> +config PPC_EARLY_DEBUG_16550_STRIDE
+> +	int "Early debug Serial 16550 stride"
+> +	depends on PPC_EARLY_DEBUG_16550
+> +	default 1
+> +
+>  config FAIL_IOMMU
+>  	bool "Fault-injection capability for IOMMU"
+>  	depends on FAULT_INJECTION
+
+Thanks.
+-- 
+~Randy

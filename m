@@ -2,145 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1155459A5A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1962959A579
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350086AbiHSSMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 14:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
+        id S1350360AbiHSSNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 14:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349994AbiHSSMM (ORCPT
+        with ESMTP id S1350336AbiHSSNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 14:12:12 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FA311987E
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:02:43 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 202so4252565pgc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:02:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=2cmeZFM9Z96PK6iKkz3xRptXL/ZQZZMehAaXwUAeWQk=;
-        b=lDgUXCE2+jFiEn1lhjtsVT9PS2XJKGRNpzzrrK6ZgsY63wSH18BIzdFb+RQZ3GRfya
-         GxoFcqt5jXqYfaK0aTD/Sy2iOw3cjGT9K31mrs+oT/3dLkTTgytOtFoPek1e3EFZ411F
-         jPZ41pNgWViMrX60LrXEY/L6EZhDvNReIPkB+xyj2wo/z8miDmDH9z+xSthnMjD9VQD4
-         G0FPV73fcK+zELUgjaG6/QJ427BK5q5YEptgOy9z3g34Q25pDyp1nZqO/upmTrObptHB
-         DHNQH2dRiD8VvCm+lCLOvIWvJ79YoUGKbPRVpROiMPgQ2etjpxPLJqFScdBai8kFhyE5
-         YuDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=2cmeZFM9Z96PK6iKkz3xRptXL/ZQZZMehAaXwUAeWQk=;
-        b=okG0v8OLiaQEzQ+2lNT2mMOgR2yXtDLWIkgF1CKaveeHM2rvM5CDWnhVNKsM+7pPj4
-         M3yIid58Th+5LKA9Gdr3TXcluM/rXTnzM6uQNy/Gzo/47V06I0PFFTPZnO4elx8j/n0b
-         TCCsXgX/Up9bOAdvUsActqb/+/bvR7nde7svtw74PlysCyBlnB1sEY5RJQHXginO/3On
-         zewO3Q4w3AEUHyjHCuy7bir9WNSnMDl31MNIH/v5+kgMz/E3sTvWVCzDLMEE3zFOc34U
-         gqES/DHwQ/WHBFr+DHMjMp3bewPM3jmOjrvYXhhvN2Ft3E97NwCYTDcFUtzYL5kfQPT+
-         rBNQ==
-X-Gm-Message-State: ACgBeo2/sv2/fnGPJCvjiPOyiuUYmgz6xmWYJQLcpvX/ieZx9+4VZdum
-        N8Q+yvIymbu0NGCuJNL1oehdfw==
-X-Google-Smtp-Source: AA6agR57Ufxqi9ITvJtI5lBP5D0IJbgyirUXVdH8AQZLkwyex2asB5d5Z98uXoBQRGz4/BKQfxRxTw==
-X-Received: by 2002:a63:2dc6:0:b0:428:ab9e:bb85 with SMTP id t189-20020a632dc6000000b00428ab9ebb85mr7172413pgt.530.1660932163163;
-        Fri, 19 Aug 2022 11:02:43 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y8-20020aa79428000000b0052dee21fecdsm3698065pfo.77.2022.08.19.11.02.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 11:02:42 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 18:02:39 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Andrew Jones <andrew.jones@linux.dev>
-Cc:     Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, marcorr@google.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com, joro@8bytes.org,
-        mizhang@google.com, pbonzini@redhat.com, vannapurve@google.com
-Subject: Re: [V3 10/11] KVM: selftests: Add ucall pool based implementation
-Message-ID: <Yv/QPxeKczzmxR9H@google.com>
-References: <20220810152033.946942-1-pgonda@google.com>
- <20220810152033.946942-11-pgonda@google.com>
- <20220816161350.b7x5brnyz5pyi7te@kamzik>
- <Yv5iKJbjW5VseagS@google.com>
- <20220818190514.ny77xpfwiruah6m5@kamzik>
- <Yv7LR8NMBMKVzS3Z@google.com>
- <20220819051725.6lgggz2ktbd35pqj@kamzik>
+        Fri, 19 Aug 2022 14:13:18 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2068.outbound.protection.outlook.com [40.107.94.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BBA11DF7F;
+        Fri, 19 Aug 2022 11:04:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GDndBKJjKZ41P4Bq4fREUrPQomE5PMlRW5pDjUb6O1XlI4u7PgzS0uFuIV3HVMzhNOwU50o5t9ujwpihwh/oQ0NI3Y55yzhd0ckV7G+kzLOAH1tMR8fbEB3cc2BEWfu2P1QOCkoboHbieJ8FX09B0IyjM/SoXQe1yKxV2M5M6gl4R0hxmpW/YEFOuoe8re6ZDGd+6r+sBi+/dlGAUZBiTDMFrRr1bxFFfVu6/dmafl9JZhFnm/hhX6ikXDF/+43gg9yUkZKPCk6m+PXjsS3rsOg+jAeEp6BqZmQYed6QKIhTq00JcIcFc1JBGv5H4zFd7OI6o/L0yjqO4ZgesO62Fw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JJXwSyFad+tbsnBRxF2tJgMn9TatYadIYFXvO04DJ6Y=;
+ b=nVTCpVmFeZ3g2X/8FTztmqfImURbs9Jdi39O84k9vYx+R35ZnyIGeoLjewVhhQs6MWVyIk2pfJoootJz/b4t2WCMfKz3jUpvsAoTihKlcacdmlpXMWxkfFp4gsPjHi5ifLRWCNwvN/pUiHnWYEBIpXPFopfEb+hh9iUdb995yb5FnFkeZIkbKbVZ6QvkUjZKNYfj9gkFHaoRCyBzpkpsB7YyNcycspAaPAi65AS/pQtn7Afj+tpgueET2HvEFUeLZJx++hoRTk+A/LzEgd6sSvVy352T/mv8JHhZ18pqEwZlejuXbGwTSxe4nFPg7dow/u+Wh2S5f1Llg7FaA9bPVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JJXwSyFad+tbsnBRxF2tJgMn9TatYadIYFXvO04DJ6Y=;
+ b=OfMxU6RVn3s/JXMWZgsitntm6oLTjFkqW3JZosDaJQaRky/mI873UfUEfyArUz6dUqMXfaGTN1+UBMZ0tKhz3FGJqYm6e3rcvmAoZ8AEx9MsH6kg46ra8mwjMeDD1wR13gfcFaVEXdztRR3qfO0p2JCJjzMA8W3VRxkD0lsC9h8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
+ by DM4PR12MB6136.namprd12.prod.outlook.com (2603:10b6:8:a9::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Fri, 19 Aug
+ 2022 18:04:55 +0000
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::406d:afb5:d2d7:8115]) by BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::406d:afb5:d2d7:8115%5]) with mapi id 15.20.5525.019; Fri, 19 Aug 2022
+ 18:04:55 +0000
+Message-ID: <b6d4ae2e-9cc0-a94c-f862-9b2698cf6640@amd.com>
+Date:   Fri, 19 Aug 2022 14:04:53 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: build failure of next-20220817 for amdgpu due to 7bc913085765
+ ("drm/amdkfd: Try to schedule bottom half on same core")
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-next <linux-next@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <Yv1lepjhg/6QKyQl@debian>
+ <CADnq5_Od9W1iuzYpsmODOB=Xem97ogeH_t0JrjWC-S8h0XM9fA@mail.gmail.com>
+ <5638aaf1-b808-bdc6-d84a-820f24facea6@infradead.org>
+ <CADVatmNA6-qCJEHNn-gRO6Nx88SsTrPsJn_F5J0NiFhyvijNxA@mail.gmail.com>
+ <c1869a4b-ead1-2ae5-c9ec-61834b578216@infradead.org>
+ <CADVatmPCd5KQ0mAfQGHvqVGFJtK+fyQPB4XUktgfc3fzYJvyCg@mail.gmail.com>
+ <df284479-9981-9983-7775-81d7d7875dac@infradead.org>
+From:   Felix Kuehling <felix.kuehling@amd.com>
+Organization: AMD Inc.
+In-Reply-To: <df284479-9981-9983-7775-81d7d7875dac@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH2PR20CA0010.namprd20.prod.outlook.com
+ (2603:10b6:610:58::20) To BN9PR12MB5115.namprd12.prod.outlook.com
+ (2603:10b6:408:118::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819051725.6lgggz2ktbd35pqj@kamzik>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e7cd0d41-00df-49d5-b4e8-08da820d5223
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6136:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: s1Tm+baAzzR7uaFS0tK86iGl+fagJFEIifR3ZO+fbGU0v76AMDvutybXMN+GZrCecSLyvduBPwOSsBL4mhOABqKDMbt2QI3cg60m34y3OFSWBg2by9xPmnghTI8bn8StUnsGlRzyu/C/MoSO2Oz8DZgXuMm2z8KjC6MOb+ErYzxkKkrk3YVZyigUpsz2IH9Ur0vhsCQhVj3IYyF2m06HnQnLYrl3T9yoM0ANhkNR4H1t5Wc1bubg7Nhz+k5/JaldBMMBIr21UTY/s/qBORa5OxhhxgbKuOWcMln5c5eQsA5VSVyKIlvxgj7lQ69kvW2k6qPXHn4vGfiT1wrgggk+MsMUPWOQ6edQlQB2F5bDO4i/XNvInVB4UhQnfjUeEkSiCcm+RUlp3qlyH09wOYEqUoBCzyvOgCrFG6e4FUCl/dGXNa9oz9au8nnlNVji5F82x6GoLfAt1OyAZSyM/Ex7Ul/fm8hvMAP1LivzQdAgjhWE5HDGPL3tbTUhhvBLA0S+v5gHBPffDCVUKhPL5hp12ExpmuxEHpUUToVoMeE1GA1sabSJZyWNQxYJa9pbrqS2i044cZYpN1cIwr9CTJi2v0OB/ndaMNSKCIFMOmKVzqjBvMSD78ZhJkC4SO1wyQq52fnbqELHAsXviAs7LppbC2IhEQBKH37uMiSpXxRJsM8hKPMd9xHRQ3vgf25AuH+8A+bVBmOWdQ0GNOwP7W3EKltsfuT9gElcxV9aq6QFBDvMViEzVii3/kOFp1Cg/RpNtGSwdUaWw1yhz13qY+DpRck91znVSR5SLB/SoeUxyQI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(136003)(376002)(396003)(366004)(186003)(2616005)(38100700002)(5660300002)(8936002)(44832011)(4326008)(8676002)(66946007)(2906002)(86362001)(66556008)(478600001)(26005)(36916002)(6486002)(6506007)(6512007)(53546011)(41300700001)(54906003)(316002)(6636002)(66476007)(31686004)(31696002)(110136005)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q1RHbVY5bWdTV21zRTdtRGJnUDRKamp1RExiTS9oRnZISXFWSWhGamc1U3Ez?=
+ =?utf-8?B?NnNvOFkyY2ljVDFUYXl3UFVzUUgxWVBUTVZDU0NCZGFnemVDczhmOThLYzh1?=
+ =?utf-8?B?UGNuSVNiT0ZKZWhMeW5ScG5pSjdWdWRvU1FyUDU2VTdrcEM4UnFDTXh1dC92?=
+ =?utf-8?B?WUU1dVkrK3FxZEhGeVNVZVBzTDYwcU9uNjY1d0RFVUU5eGVpMFNZZkNETmlq?=
+ =?utf-8?B?YmIrb2FyVEwxSDIwTk1iK0JWNUQyQVF0MXFUeUhDQUJ0c0ErVEd2WDBUc2tH?=
+ =?utf-8?B?TnJ6ODBCaFlxams5M0JhQUZTQTEzdE1wVEM3NU9lWE9NaFpMRmI0UjduMHkz?=
+ =?utf-8?B?STRtcTAralF2ZDZBWDc1WGxWNWZPNm5iVVF2STZ4QUUxVjN3OUtWOHBhelNv?=
+ =?utf-8?B?MWtmbFdzeFZsSkxqUmwvenE2MFg4QWI3TVlvaXVmekZKd0tMenlCeVQxcVZL?=
+ =?utf-8?B?K29xaTdRR0diR09QclN0NGJQdEZPMlF4cnFUdDlOTy9CMGNpdXBya050SG9S?=
+ =?utf-8?B?aXhJMjNDS3p0eU0rYlduUmZTcDU1aU5LN3BHeVVub0FPV3l1Z1hpSzZlS09z?=
+ =?utf-8?B?OWNRMzVUM21PdG5GMW9kZnZtUVk0V0UwYXAvclNuWGsvTDE4aWJJaUlTN0tj?=
+ =?utf-8?B?bExkSlkwTkFmTWFCa2dJczI4OVhBeXpRYndQSmljQnVGbFpscjJqY2NUMEJC?=
+ =?utf-8?B?M1RRWUtuNXBHR3ZZQXcrNm1uVjZ3bndFK1hPZytOU3VOVVJmSXlPZWc4R0RW?=
+ =?utf-8?B?QzMzTnp0a2p5WnpzYWlFKzlLUmlsczV4TFBDYmhsRDFyM0FxckNGckYyQlRQ?=
+ =?utf-8?B?YlQySllvWnQvQWtTcVBMeFRyK29MZTJnaS9jRWE0bWo0RzNXRVVSR3NQQjYy?=
+ =?utf-8?B?U3dIMmNpTEVHVzE0ZmR6NWJJdlovaEFlWmN2TnFSVWs4eDd2L1N4eUN1QWMy?=
+ =?utf-8?B?SHRsbnJkZEFXcGh4czhYcmtzZEVWaHQxYStrdGwxMlJHcTB4YVBUbnpHTjJj?=
+ =?utf-8?B?OE0waU5OWHRTSStwUmR2ejl4dUwzV2ZoN1JiTkpEREQxQUpMQkkyUWlIbjlJ?=
+ =?utf-8?B?WURramRFMWVCRUJ3d1ZlWktoall3UDQrZEhQS1RZbTJ1U1JFWHJIL3NEL1ZK?=
+ =?utf-8?B?UHo5aXV6eEZBeGtTclFnNlZsaGF5OCtieDlTT1JmOEJLR0Y5WDBKK0xnaXlC?=
+ =?utf-8?B?bHU2R1ExeXV5dDEyWGtNQTZKZlVQdmVyRkJWVFdRclVEM1hsdmI2QmtFcDh0?=
+ =?utf-8?B?c1kwRDA0NXUvYXExMzhVK1VoVEFTam9PRmFVc0NuVExyNEZudnI3SGpaMTV2?=
+ =?utf-8?B?eHVWU0d2K1F2VTBvQ2VVWlZ5b2htREFxMU9QdEhDT3YrRmpIZmdRWW5JQTll?=
+ =?utf-8?B?aWt5NGpmS1NHZEMyYWJxMzFUbXh0TlVSWitFR1NLU3QzQU03M2tjcDc5NXlS?=
+ =?utf-8?B?aTM2T09jb0pHelo3MjMwVURjVUU5T3llc3gxcG1Ca1gyODNBVnRmdFhyTDVm?=
+ =?utf-8?B?MzVIRjVFTDBrc2dBV3M5Y1ZlYmROR3ZSb3VVRk1xZWh0TE5VcjRYTy9RdUU1?=
+ =?utf-8?B?cWlFV1I0TllGbzZEa1gvYjdUQVJkcWJFME9GZU9wNXJFb1FKUjFoYS9sbHZq?=
+ =?utf-8?B?N2NrUU5xVzBscTlWODFHUG5wUzJKc05YaTlQYmtXaFBLR3N0SU4yaVBkbm51?=
+ =?utf-8?B?UDdrdzJ1NmpCSWdMUithS3dySnpWakI2WnZvRGxkZER3RVk1cUtoOVRZa3ZP?=
+ =?utf-8?B?SnNWb2F1WnZReWUvS3lvcnVDZ1lLa0hGeGR1bGFQWDRxY09nMXpLaTJTUFZw?=
+ =?utf-8?B?UEZqZTViVk9zTmVtRzVPdmlZT1V0N3ZIdWdMOU11UmFOcVhZUkFvNlREQWVM?=
+ =?utf-8?B?VUhJT0ZZMEJJcE1ZUHN6elMyNXo5UWxIcXo1RFcrWkwyUFZuY255OVRydzdv?=
+ =?utf-8?B?NkpTTjdCUTEwZ2R2M3NMSi9UVkZnTlI1ZUNVQjdmSnJXYmtMS0l6eWZKSFFR?=
+ =?utf-8?B?M2drVXJrakg1WXBaekNkZG9rb3h0VHNDOWI5MXRDOWV6aUVZWk5rSjZMM0dU?=
+ =?utf-8?B?QnM2a09XUmNMUHJhSXVRTGJzYWRNamg3Tks4QnZJR2JJSkdVbUxnNGw5SnJT?=
+ =?utf-8?Q?p0zOk7RxvzpFFUSGLKfsoC8GA?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7cd0d41-00df-49d5-b4e8-08da820d5223
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2022 18:04:55.2301
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GYvbcxaRI7j5uN9UdH1N6eGtnu+ahl2ZpxF8/OWKlSeoQuNOvEYOvLHfRy6VJBA+cFR6SEqB7YiGgaL0zRGPjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6136
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022, Andrew Jones wrote:
-> On Thu, Aug 18, 2022 at 11:29:11PM +0000, Sean Christopherson wrote:
-> > On Thu, Aug 18, 2022, Andrew Jones wrote:
-> Dropping the only once-used uc_pool_idx() and adding the comment looks
-> better, but I don't think there was a bug because uc == uc->hva.
+On 2022-08-18 15:34, Randy Dunlap wrote:
+> Hi--
+>
+> On 8/18/22 12:15, Sudip Mukherjee wrote:
+>> On Thu, Aug 18, 2022 at 4:10 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>>
+>>> On 8/18/22 03:43, Sudip Mukherjee wrote:
+>>>> On Thu, Aug 18, 2022 at 3:09 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>>>>
+>>>>> On 8/17/22 19:01, Alex Deucher wrote:
+>>>>>> On Wed, Aug 17, 2022 at 6:03 PM Sudip Mukherjee (Codethink)
+>>>>>> <sudipm.mukherjee@gmail.com> wrote:
+>>>>>>> Hi All,
+>>>>>>>
+>>>>>>> Not sure if it has been reported, build of next-20220817 fails with the
+>>>>>>> error:
+>>>>>>>
+>>>>>>> ERROR: modpost: "cpu_smallcore_map" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+>>>>>>>
+>>>>>>> Trying to do a git bisect to find out the offending commit.
+>>>>>>>
+>>>>>> Thanks.  I don't see that symbol in the driver at all.  Not sure where
+>>>>>> it is coming from.
+>>>>>>
+>>>>> It's powerpc only.
+>>>>>
+>>>>> Sudip, is it non-CONFIG_SMP by any chance?
+>>>> Ohhh.. really sorry for the incomplete report. I should not try to
+>>>> mail while travelling.
+>>>>
+>>>> The error is seen with powerpc allmodconfig and it has CONFIG_SMP=y.
+>>> OK, I see that also, but it doesn't make any sense (to me).
+>>>
+>>> I did 'objdump' on the code file (amdgpu.o) and it's listed as
+>>> undefined but there are no code references to it.
+>> cpu_smt_mask() is called by drivers/gpu/drm/amd/amdkfd/kfd_device.c.
+>> and cpu_smt_mask() is an inline function in
+>> arch/powerpc/include/asm/smp.h which is doing "return
+>> per_cpu(cpu_smallcore_map, cpu);"
+>>
+>> So, the offending commit is 7bc913085765 ("drm/amdkfd: Try to schedule
+>> bottom half on same core").
+> Thanks for digging that up.
+>
+> It just needs to have that symbol exported I think.
+> This builds cleanly now.
+> I can submit it or one of the AMD gfx developers can do so.
 
-uc == uc->hva for the host, but not for the guest.  From the guest's perspective,
-"hva" is an opaque pointer that has no direct relation to "uc".
+I'm not sure where I would need to submit this. And I'm not familiar 
+with Powerpc code at all. I'm OK if you submit this wherever it needs to go.
 
-> 1) Doing ucall_init() at VM create time may be too early for Arm. Arm
-> probes for an unmapped address for the MMIO address it needs, so it's
-> best to do that after all mapping.
+Thanks,
+   Felix
 
-Argh.  I really hate the MMIO probing.  Is there really no arbitrary address that
-selftests can carve out and simply say "thou shalt not create a memslot here"?
 
-Or can we just say that it's always immediate after memslot0?  That would allow
-us to delete the searching code in ARM's ucall_arch_init().
-
-> 2) We'll need to change the sanity checks in Arm's get_ucall() to not
-> check that the MMIO address == ucall_exit_mmio_addr since there's no
-> guarantee that the exiting guest's address matches whatever is lingering
-> in the host's version. We can either drop the sanity check altogether
-> or try to come up with something else.
-
-Ah, right.  This one at least is easy to handle.  If the address is per-VM, just
-track the address.  If it's hardcoded (as a fix for #1) then, it's even simpler.
-
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 8623c1568f97..74167540815b 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -94,7 +94,8 @@ struct kvm_vm {
-        vm_paddr_t pgd;
-        vm_vaddr_t gdt;
-        vm_vaddr_t tss;
--       vm_vaddr_t idt;
-+       vm_paddr_t pgd;
-+       vm_vaddr_t ucall_addr;
-        vm_vaddr_t handlers;
-        uint32_t dirty_ring_size;
-        struct vm_memcrypt memcrypt;
-diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-index b5d904f074b6..7f1d50dab0df 100644
---- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-+++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-@@ -14,6 +14,8 @@ static vm_vaddr_t *ucall_exit_mmio_addr;
-
- static void ucall_set_mmio_addr(struct kvm_vm *vm, vm_vaddr_t val)
- {
-+       vm->ucall_addr = val;
-+
-        atomic_sync_global_pointer_to_guest(vm, ucall_exit_mmio_addr, val);
- }
-
-@@ -87,7 +89,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
-        struct kvm_run *run = vcpu->run;
-
-        if (run->exit_reason == KVM_EXIT_MMIO &&
--           run->mmio.phys_addr == (uint64_t)ucall_exit_mmio_addr) {
-+           run->mmio.phys_addr == vcpu->vm->ucall_addr) {
-                TEST_ASSERT(run->mmio.is_write && run->mmio.len == sizeof(uint64_t),
-                            "Unexpected ucall exit mmio address access");
-                return (void *)(*((uint64_t *)run->mmio.data));
-
+>
+>
+> ---
+>   arch/powerpc/kernel/smp.c |    1 +
+>   1 file changed, 1 insertion(+)
+>
+> --- a/arch/powerpc/kernel/smp.c
+> +++ b/arch/powerpc/kernel/smp.c
+> @@ -86,6 +86,7 @@ DEFINE_PER_CPU(cpumask_var_t, cpu_core_m
+>   static DEFINE_PER_CPU(cpumask_var_t, cpu_coregroup_map);
+>   
+>   EXPORT_PER_CPU_SYMBOL(cpu_sibling_map);
+> +EXPORT_PER_CPU_SYMBOL(cpu_smallcore_map);
+>   EXPORT_PER_CPU_SYMBOL(cpu_l2_cache_map);
+>   EXPORT_PER_CPU_SYMBOL(cpu_core_map);
+>   EXPORT_SYMBOL_GPL(has_big_cores);
+>
+>

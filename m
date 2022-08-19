@@ -2,210 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C1B5997AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCB559979A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347204AbiHSIhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
+        id S1347358AbiHSIi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347347AbiHSIgu (ORCPT
+        with ESMTP id S1346949AbiHSIhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:36:50 -0400
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D85606A1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:34:43 -0700 (PDT)
-Received: by mail-ua1-x932.google.com with SMTP id by8so1525504uab.12
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:34:43 -0700 (PDT)
+        Fri, 19 Aug 2022 04:37:41 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2033D586
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:37:23 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id b2so2820534qkh.12
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:37:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=FIWWrde7a/JqcshJyKxI1HIVfMGJjyPquwX+/hncQxU=;
-        b=oFjxsUG3a87JQoZd+PORVHqi6PEHnZ5vNlDfRiaD2q/RvCAcsNwsAFtDnPH+pqy7Lm
-         kl7oY5yiVxKrAqaERhg6gDgt5uUYAc3pvLOWJXeeJ51hk0Zh13lenrZ1UZr+g89OQxup
-         kluS81G8bs7+I9B+bxVUGPiBT/hN+yHuNeDtqQuW/Ir/kRpAS6RLZVvILO4luGb+vYdI
-         LosPoa/Co1/EO/Lbzmz2662BGDbIlYlYe6wenJ7w/GQeW7mkd/6pZyAZj9DYM+6A7Uw4
-         0/uyrCM4F2sVcE6s2a+VLuhOL8xEVcRXFy7aGYq/tZLLV/G2sy+oUDYg5+fTnaJyGXSD
-         0IYw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=2ovy6cOrAq5hbHsy+zYmpR6YppyOweI7oSxHXbcd+Tw=;
+        b=EX292WCZQn3k56I4UVurdpZlVXNrGus9pO/H54MgD4RjHhGgyDZCGDahZ8JyYgdknx
+         /k0qBNK/1B8kbQsZZaHhgm/oEJ10NC+vsnwhj7sxrFKSMZie1BB9J1ngMqgizqdUKfV+
+         VDrPkPK6rymo9iga7G22+WRekb/rdAINJYUHjhbe3SZe0PZiBfyg9NPEek1bQasyAxNt
+         H+1TcaNPi8HfSgyGplEePLzjA1jKYdWJ+wn/cJykirJINBTltn6QQX7cibXK/9IPosC/
+         tpyZ2MU3+iPIIsq2hHcdwTlSWdY1PFfjA4LLKrHCZ2Q49ilhtQbik46ltxrA0TVMKiIp
+         mYKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=FIWWrde7a/JqcshJyKxI1HIVfMGJjyPquwX+/hncQxU=;
-        b=Q2WPUk1OkUEpVca363H6Klm+x/Fx8iRh8hAoBh/cK8RbTTuwa0Yc/Pn7fpm6CfAbsf
-         X2wGvYLjVWHqbhxJ0v7CjjwzPhAYMh1N1JLCbXHlJaTcWoUCA6yACf8MSjCPhvZRkc0L
-         h0i/PwxulEM3FFuZ+WywGIpmK5XJbNxJ7JElp/zNqgfjnIwM2g/DrFU0B72dgLJ02zyq
-         oI8Vexc/n3UESHh5UqVuvt9UzbTAws7xhNtoOZhPaoNMS339BwWNxYIuTkCRhNwsC7bm
-         rvHMWpJb7d9qBizaCmp49bENEXJUerMprcGrw5vDJM4wbIOc+HjMpFCSDoL76SFYiAP+
-         pJIQ==
-X-Gm-Message-State: ACgBeo3f4yQhf35i0zSEyuRGDna+hfEgW2kW9Y+sfDzMW8XTAvdpiO3z
-        /Z0g9Bi4Y1Vmlq1pfg2aSGTJrghLVns+K6YMC4oqVQ==
-X-Google-Smtp-Source: AA6agR6js/rZ7cAl5nKI4lPs0swl+3Wn3I7GmyFLifwGBDzbErMpFq+37uj8xdHx2xP5xOZ1ORWrqjlx4iguaeloXiA=
-X-Received: by 2002:ab0:3b09:0:b0:39a:82bc:88e5 with SMTP id
- n9-20020ab03b09000000b0039a82bc88e5mr2276360uaw.26.1660898082867; Fri, 19 Aug
- 2022 01:34:42 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=2ovy6cOrAq5hbHsy+zYmpR6YppyOweI7oSxHXbcd+Tw=;
+        b=kvgyidbwUTlFFX0knfqkcct86VA3zDTVkxFW0EvpGLHzF2toGfCDiia3xzwomqn0Ir
+         05LnDR9uWoXAxM3i7BmwGECcA3cyUn69k6fZbbJybl0Nq5G6Fl+xyodec0wIFCm4nQuN
+         xcVLPxb78EAFONunycrcuYz2Xt880WDp2eHB0chgKlGMAyuPOjil2Qfov5Z1IpJP3n2e
+         7plIypNf8okjg/5v7+rbOcOeJVCcZiFdI5oQfNxd17vYaltrZePt3dR1HYDbMkg0TY5L
+         7I7a421arbvedaJ36YbyW27r95gyqhYCSEidXztFHkN7hjb4WAEQzle1YtwCno6ocShY
+         OIVQ==
+X-Gm-Message-State: ACgBeo360JcEiME6P0Z5BIm0OjtQOQZEte6OtdzkHJ3TktKjDzyuFQgi
+        PTAlwb1BaYcyH7VRQ2yvuzM=
+X-Google-Smtp-Source: AA6agR4i2/flNAUUbOKuONjVpkKw1q/Sspz8B7ZUxzAEVVmgwbOWyHjEphvGVeqpOvrFYezqzZJl3Q==
+X-Received: by 2002:a05:620a:269a:b0:6b5:b76c:11c9 with SMTP id c26-20020a05620a269a00b006b5b76c11c9mr4585731qkp.100.1660898242746;
+        Fri, 19 Aug 2022 01:37:22 -0700 (PDT)
+Received: from sophie ([89.46.62.64])
+        by smtp.gmail.com with ESMTPSA id 66-20020a370945000000b006b8d1914504sm3078750qkj.22.2022.08.19.01.37.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 01:37:22 -0700 (PDT)
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Rebecca Mckeever <remckee0@gmail.com>
+Subject: [PATCH v2 0/8] memblock tests: update and extend memblock simulator
+Date:   Fri, 19 Aug 2022 01:34:48 -0700
+Message-Id: <cover.1660897732.git.remckee0@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220817164851.3574140-1-joefradley@google.com> <20220817164851.3574140-3-joefradley@google.com>
-In-Reply-To: <20220817164851.3574140-3-joefradley@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 19 Aug 2022 16:34:31 +0800
-Message-ID: <CABVgOSkRRMDz14cpsYBi7SaefbOhGc9V+z+pY_tULkk12Fb-EA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kunit: no longer call module_info(test, "Y") for
- kunit modules
-To:     Joe Fradley <joefradley@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        kernel-team@android.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000404fda05e693f8d3"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000404fda05e693f8d3
-Content-Type: text/plain; charset="UTF-8"
+These patches update existing tests in memblock simulator, add
+additional tests for memblock functions that are already being tested,
+and add test coverage for additional memblock functions.
 
-On Thu, Aug 18, 2022 at 12:49 AM Joe Fradley <joefradley@google.com> wrote:
->
-> Because KUnit test execution is not a guarantee with the kunit.enable
-> parameter we want to be careful to only taint the kernel only if an
-> actual test runs. Calling module_info(test, "Y") for every KUnit module
-> automatically causes the kernel to be tainted upon module load. Therefore,
-> we're removing this call and relying on the KUnit framework to taint the
-> kernel or not.
->
-> Signed-off-by: Joe Fradley <joefradley@google.com>
-> ---
+Updated tests for:
+- memblock_alloc()
+- memblock_alloc_try_nid()
+- memblock_alloc_from()
 
-Thanks!
+The updates to memblock_alloc() tests include the addition of an assert
+that checks whether the entire chunk of allocated memory is cleared. For
+memblock_alloc_try_nid() and memblock_alloc_from(), the assert that checks
+whether the allocated memory is cleared now checks the entire chunk of
+allocated memory instead of just the first byte. To make this more robust,
+setup_memblock() and dummy_physical_memory_init() fill the entire MEM_SIZE
+simulated physical memory with nonzero values by calling fill_memblock().
+setup_memblock() is called at the beginning of most tests for
+memblock_alloc() functions.
 
-This definitely fixes an assumption I'd had about KUnit-usage which
-definitely doesn't hold: that all KUnit tests would be in their own
-modules (or at least that those modules wouldn't need to be loaded on
-otherwise production systems). Given this isn't the case for a number
-of modules (thuderbolt, apparmor, probably soon amdgpu), it makles
-sense to get rid of this and only taint the kernel when the test is
-actually run, not just when it's loaded.
+Additional tests for:
+- memblock_add()
+- memblock_reserve()
+- memblock_remove()
+- memblock_free()
+- memblock_alloc()
 
-This could be considered a fix for c272612cb4a2 ("kunit: Taint the
-kernel when KUnit tests are run"), as it'd already be possible to
-load, e.g., thunderbolt, but prevent the tests from executing with a
-filter glob which doesn't match any tests. That possibly shouldn't
-taint the kernel.
+Introducing test coverage for:
+- memblock_alloc_raw()
+- memblock_alloc_try_nid_raw()
+- memblock_set_bottom_up()
+- memblock_bottom_up()
+- memblock_trim_memory()
 
-Reviewed-by: David Gow <davidgow@google.com>
-Fixes: c272612cb4a2 ("kunit: Taint the kernel when KUnit tests are run")
+The tests for the memblock_alloc_*raw() functions test both top-down and
+bottom-up allocation directions. To add coverage for memblock_alloc_raw(),
+the alloc_api was updated so that it runs through all the existing tests
+twice: once for memblock_alloc() and once for memblock_alloc_raw(). When
+the tests run memblock_alloc_raw(), they test that the entire memory
+region is nonzero instead of testing that it is zero.
 
-Cheers,
--- David
+Similarly, the alloc_nid_api was updated to run through its tests twice:
+once for memblock_alloc_try_nid() and once for
+memblock_alloc_try_nid_raw(). When the tests run
+memblock_alloc_try_nid_raw(), they test that the entire memory region is
+nonzero instead of testing that it is zero.
 
->  include/kunit/test.h | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index c958855681cc..f23d3954aa17 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -251,7 +251,6 @@ static inline int kunit_run_all_tests(void)
->  #endif /* IS_BUILTIN(CONFIG_KUNIT) */
->
->  #define __kunit_test_suites(unique_array, ...)                                \
-> -       MODULE_INFO(test, "Y");                                                \
->         static struct kunit_suite *unique_array[]                              \
->         __aligned(sizeof(struct kunit_suite *))                                \
->         __used __section(".kunit_test_suites") = { __VA_ARGS__ }
-> --
-> 2.37.1.595.g718a3a8f04-goog
->
+The patch set also adds labels to verbose output for generic
+memblock_alloc*() tests that indicate which allocation direction is set.
+The function names of those tests do not include this information.
 
---000000000000404fda05e693f8d3
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+---
+Changelog
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA3
-FKMv0rb2xHk3DirulJdRHhbiP8FNxamZGB5WRakw5zAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA4MTkwODM0NDNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEARxi3ltyQ8jHqlPurYczC
-i2+KJDMHF+h9W9WJcsMRyKiTil0H9OU7RjgwTq8tCpOAVjXjIJeyVOjdfo8rVrHQ+GHSANAIhIdD
-kOCq+yQcBAYummKaWCxpFduYmiQQ/4Zv+m5FKmGOnEQOiNE2tnZhVe8mtITb5gFPX5bRdh7uNORG
-QjIHlZGjI0ZG9P9svV7L+mYwn3/DM2Q9+zCFfH1bGmc9vgomSTvvEZK6JD6KK9ZeMFXf52vZrLU/
-IwYNK/QpUnbsTzBVJi6rA8NxtlL/3xGyS9rTy/VhrfsShoFnpdEK9UyscMTkZvHCkbT09byDX4O5
-C8AUgQ8TBDWRJoUgyQ==
---000000000000404fda05e693f8d3--
+v1 -> v2
+Updates based on feedback from Shaoqin Huang:
+PATCH 1:
+- tests/alloc_api.c:
+    - Remove fill_memblock() from alloc_no_memory_generic_check().
+- tests/common.c, tests/common.h:
+    - Change fill_memblock() to file static.
+PATCH 3:
+- Shaoqin Huang and I discussed using run_top_down() and run_bottom_up()
+  even for functions with `top_down` and `bottom_up` in the name to
+  maintain a consistent output style. However, this would make the
+  output more redundant, so no changes were made.
+PATCH 4:
+- tests/basic_api.c:
+    - Rename instances of r1_size and r2_size to
+      new_r1_size and new_r2_size.
+PATCH 6:
+- tests/alloc_api.c, tests/alloc_nid_api.c, tests/common.h:
+    - Change verify_mem_content() to a common function defined in
+      common.h.
+PATCH 8:
+- tests/basic_api.c:
+    - Rename instances of r2_base and r2_size to
+      new_r2_base and new_r2_size.
+---
+
+Rebecca Mckeever (8):
+  memblock tests: update tests to check if memblock_alloc zeroed memory
+  memblock tests: update zeroed memory check for memblock_alloc_* tests
+  memblock tests: add labels to verbose output for generic alloc tests
+  memblock tests: add additional tests for basic api and memblock_alloc
+  memblock tests: update alloc_api to test memblock_alloc_raw
+  memblock tests: update alloc_nid_api to test
+    memblock_alloc_try_nid_raw
+  memblock tests: add tests for memblock_*bottom_up functions
+  memblock tests: add tests for memblock_trim_memory
+
+ tools/testing/memblock/tests/alloc_api.c      | 175 +++-
+ .../memblock/tests/alloc_helpers_api.c        |  20 +-
+ tools/testing/memblock/tests/alloc_nid_api.c  | 260 +++---
+ tools/testing/memblock/tests/basic_api.c      | 767 ++++++++++++++++++
+ tools/testing/memblock/tests/common.c         |   7 +
+ tools/testing/memblock/tests/common.h         |  53 ++
+ 6 files changed, 1095 insertions(+), 187 deletions(-)
+
+-- 
+2.25.1
+

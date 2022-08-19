@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C35F59A331
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3027159A395
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353454AbiHSQhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 12:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S1353483AbiHSQhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 12:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353760AbiHSQce (ORCPT
+        with ESMTP id S1352895AbiHSQck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 12:32:34 -0400
+        Fri, 19 Aug 2022 12:32:40 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0334410DCD4;
-        Fri, 19 Aug 2022 09:06:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5EB10D5B7;
+        Fri, 19 Aug 2022 09:06:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC3A8B8281F;
-        Fri, 19 Aug 2022 16:06:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BA02C43140;
-        Fri, 19 Aug 2022 16:06:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A37EDB82804;
+        Fri, 19 Aug 2022 16:06:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE0B2C433D6;
+        Fri, 19 Aug 2022 16:06:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660925209;
-        bh=/deEQ7RT5Ri/0KjhQfwEy88BiGV/RDtZZ7zEgzL9xZg=;
+        s=korg; t=1660925215;
+        bh=6dF5TB/aJ1+miP79MTYgnNJanT5YTS6HF7U0DLVihcY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IqDD7l653YesaSIv+UeeDzCsbDOBzwYNjpFLecXWCqCK1qkXg5PhjixKrq/Yy7yzK
-         cJSD4UR3w1Gx9SyHLS4rcM8pDr32x3YgLRIQ2P/b/kU6oj3xAwPgcmc9nKcv7sS06Y
-         bZlC+059jJmI3iyhBpJNJgBK3+Qhk3XmNTLn+724=
+        b=vf1jYEpB7FANnHJ+7nWv0V85A8UldJh6HSdiPk/IerAKNU8K925xQCbSAPDORVVEF
+         lkRK+LEXpO3g3KOBZfmvNfR41RiBrnB4Tg39tSdCEMVDH5cz2f8aVjT+RZBVuoqylq
+         DtNxIEZK+HbGT0Tv4Aufnn/Ugz4LExvpQk2xhbBc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Byungki Lee <dominicus79@gmail.com>,
-        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 419/545] f2fs: write checkpoint during FG_GC
-Date:   Fri, 19 Aug 2022 17:43:09 +0200
-Message-Id: <20220819153848.171639158@linuxfoundation.org>
+Subject: [PATCH 5.10 421/545] powerpc/spufs: Fix refcount leak in spufs_init_isolated_loader
+Date:   Fri, 19 Aug 2022 17:43:11 +0200
+Message-Id: <20220819153848.272071255@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220819153829.135562864@linuxfoundation.org>
 References: <20220819153829.135562864@linuxfoundation.org>
@@ -55,73 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Byungki Lee <dominicus79@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit a9163b947ae8f7af7cb8d63606cd87b9facbfe74 ]
+[ Upstream commit 6ac059dacffa8ab2f7798f20e4bd3333890c541c ]
 
-If there's not enough free sections each of which consistis of large segments,
-we can hit no free section for upcoming section allocation. Let's reclaim some
-prefree segments by writing checkpoints.
+of_find_node_by_path() returns remote device nodepointer with
+refcount incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-Signed-off-by: Byungki Lee <dominicus79@gmail.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Fixes: 0afacde3df4c ("[POWERPC] spufs: allow isolated mode apps by starting the SPE loader")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220603121543.22884-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/gc.c | 38 +++++++++++++++++++++++---------------
- 1 file changed, 23 insertions(+), 15 deletions(-)
+ arch/powerpc/platforms/cell/spufs/inode.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index 22bb5e07f656..3b53fdebf03d 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -1741,23 +1741,31 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
- 	if (sync)
- 		goto stop;
+diff --git a/arch/powerpc/platforms/cell/spufs/inode.c b/arch/powerpc/platforms/cell/spufs/inode.c
+index 25390569e24c..908e9b8e79fe 100644
+--- a/arch/powerpc/platforms/cell/spufs/inode.c
++++ b/arch/powerpc/platforms/cell/spufs/inode.c
+@@ -664,6 +664,7 @@ spufs_init_isolated_loader(void)
+ 		return;
  
--	if (has_not_enough_free_secs(sbi, sec_freed, 0)) {
--		if (skipped_round <= MAX_SKIP_GC_COUNT ||
--					skipped_round * 2 < round) {
--			segno = NULL_SEGNO;
--			goto gc_more;
--		}
-+	if (!has_not_enough_free_secs(sbi, sec_freed, 0))
-+		goto stop;
+ 	loader = of_get_property(dn, "loader", &size);
++	of_node_put(dn);
+ 	if (!loader)
+ 		return;
  
--		if (first_skipped < last_skipped &&
--				(last_skipped - first_skipped) >
--						sbi->skipped_gc_rwsem) {
--			f2fs_drop_inmem_pages_all(sbi, true);
--			segno = NULL_SEGNO;
--			goto gc_more;
--		}
--		if (gc_type == FG_GC && !is_sbi_flag_set(sbi, SBI_CP_DISABLED))
-+	if (skipped_round <= MAX_SKIP_GC_COUNT || skipped_round * 2 < round) {
-+
-+		/* Write checkpoint to reclaim prefree segments */
-+		if (free_sections(sbi) < NR_CURSEG_PERSIST_TYPE &&
-+				prefree_segments(sbi) &&
-+				!is_sbi_flag_set(sbi, SBI_CP_DISABLED)) {
- 			ret = f2fs_write_checkpoint(sbi, &cpc);
--	}
-+			if (ret)
-+				goto stop;
-+		}
-+		segno = NULL_SEGNO;
-+		goto gc_more;
-+	}
-+	if (first_skipped < last_skipped &&
-+			(last_skipped - first_skipped) >
-+					sbi->skipped_gc_rwsem) {
-+		f2fs_drop_inmem_pages_all(sbi, true);
-+		segno = NULL_SEGNO;
-+		goto gc_more;
-+	}
-+	if (gc_type == FG_GC && !is_sbi_flag_set(sbi, SBI_CP_DISABLED))
-+		ret = f2fs_write_checkpoint(sbi, &cpc);
- stop:
- 	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
- 	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = init_segno;
 -- 
 2.35.1
 

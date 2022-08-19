@@ -2,105 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F705992B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 03:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2985992B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 03:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241725AbiHSBoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 21:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S242927AbiHSBq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 21:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239163AbiHSBod (ORCPT
+        with ESMTP id S240102AbiHSBqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 21:44:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9244AD571D;
-        Thu, 18 Aug 2022 18:44:32 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M84Hs0BfWznTcd;
-        Fri, 19 Aug 2022 09:42:17 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 19 Aug 2022 09:44:30 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 19 Aug 2022 09:44:30 +0800
-Subject: Re: [PATCH -next] net: neigh: use dev_kfree_skb_irq instead of
- kfree_skb()
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "Denis V. Lunev" <den@virtuozzo.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>
-References: <20220818043729.412753-1-yangyingliang@huawei.com>
- <79784952-0d15-8a4a-aa8d-590bc243ab5e@virtuozzo.com>
- <20220818093224.2539d0bc@kernel.org>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <6fab4f14-3afd-2576-e539-da37408f6b84@huawei.com>
-Date:   Fri, 19 Aug 2022 09:44:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 18 Aug 2022 21:46:23 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3D5D6303
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 18:46:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660873583; x=1692409583;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HOu9W0Z7Hb0AbvSxeFl3Bfr4eXNOKWNuHXBWb8n0dg4=;
+  b=bocTYFxcnAqEUIv1zVDMGcMDVmUuKRDUD5JIosTqCkrm/gemSLbVdjgr
+   YYxSdm/DV9lLwXEseKuNZu54HEVVo6EboaCbHcVrwaUe4PbblBIU+PYDW
+   jsK2oGZW02Lur+ykgeYN75/EIoq85m3S0oGjoE0QhNrVqa5aNql6ZpvSv
+   b1zW+0lQITcGV1cOKUgBP71x7NJCyYKcnljVZ3mUJxSwQkhlm8+6UA7G4
+   /8oXc1eStpkkeDtinI2qgLUd2A0wzPsbYs6IV8scN2auy6F9rRcGtkNhA
+   CaVWqKLQdSm6TM7o+HVyWpXXmGciLePmEiA08FuUNeY9hzt0JtorpC8x5
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="273303581"
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="273303581"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 18:46:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="936038762"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Aug 2022 18:46:22 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oOr5Z-0000sp-1P;
+        Fri, 19 Aug 2022 01:46:21 +0000
+Date:   Fri, 19 Aug 2022 09:45:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [alobakin:kallsyms 3/3] Failed to open
+ ../lib/gcc/or1k-linux/12.1.0/libgcc.syms: No such file or directory at
+ scripts/gen_sympaths.pl line 182.
+Message-ID: <202208190907.vrsbCoX3-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220818093224.2539d0bc@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/alobakin/linux kallsyms
+head:   0707de5041e9ba702fb490bf92d8742b797c9c3e
+commit: 0707de5041e9ba702fb490bf92d8742b797c9c3e [3/3] kallsyms: add option to include relative filepaths into kallsyms
+config: openrisc-allmodconfig (https://download.01.org/0day-ci/archive/20220819/202208190907.vrsbCoX3-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/alobakin/linux/commit/0707de5041e9ba702fb490bf92d8742b797c9c3e
+        git remote add alobakin https://github.com/alobakin/linux
+        git fetch --no-tags alobakin kallsyms
+        git checkout 0707de5041e9ba702fb490bf92d8742b797c9c3e
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 ARCH=openrisc 
 
-On 2022/8/19 0:32, Jakub Kicinski wrote:
-> Please put [PATCH net] as the tag for v2, this is a fix, not -next
-> material.
-OK.
-I don't find the commit 66ba215cb513 ("neigh: fix possible DoS due to 
-net iface start/stop loop")
-on linux/master, so made the patch based on linux-next/master, and add 
--next.
-Later I will send a v2 based on net/master.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Yang
->
-> On Thu, 18 Aug 2022 11:00:13 +0200 Denis V. Lunev wrote:
->>           unsigned long flags;
->>           struct sk_buff *skb;
->> +       struct sk_buff_head tmp;
-> reverse xmas tree, so tmp should be declared before the shorter lines
->
->> +       skb_queue_head_init(&tmp);
->>
->>           spin_lock_irqsave(&list->lock, flags);
->>           skb = skb_peek(list);
->> @@ -318,12 +321,16 @@ static void pneigh_queue_purge(struct sk_buff_head
->> *list, struct net *net)
->>                   struct sk_buff *skb_next = skb_peek_next(skb, list);
-> while at it let's add an empty line here
->
->>                   if (net == NULL || net == dev_net(skb->dev)) {
->>                           __skb_unlink(skb, list);
->> -                       dev_put(skb->dev);
->> -                       kfree_skb(skb);
->> +                       __skb_queue_tail(&tmp, skb);
->>                   }
->>                   skb = skb_next;
->>           } while (skb != NULL);
->>           spin_unlock_irqrestore(&list->lock, flags);
->> +
->> +       while ((skb = __skb_dequeue(&tmp)) != NULL) {
-> No need to compare pointers to NULL
->
->> +               dev_put(skb->dev);
->> +               kfree_skb(skb);
->> +       }
-> .
+All errors (new ones prefixed by >>):
+
+>> Failed to open ../lib/gcc/or1k-linux/12.1.0/libgcc.syms: No such file or directory at scripts/gen_sympaths.pl line 182.
+   No valid symbol.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002AC59981F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2708B599802
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347795AbiHSIyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S1347806AbiHSIyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244382AbiHSIyI (ORCPT
+        with ESMTP id S1347518AbiHSIyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:54:08 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1837390E
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:54:07 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id gi31so1095116ejc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:54:07 -0700 (PDT)
+        Fri, 19 Aug 2022 04:54:09 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7588C7644C
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:54:08 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id e13so4823493edj.12
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:54:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=lgIH+anOUapmsDT3madCqkJtVLuh/Inv9K5cFDxhThs=;
-        b=Oh9zPK94Un8fe7pcbMnsK/FIG9oexvu+SEqI4AyylhS+RG8LRAqWzTa6PLdYrqYOOs
-         UDKJzLpmoQNEfwX758srbGm5yM7auR7ZLiZahTVPfcCIu5rXCcJyknnRSM0dcJKPYBos
-         4ikZgl1KiavaemU1RwCOupVTMEoJnew/tDp75Pcu5ZDq32gn+V/lun6teEyK/jv7yvHW
-         I80/JZI60mVAerWg88PYR4VyqVEsOcl6h2DY8kjLWIn0j/XHTeUYZdHVOaxjAmogf4HG
-         oYl9G93PZ66ILwCavLMpgk9kKqq26jJBTM9VRKHFuEd2bdySoy1vt1YrkHCwzvtDaULD
-         bNug==
+        bh=hRYX9Qb8xgVcO72OHHpEJqvkK+/eKUc0GJTr4L8+CVs=;
+        b=Zrdanl+ISS0t/bkFjxe38FKDpC4fChz8UY3qlFMBwI5B0xWU0HA9Z+g80uc/ASOWo/
+         GuX73IWG2WYPEZrsQzUtig2dRC2SMsJ/+7Tl52u4XBuYU6cwGootc/r54lMwHoskpMlJ
+         H+L+tJ8hlWcb7b5uSFoKk/e5fc6DjojWgmIYIN3CEtGArfo+GgGdU4zYJVFVY7YiRK8J
+         KIGOY5nmisMSXXFNXehpYucxwg2wDOYmfUJBUdLgFPRp66NfCt+9cup5CYlM7ZoFqPgA
+         U7/Y5Qc6ZTWNUUYtYGzFR8sDde4Avpz14VBVig1HK12JwufQHAn5tZEBeIF3gYtZsarP
+         tjaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=lgIH+anOUapmsDT3madCqkJtVLuh/Inv9K5cFDxhThs=;
-        b=wXVwbHkG5Ict1PnCME4vQfW6KXGKB6kRmKHX0K1ScPaBgDWjHYo9AQv9vAfYK+S0wr
-         sr6J5Xdj3w1vuzwdhUOcY0nQtmUGgm/hgn9AlZfqfEc0xutok2qjtIdLptUrfGMkl79E
-         74bFQjKf14nvzfG1JWCHyCVPpBw4Bo4CCcdt2XHHapma5GtI7hE8rHGyTboXYb/GYPU8
-         GQ9pGzXlxf7pE3t1xM0w5C7d7T9GNS1XRrNFhjVCAC0QmhmtgGEAY4u/9dp+bFD1BwWu
-         bUpvHQeJ6C3X2m3v6yR26QMYzX90nB1ZYMIRDV7ULs5eSmTYjlFcxoOjxPxl8UJP/jUr
-         jT0Q==
-X-Gm-Message-State: ACgBeo38tMGhiqQPNHIhk7Ibu+Kxc/+A/XepHtZK2yXImcTDSBRqH53i
-        65/pexG1FRcirCqmsa8wPWo=
-X-Google-Smtp-Source: AA6agR5oGhiIgaRuZCuyvZPAgLaEKfWKYc7sQTTjsVGONpso3TbsB11bAN332qpegNz+MDrOEc0i+A==
-X-Received: by 2002:a17:907:1c89:b0:734:d05c:582e with SMTP id nb9-20020a1709071c8900b00734d05c582emr4320699ejc.282.1660899246114;
+        bh=hRYX9Qb8xgVcO72OHHpEJqvkK+/eKUc0GJTr4L8+CVs=;
+        b=JpaptxJcDaQpN69kvitKesnRVfppmPBeKvfE39wnUGKmWEfrvoNsNAdLYFHbIFsabc
+         d96IyLFI+95CkE5Z04gMRKV1l0MdiPv/t6UAS3dTIgsYrC8PE4WLxSfzMMsy6KBW0yw0
+         M3uMrQEGy3MSw2OMAKSEviafbHO1OIjkm7UXaeEj03hzzSa36za+RUsjAUkmmoaBXNzc
+         NBWK4qEZ3wi0AikUF4BUhWO8rYadv6yYQo9cEYoXdsTLr9PoHb+e1iLlfCfhk5R2lJIf
+         Gia5ICn//Uo261cGihWcsYA8hnKM9jXoZ47/dzSUKUVlbd0czAxp5Nz1iYzqWjIvVwIJ
+         qrQQ==
+X-Gm-Message-State: ACgBeo1xyamKMl0X+kjW1FaiB7YrKstbo6iiqxBuL0NWCocI6bSpUpZC
+        AZfT24yEOk5JoFoFh6qKN84=
+X-Google-Smtp-Source: AA6agR65dRgEllaP6C7s1+YKmHkYBctIUXotwAG5I79QP25D4aveUE7rgFk83QswOi57Ba/eiQXgmg==
+X-Received: by 2002:aa7:db5a:0:b0:446:62:922a with SMTP id n26-20020aa7db5a000000b004460062922amr5365995edt.373.1660899246990;
         Fri, 19 Aug 2022 01:54:06 -0700 (PDT)
 Received: from nam-dell.ucebne.fiit.stuba.sk ([147.175.148.17])
-        by smtp.gmail.com with ESMTPSA id b9-20020a17090630c900b0073c9d68ca0dsm1084261ejb.133.2022.08.19.01.54.05
+        by smtp.gmail.com with ESMTPSA id b9-20020a17090630c900b0073c9d68ca0dsm1084261ejb.133.2022.08.19.01.54.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 01:54:05 -0700 (PDT)
+        Fri, 19 Aug 2022 01:54:06 -0700 (PDT)
 From:   Nam Cao <namcaov@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         namcaov@gmail.com, hdegoede@redhat.com, Larry.Finger@lwfinger.net
-Subject: [PATCH 2/7] staging: rtl8723bs: remove function rtw_get_ch_setting_union
-Date:   Fri, 19 Aug 2022 10:52:52 +0200
-Message-Id: <c8c5b0c78ee9a4cd8304efeff22b51049c75a3f2.1660898432.git.namcaov@gmail.com>
+Subject: [PATCH 3/7] staging: rtl8723bs: remove function rtw_odm_ability_set
+Date:   Fri, 19 Aug 2022 10:52:53 +0200
+Message-Id: <35d0f2115fa6febd72a1a7d1c740dece3d55a3df.1660898432.git.namcaov@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1660898432.git.namcaov@gmail.com>
 References: <cover.1660898432.git.namcaov@gmail.com>
@@ -74,54 +74,38 @@ because this function is not used.
 
 Signed-off-by: Nam Cao <namcaov@gmail.com>
 ---
- drivers/staging/rtl8723bs/core/rtw_mlme_ext.c | 21 -------------------
- .../staging/rtl8723bs/include/rtw_mlme_ext.h  |  1 -
- 2 files changed, 22 deletions(-)
+ drivers/staging/rtl8723bs/core/rtw_odm.c    | 5 -----
+ drivers/staging/rtl8723bs/include/rtw_odm.h | 1 -
+ 2 files changed, 6 deletions(-)
 
-diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
-index f878b04076d8..8e74b4f47b94 100644
---- a/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_mlme_ext.c
-@@ -5945,27 +5945,6 @@ int rtw_chk_start_clnt_join(struct adapter *padapter, u8 *ch, u8 *bw, u8 *offset
- 	return connect_allow ? _SUCCESS : _FAIL;
+diff --git a/drivers/staging/rtl8723bs/core/rtw_odm.c b/drivers/staging/rtl8723bs/core/rtw_odm.c
+index abb111752169..ec8406c18b03 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_odm.c
++++ b/drivers/staging/rtl8723bs/core/rtw_odm.c
+@@ -129,11 +129,6 @@ void rtw_odm_ability_msg(void *sel, struct adapter *adapter)
+ 	}
  }
  
--/* Find union about ch, bw, ch_offset of all linked/linking interfaces */
--int rtw_get_ch_setting_union(struct adapter *adapter, u8 *ch, u8 *bw, u8 *offset)
+-inline void rtw_odm_ability_set(struct adapter *adapter, u32 ability)
 -{
--	struct dvobj_priv *dvobj = adapter_to_dvobj(adapter);
--	struct adapter *iface;
--
--	if (ch)
--		*ch = 0;
--	if (bw)
--		*bw = CHANNEL_WIDTH_20;
--	if (offset)
--		*offset = HAL_PRIME_CHNL_OFFSET_DONT_CARE;
--
--	iface = dvobj->padapters;
--
--	if (!check_fwstate(&iface->mlmepriv, _FW_LINKED|_FW_UNDER_LINKING))
--		return 0;
--
--	return 1;
+-	rtw_hal_set_hwreg(adapter, HW_VAR_DM_FLAG, (u8 *)&ability);
 -}
 -
- u8 set_ch_hdl(struct adapter *padapter, u8 *pbuf)
+ void rtw_odm_adaptivity_parm_msg(void *sel, struct adapter *adapter)
  {
- 	struct set_ch_parm *set_ch_parm;
-diff --git a/drivers/staging/rtl8723bs/include/rtw_mlme_ext.h b/drivers/staging/rtl8723bs/include/rtw_mlme_ext.h
-index 89b389d4c44b..65e138a5238f 100644
---- a/drivers/staging/rtl8723bs/include/rtw_mlme_ext.h
-+++ b/drivers/staging/rtl8723bs/include/rtw_mlme_ext.h
-@@ -662,7 +662,6 @@ extern void adaptive_early_32k(struct mlme_ext_priv *pmlmeext, u8 *pframe, uint
- extern u8 traffic_status_watchdog(struct adapter *padapter, u8 from_timer);
+ 	struct hal_com_data *pHalData = GET_HAL_DATA(adapter);
+diff --git a/drivers/staging/rtl8723bs/include/rtw_odm.h b/drivers/staging/rtl8723bs/include/rtw_odm.h
+index 27e8240284b4..ea9c4de0f284 100644
+--- a/drivers/staging/rtl8723bs/include/rtw_odm.h
++++ b/drivers/staging/rtl8723bs/include/rtw_odm.h
+@@ -18,7 +18,6 @@ void rtw_odm_dbg_level_msg(void *sel, struct adapter *adapter);
+ void rtw_odm_dbg_level_set(struct adapter *adapter, u32 level);
  
- int rtw_chk_start_clnt_join(struct adapter *padapter, u8 *ch, u8 *bw, u8 *offset);
--int rtw_get_ch_setting_union(struct adapter *adapter, u8 *ch, u8 *bw, u8 *offset);
+ void rtw_odm_ability_msg(void *sel, struct adapter *adapter);
+-void rtw_odm_ability_set(struct adapter *adapter, u32 ability);
  
- struct cmd_hdl {
- 	uint	parmsize;
+ void rtw_odm_adaptivity_parm_msg(void *sel, struct adapter *adapter);
+ void rtw_odm_adaptivity_parm_set(struct adapter *adapter, s8 TH_L2H_ini, s8 TH_EDCCA_HL_diff,
 -- 
 2.25.1
 

@@ -2,52 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1D25999DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BF65999E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348284AbiHSKeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
+        id S1347897AbiHSKeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348289AbiHSKeB (ORCPT
+        with ESMTP id S1348029AbiHSKeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:34:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158773C8CC
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 03:34:00 -0700 (PDT)
+        Fri, 19 Aug 2022 06:34:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECB03DF2A
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 03:34:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660905239;
+        s=mimecast20190719; t=1660905246;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=P/N3jznfyLCTntOiEbxHqyAxgiiPB/4urlbFDpUDuCk=;
-        b=cjJ/fB1tOLYzb20d6TitVuUhJOogxgBtsnaXxOBfngCF3oDsTPPxwhgzhX31Yzcw05tDQl
-        ucSJ2UzxUhmCTXoL1MmqBtIZFeOpLDKZTgEk7DSLHEMDZmd+i/fttn9DhScu6AGQ5crKFI
-        nSBhf2OE6o4v2rb+FueQSn3xniQipYs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-48-_PU-VMFbOe-W8ww7JuJ7JQ-1; Fri, 19 Aug 2022 06:33:57 -0400
-X-MC-Unique: _PU-VMFbOe-W8ww7JuJ7JQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8CF888032E3;
-        Fri, 19 Aug 2022 10:33:57 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7037C492C3B;
-        Fri, 19 Aug 2022 10:33:57 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] KVM changes for Linux 6.0-rc2
-Date:   Fri, 19 Aug 2022 06:33:57 -0400
-Message-Id: <20220819103357.2346708-1-pbonzini@redhat.com>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=t9qConcsVrFeMSKZiZOZ7jvIr/WxjYXLhBQh/vLaFNc=;
+        b=aV6M06N4NgBlzmkUp4MMxNRa0koCQ4xdcPTbMhczatmB15nDwq6rEdyu79R530s2grjbHw
+        EhxFMFCcpdDe/d5puVDl2W5uhSr0NheUvNeYzl8qcG7IJAxgqEG8Fj75WXfVYMFYyzyFDs
+        GkXTWHJjP1QyWBlcCSYY9qs6G4oI3TQ=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-111-gw1IjTYaMiOC1HI27ccfFw-1; Fri, 19 Aug 2022 06:34:04 -0400
+X-MC-Unique: gw1IjTYaMiOC1HI27ccfFw-1
+Received: by mail-wr1-f70.google.com with SMTP id o13-20020adfba0d000000b0022524f3f4faso641173wrg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 03:34:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=t9qConcsVrFeMSKZiZOZ7jvIr/WxjYXLhBQh/vLaFNc=;
+        b=f1R2Gw63r6OhH3RA0JUs+KdQYlMwMMvpCmrIZ/Lg1AuioDfVpSE5r7D2n3UFRn/9zQ
+         lRiJ60zLLBAtngMwa3oIssF68Cu/wUM4WjHCqZ49Rp+XWmFeuUcnTuaEp0DyZzPFVujo
+         RppNFbuT0tyyFf6U90Q586/3MjktPqehqsaWggcMdxrKiM1WakwbxxBJAtSzvoUKlPTW
+         Y073QiWWpCqgAgiVPX+F6sqONTRpM1YbeMJpzgRh4jxWGuusRQWZToXRv3oYs3+Jt632
+         oxcihg+BiKykkGkwD5XSrbuzs0QKJskDyKbp7+OOOwNTl0D1Wsy9kR2wtJTqkxqeGb/L
+         I9nQ==
+X-Gm-Message-State: ACgBeo3u0M3eyBdwi5cjJnS/26tD723oSu4X5p4QpnHWi9RLYP+q5ve8
+        e+W5JThJ0GV7scxzpFry+cXhxo1k318ojuzQhDwBCsI89aXinn6n/3GPUvjfF47jgaWXilqtWf7
+        ORCS3A7NamE1oGgrX0jZqmC7W
+X-Received: by 2002:a5d:64e9:0:b0:220:7dd7:63eb with SMTP id g9-20020a5d64e9000000b002207dd763ebmr3831675wri.590.1660905243397;
+        Fri, 19 Aug 2022 03:34:03 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7AoX+VQs/b3XMThsgV+BYuePZtBIHhF6hh6s7w1xBiDvXh8zDLXmM78RPTeY/EF0PqfZ3SJQ==
+X-Received: by 2002:a5d:64e9:0:b0:220:7dd7:63eb with SMTP id g9-20020a5d64e9000000b002207dd763ebmr3831663wri.590.1660905243244;
+        Fri, 19 Aug 2022 03:34:03 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id b18-20020adff252000000b00224f605f39dsm3501436wrp.76.2022.08.19.03.34.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 03:34:02 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     netdev <netdev@vger.kernel.org>,
+        "open list:HFI1 DRIVER" <linux-rdma@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gal Pressman <gal@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>
+Subject: Re: [PATCH v2 1/5] bitops: Introduce find_next_andnot_bit()
+In-Reply-To: <CAHp75VcaSwfy7kOm_d28-87QKQ5KPB69=X=Z9OYUzJJKwRCSmQ@mail.gmail.com>
+References: <20220817175812.671843-1-vschneid@redhat.com>
+ <20220817175812.671843-2-vschneid@redhat.com>
+ <20220818100820.3b45808b@gandalf.local.home>
+ <xhsmh35dtbjr0.mognet@vschneid.remote.csb>
+ <20220818130041.5b7c955f@gandalf.local.home>
+ <CAHp75VcaSwfy7kOm_d28-87QKQ5KPB69=X=Z9OYUzJJKwRCSmQ@mail.gmail.com>
+Date:   Fri, 19 Aug 2022 11:34:01 +0100
+Message-ID: <xhsmhk074a5eu.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,91 +102,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On 18/08/22 22:04, Andy Shevchenko wrote:
+> On Thu, Aug 18, 2022 at 8:18 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>> On Thu, 18 Aug 2022 17:26:43 +0100
+>> Valentin Schneider <vschneid@redhat.com> wrote:
+>>
+>> > How about:
+>>
+>> >
+>> >   find the next set bit in (*addr1 & ~*addr2)
+>>
+>> I understand the above better. But to convert that into English, we could
+>> say:
+>>
+>>
+>>   Find the next bit in *addr1 excluding all the bits in *addr2.
+>>
+>> or
+>>
+>>   Find the next bit in *addr1 that is not set in *addr2.
+>
+> With this explanation I'm wondering how different this is to
+> bitmap_bitremap(), with adjusting to using an inverted mask. If they
+> have something in common, perhaps make them in the same namespace with
+> similar naming convention?
+>
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+I'm trying to wrap my head around the whole remap thing, IIUC we could have
+something like remap *addr1 to ~*addr2 and stop rather than continue with a
+wraparound, but that really feels like shoehorning.
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
-
-for you to fetch changes up to 959d6c4ae238b28a163b1b3741fae05391227ad9:
-
-  Merge tag 'kvmarm-fixes-6.0-1' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD (2022-08-19 05:43:53 -0400)
-
-----------------------------------------------------------------
-ARM:
-
-* Fix unexpected sign extension of KVM_ARM_DEVICE_ID_MASK
-
-* Tidy-up handling of AArch32 on asymmetric systems
-
-x86:
-
-* Fix "missing ENDBR" BUG for fastop functions
-
-Generic:
-
-* Some cleanup and static analyzer patches
-
-* More fixes to KVM_CREATE_VM unwind paths
-
-----------------------------------------------------------------
-Chao Peng (2):
-      KVM: Rename KVM_PRIVATE_MEM_SLOTS to KVM_INTERNAL_MEM_SLOTS
-      KVM: Rename mmu_notifier_* to mmu_invalidate_*
-
-Josh Poimboeuf (3):
-      x86/ibt, objtool: Add IBT_NOSEAL()
-      x86/kvm: Simplify FOP_SETCC()
-      x86/kvm: Fix "missing ENDBR" BUG for fastop functions
-
-Li kunyu (2):
-      KVM: Drop unnecessary initialization of "npages" in hva_to_pfn_slow()
-      KVM: Drop unnecessary initialization of "ops" in kvm_ioctl_create_device()
-
-Oliver Upton (2):
-      KVM: arm64: Treat PMCR_EL1.LC as RES1 on asymmetric systems
-      KVM: arm64: Reject 32bit user PSTATE on asymmetric systems
-
-Paolo Bonzini (2):
-      KVM: MIPS: remove unnecessary definition of KVM_PRIVATE_MEM_SLOTS
-      Merge tag 'kvmarm-fixes-6.0-1' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
-
-Sean Christopherson (3):
-      KVM: Properly unwind VM creation if creating debugfs fails
-      KVM: Unconditionally get a ref to /dev/kvm module when creating a VM
-      KVM: Move coalesced MMIO initialization (back) into kvm_create_vm()
-
-Yang Yingliang (1):
-      KVM: arm64: Fix compile error due to sign extension
-
- arch/arm64/include/asm/kvm_host.h        |  4 ++
- arch/arm64/include/uapi/asm/kvm.h        |  6 +-
- arch/arm64/kvm/arm.c                     |  3 +-
- arch/arm64/kvm/guest.c                   |  2 +-
- arch/arm64/kvm/mmu.c                     |  8 +--
- arch/arm64/kvm/sys_regs.c                |  4 +-
- arch/mips/include/asm/kvm_host.h         |  2 -
- arch/mips/kvm/mmu.c                      | 12 ++--
- arch/powerpc/include/asm/kvm_book3s_64.h |  2 +-
- arch/powerpc/kvm/book3s_64_mmu_host.c    |  4 +-
- arch/powerpc/kvm/book3s_64_mmu_hv.c      |  4 +-
- arch/powerpc/kvm/book3s_64_mmu_radix.c   |  6 +-
- arch/powerpc/kvm/book3s_hv_nested.c      |  2 +-
- arch/powerpc/kvm/book3s_hv_rm_mmu.c      |  8 +--
- arch/powerpc/kvm/e500_mmu_host.c         |  4 +-
- arch/riscv/kvm/mmu.c                     |  4 +-
- arch/x86/include/asm/ibt.h               | 11 ++++
- arch/x86/include/asm/kvm_host.h          |  2 +-
- arch/x86/kvm/emulate.c                   | 26 ++-------
- arch/x86/kvm/mmu/mmu.c                   | 14 ++---
- arch/x86/kvm/mmu/paging_tmpl.h           |  4 +-
- include/linux/kvm_host.h                 | 66 +++++++++++-----------
- tools/objtool/check.c                    |  3 +-
- virt/kvm/kvm_main.c                      | 95 ++++++++++++++++----------------
- virt/kvm/pfncache.c                      | 17 +++---
- 25 files changed, 157 insertions(+), 156 deletions(-)
+> --
+> With Best Regards,
+> Andy Shevchenko
 

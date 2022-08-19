@@ -2,229 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7A659A389
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9335159A382
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351303AbiHSRp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 13:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
+        id S1351112AbiHSRqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 13:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354819AbiHSRpe (ORCPT
+        with ESMTP id S1354895AbiHSRpo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 13:45:34 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA479C8F4
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:09:23 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id z16so5864464wrh.12
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:09:23 -0700 (PDT)
+        Fri, 19 Aug 2022 13:45:44 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD03B105213
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:09:53 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id p128so5409005oif.9
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:09:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=9jGXV6irFv8tEA+MQJNoWRqDdQzGDrEVYtPdlAW1TQs=;
-        b=L/XT30nIFiM56LHKBOZXY3zQ+ZPUuM9yPuPXlMYNgcfcjn11RoQE+etbYMg7NFke+b
-         sttmOBp4Lp37YiQz0zuBVE5O5B8FhhYtHCQBTjxwgs4mk+hHOCEk2OyrMgtyHC46AZyM
-         bb2r3ysqR61QdbeEmmJKvMt1tf4+9ThQ4xW3AhuqIo1uF3K6/q4yKsN6nOZJ5C6ZoBp9
-         FGfRuZeJ2YgXD8xSvlBkY0E86T3wQ8KHye7vOkpoxR0mJqAZfkXadf0eUyTjAZ53C7JD
-         hVG1rQdkdWANBqXSxphUrZi/mhtHrzOhQXUQTDJVm6zgzm6etfw+Siew+3RS2pxxjx4k
-         I+mg==
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=1M77VSUpHBdJuUWHFqZxpANGXLDy3KTKNScQlSKbJdw=;
+        b=aI7IOaWMzXerBLtn/yA++X6Xa61OTxWBkbbMvNVBzqCiLV2LwKGTB9/nO1m4WU97Vd
+         7LfrRux4dkuqSm90eKKFUUnElWo7YRaIR4BG9CO0NXs/mJig8JFSHdz2vRD2KZ0PmiBz
+         UFD0GzM3at1fWBunNVITUdVzxU1NPJ5FLAAMA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=9jGXV6irFv8tEA+MQJNoWRqDdQzGDrEVYtPdlAW1TQs=;
-        b=xTwex5mIbYfIZIwoTv0WkVIcypss7X/mqc5C6Z8mkRCJeBe2quoI33zM+MmUP3I5+N
-         KxUS7zte/xx7WpoH7VpMKtevIfb0Zhb2DsWOuX83gJAr4/lmr6IFxPqe7TUX7zZQh3Du
-         gXtpTElp17Q0/8AspsU5GZRW996y4RQrMASIOOWLjDP5LMV3KpLHn/yytkgquMWporU/
-         s6isRsISrVFYcU/IO57L5TZshpbfPOeYqWq8XtriKkbiHIj5RRMJ89HPb3reHCxUIkxR
-         F4GNuSOi22ddzFAc4LmN7H85zzBWzvscPZ/BSfiy7DkSWEAb0YwvgBDtLjtwqDklshsp
-         5Vxw==
-X-Gm-Message-State: ACgBeo2wXLDt8v9XhKv0RwG8kCFTK9ONIKq/U2xuPUhddUtiNAzw+Vru
-        trrIFxt/rSA0sn837lotNVCWFN66yoOGHfYz19myQQ==
-X-Google-Smtp-Source: AA6agR5vPFSxtmNEOb+pTiBVPFNpYpVro0zHK9u/uW6xptEGpEyLj+JknCqkTcOg0b76QOpxdvQf7ugm7u+jcYB1adI=
-X-Received: by 2002:adf:e28d:0:b0:21e:4c3b:b446 with SMTP id
- v13-20020adfe28d000000b0021e4c3bb446mr4633062wri.300.1660928961862; Fri, 19
- Aug 2022 10:09:21 -0700 (PDT)
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc;
+        bh=1M77VSUpHBdJuUWHFqZxpANGXLDy3KTKNScQlSKbJdw=;
+        b=WVkisHZgxtzj5pRHwvEaaJst2qfS82FVnqzGLP7B6wFcsfUzqrwRG0BkHvNh5n5Jek
+         GODio/ju8cyIIccipPLFR2qHbwh4oGiwyWmje5/U85yE5W2sp3xCec8RTZb/a74Y668+
+         Sbqvxnm4oS+UZfhD8ugQt2awAkJg1mhp6KbR86kswbSK2AsDDO37h6WKGS8YFsnxXRgl
+         mz4BPGdz6lsqC98+mHWiotVfx1Gw9anCql9bAsvjs4zlC4EWttNzHdGKlu9skljYzXtv
+         LZ4xWMt939w51PMQuXOsUuZTgrY30EiRaUCKqse357q1p2FjLYoxbl8vF0gUNXYTOqgq
+         i/SQ==
+X-Gm-Message-State: ACgBeo3PnynBoqUEn6tC/t+TarEl8yLFsoy/9f2SGkjq3e1VvyZ9ETUz
+        UIMZCLu+Dj8ln3VDMGM9mb7XttbEbKdk+w==
+X-Google-Smtp-Source: AA6agR5iZZJbAl076hf1lC6WhLSavxW7q0wcpxah1mrhQ6OOlPXJUqTLvAVYq4ZpFRfr1PTvl1nhBQ==
+X-Received: by 2002:a05:6808:488:b0:344:d066:5177 with SMTP id z8-20020a056808048800b00344d0665177mr3744941oid.210.1660928993062;
+        Fri, 19 Aug 2022 10:09:53 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x19-20020a4a6213000000b004320b0cc5acsm1036958ooc.48.2022.08.19.10.09.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 10:09:52 -0700 (PDT)
+Subject: Re: [PATCH] usbip: add USBIP_URB_* URB transfer flags
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        mailhol.vincent@wanadoo.fr, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hongren Zenithal Zheng <i@zenithal.me>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220816215711.55025-1-skhan@linuxfoundation.org>
+ <Yv9J2d1bVe7Xntxu@kroah.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f2cf1fad-143f-f09b-0874-7e68c675697c@linuxfoundation.org>
+Date:   Fri, 19 Aug 2022 11:09:50 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220614143353.1559597-1-irogers@google.com> <20220614143353.1559597-5-irogers@google.com>
- <Yv60COAP90TEiWkx@kernel.org> <Yv+zK8UxUAP83zkp@kernel.org>
-In-Reply-To: <Yv+zK8UxUAP83zkp@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 19 Aug 2022 10:09:09 -0700
-Message-ID: <CAP-5=fWi5KaV40jcC1ZGfTAJ+bc52ueMvd0yREUHxSYk7y1MNw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] perf cpumap: Fix alignment for masks in event encoding
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        German Gomez <german.gomez@arm.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Song Liu <songliubraving@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-16.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yv9J2d1bVe7Xntxu@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 8:58 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Thu, Aug 18, 2022 at 06:50:00PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Tue, Jun 14, 2022 at 07:33:51AM -0700, Ian Rogers escreveu:
-> > > A mask encoding of a cpu map is laid out as:
-> > >   u16 nr
-> > >   u16 long_size
-> > >   unsigned long mask[];
-> > > However, the mask may be 8-byte aligned meaning there is a 4-byte pad
-> > > after long_size. This means 32-bit and 64-bit builds see the mask as
-> > > being at different offsets. On top of this the structure is in the byte
-> > > data[] encoded as:
-> > >   u16 type
-> > >   char data[]
-> > > This means the mask's struct isn't the required 4 or 8 byte aligned, but
-> > > is offset by 2. Consequently the long reads and writes are causing
-> > > undefined behavior as the alignment is broken.
-> > >
-> > > Fix the mask struct by creating explicit 32 and 64-bit variants, use a
-> > > union to avoid data[] and casts; the struct must be packed so the
-> > > layout matches the existing perf.data layout. Taking an address of a
-> > > member of a packed struct breaks alignment so pass the packed
-> > > perf_record_cpu_map_data to functions, so they can access variables with
-> > > the right alignment.
-> > >
-> > > As the 64-bit version has 4 bytes of padding, optimizing writing to only
-> > > write the 32-bit version.
-> > >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > ---
-> > >  tools/lib/perf/include/perf/event.h | 36 +++++++++++--
-> > >  tools/perf/tests/cpumap.c           | 19 ++++---
-> > >  tools/perf/util/cpumap.c            | 80 +++++++++++++++++++++++------
-> > >  tools/perf/util/cpumap.h            |  4 +-
-> > >  tools/perf/util/session.c           | 30 +++++------
-> > >  tools/perf/util/synthetic-events.c  | 34 +++++++-----
-> > >  6 files changed, 143 insertions(+), 60 deletions(-)
-> > >
-> > > diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
-> > > index e7758707cadd..d2d32589758a 100644
-> > > --- a/tools/lib/perf/include/perf/event.h
-> > > +++ b/tools/lib/perf/include/perf/event.h
-> > > @@ -6,6 +6,7 @@
-> > >  #include <linux/types.h>
-> > >  #include <linux/limits.h>
-> > >  #include <linux/bpf.h>
-> > > +#include <linux/compiler.h>
-> > >  #include <sys/types.h> /* pid_t */
-> > >
-> > >  #define event_contains(obj, mem) ((obj).header.size > offsetof(typeof(obj), mem))
-> > > @@ -153,20 +154,47 @@ enum {
-> > >     PERF_CPU_MAP__MASK = 1,
-> > >  };
-> > >
-> > > +/*
-> > > + * Array encoding of a perf_cpu_map where nr is the number of entries in cpu[]
-> > > + * and each entry is a value for a CPU in the map.
-> > > + */
-> > >  struct cpu_map_entries {
-> > >     __u16                    nr;
-> > >     __u16                    cpu[];
-> > >  };
-> > >
-> > > -struct perf_record_record_cpu_map {
-> > > +/* Bitmap encoding of a perf_cpu_map where bitmap entries are 32-bit. */
-> > > +struct perf_record_mask_cpu_map32 {
-> > > +   /* Number of mask values. */
-> > >     __u16                    nr;
-> > > +   /* Constant 4. */
-> > >     __u16                    long_size;
-> > > -   unsigned long            mask[];
-> > > +   /* Bitmap data. */
-> > > +   __u32                    mask[];
-> > >  };
-> > >
-> > > -struct perf_record_cpu_map_data {
-> > > +/* Bitmap encoding of a perf_cpu_map where bitmap entries are 64-bit. */
-> > > +struct perf_record_mask_cpu_map64 {
-> > > +   /* Number of mask values. */
-> > > +   __u16                    nr;
-> > > +   /* Constant 8. */
-> > > +   __u16                    long_size;
-> > > +   /* Legacy padding. */
-> > > +   char                     __pad[4];
-> > > +   /* Bitmap data. */
-> > > +   __u64                    mask[];
-> > > +};
-> > > +
-> > > +struct __packed perf_record_cpu_map_data {
-> >
-> > In various places I'm getting this:
-> >
-> > [perfbuilder@five x-riscv]$ export BUILD_TARBALL=http://192.168.86.14/perf/perf-6.0.0-rc1.tar.xz
-> > [perfbuilder@five x-riscv]$ time dm .
-> >    1     5.47 ubuntu:22.04-x-riscv64        : FAIL gcc version 11.2.0 (Ubuntu 11.2.0-16ubuntu1)
-> >     In file included from mmap.c:10:
-> >     /git/perf-6.0.0-rc1/tools/lib/perf/include/perf/event.h:190:34: error: packed attribute causes inefficient alignment for 'type' [-Werror=attributes]
-> >       190 |         __u16                    type;
-> >           |                                  ^~~~
-> >     cc1: all warnings being treated as errors
-> >     In file included from util/event.h:12,
-> >                      from builtin-diff.c:12:
-> >     /git/perf-6.0.0-rc1/tools/lib/perf/include/perf/event.h:190:34: error: packed attribute causes inefficient alignment for 'type' [-Werror=attributes]
-> >       190 |         __u16                    type;
-> >           |                                  ^~~~
-> >     In file included from util/events_stats.h:6,
-> >                      from util/evlist.h:12,
-> >                      from builtin-evlist.c:11:
-> >     /git/perf-6.0.0-rc1/tools/lib/perf/include/perf/event.h:190:34: error: packed attribute causes inefficient alignment for 'type' [-Werror=attributes]
-> >       190 |         __u16                    type;
-> >           |                                  ^~~~
-> >
-> > So probably we need to disable this -Werror=attributes in some
-> > architectures?
->
-> Slapped this there:
->
-> #pragma GCC diagnostic push
-> #pragma GCC diagnostic ignored "-Wpacked"
-> #pragma GCC diagnostic ignored "-Wattributes"
->
-> struct __packed perf_record_cpu_map_data {
->         __u16                    type;
->         union {
->                 /* Used when type == PERF_CPU_MAP__CPUS. */
->                 struct cpu_map_entries cpus_data;
->                 /* Used when type == PERF_CPU_MAP__MASK and long_size == 4. */
->                 struct perf_record_mask_cpu_map32 mask32_data;
->                 /* Used when type == PERF_CPU_MAP__MASK and long_size == 8. */
->                 struct perf_record_mask_cpu_map64 mask64_data;
->         };
-> };
->
-> #pragma GCC diagnostic pop
+On 8/19/22 2:29 AM, Greg KH wrote:
+> 
+> Overall, nice work, thanks for adding this, minor comments below:
+> 
+> On Tue, Aug 16, 2022 at 03:57:11PM -0600, Shuah Khan wrote:
+>> USBIP driver packs URB transfer flags in PDUs that are exchanged
+> 
+> What is a "PDU"?
 
-Perhaps we should also carry a comment like:
-perf_record_cpu_map_data is packed as unfortunately an earlier version
-had unaligned data and we wish to retain file format compatibility.
+Protocol Data Unit - I will expand or reword to drop it.
 
-Thanks,
-Ian
+[snip]
+
+>>   +-----------+--------+---------------------------------------------------+
+>>   | 0x14      | 4      | transfer_flags: possible values depend on the     |
+>>   |           |        | URB transfer_flags (refer to URB doc in           |
+> 
+> You can drop the second "URB" here, as it's an USBIP document being
+> referred to, right?
+
+This refers to USB URB document. I can rephrase it to USBIP_URB transfer flags
+as it is the API now.
+
+>>   
+>> +		/* Unpack the pdu to an urb (map USBIP_URB_* to URB_* flags) */
+> 
+> No need to mention the mapping everywhere in these comments as the
+> function handles that.
+> 
+
+These comments were primarily added for making sure right mapping is done.
+Will remove them.
+
+
+>> +	}
+>> +	pr_debug("%s: flag = %u map_flags = %u\n", __func__,
+>> +		 flags, map_flags);
+> 
+> When using pr_debug (or dev_dbg()), you already have access to the
+> __func__ in the output automatically, so there's never a need to add it
+> again, it would just show up twice.
+> 
+
+Good point.
+
+> Also, this should be dev_dbg(), as it's a driver, and you have access to
+> the device being handled (well, it needs to be passed to the
+> function...)
+> 
+
+I am going to delete these - debug message isn't really needed.
+
+>> +
+>> +	return map_flags;
+>> +}
+>> +
+>> +static unsigned int usbip_to_urb(unsigned int flags)
+>> +{
+>> +	unsigned int map_flags = 0;
+>> +	int loop;
+>> +
+>> +	for (loop = 0; loop < NUM_USBIP_FLAGS; loop++) {
+>> +		if (flags & flag_map[loop].usbip_flag)
+>> +			map_flags |= flag_map[loop].urb_flag;
+>> +	}
+>> +	pr_debug("%s: flag = %u map_flags = %u\n", __func__,
+>> +		 flags, map_flags);
+> 
+> Same debug comment as above.
+
+Same as above. I will just delete the message.
+
+> 
+
+>> + * As a result of coying the transfer flags, they now have become part
+> 
+> "coying"?  :)
+
+Thanks for catching this :)
+
+> 
+>> + * of the API. Any changes to kernel flags now impact the USBIP user-space.
+>> + * In addition, it will be compatibility problem between server and client.
+>> + * These defines aren't directly referenced and it is an obscure usage
+>> + * hidden away in the packets.
+> 
+> No need to mention the history here, just say "here are the flags for
+> the transfer types"
+> 
+
+Will do.
+
+> 
+>> + *
+>> + * Add code to translate the values between the numbers used in userspace
+>> + * and the numbers used in the kernel. This will help with any future
+>> + * changes to kernel flags breaking the API.
+> 
+> There's no code being added in this uapi file, so you might want to
+> reword all of this.  Possibly by removing most of it, as the history
+> here might not be necessary to document.
+> 
+
+Will do.
+
+thanks for the review. Will send v2.
+
+thanks,
+-- Shuah
+

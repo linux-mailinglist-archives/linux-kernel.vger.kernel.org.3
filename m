@@ -2,170 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159A9599A9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BEB599A95
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348751AbiHSLKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S1348606AbiHSLJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348742AbiHSLKW (ORCPT
+        with ESMTP id S1348311AbiHSLI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:10:22 -0400
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCD6FC325;
-        Fri, 19 Aug 2022 04:10:21 -0700 (PDT)
-Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JAtHpw016663;
-        Fri, 19 Aug 2022 04:07:36 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=PPS06212021;
- bh=PLaVbpp4hNo2EhMbAkEWZSGhegi5n9JUce2ULCMebHo=;
- b=Cm0BwIF5cGcB+Fld/7+IRHbHs1XABQd56EXQgOwn464h5CUOCY/Mqrnxe/F0f4dn0vts
- fW4TKq0MNZ145rR/NvI+/oU2xKydluoOJL+OyGAOQtDfbDDC+Ea+7lyq7QcXYtBhY/Ru
- bp9H0KR7h5nrFcjR2mEJoE1OxiWdic4rIuMqjh8u39gvAvjQ+10/9QZ05hYYyCJZSLa7
- Fvt+D+gm+Npf/YnTRwUafNq5ns5Ir8D9T3gbegcf/nOTDCfQmNZ9WIt3A13j9cthcRp+
- K+CkjReuSSDGl5Az7C1jbdb9TlUVNDCZYGQ/t8D9uSBhhr5bE0d61Yh9MwfL0fbp6tzO Iw== 
-Received: from ala-exchng01.corp.ad.wrs.com (unknown-82-252.windriver.com [147.11.82.252])
-        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3hxbfjn0j5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 19 Aug 2022 04:07:36 -0700
-Received: from otp-dpanait-l2.corp.ad.wrs.com (128.224.125.191) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Fri, 19 Aug 2022 04:07:32 -0700
-From:   Dragos-Marian Panait <dragos.panait@windriver.com>
-To:     <stable@vger.kernel.org>
-CC:     Pavel Skripkin <paskripkin@gmail.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
-        Sujith <Sujith.Manoharan@atheros.com>,
-        Senthil Balasubramanian <senthilkumar@atheros.com>,
-        "John W . Linville" <linville@tuxdriver.com>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 5.4 1/1] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
-Date:   Fri, 19 Aug 2022 14:07:19 +0300
-Message-ID: <20220819110719.915478-2-dragos.panait@windriver.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220819110719.915478-1-dragos.panait@windriver.com>
-References: <20220819110719.915478-1-dragos.panait@windriver.com>
+        Fri, 19 Aug 2022 07:08:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28BDC0E6C
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660907335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZqI5vZLpia5ct5t7JuYb11QdDPq9USkS4MLCaMGWylI=;
+        b=JGzRGqQQzn8zUru0GyL1TwK9KNOAgRKewTzqGMxVF8jN6gFGMOpfLdFBHhwCgx1jLY2pWV
+        VSS5DqECOd6NNQCXXVJzUQ2Vuyx91pQqnuB+zXHzuRdBpPKvLGsK1oxtbZmxKKe2tdDjx4
+        wUs7FSGUrgDsOoA2zHWJdUuYy0nIAGc=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-54-lit0Wj7tNIudK1bwzHrKAA-1; Fri, 19 Aug 2022 07:08:54 -0400
+X-MC-Unique: lit0Wj7tNIudK1bwzHrKAA-1
+Received: by mail-ej1-f70.google.com with SMTP id ho13-20020a1709070e8d00b00730a655e173so1381692ejc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:08:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=ZqI5vZLpia5ct5t7JuYb11QdDPq9USkS4MLCaMGWylI=;
+        b=K9fHM/5SfgYFAGcawEaljAT+H0JyWM6O9E4/gLIRMPR265R1cCmwcbE/ld+J5B0OFd
+         WyUUhNj6cFeedGAHzWuglURoYZhp8c8lYBYwK3DJtOEp8rSySr2QQnsBqTXG9t69R0/T
+         eMb9mUzMAc+cCGiddOqbKQl5dXeY9OpOMIdpJF+0nQnJeyg5l1GRYnODB46kh7vRUcmF
+         v2QTFJaiTBLN2btb3frRCKtloQ/RqViC3ainDG5tAm3w3X8dNHbjU8PdsKxTtRAjTg1E
+         yfs/DYjTNLTjPptduXFecCD+xC5W3grjQ9Ss5INen0QlynfEy+6Hou/N6jqtxzRWDp4R
+         PTGQ==
+X-Gm-Message-State: ACgBeo2732yASGPYYHAlXXiQC2OYWigAkrrcWVGuLTpbYowOTDpNMdUb
+        N9Gh5pqmLM33KWpnNw7x/699lGyJas6loPoXPgMKabaaI+wJSCVOA39bGDHNl2BHAAB2NSTo5nK
+        4TIBvc7Q9/GSGX+lBtZ0d/doG
+X-Received: by 2002:a17:907:7214:b0:731:465d:a77c with SMTP id dr20-20020a170907721400b00731465da77cmr4444777ejc.308.1660907333303;
+        Fri, 19 Aug 2022 04:08:53 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR73kb35vu9cHeWsEco9u/k6H/Hyebp7jx52dcbEuWBWpQkfXhPntXEIALCybwbQfWKXG12SEg==
+X-Received: by 2002:a17:907:7214:b0:731:465d:a77c with SMTP id dr20-20020a170907721400b00731465da77cmr4444764ejc.308.1660907333157;
+        Fri, 19 Aug 2022 04:08:53 -0700 (PDT)
+Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id l17-20020a1709060cd100b007308fab3eb7sm2167827ejh.195.2022.08.19.04.08.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 04:08:52 -0700 (PDT)
+From:   Danilo Krummrich <dakr@redhat.com>
+To:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
+        mripard@kernel.org
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Danilo Krummrich <dakr@redhat.com>
+Subject: [PATCH drm-misc-next v2 0/4] Fixes for vc4 hotplug rework
+Date:   Fri, 19 Aug 2022 13:08:45 +0200
+Message-Id: <20220819110849.192037-1-dakr@redhat.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [128.224.125.191]
-X-ClientProxiedBy: ala-exchng01.corp.ad.wrs.com (147.11.82.252) To
- ala-exchng01.corp.ad.wrs.com (147.11.82.252)
-X-Proofpoint-GUID: YPVHyg48XGDGYuPRzs29gU6y8mQQU4nb
-X-Proofpoint-ORIG-GUID: YPVHyg48XGDGYuPRzs29gU6y8mQQU4nb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-19_06,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- mlxlogscore=977 clxscore=1015 phishscore=0 bulkscore=0 priorityscore=1501
- impostorscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208190043
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+Hi,
 
-commit 0ac4827f78c7ffe8eef074bc010e7e34bc22f533 upstream.
+I've found a few potential issues left after the hotplug rework.
 
-Syzbot reported use-after-free Read in ath9k_hif_usb_rx_cb() [0]. The
-problem was in incorrect htc_handle->drv_priv initialization.
+In vc4_hdmi.c we're missing two mutex_unlock() calls when the device is
+unplugged.
 
-Probable call trace which can trigger use-after-free:
+vc4_crtc and vc4_plane seem to miss some drm_dev_enter()/drm_dev_exit() calls
+to protect against resource access after the device/driver is unbound, but the
+DRM potentially isn't freed yet and userspace can still call into the driver.
 
-ath9k_htc_probe_device()
-  /* htc_handle->drv_priv = priv; */
-  ath9k_htc_wait_for_target()      <--- Failed
-  ieee80211_free_hw()		   <--- priv pointer is freed
+Changes in v2:
+  - Use drm_device pointer from struct drm_plane (Maxime)
+  - Protect entire functions to increase readability (Maxime)
+  - Add another patch to fix an uncovered MMIO access in vc4_hvs.c
 
-<IRQ>
-...
-ath9k_hif_usb_rx_cb()
-  ath9k_hif_usb_rx_stream()
-   RX_STAT_INC()		<--- htc_handle->drv_priv access
+Danilo Krummrich (4):
+  drm/vc4: hdmi: unlock mutex when device is unplugged
+  drm/vc4: plane: protect device resources after removal
+  drm/vc4: crtc: protect device resources after removal
+  drm/vc4: hvs: protect drm_print_regset32()
 
-In order to not add fancy protection for drv_priv we can move
-htc_handle->drv_priv initialization at the end of the
-ath9k_htc_probe_device() and add helper macro to make
-all *_STAT_* macros NULL safe, since syzbot has reported related NULL
-deref in that macros [1]
+ drivers/gpu/drm/vc4/vc4_crtc.c  | 41 ++++++++++++++++++++++++++++++++-
+ drivers/gpu/drm/vc4/vc4_hdmi.c  |  7 ++++--
+ drivers/gpu/drm/vc4/vc4_hvs.c   |  4 ++--
+ drivers/gpu/drm/vc4/vc4_plane.c | 20 ++++++++++++++++
+ 4 files changed, 67 insertions(+), 5 deletions(-)
 
-Link: https://syzkaller.appspot.com/bug?id=6ead44e37afb6866ac0c7dd121b4ce07cb665f60 [0]
-Link: https://syzkaller.appspot.com/bug?id=b8101ffcec107c0567a0cd8acbbacec91e9ee8de [1]
-Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-Reported-and-tested-by: syzbot+03110230a11411024147@syzkaller.appspotmail.com
-Reported-and-tested-by: syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/d57bbedc857950659bfacac0ab48790c1eda00c8.1655145743.git.paskripkin@gmail.com
-Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
----
- drivers/net/wireless/ath/ath9k/htc.h          | 10 +++++-----
- drivers/net/wireless/ath/ath9k/htc_drv_init.c |  3 ++-
- 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
-index 9f64e32381f9..81107100e368 100644
---- a/drivers/net/wireless/ath/ath9k/htc.h
-+++ b/drivers/net/wireless/ath/ath9k/htc.h
-@@ -325,11 +325,11 @@ static inline struct ath9k_htc_tx_ctl *HTC_SKB_CB(struct sk_buff *skb)
- }
- 
- #ifdef CONFIG_ATH9K_HTC_DEBUGFS
--
--#define TX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
--#define TX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
--#define RX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
--#define RX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
-+#define __STAT_SAFE(expr) (hif_dev->htc_handle->drv_priv ? (expr) : 0)
-+#define TX_STAT_INC(c) __STAT_SAFE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
-+#define TX_STAT_ADD(c, a) __STAT_SAFE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
-+#define RX_STAT_INC(c) __STAT_SAFE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
-+#define RX_STAT_ADD(c, a) __STAT_SAFE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
- #define CAB_STAT_INC   priv->debug.tx_stats.cab_queued++
- 
- #define TX_QSTAT_INC(q) (priv->debug.tx_stats.queue_stats[q]++)
-diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_init.c b/drivers/net/wireless/ath/ath9k/htc_drv_init.c
-index 11054c17a9b5..eaaafa64a3ee 100644
---- a/drivers/net/wireless/ath/ath9k/htc_drv_init.c
-+++ b/drivers/net/wireless/ath/ath9k/htc_drv_init.c
-@@ -944,7 +944,6 @@ int ath9k_htc_probe_device(struct htc_target *htc_handle, struct device *dev,
- 	priv->hw = hw;
- 	priv->htc = htc_handle;
- 	priv->dev = dev;
--	htc_handle->drv_priv = priv;
- 	SET_IEEE80211_DEV(hw, priv->dev);
- 
- 	ret = ath9k_htc_wait_for_target(priv);
-@@ -965,6 +964,8 @@ int ath9k_htc_probe_device(struct htc_target *htc_handle, struct device *dev,
- 	if (ret)
- 		goto err_init;
- 
-+	htc_handle->drv_priv = priv;
-+
- 	return 0;
- 
- err_init:
+base-commit: 8ba9249396bef37cb68be9e8dee7847f1737db9d
 -- 
-2.37.1
+2.37.2
 

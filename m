@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6C159A645
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 976CF59A66D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351297AbiHSTUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 15:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
+        id S1351123AbiHSTUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 15:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351371AbiHSTTU (ORCPT
+        with ESMTP id S1351290AbiHSTTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 15:19:20 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1BFF4F;
-        Fri, 19 Aug 2022 12:19:08 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id l1so6776390lfk.8;
-        Fri, 19 Aug 2022 12:19:08 -0700 (PDT)
+        Fri, 19 Aug 2022 15:19:25 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3D524F13;
+        Fri, 19 Aug 2022 12:19:23 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id u9so7267387lfg.11;
+        Fri, 19 Aug 2022 12:19:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=AANLxeJ0LpA7gGpSl1Si3QPJ6JAdv159yU2e2glG7p8=;
-        b=DsvV8zNJOqwTBy5DNUpgWBkMYnMY5LZZwKR79UqkxspV1lqtqz3+WHbLFY9l/tQIGn
-         2C0XuxGAZ9AtM08pWBu2/uMDCtkNlICuR2SSN2gzsh5vAljxtJBI/m79Qi757gsTj6dA
-         82E9gFLnqgPB0pLzcLYCb+D6SFDYQSjeJGWyZYij3dMxtO1m0YFp4z82uIrFLCYgSMOj
-         sJb/I6jjHGvWq1qKKDOx4+ckdtDQZUW38H4kO+UYdOQmEyqii8i1IqnleyP11OKveFww
-         LB8rNoJnCMq3VfZbF3SpN9399ul+MVM+xMUmsNXQDCShjl4YGB4iIHwnCE0bXxEECfLR
-         VZbQ==
+        bh=ExwQj6OxxYffzIEbicVKMuJlzABDjdqO2Cx3MfYHzWI=;
+        b=hnjXCBFPtyC8FZIu5Ggbdvmh2xLpIzJqiWuiVbNQ1BNEUdAzr6gw65fWLIvuC/UO05
+         YqAOiKwtq6ZY/GiVsFyuePNQ78cV+8hre8dm1k8jF2RIpgL8RRQAf/4k+c2P4c7YDZT6
+         Mem+5mt0mkOTM5B9pz1PQRdhMbEmWfH19T/iJoCgjIDd15H3nBZ3v5OkXIcBpMSv35ds
+         ihooGBLZ5Dq0ObWe0nyWpcl8v7DeDoVh4m78hL9tsPrnNzlPFCG8OsExRb+yuEddgY9F
+         eWwJ8fptlEFy/ZkG7I5AFkYfGjPHW6EWrol7dbj2dRDW7MiJM5lufy779HvzgY2amJW/
+         v6fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=AANLxeJ0LpA7gGpSl1Si3QPJ6JAdv159yU2e2glG7p8=;
-        b=o9sQBA12lb0EpYS2u1h8WpDLebWcmZmaDollXpsyoXKOLoE9vOraYDfPqFi8BKyLer
-         qopRvqqaKPKYecbZpxCPAHAW17NBA5eZ7BTSclXH1SdMcAnAtqDhZqly9MVrSEb5jAm3
-         PsITmTYMJusnj+mnJYX7z8bSWwnEv2IjH6qH4Gt+NbklySvZxbtB/Tad9Jh8iG625Kkq
-         qfIIQVRJU55vjKlyQkeeEMA0hjSH32ZP+VmhDTt2cQbQQ7uytzS2dA+S8niaAkDmMwET
-         qrYmw+Od523X8roS9KPydDaQgkWraAYFj2+p1CaPWDwPuISDmDQ+wuWTPSGhahEdqDQN
-         Mntw==
-X-Gm-Message-State: ACgBeo2MIQQUIWyu2J1010bOCdTBahsNdEdRD86l/OvL50ujYd9IypJ7
-        enOxPR0qsgESdROG4rzhlHw=
-X-Google-Smtp-Source: AA6agR51+Y9+XrHdyIIEGtNp4Q/w/K7E3YqgGy2J+KZPVECydq1v4p4Cw5CW4w4QIEU3eTwkM5wpDA==
-X-Received: by 2002:ac2:4da2:0:b0:492:c6a9:f430 with SMTP id h2-20020ac24da2000000b00492c6a9f430mr1683375lfe.96.1660936747173;
-        Fri, 19 Aug 2022 12:19:07 -0700 (PDT)
+        bh=ExwQj6OxxYffzIEbicVKMuJlzABDjdqO2Cx3MfYHzWI=;
+        b=5mo4dqw2gXF8cQ/D4KEgPWa2oO+yPuEBqBB6cXRTpmp8n4TquvC9JGX2o0CsSg2W/g
+         4IpB3M6xizCKN9TL2O92J6KthSv1990SdR36c4wwrL7y0g8Lcgm07o0FX/snBITIlrP8
+         BGcH2Q0/yR3bGjiW4cjPGVGIyOlx1IWg/FXYvhP0nXSHo4ghKTjinzJmPf3QC0mPV/R0
+         id8yI8YDR1ASpF0mWSVIuxar4JwOeiG+2RRatXl8WUusSSbOdnV9yNush2Ur0z/gToMY
+         F43O8BeZpsJ0abcHSaidVcKXMPPYDh1iZn6TExclTJuGIost9gRnvNXizXhj14iEQzHV
+         aPXQ==
+X-Gm-Message-State: ACgBeo00VYQNHEL4/+ZbCwFlz2XTn23rxr3hZvs67BTpgMpAlh39JCMM
+        3leDPdS3RcTR/hKtrDeuZ/s=
+X-Google-Smtp-Source: AA6agR6IDvsDzM94+byJN3IeqXk5VH6LQuv8Iy1GJYSDqHomnQQoHPryRAw6enrzyx1YiAM0Dw0Pdw==
+X-Received: by 2002:a05:6512:2316:b0:48a:f2e3:be97 with SMTP id o22-20020a056512231600b0048af2e3be97mr2721404lfu.383.1660936762055;
+        Fri, 19 Aug 2022 12:19:22 -0700 (PDT)
 Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id a16-20020a056512391000b0048aa9d67483sm736249lfu.160.2022.08.19.12.19.06
+        by smtp.gmail.com with ESMTPSA id c3-20020ac25f63000000b00492bf0eaedfsm712558lfc.187.2022.08.19.12.19.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 12:19:06 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 22:19:01 +0300
+        Fri, 19 Aug 2022 12:19:21 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 22:19:17 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Alexandru Tachici <alexandru.tachici@analog.com>,
+Cc:     Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 06/14] iio: ad7192: Simplify using
- devm_regulator_get_enable()
-Message-ID: <9719c445c095d3d308e2fc9f4f93294f5806c41c.1660934107.git.mazziesaccount@gmail.com>
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 07/14] iio: ltc2688: Simplify using
+ devm_regulator_*get_enable()
+Message-ID: <a29493f594c84b3bd852e462bbd3e591a8575a27.1660934107.git.mazziesaccount@gmail.com>
 References: <cover.1660934107.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="KxTzg4jangapt1lT"
+        protocol="application/pgp-signature"; boundary="eXpOsAKDszvvoKFo"
 Content-Disposition: inline
 In-Reply-To: <cover.1660934107.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,14 +76,13 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---KxTzg4jangapt1lT
+--eXpOsAKDszvvoKFo
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Use devm_regulator_get_enable() instead of open coded get, enable,
-add-action-to-disable-at-detach - pattern. Also drop the seemingly unused
-struct member 'dvdd'.
+Use devm_regulator_bulk_get_enable() instead of open coded bulk-get,
+bulk-enable, add-action-to-disable-at-detach - pattern.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
@@ -92,44 +90,69 @@ Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 v2 =3D> v3
 Split to own patch.
 ---
- drivers/iio/adc/ad7192.c | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
+ drivers/iio/dac/ltc2688.c | 23 +++--------------------
+ 1 file changed, 3 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/iio/adc/ad7192.c b/drivers/iio/adc/ad7192.c
-index d71977be7d22..8a52c0dec3f9 100644
---- a/drivers/iio/adc/ad7192.c
-+++ b/drivers/iio/adc/ad7192.c
-@@ -177,7 +177,6 @@ struct ad7192_chip_info {
- struct ad7192_state {
- 	const struct ad7192_chip_info	*chip_info;
- 	struct regulator		*avdd;
--	struct regulator		*dvdd;
- 	struct clk			*mclk;
- 	u16				int_vref_mv;
- 	u32				fclk;
-@@ -1015,19 +1014,9 @@ static int ad7192_probe(struct spi_device *spi)
- 	if (ret)
- 		return ret;
+diff --git a/drivers/iio/dac/ltc2688.c b/drivers/iio/dac/ltc2688.c
+index 28bdde2d3088..fcad3efe62ea 100644
+--- a/drivers/iio/dac/ltc2688.c
++++ b/drivers/iio/dac/ltc2688.c
+@@ -84,7 +84,6 @@ struct ltc2688_chan {
+ struct ltc2688_state {
+ 	struct spi_device *spi;
+ 	struct regmap *regmap;
+-	struct regulator_bulk_data regulators[2];
+ 	struct ltc2688_chan channels[LTC2688_DAC_CHANNELS];
+ 	struct iio_chan_spec *iio_chan;
+ 	/* lock to protect against multiple access to the device and shared data =
+*/
+@@ -902,13 +901,6 @@ static int ltc2688_setup(struct ltc2688_state *st, str=
+uct regulator *vref)
+ 			       LTC2688_CONFIG_EXT_REF);
+ }
 =20
--	st->dvdd =3D devm_regulator_get(&spi->dev, "dvdd");
--	if (IS_ERR(st->dvdd))
--		return PTR_ERR(st->dvdd);
+-static void ltc2688_disable_regulators(void *data)
+-{
+-	struct ltc2688_state *st =3D data;
 -
--	ret =3D regulator_enable(st->dvdd);
--	if (ret) {
--		dev_err(&spi->dev, "Failed to enable specified DVdd supply\n");
--		return ret;
--	}
+-	regulator_bulk_disable(ARRAY_SIZE(st->regulators), st->regulators);
+-}
 -
--	ret =3D devm_add_action_or_reset(&spi->dev, ad7192_reg_disable, st->dvdd);
-+	ret =3D devm_regulator_get_enable(&spi->dev, "dvdd");
- 	if (ret)
--		return ret;
-+		return dev_err_probe(&spi->dev, ret, "Failed to enable specified DVdd su=
-pply\n");
+ static void ltc2688_disable_regulator(void *regulator)
+ {
+ 	regulator_disable(regulator);
+@@ -970,6 +962,7 @@ static int ltc2688_probe(struct spi_device *spi)
+ 	struct regulator *vref_reg;
+ 	struct device *dev =3D &spi->dev;
+ 	int ret;
++	static const char * const regulators[] =3D {"vcc", "iovcc"};
 =20
- 	ret =3D regulator_get_voltage(st->avdd);
- 	if (ret < 0) {
+ 	indio_dev =3D devm_iio_device_alloc(dev, sizeof(*st));
+ 	if (!indio_dev)
+@@ -988,21 +981,11 @@ static int ltc2688_probe(struct spi_device *spi)
+ 		return dev_err_probe(dev, PTR_ERR(st->regmap),
+ 				     "Failed to init regmap");
+=20
+-	st->regulators[0].supply =3D "vcc";
+-	st->regulators[1].supply =3D "iovcc";
+-	ret =3D devm_regulator_bulk_get(dev, ARRAY_SIZE(st->regulators),
+-				      st->regulators);
+-	if (ret)
+-		return dev_err_probe(dev, ret, "Failed to get regulators\n");
+-
+-	ret =3D regulator_bulk_enable(ARRAY_SIZE(st->regulators), st->regulators);
++	ret =3D devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(regulators),
++					     regulators);
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "Failed to enable regulators\n");
+=20
+-	ret =3D devm_add_action_or_reset(dev, ltc2688_disable_regulators, st);
+-	if (ret)
+-		return ret;
+-
+ 	vref_reg =3D devm_regulator_get_optional(dev, "vref");
+ 	if (IS_ERR(vref_reg)) {
+ 		if (PTR_ERR(vref_reg) !=3D -ENODEV)
 --=20
 2.37.1
 
@@ -146,19 +169,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---KxTzg4jangapt1lT
+--eXpOsAKDszvvoKFo
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL/4iUACgkQeFA3/03a
-ocUZLwf+JbL6zuVBJlnV46AIvw+ntaCXEUN/wFR0BZ8xSsci6CkfCOiJfQPfpKpj
-3JzYAZPNf8mAyGaSorL0C14Xcr5tMlRwFDST7dxK9VS0KeOzBCzCENuRoUjF2XAN
-UfzOzR+kL/dzBgYNamxYktwWxRcAdwjfSnaVYq8+Sg11aDr0SUg1E9fiG6Wk2mGk
-KTVKIasov6CEMM9zqOS/DJoZxqxd4alkC6x4F6t/vivhbNsCazkDXj+3qjZ5/9CC
-Ukua7P5azJA0+p+TuYCdpgGuZBq7DRI36kl5ARMpsSOCTLtj/5wcS+0JK1KDSRC8
-lJ3dgQDt5MCtzMmHTexoRv21Q2SWUA==
-=oIFB
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL/4jUACgkQeFA3/03a
+ocX2TAgAtL0Lyeb8TRKB7n4prL/7gnSvDUEO/8ZyDNZpf0yS7OWMbHA+WuC8/Sng
+OjBp5KN//zqEFjW9rmacm7EZf3gKRIdw4s/TjkP4JHnpE9S2XPuZQaP5Eha24so9
+oBNXLZZUyJ00yVf+9YZuIX3navZff2BTEOmNB9mlh8yvImdU0He9B0p50Xo79wy+
+8KFjtAqugrh+vDzobV/jM61co3bIqr/T+czcbkI/vYqboNIII3S0uMvXIIdGWELE
+1oxWRk9SG+KDJWrRguQrDxzd4Pl0Wsgu5AgJYXGKA4KKhOk2rpIKfoGveBicWTFV
+6yVdReHVgtnTJaZDq2UltAz1g/SV6A==
+=1c3M
 -----END PGP SIGNATURE-----
 
---KxTzg4jangapt1lT--
+--eXpOsAKDszvvoKFo--

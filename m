@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC4459A9BE
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8559159A9B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243994AbiHSXx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 19:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S241167AbiHSXxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 19:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243799AbiHSXxX (ORCPT
+        with ESMTP id S229595AbiHSXxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 19:53:23 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9541E63DB;
-        Fri, 19 Aug 2022 16:53:21 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id o2so4426963iof.8;
-        Fri, 19 Aug 2022 16:53:21 -0700 (PDT)
+        Fri, 19 Aug 2022 19:53:05 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415FE115234;
+        Fri, 19 Aug 2022 16:53:04 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id d16so1475687wrr.3;
+        Fri, 19 Aug 2022 16:53:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=UX9DFt9pgifkj/QY4mu++ikMopOnydaJKN+iCFeyvjI=;
-        b=PusEjCLI++Ed6692tp9RT9MfbJaYlC2Tmx94F1gdSvkzEyjBp1TqpNY49wXhZR5hGX
-         51ISmjseJ2/wRKt0cCNT9FwBMzCXp7oU3I2zc8Gamy7yV0rIHzDq2eDzvTrAHCan7jdO
-         +1stTYv0OkVLa2zaISqIN//vUuNdPquArflukgNsATTk8ELTR8zBvGFLX1L8FaAvMP9o
-         6xRN4zGIMumKA/yUMPmU1d2866sHqgLpX8D17E+TGcndHkZPQdK1miIdSLOnfIGU2qe8
-         HpdfOOqVWwY8waLHdNGmR6WItyl/KrsMQMFo/yiGvgQwXSTJ/ldDDQLz9KO4LrOb1ZiZ
-         TbPw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=RdfAKZQznic4l7A9/kRG5QY4nU50ENbgtfWawpPow5k=;
+        b=FdD91Opw+16zzYnyUIGovktOSZ74Mk0ec0Fls9gvgH0KKtQyfCLn1m+cRxR6oysMXC
+         yGGU9J9R8unA3IUtx9cpklthMvzDFYmBtj81IUHa0wlr9JQjSqTnKhweVqjLVD4urebx
+         vJn6WFxZUaApyoEHQPJKAek5nLS2o0lylOv2ANdV3MfIRz9z30QqRlEkxAGXSVTc2hBF
+         dMWnqWgQnk0jE53SWDCK0ouyiEKZlxXoiofbux9xYy3f0YwrcD+PsoX0bs0KF9GiTXKb
+         zjDsiXn0KdR+EobU/BFLMyY/lkAPokQenlFJrRXLgjI4bdlTRosh7H6dedEuaLcEI10U
+         KJiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=UX9DFt9pgifkj/QY4mu++ikMopOnydaJKN+iCFeyvjI=;
-        b=VXJYoJS85qJDQZpwZ9Jrv8MGvcg9WWQGpcxrwRX2EYctkrncviCQdY93dHLFxyVWNh
-         +GQ8i+xs6/wKLeysq9wnhOAnqOvX5ZTPqoEuHcnKpdZ7wR2oeF82HKoNk1kdVygR2U0i
-         8cqi8WKSOKFdLKXfJSUEjxsSepw5yLXeTsTFPdIhy7lyqwBNnptNdI9MkCan4p69MHFd
-         tSIK2ZCvaFmdd+jhazhKXW9NfygSB3JqSfL7vsGAAmGm2m30UviQhk1kJO139+NkapoV
-         91TpboyS8Bh6E+ybPx34Yvb3zo7Ed6hd8pPDyrKsX0mBwDCqCE7ZaQP+8u4j+C2G+d9r
-         a/SA==
-X-Gm-Message-State: ACgBeo21iapGn1W9JHCXtZC1jc4PmBkxtq3LmARRA0ZJSguvETrA6C6m
-        1dhMZ/eZivHcLANMAsweks2k7YNJh9d93epamTU=
-X-Google-Smtp-Source: AA6agR7jmYMnylg6asONp2GAAfNY5ON6YCWcavS/uvHPv+dbmjW2WszcXZkTVw7T9qXk3bZbqddE9WA58W2wb0oqKUA=
-X-Received: by 2002:a05:6638:2381:b0:346:c583:9fa0 with SMTP id
- q1-20020a056638238100b00346c5839fa0mr4410776jat.93.1660953200967; Fri, 19 Aug
- 2022 16:53:20 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=RdfAKZQznic4l7A9/kRG5QY4nU50ENbgtfWawpPow5k=;
+        b=H2h4mVQhHtNJVfhqUCn96ENX9r7gZ5ZgUPn9Q/9E9tFusnCyTBKZ/aYeakqBl4DrSo
+         c/WGVnJpwKp7e8fjWaiW/8CGYKvQ6fLnQKPOFp7QvS3bSMUtjaJKhiKW+/4gDHFjadZW
+         pqMilxsuRFG1+Kf2w3sLW7Y6XcTIPdgPLHilKFBuTTpeqvSG7fnFQdP4mGkW+OlKmHvX
+         yea8CXSNyIp8RTe2T1G47YVQ0fOdQJaMVQWiWnFjULWnWSPHfVVIrJtRdd6CyPU2NsOx
+         KB7fNrFopGAw8ofGKNQa0RMYovsGG7NUD4JGTlRo3D2ChA/ucwzmhY1ec+Uqd7p+x3vu
+         bM+g==
+X-Gm-Message-State: ACgBeo2y+Errl69d3bmuphQm4BE+6lKorh2xf6aXdbl+xS9wcCEif7kn
+        5MPdGT7SIhojA/t72BmUEtmH1cSN9xs=
+X-Google-Smtp-Source: AA6agR7r9bkZln4j8hk3SwOU78qTwcgwSEjpa2V/GaN+ThnndFTR9Wd77OqlWLlU4bHd0zBIOHAD6g==
+X-Received: by 2002:a05:6000:2c8:b0:221:7aea:c87f with SMTP id o8-20020a05600002c800b002217aeac87fmr5022605wry.242.1660953182731;
+        Fri, 19 Aug 2022 16:53:02 -0700 (PDT)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id a18-20020adfdd12000000b002205cbc1c74sm5155714wrm.101.2022.08.19.16.53.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 16:53:02 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: rockchip: Lower sd speed on quartz64-b
+Date:   Sat, 20 Aug 2022 01:53:01 +0200
+Message-ID: <830493549.YKYzsnH2yD@archbook>
+In-Reply-To: <20220721044307.48641-1-frattaroli.nicolas@gmail.com>
+References: <20220721044307.48641-1-frattaroli.nicolas@gmail.com>
 MIME-Version: 1.0
-References: <cover.1660951028.git.dxu@dxuuu.xyz> <f44b2eebe48f0653949f59c5bcf23af029490692.1660951028.git.dxu@dxuuu.xyz>
- <CAP01T74fSh6Z=54O+ORKJD7i_izb7rUe3-mHKLgRdrckcisvkw@mail.gmail.com>
-In-Reply-To: <CAP01T74fSh6Z=54O+ORKJD7i_izb7rUe3-mHKLgRdrckcisvkw@mail.gmail.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Sat, 20 Aug 2022 01:52:44 +0200
-Message-ID: <CAP01T76zWax4YSQO5nP2Kt_85JvUPvxTwpOn5Dho6co32r+FBA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/5] bpf: Add support for writing to nf_conn:mark
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, pablo@netfilter.org, fw@strlen.de,
-        toke@kernel.org, martin.lau@linux.dev,
-        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,26 +73,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 20 Aug 2022 at 01:46, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
->
-> CPU 0                                              CPU 1
-> sa = READ_ONCE(nf_ct_bsa);
->
-> delete_module("nf_conntrack", ..);
->
-> WRITE_ONCE(nf_ct_bsa, NULL);
->                                                          // finishes
-> successfully
-> if (sa)
->     return sa(...); // oops
->
+On Donnerstag, 21. Juli 2022 06:43:06 CEST Nicolas Frattaroli wrote:
+> The previously stated speed of sdr-104 is too high for the hardware
+> to reliably communicate with some fast SD cards.
+> 
+> Lower this to sd-uhs-sdr50 to fix this.
+> 
+> Fixes: dcc8c66bef79 ("arm64: dts: rockchip: add Pine64 Quartz64-B device tree")
+> 
+> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+> index 02d5f5a8ca03..528bb4e8ac77 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+> @@ -506,7 +506,7 @@ &sdmmc0 {
+>  	disable-wp;
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
+> -	sd-uhs-sdr104;
+> +	sd-uhs-sdr50;
+>  	vmmc-supply = <&vcc3v3_sd>;
+>  	vqmmc-supply = <&vccio_sd>;
+>  	status = "okay";
+> 
 
-Ew, I completely screwed it up. Not trying again.
+Please apply. Thank you!
 
-CPU 0 does:
-sa = READ_ONCE(nf_ct_bsa);
-then CPU 1 does:
-delete_module("nf_conntrack", ...);
-   WRITE_ONCE(nf_ct_bsa, NULL);
-then CPU 0 does:
-if (sa) sa(...); // bad
+

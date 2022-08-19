@@ -2,66 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C4B59A830
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 00:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110D459A833
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 00:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239538AbiHSWPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 18:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
+        id S239768AbiHSWQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 18:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239418AbiHSWPf (ORCPT
+        with ESMTP id S239587AbiHSWQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 18:15:35 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33096BD167;
-        Fri, 19 Aug 2022 15:15:34 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id l5so4352404qtv.4;
-        Fri, 19 Aug 2022 15:15:34 -0700 (PDT)
+        Fri, 19 Aug 2022 18:16:21 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A4FC0B5A
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:16:20 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3339532b6a8so97235147b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:16:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=y3tRP3OmOA1Mjqr7eOREwc8KRFICb1q32OjHDh4TJsM=;
-        b=jEbPEh9s+cumm1o0L0BA2XOMeUeW80GbpqgaY/cplSKb4S2rWsXib17UTbtpI89SES
-         clIH8MPKOmVBV9g14gnrN/p/JJOqJmqBWfcllwDRc4H0HIyCD6d82g98SZpKUYro86Qs
-         BpbR+rbl6fJa4E1IFCE8MGtu9ug++tsqPqt7qzHRQgd/CBuUSES+wSSQl2GuERMa9GtZ
-         XGz1cdtDMYbR5K0IniawLICMdw1lsBjsRaoXOLGg03b2T3PkrQONZhLeuZhGEXCqQFtz
-         JUG4pG9hbGeyhlwycjsgo6R2yI6UvJflAgKbVPzz9JaqYhQxbbM5Zx1kRJVEn7uTJ1zV
-         iYIA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=t5NMSCOXrbG0Qu3FAuWbHVmFLW5D0kFYreRH8zEIjV8=;
+        b=gWwBFfQzdDln3NwaMOLGITORJZRdOHNWfwYN4lk8hEGSpzD3nf0hp2vwhR0ehr9i2w
+         R29Hm5/+BlRY+39ZdmD1y+vr3jEPlfnvwSvpVelQwQO1O7uxHZYyvePk913Fc2Fz55iX
+         QjzGWD5mo4bmDesrjxJb2EwyBMXHWwWyQyFGrGuWY2g2Dc8APPCBlo+u1d7Cd73v12ib
+         1Xy8VHJ3p5JBMqH9WrjSqdKP7zkHUsHt6QG1+x689dosBCL7ZjXPRMDXAxU6K3HdAbOj
+         4wQEDnRMFUt+HthMu1axqnRVGLRFtqAAl07/bp2Re7kFQ2Bm7Z0Zbz/5vPJvBClJV19J
+         Ff2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=y3tRP3OmOA1Mjqr7eOREwc8KRFICb1q32OjHDh4TJsM=;
-        b=2S+8JTIjwapBRu4nnd57VouFdAP7c0Rg5bO3EzawpbBdbg5XnRkEWUiROhTAKsy6DE
-         6Gu3v5pC+XjWrr/FyYTuGasjT6Prd7Z7uDvpN9+JcQYSg+aCQjTKKFnEY1r+b9K1Y7Y3
-         hfGGZyVyZjaHebLtqWJPptT/PYYVy5s6WHqaYT9FDRO30TCNtgdoa16qGQF5y5H5rP+Y
-         BpvFuP0z1zfCVl8b17CRAprV5aRa17EUXEY/W98DAp6IoqC15aWeSb7qg1Rm/Bsjke+g
-         lo3TQlt2B8373+VT4YF45bNE1xyprIacx4IG4KwjpRJxTLngHWPaAGWRwsDruE6WGrsn
-         /Yhw==
-X-Gm-Message-State: ACgBeo03HDTtxTzq9ZvKR4dNJpBOO0oUj0wxM59bqJaGLb/P3HtauvGr
-        +KISX0bgRBkRQwAvP3E9Kn0DyA7JBXFB7chRjlg=
-X-Google-Smtp-Source: AA6agR6kyM1K854TsJ/Upt+Nc9BCXWYDX0voNN2Pffr5Q1TJbgolnPk6YUuSu6jd42ppIKjW5hZQjddgMNNm0iHm/08=
-X-Received: by 2002:a05:622a:491:b0:344:95bf:8f05 with SMTP id
- p17-20020a05622a049100b0034495bf8f05mr6740137qtx.61.1660947333248; Fri, 19
- Aug 2022 15:15:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220815091929.130547-1-brgl@bgdev.pl>
-In-Reply-To: <20220815091929.130547-1-brgl@bgdev.pl>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 20 Aug 2022 01:14:57 +0300
-Message-ID: <CAHp75Vc3dazcM1MLzjzPUmgMGNACUsOZ8aK4uauAJk0hzj9q-w@mail.gmail.com>
-Subject: Re: [PATCH] gpio: pxa: use devres for the clock struct
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>, Yuan Can <yuancan@huawei.com>
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=t5NMSCOXrbG0Qu3FAuWbHVmFLW5D0kFYreRH8zEIjV8=;
+        b=aeC0MJ3wak8nzjxfGNsdUDHR8UoYvgdOyt4zbXBKaRb8QRh5I52wHPeTrzh21p7vlo
+         aZtRTr4TM3rk3PyNNRZTHuGGb3r3p5nBqFUmvk53PtqkbvMBLXrw7pfKZbu1sYRtAH8I
+         jWw2ykSZ9wV6PLEsq56IAvjmOsWjh07lcKgQylEZ52ZQTUVP50qNFnIxS2SjW1HEXxt7
+         Oqhq87yeCr4Rsq1u6WC1vk51g+KF7M1ebfSFHtSCfupqZrzrV1H6PB5ywr6Bt57zshQT
+         XFIOBhhX6zqxodkeuZL96E25L1mHDU2tTmnfJz/xc99V2reKw02eFdRHuwR8CsVkaxil
+         TFNQ==
+X-Gm-Message-State: ACgBeo0SJFaLeG1nONPJH6KgkYMrIFW+YYzmh2y2GWu2m6QkOUUBTusq
+        MJc2Q+sj3qZRJ0ugSoxgFu2VLINkrKi69U8=
+X-Google-Smtp-Source: AA6agR4EX1OBULn40ut/MjDpJQQkX96WwHfTFwXQk6CpU2kNVzlbku/C8FdhqvNBCu/ZTTWVaRDqauv3HvTZg1M=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:f93e:7b61:ce3d:5b06])
+ (user=saravanak job=sendgmr) by 2002:a81:d353:0:b0:31e:2888:93a1 with SMTP id
+ d19-20020a81d353000000b0031e288893a1mr9560863ywl.498.1660947379483; Fri, 19
+ Aug 2022 15:16:19 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 15:16:10 -0700
+Message-Id: <20220819221616.2107893-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH v2 0/4] Bring back driver_deferred_probe_check_state() for now
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Peng Fan <peng.fan@nxp.com>, Luca Weiss <luca.weiss@fairphone.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,25 +88,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 12:26 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> The clock is never released after probe(). Use devres to not leak
-> resources.
+A bunch of issues have been reported in the original series[1] that removed
+driver_deferred_probe_check_state(). While most of the issues have been
+fixed in a new series that improved fw_devlink [2], there are still a few
+unresolved issues I need to address.
 
-...
+So let's bring back driver_deferred_probe_check_state() until the other
+issues are resolved.
 
-> -       clk = clk_get(&pdev->dev, NULL);
-> +       clk = devm_clk_get_enabled(&pdev->dev, NULL);
->         if (IS_ERR(clk)) {
->                 dev_err(&pdev->dev, "Error %ld to get gpio clock\n",
->                         PTR_ERR(clk));
->                 return PTR_ERR(clk);
+Greg,
 
-Shouldn't we fix a potential log saturation issue first (by switching
-to use dev_err_probe() helper)?
+Can we get this into 6.0-rcX please?
 
->         }
+-Saravana
+
+[1] - https://lore.kernel.org/lkml/20220601070707.3946847-1-saravanak@google.com/
+[2] - https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@google.com/
+
+v1 -> v2:
+- Added a revert of the iommu change too.
+
+Saravana Kannan (4):
+  Revert "driver core: Delete driver_deferred_probe_check_state()"
+  Revert "net: mdio: Delete usage of
+    driver_deferred_probe_check_state()"
+  Revert "PM: domains: Delete usage of
+    driver_deferred_probe_check_state()"
+  Revert "iommu/of: Delete usage of driver_deferred_probe_check_state()"
+
+ drivers/base/dd.c              | 30 ++++++++++++++++++++++++++++++
+ drivers/base/power/domain.c    |  2 +-
+ drivers/iommu/of_iommu.c       |  2 +-
+ drivers/net/mdio/fwnode_mdio.c |  4 +++-
+ include/linux/device/driver.h  |  1 +
+ 5 files changed, 36 insertions(+), 3 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.37.1.595.g718a3a8f04-goog
+

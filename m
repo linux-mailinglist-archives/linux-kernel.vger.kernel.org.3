@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBB7599D40
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F190599D39
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349474AbiHSNuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 09:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
+        id S1349479AbiHSNuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 09:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349447AbiHSNuh (ORCPT
+        with ESMTP id S1349451AbiHSNui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 09:50:37 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0C1FBA6C
+        Fri, 19 Aug 2022 09:50:38 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B0CFC311
         for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:50:36 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id gi31so2424469ejc.5
+Received: by mail-ej1-x62c.google.com with SMTP id a7so8961053ejp.2
         for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:50:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=xYBRhSDok53eb0OvQN4XDJTh9o2Zw4fM6AIaxBqnM/k=;
-        b=Og7OjeyCQub+mnMsVXkByrzBGbjqFb5M6FJbciWdd8jKCe/PjrMXLxYZXKeP67b9yf
-         gifOWmVXR8tuUugno343Xitsus7qrdkSkgy4Kt97EDQDy5YyO5RVVbmDUQbaL1Nk7Zsb
-         5J3OKzv7/lFiLh5NDKi1ALmsImnmFQpiB9t9xa2dyLuW9USzm3nMS8xIW0q3DIvZUT6g
-         88V49UrbxOlPkb19zP5FxyG0AxGG6B63n7JqG5eSS7NSACRvmtlqOj40wgjyMYniJCgt
-         lDoEWjkHvAzoStDXF6nemBy5Xtv5VQ5SPnOva1idz1qkcFf/0pvbC2MEmG1+JjXnm6KX
-         YmgQ==
+        bh=jThNKOG1gbtfk0tZNZ5jZtMKT0ivZg17/ZD4Mra2nmw=;
+        b=hkMg4woO4O4YPQl9Qc9nv8LnpMM2SEtRMG0+8LtvnRQrjx5pPa1y0jTXY8RdUen1zd
+         JPU3cqjT/62bZIXVBqfpkCu6/7KtXjSFmTrrovR036j+XzG1ZvGHJthbjDZlOLwN5jrk
+         Rb3jTEm3nfK9+SGFTk//YoMfz6DyHUacfRb8lDmhmcMqY/V9p3jnm53l/2i21nKRx6i9
+         5uZ5L3VeAKR5Ap+heJs4BzekxDH7WI8Z4I2wsoXWESPX6DUb5YKndGa5bc0WzQMavjN3
+         l85YXUb6a5cU/e9QT8QLIlY/3gddrq1jAvbnrl/SeElFWWdGGeU+e/3/6okRHAlj+KBa
+         owPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=xYBRhSDok53eb0OvQN4XDJTh9o2Zw4fM6AIaxBqnM/k=;
-        b=huH0M9RMZ6mvUYu5MHJZUlQxUUt+Ugvxe8cgMsJ4cn9ulEkyoa+ZObUuTWdOA4WsAr
-         23Wy5iKMrlFwpvLl+QVoKVzEBlAS6vLlZgvSzbKL1Y0EbnPkPWhhPJfM4eTxFVBj6u3Z
-         WKbVo49QrPMuaFuW/haXdHPFk/Bk7JzzCw+A3O54R0c1wz59Vqd29FkC+1rvWpuVbgZy
-         uUrWTF7r1rFbD18JnTwmLvjjo+5zOEJhzEiHSyUhToy3MwOV7VyrmPCLgeQyoNJQX7T4
-         A9KdIKsPfxGHGnHfowSmMtmK2Q0QOOv5iRqend3bklJFZv8ygXzL9unjd2GL83LzyAL1
-         qubw==
-X-Gm-Message-State: ACgBeo05BDMHO1uf3aCq7JVlMPEGtqsZY3E+yDRwpc3CDra8PimByGFG
-        Se9pDAjXjfzLhovaEWPEG5U=
-X-Google-Smtp-Source: AA6agR4rRXBz+CZgGIaBhY7QFou4TuAqGpdPkmyKaIgYamtZlNgH6yr0JL4je0bCUzO+WuFvqhgAKQ==
-X-Received: by 2002:a17:907:a074:b0:730:c7a3:2c9 with SMTP id ia20-20020a170907a07400b00730c7a302c9mr4865846ejc.110.1660917034635;
-        Fri, 19 Aug 2022 06:50:34 -0700 (PDT)
+        bh=jThNKOG1gbtfk0tZNZ5jZtMKT0ivZg17/ZD4Mra2nmw=;
+        b=Vu38VGde6DEYQiXtS6oo0Bj+XscnyT4BFV3zad117kFso388540r350oUI1qbFX2/A
+         Qj1IKkEFdOVBHdymfkZLykCes8IKGQ45PNNh6QMnj8UBPF/HzKRsrqP1RT4rSqX1ExUX
+         C6Z4qMVeM2IQ01t+zqbRBC85A+AaFGieBL1FKyzDLBkTnn4CDGxuhJVnKF27WN8uYAs0
+         D1nX1Dn4bxqZO5SAjMEaWiiQbUc4PAWgzTi/COhGD+cPrapHkTjv22Y59UeyRWQLbjxA
+         1AHxocD8qE5nHNX8jKuNTqJiMF4PVBFsynbt/rmlG4leYiBX7G+8Zn9DrTrwI+rmZ6NF
+         OpZQ==
+X-Gm-Message-State: ACgBeo2zTaLaUI9xaya7lCBtkzlA8uWDaU/d8qs8GmBbktlp8HN9KuO5
+        +IUOPO1Crn7FFgX0MP0Tfl4=
+X-Google-Smtp-Source: AA6agR7yptWZX9XA4DNKhtOYFQvkiQUVYk5xXU8+PeMmc0AEDWDM3I968igdDsXnPSQwmWZDyQXJhg==
+X-Received: by 2002:a17:907:843:b0:73a:5b0e:8352 with SMTP id ww3-20020a170907084300b0073a5b0e8352mr4911753ejb.438.1660917035485;
+        Fri, 19 Aug 2022 06:50:35 -0700 (PDT)
 Received: from nam-dell.ucebne.fiit.stuba.sk ([147.175.148.17])
-        by smtp.gmail.com with ESMTPSA id i8-20020a17090671c800b0073087140945sm2313821ejk.123.2022.08.19.06.50.33
+        by smtp.gmail.com with ESMTPSA id i8-20020a17090671c800b0073087140945sm2313821ejk.123.2022.08.19.06.50.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 06:50:34 -0700 (PDT)
+        Fri, 19 Aug 2022 06:50:35 -0700 (PDT)
 From:   Nam Cao <namcaov@gmail.com>
 To:     lkp@intel.com
 Cc:     Larry.Finger@lwfinger.net, gregkh@linuxfoundation.org,
         hdegoede@redhat.com, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         namcaov@gmail.com
-Subject: [PATCH v2 7/8] staging: rtl8723bs: remove function rtw_odm_dbg_comp_set
-Date:   Fri, 19 Aug 2022 15:49:41 +0200
-Message-Id: <e1927eb6151d39b53a6ce1eed1d7ad20a2d633be.1660916523.git.namcaov@gmail.com>
+Subject: [PATCH v2 8/8] staging: rtl8723bs: remove static const variable odm_comp_str
+Date:   Fri, 19 Aug 2022 15:49:42 +0200
+Message-Id: <678b03dad7217e70e61074d11975319cb1c1828c.1660916523.git.namcaov@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1660916523.git.namcaov@gmail.com>
 References: <cover.1660916523.git.namcaov@gmail.com>
@@ -72,42 +72,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-because this function is not used.
+because it is not used.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/linux-staging/202208192018.BfgiZyOY-lkp@intel.com/
 Signed-off-by: Nam Cao <namcaov@gmail.com>
 ---
- drivers/staging/rtl8723bs/core/rtw_odm.c    | 5 -----
- drivers/staging/rtl8723bs/include/rtw_odm.h | 1 -
- 2 files changed, 6 deletions(-)
+ drivers/staging/rtl8723bs/core/rtw_odm.c | 35 ------------------------
+ 1 file changed, 35 deletions(-)
 
 diff --git a/drivers/staging/rtl8723bs/core/rtw_odm.c b/drivers/staging/rtl8723bs/core/rtw_odm.c
-index 2cba7825c9b3..58b6299ed9d7 100644
+index 58b6299ed9d7..47fd2ee9bb9f 100644
 --- a/drivers/staging/rtl8723bs/core/rtw_odm.c
 +++ b/drivers/staging/rtl8723bs/core/rtw_odm.c
-@@ -90,11 +90,6 @@ static const char * const odm_dbg_level_str[] = {
+@@ -10,41 +10,6 @@
+ #include <rtw_odm.h>
+ #include <hal_data.h>
  
- #define RTW_ODM_DBG_LEVEL_NUM 6
- 
--inline void rtw_odm_dbg_comp_set(struct adapter *adapter, u64 comps)
--{
--	rtw_hal_set_def_var(adapter, HW_DEF_ODM_DBG_FLAG, &comps);
--}
+-static const char * const odm_comp_str[] = {
+-	/* BIT0 */"ODM_COMP_DIG",
+-	/* BIT1 */"ODM_COMP_RA_MASK",
+-	/* BIT2 */"ODM_COMP_DYNAMIC_TXPWR",
+-	/* BIT3 */"ODM_COMP_FA_CNT",
+-	/* BIT4 */"ODM_COMP_RSSI_MONITOR",
+-	/* BIT5 */"ODM_COMP_CCK_PD",
+-	/* BIT6 */"ODM_COMP_ANT_DIV",
+-	/* BIT7 */"ODM_COMP_PWR_SAVE",
+-	/* BIT8 */"ODM_COMP_PWR_TRAIN",
+-	/* BIT9 */"ODM_COMP_RATE_ADAPTIVE",
+-	/* BIT10 */"ODM_COMP_PATH_DIV",
+-	/* BIT11 */"ODM_COMP_PSD",
+-	/* BIT12 */"ODM_COMP_DYNAMIC_PRICCA",
+-	/* BIT13 */"ODM_COMP_RXHP",
+-	/* BIT14 */"ODM_COMP_MP",
+-	/* BIT15 */"ODM_COMP_DYNAMIC_ATC",
+-	/* BIT16 */"ODM_COMP_EDCA_TURBO",
+-	/* BIT17 */"ODM_COMP_EARLY_MODE",
+-	/* BIT18 */NULL,
+-	/* BIT19 */NULL,
+-	/* BIT20 */NULL,
+-	/* BIT21 */NULL,
+-	/* BIT22 */NULL,
+-	/* BIT23 */NULL,
+-	/* BIT24 */"ODM_COMP_TX_PWR_TRACK",
+-	/* BIT25 */"ODM_COMP_RX_GAIN_TRACK",
+-	/* BIT26 */"ODM_COMP_CALIBRATION",
+-	/* BIT27 */NULL,
+-	/* BIT28 */NULL,
+-	/* BIT29 */NULL,
+-	/* BIT30 */"ODM_COMP_COMMON",
+-	/* BIT31 */"ODM_COMP_INIT",
+-};
 -
- void rtw_odm_dbg_level_msg(void *sel, struct adapter *adapter)
- {
- 	u32 dbg_level;
-diff --git a/drivers/staging/rtl8723bs/include/rtw_odm.h b/drivers/staging/rtl8723bs/include/rtw_odm.h
-index be0d47413fd2..6a431c121285 100644
---- a/drivers/staging/rtl8723bs/include/rtw_odm.h
-+++ b/drivers/staging/rtl8723bs/include/rtw_odm.h
-@@ -13,7 +13,6 @@
- * This file provides utilities/wrappers for rtw driver to use ODM
- */
+ #define RTW_ODM_COMP_MAX 32
  
--void rtw_odm_dbg_comp_set(struct adapter *adapter, u64 comps);
- void rtw_odm_dbg_level_msg(void *sel, struct adapter *adapter);
- void rtw_odm_dbg_level_set(struct adapter *adapter, u32 level);
- 
+ static const char * const odm_ability_str[] = {
 -- 
 2.25.1
 

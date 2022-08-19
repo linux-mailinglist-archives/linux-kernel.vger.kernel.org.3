@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2194D599D41
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99AFE599D33
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349450AbiHSNui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 09:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
+        id S1349456AbiHSNuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 09:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349432AbiHSNuc (ORCPT
+        with ESMTP id S1349434AbiHSNud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 09:50:32 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150DCFBA6D
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:50:31 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id a22so5736110edj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:50:31 -0700 (PDT)
+        Fri, 19 Aug 2022 09:50:33 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3410BFBA75
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:50:32 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id dc19so8877743ejb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:50:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=hRYX9Qb8xgVcO72OHHpEJqvkK+/eKUc0GJTr4L8+CVs=;
-        b=f0o/htZwQHgDORpIN53D4O7FzqXU1zTEw/wWvixVmpVQcl1Po03p2kicqYdQAqOYhS
-         5cJZNv9+FJFT19JORkV1uIg45xF+bwWWX311dwgxtv5WQyaS37GjOvCzr7vpcPqSQPf5
-         RxOuShCKbKZUxzWpQLU/gVwk+6yxFiK3gqh6jcMiPG2gYrteDJM4bDXFUvOBNd1x53vL
-         2ZDJ6lLlhVr6KzMuFZRKViY6JT3lCjp/MoTPVgOrl7FNRubXa5DQnTUGNMq3kbu9i1PY
-         VZKmWyi4X9fwW+Xu58k6exm4qB6RWk3oq0Gqisu5JvPYNJQOUUlA85MdqFVfhsjzzWlJ
-         HvLQ==
+        bh=KwKZVOZR3GJHc3jlnF0u1iBjRpLe4GFgoYhD+Ro9tFA=;
+        b=qvwHqZDuCH3HHIURyEz05igIa18oM7ehQYcNDGhDjBnu2o78KwDvvRYRua5zr+fUg6
+         7iBSWZWSkqJE/oT7oe9y8ghNKySlQuhVKbW6uZh5f1WbhvcbEREvXUsHI5/0qsgARJBr
+         +THBUXtYdFRxRDzy9xcV+uerLfHezJGy/iVSCQnd5UlDMDTScst3ooosIuRcrdFGbW36
+         wFHeF87QFrI+FrYaSAWmR2j8rvmqANQR58WjpAxK7onpqZ29Yk9P/BvPJ1tKurm7rILe
+         A0EfgBXikiN5MLlIakkiKmQWtgo/i8P/tVj+FUjI/T/skZVbIWyHr7qx/axOQcdMV0Vt
+         dN1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=hRYX9Qb8xgVcO72OHHpEJqvkK+/eKUc0GJTr4L8+CVs=;
-        b=M3CiCZ3lEPrWZ4vnDbpXcgwq3/ffqSAPyGONvI4dasn9K+CiSol2N1HgdddTb5kGRf
-         aldcwcbYFqGQWm33gmrsDZvF9NkWXtjpQM87Ml9w7j1Erjy9XQFrd3pnSVqxzDQYm/C3
-         7QMB1u4iiWNYxzPdSdnvjLbjKi8o0XgKDJIkadylWwNZUK2BnUGJgrveEbxXn6qwisIf
-         zETGu4vKralk9hUMKtl711rWTUxyCXRa+tXL2OP665YgB1ZEFyqO1a6R2ZpNtqb0V9oD
-         Y1a05heqHWSF997T2jN/ZMfEUw354GJt692i6sZWIKbNL/i5sX0oQ2622hXZFPkJMYAb
-         axHw==
-X-Gm-Message-State: ACgBeo15gnFfR1E4ZHipn0GTHE+0opQcl6AcD14J9lY+MzRTPctwZSkp
-        MRv0gfrKz8r27pWyXMfM1BQ=
-X-Google-Smtp-Source: AA6agR6zI3qiRl8/pfFxaePE28E7zQtoxndWxw8UzIrwRHhsLKd9VNYWn5vTY/soXEjRf+6jEfUyXg==
-X-Received: by 2002:a05:6402:328a:b0:43d:f295:f14c with SMTP id f10-20020a056402328a00b0043df295f14cmr6336780eda.299.1660917029690;
-        Fri, 19 Aug 2022 06:50:29 -0700 (PDT)
+        bh=KwKZVOZR3GJHc3jlnF0u1iBjRpLe4GFgoYhD+Ro9tFA=;
+        b=V7ybfxzGao18M/bNiu1FUJwlnw2KlzwCLJivnDElF/UTyjr/nZYtsP3trurWb8tm4l
+         Gq/y7iPtEVXTJQOAVpxhsFzrCmxGIG/cKbaUGdY+pJC17CDymlKuKZ8ZiXBdq9UQB8kE
+         X6gd8Y68408oz5EFpkDTFvY7Cb1SKLaiIECxwul9F3Lj+NQ/NA0cYdy5NeG8K3cVB3ZX
+         S+Ahz2o75AhLy+dVAlE+7CkkxH/P1TIVV/4Ee3AMClsGomI4vcveqmdRIB2TnYGIQo0Y
+         eXFvK/7Z8UGd0QThDwvEs2xhMYYAQw6n3T2MVxFjbs8mMw/FrdDJuMJP2R1G/pLl3+qT
+         tlJA==
+X-Gm-Message-State: ACgBeo0LRNIOjQ6VVwyWl7SVFGLTmOubli3bwI/1hZ7aqHj3Jr5n0m4X
+        sGgRfNNlIJi/bnGjwowtAfPXDIYPvO1+OA==
+X-Google-Smtp-Source: AA6agR6X70+haqMOdyzzoiDa9ElTXs1E9C9YBlRkhohwg1DM7BLRO5YcVPaWOiwpytCK99Dyp6Rpew==
+X-Received: by 2002:a17:907:9493:b0:73b:e605:f3b with SMTP id dm19-20020a170907949300b0073be6050f3bmr4600437ejc.37.1660917030806;
+        Fri, 19 Aug 2022 06:50:30 -0700 (PDT)
 Received: from nam-dell.ucebne.fiit.stuba.sk ([147.175.148.17])
-        by smtp.gmail.com with ESMTPSA id i8-20020a17090671c800b0073087140945sm2313821ejk.123.2022.08.19.06.50.28
+        by smtp.gmail.com with ESMTPSA id i8-20020a17090671c800b0073087140945sm2313821ejk.123.2022.08.19.06.50.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 06:50:29 -0700 (PDT)
+        Fri, 19 Aug 2022 06:50:30 -0700 (PDT)
 From:   Nam Cao <namcaov@gmail.com>
 To:     lkp@intel.com
 Cc:     Larry.Finger@lwfinger.net, gregkh@linuxfoundation.org,
         hdegoede@redhat.com, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         namcaov@gmail.com
-Subject: [PATCH v2 3/8] staging: rtl8723bs: remove function rtw_odm_ability_set
-Date:   Fri, 19 Aug 2022 15:49:37 +0200
-Message-Id: <35d0f2115fa6febd72a1a7d1c740dece3d55a3df.1660916523.git.namcaov@gmail.com>
+Subject: [PATCH v2 4/8] staging: rtl8723bs: remove function GetFractionValueFromString
+Date:   Fri, 19 Aug 2022 15:49:38 +0200
+Message-Id: <e782bcd3ff8c33df8da7eb6b8e4bb00b1c270edc.1660916523.git.namcaov@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1660916523.git.namcaov@gmail.com>
 References: <cover.1660916523.git.namcaov@gmail.com>
@@ -76,38 +76,78 @@ because this function is not used.
 
 Signed-off-by: Nam Cao <namcaov@gmail.com>
 ---
- drivers/staging/rtl8723bs/core/rtw_odm.c    | 5 -----
- drivers/staging/rtl8723bs/include/rtw_odm.h | 1 -
- 2 files changed, 6 deletions(-)
+ drivers/staging/rtl8723bs/hal/hal_com.c     | 43 ---------------------
+ drivers/staging/rtl8723bs/include/hal_com.h |  3 --
+ 2 files changed, 46 deletions(-)
 
-diff --git a/drivers/staging/rtl8723bs/core/rtw_odm.c b/drivers/staging/rtl8723bs/core/rtw_odm.c
-index abb111752169..ec8406c18b03 100644
---- a/drivers/staging/rtl8723bs/core/rtw_odm.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_odm.c
-@@ -129,11 +129,6 @@ void rtw_odm_ability_msg(void *sel, struct adapter *adapter)
- 	}
+diff --git a/drivers/staging/rtl8723bs/hal/hal_com.c b/drivers/staging/rtl8723bs/hal/hal_com.c
+index 909b37bcc897..f82cbe5a77ff 100644
+--- a/drivers/staging/rtl8723bs/hal/hal_com.c
++++ b/drivers/staging/rtl8723bs/hal/hal_com.c
+@@ -939,49 +939,6 @@ bool GetHexValueFromString(char *szStr, u32 *pu4bVal, u32 *pu4bMove)
+ 	return true;
  }
  
--inline void rtw_odm_ability_set(struct adapter *adapter, u32 ability)
+-bool GetFractionValueFromString(
+-	char *szStr, u8 *pInteger, u8 *pFraction, u32 *pu4bMove
+-)
 -{
--	rtw_hal_set_hwreg(adapter, HW_VAR_DM_FLAG, (u8 *)&ability);
+-	char *szScan = szStr;
+-
+-	/*  Initialize output. */
+-	*pu4bMove = 0;
+-	*pInteger = 0;
+-	*pFraction = 0;
+-
+-	/*  Skip leading space. */
+-	while (*szScan != '\0' &&	(*szScan == ' ' || *szScan == '\t')) {
+-		++szScan;
+-		++(*pu4bMove);
+-	}
+-
+-	/*  Parse each digit. */
+-	do {
+-		(*pInteger) *= 10;
+-		*pInteger += (*szScan - '0');
+-
+-		++szScan;
+-		++(*pu4bMove);
+-
+-		if (*szScan == '.') {
+-			++szScan;
+-			++(*pu4bMove);
+-
+-			if (*szScan < '0' || *szScan > '9')
+-				return false;
+-			else {
+-				*pFraction = *szScan - '0';
+-				++szScan;
+-				++(*pu4bMove);
+-				return true;
+-			}
+-		}
+-	} while (*szScan >= '0' && *szScan <= '9');
+-
+-	return true;
 -}
 -
- void rtw_odm_adaptivity_parm_msg(void *sel, struct adapter *adapter)
- {
- 	struct hal_com_data *pHalData = GET_HAL_DATA(adapter);
-diff --git a/drivers/staging/rtl8723bs/include/rtw_odm.h b/drivers/staging/rtl8723bs/include/rtw_odm.h
-index 27e8240284b4..ea9c4de0f284 100644
---- a/drivers/staging/rtl8723bs/include/rtw_odm.h
-+++ b/drivers/staging/rtl8723bs/include/rtw_odm.h
-@@ -18,7 +18,6 @@ void rtw_odm_dbg_level_msg(void *sel, struct adapter *adapter);
- void rtw_odm_dbg_level_set(struct adapter *adapter, u32 level);
+ /*  */
+ /* 	Description: */
+ /* 		Return true if szStr is comment out with leading "//". */
+diff --git a/drivers/staging/rtl8723bs/include/hal_com.h b/drivers/staging/rtl8723bs/include/hal_com.h
+index 7be0ea20bca4..b49b0a0355c6 100644
+--- a/drivers/staging/rtl8723bs/include/hal_com.h
++++ b/drivers/staging/rtl8723bs/include/hal_com.h
+@@ -153,9 +153,6 @@ u32 MapCharToHexDigit(char chTmp);
  
- void rtw_odm_ability_msg(void *sel, struct adapter *adapter);
--void rtw_odm_ability_set(struct adapter *adapter, u32 ability);
+ bool GetHexValueFromString(char *szStr, u32 *pu4bVal, u32 *pu4bMove);
  
- void rtw_odm_adaptivity_parm_msg(void *sel, struct adapter *adapter);
- void rtw_odm_adaptivity_parm_set(struct adapter *adapter, s8 TH_L2H_ini, s8 TH_EDCCA_HL_diff,
+-bool GetFractionValueFromString(char *szStr, u8 *pInteger, u8 *pFraction,
+-				u32 *pu4bMove);
+-
+ bool IsCommentString(char *szStr);
+ 
+ bool ParseQualifiedString(char *In, u32 *Start, char *Out, char LeftQualifier,
 -- 
 2.25.1
 

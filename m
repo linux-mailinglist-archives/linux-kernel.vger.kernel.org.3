@@ -2,112 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521505999A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3535999B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348165AbiHSKQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
+        id S1348278AbiHSKRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348051AbiHSKQT (ORCPT
+        with ESMTP id S1347328AbiHSKRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:16:19 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C55FDAA25;
-        Fri, 19 Aug 2022 03:16:18 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id l5so2977178qtv.4;
-        Fri, 19 Aug 2022 03:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=ADSKbpogRZlDU9n3ifnRUc33Vsi63y1uvA/ha4YLmHE=;
-        b=i8PBBhDWC26ca+yNixL2xWjMqtpmDBQLNXSyysTGt5bb+0zRtXc+aUdW4o2IDSvz0z
-         PQaijn0pK2zpF5gRvJycNFrHz95kTU8AZ6TF6F1FLjlYpmDu1neYYlxd1TpMMx/uOx09
-         nqtn2303qZzZhHK6t3qn9eQkxUJqx0LLD/jaz2juglYeLZJrKR8GedvEtMwwxFn/q2sP
-         YDjk8IJVOQYjad0667EC9jLgUldL3D4AE/cfzC1raV0+G+2xem7vAV7o9pLTb4d03xr6
-         D2+SVOB3sNbm3EEy4pZ1iR8lflr+9F67YEuC4YKbJ2gauNrbYGTGuuGF6StoJV/k4589
-         W4lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=ADSKbpogRZlDU9n3ifnRUc33Vsi63y1uvA/ha4YLmHE=;
-        b=Zsg1jiH2Z+yUuFNFspkCpj/2QGzMIyyfZXj3U33px5ZlGd9GpP2xqSo26W1XDRfk5P
-         D4cWLn1yA8TCz1wQCkdZN2LJTO/yps/tOH9AOqkGh3pnHsh/2zQcdRM001NLVyicp8qO
-         gpEU4WFtnkA9x2+yCLjO2b8I1q1EQ95EMv387Lul6ctmunsEeohIGkeBrCaz4ZATrvL4
-         m4kP6vYbzKFmYlyj1Ss0dq36QK8NgGNtQjyXjSpnAruRCJGvJ2iaSvsYcgYNlRrP0SVx
-         C0j1YZ6WReoaQ5D4wq3XjZsZ758gUKPXJTT55aRb4ouM1vl1Ml5kVVxDq3YKsQ8XnqtT
-         TsJQ==
-X-Gm-Message-State: ACgBeo1Ke77Vqt1jJufLtBQOIhgMiCVQ4jOviM9QXhAZSXixBEmKBKrD
-        NXxIY+yyxtFhYVmfydWqWil7RGJ7AXyQgJp8tAm1ce3jDB2HKw==
-X-Google-Smtp-Source: AA6agR6SaSQ19q2UqYnMxJw7FCkWyGiLx06+wAqWACxJ1AlhJ6+OjPJAuoZ8qH/ooDiimIes55K04FFptUbN9uHUtaM=
-X-Received: by 2002:ac8:7f92:0:b0:344:8cd8:59a1 with SMTP id
- z18-20020ac87f92000000b003448cd859a1mr6008326qtj.384.1660904177633; Fri, 19
- Aug 2022 03:16:17 -0700 (PDT)
+        Fri, 19 Aug 2022 06:17:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D0DDAEED;
+        Fri, 19 Aug 2022 03:17:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B20B4616D7;
+        Fri, 19 Aug 2022 10:17:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DBBCC43143;
+        Fri, 19 Aug 2022 10:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660904267;
+        bh=bBGGs+VaVwa9GZVrl+mfip/PNxqOhyRiV5mtJK9gULA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LSwaVI8rUzMmO/Ct43XNW9RruD+qxBI8tnG2OoF/s63ywpKDgUlWIi/aLX949UKPN
+         jM20X3grcEAWH38fx5/oYHEV7F5sTeuvwCDPVnMMG53ff2UByclp++LklueQkXypFU
+         H7c9/JJp/RjyIB8BwC52gvvAYZIk2WNxpCZz5cJXuJNC06FJis2sLmU6k3EGL09lKc
+         Jb0xsF7kl1AKAIK0xmR/ofWHEdPxStI2V1NvsgZa+z5y1Ow/2cxRWkgNKh/52pgoWK
+         DCt8ZOZFDA7eTYb7MHgMkmQVIDOYTuxR00NmLv1qFt7npxJhkX1i5DzsxxCLPXCGpY
+         yOQjDCPKxSuDQ==
+Received: by mail-ej1-f46.google.com with SMTP id gb36so7910196ejc.10;
+        Fri, 19 Aug 2022 03:17:47 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3V1Hsa3QBjLGdI35DnZzMYK7sNyj2Mkp+8WtQFYukn/rhgCEFm
+        ByD7GnwBR/nTb0IY/PPcL4cNUxMrhXswDraLMTg=
+X-Google-Smtp-Source: AA6agR5J9QREsVSQar6+cAcI+eQkL21ldizqJ/P5eBUIHXbbNTd/IG0qShM+KxoLNU3uFpfrKuXX255VS5DFZKFqEjU=
+X-Received: by 2002:a05:6402:2751:b0:443:d90a:43d4 with SMTP id
+ z17-20020a056402275100b00443d90a43d4mr5657123edd.368.1660904254658; Fri, 19
+ Aug 2022 03:17:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220817105643.95710-1-contact@artur-rojek.eu>
- <20220817105643.95710-2-contact@artur-rojek.eu> <CAHp75Vd49aCKkK+KvmxJrW2mKk7=VgtSBCTYE9umOhZhc4Y8FA@mail.gmail.com>
- <4GXUGR.SAF00K92YJMF@crapouillou.net>
-In-Reply-To: <4GXUGR.SAF00K92YJMF@crapouillou.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 19 Aug 2022 13:15:41 +0300
-Message-ID: <CAHp75VdqHiPZT+cpT4OZR1HB32xS1OF=PqgXcsRW9Vn=XjC0hg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] iio/adc: ingenic: fix channel offsets in buffer
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Artur Rojek <contact@artur-rojek.eu>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        BROADCOM NVRAM DRIVER <linux-mips@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
+References: <20220818135522.3143514-1-arnd@kernel.org> <20220818135522.3143514-2-arnd@kernel.org>
+ <CAMuHMdXEXQNeOQGnYTQG58nHwB8YwLQ5q1vaje7kPQexrAMsRA@mail.gmail.com>
+In-Reply-To: <CAMuHMdXEXQNeOQGnYTQG58nHwB8YwLQ5q1vaje7kPQexrAMsRA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 19 Aug 2022 12:17:16 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0kJVLEFqS0E=Lv2=HE9dbmjgA=_T2NX4zhq7EHvk4DBg@mail.gmail.com>
+Message-ID: <CAK8P3a0kJVLEFqS0E=Lv2=HE9dbmjgA=_T2NX4zhq7EHvk4DBg@mail.gmail.com>
+Subject: Re: [PATCH 01/11] ARM: defconfig: reorder defconfig files
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Qin Jian <qinjian@cqplus1.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>, Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shannon Nelson <snelson@pensando.io>,
+        Peter Chen <peter.chen@nxp.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Felipe Balbi <balbi@ti.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
+        <linux-omap@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 1:07 PM Paul Cercueil <paul@crapouillou.net> wrote:
+On Fri, Aug 19, 2022 at 11:17 AM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
 >
-> Hi Andy,
+> This may cause conflicts with the usual refresh I plan to do for
+> v6.0-rc1, which will be very similar to
+> https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/commit/?id=517d634d376042ab797d9feeb94236ad4cb03396
+> So it may be better to drop this part.
 >
-> Le ven., ao=C3=BBt 19 2022 at 11:12:38 +0300, Andy Shevchenko
-> <andy.shevchenko@gmail.com> a =C3=A9crit :
-> > On Wed, Aug 17, 2022 at 1:58 PM Artur Rojek <contact@artur-rojek.eu>
-> > wrote:
-> >>
-> >>  Consumers expect the buffer to only contain enabled channels. While
-> >>  preparing the buffer, the driver also (incorrectly) inserts empty
-> >> data
-> >>  for disabled channels, causing the enabled channels to appear at
-> >> wrong
-> >>  offsets. Fix that.
-> >
-> > What consumers? Have you tested on all of them? Please, elaborate. It
-> > might be that some of them have to be fixed. In such case you need to
-> > report the issue to their respective channels and put the
-> > corresponding links here.
->
-> There are no consumers to fix, only this driver. I believe it  wasn't
-> noticed until now because all consumers were only using channels 0 and
-> 1.
+> However, that decision is up to you, as you will have to handle the
+> conflict when merging renesas-arm-defconfig-for-v6.0-tag1 later ;-)
+> But sfr might complain before...
 
-Something like this explanation is missed in the commit message, with that
-added (in the above or similar form)
+I'm not too worried here, if you just do the 'savedefconfig' step, you
+should get
+the same change and the mergetool will figure it out. In case there is a nasty
+context conflict, you could just send that part early so I can resolve it.
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> > P.S. It doesn't mean I'm against the patch.
-
-
---=20
-With Best Regards,
-Andy Shevchenko
+       Arnd

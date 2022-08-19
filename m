@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194195996C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFA35996C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347446AbiHSIIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S1347436AbiHSIIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347437AbiHSIIf (ORCPT
+        with ESMTP id S1347437AbiHSIIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:08:35 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E3B1F2E0;
-        Fri, 19 Aug 2022 01:08:34 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id y18so2821812qtv.5;
-        Fri, 19 Aug 2022 01:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Phy2kavk45HzuAR99SKpcbN4U9hypiQhPKgRRZqp7Do=;
-        b=ma8LA8qwXOWommtex1+VBB+xZNgJWmJWlNxr/798VJgFGYGZIimCjRxTJpEoD7rVM3
-         XLvpuvV9PyFIPH9ls48Ri8w1fIkikoWWxR9A+ODnu/mSWdgegrS5bP0J+lsGRwzSKAQv
-         QRGT115Z9Lqi48WO0ZSKoEEyLcrx1rMszzhwIUqi2uioKo6GV5udra2zt6Z5Ss10m94K
-         eZCOgx3iBIZq5/Ajm42XaozhtuqkOFIIMWPcxtmVJ3gysQqksOPU+QTe90DKrz5cJIFy
-         pRtTJ+bzwSgGb9vKm9uZIY0aLm5fge91t9Uxt5R/lXLYIRh3p5xAXQMZfutsZQ+Q/U+m
-         EAqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Phy2kavk45HzuAR99SKpcbN4U9hypiQhPKgRRZqp7Do=;
-        b=DucFF0IyVn+l/g8wcn7BRaBqLoLzzHmSCX8EEdp8B7qofPASl1dhmFzN7wbML+zhUF
-         Mf6U1e+ziTVe3mWB03BKTbzEjQzOcgTwlaIeqsS/oGdRmXrKbXDQHpzcAMkVVY8r5slB
-         58n6jBptCIS6ql3k+ngvQ/WfTEhGsdPx8vylE83kf4dvKhra6qOer42pOuV4adV/VGdv
-         j9LXWe2/ja+fY9Xr5GYEbZXUrotHSRSZIqvqBXYEyjE/RFvAfxO1+EZKt2f1YhWgLrvF
-         wHPKLq3LPGG5GD+knG03h7loQ3Ebey6stWGBMEcmIFKFoEsemAUlVyKMSBWBInYNTFKx
-         hJuA==
-X-Gm-Message-State: ACgBeo1ta8OMmBXdAW2E9+lj9tlt2Rx5Q+bbq+72V9vdZP1ZjnpmSf0M
-        EkgJ9w2KVevoWRkAssLu8q4/sWsKGaLAnw8WiF8=
-X-Google-Smtp-Source: AA6agR4E11iRlTvq05swpUjD9iCFubVB68ZvURZJmtFuncbDZmR1eGMlJgTJbnoCJnuysTcMmt6mQEP5L2GYSE2eB38=
-X-Received: by 2002:ac8:5786:0:b0:343:3051:170d with SMTP id
- v6-20020ac85786000000b003433051170dmr5493279qta.429.1660896513674; Fri, 19
- Aug 2022 01:08:33 -0700 (PDT)
+        Fri, 19 Aug 2022 04:08:21 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EB2E60;
+        Fri, 19 Aug 2022 01:08:16 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 8D7231C0003; Fri, 19 Aug 2022 10:08:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1660896494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xnSnA3nWQpeYFNh72VNZw+Q8gHM4SwkhWnnSyXt/Sc0=;
+        b=Os9MDjMZIhMPCG6eHYJnIhp2tVtKBoBo/loS2RHhNlWhlZ7HJvVddLtXh1Gsn3P4xzRULL
+        7iO69sJ9iO8RHN+ipCpUCFWSyzfVLTnHEo3inLjYbFXCy2MWO1x74EOA322uWWFCVtQg1S
+        V0cNt4QkYeky/L+T93sH7G55+I/FwvQ=
+Date:   Fri, 19 Aug 2022 10:08:14 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: leds: register-bit-led: Add active-low
+ property
+Message-ID: <20220819080814.GA6653@duo.ucw.cz>
+References: <20220818172528.23062-1-pali@kernel.org>
+ <f635d5a7-6817-cd62-e395-63e346775716@linaro.org>
+ <20220819065620.wvmy3kigvvbwo4bo@pali>
 MIME-Version: 1.0
-References: <20220818210017.6817-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220818210017.6817-1-wsa+renesas@sang-engineering.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 19 Aug 2022 11:07:56 +0300
-Message-ID: <CAHp75Ve+xuqRAiRO=7wQBBmjKm9P-_iEiHWt23E7c82RcFutVA@mail.gmail.com>
-Subject: Re: [PATCH] iio: move from strlcpy with unused retval to strscpy
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio <linux-iio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="yrj/dFKFPuw6o+aM"
+Content-Disposition: inline
+In-Reply-To: <20220819065620.wvmy3kigvvbwo4bo@pali>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 12:02 AM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
 
-Same comments as per similar patch you submit to PDx86.
+--yrj/dFKFPuw6o+aM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-With Best Regards,
-Andy Shevchenko
+Hi!
+
+> > Although the question is - where is the user of it?
+>=20
+> I was planning to send updated powerpc DTS files with these
+> register-bit-led definitions after accepting dt bindings.
+
+We need device tree people to ack them, first. But a note saying "this
+is for Turris Omnia router" would be welcome.
+
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--yrj/dFKFPuw6o+aM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYv9E7gAKCRAw5/Bqldv6
+8o0PAKCH/a2TQLl6OrbyEbn5+4OVf4zdowCeNgABuJMFG5XPiEuEhUm5UfLC100=
+=sFpc
+-----END PGP SIGNATURE-----
+
+--yrj/dFKFPuw6o+aM--

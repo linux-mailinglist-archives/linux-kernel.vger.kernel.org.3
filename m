@@ -2,120 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EF9599DD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF96599DD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349093AbiHSOz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 10:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
+        id S1349287AbiHSO4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 10:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348695AbiHSOzy (ORCPT
+        with ESMTP id S1348575AbiHSO4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 10:55:54 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F30EF026;
-        Fri, 19 Aug 2022 07:55:54 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id o14-20020a17090a0a0e00b001fabfd3369cso5099781pjo.5;
-        Fri, 19 Aug 2022 07:55:54 -0700 (PDT)
+        Fri, 19 Aug 2022 10:56:03 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9A864DC
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:56:02 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id bs25so5479969wrb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:56:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=T6fT7nNCKMbrfNAmBcVL3KD2JL0FCBDvC1i8ixlnj/U=;
-        b=fI8RNHiH7NjW7J/Lgfb3by039mnaaWUyN/QgoqUb6q7HiMtAl2mDJp9+IpjpE/MW2F
-         RewMTs80lbmLNZNhISmcQsxP/60aKoYW8aoC9P7gTmON+85CVs7fUCg5j4jV/lRI3R50
-         diAV3zZZsNyg0c6wCLlbfhjRQ0OfxiU1arT4QJ24bvxwz0fath/Gh2C1FUfrX4w8TXRZ
-         hV47nU1kQQtl6fRWGZDcX1GY7IYNKCEhc+07NcBF8w+J08uuMCv7asTgUVNxoSHygKzv
-         CFFJw5RfTfFfZWG8k68SbQtz5/AVsP7sQo5nyYAmc0+A1e1UoKWkKAAw1RUtu+x2UDsy
-         mScA==
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=tPcog03lOMlmDYTA/VZmxZ5X+gfPzW5wt/APF98WRZ4=;
+        b=hzJdGAR/18inJqXDz/+gYiYF6bfYxUd1lkG9ckp+zQ91FGkGdorLjl3JXVO4QxG1cb
+         JoyJRly/DbBvuIXOFgtM3FRH7zfGn3OggzMSGbPsXHsStz7LU2ouHuviKIy6g+GxMWzM
+         fXf0R1r/eWMYwSStWBV8uaknxImeXEnlQ3yiO0aIalIBNLBcAonZrYjzkTlOPqTjwajl
+         B3ygVDZGqIahx2ZlN78nKqnVTF2TGjp4qOUsAd3VutI4zEK2XdZtRrHIzkLWSe9NsM4T
+         6nYgf3xv40HT9mR6Ltzs5JtepLZdb5NeyIK8OB9SGhTMEryMvW31FW7ceiUdAjOm0C0L
+         paHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=T6fT7nNCKMbrfNAmBcVL3KD2JL0FCBDvC1i8ixlnj/U=;
-        b=TvusYwXtK3xGaGnRwJBGQAVlc1N0sS0hR1slE+mO6cH/ouS+vfiNVETSvYEEQzBZgV
-         yEtkV6QOKKXo1xp/clbuEml461C3TQmEKq3L1WhEhd9eo7kX5ViFAmi6Td+6kpOmr8iO
-         N1xskS++pzDpPRTOLVA6JMnJTZien5BX6XXEqLrRasOgETFxmgmeZB2hTFl33HzHWTdS
-         v0Gpp1QrWCXsnnN6QNwtTYJH2w/QJsGG0O5jyNTfjnz4x0ZjqnHUrpHhlnOm2eYi6K3h
-         /1MqgsjpQLtTteusLedN6ZjywP5bAZPGaV5On+5LQAgGvJGcN7z4qif2vEuo1fA9vYak
-         haRg==
-X-Gm-Message-State: ACgBeo2OY7KTFa+mwT7ueo7XkbkC6wuKJMlDNg5L6NhvRK4mc/s3WFI7
-        yLoDrKViPzce/cjDsmICAEcs8sElYdnZDuaTAj4=
-X-Google-Smtp-Source: AA6agR5HLWtU4kIuacFtn9NcvNyumJOZEFnRj3NuvQuBgNNzXADaPTLiSvl8QiUHheM91qJcI3a1P4Yuqq7jAInCYNs=
-X-Received: by 2002:a17:902:d4c7:b0:16e:df4b:89b4 with SMTP id
- o7-20020a170902d4c700b0016edf4b89b4mr7525425plg.142.1660920953520; Fri, 19
- Aug 2022 07:55:53 -0700 (PDT)
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=tPcog03lOMlmDYTA/VZmxZ5X+gfPzW5wt/APF98WRZ4=;
+        b=25Pua7XwJHWixKa/W3YbNg0QBjv4pH+OUGnspWKdiyeZA3wM7zZk2iODgq/oONskHV
+         ogLC67bh/MQNXs2fMYcP7ZQU0sHAwJ50NQiVYjejSPEmLi8oZDByOeE6SWUpKrIoxDnn
+         mH/VUTABJ8l3iRtlFPSg2qtd2Anp71aotPl0qFBxvfbAMk0p0AHO/oX3nboTUyfL9L/k
+         RD12syiMHosebE59J7O4kvXM55ec5AS9ie9dsb9nez2/pcTOqnnRISfHZxWqvkL8AHy+
+         hw2BN23+bjH+qPnRAHHAGx0b4PQRFQhktIGLttfDl7yzR1fOkjA0VFdmW+X1DnDhpD5j
+         ezOg==
+X-Gm-Message-State: ACgBeo2Ui+Iv2G/AXc2PXg2FBp/s/ro98xlYwQVKsOTAfKvS6QT4eJ8+
+        QBlF2JSmN6DAp8Nx/WEeBtFKTV1VNikKDscOC4E=
+X-Google-Smtp-Source: AA6agR62okEkCXseU9qFZg0M9vQpSwtNiQI7783Hevk3Otd9DmdppwtRm4I6r4wWvkcAXxN88L3IN2fkviFgI1ORYDM=
+X-Received: by 2002:adf:f2c1:0:b0:223:a7d2:4283 with SMTP id
+ d1-20020adff2c1000000b00223a7d24283mr4283942wrp.485.1660920960582; Fri, 19
+ Aug 2022 07:56:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220816032846.2579217-1-imagedong@tencent.com>
- <CAKwvOd=accNK7t_SOmybo3e4UcBKoZ6TBPjCHT3eSSpSUouzEA@mail.gmail.com>
- <CADxym3Yxq0k_W43kVjrofjNoUUag3qwmpRGLLAQL1Emot3irPQ@mail.gmail.com> <20220818165838.GM25951@gate.crashing.org>
-In-Reply-To: <20220818165838.GM25951@gate.crashing.org>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Fri, 19 Aug 2022 22:55:42 +0800
-Message-ID: <CADxym3YEfSASDg9ppRKtZ16NLh_NhH253frd5LXZLGTObsVQ9g@mail.gmail.com>
-Subject: Re: [PATCH net-next v4] net: skb: prevent the split of
- kfree_skb_reason() by gcc
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>, kuba@kernel.org,
-        miguel.ojeda.sandonis@gmail.com, ojeda@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        asml.silence@gmail.com, imagedong@tencent.com,
-        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
-        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
+Received: by 2002:a05:600c:228f:0:0:0:0 with HTTP; Fri, 19 Aug 2022 07:55:59
+ -0700 (PDT)
+Reply-To: sj7373313@gmail.com
+From:   Sandra Johnson <idrissasouleymane159@gmail.com>
+Date:   Fri, 19 Aug 2022 15:55:59 +0100
+Message-ID: <CAF+DzuGm9oaHzG6AsfUGKvN0bA3Hwn8_bLCTtd1qQzyUVyG2rw@mail.gmail.com>
+Subject: Sandra J
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:42e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4874]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [idrissasouleymane159[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [idrissasouleymane159[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [sj7373313[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Fri, Aug 19, 2022 at 1:00 AM Segher Boessenkool
-<segher@kernel.crashing.org> wrote:
->
-> Hi!
->
-> On Fri, Aug 19, 2022 at 12:31:44AM +0800, Menglong Dong wrote:
-> > On Wed, Aug 17, 2022 at 11:54 PM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > > Perhaps noipa might also work here?
-> >
-> > In my testing, both 'noclone' and 'noipa' both work! As for the
-> > '-fdisable-ipa-fnsplit', it seems it's not supported by gcc, and I
-> > failed to find any documentation of it.
->
-> noipa is noinline+noclone+no_icf plus assorted not separately enablable
-> things.  There is no reason you would want to disable all
-> inter-procedural optimisations here, so you don't need noipa.
->
-> You need both noinline and no_icf if you want all calls to this to be
-> actual function calls, and using this specific function name.  If you
-> don't have noinline some calls may go missing (which may be fine for
-> how you use it).  If you don't have no_icf the compiler may replace the
-> call with a call to another function, if that does the same thing
-> semantically.  You may want to prevent that as well, depending on
-> exactly what you have this for.
->
-
-Thanks for your explanation about the usage of 'noinline' and 'no_icf'!
-I think 'noclone' seems enough in this case? As the function
-'kfree_skb_reason' we talk about is a global function, I think that the
-compiler has no reason to make it inline, or be merged with another
-function.
-
-Meanwhile, I think that the functions which use '__builtin_return_address'
-should consider the optimization you mentioned above, and
-I'll have a check on them by the way.
-
-Thanks!
-Menglong Dong
-
->
-> Segher
+HI,
+Good day.
+Kindly confirm to me if this is your correct email Address and get
+back to me for our interest.
+Sincerely,
+Sandra J

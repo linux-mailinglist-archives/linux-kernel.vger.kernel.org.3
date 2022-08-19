@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6C259987D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2418759989F
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347757AbiHSJHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S1347978AbiHSJKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347339AbiHSJHu (ORCPT
+        with ESMTP id S1347975AbiHSJKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:07:50 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34DBEF9C7
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:07:49 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id w28so2891116qtc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:07:49 -0700 (PDT)
+        Fri, 19 Aug 2022 05:10:04 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF23F14DC
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:10:03 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id a4so2882286qto.10
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:10:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=Eif8xbxaVAItU9xNSvN6xDxgWHEsI958p9Q+p98v2po=;
-        b=NshPVdhqx+VphZ89OHtuprU+zQVB5kbt5aRSX159l3Bu0SG/Ka/ZQKsVocjPQPo7Q0
-         yqi0cs+SUTbhZrbcBdRyceOS0nRUV0Rk9QCjWVmZ8oAPLeMth7S2oa/7yRmR2N4bv3a4
-         HGQdv/IAA64rIm42h5m7Td5UZDJ39gPKa/kjaDljdAwPshboY5acdC4hS1b9Rk/CKsWb
-         OqvKZqkX5tD0PEa5lwsSO6I5ZYD6DRXroZDgAEU8v3nd5CA9dF1XZdMQ4xHhxRk4hZlC
-         YiHnokQgNAMXyqhJ8RIDIAZIO+5uDWmKCoZV7hxffAub1z2WqTNRSEED6wHJBRwtMKjR
-         IYfw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=2z0FzeFb0sFurgTQB3OFi4LJtDp72dKYIdEv0EoSLB0=;
+        b=gOjMhoM+81Tf0KMrOOhrqnacshHYdirV3D7iBKZn5xNxwWUEiQKNnoC/09C3xJeZJD
+         OANCu1KLBk5xqH4x7OEge3VSzxyrbCN9enO1YCk6j474gET6/4NeqxEvJmpbJ9yheeuL
+         0ib6fzOVcjkiztbJ/xZ4EuDKRtxfdXNpOB80oxyIN+utjsBBZLPFOf+pWvkR2EJaFi2A
+         Z2bTvQE24nr7WuhK8KOlRrXrhByMAsTAH+fkg75VLWax38j8opYNYZRK5px31hCMmQdO
+         ctB2LQNvyM9g/6iHOdR02kO7epICj9DdrPK9pxVv1PGlVfuTiF/6BTPhwtzPl7hiPKAu
+         jdEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=Eif8xbxaVAItU9xNSvN6xDxgWHEsI958p9Q+p98v2po=;
-        b=iOPTr9ZdsN7AH8rJ63lIMlEDLeiSbbM7dQyeWz6uyCItvMh94M9/2U1EK6QbLxRaHk
-         MB1w1YzMG1Fp7W2OJ8eq40JYMD6hAhzYqR6UkOKoREu0kBv6z/z0oZ8H6eAPCVABKHby
-         ITQcoJ7Rgu6btar1p9v9UHijzcEoGqbVtir0bqKETXjCP9wsF475pwi4l5boiteudAxN
-         SiJb1gTncF9olcaNJN1/NvkbAigo54RBfwmmgJYzlT/hA53tm8LY1NpNxB7CfTpdOtbl
-         v4lqgg8O5G2gFkgeCtggouhfW8ij8QhJmEzPlnia4FeQjILH7poxJKV5FQQrW/98PHu7
-         C/QA==
-X-Gm-Message-State: ACgBeo0YFOFJlZXWkL7FRh+zPp/ewaM5JbAo5iNLpIGMzz+6LwYDAoqo
-        EZa8FQuKbPJn+Km4oK1BK0M=
-X-Google-Smtp-Source: AA6agR7gscqExh9evWiRDSLoL6BomfIk6WxrNDf2Ei7gh+rA8fM51HHF40XDzodMsHJF+F1IsZSd+Q==
-X-Received: by 2002:a05:622a:53:b0:344:6f46:9b16 with SMTP id y19-20020a05622a005300b003446f469b16mr5745086qtw.664.1660900069107;
-        Fri, 19 Aug 2022 02:07:49 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=2z0FzeFb0sFurgTQB3OFi4LJtDp72dKYIdEv0EoSLB0=;
+        b=hrVmJXmQcD534oukLSb881kmkSJE2Y/LiM7tJxVq0WvUBm3mncqt/AlaLcvPCDXXs0
+         9HSqdKr+EvETd3JefqxGrlPVzmtbO2CUe3Yvwy58m5CqvC10eGtuVUBScrrUsc9FB4Sg
+         9hFPTHMsP20xQPy6CPN9nWtpywKCuKrKQdgTT9RP3Cu+RBuFYmUxtKsp8NMD6vn7oqyL
+         UilM7fPWxjLWdBjYfQun7FLca8Qy3ZpzwNzQYUf2J0Bjh1HPQjFf1aJDenOIGc3tB7xl
+         btH7hGT1An+pJIYvP0GsthcuBVoz6QexeIw1OQRXf/FGYP7vF+la64R+2aTNiXhndC8b
+         ozww==
+X-Gm-Message-State: ACgBeo0UhDXgHBANmezuqn+/mLtkVw68uc0Cuf6cgF7eydLfHFfV/K+T
+        g0Zjg1Xr34XcNwjgpm+Au4E=
+X-Google-Smtp-Source: AA6agR6AxIlBI3ibgp9VwsAzdSnR0jpMpVkwwL0Z/sWHdrBUOGmGm6JpJeTx6+3bfVrLhyG4Z5VJiA==
+X-Received: by 2002:a05:622a:1055:b0:344:9748:493f with SMTP id f21-20020a05622a105500b003449748493fmr3983395qte.190.1660900202518;
+        Fri, 19 Aug 2022 02:10:02 -0700 (PDT)
 Received: from sophie ([89.46.62.64])
-        by smtp.gmail.com with ESMTPSA id o10-20020ac87c4a000000b0034305a91aaesm2906677qtv.83.2022.08.19.02.07.48
+        by smtp.gmail.com with ESMTPSA id r25-20020ae9d619000000b006bb2f555ba4sm3215017qkk.41.2022.08.19.02.10.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 02:07:48 -0700 (PDT)
+        Fri, 19 Aug 2022 02:10:02 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Cc:     David Hildenbrand <david@redhat.com>,
         Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH v2 0/4] memblock tests: add NUMA tests for memblock_alloc_try_nid*
-Date:   Fri, 19 Aug 2022 02:05:30 -0700
-Message-Id: <cover.1660897864.git.remckee0@gmail.com>
+Subject: [PATCH v2 1/4] memblock tests: add simulation of physical memory with multiple NUMA nodes
+Date:   Fri, 19 Aug 2022 02:05:31 -0700
+Message-Id: <0cfb3c69ba6ca9ff55e1fc2528d18d108416ba57.1660897864.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1660897864.git.remckee0@gmail.com>
+References: <cover.1660897864.git.remckee0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,53 +71,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These patches add additional tests for memblock_alloc_try_nid() and
-memblock_alloc_try_nid_raw() that use a simulated physical
-memory that is set up with multiple NUMA nodes. Additionally, most of
-these tests set nid != NUMA_NO_NODE.
+Add functions setup_numa_memblock_generic() and setup_numa_memblock()
+for setting up a memory layout with multiple NUMA nodes in a previously
+allocated dummy physical memory. These functions can be used in place of
+setup_memblock() in tests that need to simulate a NUMA system.
 
-To set up a simulated physical memory with multiple NUMA nodes, patch 1
-introduces setup_numa_memblock_generic() and setup_numa_memblock().
-These functions use a previously allocated dummy physical memory. They
-can be used in place of setup_memblock() in tests that need to simulate
-a NUMA system.
+setup_numa_memblock_generic():
+- allows for setting up a custom memory layout by specifying the amount
+  of memory in each node, the number of nodes, and a factor that will be
+  used to scale the memory in each node
 
-These tests are run twice, once for memblock_alloc_try_nid() and once
-for memblock_alloc_try_nid_raw(), so that both functions are tested with
-the same set of tests. When the tests run memblock_alloc_try_nid(), they
-test that the entire memory region is zero. When the tests run
-memblock_alloc_try_nid_raw(), they test that the entire memory region is
-nonzero.
+setup_numa_memblock():
+- allows for setting up a default memory layout
 
-Note:
-This patch set depends on the following patch set:
-https://lore.kernel.org/all/cover.1660897732.git.remckee0@gmail.com
+Introduce constant MEM_FACTOR, which is used to scale the default memory
+layout based on MEM_SIZE.
 
+Set CONFIG_NODES_SHIFT to 4 when building with NUMA=1 to allow for up to
+16 NUMA nodes.
+
+Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
-Changelog
+ .../testing/memblock/scripts/Makefile.include |  2 +-
+ tools/testing/memblock/tests/common.c         | 38 +++++++++++++++++++
+ tools/testing/memblock/tests/common.h         |  9 ++++-
+ 3 files changed, 47 insertions(+), 2 deletions(-)
 
-v1 -> v2
-Updates based on changes to the dependent patch set noted above:
-PATCH 2, PATCH 3, PATCH 4:
-- tests/alloc_nid_api.c:
-    - Update calls to verify_mem_content() to include the flags parameter
-      required by the new, common verify_mem_content() function.
----
-
-Rebecca Mckeever (4):
-  memblock tests: add simulation of physical memory with multiple NUMA
-    nodes
-  memblock tests: add top-down NUMA tests for memblock_alloc_try_nid*
-  memblock tests: add bottom-up NUMA tests for memblock_alloc_try_nid*
-  memblock tests: add generic NUMA tests for memblock_alloc_try_nid*
-
- .../testing/memblock/scripts/Makefile.include |    2 +-
- tools/testing/memblock/tests/alloc_nid_api.c  | 1489 ++++++++++++++++-
- tools/testing/memblock/tests/alloc_nid_api.h  |   16 +
- tools/testing/memblock/tests/common.c         |   38 +
- tools/testing/memblock/tests/common.h         |   27 +-
- 5 files changed, 1559 insertions(+), 13 deletions(-)
-
+diff --git a/tools/testing/memblock/scripts/Makefile.include b/tools/testing/memblock/scripts/Makefile.include
+index aa6d82d56a23..998281723590 100644
+--- a/tools/testing/memblock/scripts/Makefile.include
++++ b/tools/testing/memblock/scripts/Makefile.include
+@@ -3,7 +3,7 @@
+ 
+ # Simulate CONFIG_NUMA=y
+ ifeq ($(NUMA), 1)
+-	CFLAGS += -D CONFIG_NUMA
++	CFLAGS += -D CONFIG_NUMA -D CONFIG_NODES_SHIFT=4
+ endif
+ 
+ # Use 32 bit physical addresses.
+diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
+index eec6901081af..15d8767dc70c 100644
+--- a/tools/testing/memblock/tests/common.c
++++ b/tools/testing/memblock/tests/common.c
+@@ -34,6 +34,10 @@ static const char * const help_opts[] = {
+ 
+ static int verbose;
+ 
++static const phys_addr_t node_sizes[] = {
++	SZ_4K, SZ_1K, SZ_2K, SZ_2K, SZ_1K, SZ_1K, SZ_4K, SZ_1K
++};
++
+ /* sets global variable returned by movable_node_is_enabled() stub */
+ bool movable_node_enabled;
+ 
+@@ -72,6 +76,40 @@ void setup_memblock(void)
+ 	fill_memblock();
+ }
+ 
++/**
++ * setup_numa_memblock_generic:
++ * Set up a memory layout with multiple NUMA nodes in a previously allocated
++ * dummy physical memory.
++ * @nodes: an array containing the amount of memory in each node
++ * @node_cnt: the size of @nodes
++ * @factor: a factor that will be used to scale the memory in each node
++ *
++ * The nids will be set to 0 through node_cnt - 1.
++ */
++void setup_numa_memblock_generic(const phys_addr_t nodes[],
++				 int node_cnt, int factor)
++{
++	phys_addr_t base;
++	int flags;
++
++	reset_memblock_regions();
++	base = (phys_addr_t)memory_block.base;
++	flags = (movable_node_is_enabled()) ? MEMBLOCK_NONE : MEMBLOCK_HOTPLUG;
++
++	for (int i = 0; i < node_cnt; i++) {
++		phys_addr_t size = factor * nodes[i];
++
++		memblock_add_node(base, size, i, flags);
++		base += size;
++	}
++	fill_memblock();
++}
++
++void setup_numa_memblock(void)
++{
++	setup_numa_memblock_generic(node_sizes, NUMA_NODES, MEM_FACTOR);
++}
++
+ void dummy_physical_memory_init(void)
+ {
+ 	memory_block.base = malloc(MEM_SIZE);
+diff --git a/tools/testing/memblock/tests/common.h b/tools/testing/memblock/tests/common.h
+index 4fd3534ff955..e5117d959d6c 100644
+--- a/tools/testing/memblock/tests/common.h
++++ b/tools/testing/memblock/tests/common.h
+@@ -10,7 +10,11 @@
+ #include <linux/printk.h>
+ #include <../selftests/kselftest.h>
+ 
+-#define MEM_SIZE SZ_16K
++#define MEM_SIZE		SZ_16K
++#define NUMA_NODES		8
++
++/* used to resize values that need to scale with MEM_SIZE */
++#define MEM_FACTOR		(MEM_SIZE / SZ_16K)
+ 
+ enum test_flags {
+ 	TEST_ZEROED = 0x0,
+@@ -100,6 +104,9 @@ struct region {
+ void reset_memblock_regions(void);
+ void reset_memblock_attributes(void);
+ void setup_memblock(void);
++void setup_numa_memblock_generic(const phys_addr_t nodes[],
++				 int node_cnt, int factor);
++void setup_numa_memblock(void);
+ void dummy_physical_memory_init(void);
+ void dummy_physical_memory_cleanup(void);
+ void parse_args(int argc, char **argv);
 -- 
 2.25.1
 

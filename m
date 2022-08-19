@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C715159950E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4386559950F
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346544AbiHSGJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 02:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
+        id S242023AbiHSGJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 02:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344838AbiHSGIb (ORCPT
+        with ESMTP id S1346486AbiHSGId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 02:08:31 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74AF6342
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:16 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id gk3so6973794ejb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:16 -0700 (PDT)
+        Fri, 19 Aug 2022 02:08:33 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A706C1EACB
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:18 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id r4so4436223edi.8
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ionos.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=yWNMa8gEmIcjnbw10IXxxPNQFxmc0oHgvkM31hQzFRc=;
-        b=CdNssv8VREdsltNyexSeWPxtCS+nM5OPHWwJ/DSZPjxo9HvCIhCPo4pIEnMVin3ocB
-         lIoNLX+272S7PDpn/zyspH5zx2u/9uwxomOxtZWEDkeXwXo6Lb2Fs55Fp6IrcVytGCTH
-         iMlwQ1Gh6l8DySPqf4b5z72BI0EvCpqMRcNeNq5ywdG1jkwv2900Cb5TUF8EhHMcD71y
-         4XYHW2G/mqKVWCNEZEXVz8jUi4aZlclonPEMvTQGQ8S2GOrxTNummF5KE4t/5hZ/CrnS
-         q+BsiH4mAo3zpQ/LeDXYGDft/0J84YQnjLSMw6AwmbKjILi02+f4XTqjlOtwJ6cV0Agu
-         j2lA==
+        bh=5gJkiTR+kGRLtGgVd47CicF8SNS8UY18L9XUin4OY2Y=;
+        b=QJC4IJlQ/pc53o+D11jC62z/3fhQ5SotDCbo5C5orgKX9ZXhpy96Sv15+GEhv6RP+G
+         mrqO821gPfoqnBrUz0Pt1mdZBC7U0OIwQtGUeZHKroZt28gFxn1D4vhYT4/byi/4ACXS
+         0Oc1eKBWrKxD+RJKPtaXXTHwrCsqVefIZIni+tQ/LWKxtsrTymFXxkO2gJgQ99ozgjKX
+         iGxLfMcpdIkhS9BbSA9nwWk2FjQCCCsKcEmYr+qDKpN1Gq2yXXILl8CF25Aw5O0Jy7bR
+         kQcpxeHm18TpANDu7+SIayoh6NdnbkYKG6/jA5VrzTKRTWDRCMl9o+vUxdzr5Rkhq2ha
+         xXDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=yWNMa8gEmIcjnbw10IXxxPNQFxmc0oHgvkM31hQzFRc=;
-        b=CIimxW1HxRDp3V093+/Hyks3LiCm/bKbCz5geJA7Qkwr9eTfoSPWeIMWpSMGO9tBnR
-         PieziFsLRvp14+MdymTbWhNi5rpD1TM8aTxAKOSOKtDfTtslfedfJDbmR3LOKtEC7fLo
-         0+YrOmOwBUCTuAxxEXML4eTkgW6gbzMH1MdZaOEDeV74m46SVkPN6zU7yzFRGPWaWsoX
-         U3ENkPF1DrkcxCICwpgMLehVrS65lw29xBUK1e78m9lqIPhcTEj5NC6Y8YOEkSihNdyi
-         MmCH4+1ouSTzq0lp6CbzNyn675KMSYF0bWLuOKVJzfDhCZZtFW4TBJqw36hpZxDyT0t8
-         3CIw==
-X-Gm-Message-State: ACgBeo1XY0vPbLtBRUKQtY5obf4a8de6a3GcktKL4VqsggkyCR95V6v6
-        VZQKOQK2lVxn8Qyr5H6yRIeuwszEpF+duD7e
-X-Google-Smtp-Source: AA6agR5mnj3Lntlfg+nOscK9RMkuTgHH3g812bGxQFy1YxoIMbulcNh2VlnvdCAgFkRskbSY09yKWw==
-X-Received: by 2002:a17:907:6d06:b0:731:5809:ec67 with SMTP id sa6-20020a1709076d0600b007315809ec67mr3867186ejc.195.1660889295385;
-        Thu, 18 Aug 2022 23:08:15 -0700 (PDT)
+        bh=5gJkiTR+kGRLtGgVd47CicF8SNS8UY18L9XUin4OY2Y=;
+        b=14bCcaNGeNKXJOKE101wz5B/nvVFOy11LliCwqer+jWFoyDHVUYWbgqoWUgv2qnAAU
+         tnUHTBBEVFgeoN1c5/rOMH4UaCqbuteisURyGsBKybpYFo+IEXLAALnMm/k0jkMps+0j
+         IeIgNPfyh/JLjzCcRsGZGpYa+Bw4n782CSKl0R3JAQm2EHq/1uhDUZ2forgzx8cutWRH
+         1IuEch0oh7DXRCohnAK+q2oRqkvEmXrn3JhI14JNj4V1TiicaWxGeej8oip5Ytkqa1BR
+         NX9roS5j/WRcme6s7prRHA9+0UaFFK+qB3mhnjqjlbXtA7O9EqtE3SXFjICOXtFaGQ+5
+         eMPQ==
+X-Gm-Message-State: ACgBeo1meSx5dALSkbnzZJzXgwggGw8z0UC4C0ipsCK9AtF+32+d6lDg
+        b2A9AUcW0XatDci2LfxQplAnFtKYVNkfV+YV
+X-Google-Smtp-Source: AA6agR75k14pdaTAK1S0BCFB7OdMaf69W99USHyOlv8hrS6V7Mr9HiIOc/Y2kMJ6Foo2b8Ui1jyy/g==
+X-Received: by 2002:a05:6402:191:b0:445:cf66:25c5 with SMTP id r17-20020a056402019100b00445cf6625c5mr4865875edv.58.1660889298374;
+        Thu, 18 Aug 2022 23:08:18 -0700 (PDT)
 Received: from lb02065.fritz.box ([2001:9e8:143b:fd00:5207:8c7f:747a:b80d])
-        by smtp.gmail.com with ESMTPSA id y14-20020a1709063a8e00b0073a644ef803sm1809660ejd.101.2022.08.18.23.08.12
+        by smtp.gmail.com with ESMTPSA id y14-20020a1709063a8e00b0073a644ef803sm1809660ejd.101.2022.08.18.23.08.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 23:08:14 -0700 (PDT)
+        Thu, 18 Aug 2022 23:08:17 -0700 (PDT)
 From:   Jack Wang <jinpu.wang@ionos.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+Cc:     Thara Gopinath <thara.gopinath@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org
-Subject: [PATCH v1 08/19] crypto: sahara: Fix error check for dma_map_sg
-Date:   Fri, 19 Aug 2022 08:07:50 +0200
-Message-Id: <20220819060801.10443-9-jinpu.wang@ionos.com>
+        linux-crypto@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v1 09/19] crypto: qce: Fix dma_map_sg error check
+Date:   Fri, 19 Aug 2022 08:07:51 +0200
+Message-Id: <20220819060801.10443-10-jinpu.wang@ionos.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220819060801.10443-1-jinpu.wang@ionos.com>
 References: <20220819060801.10443-1-jinpu.wang@ionos.com>
@@ -71,42 +72,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dma_map_sg return 0 on error, it returns the number of
-DMA address segments mapped (this may be shorter
-than <nents> passed in if some elements of the scatter/gather
-list are physically or virtually adjacent and an IOMMU maps
-them with a single entry).
+dma_map_sg return 0 on error, fix the error check and return -EIO to
+caller.
 
+Cc: Thara Gopinath <thara.gopinath@gmail.com>
 Cc: Herbert Xu <herbert@gondor.apana.org.au>
 Cc: "David S. Miller" <davem@davemloft.net>
 Cc: linux-crypto@vger.kernel.org
+Cc: linux-arm-msm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 
 Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
 ---
- drivers/crypto/sahara.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/crypto/qce/aead.c     | 4 ++--
+ drivers/crypto/qce/sha.c      | 8 +++++---
+ drivers/crypto/qce/skcipher.c | 8 ++++----
+ 3 files changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/crypto/sahara.c b/drivers/crypto/sahara.c
-index 457084b344c1..bb71aac30e2c 100644
---- a/drivers/crypto/sahara.c
-+++ b/drivers/crypto/sahara.c
-@@ -487,13 +487,13 @@ static int sahara_hw_descriptor_create(struct sahara_dev *dev)
+diff --git a/drivers/crypto/qce/aead.c b/drivers/crypto/qce/aead.c
+index 97a530171f07..6eb4d2e35629 100644
+--- a/drivers/crypto/qce/aead.c
++++ b/drivers/crypto/qce/aead.c
+@@ -450,8 +450,8 @@ qce_aead_async_req_handle(struct crypto_async_request *async_req)
+ 	if (ret)
+ 		return ret;
+ 	dst_nents = dma_map_sg(qce->dev, rctx->dst_sg, rctx->dst_nents, dir_dst);
+-	if (dst_nents < 0) {
+-		ret = dst_nents;
++	if (!dst_nents) {
++		ret = -EIO;
+ 		goto error_free;
+ 	}
  
- 	ret = dma_map_sg(dev->device, dev->in_sg, dev->nb_in_sg,
- 			 DMA_TO_DEVICE);
--	if (ret != dev->nb_in_sg) {
-+	if (!ret) {
- 		dev_err(dev->device, "couldn't map in sg\n");
- 		goto unmap_in;
+diff --git a/drivers/crypto/qce/sha.c b/drivers/crypto/qce/sha.c
+index 59159f5e64e5..37bafd7aeb79 100644
+--- a/drivers/crypto/qce/sha.c
++++ b/drivers/crypto/qce/sha.c
+@@ -97,14 +97,16 @@ static int qce_ahash_async_req_handle(struct crypto_async_request *async_req)
  	}
- 	ret = dma_map_sg(dev->device, dev->out_sg, dev->nb_out_sg,
- 			 DMA_FROM_DEVICE);
--	if (ret != dev->nb_out_sg) {
+ 
+ 	ret = dma_map_sg(qce->dev, req->src, rctx->src_nents, DMA_TO_DEVICE);
+-	if (ret < 0)
+-		return ret;
++	if (!ret)
++		return -EIO;
+ 
+ 	sg_init_one(&rctx->result_sg, qce->dma.result_buf, QCE_RESULT_BUF_SZ);
+ 
+ 	ret = dma_map_sg(qce->dev, &rctx->result_sg, 1, DMA_FROM_DEVICE);
+-	if (ret < 0)
 +	if (!ret) {
- 		dev_err(dev->device, "couldn't map out sg\n");
- 		goto unmap_out;
++		ret = -EIO;
+ 		goto error_unmap_src;
++	}
+ 
+ 	ret = qce_dma_prep_sgs(&qce->dma, req->src, rctx->src_nents,
+ 			       &rctx->result_sg, 1, qce_ahash_done, async_req);
+diff --git a/drivers/crypto/qce/skcipher.c b/drivers/crypto/qce/skcipher.c
+index 3d27cd5210ef..5b493fdc1e74 100644
+--- a/drivers/crypto/qce/skcipher.c
++++ b/drivers/crypto/qce/skcipher.c
+@@ -124,15 +124,15 @@ qce_skcipher_async_req_handle(struct crypto_async_request *async_req)
+ 	rctx->dst_sg = rctx->dst_tbl.sgl;
+ 
+ 	dst_nents = dma_map_sg(qce->dev, rctx->dst_sg, rctx->dst_nents, dir_dst);
+-	if (dst_nents < 0) {
+-		ret = dst_nents;
++	if (!dst_nents) {
++		ret = -EIO;
+ 		goto error_free;
  	}
+ 
+ 	if (diff_dst) {
+ 		src_nents = dma_map_sg(qce->dev, req->src, rctx->src_nents, dir_src);
+-		if (src_nents < 0) {
+-			ret = src_nents;
++		if (!src_nents) {
++			ret = -EIO;
+ 			goto error_unmap_dst;
+ 		}
+ 		rctx->src_sg = req->src;
 -- 
 2.34.1
 

@@ -2,71 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762FB599A06
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B702C5999DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347276AbiHSKf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
+        id S1348375AbiHSKgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347745AbiHSKf4 (ORCPT
+        with ESMTP id S1348128AbiHSKgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:35:56 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E0AF23FC;
-        Fri, 19 Aug 2022 03:35:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660905355; x=1692441355;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9tIOJO8iIZTfgTPmf7d8mdH6aJrcZ7JVSdLiYDFz5dE=;
-  b=f/KEn0fpkJXnt7ufpN5My7CvD7GcJykWiKeyemp/rWuLMFp9ruS+SV1p
-   uGQmAKw4CVGSEqIiT8YKXIUujnu13TvMQ2u9FCTfRn3oURztddpYkRCnx
-   fjwJNPrL1lJvtBRttBiyjda71gD0Chr9+YSyfDT6Yn3hGBVrQyBY0heTY
-   1sO3cllB3CW9DyfyWQmcpUUs8dusa4ytPspSH3S/f8CO9Xga7MTwtCLLr
-   S+7axlS+nEeZQ7iZjAaVdnJrNIZR2aK3OUSBMk1+kVBzSu+j1uVhznXz+
-   2WdfUFKN8Wi/0gSJodlORoj7xW0jepgFdAzOU/Pjt7lAhuT3sYElL0aRT
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="292983803"
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="292983803"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 03:35:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="711301794"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 19 Aug 2022 03:35:51 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oOzLy-0001MH-1w;
-        Fri, 19 Aug 2022 10:35:50 +0000
-Date:   Fri, 19 Aug 2022 18:35:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Gireesh.Hiremath@in.bosch.com, linux-omap@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, bcousson@baylibre.com,
-        tony@atomide.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dmitry.torokhov@gmail.com,
-        mkorpershoek@baylibre.com, davidgow@google.com,
-        m.felsch@pengutronix.de, swboyd@chromium.org,
-        fengping.yu@mediatek.com, y.oudjana@protonmail.com,
-        rdunlap@infradead.org, colin.king@intel.com
-Cc:     kbuild-all@lists.01.org, sjoerd.simons@collabora.co.uk,
-        VinayKumar.Shettar@in.bosch.com,
-        Govindaraji.Sivanantham@in.bosch.com, anaclaudia.dias@de.bosch.com
-Subject: Re: [PATCH v3 2/3] driver: input: matric-keypad: add reduced matrix
- support
-Message-ID: <202208191853.knYsDJyu-lkp@intel.com>
-References: <20220819065946.9572-2-Gireesh.Hiremath@in.bosch.com>
+        Fri, 19 Aug 2022 06:36:10 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621AEF2428;
+        Fri, 19 Aug 2022 03:36:08 -0700 (PDT)
+Received: (Authenticated sender: contact@artur-rojek.eu)
+        by mail.gandi.net (Postfix) with ESMTPA id 169CA4000C;
+        Fri, 19 Aug 2022 10:36:05 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819065946.9572-2-Gireesh.Hiremath@in.bosch.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Date:   Fri, 19 Aug 2022 12:36:05 +0200
+From:   Artur Rojek <contact@artur-rojek.eu>
+To:     Chris Morgan <macromorgan@hotmail.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: [PATCH 0/4] iio/adc-joystick: buffer data parsing fixes
+In-Reply-To: <SN6PR06MB534245440C9A0EA1E0C11B12A56D9@SN6PR06MB5342.namprd06.prod.outlook.com>
+References: <20220817105643.95710-1-contact@artur-rojek.eu>
+ <SN6PR06MB534245440C9A0EA1E0C11B12A56D9@SN6PR06MB5342.namprd06.prod.outlook.com>
+Message-ID: <085417ff80442dd7cc74e88d35423054@artur-rojek.eu>
+X-Sender: contact@artur-rojek.eu
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,52 +45,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 2022-08-18 20:28, Chris Morgan wrote:
+> On Wed, Aug 17, 2022 at 12:56:39PM +0200, Artur Rojek wrote:
+>> Hi all,
+>> 
+>> this patch set fixes the way channel data is being parsed in the
+>> adc-joystick driver. To achieve that, it also introduces helpers in 
+>> the
+>> IIO subsystem. As a side effect of those changes, a bug in ingenic-adc
+>> has been exposed, which this patch set promptly rectifies.
+>> 
+>> Tested on GCW Zero (by me) and on Anbernic RG350 (by Paul).
+>> 
+>> Chris:
+>> As you have originally reported the issue, would you be able to test
+>> the above changes on your setup (Odroid Go Advance, was it)?
+> 
+> I can confirm this fixes the issue I experienced, I can see both
+> channels of the joystick now when using an hrtimer as a trigger.
+> 
+> This patch also does not interfere with the polling work in progress,
+> as that still works as expected too (polling work is still desired
+> though).
+> 
+> Thank you.
+Perfect, thanks for testing!
 
-Thank you for the patch! Perhaps something to improve:
+Can I add your Tested-by for v2 of this patchset?
 
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on linus/master v6.0-rc1 next-20220819]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gireesh-Hiremath-in-bosch-com/driver-input-matric-keypad-switch-to-gpiod/20220819-151155
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220819/202208191853.knYsDJyu-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/a0b420e08e3b8775a3dbc4857f6ef4831db1c2b3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Gireesh-Hiremath-in-bosch-com/driver-input-matric-keypad-switch-to-gpiod/20220819-151155
-        git checkout a0b420e08e3b8775a3dbc4857f6ef4831db1c2b3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/input/keyboard/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/input/keyboard/matrix_keypad.c:65:33: warning: 'keypad_infos' defined but not used [-Wunused-const-variable=]
-      65 | static const struct keypad_info keypad_infos[] = {
-         |                                 ^~~~~~~~~~~~
-
-
-vim +/keypad_infos +65 drivers/input/keyboard/matrix_keypad.c
-
-    64	
-  > 65	static const struct keypad_info keypad_infos[] = {
-    66		{
-    67			.mode = GENERIC,
-    68		},
-    69		{
-    70			.mode = REDUCED,
-    71		},
-    72	};
-    73	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Artur
+> 
+>> 
+>> Artur Rojek (4):
+>>   iio/adc: ingenic: fix channel offsets in buffer
+>>   iio: add iio_channel_cb_get_iio_buffer helper
+>>   iio: add helper function for reading channel offset in buffer
+>>   input: joystick: Fix buffer data parsing
+>> 
+>>  drivers/iio/adc/ingenic-adc.c               |  7 +++---
+>>  drivers/iio/buffer/industrialio-buffer-cb.c |  7 ++++++
+>>  drivers/iio/industrialio-buffer.c           | 28 
+>> +++++++++++++++++++++
+>>  drivers/input/joystick/adc-joystick.c       | 26 ++++++++++++-------
+>>  include/linux/iio/buffer.h                  |  4 +++
+>>  include/linux/iio/consumer.h                | 12 +++++++++
+>>  6 files changed, 71 insertions(+), 13 deletions(-)
+>> 
+>> --
+>> 2.37.2
+>> 

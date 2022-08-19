@@ -2,67 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8235E599E4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23EFB599E3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349726AbiHSP1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 11:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        id S1349738AbiHSP1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 11:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349063AbiHSP1H (ORCPT
+        with ESMTP id S1349607AbiHSP1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:27:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03837C6CE6;
-        Fri, 19 Aug 2022 08:27:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55452615CE;
-        Fri, 19 Aug 2022 15:27:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52AD6C433D6;
-        Fri, 19 Aug 2022 15:27:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660922825;
-        bh=USJMgCUfTM1xHuRpc0pCe7yuIprEXFxEXKDZLcrUfI0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e39q3hSjH/lh//lRLbrYuhX39KaUDyPvfsbytBSCPKO/NrGg3G3ziw6DPWHNr+49R
-         oU5s1MpybusK91823TJM+94vebgknDGPwa9tZ4hgUSIVvKN0kL8b+gMCMQTnozHxz6
-         1RMGXZwwk55fUPByTKBGecAcX8satXrcqzEpNl8M=
-Date:   Fri, 19 Aug 2022 17:27:02 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     kishon@ti.com, lpieralisi@kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mie@igel.co.jp, kw@linux.com
-Subject: Re: [PATCH 1/5] misc: pci_endpoint_test: Remove unnecessary WARN_ON
-Message-ID: <Yv+rxuqUc+an6R3q@kroah.com>
-References: <20220819145018.35732-1-manivannan.sadhasivam@linaro.org>
- <20220819145018.35732-2-manivannan.sadhasivam@linaro.org>
+        Fri, 19 Aug 2022 11:27:19 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DE1C6CE6;
+        Fri, 19 Aug 2022 08:27:18 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id z25so6595439lfr.2;
+        Fri, 19 Aug 2022 08:27:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=p5gHKc64IQrYIvaRf5pn4OxOQejsfeLYroqX8+JBN2s=;
+        b=g2GksgmUHPPD6aYRY8RFOqoMKTAukjx1YbLYMHSP2mj0GuYfsq9SaCpOKzhOj7LuKp
+         16PAqm6uRvPf4dLt2ym2eFVmFEwFfbvAU7X4Mis/K1laFgA3rC6OoV86l3hcTpWjF9td
+         yeqX72Gh2XNy4Dn77lTNARquOZod3/xnkZ411KrPp1TPGbFcvV/CAAI+dOzns8laXUzV
+         EVe5hwEWsZY9duiRIzh19SW0ClH/oXyiM183cwJrNaxNcxuDzE4B33Nnjn3TFMF+gEJR
+         bYIodOnB8uoqk+6u4em8UR9TfRpjYmCtzXLftf+Aoww2nOjwwTCW3u+Ah6jPsedn7olo
+         Ah7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=p5gHKc64IQrYIvaRf5pn4OxOQejsfeLYroqX8+JBN2s=;
+        b=W3VHp5O/yQPS2aSoNgvlbomifkyMK/qQM39lm23ibR133kATeyBfC60CVG172f+s8l
+         9rdB8bolGd9cdnlZ5SN19jczzntalZQWUnVyeIWLR/JuH9G6cggBHN5HNYYJu6KzYyXV
+         mdLY4x5g9N8WIW47Kg1sOzOh+C6oAzxPISoQLMskbyu5ciffB2krOIF0OdcWx0GlWQOz
+         hFxd6XN6TcmuVwLiuf9Q3E1GPs0MZEm48tQZ/hKw4xzipU1EXoWvJbvzlNtutAn9/4Tg
+         ip6BK/1gSdOMuqWEkorV/0HX/FmMML2l4xTZTxcBq4BMs66nZZiI08xTnEwToghNY7lY
+         OaAw==
+X-Gm-Message-State: ACgBeo3GsXD3RCY94QOHZhojFmSF1xT9KBCXLJ6BBGb1YVWOPlJJ8jEr
+        FR/ljQGaj+YWXH61hs84xOc=
+X-Google-Smtp-Source: AA6agR7RyPHVh7iBKwYNtti1bimItwcTcp0zNGnx1FZ7u9a0hsofIEGuOWgh7eI4hGrxgcnE8UyaSw==
+X-Received: by 2002:a05:6512:2211:b0:48a:f0c1:5d01 with SMTP id h17-20020a056512221100b0048af0c15d01mr2421234lfu.249.1660922836992;
+        Fri, 19 Aug 2022 08:27:16 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru. [109.252.119.13])
+        by smtp.googlemail.com with ESMTPSA id p4-20020ac24ec4000000b0048b3926351bsm607080lfr.56.2022.08.19.08.27.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 08:27:16 -0700 (PDT)
+Message-ID: <89a746fd-a98e-3147-7811-33c5051c2b6d@gmail.com>
+Date:   Fri, 19 Aug 2022 18:27:10 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819145018.35732-2-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH RESEND 1/2] i2c: tegra: Add GPCDMA support
+Content-Language: en-US
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, christian.koenig@amd.com,
+        jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, sumit.semwal@linaro.org,
+        thierry.reding@gmail.com, wsa@kernel.org
+References: <20220819122313.40445-1-akhilrajeev@nvidia.com>
+ <20220819122313.40445-2-akhilrajeev@nvidia.com>
+ <20281ca7-e597-7030-4861-5f9a3594726d@gmail.com>
+In-Reply-To: <20281ca7-e597-7030-4861-5f9a3594726d@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 08:20:14PM +0530, Manivannan Sadhasivam wrote:
-> If unable to map test_reg_bar, then probe will fail with a dedicated
-> error message. So there is no real need of WARN_ON here.
+19.08.2022 18:15, Dmitry Osipenko пишет:
+> 19.08.2022 15:23, Akhil R пишет:
+>>  	if (of_device_is_compatible(np, "nvidia,tegra210-i2c-vi"))
+>>  		i2c_dev->is_vi = true;
+>> +	else
+>> +		i2c_dev->dma_support = !!(of_find_property(np, "dmas", NULL));
 > 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/misc/pci_endpoint_test.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> 1. You leak the np returned by of_find_property().
+> 
+> 2. There is device_property_read_bool() for this kind of property-exists
+> checks.
+> 
+> 3. If "dmas" is missing in DT, then dma_request_chan() should return
+> NULL and everything will work fine. I suppose you haven't tried to test
+> this code.
 
-Should this go to stable kernels?
-
-thanks,
-
-greg k-h
+Although, no. It should return ERR_PTR(-ENODEV) and then you should
+check the return code.

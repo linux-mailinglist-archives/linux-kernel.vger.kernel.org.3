@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63123599AB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C600599ABF
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348621AbiHSLHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
+        id S1348734AbiHSLKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348628AbiHSLH0 (ORCPT
+        with ESMTP id S1348704AbiHSLKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:07:26 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBF3FAC5C;
-        Fri, 19 Aug 2022 04:07:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VMfyY1O_1660907223;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VMfyY1O_1660907223)
-          by smtp.aliyun-inc.com;
-          Fri, 19 Aug 2022 19:07:21 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     benh@kernel.crashing.org
-Cc:     deller@gmx.de, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] video: fbdev: radeon: Clean up some inconsistent indenting
-Date:   Fri, 19 Aug 2022 19:06:59 +0800
-Message-Id: <20220819110659.110384-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Fri, 19 Aug 2022 07:10:18 -0400
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0266F4936;
+        Fri, 19 Aug 2022 04:10:17 -0700 (PDT)
+Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JAovmx007348;
+        Fri, 19 Aug 2022 04:07:32 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=PPS06212021;
+ bh=+xpItXt+HbP/PTzbqUy6/Ew9gXqfYLiFNtFjEYDxdK8=;
+ b=cdC+mml+3lMcwt2DJKKc4IQQByaxAPTcV7u4qRRh4Kxb/x9eTDUFZslcj/pdawMBCJOj
+ puQrwhbZnwX2lmCTrG5S0tMz5BWnwlWrOU4nDm+/1BlKIBM61gkiapCxkeKvm5I5G1md
+ ZUFqH371nCBdI2GeCXgIrezFivST/7nstUJDo0TVCq6kxFwi99gf1JYsaM+PI44TRZ/L
+ bXlrG/M7US9fvfdAs1d1oMqLWKuPvqwhKWcgzRc74y2ZZHEz74CKWm1o1gGrgd6GRzBt
+ xNIPwQe+3cnCydQ379IW8F/m0G/ifegLbWYAZD5SyeNVno9INIFYKEHULVK4DdafXgJb FA== 
+Received: from ala-exchng01.corp.ad.wrs.com (unknown-82-252.windriver.com [147.11.82.252])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3hxbfjn0j1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 19 Aug 2022 04:07:32 -0700
+Received: from otp-dpanait-l2.corp.ad.wrs.com (128.224.125.191) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Fri, 19 Aug 2022 04:07:28 -0700
+From:   Dragos-Marian Panait <dragos.panait@windriver.com>
+To:     <stable@vger.kernel.org>
+CC:     Pavel Skripkin <paskripkin@gmail.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
+        Sujith <Sujith.Manoharan@atheros.com>,
+        Senthil Balasubramanian <senthilkumar@atheros.com>,
+        "John W . Linville" <linville@tuxdriver.com>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 5.4 0/1] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+Date:   Fri, 19 Aug 2022 14:07:18 +0300
+Message-ID: <20220819110719.915478-1-dragos.panait@windriver.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [128.224.125.191]
+X-ClientProxiedBy: ala-exchng01.corp.ad.wrs.com (147.11.82.252) To
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252)
+X-Proofpoint-GUID: FjGF5FM6SlIzvYmFTN3t0l51Ie4CMrey
+X-Proofpoint-ORIG-GUID: FjGF5FM6SlIzvYmFTN3t0l51Ie4CMrey
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-19_06,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ mlxlogscore=307 clxscore=1015 phishscore=0 bulkscore=0 priorityscore=1501
+ impostorscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208190043
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional modification involved.
+The following commit is needed to fix CVE-2022-1679:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0ac4827f78c7ffe8eef074bc010e7e34bc22f533
 
-drivers/video/fbdev/aty/radeon_base.c:2107 radeon_identify_vram() warn: inconsistent indenting.
+Pavel Skripkin (1):
+  ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=1932
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/video/fbdev/aty/radeon_base.c | 46 +++++++++++++--------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
+ drivers/net/wireless/ath/ath9k/htc.h          | 10 +++++-----
+ drivers/net/wireless/ath/ath9k/htc_drv_init.c |  3 ++-
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/video/fbdev/aty/radeon_base.c b/drivers/video/fbdev/aty/radeon_base.c
-index 0a8199985d52..1e6ac7ef3e73 100644
---- a/drivers/video/fbdev/aty/radeon_base.c
-+++ b/drivers/video/fbdev/aty/radeon_base.c
-@@ -2095,34 +2095,34 @@ static void radeon_identify_vram(struct radeonfb_info *rinfo)
- 	u32 tmp;
- 
- 	/* framebuffer size */
--        if ((rinfo->family == CHIP_FAMILY_RS100) ||
-+	if ((rinfo->family == CHIP_FAMILY_RS100) ||
-             (rinfo->family == CHIP_FAMILY_RS200) ||
-             (rinfo->family == CHIP_FAMILY_RS300) ||
-             (rinfo->family == CHIP_FAMILY_RC410) ||
-             (rinfo->family == CHIP_FAMILY_RS400) ||
- 	    (rinfo->family == CHIP_FAMILY_RS480) ) {
--          u32 tom = INREG(NB_TOM);
--          tmp = ((((tom >> 16) - (tom & 0xffff) + 1) << 6) * 1024);
--
-- 		radeon_fifo_wait(6);
--          OUTREG(MC_FB_LOCATION, tom);
--          OUTREG(DISPLAY_BASE_ADDR, (tom & 0xffff) << 16);
--          OUTREG(CRTC2_DISPLAY_BASE_ADDR, (tom & 0xffff) << 16);
--          OUTREG(OV0_BASE_ADDR, (tom & 0xffff) << 16);
--
--          /* This is supposed to fix the crtc2 noise problem. */
--          OUTREG(GRPH2_BUFFER_CNTL, INREG(GRPH2_BUFFER_CNTL) & ~0x7f0000);
--
--          if ((rinfo->family == CHIP_FAMILY_RS100) ||
--              (rinfo->family == CHIP_FAMILY_RS200)) {
--             /* This is to workaround the asic bug for RMX, some versions
--                of BIOS doesn't have this register initialized correctly.
--             */
--             OUTREGP(CRTC_MORE_CNTL, CRTC_H_CUTOFF_ACTIVE_EN,
--                     ~CRTC_H_CUTOFF_ACTIVE_EN);
--          }
--        } else {
--          tmp = INREG(CNFG_MEMSIZE);
-+		u32 tom = INREG(NB_TOM);
-+
-+		tmp = ((((tom >> 16) - (tom & 0xffff) + 1) << 6) * 1024);
-+		radeon_fifo_wait(6);
-+		OUTREG(MC_FB_LOCATION, tom);
-+		OUTREG(DISPLAY_BASE_ADDR, (tom & 0xffff) << 16);
-+		OUTREG(CRTC2_DISPLAY_BASE_ADDR, (tom & 0xffff) << 16);
-+		OUTREG(OV0_BASE_ADDR, (tom & 0xffff) << 16);
-+
-+		/* This is supposed to fix the crtc2 noise problem. */
-+		OUTREG(GRPH2_BUFFER_CNTL, INREG(GRPH2_BUFFER_CNTL) & ~0x7f0000);
-+
-+		if ((rinfo->family == CHIP_FAMILY_RS100) ||
-+		    (rinfo->family == CHIP_FAMILY_RS200)) {
-+			/* This is to workaround the asic bug for RMX, some versions
-+			 * of BIOS doesn't have this register initialized correctly.
-+			 */
-+			OUTREGP(CRTC_MORE_CNTL, CRTC_H_CUTOFF_ACTIVE_EN,
-+				~CRTC_H_CUTOFF_ACTIVE_EN);
-+		}
-+	} else {
-+		tmp = INREG(CNFG_MEMSIZE);
-         }
- 
- 	/* mem size is bits [28:0], mask off the rest */
+
+base-commit: de0cd3ea700d1e8ed76705d02e33b524cbb84cf3
 -- 
-2.20.1.7.g153144c
+2.37.1
 

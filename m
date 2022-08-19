@@ -2,67 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798BB599DBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 143D8599DB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349417AbiHSOob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 10:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S1349396AbiHSOrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 10:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348671AbiHSOo2 (ORCPT
+        with ESMTP id S1349128AbiHSOrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 10:44:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0577A7968B
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:44:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABD89B827DF
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:44:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EC93C433D6;
-        Fri, 19 Aug 2022 14:44:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660920264;
-        bh=SR5PrwSUNeFzrA5RDIw69x1o+dFz9ygEbvlaWHCGNQ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RNMDzlofT9Do1qtO0Evz7KNkRv+ZdvLW3fBZlD7deBiDkiEkJdnhibCTwuWfPH2Jv
-         Wi1ES+bT+zVEnj5vqLu6zJerZapPimoZLYndb+1B0NTLbB1s/Use0mLOFoEwmTr4wz
-         dl9BR1lEQoD+20FJAuHs+VmrOZZCdmO/a/TA2nJ+b5mQa3wj1c2rMfTj9uoOJFJcmq
-         9K2iymNLshFFva/qqFQujb9ABgvR8S149BDlLifatYo9vaHdemFr2wPui7M3CMqQJ2
-         i0eufKGMyk1WJVYWno6ghQ/JE8Kfj3DKcpDuLi1MgIEny0OaPF73j254/qBTuKHf4O
-         kMeMGq3AFZj+g==
-Date:   Fri, 19 Aug 2022 15:44:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "linux@rasmusvillemoes.dk>" <linux@rasmusvillemoes.dk>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] regmap: introduce value tracing for regmap bulk
- operations
-Message-ID: <Yv+hwyrQtBjc69Yd@sirena.org.uk>
-References: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
- <20220818121515.6azkxyqetnunwsc6@CAB-WSD-L081021.sigma.sbrf.ru>
- <87mtc1wtjz.wl-maz@kernel.org>
- <Yv5eMcmNOmyLmd++@sirena.org.uk>
- <20220818174441.arh7otvrkzg5uk3s@CAB-WSD-L081021.sigma.sbrf.ru>
- <Yv99E0mrPI0qG66I@sirena.org.uk>
- <20220819133200.xvpjzatkub4yxnsh@CAB-WSD-L081021.sigma.sbrf.ru>
+        Fri, 19 Aug 2022 10:47:21 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC547ED03A
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:47:20 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oP3HC-0003wt-2B; Fri, 19 Aug 2022 16:47:10 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oP3H9-000jRx-Q8; Fri, 19 Aug 2022 16:47:07 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oP3H9-00Ckm6-4a; Fri, 19 Aug 2022 16:47:07 +0200
+Date:   Fri, 19 Aug 2022 16:44:53 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Romain Perier <romain.perier@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] pwm: Add support for the MSTAR MSC313 PWM
+Message-ID: <20220819144453.4pegktwwargunlzl@pengutronix.de>
+References: <20220615070813.7720-1-romain.perier@gmail.com>
+ <20220615070813.7720-3-romain.perier@gmail.com>
+ <20220619213520.qonqdv4e7zkvpeo7@pengutronix.de>
+ <CABgxDo+_uZyO2vV4QxmVLTo2ohpAxzC89jcGJ3oksT6XxEBCmA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VGKnxctTzrqGZVQ/"
+        protocol="application/pgp-signature"; boundary="gulr5uxr5zgvdp56"
 Content-Disposition: inline
-In-Reply-To: <20220819133200.xvpjzatkub4yxnsh@CAB-WSD-L081021.sigma.sbrf.ru>
-X-Cookie: Price does not include taxes.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CABgxDo+_uZyO2vV4QxmVLTo2ohpAxzC89jcGJ3oksT6XxEBCmA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,43 +61,55 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---VGKnxctTzrqGZVQ/
-Content-Type: text/plain; charset=us-ascii
+--gulr5uxr5zgvdp56
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 19, 2022 at 01:31:35PM +0000, Dmitry Rokosov wrote:
-> On Fri, Aug 19, 2022 at 01:07:47PM +0100, Mark Brown wrote:
+Hello Romain,
 
-> > I didn't realise that was even a question, but then there seems to be
-> > some discussion I've not seen given the CCing going on.  The biggest
-> > issue is do we even want the overhead but I'll need to find time to look
-> > at this properly.
+On Fri, Aug 19, 2022 at 03:12:56PM +0200, Romain Perier wrote:
+> Le dim. 19 juin 2022 =E0 23:35, Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> a =E9crit :
+> > > +static void msc313e_pwm_writecounter(struct regmap_field *low, struc=
+t regmap_field *high, u32 value)
+> > > +{
+> > > +     regmap_field_write(low, value);
+> > > +     regmap_field_write(high, value >> 16);
+> >
+> > Is this racy? E.g. if the hw is running and the low register overflows
+> > before the high register is updated?
+> >
+>=20
+> Ack, I am re-working most of the stuff you noticed. The problem with
+> this IP blocks (and others...) is we have close registers
+> but we only need to write or read 16 bits in each of these (it is
+> mainly reverse engineered from vendor source or runtime most of the
+> time) . You cannot really do a single read (except by doing an obscur
+> thing via readq ? ...)
 
-> No any additional discussion before. I've added your address to all emails
-> which I sent.
+This is fine, but pleast document that in a comment.
 
-I assume you copied in Thomas, Rasmus and Marc for some reason?
+Best regards
+Uwe
 
-> Why do you think it this patch will bring overhead to regmap? AFAK, when
-> tracepoint is disabled, tracepoint fast assign operation shouldn't be
-> executed. In other words, memcpy will not be applied.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-To repeat I have not yet looked at your patch properly, one concern is
-how we handle the marshalling which regmap does.
-
---VGKnxctTzrqGZVQ/
+--gulr5uxr5zgvdp56
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL/ocIACgkQJNaLcl1U
-h9ASKQf/cUZ2kReo5KKxCBpmKiXgMUqaHSmcdqLJjMdL7VGq0GmjAfYsEYnYFKK6
-DDAAPQ0ZFap5BNMXGQYVg8EwkTC7yj1nKXalzfGVcxiAf7RZCBOgfFDvbjNl/osb
-vYcEKFugG9fTd1v9Pjk6MHBG4FK1zOkQSswXdpQKRivdWtmoujm1CKNGoXgfzQb7
-fAMAPZcjNOS4HaPA9Iq0LnoF2TtAL/lUpfcL79yyqaW7qCgBB5ZLJJ7EgF/i0mvm
-YLI1FEcKMQRytDZDPv5y+Oyeqn9z1RqZKsKYC3k8w1lCAQBIQeT5mpI5B23YSu8z
-SJCQ/aIAmbnla8Ie+oN9Pt5H9d9iVA==
-=Sc9H
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmL/oeIACgkQwfwUeK3K
+7AnLfAf/Q730KOcWvic9TGtU5LYxv/PYwKyDY+F+78jFpI+Q15r9ECURWXCeXVx8
+Qr5883rCMEpqlcwUvP30Gosy0oFVvhAsZMg/Jq/BOQMJMyFwb8L7Dxw814dIeqdq
+7K6BLh3PP9AjkqCH1d8l2PxsPmmovPASki2/olFnHrN/MQdzgN+bAow52Ua1Rj4k
+7xdu3AQlhQf4O3ohpshUFxoxi+9lS9tcD+QSOxHoG5cXyQgC0UxMhhxEyu0ojiGJ
+klX5Qw4oRmRm35cfupZhfitj00+RbF/VLeMY0sLqyYIKoGJbr+y5PEH4XSP4wmAS
+MeyGeP0/BKsW8Awe3iK9F6urs60esA==
+=+A3G
 -----END PGP SIGNATURE-----
 
---VGKnxctTzrqGZVQ/--
+--gulr5uxr5zgvdp56--

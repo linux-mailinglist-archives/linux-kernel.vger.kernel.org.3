@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17CC9599DAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA121599DD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349605AbiHSOpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 10:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
+        id S1349481AbiHSOtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 10:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349286AbiHSOpl (ORCPT
+        with ESMTP id S1348837AbiHSOta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 10:45:41 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDCBCD539;
-        Fri, 19 Aug 2022 07:45:39 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 55E9A606; Fri, 19 Aug 2022 09:45:37 -0500 (CDT)
-Date:   Fri, 19 Aug 2022 09:45:37 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        casey@schaufler-ca.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com,
-        tixxdz@gmail.com
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-Message-ID: <20220819144537.GA16552@mail.hallyn.com>
-References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
- <8735dux60p.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
- <871qte8wy3.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
- <8735du7fnp.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
- <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
- <20220818140521.GA1000@mail.hallyn.com>
- <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
+        Fri, 19 Aug 2022 10:49:30 -0400
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05583D87F1;
+        Fri, 19 Aug 2022 07:49:29 -0700 (PDT)
+Received: by mail-pg1-f172.google.com with SMTP id c24so3864011pgg.11;
+        Fri, 19 Aug 2022 07:49:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=AEaEgab2mhaMiSkvYoYiW7yx1z+hEFyxx9wlIiPpIa8=;
+        b=PZ5svkXPbBwfSmVwVlHXWBmxq3AZJqp1RSsZNV5Oq5Dh1sKLcsDXsaDJP43L1FWZQq
+         za3PikWje+XoLxbmk7iVdND4a6hbwkG8/J/It6sJQpAhMZKI11CSTYr/oBsdm+qrKIqR
+         j7oIuOlmekZNPKeb+R8M+whb+ocqQKLGEURKHwm5j2FnoBHwJkTFRApU6tSZ8Tg/rbLA
+         afLL5UfJymiV9jUWKcWyEconwlHGBeqrHSmqVDjv/FOAXbWHC/rhhfF6BvFX/D8my400
+         bBu4iCw0YNHY6pRewxyRO+8i6c/NU59CpaQn/5ycxNs4Vj6PN3TG82q/QUyDhURpochP
+         E/kw==
+X-Gm-Message-State: ACgBeo1Wv8jjSIQEvvAySHP4iZmvJ/G6BdjNUqkvisRjf1CVEAJWjENQ
+        bL2452RhqJ+s76ySQek3n7EwFwZkyiw=
+X-Google-Smtp-Source: AA6agR4n7cfXryL/GLcBwpbdaZ8OS1DGI89ou5DCJZPaiWYVxSuSylH84/CiOOS86Tu5616hB6UhkA==
+X-Received: by 2002:a63:1925:0:b0:429:f4f4:7d48 with SMTP id z37-20020a631925000000b00429f4f47d48mr6689792pgl.474.1660920568337;
+        Fri, 19 Aug 2022 07:49:28 -0700 (PDT)
+Received: from [192.168.3.217] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id e14-20020aa798ce000000b00534a1315a63sm3580495pfm.136.2022.08.19.07.49.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 07:49:27 -0700 (PDT)
+Message-ID: <17ccd5ae-0268-1bee-7822-1352f4c676ba@acm.org>
+Date:   Fri, 19 Aug 2022 07:49:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: 6.0-rc1 regression block (blk_mq) / RCU task stuck errors +
+ block-io hang
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, rcu@vger.kernel.org
+References: <dd6844e7-f338-a4e9-2dad-0960e25b2ca1@redhat.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <dd6844e7-f338-a4e9-2dad-0960e25b2ca1@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,120 +67,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:11:06AM -0400, Paul Moore wrote:
-> On Thu, Aug 18, 2022 at 10:05 AM Serge E. Hallyn <serge@hallyn.com> wrote:
-> > On Wed, Aug 17, 2022 at 04:24:28PM -0500, Eric W. Biederman wrote:
-> > > Paul Moore <paul@paul-moore.com> writes:
-> > > > On Wed, Aug 17, 2022 at 4:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > > >> Paul Moore <paul@paul-moore.com> writes:
-> > > >> > On Wed, Aug 17, 2022 at 3:58 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > > >> >> Paul Moore <paul@paul-moore.com> writes:
-> > > >> >>
-> > > >> >> > At the end of the v4 patchset I suggested merging this into lsm/next
-> > > >> >> > so it could get a full -rc cycle in linux-next, assuming no issues
-> > > >> >> > were uncovered during testing
-> > > >> >>
-> > > >> >> What in the world can be uncovered in linux-next for code that has no in
-> > > >> >> tree users.
-> > > >> >
-> > > >> > The patchset provides both BPF LSM and SELinux implementations of the
-> > > >> > hooks along with a BPF LSM test under tools/testing/selftests/bpf/.
-> > > >> > If no one beats me to it, I plan to work on adding a test to the
-> > > >> > selinux-testsuite as soon as I'm done dealing with other urgent
-> > > >> > LSM/SELinux issues (io_uring CMD passthrough, SCTP problems, etc.); I
-> > > >> > run these tests multiple times a week (multiple times a day sometimes)
-> > > >> > against the -rcX kernels with the lsm/next, selinux/next, and
-> > > >> > audit/next branches applied on top.  I know others do similar things.
-> > > >>
-> > > >> A layer of hooks that leaves all of the logic to userspace is not an
-> > > >> in-tree user for purposes of understanding the logic of the code.
-> > > >
-> > > > The BPF LSM selftests which are part of this patchset live in-tree.
-> > > > The SELinux hook implementation is completely in-tree with the
-> > > > subject/verb/object relationship clearly described by the code itself.
-> > > > After all, the selinux_userns_create() function consists of only two
-> > > > lines, one of which is an assignment.  Yes, it is true that the
-> > > > SELinux policy lives outside the kernel, but that is because there is
-> > > > no singular SELinux policy for everyone.  From a practical
-> > > > perspective, the SELinux policy is really just a configuration file
-> > > > used to setup the kernel at runtime; it is not significantly different
-> > > > than an iptables script, /etc/sysctl.conf, or any of the other myriad
-> > > > of configuration files used to configure the kernel during boot.
-> > >
-> > > I object to adding the new system configuration knob.
-> >
-> > I do strongly sympathize with Eric's points.  It will be very easy, once
-> > user namespace creation has been further restricted in some distros, to
-> > say "well see this stuff is silly" and go back to simply requiring root
-> > to create all containers and namespaces, which is generally quite a bit
-> > easier anywway.  And then, of course, give everyone root so they can
-> > start containers.
+On 8/19/22 05:01, Hans de Goede wrote:
+> I've been dogfooding 6.0-rc1 on my main workstation and I have hit
+> this pretty serious bug, serious enough for me to go back to 5.19
 > 
-> That's assuming a lot.  Many years have passed since namespaces were
-> first introduced, and awareness of good security practices has
-> improved, perhaps not as much as any of us would like, but to say that
-> distros, system builders, and even users are the same as they were so
-> many years ago is a bit of a stretch in my opinion.
-
-Maybe.  But I do get a bit worried based on some of what I've been
-reading in mailing lists lately.  Kernel dev definitely moves like
-fashion - remember when every api should have its own filesystem?
-That was not a different group of people.
-
-> However, even ignoring that for a moment, do we really want to go to a
-> place where we dictate how users compose and secure their systems?
-> Linux "took over the world" because it offered a level of flexibility
-> that wasn't really possible before, and it has flourished because it
-> has kept that mentality.  The Linux Kernel can be shoehorned onto most
-> hardware that you can get your hands on these days, with driver
-> support for most anything you can think to plug into the system.  Do
-> you want a single-user environment with no per-user separation?  We
-> can do that.  Do you want a traditional DAC based system that leans
-> heavy on ACLs and capabilities?  We can do that.  Do you want a
-> container host that allows you to carve up the system with a high
-> degree of granularity thanks to the different namespaces?  We can do
-> that.  How about a system that leverages the LSM to enforce a least
-> privilege ideal, even on the most privileged root user?  We can do
-> that too.  This patchset is about giving distro, system builders, and
-> users another choice in how they build their system.  We've seen both
-
-Oh, you misunderstand.  Whereas I do feel there are important concerns in
-Eric's objections, and whereas I don't feel this set sufficiently
-addresses the problems that I see and outlined above, I do see value in
-this set, and was not aiming to deter it.  We need better ways to
-mitigate a certain clas sof 0-days without completely disallowing use of
-user namespaces, and this may help.
-
-> in this patchset and in previously failed attempts that there is a
-> definite want from a user perspective for functionality such as this,
-> and I think it's time we deliver it in the upstream kernel so they
-> don't have to keep patching their own systems with out-of-tree
-> patches.
+> My dmesg is showing various blk_mq (RCU?) related lockdep splats
+> followed by some tasks getting stuck on disk-IO. E.g. "sync"
+> is guaranteed to hang, but other tasks too.
 > 
-> > Eric and Paul, I wonder, will you - or some people you'd like to represent
-> > you - be at plumbers in September?  Should there be a BOF session there?  (I
-> > won't be there, but could join over video)  I think a brainstorming session
-> > for solutions to the above problems would be good.
+> This seems to be mainly the case on "sd" disks (both sata
+> and USB) where as my main nvme drive seems fine, which has
+> probably saved me from worse issues...
 > 
-> Regardless of if Eric or I will be at LPC, it is doubtful that all of
-> the people who have participated in this discussion will be able to
-> attend, and I think it's important that the users who are asking for
-> this patchset have a chance to be heard in each forum where this is
-> discussed.  While conferences are definitely nice - I definitely
-> missed them over the past couple of years - we can't use them as a
-> crutch to help us reach a conclusion on this issue; we've debated much
-
-No I wasn't thinking we would use LPC to decide on this patchset.  As far
-as I can see, the patchset is merged.  I am hoping we can come up with
-"something better" to address people's needs, make everyone happy, and
-bring forth world peace.  Which would stack just fine with what's here
-for defense in depth.
-
-You may well not be interested in further work, and that's fine.  I need
-to set aside a few days to think on this.
-
-> more difficult things over the mailing lists, I see no reason why this
-> would be any different.
+> Here are 4 task stuck reports from my last boot, where
+> I had to turn off the machine by keeping the power button
+> pressed for 4 seconds.
 > 
-> -- 
-> paul-moore.com
+> [ ... ]
+ >
+> Sorry for not being able to write a better bug-report but I don't have
+> the time to dive into this deeper. I hope this report is enough for
+> someone to have a clue what is going on.
+
+Thank you for the detailed report. I think this report is detailed 
+enough to root-cause this issue, something that was not possible before 
+this report.
+
+Please help with verifying whether this patch fixes this issue: "[PATCH] 
+scsi: sd: Revert "Rework asynchronous resume support"" 
+(https://lore.kernel.org/linux-scsi/20220816172638.538734-1-bvanassche@acm.org/).
+
+Thanks,
+
+Bart.
+

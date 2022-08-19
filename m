@@ -2,69 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A910059A4AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C7F59A340
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350755AbiHSR5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 13:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
+        id S1350253AbiHSR6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 13:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350635AbiHSR4s (ORCPT
+        with ESMTP id S1350725AbiHSR5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 13:56:48 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D664F220C3;
-        Fri, 19 Aug 2022 10:39:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Np1ibAFNVnfFgg0QIFE24X+BInAHnXNFqAN1Bvj0a9E=; b=U2083fO9ZNK/aBkQR0OkRDk/CH
-        G2fmVJE+JuoZnt3CkavmBH9hR+4HGl8o6KO+H6aAGlwS2SfY5H6d1mL5wqvUqv+lXcHpWaKU1H74+
-        ZXDojIUpeFnZh4aY1sQeFg+5ftuV39ggf6KataTvlcxGF33dgx6VglYXSpKjt6hlYjOQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oP5xg-00DwBs-9v; Fri, 19 Aug 2022 19:39:12 +0200
-Date:   Fri, 19 Aug 2022 19:39:12 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marcus Carlberg <marcus.carlberg@axis.com>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@axis.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: dsa: mv88e6xxx: support RGMII cmode
-Message-ID: <Yv/KwIDbYewAGD/d@lunn.ch>
-References: <20220819135629.32590-1-marcus.carlberg@axis.com>
+        Fri, 19 Aug 2022 13:57:43 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E19B0B38;
+        Fri, 19 Aug 2022 10:42:22 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 27JHg1Wr019732;
+        Sat, 20 Aug 2022 02:42:02 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 27JHg1Wr019732
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1660930922;
+        bh=KG4FLh078Vt2N1P5TXYssv5+zwbnf0PgknkaoFYzijQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BtK+lTo6jtk9HhWaLKAFv1J+Pxi40MSQyuMSytde6Hafttt6P5JVWM7zdjnpDNxVT
+         NewWzYNDiD5qQyHE4NR4TnA9Zocv3UOwNOW1Nq4yUEv4hzV79HximvkIbwSKtF1k1d
+         ITUi37/73G//MtWqDGIA4DSZgbHyCz7nXeFzsW8ZI6vMQLbu/kYgdmQfXBOtxG3+jx
+         0RHlJavErvZwJXLxlXLD+N/GQM1QOxve5dpmrdGmIJ4446Uz3PM5yUGsmMldcNR74l
+         udkQU1nd/UTzBfYiHaxkMg2Fh3gr9IaSPiqHzSLtS4RGCBC/AWgGMnD9++tCrrKa1Z
+         geLV0OAGvL4qA==
+X-Nifty-SrcIP: [209.85.221.42]
+Received: by mail-wr1-f42.google.com with SMTP id e20so5467972wri.13;
+        Fri, 19 Aug 2022 10:42:01 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2m2xTQ1CUx5++q2LZpNp89ezWgcErbIR0EVfWqDjemRFP1B2Nq
+        CZ5NO/ZmNXxqCY8HpN1mXcdWyaF6Od5ccKQVrmo=
+X-Google-Smtp-Source: AA6agR5fCqfs4m8WbADmO1+mqZqUkCCpgFYtSaoGfgziW6XZ+xfPlfuOsNgaVbqrBz5UOgCA97JrOvd/Jx2BBndK1wE=
+X-Received: by 2002:a5d:588f:0:b0:220:761a:6894 with SMTP id
+ n15-20020a5d588f000000b00220761a6894mr4967512wrf.406.1660930920162; Fri, 19
+ Aug 2022 10:42:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819135629.32590-1-marcus.carlberg@axis.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220819170053.2686006-1-ndesaulniers@google.com>
+ <Yv/Ff3mAfyCeWtmo@mail.local> <CAKwvOdnCGywz02Mf220njrS16fm4vTnFRFKALtJCqMbQY8Xz_w@mail.gmail.com>
+In-Reply-To: <CAKwvOdnCGywz02Mf220njrS16fm4vTnFRFKALtJCqMbQY8Xz_w@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 20 Aug 2022 02:41:13 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQy66UAWy+tyLYpzf51brdwVESAK8igcHud=4=-v5QxmQ@mail.gmail.com>
+Message-ID: <CAK7LNAQy66UAWy+tyLYpzf51brdwVESAK8igcHud=4=-v5QxmQ@mail.gmail.com>
+Subject: Re: [PATCH] Kconfig: eradicate CC_HAS_ASM_GOTO
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-um@lists.infradead.org, kvm@vger.kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 03:56:29PM +0200, Marcus Carlberg wrote:
-> Since the probe defaults all interfaces to the highest speed possible
-> (10GBASE-X in mv88e6393x) before the phy mode configuration from the
-> devicetree is considered it is currently impossible to use port 0 in
-> RGMII mode.
-> 
-> This change will allow RGMII modes to be configurable for port 0
-> enabling port 0 to be configured as RGMII as well as serial depending
-> on configuration.
-> 
-> Signed-off-by: Marcus Carlberg <marcus.carlberg@axis.com>
+On Sat, Aug 20, 2022 at 2:28 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Fri, Aug 19, 2022 at 10:16 AM Alexandre Belloni
+> <alexandre.belloni@bootlin.com> wrote:
+> >
+> > On 19/08/2022 10:00:53-0700, Nick Desaulniers wrote:
+> > > GCC has supported asm goto since 4.5, and Clang has since version 9.0.0.
+> > > The minimum supported versions of these tools for the build according to
+> > > Documentation/process/changes.rst are 5.1 and 11.0.0 respectively.
+> > >
+> > > Remove the feature detection script, Kconfig option, and clean up some
+> > > fallback code that is no longer supported.
+> > >
+> > > The removed script was also testing for a GCC specific bug that was
+> > > fixed in the 4.7 release.
+> > >
+> > > The script was also not portable; users of Dash shell reported errors
+> > > when it was invoked.
+> > >
+> >
+> > To be clear, the script was portable, what is not working with dash is
+> > the current detection of CC_HAS_ASM_GOTO_TIED_OUTPUT. I'll try the other
+> > suggestion from Masahiro.
+>
+> Ah, that was his point about echo; that makes more sense.
+>
+> Unless a v2 is required, perhaps Masahiro would be kind enough to drop
+> this sentence from the commit message when applying?
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+I can if there is nothing else to fix.
 
-    Andrew
+
+And, Alexandre's Reported-by is irrelevant.
+
+As for the subject prefix "Kconfig:",
+I prefer something else, for example,
+"asm goto:" or "jump label:".
+
+I want to reserve "Kconfig:" for changes in scripts/kconfig/.
+
+
+>
+> >
+> > > --- a/arch/x86/include/asm/cpufeature.h
+> > > +++ b/arch/x86/include/asm/cpufeature.h
+> > > @@ -155,11 +155,11 @@ extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
+> > >
+> > >  #define setup_force_cpu_bug(bit) setup_force_cpu_cap(bit)
+> > >
+> > > -#if defined(__clang__) && !defined(CONFIG_CC_HAS_ASM_GOTO)
+> > > +#if defined(__clang__) && __clang_major__ < 9
+> >
+> > Shouldn't we simply mandates clang >= 9 and drop the whole section? This
+> > is what you do later on.
+>
+> I considered it, but I don't think it would be safe to do so in this
+> header.  If you look at the comment block below it, it mentions that
+> these kernel headers are being sucked into UAPI headers that are used
+> outside of the kernel builds, such as when building eBPF programs.  So
+> we don't know what userspace tools might be consuming these headers.
+> The original intent of the guard was to not break eBPF compilation
+> with older clang releases, so I've retained. that functionality.
+>
+> + Alexei to review
+> (author of
+> commit b1ae32dbab50 ("x86/cpufeature: Guard asm_volatile_goto usage
+> for BPF compilation")
+
+
+I am not sure at this point.
+Wait for the input from Alexei.
+
+
+
+
+
+
+> ).
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

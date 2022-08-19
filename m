@@ -2,103 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3FC5998C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41D65998C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348156AbiHSJ0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35332 "EHLO
+        id S1348174AbiHSJbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348149AbiHSJ0W (ORCPT
+        with ESMTP id S1347903AbiHSJbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:26:22 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9769EF43AC;
-        Fri, 19 Aug 2022 02:26:21 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id jl18so3674123plb.1;
-        Fri, 19 Aug 2022 02:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc;
-        bh=CY0i8QDQ2vMQNk28GilQevsgpB2jxQ4GU9BTJPqju0A=;
-        b=V6VES/pqGZOotRcLtKIhAnYf7veaonsx2TJtUMdgIRxpOaUvBhyStlwTTN26Se75si
-         I/lXTlcucawVRBqonOpdH5uv6nMJp1qPfxzn6dUSImpnOE4uq2DRgYH/xuMFoVNfGWU7
-         0S+w+0Fiu7JWM4piIHf7Lznwcq85h6KLyVveLJXeeqMqAzWgx5OxvDvAkj6DYeZe08hX
-         H+raLrv395kelnjQoonzodMzo35teDgNhd8RJUvy5HQTwJ8quBBciLszY6qcSJFbVf53
-         a5e7+c6zNR04u9QEvamnmpz/em5devLzzktLfV2aw4+ZEjMCd472Y97F1C3xaXbtVrgB
-         3KEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=CY0i8QDQ2vMQNk28GilQevsgpB2jxQ4GU9BTJPqju0A=;
-        b=oxC5iH6taHQPNCk5CFxT/v3bu/BIUeAuIm4+pFFdXaaqKYV1S856NsyvNXTH9YPzRl
-         vBYrpkpoz/bLx8ieQG95ZvRj4gupxro1pu/eCN609oaRc1cjn6+jbmMvjKinL+zoc9gq
-         Ojb8deiM0WIaAPTbyL1oY32qASCrOrTCp2L1FfoSKPuM4A+wAp4hP1yIi44JKd2hcZ4K
-         sJJxEcN+bOi7Vts04hrlTQFY2n4q0LPrdxFr+wcyqN7c/GC6gycN7OjoLll/C83Ayoy/
-         krrCz87you1dCnMo3LqG0rV0vKf5DLfTupKmR1cJHsO7KwZb99MlkQ2+lOViWjJ1iBs8
-         Dk6g==
-X-Gm-Message-State: ACgBeo2dsBMW6dPqf0lN9BcY0xMrLypjrE8j8mE/dzvgBUEFnSlkiRXT
-        qpqnnp0uErwIUVqWStSMioUV6XQFp0i2DlD2vEM=
-X-Google-Smtp-Source: AA6agR6CaacXLaiXjbr51gDGZPJLXr0bmzyMubFLsYlgmuOvIISNjqeh2W9NA8BvP7ITEYy0ZiulAw==
-X-Received: by 2002:a17:90a:2eca:b0:1fa:a687:cfd9 with SMTP id h10-20020a17090a2eca00b001faa687cfd9mr13353735pjs.78.1660901181102;
-        Fri, 19 Aug 2022 02:26:21 -0700 (PDT)
-Received: from localhost.localdomain ([104.28.240.138])
-        by smtp.gmail.com with ESMTPSA id n12-20020a170903110c00b001709e3c755fsm2759533plh.230.2022.08.19.02.26.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 02:26:20 -0700 (PDT)
-From:   Qingfang DENG <dqfext@gmail.com>
-To:     Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: phylink: allow RGMII/RTBI in-band status
-Date:   Fri, 19 Aug 2022 17:26:06 +0800
-Message-Id: <20220819092607.2628716-1-dqfext@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 19 Aug 2022 05:31:03 -0400
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77D7F23DD
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:31:01 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1660901192tain063a
+Received: from localhost.localdomain ( [123.114.60.34])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 19 Aug 2022 17:26:30 +0800 (CST)
+X-QQ-SSF: 01400000002000D0U000B00A0000000
+X-QQ-FEAT: KIY2vMteGsnLesbcnYjO65jCSDMXx38WD8izJS76jGYwSKVCwA35iceBJxy+n
+        F03JnHqpKpDl+JOk+nQf9fpPVGDczqT2LwpJaRDpuaKdMrWIOQbkfd2OxU+cohX9hNEexS3
+        0QI8oLQUxC1chmMtILtdMBfD6DJrW58+4JDLEY1EFgJk9qKpJZKJmPFV+P+ovZFVW2n2P0W
+        aGOrQRRRKAJNgbZpeMJJB1lc4dGfZsAzD3jc1oWa3n5DXOY19cPadqY6yg7DTQcC1xyJAV9
+        xHjhrlfuWCDw26mSK5de6fiky0axYAm4Pb6xn2tl5DlN6xMoPsyssjLANwekyLIm0bDtKYl
+        R9haxOMkA0/1CXf9fjh2bdjE5vcTis+CVqaCbUSD+ZMWOsmOlcP6MSFHUjzNQ==
+X-QQ-GoodBg: 2
+From:   zhaoxiao <zhaoxiao@uniontech.com>
+To:     thierry.reding@gmail.com, heiko@sntech.de
+Cc:     u.kleine-koenig@pengutronix.de, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        zhaoxiao <zhaoxiao@uniontech.com>
+Subject: [PATCH v4] pwm: rockchip: Convert to use dev_err_probe()
+Date:   Fri, 19 Aug 2022 17:26:27 +0800
+Message-Id: <20220819092627.19416-1-zhaoxiao@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per RGMII specification v2.0, section 3.4.1, RGMII/RTBI has an
-optional in-band status feature where the PHY's link status, speed and
-duplex mode can be passed to the MAC.
-Allow RGMII/RTBI to use in-band status.
+It's fine to call dev_err_probe() in ->probe() when error code is known.
+Convert the driver to use dev_err_probe().
 
-Fixes: 9525ae83959b ("phylink: add phylink infrastructure")
-Signed-off-by: Qingfang DENG <dqfext@gmail.com>
+Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
 ---
- drivers/net/phy/phylink.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ v4: add the missing dev_err function.
+ drivers/pwm/pwm-rockchip.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-index 9bd69328dc4d..57186d322835 100644
---- a/drivers/net/phy/phylink.c
-+++ b/drivers/net/phy/phylink.c
-@@ -632,6 +632,11 @@ static int phylink_parse_mode(struct phylink *pl, struct fwnode_handle *fwnode)
- 		switch (pl->link_config.interface) {
- 		case PHY_INTERFACE_MODE_SGMII:
- 		case PHY_INTERFACE_MODE_QSGMII:
-+		case PHY_INTERFACE_MODE_RGMII:
-+		case PHY_INTERFACE_MODE_RGMII_ID:
-+		case PHY_INTERFACE_MODE_RGMII_RXID:
-+		case PHY_INTERFACE_MODE_RGMII_TXID:
-+		case PHY_INTERFACE_MODE_RTBI:
- 			phylink_set(pl->supported, 10baseT_Half);
- 			phylink_set(pl->supported, 10baseT_Full);
- 			phylink_set(pl->supported, 100baseT_Half);
+diff --git a/drivers/pwm/pwm-rockchip.c b/drivers/pwm/pwm-rockchip.c
+index f3647b317152..e6ee14c6a159 100644
+--- a/drivers/pwm/pwm-rockchip.c
++++ b/drivers/pwm/pwm-rockchip.c
+@@ -328,22 +328,16 @@ static int rockchip_pwm_probe(struct platform_device *pdev)
+ 	else
+ 		pc->pclk = pc->clk;
+ 
+-	if (IS_ERR(pc->pclk)) {
+-		ret = PTR_ERR(pc->pclk);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "Can't get APB clk: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(pc->pclk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(pc->pclk), "Can't get APB clk\n");
+ 
+ 	ret = clk_prepare_enable(pc->clk);
+-	if (ret) {
+-		dev_err(&pdev->dev, "Can't prepare enable PWM clk: %d\n", ret);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "Can't prepare enable PWM clk\n");
+ 
+ 	ret = clk_prepare_enable(pc->pclk);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "Can't prepare enable APB clk: %d\n", ret);
++		dev_err_probe(&pdev->dev, ret, "Can't prepare enable APB clk: %d\n", ret);
+ 		goto err_clk;
+ 	}
+ 
+@@ -360,7 +354,7 @@ static int rockchip_pwm_probe(struct platform_device *pdev)
+ 
+ 	ret = pwmchip_add(&pc->chip);
+ 	if (ret < 0) {
+-		dev_err(&pdev->dev, "pwmchip_add() failed: %d\n", ret);
++		dev_err_probe(&pdev->dev, ret, "pwmchip_add() failed: %d\n", ret);
+ 		goto err_pclk;
+ 	}
+ 
 -- 
-2.34.1
+2.20.1
+
 

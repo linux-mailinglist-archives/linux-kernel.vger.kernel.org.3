@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCB559979A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7935997E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347358AbiHSIi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
+        id S1345493AbiHSIkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346949AbiHSIhl (ORCPT
+        with ESMTP id S1346618AbiHSIjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:37:41 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2033D586
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:37:23 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id b2so2820534qkh.12
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:37:23 -0700 (PDT)
+        Fri, 19 Aug 2022 04:39:37 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F05952FED
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:39:36 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id e28so2865914qts.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:39:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=2ovy6cOrAq5hbHsy+zYmpR6YppyOweI7oSxHXbcd+Tw=;
-        b=EX292WCZQn3k56I4UVurdpZlVXNrGus9pO/H54MgD4RjHhGgyDZCGDahZ8JyYgdknx
-         /k0qBNK/1B8kbQsZZaHhgm/oEJ10NC+vsnwhj7sxrFKSMZie1BB9J1ngMqgizqdUKfV+
-         VDrPkPK6rymo9iga7G22+WRekb/rdAINJYUHjhbe3SZe0PZiBfyg9NPEek1bQasyAxNt
-         H+1TcaNPi8HfSgyGplEePLzjA1jKYdWJ+wn/cJykirJINBTltn6QQX7cibXK/9IPosC/
-         tpyZ2MU3+iPIIsq2hHcdwTlSWdY1PFfjA4LLKrHCZ2Q49ilhtQbik46ltxrA0TVMKiIp
-         mYKw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=ZVAH52wX+Vt0VKFbPcXrR0NQYeosP7RaFGxexdtx2/k=;
+        b=RBvhEylwETKO3LQxwWSeaQIT8zFQsVcb2ac4fQv65r4ZaKJOIxncaj3jU95FlpRq1C
+         miI4Mo+in6YwX1eXdwPiPt2Mf/MuUKer/ORZsLwibFNz2IYhiR261oGgJFHi/wofDzUl
+         6SvY+GbnuYbT23bJp2HASErvNrB5tVY7rlMIM1KFKh5v86IthHVkwds+7aErsgGTePLH
+         GvK7SijEyufalcqph/NO0rUf+Af2ZQw7X7P4sbIXHELV8ijwWDn0BM2Jt0MRIqCmK4tG
+         tA4v+A7Oro3k3VWl14IWMrKgTMrNwIZ8FMO/j2LhzneVE1FstWD0gvhVVXd3vrngiHlR
+         PzZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=2ovy6cOrAq5hbHsy+zYmpR6YppyOweI7oSxHXbcd+Tw=;
-        b=kvgyidbwUTlFFX0knfqkcct86VA3zDTVkxFW0EvpGLHzF2toGfCDiia3xzwomqn0Ir
-         05LnDR9uWoXAxM3i7BmwGECcA3cyUn69k6fZbbJybl0Nq5G6Fl+xyodec0wIFCm4nQuN
-         xcVLPxb78EAFONunycrcuYz2Xt880WDp2eHB0chgKlGMAyuPOjil2Qfov5Z1IpJP3n2e
-         7plIypNf8okjg/5v7+rbOcOeJVCcZiFdI5oQfNxd17vYaltrZePt3dR1HYDbMkg0TY5L
-         7I7a421arbvedaJ36YbyW27r95gyqhYCSEidXztFHkN7hjb4WAEQzle1YtwCno6ocShY
-         OIVQ==
-X-Gm-Message-State: ACgBeo360JcEiME6P0Z5BIm0OjtQOQZEte6OtdzkHJ3TktKjDzyuFQgi
-        PTAlwb1BaYcyH7VRQ2yvuzM=
-X-Google-Smtp-Source: AA6agR4i2/flNAUUbOKuONjVpkKw1q/Sspz8B7ZUxzAEVVmgwbOWyHjEphvGVeqpOvrFYezqzZJl3Q==
-X-Received: by 2002:a05:620a:269a:b0:6b5:b76c:11c9 with SMTP id c26-20020a05620a269a00b006b5b76c11c9mr4585731qkp.100.1660898242746;
-        Fri, 19 Aug 2022 01:37:22 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=ZVAH52wX+Vt0VKFbPcXrR0NQYeosP7RaFGxexdtx2/k=;
+        b=GdG3Doedhh/4bJ66QigzS8ylByujHgEEPs089ycCMWB+3QBl4qVirHLatKMg/NIacv
+         M/4v/HpKr3CCw6w2QiSeiWBsA/GtbojIafkvkpw1hxWmaLZKwdWBhLwc5RhVlhBMpK5v
+         nuNw1wB/AJKOfUiWs4KqaUsQseWQK2WMrvpabBUuGgAeo9BPuuMIaE0lzt1hxoni8Lq/
+         DEEslsk0jCof8/9dodz39LehSzF3620UR+pS65R3fQ6YcAxsaNLAhqUjzdXfFyqqY+P9
+         HEHU6d385pdF0vYVwyTvLZ+uiiS9BsYDxBsE0l1a4QeGdF0YstmMr/YbKP88QQUZS/Ab
+         0w9w==
+X-Gm-Message-State: ACgBeo0xBowivm1wpxhvX2KTj34kwnS8B/q4GT9GPhgk0aGnsKM5mlqZ
+        0AREZcFIum56K80ad6/3lfk=
+X-Google-Smtp-Source: AA6agR63GuJ9BaRkAT1HJfWOqq0Tozm0ITWs+Ffdd9lihkVdVI6HsKLlY1QYEJeOEWwacxzbNVZz4w==
+X-Received: by 2002:a05:622a:1185:b0:343:7de8:c0f2 with SMTP id m5-20020a05622a118500b003437de8c0f2mr5509076qtk.256.1660898375533;
+        Fri, 19 Aug 2022 01:39:35 -0700 (PDT)
 Received: from sophie ([89.46.62.64])
-        by smtp.gmail.com with ESMTPSA id 66-20020a370945000000b006b8d1914504sm3078750qkj.22.2022.08.19.01.37.21
+        by smtp.gmail.com with ESMTPSA id az41-20020a05620a172900b006bb8b5b79efsm3265212qkb.129.2022.08.19.01.39.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 01:37:22 -0700 (PDT)
+        Fri, 19 Aug 2022 01:39:35 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Cc:     David Hildenbrand <david@redhat.com>,
-        Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH v2 0/8] memblock tests: update and extend memblock simulator
-Date:   Fri, 19 Aug 2022 01:34:48 -0700
-Message-Id: <cover.1660897732.git.remckee0@gmail.com>
+        Rebecca Mckeever <remckee0@gmail.com>,
+        Shaoqin Huang <shaoqin.huang@intel.com>
+Subject: [PATCH v2 1/8] memblock tests: update tests to check if memblock_alloc zeroed memory
+Date:   Fri, 19 Aug 2022 01:34:49 -0700
+Message-Id: <669782f4f508c3dd60c5efd6d130d12a77573448.1660897732.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1660897732.git.remckee0@gmail.com>
+References: <cover.1660897732.git.remckee0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,104 +72,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These patches update existing tests in memblock simulator, add
-additional tests for memblock functions that are already being tested,
-and add test coverage for additional memblock functions.
+Add an assert in memblock_alloc() tests where allocation is expected to
+occur. The assert checks whether the entire chunk of allocated memory is
+cleared.
 
-Updated tests for:
-- memblock_alloc()
-- memblock_alloc_try_nid()
-- memblock_alloc_from()
+The current memblock_alloc() tests do not check whether the allocated
+memory was zeroed. memblock_alloc() should zero the allocated memory since
+it is a wrapper for memblock_alloc_try_nid().
 
-The updates to memblock_alloc() tests include the addition of an assert
-that checks whether the entire chunk of allocated memory is cleared. For
-memblock_alloc_try_nid() and memblock_alloc_from(), the assert that checks
-whether the allocated memory is cleared now checks the entire chunk of
-allocated memory instead of just the first byte. To make this more robust,
-setup_memblock() and dummy_physical_memory_init() fill the entire MEM_SIZE
-simulated physical memory with nonzero values by calling fill_memblock().
-setup_memblock() is called at the beginning of most tests for
-memblock_alloc() functions.
-
-Additional tests for:
-- memblock_add()
-- memblock_reserve()
-- memblock_remove()
-- memblock_free()
-- memblock_alloc()
-
-Introducing test coverage for:
-- memblock_alloc_raw()
-- memblock_alloc_try_nid_raw()
-- memblock_set_bottom_up()
-- memblock_bottom_up()
-- memblock_trim_memory()
-
-The tests for the memblock_alloc_*raw() functions test both top-down and
-bottom-up allocation directions. To add coverage for memblock_alloc_raw(),
-the alloc_api was updated so that it runs through all the existing tests
-twice: once for memblock_alloc() and once for memblock_alloc_raw(). When
-the tests run memblock_alloc_raw(), they test that the entire memory
-region is nonzero instead of testing that it is zero.
-
-Similarly, the alloc_nid_api was updated to run through its tests twice:
-once for memblock_alloc_try_nid() and once for
-memblock_alloc_try_nid_raw(). When the tests run
-memblock_alloc_try_nid_raw(), they test that the entire memory region is
-nonzero instead of testing that it is zero.
-
-The patch set also adds labels to verbose output for generic
-memblock_alloc*() tests that indicate which allocation direction is set.
-The function names of those tests do not include this information.
-
+Reviewed-by: Shaoqin Huang <shaoqin.huang@intel.com>
+Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
-Changelog
+ tools/testing/memblock/tests/alloc_api.c | 23 +++++++++++++++++++++++
+ tools/testing/memblock/tests/common.c    |  7 +++++++
+ tools/testing/memblock/tests/common.h    | 12 ++++++++++++
+ 3 files changed, 42 insertions(+)
 
-v1 -> v2
-Updates based on feedback from Shaoqin Huang:
-PATCH 1:
-- tests/alloc_api.c:
-    - Remove fill_memblock() from alloc_no_memory_generic_check().
-- tests/common.c, tests/common.h:
-    - Change fill_memblock() to file static.
-PATCH 3:
-- Shaoqin Huang and I discussed using run_top_down() and run_bottom_up()
-  even for functions with `top_down` and `bottom_up` in the name to
-  maintain a consistent output style. However, this would make the
-  output more redundant, so no changes were made.
-PATCH 4:
-- tests/basic_api.c:
-    - Rename instances of r1_size and r2_size to
-      new_r1_size and new_r2_size.
-PATCH 6:
-- tests/alloc_api.c, tests/alloc_nid_api.c, tests/common.h:
-    - Change verify_mem_content() to a common function defined in
-      common.h.
-PATCH 8:
-- tests/basic_api.c:
-    - Rename instances of r2_base and r2_size to
-      new_r2_base and new_r2_size.
----
-
-Rebecca Mckeever (8):
-  memblock tests: update tests to check if memblock_alloc zeroed memory
-  memblock tests: update zeroed memory check for memblock_alloc_* tests
-  memblock tests: add labels to verbose output for generic alloc tests
-  memblock tests: add additional tests for basic api and memblock_alloc
-  memblock tests: update alloc_api to test memblock_alloc_raw
-  memblock tests: update alloc_nid_api to test
-    memblock_alloc_try_nid_raw
-  memblock tests: add tests for memblock_*bottom_up functions
-  memblock tests: add tests for memblock_trim_memory
-
- tools/testing/memblock/tests/alloc_api.c      | 175 +++-
- .../memblock/tests/alloc_helpers_api.c        |  20 +-
- tools/testing/memblock/tests/alloc_nid_api.c  | 260 +++---
- tools/testing/memblock/tests/basic_api.c      | 767 ++++++++++++++++++
- tools/testing/memblock/tests/common.c         |   7 +
- tools/testing/memblock/tests/common.h         |  53 ++
- 6 files changed, 1095 insertions(+), 187 deletions(-)
-
+diff --git a/tools/testing/memblock/tests/alloc_api.c b/tools/testing/memblock/tests/alloc_api.c
+index a14f38eb8a89..aefb67557de9 100644
+--- a/tools/testing/memblock/tests/alloc_api.c
++++ b/tools/testing/memblock/tests/alloc_api.c
+@@ -22,6 +22,8 @@ static int alloc_top_down_simple_check(void)
+ 	allocated_ptr = memblock_alloc(size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
++	ASSERT_MEM_EQ((char *)allocated_ptr, 0, size);
++
+ 	ASSERT_EQ(rgn->size, size);
+ 	ASSERT_EQ(rgn->base, expected_start);
+ 
+@@ -80,6 +82,8 @@ static int alloc_top_down_disjoint_check(void)
+ 	allocated_ptr = memblock_alloc(r2_size, alignment);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
++	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r2_size);
++
+ 	ASSERT_EQ(rgn1->size, r1.size);
+ 	ASSERT_EQ(rgn1->base, r1.base);
+ 
+@@ -125,6 +129,8 @@ static int alloc_top_down_before_check(void)
+ 	allocated_ptr = memblock_alloc(r2_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
++	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r2_size);
++
+ 	ASSERT_EQ(rgn->size, total_size);
+ 	ASSERT_EQ(rgn->base, memblock_end_of_DRAM() - total_size);
+ 
+@@ -173,6 +179,8 @@ static int alloc_top_down_after_check(void)
+ 	allocated_ptr = memblock_alloc(r2_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
++	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r2_size);
++
+ 	ASSERT_EQ(rgn->size, total_size);
+ 	ASSERT_EQ(rgn->base, r1.base - r2_size);
+ 
+@@ -223,6 +231,8 @@ static int alloc_top_down_second_fit_check(void)
+ 	allocated_ptr = memblock_alloc(r3_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
++	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r3_size);
++
+ 	ASSERT_EQ(rgn->size, r2.size + r3_size);
+ 	ASSERT_EQ(rgn->base, r2.base - r3_size);
+ 
+@@ -277,6 +287,8 @@ static int alloc_in_between_generic_check(void)
+ 	allocated_ptr = memblock_alloc(r3_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
++	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r3_size);
++
+ 	ASSERT_EQ(rgn->size, total_size);
+ 	ASSERT_EQ(rgn->base, r1.base - r2.size - r3_size);
+ 
+@@ -418,6 +430,8 @@ static int alloc_limited_space_generic_check(void)
+ 	allocated_ptr = memblock_alloc(available_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
++	ASSERT_MEM_EQ((char *)allocated_ptr, 0, available_size);
++
+ 	ASSERT_EQ(rgn->size, MEM_SIZE);
+ 	ASSERT_EQ(rgn->base, memblock_start_of_DRAM());
+ 
+@@ -472,6 +486,8 @@ static int alloc_bottom_up_simple_check(void)
+ 	allocated_ptr = memblock_alloc(SZ_2, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
++	ASSERT_MEM_EQ((char *)allocated_ptr, 0, SZ_2);
++
+ 	ASSERT_EQ(rgn->size, SZ_2);
+ 	ASSERT_EQ(rgn->base, memblock_start_of_DRAM());
+ 
+@@ -528,6 +544,7 @@ static int alloc_bottom_up_disjoint_check(void)
+ 	allocated_ptr = memblock_alloc(r2_size, alignment);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
++	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r2_size);
+ 
+ 	ASSERT_EQ(rgn1->size, r1.size);
+ 	ASSERT_EQ(rgn1->base, r1.base);
+@@ -571,6 +588,8 @@ static int alloc_bottom_up_before_check(void)
+ 	allocated_ptr = memblock_alloc(r1_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
++	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r1_size);
++
+ 	ASSERT_EQ(rgn->size, total_size);
+ 	ASSERT_EQ(rgn->base, memblock_start_of_DRAM());
+ 
+@@ -618,6 +637,8 @@ static int alloc_bottom_up_after_check(void)
+ 	allocated_ptr = memblock_alloc(r2_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
++	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r2_size);
++
+ 	ASSERT_EQ(rgn->size, total_size);
+ 	ASSERT_EQ(rgn->base, r1.base);
+ 
+@@ -669,6 +690,8 @@ static int alloc_bottom_up_second_fit_check(void)
+ 	allocated_ptr = memblock_alloc(r3_size, SMP_CACHE_BYTES);
+ 
+ 	ASSERT_NE(allocated_ptr, NULL);
++	ASSERT_MEM_EQ((char *)allocated_ptr, 0, r3_size);
++
+ 	ASSERT_EQ(rgn->size, r2.size + r3_size);
+ 	ASSERT_EQ(rgn->base, r2.base);
+ 
+diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
+index 76a8ad818f3a..eec6901081af 100644
+--- a/tools/testing/memblock/tests/common.c
++++ b/tools/testing/memblock/tests/common.c
+@@ -60,16 +60,23 @@ void reset_memblock_attributes(void)
+ 	memblock.current_limit	= MEMBLOCK_ALLOC_ANYWHERE;
+ }
+ 
++static inline void fill_memblock(void)
++{
++	memset(memory_block.base, 1, MEM_SIZE);
++}
++
+ void setup_memblock(void)
+ {
+ 	reset_memblock_regions();
+ 	memblock_add((phys_addr_t)memory_block.base, MEM_SIZE);
++	fill_memblock();
+ }
+ 
+ void dummy_physical_memory_init(void)
+ {
+ 	memory_block.base = malloc(MEM_SIZE);
+ 	assert(memory_block.base);
++	fill_memblock();
+ }
+ 
+ void dummy_physical_memory_cleanup(void)
+diff --git a/tools/testing/memblock/tests/common.h b/tools/testing/memblock/tests/common.h
+index d396e5423a8e..29756e652e3e 100644
+--- a/tools/testing/memblock/tests/common.h
++++ b/tools/testing/memblock/tests/common.h
+@@ -51,6 +51,18 @@
+ 	assert((_expected) < (_seen)); \
+ } while (0)
+ 
++/**
++ * ASSERT_MEM_EQ():
++ * Check that the first @_size bytes of @_seen are all equal to @_expected.
++ * If false, print failed test message (if running with --verbose) and then
++ * assert.
++ */
++#define ASSERT_MEM_EQ(_seen, _expected, _size) do { \
++	for (int _i = 0; _i < (_size); _i++) { \
++		ASSERT_EQ((_seen)[_i], (_expected)); \
++	} \
++} while (0)
++
+ #define PREFIX_PUSH() prefix_push(__func__)
+ 
+ /*
 -- 
 2.25.1
 

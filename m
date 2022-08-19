@@ -2,356 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03A6599CCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D0B599CBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349334AbiHSNMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 09:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
+        id S1349320AbiHSNMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 09:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349323AbiHSNMm (ORCPT
+        with ESMTP id S1349153AbiHSNMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 09:12:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF0BA61D1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:12:40 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oP1ne-0000PI-Ts; Fri, 19 Aug 2022 15:12:34 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oP1nb-0008LN-HJ; Fri, 19 Aug 2022 15:12:31 +0200
-Date:   Fri, 19 Aug 2022 15:12:31 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Gireesh.Hiremath@in.bosch.com
-Cc:     linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bcousson@baylibre.com, tony@atomide.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dmitry.torokhov@gmail.com,
-        mkorpershoek@baylibre.com, davidgow@google.com,
-        swboyd@chromium.org, fengping.yu@mediatek.com,
-        y.oudjana@protonmail.com, rdunlap@infradead.org,
-        colin.king@intel.com, sjoerd.simons@collabora.co.uk,
-        VinayKumar.Shettar@in.bosch.com,
-        Govindaraji.Sivanantham@in.bosch.com, anaclaudia.dias@de.bosch.com
-Subject: Re: [PATCH v3 1/3] driver: input: matric-keypad: switch to gpiod
-Message-ID: <20220819131231.nzi26cbrpgfrycl2@pengutronix.de>
-References: <20220819065946.9572-1-Gireesh.Hiremath@in.bosch.com>
+        Fri, 19 Aug 2022 09:12:39 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488ED74E1F;
+        Fri, 19 Aug 2022 06:12:38 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id w138so1670266pfc.10;
+        Fri, 19 Aug 2022 06:12:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=+HttuOcfh+F+H+y/J89AxcmFEcYFCA26kNV2tXQCUuw=;
+        b=qW70MXd5DgmcAj2wWFFVkV72o/nHNC6AwzJv9JFJIL8u+AUbDtl5cUrT4fmFpOC4MM
+         Gh2bl+79+4YBkFPoFJFWEzoH9bvGOkZGWS/0HPXWqzf/lQGb0xg2NQeedi5NVkp+7sgU
+         MnAW9bhdz9RPq+FWYPdJ6FZrzFAhsZDHJlXZBs16mxwbkUL5xTDVfrgBNOPpiry66IVF
+         vKyajl8PgQlqoEqzOhjEW4lEatM/rLGeR0ouszRmhyd0LN6xYjQA2GXb7QFhXSt9YHiZ
+         COHFgVc9ylRiK452vHLhos5ZwxDny4wx+2ZOkraVCVRIDSWEI5crFnoSoLPGoCBfBVQE
+         i1uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=+HttuOcfh+F+H+y/J89AxcmFEcYFCA26kNV2tXQCUuw=;
+        b=WZ0p3n6IAjkme1rJE0DOjxUOustYBWvLsv+s6VfpHPjIql7iTT24ejJ3mIR8VSzeH0
+         QVl1XXyU0SVyUm7p+3mXJpY1fXCm5OxuPt91JPUZn9cyDxQWXjyfNtMAG0HgRobVO1TK
+         QnhviJ32M0BiMrbXLI77AYSUwfZhKkpsPSgXDVUwqD7+YuHja3HZkzNrlX0MgzT8MBB9
+         xcrdcg9p5yFyolmCAqvo9TVsQfnzUDxY7aES3uYIWEscoiwyP0BIljHlP6WYIBCGLjHT
+         wRjqMKq2bjNpOj/9Lb/QkLM/hMWHoPV/asCmwKze3rk7gWEnJ6tW7/Acbdb0OfMNodjd
+         7+RA==
+X-Gm-Message-State: ACgBeo1nCmGno+ml4oDSDaf+J6EUBeEoJd0nqDnG2ZoVkGsKjovtYDK3
+        JExjQ0jcM8stX9NP8uyB4hE=
+X-Google-Smtp-Source: AA6agR5fk8/zWfwk5/fLk4VWIsYM4zx1HwDid0OHsYkMdPMacu01upPGMPH5s3T+iuO/vjxq2/quXA==
+X-Received: by 2002:a05:6a00:23d1:b0:52f:39e9:9150 with SMTP id g17-20020a056a0023d100b0052f39e99150mr7981942pfc.16.1660914757655;
+        Fri, 19 Aug 2022 06:12:37 -0700 (PDT)
+Received: from [192.168.0.4] ([182.213.254.91])
+        by smtp.gmail.com with ESMTPSA id v2-20020a626102000000b005361708275fsm1073566pfb.217.2022.08.19.06.12.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 06:12:36 -0700 (PDT)
+Message-ID: <afbff5b7-1004-a445-9005-7391c91a275d@gmail.com>
+Date:   Fri, 19 Aug 2022 22:12:34 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819065946.9572-1-Gireesh.Hiremath@in.bosch.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH -next] amt: remove unneccessary skb pointer check
+Content-Language: en-US
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     davem@davemloft.net
+References: <20220818093114.2449179-1-yangyingliang@huawei.com>
+From:   Taehee Yoo <ap420073@gmail.com>
+In-Reply-To: <20220818093114.2449179-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gireesh,
+Hi Yang,
+Thanks for this work!
 
-On 22-08-19, Gireesh.Hiremath@in.bosch.com wrote:
-> From: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
+On 8/18/22 18:31, Yang Yingliang wrote:
+> The skb pointer will be checked in kfree_skb(), so remove the outside check.
 > 
-> Switch from gpio API to gpiod API
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-Nice change.
-
-Did you checked the users of this driver? This change changes the
-behaviour for actice_low GPIOs. A quick check showed that at least on
-upstream board: arch/arm/mach-pxa/palmtc.c uses active low GPIOs.
-
-> Signed-off-by: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
-> 
-> Gbp-Pq: Topic apertis/guardian
-> Gbp-Pq: Name driver-input-matric-keypad-switch-gpio-to-gpiod.patch
-
-Please drop this internal tags.
+Reviewed-by: Taehee Yoo <ap420073@gmail.com>
 
 > ---
->  drivers/input/keyboard/matrix_keypad.c | 84 ++++++++++----------------
->  include/linux/input/matrix_keypad.h    |  4 +-
->  2 files changed, 33 insertions(+), 55 deletions(-)
+>   drivers/net/amt.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/input/keyboard/matrix_keypad.c b/drivers/input/keyboard/matrix_keypad.c
-> index 30924b57058f..b99574edad9c 100644
-> --- a/drivers/input/keyboard/matrix_keypad.c
-> +++ b/drivers/input/keyboard/matrix_keypad.c
-> @@ -15,11 +15,10 @@
->  #include <linux/interrupt.h>
->  #include <linux/jiffies.h>
->  #include <linux/module.h>
-> -#include <linux/gpio.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/input/matrix_keypad.h>
->  #include <linux/slab.h>
->  #include <linux/of.h>
-> -#include <linux/of_gpio.h>
->  #include <linux/of_platform.h>
->  
->  struct matrix_keypad {
-> @@ -49,11 +48,11 @@ static void __activate_col(const struct matrix_keypad_platform_data *pdata,
->  	bool level_on = !pdata->active_low;
->  
->  	if (on) {
-> -		gpio_direction_output(pdata->col_gpios[col], level_on);
-> +		gpiod_direction_output(pdata->col_gpios[col], level_on);
-
-Now strange things can happen, if active_low is set and you specified
-GPIO_ACTIVE_LOW within the device-tree. We need a way to move to gpiod
-and keep the current behaviour.
-
->  	} else {
-> -		gpio_set_value_cansleep(pdata->col_gpios[col], !level_on);
-> +		gpiod_set_value_cansleep(pdata->col_gpios[col], !level_on);
->  		if (!pdata->drive_inactive_cols)
-> -			gpio_direction_input(pdata->col_gpios[col]);
-> +			gpiod_direction_input(pdata->col_gpios[col]);
->  	}
->  }
->  
-> @@ -78,7 +77,7 @@ static void activate_all_cols(const struct matrix_keypad_platform_data *pdata,
->  static bool row_asserted(const struct matrix_keypad_platform_data *pdata,
->  			 int row)
->  {
-> -	return gpio_get_value_cansleep(pdata->row_gpios[row]) ?
-> +	return gpiod_get_value_cansleep(pdata->row_gpios[row]) ?
->  			!pdata->active_low : pdata->active_low;
->  }
->  
-> @@ -91,7 +90,7 @@ static void enable_row_irqs(struct matrix_keypad *keypad)
->  		enable_irq(pdata->clustered_irq);
->  	else {
->  		for (i = 0; i < pdata->num_row_gpios; i++)
-> -			enable_irq(gpio_to_irq(pdata->row_gpios[i]));
-> +			enable_irq(gpiod_to_irq(pdata->row_gpios[i]));
->  	}
->  }
->  
-> @@ -104,7 +103,7 @@ static void disable_row_irqs(struct matrix_keypad *keypad)
->  		disable_irq_nosync(pdata->clustered_irq);
->  	else {
->  		for (i = 0; i < pdata->num_row_gpios; i++)
-> -			disable_irq_nosync(gpio_to_irq(pdata->row_gpios[i]));
-> +			disable_irq_nosync(gpiod_to_irq(pdata->row_gpios[i]));
->  	}
->  }
->  
-> @@ -230,7 +229,7 @@ static void matrix_keypad_stop(struct input_dev *dev)
->  static void matrix_keypad_enable_wakeup(struct matrix_keypad *keypad)
->  {
->  	const struct matrix_keypad_platform_data *pdata = keypad->pdata;
-> -	unsigned int gpio;
-> +	struct gpio_desc *gpio;
->  	int i;
->  
->  	if (pdata->clustered_irq > 0) {
-> @@ -242,7 +241,7 @@ static void matrix_keypad_enable_wakeup(struct matrix_keypad *keypad)
->  			if (!test_bit(i, keypad->disabled_gpios)) {
->  				gpio = pdata->row_gpios[i];
->  
-> -				if (enable_irq_wake(gpio_to_irq(gpio)) == 0)
-> +				if (enable_irq_wake(gpiod_to_irq(gpio)) == 0)
->  					__set_bit(i, keypad->disabled_gpios);
->  			}
->  		}
-> @@ -252,7 +251,7 @@ static void matrix_keypad_enable_wakeup(struct matrix_keypad *keypad)
->  static void matrix_keypad_disable_wakeup(struct matrix_keypad *keypad)
->  {
->  	const struct matrix_keypad_platform_data *pdata = keypad->pdata;
-> -	unsigned int gpio;
-> +	struct gpio_desc *gpio;
->  	int i;
->  
->  	if (pdata->clustered_irq > 0) {
-> @@ -264,7 +263,7 @@ static void matrix_keypad_disable_wakeup(struct matrix_keypad *keypad)
->  		for (i = 0; i < pdata->num_row_gpios; i++) {
->  			if (test_and_clear_bit(i, keypad->disabled_gpios)) {
->  				gpio = pdata->row_gpios[i];
-> -				disable_irq_wake(gpio_to_irq(gpio));
-> +				disable_irq_wake(gpiod_to_irq(gpio));
->  			}
->  		}
->  	}
-> @@ -308,27 +307,11 @@ static int matrix_keypad_init_gpio(struct platform_device *pdev,
->  
->  	/* initialized strobe lines as outputs, activated */
->  	for (i = 0; i < pdata->num_col_gpios; i++) {
-> -		err = gpio_request(pdata->col_gpios[i], "matrix_kbd_col");
-> -		if (err) {
-> -			dev_err(&pdev->dev,
-> -				"failed to request GPIO%d for COL%d\n",
-> -				pdata->col_gpios[i], i);
-> -			goto err_free_cols;
-> -		}
-> -
-> -		gpio_direction_output(pdata->col_gpios[i], !pdata->active_low);
-> +		gpiod_direction_output(pdata->col_gpios[i], !pdata->active_low);
->  	}
->  
->  	for (i = 0; i < pdata->num_row_gpios; i++) {
-> -		err = gpio_request(pdata->row_gpios[i], "matrix_kbd_row");
-> -		if (err) {
-> -			dev_err(&pdev->dev,
-> -				"failed to request GPIO%d for ROW%d\n",
-> -				pdata->row_gpios[i], i);
-> -			goto err_free_rows;
-> -		}
-> -
-> -		gpio_direction_input(pdata->row_gpios[i]);
-> +		gpiod_direction_input(pdata->row_gpios[i]);
->  	}
->  
->  	if (pdata->clustered_irq > 0) {
-> @@ -344,7 +327,7 @@ static int matrix_keypad_init_gpio(struct platform_device *pdev,
->  	} else {
->  		for (i = 0; i < pdata->num_row_gpios; i++) {
->  			err = request_any_context_irq(
-> -					gpio_to_irq(pdata->row_gpios[i]),
-> +					gpiod_to_irq(pdata->row_gpios[i]),
->  					matrix_keypad_interrupt,
->  					IRQF_TRIGGER_RISING |
->  					IRQF_TRIGGER_FALLING,
-> @@ -352,7 +335,7 @@ static int matrix_keypad_init_gpio(struct platform_device *pdev,
->  			if (err < 0) {
->  				dev_err(&pdev->dev,
->  					"Unable to acquire interrupt for GPIO line %i\n",
-> -					pdata->row_gpios[i]);
-> +					i);
->  				goto err_free_irqs;
->  			}
->  		}
-> @@ -364,15 +347,12 @@ static int matrix_keypad_init_gpio(struct platform_device *pdev,
->  
->  err_free_irqs:
->  	while (--i >= 0)
-> -		free_irq(gpio_to_irq(pdata->row_gpios[i]), keypad);
-> +		free_irq(gpiod_to_irq(pdata->row_gpios[i]), keypad);
->  	i = pdata->num_row_gpios;
->  err_free_rows:
->  	while (--i >= 0)
-> -		gpio_free(pdata->row_gpios[i]);
-> +		gpiod_put(pdata->row_gpios[i]);
->  	i = pdata->num_col_gpios;
-> -err_free_cols:
-> -	while (--i >= 0)
-> -		gpio_free(pdata->col_gpios[i]);
->  
->  	return err;
->  }
-> @@ -386,14 +366,14 @@ static void matrix_keypad_free_gpio(struct matrix_keypad *keypad)
->  		free_irq(pdata->clustered_irq, keypad);
->  	} else {
->  		for (i = 0; i < pdata->num_row_gpios; i++)
-> -			free_irq(gpio_to_irq(pdata->row_gpios[i]), keypad);
-> +			free_irq(gpiod_to_irq(pdata->row_gpios[i]), keypad);
->  	}
->  
->  	for (i = 0; i < pdata->num_row_gpios; i++)
-> -		gpio_free(pdata->row_gpios[i]);
-> +		gpiod_put(pdata->row_gpios[i]);
->  
->  	for (i = 0; i < pdata->num_col_gpios; i++)
-> -		gpio_free(pdata->col_gpios[i]);
-> +		gpiod_put(pdata->col_gpios[i]);
->  }
->  
->  #ifdef CONFIG_OF
-> @@ -402,7 +382,8 @@ matrix_keypad_parse_dt(struct device *dev)
->  {
->  	struct matrix_keypad_platform_data *pdata;
->  	struct device_node *np = dev->of_node;
-> -	unsigned int *gpios;
-> +	struct gpio_desc **gpios;
-> +	struct gpio_desc *desc;
->  	int ret, i, nrow, ncol;
->  
->  	if (!np) {
-> @@ -416,8 +397,8 @@ matrix_keypad_parse_dt(struct device *dev)
->  		return ERR_PTR(-ENOMEM);
->  	}
->  
-> -	pdata->num_row_gpios = nrow = of_gpio_named_count(np, "row-gpios");
-> -	pdata->num_col_gpios = ncol = of_gpio_named_count(np, "col-gpios");
-> +	pdata->num_row_gpios = nrow = gpiod_count(dev, "row");
-> +	pdata->num_col_gpios = ncol = gpiod_count(dev, "col");
->  	if (nrow <= 0 || ncol <= 0) {
->  		dev_err(dev, "number of keypad rows/columns not specified\n");
->  		return ERR_PTR(-EINVAL);
-> @@ -429,9 +410,6 @@ matrix_keypad_parse_dt(struct device *dev)
->  	pdata->wakeup = of_property_read_bool(np, "wakeup-source") ||
->  			of_property_read_bool(np, "linux,wakeup"); /* legacy */
->  
-> -	if (of_get_property(np, "gpio-activelow", NULL))
-> -		pdata->active_low = true;
-> -
-
-This removes backward compatibility, please don't do that.
-
-Regards,
-  Marco
-
->  	pdata->drive_inactive_cols =
->  		of_property_read_bool(np, "drive-inactive-cols");
->  
-> @@ -441,7 +419,7 @@ matrix_keypad_parse_dt(struct device *dev)
->  
->  	gpios = devm_kcalloc(dev,
->  			     pdata->num_row_gpios + pdata->num_col_gpios,
-> -			     sizeof(unsigned int),
-> +			     sizeof(*gpios),
->  			     GFP_KERNEL);
->  	if (!gpios) {
->  		dev_err(dev, "could not allocate memory for gpios\n");
-> @@ -449,17 +427,17 @@ matrix_keypad_parse_dt(struct device *dev)
->  	}
->  
->  	for (i = 0; i < nrow; i++) {
-> -		ret = of_get_named_gpio(np, "row-gpios", i);
-> -		if (ret < 0)
-> +		desc = devm_gpiod_get_index(dev, "row", i, GPIOD_IN);
-> +		if (IS_ERR(desc))
->  			return ERR_PTR(ret);
-> -		gpios[i] = ret;
-> +		gpios[i] = desc;
->  	}
->  
->  	for (i = 0; i < ncol; i++) {
-> -		ret = of_get_named_gpio(np, "col-gpios", i);
-> -		if (ret < 0)
-> +		desc = devm_gpiod_get_index(dev, "col", i, GPIOD_IN);
-> +		if (IS_ERR(desc))
->  			return ERR_PTR(ret);
-> -		gpios[nrow + i] = ret;
-> +		gpios[nrow + i] = desc;
->  	}
->  
->  	pdata->row_gpios = gpios;
-> diff --git a/include/linux/input/matrix_keypad.h b/include/linux/input/matrix_keypad.h
-> index 9476768c3b90..8ad7d4626e62 100644
-> --- a/include/linux/input/matrix_keypad.h
-> +++ b/include/linux/input/matrix_keypad.h
-> @@ -59,8 +59,8 @@ struct matrix_keymap_data {
->  struct matrix_keypad_platform_data {
->  	const struct matrix_keymap_data *keymap_data;
->  
-> -	const unsigned int *row_gpios;
-> -	const unsigned int *col_gpios;
-> +	struct gpio_desc **row_gpios;
-> +	struct gpio_desc **col_gpios;
->  
->  	unsigned int	num_row_gpios;
->  	unsigned int	num_col_gpios;
-> -- 
-> 2.20.1
-> 
-> 
+> diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+> index 9a247eb7679c..2d20be6ffb7e 100644
+> --- a/drivers/net/amt.c
+> +++ b/drivers/net/amt.c
+> @@ -2894,8 +2894,7 @@ static void amt_event_work(struct work_struct *work)
+>   			amt_event_send_request(amt);
+>   			break;
+>   		default:
+> -			if (skb)
+> -				kfree_skb(skb);
+> +			kfree_skb(skb);
+>   			break;
+>   		}
+>   	}
+> @@ -3033,8 +3032,7 @@ static int amt_dev_stop(struct net_device *dev)
+>   	cancel_work_sync(&amt->event_wq);
+>   	for (i = 0; i < AMT_MAX_EVENTS; i++) {
+>   		skb = amt->events[i].skb;
+> -		if (skb)
+> -			kfree_skb(skb);
+> +		kfree_skb(skb);
+>   		amt->events[i].event = AMT_EVENT_NONE;
+>   		amt->events[i].skb = NULL;
+>   	}

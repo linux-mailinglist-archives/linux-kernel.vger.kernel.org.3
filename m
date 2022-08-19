@@ -2,114 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6481599632
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C49DD59963C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346453AbiHSHce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 03:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
+        id S1346645AbiHSHdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 03:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241976AbiHSHcb (ORCPT
+        with ESMTP id S241976AbiHSHdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 03:32:31 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C8FE3C09
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:32:29 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M8D0K2jjJzlWNN;
-        Fri, 19 Aug 2022 15:29:21 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 19 Aug 2022 15:32:27 +0800
-Subject: Re: [PATCH 4/6] mm, hwpoison: fix possible use-after-free in
- mf_dax_kill_procs()
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220818130016.45313-1-linmiaohe@huawei.com>
- <20220818130016.45313-5-linmiaohe@huawei.com>
- <20220819052324.GD613144@hori.linux.bs1.fc.nec.co.jp>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <6dff6aec-833c-a3db-1180-09e395f6265a@huawei.com>
-Date:   Fri, 19 Aug 2022 15:32:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 19 Aug 2022 03:33:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98F3E3C33
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:33:02 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oOwUx-0005VQ-U4; Fri, 19 Aug 2022 09:32:55 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oOwUx-0006rP-E7; Fri, 19 Aug 2022 09:32:55 +0200
+Date:   Fri, 19 Aug 2022 09:32:55 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, akinobu.mita@gmail.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 3/4] media: mt9m111: fix device power usage
+Message-ID: <20220819073255.lgdcjlczfv6fx7xg@pengutronix.de>
+References: <20220818144712.997477-1-m.felsch@pengutronix.de>
+ <20220818144712.997477-3-m.felsch@pengutronix.de>
+ <20220819072605.sbp6ycsf3oj74j6c@uno.localdomain>
 MIME-Version: 1.0
-In-Reply-To: <20220819052324.GD613144@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819072605.sbp6ycsf3oj74j6c@uno.localdomain>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/19 13:23, HORIGUCHI NAOYA(堀口 直也) wrote:
-> On Thu, Aug 18, 2022 at 09:00:14PM +0800, Miaohe Lin wrote:
->> After kill_procs(), tk will be freed without being removed from the to_kill
->> list. In the next iteration, the freed list entry in the to_kill list will
->> be accessed, thus leading to use-after-free issue.
-> 
-> kill_procs() runs over the to_kill list and frees all listed items in each
-> iteration.  So just after returning from unmap_and_kill(), to_kill->next and
-> to_kill->prev still point to the addresses of struct to_kill which was the
-> first or last item (already freed!).  This is bad-manered, but
-> collect_procs_fsdax() in the next iteration calls list_add_tail() and
-> overwrites the dangling pointers with newly allocated item.  So this problem
+Hi Jacopo,
 
-list_add_tail will do WRITE_ONCE(prev->next, new) where prev is already freed!
-Or am I miss something?
-
-> should not be so critical?  Anyway, I agree with fixing this fragile code.
+On 22-08-19, Jacopo Mondi wrote:
+> Hi Marco
 > 
->> Fix it by reinitializing
->> the to_kill list after unmap_and_kill().
->>
->> Fixes: c36e20249571 ("mm: introduce mf_dax_kill_procs() for fsdax case")
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> On Thu, Aug 18, 2022 at 04:47:11PM +0200, Marco Felsch wrote:
+> > Currently the driver turn off the power after probe and toggle it during
+> > .stream by using the .s_power callback. This is problematic since other
+> > callbacks like .set_fmt accessing the hardware as well which will fail.
 > 
->> ---
->>  mm/memory-failure.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index 7023c3d81273..a2f4e8b00a26 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -1658,6 +1658,8 @@ int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
->>  		collect_procs_fsdax(page, mapping, index, &to_kill);
->>  		unmap_and_kill(&to_kill, page_to_pfn(page), mapping,
->>  				index, mf_flags);
->> +		/* Reinitialize to_kill list for later resuing. */
+> Ouch!
 > 
-> s/resuing/reusing/ ?
-
-OK.
-
+> > So in the end the default format is the only supported format.
+> >
+> > Remove the hardware register access from the callbacks and instead sync
+> > the state once right before the stream gets enabled to fix this.
 > 
->> +		INIT_LIST_HEAD(&to_kill);
+> Where does it happen in this patch ?
+
+during mt9m111_s_power which gets called by s_power() or after this
+small series during s_stream().
+
+> >
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > ---
+> >  drivers/media/i2c/mt9m111.c | 20 +++++++++++++-------
+> >  1 file changed, 13 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
+> > index 53c4dac4e4bd..cd74c408e110 100644
+> > --- a/drivers/media/i2c/mt9m111.c
+> > +++ b/drivers/media/i2c/mt9m111.c
+> > @@ -481,8 +481,6 @@ static int mt9m111_set_selection(struct v4l2_subdev *sd,
+> >  	width = min(mt9m111->width, rect.width);
+> >  	height = min(mt9m111->height, rect.height);
+> >
+> > -
 > 
-> How about adding list_del() in kill_procs()?  Other callers now use
-> to_kill only once, but fixing generally looks tidier to me.
+> Why in mainline I don't see these empty lines ?
 
-That's a good idea. Will do it in v2. Many thanks for your review, Naoya!
+Hm.. because I introduced this during my "media: mt9m111: fix subdev API
+usage" patch.. Sorry.
 
-Thanks,
-Miaohe Lin
-
+> > -	mt9m111_setup_geometry(mt9m111, &rect, width, height, mt9m111->fmt->code);
+> >  	mt9m111->rect = rect;
+> >  	mt9m111->width = width;
+> >  	mt9m111->height = height;
+> > @@ -611,7 +609,6 @@ static int mt9m111_set_pixfmt(struct mt9m111 *mt9m111,
+> >  	if (mt9m111->pclk_sample == 0)
+> >  		mask_outfmt2 |= MT9M111_OUTFMT_INV_PIX_CLOCK;
+> >
+> > -
+> >  	mt9m111_reg_mask(client, context_a.output_fmt_ctrl2,
+> >  			 data_outfmt2, mask_outfmt2);
+> >  	mt9m111_reg_mask(client, context_b.output_fmt_ctrl2,
+> > @@ -678,9 +675,6 @@ static int mt9m111_set_fmt(struct v4l2_subdev *sd,
+> >  		return 0;
+> >  	}
+> >
+> > -
+> > -	mt9m111_setup_geometry(mt9m111, rect, mf->width, mf->height, mf->code);
+> > -	mt9m111_set_pixfmt(mt9m111, mf->code);
 > 
-> Thanks,
-> Naoya Horiguchi
-> 
+> Are we looking at two different versions of the driver ??
+> https://elixir.bootlin.com/linux/latest/source/drivers/media/i2c/mt9m111.c#L684
 
+Same here.
+
+> >  	mt9m111->width	= mf->width;
+> >  	mt9m111->height	= mf->height;
+> >  	mt9m111->fmt	= fmt;
+> > @@ -743,6 +737,8 @@ mt9m111_find_mode(struct mt9m111 *mt9m111, unsigned int req_fps,
+> >  	return mode;
+> >  }
+> >
+> > +static int mt9m111_s_power(struct v4l2_subdev *sd, int on);
+> > +
+> >  #ifdef CONFIG_VIDEO_ADV_DEBUG
+> >  static int mt9m111_g_register(struct v4l2_subdev *sd,
+> >  			      struct v4l2_dbg_register *reg)
+> > @@ -753,10 +749,14 @@ static int mt9m111_g_register(struct v4l2_subdev *sd,
+> >  	if (reg->reg > 0x2ff)
+> >  		return -EINVAL;
+> >
+> > +	mt9m111_s_power(sd, 1);
+> > +
+> >  	val = mt9m111_reg_read(client, reg->reg);
+> >  	reg->size = 2;
+> >  	reg->val = (u64)val;
+> >
+> > +	mt9m111_s_power(sd, 0);
+> > +
+> >  	if (reg->val > 0xffff)
+> >  		return -EIO;
+> >
+> > @@ -771,9 +771,13 @@ static int mt9m111_s_register(struct v4l2_subdev *sd,
+> >  	if (reg->reg > 0x2ff)
+> >  		return -EINVAL;
+> >
+> > +	mt9m111_s_power(sd, 1);
+> > +
+> >  	if (mt9m111_reg_write(client, reg->reg, reg->val) < 0)
+> >  		return -EIO;
+> >
+> > +	mt9m111_s_power(sd, 0);
+> > +
+> >  	return 0;
+> >  }
+> >  #endif
+> > @@ -896,6 +900,9 @@ static int mt9m111_s_ctrl(struct v4l2_ctrl *ctrl)
+> >  					       struct mt9m111, hdl);
+> >  	int ret;
+> >
+> > +	if (!mt9m111->is_streaming)
+> > +		return 0;
+> > +
+> >  	switch (ctrl->id) {
+> >  	case V4L2_CID_VFLIP:
+> >  		ret = mt9m111_set_flip(mt9m111, ctrl->val,
+> > @@ -927,7 +934,6 @@ static int mt9m111_s_ctrl(struct v4l2_ctrl *ctrl)
+> >  		ret = -EINVAL;
+> >  	}
+> >
+> > -
+> >  	return ret;
+> >  }
+> >
+> > --
+> > 2.30.2
+> >
+> 

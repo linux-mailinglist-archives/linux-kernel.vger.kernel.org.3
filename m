@@ -2,298 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1876B599C2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5017E599C31
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348964AbiHSMmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        id S1349015AbiHSMn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348487AbiHSMmL (ORCPT
+        with ESMTP id S1348742AbiHSMnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:42:11 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F66B101592
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:42:09 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id b5so775372wrr.5
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:42:09 -0700 (PDT)
+        Fri, 19 Aug 2022 08:43:24 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592FD5F8C
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:43:21 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id by6so4398974ljb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:43:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=STFUwd3P3RCFDKggsHSgjhqp3ELyGxnNRW4j2OtnQqw=;
-        b=XiwKUUgJKSwVfDJgFeGLX+5Jsc5ngW2f82DuBhhMw7iB8ZzpdNFBy4cQN19QfhCpxO
-         jnbMs6vtaJU+iEJMxA0HERAJemrrcM4EYzqYTjMqNFqqj+W8fWLqc9hnOxOogyreZLhe
-         2wifpDhGJFIm33r3fhtY3n2aK68KI1uq7KE6ecatvEjOY2wTa+EZoGXF1Rs6jlWnVIcp
-         4ji/4iVpKQE1Wx/ki9f2+mupXwnc5cVS74BUa4aI1twkWWoqIrK0Kwo1wN0LwSds3r4t
-         iCKfTnLheBDPAThEaLRUwK+s6qhoX5QpZnDlnj64e55FVV6czlSdDJMjQ0N8SqF/kCNC
-         D+iw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=pKznTXWDR+Kv5wQQVujXep0zxIuY4TU9+ONSWdaXIj0=;
+        b=X2S1z8Ms65wvTrKmPx1zZ3BXZ/jEe7vsC1zkUhzletCMhS3LPvh0wLsK/4P3KZzXMB
+         NjAAEr2lIP/vb4atBN5tHBFAmNM5awZsEW06f3Qaj2WhXfruiaHRMvKxCzRFqt7oeFmh
+         HxaCVBML4Kf1LL6WxE+bSea5/Mfv60uHlhtnqiWWVl3fOQw+fUlzGiUr7UIiJPHCuFod
+         5yFGJ6gFOqIspdQYL89Y8PvcOu9Q35LPazGjSaw3ihZZ0taDrkeiWe3/8eAJjE9W8Ch6
+         OVWI48njeIbvwNUj5qKAt2ruXfi9dttRjFhBbT7Gv64NxTyO5cCTE8vhmIO2epkZbRyQ
+         nXww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=STFUwd3P3RCFDKggsHSgjhqp3ELyGxnNRW4j2OtnQqw=;
-        b=okb1aZsafnhSKfPNrgnaVYVJUi8ejd2nTClwyZuZV2MDMQdqVbtnISMdtI8uOgWvUI
-         wf4ReMycqVCrFjqbOWEwxeDlF+LWAYo8gdgpMMGTXXYXHJ455DOPFFsKLfpBV6E/9Qsc
-         4obr8U2x0rv9bwjG3N7io8BzR96n0fw9+2dwv/vMj7GT2ZQUBCbcllA2OE892WoX3i51
-         gCFL2PMR6NL5B4rVDasEKF6TIoOjNbVupgR9/IdWJnH6J9HvwCurnkmFOQRgl6uNRzZy
-         LO53ztjjI3HAbT6+s7MbiTFfJQMJeRDUHINuDnM8fv8Drwf70h5rWbCNgvHBk9rUYP0u
-         XZmw==
-X-Gm-Message-State: ACgBeo0GxSuXlOwFMH4aYSUuqkVAGjlkgV2lYdeteE8PuS3sIsqsYlb2
-        rnRwJA16rPMdmFA1yTx/eWvsIw==
-X-Google-Smtp-Source: AA6agR6iKn9BNfE00AOvWvIw3AI7ymdDxs2QDsG5cCU1owiwmljXcUhpNRRydJslODlItFSFymCybg==
-X-Received: by 2002:adf:eb52:0:b0:223:9164:b5b4 with SMTP id u18-20020adfeb52000000b002239164b5b4mr4182090wrn.518.1660912927505;
-        Fri, 19 Aug 2022 05:42:07 -0700 (PDT)
-Received: from blmsp ([2001:4090:a245:8020:2658:1f7c:362:3e99])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05600c355500b003a5ee64cc98sm10122201wmq.33.2022.08.19.05.42.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 05:42:06 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 14:42:06 +0200
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=pKznTXWDR+Kv5wQQVujXep0zxIuY4TU9+ONSWdaXIj0=;
+        b=zPb3J8XXEQD0oINfzlnK4gecb2UOAQ5zK71h4OuxRe7u703N8jsQzTRVD6W5/rLFgB
+         /AdOV9ZU890dp/QCG61VZOh2cUxGTiTOnJk7fA8+ctQxgNOn4a2lguPEuqTYDDQ6Hhb6
+         FA0wIVGArKXuEKUUQq7EJwtxDfYQFvdDaAQ/4XAYjFwdjN5jF0fTf3sCPKBs2ekHfrRQ
+         m25Dfc0JT9cnn0eF0jPqcbS162wnz0fXj2piPgmzqpiePu+B6Bc00hwIZaXmFyuVP+AE
+         Q73vUvZEeg9eHTqW52R6VfgCO80MTnpQWbGsEMk7cdmSyNvwsWsHomfE9HlvuzoQjjkI
+         SnUQ==
+X-Gm-Message-State: ACgBeo1+J9PREMTu/L8yj7/UN7rEVpdGrE76oCet0tc2nDSXXlKw92rG
+        /RLe6uSOOX+EfpoWdWc8a6WApw==
+X-Google-Smtp-Source: AA6agR52ozPQssGxEMx7KiQ0nCmu0UHipXpj72bnOAWi1YYRjmW1LEVpZTXaQqqkvF5L1ZwhnbVJ6Q==
+X-Received: by 2002:a2e:9985:0:b0:25e:c148:dfc4 with SMTP id w5-20020a2e9985000000b0025ec148dfc4mr1958412lji.69.1660912999706;
+        Fri, 19 Aug 2022 05:43:19 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
+        by smtp.gmail.com with ESMTPSA id k14-20020ac257ce000000b0048a7d33e0f0sm623640lfo.261.2022.08.19.05.43.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 05:43:19 -0700 (PDT)
+Message-ID: <d2279a7d-bbc3-c772-1f30-251f056341bb@linaro.org>
+Date:   Fri, 19 Aug 2022 15:43:17 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 4/7] dt-bindings: net: dsa: mediatek,mt7530: define
+ port binding per compatible
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>
-Subject: Re: [PATCH v2 2/4] soc: mediatek: Add support of WAY_EN operations
-Message-ID: <20220819124206.kwp6ammicyy4z3jb@blmsp>
-References: <20220725081853.1636444-1-msp@baylibre.com>
- <20220725081853.1636444-3-msp@baylibre.com>
- <dccc2863-a9db-d9ea-01e1-a18cf0db1d1e@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <dccc2863-a9db-d9ea-01e1-a18cf0db1d1e@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220813154415.349091-1-arinc.unal@arinc9.com>
+ <20220813154415.349091-5-arinc.unal@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220813154415.349091-5-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angelo,
+On 13/08/2022 18:44, Arınç ÜNAL wrote:
+> Define DSA port binding under each compatible device as each device
+> requires different values for certain properties.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../bindings/net/dsa/mediatek,mt7530.yaml     | 116 +++++++++++++-----
+>  1 file changed, 87 insertions(+), 29 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> index cc87f48d4d07..ff51a2f6875f 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+> @@ -130,35 +130,6 @@ properties:
+>        ethsys.
+>      maxItems: 1
+>  
+> -patternProperties:
+> -  "^(ethernet-)?ports$":
+> -    type: object
+> -
+> -    patternProperties:
+> -      "^(ethernet-)?port@[0-9]+$":
+> -        type: object
+> -        description: Ethernet switch ports
+> -
 
-Thanks for your review, I fixed most, comments inline.
+my comments from v1 apply here
 
-On Mon, Jul 25, 2022 at 11:55:27AM +0200, AngeloGioacchino Del Regno wrote:
-> Il 25/07/22 10:18, Markus Schneider-Pargmann ha scritto:
-> > From: Alexandre Bailon <abailon@baylibre.com>
-> > 
-> > This updates the power domain to support WAY_EN operations. These
-> > operations enable a path between different units of the chip and are
-> > labeled as 'way_en' in the register descriptions.
-> > 
-> > This operation is required by the mt8365 for the MM power domain.
-> > 
-> > Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> > Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > ---
-> > 
-> > Notes:
-> >      Changes in v2:
-> >      - some minor style fixes.
-> >      - Renamed 'wayen' to 'way_en' to clarify the meaning
-> >      - Updated commit message
-> > 
-> >   drivers/soc/mediatek/mtk-pm-domains.c | 64 +++++++++++++++++++++------
-> >   drivers/soc/mediatek/mtk-pm-domains.h | 28 +++++++-----
-> >   2 files changed, 68 insertions(+), 24 deletions(-)
-> > 
-> > diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
-> > index 5ced254b082b..d0eae2227813 100644
-> > --- a/drivers/soc/mediatek/mtk-pm-domains.c
-> > +++ b/drivers/soc/mediatek/mtk-pm-domains.c
-> > @@ -44,6 +44,7 @@ struct scpsys_domain {
-> >   	struct clk_bulk_data *subsys_clks;
-> >   	struct regmap *infracfg;
-> >   	struct regmap *smi;
-> > +	struct regmap *infracfg_nao;
-> 
-> What does "nao" mean?
+None of the reasons you said force you to define properties in some
+allOf:if:then subblock. These force you to constrain the properties in
+allOf:if:then, but not define.
 
-I couldn't find the meaning of nao right now. It is the name of the
-infracfg node in the datasheet. The normal one is called 'infracfg_ao'
-the other one 'infracfg_nao' as far as I can see.
 
-> 
-> Besides, please move that before *infracfg to at least keep the same type members
-> alphabetically sorted..
-> 
-> >   	struct regulator *supply;
-> >   };
-> > @@ -116,23 +117,38 @@ static int scpsys_sram_disable(struct scpsys_domain *pd)
-> >   					MTK_POLL_TIMEOUT);
-> >   }
-> > -static int _scpsys_bus_protect_enable(const struct scpsys_bus_prot_data *bpd, struct regmap *regmap)
-> > +static int _scpsys_bus_protect_enable(const struct scpsys_bus_prot_data *bpd,
-> > +				      struct regmap *regmap, struct regmap *infracfg_nao)
-> >   {
-> >   	int i, ret;
-> >   	for (i = 0; i < SPM_MAX_BUS_PROT_DATA; i++) {
-> > -		u32 val, mask = bpd[i].bus_prot_mask;
-> > +		u32 mask = bpd[i].bus_prot_mask;
-> > +		u32 val = mask, sta_mask = mask;
-> 
-> You have modified the macros to use sta_mask as mask, so, why are you doing
-> that distinction in here between the two? You can simply keep assigning
-> 
-> 		u32 mask = bpd[1].bus_prot_mask;
-> 		u32 sta_mask = bpd[1].bus_prot_sta_mask;
-> 
-> > +		struct regmap *ack_regmap = regmap;
-> 
-> Double assignment. You're reassigning this if way_en == true.
-> 
-> >   		if (!mask)
-> >   			break;
-> > +		if (bpd[i].way_en) {
-> > +			if (!infracfg_nao)
-> > +				return -ENODEV;
-> > +
-> > +			val = 0;
-> > +			sta_mask = bpd[i].bus_prot_sta_mask;
-> > +			ack_regmap = infracfg_nao;
-> > +		}
-> 
-> 		if (bpd[i].way_en) {
-> 			ack_regmap = regmap_nao;
-> 			val = 0;
-> 		} else {
-> 			ack_regmap = regmap;
-> 			val = mask;
-> 		}
-> 
-> > +
-> >   		if (bpd[i].bus_prot_reg_update)
-> > -			regmap_set_bits(regmap, bpd[i].bus_prot_set, mask);
-> > +			regmap_update_bits(regmap, bpd[i].bus_prot_set, mask, val);
-> >   		else
-> >   			regmap_write(regmap, bpd[i].bus_prot_set, mask);
-> > -		ret = regmap_read_poll_timeout(regmap, bpd[i].bus_prot_sta,
-> > -					       val, (val & mask) == mask,
-> > +		if (bpd[i].ignore_clr_ack)
-> > +			continue;
-> 
-> You're adding that ignore_clr_ack here in the bus prot enablement function
-> which wasn't here before... and I didn't check carefully, but I think that
-> this is wrong: as the name says, it's to "ignore CLEAR ack", we're not doing
-> any clearing here, we're not in bus_protect_disable.
-> 
-> If you're really sure that this is not a mistake, you should guard it for way_en.
+> I can split patternProperties to two sections, but I can't directly
+> define the reg property like you put above.
 
-We are clearing bits here if way_en is true and bus_prot_reg_update is
-true as well. Then val=0 and regmap_update_bits(..., mask, val) will
-clear the bits given in mask. And yes either way_en or val==0 should
-probably be checked here. Thanks.
+Of course you can and original bindings were doing it.
 
-> 
-> > +
-> > +		ret = regmap_read_poll_timeout(ack_regmap, bpd[i].bus_prot_sta,
-> > +					       val, (val & sta_mask) == sta_mask,
-> >   					       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-> >   		if (ret)
-> >   			return ret;
-> > @@ -145,34 +161,49 @@ static int scpsys_bus_protect_enable(struct scpsys_domain *pd)
-> >   {
-> >   	int ret;
-> > -	ret = _scpsys_bus_protect_enable(pd->data->bp_infracfg, pd->infracfg);
-> > +	ret = _scpsys_bus_protect_enable(pd->data->bp_infracfg,
-> > +					 pd->infracfg, pd->infracfg_nao);
-> >   	if (ret)
-> >   		return ret;
-> > -	return _scpsys_bus_protect_enable(pd->data->bp_smi, pd->smi);
-> > +	return _scpsys_bus_protect_enable(pd->data->bp_smi, pd->smi, NULL);
-> >   }
-> > +#define mask_cond(way_en, val, mask) \
-> > +	((way_en && ((val & mask) == mask)) || (!way_en && !(val & mask)))
-> > +
-> >   static int _scpsys_bus_protect_disable(const struct scpsys_bus_prot_data *bpd,
-> > -				       struct regmap *regmap)
-> > +				       struct regmap *regmap, struct regmap *infracfg_nao)
-> >   {
-> >   	int i, ret;
-> >   	for (i = SPM_MAX_BUS_PROT_DATA - 1; i >= 0; i--) {
-> > -		u32 val, mask = bpd[i].bus_prot_mask;
-> > +		u32 val = 0, mask = bpd[i].bus_prot_mask;
-> > +		u32 sta_mask = mask;
-> > +		struct regmap *ack_regmap = regmap;
-> >   		if (!mask)
-> >   			continue;
-> > +		if (bpd[i].way_en) {
-> > +			if (!infracfg_nao)
-> > +				return -ENODEV;
-> > +
-> > +			val = mask;
-> > +			sta_mask = bpd[i].bus_prot_sta_mask;
-> > +			ack_regmap = infracfg_nao;
-> > +		}
-> > +
-> >   		if (bpd[i].bus_prot_reg_update)
-> > -			regmap_clear_bits(regmap, bpd[i].bus_prot_clr, mask);
-> > +			regmap_update_bits(regmap, bpd[i].bus_prot_clr, mask, val);
-> >   		else
-> >   			regmap_write(regmap, bpd[i].bus_prot_clr, mask);
-> >   		if (bpd[i].ignore_clr_ack)
-> >   			continue;
-> > -		ret = regmap_read_poll_timeout(regmap, bpd[i].bus_prot_sta,
-> > -					       val, !(val & mask),
-> > +		ret = regmap_read_poll_timeout(ack_regmap, bpd[i].bus_prot_sta,
-> > +					       val, mask_cond(bpd[i].way_en, val, sta_mask),
-> 
-> "I don't know why", my brain still keeps telling me that using different functions
-> for the WAY_EN (en/dis) is just better.
-> 
-> This commit seems to be overcomplicating two "easy" en/dis functions.
+Let me ask specific questions (yes, no):
+1. Are ethernet-ports and ethernet-port present in each variant?
+2. Is dsa-port.yaml applicable to each variant? (looks like that - three
+compatibles, three all:if:then)
+3. If reg appearing in each variant?
+4. If above is true, if reg is maximum one item in each variant?
 
-Looking at the code again, I think you are right. I redesigned basically
-this whole patch, and I think it is easier to understand now.
-> 
-> >   					       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-> >   		if (ret)
-> >   			return ret;
-> > @@ -185,11 +216,12 @@ static int scpsys_bus_protect_disable(struct scpsys_domain *pd)
-> >   {
-> >   	int ret;
-> > -	ret = _scpsys_bus_protect_disable(pd->data->bp_smi, pd->smi);
-> > +	ret = _scpsys_bus_protect_disable(pd->data->bp_smi, pd->smi, NULL);
-> >   	if (ret)
-> >   		return ret;
-> > -	return _scpsys_bus_protect_disable(pd->data->bp_infracfg, pd->infracfg);
-> > +	return _scpsys_bus_protect_disable(pd->data->bp_infracfg,
-> > +			pd->infracfg, pd->infracfg_nao);
-> >   }
-> >   static int scpsys_regulator_enable(struct regulator *supply)
-> > @@ -363,6 +395,10 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
-> >   			return ERR_CAST(pd->smi);
-> >   	}
-> > +	pd->infracfg_nao = syscon_regmap_lookup_by_phandle_optional(node, "mediatek,infracfg_nao");
-> > +	if (IS_ERR(pd->infracfg_nao))
-> > +		return ERR_CAST(pd->infracfg_nao);
-> > +
-> 
-> I think that we should enforce a check here:
-> 
-> pd->infracfg_nao = syscon_regmap_lookup_by_phandle(node, "mediatek,infracfg_nao");
-> if (IS_ERR(pd->infracfg_nao)) {
-> 	/* checking if infracfg_nao != NULL at every pwoeron/poweroff is largely
-> 	 * suboptimal, as if it't present once, it's present always (!)
-> 	 */
-> 	if (we have WAY_EN)
-> 		return ERR_CAST ...
-> 	pd->infracfg_nao = NULL;
-> }
+Looking at your patch, I think answer is 4x yes, which means you can
+define them in one place and constrain in allOf:if:then, just like all
+other schemas, because this one is not different.
 
-Yes, I added another check that enforces .bp_smi not having any way_en
-configuration.
-
-Thanks,
-Markus
+Best regards,
+Krzysztof

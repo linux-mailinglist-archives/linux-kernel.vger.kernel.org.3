@@ -2,155 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5C7599E04
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B72599DFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349683AbiHSPPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 11:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S1349207AbiHSPPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 11:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349654AbiHSPPh (ORCPT
+        with ESMTP id S1349448AbiHSPPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:15:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94893C6CE6
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:15:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660922134;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TGWKh36yCcgT3zsD8zxI3eMgx3q0mMbgDZV6uayiHHw=;
-        b=Do8JRSR4SHxziV/sqMCpcFMSyWJygj57bmxOz5ARXkgqZ37xhnYk7IeJHAiafP/otW1Vhy
-        muHFYFgUQKj/HVfuDW8vemuut0v2YLylTNKNBcuOlyZA2qxNCuDqa5kdbQCrsm6QLgaoLZ
-        AMiEedG0XD8InHts5TkMqYbOJPm5JR4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-172-kcn-rxo5N5WUQwVDRrF-NA-1; Fri, 19 Aug 2022 11:15:31 -0400
-X-MC-Unique: kcn-rxo5N5WUQwVDRrF-NA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 299FF811E75;
-        Fri, 19 Aug 2022 15:15:31 +0000 (UTC)
-Received: from jtoppins.rdu.csb (unknown [10.22.34.189])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B2E9F404C6E3;
-        Fri, 19 Aug 2022 15:15:30 +0000 (UTC)
-From:   Jonathan Toppins <jtoppins@redhat.com>
-To:     netdev@vger.kernel.org, jay.vosburgh@canonical.com
-Cc:     liuhangbin@gmail.com, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH net v5 3/3] bonding: 3ad: make ad_ticks_per_sec a const
-Date:   Fri, 19 Aug 2022 11:15:14 -0400
-Message-Id: <396d7dd218ea8e95bd6f1f0e6fc44c696e8c7502.1660919940.git.jtoppins@redhat.com>
-In-Reply-To: <cover.1660919940.git.jtoppins@redhat.com>
-References: <cover.1660919940.git.jtoppins@redhat.com>
+        Fri, 19 Aug 2022 11:15:31 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE7EC6EA1;
+        Fri, 19 Aug 2022 08:15:30 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id bx38so4790636ljb.10;
+        Fri, 19 Aug 2022 08:15:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=J7TGRTezofvJGmRn6WMwQvntLGym5tFzI3/5S+8ph8c=;
+        b=UETRV2CQOVm4smk4fY6/wnI3buuWka4WnocxnkAAYVMJeIgOQ6cd3ltCLGFxNV/aV0
+         EcU69MAjV5OMyf9wsdq67xddMNO6uJx54NCSWfFGwi2VaYUdE14EgeffZ7BVrAf3gTtR
+         ECfzp0S8bHTA6XcytmDlxIZ8UnqQCY2RK+sSTLs/wQhOdj13rFHM1j9gSXL0caOvzw1I
+         HXuBcwO+7ilE1oTXUisQaycsoeTSwiwaKzfClN/SxVONVRZcubh7FzAbioYHqkut8zcD
+         /FI7gEQ++iM00MupIb9afU/nAReXxudNL/iY2SV0jYHO4dIUuc440ApnkbKQ3V0eYG+Z
+         j0aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=J7TGRTezofvJGmRn6WMwQvntLGym5tFzI3/5S+8ph8c=;
+        b=AK14+GFVBmVpOdh4N+Ngt/uVSfN1FYZEBrCYHykXYu+tACkSSecbwD5N60O2Ao4wEH
+         QhL9rWirndG5pPv2xMx26Q1FqUvXUJXtdXLwjzdlZWrJBscJ/ARydyhWF0/W+6dBRd6r
+         aeJReKvaq8WLN+EzsO4ilrV38lJB595znGaxD7ddpKs8SEeGIkVcDJvLl6BN6o7M3PVS
+         8zFMkG8EFz7gzH5UK9C93hLGcvBgBkLLKM4W1PzHgpqYtmNQSGrKqVs+rBWMpm4g3q76
+         8yIIVYCSi7fC2tX0mOdQOmEdqy9MgDKODVoP3WopzGueGisB0kXyfUARJvvCz8Qlimko
+         7gmg==
+X-Gm-Message-State: ACgBeo0VGSPTqBBqC3tc2p+Te8Zyvn/3Kvcbp+rl82i9oIUSL2aXGdGZ
+        rHx7yijtBpc+Dlx5qzQ5XPTKoB2QLIs=
+X-Google-Smtp-Source: AA6agR7+l5iinUm2hfAr7gcZ3bfFnz+NsNrXZJYivWrsh1jP3FybA1+VLwUDE2WYl9tOtgzpelm/VA==
+X-Received: by 2002:a2e:956:0:b0:261:b3cb:fe5 with SMTP id 83-20020a2e0956000000b00261b3cb0fe5mr1980321ljj.184.1660922128509;
+        Fri, 19 Aug 2022 08:15:28 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru. [109.252.119.13])
+        by smtp.googlemail.com with ESMTPSA id u1-20020a05651c130100b0025fdcdad0e4sm644138lja.35.2022.08.19.08.15.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 08:15:27 -0700 (PDT)
+Message-ID: <20281ca7-e597-7030-4861-5f9a3594726d@gmail.com>
+Date:   Fri, 19 Aug 2022 18:15:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH RESEND 1/2] i2c: tegra: Add GPCDMA support
+Content-Language: en-US
+To:     Akhil R <akhilrajeev@nvidia.com>, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, christian.koenig@amd.com,
+        =jonathanh@nvidia.com, ldewangan@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, sumit.semwal@linaro.org,
+        thierry.reding@gmail.com, wsa@kernel.org
+References: <20220819122313.40445-1-akhilrajeev@nvidia.com>
+ <20220819122313.40445-2-akhilrajeev@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20220819122313.40445-2-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The value is only ever set once in bond_3ad_initialize and only ever
-read otherwise. There seems to be no reason to set the variable via
-bond_3ad_initialize when setting the global variable will do. Change
-ad_ticks_per_sec to a const to enforce its read-only usage.
+19.08.2022 15:23, Akhil R пишет:
+>  	if (of_device_is_compatible(np, "nvidia,tegra210-i2c-vi"))
+>  		i2c_dev->is_vi = true;
+> +	else
+> +		i2c_dev->dma_support = !!(of_find_property(np, "dmas", NULL));
 
-Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
----
+1. You leak the np returned by of_find_property().
 
-Notes:
-    v4:
-     * remove passing the value of ad_ticks_per_sec on the stack and
-       set ad_ticks_per_sec and make as const
-    v5:
-     * fixup kdoc for bond_3ad_initialize
+2. There is device_property_read_bool() for this kind of property-exists
+checks.
 
- drivers/net/bonding/bond_3ad.c  | 11 +++--------
- drivers/net/bonding/bond_main.c |  2 +-
- include/net/bond_3ad.h          |  2 +-
- 3 files changed, 5 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-index 1f0120cbe9e8..184608bd8999 100644
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -84,7 +84,8 @@ enum ad_link_speed_type {
- static const u8 null_mac_addr[ETH_ALEN + 2] __long_aligned = {
- 	0, 0, 0, 0, 0, 0
- };
--static u16 ad_ticks_per_sec;
-+
-+static const u16 ad_ticks_per_sec = 1000 / AD_TIMER_INTERVAL;
- static const int ad_delta_in_ticks = (AD_TIMER_INTERVAL * HZ) / 1000;
- 
- static const u8 lacpdu_mcast_addr[ETH_ALEN + 2] __long_aligned =
-@@ -2001,11 +2002,10 @@ void bond_3ad_initiate_agg_selection(struct bonding *bond, int timeout)
- /**
-  * bond_3ad_initialize - initialize a bond's 802.3ad parameters and structures
-  * @bond: bonding struct to work on
-- * @tick_resolution: tick duration (millisecond resolution)
-  *
-  * Can be called only after the mac address of the bond is set.
-  */
--void bond_3ad_initialize(struct bonding *bond, u16 tick_resolution)
-+void bond_3ad_initialize(struct bonding *bond)
- {
- 	BOND_AD_INFO(bond).aggregator_identifier = 0;
- 	BOND_AD_INFO(bond).system.sys_priority =
-@@ -2017,11 +2017,6 @@ void bond_3ad_initialize(struct bonding *bond, u16 tick_resolution)
- 		BOND_AD_INFO(bond).system.sys_mac_addr =
- 		    *((struct mac_addr *)bond->params.ad_actor_system);
- 
--	/* initialize how many times this module is called in one
--	 * second (should be about every 100ms)
--	 */
--	ad_ticks_per_sec = tick_resolution;
--
- 	bond_3ad_initiate_agg_selection(bond,
- 					AD_AGGREGATOR_SELECTION_TIMER *
- 					ad_ticks_per_sec);
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 50e60843020c..2f4da2c13c0a 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -2081,7 +2081,7 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
- 			/* Initialize AD with the number of times that the AD timer is called in 1 second
- 			 * can be called only after the mac address of the bond is set
- 			 */
--			bond_3ad_initialize(bond, 1000/AD_TIMER_INTERVAL);
-+			bond_3ad_initialize(bond);
- 		} else {
- 			SLAVE_AD_INFO(new_slave)->id =
- 				SLAVE_AD_INFO(prev_slave)->id + 1;
-diff --git a/include/net/bond_3ad.h b/include/net/bond_3ad.h
-index 184105d68294..be2992e6de5d 100644
---- a/include/net/bond_3ad.h
-+++ b/include/net/bond_3ad.h
-@@ -290,7 +290,7 @@ static inline const char *bond_3ad_churn_desc(churn_state_t state)
- }
- 
- /* ========== AD Exported functions to the main bonding code ========== */
--void bond_3ad_initialize(struct bonding *bond, u16 tick_resolution);
-+void bond_3ad_initialize(struct bonding *bond);
- void bond_3ad_bind_slave(struct slave *slave);
- void bond_3ad_unbind_slave(struct slave *slave);
- void bond_3ad_state_machine_handler(struct work_struct *);
--- 
-2.31.1
-
+3. If "dmas" is missing in DT, then dma_request_chan() should return
+NULL and everything will work fine. I suppose you haven't tried to test
+this code.

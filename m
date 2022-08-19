@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3F359A7ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4512A59A7E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238730AbiHSVnt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 19 Aug 2022 17:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
+        id S235878AbiHSVps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 17:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234924AbiHSVnr (ORCPT
+        with ESMTP id S231397AbiHSVpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 17:43:47 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53961B7CE
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:43:46 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-47-4RE9sXC-OQ6fYpbHD6dEYg-1; Fri, 19 Aug 2022 22:43:43 +0100
-X-MC-Unique: 4RE9sXC-OQ6fYpbHD6dEYg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.38; Fri, 19 Aug 2022 22:43:42 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.040; Fri, 19 Aug 2022 22:43:42 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Hamza Mahfooz' <hamza.mahfooz@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Nathan Chancellor <nathan@kernel.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?iso-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        =?iso-8859-1?Q?Ma=EDra_Canal?= <mairacanal@riseup.net>,
-        =?iso-8859-1?Q?Andr=E9_Almeida?= <andrealmeid@igalia.com>,
-        Bing Guo <Bing.Guo@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Subject: RE: [PATCH] drm/amd/display: fix i386 frame size warning
-Thread-Topic: [PATCH] drm/amd/display: fix i386 frame size warning
-Thread-Index: AQHYsyK3bLhoYPUGX0aEEgc6M/SYOq22wp5Q
-Date:   Fri, 19 Aug 2022 21:43:42 +0000
-Message-ID: <f9f6fa60ae8c4e949ef9cce5b47f95bd@AcuMS.aculab.com>
-References: <20220818164848.68729-1-hamza.mahfooz@amd.com>
-In-Reply-To: <20220818164848.68729-1-hamza.mahfooz@amd.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 19 Aug 2022 17:45:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E6974352
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:45:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660945544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oQ+I6qTJcNsmHy7XkSLOm7yyIeLTf0j7ipsErqXY/kI=;
+        b=foK3x/S0QnFZqsYFuCISeswRDnxjH18Ie/6BPBayX4Hjdc3b37VqHRBEuKS4sal3IzAUt3
+        kMuHLM9WIq2qPG4mYnp12egTgQdMev3Qznrszb6bKUzeBkLpCL2rs/iMqwKS5aLlvipKl3
+        2TsUKMIRPi5+cvkT1zenZAACdlFP4Lk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-88-G5HFeQirNgelknX8bvr_jg-1; Fri, 19 Aug 2022 17:45:41 -0400
+X-MC-Unique: G5HFeQirNgelknX8bvr_jg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B31203C021A1;
+        Fri, 19 Aug 2022 21:45:40 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.22.48.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E628040D2827;
+        Fri, 19 Aug 2022 21:45:38 +0000 (UTC)
+Date:   Fri, 19 Aug 2022 17:45:36 -0400
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v4 2/4] fanotify: define struct members to hold response
+ decision context
+Message-ID: <YwAEgFwOm13JPbaE@madcap2.tricolour.ca>
+References: <8767f3a0d43d6a994584b86c03eb659a662cc416.1659996830.git.rgb@redhat.com>
+ <202208102231.qSUdYAdb-lkp@intel.com>
+ <Yv+5ZkFxhR+JK/Rj@madcap2.tricolour.ca>
+ <CAKwvOdnQiC++rhVCFToE6t-ZO_VgkhtbH0gy=dEg662EfWucBg@mail.gmail.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdnQiC++rhVCFToE6t-ZO_VgkhtbH0gy=dEg662EfWucBg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,44 +72,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hamza Mahfooz
-> Sent: 18 August 2022 17:49
+On 2022-08-19 10:17, Nick Desaulniers wrote:
+> On Fri, Aug 19, 2022 at 9:25 AM Richard Guy Briggs <rgb@redhat.com> wrote:
+> >
+> > On 2022-08-10 22:28, kernel test robot wrote:
+> > > Hi Richard,
+> > >
+> > > Thank you for the patch! Perhaps something to improve:
+> > >
+> > > [auto build test WARNING on jack-fs/fsnotify]
+> > > [also build test WARNING on pcmoore-audit/next linus/master v5.19 next-20220810]
+> > > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > > And when submitting patch, we suggest to use '--base' as documented in
+> > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > >
+> > > url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220810-012825
+> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git fsnotify
+> > > config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220810/202208102231.qSUdYAdb-lkp@intel.com/config)
+> > > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+> > > reproduce (this is a W=1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # https://github.com/intel-lab-lkp/linux/commit/a943676abc023c094f05b45f4d61936c567507a2
+> > >         git remote add linux-review https://github.com/intel-lab-lkp/linux
+> > >         git fetch --no-tags linux-review Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220810-012825
+> > >         git checkout a943676abc023c094f05b45f4d61936c567507a2
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/notify/fanotify/
+> > >
+> > > If you fix the issue, kindly add following tag where applicable
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > >
+> > > All warnings (new ones prefixed by >>):
+> > >
+> > > >> fs/notify/fanotify/fanotify_user.c:325:35: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+> >
+> > Interesting.  When I "fix" it, my compiler complains:
+> >
+> >         fs/notify/fanotify/fanotify_user.c:324:11: warning: format ‘%u’ expects argument of type ‘unsigned int’, but argument 8 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
 > 
-> Addresses the following warning:
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c:3596:6: error: stack frame
-> size (2092) exceeds limit (2048) in 'dml30_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-
-> larger-than]
-> void dml30_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
->      ^
-> 
-> UseMinimumDCFCLK() is eating away at
-> dml30_ModeSupportAndSystemConfigurationFull()'s stack space, so use a
-> pointer to struct vba_vars_st instead of passing lots of large arrays
-> as parameters by value.
-> 
-> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
-> ---
->  .../dc/dml/dcn30/display_mode_vba_30.c        | 295 ++++--------------
->  1 file changed, 63 insertions(+), 232 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-> b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-> index 876b321b30ca..b7fa003ffe06 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn30/display_mode_vba_30.c
-> @@ -396,64 +396,10 @@ static void CalculateUrgentBurstFactor(
-> 
->  static void UseMinimumDCFCLK(
->  		struct display_mode_lib *mode_lib,
-> -		int MaxInterDCNTileRepeaters,
-> +		struct vba_vars_st *v,
+> The correct format specifier for size_t is %zu.  This avoids issues
+> between ILP32 vs LP64 targets.
 
-You should probably add 'const' in there.
-Thinks will likely break if v->xxx gets changed.
+Perfect, thanks!
 
-	David
+> > >                     group, fd, response, info_buf, count);
+> > >                                                    ^~~~~
+> > >    include/linux/printk.h:594:38: note: expanded from macro 'pr_debug'
+> > >            no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+> > >                                        ~~~     ^~~~~~~~~~~
+> > >    include/linux/printk.h:131:17: note: expanded from macro 'no_printk'
+> > >                    printk(fmt, ##__VA_ARGS__);             \
+> > >                           ~~~    ^~~~~~~~~~~
+> > >    include/linux/printk.h:464:60: note: expanded from macro 'printk'
+> > >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+> > >                                                        ~~~    ^~~~~~~~~~~
+> > >    include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
+> > >                    _p_func(_fmt, ##__VA_ARGS__);                           \
+> > >                            ~~~~    ^~~~~~~~~~~
+> > >    1 warning generated.
+> > >
+> > >
+> > > vim +325 fs/notify/fanotify/fanotify_user.c
+> > >
+> > >    312
+> > >    313        static int process_access_response(struct fsnotify_group *group,
+> > >    314                                           struct fanotify_response *response_struct,
+> > >    315                                           const char __user *buf,
+> > >    316                                           size_t count)
+> > >    317        {
+> > >    318                struct fanotify_perm_event *event;
+> > >    319                int fd = response_struct->fd;
+> > >    320                u32 response = response_struct->response;
+> > >    321                struct fanotify_response_info_header info_hdr;
+> > >    322                char *info_buf = NULL;
+> > >    323
+> > >    324                pr_debug("%s: group=%p fd=%d response=%u buf=%p size=%lu\n", __func__,
+> > >  > 325                         group, fd, response, info_buf, count);
+> > >    326                /*
+> > >    327                 * make sure the response is valid, if invalid we do nothing and either
+> > >    328                 * userspace can send a valid response or we will clean it up after the
+> > >    329                 * timeout
+> > >    330                 */
+> > >    331                if (response & ~FANOTIFY_RESPONSE_VALID_MASK)
+> > >    332                        return -EINVAL;
+> > >    333                switch (response & FANOTIFY_RESPONSE_ACCESS) {
+> > >    334                case FAN_ALLOW:
+> > >    335                case FAN_DENY:
+> > >    336                        break;
+> > >    337                default:
+> > >    338                        return -EINVAL;
+> > >    339                }
+> > >    340                if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
+> > >    341                        return -EINVAL;
+> > >    342                if (fd < 0)
+> > >    343                        return -EINVAL;
+> > >    344                if (response & FAN_INFO) {
+> > >    345                        size_t c = count;
+> > >    346                        const char __user *ib = buf;
+> > >    347
+> > >    348                        if (c <= 0)
+> > >    349                                return -EINVAL;
+> > >    350                        while (c >= sizeof(info_hdr)) {
+> > >    351                                if (copy_from_user(&info_hdr, ib, sizeof(info_hdr)))
+> > >    352                                        return -EFAULT;
+> > >    353                                if (info_hdr.pad != 0)
+> > >    354                                        return -EINVAL;
+> > >    355                                if (c < info_hdr.len)
+> > >    356                                        return -EINVAL;
+> > >    357                                switch (info_hdr.type) {
+> > >    358                                case FAN_RESPONSE_INFO_AUDIT_RULE:
+> > >    359                                        break;
+> > >    360                                case FAN_RESPONSE_INFO_NONE:
+> > >    361                                default:
+> > >    362                                        return -EINVAL;
+> > >    363                                }
+> > >    364                                c -= info_hdr.len;
+> > >    365                                ib += info_hdr.len;
+> > >    366                        }
+> > >    367                        if (c != 0)
+> > >    368                                return -EINVAL;
+> > >    369                        /* Simplistic check for now */
+> > >    370                        if (count != sizeof(struct fanotify_response_info_audit_rule))
+> > >    371                                return -EINVAL;
+> > >    372                        info_buf = kmalloc(sizeof(struct fanotify_response_info_audit_rule),
+> > >    373                                           GFP_KERNEL);
+> > >    374                        if (!info_buf)
+> > >    375                                return -ENOMEM;
+> > >    376                        if (copy_from_user(info_buf, buf, count))
+> > >    377                                return -EFAULT;
+> > >    378                }
+> > >    379                spin_lock(&group->notification_lock);
+> > >    380                list_for_each_entry(event, &group->fanotify_data.access_list,
+> > >    381                                    fae.fse.list) {
+> > >    382                        if (event->fd != fd)
+> > >    383                                continue;
+> > >    384
+> > >    385                        list_del_init(&event->fae.fse.list);
+> > >    386                        /* finish_permission_event() eats info_buf */
+> > >    387                        finish_permission_event(group, event, response_struct,
+> > >    388                                                count, info_buf);
+> > >    389                        wake_up(&group->fanotify_data.access_waitq);
+> > >    390                        return 0;
+> > >    391                }
+> > >    392                spin_unlock(&group->notification_lock);
+> > >    393
+> > >    394                return -ENOENT;
+> > >    395        }
+> > >    396
+> > >
+> > > --
+> > > 0-DAY CI Kernel Test Service
+> > > https://01.org/lkp
+> > >
+> >
+> > - RGB
+> >
+> > --
+> > Richard Guy Briggs <rgb@redhat.com>
+> > Sr. S/W Engineer, Kernel Security, Base Operating Systems
+> > Remote, Ottawa, Red Hat Canada
+> > IRC: rgb, SunRaycer
+> > Voice: +1.647.777.2635, Internal: (81) 32635
+> >
+> >
+> 
+> 
+> -- 
+> Thanks,
+> ~Nick Desaulniers
+> 
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+IRC: rgb, SunRaycer
+Voice: +1.647.777.2635, Internal: (81) 32635
 

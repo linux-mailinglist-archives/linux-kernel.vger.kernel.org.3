@@ -2,63 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6255997E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A77E5997AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347309AbiHSIlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
+        id S1347406AbiHSIl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347168AbiHSIlC (ORCPT
+        with ESMTP id S1347442AbiHSIlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:41:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CF453015;
-        Fri, 19 Aug 2022 01:41:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BFCFB8265F;
-        Fri, 19 Aug 2022 08:40:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2807CC433D6;
-        Fri, 19 Aug 2022 08:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660898458;
-        bh=ZO9Yt5h1s9hT57VwDqwNry2UW8mH5yxqDyvTp4FAdAg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mV9R/RDiU0pcWufabeFiXc56gxrmdleuuYH7yMW+MZX/F0oGnnMeS5X2nbg/Es4BE
-         E9PfoxQRPODvJnyicgHjUWWdGxoZT3gMx3YKIc6u5iUg+yceIeHTZX5+1KbisEQSfe
-         7FDO8tHxDhuKzLpSR2s/+V3NaLqvqrJ4duWq31OBgDLth08g9QrdNl3JoCA6hjuejo
-         2lROo6CGMx4RRagliYCONjwxqUlsrWn6LFYR9HWkeg9ZJlB1Yzfwdk/1iTLkcnlvXh
-         V69EjeTTaagSquajZzPkJlyUh+thKJl0yY0gVUP+e/Sk8mGkdp4rDH8vMhVVgVbONC
-         u5Ay/osfyWN0Q==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        devicetree@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-Subject: Re: [PATCH v2 0/8] PCI: qcom: Add support for SC8280XP and SA8540P
-Date:   Fri, 19 Aug 2022 10:40:49 +0200
-Message-Id: <166089832025.262926.4406465315336249603.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220714071348.6792-1-johan+linaro@kernel.org>
-References: <20220714071348.6792-1-johan+linaro@kernel.org>
+        Fri, 19 Aug 2022 04:41:47 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7588169F6F
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:41:44 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id q7so1575676lfu.5
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:41:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=CRnuTsAE9g4131Gs1Ch+MF8rdf+eDVa6Xez0TyG+a0A=;
+        b=V7WH7QjsIZrOhFjZEoS5Hp1lBUUj/KrXDaY23Htx+8JpSFUB8BlrdppWhAU7pEdgsv
+         oT/t3nWpySkKzLc3u/0c1i2e5+dsenLdH5FXMO4jy+R2qoM+gmu+DC7H/BnjOUEI2br/
+         iviv0sz8OnaHsEKw89AwM6eOvGlyurUv9SE4RbQnlA/KuCzoaTgDmH4Vi5robLyGi4se
+         I4f45nZrl8lDIx3d7Y/t5a8S37ptwSD1RTPgihhPpikOBmG0fvg90h++2VrJRFtYJA2r
+         FYU2xaKVv5zBjt5mfAOcaeY8FHJPyPJsIZpDB8W9j/RQ3d8UKxJEymaVfjM2mnIUeZAB
+         BeOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=CRnuTsAE9g4131Gs1Ch+MF8rdf+eDVa6Xez0TyG+a0A=;
+        b=jLzYy6nRa21V4CYjDtREG/Do9P4VEv+G7fZawPRooOw5s3nYLzAKLR1QlJZugPUUaX
+         mis53lOwVjxW3WgoKtBTiXHE5ItheRetS7zrmS4RYSjYQfjMs2nqeJwJk1TXVcqjNer3
+         vfXeupjIaeoSdsdL7mUzMhZS9KahJiGQqNaahDokJPiIgwRsA0N8Vpm1+6BJWgMXTKWv
+         ErOW9XfwaGRLCqf2n7mECmd2dxPrJcixbxoJvZAEDnM7oGzRtcSo4X8m9/ljjJNihLOE
+         vLar0AqiY/5jVuckpjLEgl4QvyzE/xDWYw8eFdMorJrfxG41ZDnAwxPE+d+8PRoz1S0k
+         4XNA==
+X-Gm-Message-State: ACgBeo3K4dje1AyRViuw3WB2ebv33Zb/XP6uSDnY1vLjY44MztYXeyD6
+        I+9mNtuVLO5zpjaAUr2YhHhSAQ==
+X-Google-Smtp-Source: AA6agR4wD3EqU9y0mOORxLi5pTs4j3x4Q1X/qtUS/M7PdaGN8KlxcT2G4pkJ/ZXRfgKQ4SF0TxW/tA==
+X-Received: by 2002:a05:6512:2291:b0:48b:492e:ef35 with SMTP id f17-20020a056512229100b0048b492eef35mr2081867lfu.494.1660898502773;
+        Fri, 19 Aug 2022 01:41:42 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
+        by smtp.gmail.com with ESMTPSA id d11-20020ac25ecb000000b00492b494c4dbsm557072lfq.89.2022.08.19.01.41.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 01:41:42 -0700 (PDT)
+Message-ID: <aa659b2e-44cb-b2e2-eced-1ef7f5de5647@linaro.org>
+Date:   Fri, 19 Aug 2022 11:41:40 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/5] dt-bindings: mfd: atmel,at91-usart: convert to
+ json-schema
+Content-Language: en-US
+To:     Sergiu.Moga@microchip.com, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        admin@hifiphile.com, Kavyasree.Kotagiri@microchip.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20220817075517.49575-1-sergiu.moga@microchip.com>
+ <20220817075517.49575-3-sergiu.moga@microchip.com>
+ <c1a98a3e-609e-7783-b1b7-3bb39caa8c65@linaro.org>
+ <5fd68d8e-7132-2f58-0ef9-cd4a0fe45127@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5fd68d8e-7132-2f58-0ef9-cd4a0fe45127@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,35 +86,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Jul 2022 09:13:40 +0200, Johan Hovold wrote:
-> This series adds support for the PCIe controllers found on SC8280XP and
-> SA8540P.
+On 19/08/2022 11:37, Sergiu.Moga@microchip.com wrote:
+
+>>> +      - items:
+>>> +          - const: atmel,at91rm9200-dbgu
+>>> +          - const: atmel,at91rm9200-usart
+>>> +      - items:
+>>> +          - const: atmel,at91sam9260-dbgu
+>>> +          - const: atmel,at91sam9260-usart
+>>> +      - items:
+>>> +          - const: microchip,sam9x60-dbgu
+>>> +          - const: microchip,sam9x60-usart
+>>> +      - items:
+>>> +          - const: microchip,sam9x60-usart
+>>> +          - const: atmel,at91sam9260-usart
+>> This is not correct - contradicts earlier one.
+>>
 > 
-> Included are also three patches that clean up the way the driver handles
-> different IP revisions (e.g. by modelling optional clocks as being truly
-> optional).
+> Yes, this was for a DT node we have internally, my bad. You are right, 
+> it does not really make sense and it should not be the other way around: 
+> having the DT validate the binding. I will remove this combination in 
+> the next version.
+
+You need to fix any out of tree DTS or upstream it.
 > 
-> [...]
+> 
+>>> +      - items:
+>>> +          - const: microchip,sam9x60-dbgu
+>>> +          - const: microchip,sam9x60-usart
+>>> +          - const: atmel,at91sam9260-dbgu
+>>> +          - const: atmel,at91sam9260-usart
+>> What? You wrote above that microchip,sam9x60-dbgu is compatible only
+>> with microchip,sam9x60-usart. Now you write it is also compatible with
+>> other ones?
+> 
+> 
+> Yes, this one is intended because the 9x60 IP has new functionalities on 
+> top of 9260, and some nodes do keep all four as fallback.
 
-I tweaked commits as-per thread discussion (please check them, I had
-to fix minor rebase conflicts) and applied to pci/qcom, thanks!
+Then all nodes should keep fallbacks.
 
-[1/8] dt-bindings: PCI: qcom: Enumerate platforms with single msi interrupt
-      https://git.kernel.org/lpieralisi/pci/c/a871c90977a4
-[2/8] dt-bindings: PCI: qcom: Add SC8280XP to binding
-      https://git.kernel.org/lpieralisi/pci/c/0122ab0115a9
-[3/8] dt-bindings: PCI: qcom: Add SA8540P to binding
-      https://git.kernel.org/lpieralisi/pci/c/fe9681a74d04
-[4/8] PCI: qcom: Add support for SC8280XP
-      https://git.kernel.org/lpieralisi/pci/c/e37d881f9f3a
-[5/8] PCI: qcom: Add support for SA8540P
-      https://git.kernel.org/lpieralisi/pci/c/b325dc5f9d39
-[6/8] PCI: qcom: Make all optional clocks optional
-      https://git.kernel.org/lpieralisi/pci/c/4c4ef240b58a
-[7/8] PCI: qcom: Clean up IP configurations
-      https://git.kernel.org/lpieralisi/pci/c/4daa5e24813e
-[8/8] PCI: qcom: Sort device-id table
-      https://git.kernel.org/lpieralisi/pci/c/46bafd187104
+> 
+> 
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +
+>>> +  clock-names:
+>>> +    contains:
+>>> +      const: usart
+>> No, this has to be specific/fixed list.
+> 
+> 
+> I wanted to highlight the fact that it must contain either:
+> clock-names = "usart";
+> or
+> clock-names = "usart", "gclk";
+> 
+> What would be the recommended way of doing this then?
 
-Thanks,
-Lorenzo
+We have an example for this.
+
+https://elixir.bootlin.com/linux/v5.19/source/Documentation/devicetree/bindings/example-schema.yaml#L91
+
+
+Best regards,
+Krzysztof

@@ -2,202 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D71459A8FA
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 00:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F392A59A8F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 00:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243101AbiHSWvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 18:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
+        id S243157AbiHSWwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 18:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiHSWvR (ORCPT
+        with ESMTP id S243127AbiHSWwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 18:51:17 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CE210B510
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660949476; x=1692485476;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iAbt2fZFK4weP/KnMpyVYr3VoWOhfHdjkNTwzc12SOg=;
-  b=Uzuthm921u7jj/Ypqo0VDIHOBTaSGpg7IPgnwIUQKOrcoE0obgPOl0y+
-   P+xXSraC/ytNzuMJEBm8iEkYxoy98dViXNTw3w6FYCwADTyiZrKlsMShc
-   QnJ31vldlv0ANUE2zyTaoftWphCHmAM7BaQDLYZq4tSl5AKUO9k1Qfky+
-   uwCDupNKmp2xMerD2NRNvLv+8nuEe6MEx5LowAHhhVnOcn9InaV4OI6rM
-   FqF4Xls1G2w65I3unAv5nThVQRRxezgIzMHWhHXtg8v6C6z8CkbMj3IqP
-   olAgsFO7morqjUcq/JnKYVad6b8j1gwZtXG5X7vZwUE5WhjQJ0rsS6h62
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="319148785"
-X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="319148785"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 15:51:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="637447816"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 19 Aug 2022 15:51:14 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPApe-0001sh-0L;
-        Fri, 19 Aug 2022 22:51:14 +0000
-Date:   Sat, 20 Aug 2022 06:51:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/arm/mm/copypage-feroceon.c:65:6: warning: no previous prototype
- for 'feroceon_copy_user_highpage'
-Message-ID: <202208200632.qCY00XWl-lkp@intel.com>
+        Fri, 19 Aug 2022 18:52:17 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436D610B519;
+        Fri, 19 Aug 2022 15:52:16 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-33365a01f29so158236267b3.2;
+        Fri, 19 Aug 2022 15:52:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ePCvzW/muyp3tHWutyEFwLQrrnxA3ArTLs/J6HTRfLY=;
+        b=SfiS+2alq9htL30QUKpIzaZuP0u+uU0NCMdQbyKqhjNx1WVYuFMypqJ++I2zmlD5HR
+         9EbF5AxpHXlEEWbfAucgwKtDi5+WBpUfAxM4rU50kJzaPf5s3ewjBNfqOSTq8JP0esyV
+         vxFl7+urp6LmiQsFJ45WjtPikSukan5lkMRISDwUG82TpAo8pA+VLDKlB5lBRKDPbGnt
+         6XCwsGn1g6s1sSC7C/gu8+xPYgadWY8qZzPkH0Uq7B2fM8hoXT5qN2gSQO0BamXMbLZZ
+         LOrTxLUyddhiWJJaKiFaHYiFvkQICKV5+rnAtYuo49/lSn6Y2bd5XNSS3bq+D8Erb75h
+         exLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ePCvzW/muyp3tHWutyEFwLQrrnxA3ArTLs/J6HTRfLY=;
+        b=5DP9umjBja69OQDEIln8NTnE4pgHDy2so5eAmbqvfjhVfDRjnXXBWH5I6vQHt+H6rR
+         Dpd207En9AyXhj+FaeRLUSN4B1WIaDz31qOiOXeL5H2DLX+NxHkQeiTDA/bQGgxYxzLX
+         InwVhpy67YOUVWHnCcQY7nEsftzl6treUrlkKz7gA9tnfbpHL9MoWqaWbQyrnYPibE/e
+         klrMrGSCiNU4DZMo835C9FCpsMVtJQDiD1ae7raUwJ35A8csa0Vi68dhAlhnMJXvGWx8
+         lqS9ernRQn0jSUfkV3/+wagiBFoCFtQsGK86KriKseiGLpJn6q/cELr6hMwZg/BiscK1
+         DmKQ==
+X-Gm-Message-State: ACgBeo1oXugSReVPUYnfB43Na92pgiPRhV/JyPhoEhYwbIjx0ervbD6R
+        pEhfGg5sndm09rzSZqBkkSXGnXcZHtfBKPnFZ0ZI7Y4fOILi0B3t1tRDLDXL
+X-Google-Smtp-Source: AA6agR4afgOfJkc1z2NyLelaUeWkE/UX7xu/DhdJa5LYX3dRn/DDZ6MqrQtqwibT6A2u/RJbfYWYN3143SCmPeprUoU=
+X-Received: by 2002:a25:ac9e:0:b0:68e:ccf4:ea04 with SMTP id
+ x30-20020a25ac9e000000b0068eccf4ea04mr9510879ybi.287.1660949535520; Fri, 19
+ Aug 2022 15:52:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CANXV_XwgZMCGXijfoUyZ9+KyM6Rgeqiq-sCfubyj_16d-2CN=A@mail.gmail.com>
+ <20220815013317.26121-1-dmitrii.bundin.a@gmail.com> <CAKwvOdnnSAozX8bQ9HeSw12BV9OjpzyDmXk_BGczjVVQNN+7tQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdnnSAozX8bQ9HeSw12BV9OjpzyDmXk_BGczjVVQNN+7tQ@mail.gmail.com>
+From:   Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+Date:   Sat, 20 Aug 2022 01:52:04 +0300
+Message-ID: <CANXV_Xw2wzwDdJkyV1nHPQm2JTt48SLrNc7YwrfcxOwuFA-z3w@mail.gmail.com>
+Subject: Re: [PATCH v3] kbuild: add debug level and macro defs options
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Fangrui Song <maskray@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch/arm/configs/am200epdkit_defconfig
-arch/arm/configs/cm_x300_defconfig
-arch/arm/configs/colibri_pxa270_defconfig
-arch/arm/configs/colibri_pxa300_defconfig
-arch/arm/configs/corgi_defconfig
-arch/arm/configs/eseries_pxa_defconfig
-arch/arm/configs/ezx_defconfig
-arch/arm/configs/h5000_defconfig
-arch/arm/configs/imote2_defconfig
-arch/arm/configs/lpd270_defconfig
-arch/arm/configs/lubbock_defconfig
-arch/arm/configs/magician_defconfig
-arch/arm/configs/mainstone_defconfig
-arch/arm/configs/palmz72_defconfig
-arch/arm/configs/pcm027_defconfig
-arch/arm/configs/pxa255-idp_defconfig
-arch/arm/configs/pxa3xx_defconfig
-arch/arm/configs/pxa_defconfig
-arch/arm/configs/spitz_defconfig
-arch/arm/configs/trizeps4_defconfig
-arch/arm/configs/viper_defconfig
-arch/arm/configs/xcep_defconfig
-arch/arm/configs/zeus_defconfig
-arch/arm/mach-pxa/Makefile.boot
-arch/arm/mach-pxa/include/mach/uncompress.h
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   50cd95ac46548429e5bba7ca75cc97d11a697947
-commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
-date:   3 months ago
-config: arm-randconfig-c032-20220820 (https://download.01.org/0day-ci/archive/20220820/202208200632.qCY00XWl-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-lpc32xx/ arch/arm/mach-versatile/ arch/arm/mm/
+On Fri, Aug 19, 2022 at 8:42 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Is any of this really necessary?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Consider the case if CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y.
+Prior to GCC11/Clang12 -gsplit-dwarf implied -g2. So on newer
+compilers with -gsplit-dwarf in use there would be no debug symbols
+produced. -gdwarf-4/5 still implies -g2, but in case
+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y neither of the options are
+set. So it seems like a reasonable choice to provide a debug info
+level config that would explicitly set the level without relying on
+implicits. The default value of the config is set to -g2 to not change
+the build behavior that was before introducing the option. And it
+works for both older and newer versions of GCC/Clang in the same way.
+The benefits of the -g1 option are indeed questionable except that it
+produces an image with ~20% less in size.
 
-All warnings (new ones prefixed by >>):
+> It seems like a great way to bloat
+> vmlinux artifacts built with CONFIG_DEBUG_INFO even further.
+The defaults were chosen to not change the build behavior that was
+before introducing the options. Or did you mean something else?
 
-   In file included from include/linux/gfp.h:6,
-                    from include/linux/xarray.h:15,
-                    from include/linux/list_lru.h:14,
-                    from include/linux/fs.h:13,
-                    from include/linux/highmem.h:5,
-                    from arch/arm/mm/copypage-feroceon.c:11:
-   include/linux/mmzone.h: In function '__nr_to_section':
-   include/linux/mmzone.h:1404:13: warning: the comparison will always evaluate as 'true' for the address of 'mem_section' will never be NULL [-Waddress]
-    1404 |         if (!mem_section[SECTION_NR_TO_ROOT(nr)])
-         |             ^
-   include/linux/mmzone.h:1390:27: note: 'mem_section' declared here
-    1390 | extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
-         |                           ^~~~~~~~~~~
-   arch/arm/mm/copypage-feroceon.c: At top level:
->> arch/arm/mm/copypage-feroceon.c:65:6: warning: no previous prototype for 'feroceon_copy_user_highpage' [-Wmissing-prototypes]
-      65 | void feroceon_copy_user_highpage(struct page *to, struct page *from,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> arch/arm/mm/copypage-feroceon.c:78:6: warning: no previous prototype for 'feroceon_clear_user_highpage' [-Wmissing-prototypes]
-      78 | void feroceon_clear_user_highpage(struct page *page, unsigned long vaddr)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
---
-   In file included from include/linux/topology.h:33,
-                    from include/linux/irq.h:19,
-                    from include/asm-generic/hardirq.h:17,
-                    from arch/arm/include/asm/hardirq.h:10,
-                    from include/linux/hardirq.h:11,
-                    from include/linux/interrupt.h:11,
-                    from include/linux/serial_core.h:13,
-                    from arch/arm/mach-lpc32xx/serial.c:13:
-   include/linux/mmzone.h: In function '__nr_to_section':
-   include/linux/mmzone.h:1404:13: warning: the comparison will always evaluate as 'true' for the address of 'mem_section' will never be NULL [-Waddress]
-    1404 |         if (!mem_section[SECTION_NR_TO_ROOT(nr)])
-         |             ^
-   include/linux/mmzone.h:1390:27: note: 'mem_section' declared here
-    1390 | extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
-         |                           ^~~~~~~~~~~
-   arch/arm/mach-lpc32xx/serial.c: At top level:
->> arch/arm/mach-lpc32xx/serial.c:63:6: warning: no previous prototype for 'lpc32xx_loopback_set' [-Wmissing-prototypes]
-      63 | void lpc32xx_loopback_set(resource_size_t mapbase, int state)
-         |      ^~~~~~~~~~~~~~~~~~~~
+> The
+> above link mentions "when debugging with GDB."  In that case, please
+> don't add new Kconfigs for these; just set -g3 when
+> CONFIG_GDB_SCRIPTS=y.
 
+CONFIG_GDB_SCRIPTS does not necessarily mean that -g3 is wanted, -g2
+(default) is usually a reasonable choice. The -g3 option is very
+useful when debugging macro-intensive code, but requires much more
+disk space to build. I documented it explicitly in the help section of
+DEBUG_INFO_LEVEL. GCC and Clang use different options to include macro
+definitions so it was handled depending on the compiler used.
 
-vim +/feroceon_copy_user_highpage +65 arch/arm/mm/copypage-feroceon.c
-
-d73e60b7144a86 Russell King  2008-10-31   64  
-063b0a4207e43a Russell King  2008-10-31  @65  void feroceon_copy_user_highpage(struct page *to, struct page *from,
-f00a75c094c340 Russell King  2009-10-05   66  	unsigned long vaddr, struct vm_area_struct *vma)
-063b0a4207e43a Russell King  2008-10-31   67  {
-063b0a4207e43a Russell King  2008-10-31   68  	void *kto, *kfrom;
-063b0a4207e43a Russell King  2008-10-31   69  
-5472e862de2bc4 Cong Wang     2011-11-25   70  	kto = kmap_atomic(to);
-5472e862de2bc4 Cong Wang     2011-11-25   71  	kfrom = kmap_atomic(from);
-2725898fc9bb21 Russell King  2009-10-05   72  	flush_cache_page(vma, vaddr, page_to_pfn(from));
-063b0a4207e43a Russell King  2008-10-31   73  	feroceon_copy_user_page(kto, kfrom);
-5472e862de2bc4 Cong Wang     2011-11-25   74  	kunmap_atomic(kfrom);
-5472e862de2bc4 Cong Wang     2011-11-25   75  	kunmap_atomic(kto);
-063b0a4207e43a Russell King  2008-10-31   76  }
-063b0a4207e43a Russell King  2008-10-31   77  
-303c6443659bc1 Russell King  2008-10-31  @78  void feroceon_clear_user_highpage(struct page *page, unsigned long vaddr)
-d73e60b7144a86 Russell King  2008-10-31   79  {
-5472e862de2bc4 Cong Wang     2011-11-25   80  	void *ptr, *kaddr = kmap_atomic(page);
-43ae286b7d4d8c Nicolas Pitre 2008-11-04   81  	asm volatile ("\
-43ae286b7d4d8c Nicolas Pitre 2008-11-04   82  	mov	r1, %2				\n\
-d73e60b7144a86 Russell King  2008-10-31   83  	mov	r2, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   84  	mov	r3, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   85  	mov	r4, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   86  	mov	r5, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   87  	mov	r6, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   88  	mov	r7, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   89  	mov	ip, #0				\n\
-d73e60b7144a86 Russell King  2008-10-31   90  	mov	lr, #0				\n\
-303c6443659bc1 Russell King  2008-10-31   91  1:	stmia	%0, {r2-r7, ip, lr}		\n\
-d73e60b7144a86 Russell King  2008-10-31   92  	subs	r1, r1, #1			\n\
-303c6443659bc1 Russell King  2008-10-31   93  	mcr	p15, 0, %0, c7, c14, 1		@ clean and invalidate D line\n\
-43ae286b7d4d8c Nicolas Pitre 2008-11-04   94  	add	%0, %0, #32			\n\
-d73e60b7144a86 Russell King  2008-10-31   95  	bne	1b				\n\
-303c6443659bc1 Russell King  2008-10-31   96  	mcr	p15, 0, r1, c7, c10, 4		@ drain WB"
-43ae286b7d4d8c Nicolas Pitre 2008-11-04   97  	: "=r" (ptr)
-43ae286b7d4d8c Nicolas Pitre 2008-11-04   98  	: "0" (kaddr), "I" (PAGE_SIZE / 32)
-303c6443659bc1 Russell King  2008-10-31   99  	: "r1", "r2", "r3", "r4", "r5", "r6", "r7", "ip", "lr");
-5472e862de2bc4 Cong Wang     2011-11-25  100  	kunmap_atomic(kaddr);
-d73e60b7144a86 Russell King  2008-10-31  101  }
-d73e60b7144a86 Russell King  2008-10-31  102  
-
-:::::: The code at line 65 was first introduced by commit
-:::::: 063b0a4207e43acbeff3d4b09f43e750e0212b48 [ARM] copypage: provide our own copy_user_highpage()
-
-:::::: TO: Russell King <rmk@dyn-67.arm.linux.org.uk>
-:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards
+Dmitrii

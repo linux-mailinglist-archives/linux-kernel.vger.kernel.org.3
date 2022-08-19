@@ -2,222 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3897159934A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 05:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834AE599355
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 05:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345330AbiHSDBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 23:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
+        id S1345351AbiHSDGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 23:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344539AbiHSDBC (ORCPT
+        with ESMTP id S238548AbiHSDGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 23:01:02 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B18D5E81
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 20:00:59 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id f4so2512491qkl.7
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 20:00:59 -0700 (PDT)
+        Thu, 18 Aug 2022 23:06:49 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DC7DABA4;
+        Thu, 18 Aug 2022 20:06:48 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id h28so3197699pfq.11;
+        Thu, 18 Aug 2022 20:06:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc;
-        bh=SqzHyhYdK1V4JBswn3yCW3hnqnnsbZPFsQYu2RllJTY=;
-        b=MxC5bzVaVdTyRqcXd62vZSPNLWDIJzWO3NZV9BGtCGtukJbO3aGq8wTVM4NPvqGiXM
-         Gwc6h1B2pl0StsRb9qHw1ezYc+eQKsJIFXHOJkJLQK56Yba/yXH12A/qAvt/GHNn4Nya
-         D707Il8MyVwvmgV3dWYtEIyhdJZzXlXNrItW6N159s2XcDc/5O67GqerWAOl040sCh35
-         4zpUkW1pYDENJhKanUxKdo667PCS62uqKq4XmxXxPY4k3OmC4ujqf2Q1wmpbT3OoINdz
-         1+IaFPCzNeCdYyUh7KL9Q1cBjUgSUMCQLB6oYTt/hylhnCM1omtR0JcwyZbN6lcakGds
-         Oplg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=KmjwltB4DAqEz8CKvWyccwR6omX4tpoi/2zk3QXTTF8=;
+        b=TjG9Xue/7c6d6jQxS8Kg8HGSWgknK1+RpbXc/UrwYljaaXJNPKCEVgSa2zQW9es0Bo
+         K2lFqEdQijQRoObEZ51rKnPMdsD710nEEU8ofi9i81xNOqTsTUY78uHMgsPP1NiQ/J8B
+         Mx8t9OlyISeTzTNXD1VqH8xBT9PpfYD9lC8qj8eQlmsUu50XuXg0kYMqENV8Pq6OAtzl
+         7RQdUabHseygjrtAej8W295t70g8UhgZaeJatRufzqkMrO3izZUO+Qf+rioG+DUd2tpC
+         IurPSyDz0BjGFhh/w4GVKIF7ck4QMyHuiU47iFWW41RO1FLik6wgR7Ca2qkHZL/xx8vA
+         AtNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc;
-        bh=SqzHyhYdK1V4JBswn3yCW3hnqnnsbZPFsQYu2RllJTY=;
-        b=SrE9V4j8SWzuO+2qXcL0uskNf6R52Vsfe4/hTi0BAT7MLrD3Oo+0ka9aQ5AYcZBbKJ
-         HivHPMEQWKOPKVSAG+IsKIUcqz0yayw96EYvXhrdI3zGBGVdctW4/ekHwXh8EiFylEP1
-         DVUELfXE2bUjPCv4mlKOtbSHcu/nzJY/qf5L8nSMazHLjtBSnT6ckTWqr4YOvBolqH/C
-         Ya8b/3sD7daZDubkftd1HOL9DGhlKteYI1BOawJiXRTR/JCyOmoPdHLJ2BZE6FVdL3hh
-         EovunsiqwhcHnQvXpNLBdgoLjeiRAygDuHvoouSV5wgMChQripel5Co8VNrzKBBxskq2
-         7yLg==
-X-Gm-Message-State: ACgBeo1aBV+VsDSlBwCcySFooAWnK707ykF0IquvqV5F1ErwgbkLfjeH
-        9gWumU1qLOOt3jPwZWx2MpNJtQ==
-X-Google-Smtp-Source: AA6agR7KQTVz3JYFrJLB5lhd2uJBBP000qbAVx/oSm/fFTrnVR58FRN6Fmbj1fOpDd+LLvaHPxpv8g==
-X-Received: by 2002:a05:620a:1d0e:b0:6ba:c419:81a1 with SMTP id dl14-20020a05620a1d0e00b006bac41981a1mr4066120qkb.526.1660878058827;
-        Thu, 18 Aug 2022 20:00:58 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id a18-20020ac844b2000000b0031ef69c9024sm2045363qto.91.2022.08.18.20.00.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 20:00:58 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 20:00:41 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-In-Reply-To: <20220818132421.6xmjqduempmxnnu2@box>
-Message-ID: <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com> <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com> <20220818132421.6xmjqduempmxnnu2@box>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=KmjwltB4DAqEz8CKvWyccwR6omX4tpoi/2zk3QXTTF8=;
+        b=3WZsleWtSeeL6X4DAI6A5eRiV+Sol8WtX4ceMz9ue2dFeOItfHWumATpWFUJjVuvCu
+         Z8qdeUrdJUILdPnEzLIP1mBPVkSkNcO9aSfAq32QC5ta0KYgy8x6FK1u58dYHOYLqHn0
+         yj50CyaW/pchyFhHwhoWYDckLjdaemkZOlrUsbdGj9M3L220OwAg0nF/al7g30xEhHT/
+         4vN9X+fT1emz1Yc99eUax379QBc5NrubJfB6Kp9H1XR7rFkRLrlqsl8/AJiiNqT/Jpnn
+         v5aoJC31h8i/yx5e0n8nnyRM5eThDlfrDszmBwIx7GFOnfuAl1U1JbJ3KMMOVcqoBzbm
+         Lucw==
+X-Gm-Message-State: ACgBeo0m/fiIhNGKPp6yYBABWWtcQBlx2Mk/z/EDJq4+a9kavyK5gWiW
+        h/kBur7P47ZN/mw9nL4gmIo=
+X-Google-Smtp-Source: AA6agR6issoxGo3rm4XebZYWXXEob0Heta9BRGvy1kSyqkmYAp+xWc2Btnl1YJAu6HVMCK9FRR/Pbw==
+X-Received: by 2002:a65:588d:0:b0:42a:2778:164f with SMTP id d13-20020a65588d000000b0042a2778164fmr2896958pgu.616.1660878407524;
+        Thu, 18 Aug 2022 20:06:47 -0700 (PDT)
+Received: from dusj-System-Product-Name.dhcpserver.bu9bmc.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
+        by smtp.gmail.com with ESMTPSA id c4-20020a170903234400b0016f09d217c1sm2050265plh.281.2022.08.18.20.06.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Aug 2022 20:06:47 -0700 (PDT)
+From:   Duke Du <dukedu83@gmail.com>
+X-Google-Original-From: Duke Du <Duke.Du@quantatw.com>
+To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     fran.hsu@quantatw.com, charles.hsu@quantatw.com,
+        george.hung@quantatw.com, duke.du@quantatw.com
+Subject: [PATCH v3] hwmon: Add driver for the TEXAS TPS546D24 Buck Converter.
+Date:   Fri, 19 Aug 2022 11:04:43 +0800
+Message-Id: <1660878283-9512-1-git-send-email-Duke.Du@quantatw.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 Aug 2022, Kirill A . Shutemov wrote:
-> On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
-> > 
-> > If your memory could be swapped, that would be enough of a good reason
-> > to make use of shmem.c: but it cannot be swapped; and although there
-> > are some references in the mailthreads to it perhaps being swappable
-> > in future, I get the impression that will not happen soon if ever.
-> > 
-> > If your memory could be migrated, that would be some reason to use
-> > filesystem page cache (because page migration happens to understand
-> > that type of memory): but it cannot be migrated.
-> 
-> Migration support is in pipeline. It is part of TDX 1.5 [1]. And swapping
-> theoretically possible, but I'm not aware of any plans as of now.
-> 
-> [1] https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
+Add the pmbus driver for TEXAS tps546d24 Buck Converter. The
+tps546d24 PMBUS_VOUT_MODE is 0x97 (i.e. the bit 5~7 are 100)
+which could not meet the standard pmbus spec, the standard mode
+of PMBUS_VOUT_MODE must be 000 (linear foramt) or 001 (vid format).
+Make the tps546d24 PMBUS_VOUT_MODE return value 0x17 (i.e. the
+bit5~7 are 000), VOUT returned value is linear11.
 
-I always forget, migration means different things to different audiences.
-As an mm person, I was meaning page migration, whereas a virtualization
-person thinks VM live migration (which that reference appears to be about),
-a scheduler person task migration, an ornithologist bird migration, etc.
+Signed-off-by: Duke Du <Duke.Du@quantatw.com>
+---
+Change in v1: 
+    Initial patchset.
+Change in v2:
+    Correct the tps546d24.rst format.
+Change in v3:
+    1. Modify the patch description. 
+    2. Put the change log between the dashes and diffstat.
+---
+---
+ Documentation/hwmon/index.rst     |  1 +
+ Documentation/hwmon/tps546d24.rst | 35 +++++++++++++++++++
+ MAINTAINERS                       |  7 ++++
+ drivers/hwmon/pmbus/Kconfig       |  9 +++++
+ drivers/hwmon/pmbus/Makefile      |  1 +
+ drivers/hwmon/pmbus/tps546d24.c   | 73 +++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 126 insertions(+)
+ create mode 100644 Documentation/hwmon/tps546d24.rst
+ create mode 100644 drivers/hwmon/pmbus/tps546d24.c
 
-But you're an mm person too: you may have cited that reference in the
-knowledge that TDX 1.5 Live Migration will entail page migration of the
-kind I'm thinking of.  (Anyway, it's not important to clarify that here.)
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index f7113b0..d3eede4 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -205,6 +205,7 @@ Hardware Monitoring Kernel Drivers
+    tps23861
+    tps40422
+    tps53679
++   tps546d24
+    twl4030-madc-hwmon
+    ucd9000
+    ucd9200
+diff --git a/Documentation/hwmon/tps546d24.rst b/Documentation/hwmon/tps546d24.rst
+new file mode 100644
+index 0000000..3061fd8
+--- /dev/null
++++ b/Documentation/hwmon/tps546d24.rst
+@@ -0,0 +1,35 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++
++Kernel driver tps546d24
++======================
++
++Supported chips:
++
++  * TI TPS546D24
++
++    Prefix: 'tps546d24'
++
++    Addresses scanned: -
++
++    Datasheet: https://www.ti.com/lit/gpn/tps546d24
++
++Author: Duke Du <dukedu83@gmail.com>
++
++
++Description
++-----------
++
++The TPS546D24A is a highly integrated, non-isolated DC/DC converter capable
++of high frequency operation and 40-A current output from a 7-mm x 5-mm
++package.
++
++Two, three, and four TPS546D24A devices can be interconnected
++to provide up to 160 A on a single output. The device has an option to
++overdrive the internal 5-V LDO with an external 5-V supply via the VDD5
++pin to improve efficiency and reduce power dissipation of the converter.
++
++
++Platform data support
++---------------------
++
++The driver supports standard PMBus driver platform data.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8a5012b..fa2d4fb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20583,6 +20583,13 @@ Q:	https://patchwork.kernel.org/project/linux-integrity/list/
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+ F:	drivers/char/tpm/
+ 
++TPS546D24 DRIVER
++M:	Duke Du <dukedu83@gmail.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/tps546d24.rst
++F:	drivers/hwmon/pmbus/tps546d24.c
++
+ TRACING
+ M:	Steven Rostedt <rostedt@goodmis.org>
+ M:	Ingo Molnar <mingo@redhat.com>
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 951e4a9..89668af 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -397,6 +397,15 @@ config SENSORS_TPS53679
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called tps53679.
+ 
++config SENSORS_TPS546D24
++	tristate "TPS546D24"
++	help
++	  If you say yes here you get hardware monitoring support for TEXAS
++	  TPS546D24.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called tps546d24
++
+ config SENSORS_UCD9000
+ 	tristate "TI UCD90120, UCD90124, UCD90160, UCD90320, UCD9090, UCD90910"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index e2fe86f..0002dbe 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -41,6 +41,7 @@ obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
+ obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
+ obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+ obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
++obj-$(CONFIG_SENSORS_TPS546D24)	+= tps546d24.o
+ obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
+ obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
+ obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
+diff --git a/drivers/hwmon/pmbus/tps546d24.c b/drivers/hwmon/pmbus/tps546d24.c
+new file mode 100644
+index 0000000..f6f79d3
+--- /dev/null
++++ b/drivers/hwmon/pmbus/tps546d24.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Hardware monitoring driver for TEXAS TPS546D24 buck converter
++ */
++
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/pmbus.h>
++#include "pmbus.h"
++
++static int tps546d24_read_byte_data(struct i2c_client *client, int page, int reg)
++{
++	int ret;
++
++	switch (reg) {
++	case PMBUS_VOUT_MODE:
++		ret = 0x17;
++		break;
++	default:
++		ret = -ENODATA;
++		break;
++	}
++	return ret;
++}
++
++static struct pmbus_driver_info tps546d24_info = {
++	.pages = 1,
++	.format[PSC_VOLTAGE_IN] = linear,
++	.format[PSC_VOLTAGE_OUT] = linear,
++	.format[PSC_TEMPERATURE] = linear,
++	.format[PSC_CURRENT_OUT] = linear,
++	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |
++	    PMBUS_HAVE_IOUT | PMBUS_HAVE_VOUT |
++		PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
++		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++	.read_byte_data = tps546d24_read_byte_data,
++};
++
++static int tps546d24_probe(struct i2c_client *client)
++{
++	return pmbus_do_probe(client, &tps546d24_info);
++}
++
++static const struct i2c_device_id tps546d24_id[] = {
++	{"tps546d24", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, tps546d24_id);
++
++static const struct of_device_id __maybe_unused tps546d24_of_match[] = {
++	{.compatible = "tps546d24"},
++	{}
++};
++
++/* This is the driver that will be inserted */
++static struct i2c_driver tps546d24_driver = {
++	.driver = {
++		   .name = "tps546d24",
++		   .of_match_table = of_match_ptr(tps546d24_of_match),
++	   },
++	.probe_new = tps546d24_probe,
++	.id_table = tps546d24_id,
++};
++
++module_i2c_driver(tps546d24_driver);
++
++MODULE_AUTHOR("Duke Du <dukedu83@gmail.com>");
++MODULE_DESCRIPTION("PMBus driver for TI tps546d24");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(PMBUS);
+-- 
+2.7.4
 
-> 
-> > Some of these impressions may come from earlier iterations of the
-> > patchset (v7 looks better in several ways than v5).  I am probably
-> > underestimating the extent to which you have taken on board other
-> > usages beyond TDX and SEV private memory, and rightly want to serve
-> > them all with similar interfaces: perhaps there is enough justification
-> > for shmem there, but I don't see it.  There was mention of userfaultfd
-> > in one link: does that provide the justification for using shmem?
-> > 
-> > I'm afraid of the special demands you may make of memory allocation
-> > later on - surprised that huge pages are not mentioned already;
-> > gigantic contiguous extents? secretmem removed from direct map?
-> 
-> The design allows for extension to hugetlbfs if needed. Combination of
-> MFD_INACCESSIBLE | MFD_HUGETLB should route this way. There should be zero
-> implications for shmem. It is going to be separate struct memfile_backing_store.
-
-Last year's MFD_HUGEPAGE proposal would have allowed you to do it with
-memfd via tmpfs without needing to involve hugetlbfs; but you may prefer
-the determinism of hugetlbfs, relying on /proc/sys/vm/nr_hugepages etc.
-
-But I've yet to see why you want to involve this or that filesystem
-(with all its filesystem-icity suppressed) at all.  The backing store
-is host memory, and tmpfs and hugetlbfs just impose their own
-idiosyncrasies on how that memory is allocated; but I think you would
-do better to choose your own idiosyncrasies in allocation directly -
-you don't need a different "backing store" to choose between 4k or 2M
-or 1G or whatever allocations.
-
-tmpfs and hugetlbfs and page cache are designed around sharing memory:
-TDX is designed around absolutely not sharing memory; and the further
-uses which Sean foresees appear not to need it as page cache either.
-
-Except perhaps for page migration reasons.  It's somewhat incidental,  
-but of course page migration knows how to migrate page cache, so
-masquerading as page cache will give a short cut to page migration,
-when page migration becomes at all possible.
-
-> 
-> I'm not sure secretmem is a fit here as we want to extend MFD_INACCESSIBLE
-> to be movable if platform supports it and secretmem is not migratable by
-> design (without direct mapping fragmentations).
-> 
-> > Here's what I would prefer, and imagine much easier for you to maintain;
-> > but I'm no system designer, and may be misunderstanding throughout.
-> > 
-> > QEMU gets fd from opening /dev/kvm_something, uses ioctls (or perhaps
-> > the fallocate syscall interface itself) to allocate and free the memory,
-> > ioctl for initializing some of it too.  KVM in control of whether that
-> > fd can be read or written or mmap'ed or whatever, no need to prevent it
-> > in shmem.c, no need for flags, seals, notifications to and fro because
-> > KVM is already in control and knows the history.  If shmem actually has
-> > value, call into it underneath - somewhat like SysV SHM, and /dev/zero
-> > mmap, and i915/gem make use of it underneath.  If shmem has nothing to
-> > add, just allocate and free kernel memory directly, recorded in your
-> > own xarray.
-> 
-> I guess shim layer on top of shmem *can* work. I don't see immediately why
-> it would not. But I'm not sure it is right direction. We risk creating yet
-> another parallel VM with own rules/locking/accounting that opaque to
-> core-mm.
-
-You are already proposing a new set of rules, foreign to how tmpfs works
-for others.  You're right that KVM allocating large amounts of memory,
-opaque to core-mm, carries risk: and you'd be right to say that shmem.c
-provides some clues (security_vm_enough_memory checks, memcg charging,
-user_shm_lock accounting) on what to remember.
-
-But I'm not up to the job of being the one to police you there,
-and you don't want to be waiting on me either.
-
-To take a rather silly example: Ted just added chattr support to tmpfs,
-and it fits in well.  But I don't now want to have to decide whether
-"chattr +i" FS_IMMUTABLE_FL is or is not compatible with
-MEMFILE_F_USER_INACCESSIBLE.  They are from different worlds,
-and I'd prefer KVM to carry the weight of imposing INACCESSIBLE:
-which seems easily done if it manages the fd, without making the
-memory allocated to that fd accessible to those who hold the fd.
-
-> 
-> Note that on machines that run TDX guests such memory would likely be the
-> bulk of memory use. Treating it as a fringe case may bite us one day.
-
-Yes, I suspected that machines running TDX guests might well consume
-most of the memory that way, but glad(?) to hear it confirmed.
-
-I am not suggesting that this memory be treated as a fringe case, rather
-the reverse: a different case, not something to hide away inside shmem.c.
-
-Is there a notion that /proc/meminfo "Shmem:" is going to be a good hint
-of this usage?  Whether or not it's also included in "Shmem:", I expect
-that its different characteristics will deserve its own display.
-
-Hugh

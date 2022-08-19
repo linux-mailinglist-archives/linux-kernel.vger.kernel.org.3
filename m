@@ -2,115 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5835999C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC14C5999C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348354AbiHSKY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
+        id S1348365AbiHSK3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348356AbiHSKYx (ORCPT
+        with ESMTP id S1347966AbiHSK3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:24:53 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12DCACA1F
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 03:24:51 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9849329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9849:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A40851EC064A;
-        Fri, 19 Aug 2022 12:24:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660904685;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=S0FizUmau6S1/DFtsPjVCVKdQ3LYW9X4CqTGEwR9ThQ=;
-        b=StdfTqkTYWlewpTxDSdX/L4oSdjbKynEMLmaLzQ6nmxy5d3Jgd0XfbLwfLYtsn344gN6R9
-        HFG0uVBFutcpYfNEEXqK/pP1KBFaeJcWO2nfad9JRg3yb/1uGcIOnDNw+v2hraz5FeBuqS
-        JsEI9vAG2q5FoQP7pAQTUjGUZOfb1yw=
-Date:   Fri, 19 Aug 2022 12:24:41 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        LKML Mailing List <linux-kernel@vger.kernel.org>,
-        X86-kernel <x86@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Jacon Jun Pan <jacob.jun.pan@intel.com>
-Subject: Re: [PATCH v3 1/5] x86/microcode/intel: Check against CPU signature
- before saving microcode
-Message-ID: <Yv9k6fqRANu4ojK6@zn.tnic>
-References: <20220817051127.3323755-1-ashok.raj@intel.com>
- <20220817051127.3323755-2-ashok.raj@intel.com>
+        Fri, 19 Aug 2022 06:29:49 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A561AF4A7;
+        Fri, 19 Aug 2022 03:29:45 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27JATJGS108014;
+        Fri, 19 Aug 2022 05:29:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1660904959;
+        bh=AVrDVBFLBkE3Zwz6MfjLTiwDw+hQlbCuU5vzEr5zREs=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=ArYbwJ/CIrN6RTw1AlFv2iBfRllbaAPjqusYtnDuWC7diQbxn8mzUM6/9BxnN6fpt
+         7cmNNDIlakmfON8R2ZTKUUID7v2vrjlv+BiPqnSMvruo+nSNCTx4FKWGCjJTDcoHb8
+         fsjT40ucR38Afb1eTAPq1ZiipgUNi3YI4JrdpoLc=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27JATJ57126247
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 19 Aug 2022 05:29:19 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 19
+ Aug 2022 05:29:19 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 19 Aug 2022 05:29:19 -0500
+Received: from [10.24.69.241] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27JATDs3029523;
+        Fri, 19 Aug 2022 05:29:14 -0500
+Message-ID: <da82e71f-e32c-7adb-250e-0c80cc6e30bd@ti.com>
+Date:   Fri, 19 Aug 2022 15:59:13 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220817051127.3323755-2-ashok.raj@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>, <linux@armlinux.org.uk>,
+        <vladimir.oltean@nxp.com>, <grygorii.strashko@ti.com>,
+        <vigneshr@ti.com>, <nsekhar@ti.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kishon@ti.com>, <s-vadapalli@ti.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: net: ti: k3-am654-cpsw-nuss: Update
+ bindings for J7200 CPSW5G
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+References: <20220816060139.111934-1-s-vadapalli@ti.com>
+ <20220816060139.111934-2-s-vadapalli@ti.com>
+ <79e58157-f8f2-6ca8-1aa6-b5cf6c83d9e6@linaro.org>
+ <31c3a5b0-17cc-ad7b-6561-5834cac62d3e@ti.com>
+ <9c331cdc-e34a-1146-fb83-84c2107b2e2a@linaro.org>
+ <176ab999-e274-e22a-97d8-31f655b16800@ti.com>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <176ab999-e274-e22a-97d8-31f655b16800@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 05:11:23AM +0000, Ashok Raj wrote:
-> When save_microcode_patch() is looking to replace an existing microcode in
-> the cache, current code is *only* checks the CPU sig/pf in the main
+Hello Krzysztof,
 
-Write those "sig/pf" things out once so that it is clear what that is.
-
-> header. Microcode can carry additional sig/pf combinations in the extended
-> signature table, which is completely missed today.
+On 17/08/22 13:11, Siddharth Vadapalli wrote:
+> Hello Krzysztof,
 > 
-> For e.g. Current patch is a multi-stepping patch and new incoming patch is
-> a specific patch just for this CPUs stepping.
+> On 17/08/22 11:20, Krzysztof Kozlowski wrote:
+>> On 17/08/2022 08:14, Siddharth Vadapalli wrote:
+>>
+>>>>> -      port@[1-2]:
+>>>>> +      "^port@[1-4]$":
+>>>>>          type: object
+>>>>>          description: CPSWxG NUSS external ports
+>>>>>  
+>>>>> @@ -119,7 +120,7 @@ properties:
+>>>>>          properties:
+>>>>>            reg:
+>>>>>              minimum: 1
+>>>>> -            maximum: 2
+>>>>> +            maximum: 4
+>>>>>              description: CPSW port number
+>>>>>  
+>>>>>            phys:
+>>>>> @@ -151,6 +152,18 @@ properties:
+>>>>>  
+>>>>>      additionalProperties: false
+>>>>>  
+>>>>> +if:
+>>>>
+>>>> This goes under allOf just before unevaluated/additionalProperties:false
+>>>
+>>> allOf was added by me in v3 series patch and it is not present in the
+>>> file. I removed it in v4 after Rob Herring's suggestion. Please let me
+>>> know if simply moving the if-then statements to the line above
+>>> additionalProperties:false would be fine.
+>>
+>> I think Rob's comment was focusing not on using or not-using allOf, but
+>> on format of your entire if-then-else. Your v3 was huge and included
+>> allOf in wrong place).
+>>
+>> Now you add if-then in proper place, but it is still advisable to put it
+>> with allOf, so if ever you grow the if-then by new entry, you do not
+>> have to change the indentation.
+>>
+>> Anyway the location is not correct. Regardless if this is if-then or
+>> allOf-if-then, put it just like example schema is suggesting.
 > 
-> patch1:
-> fms3 <--- header FMS
-> ...
-> ext_sig:
-> fms1
-> fms2
-> 
-> patch2: new
-> fms2 <--- header FMS
-> 
-> Current code takes only fms3 and checks with patch2 fms2.
+> I will move the if-then statements to the lines above the
+> "additionalProperties: false" line. Also, I will add an allOf for this
 
-So, find_matching_signature() does all the signatures matching and
-scanning already. If anything, that function should tell its callers
-whether the patch it is looking at - the fms2 one - should replace the
-current one or not.
+I had a look at the example at [1] and it uses allOf after the
+"additionalProperties: false" line. Would it be fine then for me to add
+allOf and the single if-then statement below the "additionalProperties:
+false" line? Please let me know.
 
-I.e., all the logic to say how strong a patch match is, should be
-concentrated there. And then the caller will do the according action.
+[1] -> https://github.com/devicetree-org/dt-schema/blob/mai/test/schemas/conditionals-allof-example.yaml
 
-> saved_patch.header.fms3 != new_patch.header.fms2, so save_microcode_patch
-> saves it to the end of list instead of replacing patch1 with patch2.
-> 
-> There is no functional user observable issue since find_patch() skips
-> patch versions that are <= current_patch and will land on patch2 properly.
-> 
-> Nevertheless this will just end up storing every patch that isn't required.
-> Kernel just needs to store the latest patch. Otherwise its a memory leak
-> that sits in kernel and never used.
-
-Oh well.
-
-> Cc: stable@vger.kernel.org
-
-Why?
-
-This looks like a small correction to me which doesn't need to go to
-stable...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Regards,
+Siddharth.

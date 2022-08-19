@@ -2,197 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BFE5996E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083355996C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347559AbiHSIOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
+        id S1347661AbiHSIPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347540AbiHSIOX (ORCPT
+        with ESMTP id S1347602AbiHSIPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:14:23 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FAD15FAE2;
-        Fri, 19 Aug 2022 01:14:17 -0700 (PDT)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxT+BLRv9i9I0EAA--.22658S7;
-        Fri, 19 Aug 2022 16:14:10 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, hejinyang@loongson.cn,
-        zhangqing@loongson.cn
-Subject: [PATCH 5/9] Loongarch/ftrace: Add DYNAMIC_FTRACE_WITH_REGS support
-Date:   Fri, 19 Aug 2022 16:13:59 +0800
-Message-Id: <20220819081403.7143-6-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220819081403.7143-1-zhangqing@loongson.cn>
-References: <20220819081403.7143-1-zhangqing@loongson.cn>
+        Fri, 19 Aug 2022 04:15:16 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638A1D25E0;
+        Fri, 19 Aug 2022 01:14:41 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id p4so2871725qvr.5;
+        Fri, 19 Aug 2022 01:14:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=aCZoiGRwyMVY7WfRYM9uVBdL1wCHNtdff3dkV0mrBaQ=;
+        b=l8mR22plJrQHFDkgURsmJ/ehMSuSK3nSuiKCKt1T8hb2GxnoYwSDaj+cECpNaUBDO2
+         1v2p/E81hKOIGjR37Jvk+P0x5FakkubOPfBD6aLNPsNPf2cq97FSmhIR6HT+hW77M7P8
+         nPnPfBNAUid3865Z04uxhK+YbwK4AhTwC0KyClY9WD7iU+7+PVMSxZj46boFg1N6PV9X
+         GSkqKJzzO9b+MhaXRPeiDIroEQSv7w0AM++Abs2a7Cu9U+MTw85/FdWR7nuzrYDKkcgv
+         e9dEnpryil2rYJMCg75hzmcklJqqhKP0LqXcHbMMh3xG/F4G8Grai+0PBufg/ZyE1AZb
+         DNxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=aCZoiGRwyMVY7WfRYM9uVBdL1wCHNtdff3dkV0mrBaQ=;
+        b=3hw4ZQhwvH1pbPhohph5pPKTEvTHstnxl5VLnrixe4Caje1XWBqEDploSFtOmcBesV
+         Dh/FK2XGKNpWBzHsVU/Jis+76t69695Jl7ZsoFNm1XwGLmPlenkl9rGWYTQ4eXS8bGFV
+         vseKrggBlT7wPB29g4xm3htT2sx04zhsRTPA7EFeZM7U14/gvSmNtgytgKCyG3BfN3dq
+         32Jk4B5EQtN4OfYsuZUuXRnZw6FoxKd4DyXPr+Pjah2ShfuYoOMtdcr0QhkbmjLaGSp6
+         jFJC5ac3hZEvcunVSSjygBWJmJhFXZd5PnOpe8zWQMwodgrjQENi1xtyvSbWacIdhsIN
+         hUIw==
+X-Gm-Message-State: ACgBeo39pGNBNkQR/SAIoqBfvca9o2DjxfM/3eXEn/+8w8m3/f9rTp6O
+        mi2agNbEg0mJpKHKpCG/Yf6gachk13pHYRm/ej8=
+X-Google-Smtp-Source: AA6agR5L+eaDB8mY1yhUSg6sgY+tLO/JsufbJsQH+fJX18C22+r/zLWgLTDHT638gikY5E6676jklqro6Bc//w1Y7sA=
+X-Received: by 2002:ad4:4eaf:0:b0:496:ac46:2d9c with SMTP id
+ ed15-20020ad44eaf000000b00496ac462d9cmr5395010qvb.82.1660896880435; Fri, 19
+ Aug 2022 01:14:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxT+BLRv9i9I0EAA--.22658S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF43Gry5Zr1ktr17ZF48Crg_yoWrWw4xpr
-        92yrn8GFWj9Fsag3yfKrykWrs8XrWvg34avay7CFyrJr4qq3W5ArW0kr1DZFyxt3yxG3yx
-        XF1fCr4Yya17XwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUm014x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-        4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE
-        3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2I
-        x0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8
-        JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2
-        ka0xkIwI1lc2xSY4AK67AK6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-        6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
-        AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE
-        2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0x
-        vEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVj
-        vjDU0xZFpf9x0JUxUUUUUUUU=
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220817105643.95710-1-contact@artur-rojek.eu> <20220817105643.95710-3-contact@artur-rojek.eu>
+In-Reply-To: <20220817105643.95710-3-contact@artur-rojek.eu>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 19 Aug 2022 11:14:04 +0300
+Message-ID: <CAHp75VcrM53+GW8qN4H-8kxuBRStAXjpt5F7YD5R2nHhh-Wiww@mail.gmail.com>
+Subject: Re: [PATCH 2/4] iio: add iio_channel_cb_get_iio_buffer helper
+To:     Artur Rojek <contact@artur-rojek.eu>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch implements DYNAMIC_FTRACE_WITH_REGS on LoongArch, which allows
-a traced function's arguments (and some other registers) to be captured
-into a struct pt_regs, allowing these to be inspected and modified.
+On Wed, Aug 17, 2022 at 1:58 PM Artur Rojek <contact@artur-rojek.eu> wrote:
+>
+> Introduce a helper function to retrieve an iio_buffer from
+> iio_cb_buffer.
+>
+> This is useful for consumers that need to extract metadata about
+> the buffer, e.g. get the channel offsets.
 
-Co-developed-by: Jinyang He <hejinyang@loongson.cn>
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- arch/loongarch/Kconfig              |  1 +
- arch/loongarch/include/asm/ftrace.h |  3 +++
- arch/loongarch/kernel/entry_dyn.S   | 36 +++++++++++++++++++++++++++--
- arch/loongarch/kernel/ftrace_dyn.c  | 17 ++++++++++++++
- 4 files changed, 55 insertions(+), 2 deletions(-)
+I'm wondering if we should start using the IIO namespace for new
+exported symbols.
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index f2d4899b1a0e..22eb3d6f8537 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -84,6 +84,7 @@ config LOONGARCH
- 	select HAVE_DEBUG_STACKOVERFLOW
- 	select HAVE_DMA_CONTIGUOUS
-         select HAVE_DYNAMIC_FTRACE
-+        select HAVE_DYNAMIC_FTRACE_WITH_REGS
- 	select HAVE_EXIT_THREAD
- 	select HAVE_FAST_GUP
- 	select HAVE_FTRACE_MCOUNT_RECORD
-diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
-index 76ca58767f4d..a3f974a7a5ce 100644
---- a/arch/loongarch/include/asm/ftrace.h
-+++ b/arch/loongarch/include/asm/ftrace.h
-@@ -28,6 +28,9 @@ struct dyn_ftrace;
- int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
- #define ftrace_init_nop ftrace_init_nop
- 
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+#define ARCH_SUPPORTS_FTRACE_OPS 1
-+#endif
- #endif /* CONFIG_DYNAMIC_FTRACE */
- #endif /* __ASSEMBLY__ */
- #endif /* CONFIG_FUNCTION_TRACER */
-diff --git a/arch/loongarch/kernel/entry_dyn.S b/arch/loongarch/kernel/entry_dyn.S
-index 4e3fb0c9a48f..38f616c1b4db 100644
---- a/arch/loongarch/kernel/entry_dyn.S
-+++ b/arch/loongarch/kernel/entry_dyn.S
-@@ -27,7 +27,7 @@
-  * follows the LoongArch psABI well.
-  */
- 
--	.macro  ftrace_regs_entry
-+	.macro  ftrace_regs_entry allregs=0
- 	PTR_ADDI sp, sp, -PT_SIZE
- 	/* Save trace function ra at PT_ERA */
- 	PTR_S	ra, sp, PT_ERA
-@@ -43,16 +43,48 @@
- 	PTR_S	a7, sp, PT_R11
- 	PTR_S	fp, sp, PT_R22
- 
-+	.if \allregs
-+	PTR_S	t0, sp, PT_R12
-+	PTR_S	t1, sp, PT_R13
-+	PTR_S	t2, sp, PT_R14
-+	PTR_S	t3, sp, PT_R15
-+	PTR_S	t4, sp, PT_R16
-+	PTR_S	t5, sp, PT_R17
-+	PTR_S	t6, sp, PT_R18
-+	PTR_S	t7, sp, PT_R19
-+	PTR_S	t8, sp, PT_R20
-+	PTR_S	s0, sp, PT_R23
-+	PTR_S	s1, sp, PT_R24
-+	PTR_S	s2, sp, PT_R25
-+	PTR_S	s3, sp, PT_R26
-+	PTR_S	s4, sp, PT_R27
-+	PTR_S	s5, sp, PT_R28
-+	PTR_S	s6, sp, PT_R29
-+	PTR_S	s7, sp, PT_R30
-+	PTR_S	s8, sp, PT_R31
-+	PTR_S	tp, sp, PT_R2
-+	/* Clear it for later use as a flag sometimes. */
-+	PTR_S	zero, sp, PT_R0
-+	PTR_S	$r21, sp, PT_R21
-+	.endif
-+
- 	PTR_ADDI t8, sp, PT_SIZE
- 	PTR_S   t8, sp, PT_R3
- 
- 	.endm
- 
- SYM_CODE_START(ftrace_caller)
--	ftrace_regs_entry
-+	ftrace_regs_entry allregs=0
- 	b	ftrace_common
- SYM_CODE_END(ftrace_caller)
- 
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+SYM_CODE_START(ftrace_regs_caller)
-+	ftrace_regs_entry allregs=1
-+	b	ftrace_common
-+SYM_CODE_END(ftrace_regs_caller)
-+#endif
-+
- SYM_CODE_START(ftrace_common)
- 	PTR_ADDI	a0, ra, -8	/* arg0: ip */
- 	move		a1, t0		/* arg1: parent_ip */
-diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
-index 3fe791b6783e..ec3d951be50c 100644
---- a/arch/loongarch/kernel/ftrace_dyn.c
-+++ b/arch/loongarch/kernel/ftrace_dyn.c
-@@ -99,6 +99,23 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
- 	return ftrace_modify_code(pc, old, new, true);
- }
- 
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
-+			unsigned long addr)
-+{
-+	unsigned long pc;
-+	long offset;
-+	u32 old, new;
-+
-+	pc = rec->ip + LOONGARCH_INSN_SIZE;
-+
-+	old = larch_insn_gen_bl(pc, old_addr);
-+	new = larch_insn_gen_bl(pc, addr);
-+
-+	return ftrace_modify_code(pc, old, new, true);
-+}
-+#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-+
- void arch_ftrace_update_code(int command)
- {
- 	command |= FTRACE_MAY_SLEEP;
 -- 
-2.36.1
-
+With Best Regards,
+Andy Shevchenko

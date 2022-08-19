@@ -2,63 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FE3599CA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C314599C96
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348975AbiHSNID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 09:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
+        id S1349062AbiHSNIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 09:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348363AbiHSNIA (ORCPT
+        with ESMTP id S1349002AbiHSNIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 09:08:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C345FD0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:07:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660914478; x=1692450478;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ul9AY54+W+2c0uLgxHZax+CLhL8edhfxOlsyHd1h5oE=;
-  b=gSpWs6gVCwCt7rac8Ja0OZQuqDwVtgFZAOHMFQXDdE5eBUyJDRDGCQTC
-   +jZXgV3BS1inDO/fIgRE+lmRPUnlC/TVdcUTzTLKcSN/jYmt/0/GX9m1j
-   1UL4ExOOPk4i/4aBBw+fdMZ7uXGHZRNMvSLyqJPSSlarZ1ucRweISPSIG
-   p3uOaHJCZdFv5hEIHwYdCchtWjzY+nCqL3btLXM4gpdJAbmRc8/w/vFmg
-   S07K2wGL6BcCzh7d9RQbfaHqhfgYpPXVvDNZ9wrbx5dndiQSJMy/NZagK
-   8OWi4EtMrHGz2HDoSqJe3q3TsNNyTNg8ajetr3qfsPrKSD8KePDfPbRa8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="291764421"
-X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
-   d="scan'208";a="291764421"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 06:07:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
-   d="scan'208";a="936213401"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Aug 2022 06:07:56 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oP1j9-0001SR-2t;
-        Fri, 19 Aug 2022 13:07:55 +0000
-Date:   Fri, 19 Aug 2022 21:07:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nam Cao <namcaov@gmail.com>, gregkh@linuxfoundation.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, namcaov@gmail.com,
-        hdegoede@redhat.com, Larry.Finger@lwfinger.net
-Subject: Re: [PATCH 1/7] staging: rtl8723bs: remove function
- rtw_odm_dbg_comp_msg
-Message-ID: <202208192018.BfgiZyOY-lkp@intel.com>
-References: <7ff2d658863db4fd5eecc1a53f682510c2765c3f.1660898432.git.namcaov@gmail.com>
+        Fri, 19 Aug 2022 09:08:07 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C9BBBA6F
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:08:05 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id x19so6045551lfq.7
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=DxUbL1u2TvCgqbMMq8b5Q8Jcv4hpOmVj7LVtiRDhqBM=;
+        b=XFHS0xP6pzd1hzxev3TOYgtvPI55W/itopzKm0dvSDGy+6a7OvvL6KrvnD6lCEFa9H
+         EQt8Cdm+9hmcb46qvWyULanaCBJmNbQBG2NgkC4SOCQ0lX+0q90G6hTbKc7BMhjsMvHV
+         kw1AFxlZhDgAaOw8MsMn39uZoBagGabvZlY1HK0zpLDdo4U1JuUgA8nqPx3Pso45FtgZ
+         IfQWiSi+k3z8Aqj81hf6hMtB15CYd0yZizfpL+zzVvgidbmKtRcDiNZCAtX1SoPQtD1u
+         0evlGBqtt31yQ6UZU6jxrBNRPUXUmE/R2sNR7CWermmkhToxaTZrmHfgClMwYb+SYOT0
+         dFrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=DxUbL1u2TvCgqbMMq8b5Q8Jcv4hpOmVj7LVtiRDhqBM=;
+        b=DX6UrPeLuM/qsEtPrtXgCGCCsLNcLPzstHmB/eRInIp9XoEu6oOTR29/mHH7R/PAr+
+         XOMOcL1wwlNTJYY+WShWXN9NlZvfBKIaCm47ipiHWvoNWd0r1xKwECeGXR1l5TzhTAaA
+         SzDEvgnRzVeCCrNPJxnMvflcr4qp8yxwHQpbeWZAIVFFyYphs3gAN1SA40e2kPewYy7H
+         P1wuaCsTRAfEzuOOzvGCJYuvtd53GiJJrbflwja1RQ+r4uLfs1g1Rn0uJE3Ew8m1fV2i
+         wh1kiFEad99lhHX6UatwPAb7dsXADH4vsjn0AzO6/286y72awVhTn1k2NlIK2HRi22yJ
+         mxhQ==
+X-Gm-Message-State: ACgBeo2+VVzsH4JLfZZc9s+TZ0cjU10n0FcqVuKRsJ/zP5NMR7cV2Ne3
+        k88dAexE2iJEdXwIB+6AEcYOAg==
+X-Google-Smtp-Source: AA6agR7f+iFFzmMMAkNIIujsBnwTB5naNjGrtk1S4+hnAkCY2l6GkulULJahswJWGF1zJGKzS718dg==
+X-Received: by 2002:a05:6512:2398:b0:48d:4ec:11c4 with SMTP id c24-20020a056512239800b0048d04ec11c4mr2353881lfv.583.1660914483914;
+        Fri, 19 Aug 2022 06:08:03 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
+        by smtp.gmail.com with ESMTPSA id c4-20020a056512324400b0048137a6486bsm632547lfr.228.2022.08.19.06.08.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 06:08:03 -0700 (PDT)
+Message-ID: <8472463e-d99a-d0f6-9551-45a79a15f567@linaro.org>
+Date:   Fri, 19 Aug 2022 16:08:01 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7ff2d658863db4fd5eecc1a53f682510c2765c3f.1660898432.git.namcaov@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/4] dt-bindings: sound: Add Apple MCA I2S transceiver
+Content-Language: en-US
+To:     =?UTF-8?Q?Martin_Povi=c5=a1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220819125430.4920-1-povik+lin@cutebit.org>
+ <20220819125430.4920-2-povik+lin@cutebit.org>
+ <AE646B68-CA14-483C-A1AB-30358560DAAD@cutebit.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <AE646B68-CA14-483C-A1AB-30358560DAAD@cutebit.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,74 +85,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nam,
+On 19/08/2022 15:58, Martin Povišer wrote:
+> 
+>> On 19. 8. 2022, at 14:54, Martin Povišer <povik+lin@cutebit.org> wrote:
+>>
+>> Add binding schema for MCA I2S transceiver found on Apple M1 and other
+>> chips.
+>>
+>> Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
+>> ---
+>> .../devicetree/bindings/sound/apple,mca.yaml  | 131 ++++++++++++++++++
+>> 1 file changed, 131 insertions(+)
+>> create mode 100644 Documentation/devicetree/bindings/sound/apple,mca.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/sound/apple,mca.yaml b/Documentation/devicetree/bindings/sound/apple,mca.yaml
+>> new file mode 100644
+>> index 000000000000..7b4f348c2be3
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/sound/apple,mca.yaml
+>> @@ -0,0 +1,131 @@
+> 
+> 
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - enum:
+>> +          - apple,t8103-mca
+>> +          - apple,t6000-mca
+> 
+> Since it was brought up last time but I didn’t respond: the
+> nonalphabetical order is as the chips were introduced (and
+> matches other schemas).
 
-Thank you for the patch! Perhaps something to improve:
+Sure, just keep that order for future compatibles as well - so always
+put them according to verifiable time of market introduction...
 
-[auto build test WARNING on staging/staging-testing]
+This is very poor reason, instead of alphabetical order. Even worse
+reason is repeating wrong pattern just because someone else did it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nam-Cao/staging-rtl8723bs-remove-dead-functions/20220819-165905
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git 8379cf83fe6d57a12952de6dcaf7a7fbd7b364fc
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220819/202208192018.BfgiZyOY-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/3b86aa03519d904d916cb62a1113c0c5549496cb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nam-Cao/staging-rtl8723bs-remove-dead-functions/20220819-165905
-        git checkout 3b86aa03519d904d916cb62a1113c0c5549496cb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/staging/rtl8723bs/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/staging/rtl8723bs/core/rtw_odm.c:13:27: warning: 'odm_comp_str' defined but not used [-Wunused-const-variable=]
-      13 | static const char * const odm_comp_str[] = {
-         |                           ^~~~~~~~~~~~
-
-
-vim +/odm_comp_str +13 drivers/staging/rtl8723bs/core/rtw_odm.c
-
-554c0a3abf216c Hans de Goede 2017-03-29  12  
-05031914cb8f5b Tom Gardi     2017-08-12 @13  static const char * const odm_comp_str[] = {
-554c0a3abf216c Hans de Goede 2017-03-29  14  	/* BIT0 */"ODM_COMP_DIG",
-554c0a3abf216c Hans de Goede 2017-03-29  15  	/* BIT1 */"ODM_COMP_RA_MASK",
-554c0a3abf216c Hans de Goede 2017-03-29  16  	/* BIT2 */"ODM_COMP_DYNAMIC_TXPWR",
-554c0a3abf216c Hans de Goede 2017-03-29  17  	/* BIT3 */"ODM_COMP_FA_CNT",
-554c0a3abf216c Hans de Goede 2017-03-29  18  	/* BIT4 */"ODM_COMP_RSSI_MONITOR",
-554c0a3abf216c Hans de Goede 2017-03-29  19  	/* BIT5 */"ODM_COMP_CCK_PD",
-554c0a3abf216c Hans de Goede 2017-03-29  20  	/* BIT6 */"ODM_COMP_ANT_DIV",
-554c0a3abf216c Hans de Goede 2017-03-29  21  	/* BIT7 */"ODM_COMP_PWR_SAVE",
-554c0a3abf216c Hans de Goede 2017-03-29  22  	/* BIT8 */"ODM_COMP_PWR_TRAIN",
-554c0a3abf216c Hans de Goede 2017-03-29  23  	/* BIT9 */"ODM_COMP_RATE_ADAPTIVE",
-554c0a3abf216c Hans de Goede 2017-03-29  24  	/* BIT10 */"ODM_COMP_PATH_DIV",
-554c0a3abf216c Hans de Goede 2017-03-29  25  	/* BIT11 */"ODM_COMP_PSD",
-554c0a3abf216c Hans de Goede 2017-03-29  26  	/* BIT12 */"ODM_COMP_DYNAMIC_PRICCA",
-554c0a3abf216c Hans de Goede 2017-03-29  27  	/* BIT13 */"ODM_COMP_RXHP",
-554c0a3abf216c Hans de Goede 2017-03-29  28  	/* BIT14 */"ODM_COMP_MP",
-554c0a3abf216c Hans de Goede 2017-03-29  29  	/* BIT15 */"ODM_COMP_DYNAMIC_ATC",
-554c0a3abf216c Hans de Goede 2017-03-29  30  	/* BIT16 */"ODM_COMP_EDCA_TURBO",
-554c0a3abf216c Hans de Goede 2017-03-29  31  	/* BIT17 */"ODM_COMP_EARLY_MODE",
-554c0a3abf216c Hans de Goede 2017-03-29  32  	/* BIT18 */NULL,
-554c0a3abf216c Hans de Goede 2017-03-29  33  	/* BIT19 */NULL,
-554c0a3abf216c Hans de Goede 2017-03-29  34  	/* BIT20 */NULL,
-554c0a3abf216c Hans de Goede 2017-03-29  35  	/* BIT21 */NULL,
-554c0a3abf216c Hans de Goede 2017-03-29  36  	/* BIT22 */NULL,
-554c0a3abf216c Hans de Goede 2017-03-29  37  	/* BIT23 */NULL,
-554c0a3abf216c Hans de Goede 2017-03-29  38  	/* BIT24 */"ODM_COMP_TX_PWR_TRACK",
-554c0a3abf216c Hans de Goede 2017-03-29  39  	/* BIT25 */"ODM_COMP_RX_GAIN_TRACK",
-554c0a3abf216c Hans de Goede 2017-03-29  40  	/* BIT26 */"ODM_COMP_CALIBRATION",
-554c0a3abf216c Hans de Goede 2017-03-29  41  	/* BIT27 */NULL,
-554c0a3abf216c Hans de Goede 2017-03-29  42  	/* BIT28 */NULL,
-554c0a3abf216c Hans de Goede 2017-03-29  43  	/* BIT29 */NULL,
-554c0a3abf216c Hans de Goede 2017-03-29  44  	/* BIT30 */"ODM_COMP_COMMON",
-554c0a3abf216c Hans de Goede 2017-03-29  45  	/* BIT31 */"ODM_COMP_INIT",
-554c0a3abf216c Hans de Goede 2017-03-29  46  };
-554c0a3abf216c Hans de Goede 2017-03-29  47  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

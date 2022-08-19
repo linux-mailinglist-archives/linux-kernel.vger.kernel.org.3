@@ -2,82 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570375996F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AAD5996CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347417AbiHSIHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
+        id S1347434AbiHSIIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347356AbiHSIHI (ORCPT
+        with ESMTP id S1347470AbiHSIHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:07:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A646E42FB
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660896424;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ViBdorV9HHdkaicf8ipSaMCTXuZ8iW7SXUz2nBhSHsk=;
-        b=AqPfAYMFmlFNjGxNQYi8s1YZvQy07ya2xC3nBe6Izk31yIg8YZ9y8tdsGZ1GoOJd2qIC/3
-        dBg9CthiVf1klTahepbB3Q1xwK02u2x8zY0GQLmFsHjJpaw/1WX0mD5MkAM9aFqqDOA2no
-        P0oEcaJB5fI57XSvncL41GdieGa9wNo=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-47-bb6bpUF5NK2E3kUakcuBiQ-1; Fri, 19 Aug 2022 04:06:55 -0400
-X-MC-Unique: bb6bpUF5NK2E3kUakcuBiQ-1
-Received: by mail-ed1-f71.google.com with SMTP id w5-20020a05640234c500b0043dda025648so2422902edc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:06:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=ViBdorV9HHdkaicf8ipSaMCTXuZ8iW7SXUz2nBhSHsk=;
-        b=n91FEV1xrAVJJ6U6c+HddAD8N+g2Oka/zB5Ieikr9oehMRQZZ9Cnxy7WYgs5iJKfBH
-         ZhTJaL7hSMzblRdSk9/kfUdFzlto4Ah+D1DOu7HdUTuxL87KNrhLyUrl0CUgtDvpOU0L
-         CBQ7E1JEigCImz56G0QUOKKUjhPUvnCR1vsBqBnhtw1n+3772vlVhh2HT7hM+y+xibb3
-         BGr2QLLlpwkQtryvxbRoaayPjTfoq22TRooTsCXGDUkUi4lSbMLs48IU7rWgHw/iQ2eH
-         zeZT4Ng3VX2CeKCtVEfv0V3fRy1dpBacz2W8z34+bKZU+RYyoRpcEMmiJYh9fOy4tIMw
-         3gbg==
-X-Gm-Message-State: ACgBeo3O/ow0IIG16y1QkgPLnYxaYojTTdvbfnZpxukoXmRYdcSxec6S
-        IS8s06vMJsBIVQSIGK7fmK+uv3Wgpq1dgh1BsbvlVZUthvKrFcPnsA5TKXBzthdwIGilQL21tti
-        U2W6jqTNNZIhth/xw39YOrhyPLAw/e1Dnz60vUd1ihSy1liXUsO9wQGlWd7xQrI/Th8dYw44X9j
-        oe
-X-Received: by 2002:a05:6402:280f:b0:43d:f946:a895 with SMTP id h15-20020a056402280f00b0043df946a895mr5333953ede.229.1660896414729;
-        Fri, 19 Aug 2022 01:06:54 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR66HslBjqXKMQNjZGcLezcYfvoiIaBEzB14b1r1qYBlm4B5HmhbpmbIZA381cwsCHOjbk563A==
-X-Received: by 2002:a05:6402:280f:b0:43d:f946:a895 with SMTP id h15-20020a056402280f00b0043df946a895mr5333931ede.229.1660896414459;
-        Fri, 19 Aug 2022 01:06:54 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id d7-20020a170906304700b00715a02874acsm1966120ejd.35.2022.08.19.01.06.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 01:06:53 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 09/26] KVM: VMX: nVMX: Support TSC scaling and
- PERF_GLOBAL_CTRL with enlightened VMCS
-In-Reply-To: <Yv5zn4qTl0aiaQvh@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-10-vkuznets@redhat.com>
- <Yv5zn4qTl0aiaQvh@google.com>
-Date:   Fri, 19 Aug 2022 10:06:53 +0200
-Message-ID: <87sflssllu.fsf@redhat.com>
+        Fri, 19 Aug 2022 04:07:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97FFE68D7
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:07:54 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oOx2m-00031g-JK; Fri, 19 Aug 2022 10:07:52 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oOx2k-000g0P-Gz; Fri, 19 Aug 2022 10:07:50 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oOx2j-00Chb8-U1; Fri, 19 Aug 2022 10:07:49 +0200
+Date:   Fri, 19 Aug 2022 10:07:48 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Tamseel Shams <m.shams@samsung.com>
+Cc:     thierry.reding@gmail.com, lee.jones@linaro.org,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com
+Subject: Re: [PATCH v2] pwm: Fixes dpm_run_callback() error in
+ pwm_apply_state()
+Message-ID: <20220819080748.c2qprsddcvjb7vkx@pengutronix.de>
+References: <CGME20220819044619epcas5p27ba774aacaa5d2a0056bba376b9dae54@epcas5p2.samsung.com>
+ <20220819043459.32584-1-m.shams@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2ufd7wqzuulu3quu"
+Content-Disposition: inline
+In-Reply-To: <20220819043459.32584-1-m.shams@samsung.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,218 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
 
-> On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
->> Enlightened VMCS v1 got updated and now includes the required fields
->> for TSC scaling and loading PERF_GLOBAL_CTRL upon VMENTER/VMEXIT
->> features. For Hyper-V on KVM enablement, KVM can just observe VMX control
->> MSRs and use the features (with or without eVMCS) when
->> possible. Hyper-V on KVM case is trickier because of live migration:
->> the new features require explicit enablement from VMM to not break
->> it. Luckily, the updated eVMCS revision comes with a feature bit in
->> CPUID.0x4000000A.EBX.
->
-> The refactor to implement the 2-d array should go in a prep patch.  Unless you
-> (or anyone else) objects to the feedback below, I'll do the split myself, post v6,
-> and queue this up (without patch 1, and assuming there're no major issues in the
-> back half of the series).
+--2ufd7wqzuulu3quu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-No objections from me, thanks!
+On Fri, Aug 19, 2022 at 10:04:59AM +0530, Tamseel Shams wrote:
+> Return invalid argument error from pwm_apply_state()
+> call when 'period is not set' or 'duty_cycle is greater
+> than period' only when PWM is enabled, so as to fix the
+> dpm_run_callback() error seen on exynos SoC during
+> Suspend
+>=20
+> There may be situation when PWM is exported using sysfs,
+> but at that point period is not set for PWM. At this
+> point if we do suspend, then during pwm_apply_state
+> function call from pwm_class_suspend, it checks whether
+> period is set or not. It is not set now, so it returns
+> an invalid argument error which issues dpm_run_callback()
+> error
+>=20
+> Suggested-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Tamseel Shams <m.shams@samsung.com>
 
->
->> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->> ---
->>  arch/x86/kvm/hyperv.c     |  2 +-
->>  arch/x86/kvm/vmx/evmcs.c  | 88 +++++++++++++++++++++++++++++++--------
->>  arch/x86/kvm/vmx/evmcs.h  | 17 ++------
->>  arch/x86/kvm/vmx/nested.c |  2 +-
->>  arch/x86/kvm/vmx/vmx.c    |  2 +-
->>  5 files changed, 78 insertions(+), 33 deletions(-)
->> 
->> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
->> index 1098915360ae..8a2b24f9bbf6 100644
->> --- a/arch/x86/kvm/hyperv.c
->> +++ b/arch/x86/kvm/hyperv.c
->> @@ -2552,7 +2552,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
->>  		case HYPERV_CPUID_NESTED_FEATURES:
->>  			ent->eax = evmcs_ver;
->>  			ent->eax |= HV_X64_NESTED_MSR_BITMAP;
->> -
->> +			ent->ebx |= HV_X64_NESTED_EVMCS1_2022_UPDATE;
->>  			break;
->>  
->>  		case HYPERV_CPUID_SYNDBG_VENDOR_AND_MAX_FUNCTIONS:
->> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
->> index 8bea5dea0341..e8497f9854a1 100644
->> --- a/arch/x86/kvm/vmx/evmcs.c
->> +++ b/arch/x86/kvm/vmx/evmcs.c
->> @@ -368,7 +368,60 @@ uint16_t nested_get_evmcs_version(struct kvm_vcpu *vcpu)
->>  	return 0;
->>  }
->>  
->> -void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata)
->> +enum evmcs_revision {
->> +	EVMCSv1_2016,
->> +	EVMCSv1_2022,
->> +	EVMCS_REVISION_MAX,
->
-> "MAX" is technically wrong, the "max" entry is usually the last valid entry.  This
-> should be NR_EVMCS_REVISIONS, and then NR_EVMCS_CTRLS below.
->
->> +};
->> +
->> +enum evmcs_unsupported_ctrl_type {
->
-> I think drop the "unsupported" here, because the naming gets weird when trying to
-> use it for something other than indexing evmcs_unsupported_ctls (see bottom).
->
->> +	EVMCS_EXIT_CTLS,
->> +	EVMCS_ENTRY_CTLS,
->
-> s/CTLS/CTRLS for consistency.
->
->> +	EVMCS_2NDEXEC,
->> +	EVMCS_PINCTRL,
->> +	EVMCS_VMFUNC,
->> +	EVMCS_CTRL_MAX,
->> +};
->> +
->> +static u32 evmcs_unsupported_ctls[EVMCS_CTRL_MAX][EVMCS_REVISION_MAX] = {
->
-> This can be "const".  And s/ctls/ctrls for consistency.
->
->> +	[EVMCS_EXIT_CTLS] = {
->> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_VMEXIT_CTRL | VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL,
->> +		[EVMCSv1_2022] = EVMCS1_UNSUPPORTED_VMEXIT_CTRL,
->> +	},
->> +	[EVMCS_ENTRY_CTLS] = {
->> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_VMENTRY_CTRL | VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL,
->> +		[EVMCSv1_2022] =  EVMCS1_UNSUPPORTED_VMENTRY_CTRL,
->> +	},
->> +	[EVMCS_2NDEXEC] = {
->> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_2NDEXEC | SECONDARY_EXEC_TSC_SCALING,
->> +		[EVMCSv1_2022] = EVMCS1_UNSUPPORTED_2NDEXEC,
->> +	},
->> +	[EVMCS_PINCTRL] = {
->> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_PINCTRL,
->> +		[EVMCSv1_2022] = EVMCS1_UNSUPPORTED_PINCTRL,
->> +	},
->> +	[EVMCS_VMFUNC] = {
->> +		[EVMCSv1_2016] = EVMCS1_UNSUPPORTED_VMFUNC,
->> +		[EVMCSv1_2022] = EVMCS1_UNSUPPORTED_VMFUNC,
->> +	},
->> +};
->> +
->> +static u32 evmcs_get_unsupported_ctls(struct kvm_vcpu *vcpu,
->> +				      enum evmcs_unsupported_ctrl_type ctrl_type)
->> +{
->> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
->> +	enum evmcs_revision evmcs_rev = EVMCSv1_2016;
->> +
->> +	if (!hv_vcpu)
->
-> This is a functiontal change, and I don't think it's correct either.  Previously,
-> KVM would apply the EVMCSv1_2016 filter irrespective of whether or not
-> vcpu->arch.hyperv is non-NULL.  nested_enable_evmcs() doesn't require a Hyper-V
-> vCPU, and AFAICT nothing requires a Hyper-V vCPU to use eVMCS.
+I still consider this a band aid and I think there is need for prudence
+here. Did you verify that all lowlevel drivers handle a state that is
+now allowed in a sane way? If you did, you missed at least
+pwm-bcm2835.c, I guess there are more but I stopped checking.
 
-Indeed, this *is* correct after PATCH11 when we get rid of VMX feature
-MSR filtering for KVM-on-Hyper-V as the remaining use for
-evmcs_get_unsupported_ctls() is Hyper-V on KVM and hv_vcpu is not NULL
-there. As of this patch, this is incorrect as we're breaking e.g. Linux
-guests on KVM on Hyper-V.
+So while this change might make sense in the future, I think it's wrong
+to do it now.
 
->
-> So I believe this should be:
->
-> 	if (hv_vcpu &&
-> 	    hv_vcpu->cpuid_cache.nested_ebx & HV_X64_NESTED_EVMCS1_2022_UPDATE)
-> 		evmcs_rev = EVMCSv1_2022;
+I stand to the request to find out why pwm->state is strange. Maybe you
+just have to fix your .get_state() callback.
 
-This looks good to me, thanks!
+Best regards
+Uwe
 
->
->> +		return 0;
->> +
->> +	if (hv_vcpu->cpuid_cache.nested_ebx & HV_X64_NESTED_EVMCS1_2022_UPDATE)
->> +		evmcs_rev = EVMCSv1_2022;
->> +
->> +	return evmcs_unsupported_ctls[ctrl_type][evmcs_rev];
->> +}
->> +
->
-> ...
->
->> -int nested_evmcs_check_controls(struct vmcs12 *vmcs12)
->> +int nested_evmcs_check_controls(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12)
->>  {
->>  	int ret = 0;
->>  	u32 unsupp_ctl;
->>  
->>  	unsupp_ctl = vmcs12->pin_based_vm_exec_control &
->> -		EVMCS1_UNSUPPORTED_PINCTRL;
->> +		evmcs_get_unsupported_ctls(vcpu, EVMCS_PINCTRL);
->>  	if (unsupp_ctl) {
->>  		trace_kvm_nested_vmenter_failed(
->> -			"eVMCS: unsupported pin-based VM-execution controls",
->> +			"eVMCS: unsupported pin-based VM-execution controls: ",
->>  			unsupp_ctl);
->
-> Egad!  This is all broken, at least in theory.  The second param to
-> trace_kvm_nested_vmenter_failed() is the error code, not the bad value.  It mostly
-> works because __print_symbolic() falls back to printing the hex value on error,
-> but that relies on there being no collisions/matches between unsupp_ctl and the
-> set of VMX_VMENTER_INSTRUCTION_ERRORS.  E.g. if there's a collision then the
-> tracepoint will pretty print a string and cause confusion.
->
-> And checking every control even after one fails seems unnecessary subtle.  It
-> provides marginal benefit while increasing the probability that we screw up and
-> squash "ret" to zero.  Yeah, it might save some onion peeling, but if that happens
-> during production and now during initial development of a feature, then someone
-> has much bigger problems to worry about.
->
-> Unless there are objections, I'll fold in a patch to yield:
->
-> #define CC KVM_NESTED_VMENTER_CONSISTENCY_CHECK
->
-> static bool nested_evmcs_is_valid_controls(enum evmcs_ctrl_type type, u32 val)
-> {
-> 	return val & evmcs_get_unsupported_ctls(type);
-> }
->
-> int nested_evmcs_check_controls(struct vmcs12 *vmcs12)
-> {
-> 	if (CC(!nested_evmcs_is_valid_controls(EVMCS_PINCTRL,
-> 					       vmcs12->pin_based_vm_exec_control)))
-> 		return -EINVAL;
->
-> 	if (CC(!nested_evmcs_is_valid_controls(EVMCS_2NDEXEC,
-> 					       vmcs12->secondary_vm_exec_control)))
-> 		return -EINVAL;
->
-> 	if (CC(!nested_evmcs_is_valid_controls(EVMCS_EXIT_CTRLS,
-> 					       vmcs12->vm_exit_controls)))
-> 		return -EINVAL;
->
-> 	if (CC(!nested_evmcs_is_valid_controls(EVMCS_ENTRY_CTRLS,
-> 					       vmcs12->vm_entry_controls)))
-> 		return -EINVAL;
->
-> 	if (CC(!nested_evmcs_is_valid_controls(EVMCS_VMFUNC,
-> 					       vmcs12->vm_function_control)))
-> 		return -EINVAL;
->
-> 	return 0;
-> }
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--2ufd7wqzuulu3quu
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Well, it's actually nice to see all the controls where KVM screwed up
-without the need to instrument kernel, this way when someone comes with
-an issue you can immediately see what's wrong in the trace
-log. Honestly, I don't remember these firing outside of my development
-environment, your patch to make things correct looks good to me.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Vitaly
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmL/RNEACgkQwfwUeK3K
+7AmK1wf/VNuYaNLZvpltnb55FdNVkUyi3cKwn6hMcycHd15o0ZIWFiBX+eI1+XKS
+gLEi6ax4G2UvPUwtedAt9Syumibd2Fcm6Sf8P3u/IBT9haqwOmNGrAUbHqXobSh5
+Wd5rMyYIRL7lY5GYx4Cx6NWrjAxWqdc6RwtfudEbjYdYCNQ5RfDHTAWo18aKd3N+
++fEKVG2LSK1L0rpo1b5F2UZNk/oIELCEO8Ua3aBsMsrVEOYQoX1BH7JChGAy7zSi
+9oMh5gbdCn8LNxiBk7FaWwh0RqjSWTR94MzWlgO8FcfKARU3ALbO+joQkObyK5Du
+DjrgdxNAPUUUE5eP51EwOac1ZdY8ow==
+=GZXz
+-----END PGP SIGNATURE-----
 
+--2ufd7wqzuulu3quu--

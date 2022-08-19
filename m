@@ -2,466 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14BB59A7D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945D859A7CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236792AbiHSVio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 17:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
+        id S236179AbiHSVjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 17:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234545AbiHSVii (ORCPT
+        with ESMTP id S232474AbiHSVjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 17:38:38 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28CF56B8E
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:38:36 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y127so2420488pfy.5
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:38:36 -0700 (PDT)
+        Fri, 19 Aug 2022 17:39:43 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E85F18396
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:39:42 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id a14-20020a0568300b8e00b0061c4e3eb52aso3897958otv.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:39:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=BfbwlzS5+6s0VqI+nXcKb/tVfJ+Onqz9AlRMcJukqeo=;
-        b=Z3ALrhyRkLaUmF2vyenJS8yzBH8sEr2pqs5ERzcCXmKAyMe9RjX8pZW/6lu7HSINRK
-         UMUUjubr2LW9P/xMv9ChAZ/m0xj/ptfgvHsiHRsdTs6dYwjRhaIyRcgYhOHB8Y0mT6du
-         HjULyYldQZCwyyhH75TBfizAUJnsNb+VEJL9QMv9OdAIJIoARRvrmXcNWIKPbnluvaLW
-         BTyXnfEKtrnalU9ZCRUvJ9LOJb+lDFql2Uff3/rWnN43OxgbsLJYxEmyuxYzHKplB6Yp
-         8OXHGPjWHR06bBzaXjlzYQn/lBnwo04fh8ybneqWH/V0/y64hY6jVTJSngeeOggAthBL
-         TOBg==
+        bh=AGzxcMpgy1f3HMy9tWyYqtgpJAs8k+s3vJqDIzylNVA=;
+        b=E51P8ViaWVLX0jvYrxKZAm3vBcmNKWYZW6dAPGUlDQroZS+kgFOq72BAJUIzo0ysnd
+         LMZsX0P1+GPJob6JcSzn/efbznML58TYnNnfcjwV2Xaop0dBkMin0wxlOwhmDsL4Gj++
+         MHI6OKrm2UD2vylNZLgeqOybpNb+JgsMVEokXO79/AMSY19zPlzcKuwmIej34A4jbqic
+         q1FTUX84t5sz77stj2RIeOiPPu8QRceOWkk1mZrIx9kL6878ianqAjRlHHhzEJOG2q6P
+         YCprk/LSMcpkreXgN9oX0ziT8CcPYnogkT6+9WGcxNcl3mx1X80F5fOfBljHN1bhY0Ks
+         IERg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=BfbwlzS5+6s0VqI+nXcKb/tVfJ+Onqz9AlRMcJukqeo=;
-        b=nD855rKSqdF3dSpd8ek+6vP0IoNGi7uRV768+wQvlO/DOR1uHg35sajq5ayBAAUSfl
-         FZbKo0q+HCo6M7hAZiQMLRga4X2XumLqURVZ3YpuOev+eXmLecTNrrJbcLz60YIviK1N
-         scIOGgMj7SNtb9pKwVksWAVlO2f0M5vuc2YGhsg5vVM3OOdQtrFWaSz5SbImEivD65C+
-         JwKZAo3lZUI9cSA6Sv2yz/K/14KipbrD9MFOVY10OiiORfvPSLnwz7/JwEw5jb3uSEMh
-         u49y96tlKgM0GyG9/Cvdsy+WMP8vicOffFe4pLDVpWV/taAR6NaEJ/RyH8KRiwK8+z8/
-         zsOw==
-X-Gm-Message-State: ACgBeo1XndSdr8n9Rafh+3mi1v/2KgME8PFMbb91QMDErYdL2pcWCci4
-        vrOYTPlfpRk42pJaKoO9y+dUkA==
-X-Google-Smtp-Source: AA6agR5NjPAe3Ddvn/n5tVmakIaXaOtvFWbMcmHL33eJHYjJms2SDbdcQWR4i3YzNykXVkyczwNmvQ==
-X-Received: by 2002:a05:6a00:16c1:b0:520:6ede:24fb with SMTP id l1-20020a056a0016c100b005206ede24fbmr9820852pfc.7.1660945116014;
-        Fri, 19 Aug 2022 14:38:36 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id g7-20020aa79f07000000b0052dcbd87ae8sm3875595pfr.25.2022.08.19.14.38.34
+        bh=AGzxcMpgy1f3HMy9tWyYqtgpJAs8k+s3vJqDIzylNVA=;
+        b=caExouuuApeKwDse+N1QTVeFgHiAuMKOA+Cm1YWQG7PlthG4IBkPYsUkWNVusbluDz
+         OVgNdT6Xb4ctYEOIRneop4ggLpIFSRM5jRIc8T6BNN/4kN8hJH0Jd1TBZcY2RWT8QCVM
+         /GtX4Rb6hdnAnLfaE5MKB+F3zofp35mLuwxYy6Fc1dL5e5DQk3Qb1pEV26MTTd4ba94l
+         XJ+IXJ56p5X0lH53aiiCc/ijZb+lc+QjRVopKgpCY784H2KnQUcTCY7MJrasNX+qxboI
+         h2XjI1q5qOKZ3azjpXhY4eZkDxeh2Opq/gU/4p7Rzjmpu9k/Kw0D5AIpIMMP0Iyoipam
+         L9Ig==
+X-Gm-Message-State: ACgBeo1VZcVTpd3nX8BkX49+IN2IMS//Kd72gu1FGJ7Un2nOavKzd8+4
+        L3Jh4wO+wPBP8PT6ikJRZdyJQw==
+X-Google-Smtp-Source: AA6agR4fKET4Xlnj9XFWaJpgToogMvlTL7ry/CzHPdCJ2np554jHWijse9yBvrmkpPwz9nynp46fbA==
+X-Received: by 2002:a05:6830:1cc8:b0:618:ebac:c43f with SMTP id p8-20020a0568301cc800b00618ebacc43fmr3728480otg.45.1660945181376;
+        Fri, 19 Aug 2022 14:39:41 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id 3-20020a9d0b83000000b0063706889f89sm1409174oth.8.2022.08.19.14.39.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 14:38:34 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 14:38:29 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: selftests: Run dirty_log_perf_test on specific
- cpus
-Message-ID: <YwAC1f5wTYpTdeh+@google.com>
-References: <20220819210737.763135-1-vipinsh@google.com>
+        Fri, 19 Aug 2022 14:39:40 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 16:39:38 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Pin-yen Lin <treapking@chromium.org>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
+Message-ID: <YwADGgNVwtKacUBR@builder.lan>
+References: <20220810204750.3672362-1-bjorn.andersson@linaro.org>
+ <20220810204750.3672362-2-bjorn.andersson@linaro.org>
+ <a13bce60-25b4-d075-d56a-d1283e91e3ba@linaro.org>
+ <20220814210104.GA690892-robh@kernel.org>
+ <Yv1y9Wjp16CstJvK@baldur>
+ <CAE-0n53AjJ_G6yZoTALWpKvZUdF+8nFZ+TQh=Ch=8xgdMVqDkw@mail.gmail.com>
+ <CACeCKadP-AZ8OU4A=7CrwAz7yuLvMvjvAcw7K-FORFmkMvx7cA@mail.gmail.com>
+ <CAE-0n53C+D=9gdSXKsjr4KZVrb-gpeo_EyuX3DfNKp19FoicXA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819210737.763135-1-vipinsh@google.com>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAE-0n53C+D=9gdSXKsjr4KZVrb-gpeo_EyuX3DfNKp19FoicXA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 02:07:37PM -0700, Vipin Sharma wrote:
-> Add command line options to run the vcpus and the main process on the
-> specific cpus on a host machine. This is useful as it provides
-> options to analyze performance based on the vcpus and dirty log worker
-> locations, like on the different numa nodes or on the same numa nodes.
+On Fri 19 Aug 15:49 CDT 2022, Stephen Boyd wrote:
+
+> Quoting Prashant Malani (2022-08-19 13:14:25)
+> > > This would do that for us, but when all four lanes are connected from
+> > > the qmp phy directly to the connector we could just as easily have done
+> > > it with one endpoint.
+> > >
+> > >         qmp_phy {
+> > >                 ports {
+> > >                         port@0 {
+> > >                                 reg = <0>;
+> > >                                 endpoint@0 {
+> > >                                         reg = <0>;
+> > >                                         remote-endpoint = <&usb_c_ss>;
+> > >                                         data-lanes = <1 2 3 0>
+> > >                                 };
+> > >                         };
+> > >                 };
+> > >         };
+> > >
+> > > So should we explicitly have two endpoints in the usb-c-connector for
+> > > the two pairs all the time, or should we represent that via data-lanes
+> > > and only split up the connector's endpoint if we need to connect the
+> > > usb-c-connector to two different endpoints?
+> >
+> > I like 2 endpoints to represent the usb-c-connector, but that doesn't seem
+> > to be compatible (without introducing `data-lanes`, at least) with all
+> > the various
+> > combinations on the remote side, if that remote side is a DRM bridge with DP
+> > output capability (like it6505 or anx7625).
+> > That type of DRM bridge supports 1, 2 or 4 lane DP connections.
 > 
-> Link: https://lore.kernel.org/lkml/20220801151928.270380-1-vipinsh@google.com
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Suggested-by: David Matlack <dmatlack@google.com>
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+> Why can't the remote side that's a pure DP bridge (it6505) bundle
+> however many lanes it wants into one endpoint? If it's a pure DP bridge
+> we should design the bridge binding to have up to 4 endpoints, but
+> sometimes 2 or 1 and then overlay data-lanes onto that binding so that
+> we can tell the driver how to remap the lanes if it can. If the hardware
+> can't support remapping lanes then data-lanes shouldn't be in the
+> binding.
 > 
-> v2:
->  - Removed -d option.
->  - One cpu list passed as option, cpus for vcpus, followed by
->    application thread cpu.
->  - Added paranoid cousin of atoi().
+
+I don't see why we would want to further complicate the of_graph by
+representing each signal pair between two fixed endpoint as individual
+endpoints.
+
+Let's describe the connections between the components, not the signals.
+
+> >
+> > So, how about 4 endpoints (1 for each SS lane) in the usb-c-connector port@1?
+> > That should support every conceivable configuration and bridge/PHY hardware.
+> > and also allows a way to specify any lane remapping (similar to what
+> > "data lanes" does)
+> > if that is required.
+> > Then we are consistent with what an endpoint represents, regardless of whether
+> > the DRM bridge has a DP panel (1,2 or 4 lane) or Type-C connector  (2
+> > or 4 lane) on its output side.
 > 
-> v1: https://lore.kernel.org/lkml/20220817152956.4056410-1-vipinsh@google.com
+> I'd like to think in terms of the usb-c-connector, where the DP altmode
+> doesn't support one lane of DP and USB is only carried across two SS
+> lanes. Essentially, two SS lanes are always together, hence the idea
+> that we should have two endpoints in the SS port@1. In the simple case
+> above it seems we can get away with only one endpoint in the SS port@1
+> which is probably fine? I just don't know how that is represented in the
+> schema, but I suspect making another endpoint optional in the SS port@1
+> is the way to go.
 > 
->  .../selftests/kvm/access_tracking_perf_test.c |  2 +-
->  .../selftests/kvm/demand_paging_test.c        |  2 +-
->  .../selftests/kvm/dirty_log_perf_test.c       | 89 +++++++++++++++++--
->  .../selftests/kvm/include/perf_test_util.h    |  3 +-
->  .../selftests/kvm/lib/perf_test_util.c        | 32 ++++++-
->  .../kvm/memslot_modification_stress_test.c    |  2 +-
->  6 files changed, 116 insertions(+), 14 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-> index 1c2749b1481a..9659462f4747 100644
-> --- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
-> +++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-> @@ -299,7 +299,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->  	vm = perf_test_create_vm(mode, nr_vcpus, params->vcpu_memory_bytes, 1,
->  				 params->backing_src, !overlap_memory_access);
->  
-> -	perf_test_start_vcpu_threads(nr_vcpus, vcpu_thread_main);
-> +	perf_test_start_vcpu_threads(nr_vcpus, NULL, vcpu_thread_main);
->  
->  	pr_info("\n");
->  	access_memory(vm, nr_vcpus, ACCESS_WRITE, "Populating memory");
-> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-> index 779ae54f89c4..b9848174d6e7 100644
-> --- a/tools/testing/selftests/kvm/demand_paging_test.c
-> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> @@ -336,7 +336,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->  	pr_info("Finished creating vCPUs and starting uffd threads\n");
->  
->  	clock_gettime(CLOCK_MONOTONIC, &start);
-> -	perf_test_start_vcpu_threads(nr_vcpus, vcpu_worker);
-> +	perf_test_start_vcpu_threads(nr_vcpus, NULL, vcpu_worker);
->  	pr_info("Started all vCPUs\n");
->  
->  	perf_test_join_vcpu_threads(nr_vcpus);
-> diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> index f99e39a672d3..ace4ed954628 100644
-> --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> @@ -8,10 +8,12 @@
->   * Copyright (C) 2020, Google, Inc.
->   */
->  
-> +#define _GNU_SOURCE
->  #include <stdio.h>
->  #include <stdlib.h>
->  #include <time.h>
->  #include <pthread.h>
-> +#include <sched.h>
->  #include <linux/bitmap.h>
->  
->  #include "kvm_util.h"
-> @@ -132,6 +134,7 @@ struct test_params {
->  	bool partition_vcpu_memory_access;
->  	enum vm_mem_backing_src_type backing_src;
->  	int slots;
-> +	int *vcpu_to_lcpu;
->  };
->  
->  static void toggle_dirty_logging(struct kvm_vm *vm, int slots, bool enable)
-> @@ -248,7 +251,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->  	for (i = 0; i < nr_vcpus; i++)
->  		vcpu_last_completed_iteration[i] = -1;
->  
-> -	perf_test_start_vcpu_threads(nr_vcpus, vcpu_worker);
-> +	perf_test_start_vcpu_threads(nr_vcpus, p->vcpu_to_lcpu, vcpu_worker);
->  
->  	/* Allow the vCPUs to populate memory */
->  	pr_debug("Starting iteration %d - Populating\n", iteration);
-> @@ -348,12 +351,61 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->  	perf_test_destroy_vm(vm);
->  }
->  
-> +static int atoi_paranoid(const char *num_str)
-> +{
-> +	int num;
-> +	char *end_ptr;
-> +
-> +	errno = 0;
-> +	num = (int)strtol(num_str, &end_ptr, 10);
-> +	TEST_ASSERT(errno == 0, "Conversion error: %d\n", errno);
-> +	TEST_ASSERT(num_str != end_ptr && *end_ptr == '\0',
-> +		    "Invalid number string.\n");
-> +
-> +	return num;
-> +}
+> Will there ever be a time when all 4 usb-c-connector remote-endpoint
+> phandles point to endpoints that are child nodes of different ports
+> (i.e. different qmp_phy nodes) with a 4 endpoint schema? I don't think
+> that is possible, so 4 endpoints is flexible but also verbose. It also
+> means we would have to walk the endpoints to figure out lane remapping,
+> wheres we can simply find the endpoint in the DP bridge ports and look
+> at data-lanes directly.
 
-Introduce atoi_paranoid() and upgrade existing atoi() users in a
-separate commit. Also please put it in e.g. test_util.c so that it can
-be used by other tests (and consider upgrading other tests to use it in
-your commit).
+The existing implementation provides the interfaces usb_role_switch,
+usb_typec_mux and usb_typec_switch. These works based on the concept
+that the USB Type-C controller will request the endpoints connected to
+the usb-c-connector about changes such as "switch to host mode", "switch
+to 2+2 USB/DP combo" and "switch orientation to reverse". We use this
+same operations to inform any endpoint at any port about these events
+and they all react accordingly.
 
-> +
-> +static int parse_cpu_list(const char *arg, int *lcpu_list, int list_size)
-> +{
-> +	char delim[2] = ",";
-> +	char *cpu, *cpu_list;
-> +	int i = 0, cpu_num;
-> +
-> +	cpu_list = strdup(arg);
-> +	TEST_ASSERT(cpu_list, "strdup() allocation failed.\n");
-> +
-> +	cpu = strtok(cpu_list, delim);
-> +	while (cpu) {
-> +		TEST_ASSERT(i != list_size,
-> +			    "Too many cpus, max supported: %d\n", list_size);
-> +
-> +		cpu_num = atoi_paranoid(cpu);
-> +		TEST_ASSERT(cpu_num >= 0, "Invalid cpu number: %d\n", cpu_num);
-> +		lcpu_list[i++] = cpu_num;
-> +		cpu = strtok(NULL, delim);
-> +	}
-> +	free(cpu_list);
-> +
-> +	return i;
-> +}
-> +
-> +static void assign_dirty_log_perf_test_cpu(int cpu)
-> +{
-> +	cpu_set_t cpuset;
-> +	int err;
-> +
-> +	CPU_ZERO(&cpuset);
-> +	CPU_SET(cpu, &cpuset);
-> +	err = sched_setaffinity(0, sizeof(cpu_set_t), &cpuset);
-> +	TEST_ASSERT(err == 0, "Error in setting dirty log perf test cpu\n");
-> +}
-> +
->  static void help(char *name)
->  {
->  	puts("");
->  	printf("usage: %s [-h] [-i iterations] [-p offset] [-g] "
->  	       "[-m mode] [-n] [-b vcpu bytes] [-v vcpus] [-o] [-s mem type]"
-> -	       "[-x memslots]\n", name);
-> +	       "[-x memslots] [-c logical cpus to run test on]\n", name);
->  	puts("");
->  	printf(" -i: specify iteration counts (default: %"PRIu64")\n",
->  	       TEST_HOST_LOOP_N);
-> @@ -383,6 +435,14 @@ static void help(char *name)
->  	backing_src_help("-s");
->  	printf(" -x: Split the memory region into this number of memslots.\n"
->  	       "     (default: 1)\n");
-> +	printf(" -c: Comma separated values of the logical CPUs, which will run\n"
-> +	       "     the vCPUs, followed by the main application thread cpu.\n"
-> +	       "     Number of values must be equal to the number of vCPUs + 1.\n\n"
-> +	       "     Example: ./dirty_log_perf_test -v 3 -c 22,23,24,50\n"
-> +	       "     This means that the vcpu 0 will run on the logical cpu 22,\n"
-> +	       "     vcpu 1 on the logical cpu 23, vcpu 2 on the logical cpu 24\n"
-> +	       "     and the main thread will run on cpu 50.\n"
-> +	       "     (default: No cpu mapping)\n");
->  	puts("");
->  	exit(0);
->  }
-> @@ -390,14 +450,18 @@ static void help(char *name)
->  int main(int argc, char *argv[])
->  {
->  	int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
-> +	int lcpu_list[KVM_MAX_VCPUS + 1];
-> +
->  	struct test_params p = {
->  		.iterations = TEST_HOST_LOOP_N,
->  		.wr_fract = 1,
->  		.partition_vcpu_memory_access = true,
->  		.backing_src = DEFAULT_VM_MEM_SRC,
->  		.slots = 1,
-> +		.vcpu_to_lcpu = NULL,
->  	};
->  	int opt;
-> +	int nr_lcpus = -1;
->  
->  	dirty_log_manual_caps =
->  		kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT2);
-> @@ -406,8 +470,11 @@ int main(int argc, char *argv[])
->  
->  	guest_modes_append_default();
->  
-> -	while ((opt = getopt(argc, argv, "eghi:p:m:nb:f:v:os:x:")) != -1) {
-> +	while ((opt = getopt(argc, argv, "c:eghi:p:m:nb:f:v:os:x:")) != -1) {
->  		switch (opt) {
-> +		case 'c':
-> +			nr_lcpus = parse_cpu_list(optarg, lcpu_list, KVM_MAX_VCPUS + 1);
+Perhaps I'm misunderstanding your suggestion, but if you start
+representing each individual lane in the SuperSpeed interface I believe
+you would have to just abandon this interface and replace it with
+something like "give me USB on port@1/endpoint@0 and port@1/endpoint@1
+and give me DP on port@1/endpoint@2 and port@1/endpoint@3".
 
-I think we should move all the logic to pin threads to perf_test_util.c.
-The only thing dirty_log_perf_test.c should do is pass optarg into
-perf_test_util.c. This will make it trivial for any other test based on
-pef_test_util.c to also use pinning.
+I presume that such an interface would work, but I'm afraid I don't see
+the merits of it and we would have to replace the Linux implementation.
 
-e.g. All a test needs to do to use pinning is add a flag to the optlist
-and add a case statement like:
-
-        case 'c':
-                perf_test_setup_pinning(optarg);
-                break;
-
-perf_test_setup_pinning() would:
- - Parse the list and populate perf_test_vcpu_args with each vCPU's
-   assigned pCPU.
- - Pin the current thread to it's assigned pCPU if one is provided.
-
-Validating that the number of pCPUs == number of vCPUs is a little
-tricky. But that could be done as part of
-perf_test_start_vcpu_threads(). Alternatively, you could set up pinning
-after getting the number of vCPUs. e.g.
-
-        const char *cpu_list = NULL;
-
-        ...
-
-        while ((opt = getopt(...)) != -1) {
-                switch (opt) {
-                case 'c':
-                        cpu_list = optarg;  // is grabbing optarg here safe?
-                        break;
-                }
-                ...
-        }
-
-        if (cpu_list)
-                perf_test_setup_pinning(cpu_list, nr_vcpus);
-
-> +			break;
->  		case 'e':
->  			/* 'e' is for evil. */
->  			run_vcpus_while_disabling_dirty_logging = true;
-> @@ -415,7 +482,7 @@ int main(int argc, char *argv[])
->  			dirty_log_manual_caps = 0;
->  			break;
->  		case 'i':
-> -			p.iterations = atoi(optarg);
-> +			p.iterations = atoi_paranoid(optarg);
->  			break;
->  		case 'p':
->  			p.phys_offset = strtoull(optarg, NULL, 0);
-> @@ -430,12 +497,12 @@ int main(int argc, char *argv[])
->  			guest_percpu_mem_size = parse_size(optarg);
->  			break;
->  		case 'f':
-> -			p.wr_fract = atoi(optarg);
-> +			p.wr_fract = atoi_paranoid(optarg);
->  			TEST_ASSERT(p.wr_fract >= 1,
->  				    "Write fraction cannot be less than one");
->  			break;
->  		case 'v':
-> -			nr_vcpus = atoi(optarg);
-> +			nr_vcpus = atoi_paranoid(optarg);
->  			TEST_ASSERT(nr_vcpus > 0 && nr_vcpus <= max_vcpus,
->  				    "Invalid number of vcpus, must be between 1 and %d", max_vcpus);
->  			break;
-> @@ -446,7 +513,7 @@ int main(int argc, char *argv[])
->  			p.backing_src = parse_backing_src_type(optarg);
->  			break;
->  		case 'x':
-> -			p.slots = atoi(optarg);
-> +			p.slots = atoi_paranoid(optarg);
->  			break;
->  		case 'h':
->  		default:
-> @@ -455,6 +522,14 @@ int main(int argc, char *argv[])
->  		}
->  	}
->  
-> +	if (nr_lcpus != -1) {
-> +		TEST_ASSERT(nr_lcpus == nr_vcpus + 1,
-> +			    "Number of logical cpus (%d) is not equal to the number of vcpus + 1 (%d).",
-> +			    nr_lcpus, nr_vcpus);
-> +		assign_dirty_log_perf_test_cpu(lcpu_list[nr_vcpus]);
-> +		p.vcpu_to_lcpu = lcpu_list;
-> +	}
-> +
->  	TEST_ASSERT(p.iterations >= 2, "The test should have at least two iterations");
->  
->  	pr_info("Test iterations: %"PRIu64"\n",	p.iterations);
-> diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
-> index eaa88df0555a..bd6c566cfc92 100644
-> --- a/tools/testing/selftests/kvm/include/perf_test_util.h
-> +++ b/tools/testing/selftests/kvm/include/perf_test_util.h
-> @@ -53,7 +53,8 @@ void perf_test_destroy_vm(struct kvm_vm *vm);
->  
->  void perf_test_set_wr_fract(struct kvm_vm *vm, int wr_fract);
->  
-> -void perf_test_start_vcpu_threads(int vcpus, void (*vcpu_fn)(struct perf_test_vcpu_args *));
-> +void perf_test_start_vcpu_threads(int vcpus, int *vcpus_to_lcpu,
-> +				  void (*vcpu_fn)(struct perf_test_vcpu_args *));
->  void perf_test_join_vcpu_threads(int vcpus);
->  void perf_test_guest_code(uint32_t vcpu_id);
->  
-> diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
-> index 9618b37c66f7..771fbdf3d2c2 100644
-> --- a/tools/testing/selftests/kvm/lib/perf_test_util.c
-> +++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-> @@ -2,11 +2,14 @@
->  /*
->   * Copyright (C) 2020, Google LLC.
->   */
-> +#define _GNU_SOURCE
->  #include <inttypes.h>
->  
->  #include "kvm_util.h"
->  #include "perf_test_util.h"
->  #include "processor.h"
-> +#include <pthread.h>
-> +#include <sched.h>
->  
->  struct perf_test_args perf_test_args;
->  
-> @@ -260,10 +263,15 @@ static void *vcpu_thread_main(void *data)
->  	return NULL;
->  }
->  
-> -void perf_test_start_vcpu_threads(int nr_vcpus,
-> +void perf_test_start_vcpu_threads(int nr_vcpus, int *vcpu_to_lcpu,
->  				  void (*vcpu_fn)(struct perf_test_vcpu_args *))
->  {
-> -	int i;
-> +	int i, err = 0;
-> +	pthread_attr_t attr;
-> +	cpu_set_t cpuset;
-> +
-> +	pthread_attr_init(&attr);
-> +	CPU_ZERO(&cpuset);
->  
->  	vcpu_thread_fn = vcpu_fn;
->  	WRITE_ONCE(all_vcpu_threads_running, false);
-> @@ -274,7 +282,24 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
->  		vcpu->vcpu_idx = i;
->  		WRITE_ONCE(vcpu->running, false);
->  
-> -		pthread_create(&vcpu->thread, NULL, vcpu_thread_main, vcpu);
-> +		if (vcpu_to_lcpu) {
-> +			CPU_SET(vcpu_to_lcpu[i], &cpuset);
-> +
-> +			err = pthread_attr_setaffinity_np(&attr,
-> +							  sizeof(cpu_set_t),
-> +							  &cpuset);
-> +			TEST_ASSERT(err == 0,
-> +				    "vCPU %d could not be mapped to logical cpu %d, error returned: %d\n",
-> +				    i, vcpu_to_lcpu[i], err);
-> +
-> +			CPU_CLR(vcpu_to_lcpu[i], &cpuset);
-> +		}
-> +
-> +		err = pthread_create(&vcpu->thread, &attr, vcpu_thread_main,
-> +				     vcpu);
-> +		TEST_ASSERT(err == 0,
-> +			    "error in creating vcpu %d thread, error returned: %d\n",
-> +			    i, err);
->  	}
->  
->  	for (i = 0; i < nr_vcpus; i++) {
-> @@ -283,6 +308,7 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
->  	}
->  
->  	WRITE_ONCE(all_vcpu_threads_running, true);
-> +	pthread_attr_destroy(&attr);
->  }
->  
->  void perf_test_join_vcpu_threads(int nr_vcpus)
-> diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-> index 6ee7e1dde404..246f8cc7bb2b 100644
-> --- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-> +++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-> @@ -103,7 +103,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->  
->  	pr_info("Finished creating vCPUs\n");
->  
-> -	perf_test_start_vcpu_threads(nr_vcpus, vcpu_worker);
-> +	perf_test_start_vcpu_threads(nr_vcpus, NULL, vcpu_worker);
->  
->  	pr_info("Started all vCPUs\n");
->  
-> -- 
-> 2.37.1.595.g718a3a8f04-goog
-> 
+Regards,
+Bjorn

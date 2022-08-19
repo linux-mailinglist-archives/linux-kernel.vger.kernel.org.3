@@ -2,155 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE1D5993B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 05:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3515993B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 05:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344173AbiHSDi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 23:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
+        id S1345428AbiHSDnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 23:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345591AbiHSDiy (ORCPT
+        with ESMTP id S235080AbiHSDnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 23:38:54 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7A75A89F
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 20:38:52 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id j17so2549371qtp.12
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 20:38:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc;
-        bh=7QWsk1dD79/0D4u0UWDr5UxzCpKhzJRpfIhKUpnpQ+k=;
-        b=KuaCRRHm/qV9FFVeqlEN7JryKLX4RwfY1LZIY85W4Q5v1ZzNMZMPFdn7uo+ttUjCVT
-         1HbFS5hSmTmVaadbykTq/foDTvZk+z2MPmSMfVSyEcM26pLHGI+FT1pagU3qA5YSv6Pe
-         smiTX6ALd4jvtRg4FQeIZu/V5dtCvUlK9QqKG98uq9fHrU0wTxzhMXCNUViHzxNWqeDD
-         tyUgxuRBDcr0kgwcKGkfVF51bYqzSNdXUE3NR9GsMHTj7CAWRw0dTXPSi1QBSeX/tIeL
-         hFZWouaQyyw4UZ3LD6KHID3uW3OYyosgyH7ArN1AA5RlREyiZP0Lm0kDIaJaInosSy0j
-         3rLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc;
-        bh=7QWsk1dD79/0D4u0UWDr5UxzCpKhzJRpfIhKUpnpQ+k=;
-        b=PbhpkEGIFEOb3cmo2RKr2Xs4PaGo0+1HpCMDIek8jFd3Zd5mfHoUzfwkMpAU3EyNqE
-         3RBkrU2fVjfLnMFuXEdbHLVKl61iLfyjgaUOEs/WHcRlWg1QHLJlXTxawJ1HUt+kJaeM
-         zQbt5919XWeQaVyNEQJM2GJPawVIapy3oZ3e9VBuYjeo0sF7U7dEBa4DaVpTOHmrAZoY
-         t2UxEqBzjzCsNz3bXMumrLmN8/D/6u3Zfzgaat+fUQ0A+aG0DNsAbCT20+rzRSuHIb29
-         DasF8/7ii893PuKHaT3AubEqTo7Q3JdDKs+u3w/4jnOVsShuz9FNXA8cgA1fR9PHkQJg
-         NHGw==
-X-Gm-Message-State: ACgBeo1rHz62C0rQ3MB4lIEmb4cfvup851dOi6c0yZDLYMmxqTsBNcg/
-        waRwpc/pp+Kis3xjNk1eMimLZQ==
-X-Google-Smtp-Source: AA6agR40rfnrczgoKbXWMuIEA5UNdChmZMqcOy/mPNBBRihLY4ymgv1M+UCKRDg9gmCEuMhOuCh2xQ==
-X-Received: by 2002:ac8:5ad4:0:b0:344:5e40:7824 with SMTP id d20-20020ac85ad4000000b003445e407824mr5218048qtd.482.1660880331003;
-        Thu, 18 Aug 2022 20:38:51 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id bm25-20020a05620a199900b006b949afa980sm2881193qkb.56.2022.08.18.20.38.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 20:38:50 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 20:38:35 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Sean Christopherson <seanjc@google.com>
-cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-In-Reply-To: <Yv7XTON3MwuC1Q3U@google.com>
-Message-ID: <226ab26d-9aa8-dce2-c7f0-9e3f5b65b63@google.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com> <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com> <20220818132421.6xmjqduempmxnnu2@box> <Yv7XTON3MwuC1Q3U@google.com>
+        Thu, 18 Aug 2022 23:43:37 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618902DA90
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 20:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660880615; x=1692416615;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VcK/uEhddtPpiXx32oXs6WPjvn4EoVih8zuVyhlR2nU=;
+  b=kF8DjYsPvLbjvaG4AHu6+jiuSBH1zjFwCBj+yAF1pOT/NG7u+dPPmt/f
+   V2ycE7GO0iUooZ4Taibwmy54NbGOZBHWZGVZWUmj444zcTFfC2VY4w6Y3
+   7CP/+A/VmWpct76i7EYNxCXETaq6bcRxbJh9aj8t7SjOuJQyKNnRPD3MV
+   2xZm3XKi0qGjmRreL4kwwYfUj/XmOokeK+IVqvx97WJg6T4CPXemv54m/
+   BoAnA6O/4reBLBThB4luki4Qc3KKOdEjzEjyGYzVy9tUZtr4gJjXyZGUI
+   vVcr259AtIWLSw6aOjh0Lc2oJKjf96BG1fsQZg/wJPK5B8OU94jo8jgKO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="291684737"
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="291684737"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 20:43:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="584491704"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 18 Aug 2022 20:43:33 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oOsuy-00011X-36;
+        Fri, 19 Aug 2022 03:43:32 +0000
+Date:   Fri, 19 Aug 2022 11:43:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:irq/urgent] BUILD SUCCESS
+ 57646d6769f13f9484ffc6869c493e25a6568073
+Message-ID: <62ff06d1.HwBlkQ4JLbGGxsz6%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022, Sean Christopherson wrote:
-> On Thu, Aug 18, 2022, Kirill A . Shutemov wrote:
-> > On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
-> > > On Wed, 6 Jul 2022, Chao Peng wrote:
-> > > But since then, TDX in particular has forced an effort into preventing
-> > > (by flags, seals, notifiers) almost everything that makes it shmem/tmpfs.
-> > > 
-> > > Are any of the shmem.c mods useful to existing users of shmem.c? No.
-> > > Is MFD_INACCESSIBLE useful or comprehensible to memfd_create() users? No.
-> 
-> But QEMU and other VMMs are users of shmem and memfd.  The new features certainly
-> aren't useful for _all_ existing users, but I don't think it's fair to say that
-> they're not useful for _any_ existing users.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
+branch HEAD: 57646d6769f13f9484ffc6869c493e25a6568073  Merge tag 'irqchip-fixes-6.0-1' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
 
-Okay, I stand corrected: there exist some users of memfd_create()
-who will also have use for "INACCESSIBLE" memory.
+elapsed time: 722m
 
-> 
-> > > What use do you have for a filesystem here?  Almost none.
-> > > IIUC, what you want is an fd through which QEMU can allocate kernel
-> > > memory, selectively free that memory, and communicate fd+offset+length
-> > > to KVM.  And perhaps an interface to initialize a little of that memory
-> > > from a template (presumably copied from a real file on disk somewhere).
-> > > 
-> > > You don't need shmem.c or a filesystem for that!
-> > > 
-> > > If your memory could be swapped, that would be enough of a good reason
-> > > to make use of shmem.c: but it cannot be swapped; and although there
-> > > are some references in the mailthreads to it perhaps being swappable
-> > > in future, I get the impression that will not happen soon if ever.
-> > > 
-> > > If your memory could be migrated, that would be some reason to use
-> > > filesystem page cache (because page migration happens to understand
-> > > that type of memory): but it cannot be migrated.
-> > 
-> > Migration support is in pipeline. It is part of TDX 1.5 [1]. 
-> 
-> And this isn't intended for just TDX (or SNP, or pKVM).  We're not _that_ far off
-> from being able to use UPM for "regular" VMs as a way to provide defense-in-depth
+configs tested: 123
+configs skipped: 3
 
-UPM? That's an acronym from your side of the fence, I spy references to
-it in the mail threads, but haven't tracked down a definition.  I'll
-just take it to mean the fd-based memory we're discussing.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> without having to take on the overhead of confidential VMs.  At that point,
-> migration and probably even swap are on the table.
+gcc tested configs:
+arc                  randconfig-r043-20220818
+um                             i386_defconfig
+um                           x86_64_defconfig
+riscv                randconfig-r042-20220818
+x86_64                              defconfig
+i386                          randconfig-a001
+arc                              allyesconfig
+s390                 randconfig-r044-20220818
+x86_64                           allyesconfig
+i386                          randconfig-a003
+x86_64                               rhel-8.3
+i386                                defconfig
+x86_64                        randconfig-a002
+i386                          randconfig-a005
+alpha                            allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+arm                                 defconfig
+i386                          randconfig-a014
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+powerpc                          allmodconfig
+ia64                             allmodconfig
+mips                             allyesconfig
+sh                               allmodconfig
+arm                              allyesconfig
+x86_64                        randconfig-a004
+i386                          randconfig-a012
+arm64                            allyesconfig
+i386                          randconfig-a016
+i386                             allyesconfig
+powerpc                         wii_defconfig
+sh                               j2_defconfig
+mips                  decstation_64_defconfig
+powerpc                      cm5200_defconfig
+mips                            gpr_defconfig
+sh                   rts7751r2dplus_defconfig
+sh                                  defconfig
+sh                               alldefconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+loongarch                           defconfig
+loongarch                         allnoconfig
+sparc                             allnoconfig
+m68k                         amcore_defconfig
+xtensa                              defconfig
+ia64                                defconfig
+arm                           sama5_defconfig
+um                                  defconfig
+ia64                             alldefconfig
+arm                            mps2_defconfig
+sparc                       sparc64_defconfig
+m68k                        m5307c3_defconfig
+i386                          randconfig-c001
+m68k                           sun3_defconfig
+sh                           sh2007_defconfig
+arm                          gemini_defconfig
+sh                          landisk_defconfig
+sh                        apsh4ad0a_defconfig
+arm                            pleb_defconfig
+parisc                generic-64bit_defconfig
+sh                          rsk7201_defconfig
+arm                           sunxi_defconfig
+arc                 nsimosci_hs_smp_defconfig
+loongarch                        alldefconfig
+m68k                                defconfig
+mips                         db1xxx_defconfig
+mips                       bmips_be_defconfig
+arm                        clps711x_defconfig
+arm                      footbridge_defconfig
+arm                            qcom_defconfig
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+arm64                               defconfig
+m68k                          hp300_defconfig
+openrisc                       virt_defconfig
+arm                          pxa910_defconfig
+arm                        realview_defconfig
+arm                        keystone_defconfig
+arm                             ezx_defconfig
+xtensa                  audio_kc705_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
 
-Good, the more "flexible" that memory is, the better for competing users
-of memory.  But an fd supplied by KVM gives you freedom to change to a
-better implementation of allocation underneath, whenever it suits you.
-Maybe shmem beneath is good from the start, maybe not.
+clang tested configs:
+hexagon              randconfig-r041-20220818
+hexagon              randconfig-r045-20220818
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a013
+x86_64                        randconfig-a005
+i386                          randconfig-a006
+x86_64                        randconfig-a001
+i386                          randconfig-a015
+x86_64                        randconfig-a003
+i386                          randconfig-a011
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+mips                          ath25_defconfig
+powerpc                          allmodconfig
+mips                        omega2p_defconfig
+arm                             mxs_defconfig
+x86_64                        randconfig-k001
+riscv                randconfig-r042-20220819
+s390                 randconfig-r044-20220819
+hexagon              randconfig-r045-20220819
+hexagon              randconfig-r041-20220819
+arm                         s5pv210_defconfig
+arm                         shannon_defconfig
 
-Hugh
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

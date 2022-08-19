@@ -2,185 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E130559A772
+	by mail.lfdr.de (Postfix) with ESMTP id 0A59359A76F
 	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352233AbiHSVKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 17:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S1351732AbiHSVK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 17:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350874AbiHSVKm (ORCPT
+        with ESMTP id S1352232AbiHSVKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 17:10:42 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0835AE0962
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:10:41 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10ea7d8fbf7so6557823fac.7
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=zmFxI4fcqG+VM79kjsw3Dz4TIlHari2uDbTRTdPXcuI=;
-        b=udeHnstv36JubtLuTYAHvkRsCYyIXRbm68kCEPPrsUYo2bOebLxId89dOQzU1S4+yC
-         XpvNE7bTxDppbvh1Z5i+8BYlB8NX6HNZYEJvnfvvYXkiekcmDZWw6abvSa/FsLIZd6rV
-         KWgXxB+7ZGLahThNN7JXqvYZvRw5WhE1dSDZ08Y+fjG8BT3axeRWbJhWMDnOo5KZX4Es
-         fbFNNM4tvzaBo1fSWTt2NMrB3RsRmi3l0+dnpt7huBR1sA4uPXywbPov39c0ADkwhkZV
-         +xH634tLJSLX2zUecJGjSIeKFE9d8es5JUd39EZksIMYU+tQXh/x5L/cYTEkw71aiPB5
-         3/xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=zmFxI4fcqG+VM79kjsw3Dz4TIlHari2uDbTRTdPXcuI=;
-        b=w2GFJRUY5LEf2tI06n7T4us8Nxf4e7cnHYG27FlrL67W5WsKjJMQCVfeIsZCGp4WjK
-         CX1UlYedOLUTRYjuE7TYM6Eo82iXSXccxUWnGsV4tJH0RMA4He0EWdLoDgguoOJYBtcb
-         glssNVugGCVw15w1DKL4jic3fkdCwaGxabQwXLJh8Xbnu3JzKrrlHyZdRZclFW0rMzzt
-         b/koG0om4WDjzO5WNIMEmTMQPIvzzSBDhXD/mfo+j04TBsZtNR7WznZUZKR4eazlcQE2
-         aqIjYGkGT3+ZiDUOD3346ynwugzXdW1gx6XPIN0poVRH95xj2qAWw5leGLIdfzWU4iU7
-         BX9A==
-X-Gm-Message-State: ACgBeo3T4TyvPxRPKYhD1aWGmVj11uPTp3TrsOy6tibmCvByrHNoYEAp
-        TH+NBV5O8CaizPR1Odu5Gg5IXY9X/QzTYh5DSzoY
-X-Google-Smtp-Source: AA6agR4yeIHW1ffPuIU0gnJHMWqUhUxYplMRWQFExgwSU8cLoP2mDo+70sMA6OpN/Lhm/rmY1PbO9kzIe7AIXsog2nY=
-X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
- x13-20020a056870a78d00b0011c437bec70mr4812540oao.136.1660943440240; Fri, 19
- Aug 2022 14:10:40 -0700 (PDT)
+        Fri, 19 Aug 2022 17:10:45 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17671E0952;
+        Fri, 19 Aug 2022 14:10:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=ellEIQ/+GNYDRYLpWlIUIo1Eul6LQaRbVXjP6iRTirs=; b=XQwEujfqC0AcayKnvv7DpGt04l
+        9S7EkC0IAKEM3GOleiakbuaa7XSseNVr7EWtF9QsJWioT0ocvzeVF5SGh7cZg06LXQiBfAVB6D0Mb
+        8LFX8U4AYFH9EIkpAsvpxFRORrw0mAn2gW6tTTZNsZgDS33LZyIGUAh/utDBYBYJRWERrgJhUsW5w
+        P7KD+yivkqKgYyRAsHb89HpsDqeIbCTVnngN/T/mLUjMyhfK9PYKENqWvrOD9qZHk/W8gx0sehWqE
+        0MLgrlVq1JSEsRUlXLGoRYbZnMKXKvxWO0BFGBQkcQklQMmCve8PEf/djbNKodc5XGNR+S1UcQf3Z
+        E8xnC49w==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oP9GM-00CHUE-8S; Fri, 19 Aug 2022 21:10:42 +0000
+Message-ID: <0bea8b2c-3345-e475-01f7-fd9c44096244@infradead.org>
+Date:   Fri, 19 Aug 2022 14:10:38 -0700
 MIME-Version: 1.0
-References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
- <8735dux60p.fsf@email.froward.int.ebiederm.org> <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
- <871qte8wy3.fsf@email.froward.int.ebiederm.org> <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
- <8735du7fnp.fsf@email.froward.int.ebiederm.org> <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
- <87tu6a4l83.fsf@email.froward.int.ebiederm.org> <20220818140521.GA1000@mail.hallyn.com>
- <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com> <20220819144537.GA16552@mail.hallyn.com>
-In-Reply-To: <20220819144537.GA16552@mail.hallyn.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 19 Aug 2022 17:10:29 -0400
-Message-ID: <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        casey@schaufler-ca.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com,
-        tixxdz@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] KVM: s390: pci: Hook to access KVM lowlevel from VFIO
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>, mjrosato@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, lkp@intel.com,
+        borntraeger@linux.ibm.com, farman@linux.ibm.com,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org, gor@linux.ibm.com,
+        hca@linux.ibm.com, schnelle@linux.ibm.com, frankja@linux.ibm.com,
+        alex.williamson@redhat.com, cohuck@redhat.com
+References: <20220819122945.9309-1-pmorel@linux.ibm.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220819122945.9309-1-pmorel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
-> On Thu, Aug 18, 2022 at 11:11:06AM -0400, Paul Moore wrote:
-> > On Thu, Aug 18, 2022 at 10:05 AM Serge E. Hallyn <serge@hallyn.com> wrote:
 
-...
 
-> > > I do strongly sympathize with Eric's points.  It will be very easy, once
-> > > user namespace creation has been further restricted in some distros, to
-> > > say "well see this stuff is silly" and go back to simply requiring root
-> > > to create all containers and namespaces, which is generally quite a bit
-> > > easier anywway.  And then, of course, give everyone root so they can
-> > > start containers.
-> >
-> > That's assuming a lot.  Many years have passed since namespaces were
-> > first introduced, and awareness of good security practices has
-> > improved, perhaps not as much as any of us would like, but to say that
-> > distros, system builders, and even users are the same as they were so
-> > many years ago is a bit of a stretch in my opinion.
->
-> Maybe.  But I do get a bit worried based on some of what I've been
-> reading in mailing lists lately.  Kernel dev definitely moves like
-> fashion - remember when every api should have its own filesystem?
-> That was not a different group of people.
+On 8/19/22 05:29, Pierre Morel wrote:
+> We have a cross dependency between KVM and VFIO when using
+> s390 vfio_pci_zdev extensions for PCI passthrough
+> To be able to keep both subsystem modular we add a registering
+> hook inside the S390 core code.
+> 
+> This fixes a build problem when VFIO is built-in and KVM is built
+> as a module.
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+> Fixes: 09340b2fca007 ("KVM: s390: pci: add routines to start/stop interpretive execution")
+> Cc: <stable@vger.kernel.org>
 
-I'm not going to argue against the idea that kernel development is
-subject to fads, I just don't agree that adding a LSM control point
-for user namespace creation is going to be the end of user namespaces.
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-> > However, even ignoring that for a moment, do we really want to go to a
-> > place where we dictate how users compose and secure their systems?
-> > Linux "took over the world" because it offered a level of flexibility
-> > that wasn't really possible before, and it has flourished because it
-> > has kept that mentality.  The Linux Kernel can be shoehorned onto most
-> > hardware that you can get your hands on these days, with driver
-> > support for most anything you can think to plug into the system.  Do
-> > you want a single-user environment with no per-user separation?  We
-> > can do that.  Do you want a traditional DAC based system that leans
-> > heavy on ACLs and capabilities?  We can do that.  Do you want a
-> > container host that allows you to carve up the system with a high
-> > degree of granularity thanks to the different namespaces?  We can do
-> > that.  How about a system that leverages the LSM to enforce a least
-> > privilege ideal, even on the most privileged root user?  We can do
-> > that too.  This patchset is about giving distro, system builders, and
-> > users another choice in how they build their system.  We've seen both
->
-> Oh, you misunderstand.  Whereas I do feel there are important concerns in
-> Eric's objections, and whereas I don't feel this set sufficiently
-> addresses the problems that I see and outlined above, I do see value in
-> this set, and was not aiming to deter it.  We need better ways to
-> mitigate a certain clas sof 0-days without completely disallowing use of
-> user namespaces, and this may help.
+Thanks.
 
-Ah, thanks for the explanation, I missed that (obviously) in your
-previous email.  If I'm perfectly honest, I suppose the protracted
-debate with Eric has also left me a little overly sensitive to any
-perceived arguments against this patchset.
-
-> > in this patchset and in previously failed attempts that there is a
-> > definite want from a user perspective for functionality such as this,
-> > and I think it's time we deliver it in the upstream kernel so they
-> > don't have to keep patching their own systems with out-of-tree
-> > patches.
-> >
-> > > Eric and Paul, I wonder, will you - or some people you'd like to represent
-> > > you - be at plumbers in September?  Should there be a BOF session there?  (I
-> > > won't be there, but could join over video)  I think a brainstorming session
-> > > for solutions to the above problems would be good.
-> >
-> > Regardless of if Eric or I will be at LPC, it is doubtful that all of
-> > the people who have participated in this discussion will be able to
-> > attend, and I think it's important that the users who are asking for
-> > this patchset have a chance to be heard in each forum where this is
-> > discussed.  While conferences are definitely nice - I definitely
-> > missed them over the past couple of years - we can't use them as a
-> > crutch to help us reach a conclusion on this issue; we've debated much
->
-> No I wasn't thinking we would use LPC to decide on this patchset.  As far
-> as I can see, the patchset is merged.
-
-While I maintain that Frederick's patches are a good thing, I'm not
-going to consider them "merged" until I see them in Linus' tree or
-Linus decided to voice his support on the lists.  These patches do
-have Eric's NACK, and a maintainer's NACK isn't something to take
-lightly.  I certainly don't.
-
->  I am hoping we can come up with
-> "something better" to address people's needs, make everyone happy, and
-> bring forth world peace.  Which would stack just fine with what's here
-> for defense in depth.
->
-> You may well not be interested in further work, and that's fine.  I need
-> to set aside a few days to think on this.
-
-I'm happy to continue the discussion as long as it's constructive; I
-think we all are.  My gut feeling is that Frederick's approach falls
-closest to the sweet spot of "workable without being overly offensive"
-(*cough*), but if you've got an additional approach in mind, or an
-alternative approach that solves the same use case problems, I think
-we'd all love to hear about it.
+> ---
+>  arch/s390/include/asm/kvm_host.h | 17 ++++++-----------
+>  arch/s390/kvm/pci.c              | 12 ++++++++----
+>  arch/s390/pci/Makefile           |  2 +-
+>  arch/s390/pci/pci_kvm_hook.c     | 11 +++++++++++
+>  drivers/vfio/pci/vfio_pci_zdev.c |  8 ++++++--
+>  5 files changed, 32 insertions(+), 18 deletions(-)
+>  create mode 100644 arch/s390/pci/pci_kvm_hook.c
+> 
+> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
+> index f39092e0ceaa..b1e98a9ed152 100644
+> --- a/arch/s390/include/asm/kvm_host.h
+> +++ b/arch/s390/include/asm/kvm_host.h
+> @@ -1038,16 +1038,11 @@ static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
+>  #define __KVM_HAVE_ARCH_VM_FREE
+>  void kvm_arch_free_vm(struct kvm *kvm);
+>  
+> -#ifdef CONFIG_VFIO_PCI_ZDEV_KVM
+> -int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm);
+> -void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev);
+> -#else
+> -static inline int kvm_s390_pci_register_kvm(struct zpci_dev *dev,
+> -					    struct kvm *kvm)
+> -{
+> -	return -EPERM;
+> -}
+> -static inline void kvm_s390_pci_unregister_kvm(struct zpci_dev *dev) {}
+> -#endif
+> +struct zpci_kvm_hook {
+> +	int (*kvm_register)(void *opaque, struct kvm *kvm);
+> +	void (*kvm_unregister)(void *opaque);
+> +};
+> +
+> +extern struct zpci_kvm_hook zpci_kvm_hook;
+>  
+>  #endif
+> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+> index 4946fb7757d6..bb8c335d17b9 100644
+> --- a/arch/s390/kvm/pci.c
+> +++ b/arch/s390/kvm/pci.c
+> @@ -431,8 +431,9 @@ static void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
+>   * available, enable them and let userspace indicate whether or not they will
+>   * be used (specify SHM bit to disable).
+>   */
+> -int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm)
+> +static int kvm_s390_pci_register_kvm(void *opaque, struct kvm *kvm)
+>  {
+> +	struct zpci_dev *zdev = opaque;
+>  	int rc;
+>  
+>  	if (!zdev)
+> @@ -510,10 +511,10 @@ int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm)
+>  	kvm_put_kvm(kvm);
+>  	return rc;
+>  }
+> -EXPORT_SYMBOL_GPL(kvm_s390_pci_register_kvm);
+>  
+> -void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev)
+> +static void kvm_s390_pci_unregister_kvm(void *opaque)
+>  {
+> +	struct zpci_dev *zdev = opaque;
+>  	struct kvm *kvm;
+>  
+>  	if (!zdev)
+> @@ -566,7 +567,6 @@ void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev)
+>  
+>  	kvm_put_kvm(kvm);
+>  }
+> -EXPORT_SYMBOL_GPL(kvm_s390_pci_unregister_kvm);
+>  
+>  void kvm_s390_pci_init_list(struct kvm *kvm)
+>  {
+> @@ -678,6 +678,8 @@ int kvm_s390_pci_init(void)
+>  
+>  	spin_lock_init(&aift->gait_lock);
+>  	mutex_init(&aift->aift_lock);
+> +	zpci_kvm_hook.kvm_register = kvm_s390_pci_register_kvm;
+> +	zpci_kvm_hook.kvm_unregister = kvm_s390_pci_unregister_kvm;
+>  
+>  	return 0;
+>  }
+> @@ -685,6 +687,8 @@ int kvm_s390_pci_init(void)
+>  void kvm_s390_pci_exit(void)
+>  {
+>  	mutex_destroy(&aift->aift_lock);
+> +	zpci_kvm_hook.kvm_register = NULL;
+> +	zpci_kvm_hook.kvm_unregister = NULL;
+>  
+>  	kfree(aift);
+>  }
+> diff --git a/arch/s390/pci/Makefile b/arch/s390/pci/Makefile
+> index bf557a1b789c..5ae31ca9dd44 100644
+> --- a/arch/s390/pci/Makefile
+> +++ b/arch/s390/pci/Makefile
+> @@ -5,5 +5,5 @@
+>  
+>  obj-$(CONFIG_PCI)	+= pci.o pci_irq.o pci_dma.o pci_clp.o pci_sysfs.o \
+>  			   pci_event.o pci_debug.o pci_insn.o pci_mmio.o \
+> -			   pci_bus.o
+> +			   pci_bus.o pci_kvm_hook.o
+>  obj-$(CONFIG_PCI_IOV)	+= pci_iov.o
+> diff --git a/arch/s390/pci/pci_kvm_hook.c b/arch/s390/pci/pci_kvm_hook.c
+> new file mode 100644
+> index 000000000000..ff34baf50a3e
+> --- /dev/null
+> +++ b/arch/s390/pci/pci_kvm_hook.c
+> @@ -0,0 +1,11 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * VFIO ZPCI devices support
+> + *
+> + * Copyright (C) IBM Corp. 2022.  All rights reserved.
+> + *	Author(s): Pierre Morel <pmorel@linux.ibm.com>
+> + */
+> +#include <linux/kvm_host.h>
+> +
+> +struct zpci_kvm_hook zpci_kvm_hook;
+> +EXPORT_SYMBOL_GPL(zpci_kvm_hook);
+> diff --git a/drivers/vfio/pci/vfio_pci_zdev.c b/drivers/vfio/pci/vfio_pci_zdev.c
+> index e163aa9f6144..0cbdcd14f1c8 100644
+> --- a/drivers/vfio/pci/vfio_pci_zdev.c
+> +++ b/drivers/vfio/pci/vfio_pci_zdev.c
+> @@ -151,7 +151,10 @@ int vfio_pci_zdev_open_device(struct vfio_pci_core_device *vdev)
+>  	if (!vdev->vdev.kvm)
+>  		return 0;
+>  
+> -	return kvm_s390_pci_register_kvm(zdev, vdev->vdev.kvm);
+> +	if (zpci_kvm_hook.kvm_register)
+> +		return zpci_kvm_hook.kvm_register(zdev, vdev->vdev.kvm);
+> +
+> +	return -ENOENT;
+>  }
+>  
+>  void vfio_pci_zdev_close_device(struct vfio_pci_core_device *vdev)
+> @@ -161,5 +164,6 @@ void vfio_pci_zdev_close_device(struct vfio_pci_core_device *vdev)
+>  	if (!zdev || !vdev->vdev.kvm)
+>  		return;
+>  
+> -	kvm_s390_pci_unregister_kvm(zdev);
+> +	if (zpci_kvm_hook.kvm_unregister)
+> +		zpci_kvm_hook.kvm_unregister(zdev);
+>  }
 
 -- 
-paul-moore.com
+~Randy

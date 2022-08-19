@@ -2,180 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E941F5997A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F07D5997BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347198AbiHSIlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
+        id S1347041AbiHSIlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347041AbiHSIkP (ORCPT
+        with ESMTP id S1347247AbiHSIlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:40:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655C353013
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:40:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15CF6B824EA
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:40:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D688DC43470
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660898410;
-        bh=pbPOH8lcJsczbtzTQ81SaxpugXuzQ8vfVpiBgdOWZos=;
+        Fri, 19 Aug 2022 04:41:22 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C63065A9
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:41:20 -0700 (PDT)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 27J8f3fl029474
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 17:41:04 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 27J8f3fl029474
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1660898464;
+        bh=elvJSR7vlV3+9hGJEzaFU22AXaxpLvwDSpIIG1By0OI=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pfMxvGTPU3pVuiuDYLLA5c5ZmV/YXIGkwKZ9Ys18RSjydBMQuyfcOLtXjrE4unJLq
-         qE6xKMBlPSil3Qbi3X7f9kuYCMKPxEAlqEt6PufFhEl9JysdYzK6bWd/XXc3myVXkI
-         qnCPkAOJomDteQMMFVRZaOkX/GMUXyAUHbkxNPuSjHDkU9uym8KE+Ce85RawFFBxec
-         7w/2v/cBhUUC8saEsIwZXTUOpCqT7GWOJEz7x8+ZLGMuVGjB0RmPeZRnVlS7OMoRRo
-         8BaymNtzSmuFj/W/ai+JfvYMEXCkgRCrR+XU4qd6Vap3KzxlAqMGSnRNlUBVUsfkap
-         G5Ygth0XHctcw==
-Received: by mail-vs1-f42.google.com with SMTP id j2so3828054vsp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:40:10 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0XRycE2GCer+x+3Wia82UpwdujQ/1hHuGUiUoqEY9JJxfizSA+
-        UGmRFw7w1y3a+EdVrG5nVXRy8W6kLkaXUmH1zBQ=
-X-Google-Smtp-Source: AA6agR6rQK+fyBXvNJhcWl+WEfRCdo2v3o22mYmBhfqQ5UR5TbIn9ARpfFOQv7GnOVZtfy5tvmtzWfHjEnZqtj4WVbk=
-X-Received: by 2002:a67:d483:0:b0:38f:4981:c4f3 with SMTP id
- g3-20020a67d483000000b0038f4981c4f3mr2113563vsj.59.1660898409777; Fri, 19 Aug
- 2022 01:40:09 -0700 (PDT)
+        b=M3MYw5zjV5tmsDfz0WFsSH/UHyRObGnMjQHRQIbuz8usKEC+WqfUf1m1b8UTo83vp
+         BUyM4ek71n2Hn0pU8Z4VLRohkkimdwF7M5woCDpH5h2h6t+WJ8t7iay06GrbQ9J8/5
+         LT5QRAujT4wyMKYFC8RJmrByE738Ys6XXk+a1OHdpA+YkKV3Zxlj4x3PbXAvmOT1KV
+         +CCZaIfj9TsdQeo9gqOad5YScBylGl+ot/+vtWUkB1/IgdW9CAhZyoX6l0jLRKRWJP
+         vX2s+987lDGTl5Wjc36KvNSwjRhh9yi1HwHmgwwgzFdFxYPJQrgSkq20v/64POjZPU
+         iocaDjcSkhfpg==
+X-Nifty-SrcIP: [209.85.221.50]
+Received: by mail-wr1-f50.google.com with SMTP id e20so3879146wri.13
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:41:04 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2gkIQpsMmNXfDJz348i2XH6SHRJd+JHoylz2b6tX/eMWuMoiDQ
+        KnnbzY7+29C6epOGBG1fvDOACr3gNIsZ7YPdKmY=
+X-Google-Smtp-Source: AA6agR5HEcaN88E9g+nMSw3Osr2KzWiyDKgo9L6/Vq73IbJZblciYjk3mFszyHCGnZGpJJCir8rmACLMq4lo18gHGGA=
+X-Received: by 2002:a05:6000:1acb:b0:223:5de3:f8bf with SMTP id
+ i11-20020a0560001acb00b002235de3f8bfmr3503379wry.691.1660898462663; Fri, 19
+ Aug 2022 01:41:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220819072239.60378-1-liyupeng@zbhlos.com>
-In-Reply-To: <20220819072239.60378-1-liyupeng@zbhlos.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 19 Aug 2022 16:39:57 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4m+Wzc-E=owWo34hYBa8fHKQG_uBAw4y4mCFUXEfge0g@mail.gmail.com>
-Message-ID: <CAAhV-H4m+Wzc-E=owWo34hYBa8fHKQG_uBAw4y4mCFUXEfge0g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] irqchip: Fixed LoongArch CPU interrupt types defined.
-To:     Yupeng Li <liyupeng@zbhlos.com>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>, Caicai <caizp2008@163.com>
+References: <20220804190320.262510-1-alexandre.belloni@bootlin.com>
+ <CAKwvOd=3N8_Rx1P8J7pVnjM6sEzJA233BnwmD1VyMRqgujq2_Q@mail.gmail.com>
+ <7eacd1d9-42ba-fd61-7f37-0635cebcb33d@infradead.org> <e902a360e3759c7f87d98d71d79a0d5cbe935e3e.camel@linuxfoundation.org>
+ <CAK7LNART2XQYy2hN1afODbuCMj+_VX9Ojh5nVCoY-hwXRAwSWA@mail.gmail.com> <0725ccc9abce84695573539c5f3d9d061384469d.camel@linuxfoundation.org>
+In-Reply-To: <0725ccc9abce84695573539c5f3d9d061384469d.camel@linuxfoundation.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 19 Aug 2022 17:40:17 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQTHO3Za9UpeCCkdNo-mQS8ORgbfwXCJKKr4FCZ3VqT2Q@mail.gmail.com>
+Message-ID: <CAK7LNAQTHO3Za9UpeCCkdNo-mQS8ORgbfwXCJKKr4FCZ3VqT2Q@mail.gmail.com>
+Subject: Re: [PATCH] init/Kconfig: fix CC_HAS_ASM_GOTO_TIED_OUTPUT test with dash
+To:     Richard Purdie <richard.purdie@linuxfoundation.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yupeng,
+On Fri, Aug 19, 2022 at 6:46 AM Richard Purdie
+<richard.purdie@linuxfoundation.org> wrote:
+>
+> On Fri, 2022-08-19 at 04:31 +0900, Masahiro Yamada wrote:
+> > On Thu, Aug 18, 2022 at 6:14 PM Richard Purdie
+> > <richard.purdie@linuxfoundation.org> wrote:
+> > >
+> > > This problem is a little more subtle.
+> > >
+> > > As far as I could work out, exec() is used on entries like this in
+> > > kConfig. exec() falls back to /bin/sh so it is hard to see where this
+> > > would be changed to be /bin/bash.
+> >
+> >
+> >
+> > Kconfig uses popen() to execute a shell command.
+> >
+> > See do_shell() in scripts/kconfig/preprocess.c
+> >
+> > popen(3) says that
+> > "the command is passed to /bin/sh using the -c flag.
+> > interpretation, if any, is performed by the shell."
+> >
+> > GNU Make is the same.
+> > Make uses /bin/sh to execute commands in
+> > recipe lines and $(shell ...) functions.
+> > You can change the default shell via 'SHELL' variable.
+>
+> That makes sense. I don't think we can easily change the shell popen()
+> uses.
+>
+> >
+> > BTW, Richard is here, so let me ask about BitBake.
+> >
+> > The manual [3] clearly says:
+> >
+> > "When you create these types of functions in your recipe or class files,
+> > you need to follow the shell programming rules. The scripts are
+> > executed by /bin/sh,
+> > which may not be a bash shell but might be something such as dash.
+> > You should not use Bash-specific script (bashisms)"
+> >
+> > I just thought BitBake ran shell code in bash before,
+> > but I might have misunderstood.
+> > Do OE/Yocto allow only POSIX shell code?
+>
+> Bitbake runs shell code with /bin/sh so we don't allow bashisms and
+> that has always been the case.
+>
+> Like this case in the kernel, we do get people submitting changes which
+> were only tested with bash which can be frustrating but the manual and
+> our policy is quite clear. We just fix any that do creep through and
+> have test systems that have dash to try and catch them too.
+>
+> Cheers,
+>
+> Richard
 
-This errors can be fixed once this patch be merged:
-https://lore.kernel.org/lkml/20220808085319.3350111-1-chenhuacai@loongson.c=
-n/
 
-Huacai
+Thanks.
+So, Bitbake is the same approach as the kernel.
 
-On Fri, Aug 19, 2022 at 3:23 PM Yupeng Li <liyupeng@zbhlos.com> wrote:
->
-> When CONFIG_LOONGSON_LIOINTC,CONFIG_LOONGSON_EIOINTC,
-> CONFIG_LOONGSON_PCH_LPC,CONFIG_LOONGSON_PCH_PIC was disabled,
-> build kernel with errors like:
->
-> MODPOST vmlinux.symvers
-> MODINFO modules.builtin.modinfo
-> GEN     modules.builtin
-> LD      .tmp_vmlinux.kallsyms1
-> loongarch64-linux-gnu-ld: drivers/irqchip/irq-loongarch-cpu.o: in functio=
-n `lpic_get_gsi_domain_id':
-> irq-loongarch-cpu.c:(.text+0x8): undefined reference to `pch_lpc_handle'
-> loongarch64-linux-gnu-ld: irq-loongarch-cpu.c:(.text+0xc): undefined refe=
-rence to `pch_lpc_handle'
-> loongarch64-linux-gnu-ld: irq-loongarch-cpu.c:(.text+0xc): undefined refe=
-rence to `pch_lpc_handle'
-> make: *** [Makefile:1171=EF=BC=9Avmlinux] =E9=94=99=E8=AF=AF 1
->
-> Reviewed-by: Caicai <caizp2008@163.com>
-> Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
-> ---
->  drivers/irqchip/irq-loongarch-cpu.c | 20 ++++++++++++++++----
->  1 file changed, 16 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/irqchip/irq-loongarch-cpu.c b/drivers/irqchip/irq-lo=
-ongarch-cpu.c
-> index 327f3ab62c03..d296f704cbb6 100644
-> --- a/drivers/irqchip/irq-loongarch-cpu.c
-> +++ b/drivers/irqchip/irq-loongarch-cpu.c
-> @@ -27,24 +27,30 @@ static u32 lpic_gsi_to_irq(u32 gsi)
->
->  static struct fwnode_handle *lpic_get_gsi_domain_id(u32 gsi)
->  {
-> +#ifdef CONFIG_LOONGSON_PCH_PIC
->         int id;
-> +#endif
->         struct fwnode_handle *domain_handle =3D NULL;
->
->         switch (gsi) {
->         case GSI_MIN_CPU_IRQ ... GSI_MAX_CPU_IRQ:
-> +#ifdef CONFIG_LOONGSON_LIOINTC
->                 if (liointc_handle)
->                         domain_handle =3D liointc_handle;
-> +#endif
->                 break;
-> -
->         case GSI_MIN_LPC_IRQ ... GSI_MAX_LPC_IRQ:
-> +#ifdef CONFIG_LOONGSON_PCH_LPC
->                 if (pch_lpc_handle)
->                         domain_handle =3D pch_lpc_handle;
-> +#endif
->                 break;
-> -
->         case GSI_MIN_PCH_IRQ ... GSI_MAX_PCH_IRQ:
-> +#ifdef CONFIG_LOONGSON_PCH_PIC
->                 id =3D find_pch_pic(gsi);
->                 if (id >=3D 0 && pch_pic_handle[id])
->                         domain_handle =3D pch_pic_handle[id];
-> +#endif
->                 break;
->         }
->
-> @@ -92,6 +98,7 @@ static const struct irq_domain_ops loongarch_cpu_intc_i=
-rq_domain_ops =3D {
->         .xlate =3D irq_domain_xlate_onecell,
->  };
->
-> +#ifdef CONFIG_LOONGSON_LIOINTC
->  static int __init
->  liointc_parse_madt(union acpi_subtable_headers *header,
->                        const unsigned long end)
-> @@ -100,7 +107,8 @@ liointc_parse_madt(union acpi_subtable_headers *heade=
-r,
->
->         return liointc_acpi_init(irq_domain, liointc_entry);
->  }
-> -
-> +#endif
-> +#ifdef CONFIG_LOONGSON_EIOINTC
->  static int __init
->  eiointc_parse_madt(union acpi_subtable_headers *header,
->                        const unsigned long end)
-> @@ -109,13 +117,17 @@ eiointc_parse_madt(union acpi_subtable_headers *hea=
-der,
->
->         return eiointc_acpi_init(irq_domain, eiointc_entry);
->  }
-> -
-> +#endif
->  static int __init acpi_cascade_irqdomain_init(void)
->  {
-> +#ifdef CONFIG_LOONGSON_LIOINTC
->         acpi_table_parse_madt(ACPI_MADT_TYPE_LIO_PIC,
->                               liointc_parse_madt, 0);
-> +#endif
-> +#ifdef CONFIG_LOONGSON_EIOINTC
->         acpi_table_parse_madt(ACPI_MADT_TYPE_EIO_PIC,
->                               eiointc_parse_madt, 0);
-> +#endif
->         return 0;
->  }
->
-> --
-> 2.34.1
->
+
+
+
+This is a patch set to use bash forcibly. FWIW.
+
+https://lore.kernel.org/lkml/20220819065604.295572-1-masahiroy@kernel.org/
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,120 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99AA59A576
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF3759A5A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350639AbiHSSYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 14:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
+        id S1350659AbiHSS0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 14:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiHSSYO (ORCPT
+        with ESMTP id S1349705AbiHSS0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 14:24:14 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B28BD1FD
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:24:11 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id gk3so10279751ejb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:24:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=ooRQXzLUe97i7byO6R46BlbFBy3Y8r9AZv+oUBRyyNk=;
-        b=dC52cK47M+GcQ3HfB94JWV83L1H1/nK+0AbkeRCfkyYQSw3gNCJnPK0k2eZL2gbb2i
-         TL3WtRZ7Q+j7IgkZhr6qEs46gKHzUN5d/c6y8iF2ydpvzLsTocAa2zs5f6HZFM2w38JI
-         2uOWl/qcqTyLT68btQ4NE5Rfve9hnZnjChVgRYblXHqfTSeaSmLvWZILgkd3OSiO13Q9
-         PGAu06+Tu8R0NrwVKl2ASyH8x6W2Teiq4GP6tpjer+oO/AeZFMJBkCAs5c4ObVK8k3DE
-         DuT5bfdtdPnaIcayNi+xrk3HVRylqyHh72Snb/xpvILolYE+06LCX7vL38wN4xA/rfKj
-         q3WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=ooRQXzLUe97i7byO6R46BlbFBy3Y8r9AZv+oUBRyyNk=;
-        b=7Nq+V6i+2ogcj/pVX9SI/QaRhGz6qHIXigfxB0sB/2KE/eOmnoSz3B2m+zR3DIql6g
-         To3feC7wMSWs3RoAJjbjgWQ90z7MtiyFPxR+LzqCYW1wBbD4UVpMGi6uCbmZLbKUC1wm
-         BCdTI6Tdfav9+l+G1R14whjyJEO1R0JyL3vS0IkOmzp66iutKR5xPQL3QWxD/xrb8bXP
-         hMkMGanuN2zTOE5nDLaKfelnZh0B+QiB8IwoUN8+T4Pc5tAvcz6IfB0dP7XTgcXkh/Vq
-         2chx+hxtAnTWxOCysgJa3zU2RyDZ6mY21o0RPngjlC7AVMArDgmb2ZnTU1nlYdFsnL0V
-         cBww==
-X-Gm-Message-State: ACgBeo2KgaTJdjrpMV3d/CeGLMq3bmcVKBXYAU0wHf47Tq+MK6wGDl97
-        Yw4bUs5JvUYZ3Y+PgxpShL4lHY/W/C8=
-X-Google-Smtp-Source: AA6agR6xQQLYgWhvB9yg+ScZlzpdyA/QuJ7PLcpSHm5sR9ANU3GSgcySus7auP2o6Qn+owfE8qiFTw==
-X-Received: by 2002:a17:907:2cf3:b0:730:8b8c:6d55 with SMTP id hz19-20020a1709072cf300b007308b8c6d55mr5417331ejc.535.1660933450606;
-        Fri, 19 Aug 2022 11:24:10 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb77.dynamic.kabel-deutschland.de. [95.90.187.119])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170906304200b0073c37199b86sm2159974ejd.159.2022.08.19.11.24.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 11:24:10 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH] staging: r8188eu: remove ODM_ConfigRFWithHeaderFile()
-Date:   Fri, 19 Aug 2022 20:23:59 +0200
-Message-Id: <20220819182359.24141-1-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Fri, 19 Aug 2022 14:26:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B4FC741E;
+        Fri, 19 Aug 2022 11:26:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8332460B92;
+        Fri, 19 Aug 2022 18:26:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2A5CC433C1;
+        Fri, 19 Aug 2022 18:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660933605;
+        bh=QGIx0uM/G/2giC5AwzHmtZuCIltms+An/DdTszHehEc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=iAIg127PzjLBBUm8S1tO5vEcoEL5CEPWJfupHgqR8Hn54dsqx/PAEGW13KNOypwef
+         Xtd4p54Dwy4ReB/i2BQcth/owSH76/r3wgKaKNs6/puKrW5iWLkGYm7ho9UWG2YY0F
+         eYnqpPiLLLqzMjM+8lyvVVTzz5cfYh7lDQLlQny/38qgB5Jt5qAp56EFlQlMC0DzSZ
+         jMDOT58fOxZaI7t5Dc8srf3vhl4j+tqzjTeQ2RtYjodhay+I6OtJ+ikZZEg1YBV2Km
+         LieEdoZjeTEvpGoUM4pUs6xaLXqlukBBbc4M4I+ePSV9eSUESHILf9zSdn0d8/iE2M
+         M5brxJT+VLLig==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 6BDF85C0164; Fri, 19 Aug 2022 11:26:45 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 11:26:45 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, rcu <rcu@vger.kernel.org>
+Subject: Re: [PATCH v3 resend 4/6] fs: Move call_rcu() to call_rcu_lazy() in
+ some paths
+Message-ID: <20220819182645.GQ2125313@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220809034517.3867176-5-joel@joelfernandes.org>
+ <CAEXW_YQuGga9Eivq4G6o1XjvPn-nMMDiM8FOY6HXJTMzwv1Emg@mail.gmail.com>
+ <CAEXW_YQOXBRwCLZXjspXttGkNhbJK3HGVDuYj5TcYD=Xj1cK0A@mail.gmail.com>
+ <CAEXW_YT3VnK5KJTbyXdCzs8j4jw9XFTSCF4Dt9QwLPtkPSb1tA@mail.gmail.com>
+ <20220819023550.GN2125313@paulmck-ThinkPad-P17-Gen-1>
+ <4deb7354-bac7-b530-47ba-54cf50cfce58@joelfernandes.org>
+ <2d56e4ad-7d6e-2abb-461f-15f20128d42b@joelfernandes.org>
+ <20220819171249.GP2125313@paulmck-ThinkPad-P17-Gen-1>
+ <fa8b7857-b9fd-72ad-36a7-8b09e4472816@joelfernandes.org>
+ <CAEXW_YTxtfbbQ_rOiSbu62GpDPBDFpfWrNBef06MAkYPybNJ2A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YTxtfbbQ_rOiSbu62GpDPBDFpfWrNBef06MAkYPybNJ2A@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function ODM_ConfigRFWithHeaderFile() is just a wrapper around
-ODM_ReadAndConfig_RadioA_1T_8188E(). Remove the wrapper and call
-ODM_ReadAndConfig_RadioA_1T_8188E() directly.
+On Fri, Aug 19, 2022 at 02:17:32PM -0400, Joel Fernandes wrote:
+> On Fri, Aug 19, 2022 at 2:14 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> [..]
+> > >> Things are much better with the following change. However, this brings
+> > >> me to a question about lock-contention based or any deferring and boot time.
+> > >>
+> > >> If you have a path like selinux doing a synchronize_rcu(), shouldn't we
+> > >> skip the jiffie waiting for the bypass timer? Otherwise things
+> > >> synchronously waiting will slow down more than usual. Maybe bypassing
+> > >> should not be done for any case until boot up is done. I'm curious to
+> > >> see if that improves boot time.
+> > >
+> > > Why not simply disable laziness at boot time and enable it only after
+> > > booting is complete?  The exiting rcupdate.rcu_normal_after_boot kernel
+> > > boot parameter uses a similar scheme.
+> >
+> > That sounds like the right thing to good, but unfortunately it wont help
+> > this problem. The boot time issue happens after init has started. So the
+> > OS is still "booting" even though the kernel has.
+> >
+> > Also the problem can happen after boot as well, like if RCU
+> > lazy/non-lazy callbacks come back to back quickly, or so.
+> >
+> > But yes nonetheless, I can see the value of disabling it till the
+> > in-kernel boot completets.
+> 
+> My mail client is acting weird. I meant to add to this, I wonder if
+> there is a way other subsystems detect when userspace boots using some
+> heuristic?
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/hal/odm_HWConfig.c     | 5 -----
- drivers/staging/r8188eu/hal/rtl8188e_rf6052.c  | 2 +-
- drivers/staging/r8188eu/include/odm_HWConfig.h | 1 -
- 3 files changed, 1 insertion(+), 7 deletions(-)
+I don't know of one, but I bet that ChromeOS has ways.  If nothing else,
+might you add a sysfs write to one of the boot-up phases?
 
-diff --git a/drivers/staging/r8188eu/hal/odm_HWConfig.c b/drivers/staging/r8188eu/hal/odm_HWConfig.c
-index 54cc3d7789cd..035d94b3458e 100644
---- a/drivers/staging/r8188eu/hal/odm_HWConfig.c
-+++ b/drivers/staging/r8188eu/hal/odm_HWConfig.c
-@@ -347,8 +347,3 @@ void ODM_PhyStatusQuery(struct odm_dm_struct *dm_odm,
- 	odm_RxPhyStatus92CSeries_Parsing(dm_odm, pPhyInfo, pPhyStatus, pPktinfo, adapt);
- 	odm_Process_RSSIForDM(dm_odm, pPhyInfo, pPktinfo);
- }
--
--enum HAL_STATUS ODM_ConfigRFWithHeaderFile(struct odm_dm_struct *dm_odm)
--{
--	return ODM_ReadAndConfig_RadioA_1T_8188E(dm_odm);
--}
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c b/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
-index d043b7bc4142..237232432f37 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
-@@ -396,7 +396,7 @@ static int phy_RF6052_Config_ParaFile(struct adapter *Adapter)
- 	udelay(1);/* PlatformStallExecution(1); */
- 
- 	/*----Initialize RF fom connfiguration file----*/
--	if (HAL_STATUS_FAILURE == ODM_ConfigRFWithHeaderFile(&pHalData->odmpriv))
-+	if (ODM_ReadAndConfig_RadioA_1T_8188E(&pHalData->odmpriv) == HAL_STATUS_FAILURE)
- 		rtStatus = _FAIL;
- 
- 	/*----Restore RFENV control type----*/;
-diff --git a/drivers/staging/r8188eu/include/odm_HWConfig.h b/drivers/staging/r8188eu/include/odm_HWConfig.h
-index b37962edb2ed..3f7185780e87 100644
---- a/drivers/staging/r8188eu/include/odm_HWConfig.h
-+++ b/drivers/staging/r8188eu/include/odm_HWConfig.h
-@@ -66,5 +66,4 @@ void ODM_PhyStatusQuery(struct odm_dm_struct *pDM_Odm,
- 			struct odm_per_pkt_info *pPktinfo,
- 			struct adapter *adapt);
- 
--enum HAL_STATUS ODM_ConfigRFWithHeaderFile(struct odm_dm_struct *pDM_Odm);
- #endif
--- 
-2.37.2
-
+							Thanx, Paul

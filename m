@@ -2,115 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBA95998A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BB3599863
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348022AbiHSJU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
+        id S1348131AbiHSJVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348133AbiHSJUz (ORCPT
+        with ESMTP id S1347426AbiHSJVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:20:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60F9E5893
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660900852;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1IbbuZ/sOEyv7Ff85tiaeE6QSXFpWukZ2njJ70+6dh0=;
-        b=OdX83WtBrtpdgVOZODzk9IGBFZ8YwU+Lm+m1snPnbqZC1Q1/1A5rTBHy1eg1FVdwfJDymZ
-        dFmsFnZkmy39NKpDXOV5KSf7jdlY0iGj9AOBSxQDNATDb5DUeeLOl2mD9wvFM2e0FhUCvh
-        oVpQ8KnIQe70r1kqAivFYrNudiB/CCY=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-433-4MZwzR02PRK4g1zw9XB12w-1; Fri, 19 Aug 2022 05:20:51 -0400
-X-MC-Unique: 4MZwzR02PRK4g1zw9XB12w-1
-Received: by mail-ed1-f71.google.com with SMTP id w5-20020a05640234c500b0043dda025648so2514082edc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:20:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=1IbbuZ/sOEyv7Ff85tiaeE6QSXFpWukZ2njJ70+6dh0=;
-        b=dA/+PEk7pCoNHzkKmyOi3IVPhIhYO69IZxXD1U9BcOq8/x3iGBrCh3je5P53rTJ/k9
-         LG5tHj/2b+14w/GctFFdeeJv5L34JXZp4CCFmv+4PQijvGhJtw942ZVKs3+VT7lE9nLQ
-         mgIwGchEmWdrv5tBhTV7iaQpeVvbjJZpUakZqfDaIcL9vErAa1g1m+b3vK8NFxFREQTi
-         PKyRrYykds8AAmUg4AkdXv5BMB1LO/RvxEx2Qw8iOtZL4fC94uR5zm4TaTQTqOnB157d
-         VoGUrNWn3wJLeTCYOLeWQjDl1hV2bIwWxzpfULeF1nfDv52cxc0/5vOw+AlezZFkOsHu
-         KT4A==
-X-Gm-Message-State: ACgBeo0HFXLKn/6sNiZo8fsSqrbsJGf5yZd6lLiWJIseHnoBkoX8HCAT
-        tQqkwcQdQuc4iaeuVuUBfy2i3lcxg//BRIhXTtNLZDBd86fYbgZqBnBIUcVRimp++L99leb1ZC1
-        3R6K0X/qr6VUES3xPZjxvc3MX
-X-Received: by 2002:a17:907:168d:b0:731:67eb:b608 with SMTP id hc13-20020a170907168d00b0073167ebb608mr4173258ejc.518.1660900850410;
-        Fri, 19 Aug 2022 02:20:50 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5W4/lZxNZ8ZjUFgSfxvralXr9HHWlIfklNUN8lChAnSN0KD0mbBjxMaqIPfftrDrw7U1CAVg==
-X-Received: by 2002:a17:907:168d:b0:731:67eb:b608 with SMTP id hc13-20020a170907168d00b0073167ebb608mr4173245ejc.518.1660900850273;
-        Fri, 19 Aug 2022 02:20:50 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id j15-20020aa7c0cf000000b0043bbc9503ddsm2736545edp.76.2022.08.19.02.20.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 02:20:49 -0700 (PDT)
-Message-ID: <9c6f4ac0-1e71-6b91-ae03-0795cd551c46@redhat.com>
-Date:   Fri, 19 Aug 2022 11:20:48 +0200
+        Fri, 19 Aug 2022 05:21:14 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835A3E588D;
+        Fri, 19 Aug 2022 02:21:13 -0700 (PDT)
+X-UUID: 287ec98e284f4966998cf3d7f317b25a-20220819
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=WPx28nuo9RcwR75sB21q6ymmTD71bLmGxP0/PKNXITQ=;
+        b=FU30adMy92dNfqEU4l6hLja0mdw0Qv2TpXsDEegxTnKlcAnoKOQ14GeSn7FDIxzFgvSrlJgiuDeYU6cv+8A8T5T58hiCtzZPTIp8yxnKuCWgl5kzHv1kY1FVSqRWoa0BJzknPyBTfbn1pxEDqtxoSeQDCO7zn9zA5Aww/UBfNmI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:33e0be97-958d-4f19-b732-b70b18d8cb17,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release
+        _Ham,ACTION:release,TS:45
+X-CID-INFO: VERSION:1.1.10,REQID:33e0be97-958d-4f19-b732-b70b18d8cb17,OB:0,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:45
+X-CID-META: VersionHash:84eae18,CLOUDID:adb2b667-a9d9-4672-a3c8-12721739a220,C
+        OID:6e6f2b17f0cc,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 287ec98e284f4966998cf3d7f317b25a-20220819
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <jia-wei.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1780500561; Fri, 19 Aug 2022 17:21:06 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 19 Aug 2022 17:21:05 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 19 Aug 2022 17:21:05 +0800
+Message-ID: <b36cfc74fa9f1aed5f7fe60dd810c5fcf4073b65.camel@mediatek.com>
+Subject: Re: [PATCH 1/2] dt-bindings: cpufreq: add mt8188 cpufreq hw
+ dt-bindings
+From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hector Yuan <hector.yuan@mediatek.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <hsinyi@google.com>
+Date:   Fri, 19 Aug 2022 17:21:05 +0800
+In-Reply-To: <106e443a-e765-51fe-b556-e4e7e2aa771c@linaro.org>
+References: <20220805091211.2791-1-jia-wei.chang@mediatek.com>
+         <20220805091211.2791-2-jia-wei.chang@mediatek.com>
+         <106e443a-e765-51fe-b556-e4e7e2aa771c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] platform: move from strlcpy with unused retval to strscpy
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Divya Bharathi <divya.bharathi@dell.com>,
-        Prasanth Ksr <prasanth.ksr@dell.com>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Dell.Client.Kernel@dell.com,
-        Thinkpad-acpi devel ML <ibm-acpi-devel@lists.sourceforge.net>
-References: <20220818210058.7229-1-wsa+renesas@sang-engineering.com>
- <CAHp75VeM2q7wdnREoenyYpJ-tso2G6M-uyGFJGjPGL8hfUmzhQ@mail.gmail.com>
- <Yv9VhdVXqXhONj41@shikoro>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <Yv9VhdVXqXhONj41@shikoro>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 8/19/22 11:19, Wolfram Sang wrote:
+On Fri, 2022-08-05 at 11:18 +0200, Krzysztof Kozlowski wrote:
+> On 05/08/2022 11:12, jia-wei.chang wrote:
+> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > 
+> > Add mt8188 cpufreq hw compatible in dt-bindings.
+> > 
+> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > ---
+> >  .../devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml      | 4
+> > +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-
+> > mediatek-hw.yaml
+> > b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-
+> > hw.yaml
+> > index 9cd42a64b13e..b56d36224612 100644
+> > --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-
+> > hw.yaml
+> > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-
+> > hw.yaml
+> > @@ -16,7 +16,9 @@ description:
+> >  
+> >  properties:
+> >    compatible:
+> > -    const: mediatek,cpufreq-hw
+> > +    enum:
+> > +      - mediatek,cpufreq-hw
 > 
->> I assume you are experimenting with coccinelle, so I have no objection
->> to the change, but in PDx86 we usually want to have one patch per
->> driver. Can you split?
+> Can you add a comment mentioning for which SoCs this is? Someone
+> added a
+> generic compatible covering all MediaTek cpufreq-hw (all!) and now
+> you
+> say it does not cover all?
 > 
-> I can split if you want.
-> 
-> I intentionally did group per subsystem, otherwise I would have sent out
-> 1200+ patches. So, I chose to do it on subsystem level first and adapt
-> later where this scheme does not fit.
+> Best regards,
+> Krzysztof
 
-See my reply to Andy, there is no need to split this further IMHO,
-as you sat 1200 patches would be a bit much.
+Hi Krzysztof,
 
-I will merge this as is during my next round of merges.
+I realized it is possible to make MT8188 completely reuse the
+compatibles "mediatek,cpufreq-hw" and platform driver as well.
 
-Regards,
+This series for MT8188 mediatek-cpufreq-hw is no longer required to be
+reviewed.
 
-Hans
+Thanks for your help.
+
 

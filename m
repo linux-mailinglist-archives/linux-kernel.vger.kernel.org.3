@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B9B59980D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2070F599819
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347430AbiHSIw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
+        id S1347769AbiHSIzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343696AbiHSIwy (ORCPT
+        with ESMTP id S1347892AbiHSIzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:52:54 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF56EA8A0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:52:53 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id h4so2861703qtj.11
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:52:53 -0700 (PDT)
+        Fri, 19 Aug 2022 04:55:18 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D7FD4764
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:55:06 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id y18so2875546qtv.5
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:55:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=jASm5F7IG0cL7Edz8ZOf/AbyNJZ6sd775ispaeESRb0=;
-        b=TRa8ABit0XQvSbDR2dM/OYiebLfodgmI9pv5uHw4sJ1x5pS2tAP3hILJXO22stjVWb
-         SsR5IN16WTY4P92/+DPl5Ow511nagAwV5YqxOlirPhX8SP7KStqpyD3Ig1kS8ontazEr
-         Hb5Uf67GcRPKsm25fBmfy6toELEBKSu0uUnNnLJsSe19J55ZEBSMEZxt06Jkwymx/b+g
-         tgt/bbCv1ZkYkPObpzne8bGuFL9Vf3tpTMXnM3NKXtmZEVGMVzU1XwBNwHnvovNly1XY
-         z3/26FYTFgLvsXsbzYoT7tJnnSJ5uISbUGpqQnE/+4SmVl1TLTodMyRp1xFvyEg0z5B6
-         5nyw==
+        bh=QFgB1gsSAoG+hS58IncwUozrISMMlQtds/WbFB87YTI=;
+        b=AbdL85n3lmzPtDCe/0JF9M2e5jB3Q0mtzxFL6dD/0wie8bJw6MV6jGErrfhBedZKy+
+         KlhLOqMTHjkU/+J3wkmvZyChrRLEcr1+Y2MC4CoAmnNOoW0q/XnAjrk0JZ49UgvJKjS/
+         kvIiitERotZ2K1lQI6W3FzdXzI9ZuLiqpvtG/3azfIJFkOFArd/FuNmUJNqLaPZORz+W
+         MzD+VDnBMfsGPMfh43Yw5UC12IBHDHhO09rAH/dTJrToff6YXZX8HLRlTTbVW1lsyE/b
+         8OlMT0FSItyIPXS6EUcHrM1EEzHgb1EB61IAwsgfK5Nb/Inq584oiRqQ1h/UnxPPYjAK
+         6uqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=jASm5F7IG0cL7Edz8ZOf/AbyNJZ6sd775ispaeESRb0=;
-        b=u8R8VwOmz7kzf8XooV9lDgL2xMkP5Q1NUvIfEIMzNaW3tLacyV2JZfQXVPky9Qg+aK
-         XbTJtxUAJ1fnlLta1BMy91FcIW0pSkRFaC9gTlbSKFLJTOwCBP1PWR33HltbqLwtKN4u
-         U9Sk0liNOQqPyYf7qcfbbG2N74hsl3ElhvZf8Os+Kwtvo1btcEp2HDy5VnklC3uKqxTm
-         KkDYiqthuqlDOqieFV0pSsYD+wm9W5EPFPWmSprky8M2N7RYfS2bgJ9WJz+kTyTtj6Lz
-         +g3WdH35J38kOa0i5vBjz6RSt6RW5ndHHrQLnkXyQD+wvs3rz3jWb1AHZkA4/d4/BOaL
-         hTGA==
-X-Gm-Message-State: ACgBeo1oQn9auxpQAvPNMBQKv1YoRG0si0nDBu/2LElvnxmVyRPqXmA9
-        q9wv97+BFKYi2Zd2GM4sHVE=
-X-Google-Smtp-Source: AA6agR4AYmNMNf30kl/3P5ZoHdVZkf0G2VyOjgLq3MTmBmirkaXdSrwX7sXzYxmDCuKFMrlu3u5GjQ==
-X-Received: by 2002:ac8:5d89:0:b0:344:7c2d:92ba with SMTP id d9-20020ac85d89000000b003447c2d92bamr5451296qtx.124.1660899172229;
-        Fri, 19 Aug 2022 01:52:52 -0700 (PDT)
+        bh=QFgB1gsSAoG+hS58IncwUozrISMMlQtds/WbFB87YTI=;
+        b=LwBQ5a/ETStNnRAoihCThV7GQk1ChBJsufLsym2mczs4ayyUNLanmLuJ8BLAzEidq1
+         GA1InxzP0Z83lLhDHJfesJrJZ6/LsGKXVbWkh5SCXQQj9H1/r3Uyf4G6aR5rNH3D0qHl
+         +U9LdGXxcdyxZ+EMdoMOXZTd4HIJY7LaAVss5mdiSpT7uwe8IYQq29HX0Pulh5rh7yDi
+         EI7//HVieYzmPwHT9xKgw01czOk971u50XWx2yfQ6tPBBgO7i/EIcs1iL9niqxl6u25J
+         1C3ckOHzWfsx9xxWXWkGSyXCYUINTrYcQWbhG/1lPJueTSxpqsBGQVMJAaAA31lPCgTi
+         bcQw==
+X-Gm-Message-State: ACgBeo0VJx7YMgRvu+KJYTbuQybHqxyEXJYvR1RntO2ngRKnGOZno+1y
+        DDEYChVdLin2okINqe4Ul4I=
+X-Google-Smtp-Source: AA6agR7jlnvccUlV1fMt3CaIEGX7wpp5Q3lwM6x8ijuDU20Fd7DPGrCK+t9G8cEyNsbsIHibjjZaCw==
+X-Received: by 2002:a05:622a:1492:b0:344:5130:4094 with SMTP id t18-20020a05622a149200b0034451304094mr5687369qtx.3.1660899305200;
+        Fri, 19 Aug 2022 01:55:05 -0700 (PDT)
 Received: from sophie ([89.46.62.64])
-        by smtp.gmail.com with ESMTPSA id q1-20020a05620a0d8100b006bb2661f3fasm3648840qkl.133.2022.08.19.01.52.51
+        by smtp.gmail.com with ESMTPSA id t201-20020a37aad2000000b006bacf4703c5sm3495354qke.111.2022.08.19.01.55.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 01:52:51 -0700 (PDT)
+        Fri, 19 Aug 2022 01:55:04 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Cc:     David Hildenbrand <david@redhat.com>,
-        Rebecca Mckeever <remckee0@gmail.com>,
-        Shaoqin Huang <shaoqin.huang@intel.com>
-Subject: [PATCH v2 7/8] memblock tests: add tests for memblock_*bottom_up functions
-Date:   Fri, 19 Aug 2022 01:34:55 -0700
-Message-Id: <dc0ab2f907e746ea8304ab0fb8e093192711e6f4.1660897732.git.remckee0@gmail.com>
+        Rebecca Mckeever <remckee0@gmail.com>
+Subject: [PATCH v2 8/8] memblock tests: add tests for memblock_trim_memory
+Date:   Fri, 19 Aug 2022 01:34:56 -0700
+Message-Id: <4157021eecdd3abb503d4b1d1449844baac2d7b9.1660897732.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1660897732.git.remckee0@gmail.com>
 References: <cover.1660897732.git.remckee0@gmail.com>
@@ -72,63 +71,250 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add simple tests for memblock_set_bottom_up() and memblock_bottom_up().
+Add tests for memblock_trim_memory() for the following scenarios:
+- all regions aligned
+- one region unalign that is smaller than the alignment
+- one region unaligned at the base
+- one region unaligned at the end
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Shaoqin Huang <shaoqin.huang@intel.com>
 Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
- tools/testing/memblock/tests/basic_api.c | 45 ++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ tools/testing/memblock/tests/basic_api.c | 223 +++++++++++++++++++++++
+ 1 file changed, 223 insertions(+)
 
 diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
-index ea79396e4611..c7490291c485 100644
+index c7490291c485..7048319bb096 100644
 --- a/tools/testing/memblock/tests/basic_api.c
 +++ b/tools/testing/memblock/tests/basic_api.c
-@@ -1679,6 +1679,50 @@ static int memblock_free_checks(void)
+@@ -8,6 +8,7 @@
+ #define FUNC_RESERVE					"memblock_reserve"
+ #define FUNC_REMOVE					"memblock_remove"
+ #define FUNC_FREE					"memblock_free"
++#define FUNC_TRIM					"memblock_trim_memory"
+ 
+ static int memblock_initialization_check(void)
+ {
+@@ -1723,6 +1724,227 @@ static int memblock_bottom_up_checks(void)
  	return 0;
  }
  
-+static int memblock_set_bottom_up_check(void)
++/*
++ * A test that tries to trim memory when both ends of the memory region are
++ * aligned. Expect that the memory will not be trimmed. Expect the counter to
++ * not be updated.
++ */
++static int memblock_trim_memory_aligned_check(void)
 +{
-+	prefix_push("memblock_set_bottom_up");
++	struct memblock_region *rgn;
++	phys_addr_t alignment = SMP_CACHE_BYTES;
 +
-+	memblock_set_bottom_up(false);
-+	ASSERT_EQ(memblock.bottom_up, false);
-+	memblock_set_bottom_up(true);
-+	ASSERT_EQ(memblock.bottom_up, true);
++	rgn = &memblock.memory.regions[0];
 +
-+	reset_memblock_attributes();
++	struct region r = {
++		.base = alignment,
++		.size = alignment * 4
++	};
++
++	PREFIX_PUSH();
++
++	reset_memblock_regions();
++	memblock_add(r.base, r.size);
++	memblock_trim_memory(alignment);
++
++	ASSERT_EQ(rgn->base, r.base);
++	ASSERT_EQ(rgn->size, r.size);
++
++	ASSERT_EQ(memblock.memory.cnt, 1);
++
 +	test_pass_pop();
 +
 +	return 0;
 +}
 +
-+static int memblock_bottom_up_check(void)
++/*
++ * A test that tries to trim memory when there are two available regions, r1 and
++ * r2. Region r1 is aligned on both ends and region r2 is unaligned on one end
++ * and smaller than the alignment:
++ *
++ *                                     alignment
++ *                                     |--------|
++ * |        +-----------------+        +------+   |
++ * |        |        r1       |        |  r2  |   |
++ * +--------+-----------------+--------+------+---+
++ *          ^        ^        ^        ^      ^
++ *          |________|________|________|      |
++ *                            |               Unaligned address
++ *                Aligned addresses
++ *
++ * Expect that r1 will not be trimmed and r2 will be removed. Expect the
++ * counter to be updated.
++ */
++static int memblock_trim_memory_too_small_check(void)
 +{
-+	prefix_push("memblock_bottom_up");
++	struct memblock_region *rgn;
++	phys_addr_t alignment = SMP_CACHE_BYTES;
 +
-+	memblock_set_bottom_up(false);
-+	ASSERT_EQ(memblock_bottom_up(), memblock.bottom_up);
-+	ASSERT_EQ(memblock_bottom_up(), false);
-+	memblock_set_bottom_up(true);
-+	ASSERT_EQ(memblock_bottom_up(), memblock.bottom_up);
-+	ASSERT_EQ(memblock_bottom_up(), true);
++	rgn = &memblock.memory.regions[0];
 +
-+	reset_memblock_attributes();
++	struct region r1 = {
++		.base = alignment,
++		.size = alignment * 2
++	};
++	struct region r2 = {
++		.base = alignment * 4,
++		.size = alignment - SZ_2
++	};
++
++	PREFIX_PUSH();
++
++	reset_memblock_regions();
++	memblock_add(r1.base, r1.size);
++	memblock_add(r2.base, r2.size);
++	memblock_trim_memory(alignment);
++
++	ASSERT_EQ(rgn->base, r1.base);
++	ASSERT_EQ(rgn->size, r1.size);
++
++	ASSERT_EQ(memblock.memory.cnt, 1);
++
 +	test_pass_pop();
 +
 +	return 0;
 +}
 +
-+static int memblock_bottom_up_checks(void)
++/*
++ * A test that tries to trim memory when there are two available regions, r1 and
++ * r2. Region r1 is aligned on both ends and region r2 is unaligned at the base
++ * and aligned at the end:
++ *
++ *                               Unaligned address
++ *                                       |
++ *                                       v
++ * |        +-----------------+          +---------------+   |
++ * |        |        r1       |          |      r2       |   |
++ * +--------+-----------------+----------+---------------+---+
++ *          ^        ^        ^        ^        ^        ^
++ *          |________|________|________|________|________|
++ *                            |
++ *                    Aligned addresses
++ *
++ * Expect that r1 will not be trimmed and r2 will be trimmed at the base.
++ * Expect the counter to not be updated.
++ */
++static int memblock_trim_memory_unaligned_base_check(void)
 +{
-+	test_print("Running memblock_*bottom_up tests...\n");
++	struct memblock_region *rgn1, *rgn2;
++	phys_addr_t alignment = SMP_CACHE_BYTES;
++	phys_addr_t offset = SZ_2;
++	phys_addr_t new_r2_base, new_r2_size;
 +
++	rgn1 = &memblock.memory.regions[0];
++	rgn2 = &memblock.memory.regions[1];
++
++	struct region r1 = {
++		.base = alignment,
++		.size = alignment * 2
++	};
++	struct region r2 = {
++		.base = alignment * 4 + offset,
++		.size = alignment * 2 - offset
++	};
++
++	PREFIX_PUSH();
++
++	new_r2_base = r2.base + (alignment - offset);
++	new_r2_size = r2.size - (alignment - offset);
++
++	reset_memblock_regions();
++	memblock_add(r1.base, r1.size);
++	memblock_add(r2.base, r2.size);
++	memblock_trim_memory(alignment);
++
++	ASSERT_EQ(rgn1->base, r1.base);
++	ASSERT_EQ(rgn1->size, r1.size);
++
++	ASSERT_EQ(rgn2->base, new_r2_base);
++	ASSERT_EQ(rgn2->size, new_r2_size);
++
++	ASSERT_EQ(memblock.memory.cnt, 2);
++
++	test_pass_pop();
++
++	return 0;
++}
++
++/*
++ * A test that tries to trim memory when there are two available regions, r1 and
++ * r2. Region r1 is aligned on both ends and region r2 is aligned at the base
++ * and unaligned at the end:
++ *
++ *                                             Unaligned address
++ *                                                     |
++ *                                                     v
++ * |        +-----------------+        +---------------+   |
++ * |        |        r1       |        |      r2       |   |
++ * +--------+-----------------+--------+---------------+---+
++ *          ^        ^        ^        ^        ^        ^
++ *          |________|________|________|________|________|
++ *                            |
++ *                    Aligned addresses
++ *
++ * Expect that r1 will not be trimmed and r2 will be trimmed at the base.
++ * Expect the counter to not be updated.
++ */
++static int memblock_trim_memory_unaligned_end_check(void)
++{
++	struct memblock_region *rgn1, *rgn2;
++	phys_addr_t alignment = SMP_CACHE_BYTES;
++	phys_addr_t offset = SZ_2;
++	phys_addr_t new_r2_size;
++
++	rgn1 = &memblock.memory.regions[0];
++	rgn2 = &memblock.memory.regions[1];
++
++	struct region r1 = {
++		.base = alignment,
++		.size = alignment * 2
++	};
++	struct region r2 = {
++		.base = alignment * 4,
++		.size = alignment * 2 - offset
++	};
++
++	PREFIX_PUSH();
++
++	new_r2_size = r2.size - (alignment - offset);
++
++	reset_memblock_regions();
++	memblock_add(r1.base, r1.size);
++	memblock_add(r2.base, r2.size);
++	memblock_trim_memory(alignment);
++
++	ASSERT_EQ(rgn1->base, r1.base);
++	ASSERT_EQ(rgn1->size, r1.size);
++
++	ASSERT_EQ(rgn2->base, r2.base);
++	ASSERT_EQ(rgn2->size, new_r2_size);
++
++	ASSERT_EQ(memblock.memory.cnt, 2);
++
++	test_pass_pop();
++
++	return 0;
++}
++
++static int memblock_trim_memory_checks(void)
++{
 +	prefix_reset();
-+	memblock_set_bottom_up_check();
-+	prefix_reset();
-+	memblock_bottom_up_check();
++	prefix_push(FUNC_TRIM);
++	test_print("Running %s tests...\n", FUNC_TRIM);
++
++	memblock_trim_memory_aligned_check();
++	memblock_trim_memory_too_small_check();
++	memblock_trim_memory_unaligned_base_check();
++	memblock_trim_memory_unaligned_end_check();
++
++	prefix_pop();
 +
 +	return 0;
 +}
@@ -136,11 +322,11 @@ index ea79396e4611..c7490291c485 100644
  int memblock_basic_checks(void)
  {
  	memblock_initialization_check();
-@@ -1686,6 +1730,7 @@ int memblock_basic_checks(void)
- 	memblock_reserve_checks();
+@@ -1731,6 +1953,7 @@ int memblock_basic_checks(void)
  	memblock_remove_checks();
  	memblock_free_checks();
-+	memblock_bottom_up_checks();
+ 	memblock_bottom_up_checks();
++	memblock_trim_memory_checks();
  
  	return 0;
  }

@@ -2,94 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440385996AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5325996AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347376AbiHSIFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
+        id S1347394AbiHSIGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347367AbiHSIFg (ORCPT
+        with ESMTP id S242415AbiHSIGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:05:36 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80825DC0AE;
-        Fri, 19 Aug 2022 01:05:35 -0700 (PDT)
-Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M8DkR1m94z67bbZ;
-        Fri, 19 Aug 2022 16:02:23 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Fri, 19 Aug 2022 10:05:33 +0200
-Received: from [10.195.34.98] (10.195.34.98) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 19 Aug
- 2022 09:05:32 +0100
-Message-ID: <366fd6dd-a37b-c7ec-fdf3-48f8a8024834@huawei.com>
-Date:   Fri, 19 Aug 2022 09:05:32 +0100
+        Fri, 19 Aug 2022 04:06:02 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C4FDC0B9
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bu5ugniIGJnOwBi0tX7bF/9ypxKtudKwkowqlczQRFs=; b=Dq7IBbNokXaq8uuhQCkYxp3xw2
+        5yqeVXClgdF7YOEVAwFZp4hXLJebgHNTAUrMd2t0avrcvZuRwwUf96zQrtrPTUEE/+F7FmI5AMfsw
+        jqPir1wIOePidmnWg8J06dFSKpJsM4GuT2pF3rrM6wT/uo7rx5x1Ugt3gcEVvXOIUqqTh4CX0e/tv
+        wq5EOktnB6idz+M8Kmi5kDNCIE/JETj54I/pv+TLAo1+3jY1bz3S4nfb9qeKw+NG7bo7fxbKCnYen
+        a4aYbl/+v1SdcFjNh8NP44ZZ9E05idpgyHPv8Ny6nDuW+VRsSTgSQ8WgnOoL+8uMOKExCKHRYX++n
+        asOhXboQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oOx0h-003ovk-E5; Fri, 19 Aug 2022 08:05:43 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6AE22980120; Fri, 19 Aug 2022 10:05:40 +0200 (CEST)
+Date:   Fri, 19 Aug 2022 10:05:40 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     kan.liang@linux.intel.com
+Cc:     acme@redhat.com, linux-kernel@vger.kernel.org,
+        alexander.shishkin@linux.intel.com, ak@linux.intel.com,
+        Jianfeng Gao <jianfeng.gao@intel.com>
+Subject: Re: [RESEND PATCH] perf/x86/intel: Fix unchecked MSR access error
+ for Alder Lake N
+Message-ID: <Yv9EVP6O9r867om4@worktop.programming.kicks-ass.net>
+References: <20220818181530.2355034-1-kan.liang@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH PoC 1/3] ACPI / PNP: Don't add enumeration_by_parent
- devices
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "ACPI Devel Maling List" <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>
-References: <1660649244-146842-1-git-send-email-john.garry@huawei.com>
- <1660649244-146842-2-git-send-email-john.garry@huawei.com>
- <CAHp75Vc4vT==hB=svhDBhSpNFCQXwzZ1RMxy4mQspFhmSjQ03g@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <CAHp75Vc4vT==hB=svhDBhSpNFCQXwzZ1RMxy4mQspFhmSjQ03g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.34.98]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818181530.2355034-1-kan.liang@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/08/2022 20:31, Andy Shevchenko wrote:
->> For the  hisi_lpc driver, for the UART ACPI node we have a binding like:
->>
->>   Device (LPC0.CON0) {
->>      Name (_HID, "HISI1031")
->>      Name (_CID, "PNP0501")
->>      Name (LORS, ResourceTemplate() {
->>        QWordIO (
->>
->> We have the compat and hid string. The ACPI/PNP code matches the compat
->> string first, and creates the PNP device. In doing so, the acpi_device
->> created has physical_node_count member set in acpi_bind_one().
->>
->> The hisi_lpc driver also creates a platform device serial device for uart,
->> which is the actual uart which we want to use - see
->> hisi_lpc_acpi_add_child(). That function does not check
->> physical_node_count value, but acpi_create_platform_device() does check it.
->> So if we were to move hisi_lpc_acpi_add_child() across to use
->> acpi_create_platform_device(), then the change in this patch is required to
->> not create the PNP binding (so that physical_node_count is not set from
->> PNP probe).
-> Hmm... The flag, as I interpret it, is equal to "the device in
-> question is a peripheral device to the non-discoverable bus, such as
-> SPI, I2C or UART". I.o.w. I do not see how PNP suits here. So, from my
-> point of view it seems like an abuse of the flag. Not sure the current
-> state of affairs in ACPI glue layer regarding this, though.
+On Thu, Aug 18, 2022 at 11:15:30AM -0700, kan.liang@linux.intel.com wrote:
 
-Hi Andy,
+> The Alder Lake N only has e-cores. The X86_FEATURE_HYBRID_CPU flag is
+> not set. The perf cannot retrieve the correct CPU type via
+> get_this_hybrid_cpu_type(). The model specific get_hybrid_cpu_type() is
+> hardcode to p-core. The wrong CPU type is given to the PMU of the
+> Alder Lake N.
 
-Sorry, but I'm not following you here. Which flag are you talking about?
+If ADL-N isn't in fact a hybrid CPU, then *WHY* are we running
+init_hybrid_pmu() and setting up all that nonsense?
 
-thanks,
-John
+That is, wouldn't the right thing be to remove ALDERLAKE_N from the rest
+of {ALDER,RAPTOP}LAKE and create a non-hybrid PMU setup for it?

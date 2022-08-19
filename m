@@ -2,141 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C3D5999C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5835999C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348352AbiHSKYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
+        id S1348354AbiHSKY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346861AbiHSKYh (ORCPT
+        with ESMTP id S1348356AbiHSKYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:24:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8372C7E018
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 03:24:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660904674;
+        Fri, 19 Aug 2022 06:24:53 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12DCACA1F
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 03:24:51 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b9849329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9849:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A40851EC064A;
+        Fri, 19 Aug 2022 12:24:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660904685;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N/mHVSrbqdjC1aGVDhd/e9K2D4ML01uWyXVxjKqxQ38=;
-        b=G6b1Uu1BBzHV9DjgrsVeIV7pIUfBP8p9qUe3dJTS6iU0Aubq7ghgGuLgwfOmjOvvyhJSp8
-        c78JHJPGVq2Oj6+fRQtfrWRYnxOIibRRLv+fO9MfERW2nrg04Ovs3nnnVqSwFAmeLruwb1
-        /ezCjwQhEQtC7+tPxYIs7Oc/kfPVJBM=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-550-lbU4VtluPxyH3DSpoRfG0A-1; Fri, 19 Aug 2022 06:24:33 -0400
-X-MC-Unique: lbU4VtluPxyH3DSpoRfG0A-1
-Received: by mail-wm1-f72.google.com with SMTP id ay21-20020a05600c1e1500b003a6271a9718so2000616wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 03:24:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=N/mHVSrbqdjC1aGVDhd/e9K2D4ML01uWyXVxjKqxQ38=;
-        b=FGgw6RzPfJWzOoM8fc6jaNpjkgrejEleo9iVWRr0lv7T0OyO5lB5MVraWLKqCuqBpG
-         TohGmYCnMkTP4XydEeWVk2sSIk9Ot1tuAkliNs5GQp9g0LrvFqzpDP/aroI0prvQutkb
-         WuB6u9tGVtE/JauhDcIygiCGgrxFkYRhvyGWcoQTA4xqQP/J2JEggvQGlZE/pPoMiCpt
-         muYplMfzCBcgdoKGPPkmtmODyoI42izGUyJ2ZVeyNf2UBwdhnao985ZtClFAtikYHNiz
-         tissvS/GQ6ZZBBOMVz2o0owC0z7bH3AgLDJ18RQhif3mh1yCfIuM6MNtJkmCf57HRfQl
-         VRHw==
-X-Gm-Message-State: ACgBeo0adMnEozVCAcm0k1Q4s8Y3IHJn1EKEAiONa+ZucK8ETn9kpdLD
-        gMzU9g8SlM9UGPlw9WUnk40op47AVPkhqSTCClUTmWZpN73Ch+7Cz88wKvaaKcVzStF1D520vMO
-        qvndVLl6Nwga8QRzXSk68+ohN
-X-Received: by 2002:a5d:59a5:0:b0:222:c5a5:59c4 with SMTP id p5-20020a5d59a5000000b00222c5a559c4mr3791034wrr.656.1660904672331;
-        Fri, 19 Aug 2022 03:24:32 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4UobtwGkKhtvRtmvWs5RTtIa0uu+mihO6JQ7YoZdSMlNd0HYG8d+3BDeBwZzHjqohIks9ljg==
-X-Received: by 2002:a5d:59a5:0:b0:222:c5a5:59c4 with SMTP id p5-20020a5d59a5000000b00222c5a559c4mr3791015wrr.656.1660904672084;
-        Fri, 19 Aug 2022 03:24:32 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id m9-20020a7bce09000000b003a3442f1229sm7950701wmc.29.2022.08.19.03.24.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 03:24:31 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=S0FizUmau6S1/DFtsPjVCVKdQ3LYW9X4CqTGEwR9ThQ=;
+        b=StdfTqkTYWlewpTxDSdX/L4oSdjbKynEMLmaLzQ6nmxy5d3Jgd0XfbLwfLYtsn344gN6R9
+        HFG0uVBFutcpYfNEEXqK/pP1KBFaeJcWO2nfad9JRg3yb/1uGcIOnDNw+v2hraz5FeBuqS
+        JsEI9vAG2q5FoQP7pAQTUjGUZOfb1yw=
+Date:   Fri, 19 Aug 2022 12:24:41 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashok Raj <ashok.raj@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Tony Luck <tony.luck@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Gal Pressman <gal@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>
-Subject: Re: [PATCH v2 2/5] cpumask: Introduce for_each_cpu_andnot()
-In-Reply-To: <Yv6/SAj6kQ/UIKvu@yury-laptop>
-References: <20220817175812.671843-1-vschneid@redhat.com>
- <20220817175812.671843-3-vschneid@redhat.com>
- <Yv6/SAj6kQ/UIKvu@yury-laptop>
-Date:   Fri, 19 Aug 2022 11:24:29 +0100
-Message-ID: <xhsmhlerka5uq.mognet@vschneid.remote.csb>
+        Dave Hansen <dave.hansen@intel.com>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Jacon Jun Pan <jacob.jun.pan@intel.com>
+Subject: Re: [PATCH v3 1/5] x86/microcode/intel: Check against CPU signature
+ before saving microcode
+Message-ID: <Yv9k6fqRANu4ojK6@zn.tnic>
+References: <20220817051127.3323755-1-ashok.raj@intel.com>
+ <20220817051127.3323755-2-ashok.raj@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220817051127.3323755-2-ashok.raj@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/08/22 15:38, Yury Norov wrote:
-> On Wed, Aug 17, 2022 at 06:58:09PM +0100, Valentin Schneider wrote:
->> for_each_cpu_and() is very convenient as it saves having to allocate a
->> temporary cpumask to store the result of cpumask_and(). The same issue
->> applies to cpumask_andnot() which doesn't actually need temporary storage
->> for iteration purposes.
->>
->> Following what has been done for for_each_cpu_and(), introduce
->> for_each_cpu_andnot().
->>
->> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
->
-> I'm concerned that this series doesn't give us real examples and tests
-> for the new API. If we take it as-is, we'll end up with a dead code for
-> a while, quite probably for long.
->
+On Wed, Aug 17, 2022 at 05:11:23AM +0000, Ashok Raj wrote:
+> When save_microcode_patch() is looking to replace an existing microcode in
+> the cache, current code is *only* checks the CPU sig/pf in the main
 
-Tariq has at least two uses of for_each_numa_hop_cpu() (which uses
-for_each_cpu_andnot()) in net/mlx5e and net/enic). My plan here is to make
-sure the cpumask and sched/topology changes are OK, and then I'd let Tariq
-carry the whole set with actual users on top.
+Write those "sig/pf" things out once so that it is clear what that is.
 
-I wouldn't want to see this merged without users, especially given the
-EXPORT_SYMBOL_GPL() in 3/5.
+> header. Microcode can carry additional sig/pf combinations in the extended
+> signature table, which is completely missed today.
+> 
+> For e.g. Current patch is a multi-stepping patch and new incoming patch is
+> a specific patch just for this CPUs stepping.
+> 
+> patch1:
+> fms3 <--- header FMS
+> ...
+> ext_sig:
+> fms1
+> fms2
+> 
+> patch2: new
+> fms2 <--- header FMS
+> 
+> Current code takes only fms3 and checks with patch2 fms2.
 
-> Can you please submit a new code with a real application for the new API?
-> Alternatively, you can rework some existing code.
->
-> Briefly grepping, I found good candidate in a core code: __sched_core_flip(),
-> and one candidate in arch code: arch/powerpc/kernel/smp.c: update_coregroup_mask.
-> I believe there are much more.
->
+So, find_matching_signature() does all the signatures matching and
+scanning already. If anything, that function should tell its callers
+whether the patch it is looking at - the fms2 one - should replace the
+current one or not.
 
-Some of these look fairly trivial, I'll have a look around.
+I.e., all the logic to say how strong a patch match is, should be
+concentrated there. And then the caller will do the according action.
 
-> Regarding the test, I don't think it's strictly necessary to have it as soon as
-> we'll have real users, but it's always good to backup with tests.
->
+> saved_patch.header.fms3 != new_patch.header.fms2, so save_microcode_patch
+> saves it to the end of list instead of replacing patch1 with patch2.
+> 
+> There is no functional user observable issue since find_patch() skips
+> patch versions that are <= current_patch and will land on patch2 properly.
+> 
+> Nevertheless this will just end up storing every patch that isn't required.
+> Kernel just needs to store the latest patch. Otherwise its a memory leak
+> that sits in kernel and never used.
 
-That sounds sensible enough, I'll have a look at that.
+Oh well.
 
-> Thanks,
-> Yury
+> Cc: stable@vger.kernel.org
 
+Why?
+
+This looks like a small correction to me which doesn't need to go to
+stable...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

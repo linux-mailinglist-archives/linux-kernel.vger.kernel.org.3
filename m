@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F82C59A64F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0E559A659
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351548AbiHSTVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 15:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
+        id S1351445AbiHSTVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 15:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351497AbiHSTUr (ORCPT
+        with ESMTP id S1350791AbiHSTVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 15:20:47 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB36811521A;
-        Fri, 19 Aug 2022 12:20:39 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id s1so4511584lfp.6;
-        Fri, 19 Aug 2022 12:20:39 -0700 (PDT)
+        Fri, 19 Aug 2022 15:21:23 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B69A115596;
+        Fri, 19 Aug 2022 12:21:07 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id e2so474874ljj.1;
+        Fri, 19 Aug 2022 12:21:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=xN5m22WfaWqHbczZVUXbDhaaAcllqpHvQCGoo7vtQ3Q=;
-        b=oGku/UZ6JGk6V0C5bLYbPWu66MUuJjgYpY3NGBPivcZhtS7WFLDvjIC8N3BUUM+ojm
-         XrqzbPZ7BrMhKgw6iqLfOiywA2/e+V1CI1Bv+ibOwljypZIiJAJvqWYl5GdTGvHtfSGD
-         AjC8c/AA3lgjgppMd1cIaGUH2dRgdYoZWaD8x6OXrTYVzs/Sv572IV2k0tCdTTzuCx3t
-         2ikwrDFd4TfQyxs2LX1weme559lC2wREdRcP6Dc7/B3NufUGyFdifmPs2+vqf1zmp4X2
-         gc4AimqIJ4eobRPhboGYfD+oUL8eSDviG7Sv1YPnqbnnXUpkKhIJwyz8+6Ut4CAQV+ES
-         OCMQ==
+        bh=3f/bG1xCcH9GlVDTu4IzFUvz5kFlob5DxhGhmkJbqE8=;
+        b=UCyMDvX/1FVk1yWhyHofjNsW9oECG44IwYhTOrlo2KlNMkFv95nrgnmiQPvF+TveQF
+         l2MxXibmbK9uqtYV+IX807QQ2BanWvX3s754doGrYt5CaQ7SBz7J5RPkteMftGnTef50
+         4GsSk0CCeaDtXsRpnP9lWBHX4h4igKZqUAnePldKa7gl+vQr/8cT8cFFhBmpqz/V4avx
+         CyeLa6HCUV2oa6ZJvL2LfsK+y8axCMWiy7qzdznZ0eXLyBGUeAb9evfkWqC0QjQ2hfpZ
+         SY76pRX27eGh/P9I2HisCbOMmg/POwjECFzZgKGNdCbsMzQF63NuPGAI5BKomOeZ1/qK
+         eL6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=xN5m22WfaWqHbczZVUXbDhaaAcllqpHvQCGoo7vtQ3Q=;
-        b=rb86DLwfnmcmt8EIlrK28WfImb5QpWQKawf0p0FzjDUmbuaaxrfvo4P7Uti9Uo9yZY
-         VHl4Y2pNeV9GlOtcA1/2Jbb2SRUdHv+/ArKL2MNww2p9SqZ8lwNNpEDl0RmIGH7d6JV7
-         HKsA1u18rl0USXGpWTNTiYs38kWNEN3Lh1aPhIOu8h1w3V4xCqJjtLM9FKibeqM414Ua
-         +Y09JcDEMuq1SzgAPAOFmwJcqD2Tu4DJg1iBSZ11WbzDxndX/LOrOjgEhucFVtXHtXWt
-         zGIEyhc5KzKlpxRJE6abGL0fuOmdvgrO4xOa1uHtct88eV6IU+wn1hw9xEEeX6ZzwdMM
-         94XA==
-X-Gm-Message-State: ACgBeo2PvdqTdf+00OVr9Bzun5vsRHJshWivUKjMduLFxUR+F5J0nBlL
-        sWvygERrGQfmD3bvUCB9TQ4=
-X-Google-Smtp-Source: AA6agR6BPAMdFFb/vkSsLm2HrUQWrAH7AmJz5zOLk+hoeikQiaWUiHe1ZL4CVAhLy51sQSCSL2zS7Q==
-X-Received: by 2002:a05:6512:3686:b0:492:bd6f:ad4 with SMTP id d6-20020a056512368600b00492bd6f0ad4mr2926283lfs.151.1660936837811;
-        Fri, 19 Aug 2022 12:20:37 -0700 (PDT)
+        bh=3f/bG1xCcH9GlVDTu4IzFUvz5kFlob5DxhGhmkJbqE8=;
+        b=keGPt8X5ep5QXM8jJnD2sWdL721aL9VfDrbtBLtK4ZXx9zX0L+CO3Cbr0mW4aq23SH
+         G9dbyyc3eu4W1MKii2pdgENNz8QAzKMFL6VjdUHcZs1g7ESWqE0GEUqTQIrRqTSnCoMK
+         76jlRQo40eMbqYDF+P3AFFj5OxaYhEuOUmkYaboBeZlKTqsRzZcnhVjLQaLtdREkUn8S
+         vYeCX8SYB2h++Ny9/AJw/EzXjXmS3a0q1Ks2SDhdjErsrwzdLOnES41I9PjXBTlhiTkf
+         1qFUsaD8jRwa8LSRaJsfSXq51AyT4JGLfArwgWzx6ANvBgN1ItK/Rxb+8BOQEZn8sX2d
+         Q5Iw==
+X-Gm-Message-State: ACgBeo11KIocwz5ZdxRb2XExWMGUDMyBicMfzRG6DlpttYFus9yTqNgS
+        N3kmFBR776CLUiCUPNoDqHk=
+X-Google-Smtp-Source: AA6agR6uM1ayQwnZqYrF0fmvp6E2av0FzUwAAh/AwkDnw0AXgdhgSv039E65NyLc4bXqZ9P1zcVs5g==
+X-Received: by 2002:a05:651c:179c:b0:261:8fbe:b729 with SMTP id bn28-20020a05651c179c00b002618fbeb729mr2606226ljb.114.1660936852242;
+        Fri, 19 Aug 2022 12:20:52 -0700 (PDT)
 Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id p4-20020a19f004000000b0048aeef1b2bcsm725453lfc.294.2022.08.19.12.20.36
+        by smtp.gmail.com with ESMTPSA id d11-20020ac25ecb000000b00492b494c4dbsm738480lfq.89.2022.08.19.12.20.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 12:20:37 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 22:20:32 +0300
+        Fri, 19 Aug 2022 12:20:51 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 22:20:47 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 Cc:     Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Matti Vaittinen <mazziesaccount@gmail.com>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Alexandru Lazar <alazar@startmail.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 12/14] iio: max1241: simplify using
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 13/14] iio: max1363: simplify using
  devm_regulator_get_enable()
-Message-ID: <7c759bf6c06e72ae70bffeebc1939d9903427278.1660934107.git.mazziesaccount@gmail.com>
+Message-ID: <1286ea127d190e5708a0aaff271819b2d3f8802d.1660934107.git.mazziesaccount@gmail.com>
 References: <cover.1660934107.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9JDXN8VFq+K/+z7s"
+        protocol="application/pgp-signature"; boundary="cC7KBBHJIm82dlyL"
 Content-Disposition: inline
 In-Reply-To: <cover.1660934107.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,7 +77,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---9JDXN8VFq+K/+z7s
+--cC7KBBHJIm82dlyL
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -96,63 +94,39 @@ Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 v2 =3D> v3:
 New patch
 ---
- drivers/iio/adc/max1241.c | 28 +++-------------------------
- 1 file changed, 3 insertions(+), 25 deletions(-)
+ drivers/iio/adc/max1363.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/drivers/iio/adc/max1241.c b/drivers/iio/adc/max1241.c
-index a815ad1f6913..500bb09ab19b 100644
---- a/drivers/iio/adc/max1241.c
-+++ b/drivers/iio/adc/max1241.c
-@@ -22,7 +22,6 @@ enum max1241_id {
- struct max1241 {
- 	struct spi_device *spi;
- 	struct mutex lock;
--	struct regulator *vdd;
- 	struct regulator *vref;
- 	struct gpio_desc *shutdown;
+diff --git a/drivers/iio/adc/max1363.c b/drivers/iio/adc/max1363.c
+index eef55ed4814a..d900e29d6cb7 100644
+--- a/drivers/iio/adc/max1363.c
++++ b/drivers/iio/adc/max1363.c
+@@ -169,7 +169,6 @@ struct max1363_state {
+ 	const struct max1363_chip_info	*chip_info;
+ 	const struct max1363_mode	*current_mode;
+ 	u32				requestedmask;
+-	struct regulator		*reg;
+ 	struct mutex			lock;
 =20
-@@ -110,17 +109,6 @@ static const struct iio_info max1241_info =3D {
- 	.read_raw =3D max1241_read_raw,
- };
+ 	/* Using monitor modes and buffer at the same time is
+@@ -1603,15 +1602,7 @@ static int max1363_probe(struct i2c_client *client,
+ 	st =3D iio_priv(indio_dev);
 =20
--static void max1241_disable_vdd_action(void *data)
--{
--	struct max1241 *adc =3D data;
--	struct device *dev =3D &adc->spi->dev;
--	int err;
+ 	mutex_init(&st->lock);
+-	st->reg =3D devm_regulator_get(&client->dev, "vcc");
+-	if (IS_ERR(st->reg))
+-		return PTR_ERR(st->reg);
 -
--	err =3D regulator_disable(adc->vdd);
--	if (err)
--		dev_err(dev, "could not disable vdd regulator.\n");
--}
+-	ret =3D regulator_enable(st->reg);
+-	if (ret)
+-		return ret;
 -
- static void max1241_disable_vref_action(void *data)
- {
- 	struct max1241 *adc =3D data;
-@@ -147,20 +135,10 @@ static int max1241_probe(struct spi_device *spi)
- 	adc->spi =3D spi;
- 	mutex_init(&adc->lock);
-=20
--	adc->vdd =3D devm_regulator_get(dev, "vdd");
--	if (IS_ERR(adc->vdd))
--		return dev_err_probe(dev, PTR_ERR(adc->vdd),
--				     "failed to get vdd regulator\n");
--
--	ret =3D regulator_enable(adc->vdd);
-+	ret =3D devm_regulator_get_enable(dev, "vdd");
+-	ret =3D devm_add_action_or_reset(&client->dev, max1363_reg_disable, st->r=
+eg);
++	ret =3D devm_regulator_get_enable(&client->dev, "vcc");
  	if (ret)
--		return ret;
--
--	ret =3D devm_add_action_or_reset(dev, max1241_disable_vdd_action, adc);
--	if (ret) {
--		dev_err(dev, "could not set up vdd regulator cleanup action\n");
--		return ret;
--	}
-+		return dev_err_probe(dev, ret,
-+				     "failed to get/enable vdd regulator\n");
+ 		return ret;
 =20
- 	adc->vref =3D devm_regulator_get(dev, "vref");
- 	if (IS_ERR(adc->vref))
 --=20
 2.37.1
 
@@ -169,19 +143,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---9JDXN8VFq+K/+z7s
+--cC7KBBHJIm82dlyL
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL/4oAACgkQeFA3/03a
-ocVahQf/bf5z/JOjpwhdbVqyTOIhVJiXKcr2FtWmeaAb4/xAmNwBJYo6vMV4J6Dn
-qtkbc5ry14odNgSxCiwh9qRbk0oOwlJ7/xqTJzuqKjrKhfsgN13NZPT7IWz40AlG
-2N992o+zmmUjrNN1JC0PEsDz9PC5jOhq6KU09rbvgkKAbp4iNq+2lSb3XgDUVn/b
-5m5oJERV1lhUeRVFb8I8Qeh51lTQMeQRptyuuOnQVko8XcKx192ruBhjD+Li84iH
-juueuRb73kCaLjau7eVyt/v3gtsH/0kBb8K0TUyizesoTTijWSJ6FKZ7VPXPThPB
-02tdAJSx3U120ITPw1Qjx0j7KUGk2Q==
-=VAIW
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL/4o8ACgkQeFA3/03a
+ocU5yAgAgK2Nt6SPIs45tZgSmQ3sttM72aM1RgJ8PaRyzr0iVPEv9Rr1MK6/9Z9u
+opF00Mt5nmUMlc2sRo2eLti1N7MFVEn8cYOpW2Cc+DSC6rwHSnguJwQASfmj7P1N
+DR0nF55ZLuMkN5OFWP52YKFfvSOyIlHFY8PYD3btMTJvUopqxZOhQdJnxBjcSK+j
+pQGUFwv6x88XJYhMKTCQAftUNFeEDfBGJ7pNE3x7XoqCP9K/ReNd+vzcseCloVa2
+l6Rt7oc52ADt2WiGtVu1sUQq7QNBOmEHwqlT9u6WbIYRdgeGhAg8WZTc6QkmHkMb
++tr9/0CmKkypKujU9qGLmXK+/y9Jaw==
+=1ejk
 -----END PGP SIGNATURE-----
 
---9JDXN8VFq+K/+z7s--
+--cC7KBBHJIm82dlyL--

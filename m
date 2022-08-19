@@ -2,121 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B06599769
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1EC599713
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347603AbiHSITZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
+        id S1347700AbiHSIS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347599AbiHSIS4 (ORCPT
+        with ESMTP id S1347260AbiHSISV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:18:56 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBD13F1E2;
-        Fri, 19 Aug 2022 01:18:18 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id p5so1332776qvz.6;
-        Fri, 19 Aug 2022 01:18:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=5w+/g5YGTVdUHyIqk02zSqLS8P5U5fB9MVF9V2agJs0=;
-        b=gdAXzwgCjGLoD1sElbapv4QEHxkB7G5webqH9OcGwe0JTZ+S3aa40oCN2BsF7UhTFi
-         dzC7tuI4ZcdBbTu+37Z5nQXVEzEYODot/JQoQutZHP4ZnBuvYgqUjNSd3Enm3uOfGDji
-         Z6jN086ldl3QK05dZ7sykm/vBoXyb3zqQThCN9UYV0aoY7Q253/gpc469j8wOMcAXhsk
-         +hcLDE88iyEwK7deBSl0itpcChEfyi/b2qjAgKVGExoFuVtfGgd8cE/3n8aQ/FngpoNb
-         kmAuCmFc5UybXNyQn+vbezSBfe3fj1p7BU70y/MbLRtvJkt3nPrjrwye7w5NJFWGQsrT
-         slcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5w+/g5YGTVdUHyIqk02zSqLS8P5U5fB9MVF9V2agJs0=;
-        b=NR+OXYcnEmeC+noF5/ufQcsc11miCRICo0JQBPUeC2vmfCP12JNkS4DW4MZGEnJ+7/
-         ilkpqV+H2BfAnUTnxEW1GSCu7r2aZyDFBOFm5oJw32fLk9n4ZZGp5Qa47GhLPnpxTVX8
-         WAuknSrsF2H5+fmJtAqtmR7RsgJTGkThIp4n17lENEq2gXEXOcVHpf0TpktY35aWaIFR
-         0ssAZC4xY6vguMbGBaWYJYsDX+l9mFnigj0DYk4Rmnk4+rjgOcYMdY2J8RsA3Q4PMPUQ
-         i2K1PYT8M3oBHKuh6UKBeRXyGa1izy53kqK2Ij92ENOFBOY50rib6tlxYRSjZBDjk/sa
-         /iEg==
-X-Gm-Message-State: ACgBeo3hYw1Ouk1NEzERDNRa6lldaaRbMEwh3vXQP7aykcHoCfTsYYfy
-        4h5CZNLMejVTrn0Qs99h9UkwO17T6BClU6mDrTA=
-X-Google-Smtp-Source: AA6agR7LmW3N9z3MXZX9n9igF+gWSbyWFvq+FB6r3EgvE+6nZGrWjDoyV5HF2BTjg2dmSLl5DuAi/kX6oqCv1o7HUFw=
-X-Received: by 2002:a05:6214:e69:b0:476:b991:586f with SMTP id
- jz9-20020a0562140e6900b00476b991586fmr5323691qvb.48.1660897097715; Fri, 19
- Aug 2022 01:18:17 -0700 (PDT)
+        Fri, 19 Aug 2022 04:18:21 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02A0E990D;
+        Fri, 19 Aug 2022 01:18:01 -0700 (PDT)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id DDF9120007;
+        Fri, 19 Aug 2022 08:17:56 +0000 (UTC)
+Date:   Fri, 19 Aug 2022 10:17:55 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, akinobu.mita@gmail.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 4/4] media: mt9m111: remove .s_power callback
+Message-ID: <20220819081755.wlsryhcr7xjouor5@uno.localdomain>
+References: <20220818144712.997477-1-m.felsch@pengutronix.de>
+ <20220818144712.997477-4-m.felsch@pengutronix.de>
+ <20220818161408.76ofg2rjvp5whtof@uno.localdomain>
+ <20220819071832.3mr7u7jhp2ud4fv6@pengutronix.de>
+ <20220819073512.ulud7ppnrudxewdn@uno.localdomain>
+ <20220819080626.34ghffj6hmkk5ntm@pengutronix.de>
 MIME-Version: 1.0
-References: <20220817105643.95710-1-contact@artur-rojek.eu> <20220817105643.95710-4-contact@artur-rojek.eu>
-In-Reply-To: <20220817105643.95710-4-contact@artur-rojek.eu>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 19 Aug 2022 11:17:41 +0300
-Message-ID: <CAHp75VeierGKV7BqF+y-vxramA4nk24LOSPRxgmjots_amkg-w@mail.gmail.com>
-Subject: Re: [PATCH 3/4] iio: add helper function for reading channel offset
- in buffer
-To:     Artur Rojek <contact@artur-rojek.eu>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220819080626.34ghffj6hmkk5ntm@pengutronix.de>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,TVD_SUBJ_WIPE_DEBT,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 1:58 PM Artur Rojek <contact@artur-rojek.eu> wrote:
+Hi Marco
+
+On Fri, Aug 19, 2022 at 10:06:26AM +0200, Marco Felsch wrote:
+> On 22-08-19, Jacopo Mondi wrote:
+> > Hi Marco
+> >
+> > On Fri, Aug 19, 2022 at 09:18:32AM +0200, Marco Felsch wrote:
+> > > Hi Jacopo,
+> > >
+> > > thanks for your fast feedback :)
+> > >
+> > > On 22-08-18, Jacopo Mondi wrote:
+> > > > Hi Marco
+> > > >
+> > > > On Thu, Aug 18, 2022 at 04:47:12PM +0200, Marco Felsch wrote:
+> > > > > This is in preparation of switching to the generic dev PM mechanism.
+> > > > > Since the .s_power callback will be removed in the near future move the
+> > > > > powering into the .s_stream callback. So this driver no longer depends
+> > > > > on the .s_power mechanism.
+> > > > >
+> > > > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > > >
+> > > > If you want to move to runtime_pm, I would implement it first and have
+> > > > s_power call the _resume and _suspend routines, as some platform
+> > > > drivers still use s_power() and some of them might depend on it.
+> > >
+> > > Do we really have platforms which depend on this? IMHO if that is the
+> >
+> > $ git grep "v4l2_subdev_call(.*, s_power" drivers/media/platform/  | cut -d : -f1 | uniq  | wc -l
+> > 8
+> >
+> > > case than we should fix those platfoms. Since new drivers shouldn't use
+> > > this callback anymore.
+> >
+> > Patches are clearly welcome I guess..
 >
-> This is useful for consumers that wish to parse raw buffer data.
+> :)
+>
+> > > In my case, I worked on [1] and wondered why the sensor was enabled
+> > > before I told him to do so. Since I didn't implement the s_power()
+> > > callback, I had no chance to get enabled before.
+> > >
+> >
+> > I'm not sure I got this part
+>
+> What I mean is, that the MT9M131 sensor gets enabled and immediately
+> start sending frames before I told him to do so e.g. by calling
 
-...
+Why does this happen ?
 
-> +int iio_find_channel_offset_in_buffer(struct iio_dev *indio_dev,
-> +                                     const struct iio_chan_spec *chan,
-> +                                     struct iio_buffer *buffer)
-> +{
-> +       int length, offset = 0;
-> +       unsigned int si;
-> +
-> +       if (chan->scan_index < 0 ||
-> +           !test_bit(chan->scan_index, buffer->scan_mask)) {
-> +               return -EINVAL;
-> +       }
+> s_stream(). This can confuse the downstream device. The only way to get
+> enable the downstream device first is to add the s_power() callback.
+>
+> > > Can we please decide:
+> > >  - Do we wanna get rid of the s_power() callback?
+> >
+> > I think that would be everyone's desire, but drivers have to be moved
+> > away from it
+> >
+> > >  - If not, how do we handle those devices then with drivers not
+> > >    implementing this callback?
+> >
+> > By maintaining compatibility. I suggested to move to runtime_pm() and
+> > wrap _resume/_suspend in s_power().
+>
+> But then you're introducing new drivers with s_power() callbacks and so
+> the behaviour isn't really changed.
+>
 
-Have you run checkpatch? The {} are redundant. But personally I would
-split this into two separate conditionals.
+I only meant in existing ones
 
-> +       for (si = 0; si < chan->scan_index; ++si) {
+> > My understanding is that the two (runtime_pm/s_power) are mutually
+> > exclusive, but even if that was not the case, runtime_pm is reference
+> > counted, hence as long as calls are balanced this should work, right ?
+>
+> Right but the s_power() behaviour is not changed and drivers still rely
+> on it to work as right now.
 
-Just a side crying: where did you, people, get this pre-increment pattern from?!
-
-> +               if (!test_bit(si, buffer->scan_mask))
-> +                       continue;
-
-NIH for_each_set_bit()
-
-> +               length = iio_storage_bytes_for_si(indio_dev, si);
-> +
-> +               /* Account for channel alignment. */
-> +               if (offset % length)
-> +                       offset += length - (offset % length);
-> +               offset += length;
-> +       }
-> +
-> +       return offset;
-> +}
-> +EXPORT_SYMBOL_GPL(iio_find_channel_offset_in_buffer);
-
-Same Q as per previous patch: IIO namespace?
-
--- 
-With Best Regards,
-Andy Shevchenko
+As long as we have bridge drivers using it, isn't this what we want ?
+>
+> Regards,
+>   Marco

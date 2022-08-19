@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A00A599C53
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3DA599C6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349250AbiHSMyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
+        id S1349171AbiHSMzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349244AbiHSMxw (ORCPT
+        with ESMTP id S1349246AbiHSMyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:53:52 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43ECD13D3F
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:53:21 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id q7so2328017lfu.5
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:53:20 -0700 (PDT)
+        Fri, 19 Aug 2022 08:54:53 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E48675FEB
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:54:40 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a7so8673684ejp.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:54:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=pr7bhrt5RID2dCUgycRa3zMYdNhJ3IqbeowKhh7I+KE=;
-        b=Muww7Fp6z3TLBmnI9wgwpz5L/tNKqHY0CRDPQD4+eVh3MI8VFLnvjHvttcUtx6KqBG
-         fqjFjRlicTbmv4GsPbrtBwsaOhVIYDKhwYinqaev9lkoltjVxJWUzB/gO6Az6Tnu5zB3
-         8ykUvzjlBHLWIJSkHcmmM5NVviZCT8FWquVXebmXPtpC7HlPqvv0njv+EDeSet4eEhmS
-         A2EVoZkbKvd36wUGpTI1uswLPcH3eTtdgalsxPkELrtxvIn4ApRWksbAT3pPdiVUVYIF
-         kDEsK73osykelqrEEQNJy4qRa85LPnulZ3WHdaYgb8E9XxJGIwM4+V6v+UPjSDssu4P8
-         lX9w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=KfYI7x2n+dPKcoeo3/p/jfkeVeouaOocnFlGHnujIGM=;
+        b=nT+J9Cm3+lhdZyTLLhnF7i0ChpfUMDU0Vj00UzYd/cu7MAysd6CbxuwWV/jvxXWFI7
+         HDnwi08l5SeKOx+XfAHNnm4R3IcsXIKOSgEYQ2xMNxve2ss6RoxwjrqQhRmthEmhS5VN
+         i6tV2sVxzWiXbDTOcJjoF2vqWHvwEFW+pkt3RLk3courf6FHbx6oEI9y3deb7sNRZ+c4
+         heN8ck+artU7oEGC/2Eduxf0pen/2nz+qno6vUBYM0CL8u+o2sC/JZSTL74KQ26WVeMP
+         W16baG7roQJZ6lkOQ1AciQwtMKR1vgPkcXFiwPwZ77tiPt81p8P+KqQKw3tpl5gpcSOa
+         afzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=pr7bhrt5RID2dCUgycRa3zMYdNhJ3IqbeowKhh7I+KE=;
-        b=ueMOcaieuAo5+UF7GHrVn4IoIIBe+zKG0jgAsENcrKAwhXnubbpody1zEPsapJO6Nx
-         etyqX70wrnKcsqMzA3BQKwyoaWq6uxKk7TvlQUJTL9P9DGwZNFD3vaJKoVMonJDDkVJS
-         hlPM4Bs4OEw7C6x33KkMSSkz92oQz1ZIS7dDWGczTmT7YwbNfcepHsBID1bo2pFws2nA
-         kvkpHG49cJzy7mUTbYtcrNTrQH9fqkcEQOBHSZlmebL9A9ZnqgKCfrJ56MiRMfKtQLbE
-         qrlefZ2BDq2gnHdlU51HUaByG3UHO3swNOwRcvv1NykjY5CkxgWvPkCyofmp8/0EVe9J
-         azDQ==
-X-Gm-Message-State: ACgBeo2utL8FRhsFpCNtZubzZUeYA7yqSoEwvO6LDcwD/Nr1c9M7ZQFB
-        8XJjEh3mV7pgaQfYKbO2hhACWQ==
-X-Google-Smtp-Source: AA6agR4FIHTx2lqWROLFunTvAZJFkIWDWBQqO7e+yPqb3ua4X70I0FUz5U3OFnmedTqWSw6DG45kGA==
-X-Received: by 2002:a05:6512:3048:b0:48b:745:621c with SMTP id b8-20020a056512304800b0048b0745621cmr2241608lfb.620.1660913598597;
-        Fri, 19 Aug 2022 05:53:18 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id e8-20020a05651236c800b00492b0d23d24sm510523lfs.247.2022.08.19.05.53.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 05:53:18 -0700 (PDT)
-Message-ID: <e5572e77-4ba5-d8f3-4e9e-04ac5dc416fe@linaro.org>
-Date:   Fri, 19 Aug 2022 15:53:16 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=KfYI7x2n+dPKcoeo3/p/jfkeVeouaOocnFlGHnujIGM=;
+        b=Zf1liLZZoOcKEVAHOSmxgPJ8f7woIKsaoIx1O4RbESOZsU3ZDhJrwkwhDb467e361h
+         KOG7ZsWtCYGUWH6mRiMTYOXABSExSOcWYVFTLpfX9M4CFztZdYY29TPSiF11SEanYvOc
+         GY6ib9gCl0HTGANrFV5t6ZHpms6+olfN5A8OjimMITVNFW+5HaeJZ+W1Y7cy9ZiCS7DN
+         bFH6+kFKEqzEMg8sSw6roz1YX41pkquROy0jNOX23/fZpYNBVXqX6wlunLDGNgExNkwa
+         ENKOMEu4arE72AXpZDAT/t0FOncDTULNM80eAx/S/rv1bwne2t7dF8YqR6NxK3mgBITl
+         rYiw==
+X-Gm-Message-State: ACgBeo1z9cYe5CNbiT/a+NbxWzOeIFK8QfETEssF6CzFS6PuISMlhQN2
+        UoQ3KW8Me0sv9g9AYzu8v3I=
+X-Google-Smtp-Source: AA6agR5C2Q0KBcn5O4IPpfiZF6PU4jcqfp3pKwnZJV2CMTwJf9pk+4iflwiOsNPZCXrgNpSlUV8qWg==
+X-Received: by 2002:a17:907:6092:b0:731:59f0:49ac with SMTP id ht18-20020a170907609200b0073159f049acmr4763632ejc.383.1660913679217;
+        Fri, 19 Aug 2022 05:54:39 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb77.dynamic.kabel-deutschland.de. [95.90.187.119])
+        by smtp.gmail.com with ESMTPSA id b12-20020a056402138c00b0043d6ece495asm3000955edv.55.2022.08.19.05.54.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 05:54:38 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 00/11] staging: r8188eu: start migrating mlme_linux.c
+Date:   Fri, 19 Aug 2022 14:54:17 +0200
+Message-Id: <20220819125428.8412-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] dt-bindings: mfd: mediatek: Add scpsys compatible for
- mt8186
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Lee Jones <lee@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        MandyJH Liu <mandyjh.liu@mediatek.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        hsinyi@chromium.org
-References: <20220819124736.21768-1-allen-kh.cheng@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220819124736.21768-1-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 15:47, Allen-KH Cheng wrote:
-> Add a new scpsys compatible for mt8186 SoC.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
+This series starts to migrate the functions, or their functionalitiy,
+from os_dep/mlme_linux.c to the core/* part of the driver. The goal is
+to remove os_dep/mlme_linux.c at some point.
 
-No DTS using it?
+Tested on x86_64 with Inter-Tech DMG-02.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Michael Straube (11):
+  staging: r8188eu: make init_mlme_ext_timer() static
+  staging: r8188eu: make init_addba_retry_timer() static
+  staging: r8188eu: make rtw_indicate_sta_disassoc_event() static
+  staging: r8188eu: move rtw_indicate_sta_assoc_event() to rtw_ap.c
+  staging: r8188eu: make rtw_report_sec_ie() static
+  staging: r8188eu: remove unneeded initializations
+  staging: r8188eu: make rtw_reset_securitypriv() static
+  staging: r8188eu: merge rtw_{os,}_indicate_disconnect()
+  staging: r8188eu: merge rtw_{os,}_indicate_connect()
+  staging: r8188eu: merge rtw_{os,}_indicate_scan_done()
+  staging: r8188eu: remove unused function parameter
 
+ drivers/staging/r8188eu/core/rtw_ap.c         |  42 +++++
+ drivers/staging/r8188eu/core/rtw_mlme.c       |  86 ++++++++-
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c   |  22 +++
+ drivers/staging/r8188eu/core/rtw_sta_mgt.c    |  12 ++
+ drivers/staging/r8188eu/include/mlme_osdep.h  |   5 -
+ drivers/staging/r8188eu/include/rtw_ap.h      |   2 -
+ drivers/staging/r8188eu/include/rtw_mlme.h    |   2 +-
+ .../staging/r8188eu/include/rtw_mlme_ext.h    |   2 -
+ drivers/staging/r8188eu/os_dep/mlme_linux.c   | 166 ------------------
+ drivers/staging/r8188eu/os_dep/usb_intf.c     |   2 +-
+ 10 files changed, 159 insertions(+), 182 deletions(-)
 
-Best regards,
-Krzysztof
+-- 
+2.37.1
+

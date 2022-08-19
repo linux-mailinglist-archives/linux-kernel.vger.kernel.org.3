@@ -2,149 +2,455 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B69599462
+	by mail.lfdr.de (Postfix) with ESMTP id DEB99599465
 	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 07:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344608AbiHSFVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 01:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
+        id S243011AbiHSFV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 01:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238595AbiHSFV2 (ORCPT
+        with ESMTP id S238595AbiHSFVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 01:21:28 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2046.outbound.protection.outlook.com [40.107.113.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A003DFB41
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 22:21:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RRVo2nfb7XAEsIYxzNW6gfUm569fslNFN/WtwHhUg6tjFdNt776eLCXoDHlKKXq2D/81laK0Nrd3hXfVG+IG6HEaxFovhtnQJ6SYQ3oWa6sE9iof4mepV4fcAclP57ZLk4FPviYKGXhHKC4tk0kxspQ8vDLDG9rcNlZYp4+OfPe9TQjHs3AZrCtcVPIn+2uv+szw2Hmo+oD8p/PsU5q+avsxmgxqArR/gsYu8p6+DPcZ6fytk20i7jTTUQ3FvDWhBDcmG0q2QQP1pGsnslPFfbMD3x7o9JKJ8yledytEbFI5WheiUWOj0uPKt0rAfuEOvq8fIOH/oj1JJWEFFMkdsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qiJ1fRFgEIAyvvnOoTvr/AWy9/1Yc2m7YB7sOQMB9tI=;
- b=CDL3OlC3zu31C+vqNdE5fV+J+GjoY3bQW/f83PlA1Kqh8F5yvGnkVJmsHiFgsS/+fJQf+YY2j4Z+YyUH369jwfX1CvEfeQ23BOAFg0cR0vBoiT6m/XeWHZJse6qBcgtuAGURhT+HuF8Zw0tjnglz4+l0u1u3CVZd/vRYcz9eCY4hN44p1n/Bcd1va1hVBXYoCytgf92Q2IoTikoyKss4HX8YVaHsB9w3duhpOOz476Jd6UFJz2CLkjs8DfCY41wIW2NNvpRUkj4nFja2dD6H7ifs16Z2wmZyGLKspKQcicJXLE3hMF36pWbUB33VM8+/77BPDuCFg13eIakRKQxzcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
- header.d=nec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qiJ1fRFgEIAyvvnOoTvr/AWy9/1Yc2m7YB7sOQMB9tI=;
- b=SHl8nc/E9qMNtxDZVkGr2AHvor35lDNQVAzmPimkuGV7n7NL2MRf2k8e6GtMFKbcFRw3XnXgvf1OMLZUF56YCV9EgDlVpN9ujD2+rmDG+rQk0Cq7L/6vJREs4wlAx6OFEUNhu3gXG5UahwEQiUtOfk6n0ZAIc+Q6ITCWLsoMQrc=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by TYYPR01MB7880.jpnprd01.prod.outlook.com (2603:1096:400:112::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Fri, 19 Aug
- 2022 05:21:25 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::442c:db3a:80:287a]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::442c:db3a:80:287a%6]) with mapi id 15.20.5546.016; Fri, 19 Aug 2022
- 05:21:25 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/6] mm, hwpoison: fix page refcnt leaking in
- unpoison_memory()
-Thread-Topic: [PATCH 2/6] mm, hwpoison: fix page refcnt leaking in
- unpoison_memory()
-Thread-Index: AQHYswKMbbOJAhObY0GqUZfsxUS7yK21sQiA
-Date:   Fri, 19 Aug 2022 05:21:25 +0000
-Message-ID: <20220819052125.GB613144@hori.linux.bs1.fc.nec.co.jp>
-References: <20220818130016.45313-1-linmiaohe@huawei.com>
- <20220818130016.45313-3-linmiaohe@huawei.com>
-In-Reply-To: <20220818130016.45313-3-linmiaohe@huawei.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 744ad7f5-9ab9-4d82-0b1f-08da81a2a973
-x-ms-traffictypediagnostic: TYYPR01MB7880:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Itwuvn1z8FXw7gShuOrTnj0Xz6x77kXfJArwyyFBt4yeCDah1PbS6dNa+1Lon6F0zygS1L10nJpVmL2j7o2VWZMA1bD4k3xDz0CIdv782uwgEaLFN7nwKenH/TD37W73rY3PnIfOoegotMY0w4eVaZ4hFWgvCG0hcWxwJ5OC+JVeBSwIlzF45LNSVg4eAkmoaVJxRH3ZVKodYPG/whWLXmdRUgxqFZXJxp87SCXpPdoY2XFqN+xNNG2sPzpTnxsaR5YkZKdH16bzjXv82+1mBGkl7hXZ0Ie3N+SVCXXM2TrtNCPtdo3ILFVMS4whTR768cg9GbdDGC91SFHC5E53i1NQk6h5XFvEuu95kOmIuoxpST//gf7N2oGDYWpOStxx1V0uwLXkusQYlCvvZ5RZniGLIMigCgtZdM0YQZzA9DunpRrtJDx16S0d9Cz5MU57zM89EvL41uMcW9xLdaLhmWJnc4Mruw6VYe32gosapga9mKpWKTgrlDdat0IL+njLX2E3qLcD+4EJnKCJo2E7aEX9fWBC2Jqj+lMEfDes994THxKfkzaWdiDAcLoWo/ZVuq6Ke5HiUZg3nwjq+H1eXG57vDf02mjKbl2NIiPIRTAyCUK/znQ9I9xQebS+cvr/7DRHo5BinFrWKYDaWPlDzjXjqNWoRYCZiShPXKl4RV5f6r/wwInnZ9jENURbi2JzEWfhieJ7qQeTbCOvQduCPJQWBC/+XKhWNOh6B5aUvs4FF6hJwqxrbXWJpl4j3NBLCfKN0khRn7we/kP3t1bcsA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39860400002)(346002)(366004)(396003)(4326008)(83380400001)(38070700005)(186003)(38100700002)(4744005)(8936002)(82960400001)(1076003)(2906002)(86362001)(122000001)(64756008)(76116006)(66476007)(66946007)(66446008)(66556008)(5660300002)(8676002)(54906003)(55236004)(316002)(71200400001)(6486002)(6916009)(33656002)(41300700001)(9686003)(478600001)(6512007)(6506007)(26005)(85182001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Vmg4OVhrSlQ0NGNyeXZJemFjYW5lcmkxZk9iaFEvUUYzcEwvL0FSZHY4dThU?=
- =?utf-8?B?bHFrSEdKbWswSVFLNHNzQWtXVVFoSzhxdGduM1VxamRxQ09jRDQrLzM1cXF2?=
- =?utf-8?B?V0lzaEVxcUNPRC91bDlrNDlCUjhuMnFYNWNYY1grMC9uUmJ1c1dtNjBaaS81?=
- =?utf-8?B?UlFlam5TOVc1UlF2Um15R1FWNGZ0dHFmSDBOZUJ5eFMzY0llQkZISnBTNENs?=
- =?utf-8?B?aFBLTlY0NFBNSHFEeDVJSVU1alV3dEllT1dUY05CQjRGcFppbkN3aDlxeU9I?=
- =?utf-8?B?UjdkRHZDVEJhVnVQY29HNmhuMkdPc1p5clpSbzB3dkVURnI3cjczbnkyNGVp?=
- =?utf-8?B?ZjhBTHVXeFluVEF4WjFTMVVWdkZyeTZ4ODN1RTZOYUwyR3hPdXJiKy9ZajFT?=
- =?utf-8?B?NUV0L2FZcUtDOWZ0RThZTEZpTUFLd0FsbGU3ZC9rT1JONlVpYWhZZm0zVk5w?=
- =?utf-8?B?VkhmcEtXa3Nocjk1eWlEc2hWK0FRRWtzY2Z0bVJqa3UvRFBpQy9FSzBtSHhP?=
- =?utf-8?B?Z1VBRTRMRFV5S2kyV25BZE4rMldzYmlEdU1hRVFSL3dsVi9UMW5qemk5VG5P?=
- =?utf-8?B?c2h6QTh1cDVRY2ZaVEl0Yy9SYUVtKzJPNkFhYk8wUXoyL2ZURjFZZmQ2RTUr?=
- =?utf-8?B?bHltbEp1QVoycnZXb0NqY21lYnJHVnhuTHNzdGZwT2Y3M2VMZlZrV1JvdFZp?=
- =?utf-8?B?Z2hwVVA1djdLMm5lUUtqRlA0dDNjM0NLU0FrRjhpRExMbDIyRVNuUVR6M3Vl?=
- =?utf-8?B?M01manNGRTUrdXhZYks1L1JlVkgxTkcwSWZvd0JZV2J2TWxaL29ReDNOeHZ6?=
- =?utf-8?B?T2hFcHRuOFMzR0JtbVhNQXQ3Q3NHZ04rOVdWZ1lEM2sxVUFNYS9QTzJ6NVZh?=
- =?utf-8?B?SE5pZVozRjJTcmhNQ2xJeGJCeFNramtDYTQ1NU1Mb1dlTCt0dFBMbDd5bTJJ?=
- =?utf-8?B?RlFiK2lRS2dRWVh1NjA2RFFoMjdiR21YUUM2aXN5bmtsdTBKUEJzaUdUeXNX?=
- =?utf-8?B?NG9qVEpTam9MR0tsNEV6ZDVUSUpOY0pQWThndmRINGREMWpQMHo5ZGhrZXpu?=
- =?utf-8?B?a01UOTFTWXAvWW5iT2xsdFpzNFZ1bkJucERydnl4clprWlhEd0Q1TUkxSXg1?=
- =?utf-8?B?V0FZVjdVWU02UTJ5djJFL2RVRDcxY2NxTzJMVlVqUEpaL0NYdmpNY0M5cGZF?=
- =?utf-8?B?eVVhK1Q0ZnJSdnJDc1c0bldEMmNkd3A0a2lPNjZVLzlPWU5qWTNuZUIzM1R4?=
- =?utf-8?B?SWpaNzNRUHo3QVRHU3lKbGtoajlMS2xSZDdIV1VlOVRYSUhTYnplTSt3cXJE?=
- =?utf-8?B?eldVNGJUTURvMFZoVGxPd2lrbUM1U2ZVQm9ybU5QNmdoRXVPUzl1NkpRQUZj?=
- =?utf-8?B?NUJqd2cyYS82azBxdWxpcTRUSHNZUmJ4SGRFaktrRGRHdE85RFlnZDJqTVJM?=
- =?utf-8?B?clpJVDZSME1IMTFuZlM3ZGVxbm90Q1N6bVdwMi9KMEdzdk9CUzlmUUVZSTAz?=
- =?utf-8?B?ZS9VRzNGZmdWRzZqNThRWVNWL1E4QlBKT05ZWTNhU2g3U3JYd3lKbGJUZkY0?=
- =?utf-8?B?VlZmWEFpY0h6UmFYdCsrbE00VzlxcnppMlBwR3ZLcHdWYVRMbk5LbWUzSjNW?=
- =?utf-8?B?ZFNpaG1sT3drSnNDait1SDVFajFldU9aRWk1UVdTR0theTdBK0FMalArMjdM?=
- =?utf-8?B?R2xVM2c0N0JwUTZxallNYjgyNEN1Ulp3N3hTU3FaclQvbkp3L21zaVIxQ09m?=
- =?utf-8?B?YXRpdHVFdmZZdHpnQWRqdmZpNUljb1pyL0U1Kzk5SldTdU9OYWsveWdsMWJn?=
- =?utf-8?B?TGFocGt1MytzeXFxUkwwV2dRN2V3YmJucmdVazJjd1hUOWxQb284elZ4Q0o4?=
- =?utf-8?B?UnRWbUQrVE94K1ZrUTFZRGtNeCtNdkhmRnpWbUNwdWNraURRVGdWVUthWW9m?=
- =?utf-8?B?Nmx2ZEltOEhFMjNySXdReVNyMm8zeG9sWXdLdGJpWHBWSk5IeGYxVHdZc1Nh?=
- =?utf-8?B?aDVWazc3ZHZnc1l3ekFMUktJNWNaT0hzU0c0THFyd1JlUkpTUUNOK1J6cjcr?=
- =?utf-8?B?enN3eEFZR2NsdU1vSGhOZnVxOVdtWkIxSGh4VDJodDRnVlJJa2dsV3RJQXFt?=
- =?utf-8?B?dEZYTk4rNkJYK3ZGejF2b3pzcHpsam1yaWpxT1g4elhvek50eERVNURscU01?=
- =?utf-8?B?clE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <12D09EFC75274649845F5313CCE88C94@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 19 Aug 2022 01:21:55 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36601DFB4B
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 22:21:53 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id 2so3293232pll.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 22:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=u+CnDhjLlXCRY/C8SfiPEVXWRpNGtWX+sN9YvnfBPFM=;
+        b=dhdaPmIgMJDiYHWmdRD2mmexEC15AOGCZEgkA+x/70ZLkhbS/b0vwfjbc1QhBz8D1/
+         RcLiY+zmvvuNvdXKlqkEIsYs0RJVaBOsKmAt+51Cx//dd0iISgmFEilP9ZzRwUCMeQf4
+         OQGfvJF0AGgRyySQONgiCAg2tMIO08nEV5bH0YoeUCXnvOQkq1xsLkeu0CUssQ2qVn5d
+         eWhInBeu6Z64suSxJfGvier1QMz7qd9mpeP4VarSu8qy87SXqIya1l5/xyVKaW8ch2w+
+         4nur+7Xlc4WBwDoxWyGPR9XhJqqfgYV6+lsoRhqyZPoNFhZGfBO07bfabGhyKRqXU+s+
+         SRCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=u+CnDhjLlXCRY/C8SfiPEVXWRpNGtWX+sN9YvnfBPFM=;
+        b=2+ZbFFJDkNP26B/f5sWRQlMhg6sZrcvdGtgA31abv8qXcy9i9HFZQQJVilyPQWb9fs
+         01ygpqfJH/Nz6szSiKlkU1QamPFFqOj7C5xQdwKR4LBCEl6o419wXcU9DhB5lihey1PZ
+         OyGLhe873kkZhX118i1Nxm4ePhp31wHLsgt7dowxqOs/218S1xgMkEjmFnrtjix48Kcj
+         3GKL3+O3pieFQM6TbpcfGn3ki6gdyzT+x/e2bztv1zHYUou1t6CG1gADu05Tl1h3piys
+         HHWYnCv5/lfogmfpYTMz0TrV8UmN1bncQdyR4nrFNzbbNF7s/tAaZtB+8hBXitUn86kC
+         B9zw==
+X-Gm-Message-State: ACgBeo0Ca+DfBlAkqQ/UE/jlMxcSJBMPWVd0I/dReuY81ulUV18NFxu4
+        cFgY1e8OUbqOxaYd+Qx0h6WvRw==
+X-Google-Smtp-Source: AA6agR5UN1h3aOw5IGJ9ghH2y6DkLpD9X/Q2u6TYwxgSUscKyRGV9CR54pVNlevHpOj+aZ/G2cjZZQ==
+X-Received: by 2002:a17:903:2d0:b0:172:b63b:3a1e with SMTP id s16-20020a17090302d000b00172b63b3a1emr4689539plk.76.1660886512411;
+        Thu, 18 Aug 2022 22:21:52 -0700 (PDT)
+Received: from PXLDJ45XCM.bytedance.net ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id q31-20020a635c1f000000b00421841943dfsm2116524pgb.12.2022.08.18.22.21.47
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 18 Aug 2022 22:21:52 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        mike.kravetz@oracle.com, songmuchun@bytedance.com,
+        akpm@linux-foundation.org, osalvador@suse.de, david@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        muchun.song@linux.dev
+Subject: [PATCH] mm: hugetlb: simplify per-node sysfs creation and removal
+Date:   Fri, 19 Aug 2022 13:21:37 +0800
+Message-Id: <20220819052137.7985-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 744ad7f5-9ab9-4d82-0b1f-08da81a2a973
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Aug 2022 05:21:25.3764
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: P+L5qC29ClrQ+XRuKs4j86nqVvyi7+NKYaqHXKZyZPyAh/9QtzTDGiIhR5p1w8HjEvOuz5DrDoVXcHYrsgF3Lw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYPR01MB7880
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCBBdWcgMTgsIDIwMjIgYXQgMDk6MDA6MTJQTSArMDgwMCwgTWlhb2hlIExpbiB3cm90
-ZToNCj4gV2hlbiBmcmVlX3Jhd19od3BfcGFnZXMoKSBmYWlscyBpdHMgd29yaywgdGhlIHJlZmNu
-dCBvZiB0aGUgaHVnZXRsYiBwYWdlDQo+IHdvdWxkIGhhdmUgYmVlbiBpbmNyZW1lbnRlZCBpZiBy
-ZXQgPiAwLiBVc2luZyBwdXRfcGFnZSgpIHRvIGZpeCByZWZjbnQNCj4gbGVha2luZyBpbiB0aGlz
-IGNhc2UuDQo+IA0KPiBGaXhlczogZGViYjZiOWMzZmRkICgibW0sIGh3cG9pc29uOiBtYWtlIHVu
-cG9pc29uIGF3YXJlIG9mIHJhdyBlcnJvciBpbmZvIGluIGh3cG9pc29uZWQgaHVnZXBhZ2UiKQ0K
-PiBTaWduZWQtb2ZmLWJ5OiBNaWFvaGUgTGluIDxsaW5taWFvaGVAaHVhd2VpLmNvbT4NCg0KQWNr
-ZWQtYnk6IE5hb3lhIEhvcmlndWNoaSA8bmFveWEuaG9yaWd1Y2hpQG5lYy5jb20+DQoNCj4gLS0t
-DQo+ICBtbS9tZW1vcnktZmFpbHVyZS5jIHwgMSArDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
-cnRpb24oKykNCj4gDQo+IGRpZmYgLS1naXQgYS9tbS9tZW1vcnktZmFpbHVyZS5jIGIvbW0vbWVt
-b3J5LWZhaWx1cmUuYw0KPiBpbmRleCAyMjg0MGNkNWZlNTkuLjBjNWFkNzUwNWI5OSAxMDA2NDQN
-Cj4gLS0tIGEvbW0vbWVtb3J5LWZhaWx1cmUuYw0KPiArKysgYi9tbS9tZW1vcnktZmFpbHVyZS5j
-DQo+IEBAIC0yMzc4LDYgKzIzNzgsNyBAQCBpbnQgdW5wb2lzb25fbWVtb3J5KHVuc2lnbmVkIGxv
-bmcgcGZuKQ0KPiAgCQkJY291bnQgPSBmcmVlX3Jhd19od3BfcGFnZXMocGFnZSwgZmFsc2UpOw0K
-PiAgCQkJaWYgKGNvdW50ID09IDApIHsNCj4gIAkJCQlyZXQgPSAtRUJVU1k7DQo+ICsJCQkJcHV0
-X3BhZ2UocGFnZSk7DQo+ICAJCQkJZ290byB1bmxvY2tfbXV0ZXg7DQo+ICAJCQl9DQo+ICAJCX0N
-Cj4gLS0gDQo+IDIuMjMuMA==
+The following commit offload per-node sysfs creation and removal to a kworker and
+did not say why it is needed.  And it also said "I don't know that this is
+absolutely required".  It seems like the author was not sure as well.  Since it
+only complicates the code, this patch will revert the changes to simplify the code.
+
+  39da08cb074c ("hugetlb: offload per node attribute registrations")
+
+We could use memory hotplug notifier to do per-node sysfs creation and removal
+instead of inserting those operations to node registration and unregistration.
+Then, it can reduce the code coupling between node.c and hugetlb.c.  Also, it can
+simplify the code.
+
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+---
+ drivers/base/node.c  | 139 ++-------------------------------------------------
+ include/linux/node.h |  24 ++-------
+ mm/hugetlb.c         |  45 +++++++++++------
+ 3 files changed, 36 insertions(+), 172 deletions(-)
+
+diff --git a/drivers/base/node.c b/drivers/base/node.c
+index eb0f43784c2b..ed391cb09999 100644
+--- a/drivers/base/node.c
++++ b/drivers/base/node.c
+@@ -587,64 +587,9 @@ static const struct attribute_group *node_dev_groups[] = {
+ 	NULL
+ };
+ 
+-#ifdef CONFIG_HUGETLBFS
+-/*
+- * hugetlbfs per node attributes registration interface:
+- * When/if hugetlb[fs] subsystem initializes [sometime after this module],
+- * it will register its per node attributes for all online nodes with
+- * memory.  It will also call register_hugetlbfs_with_node(), below, to
+- * register its attribute registration functions with this node driver.
+- * Once these hooks have been initialized, the node driver will call into
+- * the hugetlb module to [un]register attributes for hot-plugged nodes.
+- */
+-static node_registration_func_t __hugetlb_register_node;
+-static node_registration_func_t __hugetlb_unregister_node;
+-
+-static inline bool hugetlb_register_node(struct node *node)
+-{
+-	if (__hugetlb_register_node &&
+-			node_state(node->dev.id, N_MEMORY)) {
+-		__hugetlb_register_node(node);
+-		return true;
+-	}
+-	return false;
+-}
+-
+-static inline void hugetlb_unregister_node(struct node *node)
+-{
+-	if (__hugetlb_unregister_node)
+-		__hugetlb_unregister_node(node);
+-}
+-
+-void register_hugetlbfs_with_node(node_registration_func_t doregister,
+-				  node_registration_func_t unregister)
+-{
+-	__hugetlb_register_node   = doregister;
+-	__hugetlb_unregister_node = unregister;
+-}
+-#else
+-static inline void hugetlb_register_node(struct node *node) {}
+-
+-static inline void hugetlb_unregister_node(struct node *node) {}
+-#endif
+-
+ static void node_device_release(struct device *dev)
+ {
+-	struct node *node = to_node(dev);
+-
+-#if defined(CONFIG_MEMORY_HOTPLUG) && defined(CONFIG_HUGETLBFS)
+-	/*
+-	 * We schedule the work only when a memory section is
+-	 * onlined/offlined on this node. When we come here,
+-	 * all the memory on this node has been offlined,
+-	 * so we won't enqueue new work to this work.
+-	 *
+-	 * The work is using node->node_work, so we should
+-	 * flush work before freeing the memory.
+-	 */
+-	flush_work(&node->node_work);
+-#endif
+-	kfree(node);
++	kfree(to_node(dev));
+ }
+ 
+ /*
+@@ -665,11 +610,9 @@ static int register_node(struct node *node, int num)
+ 
+ 	if (error)
+ 		put_device(&node->dev);
+-	else {
+-		hugetlb_register_node(node);
+-
++	else
+ 		compaction_register_node(node);
+-	}
++
+ 	return error;
+ }
+ 
+@@ -683,7 +626,6 @@ static int register_node(struct node *node, int num)
+ void unregister_node(struct node *node)
+ {
+ 	compaction_unregister_node(node);
+-	hugetlb_unregister_node(node);		/* no-op, if memoryless node */
+ 	node_remove_accesses(node);
+ 	node_remove_caches(node);
+ 	device_unregister(&node->dev);
+@@ -905,74 +847,8 @@ void register_memory_blocks_under_node(int nid, unsigned long start_pfn,
+ 			   (void *)&nid, func);
+ 	return;
+ }
+-
+-#ifdef CONFIG_HUGETLBFS
+-/*
+- * Handle per node hstate attribute [un]registration on transistions
+- * to/from memoryless state.
+- */
+-static void node_hugetlb_work(struct work_struct *work)
+-{
+-	struct node *node = container_of(work, struct node, node_work);
+-
+-	/*
+-	 * We only get here when a node transitions to/from memoryless state.
+-	 * We can detect which transition occurred by examining whether the
+-	 * node has memory now.  hugetlb_register_node() already check this
+-	 * so we try to register the attributes.  If that fails, then the
+-	 * node has transitioned to memoryless, try to unregister the
+-	 * attributes.
+-	 */
+-	if (!hugetlb_register_node(node))
+-		hugetlb_unregister_node(node);
+-}
+-
+-static void init_node_hugetlb_work(int nid)
+-{
+-	INIT_WORK(&node_devices[nid]->node_work, node_hugetlb_work);
+-}
+-
+-static int node_memory_callback(struct notifier_block *self,
+-				unsigned long action, void *arg)
+-{
+-	struct memory_notify *mnb = arg;
+-	int nid = mnb->status_change_nid;
+-
+-	switch (action) {
+-	case MEM_ONLINE:
+-	case MEM_OFFLINE:
+-		/*
+-		 * offload per node hstate [un]registration to a work thread
+-		 * when transitioning to/from memoryless state.
+-		 */
+-		if (nid != NUMA_NO_NODE)
+-			schedule_work(&node_devices[nid]->node_work);
+-		break;
+-
+-	case MEM_GOING_ONLINE:
+-	case MEM_GOING_OFFLINE:
+-	case MEM_CANCEL_ONLINE:
+-	case MEM_CANCEL_OFFLINE:
+-	default:
+-		break;
+-	}
+-
+-	return NOTIFY_OK;
+-}
+-#endif	/* CONFIG_HUGETLBFS */
+ #endif /* CONFIG_MEMORY_HOTPLUG */
+ 
+-#if !defined(CONFIG_MEMORY_HOTPLUG) || !defined(CONFIG_HUGETLBFS)
+-static inline int node_memory_callback(struct notifier_block *self,
+-				unsigned long action, void *arg)
+-{
+-	return NOTIFY_OK;
+-}
+-
+-static void init_node_hugetlb_work(int nid) { }
+-
+-#endif
+-
+ int __register_one_node(int nid)
+ {
+ 	int error;
+@@ -991,8 +867,6 @@ int __register_one_node(int nid)
+ 	}
+ 
+ 	INIT_LIST_HEAD(&node_devices[nid]->access_list);
+-	/* initialize work queue for memory hot plug */
+-	init_node_hugetlb_work(nid);
+ 	node_init_caches(nid);
+ 
+ 	return error;
+@@ -1063,13 +937,8 @@ static const struct attribute_group *cpu_root_attr_groups[] = {
+ 	NULL,
+ };
+ 
+-#define NODE_CALLBACK_PRI	2	/* lower than SLAB */
+ void __init node_dev_init(void)
+ {
+-	static struct notifier_block node_memory_callback_nb = {
+-		.notifier_call = node_memory_callback,
+-		.priority = NODE_CALLBACK_PRI,
+-	};
+ 	int ret, i;
+ 
+  	BUILD_BUG_ON(ARRAY_SIZE(node_state_attr) != NR_NODE_STATES);
+@@ -1079,8 +948,6 @@ void __init node_dev_init(void)
+ 	if (ret)
+ 		panic("%s() failed to register subsystem: %d\n", __func__, ret);
+ 
+-	register_hotmemory_notifier(&node_memory_callback_nb);
+-
+ 	/*
+ 	 * Create all node devices, which will properly link the node
+ 	 * to applicable memory block devices and already created cpu devices.
+diff --git a/include/linux/node.h b/include/linux/node.h
+index 40d641a8bfb0..ea817b507f54 100644
+--- a/include/linux/node.h
++++ b/include/linux/node.h
+@@ -2,15 +2,15 @@
+ /*
+  * include/linux/node.h - generic node definition
+  *
+- * This is mainly for topological representation. We define the 
+- * basic 'struct node' here, which can be embedded in per-arch 
++ * This is mainly for topological representation. We define the
++ * basic 'struct node' here, which can be embedded in per-arch
+  * definitions of processors.
+  *
+  * Basic handling of the devices is done in drivers/base/node.c
+- * and system devices are handled in drivers/base/sys.c. 
++ * and system devices are handled in drivers/base/sys.c.
+  *
+  * Nodes are exported via driverfs in the class/node/devices/
+- * directory. 
++ * directory.
+  */
+ #ifndef _LINUX_NODE_H_
+ #define _LINUX_NODE_H_
+@@ -18,7 +18,6 @@
+ #include <linux/device.h>
+ #include <linux/cpumask.h>
+ #include <linux/list.h>
+-#include <linux/workqueue.h>
+ 
+ /**
+  * struct node_hmem_attrs - heterogeneous memory performance attributes
+@@ -84,10 +83,6 @@ static inline void node_set_perf_attrs(unsigned int nid,
+ struct node {
+ 	struct device	dev;
+ 	struct list_head access_list;
+-
+-#if defined(CONFIG_MEMORY_HOTPLUG) && defined(CONFIG_HUGETLBFS)
+-	struct work_struct	node_work;
+-#endif
+ #ifdef CONFIG_HMEM_REPORTING
+ 	struct list_head cache_attrs;
+ 	struct device *cache_dev;
+@@ -96,7 +91,6 @@ struct node {
+ 
+ struct memory_block;
+ extern struct node *node_devices[];
+-typedef  void (*node_registration_func_t)(struct node *);
+ 
+ #if defined(CONFIG_MEMORY_HOTPLUG) && defined(CONFIG_NUMA)
+ void register_memory_blocks_under_node(int nid, unsigned long start_pfn,
+@@ -144,11 +138,6 @@ extern void unregister_memory_block_under_nodes(struct memory_block *mem_blk);
+ extern int register_memory_node_under_compute_node(unsigned int mem_nid,
+ 						   unsigned int cpu_nid,
+ 						   unsigned access);
+-
+-#ifdef CONFIG_HUGETLBFS
+-extern void register_hugetlbfs_with_node(node_registration_func_t doregister,
+-					 node_registration_func_t unregister);
+-#endif
+ #else
+ static inline void node_dev_init(void)
+ {
+@@ -176,11 +165,6 @@ static inline int unregister_cpu_under_node(unsigned int cpu, unsigned int nid)
+ static inline void unregister_memory_block_under_nodes(struct memory_block *mem_blk)
+ {
+ }
+-
+-static inline void register_hugetlbfs_with_node(node_registration_func_t reg,
+-						node_registration_func_t unreg)
+-{
+-}
+ #endif
+ 
+ #define to_node(device) container_of(device, struct node, dev)
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 536a52c29035..9a72499486c1 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -33,6 +33,7 @@
+ #include <linux/migrate.h>
+ #include <linux/nospec.h>
+ #include <linux/delayacct.h>
++#include <linux/memory.h>
+ 
+ #include <asm/page.h>
+ #include <asm/pgalloc.h>
+@@ -3967,19 +3968,19 @@ static void hugetlb_unregister_node(struct node *node)
+  * Register hstate attributes for a single node device.
+  * No-op if attributes already registered.
+  */
+-static void hugetlb_register_node(struct node *node)
++static int hugetlb_register_node(struct node *node)
+ {
+ 	struct hstate *h;
+ 	struct node_hstate *nhs = &node_hstates[node->dev.id];
+ 	int err;
+ 
+ 	if (nhs->hugepages_kobj)
+-		return;		/* already allocated */
++		return 0;		/* already allocated */
+ 
+ 	nhs->hugepages_kobj = kobject_create_and_add("hugepages",
+ 							&node->dev.kobj);
+ 	if (!nhs->hugepages_kobj)
+-		return;
++		return -ENOMEM;
+ 
+ 	for_each_hstate(h) {
+ 		err = hugetlb_sysfs_add_hstate(h, nhs->hugepages_kobj,
+@@ -3989,9 +3990,28 @@ static void hugetlb_register_node(struct node *node)
+ 			pr_err("HugeTLB: Unable to add hstate %s for node %d\n",
+ 				h->name, node->dev.id);
+ 			hugetlb_unregister_node(node);
+-			break;
++			return -ENOMEM;
+ 		}
+ 	}
++	return 0;
++}
++
++static int __meminit hugetlb_memory_callback(struct notifier_block *self,
++					     unsigned long action, void *arg)
++{
++	int ret = 0;
++	struct memory_notify *mnb = arg;
++	int nid = mnb->status_change_nid;
++
++	if (nid == NUMA_NO_NODE)
++		return NOTIFY_DONE;
++
++	if (action == MEM_GOING_ONLINE)
++		ret = hugetlb_register_node(node_devices[nid]);
++	else if (action == MEM_CANCEL_ONLINE || action == MEM_OFFLINE)
++		hugetlb_unregister_node(node_devices[nid]);
++
++	return notifier_from_errno(ret);
+ }
+ 
+ /*
+@@ -4003,18 +4023,11 @@ static void __init hugetlb_register_all_nodes(void)
+ {
+ 	int nid;
+ 
+-	for_each_node_state(nid, N_MEMORY) {
+-		struct node *node = node_devices[nid];
+-		if (node->dev.id == nid)
+-			hugetlb_register_node(node);
+-	}
+-
+-	/*
+-	 * Let the node device driver know we're here so it can
+-	 * [un]register hstate attributes on node hotplug.
+-	 */
+-	register_hugetlbfs_with_node(hugetlb_register_node,
+-				     hugetlb_unregister_node);
++	get_online_mems();
++	hotplug_memory_notifier(hugetlb_memory_callback, 0);
++	for_each_node_state(nid, N_MEMORY)
++		hugetlb_register_node(node_devices[nid]);
++	put_online_mems();
+ }
+ #else	/* !CONFIG_NUMA */
+ 
+-- 
+2.11.0
+

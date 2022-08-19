@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D35E599C05
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AAF8599BFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348610AbiHSM2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        id S1348927AbiHSM2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiHSM2J (ORCPT
+        with ESMTP id S230513AbiHSM2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:28:09 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF4BE3945;
-        Fri, 19 Aug 2022 05:28:08 -0700 (PDT)
+        Fri, 19 Aug 2022 08:28:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD45243;
+        Fri, 19 Aug 2022 05:28:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1660912088; x=1692448088;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=OuppHraavVdcPp0ARLA7zsvgdMH5yWNmIVqS5fqgRKI=;
-  b=1Mk9Xf4Ast+avbeztI+O2FJqBhx9XNxq5B00trA936Zr+bQYOa8u5SU4
-   FCK3pg94ER2GY/H0Kjoh5vLxBzmIDw92Ia9LGoJxKIK0C9ZVbJNj/Pooo
-   moYRO6BZ5euUwTM+FBzL/kTq+7slwe6fMGTHgkeaj6x6ZnykxBOSSsF02
-   o5wNA9ZRA02MC9XHTvtFVK2DJgCLvwJslodVMS5qBnFhrE2cMlUTgeSdB
-   8ogfoLLVHUX9cMtYkdazJnqa+/2sIyy0+SxsCRo3dQFRQtZsOqGLLfP6B
-   8U+ub3y+5xAw0j17mLvURUWVGDy3YOjArryGJZGAKkJIO31fUBmbHrZse
-   g==;
+  t=1660912090; x=1692448090;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=qCodOvHAAWV9jjEol1BPCacoYzYl6MK5PiY5naSU1RI=;
+  b=zLSA7ppsB2z7Xsfslg9bagwvFm7rn1HKnKTTnObFdAGT8PBz4H7wFlem
+   BSp2Q4ZNJd5wJlWzjRUJYrZ9jq/2qtaLjgmeqbgleZ1vMtnlfOA1Zm9cZ
+   9xewXI7VFghgP+D0alic2OZ7LvqCxr86znifJxJYN/VF4JsX28tNvJafn
+   mQeHtGnYitYqOUm4Oc3zCBYKgDwHgYoJ3R0mcK74+zYYwI9DUXS7xgAUd
+   7zXi2P5VLArfPH1YeX30gxJSnKJEtpizEjTlDuHIKmSVmCkgj6SOc3KQx
+   xl2EWgv1jvhg8RlZXmlb4l6Cjk/0wG/tvbyNE6U11N0/7AM5FtR8IU9Yy
+   A==;
 X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
-   d="scan'208";a="173199554"
+   d="scan'208";a="176919046"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Aug 2022 05:28:07 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Aug 2022 05:28:10 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 19 Aug 2022 05:28:02 -0700
+ 15.1.2507.12; Fri, 19 Aug 2022 05:28:08 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Fri, 19 Aug 2022 05:27:59 -0700
+ Transport; Fri, 19 Aug 2022 05:28:06 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -51,10 +51,12 @@ CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Albert Ou <aou@eecs.berkeley.edu>, <linux-clk@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>
-Subject: [PATCH 0/6] Add PolarFire SoC Fabric Clock Conditioning Circuitry Support
-Date:   Fri, 19 Aug 2022 13:22:54 +0100
-Message-ID: <20220819122259.183600-1-conor.dooley@microchip.com>
+Subject: [PATCH 1/6] dt-bindings: clk: rename mpfs-clkcfg binding
+Date:   Fri, 19 Aug 2022 13:22:55 +0100
+Message-ID: <20220819122259.183600-2-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220819122259.183600-1-conor.dooley@microchip.com>
+References: <20220819122259.183600-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -68,53 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey all,
+The filename for a binding is supposed to match the first compatible,
+but the mpfs-clkcfg file did not follow this policy. Rename it to match
+so that when other mpfs clock bindings are added things make more sense.
 
-PolarFire SoC has 4 clock source blocks, each with 2 PLLs and 2 DLLs,
-in the corners of the FPGA fabric. Add bindings, a driver supporting
-the PLLs and the requisite changes to the devicetrees for PolarFire
-SoC based boards. These clocks were already in use, but which clock
-specifically was chosen was decided by the synthesis tool. In our
-end-of-September release of our FPGA reference design, constraints will
-be added to force the synthesis tool to pick the "north west" CCC,
-making it possible to read the configuration from the CCC's registers.
-
-I am mainly looking for feedback on the dt-bindings on this version,
-so that if something dt-abi related needs to change it can be done in
-advance.
-
-There are no maintainers changes in this series, but they are required
-due to the binding rename. I am waiting for some changes queued in the
-soc tree before rebasing on a later -rc before including that patch.
-
-Thanks,
-Conor.
-
-Conor Dooley (6):
-  dt-bindings: clk: rename mpfs-clkcfg binding
-  dt-bindings: clk: document PolarFire SoC fabric clocks
-  dt-bindings: clk: add PolarFire SoC fabric clock ids
-  clk: microchip: add PolarFire SoC fabric clock support
-  dt-bindings: riscv: microchip: document icicle reference design
-  riscv: dts: microchip: add the mpfs' fabric clock control
-
- .../bindings/clock/microchip,mpfs-ccc.yaml    |  80 +++++
- ...p,mpfs.yaml => microchip,mpfs-clkcfg.yaml} |   2 +-
- .../devicetree/bindings/riscv/microchip.yaml  |   1 +
- .../dts/microchip/mpfs-icicle-kit-fabric.dtsi |  27 +-
- .../boot/dts/microchip/mpfs-icicle-kit.dts    |   4 +
- .../dts/microchip/mpfs-polarberry-fabric.dtsi |   5 +
- arch/riscv/boot/dts/microchip/mpfs.dtsi       |  34 +-
- drivers/clk/microchip/Makefile                |   1 +
- drivers/clk/microchip/clk-mpfs-ccc.c          | 294 ++++++++++++++++++
- .../dt-bindings/clock/microchip,mpfs-clock.h  |  23 ++
- 10 files changed, 458 insertions(+), 13 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/microchip,mpfs-ccc.yaml
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ .../clock/{microchip,mpfs.yaml => microchip,mpfs-clkcfg.yaml}   | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
  rename Documentation/devicetree/bindings/clock/{microchip,mpfs.yaml => microchip,mpfs-clkcfg.yaml} (96%)
- create mode 100644 drivers/clk/microchip/clk-mpfs-ccc.c
 
-
-base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+diff --git a/Documentation/devicetree/bindings/clock/microchip,mpfs.yaml b/Documentation/devicetree/bindings/clock/microchip,mpfs-clkcfg.yaml
+similarity index 96%
+rename from Documentation/devicetree/bindings/clock/microchip,mpfs.yaml
+rename to Documentation/devicetree/bindings/clock/microchip,mpfs-clkcfg.yaml
+index 016a4f378b9b..212228734ffd 100644
+--- a/Documentation/devicetree/bindings/clock/microchip,mpfs.yaml
++++ b/Documentation/devicetree/bindings/clock/microchip,mpfs-clkcfg.yaml
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+ %YAML 1.2
+ ---
+-$id: http://devicetree.org/schemas/clock/microchip,mpfs.yaml#
++$id: http://devicetree.org/schemas/clock/microchip,mpfs-clkcfg.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: Microchip PolarFire Clock Control Module Binding
 -- 
 2.36.1
 

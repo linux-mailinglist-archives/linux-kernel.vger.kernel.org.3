@@ -2,103 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE49E599A07
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1D25999DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347279AbiHSKeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
+        id S1348284AbiHSKeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347454AbiHSKec (ORCPT
+        with ESMTP id S1348289AbiHSKeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:34:32 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9591A924B;
-        Fri, 19 Aug 2022 03:34:31 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id c20so2990796qtw.8;
-        Fri, 19 Aug 2022 03:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=y43Q4Ux8mzcAs/PRKLgB3PhAbbRFuFRwNvqbANaCmZQ=;
-        b=WCzWYNhe7Uos+2cSI8d1+g+RmMXisRI0OCPtLc8pLgBH0XA/Q8jgQ/tBCriBS/plKX
-         eaTd4DdHfZVz0DOG4feUrCLJrexHYMI1Q2awWoSCdiAZwMgNvUPXo9X49vEgr3qGhb7M
-         bvPboaOFVYvi+A3cRBv4+2CBzxZ81DlynNJ7L4JpNxUCQ0hGRuWVJh67WkGymLNzSdZl
-         If+S5KdKCITHYr9e6OT3xXAhIDV1hTvjT9q1s3IUtgnxhWRHyLayQbn6NKJcwydyKPn0
-         ITdpm64bppQOL504GAXAa/kmBQIn2S4uD/1AprPF7imSPdET3gcOGDGG3X4z52QoHMNz
-         sK1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=y43Q4Ux8mzcAs/PRKLgB3PhAbbRFuFRwNvqbANaCmZQ=;
-        b=y6kBwP10ppmXZwsSelNjKSCEcd1GSOypOTEafVx2BpuO2LdwcH7f9HZiHiTXq10vev
-         0IKvhI2m+12dpWCuvG/P7CSTSZWUiIKZaKk9ITna2vBCv+ITSN7hrTHWo7IawCb8cAuF
-         /6f/g2y/DCBVADVoX0lLFdEwAYs3jMORJQsCnJGU8ygbUSocOahlzPafyxCZySRPu01U
-         fOOQ0RBREk7mLM58iziNTDDrUxT5/0dPEx4tMFbIpq3bwSr2YwiHJzCSjLoslGXXhJkt
-         42B99Q9PmqJ/7FksR2se6FxiJXCvInORzEDkjZ9m5NzqXs7xkvbx/1mNKiV66wjLP/KP
-         CbPA==
-X-Gm-Message-State: ACgBeo06IEZHzM9H/TXhmlM9dZuiWw/NPc7lcTzmmikE5B4B0OUN6UJR
-        +e5KliyLO2dY3Iry1kD4GWKUXWvrf60PT9FKQbk=
-X-Google-Smtp-Source: AA6agR71z1/2SpT3yPpDi+nG8Mk5PMI4fgXgfA+vgEQzHAkvpZagpe1i71Ye/VpuaokPks7F+VLaUOX9ymA7jlbWiTU=
-X-Received: by 2002:a05:622a:40a:b0:343:77ba:727f with SMTP id
- n10-20020a05622a040a00b0034377ba727fmr5973760qtx.481.1660905270646; Fri, 19
- Aug 2022 03:34:30 -0700 (PDT)
+        Fri, 19 Aug 2022 06:34:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158773C8CC
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 03:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660905239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=P/N3jznfyLCTntOiEbxHqyAxgiiPB/4urlbFDpUDuCk=;
+        b=cjJ/fB1tOLYzb20d6TitVuUhJOogxgBtsnaXxOBfngCF3oDsTPPxwhgzhX31Yzcw05tDQl
+        ucSJ2UzxUhmCTXoL1MmqBtIZFeOpLDKZTgEk7DSLHEMDZmd+i/fttn9DhScu6AGQ5crKFI
+        nSBhf2OE6o4v2rb+FueQSn3xniQipYs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-48-_PU-VMFbOe-W8ww7JuJ7JQ-1; Fri, 19 Aug 2022 06:33:57 -0400
+X-MC-Unique: _PU-VMFbOe-W8ww7JuJ7JQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8CF888032E3;
+        Fri, 19 Aug 2022 10:33:57 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7037C492C3B;
+        Fri, 19 Aug 2022 10:33:57 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM changes for Linux 6.0-rc2
+Date:   Fri, 19 Aug 2022 06:33:57 -0400
+Message-Id: <20220819103357.2346708-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <6e908cc827c70b95dae683717592aff0b003e7c9.1660606478.git.ang.iglesiasg@gmail.com>
- <CAHp75VdTZ_JYB2aYVdQTOx9QW1HPKhwYyQH-0tVCtpjHV=VcaQ@mail.gmail.com> <8a1f372f34be71895268e874bb3fbbf105dfabdb.camel@gmail.com>
-In-Reply-To: <8a1f372f34be71895268e874bb3fbbf105dfabdb.camel@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 19 Aug 2022 13:33:54 +0300
-Message-ID: <CAHp75VeSsVD8rMz-Cj6kFovqdQQPjbH7rUXWS6paRtsBaB-Kww@mail.gmail.com>
-Subject: Re: [PATCH] iio: pressure: bmp280: fix datasheet links
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     linux-iio <linux-iio@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 1:31 PM Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
-> On Fri, 2022-08-19 at 12:37 +0300, Andy Shevchenko wrote:
-> > On Tue, Aug 16, 2022 at 2:39 AM Angel Iglesias <ang.iglesiasg@gmail.com>
-> > wrote:
-> > >
-> > > Updated links for BMP280 and BME280 datasheets on Bosch website.
-> >
-> > > Datasheet of BMP180 is no longer available on the manufacturer's website,
-> > > changed the link to a copy hosted by a third party.
-> >
-> > Note, that the version is downgraded (from 12.1 to 9).
->
-> Apologies, I forgot to add a note about this. Changelog on datasheet 12.1 listed
-> these three changes from version 9:
-> * Page 26: Changed document referral from ANP015 to BST-MPS-AN004-00
-> * Chapter 3.5: New equation for B3 (adds a long cast to AC1)
-> * Page 26: Updated RoHS directive to 2011/65/EU effective 8 June 2011
+Linus,
 
-Perhaps you may add this to the comment below into the code.
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-> Unfortunately, I couldn't find the most updated version in good quality hosted
-> in a trustworthy place.
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-Me neither.
+are available in the Git repository at:
 
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
--- 
-With Best Regards,
-Andy Shevchenko
+for you to fetch changes up to 959d6c4ae238b28a163b1b3741fae05391227ad9:
+
+  Merge tag 'kvmarm-fixes-6.0-1' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD (2022-08-19 05:43:53 -0400)
+
+----------------------------------------------------------------
+ARM:
+
+* Fix unexpected sign extension of KVM_ARM_DEVICE_ID_MASK
+
+* Tidy-up handling of AArch32 on asymmetric systems
+
+x86:
+
+* Fix "missing ENDBR" BUG for fastop functions
+
+Generic:
+
+* Some cleanup and static analyzer patches
+
+* More fixes to KVM_CREATE_VM unwind paths
+
+----------------------------------------------------------------
+Chao Peng (2):
+      KVM: Rename KVM_PRIVATE_MEM_SLOTS to KVM_INTERNAL_MEM_SLOTS
+      KVM: Rename mmu_notifier_* to mmu_invalidate_*
+
+Josh Poimboeuf (3):
+      x86/ibt, objtool: Add IBT_NOSEAL()
+      x86/kvm: Simplify FOP_SETCC()
+      x86/kvm: Fix "missing ENDBR" BUG for fastop functions
+
+Li kunyu (2):
+      KVM: Drop unnecessary initialization of "npages" in hva_to_pfn_slow()
+      KVM: Drop unnecessary initialization of "ops" in kvm_ioctl_create_device()
+
+Oliver Upton (2):
+      KVM: arm64: Treat PMCR_EL1.LC as RES1 on asymmetric systems
+      KVM: arm64: Reject 32bit user PSTATE on asymmetric systems
+
+Paolo Bonzini (2):
+      KVM: MIPS: remove unnecessary definition of KVM_PRIVATE_MEM_SLOTS
+      Merge tag 'kvmarm-fixes-6.0-1' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+
+Sean Christopherson (3):
+      KVM: Properly unwind VM creation if creating debugfs fails
+      KVM: Unconditionally get a ref to /dev/kvm module when creating a VM
+      KVM: Move coalesced MMIO initialization (back) into kvm_create_vm()
+
+Yang Yingliang (1):
+      KVM: arm64: Fix compile error due to sign extension
+
+ arch/arm64/include/asm/kvm_host.h        |  4 ++
+ arch/arm64/include/uapi/asm/kvm.h        |  6 +-
+ arch/arm64/kvm/arm.c                     |  3 +-
+ arch/arm64/kvm/guest.c                   |  2 +-
+ arch/arm64/kvm/mmu.c                     |  8 +--
+ arch/arm64/kvm/sys_regs.c                |  4 +-
+ arch/mips/include/asm/kvm_host.h         |  2 -
+ arch/mips/kvm/mmu.c                      | 12 ++--
+ arch/powerpc/include/asm/kvm_book3s_64.h |  2 +-
+ arch/powerpc/kvm/book3s_64_mmu_host.c    |  4 +-
+ arch/powerpc/kvm/book3s_64_mmu_hv.c      |  4 +-
+ arch/powerpc/kvm/book3s_64_mmu_radix.c   |  6 +-
+ arch/powerpc/kvm/book3s_hv_nested.c      |  2 +-
+ arch/powerpc/kvm/book3s_hv_rm_mmu.c      |  8 +--
+ arch/powerpc/kvm/e500_mmu_host.c         |  4 +-
+ arch/riscv/kvm/mmu.c                     |  4 +-
+ arch/x86/include/asm/ibt.h               | 11 ++++
+ arch/x86/include/asm/kvm_host.h          |  2 +-
+ arch/x86/kvm/emulate.c                   | 26 ++-------
+ arch/x86/kvm/mmu/mmu.c                   | 14 ++---
+ arch/x86/kvm/mmu/paging_tmpl.h           |  4 +-
+ include/linux/kvm_host.h                 | 66 +++++++++++-----------
+ tools/objtool/check.c                    |  3 +-
+ virt/kvm/kvm_main.c                      | 95 ++++++++++++++++----------------
+ virt/kvm/pfncache.c                      | 17 +++---
+ 25 files changed, 157 insertions(+), 156 deletions(-)
+

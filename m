@@ -2,123 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E473F599E4C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4531599E29
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349708AbiHSPY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 11:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
+        id S1349716AbiHSPZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 11:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349694AbiHSPYy (ORCPT
+        with ESMTP id S1349711AbiHSPZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:24:54 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C52D876AE
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:24:53 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id w19so9427369ejc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:24:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linbit-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=QcjuSMkjgvmcMVSZtEnP4HKDq1IJJzuLOO5WZsbK0+U=;
-        b=agmJAUC8jfOsl/gS4hT8lv5H6fTz01qf2pe3Iv5R9j9Ate9ewR22RfAhjEhwJ6X7ah
-         6i2gUSjqWAQUwG7vDL22TL3OJ2DhWyK4iGyCxaZDkZBo8C5fdnjLhkpYDW7Sa1kKJ0m9
-         nTTLPu80zYWs5VKFI/soqsQZ2m3SZwMJLkyAN+lFaM/+QA0zpsdobhOAVHSxJY09NVpJ
-         unBTEPM3BaQo8lZAI/3LxHBqdI4Xtjfj+l91HslXfgpBHq8BMYj8CpA31LlMMIn6dSW8
-         vv42Aj7Ht2909aymuONX4UFmgeVzYDTPM0HNunn/RXfrH17hgsFeGl4AuF4WAgPFBbnL
-         B9iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=QcjuSMkjgvmcMVSZtEnP4HKDq1IJJzuLOO5WZsbK0+U=;
-        b=vmVOWZafMjrGB4vLfGgT7nacH6YRQeavyPEh63+m6Fr1A6aM3gruu5pXWPBUKioRKo
-         lbz8PRhKAtMsDA8s2NEgUpPIbNqE01tmHFrC1Ya8bdx1n+nfoOFtKJq+PzyALqr7PgyZ
-         1gK0ZNI6UK0Xh7MKtL0qAKkxKdqMftT2y4nL0S3/t1U35fBbOEXfvkSu3eVS74BqPgqx
-         A6W0IdS6HUiorxnvFtsE6935YTercuJ73INxIM5XldDnE663GzCfVWLd+47/haBP/SlT
-         erhelZngd83WkYrwg5VU2SwYFV1hsz75RIG7zDGMerawj6RI6h56HqEwDqWrsowm+93q
-         mGUw==
-X-Gm-Message-State: ACgBeo1WubusIeimlt4uqY9eTSTLjqaIqox1/9a+WX03Cc0ePlp8xKAT
-        0fGIiSNlpEP/9SzD+5yvdXrGdg==
-X-Google-Smtp-Source: AA6agR5mq+T7k3AHmZCAgqpwHVwskje+A0igISLSMji1ANW7KLAUFwidL9UZ9jQ29SXqclEdOTfxgg==
-X-Received: by 2002:a17:907:7fa5:b0:730:5d54:4c24 with SMTP id qk37-20020a1709077fa500b007305d544c24mr5248538ejc.641.1660922691995;
-        Fri, 19 Aug 2022 08:24:51 -0700 (PDT)
-Received: from [192.168.178.55] (h082218028181.host.wavenet.at. [82.218.28.181])
-        by smtp.gmail.com with ESMTPSA id h10-20020aa7c60a000000b0043cc2c9f5adsm3270313edq.40.2022.08.19.08.24.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 08:24:51 -0700 (PDT)
-Message-ID: <a6d3e3a8-f0a6-dffc-c3b6-45d81efc7664@linbit.com>
-Date:   Fri, 19 Aug 2022 17:24:50 +0200
+        Fri, 19 Aug 2022 11:25:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC0B883D2;
+        Fri, 19 Aug 2022 08:25:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E6FADCE2689;
+        Fri, 19 Aug 2022 15:25:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C0D8C433C1;
+        Fri, 19 Aug 2022 15:25:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660922705;
+        bh=YG9oaqVO7xrgsjGFwRl7uekmuu7kg3be4zVrVLl6lM0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MF8QlLnHbmI4k23WS+w2bqoka6EBG+AQl3aBf+k4HEeSWTa/CxuTTNTbQOMYsLlXC
+         g5LiDZs0WltKbVhekIIH6dfYmfqjd3K8y2nJy5a0rRot4zevXq/rnD5G7WtZ/CWzW3
+         kBqMHWi5vdJu8MCtoj507y3f+HaWZRlS/yhU79qo=
+Date:   Fri, 19 Aug 2022 17:25:01 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     kishon@ti.com, lpieralisi@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mie@igel.co.jp, kw@linux.com
+Subject: Re: [PATCH 2/5] misc: pci_endpoint_test: Fix the return value of
+ IOCTL
+Message-ID: <Yv+rTZ1u7HXmS5Qk@kroah.com>
+References: <20220819145018.35732-1-manivannan.sadhasivam@linaro.org>
+ <20220819145018.35732-3-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] block: move from strlcpy with unused retval to strscpy
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Geoff Levand <geoff@infradead.org>, Jim Paris <jim@jtan.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-block@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20220818205958.6552-1-wsa+renesas@sang-engineering.com>
-From:   =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-In-Reply-To: <20220818205958.6552-1-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819145018.35732-3-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 18.08.22 um 22:59 schrieb Wolfram Sang:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
+On Fri, Aug 19, 2022 at 08:20:15PM +0530, Manivannan Sadhasivam wrote:
+> IOCTLs are supposed to return 0 for success and negative error codes for
+> failure. Currently, this driver is returning 0 for failure and 1 for
+> success, that's not correct. Hence, fix it!
 > 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  drivers/block/brd.c               |  2 +-
->  drivers/block/drbd/drbd_nl.c      |  2 +-
-
-For the drbd part:
-
-Acked-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
-
->  drivers/block/mtip32xx/mtip32xx.c | 12 ++++++------
->  drivers/block/ps3vram.c           |  2 +-
->  drivers/block/zram/zram_drv.c     |  6 +++---
->  5 files changed, 12 insertions(+), 12 deletions(-)
-...
-> diff --git a/drivers/block/drbd/drbd_nl.c b/drivers/block/drbd/drbd_nl.c
-> index 013d355a2033..864c98e74875 100644
-> --- a/drivers/block/drbd/drbd_nl.c
-> +++ b/drivers/block/drbd/drbd_nl.c
-> @@ -4752,7 +4752,7 @@ void notify_helper(enum drbd_notification_type type,
->  	struct drbd_genlmsghdr *dh;
->  	int err;
+>  drivers/misc/pci_endpoint_test.c | 163 ++++++++++++++-----------------
+>  1 file changed, 76 insertions(+), 87 deletions(-)
+> 
+> diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+> index db0458039d7d..bbf903c5a5bd 100644
+> --- a/drivers/misc/pci_endpoint_test.c
+> +++ b/drivers/misc/pci_endpoint_test.c
+> @@ -174,13 +174,12 @@ static void pci_endpoint_test_free_irq_vectors(struct pci_endpoint_test *test)
+>  	test->irq_type = IRQ_TYPE_UNDEFINED;
+>  }
 >  
-> -	strlcpy(helper_info.helper_name, name, sizeof(helper_info.helper_name));
-> +	strscpy(helper_info.helper_name, name, sizeof(helper_info.helper_name));
->  	helper_info.helper_name_len = min(strlen(name), sizeof(helper_info.helper_name));
->  	helper_info.helper_status = status;
->
--- 
-Christoph Böhmwalder
-LINBIT | Keeping the Digital World Running
-DRBD HA —  Disaster Recovery — Software defined Storage
+> -static bool pci_endpoint_test_alloc_irq_vectors(struct pci_endpoint_test *test,
+> +static int pci_endpoint_test_alloc_irq_vectors(struct pci_endpoint_test *test,
+>  						int type)
+>  {
+> -	int irq = -1;
+> +	int irq = -EINVAL;
+>  	struct pci_dev *pdev = test->pdev;
+>  	struct device *dev = &pdev->dev;
+> -	bool res = true;
+>  
+>  	switch (type) {
+>  	case IRQ_TYPE_LEGACY:
+> @@ -202,15 +201,16 @@ static bool pci_endpoint_test_alloc_irq_vectors(struct pci_endpoint_test *test,
+>  		dev_err(dev, "Invalid IRQ type selected\n");
+>  	}
+>  
+> +	test->irq_type = type;
+> +
+>  	if (irq < 0) {
+> -		irq = 0;
+> -		res = false;
+> +		test->num_irqs = 0;
+> +		return irq;
+
+Why are you setting the type if there is an error?
+
+
+>  	}
+>  
+> -	test->irq_type = type;
+>  	test->num_irqs = irq;
+>  
+> -	return res;
+> +	return 0;
+>  }
+>  
+>  static void pci_endpoint_test_release_irq(struct pci_endpoint_test *test)
+> @@ -225,7 +225,7 @@ static void pci_endpoint_test_release_irq(struct pci_endpoint_test *test)
+>  	test->num_irqs = 0;
+>  }
+>  
+> -static bool pci_endpoint_test_request_irq(struct pci_endpoint_test *test)
+> +static int pci_endpoint_test_request_irq(struct pci_endpoint_test *test)
+>  {
+>  	int i;
+>  	int err;
+> @@ -240,7 +240,7 @@ static bool pci_endpoint_test_request_irq(struct pci_endpoint_test *test)
+>  			goto fail;
+>  	}
+>  
+> -	return true;
+> +	return 0;
+>  
+>  fail:
+>  	switch (irq_type) {
+> @@ -260,10 +260,10 @@ static bool pci_endpoint_test_request_irq(struct pci_endpoint_test *test)
+>  		break;
+>  	}
+>  
+> -	return false;
+> +	return err;
+>  }
+>  
+> -static bool pci_endpoint_test_bar(struct pci_endpoint_test *test,
+> +static int pci_endpoint_test_bar(struct pci_endpoint_test *test,
+>  				  enum pci_barno barno)
+>  {
+>  	int j;
+> @@ -272,7 +272,7 @@ static bool pci_endpoint_test_bar(struct pci_endpoint_test *test,
+>  	struct pci_dev *pdev = test->pdev;
+>  
+>  	if (!test->bar[barno])
+> -		return false;
+> +		return -ENOMEM;
+
+How is this no memory?
+
+Shouldn't this not even get here if the allocation failed?
+
+>  
+>  	size = pci_resource_len(pdev, barno);
+>  
+> @@ -285,13 +285,13 @@ static bool pci_endpoint_test_bar(struct pci_endpoint_test *test,
+>  	for (j = 0; j < size; j += 4) {
+>  		val = pci_endpoint_test_bar_readl(test, barno, j);
+>  		if (val != 0xA0A0A0A0)
+> -			return false;
+> +			return -EINVAL;
+
+Is this really an invalid value sent to the ioctl?
+
+
+>  	}
+>  
+> -	return true;
+> +	return 0;
+>  }
+>  
+> -static bool pci_endpoint_test_legacy_irq(struct pci_endpoint_test *test)
+> +static int pci_endpoint_test_legacy_irq(struct pci_endpoint_test *test)
+>  {
+>  	u32 val;
+>  
+> @@ -303,12 +303,12 @@ static bool pci_endpoint_test_legacy_irq(struct pci_endpoint_test *test)
+>  	val = wait_for_completion_timeout(&test->irq_raised,
+>  					  msecs_to_jiffies(1000));
+>  	if (!val)
+> -		return false;
+> +		return -ETIMEDOUT;
+>  
+> -	return true;
+> +	return 0;
+>  }
+>  
+> -static bool pci_endpoint_test_msi_irq(struct pci_endpoint_test *test,
+> +static int pci_endpoint_test_msi_irq(struct pci_endpoint_test *test,
+>  				       u16 msi_num, bool msix)
+>  {
+>  	u32 val;
+> @@ -324,19 +324,18 @@ static bool pci_endpoint_test_msi_irq(struct pci_endpoint_test *test,
+>  	val = wait_for_completion_timeout(&test->irq_raised,
+>  					  msecs_to_jiffies(1000));
+>  	if (!val)
+> -		return false;
+> +		return -ETIMEDOUT;
+>  
+> -	if (pci_irq_vector(pdev, msi_num - 1) == test->last_irq)
+> -		return true;
+> +	if (pci_irq_vector(pdev, msi_num - 1) != test->last_irq)
+> +		return -EINVAL;
+
+Again, is this an invalid value passed to the ioctl?
+
+Same for other places you are doing something and then returning this
+error value, are you sure that is correct?
+
+-EINVAL should be "the values you sent me was incorrect", not "something
+bad happened based on what you gave me".
+
+thanks,
+
+greg k-h

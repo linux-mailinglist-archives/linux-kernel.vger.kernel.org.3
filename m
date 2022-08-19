@@ -2,62 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0663599EB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48DA599E9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349789AbiHSPgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 11:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
+        id S1349809AbiHSPhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 11:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349770AbiHSPgL (ORCPT
+        with ESMTP id S1349778AbiHSPhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:36:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112AD120B6;
-        Fri, 19 Aug 2022 08:36:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1006B82800;
-        Fri, 19 Aug 2022 15:36:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDF83C433D6;
-        Fri, 19 Aug 2022 15:36:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660923368;
-        bh=1CeiB4K9FMDSHYlregecvn7xyN/t+buSajCbr7nqGoA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mtKYiVdPGXpCn3pe820y/PbYDk2D7fLcAW2IntqrbOVYlvpEYXiPpehBmqwP0cxjV
-         NnjsZyrIkEPQqAJ0IQ596eb3DYZhsD6CxkHlIfhRTdwBeyAF9xOMkprgSR6qXMvvcH
-         wOY/Q1HSaDfhdFvfVzVkGk10dqYs9Imi7JodyeKA=
-Date:   Fri, 19 Aug 2022 17:36:05 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dragos-Marian Panait <dragos.panait@windriver.com>
-Cc:     stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
-        Sujith <Sujith.Manoharan@atheros.com>,
-        Senthil Balasubramanian <senthilkumar@atheros.com>,
-        "John W . Linville" <linville@tuxdriver.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5.10 0/1] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
-Message-ID: <Yv+t5fd/ge36XzNM@kroah.com>
-References: <20220819103852.902332-1-dragos.panait@windriver.com>
- <Yv9ymGE9ZNPfUjBm@kroah.com>
- <57b4c8e6-4a32-cc03-f469-c4bd6dd1eaca@windriver.com>
+        Fri, 19 Aug 2022 11:37:16 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73232E7278
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:37:15 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id l20-20020a056e02067400b002dfa7256498so3442735ilt.4
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:37:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=94x0AlTYME7JTO0C9915l6NdfFJ2DgOCgcBChltqQWQ=;
+        b=DfRTs/AiqFTjISArTZqnXOppAUbBhDTDT6gWbgVsBZiVpmntFRu0QdqWaJ8b2AHuQr
+         0G5PbdxM3F8Urr83IdaO4NIY1i4KqbEwFQpWIHH2ecHz9JPDnu38UkTIO6+PSk+qcMQL
+         sOFcxltrS5m2y4ZVU4oeQChSAUUMhX6s1F3LnHrlWCJJAESw4x/TeYgKDqchjUD6GHq8
+         JP5YkHlgNfXJd8aA1Z9UV4K8wSL5qY4Tgklc3rVzpFQaznh8arfwKwZLn+XvByGid8up
+         ZAG+Cn8VtEl9DAPk5yjsE4TKoI66wpShufMbsZDXSh8JWcKaKi//u3szhMo/5cdhwrKg
+         27aA==
+X-Gm-Message-State: ACgBeo2ECyQBqA9B3d9rLdkOnzebVYAH/6rVISKsK4k9fa/L2FeDamdc
+        g8G0oVrXISoeKXG/DOcmSyUaVosAWWbTBZBKf+ey9pwa1556
+X-Google-Smtp-Source: AA6agR6REEtECibZlVkEcLW2dWMbYRRJEN7GzrH1VDNE6U1RZW/iX20V98CfBnA8jKHQNaBk0P/h0urd5PvrgC7OEU7xMZb0Mt6I
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <57b4c8e6-4a32-cc03-f469-c4bd6dd1eaca@windriver.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:3897:b0:346:83f6:9609 with SMTP id
+ b23-20020a056638389700b0034683f69609mr3684945jav.40.1660923434842; Fri, 19
+ Aug 2022 08:37:14 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 08:37:14 -0700
+In-Reply-To: <20220819110950.1479-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005544bd05e699dfe5@google.com>
+Subject: Re: [syzbot] WARNING: ODEBUG bug in __cancel_work
+From:   syzbot <syzbot+83672956c7aa6af698b3@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,36 +55,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 03:18:26PM +0300, Dragos-Marian Panait wrote:
-> Hi Greg,
-> 
-> On 19.08.2022 14:23, Greg KH wrote:
-> > [Please note: This e-mail is from an EXTERNAL e-mail address]
-> > 
-> > On Fri, Aug 19, 2022 at 01:38:51PM +0300, Dragos-Marian Panait wrote:
-> > > The following commit is needed to fix CVE-2022-1679:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0ac4827f78c7ffe8eef074bc010e7e34bc22f533
-> > > 
-> > > Pavel Skripkin (1):
-> > >    ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
-> > > 
-> > >   drivers/net/wireless/ath/ath9k/htc.h          | 10 +++++-----
-> > >   drivers/net/wireless/ath/ath9k/htc_drv_init.c |  3 ++-
-> > >   2 files changed, 7 insertions(+), 6 deletions(-)
-> > > 
-> > > 
-> > > base-commit: 6eae1503ddf94b4c3581092d566b17ed12d80f20
-> > > --
-> > > 2.37.1
-> > > 
-> > This is already queued up for 5.10.  You forgot the backports to older
-> > kernels, which is also already queued up.
-> Are you sure of this?
-> I can not find any patch for older kernels in the stable mailing list(except
-> for 5.15, 5.18, 5.19).
+Hello,
 
-Look in the stable-queue.git tree on git.kernel.org.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-thanks,
+Reported-and-tested-by: syzbot+83672956c7aa6af698b3@syzkaller.appspotmail.com
 
-greg k-h
+Tested on:
+
+commit:         6c8f4797 Add linux-next specific files for 20220809
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=104e8e5b080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a5ae8cfa8d7075d1
+dashboard link: https://syzkaller.appspot.com/bug?extid=83672956c7aa6af698b3
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=106ced2d080000
+
+Note: testing is done by a robot and is best-effort only.

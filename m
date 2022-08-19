@@ -2,186 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFAB59A75E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B7559A71F
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 22:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352104AbiHSUve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 16:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
+        id S1352098AbiHSUuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 16:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351704AbiHSUvM (ORCPT
+        with ESMTP id S1351880AbiHSUuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 16:51:12 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C39FC2FA1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:50:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660942231; x=1692478231;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ICra1L3ovV0x36zZN8DmjHhF1v/YCjLMFv0va4iXfdc=;
-  b=GLlXBACNetDbtlR3h+QUVn9971fJ4kEHl+5gN7nHb2Lc0CJHghCe8vTf
-   QV6ZtMkPQhFsMJT8NvHDpbEffYhXQEkYHrpmuwUgYoxbw+oz7f5d75Q62
-   6Q/twC3mN2XmF/J8mB6TXJ9eeXTwRL9pUtISN5OLHdJiCVDiN+tFw6Y/L
-   ZMukf6mxF6qs97Q8mHEiOLgpdk4EGULcbZyaxsvic/yR2h+8WCfabs173
-   cUidfXGDC+1qYrrpThxlDy2ZGC6fDTFQAvKk3pXopVD9Jho0KXqhcMM4s
-   NKRSaxmTOjWfQIZ10ikTxnaIqiNHG0JENc4iFkQPXxNq6+KPKIpaSUqgb
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="319127492"
-X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="319127492"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 13:50:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="584786553"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 19 Aug 2022 13:50:11 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oP8wU-0001nM-2M;
-        Fri, 19 Aug 2022 20:50:10 +0000
-Date:   Sat, 20 Aug 2022 04:49:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse:
- incorrect type in argument 1 (different address spaces)
-Message-ID: <202208200410.1K6K7rCh-lkp@intel.com>
+        Fri, 19 Aug 2022 16:50:10 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6D8B7EC5
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:49:51 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 24so4562065pgr.7
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc;
+        bh=PPiqvueW9Mr9csrtspssYoA1WIlf7ZX7tJOeDyZQ9tM=;
+        b=d4KS4ML+RNRPOvg7UNyebEdVPo5fGPxid064KFuNlXVLSpF9hMYkFXTQjvSUsslu5k
+         Zvz/5iAHxFn//NdXt3Aris0JqbPxcNfezauhbYIbsSsv/m+nxXRMkiFwpFpuYMAOCyuQ
+         kWDN7If/J8DIFI21Fwa57T4ls25uer1S9Wk8Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
+        bh=PPiqvueW9Mr9csrtspssYoA1WIlf7ZX7tJOeDyZQ9tM=;
+        b=7xDgIEnUAh49LGbl46vtxOOtcVHDlGETzgV75qNOUcPsMlyohZGfmqBag9trYt2FNA
+         f0P9hhQMIT12OugveqzQUMAV1LyGTVjBdm8mmYGssuOVZ1pyBwv8+s3QLx7Brzi0Va4w
+         gS0UjvgEBykTXGufKcChG9WZ+rgfW7+tp+QKt6GDMvea7Jq063ocyK8a0yWJ3Esq0M27
+         ZX+1msXNWV8LlFoWpiAQaTDyenPzLGRm0bFglKYT9G12TxQB9gzjlTpmwVyDZtFBVwee
+         M1yCCBbRXBPnbkrvsmt2FAFzg3dfzTJTs/zLxmfp8R8T6caJfnkX0DcPrfJ3JsJcb9yL
+         TIaA==
+X-Gm-Message-State: ACgBeo3jNyJj0lGOxxVhn/JvSTTBitvVMq9nrUg9Uqki1eGgsMHaamwy
+        PLfrQEE9R2jLTG2rrdqqY7OgVdWh0fuYOBbi6W0KbYZEvR8=
+X-Google-Smtp-Source: AA6agR7KU4/1crUAnBR6DlUKTnq77ERwkcpQDM3bl8Mebz7jky9KMRw9EJflpPgbZMi1DOrcz72WAs4V0LG8PaL2tME=
+X-Received: by 2002:a65:490e:0:b0:41c:5b91:e845 with SMTP id
+ p14-20020a65490e000000b0041c5b91e845mr7688094pgs.436.1660942189992; Fri, 19
+ Aug 2022 13:49:49 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 19 Aug 2022 13:49:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CACeCKadP-AZ8OU4A=7CrwAz7yuLvMvjvAcw7K-FORFmkMvx7cA@mail.gmail.com>
+References: <20220810204750.3672362-1-bjorn.andersson@linaro.org>
+ <20220810204750.3672362-2-bjorn.andersson@linaro.org> <a13bce60-25b4-d075-d56a-d1283e91e3ba@linaro.org>
+ <20220814210104.GA690892-robh@kernel.org> <Yv1y9Wjp16CstJvK@baldur>
+ <CAE-0n53AjJ_G6yZoTALWpKvZUdF+8nFZ+TQh=Ch=8xgdMVqDkw@mail.gmail.com> <CACeCKadP-AZ8OU4A=7CrwAz7yuLvMvjvAcw7K-FORFmkMvx7cA@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 19 Aug 2022 13:49:49 -0700
+Message-ID: <CAE-0n53C+D=9gdSXKsjr4KZVrb-gpeo_EyuX3DfNKp19FoicXA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Pin-yen Lin <treapking@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-include/linux/fortify-string.h
-lib/test_fortify/write_overflow_field-memset.c
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   963a70bee5880640d0fd83ed29dc1e7ec0d2bd4a
-commit: 28e77cc1c0686621a4d416f599cee5ab369daa0a fortify: Detect struct member overflows in memset() at compile-time
-date:   6 months ago
-config: arm64-randconfig-s041-20220820 (https://download.01.org/0day-ci/archive/20220820/202208200410.1K6K7rCh-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=28e77cc1c0686621a4d416f599cee5ab369daa0a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 28e77cc1c0686621a4d416f599cee5ab369daa0a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/remoteproc/
+Quoting Prashant Malani (2022-08-19 13:14:25)
+> > This would do that for us, but when all four lanes are connected from
+> > the qmp phy directly to the connector we could just as easily have done
+> > it with one endpoint.
+> >
+> >         qmp_phy {
+> >                 ports {
+> >                         port@0 {
+> >                                 reg = <0>;
+> >                                 endpoint@0 {
+> >                                         reg = <0>;
+> >                                         remote-endpoint = <&usb_c_ss>;
+> >                                         data-lanes = <1 2 3 0>
+> >                                 };
+> >                         };
+> >                 };
+> >         };
+> >
+> > So should we explicitly have two endpoints in the usb-c-connector for
+> > the two pairs all the time, or should we represent that via data-lanes
+> > and only split up the connector's endpoint if we need to connect the
+> > usb-c-connector to two different endpoints?
+>
+> I like 2 endpoints to represent the usb-c-connector, but that doesn't seem
+> to be compatible (without introducing `data-lanes`, at least) with all
+> the various
+> combinations on the remote side, if that remote side is a DRM bridge with DP
+> output capability (like it6505 or anx7625).
+> That type of DRM bridge supports 1, 2 or 4 lane DP connections.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Why can't the remote side that's a pure DP bridge (it6505) bundle
+however many lanes it wants into one endpoint? If it's a pure DP bridge
+we should design the bridge binding to have up to 4 endpoints, but
+sometimes 2 or 1 and then overlay data-lanes onto that binding so that
+we can tell the driver how to remap the lanes if it can. If the hardware
+can't support remapping lanes then data-lanes shouldn't be in the
+binding.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     got void [noderef] __iomem *cpu_addr
->> drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     expected void *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:437:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     expected void const *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     got void [noderef] __iomem *cpu_addr
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *cpu_addr @@
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     expected void *
-   drivers/remoteproc/ti_k3_r5_remoteproc.c:440:9: sparse:     got void [noderef] __iomem *cpu_addr
+>
+> So, how about 4 endpoints (1 for each SS lane) in the usb-c-connector port@1?
+> That should support every conceivable configuration and bridge/PHY hardware.
+> and also allows a way to specify any lane remapping (similar to what
+> "data lanes" does)
+> if that is required.
+> Then we are consistent with what an endpoint represents, regardless of whether
+> the DRM bridge has a DP panel (1,2 or 4 lane) or Type-C connector  (2
+> or 4 lane) on its output side.
 
-vim +437 drivers/remoteproc/ti_k3_r5_remoteproc.c
+I'd like to think in terms of the usb-c-connector, where the DP altmode
+doesn't support one lane of DP and USB is only carried across two SS
+lanes. Essentially, two SS lanes are always together, hence the idea
+that we should have two endpoints in the SS port@1. In the simple case
+above it seems we can get away with only one endpoint in the SS port@1
+which is probably fine? I just don't know how that is represented in the
+schema, but I suspect making another endpoint optional in the SS port@1
+is the way to go.
 
-6dedbd1d544389 Suman Anna 2020-10-02  378  
-6dedbd1d544389 Suman Anna 2020-10-02  379  /*
-6dedbd1d544389 Suman Anna 2020-10-02  380   * The R5F cores have controls for both a reset and a halt/run. The code
-6dedbd1d544389 Suman Anna 2020-10-02  381   * execution from DDR requires the initial boot-strapping code to be run
-6dedbd1d544389 Suman Anna 2020-10-02  382   * from the internal TCMs. This function is used to release the resets on
-6dedbd1d544389 Suman Anna 2020-10-02  383   * applicable cores to allow loading into the TCMs. The .prepare() ops is
-6dedbd1d544389 Suman Anna 2020-10-02  384   * invoked by remoteproc core before any firmware loading, and is followed
-6dedbd1d544389 Suman Anna 2020-10-02  385   * by the .start() ops after loading to actually let the R5 cores run.
-ee99ee7c929c3e Suman Anna 2021-03-27  386   *
-ee99ee7c929c3e Suman Anna 2021-03-27  387   * The Single-CPU mode on applicable SoCs (eg: AM64x) only uses Core0 to
-ee99ee7c929c3e Suman Anna 2021-03-27  388   * execute code, but combines the TCMs from both cores. The resets for both
-ee99ee7c929c3e Suman Anna 2021-03-27  389   * cores need to be released to make this possible, as the TCMs are in general
-ee99ee7c929c3e Suman Anna 2021-03-27  390   * private to each core. Only Core0 needs to be unhalted for running the
-ee99ee7c929c3e Suman Anna 2021-03-27  391   * cluster in this mode. The function uses the same reset logic as LockStep
-ee99ee7c929c3e Suman Anna 2021-03-27  392   * mode for this (though the behavior is agnostic of the reset release order).
-6dedbd1d544389 Suman Anna 2020-10-02  393   */
-6dedbd1d544389 Suman Anna 2020-10-02  394  static int k3_r5_rproc_prepare(struct rproc *rproc)
-6dedbd1d544389 Suman Anna 2020-10-02  395  {
-6dedbd1d544389 Suman Anna 2020-10-02  396  	struct k3_r5_rproc *kproc = rproc->priv;
-6dedbd1d544389 Suman Anna 2020-10-02  397  	struct k3_r5_cluster *cluster = kproc->cluster;
-6dedbd1d544389 Suman Anna 2020-10-02  398  	struct k3_r5_core *core = kproc->core;
-6dedbd1d544389 Suman Anna 2020-10-02  399  	struct device *dev = kproc->dev;
-7508ea19b20da8 Suman Anna 2020-11-18  400  	u32 ctrl = 0, cfg = 0, stat = 0;
-7508ea19b20da8 Suman Anna 2020-11-18  401  	u64 boot_vec = 0;
-7508ea19b20da8 Suman Anna 2020-11-18  402  	bool mem_init_dis;
-6dedbd1d544389 Suman Anna 2020-10-02  403  	int ret;
-6dedbd1d544389 Suman Anna 2020-10-02  404  
-7508ea19b20da8 Suman Anna 2020-11-18  405  	ret = ti_sci_proc_get_status(core->tsp, &boot_vec, &cfg, &ctrl, &stat);
-7508ea19b20da8 Suman Anna 2020-11-18  406  	if (ret < 0)
-7508ea19b20da8 Suman Anna 2020-11-18  407  		return ret;
-7508ea19b20da8 Suman Anna 2020-11-18  408  	mem_init_dis = !!(cfg & PROC_BOOT_CFG_FLAG_R5_MEM_INIT_DIS);
-7508ea19b20da8 Suman Anna 2020-11-18  409  
-ee99ee7c929c3e Suman Anna 2021-03-27  410  	/* Re-use LockStep-mode reset logic for Single-CPU mode */
-ee99ee7c929c3e Suman Anna 2021-03-27  411  	ret = (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
-ee99ee7c929c3e Suman Anna 2021-03-27  412  	       cluster->mode == CLUSTER_MODE_SINGLECPU) ?
-6dedbd1d544389 Suman Anna 2020-10-02  413  		k3_r5_lockstep_release(cluster) : k3_r5_split_release(core);
-34f2653686fecc Suman Anna 2020-10-02  414  	if (ret) {
-6dedbd1d544389 Suman Anna 2020-10-02  415  		dev_err(dev, "unable to enable cores for TCM loading, ret = %d\n",
-6dedbd1d544389 Suman Anna 2020-10-02  416  			ret);
-6dedbd1d544389 Suman Anna 2020-10-02  417  		return ret;
-6dedbd1d544389 Suman Anna 2020-10-02  418  	}
-6dedbd1d544389 Suman Anna 2020-10-02  419  
-7508ea19b20da8 Suman Anna 2020-11-18  420  	/*
-7508ea19b20da8 Suman Anna 2020-11-18  421  	 * Newer IP revisions like on J7200 SoCs support h/w auto-initialization
-7508ea19b20da8 Suman Anna 2020-11-18  422  	 * of TCMs, so there is no need to perform the s/w memzero. This bit is
-7508ea19b20da8 Suman Anna 2020-11-18  423  	 * configurable through System Firmware, the default value does perform
-7508ea19b20da8 Suman Anna 2020-11-18  424  	 * auto-init, but account for it in case it is disabled
-7508ea19b20da8 Suman Anna 2020-11-18  425  	 */
-7508ea19b20da8 Suman Anna 2020-11-18  426  	if (cluster->soc_data->tcm_ecc_autoinit && !mem_init_dis) {
-7508ea19b20da8 Suman Anna 2020-11-18  427  		dev_dbg(dev, "leveraging h/w init for TCM memories\n");
-7508ea19b20da8 Suman Anna 2020-11-18  428  		return 0;
-7508ea19b20da8 Suman Anna 2020-11-18  429  	}
-7508ea19b20da8 Suman Anna 2020-11-18  430  
-34f2653686fecc Suman Anna 2020-10-02  431  	/*
-34f2653686fecc Suman Anna 2020-10-02  432  	 * Zero out both TCMs unconditionally (access from v8 Arm core is not
-34f2653686fecc Suman Anna 2020-10-02  433  	 * affected by ATCM & BTCM enable configuration values) so that ECC
-34f2653686fecc Suman Anna 2020-10-02  434  	 * can be effective on all TCM addresses.
-34f2653686fecc Suman Anna 2020-10-02  435  	 */
-34f2653686fecc Suman Anna 2020-10-02  436  	dev_dbg(dev, "zeroing out ATCM memory\n");
-34f2653686fecc Suman Anna 2020-10-02 @437  	memset(core->mem[0].cpu_addr, 0x00, core->mem[0].size);
-34f2653686fecc Suman Anna 2020-10-02  438  
-34f2653686fecc Suman Anna 2020-10-02  439  	dev_dbg(dev, "zeroing out BTCM memory\n");
-34f2653686fecc Suman Anna 2020-10-02  440  	memset(core->mem[1].cpu_addr, 0x00, core->mem[1].size);
-34f2653686fecc Suman Anna 2020-10-02  441  
-34f2653686fecc Suman Anna 2020-10-02  442  	return 0;
-34f2653686fecc Suman Anna 2020-10-02  443  }
-34f2653686fecc Suman Anna 2020-10-02  444  
-
-:::::: The code at line 437 was first introduced by commit
-:::::: 34f2653686fecc9bd5a4ee16724768c72953fb57 remoteproc: k3-r5: Initialize TCM memories for ECC
-
-:::::: TO: Suman Anna <s-anna@ti.com>
-:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Will there ever be a time when all 4 usb-c-connector remote-endpoint
+phandles point to endpoints that are child nodes of different ports
+(i.e. different qmp_phy nodes) with a 4 endpoint schema? I don't think
+that is possible, so 4 endpoints is flexible but also verbose. It also
+means we would have to walk the endpoints to figure out lane remapping,
+wheres we can simply find the endpoint in the DP bridge ports and look
+at data-lanes directly.

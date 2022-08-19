@@ -2,128 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5894599728
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2227759978D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347705AbiHSIfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
+        id S1346240AbiHSIhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347650AbiHSIem (ORCPT
+        with ESMTP id S1347222AbiHSIgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:34:42 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739B832042
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/iVNNjB8U3q+4+g1NB6eYk8TE0j2SJ8SWzHSD2nk/y0=; b=iVwwDRSD4sV8BDBd10gpD7wRcO
-        MzYvuV5LI624DLxP9qaCT/iadFn6Dp1+rVU/hPtquPhch/KYqOkK33Ix1k5OUyZk87/G+mDJeRcfP
-        uHd1I5i5wpU5T/HoYpPngxP/4eOAnyxhbWZ6v2V00dR2PJP3bSjXUWY3HwZxOfRhFRoyzKnkx15Li
-        WmEnDzKVjTePtF0RkbBmuwXzJGb9FReZx0PBxVsCEztVtqYBg1DWEWKp3/3s3J8jAUvzyBlr9t6Mo
-        fJJTCRS4rGL4H4usxJR7hoLJFKDv5cUVWVNx7vL+eISK3UEVHUJm+o3lp6qZr910bo6nf+X/MoUy6
-        tnh9yItg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oOxRF-00AvAk-Gh; Fri, 19 Aug 2022 08:33:09 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 08D06980120; Fri, 19 Aug 2022 10:33:08 +0200 (CEST)
-Date:   Fri, 19 Aug 2022 10:33:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kan.liang@linux.intel.com
-Cc:     acme@redhat.com, linux-kernel@vger.kernel.org,
-        alexander.shishkin@linux.intel.com, ak@linux.intel.com,
-        Jianfeng Gao <jianfeng.gao@intel.com>
-Subject: Re: [RESEND PATCH] perf/x86/intel: Fix unchecked MSR access error
- for Alder Lake N
-Message-ID: <Yv9Kw21Wl/f6KJTk@worktop.programming.kicks-ass.net>
-References: <20220818181530.2355034-1-kan.liang@linux.intel.com>
- <Yv9EVP6O9r867om4@worktop.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yv9EVP6O9r867om4@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 19 Aug 2022 04:36:47 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFC252801;
+        Fri, 19 Aug 2022 01:34:35 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id 2so3604898pll.0;
+        Fri, 19 Aug 2022 01:34:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc;
+        bh=jnKcopMVpJ1ujZZ1JOt5IM3P6FS7UvXDlx9XIFw0IK0=;
+        b=R4uAZOJM8pW+RKOydL4zQmNBIkcKVwdY2q9AApJFTE6YMgMaqRPJb7BKvMDNYXhxyX
+         RDesuGNKz+NLwFlprQQqzdMPXZqWbN4WGscVqnu2k8wY2lDyWR9mVdVk4ruMshrfVdSv
+         v25ZeM6wKu+3Wbzsmizzw2NGAlSRtJ2uXytLGIAHxzNqdK22AOPT2qnXU77TNCho1IgV
+         zOLr7LcvrCltREIPFM8uKh961AiKiOd09/bAVzLeAFi5xwqT/x+3t/9prUq3etS6Rybx
+         MIi/5P3jkXG69yZirrWkYdsNmbgt3nTAFUKRsccX3RhyGmcFSyvWIrRfmirMCpZxqFeW
+         i7cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc;
+        bh=jnKcopMVpJ1ujZZ1JOt5IM3P6FS7UvXDlx9XIFw0IK0=;
+        b=bJcfJknx/Uo2oYsZEejxJO1+L3UMTi1D5A7a7BfiC7lzDQBObMJ/YEJar71hAT+ETa
+         Ywt0/4VVNwgb+V6Jd6+xpRsi7+VdbypR55Wl89VHUIyHIOgNrW9oixa9LyxOduyFC7Cz
+         qZXms3BL5ImohKYYmdQOpRdEzX8Va/oeYLR5j2kstvVDn+DUIox1/Ft04JvvIsrElySA
+         JnECZ3Zxelwb5n90dtreM1IIPWwbi+h2CbCZj8ZguxeE249JaQ9+E3+yyOx+K9vC4O8l
+         AMZBGdA2J6quL55M3Um/5swDD9foyw5XbuJt4THwQxYbm/hH2Exwly4zNj3ykYFaN8cX
+         W6uw==
+X-Gm-Message-State: ACgBeo2K5M63mTc/uCwKGGPAE0Ffj0zUSGvsvFbFOV29wDW6w2zYrVQ9
+        jap0F7p+ZaLohHONT82hTwCV04Asp3vjrQ==
+X-Google-Smtp-Source: AA6agR50l+1rM1GLTAv/4/qfnBkeE8RlgJN68Ec+GzsTmciohw49K/WfRNdWoVC6imB/rbLS1f4ikg==
+X-Received: by 2002:a17:902:eccb:b0:16f:9355:c117 with SMTP id a11-20020a170902eccb00b0016f9355c117mr6277060plh.167.1660898072946;
+        Fri, 19 Aug 2022 01:34:32 -0700 (PDT)
+Received: from smtpclient.apple ([139.177.225.232])
+        by smtp.gmail.com with ESMTPSA id u125-20020a626083000000b0052f3b2a8ee5sm2957215pfb.81.2022.08.19.01.34.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 19 Aug 2022 01:34:32 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH RFC] jbd2: detect old record when do journal scan
+From:   fengnan chang <fengnanchang@gmail.com>
+In-Reply-To: <62FF430D.9040405@huawei.com>
+Date:   Fri, 19 Aug 2022 16:34:28 +0800
+Cc:     "tytso@mit.edu" <tytso@mit.edu>, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A602BE93-1AE5-43D7-B42B-D991E24AC933@gmail.com>
+References: <20220810013442.3474533-1-yebin10@huawei.com>
+ <62FF430D.9040405@huawei.com>
+To:     yebin <yebin10@huawei.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 10:05:40AM +0200, Peter Zijlstra wrote:
-> On Thu, Aug 18, 2022 at 11:15:30AM -0700, kan.liang@linux.intel.com wrote:
-> 
-> > The Alder Lake N only has e-cores. The X86_FEATURE_HYBRID_CPU flag is
-> > not set. The perf cannot retrieve the correct CPU type via
-> > get_this_hybrid_cpu_type(). The model specific get_hybrid_cpu_type() is
-> > hardcode to p-core. The wrong CPU type is given to the PMU of the
-> > Alder Lake N.
-> 
-> If ADL-N isn't in fact a hybrid CPU, then *WHY* are we running
-> init_hybrid_pmu() and setting up all that nonsense?
-> 
-> That is, wouldn't the right thing be to remove ALDERLAKE_N from the rest
-> of {ALDER,RAPTOP}LAKE and create a non-hybrid PMU setup for it?
+If there has system time calibration, system time has become smaller, =
+what will be happen?
+the journal maybe thought as corrupt?
 
-Something like the *completely* untested below.. which adds it like a
-regular atom chip (which it is).
 
-(I basically did copy/paste of tremont and added bits from the cpu_atom
-thing from alderlake -- but might well have missed something)
+> 2022=E5=B9=B48=E6=9C=8819=E6=97=A5 16:00=EF=BC=8Cyebin =
+<yebin10@huawei.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> ping...
+>=20
+> On 2022/8/10 9:34, Ye Bin wrote:
+>> As https://github.com/tytso/e2fsprogs/issues/120 describe tune2fs do =
+not update
+>> j_tail_sequence when do journal recovery. This maybe recover old =
+journal record,
+>> then will lead to file system corruption.
+>> To avoid file system corruption in this case, if detect current =
+transaction's
+>> commit time earlier than previous transaction's commit time when do =
+journal
+>> scan, just return error.
+>>=20
+>> Signed-off-by: Ye Bin <yebin10@huawei.com>
+>> ---
+>>  fs/jbd2/recovery.c | 11 ++++++++++-
+>>  1 file changed, 10 insertions(+), 1 deletion(-)
+>>=20
+>> diff --git a/fs/jbd2/recovery.c b/fs/jbd2/recovery.c
+>> index f548479615c6..f3def21a96a5 100644
+>> --- a/fs/jbd2/recovery.c
+>> +++ b/fs/jbd2/recovery.c
+>> @@ -812,8 +812,17 @@ static int do_one_pass(journal_t *journal,
+>>  					break;
+>>  				}
+>>  			}
+>> -			if (pass =3D=3D PASS_SCAN)
+>> +			if (pass =3D=3D PASS_SCAN) {
+>> +				if (commit_time < =
+last_trans_commit_time) {
+>> +					pr_err("JBD2: old journal record =
+found "
+>> +					       "in transaction %u\n",
+>> +					       next_commit_ID);
+>> +					err =3D -EFSBADCRC;
+>> +					brelse(bh);
+>> +					goto failed;
+>> +				}
+>>  				last_trans_commit_time =3D commit_time;
+>> +			}
+>>  			brelse(bh);
+>>  			next_commit_ID++;
+>>  			continue;
+>=20
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 2db93498ff71..e509f1033a2d 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -5974,6 +5974,38 @@ __init int intel_pmu_init(void)
- 		name = "Tremont";
- 		break;
- 
-+	case INTEL_FAM6_ALDERLAKE_N:
-+		x86_pmu.mid_ack = true;
-+		memcpy(hw_cache_event_ids, glp_hw_cache_event_ids,
-+		       sizeof(hw_cache_event_ids));
-+		memcpy(hw_cache_extra_regs, tnt_hw_cache_extra_regs,
-+		       sizeof(hw_cache_extra_regs));
-+		hw_cache_event_ids[C(ITLB)][C(OP_READ)][C(RESULT_ACCESS)] = -1;
-+
-+		intel_pmu_lbr_init_skl();
-+
-+		x86_pmu.event_constraints = intel_slm_event_constraints;
-+		x86_pmu.pebs_constraints = intel_grt_pebs_event_constraints;
-+		x86_pmu.extra_regs = intel_grt_extra_regs;
-+		/*
-+		 * It's recommended to use CPU_CLK_UNHALTED.CORE_P + NPEBS
-+		 * for precise cycles.
-+		 */
-+		x86_pmu.pebs_aliases = NULL;
-+		x86_pmu.pebs_prec_dist = true;
-+		x86_pmu.lbr_pt_coexist = true;
-+		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
-+		x86_pmu.flags |= PMU_FL_NO_HT_SHARING;
-+		x86_pmu.flags |= PMU_FL_PEBS_ALL;
-+		x86_pmu.flags |= PMU_FL_INSTR_LATENCY;
-+		x86_pmu.flags |= PMU_FL_MEM_LOADS_AUX;
-+		x86_pmu.get_event_constraints = tnt_get_event_constraints;
-+		td_attr = tnt_events_attrs;
-+		extra_attr = slm_format_attr;
-+		pr_cont("Gracemont events, ");
-+		name = "Gracemont";
-+		break;
-+
- 	case INTEL_FAM6_WESTMERE:
- 	case INTEL_FAM6_WESTMERE_EP:
- 	case INTEL_FAM6_WESTMERE_EX:
-@@ -6318,7 +6350,6 @@ __init int intel_pmu_init(void)
- 
- 	case INTEL_FAM6_ALDERLAKE:
- 	case INTEL_FAM6_ALDERLAKE_L:
--	case INTEL_FAM6_ALDERLAKE_N:
- 	case INTEL_FAM6_RAPTORLAKE:
- 	case INTEL_FAM6_RAPTORLAKE_P:
- 		/*

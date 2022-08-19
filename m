@@ -2,134 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9214359982F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6C259987D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347679AbiHSJFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
+        id S1347757AbiHSJHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347983AbiHSJFf (ORCPT
+        with ESMTP id S1347339AbiHSJHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:05:35 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46672F074A
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:05:34 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id q7so1643033lfu.5
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:05:34 -0700 (PDT)
+        Fri, 19 Aug 2022 05:07:50 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34DBEF9C7
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:07:49 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id w28so2891116qtc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:07:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Lv2fWdRF99e7CpwgYLWA5Mtojc32Wbh8AA81DkMthw4=;
-        b=OSGiqt9yFp/YqXKBx4gm2F8C5JxtKpDRqyj2mKp7sWIlRwe+Fh+hasNwc2qRl47Ppw
-         I0GTNSWETzMrFZXfvSCKi1k7ttl2x1/FWvPrs9VFF3u/xg315gfvjd/F9cJD87Gf0oKB
-         rxgEjSMEqcjJVSCcgdApLk2/LNjbnpM4Kfe7rrX5rKBWTHdqsxxnq0ZTHVxbZrQG7Uj9
-         nfTf1I2n/ZqUJGTygLPCTFUNTYVj8sQ/5abcrw1zkK7h0TfvD3lLulpQuZUQET/vl5ix
-         Ve2DVwY0zoVo1krsxTiSN73f0SID8KNQRh6jdUDmLbhoQ+vT6JaFFDHUM8/jBfke43WQ
-         6L5w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=Eif8xbxaVAItU9xNSvN6xDxgWHEsI958p9Q+p98v2po=;
+        b=NshPVdhqx+VphZ89OHtuprU+zQVB5kbt5aRSX159l3Bu0SG/Ka/ZQKsVocjPQPo7Q0
+         yqi0cs+SUTbhZrbcBdRyceOS0nRUV0Rk9QCjWVmZ8oAPLeMth7S2oa/7yRmR2N4bv3a4
+         HGQdv/IAA64rIm42h5m7Td5UZDJ39gPKa/kjaDljdAwPshboY5acdC4hS1b9Rk/CKsWb
+         OqvKZqkX5tD0PEa5lwsSO6I5ZYD6DRXroZDgAEU8v3nd5CA9dF1XZdMQ4xHhxRk4hZlC
+         YiHnokQgNAMXyqhJ8RIDIAZIO+5uDWmKCoZV7hxffAub1z2WqTNRSEED6wHJBRwtMKjR
+         IYfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Lv2fWdRF99e7CpwgYLWA5Mtojc32Wbh8AA81DkMthw4=;
-        b=un+kccp6kBk0Q0dGlybkR0TzljVKGg6PlCz07CRQJD/GZw+aAGsUOylnKfyvKfW5SD
-         QUBNoJl2OASacbAJtAJ2uWjJqO3su+XXV7l4Ld18ZV8Xyx7sim7js9r2HDHXe7mWR5Iv
-         CfjpU/aBj7psAfJKUBpha36RUz3jrvILbU4xog/yKR1XTpnKtk7UrhZd3PXeqIshCUhH
-         5RVl4BEFCZB+pdeT8QkjB2hx1S6VyRS81djCZVuUqbnanhwZcoQ7kwqm8p+Z0YJeD5eo
-         ksI9dsoCobOma1xCnNieATjFbGMXo0cyIwItLiW/aYvNYk5z3ytX/uuj604bTODvMErR
-         w+gA==
-X-Gm-Message-State: ACgBeo2WP9VbGTMNc1GxgOnnar+N9DAoVsm9zh39zveln3NLzsFpuo3B
-        KQfG47VqmFDxRACjE/SJ4oraeA==
-X-Google-Smtp-Source: AA6agR4BD6cmbcbpC+BCZcvzn3RJP06MHPv/v/nVtuxaILQVOTEbitSObHN+inl836TTz+WCde6f7A==
-X-Received: by 2002:a05:6512:1686:b0:491:3199:d407 with SMTP id bu6-20020a056512168600b004913199d407mr2203181lfb.476.1660899932670;
-        Fri, 19 Aug 2022 02:05:32 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id x7-20020a056512078700b00492c627cab5sm321401lfr.254.2022.08.19.02.05.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 02:05:32 -0700 (PDT)
-Message-ID: <0aba8906-ed30-786e-cff4-6cb70d6e73c5@linaro.org>
-Date:   Fri, 19 Aug 2022 12:05:30 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=Eif8xbxaVAItU9xNSvN6xDxgWHEsI958p9Q+p98v2po=;
+        b=iOPTr9ZdsN7AH8rJ63lIMlEDLeiSbbM7dQyeWz6uyCItvMh94M9/2U1EK6QbLxRaHk
+         MB1w1YzMG1Fp7W2OJ8eq40JYMD6hAhzYqR6UkOKoREu0kBv6z/z0oZ8H6eAPCVABKHby
+         ITQcoJ7Rgu6btar1p9v9UHijzcEoGqbVtir0bqKETXjCP9wsF475pwi4l5boiteudAxN
+         SiJb1gTncF9olcaNJN1/NvkbAigo54RBfwmmgJYzlT/hA53tm8LY1NpNxB7CfTpdOtbl
+         v4lqgg8O5G2gFkgeCtggouhfW8ij8QhJmEzPlnia4FeQjILH7poxJKV5FQQrW/98PHu7
+         C/QA==
+X-Gm-Message-State: ACgBeo0YFOFJlZXWkL7FRh+zPp/ewaM5JbAo5iNLpIGMzz+6LwYDAoqo
+        EZa8FQuKbPJn+Km4oK1BK0M=
+X-Google-Smtp-Source: AA6agR7gscqExh9evWiRDSLoL6BomfIk6WxrNDf2Ei7gh+rA8fM51HHF40XDzodMsHJF+F1IsZSd+Q==
+X-Received: by 2002:a05:622a:53:b0:344:6f46:9b16 with SMTP id y19-20020a05622a005300b003446f469b16mr5745086qtw.664.1660900069107;
+        Fri, 19 Aug 2022 02:07:49 -0700 (PDT)
+Received: from sophie ([89.46.62.64])
+        by smtp.gmail.com with ESMTPSA id o10-20020ac87c4a000000b0034305a91aaesm2906677qtv.83.2022.08.19.02.07.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 02:07:48 -0700 (PDT)
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Rebecca Mckeever <remckee0@gmail.com>
+Subject: [PATCH v2 0/4] memblock tests: add NUMA tests for memblock_alloc_try_nid*
+Date:   Fri, 19 Aug 2022 02:05:30 -0700
+Message-Id: <cover.1660897864.git.remckee0@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/5] dt-bindings: mfd: atmel,at91-usart: convert to
- json-schema
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sergiu.Moga@microchip.com, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        admin@hifiphile.com, Kavyasree.Kotagiri@microchip.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20220817075517.49575-1-sergiu.moga@microchip.com>
- <20220817075517.49575-3-sergiu.moga@microchip.com>
- <942accc5-70aa-3bb2-63dd-306a39ee5ea4@linaro.org>
- <d1aad8ea-3852-f36b-366b-7aa67d2dd9d5@microchip.com>
- <ec86420c-a210-facd-ab3a-5baf84a736f3@linaro.org>
-In-Reply-To: <ec86420c-a210-facd-ab3a-5baf84a736f3@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 11:47, Krzysztof Kozlowski wrote:
-> On 19/08/2022 11:38, Sergiu.Moga@microchip.com wrote:
->> On 18.08.2022 11:39, Krzysztof Kozlowski wrote:
->>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>
->>> On 17/08/2022 10:55, Sergiu Moga wrote:
->>>> Convert at91 USART DT Binding for Atmel/Microchip SoCs to
->>>> json-schema format.
->>>>
->>>> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
->>>> ---
->>>>   .../bindings/mfd/atmel,at91-usart.yaml        | 190 ++++++++++++++++++
->>>>   .../devicetree/bindings/mfd/atmel-usart.txt   |  98 ---------
->>>>   2 files changed, 190 insertions(+), 98 deletions(-)
->>>>   create mode 100644 Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>>>   delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-usart.txt
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>>> new file mode 100644
->>>> index 000000000000..cf15d73fa1e8
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>> One more thing - I think this should be in serial directory, not mfd,
->>> even though it includes SPI. MFD is just a Linux naming/wrapper device.
->>>
->>> Best regards,
->>> Krzysztof
->>
->> I would rather keep it in this directory, since its corresponding driver 
->> is also in the mfd directory.
-> 
-> Sorry, but that's poor argument. Driver subsystems match Linux
-> convention, not necessarily hardware type/naming. Bindings directories
-> match hardware. MFD bindings are only for MFD wrapper drivers and this
-> is a serial interface. Not a MFD. You even do not add MFD devices in the
-> driver but add *always one* device depending on serial feature you want.
-> This is not even MFD device but regular platform device with children.
-> 
-> You put it in SoC, though, because all other SoCs store it there...
+These patches add additional tests for memblock_alloc_try_nid() and
+memblock_alloc_try_nid_raw() that use a simulated physical
+memory that is set up with multiple NUMA nodes. Additionally, most of
+these tests set nid != NUMA_NO_NODE.
 
-The last one should be:
+To set up a simulated physical memory with multiple NUMA nodes, patch 1
+introduces setup_numa_memblock_generic() and setup_numa_memblock().
+These functions use a previously allocated dummy physical memory. They
+can be used in place of setup_memblock() in tests that need to simulate
+a NUMA system.
 
-You could put it in SoC, though, because all other SoCs store it there...
+These tests are run twice, once for memblock_alloc_try_nid() and once
+for memblock_alloc_try_nid_raw(), so that both functions are tested with
+the same set of tests. When the tests run memblock_alloc_try_nid(), they
+test that the entire memory region is zero. When the tests run
+memblock_alloc_try_nid_raw(), they test that the entire memory region is
+nonzero.
 
-Best regards,
-Krzysztof
+Note:
+This patch set depends on the following patch set:
+https://lore.kernel.org/all/cover.1660897732.git.remckee0@gmail.com
+
+---
+Changelog
+
+v1 -> v2
+Updates based on changes to the dependent patch set noted above:
+PATCH 2, PATCH 3, PATCH 4:
+- tests/alloc_nid_api.c:
+    - Update calls to verify_mem_content() to include the flags parameter
+      required by the new, common verify_mem_content() function.
+---
+
+Rebecca Mckeever (4):
+  memblock tests: add simulation of physical memory with multiple NUMA
+    nodes
+  memblock tests: add top-down NUMA tests for memblock_alloc_try_nid*
+  memblock tests: add bottom-up NUMA tests for memblock_alloc_try_nid*
+  memblock tests: add generic NUMA tests for memblock_alloc_try_nid*
+
+ .../testing/memblock/scripts/Makefile.include |    2 +-
+ tools/testing/memblock/tests/alloc_nid_api.c  | 1489 ++++++++++++++++-
+ tools/testing/memblock/tests/alloc_nid_api.h  |   16 +
+ tools/testing/memblock/tests/common.c         |   38 +
+ tools/testing/memblock/tests/common.h         |   27 +-
+ 5 files changed, 1559 insertions(+), 13 deletions(-)
+
+-- 
+2.25.1
+

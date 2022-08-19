@@ -2,129 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E7159A987
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 01:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EB759A985
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 01:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241663AbiHSXdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 19:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
+        id S242191AbiHSXdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 19:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240543AbiHSXdA (ORCPT
+        with ESMTP id S241901AbiHSXdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 19:33:00 -0400
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CB3114A5C;
-        Fri, 19 Aug 2022 16:32:59 -0700 (PDT)
-Received: by mail-vk1-xa2a.google.com with SMTP id i67so2957627vkb.2;
-        Fri, 19 Aug 2022 16:32:59 -0700 (PDT)
+        Fri, 19 Aug 2022 19:33:18 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5658D25C9
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 16:33:14 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id m3so2302433lfg.10
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 16:33:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=8Ftt3u2zVCJ1XlR/QC6Ig2RR9m+8QvnAb/eHfD5q1ag=;
-        b=eo8bqwAPmtSdzpfC2DXbNh1J+I4B3JgMZPZGvQwqJZ8zZiILLZeVZxbp+nNPCMQgir
-         ND29DitHrMJ5vWipZ//ZPEFizYP6eeFn/DiDdrGg26CZgXcvLA5j9Ho1GTHzhZ3t7oE/
-         luOF4fjMXtVJfi6YzE9a+DljBgBmoaUjqr2KlVEzzppf9JjF3cZlhZmh/vGq5IkcfnLj
-         XfGp407fNCISq1mZdY79HdDwvNEm3o6fg8NwGfoAUDlzbAzu3EXnYacVWVN3XYTruSi3
-         yRvda0WWPHy0zxa7c2Fm/RjxoFZS0HwBAL9/nxZVcMgSdywfaH3wZjxC3J7qQVyB3Wn/
-         8pRQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Y7BwhUziN7Shv1IDBl73QA6DiHDSzdgJ+ZuTLbMJXkA=;
+        b=Ns54S2g0WBfzfkVQ7/nUOVRNeJaY6npkvHh5zPjpWOZ2JmKtTcTlturtO5zz/h6fyr
+         e354YBuRd+kKsyTy14dJMoQYiD7ll25eIDfcdKLDeq82K7bGN+x/BXRWG4FsL0yhHHkj
+         r+WE5mJQpLd9OcYg5Em0yjmJffK7BiDgDa5hiTS+XWT2Qso4P44deem8MyK77H7dTM4c
+         r0mb92hdAoDu2oX0yWLCx5/ad3Gg9yHQ2rL0wm24k0guhLoRORzYID1pD3RAZ3hU6mDT
+         ycg3m2U0UaA1iJN1rSSwPbjiarcDqYbxCY8/OjcHd2dqsUJSi/6oyQTwuEbg4NXcBzl3
+         LCIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=8Ftt3u2zVCJ1XlR/QC6Ig2RR9m+8QvnAb/eHfD5q1ag=;
-        b=m7fw3visih2cB3/NcyKErXYIwXNaGIO3i68WqwLKzwn0zQtedodzegUSpmikgPr7JI
-         9tEgPKMoKD+S0TzjOdG/ishXb6E3ZQuGW8STj6SQ0M/d9vfFHSVVQw4vFlFnIWAgnk7o
-         hJNMAYRvwgpdUmyt9jm2z1CHw8J/9C7udYqW6h7mwLXCJOcsr2z1/Z4h4IEa/ESe5xR1
-         +IUfWm2M5/o5KnfCpjraoAWETeGCuJ7pQKTwYvCw6cp1w9dJ4R6DHsENynqMFRV06CIj
-         T5wAYbbUdkxJEbWXL3Jh2Jth1I3/Lkb6f0yxNiUUPFM7uEfcefDhh1cX8pBLJNZxPLp3
-         Reqg==
-X-Gm-Message-State: ACgBeo2qCKPU2Z/vdHwRgXTBpJtkGSMg9oISfWkVFVlzx5FKFDAK+PF+
-        eodEyqbwMZD8HpR8vEpjG8JM9mlDqFYiuR6NUIA=
-X-Google-Smtp-Source: AA6agR6eJaaqNg8VDsxPvmfVCSoGG2OIUBTxkWbH6MePnRJAOqSfJjo7UZdduGoUilT7hODPdRuYkkP+jlm7KDQsFVY=
-X-Received: by 2002:ac5:c7d7:0:b0:389:61cd:ac2d with SMTP id
- e23-20020ac5c7d7000000b0038961cdac2dmr1482277vkn.27.1660951978768; Fri, 19
- Aug 2022 16:32:58 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Y7BwhUziN7Shv1IDBl73QA6DiHDSzdgJ+ZuTLbMJXkA=;
+        b=TLu2X0nLKYudgWqEPuHKvenejXaMp9C5q1NOceRT6G3oQk9iyYwUANXvsCvg+ixaNy
+         hloZF/IMZQTJavyhU1AUWS2zfApreKhwEhtDcFJfLokAenLJxcJGYOhwiRA+iyhSv3HP
+         rSqrHB8u5uCjNCdsEIXgt/QU7ePFUghiQraAuwIK90I1idJJTMzRrIZZ9yhpo5MJmi9R
+         FNRWy+L4+eFwfDWdl1ipsmBE8E6ULkrbjOyi+/K/gyQDckyBQ5qWI2E0dWTQB+ZUrTm1
+         Bj5Btw6AzZdjCR1aoOfs/k2VQVR+JdQgbzL38yIu5gg3vffxQoqBqzxcfnK3Y3Wcys61
+         /cHg==
+X-Gm-Message-State: ACgBeo3txPCwY3Re8krWbXng4RfCk8BNlAXwKevxSO2X6Kms1CdrzrID
+        IPAuNsALmhFMJCcvdz7Twnaag1A3UCvN7CeUv8PuzA==
+X-Google-Smtp-Source: AA6agR6S8k2SWNo73q0AqnEABg/vA4UxgEFYZMPy3fg9+zE7sPqCQNmlirz1q5SseKIFDBSMz2y0P8IyMhiFebJK3UM=
+X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
+ k3-20020ac24f03000000b0048a6061bd8emr3463711lfr.647.1660951992444; Fri, 19
+ Aug 2022 16:33:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220806152517.78159-1-andriy.shevchenko@linux.intel.com>
- <20220818232040.GA3505561@roeck-us.net> <CAHp75Vf+-4U6OW4sf+mKsPt8WoRL_jN-sYtzOMzhhH8--+OU1w@mail.gmail.com>
- <20220819130955.GB3108215@roeck-us.net>
-In-Reply-To: <20220819130955.GB3108215@roeck-us.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 20 Aug 2022 02:32:22 +0300
-Message-ID: <CAHp75VetU7_sJ-n6UHgFE+NU56t2Gw83x9E+OHETZkyxyF1qBQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] hwmon: (pwm-fan) Make use of device properties
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
+References: <CGME20220716081736epcas2p346100e67cf44b1dbb79f6e2a4ab07dbf@epcas2p3.samsung.com>
+ <20220716084532.2324050-1-youngmin.nam@samsung.com> <CAK7LNAR3YGoQU6ZTZmC84C1OoH0rPinjoyPDXCD0BDPoRS4NDA@mail.gmail.com>
+In-Reply-To: <CAK7LNAR3YGoQU6ZTZmC84C1OoH0rPinjoyPDXCD0BDPoRS4NDA@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 19 Aug 2022 16:33:00 -0700
+Message-ID: <CAKwvOd=FBDqutQ-6De577GDje=YR32GxDbkgcGeP9J=2Lb3CqQ@mail.gmail.com>
+Subject: Re: [PATCH] Makefile.extrawarn: add -Wformat-insufficient-args for
+ clang build
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Youngmin Nam <youngmin.nam@samsung.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pwm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+        hosung0.kim@samsung.com, d7271.choe@samsung.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 4:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On Thu, Jul 21, 2022 at 9:22 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> On Fri, Aug 19, 2022 at 12:56:42PM +0300, Andy Shevchenko wrote:
-> > On Fri, Aug 19, 2022 at 2:41 AM Guenter Roeck <linux@roeck-us.net> wrot=
-e:
-> > > On Sat, Aug 06, 2022 at 06:25:15PM +0300, Andy Shevchenko wrote:
-> > > > Convert the module to be property provider agnostic and allow
-> > > > it to be used on non-OF platforms.
-> > > >
-> > > > Add mod_devicetable.h include.
-> > > >
-> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > > Acked-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> > >
-> > > I had another look at this patch. A substantial part of the changes
-> > > is because device properties don't support of_property_read_u32_index=
-(),
-> > > reworking the code to use device_property_read_u32_array() instead.
-> > > Sorry, I don't like it, it results in a substantial number of unneces=
-sary
-> > > changes. Device properties should support the equivalent of
-> > > of_property_read_u32_index() instead to simplify conversions.
+> On Sat, Jul 16, 2022 at 5:17 PM Youngmin Nam <youngmin.nam@samsung.com> wrote:
 > >
-> > Not all (device property) providers can have such API available. Are
-> > you suggesting to
-> >  a) alloc memory for entire array;
-> >  b) cache one for a given index;
-> >  c) free a memory;
-> >  d) loop as many times as index op is called.
+> > The -Wformat-insufficient-args for clang is useful to detect the situation
+> > when the total number is unmatched between format specifiers and arguments.
 > >
-> > Sorry, this is way too far and non-optimal in comparison to the
-> > substantial number of unnecessary changes (two or three small
-> > refactorings?).
+> > Originally, this option is enabled by default(Link[1]), but it is disabled by
+> > -Wno-format explicitly so that we can't detect this unmatched situation.
 > >
-> > Another way is to provide a pwm-fan-acpi, which will be the copy of
-> > the driver after this patch is applied. I don't think it's a very
-> > bright idea either.
+> > We can enable it by adding this option after -Wno-format.
 > >
-> An alternative might be to split the patch in two parts, one replacing
-> of_property_read_u32_index() with of_property_read_u32_array() as
-> preparation, with the above rationale and a note that this is to
-> prepare for the switch to device properties, and then the actual device
-> property switch. Some context showing how other conversions handled this
-> problem would also be nice, though not necessary.
+> > Link[1]: https://releases.llvm.org/13.0.0/tools/clang/docs/DiagnosticsReference.html#wformat-insufficient-args
+> > Signed-off-by: Youngmin Nam <youngmin.nam@samsung.com>
+> > ---
+>
+>
+> Please let me hold on this patch because
+> I'd rather go straight to the removal of  -Wno-format.
+>
+> https://lore.kernel.org/linux-kbuild/CAFhGd8pk+0XEz0tMiJcwMM7B3NYF=yF4cHW8A-6-81SgpKFPNw@mail.gmail.com/T/#m4becf6ed91f25217b59a840ed1829f36e49fe347
 
-Thanks for the idea, I like it and it would indeed simplify the
-understanding of the changes made.
+Let's see what the feedback on
+https://reviews.llvm.org/D132266 is. If it lands, I will send a series
+with this patch first, then wrap it in the else clause of a
+conditional like: if clang version >= 16 then enable -Wformat else
+enable -Wformat-insufficient-args.
 
---=20
-With Best Regards,
-Andy Shevchenko
+>
+>
+>
+> >  scripts/Makefile.extrawarn | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> > index f5f0d6f09053..c23d7c286bad 100644
+> > --- a/scripts/Makefile.extrawarn
+> > +++ b/scripts/Makefile.extrawarn
+> > @@ -48,6 +48,7 @@ else
+> >  ifdef CONFIG_CC_IS_CLANG
+> >  KBUILD_CFLAGS += -Wno-initializer-overrides
+> >  KBUILD_CFLAGS += -Wno-format
+> > +KBUILD_CFLAGS += -Wformat-insufficient-args
+> >  KBUILD_CFLAGS += -Wno-sign-compare
+> >  KBUILD_CFLAGS += -Wno-format-zero-length
+> >  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+> > --
+> > 2.34.0
+> >
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers

@@ -2,125 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D68F59A168
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BF259A0AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352416AbiHSQWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 12:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52136 "EHLO
+        id S1352990AbiHSQZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 12:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352622AbiHSQRT (ORCPT
+        with ESMTP id S1352482AbiHSQVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 12:17:19 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2088.outbound.protection.outlook.com [40.107.92.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0B9118276;
-        Fri, 19 Aug 2022 09:00:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k2azQMjNKSXlv+9X1CuyvFyuajLBufkDM8mYreIBJOr7bKP6lfzH97GZxvU6vdQ8aq1sy8W0TK0kyl9nFUt3SRhK0RAW9O3HYSxzfRk49zNRyKRLnZYAccfdV3Hrz/iyQTidAqYmy7ols8MFTjCe5o5oDsxaxraXH3ki8VRbyug73VbtThhiJcREEL2RdMAq9Oba+7jADXnaFkc6aMLsHCkZmf4q4LjhOymKYIlfVv7RQaPOVa3yyJRGBgBu7MP2pSMoViIH9rvsH/RfzGvs253NIKdUEikZVdvRIp0llFNkKrHwykVtiUYkNcy/cnxKguzYFVgyeV96cW+mD7m83g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aDwO4T3WhBIQUPKk+XAGRq78pNK+V/p370SlVCRISxE=;
- b=f+S7SbyaS2QKj1oIIU7U1zu/taFikDdyfoT8N0zVLOXSOkORkwxixE3fonNGEH0C4XjsEndNt8yAhqZvMNV/gch0OYeE/2x6wXhSnnlFQhPPd3hU/lMF1oujJKDsxdCsyHUqaQIO76CntrxCGdMoFk+ejjr+cUeFoIS7AQnBVODGvgVwrWvIuGlTC8BX0rHa94qPBiTBOqDon78zRLMbraEa3M0b934aPlCza0II8ZLHbLF/fGON/fl6H2NyIEoBcj52r27SsagSrIj4oOgn8C9PS8sDKNX6j7OdwsikJpO06V60TCkSLkswrnCu8DH3kFAeEZHuZ331v/nsCKMFdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aDwO4T3WhBIQUPKk+XAGRq78pNK+V/p370SlVCRISxE=;
- b=tjAAgyovB+3yGZ4u3oqLOfovqgQgRC+nrxB7goeErLHFx2GvGbCP6Ym29v1C8ul0F67QvTvP3Q9H82akjX1Gj4CWajxY+sdEunmE4XnbJ5t50s9DWr6WIS32Mt/UKtRJUZSkr2h01d3AGIYCeQBuIqaTZMr/XEkWMry5X01xKec=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DM5PR12MB2438.namprd12.prod.outlook.com (2603:10b6:4:b5::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Fri, 19 Aug
- 2022 16:00:24 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::4489:9a98:ef82:6c67]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::4489:9a98:ef82:6c67%3]) with mapi id 15.20.5546.016; Fri, 19 Aug 2022
- 16:00:24 +0000
-Message-ID: <57cf9b61-82f4-f6d4-7f43-c3f94de7aaf3@amd.com>
-Date:   Fri, 19 Aug 2022 11:00:21 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC 0/2] Stop the abuse of Linux-* _OSI strings
-Content-Language: en-US
-To:     Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        rafael@kernel.org, Len Brown <lenb@kernel.org>,
-        nouveau@lists.freedesktop.org, hdegoede@redhat.com,
-        ddadap@nvidia.com, kai.heng.feng@canonical.com,
-        Dell.Client.Kernel@dell.com
-References: <20220819142519.5684-1-mario.limonciello@amd.com>
- <CACO55tuw_2QWFMr0t6-JfUiQ4M7V3ZMKC7jHYTyERypaU3TekQ@mail.gmail.com>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <CACO55tuw_2QWFMr0t6-JfUiQ4M7V3ZMKC7jHYTyERypaU3TekQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR08CA0001.namprd08.prod.outlook.com
- (2603:10b6:610:33::6) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Fri, 19 Aug 2022 12:21:06 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8D72AE3;
+        Fri, 19 Aug 2022 09:02:25 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aea64.dynamic.kabel-deutschland.de [95.90.234.100])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 4316161EA192A;
+        Fri, 19 Aug 2022 18:02:24 +0200 (CEST)
+Message-ID: <4253695b-85aa-a2fb-fbf6-718db8b6c20c@molgen.mpg.de>
+Date:   Fri, 19 Aug 2022 18:02:23 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ff00e1e6-72ca-445e-e110-08da81fbed12
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2438:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wyL/6Py01MuNfyTCUln+zkq745HdIiYw2qrW8HKak2tPyfAhlQvd6WadgMnlKTP1xc7+nwN02FW0r+cvDckxg9JbQZph7vJfCGCLqLXcmd+277W1rlyYBC1TLE09GTmdcQlolD+XmerA5qsbOXiIYptUyNuodZbxmk1WSZozm5fbbO8bPB6h8d6qej6YMjnba87DrOUtT8GPxhA0yILqXsWStrfD4CxToE/WiyJlM4JEwn3Dt8h7VmjXx0iB/LA83n9FyATtbV+IMbqUSeSSv85hmysSWdWQY6QwbrERT/25UevNwPysS+QCGkhB0mtNR8TbL0AKNNtQsycI3dn6xsmIGixjvo9Vog+YinhFcakA6cLeBINNic3lsj4MsWY+DZ+MZ8AdRGgbCzLdKEj06wy1V7R9bX4KYA/g3fg3HxPByNK7IQbhcR9JD6nKhS14C9PY44MycRnB9B2M90R/OD7sdo9Z5nqs42IzfdLBP6oWL0xkVyUtwJIqFdxncYIyTJl2Lqw/ptPYualBOnBgtKzCN3ZzsgcQKbYhJOt4zZhAkhDogPnSgEV+9UHNL5kOxTJCVSXPGbZ7L2zBX98JREBj2WXbbP97LKE5n2cK+d2rls5tDKK1ITrInfmkKPJSwFMws2qKoar7F6LePscCkI2qfOk5P+KX+3RvmRmum/KjqjxCXjNBIaKQuO1QGsVzYdU3ZT09r/F+HYHy40Jm9iYZvqiHh24qfm413kOqsHDPo33DZO2GHbzHzAjCQjKH7j1JyddcdEbIXWzS4RLjhfUjpHDsFdlfVGAAzyXvvcU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(346002)(136003)(396003)(39860400002)(31696002)(41300700001)(26005)(6666004)(6506007)(86362001)(53546011)(6512007)(186003)(2616005)(31686004)(36756003)(478600001)(83380400001)(6486002)(110136005)(66946007)(38100700002)(8676002)(4326008)(66476007)(316002)(5660300002)(8936002)(66556008)(2906002)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T1dUUTR3dzNtb1NNWEUwU0I3NUk1QVpPZVAxd2EvZjFqQ1BWYkFIT1RpeWsr?=
- =?utf-8?B?QWZFOHZSK1YwMzBzZzVmbFBHaUVjMG1Gb0Z3dUptL2ZYd1IvVHlLN2REdmJK?=
- =?utf-8?B?NDNEV1F5VHBWSVVwZStPZmx0dVBwNHQ4WnRUeGZETlZVY0hKb2hqNDdzSlhq?=
- =?utf-8?B?WnBWOStXalFFRnpNb2MwZ01UYW4yc0F3UHdQZEsyL0t1Tzc5Y0lkcHRXTjB4?=
- =?utf-8?B?TFA4c1ZYcmMxaklqQmh3THNFaXFhMXdickRpaWxjMGh6RmtUZExzUTVhYUdX?=
- =?utf-8?B?ZmVuSjFGVFg4Y05MMmJ3YjhWZXUxM0YvQ0dxblRES1J2SEZyTklZbTBsOWRQ?=
- =?utf-8?B?d1FwZnNZcVd3N2psb1R1aGV0YkpXYzI3dTBhNEJnaTBUbmVLWTFJenluL1oz?=
- =?utf-8?B?TWhOYmpzS2s4ZjFidndoZUI1WDJqU3RGcjA2QVA2NkxydVEyOGRmN0cwbFBr?=
- =?utf-8?B?cUdka0daYUUrOVI3WUF4Y0ViLzJyTzREZDFtb2Vidk9qOVJJckk3QWp2STA5?=
- =?utf-8?B?bkRmZ2hNOUw4Y1pqZ0xwZXJxeU9jTlc5U2gyQ2tzcnhxN3ZzTDVkK2thNVJ2?=
- =?utf-8?B?ZGMvUHlMNDhXS0pvMkp5WXBqbjFab3gwejF1VFRNb3IreE9aSnNpeTlGb0Ro?=
- =?utf-8?B?WmFWWW94TkJmYkljcG8xNW85VmNxa0grWnNMOXpmUlpZM2NTT3pUUEFZV292?=
- =?utf-8?B?SnpBbnE3aEJMQ1NJSkZLU0NURHhmOGFlNEZEbDdLV3ZUYU1ENElvQllodDNz?=
- =?utf-8?B?cHFOa01hQkcrQXEvbUpxMm50ZlVrUVRxYU56UUlkR21McTdJeGJla3pZOXRJ?=
- =?utf-8?B?ZG5QeHZ6REdKMWt6cG95alRWOGVQVm5nNk9ZWktrbHp5M1pqSTVQTUN2ZFNR?=
- =?utf-8?B?SmVFaHdSNzM5b2VrVUZ4RHpHcXdDNmNGdW5acFlDeGU4VlhGQkxZUHZJSmls?=
- =?utf-8?B?K0hSNVBKdjdhaDF2WlVDRHdRWW5IT3FaYTBPOXV3NEtSTDdQRGVVMW8xbzUx?=
- =?utf-8?B?WTJHYTlQZkZWVUloRmFhVnU4NE1SZllzZENJQzVFeTZzdndKekxoM0ZlUmY0?=
- =?utf-8?B?cHFINFk4c0tEUUhycGg4ZzFUTWpKbVBQSDRqWWVYdlI1QXdhLzVEK0hrYkNk?=
- =?utf-8?B?aDJxQktYTlVPbWdhSWxveTBxMXErV1o5SWsrUmlMK3RoWDVxeStVaXhjQzlO?=
- =?utf-8?B?YWdLZnk4SVRueXVZRVFMWnN6WjhHTDVKQ2JKMFc1UFJObXd4VUdvMzdIZ3Zt?=
- =?utf-8?B?eEIwS1B5VmhGdEppTUJtZlppaWhSdUZtRk45Y0lRYklidUpJSVEranpqYnY1?=
- =?utf-8?B?cDZ1WEhTd2FWUnVxVEVWOHpocEZyNFZyNHNTOHZjV1dlRUxzVzRaOXFpZzJm?=
- =?utf-8?B?a2ZGSjVtNU03SzdtNlRreFg0Z1NXaEpGcjZFbVJyb25VWm9yaExOMDFydEcz?=
- =?utf-8?B?cEpId3dnbC81Vk53MTdGK3pUcnlQTnRoZGZyMmNTamUxekFxVU5vVVpUd1p0?=
- =?utf-8?B?aEgxdTU4Vk9hK1BtNlZOZGdkVjM3TGs4c3N2TEt6Q2NNYmwwS3dHSStvYUJq?=
- =?utf-8?B?WmY2ekhmaGQwRG5wbTluOEswTzFoQXZUNFlLZEVIVDV1RmkwMm51aHdLeVNa?=
- =?utf-8?B?TDRFUzlLNXhqeERxN0NCNVhxRmZEd0FrSTE1Vmh3NGI2MDcwTkZ0bGdzY2s1?=
- =?utf-8?B?aDZZcGNYMmhkN2E1dXp4Smk1Q2o0eERha3RicGVFNzRHOTJjYTdyL0cxa1A3?=
- =?utf-8?B?YWVvQnBSa0FpV3VxVmM0UUdTZzVBZmR5V2ZkMnZYK0NmOVkwR2VoMlN2VWZz?=
- =?utf-8?B?blVKbDRKZmJ0N2xmT0tvSkwrUVpScnNrWkJ1eWRuK3QwTngwbzB6am5nZ3JE?=
- =?utf-8?B?Yit2ODFhUm0vYnNnKy9IL3VmZm1ZUktRVFlLMDRhUXUraTRRZGFEcGtENlc1?=
- =?utf-8?B?dFJvd0lpWGJJTi9FUVR1UnBsaDBJQUVJVmFGTnVicEprY1A2eVhFVlhaclh4?=
- =?utf-8?B?R3NnajM1ZTRLUndUYjFoS2lEc2NXT20wSXhobzBFTWZhYTJpN2RKQUdwZFIy?=
- =?utf-8?B?OUplbGkvVC9GVTNuNjVRQjhjL1hJaDJHSFlweXcrQ2dKYm5lUkhVdnZBSWUv?=
- =?utf-8?Q?JbuVzIcfXDLwQsp9DxDezbNMM?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff00e1e6-72ca-445e-e110-08da81fbed12
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2022 16:00:24.1964
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2akRcDabx+IQfzQvMCAUVJ7bjlS2uv5AMiti4dPUhWsMhYrrz8111Ij5Q6eqc6sftx7ZnXWe1tvn/OD/uhUCaw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2438
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: WARNING: CPU: 1 PID: 83 at arch/x86/kernel/cpu/sgx/main.c:446
+ ksgxd+0x1b7/0x1d0
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org
+Cc:     linux-sgx@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <ce0b4d26-3a6e-7c5a-5f66-44cba05f9f35@molgen.mpg.de>
+In-Reply-To: <ce0b4d26-3a6e-7c5a-5f66-44cba05f9f35@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,49 +49,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/19/2022 10:44, Karol Herbst wrote:
-> On Fri, Aug 19, 2022 at 4:25 PM Mario Limonciello
-> <mario.limonciello@amd.com> wrote:
->>
->> 3 _OSI strings were introduced in recent years that were intended
->> to workaround very specific problems found on specific systems.
->>
->> The idea was supposed to be that these quirks were only used on
->> those systems, but this proved to be a bad assumption.  I've found
->> at least one system in the wild where the vendor using the _OSI
->> string doesn't match the _OSI string and the neither does the use.
->>
->> So this brings a good time to review keeping those strings in the kernel.
->> There are 3 strings that were introduced:
->>
->> Linux-Dell-Video
->> -> Intended for systems with NVIDIA cards that didn't support RTD3
->> Linux-Lenovo-NV-HDMI-Audio
->> -> Intended for powering on NVIDIA HDMI device
->> Linux-HPI-Hybrid-Graphics
->> -> Intended for changing dGPU output
->>
->> AFAIK the first string is no longer relevant as nouveau now supports
->> RTD3.  If that's wrong, this can be changed for the series.
->>
+[Cc: +linux-sgx@vger.kernel.org]
+
+Am 19.08.22 um 15:19 schrieb Paul Menzel:
+> Dear Linux folks,
 > 
-> Nouveau always supported RTD3, because that's mainly a kernel feature.
-> When those were introduced we simply had a bug only hit on a few
-> systems. And instead of helping us to debug this, this workaround was
-> added :( We were not even asked about this.
-
-My apologies, I was certainly part of the impetus for this W/A in the 
-first place while I was at my previous employer.  Your comment 
-re-affirms to me that at least the first patch is correct.
-
 > 
-> I am a bit curious about the other two though as I am not even sure
-> they are needed at all as we put other work arounds in place. @Lyude
-> Paul might know more about these.
+> On the Dell XPS 13 9370, Linux 5.18.16 prints the warning below:
 > 
-
-If the other two really aren't needed anymore, then yeah we should just 
-tear all 3 out.  If that's the direction we go, I would appreciate some 
-commit IDs to reference in the commit message for tearing them out so 
-that if they end up backporting to stable we know how far they should go.
-
+> ```
+> [    0.000000] Linux version 5.18.0-4-amd64 (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.3.0-5) 11.3.0, GNU ld (GNU Binutils for Debian) 2.38.90.20220713) #1 SMP PREEMPT_DYNAMIC Debian 5.18.16-1 (2022-08-10)
+> [    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.18.0-4-amd64 root=UUID=56f398e0-1e25-4fda-aa9f-611dece4b333 ro quiet
+> […]
+> [    0.000000] DMI: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 07/06/2022
+> […]
+> [    0.235418] sgx: EPC section 0x40200000-0x45f7ffff
+> [    0.235853] ------------[ cut here ]------------
+> [    0.235855] WARNING: CPU: 1 PID: 83 at arch/x86/kernel/cpu/sgx/main.c:446 ksgxd+0x1b7/0x1d0
+> [    0.235861] Modules linked in:
+> [    0.235862] CPU: 1 PID: 83 Comm: ksgxd Not tainted 5.18.0-4-amd64 #1 Debian 5.18.16-1
+> [    0.235865] Hardware name: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 07/06/2022
+> [    0.235866] RIP: 0010:ksgxd+0x1b7/0x1d0
+> [    0.235869] Code: ff e9 f2 fe ff ff 48 89 df e8 55 56 0d 00 84 c0 0f 84 c3 fe ff ff 31 ff e8 c6 56 0d 00 84 c0 0f 85 94 fe ff ff e9 af fe ff ff <0f> 0b e9 7f fe ff ff e8 3d dd 93 00 66 66 2e 0f 1f 84 00 00 00 00
+> [    0.235870] RSP: 0000:ffffaaed0097bed8 EFLAGS: 00010287
+> [    0.235872] RAX: ffffaaed00431890 RBX: ffff9a323ccc8000 RCX: 0000000000000000
+> [    0.235873] RDX: 0000000080000000 RSI: ffffaaed00431850 RDI: 00000000ffffffff
+> [    0.235875] RBP: ffff9a31416ca080 R08: ffff9a31416cae40 R09: ffff9a31416cae40
+> [    0.235876] R10: 0000000000000000 R11: 0000000000000001 R12: ffffaaed0006bce0
+> [    0.235877] R13: ffff9a3140e9c480 R14: ffffffff9825ee60 R15: 0000000000000000
+> [    0.235878] FS:  0000000000000000(0000) GS:ffff9a32e6640000(0000) knlGS:0000000000000000
+> [    0.235880] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    0.235881] CR2: 0000000000000000 CR3: 00000001fbe10001 CR4: 00000000003706e0
+> [    0.235882] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [    0.235883] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [    0.235884] Call Trace:
+> [    0.235893]  <TASK>
+> [    0.235895]  ? _raw_spin_lock_irqsave+0x24/0x60
+> [    0.235900]  ? _raw_spin_unlock_irqrestore+0x23/0x40
+> [    0.235902]  ? __kthread_parkme+0x36/0x90
+> [    0.235905]  kthread+0xe5/0x110
+> [    0.235907]  ? kthread_complete_and_exit+0x20/0x20
+> [    0.235909]  ret_from_fork+0x1f/0x30
+> [    0.235914]  </TASK>
+> [    0.235915] ---[ end trace 0000000000000000 ]---
+> ```
+> 
+> 
+> Kind regards,
+> 
+> Paul

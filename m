@@ -2,108 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB82B5994B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 07:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382BA5994AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 07:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244440AbiHSFj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 01:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
+        id S245397AbiHSFkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 01:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241985AbiHSFjy (ORCPT
+        with ESMTP id S1345612AbiHSFkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 01:39:54 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA19BFABC;
-        Thu, 18 Aug 2022 22:39:53 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 4E9FF5FD07;
-        Fri, 19 Aug 2022 08:39:51 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1660887591;
-        bh=R79+XidUY9g0x8il8JzWOIn3o41h8mogyFPGT9KZ2dk=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=DYgOFWe4A013wRMQmmiUgKTPVk1OGKBNjIEvLrykzGdIb5nAP3Z8VqRWZnOoiVIgB
-         9INu0/yWirCu8ghVn/IgO5zit4HCIxgYVYLJ4k6RQR6I9boWLMzMusSnlYMIoJ2Ahs
-         AUZDAUS62kCSCE5Orz6hNeabMd64uJQYSwdfEIGD44SAzRFDZcyhi5pnv1l5rg2av1
-         hoNoGoRwh/EjL167FkvpnQYruswjjy/Z6U8mxsKJJDuEqXr9gOKdrLH5ewf3fbtK0c
-         Ilk0SxYTNvoy+HS0bQmJp5DKp8KNO6Ju+MZ+C72kZDDnQdpGTJdJbNnGYUr5HHQ6i6
-         PwPAkOOj40zbg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Fri, 19 Aug 2022 08:39:50 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-CC:     "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-Subject: [PATCH net-next v4 7/9] virtio/vsock: check SO_RCVLOWAT before wake
- up reader
-Thread-Topic: [PATCH net-next v4 7/9] virtio/vsock: check SO_RCVLOWAT before
- wake up reader
-Thread-Index: AQHYs44KDFwnsmWHL0COnLpDuJnm+Q==
-Date:   Fri, 19 Aug 2022 05:39:24 +0000
-Message-ID: <696d5dfb-92a6-cd06-60d0-d9c953774226@sberdevices.ru>
-In-Reply-To: <de41de4c-0345-34d7-7c36-4345258b7ba8@sberdevices.ru>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <CAC0646B010E2D44B62BE86754540C47@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Fri, 19 Aug 2022 01:40:03 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183A2DCFC6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 22:40:02 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id a22so3449593pfg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 22:40:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=EU0Xpdjq4gzaluDqvt8ZL9f0MKE2Ug7x6hJlEuzy25o=;
+        b=q4TKVBG83qbSyPTszbB4aqGThUjTg4VCA8TG0lifPnwmoeJpzmxN02EwXm/URAULnX
+         685FFTeli+9sePzO5uMNh1f8wEFs3bL9Bf13qixko8qkfhquVwaVe0/d8eb9Umgl35iL
+         EMJEzUhrfm3UPBZfAoe/lT6g56rL8ukKYEXMnxcUsqKI+7Ncpdg5FHtsruV9ljflQ9Wp
+         nvKw/ZpOcuQ6Tzd6O5wGBopJIfqgteoukXz9wXIYb0Sg7kZyKj1+tK2Koy2vAzXcz4vK
+         CeTvEErv+s9rg/1EhdEkvCadezhC0zPjptVivPdutRDd6sDCQOLMcByIWqBbRx2fDS6i
+         +v+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=EU0Xpdjq4gzaluDqvt8ZL9f0MKE2Ug7x6hJlEuzy25o=;
+        b=ri7roveVbT/d3PEWElBz8s8f8OROwu2SBJbaxPqS6QVWlE4tN3+gGu8anQRMuDM7+m
+         oRP27fP/9QsfiTbqEhd8C/KT47hT+myATo9rOK+RHExo1WAJQ5x5EXOitiCqXeyqkxv6
+         Gsg96iWJz/z9oMWrYA4rwC0jc3TLrO3vUkh+55umcJ4SsS/xyFmtFcvQHDHGA6dy9BiV
+         4rJSR0cRKY4q6h0FdeZy+Cgh1RaUXNdZ2PheF0XbnV1TA8zDLB//xuSI7wkpOReDoVXn
+         0AVWzgV9Zaw1voXaPqJA8XQILg5nePXVOhi9jSp8BMTtkCg4xOOpGe2jZkBRC8J9gTr4
+         K7+w==
+X-Gm-Message-State: ACgBeo3WUH98EvMzcR3fBVSQJOTyIcVP+yVzhQ8A9LNzoMKXmc60LNLw
+        tk+sM0nOzK489TQJGmrNwOttAkvNW2ZboQ==
+X-Google-Smtp-Source: AA6agR5rqHkJsevaWHqGKd15w/iKH002kBpV1qP/T8uNcF71eJMIX1DT1/jdedfMtw2NS/LvYRmcFg==
+X-Received: by 2002:a05:6a00:10cf:b0:528:48c3:79e0 with SMTP id d15-20020a056a0010cf00b0052848c379e0mr6224068pfu.18.1660887601337;
+        Thu, 18 Aug 2022 22:40:01 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c5e:9cc1:8f6b:abdb:fb8f:1a1b])
+        by smtp.gmail.com with ESMTPSA id e28-20020a056a0000dc00b0053617cbe2d2sm233429pfj.168.2022.08.18.22.39.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 22:40:00 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, agross@kernel.org,
+        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        Rob Herring <robh@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH] arm64: dts: qcom: Fix sm8150 fastrpc node - use correct iommu values
+Date:   Fri, 19 Aug 2022 11:09:45 +0530
+Message-Id: <20220819053945.4114430-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/19 00:26:00 #20118704
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhpcyBhZGRzIGV4dHJhIGNvbmRpdGlvbiB0byB3YWtlIHVwIGRhdGEgcmVhZGVyOiBkbyBpdCBv
-bmx5IHdoZW4gbnVtYmVyDQpvZiByZWFkYWJsZSBieXRlcyA+PSBTT19SQ1ZMT1dBVC4gT3RoZXJ3
-aXNlLCB0aGVyZSBpcyBubyBzZW5zZSB0byBraWNrDQp1c2VyLGJlY2F1c2UgaXQgd2lsbCB3YWl0
-IHVudGlsIFNPX1JDVkxPV0FUIGJ5dGVzIHdpbGwgYmUgZGVxdWV1ZWQuIFRoaXMNCmNoZWNrIGlz
-IHBlcmZvcm1lZCBpbiB2c29ja19kYXRhX3JlYWR5KCkuDQoNClNpZ25lZC1vZmYtYnk6IEFyc2Vu
-aXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KUmV2aWV3ZWQtYnk6IFN0ZWZh
-bm8gR2FyemFyZWxsYSA8c2dhcnphcmVAcmVkaGF0LmNvbT4NCi0tLQ0KIG5ldC92bXdfdnNvY2sv
-dmlydGlvX3RyYW5zcG9ydF9jb21tb24uYyB8IDIgKy0NCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
-cnRpb24oKyksIDEgZGVsZXRpb24oLSkNCg0KZGlmZiAtLWdpdCBhL25ldC92bXdfdnNvY2svdmly
-dGlvX3RyYW5zcG9ydF9jb21tb24uYyBiL25ldC92bXdfdnNvY2svdmlydGlvX3RyYW5zcG9ydF9j
-b21tb24uYw0KaW5kZXggOGY2MzU2ZWJjZGQxLi4zNTg2MzEzMmY0ZjEgMTAwNjQ0DQotLS0gYS9u
-ZXQvdm13X3Zzb2NrL3ZpcnRpb190cmFuc3BvcnRfY29tbW9uLmMNCisrKyBiL25ldC92bXdfdnNv
-Y2svdmlydGlvX3RyYW5zcG9ydF9jb21tb24uYw0KQEAgLTEwODEsNyArMTA4MSw3IEBAIHZpcnRp
-b190cmFuc3BvcnRfcmVjdl9jb25uZWN0ZWQoc3RydWN0IHNvY2sgKnNrLA0KIAlzd2l0Y2ggKGxl
-MTZfdG9fY3B1KHBrdC0+aGRyLm9wKSkgew0KIAljYXNlIFZJUlRJT19WU09DS19PUF9SVzoNCiAJ
-CXZpcnRpb190cmFuc3BvcnRfcmVjdl9lbnF1ZXVlKHZzaywgcGt0KTsNCi0JCXNrLT5za19kYXRh
-X3JlYWR5KHNrKTsNCisJCXZzb2NrX2RhdGFfcmVhZHkoc2spOw0KIAkJcmV0dXJuIGVycjsNCiAJ
-Y2FzZSBWSVJUSU9fVlNPQ0tfT1BfQ1JFRElUX1JFUVVFU1Q6DQogCQl2aXJ0aW9fdHJhbnNwb3J0
-X3NlbmRfY3JlZGl0X3VwZGF0ZSh2c2spOw0KLS0gDQoyLjI1LjENCg==
+Fix the 'memory access' relaetd crash seen while running Hexagon
+SDK example applications on the cdsp dsp available on sm8150 SoC
+based boards:
+
+  qcom_q6v5_pas 8300000.remoteproc: fatal error received:
+    EX:kernel:0x0:frpck_0_0:0xf5:PC=0xc020ceb0
+
+This crash is caused by incorrect IOMMU SID values being used
+in the fastrpc node.
+
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Rob Herring <robh@kernel.org>
+Suggested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8150.dtsi | 24 ++++++++----------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+index 7d509ecd44da..916f12b799b7 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+@@ -3394,57 +3394,49 @@ fastrpc {
+ 					compute-cb@1 {
+ 						compatible = "qcom,fastrpc-compute-cb";
+ 						reg = <1>;
+-						iommus = <&apps_smmu 0x1401 0x2040>,
+-							 <&apps_smmu 0x1421 0x0>,
+-							 <&apps_smmu 0x2001 0x420>,
+-							 <&apps_smmu 0x2041 0x0>;
++						iommus = <&apps_smmu 0x1001 0x0460>;
+ 					};
+ 
+ 					compute-cb@2 {
+ 						compatible = "qcom,fastrpc-compute-cb";
+ 						reg = <2>;
+-						iommus = <&apps_smmu 0x2 0x3440>,
+-							 <&apps_smmu 0x22 0x3400>;
++						iommus = <&apps_smmu 0x1002 0x0460>;
+ 					};
+ 
+ 					compute-cb@3 {
+ 						compatible = "qcom,fastrpc-compute-cb";
+ 						reg = <3>;
+-						iommus = <&apps_smmu 0x3 0x3440>,
+-							 <&apps_smmu 0x1423 0x0>,
+-							 <&apps_smmu 0x2023 0x0>;
++						iommus = <&apps_smmu 0x1003 0x0460>;
+ 					};
+ 
+ 					compute-cb@4 {
+ 						compatible = "qcom,fastrpc-compute-cb";
+ 						reg = <4>;
+-						iommus = <&apps_smmu 0x4 0x3440>,
+-							 <&apps_smmu 0x24 0x3400>;
++						iommus = <&apps_smmu 0x1004 0x0460>;
+ 					};
+ 
+ 					compute-cb@5 {
+ 						compatible = "qcom,fastrpc-compute-cb";
+ 						reg = <5>;
+-						iommus = <&apps_smmu 0x5 0x3440>,
+-							 <&apps_smmu 0x25 0x3400>;
++						iommus = <&apps_smmu 0x1005 0x0460>;
+ 					};
+ 
+ 					compute-cb@6 {
+ 						compatible = "qcom,fastrpc-compute-cb";
+ 						reg = <6>;
+-						iommus = <&apps_smmu 0x6 0x3460>;
++						iommus = <&apps_smmu 0x1006 0x0460>;
+ 					};
+ 
+ 					compute-cb@7 {
+ 						compatible = "qcom,fastrpc-compute-cb";
+ 						reg = <7>;
+-						iommus = <&apps_smmu 0x7 0x3460>;
++						iommus = <&apps_smmu 0x1007 0x0460>;
+ 					};
+ 
+ 					compute-cb@8 {
+ 						compatible = "qcom,fastrpc-compute-cb";
+ 						reg = <8>;
+-						iommus = <&apps_smmu 0x8 0x3460>;
++						iommus = <&apps_smmu 0x1008 0x0460>;
+ 					};
+ 
+ 					/* note: secure cb9 in downstream */
+-- 
+2.35.3
+

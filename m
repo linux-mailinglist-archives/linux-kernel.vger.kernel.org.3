@@ -2,85 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A785998E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8B35998F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348182AbiHSJm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
+        id S1348079AbiHSJnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346456AbiHSJmY (ORCPT
+        with ESMTP id S1348003AbiHSJnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:42:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0ED1D0C9
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:42:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A042615D5
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 09:42:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 502A6C433D6;
-        Fri, 19 Aug 2022 09:42:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660902142;
-        bh=pEN+et5gf6W626fbns6sKMRGFSpCUpImxJQGhoBbmn0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BCorilECWp86FSIJOu7M4oaEdM3MAsWX/zHqayk7i5SYDEBuY+2MjZl3DvWef19Vd
-         X8ciVRr/Kl/QZaKLkL9VIyrxwb8NlS+7whX2hTIczPU2XFfNm3bRYe0Ac1Qjo1+1a0
-         fD8g65kmdKHUr26PqfHgQN6h3oYbl/bH6VGHTipo=
-Date:   Fri, 19 Aug 2022 11:42:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org
-Subject: Re: [PATCH -next] driver core: switch to use dev_err_probe()
-Message-ID: <Yv9a9+iREzQWYecQ@kroah.com>
-References: <20220819094656.1945653-1-yangyingliang@huawei.com>
+        Fri, 19 Aug 2022 05:43:37 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D80022B25;
+        Fri, 19 Aug 2022 02:43:32 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id m5so2913368qkk.1;
+        Fri, 19 Aug 2022 02:43:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=0aOTc6/F1cVYRw4ls0mMkgT35B7fcZqhymVjE9ZCfDA=;
+        b=8LFHo3w1xEsIvFeeyNruJ5LmpIrE8TKhX4SJLTXUeRnLoEEg4B8p5MZFLj1UiSuWgA
+         3uOXrvg656xXbLtm2Nf3rQQ7zF1zkmJ1ZHKTuZlvcUEnb7X1YOpoMv+FW63kWPfHXZFe
+         WnAA56Jn5Makbr9Fe25xyl2JUzmvIPQ4FStqb0IcSpZkdOSfJ6I/C2ZQVb4Wx2W9oNGf
+         Xf9BIWKGV6rSNn7QRJjcFVjRjXIUFlPLAFHT3dD1dprfPhhdY8VFzwWR9jFJE6UEjpQC
+         p4/3XahwoygpYGk6Rp/xYd+Uqh6esqa52lff+d0mSv/VhLzFEAO2bVB7C0qlZvuuJY/y
+         vgnQ==
+X-Gm-Message-State: ACgBeo1ydMAs8mXE9xpA7RgVbPw/RnUlHB63QyK8mkqqJsDPxk2CIDJE
+        jsnZVuGae5aWtCUtgORFGuuZToxJKnuMpA==
+X-Google-Smtp-Source: AA6agR4n4wCUw7PcmY1GasJJeXpogIvNG5dWy38k9UKEr665prlDroKQSv05Hm2a3noCoFzrwq1ubw==
+X-Received: by 2002:a37:27c6:0:b0:6bb:e4fa:18f9 with SMTP id n189-20020a3727c6000000b006bbe4fa18f9mr184654qkn.402.1660902211747;
+        Fri, 19 Aug 2022 02:43:31 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id y2-20020ac85242000000b0031f36cd1958sm2674808qtn.81.2022.08.19.02.43.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 02:43:31 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-324ec5a9e97so107374877b3.7;
+        Fri, 19 Aug 2022 02:43:31 -0700 (PDT)
+X-Received: by 2002:a81:b812:0:b0:328:68e4:c886 with SMTP id
+ v18-20020a81b812000000b0032868e4c886mr6415346ywe.502.1660902210835; Fri, 19
+ Aug 2022 02:43:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819094656.1945653-1-yangyingliang@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220818205949.6384-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220818205949.6384-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 19 Aug 2022 11:43:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVNchTUCJgGjbZcDtMgwXadFbgtQ+2Uw52hpnwiYxZJNg@mail.gmail.com>
+Message-ID: <CAMuHMdVNchTUCJgGjbZcDtMgwXadFbgtQ+2Uw52hpnwiYxZJNg@mail.gmail.com>
+Subject: Re: [PATCH] sh: move from strlcpy with unused retval to strscpy
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 05:46:56PM +0800, Yang Yingliang wrote:
-> Use dev_err_probe() to simplify code and print error code.
-> 
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/base/core.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 753e7cca0f40..e51a09f9d0ec 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -2507,11 +2507,9 @@ static ssize_t uevent_store(struct device *dev, struct device_attribute *attr,
->  	int rc;
->  
->  	rc = kobject_synth_uevent(&dev->kobj, buf, count);
-> -
-> -	if (rc) {
-> -		dev_err(dev, "uevent: failed to send synthetic uevent\n");
-> -		return rc;
-> -	}
-> +	if (rc)
-> +		return dev_err_probe(dev, rc,
-> +				     "uevent: failed to send synthetic uevent\n");
+On Thu, Aug 18, 2022 at 11:00 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+>
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-I do not understand this at all, this is not on the probe path at all,
-so why is this function needed?
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Have you tested this?  What was the resulting output before and after
-this change?
+Gr{oetje,eeting}s,
 
-thanks,
+                        Geert
 
-greg k-h
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

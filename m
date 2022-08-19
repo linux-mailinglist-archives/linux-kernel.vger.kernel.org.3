@@ -2,459 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2455996A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A3659969F
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347390AbiHSIBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
+        id S1347368AbiHSIBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347369AbiHSIAx (ORCPT
+        with ESMTP id S1347386AbiHSIBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:00:53 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F77E42DA
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:00:51 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id 2so3545321pll.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:00:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=O9m6qvxGSverLC77Od+AySYyMWep7tv/dHfgL5BWvjU=;
-        b=Zvj7KzFFrzvZng+FXSgrATF/OJREJ/S7M4xTW/6GN8HFfFsrh4X8KEAotalMCIVesj
-         jUtemZz1pvi0uq5jsMaAc/ritFcz5r2aR4CA/3JyiC3k2XRpWCcmxV0fAqvXxd/7Ja4k
-         2X5eDx2eL2erE38XhMU5ujT1sZA2+uurvad1VgtIKHYSRHBXq/mWFcFMrj73haHAPIxA
-         mT1sOwGB/CvuGay1J5tjNAddAXaZpmEtH2fKN2sd3HEek2FbaIvlMESK9ICmfoA+lLTL
-         nX7gRDYxaUr2zjSAsSxC9dcvaFSOR4I8X4k3tuOukp7BxMAv//x+WZzBU8RFySwZDUjE
-         45hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=O9m6qvxGSverLC77Od+AySYyMWep7tv/dHfgL5BWvjU=;
-        b=siwJiRmFEws6VMmi76FbkWZngx8C1QCCv2rKMhTPtGEmrJnrpUhzSw/c9yGGABnCpv
-         f0OZK40d8hr+yM/7zcNqu6y0g843F3bi2W+baPb9h/gVTzu+sh+yQukE0NLT3E+9r/2m
-         cCElmt7i9/gtx2n1WViE8H/MrdgF6+L7r5km2XwNGrZPByn0wTngjzWu05nZu70vNvUs
-         gdgW9fgztt433YAKDGPkgjO/ZgAbahG7Jo/6FlkZO+4oSoZ3+6oWz4fXDhIpBYyQlIdL
-         ZaXhUE2BSw5PF3nm/gUQ69Nc4lQARHrXQB9WqbzofyhpoiE2rRNMyX5+B5lRBsL6HLiQ
-         kDZw==
-X-Gm-Message-State: ACgBeo3YoB/WKf5RbArLAcxY+02t3UzQ3gXggS26QtHK44802QWi+cJ5
-        gIMkE7N7/JcsTcRpjwNOAeNXIw==
-X-Google-Smtp-Source: AA6agR5YW973Z2TlDT3EZkCUEi+8YjMOcAk5pPwW+ZZAEeALUpKBrQDwQBLX0doTD0Zfq+tNXoJfsQ==
-X-Received: by 2002:a17:90b:4c07:b0:1f5:40a:8040 with SMTP id na7-20020a17090b4c0700b001f5040a8040mr12605258pjb.121.1660896050260;
-        Fri, 19 Aug 2022 01:00:50 -0700 (PDT)
-Received: from PXLDJ45XCM.bytedance.net ([61.120.150.76])
-        by smtp.gmail.com with ESMTPSA id x4-20020aa79ac4000000b005360108eb0bsm1092333pfp.137.2022.08.19.01.00.43
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 19 Aug 2022 01:00:49 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        mike.kravetz@oracle.com, songmuchun@bytedance.com,
-        akpm@linux-foundation.org, osalvador@suse.de, david@redhat.com,
-        andi@firstfloor.org
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        muchun.song@linux.dev
-Subject: [PATCH RESEND] mm: hugetlb: simplify per-node sysfs creation and removal
-Date:   Fri, 19 Aug 2022 16:00:29 +0800
-Message-Id: <20220819080029.12241-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
+        Fri, 19 Aug 2022 04:01:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E97E396D
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:00:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660896056;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=CyFYaI3Nl3GUKEP/YHOyg99CB4KdLrcDJAG+ByUqAmCRReNutt2FmcGHt+uKt0lis1ttHV
+        gQ44xrOrj90Y/X/cNxyMAeL1V4v+GIa9MXsi8lv7VggBykwFgHiBkQIFD45NGCZ6OlcdN7
+        0+975k81hhrFnhFxdHbsPYB62nAz7UU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-421-rv7fmICnP6q4qW_aqL_edA-1; Fri, 19 Aug 2022 04:00:52 -0400
+X-MC-Unique: rv7fmICnP6q4qW_aqL_edA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 39B4F3C0F361;
+        Fri, 19 Aug 2022 08:00:52 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 120422166B26;
+        Fri, 19 Aug 2022 08:00:52 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Li kunyu <kunyu@nfschina.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: Drop unnecessary initialization of "npages" in hva_to_pfn_slow() initialized and assigned, it is used after assignment
+Date:   Fri, 19 Aug 2022 04:00:50 -0400
+Message-Id: <20220819080050.2328578-1-pbonzini@redhat.com>
+In-Reply-To: <20220819022804.483914-1-kunyu@nfschina.com>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit offload per-node sysfs creation and removal to a kworker and
-did not say why it is needed.  And it also said "I don't know that this is
-absolutely required".  It seems like the author was not sure as well.  Since it
-only complicates the code, this patch will revert the changes to simplify the code.
+Queued, thanks.
 
-  39da08cb074c ("hugetlb: offload per node attribute registrations")
+Paolo
 
-We could use memory hotplug notifier to do per-node sysfs creation and removal
-instead of inserting those operations to node registration and unregistration.
-Then, it can reduce the code coupling between node.c and hugetlb.c.  Also, it can
-simplify the code.
-
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
-
-Cc Andi per Greg.
-
- drivers/base/node.c  | 139 ++-------------------------------------------------
- include/linux/node.h |  24 ++-------
- mm/hugetlb.c         |  45 +++++++++++------
- 3 files changed, 36 insertions(+), 172 deletions(-)
-
-diff --git a/drivers/base/node.c b/drivers/base/node.c
-index eb0f43784c2b..ed391cb09999 100644
---- a/drivers/base/node.c
-+++ b/drivers/base/node.c
-@@ -587,64 +587,9 @@ static const struct attribute_group *node_dev_groups[] = {
- 	NULL
- };
- 
--#ifdef CONFIG_HUGETLBFS
--/*
-- * hugetlbfs per node attributes registration interface:
-- * When/if hugetlb[fs] subsystem initializes [sometime after this module],
-- * it will register its per node attributes for all online nodes with
-- * memory.  It will also call register_hugetlbfs_with_node(), below, to
-- * register its attribute registration functions with this node driver.
-- * Once these hooks have been initialized, the node driver will call into
-- * the hugetlb module to [un]register attributes for hot-plugged nodes.
-- */
--static node_registration_func_t __hugetlb_register_node;
--static node_registration_func_t __hugetlb_unregister_node;
--
--static inline bool hugetlb_register_node(struct node *node)
--{
--	if (__hugetlb_register_node &&
--			node_state(node->dev.id, N_MEMORY)) {
--		__hugetlb_register_node(node);
--		return true;
--	}
--	return false;
--}
--
--static inline void hugetlb_unregister_node(struct node *node)
--{
--	if (__hugetlb_unregister_node)
--		__hugetlb_unregister_node(node);
--}
--
--void register_hugetlbfs_with_node(node_registration_func_t doregister,
--				  node_registration_func_t unregister)
--{
--	__hugetlb_register_node   = doregister;
--	__hugetlb_unregister_node = unregister;
--}
--#else
--static inline void hugetlb_register_node(struct node *node) {}
--
--static inline void hugetlb_unregister_node(struct node *node) {}
--#endif
--
- static void node_device_release(struct device *dev)
- {
--	struct node *node = to_node(dev);
--
--#if defined(CONFIG_MEMORY_HOTPLUG) && defined(CONFIG_HUGETLBFS)
--	/*
--	 * We schedule the work only when a memory section is
--	 * onlined/offlined on this node. When we come here,
--	 * all the memory on this node has been offlined,
--	 * so we won't enqueue new work to this work.
--	 *
--	 * The work is using node->node_work, so we should
--	 * flush work before freeing the memory.
--	 */
--	flush_work(&node->node_work);
--#endif
--	kfree(node);
-+	kfree(to_node(dev));
- }
- 
- /*
-@@ -665,11 +610,9 @@ static int register_node(struct node *node, int num)
- 
- 	if (error)
- 		put_device(&node->dev);
--	else {
--		hugetlb_register_node(node);
--
-+	else
- 		compaction_register_node(node);
--	}
-+
- 	return error;
- }
- 
-@@ -683,7 +626,6 @@ static int register_node(struct node *node, int num)
- void unregister_node(struct node *node)
- {
- 	compaction_unregister_node(node);
--	hugetlb_unregister_node(node);		/* no-op, if memoryless node */
- 	node_remove_accesses(node);
- 	node_remove_caches(node);
- 	device_unregister(&node->dev);
-@@ -905,74 +847,8 @@ void register_memory_blocks_under_node(int nid, unsigned long start_pfn,
- 			   (void *)&nid, func);
- 	return;
- }
--
--#ifdef CONFIG_HUGETLBFS
--/*
-- * Handle per node hstate attribute [un]registration on transistions
-- * to/from memoryless state.
-- */
--static void node_hugetlb_work(struct work_struct *work)
--{
--	struct node *node = container_of(work, struct node, node_work);
--
--	/*
--	 * We only get here when a node transitions to/from memoryless state.
--	 * We can detect which transition occurred by examining whether the
--	 * node has memory now.  hugetlb_register_node() already check this
--	 * so we try to register the attributes.  If that fails, then the
--	 * node has transitioned to memoryless, try to unregister the
--	 * attributes.
--	 */
--	if (!hugetlb_register_node(node))
--		hugetlb_unregister_node(node);
--}
--
--static void init_node_hugetlb_work(int nid)
--{
--	INIT_WORK(&node_devices[nid]->node_work, node_hugetlb_work);
--}
--
--static int node_memory_callback(struct notifier_block *self,
--				unsigned long action, void *arg)
--{
--	struct memory_notify *mnb = arg;
--	int nid = mnb->status_change_nid;
--
--	switch (action) {
--	case MEM_ONLINE:
--	case MEM_OFFLINE:
--		/*
--		 * offload per node hstate [un]registration to a work thread
--		 * when transitioning to/from memoryless state.
--		 */
--		if (nid != NUMA_NO_NODE)
--			schedule_work(&node_devices[nid]->node_work);
--		break;
--
--	case MEM_GOING_ONLINE:
--	case MEM_GOING_OFFLINE:
--	case MEM_CANCEL_ONLINE:
--	case MEM_CANCEL_OFFLINE:
--	default:
--		break;
--	}
--
--	return NOTIFY_OK;
--}
--#endif	/* CONFIG_HUGETLBFS */
- #endif /* CONFIG_MEMORY_HOTPLUG */
- 
--#if !defined(CONFIG_MEMORY_HOTPLUG) || !defined(CONFIG_HUGETLBFS)
--static inline int node_memory_callback(struct notifier_block *self,
--				unsigned long action, void *arg)
--{
--	return NOTIFY_OK;
--}
--
--static void init_node_hugetlb_work(int nid) { }
--
--#endif
--
- int __register_one_node(int nid)
- {
- 	int error;
-@@ -991,8 +867,6 @@ int __register_one_node(int nid)
- 	}
- 
- 	INIT_LIST_HEAD(&node_devices[nid]->access_list);
--	/* initialize work queue for memory hot plug */
--	init_node_hugetlb_work(nid);
- 	node_init_caches(nid);
- 
- 	return error;
-@@ -1063,13 +937,8 @@ static const struct attribute_group *cpu_root_attr_groups[] = {
- 	NULL,
- };
- 
--#define NODE_CALLBACK_PRI	2	/* lower than SLAB */
- void __init node_dev_init(void)
- {
--	static struct notifier_block node_memory_callback_nb = {
--		.notifier_call = node_memory_callback,
--		.priority = NODE_CALLBACK_PRI,
--	};
- 	int ret, i;
- 
-  	BUILD_BUG_ON(ARRAY_SIZE(node_state_attr) != NR_NODE_STATES);
-@@ -1079,8 +948,6 @@ void __init node_dev_init(void)
- 	if (ret)
- 		panic("%s() failed to register subsystem: %d\n", __func__, ret);
- 
--	register_hotmemory_notifier(&node_memory_callback_nb);
--
- 	/*
- 	 * Create all node devices, which will properly link the node
- 	 * to applicable memory block devices and already created cpu devices.
-diff --git a/include/linux/node.h b/include/linux/node.h
-index 40d641a8bfb0..ea817b507f54 100644
---- a/include/linux/node.h
-+++ b/include/linux/node.h
-@@ -2,15 +2,15 @@
- /*
-  * include/linux/node.h - generic node definition
-  *
-- * This is mainly for topological representation. We define the 
-- * basic 'struct node' here, which can be embedded in per-arch 
-+ * This is mainly for topological representation. We define the
-+ * basic 'struct node' here, which can be embedded in per-arch
-  * definitions of processors.
-  *
-  * Basic handling of the devices is done in drivers/base/node.c
-- * and system devices are handled in drivers/base/sys.c. 
-+ * and system devices are handled in drivers/base/sys.c.
-  *
-  * Nodes are exported via driverfs in the class/node/devices/
-- * directory. 
-+ * directory.
-  */
- #ifndef _LINUX_NODE_H_
- #define _LINUX_NODE_H_
-@@ -18,7 +18,6 @@
- #include <linux/device.h>
- #include <linux/cpumask.h>
- #include <linux/list.h>
--#include <linux/workqueue.h>
- 
- /**
-  * struct node_hmem_attrs - heterogeneous memory performance attributes
-@@ -84,10 +83,6 @@ static inline void node_set_perf_attrs(unsigned int nid,
- struct node {
- 	struct device	dev;
- 	struct list_head access_list;
--
--#if defined(CONFIG_MEMORY_HOTPLUG) && defined(CONFIG_HUGETLBFS)
--	struct work_struct	node_work;
--#endif
- #ifdef CONFIG_HMEM_REPORTING
- 	struct list_head cache_attrs;
- 	struct device *cache_dev;
-@@ -96,7 +91,6 @@ struct node {
- 
- struct memory_block;
- extern struct node *node_devices[];
--typedef  void (*node_registration_func_t)(struct node *);
- 
- #if defined(CONFIG_MEMORY_HOTPLUG) && defined(CONFIG_NUMA)
- void register_memory_blocks_under_node(int nid, unsigned long start_pfn,
-@@ -144,11 +138,6 @@ extern void unregister_memory_block_under_nodes(struct memory_block *mem_blk);
- extern int register_memory_node_under_compute_node(unsigned int mem_nid,
- 						   unsigned int cpu_nid,
- 						   unsigned access);
--
--#ifdef CONFIG_HUGETLBFS
--extern void register_hugetlbfs_with_node(node_registration_func_t doregister,
--					 node_registration_func_t unregister);
--#endif
- #else
- static inline void node_dev_init(void)
- {
-@@ -176,11 +165,6 @@ static inline int unregister_cpu_under_node(unsigned int cpu, unsigned int nid)
- static inline void unregister_memory_block_under_nodes(struct memory_block *mem_blk)
- {
- }
--
--static inline void register_hugetlbfs_with_node(node_registration_func_t reg,
--						node_registration_func_t unreg)
--{
--}
- #endif
- 
- #define to_node(device) container_of(device, struct node, dev)
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 536a52c29035..9a72499486c1 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -33,6 +33,7 @@
- #include <linux/migrate.h>
- #include <linux/nospec.h>
- #include <linux/delayacct.h>
-+#include <linux/memory.h>
- 
- #include <asm/page.h>
- #include <asm/pgalloc.h>
-@@ -3967,19 +3968,19 @@ static void hugetlb_unregister_node(struct node *node)
-  * Register hstate attributes for a single node device.
-  * No-op if attributes already registered.
-  */
--static void hugetlb_register_node(struct node *node)
-+static int hugetlb_register_node(struct node *node)
- {
- 	struct hstate *h;
- 	struct node_hstate *nhs = &node_hstates[node->dev.id];
- 	int err;
- 
- 	if (nhs->hugepages_kobj)
--		return;		/* already allocated */
-+		return 0;		/* already allocated */
- 
- 	nhs->hugepages_kobj = kobject_create_and_add("hugepages",
- 							&node->dev.kobj);
- 	if (!nhs->hugepages_kobj)
--		return;
-+		return -ENOMEM;
- 
- 	for_each_hstate(h) {
- 		err = hugetlb_sysfs_add_hstate(h, nhs->hugepages_kobj,
-@@ -3989,9 +3990,28 @@ static void hugetlb_register_node(struct node *node)
- 			pr_err("HugeTLB: Unable to add hstate %s for node %d\n",
- 				h->name, node->dev.id);
- 			hugetlb_unregister_node(node);
--			break;
-+			return -ENOMEM;
- 		}
- 	}
-+	return 0;
-+}
-+
-+static int __meminit hugetlb_memory_callback(struct notifier_block *self,
-+					     unsigned long action, void *arg)
-+{
-+	int ret = 0;
-+	struct memory_notify *mnb = arg;
-+	int nid = mnb->status_change_nid;
-+
-+	if (nid == NUMA_NO_NODE)
-+		return NOTIFY_DONE;
-+
-+	if (action == MEM_GOING_ONLINE)
-+		ret = hugetlb_register_node(node_devices[nid]);
-+	else if (action == MEM_CANCEL_ONLINE || action == MEM_OFFLINE)
-+		hugetlb_unregister_node(node_devices[nid]);
-+
-+	return notifier_from_errno(ret);
- }
- 
- /*
-@@ -4003,18 +4023,11 @@ static void __init hugetlb_register_all_nodes(void)
- {
- 	int nid;
- 
--	for_each_node_state(nid, N_MEMORY) {
--		struct node *node = node_devices[nid];
--		if (node->dev.id == nid)
--			hugetlb_register_node(node);
--	}
--
--	/*
--	 * Let the node device driver know we're here so it can
--	 * [un]register hstate attributes on node hotplug.
--	 */
--	register_hugetlbfs_with_node(hugetlb_register_node,
--				     hugetlb_unregister_node);
-+	get_online_mems();
-+	hotplug_memory_notifier(hugetlb_memory_callback, 0);
-+	for_each_node_state(nid, N_MEMORY)
-+		hugetlb_register_node(node_devices[nid]);
-+	put_online_mems();
- }
- #else	/* !CONFIG_NUMA */
- 
--- 
-2.11.0
 

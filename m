@@ -2,101 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BAF59A169
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF77759A050
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351230AbiHSQEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 12:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
+        id S1351237AbiHSQEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 12:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351334AbiHSQBU (ORCPT
+        with ESMTP id S1351358AbiHSQBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 12:01:20 -0400
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269ED6555F;
-        Fri, 19 Aug 2022 08:53:15 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id r16so5659297wrm.6;
-        Fri, 19 Aug 2022 08:53:15 -0700 (PDT)
+        Fri, 19 Aug 2022 12:01:23 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FA114D27
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:53:12 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-11c5505dba2so5637546fac.13
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:53:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=CBON6wUUJtdJ7sqqMZwarBOptDuvgv0pQ4ftADp75o0=;
+        b=YKOAsmwkDqDfvM20l4Lh6uuwgDuwW7cbK+4jA+LC7iAC7meCT0NLSwnFPDnXi74eKl
+         yVhD9IJ6AXVgUicEgtUGAcPukBcGTY1AdT1i4dMw8651aIkYmCS7rKLH/zQ8mm6PYkCb
+         TPWMzLwuSRty3pM7RepGWoCOSLr1tg1dzv56uwlo8OnjUbxQe5dlHusAnOA3yMFzEN2m
+         ngkIqcz4HoP1u6ravMguyNkYFqXF56iJ+YvV8+ES25bLsODdYingqBTet9m9RHy+vVTo
+         Zm84LgwjvGV7i1NbIsl+4g6GODiI0yXKVhRHFBA+x7XO12bYN25vg+Yf2BOW4s3YzS93
+         oIgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=sxgN3UpSGxFCTDm8l7AkBbvt36WRpMvVU8huEaNlcOs=;
-        b=krMD8u17JLUs7BC7T89T+rrc9DGrJZxxZO1IEYiBVt6sjxFOZMRmcwm7D8ubrcK7ni
-         Ed0Mlaic95bguHMxOg6+RpMEkgCJ2RCm7VRevKIfYzkgCsWbOXgGzouNU1BB2cmqzlHd
-         TgwB8c28BD4iumsUVeM9C7A7hUXtzqQ1+k8rlJiZgVqmyY/rgI8jCBrILdSsgKAyNKvo
-         tyZ5HULWC44kXKjyVqj1Rj6WyOlYIF6AN/EexmD7mDbeC2zN1Egmw41+JymTX3uHuaEH
-         0DkQUoOa14SXz6Bw0CmoEgTaRlOp0NstT3zMModZVKSPJQsCHWeflaFDE9NnT5LPgvpK
-         C/7g==
-X-Gm-Message-State: ACgBeo02tuVb5NKUH+J7AlbnRgx6Tjhc8kkbmwl6Wikue9MCiCXpUDif
-        bjiQiodSz8mgSdt0t+QdKZ8=
-X-Google-Smtp-Source: AA6agR5TsuC+RQkNW3QES9UmlM4mewKq8N5myFw6BuEs9uWD/uzR+muUu/Xrq5C9HCu4xndgmWD2Fw==
-X-Received: by 2002:a5d:6da6:0:b0:225:385a:7071 with SMTP id u6-20020a5d6da6000000b00225385a7071mr2224863wrs.351.1660924365060;
-        Fri, 19 Aug 2022 08:52:45 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id m16-20020a05600c4f5000b003a603f96db7sm12280373wmq.36.2022.08.19.08.52.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 08:52:44 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 15:52:42 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Dexuan Cui <decui@microsoft.com>, quic_jhugo@quicinc.com,
-        wei.liu@kernel.org, kys@microsoft.com, haiyangz@microsoft.com,
-        sthemmin@microsoft.com, lpieralisi@kernel.org, bhelgaas@google.com,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mikelley@microsoft.com,
-        robh@kernel.org, kw@linux.com, alex.williamson@redhat.com,
-        boqun.feng@gmail.com, Boqun.Feng@microsoft.com,
-        Carl Vanderlip <quic_carlv@quicinc.com>
-Subject: Re: [PATCH] PCI: hv: Fix the definiton of vector in
- hv_compose_msi_msg()
-Message-ID: <20220819155242.w32vcwobt4ucvpyv@liuwe-devbox-debian-v2>
-References: <20220815185505.7626-1-decui@microsoft.com>
- <20220815203545.GA1971949@bhelgaas>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=CBON6wUUJtdJ7sqqMZwarBOptDuvgv0pQ4ftADp75o0=;
+        b=NBskXrnOYTNZwZhQfPvHvK3jTdFFTc0zKf+CY/KQvCdBgSMar01LcpAVBmPOOOvCGY
+         R6v99uBtR1jQ1GYui7qPbDp1u9vJ0nOzN3yTqO5pJTj3NOq1n1I2krf7JW+Qobgqtzb5
+         7ENSUpNycYJLUrRu4Vrw0jHOD7pfrNcMqh6AK9gsKuaABXKbXPNDteQduWxIeRVWV8TZ
+         4XOfW1xDDdAGzD7Qzaxqj6hsutz3RR1CGQmGNpwVYcgPdJ0XLN/qfP7owQdOS1LMhpYe
+         7jdQPTf0zVTV3mGK4rDfMTxNf0hf12ABwC9DX6B7ftwMdMm8nUfkOy9x73O6wsMs5t4t
+         jCcg==
+X-Gm-Message-State: ACgBeo2JabclN76Ois8rXGrQYBDHBks+ciE4WHKFumzaZ4bNqGCAb3+i
+        sEpjxj7yYOWZ1U8h0Z+cN1J4Pbf55nyYcD/JNjXn0iWV
+X-Google-Smtp-Source: AA6agR7z0K2xqOKY94O/LSE9XZ82/tt5Bd4MR7meWJb+VTDodOAj64+SBqVf088mUrfo8YbPdneQyp78d6KcSKDTmi8=
+X-Received: by 2002:a05:6870:e98b:b0:10d:fe5c:f818 with SMTP id
+ r11-20020a056870e98b00b0010dfe5cf818mr4094491oao.106.1660924391783; Fri, 19
+ Aug 2022 08:53:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815203545.GA1971949@bhelgaas>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220819015302.1731088-1-magalilemes00@gmail.com>
+In-Reply-To: <20220819015302.1731088-1-magalilemes00@gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 19 Aug 2022 11:53:00 -0400
+Message-ID: <CADnq5_MzPN2mRhKxrEtm86WOjjgp1MTBk6RGWqd=VjQRqQf6DA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: remove unused header
+To:     Magali Lemes <magalilemes00@gmail.com>
+Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, tales.aparecida@gmail.com,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        mwen@igalia.com, mairacanal@riseup.net,
+        dri-devel@lists.freedesktop.org, isabbasso@riseup.net,
+        andrealmeid@riseup.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 03:35:45PM -0500, Bjorn Helgaas wrote:
-> s/definiton/definition/ in subject
-> (only if you have other occasion to repost this)
-> 
-> On Mon, Aug 15, 2022 at 11:55:05AM -0700, Dexuan Cui wrote:
-> > The local variable 'vector' must be u32 rather than u8: see the
-> > struct hv_msi_desc3.
-> > 
-> > 'vector_count' should be u16 rather than u8: see struct hv_msi_desc,
-> > hv_msi_desc2 and hv_msi_desc3.
-> > 
-> > Fixes: a2bad844a67b ("PCI: hv: Fix interrupt mapping for multi-MSI")
-> > Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> > Cc: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> > Cc: Carl Vanderlip <quic_carlv@quicinc.com>
-> 
-> Looks like Wei has been applying most changes to pci-hyperv.c, so I
-> assume the same will happen here.
+Applied.  Thanks!
 
-I can take care of this one via hyperv-fixes, but ...
+Alex
 
-> 
-> > ---
-> > 
-> > The patch should be appplied after the earlier patch:
-> >     [PATCH] PCI: hv: Only reuse existing IRTE allocation for Multi-MSI
-> >     https://lwn.net/ml/linux-kernel/20220804025104.15673-1-decui%40microsoft.com/
-> > 
-
-... this patch looks to be rejected.
-
-Thanks,
-Wei.
+On Thu, Aug 18, 2022 at 9:53 PM Magali Lemes <magalilemes00@gmail.com> wrote:
+>
+> dml_wrapper* files were removed in commit 724449e30433
+> ("drm/amd/display: Remove unused code"), as they are not used anywhere.
+> However, the header file wasn't removed, so remove the header as well.
+>
+> Signed-off-by: Magali Lemes <magalilemes00@gmail.com>
+> ---
+>  .../gpu/drm/amd/display/dc/inc/dml_wrapper.h  | 34 -------------------
+>  1 file changed, 34 deletions(-)
+>  delete mode 100644 drivers/gpu/drm/amd/display/dc/inc/dml_wrapper.h
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/inc/dml_wrapper.h b/drivers/gpu/drm/amd/display/dc/inc/dml_wrapper.h
+> deleted file mode 100644
+> index 5dcfbd8e2697..000000000000
+> --- a/drivers/gpu/drm/amd/display/dc/inc/dml_wrapper.h
+> +++ /dev/null
+> @@ -1,34 +0,0 @@
+> -/*
+> - * Copyright 2015 Advanced Micro Devices, Inc.
+> - *
+> - * Permission is hereby granted, free of charge, to any person obtaining a
+> - * copy of this software and associated documentation files (the "Software"),
+> - * to deal in the Software without restriction, including without limitation
+> - * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+> - * and/or sell copies of the Software, and to permit persons to whom the
+> - * Software is furnished to do so, subject to the following conditions:
+> - *
+> - * The above copyright notice and this permission notice shall be included in
+> - * all copies or substantial portions of the Software.
+> - *
+> - * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> - * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> - * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+> - * THE COPYRIGHT HOLDER(S) OR AUTHOR(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR
+> - * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+> - * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+> - * OTHER DEALINGS IN THE SOFTWARE.
+> - *
+> - * Authors: AMD
+> - *
+> - */
+> -
+> -#ifndef DML_WRAPPER_H_
+> -#define DML_WRAPPER_H_
+> -
+> -#include "dc.h"
+> -#include "dml/display_mode_vba.h"
+> -
+> -bool dml_validate(struct dc *dc, struct dc_state *context, bool fast_validate);
+> -
+> -#endif
+> --
+> 2.37.1
+>

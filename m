@@ -2,41 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B702C5999DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6CD599A00
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348375AbiHSKgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S1348029AbiHSKgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348128AbiHSKgK (ORCPT
+        with ESMTP id S245098AbiHSKgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:36:10 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621AEF2428;
-        Fri, 19 Aug 2022 03:36:08 -0700 (PDT)
-Received: (Authenticated sender: contact@artur-rojek.eu)
-        by mail.gandi.net (Postfix) with ESMTPA id 169CA4000C;
-        Fri, 19 Aug 2022 10:36:05 +0000 (UTC)
+        Fri, 19 Aug 2022 06:36:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF9AF2C8F;
+        Fri, 19 Aug 2022 03:36:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4577BB8274C;
+        Fri, 19 Aug 2022 10:36:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A501C433C1;
+        Fri, 19 Aug 2022 10:36:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660905394;
+        bh=XlLJ8l/1+WmR0BqWmHIhNjMDhoHHPr4K1bRmEQU2kEY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FomLmqxAv/zaRTN+pz2QA0qNlNg47OdmOMbej4vQkDwfgws8O0+qrWQd8+vhz5Iui
+         tkGSP13X8+R7Cxnljmp29Ew6xg3Tn+4U8XWD4NH0MC+HGkXLtHNVZrcTYqrwx/Vg72
+         v1Tf/28IzxDy/z46ojAtb6FgvALHw2phf9/CJsrU=
+Date:   Fri, 19 Aug 2022 12:36:31 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Jerome Forissier <jerome.forissier@linaro.org>,
+        stable@vger.kernel.org, Nimish Mishra <neelam.nimish@gmail.com>,
+        Anirban Chakraborty <ch.anirban00727@gmail.com>,
+        Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>,
+        Linus Torvalds <torvalds@linuxfoundation.org>
+Subject: Re: [PATCH v3] tee: add overflow check in register_shm_helper()
+Message-ID: <Yv9nr4/XQI0Tl4XO@kroah.com>
+References: <20220819094952.2602066-1-jens.wiklander@linaro.org>
 MIME-Version: 1.0
-Date:   Fri, 19 Aug 2022 12:36:05 +0200
-From:   Artur Rojek <contact@artur-rojek.eu>
-To:     Chris Morgan <macromorgan@hotmail.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH 0/4] iio/adc-joystick: buffer data parsing fixes
-In-Reply-To: <SN6PR06MB534245440C9A0EA1E0C11B12A56D9@SN6PR06MB5342.namprd06.prod.outlook.com>
-References: <20220817105643.95710-1-contact@artur-rojek.eu>
- <SN6PR06MB534245440C9A0EA1E0C11B12A56D9@SN6PR06MB5342.namprd06.prod.outlook.com>
-Message-ID: <085417ff80442dd7cc74e88d35423054@artur-rojek.eu>
-X-Sender: contact@artur-rojek.eu
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819094952.2602066-1-jens.wiklander@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,53 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-18 20:28, Chris Morgan wrote:
-> On Wed, Aug 17, 2022 at 12:56:39PM +0200, Artur Rojek wrote:
->> Hi all,
->> 
->> this patch set fixes the way channel data is being parsed in the
->> adc-joystick driver. To achieve that, it also introduces helpers in 
->> the
->> IIO subsystem. As a side effect of those changes, a bug in ingenic-adc
->> has been exposed, which this patch set promptly rectifies.
->> 
->> Tested on GCW Zero (by me) and on Anbernic RG350 (by Paul).
->> 
->> Chris:
->> As you have originally reported the issue, would you be able to test
->> the above changes on your setup (Odroid Go Advance, was it)?
+On Fri, Aug 19, 2022 at 11:49:52AM +0200, Jens Wiklander wrote:
+> With special lengths supplied by user space, register_shm_helper() has
+> an integer overflow when calculating the number of pages covered by a
+> supplied user space memory region. This causes
+> internal_get_user_pages_fast() a helper function of
+> pin_user_pages_fast() to do a NULL pointer dereference.
 > 
-> I can confirm this fixes the issue I experienced, I can see both
-> channels of the joystick now when using an hrtimer as a trigger.
+> [   14.141620] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+> [   14.142556] Mem abort info:
+> [   14.142829]   ESR = 0x0000000096000044
+> [   14.143237]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [   14.143742]   SET = 0, FnV = 0
+> [   14.144052]   EA = 0, S1PTW = 0
+> [   14.144348]   FSC = 0x04: level 0 translation fault
+> [   14.144767] Data abort info:
+> [   14.145053]   ISV = 0, ISS = 0x00000044
+> [   14.145394]   CM = 0, WnR = 1
+> [   14.145766] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004278e000
+> [   14.146279] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
+> [   14.147435] Internal error: Oops: 96000044 [#1] PREEMPT SMP
+> [   14.148026] Modules linked in:
+> [   14.148595] CPU: 1 PID: 173 Comm: optee_example_a Not tainted 5.19.0 #11
+> [   14.149204] Hardware name: QEMU QEMU Virtual Machine, BIOS 0.0.0 02/06/2015
+> [   14.149832] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   14.150481] pc : internal_get_user_pages_fast+0x474/0xa80
+> [   14.151640] lr : internal_get_user_pages_fast+0x404/0xa80
+> [   14.152408] sp : ffff80000a88bb30
+> [   14.152711] x29: ffff80000a88bb30 x28: 0000fffff836d000 x27: 0000fffff836e000
+> [   14.153580] x26: fffffc0000000000 x25: fffffc0000f4a1c0 x24: ffff00000289fb70
+> [   14.154634] x23: ffff000002702e08 x22: 0000000000040001 x21: ffff8000097eec60
+> [   14.155378] x20: 0000000000f4a1c0 x19: 00e800007d287f43 x18: 0000000000000000
+> [   14.156215] x17: 0000000000000000 x16: 0000000000000000 x15: 0000fffff836cfb0
+> [   14.157068] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+> [   14.157747] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+> [   14.158576] x8 : ffff00000276ec80 x7 : 0000000000000000 x6 : 000000000000003f
+> [   14.159243] x5 : 0000000000000000 x4 : ffff000041ec4eac x3 : ffff000002774cb8
+> [   14.159977] x2 : 0000000000000004 x1 : 0000000000000010 x0 : 0000000000000000
+> [   14.160883] Call trace:
+> [   14.161166]  internal_get_user_pages_fast+0x474/0xa80
+> [   14.161763]  pin_user_pages_fast+0x24/0x4c
+> [   14.162227]  register_shm_helper+0x194/0x330
+> [   14.162734]  tee_shm_register_user_buf+0x78/0x120
+> [   14.163290]  tee_ioctl+0xd0/0x11a0
+> [   14.163739]  __arm64_sys_ioctl+0xa8/0xec
+> [   14.164227]  invoke_syscall+0x48/0x114
+> [   14.164653]  el0_svc_common.constprop.0+0x44/0xec
+> [   14.165130]  do_el0_svc+0x2c/0xc0
+> [   14.165498]  el0_svc+0x2c/0x84
+> [   14.165847]  el0t_64_sync_handler+0x1ac/0x1b0
+> [   14.166258]  el0t_64_sync+0x18c/0x190
+> [   14.166878] Code: 91002318 11000401 b900f7e1 f9403be1 (f820d839)
+> [   14.167666] ---[ end trace 0000000000000000 ]---
 > 
-> This patch also does not interfere with the polling work in progress,
-> as that still works as expected too (polling work is still desired
-> though).
+> Fix this by adding an overflow check when calculating the end of the
+> memory range. Also add an explicit call to access_ok() in
+> tee_shm_register_user_buf() to catch an invalid user space address
+> early.
 > 
-> Thank you.
-Perfect, thanks for testing!
+> Fixes: 033ddf12bcf5 ("tee: add register user memory")
+> Cc: stable@vger.kernel.org
+> Reported-by: Nimish Mishra <neelam.nimish@gmail.com>
+> Reported-by: Anirban Chakraborty <ch.anirban00727@gmail.com>
+> Reported-by: Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>
+> Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
+> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 
-Can I add your Tested-by for v2 of this patchset?
+This conflicts with 573ae4f13f63 ("tee: add overflow check in
+register_shm_helper()") in Linus's tree :(
 
-Cheers,
-Artur
-> 
->> 
->> Artur Rojek (4):
->>   iio/adc: ingenic: fix channel offsets in buffer
->>   iio: add iio_channel_cb_get_iio_buffer helper
->>   iio: add helper function for reading channel offset in buffer
->>   input: joystick: Fix buffer data parsing
->> 
->>  drivers/iio/adc/ingenic-adc.c               |  7 +++---
->>  drivers/iio/buffer/industrialio-buffer-cb.c |  7 ++++++
->>  drivers/iio/industrialio-buffer.c           | 28 
->> +++++++++++++++++++++
->>  drivers/input/joystick/adc-joystick.c       | 26 ++++++++++++-------
->>  include/linux/iio/buffer.h                  |  4 +++
->>  include/linux/iio/consumer.h                | 12 +++++++++
->>  6 files changed, 71 insertions(+), 13 deletions(-)
->> 
->> --
->> 2.37.2
->> 

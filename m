@@ -2,118 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE00959919E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 02:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721445991A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 02:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240063AbiHSAMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 20:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        id S241338AbiHSAUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 20:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233314AbiHSAL5 (ORCPT
+        with ESMTP id S240030AbiHSAUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 20:11:57 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0869C9938;
-        Thu, 18 Aug 2022 17:11:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=qBpGMSI0v+lMIk9d+oAPPTnYnOFVRgH1kmWyrp4919k=; b=mqRT/H4dztD+vbBeqZe/zUjz9j
-        ymGvscm6ayT0gnjvRkv08jBarvt3DezySSpIqD5rLpYw/8AhzIEMKGjmNPgP5hyE4EbzihY3+zu68
-        kPb84MOTdheeDYCw29uaCMoLps+WPK8VPvDz3n9jd4q2JGYF8KlI3PGssZmjck5vjnE4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oOpbx-00DrFs-6L; Fri, 19 Aug 2022 02:11:41 +0200
-Date:   Fri, 19 Aug 2022 02:11:41 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     andrei.tachici@stud.acs.upb.ro
-Cc:     linux-kernel@vger.kernel.org, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        vegard.nossum@oracle.com, joel@jms.id.au, l.stelmach@samsung.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org
-Subject: Re: [net-next v4 2/3] net: ethernet: adi: Add ADIN1110 support
-Message-ID: <Yv7VPaWAJNz/if80@lunn.ch>
-References: <20220817160236.53586-1-andrei.tachici@stud.acs.upb.ro>
- <20220817160236.53586-3-andrei.tachici@stud.acs.upb.ro>
+        Thu, 18 Aug 2022 20:20:35 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C42CE317
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 17:20:33 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id o14-20020a17090a0a0e00b001fabfd3369cso3359379pjo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 17:20:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=pEgXnTJKFJrTL3CTka16XSJbg6kxwB4cnfOI/Ofjlz4=;
+        b=jQOCWpbvee03T0P8xijjOYN3zJfdX6BqWq3GiUDY54GeiB2kYOpPOdypH/gNOYaODr
+         ix4Q5zM5HRdkrH8VNhhYaqC4bGm3TWrsr3zotxk6UhP/oyxM/RNGcU3wIqmpKytWvU4a
+         BTREDH/HNF59rmTBvSdbCesgF6GRyz5K9//B1DM9fRziLLn/FELyxzGGJ6BTGO4HJJrl
+         o0UAtZhP3o05JqW/WffSD/W7KBey1RzgtF0ZEqIKFPy09PHnweIeH6czpkeJBsdR0KF6
+         StCY9jf29Uto9xBg0n+/eHlcuPQ9Rk2xvxAOK7+9vgIk182YafaVSJIp8WTK07eIFh8d
+         mv/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=pEgXnTJKFJrTL3CTka16XSJbg6kxwB4cnfOI/Ofjlz4=;
+        b=RwxPAzs5r1e/Jhsr/gLm3tFQ17yIcNuDXMfT710+1Sr+jpnhgkjk09ECy+jHeOz5ks
+         5pHShPoXeV8Mz1bgd7Abk1u+N6o4ydWa2PryNsePKsnDgKT3D2ks710wB10JSAK/e/Vx
+         WgenNz9SbaS+jffdVJbj4AMtpAFwk3Lp6Pa9m2Gy/gHDAGid03VuDI3ftyU6ESzjiegx
+         ADk18bVicp54OXchHtnYHwhPEoDRH+l2iYKTSnGIykuSsl9xakpyRqR2OFYhxK/MnxaF
+         U0CNZj/0iUGecZBcCVash5TxcL2w13KXcyshOMJ5Ok6F+suRB6XqZeW0ILg+KiVaCDPf
+         DsBQ==
+X-Gm-Message-State: ACgBeo198dROpSc6H/Uu2lEWKrr+o4moVZJcEZPBCNz45bygOQ+MBXG0
+        1tmXbYbw+pd9VVPikLAnG5O2IQ==
+X-Google-Smtp-Source: AA6agR7cPKIHabvzPHesQ7mysYM4f98Not26hLuTLYt6okFI7nMH1sNNM2K+QGI7RxRYoX8JypicJA==
+X-Received: by 2002:a17:902:7208:b0:172:a9d6:527 with SMTP id ba8-20020a170902720800b00172a9d60527mr4900702plb.32.1660868432853;
+        Thu, 18 Aug 2022 17:20:32 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id l4-20020a170903244400b0016bedcced2fsm1984501pls.35.2022.08.18.17.20.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 17:20:32 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 00:20:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <Yv7XTON3MwuC1Q3U@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817160236.53586-3-andrei.tachici@stud.acs.upb.ro>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220818132421.6xmjqduempmxnnu2@box>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 07:02:35PM +0300, andrei.tachici@stud.acs.upb.ro wrote:
-> From: Alexandru Tachici <alexandru.tachici@analog.com>
-> 
-> The ADIN1110 is a low power single port 10BASE-T1L MAC-PHY
-> designed for industrial Ethernet applications. It integrates
-> an Ethernet PHY core with a MAC and all the associated analog
-> circuitry, input and output clock buffering.
-> 
-> ADIN1110 MAC-PHY encapsulates the ADIN1100 PHY. The PHY registers
-> can be accessed through the MDIO MAC registers.
-> We are registering an MDIO bus with custom read/write in order
-> to let the PHY to be discovered by the PAL. This will let
-> the ADIN1100 Linux driver to probe and take control of
-> the PHY.
-> 
-> The ADIN2111 is a low power, low complexity, two-Ethernet ports
-> switch with integrated 10BASE-T1L PHYs and one serial peripheral
-> interface (SPI) port.
-> 
-> The device is designed for industrial Ethernet applications using
-> low power constrained nodes and is compliant with the IEEE 802.3cg-2019
-> Ethernet standard for long reach 10 Mbps single pair Ethernet (SPE).
-> The switch supports various routing configurations between
-> the two Ethernet ports and the SPI host port providing a flexible
-> solution for line, daisy-chain, or ring network topologies.
-> 
-> The ADIN2111 supports cable reach of up to 1700 meters with ultra
-> low power consumption of 77 mW. The two PHY cores support the
-> 1.0 V p-p operating mode and the 2.4 V p-p operating mode defined
-> in the IEEE 802.3cg standard.
-> 
-> The device integrates the switch, two Ethernet physical layer (PHY)
-> cores with a media access control (MAC) interface and all the
-> associated analog circuitry, and input and output clock buffering.
-> 
-> The device also includes internal buffer queues, the SPI and
-> subsystem registers, as well as the control logic to manage the reset
-> and clock control and hardware pin configuration.
-> 
-> Access to the PHYs is exposed via an internal MDIO bus. Writes/reads
-> can be performed by reading/writing to the ADIN2111 MDIO registers
-> via SPI.
-> 
-> On probe, for each port, a struct net_device is allocated and
-> registered. When both ports are added to the same bridge, the driver
-> will enable offloading of frame forwarding at the hardware level.
-> 
-> Driver offers STP support. Normal operation on forwarding state.
-> Allows only frames with the 802.1d DA to be passed to the host
-> when in any of the other states.
-> 
-> Supports both VEB and VEPA modes. In VEB mode multicast/broadcast
-> and unknown frames are handled by the ADIN2111, sw bridge will
-> not see them (this is to save SPI bandwidth). In VEPA mode,
-> all forwarding will be handled by the sw bridge, ADIN2111 will
-> not attempt to forward any frames in hardware to the other port.
-> 
-> Co-developed-by: Lennart Franzen <lennart@lfdomain.com>
-> Signed-off-by: Lennart Franzen <lennart@lfdomain.com>
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+On Thu, Aug 18, 2022, Kirill A . Shutemov wrote:
+> On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
+> > On Wed, 6 Jul 2022, Chao Peng wrote:
+> > But since then, TDX in particular has forced an effort into preventing
+> > (by flags, seals, notifiers) almost everything that makes it shmem/tmpfs.
+> > 
+> > Are any of the shmem.c mods useful to existing users of shmem.c? No.
+> > Is MFD_INACCESSIBLE useful or comprehensible to memfd_create() users? No.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+But QEMU and other VMMs are users of shmem and memfd.  The new features certainly
+aren't useful for _all_ existing users, but I don't think it's fair to say that
+they're not useful for _any_ existing users.
 
-    Andrew
+> > What use do you have for a filesystem here?  Almost none.
+> > IIUC, what you want is an fd through which QEMU can allocate kernel
+> > memory, selectively free that memory, and communicate fd+offset+length
+> > to KVM.  And perhaps an interface to initialize a little of that memory
+> > from a template (presumably copied from a real file on disk somewhere).
+> > 
+> > You don't need shmem.c or a filesystem for that!
+> > 
+> > If your memory could be swapped, that would be enough of a good reason
+> > to make use of shmem.c: but it cannot be swapped; and although there
+> > are some references in the mailthreads to it perhaps being swappable
+> > in future, I get the impression that will not happen soon if ever.
+> > 
+> > If your memory could be migrated, that would be some reason to use
+> > filesystem page cache (because page migration happens to understand
+> > that type of memory): but it cannot be migrated.
+> 
+> Migration support is in pipeline. It is part of TDX 1.5 [1]. 
+
+And this isn't intended for just TDX (or SNP, or pKVM).  We're not _that_ far off
+from being able to use UPM for "regular" VMs as a way to provide defense-in-depth
+without having to take on the overhead of confidential VMs.  At that point,
+migration and probably even swap are on the table.
+
+> And swapping theoretically possible, but I'm not aware of any plans as of
+> now.
+
+Ya, I highly doubt confidential VMs will ever bother with swap.
+
+> > I'm afraid of the special demands you may make of memory allocation
+> > later on - surprised that huge pages are not mentioned already;
+> > gigantic contiguous extents? secretmem removed from direct map?
+> 
+> The design allows for extension to hugetlbfs if needed. Combination of
+> MFD_INACCESSIBLE | MFD_HUGETLB should route this way. There should be zero
+> implications for shmem. It is going to be separate struct memfile_backing_store.
+> 
+> I'm not sure secretmem is a fit here as we want to extend MFD_INACCESSIBLE
+> to be movable if platform supports it and secretmem is not migratable by
+> design (without direct mapping fragmentations).
+
+But secretmem _could_ be a fit.  If a use case wants to unmap guest private memory
+from both userspace and the kernel then KVM should absolutely be able to support
+that, but at the same time I don't want to have to update KVM to enable secretmem
+(and I definitely don't want KVM poking into the directmap itself).
+
+MFD_INACCESSIBLE should only say "this memory can't be mapped into userspace",
+any other properties should be completely separate, e.g. the inability to migrate
+pages is effective a restriction from KVM (acting on behalf of TDX/SNP), it's not
+a fundamental property of MFD_INACCESSIBLE.

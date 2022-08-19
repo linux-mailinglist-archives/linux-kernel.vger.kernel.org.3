@@ -2,85 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC131599AB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC2E599A3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348554AbiHSLHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S1348507AbiHSLCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348657AbiHSLHg (ORCPT
+        with ESMTP id S1348489AbiHSLC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:07:36 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA799B6031;
-        Fri, 19 Aug 2022 04:07:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 590831FB69;
-        Fri, 19 Aug 2022 11:07:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660907253;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bGCXOJCzcXdOZ8xycZqlDyQ0wwo2K7wlZ7uTMS6y4E4=;
-        b=hP8+CE7I88YpO5kl2HuTvk78XbEDT8kjMbKdvsxHhV6q99sP1fMD9BtPZN7YaRu1ei8S+6
-        gkUSV++0SqLM6/qW2Uncy5hlR5XpsaOlJzQ8dwUApisWh08CfCknwKEZN/YzAXlLOROkgN
-        B98i6ytNj0/SAP2fVChJ7FygzdLWy4s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660907253;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bGCXOJCzcXdOZ8xycZqlDyQ0wwo2K7wlZ7uTMS6y4E4=;
-        b=cVVNGf0riyVMpyP/bW6pKKrB6PvOetiDk1TIpZBXH0wW+/jWXAjegAxkGqEct6jmQRYETd
-        Urj1QcEIZDsIerAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3145713AE9;
-        Fri, 19 Aug 2022 11:07:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KYDSCvVu/2LVJgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Fri, 19 Aug 2022 11:07:33 +0000
-Date:   Fri, 19 Aug 2022 13:02:21 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-kernel@vger.kernel.org, David Sterba <dsterba@suse.com>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] affs: move from strlcpy with unused retval to strscpy
-Message-ID: <20220819110221.GP13489@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, David Sterba <dsterba@suse.com>,
-        linux-fsdevel@vger.kernel.org
-References: <20220818210139.7819-1-wsa+renesas@sang-engineering.com>
+        Fri, 19 Aug 2022 07:02:29 -0400
+Received: from smtp237.sjtu.edu.cn (smtp237.sjtu.edu.cn [202.120.2.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EC2F61A5;
+        Fri, 19 Aug 2022 04:02:26 -0700 (PDT)
+Received: from mta91.sjtu.edu.cn (unknown [10.118.0.91])
+        by smtp237.sjtu.edu.cn (Postfix) with ESMTPS id 6B1F510087D60;
+        Fri, 19 Aug 2022 19:02:22 +0800 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mta91.sjtu.edu.cn (Postfix) with ESMTP id 2DBE737C83F;
+        Fri, 19 Aug 2022 19:02:22 +0800 (CST)
+X-Virus-Scanned: amavisd-new at 
+Received: from mta91.sjtu.edu.cn ([127.0.0.1])
+        by localhost (mta91.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 0dBLnWp56NuV; Fri, 19 Aug 2022 19:02:22 +0800 (CST)
+Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
+        by mta91.sjtu.edu.cn (Postfix) with ESMTP id E62CD37C83E;
+        Fri, 19 Aug 2022 19:02:21 +0800 (CST)
+Date:   Fri, 19 Aug 2022 19:02:21 +0800 (CST)
+From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
+To:     eperezma <eperezma@redhat.com>
+Cc:     jasowang <jasowang@redhat.com>, sgarzare <sgarzare@redhat.com>,
+        Michael Tsirkin <mst@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Message-ID: <984124417.8446289.1660906941482.JavaMail.zimbra@sjtu.edu.cn>
+In-Reply-To: <CAJaqyWcq++TmtMsGnn-j=6oAb7+f32P-WC5XRz0L2rEKJ4Sotw@mail.gmail.com>
+References: <20220817135718.2553-1-qtxuning1999@sjtu.edu.cn> <20220817135718.2553-2-qtxuning1999@sjtu.edu.cn> <CAJaqyWcq++TmtMsGnn-j=6oAb7+f32P-WC5XRz0L2rEKJ4Sotw@mail.gmail.com>
+Subject: Re: [RFC v2 1/7] vhost: expose used buffers
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818210139.7819-1-wsa+renesas@sang-engineering.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=GB2312
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.222.45.197]
+X-Mailer: Zimbra 8.8.15_GA_4308 (ZimbraWebClient - GC103 (Mac)/8.8.15_GA_3928)
+Thread-Topic: vhost: expose used buffers
+Thread-Index: ZUVniTisaWLV2fp0YDfuwjUwIrJe5A==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:01:39PM +0200, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
-> 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Thanks, I'll add it to the queue.
+
+----- Original Message -----
+> From: "eperezma" <eperezma@redhat.com>
+> To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>
+> Cc: "jasowang" <jasowang@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael Tsirkin" <mst@redhat.com>, "netdev"
+> <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>,
+> "virtualization" <virtualization@lists.linux-foundation.org>
+> Sent: Thursday, August 18, 2022 2:16:40 PM
+> Subject: Re: [RFC v2 1/7] vhost: expose used buffers
+
+> On Wed, Aug 17, 2022 at 3:58 PM Guo Zhi <qtxuning1999@sjtu.edu.cn> wrote:
+>>
+>> Follow VIRTIO 1.1 spec, only writing out a single used ring for a batch
+>> of descriptors.
+>>
+>> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
+>> ---
+>>  drivers/vhost/vhost.c | 14 ++++++++++++--
+>>  drivers/vhost/vhost.h |  1 +
+>>  2 files changed, 13 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+>> index 40097826cff0..7b20fa5a46c3 100644
+>> --- a/drivers/vhost/vhost.c
+>> +++ b/drivers/vhost/vhost.c
+>> @@ -2376,10 +2376,20 @@ static int __vhost_add_used_n(struct vhost_virtqueue
+>> *vq,
+>>         vring_used_elem_t __user *used;
+>>         u16 old, new;
+>>         int start;
+>> +       int copy_n = count;
+>>
+>> +       /**
+>> +        * If in order feature negotiated, devices can notify the use of a batch
+>> of buffers to
+>> +        * the driver by only writing out a single used ring entry with the id
+>> corresponding
+>> +        * to the head entry of the descriptor chain describing the last buffer
+>> in the batch.
+>> +        */
+>> +       if (vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
+>> +               copy_n = 1;
+>> +               heads = &heads[count - 1];
+>> +       }
+>>         start = vq->last_used_idx & (vq->num - 1);
+>>         used = vq->used->ring + start;
+>> -       if (vhost_put_used(vq, heads, start, count)) {
+>> +       if (vhost_put_used(vq, heads, start, copy_n)) {
+>>                 vq_err(vq, "Failed to write used");
+>>                 return -EFAULT;
+>>         }
+>> @@ -2410,7 +2420,7 @@ int vhost_add_used_n(struct vhost_virtqueue *vq, struct
+>> vring_used_elem *heads,
+>>
+>>         start = vq->last_used_idx & (vq->num - 1);
+>>         n = vq->num - start;
+>> -       if (n < count) {
+>> +       if (n < count && !vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
+>>                 r = __vhost_add_used_n(vq, heads, n);
+>>                 if (r < 0)
+>>                         return r;
+> 
+> It would be simpler to use vhost_add_used in vsock/vhost_test to add a
+> batch of used descriptors, and leave vhost_add_used_n untouched.
+> 
+> Since it's the upper layer the one that manages the in_order in this
+> version, we could:
+> * Always call vhost_add_used(vq, last_head_of_batch, ...) for the tx
+> queue, that does not need used length info.
+> * Call vhost_add_used_n for the rx queue, since the driver needs the
+> used length info.
+ 
+Very insightful view!
+
+At first, vhost_add_used will write used ring for skipped buffer in a batch,
+so we can't let vhost unmodified to enable in order feature.
+
+Secondly, Current changes to vhost_add_used_n will affect the rx queue,
+as driver have to get each buffer's length from used ring.
+
+So I would propose a flag parameter in vhost_add_used_n to decide
+whether the batch for in order buffer is done or nor.
+ 
+>> diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+>> index d9109107af08..0d5c49a30421 100644
+>> --- a/drivers/vhost/vhost.h
+>> +++ b/drivers/vhost/vhost.h
+>> @@ -236,6 +236,7 @@ enum {
+>>         VHOST_FEATURES = (1ULL << VIRTIO_F_NOTIFY_ON_EMPTY) |
+>>                          (1ULL << VIRTIO_RING_F_INDIRECT_DESC) |
+>>                          (1ULL << VIRTIO_RING_F_EVENT_IDX) |
+>> +                        (1ULL << VIRTIO_F_IN_ORDER) |
+>>                          (1ULL << VHOST_F_LOG_ALL) |
+>>                          (1ULL << VIRTIO_F_ANY_LAYOUT) |
+>>                          (1ULL << VIRTIO_F_VERSION_1)
+>> --
+>> 2.17.1
+>>

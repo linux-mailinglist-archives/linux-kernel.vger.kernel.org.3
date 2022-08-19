@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110E9599C52
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6ED599C82
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349337AbiHSMzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
+        id S1348653AbiHSMzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349251AbiHSMy4 (ORCPT
+        with ESMTP id S1349127AbiHSMy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:54:56 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B2F7D1E2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:54:43 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id a22so5546021edj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:54:43 -0700 (PDT)
+        Fri, 19 Aug 2022 08:54:57 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C06056BA0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:54:44 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id q2so3435186edb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:54:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=6nwxe1++PRhv2s0+vNHsqO2vQoiOkVixhjx+02+ah2A=;
-        b=IdMupijCCG07S6XRhxPDNwtwhCoqAA8u3wa3vFDBj4dAT6JIulwc8cVswfc54wc9uh
-         GrvsEwfCRRJ48kGlmtl4TM4XLVRCvT8gMLRzRhgYFM8YYpufKCvHaLDMIw0EHtBEcTKV
-         kEJtDu3E8B93sklpqSTT9pZZl7yb+/e6pNjdoIWLXvM+brUMF1TsucAjDC5NfZ4MyBC9
-         QIE33mKIR3UAcqZIYGZKny2BoC3VT2I2HKNDcCvXFE39xsDstpvmbvzoaTu2KUARcF9+
-         m0K/tixQt6HGJJRCXRynGgOzo4dq4aVj9q1Xa9vdq4fDzBrS2AENhz/jq6HGhC0bmWAk
-         3qZw==
+        bh=tpAs0I6mi3SUOtwu0/CjcjkIDmk/Vrs04W6AV02/W+s=;
+        b=NhPiQyO51UgCQXdF3j2uQqCC9wCloxzP4LFinLB2hRf2wfol/F3UuJgwjzKbhXDsK1
+         L2hLK746NxNSM6q6vbbYM+7mqIHavC8P6hsvInYdy/RcIZqCAyVyJ4j9Ev8WNLF/FHOg
+         4f0lQx6hgP9AcXTOKqZfB4nZw5EfdPiMFGDDHrEnjx3RI39f2Q7MruizK32z8Qwhe9oq
+         raqjkH4Q1STK9Qo1cQjPflAja1eOZQeSbSapJBRhnOfwITzn84ERU8ho9GReeyvbxAiI
+         TpXNibgG6Npa8rWvB7cV5Qn2649k4RKxWqpktkm6AP8AgTRPDDQh9xU12sBRDNE786Iz
+         OUgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=6nwxe1++PRhv2s0+vNHsqO2vQoiOkVixhjx+02+ah2A=;
-        b=j2Tsj2d3EgcyrXx4ii1Tfeh8/j+y9aXbawrWlJOCVoLCKfFU2fHmc2soB++nbrneEt
-         AuSz+umQYR7+Whg42XvTzFaDa+MHWXitPE7KxrReJb4aueWtxyJYrQ6xoHLFHot94EXg
-         dRxl3NLD+/TW40u6gCyAaJx+a843oYCiv3U5a6dnsPRNJqGvReY5EUpgS8ncy+lsgesI
-         x+QSXEUh6sHiiQ6m04b2802dDWmOaQc6eAPFbbdeR6eJmyZMwcqkDpstEzdThLJKXSCW
-         ffSOxwjnFZrs/jdz+V2wiRAgBf8rz9WkGUR3/QJgRZd9VU+NO6NgFy11iecBUAq8odrV
-         hJNQ==
-X-Gm-Message-State: ACgBeo1Q0YlMK48fT8lnK8mQ82CnVCjp3ZfIbSpU/u7gBwWclAeXBIjp
-        v431i7YgVYcdXfvC2om7sWM=
-X-Google-Smtp-Source: AA6agR5Gvbd2XyaxSiCHDP7C8nNhOGV3GL/jDgKcnsRiMw+6zrUGHKzWKm9zK4SaUCnZEGyCyHYEbw==
-X-Received: by 2002:aa7:c84f:0:b0:446:2bfb:5a63 with SMTP id g15-20020aa7c84f000000b004462bfb5a63mr3699865edt.172.1660913682048;
+        bh=tpAs0I6mi3SUOtwu0/CjcjkIDmk/Vrs04W6AV02/W+s=;
+        b=v4lr8Tsl9kG6OCp+xndmjllHRtuWDDX1AnZUBaT2CHWUjmNMcC7KTsY66jWasp5cEW
+         3L8QJzZ2w/UQrMZ1Vr5prrPK3R5h8KtcV4OwK3jblCzTRaUqJLGM8wF6vX/ezJe0auso
+         N3Q5Dt5CTORD3uscA4X6rWF2XfAh6AVDtDIS+whorLkaQrudOtCf5F5SPkByvKj5dGg8
+         N9RWZoeEcxGCJAWX18Ocd8yX/V4k5mp+qeao66VBe0z59l2EBFwGCtTeuFLshTwwsl1h
+         He141je/NGvM0gXPR72yQupMD2C+drD9mbxmbxfePVs/RHXAIlNO5L/BhhA0h/i3jcXT
+         fmyA==
+X-Gm-Message-State: ACgBeo1tWJIYXIH+aHgknoi53wyXQaD5b/E+TaXgLPbe5od6ISjNtalo
+        oaUKbI2+t6By6DEbRCUqWu0=
+X-Google-Smtp-Source: AA6agR6qVQcCrDUpgOztkeCznxCfbvHrHpp/3zRAM8C3jGY+6jtCKN/MbpTsHsvH/CjwuSbO51ZZ7Q==
+X-Received: by 2002:a05:6402:270d:b0:43a:67b9:6eea with SMTP id y13-20020a056402270d00b0043a67b96eeamr6003185edd.94.1660913682645;
         Fri, 19 Aug 2022 05:54:42 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb77.dynamic.kabel-deutschland.de. [95.90.187.119])
-        by smtp.gmail.com with ESMTPSA id b12-20020a056402138c00b0043d6ece495asm3000955edv.55.2022.08.19.05.54.41
+        by smtp.gmail.com with ESMTPSA id b12-20020a056402138c00b0043d6ece495asm3000955edv.55.2022.08.19.05.54.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 05:54:41 -0700 (PDT)
+        Fri, 19 Aug 2022 05:54:42 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 05/11] staging: r8188eu: make rtw_report_sec_ie() static
-Date:   Fri, 19 Aug 2022 14:54:22 +0200
-Message-Id: <20220819125428.8412-6-straube.linux@gmail.com>
+Subject: [PATCH 06/11] staging: r8188eu: remove unneeded initializations
+Date:   Fri, 19 Aug 2022 14:54:23 +0200
+Message-Id: <20220819125428.8412-7-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220819125428.8412-1-straube.linux@gmail.com>
 References: <20220819125428.8412-1-straube.linux@gmail.com>
@@ -71,102 +71,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function rtw_report_sec_ie() is only used in rtw_mlme.c.
-Make it static to get one step closer to removing
-os_dep/mlme_linux.c.
+In the function rtw_reset_securitypriv() three variables are
+initialized to zero. That is not necessary because they are all
+set before use in the code. Remove the initializations.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_mlme.c      | 27 ++++++++++++++++++++
- drivers/staging/r8188eu/include/mlme_osdep.h |  1 -
- drivers/staging/r8188eu/os_dep/mlme_linux.c  | 27 --------------------
- 3 files changed, 27 insertions(+), 28 deletions(-)
+ drivers/staging/r8188eu/os_dep/mlme_linux.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index 2705c9d87b14..213c64303b01 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -1639,6 +1639,33 @@ static int rtw_append_pmkid(struct adapter *Adapter, int iEntry, u8 *ie, uint ie
- 	return ie_len;
- }
- 
-+static void rtw_report_sec_ie(struct adapter *adapter, u8 authmode, u8 *sec_ie)
-+{
-+	uint len;
-+	u8 *buff, *p, i;
-+	union iwreq_data wrqu;
-+
-+	buff = NULL;
-+	if (authmode == _WPA_IE_ID_) {
-+		buff = kzalloc(IW_CUSTOM_MAX, GFP_ATOMIC);
-+		if (!buff)
-+			return;
-+		p = buff;
-+		p += sprintf(p, "ASSOCINFO(ReqIEs =");
-+		len = sec_ie[1] + 2;
-+		len =  (len < IW_CUSTOM_MAX) ? len : IW_CUSTOM_MAX;
-+		for (i = 0; i < len; i++)
-+			p += sprintf(p, "%02x", sec_ie[i]);
-+		p += sprintf(p, ")");
-+		memset(&wrqu, 0, sizeof(wrqu));
-+		wrqu.data.length = p - buff;
-+		wrqu.data.length = (wrqu.data.length < IW_CUSTOM_MAX) ?
-+				   wrqu.data.length : IW_CUSTOM_MAX;
-+		wireless_send_event(adapter->pnetdev, IWEVCUSTOM, &wrqu, buff);
-+		kfree(buff);
-+	}
-+}
-+
- int rtw_restruct_sec_ie(struct adapter *adapter, u8 *in_ie, u8 *out_ie, uint in_len)
- {
- 	u8 authmode = 0;
-diff --git a/drivers/staging/r8188eu/include/mlme_osdep.h b/drivers/staging/r8188eu/include/mlme_osdep.h
-index 5b9f688f9424..2c0ce06bce82 100644
---- a/drivers/staging/r8188eu/include/mlme_osdep.h
-+++ b/drivers/staging/r8188eu/include/mlme_osdep.h
-@@ -11,7 +11,6 @@ void rtw_init_mlme_timer(struct adapter *padapter);
- void rtw_os_indicate_disconnect(struct adapter *adapter);
- void rtw_os_indicate_connect(struct adapter *adapter);
- void rtw_os_indicate_scan_done(struct adapter *padapter, bool aborted);
--void rtw_report_sec_ie(struct adapter *adapter, u8 authmode, u8 *sec_ie);
- 
- void rtw_reset_securitypriv(struct adapter *adapter);
- void indicate_wx_scan_complete_event(struct adapter *padapter);
 diff --git a/drivers/staging/r8188eu/os_dep/mlme_linux.c b/drivers/staging/r8188eu/os_dep/mlme_linux.c
-index 37c7f52421ee..aff9e18476db 100644
+index aff9e18476db..48287aeaf502 100644
 --- a/drivers/staging/r8188eu/os_dep/mlme_linux.c
 +++ b/drivers/staging/r8188eu/os_dep/mlme_linux.c
-@@ -102,30 +102,3 @@ void rtw_os_indicate_disconnect(struct adapter *adapter)
- 	rtw_indicate_wx_disassoc_event(adapter);
- 	rtw_reset_securitypriv(adapter);
- }
--
--void rtw_report_sec_ie(struct adapter *adapter, u8 authmode, u8 *sec_ie)
--{
--	uint	len;
--	u8	*buff, *p, i;
--	union iwreq_data wrqu;
--
--	buff = NULL;
--	if (authmode == _WPA_IE_ID_) {
--		buff = kzalloc(IW_CUSTOM_MAX, GFP_ATOMIC);
--		if (!buff)
--			return;
--		p = buff;
--		p += sprintf(p, "ASSOCINFO(ReqIEs =");
--		len = sec_ie[1] + 2;
--		len =  (len < IW_CUSTOM_MAX) ? len : IW_CUSTOM_MAX;
--		for (i = 0; i < len; i++)
--			p += sprintf(p, "%02x", sec_ie[i]);
--		p += sprintf(p, ")");
--		memset(&wrqu, 0, sizeof(wrqu));
--		wrqu.data.length = p - buff;
--		wrqu.data.length = (wrqu.data.length < IW_CUSTOM_MAX) ?
--				   wrqu.data.length : IW_CUSTOM_MAX;
--		wireless_send_event(adapter->pnetdev, IWEVCUSTOM, &wrqu, buff);
--		kfree(buff);
--	}
--}
+@@ -57,9 +57,9 @@ static struct rt_pmkid_list backup_pmkid[NUM_PMKID_CACHE];
+ 
+ void rtw_reset_securitypriv(struct adapter *adapter)
+ {
+-	u8	backup_index = 0;
+-	u8	backup_counter = 0x00;
+-	u32	backup_time = 0;
++	u8 backup_index;
++	u8 backup_counter;
++	u32 backup_time;
+ 
+ 	if (adapter->securitypriv.dot11AuthAlgrthm == dot11AuthAlgrthm_8021X) {
+ 		/* 802.1x */
 -- 
 2.37.1
 

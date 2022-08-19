@@ -2,63 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB21F59930E
+	by mail.lfdr.de (Postfix) with ESMTP id 001AB59930F
 	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 04:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244505AbiHSCfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 22:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
+        id S242075AbiHSChB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 22:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243630AbiHSCfw (ORCPT
+        with ESMTP id S230441AbiHSCg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 22:35:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76D0CB5E9;
-        Thu, 18 Aug 2022 19:35:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E80861483;
-        Fri, 19 Aug 2022 02:35:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5DB1C433C1;
-        Fri, 19 Aug 2022 02:35:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660876550;
-        bh=gGDZJOTPnlUqiszONSLHfXy5nwAuAkiEqiVT95kJ5Js=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=iLpjJotFEWd4e9thkhHE20PIA+292ifv+Tr94rBHM1xv/cRRIS6kzwM/7rxUDfAPg
-         pHyLhXKTvCghalrHLh1TQkA5Pf44i0z4MTEAjvhsWnHjjWEcJP9K7jPenc2lhupunE
-         r7ja3maR2lydYSYiI39ohSoIdizZQsmurGUYQpGA0I32/Na+4saY2sNK/cVZicU/P0
-         KNvaHzaXnWTBpIqt75CuU7CjqmNWOvEQGWEz/my+kZzvS5nIUccIm8/utGIMgYK23n
-         nvSEXmxpDpYcBaJW+K+4AJpduriJLqvYaeoELvxRJHC79ZyO/t9G59RHzTkMsOnfWO
-         rCC5a0ReMhF+Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7A5815C044D; Thu, 18 Aug 2022 19:35:50 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 19:35:50 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, rcu <rcu@vger.kernel.org>
-Subject: Re: [PATCH v3 resend 4/6] fs: Move call_rcu() to call_rcu_lazy() in
- some paths
-Message-ID: <20220819023550.GN2125313@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220809034517.3867176-1-joel@joelfernandes.org>
- <20220809034517.3867176-5-joel@joelfernandes.org>
- <CAEXW_YQuGga9Eivq4G6o1XjvPn-nMMDiM8FOY6HXJTMzwv1Emg@mail.gmail.com>
- <CAEXW_YQOXBRwCLZXjspXttGkNhbJK3HGVDuYj5TcYD=Xj1cK0A@mail.gmail.com>
- <CAEXW_YT3VnK5KJTbyXdCzs8j4jw9XFTSCF4Dt9QwLPtkPSb1tA@mail.gmail.com>
+        Thu, 18 Aug 2022 22:36:59 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290DBCC313
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:36:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=CKrpIC9UicO12gvCLgzg1YisGV2nQ8KKc9GDBljdtno=; b=s2qv2DW8TUzba6vu0OWg5HOlCQ
+        kTxa5aTj2JaAUKJUQ3Wo6ZLAF1VHudAEhEJY70q6EDADlS1OB4ubh1mKT+CWWI6lm4lvVRKKOZ+Fp
+        NlgEKxnD1akZX5T6yUtvOF+/4UDC+il1qqyuSyLu0kb7dIgH4tMoPbjVLf11e0RdR6yGA/g2FzJ5I
+        +PvN3QP4PKsazr0b8az9jY2eSciOwa6hMSoLs41JLBzSppc2MYNerGQ2PZzFPiWPRpv7dtplq0fGb
+        CYgY7Y9/hOG2gzwabhoNU/NK62yVKTuuru0KE8Vh68MmVbJjougkmCV1ZruNVhWybMR9OhukQ2wi9
+        J3H3zpPA==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oOrsF-00Ef0B-Sl; Fri, 19 Aug 2022 02:36:40 +0000
+Message-ID: <fe6636a1-19a3-2243-e22e-1a8bad8e23a4@infradead.org>
+Date:   Thu, 18 Aug 2022 19:36:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEXW_YT3VnK5KJTbyXdCzs8j4jw9XFTSCF4Dt9QwLPtkPSb1tA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: drivers/tty/serial/sunplus-uart.c:671: undefined reference to
+ `uart_remove_one_port'
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, Qin Jian <qinjian@cqplus1.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+References: <202208161624.f6SCFLBq-lkp@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <202208161624.f6SCFLBq-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,83 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 09:21:56PM -0400, Joel Fernandes wrote:
-> On Thu, Aug 18, 2022 at 7:05 PM Joel Fernandes <joel@joelfernandes.org> wrote:
-> >
-> > On Thu, Aug 18, 2022 at 1:23 PM Joel Fernandes <joel@joelfernandes.org> wrote:
-> > >
-> > > [Sorry, adding back the CC list]
-> > >
-> > > On Mon, Aug 8, 2022 at 11:45 PM Joel Fernandes (Google)
-> > > <joel@joelfernandes.org> wrote:
-> > > >
-> > > > This is required to prevent callbacks triggering RCU machinery too
-> > > > quickly and too often, which adds more power to the system.
-> > > >
-> > > > When testing, we found that these paths were invoked often when the
-> > > > system is not doing anything (screen is ON but otherwise idle).
-> > >
-> > > Unfortunately, I am seeing a slow down in ChromeOS boot performance
-> > > after applying this particular patch. It is the first time I could
-> > > test ChromeOS boot times with the series since it was hard to find a
-> > > ChromeOS device that runs the upstream kernel.
-> > >
-> > > Anyway, Vlad, Neeraj, do you guys also see slower boot times with this
-> > > patch? I wonder if the issue is with wake up interaction with the nocb
-> > > GP threads.
-> > >
-> > > We ought to disable lazy RCU during boot since it would have little
-> > > benefit anyway. But I am also concerned about some deeper problem I
-> > > did not catch before.
-> > >
-> > > I'll look into tracing the fs paths to see if I can narrow down what's
-> > > causing it. Will also try a newer kernel, I am currently testing on
-> > > 5.19-rc4.
-> >
-> > I got somewhere with this. It looks like queuing CBs as lazy CBs
-> > instead of normal CBs, are triggering expedited stalls during the boot
-> > process:
-> >
-> >   39.949198] rcu: INFO: rcu_preempt detected expedited stalls on
-> > CPUs/tasks: { } 28 jiffies s: 69 root: 0x0/.
-> >
-> > No idea how/why lazy RCU CBs would be related to expedited GP issues,
-> > but maybe something hangs and causes that side-effect.
-> >
-> > initcall_debug did not help, as it seems initcalls all work fine, and
-> > then 8 seconds after the boot, it starts slowing down a lot, followed
-> > by the RCU stall messages. As a next step I'll enable ftrace during
-> > the boot to see if I can get more insight. But I believe, its not the
-> > FS layer, the FS layer just triggers lazy CBs, but there is something
-> > wrong with the core lazy-RCU work itself.
-> >
-> > This kernel is 5.19-rc4. I'll also try to rebase ChromeOS on more
-> > recent kernels and debug.
-> 
-> More digging, thanks to trace_event= boot option , I find that the
-> boot process does have some synchronous waits, and though these are
-> "non-lazy", for some reason the lazy CBs that were previously queued
-> are making them wait for the *full* lazy duration. Which points to a
-> likely bug in the lazy RCU logic. These synchronous CBs should never
-> be waiting like the lazy ones:
-> 
-> [   17.715904]  => trace_dump_stack
-> [   17.715904]  => __wait_rcu_gp
-> [   17.715904]  => synchronize_rcu
-> [   17.715904]  => selinux_netcache_avc_callback
-> [   17.715904]  => avc_ss_reset
-> [   17.715904]  => sel_write_enforce
-> [   17.715904]  => vfs_write
-> [   17.715904]  => ksys_write
-> [   17.715904]  => do_syscall_64
-> [   17.715904]  => entry_SYSCALL_64_after_hwframe
-> 
-> I'm tired so I'll resume the debug later.
 
-At times like this, I often pull the suspect code into userspace and
-run it through its paces.  In this case, a bunch of call_rcu_lazy()
-invocations into an empty bypass list, followed by a call_rcu()
-invocation, then a check to make sure that the bypass list is no longer
-lazy.
 
-							Thanx, Paul
+On 8/16/22 01:59, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+> commit: 0aa94eea8d955c82014e5368a843da93f1dc58f8 ARM: sunplus: Add initial support for Sunplus SP7021 SoC
+> date:   6 weeks ago
+> config: arm-randconfig-r012-20220815 (https://download.01.org/0day-ci/archive/20220816/202208161624.f6SCFLBq-lkp@intel.com/config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0aa94eea8d955c82014e5368a843da93f1dc58f8
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 0aa94eea8d955c82014e5368a843da93f1dc58f8
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+
+Fix is here:
+https://lore.kernel.org/lkml/20220806025705.7759-1-rdunlap@infradead.org/
+
+> 
+> All errors (new ones prefixed by >>):
+
+
+[snip]
+
+> 
+> Kconfig warnings: (for reference only)
+>    WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS
+>    Depends on [n]: TTY [=n] && HAS_IOMEM [=y] && (ARCH_SUNPLUS [=y] || COMPILE_TEST [=y])
+>    Selected by [y]:
+>    - SOC_SP7021 [=y] && ARCH_SUNPLUS [=y]
+>    WARNING: unmet direct dependencies detected for SERIAL_SUNPLUS_CONSOLE
+>    Depends on [n]: TTY [=n] && HAS_IOMEM [=y] && SERIAL_SUNPLUS [=y]
+>    Selected by [y]:
+>    - SOC_SP7021 [=y] && ARCH_SUNPLUS [=y]
+
+No, this is the primary problem. The build error happen due to this.
+ 
+
+-- 
+~Randy

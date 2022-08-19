@@ -2,245 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B8B59A743
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6A759A752
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351901AbiHSUzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 16:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
+        id S1352021AbiHSUz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 16:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352041AbiHSUyy (ORCPT
+        with ESMTP id S1351912AbiHSUzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 16:54:54 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA41310EEF6;
-        Fri, 19 Aug 2022 13:54:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=EM8M9rtfttMconDtRzIUZchXg2tD3wTiMgn/nNNDO2g=; b=Gq/dX8+bnXufoMznu+Ys8x6HYO
-        uW7uu6loPC0u43fvejcFAcQ55RMAgNReEze2cGKBKo+GwkHAJzCJ+Xa7b+PBUNxtFfu4re5bLvmeu
-        oJnzcMMAMXC+RPnxN534UgiLQ7FJoc+PEGXfFtWFrSQRj3Y3KOSVYJBBAXMCazAsbhLA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oP90Q-00Dx9i-OW; Fri, 19 Aug 2022 22:54:14 +0200
-Date:   Fri, 19 Aug 2022 22:54:14 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>
-Subject: Re: [PATCH net-next v1 4/7] net: pse-pd: add generic PSE driver
-Message-ID: <Yv/4du75DNO2Xykr@lunn.ch>
-References: <20220819120109.3857571-1-o.rempel@pengutronix.de>
- <20220819120109.3857571-5-o.rempel@pengutronix.de>
+        Fri, 19 Aug 2022 16:55:24 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646F7F03
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:55:22 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id 20so5067347plo.10
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=H2n3wyd22XqfBHQtxoS9ZE3dzQZzgHlgD8UAIwwzZHo=;
+        b=YKtiwSXPb8Qdhkvsr3OWJcCj240oEeU16z8ri5CYHHthfh9F+eygv0eYS6zDVawBVl
+         RRsSk7UkxObT7KJbVH5ZGj3GKu3TzaWXLLfcFh6LIVek25cSPGjeEFWdP2bc52szwuem
+         NjwYBGXq9HqUKds8wqwlr5KjE53CQDONIpJNxGeLBUc4QwwGXbgsF8xEPngobHNdP1JQ
+         PwtxAHalKN3xrFnRvCkrxzE8+plm9UwnGgUZffHTBDc0nQpvUsyim05QWGGqlLHjEV2y
+         MAphLt+JMS21fN36e5pwWXxwPbBKNU+DQbvdtM+fEhi0YOnCbZsYV3bcdG56qiC5MVXt
+         STVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=H2n3wyd22XqfBHQtxoS9ZE3dzQZzgHlgD8UAIwwzZHo=;
+        b=Ta81B1TCd2vRKsyZRMe9cSzvpidSozgh0SsX1zyBwjlIz0x7TjNx6BfZ7sIO3ddGkC
+         pKKyQEGRyQHjPPsHTac/5vtfKRfgH3Q0Gl5QO+s9F+tYDXuxIUkYXdhMMMNh7GEE+7SF
+         olLjpkuiz7utEJcmJap6thAe1PVaMHtwpLmZhB9VUIWm2nBEcw5oNsjQ8cRia91LPpWk
+         RtEcgHZ0ML7r/RRoinTMBYC3Eogo0rKtr+B1tgxHF4+z6OZn3rtvueAFwZFdPO1/KdNb
+         RU2Vwj53d4Wwq8wNbt9ULVln7ekH103SVw5HKPye3iHNrnenuTj9+rhNIiriz4dyR5SM
+         Rg5A==
+X-Gm-Message-State: ACgBeo37a+n7cs7fa4GiVi2v7y3TGSY+faMZEwDWv3AxhuGfE4HNn52d
+        qhfmEJs6PSatqEd1uaLP/LA=
+X-Google-Smtp-Source: AA6agR5avHemvW2jekUK/yhGPnaXIxFk65uIalqg4HggjJNug3yVXgLEGksurLvkmF6eFK8Fy50+hA==
+X-Received: by 2002:a17:903:1106:b0:172:68f9:f68 with SMTP id n6-20020a170903110600b0017268f90f68mr9089310plh.50.1660942521679;
+        Fri, 19 Aug 2022 13:55:21 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c76-20020a624e4f000000b00535f2b5a23dsm2653120pfb.155.2022.08.19.13.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 13:55:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 19 Aug 2022 13:55:18 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Isaac Manjarres <isaacmanjarres@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Saravana Kannan <saravanak@google.com>, stable@kernel.org,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] driver core: Fix bus_type.match() error handling
+Message-ID: <20220819205518.GA3151965@roeck-us.net>
+References: <YvsoYzIhOtX9DOi2@google.com>
+ <20220816111311.GC1108868@roeck-us.net>
+ <YvvQOBk9T3J1uX8k@google.com>
+ <20220817010559.GA1880847@roeck-us.net>
+ <YvxAfiSOrzy7/c1J@google.com>
+ <20220818225932.GA3433999@roeck-us.net>
+ <Yv7bd6Yl8+thp2CY@google.com>
+ <20220819112832.GA3106213@roeck-us.net>
+ <Yv/MKymRC9O04Nqu@google.com>
+ <baa1f65a-d983-0518-3979-7099679995f2@acm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819120109.3857571-5-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <baa1f65a-d983-0518-3979-7099679995f2@acm.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 02:01:06PM +0200, Oleksij Rempel wrote:
-> Add generic driver to support simple Power Sourcing Equipment without
-> automatic classification support.
+On Fri, Aug 19, 2022 at 01:01:29PM -0700, Bart Van Assche wrote:
+> On 8/19/22 10:45, Isaac Manjarres wrote:
+> > It seems that the patches mentioned in [1] are causing a hang during
+> > reboot for various ARM emulations when booting from USB. Can you please
+> > take a look? There's more information about what defconfig, rootfs, and
+> > qemu commandline to use at [2].
 > 
-> This driver was tested on 10Bast-T1L switch with regulator based PoDL PSE.
+> Unfortunately I can't reproduce this hang in an x86 VM with kernel v6.0-rc1
+> and a USB disk attached via virt-manager. The lsscsi -v output shows that a
+> USB disk has been attached:
 > 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  drivers/net/pse-pd/Kconfig       |  11 +++
->  drivers/net/pse-pd/Makefile      |   2 +
->  drivers/net/pse-pd/pse_generic.c | 146 +++++++++++++++++++++++++++++++
->  3 files changed, 159 insertions(+)
->  create mode 100644 drivers/net/pse-pd/pse_generic.c
+
+The problem only reproduces with various arm emulations. I may have missed it,
+but I have not noticed it on any other architecture.
+
+> [9:0:0:0]    disk    QEMU     QEMU HARDDISK    2.5+  /dev/sdd
+>   dir: /sys/bus/scsi/devices/9:0:0:0 [/sys/devices/pci0000:00/0000:00:07.0/usb2/2-2/2-2:1.0/host9/target9:0:0/9:0:0:0]
 > 
-> diff --git a/drivers/net/pse-pd/Kconfig b/drivers/net/pse-pd/Kconfig
-> index 49c7f0bcff526..a804c9f1af2bc 100644
-> --- a/drivers/net/pse-pd/Kconfig
-> +++ b/drivers/net/pse-pd/Kconfig
-> @@ -9,3 +9,14 @@ menuconfig PSE_CONTROLLER
->  	  Generic Power Sourcing Equipment Controller support.
->  
->  	  If unsure, say no.
-> +
-> +if PSE_CONTROLLER
-> +
-> +config PSE_GENERIC
-> +	tristate "Generic PSE driver"
-> +	help
-> +	  This module provides support for simple Ethernet Power Sourcing
-> +	  Equipment without automatic classification support. For example for
-> +	  PoDL (802.3bu) specification.
-> +
-> +endif
-> diff --git a/drivers/net/pse-pd/Makefile b/drivers/net/pse-pd/Makefile
-> index cbb79fc2e2706..80ef39ad68f10 100644
-> --- a/drivers/net/pse-pd/Makefile
-> +++ b/drivers/net/pse-pd/Makefile
-> @@ -2,3 +2,5 @@
->  # Makefile for Linux PSE drivers
->  
->  obj-$(CONFIG_PSE_CONTROLLER) += pse-core.o
-> +
-> +obj-$(CONFIG_PSE_GENERIC) += pse_generic.o
-> diff --git a/drivers/net/pse-pd/pse_generic.c b/drivers/net/pse-pd/pse_generic.c
-> new file mode 100644
-> index 0000000000000..f264d4d589f59
-> --- /dev/null
-> +++ b/drivers/net/pse-pd/pse_generic.c
-> @@ -0,0 +1,146 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +//
-> +// Driver for the Generic Ethernet Power Sourcing Equipment, without
-> +// auto classification support.
-> +//
-> +// Copyright (c) 2022 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
-> +//
-> +
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pse-pd/pse.h>
-> +#include <linux/regulator/consumer.h>
-> +
-> +struct gen_pse_priv {
-> +	struct pse_controller_dev pcdev;
-> +	struct regulator *ps; /*power source */
-> +	enum ethtool_podl_pse_admin_state admin_state;
-> +};
-> +
-> +static struct gen_pse_priv *to_gen_pse(struct pse_controller_dev *pcdev)
-> +{
-> +	return container_of(pcdev, struct gen_pse_priv, pcdev);
-> +}
-> +
-> +static int
-> +gen_pse_podl_get_admin_sate(struct pse_controller_dev *pcdev, unsigned long id)
+> Rebooting that VM happens in the expected time and without triggering any
+> kernel warnings.
+> 
+There are no warnings. The reboot just stalls. Also, the usb drive
+attaches just fine. The probem is seen in shutdown, not during boot.
 
-Should that be state?
+> Since the issue has been observed in qemu, how about sharing the sysrq-t
+> output? I recommend to collect that output as follows:
+> * Send the serial console output to a file. This involves adding
+> console=ttyS0,115200n8 to the kernel command line and using the proper qemu
+> options to save the serial console output into a file.
+> * Reproduce the hang and send the sysrq-t key sequence to qemu, e.g. as
+> follows: virsh send-key ${vm_name} KEY_LEFTALT KEY_SYSRQ KEY_T
+> 
 
-> +{
-> +	struct gen_pse_priv *priv = to_gen_pse(pcdev);
-> +
-> +	/* aPoDLPSEAdminState can be different to aPoDLPSEPowerDetectionStatus
-> +	 * which is provided by the regulator.
-> +	 */
-> +	return priv->admin_state;
-> +}
-> +
-> +static int
-> +gen_pse_podl_set_admin_control(struct pse_controller_dev *pcdev,
-> +			       unsigned long id,
-> +			       enum ethtool_podl_pse_admin_state state)
-> +{
-> +	struct gen_pse_priv *priv = to_gen_pse(pcdev);
-> +	int ret;
-> +
-> +	if (priv->admin_state == state)
-> +		goto set_state;
+Will try.
 
-return 0; ?
-
-> +
-> +	switch (state) {
-> +	case ETHTOOL_PODL_PSE_ADMIN_STATE_ENABLED:
-> +		ret = regulator_enable(priv->ps);
-> +		break;
-> +	case ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED:
-> +		ret = regulator_disable(priv->ps);
-> +		break;
-> +	default:
-> +		dev_err(pcdev->dev, "Unknown admin state %i\n", state);
-> +		ret = -ENOTSUPP;
-> +	}
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +set_state:
-> +	priv->admin_state = state;
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +gen_pse_podl_get_pw_d_status(struct pse_controller_dev *pcdev, unsigned long id)
-> +{
-> +	struct gen_pse_priv *priv = to_gen_pse(pcdev);
-> +	int ret;
-> +
-> +	ret = regulator_is_enabled(priv->ps);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (!ret)
-> +		return ETHTOOL_PODL_PSE_PW_D_STATUS_DISABLED;
-> +
-> +	return ETHTOOL_PODL_PSE_PW_D_STATUS_DELIVERING;
-> +}
-> +
-> +static const struct pse_control_ops gen_pse_ops = {
-> +	.get_podl_pse_admin_sate = gen_pse_podl_get_admin_sate,
-> +	.set_podl_pse_admin_control = gen_pse_podl_set_admin_control,
-> +	.get_podl_pse_pw_d_status = gen_pse_podl_get_pw_d_status,
-> +};
-> +
-> +static int
-> +gen_pse_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct gen_pse_priv *priv;
-> +	int ret;
-> +
-> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	if (!pdev->dev.of_node)
-> +		return -ENOENT;
-> +
-> +	priv->ps = devm_regulator_get(dev, "ieee802.3-podl-pse");
-> +	if (IS_ERR(priv->ps)) {
-> +		dev_err(dev, "failed to get PSE regulator (%pe)\n", priv->ps);
-> +		return PTR_ERR(priv->ps);
-> +	}
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	priv->admin_state = ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED;
-
-There is the comment earlier:
-
-	/* aPoDLPSEAdminState can be different to aPoDLPSEPowerDetectionStatus
-	 * which is provided by the regulator.
-
-Is this because the regulator might of been turned on, but it has
-detected a short and turned itself off? So it is administratively on,
-but off in order to stop the magic smoke escaping?
-
-But what about the other way around? Something has already turned the
-regulator on, e.g. the bootloader. Should the default be
-ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED even thought power is being
-delivered? Do we want to put the regulator into the off state at
-probe, so it is in a well defined state? Or set priv->admin_state to
-whatever regulator_is_enabled() indicates?
-
-	 Andrew
+Thanks,
+Guenter

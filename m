@@ -2,139 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1312C59A58E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1155459A5A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350024AbiHSSLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 14:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
+        id S1350086AbiHSSMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 14:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350366AbiHSSKL (ORCPT
+        with ESMTP id S1349994AbiHSSMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 14:10:11 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2057.outbound.protection.outlook.com [40.107.244.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9552C658;
-        Fri, 19 Aug 2022 11:01:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WqLoctpFmadJnl8Z5FK9XMuPtajXQTPn2foKIETR7fpwG0k0ITpt3KSeMa+02tCD+ukTWwCzAULRhtw/uCgkqRLvhEqN1UY84eml3aqMrhdGfYIk4+gfJtbJ1fWRDyNwGnfc5fg/Q8gxJ7OUqbvO6+6Jq+tF4yIGUpT7JfvRFYNMkjSqJeBhUDtDNu97quVFCfvX/L/pjDdi0VSsSyU66IRUC9so+nKwHvi+rEDmbQCx3nadkShWMdUzGQdcEvBEQkEnq0j0rRZ2YIKAc+LMZdzDxxeuJjwbWrGiYCQ2U2+TwVhFJZu3YGyHNRcvqoPeZ2oXmkCuGswiDA/VpOGjzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9Q5NaB7wUfiz4yjp32oggH3JnkRguUaXaVZkmVjuHKg=;
- b=dxYcee1kRf2B0huuiGGwHLyMIIdsgfSSAhf0Dn2H7s634S5BbfOdBIU3Q6Y90yR8PG2vrHB55oBFZ3r1P9cLodpHUbUFtNV0kVGp/YG+w/g7nWrj4r8MaQK8zDVRS+IY5c6h9vALZ+V1R51JF+X7Wn/Kn5iyDzIDqCEi2zKKavtbTqsZ8aF8nTGz1foi5AgmzTdekrzoBdjFqfLNJyFhCZLnLTgh4KVbrMWWoFQQMpf+6dPc0YOzEm9OVO6Y/RidY7NUVUYZtstbQ/JxgzK/Gq4+oECOSgM5h7j0phmKYPOCdmUG2E7zLiUtLpSdW7vkaWeuuQfScRe605uOy+16cA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lenovo.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9Q5NaB7wUfiz4yjp32oggH3JnkRguUaXaVZkmVjuHKg=;
- b=NzvwpIZk42MVf8Ldm/P14Ic5Hkk/iNBeMbRO+D/jDDOwyLShOT3QnM+hJAak5lh36WDPhO4QZC4o4YcOkQPROENzIgP4mNLW1hswDYW0sdJGCfuObalXKy6lonDVXSReXTUVwjH9omzRP1fbMIN9KZsSllJZz60Tla+/c/0/x2E=
-Received: from DM6PR03CA0078.namprd03.prod.outlook.com (2603:10b6:5:333::11)
- by DM6PR12MB3514.namprd12.prod.outlook.com (2603:10b6:5:183::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.19; Fri, 19 Aug
- 2022 18:01:03 +0000
-Received: from DM6NAM11FT008.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:333:cafe::20) by DM6PR03CA0078.outlook.office365.com
- (2603:10b6:5:333::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16 via Frontend
- Transport; Fri, 19 Aug 2022 18:01:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT008.mail.protection.outlook.com (10.13.172.85) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5546.15 via Frontend Transport; Fri, 19 Aug 2022 18:01:02 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 19 Aug
- 2022 13:01:00 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Mark Pearson <markpearson@lenovo.com>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-CC:     Mario Limonciello <mario.limonciello@amd.com>, <madcatx@atlas.cz>,
-        <ibm-acpi-devel@lists.sourceforge.net>,
-        <platform-driver-x86@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] platform/x86: thinkpad_acpi: Explicitly set to balanced mode on startup
-Date:   Fri, 19 Aug 2022 13:01:00 -0500
-Message-ID: <20220819180101.6383-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 19 Aug 2022 14:12:12 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FA311987E
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:02:43 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 202so4252565pgc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:02:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=2cmeZFM9Z96PK6iKkz3xRptXL/ZQZZMehAaXwUAeWQk=;
+        b=lDgUXCE2+jFiEn1lhjtsVT9PS2XJKGRNpzzrrK6ZgsY63wSH18BIzdFb+RQZ3GRfya
+         GxoFcqt5jXqYfaK0aTD/Sy2iOw3cjGT9K31mrs+oT/3dLkTTgytOtFoPek1e3EFZ411F
+         jPZ41pNgWViMrX60LrXEY/L6EZhDvNReIPkB+xyj2wo/z8miDmDH9z+xSthnMjD9VQD4
+         G0FPV73fcK+zELUgjaG6/QJ427BK5q5YEptgOy9z3g34Q25pDyp1nZqO/upmTrObptHB
+         DHNQH2dRiD8VvCm+lCLOvIWvJ79YoUGKbPRVpROiMPgQ2etjpxPLJqFScdBai8kFhyE5
+         YuDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=2cmeZFM9Z96PK6iKkz3xRptXL/ZQZZMehAaXwUAeWQk=;
+        b=okG0v8OLiaQEzQ+2lNT2mMOgR2yXtDLWIkgF1CKaveeHM2rvM5CDWnhVNKsM+7pPj4
+         M3yIid58Th+5LKA9Gdr3TXcluM/rXTnzM6uQNy/Gzo/47V06I0PFFTPZnO4elx8j/n0b
+         TCCsXgX/Up9bOAdvUsActqb/+/bvR7nde7svtw74PlysCyBlnB1sEY5RJQHXginO/3On
+         zewO3Q4w3AEUHyjHCuy7bir9WNSnMDl31MNIH/v5+kgMz/E3sTvWVCzDLMEE3zFOc34U
+         gqES/DHwQ/WHBFr+DHMjMp3bewPM3jmOjrvYXhhvN2Ft3E97NwCYTDcFUtzYL5kfQPT+
+         rBNQ==
+X-Gm-Message-State: ACgBeo2/sv2/fnGPJCvjiPOyiuUYmgz6xmWYJQLcpvX/ieZx9+4VZdum
+        N8Q+yvIymbu0NGCuJNL1oehdfw==
+X-Google-Smtp-Source: AA6agR57Ufxqi9ITvJtI5lBP5D0IJbgyirUXVdH8AQZLkwyex2asB5d5Z98uXoBQRGz4/BKQfxRxTw==
+X-Received: by 2002:a63:2dc6:0:b0:428:ab9e:bb85 with SMTP id t189-20020a632dc6000000b00428ab9ebb85mr7172413pgt.530.1660932163163;
+        Fri, 19 Aug 2022 11:02:43 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y8-20020aa79428000000b0052dee21fecdsm3698065pfo.77.2022.08.19.11.02.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 11:02:42 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 18:02:39 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Andrew Jones <andrew.jones@linux.dev>
+Cc:     Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, marcorr@google.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com, joro@8bytes.org,
+        mizhang@google.com, pbonzini@redhat.com, vannapurve@google.com
+Subject: Re: [V3 10/11] KVM: selftests: Add ucall pool based implementation
+Message-ID: <Yv/QPxeKczzmxR9H@google.com>
+References: <20220810152033.946942-1-pgonda@google.com>
+ <20220810152033.946942-11-pgonda@google.com>
+ <20220816161350.b7x5brnyz5pyi7te@kamzik>
+ <Yv5iKJbjW5VseagS@google.com>
+ <20220818190514.ny77xpfwiruah6m5@kamzik>
+ <Yv7LR8NMBMKVzS3Z@google.com>
+ <20220819051725.6lgggz2ktbd35pqj@kamzik>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0be0d1f6-2753-479f-c29a-08da820cc77b
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3514:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lEeQATsFI/PO2uC0ebDiZpuC887k+pPfmwBUwVaunaljlxw7ciWeZPHzdm2HytBpvM84m3t2LoLh57mFmqoTyp7netGsygI5vT8b49N9dIF9+rPMz95+Bmh+6qh6HgRzaRHX+74b6z4cMI93Fzuu9RoCMEvlhbk1DzRUdmwvMQXZKdmInTTnn9rHxLmlMj1T7r7d/O2A83iVFXZjqpL1p0AJ13CsA6M+w0PKLtS8hvIOHH/FEa8MgZ27TJyvJR4WgJzNexksCph1Rg4QhiyGo/bEeSimZYDA9JN7uq+8v+wXP07nHJ4HKHUKLroqvGA41/yEiGmD+T1HlhEbjNL+CKqpjQyjiWmCkrsyP4K4QIyRqwgjfknELZxavjU0NM987alQu2ogxNQDQfbbLCban36CWuLBOilFlzb0vNBkeJHNLXy5G88jmJlHM5JjKhfetpdpniLx9ag4Zp2dyQBxAf+hXfBJghQMhqf5lPPJ2V2/xvygAynzV7Gy7SZHnK3ufggq/D4Z8TzabrQIcY9U+PBn8L91tZvZA1fvtVB9WXGbAHtIXCi5B3wZshxlv2WQ/gpN1s+cSx5msmXByWZtUuv+LXPjtchJlmeuxjXKujlSQq6TNl1ZcamIgdPvD16qbw9dicEouPBos9JFvRODCiQEv+zrZ+WZY2uEZWwSYvZr7B+d8GRdjo/cOy8NKXpYwZ78gSPvXalZxy4K4nURufFNshOpEqxUPQ40mjMtKAXiW0dcbcWtL1kqQnryNxtA07Z1X5bop0dmbOVdUDNKzoFj/lc0k/br++qxCnXnD//1x/ZfGuOFslmvresujVY9KLlwtdOb0vJOiN79pTC/Gg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(396003)(376002)(136003)(40470700004)(36840700001)(46966006)(36756003)(478600001)(336012)(426003)(47076005)(1076003)(16526019)(82310400005)(186003)(110136005)(966005)(36860700001)(2906002)(316002)(2616005)(41300700001)(26005)(70206006)(40460700003)(8676002)(82740400003)(70586007)(54906003)(4326008)(83380400001)(40480700001)(7696005)(81166007)(86362001)(5660300002)(8936002)(44832011)(356005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2022 18:01:02.3404
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0be0d1f6-2753-479f-c29a-08da820cc77b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT008.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3514
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819051725.6lgggz2ktbd35pqj@kamzik>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was observed that on a Thinkpad T14 Gen1 (AMD) that the platform
-profile is starting up in 'low-power' mode after refreshing what the
-firmware had.  This is most likely a firmware bug, but as a harmless
-workaround set the default profile to 'balanced' at thinkpad_acpi startup.
+On Fri, Aug 19, 2022, Andrew Jones wrote:
+> On Thu, Aug 18, 2022 at 11:29:11PM +0000, Sean Christopherson wrote:
+> > On Thu, Aug 18, 2022, Andrew Jones wrote:
+> Dropping the only once-used uc_pool_idx() and adding the comment looks
+> better, but I don't think there was a bug because uc == uc->hva.
 
-Reported-by: madcatx@atlas.cz
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216347
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v1->v2
- * Only run on AMD systems (PSC mode)
+uc == uc->hva for the host, but not for the guest.  From the guest's perspective,
+"hva" is an opaque pointer that has no direct relation to "uc".
 
- drivers/platform/x86/thinkpad_acpi.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+> 1) Doing ucall_init() at VM create time may be too early for Arm. Arm
+> probes for an unmapped address for the MMIO address it needs, so it's
+> best to do that after all mapping.
 
-diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
-index 22d4e8633e30..2dbb9fc011a7 100644
---- a/drivers/platform/x86/thinkpad_acpi.c
-+++ b/drivers/platform/x86/thinkpad_acpi.c
-@@ -10592,10 +10592,9 @@ static int tpacpi_dytc_profile_init(struct ibm_init_struct *iibm)
- 	/* Ensure initial values are correct */
- 	dytc_profile_refresh();
- 
--	/* Set AMT correctly now we know current profile */
--	if ((dytc_capabilities & BIT(DYTC_FC_PSC)) &&
--	    (dytc_capabilities & BIT(DYTC_FC_AMT)))
--	    dytc_control_amt(dytc_current_profile == PLATFORM_PROFILE_BALANCED);
-+	/* Workaround for https://bugzilla.kernel.org/show_bug.cgi?id=216347 */
-+	if (dytc_capabilities & BIT(DYTC_FC_PSC))
-+		dytc_profile_set(NULL, PLATFORM_PROFILE_BALANCED);
- 
- 	return 0;
+Argh.  I really hate the MMIO probing.  Is there really no arbitrary address that
+selftests can carve out and simply say "thou shalt not create a memslot here"?
+
+Or can we just say that it's always immediate after memslot0?  That would allow
+us to delete the searching code in ARM's ucall_arch_init().
+
+> 2) We'll need to change the sanity checks in Arm's get_ucall() to not
+> check that the MMIO address == ucall_exit_mmio_addr since there's no
+> guarantee that the exiting guest's address matches whatever is lingering
+> in the host's version. We can either drop the sanity check altogether
+> or try to come up with something else.
+
+Ah, right.  This one at least is easy to handle.  If the address is per-VM, just
+track the address.  If it's hardcoded (as a fix for #1) then, it's even simpler.
+
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index 8623c1568f97..74167540815b 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -94,7 +94,8 @@ struct kvm_vm {
+        vm_paddr_t pgd;
+        vm_vaddr_t gdt;
+        vm_vaddr_t tss;
+-       vm_vaddr_t idt;
++       vm_paddr_t pgd;
++       vm_vaddr_t ucall_addr;
+        vm_vaddr_t handlers;
+        uint32_t dirty_ring_size;
+        struct vm_memcrypt memcrypt;
+diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+index b5d904f074b6..7f1d50dab0df 100644
+--- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
++++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+@@ -14,6 +14,8 @@ static vm_vaddr_t *ucall_exit_mmio_addr;
+
+ static void ucall_set_mmio_addr(struct kvm_vm *vm, vm_vaddr_t val)
+ {
++       vm->ucall_addr = val;
++
+        atomic_sync_global_pointer_to_guest(vm, ucall_exit_mmio_addr, val);
  }
--- 
-2.34.1
+
+@@ -87,7 +89,7 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+        struct kvm_run *run = vcpu->run;
+
+        if (run->exit_reason == KVM_EXIT_MMIO &&
+-           run->mmio.phys_addr == (uint64_t)ucall_exit_mmio_addr) {
++           run->mmio.phys_addr == vcpu->vm->ucall_addr) {
+                TEST_ASSERT(run->mmio.is_write && run->mmio.len == sizeof(uint64_t),
+                            "Unexpected ucall exit mmio address access");
+                return (void *)(*((uint64_t *)run->mmio.data));
 

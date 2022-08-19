@@ -2,50 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3551599323
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 04:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA84C599329
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 04:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344521AbiHSCpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 22:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
+        id S1344451AbiHSCpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 22:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245111AbiHSCpZ (ORCPT
+        with ESMTP id S235620AbiHSCpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 22:45:25 -0400
-Received: from mail-40136.proton.ch (mail-40136.proton.ch [185.70.40.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953515AC7C
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:45:23 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 02:45:10 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
-        s=protonmail; t=1660877121; x=1661136321;
-        bh=cjS4FB8Xn6Fk5xAao9JqkTW7r45Ht24vCAy8MBxAcDg=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=GXFQhoiClE+wIsNtirNqWGkUIhyt2vHNQUIb1DLN/4kynuj6gdg9JLnRlDHmFkL//
-         Yo6RfjO8EDz3z2X6TE5k36eV/cIRyfx+2OJNz8+Qrjkj4yT9NHe2Mg/SJMsOvv+3MB
-         IebDwT28S7DKbtSPYWewq/qNvcjg0kyMOLSVR69Y=
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Joel Selvaraj <jo@jsfamily.in>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-From:   Caleb Connolly <caleb@connolly.tech>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Reply-To: Caleb Connolly <caleb@connolly.tech>
-Subject: Re: [PATCH 0/5] Add support for Xiaomi Poco F1 EBBG variant
-Message-ID: <bf2296e4-aa05-5b71-6217-e15e6a300ab3@connolly.tech>
-In-Reply-To: <bb78f8fb-d6ea-5c37-0531-8d7584bc897b@somainline.org>
-References: <MN2PR02MB702415D7BF12B7B7A41B2D38D9829@MN2PR02MB7024.namprd02.prod.outlook.com> <bb78f8fb-d6ea-5c37-0531-8d7584bc897b@somainline.org>
-Feedback-ID: 10753939:user:proton
+        Thu, 18 Aug 2022 22:45:22 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C195AC7C
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:45:21 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id w28so2513124qtc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=R1Nex1dRhqgA1BqvYMjnNRmSClR3k11xE4UGyWNn60Q=;
+        b=Ok012zWfPIvabs2S1CBCGnYTewq8E8mj9YgLWiYgQDPjkQNRZq5nWVnIei1cFuroJ7
+         +1DXtuzBRVj9hlJwEu4L5PQfTIJqaX168fJMehooRDG2PL8BOy9OGONeNiyxfWMiEMaz
+         14oL+wgqSc7THLVk7fGQDl2ynU3GmmTMyzSPA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=R1Nex1dRhqgA1BqvYMjnNRmSClR3k11xE4UGyWNn60Q=;
+        b=sVd+LAFN5M14YfOl/XJ+OMV0NHj3MTGCz+7r3zzviJwnHPNg/+cpWr2LUCRaNJGiZE
+         m8MlIxDGdtLIW2tzCcBOePeXsYzyXf4Q0/37J8+9+p1vaGBnHT60hfz1iYXxY3VcfWCF
+         MmwBf1P7bS+gLDvwOdcRv9ib9Zq8OddU72xBxF6YCd8BMLsHJIO/uUduJDMstuLw+2ZF
+         UPb0/sF25x6zRkJJvnbt/fvNOmMgLBfiJPtdJUCaH9A7WFQWaCwlVYZ0+fdUrI/AlGv4
+         1dzrbh24hdUEI5CrX16YcI+iCfi4VZ/6fWcwG0IOU7kemuphOTaNE3sa7fB0diGXkf+l
+         x4gw==
+X-Gm-Message-State: ACgBeo25FYV9R0roeKWQHRagcKW5nM1D7q9syhTZS79bSOc+WB8+JGI1
+        p6VWzAApw2ftVNqD5XgENJFyRg==
+X-Google-Smtp-Source: AA6agR6eDfn8hvm4pO7LcZECxnyoEvfMsXNaLritry7g8G9XfKNTM+77uXybpHLmFiuK0ZXvTiW7Ig==
+X-Received: by 2002:a05:622a:d1:b0:344:9490:148a with SMTP id p17-20020a05622a00d100b003449490148amr3947146qtw.211.1660877120490;
+        Thu, 18 Aug 2022 19:45:20 -0700 (PDT)
+Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id y12-20020a05620a25cc00b006bb78d095c5sm2649392qko.79.2022.08.18.19.45.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 19:45:20 -0700 (PDT)
+Message-ID: <4deb7354-bac7-b530-47ba-54cf50cfce58@joelfernandes.org>
+Date:   Thu, 18 Aug 2022 22:45:19 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v3 resend 4/6] fs: Move call_rcu() to call_rcu_lazy() in
+ some paths
+To:     paulmck@kernel.org
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, rcu <rcu@vger.kernel.org>
+References: <20220809034517.3867176-1-joel@joelfernandes.org>
+ <20220809034517.3867176-5-joel@joelfernandes.org>
+ <CAEXW_YQuGga9Eivq4G6o1XjvPn-nMMDiM8FOY6HXJTMzwv1Emg@mail.gmail.com>
+ <CAEXW_YQOXBRwCLZXjspXttGkNhbJK3HGVDuYj5TcYD=Xj1cK0A@mail.gmail.com>
+ <CAEXW_YT3VnK5KJTbyXdCzs8j4jw9XFTSCF4Dt9QwLPtkPSb1tA@mail.gmail.com>
+ <20220819023550.GN2125313@paulmck-ThinkPad-P17-Gen-1>
+Content-Language: en-US
+From:   Joel Fernandes <joel@joelfernandes.org>
+In-Reply-To: <20220819023550.GN2125313@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -54,92 +84,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 08/07/2022 21:43, Konrad Dybcio wrote:
->
->
-> On 8.07.2022 13:12, Joel Selvaraj wrote:
->> There are two variants of Xiaomi Poco F1.
->> - Tianma variant with NOVATEK NT36672A panel + touchscreen manufactured
->>    by Tianma
->> - EBBG variant with Focaltech FT8719 panel + touchscreen manufactured
->>    by EBBG
+On 8/18/2022 10:35 PM, Paul E. McKenney wrote:
+> On Thu, Aug 18, 2022 at 09:21:56PM -0400, Joel Fernandes wrote:
+>> On Thu, Aug 18, 2022 at 7:05 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+>>>
+>>> On Thu, Aug 18, 2022 at 1:23 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+>>>>
+>>>> [Sorry, adding back the CC list]
+>>>>
+>>>> On Mon, Aug 8, 2022 at 11:45 PM Joel Fernandes (Google)
+>>>> <joel@joelfernandes.org> wrote:
+>>>>>
+>>>>> This is required to prevent callbacks triggering RCU machinery too
+>>>>> quickly and too often, which adds more power to the system.
+>>>>>
+>>>>> When testing, we found that these paths were invoked often when the
+>>>>> system is not doing anything (screen is ON but otherwise idle).
+>>>>
+>>>> Unfortunately, I am seeing a slow down in ChromeOS boot performance
+>>>> after applying this particular patch. It is the first time I could
+>>>> test ChromeOS boot times with the series since it was hard to find a
+>>>> ChromeOS device that runs the upstream kernel.
+>>>>
+>>>> Anyway, Vlad, Neeraj, do you guys also see slower boot times with this
+>>>> patch? I wonder if the issue is with wake up interaction with the nocb
+>>>> GP threads.
+>>>>
+>>>> We ought to disable lazy RCU during boot since it would have little
+>>>> benefit anyway. But I am also concerned about some deeper problem I
+>>>> did not catch before.
+>>>>
+>>>> I'll look into tracing the fs paths to see if I can narrow down what's
+>>>> causing it. Will also try a newer kernel, I am currently testing on
+>>>> 5.19-rc4.
+>>>
+>>> I got somewhere with this. It looks like queuing CBs as lazy CBs
+>>> instead of normal CBs, are triggering expedited stalls during the boot
+>>> process:
+>>>
+>>>   39.949198] rcu: INFO: rcu_preempt detected expedited stalls on
+>>> CPUs/tasks: { } 28 jiffies s: 69 root: 0x0/.
+>>>
+>>> No idea how/why lazy RCU CBs would be related to expedited GP issues,
+>>> but maybe something hangs and causes that side-effect.
+>>>
+>>> initcall_debug did not help, as it seems initcalls all work fine, and
+>>> then 8 seconds after the boot, it starts slowing down a lot, followed
+>>> by the RCU stall messages. As a next step I'll enable ftrace during
+>>> the boot to see if I can get more insight. But I believe, its not the
+>>> FS layer, the FS layer just triggers lazy CBs, but there is something
+>>> wrong with the core lazy-RCU work itself.
+>>>
+>>> This kernel is 5.19-rc4. I'll also try to rebase ChromeOS on more
+>>> recent kernels and debug.
 >>
->> The current sdm845-xiaomi-beryllium.dts represents tianma panel variant.
+>> More digging, thanks to trace_event= boot option , I find that the
+>> boot process does have some synchronous waits, and though these are
+>> "non-lazy", for some reason the lazy CBs that were previously queued
+>> are making them wait for the *full* lazy duration. Which points to a
+>> likely bug in the lazy RCU logic. These synchronous CBs should never
+>> be waiting like the lazy ones:
 >>
->> To add support for the EBBG variant, let's split this into 3 files,
->> - sdm845-xiaomi-beryllium-common.dtsi which contains all the common node=
-s
->> - sdm845-xiaomi-beryllium-tianma.dts for the tianma variant
->> - sdm845-xiaomi-beryllium-ebbg.dts for the ebbg variant
+>> [   17.715904]  => trace_dump_stack
+>> [   17.715904]  => __wait_rcu_gp
+>> [   17.715904]  => synchronize_rcu
+>> [   17.715904]  => selinux_netcache_avc_callback
+>> [   17.715904]  => avc_ss_reset
+>> [   17.715904]  => sel_write_enforce
+>> [   17.715904]  => vfs_write
+>> [   17.715904]  => ksys_write
+>> [   17.715904]  => do_syscall_64
+>> [   17.715904]  => entry_SYSCALL_64_after_hwframe
 >>
->> Note:
->> -----
->> Both the panels are already upstreamed and the split is based on them.
->> There were patches earlier for both the touchscreens, but they are not
->> accepted upstream yet. Once they are accepted, we will add them to
->> respective variants.
-> Hi,
->
-> I believe this is not the correct approach. This may work short-term, but
-> you will have to prepare 2 separate images for the device and mistaking t=
-hem
-> may cause irreversible hw damage at worst, or lots of user complaining at=
- best.
-> Instead, I think it's about time we should look into implementing dynamic=
- panel
-> detection.
->
-> Qualcomm devices do this by parsing the command line [1], as LK/XBL
-> gives you a nice-ish string to work with that you can simply match
-> against a label. Other vendors may use custom mechanisms, such as
-> a resistor / GPIO to determine which panel (or generally hw config),
-> but implementing this mechanism would make upstreaming of lots of other
-> devices easier..
+>> I'm tired so I'll resume the debug later.
+> 
+> At times like this, I often pull the suspect code into userspace and
+> run it through its paces.  In this case, a bunch of call_rcu_lazy()
+> invocations into an empty bypass list, followed by a call_rcu()
+> invocation, then a check to make sure that the bypass list is no longer
+> lazy.
 
-Regarding dynamic panel detection. A mechanism for choosing DT nodes based =
-on some
-generic (read: extensible) matching feature would be pretty neat....
+Thanks a lot for this great debug idea, I will look into it.
 
-e.g. matching cmdline:
+Thanks,
 
-panel {
-=09compatible =3D "some,w3ird-panel";
-=09/* Only attempt to probe a driver for this node if cmdline contains
-=09 * this string. How this is described and the type(s) of matching to
-=09 * use could be defined.
-=09 */
-=09match-if-cmdline =3D "msm_drm.dsi_display0=3Dsome_w3ird-panel";
-};
-
-or perhaps GPIO state:
-
-panel {
-=09compatible =3D "some,w3ird-panel";
-=09/* Only attempt to probe a driver for this node if GPIO 43 on tlmm is hi=
-gh,
-=09 * and GPIO 44 is low.
-=09 */
-=09match-if-gpios =3D <&tlmm 43 GPIO_ACTIVE_HIGH>, <&tlmm 44 GPIO_ACTIVE_LO=
-W>;
-};
-
-This certainly introduces the temptation to do awful things...
-
->
-> This issue concerns many phones (and well, devices in general), as
-> they are seldom made with only one configuration due to supply chain
-> strategies.
-
-It would be really nice to solve this in-kernel, chainloading a bootloader =
-sometimes kinda sucks.
->
->
-> Konrad
->
-> [1] https://github.com/LineageOS/android_kernel_xiaomi_sdm845/blob/lineag=
-e-19.1/drivers/gpu/drm/msm/dsi-staging/dsi_display.c
-
---
-Kind Regards,
-Caleb
-
+ - Joel

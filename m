@@ -2,98 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBDC599551
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E38599562
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243435AbiHSGbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 02:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        id S1346231AbiHSGdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 02:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239907AbiHSGbn (ORCPT
+        with ESMTP id S231991AbiHSGdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 02:31:43 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206E5CE495
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:31:41 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id q7so1233867lfu.5
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Bb2RpT6vGLRj2vz+IAdNpAgpAbLXOPpk7ezwAEBFYwY=;
-        b=PjTOEJ7UVo3OwfPxwoHxo3jrcfA8/pAuI7GZMYNsQ+EbNFOYCAglWqmIJYqSiNARNz
-         a5s/LIpaVS257AsfezDM2rPaUqul4ZwVuNg22IFg+BCsN1hveBQDHXyivh3aDSW6LhPH
-         zTzQaKgPb8rjbJqMJchNdvT5WxjjOIOD/8l4TreRzhKQ+/ED+jmk0Mzzsx5VH3HJoE7I
-         lOdfextLrw03dVjS82jVmm6b7XQ4elNURm4LchOwnSB1Ki4v5Tn9GFYs6nGKqwqefnUn
-         2w5T7LNZQmUUqF0vHnnSaeObZScPx1PnEVl+/FyAm3UaGRQEEflik9EyXQrzy3scRcPi
-         o2ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Bb2RpT6vGLRj2vz+IAdNpAgpAbLXOPpk7ezwAEBFYwY=;
-        b=YmmqyOGXE4c7S6weS4b0AGhkx0l6++t9Ey3DLGIwPlyuD7ML+VI0uMqPdMkmZUJJM6
-         jXhQrlyCg704MaNgV5gPTcSNkgsEMpEgXaWRIBYXOXVPfnxZdEZTXojQGC7MzP0kveai
-         YtdROe1VzujKbhQzoMLgUVH7Nsj8ftMu4Rfm7Jv8GsLVzQoi2+XA4Ck7E/xD5dqk/MBc
-         HStbILOlkSbj0lRZo1C9hiuIDg/lVOfaCSzZtEteR1JulTs6XaVsMwHmlriK9Upv3xGU
-         DEL9zKcscCu0yWZ4ywtZYrcqB8dTOXUzwO90GaO9FgJQ7LABlGC8PQIbUieFf2j3Asem
-         PxVA==
-X-Gm-Message-State: ACgBeo1kInMxmqqMLScnVcTd96VXqoZqbpC68oJSvZDYmex3dVpDJSUg
-        kRdBpD/xGtbDXsvCHF6gC8oLbw==
-X-Google-Smtp-Source: AA6agR796NtSOJs4gp+P2t8uFT91TfNBuALgjbqCoOF2Y/Xgcdz0QTYg21T57msGMFfNMZB5FapbDg==
-X-Received: by 2002:a05:6512:3409:b0:48a:ef20:dda with SMTP id i9-20020a056512340900b0048aef200ddamr2183723lfr.649.1660890700214;
-        Thu, 18 Aug 2022 23:31:40 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id s20-20020a056512215400b00492b313d37csm514106lfr.134.2022.08.18.23.31.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 23:31:39 -0700 (PDT)
-Message-ID: <31dd0110-4c7f-61f8-7261-2476766c9360@linaro.org>
-Date:   Fri, 19 Aug 2022 09:31:37 +0300
+        Fri, 19 Aug 2022 02:33:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0FDD0745
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:33:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C7D11CE134F
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:33:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A041C433D6;
+        Fri, 19 Aug 2022 06:33:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660890781;
+        bh=7KnI6WEOjESTVzU0a8ICQJZFhVe3GPGSdd9HRl9UTKA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s90eIGPpVmk3+i9VQYk4sGJbRue9fzVHkoMwI4uodC9qlNrXaPMJAuUfW0CJBOVzq
+         kjO2WXsq6gvtXKFpmJkHpAiFm4HegLWQ7IGs54VyzTpGRQVRz52SwOxyphcCmkz3Jl
+         8psKhyiPt5S3qJXCDWWbOHlgdSAxrMCcHpRf21GE=
+Date:   Fri, 19 Aug 2022 08:32:58 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     rafael@kernel.org, mike.kravetz@oracle.com,
+        akpm@linux-foundation.org, osalvador@suse.de, david@redhat.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        muchun.song@linux.dev
+Subject: Re: [PATCH] mm: hugetlb: simplify per-node sysfs creation and removal
+Message-ID: <Yv8umgIXfbpMFukB@kroah.com>
+References: <20220819052137.7985-1-songmuchun@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/3] dt-bings: net: fsl,fec: update compatible item
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>, Wei Fang <wei.fang@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>
-References: <20220704101056.24821-1-wei.fang@nxp.com>
- <20220704101056.24821-2-wei.fang@nxp.com>
- <ef7e501a-b351-77f9-c4f7-74ab10283ed6@linaro.org>
- <20220818013344.GE149610@dragon>
- <fd41a409-d0e0-0026-4644-9058d1177c45@linaro.org>
- <20220818092257.GF149610@dragon>
- <a08b230c-d655-75ee-0f0c-8281b13b477b@linaro.org>
- <20220818135727.GG149610@dragon>
- <00614b8f-0fdd-3d7e-0153-3846be5bb645@linaro.org>
- <DB9PR04MB8106BB72857149F5DD10ACEA886C9@DB9PR04MB8106.eurprd04.prod.outlook.com>
- <PA4PR04MB9416C0E26B13D4060C2F50A9886C9@PA4PR04MB9416.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <PA4PR04MB9416C0E26B13D4060C2F50A9886C9@PA4PR04MB9416.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819052137.7985-1-songmuchun@bytedance.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -102,27 +53,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 06:13, Peng Fan wrote:
->>>
->> Sorry, I did not explain clearly last time, I just mentioned that imx8ulp fec
->> was totally reused from imx6ul and was a little different from imx6q.
->> So what should I do next? Should I fix the binding doc ?
+On Fri, Aug 19, 2022 at 01:21:37PM +0800, Muchun Song wrote:
+> The following commit offload per-node sysfs creation and removal to a kworker and
+> did not say why it is needed.  And it also said "I don't know that this is
+> absolutely required".  It seems like the author was not sure as well.  Since it
+> only complicates the code, this patch will revert the changes to simplify the code.
 > 
-> Just my understanding, saying i.MX6Q supports feature A,
-> i.MX6UL support feature A + B, Then i.MX6UL is compatible with i.MX6Q.
+>   39da08cb074c ("hugetlb: offload per node attribute registrations")
 
-Or if i.MX8ULP can bind with any previous compatible and still work
-(with limited subset of features).
+Any specific reason why you did not cc: the original author of this
+commit, or anyone else on the patch?
 
-> 
-> If upper is true from hardware level, then i.MX8ULP FEC node
-> should contain 8ulp, 6ul, 6q.
-> 
-> But the list may expand too long if more and more devices are supported
-> and hardware backward compatible
+> We could use memory hotplug notifier to do per-node sysfs creation and removal
+> instead of inserting those operations to node registration and unregistration.
+> Then, it can reduce the code coupling between node.c and hugetlb.c.  Also, it can
+> simplify the code.
 
-True. I guess three items is the limit and anything newer should restart
-the sequence.
+I do not think we had memory hotplug notifier back in 2009 when this
+commit was first written.
 
-Best regards,
-Krzysztof
+How did you test this?  Did you use a HUGETLBFS system and verify that
+everything still works properly?  You are deleting a lot of code (always
+nice), but making sure everything is still operating the same is a good
+thing.
+
+thanks,
+
+greg k-h

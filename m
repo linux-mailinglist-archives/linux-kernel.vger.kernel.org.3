@@ -2,70 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C12599DBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEBE599DBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349594AbiHSOkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 10:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S1349588AbiHSOjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 10:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348130AbiHSOki (ORCPT
+        with ESMTP id S1349582AbiHSOjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 10:40:38 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630BD63F2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:40:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1I0ucBeVMEoFMs08MGdWuNXxLKgAd1wwapOXMbYJBGM=; b=Lp0Xe4G93z22RYX+k/BjoxutXK
-        vNMCaJ8mn1KoMCRp/fu67KSKSEoKyGmNLryl7W3gjxoNfc98xGPzv3W3zEWgcFK2n1Ktpd0Wp/bSh
-        zqBgTHfVLx60ViZKgCSWLBTmiLOQBfURHuC4NcTooIODNTWOgx+pwhb11GmfXHg3D1uQxKI+ho01X
-        h9+LJC/STfZeoFYanwlSYfdDI6SB4rZf47keQuUv4kQFmbzrJMCGAh4wHmYqGFhfqJ3sz9lf2xq5I
-        mYXON3kJaFjLtY/q7NrdBPnNnuOmQ3KHjVaRbuzmF7NYVOmb1cnkboZw5+0buSW8Zsjex7rEEpPlr
-        uq/USRTg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oP39H-00BEwT-Rp; Fri, 19 Aug 2022 14:39:00 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C40539801A1; Fri, 19 Aug 2022 16:38:57 +0200 (CEST)
-Date:   Fri, 19 Aug 2022 16:38:57 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kan.liang@linux.intel.com
-Cc:     acme@redhat.com, linux-kernel@vger.kernel.org,
-        alexander.shishkin@linux.intel.com, ak@linux.intel.com,
-        Jianfeng Gao <jianfeng.gao@intel.com>
-Subject: Re: [RESEND PATCH] perf/x86/intel: Fix unchecked MSR access error
- for Alder Lake N
-Message-ID: <Yv+ggf6PRjL8Eio1@worktop.programming.kicks-ass.net>
-References: <20220818181530.2355034-1-kan.liang@linux.intel.com>
+        Fri, 19 Aug 2022 10:39:10 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37626DADD
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:39:08 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id m3so735611lfg.10
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=KFMtFtZySA4bvpQNARX7HTQqtQoy7c9hAyHo75MNDrc=;
+        b=tFKOpJghYdQzwgphRpBrhjwGCF3+e81YHAqmbInJ7EwZjj7nGg2QBi7wWaHfE10E9n
+         lGxFxV7YIENSDpredOvjEX526Sdq8W7XNSxMpBMQ5LQNTwgmrud5W6Yry0CTygfODRy6
+         8MskW7KBtv/LIHCB6kp9k7mkYtbUxWk/4/BChWRG9nTbi5ULmikcrJvKAQr2eQhjske4
+         LN1PnWjpPyOSLGjvkvA4V5jN1WcEJh+CneSHUzuwUc3JHNpR6mMbYz9ya2D6Ev5H5uk+
+         xP6VH/MIUShEFbskMRYkOkr0d9UYuShmAjQCLRsfyf7N/JeoE0RuC/JoJJGUbqrmEKpu
+         l7Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=KFMtFtZySA4bvpQNARX7HTQqtQoy7c9hAyHo75MNDrc=;
+        b=TGanXXdYfDEAk/SyPuE/RaAc7TtnrPtVZab3gYFxlXJZwsMo21n5TeELiB/EvXNqbE
+         x1jXTlThz7t2uBcDCzjZyhjWYbEAM+QwWQQiPjoM49wp2ttykZyhntUQILL2m2CKhR0W
+         iQ5IiiHyTBCkXVeOzkInM/mZoZZmuSAfWIuur1/+c9c+tDFt6qPJ0EWsISL10hlCIfPv
+         e6SqJw4MEC8XeJYdedGWXBBwDs715nYqKAlkRR+M7xAT58vOAwR6C0347XQYCkSlnA7M
+         KizQCwoIxJ67LVGRXzu+QI0DefBMflxij9diMCmXownvH0pPJK+U8Io1UlgGZarZeycj
+         PIag==
+X-Gm-Message-State: ACgBeo0vbvMJ6DO5wGHc6LScsYIDhm+Nhs+CyE7hf8IzOLUB5RmnxXLw
+        u9sHA3u5++nWdq75aECgWBAO9g==
+X-Google-Smtp-Source: AA6agR4Q1EbYcr4V84vNs+4a4X0At1d5fXgXRHjAm9c4PQOGI0y1GqQpYfoot5t3al3m32CAs6CvCw==
+X-Received: by 2002:a05:6512:280e:b0:48b:132:c420 with SMTP id cf14-20020a056512280e00b0048b0132c420mr2459974lfb.542.1660919946889;
+        Fri, 19 Aug 2022 07:39:06 -0700 (PDT)
+Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id u7-20020a2e8447000000b002618fbebbbcsm639836ljh.47.2022.08.19.07.39.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 07:39:06 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [GIT PULL] MMC fixes for v6.0-rc2
+Date:   Fri, 19 Aug 2022 16:39:05 +0200
+Message-Id: <20220819143905.8090-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818181530.2355034-1-kan.liang@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:15:30AM -0700, kan.liang@linux.intel.com wrote:
-> From: Kan Liang <kan.liang@linux.intel.com>
-> 
-> For some Alder Lake N machine, the below unchecked MSR access error may be
-> triggered.
-> 
-> [ 0.088017] rcu: Hierarchical SRCU implementation.
-> [ 0.088017] unchecked MSR access error: WRMSR to 0x38f (tried to write
-> 0x0001000f0000003f) at rIP: 0xffffffffb5684de8 (native_write_msr+0x8/0x30)
-> [ 0.088017] Call Trace:
-> [ 0.088017] <TASK>
-> [ 0.088017] __intel_pmu_enable_all.constprop.46+0x4a/0xa0
+Hi Linus,
 
-FWIW, I seem to get the same error when booting KVM on my ADL. I'm
-fairly sure the whole CPUID vs vCPU thing is a trainwreck.
+Here's a PR with a couple of MMC fixes intended for v6.0-rc2. Details about the
+highlights are as usual found in the signed tag.
+
+Please pull this in!
+
+Kind regards
+Ulf Hansson
+
+
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v6.0-rc1
+
+for you to fetch changes up to a0753ef66c34c1739580219dca664eda648164b7:
+
+  mmc: sdhci-of-dwcmshc: Re-enable support for the BlueField-3 SoC (2022-08-15 19:31:04 +0200)
+
+----------------------------------------------------------------
+MMC host:
+ - meson-gx: Fix error handling in ->probe()
+ - mtk-sd: Fix a command problem when using cqe off/disable
+ - pxamci: Fix error handling in ->probe()
+ - sdhci-of-dwcmshc: Fix broken support for the BlueField-3 variant
+
+----------------------------------------------------------------
+Christophe JAILLET (3):
+      mmc: pxamci: Fix an error handling path in pxamci_probe()
+      mmc: pxamci: Fix another error handling path in pxamci_probe()
+      mmc: meson-gx: Fix an error handling path in meson_mmc_probe()
+
+Liming Sun (1):
+      mmc: sdhci-of-dwcmshc: Re-enable support for the BlueField-3 SoC
+
+Wenbin Mei (1):
+      mmc: mtk-sd: Clear interrupts when cqe off/disable
+
+ drivers/mmc/host/meson-gx-mmc.c     |  6 ++++--
+ drivers/mmc/host/mtk-sd.c           |  6 ++++++
+ drivers/mmc/host/pxamci.c           |  4 ++--
+ drivers/mmc/host/sdhci-of-dwcmshc.c | 16 ++++++++++++++--
+ 4 files changed, 26 insertions(+), 6 deletions(-)

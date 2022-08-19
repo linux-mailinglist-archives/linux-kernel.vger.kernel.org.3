@@ -2,84 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31A659A6F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 22:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AEA359A700
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 22:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351526AbiHSUNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 16:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
+        id S1351356AbiHSUOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 16:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351766AbiHSUNm (ORCPT
+        with ESMTP id S1351210AbiHSUOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 16:13:42 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D937931EDB
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:13:40 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id c9so2905709qkk.6
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:13:40 -0700 (PDT)
+        Fri, 19 Aug 2022 16:14:40 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6E7C2775
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:14:37 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3375488624aso120976257b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:14:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=0ZI+/vTZJMCwatRjH6CTCQ+NS/gGmzoMhjFZfSHC9Xg=;
-        b=erAuLwcXBKFXI/7hzPqKjgVv59NA4vdNL/GJYeOKFNy/ryFiNqRXyGIoZ10QYEwSic
-         IUUhQMdcED+u78Y15aKm8e0oVleRwlTiZtf/E5sWNNhgmrHQFvSKg7CbJiKseQhjmkpY
-         LPUPPscDOrzIDeQfOUdJN/N4H+zxXGC5Q2iqs=
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=8L7+bHVm0h1+I67FWChZbZVTBcw+lGpUv6+U3fMiZWM=;
+        b=awXeCwO8IpyJ6UloORqQrGJLvPY2JTkO9ru8WppfBpgYyBtTTPTtcvsujXWe8ticC6
+         e6oX/xjcqfQoCner5zndlF4U8WLn/q41ztORxe5jAOVij4tkFokRUbTpRbw3KxpGls3p
+         LRQv5/eO4NvDlCbdewUPciS4nR7DM5YlqLngc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=0ZI+/vTZJMCwatRjH6CTCQ+NS/gGmzoMhjFZfSHC9Xg=;
-        b=hJsr7E7fdxkwn+gbvKBQOU0pCoPEgLyMD1UJICHrdTHejlysTtjSnM2WNLA3ZZZCDZ
-         f3c0bSoL+0y16CEHpMh2nZG/a/lngZ3oPVs90r75EHQyq/YVNxKH8SC5x4xVy3L8EouM
-         afH0yJDucDuOXyN8BINX/gS4L2GzkFnIOqT5eNfGtTpNrQ0B2SBxmM1hmsUkqAfvYp+h
-         c4UUTWzU+vJittOYAQczTjPaP+5/J+qoiZl/dBL2z5zKNWnOwHcAofxf79M+/PFsm+fa
-         Xmi3R1icqQt2rzhbeMyULOpxVz4/MPFUdiqR0SayrCfy7dVQkVZwZEkQPsaYNL2iEHqI
-         ncaA==
-X-Gm-Message-State: ACgBeo1H2vGsKzUSuRpFK03Armo/8kkR3e771pBrHweWymyLC6bSJjLK
-        r92Jonz3ubGooq95+b0SGjuT8A==
-X-Google-Smtp-Source: AA6agR6EiRuMbdtZBYpNiL8/LOCCRd4jFW8jwghKrJ7WVyoE9tGAGqmO3KaRE2xsCWguAXWSoY2BXQ==
-X-Received: by 2002:a37:5481:0:b0:6b9:573e:a813 with SMTP id i123-20020a375481000000b006b9573ea813mr6221323qkb.197.1660940019812;
-        Fri, 19 Aug 2022 13:13:39 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id fb24-20020a05622a481800b003434d1a7a14sm3653902qtb.62.2022.08.19.13.13.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 13:13:39 -0700 (PDT)
-Message-ID: <7d9a6d45-db57-b9a5-63a5-c2b90342ee0a@joelfernandes.org>
-Date:   Fri, 19 Aug 2022 16:13:37 -0400
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=8L7+bHVm0h1+I67FWChZbZVTBcw+lGpUv6+U3fMiZWM=;
+        b=A6xAYTGeUqAPed2ivOGZU+Rmyy32UHRgon8D/C3F9U2p6lhS0FCshyytQ3nAVhwftW
+         BpFfsCT9rzqoDgRtuSdSfkZ2R6AnAOrOi9vSviWiIEsotxj96r9a/eE0s4t6saOOxA8O
+         GjC74l+g44YEu9mz+Jwv7sCSgbQdnwV4u+OkV+vsho2gL3HJyqffq4zlnjDKSUkDQhj/
+         152YYH/EY4osop/rci9X65rRNNBtiFhvMV9Mlh07OfOB9WjzK08O6jJfMUHC/QKdpEss
+         EtiCamjyY5/n7mt1nGslcgtNZCvjLxNABvxOfQmoB6GVF6h2fh9eknwQ01YmnAAtEtgD
+         9V6Q==
+X-Gm-Message-State: ACgBeo3Ct5vuA6Y34BIYhWW0HYNmJToPC9NnB64P2p3EVE5XS6fTKBVG
+        d3vhbotz/O6g/D+iYSXfTsA/vN3mttOKTLqAlXsz9g==
+X-Google-Smtp-Source: AA6agR6CCayhZnAMrxJ+v1bK9UJnwnwMBBlBDXq/U5wvwtoOFWPmWroCKCGDPD1Muwlj/dj3C1GkJk5po0HudLnx4iA=
+X-Received: by 2002:a25:8892:0:b0:66e:fe43:5aa0 with SMTP id
+ d18-20020a258892000000b0066efe435aa0mr8893175ybl.445.1660940076645; Fri, 19
+ Aug 2022 13:14:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v3 resend 4/6] fs: Move call_rcu() to call_rcu_lazy() in
- some paths
-Content-Language: en-US
-To:     paulmck@kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, rcu <rcu@vger.kernel.org>
-References: <20220809034517.3867176-5-joel@joelfernandes.org>
- <CAEXW_YQuGga9Eivq4G6o1XjvPn-nMMDiM8FOY6HXJTMzwv1Emg@mail.gmail.com>
- <CAEXW_YQOXBRwCLZXjspXttGkNhbJK3HGVDuYj5TcYD=Xj1cK0A@mail.gmail.com>
- <CAEXW_YT3VnK5KJTbyXdCzs8j4jw9XFTSCF4Dt9QwLPtkPSb1tA@mail.gmail.com>
- <20220819023550.GN2125313@paulmck-ThinkPad-P17-Gen-1>
- <4deb7354-bac7-b530-47ba-54cf50cfce58@joelfernandes.org>
- <2d56e4ad-7d6e-2abb-461f-15f20128d42b@joelfernandes.org>
- <20220819171249.GP2125313@paulmck-ThinkPad-P17-Gen-1>
- <fa8b7857-b9fd-72ad-36a7-8b09e4472816@joelfernandes.org>
- <b2a2742c-8e4e-152d-812f-987c8a941ddf@joelfernandes.org>
- <20220819195831.GR2125313@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <20220819195831.GR2125313@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220810204750.3672362-1-bjorn.andersson@linaro.org>
+ <20220810204750.3672362-2-bjorn.andersson@linaro.org> <a13bce60-25b4-d075-d56a-d1283e91e3ba@linaro.org>
+ <20220814210104.GA690892-robh@kernel.org> <Yv1y9Wjp16CstJvK@baldur> <CAE-0n53AjJ_G6yZoTALWpKvZUdF+8nFZ+TQh=Ch=8xgdMVqDkw@mail.gmail.com>
+In-Reply-To: <CAE-0n53AjJ_G6yZoTALWpKvZUdF+8nFZ+TQh=Ch=8xgdMVqDkw@mail.gmail.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Fri, 19 Aug 2022 13:14:25 -0700
+Message-ID: <CACeCKadP-AZ8OU4A=7CrwAz7yuLvMvjvAcw7K-FORFmkMvx7cA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Pin-yen Lin <treapking@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,218 +72,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> This would do that for us, but when all four lanes are connected from
+> the qmp phy directly to the connector we could just as easily have done
+> it with one endpoint.
+>
+>         qmp_phy {
+>                 ports {
+>                         port@0 {
+>                                 reg = <0>;
+>                                 endpoint@0 {
+>                                         reg = <0>;
+>                                         remote-endpoint = <&usb_c_ss>;
+>                                         data-lanes = <1 2 3 0>
+>                                 };
+>                         };
+>                 };
+>         };
+>
+> So should we explicitly have two endpoints in the usb-c-connector for
+> the two pairs all the time, or should we represent that via data-lanes
+> and only split up the connector's endpoint if we need to connect the
+> usb-c-connector to two different endpoints?
 
+I like 2 endpoints to represent the usb-c-connector, but that doesn't seem
+to be compatible (without introducing `data-lanes`, at least) with all
+the various
+combinations on the remote side, if that remote side is a DRM bridge with DP
+output capability (like it6505 or anx7625).
+That type of DRM bridge supports 1, 2 or 4 lane DP connections.
 
-On 8/19/2022 3:58 PM, Paul E. McKenney wrote:
-> On Fri, Aug 19, 2022 at 03:40:00PM -0400, Joel Fernandes wrote:
->> On 8/19/2022 2:14 PM, Joel Fernandes wrote:
->>> On 8/19/2022 1:12 PM, Paul E. McKenney wrote:
->>>> On Fri, Aug 19, 2022 at 12:30:49PM -0400, Joel Fernandes wrote:
->>>>> On 8/18/2022 10:45 PM, Joel Fernandes wrote:
->>>>>> On 8/18/2022 10:35 PM, Paul E. McKenney wrote:
->>>>>>> On Thu, Aug 18, 2022 at 09:21:56PM -0400, Joel Fernandes wrote:
->>>>>>>> On Thu, Aug 18, 2022 at 7:05 PM Joel Fernandes <joel@joelfernandes.org> wrote:
->>>>>>>>>
->>>>>>>>> On Thu, Aug 18, 2022 at 1:23 PM Joel Fernandes <joel@joelfernandes.org> wrote:
->>>>>>>>>>
->>>>>>>>>> [Sorry, adding back the CC list]
->>>>>>>>>>
->>>>>>>>>> On Mon, Aug 8, 2022 at 11:45 PM Joel Fernandes (Google)
->>>>>>>>>> <joel@joelfernandes.org> wrote:
->>>>>>>>>>>
->>>>>>>>>>> This is required to prevent callbacks triggering RCU machinery too
->>>>>>>>>>> quickly and too often, which adds more power to the system.
->>>>>>>>>>>
->>>>>>>>>>> When testing, we found that these paths were invoked often when the
->>>>>>>>>>> system is not doing anything (screen is ON but otherwise idle).
->>>>>>>>>>
->>>>>>>>>> Unfortunately, I am seeing a slow down in ChromeOS boot performance
->>>>>>>>>> after applying this particular patch. It is the first time I could
->>>>>>>>>> test ChromeOS boot times with the series since it was hard to find a
->>>>>>>>>> ChromeOS device that runs the upstream kernel.
->>>>>>>>>>
->>>>>>>>>> Anyway, Vlad, Neeraj, do you guys also see slower boot times with this
->>>>>>>>>> patch? I wonder if the issue is with wake up interaction with the nocb
->>>>>>>>>> GP threads.
->>>>>>>>>>
->>>>>>>>>> We ought to disable lazy RCU during boot since it would have little
->>>>>>>>>> benefit anyway. But I am also concerned about some deeper problem I
->>>>>>>>>> did not catch before.
->>>>>>>>>>
->>>>>>>>>> I'll look into tracing the fs paths to see if I can narrow down what's
->>>>>>>>>> causing it. Will also try a newer kernel, I am currently testing on
->>>>>>>>>> 5.19-rc4.
->>>>>>>>>
->>>>>>>>> I got somewhere with this. It looks like queuing CBs as lazy CBs
->>>>>>>>> instead of normal CBs, are triggering expedited stalls during the boot
->>>>>>>>> process:
->>>>>>>>>
->>>>>>>>>   39.949198] rcu: INFO: rcu_preempt detected expedited stalls on
->>>>>>>>> CPUs/tasks: { } 28 jiffies s: 69 root: 0x0/.
->>>>>>>>>
->>>>>>>>> No idea how/why lazy RCU CBs would be related to expedited GP issues,
->>>>>>>>> but maybe something hangs and causes that side-effect.
->>>>>>>>>
->>>>>>>>> initcall_debug did not help, as it seems initcalls all work fine, and
->>>>>>>>> then 8 seconds after the boot, it starts slowing down a lot, followed
->>>>>>>>> by the RCU stall messages. As a next step I'll enable ftrace during
->>>>>>>>> the boot to see if I can get more insight. But I believe, its not the
->>>>>>>>> FS layer, the FS layer just triggers lazy CBs, but there is something
->>>>>>>>> wrong with the core lazy-RCU work itself.
->>>>>>>>>
->>>>>>>>> This kernel is 5.19-rc4. I'll also try to rebase ChromeOS on more
->>>>>>>>> recent kernels and debug.
->>>>>>>>
->>>>>>>> More digging, thanks to trace_event= boot option , I find that the
->>>>>>>> boot process does have some synchronous waits, and though these are
->>>>>>>> "non-lazy", for some reason the lazy CBs that were previously queued
->>>>>>>> are making them wait for the *full* lazy duration. Which points to a
->>>>>>>> likely bug in the lazy RCU logic. These synchronous CBs should never
->>>>>>>> be waiting like the lazy ones:
->>>>>>>>
->>>>>>>> [   17.715904]  => trace_dump_stack
->>>>>>>> [   17.715904]  => __wait_rcu_gp
->>>>>>>> [   17.715904]  => synchronize_rcu
->>>>>>>> [   17.715904]  => selinux_netcache_avc_callback
->>>>>>>> [   17.715904]  => avc_ss_reset
->>>>>>>> [   17.715904]  => sel_write_enforce
->>>>>>>> [   17.715904]  => vfs_write
->>>>>>>> [   17.715904]  => ksys_write
->>>>>>>> [   17.715904]  => do_syscall_64
->>>>>>>> [   17.715904]  => entry_SYSCALL_64_after_hwframe
->>>>>>>>
->>>>>>>> I'm tired so I'll resume the debug later.
->>>>>>>
->>>>>>> At times like this, I often pull the suspect code into userspace and
->>>>>>> run it through its paces.  In this case, a bunch of call_rcu_lazy()
->>>>>>> invocations into an empty bypass list, followed by a call_rcu()
->>>>>>> invocation, then a check to make sure that the bypass list is no longer
->>>>>>> lazy.
->>>>>>
->>>>>> Thanks a lot for this great debug idea, I will look into it.
->>>>>
->>>>> It seems to be a subtle issue when a large number of callbacks are
->>>>> queued trigging the lock-contention code, which happens at boot. It
->>>>> appears the non-lazy ones and lazy ones collide, so you have the lazy
->>>>> timer which wins, and then the regular bypass lock-contention timer is
->>>>> not allowed to do its thing. Due to this, the rcuog thread wakes up much
->>>>> later than a jiffie.
->>>>
->>>> Good show, and glad you found it!
->>>
->>> Thanks!
->>>
->>>>> Things are much better with the following change. However, this brings
->>>>> me to a question about lock-contention based or any deferring and boot time.
->>>>>
->>>>> If you have a path like selinux doing a synchronize_rcu(), shouldn't we
->>>>> skip the jiffie waiting for the bypass timer? Otherwise things
->>>>> synchronously waiting will slow down more than usual. Maybe bypassing
->>>>> should not be done for any case until boot up is done. I'm curious to
->>>>> see if that improves boot time.
->>>>
->>>> Why not simply disable laziness at boot time and enable it only after
->>>> booting is complete?  The exiting rcupdate.rcu_normal_after_boot kernel
->>>> boot parameter uses a similar scheme.
->>>
->>> That sounds like the right thing to good, but unfortunately it wont help
->>> this problem. The boot time issue happens after init has started. So the
->>> OS is still "booting" even though the kernel has.
->>>
->>> Also the problem can happen after boot as well, like if RCU
->>> lazy/non-lazy callbacks come back to back quickly, or so.
->>>
->>> But yes nonetheless, I can see the value of disabling it till the
->>> in-kernel boot completets.
->>>
->>>>> @@ -580,7 +585,11 @@ static void __call_rcu_nocb_wake(struct rcu_data
->>>>> *rdp, bool was_alldone,
->>>>>         len = rcu_segcblist_n_cbs(&rdp->cblist);
->>>>>         bypass_len = rcu_cblist_n_cbs(&rdp->nocb_bypass);
->>>>>         lazy_len = rcu_cblist_n_lazy_cbs(&rdp->nocb_bypass);
->>>>> -       if (was_alldone) {
->>>>> +
->>>>> +       // If we are in lazy-mode, we still need to do a wake up even if
->>>>> +       // all CBs were previously done. Otherwise the GP thread will
->>>>> +       // wait for the full lazy duration.
->>>>> +       if (was_alldone || (READ_ONCE(rdp->nocb_defer_wakeup) ==
->>>>> RCU_NOCB_WAKE_LAZY)) {
->>>>>                 rdp->qlen_last_fqs_check = len;
->>>>>                 // Only lazy CBs in bypass list
->>>>>                 if (lazy_len && bypass_len == lazy_len) {
->>>>
->>>> And this change looks plausible, though as always, the system's opinion
->>>> carries much more weight than does mine.
->>>
->>> Sounds good, thanks, I am testing it more. Will update it for v4.
->>
->> We could also do the following, I tested it and it fixes it. It seems more maintainable
->> and less fragile, but it comes at a slightly higher (but likely negligible) cost. If there
->> are lazy CBs queued, and any non-lazy one comes, then the first non-lazy one is not
->> considered to be added to the bypass list but hopefully that's Ok with you. Later non-lazy
->> ones will be added to the bypass.
-> 
-> At first I was concerned that you intended to reorder the callbacks,
-> but fortunately that is not what the patch below does.  ;-)
-> 
-> But don't you also need to clear the "lazy" flag at some point in this
-> execution path?  After all, once a non-lazy callback arrives, all the
-> callbacks are treated as if they are non-lazy, correct?
-
-Oh, I did not see a need to clear this flag, I did not want to modify the flag because it
-is set by the caller and is more to signal what the caller intended than what its treated as.
-
-IMO it should not effect the treatment of the lazy CB as a non-lazy one, because the
-effect is the same as if something was queued into the bypass list. The bypass list is
-flushed first before the "non-bypass" (which could be non-lazy) CB is requested to be
-queued by the caller, so we're doing the same thing as the existing bypass logic.
-
-Basically these comments:
-        // If there hasn't yet been all that many ->cblist enqueues
-        // this jiffy, tell the caller to enqueue onto ->cblist.  But flush
-        // ->nocb_bypass first.
-
-    WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, j, lazy, false));
-
-Also the issue that the below diff fixed is more about the non-lazy one being treated as a
-lazy one than the other way.
-
-Let me know if I missed something. Thanks,
-
-- Joel
-
-
-> 							Thanx, Paul
-> 
->> @@ -484,9 +490,17 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head
->> *rhp,
->>         // since we are kick-starting RCU GP processing anyway for the non-lazy
->>         // one, we can just reuse that GP for the already queued-up lazy ones.
->>         if ((rdp->nocb_nobypass_count < nocb_nobypass_lim_per_jiffy && !lazy) ||
->> -           (lazy && n_lazy_cbs >= qhimark)) {
->> +           (!lazy && n_lazy_cbs) ||
->> +           (lazy  && n_lazy_cbs >= qhimark)) {
->>                 rcu_nocb_lock(rdp);
->> -               *was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
->> +
->> +               // This variable helps decide if a wakeup of the rcuog thread
->> +               // is needed. It is passed to __call_rcu_nocb_wake() by the
->> +               // caller.  If only lazy CBs were previously queued and this one
->> +               // is non-lazy, make sure the caller does a wake up.
->> +               *was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist) ||
->> +                               (!lazy && n_lazy_cbs);
->> +
->>                 if (*was_alldone)
->>                         trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
->>                                             lazy ? TPS("FirstLazyQ") : TPS("FirstQ"));
->> @@ -500,7 +514,8 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head
->> *rhp,
->>         if ((ncbs && j != READ_ONCE(rdp->nocb_bypass_first)) || ncbs >= qhimark) {
->>                 rcu_nocb_lock(rdp);
->>                 if (!rcu_nocb_flush_bypass(rdp, rhp, j, lazy, false)) {
->> -                       *was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
->> +                       *was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist) ||
->> +                               (!lazy && n_lazy_cbs);
->>                         if (*was_alldone)
->>                                 trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
->>                                                     lazy ? TPS("FirstLazyQ") : TPS("FirstQ"));
+So, how about 4 endpoints (1 for each SS lane) in the usb-c-connector port@1?
+That should support every conceivable configuration and bridge/PHY hardware.
+and also allows a way to specify any lane remapping (similar to what
+"data lanes" does)
+if that is required.
+Then we are consistent with what an endpoint represents, regardless of whether
+the DRM bridge has a DP panel (1,2 or 4 lane) or Type-C connector  (2
+or 4 lane) on its output side.

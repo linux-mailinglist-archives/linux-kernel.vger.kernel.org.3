@@ -2,121 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CDEB599CE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A58599CE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349243AbiHSNY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 09:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
+        id S1349322AbiHSN2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 09:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348748AbiHSNYY (ORCPT
+        with ESMTP id S1348542AbiHSN2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 09:24:24 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F140BCCC1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:24:23 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3378303138bso80611077b3.9
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:24:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=PE//5FEPNMY6rqPHYV8LuBFuRKOmU7+3QHKdarRxGyc=;
-        b=aSYdSnYEKlKxbvpP9TuGgufwIVXR50CGqOvKDmGFW8Vb3+LQ9emC3BrcJ2Z453m8IO
-         RtiaQhU74aZklL5kGfsx2dY+HsILotAedaadZ6MkTFMpLHsPhJXakEKi34lHy4ybX53U
-         5y0Eseu8EdEnetwCzlvJbdi/1rVJ1QNKkKsHnbBHJlve13Kz+7ToZOUu8pkAse3oI5W5
-         2SSzyClZO1qsyZorj/dfrhM5Nd3qLe/agf0EduOQTtOdQ+cXe3+ExkKSlhe6fZowa51x
-         zgewUvbyfC7Q2xt/2p8nR5cG2jeltaXsJt5zWWhGGotD1iNxomEAXnsgVvBCY7ymeG6V
-         DciQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=PE//5FEPNMY6rqPHYV8LuBFuRKOmU7+3QHKdarRxGyc=;
-        b=AOBtjiTMBKqL4s6QOF3ICxq7Oj8/Dkr0TlbR64/t+RvVJjfWJRsAPdjkDRm116ynuT
-         dwZ/1LsqL9Lfs/tnoTHX+gysBfEsq+G4An7MJEmGNHnfuouAOoUmbrkSOwXYX9U3GNkv
-         KCv/lKme4iJoM/SMlLFNHRt+lcgqUtcDtNjw9gorjcAxMIGVqCboGQQRuBDJh1NZh7Nc
-         gnUVnDTe9cXXFiZOQezA1jhRdvO3g7bu9lw23c0xeD+AUl/45nV4XI3zouisJ8/sHIaY
-         lQvsqqmGM7aK42udh03Nqx9aXAXKGPgfXKEp9vNnl3YIPh+AJ1JiMBST+7r1UPoH78qq
-         GktA==
-X-Gm-Message-State: ACgBeo3imk4NqYfXSwUGpUgXhGtS9+D1tZAz1xfcUfmsR//VFY2p7xlF
-        9QatrdjHOd4NU5q9+Yu4Mz7WV/WCMIGyDafnmnw=
-X-Google-Smtp-Source: AA6agR5X7G7uODnDVvm5AgmB6SB4q/bXpLmpHQeI676PpI8u2cJAUuq7mEMdIgZ4TG2cL8C7H5O+n0L/1uhSTsb6IAM=
-X-Received: by 2002:a5b:848:0:b0:683:58d:ea95 with SMTP id v8-20020a5b0848000000b00683058dea95mr7145104ybq.565.1660915462320;
- Fri, 19 Aug 2022 06:24:22 -0700 (PDT)
+        Fri, 19 Aug 2022 09:28:33 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF97241D1A;
+        Fri, 19 Aug 2022 06:28:31 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 9DA6A1C0010; Fri, 19 Aug 2022 15:28:30 +0200 (CEST)
+Date:   Fri, 19 Aug 2022 15:28:30 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.15 615/779] mfd: t7l66xb: Drop platform disable callback
+Message-ID: <20220819132830.GE11901@duo.ucw.cz>
+References: <20220815180337.130757997@linuxfoundation.org>
+ <20220815180403.651006449@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220817080332.1052710-1-weiyongjun1@huawei.com> <20220817080332.1052710-4-weiyongjun1@huawei.com>
-In-Reply-To: <20220817080332.1052710-4-weiyongjun1@huawei.com>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Fri, 19 Aug 2022 22:24:10 +0900
-Message-ID: <CAC5umyhZrUsOCDbWPznRpuaDwScHf7yKA5m8X8jwVztm6B+meA@mail.gmail.com>
-Subject: Re: [PATCH 3/4 -next] fault-injection: make some stack filter attrs
- more readable
-To:     Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="qFgkTsE6LiHkLPZw"
+Content-Disposition: inline
+In-Reply-To: <20220815180403.651006449@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=E5=B9=B48=E6=9C=8817=E6=97=A5(=E6=B0=B4) 16:45 Wei Yongjun <weiyongjun=
-1@huawei.com>:
->
-> Attributes of stack filter are show as unsigned decimal, such
-> as 'require-start', 'require-end'. This patch change to
-> show them as unsigned hexadecimal for more readable.
->
-> Before:
->   $ echo 0xffffffffc0257000 > /sys/kernel/debug/failslab/require-start
->   $ cat /sys/kernel/debug/failslab/require-start
->   18446744072638263296
->
-> After:
->   $ echo 0xffffffffc0257000 > /sys/kernel/debug/failslab/require-start
->   $ cat /sys/kernel/debug/failslab/require-start
->   0xffffffffc0257000
->
-> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-> ---
->  lib/fault-inject.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
->
-> diff --git a/lib/fault-inject.c b/lib/fault-inject.c
-> index 515fc5aaf032..deca05e7c9b3 100644
-> --- a/lib/fault-inject.c
-> +++ b/lib/fault-inject.c
-> @@ -179,6 +179,14 @@ static void debugfs_create_ul(const char *name, umod=
-e_t mode,
->
->  #ifdef CONFIG_FAULT_INJECTION_STACKTRACE_FILTER
->
-> +DEFINE_SIMPLE_ATTRIBUTE(fops_xl, debugfs_ul_get, debugfs_ul_set, "0x%llx=
-\n");
-> +
-> +static void debugfs_create_xl(const char *name, umode_t mode,
-> +                             struct dentry *parent, unsigned long *value=
-)
-> +{
-> +       debugfs_create_file(name, mode, parent, value, &fops_xl);
-> +}
 
-How about using an existing `debugfs_create_xul()` instead of defining
-a local helper function?
+--qFgkTsE6LiHkLPZw
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+On Mon 2022-08-15 20:04:19, Greg Kroah-Hartman wrote:
+> From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> [ Upstream commit 128ac294e1b437cb8a7f2ff8ede1cde9082bddbe ]
+>=20
+> None of the in-tree instantiations of struct t7l66xb_platform_data
+> provides a disable callback. So better don't dereference this function
+> pointer unconditionally. As there is no user, drop it completely instead
+> of calling it conditional.
+>=20
+> This is a preparation for making platform remove callbacks return void.
+
+I'm not sure if we need this in stable; this does not really fix
+anything, it is just a cleanup.
+
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--qFgkTsE6LiHkLPZw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYv+P/gAKCRAw5/Bqldv6
+8pvPAKC7p4CucX2yYDYm4pR9PPoD/crrLgCfa6yNWtF9xoJzVrJTLiV3b4A6GBU=
+=v2gB
+-----END PGP SIGNATURE-----
+
+--qFgkTsE6LiHkLPZw--

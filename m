@@ -2,66 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9347D599865
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2519259987C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347996AbiHSJOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46674 "EHLO
+        id S1348025AbiHSJOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347156AbiHSJOB (ORCPT
+        with ESMTP id S1348004AbiHSJOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:14:01 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9095C357D6;
-        Fri, 19 Aug 2022 02:13:59 -0700 (PDT)
-X-UUID: b7ecfe9518ab4e6ab836bc979d57a72a-20220819
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=w8qy4e70fA8fi5hbYN1bbBy3SRJLsnHUumQc0DFXM8w=;
-        b=Hd86rLwRpBnNr/wVBh3RhAICyqbAP1asLKnbOX/sRYbAGaQyO/RQzWmYLo1G2nfTwGnr4HbFPZG05Z8zpwNSvlCEBp5oQJtEBcaap00JtVcAmTXywcBi1bmiXKGeLNox3cP1ZjNWCSaNB8iQeFhwpeVg1x3eG2qiX9n7w3900Y0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:3d63ca9c-1791-4595-8af8-d78cfd533076,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
-        Ham,ACTION:release,TS:0
-X-CID-META: VersionHash:84eae18,CLOUDID:282733c9-6b09-4f60-bf82-12f039f5d530,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:
-        nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: b7ecfe9518ab4e6ab836bc979d57a72a-20220819
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1947182572; Fri, 19 Aug 2022 17:13:51 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 19 Aug 2022 17:13:50 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 19 Aug 2022 17:13:49 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: [PATCH 7/7] phy: phy-mtk-tphy: fix the phy type setting issue
-Date:   Fri, 19 Aug 2022 17:13:44 +0800
-Message-ID: <20220819091344.2274-7-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220819091344.2274-1-chunfeng.yun@mediatek.com>
-References: <20220819091344.2274-1-chunfeng.yun@mediatek.com>
+        Fri, 19 Aug 2022 05:14:08 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE0A3D598
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:14:05 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id n24so1928670ljc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:14:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=uuqghSHzNJr5H0vLiTIAXQb7NYP5yoc/bBfCNzDWdy4=;
+        b=l7cgJkJddLqTU0nf/69vRzamhM9l1ip2Xstft4D11LGWH1dpvWj14jzRf2oeNn62hH
+         XY/OI8AvAiKXRSqwT3Thr9/i8+CUxnG8RAPpumFO31V+Gl7Wkln/eBxJAASBTzaFpU44
+         VJimfC7jaaI1UQh13qEwJmgT2KEE8moI/PkeMF86v6/4F+v0DmaZZjuqmFaCCDcvNI5U
+         TOa7xVaHe/9r7WwDKWK3CtUsv3Moh7FVzSt6EEUQHlquYvpHAJffNusiHzqbPk0qgO1+
+         NRY6NQyVauCtloxOub3uIQ4zlaR6ojgUO54ibHERDO+tTuamJ+6jDh9/xjUCF1GOKoxN
+         Bbmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=uuqghSHzNJr5H0vLiTIAXQb7NYP5yoc/bBfCNzDWdy4=;
+        b=1MQi+hKpami8vQlZOYC2qJ6cYkjw+WLrA01QLZDsBKc6lIqVMqg9TaTEgU8TrgCytg
+         PKroqj0l7z++FZ/vscZBJ5RIONC+yclzKtenZhbaNMl4GyI4VX9mRLHrJ/1TUsaD2wO4
+         GEdOvYhiadKg0nvkZm7FwOScmLhVMq0rKXxtr1Bc5FwQ61kW9gv1uLG//QbAzd6t0yTO
+         mPw+V48Xh2K53Qk4tYfwp+rGldFlR0qvy9oPnBkk3BujhxEkx5WBF8QasS95oorOYkpP
+         JTVhIlQKft6Ga1Bg1XMOnkP9MyquKVhWki40hrk3mcSDW02U4olCPrZAAI8kI4QDVEyA
+         LEBw==
+X-Gm-Message-State: ACgBeo0RgY0tIUbLKudh8zxwXeM6Hh3EAjzl/QemV7byTpD8ropPUXl2
+        PLr4RniFFnOrCyDsF7BuVXqv7w==
+X-Google-Smtp-Source: AA6agR4hGCrfJ0FHTxXTCRDG3phtiDLv2uxyWd/UpXV2iEzQ5bMT16E59/9y8ArI9q3JbB7Owyfq+g==
+X-Received: by 2002:a2e:7e0a:0:b0:25e:63f2:bbb0 with SMTP id z10-20020a2e7e0a000000b0025e63f2bbb0mr2092765ljc.77.1660900444242;
+        Fri, 19 Aug 2022 02:14:04 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
+        by smtp.gmail.com with ESMTPSA id m4-20020a056512114400b0048b969ac5cdsm568712lfg.5.2022.08.19.02.14.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 02:14:03 -0700 (PDT)
+Message-ID: <f0f6e8af-4006-e0e8-544b-f2f892d79a1f@linaro.org>
+Date:   Fri, 19 Aug 2022 12:14:01 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH net-next 1/2] dt-bindings: net: tja11xx: add nxp,refclk_in
+ property
+Content-Language: en-US
+To:     wei.fang@nxp.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
+        f.fainelli@gmail.com, hkallweit1@gmail.com, linux@armlinux.org.uk
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220819074729.1496088-1-wei.fang@nxp.com>
+ <20220819074729.1496088-2-wei.fang@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220819074729.1496088-2-wei.fang@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,39 +80,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PHY type is not set if the index is non zero, prepare type
-value according to the index, like as mask value.
+On 19/08/2022 10:47, wei.fang@nxp.com wrote:
+> From: Wei Fang <wei.fang@nxp.com>
+> 
+> TJA110x REF_CLK can be configured as interface reference clock
+> intput or output when the RMII mode enabled. This patch add the
+> property to make the REF_CLK can be configurable.
+> 
+> Signed-off-by: Wei Fang <wei.fang@nxp.com>
+> ---
+>  .../devicetree/bindings/net/nxp,tja11xx.yaml    | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/nxp,tja11xx.yaml b/Documentation/devicetree/bindings/net/nxp,tja11xx.yaml
+> index d51da24f3505..c51ee52033e8 100644
+> --- a/Documentation/devicetree/bindings/net/nxp,tja11xx.yaml
+> +++ b/Documentation/devicetree/bindings/net/nxp,tja11xx.yaml
+> @@ -31,6 +31,22 @@ patternProperties:
+>          description:
+>            The ID number for the child PHY. Should be +1 of parent PHY.
+>  
+> +      nxp,rmii_refclk_in:
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/phy/mediatek/phy-mtk-tphy.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+No underscores in properties.
 
-diff --git a/drivers/phy/mediatek/phy-mtk-tphy.c b/drivers/phy/mediatek/phy-mtk-tphy.c
-index e0f227a0d3cc..cc10298bc70d 100644
---- a/drivers/phy/mediatek/phy-mtk-tphy.c
-+++ b/drivers/phy/mediatek/phy-mtk-tphy.c
-@@ -915,7 +915,7 @@ static int phy_type_syscon_get(struct mtk_phy_instance *instance,
- static int phy_type_set(struct mtk_phy_instance *instance)
- {
- 	int type;
--	u32 mask;
-+	u32 offset;
- 
- 	if (!instance->type_sw)
- 		return 0;
-@@ -938,8 +938,9 @@ static int phy_type_set(struct mtk_phy_instance *instance)
- 		return 0;
- 	}
- 
--	mask = RG_PHY_SW_TYPE << (instance->type_sw_index * BITS_PER_BYTE);
--	regmap_update_bits(instance->type_sw, instance->type_sw_reg, mask, type);
-+	offset = instance->type_sw_index * BITS_PER_BYTE;
-+	regmap_update_bits(instance->type_sw, instance->type_sw_reg,
-+			   RG_PHY_SW_TYPE << offset, type << offset);
- 
- 	return 0;
- }
--- 
-2.25.1
+> +        type: boolean
+> +        description: |
+> +          The REF_CLK is provided for both transmitted and receivced data
 
+typo: received
+
+> +          in RMII mode. This clock signal is provided by the PHY and is
+> +          typically derived from an external 25MHz crystal. Alternatively,
+> +          a 50MHz clock signal generated by an external oscillator can be
+> +          connected to pin REF_CLK. A third option is to connect a 25MHz
+> +          clock to pin CLK_IN_OUT. So, the REF_CLK should be configured
+> +          as input or output according to the actual circuit connection.
+> +          If present, indicates that the REF_CLK will be configured as
+> +          interface reference clock input when RMII mode enabled.
+> +          If not present, the REF_CLK will be configured as interface
+> +          reference clock output when RMII mode enabled.
+> +          Only supported on TJA1100 and TJA1101.
+
+Then disallow it on other variants.
+
+Shouldn't this be just "clocks" property?
+
+
+Best regards,
+Krzysztof

@@ -2,218 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE7559A31E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2F959A4A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354632AbiHSRip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 13:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
+        id S1354720AbiHSRiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 13:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350080AbiHSRiR (ORCPT
+        with ESMTP id S1354697AbiHSRhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 13:38:17 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A81111558B
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 09:56:35 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JGjOhV031642;
-        Fri, 19 Aug 2022 16:55:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=xmzi7s2MLFPEtYBKC55GJtP9/P7m7CvANaS86LsteSw=;
- b=x2IoKUECAuOZELaoXM4G1j7qH6B0YLP10eUUZODRPACmvgMQlzJoqtMz7+Uc4rnPSeO4
- qIBV1TGoD71NEpYj3VtP5fhTBV7/RFgY/1S5m6etJpTpDqbf2jdCB6Fsq1Vei70vPC7s
- ft1mrVmkzZO9+JsPXODaTIAENXgyALcI1nW7B3zfWNneRFLSuH1YKcCCNDOlrMjeRzeq
- fj207Ye8vOPLPK2PtAJhVdN5Ky4RToh+x9XT0zwRbqB5h6RyG68lU1IjQqOEKmyRnw6Q
- ddhuJQ0ofM7DCadSgP+gY1K31qgrL3Ifhmnqmas4E9d6LsL6SL5E/L+/e2xzY8Bk87ox Tg== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j2e5c0220-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 Aug 2022 16:55:26 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27JGptXP026883;
-        Fri, 19 Aug 2022 16:55:25 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2171.outbound.protection.outlook.com [104.47.57.171])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j0c6fet53-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 Aug 2022 16:55:25 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gmFGvCMq9JOPHnJRgNZhG2YLBA5ySMuPPWBIECa/zgHDDmDMCkaAh+OedmHHv4brx7PFNLRaZoFJL40kdrG/kawjMMazhpfA1mY+Ve5eN85rpCyxp9jDXyB+lOsM54lq04jKjmzp7ITxkK+aCajTWwjngjxhycuu5l7d6m2HtOhLOE28sXMhy0CLqFWM7+kclQB5sYhTVttWQ38bszPgdrL6dysxV6oVAd09DdcCklQu07LML6RiWTkULBAIwOroFMheRI/m/ieg6seAaoT2nxJqqeYJs9Gs3KEgX7PlU65/xNmN8VtNIAURisT8bY91jMqvAuWtImAYMCYM/qNugg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xmzi7s2MLFPEtYBKC55GJtP9/P7m7CvANaS86LsteSw=;
- b=aq46+toFTmcCPTorakDx7yb0uSnZWZC7Q+xj+3c02hecNqH186JH7t5F+jFu9eHWSQXJfjL7VKA+2kTfHIuSlQmg2MrNmm+hbqJb2HoiFxTCDBNanDSee+tVbVRC2LjCoTSIRkePVSFDBVLqa1DIromnMQ0/oMPWObhhZXiq8cik/Zx3lBXQ0rXx4W0g7IvKJ4lPZhTc9/0GjPdxA3P3nmuCgmVZuZKhXwJoeyLMux5pxFcNpBw1RE2e6LD+En8tm0DqC7UYEvjDQbxXWR4nWkU8TL1CqyDXvarx3V64QBOzPozmyt2vNHYWq/zmNheCX7hOgShB/9EAetRZvamIeg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 19 Aug 2022 13:37:37 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3FD165724
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 09:56:18 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id n4so5821733wrp.10
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 09:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xmzi7s2MLFPEtYBKC55GJtP9/P7m7CvANaS86LsteSw=;
- b=HL5VH/MOZ4+4EhNHSeAUhbQWAzqsFnTOK4pybq3On1ltkMDoI4VccmlGeEhzn/k4v8qVSpJS+kud81dcJ7Pad1lxOeAc391GuhfsEKL25WgdiC6MWM9aosyfjmhn1CA2hmZM32ozfBK6g7ewPzKbZuDTsq3JT5hp13kgLBx7PpY=
-Received: from DM6PR10MB4201.namprd10.prod.outlook.com (2603:10b6:5:216::10)
- by SN6PR10MB2447.namprd10.prod.outlook.com (2603:10b6:805:47::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.18; Fri, 19 Aug
- 2022 16:55:23 +0000
-Received: from DM6PR10MB4201.namprd10.prod.outlook.com
- ([fe80::11b6:7a8a:1432:bec]) by DM6PR10MB4201.namprd10.prod.outlook.com
- ([fe80::11b6:7a8a:1432:bec%6]) with mapi id 15.20.5546.018; Fri, 19 Aug 2022
- 16:55:23 +0000
-Date:   Fri, 19 Aug 2022 09:55:19 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Wang, Haiyue" <haiyue.wang@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "david@redhat.com" <david@redhat.com>,
-        "apopple@nvidia.com" <apopple@nvidia.com>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "naoya.horiguchi@linux.dev" <naoya.horiguchi@linux.dev>,
-        "alex.sierra@amd.com" <alex.sierra@amd.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v6 1/2] mm: migration: fix the FOLL_GET failure on
- following huge page
-Message-ID: <Yv/AdwdID9rr9xOL@monkey>
-References: <20220812084921.409142-1-haiyue.wang@intel.com>
- <20220816022102.582865-1-haiyue.wang@intel.com>
- <20220816022102.582865-2-haiyue.wang@intel.com>
- <20220816175838.211a1b1e85bc68c439101995@linux-foundation.org>
- <BYAPR11MB3495F747CBF95E079E8FC8A5F76A9@BYAPR11MB3495.namprd11.prod.outlook.com>
- <20220816224322.33e0dfbcbf522fcdc2026f0e@linux-foundation.org>
- <Yv0ku1mn4LBzg/zG@monkey>
- <875yiomq9z.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <875yiomq9z.fsf@mpe.ellerman.id.au>
-X-ClientProxiedBy: MW4PR04CA0373.namprd04.prod.outlook.com
- (2603:10b6:303:81::18) To DM6PR10MB4201.namprd10.prod.outlook.com
- (2603:10b6:5:216::10)
+        d=sifive.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=j8ZFLgSTuoY+TTUHZWrcVuE8dk4bzAu1Ol/k32eYOKo=;
+        b=nCeLu/MZDEMn9xcn0UTdb5giZelaptFqrYfLTpFVpGUyRt0a1rfHB4zbFeY9u5RuEm
+         ra8qEx/QlowcDY/sLXOYo7z54En5EAHFO0cqMb62GuwRUQ9Zdls4Yp7wHMh3F6rIUi2I
+         vWLmusLiXpm669P3BO45yjiYa+Ou1SRyJJaGoxTXX5NgprcEqo2dFf/lKhBaI58KkYVl
+         MfoBO5ML0AJoT50U4+m9Xfd6Mt9tX2rBzarQV5eoM8RDXlfFtyu1luEELfOmpcXi/OLg
+         iU6vZ7FsU9qjsk1OhfJnEo2lIY9RNBvWOCJlpEqoAaaVbH6uk35/BgD12N020ftgQ28m
+         0iVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=j8ZFLgSTuoY+TTUHZWrcVuE8dk4bzAu1Ol/k32eYOKo=;
+        b=lKd0pS9T17xg0isn/PddbF2bP1kxKGoAhKWJsQ57eZaZ2mTSD02MPA2hWKyC6ANSfA
+         rIhWMKOEtrGyPdHu6GZaBvuOvp2zVBIe8Qs7RfUDVSchuMt6I2W8yo5QEYf0Fonsov3J
+         8Sq57x2LOBWfB7MJdODFyPmeaeqF6/NVVud3LLp/gbUmECsLGlHFdcXHOXiZ6OKo9FvX
+         boJb8VJTMDcRM5tRMq0rCSXRPnUz8VfVw6NgOliz29bwLS52nRLJUki1OybENhkDDgBQ
+         D8jLEg8lepXjOvO7zWI0aAGoNgaY/kSPjvGUSE5c/FHttCmeoWI7WvggBgiv6eSOC7xy
+         JReg==
+X-Gm-Message-State: ACgBeo3/EQA6SAb+I0t/DdCq6MNBJ8tKgMLwDrp5fcUxYFN+WIlL/0f2
+        prZ5yCK3vyESsbfKXBcHOdE3cQ==
+X-Google-Smtp-Source: AA6agR53e1VEDJjz/li961SS7ONlLdMbFVXssWMS5p0Je6jZnUgfpFJ4cC21S0dWpydRb8Bl9rTJBQ==
+X-Received: by 2002:a05:6000:184c:b0:223:2c8b:c43c with SMTP id c12-20020a056000184c00b002232c8bc43cmr4882669wri.16.1660928171492;
+        Fri, 19 Aug 2022 09:56:11 -0700 (PDT)
+Received: from [10.35.5.6] ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id 8-20020a05600c024800b003a5537bb2besm5826357wmj.25.2022.08.19.09.56.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 09:56:10 -0700 (PDT)
+Message-ID: <2306e6c2-f07c-719c-1052-9bc60e59eca6@sifive.com>
+Date:   Fri, 19 Aug 2022 17:56:10 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 40268e7d-b4c4-4926-769e-08da82039b2d
-X-MS-TrafficTypeDiagnostic: SN6PR10MB2447:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xcdvxY1YDSwg1IlqXSlT6ngGTT0PvJ/wfJe2RjjDJIJlWHD582AHacu2a50DqhFLTKT99lzGKD3hmyNJ/LkKt4y8rh+sAXHAR6BqHEwig5EYy4zb8XICcdq8rlU4hYuhW7aWobKwl8vS25LG1cFyRHAg+3SB335d0YGclao2aQhN1QUpqnD9mIy/iYmpTDTm5zX6/FIhyduHpSA3zWklcDiVKS+0pvdxzx5sk7RDEgc+1q1NhQyoU6OSm8rflv9i0BcRPep/tLwcZZHA+S2o2USmQEhI6GyLc5pyPF1YJlnt6C6xKPbuYXEoJLeM6x55jmbg7aU8wR7cMT6EOCenltrSyPkz/jpeuOyVaHnaX9dFMiu9MqQceo6I17xAsH//wdKnzwOdZx1yOqlejOvQLQQAQptK1q/RKEaIUa0pqudgaJjhJiydHInTgO6niXV3Sh3Yp9gDurtcB8y/7UgZXMNzSkur4iPXKnpqv+S3a8OYmRBLyjHmGzKVnUVhtJGB2hLNC9DXr5spzb16Tdw/wFpX89wz3dLb4XmGJthRj0pqHw+oQGBG6x5bLCYH8hfrOxbBMHnQgEnmebG4a3DoQfDxqbaN80jxgMf7YIu+igkrmsfzjbhHhHZ5rMoAm4CFzlfkrWLcp+PxJzotQCefCvKQtEXyELoRdECRcDBOEbx240AtPW8yjHpYLTaIGXpmTMYqLPPBdpVCqwdfPTcm3eJifh9ES6l/NbK0RwipvR5DR8nPKHbg2fuYOrqbBJD2
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4201.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(136003)(396003)(346002)(39860400002)(366004)(6486002)(5660300002)(66476007)(33716001)(66556008)(66946007)(316002)(4326008)(86362001)(8676002)(6916009)(54906003)(38100700002)(6666004)(53546011)(41300700001)(26005)(44832011)(9686003)(6512007)(186003)(7416002)(83380400001)(478600001)(2906002)(6506007)(8936002)(14583001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ui6v/EM8N1RDnRm1YgvoCLL/qqyscLqN1CpUvhVGdni0ypdPGImRwarTLRx2?=
- =?us-ascii?Q?m8OSwNkIIOVYRzJpWkPfqvduJb2w096Enp4/9Zjo3LJqgjSQmPHmSUxei1Ds?=
- =?us-ascii?Q?eJVrW3oQjBXdaKM7o5aQ1u7Vv3PHZzH+0Yd64JEWNpLBkKk2hMuOTQfHTEyp?=
- =?us-ascii?Q?SGPeHPmfL4w8Jgan50vOLmjGOiDxW5p9YyQyUc/DcjQdPWBC1mfe4eLcLnFK?=
- =?us-ascii?Q?42Zz/uVAC+6boLJrhmnxBJ7hrEb2BwzX4fvZHRWh+CoSfB+EeetQ9DqnfvU5?=
- =?us-ascii?Q?z9Yn6ud5SBKs+59G0qsA99VKK6zkCNOj+ykH3fDYIj00H/1j2i7sTCnQFcU0?=
- =?us-ascii?Q?9HBtQ4pWFyWlAwyTpajqdLa1p+WjInkfi7ndizZSzcNPPniEw2cd6RRb4X6H?=
- =?us-ascii?Q?nV6dCw0fVtZ7xFsIe6BPP5507NnsBi3rHkaFkGvI2wBRDNAOD01KDquImWxn?=
- =?us-ascii?Q?ZyMY5ugSvnjw5Y6W4IdhXnnqz9AKD1LgdEvI4kL2L/uL58GKndj3SFoUOGVP?=
- =?us-ascii?Q?KzCop7Y/OFmfA063LVRiWjh1P0he4faK/uOHhn+ovehDL1iPZW3R9EImm+H9?=
- =?us-ascii?Q?+Y9vcWTBti25CoEOWOAfbd1LILz4m2l1ALXy2r9SCIHCcAzbhF5LpuNJ27JJ?=
- =?us-ascii?Q?Q1VPR40FAsR4JvMew6Ep3kTy/SR9pxquM0iczbFnAbZy1WdNgoKNrtVJpCIW?=
- =?us-ascii?Q?VJZ06rn6PxuHXcT/Q2/DMIKQWQlqtsLiPb4dJYu59gGboyvXrFWYzQ6XoW0T?=
- =?us-ascii?Q?pltHZM9zRlRjxm8TeWuTZSlsiv2MdUaXozGZrbgcuGtt2gjzdMAo2Qnc9BNP?=
- =?us-ascii?Q?qlAPZquX/A4Nroq11gqB5d05K3PzpF2dNHAp5/9y2jhy4m77YYm8iE/BJZLC?=
- =?us-ascii?Q?cz2ms6pNj++wvg/Dv/fmnJPNRTPUyUe72rT3qXxK+/pBh/YGuusaxXMGfGGw?=
- =?us-ascii?Q?e1v0JlcTYIJjY1+DrldmJFw/330hkPExjDUfT+YIkJxrcjD9kMtejBvcQxQO?=
- =?us-ascii?Q?kBgkoI+6Y1Y8gZLYveFLNC2fJAksMhYJBATlibEr37+hJU7Am6Vrc8zT1ebC?=
- =?us-ascii?Q?Z9Q7gUnwnloqOoSc6RWribk4rsKQr9PwreUPqGOltCQVB3nPL2ClTqzRoa8W?=
- =?us-ascii?Q?W6gi+DaYEfInQgt7wRDEN8erHpFXOAHoLZPBk+h6wYSFtYkjQgriMZPG2phk?=
- =?us-ascii?Q?wK0y2WrpsayhIf0vdFzCRIAFg0lXlzwvQfLiayzMLkFGig9Zt38iv1gXw9AO?=
- =?us-ascii?Q?gcMoTF9tX9BiwZpWGT/1oA31apU77ICjV7vsUMvEQLHOWNvdgvqpyzktaRqe?=
- =?us-ascii?Q?Y/pGYuW5zQ2/TUevvnMTLgn/4M2edxouS3znwQUYppXVitClkQZJgSRpKKaq?=
- =?us-ascii?Q?Q0zZEYpDD4kX1cUoqG1IFUuLhnRnSdI4mzhWN+W2zyhoYaS40uEp8IwjowLn?=
- =?us-ascii?Q?s4Fv4VlijBNmsnW9mYU5dR33EI/97ZE+sI0vAS1Zvw2nYil4WB5N+y13F2Lk?=
- =?us-ascii?Q?jDkE828erq5wK3J3vpQnCXh+4kQXdolcbJknnQNI+LnQSp0wRsgIu0mEl4Rv?=
- =?us-ascii?Q?Ta/vL4lOz5euxebn4xtlKUuLh9QdJXuGWYX32M0BCxljmOAl6bWe8cQQb6xg?=
- =?us-ascii?Q?wg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40268e7d-b4c4-4926-769e-08da82039b2d
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4201.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2022 16:55:23.0046
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0BrDQ7EDmcc7JCHymPjOrIeTJHio/st3QaOVb4j1dFWa/U0nOU1EaT8RR7ZcG1bTfepWEF7tiDD8zhkRZuOVLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2447
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-19_08,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- phishscore=0 mlxscore=0 malwarescore=0 suspectscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208190062
-X-Proofpoint-ORIG-GUID: bmEWJnTJNwoXZrZg0WAT_wl1a4wRkwBg
-X-Proofpoint-GUID: bmEWJnTJNwoXZrZg0WAT_wl1a4wRkwBg
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Re: [RFC v4 06/10] pwm: dwc: split pci out of core driver
+Content-Language: en-GB
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-pwm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        u.kleine-koenig@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+References: <20220816211454.237751-1-ben.dooks@sifive.com>
+ <20220816211454.237751-7-ben.dooks@sifive.com>
+ <edecb3a9-e2d4-41a1-1d06-b3a30a9bac60@linux.intel.com>
+From:   Ben Dooks <ben.dooks@sifive.com>
+In-Reply-To: <edecb3a9-e2d4-41a1-1d06-b3a30a9bac60@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/19/22 21:22, Michael Ellerman wrote:
-> Mike Kravetz <mike.kravetz@oracle.com> writes:
-> > On 08/16/22 22:43, Andrew Morton wrote:
-> >> On Wed, 17 Aug 2022 03:31:37 +0000 "Wang, Haiyue" <haiyue.wang@intel.com> wrote:
-> >>
-> >> > > >  		}
-> >> > >
-> >> > > I would be better to fix this for real at those three client code sites?
-> >> >
-> >> > Then 5.19 will break for a while to wait for the final BIG patch ?
-> >>
-> >> If that's the proposal then your [1/2] should have had a cc:stable and
-> >> changelog words describing the plan for 6.0.
-> >>
-> >> But before we do that I'd like to see at least a prototype of the final
-> >> fixes to s390 and hugetlb, so we can assess those as preferable for
-> >> backporting.  I don't think they'll be terribly intrusive or risky?
-> >
-> > I will start on adding follow_huge_pgd() support.  Although, I may need
-> > some help with verification from the powerpc folks, as that is the only
-> > architecture which supports hugetlb pages at that level.
-> >
-> > mpe any suggestions?
+On 19/08/2022 14:38, Jarkko Nikula wrote:
+> Hi
 > 
-> I'm happy to test.
+> On 8/17/22 00:14, Ben Dooks wrote:
+>> Moving towards adding non-pci support for the driver, move the pci
+>> parts out of the core into their own module. This is partly due to
+>> the module_driver() code only being allowed once in a module and also
+>> to avoid a number of #ifdef if we build a single file in a system
+>> without pci support.
+>>
+>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+>> ---
 > 
-> I have a system where I can allocate 1GB huge pages.
+> I quickly tested this on Intel Elkhart and didn't notice any regression. 
+> A few comments below.
 > 
-> I'm not sure how to actually test this path though. I hacked up the
-> vm/migration.c test to allocate 1GB hugepages, but I can't see it going
-> through follow_huge_pgd() (using ftrace).
+>>   drivers/pwm/Kconfig       |  14 +++-
+>>   drivers/pwm/Makefile      |   1 +
+>>   drivers/pwm/pwm-dwc-pci.c | 133 ++++++++++++++++++++++++++++++++
+>>   drivers/pwm/pwm-dwc.c     | 158 +-------------------------------------
+>>   drivers/pwm/pwm-dwc.h     |  58 ++++++++++++++
+>>   5 files changed, 207 insertions(+), 157 deletions(-)
+>>   create mode 100644 drivers/pwm/pwm-dwc-pci.c
+>>   create mode 100644 drivers/pwm/pwm-dwc.h
+>>
+>> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+>> index 3f3c53af4a56..a9f1c554db2b 100644
+>> --- a/drivers/pwm/Kconfig
+>> +++ b/drivers/pwm/Kconfig
+>> @@ -175,15 +175,23 @@ config PWM_CROS_EC
+>>         Controller.
+>>   config PWM_DWC
+>> -    tristate "DesignWare PWM Controller"
+>> -    depends on PCI || COMPILE_TEST
+>> +    tristate "DesignWare PWM Controller core"
+>>       depends on HAS_IOMEM
+>>       help
+>> -      PWM driver for Synopsys DWC PWM Controller attached to a PCI bus.
+>> +      PWM driver for Synopsys DWC PWM Controller.
+>>         To compile this driver as a module, choose M here: the module
+>>         will be called pwm-dwc.
+>> +config PWM_DWC_PCI
+>> +    tristate "DesignWare PWM Controller core"
+> 
+> Same text as core part has. How about "DesignWare PWM Controller PCI 
+> driver"?
 
-I thing you needed to use 16GB to trigger this code path.  Anshuman introduced
-support for page offline (and migration) at this level in commit 94310cbcaa3c
-("mm/madvise: enable (soft|hard) offline of HugeTLB pages at PGD level").
-When asked about the use case, he mentioned:
-
-"Yes, its in the context of 16GB pages on POWER8 system where all the
- gigantic pages are pre allocated from the platform and passed on to
- the kernel through the device tree. We dont allocate these gigantic
- pages on runtime."
-
--- 
-Mike Kravetz
+Thanks, did notice a couple of kconfig issues so will look at that.
 
 > 
-> Maybe I hacked it up badly, I'll have a closer look on Monday. But if
-> you have any tips on how to trigger that path let me know :)
+>> +    depends on PWM_DWC && HAS_IOMEM && PCI
+>> +    help
+>> +      PWM driver for Synopsys DWC PWM Controller attached to a PCI bus.
+>> +
+>> +      To compile this driver as a module, choose M here: the module
+>> +      will be called pwm-dwc-pci.
+>> +
+>>   config PWM_EP93XX
+>>       tristate "Cirrus Logic EP93xx PWM support"
+>>       depends on ARCH_EP93XX || COMPILE_TEST
+>> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
+>> index 7bf1a29f02b8..a70d36623129 100644
+>> --- a/drivers/pwm/Makefile
+>> +++ b/drivers/pwm/Makefile
+>> @@ -15,6 +15,7 @@ obj-$(CONFIG_PWM_CLPS711X)    += pwm-clps711x.o
+>>   obj-$(CONFIG_PWM_CRC)        += pwm-crc.o
+>>   obj-$(CONFIG_PWM_CROS_EC)    += pwm-cros-ec.o
+>>   obj-$(CONFIG_PWM_DWC)        += pwm-dwc.o
+>> +obj-$(CONFIG_PWM_DWC_PCI)    += pwm-dwc-pci.o
+>>   obj-$(CONFIG_PWM_EP93XX)    += pwm-ep93xx.o
+>>   obj-$(CONFIG_PWM_FSL_FTM)    += pwm-fsl-ftm.o
+>>   obj-$(CONFIG_PWM_HIBVT)        += pwm-hibvt.o
+>> diff --git a/drivers/pwm/pwm-dwc-pci.c b/drivers/pwm/pwm-dwc-pci.c
+>> new file mode 100644
+>> index 000000000000..2213d0e7f3c8
+>> --- /dev/null
+>> +++ b/drivers/pwm/pwm-dwc-pci.c
+>> @@ -0,0 +1,133 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * DesignWare PWM Controller driver (PCI part)
+>> + *
+>> + * Copyright (C) 2018-2020 Intel Corporation
+>> + *
+>> + * Author: Felipe Balbi (Intel)
+>> + * Author: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+>> + * Author: Raymond Tan <raymond.tan@intel.com>
+>> + *
+>> + * Limitations:
+>> + * - The hardware cannot generate a 0 % or 100 % duty cycle. Both 
+>> high and low
+>> + *   periods are one or more input clock periods long.
+>> + */
+>> +
 > 
-> cheers
+> I think this is more common limitation rather than PCI part.
+
+The PCI is based off an core without the support, it is added
+as a build option as of (IIRC) the 2.13 core.
+
+> 
+>> --- a/drivers/pwm/pwm-dwc.c
+>> +++ b/drivers/pwm/pwm-dwc.c
+>> @@ -1,16 +1,12 @@
+>>   // SPDX-License-Identifier: GPL-2.0
+>>   /*
+>> - * DesignWare PWM Controller driver
+>> + * DesignWare PWM Controller driver core
+>>    *
+>>    * Copyright (C) 2018-2020 Intel Corporation
+>>    *
+>>    * Author: Felipe Balbi (Intel)
+>>    * Author: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+>>    * Author: Raymond Tan <raymond.tan@intel.com>
+>> - *
+>> - * Limitations:
+>> - * - The hardware cannot generate a 0 % or 100 % duty cycle. Both 
+>> high and low
+>> - *   periods are one or more input clock periods long.
+>>    */
+> 
+> Relates to previous comment, is there reason why this limitation is 
+> removed from the core part?
+
+See above.
+
+> 
+>> --- /dev/null
+>> +++ b/drivers/pwm/pwm-dwc.h
+>> +#define DWC_CLK_PERIOD_NS    10
+> 
+> Perhaps this addition can be removed if patch 7/10 goes before this 
+> patch? It's anyway specific to PCI part only.
+
+Will look into that
+

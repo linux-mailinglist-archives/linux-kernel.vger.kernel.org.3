@@ -2,69 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0FC5995C1
+	by mail.lfdr.de (Postfix) with ESMTP id BE00A5995C3
 	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346993AbiHSHGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 03:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
+        id S1346388AbiHSHIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 03:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346847AbiHSHGh (ORCPT
+        with ESMTP id S1345249AbiHSHIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 03:06:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE9AE1933
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:06:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19BD2615FB
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:06:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21ABFC433D6;
-        Fri, 19 Aug 2022 07:06:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660892795;
-        bh=cp+vyEMTbv7YFDOX3ot15HLf44wWAWu4Pm5/zW002lc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PdQnZ8kL1yciTjvliLlzLOGtXUUsCjz29FI3MhGF4VUTfa1x/N4Fg3jqxRS1ZL1EF
-         Eani4mUsiDzs54ksizqaDBqcUg4flri5rpCfr80Gv8IIoGWHdqMNrcInzbcBLLdj8J
-         8Pk/IscJbXNF1KX1PXVLgVVnuX48EWdZdvzS+YI4=
-Date:   Fri, 19 Aug 2022 09:06:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Abhishek Shah <abhishek.shah@columbia.edu>
-Cc:     jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        bjohannesmeyer@gmail.com, jakobkoschel@gmail.com,
-        xiam0nd.tong@gmail.com, Gabriel Ryan <gabe@cs.columbia.edu>
-Subject: Re: data-race in set_console / vt_ioctl
-Message-ID: <Yv82cwVT9MXX2nx/@kroah.com>
-References: <CAEHB249P1XurGDtvfjzkEzP4qWEaL6FG4ENM=PYjk7-JZfnKrQ@mail.gmail.com>
+        Fri, 19 Aug 2022 03:08:45 -0400
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E698257E34;
+        Fri, 19 Aug 2022 00:08:39 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1660892882t7gg8drd
+Received: from localhost.localdomain ( [123.114.60.34])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 19 Aug 2022 15:08:00 +0800 (CST)
+X-QQ-SSF: 01400000002000D0U000B00A0000000
+X-QQ-FEAT: QityeSR92A0+yWSjjTB+IV8pKbCs/7cP9P/foXuOyx46FWXJK6UkeN9TfHSeh
+        k2nb5FbStNEBg6w+wZB3rQFMQ63eo8yZVOFmJZ/8T2vCfABNU/b/5u0/8VUA2wP3SE6Gxo/
+        T7S8cIG+y+raPFt2oUZmcL2175HQVTt7+/r6zq/kyat7ArX6Unm/vwDAFUD1UWnIJ3biMeX
+        fiLk8i+2b6fKngOnmaN9bt7dF++F3GyhSL0xnvsdNuBLWXntJEmhoHddaryH0+fIHhDoM4Z
+        GxYH+ToyEnFO6skNCVqeeEmZVbK/sMygxrQojN3Da855Pbea7sbPF/QcNpB8FoLH7p2dIga
+        escZsEpTwPMh1uXBgfig67RP8fzIWPIWEdf0l9hlL5iH5Gw4kUCTbK8IuQMnQ==
+X-QQ-GoodBg: 2
+From:   zhaoxiao <zhaoxiao@uniontech.com>
+To:     thierry.reding@gmail.com, heiko@sntech.de
+Cc:     u.kleine-koenig@pengutronix.de, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        zhaoxiao <zhaoxiao@uniontech.com>
+Subject: [PATCH v3] pwm: rockchip: Convert to use dev_err_probe()
+Date:   Fri, 19 Aug 2022 15:07:56 +0800
+Message-Id: <20220819070756.14895-1-zhaoxiao@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEHB249P1XurGDtvfjzkEzP4qWEaL6FG4ENM=PYjk7-JZfnKrQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 09:17:00PM -0400, Abhishek Shah wrote:
-> Hi all,
-> 
-> We found a data race involving the *vt_dont_switch* variable. Upon further
-> investigation, we see that this racing variable controls whether the
-> callbacks will be scheduled in the console (see here
-> <https://elixir.bootlin.com/linux/v5.18-rc5/source/drivers/tty/vt/vt.c#L3032>),
-> but we are not sure of its security implications. Please let us know what
-> you think.
+It's fine to call dev_err_probe() in ->probe() when error code is known.
+Convert the driver to use dev_err_probe().
 
-Again, any patch that you might have to resolve this would be great, as
-that's the easiest thing to review.
+Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
+---
+ v3: 1.There is no need to assign it to 'ret', and use PTR_ERR(pc->pclk) directly.
+     2.add the return before dev_err_probe().
+ drivers/pwm/pwm-rockchip.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-thanks,
+diff --git a/drivers/pwm/pwm-rockchip.c b/drivers/pwm/pwm-rockchip.c
+index f3647b317152..eda1bd49d260 100644
+--- a/drivers/pwm/pwm-rockchip.c
++++ b/drivers/pwm/pwm-rockchip.c
+@@ -328,18 +328,12 @@ static int rockchip_pwm_probe(struct platform_device *pdev)
+ 	else
+ 		pc->pclk = pc->clk;
+ 
+-	if (IS_ERR(pc->pclk)) {
+-		ret = PTR_ERR(pc->pclk);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "Can't get APB clk: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(pc->pclk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(pc->pclk), "Can't get APB clk\n");
+ 
+ 	ret = clk_prepare_enable(pc->clk);
+-	if (ret) {
+-		dev_err(&pdev->dev, "Can't prepare enable PWM clk: %d\n", ret);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "Can't prepare enable PWM clk\n");
+ 
+ 	ret = clk_prepare_enable(pc->pclk);
+ 	if (ret) {
+-- 
+2.20.1
 
-greg k-h

@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0D459A99D
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 01:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC4459A9BE
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243774AbiHSXvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 19:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
+        id S243994AbiHSXx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 19:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243674AbiHSXvR (ORCPT
+        with ESMTP id S243799AbiHSXxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 19:51:17 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6384112FB0;
-        Fri, 19 Aug 2022 16:51:15 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id r83-20020a1c4456000000b003a5cb389944so4817609wma.4;
-        Fri, 19 Aug 2022 16:51:15 -0700 (PDT)
+        Fri, 19 Aug 2022 19:53:23 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9541E63DB;
+        Fri, 19 Aug 2022 16:53:21 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id o2so4426963iof.8;
+        Fri, 19 Aug 2022 16:53:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=6K+Gbut6C3SMWqkBrTWvK/kA2LBhPOCWJd8A9mugSZw=;
-        b=X+1fqQVkRUblp4KR6kQj5KcuWemgxb/9Z2iRuoaU0t8ckKnPN7NEnVNwKZdP/jvHXh
-         wg4E6fzr9hCqdobcCjVq7fmn+G6Mb9CAfDYkMkQbe/IjVYyMMJqXcA+jStFvaVfDCjAe
-         /kd1O8Kf9KIbm2/b501QcWJumkW/XVZzC8dJcLWqSmqnBo/DPTT0JuxYx3NpVwHyi6A1
-         jjIewqaaLaA+lC3ix7py13wa7/o22OO6nWDf7bDg3FJd891fvKfd86Qz4NuahwrW+L6v
-         zJUvW3aEXaA/nThO3eN2jhDxbTJvp7WswHFbZx3SspIK78zOY3H44/fC00uurj1/xtSE
-         wvng==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=UX9DFt9pgifkj/QY4mu++ikMopOnydaJKN+iCFeyvjI=;
+        b=PusEjCLI++Ed6692tp9RT9MfbJaYlC2Tmx94F1gdSvkzEyjBp1TqpNY49wXhZR5hGX
+         51ISmjseJ2/wRKt0cCNT9FwBMzCXp7oU3I2zc8Gamy7yV0rIHzDq2eDzvTrAHCan7jdO
+         +1stTYv0OkVLa2zaISqIN//vUuNdPquArflukgNsATTk8ELTR8zBvGFLX1L8FaAvMP9o
+         6xRN4zGIMumKA/yUMPmU1d2866sHqgLpX8D17E+TGcndHkZPQdK1miIdSLOnfIGU2qe8
+         HpdfOOqVWwY8waLHdNGmR6WItyl/KrsMQMFo/yiGvgQwXSTJ/ldDDQLz9KO4LrOb1ZiZ
+         TbPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=6K+Gbut6C3SMWqkBrTWvK/kA2LBhPOCWJd8A9mugSZw=;
-        b=52K2aueEZrKY3KJqc6ejmHEUP6V+1PS6esFb6IPVMNyU6RWIoywfcQFeDBXbZLA5XT
-         N8V73aMDN3Ld6gZbiI1eTpHEjzRscf0/ckR46t84y70TZ0xnWuke4M3z7CPY6bYVQ/P7
-         /uTPgIF2/Mr/3xr2DoMUvWX61Q65O4BT7185Ayt+zwEJsigD79UTlVa4LlpvZkBAD7la
-         PDwpUA1p5LIzDNtpd//PUs3G8SZfXlEfsVICJtiAJRtYNiK7uQK1Gqmm1LBnuzkOqf8b
-         NNfpHPi4x6gnUSKSbAXUWjJ11flktkBzALWyBKw1Uj03g0xBe+tDTEweW/a+KLMyERKj
-         TbSg==
-X-Gm-Message-State: ACgBeo0Pm7EFs58xqMOGGSPWid1bdgMm1/KGoMYwhi5xz4l4ExYlsvNL
-        /7Ne3MNceOCtqWukoA5kb10=
-X-Google-Smtp-Source: AA6agR47Np9Ok78NyHzV8nhmUyE67a78+p7tAZ5Cjr/2TXypthFIBb8X6ZXHpuPJw8fcw1o8HqY8tw==
-X-Received: by 2002:a05:600c:1550:b0:3a6:1d8c:247e with SMTP id f16-20020a05600c155000b003a61d8c247emr6019877wmg.63.1660953074286;
-        Fri, 19 Aug 2022 16:51:14 -0700 (PDT)
-Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id r38-20020a05600c322600b003a2e92edeccsm9026113wmp.46.2022.08.19.16.51.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 16:51:13 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: dts: rockchip: Add analog audio output on quartz64-b
-Date:   Sat, 20 Aug 2022 01:51:12 +0200
-Message-ID: <10732790.V6xDz3LDya@archbook>
-In-Reply-To: <20220721083301.3711-1-frattaroli.nicolas@gmail.com>
-References: <20220721083301.3711-1-frattaroli.nicolas@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=UX9DFt9pgifkj/QY4mu++ikMopOnydaJKN+iCFeyvjI=;
+        b=VXJYoJS85qJDQZpwZ9Jrv8MGvcg9WWQGpcxrwRX2EYctkrncviCQdY93dHLFxyVWNh
+         +GQ8i+xs6/wKLeysq9wnhOAnqOvX5ZTPqoEuHcnKpdZ7wR2oeF82HKoNk1kdVygR2U0i
+         8cqi8WKSOKFdLKXfJSUEjxsSepw5yLXeTsTFPdIhy7lyqwBNnptNdI9MkCan4p69MHFd
+         tSIK2ZCvaFmdd+jhazhKXW9NfygSB3JqSfL7vsGAAmGm2m30UviQhk1kJO139+NkapoV
+         91TpboyS8Bh6E+ybPx34Yvb3zo7Ed6hd8pPDyrKsX0mBwDCqCE7ZaQP+8u4j+C2G+d9r
+         a/SA==
+X-Gm-Message-State: ACgBeo21iapGn1W9JHCXtZC1jc4PmBkxtq3LmARRA0ZJSguvETrA6C6m
+        1dhMZ/eZivHcLANMAsweks2k7YNJh9d93epamTU=
+X-Google-Smtp-Source: AA6agR7jmYMnylg6asONp2GAAfNY5ON6YCWcavS/uvHPv+dbmjW2WszcXZkTVw7T9qXk3bZbqddE9WA58W2wb0oqKUA=
+X-Received: by 2002:a05:6638:2381:b0:346:c583:9fa0 with SMTP id
+ q1-20020a056638238100b00346c5839fa0mr4410776jat.93.1660953200967; Fri, 19 Aug
+ 2022 16:53:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <cover.1660951028.git.dxu@dxuuu.xyz> <f44b2eebe48f0653949f59c5bcf23af029490692.1660951028.git.dxu@dxuuu.xyz>
+ <CAP01T74fSh6Z=54O+ORKJD7i_izb7rUe3-mHKLgRdrckcisvkw@mail.gmail.com>
+In-Reply-To: <CAP01T74fSh6Z=54O+ORKJD7i_izb7rUe3-mHKLgRdrckcisvkw@mail.gmail.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Sat, 20 Aug 2022 01:52:44 +0200
+Message-ID: <CAP01T76zWax4YSQO5nP2Kt_85JvUPvxTwpOn5Dho6co32r+FBA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/5] bpf: Add support for writing to nf_conn:mark
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, pablo@netfilter.org, fw@strlen.de,
+        toke@kernel.org, martin.lau@linux.dev,
+        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,89 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Donnerstag, 21. Juli 2022 10:33:00 CEST Nicolas Frattaroli wrote:
-> This adds the necessary device tree changes to enable analog
-> audio output on the PINE64 Quartz64 Model B with its RK809
-> codec.
-> 
-> The headphone detection pin is left out for now because I couldn't
-> get it to work and am not sure if it even matters, but for future
-> reference: It's pin GPIO4 RK_PC4, named HP_DET_L_GPIO4_C4 in the
-> schematic.
-> 
-> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> ---
-> Changes since v1:
->  - use generic node name for the simple-audio-card node
-> 
-> ---
->  .../boot/dts/rockchip/rk3566-quartz64-b.dts   | 32 ++++++++++++++++++-
->  1 file changed, 31 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-> index 02d5f5a8ca03..3897980d69d1 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-> @@ -42,6 +42,21 @@ led-user {
->  		};
->  	};
->  
-> +	sound {
-> +		compatible = "simple-audio-card";
-> +		simple-audio-card,format = "i2s";
-> +		simple-audio-card,name = "Analog RK809";
-> +		simple-audio-card,mclk-fs = <256>;
-> +
-> +		simple-audio-card,cpu {
-> +			sound-dai = <&i2s1_8ch>;
-> +		};
-> +
-> +		simple-audio-card,codec {
-> +			sound-dai = <&rk809>;
-> +		};
-> +	};
-> +
->  	sdio_pwrseq: sdio-pwrseq {
->  		status = "okay";
->  		compatible = "mmc-pwrseq-simple";
-> @@ -177,11 +192,16 @@ rk809: pmic@20 {
->  		reg = <0x20>;
->  		interrupt-parent = <&gpio0>;
->  		interrupts = <RK_PA7 IRQ_TYPE_LEVEL_LOW>;
-> +		assigned-clocks = <&cru I2S1_MCLKOUT_TX>;
-> +		assigned-clock-parents = <&cru CLK_I2S1_8CH_TX>;
-> +		clock-names = "mclk";
-> +		clocks = <&cru I2S1_MCLKOUT_TX>;
->  		clock-output-names = "rk808-clkout1", "rk808-clkout2";
->  
->  		pinctrl-names = "default";
-> -		pinctrl-0 = <&pmic_int>;
-> +		pinctrl-0 = <&pmic_int>, <&i2s1m0_mclk>;
->  		rockchip,system-power-controller;
-> +		#sound-dai-cells = <0>;
->  		wakeup-source;
->  		#clock-cells = <1>;
->  
-> @@ -420,6 +440,16 @@ &i2c5 {
->  	status = "disabled";
->  };
->  
-> +&i2s1_8ch {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&i2s1m0_sclktx
-> +		     &i2s1m0_lrcktx
-> +		     &i2s1m0_sdi0
-> +		     &i2s1m0_sdo0>;
-> +	rockchip,trcm-sync-tx-only;
-> +	status = "okay";
-> +};
-> +
->  &mdio1 {
->  	rgmii_phy1: ethernet-phy@1 {
->  		compatible = "ethernet-phy-ieee802.3-c22";
-> 
+On Sat, 20 Aug 2022 at 01:46, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>
+> CPU 0                                              CPU 1
+> sa = READ_ONCE(nf_ct_bsa);
+>
+> delete_module("nf_conntrack", ..);
+>
+> WRITE_ONCE(nf_ct_bsa, NULL);
+>                                                          // finishes
+> successfully
+> if (sa)
+>     return sa(...); // oops
+>
 
-Gentle ping, it has been a month with no response so I assume
-there's nothing egregiously wrong here.
+Ew, I completely screwed it up. Not trying again.
 
-
+CPU 0 does:
+sa = READ_ONCE(nf_ct_bsa);
+then CPU 1 does:
+delete_module("nf_conntrack", ...);
+   WRITE_ONCE(nf_ct_bsa, NULL);
+then CPU 0 does:
+if (sa) sa(...); // bad

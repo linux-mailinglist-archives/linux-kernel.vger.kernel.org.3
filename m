@@ -2,140 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D86859A455
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAB259A52F
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350863AbiHSR4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 13:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40486 "EHLO
+        id S1349826AbiHSSEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 14:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354002AbiHSR4H (ORCPT
+        with ESMTP id S1349835AbiHSSD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 13:56:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC65E117C;
-        Fri, 19 Aug 2022 10:38:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7639617D8;
-        Fri, 19 Aug 2022 17:38:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53DE7C433C1;
-        Fri, 19 Aug 2022 17:38:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660930724;
-        bh=OKpgMPnKr9d9cTKpfOdmcjkXXNEfExuYIhIkIm7K3RQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uixDXXWkvtEq9Gd/b2RZf6otlbMU4JEP/iz6Ag940SJHlUdBVfDY0VH5ysVrdmg+L
-         zx4mu+vd7OTagl1pX06kbIqOG6r94+Rep+EBnNNhUEaIq7YpP3kJPGNFCDv1B6qO6F
-         zKu+LVkcpyxVXINVvt3c9M2c5hOIS/S+i2gqYefwgF+X1alSoQl16XqNGxrYZfYq18
-         1zCf9Qdz5aCCOlrWUscIXFo7hIYXz4h+5YZDPRMuT1xg5yr41DTzb1ETVaoEhcZ0Lw
-         cJ8qz3H20ycCUoL1odKIeaSC0e1MDB1c78CTX7JtGaIR0tBXtpDLi/nbD/U4KgVGgI
-         R/SwKz7rl06Ng==
-Date:   Fri, 19 Aug 2022 18:49:19 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Artur Rojek <contact@artur-rojek.eu>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH 3/4] iio: add helper function for reading channel offset
- in buffer
-Message-ID: <20220819184919.6e08ae06@jic23-huawei>
-In-Reply-To: <20220817105643.95710-4-contact@artur-rojek.eu>
-References: <20220817105643.95710-1-contact@artur-rojek.eu>
-        <20220817105643.95710-4-contact@artur-rojek.eu>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Fri, 19 Aug 2022 14:03:56 -0400
+Received: from mail.rv.npu.gov.ua (mail.rv.npu.gov.ua [85.159.5.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDCA2F025
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:49:49 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.rv.npu.gov.ua (Postfix) with ESMTP id A5E1F4223FE7;
+        Fri, 19 Aug 2022 20:49:20 +0300 (EEST)
+Received: from mail.rv.npu.gov.ua ([127.0.0.1])
+        by localhost (mail.rv.npu.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id J-8EcNGSVPDb; Fri, 19 Aug 2022 20:49:19 +0300 (EEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.rv.npu.gov.ua (Postfix) with ESMTP id 2F95E4145EF7;
+        Fri, 19 Aug 2022 20:49:19 +0300 (EEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rv.npu.gov.ua 2F95E4145EF7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rv.npu.gov.ua;
+        s=D9C6921A-69F2-11EB-967E-80F8358BD1FC; t=1660931359;
+        bh=rXKZG/8bQHY28IslpDmB9+1lxzhBpWrTxjnUDTFW+HM=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=cLLQcGhXw4SNStxiTqJV3wwGE4kNjOMemiTaR0QEamYqr3DeEWjSeTZpxcByLLSTH
+         ls4nLv5aheBkoY/VhBBHjKDrZHTNw59Y9WmIZMA+GDFV2XkIYk2E6sf96aG1tLtSXt
+         tHgQ7sD4v+p6QT0199UNcJ4sCW0z4rJ7rI+vmqG+RcP0+h7nyYv5Nec3zsh5SjLdKG
+         MGA7r3YZy/r4U4foYUsFOvIEdEtmYmIKxm6zzbSjUi5py8aDg5LI2OZnmCQsxldhWy
+         eAdy8YyJOxCqAxIdxxcnQEOJbiA1ey0NCt7Oov/Wz4u8bvexa1n4X9XMdfS1IlfEWo
+         f1waqjs0xMxZg==
+X-Virus-Scanned: amavisd-new at rv.npu.gov.ua
+Received: from mail.rv.npu.gov.ua ([127.0.0.1])
+        by localhost (mail.rv.npu.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id vI3BUEY_fzbk; Fri, 19 Aug 2022 20:49:19 +0300 (EEST)
+Received: from DESKTOP-CJHK18M.home (gateway [101.19.1.22])
+        by mail.rv.npu.gov.ua (Postfix) with ESMTPSA id 213634145EFC;
+        Fri, 19 Aug 2022 20:49:17 +0300 (EEST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Re:
+To:     Recipients <kostopil@rv.npu.gov.ua>
+From:   "MacKenzie Scott" <kostopil@rv.npu.gov.ua>
+Date:   Sat, 20 Aug 2022 01:49:38 +0800
+Reply-To: mackenziescott@vallenata.co
+Message-Id: <20220819174917.213634145EFC@mail.rv.npu.gov.ua>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,LOTS_OF_MONEY,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 Aug 2022 12:56:42 +0200
-Artur Rojek <contact@artur-rojek.eu> wrote:
+Hello, =
 
-> This is useful for consumers that wish to parse raw buffer data.
-> 
-> Tested-by: Paul Cercueil <paul@crapouillou.net>
-> Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
-> ---
->  drivers/iio/industrialio-buffer.c | 28 ++++++++++++++++++++++++++++
->  include/linux/iio/buffer.h        |  4 ++++
->  2 files changed, 32 insertions(+)
-> 
-> diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
-> index 228598b82a2f..cf23736610d9 100644
-> --- a/drivers/iio/industrialio-buffer.c
-> +++ b/drivers/iio/industrialio-buffer.c
-> @@ -691,6 +691,34 @@ static unsigned int iio_storage_bytes_for_si(struct iio_dev *indio_dev,
->  	return bytes;
->  }
->  
-> +int iio_find_channel_offset_in_buffer(struct iio_dev *indio_dev,
-> +				      const struct iio_chan_spec *chan,
-> +				      struct iio_buffer *buffer)
-> +{
-> +	int length, offset = 0;
-> +	unsigned int si;
-> +
-> +	if (chan->scan_index < 0 ||
-> +	    !test_bit(chan->scan_index, buffer->scan_mask)) {
-> +		return -EINVAL;
-> +	}
-> +
-> +	for (si = 0; si < chan->scan_index; ++si) {
-> +		if (!test_bit(si, buffer->scan_mask))
+                          =
 
-You are walking channels that the consumer should not even know about
-here.
+I'm MacKenzie Scott Ex-wife of Amazon CEO and founder, I'm donating $ 4 bil=
+lion Dollars to charities, individuals, colleges across the Globe from Scot=
+t's foundation, to provide immediate support to people suffering economical=
+ly from COVID-19 pandemic and you're one of the lucky winners, i have a don=
+ation grant worth $100,800,000.00 Dollars for you, you can contact me for m=
+ore information if you're interested.
 
-I think you can establish the same easily enough from the channels it
-does know about.  It would be fiddly if you had lots of channels (as
-you might be best off sorting them) but for small numbers of channels
-loop over the array to find lowest scan_index - compute offset due
-to that then move on to next one etc until you reach the scan index
-of the channel you want.
-
-
-> +			continue;
-> +
-> +		length = iio_storage_bytes_for_si(indio_dev, si);
-> +
-> +		/* Account for channel alignment. */
-> +		if (offset % length)
-> +			offset += length - (offset % length);
-> +		offset += length;
-> +	}
-> +
-> +	return offset;
-> +}
-> +EXPORT_SYMBOL_GPL(iio_find_channel_offset_in_buffer);
-> +
->  static unsigned int iio_storage_bytes_for_timestamp(struct iio_dev *indio_dev)
->  {
->  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
-> diff --git a/include/linux/iio/buffer.h b/include/linux/iio/buffer.h
-> index 418b1307d3f2..b1db74772e77 100644
-> --- a/include/linux/iio/buffer.h
-> +++ b/include/linux/iio/buffer.h
-> @@ -16,6 +16,10 @@ enum iio_buffer_direction {
->  	IIO_BUFFER_DIRECTION_OUT,
->  };
->  
-> +int iio_find_channel_offset_in_buffer(struct iio_dev *indio_dev,
-> +				      const struct iio_chan_spec *chan,
-> +				      struct iio_buffer *buffer);
-> +
->  int iio_push_to_buffers(struct iio_dev *indio_dev, const void *data);
->  
->  int iio_pop_from_buffer(struct iio_buffer *buffer, void *data);
-
+Regards,
+MacKenzie Scott.

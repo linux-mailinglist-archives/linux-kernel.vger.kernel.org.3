@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4386559950F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810B259950A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242023AbiHSGJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 02:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S1346660AbiHSGJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 02:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346486AbiHSGId (ORCPT
+        with ESMTP id S1346524AbiHSGId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 19 Aug 2022 02:08:33 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A706C1EACB
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:18 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id r4so4436223edi.8
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:18 -0700 (PDT)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908D7220F7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:21 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id w19so6976875ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ionos.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=5gJkiTR+kGRLtGgVd47CicF8SNS8UY18L9XUin4OY2Y=;
-        b=QJC4IJlQ/pc53o+D11jC62z/3fhQ5SotDCbo5C5orgKX9ZXhpy96Sv15+GEhv6RP+G
-         mrqO821gPfoqnBrUz0Pt1mdZBC7U0OIwQtGUeZHKroZt28gFxn1D4vhYT4/byi/4ACXS
-         0Oc1eKBWrKxD+RJKPtaXXTHwrCsqVefIZIni+tQ/LWKxtsrTymFXxkO2gJgQ99ozgjKX
-         iGxLfMcpdIkhS9BbSA9nwWk2FjQCCCsKcEmYr+qDKpN1Gq2yXXILl8CF25Aw5O0Jy7bR
-         kQcpxeHm18TpANDu7+SIayoh6NdnbkYKG6/jA5VrzTKRTWDRCMl9o+vUxdzr5Rkhq2ha
-         xXDA==
+        bh=F5ABPES53yBnNM8KMYaOoJGq6EgoilQgsIQzRxOn8jI=;
+        b=YF9RDOWfoLh1rKjWTYgYRo+wyiZASSeVrPh9Z70zeRcDdGmQB3lQT7MPFxJXHqlu+M
+         osfBgwSm98SFRcW8wlbcC7vK6DmPb6aKRn5z/Ba0K+qEsnyMxYg1jcgWV/2UyxnAwnEQ
+         MfGHH3SoCYX9kM1xEFBRZz8Agb6CqTD6RyOE2yaoiVP4theIZp9an+m8AbQDehTGukSB
+         Mw1rEXirxBiuAaZdwCSx1VXbv8ye39ic9KrRi5ONSIGqKYv+5bYHnFf6XmZDwRcd9+p5
+         eLj5546HBAkV+eB0IWBmdPR3FZ/FoBJM9JLkOtFcVcq4yhGfO9gnyqJDB5QpSv1uibdN
+         CnYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=5gJkiTR+kGRLtGgVd47CicF8SNS8UY18L9XUin4OY2Y=;
-        b=14bCcaNGeNKXJOKE101wz5B/nvVFOy11LliCwqer+jWFoyDHVUYWbgqoWUgv2qnAAU
-         tnUHTBBEVFgeoN1c5/rOMH4UaCqbuteisURyGsBKybpYFo+IEXLAALnMm/k0jkMps+0j
-         IeIgNPfyh/JLjzCcRsGZGpYa+Bw4n782CSKl0R3JAQm2EHq/1uhDUZ2forgzx8cutWRH
-         1IuEch0oh7DXRCohnAK+q2oRqkvEmXrn3JhI14JNj4V1TiicaWxGeej8oip5Ytkqa1BR
-         NX9roS5j/WRcme6s7prRHA9+0UaFFK+qB3mhnjqjlbXtA7O9EqtE3SXFjICOXtFaGQ+5
-         eMPQ==
-X-Gm-Message-State: ACgBeo1meSx5dALSkbnzZJzXgwggGw8z0UC4C0ipsCK9AtF+32+d6lDg
-        b2A9AUcW0XatDci2LfxQplAnFtKYVNkfV+YV
-X-Google-Smtp-Source: AA6agR75k14pdaTAK1S0BCFB7OdMaf69W99USHyOlv8hrS6V7Mr9HiIOc/Y2kMJ6Foo2b8Ui1jyy/g==
-X-Received: by 2002:a05:6402:191:b0:445:cf66:25c5 with SMTP id r17-20020a056402019100b00445cf6625c5mr4865875edv.58.1660889298374;
-        Thu, 18 Aug 2022 23:08:18 -0700 (PDT)
+        bh=F5ABPES53yBnNM8KMYaOoJGq6EgoilQgsIQzRxOn8jI=;
+        b=xO0/ZKjcyQDxkK26uEbiuj/y+ba4fxz3vkZ5UGlAV9w75dxTR37pj9tsPuDCIuotfd
+         3nGlblbEKvnpmUiJqXOowEWOsIOX4sHvXeXgUYCHNFCyNC1hYgjsOQijjbtNl6Rk8DkS
+         jiUnuYbIB9THeuyOpTxVQqYT4cFYFfhKkW+XA5ZmsliAEQpVTzUVVOPeZLc+lvtKxAn1
+         lTNuseIijO/0I/1eywkBItViQM2C8buHD+x+a/aThMhliUnYyVBZcYBbqQHzbqrP8qBl
+         xQkMnix3trLzRTwzs+jWUGY9KGbR08H7hu4qAGOVvP4d6TLiStvrMTZLfAhXhV/OSO13
+         lzKA==
+X-Gm-Message-State: ACgBeo33iT18DwUs5LHLMaHS55F64x6ze1wLmKZ5ZXOCdwAg5zuW6R0O
+        tctk0nN6j8iMd/3lXutwKmaNph16oF46TvNF
+X-Google-Smtp-Source: AA6agR7vpe7XwFhB8bWIG6ZHamJs/kMyizsVnVvMQeylgjrGCsHiyms0BKMF09snW3nldFzq48Vd7A==
+X-Received: by 2002:a17:906:8a55:b0:73b:d8ea:6c2b with SMTP id gx21-20020a1709068a5500b0073bd8ea6c2bmr3343732ejc.114.1660889299632;
+        Thu, 18 Aug 2022 23:08:19 -0700 (PDT)
 Received: from lb02065.fritz.box ([2001:9e8:143b:fd00:5207:8c7f:747a:b80d])
-        by smtp.gmail.com with ESMTPSA id y14-20020a1709063a8e00b0073a644ef803sm1809660ejd.101.2022.08.18.23.08.15
+        by smtp.gmail.com with ESMTPSA id y14-20020a1709063a8e00b0073a644ef803sm1809660ejd.101.2022.08.18.23.08.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 23:08:17 -0700 (PDT)
+        Thu, 18 Aug 2022 23:08:19 -0700 (PDT)
 From:   Jack Wang <jinpu.wang@ionos.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Thara Gopinath <thara.gopinath@gmail.com>,
+Cc:     Corentin Labbe <clabbe@baylibre.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v1 09/19] crypto: qce: Fix dma_map_sg error check
-Date:   Fri, 19 Aug 2022 08:07:51 +0200
-Message-Id: <20220819060801.10443-10-jinpu.wang@ionos.com>
+        linux-crypto@vger.kernel.org, linux-amlogic@lists.infradead.org
+Subject: [PATCH v1 10/19] crypto: amlogic: Fix dma_map_sg error check
+Date:   Fri, 19 Aug 2022 08:07:52 +0200
+Message-Id: <20220819060801.10443-11-jinpu.wang@ionos.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220819060801.10443-1-jinpu.wang@ionos.com>
 References: <20220819060801.10443-1-jinpu.wang@ionos.com>
@@ -72,86 +72,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dma_map_sg return 0 on error, fix the error check and return -EIO to
-caller.
+dma_map_sg return 0 on error.
 
-Cc: Thara Gopinath <thara.gopinath@gmail.com>
+Cc: Corentin Labbe <clabbe@baylibre.com>
 Cc: Herbert Xu <herbert@gondor.apana.org.au>
 Cc: "David S. Miller" <davem@davemloft.net>
 Cc: linux-crypto@vger.kernel.org
-Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-amlogic@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org
 
 Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
 ---
- drivers/crypto/qce/aead.c     | 4 ++--
- drivers/crypto/qce/sha.c      | 8 +++++---
- drivers/crypto/qce/skcipher.c | 8 ++++----
- 3 files changed, 11 insertions(+), 9 deletions(-)
+ drivers/crypto/amlogic/amlogic-gxl-cipher.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/crypto/qce/aead.c b/drivers/crypto/qce/aead.c
-index 97a530171f07..6eb4d2e35629 100644
---- a/drivers/crypto/qce/aead.c
-+++ b/drivers/crypto/qce/aead.c
-@@ -450,8 +450,8 @@ qce_aead_async_req_handle(struct crypto_async_request *async_req)
- 	if (ret)
- 		return ret;
- 	dst_nents = dma_map_sg(qce->dev, rctx->dst_sg, rctx->dst_nents, dir_dst);
--	if (dst_nents < 0) {
--		ret = dst_nents;
-+	if (!dst_nents) {
-+		ret = -EIO;
- 		goto error_free;
- 	}
- 
-diff --git a/drivers/crypto/qce/sha.c b/drivers/crypto/qce/sha.c
-index 59159f5e64e5..37bafd7aeb79 100644
---- a/drivers/crypto/qce/sha.c
-+++ b/drivers/crypto/qce/sha.c
-@@ -97,14 +97,16 @@ static int qce_ahash_async_req_handle(struct crypto_async_request *async_req)
- 	}
- 
- 	ret = dma_map_sg(qce->dev, req->src, rctx->src_nents, DMA_TO_DEVICE);
--	if (ret < 0)
--		return ret;
-+	if (!ret)
-+		return -EIO;
- 
- 	sg_init_one(&rctx->result_sg, qce->dma.result_buf, QCE_RESULT_BUF_SZ);
- 
- 	ret = dma_map_sg(qce->dev, &rctx->result_sg, 1, DMA_FROM_DEVICE);
--	if (ret < 0)
-+	if (!ret) {
-+		ret = -EIO;
- 		goto error_unmap_src;
-+	}
- 
- 	ret = qce_dma_prep_sgs(&qce->dma, req->src, rctx->src_nents,
- 			       &rctx->result_sg, 1, qce_ahash_done, async_req);
-diff --git a/drivers/crypto/qce/skcipher.c b/drivers/crypto/qce/skcipher.c
-index 3d27cd5210ef..5b493fdc1e74 100644
---- a/drivers/crypto/qce/skcipher.c
-+++ b/drivers/crypto/qce/skcipher.c
-@@ -124,15 +124,15 @@ qce_skcipher_async_req_handle(struct crypto_async_request *async_req)
- 	rctx->dst_sg = rctx->dst_tbl.sgl;
- 
- 	dst_nents = dma_map_sg(qce->dev, rctx->dst_sg, rctx->dst_nents, dir_dst);
--	if (dst_nents < 0) {
--		ret = dst_nents;
-+	if (!dst_nents) {
-+		ret = -EIO;
- 		goto error_free;
- 	}
- 
- 	if (diff_dst) {
- 		src_nents = dma_map_sg(qce->dev, req->src, rctx->src_nents, dir_src);
--		if (src_nents < 0) {
--			ret = src_nents;
-+		if (!src_nents) {
-+			ret = -EIO;
- 			goto error_unmap_dst;
+diff --git a/drivers/crypto/amlogic/amlogic-gxl-cipher.c b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
+index e79514fce731..af017a087ebf 100644
+--- a/drivers/crypto/amlogic/amlogic-gxl-cipher.c
++++ b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
+@@ -177,7 +177,7 @@ static int meson_cipher(struct skcipher_request *areq)
+ 	if (areq->src == areq->dst) {
+ 		nr_sgs = dma_map_sg(mc->dev, areq->src, sg_nents(areq->src),
+ 				    DMA_BIDIRECTIONAL);
+-		if (nr_sgs < 0) {
++		if (!nr_sgs) {
+ 			dev_err(mc->dev, "Invalid SG count %d\n", nr_sgs);
+ 			err = -EINVAL;
+ 			goto theend;
+@@ -186,14 +186,14 @@ static int meson_cipher(struct skcipher_request *areq)
+ 	} else {
+ 		nr_sgs = dma_map_sg(mc->dev, areq->src, sg_nents(areq->src),
+ 				    DMA_TO_DEVICE);
+-		if (nr_sgs < 0 || nr_sgs > MAXDESC - 3) {
++		if (!nr_sgs || nr_sgs > MAXDESC - 3) {
+ 			dev_err(mc->dev, "Invalid SG count %d\n", nr_sgs);
+ 			err = -EINVAL;
+ 			goto theend;
  		}
- 		rctx->src_sg = req->src;
+ 		nr_sgd = dma_map_sg(mc->dev, areq->dst, sg_nents(areq->dst),
+ 				    DMA_FROM_DEVICE);
+-		if (nr_sgd < 0 || nr_sgd > MAXDESC - 3) {
++		if (!nr_sgd || nr_sgd > MAXDESC - 3) {
+ 			dev_err(mc->dev, "Invalid SG count %d\n", nr_sgd);
+ 			err = -EINVAL;
+ 			goto theend;
 -- 
 2.34.1
 

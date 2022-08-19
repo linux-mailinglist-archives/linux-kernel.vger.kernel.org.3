@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FA759A909
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 01:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED95459A905
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 01:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243124AbiHSXDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 19:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S243374AbiHSXFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 19:05:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239974AbiHSXDk (ORCPT
+        with ESMTP id S239401AbiHSXFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 19:03:40 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850AB2ED52
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 16:03:39 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id s11so7258677edd.13
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 16:03:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=eY3PGy+0ZnJYOusZqP/aMVjX0RIvUyfRFC1DMWpFfZg=;
-        b=glGObiSPFperSGxZTSrRQtOSI2VugiytakxkMo/TSWxujrcWOKdkyRiEv6nE/LINGk
-         krDnH1N19krP5sxNpCGq8r+aEt5vPLQAZTYJj6IGIKa+N4KHdt45fEnDbmgWfNihK7NC
-         ozvdvHCx1qpMQl+ckHq+g1duXCyWHZW/7xYN4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=eY3PGy+0ZnJYOusZqP/aMVjX0RIvUyfRFC1DMWpFfZg=;
-        b=MoE1YAptigBRf93Rw3UqWwVMZvaYMmzXhEqLlsYnYm+wGqkAaHn4ciNwSiA5tC21Wc
-         X03jZ0p1Gukgpbg7FC4CSYmcU0GYSVVUjJAkArxO1jK94cgHkhpx+nwKsYFTmB9eeB1R
-         tl3iEwVUHMRwIOLx8ntrLE7coDpQt1IUAlaid2UY5ebzNycsRPfh+uG76G49YEv/iqyQ
-         AtInzOBzx7cCgJDXWpOfz+xGnsc9V99MCW3NZZWL91UMM7OS3Ytcl9jiqWdd30mfEmD7
-         EvP5qz5soPn5WDAXQ/2IRVrYn3Zi64QfvR86IL4jEPaczxkOdADU92/EBzcH7QSn5KSG
-         GZVA==
-X-Gm-Message-State: ACgBeo2y32tnbyq+SQ/6PPaJrat0koLJ1zDK6eIUcv/XUyQ9VeK4i+Mg
-        +N42g49JdSyI+ERq5/v+fBRFKBuec5+eWd93hdw=
-X-Google-Smtp-Source: AA6agR4t+r6Y9vUoJdhGnWSvYHcwTF+s/zUS7VmkYQi1Yt1xE6v1far3XSb9lxJ6/WmuxctbFVKBFQ==
-X-Received: by 2002:a05:6402:440c:b0:43a:1124:e56a with SMTP id y12-20020a056402440c00b0043a1124e56amr7839133eda.134.1660950217796;
-        Fri, 19 Aug 2022 16:03:37 -0700 (PDT)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id bj5-20020a170906b04500b007307c4c8a5dsm2905060ejb.58.2022.08.19.16.03.36
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 16:03:37 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id u14so6686502wrq.9
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 16:03:36 -0700 (PDT)
-X-Received: by 2002:a5d:6881:0:b0:225:28cb:332f with SMTP id
- h1-20020a5d6881000000b0022528cb332fmr5244944wru.405.1660950216654; Fri, 19
- Aug 2022 16:03:36 -0700 (PDT)
+        Fri, 19 Aug 2022 19:05:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16EB90809;
+        Fri, 19 Aug 2022 16:05:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89962B8280F;
+        Fri, 19 Aug 2022 23:05:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A2A3C433B5;
+        Fri, 19 Aug 2022 23:05:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660950304;
+        bh=AZL0aSK7Iwf8Lk3JbnO6+H4YnWrrROAZWLMPh5Hm/5E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZEKPV7mXRXYXHkT9CiejWuOCLLKp1h4nrKuXEyG9QfdzXQt68jqr2caGZI6WJkxYe
+         gweaJaYGJxoiXNQ/zrX2WoI6U/KcRK9bU+n+c+FdQ4N7q8ZT6XDaK3aTCC13thOEMd
+         qEuLyoVfoMM/6ghLjJlAtzmjZsmiH6Sg8by3zhFwGPnf/q/S50i5qDAHn5RPrYs9rS
+         uwy8ylu3fm6KGo4LvMOLItxclMgd1WZK5VYUVUoToWPjzRve8+/WhFwaWAfZ2iS6Re
+         hIgFMFZzjaa01DTi4ploFElFllt+QnNoPtJjTRDMH3nmrZZTYEgwor0R5msDqt+53d
+         kR10UUa28lbqA==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, gregkh@linuxfoundation.org,
+        badari.pulavarty@intel.com, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] mm/damon/dbgfs: avoid duplicate context directory creation
+Date:   Fri, 19 Aug 2022 23:05:01 +0000
+Message-Id: <20220819230501.16830-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220819154451.9f424d9d563969d9cc6437f7@linux-foundation.org>
+References: 
 MIME-Version: 1.0
-References: <20220819194336.382740-1-ahalaney@redhat.com> <YwATSglfJEgG6V73@sirena.org.uk>
-In-Reply-To: <YwATSglfJEgG6V73@sirena.org.uk>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 19 Aug 2022 16:03:24 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UWn8a9C3j0Ky9JWqo_2AvOE=ORVP94zHftGQLsxFdXyw@mail.gmail.com>
-Message-ID: <CAD=FV=UWn8a9C3j0Ky9JWqo_2AvOE=ORVP94zHftGQLsxFdXyw@mail.gmail.com>
-Subject: Re: [PATCH] regulator: core: Clean up on enable failure
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andrew Halaney <ahalaney@redhat.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, bmasney@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,24 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 19 Aug 2022 15:44:51 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
 
-On Fri, Aug 19, 2022 at 3:48 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Fri, Aug 19, 2022 at 02:43:36PM -0500, Andrew Halaney wrote:
->
-> > -     if (regulator->uA_load && regulator->enable_count == 1)
-> > -             return drms_uA_update(rdev);
-> > +     if (regulator->uA_load && regulator->enable_count == 1) {
-> > +             ret = drms_uA_update(rdev);
->
-> I am vaugely surprised and a bit concerned that drms_uA_update() can
-> fail...
+> On Fri, 19 Aug 2022 21:16:31 +0000 SeongJae Park <sj@kernel.org> wrote:
+> 
+> > > It would be simpler (and less racy) to check the debugfs_create_dir()
+> > > return value for IS_ERR()?
+> > 
+> > I was merely following Greg's previous advice for ignoring the return value[1]
+> > of the function, but I might misunderstanding his intention, so CC-ing Greg.
+> > Greg, may I ask your opinion?
+> > 
+> > [1] https://lore.kernel.org/linux-mm/YB1kZaD%2F7omxXztF@kroah.com/
+> 
+> Thing is, the correct functioning of the debugfs interfaces is utterly
+> critical to damon.  And that's apart from these memory leak and
+> oops-we-killed-damon issues.
+> 
+> So damon simply cannot ignore the state of its debugfs interfaces and
+> keep going along - because if something goes wrong at the debugfs
+> layer, damon is dead and useless and the machine needs a reboot.
+> 
+> Perhaps this means that damon should not be using debugfs for its
+> interfaces at all.  Or it means that the debugfs interfaces are
+> misdesigned.  I go with the latter, which, alas, also affirms the
+> former.
 
-In his original email Andrew implied that his system was misconfigured
-when he was seeing this error. I presume this isn't common which is
-why nobody had noticed this before now, but given that the function
-drms_uA_update() does return an error code it seems like we should
-handle it properly in the caller.
+I'd save my word about the latter, but agreed on the former.  Fortunately we
+already have an alternative (DAMON sysfs interface), and the debugfs interface
+deprecation plan was announced for a while ago.  Not sure if the deprecation
+will be well as hoped, though.
 
--Doug
+> 
+> From a quick scan it appears that a significant minority (20%?) of
+> drivers are checking the debugfs_create_dir() return value.
+
+Maybe partly owing to Greg's previous efforts for removing the checks[1,2]?
+Anyway, based on the previous discussions, I'd expect Greg might prefer not
+checking the return code.
+
+Anyway, waiting for his opinion.
+
+[1] https://lore.kernel.org/all/20190122152151.16139-14-gregkh@linuxfoundation.org/
+[2] https://lore.kernel.org/lkml/20190122152151.16139-7-gregkh@linuxfoundation.org/
+
+
+Thanks,
+SJ

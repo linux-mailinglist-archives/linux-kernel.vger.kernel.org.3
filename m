@@ -2,121 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00176599B1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14835599B16
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347979AbiHSLiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S1348485AbiHSLis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346618AbiHSLiW (ORCPT
+        with ESMTP id S1346618AbiHSLin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:38:22 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB87DF3F;
-        Fri, 19 Aug 2022 04:38:17 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3321c2a8d4cso113872497b3.5;
-        Fri, 19 Aug 2022 04:38:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=NmhoqI7k4G6QeMKgIeqojmW1W43PHTYsxk5F7putWNQ=;
-        b=ISEypOIUgRx4LtgZAU/Zt9gtmdQJMf1Necwp6xhN2wGJcJKV06jBwOeuYw+RgxNwwk
-         zOJDTubjM1fsdCiY8e3XX1JQ0D/EB8focolh0vfSxVMqlHxwF71rDamRJ1f8FyHzrLpd
-         GMpiWW0vNYD8UUeDX5lJv0g4RSIXGo2ZoxhT1d1fmaYBvZvn1aO7+UgFV6d0EH5c+q0L
-         c+7qJiWS6nPlt/6MpSDqoMvKsvFunWJcyOmp4FmR+pniCa8tKxopBLzlExRZT1GpF1+l
-         uhrabPieck9hpQKVoDsWyZOVtiYKQtAgT+7/YCID3abj6gHVno4bsiz+sa3a8+h1+xZx
-         4HNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=NmhoqI7k4G6QeMKgIeqojmW1W43PHTYsxk5F7putWNQ=;
-        b=Q4VgH+3pImTA6Bv8w1VcftapiyRDWC27NRa6681CC9qVfXzICEazPap4lSm8C9KSGP
-         SUHBH7WyHTWtBvL0Dw5f3Mu8TB2n7mEqyDDn7BhYgsek8RnECkOwyMrJfpPLThqLCtQx
-         D87JPS0ypJvsMqGJNgdPPTaaDMU1Z+nmP4KnGiFlZli7OKYYxYDDtGo/78T5r9fe5GX2
-         LZUOaMvpykCrJfKmRPHoLxQChKaj/Bwbm7SHkyuAR3DjM/vEpkngnRh+F98qDiSwqEWA
-         QqAQN/xFXpjk9J6GUUYvvvWQE2qknIwtsLjcKdJF/MwbLiZ4w/BzOY+YlSh+SgzSVks3
-         79tw==
-X-Gm-Message-State: ACgBeo3ggkbxvlLHs7mhLugzxSeeDGPS+Z2N0OVVZ7m4r/eZYV2k5s7S
-        waas3GHPOJJJvWvNC1epGKlHwdRzRZ4WYO+o5Ks=
-X-Google-Smtp-Source: AA6agR4/Vfe8x/za+bJPvbu3J3Q/1xJd9HVg7k/3oR1ufo6PrA2tdscx1U9Y0c+tmx0YQ1vTbLzMESsVWI1NfuQhhmU=
-X-Received: by 2002:a81:1c4b:0:b0:337:4e8:8bdc with SMTP id
- c72-20020a811c4b000000b0033704e88bdcmr5909913ywc.65.1660909097055; Fri, 19
- Aug 2022 04:38:17 -0700 (PDT)
+        Fri, 19 Aug 2022 07:38:43 -0400
+Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0118E1260A;
+        Fri, 19 Aug 2022 04:38:40 -0700 (PDT)
+Received: from 213.219.160.184.adsl.dyn.edpnet.net ([213.219.160.184] helo=deadeye)
+        by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1oP0Ke-0003FT-Gc; Fri, 19 Aug 2022 13:38:32 +0200
+Received: from ben by deadeye with local (Exim 4.96)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1oP0Kd-000b3h-39;
+        Fri, 19 Aug 2022 13:38:31 +0200
+Message-ID: <9395338630e3313c1bf0393ae507925d1f9af870.camel@decadent.org.uk>
+Subject: Re: [PATCH] x86/speculation: Avoid LFENCE in FILL_RETURN_BUFFER on
+ CPUs that lack it
+From:   Ben Hutchings <ben@decadent.org.uk>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        1017425@bugs.debian.org,
+        =?ISO-8859-1?Q?Martin-=C9ric?= Racine <martin-eric.racine@iki.fi>,
+        stable@vger.kernel.org, regressions@lists.linux.dev,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Date:   Fri, 19 Aug 2022 13:38:27 +0200
+In-Reply-To: <Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net>
+References: <Yv7aRJ/SvVhSdnSB@decadent.org.uk>
+         <Yv9OGVc+WpoDAB0X@worktop.programming.kicks-ass.net>
+         <Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-nQrCdQRVr0v9wcLsIe/Y"
+User-Agent: Evolution 3.44.3-1 
 MIME-Version: 1.0
-References: <20220801214718.16943-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220801214718.16943-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdXKnve1-KE+GF5YVe3k8w0oQA96P9VAfB9XxVMbuKiN7g@mail.gmail.com>
-In-Reply-To: <CAMuHMdXKnve1-KE+GF5YVe3k8w0oQA96P9VAfB9XxVMbuKiN7g@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 19 Aug 2022 12:37:50 +0100
-Message-ID: <CA+V-a8v84auNSF7HSO=VxvofHKuO75YG7DxdSmUvjUdjx8zf7w@mail.gmail.com>
-Subject: Re: [PATCH 1/4] media: dt-bindings: media: Document RZ/G2L CSI-2 block
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 213.219.160.184
+X-SA-Exim-Mail-From: ben@decadent.org.uk
+X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
 
-Thank you for the review.
+--=-nQrCdQRVr0v9wcLsIe/Y
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 18, 2022 at 9:56 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Mon, Aug 1, 2022 at 11:47 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > Document the CSI-2 block which is part of CRU found in Renesas
-> > RZ/G2L SoC.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > RFC v2 -> v1
-> > * Fixed review comments pointed by Rob and Jacopo.
->
-> Thanks for the update!
->
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
-> > @@ -0,0 +1,149 @@
->
-> > +  resets:
-> > +    items:
-> > +      - description: CRU_CMN_RSTB reset terminal
-> > +
-> > +  reset-names:
-> > +    const: cmn-rstb
->
-> While it doesn't hurt to always have reset-names, you may want to drop
-> it, as there is only a single reset.
->
-Agreed, I will drop it.
+On Fri, 2022-08-19 at 13:01 +0200, Peter Zijlstra wrote:
+> On Fri, Aug 19, 2022 at 10:47:21AM +0200, Peter Zijlstra wrote:
+> > On Fri, Aug 19, 2022 at 02:33:08AM +0200, Ben Hutchings wrote:
+> > > From: Ben Hutchings <benh@debian.org>
+> > >=20
+> > > The mitigation for PBRSB includes adding LFENCE instructions to the
+> > > RSB filling sequence.  However, RSB filling is done on some older CPU=
+s
+> > > that don't support the LFENCE instruction.
+> > >=20
+> >=20
+> > Wait; what? There are chips that enable the RSB mitigations and DONT
+> > have LFENCE ?!?
+>=20
+> So I gave in and clicked on the horrible bugzilla thing. Apparently this
+> is P3/Athlon64 era crud.
+>=20
+> Anyway, the added LFENCE isn't because of retbleed; it is because you
+> can steer the jnz and terminate the loop early and then not actually
+> complete the RSB stuffing.
 
-Cheers,
-Prabhakar
+I know, I corrected that further down.
+
+> New insights etc.. So it's a geniune fix for the existing rsb stuffing.
+>=20
+> I'm not entirly sure what to do here. On the one hand, it's 32bit, so
+> who gives a crap, otoh we shouldn't break these ancient chips either I
+> suppose.
+>=20
+> How's something like so then? It goes on top of my other patch cleaning
+> up this RSB mess:
+>=20
+>   https://lkml.kernel.org/r/Yv9m%2FhuNJLuyviIn%40worktop.programming.kick=
+s-ass.net
+[...]
+
+That should be:
+https://lore.kernel.org/all/Yv9m%2FhuNJLuyviIn@worktop.programming.kicks-as=
+s.net/
+(the redirector unescapes the URL-escaped /).
+
+So that puts the whole __FILL_RETURN_BUFFER inside an alternative, and
+we can't have nested alternatives.  That's unfortunate.
+
+Ben.
+
+--=20
+Ben Hutchings
+Beware of bugs in the above code;
+I have only proved it correct, not tried it. - Donald Knuth
+
+--=-nQrCdQRVr0v9wcLsIe/Y
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmL/djMACgkQ57/I7JWG
+EQlHpg/9FbaeEJKro9Qcmw+qk86shNJCNfyfeGVeLs0aiM6KgDOp17SaTPzAleea
+Y4UeZYgu36lGTPh+RnK9Llb6bJgqlG3ad90VyUO0fBcY7uuJF/uTxHtNQVRNYRHL
+pqmH36qNzJ8FGsHYbl6ikhpIiw5Ail4js4WbCiW0f5eL8BWyAKj2seKHkRpIkd2I
+eq8/Ux9YXRhGhGnPj+1XRhl/nqw7Hb1KUMjtGqUwKIjp/1NkubbzFnqRsQPL0w0i
+fLi/dbdtepWlcg8zy6xKa9B1xHqfPOnjldD4G2CDLrpprWacjkTZIoHY2WJmqv4+
+aU+q3XinoxZHODeqxD2DJ+r7TzJcBiSj+ypf3HxwR8YHReQVjUbdMLmMe6bXYX/f
+EyDNw1OaJUaxbbEPQM1dJaJOLKGPHGUgKQuucMJq1R6kcKqhnLfWIoPBaL/gKbHk
+xo6Tyg2WAMN14UzzDFzqTFwndU5zlA95J/Xi1RiS3muKdNkcpu33NnbEG45tpEiM
+P+N/xqZr1dvJ9BYYWlkA8OAdDcSnmL9vkHxuzWuHTyh1gxnW99C6IWosr5sIVc2G
+REAhuTXssLSMXsfm3plqmtPyXaJIm7vHSmB/d1OV9LylZOCOcqsGjmE1H0CbkVf9
+dPdEFxXudTWbOb9965rEzhQYMn3OWsv6Ik17S3S3ZAdeo4hMDEY=
+=P7Kd
+-----END PGP SIGNATURE-----
+
+--=-nQrCdQRVr0v9wcLsIe/Y--

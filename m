@@ -2,99 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BF259A0AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8EC59A248
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352990AbiHSQZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 12:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        id S1353042AbiHSQdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 12:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352482AbiHSQVG (ORCPT
+        with ESMTP id S1353068AbiHSQad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 12:21:06 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8D72AE3;
-        Fri, 19 Aug 2022 09:02:25 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aea64.dynamic.kabel-deutschland.de [95.90.234.100])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 4316161EA192A;
-        Fri, 19 Aug 2022 18:02:24 +0200 (CEST)
-Message-ID: <4253695b-85aa-a2fb-fbf6-718db8b6c20c@molgen.mpg.de>
-Date:   Fri, 19 Aug 2022 18:02:23 +0200
+        Fri, 19 Aug 2022 12:30:33 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4A111C948
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 09:04:44 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-33365a01f29so133308577b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 09:04:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=YXESTZDcUiCGjixm/Ny1l24ykaWVY7si0JYAd8lcp3k=;
+        b=vjvUTlreFnl+R/d8XSKBiZ/HMOzY8RhSkaWyUhuA7RH5KzDVHAxqQti9Ie8k+T9/V7
+         KPcBrgI4wg/sNGfjHAX5FoEJ4nprCvePmP4jHIePmB7QPxH4oK8HjgK8qOs4wziLVTdy
+         jmq5tKcJw5QppeAFBtK1CbWMJ5iD9BTEV6lmoZfbNI8QAppsxwYxhmIC7AUe8S5agRxi
+         pbXa2VZLHbXKoxrhs20QuoD3jMLCPLQNXMJc9UII8AFWHVw1VoZMejEOfBb7chsFw4yf
+         7T9yrOfD5LtNkvKJlxlckc/z356d/LFYXnoJptfvcSwltahwkhx/WhPldiRrVC2mB7Jg
+         XUCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=YXESTZDcUiCGjixm/Ny1l24ykaWVY7si0JYAd8lcp3k=;
+        b=MdQraR0D33pHrp9BFVeQEvF03kvB1OAik28i2TbnYcifp2QxY7+CB1fBANqGtaLmPD
+         2vlvtpwsWuYZKaNyh6vZAIj9NBnC76OAIdbD48jAHc6XqaROhj1QNo9M0I+gJl3pPWem
+         CSg9/TIdtZZSVS9nQpBm3PAk7SCHLPwbi21DUFAXneC6DBPBJz2s2Qx261nBye5Rn2Ot
+         OsfSv3dR36U/1bIgqHbP1t7svOhZ/dHrxR6S+XKDp6fr1ahfKt3FkTRfXYywQnHbeAyI
+         q2rc/OkFmAWdG151PV67qhHRjT6E8DrM0naGfaRQn+1JCL0n/jFHyoyc4us0X3GQQqic
+         kwhA==
+X-Gm-Message-State: ACgBeo10Fo5LDvlQeNx7wi173vjPQccU0o7oM67bsPoNhi/fMdBtxJYp
+        KxO/+e30e8qdSjlW2RUDZ+pNifiVV2HAR8Wk06ztJA==
+X-Google-Smtp-Source: AA6agR6xNZR5qwP6Wv5QjmvYXeeeU1W9XRwFIR12aoZAvBVU1o7AcPGSKes3sCd6zBd3CuneYT0a8C6g3NxlGiw1vUE=
+X-Received: by 2002:a0d:cb02:0:b0:334:e16c:8d36 with SMTP id
+ n2-20020a0dcb02000000b00334e16c8d36mr8459357ywd.86.1660925082827; Fri, 19 Aug
+ 2022 09:04:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: WARNING: CPU: 1 PID: 83 at arch/x86/kernel/cpu/sgx/main.c:446
- ksgxd+0x1b7/0x1d0
-Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org
-Cc:     linux-sgx@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <ce0b4d26-3a6e-7c5a-5f66-44cba05f9f35@molgen.mpg.de>
-In-Reply-To: <ce0b4d26-3a6e-7c5a-5f66-44cba05f9f35@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220810015636.3865248-1-zhangsong34@huawei.com>
+ <b62804cb-2b60-a534-5096-56785a1940bd@bytedance.com> <e2c9eccc-dd86-16e9-c43e-8415f99f413e@huawei.com>
+ <13a7a412-5e2e-6ef8-acd6-a761aad66c3a@bytedance.com> <6ae319c0-e6ed-4aad-64b8-d3f6cbea688d@huawei.com>
+ <CAKfTPtAcEstoqC+9-y9ubaXDSGbfLdMhFboMPn433QNPD114dQ@mail.gmail.com>
+ <9a63b371-9940-caee-7fa1-2c230bec0bd1@bytedance.com> <20220818083133.GA536@vingu-book>
+ <798411ac-6edb-d22c-5378-297268e77b1a@huawei.com> <CAKfTPtBcJhC4qPQuK9g4bL0sgtmqkA3JZmnGJz7DaejsUPkOeg@mail.gmail.com>
+In-Reply-To: <CAKfTPtBcJhC4qPQuK9g4bL0sgtmqkA3JZmnGJz7DaejsUPkOeg@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 19 Aug 2022 18:04:30 +0200
+Message-ID: <CAKfTPtBEaaLUdapJRvPFX3UZrkynRUfdDg6dAZ_vm2OK9eN0Fg@mail.gmail.com>
+Subject: Re: [PATCH v2] sched/fair: Introduce priority load balance to reduce
+ interference from IDLE tasks
+To:     "zhangsong (J)" <zhangsong34@huawei.com>
+Cc:     Abel Wu <wuyun.abel@bytedance.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc: +linux-sgx@vger.kernel.org]
+On Fri, 19 Aug 2022 at 14:35, Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
+>
+> Hi Zhang,
+>
+> On Fri, 19 Aug 2022 at 12:54, zhangsong (J) <zhangsong34@huawei.com> wrot=
+e:
+> >
+> >
+> > On 2022/8/18 16:31, Vincent Guittot wrote:
+> > > Le jeudi 18 ao=C3=BBt 2022 =C3=A0 10:46:55 (+0800), Abel Wu a =C3=A9c=
+rit :
+> > >> On 8/17/22 8:58 PM, Vincent Guittot Wrote:
+> > >>> On Tue, 16 Aug 2022 at 04:53, zhangsong (J) <zhangsong34@huawei.com=
+> wrote:
+> > >>>>
+> > > ...
+> > >
+> > >>>> Yes, this is usually a corner case, but suppose that some non-idle=
+ tasks bounds to CPU 1-2
+> > >>>>
+> > >>>> and idle tasks bounds to CPU 0-1, so CPU 1 may has many idle tasks=
+ and some non-idle
+> > >>>>
+> > >>>> tasks while idle tasks on CPU 1 can not be pulled to CPU 2, when t=
+rigger load balance if
+> > >>>>
+> > >>>> CPU 2 should pull some tasks from CPU 1, the bad result is idle ta=
+sks of CPU 1 cannot be
+> > >>>>
+> > >>>> migrated and non-idle tasks also cannot be migrated in case of env=
+->loop_max constraint.
+> > >>> env->loop_max adds a break but load_balance will continue with next
+> > >>> tasks so it also tries to pull your non idle task at the end after
+> > >>> several breaks.
+> > >> Loop will be terminated without LBF_NEED_BREAK if exceeds loop_max :=
+)
+> > > Argh yes, my brain is not yet back from vacation
+> > > I have been confused by loop_max and loop_break being set to the same=
+ value 32
+> > >
+> > > Zhang Song, Could you try the patch below ? If it works, I will prepa=
+re a
+> > > clean patch with all tags
+> > >
+> > >
+> > >
+> > > sched/fair: make sure to try to detach at least one movable task
+> > >
+> > > During load balance we try at most env->loop_max time to move a task.=
+ But
+> > > it can happen that the LRU tasks (ie tail of the cfs_tasks list) can'=
+t
+> > > be moved to dst_cpu because of affinity. In this case, loop in the li=
+st
+> > > until we found at least one.
+> > >
+> > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > > ---
+> > >   kernel/sched/fair.c | 12 +++++++++---
+> > >   1 file changed, 9 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > index da388657d5ac..02b7b808e186 100644
+> > > --- a/kernel/sched/fair.c
+> > > +++ b/kernel/sched/fair.c
+> > > @@ -8052,8 +8052,12 @@ static int detach_tasks(struct lb_env *env)
+> > >               p =3D list_last_entry(tasks, struct task_struct, se.gro=
+up_node);
+> > >
+> > >               env->loop++;
+> > > -             /* We've more or less seen every task there is, call it=
+ quits */
+> > > -             if (env->loop > env->loop_max)
+> > > +             /*
+> > > +              * We've more or less seen every task there is, call it=
+ quits
+> > > +              * unless we haven't found any movable task yet.
+> > > +              */
+> > > +             if (env->loop > env->loop_max &&
+> > > +                 !(env->flags & LBF_ALL_PINNED))
+> > >                       break;
+> > >
+> > >               /* take a breather every nr_migrate tasks */
+> > > @@ -10182,7 +10186,9 @@ static int load_balance(int this_cpu, struct =
+rq *this_rq,
+> > >
+> > >               if (env.flags & LBF_NEED_BREAK) {
+> > >                       env.flags &=3D ~LBF_NEED_BREAK;
+> > > -                     goto more_balance;
+> > > +                     /* Stop if we tried all running tasks */
+> > > +                     if (env.loop < busiest->nr_running)
+> > > +                             goto more_balance;
+> > >               }
+> > >
+> > >               /*
+> > > --
+> > > 2.17.1
+> >
+> > Thanks for your reply.
+> > I have tried your patch and run test compared with it, it seems that th=
+e
+> > patch you provide makes no sense.
+> > The test result is below(1000 idle tasks bounds to CPU 0-1 and 10 norma=
+l
+> > tasks bounds to CPU 1-2):
+> >
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> > Without patch:
+> >
+> >
+> >            6,777.37 msec cpu-clock                 #    1.355 CPUs util=
+ized
+> >              20,812      context-switches          #    0.003 M/sec
+> >                   0      cpu-migrations            #    0.000 K/sec
+> >                   0      page-faults               #    0.000 K/sec
+> >      13,333,983,148      cycles                    #    1.967 GHz
+> >       6,457,930,305      instructions              #    0.48  insn per =
+cycle
+> >       2,125,644,649      branches                  #  313.639 M/sec
+> >           1,690,587      branch-misses             #    0.08% of all
+> > branches
+> >        5.001931983 seconds time elapsed
+> >
+> > With your patch:
+> >
+> >
+> >            6,791.46 msec cpu-clock                 #    1.358 CPUs util=
+ized
+> >              20,996      context-switches          #    0.003 M/sec
+> >                   0      cpu-migrations            #    0.000 K/sec
+> >                   0      page-faults               #    0.000 K/sec
+> >      13,467,573,052      cycles                    #    1.983 GHz
+> >       6,516,989,062      instructions              #    0.48  insn per =
+cycle
+> >       2,145,139,220      branches                  #  315.858 M/sec
+> >           1,751,454      branch-misses             #    0.08% of all
+> > branches
+> >
+> >         5.002274267 seconds time elapsed
+> >
+> > With my patch:
+> >
+> >
+> >            7,495.14 msec cpu-clock                 #    1.499 CPUs util=
+ized
+> >              23,176      context-switches          #    0.003 M/sec
+> >                 309      cpu-migrations            #    0.041 K/sec
+> >                   0      page-faults               #    0.000 K/sec
+> >      14,849,083,489      cycles                    #    1.981 GHz
+> >       7,180,832,268      instructions              #    0.48  insn per =
+cycle
+> >       2,363,300,644      branches                  #  315.311 M/sec
+> >           1,964,169      branch-misses             #    0.08% of all
+> > branches
+> >
+> >         5.001713352 seconds time elapsed
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> > Obviously,  when your patch is applied, the cpu-migrations of normal
+> > tasks is still 0 and the
+> > CPU ulization of normal tasks have no improvement compared with no patc=
+h
+> > applied.
+> > When apply my patch, the cpu-migrations and CPU ulization of normal
+> > tasks can both improve.
+> > I cannot explain the result with your patch, you also can test it by
+> > yourself.
+>
+> Do you have more details about the test that your are running ?
+>
+> Do cpu0-2 share their cache ?
+> Which kingd of task are the normal and idle tasks ? always running tasks =
+?
+>
+> I'm going to try to reproduce your problem locally
 
-Am 19.08.22 um 15:19 schrieb Paul Menzel:
-> Dear Linux folks,
-> 
-> 
-> On the Dell XPS 13 9370, Linux 5.18.16 prints the warning below:
-> 
-> ```
-> [    0.000000] Linux version 5.18.0-4-amd64 (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.3.0-5) 11.3.0, GNU ld (GNU Binutils for Debian) 2.38.90.20220713) #1 SMP PREEMPT_DYNAMIC Debian 5.18.16-1 (2022-08-10)
-> [    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.18.0-4-amd64 root=UUID=56f398e0-1e25-4fda-aa9f-611dece4b333 ro quiet
-> […]
-> [    0.000000] DMI: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 07/06/2022
-> […]
-> [    0.235418] sgx: EPC section 0x40200000-0x45f7ffff
-> [    0.235853] ------------[ cut here ]------------
-> [    0.235855] WARNING: CPU: 1 PID: 83 at arch/x86/kernel/cpu/sgx/main.c:446 ksgxd+0x1b7/0x1d0
-> [    0.235861] Modules linked in:
-> [    0.235862] CPU: 1 PID: 83 Comm: ksgxd Not tainted 5.18.0-4-amd64 #1 Debian 5.18.16-1
-> [    0.235865] Hardware name: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 07/06/2022
-> [    0.235866] RIP: 0010:ksgxd+0x1b7/0x1d0
-> [    0.235869] Code: ff e9 f2 fe ff ff 48 89 df e8 55 56 0d 00 84 c0 0f 84 c3 fe ff ff 31 ff e8 c6 56 0d 00 84 c0 0f 85 94 fe ff ff e9 af fe ff ff <0f> 0b e9 7f fe ff ff e8 3d dd 93 00 66 66 2e 0f 1f 84 00 00 00 00
-> [    0.235870] RSP: 0000:ffffaaed0097bed8 EFLAGS: 00010287
-> [    0.235872] RAX: ffffaaed00431890 RBX: ffff9a323ccc8000 RCX: 0000000000000000
-> [    0.235873] RDX: 0000000080000000 RSI: ffffaaed00431850 RDI: 00000000ffffffff
-> [    0.235875] RBP: ffff9a31416ca080 R08: ffff9a31416cae40 R09: ffff9a31416cae40
-> [    0.235876] R10: 0000000000000000 R11: 0000000000000001 R12: ffffaaed0006bce0
-> [    0.235877] R13: ffff9a3140e9c480 R14: ffffffff9825ee60 R15: 0000000000000000
-> [    0.235878] FS:  0000000000000000(0000) GS:ffff9a32e6640000(0000) knlGS:0000000000000000
-> [    0.235880] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    0.235881] CR2: 0000000000000000 CR3: 00000001fbe10001 CR4: 00000000003706e0
-> [    0.235882] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [    0.235883] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [    0.235884] Call Trace:
-> [    0.235893]  <TASK>
-> [    0.235895]  ? _raw_spin_lock_irqsave+0x24/0x60
-> [    0.235900]  ? _raw_spin_unlock_irqrestore+0x23/0x40
-> [    0.235902]  ? __kthread_parkme+0x36/0x90
-> [    0.235905]  kthread+0xe5/0x110
-> [    0.235907]  ? kthread_complete_and_exit+0x20/0x20
-> [    0.235909]  ret_from_fork+0x1f/0x30
-> [    0.235914]  </TASK>
-> [    0.235915] ---[ end trace 0000000000000000 ]---
-> ```
-> 
-> 
-> Kind regards,
-> 
-> Paul
+Some details of your UC are missing. I have tried to reproduce your
+example above:
+    1000 idle tasks bounds to CPU 0-1 and 10 normal tasks bounds to CPU 1-2
+
+Let assume that for any reason, the 10 normal tasks wake up on CPU 1.
+Then, the thousand of idle tasks are moved to CPU0 by load balance and
+only normal tasks stay on CPU1. Then load balance will move some
+normal tasks to CPU2.
+
+My only way to reproduce something similar to your example, is to pin
+the 1000 idle tasks on CPU1 so they can't move to CPU0. Then I can see
+that load balance reaches loop_max limit and gets hard time moving
+normal tasks on CPU2. But in this later case, my patch helps to move
+normal tasks on CPU2. Something is missing in the description of your
+UC.
+
+Sidenote, I have the same kind of problem with 1000 normal task with
+low priority so it's not a matter of idle vs normal tasks
+
+Regards,
+Vincent
+
+>
+> Regards,
+> Vincent
+>
+> >
+> > Best,
+> > Zhang Song
+> >
+> > >
+> > >>>> This will cause non-idle  tasks cannot achieve  more CPU utilizati=
+on.
+> > >>> Your problem is not linked to IDLE vs NORMAL tasks but to the large
+> > >>> number of pinned tasks that can't migrate on CPU2. You can end with
+> > >>> the same behavior without using IDLE tasks but only NORMAL tasks.
+> > >> I feel the same thing.
+> > >>
+> > >> Best,
+> > >> Abel
+> > > .

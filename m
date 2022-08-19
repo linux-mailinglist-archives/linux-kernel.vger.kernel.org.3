@@ -2,110 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FC359A6ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 22:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CEF59A6DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 22:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351737AbiHSUJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 16:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52194 "EHLO
+        id S1351749AbiHSUMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 16:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351558AbiHSUJl (ORCPT
+        with ESMTP id S1351744AbiHSUMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 16:09:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D937104472
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:09:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660939778;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4WKsTj80+KlAOcyLxVq2MH02vD1fdMO95DXY/VPgDU4=;
-        b=bo+c7wwj9NWoNQf2mVjNEB8yu6Dhiymgq8cavu0w/xqveKZEjXbXDklObkdJlaZ0SEM1Zl
-        FygO+k0IyjZvMo9fT4tYP15WDy++/7c1YfquprAqnTaeLMYVIM9e3JK8/mqgE8bKjb2YpH
-        D2rQNKPt6H1ioitmoJzLEpvJRMq83Ok=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-675-L6uXd-_1NuqufzODojM1uA-1; Fri, 19 Aug 2022 16:09:37 -0400
-X-MC-Unique: L6uXd-_1NuqufzODojM1uA-1
-Received: by mail-wm1-f70.google.com with SMTP id c64-20020a1c3543000000b003a61987ffb3so2835686wma.6
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:09:36 -0700 (PDT)
+        Fri, 19 Aug 2022 16:12:49 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752BB106510
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:12:48 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id y187so4138163iof.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:12:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=TWnGx0tsPzDsYWN5IvwyG0/F4n3/lHDuvrydVsnCdTg=;
+        b=FamF99POPr6PtKGcfiAFaDyK/px9/QEUZ9jAWq0VuRMjBQuH/SIEycINUXdEisf8wJ
+         GB5Fp0sV/9jsr8SHRoKkycJAodjombPVpppk1giNuh7jurYysChORzMPgyHKQdBRx6Yi
+         bMQ8CZykRl92tAcPu+aCfb2R1BHuyiGBmYyICNbj6NOdCbqR0y056zBRI5sucULdSXWP
+         iBSs6go4YjTUccStqlOuQrHTd0ys3ntGBcGxqR0SgI4W+Fz4sL7vOXN4324d30h8iu/T
+         k8P9H+ggVIlKLOTUU3V6HrleaFRS/uGb9Vw8lQ57cl7kluTFPaNsmbjckIsP6sE3O2xR
+         GObw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=4WKsTj80+KlAOcyLxVq2MH02vD1fdMO95DXY/VPgDU4=;
-        b=o04G/AYlGigtfWR9iUSALSdP6M5Nr7FdH8j/du+ncGF7cUVa5yZV/IFK63q6dUzIT6
-         0pW2SjoWcPXJ+bukNY9VLg5O9pb09D6Qm3XNkPTon3hWH5mH7V8tviu8Au3SVFSowgWo
-         9MN/tSaRjFoGEcDiWL/dKuukrL0YMKCPp/bxSry9ADN+36Glo23+NYm3iedbXUPMeZPA
-         xx9U9pG6yKdnj6Tv8NhUj1kZDLv54S3sNE9AeHqdOZ8e2BdWAIUHrVspfi48E8UTHp3+
-         irHb403wkv2cB+jsU9HlYvRFh6YwFir+ViNRZxR3xiL7JGgh1cBfC1Lqi8kZblrb4Mds
-         /ZZg==
-X-Gm-Message-State: ACgBeo2L2lAzjtXDbv3lBYfpajmmH4P5NwPga+l51SN0YoCl665f9zEw
-        rglTpSjk5VvzFKO8hXmFzWqFxXHZFcqlNvEz2cuDpbJJ49WEsYLgddZRkeVl3kndwLPnWdGZNOU
-        6y+OZbd+Gt373MLO0r3bFJCionKeLjd1tBA9jN26yMRf6BW5ub2jxvaahexpGKxonIIswcszIDy
-        8=
-X-Received: by 2002:a05:6000:18c:b0:21f:170d:446e with SMTP id p12-20020a056000018c00b0021f170d446emr5029341wrx.304.1660939775796;
-        Fri, 19 Aug 2022 13:09:35 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR41MvAqMhAqH36jAsYe/x4lLfhc9bERm3BktAuEeK79ImvBnIv/1szPfEWDOHxRsmuy+tKIGA==
-X-Received: by 2002:a05:6000:18c:b0:21f:170d:446e with SMTP id p12-20020a056000018c00b0021f170d446emr5029327wrx.304.1660939775474;
-        Fri, 19 Aug 2022 13:09:35 -0700 (PDT)
-Received: from kherbst.pingu.com ([31.16.187.72])
-        by smtp.gmail.com with ESMTPSA id u18-20020adfdb92000000b0021eaf4138aesm5991920wri.108.2022.08.19.13.09.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 13:09:34 -0700 (PDT)
-From:   Karol Herbst <kherbst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ben Skeggs <bskeggs@redhat.com>, Lyude Paul <lyude@redhat.com>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        Karol Herbst <kherbst@redhat.com>, stable@vger.kernel.org
-Subject: [PATCH] nouveau: explicitly wait on the fence in nouveau_bo_move_m2mf
-Date:   Fri, 19 Aug 2022 22:09:28 +0200
-Message-Id: <20220819200928.401416-1-kherbst@redhat.com>
-X-Mailer: git-send-email 2.37.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=TWnGx0tsPzDsYWN5IvwyG0/F4n3/lHDuvrydVsnCdTg=;
+        b=fMzUwE6SEkBJitP8MPOxr1FNgu22ltEZX2H4DmnLMH5i2B2UoD9nNJTF76eB55C3nm
+         +4iGmtaNayKvYUROhYQgBmAsnUyPLg8VPofReXWkkHQBiJVjaUSqDs129exvDF432n8l
+         awbRGUqMk6c8tiUCmKZ0vnI+OoENpQlljxupGDtWV68d6+jJj6srJY4x4YuJnj602p6Q
+         m4pwK/cMQg2UwrMtVoWV8G9/+FIe9ZD1G5pu9pmkEVmMqLx7xd0WaYiRqfFlgxLd9rzm
+         gWosjcjq8bTR8KgEp3w7VB9I37/9DCVl6ZVJ/k3D8qZ2FAUgsBOpEs3jso/Tn2fYM0Bc
+         8miQ==
+X-Gm-Message-State: ACgBeo2eJvF7QHou/4i9m4p3oehPryJFIAaWfmF4QZu6aUmX1TyNz//j
+        MDO1HtJbyi074V7qiUTZ2vlxg1WEQ+6H7Zn1y8Pa0Q==
+X-Google-Smtp-Source: AA6agR7vH6bU/CcMRlqauAdte2pei9jmt+xQRqGJlV8ch8ekID2WY8/GjnEURxqW3LnsWWhfJJAGPXkSfSDz0FeaHIw=
+X-Received: by 2002:a05:6638:34a8:b0:343:4d0a:5984 with SMTP id
+ t40-20020a05663834a800b003434d0a5984mr4292780jal.167.1660939967732; Fri, 19
+ Aug 2022 13:12:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220817214728.489904-1-axelrasmussen@google.com>
+ <20220817214728.489904-3-axelrasmussen@google.com> <Yv3bnouKb7242Ama@kroah.com>
+In-Reply-To: <Yv3bnouKb7242Ama@kroah.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Fri, 19 Aug 2022 13:12:10 -0700
+Message-ID: <CAJHvVcjd3GtjJ2yr0gNDGHCqc8RZUYXCYaj8eEgo1TTLBjNYSQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/5] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-security-module@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is a bit unlcear to us why that's helping, but it does and unbreaks
-suspend/resume on a lot of GPUs without any known drawbacks.
+On Wed, Aug 17, 2022 at 11:26 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Aug 17, 2022 at 02:47:25PM -0700, Axel Rasmussen wrote:
+> > +static int userfaultfd_dev_open(struct inode *inode, struct file *file)
+> > +{
+> > +     return 0;
+>
+> If your open does nothing, no need to list it here at all, right?
+>
+> > +}
+> > +
+> > +static long userfaultfd_dev_ioctl(struct file *file, unsigned int cmd, unsigned long flags)
+> > +{
+> > +     if (cmd != USERFAULTFD_IOC_NEW)
+> > +             return -EINVAL;
+> > +
+> > +     return new_userfaultfd(flags);
+> > +}
+> > +
+> > +static const struct file_operations userfaultfd_dev_fops = {
+> > +     .open = userfaultfd_dev_open,
+> > +     .unlocked_ioctl = userfaultfd_dev_ioctl,
+> > +     .compat_ioctl = userfaultfd_dev_ioctl,
+>
+> Why do you need to set compat_ioctl?  Shouldn't it just default to the
+> existing one?
 
-Cc: stable@vger.kernel.org # v5.15+
-Closes: https://gitlab.freedesktop.org/drm/nouveau/-/issues/156
-Signed-off-by: Karol Herbst <kherbst@redhat.com>
----
- drivers/gpu/drm/nouveau/nouveau_bo.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+I took some more time looking at this today, and I think it actually
+has to be the way it is.
 
-diff --git a/drivers/gpu/drm/nouveau/nouveau_bo.c b/drivers/gpu/drm/nouveau/nouveau_bo.c
-index 35bb0bb3fe61..126b3c6e12f9 100644
---- a/drivers/gpu/drm/nouveau/nouveau_bo.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_bo.c
-@@ -822,6 +822,15 @@ nouveau_bo_move_m2mf(struct ttm_buffer_object *bo, int evict,
- 		if (ret == 0) {
- 			ret = nouveau_fence_new(chan, false, &fence);
- 			if (ret == 0) {
-+				/* TODO: figure out a better solution here
-+				 *
-+				 * wait on the fence here explicitly as going through
-+				 * ttm_bo_move_accel_cleanup somehow doesn't seem to do it.
-+				 *
-+				 * Without this the operation can timeout and we'll fallback to a
-+				 * software copy, which might take several minutes to finish.
-+				 */
-+				nouveau_fence_wait(fence, false, false);
- 				ret = ttm_bo_move_accel_cleanup(bo,
- 								&fence->base,
- 								evict, false,
--- 
-2.37.1
+I didn't find anywhere we noticed compat_ioctl unset, and default to
+the "normal" one (e.g. see the compat ioctl syscall definition in
+fs/ioctl.c). It looks to me like it really does need some value. It's
+common to use compat_ptr_ioctl for this, but since we're interpreting
+the arg as a scalar not as a pointer, doing that here would be
+incorrect.
 
+It looks like there are other existing examples that do it the same
+way, e.g. seccomp_notify_ops in linux/seccomp.c.
+
+>
+> And why is this a device node at all?  Shouldn't the syscall handle all
+> of this (to be honest, I didn't read anything but the misc code, sorry.)
+>
+> thanks,
+>
+> greg k-h

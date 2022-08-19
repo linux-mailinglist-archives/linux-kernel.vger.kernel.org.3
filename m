@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56442599871
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F223B5998A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348066AbiHSJOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47078 "EHLO
+        id S1348013AbiHSJOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348007AbiHSJOI (ORCPT
+        with ESMTP id S1347921AbiHSJOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:14:08 -0400
+        Fri, 19 Aug 2022 05:14:06 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0253C176;
-        Fri, 19 Aug 2022 02:14:06 -0700 (PDT)
-X-UUID: 0708a393aa414964be1f0fdedeead9f3-20220819
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3753B942;
+        Fri, 19 Aug 2022 02:14:04 -0700 (PDT)
+X-UUID: 5b93aee1df40426081746b1b73d63241-20220819
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=tS6CZCBjUbOc1UZ92WKOWil7JFSb8J7Du3g9c10m3yA=;
-        b=OHIgAhQcj43bNiCvufA3X/m94mgZNyQqu64dP3z3vhl+JWDb/pAyzuPms+BPzNaKP17zoLC6eEojdtyNZIRcWo48h8awiFE9Oqw2QmtdVkUwtXYKbFwyhmaqX3v9r2TanJXk9n12Xzz2HvnPI288Yv6i5HkKDAJPWqAIsp7z6dM=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=q6s6R/M3t6AahZ3ncr+Mey3ck5xIFT6X1vBjwMFg54s=;
+        b=fuE5rvT836SSRAKwvQaix9yp8DXojh+4oj2bYEkkDry+d3brZ62mw/CtMtFeBxkBGUOZvsP+YGjK6TMqx9WktxVmlCJCD2IrsBnj1/9SxD3tgh+uTzP75f8RW/p3U7KiWlZXEhwaVJZPCB9885kTMd+bhb6Gn+EkU5MWTDhrjho=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:ef19bea7-fe68-4ba6-b936-282652d8da33,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
-        Ham,ACTION:release,TS:0
-X-CID-META: VersionHash:84eae18,CLOUDID:4b79b667-a9d9-4672-a3c8-12721739a220,C
+X-CID-O-INFO: VERSION:1.1.10,REQID:9e95cb2a-01f4-4bf4-9440-e5eda49a96d2,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release
+        _Ham,ACTION:release,TS:-5
+X-CID-META: VersionHash:84eae18,CLOUDID:ae0704cf-20bd-4e5e-ace8-00692b7ab380,C
         OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:
         nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 0708a393aa414964be1f0fdedeead9f3-20220819
+X-UUID: 5b93aee1df40426081746b1b73d63241-20220819
 Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
         (envelope-from <chunfeng.yun@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 723050939; Fri, 19 Aug 2022 17:13:57 +0800
+        with ESMTP id 1878322963; Fri, 19 Aug 2022 17:13:57 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 19 Aug 2022 17:13:48 +0800
+ 15.2.792.15; Fri, 19 Aug 2022 17:13:49 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 19 Aug 2022 17:13:47 +0800
+ Transport; Fri, 19 Aug 2022 17:13:48 +0800
 From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
 To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
 CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
@@ -49,9 +49,9 @@ CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Eddie Hung <eddie.hung@mediatek.com>
-Subject: [PATCH 4/7] phy: phy-mtk-tphy: disable hardware efuse when set INTR
-Date:   Fri, 19 Aug 2022 17:13:41 +0800
-Message-ID: <20220819091344.2274-4-chunfeng.yun@mediatek.com>
+Subject: [PATCH 5/7] phy: phy-mtk-tphy: disable gpio mode for all usb2 phys
+Date:   Fri, 19 Aug 2022 17:13:42 +0800
+Message-ID: <20220819091344.2274-5-chunfeng.yun@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220819091344.2274-1-chunfeng.yun@mediatek.com>
 References: <20220819091344.2274-1-chunfeng.yun@mediatek.com>
@@ -69,35 +69,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-INTR's value is able autoload from hardware efuse by default, when
-software tries to update its value, should disable hardware efuse
-firstly.
+Disable DP/DM's GPIO mode for all usb2 phy, not only for the first
+usb2 phy which usually supports dual-role mode.
 
 Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- drivers/phy/mediatek/phy-mtk-tphy.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/phy/mediatek/phy-mtk-tphy.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/phy/mediatek/phy-mtk-tphy.c b/drivers/phy/mediatek/phy-mtk-tphy.c
-index 986fde0f63a0..7f40b8b052bd 100644
+index 7f40b8b052bd..79920c066e59 100644
 --- a/drivers/phy/mediatek/phy-mtk-tphy.c
 +++ b/drivers/phy/mediatek/phy-mtk-tphy.c
-@@ -874,9 +874,14 @@ static void u2_phy_props_set(struct mtk_tphy *tphy,
- 		mtk_phy_update_bits(com + U3P_USBPHYACR1, PA1_RG_TERM_SEL,
- 				    PA1_RG_TERM_SEL_VAL(instance->eye_term));
+@@ -532,8 +532,7 @@ static void u2_phy_instance_init(struct mtk_tphy *tphy,
+ 	/* disable switch 100uA current to SSUSB */
+ 	mtk_phy_clear_bits(com + U3P_USBPHYACR5, PA5_RG_U2_HS_100U_U3_EN);
  
--	if (instance->intr)
-+	if (instance->intr) {
-+		if (u2_banks->misc)
-+			mtk_phy_set_bits(u2_banks->misc + U3P_MISC_REG1,
-+					 MR1_EFUSE_AUTO_LOAD_DIS);
-+
- 		mtk_phy_update_bits(com + U3P_USBPHYACR1, PA1_RG_INTR_CAL,
- 				    PA1_RG_INTR_CAL_VAL(instance->intr));
-+	}
+-	if (!index)
+-		mtk_phy_clear_bits(com + U3P_U2PHYACR4, P2C_U2_GPIO_CTR_MSK);
++	mtk_phy_clear_bits(com + U3P_U2PHYACR4, P2C_U2_GPIO_CTR_MSK);
  
- 	if (instance->discth)
- 		mtk_phy_update_bits(com + U3P_USBPHYACR6, PA6_RG_U2_DISCTH,
+ 	if (tphy->pdata->avoid_rx_sen_degradation) {
+ 		if (!index) {
 -- 
 2.25.1
 

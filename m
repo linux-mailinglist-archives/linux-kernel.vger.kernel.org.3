@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0E559A659
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BAC59A651
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351445AbiHSTVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 15:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
+        id S1351501AbiHSTV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 15:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350791AbiHSTVX (ORCPT
+        with ESMTP id S1351480AbiHSTV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 15:21:23 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B69A115596;
-        Fri, 19 Aug 2022 12:21:07 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id e2so474874ljj.1;
-        Fri, 19 Aug 2022 12:21:07 -0700 (PDT)
+        Fri, 19 Aug 2022 15:21:27 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D7A1155B0;
+        Fri, 19 Aug 2022 12:21:13 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id bx38so5352767ljb.10;
+        Fri, 19 Aug 2022 12:21:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=3f/bG1xCcH9GlVDTu4IzFUvz5kFlob5DxhGhmkJbqE8=;
-        b=UCyMDvX/1FVk1yWhyHofjNsW9oECG44IwYhTOrlo2KlNMkFv95nrgnmiQPvF+TveQF
-         l2MxXibmbK9uqtYV+IX807QQ2BanWvX3s754doGrYt5CaQ7SBz7J5RPkteMftGnTef50
-         4GsSk0CCeaDtXsRpnP9lWBHX4h4igKZqUAnePldKa7gl+vQr/8cT8cFFhBmpqz/V4avx
-         CyeLa6HCUV2oa6ZJvL2LfsK+y8axCMWiy7qzdznZ0eXLyBGUeAb9evfkWqC0QjQ2hfpZ
-         SY76pRX27eGh/P9I2HisCbOMmg/POwjECFzZgKGNdCbsMzQF63NuPGAI5BKomOeZ1/qK
-         eL6g==
+        bh=a+PnZAwbnyxlFPa4YTGTR9Nn3kx7SIjA9eZbEWP7QKo=;
+        b=i6hF2TK47IL6OucnkuO0ZZDBdrZCY0I+aqauSm7cwbQFP/lMdEasMpn5cTmwY6/oHY
+         3p4h/c4nLLavxgmnBPIXrPWybBgsUw2WWlLeSVGcg2a3NMPpWDwH+74wWJ+PGUVBECJS
+         tP2n22FsXCwrrf2B+qrOw0w8gTfTLXO3+BFbm+S7cfIIP8wEzpxOBcWsd9rXTZPN4slb
+         qcxxhFnNbcsNMulPd2PcNwGw7VgtHHKI+jRrADrfoYwGvjr+bYrJxXthZO4A4X6zgsQi
+         sGptDDE+M1btRF2FMVxoeIBy0IkYU1P4GmFEwAFwmwM9SOVb/8VFbu0hZNoQqO5x09uF
+         UwrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=3f/bG1xCcH9GlVDTu4IzFUvz5kFlob5DxhGhmkJbqE8=;
-        b=keGPt8X5ep5QXM8jJnD2sWdL721aL9VfDrbtBLtK4ZXx9zX0L+CO3Cbr0mW4aq23SH
-         G9dbyyc3eu4W1MKii2pdgENNz8QAzKMFL6VjdUHcZs1g7ESWqE0GEUqTQIrRqTSnCoMK
-         76jlRQo40eMbqYDF+P3AFFj5OxaYhEuOUmkYaboBeZlKTqsRzZcnhVjLQaLtdREkUn8S
-         vYeCX8SYB2h++Ny9/AJw/EzXjXmS3a0q1Ks2SDhdjErsrwzdLOnES41I9PjXBTlhiTkf
-         1qFUsaD8jRwa8LSRaJsfSXq51AyT4JGLfArwgWzx6ANvBgN1ItK/Rxb+8BOQEZn8sX2d
-         Q5Iw==
-X-Gm-Message-State: ACgBeo11KIocwz5ZdxRb2XExWMGUDMyBicMfzRG6DlpttYFus9yTqNgS
-        N3kmFBR776CLUiCUPNoDqHk=
-X-Google-Smtp-Source: AA6agR6uM1ayQwnZqYrF0fmvp6E2av0FzUwAAh/AwkDnw0AXgdhgSv039E65NyLc4bXqZ9P1zcVs5g==
-X-Received: by 2002:a05:651c:179c:b0:261:8fbe:b729 with SMTP id bn28-20020a05651c179c00b002618fbeb729mr2606226ljb.114.1660936852242;
-        Fri, 19 Aug 2022 12:20:52 -0700 (PDT)
+        bh=a+PnZAwbnyxlFPa4YTGTR9Nn3kx7SIjA9eZbEWP7QKo=;
+        b=ZNbc344OVhkNnEhoBKDkSUj49clwmsRoDVm4tUlYpjUD0q2gPconEPqqBSoRkgLEVf
+         GuNa6XFmoAIpcrIh59D0h+OSB1cxMh+2PAaK1sAdUFj51hifpTh+jaXFFnLtZtQqR7E0
+         cKhpw6AUjoYF9crqn7AES+4EBEDJuWRoDy5s91r8QLMyfALskqxUZi2hKJ6kphp3CkNC
+         3gbR5UgCpvMOCgI1txoUddJrpwiVAP5SDsImt4r9ArfeKdWfOM7igpCiDFimaTZ1CwJ8
+         Y7LHef/735MguwKcizKiys6bRrWE4ldT63NuIk57u93yD1WdKyGiduf0u68/nzduBnX+
+         oYZg==
+X-Gm-Message-State: ACgBeo1dxyqup1kCTsSTmXQjkHtJ1zz9Xo7u77O7B864/xjgmyyHjB8B
+        WmSnSkjg6XzLmozYNHRA3EM=
+X-Google-Smtp-Source: AA6agR46yG7niNqKEUERouB3aXkhxNgAps0NbeAnMPogiKGrAyKrNvIAecpExpxeJb0itxekUn1sXA==
+X-Received: by 2002:a05:651c:1026:b0:25e:77f3:e0bd with SMTP id w6-20020a05651c102600b0025e77f3e0bdmr2449571ljm.383.1660936868038;
+        Fri, 19 Aug 2022 12:21:08 -0700 (PDT)
 Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id d11-20020ac25ecb000000b00492b494c4dbsm738480lfq.89.2022.08.19.12.20.51
+        by smtp.gmail.com with ESMTPSA id i17-20020a2ea231000000b002618a31be1csm699147ljm.62.2022.08.19.12.21.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 12:20:51 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 22:20:47 +0300
+        Fri, 19 Aug 2022 12:21:07 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 22:21:02 +0300
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 13/14] iio: max1363: simplify using
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 14/14] iio: hmc425a: simplify using
  devm_regulator_get_enable()
-Message-ID: <1286ea127d190e5708a0aaff271819b2d3f8802d.1660934107.git.mazziesaccount@gmail.com>
+Message-ID: <8b1193fdefb231a6d721e2bded52c48e56039c20.1660934107.git.mazziesaccount@gmail.com>
 References: <cover.1660934107.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="cC7KBBHJIm82dlyL"
+        protocol="application/pgp-signature"; boundary="n0FtiIFG1DkzGVCH"
 Content-Disposition: inline
 In-Reply-To: <cover.1660934107.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,7 +76,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---cC7KBBHJIm82dlyL
+--n0FtiIFG1DkzGVCH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -94,36 +93,50 @@ Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 v2 =3D> v3:
 New patch
 ---
- drivers/iio/adc/max1363.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ drivers/iio/amplifiers/hmc425a.c | 17 +----------------
+ 1 file changed, 1 insertion(+), 16 deletions(-)
 
-diff --git a/drivers/iio/adc/max1363.c b/drivers/iio/adc/max1363.c
-index eef55ed4814a..d900e29d6cb7 100644
---- a/drivers/iio/adc/max1363.c
-+++ b/drivers/iio/adc/max1363.c
-@@ -169,7 +169,6 @@ struct max1363_state {
- 	const struct max1363_chip_info	*chip_info;
- 	const struct max1363_mode	*current_mode;
- 	u32				requestedmask;
--	struct regulator		*reg;
- 	struct mutex			lock;
+diff --git a/drivers/iio/amplifiers/hmc425a.c b/drivers/iio/amplifiers/hmc4=
+25a.c
+index ce80e0c916f4..108f0f1685ef 100644
+--- a/drivers/iio/amplifiers/hmc425a.c
++++ b/drivers/iio/amplifiers/hmc425a.c
+@@ -34,7 +34,6 @@ struct hmc425a_chip_info {
+ };
 =20
- 	/* Using monitor modes and buffer at the same time is
-@@ -1603,15 +1602,7 @@ static int max1363_probe(struct i2c_client *client,
- 	st =3D iio_priv(indio_dev);
+ struct hmc425a_state {
+-	struct	regulator *reg;
+ 	struct	mutex lock; /* protect sensor state */
+ 	struct	hmc425a_chip_info *chip_info;
+ 	struct	gpio_descs *gpios;
+@@ -162,13 +161,6 @@ static const struct of_device_id hmc425a_of_match[] =
+=3D {
+ };
+ MODULE_DEVICE_TABLE(of, hmc425a_of_match);
 =20
- 	mutex_init(&st->lock);
--	st->reg =3D devm_regulator_get(&client->dev, "vcc");
+-static void hmc425a_reg_disable(void *data)
+-{
+-	struct hmc425a_state *st =3D data;
+-
+-	regulator_disable(st->reg);
+-}
+-
+ static struct hmc425a_chip_info hmc425a_chip_info_tbl[] =3D {
+ 	[ID_HMC425A] =3D {
+ 		.name =3D "hmc425a",
+@@ -211,14 +203,7 @@ static int hmc425a_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+=20
+-	st->reg =3D devm_regulator_get(&pdev->dev, "vcc-supply");
 -	if (IS_ERR(st->reg))
 -		return PTR_ERR(st->reg);
 -
 -	ret =3D regulator_enable(st->reg);
 -	if (ret)
 -		return ret;
--
--	ret =3D devm_add_action_or_reset(&client->dev, max1363_reg_disable, st->r=
-eg);
-+	ret =3D devm_regulator_get_enable(&client->dev, "vcc");
+-	ret =3D devm_add_action_or_reset(&pdev->dev, hmc425a_reg_disable, st);
++	ret =3D devm_regulator_get_enable(&pdev->dev, "vcc-supply");
  	if (ret)
  		return ret;
 =20
@@ -143,19 +156,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---cC7KBBHJIm82dlyL
+--n0FtiIFG1DkzGVCH
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL/4o8ACgkQeFA3/03a
-ocU5yAgAgK2Nt6SPIs45tZgSmQ3sttM72aM1RgJ8PaRyzr0iVPEv9Rr1MK6/9Z9u
-opF00Mt5nmUMlc2sRo2eLti1N7MFVEn8cYOpW2Cc+DSC6rwHSnguJwQASfmj7P1N
-DR0nF55ZLuMkN5OFWP52YKFfvSOyIlHFY8PYD3btMTJvUopqxZOhQdJnxBjcSK+j
-pQGUFwv6x88XJYhMKTCQAftUNFeEDfBGJ7pNE3x7XoqCP9K/ReNd+vzcseCloVa2
-l6Rt7oc52ADt2WiGtVu1sUQq7QNBOmEHwqlT9u6WbIYRdgeGhAg8WZTc6QkmHkMb
-+tr9/0CmKkypKujU9qGLmXK+/y9Jaw==
-=1ejk
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL/4p4ACgkQeFA3/03a
+ocWC5wf/dLaY0o4KfYk2D/JFl0YNKp7J4iOndU/+1ot/7R+IZwIFzuTHW3wsoEJz
+VMtS7tLRUYPPQoRyjbT1WOO6qTGwD+rNDeIOUqDaoBylUukdFoCTdQFPdxDRjdp7
+NYoXLJ9ww6heT18dLLk3Z5ClPeKOdKe+Yb9WpoRO68l9R1fpb23vyRFEwYVRjCoI
+8/R/3YP5qDob4TdO3ATZnZPjzJusU+zbxP4Kk9AtZrt3y8+GDIsEwz5iWPMMUXDO
+qde4UJJMJjDTN23AhU/BYdi2VVsAgg9sJfHSSv11vXgUlR7fD/0RVi7x9cHxBTmP
+faqUSXrx6OtvA76u5MyIj/itBxh0DQ==
+=Wxo4
 -----END PGP SIGNATURE-----
 
---cC7KBBHJIm82dlyL--
+--n0FtiIFG1DkzGVCH--

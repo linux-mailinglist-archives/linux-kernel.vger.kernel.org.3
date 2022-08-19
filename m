@@ -2,136 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC14C5999C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203A55999C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348365AbiHSK3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
+        id S1348367AbiHSKbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347966AbiHSK3t (ORCPT
+        with ESMTP id S1346949AbiHSKbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:29:49 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A561AF4A7;
-        Fri, 19 Aug 2022 03:29:45 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27JATJGS108014;
-        Fri, 19 Aug 2022 05:29:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1660904959;
-        bh=AVrDVBFLBkE3Zwz6MfjLTiwDw+hQlbCuU5vzEr5zREs=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=ArYbwJ/CIrN6RTw1AlFv2iBfRllbaAPjqusYtnDuWC7diQbxn8mzUM6/9BxnN6fpt
-         7cmNNDIlakmfON8R2ZTKUUID7v2vrjlv+BiPqnSMvruo+nSNCTx4FKWGCjJTDcoHb8
-         fsjT40ucR38Afb1eTAPq1ZiipgUNi3YI4JrdpoLc=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27JATJ57126247
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 19 Aug 2022 05:29:19 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 19
- Aug 2022 05:29:19 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 19 Aug 2022 05:29:19 -0500
-Received: from [10.24.69.241] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27JATDs3029523;
-        Fri, 19 Aug 2022 05:29:14 -0500
-Message-ID: <da82e71f-e32c-7adb-250e-0c80cc6e30bd@ti.com>
-Date:   Fri, 19 Aug 2022 15:59:13 +0530
+        Fri, 19 Aug 2022 06:31:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1687BEF9F3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 03:31:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A12C1042;
+        Fri, 19 Aug 2022 03:31:04 -0700 (PDT)
+Received: from e108754-lin.cambridge.arm.com (unknown [10.1.195.34])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DCA6F3F70D;
+        Fri, 19 Aug 2022 03:31:01 -0700 (PDT)
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ionela Voinescu <ionela.voinescu@arm.com>
+Subject: [PATCH v3] arm64: errata: add detection for AMEVCNTR01 incrementing incorrectly
+Date:   Fri, 19 Aug 2022 11:30:50 +0100
+Message-Id: <20220819103050.24211-1-ionela.voinescu@arm.com>
+X-Mailer: git-send-email 2.29.2.dirty
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <robh+dt@kernel.org>, <linux@armlinux.org.uk>,
-        <vladimir.oltean@nxp.com>, <grygorii.strashko@ti.com>,
-        <vigneshr@ti.com>, <nsekhar@ti.com>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kishon@ti.com>, <s-vadapalli@ti.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: net: ti: k3-am654-cpsw-nuss: Update
- bindings for J7200 CPSW5G
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-References: <20220816060139.111934-1-s-vadapalli@ti.com>
- <20220816060139.111934-2-s-vadapalli@ti.com>
- <79e58157-f8f2-6ca8-1aa6-b5cf6c83d9e6@linaro.org>
- <31c3a5b0-17cc-ad7b-6561-5834cac62d3e@ti.com>
- <9c331cdc-e34a-1146-fb83-84c2107b2e2a@linaro.org>
- <176ab999-e274-e22a-97d8-31f655b16800@ti.com>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <176ab999-e274-e22a-97d8-31f655b16800@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof,
+The AMU counter AMEVCNTR01 (constant counter) should increment at the same
+rate as the system counter. On affected Cortex-A510 cores, AMEVCNTR01
+increments incorrectly giving a significantly higher output value. This
+results in inaccurate task scheduler utilization tracking and incorrect
+feedback on CPU frequency.
 
-On 17/08/22 13:11, Siddharth Vadapalli wrote:
-> Hello Krzysztof,
-> 
-> On 17/08/22 11:20, Krzysztof Kozlowski wrote:
->> On 17/08/2022 08:14, Siddharth Vadapalli wrote:
->>
->>>>> -      port@[1-2]:
->>>>> +      "^port@[1-4]$":
->>>>>          type: object
->>>>>          description: CPSWxG NUSS external ports
->>>>>  
->>>>> @@ -119,7 +120,7 @@ properties:
->>>>>          properties:
->>>>>            reg:
->>>>>              minimum: 1
->>>>> -            maximum: 2
->>>>> +            maximum: 4
->>>>>              description: CPSW port number
->>>>>  
->>>>>            phys:
->>>>> @@ -151,6 +152,18 @@ properties:
->>>>>  
->>>>>      additionalProperties: false
->>>>>  
->>>>> +if:
->>>>
->>>> This goes under allOf just before unevaluated/additionalProperties:false
->>>
->>> allOf was added by me in v3 series patch and it is not present in the
->>> file. I removed it in v4 after Rob Herring's suggestion. Please let me
->>> know if simply moving the if-then statements to the line above
->>> additionalProperties:false would be fine.
->>
->> I think Rob's comment was focusing not on using or not-using allOf, but
->> on format of your entire if-then-else. Your v3 was huge and included
->> allOf in wrong place).
->>
->> Now you add if-then in proper place, but it is still advisable to put it
->> with allOf, so if ever you grow the if-then by new entry, you do not
->> have to change the indentation.
->>
->> Anyway the location is not correct. Regardless if this is if-then or
->> allOf-if-then, put it just like example schema is suggesting.
-> 
-> I will move the if-then statements to the lines above the
-> "additionalProperties: false" line. Also, I will add an allOf for this
+Work around this problem by returning 0 when reading the affected counter
+in key locations that results in disabling all users of this counter from
+using it either for frequency invariance or as FFH reference counter. This
+effect is the same to firmware disabling affected counters.
 
-I had a look at the example at [1] and it uses allOf after the
-"additionalProperties: false" line. Would it be fine then for me to add
-allOf and the single if-then statement below the "additionalProperties:
-false" line? Please let me know.
+Details on how the two features are affected by this erratum:
 
-[1] -> https://github.com/devicetree-org/dt-schema/blob/mai/test/schemas/conditionals-allof-example.yaml
+ - AMU counters will not be used for frequency invariance for affected
+   CPUs and CPUs in the same cpufreq policy. AMUs can still be used for
+   frequency invariance for unaffected CPUs in the system. Although
+   unlikely, if no alternative method can be found to support frequency
+   invariance for affected CPUs (cpufreq based or solution based on
+   platform counters) frequency invariance will be disabled. Please check
+   the chapter on frequency invariance at
+   Documentation/scheduler/sched-capacity.rst for details of its effect.
 
-Regards,
-Siddharth.
+ - Given that FFH can be used to fetch either the core or constant counter
+   values, restrictions are lifted regarding any of these counters
+   returning a valid (!0) value. Therefore FFH is considered supported
+   if there is a least one CPU that support AMUs, independent of any
+   counters being disabled or affected by this erratum. Clarifying
+   comments are now added to the cpc_ffh_supported(), cpu_read_constcnt()
+   and cpu_read_corecnt() functions.
+
+The above is achieved through adding a new erratum: ARM64_ERRATUM_2457168.
+
+Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: James Morse <james.morse@arm.com>
+---
+
+Hi,
+
+This patch is based on the information in the A510 Errata Notice,
+version 13.0 at [1] and applies on v6.0-rc1.
+
+v2 -> v3:
+ - v2 resent at [3]
+ - Based on 6.0-rc1.
+ - Added (hopefully clarifying) comments to cpc_ffh_supported(),
+   cpu_read_constcnt() and and cpu_read_corecnt() regarding CPUs affected
+   by errata, that have counters disabled or that don't support AMUs.
+   I'm happy to change the wording or add more details if need be.
+
+v2 RESEND: v2 rebased on 6.0-rc1
+v1 -> v2:
+ - v1 at [2]
+ - Move detection of erratum in cpu_errata.c
+ - Limit checking for affected CPUs to the init phase for FIE (Frequency
+   Invariance Engine). For FFH we'll still check for affected CPUs at each
+   read of the constant counter, but reads happen less often (driven by
+   sysfs reads) compared to FIE (on the tick).
+
+[1] https://developer.arm.com/documentation/SDEN2397589/1300/?lang=en
+[2] https://lore.kernel.org/lkml/20220607125340.13635-1-ionela.voinescu@arm.com/
+[3] https://lore.kernel.org/lkml/20220817121551.21790-1-ionela.voinescu@arm.com/
+
+Thanks,
+Ionela.
+
+ Documentation/arm64/silicon-errata.rst |  2 ++
+ arch/arm64/Kconfig                     | 17 ++++++++++++++
+ arch/arm64/kernel/cpu_errata.c         | 10 ++++++++
+ arch/arm64/kernel/cpufeature.c         |  5 +++-
+ arch/arm64/kernel/topology.c           | 32 ++++++++++++++++++++++++--
+ arch/arm64/tools/cpucaps               |  1 +
+ 6 files changed, 64 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+index 33b04db8408f..fda97b3fcf01 100644
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -52,6 +52,8 @@ stable kernels.
+ | Allwinner      | A64/R18         | UNKNOWN1        | SUN50I_ERRATUM_UNKNOWN1     |
+ +----------------+-----------------+-----------------+-----------------------------+
+ +----------------+-----------------+-----------------+-----------------------------+
++| ARM            | Cortex-A510     | #2457168        | ARM64_ERRATUM_2457168       |
+++----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A510     | #2064142        | ARM64_ERRATUM_2064142       |
+ +----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A510     | #2038923        | ARM64_ERRATUM_2038923       |
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 571cc234d0b3..9fb9fff08c94 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -917,6 +917,23 @@ config ARM64_ERRATUM_1902691
+ 
+ 	  If unsure, say Y.
+ 
++config ARM64_ERRATUM_2457168
++	bool "Cortex-A510: 2457168: workaround for AMEVCNTR01 incrementing incorrectly"
++	depends on ARM64_AMU_EXTN
++	default y
++	help
++	  This option adds the workaround for ARM Cortex-A510 erratum 2457168.
++
++	  The AMU counter AMEVCNTR01 (constant counter) should increment at the same rate
++	  as the system counter. On affected Cortex-A510 cores AMEVCNTR01 increments
++	  incorrectly giving a significantly higher output value.
++
++	  Work around this problem by returning 0 when reading the affected counter in
++	  key locations that results in disabling all users of this counter. This effect
++	  is the same to firmware disabling affected counters.
++
++	  If unsure, say Y.
++
+ config CAVIUM_ERRATUM_22375
+ 	bool "Cavium erratum 22375, 24313"
+ 	default y
+diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+index 7e6289e709fc..810dd3c39882 100644
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -654,6 +654,16 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
+ 		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
+ 	},
+ #endif
++#ifdef CONFIG_ARM64_ERRATUM_2457168
++	{
++		.desc = "ARM erratum 2457168",
++		.capability = ARM64_WORKAROUND_2457168,
++		.type = ARM64_CPUCAP_WEAK_LOCAL_CPU_FEATURE,
++
++		/* Cortex-A510 r0p0-r1p1 */
++		CAP_MIDR_RANGE(MIDR_CORTEX_A510, 0, 0, 1, 1)
++	},
++#endif
+ #ifdef CONFIG_ARM64_ERRATUM_2038923
+ 	{
+ 		.desc = "ARM erratum 2038923",
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 907401e4fffb..af4de817d712 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -1870,7 +1870,10 @@ static void cpu_amu_enable(struct arm64_cpu_capabilities const *cap)
+ 		pr_info("detected CPU%d: Activity Monitors Unit (AMU)\n",
+ 			smp_processor_id());
+ 		cpumask_set_cpu(smp_processor_id(), &amu_cpus);
+-		update_freq_counters_refs();
++
++		/* 0 reference values signal broken/disabled counters */
++		if (!this_cpu_has_cap(ARM64_WORKAROUND_2457168))
++			update_freq_counters_refs();
+ 	}
+ }
+ 
+diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+index 869ffc4d4484..ad2bfc794257 100644
+--- a/arch/arm64/kernel/topology.c
++++ b/arch/arm64/kernel/topology.c
+@@ -296,12 +296,25 @@ core_initcall(init_amu_fie);
+ 
+ static void cpu_read_corecnt(void *val)
+ {
++	/*
++	 * A value of 0 can be returned if the current CPU does not support AMUs
++	 * or if the counter is disabled for this CPU. A return value of 0 at
++	 * counter read is properly handled as an error case by the users of the
++	 * counter.
++	 */
+ 	*(u64 *)val = read_corecnt();
+ }
+ 
+ static void cpu_read_constcnt(void *val)
+ {
+-	*(u64 *)val = read_constcnt();
++	/*
++	 * Return 0 if the current CPU is affected by erratum 2457168. A value
++	 * of 0 is also returned if the current CPU does not support AMUs or if
++	 * the counter is disabled. A return value of 0 at counter read is
++	 * properly handled as an error case by the users of the counter.
++	 */
++	*(u64 *)val = this_cpu_has_cap(ARM64_WORKAROUND_2457168) ?
++		      0UL : read_constcnt();
+ }
+ 
+ static inline
+@@ -328,7 +341,22 @@ int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
+  */
+ bool cpc_ffh_supported(void)
+ {
+-	return freq_counters_valid(get_cpu_with_amu_feat());
++	int cpu = get_cpu_with_amu_feat();
++
++	/*
++	 * FFH is considered supported if there is at least one present CPU that
++	 * supports AMUs. Using FFH to read core and reference counters for CPUs
++	 * that do not support AMUs, have counters disabled or that are affected
++	 * by errata, will result in a return value of 0.
++	 *
++	 * This is done to allow any enabled and valid counters to be read
++	 * through FFH, knowing that potentially returning 0 as counter value is
++	 * properly handled by the users of these counters.
++	 */
++	if ((cpu >= nr_cpu_ids) || !cpumask_test_cpu(cpu, cpu_present_mask))
++		return false;
++
++	return true;
+ }
+ 
+ int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
+diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
+index 779653771507..63b2484ce6c3 100644
+--- a/arch/arm64/tools/cpucaps
++++ b/arch/arm64/tools/cpucaps
+@@ -67,6 +67,7 @@ WORKAROUND_1902691
+ WORKAROUND_2038923
+ WORKAROUND_2064142
+ WORKAROUND_2077057
++WORKAROUND_2457168
+ WORKAROUND_TRBE_OVERWRITE_FILL_MODE
+ WORKAROUND_TSB_FLUSH_FAILURE
+ WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
+-- 
+2.25.1
+

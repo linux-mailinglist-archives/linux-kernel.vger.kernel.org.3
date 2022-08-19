@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A482659A65A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9F659A66C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351331AbiHST1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 15:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
+        id S1351370AbiHST2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 15:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349705AbiHST1u (ORCPT
+        with ESMTP id S1349705AbiHST16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 15:27:50 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A4581B2F;
-        Fri, 19 Aug 2022 12:27:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1660937264;
-        bh=T8yJKMD8o6XFclCIp2z4mMB1SQbgLUqQpqvOc1TdR3M=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=fIFaRjfRAQtEvkdlYxGSb8HpBqGiWtizBI1/T8hPoi2+X0GpXRDXIpyRyiKMyJWiD
-         s0+58VeP3zIhJ3vgWnU4OdYDE1eYQGrbG14yRmLuOoV8UPZ48Ud9+QdnWN9EnXwUgS
-         ZIyHKuP59v5Ec8YvkRSzN/xyBRkC0s5Ncl2S7b5c=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.153.160]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MRmfo-1nvsks2keI-00T9Uz; Fri, 19
- Aug 2022 21:27:44 +0200
-Message-ID: <10e7f147-6f7e-76ad-02f9-2db32c533953@gmx.de>
-Date:   Fri, 19 Aug 2022 21:26:46 +0200
+        Fri, 19 Aug 2022 15:27:58 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6BE81B2F
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 12:27:56 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id bh13so4429725pgb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 12:27:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=OdVRHW5dgn9+ZFv7Dx3d9MQVdeaggjviefmhBuLYccY=;
+        b=KLiHLmUnTwUW4nPAcccokb8rqDM7RaZKR3tAhfpWrqa4fyUZ11fQGnRCahlJbMSNkc
+         K7onznVTAcTPdJ5ctU5qfok0xiXA4RUZWWeXukjQhEL0KrbtzmRpe90Uuw2GudQ6cB3z
+         wqidMjhzn3TYXU35oygksNUgU3fknacc64G2XK3+HLTw5IWBs6csGTW6/65ggSWB/q94
+         VV1NbgwFLjrAIvYqiN/GSEoDRheHm2Jcs0J12eYCvBM3w1EYrjOcPA4TzdFyaz7+hBZg
+         W08yNzJhuyiH6ybAoXgAL2/XGKRMYk/cdwhxrx/frztCzW3qlKJK1yFKPYJyVcVN9uzT
+         Z1KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=OdVRHW5dgn9+ZFv7Dx3d9MQVdeaggjviefmhBuLYccY=;
+        b=1DIyRp4EBP0Yhz6r93YhbhVGqhotUBp5uk4l8DgvOmrNQuQh8beqrHYsTBMwrd17hL
+         aWZ+QO07RPPbBS3XIs0WrcWUB/VODuIT24Kmupg+6Zi6+p1uGmrUmZVYWlRY/RIX+xT9
+         h9o5/CPFBPM5zyHY99Pu1cBebC8n4H1p2BQKU3JYQ2zmyq4/pxOyl+8ozOZcfjNE47Si
+         j18UsYVuRQanNZGaKBtPb8p4imSuQQ3Y8e7KKJdMgIQQ9RjoKr48/CZWaqFm+dSlhrqq
+         /wGUdzCdPOSwIOyQThLZknbUnFRhsAmd9nXY2tYU7ZzpRAZ5sX9LXmNWIenn1UMcwGEP
+         H7AA==
+X-Gm-Message-State: ACgBeo38jrBQ1duavcILj4CFXQj1myxeNhB3y44+77gWTS762usHS8PP
+        Py5cP2Ws0DhYEguNiQkgObU6yaGYJh6YTqb8qrXpUA==
+X-Google-Smtp-Source: AA6agR6GwGgHvB/kIWBltf1ldR8xs3lS7wiIsIOwazSdhvuDPMSNX6TOwG4x6BLYFJ/S/btctxhQLjTtMJ9Rygnp60E=
+X-Received: by 2002:a65:5941:0:b0:41d:a203:c043 with SMTP id
+ g1-20020a655941000000b0041da203c043mr7317812pgu.483.1660937275721; Fri, 19
+ Aug 2022 12:27:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] parisc: move from strlcpy with unused retval to strscpy
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org
-Cc:     "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        linux-parisc@vger.kernel.org
-References: <20220818210055.7181-1-wsa+renesas@sang-engineering.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220818210055.7181-1-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:QmeEpcKlr3qlUzuFyD6WPk0AZuKFJtm3XO8GctBcN+J/ae6GQaJ
- 5/vf8HEr3PXnNWjMOUVP9ja39NdkOdfuzB+Fpe3xjlehr/nlss0hi84in+aSLZjaYe2bRkj
- V2yKv2mYDsRv9o5IygdnuKV5x30QvgW2NE4jR6C1TZRoFaFkO0nyzukEvwsdp04xNet1rYr
- SXmQzkaIZv0e4w5A96Meg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jL28/mYB9xA=:9Trwc9b09DhN56RlKyflb8
- ilnnMOnIh97osZm8HdI+JT9O0Rm2JGsr8LXjRpyC25nh2FnQb4KPOezWbcA+Ept124FjCSNoN
- WDP9fC+nl39wyqLMeT8wdT9LvuLYxN2sI5w5UoUwDF6WJOkhrxP0OPuMnxH5n/2UR6xJnW+VQ
- Thr0z/qGl5/31q2CXQw72u+S05EqHP5o87i7nAYumIGvLW4VM0vPr0gRAml2KAoAkOeEAdaHv
- WuBEUcDXySCWQMZ0x/50tXSM+wpjzp2qkDAgbYUg2OkLf8zL49OTFolBsz7g5/6dV1vTTQHWo
- EIUCFFGqFICHaD+rCGY5Fbj0tdPTsjHUIpKAfSipkiYVYqRb29g8md4ofZQqtWBYGUkRZfLrx
- N+PK2IRmHtHu/yAsCsMXW4t+Et+AF+ItN2QGekUHpvoyyF06HSJu6Xa08mGljm20vySrFTTjQ
- q18Tz+Ow4eEtiovrA6uyBm3UznHVGJ/IJwy0dvfNEfEkvZDR6zjW4ESf9jcGZRsJJbqCuMQSD
- fru3RpQH9T6CN7vv8bzeFtu5Bd+F4SEGPO/I7on2E4zxMP7x53Ad6ODL8jmQg0QWmtir6KpOI
- PcrEEhuSfr+Iu+h9Y/HTziUANBRosVzp/MLNT/v6TtfiUO0rFTExK0QQ4J4zMOiRbP7sQEAVR
- vmAk2q6SqoVnbfXnw4I3HJx6E/oMeH/oU9PH1oiGVv/wODUMcA8lO24qqBtsvQMxQ4UbSP+3d
- 4x5WqQ5nSanIFLC7D9LCpEYJKLE3PT57k61WK3bBLWlFB+5DLf9rn/APBeUpWyh8bnXZmw2Mu
- 8v7yP3sGKi5B1fRFH+JqqpDOYW6PUp+fXhYiIvjH17p3UOU3zEFCqRkylupqW/5Z3kgiDMhAU
- 20PQhfgKGiIWDlC0K3QMQiBXmdBoR/JVLH/6nsZ+GPsQYKUojogAKbL28QVNShW4HTWUHrhUJ
- RaPP4Y8MRyiC8QXcxUFr35sUBK5kByu5jMFWm8MeHslZTMOB+h+nX72M/9GQiX/zi8oychk+7
- yJLdJAdheL46yd88IVvln52HCtKU3x2MqoBY9B/cYqwbhiYNA4UQ0J77CZ293T+DvA7nB7TpF
- X81IHsxHl/9v1ZClsBCgs8LRHj8PM27PZs84IHeBgxUhucEjusrcSHuvQ==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220810152033.946942-1-pgonda@google.com> <20220810152033.946942-11-pgonda@google.com>
+In-Reply-To: <20220810152033.946942-11-pgonda@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Fri, 19 Aug 2022 12:27:44 -0700
+Message-ID: <CAGtprH-emXA_5dwwdb4noOC-cuy3BTGT8UbKRkPD8j2gjBSu+Q@mail.gmail.com>
+Subject: Re: [V3 10/11] KVM: selftests: Add ucall pool based implementation
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Marc Orr <marcorr@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Mingwei Zhang <mizhang@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, andrew.jones@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,34 +74,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 23:00, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
+On Wed, Aug 10, 2022 at 8:20 AM Peter Gonda <pgonda@google.com> wrote:
+> ...
+> +
+> +static struct ucall *ucall_alloc(void)
+> +{
+> +       struct ucall *uc = NULL;
+> +       int i;
+> +
+> +       if (!use_ucall_pool)
+> +               goto out;
+> +
+> +       for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+> +               if (!atomic_test_and_set_bit(i, ucall_pool->in_use)) {
+> +                       uc = &ucall_pool->ucalls[i];
+> +                       memset(uc->args, 0, sizeof(uc->args));
+> +                       break;
+> +               }
+> +       }
+> +out:
+> +       return uc;
+> +}
+> +
+> +static inline size_t uc_pool_idx(struct ucall *uc)
+> +{
+> +       return uc->hva - ucall_pool->ucalls;
+> +}
+> +
+> +static void ucall_free(struct ucall *uc)
+> +{
+> +       if (!use_ucall_pool)
+> +               return;
+> +
+> +       clear_bit(uc_pool_idx(uc), ucall_pool->in_use);
+> +}
 >
-> Link: https://lore.kernel.org/r/CAHk-=3DwgfRnXz0W3D37d01q3JFkr_i_uTL=3DV=
-6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>  void ucall(uint64_t cmd, int nargs, ...)
+>  {
+> -       struct ucall uc = {};
+> +       struct ucall *uc;
+> +       struct ucall tmp = {};
 
-applied to parisc git tree.
-Thanks!
-Helge
+This steps seems to result in generating instructions that need SSE
+support on x86:
+struct ucall tmp = {};
+   movaps %xmm0,0x20(%rsp)
+   movaps %xmm0,0x30(%rsp)
+   movaps %xmm0,0x40(%rsp)
+   movaps %xmm0,0x50(%rsp)
 
-> ---
->  drivers/parisc/led.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/parisc/led.c b/drivers/parisc/led.c
-> index 1e4a5663d011..d4be9d2ee74d 100644
-> --- a/drivers/parisc/led.c
-> +++ b/drivers/parisc/led.c
-> @@ -646,7 +646,7 @@ int lcd_print( const char *str )
->  		cancel_delayed_work_sync(&led_task);
->
->  	/* copy display string to buffer for procfs */
-> -	strlcpy(lcd_text, str, sizeof(lcd_text));
-> +	strscpy(lcd_text, str, sizeof(lcd_text));
->
->  	/* Set LCD Cursor to 1st character */
->  	gsc_writeb(lcd_info.reset_cmd1, LCD_CMD_REG);
+This initialization will need proper compilation flags to generate
+instructions according to VM configuration.
 
+>         va_list va;
+>         int i;
+>
+> -       WRITE_ONCE(uc.cmd, cmd);
+> +       uc = ucall_alloc();
+> +       if (!uc)
+> +               uc = &tmp;
+> +
+> +       WRITE_ONCE(uc->cmd, cmd);
+>
+>         nargs = min(nargs, UCALL_MAX_ARGS);
+>
+>         va_start(va, nargs);
+>         for (i = 0; i < nargs; ++i)
+> -               WRITE_ONCE(uc.args[i], va_arg(va, uint64_t));
+> +               WRITE_ONCE(uc->args[i], va_arg(va, uint64_t));
+>         va_end(va);
+>
+> -       ucall_arch_do_ucall((vm_vaddr_t)&uc);
+> ...

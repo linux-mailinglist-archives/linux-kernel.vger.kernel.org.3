@@ -2,55 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6526459A926
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 01:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 703BE59A93B
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 01:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236772AbiHSXIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 19:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
+        id S243537AbiHSXJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 19:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236190AbiHSXH5 (ORCPT
+        with ESMTP id S236190AbiHSXJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 19:07:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA702B775F;
-        Fri, 19 Aug 2022 16:07:56 -0700 (PDT)
+        Fri, 19 Aug 2022 19:09:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D554F6B2;
+        Fri, 19 Aug 2022 16:09:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70979B82969;
-        Fri, 19 Aug 2022 23:07:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8A5CC433C1;
-        Fri, 19 Aug 2022 23:07:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4AA04B8280F;
+        Fri, 19 Aug 2022 23:09:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93BD3C433C1;
+        Fri, 19 Aug 2022 23:09:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660950474;
-        bh=xfweD1Db7pjmMOuWXitD59Y9epaVTfjdmJG40kol4fc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cN9Q8djRRIjLcJX81J4TZLfMgTDpg0tzuqzO9gtdKcavVcePIDlwSLSc2n+RPcdJx
-         ae9qqRtIUgdhn0VtqjjiyLuJLZ+yLWilssZnaZ2R0ozckIPnQUuxVXY1zsZXvke8qv
-         m3xIrtuKkfTgQaQqSLM8YAa0HGCu57STPtW/bWNMT4dijdTU8S0zg+qvOZ4WNxUVD1
-         ZOVD6+pkhA4QmiGi+Sgplt+RnY33zCxJR4bMJxJYVUHB4900IpDmLwUXwjT21ipL0E
-         HOijaMoLvBebfH/bWeZ5POCfPJNWwFSwn2tOTt5ypJy0xNNDMuHTrtxdBQPbFv0Adg
-         4RgqM4czyScPg==
-Date:   Fri, 19 Aug 2022 16:07:52 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Andrei Vagin <avagin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Kees Cook <keescook@chromium.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: fix a couple missing .gitignore entries
-Message-ID: <20220819160752.777ef64b@kernel.org>
-In-Reply-To: <20220819190558.477166-1-axelrasmussen@google.com>
-References: <20220819190558.477166-1-axelrasmussen@google.com>
+        s=k20201202; t=1660950591;
+        bh=jyQMlfDyLfQswfrcmubQj7ukvdgCEoTA8LhJP39mZNY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QuOfKLcTLqSxarEIMozH41HlKKSXIw1Ha5z+iGobBTp0XC/190sxrbX4xymxeQZFF
+         3WudYVrb63Ic60WpCeWYRRbbMC6sNiKGVAznV8UysIUN6uVjyi5NDY0XFhaprIuD8A
+         pF59daiDM0+L9HkOjVyll+2uPITOtrvjzgrPS16r1XJmBV5ma+KvcLc+BHhqr03upy
+         fMsLt1xcBM7/2jnJiXFv+FJPXeiiS+0sz7tw4jOhLuKIjQw+8yi7bYCZL/cqb3a2bJ
+         OHxlSv4rJUDd6AvnKU3c4q61YHoNXW9ZdFJr7Qw7jTpstVUaoUe5id8DJL1pk0juet
+         AgN1uJU3z9Rkg==
+Date:   Fri, 19 Aug 2022 16:09:48 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Andreas Dilger <adilger@dilger.ca>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        xfs <linux-xfs@vger.kernel.org>, linux-api@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH v4 6/9] f2fs: don't allow DIO reads but not DIO writes
+Message-ID: <YwAYPFxW7VV4M9D1@sol.localdomain>
+References: <20220722071228.146690-1-ebiggers@kernel.org>
+ <20220722071228.146690-7-ebiggers@kernel.org>
+ <YtyoF89iOg8gs7hj@google.com>
+ <Yt7dCcG0ns85QqJe@sol.localdomain>
+ <YuXyKh8Zvr56rR4R@google.com>
+ <YvrrEcw4E+rpDLwM@sol.localdomain>
+ <20220816090312.GU3600936@dread.disaster.area>
+ <D1CDACE3-EC7E-43E4-8F49-EEA2B6E71A41@dilger.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <D1CDACE3-EC7E-43E4-8F49-EEA2B6E71A41@dilger.ca>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,34 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 12:05:58 -0700 Axel Rasmussen wrote:
-> Some recent commits added new test binaries, but forgot to add those to
-> .gitignore. Now, after one does "make -C tools/testing/selftests", one
-> ends up with some untracked files in the kernel tree.
+On Tue, Aug 16, 2022 at 10:42:29AM -0600, Andreas Dilger wrote:
 > 
-> Add the test binaries to .gitignore, to avoid this minor annoyance.
+> IMHO, this whole discussion is putting the cart before the horse.
+> Changing existing (and useful) IO behavior to accommodate an API that
+> nobody has ever used, and is unlikely to even be widely used, doesn't
+> make sense to me.  Most applications won't check or care about the new
+> DIO size fields, since they've lived this long without statx() returning
+> this info, and will just pick a "large enough" size (4KB, 1MB, whatever)
+> that gives them the performance they need.  They *WILL* care if the app
+> is suddenly unable to read data from a file in ways that have worked for
+> a long time.
 > 
-> Fixes: d8b6171bd58a ("selftests/io_uring: test zerocopy send")
-> Fixes: 6342140db660 ("selftests/timens: add a test for vfork+exit")
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->  tools/testing/selftests/net/.gitignore    | 3 ++-
->  tools/testing/selftests/timens/.gitignore | 1 +
->  2 files changed, 3 insertions(+), 1 deletion(-)
+> Even if apps are modified to check these new DIO size fields, and then
+> try to DIO write to a file in f2fs that doesn't allow it, then f2fs will
+> return an error, which is what it would have done without the statx()
+> changes, so no harm done AFAICS.
 > 
-> diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-> index 0e5751af6247..02abf8fdfd3a 100644
-> --- a/tools/testing/selftests/net/.gitignore
-> +++ b/tools/testing/selftests/net/.gitignore
-> @@ -39,4 +39,5 @@ toeplitz
->  tun
->  cmsg_sender
->  unix_connect
-> -tap
-> \ No newline at end of file
-> +tap
-> +io_uring_zerocopy_tx
+> Even with a more-complex DIO status return that handles a "direction"
+> field (which IMHO is needlessly complex), there is always the potential
+> for a TOCTOU race where a file changes between checking and access, so
+> the userspace code would need to handle this.
+> 
 
-Could you make the io_uring test the first in the file?
-That'd gets us closest to the alphabetical ordering (I know the file is
-not ordered now, but we should start moving that way).
+I'm having trouble making sense of your argument here; you seem to be saying
+that STATX_DIOALIGN isn't useful, so it doesn't matter if we design it
+correctly?  That line of reasoning is concerning, as it's certainly intended to
+be useful, and if it's not useful there's no point in adding it.
+
+Are there any specific concerns that you have, besides TOCTOU races and the lack
+of support for read-only DIO?
+
+I don't think that TOCTOU races are a real concern here.  Generally DIO
+constraints would only change if the application doing DIO intentionally does
+something to the file, or if there are changes that involve the filesystem being
+taken offline, e.g. the filesystem being mounted with significantly different
+options or being moved to a different block device.  And, well, everything else
+in stat()/statx() is subject to TOCTOU as well, but is still used...
+
+- Eric

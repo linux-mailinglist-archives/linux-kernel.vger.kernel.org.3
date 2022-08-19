@@ -2,124 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8366B599BB3
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8F7599BB2
 	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348891AbiHSMHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
+        id S1348906AbiHSMHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348496AbiHSMG7 (ORCPT
+        with ESMTP id S1348496AbiHSMHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:06:59 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CDB100977
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:06:57 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-11c59785966so4976216fac.11
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:06:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=BS8rpDUuJ+C81koEbZ/S2EZJvVDKAj+JtFCwhraayGM=;
-        b=rjyqhlsYjTLeLXmxYbxShSma7EjgClUCI9vd55cQl4/HYoiwbSOCLsnxtVsC5bS0dk
-         6jiDG3E1MLDdD3aFzejOiBT88qGvpI1E+zY+KUpWRoj6+ToJQfzyQ7gy7EYH1ZzSNhzE
-         CYjBAw9N45A5Ik1GciMK/Me4x9s5pKTdDV51njHzzPBNlcr7KflpzdPpZDCPjaI0Zq7v
-         SlxhpX5gIkW+OL+HM6hDcd/q+fNBeQoN4I7vSuEgM/VhqkKbG+IcOTfhlYXJ+FoBklca
-         dOZ3AD+0ASczp3kV8Q9zjtvBZk56QvlSoEp3WWzZxWD/+U8ySnndL1pwgs44AorqPLEb
-         0d0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=BS8rpDUuJ+C81koEbZ/S2EZJvVDKAj+JtFCwhraayGM=;
-        b=U+aYss5EqejPZFecJnHQBPRIowwph3KEQ48T2/NvkHhG5goDowfV0JbaOOUCkbIIMt
-         K17GOp9BaG7abS0Os8iHP7yOiOjD3O9iQjCU+ZqWJUsV/K+3FlVM2KydJo3Y/aAKOVHE
-         gGzPBRD7xto3VP+pXjsgq7Fl7eFUFnQHJOTJvCxni0TcIbdj2pA9lPtnE7ZZ144pvWaf
-         QlJZtS7rRNo0qd+MROQOA+shHqd/vhqr/Hlfo71vKXoPolCA3BpGeLxtADhyYEKN3UzX
-         JdlfwInA14y40I4KaKS+u9Y/N75PSJ0eiSr3FkNfyOyVuRiTWndr0cwXVrZL0Jmc9Wgr
-         yK8A==
-X-Gm-Message-State: ACgBeo3M3xGYUycRIMWXIusrZ0VL1L8IZ/qqH45dsitE2mNpAYAc87LO
-        yFYT029JhsOSj4mT4D7OVtfqUOON50AtOjqcL5kz
-X-Google-Smtp-Source: AA6agR67JqLJbTsUMywSUV4CDMmds8+ClBQaMdh6BNCEFu6UwDXwsTiWYtKBclPxGnDjuicTj+ve4s+6uWG/VcY13Q8=
-X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
- x13-20020a056870a78d00b0011c437bec70mr3678091oao.136.1660910816244; Fri, 19
- Aug 2022 05:06:56 -0700 (PDT)
+        Fri, 19 Aug 2022 08:07:03 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BA010096A;
+        Fri, 19 Aug 2022 05:06:57 -0700 (PDT)
+X-UUID: 90fb09d8026b40bcb47f4d9907776688-20220819
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=g/YPOMlZjMsEaO2WgP8P2ictRGCTTr097gbQCAoAdL0=;
+        b=eqz286WlDwrBi5Va/N4fvbTOki8cK9cI0LmYNnDzFWCsjXmeTlOCqu/2Jhpv+NPutiJY0p2uWvvOT7i/eMstPdBc5XClUzx5QospF2u+Q5GA7GDkXqvSAqM/dEt3mcht86PcrlRQR0nOOLeDolrM8B495gkLY4dj1oohGoUmKJ8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:b698d438-228e-4734-ac58-4b3edee145df,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Releas
+        e_Ham,ACTION:release,TS:-25
+X-CID-META: VersionHash:84eae18,CLOUDID:459c36c9-6b09-4f60-bf82-12f039f5d530,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 90fb09d8026b40bcb47f4d9907776688-20220819
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1512524538; Fri, 19 Aug 2022 20:06:52 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 19 Aug 2022 20:06:50 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 19 Aug 2022 20:06:50 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Guodong Liu <guodong.liu@mediatek.com>
+Subject: [PATCH v3] dt-bindings: pinctrl: mt8186: Fix 'reg-names' for pinctrl nodes
+Date:   Fri, 19 Aug 2022 20:06:49 +0800
+Message-ID: <20220819120649.21523-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <CAEHB248ft0LFUQDHNtB9NN_D3F=12Jndh13Ue=LokajXNhMk5Q@mail.gmail.com>
- <CAHC9VhTXNPWBDRoPcz-Jw=f+NNAEhxbh-ySc56CUd-ZbuboW5w@mail.gmail.com>
-In-Reply-To: <CAHC9VhTXNPWBDRoPcz-Jw=f+NNAEhxbh-ySc56CUd-ZbuboW5w@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 19 Aug 2022 08:06:45 -0400
-Message-ID: <CAHC9VhQnYY_wdUjBbL3NpPYTQcr0M_Nf1g8ObbHiUoUbHPYdYA@mail.gmail.com>
-Subject: Re: data-race in audit_log_start / audit_receive
-To:     abhishek.shah@columbia.edu
-Cc:     eparis@redhat.com, linux-audit@redhat.com,
-        linux-kernel@vger.kernel.org, Gabriel Ryan <gabe@cs.columbia.edu>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 9:59 PM Paul Moore <paul@paul-moore.com> wrote:
-> On Thu, Aug 18, 2022 at 6:23 PM Abhishek Shah
-> <abhishek.shah@columbia.edu> wrote:
-> > Hi all,
-> >
-> > We found a data race involving the audit_cmd_mutex.owner variable. We think this bug is concerning because audit_ctl_owner_current is used at a location that controls the scheduling of tasks shown here. Please let us know what you think.
-> >
-> > Thanks!
-> >
-> > -----------------Report----------------------
-> >
-> > write to 0xffffffff881d0710 of 8 bytes by task 6541 on cpu 0:
-> >  audit_ctl_lock kernel/audit.c:237 [inline]
->
-> ...
->
-> > read to 0xffffffff881d0710 of 8 bytes by task 6542 on cpu 1:
-> >  audit_ctl_owner_current kernel/audit.c:258 [inline]
->
-> Yes, technically there is a race condition if/when an auditd instance
-> is registering itself the exact same time as another task is
-> attempting to log an audit record via audit_log_start().
+The mt8186 contains 8 GPIO physical address bases that correspond to
+the 'reg-names' of the pinctrl driver. The 'reg-names' entries in
+bindings are ordered incorrectly, though. The system crashes due of an
+erroneous address when the regulator initializes.
 
-I realized after I sent this and turned off my computer last night
-that I typed the wrong thing - the race isn't between auditd and
-audit_log_start(), it's between the code which changes the audit
-subsystem state (see audit_receive() and the audit watch/tree code)
-and audit_log_start().
+We fix the 'reg-names' for the pinctrl nodes and the pinctrl-mt8186
+example in bindings.
 
-> The risk
-> being that a *very* limited number of audit records could be
-> mis-handled with respect to their queue priority and that is it; no
-> records would be lost or misplaced.  Correcting this would likely
-> involve a more complex locking scheme[1] or a rather severe
-> performance penalty due to an additional lock in the audit_log_start()
-> code path.  There may be some value in modifying
-> audit_ctl_owner_current() to use READ_ONCE(), but it isn't clear to me
-> that this would significantly improve things or have no impact on
-> performance.
+Fixes: 338e953f1bd1 ("dt-bindings: pinctrl: mt8186: add pinctrl file and binding document")
+Co-developed-by: Guodong Liu <guodong.liu@mediatek.com>
+Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
+Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+---
+Change in v2:
+  * Remove changes of the formatting of addresses and add C-d-b tag for
+    Guodong
+Change in v1:
+  * Capitalize First Letter of Sentences and rephrase the commit message
+    [Allen-KH Cheng <allen-kh.cheng@mediatek.com>]
+---
+---
+ .../bindings/pinctrl/pinctrl-mt8186.yaml           | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Another thing I thought of last night - I don't believe READ_ONCE()
-adds a memory barrier, which would probably be needed; although my
-original statement still stands, I'm not sure the performance hit
-would justify the marginal impact on the audit queue.
-
-> Have you noticed any serious problems on your system due to this?  If
-> you have a reproducer which shows actual harm on the system could you
-> please share that?
->
-> [1] The obvious choice would be to move to a RCU based scheme, but
-> even that doesn't totally solve the problem as there would still be a
-> window where some tasks would have an "old" value.  It might actually
-> end up extending the race window on large multi-core systems due to
-> the time needed for all of the critical sections to complete.
-
+diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml
+index 1eeb885ce0c6..26573a793b57 100644
+--- a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml
+@@ -41,12 +41,12 @@ properties:
+       Gpio base register names.
+     items:
+       - const: iocfg0
+-      - const: iocfg_bm
+-      - const: iocfg_bl
+-      - const: iocfg_br
++      - const: iocfg_lt
+       - const: iocfg_lm
++      - const: iocfg_lb
++      - const: iocfg_bl
+       - const: iocfg_rb
+-      - const: iocfg_tl
++      - const: iocfg_rt
+       - const: eint
+ 
+   interrupt-controller: true
+@@ -235,9 +235,9 @@ examples:
+             <0x10002A00 0x0200>,
+             <0x10002c00 0x0200>,
+             <0x1000b000 0x1000>;
+-      reg-names = "iocfg0", "iocfg_bm", "iocfg_bl",
+-                  "iocfg_br", "iocfg_lm", "iocfg_rb",
+-                  "iocfg_tl", "eint";
++      reg-names = "iocfg0", "iocfg_lt", "iocfg_lm",
++                  "iocfg_lb", "iocfg_bl", "iocfg_rb",
++                  "iocfg_rt", "eint";
+       gpio-controller;
+       #gpio-cells = <2>;
+       gpio-ranges = <&pio 0 0 185>;
 -- 
-paul-moore.com
+2.18.0
+

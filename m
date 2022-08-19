@@ -2,52 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC2E599A3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE8B599A5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348507AbiHSLCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
+        id S1348498AbiHSLCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348489AbiHSLC3 (ORCPT
+        with ESMTP id S1348495AbiHSLCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:02:29 -0400
-Received: from smtp237.sjtu.edu.cn (smtp237.sjtu.edu.cn [202.120.2.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EC2F61A5;
-        Fri, 19 Aug 2022 04:02:26 -0700 (PDT)
-Received: from mta91.sjtu.edu.cn (unknown [10.118.0.91])
-        by smtp237.sjtu.edu.cn (Postfix) with ESMTPS id 6B1F510087D60;
-        Fri, 19 Aug 2022 19:02:22 +0800 (CST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mta91.sjtu.edu.cn (Postfix) with ESMTP id 2DBE737C83F;
-        Fri, 19 Aug 2022 19:02:22 +0800 (CST)
-X-Virus-Scanned: amavisd-new at 
-Received: from mta91.sjtu.edu.cn ([127.0.0.1])
-        by localhost (mta91.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 0dBLnWp56NuV; Fri, 19 Aug 2022 19:02:22 +0800 (CST)
-Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
-        by mta91.sjtu.edu.cn (Postfix) with ESMTP id E62CD37C83E;
-        Fri, 19 Aug 2022 19:02:21 +0800 (CST)
-Date:   Fri, 19 Aug 2022 19:02:21 +0800 (CST)
-From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
-To:     eperezma <eperezma@redhat.com>
-Cc:     jasowang <jasowang@redhat.com>, sgarzare <sgarzare@redhat.com>,
-        Michael Tsirkin <mst@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>
-Message-ID: <984124417.8446289.1660906941482.JavaMail.zimbra@sjtu.edu.cn>
-In-Reply-To: <CAJaqyWcq++TmtMsGnn-j=6oAb7+f32P-WC5XRz0L2rEKJ4Sotw@mail.gmail.com>
-References: <20220817135718.2553-1-qtxuning1999@sjtu.edu.cn> <20220817135718.2553-2-qtxuning1999@sjtu.edu.cn> <CAJaqyWcq++TmtMsGnn-j=6oAb7+f32P-WC5XRz0L2rEKJ4Sotw@mail.gmail.com>
-Subject: Re: [RFC v2 1/7] vhost: expose used buffers
+        Fri, 19 Aug 2022 07:02:30 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5501FF61A8;
+        Fri, 19 Aug 2022 04:02:29 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1oOzlh-00CpeD-VR; Fri, 19 Aug 2022 21:02:27 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 19 Aug 2022 19:02:25 +0800
+Date:   Fri, 19 Aug 2022 19:02:25 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org,
+        Declan Murphy <declan.murphy@intel.com>,
+        Daniele Alessandrelli <daniele.alessandrelli@intel.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Prabhjot Khurana <prabhjot.khurana@intel.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH] crypto: keembay-ocs - Drop obsolete dependency on
+ COMPILE_TEST
+Message-ID: <Yv9twQnbmqrLCDcV@gondor.apana.org.au>
+References: <20220803224755.177de90e@endymion.delvare>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=GB2312
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.222.45.197]
-X-Mailer: Zimbra 8.8.15_GA_4308 (ZimbraWebClient - GC103 (Mac)/8.8.15_GA_3928)
-Thread-Topic: vhost: expose used buffers
-Thread-Index: ZUVniTisaWLV2fp0YDfuwjUwIrJe5A==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220803224755.177de90e@endymion.delvare>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -57,102 +45,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
------ Original Message -----
-> From: "eperezma" <eperezma@redhat.com>
-> To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>
-> Cc: "jasowang" <jasowang@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael Tsirkin" <mst@redhat.com>, "netdev"
-> <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>,
-> "virtualization" <virtualization@lists.linux-foundation.org>
-> Sent: Thursday, August 18, 2022 2:16:40 PM
-> Subject: Re: [RFC v2 1/7] vhost: expose used buffers
-
-> On Wed, Aug 17, 2022 at 3:58 PM Guo Zhi <qtxuning1999@sjtu.edu.cn> wrote:
->>
->> Follow VIRTIO 1.1 spec, only writing out a single used ring for a batch
->> of descriptors.
->>
->> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
->> ---
->>  drivers/vhost/vhost.c | 14 ++++++++++++--
->>  drivers/vhost/vhost.h |  1 +
->>  2 files changed, 13 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
->> index 40097826cff0..7b20fa5a46c3 100644
->> --- a/drivers/vhost/vhost.c
->> +++ b/drivers/vhost/vhost.c
->> @@ -2376,10 +2376,20 @@ static int __vhost_add_used_n(struct vhost_virtqueue
->> *vq,
->>         vring_used_elem_t __user *used;
->>         u16 old, new;
->>         int start;
->> +       int copy_n = count;
->>
->> +       /**
->> +        * If in order feature negotiated, devices can notify the use of a batch
->> of buffers to
->> +        * the driver by only writing out a single used ring entry with the id
->> corresponding
->> +        * to the head entry of the descriptor chain describing the last buffer
->> in the batch.
->> +        */
->> +       if (vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
->> +               copy_n = 1;
->> +               heads = &heads[count - 1];
->> +       }
->>         start = vq->last_used_idx & (vq->num - 1);
->>         used = vq->used->ring + start;
->> -       if (vhost_put_used(vq, heads, start, count)) {
->> +       if (vhost_put_used(vq, heads, start, copy_n)) {
->>                 vq_err(vq, "Failed to write used");
->>                 return -EFAULT;
->>         }
->> @@ -2410,7 +2420,7 @@ int vhost_add_used_n(struct vhost_virtqueue *vq, struct
->> vring_used_elem *heads,
->>
->>         start = vq->last_used_idx & (vq->num - 1);
->>         n = vq->num - start;
->> -       if (n < count) {
->> +       if (n < count && !vhost_has_feature(vq, VIRTIO_F_IN_ORDER)) {
->>                 r = __vhost_add_used_n(vq, heads, n);
->>                 if (r < 0)
->>                         return r;
+On Wed, Aug 03, 2022 at 10:47:55PM +0200, Jean Delvare wrote:
+> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+> is possible to test-build any driver which depends on OF on any
+> architecture by explicitly selecting OF. Therefore depending on
+> COMPILE_TEST as an alternative is no longer needed.
 > 
-> It would be simpler to use vhost_add_used in vsock/vhost_test to add a
-> batch of used descriptors, and leave vhost_add_used_n untouched.
+> It is actually better to always build such drivers with OF enabled,
+> so that the test builds are closer to how each driver will actually be
+> built on its intended target. Building them without OF may not test
+> much as the compiler will optimize out potentially large parts of the
+> code. In the worst case, this could even pop false positive warnings.
+> Dropping COMPILE_TEST here improves the quality of our testing and
+> avoids wasting time on non-existent issues.
 > 
-> Since it's the upper layer the one that manages the in_order in this
-> version, we could:
-> * Always call vhost_add_used(vq, last_head_of_batch, ...) for the tx
-> queue, that does not need used length info.
-> * Call vhost_add_used_n for the rx queue, since the driver needs the
-> used length info.
- 
-Very insightful view!
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> Cc: Declan Murphy <declan.murphy@intel.com>
+> Cc: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
+> Cc: Mark Gross <mgross@linux.intel.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: Prabhjot Khurana <prabhjot.khurana@intel.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> ---
+>  drivers/crypto/keembay/Kconfig |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-At first, vhost_add_used will write used ring for skipped buffer in a batch,
-so we can't let vhost unmodified to enable in order feature.
-
-Secondly, Current changes to vhost_add_used_n will affect the rx queue,
-as driver have to get each buffer's length from used ring.
-
-So I would propose a flag parameter in vhost_add_used_n to decide
-whether the batch for in order buffer is done or nor.
- 
->> diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
->> index d9109107af08..0d5c49a30421 100644
->> --- a/drivers/vhost/vhost.h
->> +++ b/drivers/vhost/vhost.h
->> @@ -236,6 +236,7 @@ enum {
->>         VHOST_FEATURES = (1ULL << VIRTIO_F_NOTIFY_ON_EMPTY) |
->>                          (1ULL << VIRTIO_RING_F_INDIRECT_DESC) |
->>                          (1ULL << VIRTIO_RING_F_EVENT_IDX) |
->> +                        (1ULL << VIRTIO_F_IN_ORDER) |
->>                          (1ULL << VHOST_F_LOG_ALL) |
->>                          (1ULL << VIRTIO_F_ANY_LAYOUT) |
->>                          (1ULL << VIRTIO_F_VERSION_1)
->> --
->> 2.17.1
->>
+Patch applied.  Thanks.
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

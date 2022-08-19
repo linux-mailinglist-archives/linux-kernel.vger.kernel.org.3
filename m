@@ -2,232 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2773059936E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 05:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 597E4599369
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 05:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345271AbiHSDRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 23:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
+        id S1344634AbiHSDUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 23:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238585AbiHSDRD (ORCPT
+        with ESMTP id S1343798AbiHSDUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 23:17:03 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2FF5282C;
-        Thu, 18 Aug 2022 20:16:59 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id c39so4168580edf.0;
-        Thu, 18 Aug 2022 20:16:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=HDElL7NIZL2WbvndTq4kcy0ls9oQ+UMEI0zSzU1XXPk=;
-        b=ZO6AYyZPU3ymxEe4IhRZ3wSLKJbYc3rwxB+8qyavPb7MZAsuaiMsZIj/IVHHlFk1ta
-         eiP/2GqxHxFdcYWudiUXQE/ooDhTZUyM43GonZAPRtOScfM44ONLRGv1qql88tNPC0Yf
-         81fq1+UAHHFMVsprbFg0ZNZkZTqTi3Dr4hGl8yMkOHBKvhcHB9LZkGi58lSWxctgJcyg
-         oyXcmH5X0lb5pzsNS478vfbqSLu3GhF0lgHzTTYwgz8RJ4PMnsYKoy6t6Ca/9wgySZV9
-         1yzPxRuAAZ+BHi45JCBex9SP9ikyV7a2cfvX3FuUA6e7tpMeAjCsCBldqFoMmoh0F2hI
-         9l2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=HDElL7NIZL2WbvndTq4kcy0ls9oQ+UMEI0zSzU1XXPk=;
-        b=MsdjighiJzW1TgN+cDQWYAOM8710/o4ZQUOfTukL16GAi44gKFQDGrSay1S8G55sfq
-         qxsR6M9PgaosSw97LSEEG29/xv22R294jFGTAY3PQfs4yyHwY8u7KNYejcT41pOU++iQ
-         AiHoa8LUxVA8M8SRSMkUOJLjvMPRKqgzRMhofnV544tRKoUhjZ0ZN9reEuGqanV7Qkfz
-         Ef67WnrmDZH1Zz3RTfZDYrnpZQNpkoMYqta+NVNDqMb48QcmRC4csUDz+04zjOXWhIFQ
-         O43t/P/Hdmrc7KdmtrtqICEKLaYyYlPYQK3GhHWm68WOF84g0RvQAjEsTOqCKomH6k9o
-         opcQ==
-X-Gm-Message-State: ACgBeo0iucMXQvrutOajh+MjKnX1irKR+ilwuA+dcDqJ6T9+RVceiftJ
-        LSjOFKsrARrHZVfu+jTP/og4SUon9CafOROT/VY=
-X-Google-Smtp-Source: AA6agR5hufcDZ3BAgZXq3ekWifHid4bZ0OYreqchGdeOM0IVytrwyTtUZ1CgQKMlCc9VuSOVDMlIfNuat4PBF+VbIks=
-X-Received: by 2002:a05:6402:5c9:b0:446:fb0:56bb with SMTP id
- n9-20020a05640205c900b004460fb056bbmr4282301edx.173.1660879017761; Thu, 18
- Aug 2022 20:16:57 -0700 (PDT)
+        Thu, 18 Aug 2022 23:20:07 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D7CD7D3C
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 20:20:05 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1660879203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yC6R0myoxGgXOzWQ2xXoUHLOu8l5zFa6DmxhKjaalC0=;
+        b=GNFNsnAuyqrQASwyQHxK5dFBwd7aDS1C3l3LWi9YhxVmroIFRNH/c/mgKBBukP2SC4mSxi
+        B/C3EDlf7O+yUKBaiP+xuhOg4ykDIwFxkXeRECk6+iWiIlRmp2QHRbcHxTEHdbuCUjPHqC
+        CnDfxYQ+U5DimOhHIWkhkwc4IX7rNoM=
 MIME-Version: 1.0
-References: <20220817134324.702278-1-tcwzxx@gmail.com> <CAP-5=fVrpsid2_Ku=5hHeFSQ5Q1zE--5qszWw38ZVciq9Rxd5A@mail.gmail.com>
- <CAHkAAVrhD4Z4=NtwD-sA-vwpQTj=sHB5V7Kr0KNFNSVsu+-DnQ@mail.gmail.com> <CAP-5=fUfpmLPfAP1NZ+O5UTWYrAvzhsepvCkYpj3UE9Q5e6=mg@mail.gmail.com>
-In-Reply-To: <CAP-5=fUfpmLPfAP1NZ+O5UTWYrAvzhsepvCkYpj3UE9Q5e6=mg@mail.gmail.com>
-From:   zhizhi xu <tcwzxx@gmail.com>
-Date:   Fri, 19 Aug 2022 11:18:55 +0800
-Message-ID: <CAHkAAVprHsOnsEcNN2u3VExEXxi6in9UKtVkWymOPebpbjXVpg@mail.gmail.com>
-Subject: Re: [PATCH] perf tool: add skip_not_exec_file_map_events option
-To:     Ian Rogers <irogers@google.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 4/6] mm: hugetlb_vmemmap: add missing smp_wmb() before
+ set_pte_at()
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <615c8ec8-6977-2ce0-f049-d2ec1619245c@huawei.com>
+Date:   Fri, 19 Aug 2022 11:19:20 +0800
+Cc:     "Yin, Fengwei" <fengwei.yin@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Linux MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <AB2E4E2F-D8E3-4A9C-BBF1-03652D5F66F2@linux.dev>
+References: <20220816130553.31406-1-linmiaohe@huawei.com>
+ <20220816130553.31406-5-linmiaohe@huawei.com>
+ <D8C00BDA-160D-40CE-AFBD-9488F85E76CE@linux.dev>
+ <ea67ab10-667e-f361-b80f-dafb13da4808@huawei.com>
+ <0EAF1279-6A1C-41FA-9A32-414C36B3792A@linux.dev>
+ <019c1272-9d01-9d51-91a0-2d656b25c318@intel.com>
+ <18adbf89-473e-7ba6-9a2b-522e1592bdc6@huawei.com>
+ <9c791de0-b702-1bbe-38a4-30e87d9d1b95@intel.com>
+ <931536E2-3948-40AB-88A7-E36F67954AAA@linux.dev>
+ <7be98c64-88a1-3bee-7f92-67bb1f4f495b@huawei.com>
+ <3B1463C2-9DC4-43D0-93EC-2D2334A20502@linux.dev>
+ <7fa5b2b2-dcef-f264-7932-c4fdbb9619d0@intel.com>
+ <C6F3DC27-4819-43A4-B884-DD3D03A2DF90@linux.dev>
+ <7408156a-f708-5e73-d0a2-69b1acca9b96@intel.com>
+ <15DD6DCA-39BC-4EA2-984F-D488E94CC4FF@linux.dev>
+ <615c8ec8-6977-2ce0-f049-d2ec1619245c@huawei.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 Aug 2022 at 23:00, Ian Rogers <irogers@google.com> wrote:
->
-> On Wed, Aug 17, 2022 at 8:24 PM lika you <tcwzxx@gmail.com> wrote:
-> >
-> > I'm so sorry for forgetting to reply to all. Here is the reply again.
-> >
-> > Thanks for the reply.
-> >
-> > The background is we have two types of tasks running on the same host.The high
-> > priority one which is CPU overhead and the low priority which is IO overhead.
-> > The high priority task has mmap many files as shared memory. The low priority
-> > task may load multi TB data from SSD at once time which will cause the high
-> > priority task file page cache to be swapped out. So we mmap all files with the
-> > PROT_EXEC flag to prevent hot page cache to be swapped out. That cause
-> > too many executable memory regions without symbols on it.
-> >
-> > The trick is implementate here.
-> > https://github.com/torvalds/linux/blob/master/mm/vmscan.c#L2572
-> >
-> > Thanks again
->
-> Thanks. So you are making data pages executable for the sake of
-> getting "better chances to stay in memory under moderate memory
-> pressure." Having lots of executable pages in your program isn't
-> great, I'm reminded of efforts to stop stacks from being executable.
-> This also feels like a case where madvise should be being used, for
-> example, the MADV_WILLNEED option. Given this, I'm not sure supporting
-> this case in the perf tool makes sense.
->
-> > On Thu, 18 Aug 2022 at 02:13, Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > On Wed, Aug 17, 2022 at 6:43 AM tcwzxx <tcwzxx@gmail.com> wrote:
-> > > >
-> > > > When generate the flame graph, the perf-script subcommand will
-> > > > process all mmap event and add them to the rbtree. The 240,000
-> > > > mmap region takes about 5 minutes, which is not useful for flame
-> > > > graph. So add the skip-not-exec-file-map-events option to skip
-> > > > not PROT_EXEC flag memory regions.
-> > > >
-> > > > Signed-off-by: tcwzxx <tcwzxx@gmail.com>
-> > >
-> > > Could you provide more context? A reproduction?
-> > >
-> > > When we synthesize mmap events we drop non-executable pages:
-> > > https://github.com/torvalds/linux/blob/master/tools/perf/util/synthetic-events.c#L466
-> > >
-> > > Similarly in the kernel for the "dummy" event:
-> > > https://github.com/torvalds/linux/blob/master/kernel/events/core.c#L8258
-> > >
-> > > Thanks,
-> > > Ian
-> > >
-> > > > ---
-> > > >  tools/perf/builtin-report.c | 2 ++
-> > > >  tools/perf/builtin-script.c | 3 +++
-> > > >  tools/perf/util/machine.c   | 3 +++
-> > > >  tools/perf/util/map.c       | 5 +++++
-> > > >  tools/perf/util/map.h       | 2 ++
-> > > >  5 files changed, 15 insertions(+)
-> > > >
-> > > > diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-> > > > index 91ed41cc7d88..c28eb9450a66 100644
-> > > > --- a/tools/perf/builtin-report.c
-> > > > +++ b/tools/perf/builtin-report.c
-> > > > @@ -1364,6 +1364,8 @@ int cmd_report(int argc, const char **argv)
-> > > >                     "Disable raw trace ordering"),
-> > > >         OPT_BOOLEAN(0, "skip-empty", &report.skip_empty,
-> > > >                     "Do not display empty (or dummy) events in the output"),
-> > > > +       OPT_BOOLEAN(0, "skip-not-exec-file-map_events", &skip_not_exec_file_map_events,
-> > > > +                   "skip not exec map events"),
-> > > >         OPT_END()
-> > > >         };
-> > > >         struct perf_data data = {
-> > > > diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> > > > index 13580a9c50b8..e3f4e5e654c9 100644
-> > > > --- a/tools/perf/builtin-script.c
-> > > > +++ b/tools/perf/builtin-script.c
-> > > > @@ -32,6 +32,7 @@
-> > > >  #include "util/time-utils.h"
-> > > >  #include "util/path.h"
-> > > >  #include "util/event.h"
-> > > > +#include "util/map.h"
-> > > >  #include "ui/ui.h"
-> > > >  #include "print_binary.h"
-> > > >  #include "archinsn.h"
-> > > > @@ -3936,6 +3937,8 @@ int cmd_script(int argc, const char **argv)
-> > > >                     "Guest code can be found in hypervisor process"),
-> > > >         OPT_BOOLEAN('\0', "stitch-lbr", &script.stitch_lbr,
-> > > >                     "Enable LBR callgraph stitching approach"),
-> > > > +       OPT_BOOLEAN(0, "skip-not-exec-map_events", &skip_not_exec_file_map_events,
-> > > > +                   "skip not exec map events"),
-> > > >         OPTS_EVSWITCH(&script.evswitch),
-> > > >         OPT_END()
-> > > >         };
-> > > > diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-> > > > index 2a16cae28407..21dde9f9935c 100644
-> > > > --- a/tools/perf/util/machine.c
-> > > > +++ b/tools/perf/util/machine.c
-> > > > @@ -1904,6 +1904,9 @@ int machine__process_mmap2_event(struct machine *machine,
-> > > >         if (thread == NULL)
-> > > >                 goto out_problem;
-> > > >
-> > > > +       if (skip_not_exec_file_map_events && !(event->mmap2.prot & PROT_EXEC))
-> > > > +               goto out_problem;
->
-> Do you mean to drop all executable pages with the flag here or just
-> those with the DSO__TYPE_UNKNOWN (as below)? It reads that all
-> executable pages will be dropped.
->
+
+
+> On Aug 18, 2022, at 20:58, Miaohe Lin <linmiaohe@huawei.com> wrote:
+>=20
+> On 2022/8/18 17:18, Muchun Song wrote:
+>>=20
+>>=20
+>>> On Aug 18, 2022, at 16:54, Yin, Fengwei <fengwei.yin@intel.com> =
+wrote:
+>>>=20
+>>>=20
+>>>=20
+>>> On 8/18/2022 4:40 PM, Muchun Song wrote:
+>>>>=20
+>>>>=20
+>>>>> On Aug 18, 2022, at 16:32, Yin, Fengwei <fengwei.yin@intel.com> =
+wrote:
+>>>>>=20
+>>>>>=20
+>>>>>=20
+>>>>> On 8/18/2022 3:59 PM, Muchun Song wrote:
+>>>>>>=20
+>>>>>>=20
+>>>>>>> On Aug 18, 2022, at 15:52, Miaohe Lin <linmiaohe@huawei.com> =
+wrote:
+>>>>>>>=20
+>>>>>>> On 2022/8/18 10:47, Muchun Song wrote:
+>>>>>>>>=20
+>>>>>>>>=20
+>>>>>>>>> On Aug 18, 2022, at 10:00, Yin, Fengwei =
+<fengwei.yin@intel.com> wrote:
+>>>>>>>>>=20
+>>>>>>>>>=20
+>>>>>>>>>=20
+>>>>>>>>> On 8/18/2022 9:55 AM, Miaohe Lin wrote:
+>>>>>>>>>>>>> 	/*
+>>>>>>>>>>>>> 	 * The memory barrier inside __SetPageUptodate makes =
+sure that
+>>>>>>>>>>>>> 	 * preceding stores to the page contents become visible =
+before
+>>>>>>>>>>>>> 	 * the set_pte_at() write.
+>>>>>>>>>>>>> 	 */
+>>>>>>>>>>>>> 	__SetPageUptodate(page);
+>>>>>>>>>>>> IIUC, the case here we should make sure others (CPUs) can =
+see new page=E2=80=99s
+>>>>>>>>>>>> contents after they have saw PG_uptodate is set. I think =
+commit 0ed361dec369
+>>>>>>>>>>>> can tell us more details.
+>>>>>>>>>>>>=20
+>>>>>>>>>>>> I also looked at commit 52f37629fd3c to see why we need a =
+barrier before
+>>>>>>>>>>>> set_pte_at(), but I didn=E2=80=99t find any info to explain =
+why. I guess we want
+>>>>>>>>>>>> to make sure the order between the page=E2=80=99s contents =
+and subsequent memory
+>>>>>>>>>>>> accesses using the corresponding virtual address, do you =
+agree with this?
+>>>>>>>>>>> This is my understanding also. Thanks.
+>>>>>>>>>> That's also my understanding. Thanks both.
+>>>>>>>>> I have an unclear thing (not related with this patch =
+directly): Who is response
+>>>>>>>>> for the read barrier in the read side in this case?
+>>>>>>>>>=20
+>>>>>>>>> For SetPageUptodate, there are paring write/read memory =
+barrier.
+>>>>>>>>>=20
+>>>>>>>>=20
+>>>>>>>> I have the same question. So I think the example proposed by =
+Miaohe is a little
+>>>>>>>> difference from the case (hugetlb_vmemmap) here.
+>>>>>>>=20
+>>>>>>> Per my understanding, memory barrier in PageUptodate() is needed =
+because user might access the
+>>>>>>> page contents using page_address() (corresponding pagetable =
+entry already exists) soon. But for
+>>>>>>> the above proposed case, if user wants to access the page =
+contents, the corresponding pagetable
+>>>>>>> should be visible first or the page contents can't be accessed. =
+So there should be a data dependency
+>>>>>>> acting as memory barrier between pagetable entry is loaded and =
+page contents is accessed.
+>>>>>>> Or am I miss something?
+>>>>>>=20
+>>>>>> Yep, it is a data dependency. The difference between =
+hugetlb_vmemmap and PageUptodate() is that
+>>>>>> the page table (a pointer to the mapped page frame) is loaded by =
+MMU while PageUptodate() is
+>>>>>> loaded by CPU. Seems like the data dependency should be inserted =
+between the MMU access and the CPU
+>>>>>> access. Maybe it is hardware=E2=80=99s guarantee?
+>>>>> I just found the comment in pmd_install() explained why most arch =
+has no read
+>>>>=20
+>>>> I think pmd_install() is a little different as well. We should make =
+sure the
+>>>> page table walker (like GUP) see the correct PTE entry after they =
+see the pmd
+>>>> entry.
+>>>=20
+>>> The difference I can see is that pmd/pte thing has both hardware =
+page walker and
+>>> software page walker (like GUP) as read side. While the case here =
+only has hardware
+>>> page walker as read side. But I suppose the memory barrier =
+requirement still apply
+>>> here.
+>>=20
+>> I am not against this change. Just in order to make me get a better =
+understanding of
+>> hardware behavior.
+>>=20
+>>>=20
+>>> Maybe we could do a test: add large delay between =
+reset_struct_page() and set_pte_at?
+>>=20
+>> Hi Miaohe,
+>>=20
+>> Would you mind doing this test? One thread do vmemmap_restore_pte(), =
+another thread
+>> detect if it can see a tail page with PG_head after the previous =
+thread has executed
+>> set_pte_at().
+>=20
+> Will it be easier to construct the memory reorder manually like below?
+>=20
+> vmemmap_restore_pte()
+> 	...
+> 	set_pte_at(&init_mm, addr, pte, mk_pte(page, pgprot));
+> 	/* might a delay. */
+> 	copy_page(to, (void *)walk->reuse_addr);
+> 	reset_struct_pages(to);
+
+
+Well, you have changed the code ordering. I thought we don=E2=80=99t =
+change the code
+ordering. Just let the hardware do reordering. The ideal scenario would =
+be
+as follows.
+
+
+CPU0:						CPU1:
+
+vmemmap_restore_pte()
+	copy_page(to, (void *)walk->reuse_addr);
+        reset_struct_pages(to); // clear the tail page=E2=80=99s PG_head
+	set_pte_at(&init_mm, addr, pte, mk_pte(page, pgprot));
+						// Detect if it can see =
+a tail page with PG_head.
+
+I should admit it is a little difficult to construct the scenario. After =
+more
+thought, I think here should be inserted a barrier. So:
+
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+
+Thanks.
+
+>=20
+> And another thread detects whether it can see a tail page with some =
+invalid fields? If so,
+> it seems the problem will always trigger? If not, we depend on the =
+observed meory reorder
+> and set_pte_at doesn't contain a memory barrier?
+>=20
 > Thanks,
-> Ian
->
+> Miaohe Lin
 
-Thank you for your advice.
-I mean remove non-executable pages and non-ELF files
-
-!(event->mmap2.prot & PROT_EXEC)
-
-Thanks
-
-> > > > +
-> > > >         map = map__new(machine, event->mmap2.start,
-> > > >                         event->mmap2.len, event->mmap2.pgoff,
-> > > >                         &dso_id, event->mmap2.prot,
-> > > > diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
-> > > > index e0aa4a254583..2b51ca012c91 100644
-> > > > --- a/tools/perf/util/map.c
-> > > > +++ b/tools/perf/util/map.c
-> > > > @@ -16,6 +16,8 @@
-> > > >  #include "thread.h"
-> > > >  #include "vdso.h"
-> > > >
-> > > > +bool skip_not_exec_file_map_events;
-> > > > +
-> > > >  static inline int is_android_lib(const char *filename)
-> > > >  {
-> > > >         return strstarts(filename, "/data/app-lib/") ||
-> > > > @@ -168,6 +170,9 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
-> > > >                 if (dso == NULL)
-> > > >                         goto out_delete;
-> > > >
-> > > > +               if (skip_not_exec_file_map_events && dso__type(dso, machine) == DSO__TYPE_UNKNOWN)
-> > > > +                       goto out_delete;
-> > > > +
-> > > >                 map__init(map, start, start + len, pgoff, dso);
-> > > >
-> > > >                 if (anon || no_dso) {
-> > > > diff --git a/tools/perf/util/map.h b/tools/perf/util/map.h
-> > > > index 3dcfe06db6b3..67b0e0f9f0ae 100644
-> > > > --- a/tools/perf/util/map.h
-> > > > +++ b/tools/perf/util/map.h
-> > > > @@ -11,6 +11,8 @@
-> > > >  #include <stdbool.h>
-> > > >  #include <linux/types.h>
-> > > >
-> > > > +extern bool skip_not_exec_file_map_events;
-> > > > +
-> > > >  struct dso;
-> > > >  struct maps;
-> > > >  struct machine;
-> > > > --
-> > > > 2.34.1
-> > > >

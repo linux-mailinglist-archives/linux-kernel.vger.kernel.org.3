@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8EA59A8C3
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 00:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D3559A8C6
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 00:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242949AbiHSWo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 18:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
+        id S242415AbiHSWro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 18:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiHSWo4 (ORCPT
+        with ESMTP id S241699AbiHSWrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 18:44:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694DA10D5A2;
-        Fri, 19 Aug 2022 15:44:55 -0700 (PDT)
+        Fri, 19 Aug 2022 18:47:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA31610DCD4
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:47:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 254E0B82920;
-        Fri, 19 Aug 2022 22:44:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996E9C433C1;
-        Fri, 19 Aug 2022 22:44:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1660949092;
-        bh=s8PKxoj54nX65XSLJWvwOlsXTFX9oxeU7c5M0X//TrI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JHseprvTKx73mTepc3ANX5VSFgNTx8dSF5hSyR7qMWkHxt3k3vypwaBGHlaF4Ch0n
-         fq1HKIH4bvo2I6lHUYEXuLDORyil74A4LhL/rQbxtrRUxOX9kZSJwiShKVrdH6YBY8
-         IiK/D3zRr+Yqts1mWu+fPpcStMeL8msluSQwfzAg=
-Date:   Fri, 19 Aug 2022 15:44:51 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     gregkh@linuxfoundation.org, badari.pulavarty@intel.com,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] mm/damon/dbgfs: avoid duplicate context directory
- creation
-Message-Id: <20220819154451.9f424d9d563969d9cc6437f7@linux-foundation.org>
-In-Reply-To: <20220819211631.16658-1-sj@kernel.org>
-References: <20220819140809.1e3929fd8f50bfc32cae31d3@linux-foundation.org>
-        <20220819211631.16658-1-sj@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5777661826
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 22:47:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB7AAC433D7;
+        Fri, 19 Aug 2022 22:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660949259;
+        bh=T2ZIY+4uZ7FtlXL26qIP7vtXP3FByMTOuhwzDgOCdlM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=T3tGisiXjhDAPfJeYTTCWjlgvPt5eplr5dVivhuV+unKd/nTVWlXBBpKocKpjkpWu
+         Un6iuen5du6PXW0//lXn2yalqVRBFagPUE9pRDaXnGMlGM9Yv6GfCmxqbS/riE5jRo
+         OZ8fOU2SEmSCmC8IQHsydZPFvDNa/kNT7CvOnuj0uM7tBN5/9NG4QJCG+8TE6TjG51
+         wnv2LK0IbsPJ03uQRAJ3rmnMK0+GGIbIZvTd3ngQD9SC5HfkhDQUhv2d0PtiVq/4oK
+         Pw7wH+wHIvkkJm4CyRY5qfl89z457MfkbTJh30bKbvuYGiBQMNaFjJ5pu8S4gqDFpI
+         DlFdrLABjlkrA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     venkataprasad.potturu@amd.com, Vijendar.Mukunda@amd.com
+In-Reply-To: <20220819073758.1273160-1-yangyingliang@huawei.com>
+References: <20220819073758.1273160-1-yangyingliang@huawei.com>
+Subject: Re: [PATCH -next 1/3] ASoC: amd: acp: add missing platform_device_unregister() in acp_pci_probe()
+Message-Id: <166094925849.19151.6188249886261583368.b4-ty@kernel.org>
+Date:   Fri, 19 Aug 2022 23:47:38 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fe10a
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,29 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 21:16:31 +0000 SeongJae Park <sj@kernel.org> wrote:
-
-> > It would be simpler (and less racy) to check the debugfs_create_dir()
-> > return value for IS_ERR()?
+On Fri, 19 Aug 2022 15:37:56 +0800, Yang Yingliang wrote:
+> Add missing platform_device_unregister() in error path in acp_pci_probe().
 > 
-> I was merely following Greg's previous advice for ignoring the return value[1]
-> of the function, but I might misunderstanding his intention, so CC-ing Greg.
-> Greg, may I ask your opinion?
 > 
-> [1] https://lore.kernel.org/linux-mm/YB1kZaD%2F7omxXztF@kroah.com/
 
-Thing is, the correct functioning of the debugfs interfaces is utterly
-critical to damon.  And that's apart from these memory leak and
-oops-we-killed-damon issues.
+Applied to
 
-So damon simply cannot ignore the state of its debugfs interfaces and
-keep going along - because if something goes wrong at the debugfs
-layer, damon is dead and useless and the machine needs a reboot.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Perhaps this means that damon should not be using debugfs for its
-interfaces at all.  Or it means that the debugfs interfaces are
-misdesigned.  I go with the latter, which, alas, also affirms the
-former.
+Thanks!
 
-From a quick scan it appears that a significant minority (20%?) of
-drivers are checking the debugfs_create_dir() return value.
+[1/3] ASoC: amd: acp: add missing platform_device_unregister() in acp_pci_probe()
+      commit: 6a4ce20fd776d2fd19ffaf85cf34a53761e2c888
+[2/3] ASoC: amd: acp: switch to use dev_err_probe()
+      commit: f89a8c5bb3489e43ff87b5f91acc8db66a168e8e
+[3/3] ASoC: amd: acp: add a label to make error path more clean
+      commit: fd8ec75207588f85c622ee49e5f32267d2406d92
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

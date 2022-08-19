@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD01F599504
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7332599522
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346787AbiHSGJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 02:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
+        id S1346809AbiHSGKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 02:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346634AbiHSGJD (ORCPT
+        with ESMTP id S1346640AbiHSGJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 19 Aug 2022 02:09:03 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675AE24BD7
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:30 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id i14so6977916ejg.6
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:30 -0700 (PDT)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1B03E775
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:33 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id j21so1601262ejs.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:08:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ionos.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=nqYvJwkPyhGWw+zs1FTUvC87NAtZOXSQ3RqOerl0RrE=;
-        b=fiuYIZZteuYPevbr1jm85MKPd5CH4K37Lu4s75kvjuumhqQNFhJ070aTDxlo8rddZH
-         i+SLkKBHFRU3yeK8DOPjK8gtAyWibQEuXvJ8eP9IHSg/vRac7WgRAymuwe9+ZobzdLFN
-         PxR14UjJQUSwykQ7XL3yHLtQ4vIhSNDABxzAuHo0Xmno3tATOenqwGlRgr3r4XJhrefO
-         D77YhaODhrbxs5QaR/3iE+LF0FPSh9Ss0hm+76qlQi4ZO1yohXeMcT2tciZbP4zjCTWi
-         ITu0PHFBTopfTT6ON3pqalPDv/DMSFxCS4bqvqWVeoQK7zX6Pur+EiSUCX6SB3Idc4bs
-         hj3w==
+        bh=aWxibmll6dw/pqOCoi7TR4UJQijH/2FtimkTNrGyezk=;
+        b=BvBSOSyw3iiv7zGvCap/WbdDf/oN0NTZE0qS3IMD0KNzeUdTvihvlvLMuuYitRZvE/
+         m91mX5BcHAzQzmFlYJ9XOMgeaKGEidyXAmrwZyN9tu4ux2wrV78lw/hrcbiXneJuZZEs
+         cFVDStud4vcr2LzM4HQ3TqvwE4yXd75WYW32FPgqBEgFhe+MbOcln3OEbaJdLxL3OpmG
+         yz4pjFzomcWQWZrGSR928lMeJDqYKk7nzXFR1WwiTdcleoICgdZczEbk4dE3ByCZ3W52
+         ZPE7HrzuhjQWRDJh6F1NgSQal4hinjGHUmETkoVL7jQYlECrig3h4g0k89jbgWMEWaBH
+         njDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=nqYvJwkPyhGWw+zs1FTUvC87NAtZOXSQ3RqOerl0RrE=;
-        b=GDZaU947nwywFIEBeyezAm0vOkAcqhtKBBd9rdp1/9plyz8RDbFPHYKpD7F01BhBpS
-         L3ScGaMrtyFntTuRW8qeA4qAJK7j+cGoX4G6hJaPgubqE3BxqsA/zurXzUnyMnnQuyq9
-         j1hcVoAWHxhKvzB+dHsRj8jEoIB1zq+Xzc2rZN249MzQnryYYk/lyQIpuKIlo/SktBbV
-         6Yxr11aapeZSqJBioodiQSr2KAooycQwM+4ke++AogqJsoFsNnrdiT4sESKrLG/frNB+
-         JbCPUlr+Ge/+AOsmyKfA3tRto2HSkTd6lBiyyf0j6CxH4Bhmv/czlxyAAePzLONrZ+D9
-         0tzA==
-X-Gm-Message-State: ACgBeo1Gj8OYpF8g3XJaeV22pxWf+8I1AhBfOmtTZfD7mSunSewaGpEp
-        OqHSYz5vh9zjBoM5cQHYuSjSrdUO6fQllH35
-X-Google-Smtp-Source: AA6agR63MvipYuGx9P2SlYQNDL6T8+iUmE8z45ilOguyJ5frm1741Qd6zDL+S52D+AlEU7kMb3PpMg==
-X-Received: by 2002:a17:907:7628:b0:730:b755:4414 with SMTP id jy8-20020a170907762800b00730b7554414mr3907267ejc.11.1660889310244;
-        Thu, 18 Aug 2022 23:08:30 -0700 (PDT)
+        bh=aWxibmll6dw/pqOCoi7TR4UJQijH/2FtimkTNrGyezk=;
+        b=kgALqT1AkS0wpRzwtgM4VlmJ9iZypfnjZvPvpuQ+mzeXmLvUfPTaIndY7uC3fYbPEn
+         b6I7B0B1guEGUjcybQWRG4TfULaKYrx/nwpQHOjDYpBSmnO1rx+RUJ2euPUgBefiuXIe
+         k/BDTQtev30b7tx5UWPdc6gr5gjj2AnBKjwT5x/p8SKANBEdIEaApRZ4WNYycYfzPZZ6
+         Wzly3fHqakNGh1ojV99ghVQyRJNz3JUh/POljeKNKHzNKLSYH4quVyM68i2YvL3pGYXa
+         XeDTov9WnOSmYfTmIhhxiSCjle+n8IG6cZkOafggoJZy6QL1eDqRtzKe3esqO8XJjJVo
+         1oew==
+X-Gm-Message-State: ACgBeo3DeET0Xwhip6YGu+vWYiG6j/c/FRZij+RJWl64KvKD9p6Lti8K
+        lT6wFZfoqrIQTbiIF2K9OEJ/cB9uaEWZutds
+X-Google-Smtp-Source: AA6agR4Iy4mG3WSo/+iV+l4otLH2sa6d2rwaJAQsAE1Z1Nuy5iTIHXL0YtgWK+Uf3LeX6Gm0YwCa4Q==
+X-Received: by 2002:a17:907:1c26:b0:730:960f:118 with SMTP id nc38-20020a1709071c2600b00730960f0118mr3868462ejc.650.1660889311411;
+        Thu, 18 Aug 2022 23:08:31 -0700 (PDT)
 Received: from lb02065.fritz.box ([2001:9e8:143b:fd00:5207:8c7f:747a:b80d])
-        by smtp.gmail.com with ESMTPSA id y14-20020a1709063a8e00b0073a644ef803sm1809660ejd.101.2022.08.18.23.08.27
+        by smtp.gmail.com with ESMTPSA id y14-20020a1709063a8e00b0073a644ef803sm1809660ejd.101.2022.08.18.23.08.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 23:08:28 -0700 (PDT)
+        Thu, 18 Aug 2022 23:08:30 -0700 (PDT)
 From:   Jack Wang <jinpu.wang@ionos.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org
-Subject: [PATCH v1 17/19] mmc: meson-mx-sdhc: Fix error check for dma_map_sg
-Date:   Fri, 19 Aug 2022 08:07:59 +0200
-Message-Id: <20220819060801.10443-18-jinpu.wang@ionos.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org
+Subject: [PATCH v1 18/19] mmc: jz4740_mmc: Fix error check for dma_map_sg
+Date:   Fri, 19 Aug 2022 08:08:00 +0200
+Message-Id: <20220819060801.10443-19-jinpu.wang@ionos.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220819060801.10443-1-jinpu.wang@ionos.com>
 References: <20220819060801.10443-1-jinpu.wang@ionos.com>
@@ -77,34 +73,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 dma_map_sg return 0 on error.
 
+Cc: Paul Cercueil <paul@crapouillou.net>
 Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Neil Armstrong <narmstrong@baylibre.com>
-Cc: Kevin Hilman <khilman@baylibre.com>
-Cc: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-mips@vger.kernel.org
 Cc: linux-mmc@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-amlogic@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org
 
 Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
 ---
- drivers/mmc/host/meson-mx-sdhc-mmc.c | 2 +-
+ drivers/mmc/host/jz4740_mmc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/host/meson-mx-sdhc-mmc.c b/drivers/mmc/host/meson-mx-sdhc-mmc.c
-index e92e63cb5641..b32364f20c32 100644
---- a/drivers/mmc/host/meson-mx-sdhc-mmc.c
-+++ b/drivers/mmc/host/meson-mx-sdhc-mmc.c
-@@ -388,7 +388,7 @@ static int meson_mx_sdhc_map_dma(struct mmc_host *mmc, struct mmc_request *mrq)
+diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+index b1d563b2ed1b..666600055b06 100644
+--- a/drivers/mmc/host/jz4740_mmc.c
++++ b/drivers/mmc/host/jz4740_mmc.c
+@@ -308,7 +308,7 @@ static int jz4740_mmc_prepare_dma_data(struct jz4740_mmc_host *host,
+ 			data->sg_len,
+ 			dir);
  
- 	dma_len = dma_map_sg(mmc_dev(mmc), data->sg, data->sg_len,
- 			     mmc_get_dma_dir(data));
--	if (dma_len <= 0) {
-+	if (!dma_len) {
- 		dev_err(mmc_dev(mmc), "dma_map_sg failed\n");
- 		return -ENOMEM;
- 	}
+-	if (sg_count <= 0) {
++	if (!sg_count) {
+ 		dev_err(mmc_dev(host->mmc),
+ 			"Failed to map scatterlist for DMA operation\n");
+ 		return -EINVAL;
 -- 
 2.34.1
 

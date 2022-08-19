@@ -2,113 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1427159A4F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E72B59A445
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351243AbiHSRzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 13:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S1350355AbiHSRwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 13:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351220AbiHSRyu (ORCPT
+        with ESMTP id S1354844AbiHSRvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 13:54:50 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4389184ECC;
-        Fri, 19 Aug 2022 10:35:23 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id k14so4935413pfh.0;
-        Fri, 19 Aug 2022 10:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc;
-        bh=HJOADyjEijTZgHMmhk5s3Tca02tMu8m4cNUu2EhYaAU=;
-        b=fdmiJtb9RMBLJTQ+Xgl/kx6fm6FmEyy0L/lYlYxIWJX5k3m+R5z3YbZgU7aYih8WAc
-         sAmQjBqm9+W17s6M38OvDRgjiaSaOqlC0SCu+JBOU3BI1QYBGiJOsQ+t76kaxgeBcVGJ
-         NuCOoSKl8ukmGAzUbJrV5NkBVynK+S6LGQjUYKInpZa7u/wu9ffgjzLdBX0VsxlKllze
-         1VjABlNkXWdpcbqbtajq/AT7I3QwDIS9ZOX2ev3qXXy/waWCcM9UnVkD2OOyffE+BsUR
-         ZRZQCqFQ25mZ5LqtHndedni2VRA0mWJ1bu8qjDcUWiWZEPkPcZiQmUfAl3l5vL+MdaJs
-         46vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc;
-        bh=HJOADyjEijTZgHMmhk5s3Tca02tMu8m4cNUu2EhYaAU=;
-        b=fMpIqFjexyWXUNpjOBoyThm/LCu/sacwSJruEYbesWRFU3J3dCvR5kz3iGVZF7hZGF
-         1t//iqk/lv37ZOqbj0yymmrD2F8YyqSM282mE1gBHqrbMx3NkJ37jEbxOAC+ojyhvjka
-         W8zx3lt9KUMhVYzKRv4zdFb9hj5+bN69JITRyhPzNxt2+AoQmKrhPjC9KaE5zzdj3HdI
-         ey9mr8rO98098U+7t4HHp1B00KTCgwO7NsAjlF84+NCSVOPt5TOEXpOY0GZaWuimkh47
-         ewiesEvhWlAUZFl/QMvhCrhP7wAjBeqJ4j7OHdf+lUlW4aCcLsYaZNDwieaa3+GOuNfk
-         XW3Q==
-X-Gm-Message-State: ACgBeo1yoItwAIg4zkUFZf5Nz2WnAoffiCJfdqDFysglCHtuxfltawdF
-        ZCbHJBmD0AKjpfdAHedc8pBfRecml7o=
-X-Google-Smtp-Source: AA6agR4oZ1QImb2//4w2oB/fgGghUe4I3us2MzRuh0RNXn7NIGpxiEUSBf0ktiEmz2DtHEXYyrshdQ==
-X-Received: by 2002:a63:dc56:0:b0:419:e9df:28ce with SMTP id f22-20020a63dc56000000b00419e9df28cemr7006612pgj.48.1660930522661;
-        Fri, 19 Aug 2022 10:35:22 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:db7d])
-        by smtp.gmail.com with ESMTPSA id c9-20020a170902d48900b0016db43e5212sm3489712plg.175.2022.08.19.10.35.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 10:35:22 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 19 Aug 2022 07:35:20 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH v7 9/9] blk-throttle: clean up flag 'THROTL_TG_PENDING'
-Message-ID: <Yv/J2CXNdEimfqlv@slm.duckdns.org>
-References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
- <20220802140415.2960284-10-yukuai1@huaweicloud.com>
- <Yvv6kk/RD5LT+3dk@slm.duckdns.org>
- <65d93ec6-2465-35f1-314f-f092ce631100@huaweicloud.com>
- <Yv0rR9gBL0qbYeXp@slm.duckdns.org>
- <841b7b5a-b908-649a-c09d-32c8de5f1c14@huaweicloud.com>
+        Fri, 19 Aug 2022 13:51:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9F8DEA8;
+        Fri, 19 Aug 2022 10:25:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C8FE615F4;
+        Fri, 19 Aug 2022 17:25:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F3EC433C1;
+        Fri, 19 Aug 2022 17:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660929905;
+        bh=pJy89UL2aRemfC7jlH+uSwmGjw0ghtM9kl28iT97o9U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nMhMPwSvVk8CRDTKIdfKgz8CS89NYOOBn1cRIyeZMy2CzngagzW4mY53RYpFvQ+5T
+         3eMaq83HbMRdn7ONSA82hRNNoQtbmxnWOusqoRpMncYxsJSJZ2NTv4+eckkKmQ6pk/
+         9sZRNAeMjzkLKIptLPDuKAS+8E8NCLwYFRC/4qyooWFpIaZQF7BELmMZFKWmhZCkhR
+         T9wugX9d6C+hMZMxRhGg7EnzkkXn9fr1i3cKK2h5N0SVj6No3WkUPzjIQMuRNLAt1j
+         HOvsj6POtzjy4iNIVyi3zF9s+3UZeZGBKfDCvjAOKJnbN75foqVMgKz+IkJPERQTCE
+         /35JYlh//09kg==
+Date:   Fri, 19 Aug 2022 18:35:40 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Artur Rojek <contact@artur-rojek.eu>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>
+Subject: Re: [PATCH 2/4] iio: add iio_channel_cb_get_iio_buffer helper
+Message-ID: <20220819183540.5f043ab4@jic23-huawei>
+In-Reply-To: <CAHp75VcrM53+GW8qN4H-8kxuBRStAXjpt5F7YD5R2nHhh-Wiww@mail.gmail.com>
+References: <20220817105643.95710-1-contact@artur-rojek.eu>
+        <20220817105643.95710-3-contact@artur-rojek.eu>
+        <CAHp75VcrM53+GW8qN4H-8kxuBRStAXjpt5F7YD5R2nHhh-Wiww@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <841b7b5a-b908-649a-c09d-32c8de5f1c14@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 05:29:39PM +0800, Yu Kuai wrote:
-> Hi, Tejun!
+On Fri, 19 Aug 2022 11:14:04 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+
+> On Wed, Aug 17, 2022 at 1:58 PM Artur Rojek <contact@artur-rojek.eu> wrote:
+> >
+> > Introduce a helper function to retrieve an iio_buffer from
+> > iio_cb_buffer.
+> >
+> > This is useful for consumers that need to extract metadata about
+> > the buffer, e.g. get the channel offsets.  
 > 
-> 在 2022/08/18 1:54, Tejun Heo 写道:
-> > Hello,
-> > 
-> > On Wed, Aug 17, 2022 at 09:45:13AM +0800, Yu Kuai wrote:
-> > > > I don't know whether this is better or not. It's minutely less lines of code
-> > > > but also makes the code a bit more fragile. I'm ambivalent. At any rate,
-> > > > please move these trivial patches to the head of the series or post them
-> > > > separately.
-> > > 
-> > > Can I ask why do you think this patch makes the code a bit more fragile?
-> > 
-> > It's just one step further removed. Before, the flag was trivially in sync
-> > with the on queue status. After, the relationship is more indirect and
-> > easier to break accidentally. Not that it's a major problem. Just not sure
-> > what the benefit of the change is.
+> I'm wondering if we should start using the IIO namespace for new
+> exported symbols.
 > 
-> If you are worried about that, I can keep the flag, then the last two
-> patches will cleanup:
 
-I wasn't necessarily worried. It's more that I couldn't tell why the code is
-better afterwards. Maybe update the commit message to explain why the new
-code is better?
+I'd rather not jump ahead with that because I want to come up
+with a coherent set of IIO namespaces to separate core / drivers / consumers
+and platform type code (there's a bit of that left) plus maybe even trigger
+and buffer implementations.  We should probably get on with that though!
 
-Thanks.
+Jonathan
 
--- 
-tejun

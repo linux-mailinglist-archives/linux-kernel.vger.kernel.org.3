@@ -2,127 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC3A599383
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 05:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE1D5993B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 05:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345505AbiHSDfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 23:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52440 "EHLO
+        id S1344173AbiHSDi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 23:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242374AbiHSDfL (ORCPT
+        with ESMTP id S1345591AbiHSDiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 23:35:11 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AC4C59D4;
-        Thu, 18 Aug 2022 20:35:10 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d16so3094945pll.11;
-        Thu, 18 Aug 2022 20:35:10 -0700 (PDT)
+        Thu, 18 Aug 2022 23:38:54 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7A75A89F
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 20:38:52 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id j17so2549371qtp.12
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 20:38:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=JZwTxIjZdK3eeeynNetfRffvQYVNIdx1KtctWmB4uOs=;
-        b=CpcK6Xq8AQBsTaC8iTZlqnR8WjvsgkNpaBKHPZ92mhk8SAINSyuE9MQFiQDOCFqelq
-         syIFpWnoX5v17c33IHU42AIWdXsqxknNcVCemBLKZ5kqgg7ZOyI9nI5owWpHxiJnizgs
-         xb9RQPWHyHxo9U3d2N4cjnzbTnAVR/fRhlrlo8tYS2y/3nv8/DLm64VosxnpKV5nGxGP
-         zdTHM+jcIhdUdXJHi2yumtTqrRP2NvKYtJiTvdrL23lm0O0QAyOw1/8YDiGtYVZMiE+t
-         6tsha6IiR+LufjAXv6PdnYXVY1Po67cu4UmxJgb0HTANKPp8YNECGnYdOZncLdK23hd7
-         lW7A==
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc;
+        bh=7QWsk1dD79/0D4u0UWDr5UxzCpKhzJRpfIhKUpnpQ+k=;
+        b=KuaCRRHm/qV9FFVeqlEN7JryKLX4RwfY1LZIY85W4Q5v1ZzNMZMPFdn7uo+ttUjCVT
+         1HbFS5hSmTmVaadbykTq/foDTvZk+z2MPmSMfVSyEcM26pLHGI+FT1pagU3qA5YSv6Pe
+         smiTX6ALd4jvtRg4FQeIZu/V5dtCvUlK9QqKG98uq9fHrU0wTxzhMXCNUViHzxNWqeDD
+         tyUgxuRBDcr0kgwcKGkfVF51bYqzSNdXUE3NR9GsMHTj7CAWRw0dTXPSi1QBSeX/tIeL
+         hFZWouaQyyw4UZ3LD6KHID3uW3OYyosgyH7ArN1AA5RlREyiZP0Lm0kDIaJaInosSy0j
+         3rLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=JZwTxIjZdK3eeeynNetfRffvQYVNIdx1KtctWmB4uOs=;
-        b=MPrrF3JYBKyy8rtwm1+orLUSAXNCpeg1Egr5ccFjre6vM00r/0m0JXJEvMVwUUeRgo
-         Bu1tiz8G+MT/IxFyAg7Zhw6frYymwWorQRH38FZWSmk1cmRxqv/XfmZgITlxUcgGH/R0
-         2lA15FSFQ2mE99ORXiQYqSMZ1yLyNz5MF+JTX7r5FSef9Lkdb0dw2zrmDCjUC2/zuMi7
-         CrahbSAZ8WRkTnVps5GbJUroENKoYWzZUjA2QL8px2O1+bqS4ehfI0nWX9rRuy5yFQY7
-         KinkguX4qGtDnr+MlAUbfnybe2F4RD5sEfURaY9WVwFhdyXXnxmFJqpai3QKWu1fChW0
-         KP7A==
-X-Gm-Message-State: ACgBeo2zvpjcNDSQZrE3wF0c/TXWD6oJ2JDz/G/KkKowpSS00Zm6j2PY
-        Bm/TOFi5xKGwoaA66UK+54c=
-X-Google-Smtp-Source: AA6agR6QkMVDyEgNBZF3cqgm5OpS+kC4fttvctAVRZu0j6scYhiBr/ZlSJt2hCbEzdWzBjjUTEYvlQ==
-X-Received: by 2002:a17:90b:164f:b0:1f5:4ced:ed81 with SMTP id il15-20020a17090b164f00b001f54ceded81mr11603530pjb.122.1660880109850;
-        Thu, 18 Aug 2022 20:35:09 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-41.three.co.id. [116.206.28.41])
-        by smtp.gmail.com with ESMTPSA id e66-20020a621e45000000b005251f4596f0sm2397774pfe.107.2022.08.18.20.35.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 20:35:09 -0700 (PDT)
-Message-ID: <8b8f463d-092e-fad2-e812-68a44b2dc362@gmail.com>
-Date:   Fri, 19 Aug 2022 10:35:05 +0700
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc;
+        bh=7QWsk1dD79/0D4u0UWDr5UxzCpKhzJRpfIhKUpnpQ+k=;
+        b=PbhpkEGIFEOb3cmo2RKr2Xs4PaGo0+1HpCMDIek8jFd3Zd5mfHoUzfwkMpAU3EyNqE
+         3RBkrU2fVjfLnMFuXEdbHLVKl61iLfyjgaUOEs/WHcRlWg1QHLJlXTxawJ1HUt+kJaeM
+         zQbt5919XWeQaVyNEQJM2GJPawVIapy3oZ3e9VBuYjeo0sF7U7dEBa4DaVpTOHmrAZoY
+         t2UxEqBzjzCsNz3bXMumrLmN8/D/6u3Zfzgaat+fUQ0A+aG0DNsAbCT20+rzRSuHIb29
+         DasF8/7ii893PuKHaT3AubEqTo7Q3JdDKs+u3w/4jnOVsShuz9FNXA8cgA1fR9PHkQJg
+         NHGw==
+X-Gm-Message-State: ACgBeo1rHz62C0rQ3MB4lIEmb4cfvup851dOi6c0yZDLYMmxqTsBNcg/
+        waRwpc/pp+Kis3xjNk1eMimLZQ==
+X-Google-Smtp-Source: AA6agR40rfnrczgoKbXWMuIEA5UNdChmZMqcOy/mPNBBRihLY4ymgv1M+UCKRDg9gmCEuMhOuCh2xQ==
+X-Received: by 2002:ac8:5ad4:0:b0:344:5e40:7824 with SMTP id d20-20020ac85ad4000000b003445e407824mr5218048qtd.482.1660880331003;
+        Thu, 18 Aug 2022 20:38:51 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id bm25-20020a05620a199900b006b949afa980sm2881193qkb.56.2022.08.18.20.38.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 20:38:50 -0700 (PDT)
+Date:   Thu, 18 Aug 2022 20:38:35 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Sean Christopherson <seanjc@google.com>
+cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+In-Reply-To: <Yv7XTON3MwuC1Q3U@google.com>
+Message-ID: <226ab26d-9aa8-dce2-c7f0-9e3f5b65b63@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com> <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com> <20220818132421.6xmjqduempmxnnu2@box> <Yv7XTON3MwuC1Q3U@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 06/13] Documentation: coresight: fix a documentation build
- warning
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        corbet@lwn.net
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1660829433.git.mchehab@kernel.org>
- <ff5c57f03d106dc5cc14448ec0db224267fb1bfb.1660829433.git.mchehab@kernel.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <ff5c57f03d106dc5cc14448ec0db224267fb1bfb.1660829433.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 20:38, Mauro Carvalho Chehab wrote:
-> Using wildcards for cross-reference doesn't work, as the Sphinx
-> automarkup plugin is not smart enough. So, changeset
-> c06475910b52 ("Documentation: coresight: Escape coresight bindings file wildcard")
-> tried to fix it, but at the wrong way, as it the building system
-> will keep producing warnings about that:
+On Fri, 19 Aug 2022, Sean Christopherson wrote:
+> On Thu, Aug 18, 2022, Kirill A . Shutemov wrote:
+> > On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
+> > > On Wed, 6 Jul 2022, Chao Peng wrote:
+> > > But since then, TDX in particular has forced an effort into preventing
+> > > (by flags, seals, notifiers) almost everything that makes it shmem/tmpfs.
+> > > 
+> > > Are any of the shmem.c mods useful to existing users of shmem.c? No.
+> > > Is MFD_INACCESSIBLE useful or comprehensible to memfd_create() users? No.
 > 
-> 	Warning: Documentation/trace/coresight/coresight.rst references a file that doesn't exist: Documentation/devicetree/bindings/arm/arm,coresight-
-> 
-> As automarkup will still try (and fail) to create a cross reference.
-> So, instead, change the markup to ensure that the warning won't be
-> reported.
-> 
-> Fixes: c06475910b52 ("Documentation: coresight: Escape coresight bindings file wildcard")
-> Cc: Bagas Sanjaya <bagasdotme@gmail.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> 
-> See [PATCH 00/13] at: https://lore.kernel.org/all/cover.1660829433.git.mchehab@kernel.org/
-> 
->  Documentation/trace/coresight/coresight.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/trace/coresight/coresight.rst b/Documentation/trace/coresight/coresight.rst
-> index 4a71ea6cb390..826e59a698da 100644
-> --- a/Documentation/trace/coresight/coresight.rst
-> +++ b/Documentation/trace/coresight/coresight.rst
-> @@ -130,7 +130,7 @@ Misc:
->  Device Tree Bindings
->  --------------------
->  
-> -See Documentation/devicetree/bindings/arm/arm,coresight-\*.yaml for details.
-> +See ``Documentation/devicetree/bindings/arm/arm,coresight-*.yaml`` for details.
->  
->  As of this writing drivers for ITM, STMs and CTIs are not provided but are
->  expected to be added as the solution matures.
+> But QEMU and other VMMs are users of shmem and memfd.  The new features certainly
+> aren't useful for _all_ existing users, but I don't think it's fair to say that
+> they're not useful for _any_ existing users.
 
-This makes YAML wildcards be inline code. LGTM.
+Okay, I stand corrected: there exist some users of memfd_create()
+who will also have use for "INACCESSIBLE" memory.
 
-Acked-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> 
+> > > What use do you have for a filesystem here?  Almost none.
+> > > IIUC, what you want is an fd through which QEMU can allocate kernel
+> > > memory, selectively free that memory, and communicate fd+offset+length
+> > > to KVM.  And perhaps an interface to initialize a little of that memory
+> > > from a template (presumably copied from a real file on disk somewhere).
+> > > 
+> > > You don't need shmem.c or a filesystem for that!
+> > > 
+> > > If your memory could be swapped, that would be enough of a good reason
+> > > to make use of shmem.c: but it cannot be swapped; and although there
+> > > are some references in the mailthreads to it perhaps being swappable
+> > > in future, I get the impression that will not happen soon if ever.
+> > > 
+> > > If your memory could be migrated, that would be some reason to use
+> > > filesystem page cache (because page migration happens to understand
+> > > that type of memory): but it cannot be migrated.
+> > 
+> > Migration support is in pipeline. It is part of TDX 1.5 [1]. 
+> 
+> And this isn't intended for just TDX (or SNP, or pKVM).  We're not _that_ far off
+> from being able to use UPM for "regular" VMs as a way to provide defense-in-depth
 
--- 
-An old man doll... just what I always wanted! - Clara
+UPM? That's an acronym from your side of the fence, I spy references to
+it in the mail threads, but haven't tracked down a definition.  I'll
+just take it to mean the fd-based memory we're discussing.
+
+> without having to take on the overhead of confidential VMs.  At that point,
+> migration and probably even swap are on the table.
+
+Good, the more "flexible" that memory is, the better for competing users
+of memory.  But an fd supplied by KVM gives you freedom to change to a
+better implementation of allocation underneath, whenever it suits you.
+Maybe shmem beneath is good from the start, maybe not.
+
+Hugh

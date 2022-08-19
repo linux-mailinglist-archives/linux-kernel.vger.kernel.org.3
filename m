@@ -2,186 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940EC59A967
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 01:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8370559A956
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 01:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244228AbiHSXYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 19:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S239693AbiHSXZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 19:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244180AbiHSXYB (ORCPT
+        with ESMTP id S244280AbiHSXY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 19:24:01 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB3E2ED4C;
-        Fri, 19 Aug 2022 16:24:00 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id BF5093200657;
-        Fri, 19 Aug 2022 19:23:58 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 19 Aug 2022 19:23:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1660951437; x=1661037837; bh=Yi
-        pKfE5H7K9Z8GqiZelawUT7boFvb7Vr7t0y/LekHjU=; b=MaETqA0YX0tuMj9POq
-        4bGjhmm6hTEKneb0RfbtNfcFGNpfelMXxp4FPCYM24938MdflRQrvwG+/cczXTrn
-        d4/mSlpDOWyVWidCAILby7WQehR2NU62oQSIfeU16gu4ehY3wnviZDeVfEyvpMKS
-        WlqVxzlz6Hrp4HDjPjlvpTvbxOm5KqCqvGbL+6lkiBuQSN+f2YKoywpIP6gavt88
-        d+Y1kk2qbZ2gXfynCFN7x1nuvAGd110UOFonPZY44shKIh3oqkesv/9vmP+mlJIt
-        KNnyflzpnplhN+f5PharV3gj1egKua4qIuQNOE3OBAZ4mfNLEK6FfGl70av72nLw
-        zbAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660951437; x=1661037837; bh=YipKfE5H7K9Z8
-        GqiZelawUT7boFvb7Vr7t0y/LekHjU=; b=F4JQ1nwbHO5/R7xw+xCHr+XwtXFp1
-        nm/MvCGfyoh72iRGRFENxUEP58Fdr2IJoC1DDl04g7QyY3wN4yPnIKcp0UW3OMix
-        Qdu59JPgSLJNJfblENytYTxHqJ3N7kDoMDitYXoUjhKE0AlRYej2nPpSJCYeHdzN
-        vyLwX+K+yoGIAakGYw9Q98u+JIU8XNZJE3xnQC242cO0uj+m03HOcFa7Ahr9G4gj
-        cq1u3/PGCNvJyKcoASwrSp24/8DMdggo9EytrY+b7j3P6U3mZ5IPTZ7p6YmjInF/
-        3YjqprUrLLEPw+uJw+ODfUoqYJnA/xEnNyfb4ITF+gmt2N9HFpmzhX70A==
-X-ME-Sender: <xms:jRsAY1irPVIpEk36IWPx9d819_9QtR5mPlsDgQloXt85KQBQIMGmaw>
-    <xme:jRsAY6AgSfm4PUKDMrRTf4M72S1-KhRycfWjfx_1OvKliww1HLfOZ_XFg2W5YuLiw
-    4dZMpZ69GwyEqnCYQ>
-X-ME-Received: <xmr:jRsAY1H8UqJyS4FspUGGmQqsZTDVEe8xdqYh8eGWwGzr0TKLcnzP5IMxkFdPm_66LNV0LAqN6nyuB-LWTcKxvxcn_6QMLfrDY7wo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeivddgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
-    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
-    dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
-    vgepudenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:jRsAY6SglckYl_Kqb8J31l0repszBhR4o4hQPFXb6RwiWT2aJy-0bg>
-    <xmx:jRsAYyyCfM5uFNhsDOkOE3tMJz-wz5l_dllAWLhgM0FqkelgV0AZBg>
-    <xmx:jRsAYw6RbXElkUqRV5cPVBk3Q62VDfkHYtatvnaGbzR9JmlEL9_dpA>
-    <xmx:jRsAY04D4uDLuZDO87hGHeVULktPE5Kmd5sk80yzSu0QtyDSDVjkWw>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 19 Aug 2022 19:23:56 -0400 (EDT)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, memxor@gmail.com
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
-        toke@kernel.org, martin.lau@linux.dev,
-        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 5/5] selftests/bpf: Add tests for writing to nf_conn:mark
-Date:   Fri, 19 Aug 2022 17:23:34 -0600
-Message-Id: <c131830b9b8f2c2ac5a2471bc00057de3e2f071d.1660951028.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <cover.1660951028.git.dxu@dxuuu.xyz>
-References: <cover.1660951028.git.dxu@dxuuu.xyz>
+        Fri, 19 Aug 2022 19:24:58 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA95B6029;
+        Fri, 19 Aug 2022 16:24:29 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id c20so4416244qtw.8;
+        Fri, 19 Aug 2022 16:24:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=9kj8YADm8du70l4gQ+EusuiOAvks8txJezrna7w9qAE=;
+        b=TLGJR6BH78Ku2XRy50XMpy9E0iSRYnRxuvCc+nA5yToS01jHWC0aYsueR14qRdZCRm
+         lvV/K9kkYKj8XK6zc9NKqNxeUNg228APIv07V9yhX6bMSMfLXgvBSxuGdHds+VCP4iVI
+         RCQju+JEVbtKiwVV2xcq/fSYZns1DCqj4koRA3Fw/Y+P0Bo/kkmE3AwNAam7Frh/vMbc
+         cBJjC1Z1hoawTDW5AQgswfvCCxtXVXv/Ogr0d26NpLFtX4thINlfoV7enGM/pENBKdey
+         GzQXYV+N/qwuD8wj2ib07utbZeBnQigUfT9TQnzERwmcG9z3SA3BBcx5xkS2T4qdgw2N
+         TOrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=9kj8YADm8du70l4gQ+EusuiOAvks8txJezrna7w9qAE=;
+        b=GP1GHYTPzcGy+sabJ7vm7OGRGVsTjL129AZkovvAaAfA1huFvtH8P/d/I9nd92nMgk
+         huf5taN8ZGG1noCG3ITy/TaVeL9h6SmOi1s9Erxrtx/GKHYkkjhxeHOE0iTR6sJRlo1I
+         Elup5hXI4TB5vnRCayt+DryMZNoVophM5CnbKdXcP7MlGNWvn3eJMV4ih3OyivCLR1uG
+         jlap8eAuY6zlYGRqRXdCSUza8RBuNEibpB3J0lV30Ws+u+YMqYF3N4EdrrCCaUzxbi33
+         /u81oJTEhUPdENyQ2icuJ/y/XGAh4iHup/HoE9gHdNxut9E9Jw0Sm1auv4mV7CyGjDay
+         KYjg==
+X-Gm-Message-State: ACgBeo0werKSf8IeXq6A9GmiIz9TrHl59nsZwalABltLoE0edO/00VnA
+        t5VQqSSGXTc/PyxjquhLnJz7qTfAXr6fKq0YO1c=
+X-Google-Smtp-Source: AA6agR7b9hjrEla6ZbAwec9YTGFqrakS7HOziDFtiFYKG01c+pvBlvapThT5k++u/jjDQvsh2a90zjYOrn0o5GYnN+0=
+X-Received: by 2002:a05:622a:491:b0:344:95bf:8f05 with SMTP id
+ p17-20020a05622a049100b0034495bf8f05mr6893450qtx.61.1660951468982; Fri, 19
+ Aug 2022 16:24:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220816191842.14020-1-ddrokosov@sberdevices.ru>
+ <20220816191842.14020-4-ddrokosov@sberdevices.ru> <CAHp75VewJ1taLhsCb4_yEQHpw4VDXRhkxpL0jzdu-JsajfF6oA@mail.gmail.com>
+ <20220819125818.37qc66akgercd6zb@CAB-WSD-L081021.sigma.sbrf.ru>
+In-Reply-To: <20220819125818.37qc66akgercd6zb@CAB-WSD-L081021.sigma.sbrf.ru>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 20 Aug 2022 02:23:52 +0300
+Message-ID: <CAHp75VcUPQF21+gq3Hn_CLeY+y9sTFSLrbHYKgFJssveL+badg@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] iio: add MEMSensing MSA311 3-axis accelerometer driver
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
+        "jbhayana@google.com" <jbhayana@google.com>,
+        "lucas.demarchi@intel.com" <lucas.demarchi@intel.com>,
+        "jani.nikula@intel.com" <jani.nikula@intel.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a simple extension to the existing selftest to write to
-nf_conn:mark. Also add a failure test for writing to unsupported field.
+On Fri, Aug 19, 2022 at 3:58 PM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+> On Fri, Aug 19, 2022 at 11:41:55AM +0300, Andy Shevchenko wrote:
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- tools/testing/selftests/bpf/prog_tests/bpf_nf.c    |  2 ++
- tools/testing/selftests/bpf/progs/test_bpf_nf.c    |  9 +++++++--
- .../testing/selftests/bpf/progs/test_bpf_nf_fail.c | 14 ++++++++++++++
- 3 files changed, 23 insertions(+), 2 deletions(-)
+...
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-index 544bf90ac2a7..ab9117ae7545 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-@@ -17,6 +17,7 @@ struct {
- 	{ "set_status_after_insert", "kernel function bpf_ct_set_status args#0 expected pointer to STRUCT nf_conn___init but" },
- 	{ "change_timeout_after_alloc", "kernel function bpf_ct_change_timeout args#0 expected pointer to STRUCT nf_conn but" },
- 	{ "change_status_after_alloc", "kernel function bpf_ct_change_status args#0 expected pointer to STRUCT nf_conn but" },
-+	{ "write_not_allowlisted_field", "no write support to nf_conn at off" },
- };
- 
- enum {
-@@ -113,6 +114,7 @@ static void test_bpf_nf_ct(int mode)
- 	ASSERT_LE(skel->bss->test_delta_timeout, 10, "Test for max ct timeout update");
- 	/* expected status is IPS_SEEN_REPLY */
- 	ASSERT_EQ(skel->bss->test_status, 2, "Test for ct status update ");
-+	ASSERT_EQ(skel->bss->test_insert_lookup_mark, 77, "Test for insert and lookup mark value");
- 	ASSERT_EQ(skel->data->test_exist_lookup, 0, "Test existing connection lookup");
- 	ASSERT_EQ(skel->bss->test_exist_lookup_mark, 43, "Test existing connection lookup ctmark");
- end:
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index 2722441850cc..b5e7079701e8 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -23,6 +23,7 @@ int test_insert_entry = -EAFNOSUPPORT;
- int test_succ_lookup = -ENOENT;
- u32 test_delta_timeout = 0;
- u32 test_status = 0;
-+u32 test_insert_lookup_mark = 0;
- __be32 saddr = 0;
- __be16 sport = 0;
- __be32 daddr = 0;
-@@ -144,6 +145,7 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 
- 		bpf_ct_set_timeout(ct, 10000);
- 		bpf_ct_set_status(ct, IPS_CONFIRMED);
-+		ct->mark = 77;
- 
- 		ct_ins = bpf_ct_insert_entry(ct);
- 		if (ct_ins) {
-@@ -157,6 +159,7 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 				test_delta_timeout = ct_lk->timeout - bpf_jiffies64();
- 				test_delta_timeout /= CONFIG_HZ;
- 				test_status = IPS_SEEN_REPLY;
-+				test_insert_lookup_mark = ct_lk->mark;
- 				bpf_ct_change_status(ct_lk, IPS_SEEN_REPLY);
- 				bpf_ct_release(ct_lk);
- 				test_succ_lookup = 0;
-@@ -175,8 +178,10 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 		       sizeof(opts_def));
- 	if (ct) {
- 		test_exist_lookup = 0;
--		if (ct->mark == 42)
--			test_exist_lookup_mark = 43;
-+		if (ct->mark == 42) {
-+			ct->mark++;
-+			test_exist_lookup_mark = ct->mark;
-+		}
- 		bpf_ct_release(ct);
- 	} else {
- 		test_exist_lookup = opts_def.error;
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf_fail.c b/tools/testing/selftests/bpf/progs/test_bpf_nf_fail.c
-index bf79af15c808..0e4759ab38ff 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf_fail.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf_fail.c
-@@ -69,6 +69,20 @@ int lookup_insert(struct __sk_buff *ctx)
- 	return 0;
- }
- 
-+SEC("?tc")
-+int write_not_allowlisted_field(struct __sk_buff *ctx)
-+{
-+	struct bpf_ct_opts___local opts = {};
-+	struct bpf_sock_tuple tup = {};
-+	struct nf_conn *ct;
-+
-+	ct = bpf_skb_ct_lookup(ctx, &tup, sizeof(tup.ipv4), &opts, sizeof(opts));
-+	if (!ct)
-+		return 0;
-+	ct->status = 0xF00;
-+	return 0;
-+}
-+
- SEC("?tc")
- int set_timeout_after_insert(struct __sk_buff *ctx)
- {
+> > > Spec: https://cdn-shop.adafruit.com/product-files/5309/MSA311-V1.1-ENG.pdf
+> >
+> > Have you ever seen such a tag?
+> > We have the Datasheet that is more or less established for this kind of links.
+>
+> As I mentioned before, if I use Datasheet tag, line length limit will be
+> exceeded. If it's okay, I don't mind.
+
+Tags must be one-liners, that's the convention. It doesn't matter how
+long they are.
+
+
 -- 
-2.37.1
-
+With Best Regards,
+Andy Shevchenko

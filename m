@@ -2,89 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A73599C81
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A00A599C53
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349108AbiHSMwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
+        id S1349250AbiHSMyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349075AbiHSMwn (ORCPT
+        with ESMTP id S1349244AbiHSMxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:52:43 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C64BDAEEA
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:52:42 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id by6so4421271ljb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:52:42 -0700 (PDT)
+        Fri, 19 Aug 2022 08:53:52 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43ECD13D3F
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:53:21 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id q7so2328017lfu.5
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:53:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=mu4cs57so/hm5H36zlHi+oMf19bmDRm3sZ5zNgNtxQw=;
-        b=hNhliri7Zq4aZR+zeEMCZ3lQ5ZYBtWNy2tq1eX2FnOUex3MB2/WSBsLtkv/Z5TzQeY
-         zmY4neIXhtWCN5O8TJxlGZeZoO0EVY78CjIM1XKxHSKNcZSuwhcly4clBIh6BuJd1KBw
-         /ICBLHjVgOgsoiIinTgW6BtGwpPC8bqf6Z36kq5FGi048T2GQRGNxl8iqK9u7WYUqTwa
-         N7Xj2QJCQybpwQdQqpHze8XBJSRAGU6TPCy+3Lq4KZ4k8K9pYyrXWTA34Xx25dP9fmUz
-         mtStDwoNwY4y27TMTTQvgYMgcpT8k+gjdvfJegMD1z6IZBkfcm/YftwrsKU7UILwaSC3
-         PhHA==
+        bh=pr7bhrt5RID2dCUgycRa3zMYdNhJ3IqbeowKhh7I+KE=;
+        b=Muww7Fp6z3TLBmnI9wgwpz5L/tNKqHY0CRDPQD4+eVh3MI8VFLnvjHvttcUtx6KqBG
+         fqjFjRlicTbmv4GsPbrtBwsaOhVIYDKhwYinqaev9lkoltjVxJWUzB/gO6Az6Tnu5zB3
+         8ykUvzjlBHLWIJSkHcmmM5NVviZCT8FWquVXebmXPtpC7HlPqvv0njv+EDeSet4eEhmS
+         A2EVoZkbKvd36wUGpTI1uswLPcH3eTtdgalsxPkELrtxvIn4ApRWksbAT3pPdiVUVYIF
+         kDEsK73osykelqrEEQNJy4qRa85LPnulZ3WHdaYgb8E9XxJGIwM4+V6v+UPjSDssu4P8
+         lX9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=mu4cs57so/hm5H36zlHi+oMf19bmDRm3sZ5zNgNtxQw=;
-        b=wCyMcPOuryaCPxGDwARboy31GgWpVIxQbaNTOJj842bkvYYcX1NYu9k1MZubAMDz/e
-         c989KF/ZDHqVUbNRVh7Jx8w0/x1nduaWSlZGr955EWrKXtCGwIsaVY//r5DczyRyxw4c
-         Q6eHYqX1V1ohk3biioDISN204E0uUhtjAIs2/nSIDEydZfh4saS37nNkdmD/q9atuOe+
-         PVsCquvuDetZGhCJytcI7ApJVKju0YCgABJKA33Gkw51lD61Ejt/9wbF26hZqIlw4fw4
-         x77DatXXm/Xgt1DygllMMfaF1jISa/MHw5QyYiDgt9rVqcaWdKp89HA69wk6liP+o5Xq
-         kZoA==
-X-Gm-Message-State: ACgBeo1sNVgptoH3UBpmHamPK9SUJ71kC6bvFNVM2Wyrygf4EUNwwgZj
-        POnzoNmpaFt1YuI+/JQQn/7rgg==
-X-Google-Smtp-Source: AA6agR6E41JWNeYbhnyaHiir5IGmfC6Jpna2d622TenkdJ160D+d3YEw6fp21X0jdpUta0fOc4uQ3g==
-X-Received: by 2002:a05:651c:12c4:b0:25d:fe06:8658 with SMTP id 4-20020a05651c12c400b0025dfe068658mr2017908lje.301.1660913560695;
-        Fri, 19 Aug 2022 05:52:40 -0700 (PDT)
+        bh=pr7bhrt5RID2dCUgycRa3zMYdNhJ3IqbeowKhh7I+KE=;
+        b=ueMOcaieuAo5+UF7GHrVn4IoIIBe+zKG0jgAsENcrKAwhXnubbpody1zEPsapJO6Nx
+         etyqX70wrnKcsqMzA3BQKwyoaWq6uxKk7TvlQUJTL9P9DGwZNFD3vaJKoVMonJDDkVJS
+         hlPM4Bs4OEw7C6x33KkMSSkz92oQz1ZIS7dDWGczTmT7YwbNfcepHsBID1bo2pFws2nA
+         kvkpHG49cJzy7mUTbYtcrNTrQH9fqkcEQOBHSZlmebL9A9ZnqgKCfrJ56MiRMfKtQLbE
+         qrlefZ2BDq2gnHdlU51HUaByG3UHO3swNOwRcvv1NykjY5CkxgWvPkCyofmp8/0EVe9J
+         azDQ==
+X-Gm-Message-State: ACgBeo2utL8FRhsFpCNtZubzZUeYA7yqSoEwvO6LDcwD/Nr1c9M7ZQFB
+        8XJjEh3mV7pgaQfYKbO2hhACWQ==
+X-Google-Smtp-Source: AA6agR4FIHTx2lqWROLFunTvAZJFkIWDWBQqO7e+yPqb3ua4X70I0FUz5U3OFnmedTqWSw6DG45kGA==
+X-Received: by 2002:a05:6512:3048:b0:48b:745:621c with SMTP id b8-20020a056512304800b0048b0745621cmr2241608lfb.620.1660913598597;
+        Fri, 19 Aug 2022 05:53:18 -0700 (PDT)
 Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id e16-20020ac24e10000000b00492ba56995asm630824lfr.101.2022.08.19.05.52.39
+        by smtp.gmail.com with ESMTPSA id e8-20020a05651236c800b00492b0d23d24sm510523lfs.247.2022.08.19.05.53.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 05:52:40 -0700 (PDT)
-Message-ID: <55c53ba1-8e13-599d-1b16-5dab417a3059@linaro.org>
-Date:   Fri, 19 Aug 2022 15:52:38 +0300
+        Fri, 19 Aug 2022 05:53:18 -0700 (PDT)
+Message-ID: <e5572e77-4ba5-d8f3-4e9e-04ac5dc416fe@linaro.org>
+Date:   Fri, 19 Aug 2022 15:53:16 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH net-next 1/2] dt-bindings: net: tja11xx: add nxp,refclk_in
- property
+Subject: Re: [PATCH] dt-bindings: mfd: mediatek: Add scpsys compatible for
+ mt8186
 Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Wei Fang <wei.fang@nxp.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220819074729.1496088-1-wei.fang@nxp.com>
- <20220819074729.1496088-2-wei.fang@nxp.com>
- <f0f6e8af-4006-e0e8-544b-f2f892d79a1f@linaro.org>
- <DB9PR04MB81064199835C0E44B997DE06886C9@DB9PR04MB8106.eurprd04.prod.outlook.com>
- <9ec575ba-784d-74f7-8861-da2f62fe0773@linaro.org> <Yv+FuiUoTjpoUZ32@lunn.ch>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Lee Jones <lee@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        hsinyi@chromium.org
+References: <20220819124736.21768-1-allen-kh.cheng@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Yv+FuiUoTjpoUZ32@lunn.ch>
+In-Reply-To: <20220819124736.21768-1-allen-kh.cheng@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,57 +82,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 15:44, Andrew Lunn wrote:
-> On Fri, Aug 19, 2022 at 02:37:36PM +0300, Krzysztof Kozlowski wrote:
->> On 19/08/2022 12:37, Wei Fang wrote:
->>>>
->>>>> +          in RMII mode. This clock signal is provided by the PHY and is
->>>>> +          typically derived from an external 25MHz crystal. Alternatively,
->>>>> +          a 50MHz clock signal generated by an external oscillator can be
->>>>> +          connected to pin REF_CLK. A third option is to connect a 25MHz
->>>>> +          clock to pin CLK_IN_OUT. So, the REF_CLK should be configured
->>>>> +          as input or output according to the actual circuit connection.
->>>>> +          If present, indicates that the REF_CLK will be configured as
->>>>> +          interface reference clock input when RMII mode enabled.
->>>>> +          If not present, the REF_CLK will be configured as interface
->>>>> +          reference clock output when RMII mode enabled.
->>>>> +          Only supported on TJA1100 and TJA1101.
->>>>
->>>> Then disallow it on other variants.
->>>>
->>>> Shouldn't this be just "clocks" property?
->>>>
->>>>
->>> This property is to configure the pin REF_CLK of PHY as a input pin through phy register,
->>> indicates that the REF_CLK signal is provided by an external oscillator. so I don't think it's a
->>> "clock" property.
->>
->> clocks, not clock.
->>
->> You just repeated pieces of description as an counter-argument, so this
->> does not explain anything.
->>
->> If it is external oscillator shouldn't it be represented in DTS and then
->> obtained by driver (clk_get + clk_prepare_enable)? Otherwise how are you
->> sure that clock is actually enabled? And the lack of presence of the
->> external clock means it is derived from PHY?
+On 19/08/2022 15:47, Allen-KH Cheng wrote:
+> Add a new scpsys compatible for mt8186 SoC.
 > 
-> Using the common clock framework has been discussed in the past. But
-> no PHY actually does this. When the SoC provides the clock, a few PHYs
-> do make use of the common clock framework as clock consumers to ensure
-> the clock is ticking.
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
 
-IOW, all DTSes would have a fixed clock stub without any logic usable by
-Common CF (like enabling)?
+No DTS using it?
 
-> Plus, as the description says, this pin can be either a clock producer
-> or a consumer. I don't think the common clock code allows this. It is
-> also not something you negotiate between the MAC and PHY. The hardware
-> designer typically decides based on the MAC and PHY actually used. So
-> this is a fixed hardware property.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Indeed.
 
-Anyway the property name and typo need fixes.
 Best regards,
 Krzysztof

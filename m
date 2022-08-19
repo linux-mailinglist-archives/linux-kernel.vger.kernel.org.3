@@ -2,249 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55225998CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23460599900
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348164AbiHSJbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
+        id S1348143AbiHSJjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347308AbiHSJa7 (ORCPT
+        with ESMTP id S1348169AbiHSJi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:30:59 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FD3F23F7;
-        Fri, 19 Aug 2022 02:30:57 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M8Gbk2ND5zXdtS;
-        Fri, 19 Aug 2022 17:26:42 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 19 Aug 2022 17:30:55 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 19 Aug 2022 17:30:55 +0800
-From:   Wupeng Ma <mawupeng1@huawei.com>
-To:     <akpm@linux-foundation.org>
-CC:     <corbet@lwn.net>, <mcgrof@kernel.org>, <keescook@chromium.org>,
-        <yzaikin@google.com>, <songmuchun@bytedance.com>,
-        <mike.kravetz@oracle.com>, <osalvador@suse.de>, <rppt@kernel.org>,
-        <surenb@google.com>, <mawupeng1@huawei.com>, <jsavitz@redhat.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>,
-        <wangkefeng.wang@huawei.com>, "kernel test robot" <lkp@intel.com>
-Subject: [PATCH v2 2/2] mm: sysctl: Introduce per zone watermark_scale_factor
-Date:   Fri, 19 Aug 2022 17:30:25 +0800
-Message-ID: <20220819093025.105403-3-mawupeng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220819093025.105403-1-mawupeng1@huawei.com>
-References: <20220819093025.105403-1-mawupeng1@huawei.com>
+        Fri, 19 Aug 2022 05:38:59 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26765072F;
+        Fri, 19 Aug 2022 02:38:49 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27J9VXAf018880;
+        Fri, 19 Aug 2022 09:38:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=k0s98wbwykj1h/+dscgayMBTy/dgtVTdsqH1ZecErf4=;
+ b=PD2WQD4HGKMjkndoiaPMdkkkwu61TgmMuMftS1rZCTqZIOybi9v1IGNKJq+uSOw9Ow9F
+ nWJ9bPerhqkVc6iT4YCOg3IwU7lBnFquNiFSeEoKjNrgLiwajmY9SWPaXYAjgkqhU7vW
+ 41lqRGi4/ORclKnREg3eTdNz+NVOpsCk8WG62gUtoJWY8aK0GwoCflW+Jf+l6gIBDDfD
+ 4KvIzfblAWmqpRDh8sZPRPv08YiM/Kg7qPYJ3cOEeruIKYph5Is29DNevDrqNQqtgN/s
+ xmvAYasOi6Cl9/PWqfhklmSWH9KDS3tGCqi1NKFEPby60uPsXlVNlqbKaLyyP5XswDKF ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j27ycg55y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Aug 2022 09:38:49 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27J9VYOf018941;
+        Fri, 19 Aug 2022 09:38:48 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j27ycg54h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Aug 2022 09:38:48 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27J9LD5F013229;
+        Fri, 19 Aug 2022 09:33:46 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3hx37jf2ku-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Aug 2022 09:33:46 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27J9XhZQ31654398
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Aug 2022 09:33:43 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF2FF52052;
+        Fri, 19 Aug 2022 09:33:42 +0000 (GMT)
+Received: from [9.145.49.220] (unknown [9.145.49.220])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 74BA95204F;
+        Fri, 19 Aug 2022 09:33:42 +0000 (GMT)
+Message-ID: <721557f7-93eb-a26b-76a6-f207d05a5d0d@linux.ibm.com>
+Date:   Fri, 19 Aug 2022 11:33:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
+        david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        seiden@linux.ibm.com, nrb@linux.ibm.com
+References: <20220810125625.45295-1-imbrenda@linux.ibm.com>
+ <20220810125625.45295-3-imbrenda@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [PATCH v13 2/6] KVM: s390: pv: api documentation for asynchronous
+ destroy
+In-Reply-To: <20220810125625.45295-3-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: RuVUvDs38Fq8BFcgQ-JqIRUjwzI73qQf
+X-Proofpoint-ORIG-GUID: 81wAyy220UPC_7vbqRFC6ffzl5-0VOMk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-19_04,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ phishscore=0 impostorscore=0 adultscore=0 lowpriorityscore=0
+ suspectscore=0 mlxscore=0 malwarescore=0 priorityscore=1501
+ mlxlogscore=999 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2207270000 definitions=main-2208190037
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ma Wupeng <mawupeng1@huawei.com>
+On 8/10/22 14:56, Claudio Imbrenda wrote:
+> Add documentation for the new commands added to the KVM_S390_PV_COMMAND
+> ioctl.
+> 
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
+> ---
+>   Documentation/virt/kvm/api.rst | 30 ++++++++++++++++++++++++++++--
+>   1 file changed, 28 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 9788b19f9ff7..5bd151b601b4 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -5163,8 +5163,11 @@ KVM_PV_ENABLE
+>   KVM_PV_DISABLE
+>     Deregister the VM from the Ultravisor and reclaim the memory that
+>     had been donated to the Ultravisor, making it usable by the kernel
+> -  again.  All registered VCPUs are converted back to non-protected
+> -  ones.
+> +  again. All registered VCPUs are converted back to non-protected
+> +  ones. If a previous VM had been set aside for asynchonous teardown
+> +  with KVM_PV_ASYNC_CLEANUP_PREPARE and not actually torn down with
 
-System may have little normal zone memory and huge movable memory in the
-following situations:
-  - for system with kernelcore=nn% or kernelcore=mirror, movable zone will
-  be added and movable zone is bigger than normal zone in most cases.
-  - system with movable nodes, they will have multiple numa nodes with
-  only movable zone and movable zone will have plenty of memory.
+...and hasn't yet been torn down with...
 
-Since kernel/driver can only use memory from non-movable zone in most
-cases, normal zone need to increase its watermark to reserve more memory.
+> +  KVM_PV_ASYNC_CLEANUP_PERFORM, it will be torn down in this call
+> +  together with the current VM.
 
-However, current watermark_scale_factor is used to control all zones
-at once and can't be set separately. To reserve memory in non-movable
-zones, the watermark is increased in movable zones as well. Which will
-lead to inefficient kswapd.
+current PV VM? or protected VM
+I know it's missing in the unchanged paragraph above too but such is life.
 
-To solve this problem, per zone watermark is introduced to tune each zone's
-watermark separately. This can bring the following advantages:
-  - each zone can set its own watermark which bring flexibility
-  - lead to more efficient kswapd if this watermark is set fine
+>   
+>   KVM_PV_VM_SET_SEC_PARMS
+>     Pass the image header from VM memory to the Ultravisor in
+> @@ -5287,6 +5290,29 @@ KVM_PV_DUMP
+>       authentication tag all of which are needed to decrypt the dump at a
+>       later time.
+>   
+> +KVM_PV_ASYNC_CLEANUP_PREPARE
+> +  Prepare the current protected VM for asynchronous teardown. Most
+> +  resources used by the current protected VM will be set aside for a
+> +  subsequent asynchronous teardown. The current protected VM will then
+> +  resume execution immediately as non-protected. There can be at most
+> +  one protected VM set aside at any time. If a protected VM had
+> +  already been set aside without starting the asynchronous teardown
+> +  process, this call will fail. In that case, the userspace process
 
-Here is real watermark data in my qemu machine(with THP disabled).
+If KVM_PV_ASYNC_CLEANUP_PREPARE has already been called without a 
+successful KVM_PV_ASYNC_CLEANUP_PERFORM this call will fail. I.e. only 
+be one PV VM can be set aside.
 
-With watermark_scale_factor = 10, there is only 1440(772-68+807-71)
-pages(5.76M) reserved for a system with 96G of memory. However if the
-watermark is set to 100, the movable zone's watermark increased to
-231908(93M), which is too much.
-This situation is even worse with 32G of normal zone memory and 1T of
-movable zone memory.
+Do we need to finish the cleanup or is it enough to start the cleanup 
+like you describe here?
 
-       Modified        | Vanilla wm_factor = 10 | Vanilla wm_factor = 30
-Node 0, zone      DMA  | Node 0, zone      DMA  | Node 0, zone      DMA
-        min      68    |         min      68    |         min      68
-        low      7113  |         low      772   |         low      7113
-        high **14158** |         high **1476**  |         high **14158**
-Node 0, zone   Normal  | Node 0, zone   Normal  | Node 0, zone   Normal
-        min      71    |         min      71    |         min      71
-        low      7438  |         low      807   |         low      7438
-        high     14805 |         high     1543  |         high     14805
-Node 0, zone  Movable  | Node 0, zone  Movable  | Node 0, zone  Movable
-        min      1455  |         min      1455  |         min      1455
-        low      16388 |         low      16386 |         low      150787
-        high **31321** |         high **31317** |         high **300119**
-Node 1, zone  Movable  | Node 1, zone  Movable  | Node 1, zone  Movable
-        min      804   |         min      804   |         min      804
-        low      9061  |         low      9061  |         low      83379
-        high **17318** |         high **17318** |         high **165954**
-
-With the modified per zone watermark_scale_factor, only dma/normal zone
-will increase its watermark via the following command which the huge
-movable zone stay the same.
-
-  % echo 100 100 100 10 > /proc/sys/vm/watermark_scale_factor
-
-The reason to disable THP is khugepaged_min_free_kbytes_update() will
-update min watermark.
-
-Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
- Documentation/admin-guide/sysctl/vm.rst |  6 ++++
- include/linux/mm.h                      |  2 +-
- kernel/sysctl.c                         |  2 --
- mm/page_alloc.c                         | 37 ++++++++++++++++++++-----
- 4 files changed, 37 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index 9b833e439f09..ec240aa45322 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -1002,6 +1002,12 @@ that the number of free pages kswapd maintains for latency reasons is
- too small for the allocation bursts occurring in the system. This knob
- can then be used to tune kswapd aggressiveness accordingly.
- 
-+The watermark_scale_factor is an array. You can set each zone's watermark
-+separately and can be seen by reading this file::
-+
-+	% cat /proc/sys/vm/watermark_scale_factor
-+	10	10	10	10
-+
- 
- zone_reclaim_mode
- =================
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 3bedc449c14d..7f1eba1541f8 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2525,7 +2525,7 @@ extern void setup_per_cpu_pageset(void);
- /* page_alloc.c */
- extern int min_free_kbytes;
- extern int watermark_boost_factor;
--extern int watermark_scale_factor;
-+extern int watermark_scale_factor[MAX_NR_ZONES];
- extern bool arch_has_descending_max_zone_pfns(void);
- 
- /* nommu.c */
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 205d605cacc5..d16d06c71e5a 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2251,8 +2251,6 @@ static struct ctl_table vm_table[] = {
- 		.maxlen		= sizeof(watermark_scale_factor),
- 		.mode		= 0644,
- 		.proc_handler	= watermark_scale_factor_sysctl_handler,
--		.extra1		= SYSCTL_ONE,
--		.extra2		= SYSCTL_THREE_THOUSAND,
- 	},
- 	{
- 		.procname	= "percpu_pagelist_high_fraction",
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index ff644205370f..21459256dab6 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -421,7 +421,6 @@ compound_page_dtor * const compound_page_dtors[NR_COMPOUND_DTORS] = {
- int min_free_kbytes = 1024;
- int user_min_free_kbytes = -1;
- int watermark_boost_factor __read_mostly = 15000;
--int watermark_scale_factor = 10;
- 
- static unsigned long nr_kernel_pages __initdata;
- static unsigned long nr_all_pages __initdata;
-@@ -449,6 +448,20 @@ EXPORT_SYMBOL(nr_online_nodes);
- 
- int page_group_by_mobility_disabled __read_mostly;
- 
-+int watermark_scale_factor[MAX_NR_ZONES] = {
-+#ifdef CONFIG_ZONE_DMA
-+	[ZONE_DMA] = 10,
-+#endif
-+#ifdef CONFIG_ZONE_DMA32
-+	[ZONE_DMA32] = 10,
-+#endif
-+	[ZONE_NORMAL] = 10,
-+#ifdef CONFIG_HIGHMEM
-+	[ZONE_HIGHMEM] = 10,
-+#endif
-+	[ZONE_MOVABLE] = 10,
-+};
-+
- #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
- /*
-  * During boot we initialize deferred pages on-demand, as needed, but once
-@@ -8643,6 +8656,7 @@ static void __setup_per_zone_wmarks(void)
- 	}
- 
- 	for_each_zone(zone) {
-+		int zone_wm_factor;
- 		u64 tmp;
- 
- 		spin_lock_irqsave(&zone->lock, flags);
-@@ -8676,9 +8690,10 @@ static void __setup_per_zone_wmarks(void)
- 		 * scale factor in proportion to available memory, but
- 		 * ensure a minimum size on small systems.
- 		 */
-+		zone_wm_factor = watermark_scale_factor[zone_idx(zone)];
- 		tmp = max_t(u64, tmp >> 2,
--			    mult_frac(zone_managed_pages(zone),
--				      watermark_scale_factor, 10000));
-+			    mult_frac(zone_managed_pages(zone), zone_wm_factor,
-+				      10000));
- 
- 		zone->watermark_boost = 0;
- 		zone->_watermark[WMARK_LOW]  = min_wmark_pages(zone) + tmp;
-@@ -8798,11 +8813,19 @@ int min_free_kbytes_sysctl_handler(struct ctl_table *table, int write,
- int watermark_scale_factor_sysctl_handler(struct ctl_table *table, int write,
- 		void *buffer, size_t *length, loff_t *ppos)
- {
--	int rc;
-+	int i;
- 
--	rc = proc_dointvec_minmax(table, write, buffer, length, ppos);
--	if (rc)
--		return rc;
-+	proc_dointvec_minmax(table, write, buffer, length, ppos);
-+
-+	/*
-+	 * The unit is in fractions of 10,000. The default value of 10
-+	 * means the distances between watermarks are 0.1% of the available
-+	 * memory in the node/system. The maximum value is 3000, or 30% of
-+	 * memory.
-+	 */
-+	for (i = 0; i < MAX_NR_ZONES; i++)
-+		watermark_scale_factor[i] =
-+			clamp(watermark_scale_factor[i], 1, 3000);
- 
- 	if (write)
- 		setup_per_zone_wmarks();
--- 
-2.25.1
+> +  should issue a normal KVM_PV_DISABLE. The resources set aside with
+> +  this call will need to be cleaned up with a subsequent call to
+> +  KVM_PV_ASYNC_CLEANUP_PERFORM or KVM_PV_DISABLE, otherwise they will
+> +  be cleaned up when KVM terminates.
+> +
+> +KVM_PV_ASYNC_CLEANUP_PERFORM
+> +  Tear down the protected VM previously set aside with
+> +  KVM_PV_ASYNC_CLEANUP_PREPARE. The resources that had been set aside
+> +  will be freed during the execution of this command. This PV command
+> +  should ideally be issued by userspace from a separate thread. If a
+> +  fatal signal is received (or the process terminates naturally), the
+> +  command will terminate immediately without completing, and the normal
+> +  KVM shutdown procedure will take care of cleaning up all remaining
+> +  protected VMs.
+> +
+>   
+>   4.126 KVM_X86_SET_MSR_FILTER
+>   ----------------------------
 

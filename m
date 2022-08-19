@@ -2,163 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13358599615
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2223259960F
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347046AbiHSH0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 03:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
+        id S1347064AbiHSH0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 03:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347011AbiHSH0N (ORCPT
+        with ESMTP id S1347011AbiHSH0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 03:26:13 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D45E77551;
-        Fri, 19 Aug 2022 00:26:12 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id A9AD5240005;
-        Fri, 19 Aug 2022 07:26:07 +0000 (UTC)
-Date:   Fri, 19 Aug 2022 09:26:05 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org, akinobu.mita@gmail.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 3/4] media: mt9m111: fix device power usage
-Message-ID: <20220819072605.sbp6ycsf3oj74j6c@uno.localdomain>
-References: <20220818144712.997477-1-m.felsch@pengutronix.de>
- <20220818144712.997477-3-m.felsch@pengutronix.de>
+        Fri, 19 Aug 2022 03:26:22 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56B4857EC
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:26:20 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 75AA15C01A5;
+        Fri, 19 Aug 2022 03:26:18 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 19 Aug 2022 03:26:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660893978; x=1660980378; bh=PQvXEf0pFG
+        7expZxKH9DggF+3kgGD1xFEyOXSYF6w9A=; b=VfJqVXNp+l3F9PSdNy39DzmKcM
+        q80vDt8WC4xeZgZgxyOFJjo1+Ao9hP0DZjCnApKGjwesoi9dkgJI4EQodKftmHc/
+        yOcdOgLcPsePShy0bD4hyWlzyiIbRxfS53icBhPpa2kRVky1eZcvdEZEZSXKWnPY
+        XBiDA8uPpqr9gYw+03HzGWt5dooKsuMaZ+ppUiHulFM24W+30q8LtyZlCvuM7UFY
+        SL7zJz/Wj7dRgOb7fVYMwfmuG4FhE75HWWBPjyH/+L65+XtN6zwmiZU6qpfYFA5u
+        eFP0rwd/hIVEnioG6W1CfG6ADXfV85riM4UzRdGOebY/d9iyJzDL/kYXbI+Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660893978; x=1660980378; bh=PQvXEf0pFG7expZxKH9DggF+3kgG
+        D1xFEyOXSYF6w9A=; b=llwIaWhlKIho6AS0koZdRDSv9Cywh1zX+rX6dNfYHP/p
+        8g0C0+zRGw0eq+cpKgUVaVfiekXhKR7ooN0AuVLWrjruC/VAy11gtobKrZRJF+uH
+        NwMU2VQUZCfW0yQgv9MWSesWxnc0Ydao4jGuxBOWnq977TNr8ep8ZVua5zxpOJjc
+        4rOi68pslC72QDYlS6F8XGgh+ncBO6dkyh/dMO6o+gqFMcuEzMdwFC3L8ccHg1YQ
+        nxe40e9cMRA5TJPULKRvOvLQLJAggxrM9xGcAGqE7UlTiW4ijuzrNVWnI7oNFi65
+        J+03OWO+oDMirlypNMOEFTRJw/xFfcG1+e54mqsdxQ==
+X-ME-Sender: <xms:GTv_YvfW-3fl32jZWcLICq7aDQy58HipZeaA2wHYbz27yj4IrR9A_g>
+    <xme:GTv_YlONBv9GkB2vrifKkco_Wb0OJytB5GJdW0TSXX0qg7mxxYeXo_2NL8kevSp3F
+    _PT0sq3nXQSGofP3wQ>
+X-ME-Received: <xmr:GTv_YogWp7Ifley52tKgJDfmq53-fo4TZiBJINQDcqUazTBTwt4qnBR7>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeitddguddvudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheeh
+    fffhvedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:GTv_Yg80pinc-NWvJigDkQznzT4RGAc3WbnJR4xyPFsbkfmOhN2zpQ>
+    <xmx:GTv_YrtooUqG89sZoJi56xMqTnr2v2plFPyf07hpmoNbroxSxgDWFg>
+    <xmx:GTv_YvE1HALChCx2uvvLFPU-i0utmxmuG1awV-ak_veqiDQcxEeu_w>
+    <xmx:Gjv_YlI_DHpTH5bHZOrDYQMqNC1eF7IWXWM3pwuyd-jg2RQTflMTgA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 19 Aug 2022 03:26:17 -0400 (EDT)
+Date:   Fri, 19 Aug 2022 09:26:14 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH drm-misc-next 2/3] drm/vc4: plane: protect device
+ resources after removal
+Message-ID: <20220819072614.dthfuugbkk65o3ps@houat>
+References: <20220819002905.82095-1-dakr@redhat.com>
+ <20220819002905.82095-3-dakr@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dcp2mqorp5d7a6ps"
 Content-Disposition: inline
-In-Reply-To: <20220818144712.997477-3-m.felsch@pengutronix.de>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220819002905.82095-3-dakr@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco
 
-On Thu, Aug 18, 2022 at 04:47:11PM +0200, Marco Felsch wrote:
-> Currently the driver turn off the power after probe and toggle it during
-> .stream by using the .s_power callback. This is problematic since other
-> callbacks like .set_fmt accessing the hardware as well which will fail.
+--dcp2mqorp5d7a6ps
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ouch!
+Hi,
 
-> So in the end the default format is the only supported format.
->
-> Remove the hardware register access from the callbacks and instead sync
-> the state once right before the stream gets enabled to fix this.
+On Fri, Aug 19, 2022 at 02:29:04AM +0200, Danilo Krummrich wrote:
+> (Hardware) resources which are bound to the driver and device lifecycle
+> must not be accessed after the device and driver are unbound.
+>=20
+> However, the DRM device isn't freed as long as the last user closed it,
+> hence userspace can still call into the driver.
+>=20
+> Therefore protect the critical sections which are accessing those
+> resources with drm_dev_enter() and drm_dev_exit().
 
-Where does it happen in this patch ?
+Ah good catch, thanks
 
->
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> Fixes: 9872c7a31921 ("drm/vc4: plane: Switch to drmm_universal_plane_allo=
+c()")
+> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 > ---
->  drivers/media/i2c/mt9m111.c | 20 +++++++++++++-------
->  1 file changed, 13 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
-> index 53c4dac4e4bd..cd74c408e110 100644
-> --- a/drivers/media/i2c/mt9m111.c
-> +++ b/drivers/media/i2c/mt9m111.c
-> @@ -481,8 +481,6 @@ static int mt9m111_set_selection(struct v4l2_subdev *sd,
->  	width = min(mt9m111->width, rect.width);
->  	height = min(mt9m111->height, rect.height);
->
-> -
+>  drivers/gpu/drm/vc4/vc4_drv.h   |  1 +
+>  drivers/gpu/drm/vc4/vc4_plane.c | 25 +++++++++++++++++++++++++
+>  2 files changed, 26 insertions(+)
+>=20
+> diff --git a/drivers/gpu/drm/vc4/vc4_drv.h b/drivers/gpu/drm/vc4/vc4_drv.h
+> index 418a8242691f..80da9a9337cc 100644
+> --- a/drivers/gpu/drm/vc4/vc4_drv.h
+> +++ b/drivers/gpu/drm/vc4/vc4_drv.h
+> @@ -341,6 +341,7 @@ struct vc4_hvs {
+> =20
+>  struct vc4_plane {
+>  	struct drm_plane base;
+> +	struct drm_device *dev;
 
-Why in mainline I don't see these empty lines ?
+That pointer already exists in struct drm_plane
 
-> -	mt9m111_setup_geometry(mt9m111, &rect, width, height, mt9m111->fmt->code);
->  	mt9m111->rect = rect;
->  	mt9m111->width = width;
->  	mt9m111->height = height;
-> @@ -611,7 +609,6 @@ static int mt9m111_set_pixfmt(struct mt9m111 *mt9m111,
->  	if (mt9m111->pclk_sample == 0)
->  		mask_outfmt2 |= MT9M111_OUTFMT_INV_PIX_CLOCK;
->
-> -
->  	mt9m111_reg_mask(client, context_a.output_fmt_ctrl2,
->  			 data_outfmt2, mask_outfmt2);
->  	mt9m111_reg_mask(client, context_b.output_fmt_ctrl2,
-> @@ -678,9 +675,6 @@ static int mt9m111_set_fmt(struct v4l2_subdev *sd,
->  		return 0;
->  	}
->
-> -
-> -	mt9m111_setup_geometry(mt9m111, rect, mf->width, mf->height, mf->code);
-> -	mt9m111_set_pixfmt(mt9m111, mf->code);
+Looks good otherwise
 
-Are we looking at two different versions of the driver ??
-https://elixir.bootlin.com/linux/latest/source/drivers/media/i2c/mt9m111.c#L684
+Maxime
 
->  	mt9m111->width	= mf->width;
->  	mt9m111->height	= mf->height;
->  	mt9m111->fmt	= fmt;
-> @@ -743,6 +737,8 @@ mt9m111_find_mode(struct mt9m111 *mt9m111, unsigned int req_fps,
->  	return mode;
->  }
->
-> +static int mt9m111_s_power(struct v4l2_subdev *sd, int on);
-> +
->  #ifdef CONFIG_VIDEO_ADV_DEBUG
->  static int mt9m111_g_register(struct v4l2_subdev *sd,
->  			      struct v4l2_dbg_register *reg)
-> @@ -753,10 +749,14 @@ static int mt9m111_g_register(struct v4l2_subdev *sd,
->  	if (reg->reg > 0x2ff)
->  		return -EINVAL;
->
-> +	mt9m111_s_power(sd, 1);
-> +
->  	val = mt9m111_reg_read(client, reg->reg);
->  	reg->size = 2;
->  	reg->val = (u64)val;
->
-> +	mt9m111_s_power(sd, 0);
-> +
->  	if (reg->val > 0xffff)
->  		return -EIO;
->
-> @@ -771,9 +771,13 @@ static int mt9m111_s_register(struct v4l2_subdev *sd,
->  	if (reg->reg > 0x2ff)
->  		return -EINVAL;
->
-> +	mt9m111_s_power(sd, 1);
-> +
->  	if (mt9m111_reg_write(client, reg->reg, reg->val) < 0)
->  		return -EIO;
->
-> +	mt9m111_s_power(sd, 0);
-> +
->  	return 0;
->  }
->  #endif
-> @@ -896,6 +900,9 @@ static int mt9m111_s_ctrl(struct v4l2_ctrl *ctrl)
->  					       struct mt9m111, hdl);
->  	int ret;
->
-> +	if (!mt9m111->is_streaming)
-> +		return 0;
-> +
->  	switch (ctrl->id) {
->  	case V4L2_CID_VFLIP:
->  		ret = mt9m111_set_flip(mt9m111, ctrl->val,
-> @@ -927,7 +934,6 @@ static int mt9m111_s_ctrl(struct v4l2_ctrl *ctrl)
->  		ret = -EINVAL;
->  	}
->
-> -
->  	return ret;
->  }
->
-> --
-> 2.30.2
->
+--dcp2mqorp5d7a6ps
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYv87EAAKCRDj7w1vZxhR
+xcKJAPoCGmGROyZVzyfQc6jLZJ6oE3b0TFvxgA60VBJRAcmBDgEAiPirDdNpKGTp
+AQey4Kx35gTUWmZmTGdYwv+h75x5KQU=
+=gwzs
+-----END PGP SIGNATURE-----
+
+--dcp2mqorp5d7a6ps--

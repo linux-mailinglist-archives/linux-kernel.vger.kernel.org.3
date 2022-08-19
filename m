@@ -2,92 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5F5599662
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A27A5996A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347261AbiHSHyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 03:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
+        id S1347278AbiHSH4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 03:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345865AbiHSHyr (ORCPT
+        with ESMTP id S1347292AbiHSH43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 03:54:47 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5F0DB04A;
-        Fri, 19 Aug 2022 00:54:45 -0700 (PDT)
-Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M8DTw5Pw8z68BVL;
-        Fri, 19 Aug 2022 15:51:32 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 19 Aug 2022 09:54:42 +0200
-Received: from [10.195.34.98] (10.195.34.98) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 19 Aug
- 2022 08:54:42 +0100
-Message-ID: <4014a51d-0925-c0dc-70dc-1a465dd278e7@huawei.com>
-Date:   Fri, 19 Aug 2022 08:54:42 +0100
+        Fri, 19 Aug 2022 03:56:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905CF1834E
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:56:28 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oOwrZ-0000mt-EJ; Fri, 19 Aug 2022 09:56:17 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oOwrY-0007gu-0D; Fri, 19 Aug 2022 09:56:16 +0200
+Date:   Fri, 19 Aug 2022 09:56:15 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, akinobu.mita@gmail.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 1/4] media: mt9m111: add V4L2_CID_PIXEL_RATE support
+Message-ID: <20220819075615.a3nuakrac54kn7t3@pengutronix.de>
+References: <20220818144712.997477-1-m.felsch@pengutronix.de>
+ <20220818161108.dlmi77o6j7wcyayc@uno.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
- regression
-To:     Oliver Sang <oliver.sang@intel.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Linux Memory Management List" <linux-mm@kvack.org>,
-        <linux-ide@vger.kernel.org>, <lkp@lists.01.org>, <lkp@intel.com>,
-        <ying.huang@intel.com>, <feng.tang@intel.com>,
-        <zhengjun.xing@linux.intel.com>, <fengwei.yin@intel.com>
-References: <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
- <f1c3d717-339d-ba2b-9775-fc0e00f57ae3@huawei.com>
- <Yvs/w93KUkgD9f7/@xsang-OptiPlex-9020>
- <aabf7ed8-8d4d-dc68-1b8b-c91653701def@huawei.com>
- <43eaa104-5b09-072c-56aa-6289569b0015@opensource.wdc.com>
- <28d6e48b-f52f-9467-8260-262504a1a1ff@huawei.com>
- <YvzyZJUblfqN6Xj3@xsang-OptiPlex-9020>
- <743867a6-b266-58e4-a8a6-542757916f0a@huawei.com>
- <Yv2euLFLjl8bEaeI@xsang-OptiPlex-9020>
- <d1b1d434-059d-4d76-5fc6-092ab9ba6e16@huawei.com>
- <Yv8sg3J8PLD56osY@xsang-OptiPlex-9020>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <Yv8sg3J8PLD56osY@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.34.98]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818161108.dlmi77o6j7wcyayc@uno.localdomain>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 07:24, Oliver Sang wrote:
->> As you probably saw, I sent "[RFT PATCH] ata: libata: Set __ATA_BASE_SHT
->> max_sectors" for testing on top of v6.0-rc1, and I hope that then we can get
+Hi Jacopo,
 
-Based on result below, I wonder if SAS HBAs (which use libata) should 
-not use default SCSI max_sectors also. Any libsas HBA driver does today, 
-IIRC.
-
->> same performance as v5.19
-> yeah, our test confirmed your expectation:
+On 22-08-18, Jacopo Mondi wrote:
+> Hi Marco
 > 
-> stress-ng.copy-file.ops_per_sec
-> v5.19                 - 26.85
-> v6.0-rc1              - 23.03
-> v6.0-rc1 + your patch - 26.94
+> On Thu, Aug 18, 2022 at 04:47:09PM +0200, Marco Felsch wrote:
+> > Add support to report the PIXEL_RATE so a host or bridge device can ask
+> > the sensor.
+> >
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > ---
+> >  drivers/media/i2c/mt9m111.c | 15 ++++++++++++++-
+> >  1 file changed, 14 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
+> > index afc86efa9e3e..cdaf283e1309 100644
+> > --- a/drivers/media/i2c/mt9m111.c
+> > +++ b/drivers/media/i2c/mt9m111.c
+> > @@ -908,6 +908,8 @@ static int mt9m111_s_ctrl(struct v4l2_ctrl *ctrl)
+> >  		return mt9m111_set_test_pattern(mt9m111, ctrl->val);
+> >  	case V4L2_CID_COLORFX:
+> >  		return mt9m111_set_colorfx(mt9m111, ctrl->val);
+> > +	case V4L2_CID_PIXEL_RATE:
+> > +		return 0;
 > 
+> By default PIXEL_RATE is read-only.
+> Do you get a call to s_ctrl for it ?
 
-great, thanks
+You're absolutly right, we don't need to do this.
 
-Thanks,
-John
+> >  	}
+> >
+> >  	return -EINVAL;
+> > @@ -1249,6 +1251,7 @@ static int mt9m111_probe(struct i2c_client *client)
+> >  {
+> >  	struct mt9m111 *mt9m111;
+> >  	struct i2c_adapter *adapter = client->adapter;
+> > +	unsigned long mclk_rate;
+> >  	int ret;
+> >
+> >  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA)) {
+> > @@ -1271,6 +1274,13 @@ static int mt9m111_probe(struct i2c_client *client)
+> >  	if (IS_ERR(mt9m111->clk))
+> >  		return PTR_ERR(mt9m111->clk);
+> >
+> > +	ret = clk_prepare_enable(mt9m111->clk);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> 
+> Do you need to enable clock to read its rate ?
+
+Yes, accroding the API [1].
+
+[1] https://elixir.bootlin.com/linux/v6.0-rc1/source/include/linux/clk.h#L682
+
+> > +	mclk_rate = clk_get_rate(mt9m111->clk);
+> > +	clk_disable_unprepare(mt9m111->clk);
+> > +
+> >  	mt9m111->regulator = devm_regulator_get(&client->dev, "vdd");
+> >  	if (IS_ERR(mt9m111->regulator)) {
+> >  		dev_err(&client->dev, "regulator not found: %ld\n",
+> > @@ -1285,7 +1295,7 @@ static int mt9m111_probe(struct i2c_client *client)
+> >  	mt9m111->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+> >  				 V4L2_SUBDEV_FL_HAS_EVENTS;
+> >
+> > -	v4l2_ctrl_handler_init(&mt9m111->hdl, 7);
+> > +	v4l2_ctrl_handler_init(&mt9m111->hdl, 8);
+> >  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
+> >  			V4L2_CID_VFLIP, 0, 1, 1, 0);
+> >  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
+> > @@ -1309,6 +1319,9 @@ static int mt9m111_probe(struct i2c_client *client)
+> >  				BIT(V4L2_COLORFX_NEGATIVE) |
+> >  				BIT(V4L2_COLORFX_SOLARIZATION)),
+> >  			V4L2_COLORFX_NONE);
+> > +	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops, V4L2_CID_PIXEL_RATE,
+> > +			  mclk_rate, mclk_rate, 1, mclk_rate);
+> > +
+> 
+> I don't have a datasheet but it seems a little weird that the mclk
+> frequency is the same as the pixel clock rate ?
+
+I see your confusion here. I can only speak for the MT9M131 device which
+is covered by this driver as well. This device is composed of a
+internal-sensor and a internal-isp. The internal-sensor is clocked by
+mclk/2 but the final image device/sensor output-fifo is clocked by mclk.
+There are options to devide the output clock as well, but these options
+are not enabled yet. So yes, the pixel clock rate == mclk rate. To avoid
+confusion I could rename the mclk_rate to extclk_rate but then clock
+request is not 100% correct since we are requesting a "mclk", this
+should be "extclk".
+
+Regards,
+  Marco
+
+> >  	mt9m111->subdev.ctrl_handler = &mt9m111->hdl;
+> >  	if (mt9m111->hdl.error) {
+> >  		ret = mt9m111->hdl.error;
+> > --
+> > 2.30.2
+> >
+> 

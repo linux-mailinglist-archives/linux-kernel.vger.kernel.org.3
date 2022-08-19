@@ -2,124 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5C459979C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D42145997DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347562AbiHSInF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
+        id S1347561AbiHSInY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347014AbiHSIm6 (ORCPT
+        with ESMTP id S1347014AbiHSInQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:42:58 -0400
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257E167146;
-        Fri, 19 Aug 2022 01:42:57 -0700 (PDT)
-Received: by mail-qk1-f178.google.com with SMTP id g21so2846180qka.5;
-        Fri, 19 Aug 2022 01:42:57 -0700 (PDT)
+        Fri, 19 Aug 2022 04:43:16 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B844840BC9;
+        Fri, 19 Aug 2022 01:43:14 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3375488624aso75243847b3.3;
+        Fri, 19 Aug 2022 01:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=4KV0yn/NjRr9fnRDAYkJx34PxHIonAhhduVl0Tj79jY=;
+        b=JPnTRyWRLSemO6XZp+7Bv4/ixzq0eGuPc2U7h/pFfbYZ8UAqOs9vTiLTH+GMbD9F1X
+         hFB2rVyFMuU6bS6EiActsOd7FAxUYxTUc+i/+IKXajnr7wGfVBYwHkLCZvsuO8W5AJjn
+         qq8iobjiRmqFZ/tMnsLWTc0xrODUqjhG2yse5Dkn/KXzP58f9Assveoi1HoOzbY8To8D
+         969FWlun4z4ShSBcQL28vUHxB2u4Kiq4n9O75ckRQwUOhD86FXPEirF6spINAgzQ0Kfz
+         IGHOXa7MCg6WmqItyPyTiJYw0O8WLooPlEyXZZl9Ag1JUjzfeETxaxR8WJTaJswZZvnK
+         hS8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=+Cq03o2awZ2CNavLumSobGfio3EFTtGHTSm82q82K2A=;
-        b=RLA5gBURjwXrKBW418Tb13lNHH6WfLKhnihlwtoipQvzpkCIHgYLCKPMUW2sCK+Mdh
-         cLTPh861GFI0AvmgmglY2Y3b6cKmG4C4xHxkH885oagwkZFpg7GM8o3bo8Mu+/MUn+03
-         d1euMZBX/3C7fTJT2x+HozcMD9kNKUnAJKtCmYPyKWUdxNJo65JRUyCu+ngLELHYFZaX
-         2nnUmwRO8w+kx71Ec8B4gevfx4ukYoOE8/gYW6OVq5nA2QcF3R3rmuG5dZ38L3OIYzg6
-         3laZ/JFqZKj+IKzJTcUuxqWeHTB37JkXM9xrtM2zQh6DqB0gGwWTzOjg5KZ6ZYKZCrvF
-         T8ug==
-X-Gm-Message-State: ACgBeo0f+LYskdR/A4iDi9dv7LpLO7HczobND3Omi1NqbIl/xg/XaFup
-        fsVKaoi7xiQK+16wLqvUE/Q/lu5dLmX9+w==
-X-Google-Smtp-Source: AA6agR5a6EDIO/adlC9pO9cqiTlx4Pa5cQBDvBpvDKPOyZ69H9MiZ2KhQG0zr5TKRgWPIbcmYaHUXQ==
-X-Received: by 2002:a37:4049:0:b0:6b8:e75f:6920 with SMTP id n70-20020a374049000000b006b8e75f6920mr4491334qka.448.1660898576144;
-        Fri, 19 Aug 2022 01:42:56 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id i12-20020ac85c0c000000b0031eb393aa45sm2721239qti.40.2022.08.19.01.42.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 01:42:54 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-3321c2a8d4cso104260417b3.5;
-        Fri, 19 Aug 2022 01:42:54 -0700 (PDT)
-X-Received: by 2002:a5b:bcd:0:b0:68f:b4c0:7eca with SMTP id
- c13-20020a5b0bcd000000b0068fb4c07ecamr6714080ybr.202.1660898573940; Fri, 19
- Aug 2022 01:42:53 -0700 (PDT)
+        bh=4KV0yn/NjRr9fnRDAYkJx34PxHIonAhhduVl0Tj79jY=;
+        b=5erwE/L5AhY+zzLIQbrOg1Di/5h9EdxDUBNX+opNWNzAOzPpIl3R5YPvyC/5LRQ259
+         W7kHyxyIovF65p3kIgOBdmasE3rWwxZa0unBylUlnoj1f2kTrFsDJZH/OaXcVI3Pahl3
+         1O4tFqQiz7iJHjenVLEDXJSh6BVS8fuayzIhftOalw04jWziGAcAR+5gv0U/akVv1FH+
+         ylkWaJCDvNSBWcMToqKbMvr7hfclLgdGDeju8YVVg9ebyLZvqUblH98EZ6I85YH0km9D
+         ssyIZvQNbdwwwNpMytcyfAqIAuSxFZ9TuoBwBJ2033ZDYnD/vLkAyWGgegLFlD8Igc0x
+         E9ng==
+X-Gm-Message-State: ACgBeo3VDq4L9/0lYXA9ZtwSbRUT/QnTNJW1uyXn55yCzAx2zXe6814X
+        ONEG4i/0sN5nXjo7vOj7f23HpdjKQAwPF5UOvJ1hVZB2jso=
+X-Google-Smtp-Source: AA6agR7B/OPWTAC8mtg7+avOtn/zgJZZJ20QhZUSHP6YIz9kSzxyyBvFrPaa3Lr5ml23lBsT22YjZe9RIux35CbBqb4=
+X-Received: by 2002:a81:2596:0:b0:329:da3a:e1d3 with SMTP id
+ l144-20020a812596000000b00329da3ae1d3mr6252641ywl.41.1660898593562; Fri, 19
+ Aug 2022 01:43:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220815151451.23293-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220815151451.23293-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 19 Aug 2022 10:42:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVEVtu2zf0R5+LufxHWLtG0=aEvPkfcF=K9V025_TCTrQ@mail.gmail.com>
-Message-ID: <CAMuHMdVEVtu2zf0R5+LufxHWLtG0=aEvPkfcF=K9V025_TCTrQ@mail.gmail.com>
-Subject: Re: [PATCH v2 7/8] MAINTAINERS: Add entry for Renesas RISC-V architecture
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <Conor.Dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220819081700.96279-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220819081700.96279-1-chi.minghao@zte.com.cn>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Fri, 19 Aug 2022 17:42:57 +0900
+Message-ID: <CAKFNMon7N0NAHNoXuH7JzwqbO_we95X+2MFi2tHf3OPs_uygNg@mail.gmail.com>
+Subject: Re: [PATCH] nilfs2: delete unnecessary checks before brelse()
+To:     cgel.zte@gmail.com
+Cc:     linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On Mon, Aug 15, 2022 at 5:16 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Initial Renesas RISC-V architecture support will be for the
-> RZ/Five SMARC EVK board.
+On Fri, Aug 19, 2022 at 5:17 PM wrote:
 >
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17562,6 +17562,16 @@ F:     drivers/spi/spi-microchip-core.c
->  F:     drivers/usb/musb/mpfs.c
->  F:     include/soc/microchip/mpfs.h
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 >
-> +RISC-V/Renesas RISC-V ARCHITECTURE
-> +M:     Geert Uytterhoeven <geert+renesas@glider.be>
-> +L:     linux-renesas-soc@vger.kernel.org
-> +S:     Supported
-> +Q:     http://patchwork.kernel.org/project/linux-renesas-soc/list/
-> +C:     irc://irc.libera.chat/renesas-soc
-> +T:     git git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git next
-> +F:     Documentation/devicetree/bindings/soc/renesas/
-> +F:     arch/riscv/boot/dts/renesas/
-> +
->  RNBD BLOCK DRIVERS
->  M:     Md. Haris Iqbal <haris.iqbal@ionos.com>
->  M:     Jack Wang <jinpu.wang@ionos.com>
+> The brelse() function tests whether its argument is NULL
+> and then returns immediately.
+> Thus remove the tests which are not needed around the shown calls.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>  fs/nilfs2/btree.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 
-Perhaps we should merge them all into a single section for "Renesas
-ARM/ARM64/RISC-V ARCHITECTURE", to follow up on "[PATCH/RFC]
-MAINTAINERS: Merge ARM/Renesas ARM64 and ARM/SH-Mobile ARM
-architectures" I've just ssent?
-https://lore.kernel.org/r/a869b8afdc47aa637ebeefcc1ca7bc61244f34b9.1660898008.git.geert+renesas@glider.be/
+Will apply, thanks!
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Ryusuke Konishi

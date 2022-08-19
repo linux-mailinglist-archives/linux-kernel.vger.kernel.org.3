@@ -2,79 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA08599AF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15568599ADF
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348211AbiHSLZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
+        id S1348780AbiHSLWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348835AbiHSLZV (ORCPT
+        with ESMTP id S1348787AbiHSLWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:25:21 -0400
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A182FD9EAA;
-        Fri, 19 Aug 2022 04:25:16 -0700 (PDT)
-Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JBM6OK008105;
-        Fri, 19 Aug 2022 04:22:43 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=PPS06212021;
- bh=OxkVfPdV09BsblCgs3m0EpWVHAADlKxxQ31Gvrw9Euo=;
- b=g677eaDY6ccDN1X+BphKynRgQ3Fas8CSJhLsubF73HuXxUIQVhtWRGgRTH/vlTsb1Hwx
- 2svye79h+b/FO5o2+aVQLHv9a5bl9KDlsKqWRu/hdeoH3DimvZmEmXhTCi7rHaZFIakT
- aX267n6KlEnuHhA5BML9DvHgiYgEvwFXxw6LwZftiF8Krv+AhCYJVKMH9orWfHk6svCh
- e36j9rTDwm3sC6B1Qf5D6e0Jsv/hQx1wbXAaLCOhv47vGNlPwBL0FaW+a1CmYwWMrUNl
- 7xjTzwP0bkEQwm2Arh2MYuFDGMO18DmMw0ujDtOwApvK/mLG1cnx3QtyKY41dNKSOsxX KA== 
-Received: from ala-exchng01.corp.ad.wrs.com (unknown-82-252.windriver.com [147.11.82.252])
-        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3hxbfjn0sj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 19 Aug 2022 04:22:42 -0700
-Received: from otp-dpanait-l2.corp.ad.wrs.com (128.224.125.191) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Fri, 19 Aug 2022 04:22:38 -0700
-From:   Dragos-Marian Panait <dragos.panait@windriver.com>
-To:     <stable@vger.kernel.org>
-CC:     Pavel Skripkin <paskripkin@gmail.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
-        Sujith <Sujith.Manoharan@atheros.com>,
-        Senthil Balasubramanian <senthilkumar@atheros.com>,
-        "John W . Linville" <linville@tuxdriver.com>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 4.14 1/1] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
-Date:   Fri, 19 Aug 2022 14:22:26 +0300
-Message-ID: <20220819112226.922595-2-dragos.panait@windriver.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220819112226.922595-1-dragos.panait@windriver.com>
-References: <20220819112226.922595-1-dragos.panait@windriver.com>
+        Fri, 19 Aug 2022 07:22:39 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85D7FEC40
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:22:37 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M8K9P1v8Qz4x1G;
+        Fri, 19 Aug 2022 21:22:33 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1660908155;
+        bh=SXvhcATHeAzGrsMP2ajJM02RREFpXI38PV8xlqpBvfk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Dj5/0PZNbcvmmBLC1vxc+g8hIrgyxyVrvDiueNMAUKwl+xNjN80XyTFh6mcL3oo88
+         JhI4NCwCYx4vx1guEND4xEfN602aY988zTA9BEVr/wBtSUBng7mjVYFRd54CfaNV7L
+         AzlxqMoecTz26IeIoVfSYwYkbqdW/dWTJBpg7v+Df9GFmEHhjHTzfNo5Cc+h8jBBGN
+         /wTMmny+SRgk1jqhkGFt+qR/9XwyQ8/ZL3licVyZcBan4ftPMvNnrJY4G8bpPi6g62
+         boV22S7BcUl47iUzKvn+Zwpcp+K42mIHbBDhssIFl1XIJKxDOfb8hanzYqJ34Hy+qF
+         49CXJER8bAuPg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Wang, Haiyue" <haiyue.wang@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "david@redhat.com" <david@redhat.com>,
+        "apopple@nvidia.com" <apopple@nvidia.com>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "naoya.horiguchi@linux.dev" <naoya.horiguchi@linux.dev>,
+        "alex.sierra@amd.com" <alex.sierra@amd.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v6 1/2] mm: migration: fix the FOLL_GET failure on
+ following huge page
+In-Reply-To: <Yv0ku1mn4LBzg/zG@monkey>
+References: <20220812084921.409142-1-haiyue.wang@intel.com>
+ <20220816022102.582865-1-haiyue.wang@intel.com>
+ <20220816022102.582865-2-haiyue.wang@intel.com>
+ <20220816175838.211a1b1e85bc68c439101995@linux-foundation.org>
+ <BYAPR11MB3495F747CBF95E079E8FC8A5F76A9@BYAPR11MB3495.namprd11.prod.outlook.com>
+ <20220816224322.33e0dfbcbf522fcdc2026f0e@linux-foundation.org>
+ <Yv0ku1mn4LBzg/zG@monkey>
+Date:   Fri, 19 Aug 2022 21:22:32 +1000
+Message-ID: <875yiomq9z.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [128.224.125.191]
-X-ClientProxiedBy: ala-exchng01.corp.ad.wrs.com (147.11.82.252) To
- ala-exchng01.corp.ad.wrs.com (147.11.82.252)
-X-Proofpoint-GUID: eP2hJnvv-X8YTHkC7Sqt6ivkzF88Q8rA
-X-Proofpoint-ORIG-GUID: eP2hJnvv-X8YTHkC7Sqt6ivkzF88Q8rA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-19_06,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- mlxlogscore=977 clxscore=1015 phishscore=0 bulkscore=0 priorityscore=1501
- impostorscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208190044
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,89 +74,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+Mike Kravetz <mike.kravetz@oracle.com> writes:
+> On 08/16/22 22:43, Andrew Morton wrote:
+>> On Wed, 17 Aug 2022 03:31:37 +0000 "Wang, Haiyue" <haiyue.wang@intel.com> wrote:
+>>
+>> > > >  		}
+>> > >
+>> > > I would be better to fix this for real at those three client code sites?
+>> >
+>> > Then 5.19 will break for a while to wait for the final BIG patch ?
+>>
+>> If that's the proposal then your [1/2] should have had a cc:stable and
+>> changelog words describing the plan for 6.0.
+>>
+>> But before we do that I'd like to see at least a prototype of the final
+>> fixes to s390 and hugetlb, so we can assess those as preferable for
+>> backporting.  I don't think they'll be terribly intrusive or risky?
+>
+> I will start on adding follow_huge_pgd() support.  Although, I may need
+> some help with verification from the powerpc folks, as that is the only
+> architecture which supports hugetlb pages at that level.
+>
+> mpe any suggestions?
 
-commit 0ac4827f78c7ffe8eef074bc010e7e34bc22f533 upstream.
+I'm happy to test.
 
-Syzbot reported use-after-free Read in ath9k_hif_usb_rx_cb() [0]. The
-problem was in incorrect htc_handle->drv_priv initialization.
+I have a system where I can allocate 1GB huge pages.
 
-Probable call trace which can trigger use-after-free:
+I'm not sure how to actually test this path though. I hacked up the
+vm/migration.c test to allocate 1GB hugepages, but I can't see it going
+through follow_huge_pgd() (using ftrace).
 
-ath9k_htc_probe_device()
-  /* htc_handle->drv_priv = priv; */
-  ath9k_htc_wait_for_target()      <--- Failed
-  ieee80211_free_hw()		   <--- priv pointer is freed
+Maybe I hacked it up badly, I'll have a closer look on Monday. But if
+you have any tips on how to trigger that path let me know :)
 
-<IRQ>
-...
-ath9k_hif_usb_rx_cb()
-  ath9k_hif_usb_rx_stream()
-   RX_STAT_INC()		<--- htc_handle->drv_priv access
-
-In order to not add fancy protection for drv_priv we can move
-htc_handle->drv_priv initialization at the end of the
-ath9k_htc_probe_device() and add helper macro to make
-all *_STAT_* macros NULL safe, since syzbot has reported related NULL
-deref in that macros [1]
-
-Link: https://syzkaller.appspot.com/bug?id=6ead44e37afb6866ac0c7dd121b4ce07cb665f60 [0]
-Link: https://syzkaller.appspot.com/bug?id=b8101ffcec107c0567a0cd8acbbacec91e9ee8de [1]
-Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-Reported-and-tested-by: syzbot+03110230a11411024147@syzkaller.appspotmail.com
-Reported-and-tested-by: syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/d57bbedc857950659bfacac0ab48790c1eda00c8.1655145743.git.paskripkin@gmail.com
-Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
----
- drivers/net/wireless/ath/ath9k/htc.h          | 10 +++++-----
- drivers/net/wireless/ath/ath9k/htc_drv_init.c |  3 ++-
- 2 files changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
-index 16dff4b89a86..d66d3c9299fb 100644
---- a/drivers/net/wireless/ath/ath9k/htc.h
-+++ b/drivers/net/wireless/ath/ath9k/htc.h
-@@ -325,11 +325,11 @@ static inline struct ath9k_htc_tx_ctl *HTC_SKB_CB(struct sk_buff *skb)
- }
- 
- #ifdef CONFIG_ATH9K_HTC_DEBUGFS
--
--#define TX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
--#define TX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
--#define RX_STAT_INC(c) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
--#define RX_STAT_ADD(c, a) (hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
-+#define __STAT_SAFE(expr) (hif_dev->htc_handle->drv_priv ? (expr) : 0)
-+#define TX_STAT_INC(c) __STAT_SAFE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c++)
-+#define TX_STAT_ADD(c, a) __STAT_SAFE(hif_dev->htc_handle->drv_priv->debug.tx_stats.c += a)
-+#define RX_STAT_INC(c) __STAT_SAFE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c++)
-+#define RX_STAT_ADD(c, a) __STAT_SAFE(hif_dev->htc_handle->drv_priv->debug.skbrx_stats.c += a)
- #define CAB_STAT_INC   priv->debug.tx_stats.cab_queued++
- 
- #define TX_QSTAT_INC(q) (priv->debug.tx_stats.queue_stats[q]++)
-diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_init.c b/drivers/net/wireless/ath/ath9k/htc_drv_init.c
-index 88e3b4a4de31..9fcdda6f7088 100644
---- a/drivers/net/wireless/ath/ath9k/htc_drv_init.c
-+++ b/drivers/net/wireless/ath/ath9k/htc_drv_init.c
-@@ -946,7 +946,6 @@ int ath9k_htc_probe_device(struct htc_target *htc_handle, struct device *dev,
- 	priv->hw = hw;
- 	priv->htc = htc_handle;
- 	priv->dev = dev;
--	htc_handle->drv_priv = priv;
- 	SET_IEEE80211_DEV(hw, priv->dev);
- 
- 	ret = ath9k_htc_wait_for_target(priv);
-@@ -967,6 +966,8 @@ int ath9k_htc_probe_device(struct htc_target *htc_handle, struct device *dev,
- 	if (ret)
- 		goto err_init;
- 
-+	htc_handle->drv_priv = priv;
-+
- 	return 0;
- 
- err_init:
--- 
-2.37.1
-
+cheers

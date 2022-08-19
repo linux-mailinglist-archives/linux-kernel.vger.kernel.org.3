@@ -2,139 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0255859A349
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5887759A493
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354698AbiHSRml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 13:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
+        id S1354671AbiHSRnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 13:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350894AbiHSRmT (ORCPT
+        with ESMTP id S1351863AbiHSRnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 13:42:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C958C131A2A
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:01:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660928494;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Hsc4yRhAhZ4DbPHQFkOZPha0cv9GZ3AkjwFlq+dmc4w=;
-        b=QBoDO7sKvFahY+oIP7USeWCVRKtLoRIgVnsWontc7SOVl94zvo8MwY27OUFfERmyQljMPe
-        lMTEds0jZglE43FylZwZxBVVmsLufK+mH/7lH7FotLy0JtOdmOZ3RUVDqzgCJh+u6B4ry7
-        OmxmgMYJoZfdRc1sbZc2STbjel5sDmo=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-232-vz29oyJdPXmtj3wY1RzSVw-1; Fri, 19 Aug 2022 13:01:31 -0400
-X-MC-Unique: vz29oyJdPXmtj3wY1RzSVw-1
-Received: by mail-qt1-f199.google.com with SMTP id fy12-20020a05622a5a0c00b00344569022f7so3822104qtb.17
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:01:31 -0700 (PDT)
+        Fri, 19 Aug 2022 13:43:05 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCA9133B9D
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:02:45 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id z187so4808271pfb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:02:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=RHK5G9JAHhgGCkTg4CkDfYb1xqntg9knbs5lZi1RIbo=;
+        b=eMWi9bQ3cPenIuHSE1JOvmJB1dVh9t7Cp2IJZLR8XpIFrkabsBA8LbFNcDtuMHKGYk
+         lO7RbJFzqoDBs8EjujmnOcJLHZooX1hawuVMA0ma5VUzEKGcpOXnOLS2CFUw/oVsO866
+         0U4urqsAvRT98P0gP48YbFe9EjKkLcaYDUAWnRX3saxFTQj2ISyRC9CepELsXY6jT3Hh
+         /m0YC3rHZ9ky4EwtbhCtLhtDgckjSwQPxdm3Jtsw1cZD3VWrOfQyewqtdSQZbGRZDNBH
+         MtELkwWWbG0wjmDUT2Z7RpO5lj/fJ9WfntfjsrQnMmBL0x9OGKnU7886JMJzb5PGqGyj
+         Nubw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Hsc4yRhAhZ4DbPHQFkOZPha0cv9GZ3AkjwFlq+dmc4w=;
-        b=aS6T02+qBWa9fLiDhtTwkOe6mWQrGYska9NNtFKE/YtcgPx+aHHFz/swfoxIEVYp+Z
-         FgrLf7cCIX5sd3NUHgbW65KVM/I42Xl0HjCzBksIX4UQwNBiMDJRW5PxnKQZuF+sPfEh
-         nmHew4JS16Z5iZ2cHFv7y2MfjPEX1Giw1Yrb4zg8PMJD1f31Bm9dFW/BpT7yXQpGRU9y
-         hdVendvbaEo8sd1TiSPq1W5kqtbLtYw7GYf5zafMyiuJb9YgOZmF+1bLtQGk/pXaEvFO
-         gnQd0Q0z9NLA1+Z2v75JaBTD5YE4KbPutdYhj0JlSxD1iZcbRuQjrvreoQJp0AvbraF5
-         ugEQ==
-X-Gm-Message-State: ACgBeo0Y6beQmqdknbsSajbuYTr+V4CeVc7hoKC4VYwN/IccqQDgprjM
-        tlSJAC6o1VwEsM5u7XKQz5J5kdnqBNCBb5bIX293PORl0GjdCGn1uscI7qu761UwDUnQjnWHRcQ
-        /Qs1yWYexwpvk+pU4pFq/ohv8YK3TkC7F6RmdPW1n
-X-Received: by 2002:a05:6214:2588:b0:477:22bd:e1e6 with SMTP id fq8-20020a056214258800b0047722bde1e6mr6941503qvb.105.1660928490869;
-        Fri, 19 Aug 2022 10:01:30 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5adLa5ufq8xv5MSitmP52SMGWicDFV/f3YeImHZmgqosweVM0PWafCWIvK9R7y6580EaMkBmHeuxCslplaa6M=
-X-Received: by 2002:a05:6214:2588:b0:477:22bd:e1e6 with SMTP id
- fq8-20020a056214258800b0047722bde1e6mr6941464qvb.105.1660928490528; Fri, 19
- Aug 2022 10:01:30 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=RHK5G9JAHhgGCkTg4CkDfYb1xqntg9knbs5lZi1RIbo=;
+        b=t28pPnCH1F/ZLw8N5FpK3z+Fi8AygxJfAFiAmbdjwH/0Fyu6y27VJCzfwVO61sGV6D
+         7+9lDBwZWZHtEYx4T3oQh306+16hzVlSc6vVPR1oUEwlH632HSqm3UoaI74gq2MM/hhb
+         IbREllGzFYfJZFF9ehGrWWMeUze8neUxF9rog9WlfJ3jcqKIPEXQ8xrgJv/rdV2UX3pa
+         3RvDfUxp8Bsd3yRTU14116/yM+cyKMSw93xHQpmGQzDDZ8s0atJx8U/aARhkXeTqcqYM
+         4GEWQ1nS6sQVwJ2/pKtl8lrb/gXTVnk39saPB4p5d/KnhgJuCXoO72K4E5AI4LoZoviP
+         fm3w==
+X-Gm-Message-State: ACgBeo3/j7LPQbam1lBhbLxMlLZCxes5xrQoxMTliI1fbzCISxJLCPgG
+        yifGlCiT7ZTqELw1y97MNBWjvQ==
+X-Google-Smtp-Source: AA6agR5G2Yn1si0Ny8aEgUM18mGUOU921TVyadVX4vrrgP4oahkPCcwlt/K0QNMZO1CXlnVbKd1jxQ==
+X-Received: by 2002:a05:6a00:13a2:b0:52e:128a:23dd with SMTP id t34-20020a056a0013a200b0052e128a23ddmr8879857pfg.54.1660928564333;
+        Fri, 19 Aug 2022 10:02:44 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x1-20020aa79ac1000000b00535d3caa66fsm3469048pfp.197.2022.08.19.10.02.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 10:02:43 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 17:02:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 09/26] KVM: VMX: nVMX: Support TSC scaling and
+ PERF_GLOBAL_CTRL with enlightened VMCS
+Message-ID: <Yv/CME8B1ueOMY5M@google.com>
+References: <20220802160756.339464-1-vkuznets@redhat.com>
+ <20220802160756.339464-10-vkuznets@redhat.com>
+ <Yv5zn4qTl0aiaQvh@google.com>
+ <87sflssllu.fsf@redhat.com>
 MIME-Version: 1.0
-References: <20220816025217.618181-1-kai.heng.feng@canonical.com>
- <87leror4sl.fsf@intel.com> <20220818115338.GA26586@wunner.de>
-In-Reply-To: <20220818115338.GA26586@wunner.de>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Fri, 19 Aug 2022 19:01:19 +0200
-Message-ID: <CACO55ts1T9x++gjbvb-4gxOhLfKTeVVEjpm4L4uav-qRBsxmZg@mail.gmail.com>
-Subject: Re: [PATCH] drm/i915: Switch TGL-H DP-IN to dGFX when it's supported
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        tvrtko.ursulin@linux.intel.com,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        rodrigo.vivi@intel.com, Zenghui Yu <yuzenghui@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87sflssllu.fsf@redhat.com>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 2:09 PM Lukas Wunner <lukas@wunner.de> wrote:
->
-> On Tue, Aug 16, 2022 at 11:06:18AM +0300, Jani Nikula wrote:
-> > On Tue, 16 Aug 2022, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
-> > > On mobile workstations like HP ZBook Fury G8, iGFX's DP-IN can switch to
-> > > dGFX so external monitors are routed to dGFX, and more monitors can be
-> > > supported as result.
-> > >
-> > > To switch the DP-IN to dGFX, the driver needs to invoke _DSM function 20
-> > > on intel_dsm_guid2. This method is described in Intel document 632107.
+On Fri, Aug 19, 2022, Vitaly Kuznetsov wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
+> >> +static u32 evmcs_get_unsupported_ctls(struct kvm_vcpu *vcpu,
+> >> +				      enum evmcs_unsupported_ctrl_type ctrl_type)
+> >> +{
+> >> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> >> +	enum evmcs_revision evmcs_rev = EVMCSv1_2016;
+> >> +
+> >> +	if (!hv_vcpu)
 > >
-> > Is this the policy decision that we want to unconditionally make,
-> > though?
->
-> In general, we handle switching of outputs between GPUs in vga_switcheroo.c
-> upon a request from user space via sysfs (well, debugfs currently).
-> It's up to users to decide which policy suits their needs best.
->
-> That said, we never grew support to allow different switching policies for
-> the built-in panel and external outputs.  Laptops supporting this are
-> rare.  Older MacBook Pros introduced between 2008 and 2010 are among them:
-> They have separate muxes for the panel and external DP port.  Our policy
-> is documented in a code comment in drivers/platform/x86/apple-gmux.c:
->
->  * The external DP port is only fully switchable on the first two unibody
->  * MacBook Pro generations, MBP5 2008/09 and MBP6 2010. This is done by an
->  * `NXP CBTL06141`_ which is controlled by gmux.
->  [...]
->  * Our switching policy for the external port is that on those generations
->  * which are able to switch it fully, the port is switched together with the
->  * panel when IGD / DIS commands are issued to vga_switcheroo. It is thus
->  * possible to drive e.g. a beamer on battery power with the integrated GPU.
->  * The user may manually switch to the discrete GPU if more performance is
->  * needed.
->  *
->  * On all newer generations, the external port can only be driven by the
->  * discrete GPU. If a display is plugged in while the panel is switched to
->  * the integrated GPU, *both* GPUs will be in use for maximum performance.
->  * To decrease power consumption, the user may manually switch to the
->  * discrete GPU, thereby suspending the integrated GPU.
->
-> In other words, on these older MacBook Pros, we switch the panel and
-> external DP port in unison, thus always allowing one of the two GPUs
-> to runtime suspend and save power.
->
-> Thanks,
->
-> Lukas
->
+> > This is a functiontal change, and I don't think it's correct either.  Previously,
+> > KVM would apply the EVMCSv1_2016 filter irrespective of whether or not
+> > vcpu->arch.hyperv is non-NULL.  nested_enable_evmcs() doesn't require a Hyper-V
+> > vCPU, and AFAICT nothing requires a Hyper-V vCPU to use eVMCS.
+> 
+> Indeed, this *is* correct after PATCH11 when we get rid of VMX feature
+> MSR filtering for KVM-on-Hyper-V as the remaining use for
+> evmcs_get_unsupported_ctls() is Hyper-V on KVM and hv_vcpu is not NULL
+> there.
 
-sure, but this is changing now. I do have a laptop with a muxable
-internal display. But this is considered to be a dynamic on demand
-switching thing not a boot time switch.
+Hmm, nested_vmx_handle_enlightened_vmptrld() will fail without a Hyper-V vCPU, so
+filtering eVMCS control iff there's a Hyper-V vCPU makes sense.  But that's a guest
+visible change and should be a separate patch.
 
-Anyway, I am still not convinced that doing that unconditionally is
-what we want, especially as userspace has to support dynamic switching
-regardless.
+But that also raises the question of whether or not KVM should honor hyperv_enabled
+when filtering MSRs.  Same question for nested VM-Enter.  nested_enlightened_vmentry()
+will "fail" without an assist page, and the guest can't set the assist page without
+hyperv_enabled==true, but nothing prevents the host from stuffing the assist page.
 
+And on a very related topic, the handling of kvm_hv_vcpu_init() in kvm_hv_set_cpuid()
+is buggy.  KVM will not report an error to userspace for KVM_SET_CPUID2 if allocation
+fails.  If a later operation successfully create a Hyper-V vCPU, KVM will chug along
+with Hyper-V enabled but without having cached the relevant Hyper-V CPUID info.
+
+Less important is that kvm_hv_set_cpuid() should also zero out the CPUID cache if
+Hyper-V is disabled.  I'm pretty sure sure all paths check hyperv_enabled before
+consuming cpuid_cache, but it's unnecessarily risky.
+
+If we fix the kvm_hv_set_cpuid() allocation failure, then we can also guarantee
+that vcpu->arch.hyperv is non-NULL if vcpu->arch.hyperv_enabled==true.  And then
+we can add gate guest eVMCS flow on hyperv_enabled, and evmcs_get_unsupported_ctls()
+can then WARN if hv_vcpu is NULL.
+
+Assuming I'm not overlooking something, I'll fold in yet more patches.

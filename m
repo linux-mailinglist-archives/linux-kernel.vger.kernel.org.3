@@ -2,116 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558F95991D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 02:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DC25991D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 02:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244625AbiHSAi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 20:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S245423AbiHSAkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 20:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243317AbiHSAiX (ORCPT
+        with ESMTP id S241426AbiHSAk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 20:38:23 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D94D481C5
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 17:38:22 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 202so2528812pgc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 17:38:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=uaAY5FUxLbVgPNlfLoUfupM+nmBQ9ZGafJzO117nq8g=;
-        b=SLUqj/6euaOatuUK2NC8fjYNbAO12r/sSxk2TtkwGMM7Xx2rQR27VYEKj7w49p0n4U
-         ttYCxyHLD4dZR0AmOpfJkFnXTmJ5H21keIGDnNJXUVed41jpFXIagRmgLgXP3Uo59Xuf
-         dAlnZiAyCxWA4MWqIgtOhjU7MePRskq3ExKT4WrMQ65vfcBcZDtfdJvcm3q1DbsiO6Hf
-         Rozuxk+w5mbS0KABkqeb3/5gkmRrFST9zT1cH33rWP/4vZKrkER0PwkGve4H+QyebxZH
-         Ptv9zZ2RvNY+5MeHJzKsz/yBgT+g5u7q5YP/RKvOe5XrLQknNyPeKCex9IjWDysGyVvV
-         D1GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=uaAY5FUxLbVgPNlfLoUfupM+nmBQ9ZGafJzO117nq8g=;
-        b=0gw2VJ9ulAK5W/vOjXwVNcqbuyuFyGGNnP/kUS53JUG+r0M3V9gQHFyFty7CtcuMV+
-         8M/CY0RgC9GgQDHhXpHl4QZt0n7Pzy8qnfIT3q1TZMpekjEqaP9P6G9aM7IZqfeafsNZ
-         qO5nDZSZE3BE6QQSfT3M6R27D6SJvEE6Lk6APoEoHepi6OOBIEXLIp+J3UDheXcT7nth
-         tB1bmUOk2RM2894hH1ELLioQp5L290qQ7IPHMP5eRTpiMrvMjOIZICWNUS6jiY1v4rKh
-         ark3Xi9G7XnUwXpepJXp89Ni522tX5X8q9TEaer+iAQm6JgEjL4qCf1/NcerTQEDziay
-         Xfbw==
-X-Gm-Message-State: ACgBeo1daEf9rIlfrUYA8Oa5jfUmHaxsVA7Y7DN89nMa3mMQVJXrcQ/5
-        mHoy4RZqg8ietVru5ofH/NYfUQ==
-X-Google-Smtp-Source: AA6agR7VoOScTbEohs79Z6ARtks3G0b8GoE1/AMSLubyc3KzeWbFzZ5sGd4VVQK3EfMvWLsInL3IPA==
-X-Received: by 2002:a63:505a:0:b0:421:a16a:d286 with SMTP id q26-20020a63505a000000b00421a16ad286mr4318375pgl.441.1660869501835;
-        Thu, 18 Aug 2022 17:38:21 -0700 (PDT)
-Received: from google.com ([2620:15c:2d:3:aa25:fe91:7e28:16bc])
-        by smtp.gmail.com with ESMTPSA id p18-20020a170902ead200b0016a6caacaefsm1952248pld.103.2022.08.18.17.38.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 17:38:21 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 17:38:15 -0700
-From:   Isaac Manjarres <isaacmanjarres@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Saravana Kannan <saravanak@google.com>, stable@kernel.org,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] driver core: Fix bus_type.match() error handling
-Message-ID: <Yv7bd6Yl8+thp2CY@google.com>
-References: <20220815211919.2028890-1-isaacmanjarres@google.com>
- <20220816042507.GB1108868@roeck-us.net>
- <YvsoYzIhOtX9DOi2@google.com>
- <20220816111311.GC1108868@roeck-us.net>
- <YvvQOBk9T3J1uX8k@google.com>
- <20220817010559.GA1880847@roeck-us.net>
- <YvxAfiSOrzy7/c1J@google.com>
- <20220818225932.GA3433999@roeck-us.net>
+        Thu, 18 Aug 2022 20:40:28 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E810D7D3C;
+        Thu, 18 Aug 2022 17:40:27 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2A636580E5D;
+        Thu, 18 Aug 2022 20:40:25 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 18 Aug 2022 20:40:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1660869625; x=1660876825; bh=p4
+        mrdAhfuXrXkbUMCbpYFq9iim/KI6Q1KeIWNni0Pu8=; b=NmfuW1+kY6jqCU+SOB
+        OECgLcjgfa/gkmj9WAQWHrJD2/c3qc7nnUazVUk975wdVftGPDZXi2dYd4VJlXps
+        pRzBpT25IAYRcsHhb7UXxtcuflc66clE4gkYqkYMfuIGsxGOO4Mo6n9vy4TbbePv
+        yBvxD+OcV+nUrqJdK4J4VrhHOn6Dh4g3iWomVQfeY1QK/C5oo0Oh6tr+ERqPQMm/
+        i7WrGOmMzO20ibGuUivoDpDcehqVDc1tMFLXwnSCECRO27CUzxCo+ikHKB84LSj0
+        2YqTH1XDybKxylJkysD/9Vw2GqO6En0Zr+bxEgi2mulkmu4V1uTFB42pTofZ42y7
+        pOBQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660869625; x=1660876825; bh=p4mrdAhfuXrXkbUMCbpYFq9iim/K
+        I6Q1KeIWNni0Pu8=; b=zxN4ID6gqcZMZFi8RRRCqCJJz67/hlDBmIXr5jMDNL7J
+        Vwlbb+o3pWLxQLrkZKs73qUn9/G22KzobJM2Jl9O3KX7JfWy8k8c1xkZpCxVN9WN
+        c00bSD4/geEGawIMVcoMPAkKeghrFaVGsJA3qfQJ+oRqw2xSLwBMFIZpRH3IVJG8
+        Zt86YzEpUzOJMNgH0PLfyvpiIbmSH7yVHevlA/KJ6yD2K4mMagqIDeKaIPrcMCR+
+        M/ji5zqZU/m+yB8GLeVVmDfdSJ/wcNIGTd6h+ZgRK3B2Zu9Bup7h2qXawrZCQQyC
+        fjNPXMtQFfPMWzHkfo+l1ZWfQYMTSh0d9NDp8BLonQ==
+X-ME-Sender: <xms:99v-Yguo4sXKdcYloGScFZLpjFVcdsWZEue-M1d_aSugtfVgFE0PgQ>
+    <xme:99v-YteKlaDAXzZrY5Q7ajRii4Spnlk3QnOkHFRj7meDmdCXaXBQ3dL9-ckV7WqnB
+    xnWlyo3ThZy_C2RBU0>
+X-ME-Received: <xmr:99v-Yryf_SG4XVAtEfsYgZcJ3dxZwV8_ZLtSRV-uOvVorPrG9mI1zqhG9KlR3myN6ZGf_A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeitddgfeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:99v-YjNXs-TyttYJAcbSZqpXqruhIjPf74NygKPH72sFr0vzEnXA_Q>
+    <xmx:99v-Yg-3-1lIdhYqJkEpnHGqR3EY0j38u01Fr5ghV6lowELnpxWTIw>
+    <xmx:99v-YrUHX7v-hUiBnmBx_peHkRqQJLNybs1S_IxmlhX7GebIRTLP2Q>
+    <xmx:-dv-YszGL-rTfN2_TUO-BqTH0iFUn_7vbveOClqgPpv1wXSMp-azIw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 18 Aug 2022 20:40:22 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id CB4DD104AA5; Fri, 19 Aug 2022 03:40:18 +0300 (+03)
+Date:   Fri, 19 Aug 2022 03:40:18 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Subject: Re: [PATCH v6 6/8] KVM: Handle page fault for private memory
+Message-ID: <20220819004018.mgdvxhl6dj3ujl3f@box.shutemov.name>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <20220519153713.819591-7-chao.p.peng@linux.intel.com>
+ <YqzyjZnflCMPo8b/@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220818225932.GA3433999@roeck-us.net>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YqzyjZnflCMPo8b/@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 03:59:32PM -0700, Guenter Roeck wrote:
-> Requesting system reboot
-> sd 0:0:0:0: [sda] Synchronizing SCSI cache
-> ci_hdrc ci_hdrc.1: remove, state 4
-> usb usb2: USB disconnect, device number 1
-> ci_hdrc ci_hdrc.1: USB bus 2 deregistered
-> ci_hdrc ci_hdrc.0: remove, state 1
-> usb usb1: USB disconnect, device number 1
-> usb 1-1: USB disconnect, device number 2
-> sd 0:0:0:0: [sda] Synchronizing SCSI cache
-> sd 0:0:0:0: [sda] Synchronize Cache(10) failed: Result: hostbyte=0x01 driverbyte=DRIVER_OK
+On Fri, Jun 17, 2022 at 09:30:53PM +0000, Sean Christopherson wrote:
+> > @@ -4088,7 +4144,12 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+> >  		read_unlock(&vcpu->kvm->mmu_lock);
+> >  	else
+> >  		write_unlock(&vcpu->kvm->mmu_lock);
+> > -	kvm_release_pfn_clean(fault->pfn);
+> > +
+> > +	if (fault->is_private)
+> > +		kvm_private_mem_put_pfn(fault->slot, fault->pfn);
 > 
-> [ stuck here until qemu is killed ]
-> 
-Hi Guenter,
+> Why does the shmem path lock the page, and then unlock it here?
 
-I'm actually observing the behavior described above even without my patch.
-The tip of my tree is currently at 573ae4f13f63 ("tee: add overflow check in
-register_shm_helper()"). I used git bisect to find what commit was
-causing the problem, and narrowed it down to this series[1].
+Lock is require to avoid race with truncate / punch hole. Like if truncate
+happens after get_pfn(), but before it gets into SEPT we are screwed.
 
-I reverted all 4 patches in that series, and I no longer see this hang
-with my tree.
+> Same question for why this path marks it dirty?  The guest has the page mapped
+> so the dirty flag is immediately stale.
 
-[1]: https://lore.kernel.org/all/20220712221936.1199196-1-bvanassche@acm.org/
+If page is clean and refcount is not elevated, vmscan is free to drop the
+page from page cache. I don't think we want this.
 
-Are these patches part of the tree you're using for testing and
-observing this hang in?
+> In other words, why does KVM need to do something different for private pfns?
 
-Thanks,
-Isaac
+Because in the traditional KVM memslot scheme, core mm takes care about
+this.
+
+The changes in v7 is wrong. Page has be locked until it lends into SEPT and
+must make it dirty before unlocking.
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov

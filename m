@@ -2,45 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D0159A5FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8163159A618
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350582AbiHSTH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 15:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
+        id S1351185AbiHSTIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 15:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350392AbiHSTHX (ORCPT
+        with ESMTP id S1351089AbiHSTI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 15:07:23 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E100B10977D;
-        Fri, 19 Aug 2022 12:07:22 -0700 (PDT)
-Received: from [192.168.31.174] (unknown [95.31.169.23])
-        by mail.ispras.ru (Postfix) with ESMTPSA id E005A40737CD;
-        Fri, 19 Aug 2022 19:07:19 +0000 (UTC)
-Message-ID: <9ebc80d0-1b16-642c-e66b-2de52c673334@ispras.ru>
-Date:   Fri, 19 Aug 2022 22:07:19 +0300
+        Fri, 19 Aug 2022 15:08:28 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EB532AA9;
+        Fri, 19 Aug 2022 12:08:25 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27JJ7ZR4090751;
+        Fri, 19 Aug 2022 14:07:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1660936055;
+        bh=u9P/5Oz+onGjKnverq4DWRIAD3ByWF1SyU5y0haCG5c=;
+        h=From:To:CC:Subject:Date;
+        b=OU120/eiD1tFkJStijVybhM3IjU8LE4xI31Dz7a1nKhKJI8C3ScfNp41BCV21tjHm
+         RS/iTeHk/aqCSLpGyCvyzTn4dcV9HPSQ6uh22Mg9tHeXV6gg2JH5sNra3eSZKrf8an
+         Bpj9i6KKbd++ir6hozvaxL4mDIRLnIOrCzlDiIsA=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27JJ7ZVP123338
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 19 Aug 2022 14:07:35 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 19
+ Aug 2022 14:07:35 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 19 Aug 2022 14:07:35 -0500
+Received: from LT5CD112GSQZ.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27JJ7T2s051038;
+        Fri, 19 Aug 2022 14:07:30 -0500
+From:   Apurva Nandan <a-nandan@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>
+CC:     Apurva Nandan <a-nandan@ti.com>, Hari Nagalla <hnagalla@ti.com>
+Subject: [PATCH 0/3] Fix ti,sci-inta/intr and mmc dtbs_check warnings for TI K3 platforms
+Date:   Sat, 20 Aug 2022 00:37:26 +0530
+Message-ID: <20220819190729.32358-1-a-nandan@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: WARNING in hif_usb_alloc_rx_urbs/usb_submit_urb
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ath9k-devel@qca.qualcomm.com, ldv-project@linuxtesting.org,
-        eli.billauer@gmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        andreyknvl@google.com, gustavoars@kernel.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        oneukum@suse.com, tiwai@suse.de, syzkaller-bugs@googlegroups.com
-References: <09fbc5ed-d67e-8308-1e49-2de6f2cea7dd@ispras.ru>
- <Yv/ahFW577q5woup@rowland.harvard.edu>
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-In-Reply-To: <Yv/ahFW577q5woup@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,84 +70,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.08.2022 21:46, Alan Stern wrote:
-> On Fri, Aug 19, 2022 at 09:34:44PM +0300, Fedor Pchelkin wrote:
->> Hi Alan,
->>
->> Fri, 9 Oct 2020 at 21:55:51 UTC+3, Alan Stern wrote:
->>> To the ath9k_htc maintainers:
->>> This is an attempt to fix a bug detected by the syzbot fuzzer. The bug
->>> arises when a USB device claims to be an ATH9K but doesn't have the
->>> expected endpoints. (In this case there was a bulk endpoint where the
->>> driver expected an interrupt endpoint.) The kernel needs to be able to
->>> handle such devices without getting an internal error.
->>
->> We are facing the similar warnings [1] in
->> hif_usb_alloc_rx_urbs/usb_submit_urb:
->>
->> usb 1-1: ath9k_htc: Firmware ath9k_htc/htc_9271-1.4.0.fw requested
->> usb 1-1: ath9k_htc: Transferred FW: ath9k_htc/htc_9271-1.4.0.fw, size: 51008
->> ------------[ cut here ]------------
->> usb 1-1: BOGUS urb xfer, pipe 3 != type 1
->> WARNING: CPU: 3 PID: 500 at drivers/usb/core/urb.c:493
->> usb_submit_urb+0xce2/0x1430 drivers/usb/core/urb.c:493
->> Modules linked in:
->> CPU: 3 PID: 500 Comm: kworker/3:2 Not tainted 5.10.135-syzkaller #0
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1
->> 04/01/2014
->> Workqueue: events request_firmware_work_func
->> RIP: 0010:usb_submit_urb+0xce2/0x1430 drivers/usb/core/urb.c:493
->> Code: 84 d4 02 00 00 e8 0e 00 80 fc 4c 89 ef e8 06 2d 35 ff 41 89 d8 44 89
->> e1 4c 89 f2 48 89 c6 48 c7 c7 c0 f0 a8 88 e8 0e a6 b9 02 <0f> 0b e9 c6 f8 ff
->> ff e8 e2 ff 7f fc 48 81 c5 88 06 00 00 e9 f2 f7
->> RSP: 0018:ffff888147227b60 EFLAGS: 00010282
->> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
->> RDX: ffff888147218000 RSI: ffffffff815909c5 RDI: ffffed1028e44f5e
->> RBP: ffff888021509850 R08: 0000000000000001 R09: ffff888237d38ba7
->> R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000003
->> R13: ffff888021a330a0 R14: ffff88800f82b5a0 R15: ffff88801466a900
->> FS:  0000000000000000(0000) GS:ffff888237d00000(0000) knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 000055b2994526c8 CR3: 000000001e730000 CR4: 0000000000350ee0
->> Call Trace:
->>   ath9k_hif_usb_alloc_rx_urbs drivers/net/wireless/ath/ath9k/hif_usb.c:908
->> [inline]
->>   ath9k_hif_usb_alloc_urbs+0x75e/0x1010
->> drivers/net/wireless/ath/ath9k/hif_usb.c:1019
->>   ath9k_hif_usb_dev_init drivers/net/wireless/ath/ath9k/hif_usb.c:1109
->> [inline]
->>   ath9k_hif_usb_firmware_cb+0x142/0x530
->> drivers/net/wireless/ath/ath9k/hif_usb.c:1242
->>   request_firmware_work_func+0x12e/0x240
->> drivers/base/firmware_loader/main.c:1097
->>   process_one_work+0x9af/0x1600 kernel/workqueue.c:2279
->>   worker_thread+0x61d/0x12f0 kernel/workqueue.c:2425
->>   kthread+0x3b4/0x4a0 kernel/kthread.c:313
->>   ret_from_fork+0x22/0x30 arch/x86/entry/entry_64.S:299
->>
->> Fri, 9 Oct 2020 at 21:55:51 UTC+3, Alan Stern wrote:
->>> I don't know if all the devices used by the ath9k_htc driver are
->>> expected to have all of these endpoints and no others. I just added
->>> checks for the ones listed in the hif_usb.h file.
->>
->> I agree with you: kernel should definitely handle itself the situation
->> when endpoint definitions do not correspond to the expected ones because
->> this problem arises in Syzkaller cases. I suppose adding the endpoints
->> to be checked listed in the hif_usb.h file would be enough.
->>
->> However, it is probable that those warnings can only be triggered with
->> fuzzer and can't happen in real applications. Perhaps it is Syzkaller
->> which does not name endpoints correctly in a way that suits real
->> implementation. But overall, some method of checking endpoints should
->> be implemented inside ath9k driver, and the code you proposed does this
->> functionality.
->>
->> [1]: https://groups.google.com/g/syzkaller-bugs/c/umu68ITBsRg/m/xy8dtA5JAQAJ
-> 
-> Good.  Should I add your Acked-by: to the patch and submit it?
-> 
-> Alan Stern
+This series fixes the following warnings common across all TI K3
+platforms:
 
-Yeah, okay.
+k3-j721e-common-proc-board.dtb: interrupt-controller@33d00000: Unevaluated properties are not allowed ('#interrupt-cells' was unexpected)
+From schema: linux/Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml
 
-Fedor
+k3-j721s2-common-proc-board.dtb: mmc@4f80000: Unevaluated properties are not allowed ('dma-coherent' was unexpected)
+From schema: linux/Documentation/devicetree/bindings/mmc/sdhci-am654.yaml
+
+k3-j721s2-common-proc-board.dtb: interrupt-controller@310e0000: Unevaluated properties are not allowed ('reg' was unexpected)
+From schema: linux/Documentation/devicetree/bindings/interrupt-controller/ti,sci-intr.yaml
+
+Apurva Nandan (3):
+  dt-bindings: irqchip: ti, sci-intr/inta: Fix warning
+    '#interrupt-cells' was unexpected
+  dt-bindings: mmc: Fix 'dma-coherent' was unexpected
+  dt-bindings: interrupt-controller: Fix 'reg' was unexpected
+
+ .../devicetree/bindings/interrupt-controller/ti,sci-inta.yaml  | 3 +++
+ .../devicetree/bindings/interrupt-controller/ti,sci-intr.yaml  | 3 +++
+ Documentation/devicetree/bindings/mmc/sdhci-am654.yaml         | 3 +++
+ 3 files changed, 9 insertions(+)
+
+-- 
+2.17.1
+

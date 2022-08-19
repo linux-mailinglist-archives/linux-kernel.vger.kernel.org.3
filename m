@@ -2,224 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFEE5998F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B138A5998F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347995AbiHSJrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        id S1348208AbiHSJr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346902AbiHSJrK (ORCPT
+        with ESMTP id S1346902AbiHSJrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:47:10 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEDAEEF32;
-        Fri, 19 Aug 2022 02:47:07 -0700 (PDT)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id AA49D60007;
-        Fri, 19 Aug 2022 09:47:02 +0000 (UTC)
-Date:   Fri, 19 Aug 2022 11:46:59 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        laurent.pinchart+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org, akinobu.mita@gmail.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 1/4] media: mt9m111: add V4L2_CID_PIXEL_RATE support
-Message-ID: <20220819094659.tgngnhr5taup2lhl@uno.localdomain>
-References: <20220818144712.997477-1-m.felsch@pengutronix.de>
- <20220818161108.dlmi77o6j7wcyayc@uno.localdomain>
- <20220819075615.a3nuakrac54kn7t3@pengutronix.de>
- <20220819081548.q6c5pwio2z2ambqq@uno.localdomain>
- <20220819090438.72vlat6by3ag6pvd@pengutronix.de>
+        Fri, 19 Aug 2022 05:47:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCD5EEF32
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660902442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5lMZ2tlr9OXZUpmoDj+rHRu4KhHy68wISKdzPx4ZgD8=;
+        b=FCZIRxyqoTz6WT8TZtiQDxYFJzU9oSwr8ZxbpCvGdf0eG6Vom1KYgvOW/XAwE9IagCAIQX
+        BSozO7j8q9C+kiXMbHiEw6H4FpVE64DwNf145jHcs959KnSGfLtUv3t97pjm7mz22TTemp
+        y/gB2HQylEmwlgOqWI49J8X8edpGm/8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-307-Y0PYAS-2MDq0cSMqgHeftw-1; Fri, 19 Aug 2022 05:47:21 -0400
+X-MC-Unique: Y0PYAS-2MDq0cSMqgHeftw-1
+Received: by mail-wm1-f70.google.com with SMTP id f18-20020a05600c4e9200b003a5f81299caso2204872wmq.7
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 02:47:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=5lMZ2tlr9OXZUpmoDj+rHRu4KhHy68wISKdzPx4ZgD8=;
+        b=wV+mwEg9KZzrRytF+KtoJ1+GtWKYOaPhzUZSlw1AzqLgpecYITqNph54vSGvaGN85v
+         8La1nYhF7Uhj0k+ykQPxsNBqrrdKn9lqjZj1bsHGTwaUFk8Ig2qbP/y2BHii7hc7XMAL
+         cWpSHPNF+4CScjMhwAPIkAA4hRYSTSoJz+2pK5/rLH2xvFmH8Tm/k+sv4s5Zv418cDZa
+         weJ0caxt7XPs2HEN6qP8/HDCsxvSe2AZhg0HkByvtieOS84Yk5aGdLUR9W8I99Vfu0ig
+         ac6gwuNH3TVaMJVrR9yqAVc1KBsIRt9IMOs/WMMI10SN0RE7eobG/Z0pppqsXg+xUn9w
+         T40g==
+X-Gm-Message-State: ACgBeo1zv5alvzYf342QdDbLSj6x4KgPzBAA1g8qPD+Y2Fx9OERk8HZX
+        H+aexBD3O00MvKYbf1ow/tqdWN43MXtKYeyA/ixznCTiaffPCS6ZVqkrd3gM1YgL6XqRuU37TeD
+        iJhizpgNkzUKXBMPfSVT7Mok3
+X-Received: by 2002:a05:6000:1ac6:b0:225:2e67:6ba4 with SMTP id i6-20020a0560001ac600b002252e676ba4mr3918689wry.321.1660902440454;
+        Fri, 19 Aug 2022 02:47:20 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7nQvOWV3ULJGGviUNHqU+TpGchBIgqEmBu6MJDb5xkuEy7gzhYLWgD+bRw0yeEGsmQHQIRbw==
+X-Received: by 2002:a05:6000:1ac6:b0:225:2e67:6ba4 with SMTP id i6-20020a0560001ac600b002252e676ba4mr3918675wry.321.1660902440200;
+        Fri, 19 Aug 2022 02:47:20 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id j9-20020a05600c190900b003a54f49c1c8sm5421782wmq.12.2022.08.19.02.47.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 02:47:19 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Bing Huang <huangbing775@126.com>, mingo@redhat.com
+Cc:     peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        Bing Huang <huangbing@kylinos.cn>
+Subject: Re: [PATCH] sched/topology: Add __init for init_defrootdomain
+In-Reply-To: <20220810033932.171690-1-huangbing775@126.com>
+References: <20220810033932.171690-1-huangbing775@126.com>
+Date:   Fri, 19 Aug 2022 10:47:18 +0100
+Message-ID: <xhsmhr11ca7kp.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220819090438.72vlat6by3ag6pvd@pengutronix.de>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
-
-On Fri, Aug 19, 2022 at 11:04:38AM +0200, Marco Felsch wrote:
-> On 22-08-19, Jacopo Mondi wrote:
-> > Hi Marco
-> >
-> > On Fri, Aug 19, 2022 at 09:56:15AM +0200, Marco Felsch wrote:
-> > > Hi Jacopo,
-> > >
-> > > On 22-08-18, Jacopo Mondi wrote:
-> > > > Hi Marco
-> > > >
-> > > > On Thu, Aug 18, 2022 at 04:47:09PM +0200, Marco Felsch wrote:
-> > > > > Add support to report the PIXEL_RATE so a host or bridge device can ask
-> > > > > the sensor.
-> > > > >
-> > > > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > > > > ---
-> > > > >  drivers/media/i2c/mt9m111.c | 15 ++++++++++++++-
-> > > > >  1 file changed, 14 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
-> > > > > index afc86efa9e3e..cdaf283e1309 100644
-> > > > > --- a/drivers/media/i2c/mt9m111.c
-> > > > > +++ b/drivers/media/i2c/mt9m111.c
-> > > > > @@ -908,6 +908,8 @@ static int mt9m111_s_ctrl(struct v4l2_ctrl *ctrl)
-> > > > >  		return mt9m111_set_test_pattern(mt9m111, ctrl->val);
-> > > > >  	case V4L2_CID_COLORFX:
-> > > > >  		return mt9m111_set_colorfx(mt9m111, ctrl->val);
-> > > > > +	case V4L2_CID_PIXEL_RATE:
-> > > > > +		return 0;
-> > > >
-> > > > By default PIXEL_RATE is read-only.
-> > > > Do you get a call to s_ctrl for it ?
-> > >
-> > > You're absolutly right, we don't need to do this.
-> > >
-> > > > >  	}
-> > > > >
-> > > > >  	return -EINVAL;
-> > > > > @@ -1249,6 +1251,7 @@ static int mt9m111_probe(struct i2c_client *client)
-> > > > >  {
-> > > > >  	struct mt9m111 *mt9m111;
-> > > > >  	struct i2c_adapter *adapter = client->adapter;
-> > > > > +	unsigned long mclk_rate;
-> > > > >  	int ret;
-> > > > >
-> > > > >  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_WORD_DATA)) {
-> > > > > @@ -1271,6 +1274,13 @@ static int mt9m111_probe(struct i2c_client *client)
-> > > > >  	if (IS_ERR(mt9m111->clk))
-> > > > >  		return PTR_ERR(mt9m111->clk);
-> > > > >
-> > > > > +	ret = clk_prepare_enable(mt9m111->clk);
-> > > > > +	if (ret < 0)
-> > > > > +		return ret;
-> > > > > +
-> > > >
-> > > > Do you need to enable clock to read its rate ?
-> > >
-> > > Yes, accroding the API [1].
-> > >
-> > > [1] https://elixir.bootlin.com/linux/v6.0-rc1/source/include/linux/clk.h#L682
-> >
-> > So weird! none of the drivers I checked do that. The most common
-> > pattern is
-> >
-> >         clk = devm_clk_get();
-> >         rate = clk_get_rate(clk)
-> >         if (rate != RATE)
-> >                 ...
+On 10/08/22 11:39, Bing Huang wrote:
+> From: Bing Huang <huangbing@kylinos.cn>
 >
-> Yep, I know. There are a lot of drivers not respecting this.
+> init_defrootdomain is only used in initialization
 >
+> Signed-off-by: Bing Huang <huangbing@kylinos.cn>
 
-I wonder if it's really necessary then :)
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
 
-> > >
-> > > > > +	mclk_rate = clk_get_rate(mt9m111->clk);
-> > > > > +	clk_disable_unprepare(mt9m111->clk);
-> > > > > +
-> > > > >  	mt9m111->regulator = devm_regulator_get(&client->dev, "vdd");
-> > > > >  	if (IS_ERR(mt9m111->regulator)) {
-> > > > >  		dev_err(&client->dev, "regulator not found: %ld\n",
-> > > > > @@ -1285,7 +1295,7 @@ static int mt9m111_probe(struct i2c_client *client)
-> > > > >  	mt9m111->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-> > > > >  				 V4L2_SUBDEV_FL_HAS_EVENTS;
-> > > > >
-> > > > > -	v4l2_ctrl_handler_init(&mt9m111->hdl, 7);
-> > > > > +	v4l2_ctrl_handler_init(&mt9m111->hdl, 8);
-> > > > >  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
-> > > > >  			V4L2_CID_VFLIP, 0, 1, 1, 0);
-> > > > >  	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops,
-> > > > > @@ -1309,6 +1319,9 @@ static int mt9m111_probe(struct i2c_client *client)
-> > > > >  				BIT(V4L2_COLORFX_NEGATIVE) |
-> > > > >  				BIT(V4L2_COLORFX_SOLARIZATION)),
-> > > > >  			V4L2_COLORFX_NONE);
-> > > > > +	v4l2_ctrl_new_std(&mt9m111->hdl, &mt9m111_ctrl_ops, V4L2_CID_PIXEL_RATE,
-> > > > > +			  mclk_rate, mclk_rate, 1, mclk_rate);
-> > > > > +
-> > > >
-> > > > I don't have a datasheet but it seems a little weird that the mclk
-> > > > frequency is the same as the pixel clock rate ?
-> > >
-> > > I see your confusion here. I can only speak for the MT9M131 device which
-> > > is covered by this driver as well. This device is composed of a
-> > > internal-sensor and a internal-isp. The internal-sensor is clocked by
-> > > mclk/2 but the final image device/sensor output-fifo is clocked by mclk.
-> >
-> > No PLL, no rate multiplier/divider ? Does this sensor only work with
-> > one pixel rate that is defined by the input clock rate ?
-> >
-> > > There are options to devide the output clock as well, but these options
-> > > are not enabled yet. So yes, the pixel clock rate == mclk rate. To avoid
-> >
-> > Ah ok
-> >
-> > Could you share your setup mclk, resolution and frame rate to show how
-> > the pixel rate and the mclk rate are related ?
->
->
-> mclk:      54 MHz (input)
-> pixelclk:  54 MHz (output)
-> res:       1280x1024
-
-You should take blankings into account as well, even if I havent'
-found where they are programmed in the driver
-
-
-> fps:       15
-> bus-width: 8
-> bpp:       16
->
-> After re-reading the PIXEL_RATE, maybe I missunderstood the control. As
-> of now I thought it is the amount of bytes per second send on the bus.
-
-Not bytes but pixels :)
-
-And the above gives me a 19.660.800 Hz pixel rate
-
-
-> But the documentation says pixels per second... Is there a control to
-> expose the current pixelclk on the mbus? What I wanna do in the end is
-> to calculate the througput on the (parallel-)bus.
-
-Not for parallel busses as far as I'm aware as my understanding is
-that CID_LINK_FREQ applies to CSI-2 setups only.
-
-To get the byte rate on the bus I would simply multiply the pixel
-clock by the number of bytes per pixel, in this case 2.
-
->
-> > > confusion I could rename the mclk_rate to extclk_rate but then clock
-> > > request is not 100% correct since we are requesting a "mclk", this
-> > > should be "extclk".
-> >
-> > Doesn't really make a difference!
-> >
-> > A comment in the code to explain what happens would help though!
->
-> I did that right now, after your confusion :)
->
-> Regards,
->   Marco
->
-> >
-> > >
-> > > Regards,
-> > >   Marco
-> > >
-> > > > >  	mt9m111->subdev.ctrl_handler = &mt9m111->hdl;
-> > > > >  	if (mt9m111->hdl.error) {
-> > > > >  		ret = mt9m111->hdl.error;
-> > > > > --
-> > > > > 2.30.2
-> > > > >
-> > > >
-> >

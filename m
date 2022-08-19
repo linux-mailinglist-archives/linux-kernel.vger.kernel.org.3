@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F95459A47F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1753659A34E
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353523AbiHSQiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 12:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
+        id S1353560AbiHSQjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 12:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353586AbiHSQgb (ORCPT
+        with ESMTP id S1353434AbiHSQhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 12:36:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A0E123081;
-        Fri, 19 Aug 2022 09:07:37 -0700 (PDT)
+        Fri, 19 Aug 2022 12:37:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACBE123C8A;
+        Fri, 19 Aug 2022 09:07:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B6FB617A7;
-        Fri, 19 Aug 2022 16:07:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19780C433D6;
-        Fri, 19 Aug 2022 16:07:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0CD8B82802;
+        Fri, 19 Aug 2022 16:07:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A830C433C1;
+        Fri, 19 Aug 2022 16:07:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660925230;
-        bh=cBfODlRNOd8cFl/pngxgTii9xHeqTZLnSwPJNRRiags=;
+        s=korg; t=1660925264;
+        bh=MR/WQ03ufFX6kSt75F16agGty5l0x1n6KmHP4Yzz8Ak=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xkk4l1oRYCYMtD0lgAfLZZR8BQbEmly/X65Ac31NZj+qiYqS5VdJnUoESTI/2rndC
-         75zVlA0OIG13ukle2qihkChe+6U0c7MM8GHIIMJtj3FvZOYP0ngpHAnnYLlWArgFdG
-         d9D62PmerkDZ1KsZxgPlWWTFYkvyvK438nOiIKBc=
+        b=M/DsuYBV/iF62Sz23gIK4fsugyijXqXiRhCIc+/eapZA3QpqE28qhcZNSW8wa+OkR
+         U4XfXYC8MomHUrMKq+C+levOef4qwnPXs0wutO/devvR6vdaJ0tzoUdhvpwUW2PGMA
+         gPXc7LHQwvjbpi7U+UjS/ih6IzEI3G8TvqsFG9+k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shengjiu Wang <shengjiu.wang@nxp.com>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 408/545] ASoC: fsl_easrc: use snd_pcm_format_t type for sample_format
-Date:   Fri, 19 Aug 2022 17:42:58 +0200
-Message-Id: <20220819153847.678948594@linuxfoundation.org>
+Subject: [PATCH 5.10 409/545] ASoC: qcom: q6dsp: Fix an off-by-one in q6adm_alloc_copp()
+Date:   Fri, 19 Aug 2022 17:42:59 +0200
+Message-Id: <20220819153847.729459572@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220819153829.135562864@linuxfoundation.org>
 References: <20220819153829.135562864@linuxfoundation.org>
@@ -55,105 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit de27216cf2d645c2fd14e513707bdcd54e5b1de4 ]
+[ Upstream commit 673f58f62ca6fc98979d1cf3fe89c3ff33f29b2e ]
 
-Fix sparse warning:
-sound/soc/fsl/fsl_easrc.c:562:33: sparse: warning: restricted snd_pcm_format_t degrades to integer
-sound/soc/fsl/fsl_easrc.c:563:34: sparse: warning: restricted snd_pcm_format_t degrades to integer
-sound/soc/fsl/fsl_easrc.c:565:38: sparse: warning: restricted snd_pcm_format_t degrades to integer
-sound/soc/fsl/fsl_easrc.c:566:39: sparse: warning: restricted snd_pcm_format_t degrades to integer
-sound/soc/fsl/fsl_easrc.c:608:33: sparse: warning: restricted snd_pcm_format_t degrades to integer
-sound/soc/fsl/fsl_easrc.c:609:34: sparse: warning: restricted snd_pcm_format_t degrades to integer
-sound/soc/fsl/fsl_easrc.c:615:40: sparse: warning: restricted snd_pcm_format_t degrades to integer
-sound/soc/fsl/fsl_easrc.c:616:41: sparse: warning: restricted snd_pcm_format_t degrades to integer
+find_first_zero_bit() returns MAX_COPPS_PER_PORT at max here.
+So 'idx' should be tested with ">=" or the test can't match.
 
-sound/soc/fsl/fsl_easrc.c:1465:51: sparse: warning: incorrect type in assignment (different base types)
-sound/soc/fsl/fsl_easrc.c:1465:51: sparse:    expected unsigned int sample_format
-sound/soc/fsl/fsl_easrc.c:1465:51: sparse:    got restricted snd_pcm_format_t [usertype] format
-sound/soc/fsl/fsl_easrc.c:1467:52: sparse: warning: incorrect type in assignment (different base types)
-sound/soc/fsl/fsl_easrc.c:1467:52: sparse:    expected unsigned int sample_format
-sound/soc/fsl/fsl_easrc.c:1467:52: sparse:    got restricted snd_pcm_format_t [usertype] asrc_format
-sound/soc/fsl/fsl_easrc.c:1470:52: sparse: warning: incorrect type in assignment (different base types)
-sound/soc/fsl/fsl_easrc.c:1470:52: sparse:    expected unsigned int sample_format
-sound/soc/fsl/fsl_easrc.c:1470:52: sparse:    got restricted snd_pcm_format_t [usertype] format
-sound/soc/fsl/fsl_easrc.c:1472:51: sparse: warning: incorrect type in assignment (different base types)
-sound/soc/fsl/fsl_easrc.c:1472:51: sparse:    expected unsigned int sample_format
-sound/soc/fsl/fsl_easrc.c:1472:51: sparse:    got restricted snd_pcm_format_t [usertype] asrc_format
-sound/soc/fsl/fsl_easrc.c:1484:41: sparse: warning: incorrect type in argument 2 (different base types)
-sound/soc/fsl/fsl_easrc.c:1484:41: sparse:    expected restricted snd_pcm_format_t [usertype] *in_raw_format
-sound/soc/fsl/fsl_easrc.c:1484:41: sparse:    got unsigned int *
-sound/soc/fsl/fsl_easrc.c:1485:41: sparse: warning: incorrect type in argument 3 (different base types)
-sound/soc/fsl/fsl_easrc.c:1485:41: sparse:    expected restricted snd_pcm_format_t [usertype] *out_raw_format
-sound/soc/fsl/fsl_easrc.c:1485:41: sparse:    got unsigned int *
-sound/soc/fsl/fsl_easrc.c:1937:60: sparse: warning: incorrect type in argument 3 (different base types)
-sound/soc/fsl/fsl_easrc.c:1937:60: sparse:    expected unsigned int [usertype] *out_value
-sound/soc/fsl/fsl_easrc.c:1937:60: sparse:    got restricted snd_pcm_format_t *
-sound/soc/fsl/fsl_easrc.c:1943:49: sparse: warning: restricted snd_pcm_format_t degrades to integer
-
-Fixes: 955ac624058f ("ASoC: fsl_easrc: Add EASRC ASoC CPU DAI drivers")
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Link: https://lore.kernel.org/r/1658399393-28777-5-git-send-email-shengjiu.wang@nxp.com
+Fixes: 7b20b2be51e1 ("ASoC: qdsp6: q6adm: Add q6adm driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/0fca3271649736053eb9649d87e1ca01b056be40.1658394124.git.christophe.jaillet@wanadoo.fr
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/fsl/fsl_easrc.c | 9 ++++++---
- sound/soc/fsl/fsl_easrc.h | 2 +-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ sound/soc/qcom/qdsp6/q6adm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/fsl/fsl_easrc.c b/sound/soc/fsl/fsl_easrc.c
-index 60951a8aabd3..3cf1f40e6892 100644
---- a/sound/soc/fsl/fsl_easrc.c
-+++ b/sound/soc/fsl/fsl_easrc.c
-@@ -476,7 +476,8 @@ static int fsl_easrc_prefilter_config(struct fsl_asrc *easrc,
- 	struct fsl_asrc_pair *ctx;
- 	struct device *dev;
- 	u32 inrate, outrate, offset = 0;
--	u32 in_s_rate, out_s_rate, in_s_fmt, out_s_fmt;
-+	u32 in_s_rate, out_s_rate;
-+	snd_pcm_format_t in_s_fmt, out_s_fmt;
- 	int ret, i;
+diff --git a/sound/soc/qcom/qdsp6/q6adm.c b/sound/soc/qcom/qdsp6/q6adm.c
+index 72f29720398c..182d36a34faf 100644
+--- a/sound/soc/qcom/qdsp6/q6adm.c
++++ b/sound/soc/qcom/qdsp6/q6adm.c
+@@ -217,7 +217,7 @@ static struct q6copp *q6adm_alloc_copp(struct q6adm *adm, int port_idx)
+ 	idx = find_first_zero_bit(&adm->copp_bitmap[port_idx],
+ 				  MAX_COPPS_PER_PORT);
  
- 	if (!easrc)
-@@ -1873,6 +1874,7 @@ static int fsl_easrc_probe(struct platform_device *pdev)
- 	struct resource *res;
- 	struct device_node *np;
- 	void __iomem *regs;
-+	u32 asrc_fmt = 0;
- 	int ret, irq;
+-	if (idx > MAX_COPPS_PER_PORT)
++	if (idx >= MAX_COPPS_PER_PORT)
+ 		return ERR_PTR(-EBUSY);
  
- 	easrc = devm_kzalloc(dev, sizeof(*easrc), GFP_KERNEL);
-@@ -1939,13 +1941,14 @@ static int fsl_easrc_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = of_property_read_u32(np, "fsl,asrc-format", &easrc->asrc_format);
-+	ret = of_property_read_u32(np, "fsl,asrc-format", &asrc_fmt);
-+	easrc->asrc_format = (__force snd_pcm_format_t)asrc_fmt;
- 	if (ret) {
- 		dev_err(dev, "failed to asrc format\n");
- 		return ret;
- 	}
- 
--	if (!(FSL_EASRC_FORMATS & (1ULL << easrc->asrc_format))) {
-+	if (!(FSL_EASRC_FORMATS & (pcm_format_to_bits(easrc->asrc_format)))) {
- 		dev_warn(dev, "unsupported format, switching to S24_LE\n");
- 		easrc->asrc_format = SNDRV_PCM_FORMAT_S24_LE;
- 	}
-diff --git a/sound/soc/fsl/fsl_easrc.h b/sound/soc/fsl/fsl_easrc.h
-index 30620d56252c..5b8469757c12 100644
---- a/sound/soc/fsl/fsl_easrc.h
-+++ b/sound/soc/fsl/fsl_easrc.h
-@@ -569,7 +569,7 @@ struct fsl_easrc_io_params {
- 	unsigned int access_len;
- 	unsigned int fifo_wtmk;
- 	unsigned int sample_rate;
--	unsigned int sample_format;
-+	snd_pcm_format_t sample_format;
- 	unsigned int norm_rate;
- };
- 
+ 	c = kzalloc(sizeof(*c), GFP_ATOMIC);
 -- 
 2.35.1
 

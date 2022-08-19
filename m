@@ -2,114 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D0B599CBD
+	by mail.lfdr.de (Postfix) with ESMTP id DDC2D599CC0
 	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 15:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349320AbiHSNMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 09:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        id S1349362AbiHSNNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 09:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349153AbiHSNMj (ORCPT
+        with ESMTP id S1349317AbiHSNNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 09:12:39 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488ED74E1F;
-        Fri, 19 Aug 2022 06:12:38 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id w138so1670266pfc.10;
-        Fri, 19 Aug 2022 06:12:38 -0700 (PDT)
+        Fri, 19 Aug 2022 09:13:00 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA69CD399E
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:12:57 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id z25so6106023lfr.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 06:12:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=+HttuOcfh+F+H+y/J89AxcmFEcYFCA26kNV2tXQCUuw=;
-        b=qW70MXd5DgmcAj2wWFFVkV72o/nHNC6AwzJv9JFJIL8u+AUbDtl5cUrT4fmFpOC4MM
-         Gh2bl+79+4YBkFPoFJFWEzoH9bvGOkZGWS/0HPXWqzf/lQGb0xg2NQeedi5NVkp+7sgU
-         MnAW9bhdz9RPq+FWYPdJ6FZrzFAhsZDHJlXZBs16mxwbkUL5xTDVfrgBNOPpiry66IVF
-         vKyajl8PgQlqoEqzOhjEW4lEatM/rLGeR0ouszRmhyd0LN6xYjQA2GXb7QFhXSt9YHiZ
-         COHFgVc9ylRiK452vHLhos5ZwxDny4wx+2ZOkraVCVRIDSWEI5crFnoSoLPGoCBfBVQE
-         i1uQ==
+        bh=1+BR4rDQN1hkhfT6kogWluPYgnRMjeAFXBEVDjlIhyY=;
+        b=Mm+XwoLhbjB1cUquH2nI6XAsgf46x6z5xxfd/c+vvysAgHSw4MKjDKPGH8Le0gKS2o
+         E/mWThe9V6JEJrV6o3wW2VE5On3tZIxDhJbCyprkN5gMm/Qr61nLrG0uoOkuf2Ec7wWb
+         VobSFgaN449vit9p5Xoo3E9qLUgOV9ZsjdX/L82dR4XhfsOmYCop69ZyK6p7q8jKW2f9
+         Cv8NutBtvaDQWaRA553UHNkfGavuESsZWgkj3pOeNfeK/OjzDlUXDuHf1Ddin+fePMrZ
+         Divj6CFTaGgWhdC4bRTjxIBZW91wfbXgttfP69q5GGFfpBZNqoeBpjM6GaReWXIfDaoa
+         L12g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=+HttuOcfh+F+H+y/J89AxcmFEcYFCA26kNV2tXQCUuw=;
-        b=WZ0p3n6IAjkme1rJE0DOjxUOustYBWvLsv+s6VfpHPjIql7iTT24ejJ3mIR8VSzeH0
-         QVl1XXyU0SVyUm7p+3mXJpY1fXCm5OxuPt91JPUZn9cyDxQWXjyfNtMAG0HgRobVO1TK
-         QnhviJ32M0BiMrbXLI77AYSUwfZhKkpsPSgXDVUwqD7+YuHja3HZkzNrlX0MgzT8MBB9
-         xcrdcg9p5yFyolmCAqvo9TVsQfnzUDxY7aES3uYIWEscoiwyP0BIljHlP6WYIBCGLjHT
-         wRjqMKq2bjNpOj/9Lb/QkLM/hMWHoPV/asCmwKze3rk7gWEnJ6tW7/Acbdb0OfMNodjd
-         7+RA==
-X-Gm-Message-State: ACgBeo1nCmGno+ml4oDSDaf+J6EUBeEoJd0nqDnG2ZoVkGsKjovtYDK3
-        JExjQ0jcM8stX9NP8uyB4hE=
-X-Google-Smtp-Source: AA6agR5fk8/zWfwk5/fLk4VWIsYM4zx1HwDid0OHsYkMdPMacu01upPGMPH5s3T+iuO/vjxq2/quXA==
-X-Received: by 2002:a05:6a00:23d1:b0:52f:39e9:9150 with SMTP id g17-20020a056a0023d100b0052f39e99150mr7981942pfc.16.1660914757655;
-        Fri, 19 Aug 2022 06:12:37 -0700 (PDT)
-Received: from [192.168.0.4] ([182.213.254.91])
-        by smtp.gmail.com with ESMTPSA id v2-20020a626102000000b005361708275fsm1073566pfb.217.2022.08.19.06.12.35
+        bh=1+BR4rDQN1hkhfT6kogWluPYgnRMjeAFXBEVDjlIhyY=;
+        b=RxZJWyD/3r5oF5F2s01xh/1bE5ozUJQ39gH0G977JUXCBVPSZnTYIhvhoONykn0aKN
+         8O20lzVGqoEapmYcJ1qBkgJe24/KSDZ3IPX+oN4eu24LAAIwuUUf8x+0bnN6u4jtY2wB
+         hd9NMWX8RbZLfd/M1+v+UvmNpHgvlEW+7Wp8X8jfnL0gTTHr7kQAxWeyGhtDhMJorAD1
+         IuG32jzYxHMdE+uFyZzsDEMLN91oQOJb51l3G44I7uOmTxPTSM65iUJfJpZPPS1ADhrT
+         vbvEzH1vtUAUc2Don8wpLHsc60v87ZCMBlLSCVebXlSrNYZOAFzSDgkgAsSQwgfDK/LZ
+         /IHw==
+X-Gm-Message-State: ACgBeo0UpFnDmU2dxfmDri9BO04cluMrotEpeyIQ9O/gz3o7mRVaczrh
+        Elwbv/0Ff6MC2RSWf8Lc4m85JQ==
+X-Google-Smtp-Source: AA6agR7Jl+hYFxUbkuB2Ukvk+i6QTFpmW4GiQyzt6DOiMyZCjAWZly+NaiGCSEV5xqMzEGUFKAlTAQ==
+X-Received: by 2002:a05:6512:281f:b0:48b:824:9741 with SMTP id cf31-20020a056512281f00b0048b08249741mr2615778lfb.135.1660914775898;
+        Fri, 19 Aug 2022 06:12:55 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
+        by smtp.gmail.com with ESMTPSA id be24-20020a05651c171800b0025dfe45c031sm613986ljb.27.2022.08.19.06.12.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 06:12:36 -0700 (PDT)
-Message-ID: <afbff5b7-1004-a445-9005-7391c91a275d@gmail.com>
-Date:   Fri, 19 Aug 2022 22:12:34 +0900
+        Fri, 19 Aug 2022 06:12:55 -0700 (PDT)
+Message-ID: <38094e2d-c75c-920b-4b4d-aa377971f615@linaro.org>
+Date:   Fri, 19 Aug 2022 16:12:53 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH -next] amt: remove unneccessary skb pointer check
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 2/4] arm64: dts: apple: t8103: Add MCA and its support
 Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     davem@davemloft.net
-References: <20220818093114.2449179-1-yangyingliang@huawei.com>
-From:   Taehee Yoo <ap420073@gmail.com>
-In-Reply-To: <20220818093114.2449179-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     =?UTF-8?Q?Martin_Povi=c5=a1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220819125430.4920-1-povik+lin@cutebit.org>
+ <20220819125430.4920-3-povik+lin@cutebit.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220819125430.4920-3-povik+lin@cutebit.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yang,
-Thanks for this work!
-
-On 8/18/22 18:31, Yang Yingliang wrote:
-> The skb pointer will be checked in kfree_skb(), so remove the outside check.
+On 19/08/2022 15:54, Martin Povišer wrote:
+> Add the MCA I2S transceiver node and its supporting NCO, ADMAC nodes.
 > 
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-
-Reviewed-by: Taehee Yoo <ap420073@gmail.com>
-
+> Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
 > ---
->   drivers/net/amt.c | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
+>  arch/arm64/boot/dts/apple/t8103.dtsi | 70 ++++++++++++++++++++++++++++
+>  1 file changed, 70 insertions(+)
 > 
-> diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-> index 9a247eb7679c..2d20be6ffb7e 100644
-> --- a/drivers/net/amt.c
-> +++ b/drivers/net/amt.c
-> @@ -2894,8 +2894,7 @@ static void amt_event_work(struct work_struct *work)
->   			amt_event_send_request(amt);
->   			break;
->   		default:
-> -			if (skb)
-> -				kfree_skb(skb);
-> +			kfree_skb(skb);
->   			break;
->   		}
->   	}
-> @@ -3033,8 +3032,7 @@ static int amt_dev_stop(struct net_device *dev)
->   	cancel_work_sync(&amt->event_wq);
->   	for (i = 0; i < AMT_MAX_EVENTS; i++) {
->   		skb = amt->events[i].skb;
-> -		if (skb)
-> -			kfree_skb(skb);
-> +		kfree_skb(skb);
->   		amt->events[i].event = AMT_EVENT_NONE;
->   		amt->events[i].skb = NULL;
->   	}
+> diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
+> index 51a63b29d404..2dc3125aca5b 100644
+> --- a/arch/arm64/boot/dts/apple/t8103.dtsi
+> +++ b/arch/arm64/boot/dts/apple/t8103.dtsi
+> @@ -532,6 +532,76 @@ port02: pci@2,0 {
+>  						<0 0 0 4 &port02 0 0 0 3>;
+>  			};
+>  		};
+> +
+> +		dart_sio: iommu@235004000 {
+> +			compatible = "apple,t8103-dart", "apple,dart";
+> +			reg = <0x2 0x35004000 0x0 0x4000>;
+> +			interrupt-parent = <&aic>;
+> +			interrupts = <AIC_IRQ 635 IRQ_TYPE_LEVEL_HIGH>;
+> +			#iommu-cells = <1>;
+> +			power-domains = <&ps_sio_cpu>;
+> +		};
+> +
+> +		nco_clkref: clock-ref {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <900000000>;
+> +			clock-output-names = "nco_ref";
+> +		};
+
+Reference clocks are usually physically outside of SoC (e.g. on the
+board), so:
+1. Not part of "soc" node.
+2. It should be defined by board. At least clock-frequency should be there.
+
+> +
+> +		nco: nco@23b044000 {
+> +			compatible = "apple,t8103-nco", "apple,nco";
+> +			reg = <0x2 0x3b044000 0x0 0x14000>;
+> +			clocks = <&nco_clkref>;
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		admac: dma-controller@238200000 {
+> +			compatible = "apple,t8103-admac", "apple,admac";
+> +			reg = <0x2 0x38200000 0x0 0x34000>;
+> +			dma-channels = <24>;
+> +			interrupts-extended = <0>,
+> +					      <&aic AIC_IRQ 626 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <0>,
+> +					      <0>;
+> +			#dma-cells = <1>;
+> +			iommus = <&dart_sio 2>;
+> +			power-domains = <&ps_sio_adma>;
+> +		};
+> +
+> +		mca: mca@38400000 {
+
+Here node name is as well wrong.
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+
+Best regards,
+Krzysztof

@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E8859A5B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6672E59A5C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350204AbiHSSud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 14:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
+        id S1350883AbiHSSvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 14:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350259AbiHSSu0 (ORCPT
+        with ESMTP id S1349884AbiHSSvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 14:50:26 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB482895C4;
-        Fri, 19 Aug 2022 11:50:24 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9849329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9849:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D30651EC04E4;
-        Fri, 19 Aug 2022 20:50:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660935022;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=6D6hh4GXxmsbQ/Bs0bvST4W/j42IfJbiSC/G91z1rl0=;
-        b=pj/OdITK3C8nI+qqmdC6RCFwOQJMRKRvZ6CluuJKTl3F1BFP/bECt8sdaRXJ1e029dODvI
-        BrGkpR2rz95ubkrPCsqxWlFY9WcZgAtJsFRlz11k3UmqSpmw1XRD2r3TIBqGskE6X8PKju
-        eKm4citzXoujtJLFjO59gTgkiXxjrYU=
-Date:   Fri, 19 Aug 2022 20:50:18 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kani, Toshi" <toshi.kani@hpe.com>
-Cc:     Justin He <Justin.He@arm.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        nd <nd@arm.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v2 5/7] EDAC/ghes: Prevent chipset-specific edac from
- loading after ghes_edac is registered
-Message-ID: <Yv/batVmSf7PDRcL@zn.tnic>
-References: <20220817143458.335938-1-justin.he@arm.com>
- <20220817143458.335938-6-justin.he@arm.com>
- <DM4PR84MB18538A56870A280CDC4637A7826C9@DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM>
- <DBBPR08MB453891E87563F1BBE291248AF76C9@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <DM4PR84MB1853B213F2F45E495D9D6446826C9@DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM>
- <Yv/Wm/Zf0kdGgT33@zn.tnic>
- <DM4PR84MB185306C2C0DE95FF408173BA826C9@DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM>
+        Fri, 19 Aug 2022 14:51:10 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC69EC4D9
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:51:09 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id w196so5671415oiw.10
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:51:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=7wUgB1dRjU6/+eFjwFHTANQu+ic7Dy7EWy3+cTOIz0Y=;
+        b=YA8lduBFsw7+V7kZTDB3G6gYa9HAlS3UjQdrISezZ02nmKmRjX8o+zRPyTx/PHiYBZ
+         rX95UYX6pa787HSJFyX48N66z5sdS4xAuGadWGodDH9DtcoCZURHsEo/l//aN07ydqa8
+         g+1wDe62RvoZ6Gwv+nSIfZquiGYctEGwl6VfR8d8ZKZSKy+qIQhOqh/QAXHuYHm9xtZA
+         hwJEbVmrnbJhzna0LzhuX2bApaTmhDg6PmYQYpweixbKasPqO4mO64qdsXreZTA7ZHyL
+         yvMBdpBTpssQ3iVv4QJGcm22hssFCi5sh3/N5rOi7ZtgEGsLC2RbPFdKo4HPCQDfa0D4
+         LA6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=7wUgB1dRjU6/+eFjwFHTANQu+ic7Dy7EWy3+cTOIz0Y=;
+        b=W044YG6l6wBlRJffrZmGwiAHDPqDkx+XbduwTsybPZCA4Ii21sYj8HYjrmChC2bz2P
+         HPY4+zXZpJ1HZ6jv/9yLQFjItMzIISWWayeJYatFW4L/VcQRqG/ht4kCTh9FMbqK1WbV
+         gwf9vHHM4Rf396LsxIdh+X5pwON0FNdPW/DpKVLNXozpbyv4F3WUHXnia6SFnpNIhGiq
+         h2XZ10grqE9iUGwAgEKP9aOq0duicmG/owvZ44cDr9wZe+UcE68Pq3dufH3iWTsQX6IX
+         I1x4lJ2+A2N+vteHc99PgOOQM3pC7R4nhNAY5Tnydwk4ZWgMWg3uQp8GfsgV2/2oDoY4
+         sZsg==
+X-Gm-Message-State: ACgBeo1n0a5FQhywIch4XP6wj27A2HHfcsF/IqQQ/IcC0vW8M+VZ+FZQ
+        7fL1lk9x90qsaURMz89tSW0cx8TMveXPBDDMZid6zGt0Gw==
+X-Google-Smtp-Source: AA6agR6AxsfZpdcBXlrKQIpyKWJZdaiNH1nuBz29aeBvGBp77p+jqo+BBEdP58dCAql7NNzw8Zch6kTiW0lJ65Yi4B8=
+X-Received: by 2002:aca:b7d5:0:b0:343:c478:91c6 with SMTP id
+ h204-20020acab7d5000000b00343c47891c6mr4062449oif.136.1660935068420; Fri, 19
+ Aug 2022 11:51:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DM4PR84MB185306C2C0DE95FF408173BA826C9@DM4PR84MB1853.NAMPRD84.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+References: <20220708093451.472870-1-omosnace@redhat.com> <CAHC9VhSFUJ6J4_wt1SKAoLourNGVkxu0Tbd9NPDbYqjjrs-qoQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhSFUJ6J4_wt1SKAoLourNGVkxu0Tbd9NPDbYqjjrs-qoQ@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 19 Aug 2022 14:50:57 -0400
+Message-ID: <CAHC9VhRtLEg-xR5q33bVNOBi=54uJuix2QCZuCiKX2Qm6CaLzw@mail.gmail.com>
+Subject: Re: [RFC PATCH RESEND] userfaultfd: open userfaultfds with O_RDONLY
+To:     Ondrej Mosnacek <omosnace@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Lokesh Gidra <lokeshgidra@google.com>, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Robert O'Callahan" <roc@ocallahan.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,13 +73,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 06:46:34PM +0000, Kani, Toshi wrote:
-> 3. ghes_probe() is not called,
+On Tue, Aug 16, 2022 at 6:12 PM Paul Moore <paul@paul-moore.com> wrote:
+> On Fri, Jul 8, 2022 at 5:35 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> >
+> > Since userfaultfd doesn't implement a write operation, it is more
+> > appropriate to open it read-only.
+> >
+> > When userfaultfds are opened read-write like it is now, and such fd is
+> > passed from one process to another, SELinux will check both read and
+> > write permissions for the target process, even though it can't actually
+> > do any write operation on the fd later.
+> >
+> > Inspired by the following bug report, which has hit the SELinux scenario
+> > described above:
+> > https://bugzilla.redhat.com/show_bug.cgi?id=1974559
+> >
+> > Reported-by: Robert O'Callahan <roc@ocallahan.org>
+> > Fixes: 86039bd3b4e6 ("userfaultfd: add new syscall to provide memory externalization")
+> > Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+> > ---
+> >
+> > Resending as the last submission was ignored for over a year...
+> >
+> > https://lore.kernel.org/lkml/20210624152515.1844133-1-omosnace@redhat.com/T/
+> >
+> > I marked this as RFC, because I'm not sure if this has any unwanted side
+> > effects. I only ran this patch through selinux-testsuite, which has a
+> > simple userfaultfd subtest, and a reproducer from the Bugzilla report.
+> >
+> > Please tell me whether this makes sense and/or if it passes any
+> > userfaultfd tests you guys might have.
+> >
+> >  fs/userfaultfd.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> VFS folks, any objection to this patch?  It seems reasonable to me and
+> I'd really prefer this to go in via the vfs tree, but I'm not above
+> merging this via the lsm/next tree to get someone in vfs land to pay
+> attention to this ...
 
-When is ghes_probe() not called on ARM?
+Okay, final warning, if I don't see any objections to this when I make
+my patch sweep next week I'm going to go ahead and merge this via the
+LSM tree.
+
+> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> > index e943370107d0..8ccf00be63e1 100644
+> > --- a/fs/userfaultfd.c
+> > +++ b/fs/userfaultfd.c
+> > @@ -989,7 +989,7 @@ static int resolve_userfault_fork(struct userfaultfd_ctx *new,
+> >         int fd;
+> >
+> >         fd = anon_inode_getfd_secure("[userfaultfd]", &userfaultfd_fops, new,
+> > -                       O_RDWR | (new->flags & UFFD_SHARED_FCNTL_FLAGS), inode);
+> > +                       O_RDONLY | (new->flags & UFFD_SHARED_FCNTL_FLAGS), inode);
+> >         if (fd < 0)
+> >                 return fd;
+> >
+> > @@ -2090,7 +2090,7 @@ SYSCALL_DEFINE1(userfaultfd, int, flags)
+> >         mmgrab(ctx->mm);
+> >
+> >         fd = anon_inode_getfd_secure("[userfaultfd]", &userfaultfd_fops, ctx,
+> > -                       O_RDWR | (flags & UFFD_SHARED_FCNTL_FLAGS), NULL);
+> > +                       O_RDONLY | (flags & UFFD_SHARED_FCNTL_FLAGS), NULL);
+> >         if (fd < 0) {
+> >                 mmdrop(ctx->mm);
+> >                 kmem_cache_free(userfaultfd_ctx_cachep, ctx);
+> > --
+> > 2.36.1
+>
+> --
+> paul-moore.com
+
+
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+paul-moore.com

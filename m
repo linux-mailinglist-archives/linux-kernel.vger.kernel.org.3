@@ -2,198 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5AA59A3A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE7559A31E
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354761AbiHSRgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 13:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        id S1354632AbiHSRip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 13:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354653AbiHSRgc (ORCPT
+        with ESMTP id S1350080AbiHSRiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 13:36:32 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF121636C5
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 09:55:12 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id by6so5025893ljb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 09:55:12 -0700 (PDT)
+        Fri, 19 Aug 2022 13:38:17 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A81111558B
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 09:56:35 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JGjOhV031642;
+        Fri, 19 Aug 2022 16:55:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=xmzi7s2MLFPEtYBKC55GJtP9/P7m7CvANaS86LsteSw=;
+ b=x2IoKUECAuOZELaoXM4G1j7qH6B0YLP10eUUZODRPACmvgMQlzJoqtMz7+Uc4rnPSeO4
+ qIBV1TGoD71NEpYj3VtP5fhTBV7/RFgY/1S5m6etJpTpDqbf2jdCB6Fsq1Vei70vPC7s
+ ft1mrVmkzZO9+JsPXODaTIAENXgyALcI1nW7B3zfWNneRFLSuH1YKcCCNDOlrMjeRzeq
+ fj207Ye8vOPLPK2PtAJhVdN5Ky4RToh+x9XT0zwRbqB5h6RyG68lU1IjQqOEKmyRnw6Q
+ ddhuJQ0ofM7DCadSgP+gY1K31qgrL3Ifhmnqmas4E9d6LsL6SL5E/L+/e2xzY8Bk87ox Tg== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j2e5c0220-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Aug 2022 16:55:26 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27JGptXP026883;
+        Fri, 19 Aug 2022 16:55:25 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2171.outbound.protection.outlook.com [104.47.57.171])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j0c6fet53-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Aug 2022 16:55:25 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gmFGvCMq9JOPHnJRgNZhG2YLBA5ySMuPPWBIECa/zgHDDmDMCkaAh+OedmHHv4brx7PFNLRaZoFJL40kdrG/kawjMMazhpfA1mY+Ve5eN85rpCyxp9jDXyB+lOsM54lq04jKjmzp7ITxkK+aCajTWwjngjxhycuu5l7d6m2HtOhLOE28sXMhy0CLqFWM7+kclQB5sYhTVttWQ38bszPgdrL6dysxV6oVAd09DdcCklQu07LML6RiWTkULBAIwOroFMheRI/m/ieg6seAaoT2nxJqqeYJs9Gs3KEgX7PlU65/xNmN8VtNIAURisT8bY91jMqvAuWtImAYMCYM/qNugg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xmzi7s2MLFPEtYBKC55GJtP9/P7m7CvANaS86LsteSw=;
+ b=aq46+toFTmcCPTorakDx7yb0uSnZWZC7Q+xj+3c02hecNqH186JH7t5F+jFu9eHWSQXJfjL7VKA+2kTfHIuSlQmg2MrNmm+hbqJb2HoiFxTCDBNanDSee+tVbVRC2LjCoTSIRkePVSFDBVLqa1DIromnMQ0/oMPWObhhZXiq8cik/Zx3lBXQ0rXx4W0g7IvKJ4lPZhTc9/0GjPdxA3P3nmuCgmVZuZKhXwJoeyLMux5pxFcNpBw1RE2e6LD+En8tm0DqC7UYEvjDQbxXWR4nWkU8TL1CqyDXvarx3V64QBOzPozmyt2vNHYWq/zmNheCX7hOgShB/9EAetRZvamIeg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=AhTWQcbRqLOHVkblJK8G++davTd8BoOGzTOxaJ8TciQ=;
-        b=rev22bDg/B6huypKjaBYCvhEdROPXhJKo6JY54CN/6HsfbGiAmHcmqz0iheKnDiDLv
-         60YvV6ZgPfqwgXaYULb+bIH7ZUt/NgGkDRQU23y78EYAPdOVenEvDyqxPyto7nYBPA5Z
-         XlpbPeRjdVjAuHZy974y8RZepwILZP8uJ4UkB1YMCBrCslXjf4MRg873773Fs2FkUMHK
-         QsqKpT37JjGP63hwvjmwKtKwirueKtOXcEQSrq4+c6X+2pNdYciqCszqJ9gyzTHHe95s
-         UwY4K0fEdTOLITGsLhKh/abM38uMi95xw1SFJtkj7Ko+Jzi2+qbqPO7SOVvFC9NsTxRy
-         n2IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=AhTWQcbRqLOHVkblJK8G++davTd8BoOGzTOxaJ8TciQ=;
-        b=GEaA/i1XF8Lcm40jcM+hWVFUgaVz+M4+c3hnLJeOuQYqDtaWyLIaSr+OKi+wBCD3ka
-         98fRSoU7kVxm77/n8Gwy97j7olf6r+tJlySSRoFF5xurm5ZUGv5ZoJ5csdHHKDwUpFo5
-         yIZ3/l5JblSvFis0gfzI9TpTXKMha0jT69I4RJAVMtAtnpfBPwsRqBmn+t2OLeYSrxNc
-         v4PHzeIDZNz/FAd+K1FYnWHv9N62l8gvx0Hwg5PAg/a72PP1AxDWzcIDaodAQZmOgXhQ
-         P+vb07ZTdEglA+g7um2WSRCQEdA4IkrYzD6zhN4D1/NcXrLBzueMFKXN46FR52CIYNGw
-         wreA==
-X-Gm-Message-State: ACgBeo0Y4LvEMeVQifIoY1vrkfWPGV2ntLOzWNaIIFIcSbVK7hUz8INU
-        vCAgML9Gznzr7TIfjhQX66A+VdjzVopWWVcDBm5Tvg==
-X-Google-Smtp-Source: AA6agR58K2GJzQfDZi+FO4kcRkjUmKJQPNXIQiTuu2Go1eedCUceiwNYBAb48mJhSiTtK1OeQXqSY4hu6BiWgBiZhe4=
-X-Received: by 2002:a05:651c:1787:b0:261:c1ff:4407 with SMTP id
- bn7-20020a05651c178700b00261c1ff4407mr340249ljb.257.1660928058082; Fri, 19
- Aug 2022 09:54:18 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xmzi7s2MLFPEtYBKC55GJtP9/P7m7CvANaS86LsteSw=;
+ b=HL5VH/MOZ4+4EhNHSeAUhbQWAzqsFnTOK4pybq3On1ltkMDoI4VccmlGeEhzn/k4v8qVSpJS+kud81dcJ7Pad1lxOeAc391GuhfsEKL25WgdiC6MWM9aosyfjmhn1CA2hmZM32ozfBK6g7ewPzKbZuDTsq3JT5hp13kgLBx7PpY=
+Received: from DM6PR10MB4201.namprd10.prod.outlook.com (2603:10b6:5:216::10)
+ by SN6PR10MB2447.namprd10.prod.outlook.com (2603:10b6:805:47::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.18; Fri, 19 Aug
+ 2022 16:55:23 +0000
+Received: from DM6PR10MB4201.namprd10.prod.outlook.com
+ ([fe80::11b6:7a8a:1432:bec]) by DM6PR10MB4201.namprd10.prod.outlook.com
+ ([fe80::11b6:7a8a:1432:bec%6]) with mapi id 15.20.5546.018; Fri, 19 Aug 2022
+ 16:55:23 +0000
+Date:   Fri, 19 Aug 2022 09:55:19 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Wang, Haiyue" <haiyue.wang@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "david@redhat.com" <david@redhat.com>,
+        "apopple@nvidia.com" <apopple@nvidia.com>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "naoya.horiguchi@linux.dev" <naoya.horiguchi@linux.dev>,
+        "alex.sierra@amd.com" <alex.sierra@amd.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v6 1/2] mm: migration: fix the FOLL_GET failure on
+ following huge page
+Message-ID: <Yv/AdwdID9rr9xOL@monkey>
+References: <20220812084921.409142-1-haiyue.wang@intel.com>
+ <20220816022102.582865-1-haiyue.wang@intel.com>
+ <20220816022102.582865-2-haiyue.wang@intel.com>
+ <20220816175838.211a1b1e85bc68c439101995@linux-foundation.org>
+ <BYAPR11MB3495F747CBF95E079E8FC8A5F76A9@BYAPR11MB3495.namprd11.prod.outlook.com>
+ <20220816224322.33e0dfbcbf522fcdc2026f0e@linux-foundation.org>
+ <Yv0ku1mn4LBzg/zG@monkey>
+ <875yiomq9z.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <875yiomq9z.fsf@mpe.ellerman.id.au>
+X-ClientProxiedBy: MW4PR04CA0373.namprd04.prod.outlook.com
+ (2603:10b6:303:81::18) To DM6PR10MB4201.namprd10.prod.outlook.com
+ (2603:10b6:5:216::10)
 MIME-Version: 1.0
-References: <cover.1655761627.git.ashish.kalra@amd.com> <78e30b5a25c926fcfdcaafea3d484f1bb25f20b9.1655761627.git.ashish.kalra@amd.com>
-In-Reply-To: <78e30b5a25c926fcfdcaafea3d484f1bb25f20b9.1655761627.git.ashish.kalra@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Fri, 19 Aug 2022 10:54:06 -0600
-Message-ID: <CAMkAt6rrGJ5DYTAJKFUTagN9i_opS8u5HPw5c_8NoyEjK7rYzA@mail.gmail.com>
-Subject: Re: [PATCH Part2 v6 37/49] KVM: SVM: Add support to handle MSR based
- Page State Change VMGEXIT
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Alper Gun <alpergun@google.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 40268e7d-b4c4-4926-769e-08da82039b2d
+X-MS-TrafficTypeDiagnostic: SN6PR10MB2447:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xcdvxY1YDSwg1IlqXSlT6ngGTT0PvJ/wfJe2RjjDJIJlWHD582AHacu2a50DqhFLTKT99lzGKD3hmyNJ/LkKt4y8rh+sAXHAR6BqHEwig5EYy4zb8XICcdq8rlU4hYuhW7aWobKwl8vS25LG1cFyRHAg+3SB335d0YGclao2aQhN1QUpqnD9mIy/iYmpTDTm5zX6/FIhyduHpSA3zWklcDiVKS+0pvdxzx5sk7RDEgc+1q1NhQyoU6OSm8rflv9i0BcRPep/tLwcZZHA+S2o2USmQEhI6GyLc5pyPF1YJlnt6C6xKPbuYXEoJLeM6x55jmbg7aU8wR7cMT6EOCenltrSyPkz/jpeuOyVaHnaX9dFMiu9MqQceo6I17xAsH//wdKnzwOdZx1yOqlejOvQLQQAQptK1q/RKEaIUa0pqudgaJjhJiydHInTgO6niXV3Sh3Yp9gDurtcB8y/7UgZXMNzSkur4iPXKnpqv+S3a8OYmRBLyjHmGzKVnUVhtJGB2hLNC9DXr5spzb16Tdw/wFpX89wz3dLb4XmGJthRj0pqHw+oQGBG6x5bLCYH8hfrOxbBMHnQgEnmebG4a3DoQfDxqbaN80jxgMf7YIu+igkrmsfzjbhHhHZ5rMoAm4CFzlfkrWLcp+PxJzotQCefCvKQtEXyELoRdECRcDBOEbx240AtPW8yjHpYLTaIGXpmTMYqLPPBdpVCqwdfPTcm3eJifh9ES6l/NbK0RwipvR5DR8nPKHbg2fuYOrqbBJD2
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4201.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(136003)(396003)(346002)(39860400002)(366004)(6486002)(5660300002)(66476007)(33716001)(66556008)(66946007)(316002)(4326008)(86362001)(8676002)(6916009)(54906003)(38100700002)(6666004)(53546011)(41300700001)(26005)(44832011)(9686003)(6512007)(186003)(7416002)(83380400001)(478600001)(2906002)(6506007)(8936002)(14583001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ui6v/EM8N1RDnRm1YgvoCLL/qqyscLqN1CpUvhVGdni0ypdPGImRwarTLRx2?=
+ =?us-ascii?Q?m8OSwNkIIOVYRzJpWkPfqvduJb2w096Enp4/9Zjo3LJqgjSQmPHmSUxei1Ds?=
+ =?us-ascii?Q?eJVrW3oQjBXdaKM7o5aQ1u7Vv3PHZzH+0Yd64JEWNpLBkKk2hMuOTQfHTEyp?=
+ =?us-ascii?Q?SGPeHPmfL4w8Jgan50vOLmjGOiDxW5p9YyQyUc/DcjQdPWBC1mfe4eLcLnFK?=
+ =?us-ascii?Q?42Zz/uVAC+6boLJrhmnxBJ7hrEb2BwzX4fvZHRWh+CoSfB+EeetQ9DqnfvU5?=
+ =?us-ascii?Q?z9Yn6ud5SBKs+59G0qsA99VKK6zkCNOj+ykH3fDYIj00H/1j2i7sTCnQFcU0?=
+ =?us-ascii?Q?9HBtQ4pWFyWlAwyTpajqdLa1p+WjInkfi7ndizZSzcNPPniEw2cd6RRb4X6H?=
+ =?us-ascii?Q?nV6dCw0fVtZ7xFsIe6BPP5507NnsBi3rHkaFkGvI2wBRDNAOD01KDquImWxn?=
+ =?us-ascii?Q?ZyMY5ugSvnjw5Y6W4IdhXnnqz9AKD1LgdEvI4kL2L/uL58GKndj3SFoUOGVP?=
+ =?us-ascii?Q?KzCop7Y/OFmfA063LVRiWjh1P0he4faK/uOHhn+ovehDL1iPZW3R9EImm+H9?=
+ =?us-ascii?Q?+Y9vcWTBti25CoEOWOAfbd1LILz4m2l1ALXy2r9SCIHCcAzbhF5LpuNJ27JJ?=
+ =?us-ascii?Q?Q1VPR40FAsR4JvMew6Ep3kTy/SR9pxquM0iczbFnAbZy1WdNgoKNrtVJpCIW?=
+ =?us-ascii?Q?VJZ06rn6PxuHXcT/Q2/DMIKQWQlqtsLiPb4dJYu59gGboyvXrFWYzQ6XoW0T?=
+ =?us-ascii?Q?pltHZM9zRlRjxm8TeWuTZSlsiv2MdUaXozGZrbgcuGtt2gjzdMAo2Qnc9BNP?=
+ =?us-ascii?Q?qlAPZquX/A4Nroq11gqB5d05K3PzpF2dNHAp5/9y2jhy4m77YYm8iE/BJZLC?=
+ =?us-ascii?Q?cz2ms6pNj++wvg/Dv/fmnJPNRTPUyUe72rT3qXxK+/pBh/YGuusaxXMGfGGw?=
+ =?us-ascii?Q?e1v0JlcTYIJjY1+DrldmJFw/330hkPExjDUfT+YIkJxrcjD9kMtejBvcQxQO?=
+ =?us-ascii?Q?kBgkoI+6Y1Y8gZLYveFLNC2fJAksMhYJBATlibEr37+hJU7Am6Vrc8zT1ebC?=
+ =?us-ascii?Q?Z9Q7gUnwnloqOoSc6RWribk4rsKQr9PwreUPqGOltCQVB3nPL2ClTqzRoa8W?=
+ =?us-ascii?Q?W6gi+DaYEfInQgt7wRDEN8erHpFXOAHoLZPBk+h6wYSFtYkjQgriMZPG2phk?=
+ =?us-ascii?Q?wK0y2WrpsayhIf0vdFzCRIAFg0lXlzwvQfLiayzMLkFGig9Zt38iv1gXw9AO?=
+ =?us-ascii?Q?gcMoTF9tX9BiwZpWGT/1oA31apU77ICjV7vsUMvEQLHOWNvdgvqpyzktaRqe?=
+ =?us-ascii?Q?Y/pGYuW5zQ2/TUevvnMTLgn/4M2edxouS3znwQUYppXVitClkQZJgSRpKKaq?=
+ =?us-ascii?Q?Q0zZEYpDD4kX1cUoqG1IFUuLhnRnSdI4mzhWN+W2zyhoYaS40uEp8IwjowLn?=
+ =?us-ascii?Q?s4Fv4VlijBNmsnW9mYU5dR33EI/97ZE+sI0vAS1Zvw2nYil4WB5N+y13F2Lk?=
+ =?us-ascii?Q?jDkE828erq5wK3J3vpQnCXh+4kQXdolcbJknnQNI+LnQSp0wRsgIu0mEl4Rv?=
+ =?us-ascii?Q?Ta/vL4lOz5euxebn4xtlKUuLh9QdJXuGWYX32M0BCxljmOAl6bWe8cQQb6xg?=
+ =?us-ascii?Q?wg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40268e7d-b4c4-4926-769e-08da82039b2d
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4201.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2022 16:55:23.0046
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0BrDQ7EDmcc7JCHymPjOrIeTJHio/st3QaOVb4j1dFWa/U0nOU1EaT8RR7ZcG1bTfepWEF7tiDD8zhkRZuOVLg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2447
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-19_08,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ phishscore=0 mlxscore=0 malwarescore=0 suspectscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208190062
+X-Proofpoint-ORIG-GUID: bmEWJnTJNwoXZrZg0WAT_wl1a4wRkwBg
+X-Proofpoint-GUID: bmEWJnTJNwoXZrZg0WAT_wl1a4wRkwBg
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +
-> +static int __snp_handle_page_state_change(struct kvm_vcpu *vcpu, enum psc_op op, gpa_t gpa,
-> +                                         int level)
-> +{
-> +       struct kvm_sev_info *sev = &to_kvm_svm(vcpu->kvm)->sev_info;
-> +       struct kvm *kvm = vcpu->kvm;
-> +       int rc, npt_level;
-> +       kvm_pfn_t pfn;
-> +       gpa_t gpa_end;
-> +
-> +       gpa_end = gpa + page_level_size(level);
-> +
-> +       while (gpa < gpa_end) {
-> +               /*
-> +                * If the gpa is not present in the NPT then build the NPT.
-> +                */
-> +               rc = snp_check_and_build_npt(vcpu, gpa, level);
-> +               if (rc)
-> +                       return -EINVAL;
-> +
-> +               if (op == SNP_PAGE_STATE_PRIVATE) {
-> +                       hva_t hva;
-> +
-> +                       if (snp_gpa_to_hva(kvm, gpa, &hva))
-> +                               return -EINVAL;
-> +
-> +                       /*
-> +                        * Verify that the hva range is registered. This enforcement is
-> +                        * required to avoid the cases where a page is marked private
-> +                        * in the RMP table but never gets cleanup during the VM
-> +                        * termination path.
-> +                        */
-> +                       mutex_lock(&kvm->lock);
-> +                       rc = is_hva_registered(kvm, hva, page_level_size(level));
-> +                       mutex_unlock(&kvm->lock);
-> +                       if (!rc)
-> +                               return -EINVAL;
-> +
-> +                       /*
-> +                        * Mark the userspace range unmerable before adding the pages
-> +                        * in the RMP table.
-> +                        */
-> +                       mmap_write_lock(kvm->mm);
-> +                       rc = snp_mark_unmergable(kvm, hva, page_level_size(level));
-> +                       mmap_write_unlock(kvm->mm);
-> +                       if (rc)
-> +                               return -EINVAL;
-> +               }
-> +
-> +               write_lock(&kvm->mmu_lock);
-> +
-> +               rc = kvm_mmu_get_tdp_walk(vcpu, gpa, &pfn, &npt_level);
-> +               if (!rc) {
-> +                       /*
-> +                        * This may happen if another vCPU unmapped the page
-> +                        * before we acquire the lock. Retry the PSC.
-> +                        */
-> +                       write_unlock(&kvm->mmu_lock);
-> +                       return 0;
-> +               }
+On 08/19/22 21:22, Michael Ellerman wrote:
+> Mike Kravetz <mike.kravetz@oracle.com> writes:
+> > On 08/16/22 22:43, Andrew Morton wrote:
+> >> On Wed, 17 Aug 2022 03:31:37 +0000 "Wang, Haiyue" <haiyue.wang@intel.com> wrote:
+> >>
+> >> > > >  		}
+> >> > >
+> >> > > I would be better to fix this for real at those three client code sites?
+> >> >
+> >> > Then 5.19 will break for a while to wait for the final BIG patch ?
+> >>
+> >> If that's the proposal then your [1/2] should have had a cc:stable and
+> >> changelog words describing the plan for 6.0.
+> >>
+> >> But before we do that I'd like to see at least a prototype of the final
+> >> fixes to s390 and hugetlb, so we can assess those as preferable for
+> >> backporting.  I don't think they'll be terribly intrusive or risky?
+> >
+> > I will start on adding follow_huge_pgd() support.  Although, I may need
+> > some help with verification from the powerpc folks, as that is the only
+> > architecture which supports hugetlb pages at that level.
+> >
+> > mpe any suggestions?
+> 
+> I'm happy to test.
+> 
+> I have a system where I can allocate 1GB huge pages.
+> 
+> I'm not sure how to actually test this path though. I hacked up the
+> vm/migration.c test to allocate 1GB hugepages, but I can't see it going
+> through follow_huge_pgd() (using ftrace).
 
-I think we want to return -EAGAIN or similar if we want the caller to
-retry, right? I think returning 0 here hides the error.
+I thing you needed to use 16GB to trigger this code path.  Anshuman introduced
+support for page offline (and migration) at this level in commit 94310cbcaa3c
+("mm/madvise: enable (soft|hard) offline of HugeTLB pages at PGD level").
+When asked about the use case, he mentioned:
 
-> +
-> +               /*
-> +                * Adjust the level so that we don't go higher than the backing
-> +                * page level.
-> +                */
-> +               level = min_t(size_t, level, npt_level);
-> +
-> +               trace_kvm_snp_psc(vcpu->vcpu_id, pfn, gpa, op, level);
-> +
-> +               switch (op) {
-> +               case SNP_PAGE_STATE_SHARED:
-> +                       rc = snp_make_page_shared(kvm, gpa, pfn, level);
-> +                       break;
-> +               case SNP_PAGE_STATE_PRIVATE:
-> +                       rc = rmp_make_private(pfn, gpa, level, sev->asid, false);
-> +                       break;
-> +               default:
-> +                       rc = -EINVAL;
-> +                       break;
-> +               }
-> +
-> +               write_unlock(&kvm->mmu_lock);
-> +
-> +               if (rc) {
-> +                       pr_err_ratelimited("Error op %d gpa %llx pfn %llx level %d rc %d\n",
-> +                                          op, gpa, pfn, level, rc);
-> +                       return rc;
-> +               }
-> +
-> +               gpa = gpa + page_level_size(level);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
+"Yes, its in the context of 16GB pages on POWER8 system where all the
+ gigantic pages are pre allocated from the platform and passed on to
+ the kernel through the device tree. We dont allocate these gigantic
+ pages on runtime."
+
+-- 
+Mike Kravetz
+
+> 
+> Maybe I hacked it up badly, I'll have a closer look on Monday. But if
+> you have any tips on how to trigger that path let me know :)
+> 
+> cheers

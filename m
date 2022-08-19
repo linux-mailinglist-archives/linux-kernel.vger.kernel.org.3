@@ -2,51 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23C9599765
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453A559975A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347634AbiHSIW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
+        id S1345603AbiHSIYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236670AbiHSIWz (ORCPT
+        with ESMTP id S230316AbiHSIYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:22:55 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DBD86714
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:22:53 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oOxH8-0004of-3W; Fri, 19 Aug 2022 10:22:42 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oOxH5-000g1u-IS; Fri, 19 Aug 2022 10:22:39 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oOxH4-00Chdh-N7; Fri, 19 Aug 2022 10:22:38 +0200
-Date:   Fri, 19 Aug 2022 10:22:35 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     zhaoxiao <zhaoxiao@uniontech.com>
-Cc:     thierry.reding@gmail.com, heiko@sntech.de,
-        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] pwm: rockchip: Convert to use dev_err_probe()
-Message-ID: <20220819082235.ygyw3spkbpookzyy@pengutronix.de>
-References: <20220819070756.14895-1-zhaoxiao@uniontech.com>
+        Fri, 19 Aug 2022 04:24:44 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF98C229B
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:24:43 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3321c2a8d4cso103334227b3.5
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:24:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=GridmYqKIl9YhRzWxWOzxfd24n2YkgbOm/HqzMAUhEQ=;
+        b=bwNIyABVmu81M7BGPfjuHZ6PjIx00blv/MpdYbhXPXackmXOce8DP2CjV/tCB/03Si
+         /FmDOotUt4VGGVOPk7no9TMR+TuGC7n73wb594mU54kKQ+XCvHraCCmCzIVrPJbhPpsm
+         jjdZZSO942VUB/CVHr+wodkZPIzhIaTwLheZDB0+BeLUGC1Rmzi+4CYlvzHf9VIlSsaj
+         ggHRRVyYDnrW6QmjXK1pmuYAURpmrYSbNORQBd7Hna4JgukZcEaIdFcLAGzLz+g3JBos
+         GeCdgmv1eq8LW+Iz3ANUpnfGua4NLHGX62ulRSTOHK0XLfbaRoLxVSMBgzs6JBPA4OgR
+         WDEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=GridmYqKIl9YhRzWxWOzxfd24n2YkgbOm/HqzMAUhEQ=;
+        b=llsWfAjmPKsD24ifIjcPJmIFQgeCNI4safWooFYnEkrENSEI5tjMCYFKpWLJYbUC4s
+         NtclpxaLSAi3bLg8VoURvP6aEmispBmiDTnvP+nuzFpH1N/HSYnQwxakkWsk0e8Tszib
+         MjMUbhHfbmhhiSK+Bn8m3QSLx152UgiadgvNSl3v9AsNrQJxK1mw0tLDlJjDAfpN1jyG
+         /gb85F1mQfuV5vLEn1KaVbeUTHdbG8YN54CvWAVQiLEOl4Wzzy3ZtfIGPFvHdVmRmjHQ
+         JkZ7fYA5xtNey1UTXqLG1EmsC+WiJYxcOfs87Ki23M0ToF7sSIF/KepaNOBRfLF28Pwx
+         1AcQ==
+X-Gm-Message-State: ACgBeo3ja1ZTXlef2f3mpFp4EXV8MEqi5VVcYCQ964kgNjAqkm1oiadX
+        xZIFXVGKd8ZnjezS3HOaNHG/4HAhnlD+BtPjnjNIgA==
+X-Google-Smtp-Source: AA6agR5Xeeq2XXdslKqjNOEIt8ha4tkJ3suR0T/hScDsfaXCZ/KwX1otEr27K/Qwm11NBboU15GFBLmyI/AXH0D6BfA=
+X-Received: by 2002:a81:d543:0:b0:325:2240:ce5 with SMTP id
+ l3-20020a81d543000000b0032522400ce5mr6410102ywj.210.1660897482275; Fri, 19
+ Aug 2022 01:24:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2ashbpe5mzbtgjqm"
-Content-Disposition: inline
-In-Reply-To: <20220819070756.14895-1-zhaoxiao@uniontech.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220812143055.12938-1-olivier.masse@nxp.com>
+In-Reply-To: <20220812143055.12938-1-olivier.masse@nxp.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Fri, 19 Aug 2022 13:54:31 +0530
+Message-ID: <CAFA6WYM89+SrW2Br-fnFke4djt4GgGHXn7JS3=rxvAa7dAAY7w@mail.gmail.com>
+Subject: Re: [PATCH v2 0/1] tee: Add tee_shm_register_fd
+To:     Olivier Masse <olivier.masse@nxp.com>
+Cc:     etienne.carriere@linaro.org, jens.wiklander@linaro.org,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        op-tee@lists.trustedfirmware.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, clement.faure@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,76 +69,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Olivier,
 
---2ashbpe5mzbtgjqm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, 12 Aug 2022 at 20:01, Olivier Masse <olivier.masse@nxp.com> wrote:
+>
+> Add a new ioctl called TEE_IOC_SHM_REGISTER_FD to register a
+> shared memory from a dmabuf file descriptor.
+> This new ioctl will allow the Linux Kernel to register a buffer
+> to be used by the Secure Data Path OPTEE OS feature.
+>
+> Please find more information here:
+> https://static.linaro.org/connect/san19/presentations/san19-107.pdf
+>
+> Patch tested on Hikey 6220.
+>
 
-On Fri, Aug 19, 2022 at 03:07:56PM +0800, zhaoxiao wrote:
-> It's fine to call dev_err_probe() in ->probe() when error code is known.
-> Convert the driver to use dev_err_probe().
->=20
-> Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
-> ---
->  v3: 1.There is no need to assign it to 'ret', and use PTR_ERR(pc->pclk) =
-directly.
->      2.add the return before dev_err_probe().
->  drivers/pwm/pwm-rockchip.c | 14 ++++----------
->  1 file changed, 4 insertions(+), 10 deletions(-)
->=20
-> diff --git a/drivers/pwm/pwm-rockchip.c b/drivers/pwm/pwm-rockchip.c
-> index f3647b317152..eda1bd49d260 100644
-> --- a/drivers/pwm/pwm-rockchip.c
-> +++ b/drivers/pwm/pwm-rockchip.c
-> @@ -328,18 +328,12 @@ static int rockchip_pwm_probe(struct platform_devic=
-e *pdev)
->  	else
->  		pc->pclk =3D pc->clk;
-> =20
-> -	if (IS_ERR(pc->pclk)) {
-> -		ret =3D PTR_ERR(pc->pclk);
-> -		if (ret !=3D -EPROBE_DEFER)
-> -			dev_err(&pdev->dev, "Can't get APB clk: %d\n", ret);
-> -		return ret;
-> -	}
-> +	if (IS_ERR(pc->pclk))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(pc->pclk), "Can't get APB clk=
-\n");
-> =20
->  	ret =3D clk_prepare_enable(pc->clk);
-> -	if (ret) {
-> -		dev_err(&pdev->dev, "Can't prepare enable PWM clk: %d\n", ret);
-> -		return ret;
-> -	}
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret, "Can't prepare enable PWM clk\n"=
-);
-> =20
->  	ret =3D clk_prepare_enable(pc->pclk);
->  	if (ret) {
+AFAIU, for the OP-TEE SDP feature to work you need to have a DMA-BUF
+heap driver for allocating secure buffers through exposed chardev:
+"/dev/dma_heap/sdp". Have you tested it with some out-of-tree driver
+as I can't find it upstream? Also, do you plan to push that upstream
+as well?
 
-Still missing two dev_err() that are unconverted ...
+BTW, please add a changelog while sending newer patch-set versions.
 
-Uwe
+-Sumit
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---2ashbpe5mzbtgjqm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmL/SEgACgkQwfwUeK3K
-7AmYCAf+JNAnIXa6WEgqFlr9kJ6eRLkB5TuFo0vd5ix980QQR+G0ouBvA6+aiEyP
-vagnbM2Ln+ld6ZJGCqgAKwbQcjXTB5x2QZ7r0m4lDetPJKXyHbp5wG0OxAgubbrt
-tA1u1h6gV98fN5nQhJ21AmP27ysF8zAr50aK7oq0T+6T0AKTDzT0cjeZTdFbX2zb
-td/aTKo9RZ9CotP9OXpXPuQV2z/wvsmnqzSwhAG1oyqPq6hDU2BcMGbZdx6fOzTm
-Tlist939BIzup5wRGA1rFceLYb3A4esTq0/TrnGYiwWXxk3E33eWJw/GQYlQ/DgQ
-eudXywcnEeJJ321bqFFVKwIPxImj8A==
-=eUfy
------END PGP SIGNATURE-----
-
---2ashbpe5mzbtgjqm--
+> Etienne Carriere (1):
+>   tee: new ioctl to a register tee_shm from a dmabuf file descriptor
+>
+>  drivers/tee/tee_core.c   | 38 +++++++++++++++
+>  drivers/tee/tee_shm.c    | 99 +++++++++++++++++++++++++++++++++++++++-
+>  include/linux/tee_drv.h  | 11 +++++
+>  include/uapi/linux/tee.h | 29 ++++++++++++
+>  4 files changed, 175 insertions(+), 2 deletions(-)
+>
+> --
+> 2.25.0
+>

@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4512A59A7E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8400A59A7EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235878AbiHSVps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 17:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
+        id S232420AbiHSVs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 17:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbiHSVpq (ORCPT
+        with ESMTP id S230359AbiHSVsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 17:45:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E6974352
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 14:45:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660945544;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oQ+I6qTJcNsmHy7XkSLOm7yyIeLTf0j7ipsErqXY/kI=;
-        b=foK3x/S0QnFZqsYFuCISeswRDnxjH18Ie/6BPBayX4Hjdc3b37VqHRBEuKS4sal3IzAUt3
-        kMuHLM9WIq2qPG4mYnp12egTgQdMev3Qznrszb6bKUzeBkLpCL2rs/iMqwKS5aLlvipKl3
-        2TsUKMIRPi5+cvkT1zenZAACdlFP4Lk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-88-G5HFeQirNgelknX8bvr_jg-1; Fri, 19 Aug 2022 17:45:41 -0400
-X-MC-Unique: G5HFeQirNgelknX8bvr_jg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 19 Aug 2022 17:48:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0374795B2;
+        Fri, 19 Aug 2022 14:48:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B31203C021A1;
-        Fri, 19 Aug 2022 21:45:40 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.48.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E628040D2827;
-        Fri, 19 Aug 2022 21:45:38 +0000 (UTC)
-Date:   Fri, 19 Aug 2022 17:45:36 -0400
-From:   Richard Guy Briggs <rgb@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46DAAB80B9E;
+        Fri, 19 Aug 2022 21:48:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4731BC433B5;
+        Fri, 19 Aug 2022 21:48:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660945695;
+        bh=rO7ZyWwsowSkDNvfboEH8c9VQ1qF0vIJh+iuZPGzzdY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MiyHJZmRRYUds3hOIRzUuDhCxTtc2TOMPbDXTVAAb5hE9TiTv0SREKvf3jeQiF7wQ
+         sS/mcdB9KLv0gDPEJWlUubiG2X+ukJTJiVsjMY9oZ+eL6LZahSbh2EKiNted9MB7Cv
+         cUeTOy2wyxlhg8FXc61PLTECVhK1F08LaEcV/iUKokUhE7OcAD4KMZcacr5ozsciGj
+         oBpJz5o1jQLY603LjNKGdCL+sBCfiYghcP5HZXgNTfp7hz3tWkxny7yrP+1K4oqNHP
+         k2gAwhopUsmFWXDbki8vEN5d0eX+gO04mzXKSkDS8qLr5vDZDVFLfRDIkZFpVJkJd6
+         FLXnR/6O4apsA==
+Date:   Fri, 19 Aug 2022 14:48:12 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
 To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v4 2/4] fanotify: define struct members to hold response
- decision context
-Message-ID: <YwAEgFwOm13JPbaE@madcap2.tricolour.ca>
-References: <8767f3a0d43d6a994584b86c03eb659a662cc416.1659996830.git.rgb@redhat.com>
- <202208102231.qSUdYAdb-lkp@intel.com>
- <Yv+5ZkFxhR+JK/Rj@madcap2.tricolour.ca>
- <CAKwvOdnQiC++rhVCFToE6t-ZO_VgkhtbH0gy=dEg662EfWucBg@mail.gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+        kvm@vger.kernel.org, llvm@lists.linux.dev,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Borislav Petkov <bp@suse.de>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH v2] asm goto: eradicate CC_HAS_ASM_GOTO
+Message-ID: <YwAFHPRVVa9X3Gue@dev-arch.thelio-3990X>
+References: <CAADnVQJFc9AnH_9CW+bSRotkKvOmkO9jq-RF6dmyPYOpq691Yg@mail.gmail.com>
+ <20220819190640.2763586-1-ndesaulniers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdnQiC++rhVCFToE6t-ZO_VgkhtbH0gy=dEg662EfWucBg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220819190640.2763586-1-ndesaulniers@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,184 +62,297 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-19 10:17, Nick Desaulniers wrote:
-> On Fri, Aug 19, 2022 at 9:25 AM Richard Guy Briggs <rgb@redhat.com> wrote:
-> >
-> > On 2022-08-10 22:28, kernel test robot wrote:
-> > > Hi Richard,
-> > >
-> > > Thank you for the patch! Perhaps something to improve:
-> > >
-> > > [auto build test WARNING on jack-fs/fsnotify]
-> > > [also build test WARNING on pcmoore-audit/next linus/master v5.19 next-20220810]
-> > > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > > And when submitting patch, we suggest to use '--base' as documented in
-> > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > >
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220810-012825
-> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git fsnotify
-> > > config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220810/202208102231.qSUdYAdb-lkp@intel.com/config)
-> > > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-> > > reproduce (this is a W=1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # https://github.com/intel-lab-lkp/linux/commit/a943676abc023c094f05b45f4d61936c567507a2
-> > >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> > >         git fetch --no-tags linux-review Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220810-012825
-> > >         git checkout a943676abc023c094f05b45f4d61936c567507a2
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/notify/fanotify/
-> > >
-> > > If you fix the issue, kindly add following tag where applicable
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > >
-> > > All warnings (new ones prefixed by >>):
-> > >
-> > > >> fs/notify/fanotify/fanotify_user.c:325:35: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-> >
-> > Interesting.  When I "fix" it, my compiler complains:
-> >
-> >         fs/notify/fanotify/fanotify_user.c:324:11: warning: format ‘%u’ expects argument of type ‘unsigned int’, but argument 8 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
+On Fri, Aug 19, 2022 at 12:06:40PM -0700, Nick Desaulniers wrote:
+> GCC has supported asm goto since 4.5, and Clang has since version 9.0.0.
+> The minimum supported versions of these tools for the build according to
+> Documentation/process/changes.rst are 5.1 and 11.0.0 respectively.
 > 
-> The correct format specifier for size_t is %zu.  This avoids issues
-> between ILP32 vs LP64 targets.
+> Remove the feature detection script, Kconfig option, and clean up some
+> fallback code that is no longer supported.
+> 
+> The removed script was also testing for a GCC specific bug that was
+> fixed in the 4.7 release.
+> 
+> Also remove workarounds for bpftrace using clang older than 9.0.0, since
+> other BPF backend fixes are required at this point.
+> 
+> Link: https://lore.kernel.org/lkml/CAK7LNATSr=BXKfkdW8f-H5VT_w=xBpT2ZQcZ7rm6JfkdE+QnmA@mail.gmail.com/
+> Link: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48637
+> Acked-by: Borislav Petkov <bp@suse.de>
+> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Perfect, thanks!
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-> > >                     group, fd, response, info_buf, count);
-> > >                                                    ^~~~~
-> > >    include/linux/printk.h:594:38: note: expanded from macro 'pr_debug'
-> > >            no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-> > >                                        ~~~     ^~~~~~~~~~~
-> > >    include/linux/printk.h:131:17: note: expanded from macro 'no_printk'
-> > >                    printk(fmt, ##__VA_ARGS__);             \
-> > >                           ~~~    ^~~~~~~~~~~
-> > >    include/linux/printk.h:464:60: note: expanded from macro 'printk'
-> > >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-> > >                                                        ~~~    ^~~~~~~~~~~
-> > >    include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-> > >                    _p_func(_fmt, ##__VA_ARGS__);                           \
-> > >                            ~~~~    ^~~~~~~~~~~
-> > >    1 warning generated.
-> > >
-> > >
-> > > vim +325 fs/notify/fanotify/fanotify_user.c
-> > >
-> > >    312
-> > >    313        static int process_access_response(struct fsnotify_group *group,
-> > >    314                                           struct fanotify_response *response_struct,
-> > >    315                                           const char __user *buf,
-> > >    316                                           size_t count)
-> > >    317        {
-> > >    318                struct fanotify_perm_event *event;
-> > >    319                int fd = response_struct->fd;
-> > >    320                u32 response = response_struct->response;
-> > >    321                struct fanotify_response_info_header info_hdr;
-> > >    322                char *info_buf = NULL;
-> > >    323
-> > >    324                pr_debug("%s: group=%p fd=%d response=%u buf=%p size=%lu\n", __func__,
-> > >  > 325                         group, fd, response, info_buf, count);
-> > >    326                /*
-> > >    327                 * make sure the response is valid, if invalid we do nothing and either
-> > >    328                 * userspace can send a valid response or we will clean it up after the
-> > >    329                 * timeout
-> > >    330                 */
-> > >    331                if (response & ~FANOTIFY_RESPONSE_VALID_MASK)
-> > >    332                        return -EINVAL;
-> > >    333                switch (response & FANOTIFY_RESPONSE_ACCESS) {
-> > >    334                case FAN_ALLOW:
-> > >    335                case FAN_DENY:
-> > >    336                        break;
-> > >    337                default:
-> > >    338                        return -EINVAL;
-> > >    339                }
-> > >    340                if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
-> > >    341                        return -EINVAL;
-> > >    342                if (fd < 0)
-> > >    343                        return -EINVAL;
-> > >    344                if (response & FAN_INFO) {
-> > >    345                        size_t c = count;
-> > >    346                        const char __user *ib = buf;
-> > >    347
-> > >    348                        if (c <= 0)
-> > >    349                                return -EINVAL;
-> > >    350                        while (c >= sizeof(info_hdr)) {
-> > >    351                                if (copy_from_user(&info_hdr, ib, sizeof(info_hdr)))
-> > >    352                                        return -EFAULT;
-> > >    353                                if (info_hdr.pad != 0)
-> > >    354                                        return -EINVAL;
-> > >    355                                if (c < info_hdr.len)
-> > >    356                                        return -EINVAL;
-> > >    357                                switch (info_hdr.type) {
-> > >    358                                case FAN_RESPONSE_INFO_AUDIT_RULE:
-> > >    359                                        break;
-> > >    360                                case FAN_RESPONSE_INFO_NONE:
-> > >    361                                default:
-> > >    362                                        return -EINVAL;
-> > >    363                                }
-> > >    364                                c -= info_hdr.len;
-> > >    365                                ib += info_hdr.len;
-> > >    366                        }
-> > >    367                        if (c != 0)
-> > >    368                                return -EINVAL;
-> > >    369                        /* Simplistic check for now */
-> > >    370                        if (count != sizeof(struct fanotify_response_info_audit_rule))
-> > >    371                                return -EINVAL;
-> > >    372                        info_buf = kmalloc(sizeof(struct fanotify_response_info_audit_rule),
-> > >    373                                           GFP_KERNEL);
-> > >    374                        if (!info_buf)
-> > >    375                                return -ENOMEM;
-> > >    376                        if (copy_from_user(info_buf, buf, count))
-> > >    377                                return -EFAULT;
-> > >    378                }
-> > >    379                spin_lock(&group->notification_lock);
-> > >    380                list_for_each_entry(event, &group->fanotify_data.access_list,
-> > >    381                                    fae.fse.list) {
-> > >    382                        if (event->fd != fd)
-> > >    383                                continue;
-> > >    384
-> > >    385                        list_del_init(&event->fae.fse.list);
-> > >    386                        /* finish_permission_event() eats info_buf */
-> > >    387                        finish_permission_event(group, event, response_struct,
-> > >    388                                                count, info_buf);
-> > >    389                        wake_up(&group->fanotify_data.access_waitq);
-> > >    390                        return 0;
-> > >    391                }
-> > >    392                spin_unlock(&group->notification_lock);
-> > >    393
-> > >    394                return -ENOENT;
-> > >    395        }
-> > >    396
-> > >
-> > > --
-> > > 0-DAY CI Kernel Test Service
-> > > https://01.org/lkp
-> > >
-> >
-> > - RGB
-> >
-> > --
-> > Richard Guy Briggs <rgb@redhat.com>
-> > Sr. S/W Engineer, Kernel Security, Base Operating Systems
-> > Remote, Ottawa, Red Hat Canada
-> > IRC: rgb, SunRaycer
-> > Voice: +1.647.777.2635, Internal: (81) 32635
-> >
-> >
+> ---
 > 
+> Changes v1 -> v2:
+> https://lore.kernel.org/linux-kbuild/20220819170053.2686006-1-ndesaulniers@google.com/
+> * Pick up Boris' ack.
+> * Drop line about Dash compat as per Alexandre.
+> * Drop Alexandre's reported by as per Masahiro.
+> * s/Kbuild/asm goto/ in oneline as per Masahiro.
+> * Remove entirety of bpftrace workarounds as per Alexei.
+> * Fix mistake in arch/x86/include/asm/rmwcc.h in v1 where I removed too
+>   much; we still need guards for __GCC_ASM_FLAG_OUTPUTS__.
 > 
+>  Documentation/kbuild/kconfig-language.rst |  4 ++--
+>  arch/Kconfig                              |  3 +--
+>  arch/um/include/asm/cpufeature.h          | 15 ---------------
+>  arch/x86/Makefile                         |  4 ----
+>  arch/x86/include/asm/cpufeature.h         | 15 ---------------
+>  arch/x86/include/asm/rmwcc.h              |  6 +++---
+>  arch/x86/kvm/emulate.c                    |  2 +-
+>  init/Kconfig                              |  4 ----
+>  scripts/gcc-goto.sh                       | 22 ----------------------
+>  tools/arch/x86/include/asm/rmwcc.h        | 21 ---------------------
+>  10 files changed, 7 insertions(+), 89 deletions(-)
+>  delete mode 100755 scripts/gcc-goto.sh
+> 
+> diff --git a/Documentation/kbuild/kconfig-language.rst b/Documentation/kbuild/kconfig-language.rst
+> index 7fb398649f51..858ed5d80def 100644
+> --- a/Documentation/kbuild/kconfig-language.rst
+> +++ b/Documentation/kbuild/kconfig-language.rst
+> @@ -525,8 +525,8 @@ followed by a test macro::
+>  If you need to expose a compiler capability to makefiles and/or C source files,
+>  `CC_HAS_` is the recommended prefix for the config option::
+>  
+> -  config CC_HAS_ASM_GOTO
+> -	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
+> +  config CC_HAS_FOO
+> +	def_bool $(success,$(srctree)/scripts/cc-check-foo.sh $(CC))
+>  
+>  Build as module only
+>  ~~~~~~~~~~~~~~~~~~~~
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index f330410da63a..5dbf11a5ba4e 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -53,7 +53,6 @@ config KPROBES
+>  config JUMP_LABEL
+>  	bool "Optimize very unlikely/likely branches"
+>  	depends on HAVE_ARCH_JUMP_LABEL
+> -	depends on CC_HAS_ASM_GOTO
+>  	select OBJTOOL if HAVE_JUMP_LABEL_HACK
+>  	help
+>  	 This option enables a transparent branch optimization that
+> @@ -1361,7 +1360,7 @@ config HAVE_PREEMPT_DYNAMIC_CALL
+>  
+>  config HAVE_PREEMPT_DYNAMIC_KEY
+>  	bool
+> -	depends on HAVE_ARCH_JUMP_LABEL && CC_HAS_ASM_GOTO
+> +	depends on HAVE_ARCH_JUMP_LABEL
+>  	select HAVE_PREEMPT_DYNAMIC
+>  	help
+>  	   An architecture should select this if it can handle the preemption
+> diff --git a/arch/um/include/asm/cpufeature.h b/arch/um/include/asm/cpufeature.h
+> index 19cd7ed6ec3c..4b6d1b526bc1 100644
+> --- a/arch/um/include/asm/cpufeature.h
+> +++ b/arch/um/include/asm/cpufeature.h
+> @@ -65,20 +65,6 @@ extern void setup_clear_cpu_cap(unsigned int bit);
+>  
+>  #define setup_force_cpu_bug(bit) setup_force_cpu_cap(bit)
+>  
+> -#if defined(__clang__) && !defined(CONFIG_CC_HAS_ASM_GOTO)
+> -
+> -/*
+> - * Workaround for the sake of BPF compilation which utilizes kernel
+> - * headers, but clang does not support ASM GOTO and fails the build.
+> - */
+> -#ifndef __BPF_TRACING__
+> -#warning "Compiler lacks ASM_GOTO support. Add -D __BPF_TRACING__ to your compiler arguments"
+> -#endif
+> -
+> -#define static_cpu_has(bit)            boot_cpu_has(bit)
+> -
+> -#else
+> -
+>  /*
+>   * Static testing of CPU features. Used the same as boot_cpu_has(). It
+>   * statically patches the target code for additional performance. Use
+> @@ -137,7 +123,6 @@ static __always_inline bool _static_cpu_has(u16 bit)
+>  		boot_cpu_has(bit) :				\
+>  		_static_cpu_has(bit)				\
+>  )
+> -#endif
+>  
+>  #define cpu_has_bug(c, bit)		cpu_has(c, (bit))
+>  #define set_cpu_bug(c, bit)		set_cpu_cap(c, (bit))
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index 7854685c5f25..bafbd905e6e7 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -286,10 +286,6 @@ vdso_install:
+>  
+>  archprepare: checkbin
+>  checkbin:
+> -ifndef CONFIG_CC_HAS_ASM_GOTO
+> -	@echo Compiler lacks asm-goto support.
+> -	@exit 1
+> -endif
+>  ifdef CONFIG_RETPOLINE
+>  ifeq ($(RETPOLINE_CFLAGS),)
+>  	@echo "You are building kernel with non-retpoline compiler." >&2
+> diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
+> index ea34cc31b047..1a85e1fb0922 100644
+> --- a/arch/x86/include/asm/cpufeature.h
+> +++ b/arch/x86/include/asm/cpufeature.h
+> @@ -155,20 +155,6 @@ extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
+>  
+>  #define setup_force_cpu_bug(bit) setup_force_cpu_cap(bit)
+>  
+> -#if defined(__clang__) && !defined(CONFIG_CC_HAS_ASM_GOTO)
+> -
+> -/*
+> - * Workaround for the sake of BPF compilation which utilizes kernel
+> - * headers, but clang does not support ASM GOTO and fails the build.
+> - */
+> -#ifndef __BPF_TRACING__
+> -#warning "Compiler lacks ASM_GOTO support. Add -D __BPF_TRACING__ to your compiler arguments"
+> -#endif
+> -
+> -#define static_cpu_has(bit)            boot_cpu_has(bit)
+> -
+> -#else
+> -
+>  /*
+>   * Static testing of CPU features. Used the same as boot_cpu_has(). It
+>   * statically patches the target code for additional performance. Use
+> @@ -208,7 +194,6 @@ static __always_inline bool _static_cpu_has(u16 bit)
+>  		boot_cpu_has(bit) :				\
+>  		_static_cpu_has(bit)				\
+>  )
+> -#endif
+>  
+>  #define cpu_has_bug(c, bit)		cpu_has(c, (bit))
+>  #define set_cpu_bug(c, bit)		set_cpu_cap(c, (bit))
+> diff --git a/arch/x86/include/asm/rmwcc.h b/arch/x86/include/asm/rmwcc.h
+> index 8a9eba191516..7fa611216417 100644
+> --- a/arch/x86/include/asm/rmwcc.h
+> +++ b/arch/x86/include/asm/rmwcc.h
+> @@ -11,7 +11,7 @@
+>  
+>  #define __CLOBBERS_MEM(clb...)	"memory", ## clb
+>  
+> -#if !defined(__GCC_ASM_FLAG_OUTPUTS__) && defined(CONFIG_CC_HAS_ASM_GOTO)
+> +#ifndef __GCC_ASM_FLAG_OUTPUTS__
+>  
+>  /* Use asm goto */
+>  
+> @@ -27,7 +27,7 @@ cc_label:	c = true;						\
+>  	c;								\
+>  })
+>  
+> -#else /* defined(__GCC_ASM_FLAG_OUTPUTS__) || !defined(CONFIG_CC_HAS_ASM_GOTO) */
+> +#else /* defined(__GCC_ASM_FLAG_OUTPUTS__) */
+>  
+>  /* Use flags output or a set instruction */
+>  
+> @@ -40,7 +40,7 @@ cc_label:	c = true;						\
+>  	c;								\
+>  })
+>  
+> -#endif /* defined(__GCC_ASM_FLAG_OUTPUTS__) || !defined(CONFIG_CC_HAS_ASM_GOTO) */
+> +#endif /* defined(__GCC_ASM_FLAG_OUTPUTS__) */
+>  
+>  #define GEN_UNARY_RMWcc_4(op, var, cc, arg0)				\
+>  	__GEN_RMWcc(op " " arg0, var, cc, __CLOBBERS_MEM())
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index b4eeb7c75dfa..08613c65138d 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -493,7 +493,7 @@ FOP_END;
+>  
+>  /*
+>   * XXX: inoutclob user must know where the argument is being expanded.
+> - *      Relying on CONFIG_CC_HAS_ASM_GOTO would allow us to remove _fault.
+> + *      Using asm goto would allow us to remove _fault.
+>   */
+>  #define asm_safe(insn, inoutclob...) \
+>  ({ \
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 80fe60fa77fb..532362fcfe31 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -70,11 +70,7 @@ config CC_CAN_LINK_STATIC
+>  	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag) -static) if 64BIT
+>  	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
+>  
+> -config CC_HAS_ASM_GOTO
+> -	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
+> -
+>  config CC_HAS_ASM_GOTO_OUTPUT
+> -	depends on CC_HAS_ASM_GOTO
+>  	def_bool $(success,echo 'int foo(int x) { asm goto ("": "=r"(x) ::: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
+>  
+>  config CC_HAS_ASM_GOTO_TIED_OUTPUT
+> diff --git a/scripts/gcc-goto.sh b/scripts/gcc-goto.sh
+> deleted file mode 100755
+> index 8b980fb2270a..000000000000
+> --- a/scripts/gcc-goto.sh
+> +++ /dev/null
+> @@ -1,22 +0,0 @@
+> -#!/bin/sh
+> -# SPDX-License-Identifier: GPL-2.0
+> -# Test for gcc 'asm goto' support
+> -# Copyright (C) 2010, Jason Baron <jbaron@redhat.com>
+> -
+> -cat << "END" | $@ -x c - -fno-PIE -c -o /dev/null
+> -int main(void)
+> -{
+> -#if defined(__arm__) || defined(__aarch64__)
+> -	/*
+> -	 * Not related to asm goto, but used by jump label
+> -	 * and broken on some ARM GCC versions (see GCC Bug 48637).
+> -	 */
+> -	static struct { int dummy; int state; } tp;
+> -	asm (".long %c0" :: "i" (&tp.state));
+> -#endif
+> -
+> -entry:
+> -	asm goto ("" :::: entry);
+> -	return 0;
+> -}
+> -END
+> diff --git a/tools/arch/x86/include/asm/rmwcc.h b/tools/arch/x86/include/asm/rmwcc.h
+> index fee7983a90b4..11ff975242ca 100644
+> --- a/tools/arch/x86/include/asm/rmwcc.h
+> +++ b/tools/arch/x86/include/asm/rmwcc.h
+> @@ -2,8 +2,6 @@
+>  #ifndef _TOOLS_LINUX_ASM_X86_RMWcc
+>  #define _TOOLS_LINUX_ASM_X86_RMWcc
+>  
+> -#ifdef CONFIG_CC_HAS_ASM_GOTO
+> -
+>  #define __GEN_RMWcc(fullop, var, cc, ...)				\
+>  do {									\
+>  	asm_volatile_goto (fullop "; j" cc " %l[cc_label]"		\
+> @@ -20,23 +18,4 @@ cc_label:								\
+>  #define GEN_BINARY_RMWcc(op, var, vcon, val, arg0, cc)			\
+>  	__GEN_RMWcc(op " %1, " arg0, var, cc, vcon (val))
+>  
+> -#else /* !CONFIG_CC_HAS_ASM_GOTO */
+> -
+> -#define __GEN_RMWcc(fullop, var, cc, ...)				\
+> -do {									\
+> -	char c;								\
+> -	asm volatile (fullop "; set" cc " %1"				\
+> -			: "+m" (var), "=qm" (c)				\
+> -			: __VA_ARGS__ : "memory");			\
+> -	return c != 0;							\
+> -} while (0)
+> -
+> -#define GEN_UNARY_RMWcc(op, var, arg0, cc)				\
+> -	__GEN_RMWcc(op " " arg0, var, cc)
+> -
+> -#define GEN_BINARY_RMWcc(op, var, vcon, val, arg0, cc)			\
+> -	__GEN_RMWcc(op " %2, " arg0, var, cc, vcon (val))
+> -
+> -#endif /* CONFIG_CC_HAS_ASM_GOTO */
+> -
+>  #endif /* _TOOLS_LINUX_ASM_X86_RMWcc */
 > -- 
-> Thanks,
-> ~Nick Desaulniers
+> 2.37.1.595.g718a3a8f04-goog
 > 
-
-- RGB
-
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
-
+> 

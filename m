@@ -2,131 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B24599446
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 06:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40EA5599451
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 07:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346248AbiHSEw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 00:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
+        id S1343668AbiHSFAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 01:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiHSEwZ (ORCPT
+        with ESMTP id S230077AbiHSFAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 00:52:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4363C6FC7
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 21:52:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81903B82569
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:52:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE0FC433D6;
-        Fri, 19 Aug 2022 04:52:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660884741;
-        bh=pJsR9cSORbtbMymP+m9MvHTaCihfu9PX9SIGrheKZmw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=o637CJLbB7MYcFkOf3iJtO6JpyRqT6H/5C4jnwxHKJxPdd8ZbddPbFkBo+Owi/yid
-         XwC+pxHsAnOS7lk8zjN3euHYHC8T1TKW7LPAUZ1VzFVNxyvbUZAJX05KUIX0W0YcTe
-         zutCqedwg2t+ZGWH9IsEbLWKOLFpN1rToKXWL/HQnGuaYzniR+aYnDlfZmHCLur+18
-         A9rskX98zkia9sdqJOJtmTL37CwwpUIM+SvRSc2c/jGT2ltJtUDi7TTj/YphImTOX8
-         jIOurMsYjVJ+aDtwDBX0ZqunReNK3u1gU4A8bAOyztUXzd72GBHUkzvSLwyU8v/DGR
-         gBxt8Sf1ZFALQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     haoxin <xhao@linux.alibaba.com>
-Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 1/2] mm/damon/lru_sort: Move target memory region check to head of func
-Date:   Thu, 18 Aug 2022 21:52:04 -0700
-Message-Id: <20220819045204.21834-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        Fri, 19 Aug 2022 01:00:47 -0400
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582C11DA6E;
+        Thu, 18 Aug 2022 22:00:46 -0700 (PDT)
+Received: by mail-vk1-xa2f.google.com with SMTP id b81so1773737vkf.1;
+        Thu, 18 Aug 2022 22:00:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=0KoTScIC7XKvx310KN0v9F7ZwulzGHm2HwEwg7svJe0=;
+        b=FdY8v7jr0moe/4RznEj7CYmQBDRzeerk4eAozh/OA5/dQiYzCdAVa/K2ethdYrjbb8
+         v2ZHM2FldV5wp0ZwVogkTZSliZszKhxQ0YG1Z411fZJ+dojjIuvYJPJr1a3l4fyKa21H
+         8QMDI8y4Wu3eJndEHEH1kVEuwOOBu56kbKR7YEZL+liZE+8I6DzfyQ2ItSUWn/b1U3/k
+         UuKpZ7jSipyt7yJwONR4zAXQhi05i9zUNLiQ1wnZBPwvTm9sE6E2yPFU+rHJPBJDAkR6
+         2uWyQ7X3Fh1vzRNGY2M6mmh+pX/cGFJE0iK6qsJd97tuA2B2W5ETsfOMA9VDHfH6YhXi
+         0QFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=0KoTScIC7XKvx310KN0v9F7ZwulzGHm2HwEwg7svJe0=;
+        b=mewaDKYRJWDpPgT5MoIn/T48d6FD2a1NGdHisaMDVr2xWkmNGsum/kAtInNzwzVrxj
+         rVOMCyKVq9ge7SvELwHsWKnGXanwd+AiOkCNaTkLHLcDdWrgJR+SqpSvLuEfV5iWol5j
+         cqCs4iuB7NoV7Z2JYBcmU3nvzXJ+RWYvKKfYJvxFA5WFOYAJs49IVV5VwhXKVVMD0nKa
+         cpPLDMq9B6bj/yCNmYlwqwK2SNGDOyF7FMbuQVeIqUABXO6ETprNzlpbyhSYxOVMvyJY
+         ACnP7VJ4S+EXFKeY3NUWj0+7B9h8Y7pYqTFakw+xeAhjpi30K9ME/4t4ijC0GMSow/O3
+         wuMQ==
+X-Gm-Message-State: ACgBeo3DP6mSbkdX99FaDNqZ6vbdT6e6ZJweG+h18edyEkSyPimIbsSn
+        adpbeo2BayVwaDFHfbKqpRqdgh/logYUkvvpwzY=
+X-Google-Smtp-Source: AA6agR4svtgvAfl4R3I3WZgQD9UTOtc+XojuuodEDOo2vl5rRt4vzm6oB1jYo5db0+cicUfOgr+PgtInxzDGeL2gB7A=
+X-Received: by 2002:a05:6122:311:b0:383:2f10:47f6 with SMTP id
+ c17-20020a056122031100b003832f1047f6mr2308991vko.3.1660885245104; Thu, 18 Aug
+ 2022 22:00:45 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <c0c5c013-9355-c394-afff-ed25b0c456b8@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220818210142.7867-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220818210142.7867-1-wsa+renesas@sang-engineering.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 19 Aug 2022 00:00:34 -0500
+Message-ID: <CAH2r5muBD8AV51ZQMapGoXyF=5Mk0GW2tYz2ng9XrhKRp_b96g@mail.gmail.com>
+Subject: Re: [PATCH] cifs: move from strlcpy with unused retval to strscpy
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        samba-technical <samba-technical@lists.samba.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 10:47:58 +0800 haoxin <xhao@linux.alibaba.com> wrote:
+Looks fine.   Do you want this merged through my tree?
 
-> 
-> 在 2022/8/19 上午10:28, SeongJae Park 写道:
-> > Hi Xin,
-> >
-> >> 在 2022/8/19 上午1:11, SeongJae Park 写道:
-> >>> Hi Xin,
-> >>>
-> >>>
-> >>> On Thu, 18 Aug 2022 18:57:31 +0800 Xin Hao <xhao@linux.alibaba.com> wrote:
-> >>>
-> >>>> In damon_lru_sort_apply_parameters(), if "monitor_region_start"
-> >>>> and "monitor_region_end" is not a valid physical address range,
-> >>>> There no need to run the remainder codes in it.
-> >>> The function, 'damon_lru_sort_apply_parameters()', checks validity of
-> >>> parameters and construct the DAMON context one by one.  For example,
-> >>> 'damon_set_attrs()' returns an error if the parameters are invalid.  So the
-> >>> intended flow is,
-> >>>
-> >>> 1. check DAMON attributes parameters,
-> >>> 2. apply DAMON attributes parameters,
-> >>> 3. check scheme parameters,
-> >>> 4. apply scheme parameters,
-> >>> 5. check target region parameters, and
-> >>> 6. apply target region parameters.
-> >>>
-> >>> Therefore what this patch does is making the target regions validity check to
-> >>> be done earlier than validity checks of other parameters.  There is no special
-> >>> reason to check the region earlier than others.  Also, this change makes the
-> >>> flow of the function a little bit weird in my humble opinion, as the flow will
-> >>> be
-> >>>
-> >>> 1. check target region parameters,
-> >>> 2. check DAMON attributes parameters,
-> >>> 3. apply DAMON attributes parameters,
-> >>> 4. check scheme parameters,
-> >>> 5. apply scheme parameters, and
-> >>> 6. apply target region parameters.
-> >> Ok, understand what you mean,   my fix looks ugly,  buy any apply above
-> >> are not not necessary if one of them checks failed, why not check all
-> >> fisrt and then apply them, like this:
-> >>
-> >> 1. check target region parameters,
-> >>
-> >> 2. check DAMON attributes parameters,
-> >>
-> >> 3. check scheme parameters,
-> > The parameter values could be changed by users after the check, so we should
-> > cache those somewhere anyway.  In other words, we cache those in the DAMON
-> > context.  Therefore I think the above works were not totally waste of the time.
-> > Also, because the parameters applying functions like 'damon_set_attrs()' does
-> > the check and applying of the parameters together, I feel like current flow is
-> > natural.
-> 
-> Ok,  Thank you for your detailed  explain, just keep it. but there still 
-> a problem in damon_lru_sort_apply_parameters
-> 
-> if (!monitor_region_start && !monitor_region_end &&
-> 		!get_monitoring_region(&monitor_region_start,
-> 			&monitor_region_end))
-> 
-> if (!monitor_region_start || !monitor_region_end ||
-> 		!get_monitoring_region(&monitor_region_start,
-> 			&monitor_region_end))
-> 
-> the '&&' should fix to '||',  anyone checks fail, it should return ?
-
-No.  The code is for setting the monitoring region as the biggest System RAM
-resource only if the user didn't set both 'monitor_region_start' and
-'monitor_region_end'.
+On Thu, Aug 18, 2022 at 4:11 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+>
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  fs/cifs/cifsroot.c | 2 +-
+>  fs/cifs/connect.c  | 2 +-
+>  fs/cifs/smb2pdu.c  | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/cifs/cifsroot.c b/fs/cifs/cifsroot.c
+> index 9e91a5a40aae..56ec1b233f52 100644
+> --- a/fs/cifs/cifsroot.c
+> +++ b/fs/cifs/cifsroot.c
+> @@ -59,7 +59,7 @@ static int __init cifs_root_setup(char *line)
+>                         pr_err("Root-CIFS: UNC path too long\n");
+>                         return 1;
+>                 }
+> -               strlcpy(root_dev, line, len);
+> +               strscpy(root_dev, line, len);
+>                 srvaddr = parse_srvaddr(&line[2], s);
+>                 if (*s) {
+>                         int n = snprintf(root_opts,
+> diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
+> index 9111c025bcb8..3da5da9f16b0 100644
+> --- a/fs/cifs/connect.c
+> +++ b/fs/cifs/connect.c
+> @@ -3994,7 +3994,7 @@ CIFSTCon(const unsigned int xid, struct cifs_ses *ses,
+>                 }
+>                 bcc_ptr += length + 1;
+>                 bytes_left -= (length + 1);
+> -               strlcpy(tcon->treeName, tree, sizeof(tcon->treeName));
+> +               strscpy(tcon->treeName, tree, sizeof(tcon->treeName));
+>
+>                 /* mostly informational -- no need to fail on error here */
+>                 kfree(tcon->nativeFileSystem);
+> diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+> index 9b31ea946d45..9958b5f1c12f 100644
+> --- a/fs/cifs/smb2pdu.c
+> +++ b/fs/cifs/smb2pdu.c
+> @@ -1928,7 +1928,7 @@ SMB2_tcon(const unsigned int xid, struct cifs_ses *ses, const char *tree,
+>         tcon->capabilities = rsp->Capabilities; /* we keep caps little endian */
+>         tcon->maximal_access = le32_to_cpu(rsp->MaximalAccess);
+>         tcon->tid = le32_to_cpu(rsp->hdr.Id.SyncId.TreeId);
+> -       strlcpy(tcon->treeName, tree, sizeof(tcon->treeName));
+> +       strscpy(tcon->treeName, tree, sizeof(tcon->treeName));
+>
+>         if ((rsp->Capabilities & SMB2_SHARE_CAP_DFS) &&
+>             ((tcon->share_flags & SHI1005_FLAGS_DFS) == 0))
+> --
+> 2.35.1
+>
 
 
+-- 
 Thanks,
-SJ
+
+Steve

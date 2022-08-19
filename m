@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E9F5993F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 06:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 267375993EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 06:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245371AbiHSEMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 00:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
+        id S1345942AbiHSEM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 00:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345157AbiHSEMT (ORCPT
+        with ESMTP id S1345642AbiHSEMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 00:12:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB7AD4751
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 21:12:18 -0700 (PDT)
+        Fri, 19 Aug 2022 00:12:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7E7D41BD
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 21:12:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEF25614B3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:12:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86439C43470;
-        Fri, 19 Aug 2022 04:12:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 538FFB82555
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:12:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F87C433C1;
+        Fri, 19 Aug 2022 04:12:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660882337;
-        bh=OJw5ok0VWpXV3rCiT2RPnbejds8oP9obR0Vq/h7CFMg=;
+        s=k20201202; t=1660882341;
+        bh=zBIuI5xJv0DW/mdZk8va9FmpzHKWXDhqhhaqKGKSfXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kk7a5L2fGYglj/X+iysS0UCkB1aNmS+LAXX5gdRkSk6QWLPtsYWlXgpsLQSX4/2m6
-         xSAnTQjm8z1SSGIu8AvMC+WvtHiaUkHJXdotVu+VIGcGwbSuWAa+pd3D9TwA5hO/xV
-         SeQY4tvS/87p9KJbLFiypyt5avneNb1U2JMS3OHFQ8Wg6vRfY+VP9ARAPb3z3fFNQe
-         huyGcQmXx05+a+1zofD5JiK4ztPPW2Jk7PfQ9e7+JOYJ2Xd9K53aTQjezSdfbXcy+C
-         tUZwCybmYrgTbhNUX0ean/n/TqOYsmBrz6//+A5XGGyoJP5834TNnLWwbx8TiIrg1s
-         Q0eNNmNBjqIyQ==
+        b=kQAoFAYvMa2YCWmHycPxD7RjUUKALOFfcuCjJ+ET6gwjVaBZ8zpGwlCII6ybIwIYp
+         dtbZUq65yd+jjOfgLj36qfXtIMqNN7ENdkHwsq+RRb7R2lCWsbgpnTsXW7Lgnx+1p+
+         lPr65UdT/vl7v5EptEhxOtmELPq/fbJXOSWLQRVNcncYtz3/v0BuLRZJfEk1HeOgqX
+         FepEhVhEBTSyoK+x7RETM710mRHS1fVwe92Ip1E12u0OwAaGV+t6TERW81HD9T9BNP
+         IKDBeDVG27XnSoWiA13XzEwwA11t0szOgzydrU5cvgb5u9+6ZfvyRE/rVP9h1RLonZ
+         XJSsuYdQfmesw==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Ard Biesheuvel <ardb@kernel.org>,
@@ -42,9 +42,9 @@ Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH 1/5] arm64: rename defer_reserve_crashkernel() to have_zone_dma()
-Date:   Fri, 19 Aug 2022 07:11:52 +0300
-Message-Id: <20220819041156.873873-2-rppt@kernel.org>
+Subject: [PATCH 2/5] arm64/mmu: drop _hotplug from unmap_hotplug_* function names
+Date:   Fri, 19 Aug 2022 07:11:53 +0300
+Message-Id: <20220819041156.873873-3-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220819041156.873873-1-rppt@kernel.org>
 References: <20220819041156.873873-1-rppt@kernel.org>
@@ -62,73 +62,104 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mike Rapoport <rppt@linux.ibm.com>
 
-The new name better describes what the function does and does not
-restrict its use to crash kernel reservations.
+so that they can be used for remapping crash kernel.
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
- arch/arm64/include/asm/memory.h | 2 +-
- arch/arm64/mm/init.c            | 4 ++--
- arch/arm64/mm/mmu.c             | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ arch/arm64/mm/mmu.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
-index 9dd08cd339c3..27fce129b97e 100644
---- a/arch/arm64/include/asm/memory.h
-+++ b/arch/arm64/include/asm/memory.h
-@@ -364,7 +364,7 @@ static inline void *phys_to_virt(phys_addr_t x)
- 
- void dump_mem_limit(void);
- 
--static inline bool defer_reserve_crashkernel(void)
-+static inline bool have_zone_dma(void)
- {
- 	return IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32);
- }
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index b9af30be813e..a6585d50a76c 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -389,7 +389,7 @@ void __init arm64_memblock_init(void)
- 
- 	early_init_fdt_scan_reserved_mem();
- 
--	if (!defer_reserve_crashkernel())
-+	if (!have_zone_dma())
- 		reserve_crashkernel();
- 
- 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
-@@ -438,7 +438,7 @@ void __init bootmem_init(void)
- 	 * request_standard_resources() depends on crashkernel's memory being
- 	 * reserved, so do it here.
- 	 */
--	if (defer_reserve_crashkernel())
-+	if (have_zone_dma())
- 		reserve_crashkernel();
- 
- 	memblock_dump_all();
 diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index db7c4e6ae57b..bf303f1dea25 100644
+index bf303f1dea25..ea81e40a25cd 100644
 --- a/arch/arm64/mm/mmu.c
 +++ b/arch/arm64/mm/mmu.c
-@@ -548,7 +548,7 @@ static void __init map_mem(pgd_t *pgdp)
+@@ -911,7 +911,7 @@ static bool pgtable_range_aligned(unsigned long start, unsigned long end,
+ 	return true;
+ }
  
- #ifdef CONFIG_KEXEC_CORE
- 	if (crash_mem_map) {
--		if (defer_reserve_crashkernel())
-+		if (have_zone_dma())
- 			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
- 		else if (crashk_res.end)
- 			memblock_mark_nomap(crashk_res.start,
-@@ -589,7 +589,7 @@ static void __init map_mem(pgd_t *pgdp)
- 	 * through /sys/kernel/kexec_crash_size interface.
- 	 */
- #ifdef CONFIG_KEXEC_CORE
--	if (crash_mem_map && !defer_reserve_crashkernel()) {
-+	if (crash_mem_map && !have_zone_dma()) {
- 		if (crashk_res.end) {
- 			__map_memblock(pgdp, crashk_res.start,
- 				       crashk_res.end + 1,
+-static void unmap_hotplug_pte_range(pmd_t *pmdp, unsigned long addr,
++static void unmap_pte_range(pmd_t *pmdp, unsigned long addr,
+ 				    unsigned long end, bool free_mapped,
+ 				    struct vmem_altmap *altmap)
+ {
+@@ -932,7 +932,7 @@ static void unmap_hotplug_pte_range(pmd_t *pmdp, unsigned long addr,
+ 	} while (addr += PAGE_SIZE, addr < end);
+ }
+ 
+-static void unmap_hotplug_pmd_range(pud_t *pudp, unsigned long addr,
++static void unmap_pmd_range(pud_t *pudp, unsigned long addr,
+ 				    unsigned long end, bool free_mapped,
+ 				    struct vmem_altmap *altmap)
+ {
+@@ -961,11 +961,11 @@ static void unmap_hotplug_pmd_range(pud_t *pudp, unsigned long addr,
+ 			continue;
+ 		}
+ 		WARN_ON(!pmd_table(pmd));
+-		unmap_hotplug_pte_range(pmdp, addr, next, free_mapped, altmap);
++		unmap_pte_range(pmdp, addr, next, free_mapped, altmap);
+ 	} while (addr = next, addr < end);
+ }
+ 
+-static void unmap_hotplug_pud_range(p4d_t *p4dp, unsigned long addr,
++static void unmap_pud_range(p4d_t *p4dp, unsigned long addr,
+ 				    unsigned long end, bool free_mapped,
+ 				    struct vmem_altmap *altmap)
+ {
+@@ -994,11 +994,11 @@ static void unmap_hotplug_pud_range(p4d_t *p4dp, unsigned long addr,
+ 			continue;
+ 		}
+ 		WARN_ON(!pud_table(pud));
+-		unmap_hotplug_pmd_range(pudp, addr, next, free_mapped, altmap);
++		unmap_pmd_range(pudp, addr, next, free_mapped, altmap);
+ 	} while (addr = next, addr < end);
+ }
+ 
+-static void unmap_hotplug_p4d_range(pgd_t *pgdp, unsigned long addr,
++static void unmap_p4d_range(pgd_t *pgdp, unsigned long addr,
+ 				    unsigned long end, bool free_mapped,
+ 				    struct vmem_altmap *altmap)
+ {
+@@ -1013,11 +1013,11 @@ static void unmap_hotplug_p4d_range(pgd_t *pgdp, unsigned long addr,
+ 			continue;
+ 
+ 		WARN_ON(!p4d_present(p4d));
+-		unmap_hotplug_pud_range(p4dp, addr, next, free_mapped, altmap);
++		unmap_pud_range(p4dp, addr, next, free_mapped, altmap);
+ 	} while (addr = next, addr < end);
+ }
+ 
+-static void unmap_hotplug_range(unsigned long addr, unsigned long end,
++static void unmap_range(unsigned long addr, unsigned long end,
+ 				bool free_mapped, struct vmem_altmap *altmap)
+ {
+ 	unsigned long next;
+@@ -1039,7 +1039,7 @@ static void unmap_hotplug_range(unsigned long addr, unsigned long end,
+ 			continue;
+ 
+ 		WARN_ON(!pgd_present(pgd));
+-		unmap_hotplug_p4d_range(pgdp, addr, next, free_mapped, altmap);
++		unmap_p4d_range(pgdp, addr, next, free_mapped, altmap);
+ 	} while (addr = next, addr < end);
+ }
+ 
+@@ -1258,7 +1258,7 @@ void vmemmap_free(unsigned long start, unsigned long end,
+ {
+ 	WARN_ON((start < VMEMMAP_START) || (end > VMEMMAP_END));
+ 
+-	unmap_hotplug_range(start, end, true, altmap);
++	unmap_range(start, end, true, altmap);
+ 	free_empty_tables(start, end, VMEMMAP_START, VMEMMAP_END);
+ }
+ #endif /* CONFIG_MEMORY_HOTPLUG */
+@@ -1522,7 +1522,7 @@ static void __remove_pgd_mapping(pgd_t *pgdir, unsigned long start, u64 size)
+ 	WARN_ON(pgdir != init_mm.pgd);
+ 	WARN_ON((start < PAGE_OFFSET) || (end > PAGE_END));
+ 
+-	unmap_hotplug_range(start, end, false, NULL);
++	unmap_range(start, end, false, NULL);
+ 	free_empty_tables(start, end, PAGE_OFFSET, PAGE_END);
+ }
+ 
 -- 
 2.35.3
 

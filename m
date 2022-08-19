@@ -2,54 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BFA59A18E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B20A599FC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352137AbiHSQTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 12:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S1352116AbiHSQTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 12:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352132AbiHSQPp (ORCPT
+        with ESMTP id S1352108AbiHSQPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 12:15:45 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A198D39A8;
-        Fri, 19 Aug 2022 08:58:45 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M8RD641SmzkWQg;
-        Fri, 19 Aug 2022 23:55:18 +0800 (CST)
-Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 19 Aug 2022 23:58:33 +0800
-Received: from [10.174.176.245] (10.174.176.245) by
- kwepemm600001.china.huawei.com (7.193.23.3) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 19 Aug 2022 23:58:32 +0800
-Message-ID: <d1463bc2-6abd-7b01-5aac-8b7780b94cca@huawei.com>
-Date:   Fri, 19 Aug 2022 23:58:32 +0800
+        Fri, 19 Aug 2022 12:15:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330E5D83ED;
+        Fri, 19 Aug 2022 08:58:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D94561644;
+        Fri, 19 Aug 2022 15:58:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62CCBC433C1;
+        Fri, 19 Aug 2022 15:58:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660924718;
+        bh=jZkm9DTACQV+CBvNGwKYZM0g86biojOTExli8sSeSBs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b9yiSyZeJErT7d9JnfdCGOhfzh3cyYM4ixrg4XFeiNauXu5J3I9j/C8qKwnFdo6Ih
+         9NhAEQqCMNsRIfUxA5xcl07bt5ChbG2uSgpAWasMqkqo5Er5iR7VaI35jDdnhqoTet
+         4G6QkVgp7tDfnvn5loQ5NhX9lAONn0MmnmX5jfKpEKy3G1TsCBG8DKNRl3EMDT9eFM
+         76GRmncGRPQpI6xV1bE3drTV+fRu9+YabOQrzbTomxRzS/qTcRPXpvlsAFaD7GFfnA
+         L/kB8FUACwjYcfw8/YN6SS43ImvyHrLCb5HiIVgjDlkR9i0M9VaKeOy4rHu481zuQ0
+         p78Zi5RCO04xw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0BEFC4035A; Fri, 19 Aug 2022 12:58:36 -0300 (-03)
+Date:   Fri, 19 Aug 2022 12:58:35 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        German Gomez <german.gomez@arm.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Song Liu <songliubraving@fb.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v2 4/6] perf cpumap: Fix alignment for masks in event
+ encoding
+Message-ID: <Yv+zK8UxUAP83zkp@kernel.org>
+References: <20220614143353.1559597-1-irogers@google.com>
+ <20220614143353.1559597-5-irogers@google.com>
+ <Yv60COAP90TEiWkx@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net] net/sched: fix netdevice reference leaks in
- attach_one_default_qdisc()
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
-        <brouer@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220817104646.22861-1-wanghai38@huawei.com>
- <20220818105642.6d58e9d4@kernel.org>
-From:   "wanghai (M)" <wanghai38@huawei.com>
-In-Reply-To: <20220818105642.6d58e9d4@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.245]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600001.china.huawei.com (7.193.23.3)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yv60COAP90TEiWkx@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NUMERIC_HTTP_ADDR,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,99 +77,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Thu, Aug 18, 2022 at 06:50:00PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Tue, Jun 14, 2022 at 07:33:51AM -0700, Ian Rogers escreveu:
+> > A mask encoding of a cpu map is laid out as:
+> >   u16 nr
+> >   u16 long_size
+> >   unsigned long mask[];
+> > However, the mask may be 8-byte aligned meaning there is a 4-byte pad
+> > after long_size. This means 32-bit and 64-bit builds see the mask as
+> > being at different offsets. On top of this the structure is in the byte
+> > data[] encoded as:
+> >   u16 type
+> >   char data[]
+> > This means the mask's struct isn't the required 4 or 8 byte aligned, but
+> > is offset by 2. Consequently the long reads and writes are causing
+> > undefined behavior as the alignment is broken.
+> > 
+> > Fix the mask struct by creating explicit 32 and 64-bit variants, use a
+> > union to avoid data[] and casts; the struct must be packed so the
+> > layout matches the existing perf.data layout. Taking an address of a
+> > member of a packed struct breaks alignment so pass the packed
+> > perf_record_cpu_map_data to functions, so they can access variables with
+> > the right alignment.
+> > 
+> > As the 64-bit version has 4 bytes of padding, optimizing writing to only
+> > write the 32-bit version.
+> > 
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/lib/perf/include/perf/event.h | 36 +++++++++++--
+> >  tools/perf/tests/cpumap.c           | 19 ++++---
+> >  tools/perf/util/cpumap.c            | 80 +++++++++++++++++++++++------
+> >  tools/perf/util/cpumap.h            |  4 +-
+> >  tools/perf/util/session.c           | 30 +++++------
+> >  tools/perf/util/synthetic-events.c  | 34 +++++++-----
+> >  6 files changed, 143 insertions(+), 60 deletions(-)
+> > 
+> > diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
+> > index e7758707cadd..d2d32589758a 100644
+> > --- a/tools/lib/perf/include/perf/event.h
+> > +++ b/tools/lib/perf/include/perf/event.h
+> > @@ -6,6 +6,7 @@
+> >  #include <linux/types.h>
+> >  #include <linux/limits.h>
+> >  #include <linux/bpf.h>
+> > +#include <linux/compiler.h>
+> >  #include <sys/types.h> /* pid_t */
+> >  
+> >  #define event_contains(obj, mem) ((obj).header.size > offsetof(typeof(obj), mem))
+> > @@ -153,20 +154,47 @@ enum {
+> >  	PERF_CPU_MAP__MASK = 1,
+> >  };
+> >  
+> > +/*
+> > + * Array encoding of a perf_cpu_map where nr is the number of entries in cpu[]
+> > + * and each entry is a value for a CPU in the map.
+> > + */
+> >  struct cpu_map_entries {
+> >  	__u16			 nr;
+> >  	__u16			 cpu[];
+> >  };
+> >  
+> > -struct perf_record_record_cpu_map {
+> > +/* Bitmap encoding of a perf_cpu_map where bitmap entries are 32-bit. */
+> > +struct perf_record_mask_cpu_map32 {
+> > +	/* Number of mask values. */
+> >  	__u16			 nr;
+> > +	/* Constant 4. */
+> >  	__u16			 long_size;
+> > -	unsigned long		 mask[];
+> > +	/* Bitmap data. */
+> > +	__u32			 mask[];
+> >  };
+> >  
+> > -struct perf_record_cpu_map_data {
+> > +/* Bitmap encoding of a perf_cpu_map where bitmap entries are 64-bit. */
+> > +struct perf_record_mask_cpu_map64 {
+> > +	/* Number of mask values. */
+> > +	__u16			 nr;
+> > +	/* Constant 8. */
+> > +	__u16			 long_size;
+> > +	/* Legacy padding. */
+> > +	char                     __pad[4];
+> > +	/* Bitmap data. */
+> > +	__u64			 mask[];
+> > +};
+> > +
+> > +struct __packed perf_record_cpu_map_data {
+> 
+> In various places I'm getting this:
+> 
+> [perfbuilder@five x-riscv]$ export BUILD_TARBALL=http://192.168.86.14/perf/perf-6.0.0-rc1.tar.xz
+> [perfbuilder@five x-riscv]$ time dm .
+>    1     5.47 ubuntu:22.04-x-riscv64        : FAIL gcc version 11.2.0 (Ubuntu 11.2.0-16ubuntu1)
+>     In file included from mmap.c:10:
+>     /git/perf-6.0.0-rc1/tools/lib/perf/include/perf/event.h:190:34: error: packed attribute causes inefficient alignment for 'type' [-Werror=attributes]
+>       190 |         __u16                    type;
+>           |                                  ^~~~
+>     cc1: all warnings being treated as errors
+>     In file included from util/event.h:12,
+>                      from builtin-diff.c:12:
+>     /git/perf-6.0.0-rc1/tools/lib/perf/include/perf/event.h:190:34: error: packed attribute causes inefficient alignment for 'type' [-Werror=attributes]
+>       190 |         __u16                    type;
+>           |                                  ^~~~
+>     In file included from util/events_stats.h:6,
+>                      from util/evlist.h:12,
+>                      from builtin-evlist.c:11:
+>     /git/perf-6.0.0-rc1/tools/lib/perf/include/perf/event.h:190:34: error: packed attribute causes inefficient alignment for 'type' [-Werror=attributes]
+>       190 |         __u16                    type;
+>           |                                  ^~~~
+> 
+> So probably we need to disable this -Werror=attributes in some
+> architectures?
 
-在 2022/8/19 1:56, Jakub Kicinski 写道:
-> On Wed, 17 Aug 2022 18:46:46 +0800 Wang Hai wrote:
->> In attach_default_qdiscs(), when attach default qdisc (fq_codel) fails
->> and fallback to noqueue, if the original attached qdisc is not released
->> and a new one is directly attached, this will cause netdevice reference
->> leaks.
-> Could you provide more details on the failure path? My preference would
-> be to try to clean up properly there, if possible.
-Hi Jakub.
+Slapped this there:
 
-Here are the details of the failure. Do I need to do cleanup under the 
-failed path?
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpacked"
+#pragma GCC diagnostic ignored "-Wattributes"
 
-If a dev has multiple queues and queue 0 fails to attach qdisc
-because there is no memory in attach_one_default_qdisc(). Then
-dev->qdisc will be noop_qdisc by default. But the other queues
-may be able to successfully attach to default qdisc.
+struct __packed perf_record_cpu_map_data {
+        __u16                    type;
+        union {
+                /* Used when type == PERF_CPU_MAP__CPUS. */
+                struct cpu_map_entries cpus_data;
+                /* Used when type == PERF_CPU_MAP__MASK and long_size == 4. */
+                struct perf_record_mask_cpu_map32 mask32_data;
+                /* Used when type == PERF_CPU_MAP__MASK and long_size == 8. */
+                struct perf_record_mask_cpu_map64 mask64_data;
+        };
+};
 
-In this case, the fallback to noqueue process will be triggered
-
-static void attach_default_qdiscs(struct net_device *dev)
-{
-     ...
-     if (!netif_is_multiqueue(dev) ||
-         dev->priv_flags & IFF_NO_QUEUE) {
-             ...
-             netdev_for_each_tx_queue(dev, attach_one_default_qdisc, 
-NULL); // queue 0 attach failed because -ENOBUFS, but the other queues 
-attach successfully
-             qdisc = txq->qdisc_sleeping;
-             rcu_assign_pointer(dev->qdisc, qdisc); // dev->qdisc = 
-&noop_qdisc
-             ...
-     }
-     ...
-     if (qdisc == &noop_qdisc) {
-         ...
-         netdev_for_each_tx_queue(dev, attach_one_default_qdisc, NULL); 
-// Re-attach, but not release the previously created qdisc
-         ...
-     }
-}
-
->> The following is the bug log:
->>
->> veth0: default qdisc (fq_codel) fail, fallback to noqueue
->> unregister_netdevice: waiting for veth0 to become free. Usage count = 32
->> leaked reference.
->>   qdisc_alloc+0x12e/0x210
->>   qdisc_create_dflt+0x62/0x140
->>   attach_one_default_qdisc.constprop.41+0x44/0x70
->>   dev_activate+0x128/0x290
->>   __dev_open+0x12a/0x190
->>   __dev_change_flags+0x1a2/0x1f0
->>   dev_change_flags+0x23/0x60
->>   do_setlink+0x332/0x1150
->>   __rtnl_newlink+0x52f/0x8e0
->>   rtnl_newlink+0x43/0x70
->>   rtnetlink_rcv_msg+0x140/0x3b0
->>   netlink_rcv_skb+0x50/0x100
->>   netlink_unicast+0x1bb/0x290
->>   netlink_sendmsg+0x37c/0x4e0
->>   sock_sendmsg+0x5f/0x70
->>   ____sys_sendmsg+0x208/0x280
->>
->> In attach_one_default_qdisc(), release the old one before attaching
->> a new qdisc to fix this bug.
->>
->> Fixes: bf6dba76d278 ("net: sched: fallback to qdisc noqueue if default qdisc setup fail")
->> Signed-off-by: Wang Hai <wanghai38@huawei.com>
->> ---
->>   net/sched/sch_generic.c | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
->> index d47b9689eba6..87b61ef14497 100644
->> --- a/net/sched/sch_generic.c
->> +++ b/net/sched/sch_generic.c
->> @@ -1140,6 +1140,11 @@ static void attach_one_default_qdisc(struct net_device *dev,
->>   
->>   	if (!netif_is_multiqueue(dev))
->>   		qdisc->flags |= TCQ_F_ONETXQUEUE | TCQ_F_NOPARENT;
->> +
->> +	if (dev_queue->qdisc_sleeping &&
->> +	    dev_queue->qdisc_sleeping != &noop_qdisc)
->> +		qdisc_put(dev_queue->qdisc_sleeping);
->> +
->>   	dev_queue->qdisc_sleeping = qdisc;
->>   }
->>   
-> .
-
--- 
-Wang Hai
+#pragma GCC diagnostic pop
 

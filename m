@@ -2,58 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8400A59A7EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3AC59A7FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbiHSVs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 17:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S239140AbiHSVvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 17:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbiHSVsW (ORCPT
+        with ESMTP id S233588AbiHSVvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 17:48:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0374795B2;
-        Fri, 19 Aug 2022 14:48:17 -0700 (PDT)
+        Fri, 19 Aug 2022 17:51:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE6BE0ED;
+        Fri, 19 Aug 2022 14:51:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46DAAB80B9E;
-        Fri, 19 Aug 2022 21:48:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4731BC433B5;
-        Fri, 19 Aug 2022 21:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660945695;
-        bh=rO7ZyWwsowSkDNvfboEH8c9VQ1qF0vIJh+iuZPGzzdY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MiyHJZmRRYUds3hOIRzUuDhCxTtc2TOMPbDXTVAAb5hE9TiTv0SREKvf3jeQiF7wQ
-         sS/mcdB9KLv0gDPEJWlUubiG2X+ukJTJiVsjMY9oZ+eL6LZahSbh2EKiNted9MB7Cv
-         cUeTOy2wyxlhg8FXc61PLTECVhK1F08LaEcV/iUKokUhE7OcAD4KMZcacr5ozsciGj
-         oBpJz5o1jQLY603LjNKGdCL+sBCfiYghcP5HZXgNTfp7hz3tWkxny7yrP+1K4oqNHP
-         k2gAwhopUsmFWXDbki8vEN5d0eX+gO04mzXKSkDS8qLr5vDZDVFLfRDIkZFpVJkJd6
-         FLXnR/6O4apsA==
-Date:   Fri, 19 Aug 2022 14:48:12 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-        kvm@vger.kernel.org, llvm@lists.linux.dev,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Borislav Petkov <bp@suse.de>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH v2] asm goto: eradicate CC_HAS_ASM_GOTO
-Message-ID: <YwAFHPRVVa9X3Gue@dev-arch.thelio-3990X>
-References: <CAADnVQJFc9AnH_9CW+bSRotkKvOmkO9jq-RF6dmyPYOpq691Yg@mail.gmail.com>
- <20220819190640.2763586-1-ndesaulniers@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819190640.2763586-1-ndesaulniers@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B330B82969;
+        Fri, 19 Aug 2022 21:51:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F27C433D7;
+        Fri, 19 Aug 2022 21:51:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1660945862;
+        bh=otkJxMUciAkV/iSop9AgWwjsmz2/mTQOowplWkEsqE0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bsWzZSgDJq6T0nI0FlnIQaEfJzJLSFiYENmfQcb2Wyw+HCKrWj5o5cdOLTdszWZGq
+         qm7aP8rCVgPj59JacSRno0v3TvrMsptcGOTBz2nGKzHJ0acwFOpDkrTRR4iFB7CgXS
+         O+60Zr+Gt0Kt+K/uGrDX95jkRoIsDaiMsBoVU7P0=
+Date:   Fri, 19 Aug 2022 14:51:00 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     quanyang.wang@windriver.com
+Cc:     Arnd Bergmann <arnd@arndb.de>, Thierry Reding <treding@nvidia.com>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [V2][PATCH] asm-generic: sections: refactor memory_intersects
+Message-Id: <20220819145100.ad9d08094ab9f345563fc52b@linux-foundation.org>
+In-Reply-To: <20220819081145.948016-1-quanyang.wang@windriver.com>
+References: <20220819081145.948016-1-quanyang.wang@windriver.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,297 +53,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 12:06:40PM -0700, Nick Desaulniers wrote:
-> GCC has supported asm goto since 4.5, and Clang has since version 9.0.0.
-> The minimum supported versions of these tools for the build according to
-> Documentation/process/changes.rst are 5.1 and 11.0.0 respectively.
-> 
-> Remove the feature detection script, Kconfig option, and clean up some
-> fallback code that is no longer supported.
-> 
-> The removed script was also testing for a GCC specific bug that was
-> fixed in the 4.7 release.
-> 
-> Also remove workarounds for bpftrace using clang older than 9.0.0, since
-> other BPF backend fixes are required at this point.
-> 
-> Link: https://lore.kernel.org/lkml/CAK7LNATSr=BXKfkdW8f-H5VT_w=xBpT2ZQcZ7rm6JfkdE+QnmA@mail.gmail.com/
-> Link: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48637
-> Acked-by: Borislav Petkov <bp@suse.de>
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+On Fri, 19 Aug 2022 16:11:45 +0800 quanyang.wang@windriver.com wrote:
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> From: Quanyang Wang <quanyang.wang@windriver.com>
+> 
+> There are two problems with the current code of memory_intersects:
+> 
+> First, it doesn't check whether the region (begin, end) falls inside
+> the region (virt, vend), that is (virt < begin && vend > end).
+> 
+> The second problem is if vend is equal to begin, it will return true
+> but this is wrong since vend (virt + size) is not the last address of
+> the memory region but (virt + size -1) is. The wrong determination will
+> trigger the misreporting when the function check_for_illegal_area calls
+> memory_intersects to check if the dma region intersects with stext region.
+> 
+> The misreporting is as below (stext is at 0x80100000):
+>  WARNING: CPU: 0 PID: 77 at kernel/dma/debug.c:1073 check_for_illegal_area+0x130/0x168
+>  DMA-API: chipidea-usb2 e0002000.usb: device driver maps memory from kernel text or rodata [addr=800f0000] [len=65536]
+>  Modules linked in:
+>  CPU: 1 PID: 77 Comm: usb-storage Not tainted 5.19.0-yocto-standard #5
+>  Hardware name: Xilinx Zynq Platform
+>   unwind_backtrace from show_stack+0x18/0x1c
+>   show_stack from dump_stack_lvl+0x58/0x70
+>   dump_stack_lvl from __warn+0xb0/0x198
+>   __warn from warn_slowpath_fmt+0x80/0xb4
+>   warn_slowpath_fmt from check_for_illegal_area+0x130/0x168
+>   check_for_illegal_area from debug_dma_map_sg+0x94/0x368
+>   debug_dma_map_sg from __dma_map_sg_attrs+0x114/0x128
+>   __dma_map_sg_attrs from dma_map_sg_attrs+0x18/0x24
+>   dma_map_sg_attrs from usb_hcd_map_urb_for_dma+0x250/0x3b4
+>   usb_hcd_map_urb_for_dma from usb_hcd_submit_urb+0x194/0x214
+>   usb_hcd_submit_urb from usb_sg_wait+0xa4/0x118
+>   usb_sg_wait from usb_stor_bulk_transfer_sglist+0xa0/0xec
+>   usb_stor_bulk_transfer_sglist from usb_stor_bulk_srb+0x38/0x70
+>   usb_stor_bulk_srb from usb_stor_Bulk_transport+0x150/0x360
+>   usb_stor_Bulk_transport from usb_stor_invoke_transport+0x38/0x440
+>   usb_stor_invoke_transport from usb_stor_control_thread+0x1e0/0x238
+>   usb_stor_control_thread from kthread+0xf8/0x104
+>   kthread from ret_from_fork+0x14/0x2c
+> 
+> Refactor memory_intersects to fix the two problems above.
+> 
+> ...
 
-> ---
-> 
-> Changes v1 -> v2:
-> https://lore.kernel.org/linux-kbuild/20220819170053.2686006-1-ndesaulniers@google.com/
-> * Pick up Boris' ack.
-> * Drop line about Dash compat as per Alexandre.
-> * Drop Alexandre's reported by as per Masahiro.
-> * s/Kbuild/asm goto/ in oneline as per Masahiro.
-> * Remove entirety of bpftrace workarounds as per Alexei.
-> * Fix mistake in arch/x86/include/asm/rmwcc.h in v1 where I removed too
->   much; we still need guards for __GCC_ASM_FLAG_OUTPUTS__.
-> 
->  Documentation/kbuild/kconfig-language.rst |  4 ++--
->  arch/Kconfig                              |  3 +--
->  arch/um/include/asm/cpufeature.h          | 15 ---------------
->  arch/x86/Makefile                         |  4 ----
->  arch/x86/include/asm/cpufeature.h         | 15 ---------------
->  arch/x86/include/asm/rmwcc.h              |  6 +++---
->  arch/x86/kvm/emulate.c                    |  2 +-
->  init/Kconfig                              |  4 ----
->  scripts/gcc-goto.sh                       | 22 ----------------------
->  tools/arch/x86/include/asm/rmwcc.h        | 21 ---------------------
->  10 files changed, 7 insertions(+), 89 deletions(-)
->  delete mode 100755 scripts/gcc-goto.sh
-> 
-> diff --git a/Documentation/kbuild/kconfig-language.rst b/Documentation/kbuild/kconfig-language.rst
-> index 7fb398649f51..858ed5d80def 100644
-> --- a/Documentation/kbuild/kconfig-language.rst
-> +++ b/Documentation/kbuild/kconfig-language.rst
-> @@ -525,8 +525,8 @@ followed by a test macro::
->  If you need to expose a compiler capability to makefiles and/or C source files,
->  `CC_HAS_` is the recommended prefix for the config option::
+There must be tons of places in the kernel which check to see if two
+regions overlap at all, I'm not sure why dma debug needs its own one?
+
+> --- a/include/asm-generic/sections.h
+> +++ b/include/asm-generic/sections.h
+> @@ -110,7 +110,10 @@ static inline bool memory_intersects(void *begin, void *end, void *virt,
+>  {
+>  	void *vend = virt + size;
 >  
-> -  config CC_HAS_ASM_GOTO
-> -	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
-> +  config CC_HAS_FOO
-> +	def_bool $(success,$(srctree)/scripts/cc-check-foo.sh $(CC))
->  
->  Build as module only
->  ~~~~~~~~~~~~~~~~~~~~
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index f330410da63a..5dbf11a5ba4e 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -53,7 +53,6 @@ config KPROBES
->  config JUMP_LABEL
->  	bool "Optimize very unlikely/likely branches"
->  	depends on HAVE_ARCH_JUMP_LABEL
-> -	depends on CC_HAS_ASM_GOTO
->  	select OBJTOOL if HAVE_JUMP_LABEL_HACK
->  	help
->  	 This option enables a transparent branch optimization that
-> @@ -1361,7 +1360,7 @@ config HAVE_PREEMPT_DYNAMIC_CALL
->  
->  config HAVE_PREEMPT_DYNAMIC_KEY
->  	bool
-> -	depends on HAVE_ARCH_JUMP_LABEL && CC_HAS_ASM_GOTO
-> +	depends on HAVE_ARCH_JUMP_LABEL
->  	select HAVE_PREEMPT_DYNAMIC
->  	help
->  	   An architecture should select this if it can handle the preemption
-> diff --git a/arch/um/include/asm/cpufeature.h b/arch/um/include/asm/cpufeature.h
-> index 19cd7ed6ec3c..4b6d1b526bc1 100644
-> --- a/arch/um/include/asm/cpufeature.h
-> +++ b/arch/um/include/asm/cpufeature.h
-> @@ -65,20 +65,6 @@ extern void setup_clear_cpu_cap(unsigned int bit);
->  
->  #define setup_force_cpu_bug(bit) setup_force_cpu_cap(bit)
->  
-> -#if defined(__clang__) && !defined(CONFIG_CC_HAS_ASM_GOTO)
-> -
-> -/*
-> - * Workaround for the sake of BPF compilation which utilizes kernel
-> - * headers, but clang does not support ASM GOTO and fails the build.
-> - */
-> -#ifndef __BPF_TRACING__
-> -#warning "Compiler lacks ASM_GOTO support. Add -D __BPF_TRACING__ to your compiler arguments"
-> -#endif
-> -
-> -#define static_cpu_has(bit)            boot_cpu_has(bit)
-> -
-> -#else
-> -
->  /*
->   * Static testing of CPU features. Used the same as boot_cpu_has(). It
->   * statically patches the target code for additional performance. Use
-> @@ -137,7 +123,6 @@ static __always_inline bool _static_cpu_has(u16 bit)
->  		boot_cpu_has(bit) :				\
->  		_static_cpu_has(bit)				\
->  )
-> -#endif
->  
->  #define cpu_has_bug(c, bit)		cpu_has(c, (bit))
->  #define set_cpu_bug(c, bit)		set_cpu_cap(c, (bit))
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index 7854685c5f25..bafbd905e6e7 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -286,10 +286,6 @@ vdso_install:
->  
->  archprepare: checkbin
->  checkbin:
-> -ifndef CONFIG_CC_HAS_ASM_GOTO
-> -	@echo Compiler lacks asm-goto support.
-> -	@exit 1
-> -endif
->  ifdef CONFIG_RETPOLINE
->  ifeq ($(RETPOLINE_CFLAGS),)
->  	@echo "You are building kernel with non-retpoline compiler." >&2
-> diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-> index ea34cc31b047..1a85e1fb0922 100644
-> --- a/arch/x86/include/asm/cpufeature.h
-> +++ b/arch/x86/include/asm/cpufeature.h
-> @@ -155,20 +155,6 @@ extern void clear_cpu_cap(struct cpuinfo_x86 *c, unsigned int bit);
->  
->  #define setup_force_cpu_bug(bit) setup_force_cpu_cap(bit)
->  
-> -#if defined(__clang__) && !defined(CONFIG_CC_HAS_ASM_GOTO)
-> -
-> -/*
-> - * Workaround for the sake of BPF compilation which utilizes kernel
-> - * headers, but clang does not support ASM GOTO and fails the build.
-> - */
-> -#ifndef __BPF_TRACING__
-> -#warning "Compiler lacks ASM_GOTO support. Add -D __BPF_TRACING__ to your compiler arguments"
-> -#endif
-> -
-> -#define static_cpu_has(bit)            boot_cpu_has(bit)
-> -
-> -#else
-> -
->  /*
->   * Static testing of CPU features. Used the same as boot_cpu_has(). It
->   * statically patches the target code for additional performance. Use
-> @@ -208,7 +194,6 @@ static __always_inline bool _static_cpu_has(u16 bit)
->  		boot_cpu_has(bit) :				\
->  		_static_cpu_has(bit)				\
->  )
-> -#endif
->  
->  #define cpu_has_bug(c, bit)		cpu_has(c, (bit))
->  #define set_cpu_bug(c, bit)		set_cpu_cap(c, (bit))
-> diff --git a/arch/x86/include/asm/rmwcc.h b/arch/x86/include/asm/rmwcc.h
-> index 8a9eba191516..7fa611216417 100644
-> --- a/arch/x86/include/asm/rmwcc.h
-> +++ b/arch/x86/include/asm/rmwcc.h
-> @@ -11,7 +11,7 @@
->  
->  #define __CLOBBERS_MEM(clb...)	"memory", ## clb
->  
-> -#if !defined(__GCC_ASM_FLAG_OUTPUTS__) && defined(CONFIG_CC_HAS_ASM_GOTO)
-> +#ifndef __GCC_ASM_FLAG_OUTPUTS__
->  
->  /* Use asm goto */
->  
-> @@ -27,7 +27,7 @@ cc_label:	c = true;						\
->  	c;								\
->  })
->  
-> -#else /* defined(__GCC_ASM_FLAG_OUTPUTS__) || !defined(CONFIG_CC_HAS_ASM_GOTO) */
-> +#else /* defined(__GCC_ASM_FLAG_OUTPUTS__) */
->  
->  /* Use flags output or a set instruction */
->  
-> @@ -40,7 +40,7 @@ cc_label:	c = true;						\
->  	c;								\
->  })
->  
-> -#endif /* defined(__GCC_ASM_FLAG_OUTPUTS__) || !defined(CONFIG_CC_HAS_ASM_GOTO) */
-> +#endif /* defined(__GCC_ASM_FLAG_OUTPUTS__) */
->  
->  #define GEN_UNARY_RMWcc_4(op, var, cc, arg0)				\
->  	__GEN_RMWcc(op " " arg0, var, cc, __CLOBBERS_MEM())
-> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> index b4eeb7c75dfa..08613c65138d 100644
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -493,7 +493,7 @@ FOP_END;
->  
->  /*
->   * XXX: inoutclob user must know where the argument is being expanded.
-> - *      Relying on CONFIG_CC_HAS_ASM_GOTO would allow us to remove _fault.
-> + *      Using asm goto would allow us to remove _fault.
->   */
->  #define asm_safe(insn, inoutclob...) \
->  ({ \
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 80fe60fa77fb..532362fcfe31 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -70,11 +70,7 @@ config CC_CAN_LINK_STATIC
->  	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag) -static) if 64BIT
->  	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
->  
-> -config CC_HAS_ASM_GOTO
-> -	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
-> -
->  config CC_HAS_ASM_GOTO_OUTPUT
-> -	depends on CC_HAS_ASM_GOTO
->  	def_bool $(success,echo 'int foo(int x) { asm goto ("": "=r"(x) ::: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
->  
->  config CC_HAS_ASM_GOTO_TIED_OUTPUT
-> diff --git a/scripts/gcc-goto.sh b/scripts/gcc-goto.sh
-> deleted file mode 100755
-> index 8b980fb2270a..000000000000
-> --- a/scripts/gcc-goto.sh
-> +++ /dev/null
-> @@ -1,22 +0,0 @@
-> -#!/bin/sh
-> -# SPDX-License-Identifier: GPL-2.0
-> -# Test for gcc 'asm goto' support
-> -# Copyright (C) 2010, Jason Baron <jbaron@redhat.com>
-> -
-> -cat << "END" | $@ -x c - -fno-PIE -c -o /dev/null
-> -int main(void)
-> -{
-> -#if defined(__arm__) || defined(__aarch64__)
-> -	/*
-> -	 * Not related to asm goto, but used by jump label
-> -	 * and broken on some ARM GCC versions (see GCC Bug 48637).
-> -	 */
-> -	static struct { int dummy; int state; } tp;
-> -	asm (".long %c0" :: "i" (&tp.state));
-> -#endif
-> -
-> -entry:
-> -	asm goto ("" :::: entry);
-> -	return 0;
-> -}
-> -END
-> diff --git a/tools/arch/x86/include/asm/rmwcc.h b/tools/arch/x86/include/asm/rmwcc.h
-> index fee7983a90b4..11ff975242ca 100644
-> --- a/tools/arch/x86/include/asm/rmwcc.h
-> +++ b/tools/arch/x86/include/asm/rmwcc.h
-> @@ -2,8 +2,6 @@
->  #ifndef _TOOLS_LINUX_ASM_X86_RMWcc
->  #define _TOOLS_LINUX_ASM_X86_RMWcc
->  
-> -#ifdef CONFIG_CC_HAS_ASM_GOTO
-> -
->  #define __GEN_RMWcc(fullop, var, cc, ...)				\
->  do {									\
->  	asm_volatile_goto (fullop "; j" cc " %l[cc_label]"		\
-> @@ -20,23 +18,4 @@ cc_label:								\
->  #define GEN_BINARY_RMWcc(op, var, vcon, val, arg0, cc)			\
->  	__GEN_RMWcc(op " %1, " arg0, var, cc, vcon (val))
->  
-> -#else /* !CONFIG_CC_HAS_ASM_GOTO */
-> -
-> -#define __GEN_RMWcc(fullop, var, cc, ...)				\
-> -do {									\
-> -	char c;								\
-> -	asm volatile (fullop "; set" cc " %1"				\
-> -			: "+m" (var), "=qm" (c)				\
-> -			: __VA_ARGS__ : "memory");			\
-> -	return c != 0;							\
-> -} while (0)
-> -
-> -#define GEN_UNARY_RMWcc(op, var, arg0, cc)				\
-> -	__GEN_RMWcc(op " " arg0, var, cc)
-> -
-> -#define GEN_BINARY_RMWcc(op, var, vcon, val, arg0, cc)			\
-> -	__GEN_RMWcc(op " %2, " arg0, var, cc, vcon (val))
-> -
-> -#endif /* CONFIG_CC_HAS_ASM_GOTO */
-> -
->  #endif /* _TOOLS_LINUX_ASM_X86_RMWcc */
-> -- 
-> 2.37.1.595.g718a3a8f04-goog
-> 
-> 
+> -	return (virt >= begin && virt < end) || (vend >= begin && vend < end);
+> +	if (virt < end && vend > begin)
+> +		return true;
+> +
+> +	return false;
+>  }
+
+These things bend my brain, but all the cases I've mind-tested worked
+out OK.
+
+Now the forever question: is a -stable backport needed?  The bug
+appears to be six years old, so I guess not.  Can you suggest why it
+took this long?  Are you doing something unusual?
+
+
+While we're in there, I can't resist fixing that typo...
+
+--- a/include/asm-generic/sections.h~asm-generic-sections-refactor-memory_intersects-fix
++++ a/include/asm-generic/sections.h
+@@ -97,7 +97,7 @@ static inline bool memory_contains(void
+ /**
+  * memory_intersects - checks if the region occupied by an object intersects
+  *                     with another memory region
+- * @begin: virtual address of the beginning of the memory regien
++ * @begin: virtual address of the beginning of the memory region
+  * @end: virtual address of the end of the memory region
+  * @virt: virtual address of the memory object
+  * @size: size of the memory object
+_
+

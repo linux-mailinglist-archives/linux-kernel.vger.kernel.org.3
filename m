@@ -2,128 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58245996CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7055996F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347455AbiHSIJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        id S1347485AbiHSIKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347437AbiHSIJY (ORCPT
+        with ESMTP id S1347457AbiHSIKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:09:24 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51109AFBF;
-        Fri, 19 Aug 2022 01:09:22 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27J6vIV1019537;
-        Fri, 19 Aug 2022 08:09:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Udv9bz/xQJBZrSCR6IODRmBEUGm4gg5qONcdmdNP+Lc=;
- b=WZybTPf3J1T/jjLIymqVirEde9WA41zu5MRphcAHYnlnW4qUM0XPXZk7pRmJx1yhbdWF
- qStAZzOtISdMXBCEebsIM2E7C2d+lccWBExHRwj5hZ9poq7bifQtjBXVOxIWFfE9i58C
- TDHh9fb6lOL+po1W98S/lkSCvspFboK6WjNe6KB81YerTjxYcdQcsfiYszI5W3fOzSy7
- 5uatsUjMsLVl3IrL+UIrkNfafGnv/zQR57o2Dh9pY1y/z8TpSwSBW5+3se0b/rFJ+uJm
- LRCW0xKUC1EKpy6NvyCkpCe77ZsJKgqpShpSNle8PrJx0H4o1oe0r9m+PeBCZlMrOmrW Aw== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j25q3a6u4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 08:09:18 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27J86Aaa001381;
-        Fri, 19 Aug 2022 08:09:16 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03fra.de.ibm.com with ESMTP id 3hx3k8w5rj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 08:09:15 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27J89CcY24772874
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 Aug 2022 08:09:12 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E984A4051;
-        Fri, 19 Aug 2022 08:09:12 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D6482A4040;
-        Fri, 19 Aug 2022 08:09:11 +0000 (GMT)
-Received: from [9.145.158.147] (unknown [9.145.158.147])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 19 Aug 2022 08:09:11 +0000 (GMT)
-Message-ID: <580bf781-81f6-5f8e-12bf-7195f7a62b36@linux.ibm.com>
-Date:   Fri, 19 Aug 2022 10:09:11 +0200
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH] s390: move from strlcpy with unused retval to strscpy
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org
-References: <20220818210102.7301-1-wsa+renesas@sang-engineering.com>
-From:   Alexandra Winter <wintera@linux.ibm.com>
-In-Reply-To: <20220818210102.7301-1-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 07MBEEmAI3oDzTfECX0PkbivG95bSTto
-X-Proofpoint-ORIG-GUID: 07MBEEmAI3oDzTfECX0PkbivG95bSTto
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 19 Aug 2022 04:10:19 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EF6E5899;
+        Fri, 19 Aug 2022 01:10:18 -0700 (PDT)
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M8Dnn0Ntsz67kgW;
+        Fri, 19 Aug 2022 16:05:17 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 19 Aug 2022 10:10:03 +0200
+Received: from [10.195.34.98] (10.195.34.98) by lhrpeml500003.china.huawei.com
+ (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 19 Aug
+ 2022 09:10:03 +0100
+Message-ID: <dd41c5c3-ee16-821c-afd4-ddda4443bc78@huawei.com>
+Date:   Fri, 19 Aug 2022 09:10:03 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-19_04,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 bulkscore=0 mlxscore=0 spamscore=0 adultscore=0
- clxscore=1011 phishscore=0 impostorscore=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=911 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2207270000 definitions=main-2208190032
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH PoC 2/3] ACPI: platform: Refactor
+ acpi_create_platform_device()
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "ACPI Devel Maling List" <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>
+References: <1660649244-146842-1-git-send-email-john.garry@huawei.com>
+ <1660649244-146842-3-git-send-email-john.garry@huawei.com>
+ <CAHp75VdhCovo1uT3oxQAymEO9X+29oDet7LjYkLvpmj+r15Tfg@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <CAHp75VdhCovo1uT3oxQAymEO9X+29oDet7LjYkLvpmj+r15Tfg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.34.98]
+X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18.08.22 23:01, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
+On 18/08/2022 20:41, Andy Shevchenko wrote:
+> On Tue, Aug 16, 2022 at 2:33 PM John Garry <john.garry@huawei.com> wrote:
+>>
+>> There is commonality between acpi_create_platform_device() and
+>> hisi_lpc_acpi_add_child(), in that it covers 2x main steps:
+>> - Read resources for the acpi_device
+>> - Create platform device
+>>
+>> Refactor acpi_create_platform_device() so that it may be reused by
+>> hisi_lpc_acpi_add_child() to reduce duplication.
 > 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  drivers/s390/block/dasd_devmap.c | 2 +-
->  drivers/s390/block/dasd_eer.c    | 4 ++--
->  drivers/s390/block/dcssblk.c     | 2 +-
->  drivers/s390/char/hmcdrv_cache.c | 2 +-
->  drivers/s390/char/tape_class.c   | 4 ++--
->  drivers/s390/cio/qdio_debug.c    | 2 +-
->  drivers/s390/net/ctcm_main.c     | 2 +-
->  drivers/s390/net/fsm.c           | 2 +-
->  drivers/s390/net/qeth_ethtool.c  | 4 ++--
->  drivers/s390/scsi/zfcp_aux.c     | 2 +-
->  drivers/s390/scsi/zfcp_fc.c      | 2 +-
->  11 files changed, 14 insertions(+), 14 deletions(-)
+> ...
+> 
+>> + * acpi_create_platform_device_ops - Create platform device for ACPI device node
+> 
+> Not sure I understand why _ops is a suffix for the function. I would
+> expect _ops to be a data struct where the ->xlate() and perhaps other
+> callbacks may be collected. It may be that I have missed that portion
+> in the previous discussion.
+
+ok, maybe I can put all the members into a struct, but I don't think 
+that it improves the overall code too much.
+
+> 
+> ...
+> 
+>> +       if (name)
+>> +               pdevinfo.name = name;
+>> +       else
+>> +               pdevinfo.name = dev_name(&adev->dev);
+> 
+>> +       pdevinfo.data = data;
+>> +       pdevinfo.size_data = size_data;
+> 
+> It rather reminds me of platform device registration full with this
+> device info. May be what you need is
+> struct acpi_platfrom_device_info {
+>    properties;
+>    name;
+>    id;
+>    ->xlate();
+>    ...
+> };
+> 
+> ?
+> 
+> ...
+> 
+>> +struct platform_device *acpi_create_platform_device_ops(
+>> +                               struct acpi_device *adev,
+>> +                               const char *name,
+>> +                               const struct property_entry *properties,
+>> +                               void *data, size_t size_data,
+>> +                               int (*xlat)(struct acpi_device *adev,
+>> +                                           struct resource *res,
+>> +                                           void *data, size_t size_data),
+>> +                               int id);
+> 
+> ...because this looks  a bit too much from the amount of parameters
+> point of view.
 > 
 
+ok, agreed.
 
-Thank you. Ack'ed for drivers/s390/net and drivers/s390/cio
-Acked-by: Alexandra Winter <wintera@linux.ibm.com>
+But even if we improve this code, the hisi_lpc changes are quite large 
+and unwieldly.
+
+Thanks,
+John

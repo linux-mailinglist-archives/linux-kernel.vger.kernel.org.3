@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239B05992E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 04:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D84D35992F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 04:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240343AbiHSCHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 22:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
+        id S243954AbiHSCIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 22:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242457AbiHSCHO (ORCPT
+        with ESMTP id S236015AbiHSCI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 22:07:14 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742A9D2B07
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:07:12 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id u9so3414378oiv.12
-        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 19:07:12 -0700 (PDT)
+        Thu, 18 Aug 2022 22:08:26 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1983A52DDF;
+        Thu, 18 Aug 2022 19:08:25 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id p6so2857841vsr.9;
+        Thu, 18 Aug 2022 19:08:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=7FnofYSJQVqMcwObKiPoclmUUgog9bhmYO53YPglp1g=;
-        b=GX8kGc2VNDTD33NJ/fvEi1ucSQdLqQ7hwf5zCrmTGt4qPXCTu/n1o61/RVTMAy1TKM
-         sI/ZErSSKKeTEfTy7gW5ozAX4kYZ9gdaOMpYknqrUzd2hYTodMJ/a0GVQic7Y46Lz+a3
-         o74vy6ZRtANrFfDTVPP616J23XshowlWQD0IUNT5mfUv6Hux8r3eJ+N48x1k1hSmB+mU
-         oEfs07GB24v+owqIGmgGwhL0wc5CZX6TJ6/VDf/Up6Qnw4UYisHDbWm/db0ROUF4nsfw
-         h0xKbWmRPyl/ZvzL2IFxirIOJnAdRWwN94r5wap/LAacMya0Bx0cHcilqULYlyUGY/Hj
-         mUbw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=LUWdT3rWXowd2tAqN9voXlgd0i9mK0bhvny4YxtRrog=;
+        b=oeaINDlitH/VkyumqwSp0jpH1rbCvnqfOcL4nC538YFfFPIoOMo24PuceZEZ/19wql
+         fT3fW7SRGbAKERBpZrmD7E92+3K4U+WU/cXduaTYJP6QJsN0LjsfCLXy7rshAqcNzxrA
+         yAAlXc0CqHK85wjk3JmWBopzWgpkVfczFa8vIVm/JFRo56el7Np+/Ybftl512MORyDjl
+         MEmKjlieSKGSvs6Jbr9lPw6ngm3PUPEVSC9sIsi2wIDcHsQSjF+i0RwQ3LYDMFOd+L0H
+         aLPUzsJIpLY6AXcIo0QooTL3KoEJ30yEeaTW+cwUUKicp+Itfu1X+klP0pDMFmECUMXD
+         Z2SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=7FnofYSJQVqMcwObKiPoclmUUgog9bhmYO53YPglp1g=;
-        b=Q074Oeq1bWWU4IfZKjhk69eGMAluvgf2+AN655sbglffebZ3BjJLOqCrWRAxBAqdwM
-         yqiETV/cTina4CLv6MqaARVQoDxsu76O7HxQoP+bg4uBIi688GrQN4w5inmtcZr0/YZY
-         w0DyRKOG95KkZFR1niZ0QOe257XXjzNcMmQyonwVz5OUNPaTU5UY9ApDgTX3rbgz9/gD
-         g1hqPg0PisACuKmksnY82Qa0KDHaYv6XtjgZE/Dn+v0FJfbc6u162TQtEBoUlQ/iUE9U
-         VRxZVBfuNgC2/d2FvS/vVbHHWEY+B180l6sv0odWeyUMI88t1gklF5f6vL2/v/lksu1j
-         pEUA==
-X-Gm-Message-State: ACgBeo0UH1/7D7JFRNd8nQqNZ7MjLF6hxm2CCg8EgkTFwR0tG/Nd8C0T
-        Nm7LMlP/lUpTJlSAD1mUNphiiixl6VRhTd/6iLZN
-X-Google-Smtp-Source: AA6agR6cj8VSpjI/zApuASeCp69SrwPgQ8cO+N+6GBvKR4OZOomr/8/vSNzS2f2WUZvq2z45LGjtxYHiuXLI20C0OyI=
-X-Received: by 2002:aca:b7d5:0:b0:343:c478:91c6 with SMTP id
- h204-20020acab7d5000000b00343c47891c6mr2523807oif.136.1660874831825; Thu, 18
- Aug 2022 19:07:11 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=LUWdT3rWXowd2tAqN9voXlgd0i9mK0bhvny4YxtRrog=;
+        b=5oYz3XKvtG/Tbk90OnpKKfX6oWMbyAc3BSZXDfL57Ccm1ISTU5KV5I07MC6+VHT57Q
+         sNo4FJYtcpB789DRBUw8n9snYf2wA2e6FFYD38Kuc80dx2oXTIqyF4gwPhD9gtKZlDQ4
+         oz+FYs7TzTWXwZSxBOsh/YmBNIV9J3bWL6vP3uhc4kSbc2IpY+4LZao1T8pYip6TowD8
+         KkHTp2qGB2K4i+LwK3pe5vXPdJxFEZk4GcCHkn7pbfGAqGqO7M8iIfE5MpKnFzAJ/0pb
+         3kCwtK0GEWwYl5AOoCJmHEsDd70jTSOiqNMBAhBockldAQQDCC1cp7cnFFGeXI7J2TJY
+         6lAA==
+X-Gm-Message-State: ACgBeo27XrIACUzZGjyLK0PCuaBLOMqwz6g0fgo+ZJEbD+cZ9A8Pma6f
+        z/0ehRLADpYQRCwfzV/f1/o=
+X-Google-Smtp-Source: AA6agR5zbwlQKGOLOiTmbWRKZy2b23MVDpGAiUHOx4R3SCdJReWWUh7pIGvBZ+bGLMPWn8UOfX4pgQ==
+X-Received: by 2002:a67:ba03:0:b0:385:b608:300d with SMTP id l3-20020a67ba03000000b00385b608300dmr2173862vsn.33.1660874903321;
+        Thu, 18 Aug 2022 19:08:23 -0700 (PDT)
+Received: from localhost.localdomain ([2804:14c:4c2:8202::1001])
+        by smtp.gmail.com with ESMTPSA id ba6-20020a056102282600b0038855ac0416sm1706595vsb.7.2022.08.18.19.08.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Aug 2022 19:08:22 -0700 (PDT)
+From:   Tales Aparecida <tales.aparecida@gmail.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>, davidgow@google.com
+Cc:     siqueirajordao@riseup.net, mwen@igalia.com, andrealmeid@riseup.net,
+        mairacanal@riseup.net, Isabella Basso <isabbasso@riseup.net>,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kunit: tool: fix --qemu_config help text
+Date:   Thu, 18 Aug 2022 23:08:15 -0300
+Message-Id: <20220819020815.183766-1-tales.aparecida@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <165970659095.2812394.6868894171102318796.stgit@warthog.procyon.org.uk>
- <CAFqZXNv+ahpN3Hdv54ixa4u-LKaqTtCyjtkpzKGbv7x4dzwc0Q@mail.gmail.com>
- <CAHC9VhTpqvFbjKG5FMKGRBRHavOUrsCSFgayh+BNgSrry8bWLg@mail.gmail.com> <2026286.1660828477@warthog.procyon.org.uk>
-In-Reply-To: <2026286.1660828477@warthog.procyon.org.uk>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 18 Aug 2022 22:07:01 -0400
-Message-ID: <CAHC9VhSVRgSK_ShwShcYnnDOg+mR0V9WEodVmJ=c5_UzK3KLiQ@mail.gmail.com>
-Subject: Re: [PATCH v3] nfs: Fix automount superblock LSM init problem,
- preventing sb sharing
-To:     David Howells <dhowells@redhat.com>
-Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Scott Mayhew <smayhew@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        dwysocha@redhat.com,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 9:14 AM David Howells <dhowells@redhat.com> wrote:
-> Paul Moore <paul@paul-moore.com> wrote:
->
-> > I guess my question is this: for inodes inside the superblock, does
-> > their superblock pointer point to the submount's superblock, or the
-> > parent filesystem's superblock?
->
-> They have to point to the submount superblock.  Too many things would break, I
-> think, if inode->i_sb pointed to the wrong place.  As far as the VFS is
-> concerned, apart from the way it is mounted, it's a perfectly normal
-> superblock.
+Remove duplicated wording from the help text for the kunit_tool
+argument "qemu_config":
+"Takes a path to a path to a file containing a QemuArchParams object."
+         ~~~~~~~~~
 
-If the submount inodes point back to the submount's superblock then it
-seems reasonable that the rootcontext should remain unset to me.
+Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
+---
+ tools/testing/kunit/kunit.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index e132b0654029..ae193c9820c5 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -322,7 +322,7 @@ def add_common_opts(parser) -> None:
+ 			    metavar='PREFIX')
+ 
+ 	parser.add_argument('--qemu_config',
+-			    help=('Takes a path to a path to a file containing '
++			    help=('Takes a path to a file containing '
+ 				  'a QemuArchParams object.'),
+ 			    type=str, metavar='FILE')
+ 
 -- 
-paul-moore.com
+2.37.1
+

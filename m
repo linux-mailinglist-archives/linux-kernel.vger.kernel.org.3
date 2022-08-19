@@ -2,122 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7BC59975B
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5894599728
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347569AbiHSIdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
+        id S1347705AbiHSIfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347479AbiHSIcp (ORCPT
+        with ESMTP id S1347650AbiHSIem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:32:45 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F00E97F7
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:32:37 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id z6so5217309lfu.9
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:32:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=kO40mQ5LLiZM72PI1BOZaM3hZEnsq6qb9gCyjdGLi8E=;
-        b=g1vh6m10ovfpwnHEpYd5bleuB3ieTl0HlOZy9kcgToeIlnHokH2a6h36qB/Bz7bqtY
-         rnjOjsJydffU24SgMyQLzR+6ldMGAEFkIrt4kJVVujYzUHiP3VOC6HAY7nebnULJnFDn
-         IlL06PdoFY1GpUlxMT0UqPrQD3SE9lB97QmIoTP3GIMcseDK6XXBjqYnW9ogMstg9IjA
-         gcdesJFbkkrDkbKEL7KrXrhIn7XO+3SSWFRIUoCNwWukhk2aOe7Tq56YEhN+66aHASN4
-         6joodtqmahp03Bw+KMQvjvkLNs7kHDbFhp/YdfaIH0+uvRnkuXamKGbsmvju7zj8J6Cz
-         +PKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=kO40mQ5LLiZM72PI1BOZaM3hZEnsq6qb9gCyjdGLi8E=;
-        b=x1ZiGHbMY6nsKAVvPLpmpF8t5sFTRfTQxMJJHLfYxv50Fv57e+uJiGfQyDdlrelyIh
-         vUkEHqsmXoq03mlbo9OqO85QWrg/ijN/H0q4iVjYBAxEnyvvk6aAmLT4MDM4aVi0GWPo
-         C5hgHi3ztOYY1n7Lp/zG/NX4GAgl6FfF+5XlqnNJtsYvDkYu1EXq3ecDXwT97Y8zvK+d
-         Mx3xuZ94fISjxx8MV+7YMFn3BfDSQd/6Ia8rcXQsMyc98U/edvOdeUFPUVDCQZJrFBcb
-         Vh/aMbK10+VRggwAa2rKH1EeAgN+tSzFGhRqqNY9beDSah5UUi18KFq1RHvDeZEl9hsZ
-         IH/g==
-X-Gm-Message-State: ACgBeo1+QTOVawAW3wCSkXpPHFQJxb/irfWrVosq/2R28TG7FgLIrohT
-        5sC6dp3IsU81JGJQOPwn1zSAdw==
-X-Google-Smtp-Source: AA6agR7KumzH+lH7XCNHMJ0xX3epEUY1/e/6aC/dy4l7Gna3s4wt6/o6JpLuJTOao+IuaHNwqY2TGg==
-X-Received: by 2002:a05:6512:3090:b0:48b:6e1:1b55 with SMTP id z16-20020a056512309000b0048b06e11b55mr2325331lfd.535.1660897955437;
-        Fri, 19 Aug 2022 01:32:35 -0700 (PDT)
-Received: from krzk-bin.. (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id j8-20020a19f508000000b00492a54f0be1sm545355lfb.284.2022.08.19.01.32.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 01:32:35 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFT PATCH v3 16/16] arm64: dts: qcom: sm8150: switch TCSR mutex to MMIO
-Date:   Fri, 19 Aug 2022 11:32:09 +0300
-Message-Id: <20220819083209.50844-17-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220819083209.50844-1-krzysztof.kozlowski@linaro.org>
-References: <20220819083209.50844-1-krzysztof.kozlowski@linaro.org>
+        Fri, 19 Aug 2022 04:34:42 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739B832042
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/iVNNjB8U3q+4+g1NB6eYk8TE0j2SJ8SWzHSD2nk/y0=; b=iVwwDRSD4sV8BDBd10gpD7wRcO
+        MzYvuV5LI624DLxP9qaCT/iadFn6Dp1+rVU/hPtquPhch/KYqOkK33Ix1k5OUyZk87/G+mDJeRcfP
+        uHd1I5i5wpU5T/HoYpPngxP/4eOAnyxhbWZ6v2V00dR2PJP3bSjXUWY3HwZxOfRhFRoyzKnkx15Li
+        WmEnDzKVjTePtF0RkbBmuwXzJGb9FReZx0PBxVsCEztVtqYBg1DWEWKp3/3s3J8jAUvzyBlr9t6Mo
+        fJJTCRS4rGL4H4usxJR7hoLJFKDv5cUVWVNx7vL+eISK3UEVHUJm+o3lp6qZr910bo6nf+X/MoUy6
+        tnh9yItg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oOxRF-00AvAk-Gh; Fri, 19 Aug 2022 08:33:09 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 08D06980120; Fri, 19 Aug 2022 10:33:08 +0200 (CEST)
+Date:   Fri, 19 Aug 2022 10:33:07 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     kan.liang@linux.intel.com
+Cc:     acme@redhat.com, linux-kernel@vger.kernel.org,
+        alexander.shishkin@linux.intel.com, ak@linux.intel.com,
+        Jianfeng Gao <jianfeng.gao@intel.com>
+Subject: Re: [RESEND PATCH] perf/x86/intel: Fix unchecked MSR access error
+ for Alder Lake N
+Message-ID: <Yv9Kw21Wl/f6KJTk@worktop.programming.kicks-ass.net>
+References: <20220818181530.2355034-1-kan.liang@linux.intel.com>
+ <Yv9EVP6O9r867om4@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yv9EVP6O9r867om4@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TCSR mutex bindings allow device to be described only with address
-space (so it uses MMIO, not syscon regmap).  This seems reasonable as
-TCSR mutex is actually a dedicated IO address space and it also fixes DT
-schema checks:
+On Fri, Aug 19, 2022 at 10:05:40AM +0200, Peter Zijlstra wrote:
+> On Thu, Aug 18, 2022 at 11:15:30AM -0700, kan.liang@linux.intel.com wrote:
+> 
+> > The Alder Lake N only has e-cores. The X86_FEATURE_HYBRID_CPU flag is
+> > not set. The perf cannot retrieve the correct CPU type via
+> > get_this_hybrid_cpu_type(). The model specific get_hybrid_cpu_type() is
+> > hardcode to p-core. The wrong CPU type is given to the PMU of the
+> > Alder Lake N.
+> 
+> If ADL-N isn't in fact a hybrid CPU, then *WHY* are we running
+> init_hybrid_pmu() and setting up all that nonsense?
+> 
+> That is, wouldn't the right thing be to remove ALDERLAKE_N from the rest
+> of {ALDER,RAPTOP}LAKE and create a non-hybrid PMU setup for it?
 
-  qcom/sm8150-mtp.dtb: hwlock: 'reg' is a required property
-  qcom/sm8150-mtp.dtb: hwlock: 'syscon' does not match any of the regexes: 'pinctrl-[0-9]+'
+Something like the *completely* untested below.. which adds it like a
+regular atom chip (which it is).
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8150.dtsi | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+(I basically did copy/paste of tremont and added bits from the cpu_atom
+thing from alderlake -- but might well have missed something)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index 6df2e6828282..da737ba54490 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -585,12 +585,6 @@ scm: scm {
- 		};
- 	};
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 2db93498ff71..e509f1033a2d 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -5974,6 +5974,38 @@ __init int intel_pmu_init(void)
+ 		name = "Tremont";
+ 		break;
  
--	tcsr_mutex: hwlock {
--		compatible = "qcom,tcsr-mutex";
--		syscon = <&tcsr_mutex_regs 0 0x1000>;
--		#hwlock-cells = <1>;
--	};
--
- 	memory@80000000 {
- 		device_type = "memory";
- 		/* We expect the bootloader to fill in the size */
-@@ -2054,9 +2048,10 @@ ipa_virt: interconnect@1e00000 {
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
++	case INTEL_FAM6_ALDERLAKE_N:
++		x86_pmu.mid_ack = true;
++		memcpy(hw_cache_event_ids, glp_hw_cache_event_ids,
++		       sizeof(hw_cache_event_ids));
++		memcpy(hw_cache_extra_regs, tnt_hw_cache_extra_regs,
++		       sizeof(hw_cache_extra_regs));
++		hw_cache_event_ids[C(ITLB)][C(OP_READ)][C(RESULT_ACCESS)] = -1;
++
++		intel_pmu_lbr_init_skl();
++
++		x86_pmu.event_constraints = intel_slm_event_constraints;
++		x86_pmu.pebs_constraints = intel_grt_pebs_event_constraints;
++		x86_pmu.extra_regs = intel_grt_extra_regs;
++		/*
++		 * It's recommended to use CPU_CLK_UNHALTED.CORE_P + NPEBS
++		 * for precise cycles.
++		 */
++		x86_pmu.pebs_aliases = NULL;
++		x86_pmu.pebs_prec_dist = true;
++		x86_pmu.lbr_pt_coexist = true;
++		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
++		x86_pmu.flags |= PMU_FL_NO_HT_SHARING;
++		x86_pmu.flags |= PMU_FL_PEBS_ALL;
++		x86_pmu.flags |= PMU_FL_INSTR_LATENCY;
++		x86_pmu.flags |= PMU_FL_MEM_LOADS_AUX;
++		x86_pmu.get_event_constraints = tnt_get_event_constraints;
++		td_attr = tnt_events_attrs;
++		extra_attr = slm_format_attr;
++		pr_cont("Gracemont events, ");
++		name = "Gracemont";
++		break;
++
+ 	case INTEL_FAM6_WESTMERE:
+ 	case INTEL_FAM6_WESTMERE_EP:
+ 	case INTEL_FAM6_WESTMERE_EX:
+@@ -6318,7 +6350,6 @@ __init int intel_pmu_init(void)
  
--		tcsr_mutex_regs: syscon@1f40000 {
--			compatible = "syscon";
-+		tcsr_mutex: hwlock@1f40000 {
-+			compatible = "qcom,tcsr-mutex";
- 			reg = <0x0 0x01f40000 0x0 0x20000>;
-+			#hwlock-cells = <1>;
- 		};
- 
- 		tcsr_regs_1: sycon@1f60000 {
--- 
-2.34.1
-
+ 	case INTEL_FAM6_ALDERLAKE:
+ 	case INTEL_FAM6_ALDERLAKE_L:
+-	case INTEL_FAM6_ALDERLAKE_N:
+ 	case INTEL_FAM6_RAPTORLAKE:
+ 	case INTEL_FAM6_RAPTORLAKE_P:
+ 		/*

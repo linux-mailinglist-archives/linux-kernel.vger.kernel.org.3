@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B93C859A93C
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 01:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BB859A923
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 01:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243812AbiHSXLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 19:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S241145AbiHSXOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 19:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243682AbiHSXL1 (ORCPT
+        with ESMTP id S229595AbiHSXO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 19:11:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23ECAD5DEB
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 16:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660950680;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0y/a4pTSF6VtadOpwMNTC/mvZDJbVIcTrD8TXNTMH9w=;
-        b=e4sUl5rhbcDtgpuKtwGdwId8WiJHqNZEe3aWFrcnsBqI5QvP9XKWtSyUijHVnUfQwvA3ON
-        NlmAKv1+ynauy/ZXxp86DYWTGQYtbEkvu9pOvGVGGVNeTEmS9wTLtKdEOqBa8JuuJhvbwr
-        ohKkn4vW+A8RJgwcBcob4xWHZu5bucQ=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-360-b6xnA5ofMZWPN1goblxMEA-1; Fri, 19 Aug 2022 19:11:19 -0400
-X-MC-Unique: b6xnA5ofMZWPN1goblxMEA-1
-Received: by mail-ej1-f72.google.com with SMTP id hv19-20020a17090760d300b00730d0a018a6so1982635ejc.21
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 16:11:19 -0700 (PDT)
+        Fri, 19 Aug 2022 19:14:27 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6102D5DDE
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 16:14:25 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id bq11so133849wrb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 16:14:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=SaeFaIV5wV1MKMr29Q6wupMh56tK3GFJ3AGQW75BYAE=;
+        b=CGs3P+Cp1wV98Tih58wKHgLyWCKINJrfx6yL72mF1A8UF9jmiJMChfyPINgIVOByhr
+         BTraVSVz4osV3Wr3JoOqCa/t6H410iUM9T6oU4m2J/9fYv6+SurQjrupYfo5M91mndyr
+         ahmj7QeGxOVY00UfKAw/9xc/w65Ijrfdyl0ejMXa8/rnMnuUaSNR01kpejLmHmISVhnF
+         +6WEjyzVLsTZMLuB1/6gOl8DmPR5wCbL5dremvHWhDt1rbRaunnmAaOJh+qvhZAEluR3
+         CLjygIoBx/umhsPSf74QopQS6EDYGRsPFk3XnabCP6abxdxF6zPGvyNBABIT4voyhiJ2
+         OFJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=0y/a4pTSF6VtadOpwMNTC/mvZDJbVIcTrD8TXNTMH9w=;
-        b=4sLZhWBZ3dHhNZ3dCNaj907eD5UXWu04unHC8ZvkB/uZQMjyWPKY/e34LJX9YsyjMe
-         o+FCL8lpb3tDPktMzYsap+28NW9apMmpxXkebf2s7WBYX+De1BTf2eMDR9FjJsfOsTXV
-         n3oiLxSVLfiId5UxtXYHBbntJHEoN4ZgzyqKFpu0kyPidcftpjD03D41w6YIv/HrhwEN
-         nKBoQwAeU4PndcExlyGDFJl1oMNgKuyJEq+1MrKKgZlhgss9V00q0BeYOV/UVKQgV9J4
-         saogB4ARARaezGWe19mCKnsT1bbsAheNQ1SSIoavok3gTYlehgZVJInWHp/1Fx9drxVt
-         O0EQ==
-X-Gm-Message-State: ACgBeo13EA+YA9wz5DoH+MIjfm+dukRrzWpkdEscnJdGWbe8b6KdlhKN
-        Jph52beYHYFvwgMxTFW7yipX7EgD3OvIzfGHzw2XRWyh+IDpvGePJIc5HdkbbZKv6LQPCqUNAgW
-        dFdxumTCG8wKX1+HszKDw51Rd
-X-Received: by 2002:a05:6402:2714:b0:43d:ca4f:d2a2 with SMTP id y20-20020a056402271400b0043dca4fd2a2mr7764355edd.185.1660950678519;
-        Fri, 19 Aug 2022 16:11:18 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5t8ZWTVk4y4Y4BTXVKS9pOWxmu4s8KtL9YowyUh5bjRrc9ssHwXdvbPAqefLHaOgjt3XLApA==
-X-Received: by 2002:a05:6402:2714:b0:43d:ca4f:d2a2 with SMTP id y20-20020a056402271400b0043dca4fd2a2mr7764349edd.185.1660950678398;
-        Fri, 19 Aug 2022 16:11:18 -0700 (PDT)
-Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id d5-20020a17090694c500b00734bfab4d59sm2923078ejy.170.2022.08.19.16.11.17
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=SaeFaIV5wV1MKMr29Q6wupMh56tK3GFJ3AGQW75BYAE=;
+        b=vdtx4Hwq96tDTFYFjjiXeyyXSVlK4HAomDt3S+r/h/SaDx91suWgWzr4DUVLZdvohJ
+         Y5EhwA4+SXPKR4srPBhj7eITKhk1172B515QeDO2kXPiGZuqm6RzJAFw5GxUtLMGU1hF
+         huRCdueKaq6d5X7G2Iwgy/b9BMFQdNswBsv9eBjghbhk03PXFsWrlF9qBLwyUm+W1LvH
+         kKLjHwWqw1XwpRiTSCjJoT+Hw26PVHCbPzbca4JcWO9aEH3IyC0BV7Bh6XhyUWKFbczb
+         dcpGf+Zzm/Ju8qen9SrTwS0yS/sKYnhJxlXWs/r98ZjsVOboEi5supOcWmAvTkeFXtJN
+         ro0A==
+X-Gm-Message-State: ACgBeo28cDYSYJwk29JzBynTSsusZm5RGCuPrrPO+TAYQJIVaIAgOWvi
+        91+f9wxkCqM5vSZ6A2NTuEExeg==
+X-Google-Smtp-Source: AA6agR45rexqagWDTaf4OrZKNQUASwm12brUKvs56alSg1WmnroFZwWLaQyc1Nq9TLv496a/xaoE2A==
+X-Received: by 2002:a5d:4642:0:b0:225:33bf:39f4 with SMTP id j2-20020a5d4642000000b0022533bf39f4mr4002097wrs.77.1660950864300;
+        Fri, 19 Aug 2022 16:14:24 -0700 (PDT)
+Received: from henark71.. ([109.76.58.63])
+        by smtp.gmail.com with ESMTPSA id g17-20020a5d46d1000000b0020fff0ea0a3sm5198522wrs.116.2022.08.19.16.14.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 16:11:18 -0700 (PDT)
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
-        mripard@kernel.org, liviu.dudau@arm.com, brian.starkey@arm.com
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next 7/7] drm/arm/hdlcd: debugfs: protect device resources after removal
-Date:   Sat, 20 Aug 2022 01:10:58 +0200
-Message-Id: <20220819231058.647658-8-dakr@redhat.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220819231058.647658-1-dakr@redhat.com>
-References: <20220819231058.647658-1-dakr@redhat.com>
+        Fri, 19 Aug 2022 16:14:23 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v3 0/7] Fix RISC-V/PCI dt-schema issues with dt-schema v2022.08
+Date:   Sat, 20 Aug 2022 00:14:09 +0100
+Message-Id: <20220819231415.3860210-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,46 +77,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Hardware) resources which are bound to the driver and device lifecycle
-must not be accessed after the device and driver are unbound.
+From: Conor Dooley <conor.dooley@microchip.com>
 
-However, the DRM device isn't freed as long as the last user didn't
-close it, hence userspace can still call into the driver.
+Hey all,
 
-Therefore protect the critical sections which are accessing those
-resources with drm_dev_enter() and drm_dev_exit().
+Got a few fixes for PCI dt-bindings that I noticed after upgrading my
+dt-schema to v2022.08.
 
-Signed-off-by: Danilo Krummrich <dakr@redhat.com>
----
- drivers/gpu/drm/arm/hdlcd_drv.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+Since all the dts patches are for "my" boards, I'll take them once the
+bindings are approved. I added a pair of other dts changes to the series,
+mostly for my own benefit in tracking what I need to apply that were
+previously at [0] & [1].
 
-diff --git a/drivers/gpu/drm/arm/hdlcd_drv.c b/drivers/gpu/drm/arm/hdlcd_drv.c
-index e41def6d47cc..020c7d0c70a5 100644
---- a/drivers/gpu/drm/arm/hdlcd_drv.c
-+++ b/drivers/gpu/drm/arm/hdlcd_drv.c
-@@ -204,11 +204,19 @@ static int hdlcd_show_pxlclock(struct seq_file *m, void *arg)
- 	struct drm_info_node *node = (struct drm_info_node *)m->private;
- 	struct drm_device *drm = node->minor->dev;
- 	struct hdlcd_drm_private *hdlcd = drm_to_hdlcd_priv(drm);
--	unsigned long clkrate = clk_get_rate(hdlcd->clk);
--	unsigned long mode_clock = hdlcd->crtc.mode.crtc_clock * 1000;
-+	unsigned long clkrate, mode_clock;
-+	int idx;
-+
-+	if (!drm_dev_enter(drm, &idx))
-+		return -ENODEV;
-+
-+	clkrate = clk_get_rate(hdlcd->clk);
-+	mode_clock = hdlcd->crtc.mode.crtc_clock * 1000;
- 
- 	seq_printf(m, "hw  : %lu\n", clkrate);
- 	seq_printf(m, "mode: %lu\n", mode_clock);
-+
-+	drm_dev_exit(idx);
- 	return 0;
- }
- 
+Thanks,
+Conor.
+
+0 - https://lore.kernel.org/all/20220811203207.179470-1-mail@conchuod.ie/
+1 - https://lore.kernel.org/all/20220811204024.182453-1-mail@conchuod.ie/
+
+Changes since v2:
+- fu740: make clock-names required
+- mchp: add regex to clock names
+- mchp: add a new patch adding dma-ranges as optional
+
+Changes since v1:
+- fu740: rewrite commit message
+- mchp: rework clock-names as per rob's suggestion on IRC
+- mchp: drop the "legacy" from the node name
+- mchp: renemove the address translation property
+- mchp: change the child node name in the dts rather than the binding
+
+Conor Dooley (7):
+  dt-bindings: PCI: fu740-pci: fix missing clock-names
+  dt-bindings: PCI: microchip,pcie-host: fix missing clocks properties
+  dt-bindings: PCI: microchip,pcie-host: fix missing dma-ranges
+  riscv: dts: microchip: mpfs: fix incorrect pcie child node name
+  riscv: dts: microchip: mpfs: remove ti,fifo-depth property
+  riscv: dts: microchip: mpfs: remove bogus card-detect-delay
+  riscv: dts: microchip: mpfs: remove pci axi address translation
+    property
+
+ .../bindings/pci/microchip,pcie-host.yaml     | 31 +++++++++++++++++++
+ .../bindings/pci/sifive,fu740-pcie.yaml       |  8 +++++
+ .../boot/dts/microchip/mpfs-icicle-kit.dts    |  3 --
+ .../boot/dts/microchip/mpfs-polarberry.dts    |  3 --
+ arch/riscv/boot/dts/microchip/mpfs.dtsi       |  3 +-
+ 5 files changed, 40 insertions(+), 8 deletions(-)
+
+
+base-commit: 69dac8e431af26173ca0a1ebc87054e01c585bcc
 -- 
-2.37.2
+2.37.1
 

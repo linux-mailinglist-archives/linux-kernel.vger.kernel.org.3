@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9492759A88B
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 00:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C975659A853
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 00:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238964AbiHSWQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 18:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
+        id S240608AbiHSWRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 18:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239924AbiHSWQe (ORCPT
+        with ESMTP id S239411AbiHSWQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 18:16:34 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2681CD34D3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:16:28 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3339532b6a8so97240477b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:16:28 -0700 (PDT)
+        Fri, 19 Aug 2022 18:16:42 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B3EC0E6A
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:16:32 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-333b218f2cbso97335417b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 15:16:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=23aDVj4LlbfPkoiXqxbD0E4C7v4CoYUgh/84jy41NX0=;
-        b=RfDBUV4Eoi6hUFddi87J/g/A5JBzLloY2dSMy9AH8SPOKlZLXQ//QBrA4oxiIqSu4a
-         SIOdoHuaxKNOVbAJ7rfbvgzZsRd+lMbYJfODtYvKx4yHXzvVcTpentmBP17iRir2X+Q8
-         FlckrSbhp4QISwdxhNXl36Ack8Ob/HkJo70k1gEcoGu4PVUev58lHdvwI4FChXgTC+y5
-         LTE5zMaLdxyeGDcqGVqt2VvayphFlXKnYAmdOu8lbSbVtxx9pUAZ8nNJz8tK4YyOkHI/
-         BohL+A06pQKGtVKh3c7R1TalLS7V2CuJgo894FA5LRde++POf9XldtYkSnPPXVrKJnl3
-         5KPw==
+        bh=H3YEiHHCZDHfvJiU4fCYVtnbVB8iHyjPM7ELjaj28Ew=;
+        b=X1U73b0XniNLU7Z952Uoe4oLLlOQuH9fMoxIo3YE8wTvISBipZU3kbSsA/PpZc74b9
+         GKGrN3RRsS65zQ/iiGgHDkFgLoHu+HT15JxvGOx9hJ2PV56mfIi6fXTua6T4tCzBZCDs
+         pidzBZcxXFnAUE6H041z//D5yM40NWB78f6EufBqHmtQf2Fy2jYoy7SMHxtXqD8J18Jl
+         tglJU4xpK/iRl2mW5tY+0pgOj4nH9Bx5lesRwnijThCj0o6tZ7h84PrI8aDfHNjuuotw
+         33+iubcVMVmM0KnScNcfs0uK//EhpI5sVYu65TPan5KCq2k7mlKkYFPNxSojzIFEnPuE
+         wSnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=23aDVj4LlbfPkoiXqxbD0E4C7v4CoYUgh/84jy41NX0=;
-        b=1mLYG/XBueGVAuEBhpwybRfgxcJH0mertrz+MOFCTjaflggEZgWZHoYjkIPU77fkM8
-         3Cd3ibkpLvf6/OuzBJtLyMnqzXIbx7wyI8IXdqHlAdGgBs2LgfHNjsrqlGsH3G/gygVE
-         fDM6MTcwBHQgcQfCm43G0pAF5bRxllfPUgP7TAcKaH48aTG0ttchRSMXAKYbG56/vUoP
-         pNelIHM3VHLk+fxn1srBoL/Uv7rDRt6lIXk9pKpYBdUrnK1WcjblxlMvJBqysHZfKprA
-         amylYJP9+swlUUVPD4IP9rhOMF66yLZUGBsS5Tvm58N8Y303rH8CTh0ZxlABos23nAvE
-         sjWw==
-X-Gm-Message-State: ACgBeo0y/anfpn6i9+9T5euCsCjD9Ol1BrN2HNIJV0TLOsgGOlEGWgHy
-        cOUpyT30PkI5Jl8d3o2uLqO+DU4ulKTTJ+4=
-X-Google-Smtp-Source: AA6agR6A+xqItbXSEK4uHJ0mFi1QE/So6yke4k7KdQfN6tbP1gpuJnanRFbNSnpcIO10ajqPyRqVifalVRrScOo=
+        bh=H3YEiHHCZDHfvJiU4fCYVtnbVB8iHyjPM7ELjaj28Ew=;
+        b=5jhCnPkl/Cj26sjVYVortIQXyFko2nAxICxVMjoJQ0FfcJynZ47pJz3HPC3+0jQhhy
+         UMDlmhf/vk8Md1pck2CxXucVFER+NFVk/lPVU1PAE4FJomSTpn5UxJeo9kusnK9pTnhM
+         lx7S/9lvvrk0QwbdaNrkO6uwMoHAELpPXbHRwwE5dyd0Br9I1za4F9nW+x5x/htBXs8q
+         YBhYvYMF5xsf+oPy5lntwIsXgiPwupj3LAVYPasZdgPtz+2bkFF2JwqZUbyE0ATHaGed
+         M2/FGAZ84HkSLSHk7CKcrIRtUvToOEjnVhBLkbsm7oQCxhjcnLzVndM3SyKo8YgCWfQa
+         5edg==
+X-Gm-Message-State: ACgBeo0IrbPPTCWwM4y6FuWGMaq2WtrUacu8/RW4wHrNL5A4C7mHCHwX
+        V33NOzGiU7EiEUPGqDFtpjqBOEAg1gJ/qMg=
+X-Google-Smtp-Source: AA6agR6s7O9ks9P+6MMRLsKupYiohHddIyehPE2rdJmt/AJwJ41rH2q/2hZo31rpF1++hMgFEDboETrWBMyKu5U=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:f93e:7b61:ce3d:5b06])
- (user=saravanak job=sendgmr) by 2002:a25:bc52:0:b0:67e:e3c:1453 with SMTP id
- d18-20020a25bc52000000b0067e0e3c1453mr9778933ybk.121.1660947388574; Fri, 19
- Aug 2022 15:16:28 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 15:16:13 -0700
+ (user=saravanak job=sendgmr) by 2002:a81:5744:0:b0:333:7505:5bca with SMTP id
+ l65-20020a815744000000b0033375055bcamr9459605ywb.315.1660947391375; Fri, 19
+ Aug 2022 15:16:31 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 15:16:14 -0700
 In-Reply-To: <20220819221616.2107893-1-saravanak@google.com>
-Message-Id: <20220819221616.2107893-4-saravanak@google.com>
+Message-Id: <20220819221616.2107893-5-saravanak@google.com>
 Mime-Version: 1.0
 References: <20220819221616.2107893-1-saravanak@google.com>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v2 3/4] Revert "PM: domains: Delete usage of driver_deferred_probe_check_state()"
+Subject: [PATCH v2 4/4] Revert "iommu/of: Delete usage of driver_deferred_probe_check_state()"
 From:   Saravana Kannan <saravanak@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -84,55 +84,41 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a.
+This reverts commit b09796d528bbf06e3e10a4a8f78038719da7ebc6.
 
-Quite a few issues have been reported [1][2][3][4][5][6] on the original
-commit. While about half of them have been fixed, I'll need to fix the rest
-before driver_deferred_probe_check_state() can be deleted. So, revert the
-deletion for now.
+An issue was reported[1] on the original commit. I'll need to address that
+before I can delete the use of driver_deferred_probe_check_state().  So,
+bring it back for now.
 
-[1] - https://lore.kernel.org/all/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
-[2] - https://lore.kernel.org/all/CM6REZS9Z8AC.2KCR9N3EFLNQR@otso/
-[3] - https://lore.kernel.org/all/CAD=FV=XYVwaXZxqUKAuM5c7NiVjFz5C6m6gAHSJ7rBXBF94_Tg@mail.gmail.com/
-[4] - https://lore.kernel.org/all/Yvpd2pwUJGp7R+YE@euler/
-[5] - https://lore.kernel.org/lkml/20220601070707.3946847-2-saravanak@google.com/
-[6] - https://lore.kernel.org/all/CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com/
+[1] - https://lore.kernel.org/lkml/4799738.LvFx2qVVIh@steina-w/
 
-Fixes: 5a46079a9645 ("PM: domains: Delete usage of driver_deferred_probe_check_state()")
-Reported-by: Peng Fan <peng.fan@nxp.com>
-Reported-by: Luca Weiss <luca.weiss@fairphone.com>
-Reported-by: Doug Anderson <dianders@chromium.org>
-Reported-by: Colin Foster <colin.foster@in-advantage.com>
-Reported-by: Tony Lindgren <tony@atomide.com>
-Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Reviewed-by: Tony Lindgren <tony@atomide.com>
-Tested-by: Tony Lindgren <tony@atomide.com>
+Fixes: b09796d528bb ("iommu/of: Delete usage of driver_deferred_probe_check_state()")
+Reported-by: Jean-Philippe Brucker <jpb@kernel.org>
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/base/power/domain.c | 2 +-
+ drivers/iommu/of_iommu.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 5a2e0232862e..55a10e6d4e2a 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -2733,7 +2733,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 		mutex_unlock(&gpd_list_lock);
- 		dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
- 			__func__, PTR_ERR(pd));
+diff --git a/drivers/iommu/of_iommu.c b/drivers/iommu/of_iommu.c
+index 41f4eb005219..5696314ae69e 100644
+--- a/drivers/iommu/of_iommu.c
++++ b/drivers/iommu/of_iommu.c
+@@ -40,7 +40,7 @@ static int of_iommu_xlate(struct device *dev,
+ 	 * a proper probe-ordering dependency mechanism in future.
+ 	 */
+ 	if (!ops)
 -		return -ENODEV;
-+		return driver_deferred_probe_check_state(base_dev);
- 	}
++		return driver_deferred_probe_check_state(dev);
  
- 	dev_dbg(dev, "adding to PM domain %s\n", pd->name);
+ 	if (!try_module_get(ops->owner))
+ 		return -ENODEV;
 -- 
 2.37.1.595.g718a3a8f04-goog
 

@@ -2,126 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6A759A752
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3E159A741
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352021AbiHSUz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 16:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
+        id S1352135AbiHSU4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 16:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351912AbiHSUzY (ORCPT
+        with ESMTP id S1351912AbiHSU43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 16:55:24 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646F7F03
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:55:22 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id 20so5067347plo.10
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:55:22 -0700 (PDT)
+        Fri, 19 Aug 2022 16:56:29 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F9AAE51
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:56:28 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id k14so5340072pfh.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:56:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=H2n3wyd22XqfBHQtxoS9ZE3dzQZzgHlgD8UAIwwzZHo=;
-        b=YKtiwSXPb8Qdhkvsr3OWJcCj240oEeU16z8ri5CYHHthfh9F+eygv0eYS6zDVawBVl
-         RRsSk7UkxObT7KJbVH5ZGj3GKu3TzaWXLLfcFh6LIVek25cSPGjeEFWdP2bc52szwuem
-         NjwYBGXq9HqUKds8wqwlr5KjE53CQDONIpJNxGeLBUc4QwwGXbgsF8xEPngobHNdP1JQ
-         PwtxAHalKN3xrFnRvCkrxzE8+plm9UwnGgUZffHTBDc0nQpvUsyim05QWGGqlLHjEV2y
-         MAphLt+JMS21fN36e5pwWXxwPbBKNU+DQbvdtM+fEhi0YOnCbZsYV3bcdG56qiC5MVXt
-         STVA==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc;
+        bh=TspGg8RA/kX2lN4CLyM+oSg5D5K9Xh9asKYi5WRBw6w=;
+        b=X87kIQd8Sws8VbhM7n5p21HC31jo4SDuDpDg5OwtuAnZa42ul9ZQWg5tqhSmY30pjE
+         DozzYKzs9qHc1wBZccv9dp2Hctqi0WadF+WbhNgyX7kYwY6RGLQ6rRONOkZFlqWzv8UI
+         CckAUSrWKZpRug5gIYtapbXDR6z+c5vT24DGJPaNHRNfyeYp+W/xT9P8kc9pZIQ8PM5h
+         D8YpyFWfd353kmYfGC+UKN5HkEtgYNGl7GzP1iysuqb6SB357D2NpAW5gRPUYDlz6FI4
+         Ikr1G1g3LF4OlEPEcXmxn0QLLv9vErFUm9FwCRacf1GiimbxnM19yiff8Y+n06v2bguJ
+         jH3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=H2n3wyd22XqfBHQtxoS9ZE3dzQZzgHlgD8UAIwwzZHo=;
-        b=Ta81B1TCd2vRKsyZRMe9cSzvpidSozgh0SsX1zyBwjlIz0x7TjNx6BfZ7sIO3ddGkC
-         pKKyQEGRyQHjPPsHTac/5vtfKRfgH3Q0Gl5QO+s9F+tYDXuxIUkYXdhMMMNh7GEE+7SF
-         olLjpkuiz7utEJcmJap6thAe1PVaMHtwpLmZhB9VUIWm2nBEcw5oNsjQ8cRia91LPpWk
-         RtEcgHZ0ML7r/RRoinTMBYC3Eogo0rKtr+B1tgxHF4+z6OZn3rtvueAFwZFdPO1/KdNb
-         RU2Vwj53d4Wwq8wNbt9ULVln7ekH103SVw5HKPye3iHNrnenuTj9+rhNIiriz4dyR5SM
-         Rg5A==
-X-Gm-Message-State: ACgBeo37a+n7cs7fa4GiVi2v7y3TGSY+faMZEwDWv3AxhuGfE4HNn52d
-        qhfmEJs6PSatqEd1uaLP/LA=
-X-Google-Smtp-Source: AA6agR5avHemvW2jekUK/yhGPnaXIxFk65uIalqg4HggjJNug3yVXgLEGksurLvkmF6eFK8Fy50+hA==
-X-Received: by 2002:a17:903:1106:b0:172:68f9:f68 with SMTP id n6-20020a170903110600b0017268f90f68mr9089310plh.50.1660942521679;
-        Fri, 19 Aug 2022 13:55:21 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c76-20020a624e4f000000b00535f2b5a23dsm2653120pfb.155.2022.08.19.13.55.19
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=TspGg8RA/kX2lN4CLyM+oSg5D5K9Xh9asKYi5WRBw6w=;
+        b=LeBZMw3i1P0xOP1plFom+UV8VYh+WIl0QFYCOG973qGPaw4L5Lnnguri0Cn5UG1wWc
+         hBFUyWWhaSWaFZUMpOqIaUADqAgcP1X0/t+7kZEC4I8PLyzGUalIbGnQHMsaoHvANfvg
+         gEVgdiCnZOiPfttkyHOHeVZumC6S7iyjz/D0DY0LfSekP426YX9qbAWLRUeg5iboPraQ
+         J9hnMbQDQeuGLnm54hWAFDd671yG/CB3UO05RJBXh9cgZhwDZls9yYFxv7A3D8kED1Vd
+         KQ0roK79sCF7oeh744zl6vvfbeSalcHCIhpFZKBZmPJJaO22O9SolfYzdfMFWBuanXvN
+         guFg==
+X-Gm-Message-State: ACgBeo28oL6SIW+hcUEtumB0JpEx2R8yd7Z3FstuRtDi5nNrSuj7MrRP
+        BkXJbRWpnyNLmt7R86bSprEkUA==
+X-Google-Smtp-Source: AA6agR4a5OF37r5jyqc82vTCCrG8wkZAv8zc3qGleDMcdb02QZe6RUYCze4JDt3weaFJwDCGJ9IIvA==
+X-Received: by 2002:a63:82c6:0:b0:41c:d253:a446 with SMTP id w189-20020a6382c6000000b0041cd253a446mr7504564pgd.125.1660942588405;
+        Fri, 19 Aug 2022 13:56:28 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id q7-20020a17090311c700b0016bffc59718sm3639768plh.58.2022.08.19.13.56.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 13:55:20 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 19 Aug 2022 13:55:18 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Isaac Manjarres <isaacmanjarres@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Saravana Kannan <saravanak@google.com>, stable@kernel.org,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] driver core: Fix bus_type.match() error handling
-Message-ID: <20220819205518.GA3151965@roeck-us.net>
-References: <YvsoYzIhOtX9DOi2@google.com>
- <20220816111311.GC1108868@roeck-us.net>
- <YvvQOBk9T3J1uX8k@google.com>
- <20220817010559.GA1880847@roeck-us.net>
- <YvxAfiSOrzy7/c1J@google.com>
- <20220818225932.GA3433999@roeck-us.net>
- <Yv7bd6Yl8+thp2CY@google.com>
- <20220819112832.GA3106213@roeck-us.net>
- <Yv/MKymRC9O04Nqu@google.com>
- <baa1f65a-d983-0518-3979-7099679995f2@acm.org>
+        Fri, 19 Aug 2022 13:56:27 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     jack@suse.cz, paolo.valente@linaro.org, yukuai1@huaweicloud.com
+Cc:     yi.zhang@huawei.com, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org
+In-Reply-To: <20220816015631.1323948-1-yukuai1@huaweicloud.com>
+References: <20220816015631.1323948-1-yukuai1@huaweicloud.com>
+Subject: Re: [PATCH -next 0/3] bfq simple cleanups
+Message-Id: <166094258743.37480.10341600482798936132.b4-ty@kernel.dk>
+Date:   Fri, 19 Aug 2022 20:56:27 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <baa1f65a-d983-0518-3979-7099679995f2@acm.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 01:01:29PM -0700, Bart Van Assche wrote:
-> On 8/19/22 10:45, Isaac Manjarres wrote:
-> > It seems that the patches mentioned in [1] are causing a hang during
-> > reboot for various ARM emulations when booting from USB. Can you please
-> > take a look? There's more information about what defconfig, rootfs, and
-> > qemu commandline to use at [2].
+On Tue, 16 Aug 2022 09:56:28 +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
 > 
-> Unfortunately I can't reproduce this hang in an x86 VM with kernel v6.0-rc1
-> and a USB disk attached via virt-manager. The lsscsi -v output shows that a
-> USB disk has been attached:
+> Yu Kuai (3):
+>   block: bfq: remove unused functions
+>   block, bfq: remove useless checking in bfq_put_queue()
+>   block, bfq: remove useless parameter for bfq_add/del_bfqq_busy()
 > 
+> [...]
 
-The problem only reproduces with various arm emulations. I may have missed it,
-but I have not noticed it on any other architecture.
+Applied, thanks!
 
-> [9:0:0:0]    disk    QEMU     QEMU HARDDISK    2.5+  /dev/sdd
->   dir: /sys/bus/scsi/devices/9:0:0:0 [/sys/devices/pci0000:00/0000:00:07.0/usb2/2-2/2-2:1.0/host9/target9:0:0/9:0:0:0]
-> 
-> Rebooting that VM happens in the expected time and without triggering any
-> kernel warnings.
-> 
-There are no warnings. The reboot just stalls. Also, the usb drive
-attaches just fine. The probem is seen in shutdown, not during boot.
+[1/3] block, bfq: remove unused functions
+      commit: 83501be67dbabc4a19ca7cf0f7406cc200272880
+[2/3] block, bfq: remove useless checking in bfq_put_queue()
+      commit: bf2c5a1d2aa31faf3cae0158da2a301acfa0c9fd
+[3/3] block, bfq: remove useless parameter for bfq_add/del_bfqq_busy()
+      commit: f5f9d71bc15eaa72f70cd49aa507b0809a0325ae
 
-> Since the issue has been observed in qemu, how about sharing the sysrq-t
-> output? I recommend to collect that output as follows:
-> * Send the serial console output to a file. This involves adding
-> console=ttyS0,115200n8 to the kernel command line and using the proper qemu
-> options to save the serial console output into a file.
-> * Reproduce the hang and send the sysrq-t key sequence to qemu, e.g. as
-> follows: virsh send-key ${vm_name} KEY_LEFTALT KEY_SYSRQ KEY_T
-> 
+Best regards,
+-- 
+Jens Axboe
 
-Will try.
 
-Thanks,
-Guenter

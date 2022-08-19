@@ -2,102 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA121599DD9
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAAB599DE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349481AbiHSOtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 10:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
+        id S1349544AbiHSOtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 10:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348837AbiHSOta (ORCPT
+        with ESMTP id S1349497AbiHSOtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 10:49:30 -0400
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05583D87F1;
-        Fri, 19 Aug 2022 07:49:29 -0700 (PDT)
-Received: by mail-pg1-f172.google.com with SMTP id c24so3864011pgg.11;
-        Fri, 19 Aug 2022 07:49:29 -0700 (PDT)
+        Fri, 19 Aug 2022 10:49:41 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609A2D8E2E
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:49:40 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id bf22so4834468pjb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:49:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=uRT1dfCACycQqNXmcC8HP5/+bX38g4rLbOY9bQx0QKs=;
+        b=ish7ZOCTD7n29s4ja2n6fBm1QfHXkE6KMyKyZs+QOfQm6L8DM4YqFjCS8viMyjsnBc
+         5C69v5tlpeq8PhzwvJPyE9sb8Na2PrLboUSwEanyMCE6KOUfJ84ydT2evoNQWH9K0tyq
+         yw0rApG1TdNwk/NZeTAXFkhViMu/9mPt0XKnJDRQYWv2LhQfRG767bGCjxcW0P8uxpIQ
+         EFRNGyzsBI2P+z756RV1YpPzHCb8dsf3iVV8SuIf77mfBn5Gq7JY9BkLtbWMend+Qx5+
+         Q3svzgWq7R5mfkCpgGdT8xI/JSwO753FEbKO0Iov3H45k+GT9JVGquxSsRnJCzlf6tKS
+         pqtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=AEaEgab2mhaMiSkvYoYiW7yx1z+hEFyxx9wlIiPpIa8=;
-        b=PZ5svkXPbBwfSmVwVlHXWBmxq3AZJqp1RSsZNV5Oq5Dh1sKLcsDXsaDJP43L1FWZQq
-         za3PikWje+XoLxbmk7iVdND4a6hbwkG8/J/It6sJQpAhMZKI11CSTYr/oBsdm+qrKIqR
-         j7oIuOlmekZNPKeb+R8M+whb+ocqQKLGEURKHwm5j2FnoBHwJkTFRApU6tSZ8Tg/rbLA
-         afLL5UfJymiV9jUWKcWyEconwlHGBeqrHSmqVDjv/FOAXbWHC/rhhfF6BvFX/D8my400
-         bBu4iCw0YNHY6pRewxyRO+8i6c/NU59CpaQn/5ycxNs4Vj6PN3TG82q/QUyDhURpochP
-         E/kw==
-X-Gm-Message-State: ACgBeo1Wv8jjSIQEvvAySHP4iZmvJ/G6BdjNUqkvisRjf1CVEAJWjENQ
-        bL2452RhqJ+s76ySQek3n7EwFwZkyiw=
-X-Google-Smtp-Source: AA6agR4n7cfXryL/GLcBwpbdaZ8OS1DGI89ou5DCJZPaiWYVxSuSylH84/CiOOS86Tu5616hB6UhkA==
-X-Received: by 2002:a63:1925:0:b0:429:f4f4:7d48 with SMTP id z37-20020a631925000000b00429f4f47d48mr6689792pgl.474.1660920568337;
-        Fri, 19 Aug 2022 07:49:28 -0700 (PDT)
-Received: from [192.168.3.217] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id e14-20020aa798ce000000b00534a1315a63sm3580495pfm.136.2022.08.19.07.49.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 07:49:27 -0700 (PDT)
-Message-ID: <17ccd5ae-0268-1bee-7822-1352f4c676ba@acm.org>
-Date:   Fri, 19 Aug 2022 07:49:25 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=uRT1dfCACycQqNXmcC8HP5/+bX38g4rLbOY9bQx0QKs=;
+        b=jtNIBG3fdXM3v+lGPdcJxjucvZEOKb/784vXh+WjGKPXkHTWU1Lg01pa8IHCotkrjK
+         iZw6jpdRVRCnKt7AydBvPq/p25A0b7OrKedsUIoVw0G5lx2A/u9GcRmLm2i/s+RlGIvS
+         DP2ojUzBMYBf6v3qCbsxkpWcrhnTbkOTuMn7KyDd+NPSloiSvlR6nMtLtFb2+Qm6QubJ
+         CINj8GzojQPmsjkofGu5MzfYrrtuZWXHzY/m75GISApow5j9nw06JBVmJrRFrFFX8rkp
+         RJE+aXmSZ7fxm3yTZQVUxmsTSQqu/TcajBRkL8WnQNIiZ6flC6i+5KECUpCAs/CfmdDn
+         k3DA==
+X-Gm-Message-State: ACgBeo05ZqhRhUcaNxB5u9VOXAjmf3O36f+X7M4/uZZrOyxrTyQ0NQn+
+        kMNSw8xLCaGyzgM9edxS/J3GRA==
+X-Google-Smtp-Source: AA6agR6Ni20ut6dVdgRtMYnrfm3+VwwBk3uL3D6coMcgFeqx4bqlmxKgg8G9I3PPvhuYPCPAwCO2VA==
+X-Received: by 2002:a17:90a:e7cc:b0:1f7:26c9:ee9f with SMTP id kb12-20020a17090ae7cc00b001f726c9ee9fmr8865506pjb.75.1660920579765;
+        Fri, 19 Aug 2022 07:49:39 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id h9-20020aa796c9000000b005360813cabasm1581787pfq.69.2022.08.19.07.49.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 07:49:39 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 14:49:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 09/26] KVM: VMX: nVMX: Support TSC scaling and
+ PERF_GLOBAL_CTRL with enlightened VMCS
+Message-ID: <Yv+i/wuObvLf7QZE@google.com>
+References: <20220802160756.339464-1-vkuznets@redhat.com>
+ <20220802160756.339464-10-vkuznets@redhat.com>
+ <Yv50vWGoLQ9n+6MO@google.com>
+ <87zgg0smqr.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: 6.0-rc1 regression block (blk_mq) / RCU task stuck errors +
- block-io hang
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, rcu@vger.kernel.org
-References: <dd6844e7-f338-a4e9-2dad-0960e25b2ca1@redhat.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <dd6844e7-f338-a4e9-2dad-0960e25b2ca1@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87zgg0smqr.fsf@redhat.com>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/19/22 05:01, Hans de Goede wrote:
-> I've been dogfooding 6.0-rc1 on my main workstation and I have hit
-> this pretty serious bug, serious enough for me to go back to 5.19
+On Fri, Aug 19, 2022, Vitaly Kuznetsov wrote:
+> Sean Christopherson <seanjc@google.com> writes:
 > 
-> My dmesg is showing various blk_mq (RCU?) related lockdep splats
-> followed by some tasks getting stuck on disk-IO. E.g. "sync"
-> is guaranteed to hang, but other tasks too.
+> > On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
+> >> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
+> >> index f886a8ff0342..4b809c79ae63 100644
+> >> --- a/arch/x86/kvm/vmx/evmcs.h
+> >> +++ b/arch/x86/kvm/vmx/evmcs.h
+> >> @@ -37,16 +37,9 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
+> >>   *	EPTP_LIST_ADDRESS               = 0x00002024,
+> >>   *	VMREAD_BITMAP                   = 0x00002026,
+> >>   *	VMWRITE_BITMAP                  = 0x00002028,
+> >> - *
+> >> - *	TSC_MULTIPLIER                  = 0x00002032,
+> >>   *	PLE_GAP                         = 0x00004020,
+> >>   *	PLE_WINDOW                      = 0x00004022,
+> >>   *	VMX_PREEMPTION_TIMER_VALUE      = 0x0000482E,
+> >> - *      GUEST_IA32_PERF_GLOBAL_CTRL     = 0x00002808,
+> >> - *      HOST_IA32_PERF_GLOBAL_CTRL      = 0x00002c04,
+> >> - *
+> >> - * Currently unsupported in KVM:
+> >> - *	GUEST_IA32_RTIT_CTL		= 0x00002814,
+> >
+> > Almost forgot: is deleting this chunk of the comment intentional?
+> >
 > 
-> This seems to be mainly the case on "sd" disks (both sata
-> and USB) where as my main nvme drive seems fine, which has
-> probably saved me from worse issues...
+> Intentional or not (I forgot :-), GUEST_IA32_RTIT_CTL is supported/used
+> by KVM since
 > 
-> Here are 4 task stuck reports from my last boot, where
-> I had to turn off the machine by keeping the power button
-> pressed for 4 seconds.
+> commit f99e3daf94ff35dd4a878d32ff66e1fd35223ad6
+> Author: Chao Peng <chao.p.peng@linux.intel.com>
+> Date:   Wed Oct 24 16:05:10 2018 +0800
 > 
-> [ ... ]
- >
-> Sorry for not being able to write a better bug-report but I don't have
-> the time to dive into this deeper. I hope this report is enough for
-> someone to have a clue what is going on.
+>     KVM: x86: Add Intel PT virtualization work mode
+> 
+> ...
+>  
+> commit bf8c55d8dc094c85a3f98cd302a4dddb720dd63f
+> Author: Chao Peng <chao.p.peng@linux.intel.com>
+> Date:   Wed Oct 24 16:05:14 2018 +0800
+> 
+>     KVM: x86: Implement Intel PT MSRs read/write emulation
+> 
+> but there's no corresponding field in eVMCS. It would probably be better
+> to remove "Currently unsupported in KVM:" line leaving
+> 
+> "GUEST_IA32_RTIT_CTL             = 0x00002814" 
+> 
+> in place. 
 
-Thank you for the detailed report. I think this report is detailed 
-enough to root-cause this issue, something that was not possible before 
-this report.
-
-Please help with verifying whether this patch fixes this issue: "[PATCH] 
-scsi: sd: Revert "Rework asynchronous resume support"" 
-(https://lore.kernel.org/linux-scsi/20220816172638.538734-1-bvanassche@acm.org/).
-
-Thanks,
-
-Bart.
-
+GUEST_IA32_RTIT_CTL isn't supported for nested VMX though, which is how I
+interpreted the "Currently unsupported in KVM:".  Would it be accurate to extend
+that part of the comment to "Currently unsupported in KVM for nested VMX:"?

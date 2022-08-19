@@ -2,171 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44248599891
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C9A59989E
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348110AbiHSJSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
+        id S1348087AbiHSJRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348073AbiHSJR7 (ORCPT
+        with ESMTP id S1348073AbiHSJRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:17:59 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755FCF4392;
-        Fri, 19 Aug 2022 02:17:58 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id q184so4194190oif.1;
-        Fri, 19 Aug 2022 02:17:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=p1fTT14mThGLEnUJzebZNUEmZIwatmKiQNsPLBHI5iY=;
-        b=kBfeia/XUVgX0NjH4njVgp10Xc+G+28B7su+3eLWJGuGhpg+B6pi63D7X7ze0vV6ap
-         TF7KX4NW+jKdP61KoE0V40tmQa/s+NfkO9m9S+h+YkUQ2AMiYQlIzG9nwFhSjbxflmr9
-         5WGyFoW9cIf5hKib/FNGaA4zPJJ3MIzH3fM1cEkJ5dENjMsz2irwnfI6OFN07HoQtB8K
-         iHRS+5U+nLzWrpXRLrv4S6HpjT1Y1BjUMEtLrIfb0YcTXARrisPlFl9FkIG3IAQQGiJ0
-         mIuccOKwveXBwwNIyrsQlZrzcZrS0i1gIOiFTiiMI+2EIVIMxmirctiPgpdUkOnW8PpT
-         iNaw==
-X-Gm-Message-State: ACgBeo2t22LqTqksUVWW4/4tRBNGwS5vxFL9yJgdw/kF81HLq89yOwXr
-        ydoie4ybEhlLIPaADnA4Gf/G1GmAoBk5HQ==
-X-Google-Smtp-Source: AA6agR7hZqcd16EjL3RuiBwYvUhrQuTVo7VMNddPUiVSBB02kjqZEYsLOygKuKvn+l2N3NaYliFvvg==
-X-Received: by 2002:a05:6808:10ce:b0:344:e898:3584 with SMTP id s14-20020a05680810ce00b00344e8983584mr2827050ois.36.1660900677604;
-        Fri, 19 Aug 2022 02:17:57 -0700 (PDT)
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com. [209.85.160.52])
-        by smtp.gmail.com with ESMTPSA id k38-20020a4a94a9000000b004354a4412edsm841634ooi.29.2022.08.19.02.17.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 02:17:56 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-11c5ee9bf43so4597042fac.5;
-        Fri, 19 Aug 2022 02:17:56 -0700 (PDT)
-X-Received: by 2002:a25:cbcf:0:b0:695:2d3b:366 with SMTP id
- b198-20020a25cbcf000000b006952d3b0366mr1673997ybg.365.1660900664907; Fri, 19
- Aug 2022 02:17:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220818135522.3143514-1-arnd@kernel.org> <20220818135522.3143514-2-arnd@kernel.org>
-In-Reply-To: <20220818135522.3143514-2-arnd@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 19 Aug 2022 11:17:33 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXEXQNeOQGnYTQG58nHwB8YwLQ5q1vaje7kPQexrAMsRA@mail.gmail.com>
-Message-ID: <CAMuHMdXEXQNeOQGnYTQG58nHwB8YwLQ5q1vaje7kPQexrAMsRA@mail.gmail.com>
-Subject: Re: [PATCH 01/11] ARM: defconfig: reorder defconfig files
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Qin Jian <qinjian@cqplus1.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shannon Nelson <snelson@pensando.io>,
-        Peter Chen <peter.chen@nxp.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Felipe Balbi <balbi@ti.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
-        <linux-omap@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
+        Fri, 19 Aug 2022 05:17:49 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8500F2D68;
+        Fri, 19 Aug 2022 02:17:48 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 02DA1E031B;
+        Fri, 19 Aug 2022 02:17:48 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Vuvx1q-IectB; Fri, 19 Aug 2022 02:17:47 -0700 (PDT)
+Message-ID: <d1db07c8ca57c72b4f0820fcb6832dd7e4501055.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1660900667; bh=Jo9QL7raUD2BIWVuwvlATedJOyz9wfWXMd9342485kA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=gwtLUvDwZ3jddAsrm0b7mign2kCxfFLgAot46f6PaCr9wDf8QeCaXDr6SHHhszwdk
+         QjJeLT9WsyTB6yPSwVNDoG8zfki/eOIgERjfIP2PDnW69QxRXLkjIHdL6DIFoWnaVm
+         qy0berAxWmjfeXnvZ/OkkWIK4kAPMMP9ZybuVeh5Mll/QonaaXr8JcZtMABdiEAHWx
+         a6gaGGRplptBNF8jKk9LECc/RF8D2Oluk546RId5dcx8aPYULvUrpw8Cc0/1asAYD/
+         upmL174Wi/mu6wXdzA4TyKqzd0Lop1CtCEHh2cH7jCTsfx7haqZESJezll+KoUKttF
+         YEbS6UkXsfzbw==
+Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when
+ needing interrupts
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
+        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        l.stach@pengutronix.de, aford173@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date:   Fri, 19 Aug 2022 11:17:40 +0200
+In-Reply-To: <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
+References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
+         <20220726083257.1730630-2-martin.kepplinger@puri.sm>
+         <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Am Dienstag, dem 26.07.2022 um 17:07 +0200 schrieb Ulf Hansson:
+> On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
+> <martin.kepplinger@puri.sm> wrote:
+> > 
+> > If for example the power-domains' power-supply node (regulator)
+> > needs
+> > interrupts to work, the current setup with noirq callbacks cannot
+> > work; for example a pmic regulator on i2c, when suspending, usually
+> > already
+> > times out during suspend_noirq:
+> > 
+> > [   41.024193] buck4: failed to disable: -ETIMEDOUT
+> > 
+> > So fix system suspend and resume for these power-domains by using
+> > the
+> > "outer" suspend/resume callbacks instead. Tested on the imx8mq-
+> > librem5 board,
+> > but by looking at the dts, this will fix imx8mq-evk and possibly
+> > many other
+> > boards too.
+> > 
+> > This is designed so that genpd providers just say "this genpd needs
+> > interrupts" (by setting the flag) - without implying an
+> > implementation.
+> > 
+> > Initially system suspend problems had been discussed at
+> > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
+> > which led to discussing the pmic that contains the regulators which
+> > serve as power-domain power-supplies:
+> > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
+> > 
+> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > ---
+> >  drivers/base/power/domain.c | 13 +++++++++++--
+> >  include/linux/pm_domain.h   |  5 +++++
+> >  2 files changed, 16 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/base/power/domain.c
+> > b/drivers/base/power/domain.c
+> > index 5a2e0232862e..58376752a4de 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops
+> > genpd_spin_ops = {
+> >  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
+> > GENPD_FLAG_ACTIVE_WAKEUP)
+> >  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
+> > GENPD_FLAG_CPU_DOMAIN)
+> >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
+> > GENPD_FLAG_RPM_ALWAYS_ON)
+> > +#define genpd_irq_on(genpd)            (genpd->flags &
+> > GENPD_FLAG_IRQ_ON)
+> > 
+> >  static inline bool irq_safe_dev_in_sleep_domain(struct device
+> > *dev,
+> >                 const struct generic_pm_domain *genpd)
+> > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct generic_pm_domain
+> > *genpd,
+> >         genpd->domain.ops.runtime_suspend = genpd_runtime_suspend;
+> >         genpd->domain.ops.runtime_resume = genpd_runtime_resume;
+> >         genpd->domain.ops.prepare = genpd_prepare;
+> > -       genpd->domain.ops.suspend_noirq = genpd_suspend_noirq;
+> > -       genpd->domain.ops.resume_noirq = genpd_resume_noirq;
+> > +
+> > +       if (genpd_irq_on(genpd)) {
+> > +               genpd->domain.ops.suspend = genpd_suspend_noirq;
+> > +               genpd->domain.ops.resume = genpd_resume_noirq;
+> > +       } else {
+> > +               genpd->domain.ops.suspend_noirq =
+> > genpd_suspend_noirq;
+> > +               genpd->domain.ops.resume_noirq =
+> > genpd_resume_noirq;
+> 
+> As we discussed previously, I am thinking that it may be better to
+> move to using genpd->domain.ops.suspend_late and
+> genpd->domain.ops.resume_early instead.
 
-On Thu, Aug 18, 2022 at 3:55 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The debug-info and can subystem options have moved around in the
-> 'savedefconfig' output, so fix these up to reduce the clutter
-> from the savedefconfig command.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Wouldn't that better be a separate patch (on top)? Do you really want
+me to change the current behaviour (default case) to from noirq to
+late? Then I'll resend this series with such a patch added.
 
-Thanks for your patch!
+thanks,
 
-> --- a/arch/arm/configs/shmobile_defconfig
-> +++ b/arch/arm/configs/shmobile_defconfig
-> @@ -33,7 +33,6 @@ CONFIG_INET=y
->  CONFIG_IP_PNP=y
->  CONFIG_IP_PNP_DHCP=y
->  CONFIG_CAN=y
-> -CONFIG_CAN_RCAR=y
->  CONFIG_PCI=y
->  CONFIG_PCI_MSI=y
->  CONFIG_PCI_RCAR_GEN2=y
-> @@ -57,6 +56,7 @@ CONFIG_RAVB=y
->  CONFIG_SMSC911X=y
->  CONFIG_MICREL_PHY=y
->  CONFIG_SMSC_PHY=y
-> +CONFIG_CAN_RCAR=y
->  CONFIG_INPUT_EVDEV=y
->  CONFIG_KEYBOARD_GPIO=y
->  # CONFIG_INPUT_MOUSE is not set
+                              martin
 
-This may cause conflicts with the usual refresh I plan to do for
-v6.0-rc1, which will be very similar to
-https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/commit/?id=517d634d376042ab797d9feeb94236ad4cb03396
-So it may be better to drop this part.
+> 
+> Beside this, I think the $subject patch looks good to me.
+> 
+> [...]
+> 
+> Kind regards
+> Uffe
 
-However, that decision is up to you, as you will have to handle the
-conflict when merging renesas-arm-defconfig-for-v6.0-tag1 later ;-)
-But sfr might complain before...
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

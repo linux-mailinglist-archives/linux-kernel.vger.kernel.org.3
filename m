@@ -2,65 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A698E599650
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 244AA599681
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347170AbiHSHnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 03:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
+        id S1347174AbiHSHob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 03:44:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346644AbiHSHnd (ORCPT
+        with ESMTP id S1346854AbiHSHo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 03:43:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAF7606B3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:43:31 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M8DG34789znTcy;
-        Fri, 19 Aug 2022 15:41:15 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 19 Aug 2022 15:43:29 +0800
-Subject: Re: [PATCH] mm: hugetlb_vmemmap: simplify reset_struct_pages()
-To:     Muchun Song <songmuchun@bytedance.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <muchun.song@linux.dev>, Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220819035532.6189-1-songmuchun@bytedance.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <a7116c45-a2a3-4c9d-633b-1ae0acd8b927@huawei.com>
-Date:   Fri, 19 Aug 2022 15:43:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 19 Aug 2022 03:44:27 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B206CE49F;
+        Fri, 19 Aug 2022 00:44:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1660895065; x=1692431065;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=d6POj7xk4cTUM5maaIYL0lltQRs3YIiqOu1HB6fBHwA=;
+  b=rPk5xxschdGTpwooa7mS9mgVIAiGDjr0NjN3xAw+d5wtrikE5G83bNaW
+   XMX2l/2BsZ92clbBfMJ+Xqo/QMk12AptaUfbpBKH3pFQWYfM04o3lwbfk
+   ncqiR9X+6P/oYT2T7YLWEnNqgmfThONZVKf5nCn6M2FdU0rbN9MUP7Ve1
+   E=;
+X-IronPort-AV: E=Sophos;i="5.93,247,1654560000"; 
+   d="scan'208";a="231469330"
+Subject: Re: [PATCH v2 12/16] hwmon: (mr75203) modify the temperature equation
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-92ba9394.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 07:44:13 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-92ba9394.us-west-2.amazon.com (Postfix) with ESMTPS id 0246745143;
+        Fri, 19 Aug 2022 07:44:13 +0000 (UTC)
+Received: from EX19D013UWA003.ant.amazon.com (10.13.138.202) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Fri, 19 Aug 2022 07:44:12 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D013UWA003.ant.amazon.com (10.13.138.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Fri, 19 Aug 2022 07:44:12 +0000
+Received: from [192.168.95.21] (10.85.143.173) by mail-relay.amazon.com
+ (10.43.160.118) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Fri, 19 Aug 2022 07:44:07 +0000
+Message-ID: <2cc79934-2280-79e6-6e63-0e3eb7107e1c@amazon.com>
+Date:   Fri, 19 Aug 2022 10:44:06 +0300
 MIME-Version: 1.0
-In-Reply-To: <20220819035532.6189-1-songmuchun@bytedance.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
 Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
+        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
+        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
+        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220817054321.6519-1-farbere@amazon.com>
+ <20220817054321.6519-13-farbere@amazon.com>
+ <20220818202324.GA3431316@roeck-us.net>
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <20220818202324.GA3431316@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/19 11:55, Muchun Song wrote:
-> We can choose to copy three contiguous tail pages' content to the first three pages
-> instead of copying one by one to simplify the code and reduce code size from 229 bytes
-> to 63 bytes. The BUILD_BUG_ON() aims to avoid out-of-bounds accesses.
-> 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+On 8/18/2022 11:23 PM, Guenter Roeck wrote:
+> On Wed, Aug 17, 2022 at 05:43:17AM +0000, Eliav Farber wrote:
+>> Modify the equation and coefficients to convert the digital output to
+>> temperature according to series 5 of the Moortec Embedded Temperature
+>> Sensor (METS) datasheet:
+>> T = G + H * (n / cal5 - 0.5) + J * F
+>>
+>> The G, H and J coefficients are multiplied by 1000 to get the 
+>> temperature
+>> in milli-Celsius.
+>>
+>
+> This is, at the very least, confusing. It doesn't explain the discrepancy
+> to the old code nor the change in constant values. I have no idea if this
+> change would result in erroneous readings on some other system where
+> the existing calculation may be the correct one.
 
-LGTM. Thanks.
+When I tested the driver it was also not clear to me why the equation
+and coefficients in the code don't match the specifications in the data
+sheet.
+I reached out to Maxlinear engineers (@rtanwar) and they also couldn't
+explain the discrepancy.
+After further correspondence I aligned both the equation and coefficients
+in the driver code to the equation and coefficients defined in series 5
+of the Moortec Embedded Temperature Sensor (METS) datasheet which they
+provided.
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+> On top of that, it seems overflow-prune in 32 bit systems.
 
-Thanks,
-Miaohe Lin
+I'll check if it can overflow, and if it can I'll fix in next version.
+
+--
+Regards, Eliav
+

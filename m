@@ -2,122 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D900599DE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EF9599DD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349617AbiHSO5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 10:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
+        id S1349093AbiHSOz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 10:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349172AbiHSO5O (ORCPT
+        with ESMTP id S1348695AbiHSOzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 10:57:14 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F342C64C4;
-        Fri, 19 Aug 2022 07:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=SYqd0jVvSqn0LYdbb0mNobM+NLD0i8990uNItjrpJW0=; b=p8X1gMssAFqz7Cj5E1IU3EN3xz
-        t/snbLEyJv1XAdu4J+MpAgDpW86NPkUeqqsmS64YxuYIDoz1/0nSwGnJ4A7MRHs6v4/DfY13yylRH
-        yTpJ3gDO1i4G6ew5SrDgljBdNE61ShqeAK0joibG/N9CQrD4C5DO+D+oHobsM0kWRo/T88yRl68DM
-        ivZpQK7KoicNncKbbL3cMwzclIbdo4NBfFt8WVkYbV7Yt9Ti+iBnKi0iAa3qakANtULKlnjVs0VPW
-        qMm4R7XYp2iFBesGctz7KWjgzPu53WYvs3CSQtaYwSCE20OErGTcffzJDbyUtNOmEl2QCsbCVzRVd
-        fg0lrl+g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33852)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oP3PW-0007vG-Sl; Fri, 19 Aug 2022 15:55:47 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oP3PE-0007s8-Jr; Fri, 19 Aug 2022 15:55:28 +0100
-Date:   Fri, 19 Aug 2022 15:55:28 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        akpm@linux-foundation.org
-Subject: Re: [PATCH] kernel: exit: cleanup release_thread()
-Message-ID: <Yv+kYPnf8c6rLXgN@shell.armlinux.org.uk>
-References: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
+        Fri, 19 Aug 2022 10:55:54 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F30EF026;
+        Fri, 19 Aug 2022 07:55:54 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id o14-20020a17090a0a0e00b001fabfd3369cso5099781pjo.5;
+        Fri, 19 Aug 2022 07:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=T6fT7nNCKMbrfNAmBcVL3KD2JL0FCBDvC1i8ixlnj/U=;
+        b=fI8RNHiH7NjW7J/Lgfb3by039mnaaWUyN/QgoqUb6q7HiMtAl2mDJp9+IpjpE/MW2F
+         RewMTs80lbmLNZNhISmcQsxP/60aKoYW8aoC9P7gTmON+85CVs7fUCg5j4jV/lRI3R50
+         diAV3zZZsNyg0c6wCLlbfhjRQ0OfxiU1arT4QJ24bvxwz0fath/Gh2C1FUfrX4w8TXRZ
+         hV47nU1kQQtl6fRWGZDcX1GY7IYNKCEhc+07NcBF8w+J08uuMCv7asTgUVNxoSHygKzv
+         CFFJw5RfTfFfZWG8k68SbQtz5/AVsP7sQo5nyYAmc0+A1e1UoKWkKAAw1RUtu+x2UDsy
+         mScA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=T6fT7nNCKMbrfNAmBcVL3KD2JL0FCBDvC1i8ixlnj/U=;
+        b=TvusYwXtK3xGaGnRwJBGQAVlc1N0sS0hR1slE+mO6cH/ouS+vfiNVETSvYEEQzBZgV
+         yEtkV6QOKKXo1xp/clbuEml461C3TQmEKq3L1WhEhd9eo7kX5ViFAmi6Td+6kpOmr8iO
+         N1xskS++pzDpPRTOLVA6JMnJTZien5BX6XXEqLrRasOgETFxmgmeZB2hTFl33HzHWTdS
+         v0Gpp1QrWCXsnnN6QNwtTYJH2w/QJsGG0O5jyNTfjnz4x0ZjqnHUrpHhlnOm2eYi6K3h
+         /1MqgsjpQLtTteusLedN6ZjywP5bAZPGaV5On+5LQAgGvJGcN7z4qif2vEuo1fA9vYak
+         haRg==
+X-Gm-Message-State: ACgBeo2OY7KTFa+mwT7ueo7XkbkC6wuKJMlDNg5L6NhvRK4mc/s3WFI7
+        yLoDrKViPzce/cjDsmICAEcs8sElYdnZDuaTAj4=
+X-Google-Smtp-Source: AA6agR5HLWtU4kIuacFtn9NcvNyumJOZEFnRj3NuvQuBgNNzXADaPTLiSvl8QiUHheM91qJcI3a1P4Yuqq7jAInCYNs=
+X-Received: by 2002:a17:902:d4c7:b0:16e:df4b:89b4 with SMTP id
+ o7-20020a170902d4c700b0016edf4b89b4mr7525425plg.142.1660920953520; Fri, 19
+ Aug 2022 07:55:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20220816032846.2579217-1-imagedong@tencent.com>
+ <CAKwvOd=accNK7t_SOmybo3e4UcBKoZ6TBPjCHT3eSSpSUouzEA@mail.gmail.com>
+ <CADxym3Yxq0k_W43kVjrofjNoUUag3qwmpRGLLAQL1Emot3irPQ@mail.gmail.com> <20220818165838.GM25951@gate.crashing.org>
+In-Reply-To: <20220818165838.GM25951@gate.crashing.org>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Fri, 19 Aug 2022 22:55:42 +0800
+Message-ID: <CADxym3YEfSASDg9ppRKtZ16NLh_NhH253frd5LXZLGTObsVQ9g@mail.gmail.com>
+Subject: Re: [PATCH net-next v4] net: skb: prevent the split of
+ kfree_skb_reason() by gcc
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>, kuba@kernel.org,
+        miguel.ojeda.sandonis@gmail.com, ojeda@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        asml.silence@gmail.com, imagedong@tencent.com,
+        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
+        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 09:44:06AM +0800, Kefeng Wang wrote:
-> Only x86 has own release_thread(), introduce a new weak
-> release_thread() function to clean empty definitions in
-> other ARCHs.
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-...
->  arch/arm/include/asm/processor.h        | 3 ---
->  arch/arm/kernel/process.c               | 4 ----
+Hello,
 
-Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+On Fri, Aug 19, 2022 at 1:00 AM Segher Boessenkool
+<segher@kernel.crashing.org> wrote:
+>
+> Hi!
+>
+> On Fri, Aug 19, 2022 at 12:31:44AM +0800, Menglong Dong wrote:
+> > On Wed, Aug 17, 2022 at 11:54 PM Nick Desaulniers
+> > <ndesaulniers@google.com> wrote:
+> > > Perhaps noipa might also work here?
+> >
+> > In my testing, both 'noclone' and 'noipa' both work! As for the
+> > '-fdisable-ipa-fnsplit', it seems it's not supported by gcc, and I
+> > failed to find any documentation of it.
+>
+> noipa is noinline+noclone+no_icf plus assorted not separately enablable
+> things.  There is no reason you would want to disable all
+> inter-procedural optimisations here, so you don't need noipa.
+>
+> You need both noinline and no_icf if you want all calls to this to be
+> actual function calls, and using this specific function name.  If you
+> don't have noinline some calls may go missing (which may be fine for
+> how you use it).  If you don't have no_icf the compiler may replace the
+> call with a call to another function, if that does the same thing
+> semantically.  You may want to prevent that as well, depending on
+> exactly what you have this for.
+>
+
+Thanks for your explanation about the usage of 'noinline' and 'no_icf'!
+I think 'noclone' seems enough in this case? As the function
+'kfree_skb_reason' we talk about is a global function, I think that the
+compiler has no reason to make it inline, or be merged with another
+function.
+
+Meanwhile, I think that the functions which use '__builtin_return_address'
+should consider the optimization you mentioned above, and
+I'll have a check on them by the way.
 
 Thanks!
+Menglong Dong
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+>
+> Segher

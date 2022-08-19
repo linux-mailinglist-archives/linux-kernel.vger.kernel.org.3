@@ -2,188 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80AE599B0E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 047E0599B50
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348617AbiHSLna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S1348639AbiHSLo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348558AbiHSLn0 (ORCPT
+        with ESMTP id S1347719AbiHSLoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:43:26 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763CEBE19;
-        Fri, 19 Aug 2022 04:43:23 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JBdgTq004630;
-        Fri, 19 Aug 2022 11:43:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=zWRGa3Af7C/Nzs7CTmE0gQcvlbG+601lqNptAJNWYpM=;
- b=NBux9K5DNY7Uo0jiHQaH0hZTF6elMN7REPHh5+a3OD7qmW/IM/d3Zt97iU5KmG7gKM11
- JjKQDgR7K6Td24Hl7oyptGabBQWwH8U+IHGQiBj1+tMzbWxpfvnk+Vho1k4yUeV87PZy
- LOEl7Rj5m09xEbrsyByfh18TO4HgBiarPesZQ29U6MyykenzLfIp7t/xwIdEr6YAXs7y
- 1v76dHnx9YO9+EMtpBVQbSP82sJN7vr5L+5StA12lg+gluvCF8ilB4pUROPAjVwrhF+9
- 1gB3lVxUx7TlFuzQbxqRn7OK3zToZ1085jTki/ChPCHfqk6WWODtp1mz00jf4CEStPhT tg== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j29860v3a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 11:43:07 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27JBKfeB000962;
-        Fri, 19 Aug 2022 11:43:04 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3hx3k9f55d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 11:43:04 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27JBh1fm22020400
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 Aug 2022 11:43:01 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6D546A4053;
-        Fri, 19 Aug 2022 11:43:01 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E5A7AA4040;
-        Fri, 19 Aug 2022 11:42:59 +0000 (GMT)
-Received: from [9.171.46.183] (unknown [9.171.46.183])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 19 Aug 2022 11:42:59 +0000 (GMT)
-Message-ID: <b22977d5-6df7-13e0-802f-6201e6445d72@linux.ibm.com>
-Date:   Fri, 19 Aug 2022 13:42:58 +0200
+        Fri, 19 Aug 2022 07:44:54 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07706C2763;
+        Fri, 19 Aug 2022 04:44:52 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id w138so1478167pfc.10;
+        Fri, 19 Aug 2022 04:44:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=UCWqtLC1yYug912P/xJZXTJO6IcyX8bpF1RM7XJlaA4=;
+        b=LBXZTKaoBUH+ULwwdTRqW7STUr819eXN+/NMdPNxP+5tEbdZ6FxlaikH6UCkpr72XN
+         dXX0LxEt5egGP1IXKhQc84rS+ZgQHD+ve58/pw7tsfdQwf0BAozP+jWQjvfG8QvE8oDK
+         +wkS0I1D4u//cpAXd06OVcrRleAS0TXi2042Fgmmx5oF71mncxDjNy/8Ff7oSzrDvrx5
+         liSSJQAn80C4GdCiNuBYVVzjSpIf5af5RoueihAyt/AHUJbBltK7D5HEKBIBBMCb5mwk
+         RjKZE/7nNP/3xb9sQ+vz778brQVkboSN5YVQAd12n40WZMxnvOSvIdqq6FHzsyLvM3hh
+         2duw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=UCWqtLC1yYug912P/xJZXTJO6IcyX8bpF1RM7XJlaA4=;
+        b=lABxLsCES1j6MkX4vZFiDw9gxC/M+np2c6Slace2etii78bBXgVxav19EvThaAJ70f
+         Qt5DsV/596rrwUCZXdQ2rsDH7oEBAhNM3VeYHfEUdmy7Tf61uY9LLYwnIYlMnuWTAd/n
+         MdrYVB63zKOwUFmHBQja3P5NHfZcwuo2uH3fzrgJq5V7AWMxyJBSiXu7b7h7yM1UcQQH
+         ofLKo/Xphj3uZ5dVoS12HMuIFCGwP23awmwkEHyxQP+ehA0PaS9HbwCxUbfX4N4rsTg/
+         tP58wwJRI6eilu4Y8plag3QG2RPxD3d6bVsnpvWFcpgzme58CdrvW4QlCCqYObwdkviG
+         N7Ww==
+X-Gm-Message-State: ACgBeo0MgHKkQu5UYUyt+X4TPw0j1UoYwLZDyHZyyf/qAAwge3cnJ097
+        8oLRvFZqWT5HxDf1lqSuVlwkQwTd3U8=
+X-Google-Smtp-Source: AA6agR7CbiVFbWALuy4dvNt5DjW422IoGaxOs/+ufjJr9mtOmCjJQ90/G+ZsrjghuJAhrL0WMIqN0A==
+X-Received: by 2002:a65:6d1a:0:b0:3fb:2109:7b87 with SMTP id bf26-20020a656d1a000000b003fb21097b87mr5869447pgb.127.1660909491496;
+        Fri, 19 Aug 2022 04:44:51 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q62-20020a17090a1b4400b001f4cc17b451sm5030849pjq.5.2022.08.19.04.44.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 04:44:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 19 Aug 2022 04:44:49 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+Cc:     wim@linux-watchdog.org, joel@jms.id.au, andrew@aj.id.au,
+        BMC-SW@aspeedtech.com, linux-watchdog@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, Bonnie_Lo@wiwynn.com
+Subject: Re: [PATCH] watchdog: aspeed_wdt: Reorder output signal register
+ configuration
+Message-ID: <20220819114449.GF3106213@roeck-us.net>
+References: <20220819094905.1962513-1-chin-ting_kuo@aspeedtech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] KVM: s390: pci: Hook to access KVM lowlevel from VFIO
-Content-Language: en-US
-To:     Niklas Schnelle <schnelle@linux.ibm.com>, mjrosato@linux.ibm.com
-Cc:     rdunlap@infradead.org, linux-kernel@vger.kernel.org, lkp@intel.com,
-        borntraeger@linux.ibm.com, farman@linux.ibm.com,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, frankja@linux.ibm.com
-References: <20220818164652.269336-1-pmorel@linux.ibm.com>
- <2ae0bf9abffe2eb3eb2fb3f84873720d39f73d4d.camel@linux.ibm.com>
- <0d7d055d-f323-acba-cb79-f859b5e182b4@linux.ibm.com>
- <ae19135f580e1f510e99d1567514cc2dfe3571be.camel@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <ae19135f580e1f510e99d1567514cc2dfe3571be.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TpNuB7kEou0-CgaZpNv6WAUZa33Q863R
-X-Proofpoint-ORIG-GUID: TpNuB7kEou0-CgaZpNv6WAUZa33Q863R
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-19_06,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- bulkscore=0 malwarescore=0 spamscore=0 mlxscore=0 suspectscore=0
- adultscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208190044
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819094905.1962513-1-chin-ting_kuo@aspeedtech.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/19/22 12:42, Niklas Schnelle wrote:
-> On Fri, 2022-08-19 at 10:44 +0200, Pierre Morel wrote:
->>
->> On 8/19/22 09:14, Niklas Schnelle wrote:
->>> On Thu, 2022-08-18 at 18:46 +0200, Pierre Morel wrote:
->>>> We have a cross dependency between KVM and VFIO when using
->>>> s390 vfio_pci_zdev extensions for PCI passthrough
->>>> To be able to keep both subsystem modular we add a registering
->>>> hook inside the S390 core code.
->>>>
->>>> This fixes a build problem when VFIO is built-in and KVM is built
->>>> as a module.
->>>>
->>>> Reported-by: Randy Dunlap <rdunlap@infradead.org>
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
->>>> Fixes: 09340b2fca007 ("KVM: s390: pci: add routines to start/stop inter..")
->>>
->>> Please don't shorten the Fixes tag, the subject line is likely also
->>> checked by some automated tools. It's okay for this line to be over the
->>> column limit and checkpatch.pl --strict also accepts it.
->>>
->>
->> OK
->>
->>>> Cc: <stable@vger.kernel.org>
->>>> ---
->>>>    arch/s390/include/asm/kvm_host.h | 17 ++++++-----------
->>>>    arch/s390/kvm/pci.c              | 10 ++++++----
->>>>    arch/s390/pci/Makefile           |  2 ++
->>>>    arch/s390/pci/pci_kvm_hook.c     | 11 +++++++++++
->>>>    drivers/vfio/pci/vfio_pci_zdev.c |  8 ++++++--
->>>>    5 files changed, 31 insertions(+), 17 deletions(-)
->>>>    create mode 100644 arch/s390/pci/pci_kvm_hook.c
->>>>
->>>>
->>> ---8<---
->>>>    
->>>>    	kvm_put_kvm(kvm);
->>>>    }
->>>> -EXPORT_SYMBOL_GPL(kvm_s390_pci_unregister_kvm);
->>>>    
->>>>    void kvm_s390_pci_init_list(struct kvm *kvm)
->>>>    {
->>>> @@ -678,6 +678,8 @@ int kvm_s390_pci_init(void)
->>>>    
->>>>    	spin_lock_init(&aift->gait_lock);
->>>>    	mutex_init(&aift->aift_lock);
->>>> +	zpci_kvm_hook.kvm_register = kvm_s390_pci_register_kvm;
->>>> +	zpci_kvm_hook.kvm_unregister = kvm_s390_pci_unregister_kvm;
->>>>    
->>>>    	return 0;
->>>>    }
->>>> diff --git a/arch/s390/pci/Makefile b/arch/s390/pci/Makefile
->>>> index bf557a1b789c..c02dbfb415d9 100644
->>>> --- a/arch/s390/pci/Makefile
->>>> +++ b/arch/s390/pci/Makefile
->>>> @@ -7,3 +7,5 @@ obj-$(CONFIG_PCI)	+= pci.o pci_irq.o pci_dma.o pci_clp.o pci_sysfs.o \
->>>>    			   pci_event.o pci_debug.o pci_insn.o pci_mmio.o \
->>>>    			   pci_bus.o
->>>>    obj-$(CONFIG_PCI_IOV)	+= pci_iov.o
->>>> +
->>>> +obj-y += pci_kvm_hook.o
->>>
->>> I thought we wanted to compile this only for CONFIG_PCI?
->>
->> Ah sorry, that is indeed what I understood with Matt but then I
->> misunderstood your own answer from yesterday.
->> I change to
->> obj-$(CONFIG_PCI) += pci_kvm_hook.o
->>
->>>> diff --git a/arch/s390/pci/pci_kvm_hook.c b/arch/s390/pci/pci_kvm_hook.c
->>>> new file mode 100644
->>>> index 000000000000..ff34baf50a3e
->>> ---8<---
->>>
+On Fri, Aug 19, 2022 at 05:49:05PM +0800, Chin-Ting Kuo wrote:
+> If the output driving type is push-pull mode, the output
+> polarity should be selected in advance. Otherwise, an unexpected
+> value will be output at the moment of changing to push-pull mode.
+> Thus, output polarity, WDT18[31], must be configured before
+> changing driving type, WDT18[30].
 > 
-> Ok with the two things above plus the comment by Matt incorporated:
+> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  drivers/watchdog/aspeed_wdt.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
+> index 436571b6fc79..a03e4ff812a2 100644
+> --- a/drivers/watchdog/aspeed_wdt.c
+> +++ b/drivers/watchdog/aspeed_wdt.c
+> @@ -325,18 +325,18 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+>  		u32 reg = readl(wdt->base + WDT_RESET_WIDTH);
+>  
+>  		reg &= config->ext_pulse_width_mask;
+> -		if (of_property_read_bool(np, "aspeed,ext-push-pull"))
+> -			reg |= WDT_PUSH_PULL_MAGIC;
+> +		if (of_property_read_bool(np, "aspeed,ext-active-high"))
+> +			reg |= WDT_ACTIVE_HIGH_MAGIC;
+>  		else
+> -			reg |= WDT_OPEN_DRAIN_MAGIC;
+> +			reg |= WDT_ACTIVE_LOW_MAGIC;
+>  
+>  		writel(reg, wdt->base + WDT_RESET_WIDTH);
+>  
+>  		reg &= config->ext_pulse_width_mask;
+> -		if (of_property_read_bool(np, "aspeed,ext-active-high"))
+> -			reg |= WDT_ACTIVE_HIGH_MAGIC;
+> +		if (of_property_read_bool(np, "aspeed,ext-push-pull"))
+> +			reg |= WDT_PUSH_PULL_MAGIC;
+>  		else
+> -			reg |= WDT_ACTIVE_LOW_MAGIC;
+> +			reg |= WDT_OPEN_DRAIN_MAGIC;
+>  
+>  		writel(reg, wdt->base + WDT_RESET_WIDTH);
+>  	}
+> -- 
+> 2.25.1
 > 
-
-Just a little correction, it changes nothing if the pci_kvm_hook.c goes 
-on same lines as other CONFIG_PCI depending files.
-So I put it on the same line.
-
-Thanks
-
-Pierre
-
--- 
-Pierre Morel
-IBM Lab Boeblingen

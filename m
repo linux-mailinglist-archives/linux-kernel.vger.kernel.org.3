@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E57C59A0D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D4259A02B
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351126AbiHSQDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 12:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
+        id S1351188AbiHSQDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 12:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351094AbiHSQAj (ORCPT
+        with ESMTP id S1351291AbiHSQBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 12:00:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEA3109753;
-        Fri, 19 Aug 2022 08:52:35 -0700 (PDT)
+        Fri, 19 Aug 2022 12:01:14 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CEF10A767;
+        Fri, 19 Aug 2022 08:53:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA334B827F8;
-        Fri, 19 Aug 2022 15:52:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34213C433C1;
-        Fri, 19 Aug 2022 15:52:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 50607CE26B6;
+        Fri, 19 Aug 2022 15:52:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 413C3C433C1;
+        Fri, 19 Aug 2022 15:52:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660924353;
-        bh=2P86ZKNFEU5wzeVoOvbD8JQFIyb0ga6RcvV8rBd+ApA=;
+        s=korg; t=1660924356;
+        bh=qVDrBSzVaPi+3Q9Qz4aFGHejuAGKOQ9q8ZjK5k3N9wk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OgkuIGHkAKjP6dJ76AJGzhaf1HghFqW15u7XefNHvAtgkJ/ms3WblJhZPNzQtMPZF
-         r6sDWg3u4DT3U+f2P/OlrKvwuDYQqEYAW1ZL2JjUbQJFfVa884UhTnRMfReiXmqDHO
-         3nZACIe0r+5V9nyOYu2bYXrRXKJIuNZzRBqcSW8c=
+        b=ZARfBAiogdq/xuOKigGxSIN5VdO9je8I1Z2rDV9wuPp0ZaOhkU4Mu0G07M9zUCcW4
+         Zto6mhv78g1e4Ud9a7T/cLCJ0Jyi4VWla1V4XmCCyskqxkNt5mslt/+gsFJecNK09u
+         KZYy/lkHm0gH15foppIkrVNvdpkOu0iU00x0GHGM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Junichi Nomura <junichi.nomura@nec.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Mike Christie <michael.christie@oracle.com>,
-        Li Zefan <lizf@cn.fujitsu.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 142/545] blktrace: Trace remapped requests correctly
-Date:   Fri, 19 Aug 2022 17:38:32 +0200
-Message-Id: <20220819153835.687614029@linuxfoundation.org>
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 143/545] regulator: of: Fix refcount leak bug in of_get_regulation_constraints()
+Date:   Fri, 19 Aug 2022 17:38:33 +0200
+Message-Id: <20220819153835.726466630@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220819153829.135562864@linuxfoundation.org>
 References: <20220819153829.135562864@linuxfoundation.org>
@@ -59,41 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit 22c80aac882f712897b88b7ea8f5a74ea19019df ]
+[ Upstream commit 66efb665cd5ad69b27dca8571bf89fc6b9c628a4 ]
 
-Trace the remapped operation and its flags instead of only the data
-direction of remapped operations. This issue was detected by analyzing
-the warnings reported by sparse related to the new blk_opf_t type.
+We should call the of_node_put() for the reference returned by
+of_get_child_by_name() which has increased the refcount.
 
-Reviewed-by: Jun'ichi Nomura <junichi.nomura@nec.com>
-Cc: Mike Snitzer <snitzer@kernel.org>
-Cc: Mike Christie <michael.christie@oracle.com>
-Cc: Li Zefan <lizf@cn.fujitsu.com>
-Cc: Chaitanya Kulkarni <kch@nvidia.com>
-Fixes: 1b9a9ab78b0a ("blktrace: use op accessors")
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Link: https://lore.kernel.org/r/20220714180729.1065367-11-bvanassche@acm.org
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 40e20d68bb3f ("regulator: of: Add support for parsing regulator_state for suspend state")
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220715111027.391032-1-windhl@126.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/blktrace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/regulator/of_regulator.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/trace/blktrace.c b/kernel/trace/blktrace.c
-index 7f625400763b..15a376f85e09 100644
---- a/kernel/trace/blktrace.c
-+++ b/kernel/trace/blktrace.c
-@@ -1100,7 +1100,7 @@ static void blk_add_trace_rq_remap(void *ignore, struct request *rq, dev_t dev,
- 	r.sector_from = cpu_to_be64(from);
+diff --git a/drivers/regulator/of_regulator.c b/drivers/regulator/of_regulator.c
+index 06c0b15fe4c0..5d844697c7b6 100644
+--- a/drivers/regulator/of_regulator.c
++++ b/drivers/regulator/of_regulator.c
+@@ -206,8 +206,12 @@ static int of_get_regulation_constraints(struct device *dev,
+ 		}
  
- 	__blk_add_trace(bt, blk_rq_pos(rq), blk_rq_bytes(rq),
--			rq_data_dir(rq), 0, BLK_TA_REMAP, 0,
-+			req_op(rq), rq->cmd_flags, BLK_TA_REMAP, 0,
- 			sizeof(r), &r, blk_trace_request_get_cgid(rq));
- 	rcu_read_unlock();
- }
+ 		suspend_np = of_get_child_by_name(np, regulator_states[i]);
+-		if (!suspend_np || !suspend_state)
++		if (!suspend_np)
+ 			continue;
++		if (!suspend_state) {
++			of_node_put(suspend_np);
++			continue;
++		}
+ 
+ 		if (!of_property_read_u32(suspend_np, "regulator-mode",
+ 					  &pval)) {
 -- 
 2.35.1
 

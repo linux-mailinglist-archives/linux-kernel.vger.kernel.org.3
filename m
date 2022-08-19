@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15568599ADF
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9822A599AF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348780AbiHSLWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S1346450AbiHSLXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348787AbiHSLWj (ORCPT
+        with ESMTP id S1348682AbiHSLXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:22:39 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85D7FEC40
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:22:37 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 19 Aug 2022 07:23:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03A2C6FFE;
+        Fri, 19 Aug 2022 04:23:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M8K9P1v8Qz4x1G;
-        Fri, 19 Aug 2022 21:22:33 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1660908155;
-        bh=SXvhcATHeAzGrsMP2ajJM02RREFpXI38PV8xlqpBvfk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Dj5/0PZNbcvmmBLC1vxc+g8hIrgyxyVrvDiueNMAUKwl+xNjN80XyTFh6mcL3oo88
-         JhI4NCwCYx4vx1guEND4xEfN602aY988zTA9BEVr/wBtSUBng7mjVYFRd54CfaNV7L
-         AzlxqMoecTz26IeIoVfSYwYkbqdW/dWTJBpg7v+Df9GFmEHhjHTzfNo5Cc+h8jBBGN
-         /wTMmny+SRgk1jqhkGFt+qR/9XwyQ8/ZL3licVyZcBan4ftPMvNnrJY4G8bpPi6g62
-         boV22S7BcUl47iUzKvn+Zwpcp+K42mIHbBDhssIFl1XIJKxDOfb8hanzYqJ34Hy+qF
-         49CXJER8bAuPg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Wang, Haiyue" <haiyue.wang@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "david@redhat.com" <david@redhat.com>,
-        "apopple@nvidia.com" <apopple@nvidia.com>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "naoya.horiguchi@linux.dev" <naoya.horiguchi@linux.dev>,
-        "alex.sierra@amd.com" <alex.sierra@amd.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v6 1/2] mm: migration: fix the FOLL_GET failure on
- following huge page
-In-Reply-To: <Yv0ku1mn4LBzg/zG@monkey>
-References: <20220812084921.409142-1-haiyue.wang@intel.com>
- <20220816022102.582865-1-haiyue.wang@intel.com>
- <20220816022102.582865-2-haiyue.wang@intel.com>
- <20220816175838.211a1b1e85bc68c439101995@linux-foundation.org>
- <BYAPR11MB3495F747CBF95E079E8FC8A5F76A9@BYAPR11MB3495.namprd11.prod.outlook.com>
- <20220816224322.33e0dfbcbf522fcdc2026f0e@linux-foundation.org>
- <Yv0ku1mn4LBzg/zG@monkey>
-Date:   Fri, 19 Aug 2022 21:22:32 +1000
-Message-ID: <875yiomq9z.fsf@mpe.ellerman.id.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CAC861772;
+        Fri, 19 Aug 2022 11:23:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 270EDC433D6;
+        Fri, 19 Aug 2022 11:23:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660908186;
+        bh=hnttYLqb9dk7bb0JclIZVL0NbVbYYPFxWtSbXQQOsBM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DgSxC7w5k2hBp7tpldSGiukqlcpjM69Y4pnHW5nRuBod2I7uMBhSmnG+NO9+2PLuU
+         1gYXdkdrIHUSHuRwFEH3JitoLJdJ59CZNorj41BjrlhCk1KXyqU6F+R7J4iBGZT0hC
+         qqNYUC2xnWDZOPNKwtf4q4u2Vd9vuJ0dZ3L/6klQ=
+Date:   Fri, 19 Aug 2022 13:23:04 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dragos-Marian Panait <dragos.panait@windriver.com>
+Cc:     stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
+        Sujith <Sujith.Manoharan@atheros.com>,
+        Senthil Balasubramanian <senthilkumar@atheros.com>,
+        "John W . Linville" <linville@tuxdriver.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.10 0/1] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+Message-ID: <Yv9ymGE9ZNPfUjBm@kroah.com>
+References: <20220819103852.902332-1-dragos.panait@windriver.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819103852.902332-1-dragos.panait@windriver.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mike Kravetz <mike.kravetz@oracle.com> writes:
-> On 08/16/22 22:43, Andrew Morton wrote:
->> On Wed, 17 Aug 2022 03:31:37 +0000 "Wang, Haiyue" <haiyue.wang@intel.com> wrote:
->>
->> > > >  		}
->> > >
->> > > I would be better to fix this for real at those three client code sites?
->> >
->> > Then 5.19 will break for a while to wait for the final BIG patch ?
->>
->> If that's the proposal then your [1/2] should have had a cc:stable and
->> changelog words describing the plan for 6.0.
->>
->> But before we do that I'd like to see at least a prototype of the final
->> fixes to s390 and hugetlb, so we can assess those as preferable for
->> backporting.  I don't think they'll be terribly intrusive or risky?
->
-> I will start on adding follow_huge_pgd() support.  Although, I may need
-> some help with verification from the powerpc folks, as that is the only
-> architecture which supports hugetlb pages at that level.
->
-> mpe any suggestions?
+On Fri, Aug 19, 2022 at 01:38:51PM +0300, Dragos-Marian Panait wrote:
+> The following commit is needed to fix CVE-2022-1679:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0ac4827f78c7ffe8eef074bc010e7e34bc22f533
+> 
+> Pavel Skripkin (1):
+>   ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+> 
+>  drivers/net/wireless/ath/ath9k/htc.h          | 10 +++++-----
+>  drivers/net/wireless/ath/ath9k/htc_drv_init.c |  3 ++-
+>  2 files changed, 7 insertions(+), 6 deletions(-)
+> 
+> 
+> base-commit: 6eae1503ddf94b4c3581092d566b17ed12d80f20
+> -- 
+> 2.37.1
+> 
 
-I'm happy to test.
+This is already queued up for 5.10.  You forgot the backports to older
+kernels, which is also already queued up.
 
-I have a system where I can allocate 1GB huge pages.
+thanks,
 
-I'm not sure how to actually test this path though. I hacked up the
-vm/migration.c test to allocate 1GB hugepages, but I can't see it going
-through follow_huge_pgd() (using ftrace).
-
-Maybe I hacked it up badly, I'll have a closer look on Monday. But if
-you have any tips on how to trigger that path let me know :)
-
-cheers
+greg k-h

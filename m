@@ -2,98 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364D659A585
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 430B859A559
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349856AbiHSS2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 14:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
+        id S1350700AbiHSS3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 14:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349931AbiHSS2a (ORCPT
+        with ESMTP id S1349836AbiHSS3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 14:28:30 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD703343A;
-        Fri, 19 Aug 2022 11:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660933708; x=1692469708;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=YDdzNwGuarY0Qqw69S3P1mgYyWI4ffMOknFPoo+F9Ek=;
-  b=HrgXQtD3EyNUXQ2xUL2/m8Ht7O3TpEYowAb//YyluRLi4RzDAH23BBEO
-   mxRhgg0j4R3jQlWYey5+MVGjET6ZKlvETPzmz5+PxIu5OuW4EFUZoYrJZ
-   5hhLdNc1zhTRF/embTLAHLoMVLOoP0v01c53Vr/2ZLWDq7uuC6i9FNTB1
-   K1dqfK7ZoMNcUi2S7HQ/BpwKhp+gsduFTB0q31jPL0S75HA1pqX4Nj+ar
-   L86EO780el/xdxcGdTzg/nRDSWD1ZruXOy1HGQyMU/z4yvZR7/X38hQqz
-   DAdDLl0dfvPzs0GzNH5umZTG+PvhXbGX2twzgZZ/RmcCtXM2mp371Iuk7
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="280034867"
-X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
-   d="scan'208";a="280034867"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 11:28:27 -0700
-X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
-   d="scan'208";a="936313396"
-Received: from mupton-mobl.amr.corp.intel.com (HELO [10.209.5.45]) ([10.209.5.45])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 11:28:26 -0700
-Message-ID: <46e3483b-a5ab-2a05-8a28-f9ea87e881c3@intel.com>
-Date:   Fri, 19 Aug 2022 11:28:24 -0700
+        Fri, 19 Aug 2022 14:29:42 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6640BA9C2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:29:41 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id o14so2712648ilt.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:29:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=q/AKxBAoGuIGbw50ofhyCLKrbO9AgUVTeplds+BuUCU=;
+        b=uH5PyXDmPHsIXPrkyxT6Y3rEqmV112PumYE2Or+P8B65EMPD1ZEwogxLhwssPzz4sr
+         hFxwtYsIWikwlqkaPRuZOjxbQry6cBwmgZfe9T5dJVChsgE1PHUec0wSeUWfcarAbXYh
+         xoMp4Z1U1cmuG4d7IlAUhK30gWFwvLuRhJp4w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=q/AKxBAoGuIGbw50ofhyCLKrbO9AgUVTeplds+BuUCU=;
+        b=Auy7I4dDKovrrjZHm89o0hKu0LecctocelL1fYXMSLzBK9VxrKuaSBCL70i1xynYZi
+         +Iiv8V1z2f9IRo7FmFfdxSzCtmm+wBFeZlvKIeiWuLDA+/hHpenZtgox9fzlRbi8OdO9
+         OJ4hqnv5f3XbnsOzNs3kFSNv++aDLIO5/AStMP3OxsufUw2rOaTWRiUgn0I636/UykG5
+         JWeWoxtV6ffr2KGxgEBSkDRLv/+fwsdhbWBiVKXqpyjlkMOCHFIbAxSi+79lpp5PJ/Cz
+         S4gSMyVsmkhAjh4LiYqZ46iX2szowGue98hClZqnvzOmmPXkcKzCZPT2rvrEJXfsde8b
+         L3nw==
+X-Gm-Message-State: ACgBeo1ID5GTRoJpg69Jr73/ATt2tL2DenKatjX1Os14x9znUCXvDa3+
+        Z3+EEHPhon6cH/04vmI4p7HUYDsxR+0Frm8QfgWtdU9FJyc=
+X-Google-Smtp-Source: AA6agR6hmPcagkGPqpN710GPGIER30OCN9Cjyb0YXVdQifGj0juUylG+lMx1xQ6HGw8nj1Fnp88oM+a2AytUoJDIMgc=
+X-Received: by 2002:a05:6e02:1c26:b0:2e5:8680:e842 with SMTP id
+ m6-20020a056e021c2600b002e58680e842mr4386935ilh.148.1660933781301; Fri, 19
+ Aug 2022 11:29:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: WARNING: CPU: 1 PID: 83 at arch/x86/kernel/cpu/sgx/main.c:446
- ksgxd+0x1b7/0x1d0
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "Chatre, Reinette" <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <ce0b4d26-3a6e-7c5a-5f66-44cba05f9f35@molgen.mpg.de>
- <4253695b-85aa-a2fb-fbf6-718db8b6c20c@molgen.mpg.de>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <4253695b-85aa-a2fb-fbf6-718db8b6c20c@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220809034517.3867176-5-joel@joelfernandes.org>
+ <CAEXW_YQuGga9Eivq4G6o1XjvPn-nMMDiM8FOY6HXJTMzwv1Emg@mail.gmail.com>
+ <CAEXW_YQOXBRwCLZXjspXttGkNhbJK3HGVDuYj5TcYD=Xj1cK0A@mail.gmail.com>
+ <CAEXW_YT3VnK5KJTbyXdCzs8j4jw9XFTSCF4Dt9QwLPtkPSb1tA@mail.gmail.com>
+ <20220819023550.GN2125313@paulmck-ThinkPad-P17-Gen-1> <4deb7354-bac7-b530-47ba-54cf50cfce58@joelfernandes.org>
+ <2d56e4ad-7d6e-2abb-461f-15f20128d42b@joelfernandes.org> <20220819171249.GP2125313@paulmck-ThinkPad-P17-Gen-1>
+ <fa8b7857-b9fd-72ad-36a7-8b09e4472816@joelfernandes.org> <CAEXW_YTxtfbbQ_rOiSbu62GpDPBDFpfWrNBef06MAkYPybNJ2A@mail.gmail.com>
+ <20220819182645.GQ2125313@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220819182645.GQ2125313@paulmck-ThinkPad-P17-Gen-1>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 19 Aug 2022 14:29:29 -0400
+Message-ID: <CAEXW_YT0==us-Suq74W5HV-ZbykmAY3cGoNDU2KQbTG3ZksgjQ@mail.gmail.com>
+Subject: Re: [PATCH v3 resend 4/6] fs: Move call_rcu() to call_rcu_lazy() in
+ some paths
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, rcu <rcu@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/19/22 09:02, Paul Menzel wrote:
-> On the Dell XPS 13 9370, Linux 5.18.16 prints the warning below:
-> 
-> ```
-> [    0.000000] Linux version 5.18.0-4-amd64
-> (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.3.0-5) 11.3.0, GNU
-> ld (GNU Binutils for Debian) 2.38.90.20220713) #1 SMP PREEMPT_DYNAMIC
-> Debian 5.18.16-1 (2022-08-10)
-> [    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.18.0-4-amd64
-> root=UUID=56f398e0-1e25-4fda-aa9f-611dece4b333 ro quiet
-> […]
-> [    0.000000] DMI: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 07/06/2022
-> […]
-> [    0.235418] sgx: EPC section 0x40200000-0x45f7ffff
+On Fri, Aug 19, 2022 at 2:26 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Fri, Aug 19, 2022 at 02:17:32PM -0400, Joel Fernandes wrote:
+> > On Fri, Aug 19, 2022 at 2:14 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> > [..]
+> > > >> Things are much better with the following change. However, this brings
+> > > >> me to a question about lock-contention based or any deferring and boot time.
+> > > >>
+> > > >> If you have a path like selinux doing a synchronize_rcu(), shouldn't we
+> > > >> skip the jiffie waiting for the bypass timer? Otherwise things
+> > > >> synchronously waiting will slow down more than usual. Maybe bypassing
+> > > >> should not be done for any case until boot up is done. I'm curious to
+> > > >> see if that improves boot time.
+> > > >
+> > > > Why not simply disable laziness at boot time and enable it only after
+> > > > booting is complete?  The exiting rcupdate.rcu_normal_after_boot kernel
+> > > > boot parameter uses a similar scheme.
+> > >
+> > > That sounds like the right thing to good, but unfortunately it wont help
+> > > this problem. The boot time issue happens after init has started. So the
+> > > OS is still "booting" even though the kernel has.
+> > >
+> > > Also the problem can happen after boot as well, like if RCU
+> > > lazy/non-lazy callbacks come back to back quickly, or so.
+> > >
+> > > But yes nonetheless, I can see the value of disabling it till the
+> > > in-kernel boot completets.
+> >
+> > My mail client is acting weird. I meant to add to this, I wonder if
+> > there is a way other subsystems detect when userspace boots using some
+> > heuristic?
+>
+> I don't know of one, but I bet that ChromeOS has ways.  If nothing else,
+> might you add a sysfs write to one of the boot-up phases?
 
-Hi Paul,
+Yes, that's possible :) Thanks, I will consider this idea.
 
-Would you be able to send the entire dmesg, along with:
+Thanks,
 
-	cat /proc/iomem # (as root)
-and
-	cpuid -1 --raw
-
-I'm suspecting either a BIOS problem.  Reinette (cc'd) also thought this
-might be a case of the SGX initialization getting a bit too far along
-when it should have been disabled.
-
-We had some bugs where we didn't stop fast enough after spitting out the
-"SGX Launch Control is locked..." errors.
+ - Joel

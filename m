@@ -2,125 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542F6599C83
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34BE599C54
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349282AbiHSM4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        id S1349357AbiHSMzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349170AbiHSMy7 (ORCPT
+        with ESMTP id S1349262AbiHSMy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:54:59 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C455A88A
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:54:46 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id r4so5544576edi.8
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=MXV4DylOF0ZdaiLo2QJuGxzw6UXL1e8It7jaBClcFvg=;
-        b=osiPXDjtr2ryf+P6+tDShDm6e+MFPpDx47vXUDtsOoJPTedOqf/j96FBlkhOYqtROd
-         XwPx+LuduCt8UHcnYqZ+hGJDHj3TcNA2Mn317Ng/3QlG2RVrlyUgEN5gtzW/gCFD7nm4
-         PTCxowDthgLU/Pa4KL+/G+1jyTwzC2ghWvEsuX17Dn2/AjOCqP5bH8+mP2UTPZiOERHc
-         ZI6Bfiwz0rZhtD8TOGmgJRjIv9/IQPFc51Pv+TgQ0qq4PVdgJdYKOSWNhnxWglpVH+i5
-         cfuLuiMo5bimaS6P5i5K24pk4PKOEi9HDw6IGvBLvYzv3St9Mn0pRjpYdnNPfbQE7bVf
-         NtwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=MXV4DylOF0ZdaiLo2QJuGxzw6UXL1e8It7jaBClcFvg=;
-        b=vSygUP7QsXxXuMkfoytqsLNqoI25+YrF940GLCM8WMrhqxUqBps2o6h4e19UFgrKH6
-         KXfAV/3zqMEaSI4ep1wtJEJXQTHhjlcMUxG0CiDO/7Nw2uedLZVWBRzYHcX8OPZltXJH
-         Fd8Yw0YdZTBWPne/Uw+RkNUWQ4Ei+jQuKhD3vKIAJfO9TDykALth2/eFwcs3rHHwCRWx
-         4y7bs4As+q31jsCg12w767lx1Y43rRd0togkTTIwCHDJSRhYCyCdiQy1Ubs0BKcP+Boc
-         5w1id3mD24ljeQJvEh/iotL435NVNLehdbeyhgVWDbyohpUSGMCv/KWZrUHpTHN7IwMU
-         ptIQ==
-X-Gm-Message-State: ACgBeo2TkZk+XA2v7ZxkYi32hhoJkL1gv9QOgOcShdcz6XxTZR8mJwzB
-        pQgVmgWWSy4Ma2RkLhXsPIk=
-X-Google-Smtp-Source: AA6agR7Q+W+RLgMxyIBfSNlTMD3yN5X4f110uXeDFuTtojrjd5h0HtViZ742+1fDJKRBkAGgKtZLbw==
-X-Received: by 2002:a05:6402:e01:b0:442:dd7e:f49d with SMTP id h1-20020a0564020e0100b00442dd7ef49dmr5958364edh.355.1660913684914;
-        Fri, 19 Aug 2022 05:54:44 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb77.dynamic.kabel-deutschland.de. [95.90.187.119])
-        by smtp.gmail.com with ESMTPSA id b12-20020a056402138c00b0043d6ece495asm3000955edv.55.2022.08.19.05.54.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 05:54:44 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 10/11] staging: r8188eu: merge rtw_{os,}_indicate_scan_done()
+        Fri, 19 Aug 2022 08:54:56 -0400
+Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73372786DC;
+        Fri, 19 Aug 2022 05:54:42 -0700 (PDT)
+From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1660913679; bh=Gkj3zv8/AM0qe5Jje8Bp7iYtlxqcO626XnrNO1Cj3wY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=keSH+EIT5pxyg9zlrBLaHmVDb0kTl6hmA4nfblgxgR4YNeHQlAYHfO+l5qvJo926l
+         G9Om5eu9TQLcHcs+FkrzPNSsXU20Bf3avCCdsnMsch0yEscQbl4clP1ruBz1cZe1VK
+         nzshyHi6HRupXMQfwDwie9Gxv5mlbJEUe/EUxwes=
+To:     =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/4] dt-bindings: sound: Add Apple MCA I2S transceiver
 Date:   Fri, 19 Aug 2022 14:54:27 +0200
-Message-Id: <20220819125428.8412-11-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220819125428.8412-1-straube.linux@gmail.com>
-References: <20220819125428.8412-1-straube.linux@gmail.com>
+Message-Id: <20220819125430.4920-2-povik+lin@cutebit.org>
+In-Reply-To: <20220819125430.4920-1-povik+lin@cutebit.org>
+References: <20220819125430.4920-1-povik+lin@cutebit.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Merge rtw_os_indicate_scan_done() into rtw_indicate_scan_done().
-It looks like the driver was originaly written to support different
-operating systems. We do not need this wrapping into an extra _os_
-function obviously.
+Add binding schema for MCA I2S transceiver found on Apple M1 and other
+chips.
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
+Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
 ---
- drivers/staging/r8188eu/core/rtw_mlme.c      | 2 +-
- drivers/staging/r8188eu/include/mlme_osdep.h | 1 -
- drivers/staging/r8188eu/os_dep/mlme_linux.c  | 5 -----
- 3 files changed, 1 insertion(+), 7 deletions(-)
+ .../devicetree/bindings/sound/apple,mca.yaml  | 131 ++++++++++++++++++
+ 1 file changed, 131 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/apple,mca.yaml
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index bd86fb679d63..594bfaf27291 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -894,7 +894,7 @@ void rtw_indicate_disconnect(struct adapter *padapter)
- 
- inline void rtw_indicate_scan_done(struct adapter *padapter, bool aborted)
- {
--	rtw_os_indicate_scan_done(padapter, aborted);
-+	indicate_wx_scan_complete_event(padapter);
- }
- 
- static struct sta_info *rtw_joinbss_update_stainfo(struct adapter *padapter, struct wlan_network *pnetwork)
-diff --git a/drivers/staging/r8188eu/include/mlme_osdep.h b/drivers/staging/r8188eu/include/mlme_osdep.h
-index 5f63e2051419..d5e367e2d0de 100644
---- a/drivers/staging/r8188eu/include/mlme_osdep.h
-+++ b/drivers/staging/r8188eu/include/mlme_osdep.h
-@@ -8,7 +8,6 @@
- #include "drv_types.h"
- 
- void rtw_init_mlme_timer(struct adapter *padapter);
--void rtw_os_indicate_scan_done(struct adapter *padapter, bool aborted);
- 
- void indicate_wx_scan_complete_event(struct adapter *padapter);
- 
-diff --git a/drivers/staging/r8188eu/os_dep/mlme_linux.c b/drivers/staging/r8188eu/os_dep/mlme_linux.c
-index 105251f250dc..5bd2b2c31342 100644
---- a/drivers/staging/r8188eu/os_dep/mlme_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/mlme_linux.c
-@@ -37,8 +37,3 @@ void rtw_init_mlme_timer(struct adapter *padapter)
- 	timer_setup(&pmlmepriv->scan_to_timer, _rtw_scan_timeout_handler, 0);
- 	timer_setup(&pmlmepriv->dynamic_chk_timer, _dynamic_check_timer_handlder, 0);
- }
--
--void rtw_os_indicate_scan_done(struct adapter *padapter, bool aborted)
--{
--	indicate_wx_scan_complete_event(padapter);
--}
+diff --git a/Documentation/devicetree/bindings/sound/apple,mca.yaml b/Documentation/devicetree/bindings/sound/apple,mca.yaml
+new file mode 100644
+index 000000000000..7b4f348c2be3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/apple,mca.yaml
+@@ -0,0 +1,131 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/apple,mca.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Apple MCA I2S transceiver
++
++description: |
++  MCA is an I2S transceiver peripheral found on M1 and other Apple chips. It is
++  composed of a number of identical clusters which can operate independently
++  or in an interlinked fashion. Up to 6 clusters have been seen on an MCA.
++
++maintainers:
++  - Martin Povišer <povik+lin@cutebit.org>
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - apple,t8103-mca
++          - apple,t6000-mca
++      - const: apple,mca
++
++  reg:
++    items:
++      - description: Register region of the MCA clusters proper
++      - description: Register region of the DMA glue and its FIFOs
++
++  interrupts:
++    minItems: 4
++    maxItems: 6
++    description:
++      One interrupt per each cluster
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++  dmas:
++    minItems: 16
++    maxItems: 24
++    description:
++      DMA channels corresponding to the SERDES units in the peripheral. They are
++      listed in groups of four per cluster, and within the group they are given
++      as associated to the TXA, RXA, TXB, RXB units.
++
++  dma-names:
++    minItems: 16
++    items:
++      - const: tx0a
++      - const: rx0a
++      - const: tx0b
++      - const: rx0b
++      - const: tx1a
++      - const: rx1a
++      - const: tx1b
++      - const: rx1b
++      - const: tx2a
++      - const: rx2a
++      - const: tx2b
++      - const: rx2b
++      - const: tx3a
++      - const: rx3a
++      - const: tx3b
++      - const: rx3b
++      - const: tx4a
++      - const: rx4a
++      - const: tx4b
++      - const: rx4b
++      - const: tx5a
++      - const: rx5a
++      - const: tx5b
++      - const: rx5b
++    description: |
++      Names for the DMA channels: 'tx'/'rx', then cluster number, then 'a'/'b'
++      based on the associated SERDES unit.
++
++  clocks:
++    minItems: 4
++    maxItems: 6
++    description:
++      Clusters' input reference clock.
++
++  resets:
++    maxItems: 1
++
++  power-domains:
++    minItems: 5
++    maxItems: 7
++    description:
++      First a general power domain for register access, then the power
++      domains of individual clusters for their operation.
++
++  '#sound-dai-cells':
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - dmas
++  - dma-names
++  - clocks
++  - power-domains
++  - '#sound-dai-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    mca: i2s@9b600000 {
++      compatible = "apple,t6000-mca", "apple,mca";
++      reg = <0x9b600000 0x10000>,
++            <0x9b200000 0x20000>;
++
++      clocks = <&nco 0>, <&nco 1>, <&nco 2>, <&nco 3>;
++      power-domains = <&ps_audio_p>, <&ps_mca0>, <&ps_mca1>,
++                      <&ps_mca2>, <&ps_mca3>;
++      dmas = <&admac 0>, <&admac 1>, <&admac 2>, <&admac 3>,
++             <&admac 4>, <&admac 5>, <&admac 6>, <&admac 7>,
++             <&admac 8>, <&admac 9>, <&admac 10>, <&admac 11>,
++             <&admac 12>, <&admac 13>, <&admac 14>, <&admac 15>;
++      dma-names = "tx0a", "rx0a", "tx0b", "rx0b",
++                  "tx1a", "rx1a", "tx1b", "rx1b",
++                  "tx2a", "rx2a", "tx2b", "rx2b",
++                  "tx3a", "rx3a", "tx3b", "rx3b";
++
++      #sound-dai-cells = <1>;
++    };
 -- 
-2.37.1
+2.33.0
 

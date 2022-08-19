@@ -2,107 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F965992A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 03:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AB85992B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 03:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241469AbiHSBiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 21:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
+        id S243848AbiHSBr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 21:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236179AbiHSBiw (ORCPT
+        with ESMTP id S238919AbiHSBr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 21:38:52 -0400
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364B767CBF;
-        Thu, 18 Aug 2022 18:38:51 -0700 (PDT)
-Received: from [10.172.66.188] (1.general.jsalisbury.us.vpn [10.172.66.188])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 3D7A33F119;
-        Fri, 19 Aug 2022 01:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1660873129;
-        bh=f2530xu/ZwghAIZ7eHrD4nhXaPxs0D+iScywNNE7e08=;
-        h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-         In-Reply-To:Content-Type;
-        b=c+gYZw5QfyehDzfsz0UhNSYBu0bQWeDcRdidakaJlBub6HaPIU53U/7TYIIe5JO5e
-         3+Rg8vsY7VSMDX76Qa2YdZqqoGl++ycyoti1oUjI7mUneGYed+MOAaD4UE3gdFDHmz
-         bJCLGVhOTKiPSx1PnEWOirm8eTy+qP4omG3FuMUTYakPKCP1AGp9qgRG2WUDQRXWDy
-         CdaobmW2iS0IsaFIRrlq5wMcKEyfv4hMhMGDye3t9J4CT5YQk5SIFtHyB4IdZXB2wd
-         +JnYoXiJFBZem4qOGWdw07GoR1ulnX4DWHCoIFwKvOiTDbJj8OdFcVZpQegMV1X3sa
-         +V3RtuMCeStXw==
-Message-ID: <b107a46a-7f53-0b35-71f4-9a909643c4c1@canonical.com>
-Date:   Thu, 18 Aug 2022 21:38:46 -0400
+        Thu, 18 Aug 2022 21:47:26 -0400
+X-Greylist: delayed 354 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Aug 2022 18:47:23 PDT
+Received: from mail-m11873.qiye.163.com (mail-m11873.qiye.163.com [115.236.118.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C186D5EB6;
+        Thu, 18 Aug 2022 18:47:23 -0700 (PDT)
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by mail-m11873.qiye.163.com (Hmail) with ESMTPA id E22AD900383;
+        Fri, 19 Aug 2022 09:41:27 +0800 (CST)
+From:   Jianqun Xu <jay.xu@rock-chips.com>
+To:     heiko@sntech.de
+Cc:     linus.walleij@linaro.org, jeffy.chen@rock-chips.com,
+        linux-gpio@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Jianqun Xu <jay.xu@rock-chips.com>
+Subject: [PATCH] gpio/rockchip: handle irq before toggle trigger for edge type irq
+Date:   Fri, 19 Aug 2022 09:41:26 +0800
+Message-Id: <20220819014126.1235390-1-jay.xu@rock-chips.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-rt-users@vger.kernel.org, williams@redhat.com,
-        bigeasy@linutronix.de, valentin.schneider@arm.com,
-        linux-kernel@vger.kernel.org,
-        Marcelo Cerri <marcelo.cerri@canonical.com>
-References: <9e6a7216-9cb9-cba4-f150-1a0eaf56353c@canonical.com>
- <Yv6hl3D2TRL6jzrL@worktop.programming.kicks-ass.net>
-From:   Joseph Salisbury <joseph.salisbury@canonical.com>
-Subject: Re: [RFC} Commit 8a99b6833c88 Moves Important Real-time Settings To
- DebugFS
-In-Reply-To: <Yv6hl3D2TRL6jzrL@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFJSktLSjdXWS1ZQUlXWQ8JGhUIEh9ZQVkZSxhLVk4aQ0geGUpCHklCQ1UTARMWGhIXJB
+        QOD1lXWRgSC1lBWU5DVUlJVUxVSkpPWVdZFhoPEhUdFFlBWU9LSFVKSktITUpVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ojo6Thw*Fj0yGRdMMTkoM1YY
+        OitPCShVSlVKTU1LQ0xISUNDT01PVTMWGhIXVREaAlUDDjsJFBgQVhgTEgsIVRgUFkVZV1kSC1lB
+        WU5DVUlJVUxVSkpPWVdZCAFZQUlMSkw3Bg++
+X-HM-Tid: 0a82b3c329b82eafkusne22ad900383
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The irq demux for rockchip gpio interrupts do real irq handle after loop
+over the bits from int status register. Some oldder SoCs such as RK3308
+has no both edge trigger type support, replaced by a soft both type
+which switch trigger type once a level type triggered.
 
+For example, a irq is set to a IRQ_TYPE_EDGE_BOTH trigger type, but the
+SoC not support really both edge trigger type, use a
+IRQ_TYPE_EDGE_RISING | IRQ_TYPE_EDGE_FALLING instead.
 
-On 8/18/22 16:31, Peter Zijlstra wrote:
-> On Thu, Aug 18, 2022 at 03:53:28PM -0400, Joseph Salisbury wrote:
->> Hello,
->>
->> Some Ubuntu users are using the tuned package with a 5.15.x based real-time
->> kernel.  Tuned adjusts various sysctl options based on a specified profile.
->> This userspace package has stopped working > 5.13 due to the following
->> commit:
->>
->> 8a99b6833c88 "(sched: Move SCHED_DEBUG sysctl to debugfs)"
->>
->> This commit moved some important real-time sysctl knobs to debugfs in
->> 5.13-rc1.  It also appears some of the sysctl options were not moved,
->> sched_min_granularity_ns, for example.
->>
->> I was hoping to get some feedback on how to approach this.  Would upstream
->> real-time consider accepting a patch to the 5.15 real-time patch set that
->> reverts this commit?  Or a new patch that adds the sysctl settings back?
->> Any other ideas or feedback would be appreciated!
-> None of those knobs were available when SCHED_DEBUG=n, so relying on
-> them is your error to begin with.
-We have had SCHED_DEBUG=y while this kernel is in beta, so you are 
-correct.  I need to investigate a different approach.
->
-> Secondly, real-time? Which if those values affects anything in
-> SCHED_FIFO/RR/DEADLINE ?
-I am in the process of understanding how tuned[0] works. Many users have 
-reported success using tuned.  One use case for tuned is to assign 
-isolated cores to real-time processes and then move managed IRQs out of 
-these isolated cores.  This can be done easily with tuned (I will 
-research if there are other options to suggest). However, tuned is 
-trying to set the affected values when enabling a profile, such as the 
-real-time profile (Tuned offers many profiles based on a workload type).
+        --------
+    ____|      |______
 
-I will investigate further to answer your point of what in 
-SCHED_FIFO/RR/DEADLINE those values affect.  It could be those values 
-are not needed at all. The dependency on them might be left over from 
-some need that no longer exists.
+        ^      ^
+	|      |
+	|      [0] the falling edge come before irq ack set by driver !
+	|
+        rockchip_irq_demux set to EDGE_FALLING type
+	rockchip_irq_demux call generic_handle_irq
+	                          -> handle_edge_irq
+				    -> irq_gc_ack_set_bit
 
-Thank you again for the feedback!
+The [0] irq will lost by software on board test.
 
-[0] https://tuned-project.org/
+With this patch, the generic_handle_irq has been move ahead before
+trigger toggle to fix the [0] lost issue.
+
+Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
+---
+ drivers/gpio/gpio-rockchip.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
+index f91e876fd969..952d628a6f7e 100644
+--- a/drivers/gpio/gpio-rockchip.c
++++ b/drivers/gpio/gpio-rockchip.c
+@@ -346,6 +346,7 @@ static void rockchip_irq_demux(struct irq_desc *desc)
+ 		}
+ 
+ 		dev_dbg(bank->dev, "handling irq %d\n", irq);
++		generic_handle_irq(virq);
+ 
+ 		/*
+ 		 * Triggering IRQ on both rising and falling edge
+@@ -377,8 +378,6 @@ static void rockchip_irq_demux(struct irq_desc *desc)
+ 						     bank->gpio_regs->ext_port);
+ 			} while ((data & BIT(irq)) != (data_old & BIT(irq)));
+ 		}
+-
+-		generic_handle_irq(virq);
+ 	}
+ 
+ 	chained_irq_exit(chip, desc);
+-- 
+2.25.1
 

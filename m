@@ -2,49 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCB8599B1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B99599B14
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiHSLeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
+        id S1348034AbiHSLdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347966AbiHSLeb (ORCPT
+        with ESMTP id S1347538AbiHSLdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:34:31 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27F380B66
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:34:28 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 27JBTQbI043766
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Fri, 19 Aug 2022 19:29:26 +0800 (CST)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Fri, 19 Aug 2022 19:29:27 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <ke.wang@unisoc.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [RFC PATCH] memcg: use root_mem_cgroup when css is inherited
-Date:   Fri, 19 Aug 2022 19:29:22 +0800
-Message-ID: <1660908562-17409-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Fri, 19 Aug 2022 07:33:50 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370632D1FE;
+        Fri, 19 Aug 2022 04:33:47 -0700 (PDT)
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: martin-eric.racine)
+        by meesny.iki.fi (Postfix) with ESMTPSA id BA0F72065F;
+        Fri, 19 Aug 2022 14:33:44 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1660908824; h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fkx3l2Jsr5sn7pf41ZGYs34bVyvOXQOv8D/DfIbdLs4=;
+        b=jvNOhQxCaIxg8axFbz7wCTaU1KV/nOQCmIzGuUqNw5LS+lfmzjNQTC6KolbhoBgBIUiYH9
+        nsbYjG6RtqL/XyVJzVfxtvraI7edzi0GzAEhwZbTCIt3LH4qm5JfdLnoshikVZ3PpeOvHH
+        pVxGB8eEH2JA8Y2Tl5bZRJQ6gg4Uf60=
+Received: by mail-vs1-f43.google.com with SMTP id z185so4184817vsb.4;
+        Fri, 19 Aug 2022 04:33:44 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3JqDmziwEC9RUhjdrHJUYiZrktluNJaPlcAoiWTgc04TQ325ar
+        Rx3qpCLC29kxpodHpNv54aamuExjbwHl3VD1SrE=
+X-Google-Smtp-Source: AA6agR6W0iWWXzz2sZkerBMRwwozpy0qrrVZxzp7D6cWhuSVrTiOEAnBUCz0CDdjQq7II9fbkjswjtsDDlClM4nra4o=
+X-Received: by 2002:a67:c819:0:b0:38f:784f:c377 with SMTP id
+ u25-20020a67c819000000b0038f784fc377mr2234906vsk.15.1660908823365; Fri, 19
+ Aug 2022 04:33:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 27JBTQbI043766
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+References: <Yv7aRJ/SvVhSdnSB@decadent.org.uk> <Yv9OGVc+WpoDAB0X@worktop.programming.kicks-ass.net>
+ <Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net>
+In-Reply-To: <Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net>
+Reply-To: martin-eric.racine@iki.fi
+From:   =?UTF-8?Q?Martin=2D=C3=89ric_Racine?= <martin-eric.racine@iki.fi>
+Date:   Fri, 19 Aug 2022 14:33:32 +0300
+X-Gmail-Original-Message-ID: <CAPZXPQe+MPTGD3MH1HORvCZa08HhdbWy=zh7rLSCwA6edM2Ccg@mail.gmail.com>
+Message-ID: <CAPZXPQe+MPTGD3MH1HORvCZa08HhdbWy=zh7rLSCwA6edM2Ccg@mail.gmail.com>
+Subject: Re: [PATCH] x86/speculation: Avoid LFENCE in FILL_RETURN_BUFFER on
+ CPUs that lack it
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ben Hutchings <ben@decadent.org.uk>, x86@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        1017425@bugs.debian.org, stable@vger.kernel.org,
+        regressions@lists.linux.dev,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1660908824;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fkx3l2Jsr5sn7pf41ZGYs34bVyvOXQOv8D/DfIbdLs4=;
+        b=rjfIm3WhysBqcVoqDra2pO/z7G2hhRhEndLGJtAIVdUSISYt9ezBwLMrd/mghTxOPSbX1Q
+        TfAEV4istT8bkFx1rwAD+NUgvUF6KhkOsbnQ+6EB/9MF0HfH/dwFE1RaI5K6z5Y72sUijq
+        QyuJows/mW9QDBwVy6QL7/b4Y9t7HKQ=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=martin-eric.racine smtp.mailfrom=martin-eric.racine@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1660908824; a=rsa-sha256; cv=none;
+        b=d7uWLKMeMUDzepnKQKoJICuYpRzHhvIM+shCzJV6F4wy0eR0q+1ZDlILwdml8FkOI+D2Xj
+        eN6nrrc/DGgioCH9CyZn5o8pn2iZb4VnNgrWUIGBn1Whom9Tmp/OqDdZW96iew07MlXveg
+        8yzEb9i+kT/zKgPtZ82QfjXgUPBuGIY=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,90 +88,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On Fri, Aug 19, 2022 at 2:01 PM Peter Zijlstra <peterz@infradead.org> wrote=
+:
+> I'm not entirly sure what to do here. On the one hand, it's 32bit, so
+> who gives a crap, otoh we shouldn't break these ancient chips either I
+> suppose.
 
-It is observed in android system where per-app cgroup is demanded by freezer
-subsys and part of groups require memory control. The hierarchy could be simplized
-as bellowing where memory charged on group B abserved while we only want have
-group E's memory be controlled and B's descendants compete freely for memory.
-This should be the consequences of unified hierarchy.
-Under this scenario, less efficient memory reclaim is observed when comparing
-with no memory control. It is believed that multi LRU scanning introduces some
-of the overhead. Furthermore, page thrashing is also heavier than global LRU
-which could be the consequences of partial failure of WORKINGSET mechanism as
-LRU is too short to protect the active pages.
+This is something that I've repeatedly had to bring up, whenever
+something breaks because someone meant well by enabling more security
+bells and whistles:
 
-A(subtree_control = memory) - B(subtree_control = NULL) - C()
-							\ D()
-			    - E(subtree_control = memory) - F()
-							  \ G()
+x86-32 is by definition legacy hardware. Enabling more bells and
+whistles essentially kills support for all but the very latest
+variants of the x86-32 family. This is the wrong approach. The right
+approach is to accept that building for x86-32 inherently means
+building for older and thus less secure architectures.
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- include/linux/cgroup.h |  1 +
- kernel/cgroup/cgroup.c | 11 +++++++++++
- mm/memcontrol.c        |  5 ++++-
- 3 files changed, 16 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index 0d1ada8..747f0f4 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -136,6 +136,7 @@ extern void cgroup_post_fork(struct task_struct *p,
- 
- int cgroup_parse_float(const char *input, unsigned dec_shift, s64 *v);
- 
-+struct cgroup *get_task_cgroup(struct task_struct *task);
- /*
-  * Iteration helpers and macros.
-  */
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 1779ccd..3f34c58 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -1457,6 +1457,17 @@ struct cgroup *task_cgroup_from_root(struct task_struct *task,
- 	return cset_cgroup_from_root(task_css_set(task), root);
- }
- 
-+struct cgroup *get_task_cgroup(struct task_struct *task)
-+{
-+	struct cgroup *src_cgrp;
-+	/* find the source cgroup */
-+	spin_lock_irq(&css_set_lock);
-+	src_cgrp = task_cgroup_from_root(task, &cgrp_dfl_root);
-+	spin_unlock_irq(&css_set_lock);
-+
-+	return src_cgrp;
-+}
-+
- /*
-  * A task must hold cgroup_mutex to modify cgroups.
-  *
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index abec50f..c81012b 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -930,6 +930,7 @@ static __always_inline struct mem_cgroup *active_memcg(void)
- struct mem_cgroup *get_mem_cgroup_from_mm(struct mm_struct *mm)
- {
- 	struct mem_cgroup *memcg;
-+	struct cgroup *cgrp;
- 
- 	if (mem_cgroup_disabled())
- 		return NULL;
-@@ -956,9 +957,11 @@ struct mem_cgroup *get_mem_cgroup_from_mm(struct mm_struct *mm)
- 	}
- 
- 	rcu_read_lock();
-+	cgrp = get_task_cgroup(rcu_dereference(mm->owner));
- 	do {
- 		memcg = mem_cgroup_from_task(rcu_dereference(mm->owner));
--		if (unlikely(!memcg))
-+		if (unlikely(!memcg)
-+			|| !(cgroup_ss_mask(cgrp) & (1 << memory_cgrp_id)))
- 			memcg = root_mem_cgroup;
- 	} while (!css_tryget(&memcg->css));
- 	rcu_read_unlock();
--- 
-1.9.1
-
+Martin-=C3=89ric

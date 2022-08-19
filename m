@@ -2,135 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14835599B16
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9368C599B21
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348485AbiHSLis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
+        id S1348529AbiHSLiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346618AbiHSLin (ORCPT
+        with ESMTP id S1348490AbiHSLiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:38:43 -0400
-Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0118E1260A;
-        Fri, 19 Aug 2022 04:38:40 -0700 (PDT)
-Received: from 213.219.160.184.adsl.dyn.edpnet.net ([213.219.160.184] helo=deadeye)
-        by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1oP0Ke-0003FT-Gc; Fri, 19 Aug 2022 13:38:32 +0200
-Received: from ben by deadeye with local (Exim 4.96)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1oP0Kd-000b3h-39;
-        Fri, 19 Aug 2022 13:38:31 +0200
-Message-ID: <9395338630e3313c1bf0393ae507925d1f9af870.camel@decadent.org.uk>
-Subject: Re: [PATCH] x86/speculation: Avoid LFENCE in FILL_RETURN_BUFFER on
- CPUs that lack it
-From:   Ben Hutchings <ben@decadent.org.uk>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        1017425@bugs.debian.org,
-        =?ISO-8859-1?Q?Martin-=C9ric?= Racine <martin-eric.racine@iki.fi>,
-        stable@vger.kernel.org, regressions@lists.linux.dev,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Date:   Fri, 19 Aug 2022 13:38:27 +0200
-In-Reply-To: <Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net>
-References: <Yv7aRJ/SvVhSdnSB@decadent.org.uk>
-         <Yv9OGVc+WpoDAB0X@worktop.programming.kicks-ass.net>
-         <Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-nQrCdQRVr0v9wcLsIe/Y"
-User-Agent: Evolution 3.44.3-1 
+        Fri, 19 Aug 2022 07:38:46 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EA753D28;
+        Fri, 19 Aug 2022 04:38:45 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so4636277pjl.0;
+        Fri, 19 Aug 2022 04:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=pkQp/tVIm+IyNGxzFe2/bIrOHgqIAxdHXzgjR+cRZvc=;
+        b=CliF7FRG9tvolY95akZRCp48s8StkzlBXM/iXnL6dgSBMGE3SIddNzeTOWkkoFd7h2
+         c+/uzOLozKFsDyDPRWolDgYd7Pk4+vEZ6BRs2Hr+9/xLWfN8Cx3/QCcwJzGIanrhzbrA
+         OQbV+w6t1W3PoBXcnUpvwaP6F3h7wMfiYv0W3hS+0+HkPNKsSBL50zpVjp0niCkBpA+p
+         vBE03pSVMOy1yPC505P/EKQTA30f1tEhLGDSqXCPgFfhisXEyOHhSRer3SJDjyqlFwHd
+         GmkCdqsBwjorfDOrZdTMI0PQ8BcqGLbc8NDO2VSJjSEetGj29LXcqL91Ar6Rurgpc100
+         P77Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=pkQp/tVIm+IyNGxzFe2/bIrOHgqIAxdHXzgjR+cRZvc=;
+        b=3T7HnmulWB2rl8ZDFgRRH08D8bBb6MiDGT0RWORZkaWMnr8VAhFrkRjN4Z7t0JHuZI
+         vyXQ7O/V4fCpQppVAsjV0/M0mCz7FmwLCpbgZ6T5QGDM2BwtYQDSWC6q82deAh4g9z2w
+         TEICR3P1pr5Aoj8LAPc/gWPLwEkqVJ/04I/T7/TkTDZ4tw9alXmZw9fbc2I47gZqMNoh
+         Ru1EowgFHOIKDRRDoPlOoyjzHKuRPz9rbr0bEP0HhXljwgquBXSPz9XYr8gg+sm18eIu
+         6J0R12VJR0QxhSvDQpor6rHAHtJZLAnDw7MJrMUOWGzDM4XKbXCpmZsYJ4NHvKQHS0vr
+         ze1w==
+X-Gm-Message-State: ACgBeo28pzx6IFFlLWlHjFqqQTc6Vjy/yRBiu6TAH9Il2Y93+j5mrI25
+        7Hbm2n1X+uFks5emjXpKbm4=
+X-Google-Smtp-Source: AA6agR4+JPTBAZi6VgxPOG05ZW9iglyFXeYS4kupg5clWtSXqD4kNYsxdGi/ahV7W+m3PMqqndYW4g==
+X-Received: by 2002:a17:90a:9907:b0:1f5:2318:ea6d with SMTP id b7-20020a17090a990700b001f52318ea6dmr8067012pjp.163.1660909124525;
+        Fri, 19 Aug 2022 04:38:44 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902780500b0016c1b178628sm2979524pll.269.2022.08.19.04.38.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 04:38:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 19 Aug 2022 04:38:42 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Farber, Eliav" <farbere@amazon.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
+        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
+        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
+        rtanwar@maxlinear.com
+Subject: Re: [PATCH v2 14/16] hwmon: (mr75203) parse thermal coefficients
+ from device-tree
+Message-ID: <20220819113842.GD3106213@roeck-us.net>
+References: <20220817054321.6519-1-farbere@amazon.com>
+ <20220817054321.6519-15-farbere@amazon.com>
+ <20220818202839.GA3431511@roeck-us.net>
+ <e0b133e7-ac81-acf4-3783-44edf58d6426@amazon.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 213.219.160.184
-X-SA-Exim-Mail-From: ben@decadent.org.uk
-X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e0b133e7-ac81-acf4-3783-44edf58d6426@amazon.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Aug 19, 2022 at 10:57:58AM +0300, Farber, Eliav wrote:
+> On 8/18/2022 11:28 PM, Guenter Roeck wrote:
+> > The calculation was just changed to use new defaults in a previous
+> > patch. This patch makes it quite clear that the coefficients
+> > are implementation (?) dependent. So the previous patch just changes
+> > the defaults to (presumably) the coefficients used in your system.
+> > That is inappropriate. Adding non-default corefficients is ok
+> > and makes sense is supported by the chip, but changing defaults
+> > isn't.
+> The calculation was changed in previous patch to match series 5 of the
+> Moortec Embedded Temperature Sensor (METS) datasheet.
+> In our SOC we use series 6 which has a slightly different equation and
+> different coefficients.
 
---=-nQrCdQRVr0v9wcLsIe/Y
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+If the coefficients are different based on the series, it would probably
+make sense to create a separate devicetree compatible property for series 6
+instead or requiring the user to list the actual coefficients. Those can
+still be present, but the code should be able to use the defaults for
+each series.
 
-On Fri, 2022-08-19 at 13:01 +0200, Peter Zijlstra wrote:
-> On Fri, Aug 19, 2022 at 10:47:21AM +0200, Peter Zijlstra wrote:
-> > On Fri, Aug 19, 2022 at 02:33:08AM +0200, Ben Hutchings wrote:
-> > > From: Ben Hutchings <benh@debian.org>
-> > >=20
-> > > The mitigation for PBRSB includes adding LFENCE instructions to the
-> > > RSB filling sequence.  However, RSB filling is done on some older CPU=
-s
-> > > that don't support the LFENCE instruction.
-> > >=20
-> >=20
-> > Wait; what? There are chips that enable the RSB mitigations and DONT
-> > have LFENCE ?!?
->=20
-> So I gave in and clicked on the horrible bugzilla thing. Apparently this
-> is P3/Athlon64 era crud.
->=20
-> Anyway, the added LFENCE isn't because of retbleed; it is because you
-> can steer the jnz and terminate the loop early and then not actually
-> complete the RSB stuffing.
+Guenter
 
-I know, I corrected that further down.
-
-> New insights etc.. So it's a geniune fix for the existing rsb stuffing.
->=20
-> I'm not entirly sure what to do here. On the one hand, it's 32bit, so
-> who gives a crap, otoh we shouldn't break these ancient chips either I
-> suppose.
->=20
-> How's something like so then? It goes on top of my other patch cleaning
-> up this RSB mess:
->=20
->   https://lkml.kernel.org/r/Yv9m%2FhuNJLuyviIn%40worktop.programming.kick=
-s-ass.net
-[...]
-
-That should be:
-https://lore.kernel.org/all/Yv9m%2FhuNJLuyviIn@worktop.programming.kicks-as=
-s.net/
-(the redirector unescapes the URL-escaped /).
-
-So that puts the whole __FILL_RETURN_BUFFER inside an alternative, and
-we can't have nested alternatives.  That's unfortunate.
-
-Ben.
-
---=20
-Ben Hutchings
-Beware of bugs in the above code;
-I have only proved it correct, not tried it. - Donald Knuth
-
---=-nQrCdQRVr0v9wcLsIe/Y
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmL/djMACgkQ57/I7JWG
-EQlHpg/9FbaeEJKro9Qcmw+qk86shNJCNfyfeGVeLs0aiM6KgDOp17SaTPzAleea
-Y4UeZYgu36lGTPh+RnK9Llb6bJgqlG3ad90VyUO0fBcY7uuJF/uTxHtNQVRNYRHL
-pqmH36qNzJ8FGsHYbl6ikhpIiw5Ail4js4WbCiW0f5eL8BWyAKj2seKHkRpIkd2I
-eq8/Ux9YXRhGhGnPj+1XRhl/nqw7Hb1KUMjtGqUwKIjp/1NkubbzFnqRsQPL0w0i
-fLi/dbdtepWlcg8zy6xKa9B1xHqfPOnjldD4G2CDLrpprWacjkTZIoHY2WJmqv4+
-aU+q3XinoxZHODeqxD2DJ+r7TzJcBiSj+ypf3HxwR8YHReQVjUbdMLmMe6bXYX/f
-EyDNw1OaJUaxbbEPQM1dJaJOLKGPHGUgKQuucMJq1R6kcKqhnLfWIoPBaL/gKbHk
-xo6Tyg2WAMN14UzzDFzqTFwndU5zlA95J/Xi1RiS3muKdNkcpu33NnbEG45tpEiM
-P+N/xqZr1dvJ9BYYWlkA8OAdDcSnmL9vkHxuzWuHTyh1gxnW99C6IWosr5sIVc2G
-REAhuTXssLSMXsfm3plqmtPyXaJIm7vHSmB/d1OV9LylZOCOcqsGjmE1H0CbkVf9
-dPdEFxXudTWbOb9965rEzhQYMn3OWsv6Ik17S3S3ZAdeo4hMDEY=
-=P7Kd
------END PGP SIGNATURE-----
-
---=-nQrCdQRVr0v9wcLsIe/Y--
+> I did the changes in steps.
+> With this last change, both series 5 and 6 are supported, in addition to
+> calibrated vs. non-calibrated modes.
+> In addition the data sheet just recommends default values but they also
+> specifically mention that actual values might vary from product to product.
+> 
+> --
+> Regards, Eliav

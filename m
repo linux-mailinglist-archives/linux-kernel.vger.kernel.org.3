@@ -2,126 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7D059A736
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B8B59A743
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 23:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351989AbiHSUyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 16:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S1351901AbiHSUzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 16:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352081AbiHSUwh (ORCPT
+        with ESMTP id S1352041AbiHSUyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 16:52:37 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4851610EED3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:52:23 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3345ad926f2so94557147b3.12
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=jnCzi2soCjCrdoYyE26okeRANWMjNTuMb/vBG8/63Ug=;
-        b=dIpcC3duR2F4UdEnpnHe2+B2ki05YIFseJ6XkifI1ovJCzemg2dHLOQR3Hcrc13yAL
-         Lpy72mYkw+OVc8KXup1+UJK4XLguOgG5HwNBjH22RGBbJMIcWlulfNwQfWuP3eCH1lzl
-         b6B/y6zPicu82sY/bgXGd+sZ7zR21n9PVfNhwwMc7sFL1dgEFNdgDl4r6Df+26JDnzoX
-         D/QTc2Uc0q9CmmICpeKvhxd1UkQnOMlXqy1sHiVX7JddGHfDA7XMLC1N6qy4z3fF6Ds0
-         wKDnL40gO8YfOaMBnPWMebrtf+ROzhZfFnwNXLkDKPFG0O28730Y0sG1orQLamNZ7Y7E
-         ZYzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=jnCzi2soCjCrdoYyE26okeRANWMjNTuMb/vBG8/63Ug=;
-        b=KddMHH1qEzuquv+y5NzCmDZqJMAMCjiPwNdHcda5KTi7DM7ov1VX+JlsCUbg7c8YAf
-         OHvLpyjObiEN7xJ4wbYMjsEzcUaBkLGw6tGfGFVw1CGv8BQepOLXC8fumP636q+BIclb
-         m6FSbnltAcai0sAnaCXpwC4q1oMEkQGM5PQAFh71XIz7S48MmRLc51z2N1wUsfrAgTF4
-         GPaWXt61fgdGj92YmwT+g/I2poZP9LIiH7wFIJM0L/NkudsiABsn37AUIQRd70VP5CWG
-         QqhPPKiU+Sf9P8QIygh5OvSS0kMLCMVGNEjjYh8yo/NLOcHSLYH90v8AmilS1Xzn+w1I
-         H6zg==
-X-Gm-Message-State: ACgBeo09H/ING+7BcGoiqV+3Pi8cTH3xW0xJwnmtNl8YOZtSa/GNIi1x
-        hhVBRIiOGM3jakS8R/04ktR1k+7e0jqVIBv2giXJ
-X-Google-Smtp-Source: AA6agR6tYdLSyLary3+Q5VuCsv3LcSs1JihCOYeNOoWw3HYFbFr1DaLds4QXVaepr+bVaJJ9uL2y6ztcYfkdMgBc8C6B
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:baf:4c5:18b:2c4b])
- (user=axelrasmussen job=sendgmr) by 2002:a81:eb04:0:b0:329:94ef:3e68 with
- SMTP id n4-20020a81eb04000000b0032994ef3e68mr9476724ywm.309.1660942342250;
- Fri, 19 Aug 2022 13:52:22 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 13:52:01 -0700
-In-Reply-To: <20220819205201.658693-1-axelrasmussen@google.com>
-Message-Id: <20220819205201.658693-6-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20220819205201.658693-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v7 5/5] selftests: vm: add /dev/userfaultfd test cases to run_vmtests.sh
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 19 Aug 2022 16:54:54 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA41310EEF6;
+        Fri, 19 Aug 2022 13:54:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=EM8M9rtfttMconDtRzIUZchXg2tD3wTiMgn/nNNDO2g=; b=Gq/dX8+bnXufoMznu+Ys8x6HYO
+        uW7uu6loPC0u43fvejcFAcQ55RMAgNReEze2cGKBKo+GwkHAJzCJ+Xa7b+PBUNxtFfu4re5bLvmeu
+        oJnzcMMAMXC+RPnxN534UgiLQ7FJoc+PEGXfFtWFrSQRj3Y3KOSVYJBBAXMCazAsbhLA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oP90Q-00Dx9i-OW; Fri, 19 Aug 2022 22:54:14 +0200
+Date:   Fri, 19 Aug 2022 22:54:14 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH net-next v1 4/7] net: pse-pd: add generic PSE driver
+Message-ID: <Yv/4du75DNO2Xykr@lunn.ch>
+References: <20220819120109.3857571-1-o.rempel@pengutronix.de>
+ <20220819120109.3857571-5-o.rempel@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819120109.3857571-5-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This new mode was recently added to the userfaultfd selftest. We want to
-exercise both userfaultfd(2) as well as /dev/userfaultfd, so add both
-test cases to the script.
+On Fri, Aug 19, 2022 at 02:01:06PM +0200, Oleksij Rempel wrote:
+> Add generic driver to support simple Power Sourcing Equipment without
+> automatic classification support.
+> 
+> This driver was tested on 10Bast-T1L switch with regulator based PoDL PSE.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/net/pse-pd/Kconfig       |  11 +++
+>  drivers/net/pse-pd/Makefile      |   2 +
+>  drivers/net/pse-pd/pse_generic.c | 146 +++++++++++++++++++++++++++++++
+>  3 files changed, 159 insertions(+)
+>  create mode 100644 drivers/net/pse-pd/pse_generic.c
+> 
+> diff --git a/drivers/net/pse-pd/Kconfig b/drivers/net/pse-pd/Kconfig
+> index 49c7f0bcff526..a804c9f1af2bc 100644
+> --- a/drivers/net/pse-pd/Kconfig
+> +++ b/drivers/net/pse-pd/Kconfig
+> @@ -9,3 +9,14 @@ menuconfig PSE_CONTROLLER
+>  	  Generic Power Sourcing Equipment Controller support.
+>  
+>  	  If unsure, say no.
+> +
+> +if PSE_CONTROLLER
+> +
+> +config PSE_GENERIC
+> +	tristate "Generic PSE driver"
+> +	help
+> +	  This module provides support for simple Ethernet Power Sourcing
+> +	  Equipment without automatic classification support. For example for
+> +	  PoDL (802.3bu) specification.
+> +
+> +endif
+> diff --git a/drivers/net/pse-pd/Makefile b/drivers/net/pse-pd/Makefile
+> index cbb79fc2e2706..80ef39ad68f10 100644
+> --- a/drivers/net/pse-pd/Makefile
+> +++ b/drivers/net/pse-pd/Makefile
+> @@ -2,3 +2,5 @@
+>  # Makefile for Linux PSE drivers
+>  
+>  obj-$(CONFIG_PSE_CONTROLLER) += pse-core.o
+> +
+> +obj-$(CONFIG_PSE_GENERIC) += pse_generic.o
+> diff --git a/drivers/net/pse-pd/pse_generic.c b/drivers/net/pse-pd/pse_generic.c
+> new file mode 100644
+> index 0000000000000..f264d4d589f59
+> --- /dev/null
+> +++ b/drivers/net/pse-pd/pse_generic.c
+> @@ -0,0 +1,146 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +//
+> +// Driver for the Generic Ethernet Power Sourcing Equipment, without
+> +// auto classification support.
+> +//
+> +// Copyright (c) 2022 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
+> +//
+> +
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pse-pd/pse.h>
+> +#include <linux/regulator/consumer.h>
+> +
+> +struct gen_pse_priv {
+> +	struct pse_controller_dev pcdev;
+> +	struct regulator *ps; /*power source */
+> +	enum ethtool_podl_pse_admin_state admin_state;
+> +};
+> +
+> +static struct gen_pse_priv *to_gen_pse(struct pse_controller_dev *pcdev)
+> +{
+> +	return container_of(pcdev, struct gen_pse_priv, pcdev);
+> +}
+> +
+> +static int
+> +gen_pse_podl_get_admin_sate(struct pse_controller_dev *pcdev, unsigned long id)
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Acked-by: Peter Xu <peterx@redhat.com>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/vm/run_vmtests.sh | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+Should that be state?
 
-diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-index b8e7f6f38d64..e780e76c26b8 100755
---- a/tools/testing/selftests/vm/run_vmtests.sh
-+++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -120,13 +120,16 @@ run_test ./gup_test -a
- # Dump pages 0, 19, and 4096, using pin_user_pages:
- run_test ./gup_test -ct -F 0x1 0 19 0x1000
- 
--run_test ./userfaultfd anon 20 16
--# Hugetlb tests require source and destination huge pages. Pass in half the
--# size ($half_ufd_size_MB), which is used for *each*.
--run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
--run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
--rm -f "$mnt"/uffd-test
--run_test ./userfaultfd shmem 20 16
-+uffd_mods=("" ":dev")
-+for mod in "${uffd_mods[@]}"; do
-+	run_test ./userfaultfd anon${mod} 20 16
-+	# Hugetlb tests require source and destination huge pages. Pass in half
-+	# the size ($half_ufd_size_MB), which is used for *each*.
-+	run_test ./userfaultfd hugetlb${mod} "$half_ufd_size_MB" 32
-+	run_test ./userfaultfd hugetlb_shared${mod} "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-+	rm -f "$mnt"/uffd-test
-+	run_test ./userfaultfd shmem${mod} 20 16
-+done
- 
- #cleanup
- umount "$mnt"
--- 
-2.37.1.595.g718a3a8f04-goog
+> +{
+> +	struct gen_pse_priv *priv = to_gen_pse(pcdev);
+> +
+> +	/* aPoDLPSEAdminState can be different to aPoDLPSEPowerDetectionStatus
+> +	 * which is provided by the regulator.
+> +	 */
+> +	return priv->admin_state;
+> +}
+> +
+> +static int
+> +gen_pse_podl_set_admin_control(struct pse_controller_dev *pcdev,
+> +			       unsigned long id,
+> +			       enum ethtool_podl_pse_admin_state state)
+> +{
+> +	struct gen_pse_priv *priv = to_gen_pse(pcdev);
+> +	int ret;
+> +
+> +	if (priv->admin_state == state)
+> +		goto set_state;
 
+return 0; ?
+
+> +
+> +	switch (state) {
+> +	case ETHTOOL_PODL_PSE_ADMIN_STATE_ENABLED:
+> +		ret = regulator_enable(priv->ps);
+> +		break;
+> +	case ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED:
+> +		ret = regulator_disable(priv->ps);
+> +		break;
+> +	default:
+> +		dev_err(pcdev->dev, "Unknown admin state %i\n", state);
+> +		ret = -ENOTSUPP;
+> +	}
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +set_state:
+> +	priv->admin_state = state;
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +gen_pse_podl_get_pw_d_status(struct pse_controller_dev *pcdev, unsigned long id)
+> +{
+> +	struct gen_pse_priv *priv = to_gen_pse(pcdev);
+> +	int ret;
+> +
+> +	ret = regulator_is_enabled(priv->ps);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (!ret)
+> +		return ETHTOOL_PODL_PSE_PW_D_STATUS_DISABLED;
+> +
+> +	return ETHTOOL_PODL_PSE_PW_D_STATUS_DELIVERING;
+> +}
+> +
+> +static const struct pse_control_ops gen_pse_ops = {
+> +	.get_podl_pse_admin_sate = gen_pse_podl_get_admin_sate,
+> +	.set_podl_pse_admin_control = gen_pse_podl_set_admin_control,
+> +	.get_podl_pse_pw_d_status = gen_pse_podl_get_pw_d_status,
+> +};
+> +
+> +static int
+> +gen_pse_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct gen_pse_priv *priv;
+> +	int ret;
+> +
+> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	if (!pdev->dev.of_node)
+> +		return -ENOENT;
+> +
+> +	priv->ps = devm_regulator_get(dev, "ieee802.3-podl-pse");
+> +	if (IS_ERR(priv->ps)) {
+> +		dev_err(dev, "failed to get PSE regulator (%pe)\n", priv->ps);
+> +		return PTR_ERR(priv->ps);
+> +	}
+> +
+> +	platform_set_drvdata(pdev, priv);
+> +
+> +	priv->admin_state = ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED;
+
+There is the comment earlier:
+
+	/* aPoDLPSEAdminState can be different to aPoDLPSEPowerDetectionStatus
+	 * which is provided by the regulator.
+
+Is this because the regulator might of been turned on, but it has
+detected a short and turned itself off? So it is administratively on,
+but off in order to stop the magic smoke escaping?
+
+But what about the other way around? Something has already turned the
+regulator on, e.g. the bootloader. Should the default be
+ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED even thought power is being
+delivered? Do we want to put the regulator into the off state at
+probe, so it is in a well defined state? Or set priv->admin_state to
+whatever regulator_is_enabled() indicates?
+
+	 Andrew

@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BAC59A651
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B148E59A66A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351501AbiHSTV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 15:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
+        id S1350857AbiHSTYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 15:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351480AbiHSTV1 (ORCPT
+        with ESMTP id S1349705AbiHSTYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 15:21:27 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D7A1155B0;
-        Fri, 19 Aug 2022 12:21:13 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id bx38so5352767ljb.10;
-        Fri, 19 Aug 2022 12:21:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=a+PnZAwbnyxlFPa4YTGTR9Nn3kx7SIjA9eZbEWP7QKo=;
-        b=i6hF2TK47IL6OucnkuO0ZZDBdrZCY0I+aqauSm7cwbQFP/lMdEasMpn5cTmwY6/oHY
-         3p4h/c4nLLavxgmnBPIXrPWybBgsUw2WWlLeSVGcg2a3NMPpWDwH+74wWJ+PGUVBECJS
-         tP2n22FsXCwrrf2B+qrOw0w8gTfTLXO3+BFbm+S7cfIIP8wEzpxOBcWsd9rXTZPN4slb
-         qcxxhFnNbcsNMulPd2PcNwGw7VgtHHKI+jRrADrfoYwGvjr+bYrJxXthZO4A4X6zgsQi
-         sGptDDE+M1btRF2FMVxoeIBy0IkYU1P4GmFEwAFwmwM9SOVb/8VFbu0hZNoQqO5x09uF
-         UwrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=a+PnZAwbnyxlFPa4YTGTR9Nn3kx7SIjA9eZbEWP7QKo=;
-        b=ZNbc344OVhkNnEhoBKDkSUj49clwmsRoDVm4tUlYpjUD0q2gPconEPqqBSoRkgLEVf
-         GuNa6XFmoAIpcrIh59D0h+OSB1cxMh+2PAaK1sAdUFj51hifpTh+jaXFFnLtZtQqR7E0
-         cKhpw6AUjoYF9crqn7AES+4EBEDJuWRoDy5s91r8QLMyfALskqxUZi2hKJ6kphp3CkNC
-         3gbR5UgCpvMOCgI1txoUddJrpwiVAP5SDsImt4r9ArfeKdWfOM7igpCiDFimaTZ1CwJ8
-         Y7LHef/735MguwKcizKiys6bRrWE4ldT63NuIk57u93yD1WdKyGiduf0u68/nzduBnX+
-         oYZg==
-X-Gm-Message-State: ACgBeo1dxyqup1kCTsSTmXQjkHtJ1zz9Xo7u77O7B864/xjgmyyHjB8B
-        WmSnSkjg6XzLmozYNHRA3EM=
-X-Google-Smtp-Source: AA6agR46yG7niNqKEUERouB3aXkhxNgAps0NbeAnMPogiKGrAyKrNvIAecpExpxeJb0itxekUn1sXA==
-X-Received: by 2002:a05:651c:1026:b0:25e:77f3:e0bd with SMTP id w6-20020a05651c102600b0025e77f3e0bdmr2449571ljm.383.1660936868038;
-        Fri, 19 Aug 2022 12:21:08 -0700 (PDT)
-Received: from dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id i17-20020a2ea231000000b002618a31be1csm699147ljm.62.2022.08.19.12.21.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 12:21:07 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 22:21:02 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 14/14] iio: hmc425a: simplify using
- devm_regulator_get_enable()
-Message-ID: <8b1193fdefb231a6d721e2bded52c48e56039c20.1660934107.git.mazziesaccount@gmail.com>
-References: <cover.1660934107.git.mazziesaccount@gmail.com>
+        Fri, 19 Aug 2022 15:24:01 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E87C4F684;
+        Fri, 19 Aug 2022 12:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1660937030;
+        bh=xO0rYpoFj+vOKj4sXf03GtVK1Czt+4SANo4Rb7BA6iI=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=SLZfydjeOB8r7XURETyPCICh1sC2E5Cut1fUmKOj6MpTQIuA9IJXdld/V3uG3yD6s
+         /Ky8ij8B3LjnmUMjdDOOnVQGMfiDZjLFPulPNQWi0F7B7n3vOcn4DwaBLitXtAPXxX
+         c/ZSrB4lku2szGsbeskYf/5IyuKH8cQtYxv+wU68=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.153.160]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MUGe1-1nxn9R0kJH-00RM7a; Fri, 19
+ Aug 2022 21:23:50 +0200
+Message-ID: <5b54b8a5-3ab7-c009-c42a-247c987888c5@gmx.de>
+Date:   Fri, 19 Aug 2022 21:22:51 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="n0FtiIFG1DkzGVCH"
-Content-Disposition: inline
-In-Reply-To: <cover.1660934107.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] parisc: ccio-dma.c: Fix comment typo
+Content-Language: en-US
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     James.Bottomley@HansenPartnership.com,
+        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220811135953.27950-1-wangborong@cdjrlc.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220811135953.27950-1-wangborong@cdjrlc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:WM/naeTXWCPlDGUwOznRhfYr7U4E37Z9McjvDx09pjq21lNk+sY
+ qtXMmula5/kUfkJ7m/YwyFIIBbmwKNJjd0Dg+FrCa4+cYF/zKjGYlEbxKAlVwI5+i/1wk1j
+ sn3S6z+Z3VszhGlEOYHzQqYRMBRzUgfNohsGSEGFciKmSvReRq/ytCSql0jUk5l05fqPs5C
+ J7ofad2cDCMpB+3KHft6w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xDpWXXPNTf0=:2XG+1BPj3ed1aoqIgFecmS
+ wpQLkqQGQ0pzf7sgJMtJ43zKYydsWpJlXqPBCbnT2Q6OnZlW+uNyHz30uiQ5RhCrgUGc/sHBG
+ BOrH/xgeebwFY5G6wTXZDbz6GivSadmI1vAzIpKbKesi8dHTgNWrhfa9DsZtxA7L6T/u5y1FQ
+ u91xVxvG+U1iLB+fIBwcautu+m4uT/ioYCjj9R3wXLGJto1prtouOkAlPJjbEnks+jnc2JTtR
+ guZEq61zOsD6IYIHEBicR5GOdxllZprltEzS0A4gBOkg4VZplpODRjlRnukaAtslkWi1mPxjq
+ 6LR7mtHrBjLzFUIQsK9xebg6djez74r403BkuHxI8T0uiOQAZL7hQP/QSKH6KCGGw/U3Nrw+p
+ s/j0BqngwrqOvL1zYcqTRx0g6cQ3uZO525lF1sthI+O7nCFlF/a9AvvVPt/2QABWLCWjqVJGN
+ u2hQyKifrwBy+pl7TVY1oAQsyZ/bxKzpRzDePMtu+gnhlnYGvPFfKAPYBb3MjGEMWtgLaOLdd
+ z63v87fM+6U+pjf+CRmxI6FNXb1dbSCv3A03iFgVD753Hk+z5z7wOP04m+yBz6HkGn8J7wEMl
+ 9EEFUEJ7zd6N8qoVExm3MucoMilUJ0xSBMBI2ODe+JsOJ5bhw8kmwkHD98h2ZbUYMq75TsNPe
+ I6jHj0tAC/qUm8WYhQzDRdLMCicSJtjFSVMEGimKFzMcZxjxaNIJtTUwOGh61Bn7iyT9mz7df
+ r/fnD8RI3hT9JdfcXmT7pl7Gu7t2OdnGBLloa9lt43zdQE/p0C8Pdq+arfqQ7OMYVCaYDkXiw
+ HQgO8cKGC8jRAiH6K++I/0utOouqBtYwCoe+zKzPXjrCCkp3LhCOMtH2WL0SCHjubdfCbe1rH
+ OQdHMIMHQSeS0QOshHq38gurESpmmnjxs/TyP0LUY9QhXKzq7mhzKN8hX+wKVVyEm3c8o5omh
+ GXDwJLi/Lto2Rl6opRhmbTKFj0bcbleBTTg6qnriXk61FLyxQesxHr1MRQPm3pO/AKTCS/jfk
+ 1ik10YFLUIP8SrT5I9h283Dg7bsjJcCFhdGaKjf1hXV2UkE4pfwxkLizbjLQ49phrkUwmjdwu
+ q4d4U3R3FFJxObWJ+kcqHKdXgvD9W7wnl6G0ZbpwE/jL1O2WmLxaPL3pw==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,100 +72,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 8/11/22 15:59, Jason Wang wrote:
+> The double `was' is duplicated in the comment, remove one.
+>
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 
---n0FtiIFG1DkzGVCH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+applied.
+Thanks!
+Helge
 
-Drop open-coded pattern: 'devm_regulator_get(), regulator_enable(),
-add_action_or_reset(regulator_disable)' and use the
-devm_regulator_get_enable() and drop the pointer to the regulator.
-This simplifies code and makes it less tempting to add manual control
-for the regulator which is also controlled by devm.
+> ---
+>  drivers/parisc/ccio-dma.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/parisc/ccio-dma.c b/drivers/parisc/ccio-dma.c
+> index 9be007c9420f..e863eb648379 100644
+> --- a/drivers/parisc/ccio-dma.c
+> +++ b/drivers/parisc/ccio-dma.c
+> @@ -268,7 +268,7 @@ static int ioc_count;
+>  *   Each bit can represent a number of pages.
+>  *   LSbs represent lower addresses (IOVA's).
+>  *
+> -*   This was was copied from sba_iommu.c. Don't try to unify
+> +*   This was copied from sba_iommu.c. Don't try to unify
+>  *   the two resource managers unless a way to have different
+>  *   allocation policies is also adjusted. We'd like to avoid
+>  *   I/O TLB thrashing by having resource allocation policy
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
----
-v2 =3D> v3:
-New patch
----
- drivers/iio/amplifiers/hmc425a.c | 17 +----------------
- 1 file changed, 1 insertion(+), 16 deletions(-)
-
-diff --git a/drivers/iio/amplifiers/hmc425a.c b/drivers/iio/amplifiers/hmc4=
-25a.c
-index ce80e0c916f4..108f0f1685ef 100644
---- a/drivers/iio/amplifiers/hmc425a.c
-+++ b/drivers/iio/amplifiers/hmc425a.c
-@@ -34,7 +34,6 @@ struct hmc425a_chip_info {
- };
-=20
- struct hmc425a_state {
--	struct	regulator *reg;
- 	struct	mutex lock; /* protect sensor state */
- 	struct	hmc425a_chip_info *chip_info;
- 	struct	gpio_descs *gpios;
-@@ -162,13 +161,6 @@ static const struct of_device_id hmc425a_of_match[] =
-=3D {
- };
- MODULE_DEVICE_TABLE(of, hmc425a_of_match);
-=20
--static void hmc425a_reg_disable(void *data)
--{
--	struct hmc425a_state *st =3D data;
--
--	regulator_disable(st->reg);
--}
--
- static struct hmc425a_chip_info hmc425a_chip_info_tbl[] =3D {
- 	[ID_HMC425A] =3D {
- 		.name =3D "hmc425a",
-@@ -211,14 +203,7 @@ static int hmc425a_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
-=20
--	st->reg =3D devm_regulator_get(&pdev->dev, "vcc-supply");
--	if (IS_ERR(st->reg))
--		return PTR_ERR(st->reg);
--
--	ret =3D regulator_enable(st->reg);
--	if (ret)
--		return ret;
--	ret =3D devm_add_action_or_reset(&pdev->dev, hmc425a_reg_disable, st);
-+	ret =3D devm_regulator_get_enable(&pdev->dev, "vcc-supply");
- 	if (ret)
- 		return ret;
-=20
---=20
-2.37.1
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---n0FtiIFG1DkzGVCH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL/4p4ACgkQeFA3/03a
-ocWC5wf/dLaY0o4KfYk2D/JFl0YNKp7J4iOndU/+1ot/7R+IZwIFzuTHW3wsoEJz
-VMtS7tLRUYPPQoRyjbT1WOO6qTGwD+rNDeIOUqDaoBylUukdFoCTdQFPdxDRjdp7
-NYoXLJ9ww6heT18dLLk3Z5ClPeKOdKe+Yb9WpoRO68l9R1fpb23vyRFEwYVRjCoI
-8/R/3YP5qDob4TdO3ATZnZPjzJusU+zbxP4Kk9AtZrt3y8+GDIsEwz5iWPMMUXDO
-qde4UJJMJjDTN23AhU/BYdi2VVsAgg9sJfHSSv11vXgUlR7fD/0RVi7x9cHxBTmP
-faqUSXrx6OtvA76u5MyIj/itBxh0DQ==
-=Wxo4
------END PGP SIGNATURE-----
-
---n0FtiIFG1DkzGVCH--

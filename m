@@ -2,105 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C46599ADE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACCB8599B1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348769AbiHSL2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
+        id S229601AbiHSLeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348241AbiHSL2p (ORCPT
+        with ESMTP id S1347966AbiHSLeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:28:45 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFB5B514B;
-        Fri, 19 Aug 2022 04:28:44 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4M8KJW631TzDrR3;
-        Fri, 19 Aug 2022 11:28:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1660908524; bh=HtTFlUxYhMXKADnhF9mXs30RyZIzn/W5VJYsvu6FAWY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oNE1KfuQvtHc6iPUUoq7FSpjOkKEPrc/+RR6cYSgcJxHZ9z8/8ccbHuB+sKb98nqQ
-         aoYWA88GUFWtbXCLjG4psT0qZVNooAuaAOMK4D4UxqvFwhz1DbNC0wRWgEhZKObksV
-         TxaV7riL7BmM91aLXMkes37L28oiNzpYdwxIrnpw=
-X-Riseup-User-ID: 0F8265F3B5B153B0BB085616B6910490B77EA1389FDF561D07126609569FEFE3
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4M8KJR1sMPz5vQt;
-        Fri, 19 Aug 2022 11:28:38 +0000 (UTC)
-Message-ID: <ff728926-22e4-e65b-ee94-2ed958c92993@riseup.net>
-Date:   Fri, 19 Aug 2022 08:28:36 -0300
+        Fri, 19 Aug 2022 07:34:31 -0400
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27F380B66
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 04:34:28 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTPS id 27JBTQbI043766
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Fri, 19 Aug 2022 19:29:26 +0800 (CST)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Fri, 19 Aug 2022 19:29:27 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <cgroups@vger.kernel.org>,
+        <ke.wang@unisoc.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [RFC PATCH] memcg: use root_mem_cgroup when css is inherited
+Date:   Fri, 19 Aug 2022 19:29:22 +0800
+Message-ID: <1660908562-17409-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Subject: Re: [PATCH 5/8] Documentation: KUnit: add intro to the
- getting-started page
-Content-Language: en-US
-To:     Tales Aparecida <tales.aparecida@gmail.com>,
-        Sadiya Kazi <sadiyakazi@google.com>
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        davidgow@google.com, corbet@lwn.net, brendan.higgins@linux.dev,
-        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
-        mwen@igalia.com, andrealmeid@riseup.net,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com
-References: <20220819053234.241501-1-tales.aparecida@gmail.com>
- <20220819053234.241501-6-tales.aparecida@gmail.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220819053234.241501-6-tales.aparecida@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.65]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 27JBTQbI043766
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tales
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-On 8/19/22 02:32, Tales Aparecida wrote:
-> Describe the objective of the Getting Started page, which should be a
-> brief and beginner-friendly walkthrough for running and writing tests,
-> showing the reader where to find detailed instructions in other pages.
-> 
-> Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
-> ---
->  Documentation/dev-tools/kunit/start.rst | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> index f0ec64207bd3..3855402a5b3e 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -4,6 +4,11 @@
->  Getting Started
->  ===============
->  
-> +This page contains an overview about the kunit_tool and Kunit framework,
-> +teaching how to run existent tests and then how to write a simple test-case,
-> +and covering common problems users face when using Kunit for the first time.
-> +It is recommended that the reader had compiled the Kernel at least once before.
+It is observed in android system where per-app cgroup is demanded by freezer
+subsys and part of groups require memory control. The hierarchy could be simplized
+as bellowing where memory charged on group B abserved while we only want have
+group E's memory be controlled and B's descendants compete freely for memory.
+This should be the consequences of unified hierarchy.
+Under this scenario, less efficient memory reclaim is observed when comparing
+with no memory control. It is believed that multi LRU scanning introduces some
+of the overhead. Furthermore, page thrashing is also heavier than global LRU
+which could be the consequences of partial failure of WORKINGSET mechanism as
+LRU is too short to protect the active pages.
 
-Some grammar nits:
-- s/an overview about/an overview of
-- s/Kunit/KUnit for consistency
-- s/existent/existing
-- s/covering/covers
+A(subtree_control = memory) - B(subtree_control = NULL) - C()
+							\ D()
+			    - E(subtree_control = memory) - F()
+							  \ G()
 
-Other than this small nits,
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+---
+ include/linux/cgroup.h |  1 +
+ kernel/cgroup/cgroup.c | 11 +++++++++++
+ mm/memcontrol.c        |  5 ++++-
+ 3 files changed, 16 insertions(+), 1 deletion(-)
 
-Reviewed-by: Maíra Canal <mairacanal@riseup.net>
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index 0d1ada8..747f0f4 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -136,6 +136,7 @@ extern void cgroup_post_fork(struct task_struct *p,
+ 
+ int cgroup_parse_float(const char *input, unsigned dec_shift, s64 *v);
+ 
++struct cgroup *get_task_cgroup(struct task_struct *task);
+ /*
+  * Iteration helpers and macros.
+  */
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 1779ccd..3f34c58 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -1457,6 +1457,17 @@ struct cgroup *task_cgroup_from_root(struct task_struct *task,
+ 	return cset_cgroup_from_root(task_css_set(task), root);
+ }
+ 
++struct cgroup *get_task_cgroup(struct task_struct *task)
++{
++	struct cgroup *src_cgrp;
++	/* find the source cgroup */
++	spin_lock_irq(&css_set_lock);
++	src_cgrp = task_cgroup_from_root(task, &cgrp_dfl_root);
++	spin_unlock_irq(&css_set_lock);
++
++	return src_cgrp;
++}
++
+ /*
+  * A task must hold cgroup_mutex to modify cgroups.
+  *
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index abec50f..c81012b 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -930,6 +930,7 @@ static __always_inline struct mem_cgroup *active_memcg(void)
+ struct mem_cgroup *get_mem_cgroup_from_mm(struct mm_struct *mm)
+ {
+ 	struct mem_cgroup *memcg;
++	struct cgroup *cgrp;
+ 
+ 	if (mem_cgroup_disabled())
+ 		return NULL;
+@@ -956,9 +957,11 @@ struct mem_cgroup *get_mem_cgroup_from_mm(struct mm_struct *mm)
+ 	}
+ 
+ 	rcu_read_lock();
++	cgrp = get_task_cgroup(rcu_dereference(mm->owner));
+ 	do {
+ 		memcg = mem_cgroup_from_task(rcu_dereference(mm->owner));
+-		if (unlikely(!memcg))
++		if (unlikely(!memcg)
++			|| !(cgroup_ss_mask(cgrp) & (1 << memory_cgrp_id)))
+ 			memcg = root_mem_cgroup;
+ 	} while (!css_tryget(&memcg->css));
+ 	rcu_read_unlock();
+-- 
+1.9.1
 
-Best Regards,
-- Maíra Canal
-
-> +
->  Installing Dependencies
->  =======================
->  KUnit has the same dependencies as the Linux kernel. As long as you can

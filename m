@@ -2,131 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65EB599928
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED93D599941
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 11:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348032AbiHSJvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 05:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
+        id S1347631AbiHSJyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 05:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346395AbiHSJvD (ORCPT
+        with ESMTP id S1346996AbiHSJyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 05:51:03 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16352EF001;
-        Fri, 19 Aug 2022 02:51:02 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27J9RhCK005956;
-        Fri, 19 Aug 2022 09:51:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=/n+0HvGmT1pfTamPIFhgrgyDHjxBz4Xfo3FQmH1h9H8=;
- b=eN0zHAAQ99HxCC1A+SJ3wtp/Do91HjNWhFYkjabqlvvg/BVgk/2Tr/3N51Xt/Zgbtddm
- 7o+wjObv5HZ/5uPk1W8GqVGjMRW2k0saGD7lDn0KatZJRQJ5/0d/t1XYgIeAjjvYVTDY
- gga0tTeOt//8Zr/IdujSNhVUek54lSTXRgPJcSHhyh3pH+CerzNCaCHdLKfiaVKAVL6g
- JtwN/rNM1IVG632TLGWUVxFHp/Dt5hV/+eNnhuTsIEo/mqJ3oRV22pzgtz2GkO43fevA
- 8WtVOrAkGoIUz6vu2WCREc6uU3bIp5DtAL+tPDUlZWTcRqLK/vXdpyKK/JWqGFxVcgYC Fg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j27whrk26-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 09:51:01 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27J9jC6g014549;
-        Fri, 19 Aug 2022 09:51:01 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j27whrk1e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 09:51:01 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27J9Kpnb011979;
-        Fri, 19 Aug 2022 09:50:58 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3hx3k8y288-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 09:50:58 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27J9pE0036635114
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 Aug 2022 09:51:14 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6D35CAE051;
-        Fri, 19 Aug 2022 09:50:55 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D93D7AE045;
-        Fri, 19 Aug 2022 09:50:54 +0000 (GMT)
-Received: from [9.145.49.220] (unknown [9.145.49.220])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 19 Aug 2022 09:50:54 +0000 (GMT)
-Message-ID: <99a49638-1604-962e-9010-1b57111d3132@linux.ibm.com>
-Date:   Fri, 19 Aug 2022 11:50:54 +0200
+        Fri, 19 Aug 2022 05:54:45 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991E5BD09E;
+        Fri, 19 Aug 2022 02:54:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1660902884; x=1692438884;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LHd+4+ztyLleLhRkBC+IDhKqnrDiduTJ+MVOjUQ9LfU=;
+  b=bUDOOZDoz2GMeJyqdXuf+oU98eFB2dEbkJoEePg1zb1k8SPZDp/0mtAW
+   iQGnBkt0XKT/yd5ZNgh9zLDgGNzNN++Ifq9i04Mu3ANFSjgsbWfzkEoWo
+   qoeMZ/yb8iCR/OzNPMYogQ41mhvqZkGBYRJOg+WehjIrXV+2zT4DvdnMv
+   tzBG0tBTGnk4Z3d256mdq7LgaNgv/IzsCJ5srRoUxjxCp6yxCBXgl2NHq
+   G174xOBHkLKZBPKvUYVhxW4hhO9039K3wA1bflACZ6Woes3x8381iSokr
+   qeEgFRGX1fhieZOwiI/If9fw8ZwJofaGzDr9cGhXAQh3erwFeyq+7iZH2
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="187175524"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Aug 2022 02:54:33 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 19 Aug 2022 02:54:32 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 19 Aug 2022 02:54:30 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Daire McNamara <daire.mcnamara@microchip.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: [PATCH v3 00/13] PolarFire SoC reset controller & clock cleanups
+Date:   Fri, 19 Aug 2022 10:53:08 +0100
+Message-ID: <20220819095320.40006-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
-        david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220810125625.45295-1-imbrenda@linux.ibm.com>
- <20220810125625.45295-5-imbrenda@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v13 4/6] KVM: s390: pv: avoid export before import if
- possible
-In-Reply-To: <20220810125625.45295-5-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: NNgj39bwebWjNUdU7YYEarOHQPvFevST
-X-Proofpoint-ORIG-GUID: qPlsnErocGN7hRNExndp0u-nGtAuWj4g
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-19_04,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- adultscore=0 mlxlogscore=999 malwarescore=0 priorityscore=1501 spamscore=0
- lowpriorityscore=0 impostorscore=0 mlxscore=0 clxscore=1015 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208190037
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 14:56, Claudio Imbrenda wrote:
-> If the appropriate UV feature bit is set, there is no need to perform
-> an export before import.
-> 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Reviewed-by: Nico Boehr <nrb@linux.ibm.com>
-> ---
->   arch/s390/kernel/uv.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
-> index f9810d2a267c..b455646c8d74 100644
-> --- a/arch/s390/kernel/uv.c
-> +++ b/arch/s390/kernel/uv.c
-> @@ -255,6 +255,8 @@ static int make_secure_pte(pte_t *ptep, unsigned long addr,
->    */
->   static bool should_export_before_import(struct uv_cb_header *uvcb, struct mm_struct *mm)
->   {
-The misc feature indicates that the UV will automatically transfer 
-ownership from one protected VM to another when importing a shared page.
+Hey all,
+
+Kinda two things happening in this series, but I sent it together to
+ensure the second part would apply correctly.
+
+The first is the reset controller that I promised after discovering the
+issue triggered by CONFIG_PM & the phy not coming up correctly. I have
+now removed all the messing with resets from clock enable/disable
+functions & now use the aux bus to set up a reset controller driver.
+Since I needed something to test it, I hooked up the reset for the
+Cadence MACB on PolarFire SoC. This was been split into a second series
+for v2 (and is now in v6.0-rcN):
+https://lore.kernel.org/all/20220704114511.1892332-1-conor.dooley@microchip.com/
+
+The second part adds rate control for the MSS PLL clock, followed by
+some simplifications to the driver & conversions of some custom structs
+to the corresponding structs in the framework.
+
+I'll take the dts patch myself when the rest of this is accepted.
+Thanks,
+Conor.
+
+Changes since v2:
+- reorder reset Makefile/Kconfig entries
+- fix a pre-existing bug exposed by clang with this series applied
+- add Padmarao who co-authored the original driver to the authors
+
+Conor Dooley (13):
+  clk: microchip: mpfs: fix clk_cfg array bounds violation
+  dt-bindings: clk: microchip: mpfs: add reset controller support
+  clk: microchip: mpfs: add reset controller
+  reset: add polarfire soc reset support
+  MAINTAINERS: add polarfire soc reset controller
+  riscv: dts: microchip: add mpfs specific macb reset support
+  clk: microchip: mpfs: add MSS pll's set & round rate
+  clk: microchip: mpfs: move id & offset out of clock structs
+  clk: microchip: mpfs: simplify control reg access
+  clk: microchip: mpfs: delete 2 line mpfs_clk_register_foo()
+  clk: microchip: mpfs: convert cfg_clk to clk_divider
+  clk: microchip: mpfs: convert periph_clk to clk_gate
+  clk: microchip: mpfs: update module authorship & licencing
+
+ .../bindings/clock/microchip,mpfs.yaml        |  17 +-
+ MAINTAINERS                                   |   1 +
+ arch/riscv/boot/dts/microchip/mpfs.dtsi       |   7 +-
+ drivers/clk/microchip/Kconfig                 |   1 +
+ drivers/clk/microchip/clk-mpfs.c              | 386 +++++++++---------
+ drivers/reset/Kconfig                         |   7 +
+ drivers/reset/Makefile                        |   2 +-
+ drivers/reset/reset-mpfs.c                    | 157 +++++++
+ include/soc/microchip/mpfs.h                  |   8 +
+ 9 files changed, 391 insertions(+), 195 deletions(-)
+ create mode 100644 drivers/reset/reset-mpfs.c
 
 
-Other than that:
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-
-
-> +	if (test_bit_inv(BIT_UV_FEAT_MISC, &uv_info.uv_feature_indications))
-> +		return false;
->   	if (uvcb->cmd == UVC_CMD_UNPIN_PAGE_SHARED)
->   		return false;
->   	return atomic_read(&mm->context.protected_count) > 1;
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+-- 
+2.36.1
 

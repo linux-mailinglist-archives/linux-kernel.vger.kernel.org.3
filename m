@@ -2,165 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAA9599DCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D900599DE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349585AbiHSOyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 10:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
+        id S1349617AbiHSO5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 10:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349038AbiHSOyh (ORCPT
+        with ESMTP id S1349172AbiHSO5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 10:54:37 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4887CD21F7
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:54:36 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id x10so4760546ljq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 07:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=RB7AhKhD6AGVN/FWM8EefpXqGSUdKLi/83gJNo8P8A8=;
-        b=ukZZs/HNQ7J9Zv6RG2j0LdMZFmvFxJrKEWtRHDYURQ+zit353wTcB/yZf7UbnuMtCC
-         IYIAQXew86cYDr2fvuAWbPb0YSbeZOImE906+CpGl/s7BZJPgv6GTV+O91jj2CIGU7L5
-         OFB/YM9cZB5zAy2zgPH+5dCfYRlL1TduBVITtEXjwc6RlDOcqm/4TuFj05rhAMj5Ih4r
-         61hw0HWDzrg37O1peBmsoSw7bUdkVmrDPYGBE5p80Glr3gqwNl+pUyN3LEmSRj/+larM
-         M3vNc4bh5+WTZms2a7uHR4oWU5xJY6qIhYaIYmyW0PhNkRQTscAnwi81KlFbl/+9kP6M
-         LZoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=RB7AhKhD6AGVN/FWM8EefpXqGSUdKLi/83gJNo8P8A8=;
-        b=5XkeXE8CNVj40rXV8ZQZpQxxfP+j4fyUANK4ymZ5P//3mZFStvcw0j2YOUK/pxLNWe
-         6oPefon9bb+oECM0nE4HgdjMk0UNFEGDXtirG0+zykevS+ZzOM7ef8Bh+Vvdl3ujE1RG
-         PRZevrKJ9kNLBjkXwHB+OcijEW92S+xxBtYgkAs+NvKONGSjpUvBAYajCu5lfO5LxaVJ
-         O6UZ4GoNdP9/dpe2N6UzfFGq1mthrM/GwcpUmkyL6ejz7fuvnina6SVXbmFqMJspUy6R
-         Ii2qE5G3O4o+pHtkeeb5sOCgzbX70VPoDVWrGCgYWl58/57coIAWyQfat43fIJ1A17aZ
-         yNnQ==
-X-Gm-Message-State: ACgBeo33vrVOrQNknJYfPOr5piIFOrhNRwbVe7HOypygs/jtPmLqCNTV
-        6h2RNDXBLyB4S7UEIStiZL8VbdrebuHBJbpfTpYIiw==
-X-Google-Smtp-Source: AA6agR4LKuTTBMhjnkTTLmdSIUoln5Khx5nC3j9KNqc8+z3/j2pYHnYHmoYM6uxvbd4BKVFc1yC9kLBk0j+xNy3GIBE=
-X-Received: by 2002:a05:651c:223:b0:261:beb4:1c85 with SMTP id
- z3-20020a05651c022300b00261beb41c85mr751234ljn.463.1660920874560; Fri, 19 Aug
- 2022 07:54:34 -0700 (PDT)
+        Fri, 19 Aug 2022 10:57:14 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F342C64C4;
+        Fri, 19 Aug 2022 07:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=SYqd0jVvSqn0LYdbb0mNobM+NLD0i8990uNItjrpJW0=; b=p8X1gMssAFqz7Cj5E1IU3EN3xz
+        t/snbLEyJv1XAdu4J+MpAgDpW86NPkUeqqsmS64YxuYIDoz1/0nSwGnJ4A7MRHs6v4/DfY13yylRH
+        yTpJ3gDO1i4G6ew5SrDgljBdNE61ShqeAK0joibG/N9CQrD4C5DO+D+oHobsM0kWRo/T88yRl68DM
+        ivZpQK7KoicNncKbbL3cMwzclIbdo4NBfFt8WVkYbV7Yt9Ti+iBnKi0iAa3qakANtULKlnjVs0VPW
+        qMm4R7XYp2iFBesGctz7KWjgzPu53WYvs3CSQtaYwSCE20OErGTcffzJDbyUtNOmEl2QCsbCVzRVd
+        fg0lrl+g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33852)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oP3PW-0007vG-Sl; Fri, 19 Aug 2022 15:55:47 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oP3PE-0007s8-Jr; Fri, 19 Aug 2022 15:55:28 +0100
+Date:   Fri, 19 Aug 2022 15:55:28 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        akpm@linux-foundation.org
+Subject: Re: [PATCH] kernel: exit: cleanup release_thread()
+Message-ID: <Yv+kYPnf8c6rLXgN@shell.armlinux.org.uk>
+References: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
- <20220726083257.1730630-2-martin.kepplinger@puri.sm> <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
- <d1db07c8ca57c72b4f0820fcb6832dd7e4501055.camel@puri.sm>
-In-Reply-To: <d1db07c8ca57c72b4f0820fcb6832dd7e4501055.camel@puri.sm>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 19 Aug 2022 16:53:58 +0200
-Message-ID: <CAPDyKFpz0HG_AzCkj8LkyisO1fjJiiyX2QjKTWDTLng2O7PDgA@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when needing interrupts
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 at 11:17, Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
->
-> Am Dienstag, dem 26.07.2022 um 17:07 +0200 schrieb Ulf Hansson:
-> > On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
-> > <martin.kepplinger@puri.sm> wrote:
-> > >
-> > > If for example the power-domains' power-supply node (regulator)
-> > > needs
-> > > interrupts to work, the current setup with noirq callbacks cannot
-> > > work; for example a pmic regulator on i2c, when suspending, usually
-> > > already
-> > > times out during suspend_noirq:
-> > >
-> > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> > >
-> > > So fix system suspend and resume for these power-domains by using
-> > > the
-> > > "outer" suspend/resume callbacks instead. Tested on the imx8mq-
-> > > librem5 board,
-> > > but by looking at the dts, this will fix imx8mq-evk and possibly
-> > > many other
-> > > boards too.
-> > >
-> > > This is designed so that genpd providers just say "this genpd needs
-> > > interrupts" (by setting the flag) - without implying an
-> > > implementation.
-> > >
-> > > Initially system suspend problems had been discussed at
-> > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > > which led to discussing the pmic that contains the regulators which
-> > > serve as power-domain power-supplies:
-> > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> > >
-> > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > > ---
-> > >  drivers/base/power/domain.c | 13 +++++++++++--
-> > >  include/linux/pm_domain.h   |  5 +++++
-> > >  2 files changed, 16 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/base/power/domain.c
-> > > b/drivers/base/power/domain.c
-> > > index 5a2e0232862e..58376752a4de 100644
-> > > --- a/drivers/base/power/domain.c
-> > > +++ b/drivers/base/power/domain.c
-> > > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops
-> > > genpd_spin_ops = {
-> > >  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
-> > > GENPD_FLAG_ACTIVE_WAKEUP)
-> > >  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
-> > > GENPD_FLAG_CPU_DOMAIN)
-> > >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
-> > > GENPD_FLAG_RPM_ALWAYS_ON)
-> > > +#define genpd_irq_on(genpd)            (genpd->flags &
-> > > GENPD_FLAG_IRQ_ON)
-> > >
-> > >  static inline bool irq_safe_dev_in_sleep_domain(struct device
-> > > *dev,
-> > >                 const struct generic_pm_domain *genpd)
-> > > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct generic_pm_domain
-> > > *genpd,
-> > >         genpd->domain.ops.runtime_suspend = genpd_runtime_suspend;
-> > >         genpd->domain.ops.runtime_resume = genpd_runtime_resume;
-> > >         genpd->domain.ops.prepare = genpd_prepare;
-> > > -       genpd->domain.ops.suspend_noirq = genpd_suspend_noirq;
-> > > -       genpd->domain.ops.resume_noirq = genpd_resume_noirq;
-> > > +
-> > > +       if (genpd_irq_on(genpd)) {
-> > > +               genpd->domain.ops.suspend = genpd_suspend_noirq;
-> > > +               genpd->domain.ops.resume = genpd_resume_noirq;
-> > > +       } else {
-> > > +               genpd->domain.ops.suspend_noirq =
-> > > genpd_suspend_noirq;
-> > > +               genpd->domain.ops.resume_noirq =
-> > > genpd_resume_noirq;
-> >
-> > As we discussed previously, I am thinking that it may be better to
-> > move to using genpd->domain.ops.suspend_late and
-> > genpd->domain.ops.resume_early instead.
->
-> Wouldn't that better be a separate patch (on top)? Do you really want
-> me to change the current behaviour (default case) to from noirq to
-> late? Then I'll resend this series with such a patch added.
+On Fri, Aug 19, 2022 at 09:44:06AM +0800, Kefeng Wang wrote:
+> Only x86 has own release_thread(), introduce a new weak
+> release_thread() function to clean empty definitions in
+> other ARCHs.
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+...
+>  arch/arm/include/asm/processor.h        | 3 ---
+>  arch/arm/kernel/process.c               | 4 ----
 
-Sorry, I wasn't clear enough, the default behaviour should remain as is.
+Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-What I meant was, when genpd_irq_on() is true, we should use the
-genpd->domain.ops.suspend_late and genpd->domain.ops.resume_early.
+Thanks!
 
-Kind regards
-Uffe
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

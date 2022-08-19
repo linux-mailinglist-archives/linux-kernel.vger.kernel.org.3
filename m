@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 618D9599EB4
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E526F599E5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350054AbiHSPld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 11:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
+        id S1350065AbiHSPma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 11:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349967AbiHSPk6 (ORCPT
+        with ESMTP id S1349981AbiHSPlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:40:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6301AFF8CD;
-        Fri, 19 Aug 2022 08:40:48 -0700 (PDT)
+        Fri, 19 Aug 2022 11:41:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAFFEA336;
+        Fri, 19 Aug 2022 08:41:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 055A3B8277D;
-        Fri, 19 Aug 2022 15:40:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC65C433C1;
-        Fri, 19 Aug 2022 15:40:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 262D8B82814;
+        Fri, 19 Aug 2022 15:41:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE08C433C1;
+        Fri, 19 Aug 2022 15:41:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660923645;
-        bh=JH8YGLEcHg3LX4WC0hQaLrQ6zIleqe7Bxnu577DJ1JQ=;
+        s=korg; t=1660923664;
+        bh=qh/axndb7wUJZpXguucKoIulVp/Qb3Nd7Atm6YWpB5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2rnjkPK1OE+wf3pv8lYDNW+ZT8ZZJprMO3k+vrqzCToIhCoK0+ICAUCNZi1Cz7rdi
-         SJg36vAXfF5H6feyU4mYmHILLNNmCqsQZbXV8xNDW8PmjYQAunMULNgSibCqYm6pSn
-         x5punIvHykIiMB++niSbr2fVoG9VVLA8t1WoD4wo=
+        b=KyUglHcQebGDrtrwLWNu1M4ir0TS5OALsmqOMY7HEjtejt2cb6sMFLjxduKsyugpv
+         DbJqbOMTUQcWoe3cDCAUFVGImrQPocItkbBU107NqAbvSvTmJ4tuRgrxZWLTknBqyx
+         MF4+Xo6eb1esJQQgtJiLJh4GqqRDmxqbIBWpK08s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 01/14] io_uring: use original request task for inflight tracking
-Date:   Fri, 19 Aug 2022 17:40:17 +0200
-Message-Id: <20220819153711.712418650@linuxfoundation.org>
+        stable@vger.kernel.org, Nimish Mishra <neelam.nimish@gmail.com>,
+        Anirban Chakraborty <ch.anirban00727@gmail.com>,
+        Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>,
+        Jerome Forissier <jerome.forissier@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 02/14] tee: add overflow check in register_shm_helper()
+Date:   Fri, 19 Aug 2022 17:40:18 +0200
+Message-Id: <20220819153711.747538439@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220819153711.658766010@linuxfoundation.org>
 References: <20220819153711.658766010@linuxfoundation.org>
 User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,35 +58,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Jens Wiklander <jens.wiklander@linaro.org>
 
-commit 386e4fb6962b9f248a80f8870aea0870ca603e89 upstream.
+commit 573ae4f13f630d6660008f1974c0a8a29c30e18a upstream.
 
-In prior kernels, we did file assignment always at prep time. This meant
-that req->task == current. But after deferring that assignment and then
-pushing the inflight tracking back in, we've got the inflight tracking
-using current when it should in fact now be using req->task.
+With special lengths supplied by user space, register_shm_helper() has
+an integer overflow when calculating the number of pages covered by a
+supplied user space memory region.
 
-Fixup that error introduced by adding the inflight tracking back after
-file assignments got modifed.
+This causes internal_get_user_pages_fast() a helper function of
+pin_user_pages_fast() to do a NULL pointer dereference:
 
-Fixes: 9cae36a094e7 ("io_uring: reinstate the inflight tracking")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+  Modules linked in:
+  CPU: 1 PID: 173 Comm: optee_example_a Not tainted 5.19.0 #11
+  Hardware name: QEMU QEMU Virtual Machine, BIOS 0.0.0 02/06/2015
+  pc : internal_get_user_pages_fast+0x474/0xa80
+  Call trace:
+   internal_get_user_pages_fast+0x474/0xa80
+   pin_user_pages_fast+0x24/0x4c
+   register_shm_helper+0x194/0x330
+   tee_shm_register_user_buf+0x78/0x120
+   tee_ioctl+0xd0/0x11a0
+   __arm64_sys_ioctl+0xa8/0xec
+   invoke_syscall+0x48/0x114
+
+Fix this by adding an an explicit call to access_ok() in
+tee_shm_register_user_buf() to catch an invalid user space address
+early.
+
+Fixes: 033ddf12bcf5 ("tee: add register user memory")
+Cc: stable@vger.kernel.org
+Reported-by: Nimish Mishra <neelam.nimish@gmail.com>
+Reported-by: Anirban Chakraborty <ch.anirban00727@gmail.com>
+Reported-by: Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>
+Suggested-by: Jerome Forissier <jerome.forissier@linaro.org>
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tee/tee_shm.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -1405,7 +1405,7 @@ static void io_req_track_inflight(struct
- {
- 	if (!(req->flags & REQ_F_INFLIGHT)) {
- 		req->flags |= REQ_F_INFLIGHT;
--		atomic_inc(&current->io_uring->inflight_tracked);
-+		atomic_inc(&req->task->io_uring->inflight_tracked);
+--- a/drivers/tee/tee_shm.c
++++ b/drivers/tee/tee_shm.c
+@@ -222,6 +222,9 @@ struct tee_shm *tee_shm_register(struct
+ 		goto err;
  	}
- }
  
++	if (!access_ok((void __user *)addr, length))
++		return ERR_PTR(-EFAULT);
++
+ 	mutex_lock(&teedev->mutex);
+ 	shm->id = idr_alloc(&teedev->idr, shm, 1, 0, GFP_KERNEL);
+ 	mutex_unlock(&teedev->mutex);
 
 

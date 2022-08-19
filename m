@@ -2,74 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94CC599BAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FF7599BAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348942AbiHSMPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
+        id S1347923AbiHSMQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348748AbiHSMP0 (ORCPT
+        with ESMTP id S1348495AbiHSMQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:15:26 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AB0FBA4D
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:15:22 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id qn6so8419117ejc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:15:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=xXVWZhjqeAkNlLD6nIdsDN330sAu6yXoB2pmNWkfjq8=;
-        b=6rZKvojny92lNHiwCXBDB7+e4XLb0SUSI8xNptuHRv3mpR4VbPEopPQKFCoCaH9ZKD
-         5RulSf2FQdeaBH67QhgtpUFRiiAlEgE1eARGx2G4lAqES3VPgaMnY4jXjKRC8ZfVPtaI
-         JWBz2VNlnT9K+wmrc+1oEyF2SjD0xiVh4Ng+pYdHH3TBCqsjQnplzoGXjV1zEabF2uGZ
-         6Vwxr0mmTY79eJmqzd4sJr8Xoj5cHVNz/qThKqkptWP+CK37XRQj2kn5IKRovEMSiF7i
-         Oe2FKbkKWMuILnmksVxVZQ7A7OhS1tn0HyvnRm/L6uNekVcnY20ZWh/2FDqeaJitkccp
-         Gdog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=xXVWZhjqeAkNlLD6nIdsDN330sAu6yXoB2pmNWkfjq8=;
-        b=uXKzm4JuTATmegw0NOzP9JG0M7pxCwCO/lwW72p0RecuyZFx/rWazXJgQO+aLK0w1w
-         g6gV7i2FatLac/e1Jl8EZwnarm5HoS8VbslWbCQ+QJyCC9PT4ABeKAjwyMhnJ+tR8VnS
-         PnBQTeYq1825QNqXaoctxboNpFeVviXTFcuONr84MzQBPd1Ou28r0UTf7MsE8tOspPf7
-         ar7r/yCTIzhOgECoBzjP5ENad9VSANEoqLDuttlvvg2DrVJ4elfniV7Mi4uHMBugSKBG
-         hplO139In9XozrkwAOrZbDk3ydYFS9p8BiBbO4zKbK9S3TB9Q3A/gI27qABygbCVVjLU
-         ov6g==
-X-Gm-Message-State: ACgBeo3qlZgs70SfxTT7wWKO4VcQnrFjTNcxDMO8ZQtoZdksgjoBWA3Y
-        XKPjuUMw7frYxl77UKtyzc4E7lh8kwvsFhiKOzU=
-X-Google-Smtp-Source: AA6agR7GtKamrSDVG3lUy3KiEGlgb6UL9opr0vEUmz8GOGyER6fJlE6kBDeerafsCu3XHGzhZJ83tQ==
-X-Received: by 2002:a17:906:98c9:b0:730:a23e:2785 with SMTP id zd9-20020a17090698c900b00730a23e2785mr4686376ejb.622.1660911320892;
-        Fri, 19 Aug 2022 05:15:20 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906218a00b0072af2460cd6sm2260910eju.30.2022.08.19.05.15.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 05:15:20 -0700 (PDT)
-Message-ID: <c9bc0382-fd0d-c596-5f61-365a8e0cbb21@blackwall.org>
-Date:   Fri, 19 Aug 2022 15:15:19 +0300
+        Fri, 19 Aug 2022 08:16:02 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38239100969;
+        Fri, 19 Aug 2022 05:15:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uJIjedYarczgR1fsBatrH00iIT2IriOKYXL6KyniivQ=; b=lVjBzwDnL3TrLWNLHk7fn3Zu5H
+        uOneN7WQJLk3Ocvk6+5NHFKCHi7tRAShM40RhrUHtyho7QHrHAg9Gq8avL2auKCXw82/3DsATrxIt
+        F3hHmQ/GZVrguU14SMnEi1xfiKp2iuBlEwpwe1KKSgKDtmA9SGJ+BqXAedD0JnDxVqpAQyIg4qqaS
+        RhNgIJGA1P8YMmmiNOaRDxVc4CASWoh2Z6WsV5GwLITc0PsAkbTyKH4f66HcJh0TMFV+FqFwYi6Yk
+        alrKd5oIBDJrz7hFmhwl4PIi0kemfNQnTOhstNfXVZ7F/ClCIyzzZAW3TEuqjTaBkBkLLt0oTPBjQ
+        8fRWd75Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oP0ui-00B6SB-EK; Fri, 19 Aug 2022 12:15:48 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 84B18980163; Fri, 19 Aug 2022 14:15:46 +0200 (CEST)
+Date:   Fri, 19 Aug 2022 14:15:46 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ben Hutchings <ben@decadent.org.uk>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        1017425@bugs.debian.org,
+        =?iso-8859-1?Q?Martin-=C9ric?= Racine <martin-eric.racine@iki.fi>,
+        stable@vger.kernel.org, regressions@lists.linux.dev,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: Re: [PATCH] x86/speculation: Avoid LFENCE in FILL_RETURN_BUFFER on
+ CPUs that lack it
+Message-ID: <Yv9+8vR4QH6j6J/5@worktop.programming.kicks-ass.net>
+References: <Yv7aRJ/SvVhSdnSB@decadent.org.uk>
+ <Yv9OGVc+WpoDAB0X@worktop.programming.kicks-ass.net>
+ <Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net>
+ <9395338630e3313c1bf0393ae507925d1f9af870.camel@decadent.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net v2] net: neigh: don't call kfree_skb() under
- spin_lock_irqsave()
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     den@openvz.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org
-References: <20220819044724.961356-1-yangyingliang@huawei.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220819044724.961356-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9395338630e3313c1bf0393ae507925d1f9af870.camel@decadent.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,65 +60,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 07:47, Yang Yingliang wrote:
-> It is not allowed to call kfree_skb() from hardware interrupt
-> context or with interrupts being disabled. So add all skb to
-> a tmp list, then free them after spin_unlock_irqrestore() at
-> once.
-> 
-> Fixes: 66ba215cb513 ("neigh: fix possible DoS due to net iface start/stop loop")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  net/core/neighbour.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-> index 5b669eb80270..d21c7de1ff1a 100644
-> --- a/net/core/neighbour.c
-> +++ b/net/core/neighbour.c
-> @@ -309,14 +309,17 @@ static int neigh_del_timer(struct neighbour *n)
->  
->  static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
->  {
-> +	struct sk_buff_head tmp;
->  	unsigned long flags;
->  	struct sk_buff *skb;
->  
-> +	skb_queue_head_init(&tmp);
->  	spin_lock_irqsave(&list->lock, flags);
->  	skb = skb_peek(list);
->  	while (skb != NULL) {
->  		struct sk_buff *skb_next = skb_peek_next(skb, list);
->  		struct net_device *dev = skb->dev;
-> +
->  		if (net == NULL || net_eq(dev_net(dev), net)) {
->  			struct in_device *in_dev;
->  
-> @@ -328,11 +331,16 @@ static void :q
+On Fri, Aug 19, 2022 at 01:38:27PM +0200, Ben Hutchings wrote:
 
-(struct sk_buff_head *list, struct net *net)
->  			__skb_unlink(skb, list);
->  
->  			dev_put(dev);
-> -			kfree_skb(skb);
-> +			dev_kfree_skb_irq(skb);
+> So that puts the whole __FILL_RETURN_BUFFER inside an alternative, and
+> we can't have nested alternatives.  That's unfortunate.
 
-this is still doing dev_kfree_skb_irq() instead of attaching the skb to tmp, in fact
-tmp seems unused so the loop below does nothing
-
->  		}
->  		skb = skb_next;
->  	}
->  	spin_unlock_irqrestore(&list->lock, flags);
-> +
-> +	while ((skb = __skb_dequeue(&tmp))) {
-> +		dev_put(skb->dev);
-
-Also note that there's already a dev_put() above
-
-> +		kfree_skb(skb);
-> +	}
->  }
->  
->  static void neigh_flush_dev(struct neigh_table *tbl, struct net_device *dev,
-
+Well, both alternatives end with the LFENCE instruction, so I could pull
+it out and do two consequtive ALTs, but unrolling the loop for i386 is
+a better solution in that the sequence, while larger, removes the need
+for the LFENCE.

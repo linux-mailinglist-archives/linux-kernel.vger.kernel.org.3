@@ -2,122 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C7F59A5D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E9B59A5DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350131AbiHSSyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 14:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S1350913AbiHSS5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 14:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349705AbiHSSyJ (ORCPT
+        with ESMTP id S1350111AbiHSS5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 14:54:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E64BA5731
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 11:54:07 -0700 (PDT)
-Received: from notapiano (unknown [70.107.189.129])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 240DC6601DC5;
-        Fri, 19 Aug 2022 19:54:04 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660935245;
-        bh=K0YLkb0y8E7IJjuV74dUqvmMPhGIIPSjh8y+QKSzuUo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NnetjEoq0ZAPXfWQ9ci9nv05AU+ZorGb7w0REYn9xsxSKYfG+1B4H7QoC6Ee2r3oo
-         eHx9NNBXej7nZ7pvMxtwRVBkhVA+/gvbWUmAk4NvzaifkQNUyfdZ8MGZtDWsif7nGk
-         CS1hzqBGqDlZdmPpzSNFQ4A2CIMJYO+qPZHVIOlHRd8K/GLCzpVKAUnu9z5ZUEXTKp
-         I55hbtVYs7VwTxzDdPQ4oJN830xsylunDdRgCia0JXtMqGElmaG9ctyR1FxGrWCWqK
-         RMyvuMFRD9Gbx+8K3NfvyF1oRrlsi/12sDrqsHUM0v14tBtHfkwjVBs9/4z9fML1jU
-         TR6pxUAL4Ojfw==
-Date:   Fri, 19 Aug 2022 14:54:00 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     xinlei.lee@mediatek.com
-Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, matthias.bgg@gmail.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Jitao Shi <jitao.shi@mediatek.com>
-Subject: Re: [PATCH v2,1/2] soc: mediatek: Add mmsys func to adapt to dpi
- output for MT8186
-Message-ID: <20220819185400.aokd53xln6rmc3xk@notapiano>
-References: <1659693461-27057-1-git-send-email-xinlei.lee@mediatek.com>
- <1659693461-27057-2-git-send-email-xinlei.lee@mediatek.com>
+        Fri, 19 Aug 2022 14:57:12 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBB3FEE92;
+        Fri, 19 Aug 2022 11:57:10 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 0B31F3B7A74;
+        Fri, 19 Aug 2022 14:57:10 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 3lZMkGODt-IH; Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 874613B78F5;
+        Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 874613B78F5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1660935429;
+        bh=6rmtj4UFHePqWJceVQhRqpzznhW6LnpT2VRjtwGS2TA=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=vRnfSePuLRdGSlWXFTbKnecqhWw30sGY2up/Lrcj4v2bt/ENJd5zvtypXLrJo1hsc
+         BGpB9jqhz1K0TwjpOaB3cURChp/ZcKQNYoLbFFhb5H3/LvPLEtCR0vMSAaaMwunfTw
+         GDf3fdgaMdXz1KpThKEaTAlGp3taFmQW+wm/ZP6KNHX/uT7dxWx8llBpKQztNzDhIK
+         61E8p+NwriNfP4FB7Blk2Qnevgq8uwkZSOlGGv79y/Lx94EAN871SvFnyNbrVWL8eg
+         T6ZlqbuuzU9ymAlQseYZxZkoiTcujtyS6qCHeRWNzA+D+NItg+ObIL91G58f5DXkaq
+         hgTAdUK72GhDg==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id fiECbDsY4bAE; Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 7961A3B7FA6;
+        Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+Date:   Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     lttng-dev <lttng-dev@lists.lttng.org>,
+        Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+        linux-trace-users <linux-trace-users@vger.kernel.org>,
+        lwn <lwn@lwn.net>, linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1273091514.17599.1660935429453.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.12.10 and 2.13.5 (Linux kernel tracer)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1659693461-27057-2-git-send-email-xinlei.lee@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - FF103 (Linux)/8.8.15_GA_4372)
+Thread-Index: njpMKIkDnXU7Voqt9NfXwqumSfFwyQ==
+Thread-Topic: LTTng-modules 2.12.10 and 2.13.5 (Linux kernel tracer)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xinlei,
+Hi,
 
-On Fri, Aug 05, 2022 at 05:57:40PM +0800, xinlei.lee@mediatek.com wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
-> 
-> Add mmsys func to manipulate dpi output format config for MT8186.
+This is a release announcement for the two currently maintained stable branches
+of the LTTng kernel tracer.
 
-func -> function
-config -> configuration
+* New in these releases:
 
-> 
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+Version 2.12.10 and 2.13.5 fix tracepoint instrumentation to support stable kernels in the
+version range v5.15.58 to 5.16. They also fix incorrect stub prototypes for
+CONFIG_HAVE_SYSCALL_TRACEPOINTS=n. A minor fix to tie compaction probe build to
+CONFIG_COMPACTION has also been added.
 
-Same thing about the co-developed-by.
+Version 2.13.5 updates the tracepoint instrumentation to support Linux kernel
+v5.19, and v6.0-rc1.
 
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> 
-> ---
->  drivers/soc/mediatek/mt8186-mmsys.h    | 1 +
->  drivers/soc/mediatek/mtk-mmsys.c       | 8 ++++++++
->  include/linux/soc/mediatek/mtk-mmsys.h | 3 +++
->  3 files changed, 12 insertions(+)
-> 
-> diff --git a/drivers/soc/mediatek/mt8186-mmsys.h b/drivers/soc/mediatek/mt8186-mmsys.h
-> index eb1ad9c37a9c..620c062e4893 100644
-> --- a/drivers/soc/mediatek/mt8186-mmsys.h
-> +++ b/drivers/soc/mediatek/mt8186-mmsys.h
-> @@ -3,6 +3,7 @@
->  #ifndef __SOC_MEDIATEK_MT8186_MMSYS_H
->  #define __SOC_MEDIATEK_MT8186_MMSYS_H
->  
-> +#define MT8186_DPI_OUTPUT_FORMAT		0X400
-
-0x400
-
-(lowercase "x")
-
->  #define MT8186_MMSYS_OVL_CON			0xF04
->  #define MT8186_MMSYS_OVL0_CON_MASK			0x3
->  #define MT8186_MMSYS_OVL0_2L_CON_MASK			0xC
-> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-> index 9bbf0103b225..0e71a3296046 100644
-> --- a/drivers/soc/mediatek/mtk-mmsys.c
-> +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> @@ -252,6 +252,14 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
->  }
->  EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
->  
-> +void mtk_mmsys_ddp_dpi_confing(struct device *dev, u32 mask, u32 val,
-
-confing -> config
-
-But I'd add something to the name to indicate it handles specifically the
-format:
-
-mtk_mmsys_ddp_dpi_fmt_config
+Feedback is welcome,
 
 Thanks,
-Nícolas
+
+Mathieu
+
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

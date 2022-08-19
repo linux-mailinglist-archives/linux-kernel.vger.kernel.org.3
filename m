@@ -2,118 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D371599561
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F4D599572
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346361AbiHSGgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 02:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
+        id S244112AbiHSGlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 02:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236670AbiHSGga (ORCPT
+        with ESMTP id S235053AbiHSGk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 02:36:30 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE199D87E4;
-        Thu, 18 Aug 2022 23:36:29 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id CDFF83200344;
-        Fri, 19 Aug 2022 02:36:25 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 19 Aug 2022 02:36:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1660890985; x=1660977385; bh=pBeaj2V8t6
-        P6bolCHrfvXg9D/W9MzEWG+IPlbO8Nh9E=; b=LmO6mbb053d74ialFpg+AUcGlA
-        5sJ8GMsLi2B6uqzfsj8MweB2M6qe7jz1ViFH58duNQj1qMqcHqQAjyzk7uyf2wPf
-        iGdGo+HPWqc+aIHgHva0gfH3JGu3VJKa0hcWyGMkXvbIlA8OZW0uE6LiP6pZolxp
-        6UlhRrsKKgxAA3RLZuxQAsIZ6x0p35Y+LcN+lAaii06OjEx9phISE351+xLUx/Bj
-        vK0+cS8MjAoSJfFdPSLXYTivgbF9b3HwDRkl4lm54i5IoWTEfs+ZSSNoHhQyLetI
-        JtcUyRZlYG9i/xvcTUtjWugaEJU/zmTXvxD2t+SP5/S/SltpASiHVILpj0zg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660890985; x=1660977385; bh=pBeaj2V8t6P6bolCHrfvXg9D/W9M
-        zEWG+IPlbO8Nh9E=; b=Q5Vk6MDCGVydPBD6Efm3Ot1YVPqdDBrQ//yrb/l85OWN
-        2cipyAFKCzFF+bMBk2zAUyoxAHl+ZOJUiUUVQ9Z3Geb226DcmT/KVUc/9vcEOnyH
-        NVlUxyc1oZ85cqUqYrwc4WnSu3YAesltk6L4Y12gMEvH0BgZAKyYDMSLFdnLJHie
-        900pB9D+pgczn7Yo4n7v+6rsL0R8D/oDWQSGzIjPTumU6czvPk0fp9RC5fXZKl/N
-        fDlpZoM6f2ZbbUkYW7ExPto0LNyFs/qiPFzxPE6Km3vL3ZxzY+8uHWLHWetUlkGd
-        G4JutDqq9Lmgy6U+TSm0kZ+tMH1t6BxQKT9cLdv2ow==
-X-ME-Sender: <xms:aC__YsfpYqv_GWl61ECZq0wQjEwy_pGX10fjNJre5sd6N_isJ2Rz0Q>
-    <xme:aC__YuNvkDQlK7AZ2FlB30WfNRvqNj2QT0nLwKk_gvpKelThPWaPvc8RuAHjsVKow
-    tP7cTs2QAtuMg>
-X-ME-Received: <xmr:aC__YtjtqRwZTWZ4-Ovmi07L5ktzAD0UALS1ZeAiwZAt-w81ig7MWBg05kOmX85M0JLvsxkYeKZdFtobK0tcvWDRyDSz24t6>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeitddgudduudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:aC__Yh_BDbgrPNGynMGP_hWqYLgb0I4c6IiAfqk77cVVxQfYtjqQCw>
-    <xmx:aC__YovYNODedOs6rDaSWBUmkY1Oc2FQDzYulbbLMUFsQhWSFuX3rg>
-    <xmx:aC__YoGxF5xC9N_5OoF818RdARckXYOUjVTu6UI95D1BIJq5iAXdKg>
-    <xmx:aS__Ypmjfia4nRhyxizbaIaEglPxQjnZldEEVX2VMYtCaaCQ5WqloQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 19 Aug 2022 02:36:24 -0400 (EDT)
-Date:   Fri, 19 Aug 2022 08:36:21 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the char-misc.current tree with the
- mm-hotfixes tree
-Message-ID: <Yv8vZQB25NE0r/uN@kroah.com>
-References: <20220819082714.5313827d@canb.auug.org.au>
+        Fri, 19 Aug 2022 02:40:58 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB55DABA4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:40:56 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id s1so2138794lfp.6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 Aug 2022 23:40:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=GYmIScs4mfZnnjadeyNqjbuAo9aXiX5S9q/mWekMvwo=;
+        b=oePyxO4oEX6xk6fav01I5vbNrZmR0ZxjmvJxpzG7j/fhw5AQsmMivprlTFsvMNCNBv
+         Fr13vfWBVK8AyfWyS16INk1lTBeqG2aZKWXMKSGrNJ980Zh7R+kUtZTNLA7ETS2oXn/Z
+         ZWNnjxUqOEknJp/RlXLQ9MztayQFPXFoFQnZQARR19zgZY5BtxtWeS7Y6w5jjclNHbXA
+         +crZTAVzAeI+K/4vF7XgTTGPEwVPvTCpRAH8t2SGwobO6HUosJ/NMSHKV9Ikt0Ls9NPr
+         +uDa+7U1zcBhhDmKyEvuNbJfnukQQuc2Z2K1fV1NB3mKytyN+hlSkdD7T9UVBqzRBU2p
+         ESjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=GYmIScs4mfZnnjadeyNqjbuAo9aXiX5S9q/mWekMvwo=;
+        b=O/ObndGo/mp5hBKXLEVhuJVwSJL0aWTKDOXWAZN85FGx8ZZDgXfC+XbegC3evcWLEz
+         ijEZ2xYY7PA2PFrg177+OrDzp/G4Bt2k74MJ4W0+iWaSI0yYAS3ujUXzVC8ZDYOHuNS2
+         YBP5l/E2krk83wSmw6/StXT/bpPS7XC1/3oV2I2G3izXnP9vEmpE+Dvems7lYa1m2Hi3
+         neoAXzkOJdL8rldN+BzYQIi6r1zJsoZuvps4gx66hxIyopDAUGAlrOvIt4cw/NV4yiSc
+         87/xEjdIIz8PaQXshTUutrAoVrgOW3LPW8GK9Udlg+GiphIlHUUTkPo2e4oxPVXnnJk/
+         nsuQ==
+X-Gm-Message-State: ACgBeo0D2Ny1BD0hb98n36NCHOhk8+gze3sVk2Ki7D23KR48GvJ7cM2e
+        Q4zwdWzSba98KOrkNI8gWmMXOQ==
+X-Google-Smtp-Source: AA6agR7TbniMzGwqPEfAjokSet4E3Ix7OoannQIA8Ey+MTO2YQhuDAuk8GmTtGzWzCEm4xbLb4qHGA==
+X-Received: by 2002:a05:6512:238c:b0:48b:132:8392 with SMTP id c12-20020a056512238c00b0048b01328392mr1877371lfv.658.1660891254460;
+        Thu, 18 Aug 2022 23:40:54 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
+        by smtp.gmail.com with ESMTPSA id m24-20020ac24298000000b0048d1101d0d6sm517427lfh.121.2022.08.18.23.40.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 23:40:54 -0700 (PDT)
+Message-ID: <360087ae-50d4-3902-13bd-4752ddc80865@linaro.org>
+Date:   Fri, 19 Aug 2022 09:40:52 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819082714.5313827d@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v8 1/5] dt-bindings: mfd: qcom-spmi-pmic: add support for
+ PMP8074
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
+        lars@metafoo.de, sboyd@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org
+References: <20220818221815.346233-1-robimarko@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220818221815.346233-1-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 08:28:18AM +1000, Stephen Rothwell wrote:
-> Hi all,
+On 19/08/2022 01:18, Robert Marko wrote:
+> Document compatible for the PMP8074 PMIC.
 > 
-> Today's linux-next merge of the char-misc.current tree got a conflict in:
-> 
->   drivers/android/binder_alloc.c
-> 
-> between commit:
-> 
->   b3bb668f3dc6 ("binder_alloc: add missing mmap_lock calls when using the VMA")
-> 
-> from the mm-hotfixes tree and commit:
-> 
->   d6f35446d076 ("binder_alloc: Add missing mmap_lock calls when using the VMA")
-> 
-> from the char-misc.current tree.
-> 
-> I fixed it up (I used the latter as it was committed later even though
-> the author times were the same) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+> Changes in v8:
 
-These should be identical, if not, something went wrong :(
 
-thanks,
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-greg k-h
+
+Best regards,
+Krzysztof

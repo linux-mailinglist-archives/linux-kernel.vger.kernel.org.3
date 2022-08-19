@@ -2,122 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCD9599B9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F101E599B63
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348682AbiHSMGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        id S1348538AbiHSMBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348496AbiHSMGH (ORCPT
+        with ESMTP id S1348041AbiHSMBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:06:07 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514F8100963;
-        Fri, 19 Aug 2022 05:06:05 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 03DF42020E;
-        Fri, 19 Aug 2022 12:06:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660910764;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=s8JuKXuquxAHWWI+QjuKLmXu6m/+exD+rUksSV7bL9U=;
-        b=pGr9BqV15xyOVLEeTm7Gc+cpOYlTyIDe0UvexnFuFVkegZ6kh6jvSu3pCQ35YMGxf+VenF
-        i6Y/STjbx5bjc9o2bm0rKfsK1oeVz38UfUsYKTdCj5xjbO3BEXGbpXILbc5CWYKDl91o9b
-        JJyrSRx+IoQbJGlzU5YT4H9wPGsYOEk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D298B13AC1;
-        Fri, 19 Aug 2022 12:06:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id t8BqMqt8/2JpPQAAMHmgww
-        (envelope-from <dsterba@suse.com>); Fri, 19 Aug 2022 12:06:03 +0000
-Date:   Fri, 19 Aug 2022 14:00:51 +0200
-From:   David Sterba <dsterba@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Btrfs fixes for 6.0-rc2
-Message-ID: <cover.1660908668.git.dsterba@suse.com>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, torvalds@linux-foundation.org,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+        Fri, 19 Aug 2022 08:01:34 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E160AE398B
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:01:32 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oP0ge-0007mf-NM; Fri, 19 Aug 2022 14:01:16 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oP0gc-000hbR-72; Fri, 19 Aug 2022 14:01:14 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oP0ga-00GBaU-7C; Fri, 19 Aug 2022 14:01:12 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: [PATCH net-next v1 0/7] add generic PSE support 
+Date:   Fri, 19 Aug 2022 14:01:02 +0200
+Message-Id: <20220819120109.3857571-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add generic support for the Ethernet Power Sourcing Equipment.
 
-a few short fixes and a lockdep warning fix (needs moving some code).
-Please pull, thanks.
+Oleksij Rempel (7):
+  dt-bindings: net: pse-dt: add bindings for generic PSE controller
+  dt-bindings: net: phy: add PoDL PSE property
+  net: add framework to support Ethernet PSE and PDs devices
+  net: pse-pd: add generic PSE driver
+  net: mdiobus: fwnode_mdiobus_register_phy() rework error handling
+  net: mdiobus: search for PSE nodes by parsing PHY nodes.
+  ethtool: add interface to interact with Ethernet Power Equipment
 
-- tree-log replay fixes
-  - fix error handling when looking up extent refs
-  - fix warning when setting inode number of links
+ .../devicetree/bindings/net/ethernet-phy.yaml |   6 +
+ .../bindings/net/pse-pd/generic-pse.yaml      |  40 ++
+ Documentation/networking/ethtool-netlink.rst  |  60 +++
+ drivers/net/Kconfig                           |   2 +
+ drivers/net/Makefile                          |   1 +
+ drivers/net/mdio/fwnode_mdio.c                |  58 ++-
+ drivers/net/phy/phy_device.c                  |   2 +
+ drivers/net/pse-pd/Kconfig                    |  22 +
+ drivers/net/pse-pd/Makefile                   |   6 +
+ drivers/net/pse-pd/pse-core.c                 | 387 ++++++++++++++++++
+ drivers/net/pse-pd/pse_generic.c              | 146 +++++++
+ include/linux/phy.h                           |   2 +
+ include/linux/pse-pd/pse.h                    | 134 ++++++
+ include/uapi/linux/ethtool.h                  |  50 +++
+ include/uapi/linux/ethtool_netlink.h          |  17 +
+ net/ethtool/Makefile                          |   3 +-
+ net/ethtool/netlink.c                         |  19 +
+ net/ethtool/netlink.h                         |   4 +
+ net/ethtool/pse-pd.c                          | 194 +++++++++
+ 19 files changed, 1141 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/pse-pd/generic-pse.yaml
+ create mode 100644 drivers/net/pse-pd/Kconfig
+ create mode 100644 drivers/net/pse-pd/Makefile
+ create mode 100644 drivers/net/pse-pd/pse-core.c
+ create mode 100644 drivers/net/pse-pd/pse_generic.c
+ create mode 100644 include/linux/pse-pd/pse.h
+ create mode 100644 net/ethtool/pse-pd.c
 
-- relocation fixes
-  - reset block group read-only status when relocation fails
-  - unset control structure if transaction fails when starting to
-    process a block group
-  - add lockdep annotations to fix a warning during relocation where
-    blocks temporarily belong to another tree and can lead to reversed
-    dependencies
+-- 
+2.30.2
 
-- tree-checker verifies if extent items don't overlap
-
-----------------------------------------------------------------
-The following changes since commit 0b078d9db8793b1bd911e97be854e3c964235c78:
-
-  btrfs: don't call btrfs_page_set_checked in finish_compressed_bio_read (2022-07-25 19:56:16 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.0-rc1-tag
-
-for you to fetch changes up to 899b7f69f244e539ea5df1b4d756046337de44a5:
-
-  btrfs: tree-checker: check for overlapping extent items (2022-08-17 16:20:25 +0200)
-
-----------------------------------------------------------------
-Filipe Manana (2):
-      btrfs: fix lost error handling when looking up extended ref on log replay
-      btrfs: fix warning during log replay when bumping inode link count
-
-Josef Bacik (4):
-      btrfs: reset RO counter on block group if we fail to relocate
-      btrfs: move lockdep class helpers to locking.c
-      btrfs: fix lockdep splat with reloc root extent buffers
-      btrfs: tree-checker: check for overlapping extent items
-
-Zixuan Fu (1):
-      btrfs: unset reloc control if transaction commit fails in prepare_to_relocate()
-
- fs/btrfs/block-group.c  |  4 ++-
- fs/btrfs/ctree.c        |  3 ++
- fs/btrfs/ctree.h        |  2 ++
- fs/btrfs/disk-io.c      | 82 --------------------------------------------
- fs/btrfs/disk-io.h      | 10 ------
- fs/btrfs/extent-tree.c  | 18 +++++++++-
- fs/btrfs/extent_io.c    | 11 +++++-
- fs/btrfs/locking.c      | 91 +++++++++++++++++++++++++++++++++++++++++++++++++
- fs/btrfs/locking.h      | 14 ++++++++
- fs/btrfs/relocation.c   |  9 ++++-
- fs/btrfs/tree-checker.c | 25 ++++++++++++--
- fs/btrfs/tree-log.c     |  8 +++--
- 12 files changed, 176 insertions(+), 101 deletions(-)

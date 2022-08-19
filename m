@@ -2,217 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0240599BAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8366B599BB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348884AbiHSMGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        id S1348891AbiHSMHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 08:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348496AbiHSMG2 (ORCPT
+        with ESMTP id S1348496AbiHSMG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:06:28 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E93610096A
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:06:26 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id b38so3241917lfv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:06:26 -0700 (PDT)
+        Fri, 19 Aug 2022 08:06:59 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CDB100977
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:06:57 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-11c59785966so4976216fac.11
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 05:06:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=/Sb3w6Y1BeOgZMrIBk6x8kpTOxRss537p36tvRmvnAg=;
-        b=dH9RyMR3lKC/qZOXxXjEafcK7XBKChilHFvq0LsT4iA780RiPQKoXew3aujRndsSfM
-         9WHc33SEm49OFB78kb/hStFA6mKaEQmQlBw0XJ04mfvWdymVok5fsh1xOFJEHLgvgLPm
-         Yp3uOpwElmcoTR2sh6KeSZ/zf/HMZ3YG2IFsWbexZPGa4OtUlAXXQ2uLt+pJ5vFNB9zm
-         bbB9S8SzHl9EIDkvMetWJVwb4LexM/85N+ZGrEXtUv1PipNEw7aTnQEAwi6PSREWjHh6
-         w99N2AtiTCixlxSc8KvbnhCDiUEtlgSqXHjRkqz0qbINVJgGwrblkZwfXu/5VAqYwKFy
-         JmNQ==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=BS8rpDUuJ+C81koEbZ/S2EZJvVDKAj+JtFCwhraayGM=;
+        b=rjyqhlsYjTLeLXmxYbxShSma7EjgClUCI9vd55cQl4/HYoiwbSOCLsnxtVsC5bS0dk
+         6jiDG3E1MLDdD3aFzejOiBT88qGvpI1E+zY+KUpWRoj6+ToJQfzyQ7gy7EYH1ZzSNhzE
+         CYjBAw9N45A5Ik1GciMK/Me4x9s5pKTdDV51njHzzPBNlcr7KflpzdPpZDCPjaI0Zq7v
+         SlxhpX5gIkW+OL+HM6hDcd/q+fNBeQoN4I7vSuEgM/VhqkKbG+IcOTfhlYXJ+FoBklca
+         dOZ3AD+0ASczp3kV8Q9zjtvBZk56QvlSoEp3WWzZxWD/+U8ySnndL1pwgs44AorqPLEb
+         0d0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=/Sb3w6Y1BeOgZMrIBk6x8kpTOxRss537p36tvRmvnAg=;
-        b=1H8tWOrG0AudqeSBZMJ5M2XJmhoSjt4UNAyhWwmT5udV48mSGfvsc3cJoXWvoh7W33
-         vrEEu8uZXV70lAq1+hL2SzbY53DBv49RANbh/bClluPr8JESSMU9h3PeYuMUpt5XwFgo
-         B5Uf6QlcSavQQXLCvFPR8/k3XBu9jJz2mv8Cc4tbVKLb1z4ZAJx4UMnlRifAhq0NDYyv
-         /Q1nbrgPv4nMByqGMyiBquXNqr/FYsVk1EjSqOi9aB6gcqsBLNGlJOsRxSAzjnO5/gFn
-         mo9BD2zfjL1q0CK5JYUDXWZMENVt3f5GkbkLW0Z88BoamU3pwiIrhfc4NtcDzdyEhCfN
-         aWxw==
-X-Gm-Message-State: ACgBeo0v5fYNJW6bwwLePGSE2LdKOaMvpzaNnu2ewFYYEzprRcs/dc4O
-        3yEgBNdZd6GEqZHhh4SJ0E0yiQ==
-X-Google-Smtp-Source: AA6agR4UDDM3tfvRJzYG1IzCN1p3rR1zz78x4mZxht+ZjrTuTapl3U/WvyNHyNKsLsCkmdOM4E5jTg==
-X-Received: by 2002:a05:6512:358d:b0:48b:37f:dce2 with SMTP id m13-20020a056512358d00b0048b037fdce2mr2131532lfr.267.1660910784888;
-        Fri, 19 Aug 2022 05:06:24 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id u24-20020ac258d8000000b00492cebbeefbsm115021lfo.59.2022.08.19.05.06.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 05:06:24 -0700 (PDT)
-Message-ID: <0871f3af-cb37-e490-f0b3-88703652b089@linaro.org>
-Date:   Fri, 19 Aug 2022 15:06:22 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=BS8rpDUuJ+C81koEbZ/S2EZJvVDKAj+JtFCwhraayGM=;
+        b=U+aYss5EqejPZFecJnHQBPRIowwph3KEQ48T2/NvkHhG5goDowfV0JbaOOUCkbIIMt
+         K17GOp9BaG7abS0Os8iHP7yOiOjD3O9iQjCU+ZqWJUsV/K+3FlVM2KydJo3Y/aAKOVHE
+         gGzPBRD7xto3VP+pXjsgq7Fl7eFUFnQHJOTJvCxni0TcIbdj2pA9lPtnE7ZZ144pvWaf
+         QlJZtS7rRNo0qd+MROQOA+shHqd/vhqr/Hlfo71vKXoPolCA3BpGeLxtADhyYEKN3UzX
+         JdlfwInA14y40I4KaKS+u9Y/N75PSJ0eiSr3FkNfyOyVuRiTWndr0cwXVrZL0Jmc9Wgr
+         yK8A==
+X-Gm-Message-State: ACgBeo3M3xGYUycRIMWXIusrZ0VL1L8IZ/qqH45dsitE2mNpAYAc87LO
+        yFYT029JhsOSj4mT4D7OVtfqUOON50AtOjqcL5kz
+X-Google-Smtp-Source: AA6agR67JqLJbTsUMywSUV4CDMmds8+ClBQaMdh6BNCEFu6UwDXwsTiWYtKBclPxGnDjuicTj+ve4s+6uWG/VcY13Q8=
+X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
+ x13-20020a056870a78d00b0011c437bec70mr3678091oao.136.1660910816244; Fri, 19
+ Aug 2022 05:06:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/5] dt-bindings: mfd: atmel,at91-usart: convert to
- json-schema
-Content-Language: en-US
-To:     Sergiu.Moga@microchip.com, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, Claudiu.Beznea@microchip.com,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        admin@hifiphile.com, Kavyasree.Kotagiri@microchip.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20220817075517.49575-1-sergiu.moga@microchip.com>
- <20220817075517.49575-3-sergiu.moga@microchip.com>
- <c1a98a3e-609e-7783-b1b7-3bb39caa8c65@linaro.org>
- <ddd8ca9a-1fc1-7d37-07e8-f6f7f4617eef@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ddd8ca9a-1fc1-7d37-07e8-f6f7f4617eef@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAEHB248ft0LFUQDHNtB9NN_D3F=12Jndh13Ue=LokajXNhMk5Q@mail.gmail.com>
+ <CAHC9VhTXNPWBDRoPcz-Jw=f+NNAEhxbh-ySc56CUd-ZbuboW5w@mail.gmail.com>
+In-Reply-To: <CAHC9VhTXNPWBDRoPcz-Jw=f+NNAEhxbh-ySc56CUd-ZbuboW5w@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 19 Aug 2022 08:06:45 -0400
+Message-ID: <CAHC9VhQnYY_wdUjBbL3NpPYTQcr0M_Nf1g8ObbHiUoUbHPYdYA@mail.gmail.com>
+Subject: Re: data-race in audit_log_start / audit_receive
+To:     abhishek.shah@columbia.edu
+Cc:     eparis@redhat.com, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org, Gabriel Ryan <gabe@cs.columbia.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/08/2022 12:25, Sergiu.Moga@microchip.com wrote:
-> On 18.08.2022 11:38, Krzysztof Kozlowski wrote:
->> On 17/08/2022 10:55, Sergiu Moga wrote:
->>> Convert at91 USART DT Binding for Atmel/Microchip SoCs to
->>> json-schema format.
->>>
->>> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
->>> ---
->>>   .../bindings/mfd/atmel,at91-usart.yaml        | 190 ++++++++++++++++++
->>>   .../devicetree/bindings/mfd/atmel-usart.txt   |  98 ---------
->>>   2 files changed, 190 insertions(+), 98 deletions(-)
->>>   create mode 100644 Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>>   delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-usart.txt
->>>
->>> diff --git a/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>> new file mode 100644
->>> index 000000000000..cf15d73fa1e8
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/mfd/atmel,at91-usart.yaml
->>> @@ -0,0 +1,190 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/mfd/atmel,at91-usart.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Atmel Universal Synchronous Asynchronous Receiver/Transmitter (USART)
->>> +
->>> +maintainers:
->>> +  - Richard Genoud <richard.genoud@gmail.com>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->> This looks quite different than bindings and you commit msg is saying it
->> is only a conversion. Mention any changes against original bindings.
->>
->>> +      - const: atmel,at91rm9200-usart
->>> +      - const: atmel,at91sam9260-usart
->>> +      - const: microchip,sam9x60-usart
->> That's an enum
->>
->>> +      - items:
->>> +          - const: atmel,at91rm9200-dbgu
->>> +          - const: atmel,at91rm9200-usart
->>> +      - items:
->>> +          - const: atmel,at91sam9260-dbgu
->>> +          - const: atmel,at91sam9260-usart
->>> +      - items:
->>> +          - const: microchip,sam9x60-dbgu
->>> +          - const: microchip,sam9x60-usart
->>> +      - items:
->>> +          - const: microchip,sam9x60-usart
->>> +          - const: atmel,at91sam9260-usart
->> This is not correct - contradicts earlier one.
->>
->>> +      - items:
->>> +          - const: microchip,sam9x60-dbgu
->>> +          - const: microchip,sam9x60-usart
->>> +          - const: atmel,at91sam9260-dbgu
->>> +          - const: atmel,at91sam9260-usart
->> What? You wrote above that microchip,sam9x60-dbgu is compatible only
->> with microchip,sam9x60-usart. Now you write it is also compatible with
->> other ones?
->>
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +
->>> +  clock-names:
->>> +    contains:
->>> +      const: usart
->> No, this has to be specific/fixed list.
->>
->>> +
->>> +  clocks:
->>> +    minItems: 1
->>> +    maxItems: 2
->> Not really - define the items. One item could be optional, though.
->>
->>> +
->>> +  dmas:
->>> +    items:
->>> +      - description: TX DMA Channel
->>> +      - description: RX DMA Channel
->>> +
->>> +  dma-names:
->>> +    items:
->>> +      - const: tx
->>> +      - const: rx
->>> +
->>> +  atmel,usart-mode:
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    description: |
->> No need for |
->>
->>> +      Must be either 1 for SPI or 0 for USART.
->> Mention the header.
->>
->>> +    enum: [ 0, 1 ]
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - interrupts
->>> +  - clock-names
->>> +  - clocks
->>> +
->>> +if:
->> Put it under allOf.
-> 
-> 
-> I missed this in the first read, but what do you mean by under allOf? 
-> The only allOf's in this file are under the then:'s.
-> 
+On Thu, Aug 18, 2022 at 9:59 PM Paul Moore <paul@paul-moore.com> wrote:
+> On Thu, Aug 18, 2022 at 6:23 PM Abhishek Shah
+> <abhishek.shah@columbia.edu> wrote:
+> > Hi all,
+> >
+> > We found a data race involving the audit_cmd_mutex.owner variable. We think this bug is concerning because audit_ctl_owner_current is used at a location that controls the scheduling of tasks shown here. Please let us know what you think.
+> >
+> > Thanks!
+> >
+> > -----------------Report----------------------
+> >
+> > write to 0xffffffff881d0710 of 8 bytes by task 6541 on cpu 0:
+> >  audit_ctl_lock kernel/audit.c:237 [inline]
+>
+> ...
+>
+> > read to 0xffffffff881d0710 of 8 bytes by task 6542 on cpu 1:
+> >  audit_ctl_owner_current kernel/audit.c:258 [inline]
+>
+> Yes, technically there is a race condition if/when an auditd instance
+> is registering itself the exact same time as another task is
+> attempting to log an audit record via audit_log_start().
 
-It means that "if:" is preferred to be under allOf, just like example
-schema is showing:
-https://elixir.bootlin.com/linux/v5.19/source/Documentation/devicetree/bindings/example-schema.yaml
+I realized after I sent this and turned off my computer last night
+that I typed the wrong thing - the race isn't between auditd and
+audit_log_start(), it's between the code which changes the audit
+subsystem state (see audit_receive() and the audit watch/tree code)
+and audit_log_start().
 
-Not some other allOf, which could be many in your bindings. The one
-allOf in top-level, just like example schema.
+> The risk
+> being that a *very* limited number of audit records could be
+> mis-handled with respect to their queue priority and that is it; no
+> records would be lost or misplaced.  Correcting this would likely
+> involve a more complex locking scheme[1] or a rather severe
+> performance penalty due to an additional lock in the audit_log_start()
+> code path.  There may be some value in modifying
+> audit_ctl_owner_current() to use READ_ONCE(), but it isn't clear to me
+> that this would significantly improve things or have no impact on
+> performance.
 
+Another thing I thought of last night - I don't believe READ_ONCE()
+adds a memory barrier, which would probably be needed; although my
+original statement still stands, I'm not sure the performance hit
+would justify the marginal impact on the audit queue.
 
-Best regards,
-Krzysztof
+> Have you noticed any serious problems on your system due to this?  If
+> you have a reproducer which shows actual harm on the system could you
+> please share that?
+>
+> [1] The obvious choice would be to move to a RCU based scheme, but
+> even that doesn't totally solve the problem as there would still be a
+> window where some tasks would have an "old" value.  It might actually
+> end up extending the race window on large multi-core systems due to
+> the time needed for all of the critical sections to complete.
+
+-- 
+paul-moore.com

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71BA59A0FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6227159A007
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350950AbiHSP7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 11:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
+        id S1350421AbiHSP7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 11:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351118AbiHSP40 (ORCPT
+        with ESMTP id S1351072AbiHSP4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:56:26 -0400
+        Fri, 19 Aug 2022 11:56:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E569DB56EB;
-        Fri, 19 Aug 2022 08:51:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D76F108931;
+        Fri, 19 Aug 2022 08:51:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BF7B6172D;
-        Fri, 19 Aug 2022 15:51:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B409C433B5;
-        Fri, 19 Aug 2022 15:51:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7624616F9;
+        Fri, 19 Aug 2022 15:51:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE2D6C433C1;
+        Fri, 19 Aug 2022 15:51:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660924278;
-        bh=wBzxCo5hjBfe1zfh5zUb0PYm7nf2Nm7lHu2UY3R1mFU=;
+        s=korg; t=1660924281;
+        bh=oXFRchSpsAw6enE5S+hGW9CUqREHUlNKONvJdEmGHJg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UksNlW+s5g1OWWwpTnI1GkM7XqFpNUYbogqEkyVpMGDFL93iIY2ORMhNo59/LgP/+
-         sAXINFvgqk7PlSfBSgBVPvbk9BflUpKNYjfjLXahrt1sfFL4vmdk1HmvfJfDcmwQrY
-         8LJ0Wsu0xPHH0MFmj2aYjWncewxxAqkqwwBAXLtE=
+        b=CDT4pXby/EwQ8Px5m9SccwIvJ4XRfu9WBrWnnjc3C+04eO+CMtAEwrFbIrN28XL2f
+         q3TyvbK+ECtIMARjT0E3amoK/d8w7yttK9P7+GYvT/2ZBDDx6qSfqLrj/PI1/ViN4a
+         aHwiYPZ8gsoQ3kp0B2EVLpez26gJ+nn7pPxdlQEM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bruno Goncalves <bgoncalv@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Valentin Schneider <vschneid@redhat.com>,
+        stable@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Shawn Guo <shawnguo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 085/545] wait: Fix __wait_event_hrtimeout for RT/DL tasks
-Date:   Fri, 19 Aug 2022 17:37:35 +0200
-Message-Id: <20220819153833.064334892@linuxfoundation.org>
+Subject: [PATCH 5.10 086/545] ARM: dts: imx6ul: add missing properties for sram
+Date:   Fri, 19 Aug 2022 17:37:36 +0200
+Message-Id: <20220819153833.107076323@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220819153829.135562864@linuxfoundation.org>
 References: <20220819153829.135562864@linuxfoundation.org>
@@ -58,60 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juri Lelli <juri.lelli@redhat.com>
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-[ Upstream commit cceeeb6a6d02e7b9a74ddd27a3225013b34174aa ]
+[ Upstream commit 5655699cf5cff9f4c4ee703792156bdd05d1addf ]
 
-Changes to hrtimer mode (potentially made by __hrtimer_init_sleeper on
-PREEMPT_RT) are not visible to hrtimer_start_range_ns, thus not
-accounted for by hrtimer_start_expires call paths. In particular,
-__wait_event_hrtimeout suffers from this problem as we have, for
-example:
+All 3 properties are required by sram.yaml. Fixes the dtbs_check
+warning:
+sram@900000: '#address-cells' is a required property
+sram@900000: '#size-cells' is a required property
+sram@900000: 'ranges' is a required property
 
-fs/aio.c::read_events
-  wait_event_interruptible_hrtimeout
-    __wait_event_hrtimeout
-      hrtimer_init_sleeper_on_stack <- this might "mode |= HRTIMER_MODE_HARD"
-                                       on RT if task runs at RT/DL priority
-        hrtimer_start_range_ns
-          WARN_ON_ONCE(!(mode & HRTIMER_MODE_HARD) ^ !timer->is_hard)
-          fires since the latter doesn't see the change of mode done by
-          init_sleeper
-
-Fix it by making __wait_event_hrtimeout call hrtimer_sleeper_start_expires,
-which is aware of the special RT/DL case, instead of hrtimer_start_range_ns.
-
-Reported-by: Bruno Goncalves <bgoncalv@redhat.com>
-Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-Link: https://lore.kernel.org/r/20220627095051.42470-1-juri.lelli@redhat.com
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/wait.h | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ arch/arm/boot/dts/imx6ul.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/include/linux/wait.h b/include/linux/wait.h
-index 9b8b0833100a..1663e47681a3 100644
---- a/include/linux/wait.h
-+++ b/include/linux/wait.h
-@@ -534,10 +534,11 @@ do {										\
- 										\
- 	hrtimer_init_sleeper_on_stack(&__t, CLOCK_MONOTONIC,			\
- 				      HRTIMER_MODE_REL);			\
--	if ((timeout) != KTIME_MAX)						\
--		hrtimer_start_range_ns(&__t.timer, timeout,			\
--				       current->timer_slack_ns,			\
--				       HRTIMER_MODE_REL);			\
-+	if ((timeout) != KTIME_MAX) {						\
-+		hrtimer_set_expires_range_ns(&__t.timer, timeout,		\
-+					current->timer_slack_ns);		\
-+		hrtimer_sleeper_start_expires(&__t, HRTIMER_MODE_REL);		\
-+	}									\
- 										\
- 	__ret = ___wait_event(wq_head, condition, state, 0, 0,			\
- 		if (!__t.task) {						\
+diff --git a/arch/arm/boot/dts/imx6ul.dtsi b/arch/arm/boot/dts/imx6ul.dtsi
+index d7d9f3e46b92..34eccc1db12c 100644
+--- a/arch/arm/boot/dts/imx6ul.dtsi
++++ b/arch/arm/boot/dts/imx6ul.dtsi
+@@ -147,6 +147,9 @@ soc {
+ 		ocram: sram@900000 {
+ 			compatible = "mmio-sram";
+ 			reg = <0x00900000 0x20000>;
++			ranges = <0 0x00900000 0x20000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
+ 		};
+ 
+ 		intc: interrupt-controller@a01000 {
 -- 
 2.35.1
 

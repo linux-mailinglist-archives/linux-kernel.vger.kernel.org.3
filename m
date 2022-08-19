@@ -2,315 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E007D59A441
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1218F59A3E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354732AbiHSRqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 13:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
+        id S1354697AbiHSRqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 13:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354973AbiHSRpz (ORCPT
+        with ESMTP id S1354960AbiHSRpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 13:45:55 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6216109759;
-        Fri, 19 Aug 2022 10:10:44 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 45A3C4C1D4C;
-        Fri, 19 Aug 2022 17:10:35 +0000 (UTC)
-Received: from pdx1-sub0-mail-a264.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 50A274C25EC;
-        Fri, 19 Aug 2022 17:10:34 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1660929034; a=rsa-sha256;
-        cv=none;
-        b=5cKO38w6HOtms0u9sQ3GepT4FM8gwF4I0LbfMs7RKCu3OuMusk7Uc3t8j0FEYniv6pFkXr
-        7HSOfE9O5gsHyFuNIxxozJYFa4tcCY72Sg7QSJuxqrsL1vS+drxzsKRWRzMf0xXpsvMm+N
-        J7YMYII+pGFI0EAAr8u0p/32bYsDRPSH47jpC3JuvyJOPyh/TLNEUU3EagVHPMzk6cNRzP
-        ZWAozXtHnjHSUoxrVTbTFPMh5kQsYH3b6Tma/JNL3qNLaCdYfLkhz84Xbv/cXUIJl/hAlF
-        Z/d2GlEg4JdxIrmg4JC9/zPSKl/5zgER42zneWoEoZhi6rEChrH4okhAK8uopA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1660929034;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=WAH2Q04qOOZviyzR8Bbm7cthfCCUJ+xnXbB07gw5SSk=;
-        b=ZoINtC4u5TA72FcggARe2fDeATKzoUQxzfw5aHtodIHyz0LQwD2+B+ZhwaI/7FpPeGpxTz
-        gjOP+OmOxAvhS6RQArnqoyZhZvVpXtA7mvdiyeg0vqRBfUv3d8v8OZEjCf6GZjItsipOrj
-        s5Ry6dHP97cJy6FV/xgQs9zjFGG2K0vSdjMmWK7ujLMhED6IRmP7M9SFWpM0pD7g8VZUEn
-        CcdvJVZAm7wqMADxaEmz38wm9RX2+RIjURVoSUm2xVxnOI3csMC3eyCrmEl/ciz9owsSBA
-        VlowFAMhEl2jnhFucruQqtAVzwPgXK1bZZqSiIikCG5Qc5T6skhAsVi9H+agJg==
-ARC-Authentication-Results: i=1;
-        rspamd-79945fd77c-mwkdm;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Obese-Chemical: 0736d13c36e1a4a8_1660929035054_241875966
-X-MC-Loop-Signature: 1660929035054:962906012
-X-MC-Ingress-Time: 1660929035054
-Received: from pdx1-sub0-mail-a264.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.112.55.195 (trex/6.7.1);
-        Fri, 19 Aug 2022 17:10:35 +0000
-Received: from offworld.. (unknown [104.36.31.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a264.dreamhost.com (Postfix) with ESMTPSA id 4M8Stw3PRHz33;
-        Fri, 19 Aug 2022 10:10:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1660929033;
-        bh=WAH2Q04qOOZviyzR8Bbm7cthfCCUJ+xnXbB07gw5SSk=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=H2h3CfoxDs72tJyVbuC3+AuYHpXZSMGR3+CtYgVshT7Dyg/tQTNlTUX5W8/j3y+/0
-         oLeuWhBADjU9GVaJY0lB8/isl3M0MW04ighymDUsMsnqIfi/P5fnT+XSMXYD0zaMMb
-         zBWq/CAucu6GonWGiqxv6pUDqdOyGhmG8tBnS7Roi1qBg8EpVI7p2IgvzVSP97+WR9
-         lyjBHLtmUn5sDawDBwNFeMl4KHETGG7sUPSiTNMOf8WL6qvFu/xPZqnt2iVxoSdEKE
-         +9cRclOPvXUcAnla+INmBFLYzI9D1GG2k3Q7nqWou25V2TZNIUwmzMiV9eKMng3G+r
-         BqyhY/DNrw/0Q==
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     linux-arch@vger.kernel.org
-Cc:     dan.j.williams@intel.com, peterz@infradead.org,
-        mark.rutland@arm.com, dave.jiang@intel.com,
-        Jonathan.Cameron@huawei.com, a.manzanares@samsung.com,
-        bwidawsk@kernel.org, alison.schofield@intel.com,
-        ira.weiny@intel.com, linux-cxl@vger.kernel.org,
-        nvdimm@lists.linux.dev, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dave@stgolabs.net
-Subject: [PATCH v2] arch/cacheflush: Introduce flush_all_caches()
-Date:   Fri, 19 Aug 2022 10:10:24 -0700
-Message-Id: <20220819171024.1766857-1-dave@stgolabs.net>
-X-Mailer: git-send-email 2.37.2
+        Fri, 19 Aug 2022 13:45:53 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4465E108F2F;
+        Fri, 19 Aug 2022 10:10:29 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id w138so2229947pfc.10;
+        Fri, 19 Aug 2022 10:10:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=7WjX18+SJwTo5iBm+RDyyQ38vzw7KWPpCCkeot28T3I=;
+        b=S2LQx7r114T3Une2zfGFyLwMrHa53oIGdjnC12/4bfWAbMWUv2OE+868ZxwJnKnTK5
+         gIVgFaQYliBJlbsl93dYwckLq4nOrsq10YPb+jlSAjq9Umnyphckr+qnSL2aQVpzGVto
+         vewKy7me+Lzo+L3NyBQSpckbYXsXXPhMFBybX8rTpvLr/JylVeX0hnH49TJcdqZADlz/
+         EAdt9R3Hp5ulkjlW1/sWG3jBtntFH3F7J/pb/QIn81PIGqEbXw1nDsCA6B2zLes55j0a
+         lqyzknuwoXDpW3Yokmnj3pI8Unzw9HnSTknRp/Z9t7fKbEETpV2Eg4zTWPxQK3Pq9zlH
+         pV1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=7WjX18+SJwTo5iBm+RDyyQ38vzw7KWPpCCkeot28T3I=;
+        b=gpRYK45372CdZburhq2qQvsLrXqTSmpo5WCUgwfhggzYTe7gFgvs2TkNe04Y5m8ZIq
+         DR3JeYR9E2YqP6W6iferXqT81Wzn5v8lIGs9TEf4oC6j20mg+AfRK41Krx6QvBXSmTMg
+         j2AvdyRal43zHg01WHbfnJ5OVtIAGdZXuWdukjMl2gN+Y3Y+J7/Z0Q3b15N/O50foq8i
+         pEZRfr26gP6lcSso/fSSS+tNXaU/OB7MCKL7rJrkbjWYXCqE+3b0DughXfzP9KhpbU8a
+         uquAxBS1Piooq8Y4GePHgZYrJ0YQM4IsrhRE2uukwmYZ8ZyyO2Io/PtMIS6SIxbAfYRy
+         RV/Q==
+X-Gm-Message-State: ACgBeo0SbzLVbU8tkkLh12kPL9Uch1txTMb4ISpriUE8vVWtUmXcdhcJ
+        DfMu7A+a9JmtcpkBDZCfcOM=
+X-Google-Smtp-Source: AA6agR4N4u7pHPc2TIUiawaqfkhsiNKVDn/EG+sF93jrjzRMMKCrNOEKARKB8/S+80/4KDYKfmdAPw==
+X-Received: by 2002:a65:6854:0:b0:41c:feab:e17c with SMTP id q20-20020a656854000000b0041cfeabe17cmr7097086pgt.256.1660929028734;
+        Fri, 19 Aug 2022 10:10:28 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:db7d])
+        by smtp.gmail.com with ESMTPSA id f23-20020a17090a121700b001f94d25bfabsm5451928pja.28.2022.08.19.10.10.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 10:10:28 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 19 Aug 2022 07:10:26 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>, ke.wang@unisoc.com,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [RFC PATCH] memcg: use root_mem_cgroup when css is inherited
+Message-ID: <Yv/EArPDTcCrGqJh@slm.duckdns.org>
+References: <1660908562-17409-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <Yv+6YjaGAv52yvq9@slm.duckdns.org>
+ <CALvZod7QdLSMdBoD2WztL72qS8kJe7F79JuCH6t19rRcw6Pn1w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALvZod7QdLSMdBoD2WztL72qS8kJe7F79JuCH6t19rRcw6Pn1w@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With CXL security features, global CPU cache flushing nvdimm requirements
-are no longer specific to that subsystem, even beyond the scope of
-security_ops. CXL will need such semantics for features not necessarily
-limited to persistent memory.
+On Fri, Aug 19, 2022 at 10:08:59AM -0700, Shakeel Butt wrote:
+> On Fri, Aug 19, 2022 at 9:29 AM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > On Fri, Aug 19, 2022 at 07:29:22PM +0800, zhaoyang.huang wrote:
+> > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > >
+> > > It is observed in android system where per-app cgroup is demanded by freezer
+> > > subsys and part of groups require memory control. The hierarchy could be simplized
+> > > as bellowing where memory charged on group B abserved while we only want have
+> > > group E's memory be controlled and B's descendants compete freely for memory.
+> > > This should be the consequences of unified hierarchy.
+> > > Under this scenario, less efficient memory reclaim is observed when comparing
+> > > with no memory control. It is believed that multi LRU scanning introduces some
+> > > of the overhead. Furthermore, page thrashing is also heavier than global LRU
+> > > which could be the consequences of partial failure of WORKINGSET mechanism as
+> > > LRU is too short to protect the active pages.
+> > >
+> > > A(subtree_control = memory) - B(subtree_control = NULL) - C()
+> > >                                                       \ D()
+> > >                           - E(subtree_control = memory) - F()
+> > >                                                         \ G()
+> > >
+> > > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> >
+> > Just in case it wasn't clear.
+> >
+> > Nacked-by: Tejun Heo <tj@kernel.org>
+> >
+> > Thanks.
+> >
+> 
+> Was there a previous discussion on this? The commit message is unreadable.
 
-The functionality this is enabling is to be able to instantaneously
-secure erase potentially terabytes of memory at once and the kernel
-needs to be sure that none of the data from before the secure is still
-present in the cache. It is also used when unlocking a memory device
-where speculative reads and firmware accesses could have cached poison
-from before the device was unlocked.
+http://lkml.kernel.org/r/1660298966-11493-1-git-send-email-zhaoyang.huang@unisoc.com
 
-This capability is typically only used once per-boot (for unlock), or
-once per bare metal provisioning event (secure erase), like when handing
-off the system to another tenant or decomissioning a device. That small
-scope plus the fact that none of this is available to a VM limits the
-potential damage.
+Thanks.
 
-While the scope of this is for physical address space, add a new
-flush_all_caches() in cacheflush headers such that each architecture
-can define it, when capable. For x86 just use the wbinvd hammer and
-prevent any other arch from being capable.
-
-Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
----
-
-Changes from v1 (https://lore.kernel.org/all/20220815160706.tqd42dv24tgb7x7y@offworld/):
-- Added comments and improved changelog to reflect this is
-  routine should be avoided and not considered a general API (Peter, Dan).
-
- arch/x86/include/asm/cacheflush.h |  4 +++
- drivers/acpi/nfit/intel.c         | 41 ++++++++++++++-----------------
- include/asm-generic/cacheflush.h  | 31 +++++++++++++++++++++++
- 3 files changed, 53 insertions(+), 23 deletions(-)
-
-diff --git a/arch/x86/include/asm/cacheflush.h b/arch/x86/include/asm/cacheflush.h
-index b192d917a6d0..ac4d4fd4e508 100644
---- a/arch/x86/include/asm/cacheflush.h
-+++ b/arch/x86/include/asm/cacheflush.h
-@@ -10,4 +10,8 @@
- 
- void clflush_cache_range(void *addr, unsigned int size);
- 
-+/* see comments in the stub version */
-+#define flush_all_caches() \
-+	do { wbinvd_on_all_cpus(); } while(0)
-+
- #endif /* _ASM_X86_CACHEFLUSH_H */
-diff --git a/drivers/acpi/nfit/intel.c b/drivers/acpi/nfit/intel.c
-index 8dd792a55730..f2f6c31e6ab7 100644
---- a/drivers/acpi/nfit/intel.c
-+++ b/drivers/acpi/nfit/intel.c
-@@ -4,6 +4,7 @@
- #include <linux/ndctl.h>
- #include <linux/acpi.h>
- #include <asm/smp.h>
-+#include <linux/cacheflush.h>
- #include "intel.h"
- #include "nfit.h"
- 
-@@ -190,8 +191,6 @@ static int intel_security_change_key(struct nvdimm *nvdimm,
- 	}
- }
- 
--static void nvdimm_invalidate_cache(void);
--
- static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
- 		const struct nvdimm_key_data *key_data)
- {
-@@ -210,6 +209,9 @@ static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
- 	};
- 	int rc;
- 
-+	if (!flush_all_caches_capable())
-+		return -EINVAL;
-+
- 	if (!test_bit(NVDIMM_INTEL_UNLOCK_UNIT, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-@@ -228,7 +230,7 @@ static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
- 	}
- 
- 	/* DIMM unlocked, invalidate all CPU caches before we read it */
--	nvdimm_invalidate_cache();
-+	flush_all_caches();
- 
- 	return 0;
- }
-@@ -294,11 +296,14 @@ static int __maybe_unused intel_security_erase(struct nvdimm *nvdimm,
- 		},
- 	};
- 
-+	if (!flush_all_caches_capable())
-+		return -EINVAL;
-+
- 	if (!test_bit(cmd, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
- 	/* flush all cache before we erase DIMM */
--	nvdimm_invalidate_cache();
-+	flush_all_caches();
- 	memcpy(nd_cmd.cmd.passphrase, key->data,
- 			sizeof(nd_cmd.cmd.passphrase));
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
-@@ -318,7 +323,7 @@ static int __maybe_unused intel_security_erase(struct nvdimm *nvdimm,
- 	}
- 
- 	/* DIMM erased, invalidate all CPU caches before we read it */
--	nvdimm_invalidate_cache();
-+	flush_all_caches();
- 	return 0;
- }
- 
-@@ -338,6 +343,9 @@ static int __maybe_unused intel_security_query_overwrite(struct nvdimm *nvdimm)
- 		},
- 	};
- 
-+	if (!flush_all_caches_capable())
-+		return -EINVAL;
-+
- 	if (!test_bit(NVDIMM_INTEL_QUERY_OVERWRITE, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-@@ -355,7 +363,7 @@ static int __maybe_unused intel_security_query_overwrite(struct nvdimm *nvdimm)
- 	}
- 
- 	/* flush all cache before we make the nvdimms available */
--	nvdimm_invalidate_cache();
-+	flush_all_caches();
- 	return 0;
- }
- 
-@@ -377,11 +385,14 @@ static int __maybe_unused intel_security_overwrite(struct nvdimm *nvdimm,
- 		},
- 	};
- 
-+	if (!flush_all_caches_capable())
-+		return -EINVAL;
-+
- 	if (!test_bit(NVDIMM_INTEL_OVERWRITE, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
- 	/* flush all cache before we erase DIMM */
--	nvdimm_invalidate_cache();
-+	flush_all_caches();
- 	memcpy(nd_cmd.cmd.passphrase, nkey->data,
- 			sizeof(nd_cmd.cmd.passphrase));
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
-@@ -401,22 +412,6 @@ static int __maybe_unused intel_security_overwrite(struct nvdimm *nvdimm,
- 	}
- }
- 
--/*
-- * TODO: define a cross arch wbinvd equivalent when/if
-- * NVDIMM_FAMILY_INTEL command support arrives on another arch.
-- */
--#ifdef CONFIG_X86
--static void nvdimm_invalidate_cache(void)
--{
--	wbinvd_on_all_cpus();
--}
--#else
--static void nvdimm_invalidate_cache(void)
--{
--	WARN_ON_ONCE("cache invalidation required after unlock\n");
--}
--#endif
--
- static const struct nvdimm_security_ops __intel_security_ops = {
- 	.get_flags = intel_security_flags,
- 	.freeze = intel_security_freeze,
-diff --git a/include/asm-generic/cacheflush.h b/include/asm-generic/cacheflush.h
-index 4f07afacbc23..89f310f92498 100644
---- a/include/asm-generic/cacheflush.h
-+++ b/include/asm-generic/cacheflush.h
-@@ -115,4 +115,35 @@ static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
- 	memcpy(dst, src, len)
- #endif
- 
-+/*
-+ * Flush the entire caches across all CPUs, however:
-+ *
-+ *       YOU DO NOT WANT TO USE THIS FUNCTION.
-+ *
-+ * It is considered a big hammer and can affect overall
-+ * system performance and increase latency/response times.
-+ * As such it is not for general usage, but for specific use
-+ * cases involving instantaneously invalidating wide swaths
-+ * of memory on bare metal.
-+
-+ * Unlike the APIs above, this function can be defined on
-+ * architectures which have VIPT or PIPT caches, and thus is
-+ * beyond the scope of virtual to physical mappings/page
-+ * tables changing.
-+ *
-+ * The limitation here is that the architectures that make
-+ * use of it must can actually comply with the semantics,
-+ * such as those which caches are in a consistent state. The
-+ * caller can verify the situation early on.
-+ */
-+#ifndef flush_all_caches
-+# define flush_all_caches_capable() false
-+static inline void flush_all_caches(void)
-+{
-+	WARN_ON_ONCE("cache invalidation required\n");
-+}
-+#else
-+# define flush_all_caches_capable() true
-+#endif
-+
- #endif /* _ASM_GENERIC_CACHEFLUSH_H */
 -- 
-2.37.2
-
+tejun

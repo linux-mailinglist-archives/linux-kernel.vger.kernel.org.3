@@ -2,109 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DC25991D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 02:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FC55991DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 02:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245423AbiHSAkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 Aug 2022 20:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
+        id S1343565AbiHSAkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 Aug 2022 20:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241426AbiHSAk2 (ORCPT
+        with ESMTP id S241426AbiHSAku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 Aug 2022 20:40:28 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E810D7D3C;
-        Thu, 18 Aug 2022 17:40:27 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 2A636580E5D;
-        Thu, 18 Aug 2022 20:40:25 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 18 Aug 2022 20:40:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660869625; x=1660876825; bh=p4
-        mrdAhfuXrXkbUMCbpYFq9iim/KI6Q1KeIWNni0Pu8=; b=NmfuW1+kY6jqCU+SOB
-        OECgLcjgfa/gkmj9WAQWHrJD2/c3qc7nnUazVUk975wdVftGPDZXi2dYd4VJlXps
-        pRzBpT25IAYRcsHhb7UXxtcuflc66clE4gkYqkYMfuIGsxGOO4Mo6n9vy4TbbePv
-        yBvxD+OcV+nUrqJdK4J4VrhHOn6Dh4g3iWomVQfeY1QK/C5oo0Oh6tr+ERqPQMm/
-        i7WrGOmMzO20ibGuUivoDpDcehqVDc1tMFLXwnSCECRO27CUzxCo+ikHKB84LSj0
-        2YqTH1XDybKxylJkysD/9Vw2GqO6En0Zr+bxEgi2mulkmu4V1uTFB42pTofZ42y7
-        pOBQ==
+        Thu, 18 Aug 2022 20:40:50 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8625FD806F;
+        Thu, 18 Aug 2022 17:40:47 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id E8BF05C004F;
+        Thu, 18 Aug 2022 20:40:45 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute3.internal (MEProxy); Thu, 18 Aug 2022 20:40:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660869645; x=1660956045; bh=hKTkgJE0Em
+        hoc0KV5we9aVtrEb2/1qqim2MoVzcgNlc=; b=e3KNLBFMzdrV5ln0JmwiYxzfz0
+        ApOZ4LAZ6OWcQk/D+QdrOpuNR2Z+Cooc2WqCGSLwNDD8kxrvhsdv5xAz4PllADPC
+        wM6bTRb+kNxC7J7An7JBHEsOD5aUBKajKWSe/tJeXk8F+vXQKvYaV+qSWudkKtQB
+        Q9VoBK7PfLv/WfaJWqZTQDIl7nUIlViLzphq0/jmIVVoYN6yFed+b2uQFr0gar41
+        hSDHIo1PE3gnt79Rsud/cSN8b/8WwL0DCljxyllGd7UGRWnJ3XZyFrRnvXdIUmJU
+        KCigc3NSBFzhvoNTUBN7VQSrEIBaYzFYWsKPXUzOsUqvn+sLQoN55pqT2U1w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        messagingengine.com; h=cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660869625; x=1660876825; bh=p4mrdAhfuXrXkbUMCbpYFq9iim/K
-        I6Q1KeIWNni0Pu8=; b=zxN4ID6gqcZMZFi8RRRCqCJJz67/hlDBmIXr5jMDNL7J
-        Vwlbb+o3pWLxQLrkZKs73qUn9/G22KzobJM2Jl9O3KX7JfWy8k8c1xkZpCxVN9WN
-        c00bSD4/geEGawIMVcoMPAkKeghrFaVGsJA3qfQJ+oRqw2xSLwBMFIZpRH3IVJG8
-        Zt86YzEpUzOJMNgH0PLfyvpiIbmSH7yVHevlA/KJ6yD2K4mMagqIDeKaIPrcMCR+
-        M/ji5zqZU/m+yB8GLeVVmDfdSJ/wcNIGTd6h+ZgRK3B2Zu9Bup7h2qXawrZCQQyC
-        fjNPXMtQFfPMWzHkfo+l1ZWfQYMTSh0d9NDp8BLonQ==
-X-ME-Sender: <xms:99v-Yguo4sXKdcYloGScFZLpjFVcdsWZEue-M1d_aSugtfVgFE0PgQ>
-    <xme:99v-YteKlaDAXzZrY5Q7ajRii4Spnlk3QnOkHFRj7meDmdCXaXBQ3dL9-ckV7WqnB
-    xnWlyo3ThZy_C2RBU0>
-X-ME-Received: <xmr:99v-Yryf_SG4XVAtEfsYgZcJ3dxZwV8_ZLtSRV-uOvVorPrG9mI1zqhG9KlR3myN6ZGf_A>
+        fm1; t=1660869645; x=1660956045; bh=hKTkgJE0Emhoc0KV5we9aVtrEb2/
+        1qqim2MoVzcgNlc=; b=g19ZwDjpwZXpIHfXWknm8aq9Hj+TwAhKOOiHU/lR7CtG
+        zAEvnj5oKFXct5/wpjL/FiZPv6q46oVM7/prf7W8p1Wwy2fmqFeieBUa9jSvphSc
+        Droaj3pzFKl12Ay1WcP7qlerWvyXOh9jYxQUweCHCIX7r7wuR48C5GLdHbZVLscL
+        EyRY+pi+2uGSmNhPa0iq7XszAJlpAr15KqMbT3oaud5QyeTcz1qLtnYYbdIzZcK5
+        9xo/o7zEXKLfEtq+8USRydVqJYNkhQVMWVtk7HtAhEU6rvWIETVEEp1aj7BrmH/t
+        TZIBLFNm25TNfX7gf1Sk9iizXtFwqnZE43WTAGsfJw==
+X-ME-Sender: <xms:Ddz-Ys0-ONHJpseK2y0wnQGeqI2jaAv3nWrptauIQCqO0bZ8U0sVMQ>
+    <xme:Ddz-YnEHUZCf2-AnEkql-bV7c-2yTxliygidanxhd5eLaitoi2bq8-eD4makMZNwm
+    _eJPWaJqtZPBebOnQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeitddgfeekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:99v-YjNXs-TyttYJAcbSZqpXqruhIjPf74NygKPH72sFr0vzEnXA_Q>
-    <xmx:99v-Yg-3-1lIdhYqJkEpnHGqR3EY0j38u01Fr5ghV6lowELnpxWTIw>
-    <xmx:99v-YrUHX7v-hUiBnmBx_peHkRqQJLNybs1S_IxmlhX7GebIRTLP2Q>
-    <xmx:-dv-YszGL-rTfN2_TUO-BqTH0iFUn_7vbveOClqgPpv1wXSMp-azIw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 18 Aug 2022 20:40:22 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id CB4DD104AA5; Fri, 19 Aug 2022 03:40:18 +0300 (+03)
-Date:   Fri, 19 Aug 2022 03:40:18 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
-Subject: Re: [PATCH v6 6/8] KVM: Handle page fault for private memory
-Message-ID: <20220819004018.mgdvxhl6dj3ujl3f@box.shutemov.name>
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <20220519153713.819591-7-chao.p.peng@linux.intel.com>
- <YqzyjZnflCMPo8b/@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqzyjZnflCMPo8b/@google.com>
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
+    grthhtvghrnhephefhfeekgfekudevheffheeihedujeefjeevjeefudfgfeeutdeuvdeh
+    hfevueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghnughrvgifsegrjhdrihgurdgruh
+X-ME-Proxy: <xmx:Ddz-Yk4JvBCnbiGqQKoR1Dzu1dkvJJtUQJYdU6wADRjzzoQErJ1CSg>
+    <xmx:Ddz-Yl12N43ZaVw5U-tfGvS2THFrChJL4Z7w-GJk_xKyBYsApQWAyg>
+    <xmx:Ddz-YvG39PTDjnc58Umc1jsk_ANIC2uV5JV1Sj5XKtpPC32Eo7Sz2Q>
+    <xmx:Ddz-YgOpuE2nfaNANOws3Bi_Zgn2IMZoryaLn1FSe_nZAMA9avIn7Q>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 03D201700082; Thu, 18 Aug 2022 20:40:45 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <6845561a-cb33-4939-a760-2a5722134851@www.fastmail.com>
+In-Reply-To: <20220818101839.28860-1-billy_tsai@aspeedtech.com>
+References: <20220818101839.28860-1-billy_tsai@aspeedtech.com>
+Date:   Fri, 19 Aug 2022 10:10:23 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Billy Tsai" <billy_tsai@aspeedtech.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Joel Stanley" <joel@jms.id.au>, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pinctrl: aspeed: Force to disable the function's signal
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -115,34 +85,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 09:30:53PM +0000, Sean Christopherson wrote:
-> > @@ -4088,7 +4144,12 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
-> >  		read_unlock(&vcpu->kvm->mmu_lock);
-> >  	else
-> >  		write_unlock(&vcpu->kvm->mmu_lock);
-> > -	kvm_release_pfn_clean(fault->pfn);
-> > +
-> > +	if (fault->is_private)
-> > +		kvm_private_mem_put_pfn(fault->slot, fault->pfn);
+Hi Billy,
+
+On Thu, 18 Aug 2022, at 19:48, Billy Tsai wrote:
+> When the driver want to disable the signal of the function, it doesn't
+> need to query the state of the mux function's signal on a pin. The
+> condition below will miss the disable of the signal:
+> Ball | Default | P0 Signal | P0 Expression               | Other
+> -----+---------+-----------+-----------------------------+----------
+>  E21   GPIOG0    SD2CLK      SCU4B4[16]=1 & SCU450[1]=1    GPIOG0
+> -----+---------+-----------+-----------------------------+----------
+>  B22   GPIOG1    SD2CMD      SCU4B4[17]=1 & SCU450[1]=1    GPIOG1
+> -----+---------+-----------+-----------------------------+----------
+> Assume the register status like below:
+> SCU4B4[16] == 1 & SCU4B4[17] == 1 & SCU450[1]==1
+> After the driver set the Ball E21 to the GPIOG0:
+> SCU4B4[16] == 0 & SCU4B4[17] == 1 & SCU450[1]==0
+> When the driver want to set the Ball B22 to the GPIOG1, the condition of
+> the SD2CMD will be false causing SCU4B4[17] not to be cleared.
+>
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> ---
+>  drivers/pinctrl/aspeed/pinctrl-aspeed.c | 11 +----------
+>  1 file changed, 1 insertion(+), 10 deletions(-)
+>
+> diff --git a/drivers/pinctrl/aspeed/pinctrl-aspeed.c 
+> b/drivers/pinctrl/aspeed/pinctrl-aspeed.c
+> index 83d47ff1cea8..a30912a92f05 100644
+> --- a/drivers/pinctrl/aspeed/pinctrl-aspeed.c
+> +++ b/drivers/pinctrl/aspeed/pinctrl-aspeed.c
+> @@ -92,19 +92,10 @@ static int aspeed_sig_expr_enable(struct 
+> aspeed_pinmux_data *ctx,
+>  static int aspeed_sig_expr_disable(struct aspeed_pinmux_data *ctx,
+>  				   const struct aspeed_sig_expr *expr)
+>  {
+> -	int ret;
+> -
+>  	pr_debug("Disabling signal %s for %s\n", expr->signal,
+>  		 expr->function);
 > 
-> Why does the shmem path lock the page, and then unlock it here?
+> -	ret = aspeed_sig_expr_eval(ctx, expr, true);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	if (ret)
+> -		return aspeed_sig_expr_set(ctx, expr, false);
+> -
+> -	return 0;
+> +	return aspeed_sig_expr_set(ctx, expr, false);
 
-Lock is require to avoid race with truncate / punch hole. Like if truncate
-happens after get_pfn(), but before it gets into SEPT we are screwed.
+Okay, maybe I was short-circuiting things in a way that wasn't quite 
+right. However, I'm a little nervous that we'll end up whacking state 
+that we can't restore and give ourselves mux-request ordering problems. 
+The Aspeed pin controllers are such a complex sea of state. Hopefully 
+we get away without needing to fix the theory behind the driver's 
+implementation.
 
-> Same question for why this path marks it dirty?  The guest has the page mapped
-> so the dirty flag is immediately stale.
+This code is common to the 2400, 2500 and 2600, have you tested the 
+patch on platforms for each to get coverage for the various pin state 
+expressions we have?
 
-If page is clean and refcount is not elevated, vmscan is free to drop the
-page from page cache. I don't think we want this.
+I also wonder if we can write kunit tests to build some confidence with 
+the expected SCU bit state patterns for a given set of desired mux 
+states. Is this something you've looked at (it would be handy if kunit 
+can intercept regmap accesses)?
 
-> In other words, why does KVM need to do something different for private pfns?
-
-Because in the traditional KVM memslot scheme, core mm takes care about
-this.
-
-The changes in v7 is wrong. Page has be locked until it lends into SEPT and
-must make it dirty before unlocking.
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Andrew

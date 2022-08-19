@@ -2,99 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23EFB599E3D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2BE599E23
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349738AbiHSP1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 11:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        id S1349741AbiHSP1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 11:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349607AbiHSP1T (ORCPT
+        with ESMTP id S1349704AbiHSP12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:27:19 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DE1C6CE6;
-        Fri, 19 Aug 2022 08:27:18 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id z25so6595439lfr.2;
-        Fri, 19 Aug 2022 08:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=p5gHKc64IQrYIvaRf5pn4OxOQejsfeLYroqX8+JBN2s=;
-        b=g2GksgmUHPPD6aYRY8RFOqoMKTAukjx1YbLYMHSP2mj0GuYfsq9SaCpOKzhOj7LuKp
-         16PAqm6uRvPf4dLt2ym2eFVmFEwFfbvAU7X4Mis/K1laFgA3rC6OoV86l3hcTpWjF9td
-         yeqX72Gh2XNy4Dn77lTNARquOZod3/xnkZ411KrPp1TPGbFcvV/CAAI+dOzns8laXUzV
-         EVe5hwEWsZY9duiRIzh19SW0ClH/oXyiM183cwJrNaxNcxuDzE4B33Nnjn3TFMF+gEJR
-         bYIodOnB8uoqk+6u4em8UR9TfRpjYmCtzXLftf+Aoww2nOjwwTCW3u+Ah6jPsedn7olo
-         Ah7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=p5gHKc64IQrYIvaRf5pn4OxOQejsfeLYroqX8+JBN2s=;
-        b=W3VHp5O/yQPS2aSoNgvlbomifkyMK/qQM39lm23ibR133kATeyBfC60CVG172f+s8l
-         9rdB8bolGd9cdnlZ5SN19jczzntalZQWUnVyeIWLR/JuH9G6cggBHN5HNYYJu6KzYyXV
-         mdLY4x5g9N8WIW47Kg1sOzOh+C6oAzxPISoQLMskbyu5ciffB2krOIF0OdcWx0GlWQOz
-         hFxd6XN6TcmuVwLiuf9Q3E1GPs0MZEm48tQZ/hKw4xzipU1EXoWvJbvzlNtutAn9/4Tg
-         ip6BK/1gSdOMuqWEkorV/0HX/FmMML2l4xTZTxcBq4BMs66nZZiI08xTnEwToghNY7lY
-         OaAw==
-X-Gm-Message-State: ACgBeo3GsXD3RCY94QOHZhojFmSF1xT9KBCXLJ6BBGb1YVWOPlJJ8jEr
-        FR/ljQGaj+YWXH61hs84xOc=
-X-Google-Smtp-Source: AA6agR7RyPHVh7iBKwYNtti1bimItwcTcp0zNGnx1FZ7u9a0hsofIEGuOWgh7eI4hGrxgcnE8UyaSw==
-X-Received: by 2002:a05:6512:2211:b0:48a:f0c1:5d01 with SMTP id h17-20020a056512221100b0048af0c15d01mr2421234lfu.249.1660922836992;
-        Fri, 19 Aug 2022 08:27:16 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru. [109.252.119.13])
-        by smtp.googlemail.com with ESMTPSA id p4-20020ac24ec4000000b0048b3926351bsm607080lfr.56.2022.08.19.08.27.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 08:27:16 -0700 (PDT)
-Message-ID: <89a746fd-a98e-3147-7811-33c5051c2b6d@gmail.com>
-Date:   Fri, 19 Aug 2022 18:27:10 +0300
+        Fri, 19 Aug 2022 11:27:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC5AFAC53;
+        Fri, 19 Aug 2022 08:27:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0E12615B0;
+        Fri, 19 Aug 2022 15:27:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA5FC433C1;
+        Fri, 19 Aug 2022 15:27:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660922847;
+        bh=TVSnyBkAa8N3fNZeD8W6C9YN5G3keWy7HS55wvxIhzk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JA3/MYCi8aKQI5FCRVhTdn+ixn3NBhsnoDJTw67CciTWaHQsveUteYI5WYTGcJ1+3
+         DaIEBkklvSV7vaWfbjBY9ZNFfqm/w119As80OZGIa1hqGrC5tobRCQWoVFxorplNMe
+         yn18eFS/sziqUMeMsZTqdEMdinpy7pn8uc5d5SXs=
+Date:   Fri, 19 Aug 2022 17:27:24 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     kishon@ti.com, lpieralisi@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mie@igel.co.jp, kw@linux.com
+Subject: Re: [PATCH 3/5] tools: PCI: Fix parsing the return value of IOCTLs
+Message-ID: <Yv+r3BwBel8X/8gE@kroah.com>
+References: <20220819145018.35732-1-manivannan.sadhasivam@linaro.org>
+ <20220819145018.35732-4-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH RESEND 1/2] i2c: tegra: Add GPCDMA support
-Content-Language: en-US
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Akhil R <akhilrajeev@nvidia.com>, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, christian.koenig@amd.com,
-        jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, sumit.semwal@linaro.org,
-        thierry.reding@gmail.com, wsa@kernel.org
-References: <20220819122313.40445-1-akhilrajeev@nvidia.com>
- <20220819122313.40445-2-akhilrajeev@nvidia.com>
- <20281ca7-e597-7030-4861-5f9a3594726d@gmail.com>
-In-Reply-To: <20281ca7-e597-7030-4861-5f9a3594726d@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819145018.35732-4-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-19.08.2022 18:15, Dmitry Osipenko пишет:
-> 19.08.2022 15:23, Akhil R пишет:
->>  	if (of_device_is_compatible(np, "nvidia,tegra210-i2c-vi"))
->>  		i2c_dev->is_vi = true;
->> +	else
->> +		i2c_dev->dma_support = !!(of_find_property(np, "dmas", NULL));
+On Fri, Aug 19, 2022 at 08:20:16PM +0530, Manivannan Sadhasivam wrote:
+> "pci_endpoint_test" driver now returns 0 for success and negative error
+> code for failure. So adapt to the change by reporting FAILURE if the
+> return value is < 0, and SUCCESS otherwise.
 > 
-> 1. You leak the np returned by of_find_property().
-> 
-> 2. There is device_property_read_bool() for this kind of property-exists
-> checks.
-> 
-> 3. If "dmas" is missing in DT, then dma_request_chan() should return
-> NULL and everything will work fine. I suppose you haven't tried to test
-> this code.
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Although, no. It should return ERR_PTR(-ENODEV) and then you should
-check the return code.
+Fixes: tag and cc: stable?
+
+thanks,
+
+greg k-h

@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC19599D98
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 465D9599DA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 16:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349480AbiHSO20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 10:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
+        id S231866AbiHSO2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 10:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349541AbiHSO2V (ORCPT
+        with ESMTP id S231433AbiHSO2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 10:28:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2421E32;
-        Fri, 19 Aug 2022 07:28:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 19 Aug 2022 10:28:50 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BB326123;
+        Fri, 19 Aug 2022 07:28:48 -0700 (PDT)
+Received: from [10.172.66.188] (1.general.jsalisbury.us.vpn [10.172.66.188])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2312A61199;
-        Fri, 19 Aug 2022 14:28:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CABEFC433C1;
-        Fri, 19 Aug 2022 14:28:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660919294;
-        bh=W6ZfbKa2VF0MiVjMNZj4uo2J9tIHd+e1pEfszl8HrnY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F7aK1+c8laxCqDdunn8O7uTKalWW8Lz9Isned6yIgCNuZnPcEmhK/XcSKoAFXa+21
-         +TXBc82RaKwCQWvmvRfnyiXsIkECmEl8vXlJas0QQEXghJhrjPHX5BlZGGJOTk64EV
-         45TDsZGyNsvrADmdHtyqCAzkrIG6nh6L+srEjmNrNxI61GZ4xfT6+zSBu4sA62vV8j
-         HHLGWgnhw8Ma2PhmduPuzhiaw6yT9HolBaZ4OxVKO1vbj9Q6vumpLUAiMnzjWHtHj3
-         qpV4IK1GhR0O+IwEE98pzNw7P1jJk0zVzqg4mVOdReMX8oKhmHhapk0EGp8UDZSCKW
-         SMKhUs10DPbGg==
-Date:   Fri, 19 Aug 2022 15:28:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     sanju.mehta@amd.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        krisman@collabora.com, alvaro.soliverez@collabora.com,
-        Lucas Tanure <tanureal@opensource.cirrus.com>
-Subject: Re: [PATCH v2] spi: amd: Configure device speed
-Message-ID: <Yv+d+byNXO3z9JaF@sirena.org.uk>
-References: <20220819123630.368462-1-shreeya.patel@collabora.com>
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id C7D503F131;
+        Fri, 19 Aug 2022 14:28:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1660919326;
+        bh=jX/B2ux5/uBy+wzYzZZpmZkCJnX1pejB4rk9LuMf2Co=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+         In-Reply-To:Content-Type;
+        b=eXTYlHcxYaMv7YYKKK/pWWQxzFlg5AS34Q/Zu+mEmLwKItAuRGJWx00JuLbmQaGRU
+         Y5Y2VpYws7Do9CdL8a7ZMfpSgK+gDlOlklk5Pz7aESNERyZydDDPn0zJ0WUgfaW+xP
+         ombpwvBIeXnfslvpo1dkcVl6DeQ2oS8YDrW9ggm9d10C05CQR1LueAdCv/DSGkxoXe
+         0dpnU0KV26WVyO6egH1TYuakhn+U4p5GSTecw49PGEFSDHooqRXeVZXC1+A+9Sw8s6
+         3+JKByzsf/Iu+K1QBfMA+gn77gFvxuGRDFL0F88dQGZ+SDXLM6gidLZooMyhdQJ+y7
+         wF8GzhyO8xymA==
+Message-ID: <c92c1bee-44db-3d78-57e5-03e6f1dc51c9@canonical.com>
+Date:   Fri, 19 Aug 2022 10:28:44 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aqSctdl6o5lEG6db"
-Content-Disposition: inline
-In-Reply-To: <20220819123630.368462-1-shreeya.patel@collabora.com>
-X-Cookie: You may be recognized soon.  Hide.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC} Commit 8a99b6833c88 Moves Important Real-time Settings To
+ DebugFS
+Content-Language: en-US
+From:   Joseph Salisbury <joseph.salisbury@canonical.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-rt-users@vger.kernel.org, williams@redhat.com,
+        bigeasy@linutronix.de, valentin.schneider@arm.com,
+        linux-kernel@vger.kernel.org,
+        Marcelo Cerri <marcelo.cerri@canonical.com>
+References: <9e6a7216-9cb9-cba4-f150-1a0eaf56353c@canonical.com>
+ <Yv6hl3D2TRL6jzrL@worktop.programming.kicks-ass.net>
+ <b107a46a-7f53-0b35-71f4-9a909643c4c1@canonical.com>
+In-Reply-To: <b107a46a-7f53-0b35-71f4-9a909643c4c1@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,35 +63,70 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---aqSctdl6o5lEG6db
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 19, 2022 at 06:06:30PM +0530, Shreeya Patel wrote:
-> From: Lucas Tanure <tanureal@opensource.cirrus.com>
->=20
-> Number of clock frequencies are supported by AMD controller
-> which are mentioned in the amd_spi_freq structure table.
->=20
-> Create mechanism to configure device clock frequency such
-> that it is strictly less than the requested frequency.
+On 8/18/22 21:38, Joseph Salisbury wrote:
+>
+>
+> On 8/18/22 16:31, Peter Zijlstra wrote:
+>> On Thu, Aug 18, 2022 at 03:53:28PM -0400, Joseph Salisbury wrote:
+>>> Hello,
+>>>
+>>> Some Ubuntu users are using the tuned package with a 5.15.x based 
+>>> real-time
+>>> kernel.  Tuned adjusts various sysctl options based on a specified 
+>>> profile.
+>>> This userspace package has stopped working > 5.13 due to the following
+>>> commit:
+>>>
+>>> 8a99b6833c88 "(sched: Move SCHED_DEBUG sysctl to debugfs)"
+>>>
+>>> This commit moved some important real-time sysctl knobs to debugfs in
+>>> 5.13-rc1.  It also appears some of the sysctl options were not moved,
+>>> sched_min_granularity_ns, for example.
+>>>
+>>> I was hoping to get some feedback on how to approach this. Would 
+>>> upstream
+>>> real-time consider accepting a patch to the 5.15 real-time patch set 
+>>> that
+>>> reverts this commit?  Or a new patch that adds the sysctl settings 
+>>> back?
+>>> Any other ideas or feedback would be appreciated!
+>> None of those knobs were available when SCHED_DEBUG=n, so relying on
+>> them is your error to begin with.
+> We have had SCHED_DEBUG=y while this kernel is in beta, so you are 
+> correct.  I need to investigate a different approach.
+>>
+>> Secondly, real-time? Which if those values affects anything in
+>> SCHED_FIFO/RR/DEADLINE ?
+> I am in the process of understanding how tuned[0] works. Many users 
+> have reported success using tuned.  One use case for tuned is to 
+> assign isolated cores to real-time processes and then move managed 
+> IRQs out of these isolated cores.  This can be done easily with tuned 
+> (I will research if there are other options to suggest). However, 
+> tuned is trying to set the affected values when enabling a profile, 
+> such as the real-time profile (Tuned offers many profiles based on a 
+> workload type).
+>
+> I will investigate further to answer your point of what in 
+> SCHED_FIFO/RR/DEADLINE those values affect.  It could be those values 
+> are not needed at all. The dependency on them might be left over from 
+> some need that no longer exists.
+>
+> Thank you again for the feedback!
+>
+> [0] https://tuned-project.org/
+>
+I also see that the github repo[0] is at version 2.19-rc1, and the 
+version being testing is 2.15.  Many of the issues we see may already be 
+resolved.
 
-This doesn't apply against current code, please check and resend.
+I will find out how I can participate in the tuned community.  At a 
+minimum, I can start with testing and bug fixes.
 
---aqSctdl6o5lEG6db
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks again for your feedback, Peter.  And sorry for the noise.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL/nfgACgkQJNaLcl1U
-h9By1wf/dl7YskCYF6ui2/ddg+SJHt1UlD1E2IOf3wutpmHEecl04Fs4Q3HGBVGY
-UBlrVXlRIpJr1wvGQ43qK2Upnmj+36qEwnjyHShe5cK+d5vPVRM0bo4irahG0XUe
-cOvqWeNNVhInq7dKWt/DVM4KiutfJVlrOmMaH8s2voNQ7ec//AGZMiOk1/Hd4aXL
-u2rO22NRZuTInjJDZSUncg66eFgBUzRJ7ezAhp9AkXp0ikbjYDdFAtV/u1AoLX2q
-1aoY1W+ghLHZV25JoS6IBnnGpDnrnMqxIdFuRLEdgJGoDvJgqAv4vN0tLeNEK64M
-iz/jNzM62HxJuwsxRUBKCjv6IFR43g==
-=yBzS
------END PGP SIGNATURE-----
+Joe
 
---aqSctdl6o5lEG6db--
+[0] https://github.com/redhat-performance/tuned

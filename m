@@ -2,87 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9822A599AF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96EB599AE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346450AbiHSLXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
+        id S1348814AbiHSLZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348682AbiHSLXI (ORCPT
+        with ESMTP id S1348819AbiHSLYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:23:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03A2C6FFE;
-        Fri, 19 Aug 2022 04:23:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 19 Aug 2022 07:24:52 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685A7DA3C6;
+        Fri, 19 Aug 2022 04:24:50 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 17E4C34450;
+        Fri, 19 Aug 2022 11:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1660908289; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X71bsXQe8X2f7i/wXt+ZaSMOEJy6QPzm6trBFKfJVg4=;
+        b=wSJow9AcSgg3Gh+KlijcBCh0yKDvH2+oVWlKE1M7jaD+ds6m1txscyAlqKbsMJI48k7qvI
+        o05HJChUiE05yWV01tisn5upkQvq+6I2mGPk961MEfQGwHWrqM8I7rikZq9IJLDHvs8nho
+        a9u+9BoEv0NxKoOSuLXSluohOJsYbmQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1660908289;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X71bsXQe8X2f7i/wXt+ZaSMOEJy6QPzm6trBFKfJVg4=;
+        b=aVrT3+KO7RULInVTdRKbngA/gi84S5COyCdI15brX97/QfYBfXrCPYwkqh5YVHCL7n7RKd
+        jf+Q1f7bubrM3bAQ==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CAC861772;
-        Fri, 19 Aug 2022 11:23:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 270EDC433D6;
-        Fri, 19 Aug 2022 11:23:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660908186;
-        bh=hnttYLqb9dk7bb0JclIZVL0NbVbYYPFxWtSbXQQOsBM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DgSxC7w5k2hBp7tpldSGiukqlcpjM69Y4pnHW5nRuBod2I7uMBhSmnG+NO9+2PLuU
-         1gYXdkdrIHUSHuRwFEH3JitoLJdJ59CZNorj41BjrlhCk1KXyqU6F+R7J4iBGZT0hC
-         qqNYUC2xnWDZOPNKwtf4q4u2Vd9vuJ0dZ3L/6klQ=
-Date:   Fri, 19 Aug 2022 13:23:04 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dragos-Marian Panait <dragos.panait@windriver.com>
-Cc:     stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
-        Sujith <Sujith.Manoharan@atheros.com>,
-        Senthil Balasubramanian <senthilkumar@atheros.com>,
-        "John W . Linville" <linville@tuxdriver.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5.10 0/1] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
-Message-ID: <Yv9ymGE9ZNPfUjBm@kroah.com>
-References: <20220819103852.902332-1-dragos.panait@windriver.com>
+        by relay2.suse.de (Postfix) with ESMTPS id E2A862C141;
+        Fri, 19 Aug 2022 11:24:48 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 9CD90A0635; Fri, 19 Aug 2022 13:24:48 +0200 (CEST)
+Date:   Fri, 19 Aug 2022 13:24:48 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Richard Guy Briggs <rgb@redhat.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux API <linux-api@vger.kernel.org>
+Subject: Re: [PATCH v4 2/4] fanotify: define struct members to hold response
+ decision context
+Message-ID: <20220819112448.poyke7hqcqrnolg5@quack3>
+References: <cover.1659996830.git.rgb@redhat.com>
+ <8767f3a0d43d6a994584b86c03eb659a662cc416.1659996830.git.rgb@redhat.com>
+ <CAOQ4uxjWCyFNATVmAcgOa8HNk6Upj+PPrJF7DA9V-4LjOGAALA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819103852.902332-1-dragos.panait@windriver.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAOQ4uxjWCyFNATVmAcgOa8HNk6Upj+PPrJF7DA9V-4LjOGAALA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 01:38:51PM +0300, Dragos-Marian Panait wrote:
-> The following commit is needed to fix CVE-2022-1679:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0ac4827f78c7ffe8eef074bc010e7e34bc22f533
+On Wed 10-08-22 08:22:49, Amir Goldstein wrote:
+> [+linux-api]
 > 
-> Pavel Skripkin (1):
->   ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
-> 
->  drivers/net/wireless/ath/ath9k/htc.h          | 10 +++++-----
->  drivers/net/wireless/ath/ath9k/htc_drv_init.c |  3 ++-
->  2 files changed, 7 insertions(+), 6 deletions(-)
-> 
-> 
-> base-commit: 6eae1503ddf94b4c3581092d566b17ed12d80f20
-> -- 
-> 2.37.1
-> 
+> On Tue, Aug 9, 2022 at 7:23 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> >
+> > This patch adds a flag, FAN_INFO and an extensible buffer to provide
+> > additional information about response decisions.  The buffer contains
+> > one or more headers defining the information type and the length of the
+> > following information.  The patch defines one additional information
+> > type, FAN_RESPONSE_INFO_AUDIT_RULE, an audit rule number.  This will
+> > allow for the creation of other information types in the future if other
+> > users of the API identify different needs.
+> >
+> > Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> > Link: https://lore.kernel.org/r/2745105.e9J7NaK4W3@x2
+> > Suggested-by: Jan Kara <jack@suse.cz>
+> > Link: https://lore.kernel.org/r/20201001101219.GE17860@quack2.suse.cz
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > ---
 
-This is already queued up for 5.10.  You forgot the backports to older
-kernels, which is also already queued up.
+...
 
-thanks,
+> >  static int process_access_response(struct fsnotify_group *group,
+> > -                                  struct fanotify_response *response_struct)
+> > +                                  struct fanotify_response *response_struct,
+> > +                                  const char __user *buf,
+> > +                                  size_t count)
+> >  {
+> >         struct fanotify_perm_event *event;
+> >         int fd = response_struct->fd;
+> >         u32 response = response_struct->response;
+> > +       struct fanotify_response_info_header info_hdr;
+> > +       char *info_buf = NULL;
+> >
+> > -       pr_debug("%s: group=%p fd=%d response=%u\n", __func__, group,
+> > -                fd, response);
+> > +       pr_debug("%s: group=%p fd=%d response=%u buf=%p size=%lu\n", __func__,
+> > +                group, fd, response, info_buf, count);
+> >         /*
+> >          * make sure the response is valid, if invalid we do nothing and either
+> >          * userspace can send a valid response or we will clean it up after the
+> >          * timeout
+> >          */
+> > -       switch (response & ~FAN_AUDIT) {
+> > +       if (response & ~FANOTIFY_RESPONSE_VALID_MASK)
+> > +               return -EINVAL;
+> > +       switch (response & FANOTIFY_RESPONSE_ACCESS) {
+> >         case FAN_ALLOW:
+> >         case FAN_DENY:
+> >                 break;
+> >         default:
+> >                 return -EINVAL;
+> >         }
+> > -
+> > -       if (fd < 0)
+> > -               return -EINVAL;
+> > -
+> >         if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
+> >                 return -EINVAL;
+> > +       if (fd < 0)
+> > +               return -EINVAL;
+> 
+> Since you did not accept my suggestion of FAN_TEST [1],
+> I am not sure why this check was moved.
+> 
+> However, if you move this check past FAN_INFO processing,
+> you could change the error value to -ENOENT, same as the return value
+> for an fd that is >= 0 but does not correspond to any pending
+> permission event.
+> 
+> The idea was that userspace could write a test
+> fanotify_response_info_audit_rule payload to fanotify fd with FAN_NOFD
+> in the response.fd field.
+> On old kernel, this will return EINVAL.
+> On new kernel, if the fanotify_response_info_audit_rule payload
+> passes all the validations, this will do nothing and return ENOENT.
+> 
+> [1] https://lore.kernel.org/linux-fsdevel/CAOQ4uxi+8HUqyGxQBNMqSong92nreOWLKdy9MCrYg8wgW9Dj4g@mail.gmail.com/
 
-greg k-h
+Yes. Richard, if you don't like the FAN_TEST proposal from Amir, please
+explain (preferably also with sample code) how you imagine userspace will
+decide whether to use FAN_INFO flag in responses or not. Because if it will
+just blindly set it, that will result in all permission events to finished
+with EPERM for kernels not recognizing FAN_INFO.
+
+> > -       if (count < sizeof(response))
+> > -               return -EINVAL;
+> > -
+> > -       count = sizeof(response);
+> > -
+> >         pr_debug("%s: group=%p count=%zu\n", __func__, group, count);
+> >
+> > -       if (copy_from_user(&response, buf, count))
+> > +       if (count < sizeof(response))
+> > +               return -EINVAL;
+> > +       if (copy_from_user(&response, buf, sizeof(response)))
+> >                 return -EFAULT;
+> >
+> > -       ret = process_access_response(group, &response);
+> > +       c = count - sizeof(response);
+> > +       if (response.response & FAN_INFO) {
+> > +               if (c < sizeof(struct fanotify_response_info_header))
+> > +                       return -EINVAL;
+> 
+> Should FAN_INFO require FAN_AUDIT?
+
+Currently we could but longer term not all additional info needs to be
+related to audit so probably I'd not require that even now (which results
+in info being effectively ignored after it is parsed).
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

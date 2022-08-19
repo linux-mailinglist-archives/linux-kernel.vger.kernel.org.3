@@ -2,220 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5738A599AE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2D1599AEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 13:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348678AbiHSLWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 07:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
+        id S1348845AbiHSLZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348516AbiHSLWa (ORCPT
+        with ESMTP id S1348857AbiHSLZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:22:30 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC1DC6FF3;
-        Fri, 19 Aug 2022 04:22:29 -0700 (PDT)
-Received: from mx0.riseup.net (mx0-pn.riseup.net [10.0.1.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mx0.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4M8K9J4vq6zDrR3;
-        Fri, 19 Aug 2022 11:22:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1660908148; bh=gHevZHd4MwauF+bQaKmbIYbAX/zcMUuWSuNRVfR4Jck=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qWk/NwWh2R9bLINwJ1iJZuYSVYWVljkYFI5H7Vlvcg/rJlLExlxemhZk5S9aPfez9
-         vj9xKWOdRporzsGZtMznEsViydXFRwTqy6EhtHJAKbVVSv6J8XWLakF+ZdlKrlNmZT
-         Nm6K3OV8DN81CNZenQQ00a/1XhPSLezH7jNmlek8=
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4M8K9H3Mvcz9tKP;
-        Fri, 19 Aug 2022 11:22:27 +0000 (UTC)
-X-Riseup-User-ID: E29BAA7489794C54C8350D3A96F1DFE8F1AB44A83D4D17D36133215CA8957214
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4M8K9B5vbfz5vTJ;
-        Fri, 19 Aug 2022 11:22:22 +0000 (UTC)
-Message-ID: <a248b7b5-6d3b-8bc9-a36e-58a311bb27b8@riseup.net>
-Date:   Fri, 19 Aug 2022 08:22:20 -0300
+        Fri, 19 Aug 2022 07:25:25 -0400
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80895FC302;
+        Fri, 19 Aug 2022 04:25:21 -0700 (PDT)
+Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JAwC4h025908;
+        Fri, 19 Aug 2022 11:22:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=PPS06212021;
+ bh=KO/dDSQO9FNu5k6cAb6uRHEGTA0po9DDpv8jG/vg1CI=;
+ b=YDyseJCviMRvK0bj14RV2vg619KcblVpNGXh2JrS9mD6CSpdbmiHM5ryY3pQo0IoE7To
+ uyqPnemtgD90GXSos5mM72kyfMtXAanBrIlpibJAc582MeZ7/mB0kRa6UaFcu6F7f07l
+ 5u/z9xvZpRnPLAgKmWpBUdaJ4RBQafVQAoDmdVdT+N0OwKYKUMfDXk2EPYTClHhOGSgL
+ BRD/eeQz7Tr/RxMFVidc0tSTy91tExbfbCU8PsYXh3kNv4nu1Js+MP1ul/Sdy78lDUwE
+ 6uYqu3YEhnBNHlLsJjRao98cSXf9aMYYfm+ILmLtzs3b2QfVOVn3RoPkA5OMrt47eSVN nw== 
+Received: from ala-exchng01.corp.ad.wrs.com (unknown-82-252.windriver.com [147.11.82.252])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3hx2x8n9cb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 19 Aug 2022 11:22:39 +0000
+Received: from otp-dpanait-l2.corp.ad.wrs.com (128.224.125.191) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.12; Fri, 19 Aug 2022 04:22:35 -0700
+From:   Dragos-Marian Panait <dragos.panait@windriver.com>
+To:     <stable@vger.kernel.org>
+CC:     Pavel Skripkin <paskripkin@gmail.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vasanthakumar Thiagarajan <vasanth@atheros.com>,
+        Sujith <Sujith.Manoharan@atheros.com>,
+        Senthil Balasubramanian <senthilkumar@atheros.com>,
+        "John W . Linville" <linville@tuxdriver.com>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 4.14 0/1] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+Date:   Fri, 19 Aug 2022 14:22:25 +0300
+Message-ID: <20220819112226.922595-1-dragos.panait@windriver.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [PATCH 4/8] Documentation: KUnit: Reword start guide for
- selecting tests
-Content-Language: en-US
-To:     Tales Aparecida <tales.aparecida@gmail.com>,
-        Sadiya Kazi <sadiyakazi@google.com>
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        davidgow@google.com, corbet@lwn.net, brendan.higgins@linux.dev,
-        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
-        mwen@igalia.com, andrealmeid@riseup.net,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com
-References: <20220819053234.241501-1-tales.aparecida@gmail.com>
- <20220819053234.241501-5-tales.aparecida@gmail.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220819053234.241501-5-tales.aparecida@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [128.224.125.191]
+X-ClientProxiedBy: ala-exchng01.corp.ad.wrs.com (147.11.82.252) To
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252)
+X-Proofpoint-ORIG-GUID: y9KDF-828HdFJ_0TijFeaR2K9ze4mpNm
+X-Proofpoint-GUID: y9KDF-828HdFJ_0TijFeaR2K9ze4mpNm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-19_06,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 malwarescore=0 bulkscore=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=307 adultscore=0
+ impostorscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2207270000 definitions=main-2208190044
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tales
+The following commit is needed to fix CVE-2022-1679:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0ac4827f78c7ffe8eef074bc010e7e34bc22f533
 
-On 8/19/22 02:32, Tales Aparecida wrote:
-> Reword "Creating a ``.kunitconfig``" into "Selecting which tests to run"
-> covering the current alternatives for editing configs and glob-filtering
-> 
-> Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
-> ---
->  Documentation/dev-tools/kunit/start.rst | 90 +++++++++++++++++--------
->  1 file changed, 63 insertions(+), 27 deletions(-)
-> 
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> index e4b73adde6d0..f0ec64207bd3 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -52,27 +52,20 @@ The tests will pass or fail.
->  For detailed information on this wrapper, see:
->  Documentation/dev-tools/kunit/run_wrapper.rst.
->  
-> -Creating a ``.kunitconfig``
-> ----------------------------
-> -
-> -By default, kunit_tool runs a selection of tests. However, you can specify which
-> -unit tests to run by creating a ``.kunitconfig`` file with kernel config options
-> -that enable only a specific set of tests and their dependencies.
-> -The ``.kunitconfig`` file contains a list of kconfig options which are required
-> -to run the desired targets. The ``.kunitconfig`` also contains any other test
-> -specific config options, such as test dependencies. For example: the
-> -``FAT_FS`` tests - ``FAT_KUNIT_TEST``, depends on
-> -``FAT_FS``. ``FAT_FS`` can be enabled by selecting either ``MSDOS_FS``
-> -or ``VFAT_FS``. To run ``FAT_KUNIT_TEST``, the ``.kunitconfig`` has:
-> +Selecting which tests to run
-> +----------------------------
->  
-> -.. code-block:: none
-> +By default, kunit_tool runs all tests reachable with minimal configuration,
-> +that is, using default values for most of the kconfig options.  However,
-> +you can select which tests to run by:
->  
-> -	CONFIG_KUNIT=y
-> -	CONFIG_MSDOS_FS=y
-> -	CONFIG_FAT_KUNIT_TEST=y
-> +- `Customizing Kconfig`_ used to compile the kernel, or
-> +- `Filtering tests by name`_ to select specifically which compiled tests to run.
->  
-> -1. A good starting point for the ``.kunitconfig`` is the KUnit default config.
-> -   You can generate it by running:
-> +Customizing Kconfig
-> +~~~~~~~~~~~~~~~~~~~
-> +A good starting point for the ``.kunitconfig`` is the KUnit default config.
-> +If you didn't run ``kunit.py run`` yet, you can generate it by running:
->  
->  .. code-block:: bash
->  
-> @@ -84,27 +77,70 @@ or ``VFAT_FS``. To run ``FAT_KUNIT_TEST``, the ``.kunitconfig`` has:
->     ``.kunitconfig`` lives in the ``--build_dir`` used by kunit.py, which is
->     ``.kunit`` by default.
->  
-> -.. note ::
-> +Before running the tests, kunit_tool ensures that all config options
-> +set in ``.kunitconfig`` are set in the kernel ``.config``. It will warn
-> +you if you have not included dependencies for the options used.
-> +
-> +There are many ways to customize the configurations:
-> +
-> +a. Edit ``.kunit/.kunitconfig``. The file should contain the list of kconfig
-> +   options required to run the desired tests, including their dependencies.
->     You may want to remove CONFIG_KUNIT_ALL_TESTS from the ``.kunitconfig`` as
->     it will enable a number of additional tests that you may not want.
-> +   If you need to run on an architecture other than UML see :ref:`kunit-on-qemu`.
->  
-> -2. You can then add any other Kconfig options, for example:
-> +b. Enable additional kconfig options on top of ``.kunit/.kunitconfig``.
-> +   For example, to include the kernel's linked-list test you can run::
->  
-> -.. code-block:: none
-> +	./tools/testing/kunit/kunit.py run \
-> +		--kconfig_add CONFIG_LIST_KUNIT_TEST=y
->  
-> -	CONFIG_LIST_KUNIT_TEST=y
-> +c. Provide the path of one or more .kunitconfig files from the tree.
-> +   For example, to run only ``FAT_FS`` and ``EXT4`` tests you can run::
->  
-> -Before running the tests, kunit_tool ensures that all config options
-> -set in ``.kunitconfig`` are set in the kernel ``.config``. It will warn
-> -you if you have not included dependencies for the options used.
-> +	./tools/testing/kunit/kunit.py run \
-> +		--kunitconfig ./fs/fat/.kunitconfig \
-> +		--kunitconfig ./fs/ext4/.kunitconfig
->  
-> -.. note ::
-> -   If you change the ``.kunitconfig``, kunit.py will trigger a rebuild of the
-> +d. If you change the ``.kunitconfig``, kunit.py will trigger a rebuild of the
->     ``.config`` file. But you can edit the ``.config`` file directly or with
->     tools like ``make menuconfig O=.kunit``. As long as its a superset of
->     ``.kunitconfig``, kunit.py won't overwrite your changes.
->  
->  
-> +.. note ::
-> +
-> +	To save a .kunitconfig after finding a satisfactory configuration::
-> +
-> +		make savedefconfig O=.kunit
-> +		cp .kunit/defconfig .kunit/.kunitconfig
-> +
-> +Filtering tests by name
-> +~~~~~~~~~~~~~~~~~~~~~~~
-> +If you want to be more specific than Kconfig can provide, it is also possible
-> +to select which tests to execute at boot-time by passing a glob filter
-> +(read instructions regarding the pattern in the manpage :manpage:`glob(7)`).
-> +If there is a ``"."`` (period) in the filter, it will be interpreted as a
-> +separator between the name of the test-suite and the test-case,
-> +otherwise, it will be interpreted as the name of the test suite.
-> +For example, let's assume we are using the default config:
+Pavel Skripkin (1):
+  ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
 
-Another small nit: you could keep the consistency on naming test-suite
-and test-cases. Currently, you are using "test-suite" and "test suite"
-(same for test-cases). I guess any of the two options are fine, but it
-would be nice to keep it consistent.
+ drivers/net/wireless/ath/ath9k/htc.h          | 10 +++++-----
+ drivers/net/wireless/ath/ath9k/htc_drv_init.c |  3 ++-
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-> +
-> +a. inform the name of a test suite, like ``"kunit_executor_test"``,
-> +   to run every test case it contains::
-> +
-> +	./tools/testing/kunit/kunit.py run "kunit_executor_test"
-> +
-> +b. inform the name of a test case prefixed by its test suite,
-> +   like ``"example.example_simple_test"``, to run specifically that test case::
-> +
-> +	./tools/testing/kunit/kunit.py run "example.example_simple_test"
-> +
-> +c. use wildcard characters (``*?[``) to run any test-case that match the pattern,
 
-I guess it would be "matches" instead of "match" here.
+base-commit: b641242202ed8c52030f7b6d8cf15886d3c4fc82
+-- 
+2.37.1
 
-Other than this small nits, this is a great improvement on the docs!
-
-Reviewed-by: Maíra Canal <mairacanal@riseup.net>
-
-Best Regards,
-- Maíra Canal
-
-> +   like ``"*.*64*"`` to run test-cases containing ``"64"`` in the name inside
-> +   any test-suite::
-> +
-> +	./tools/testing/kunit/kunit.py run "*.*64*"
-> +
->  Running Tests without the KUnit Wrapper
->  =======================================
->  If you do not want to use the KUnit Wrapper (for example: you want code

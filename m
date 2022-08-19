@@ -2,52 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AE659A6E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 22:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A52F59A6DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 22:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351708AbiHSUGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 16:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
+        id S1351698AbiHSUJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 16:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351558AbiHSUF6 (ORCPT
+        with ESMTP id S1351558AbiHSUJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 16:05:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2FBEC4D3;
-        Fri, 19 Aug 2022 13:05:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BA6F61698;
-        Fri, 19 Aug 2022 20:05:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6320C433D7;
-        Fri, 19 Aug 2022 20:05:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660939556;
-        bh=1Yow+Fhn+rlSsjYHJEZ/n6C+LBI5GQMFX7tXobAvLT4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=KWBjuN3rDyoh/R6XF6YBGZoG/zBb9FuATBJj5sLwozDb2/1l4DeNOtETxLWlb+GHO
-         NqsUkHylhS9oDD0DKE7C9HTlZ2RuWtpuXRzPHkcQylyN6b+DrDlA7pok3R9wGG+f0r
-         LJRxr5PXfIz5Za/s2Y6ne2DPiIynLT/1Vah6h0edglIOeb0QYL35wSen3TrZGxshe4
-         zyg3jDYGSh5zOy6g4oCdG/tv9VHVtBiNO1jFm+Kurtin11XGNm9u2HTXQnnlX3cHyp
-         b6/AexOigq56McDJo7abLWjYiNpmDFxFPh386az0JN1jLzqGuHlw+ZGXspvJqVSJFT
-         Y08wbEoCz6sbw==
-Date:   Fri, 19 Aug 2022 15:05:55 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     bhelgaas@google.com, lpieralisi@kernel.org, kishon@ti.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kw@linux.com
-Subject: Re: [PATCH] MAINTAINERS: Add myself as the reviewer for PCI Endpoint
- Subsystem
-Message-ID: <20220819200555.GA2502055@bhelgaas>
+        Fri, 19 Aug 2022 16:09:14 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D01A9D11E
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:09:13 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-32a09b909f6so150506227b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=YuF+xqYANb0UpSKdFXaPIjdGoUsETegDwAlHIfHh17s=;
+        b=SmwVsSxLi/TN3be8ePf4Zt26MSe+mpgAQ9Yj1M7BSIb+2/45bT5dcu90JsXbPBl5vH
+         caJzUu+A8tA+CqBs274jJpfoLUC/7GmPmhVg8b6otV8Dg+XUbZaq4LVnJUo5r2JnpOd1
+         oZC+HNnX9iXvL2IpKtVVL/slYa6BOXTlJ7kWQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=YuF+xqYANb0UpSKdFXaPIjdGoUsETegDwAlHIfHh17s=;
+        b=6DLY+Piig78XU31U4zRz1FOCDRCHBu6Ir8N2XxQzzF/8jaTYqlHJMHHiXNskPjjvAg
+         I2qWq+8iybfEQZafHAZAI3nyJ4LreS8t7+wXElW7leXqtkIC+hXhClD+a1vvgRR8S/Hk
+         JOQ+I6rSgYYya5pubNUtrZSdV6HPqAagwof0wvSxni3h0g6imPhEEniU1mbHoIk8S/NY
+         9NMFiIt+QeuO4DEGKB4raL99NaI1kFdpF1ZB5vwk3Zg2PZGNL8Rjlunrxwrb3X/BHlat
+         DMwknjzjgzcpDzMzVLovtbiukL9bv0iIvUZljUZuwjTrE1g55grUgslS0rtdmOu/3Cnh
+         HoMA==
+X-Gm-Message-State: ACgBeo2Q9sm+vWgkVRn81YgvSf4vcoubYzyJqK/AigjXltkkmNubjl/R
+        4l71hJMPJUqMJSFYvGY8FK2QMkgInOaDh7SGYyHC
+X-Google-Smtp-Source: AA6agR7wQ8oKJPNlIuB55kWztWUPT4TZ4pt1foHS2qP00B5/o+HsUbPTDI0y9sCaodK5ZH30pxM3xwnr92xLtnZ6tlU=
+X-Received: by 2002:a25:5105:0:b0:692:17f6:62b6 with SMTP id
+ f5-20020a255105000000b0069217f662b6mr8381453ybb.361.1660939752536; Fri, 19
+ Aug 2022 13:09:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220819020817.197844-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220814141237.493457-1-mail@conchuod.ie> <20220814141237.493457-2-mail@conchuod.ie>
+In-Reply-To: <20220814141237.493457-2-mail@conchuod.ie>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Fri, 19 Aug 2022 13:09:01 -0700
+Message-ID: <CAOnJCU+gvVfqN6DHQRMtJ82xU4ZajHrANfeDjt21i9Om4r43eg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] riscv: kvm: vcpu_timer: fix unused variable warnings
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Tong Tiangen <tongtiangen@huawei.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,39 +74,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 07:38:17AM +0530, Manivannan Sadhasivam wrote:
-> I've been reviewing the patches related to PCI Endpoint Subsystem for
-> some time. So I'd like to add myself as the reviewer to get immediate
-> attention to the patches.
-> 
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-Thanks, applied to for-linus for v6.0.
-
-Updated subject line to:
-
-  MAINTAINERS: Add Manivannan Sadhasivam as PCI Endpoint reviewer
-
-since "add myself" doesn't mean anything without reading the whole
-commit log.
-
+On Sun, Aug 14, 2022 at 7:12 AM Conor Dooley <mail@conchuod.ie> wrote:
+>
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> In two places, csr is set but never used:
+>
+> arch/riscv/kvm/vcpu_timer.c:302:23: warning: variable 'csr' set but not used [-Wunused-but-set-variable]
+>         struct kvm_vcpu_csr *csr;
+>                              ^
+> arch/riscv/kvm/vcpu_timer.c:327:23: warning: variable 'csr' set but not used [-Wunused-but-set-variable]
+>         struct kvm_vcpu_csr *csr;
+>                              ^
+>
+> Remove the variable.
+>
+> Fixes: 8f5cb44b1bae ("RISC-V: KVM: Support sstc extension")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 21081f72776d..58a163c2e5dc 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15682,6 +15682,7 @@ PCI ENDPOINT SUBSYSTEM
->  M:	Kishon Vijay Abraham I <kishon@ti.com>
->  M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
->  R:	Krzysztof Wilczyński <kw@linux.com>
-> +R:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->  L:	linux-pci@vger.kernel.org
->  S:	Supported
->  Q:	https://patchwork.kernel.org/project/linux-pci/list/
-> -- 
-> 2.25.1
-> 
+>  arch/riscv/kvm/vcpu_timer.c | 4 ----
+>  1 file changed, 4 deletions(-)
+>
+> diff --git a/arch/riscv/kvm/vcpu_timer.c b/arch/riscv/kvm/vcpu_timer.c
+> index 16f50c46ba39..185f2386a747 100644
+> --- a/arch/riscv/kvm/vcpu_timer.c
+> +++ b/arch/riscv/kvm/vcpu_timer.c
+> @@ -299,7 +299,6 @@ static void kvm_riscv_vcpu_update_timedelta(struct kvm_vcpu *vcpu)
+>
+>  void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
+>  {
+> -       struct kvm_vcpu_csr *csr;
+>         struct kvm_vcpu_timer *t = &vcpu->arch.timer;
+>
+>         kvm_riscv_vcpu_update_timedelta(vcpu);
+> @@ -307,7 +306,6 @@ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
+>         if (!t->sstc_enabled)
+>                 return;
+>
+> -       csr = &vcpu->arch.guest_csr;
+>  #if defined(CONFIG_32BIT)
+>         csr_write(CSR_VSTIMECMP, (u32)t->next_cycles);
+>         csr_write(CSR_VSTIMECMPH, (u32)(t->next_cycles >> 32));
+> @@ -324,13 +322,11 @@ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
+>
+>  void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu)
+>  {
+> -       struct kvm_vcpu_csr *csr;
+>         struct kvm_vcpu_timer *t = &vcpu->arch.timer;
+>
+>         if (!t->sstc_enabled)
+>                 return;
+>
+> -       csr = &vcpu->arch.guest_csr;
+>         t = &vcpu->arch.timer;
+>  #if defined(CONFIG_32BIT)
+>         t->next_cycles = csr_read(CSR_VSTIMECMP);
+> --
+> 2.37.1
+>
+
+Thanks for fixing this. Sorry for missing those.
+
+
+--
+Regards,
+Atish

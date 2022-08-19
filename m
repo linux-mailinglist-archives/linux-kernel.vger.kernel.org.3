@@ -2,98 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74DA599677
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DE759967D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 09:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347255AbiHSHtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 03:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S1347295AbiHSHup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 03:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347246AbiHSHtl (ORCPT
+        with ESMTP id S1347246AbiHSHuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 03:49:41 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009A2D9E96
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:49:39 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id l21so3808032ljj.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=LjRGJYWrfd5q271QGfhE7awaulrS21PYNrzkIfUWipg=;
-        b=Ds5gqAEouP3I+sn4oK46uJmHLQ9HGDguWat7ZoljNvQ528exXwZoWRSWSg7ZLtYQnu
-         tRt0DPBGvb+I9fTN6/ICWQmrBxndYno5sG+gTxWcJVfU/yPmjkFTPZwS0HQ5CmInXgUq
-         ZKX+ieweQf2ghIx7r23R8XE7PDWNLU7sZXxkjS8z2pBVIqOHp1DnxKtP/FdR+XURrgSF
-         TZl/3RkqdncsBYJhB5LskfKR01gRuslfYVy6MSqCIQsVmc49EkzOZbQ3cFcbh1Fnnux4
-         H0ZXQxhqW4Pl3UaaeVkThR7binKYldPxhfcw1sCWLcrMOt1wNWD+POT3cZVbcbYhltdn
-         oIlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=LjRGJYWrfd5q271QGfhE7awaulrS21PYNrzkIfUWipg=;
-        b=uKtVyE/MiqO51bdeF9/9FkXVQOUH1Y0upGSXxe+P8VRu/dMmIsJ72hXcBV/xfAuKCc
-         EAW43jLpz2KuvbPJeq2ngeg9MHM5/LPVzFxbujF92fn1MnGbbuvnU9YYIE2iY8Y2LQro
-         xgQZ7iBfOSENsH3pGoYXN8Y0tQwkkytcLlVFAqhvLYYClX6kAdATwPOaAh9x68Pc218L
-         meLL6x1GnowKiLlTqTt6skeu23mPP9tfGXTnOAxj1B6cTR0Y9aZ7TuW5B5b+LqjuoTM8
-         udbaC0D3yHIY2+HKWPNclyZf9Z9CBICeKr7fZm+T7Z9UOy++6a33JIXOphiKw3l+vWAA
-         ArJw==
-X-Gm-Message-State: ACgBeo006FpKLbUJhOeKbeiB/MLr7/goO2eOI2ivhwW+GmkNNAgroHMJ
-        oVYgm3uXq/3b7jhty83lbfdnKg==
-X-Google-Smtp-Source: AA6agR5NmsrB1XMZSRj3Ijrjhwqv10iEp9DqulVpGjVsF4Zj9mkJ+sJaAbk9kkWPT5V058jYfNelXw==
-X-Received: by 2002:a05:651c:12c4:b0:25d:d71c:e249 with SMTP id 4-20020a05651c12c400b0025dd71ce249mr1698093lje.17.1660895378224;
-        Fri, 19 Aug 2022 00:49:38 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
-        by smtp.gmail.com with ESMTPSA id k8-20020a2ea268000000b0025e53413b6dsm513113ljm.2.2022.08.19.00.49.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 00:49:37 -0700 (PDT)
-Message-ID: <a4b145b6-4df2-c1c1-654f-b0535b0150f4@linaro.org>
-Date:   Fri, 19 Aug 2022 10:49:36 +0300
+        Fri, 19 Aug 2022 03:50:25 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA71D9E96
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 00:50:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cTRVX8Pd/QkIMgNoEEIaYCDvLIjoXFSl5I7fHaAjeJQ=; b=m3ppzq09RDvO533j7tkDCONQKL
+        53E2eC43uquw3tcBbZ9G1cofjLQqdRlaZ7Kt1+p/fLPnuxtgmT3qhC5FOLaTOqy49rE/FvlquNjqU
+        b8b3hqKsgDQebXBET46Ej32VS0HFmC6UpIKjrW4Tau7YieYpXvAY/KuZsxJfqWvIgjTa4wCO7A75G
+        k1Njl4UbTONw2UtamDrFDKIikoxf6QfVArOentc47RmjZ9bWF06a3KLks0nY77jayazHqPEC0DFeS
+        KyryeyvQXeFEoPAxJ+hn+fSN0UbHyp6RQBoaFGpC31F2YgQx3hfchyyozQDlcVekAuAUTzqL+QEZR
+        7PSkzLow==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oOwlf-00Aspa-Jf; Fri, 19 Aug 2022 07:50:11 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 384C5980120; Fri, 19 Aug 2022 09:50:08 +0200 (CEST)
+Date:   Fri, 19 Aug 2022 09:50:08 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Pengfei Xu <pengfei.xu@intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Su, Heng" <heng.su@intel.com>
+Subject: Re: [PATCH 0/3] x86/kvm, objtool: Fix KVM "missing ENDBR" bug
+Message-ID: <Yv9AsJoDRep8h0vZ@worktop.programming.kicks-ass.net>
+References: <cover.1660837839.git.jpoimboe@kernel.org>
+ <64365019-57dc-b449-8178-30428e09adf8@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] ARM: move from strlcpy with unused retval to strscpy
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20220818205937.6168-1-wsa+renesas@sang-engineering.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220818205937.6168-1-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64365019-57dc-b449-8178-30428e09adf8@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/08/2022 23:59, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
+On Thu, Aug 18, 2022 at 07:25:57PM +0200, Paolo Bonzini wrote:
+> On 8/18/22 17:53, Josh Poimboeuf wrote:
+> > Fix the "missing ENDBR" KVM bug, along with a couple of preparatory
+> > patches.
+> > 
+> > Josh Poimboeuf (3):
+> >    x86/ibt, objtool: Add IBT_NOSEAL()
+> >    x86/kvm: Simplify FOP_SETCC()
+> >    x86/kvm: Fix "missing ENDBR" BUG for fastop functions
+> > 
+> >   arch/x86/include/asm/ibt.h | 10 ++++++++++
+> >   arch/x86/kvm/emulate.c     | 26 ++++++--------------------
+> >   tools/objtool/check.c      |  3 ++-
+> >   3 files changed, 18 insertions(+), 21 deletions(-)
+> > 
 > 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  arch/arm/kernel/atags_parse.c     | 4 ++--
->  arch/arm/kernel/setup.c           | 2 +-
->  arch/arm/kernel/vdso.c            | 2 +-
->  arch/arm/mach-s3c/mach-real6410.c | 2 +-
+> Queued, thanks!
 
-If you split s3c, I can take it. Otherwise:
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> # s3c
-
-Best regards,
-Krzysztof
+OK, let me drop them from the queue then ;-)

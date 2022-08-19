@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E97EA599539
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50CA759955B
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 08:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345015AbiHSGUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 02:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
+        id S245111AbiHSGX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 02:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345865AbiHSGU1 (ORCPT
+        with ESMTP id S235053AbiHSGXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 02:20:27 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BEE60686;
-        Thu, 18 Aug 2022 23:20:27 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id s18so1448984uac.10;
-        Thu, 18 Aug 2022 23:20:26 -0700 (PDT)
+        Fri, 19 Aug 2022 02:23:24 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADDB45F59;
+        Thu, 18 Aug 2022 23:23:23 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id w28so2710362qtc.7;
+        Thu, 18 Aug 2022 23:23:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=0MSWc7wdb4JmTnyiY3TNYUbqrM+fW7halymViKhckH0=;
-        b=ldS6CT+CSIK1ONsRd4HFvX5zLNhbwOSmfYXGXtouMr+obCzSyvKuevfrvhdq9568Tf
-         rfa6MxqeABVgMEcTGyshxoXuxXa9gl4AuwAaPLNZ3ekA0qZKoig9MT8Go5qMKM0vtu/K
-         uR6ifXy80K0kwL3BXvLdZnJiY+LiGdkInUmrd3D1WtZaOvhhare2mc707N79qXaHATAA
-         sDsEORXOqx8O+GCqes40t2SC+n8f82bIjnV9w30Jwr3Id/5O54G1eDQV8ebxdKEsKdwz
-         UHdZaGW09CuOHSCJ6ZA2LD7GHZ3ICNYjW4k9XSi2AYnK4ADMLbiKN8IbpslU7chE6epU
-         dwNQ==
+        bh=fY9LveBLnFiSKbYjRHuFcLH7o9uOpu0WQwKbq0SBCjI=;
+        b=TjqudFaW/qj1ie2RbOptrz2HTLfhnQ0w3n7Z6veDV64KlFGtbQzBRK6HPWWj5jMxJt
+         oHqTN5GSOp+cUfJkEY9LNxVsj5FhUVwsAKBnTB66YI7ivf+7iVDj+qoWK+a777FlCtNH
+         ZbVVIxMYa4d2aMpnlIhLYJOlqjoEUD9+UMFpXx0q/bL/umZNfiStNjs3WXsbUOA2GKmW
+         q1oQzRQc3oX/tcc43Wk0rH2SlTyHkR3XOmFUO4xFqeWokBv6/EPa1pgrXuhqLec5Susi
+         03yxAZRobpw6YtpIc7X6+hZ/gL+9WfyI6GpfkxGbF2HidldmArMTSqi8XGwkn3WHZvpY
+         nT7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=0MSWc7wdb4JmTnyiY3TNYUbqrM+fW7halymViKhckH0=;
-        b=ExgFVR0H9aNY8KJYfyuWcelPfVZCQMXsJeuxzG/2EP0lQGfQEwaL1UmXB0j6+MNp/m
-         sXOsjbsWn6ee/D918nRAh8QcgG5+SMSF7/CKuFmymaINi7NJ0i844AARYF7w9HdHa/fp
-         kPaZz8KuVNC/AKKv1dL2f9DMIWbqQqJ3MvheN33Nv8PL4ncVRvDJ2HXMz85nnCLm+l+C
-         J/PkwI6c0tWnXeqhoLDBpkW5UeRd38DNrlCg40agv+vlbtlVs1MJdNXWw9Fdkx8CEjJ/
-         KEdWSAuTpgpzXZYm1B+5kVXlDP3RCtpW3SNiyyttMNPjUq0JdHGltHKKO74t37zeCmHd
-         GHrg==
-X-Gm-Message-State: ACgBeo0kOJezQRQCkRyHLzB2P5YY+MxA3Aho96r5jKNPUwQFsYrsCFNY
-        3sO+23hCBOWjeCNF+vRHxJe0h/rErHUeVZP2e8w22hg38nc=
-X-Google-Smtp-Source: AA6agR6FNSsP/9mrdqwlhKF+kOZqYewx8f9uLyJBK/GqLrNmGE86ASbR883Y2sokThy2rEEDu1AZojaH4LFG/Bxwwgg=
-X-Received: by 2002:ab0:3bc6:0:b0:381:c4db:ef5 with SMTP id
- q6-20020ab03bc6000000b00381c4db0ef5mr2542135uaw.81.1660890025731; Thu, 18 Aug
- 2022 23:20:25 -0700 (PDT)
+        bh=fY9LveBLnFiSKbYjRHuFcLH7o9uOpu0WQwKbq0SBCjI=;
+        b=qKKN0vzkMdkokUFos3Y3Yi0cWhh1ZErPsmDYmwqPNN9dRi+/p6TH+IH48XrXRd1gaj
+         JSyr4epPCkaimf5oiNsoVEaU7+jv7oox8Ep0xU3nZhCG/P8NpOHv80piYnKaNTzVmiC6
+         P0iFfG+7iJng2iYB0ENRwhXQODElkS6ITR1iJ24j5088KFm6FehKy07pyHCHiaDQgG9w
+         qd1b0s7lTR73yRAqf/f1LSSxmUTSdwskgbrxo4xEabPoCKLGp4ruTgwZjhWaDtsnI4JA
+         WPt6kai2ieO5DzirMNFEp8EDCImrpfI6G7VPH/F7HbEy+3tMXDugl+O9mFWfMDPfp0m2
+         QjDQ==
+X-Gm-Message-State: ACgBeo0ULf+TgKL23xm3uQGhEIzwF0hNvSIzNzhteF38EsZCJVItbMSP
+        hNGZM4h4pR3ZqxMsq43nuJxLUuigjTD8PDt5gH0=
+X-Google-Smtp-Source: AA6agR7/N1zPVsasyqkyG/YF+U2KyCp9duOxoXwYcnvf2RRSPdXQSkddTw+2IQC/XZoltV8H+EDmscYRRPJqEIAKK2I=
+X-Received: by 2002:ac8:7f92:0:b0:344:8cd8:59a1 with SMTP id
+ z18-20020ac87f92000000b003448cd859a1mr5566251qtj.384.1660890201997; Thu, 18
+ Aug 2022 23:23:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220818210142.7867-1-wsa+renesas@sang-engineering.com> <CAH2r5muBD8AV51ZQMapGoXyF=5Mk0GW2tYz2ng9XrhKRp_b96g@mail.gmail.com>
-In-Reply-To: <CAH2r5muBD8AV51ZQMapGoXyF=5Mk0GW2tYz2ng9XrhKRp_b96g@mail.gmail.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 19 Aug 2022 01:20:14 -0500
-Message-ID: <CAH2r5mt9Qs+Mb5Fj6xSOADcDZdggxALuxdDr6bd5HHzi2Z6WHw@mail.gmail.com>
-Subject: Re: [PATCH] cifs: move from strlcpy with unused retval to strscpy
+References: <20220818210058.7229-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220818210058.7229-1-wsa+renesas@sang-engineering.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 19 Aug 2022 09:22:45 +0300
+Message-ID: <CAHp75VeM2q7wdnREoenyYpJ-tso2G6M-uyGFJGjPGL8hfUmzhQ@mail.gmail.com>
+Subject: Re: [PATCH] platform: move from strlcpy with unused retval to strscpy
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Divya Bharathi <divya.bharathi@dell.com>,
+        Prasanth Ksr <prasanth.ksr@dell.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Dell.Client.Kernel@dell.com,
+        Thinkpad-acpi devel ML <ibm-acpi-devel@lists.sourceforge.net>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -70,79 +74,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tentatively merged into cifs-2.6.git for-next pending testing
+On Fri, Aug 19, 2022 at 12:06 AM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> Follow the advice of the below link and prefer 'strscpy' in this
 
-On Fri, Aug 19, 2022 at 12:00 AM Steve French <smfrench@gmail.com> wrote:
+We refer to the functions like this: strscpy() (note no quote marks).
+
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+
+I assume you are experimenting with coccinelle, so I have no objection
+to the change, but in PDx86 we usually want to have one patch per
+driver. Can you split?
+
+You also may add
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+to each of them.
+
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/platform/surface/surface3_power.c          | 2 +-
+>  drivers/platform/x86/dell/dell-wmi-sysman/sysman.c | 2 +-
+>  drivers/platform/x86/intel/chtwc_int33fe.c         | 6 +++---
+>  drivers/platform/x86/thinkpad_acpi.c               | 4 ++--
+>  4 files changed, 7 insertions(+), 7 deletions(-)
 >
-> Looks fine.   Do you want this merged through my tree?
+> diff --git a/drivers/platform/surface/surface3_power.c b/drivers/platform/surface/surface3_power.c
+> index 444ec81ba02d..4c53d116d59b 100644
+> --- a/drivers/platform/surface/surface3_power.c
+> +++ b/drivers/platform/surface/surface3_power.c
+> @@ -519,7 +519,7 @@ static int mshw0011_probe(struct i2c_client *client)
+>         i2c_set_clientdata(client, data);
 >
-> On Thu, Aug 18, 2022 at 4:11 PM Wolfram Sang
-> <wsa+renesas@sang-engineering.com> wrote:
-> >
-> > Follow the advice of the below link and prefer 'strscpy' in this
-> > subsystem. Conversion is 1:1 because the return value is not used.
-> > Generated by a coccinelle script.
-> >
-> > Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> > ---
-> >  fs/cifs/cifsroot.c | 2 +-
-> >  fs/cifs/connect.c  | 2 +-
-> >  fs/cifs/smb2pdu.c  | 2 +-
-> >  3 files changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/fs/cifs/cifsroot.c b/fs/cifs/cifsroot.c
-> > index 9e91a5a40aae..56ec1b233f52 100644
-> > --- a/fs/cifs/cifsroot.c
-> > +++ b/fs/cifs/cifsroot.c
-> > @@ -59,7 +59,7 @@ static int __init cifs_root_setup(char *line)
-> >                         pr_err("Root-CIFS: UNC path too long\n");
-> >                         return 1;
-> >                 }
-> > -               strlcpy(root_dev, line, len);
-> > +               strscpy(root_dev, line, len);
-> >                 srvaddr = parse_srvaddr(&line[2], s);
-> >                 if (*s) {
-> >                         int n = snprintf(root_opts,
-> > diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-> > index 9111c025bcb8..3da5da9f16b0 100644
-> > --- a/fs/cifs/connect.c
-> > +++ b/fs/cifs/connect.c
-> > @@ -3994,7 +3994,7 @@ CIFSTCon(const unsigned int xid, struct cifs_ses *ses,
-> >                 }
-> >                 bcc_ptr += length + 1;
-> >                 bytes_left -= (length + 1);
-> > -               strlcpy(tcon->treeName, tree, sizeof(tcon->treeName));
-> > +               strscpy(tcon->treeName, tree, sizeof(tcon->treeName));
-> >
-> >                 /* mostly informational -- no need to fail on error here */
-> >                 kfree(tcon->nativeFileSystem);
-> > diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-> > index 9b31ea946d45..9958b5f1c12f 100644
-> > --- a/fs/cifs/smb2pdu.c
-> > +++ b/fs/cifs/smb2pdu.c
-> > @@ -1928,7 +1928,7 @@ SMB2_tcon(const unsigned int xid, struct cifs_ses *ses, const char *tree,
-> >         tcon->capabilities = rsp->Capabilities; /* we keep caps little endian */
-> >         tcon->maximal_access = le32_to_cpu(rsp->MaximalAccess);
-> >         tcon->tid = le32_to_cpu(rsp->hdr.Id.SyncId.TreeId);
-> > -       strlcpy(tcon->treeName, tree, sizeof(tcon->treeName));
-> > +       strscpy(tcon->treeName, tree, sizeof(tcon->treeName));
-> >
-> >         if ((rsp->Capabilities & SMB2_SHARE_CAP_DFS) &&
-> >             ((tcon->share_flags & SHI1005_FLAGS_DFS) == 0))
-> > --
-> > 2.35.1
-> >
+>         memset(&board_info, 0, sizeof(board_info));
+> -       strlcpy(board_info.type, "MSHW0011-bat0", I2C_NAME_SIZE);
+> +       strscpy(board_info.type, "MSHW0011-bat0", I2C_NAME_SIZE);
 >
+>         bat0 = i2c_acpi_new_device(dev, 1, &board_info);
+>         if (IS_ERR(bat0))
+> diff --git a/drivers/platform/x86/dell/dell-wmi-sysman/sysman.c b/drivers/platform/x86/dell/dell-wmi-sysman/sysman.c
+> index 636bdfa83284..0a6411a8a104 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-sysman/sysman.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-sysman/sysman.c
+> @@ -270,7 +270,7 @@ void strlcpy_attr(char *dest, char *src)
+>         size_t len = strlen(src) + 1;
 >
+>         if (len > 1 && len <= MAX_BUFF)
+> -               strlcpy(dest, src, len);
+> +               strscpy(dest, src, len);
+>
+>         /*len can be zero because any property not-applicable to attribute can
+>          * be empty so check only for too long buffers and log error
+> diff --git a/drivers/platform/x86/intel/chtwc_int33fe.c b/drivers/platform/x86/intel/chtwc_int33fe.c
+> index c52ac23e2331..1ea989df513c 100644
+> --- a/drivers/platform/x86/intel/chtwc_int33fe.c
+> +++ b/drivers/platform/x86/intel/chtwc_int33fe.c
+> @@ -270,7 +270,7 @@ cht_int33fe_register_max17047(struct device *dev, struct cht_int33fe_data *data)
+>         }
+>
+>         memset(&board_info, 0, sizeof(board_info));
+> -       strlcpy(board_info.type, "max17047", I2C_NAME_SIZE);
+> +       strscpy(board_info.type, "max17047", I2C_NAME_SIZE);
+>         board_info.dev_name = "max17047";
+>         board_info.fwnode = fwnode;
+>         data->battery_fg = i2c_acpi_new_device(dev, 1, &board_info);
+> @@ -361,7 +361,7 @@ static int cht_int33fe_typec_probe(struct platform_device *pdev)
+>         }
+>
+>         memset(&board_info, 0, sizeof(board_info));
+> -       strlcpy(board_info.type, "typec_fusb302", I2C_NAME_SIZE);
+> +       strscpy(board_info.type, "typec_fusb302", I2C_NAME_SIZE);
+>         board_info.dev_name = "fusb302";
+>         board_info.fwnode = fwnode;
+>         board_info.irq = fusb302_irq;
+> @@ -381,7 +381,7 @@ static int cht_int33fe_typec_probe(struct platform_device *pdev)
+>         memset(&board_info, 0, sizeof(board_info));
+>         board_info.dev_name = "pi3usb30532";
+>         board_info.fwnode = fwnode;
+> -       strlcpy(board_info.type, "pi3usb30532", I2C_NAME_SIZE);
+> +       strscpy(board_info.type, "pi3usb30532", I2C_NAME_SIZE);
+>
+>         data->pi3usb30532 = i2c_acpi_new_device(dev, 3, &board_info);
+>         if (IS_ERR(data->pi3usb30532)) {
+> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+> index 22d4e8633e30..8dad0428a83c 100644
+> --- a/drivers/platform/x86/thinkpad_acpi.c
+> +++ b/drivers/platform/x86/thinkpad_acpi.c
+> @@ -7623,9 +7623,9 @@ static int __init volume_create_alsa_mixer(void)
+>         data = card->private_data;
+>         data->card = card;
+>
+> -       strlcpy(card->driver, TPACPI_ALSA_DRVNAME,
+> +       strscpy(card->driver, TPACPI_ALSA_DRVNAME,
+>                 sizeof(card->driver));
+> -       strlcpy(card->shortname, TPACPI_ALSA_SHRTNAME,
+> +       strscpy(card->shortname, TPACPI_ALSA_SHRTNAME,
+>                 sizeof(card->shortname));
+>         snprintf(card->mixername, sizeof(card->mixername), "ThinkPad EC %s",
+>                  (thinkpad_id.ec_version_str) ?
 > --
-> Thanks,
+> 2.35.1
 >
-> Steve
-
 
 
 -- 
-Thanks,
-
-Steve
+With Best Regards,
+Andy Shevchenko

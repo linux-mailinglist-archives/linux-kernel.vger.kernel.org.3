@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E2159A276
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ADDC59A283
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 18:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353209AbiHSQgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 12:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        id S1353353AbiHSQhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 12:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353706AbiHSQc0 (ORCPT
+        with ESMTP id S1353717AbiHSQc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 12:32:26 -0400
+        Fri, 19 Aug 2022 12:32:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7300104752;
-        Fri, 19 Aug 2022 09:06:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14E5DED4;
+        Fri, 19 Aug 2022 09:06:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 921336177D;
-        Fri, 19 Aug 2022 16:06:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BECCC433D6;
-        Fri, 19 Aug 2022 16:06:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83009617A7;
+        Fri, 19 Aug 2022 16:06:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F82CC433C1;
+        Fri, 19 Aug 2022 16:06:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660925197;
-        bh=NZrKYplqe+G17tIETm+2hY+3VvZ50Kmxurqtsx++LB4=;
+        s=korg; t=1660925199;
+        bh=dq0hPizqrVxlSqi/HT9pnHurp5vufDixbk6ozuVR+nI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rgu14KGru+GV/HNT2EO3nIKu6DZn4hJK/X0d5OstI2QTFHSv4AS9vFR5THEgdoRRF
-         9rpJbZLp0s3wBXsiZE0j6h3sGj5XOUjuR14GHklyoOSEzI9N7+bEH86bcxqYRqgZeB
-         r8E2h106p5WEUWOThLabMu8O2bXEuoXvuf0PgWS8=
+        b=pLbAhljtsAEMxCnomLxZT13livBFlwyejde+jYOP341afU3iGB5HAQ677947lkkDB
+         QU199sxEvHO0VYmKVjD+UyIkxTaAWtewENoIqiDpQCLwreXfLzux/65+MdIlZUZ8j9
+         DzWTbI1zJd+FbR+ghmSrff9JC/VC2m/qqS2naXpw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
+        stable@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 407/545] s390/zcore: fix race when reading from hardware system area
-Date:   Fri, 19 Aug 2022 17:42:57 +0200
-Message-Id: <20220819153847.638702238@linuxfoundation.org>
+Subject: [PATCH 5.10 416/545] powerpc/32: Do not allow selection of e5500 or e6500 CPUs on PPC32
+Date:   Fri, 19 Aug 2022 17:43:06 +0200
+Message-Id: <20220819153848.041277417@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220819153829.135562864@linuxfoundation.org>
 References: <20220819153829.135562864@linuxfoundation.org>
@@ -57,82 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Gordeev <agordeev@linux.ibm.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-[ Upstream commit 9ffed254d938c9e99eb7761c7f739294c84e0367 ]
+[ Upstream commit 9be013b2a9ecb29b5168e4b9db0e48ed53acf37c ]
 
-Memory buffer used for reading out data from hardware system
-area is not protected against concurrent access.
+Commit 0e00a8c9fd92 ("powerpc: Allow CPU selection also on PPC32")
+enlarged the CPU selection logic to PPC32 by removing depend to
+PPC64, and failed to restrict that depend to E5500_CPU and E6500_CPU.
+Fortunately that got unnoticed because -mcpu=8540 will override the
+-mcpu=e500mc64 or -mpcu=e6500 as they are ealier, but that's
+fragile and may no be right in the future.
 
-Reported-by: Matthew Wilcox <willy@infradead.org>
-Fixes: 411ed3225733 ("[S390] zfcpdump support.")
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
-Tested-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-Link: https://lore.kernel.org/r/e68137f0f9a0d2558f37becc20af18e2939934f6.1658206891.git.agordeev@linux.ibm.com
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Add back the depend PPC64 on E5500_CPU and E6500_CPU.
+
+Fixes: 0e00a8c9fd92 ("powerpc: Allow CPU selection also on PPC32")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/8abab4888da69ff78b73a56f64d9678a7bf684e9.1657549153.git.christophe.leroy@csgroup.eu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/s390/char/zcore.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ arch/powerpc/platforms/Kconfig.cputype | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/s390/char/zcore.c b/drivers/s390/char/zcore.c
-index 1515fdc3c1ab..3841c0e77df6 100644
---- a/drivers/s390/char/zcore.c
-+++ b/drivers/s390/char/zcore.c
-@@ -48,6 +48,7 @@ static struct dentry *zcore_reipl_file;
- static struct dentry *zcore_hsa_file;
- static struct ipl_parameter_block *zcore_ipl_block;
+diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/platforms/Kconfig.cputype
+index 32a9c4c09b98..75ebfbff4deb 100644
+--- a/arch/powerpc/platforms/Kconfig.cputype
++++ b/arch/powerpc/platforms/Kconfig.cputype
+@@ -152,11 +152,11 @@ config POWER9_CPU
  
-+static DEFINE_MUTEX(hsa_buf_mutex);
- static char hsa_buf[PAGE_SIZE] __aligned(PAGE_SIZE);
+ config E5500_CPU
+ 	bool "Freescale e5500"
+-	depends on E500
++	depends on PPC64 && E500
  
- /*
-@@ -64,19 +65,24 @@ int memcpy_hsa_user(void __user *dest, unsigned long src, size_t count)
- 	if (!hsa_available)
- 		return -ENODATA;
+ config E6500_CPU
+ 	bool "Freescale e6500"
+-	depends on E500
++	depends on PPC64 && E500
  
-+	mutex_lock(&hsa_buf_mutex);
- 	while (count) {
- 		if (sclp_sdias_copy(hsa_buf, src / PAGE_SIZE + 2, 1)) {
- 			TRACE("sclp_sdias_copy() failed\n");
-+			mutex_unlock(&hsa_buf_mutex);
- 			return -EIO;
- 		}
- 		offset = src % PAGE_SIZE;
- 		bytes = min(PAGE_SIZE - offset, count);
--		if (copy_to_user(dest, hsa_buf + offset, bytes))
-+		if (copy_to_user(dest, hsa_buf + offset, bytes)) {
-+			mutex_unlock(&hsa_buf_mutex);
- 			return -EFAULT;
-+		}
- 		src += bytes;
- 		dest += bytes;
- 		count -= bytes;
- 	}
-+	mutex_unlock(&hsa_buf_mutex);
- 	return 0;
- }
- 
-@@ -94,9 +100,11 @@ int memcpy_hsa_kernel(void *dest, unsigned long src, size_t count)
- 	if (!hsa_available)
- 		return -ENODATA;
- 
-+	mutex_lock(&hsa_buf_mutex);
- 	while (count) {
- 		if (sclp_sdias_copy(hsa_buf, src / PAGE_SIZE + 2, 1)) {
- 			TRACE("sclp_sdias_copy() failed\n");
-+			mutex_unlock(&hsa_buf_mutex);
- 			return -EIO;
- 		}
- 		offset = src % PAGE_SIZE;
-@@ -106,6 +114,7 @@ int memcpy_hsa_kernel(void *dest, unsigned long src, size_t count)
- 		dest += bytes;
- 		count -= bytes;
- 	}
-+	mutex_unlock(&hsa_buf_mutex);
- 	return 0;
- }
- 
+ config 860_CPU
+ 	bool "8xx family"
 -- 
 2.35.1
 

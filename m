@@ -2,76 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAB259A52F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D6B59A470
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349826AbiHSSEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 14:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        id S1350279AbiHSR6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 13:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349835AbiHSSD4 (ORCPT
+        with ESMTP id S1350816AbiHSR5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 14:03:56 -0400
-Received: from mail.rv.npu.gov.ua (mail.rv.npu.gov.ua [85.159.5.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDCA2F025
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 10:49:49 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rv.npu.gov.ua (Postfix) with ESMTP id A5E1F4223FE7;
-        Fri, 19 Aug 2022 20:49:20 +0300 (EEST)
-Received: from mail.rv.npu.gov.ua ([127.0.0.1])
-        by localhost (mail.rv.npu.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id J-8EcNGSVPDb; Fri, 19 Aug 2022 20:49:19 +0300 (EEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rv.npu.gov.ua (Postfix) with ESMTP id 2F95E4145EF7;
-        Fri, 19 Aug 2022 20:49:19 +0300 (EEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rv.npu.gov.ua 2F95E4145EF7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rv.npu.gov.ua;
-        s=D9C6921A-69F2-11EB-967E-80F8358BD1FC; t=1660931359;
-        bh=rXKZG/8bQHY28IslpDmB9+1lxzhBpWrTxjnUDTFW+HM=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=cLLQcGhXw4SNStxiTqJV3wwGE4kNjOMemiTaR0QEamYqr3DeEWjSeTZpxcByLLSTH
-         ls4nLv5aheBkoY/VhBBHjKDrZHTNw59Y9WmIZMA+GDFV2XkIYk2E6sf96aG1tLtSXt
-         tHgQ7sD4v+p6QT0199UNcJ4sCW0z4rJ7rI+vmqG+RcP0+h7nyYv5Nec3zsh5SjLdKG
-         MGA7r3YZy/r4U4foYUsFOvIEdEtmYmIKxm6zzbSjUi5py8aDg5LI2OZnmCQsxldhWy
-         eAdy8YyJOxCqAxIdxxcnQEOJbiA1ey0NCt7Oov/Wz4u8bvexa1n4X9XMdfS1IlfEWo
-         f1waqjs0xMxZg==
-X-Virus-Scanned: amavisd-new at rv.npu.gov.ua
-Received: from mail.rv.npu.gov.ua ([127.0.0.1])
-        by localhost (mail.rv.npu.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vI3BUEY_fzbk; Fri, 19 Aug 2022 20:49:19 +0300 (EEST)
-Received: from DESKTOP-CJHK18M.home (gateway [101.19.1.22])
-        by mail.rv.npu.gov.ua (Postfix) with ESMTPSA id 213634145EFC;
-        Fri, 19 Aug 2022 20:49:17 +0300 (EEST)
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 19 Aug 2022 13:57:55 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30F631358;
+        Fri, 19 Aug 2022 10:43:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 28E3CCE26B5;
+        Fri, 19 Aug 2022 17:43:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FDCBC433D6;
+        Fri, 19 Aug 2022 17:43:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660930983;
+        bh=CtN0bU1lCxBA2fo8mhjV2ip2dwYJ1d1FUVmor9iMIE8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eNPvGdQ/HZ3TrSyM9+mcrX5Ixzh7JeBIY71kH3qCq3XhdcIh+cj7SNkuW2qWOqSlm
+         KMU8VkmtknY5zH4Jt/Bwl/i2Fqd3XP9HvUzfpLJsfCOdOcnP5lBM6xZvHPwpepqC32
+         l7QvgFgsdBLLh6FdQHJ5JDWINV5YUWb2DmWq+ZeLi0b7Jq+bF3//cebXvNa5TetDIz
+         Yw9AkJyB9ohxI2FSWDmPmpVIj0gjvlmB2pcn3T08N+juDfmP01fHSL//PveRBViwy2
+         fKZEg2pFqi7Tx7+BtiRZ94tYGR8jqd4/D897mmTN2jDH3yqZfE0pDypYbtO0cng8s/
+         37N3gk1KRxa7g==
+Date:   Fri, 19 Aug 2022 18:53:39 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Artur Rojek <contact@artur-rojek.eu>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: [PATCH 4/4] input: joystick: Fix buffer data parsing
+Message-ID: <20220819185339.7f488ad8@jic23-huawei>
+In-Reply-To: <20220817105643.95710-5-contact@artur-rojek.eu>
+References: <20220817105643.95710-1-contact@artur-rojek.eu>
+        <20220817105643.95710-5-contact@artur-rojek.eu>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re:
-To:     Recipients <kostopil@rv.npu.gov.ua>
-From:   "MacKenzie Scott" <kostopil@rv.npu.gov.ua>
-Date:   Sat, 20 Aug 2022 01:49:38 +0800
-Reply-To: mackenziescott@vallenata.co
-Message-Id: <20220819174917.213634145EFC@mail.rv.npu.gov.ua>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,LOTS_OF_MONEY,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, =
+On Wed, 17 Aug 2022 12:56:43 +0200
+Artur Rojek <contact@artur-rojek.eu> wrote:
 
-                          =
+> Don't try to access buffer data of a channel by its scan index. Instead,
+> use the newly introduced `iio_find_channel_offset_in_buffer` to get the
+> correct data offset.
+> 
+> The scan index of a channel does not represent its position in a buffer,
+> as the buffer will contain data for enabled channels only, affecting
+> data offsets and alignment.
+> 
+> Fixes: 2c2b364fddd5 ("Input: joystick - add ADC attached joystick driver.")
+> Reported-by: Chris Morgan <macromorgan@hotmail.com>
+> Tested-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+> ---
+>  drivers/input/joystick/adc-joystick.c | 26 +++++++++++++++++---------
+>  1 file changed, 17 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/input/joystick/adc-joystick.c b/drivers/input/joystick/adc-joystick.c
+> index c0deff5d4282..aed853ebe1d1 100644
+> --- a/drivers/input/joystick/adc-joystick.c
+> +++ b/drivers/input/joystick/adc-joystick.c
+> @@ -6,6 +6,7 @@
+>  #include <linux/ctype.h>
+>  #include <linux/input.h>
+>  #include <linux/iio/iio.h>
+> +#include <linux/iio/buffer.h>
+>  #include <linux/iio/consumer.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+> @@ -46,36 +47,43 @@ static void adc_joystick_poll(struct input_dev *input)
+>  static int adc_joystick_handle(const void *data, void *private)
+>  {
+>  	struct adc_joystick *joy = private;
+> +	struct iio_buffer *buffer;
+>  	enum iio_endian endianness;
+> -	int bytes, msb, val, idx, i;
+> -	const u16 *data_u16;
+> +	int bytes, msb, val, off;
+> +	const u8 *chan_data;
+> +	unsigned int i;
+>  	bool sign;
+>  
+>  	bytes = joy->chans[0].channel->scan_type.storagebits >> 3;
+>  
+>  	for (i = 0; i < joy->num_chans; ++i) {
+> -		idx = joy->chans[i].channel->scan_index;
+>  		endianness = joy->chans[i].channel->scan_type.endianness;
+>  		msb = joy->chans[i].channel->scan_type.realbits - 1;
+>  		sign = tolower(joy->chans[i].channel->scan_type.sign) == 's';
+> +		buffer = iio_channel_cb_get_iio_buffer(joy->buffer);
+> +		off = iio_find_channel_offset_in_buffer(joy->chans[i].indio_dev,
+> +							joy->chans[i].channel,
+> +							buffer);
 
-I'm MacKenzie Scott Ex-wife of Amazon CEO and founder, I'm donating $ 4 bil=
-lion Dollars to charities, individuals, colleges across the Globe from Scot=
-t's foundation, to provide immediate support to people suffering economical=
-ly from COVID-19 pandemic and you're one of the lucky winners, i have a don=
-ation grant worth $100,800,000.00 Dollars for you, you can contact me for m=
-ore information if you're interested.
+With this call replaced with one that instead uses
 
-Regards,
-MacKenzie Scott.
+		off = iio_find_channel_offset_in_buffer(joy->chans, i);
+
+which I'm fairly sure is enough via the info in chans[x]->channel to establish this offset.
+
+All is good, though you should probably cache it as doing that maths every
+time seems excessive.
+
+
+> +		if (off < 0)
+> +			return off;
+> +
+> +		chan_data = (const u8 *)data + off;
+>  
+>  		switch (bytes) {
+>  		case 1:
+> -			val = ((const u8 *)data)[idx];
+> +			val = *chan_data;
+>  			break;
+>  		case 2:
+> -			data_u16 = (const u16 *)data + idx;
+> -
+>  			/*
+>  			 * Data is aligned to the sample size by IIO core.
+>  			 * Call `get_unaligned_xe16` to hide type casting.
+>  			 */
+>  			if (endianness == IIO_BE)
+> -				val = get_unaligned_be16(data_u16);
+> +				val = get_unaligned_be16(chan_data);
+
+I obviously missed this previously but these are aligned so we don't need the
+unaligned form.
+
+>  			else if (endianness == IIO_LE)
+> -				val = get_unaligned_le16(data_u16);
+> +				val = get_unaligned_le16(chan_data);
+>  			else /* IIO_CPU */
+> -				val = *data_u16;
+> +				val = *(const u16 *)chan_data;
+>  			break;
+>  		default:
+>  			return -EINVAL;
+

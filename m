@@ -2,267 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203A55999C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586A45999BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348367AbiHSKbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
+        id S1348276AbiHSKbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346949AbiHSKbE (ORCPT
+        with ESMTP id S1348042AbiHSKbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:31:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1687BEF9F3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 03:31:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A12C1042;
-        Fri, 19 Aug 2022 03:31:04 -0700 (PDT)
-Received: from e108754-lin.cambridge.arm.com (unknown [10.1.195.34])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DCA6F3F70D;
-        Fri, 19 Aug 2022 03:31:01 -0700 (PDT)
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ionela Voinescu <ionela.voinescu@arm.com>
-Subject: [PATCH v3] arm64: errata: add detection for AMEVCNTR01 incrementing incorrectly
-Date:   Fri, 19 Aug 2022 11:30:50 +0100
-Message-Id: <20220819103050.24211-1-ionela.voinescu@arm.com>
-X-Mailer: git-send-email 2.29.2.dirty
+        Fri, 19 Aug 2022 06:31:46 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF9BF14D5;
+        Fri, 19 Aug 2022 03:31:44 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id n7so4683681wrv.4;
+        Fri, 19 Aug 2022 03:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc;
+        bh=S5k8ZCJni3UL0WQ48e88TPbgvrbpo4Cons2frUXSviI=;
+        b=pkk4Blrjvsirn3+XzQbOc481V0K85S55+qb5UDQI8LqNw8stAarO0zQl/yQeWVNYU9
+         8ddcICcQF6erv4mSrZK8XEEnVtmgWn5mtP42Nu0Iw3WPEBaCUpCxoAaqrjxWMAAz5y6S
+         +c83VRx61KJO/OWqBLAatDe4o3J3Y/yVpP71V6snjmIey/bubvmykty7jMU2XxUgpJTs
+         wA+2DFT5Kx6iyKOr6E7IhxFJAcaPCawGPghxCM3oIgXYCcFg4nVMvXVU5UO9lveKsx4a
+         lroGm0RqSTuHtvD3aDQ6g+fpksyATl3ijj3FHwoifELsDyuYYpLuzHsGe1mAcjSOFXuN
+         s3Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc;
+        bh=S5k8ZCJni3UL0WQ48e88TPbgvrbpo4Cons2frUXSviI=;
+        b=jZP4FscejM/OuQJSaV/PWAEUbxYcbIOotvLvxQQBSEhxdV8ZK0QplCLmpHLjKDfowg
+         Vj8bQiOz0vPAgJc+GEQ2wWAUtdj/ASerjH0A6bf+BSisX3/BB8rFEVdLEgz0hfBqGnfM
+         WQyexgSgHC7JUTYqzFnb/lSkCAezn5qwWa8TVX3U4cUNBLXrhvaKkKbOv5M7HiLpVUWo
+         +n3tR3l+4NxdYtuHvYaXg1ID8N2jS4DV6nf5+v6kgTItrjJLb/WipVrEo1MaC0zrLHM/
+         vGzeQukakINpUnXFPZBUikEDv4Z43rzD9dCjCYtr5NJXNMckKSDfv9KghIdcXgkaWSTJ
+         AFhw==
+X-Gm-Message-State: ACgBeo2UD9SXUHMI1qgwNjLzLx0I+IOAJWSjchT7Nn0/YuIakbDdfzNd
+        flP++781n4sytSqkceJgrkY=
+X-Google-Smtp-Source: AA6agR5RAgFD53s5JdkYUUOp+pMAXYKgWpDePCH/nKlI9urWFaExgPVXWbEytt2eaVI/klXWRUvI+g==
+X-Received: by 2002:a05:6000:2c7:b0:225:16cc:aa33 with SMTP id o7-20020a05600002c700b0022516ccaa33mr3867028wry.609.1660905102927;
+        Fri, 19 Aug 2022 03:31:42 -0700 (PDT)
+Received: from DreamMachine2.lan (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
+        by smtp.gmail.com with ESMTPSA id j7-20020a05600c1c0700b003a319b67f64sm3541287wms.0.2022.08.19.03.31.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 03:31:42 -0700 (PDT)
+Message-ID: <8a1f372f34be71895268e874bb3fbbf105dfabdb.camel@gmail.com>
+Subject: Re: [PATCH] iio: pressure: bmp280: fix datasheet links
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     linux-iio <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Fri, 19 Aug 2022 12:31:18 +0200
+In-Reply-To: <CAHp75VdTZ_JYB2aYVdQTOx9QW1HPKhwYyQH-0tVCtpjHV=VcaQ@mail.gmail.com>
+References: <6e908cc827c70b95dae683717592aff0b003e7c9.1660606478.git.ang.iglesiasg@gmail.com>
+         <CAHp75VdTZ_JYB2aYVdQTOx9QW1HPKhwYyQH-0tVCtpjHV=VcaQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (by Flathub.org) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AMU counter AMEVCNTR01 (constant counter) should increment at the same
-rate as the system counter. On affected Cortex-A510 cores, AMEVCNTR01
-increments incorrectly giving a significantly higher output value. This
-results in inaccurate task scheduler utilization tracking and incorrect
-feedback on CPU frequency.
+On Fri, 2022-08-19 at 12:37 +0300, Andy Shevchenko wrote:
+> On Tue, Aug 16, 2022 at 2:39 AM Angel Iglesias <ang.iglesiasg@gmail.com>
+> wrote:
+> >=20
+> > Updated links for BMP280 and BME280 datasheets on Bosch website.
+>=20
+> > Datasheet of BMP180 is no longer available on the manufacturer's websit=
+e,
+> > changed the link to a copy hosted by a third party.
+>=20
+> Note, that the version is downgraded (from 12.1 to 9).
 
-Work around this problem by returning 0 when reading the affected counter
-in key locations that results in disabling all users of this counter from
-using it either for frequency invariance or as FFH reference counter. This
-effect is the same to firmware disabling affected counters.
+Apologies, I forgot to add a note about this. Changelog on datasheet 12.1 l=
+isted
+these three changes from version 9:
+* Page 26: Changed document referral from ANP015 to BST-MPS-AN004-00
+* Chapter 3.5: New equation for B3 (adds a long cast to AC1)
+* Page 26: Updated RoHS directive to 2011/65/EU effective 8 June 2011
 
-Details on how the two features are affected by this erratum:
+Unfortunately, I couldn't find the most updated version in good quality hos=
+ted
+in a trustworthy place.
 
- - AMU counters will not be used for frequency invariance for affected
-   CPUs and CPUs in the same cpufreq policy. AMUs can still be used for
-   frequency invariance for unaffected CPUs in the system. Although
-   unlikely, if no alternative method can be found to support frequency
-   invariance for affected CPUs (cpufreq based or solution based on
-   platform counters) frequency invariance will be disabled. Please check
-   the chapter on frequency invariance at
-   Documentation/scheduler/sched-capacity.rst for details of its effect.
-
- - Given that FFH can be used to fetch either the core or constant counter
-   values, restrictions are lifted regarding any of these counters
-   returning a valid (!0) value. Therefore FFH is considered supported
-   if there is a least one CPU that support AMUs, independent of any
-   counters being disabled or affected by this erratum. Clarifying
-   comments are now added to the cpc_ffh_supported(), cpu_read_constcnt()
-   and cpu_read_corecnt() functions.
-
-The above is achieved through adding a new erratum: ARM64_ERRATUM_2457168.
-
-Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: James Morse <james.morse@arm.com>
----
-
-Hi,
-
-This patch is based on the information in the A510 Errata Notice,
-version 13.0 at [1] and applies on v6.0-rc1.
-
-v2 -> v3:
- - v2 resent at [3]
- - Based on 6.0-rc1.
- - Added (hopefully clarifying) comments to cpc_ffh_supported(),
-   cpu_read_constcnt() and and cpu_read_corecnt() regarding CPUs affected
-   by errata, that have counters disabled or that don't support AMUs.
-   I'm happy to change the wording or add more details if need be.
-
-v2 RESEND: v2 rebased on 6.0-rc1
-v1 -> v2:
- - v1 at [2]
- - Move detection of erratum in cpu_errata.c
- - Limit checking for affected CPUs to the init phase for FIE (Frequency
-   Invariance Engine). For FFH we'll still check for affected CPUs at each
-   read of the constant counter, but reads happen less often (driven by
-   sysfs reads) compared to FIE (on the tick).
-
-[1] https://developer.arm.com/documentation/SDEN2397589/1300/?lang=en
-[2] https://lore.kernel.org/lkml/20220607125340.13635-1-ionela.voinescu@arm.com/
-[3] https://lore.kernel.org/lkml/20220817121551.21790-1-ionela.voinescu@arm.com/
-
-Thanks,
-Ionela.
-
- Documentation/arm64/silicon-errata.rst |  2 ++
- arch/arm64/Kconfig                     | 17 ++++++++++++++
- arch/arm64/kernel/cpu_errata.c         | 10 ++++++++
- arch/arm64/kernel/cpufeature.c         |  5 +++-
- arch/arm64/kernel/topology.c           | 32 ++++++++++++++++++++++++--
- arch/arm64/tools/cpucaps               |  1 +
- 6 files changed, 64 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
-index 33b04db8408f..fda97b3fcf01 100644
---- a/Documentation/arm64/silicon-errata.rst
-+++ b/Documentation/arm64/silicon-errata.rst
-@@ -52,6 +52,8 @@ stable kernels.
- | Allwinner      | A64/R18         | UNKNOWN1        | SUN50I_ERRATUM_UNKNOWN1     |
- +----------------+-----------------+-----------------+-----------------------------+
- +----------------+-----------------+-----------------+-----------------------------+
-+| ARM            | Cortex-A510     | #2457168        | ARM64_ERRATUM_2457168       |
-++----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-A510     | #2064142        | ARM64_ERRATUM_2064142       |
- +----------------+-----------------+-----------------+-----------------------------+
- | ARM            | Cortex-A510     | #2038923        | ARM64_ERRATUM_2038923       |
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 571cc234d0b3..9fb9fff08c94 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -917,6 +917,23 @@ config ARM64_ERRATUM_1902691
- 
- 	  If unsure, say Y.
- 
-+config ARM64_ERRATUM_2457168
-+	bool "Cortex-A510: 2457168: workaround for AMEVCNTR01 incrementing incorrectly"
-+	depends on ARM64_AMU_EXTN
-+	default y
-+	help
-+	  This option adds the workaround for ARM Cortex-A510 erratum 2457168.
-+
-+	  The AMU counter AMEVCNTR01 (constant counter) should increment at the same rate
-+	  as the system counter. On affected Cortex-A510 cores AMEVCNTR01 increments
-+	  incorrectly giving a significantly higher output value.
-+
-+	  Work around this problem by returning 0 when reading the affected counter in
-+	  key locations that results in disabling all users of this counter. This effect
-+	  is the same to firmware disabling affected counters.
-+
-+	  If unsure, say Y.
-+
- config CAVIUM_ERRATUM_22375
- 	bool "Cavium erratum 22375, 24313"
- 	default y
-diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-index 7e6289e709fc..810dd3c39882 100644
---- a/arch/arm64/kernel/cpu_errata.c
-+++ b/arch/arm64/kernel/cpu_errata.c
-@@ -654,6 +654,16 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
- 		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
- 	},
- #endif
-+#ifdef CONFIG_ARM64_ERRATUM_2457168
-+	{
-+		.desc = "ARM erratum 2457168",
-+		.capability = ARM64_WORKAROUND_2457168,
-+		.type = ARM64_CPUCAP_WEAK_LOCAL_CPU_FEATURE,
-+
-+		/* Cortex-A510 r0p0-r1p1 */
-+		CAP_MIDR_RANGE(MIDR_CORTEX_A510, 0, 0, 1, 1)
-+	},
-+#endif
- #ifdef CONFIG_ARM64_ERRATUM_2038923
- 	{
- 		.desc = "ARM erratum 2038923",
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 907401e4fffb..af4de817d712 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -1870,7 +1870,10 @@ static void cpu_amu_enable(struct arm64_cpu_capabilities const *cap)
- 		pr_info("detected CPU%d: Activity Monitors Unit (AMU)\n",
- 			smp_processor_id());
- 		cpumask_set_cpu(smp_processor_id(), &amu_cpus);
--		update_freq_counters_refs();
-+
-+		/* 0 reference values signal broken/disabled counters */
-+		if (!this_cpu_has_cap(ARM64_WORKAROUND_2457168))
-+			update_freq_counters_refs();
- 	}
- }
- 
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index 869ffc4d4484..ad2bfc794257 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -296,12 +296,25 @@ core_initcall(init_amu_fie);
- 
- static void cpu_read_corecnt(void *val)
- {
-+	/*
-+	 * A value of 0 can be returned if the current CPU does not support AMUs
-+	 * or if the counter is disabled for this CPU. A return value of 0 at
-+	 * counter read is properly handled as an error case by the users of the
-+	 * counter.
-+	 */
- 	*(u64 *)val = read_corecnt();
- }
- 
- static void cpu_read_constcnt(void *val)
- {
--	*(u64 *)val = read_constcnt();
-+	/*
-+	 * Return 0 if the current CPU is affected by erratum 2457168. A value
-+	 * of 0 is also returned if the current CPU does not support AMUs or if
-+	 * the counter is disabled. A return value of 0 at counter read is
-+	 * properly handled as an error case by the users of the counter.
-+	 */
-+	*(u64 *)val = this_cpu_has_cap(ARM64_WORKAROUND_2457168) ?
-+		      0UL : read_constcnt();
- }
- 
- static inline
-@@ -328,7 +341,22 @@ int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
-  */
- bool cpc_ffh_supported(void)
- {
--	return freq_counters_valid(get_cpu_with_amu_feat());
-+	int cpu = get_cpu_with_amu_feat();
-+
-+	/*
-+	 * FFH is considered supported if there is at least one present CPU that
-+	 * supports AMUs. Using FFH to read core and reference counters for CPUs
-+	 * that do not support AMUs, have counters disabled or that are affected
-+	 * by errata, will result in a return value of 0.
-+	 *
-+	 * This is done to allow any enabled and valid counters to be read
-+	 * through FFH, knowing that potentially returning 0 as counter value is
-+	 * properly handled by the users of these counters.
-+	 */
-+	if ((cpu >= nr_cpu_ids) || !cpumask_test_cpu(cpu, cpu_present_mask))
-+		return false;
-+
-+	return true;
- }
- 
- int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
-diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-index 779653771507..63b2484ce6c3 100644
---- a/arch/arm64/tools/cpucaps
-+++ b/arch/arm64/tools/cpucaps
-@@ -67,6 +67,7 @@ WORKAROUND_1902691
- WORKAROUND_2038923
- WORKAROUND_2064142
- WORKAROUND_2077057
-+WORKAROUND_2457168
- WORKAROUND_TRBE_OVERWRITE_FILL_MODE
- WORKAROUND_TSB_FLUSH_FAILURE
- WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
--- 
-2.25.1
+>=20
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>=20
+> > Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+> > ---
+> > =C2=A0drivers/iio/pressure/bmp280-core.c | 6 +++---
+> > =C2=A01 file changed, 3 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/drivers/iio/pressure/bmp280-core.c
+> > b/drivers/iio/pressure/bmp280-core.c
+> > index fe7aa81e7cc9..e98b024d510b 100644
+> > --- a/drivers/iio/pressure/bmp280-core.c
+> > +++ b/drivers/iio/pressure/bmp280-core.c
+> > @@ -9,9 +9,9 @@
+> > =C2=A0 * Driver for Bosch Sensortec BMP180 and BMP280 digital pressure =
+sensor.
+> > =C2=A0 *
+> > =C2=A0 * Datasheet:
+> > - *
+> > https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMP1=
+80-DS000-121.pdf
+> > - *
+> > https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMP2=
+80-DS001-12.pdf
+> > - *
+> > https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BME2=
+80_DS001-11.pdf
+> > + * https://cdn-shop.adafruit.com/datasheets/BST-BMP180-DS000-09.pdf
+> > + *
+> > https://www.bosch-sensortec.com/media/boschsensortec/downloads/datashee=
+ts/bst-bmp280-ds001.pdf
+> > + *
+> > https://www.bosch-sensortec.com/media/boschsensortec/downloads/datashee=
+ts/bst-bme280-ds002.pdf
+> > =C2=A0 */
+> >=20
+> > =C2=A0#define pr_fmt(fmt) "bmp280: " fmt
+> >=20
+> > base-commit: b82217e73b5aa6db8453ad91b929ca2366e47184
+> > --
+> > 2.37.2
+> >=20
+>=20
+>=20
+Kind regards,
+Angel
 

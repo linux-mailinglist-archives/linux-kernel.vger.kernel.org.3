@@ -2,99 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA61599A02
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3189599A10
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348198AbiHSKd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
+        id S1347521AbiHSKdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348042AbiHSKdW (ORCPT
+        with ESMTP id S1347681AbiHSKdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:33:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AB463BB;
-        Fri, 19 Aug 2022 03:33:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A664616EC;
-        Fri, 19 Aug 2022 10:33:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1841CC433D7;
-        Fri, 19 Aug 2022 10:33:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660905195;
-        bh=P0ohKSkFshdhJ/jP9vFwkBZFmB+9KCEud3AFiAiMbmQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zjJfROVURJQxCvUOeg4Nkgxqx9luhmsRP5yzv95BZBWKg4eJHf5UGpZQb5Ret5hrk
-         lhdlelPhJ0Ez06/6q+3qZRWsC9vfsWVf123a+7H1SnfCDqDWABG+2Z1naBXTnNuzPH
-         av3xOcUd2jLMnbAe1GsPmTTaBWHErkYy0dNegwt0=
-Date:   Fri, 19 Aug 2022 12:33:12 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Utkarsh Patel <utkarsh.h.patel@intel.com>,
-        rajmohan.mani@intel.com, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/6] ACPI: New helper function
- acpi_dev_get_memory_resources() and a new ACPI ID
-Message-ID: <Yv9m6LSGKXvnnBSY@kroah.com>
-References: <20220816101629.69054-1-heikki.krogerus@linux.intel.com>
- <Yv6PLl4aLPzHTJTQ@kroah.com>
- <Yv9ftg2MVx+okmzC@kuha.fi.intel.com>
+        Fri, 19 Aug 2022 06:33:49 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9687E2C108;
+        Fri, 19 Aug 2022 03:33:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dotXOKDiE1Y3p77G/61a0SdN8QdKHMNUsMOBOW8ypLA=; b=blckdN/WSOPTEjHVqp8yk9NPT0
+        QIdwpSuyVgGGsN7RFjen+tZmn7irX96jkAlgWREvYD3NBXcNsZabMpHJRyxxcft0HguTNOtzuRVMY
+        wUhxjGNmqIRMXtR4hI7b47Uz06VpsOE7u6lpU0tsXVrItxQrPz3O9pnM2Qsw79QeMKPOmDco+ct5T
+        psua+uKaS26T+MITqkD2Vse88mEwa06rym4C7jN6SDs2tsR0XodwEKp9OZAMR55h6KBWib5vY9qjA
+        3jjLJSL14hWNyCj/0/dlZTIsJwaXPIwgy05dVRLM3LBVJ7wMQe2d87iEOrbySSWXICOtNM1DlPfFG
+        39gq9tkQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oOzJn-00B1c4-Ui; Fri, 19 Aug 2022 10:33:36 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E61AF980163; Fri, 19 Aug 2022 12:33:34 +0200 (CEST)
+Date:   Fri, 19 Aug 2022 12:33:34 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Daniel Sneddon <daniel.sneddon@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH] x86/nospec: Unwreck the RSB stuffing
+Message-ID: <Yv9m/huNJLuyviIn@worktop.programming.kicks-ass.net>
+References: <20220809175513.345597655@linuxfoundation.org>
+ <20220809175513.979067723@linuxfoundation.org>
+ <YvuNdDWoUZSBjYcm@worktop.programming.kicks-ass.net>
+ <839e2877-bb16-dbb5-d4da-bc611733c7e1@linux.intel.com>
+ <84f4b1ea-d837-9a53-a21c-4ac602ff8e75@linux.intel.com>
+ <YvyQzHzLJpalcvbZ@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yv9ftg2MVx+okmzC@kuha.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YvyQzHzLJpalcvbZ@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 01:02:30PM +0300, Heikki Krogerus wrote:
-> Hi,
-> 
-> On Thu, Aug 18, 2022 at 09:12:46PM +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Aug 16, 2022 at 01:16:23PM +0300, Heikki Krogerus wrote:
-> > > Hi,
-> > > 
-> > > The helper function returns all memory resources described for a
-> > > device regardless of the ACPI descriptor type (as long as it's
-> > > memory), but the first patch introduces new ACPI ID for the IOM
-> > > controller on Intel Meteor Lake and also separately modifies the
-> > > driver so that it can get the memory resource from Address Space
-> > > Resource Descriptor.
-> > > 
-> > > An alternative would have been to introduce that helper function first
-> > > so we would not need to modify the driver when the new ID is added,
-> > > but then the helper would also need to be applied to the stable kernel
-> > > releases, and that does not feel necessary or appropriate in this
-> > > case, at least not IMO.
-> > > 
-> > > So that's why I'm proposing here that we first add the ID, and only
-> > > after that introduce the helper, and only for mainline. That way the
-> > > patch introducing the ID is the only that goes to the stable releases.
-> > > 
-> > > If that's okay, and these don't have any other problems, I assume it's
-> > > OK if Rafael takes all of these, including the ID?
+On Wed, Aug 17, 2022 at 08:55:08AM +0200, Peter Zijlstra wrote:
+> On Tue, Aug 16, 2022 at 11:04:36AM -0700, Daniel Sneddon wrote:
+> > diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> > index 1a31ae6d758b..c5b55c9f2849 100644
+> > --- a/arch/x86/include/asm/cpufeatures.h
+> > +++ b/arch/x86/include/asm/cpufeatures.h
+> > @@ -420,7 +420,7 @@
+> >  #define X86_FEATURE_V_TSC_AUX          (19*32+ 9) /* "" Virtual TSC_AUX */
+> >  #define X86_FEATURE_SME_COHERENT       (19*32+10) /* "" AMD hardware-enforced
+> > cache coherency */
 > > 
-> > I took the id now, for 6.0-final as it seems to be totally independant
-> > of the other commits (otherwise you would not have tagged it for the
-> > stable tree.)
-> > 
-> > The remainder should probably be resent and send through the acpi tree.
+> > -#define X86_FEATURE_NEVER              (-1) /* "" Logical complement of ALWAYS */
+> > +#define X86_FEATURE_NEVER              (0x7FFF) /* "" Logical complement of
+> > ALWAYS */
 > 
-> Okay. The last patch depends on that ID patch, so Rafael, you need to
-> handle that conflict with immutable branch I guess. Or should we just
-> skip that patch for now?
+> 
+> Bah, I initially spelled that: ALT_NOT(X86_FEATURE_ALWAYS), but Boris
+> made me do the -1 thing there. Oh well, Boris can fix that :-)
 
-You can wait for -rc3 or so which should have that commit in it.
+Boris, how's this then? Will you cram it into x86/urgent ?
 
-thanks,
+---
 
-greg k-h
+Subject: x86/nospec: Unwreck the RSB stuffing
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Tue, 16 Aug 2022 14:28:36 +0200
+
+Commit 2b1299322016 ("x86/speculation: Add RSB VM Exit protections")
+made a right mess of the RSB stuffing, rewrite the whole thing to not
+suck.
+
+Thanks to Andrew for the enlightening comment about Post-Barrier RSB
+things so we can make this code less magical.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/include/asm/nospec-branch.h |   80 +++++++++++++++++------------------
+ 1 file changed, 39 insertions(+), 41 deletions(-)
+
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -35,33 +35,44 @@
+ #define RSB_CLEAR_LOOPS		32	/* To forcibly overwrite all entries */
+ 
+ /*
++ * Common helper for __FILL_RETURN_BUFFER and __FILL_ONE_RETURN.
++ */
++#define __FILL_RETURN_SLOT			\
++	ANNOTATE_INTRA_FUNCTION_CALL;		\
++	call	772f;				\
++	int3;					\
++772:
++
++/*
++ * Stuff the entire RSB.
++ *
+  * Google experimented with loop-unrolling and this turned out to be
+  * the optimal version - two calls, each with their own speculation
+  * trap should their return address end up getting used, in a loop.
+  */
+-#define __FILL_RETURN_BUFFER(reg, nr, sp)	\
+-	mov	$(nr/2), reg;			\
+-771:						\
+-	ANNOTATE_INTRA_FUNCTION_CALL;		\
+-	call	772f;				\
+-773:	/* speculation trap */			\
+-	UNWIND_HINT_EMPTY;			\
+-	pause;					\
+-	lfence;					\
+-	jmp	773b;				\
+-772:						\
+-	ANNOTATE_INTRA_FUNCTION_CALL;		\
+-	call	774f;				\
+-775:	/* speculation trap */			\
+-	UNWIND_HINT_EMPTY;			\
+-	pause;					\
+-	lfence;					\
+-	jmp	775b;				\
+-774:						\
+-	add	$(BITS_PER_LONG/8) * 2, sp;	\
+-	dec	reg;				\
+-	jnz	771b;				\
+-	/* barrier for jnz misprediction */	\
++#define __FILL_RETURN_BUFFER(reg, nr)			\
++	mov	$(nr/2), reg;				\
++771:							\
++	__FILL_RETURN_SLOT				\
++	__FILL_RETURN_SLOT				\
++	add	$(BITS_PER_LONG/8) * 2, %_ASM_SP;	\
++	dec	reg;					\
++	jnz	771b;					\
++	/* barrier for jnz misprediction */		\
++	lfence;
++
++/*
++ * Stuff a single RSB slot.
++ *
++ * To mitigate Post-Barrier RSB speculation, one CALL instruction must be
++ * forced to retire before letting a RET instruction execute.
++ *
++ * On PBRSB-vulnerable CPUs, it is not safe for a RET to be executed
++ * before this point.
++ */
++#define __FILL_ONE_RETURN				\
++	__FILL_RETURN_SLOT				\
++	add	$(BITS_PER_LONG/8), %_ASM_SP;		\
+ 	lfence;
+ 
+ #ifdef __ASSEMBLY__
+@@ -132,28 +143,15 @@
+ #endif
+ .endm
+ 
+-.macro ISSUE_UNBALANCED_RET_GUARD
+-	ANNOTATE_INTRA_FUNCTION_CALL
+-	call .Lunbalanced_ret_guard_\@
+-	int3
+-.Lunbalanced_ret_guard_\@:
+-	add $(BITS_PER_LONG/8), %_ASM_SP
+-	lfence
+-.endm
+-
+  /*
+   * A simpler FILL_RETURN_BUFFER macro. Don't make people use the CPP
+   * monstrosity above, manually.
+   */
+-.macro FILL_RETURN_BUFFER reg:req nr:req ftr:req ftr2
+-.ifb \ftr2
+-	ALTERNATIVE "jmp .Lskip_rsb_\@", "", \ftr
+-.else
+-	ALTERNATIVE_2 "jmp .Lskip_rsb_\@", "", \ftr, "jmp .Lunbalanced_\@", \ftr2
+-.endif
+-	__FILL_RETURN_BUFFER(\reg,\nr,%_ASM_SP)
+-.Lunbalanced_\@:
+-	ISSUE_UNBALANCED_RET_GUARD
++.macro FILL_RETURN_BUFFER reg:req nr:req ftr:req ftr2=ALT_NOT(X86_FEATURE_ALWAYS)
++	ALTERNATIVE_2 "jmp .Lskip_rsb_\@", \
++		__stringify(__FILL_RETURN_BUFFER(\reg,\nr)), \ftr, \
++		__stringify(__FILL_ONE_RETURN), \ftr2
++
+ .Lskip_rsb_\@:
+ .endm
+ 

@@ -2,196 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F459599E2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F946599E24
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 17:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349566AbiHSP2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 11:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
+        id S1349746AbiHSP3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 11:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349751AbiHSP2J (ORCPT
+        with ESMTP id S1348832AbiHSP3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 11:28:09 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB33B101C50
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:28:07 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id a4so3567807qto.10
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 08:28:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc;
-        bh=iA9FPyd1nVi+5ANzlnbkk2becmIxzDV5Vq9MszOeMik=;
-        b=BR81CJRUyoDiW6jn9a7JfCde43ZAfHclIbU+KinvYPofdBD0gEF2AhhMPdqGT1Vj5X
-         5nErMs6lUjEStZhPblbRZ7VqtQp2SetHyO8Ys9EB756PmvtIEIUuKhvQ11FX1dRvsY8V
-         iEVMl64per07X5+eNjU20MCm0AFjphbawvNxTpvkpvgVuqpNdimPa28fQORsIAP3T9xL
-         f+dj9/KhvHPICwjMCTr+RfTxkKLQuNOaXOMwWiInOMNYSbo5W1VAAFbKTzzpRVxaYHwH
-         WnQZCAAQMzrScA9hVdQNFgRG8NtfQgfdCr2XYtbjwxia+iTONOWMq/znu5v2C+ii8FTU
-         kHeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc;
-        bh=iA9FPyd1nVi+5ANzlnbkk2becmIxzDV5Vq9MszOeMik=;
-        b=pebPW9HTPxlm+B00DQzr5eSzCpSXZkIRldlskAdcw6cdos0PNehVkKsJH8zxdZbuTz
-         UkFDJn4cWkMT2TwjMY4gQaONGksOJUO1u02sSsR8uFQGRg6VHJz7P2l+OSkWlO7Qtx/g
-         ir9W1ZhiST1B3yKv7n8rq0vKzaSjjwvGSUVA1kEJnAgXQtvTdOsozvdb7kC9YFHPe9ax
-         HdezCEp54kkSlp+WYjQVBWihZOvNp7O5WhO9bmaP+Hs30nX3ub0TV3c+fXRo3yC6kjyL
-         rvOB8buAOrySKWMOGJrpBT6jaZUYkbEvCG+KHTNPfavgV32Fgo4cw0uJOK37a/39+4ou
-         yubw==
-X-Gm-Message-State: ACgBeo1QO1GAQMMaS/gESR8y44ZS+8IcJ0t0JCasj9tQvED/PZvywUaM
-        cPl3TF6zb/ds6CKVbmtIPfXSNA==
-X-Google-Smtp-Source: AA6agR78yg020o3BQrSjbyOHf2K23nLFedXybdJ5R96QMH31H/Um1bHSOfOeF4uB98Jhlhnwd5sW7w==
-X-Received: by 2002:ac8:59c6:0:b0:344:6f73:da07 with SMTP id f6-20020ac859c6000000b003446f73da07mr6813160qtf.199.1660922886865;
-        Fri, 19 Aug 2022 08:28:06 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id w4-20020a05620a424400b006b6757a11fcsm3976599qko.36.2022.08.19.08.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 08:28:06 -0700 (PDT)
-Message-ID: <6da7faf329128312f0862f555d1a855437ae99f3.camel@ndufresne.ca>
-Subject: Re: [PATCH 2/2] [WIP]: media: Add Synaptics compressed tiled format
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hsia-Jun Li <Randy.Li@synaptics.com>
-Cc:     Tomasz Figa <tfiga@chromium.org>, dri-devel@lists.freedesktop.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, sakari.ailus@linux.intel.com,
-        ribalda@chromium.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sebastian.hesselbarth@gmail.com,
-        jszhang@kernel.org, linux-arm-kernel@lists.infradead.org
-Date:   Fri, 19 Aug 2022 11:28:04 -0400
-In-Reply-To: <Yv7HnHE7bLmgq5D0@pendragon.ideasonboard.com>
-References: <20220808162750.828001-1-randy.li@synaptics.com>
-         <20220808162750.828001-3-randy.li@synaptics.com>
-         <CAAFQd5AKjpJ+fPAeCqdNnJbS4R7SdaHkfyW4qG1xXr-sE801pQ@mail.gmail.com>
-         <13d37c15-79f3-4e16-8cf4-fc37846f4a04@synaptics.com>
-         <Yv7HnHE7bLmgq5D0@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Fri, 19 Aug 2022 11:29:18 -0400
+Received: from 7of9.schinagl.nl (7of9.connected.by.freedominter.net [185.238.129.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943A5B490;
+        Fri, 19 Aug 2022 08:29:15 -0700 (PDT)
+Received: from localhost (7of9.are-b.org [127.0.0.1])
+        by 7of9.schinagl.nl (Postfix) with ESMTP id DECB518669BC;
+        Fri, 19 Aug 2022 17:29:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
+        t=1660922952; bh=/FXiuNvkl4pKLGDWUjodkCVhdgwIGhKIvcSAns8TLLk=;
+        h=From:To:Cc:Subject:Date;
+        b=s2TGgG3QmX4tcd8t1qHoVfSkK1UdrtHA6d1iLFCF28f5kLyeTbL5XF5zWkXQqulpc
+         cvdnbuRZg5BQQp4HtPE3EO7cyQdhWS9sctRkAO8CxiWjl5IvHsrdQulyqX2a8VBE+u
+         6hfigOAJ0ajE4yvyzcDi84I73c0xJrGyQ+zOiANY=
+X-Virus-Scanned: amavisd-new at schinagl.nl
+Received: from 7of9.schinagl.nl ([127.0.0.1])
+        by localhost (7of9.schinagl.nl [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id HOiRi6kbe3nz; Fri, 19 Aug 2022 17:29:10 +0200 (CEST)
+Received: from valexia.are-b.org (unknown [10.2.12.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by 7of9.schinagl.nl (Postfix) with ESMTPSA id 33B6118669B7;
+        Fri, 19 Aug 2022 17:29:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
+        t=1660922950; bh=/FXiuNvkl4pKLGDWUjodkCVhdgwIGhKIvcSAns8TLLk=;
+        h=From:To:Cc:Subject:Date;
+        b=ESa6yd7mUZS7Us3Xf/bSq4vZHwODRdUjPkanxxyKAbeG7iuoldk1ZdNEp17PrGY5i
+         V+NTOK97q2i5t2y74a8s53fXqFxt3/3JLZ1gBW2eNZm+/YxYBXBm/vmbvMzVpzJzQ0
+         wiNr4F68ypdZh5LMUVLTrPsKU4PEIGpf8n0fUXnc=
+From:   Olliver Schinagl <oliver@schinagl.nl>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Baolin Wang <baolin.wang@linaro.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Oleh Kravchenko <oleg@kaa.org.ua>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Simon Shields <simon@lineageos.org>,
+        Olliver Schinagl <oliver+list@schinagl.nl>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Olliver Schinagl <oliver@schinagl.nl>
+Subject: [PATCHv2 resend] dt-bindings: leds: Expand LED_COLOR_ID definitions
+Date:   Fri, 19 Aug 2022 17:29:04 +0200
+Message-Id: <20220819152904.433514-1-oliver@schinagl.nl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le vendredi 19 ao=C3=BBt 2022 =C3=A0 02:13 +0300, Laurent Pinchart a =C3=A9=
-crit=C2=A0:
-> On Thu, Aug 18, 2022 at 02:33:42PM +0800, Hsia-Jun Li wrote:
-> > On 8/18/22 14:06, Tomasz Figa wrote:
-> > > On Tue, Aug 9, 2022 at 1:28 AM Hsia-Jun Li <randy.li@synaptics.com> w=
-rote:
-> > > >=20
-> > > > From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
-> > > >=20
-> > > > The most of detail has been written in the drm.
->=20
-> This patch still needs a description of the format, which should go to
-> Documentation/userspace-api/media/v4l/.
->=20
-> > > > Please notice that the tiled formats here request
-> > > > one more plane for storing the motion vector metadata.
-> > > > This buffer won't be compressed, so you can't append
-> > > > it to luma or chroma plane.
-> > >=20
-> > > Does the motion vector buffer need to be exposed to userspace? Is the
-> > > decoder stateless (requires userspace to specify the reference frames=
-)
-> > > or stateful (manages the entire decoding process internally)?
-> >=20
-> > No, users don't need to access them at all. Just they need a different=
-=20
-> > dma-heap.
-> >=20
-> > You would only get the stateful version of both encoder and decoder.
->=20
-> Shouldn't the motion vectors be stored in a separate V4L2 buffer,
-> submitted through a different queue then ?
+In commit 853a78a7d6c7 (dt-bindings: leds: Add LED_COLOR_ID definitions,
+Sun Jun 9 20:19:04 2019 +0200) the most basic color definitions where
+added. However, there's a little more very common LED colors.
 
-Imho, I believe these should be invisible to users and pooled separately to
-reduce the overhead. The number of reference is usually lower then the numb=
-er of
-allocated display buffers.
+While the documentation states 'add what is missing', engineers tend to
+be lazy and will just use what currently exists. So this patch will take
+(a) list from online retailers [0], [1], [2] and use the common LED colors
+from there, this being reasonable as this is what is currently available to
+purchase.
 
->=20
-> > > > Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
-> > > > ---
-> > > >   drivers/media/v4l2-core/v4l2-common.c | 1 +
-> > > >   drivers/media/v4l2-core/v4l2-ioctl.c  | 2 ++
-> > > >   include/uapi/linux/videodev2.h        | 2 ++
-> > > >   3 files changed, 5 insertions(+)
-> > > >=20
-> > > > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/=
-v4l2-core/v4l2-common.c
-> > > > index e0fbe6ba4b6c..f645278b3055 100644
-> > > > --- a/drivers/media/v4l2-core/v4l2-common.c
-> > > > +++ b/drivers/media/v4l2-core/v4l2-common.c
-> > > > @@ -314,6 +314,7 @@ const struct v4l2_format_info *v4l2_format_info=
-(u32 format)
-> > > >                  { .format =3D V4L2_PIX_FMT_SGBRG12,       .pixel_e=
-nc =3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =
-=3D { 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
-> > > >                  { .format =3D V4L2_PIX_FMT_SGRBG12,       .pixel_e=
-nc =3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =
-=3D { 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
-> > > >                  { .format =3D V4L2_PIX_FMT_SRGGB12,       .pixel_e=
-nc =3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =
-=3D { 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
-> > > > +               { .format =3D V4L2_PIX_FMT_NV12M_V4H1C, .pixel_enc =
-=3D V4L2_PIXEL_ENC_YUV, .mem_planes =3D 5, .comp_planes =3D 2, .bpp =3D { 1=
-, 2, 0, 0 }, .hdiv =3D 2, .vdiv =3D 2, .block_w =3D { 128, 128 }, .block_h =
-=3D { 128, 128 } },
-> > > >          };
-> > > >          unsigned int i;
-> > > >=20
-> > > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v=
-4l2-core/v4l2-ioctl.c
-> > > > index e6fd355a2e92..8f65964aff08 100644
-> > > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > > @@ -1497,6 +1497,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtd=
-esc *fmt)
-> > > >                  case V4L2_PIX_FMT_MT21C:        descr =3D "Mediate=
-k Compressed Format"; break;
-> > > >                  case V4L2_PIX_FMT_QC08C:        descr =3D "QCOM Co=
-mpressed 8-bit Format"; break;
-> > > >                  case V4L2_PIX_FMT_QC10C:        descr =3D "QCOM Co=
-mpressed 10-bit Format"; break;
-> > > > +               case V4L2_PIX_FMT_NV12M_V4H1C:  descr =3D "Synaptic=
-s Compressed 8-bit tiled Format";break;
-> > > > +               case V4L2_PIX_FMT_NV12M_10_V4H3P8C:     descr =3D "=
-Synaptics Compressed 10-bit tiled Format";break;
-> > > >                  default:
-> > > >                          if (fmt->description[0])
-> > > >                                  return;
-> > > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/vi=
-deodev2.h
-> > > > index 01e630f2ec78..7e928cb69e7c 100644
-> > > > --- a/include/uapi/linux/videodev2.h
-> > > > +++ b/include/uapi/linux/videodev2.h
-> > > > @@ -661,6 +661,8 @@ struct v4l2_pix_format {
-> > > >   #define V4L2_PIX_FMT_NV12MT_16X16 v4l2_fourcc('V', 'M', '1', '2')=
- /* 12  Y/CbCr 4:2:0 16x16 tiles */
-> > > >   #define V4L2_PIX_FMT_NV12M_8L128      v4l2_fourcc('N', 'A', '1', =
-'2') /* Y/CbCr 4:2:0 8x128 tiles */
-> > > >   #define V4L2_PIX_FMT_NV12M_10BE_8L128 v4l2_fourcc_be('N', 'T', '1=
-', '2') /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
-> > > > +#define V4L2_PIX_FMT_NV12M_V4H1C v4l2_fourcc('S', 'Y', '1', '2')  =
- /* 12  Y/CbCr 4:2:0 tiles */
-> > > > +#define V4L2_PIX_FMT_NV12M_10_V4H3P8C v4l2_fourcc('S', 'Y', '1', '=
-0')   /* 12  Y/CbCr 4:2:0 10-bits tiles */
-> > > >=20
-> > > >   /* Bayer formats - see http://www.siliconimaging.com/RGB%20Bayer.=
-htm */
-> > > >   #define V4L2_PIX_FMT_SBGGR8  v4l2_fourcc('B', 'A', '8', '1') /*  =
-8  BGBG.. GRGR.. */
->=20
+Note, that LIME seems to be the modern take to 'Yellow-green' or
+'Yellowish-green' from some older datasheets.
+
+[0]: https://www.digikey.com/en/products/filter/led-lighting-color/125
+[1]: https://eu.mouser.com/c/optoelectronics/led-lighting/led-emitters/standard-leds-smd
+[2]: https://nl.farnell.com/en-NL/c/optoelectronics-displays/led-products/standard-single-colour-leds-under-75ma
+
+Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
+---
+
+Changes since v1: Unbreak existing definitions.
+
+
+ include/dt-bindings/leds/common.h | 28 ++++++++++++++++------------
+ 1 file changed, 16 insertions(+), 12 deletions(-)
+
+diff --git a/include/dt-bindings/leds/common.h b/include/dt-bindings/leds/common.h
+index 3be89a7c20a9..04bf94523ea3 100644
+--- a/include/dt-bindings/leds/common.h
++++ b/include/dt-bindings/leds/common.h
+@@ -22,18 +22,22 @@
+ #define LEDS_BOOST_FIXED	2
+ 
+ /* Standard LED colors */
+-#define LED_COLOR_ID_WHITE	0
+-#define LED_COLOR_ID_RED	1
+-#define LED_COLOR_ID_GREEN	2
+-#define LED_COLOR_ID_BLUE	3
+-#define LED_COLOR_ID_AMBER	4
+-#define LED_COLOR_ID_VIOLET	5
+-#define LED_COLOR_ID_YELLOW	6
+-#define LED_COLOR_ID_IR		7
+-#define LED_COLOR_ID_MULTI	8	/* For multicolor LEDs */
+-#define LED_COLOR_ID_RGB	9	/* For multicolor LEDs that can do arbitrary color,
+-					   so this would include RGBW and similar */
+-#define LED_COLOR_ID_MAX	10
++#define LED_COLOR_ID_WHITE      0
++#define LED_COLOR_ID_RED        1
++#define LED_COLOR_ID_GREEN      2
++#define LED_COLOR_ID_BLUE       3
++#define LED_COLOR_ID_AMBER      4
++#define LED_COLOR_ID_VIOLET     5
++#define LED_COLOR_ID_YELLOW     6
++#define LED_COLOR_ID_IR         7
++#define LED_COLOR_ID_MULTI      8 /* For multicolor LEDs */
++#define LED_COLOR_ID_RGB        9 /* For multicolor LEDs that can do arbitrary color, including RGBW etc. */
++#define LED_COLOR_ID_PUPRPLE   10
++#define LED_COLOR_ID_ORANGE    11
++#define LED_COLOR_ID_PINK      12
++#define LED_COLOR_ID_CYAN      13
++#define LED_COLOR_ID_LIME      14
++#define LED_COLOR_ID_MAX       15
+ 
+ /* Standard LED functions */
+ /* Keyboard LEDs, usually it would be input4::capslock etc. */
+-- 
+2.37.2
 

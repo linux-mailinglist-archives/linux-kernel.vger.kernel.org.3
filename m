@@ -2,85 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42145997DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9CD5997A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 10:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347561AbiHSInY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 04:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
+        id S1347738AbiHSIqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 04:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347014AbiHSInQ (ORCPT
+        with ESMTP id S1347732AbiHSIqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:43:16 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B844840BC9;
-        Fri, 19 Aug 2022 01:43:14 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3375488624aso75243847b3.3;
-        Fri, 19 Aug 2022 01:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=4KV0yn/NjRr9fnRDAYkJx34PxHIonAhhduVl0Tj79jY=;
-        b=JPnTRyWRLSemO6XZp+7Bv4/ixzq0eGuPc2U7h/pFfbYZ8UAqOs9vTiLTH+GMbD9F1X
-         hFB2rVyFMuU6bS6EiActsOd7FAxUYxTUc+i/+IKXajnr7wGfVBYwHkLCZvsuO8W5AJjn
-         qq8iobjiRmqFZ/tMnsLWTc0xrODUqjhG2yse5Dkn/KXzP58f9Assveoi1HoOzbY8To8D
-         969FWlun4z4ShSBcQL28vUHxB2u4Kiq4n9O75ckRQwUOhD86FXPEirF6spINAgzQ0Kfz
-         IGHOXa7MCg6WmqItyPyTiJYw0O8WLooPlEyXZZl9Ag1JUjzfeETxaxR8WJTaJswZZvnK
-         hS8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=4KV0yn/NjRr9fnRDAYkJx34PxHIonAhhduVl0Tj79jY=;
-        b=5erwE/L5AhY+zzLIQbrOg1Di/5h9EdxDUBNX+opNWNzAOzPpIl3R5YPvyC/5LRQ259
-         W7kHyxyIovF65p3kIgOBdmasE3rWwxZa0unBylUlnoj1f2kTrFsDJZH/OaXcVI3Pahl3
-         1O4tFqQiz7iJHjenVLEDXJSh6BVS8fuayzIhftOalw04jWziGAcAR+5gv0U/akVv1FH+
-         ylkWaJCDvNSBWcMToqKbMvr7hfclLgdGDeju8YVVg9ebyLZvqUblH98EZ6I85YH0km9D
-         ssyIZvQNbdwwwNpMytcyfAqIAuSxFZ9TuoBwBJ2033ZDYnD/vLkAyWGgegLFlD8Igc0x
-         E9ng==
-X-Gm-Message-State: ACgBeo3VDq4L9/0lYXA9ZtwSbRUT/QnTNJW1uyXn55yCzAx2zXe6814X
-        ONEG4i/0sN5nXjo7vOj7f23HpdjKQAwPF5UOvJ1hVZB2jso=
-X-Google-Smtp-Source: AA6agR7B/OPWTAC8mtg7+avOtn/zgJZZJ20QhZUSHP6YIz9kSzxyyBvFrPaa3Lr5ml23lBsT22YjZe9RIux35CbBqb4=
-X-Received: by 2002:a81:2596:0:b0:329:da3a:e1d3 with SMTP id
- l144-20020a812596000000b00329da3ae1d3mr6252641ywl.41.1660898593562; Fri, 19
- Aug 2022 01:43:13 -0700 (PDT)
+        Fri, 19 Aug 2022 04:46:47 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048F4CAC4D
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 01:46:46 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M8Fck1czWzXdgb;
+        Fri, 19 Aug 2022 16:42:30 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 19 Aug 2022 16:46:42 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 19 Aug 2022 16:46:42 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <rostedt@goodmis.org>, <chenzhongjin@huawei.com>
+Subject: [PATCH v2] x86/unwind/orc: unwind ftrace trampolines with correct orc
+Date:   Fri, 19 Aug 2022 16:43:34 +0800
+Message-ID: <20220819084334.244016-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220819081700.96279-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220819081700.96279-1-chi.minghao@zte.com.cn>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Fri, 19 Aug 2022 17:42:57 +0900
-Message-ID: <CAKFNMon7N0NAHNoXuH7JzwqbO_we95X+2MFi2tHf3OPs_uygNg@mail.gmail.com>
-Subject: Re: [PATCH] nilfs2: delete unnecessary checks before brelse()
-To:     cgel.zte@gmail.com
-Cc:     linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 5:17 PM wrote:
->
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->
-> The brelse() function tests whether its argument is NULL
-> and then returns immediately.
-> Thus remove the tests which are not needed around the shown calls.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
->  fs/nilfs2/btree.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+When meeting ftrace trampolines in orc unwinding, unwinder uses address
+of ftrace_{regs_}call address to find the orc, which gets next frame at
+sp+176.
 
-Will apply, thanks!
+If there is an irq hitting at sub $0xa8,%rsp, the next frame should be
+sp+8 instead of 176. It makes unwinder skip correct frame and throw
+warnings such as "wrong direction" or "can't access registers", etc,
+depending on the content of the wrong frame address.
 
-Ryusuke Konishi
+By adding the base address ftrace_{regs_}caller with the offset
+*ip - ops->trampoline*,
+we can get the correct address to find orc.
+
+Also change "caller" to "tramp_addr" to make variable name conform to
+its content.
+
+Fixes: 6be7fa3c74d1 ("ftrace, orc, x86: Handle ftrace dynamically allocated trampolines")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+v1 -> v2:
+	Add some comments.
+---
+ arch/x86/kernel/unwind_orc.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index 38185aedf7d1..0ea57da92940 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -93,22 +93,27 @@ static struct orc_entry *orc_find(unsigned long ip);
+ static struct orc_entry *orc_ftrace_find(unsigned long ip)
+ {
+ 	struct ftrace_ops *ops;
+-	unsigned long caller;
++	unsigned long tramp_addr, offset;
+ 
+ 	ops = ftrace_ops_trampoline(ip);
+ 	if (!ops)
+ 		return NULL;
+ 
++	/* Set tramp_addr to the start of the code copied by the trampoline */
+ 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS)
+-		caller = (unsigned long)ftrace_regs_call;
++		tramp_addr = (unsigned long)ftrace_regs_caller;
+ 	else
+-		caller = (unsigned long)ftrace_call;
++		tramp_addr = (unsigned long)ftrace_caller;
++
++	/* Now place tramp_addr to the location within the trampoline ip is at */
++	offset = ip - ops->trampoline;
++	tramp_addr += offset;
+ 
+ 	/* Prevent unlikely recursion */
+-	if (ip == caller)
++	if (ip == tramp_addr)
+ 		return NULL;
+ 
+-	return orc_find(caller);
++	return orc_find(tramp_addr);
+ }
+ #else
+ static struct orc_entry *orc_ftrace_find(unsigned long ip)
+-- 
+2.17.1
+

@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4AB59A629
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1101959A601
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 21:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350818AbiHSTHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 15:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
+        id S1351090AbiHSTIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 15:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350768AbiHSTHj (ORCPT
+        with ESMTP id S1351067AbiHSTIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 15:07:39 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9460D109A31
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 12:07:37 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id e19so4274204pju.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 12:07:37 -0700 (PDT)
+        Fri, 19 Aug 2022 15:08:18 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A98665BE
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 12:08:16 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id e19so4275568pju.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 12:08:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=DHHhnraoY65tyRhzZg5vQ0+h6PvziDksTsOW2++v8Zs=;
-        b=RPjmo2FxtGyLR8PYNrQ0WpMsIJGmf9vuJNzD3hcTlkiWIceSPrxTlQdWlGLXoPWmeZ
-         QE8kzIm93mhy6fbK94/1CVsj3VUeiVVL9xd6IjE6nh8u+p3xHnEhzuSU0z+FeitWBm+u
-         IT9bWa+bVqb8v01iZG+o6UeShRs5ZnjrIhqUg=
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=8WuC3QVNj7mN+gJ3LjT4Cfvi0Qq7SJaLcYxLIkVCB2I=;
+        b=boS2jioIR3XnzDYWXFCfhb+LllONe6VH67/GSUWbCeUb9ROSFmyoCi45qHQ2uqfNFl
+         RkA7XlSJ4KoJmpr4d2cA3unGM72tJfyemOnWja22v9H5rVKNv/DJZlaK0Fdszjhid6Bk
+         LpclbcGGjJO2xvS3oxWcpYdSSIbUg4TWAQCmY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=DHHhnraoY65tyRhzZg5vQ0+h6PvziDksTsOW2++v8Zs=;
-        b=d9I21fcmBdiG5AkYAhD4PYX/AB/CNtzpD7GQ+i37QzxGmjQ81lHEuHRaNznaeu58fN
-         Mx5YJrDOpeWq6IyY5rM49tY3Rtjf4YEFuCalB4MTVR2sd3EcM3UXbPxitkXb3+QcQmL7
-         75/+AGbWUW1WXzQ8uaGScg3wlMLj4cWASfEp6l8i+idmHr5GWWcQqf1H74D4RS9n5pEQ
-         ZQxBzsAs6s9o4cHOxpFYCEXQ/+KV1wJTIwGY1F0kJQ7TZoWmuFL1pQ6/CmI4LZRB6wTN
-         QCFftTi94mcUKn7myqbioc0zWlZezCo4OjR+eDpA/zu5OBX7HPKRIpZwbh8UY+GszzPi
-         tTEQ==
-X-Gm-Message-State: ACgBeo226xdzJlj/ZQVmiIizy8TldfpL0Kg9bDsqcnYJtaWiCxIsHfk2
-        D3bqZ9u+FEIgRaUW8n3KOjJ+mg==
-X-Google-Smtp-Source: AA6agR6K8ZeFu5uVrPpEanR+fcoa22K2szNXPWdkjPu9h6Z5dqzuI/cjW0mM8eCRai82tKvovNirIQ==
-X-Received: by 2002:a17:902:c40a:b0:16e:cc02:b9ab with SMTP id k10-20020a170902c40a00b0016ecc02b9abmr8595584plk.81.1660936057093;
-        Fri, 19 Aug 2022 12:07:37 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090a6c9000b001f216407204sm3522272pjj.36.2022.08.19.12.07.36
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=8WuC3QVNj7mN+gJ3LjT4Cfvi0Qq7SJaLcYxLIkVCB2I=;
+        b=goDoceWCyxuFvUNe+uYy6Ru94489MzSJR0FiZCaCOchl+q9j+D+KrmY/9Ll6145N91
+         sDptB0qs6kHDv69rznryPRW+MR/HqmdUMe5S3sDDPheYa77br7FQ+L04FkySJ9RQGJ5L
+         70IDP8d/j7hZraPhaohlFYV6eXGn6uzL83bmQPQS02KLcKvcK8pt4K3K852jtdGl3gfB
+         nUoxd7fGX+YVS62cjtl24I3jHbtw07CHnnl/V1+wyofcKro0ZDh7DnCbSFDg8PrLYamJ
+         rpyUFWVTcylhLc3XpaaO1nqUlhfKDuUrq2pfhAeOgdIf6Yh5yr+qdRaLzA8SQskvJpb4
+         PqEw==
+X-Gm-Message-State: ACgBeo0ZgsyBzZIgdWpN0nsScG680k9QsmwmqOuy0Mn1kHOXZoKkkztz
+        Bn4awPdmks9i4BU9Qnz6C7FhnQjcXtVuXA==
+X-Google-Smtp-Source: AA6agR7dsTtzR9jI8fPkHbcLyi9Kp1fhBb4YYG+GJpFhKXDSjZ84k8gw9vAMssGvEBMGyjOPq9p2/w==
+X-Received: by 2002:a17:902:7242:b0:171:398d:9e66 with SMTP id c2-20020a170902724200b00171398d9e66mr8963930pll.19.1660936095903;
+        Fri, 19 Aug 2022 12:08:15 -0700 (PDT)
+Received: from pmalani.c.googlers.com.com (137.22.168.34.bc.googleusercontent.com. [34.168.22.137])
+        by smtp.gmail.com with ESMTPSA id b14-20020a170903228e00b00172a567d910sm3499775plh.289.2022.08.19.12.08.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 12:07:36 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 12:07:35 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Andrei Vagin <avagin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: fix a couple missing .gitignore entries
-Message-ID: <202208191207.56B7DDE@keescook>
-References: <20220819190558.477166-1-axelrasmussen@google.com>
+        Fri, 19 Aug 2022 12:08:15 -0700 (PDT)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+Cc:     bleung@chromium.org, Prashant Malani <pmalani@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: [PATCH 0/4] platform/chrome: cros_ec_typec: Altmode fixes
+Date:   Fri, 19 Aug 2022 19:08:01 +0000
+Message-Id: <20220819190807.1275937-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819190558.477166-1-axelrasmussen@google.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -73,18 +67,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 12:05:58PM -0700, Axel Rasmussen wrote:
-> Some recent commits added new test binaries, but forgot to add those to
-> .gitignore. Now, after one does "make -C tools/testing/selftests", one
-> ends up with some untracked files in the kernel tree.
-> 
-> Add the test binaries to .gitignore, to avoid this minor annoyance.
-> 
-> Fixes: d8b6171bd58a ("selftests/io_uring: test zerocopy send")
-> Fixes: 6342140db660 ("selftests/timens: add a test for vfork+exit")
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+This is a short series of minor fixes and changes to prepare the
+ChromeOS Type-C driver to better support alternate mode drivers.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Prashant Malani (4):
+  platform/chrome: cros_ec_typec: Add bit offset for DP VDO
+  platform/chrome: cros_ec_typec: Correct alt mode index
+  platform/chrome: cros_ec_typec: Stash port driver info
+  platform/chrome: cros_ec_typec: Use Type-C driver data
+
+ drivers/platform/chrome/cros_ec_typec.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 -- 
-Kees Cook
+2.37.1.595.g718a3a8f04-goog
+

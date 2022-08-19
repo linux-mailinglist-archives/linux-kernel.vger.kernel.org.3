@@ -2,120 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A5659A57C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765E559A577
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350774AbiHSSey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 14:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
+        id S1350823AbiHSSiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 14:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349908AbiHSSew (ORCPT
+        with ESMTP id S1349427AbiHSSiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 14:34:52 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FB7D6303;
-        Fri, 19 Aug 2022 11:34:49 -0700 (PDT)
-Received: from [192.168.31.174] (unknown [95.31.169.23])
-        by mail.ispras.ru (Postfix) with ESMTPSA id EF94640737CD;
-        Fri, 19 Aug 2022 18:34:45 +0000 (UTC)
-Message-ID: <09fbc5ed-d67e-8308-1e49-2de6f2cea7dd@ispras.ru>
-Date:   Fri, 19 Aug 2022 21:34:44 +0300
+        Fri, 19 Aug 2022 14:38:19 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E522B3D;
+        Fri, 19 Aug 2022 11:38:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660934291; x=1692470291;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iNZ8OTgrcP4HEsJvk4GqUiryuR+PawK94q78dSQ8mT8=;
+  b=CQmPZX4TEz+FzCCu0Nj8fiiqz7k27RrhqDo6iYwtSHes0DmB8rPnxha5
+   GQhy5j3/P9oW8N7C7mZWyepNFT2vQ0Fx5b3iGHOBKcTcNvE09XK0YkTm0
+   IWYOx9RM0vquDN1jkAUydiuXIYVxffLdWLTVoclBCPNCPLGy6uVizmDxJ
+   0z8eQUT77zNVlYcp8nst/65eBoaLm2ytVH6vhVrEIwcOuj8Vo1Xd66CUl
+   X2pSe0GeMFbYekGuJ2KhIWu2JWCxYhPjike+3h3GoTenbFTYGXX4p9GSl
+   0p3Ew9/5XISsIoNsa/wy0aY4DsorXoCGxbzbiH5cV4Zqm1M0raTPMfnWx
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="273466290"
+X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
+   d="scan'208";a="273466290"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 11:38:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,248,1654585200"; 
+   d="scan'208";a="697645941"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 19 Aug 2022 11:38:07 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oP6sg-0001ht-1W;
+        Fri, 19 Aug 2022 18:38:06 +0000
+Date:   Sat, 20 Aug 2022 02:37:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH net-next v1 7/7] ethtool: add interface to interact with
+ Ethernet Power Equipment
+Message-ID: <202208200202.pmwCMvZd-lkp@intel.com>
+References: <20220819120109.3857571-8-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     stern@rowland.harvard.edu
-Cc:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ath9k-devel@qca.qualcomm.com, ldv-project@linuxtesting.org,
-        eli.billauer@gmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        andreyknvl@google.com, gustavoars@kernel.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        oneukum@suse.com, tiwai@suse.de, syzkaller-bugs@googlegroups.com
-Subject: WARNING in hif_usb_alloc_rx_urbs/usb_submit_urb
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819120109.3857571-8-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alan,
+Hi Oleksij,
 
-Fri, 9 Oct 2020 at 21:55:51 UTC+3, Alan Stern wrote:
- > To the ath9k_htc maintainers:
- > This is an attempt to fix a bug detected by the syzbot fuzzer. The bug
- > arises when a USB device claims to be an ATH9K but doesn't have the
- > expected endpoints. (In this case there was a bulk endpoint where the
- > driver expected an interrupt endpoint.) The kernel needs to be able to
- > handle such devices without getting an internal error.
+I love your patch! Yet something to improve:
 
-We are facing the similar warnings [1] in
-hif_usb_alloc_rx_urbs/usb_submit_urb:
+[auto build test ERROR on net-next/master]
 
-usb 1-1: ath9k_htc: Firmware ath9k_htc/htc_9271-1.4.0.fw requested
-usb 1-1: ath9k_htc: Transferred FW: ath9k_htc/htc_9271-1.4.0.fw, size: 51008
-------------[ cut here ]------------
-usb 1-1: BOGUS urb xfer, pipe 3 != type 1
-WARNING: CPU: 3 PID: 500 at drivers/usb/core/urb.c:493 
-usb_submit_urb+0xce2/0x1430 drivers/usb/core/urb.c:493
-Modules linked in:
-CPU: 3 PID: 500 Comm: kworker/3:2 Not tainted 5.10.135-syzkaller #0
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 
-04/01/2014
-Workqueue: events request_firmware_work_func
-RIP: 0010:usb_submit_urb+0xce2/0x1430 drivers/usb/core/urb.c:493
-Code: 84 d4 02 00 00 e8 0e 00 80 fc 4c 89 ef e8 06 2d 35 ff 41 89 d8 44 
-89 e1 4c 89 f2 48 89 c6 48 c7 c7 c0 f0 a8 88 e8 0e a6 b9 02 <0f> 0b e9 
-c6 f8 ff ff e8 e2 ff 7f fc 48 81 c5 88 06 00 00 e9 f2 f7
-RSP: 0018:ffff888147227b60 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff888147218000 RSI: ffffffff815909c5 RDI: ffffed1028e44f5e
-RBP: ffff888021509850 R08: 0000000000000001 R09: ffff888237d38ba7
-R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000003
-R13: ffff888021a330a0 R14: ffff88800f82b5a0 R15: ffff88801466a900
-FS:  0000000000000000(0000) GS:ffff888237d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055b2994526c8 CR3: 000000001e730000 CR4: 0000000000350ee0
-Call Trace:
-  ath9k_hif_usb_alloc_rx_urbs 
-drivers/net/wireless/ath/ath9k/hif_usb.c:908 [inline]
-  ath9k_hif_usb_alloc_urbs+0x75e/0x1010 
-drivers/net/wireless/ath/ath9k/hif_usb.c:1019
-  ath9k_hif_usb_dev_init drivers/net/wireless/ath/ath9k/hif_usb.c:1109 
-[inline]
-  ath9k_hif_usb_firmware_cb+0x142/0x530 
-drivers/net/wireless/ath/ath9k/hif_usb.c:1242
-  request_firmware_work_func+0x12e/0x240 
-drivers/base/firmware_loader/main.c:1097
-  process_one_work+0x9af/0x1600 kernel/workqueue.c:2279
-  worker_thread+0x61d/0x12f0 kernel/workqueue.c:2425
-  kthread+0x3b4/0x4a0 kernel/kthread.c:313
-  ret_from_fork+0x22/0x30 arch/x86/entry/entry_64.S:299
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/add-generic-PSE-support/20220819-200408
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 268603d79cc48dba671e9caf108fab32315b86a2
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220820/202208200202.pmwCMvZd-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ac5a14669dbe6cac4972ff01ea6291d12152e78f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Oleksij-Rempel/add-generic-PSE-support/20220819-200408
+        git checkout ac5a14669dbe6cac4972ff01ea6291d12152e78f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Fri, 9 Oct 2020 at 21:55:51 UTC+3, Alan Stern wrote:
- > I don't know if all the devices used by the ath9k_htc driver are
- > expected to have all of these endpoints and no others. I just added
- > checks for the ones listed in the hif_usb.h file.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I agree with you: kernel should definitely handle itself the situation
-when endpoint definitions do not correspond to the expected ones because
-this problem arises in Syzkaller cases. I suppose adding the endpoints
-to be checked listed in the hif_usb.h file would be enough.
+All errors (new ones prefixed by >>):
 
-However, it is probable that those warnings can only be triggered with
-fuzzer and can't happen in real applications. Perhaps it is Syzkaller
-which does not name endpoints correctly in a way that suits real
-implementation. But overall, some method of checking endpoints should
-be implemented inside ath9k driver, and the code you proposed does this
-functionality.
+>> make[3]: *** No rule to make target 'net/ethtool/pse.o', needed by 'net/ethtool/built-in.a'.
+   make[3]: Target '__build' not remade because of errors.
 
-[1]: https://groups.google.com/g/syzkaller-bugs/c/umu68ITBsRg/m/xy8dtA5JAQAJ
-
-Fedor
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

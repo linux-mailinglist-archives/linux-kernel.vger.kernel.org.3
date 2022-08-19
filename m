@@ -2,94 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9465D599974
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAFD599984
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 12:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348296AbiHSKBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 06:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
+        id S1347891AbiHSKCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 06:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348092AbiHSKBT (ORCPT
+        with ESMTP id S1347482AbiHSKCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 06:01:19 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9AAF4CAE;
-        Fri, 19 Aug 2022 03:01:18 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27J9xTOn020424;
-        Fri, 19 Aug 2022 10:01:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=u6YMy6Ix9WjbVng7rQr/9Mprb+EHTMWFzig8waTbMMY=;
- b=sUXFammzYzb+0MVvJIrscHe/LEFvl1PE78vLNl5vNhAO9zRYmilHrviqQLSWlNvfqAZy
- 717/UzB2uAK7b3WD1JauUI2sJGdM98naVYBRZYRtB/3pF0GoDiF2Oya4hJ83KYO53g0H
- gP00EFTugW1b7eqbtL7SATUCB2Sa26m1hy+RIAENDwW53nUnmnKUKQgkgDGM53Mn+C2C
- 5mVT4cEUtqKioMhxb/JFS91AZfNp2/qoUgnA9MHIJwRCuZCAZU5DJDSo+ABMxM+LtOde
- pHm05HMJtYwoczfT3pz4PKl6SCX7jlTOFO8KwdUkfNZd6DxUcMVgcNMiQF2V3+vSRzWo 9A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j28cer1da-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 10:01:17 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27JA1C3I024866;
-        Fri, 19 Aug 2022 10:01:16 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3j28cer1ca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 10:01:16 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27J9riHX016876;
-        Fri, 19 Aug 2022 10:01:14 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04fra.de.ibm.com with ESMTP id 3hx3k8w864-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 Aug 2022 10:01:13 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27JA1AvJ21954904
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 Aug 2022 10:01:10 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 73155A4053;
-        Fri, 19 Aug 2022 10:01:10 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E73F2A404D;
-        Fri, 19 Aug 2022 10:01:09 +0000 (GMT)
-Received: from [9.145.49.220] (unknown [9.145.49.220])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 19 Aug 2022 10:01:09 +0000 (GMT)
-Message-ID: <ff6cbb6c-9e21-ee40-419e-4251abfd4d87@linux.ibm.com>
-Date:   Fri, 19 Aug 2022 12:01:09 +0200
+        Fri, 19 Aug 2022 06:02:36 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDE1F4CBA;
+        Fri, 19 Aug 2022 03:02:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660903355; x=1692439355;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E6FdEgHUmQc8Q5gyJFQn/n5xf7ASsR5QDlILY8+o774=;
+  b=X/f4mOIgrXffXK2awkQvCkC4DSqBuCpbAq9Jkkmp5owOKcQiCSdo84BO
+   WUnNVQu+FzQ71DPOpBjXvA+BtuoMbSrry6y+DE5c51wT3blUnLVghTuWs
+   WqL68YU8A6JzJC5dvw6JKdh3EzFfP0VnI5xWJDkhoSRkqxLvSc8TSELQd
+   cl8kpf5CT1Ux0xVrP3Mqc1f1vxGJrNTk307SiS7PZyrl1HRfl3eiQhWXy
+   fabqnyQR7zQZzTmGeLeVpf047rq04KNL11G5Bh0dkvKVek4YqFbpvr2wN
+   u5T/S+3+zzHX/5aLVsvpYuaI3lLINgT+lsZE7MGo2yof9+U1rCNZWx1GZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10443"; a="294257210"
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="294257210"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 03:02:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,247,1654585200"; 
+   d="scan'208";a="750467167"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 19 Aug 2022 03:02:31 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 19 Aug 2022 13:02:30 +0300
+Date:   Fri, 19 Aug 2022 13:02:30 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Utkarsh Patel <utkarsh.h.patel@intel.com>,
+        rajmohan.mani@intel.com, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/6] ACPI: New helper function
+ acpi_dev_get_memory_resources() and a new ACPI ID
+Message-ID: <Yv9ftg2MVx+okmzC@kuha.fi.intel.com>
+References: <20220816101629.69054-1-heikki.krogerus@linux.intel.com>
+ <Yv6PLl4aLPzHTJTQ@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v13 5/6] KVM: s390: pv: support for Destroy fast UVC
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
-        david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220810125625.45295-1-imbrenda@linux.ibm.com>
- <20220810125625.45295-6-imbrenda@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20220810125625.45295-6-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: yAUyPdwDaF1s1hhXOtpeYWJ7wTlKUt6J
-X-Proofpoint-GUID: 9OUB_yrq1vsp62Gj396qVQ5MNLh4KLDg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-19_04,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- spamscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0 suspectscore=0
- phishscore=0 mlxscore=0 priorityscore=1501 impostorscore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208190037
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yv6PLl4aLPzHTJTQ@kroah.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,50 +65,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 14:56, Claudio Imbrenda wrote:
-> Add support for the Destroy Secure Configuration Fast Ultravisor call,
-> and take advantage of it for asynchronous destroy.
-> 
-> When supported, the protected guest is destroyed immediately using the
-> new UVC, leaving only the memory to be cleaned up asynchronously.
-> 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Hi,
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-
-> ---
->   arch/s390/include/asm/uv.h | 10 +++++++
->   arch/s390/kvm/pv.c         | 57 ++++++++++++++++++++++++++++++++------
->   2 files changed, 59 insertions(+), 8 deletions(-)
+On Thu, Aug 18, 2022 at 09:12:46PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Aug 16, 2022 at 01:16:23PM +0300, Heikki Krogerus wrote:
+> > Hi,
+> > 
+> > The helper function returns all memory resources described for a
+> > device regardless of the ACPI descriptor type (as long as it's
+> > memory), but the first patch introduces new ACPI ID for the IOM
+> > controller on Intel Meteor Lake and also separately modifies the
+> > driver so that it can get the memory resource from Address Space
+> > Resource Descriptor.
+> > 
+> > An alternative would have been to introduce that helper function first
+> > so we would not need to modify the driver when the new ID is added,
+> > but then the helper would also need to be applied to the stable kernel
+> > releases, and that does not feel necessary or appropriate in this
+> > case, at least not IMO.
+> > 
+> > So that's why I'm proposing here that we first add the ID, and only
+> > after that introduce the helper, and only for mainline. That way the
+> > patch introducing the ID is the only that goes to the stable releases.
+> > 
+> > If that's okay, and these don't have any other problems, I assume it's
+> > OK if Rafael takes all of these, including the ID?
 > 
-> diff --git a/arch/s390/include/asm/uv.h b/arch/s390/include/asm/uv.h
-> index be3ef9dd6972..28a9ad57b6f1 100644
-> --- a/arch/s390/include/asm/uv.h
-> +++ b/arch/s390/include/asm/uv.h
-> @@ -34,6 +34,7 @@
->   #define UVC_CMD_INIT_UV			0x000f
->   #define UVC_CMD_CREATE_SEC_CONF		0x0100
->   #define UVC_CMD_DESTROY_SEC_CONF	0x0101
-> +#define UVC_CMD_DESTROY_SEC_CONF_FAST	0x0102
->   #define UVC_CMD_CREATE_SEC_CPU		0x0120
->   #define UVC_CMD_DESTROY_SEC_CPU		0x0121
->   #define UVC_CMD_CONV_TO_SEC_STOR	0x0200
-> @@ -81,6 +82,7 @@ enum uv_cmds_inst {
->   	BIT_UVC_CMD_UNSHARE_ALL = 20,
->   	BIT_UVC_CMD_PIN_PAGE_SHARED = 21,
->   	BIT_UVC_CMD_UNPIN_PAGE_SHARED = 22,
-> +	BIT_UVC_CMD_DESTROY_SEC_CONF_FAST = 23,
->   	BIT_UVC_CMD_DUMP_INIT = 24,
->   	BIT_UVC_CMD_DUMP_CONFIG_STOR_STATE = 25,
->   	BIT_UVC_CMD_DUMP_CPU = 26,
-> @@ -230,6 +232,14 @@ struct uv_cb_nodata {
->   	u64 reserved20[4];
->   } __packed __aligned(8);
->   
-> +/* Destroy Configuration Fast */
-> +struct uv_cb_destroy_fast {
-> +	struct uv_cb_header header;
-> +	u64 reserved08[2];
-> +	u64 handle;
-> +	u64 reserved20[5];
-> +} __packed __aligned(8);
+> I took the id now, for 6.0-final as it seems to be totally independant
+> of the other commits (otherwise you would not have tagged it for the
+> stable tree.)
+> 
+> The remainder should probably be resent and send through the acpi tree.
+
+Okay. The last patch depends on that ID patch, so Rafael, you need to
+handle that conflict with immutable branch I guess. Or should we just
+skip that patch for now?
+
+I think another way to handle this would be that Greg, you take the
+whole series.
+
+thanks,
+
+-- 
+heikki

@@ -2,135 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CEF59A6DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 22:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D8059A6FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 22:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351749AbiHSUMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 16:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S1350975AbiHSUNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 16:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351744AbiHSUMt (ORCPT
+        with ESMTP id S1351758AbiHSUNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 16:12:49 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752BB106510
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:12:48 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id y187so4138163iof.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 13:12:48 -0700 (PDT)
+        Fri, 19 Aug 2022 16:13:18 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B93C614E;
+        Fri, 19 Aug 2022 13:13:15 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id v10so5462159ljh.9;
+        Fri, 19 Aug 2022 13:13:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=TWnGx0tsPzDsYWN5IvwyG0/F4n3/lHDuvrydVsnCdTg=;
-        b=FamF99POPr6PtKGcfiAFaDyK/px9/QEUZ9jAWq0VuRMjBQuH/SIEycINUXdEisf8wJ
-         GB5Fp0sV/9jsr8SHRoKkycJAodjombPVpppk1giNuh7jurYysChORzMPgyHKQdBRx6Yi
-         bMQ8CZykRl92tAcPu+aCfb2R1BHuyiGBmYyICNbj6NOdCbqR0y056zBRI5sucULdSXWP
-         iBSs6go4YjTUccStqlOuQrHTd0ys3ntGBcGxqR0SgI4W+Fz4sL7vOXN4324d30h8iu/T
-         k8P9H+ggVIlKLOTUU3V6HrleaFRS/uGb9Vw8lQ57cl7kluTFPaNsmbjckIsP6sE3O2xR
-         GObw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=IcngjGV4zbZSOi+jrmaVhNkVii+NAIYV4colFiC23+E=;
+        b=OfzHVubGC+1Rb/Q9WXF+4lnZWDgHRWUVYsWb/iRlxABOUpe9xu4EJXuTFnhA2WD3dR
+         gyb1b5Im3UciVP6Hn1fd4ooggQQXaQ9fg15O18YaIgbQTCLWMZL7ABYXz0uBgzSZce1E
+         8NxIa3n7vKt7sH82PlWOXafKLWmHEONXOi743c6cwMaQ+b+++Uf9C+3pP5a0XTnIu8CD
+         fR5TI59FrfzZPJlk4mNRuVXFsjM/i8nGXLyhHJGzc0KhhLeioDzv60NNaXmv47TqX/qm
+         eijFduGtk/9D+G3sXNYVYV5HyzFdjBo0ZYRFLm1De2EiCDgSyzKcn+u8nlNhoUXQ49Qv
+         SkLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=TWnGx0tsPzDsYWN5IvwyG0/F4n3/lHDuvrydVsnCdTg=;
-        b=fMzUwE6SEkBJitP8MPOxr1FNgu22ltEZX2H4DmnLMH5i2B2UoD9nNJTF76eB55C3nm
-         +4iGmtaNayKvYUROhYQgBmAsnUyPLg8VPofReXWkkHQBiJVjaUSqDs129exvDF432n8l
-         awbRGUqMk6c8tiUCmKZ0vnI+OoENpQlljxupGDtWV68d6+jJj6srJY4x4YuJnj602p6Q
-         m4pwK/cMQg2UwrMtVoWV8G9/+FIe9ZD1G5pu9pmkEVmMqLx7xd0WaYiRqfFlgxLd9rzm
-         gWosjcjq8bTR8KgEp3w7VB9I37/9DCVl6ZVJ/k3D8qZ2FAUgsBOpEs3jso/Tn2fYM0Bc
-         8miQ==
-X-Gm-Message-State: ACgBeo2eJvF7QHou/4i9m4p3oehPryJFIAaWfmF4QZu6aUmX1TyNz//j
-        MDO1HtJbyi074V7qiUTZ2vlxg1WEQ+6H7Zn1y8Pa0Q==
-X-Google-Smtp-Source: AA6agR7vH6bU/CcMRlqauAdte2pei9jmt+xQRqGJlV8ch8ekID2WY8/GjnEURxqW3LnsWWhfJJAGPXkSfSDz0FeaHIw=
-X-Received: by 2002:a05:6638:34a8:b0:343:4d0a:5984 with SMTP id
- t40-20020a05663834a800b003434d0a5984mr4292780jal.167.1660939967732; Fri, 19
- Aug 2022 13:12:47 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=IcngjGV4zbZSOi+jrmaVhNkVii+NAIYV4colFiC23+E=;
+        b=0O6T4gfW7adbLaae8ZPLgB/53v7RRqCrWroYcsgre4LjI+J6xeZpWnI4XxQFCt7kkm
+         FLWJpEbw8pAAQPZRwk4Pt4lVLupNWTPd+/N2yuyVnSDCARQ3gXWwLs1jD0RvMpiYifUl
+         z4KA/KElSYtUByGI3aio5y4pxY8k00LC/1kY52b/3+GEZwNex3p1tKMh/IFCYGZLtquf
+         JiRi4YNNXKjWc6r9ikXl4pOj7CZUWa/MvC3sCYqfbugtHjIGoOLi8+6U/4GQZuIRDMKN
+         EEXZGMFEpYwmjPSk4Ejx8qs89vyLF7sZl2+9mInn75yihAwDNkaAixxO+s1NLzh0ag3E
+         MBqQ==
+X-Gm-Message-State: ACgBeo1TSH8mBKraJtIWxSZSkVljqSAb8drmgq+NkL+erro3jKvw/c2R
+        Y5aWXN23R0y5lQjmjfmqn7dNyigZpIE=
+X-Google-Smtp-Source: AA6agR6MsxnDx/xQDuFezqzCmoeAapiezI9Y2xzEeTt6Sdc9D4VihW/YVyw15kGNZNkOuR2TApK8ew==
+X-Received: by 2002:a2e:940d:0:b0:261:c5c8:3403 with SMTP id i13-20020a2e940d000000b00261c5c83403mr76538ljh.86.1660939993307;
+        Fri, 19 Aug 2022 13:13:13 -0700 (PDT)
+Received: from localhost.localdomain (admv234.neoplus.adsl.tpnet.pl. [79.185.51.234])
+        by smtp.gmail.com with ESMTPSA id h25-20020ac250d9000000b004916f129729sm753895lfm.50.2022.08.19.13.13.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 13:13:12 -0700 (PDT)
+From:   Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Add DISPCC driver for SM6115
+Date:   Fri, 19 Aug 2022 22:12:20 +0200
+Message-Id: <20220819201231.23474-1-a39.skl@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220817214728.489904-1-axelrasmussen@google.com>
- <20220817214728.489904-3-axelrasmussen@google.com> <Yv3bnouKb7242Ama@kroah.com>
-In-Reply-To: <Yv3bnouKb7242Ama@kroah.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Fri, 19 Aug 2022 13:12:10 -0700
-Message-ID: <CAJHvVcjd3GtjJ2yr0gNDGHCqc8RZUYXCYaj8eEgo1TTLBjNYSQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/5] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-security-module@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 11:26 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Aug 17, 2022 at 02:47:25PM -0700, Axel Rasmussen wrote:
-> > +static int userfaultfd_dev_open(struct inode *inode, struct file *file)
-> > +{
-> > +     return 0;
->
-> If your open does nothing, no need to list it here at all, right?
->
-> > +}
-> > +
-> > +static long userfaultfd_dev_ioctl(struct file *file, unsigned int cmd, unsigned long flags)
-> > +{
-> > +     if (cmd != USERFAULTFD_IOC_NEW)
-> > +             return -EINVAL;
-> > +
-> > +     return new_userfaultfd(flags);
-> > +}
-> > +
-> > +static const struct file_operations userfaultfd_dev_fops = {
-> > +     .open = userfaultfd_dev_open,
-> > +     .unlocked_ioctl = userfaultfd_dev_ioctl,
-> > +     .compat_ioctl = userfaultfd_dev_ioctl,
->
-> Why do you need to set compat_ioctl?  Shouldn't it just default to the
-> existing one?
+This patch series introduce support for SM6115 display clock controller,
+this driver is based on QCM2290 one.
 
-I took some more time looking at this today, and I think it actually
-has to be the way it is.
+Changes since v1
+================
+1. Changed bindings file names to Vendor,SoC-IP format.
+2. Changed include in dispcc-sm6115 to reflect name change of bindings.
 
-I didn't find anywhere we noticed compat_ioctl unset, and default to
-the "normal" one (e.g. see the compat ioctl syscall definition in
-fs/ioctl.c). It looks to me like it really does need some value. It's
-common to use compat_ptr_ioctl for this, but since we're interpreting
-the arg as a scalar not as a pointer, doing that here would be
-incorrect.
+Adam Skladowski (2):
+  dt-bindings: clock: add QCOM SM6115 display clock bindings
+  clk: qcom: Add display clock controller driver for SM6115
 
-It looks like there are other existing examples that do it the same
-way, e.g. seccomp_notify_ops in linux/seccomp.c.
+ .../bindings/clock/qcom,sm6115-dispcc.yaml    |  88 +++
+ drivers/clk/qcom/Kconfig                      |   9 +
+ drivers/clk/qcom/Makefile                     |   1 +
+ drivers/clk/qcom/dispcc-sm6115.c              | 615 ++++++++++++++++++
+ .../dt-bindings/clock/qcom,sm6115-dispcc.h    |  36 +
+ 5 files changed, 749 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml
+ create mode 100644 drivers/clk/qcom/dispcc-sm6115.c
+ create mode 100644 include/dt-bindings/clock/qcom,sm6115-dispcc.h
 
->
-> And why is this a device node at all?  Shouldn't the syscall handle all
-> of this (to be honest, I didn't read anything but the misc code, sorry.)
->
-> thanks,
->
-> greg k-h
+-- 
+2.25.1
+

@@ -2,158 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A30F59A432
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFDE359A359
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 20:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354336AbiHSRVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 13:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
+        id S1354359AbiHSRWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 13:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352751AbiHSRVB (ORCPT
+        with ESMTP id S1350654AbiHSRWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 13:21:01 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F4314D065;
-        Fri, 19 Aug 2022 09:40:16 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id c39so6341086edf.0;
-        Fri, 19 Aug 2022 09:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=Fya4fZM01wtpV6jSWWXM/JoqlH2BGCdszj83hyqTE9Q=;
-        b=a/OpAIk/kN1DVTd5wBYF+F7EgMXvFSvBuTaOGIBJxkeaU8wKI4dpl3ipvq1YyIb3A9
-         nrqBZAIr8x029+uxX0c19j1Bu7RPlwwbp0N+N9FYHNbYVjaULrG/wI91keaVSZs8dLeP
-         UZJJBqZRaTln9uAFaklc0MmXBdPK254cAHipMS9AzpffDHST92WPwjkXWoV3t9GaHVhz
-         U/U9RBBOJu+dEmuba0S/fliA3OQ00hZZtvsMWKreQ/WjRjjWBxJFWND5CvsmxkazTBdo
-         oYg8NWCpRNn8Pe3SebfAYINWGdfJ66+PexCUqNYQl99Zk44ZdjhTgAalyi5mviVVcZ4H
-         +Gfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=Fya4fZM01wtpV6jSWWXM/JoqlH2BGCdszj83hyqTE9Q=;
-        b=Uh3HyiW7BAU/wRVGlAYNEsGOxdAisHoSV3tSgthCPq2gp00tqzNMtffgzxC/UYI2FN
-         Ws5Z2oxaIyuvcXAR3vrTvYbKBpojTRWhzENJ4vFpuDOrPJ5bSb0D6cAauQJ7k3zbH+Cf
-         IeuymnOYAAzp1iGZ0FTqVGO2wW4iQ8WmRGi4MURYvLYFRTDk0KrXOYQi+Njkoh6RxcmX
-         nXWm8Ger54AesXmWkCy8GVW2plH2p/oG0ETC1IAhaLdeRQI6bevUo4Po7PxMMYAwUnrx
-         j+IpOhasNbQC/WVYzageMPWkn2es3hzByuqrMcBuGPFfXq1l6h4yJBMpl9aWZoVAhJMH
-         +/6w==
-X-Gm-Message-State: ACgBeo37iW80cHRU8oKkCvfhgfudfI0RmxS7VcDW2aS/yHe0ryzKKWUa
-        BsyFHKEeKiI0u8Oa7vWzaaRGM82GaefX+5dhyH4=
-X-Google-Smtp-Source: AA6agR5lfMOKEBoDzHA6/bVtt1G+RY9+YHXqTlh41y4Yzsem3FQcp824i65YTAGU77Xssxh3e5ilE2fVkRoq6psxDq8=
-X-Received: by 2002:a05:6402:298c:b0:446:a97:1800 with SMTP id
- eq12-20020a056402298c00b004460a971800mr6829163edb.421.1660927211176; Fri, 19
- Aug 2022 09:40:11 -0700 (PDT)
+        Fri, 19 Aug 2022 13:22:25 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AA21272DD;
+        Fri, 19 Aug 2022 09:41:31 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JEhGlW003718;
+        Fri, 19 Aug 2022 16:41:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=XjtcvC/BI3XHYKOQCoPWoIynYxVZExJBSpyTyUaVomU=;
+ b=IZFsorwsJ8akAV6u4Ku19Z6aCnSVchJ1XCmmkEmnnfxrc6wFAKqkYhRoZ09RnpaX8+Tr
+ MY1vZSSB8sU2G8x+F/rcDkM8fxnd9AC5xvPzpg9JrN53dn7bBdIglapx8pk+x21yvivQ
+ njMQvx35mIrXnss7+iPN8htnhqzhm/HyZARggukhLOd1yzIRsFZr81mLh4DksTo2VU6z
+ ksrHbwH3BUA2Pos7w3O4skzUgSjVsv5XedHLZkE5h7Gx3oOLffbLgLv/ZVwOmL/k1Yrc
+ B4/hLh5utMG1xgOF45+SmPOiT9bSSf+zS+RkJs074K2Enm1JXijn/C+vLiria+2xgQmq TA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j21v523j2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Aug 2022 16:41:03 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27JGf2PR008752
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Aug 2022 16:41:02 GMT
+Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 19 Aug 2022 09:40:55 -0700
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Stephen Boyd" <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Douglas Anderson <dianders@chromium.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <sboyd@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/6] clk/qcom: Support gdsc collapse polling using 'reset' interface
+Date:   Fri, 19 Aug 2022 22:10:39 +0530
+Message-ID: <1660927246-11327-1-git-send-email-quic_akhilpo@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <cover.1660761470.git.dxu@dxuuu.xyz> <edbca42217a73161903a50ba07ec63c5fa5fde00.1660761470.git.dxu@dxuuu.xyz>
- <87pmgxuy6v.fsf@toke.dk> <20220818221032.7b4lcpa7i4gchdvl@kashmir.localdomain>
- <87wnb4tmc0.fsf@toke.dk>
-In-Reply-To: <87wnb4tmc0.fsf@toke.dk>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 19 Aug 2022 09:39:59 -0700
-Message-ID: <CAADnVQ+YtLQPa3fifFn5vazydP1fZtE2RmjOBY4F5tF2t8MmSQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/4] bpf: Add support for writing to nf_conn:mark
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        netfilter-devel <netfilter-devel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: SfnWSdqgXmmjcyotKxFZkXGKn2nsaCnf
+X-Proofpoint-GUID: SfnWSdqgXmmjcyotKxFZkXGKn2nsaCnf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-19_08,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 mlxscore=0 adultscore=0 bulkscore=0 impostorscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208190060
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 6:05 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@kern=
-el.org> wrote:
->
-> Daniel Xu <dxu@dxuuu.xyz> writes:
->
-> > Hi Toke,
-> >
-> > On Thu, Aug 18, 2022 at 09:52:08PM +0200, Toke H=C3=B8iland-J=C3=B8rgen=
-sen wrote:
-> >> Daniel Xu <dxu@dxuuu.xyz> writes:
-> >>
-> >> > Support direct writes to nf_conn:mark from TC and XDP prog types. Th=
-is
-> >> > is useful when applications want to store per-connection metadata. T=
-his
-> >> > is also particularly useful for applications that run both bpf and
-> >> > iptables/nftables because the latter can trivially access this
-> >> > metadata.
-> >>
-> >> Looking closer at the nf_conn definition, the mark field (and possibly
-> >> secmark) seems to be the only field that is likely to be feasible to
-> >> support direct writes to, as everything else either requires special
-> >> handling (like status and timeout), or they are composite field that
-> >> will require helpers anyway to use correctly.
-> >>
-> >> Which means we're in the process of creating an API where users have t=
-o
-> >> call helpers to fill in all fields *except* this one field that happen=
-s
-> >> to be directly writable. That seems like a really confusing and
-> >> inconsistent API, so IMO it strengthens the case for just making a
-> >> helper for this field as well, even though it adds a bit of overhead
-> >> (and then solving the overhead issue in a more generic way such as by
-> >> supporting clever inlining).
-> >>
-> >> -Toke
-> >
-> > I don't particularly have a strong opinion here. But to play devil's
-> > advocate:
-> >
-> > * It may be confusing now, but over time I expect to see more direct
-> >   write support via BTF, especially b/c there is support for unstable
-> >   helpers now. So perhaps in the future it will seem more sensible.
->
-> Right, sure, for other structs. My point was that it doesn't look like
-> this particular one (nf_conn) is likely to grow any other members we can
-> access directly, so it'll be a weird one-off for that single field...
->
-> > * The unstable helpers do not have external documentation. Nor should
-> >   they in my opinion as their unstableness + stale docs may lead to
-> >   undesirable outcomes. So users of the unstable API already have to
-> >   splunk through kernel code and/or selftests to figure out how to wiel=
-d
-> >   the APIs. All this to say there may not be an argument for
-> >   discoverability.
->
-> This I don't buy at all. Just because it's (supposedly) "unstable" is no
 
-They're unstable. Please don't start this 'but can we actually remove
-them' doubts. You're only confusing yourself and others.
-We tweaked kfuncs already. We removed tracepoints too after they
-were in a full kernel release.
+Some clients like adreno gpu driver would like to ensure that its gdsc
+is collapsed at hardware during a gpu reset sequence. This is because it
+has a votable gdsc which could be ON due to a vote from another subsystem
+like tz, hyp etc or due to an internal hardware signal. To allow
+this, gpucc driver can expose an interface to the client driver using
+reset framework. Using this the client driver can trigger a polling within
+the gdsc driver.
 
-> excuse to design a bad API, or make it actively user-hostile by hiding
+This series is rebased on top of linus's master branch.
 
-'bad API'? what? It's a direct field write.
-We do allow it in other data structures.
+Related discussion: https://patchwork.freedesktop.org/patch/493144/
 
-> things so users have to go browse kernel code to know how to use it. So
-> in any case, we should definitely document everything.
->
-> > * Direct writes are slightly more ergnomic than using a helper.
->
-> This is true, and that's the main argument for doing it this way. The
-> point of my previous email was that since it's only a single field,
-> consistency weighs heavier than ergonomics :)
+Changes in v4:
+- Update gpu dt-binding schema
+- Typo fix in commit text
 
-I don't think the 'consistency' argument applies here.
-We already allow direct read of all fields.
-Also the field access is easier to handle with CO-RE.
+Changes in v3:
+- Use pointer to const for "struct qcom_reset_ops" in qcom_reset_map (Krzysztof)
+
+Changes in v2:
+- Return error when a particular custom reset op is not implemented. (Dmitry)
+
+Akhil P Oommen (6):
+  dt-bindings: clk: qcom: Support gpu cx gdsc reset
+  clk: qcom: Allow custom reset ops
+  clk: qcom: gdsc: Add a reset op to poll gdsc collapse
+  clk: qcom: gpucc-sc7280: Add cx collapse reset support
+  dt-bindings: drm/msm/gpu: Add optional resets
+  arm64: dts: qcom: sc7280: Add Reset support for gpu
+
+ .../devicetree/bindings/display/msm/gpu.yaml       |  7 ++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  3 +++
+ drivers/clk/qcom/gdsc.c                            | 23 ++++++++++++++----
+ drivers/clk/qcom/gdsc.h                            |  7 ++++++
+ drivers/clk/qcom/gpucc-sc7280.c                    | 10 ++++++++
+ drivers/clk/qcom/reset.c                           | 27 ++++++++++++++++++++++
+ drivers/clk/qcom/reset.h                           |  8 +++++++
+ include/dt-bindings/clock/qcom,gpucc-sc7280.h      |  3 +++
+ 8 files changed, 84 insertions(+), 4 deletions(-)
+
+-- 
+2.7.4
+

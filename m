@@ -2,139 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C81599BD0
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04E6599B6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 Aug 2022 14:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348503AbiHSMTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 08:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
+        id S1348735AbiHSL7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 07:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347929AbiHSMTI (ORCPT
+        with ESMTP id S1347592AbiHSL7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 08:19:08 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5BFE9A99;
-        Fri, 19 Aug 2022 05:19:06 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 6AB43188488D;
-        Fri, 19 Aug 2022 12:18:34 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id B357F2503313;
-        Fri, 19 Aug 2022 12:18:23 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 02302A1A5E40; Fri, 19 Aug 2022 09:51:11 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-MIME-Version: 1.0
-Date:   Fri, 19 Aug 2022 11:51:11 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
+        Fri, 19 Aug 2022 07:59:39 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE26C6B60;
+        Fri, 19 Aug 2022 04:59:38 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id e21so531479edc.7;
+        Fri, 19 Aug 2022 04:59:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc;
+        bh=OFbstuxh2bM00OlidvhlMfZ5HY1I75qAICyPsDUJ70Y=;
+        b=BO95pDtWkzJrDZfzILRRYN7GrY3Hnz3RqM3ZNMuGI1FC3WfZQ5P+c5D73FTi4mEs2j
+         Jub1BH/HYKTPwoLXYzUAlcDx7+XKfyORexNQ/dU5y/eb4VD3RUG9N0/qiDoEMrtBCyfH
+         udo10JlvI1DRloNgVjvIIY1zAMF0nYMwnN+3TwIWttFZ1JrUpJINL+ubOiDY3sWZK2xh
+         /Ecxrl2Xicoxtc34yDJ00SzeHUZwTtLGxneGyLFR/SY8IGUc76EnCwF7FwX4YZUmFw6l
+         jsAbrNskECodtzXG6WG24P34Fn0sD+4EgULBrvRkYWShUyIEgQ8A+nqzMvFYTak4zA/N
+         CkzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc;
+        bh=OFbstuxh2bM00OlidvhlMfZ5HY1I75qAICyPsDUJ70Y=;
+        b=eFbpvyDHk3XH9okWmqHFxMyVCFsDWHY5ePqflyfyqtqXgabW+U0e2kURw/18Q7zShX
+         papafXxswXJqAm9GpahfEQ3Dhrd9LK43EljoRbqw0Gc0gbOXq+krrrgrCHePhfZv42SH
+         IaOwuDizGboZw43tMuczAFGl3lFAhAQhsecSfol34aU3Wa5/hfYv46QLM5nNFANjh50V
+         bUYZzjXnbkhB4IYHzV3YIdVl0AZZ3aC0J+jhQylH0ZNZAw9W0zPTWG0icJh5j6c4yrvP
+         6dj18ggcodVS+VSs7Sw1IuN/j0Ie3/vFhiFRndkFbilgtzmZOlQ10NxDJw43ajTkojjH
+         ORzw==
+X-Gm-Message-State: ACgBeo2izRGo9DcxKAFnzo8YE/COdQj66B0ELynw7bZ+3Qhhp09PJNFR
+        dHbDfjIsYc3wAPGQLPnIRPQ=
+X-Google-Smtp-Source: AA6agR5+6v4xRQkCgYSr0SgKCtDdo+WH/SiJO/XJBRmGpNFZoYhAvvs0LMK2+lBFa4Bh1phS9IMOFw==
+X-Received: by 2002:a05:6402:4282:b0:43e:612c:fcf7 with SMTP id g2-20020a056402428200b0043e612cfcf7mr5785323edc.242.1660910376823;
+        Fri, 19 Aug 2022 04:59:36 -0700 (PDT)
+Received: from Ansuel-xps. (host-95-250-253-218.retail.telecomitalia.it. [95.250.253.218])
+        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b007317f017e64sm2222207ejg.134.2022.08.19.04.59.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 04:59:36 -0700 (PDT)
+Message-ID: <62ff7b28.170a0220.91820.52c8@mx.google.com>
+X-Google-Original-Message-ID: <Yv93fbdoPfRAaR0P@Ansuel-xps.>
+Date:   Fri, 19 Aug 2022 13:43:57 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <YvkM7UJ0SX+jkts2@shredder>
-References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
- <YvkM7UJ0SX+jkts2@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH net-next] net: dsa: qca8k: convert to regmap
+ read/write API
+References: <20220806192253.7567-1-ansuelsmth@gmail.com>
+ <20220806192253.7567-1-ansuelsmth@gmail.com>
+ <20220818165119.c5cgk5og7jhmzpo6@skbuf>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818165119.c5cgk5og7jhmzpo6@skbuf>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-14 16:55, Ido Schimmel wrote:
-> On Fri, Aug 12, 2022 at 02:29:48PM +0200, netdev@kapio-technology.com 
-> wrote:
->> On 2022-08-11 13:28, Ido Schimmel wrote:
->> 
->> > > > I'm talking about roaming, not forwarding. Let's say you have a locked
->> > > > entry with MAC X pointing to port Y. Now you get a packet with SMAC X
->> > > > from port Z which is unlocked. Will the FDB entry roam to port Z? I
->> > > > think it should, but at least in current implementation it seems that
->> > > > the "locked" flag will not be reset and having locked entries pointing
->> > > > to an unlocked port looks like a bug.
-
-I have made the locked entries sticky in the bridge, so that they don't 
-move to other ports.
-
->> > > >
->> > >
->> 
->> In general I have been thinking that the said setup is a network
->> configuration error as I was arguing in an earlier conversation with
->> Vladimir. In this setup we must remember that SMAC X becomes DMAC X in 
->> the
->> return traffic on the open port. But the question arises to me why MAC 
->> X
->> would be behind the locked port without getting authed while being 
->> behind an
->> open port too?
->> In a real life setup, I don't think you would want random hosts behind 
->> a
->> locked port in the MAB case, but only the hosts you will let through. 
->> Other
->> hosts should be regarded as intruders.
->> 
->> If we are talking about a station move, then the locked entry will age 
->> out
->> and MAC X will function normally on the open port after the timeout, 
->> which
->> was a case that was taken up in earlier discussions.
->> 
->> But I will anyhow do some testing with this 'edge case' (of being 
->> behind
->> both a locked and an unlocked port) if I may call it so, and see to 
->> that the
->> offloaded and non-offloaded cases correspond to each other, and will 
->> work
->> satisfactory.
+On Thu, Aug 18, 2022 at 07:51:19PM +0300, Vladimir Oltean wrote:
+> On Sat, Aug 06, 2022 at 09:22:53PM +0200, Christian Marangi wrote:
+> > Convert qca8k to regmap read/write bulk API. The mgmt eth can write up
+> > to 16 bytes of data at times. Currently we use a custom function to do
+> > it but regmap now supports declaration of read/write bulk even without a
+> > bus.
+> > 
+> > Drop the custom function and rework the regmap function to this new
+> > implementation.
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > ---
 > 
-> It would be best to implement these as additional test cases in the
-> current selftest. Then you can easily test with both veth pairs and
-> loopbacks and see that the hardware and software data paths behave the
-> same.
-> 
+> Nothing in this change jumps out as wrong to me, but maybe you should
+> copy Mark Brown too when you submit it proper, as the first user of the
+> bulk regmap read/write over Ethernet, IIUC.
 
-How many loops would be needed to have a selftest with a HUB and a MAC 
-on both a locked and an unlocked port?
+Should I send a v2 without RFC and CC Mark or CC directly here in the
+RFC? This is ready so v2 won't have changes.
 
->> 
->> I think it will be good to have a flag to enable the mac-auth/MAB 
->> feature,
->> and I suggest just calling the flag 'mab', as it is short.
-
-I have now created the flag to enable Mac-Auth/MAB with iproute2:
-bridge link set dev DEV macauth on|off
-
-with the example output from 'bridge -d link show dev DEV' when macauth 
-is enabled:
-1: ethX: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master br0 state 
-forwarding priority 32 cost 19
-     hairpin off guard off root_block off fastleave off learning on flood 
-off mcast_flood on bcast_flood on mcast_router 1 mcast_to_unicast off 
-neigh_suppress off vlan_tunnel off isolated off locked mab on
-
-The flag itself in the code is called BR_PORT_MACAUTH.
-
-> 
-> Fine by me, but I'm not sure everyone agrees.
+-- 
+	Ansuel

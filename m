@@ -2,175 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3068E59ABCF
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 08:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2927F59ABD1
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 08:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245476AbiHTGnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 02:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
+        id S245552AbiHTGst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 02:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245055AbiHTGnj (ORCPT
+        with ESMTP id S243357AbiHTGsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 02:43:39 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66FA12639
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 23:43:30 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id dc19so12351901ejb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 23:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=K+ACVRr2qvbdZdGfEXZ+98M4lRWQBPuEkPQm+EeZJtg=;
-        b=RN/MJth3KruMft+k48dYAhxZEs9O5v7vODTyzoqUQCsHDfmzq2p6yrUQnhmeBFCXXX
-         u6ESR83dZSLHVVf3p/EubuLTlCqaSoLlPvJzNt0phGHzBm2Ha6BGaLTCh5SWmVoQhYjy
-         ykEI6l+H6pUlT2DastachcsN4kcXcN+95aGlGPTE27hDnoF2GiRz3NXFWMfMpKf1zS9G
-         5X5BgZDF0ceTtWvwBwO4SO0FZLAxzeRVqhSBZXPObzjQXhdirmIt4fkrINg2GhWcNrEJ
-         BaW6J6IbmO/UEwT2PPXkQXz7ejq8UxdzJtzw/bfiFwCgsaddfdkMrDIQUz+IWu4U93y1
-         iShg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=K+ACVRr2qvbdZdGfEXZ+98M4lRWQBPuEkPQm+EeZJtg=;
-        b=syKXtQoveW+gLsOhWuWYkqC8tx8qFb7zjEkJXFPkhYs+W6EuQt/G3M7B/rYuhZRMk3
-         ff6Ugf1/rQOM80Cu6EiMKx48uLQM3su20uOIpDp2OOu04ZTxXs6FCrSuF4BUR0r+/+Z8
-         wP9L37PE4gB5yDHgkCR/tzbItT+pYViiFjkDbEQPEW72PEigdjELbwUTQR/KPbUCbsBx
-         4qD266+xwUTGTZaUJflsulX2ULvEs7u7JLQjggTAKehEHYR3o0TEsi1gMPKAVG82rGol
-         Qc6eRLmef5YqUobN8YoCGscHdHhyH8CEOIYZB0Ubk33ZKORjzV5gXvtk1rumrPYkmMb6
-         NQEw==
-X-Gm-Message-State: ACgBeo21kCf3A5jphQhRY2g83Ya/lYMytrM7jHPTsAccN7KJLQAeQ5XH
-        Ow28jhbiOuScRLhMIl2Y48U=
-X-Google-Smtp-Source: AA6agR7j8mzhn0ltAl7QUMevwSp8OgzgbuPbEAr0O4S4Ihi6BzQD8boGfYzXSv+MsZPcYGfXGeeDFQ==
-X-Received: by 2002:a17:907:7f22:b0:73b:e53a:820d with SMTP id qf34-20020a1709077f2200b0073be53a820dmr6334613ejc.133.1660977809286;
-        Fri, 19 Aug 2022 23:43:29 -0700 (PDT)
-Received: from nam-dell.vm.stuba.sk ([147.175.88.220])
-        by smtp.gmail.com with ESMTPSA id 27-20020a170906329b00b0073c0b87ba34sm2935816ejw.198.2022.08.19.23.43.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 23:43:29 -0700 (PDT)
-From:   Nam Cao <namcaov@gmail.com>
-To:     lkp@intel.com
-Cc:     Larry.Finger@lwfinger.net, gregkh@linuxfoundation.org,
-        hdegoede@redhat.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        namcaov@gmail.com
-Subject: [PATCH v2 4/4] staging: rtl8723bs: remove odm_NoiseMonitor.h and odm_NoiseMonitor.c
-Date:   Sat, 20 Aug 2022 08:42:46 +0200
-Message-Id: <2e60f0f5fed9812cd7a0ba70bf8073eb25dfc43e.1660977536.git.namcaov@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1660977535.git.namcaov@gmail.com>
-References: <cover.1660977535.git.namcaov@gmail.com>
+        Sat, 20 Aug 2022 02:48:39 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178D02019C
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 23:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660978113; x=1692514113;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ANac5rmsWEEFgxc9oMLOxCcT6rImUprpc90XJdhlGrU=;
+  b=bS9EvTlvggY5rMzkqUwZFgFwWIQt83j1f1rh3zmmYbJHaUNAMMLMshI0
+   IP6EL1CKqGNjOoAbOBIsFppKtI9Sk9WZPtfjRq9ZWCS8+D2f7ldFUow9r
+   rzDMmdQ8v1o4MOfjwgX4HN+IheP7SjIwjgR9oMyEmTJ1u3wn71FrQV72B
+   iaMmE6jevQw2NcsOE3lvuwfEgJMoHVR7CGi/KEn9jGTNUWR4G4nWe2XEf
+   bZDip7c/e5W0q75/Qr9pCdx6ICB48h6kilH7TitxMNHILZJOqL8Ct46YM
+   5u0SVn1wdja5HPEAEZsPii3g9jiceTRyus0GUF5NXZ7/qLF9D1x8vkshj
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="293156314"
+X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
+   d="scan'208";a="293156314"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 23:48:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
+   d="scan'208";a="936458239"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 19 Aug 2022 23:48:30 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPIHV-0002IB-2u;
+        Sat, 20 Aug 2022 06:48:29 +0000
+Date:   Sat, 20 Aug 2022 14:47:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 254abba1863ae7bfc1a698661450cb7aee300f54
+Message-ID: <63008382.AnX8tm7d4X0Sxt9Y%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-because the content of these files is not used.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 254abba1863ae7bfc1a698661450cb7aee300f54  Merge branch into tip/master: 'x86/timers'
 
-Signed-off-by: Nam Cao <namcaov@gmail.com>
----
- drivers/staging/rtl8723bs/hal/odm.h           |  1 -
- .../staging/rtl8723bs/hal/odm_NoiseMonitor.c  | 19 -----------
- .../staging/rtl8723bs/hal/odm_NoiseMonitor.h  | 32 -------------------
- drivers/staging/rtl8723bs/hal/odm_precomp.h   |  1 -
- 4 files changed, 53 deletions(-)
- delete mode 100644 drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.c
- delete mode 100644 drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.h
+elapsed time: 720m
 
-diff --git a/drivers/staging/rtl8723bs/hal/odm.h b/drivers/staging/rtl8723bs/hal/odm.h
-index 033f22b0f394..fe9782d2d4fd 100644
---- a/drivers/staging/rtl8723bs/hal/odm.h
-+++ b/drivers/staging/rtl8723bs/hal/odm.h
-@@ -14,7 +14,6 @@
- #include "odm_DynamicBBPowerSaving.h"
- #include "odm_DynamicTxPower.h"
- #include "odm_CfoTracking.h"
--#include "odm_NoiseMonitor.h"
- 
- #define	TP_MODE		0
- #define	RSSI_MODE		1
-diff --git a/drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.c b/drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.c
-deleted file mode 100644
-index b85b323cf5bd..000000000000
---- a/drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.c
-+++ /dev/null
-@@ -1,19 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/******************************************************************************
-- *
-- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
-- *
-- ******************************************************************************/
--
--#include "odm_precomp.h"
--
--/*  This function is for inband noise test utility only */
--/*  To obtain the inband noise level(dbm), do the following. */
--/*  1. disable DIG and Power Saving */
--/*  2. Set initial gain = 0x1a */
--/*  3. Stop updating idle time pwer report (for driver read) */
--/* - 0x80c[25] */
--
--#define Valid_Min				-35
--#define Valid_Max			10
--#define ValidCnt				5
-diff --git a/drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.h b/drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.h
-deleted file mode 100644
-index 01c5c524d4e0..000000000000
---- a/drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.h
-+++ /dev/null
-@@ -1,32 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/******************************************************************************
-- *
-- * Copyright(c) 2007 - 2011 Realtek Corporation. All rights reserved.
-- *
-- *****************************************************************************/
--#ifndef	__ODMNOISEMONITOR_H__
--#define __ODMNOISEMONITOR_H__
--
--#define	ODM_MAX_CHANNEL_NUM					38/* 14+24 */
--struct noise_level {
--	/* u8 value_a, value_b; */
--	u8 value[MAX_RF_PATH];
--	/* s8 sval_a, sval_b; */
--	s8 sval[MAX_RF_PATH];
--
--	/* s32 noise_a = 0, noise_b = 0, sum_a = 0, sum_b = 0; */
--	/* s32 noise[ODM_RF_PATH_MAX]; */
--	s32 sum[MAX_RF_PATH];
--	/* u8 valid_cnt_a = 0, valid_cnt_b = 0, */
--	u8 valid[MAX_RF_PATH];
--	u8 valid_cnt[MAX_RF_PATH];
--
--};
--
--
--struct odm_noise_monitor {
--	s8 noise[MAX_RF_PATH];
--	s16 noise_all;
--};
--
--#endif
-diff --git a/drivers/staging/rtl8723bs/hal/odm_precomp.h b/drivers/staging/rtl8723bs/hal/odm_precomp.h
-index edce506022a5..2987857a8761 100644
---- a/drivers/staging/rtl8723bs/hal/odm_precomp.h
-+++ b/drivers/staging/rtl8723bs/hal/odm_precomp.h
-@@ -33,7 +33,6 @@
- #include "odm_DynamicBBPowerSaving.h"
- #include "odm_DynamicTxPower.h"
- #include "odm_CfoTracking.h"
--#include "odm_NoiseMonitor.h"
- #include "HalPhyRf.h"
- #include "HalPhyRf_8723B.h"/* for IQK, LCK, Power-tracking */
- #include "rtl8723b_hal.h"
+configs tested: 102
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+alpha                            allyesconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+m68k                             allyesconfig
+m68k                             allmodconfig
+i386                             allyesconfig
+i386                                defconfig
+arc                              allyesconfig
+x86_64                        randconfig-a015
+riscv             nommu_k210_sdcard_defconfig
+powerpc                           allnoconfig
+riscv                randconfig-r042-20220820
+s390                 randconfig-r044-20220820
+arc                  randconfig-r043-20220820
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+powerpc                          allmodconfig
+mips                             allyesconfig
+sh                               allmodconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+i386                          randconfig-c001
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+sh                      rts7751r2d1_defconfig
+powerpc                 mpc834x_itx_defconfig
+mips                      fuloong2e_defconfig
+powerpc                    klondike_defconfig
+m68k                             alldefconfig
+sh                           se7722_defconfig
+arm                        spear6xx_defconfig
+sh                            hp6xx_defconfig
+sh                     sh7710voipgw_defconfig
+xtensa                generic_kc705_defconfig
+arm                        mini2440_defconfig
+microblaze                          defconfig
+powerpc                 linkstation_defconfig
+arm                             ezx_defconfig
+ia64                                defconfig
+um                                  defconfig
+arm                          simpad_defconfig
+powerpc                  iss476-smp_defconfig
+s390                       zfcpdump_defconfig
+mips                           jazz_defconfig
+m68k                            mac_defconfig
+powerpc                     stx_gp3_defconfig
+m68k                          amiga_defconfig
+arm                        oxnas_v6_defconfig
+powerpc                      ppc40x_defconfig
+microblaze                      mmu_defconfig
+arm                         cm_x300_defconfig
+xtensa                          iss_defconfig
+mips                     decstation_defconfig
+arm                            qcom_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+parisc                generic-32bit_defconfig
+arm                           viper_defconfig
+sh                         apsh4a3a_defconfig
+arc                 nsimosci_hs_smp_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+m68k                          atari_defconfig
+sh                          sdk7780_defconfig
+sh                         ecovec24_defconfig
+
+clang tested configs:
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a014
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+powerpc                      ppc64e_defconfig
+mips                malta_qemu_32r6_defconfig
+x86_64                        randconfig-k001
+mips                        omega2p_defconfig
+mips                          malta_defconfig
+powerpc                    gamecube_defconfig
+arm                       mainstone_defconfig
+powerpc                 mpc8313_rdb_defconfig
+mips                     loongson1c_defconfig
+i386                             allyesconfig
+powerpc                     ksi8560_defconfig
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

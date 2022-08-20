@@ -2,104 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891DD59AC2B
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 09:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E64459AC28
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 09:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344604AbiHTHSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 03:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
+        id S1344193AbiHTHTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 03:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344407AbiHTHSU (ORCPT
+        with ESMTP id S1344259AbiHTHSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 03:18:20 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3608D6406;
-        Sat, 20 Aug 2022 00:18:14 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id k14so6137354pfh.0;
-        Sat, 20 Aug 2022 00:18:13 -0700 (PDT)
+        Sat, 20 Aug 2022 03:18:55 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C853883073;
+        Sat, 20 Aug 2022 00:18:51 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id m5so4728392qkk.1;
+        Sat, 20 Aug 2022 00:18:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=1zjTqUm4luCpgc05ENQ2GjoJH4VkCDObkjj2YRmbGQQ=;
-        b=VU7DtQSsgB1zcrbxExarNoM/FM3oHXXC4E0gQvlVLBnzJU+FTDhawOTl+6Zc9crRbf
-         +xHKDW0N2oPEouDXOJuEszJ1QD9Qqj+Q65IpkD+p8pRarBdph7EtdDxMEtYzBzQGhdJF
-         94uRBci2yh/52XwIn6FYouKGDDj0L6c3MuC/jj7ruTsTijs4eq/cq+8PyPtJkvc6UCQb
-         WALgMDr98U1gLCCwdWyZzjfwOQwmS4vWasROxU37cckCRohZQTYos7eFFw9+PuYnVTq9
-         jfIxY5hqptbYCRHbk32h0Enbx8joXy0/Ufk73ifhc3UU6tP2gfhldSWTyMfh6nFqXKHa
-         WXlg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=RfHnMtcUMETMR/Aa5CV8kPSlFBKpFrMW9OaR7NTF/mw=;
+        b=gErxLB/H9EPF/1o1mS8x9cvyBOD3vCmxe0xHdLOMdgdrrHDot66YlGqsTRSS3Za0nW
+         7uudGW4aoWfPavvjHQWv6p6GLXRfPhtO9uRZvnAPDNKfCsvYLELF3ObwXlWxdA84ukYT
+         9RbDlyybycQwsDqDoEGRNUXwGWykstwGmqhd/zSlxqR7I2kn1gair8nLqF9uU4JtVQLv
+         21Szigiu0we8EpjFIu+w/EpCpeazOi7eyoKhKLOyNPCxm525RbbCXSPVLFthmg1njgld
+         hZ06fVPfOmmM8367dduaQQ/sWZrvNrWpg2xX1UMyoY479Gxuc3claNaCabt+9MT5Cm//
+         E2AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=1zjTqUm4luCpgc05ENQ2GjoJH4VkCDObkjj2YRmbGQQ=;
-        b=cSdWd8Djjk8mjzZbv7La0uosalETnw4P9V7Gs7Jt9PYDCYK5FbRBxz9P/pIS5myllg
-         K8APRbL52HABGeXx82cwEBw7KFJoK5vr2z9JXWwSvmVDjPXlYmEQYqlrieJl980u4PAk
-         2+wnxZlMcVs6blE6xEJt9X8XWS8SXZvaTi9Vl3Hh3CR7Jmwh/VPok6DA4g62dntkbm6W
-         Y5bbDCgBWJoIYXMNJyp7ZgT9CNZqQsK7bmF7OdnhYqba6K8lW35OqU9TFdReGvpluX/E
-         LVWKEafqbO5hJg6AYRu94N/YYDTL4yQGgtR5H/tPsRrgYafTPTyylrP4Hk7T7HwhGJps
-         pzaw==
-X-Gm-Message-State: ACgBeo3vRws9HEBXratRBSA+LalU9kBTcPr77TLEXNSo3By3WyamhgsI
-        cVJnS95JQatcjmWBM5suA0WfpuUnwytyjZHqOPM=
-X-Google-Smtp-Source: AA6agR7Tn8tFdRxFz7954cWIplbnFqO0dmoiLoIt/8ZECUKL/T9JmOM+42WDNvNUvk4PSItxpF8exg==
-X-Received: by 2002:a05:6a00:a05:b0:534:b1ad:cfac with SMTP id p5-20020a056a000a0500b00534b1adcfacmr11227240pfh.35.1660979892605;
-        Sat, 20 Aug 2022 00:18:12 -0700 (PDT)
-Received: from mithil.localdomain ([103.19.226.223])
-        by smtp.gmail.com with ESMTPSA id j15-20020a17090a694f00b001faf273e4afsm1459019pjm.35.2022.08.20.00.18.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 00:18:12 -0700 (PDT)
-From:   Mithil Bavishi <bavishimithil@gmail.com>
-To:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     dmitry.torokhov@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org, sre@kernel.org,
-        tony@atomide.com, linux@armlinux.org.uk, bavishimithil@gmail.com,
-        contact@paulk.fr
-Subject: [PATCH 09/10] dt-bindings: input: Rename twl4030-pwrbutton to twl-pwrbutton
-Date:   Sat, 20 Aug 2022 12:46:59 +0530
-Message-Id: <20220820071659.1215-10-bavishimithil@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220820071659.1215-1-bavishimithil@gmail.com>
-References: <20220820071659.1215-1-bavishimithil@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=RfHnMtcUMETMR/Aa5CV8kPSlFBKpFrMW9OaR7NTF/mw=;
+        b=SrjjZXyx9BndxtPK2bA6r+VHeZH53lYi3QSE596JPg5nfqXeCQAR9gSdJNDYcH6yqr
+         yppLC2pudPaVijBmWeLJAviEx1YKcSlxVzOLe/R5eEDn3v7GwUczOMbyn4F/U5vhmSQf
+         GYuN56fSVQlWGnEgpWv/998nRRx26Eu8MhUl63cT1c2I7uRONwNn5GmNkMb3zx6khWyR
+         ydvmTUzjAdWLjTpWPcKCZ5c806qtzYPrA3nPgA9zShPqOIwwI+v1yDhrYS6V9RiubM4h
+         sJD44gHMqkezsZBmzkm7mc+wk2APhSDc2+cLQZvXCSXvnVs3xnyHb+q9u8laj9991ZKq
+         lvzQ==
+X-Gm-Message-State: ACgBeo1gLwYhXnosLlmSnW3niet+90zNH98OqYKsUGKflJtNIZuI8js2
+        YvycyAF5rPJlTohvfcKBPBKSuEl4sefvXbqK/J70LT+dYZPllA==
+X-Google-Smtp-Source: AA6agR51iJY4HTrrDAV07jAOvPgX/Gd8/EHqlA7xQFEYvWuz7ZiSh9uMxBez6zihroZyU+XxYQOxMhACGd1VBbCQkQk=
+X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
+ v17-20020ae9e311000000b006bae711fb27mr7336251qkf.320.1660979930527; Sat, 20
+ Aug 2022 00:18:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <cover.1660934107.git.mazziesaccount@gmail.com>
+ <3fd11489356b1c73a3d7b4bd9dec7e12c9fe8788.1660934107.git.mazziesaccount@gmail.com>
+ <CAHp75VePr790pXZ5AiRnrPmxkOgZ3YKRTbABE6dvk+udQYrXGA@mail.gmail.com>
+ <795d16f2-4dee-7492-4a87-e928020efebe@fi.rohmeurope.com> <CAHp75VdGhXpD8YgwkVPLCBEMmupBiTDS4FChocJFVo+BBZ-2KA@mail.gmail.com>
+ <0823a6e8-b325-78c5-d060-c5f9442e3df8@fi.rohmeurope.com>
+In-Reply-To: <0823a6e8-b325-78c5-d060-c5f9442e3df8@fi.rohmeurope.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 20 Aug 2022 10:18:14 +0300
+Message-ID: <CAHp75VdMA5mkxkMrtiRTGn5F-5GWjxKyuD5iBuj3HKWqZZMxkg@mail.gmail.com>
+Subject: Re: [PATCH v3 08/14] iio: bmg160_core: Simplify using devm_regulator_*get_enable()
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Xiang wangx <wangxiang@cdjrlc.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This changes the Documentation of the twl4030-pwrbutton to
-make it more generic as it can support other chips than
-twl4030 as well.
+On Sat, Aug 20, 2022 at 9:48 AM Vaittinen, Matti
+<Matti.Vaittinen@fi.rohmeurope.com> wrote:
+> On 8/20/22 09:25, Andy Shevchenko wrote:
+> > On Sat, Aug 20, 2022 at 9:19 AM Vaittinen, Matti
+> > <Matti.Vaittinen@fi.rohmeurope.com> wrote:
+> >> On 8/20/22 02:30, Andy Shevchenko wrote:
+> >>> On Fri, Aug 19, 2022 at 10:21 PM Matti Vaittinen
+> >>> <mazziesaccount@gmail.com> wrote:
+> >
+> > What did I miss?
+>
+>  >>>>           struct bmg160_data *data;
+>  >>>>           struct iio_dev *indio_dev;
+>
+> This does already violate the rule.
 
-Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
----
- .../input/{twl4030-pwrbutton.txt => twl-pwrbutton.txt}        | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
- rename Documentation/devicetree/bindings/input/{twl4030-pwrbutton.txt => twl-pwrbutton.txt} (81%)
+Indeed, I am reading this with an MTA that has True Type fonts, and I
+can't see it at the first glance. But this breaks that rule slightly
+while your added line breaks it significantly.
 
-diff --git a/Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt b/Documentation/devicetree/bindings/input/twl-pwrbutton.txt
-similarity index 81%
-rename from Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt
-rename to Documentation/devicetree/bindings/input/twl-pwrbutton.txt
-index 9a0b765d3..43addc04d 100644
---- a/Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt
-+++ b/Documentation/devicetree/bindings/input/twl-pwrbutton.txt
-@@ -1,6 +1,6 @@
--Texas Instruments TWL family (twl4030) pwrbutton module
-+Texas Instruments TWL family pwrbutton module
- 
--This module is part of the TWL4030. For more details about the whole
-+This module is part of a TWL chip. For more details about the whole
- chip see Documentation/devicetree/bindings/mfd/twl-family.txt.
- 
- This module provides a simple power button event via an Interrupt.
+> >>> this case you even can move it out of the function, so we will see
+> >>> clearly that this is (not a hidden) global variable.
+> >>
+> >> Here I do disagree with you. Moving the array out of the function makes
+> >> it _much_ less obvious it is not used outside this function. Reason for
+> >> making is "static const" is to allow the data be placed in read-only
+> >> area (thanks to Guenter who originally gave me this tip).
+> >
+> > "static" in C language means two things (that's what come to my mind):
+> > - for functions this tells that a function is not used outside of the module;
+> > - for variables that it is a _global_ variable.
+> >
+> > Hiding static inside functions is not a good coding practice since it
+> > hides scope of the variable.
+>
+> For const arrays the static in function does make sense. Being able to
+> place the data in read-only areas do help with the memory on limited
+> systems.
+
+I'm not sure we are on the same page. I do not object to the "const"
+part and we are _not_ talking about that.
+
+> > And if you look into the kernel code, I
+> > believe the use you are proposing is in minority.
+>
+> I don't know about the statistics. What I know is that we do have a
+> technical benefits when we use static const arrays instead of non static
+> ones in the functions. I do also believe placing the variables in blocks
+> is a good practice.
+
+Yes, and global variables are better to be seen as global variables.
+
+> I tend to agree with you that using local, non const statics has
+> pitfalls - but the pitfalls do not really apply with const ones. You
+> know the value and have no races. Benefit is that just by seeing that no
+> pointer is returned you can be sure that no "sane code" uses the data
+> outside the function it resides.
+
+Putting a global variable (const or non-const) to the function will
+hide its scope and it is prone to getting two variables with the same
+or very similar names with quite different semantics. That's why it's
+really not good practice. I would rather see it outside of the
+function _esp_ because it's static const.
+
 -- 
-2.25.1
-
+With Best Regards,
+Andy Shevchenko

@@ -2,54 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130AF59AA77
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 03:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8B559AA76
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 03:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237749AbiHTB0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 21:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
+        id S245102AbiHTB21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 21:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiHTB0a (ORCPT
+        with ESMTP id S229672AbiHTB2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 21:26:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B90D108918;
-        Fri, 19 Aug 2022 18:26:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A35666192F;
-        Sat, 20 Aug 2022 01:26:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC76EC433D6;
-        Sat, 20 Aug 2022 01:26:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1660958788;
-        bh=wZDZtzkUwqxG1wWU3cUt/qF4N4cQ/GD2qYzT2IrE6A8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jeMeO6p2fyPEDLfHRpacUUjK+xt/bFxhhdDXyuzD/xjD7KLDa4ANsKSEyqAWkz6tN
-         xbYhMNt/Xno7l0rmMICwnPgFRkQXVRoRsa4cVyT2DoWL1cNvDcPLQ2zPjdgQkFSxTX
-         OWoE8hh6dkRW6oUtu3FB2pKr5IrfRyX3ENymWpkA=
-Date:   Fri, 19 Aug 2022 18:26:26 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     quanyang wang <quanyang.wang@windriver.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Thierry Reding <treding@nvidia.com>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [V2][PATCH] asm-generic: sections: refactor memory_intersects
-Message-Id: <20220819182626.0791628d6f3fcf53fa413a43@linux-foundation.org>
-In-Reply-To: <a22358ce-8eb3-cd34-47e1-363ce37e0ae7@windriver.com>
-References: <20220819081145.948016-1-quanyang.wang@windriver.com>
-        <20220819145100.ad9d08094ab9f345563fc52b@linux-foundation.org>
-        <a22358ce-8eb3-cd34-47e1-363ce37e0ae7@windriver.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 19 Aug 2022 21:28:25 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A90B29811
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 18:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660958902; x=1692494902;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=m1KjniAdlqsrJVQqrfzbFEV4LIS3Vpy3KFcpfXQwjgY=;
+  b=htNFQN1n7yyD3NgdJgEU2VKAicvWDo4lGRF1NgYpn70evnyI9EjOkhcm
+   1/YOQi+EyTDAAhFsEfN8QgE3VgsxAeFi1oPx7Zc4S5nQtlBy1fJCooVI7
+   C9COrnya2EgqOLFN4s2MlLAC6VPfZY+qQxr/pP4RKLJrbXLYocjrzacbQ
+   S5k9F9YxuquBF6kVtOiDTjhOgZr8z88rlSWPZTBSVIHst4nI71pJpTiTa
+   XcqcYCCpZWV1bbOoh3NnQ0S9rw5N13oHk4JDn7j//FVxPw4d4uT7a15Ty
+   QSS+3aBgh/kIizopHoBslOqLCd5ODr3VoZdtMamFYFq2XS3cB+AMQjR+Z
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="379433871"
+X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
+   d="scan'208";a="379433871"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 18:28:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
+   d="scan'208";a="584856895"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 19 Aug 2022 18:28:19 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPDHf-0001zt-0E;
+        Sat, 20 Aug 2022 01:28:19 +0000
+Date:   Sat, 20 Aug 2022 09:27:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>, Fuad Tabba <tabba@google.com>
+Subject: arch/arm64/kvm/hyp/nvhe/stacktrace.c:15:1: sparse: sparse: symbol
+ '__pcpu_scope_kvm_stacktrace_info' was not declared. Should it be static?
+Message-ID: <202208200907.k7SaWQ4x-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,90 +62,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 20 Aug 2022 08:24:52 +0800 quanyang wang <quanyang.wang@windriver.com> wrote:
+arch/arm64/include/asm/kvm_asm.h
+arch/arm64/kvm/hyp/nvhe/stacktrace.c
+arch/arm64/kvm/hyp/nvhe/switch.c
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   50cd95ac46548429e5bba7ca75cc97d11a697947
+commit: 879e5ac7b2e4db05799a905b5a07fc9e5dedf651 KVM: arm64: Prepare non-protected nVHE hypervisor stacktrace
+date:   4 weeks ago
+config: arm64-randconfig-s042-20220820 (https://download.01.org/0day-ci/archive/20220820/202208200907.k7SaWQ4x-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=879e5ac7b2e4db05799a905b5a07fc9e5dedf651
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 879e5ac7b2e4db05799a905b5a07fc9e5dedf651
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
 
-> Hi Andrew,
-> 
-> On 2022/8/20 05:51, Andrew Morton wrote:
-> > On Fri, 19 Aug 2022 16:11:45 +0800 quanyang.wang@windriver.com wrote:
-> >
-> >> From: Quanyang Wang <quanyang.wang@windriver.com>
-> >>
-> >> There are two problems with the current code of memory_intersects:
-> >>
-> >> First, it doesn't check whether the region (begin, end) falls inside
-> >> the region (virt, vend), that is (virt < begin && vend > end).
-> >>
-> >> The second problem is if vend is equal to begin, it will return true
-> >> but this is wrong since vend (virt + size) is not the last address of
-> >> the memory region but (virt + size -1) is. The wrong determination will
-> >> trigger the misreporting when the function check_for_illegal_area calls
-> >> memory_intersects to check if the dma region intersects with stext region.
-> >>
-> >> The misreporting is as below (stext is at 0x80100000):
-> >>   WARNING: CPU: 0 PID: 77 at kernel/dma/debug.c:1073 check_for_illegal_area+0x130/0x168
-> >>   DMA-API: chipidea-usb2 e0002000.usb: device driver maps memory from kernel text or rodata [addr=800f0000] [len=65536]
-> >>   Modules linked in:
-> >>   CPU: 1 PID: 77 Comm: usb-storage Not tainted 5.19.0-yocto-standard #5
-> >>   Hardware name: Xilinx Zynq Platform
-> >>    unwind_backtrace from show_stack+0x18/0x1c
-> >>    show_stack from dump_stack_lvl+0x58/0x70
-> >>    dump_stack_lvl from __warn+0xb0/0x198
-> >>    __warn from warn_slowpath_fmt+0x80/0xb4
-> >>    warn_slowpath_fmt from check_for_illegal_area+0x130/0x168
-> >>    check_for_illegal_area from debug_dma_map_sg+0x94/0x368
-> >>    debug_dma_map_sg from __dma_map_sg_attrs+0x114/0x128
-> >>    __dma_map_sg_attrs from dma_map_sg_attrs+0x18/0x24
-> >>    dma_map_sg_attrs from usb_hcd_map_urb_for_dma+0x250/0x3b4
-> >>    usb_hcd_map_urb_for_dma from usb_hcd_submit_urb+0x194/0x214
-> >>    usb_hcd_submit_urb from usb_sg_wait+0xa4/0x118
-> >>    usb_sg_wait from usb_stor_bulk_transfer_sglist+0xa0/0xec
-> >>    usb_stor_bulk_transfer_sglist from usb_stor_bulk_srb+0x38/0x70
-> >>    usb_stor_bulk_srb from usb_stor_Bulk_transport+0x150/0x360
-> >>    usb_stor_Bulk_transport from usb_stor_invoke_transport+0x38/0x440
-> >>    usb_stor_invoke_transport from usb_stor_control_thread+0x1e0/0x238
-> >>    usb_stor_control_thread from kthread+0xf8/0x104
-> >>    kthread from ret_from_fork+0x14/0x2c
-> >>
-> >> Refactor memory_intersects to fix the two problems above.
-> >>
-> >> ...
-> > There must be tons of places in the kernel which check to see if two
-> > regions overlap at all, I'm not sure why dma debug needs its own one?
-> >
-> >> --- a/include/asm-generic/sections.h
-> >> +++ b/include/asm-generic/sections.h
-> >> @@ -110,7 +110,10 @@ static inline bool memory_intersects(void *begin, void *end, void *virt,
-> >>   {
-> >>   	void *vend = virt + size;
-> >>   
-> >> -	return (virt >= begin && virt < end) || (vend >= begin && vend < end);
-> >> +	if (virt < end && vend > begin)
-> >> +		return true;
-> >> +
-> >> +	return false;
-> >>   }
-> > These things bend my brain, but all the cases I've mind-tested worked
-> > out OK.
-> >
-> > Now the forever question: is a -stable backport needed?  The bug
-> > appears to be six years old, so I guess not.  Can you suggest why it
-> > took this long?  Are you doing something unusual?
-> 
-> Before the commit 1d7db834a027e ("dma-debug: use memory_intersects() 
-> directly") , memory_intersects is called only by printk_late_init:
-> 
-> printk_late_init -> init_section_intersects ->memory_intersects.
-> 
-> There are few places memory_intersects is called.
-> 
-> When the commit 1d7db834a027e ("dma-debug: use memory_intersects() 
-> directly") is merged and CONFIG_DMA_API_DEBUG is enabled,
-> 
-> DMA subsystem uses it to check illegal area and trigger the calltrace above.
-> 
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-OK, thanks.  I'll add the cc:stable.  It will get backported further
-back than 1d7db834a027e, but that shouldn't be harmful and might even
-be helpful.
+sparse warnings: (new ones prefixed by >>)
+   arch/arm64/kvm/hyp/nvhe/stacktrace.c:12:1: sparse: sparse: symbol '__pcpu_scope_overflow_stack' was not declared. Should it be static?
+>> arch/arm64/kvm/hyp/nvhe/stacktrace.c:15:1: sparse: sparse: symbol '__pcpu_scope_kvm_stacktrace_info' was not declared. Should it be static?
 
+vim +/__pcpu_scope_kvm_stacktrace_info +15 arch/arm64/kvm/hyp/nvhe/stacktrace.c
+
+    11	
+  > 12	DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack)
+    13		__aligned(16);
+    14	
+  > 15	DEFINE_PER_CPU(struct kvm_nvhe_stacktrace_info, kvm_stacktrace_info);
+    16	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

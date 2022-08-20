@@ -2,72 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8EB59B0B1
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 00:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47ED059B0B5
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 00:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235844AbiHTWBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 18:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
+        id S233240AbiHTWEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 18:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235776AbiHTWBM (ORCPT
+        with ESMTP id S231648AbiHTWEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 18:01:12 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A553275D0
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 15:01:00 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id f4so5566330qkl.7
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 15:01:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=KykEBBUCJiG8hWNQH+HNXVEIkWlq4MXZ6NZu3UE4RTg=;
-        b=ZkGSLVKi4sggsqFIAZKvovnEa0HXHlb7Ig9Ib3MAgXo1DMrVjhIpEvWDmF9jjk9p0S
-         GF8Tx0fbOr+Cy3EoYJwqS0QHgsnxJfboDwD1N5mW65A0O9grtdtImCJ+CH6otZ0LdAq/
-         cHD1Ug+1NUz8bXOuAT3n6vwgVWZGFRYB+BQcbqCf51MxNUETgJIf21uoVVsCYy/dauRH
-         Reaa40LHNi8/Q/ZzpvfXb+90mxmZ3RAorHnglDWVFPCMuUG2XXRR/2f4MxFRdhQZGctg
-         L4bzBbirr9kcBdXbOqp7fyST8FS5sgYv+OJZI8o8VuFO2JpI3AMTmL4WquUI5muqiM1T
-         RJcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=KykEBBUCJiG8hWNQH+HNXVEIkWlq4MXZ6NZu3UE4RTg=;
-        b=WEloTySq5m8qzE41UUjBpFQU+XGPxeGmja4A+EMlaloxvhjPwBco6HKLXMDCl32Rez
-         gJjv1W8qJzdAgwTuKZdHGbHD2hkKe+XcVNdpw2bJoMbTmE1jIfeaDw5AooB2P5/16Cv/
-         QNJ37gTWnffdaSwFzei6jZ0XccQ1PGrUHAGRxlloeM6KdcrNpPWCtGM2vIsW6+5C5CmW
-         +UONvpIq40GGWIMQWxJKBzNGfV5RFu01mbkK3tuXzpoIpQL51Ck8SI4B7yXCLpR9zj33
-         IMO7UdHqu/hj59RR/0Gjr32ejADQ1tjmD68vpddCgT9dqV9nfF6Xe54RXRhK4yCROlbe
-         sn5Q==
-X-Gm-Message-State: ACgBeo3NhsEH06LYnxSEO4PgPkcUv6O4YEV34+BhRGuz+PCja7aT0B2g
-        vjjDDDXd6Zc+yu5k0noS312QZg==
-X-Google-Smtp-Source: AA6agR6WU12+zbM5VGNizCLQfDVR1duJWik7phAdRLZddHz21A7bbu41K9rXQBRZdfh7P1Uif+Iv5w==
-X-Received: by 2002:a05:620a:2a0d:b0:6b6:6c75:f050 with SMTP id o13-20020a05620a2a0d00b006b66c75f050mr9016152qkp.199.1661032859180;
-        Sat, 20 Aug 2022 15:00:59 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id u9-20020a05620a430900b006af08c26774sm7071581qko.47.2022.08.20.15.00.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 15:00:58 -0700 (PDT)
-Date:   Sat, 20 Aug 2022 18:00:56 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, mranostay@ti.com,
-        fabien.lahoudere@collabora.com, gwendal@chromium.org,
-        enric.balletbo@collabora.com, bleung@chromium.org,
-        groeck@chromium.org, jic23@kernel.org, david@lechnology.com,
-        robertcnelson@gmail.com
-Subject: Re: [PATCH v5 0/3] ECAP support on TI AM62x SoC
-Message-ID: <YwFZmN9H+Fjqm8sf@fedora>
-References: <20220817141620.256481-1-jpanis@baylibre.com>
+        Sat, 20 Aug 2022 18:04:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC6F2A975
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 15:04:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15DCCB80022
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 22:04:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C243C433D7;
+        Sat, 20 Aug 2022 22:04:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661033040;
+        bh=0q4ehFqy+dT8rj71tm8kRI9NkH83JcVsJnL2gVHe8tA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mqk3sp2EEgTShNlfHRijcARttRP7/s/5o10TK8N0wMagvy1FBLXp8rJQS8JD49wTK
+         TXLr3/SkLHLxix38r2J+ukhoKsP56ltTJok4QtbsbQQtqcXjvyQ2QZf2zsimDay74B
+         ANME9Y5kN7H8/xIhDQY1lFh3Az2GVzV7RiaycwscGeHhahqRH4T4BGitenfTO1TpFg
+         7M5IfSG9dEG0P25NEIV0vWEsA2nK4th7Kh33PyvZJ4RLG5kmfa6Nm7Uya8SdYogLFe
+         ZSYW/az8QPtyuA7CsHTLWZ4ORVbLFCUsnuw7JdCy009vu06K+RpO+TNWiLXEW0lo6X
+         /ae/4oxNdYDJA==
+Date:   Sat, 20 Aug 2022 15:03:58 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     Shuqi Zhang <zhangshuqi3@huawei.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] f2fs: fix wrong dirty page count when race between
+ mmap and fallocate.
+Message-ID: <YwFaTprvOf8ckGsP@google.com>
+References: <20220815081555.2961943-1-zhangshuqi3@huawei.com>
+ <a364da58-f476-69fd-3f90-448f35c8e151@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="y6Uakq24GtS4M/ov"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817141620.256481-1-jpanis@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <a364da58-f476-69fd-3f90-448f35c8e151@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,195 +57,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08/20, Chao Yu wrote:
+> On 2022/8/15 16:15, Shuqi Zhang wrote:
+> > This is a BUG_ON issue as follows when running xfstest-generic-503:
+> > WARNING: CPU: 21 PID: 1385 at fs/f2fs/inode.c:762 f2fs_evict_inode+0x847/0xaa0
+> > Modules linked in:
+> > CPU: 21 PID: 1385 Comm: umount Not tainted 5.19.0-rc5+ #73
+> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-4.fc34 04/01/2014
+> > 
+> > Call Trace:
+> > evict+0x129/0x2d0
+> > dispose_list+0x4f/0xb0
+> > evict_inodes+0x204/0x230
+> > generic_shutdown_super+0x5b/0x1e0
+> > kill_block_super+0x29/0x80
+> > kill_f2fs_super+0xe6/0x140
+> > deactivate_locked_super+0x44/0xc0
+> > deactivate_super+0x79/0x90
+> > cleanup_mnt+0x114/0x1a0
+> > __cleanup_mnt+0x16/0x20
+> > task_work_run+0x98/0x100
+> > exit_to_user_mode_prepare+0x3d0/0x3e0
+> > syscall_exit_to_user_mode+0x12/0x30
+> > do_syscall_64+0x42/0x80
+> > entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > 
+> > Function flow analysis when BUG occurs:
+> > f2fs_fallocate                    mmap
+> >                                    do_page_fault
+> >                                      pte_spinlock  // ---lock_pte
+> >                                      do_wp_page
+> >                                        wp_page_shared
+> >                                          pte_unmap_unlock   // unlock_pte
+> >                                            do_page_mkwrite
+> >                                            f2fs_vm_page_mkwrite
+> >                                              down_read(i_mmap_sem)
+> >                                              lock_page
+> >                                              if (PageMappedToDisk(page))
+> >                                                goto out;
+> >                                              // set_page_dirty  --NOT RUN
+> >                                              out: up_read(i_mmap_sem)
+> >                                            lock_page
+> >                                          finish_mkwrite_fault // unlock_pte
+> > f2fs_collapse_range
+> >    down_write(i_mmap_sem)
+> >    truncate_pagecache
+> >      unmap_mapping_pages
+> >        i_mmap_lock_write // down_write(i_mmap_rwsem)
+> >          ......
+> >          zap_pte_range
+> >            pte_offset_map_lock // ---lock_pte
+> >            f2fs_set_data_page_dirty
+> 
+> I didn't get it, why zap_pte_range() can set page dirty w/o lock_page?
+> 
+> I found it's very easy to reproduce this bug, but previously I never saw this...
+> is there any code udpate around truncate_pagecache()?
 
---y6Uakq24GtS4M/ov
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Found this.
 
-On Wed, Aug 17, 2022 at 04:16:17PM +0200, Julien Panis wrote:
-> The Enhanced Capture (ECAP) module can be used to timestamp events
-> detected on signal input pin. It can be used for time measurements
-> of pulse train signals.
->=20
-> ECAP module includes 4 timestamp capture registers. For all 4 sequenced
-> timestamp capture events (1->2->3->4->1->...), edge polarity (falling/ris=
-ing
-> edge) can be selected.
->=20
-> This driver leverages counter subsystem to :
-> - select edge polarity for all 4 capture events (event mode)
-> - log timestamps for each capture event
-> Event polarity, and CAP1/2/3/4 timestamps give all the information
-> about the input pulse train. Further information can easily be computed :
-> period and/or duty cycle if frequency is constant, elapsed time between
-> pulses, etc...
->=20
-> Modifications since v4:
-> 	- Modify yaml commit message prefix (dt-bindings)
-> 	- Modify driver file name & Makefile (ti-ecap-capture)
-> 	- Modify compilation flag name in Kconfig (TI_ECAP_CAPTURE)
-> 	- Select REGMAP_MMIO in Kconfig
-> 	- Add capture items to sysfs-bus-counter ABI documentation
-> 	- Cleanup probe function (dev_err_probe & devm_clk_get_enabled & devm_ad=
-d_action_or_reset for PM)
-> 	- Enable/Disable device clock in suspend/resume functions
-> 	- Add PM explanations
-> 	- Add ECAP clock signal & 'frequency' sysfs entry
-> 	- Replace elapsed_time & spinlock by nb_ovf (atomic_t) & 'count_cumul' s=
-ysfs entry
-> 	- Add counter overflow event
-> 	- Modify 'name' sysfs entry for signal0 & signal1 & count0
-> 	- Modify watch_validate function
-> 	- Add macros for callbacks related to cap1/2/3/4
->=20
-> Userspace commands :
-> 	### SIGNAL INPUT ###
-> 	cd /sys/bus/counter/devices/counter0/signal0
->=20
-> 	# Get available polarities for each capture event
-> 	cat polarity1_available
-> 	cat polarity2_available
-> 	cat polarity3_available
-> 	cat polarity4_available
->=20
-> 	# Get polarity for each capture event
-> 	cat polarity1
-> 	cat polarity2
-> 	cat polarity3
-> 	cat polarity4
->=20
-> 	# Set polarity for each capture event
-> 	echo rising edge > polarity1
-> 	echo falling edge > polarity2
-> 	echo rising edge > polarity3
-> 	echo falling edge > polarity4
->=20
-> 	### SIGNAL CLOCK ###
-> 	cd /sys/bus/counter/devices/counter0/signal1
->=20
-> 	# Get clock rate
-> 	cat frequency
->=20
-> 	### COUNT ###
-> 	cd /sys/bus/counter/devices/counter0/count0
->=20
-> 	# Run ECAP
-> 	echo 1 > enable
->=20
-> 	# Get current timebase counter value
-> 	cat count
->=20
-> 	# Get cumulated counter value
-> 	cat count_cumul
->=20
-> 	# Get captured timestamps
-> 	cat capture1
-> 	cat capture2
-> 	cat capture3
-> 	cat capture4
->=20
-> 	# Note that counter watches can also be used to get
-> 	# data from userspace application
-> 	# -> see tools/counter/counter_example.c
->=20
-> 	# Stop ECAP
-> 	echo 0 > enable
->=20
-> Julien Panis (3):
->   dt-bindings: counter: add ti,am62-ecap-capture.yaml
->   Documentation: ABI: sysfs-bus-counter: add capture items
->   counter: ti-ecap-capture: capture driver support for ECAP
->=20
->  Documentation/ABI/testing/sysfs-bus-counter   |  49 ++
->  .../counter/ti,am62-ecap-capture.yaml         |  61 ++
->  drivers/counter/Kconfig                       |  15 +
->  drivers/counter/Makefile                      |   1 +
->  drivers/counter/ti-ecap-capture.c             | 624 ++++++++++++++++++
->  include/uapi/linux/counter.h                  |   2 +
->  6 files changed, 752 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/counter/ti,am62-eca=
-p-capture.yaml
->  create mode 100644 drivers/counter/ti-ecap-capture.c
->=20
-> --=20
-> 2.25.1
+2637  * The caller must ensure this doesn't race with truncation.  Most will
+2638  * simply hold the folio lock, but e.g. zap_pte_range() calls with the
+2639  * folio mapped and the pte lock held, which also locks out truncation.
+2640  */
+2641 bool filemap_dirty_folio(struct address_space *mapping, struct folio *folio)
+2642 {
 
-Hello Julien,
-
-I'm CCing a number of other developers here who have indicated interest
-in counter timestamp functionality in past, just in case they would like
-to particpate in this discussion.
-
-Adding buffers to the Counter subsystem will be a user-visible ABI
-change, so I want to make sure we get the interface design correct
-before we merge any of those changes; once it's exposed to userspace it
-can't be changed. However, we can still improve your patches while we
-develop this interface, so revisions are welcome even if I can't merge
-your counter driver until we iron out the Counter subsystem buffer
-interface.
-
-So in the v4 patchset we discussed introducing a new counter_comp_type
-COUNTER_COMP_BUFFER_U64 enum constant with respective counter_comp read
-callbacks::
-
-     int (*count_buffer_u64_read)(struct counter_device *counter,
-                                  struct counter_count *count,
-                                  size_t index, u64 *val);=20
-
-Drive authors can then handle buffer reads by receiving an "index",
-locating the value at that buffer offset, and returning the value via
-the "val" u64 pointer.
-
-Defining a buffer as Count extensions could be done using a helper
-macro::
-
-     COUNTER_COMP_COUNT_BUFFER_U64("capture", ecap_cnt_cap_read, 4)
-
-Originally I considered unrolling this into four COUNTER_COMP_COUNT_U64,
-but I'm unsure if that is possible in GCC. Regardless, I believe it's
-feasible to implement this in counter-chrdev.c by passing the buffer
-length in the "priv" member of struct counter_comp and handling it when
-creating sysfs attributes. I might be able to write a prototype for this
-in the next couple weeks.
-
-In the end, we should have four buffer elements exposed as sysfs
-attributes under the respective count directory:
-
-* /sys/bus/counter/devices/counterX/count0/capture0
-* /sys/bus/counter/devices/counterX/count0/capture1
-* /sys/bus/counter/devices/counterX/count0/capture2
-* /sys/bus/counter/devices/counterX/count0/capture3=20
-
-One worry I do have is whether this will scale well enough; I can
-imagine some future device having a timestamp history buffer of much
-later than four elements. In cases with large buffers, it might be more
-practical to expose a FIFO queue to deliver buffer data. However, the
-existing Counter character device interface isn't designed for data of
-arbitrary length, so we'd likely have to introduce a secondary character
-device to provide the queue.
-
-We can postpone implementation of such a queue until the need arises and
-focus on just the sysfs interface for this particular driver. If we
-expose each element of the buffer as its own sysfs attribute, then the
-existing Counter character device interface gets access to these
-elements for free without any additional code changes to that part of
-the Counter subsystem.
-
-So my concerns right now are making sure this is a sane design and the
-right path forward to expose device buffer elements in sysfs.
-
-William Breathitt Gray
-
---y6Uakq24GtS4M/ov
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYwFZmAAKCRC1SFbKvhIj
-K/ovAP47QIMo+w4JiGDrqtcUb5OvA8DBd6zMjz/pQ4jLO+MWsQD/ZE/q0/vn6zaq
-nx05yy65K++Fl4e6kQJF+/LC4i24fws=
-=dkgg
------END PGP SIGNATURE-----
-
---y6Uakq24GtS4M/ov--
+> 
+> Thanks,
+> 
+> >              if (!PageDirty(page)) {
+> >                                          fault_dirty_shared_page
+> >                                            f2fs_set_data_page_dirty
+> >                                              if (!PageDirty(page)) {
+> >                                                __set_page_dirty_nobuffer
+> >                                                f2fs_update_dirty_page // ++
+> >                                              }
+> >                                            unlock_page
+> >                __set_page_dirty_nobuffers
+> >                f2fs_update_dirty_page // page count++
+> >              }
+> >            pte_unmap_unlock  // --unlock_pte
+> >        i_mmap_unlock_write  // up_write(i_mmap_rwsem)
+> >    truncate_inode_pages
+> >    up_write(i_mmap_sem)
+> > 
+> > When race happens between mmap-do_page_fault-wp_page_shared and
+> > fallocate-truncate_pagecache-zap_pte_range, the zap_pte_range calls
+> > function set_page_dirty without page lock. Besides, though
+> > truncate_pagecache has immap and pte lock, wp_page_shared calls
+> > fault_dirty_shared_page without any. In this case, two threads race
+> > in f2fs_set_data_page_dirty function. Page is set to dirty only ONCE,
+> > but the count is added TWICE by calling f2fs_update_dirty_page.
+> > Thus the count of dirty page cannot accord with the real dirty pages.
+> > 
+> > Following is the solution to in case of race happens without any lock.
+> > If making sure f2fs_vm_page_mkwrite calls set_page_dirty within immap
+> > lock area, page will already be dirtied when running into
+> > fault_dirty_shared_page-f2fs_set_data_page_dirty.
+> > The count of dirty page will not be increased wrong times.
+> > 
+> > Signed-off-by: Shuqi Zhang <zhangshuqi3@huawei.com>
+> > ---
+> >   fs/f2fs/file.c | 11 ++++++-----
+> >   1 file changed, 6 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> > index ce4905a073b3..d837359a9c00 100644
+> > --- a/fs/f2fs/file.c
+> > +++ b/fs/f2fs/file.c
+> > @@ -140,7 +140,7 @@ static vm_fault_t f2fs_vm_page_mkwrite(struct vm_fault *vmf)
+> >   	 * check to see if the page is mapped already (no holes)
+> >   	 */
+> >   	if (PageMappedToDisk(page))
+> > -		goto out_sem;
+> > +		goto set_dirty;
+> >   	/* page is wholly or partially inside EOF */
+> >   	if (((loff_t)(page->index + 1) << PAGE_SHIFT) >
+> > @@ -150,14 +150,15 @@ static vm_fault_t f2fs_vm_page_mkwrite(struct vm_fault *vmf)
+> >   		offset = i_size_read(inode) & ~PAGE_MASK;
+> >   		zero_user_segment(page, offset, PAGE_SIZE);
+> >   	}
+> > -	set_page_dirty(page);
+> > -	if (!PageUptodate(page))
+> > -		SetPageUptodate(page);
+> >   	f2fs_update_iostat(sbi, APP_MAPPED_IO, F2FS_BLKSIZE);
+> > -	f2fs_update_time(sbi, REQ_TIME);
+> > +set_dirty:
+> >   	trace_f2fs_vm_page_mkwrite(page, DATA);
+> > +	set_page_dirty(page);
+> > +	if (!PageUptodate(page))
+> > +		SetPageUptodate(page);
+> > +	f2fs_update_time(sbi, REQ_TIME);
+> >   out_sem:
+> >   	filemap_invalidate_unlock_shared(inode->i_mapping);

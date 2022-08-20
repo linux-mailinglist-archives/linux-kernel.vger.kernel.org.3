@@ -2,209 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D6959AEAB
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 16:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBB659AEAC
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 16:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346310AbiHTOYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 10:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
+        id S1344920AbiHTOXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 10:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346217AbiHTOXx (ORCPT
+        with ESMTP id S1346217AbiHTOXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 10:23:53 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D13B1C13B
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 07:23:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661005433; x=1692541433;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2eoWGW5RTsfp6wncHXLsru9x/II2kVDL7PVh7uQDKkc=;
-  b=KMrmnowXTg//FXw7sMKTGcQuiZt/wIPo0iawGdNA6Ymksm7rK57AvWMw
-   AXoETzLok/VPNyyr0ccK01h2Ef0AGa0FZJcOFZvmbYjtevDuirjvrZyFC
-   fym3IOPeaaCKfU4/xRn5NVikt6kBKgbsV0GtLjM/gcwkk0MEdaFb7JyIz
-   zTIxHjQv5HpT9NF3362/U1AksAefsC55X6caYmIOB5xj91B15QjNUjRMJ
-   Qwp0s11+xM9pjsKbx4FDF7b2JqNsDOTNDikq4/EgIxNq0tvfGJGTsy4Yq
-   O3dLLe3Tig2LzDBGIBjo2V3c4fgpd4sOBbN9IG0fP8ivZuIWbS4655hoM
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="290739825"
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="290739825"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 07:23:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="584979042"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Aug 2022 07:23:51 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPPOA-0002mN-2u;
-        Sat, 20 Aug 2022 14:23:50 +0000
-Date:   Sat, 20 Aug 2022 22:23:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/090-spi-hid 17/22]
- drivers/hid/dockchannel-hid/dockchannel-hid.c:303:28: error: implicit
- declaration of function 'FIELD_PREP'
-Message-ID: <202208202234.aXbQ3aiF-lkp@intel.com>
+        Sat, 20 Aug 2022 10:23:32 -0400
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B7413D26
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 07:23:31 -0700 (PDT)
+Received: by mail-ua1-x933.google.com with SMTP id m21so2744734uab.13
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 07:23:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc;
+        bh=s3WwiOFU4Cx25TV2VhuX+55GvPSt92ikN3uNkO5ZYHI=;
+        b=HNvCH5+aD1kqILurnYempphOknweSCuZbJtiWsmHfK50GiXR2jvzpV95UKBEVl4udd
+         fJTaE6XzKvvhJJiIfcRno70U2q2BUtJ7q7Eu33HjPdn9VVAe02YIp1khpbbxm9kRWBVq
+         /dEqZuHyiUY5mcj3BofBGk+MEDRsdBih0ruozMe82adoSidoN2EPnNWDo6nclvtantgL
+         Td8K1tXXf4i+/adfallyKlSmdiCSRYfMkRUX7k1wOZ66lS1hS18xcxxHZd8L5ZFrZ3SQ
+         uSWghHuQDGPVhYM8eOFWbnyt+Mwb+AIV1t1/koN0Mf6pZt939w6G8BkEvG2Eh37MjV/n
+         OrvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=s3WwiOFU4Cx25TV2VhuX+55GvPSt92ikN3uNkO5ZYHI=;
+        b=uFE9YUqZX1uqtdTXitPZXfx6YduCufrHaGdbZFX8+Y5t/fg4XsT+UMzVPXRr7UKAut
+         6oCAu3XyQHmwuBpzBAn9FyFlktfnjpYhCnQj/tTosZyJiv2GFJ/VbUvPoAu0VbFGOIzI
+         c9mHwJIvcZ117Rx/YC9XI1JLTV511ywtAwot/7II1jGZgiMqFyy0uoQkFnJpWtSjDs1H
+         BA4F2ch3cUb+lWMJ9fHkEsasFZiSxsh84kPO0WcQbMUMnLvXn3JMp+xv30G+DfOLqaZO
+         kEt9mY2ER6PHkH6qmbuqz9leWtgA5gyDN4fmcjFG/5Yj212rpeej2pHMCh6meZFhG0nm
+         eeYg==
+X-Gm-Message-State: ACgBeo0XjSJYpfDKY4mPXBsv184dcCOLp7CKIMneRYUFu1zgKREZaRkV
+        M5J+G+Xl9xpYuXEnmFvfn7iU1SrnS6WXjE/rsTw=
+X-Google-Smtp-Source: AA6agR63ONSuD+1j15VdQYXmbFc0A68q9VCDQi3Q/WIqd+X0Iu/Q9krKxzAbLPJVBYkF5kqvSZ5IRdsKhWmgP9apSwQ=
+X-Received: by 2002:ab0:24cc:0:b0:391:c681:7b7 with SMTP id
+ k12-20020ab024cc000000b00391c68107b7mr4439545uan.16.1661005410564; Sat, 20
+ Aug 2022 07:23:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6122:911:0:0:0:0 with HTTP; Sat, 20 Aug 2022 07:23:29
+ -0700 (PDT)
+Reply-To: uchennailobitenone@gmail.com
+From:   uchenna <okeyyoyopa7@gmail.com>
+Date:   Sat, 20 Aug 2022 14:23:29 +0000
+Message-ID: <CAH8nkvZ5bj-qWeWt+L5KiL3=Ke=qZuDs4MLhf=60G42_zJfnFg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:933 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.0 HK_RANDOM_ENVFROM Envelope sender username looks random
+        *  1.0 HK_RANDOM_FROM From username looks random
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [okeyyoyopa7[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [okeyyoyopa7[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   480924e97dddd088c4ed360eb12ecf92a30f19b1
-commit: 1d801ad9c4b08a5675701e82f600d9f462211a79 [17/22] hid: Add Apple DockChannel HID transport driver
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220820/202208202234.aXbQ3aiF-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/1d801ad9c4b08a5675701e82f600d9f462211a79
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout 1d801ad9c4b08a5675701e82f600d9f462211a79
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Gratulacje!
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Organizacja Narod=C3=B3w Zjednoczonych dosz=C5=82a do wniosku, =C5=BCe z po=
+moc=C4=85 nowo
+wybranego prezydenta z powodu Covid-19 (koronawirusa), kt=C3=B3ry
+spowodowa=C5=82 za=C5=82amanie gospodarcze w r=C3=B3=C5=BCne kraje i global=
+ne zagro=C5=BCenie
+dla tak wielu istnie=C5=84 ludzkich.
 
-All errors (new ones prefixed by >>):
+ Organizacja Narod=C3=B3w Zjednoczonych zleci=C5=82a szwajcarskiemu bankowi
+=C5=9Bwiatowemu uwolnienie p=C5=82atno=C5=9Bci funduszu kompensacyjnego we =
+wsp=C3=B3=C5=82pracy
+z bankiem IBE w Wielkiej Brytanii.
 
-   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dchid_cmd':
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:303:28: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-     303 |         iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
-         |                            ^~~~~~~~~~
-   In file included from include/linux/device.h:15,
-                    from drivers/hid/dockchannel-hid/dockchannel-hid.c:10:
-   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dchid_handle_ready':
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:569:37: warning: format '%ld' expects argument of type 'long int', but argument 3 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-     569 |                 dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:569:17: note: in expansion of macro 'dev_err'
-     569 |                 dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
-         |                 ^~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:569:70: note: format string is defined here
-     569 |                 dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
-         |                                                                    ~~^
-         |                                                                      |
-         |                                                                      long int
-         |                                                                    %d
-   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dchid_packet_work':
->> drivers/hid/dockchannel-hid/dockchannel-hid.c:825:20: error: implicit declaration of function 'FIELD_GET'; did you mean 'FOLL_GET'? [-Werror=implicit-function-declaration]
-     825 |         int type = FIELD_GET(FLAGS_GROUP, shdr->flags);
-         |                    ^~~~~~~~~
-         |                    FOLL_GET
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:829:37: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'unsigned int' [-Wformat=]
-     829 |                 dev_err(dchid->dev, "Bad sub header length (%d > %ld)\n",
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:829:17: note: in expansion of macro 'dev_err'
-     829 |                 dev_err(dchid->dev, "Bad sub header length (%d > %ld)\n",
-         |                 ^~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:829:68: note: format string is defined here
-     829 |                 dev_err(dchid->dev, "Bad sub header length (%d > %ld)\n",
-         |                                                                  ~~^
-         |                                                                    |
-         |                                                                    long int
-         |                                                                  %d
-   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dchid_handle_ack':
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:855:44: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'unsigned int' [-Wformat=]
-     855 |                 dev_err(iface->dchid->dev, "Bad sub header length (%d > %ld)\n",
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:855:17: note: in expansion of macro 'dev_err'
-     855 |                 dev_err(iface->dchid->dev, "Bad sub header length (%d > %ld)\n",
-         |                 ^~~~~~~
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:855:75: note: format string is defined here
-     855 |                 dev_err(iface->dchid->dev, "Bad sub header length (%d > %ld)\n",
-         |                                                                         ~~^
-         |                                                                           |
-         |                                                                           long int
-         |                                                                         %d
-   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dockchannel_hid_probe':
-   drivers/hid/dockchannel-hid/dockchannel-hid.c:975:14: warning: variable 'defer' set but not used [-Wunused-but-set-variable]
-     975 |         bool defer = false;
-         |              ^~~~~
-   cc1: some warnings being treated as errors
+P=C5=82atno=C5=9B=C4=87 zostanie przekazana na kart=C4=99 bankomatow=C4=85 =
+Visa i wys=C5=82ana do
+szcz=C4=99=C5=9Bliwego beneficjenta, kt=C3=B3ry z=C5=82o=C5=BCy wniosek za =
+po=C5=9Brednictwem banku
+IBE w Wielkiej Brytanii za po=C5=9Brednictwem dyplomatycznej firmy
+kurierskiej znajduj=C4=85cej si=C4=99 w pobli=C5=BCu kraju beneficjenta.
 
+S=C4=85 to informacje wymagane przez kierownictwo Zjednoczonego Kr=C3=B3les=
+twa w
+celu dostarczenia p=C5=82atno=C5=9Bci z funduszu kompensacyjnego do progu k=
+raju
+beneficjenta.
 
-vim +/FIELD_PREP +303 drivers/hid/dockchannel-hid/dockchannel-hid.c
+1. Twoje imi=C4=99 i nazwisko:
+2. Adres domowy:
+3. Miasto:
+4. Kraj:
+5. Zaw=C3=B3d:
+6. P=C5=82e=C4=87:
+7. Stan cywilny:
+8. Wiek:
+9. Paszport / dow=C3=B3d osobisty / prawo jazdy
+10. Numer telefonu:
+Skontaktuj si=C4=99 z naszym identyfikatorem e-mail agenta:
+nazwa solomo brandy
 
-   292	
-   293	static int dchid_cmd(struct dchid_iface *iface, u32 type, u32 req,
-   294			     void *data, size_t size, void *resp_buf, size_t resp_size)
-   295	{
-   296		int ret;
-   297		int report_id = *(u8*)data;
-   298	
-   299		mutex_lock(&iface->out_mutex);
-   300	
-   301		WARN_ON(iface->out_report != -1);
-   302		iface->out_report = report_id;
- > 303		iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
-   304		iface->resp_buf = resp_buf;
-   305		iface->resp_size = resp_size;
-   306		reinit_completion(&iface->out_complete);
-   307	
-   308		ret = dchid_send(iface, iface->out_flags, data, size);
-   309		if (ret < 0)
-   310			goto done;
-   311	
-   312		if (!wait_for_completion_timeout(&iface->out_complete, msecs_to_jiffies(1000))) {
-   313			dev_err(iface->dchid->dev, "output report 0x%x to iface  %d (%s) timed out\n",
-   314				report_id, iface->index, iface->name);
-   315			ret = -ETIMEDOUT;
-   316			goto done;
-   317		}
-   318	
-   319		ret = iface->resp_size;
-   320		if (iface->retcode) {
-   321			dev_err(iface->dchid->dev,
-   322				"output report 0x%x to iface %d (%s) failed with err 0x%x\n",
-   323				report_id, iface->index, iface->name, iface->retcode);
-   324			ret = -EIO;
-   325		}
-   326	
-   327	done:
-   328		iface->tx_seq++;
-   329		iface->out_report = -1;
-   330		iface->out_flags = 0;
-   331		iface->resp_buf = NULL;
-   332		iface->resp_size = 0;
-   333		mutex_unlock(&iface->out_mutex);
-   334		return ret;
-   335	}
-   336	
+ADRES EMIL (solomonbrandyfiveone@gmail.com ) dla Twojej p=C5=82atno=C5=9Bci=
+ bez zw=C5=82oki,
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Pozdrowienia
+Pani Mary J. Robertson.

@@ -2,433 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A0459ACEE
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 11:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1CC59ACF3
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 11:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344927AbiHTJ0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 05:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
+        id S1345212AbiHTJfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 05:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344414AbiHTJZm (ORCPT
+        with ESMTP id S245125AbiHTJfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 05:25:42 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE1560693
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 02:25:41 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 134593436B;
-        Sat, 20 Aug 2022 09:25:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660987540; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g4lisHKlxJMHmN7MLyKucg4rSOW6FXqUJI1lqd+zyHc=;
-        b=kj/w/8TFOzdZqNCcGJL3EtijbDuNmVRNPtYFAVa+o2+bHMrLc2NUQO5X7c9Uz0/bo4sulB
-        6HUH5C1stD/XQS2cK7zTpGrumqWbYpRgUWWyTNAmA8ZhQKZxFHXoo4Ld4crAlpgQQWI1VH
-        6t8torGRK2oftr9UT8AMdU/X+ZFoJGU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B69C913B04;
-        Sat, 20 Aug 2022 09:25:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kMxPK5OoAGPJMAAAMHmgww
-        (envelope-from <jgross@suse.com>); Sat, 20 Aug 2022 09:25:39 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        Sat, 20 Aug 2022 05:35:23 -0400
+Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAC721830
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 02:35:21 -0700 (PDT)
+Received: from gproxy2-pub.mail.unifiedlayer.com (unknown [69.89.18.3])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 871BD8033513
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 09:35:20 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id DB9D510048373
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 09:34:58 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id PKsco7eu9sbE6PKsco9qlL; Sat, 20 Aug 2022 09:34:58 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=EegN/NqC c=1 sm=1 tr=0 ts=6300aac2
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=biHskzXt2R4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=P_Ggkjto_qLeQm38W8AA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=pfUh0OkdD9ECtf/Ulbr9qrfSPNo3aES6azkpvwDTpsY=; b=UIpbHoa864y7Aafq/VALhprIth
+        RjPm+iR41cwYusjlbfyyUDOc2t0d+TINQBhkhZro2m0SAn4Jb2uWun6dne1GvLM/0rLctj5fTKapr
+        7Bg9ZmTN5FxaAY2XZDE2hgD844auCjuX2R+jYvlVnBmvOWMeX3yt47eYTA9eZssCbbDcD2XiFfcGU
+        NHAqO9jOwpb95NYIbqDdCyni0jBBNRKE/hjz7jmekdiNO6zTw78QVR7oEh3JP0+QJKbu9XflNh9SN
+        2RmCz5B3AcOP04gSNY4BKTTH7uI9YCeibzm2VR44Dkycuk2Zo+19G5g/PEFuPJQltEvH1ttvt4Zpc
+        okHAeR4A==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:41002 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oPKsa-003W0a-S6;
+        Sat, 20 Aug 2022 03:34:56 -0600
+Subject: Re: [PATCH 5.18 0/6] 5.18.19-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v2 10/10] x86: decouple pat and mtrr handling
-Date:   Sat, 20 Aug 2022 11:25:33 +0200
-Message-Id: <20220820092533.29420-11-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220820092533.29420-1-jgross@suse.com>
-References: <20220820092533.29420-1-jgross@suse.com>
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220819153710.430046927@linuxfoundation.org>
+In-Reply-To: <20220819153710.430046927@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <63b7a770-fc9d-e001-f303-431c77895b61@w6rz.net>
+Date:   Sat, 20 Aug 2022 02:34:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oPKsa-003W0a-S6
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:41002
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Today PAT is usable only with MTRR being active, with some nasty tweaks
-to make PAT usable when running as Xen PV guest, which doesn't support
-MTRR.
+On 8/19/22 8:40 AM, Greg Kroah-Hartman wrote:
+> -------------------
+> NOTE, this is the LAST 5.18.y stable release.  This tree will be
+> end-of-life after this one.  Please move to 5.19.y at this point in time
+> or let us know why that is not possible.
+> -------------------
+>
+> This is the start of the stable review cycle for the 5.18.19 release.
+> There are 6 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 21 Aug 2022 15:36:59 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.19-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-The reason for this coupling is, that both, PAT MSR changes and MTRR
-changes, require a similar sequence and so full PAT support was added
-using the already available MTRR handling.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Xen PV PAT handling can work without MTRR, as it just needs to consume
-the PAT MSR setting done by the hypervisor without the ability and need
-to change it. This in turn has resulted in a convoluted initialization
-sequence and wrong decisions regarding cache mode availability due to
-misguiding PAT availability flags.
-
-Fix all of that by allowing to use PAT without MTRR and by reworking
-the current PAT initialization sequence to match better with the newly
-introduced generic cache initialization.
-
-This removes the need of the recently added pat_force_disabled flag, so
-remove the remnants of the patch adding it.
-
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V2:
-- former patch 3 completely reworked
----
- arch/x86/include/asm/memtype.h  |   5 +-
- arch/x86/kernel/cpu/cacheinfo.c |   3 +-
- arch/x86/kernel/cpu/mtrr/mtrr.c |  13 +---
- arch/x86/kernel/setup.c         |  13 +---
- arch/x86/mm/pat/memtype.c       | 127 ++++++++++----------------------
- 5 files changed, 45 insertions(+), 116 deletions(-)
-
-diff --git a/arch/x86/include/asm/memtype.h b/arch/x86/include/asm/memtype.h
-index 9ca760e430b9..113b2fa51849 100644
---- a/arch/x86/include/asm/memtype.h
-+++ b/arch/x86/include/asm/memtype.h
-@@ -6,9 +6,8 @@
- #include <asm/pgtable_types.h>
- 
- extern bool pat_enabled(void);
--extern void pat_disable(const char *reason);
--extern void pat_init(void);
--extern void init_cache_modes(void);
-+extern void pat_bp_init(void);
-+extern void pat_cpu_init(void);
- 
- extern int memtype_reserve(u64 start, u64 end,
- 		enum page_cache_mode req_pcm, enum page_cache_mode *ret_pcm);
-diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
-index 4946f93eb16f..08130919d55d 100644
---- a/arch/x86/kernel/cpu/cacheinfo.c
-+++ b/arch/x86/kernel/cpu/cacheinfo.c
-@@ -1135,7 +1135,7 @@ static void cache_cpu_init(void)
- 
- 	/* Set PAT. */
- 	if (cache_generic & CACHE_GENERIC_PAT)
--		pat_init();
-+		pat_cpu_init();
- 
- 	cache_enable();
- 	local_irq_restore(flags);
-@@ -1154,6 +1154,7 @@ static int cache_rendezvous_handler(void *unused)
- void __init cache_bp_init(void)
- {
- 	mtrr_bp_init();
-+	pat_bp_init();
- 
- 	if (cache_generic)
- 		cache_cpu_init();
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index 38531e021581..90aa15610692 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -727,24 +727,15 @@ void __init mtrr_bp_init(void)
- 			mtrr_enabled = get_mtrr_state();
- 
- 			if (mtrr_enabled) {
--				cache_generic |= CACHE_GENERIC_MTRR |
--						 CACHE_GENERIC_PAT;
-+				cache_generic |= CACHE_GENERIC_MTRR;
- 				changed_by_mtrr_cleanup =
- 					mtrr_cleanup(phys_addr);
- 			}
- 		}
- 	}
- 
--	if (!mtrr_enabled) {
-+	if (!mtrr_enabled)
- 		pr_info("Disabled\n");
--
--		/*
--		 * PAT initialization relies on MTRR's rendezvous handler.
--		 * Skip PAT init until the handler can initialize both
--		 * features independently.
--		 */
--		pat_disable("MTRRs disabled, skipping PAT initialization too.");
--	}
- }
- 
- /**
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index e0e185ee0229..aacaa96f0195 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -1075,23 +1075,12 @@ void __init setup_arch(char **cmdline_p)
- 	max_pfn = e820__end_of_ram_pfn();
- 
- 	/* update e820 for memory not covered by WB MTRRs */
--	if (IS_ENABLED(CONFIG_MTRR))
--		cache_bp_init();
--	else
--		pat_disable("PAT support disabled because CONFIG_MTRR is disabled in the kernel.");
--
-+	cache_bp_init();
- 	if (mtrr_trim_uncached_memory(max_pfn))
- 		max_pfn = e820__end_of_ram_pfn();
- 
- 	max_possible_pfn = max_pfn;
- 
--	/*
--	 * This call is required when the CPU does not support PAT. If
--	 * mtrr_bp_init() invoked it already via pat_init() the call has no
--	 * effect.
--	 */
--	init_cache_modes();
--
- 	/*
- 	 * Define random base addresses for memory sections after max_pfn is
- 	 * defined and before each memory section base is used.
-diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
-index 66a209f7eb86..891f7c5f0f09 100644
---- a/arch/x86/mm/pat/memtype.c
-+++ b/arch/x86/mm/pat/memtype.c
-@@ -43,6 +43,7 @@
- #include <linux/rbtree.h>
- 
- #include <asm/cacheflush.h>
-+#include <asm/cacheinfo.h>
- #include <asm/processor.h>
- #include <asm/tlbflush.h>
- #include <asm/x86_init.h>
-@@ -60,41 +61,34 @@
- #undef pr_fmt
- #define pr_fmt(fmt) "" fmt
- 
--static bool __read_mostly pat_bp_initialized;
- static bool __read_mostly pat_disabled = !IS_ENABLED(CONFIG_X86_PAT);
--static bool __initdata pat_force_disabled = !IS_ENABLED(CONFIG_X86_PAT);
--static bool __read_mostly pat_bp_enabled;
--static bool __read_mostly pat_cm_initialized;
-+static u64 __read_mostly pat_msr_val;
- 
- /*
-  * PAT support is enabled by default, but can be disabled for
-  * various user-requested or hardware-forced reasons:
-  */
--void pat_disable(const char *msg_reason)
-+static void __init pat_disable(const char *msg_reason)
- {
- 	if (pat_disabled)
- 		return;
- 
--	if (pat_bp_initialized) {
--		WARN_ONCE(1, "x86/PAT: PAT cannot be disabled after initialization\n");
--		return;
--	}
--
- 	pat_disabled = true;
- 	pr_info("x86/PAT: %s\n", msg_reason);
-+
-+	cache_generic &= ~CACHE_GENERIC_PAT;
- }
- 
- static int __init nopat(char *str)
- {
- 	pat_disable("PAT support disabled via boot option.");
--	pat_force_disabled = true;
- 	return 0;
- }
- early_param("nopat", nopat);
- 
- bool pat_enabled(void)
- {
--	return pat_bp_enabled;
-+	return !pat_disabled;
- }
- EXPORT_SYMBOL_GPL(pat_enabled);
- 
-@@ -192,7 +186,8 @@ enum {
- 
- #define CM(c) (_PAGE_CACHE_MODE_ ## c)
- 
--static enum page_cache_mode pat_get_cache_mode(unsigned pat_val, char *msg)
-+static enum page_cache_mode __init pat_get_cache_mode(unsigned int pat_val,
-+						      char *msg)
- {
- 	enum page_cache_mode cache;
- 	char *cache_mode;
-@@ -219,14 +214,12 @@ static enum page_cache_mode pat_get_cache_mode(unsigned pat_val, char *msg)
-  * configuration.
-  * Using lower indices is preferred, so we start with highest index.
-  */
--static void __init_cache_modes(u64 pat)
-+static void __init init_cache_modes(u64 pat)
- {
- 	enum page_cache_mode cache;
- 	char pat_msg[33];
- 	int i;
- 
--	WARN_ON_ONCE(pat_cm_initialized);
--
- 	pat_msg[32] = 0;
- 	for (i = 7; i >= 0; i--) {
- 		cache = pat_get_cache_mode((pat >> (i * 8)) & 7,
-@@ -234,34 +227,11 @@ static void __init_cache_modes(u64 pat)
- 		update_cache_mode_entry(i, cache);
- 	}
- 	pr_info("x86/PAT: Configuration [0-7]: %s\n", pat_msg);
--
--	pat_cm_initialized = true;
- }
- 
- #define PAT(x, y)	((u64)PAT_ ## y << ((x)*8))
- 
--static void pat_bp_init(u64 pat)
--{
--	u64 tmp_pat;
--
--	if (!boot_cpu_has(X86_FEATURE_PAT)) {
--		pat_disable("PAT not supported by the CPU.");
--		return;
--	}
--
--	rdmsrl(MSR_IA32_CR_PAT, tmp_pat);
--	if (!tmp_pat) {
--		pat_disable("PAT support disabled by the firmware.");
--		return;
--	}
--
--	wrmsrl(MSR_IA32_CR_PAT, pat);
--	pat_bp_enabled = true;
--
--	__init_cache_modes(pat);
--}
--
--static void pat_ap_init(u64 pat)
-+void pat_cpu_init(void)
- {
- 	if (!boot_cpu_has(X86_FEATURE_PAT)) {
- 		/*
-@@ -271,30 +241,35 @@ static void pat_ap_init(u64 pat)
- 		panic("x86/PAT: PAT enabled, but not supported by secondary CPU\n");
- 	}
- 
--	wrmsrl(MSR_IA32_CR_PAT, pat);
-+	wrmsrl(MSR_IA32_CR_PAT, pat_msr_val);
- }
- 
--void __init init_cache_modes(void)
-+/**
-+ * pat_bp_init - Initialize the PAT MSR value and PAT table
-+ *
-+ * This function initializes PAT MSR value and PAT table with an OS-defined
-+ * value to enable additional cache attributes, WC, WT and WP.
-+ *
-+ * This function prepares the calls of pat_cpu_init() via cache_cpu_init()
-+ * on all cpus.
-+ */
-+void __init pat_bp_init(void)
- {
- 	u64 pat = 0;
-+	struct cpuinfo_x86 *c = &boot_cpu_data;
- 
--	if (pat_cm_initialized)
--		return;
-+#ifndef CONFIG_X86_PAT
-+	pr_info_once("x86/PAT: PAT support disabled because CONFIG_X86_PAT is disabled in the kernel.\n");
-+#endif
- 
--	if (boot_cpu_has(X86_FEATURE_PAT)) {
--		/*
--		 * CPU supports PAT. Set PAT table to be consistent with
--		 * PAT MSR. This case supports "nopat" boot option, and
--		 * virtual machine environments which support PAT without
--		 * MTRRs. In specific, Xen has unique setup to PAT MSR.
--		 *
--		 * If PAT MSR returns 0, it is considered invalid and emulates
--		 * as No PAT.
--		 */
-+	if (!boot_cpu_has(X86_FEATURE_PAT))
-+		pat_disable("PAT not supported by the CPU.");
-+	else
- 		rdmsrl(MSR_IA32_CR_PAT, pat);
--	}
- 
- 	if (!pat) {
-+		pat_disable("PAT support disabled by the firmware.");
-+
- 		/*
- 		 * No PAT. Emulate the PAT table that corresponds to the two
- 		 * cache bits, PWT (Write Through) and PCD (Cache Disable).
-@@ -315,38 +290,14 @@ void __init init_cache_modes(void)
- 		 */
- 		pat = PAT(0, WB) | PAT(1, WT) | PAT(2, UC_MINUS) | PAT(3, UC) |
- 		      PAT(4, WB) | PAT(5, WT) | PAT(6, UC_MINUS) | PAT(7, UC);
--	} else if (!pat_force_disabled && cpu_feature_enabled(X86_FEATURE_HYPERVISOR)) {
--		/*
--		 * Clearly PAT is enabled underneath. Allow pat_enabled() to
--		 * reflect this.
--		 */
--		pat_bp_enabled = true;
- 	}
- 
--	__init_cache_modes(pat);
--}
--
--/**
-- * pat_init - Initialize the PAT MSR and PAT table on the current CPU
-- *
-- * This function initializes PAT MSR and PAT table with an OS-defined value
-- * to enable additional cache attributes, WC, WT and WP.
-- *
-- * This function must be called on all CPUs using the specific sequence of
-- * operations defined in Intel SDM. mtrr_rendezvous_handler() provides this
-- * procedure for PAT.
-- */
--void pat_init(void)
--{
--	u64 pat;
--	struct cpuinfo_x86 *c = &boot_cpu_data;
--
--#ifndef CONFIG_X86_PAT
--	pr_info_once("x86/PAT: PAT support disabled because CONFIG_X86_PAT is disabled in the kernel.\n");
--#endif
-+	/* Xen PV doesn't allow to set PAT MSR, but all cache modes are fine. */
-+	if (pat_disabled || cpu_feature_enabled(X86_FEATURE_XENPV)) {
-+		init_cache_modes(pat);
- 
--	if (pat_disabled)
- 		return;
-+	}
- 
- 	if ((c->x86_vendor == X86_VENDOR_INTEL) &&
- 	    (((c->x86 == 0x6) && (c->x86_model <= 0xd)) ||
-@@ -404,12 +355,10 @@ void pat_init(void)
- 		      PAT(4, WB) | PAT(5, WP) | PAT(6, UC_MINUS) | PAT(7, WT);
- 	}
- 
--	if (!pat_bp_initialized) {
--		pat_bp_init(pat);
--		pat_bp_initialized = true;
--	} else {
--		pat_ap_init(pat);
--	}
-+	pat_msr_val = pat;
-+	cache_generic |= CACHE_GENERIC_PAT;
-+
-+	init_cache_modes(pat);
- }
- 
- #undef PAT
--- 
-2.35.3
+Tested-by: Ron Economos <re@w6rz.net>
 

@@ -2,97 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073AA59ADAC
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 13:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D6E59ADBB
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 13:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345872AbiHTLwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 07:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        id S1345875AbiHTL5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 07:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345327AbiHTLwL (ORCPT
+        with ESMTP id S230061AbiHTL5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 07:52:11 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5889E136;
-        Sat, 20 Aug 2022 04:52:10 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-3375488624aso153371847b3.3;
-        Sat, 20 Aug 2022 04:52:10 -0700 (PDT)
+        Sat, 20 Aug 2022 07:57:21 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C45248E2;
+        Sat, 20 Aug 2022 04:57:20 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-333a4a5d495so182359727b3.10;
+        Sat, 20 Aug 2022 04:57:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=RZrX4TsmyKYIZeKVsYzl/dXGPxXgZPHqV4cddoyqRO0=;
-        b=pwc04a5FVqjPOLPl6SiZ7b0z2LWHxvoDi5OpuXrWCagG1YT73sp3r/RouZyF4X3jNV
-         n9mn2lKxeeurTdRDNynO9yCLvfJYG8A4O3NihZrFhbGGr2BClfDtbsiGAUSn2NX/QdU6
-         Yu2YtVPpIQAGK72cmLijMMIaqAqJ9i7F862cDodYbTqiDed+DBJUBJYVt1VTEgWxItx9
-         ke79XlS+dUb6SB0+E2kLSdvwDWuXzEqZY39znPu9DIapCi0s/0Yf+RAdfWwHZmWFWtrH
-         c9yAj798LwHm403uXkkGmSGCs6Xk1KHr4fHK53l9XR96k2pKULsowcFedKVHbRA3ue6w
-         ofCw==
-X-Gm-Message-State: ACgBeo1eCJLhAgehHLIam8dM1lqeZJFr8x+sfosjJXcoawbSWQioe0tf
-        sr3GHHddgbF9ChdwEMeQOanSzrpfkNyL3TSkRfE664Wr
-X-Google-Smtp-Source: AA6agR7nqoBR/gw5q60Ast2lmIvmYz0AuT2Uxm2lMmepCX1F8NqJDPp5jnO5ykO3U6vwPYLsHFg9cnvO/VSQS1+7TLU=
-X-Received: by 2002:a25:cbcf:0:b0:695:2d3b:366 with SMTP id
- b198-20020a25cbcf000000b006952d3b0366mr6051546ybg.365.1660996329583; Sat, 20
- Aug 2022 04:52:09 -0700 (PDT)
+        bh=eFv+Oj3QaofeetDmZ1hWU31f01S4gXzOn+W40f2bcH8=;
+        b=Jh9VYy5RF6o3w+4t2LygfX4yCtFcAj+toPFoYCAvMWoNJCb340EE6H2jNoUVEER67j
+         Oof6U81HeY5G2lxcydW7TLSZp0DuQxsvl872ON+MxqNCD1MVfR2zqD58U7mGHJJxaRhs
+         dvLX2jNP7jWbeSgqfCwRXeoiV4ypDgLsQP+dzGmnF6zUt21JjPWT8dwKGLhyY9p6kqrm
+         qXCPEgRQJ17hi9oYKJ4jqe1g2DVaULlUy52kwKGAiBam4KFIIL5+5WAFwaikg7F41Ifq
+         JCobYAIBRVa9KCWJADGJjh7YpfvATF+irt6dGz27jdP944/yq4r39b1x1N0U5K16845Z
+         JAjw==
+X-Gm-Message-State: ACgBeo3V7U5nzltHxIOW19X4yw8aArUvdpQwyvHuc081/fxGuWgZ5GzK
+        7Ur1LUJkTQBMEkZ0jho3LPtXMbYgmUb8tj7CbHk=
+X-Google-Smtp-Source: AA6agR6zWHtnabZ6V306XrP13eJqyDVES8EsSaAH+ECiBaAuEnvGN7G48D/WRufhiU2j2MyLI1HC14c/WpW02memvng=
+X-Received: by 2002:a81:104e:0:b0:336:37f1:9686 with SMTP id
+ 75-20020a81104e000000b0033637f19686mr12206283ywq.149.1660996639914; Sat, 20
+ Aug 2022 04:57:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <dbd20ef2-f109-0675-6fbe-8d08da5cc5a3@linaro.org>
-In-Reply-To: <dbd20ef2-f109-0675-6fbe-8d08da5cc5a3@linaro.org>
+References: <f1fb1d84-85de-f3c5-0212-fcf0e9c0ccd2@samsung.com>
+ <CGME20220812131216eucas1p266cfd4e51b59fc3cf8056474a6910094@eucas1p2.samsung.com>
+ <20220812131202.1331238-1-daniel.lezcano@linaro.org> <ab708272-efe0-343e-2dfc-299187126a2a@samsung.com>
+ <c0c5b306-9fd5-1048-ba08-044d292cbf7a@linaro.org>
+In-Reply-To: <c0c5b306-9fd5-1048-ba08-044d292cbf7a@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 20 Aug 2022 13:51:58 +0200
-Message-ID: <CAJZ5v0jPm5+zu9ju=RAit01LC6Nc=wRK6T3y8HY-9rgKeXJ5nw@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal fixes for v6.0-rc1
+Date:   Sat, 20 Aug 2022 13:57:09 +0200
+Message-ID: <CAJZ5v0gL=k-1SxbfSSdoFYaTWk=YvY72d3r0oEyu9dZA5YJLbw@mail.gmail.com>
+Subject: Re: [PATCH] thermal/core: Fix lockdep_assert() warning
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
+        Amit Kucheria <amitk@kernel.org>,
+        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 1:39 PM Daniel Lezcano
+On Fri, Aug 12, 2022 at 3:54 PM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
-> The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+> On 12/08/2022 15:34, Marek Szyprowski wrote:
+> > On 12.08.2022 15:12, Daniel Lezcano wrote:
+> >> The function thermal_zone_device_is_enabled() must be called with the
+> >> thermal zone lock held. In the resume path, it is called without.
+> >>
+> >> As the thermal_zone_device_is_enabled() is also checked in
+> >> thermal_zone_device_update(), do the check in resume() function is
+> >> pointless, except for saving an extra initialization which does not
+> >> hurt if it is done in all the cases.
+> >>
+> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >
+> > This fixes the warning I've reported. Feel free to add:
+> >
+> > Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> >
+> > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 >
->    Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v6.0-rc2
->
-> for you to fetch changes up to 8c596324232d22e19f8df59ba03410b9b5b0f3d7:
->
->    dt-bindings: thermal: Fix missing required property (2022-08-15
-> 20:38:40 +0200)
->
-> ----------------------------------------------------------------
-> - Fix missing required property for thermal zone description (Daniel
->    Lezcano)
->
-> - Add missing export symbol for
->    thermal_zone_device_register_with_trips() (Daniel Lezcano)
->
-> ----------------------------------------------------------------
-> Daniel Lezcano (2):
->        thermal/core: Add missing EXPORT_SYMBOL_GPL
->        dt-bindings: thermal: Fix missing required property
->
->   Documentation/devicetree/bindings/thermal/thermal-zones.yaml | 1 +
->   drivers/thermal/thermal_core.c                               | 1 +
->   2 files changed, 2 insertions(+)
->
->
-> --
+> Great, thanks for testing
 
-Pulled, thanks!
-
-I will be pushing this for -rc3, though.
+Do you want me to apply this for -rc3?

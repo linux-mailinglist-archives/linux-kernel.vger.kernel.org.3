@@ -2,64 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E60559AADF
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 05:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 937E359AAE9
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 05:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243687AbiHTDQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 23:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
+        id S244159AbiHTDTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 23:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239003AbiHTDQP (ORCPT
+        with ESMTP id S244019AbiHTDTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 23:16:15 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DCCA2AD6;
-        Fri, 19 Aug 2022 20:16:13 -0700 (PDT)
-Received: from localhost.localdomain (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxrmvzUQBjXo4FAA--.13173S3;
-        Sat, 20 Aug 2022 11:16:05 +0800 (CST)
-Subject: Re: [PATCH 1/9] LoongArch/ftrace: Add basic support
-To:     Steven Rostedt <rostedt@goodmis.org>
-References: <20220819081403.7143-1-zhangqing@loongson.cn>
- <20220819081403.7143-2-zhangqing@loongson.cn>
- <20220819132509.127a1353@gandalf.local.home>
- <246779c0-b834-16a6-ec68-c06d8f9a375d@loongson.cn>
- <20220819215240.3caf89e2@gandalf.local.home>
-Cc:     Qing Zhang <zhangqing@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <de7584d4-56ff-aafe-42ec-702924fbcf64@loongson.cn>
-Date:   Sat, 20 Aug 2022 11:16:03 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Fri, 19 Aug 2022 23:19:37 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12E356BA4
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 20:19:34 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4M8kMn0dGyzGpfF;
+        Sat, 20 Aug 2022 11:17:57 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 20 Aug 2022 11:19:32 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 20 Aug 2022 11:19:31 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
+CC:     Qian Cai <cai@lca.pw>, <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH] mm: fix pgdat->kswap accessed concurrently
+Date:   Sat, 20 Aug 2022 11:25:06 +0800
+Message-ID: <20220820032506.126860-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-In-Reply-To: <20220819215240.3caf89e2@gandalf.local.home>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxrmvzUQBjXo4FAA--.13173S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Gr45WrWkZr4DJry3AF15XFb_yoW8Jr4xpF
-        yFg3yxCFZ7tFWavan2vw17Wr13uFn5AFZ3tr1rKry8Aryrur1avw4avrnFqryvyw1kGrW2
-        qr4DK3yUCFn8C37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
-        67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14
-        v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4l
-        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,37 +50,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/20/2022 09:52 AM, Steven Rostedt wrote:
+The pgdat->kswap could be accessed concurrently by kswapd_run() and
+kcompactd(), it don't be protected by any lock, which leads to the
+following null-ptr-deref,
 
-> On Sat, 20 Aug 2022 09:38:21 +0800
-> Jinyang He <hejinyang@loongson.cn> wrote:
->
->> I think we have implemented CONFIG_FTRACE_WITH_ARGS in dynamic ftrace
->> in the [Patch3/9].
-> Sorry, I must have missed it.
-And there is still something left to do, Qing will do that.
+  vmscan: Failed to start kswapd on node 0
+  ...
+  BUG: KASAN: null-ptr-deref in kcompactd+0x440/0x504
+  Read of size 8 at addr 0000000000000024 by task kcompactd0/37
 
->
->> But, for non dynamic ftrace, it is hardly to
->> implement it. Because the LoongArch compiler gcc treats mount as a
-> Don't bother implementing it for non-dynamic. I would just add a:
->
-> config HAVE_FTRACE_WITH_ARGS if DYNAMIC_FTRACE
->
-> and be done with it.
-Yes, it is clear.
+  CPU: 0 PID: 37 Comm: kcompactd0 Kdump: loaded Tainted: G           OE     5.10.60 #1
+  Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
+  Call trace:
+   dump_backtrace+0x0/0x394
+   show_stack+0x34/0x4c
+   dump_stack+0x158/0x1e4
+   __kasan_report+0x138/0x140
+   kasan_report+0x44/0xdc
+   __asan_load8+0x94/0xd0
+   kcompactd+0x440/0x504
+   kthread+0x1a4/0x1f0
+   ret_from_fork+0x10/0x18
 
->
->> really call, like 'call _mcount(__builtin_return_address(0))'. That
->> means, they decrease stack, save args to callee saved regs and may
->> do some optimization before calling mcount. It is difficult to find the
->> original args and apply changes from tracers.
-> Right, there's no point in implementing it for non dynamic. Like I said,
-> non-dynamic is just a stepping stone for getting dynamic working. Once you
-> have dynamic working, it's up to you to throw out the non-dynamic. It's not
-> useful for anything other than porting to a new architecture or for
-> academic purposes.
->
-Thanks for your detail answers.
-Jinyang
+Fix it by adding READ_ONCE()|WRITE_ONCE().
+
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ mm/compaction.c |  4 +++-
+ mm/vmscan.c     | 15 +++++++++------
+ 2 files changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/mm/compaction.c b/mm/compaction.c
+index 640fa76228dd..aa1cfe47f046 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -1983,7 +1983,9 @@ static inline bool is_via_compact_memory(int order)
+ 
+ static bool kswapd_is_running(pg_data_t *pgdat)
+ {
+-	return pgdat->kswapd && task_is_running(pgdat->kswapd);
++	struct task_struct *t = READ_ONCE(pgdat->kswapd);
++
++	return t && task_is_running(t);
+ }
+ 
+ /*
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index b2b1431352dc..9abba714249e 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -4642,16 +4642,19 @@ unsigned long shrink_all_memory(unsigned long nr_to_reclaim)
+ void kswapd_run(int nid)
+ {
+ 	pg_data_t *pgdat = NODE_DATA(nid);
++	struct task_struct *t;
+ 
+-	if (pgdat->kswapd)
++	if (READ_ONCE(pgdat->kswapd))
+ 		return;
+ 
+-	pgdat->kswapd = kthread_run(kswapd, pgdat, "kswapd%d", nid);
+-	if (IS_ERR(pgdat->kswapd)) {
++	t = kthread_run(kswapd, pgdat, "kswapd%d", nid);
++	if (IS_ERR(t)) {
+ 		/* failure at boot is fatal */
+ 		BUG_ON(system_state < SYSTEM_RUNNING);
+ 		pr_err("Failed to start kswapd on node %d\n", nid);
+-		pgdat->kswapd = NULL;
++		WRITE_ONCE(pgdat->kswapd, NULL);
++	} else {
++		WRITE_ONCE(pgdat->kswapd, t);
+ 	}
+ }
+ 
+@@ -4661,11 +4664,11 @@ void kswapd_run(int nid)
+  */
+ void kswapd_stop(int nid)
+ {
+-	struct task_struct *kswapd = NODE_DATA(nid)->kswapd;
++	struct task_struct *kswapd = READ_ONCE(NODE_DATA(nid)->kswapd);
+ 
+ 	if (kswapd) {
+ 		kthread_stop(kswapd);
+-		NODE_DATA(nid)->kswapd = NULL;
++		WRITE_ONCE(NODE_DATA(nid)->kswapd, NULL);
+ 	}
+ }
+ 
+-- 
+2.35.3
 

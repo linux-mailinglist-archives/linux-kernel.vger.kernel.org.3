@@ -2,290 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D0059B048
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 22:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDA859B049
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 22:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbiHTUIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 16:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
+        id S233448AbiHTUNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 16:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiHTUIR (ORCPT
+        with ESMTP id S230188AbiHTUM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 16:08:17 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA64B99
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 13:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661026094; x=1692562094;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oY21mxCtzpqrOI5WhljHEFjnQh9rlwsHU22OuWdu/Ps=;
-  b=POd/MQ7xoXgdLtWxpvQ/lSXCKWL4pCdMFn2P/GcSNaC/kKbx9TGsemY3
-   KKKfYRisz1PwwVypV8iNoHqKTA2qiE9Fw3lyyOo6rWG2fUZxht9p42GXw
-   L/+lcp0P5/ycYCDpgMz6f8i2vn6O2bBOWBEXe1LXMH5N3ERtmMftEpnZD
-   N1rzaCpE2D+xckoE+fSJdqIgdrZ6NLiHZISgQErFkaO/lxX/l7+/WmVYd
-   KFruTNrd+kk3QbALaUGR9psXmjrdkstlhHDkRev9udal6uPrXvP+zpjva
-   mo1dehXul2nch6ux/QULzJLUJBnPiEDRawBHxOzmH2JudxuagzwhLb1bY
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="276229455"
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="276229455"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 13:08:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="637664854"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 20 Aug 2022 13:08:12 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPUlP-00038j-33;
-        Sat, 20 Aug 2022 20:08:11 +0000
-Date:   Sun, 21 Aug 2022 04:07:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        WANG Xuerui <git@xen0n.name>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-Subject: drivers/message/fusion/mptlan.c:1177:21: sparse: sparse: cast to
- restricted __le16
-Message-ID: <202208210318.I5GlR6yM-lkp@intel.com>
+        Sat, 20 Aug 2022 16:12:58 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8DE2CDD3
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 13:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4hOW8ikp9BlC16NkIWVeHbEV6qbT3qh1PghkZPE+sv4=; b=EYQWVkjSwqrvFkoX1JvIf//bPD
+        rEItT472ljcmmgsALoCO69D1USt7lV7NN2hoP+xsAD1Ah5OswP5WxP1JOXL4tm3urS5R5B87k+xg0
+        zdzgMRBcKw0hntPg1U1qPeb34xYNx6wvUjZZLk8qIBk9b21bNrGuH8J5CwJIX6lUvd93VZia83lcZ
+        aqbUvKktpq2As8oMbi9WVjKaNVhiosQO71HL0ngBhKzpdjmFKkH0kQ3Xnwp1HWDDW4M1WUCJvSmvx
+        oRXT91l9CG7GKNY2Yu61jbnX4tRSwQ6qIgVKWglKp6ugPYKi3ldjZNkNQUJjrMhZti2PA1LT13BsH
+        bgZyDBKw==;
+Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=62329)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oPUpx-0005wt-AI; Sat, 20 Aug 2022 22:12:53 +0200
+Message-ID: <37a76651-a457-e50d-9a05-00ca9ed5d729@tronnes.org>
+Date:   Sat, 20 Aug 2022 22:12:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f31c32efd57c860f2b237a08327840f8444362f3
-commit: 57fc7323a8e7c2e7c1d5795ab63cb3ffea3cfdfb LoongArch: Add PCI controller support
-date:   9 days ago
-config: loongarch-randconfig-s033-20220820 (https://download.01.org/0day-ci/archive/20220821/202208210318.I5GlR6yM-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57fc7323a8e7c2e7c1d5795ab63cb3ffea3cfdfb
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 57fc7323a8e7c2e7c1d5795ab63cb3ffea3cfdfb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/message/fusion/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/message/fusion/mptlan.c:1177:21: sparse: sparse: cast to restricted __le16
->> drivers/message/fusion/mptlan.c:1240:52: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] TransactionContext @@     got restricted __le32 [usertype] @@
-   drivers/message/fusion/mptlan.c:1240:52: sparse:     expected unsigned int [usertype] TransactionContext
-   drivers/message/fusion/mptlan.c:1240:52: sparse:     got restricted __le32 [usertype]
->> drivers/message/fusion/mptlan.c:1244:46: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] FlagsLength @@     got restricted __le32 [usertype] @@
-   drivers/message/fusion/mptlan.c:1244:46: sparse:     expected unsigned int [usertype] FlagsLength
-   drivers/message/fusion/mptlan.c:1244:46: sparse:     got restricted __le32 [usertype]
->> drivers/message/fusion/mptlan.c:1248:46: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] Low @@     got restricted __le32 [usertype] @@
-   drivers/message/fusion/mptlan.c:1248:46: sparse:     expected unsigned int [usertype] Low
-   drivers/message/fusion/mptlan.c:1248:46: sparse:     got restricted __le32 [usertype]
->> drivers/message/fusion/mptlan.c:1250:55: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] High @@     got restricted __le32 [usertype] @@
-   drivers/message/fusion/mptlan.c:1250:55: sparse:     expected unsigned int [usertype] High
-   drivers/message/fusion/mptlan.c:1250:55: sparse:     got restricted __le32 [usertype]
->> drivers/message/fusion/mptlan.c:1264:38: sparse: sparse: invalid assignment: |=
->> drivers/message/fusion/mptlan.c:1264:38: sparse:    left side has type unsigned int
->> drivers/message/fusion/mptlan.c:1264:38: sparse:    right side has type restricted __le32
->> drivers/message/fusion/mptlan.c:1266:39: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] BucketCount @@     got restricted __le32 [usertype] @@
-   drivers/message/fusion/mptlan.c:1266:39: sparse:     expected unsigned int [usertype] BucketCount
-   drivers/message/fusion/mptlan.c:1266:39: sparse:     got restricted __le32 [usertype]
->> drivers/message/fusion/mptlan.c:969:25: sparse: sparse: cast to restricted __le32
-   drivers/message/fusion/mptlan.c:974:9: sparse: sparse: cast to restricted __le16
-   drivers/message/fusion/mptlan.c:977:14: sparse: sparse: cast to restricted __le16
-   drivers/message/fusion/mptlan.c:981:15: sparse: sparse: cast to restricted __le32
-   drivers/message/fusion/mptlan.c:986:17: sparse: sparse: cast to restricted __le16
-   drivers/message/fusion/mptlan.c:991:18: sparse: sparse: cast to restricted __le32
-   drivers/message/fusion/mptlan.c:995:18: sparse: sparse: cast to restricted __le32
-   drivers/message/fusion/mptlan.c:1025:31: sparse: sparse: cast to restricted __le32
-   drivers/message/fusion/mptlan.c:612:9: sparse: sparse: cast to restricted __le16
-   drivers/message/fusion/mptlan.c:617:17: sparse: sparse: cast to restricted __le16
-   drivers/message/fusion/mptlan.c:641:23: sparse: sparse: cast to restricted __le32
-   drivers/message/fusion/mptlan.c:346:17: sparse: sparse: cast to restricted __le32
->> drivers/message/fusion/mptlan.c:1498:27: sparse: sparse: restricted __be16 degrades to integer
->> drivers/message/fusion/mptlan.c:1535:29: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned short @@     got restricted __be16 [usertype] ethertype @@
-   drivers/message/fusion/mptlan.c:1535:29: sparse:     expected unsigned short
-   drivers/message/fusion/mptlan.c:1535:29: sparse:     got restricted __be16 [usertype] ethertype
->> drivers/message/fusion/mptlan.c:1538:16: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned short @@     got restricted __be16 [usertype] @@
-   drivers/message/fusion/mptlan.c:1538:16: sparse:     expected unsigned short
-   drivers/message/fusion/mptlan.c:1538:16: sparse:     got restricted __be16 [usertype]
-   drivers/message/fusion/mptlan.c:746:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] TransactionContext @@     got restricted __le32 [usertype] @@
-   drivers/message/fusion/mptlan.c:746:36: sparse:     expected unsigned int [usertype] TransactionContext
-   drivers/message/fusion/mptlan.c:746:36: sparse:     got restricted __le32 [usertype]
->> drivers/message/fusion/mptlan.c:754:39: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int @@     got restricted __le32 [usertype] @@
-   drivers/message/fusion/mptlan.c:754:39: sparse:     expected unsigned int
-   drivers/message/fusion/mptlan.c:754:39: sparse:     got restricted __le32 [usertype]
-   drivers/message/fusion/mptlan.c:757:39: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int @@     got restricted __le32 [usertype] @@
-   drivers/message/fusion/mptlan.c:757:39: sparse:     expected unsigned int
-   drivers/message/fusion/mptlan.c:757:39: sparse:     got restricted __le32 [usertype]
-   drivers/message/fusion/mptlan.c:767:30: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] FlagsLength @@     got restricted __le32 [usertype] @@
-   drivers/message/fusion/mptlan.c:767:30: sparse:     expected unsigned int [usertype] FlagsLength
-   drivers/message/fusion/mptlan.c:767:30: sparse:     got restricted __le32 [usertype]
-   drivers/message/fusion/mptlan.c:776:30: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] Low @@     got restricted __le32 [usertype] @@
-   drivers/message/fusion/mptlan.c:776:30: sparse:     expected unsigned int [usertype] Low
-   drivers/message/fusion/mptlan.c:776:30: sparse:     got restricted __le32 [usertype]
-   drivers/message/fusion/mptlan.c:778:39: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] High @@     got restricted __le32 [usertype] @@
-   drivers/message/fusion/mptlan.c:778:39: sparse:     expected unsigned int [usertype] High
-   drivers/message/fusion/mptlan.c:778:39: sparse:     got restricted __le32 [usertype]
-   drivers/message/fusion/mptlan.c:785:9: sparse: sparse: cast to restricted __le32
->> drivers/message/fusion/mptlan.c:820:23: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [usertype] protocol @@     got unsigned short @@
-   drivers/message/fusion/mptlan.c:820:23: sparse:     expected restricted __be16 [usertype] protocol
-   drivers/message/fusion/mptlan.c:820:23: sparse:     got unsigned short
-   drivers/message/fusion/mptlan.c:924:23: sparse: sparse: cast to restricted __le32
+Den 29.07.2022 18.34, skrev Maxime Ripard:
+> The TV mode property has been around for a while now to select and get the
+> current TV mode output on an analog TV connector.
+> 
+> Despite that property name being generic, its content isn't and has been
+> driver-specific which makes it hard to build any generic behaviour on top
+> of it, both in kernel and user-space.
+> 
+> Let's create a new bitmask tv norm property, that can contain any of the
+> analog TV standards currently supported by kernel drivers. Each driver can
+> then pass in a bitmask of the modes it supports.
+> 
+> We'll then be able to phase out the older tv mode property.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> 
+> diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
+> index c06d0639d552..d7ff6c644c2f 100644
+> --- a/drivers/gpu/drm/drm_atomic_uapi.c
+> +++ b/drivers/gpu/drm/drm_atomic_uapi.c
+> @@ -700,6 +700,8 @@ static int drm_atomic_connector_set_property(struct drm_connector *connector,
+>  		state->tv.margins.bottom = val;
+>  	} else if (property == config->tv_mode_property) {
+>  		state->tv.mode = val;
+> +	} else if (property == config->tv_norm_property) {
+> +		state->tv.norm = val;
+>  	} else if (property == config->tv_brightness_property) {
+>  		state->tv.brightness = val;
+>  	} else if (property == config->tv_contrast_property) {
+> @@ -810,6 +812,8 @@ drm_atomic_connector_get_property(struct drm_connector *connector,
+>  		*val = state->tv.margins.bottom;
+>  	} else if (property == config->tv_mode_property) {
+>  		*val = state->tv.mode;
+> +	} else if (property == config->tv_norm_property) {
+> +		*val = state->tv.norm;
+>  	} else if (property == config->tv_brightness_property) {
+>  		*val = state->tv.brightness;
+>  	} else if (property == config->tv_contrast_property) {
+> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+> index e3142c8142b3..68a4e47f85a9 100644
+> --- a/drivers/gpu/drm/drm_connector.c
+> +++ b/drivers/gpu/drm/drm_connector.c
+> @@ -1637,6 +1637,7 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_properties);
+>  /**
+>   * drm_mode_create_tv_properties - create TV specific connector properties
+>   * @dev: DRM device
+> + * @supported_tv_norms: Bitmask of TV norms supported (See DRM_MODE_TV_NORM_*)
+>   * @num_modes: number of different TV formats (modes) supported
+>   * @modes: array of pointers to strings containing name of each format
+>   *
+> @@ -1649,11 +1650,40 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_properties);
+>   * 0 on success or a negative error code on failure.
+>   */
+>  int drm_mode_create_tv_properties(struct drm_device *dev,
+> +				  unsigned int supported_tv_norms,
+>  				  unsigned int num_modes,
+>  				  const char * const modes[])
+>  {
+> +	static const struct drm_prop_enum_list tv_norm_values[] = {
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_443) - 1, "NTSC-443" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_J) - 1, "NTSC-J" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_M) - 1, "NTSC-M" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_60) - 1, "PAL-60" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_B) - 1, "PAL-B" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_D) - 1, "PAL-D" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_G) - 1, "PAL-G" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_H) - 1, "PAL-H" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_I) - 1, "PAL-I" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_M) - 1, "PAL-M" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_N) - 1, "PAL-N" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_NC) - 1, "PAL-Nc" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_60) - 1, "SECAM-60" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_B) - 1, "SECAM-B" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_D) - 1, "SECAM-D" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_G) - 1, "SECAM-G" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K) - 1, "SECAM-K" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K1) - 1, "SECAM-K1" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_L) - 1, "SECAM-L" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD480I) - 1, "hd480i" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD480P) - 1, "hd480p" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD576I) - 1, "hd576i" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD576P) - 1, "hd576p" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD720P) - 1, "hd720p" },
+> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD1080I) - 1, "hd1080i" },
+> +	};
+>  	struct drm_property *tv_selector;
+>  	struct drm_property *tv_subconnector;
+> +	struct drm_property *tv_norm;
+>  	unsigned int i;
+>  
+>  	if (dev->mode_config.tv_select_subconnector_property)
+> @@ -1686,6 +1716,13 @@ int drm_mode_create_tv_properties(struct drm_device *dev,
+>  	if (drm_mode_create_tv_margin_properties(dev))
+>  		goto nomem;
+>  
+> +	tv_norm = drm_property_create_bitmask(dev, 0, "tv norm",
+> +					   tv_norm_values, ARRAY_SIZE(tv_norm_values),
+> +					   supported_tv_norms);
+> +	if (!tv_norm)
+> +		goto nomem;
+> +	dev->mode_config.tv_norm_property = tv_norm;
+> +
+>  	dev->mode_config.tv_mode_property =
+>  		drm_property_create(dev, DRM_MODE_PROP_ENUM,
+>  				    "mode", num_modes);
+> diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c
+> index 4a788c1c9058..457529e5d857 100644
+> --- a/drivers/gpu/drm/vc4/vc4_vec.c
+> +++ b/drivers/gpu/drm/vc4/vc4_vec.c
+> @@ -573,7 +573,9 @@ static int vc4_vec_bind(struct device *dev, struct device *master, void *data)
+>  	struct vc4_vec *vec;
+>  	int ret;
+>  
+> -	ret = drm_mode_create_tv_properties(drm, ARRAY_SIZE(tv_mode_names),
+> +	ret = drm_mode_create_tv_properties(drm,
+> +					    0,
+> +					    ARRAY_SIZE(tv_mode_names),
+>  					    tv_mode_names);
+>  	if (ret)
+>  		return ret;
+> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+> index 1e9996b33cc8..78275e68ff66 100644
+> --- a/include/drm/drm_connector.h
+> +++ b/include/drm/drm_connector.h
+> @@ -143,6 +143,32 @@ enum subpixel_order {
+>  
+>  };
+>  
+> +#define DRM_MODE_TV_NORM_NTSC_443	(1 << 0)
+> +#define DRM_MODE_TV_NORM_NTSC_J		(1 << 1)
+> +#define DRM_MODE_TV_NORM_NTSC_M		(1 << 2)
+> +#define DRM_MODE_TV_NORM_PAL_60		(1 << 3)
+> +#define DRM_MODE_TV_NORM_PAL_B		(1 << 4)
+> +#define DRM_MODE_TV_NORM_PAL_D		(1 << 5)
+> +#define DRM_MODE_TV_NORM_PAL_G		(1 << 6)
+> +#define DRM_MODE_TV_NORM_PAL_H		(1 << 7)
+> +#define DRM_MODE_TV_NORM_PAL_I		(1 << 8)
+> +#define DRM_MODE_TV_NORM_PAL_M		(1 << 9)
+> +#define DRM_MODE_TV_NORM_PAL_N		(1 << 10)
+> +#define DRM_MODE_TV_NORM_PAL_NC		(1 << 11)
+> +#define DRM_MODE_TV_NORM_SECAM_60	(1 << 12)
+> +#define DRM_MODE_TV_NORM_SECAM_B	(1 << 13)
+> +#define DRM_MODE_TV_NORM_SECAM_D	(1 << 14)
+> +#define DRM_MODE_TV_NORM_SECAM_G	(1 << 15)
+> +#define DRM_MODE_TV_NORM_SECAM_K	(1 << 16)
+> +#define DRM_MODE_TV_NORM_SECAM_K1	(1 << 17)
+> +#define DRM_MODE_TV_NORM_SECAM_L	(1 << 18)
+> +#define DRM_MODE_TV_NORM_HD480I		(1 << 19)
+> +#define DRM_MODE_TV_NORM_HD480P		(1 << 20)
+> +#define DRM_MODE_TV_NORM_HD576I		(1 << 21)
+> +#define DRM_MODE_TV_NORM_HD576P		(1 << 22)
+> +#define DRM_MODE_TV_NORM_HD720P		(1 << 23)
+> +#define DRM_MODE_TV_NORM_HD1080I	(1 << 24)
+> +
 
-vim +1177 drivers/message/fusion/mptlan.c
+This is an area where DRM overlaps with v4l2, see:
+- include/dt-bindings/display/sdtv-standards.h
+- v4l2_norm_to_name()
 
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1139  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1140  static void
-c4028958b6ecad David Howells       2006-11-22  1141  mpt_lan_post_receive_buckets(struct mpt_lan_priv *priv)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1142  {
-c4028958b6ecad David Howells       2006-11-22  1143  	struct net_device *dev = priv->dev;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1144  	MPT_ADAPTER *mpt_dev = priv->mpt_dev;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1145  	MPT_FRAME_HDR *mf;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1146  	LANReceivePostRequest_t *pRecvReq;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1147  	SGETransaction32_t *pTrans;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1148  	SGESimple64_t *pSimple;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1149  	struct sk_buff *skb;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1150  	dma_addr_t dma;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1151  	u32 curr, buckets, count, max;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1152  	u32 len = (dev->mtu + dev->hard_header_len + 4);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1153  	unsigned long flags;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1154  	int i;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1155  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1156  	curr = atomic_read(&priv->buckets_out);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1157  	buckets = (priv->max_buckets_out - curr);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1158  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1159  	dioprintk((KERN_INFO MYNAM ": %s/%s: @%s, Start_buckets = %u, buckets_out = %u\n",
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1160  			IOC_AND_NETDEV_NAMES_s_s(dev),
-cadbd4a5e36dde Harvey Harrison     2008-07-03  1161  			__func__, buckets, curr));
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1162  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1163  	max = (mpt_dev->req_sz - MPT_LAN_RECEIVE_POST_REQUEST_SIZE) /
-4e2e619f3c9e3c Gustavo A. R. Silva 2021-03-24  1164  			(sizeof(SGETransaction32_t) + sizeof(SGESimple64_t));
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1165  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1166  	while (buckets) {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1167  		mf = mpt_get_msg_frame(LanCtx, mpt_dev);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1168  		if (mf == NULL) {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1169  			printk (KERN_ERR "%s: Unable to alloc request frame\n",
-cadbd4a5e36dde Harvey Harrison     2008-07-03  1170  				__func__);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1171  			dioprintk((KERN_ERR "%s: %u buckets remaining\n",
-cadbd4a5e36dde Harvey Harrison     2008-07-03  1172  				 __func__, buckets));
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1173  			goto out;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1174  		}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1175  		pRecvReq = (LANReceivePostRequest_t *) mf;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1176  
-e1fc2b5167f9c3 Eric Moore          2007-09-29 @1177  		i = le16_to_cpu(mf->u.frame.hwhdr.msgctxu.fld.req_idx);
-e1fc2b5167f9c3 Eric Moore          2007-09-29  1178  		mpt_dev->RequestNB[i] = 0;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1179  		count = buckets;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1180  		if (count > max)
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1181  			count = max;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1182  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1183  		pRecvReq->Function    = MPI_FUNCTION_LAN_RECEIVE;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1184  		pRecvReq->ChainOffset = 0;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1185  		pRecvReq->MsgFlags    = 0;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1186  		pRecvReq->PortNumber  = priv->pnum;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1187  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1188  		pTrans = (SGETransaction32_t *) pRecvReq->SG_List;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1189  		pSimple = NULL;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1190  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1191  		for (i = 0; i < count; i++) {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1192  			int ctx;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1193  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1194  			spin_lock_irqsave(&priv->rxfidx_lock, flags);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1195  			if (priv->mpt_rxfidx_tail < 0) {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1196  				printk (KERN_ERR "%s: Can't alloc context\n",
-cadbd4a5e36dde Harvey Harrison     2008-07-03  1197  					__func__);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1198  				spin_unlock_irqrestore(&priv->rxfidx_lock,
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1199  						       flags);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1200  				break;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1201  			}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1202  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1203  			ctx = priv->mpt_rxfidx[priv->mpt_rxfidx_tail--];
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1204  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1205  			skb = priv->RcvCtl[ctx].skb;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1206  			if (skb && (priv->RcvCtl[ctx].len != len)) {
-b114dda6f2f10c Christophe JAILLET  2022-01-06  1207  				dma_unmap_single(&mpt_dev->pcidev->dev,
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1208  						 priv->RcvCtl[ctx].dma,
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1209  						 priv->RcvCtl[ctx].len,
-b114dda6f2f10c Christophe JAILLET  2022-01-06  1210  						 DMA_FROM_DEVICE);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1211  				dev_kfree_skb(priv->RcvCtl[ctx].skb);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1212  				skb = priv->RcvCtl[ctx].skb = NULL;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1213  			}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1214  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1215  			if (skb == NULL) {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1216  				skb = dev_alloc_skb(len);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1217  				if (skb == NULL) {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1218  					printk (KERN_WARNING
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1219  						MYNAM "/%s: Can't alloc skb\n",
-cadbd4a5e36dde Harvey Harrison     2008-07-03  1220  						__func__);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1221  					priv->mpt_rxfidx[++priv->mpt_rxfidx_tail] = ctx;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1222  					spin_unlock_irqrestore(&priv->rxfidx_lock, flags);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1223  					break;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1224  				}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1225  
-b114dda6f2f10c Christophe JAILLET  2022-01-06  1226  				dma = dma_map_single(&mpt_dev->pcidev->dev,
-b114dda6f2f10c Christophe JAILLET  2022-01-06  1227  						     skb->data, len,
-b114dda6f2f10c Christophe JAILLET  2022-01-06  1228  						     DMA_FROM_DEVICE);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1229  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1230  				priv->RcvCtl[ctx].skb = skb;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1231  				priv->RcvCtl[ctx].dma = dma;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1232  				priv->RcvCtl[ctx].len = len;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1233  			}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1234  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1235  			spin_unlock_irqrestore(&priv->rxfidx_lock, flags);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1236  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1237  			pTrans->ContextSize   = sizeof(u32);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1238  			pTrans->DetailsLength = 0;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1239  			pTrans->Flags         = 0;
-4e2e619f3c9e3c Gustavo A. R. Silva 2021-03-24 @1240  			pTrans->TransactionContext = cpu_to_le32(ctx);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1241  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1242  			pSimple = (SGESimple64_t *) pTrans->TransactionDetails;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1243  
-^1da177e4c3f41 Linus Torvalds      2005-04-16 @1244  			pSimple->FlagsLength = cpu_to_le32(
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1245  				((MPI_SGE_FLAGS_END_OF_BUFFER |
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1246  				  MPI_SGE_FLAGS_SIMPLE_ELEMENT |
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1247  				  MPI_SGE_FLAGS_64_BIT_ADDRESSING) << MPI_SGE_FLAGS_SHIFT) | len);
-^1da177e4c3f41 Linus Torvalds      2005-04-16 @1248  			pSimple->Address.Low = cpu_to_le32((u32) priv->RcvCtl[ctx].dma);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1249  			if (sizeof(dma_addr_t) > sizeof(u32))
-^1da177e4c3f41 Linus Torvalds      2005-04-16 @1250  				pSimple->Address.High = cpu_to_le32((u32) ((u64) priv->RcvCtl[ctx].dma >> 32));
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1251  			else
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1252  				pSimple->Address.High = 0;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1253  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1254  			pTrans = (SGETransaction32_t *) (pSimple + 1);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1255  		}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1256  
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1257  		if (pSimple == NULL) {
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1258  /**/			printk (KERN_WARNING MYNAM "/%s: No buckets posted\n",
-cadbd4a5e36dde Harvey Harrison     2008-07-03  1259  /**/				__func__);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1260  			mpt_free_msg_frame(mpt_dev, mf);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1261  			goto out;
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1262  		}
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1263  
-^1da177e4c3f41 Linus Torvalds      2005-04-16 @1264  		pSimple->FlagsLength |= cpu_to_le32(MPI_SGE_FLAGS_END_OF_LIST << MPI_SGE_FLAGS_SHIFT);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1265  
-^1da177e4c3f41 Linus Torvalds      2005-04-16 @1266  		pRecvReq->BucketCount = cpu_to_le32(i);
-^1da177e4c3f41 Linus Torvalds      2005-04-16  1267  
+Maybe we should follow suit, but if we do our own thing please mention
+why in the commit message.
 
-:::::: The code at line 1177 was first introduced by commit
-:::::: e1fc2b5167f9c3614099e55d3f49763a26a5a339 [SCSI] mptlan: bug fix, only half the message frame is dma'd resulting in corruption
+Noralf.
 
-:::::: TO: Eric Moore <eric.moore@lsi.com>
-:::::: CC: James Bottomley <jejb@mulgrave.localdomain>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>  /**
+>   * struct drm_scrambling: sink's scrambling support.
+>   */
+> @@ -687,6 +713,7 @@ struct drm_tv_connector_state {
+>  	enum drm_mode_subconnector subconnector;
+>  	struct drm_connector_tv_margins margins;
+>  	unsigned int mode;
+> +	unsigned int norm;
+>  	unsigned int brightness;
+>  	unsigned int contrast;
+>  	unsigned int flicker_reduction;
+> @@ -1779,6 +1806,7 @@ void drm_connector_attach_dp_subconnector_property(struct drm_connector *connect
+>  
+>  int drm_mode_create_tv_margin_properties(struct drm_device *dev);
+>  int drm_mode_create_tv_properties(struct drm_device *dev,
+> +				  unsigned int supported_tv_norms,
+>  				  unsigned int num_modes,
+>  				  const char * const modes[]);
+>  void drm_connector_attach_tv_margin_properties(struct drm_connector *conn);
+> diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
+> index 6b5e01295348..d9e79def8b92 100644
+> --- a/include/drm/drm_mode_config.h
+> +++ b/include/drm/drm_mode_config.h
+> @@ -704,6 +704,12 @@ struct drm_mode_config {
+>  	 */
+>  	struct drm_property *dp_subconnector_property;
+>  
+> +	/**
+> +	 * @tv_norm_property: Optional TV property to select the TV
+> +	 * standard output on the connector.
+> +	 */
+> +	struct drm_property *tv_norm_property;
+> +
+>  	/**
+>  	 * @tv_subconnector_property: Optional TV property to differentiate
+>  	 * between different TV connector types.
+> 

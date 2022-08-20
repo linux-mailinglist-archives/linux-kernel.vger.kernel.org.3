@@ -2,56 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B6E59ACAB
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1617359ACB0
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344605AbiHTIjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 04:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48502 "EHLO
+        id S1344711AbiHTImo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 04:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiHTIjQ (ORCPT
+        with ESMTP id S1343849AbiHTImm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 04:39:16 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADE927B0F
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:39:14 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9849329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9849:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2A5E61EC0657;
-        Sat, 20 Aug 2022 10:39:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660984749;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=TD86MjNzNK/6ONxM4dB6JHGrVjxPZZILCR5gKUKE7pM=;
-        b=hNu7J36bytXQs7ZS+C9/PTH/fI17VsllEYVpvHmn0jY+W0vw3WHrqorUSwSzpVgrNEZmjx
-        HnnQQd9pd6cXXY8Ht3Tj6CyIzAlhwLVn2QKzlQuiessE2vm44iSBYLX7jrqcIsX99Sw9w1
-        oCSJHlY6kYq6vJM0Fn+l5DiIMy4PypA=
-Date:   Sat, 20 Aug 2022 10:39:03 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-Cc:     ssengar@microsoft.com, mikelley@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, peterz@infradead.org, tim.c.chen@linux.intel.com,
-        will@kernel.org, song.bao.hua@hisilicon.com,
-        suravee.suthikulpanit@amd.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/cacheinfo: Add a cpu_llc_shared_mask() UP variant
-Message-ID: <YwCdp+g5fsKpV7T6@zn.tnic>
-References: <1660148115-302-1-git-send-email-ssengar@linux.microsoft.com>
- <Yv1ELaWHbRfvdt/p@zn.tnic>
- <20220818045225.GA9054@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <Yv4pOz01nAkafiwd@zn.tnic>
- <20220818122925.GA8507@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <Yv/FXcOkB0BpUkVn@zn.tnic>
- <20220819174659.GA16818@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+        Sat, 20 Aug 2022 04:42:42 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DD68A6DB
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:42:41 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id g16so4771764qkl.11
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:42:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=R+0WNPBIl0HuqlojWfX7vpKljMWq3/iAmKYaFMjduJA=;
+        b=VgitokBh0UfodBVDwP5QzUgmzCc1285YPeTX48nhtaSQwXcQAElSCKFgAvO71CMP5k
+         NKKFWRsm/EoeuP3fMv/hD+wvaPLKq6Jdr3fhUdtx8tIfqk/n81mymcC4xhWVVououEJt
+         +9YC6Nvj1i5nmU0NmnXycBeh1Apz6pDorh8cCYMwRj8xq2l5CZp68X/yxTFKAAJhrlC4
+         Y6cEaGRBmRcdD5udJmvDJK0Vkoh4AHmxwK4OVzL4rbBgDLkNomppT5+bbxgIClatql3s
+         qYEP+dsxIwLty2/vjylzy1Ay8wQqEQL+l7BsSvYl5Ms70ep57z3cuGhFjeO0A+lCNHLI
+         kz+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=R+0WNPBIl0HuqlojWfX7vpKljMWq3/iAmKYaFMjduJA=;
+        b=YRU9SFXIQtgJb0NfL4hHazwfq5X0MKx6GyZOx1/UNekxbyZ2uLi87dFOm/1oKqcpKk
+         ntqZZtYrF469B3pWl9ss5/b3iLCdNYVK5u4PwoijX+fqxbFcrCEOJWrAtpWhOfqFrZ5F
+         Vn9gHX/gAtK7I8KvpeesZbe5T1L7GEP56zHwGnUgqAdkbSmBYytJdWD5iwnwf0GDfoaH
+         heRDisqL5JjQSdvCxmb6pPqLoKlFNmaAfG67UxXmJ+ktxqV7ju22HaTpf+7tHCzbSYB9
+         rSueqf/QpTLvlhNbiKFan8ZPR0A5xh+wxercEWY/jIoShyHvNLd/tuQigMTKnPsAJzJO
+         LRqg==
+X-Gm-Message-State: ACgBeo2/kw/Ii0V+VLe/uFgJPqh+dqUYcSZlQaDjhiXmPfy4/zQupmLj
+        AfBk2YD5xKZd3eGM/kX0oP4=
+X-Google-Smtp-Source: AA6agR46OmbecUXN3wq6g//sjNTs+4oHgLPlMjuuGjTeJa3MDc62NnU4atwOGOGsciQe9e1MjXhzrA==
+X-Received: by 2002:a05:620a:134f:b0:6bb:ffc4:d5b3 with SMTP id c15-20020a05620a134f00b006bbffc4d5b3mr66310qkl.327.1660984960728;
+        Sat, 20 Aug 2022 01:42:40 -0700 (PDT)
+Received: from sophie ([45.134.140.159])
+        by smtp.gmail.com with ESMTPSA id n1-20020ac86741000000b0031eebfcb369sm4410999qtp.97.2022.08.20.01.42.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Aug 2022 01:42:39 -0700 (PDT)
+Date:   Sat, 20 Aug 2022 01:40:26 -0700
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     "Huang, Shaoqin" <shaoqin.huang@intel.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH 8/8] memblock tests: add tests for memblock_trim_memory
+Message-ID: <20220820084026.GA13533@sophie>
+References: <cover.1660454730.git.remckee0@gmail.com>
+ <ebbd1fd2c2a3d223a744adf24b4293a559a7003a.1660454730.git.remckee0@gmail.com>
+ <9f6a0b68-6777-dd88-929c-2d4303b28984@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819174659.GA16818@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <9f6a0b68-6777-dd88-929c-2d4303b28984@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,87 +72,276 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 10:46:59AM -0700, Saurabh Singh Sengar wrote:
-> Yes, this patch fixes this segfault.
+On Tue, Aug 16, 2022 at 09:46:11AM +0800, Huang, Shaoqin wrote:
+> 
+> 
+> On 8/14/2022 1:54 PM, Rebecca Mckeever wrote:
+> > Add tests for memblock_trim_memory() for the following scenarios:
+> > - all regions aligned
+> > - one region unalign that is smaller than the alignment
+> > - one region unaligned at the base
+> > - one region unaligned at the end
+> > 
+> > Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+> > ---
+> >   tools/testing/memblock/tests/basic_api.c | 223 +++++++++++++++++++++++
+> >   1 file changed, 223 insertions(+)
+> > 
+> > diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
+> > index d7f008e7a12a..c8bb44f20846 100644
+> > --- a/tools/testing/memblock/tests/basic_api.c
+> > +++ b/tools/testing/memblock/tests/basic_api.c
+> > @@ -8,6 +8,7 @@
+> >   #define FUNC_RESERVE					"memblock_reserve"
+> >   #define FUNC_REMOVE					"memblock_remove"
+> >   #define FUNC_FREE					"memblock_free"
+> > +#define FUNC_TRIM					"memblock_trim_memory"
+> >   static int memblock_initialization_check(void)
+> >   {
+> > @@ -1723,6 +1724,227 @@ static int memblock_bottom_up_checks(void)
+> >   	return 0;
+> >   }
+> > +/*
+> > + * A test that tries to trim memory when both ends of the memory region are
+> > + * aligned. Expect that the memory will not be trimmed. Expect the counter to
+> > + * not be updated.
+> > + */
+> > +static int memblock_trim_memory_aligned_check(void)
+> > +{
+> > +	struct memblock_region *rgn;
+> > +	phys_addr_t alignment = SMP_CACHE_BYTES;
+> > +
+> > +	rgn = &memblock.memory.regions[0];
+> > +
+> > +	struct region r = {
+> > +		.base = alignment,
+> > +		.size = alignment * 4
+> > +	};
+> > +
+> > +	PREFIX_PUSH();
+> > +
+> > +	reset_memblock_regions();
+> > +	memblock_add(r.base, r.size);
+> > +	memblock_trim_memory(alignment);
+> > +
+> > +	ASSERT_EQ(rgn->base, r.base);
+> > +	ASSERT_EQ(rgn->size, r.size);
+> > +
+> > +	ASSERT_EQ(memblock.memory.cnt, 1);
+> > +
+> > +	test_pass_pop();
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +/*
+> > + * A test that tries to trim memory when there are two available regions, r1 and
+> > + * r2. Region r1 is aligned on both ends and region r2 is unaligned on one end
+> > + * and smaller than the alignment:
+> > + *
+> > + *                                     alignment
+> > + *                                     |--------|
+> > + * |        +-----------------+        +------+   |
+> > + * |        |        r1       |        |  r2  |   |
+> > + * +--------+-----------------+--------+------+---+
+> > + *          ^        ^        ^        ^      ^
+> > + *          |________|________|________|      |
+> > + *                            |               Unaligned address
+> > + *                Aligned addresses
+> > + *
+> > + * Expect that r1 will not be trimmed and r2 will be removed. Expect the
+> > + * counter to be updated.
+> > + */
+> > +static int memblock_trim_memory_too_small_check(void)
+> > +{
+> > +	struct memblock_region *rgn;
+> > +	phys_addr_t alignment = SMP_CACHE_BYTES;
+> > +
+> > +	rgn = &memblock.memory.regions[0];
+> > +
+> > +	struct region r1 = {
+> > +		.base = alignment,
+> > +		.size = alignment * 2
+> > +	};
+> > +	struct region r2 = {
+> > +		.base = alignment * 4,
+> > +		.size = alignment - SZ_2
+> > +	};
+> > +
+> > +	PREFIX_PUSH();
+> > +
+> > +	reset_memblock_regions();
+> > +	memblock_add(r1.base, r1.size);
+> > +	memblock_add(r2.base, r2.size);
+> > +	memblock_trim_memory(alignment);
+> > +
+> > +	ASSERT_EQ(rgn->base, r1.base);
+> > +	ASSERT_EQ(rgn->size, r1.size);
+> > +
+> > +	ASSERT_EQ(memblock.memory.cnt, 1);
+> > +
+> > +	test_pass_pop();
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +/*
+> > + * A test that tries to trim memory when there are two available regions, r1 and
+> > + * r2. Region r1 is aligned on both ends and region r2 is unaligned at the base
+> > + * and aligned at the end:
+> > + *
+> > + *                               Unaligned address
+> > + *                                       |
+> > + *                                       v
+> > + * |        +-----------------+          +---------------+   |
+> > + * |        |        r1       |          |      r2       |   |
+> > + * +--------+-----------------+----------+---------------+---+
+> > + *          ^        ^        ^        ^        ^        ^
+> > + *          |________|________|________|________|________|
+> > + *                            |
+> > + *                    Aligned addresses
+> > + *
+> > + * Expect that r1 will not be trimmed and r2 will be trimmed at the base.
+> > + * Expect the counter to not be updated.
+> > + */
+> > +static int memblock_trim_memory_unaligned_base_check(void)
+> > +{
+> > +	struct memblock_region *rgn1, *rgn2;
+> > +	phys_addr_t alignment = SMP_CACHE_BYTES;
+> > +	phys_addr_t offset = SZ_2;
+> > +	phys_addr_t r2_base, r2_size;
+> > +
+> > +	rgn1 = &memblock.memory.regions[0];
+> > +	rgn2 = &memblock.memory.regions[1];
+> > +
+> > +	struct region r1 = {
+> > +		.base = alignment,
+> > +		.size = alignment * 2
+> > +	};
+> > +	struct region r2 = {
+> > +		.base = alignment * 4 + offset,
+> > +		.size = alignment * 2 - offset
+> > +	};
+> > +
+> > +	PREFIX_PUSH();
+> > +
+> > +	r2_base = r2.base + (alignment - offset);
+> > +	r2_size = r2.size - (alignment - offset);
+> 
+> Also the variable name.
+> 
+> > +
+> > +	reset_memblock_regions();
+> > +	memblock_add(r1.base, r1.size);
+> > +	memblock_add(r2.base, r2.size);
+> > +	memblock_trim_memory(alignment);
+> > +
+> > +	ASSERT_EQ(rgn1->base, r1.base);
+> > +	ASSERT_EQ(rgn1->size, r1.size);
+> > +
+> > +	ASSERT_EQ(rgn2->base, r2_base);
+> > +	ASSERT_EQ(rgn2->size, r2_size);
+> > +
+> > +	ASSERT_EQ(memblock.memory.cnt, 2);
+> > +
+> > +	test_pass_pop();
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +/*
+> > + * A test that tries to trim memory when there are two available regions, r1 and
+> > + * r2. Region r1 is aligned on both ends and region r2 is aligned at the base
+> > + * and unaligned at the end:
+> > + *
+> > + *                                             Unaligned address
+> > + *                                                     |
+> > + *                                                     v
+> > + * |        +-----------------+        +---------------+   |
+> > + * |        |        r1       |        |      r2       |   |
+> > + * +--------+-----------------+--------+---------------+---+
+> > + *          ^        ^        ^        ^        ^        ^
+> > + *          |________|________|________|________|________|
+> > + *                            |
+> > + *                    Aligned addresses
+> > + *
+> > + * Expect that r1 will not be trimmed and r2 will be trimmed at the base.
+> 								^
+> 							at the end.
 
-Thx!
+I forgot to make this change in v2. I will include it in v3.
 
----
-From: Borislav Petkov <bp@suse.de>
+> > + * Expect the counter to not be updated.
+> > + */
+> > +static int memblock_trim_memory_unaligned_end_check(void)
+> > +{
+> > +	struct memblock_region *rgn1, *rgn2;
+> > +	phys_addr_t alignment = SMP_CACHE_BYTES;
+> > +	phys_addr_t offset = SZ_2;
+> > +	phys_addr_t r2_size;
+> > +
+> > +	rgn1 = &memblock.memory.regions[0];
+> > +	rgn2 = &memblock.memory.regions[1];
+> > +
+> > +	struct region r1 = {
+> > +		.base = alignment,
+> > +		.size = alignment * 2
+> > +	};
+> > +	struct region r2 = {
+> > +		.base = alignment * 4,
+> > +		.size = alignment * 2 - offset
+> > +	};
+> > +
+> > +	PREFIX_PUSH();
+> > +
+> > +	r2_size = r2.size - (alignment - offset);
+> > +
+> > +	reset_memblock_regions();
+> > +	memblock_add(r1.base, r1.size);
+> > +	memblock_add(r2.base, r2.size);
+> > +	memblock_trim_memory(alignment);
+> > +
+> > +	ASSERT_EQ(rgn1->base, r1.base);
+> > +	ASSERT_EQ(rgn1->size, r1.size);
+> > +
+> > +	ASSERT_EQ(rgn2->base, r2.base);
+> > +	ASSERT_EQ(rgn2->size, r2_size);
+> > +
+> > +	ASSERT_EQ(memblock.memory.cnt, 2);
+> > +
+> > +	test_pass_pop();
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int memblock_trim_memory_checks(void)
+> > +{
+> > +	prefix_reset();
+> > +	prefix_push(FUNC_TRIM);
+> > +	test_print("Running %s tests...\n", FUNC_TRIM);
+> > +
+> > +	memblock_trim_memory_aligned_check();
+> > +	memblock_trim_memory_too_small_check();
+> > +	memblock_trim_memory_unaligned_base_check();
+> > +	memblock_trim_memory_unaligned_end_check();
+> > +
+> > +	prefix_pop();
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >   int memblock_basic_checks(void)
+> >   {
+> >   	memblock_initialization_check();
+> > @@ -1731,6 +1953,7 @@ int memblock_basic_checks(void)
+> >   	memblock_remove_checks();
+> >   	memblock_free_checks();
+> >   	memblock_bottom_up_checks();
+> > +	memblock_trim_memory_checks();
+> >   	return 0;
+> >   }
+> 
+> Others looks good.
 
-On a CONFIG_SMP=n kernel, the LLC shared mask is 0, which prevents
-__cache_amd_cpumap_setup() from doing the L3 masks setup, and more
-specifically from setting up the shared_cpu_map and shared_cpu_list
-files in sysfs, leading to lscpu from util-linux getting confused and
-segfaulting.
-
-Add a cpu_llc_shared_mask() UP variant which returns a mask with a
-single bit set, i.e., for CPU0.
-
-Fixes: 2b83809a5e6d ("x86/cpu/amd: Derive L3 shared_cpu_map from cpu_llc_shared_mask")
-Reported-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/1660148115-302-1-git-send-email-ssengar@linux.microsoft.com
----
- arch/x86/include/asm/smp.h | 25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
-
-diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
-index 81a0211a372d..a73bced40e24 100644
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -21,16 +21,6 @@ DECLARE_PER_CPU_READ_MOSTLY(u16, cpu_llc_id);
- DECLARE_PER_CPU_READ_MOSTLY(u16, cpu_l2c_id);
- DECLARE_PER_CPU_READ_MOSTLY(int, cpu_number);
- 
--static inline struct cpumask *cpu_llc_shared_mask(int cpu)
--{
--	return per_cpu(cpu_llc_shared_map, cpu);
--}
--
--static inline struct cpumask *cpu_l2c_shared_mask(int cpu)
--{
--	return per_cpu(cpu_l2c_shared_map, cpu);
--}
--
- DECLARE_EARLY_PER_CPU_READ_MOSTLY(u16, x86_cpu_to_apicid);
- DECLARE_EARLY_PER_CPU_READ_MOSTLY(u32, x86_cpu_to_acpiid);
- DECLARE_EARLY_PER_CPU_READ_MOSTLY(u16, x86_bios_cpu_apicid);
-@@ -172,6 +162,16 @@ extern int safe_smp_processor_id(void);
- # define safe_smp_processor_id()	smp_processor_id()
- #endif
- 
-+static inline struct cpumask *cpu_llc_shared_mask(int cpu)
-+{
-+	return per_cpu(cpu_llc_shared_map, cpu);
-+}
-+
-+static inline struct cpumask *cpu_l2c_shared_mask(int cpu)
-+{
-+	return per_cpu(cpu_l2c_shared_map, cpu);
-+}
-+
- #else /* !CONFIG_SMP */
- #define wbinvd_on_cpu(cpu)     wbinvd()
- static inline int wbinvd_on_all_cpus(void)
-@@ -179,6 +179,11 @@ static inline int wbinvd_on_all_cpus(void)
- 	wbinvd();
- 	return 0;
- }
-+
-+static inline struct cpumask *cpu_llc_shared_mask(int cpu)
-+{
-+	return (struct cpumask *)cpumask_of(0);
-+}
- #endif /* CONFIG_SMP */
- 
- extern unsigned disabled_cpus;
--- 
-2.35.1
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Rebecca

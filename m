@@ -2,234 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DA959ADD0
+	by mail.lfdr.de (Postfix) with ESMTP id 4EAF859ADCF
 	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 14:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346126AbiHTMG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 08:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
+        id S1346168AbiHTMHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 08:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346075AbiHTMGY (ORCPT
+        with ESMTP id S1346075AbiHTMHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 08:06:24 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031439C8DB;
-        Sat, 20 Aug 2022 05:06:20 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id m6so7434762oib.4;
-        Sat, 20 Aug 2022 05:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc;
-        bh=mf+BGQNsYSJCzj9Yop/1xy8Ja+yt+HEFVNOqFU3s8gU=;
-        b=Fc4EDdryo+o0cR1BeQStJozKBQW0cXZFzwVuqhNlJYmPKLCZLgDisnyqEolLlHKNli
-         Fhv32Hu7yJ1dmgY1tQ/GdABO3amcpBJONu62Uloo6dE/viLLufmpp9/NMHIXMcUnAWHe
-         /K3Hz4BshhbgPj8zyQdbcMlTBDYtXRfjR4SHifJ4gLld83wGhbDjn+1P1E3/8m3i1Ou6
-         eYNPxkAYb30gK6REN/i2sK7MRDvNjAN6IcKWAN1ef6OkPH7kp0Ilpmq4J4AoJC2ZQ/q/
-         VJ/Kl0V3DSiAxkwpBzRFVwsnyS7ucXH9i2rNP2Bu+8zD7WQjH4e7GREVMTvYksGWN5+g
-         aBLg==
+        Sat, 20 Aug 2022 08:07:43 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5F89D8DC;
+        Sat, 20 Aug 2022 05:07:42 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id a15so4969230qko.4;
+        Sat, 20 Aug 2022 05:07:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=mf+BGQNsYSJCzj9Yop/1xy8Ja+yt+HEFVNOqFU3s8gU=;
-        b=y6361zinVfovZ7O5hQDMBDmypAs84sjrd88Zo9hLxdLC1xUrkV+04CTAbNCouJ80J2
-         tIPaXGWMx2c7iZugtIBo5Mh5gSaJ2SBh5KgzKoC4pKRuPBc/OcWv37SICyTXtAfwYt/2
-         /ZMOjdoeVPz5AyE18XiPi3sNsNaFyj2MDinJgGPJl+h8X7wSQEH6QxB6ZWINhUgkBzYq
-         IhV1l35OMou30Banm38tYxDRwDyM1uLrDri8cOS4zFrGG+aMh88/FJrZpxLA2U+OlAVV
-         y3caBoInvyneuV9z7Vb1Z0d0ZuZHSG5oEmir2QyuQXwPwXBwYRkjmM6T7YgHsaI5LWjC
-         Xptg==
-X-Gm-Message-State: ACgBeo0KNEqhbz32J+5/5dsxZ4sMO7phi3w70RfWcuqbFCgVuFkAZR8q
-        ujSjX3Ixyv9rdXozR4PwjnrjC3fXU6X/291ToqM=
-X-Google-Smtp-Source: AA6agR4ICOE2LfN4NlOKxCVBEOSWiAdjwW3NLUyzRQQVu8BSlwK3wMMkJ2R7r8I2EvUUPL0aCCbzwBn0W30Y3jQluK8=
-X-Received: by 2002:aca:aac2:0:b0:343:3435:a270 with SMTP id
- t185-20020acaaac2000000b003433435a270mr5314540oie.252.1660997179188; Sat, 20
- Aug 2022 05:06:19 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ZR3FjkuW5iiRmrC3UtyKJcWdpW3MmZDZj9swwhPKMYc=;
+        b=rp6S5kJjVnCfxZ5P9jvbRMsH3JlGSy9gU+JfOWDu3mLvKbRu73WMviujk4xjNfelX/
+         E1RFIToF1u2Mnnt/X1ryStwf1mWNwPOrc9NwnbGIFcFlKC5LcgmzcvEAUWXQvKu9DjrE
+         JglnmkFJJnsb/qJDuAGAeh+N7KgQqDyZbFLZrDz/DSULUzvhxVQSlkVhKJmjq1Ev9DGg
+         +INL6VhOB56O4YJFvWX5C91oSTscTesA/rdCZhtR/1DDpaNyj0IfollTvTBOmBxJCaPi
+         +Ke9mmIpI37jdb0rXW8dgcGukyNNJmofoGHqh+8XIWmmMo60jT3S5wv90C3dtx2PWpYS
+         I0Jg==
+X-Gm-Message-State: ACgBeo0P+Gra8mBAlOKGNtix+YblxEN/Yk/BlvZkvwuA/R2kkJqVm1a+
+        9ONo/pC1szYHJ5qtKnkts3GSEgF4+JYgmg==
+X-Google-Smtp-Source: AA6agR4McFE7kFk21ae3mwT40DfQrXDhm+/AmmQfbaS42RIIm7LZvKeH/9Qx/wLvvvCjGAq1McqgIQ==
+X-Received: by 2002:a05:620a:12bc:b0:6bb:2f73:beab with SMTP id x28-20020a05620a12bc00b006bb2f73beabmr7845941qki.546.1660997260997;
+        Sat, 20 Aug 2022 05:07:40 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id n18-20020a05620a295200b006b9593e2f68sm6496432qkp.4.2022.08.20.05.07.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 20 Aug 2022 05:07:40 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-3376851fe13so149793297b3.6;
+        Sat, 20 Aug 2022 05:07:39 -0700 (PDT)
+X-Received: by 2002:a81:f47:0:b0:31f:434b:5ee with SMTP id 68-20020a810f47000000b0031f434b05eemr12132492ywp.383.1660997259528;
+ Sat, 20 Aug 2022 05:07:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220513113930.10488-1-masahiroy@kernel.org> <20220513113930.10488-3-masahiroy@kernel.org>
- <38605f6a-a568-f884-f06f-ea4da5b214f0@csgroup.eu>
-In-Reply-To: <38605f6a-a568-f884-f06f-ea4da5b214f0@csgroup.eu>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 20 Aug 2022 14:05:43 +0200
-Message-ID: <CA+icZUU1R6vmmKussGBXGBzR8We2b5mAnfWT5BCcfvYY3vk+Zw@mail.gmail.com>
-Subject: Re: Build/boot problem with 7b4537199a4a (Re: [PATCH v6 02/10]
- kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS)
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220815151451.23293-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <e9b00bb5-bb78-091f-9c10-96c156690469@microchip.com> <CAMuHMdUGttswcSGeOdrJLeoZLmoeKhm7R82L-3wLJnagmZ4dBA@mail.gmail.com>
+ <47cec683-dc17-7aa2-3511-b0244020d571@microchip.com>
+In-Reply-To: <47cec683-dc17-7aa2-3511-b0244020d571@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sat, 20 Aug 2022 14:07:28 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUSud4-0ercQe3cyg1RXqg4DKTfgvPh5wc8ibca6dyDKQ@mail.gmail.com>
+Message-ID: <CAMuHMdUSud4-0ercQe3cyg1RXqg4DKTfgvPh5wc8ibca6dyDKQ@mail.gmail.com>
+Subject: Re: [PATCH v2 5/8] riscv: dts: renesas: Add initial devicetree for
+ Renesas RZ/Five SoC
+To:     Conor Dooley <Conor.Dooley@microchip.com>
+Cc:     "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Anup Patel <anup@brainfault.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar Lad <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 12:04 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
-> Hi,
->
-> Le 13/05/2022 =C3=A0 13:39, Masahiro Yamada a =C3=A9crit :
-> > include/{linux,asm-generic}/export.h defines a weak symbol, __crc_*
-> > as a placeholder.
-> >
-> > Genksyms writes the version CRCs into the linker script, which will be
-> > used for filling the __crc_* symbols. The linker script format depends
-> > on CONFIG_MODULE_REL_CRCS. If it is enabled, __crc_* holds the offset
-> > to the reference of CRC.
-> >
-> > It is time to get rid of this complexity.
-> >
-> > Now that modpost parses text files (.*.cmd) to collect all the CRCs,
-> > it can generate C code that will be linked to the vmlinux or modules.
-> >
-> > Generate a new C file, .vmlinux.export.c, which contains the CRCs of
-> > symbols exported by vmlinux. It is compiled and linked to vmlinux in
-> > scripts/link-vmlinux.sh.
-> >
-> > Put the CRCs of symbols exported by modules into the existing *.mod.c
-> > files. No additional build step is needed for modules. As before,
-> > *.mod.c are compiled and linked to *.ko in scripts/Makefile.modfinal.
-> >
-> > No linker magic is used here. The new C implementation works in the
-> > same way, whether CONFIG_RELOCATABLE is enabled or not.
-> > CONFIG_MODULE_REL_CRCS is no longer needed.
-> >
-> > Previously, Kbuild invoked additional $(LD) to update the CRCs in
-> > objects, but this step is unneeded too.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > Tested-by: Nathan Chancellor <nathan@kernel.org>
-> > Tested-by: Nicolas Schier <nicolas@fjasle.eu>
-> > Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
->
-> Problem with v6.0-rc1
-> Problem with v5.19
-> No problem with v5.18
->
-> Bisected to 7b4537199a4a ("kbuild: link symbol CRCs at final link,
-> removing CONFIG_MODULE_REL_CRCS")
->
+Hi Conor,
 
-What you are looking for is...
+On Sat, Aug 20, 2022 at 10:49 AM <Conor.Dooley@microchip.com> wrote:
+> On 20/08/2022 09:45, Geert Uytterhoeven wrote:
+> > On Fri, Aug 19, 2022 at 8:40 PM <Conor.Dooley@microchip.com> wrote:
+> >> On 15/08/2022 16:14, Lad Prabhakar wrote:
+> >>> Add initial device tree for Renesas RZ/Five RISC-V CPU Core (AX45MP
+> >>> Single).
+> >>>
+> >>> Below is the list of IP blocks added in the initial SoC DTSI which can be
+> >>> used to boot via initramfs on RZ/Five SMARC EVK:
+> >>> - AX45MP CPU
+> >>> - CPG
+> >>> - PINCTRL
+> >>> - PLIC
+> >>> - SCIF0
+> >>> - SYSC
+> >>>
+> >>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-commit 7d13fd96df875a9d786ee6dcc8fec460d35d4b12
-("modpost: fix module versioning when a symbol lacks valid CRC")
+> >> That aside, by convention so far we have put things like extals or
+> >> reference clocks below the /cpus node. Could you do the same here too
+> >> please?
+> >
+> > Really? We've been putting them at the root node for a long time,
+> > since the separate "clocks" grouping subnode was deprecated.
+> > The extal-clk is not even part of the SoC, so it should definitely
+> > not be under the /cpus node.
+>
+> Under may have been a confusing choice of words, I meant "physically"
+> under it in the file. Maybe after would have been a better choice of
+> words? I wasn't suggesting you put it inside the CPUs node.
+> Does that make more sense?
 
-It's pending in kbuild.git#fixes.
+Oh right, you mean the order of the nodes. Yes, "extal-clk" should
+be after "cpus", following alphabetical sort order, as the nodes have no
+unit addresses.
 
--Sedat-
+Sorry for missing that in my review.  I also misread "below"
+(in Dutch there is only a single word for "below" and "under" ;-)
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.=
-git/commit/?h=3Dfixes&id=3D7d13fd96df875a9d786ee6dcc8fec460d35d4b12
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.=
-git/log/?h=3Dfixes
+Gr{oetje,eeting}s,
 
-> The above patch leads to the following problem building
-> mpc85xx_defconfig + CONFIG_RELOCATABLE
->
->    LD      vmlinux
->    SYSMAP  System.map
->    SORTTAB vmlinux
->    CHKREL  vmlinux
-> WARNING: 451 bad relocations
-> c0b0f26d R_PPC_UADDR32     .head.text-0x3ff9f2bc
-> c0b0f271 R_PPC_UADDR32     .head.text-0x3ffac300
-> c0b0f275 R_PPC_UADDR32     .head.text-0x3ffb0bdc
-> c0b0f279 R_PPC_UADDR32     .head.text-0x3fe1e080
-> c0b0f27d R_PPC_UADDR32     .head.text-0x3fe1df4c
-> c0b0f281 R_PPC_UADDR32     .head.text-0x3fe21514
-> c0b0f285 R_PPC_UADDR32     .head.text-0x3fe211c0
-> c0b0f289 R_PPC_UADDR32     .head.text-0x3ffabda0
-> c0b0f28d R_PPC_UADDR32     .head.text-0x3fe21258
-> c0b0f291 R_PPC_UADDR32     .head.text-0x3fe074d0
-> c0b0f295 R_PPC_UADDR32     .head.text-0x3fe07ad4
-> c0b0f299 R_PPC_UADDR32     .head.text-0x3fe13470
-> c0b0f29d R_PPC_UADDR32     .head.text-0x3fe22700
-> c0b0f2a1 R_PPC_UADDR32     .head.text-0x3ff4b8e0
-> c0b0f2a5 R_PPC_UADDR32     .head.text-0x3fe08320
-> c0b0f2a9 R_PPC_UADDR32     .head.text-0x3fe220dc
-> c0b0f2ad R_PPC_UADDR32     .head.text-0x3fe21da0
-> c0b0f2b1 R_PPC_UADDR32     .head.text-0x3ff89dc0
-> c0b0f2b5 R_PPC_UADDR32     .head.text-0x3fe16524
-> c0b0f2b9 R_PPC_UADDR32     .head.text-0x3fe1ef74
-> c0b0f2bd R_PPC_UADDR32     .head.text-0x3ff98b84
-> c0b0f2c1 R_PPC_UADDR32     .head.text-0x3fdef9a0
-> c0b0f2c5 R_PPC_UADDR32     .head.text-0x3fdf21ac
-> c0b0f2c9 R_PPC_UADDR32     .head.text-0x3ff993c4
-> ...
-> c0b0f969 R_PPC_UADDR32     .head.text-0x3ff89dc0
-> c0b0f96d R_PPC_UADDR32     .head.text-0x3fe9ad40
-> c0b0f971 R_PPC_UADDR32     .head.text-0x3ff2eb00
-> c0b0f975 R_PPC_UADDR32     .head.text-0x3ff89dc0
->
-> And boot fails:
->
-> Run /init as init process
-> kernel tried to execute user page (0) - exploit attempt? (uid: 0)
-> BUG: Unable to handle kernel instruction fetch (NULL pointer?)
-> Faulting instruction address: 0x00000000
-> Oops: Kernel access of bad area, sig: 11 [#1]
-> BE PAGE_SIZE=3D4K MPC8544 DS
-> Modules linked in:
-> CPU: 0 PID: 1 Comm: init Not tainted 5.18.0-rc1-00054-g7b4537199a4a #1523
-> NIP:  00000000 LR: c00150e4 CTR: 00000000
-> REGS: c3091e10 TRAP: 0400   Not tainted  (5.18.0-rc1-00054-g7b4537199a4a)
-> MSR:  00009000 <EE,ME>  CR: 88000422  XER: 20000000
->
-> GPR00: 00004000 c3091f00 c30c8000 00000000 00000013 b7bb9f4c b7bd8f60
-> bfee6650
-> GPR08: 00000054 00000000 c0b0f26d 00000000 c13b0000 00000000 bfee6668
-> 00000000
-> GPR16: 84e08000 00000000 08000000 00000064 00000000 00102000 00000001
-> 00000001
-> GPR24: 00000001 00000001 b7b9c7d0 10000034 00000009 b7bd8f38 b7bd9854
-> b7bd8688
-> NIP [00000000] 0x0
-> LR [c00150e4] ret_from_syscall+0x0/0x28
-> Call Trace:
-> [c3091f00] [c0000af0] InstructionStorage+0x150/0x160 (unreliable)
-> --- interrupt: c00 at 0xb7bb28e8
-> NIP:  b7bb28e8 LR: b7bb1384 CTR: b7bb1218
-> REGS: c3091f10 TRAP: 0c00   Not tainted  (5.18.0-rc1-00054-g7b4537199a4a)
-> MSR:  0002d000 <CE,EE,PR,ME>  CR: 28000422  XER: 20000000
->
-> GPR00: 0000002d bfee61f0 00000000 00000000 00000013 b7bb9f4c b7bd8f60
-> bfee6650
-> GPR08: 00000054 00000020 bfee6648 00000000 00000001 00000000 bfee6668
-> 00000000
-> GPR16: 84e08000 00000000 08000000 00000064 00000000 00102000 00000001
-> 00000001
-> GPR24: 00000001 00000001 b7b9c7d0 10000034 00000009 b7bd8f38 b7bd9854
-> b7bd8688
-> NIP [b7bb28e8] 0xb7bb28e8
-> LR [b7bb1384] 0xb7bb1384
-> --- interrupt: c00
-> Instruction dump:
-> XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
-> XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
-> ---[ end trace 0000000000000000 ]---
->
-> Kernel panic - not syncing: Attempted to kill init! exitcode=3D0x0000000b
->
->
->
-> Christophe
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

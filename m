@@ -2,267 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FEE59ABF2
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 09:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33B959ABE6
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 09:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343513AbiHTHN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 03:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
+        id S1343743AbiHTHGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 03:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243618AbiHTHNy (ORCPT
+        with ESMTP id S245060AbiHTHGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 03:13:54 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D2D3DF30;
-        Sat, 20 Aug 2022 00:13:52 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27K73qqC005180;
-        Sat, 20 Aug 2022 07:13:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2022-7-12; bh=dWGrWl+UMhlJQeLNhVrfQNRrr4ww1miYbYawyZs4VUM=;
- b=u1ve8juOr6vqm4Lj2Mp4xn6tvYqoHSg2svQrEWZgyOeO55ROnrupKhlByR0SqBxlvqw7
- Ii43OYg0JAf4/B0p5BeEfqAMVlfZwUmugoyNJl/9Ren7TXKRput4dBBzN2G1Eu1u0+/K
- DqOYAUwvNb9KdCOIcUjJkqqE9YCu/PVm5hezan/b7pdzNRPpykLXcOLJtFNaFUflwjiF
- 2xggAUACXhgFGUwWspjs576xca0774E/fV0RplRqJ2SPQbK4xEWDE+aAV0uB2ussXdod
- 9VbjEV7ytYzQDehlf+SciOH054f4e29sERWKxH0KupfSGSXmxjUNxSr9SS4kkC6E05/2 qg== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j2tvx0085-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 20 Aug 2022 07:13:18 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27K1WpGK035366;
-        Sat, 20 Aug 2022 07:03:52 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3j2p203r96-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 20 Aug 2022 07:03:52 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27K73pYX023337;
-        Sat, 20 Aug 2022 07:03:51 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3j2p203r8u-1;
-        Sat, 20 Aug 2022 07:03:51 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-To:     syzkaller@googlegroups.com
-Cc:     harshit.m.mogalapalli@oracle.com, george.kennedy@oracle.com,
-        vegard.nossum@oracle.com, john.p.donnelly@oracle.com,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] netfilter: ebtables: fix a NULL pointer dereference in ebt_do_table()
-Date:   Sat, 20 Aug 2022 00:03:29 -0700
-Message-Id: <20220820070331.48817-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
+        Sat, 20 Aug 2022 03:06:01 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4097160693
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 00:05:58 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2760933EB0;
+        Sat, 20 Aug 2022 07:05:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1660979157; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1Shuba+n8aZxAdB/0puji/cpb/oX7r6dCrmKxWZwCyU=;
+        b=1VfWs0Qz0SNdfcJnUWlt9WTyfrKuUrtN/GDjJFWNtzbZ9sqDAXFIhAQb7bXOxx+KiyCHZQ
+        5wtIJncgmpvPpuvHK7Y9ROfo/UKPx6MWH36bhR4VJo7hJLmtD7yKdtHVnBZrY2a9tT424A
+        ZXgFW/UlXN+j386AV1izgmJUysm12Gc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1660979157;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1Shuba+n8aZxAdB/0puji/cpb/oX7r6dCrmKxWZwCyU=;
+        b=fh9j0n2VESu8VBFEKDOI4RGL4gFHVBGMCWlAf974F+l6S2X3fbQiDYMKjhFNjz2/tYniMd
+        tJg0NM/EBga0pHDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EABD913440;
+        Sat, 20 Aug 2022 07:05:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3qPGN9SHAGMDDwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sat, 20 Aug 2022 07:05:56 +0000
+Date:   Sat, 20 Aug 2022 09:05:56 +0200
+Message-ID: <87h727mm23.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     abhishek.shah@columbia.edu
+Cc:     alsa-devel@alsa-project.org, perex@perex.cz, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, Gabriel Ryan <gabe@cs.columbia.edu>
+Subject: Re: data-race in snd_seq_client_use_ptr / snd_seq_client_use_ptr
+In-Reply-To: <CAEHB24_ay6YzARpA1zgCsE7=H9CSJJzux618E=Ka4h0YdKn=qA@mail.gmail.com>
+References: <CAEHB24_ay6YzARpA1zgCsE7=H9CSJJzux618E=Ka4h0YdKn=qA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-20_04,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- spamscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208200027
-X-Proofpoint-GUID: H3nWHTMoMdOJVycV1j3LQSwuoVb8gUJO
-X-Proofpoint-ORIG-GUID: H3nWHTMoMdOJVycV1j3LQSwuoVb8gUJO
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ebt_do_table() function dereferencing 'private->hook_entry[hook]'
-can lead to NULL pointer dereference. So add a check to prevent that.
+On Fri, 19 Aug 2022 19:00:00 +0200,
+Abhishek Shah wrote:
+> 
+> 
+> Hi all,
+> 
+> We found a data race involving the card_requested[card] variable here, which
+> can cause snd_request_card to be called multiple times. We are not sure if
+> this has security implications however, but we would still like to report it.
+> Please let us know what you think. 
 
-Kernel panic:
+It's harmless.  The result would be another call of request_module(),
+which might be just redundant but it doesn't influence on the behavior
+or the safety.
 
-[  119.229105][   T31] general protection fault, probably for
-non-canonical address 0xdffffc0000000005: 0000 [#1] PREEMPT SMP KASAN
-[  119.230280][   T31] KASAN: null-ptr-deref in range
-[0x0000000000000028-0x000000000000002f]
-[  119.231043][   T31] CPU: 3 PID: 31 Comm: kworker/3:0 Not tainted
-6.0.0-rc1 #1
-[  119.231652][   T31] Hardware name: QEMU Standard PC (i440FX + PIIX,
-1996), BIOS 1.11.0-2.el7 04/01/2014
-[  119.232440][   T31] Workqueue: mld mld_ifc_work
-[  119.232846][   T31] RIP: 0010:ebt_do_table+0x1dc/0x1ce0
-[  119.233291][   T31] Code: 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 5c 16
-00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 6c df 08 48 8d 7d 2c 48 89 fa
-48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2
-0f 85 88
-[  119.234920][   T31] RSP: 0018:ffffc90000347178 EFLAGS: 00010217
-[  119.235425][   T31] RAX: dffffc0000000000 RBX: 0000000000000003 RCX:
-ffffffff8158677b
-[  119.236097][   T31] RDX: 0000000000000005 RSI: ffffffff889a7b80 RDI:
-000000000000002c
-[  119.236764][   T31] RBP: 0000000000000000 R08: 0000000000000001 R09:
-ffff888101a78443
-[  119.237425][   T31] R10: ffffed102034f088 R11: 000200100040dd86 R12:
-ffffc90001111018
-[  119.238100][   T31] R13: ffffc90001103080 R14: ffffc90001111000 R15:
-ffffc90001103000
-[  119.238769][   T31] FS:  0000000000000000(0000)
-GS:ffff88811a380000(0000) knlGS:0000000000000000
-[  119.239592][   T31] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  119.240221][   T31] CR2: 00007f6a9adda000 CR3: 0000000100be3000 CR4:
-00000000000006e0
-[  119.240970][   T31] Call Trace:
-[  119.241253][   T31]  <TASK>
-[  119.241495][   T31]  ? ip6_output+0x1f4/0x6e0
-[  119.241877][   T31]  ? NF_HOOK.constprop.0+0xe6/0x5f0
-[  119.242309][   T31]  ? mld_ifc_work+0x564/0xaa0
-[  119.242708][   T31]  ? kthread+0x297/0x340
-[  119.243060][   T31]  ? ret_from_fork+0x22/0x30
-[  119.243454][   T31]  ? br_multicast_count+0xbf/0x8d0
-[  119.243896][   T31]  ? rcu_read_lock_sched_held+0xd/0xa0
-[  119.244356][   T31]  ? compat_copy_ebt_replace_from_user+0x380/0x380
-[  119.244907][   T31]  ? compat_copy_ebt_replace_from_user+0x380/0x380
-[  119.245454][   T31]  nf_hook_slow+0xb1/0x170
-[  119.245835][   T31]  __br_forward+0x289/0x730
-[  119.246219][   T31]  ? br_forward_finish+0x320/0x320
-[  119.246656][   T31]  ? br_dev_queue_push_xmit+0x650/0x650
-[  119.247118][   T31]  ? memcpy+0x39/0x60
-[  119.247444][   T31]  ? __skb_clone+0x56c/0x750
-[  119.247845][   T31]  maybe_deliver+0x24b/0x380
-[  119.248234][   T31]  br_flood+0xc6/0x390
-[  119.248577][   T31]  br_dev_xmit+0xa2e/0x12c0
-[  119.248975][   T31]  ? rcu_read_lock_sched_held+0xd/0xa0
-[  119.249498][   T31]  ? br_netpoll_setup+0x170/0x170
-[  119.249987][   T31]  ? fib_rules_lookup+0x2eb/0x9d0
-[  119.250462][   T31]  ? lock_repin_lock+0x30/0x420
-[  119.250922][   T31]  ? rcu_read_lock_sched_held+0xd/0xa0
-[  119.251376][   T31]  ? lock_acquire+0x510/0x630
-[  119.251773][   T31]  ? netif_inherit_tso_max+0x1e0/0x1e0
-[  119.252228][   T31]  dev_hard_start_xmit+0x151/0x660
-[  119.252663][   T31]  __dev_queue_xmit+0x240e/0x3200
-[  119.253080][   T31]  ? ip6mr_rtm_dumproute+0x530/0x530
-[  119.253522][   T31]  ? netdev_core_pick_tx+0x2a0/0x2a0
-[  119.253968][   T31]  ? unwind_next_frame+0x3de/0x1c90
-[  119.254403][   T31]  ? rcu_read_lock_sched_held+0xd/0xa0
-[  119.254872][   T31]  ? lock_acquire+0x510/0x630
-[  119.255266][   T31]  ? rcu_read_lock_sched_held+0xd/0xa0
-[  119.255724][   T31]  ? lock_release+0x5a2/0x840
-[  119.256119][   T31]  ? mroute6_is_socket+0x14d/0x220
-[  119.256549][   T31]  ? rcu_read_lock_sched_held+0xd/0xa0
-[  119.257064][   T31]  ? lock_acquire+0x510/0x630
-[  119.257507][   T31]  ? rcu_read_lock_sched_held+0xd/0xa0
-[  119.258016][   T31]  ? lock_release+0x5a2/0x840
-[  119.258410][   T31]  ? lock_release+0x840/0x840
-[  119.258812][   T31]  ? ip6_finish_output+0x779/0x1190
-[  119.259304][   T31]  ? lock_downgrade+0x7b0/0x7b0
-[  119.259778][   T31]  ? rcu_read_lock_bh_held+0xd/0x90
-[  119.260275][   T31]  ? ___neigh_lookup_noref.constprop.0+0x266/0x6d0
-[  119.260896][   T31]  ? ip6_finish_output2+0x861/0x1690
-[  119.261343][   T31]  ip6_finish_output2+0x861/0x1690
-[  119.261776][   T31]  ? lock_release+0x5a2/0x840
-[  119.262176][   T31]  ? __kasan_kmalloc+0x7f/0xa0
-[  119.262574][   T31]  ? ip6_mtu+0x139/0x320
-[  119.262942][   T31]  ? ip6_frag_next+0xcc0/0xcc0
-[  119.263341][   T31]  ? rcu_read_lock_sched_held+0xd/0xa0
-[  119.263816][   T31]  ? nf_ct_netns_get+0xe0/0xe0
-[  119.264214][   T31]  ? rcu_read_lock_sched_held+0xd/0xa0
-[  119.264679][   T31]  ? lock_release+0x5a2/0x840
-[  119.265066][   T31]  ? nf_conntrack_in.cold+0x9b/0xe2
-[  119.265504][   T31]  ? ip6_output+0x4c9/0x6e0
-[  119.265891][   T31]  ip6_finish_output+0x779/0x1190
-[  119.266315][   T31]  ? nf_hook_slow+0xb1/0x170
-[  119.266711][   T31]  ip6_output+0x1f4/0x6e0
-[  119.267069][   T31]  ? rcu_read_lock_sched_held+0xd/0xa0
-[  119.267520][   T31]  ? ip6_finish_output+0x1190/0x1190
-[  119.267969][   T31]  ? NF_HOOK.constprop.0+0x1b3/0x5f0
-[  119.268415][   T31]  ? lock_pin_lock+0x184/0x380
-[  119.268817][   T31]  ? ip6_fragment+0x2910/0x2910
-[  119.269269][   T31]  ? nf_ct_netns_do_get+0x6c0/0x6c0
-[  119.269773][   T31]  ? nf_hook_slow+0xb1/0x170
-[  119.270211][   T31]  NF_HOOK.constprop.0+0xe6/0x5f0
-[  119.270697][   T31]  ? igmp6_mcf_seq_next+0x460/0x460
-[  119.271159][   T31]  ? igmp6_mcf_seq_stop+0x130/0x130
-[  119.271600][   T31]  ? icmp6_dst_alloc+0x3dc/0x610
-[  119.272030][   T31]  mld_sendpack+0x619/0xb50
-[  119.272413][   T31]  ? NF_HOOK.constprop.0+0x5f0/0x5f0
-[  119.272867][   T31]  ? lock_release+0x840/0x840
-[  119.273254][   T31]  mld_ifc_work+0x564/0xaa0
-[  119.273642][   T31]  ? pwq_activate_inactive_work+0xb2/0x190
-[  119.274126][   T31]  process_one_work+0x875/0x1440
-[  119.274543][   T31]  ? lock_release+0x840/0x840
-[  119.274936][   T31]  ? pwq_dec_nr_in_flight+0x230/0x230
-[  119.275381][   T31]  ? rwlock_bug.part.0+0x90/0x90
-[  119.275801][   T31]  worker_thread+0x598/0xec0
-[  119.276187][   T31]  ? process_one_work+0x1440/0x1440
-[  119.276613][   T31]  kthread+0x297/0x340
-[  119.276958][   T31]  ? kthread_complete_and_exit+0x20/0x20
-[  119.277422][   T31]  ret_from_fork+0x22/0x30
-[  119.277796][   T31]  </TASK>
-[  119.278048][   T31] Modules linked in:
-[  119.278377][   T31] Dumping ftrace buffer:
-[  119.278733][   T31]    (ftrace buffer empty)
-[  119.279151][   T31] ---[ end trace 0000000000000000 ]---
-[  119.279679][   T31] RIP: 0010:ebt_do_table+0x1dc/0x1ce0
-[  119.280187][   T31] Code: 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 5c 16
-00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 6c df 08 48 8d 7d 2c 48 89 fa
-48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2
-0f 85 88
-[  119.282006][   T31] RSP: 0018:ffffc90000347178 EFLAGS: 00010217
-[  119.282569][   T31] RAX: dffffc0000000000 RBX: 0000000000000003 RCX:
-ffffffff8158677b
-[  119.283308][   T31] RDX: 0000000000000005 RSI: ffffffff889a7b80 RDI:
-000000000000002c
-[  119.284056][   T31] RBP: 0000000000000000 R08: 0000000000000001 R09:
-ffff888101a78443
-[  119.284811][   T31] R10: ffffed102034f088 R11: 000200100040dd86 R12:
-ffffc90001111018
-[  119.285549][   T31] R13: ffffc90001103080 R14: ffffc90001111000 R15:
-ffffc90001103000
-[  119.286284][   T31] FS:  0000000000000000(0000)
-GS:ffff88811a380000(0000) knlGS:0000000000000000
-[  119.287119][   T31] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  119.287741][   T31] CR2: 00007f6a9adda000 CR3: 0000000100be3000 CR4:
-00000000000006e0
-[  119.288489][   T31] Kernel panic - not syncing: Fatal exception in
-interrupt
-[  119.298556][   T31] Dumping ftrace buffer:
-[  119.298974][   T31]    (ftrace buffer empty)
-[  119.299399][   T31] Kernel Offset: disabled
-[  119.299823][   T31] Rebooting in 86400 seconds..
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
-Testing is only done with reproducer.
+thanks,
 
- net/bridge/netfilter/ebtables.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Takashi
 
-diff --git a/net/bridge/netfilter/ebtables.c b/net/bridge/netfilter/ebtables.c
-index f2dbefb61ce8..d19d439a66c5 100644
---- a/net/bridge/netfilter/ebtables.c
-+++ b/net/bridge/netfilter/ebtables.c
-@@ -217,6 +217,11 @@ unsigned int ebt_do_table(void *priv, struct sk_buff *skb,
- 	else
- 		cs = NULL;
- 	chaininfo = private->hook_entry[hook];
-+	if (!chaininfo) {
-+		read_unlock_bh(&table->lock);
-+		return NF_DROP;
-+	}
-+
- 	nentries = private->hook_entry[hook]->nentries;
- 	point = (struct ebt_entry *)(private->hook_entry[hook]->data);
- 	counter_base = cb_base + private->hook_entry[hook]->counter_offset;
--- 
-2.31.1
-
+> 
+> Thanks!
+> 
+> ----------Report-----------
+> write to 0xffffffff88382191 of 1 bytes by task 6541 on cpu 0:
+>  snd_seq_client_use_ptr+0x254/0x610 sound/core/seq/seq_clientmgr.c:146
+>  snd_seq_info_clients_read+0xd8/0x480 sound/core/seq/seq_clientmgr.c:2475
+>  snd_info_seq_show+0x81/0xa0 sound/core/info.c:361
+>  seq_read_iter+0x2d2/0x8e0 fs/seq_file.c:230
+>  seq_read+0x1c9/0x210 fs/seq_file.c:162
+>  pde_read fs/proc/inode.c:311 [inline]
+>  proc_reg_read+0x123/0x1b0 fs/proc/inode.c:323
+>  vfs_read+0x1b5/0x6e0 fs/read_write.c:480
+>  ksys_read+0xde/0x190 fs/read_write.c:620
+>  __do_sys_read fs/read_write.c:630 [inline]
+>  __se_sys_read fs/read_write.c:628 [inline]
+>  __x64_sys_read+0x43/0x50 fs/read_write.c:628
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3d/0x90 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> read to 0xffffffff88382191 of 1 bytes by task 6542 on cpu 1:
+>  snd_seq_client_use_ptr+0x189/0x610 sound/core/seq/seq_clientmgr.c:145
+>  snd_seq_info_clients_read+0xd8/0x480 sound/core/seq/seq_clientmgr.c:2475
+>  snd_info_seq_show+0x81/0xa0 sound/core/info.c:361
+>  seq_read_iter+0x2d2/0x8e0 fs/seq_file.c:230
+>  seq_read+0x1c9/0x210 fs/seq_file.c:162
+>  pde_read fs/proc/inode.c:311 [inline]
+>  proc_reg_read+0x123/0x1b0 fs/proc/inode.c:323
+>  vfs_read+0x1b5/0x6e0 fs/read_write.c:480
+>  ksys_read+0xde/0x190 fs/read_write.c:620
+>  __do_sys_read fs/read_write.c:630 [inline]
+>  __se_sys_read fs/read_write.c:628 [inline]
+>  __x64_sys_read+0x43/0x50 fs/read_write.c:628
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3d/0x90 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> Reported by Kernel Concurrency Sanitizer on:
+> CPU: 1 PID: 6542 Comm: syz-executor2-n Not tainted 5.18.0-rc5+ #107
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/
+> 2014
+> 
+> Reproducing Inputs
+> 
+> Input CPU 0:
+> r0 = openat$procfs(0xffffffffffffff9c, &(0x7f00000004c0)='/proc/asound/seq/
+> clients\x00', 0x0, 0x0)
+> read$ptp(r0, &(0x7f0000001280)=""/4096, 0x1000)
+> 
+> Input CPU 1:
+> r0 = openat$procfs(0xffffff9c, &(0x7f0000000000)='/proc/asound/seq/clients\
+> x00', 0x0, 0x0)
+> syz_fuse_handle_req(r0, &(0x7f0000000040)=
+> "b49dac4d60a4ef29274ad6ec771da74d4c8c0fd83d0aeb9dfe8d26d06f9ce49c698d1b2dbca3915be594ab841c00c1928a4c4363e8b5d17b93829abe5cc366527d477458cd9ea1659ccb0c07b05158926dc748aefe7fbac30da85ef1aff793e0b99ff36257ec864a364666b2151e04e8d9a709e4c300368d5ba364e588c6f32a1829b7dab3a920b39918005984975164f1dedcfd04503f3659ab13386ab13bb7f2f160848a41792cb49eb2ffeca5915ee146e2c348b8fd37ff56d515b39d85fbb034b8e5e08c96b6579a19efe90844e30a790ec223767b8f5a409433b87dec579dc420a62ab203228136577a9945a59afda7efbe7dde89be13a4fdf54ead3624b1a5c70efe99d2e36cb5c1001427e116128ce2601e552e2f50642e1dba23f9526788a382acb79f92fd733f10bdcf9a4035122730498ca3481a4d2e7ae2c6bddd8cb1f8899f0f5d36975b1f1aa989a182029e3225d98a503e97073a728978795a6f27457df5fe5d19182d314ba3b15ad8a430e808bcda1bccfc1e6ea459aab7c062fb5d92b54098e73706e4d2b90b3985ce35736e715b04b7e590fa7349b639069928f5153a8d31e443a21546029d24943a69e44f65a4e253b538b8803366e45cdffa3c45c4c012981eb018dc04af8c082acaa2eff05cb91025d6424a2d9600ac2539deef60540c030f90c8adc939d3b6830
+ 3babc5da851c88b15e238eb0515c1210398235eb76dba454f4e1f460d3cd13d85cc5a531968955064dae07b2c63d17d343fb80494fcce2f84775be037fd6d0e05834da6408fce3dc3c8d45bf33f500d83c4f5ce015544464daa6b4965987a6454eb6e29bf33d654ab0c6682cbbb5520afeb93c9c9b377886ef4b18f31c6c6e67fff8388e19c5ba73efda0e7874dc365c05da5ac4d360161a8a28aa41a3d410da55e464886bc2c69d2c441961f5eb7cd428e410d12c0a083f197abc4a249a7cee1d6f495f4513f8ca194c43e967ddd342ecb3c3cecef199a1beace9e374ebe04e9dfff46fa4d6e3b8296a1a3f8daa431e1a45598100f53292630c7e27efbf18a0236e33fa08b66af22c8325e04f1c6a7e48844fdd6d506663d15cfdd7c63f60803c6e0db5cef6d111a6401bccc09ec05f56bace7eacfbf2f6954c4e9c00f6e4b8cf6622f7f23570fc4b730d8cd8f9b322eabadffa9631105943e621a018d3cf7fc4242d457c068e94342f819808a491f2c62ea07fba2a08b15ab208d64e1cde2020f0ae9f8f903dcb78bafd589832e4e8a02ac3a27749acee64fba7081c782d68df0a7314f95514e9022845062f8caf3052ffe55a5bc538789ec6eca37a26055ff6768cb5d5158a8be6321233efdb9ce135fccf3f20e696dbeec3776986e210d1c36881657b9eb3708c0437955f8b1ba617b94
+ 40dee185741f554facdc7da8daa55015b19dc8f5e32499797e1b85941a801771717184ce09c569cacf82992b2f8c33ede8e02a8a3e1fbd4835c2d943f144498aa1edf50d1d2af669b148d433b7a7e55b08a0fbf49572b4815ae96d35a8297b57b73c8333e7d7718169ac83129eecea08565172ee26e8cc29682fc2af3f8f1fa1fa411205b8376389065551c7cfeb87b6036f91f20566f6274df1365f0122bb139ee6c6298854126ce7d2f69233d1d7a8edcaf6b15d97baaaaeafd1d4069b83bea98694dc9ef8fb6beae9dc5d1ede7458bd897b11fe93ef6f39858dc210419331327fd5dac69c6ff352ea04e439ce97e7ae904db5a86a5ed4bec35cd4e16bc1e3d54c591a93da93645eb697065719a7c41bfc0a4b573961eb6f0a944aea68e65e28713d4ce77bcf5e1cc8c25375f075ac66c2b1116f9d89a7614c60cd5afbc86fdad7fac5a629ed5b808480dd2cd0448f85ef5c308fb4cb9a618bed06155cfd7e6c18f4241bc63a960056dbf837de0dbbf742a23256af0acf855a722bf62630e8df2c57d92b3cb7aaa6cc26cbb20670fafee9af231f1d391f560f4257bd3a976ea0d22fc05c592adfe85c5f81ebf885eb93c23dd6ed3f84eb39766d28c1de7fd75250dcfc469cfad4ac3cecc8d148de571669ef7d1fe1f115ec7533fb8a81c87b54602a0726a9b47dd31b536fc51f4b7d292b8
+ 3b191524c457dd618536e3b7ad20e222a1c9bf725ce5586463262d112f3336b9da8abb55fe4c756808a0b8617fd69d84f91d444a72c22116be94a52d1b2bb79cae60a4b9cf39d19819167d4bd689e752b1ecf5cd50040cf6e6eea9183dfc793c332ce666c66b179363b3fa865846d6774d050e5037776df34c7ab6672ae1b350dd849b540b8b285eaf6794f507e2c7c10acf7bf7ad9521e86a1b72a1418c90ab696f8e984ed6c7f0f1810fc9011e8f3f6cd4d1687ea682a42faffa296a00f9cc7c53210db85c9559207aa664f3c2716f524ad5fc0ed97bd880c14ace7d629c43f02e413c562046eeb2b58f0ead899286ea8b5826af76b3e3d02e71137cbebe552306d1dd1016e097a54928033ea63f0540b05a3bf331773694b2546e4679c05d488b356a2d37d275b4ccee590bb7ac7483ca0a72149cea3b39f687fded587e5e94d25c3b3e1b1b0d47b2bde830331905390837a3fefdda1feba5ffebb6cf9ec2ad3882e3094c39da450daac74592c20ae560c61cbcb1d487f8d54e76c808178b2cc0ab1d072820b291f3092c49b205981f45318135c8075d860e7eefbb640dd8e80498167db26b3ece09c8099eff0c3cf5cbfe6440472ed5d3ce8548b15004423868118b0e87655315856fc2102b804c1e28b6da7dcdba54ecae6b721477fca494bd3b72f46480ae87f334494c602819d6a3e
+ 9cbd6c2f2b3a9d32c8eae8c1484b8dc5eea2c006ad95fa3d7e80d89e1aa6ae8a98fcb95ecd8a654d176cc7ada0c6424a898ff8a9859b2a29a51d36b879011a24ae2a4e0f69f02c95ac3da7246a45681d91bc0ebf019e3e2031fb3336b2ec10f7d94186fc0520999b775bac2eb542e5e3cfbfbcc5f5f56df6d9d0ca8e2308c6cbaefc861a0acf0622ec9fa7c4cac8590c6b4692219ed38b136ce5d659d00a8710b1ddf384edf5737101448015ea3f8c3fef0cb07602064035a4579a2b6bfc5edc1e81a8ab9522d6711f606183b3f59ec32c4df67da8289ce54ed9f97c7515746b859027c8ab1ddcbec9ab3c37c6dc0a97cb255961c69bc71936364ec49076400b4d918265cfaba0a9475d5dd1b8179653c3892aeb3f434a9ac2d9d3dbb81598a44cd90beb48a8949dd31f907465dfd8bf651dc60ef0d535cc9d5493dda2c474a10b7726b63291b0d6107b47faf77ce62eea112fbdfb95481c7f84d6cf9312faea8888284cfc04854f58fce61988e25a2dc9dbaf8f7659b21ace61be9d83c04789a202d72f2e411ab3db416dcf63abbc1c6d827aad75579eecb3a81a6e0d0669012db51435d53d3c0bf2426dbb431e2f4bc4938fa458692051f5047610687bc2077edee95274bd653ef1105086563f858c0db245454fe5fc83e6788c82310a02008ef76a3ffd357d8452cf5a712f421f253cf81
+ 232f1ca4d6f8364cb96b9bb2f23ab27a6ce3a2682b615ed762c5210bfc17229b83551af482143374e21a115d77c98c8fb17487b2c9f25d8da17ff3e96b155354f611da1ff91bfd6d89436486a466642f96c5cbbbcedeee4d35d26ee982bd152bf309eb1c4f56bd77dc89861bb82eb56405af798c7100768461f1b21d8e98d498ed5e2f74104d0309b00bf376cf32a82397d1adca7ca86950f5e63c60bd0189bac5dcb596ac0d111f9e6d17ed06a47bb92e49ea2ec4a295acd84b37524fbbd3c7516d4135d6d0625781fa85316098c4a8f94c4f10497ada2332b524e5e91c63ba4df47e1b33e0ebb9f748f1d0a338993cd4f155608e8238d3d574b8b166d46211909128848e96a28282b7cb652d103307c0028653b4fb40379b6d545fb1e2f5b9ea9d57a5b270db019e228b1edde431bd44e5728216781a5ba01163fd803c98e46a440e5617a781f55502c73aa1c417cfdfa7ef95fc83cfc0d9e7140df356cc0a3bf0824d4f3233ca963d367f9e6bd53b78edc3f5b0c53c9a836e02eb57e0c16417f9e42338aeada43fe34b4c525c29835d77e7695142361a500e097f7d110f1912a534fa9441f1973b123d76817483f51deef7b2f7b3b180cf062b7acba7b77788d7ae6be6cce00296097ae60ad84e588711a5a63b66aed3e01010381dfe53bda06ee770cd3f96b3fb7ec9ad700949e6ad320
+ 62958e807b8b03204c3a77b5034143a6b342bb913dfc4a5db48c44235b56ee464e933b2bd7e46b49ab01166492d4d46a48b730532b13e231984c7afd18ae13663ab84c385e367021ad3dfa918860243454ac08e00e27ec0b193f67fa33cd43d9bd69b34ad29184924c98e61454afefc5cc69e32d0792c65aa0638b5d128fdee58bdaeae09969fc7493296c0f7689093e24609f44a1ea4a4cb7aa4e46082e89fbcae15862c5f1423ccb651a5b12f952797d0854ebfcf6dc494add5d140a5deee50f3c9729f2779aa0bb0339690770f090b3719a53b9e0a4521d3a9811bcd1702642f7c5d4142044826f97edf713bb6a695b5f34e705eefd386df6ab621fb8f4e39641926908c9a37df76bef9b40fb352c8b2266a079625c81f0b6823348e7dfe593fd6c155fc2b0c082b04a8098712b02a4bb9a60a4f68cbf60b58d61f32798c66edf64d387576630902a13b5a1f8f5f51a79c708d7d2c68d2be1c68e5fd8757a3c3ccf951e65727722868688133ce0cc22a7d3db72fd0d3ae51d9c169055d754011b1de6a6be680c55bf92e6fcbc645941b2e89afa7b91ad61726c87e3c4e131608ce244fea2018925ba74dd8cac6e6f5c455978b7151eb6e6e7a797590d784cd9464450f89a671c29804a1eb7c96612ba025fd4d2564a0199a1c18c20964c2fecc0c463fcf0c1d3089b46ae523b6fb259cce
+ 1a0171254f847945a862ceb3ae1fe7082958d06ce952f3f079df3490b448cda60acddbaed7ae50eb32eed1feab15b075e7fac69c4142dab32f9abd562c6a3ffcc6d3fc0595e202f3430080a8c85665a25889fa5f78f403f9ac93cfa160fd242d9cf123e43010891bfb21f7518588aa9f94393daf212c7a396cacfa27f29bdf8ce0c9269c3270466aae1df02832e605dd3aabfde47b93cfc812feb65bf1f0b326f48fa89f00059d0bcab950f229f128eea46d16a9d3feb5c04f5e707f835de686df16ceaae1ac98cb5a7abd0852cd80f8f2c093ca86b4fcdfcfb4648d244b5bc734ce2bff50880b4de5cad96aff1eca5e3f93dcecbde2a06b0371529d471908c05654e463c787e56e24edcdc363a93b22fa7925a4f205e62ef6d7f7f64b7e9525b7e8c694f19738d5311fbe12f1b8123035323775ba87e1e77bb9eddb09e22f65a175f51bce14ec6bceeca1bfba4bd69d4e18d8442c8f60d2747ec7373e8e49b412b769dde6486eca1b98231ddac5164ace299b5bc3b6cf82c00ae55a1a47af14a72a5f05ce3c94ad6dfb2af8712262a0d2dce422946d84fe643530a0528eafabe77a14c9da86eca5d7556832b2dff7005f79f61ba802b6c855ea38a043d18d996c21897f7c820b1ea63cd5d823472adfd8b56df62d0a14f15c9e48b9ca7d4aceb012a16778d88ebe48c501e9dd460d3a21a0a
+ 4bcc4bc7129bda1912eff1a3d43fdd75cf7c2c50978d94fbf65b34fe73d003084fcf6133f2336ffa4a4b927fed2ae7bcb010360805fa497af8cb3dfd2ea25419f3857899bdab0bdb61f3ea1de0f7d6aa6e79f5493fab9751eb0d9c5fe65956072125c47d94740f2a3ace54719f09ebf3e27d895d51935332265571596731ce3144330ea48d8995038d756986b111899c8630a24920261a1f9907fdabd970f7dc69058a8efc4381b414752b12f3974ded28a149760c7fef4ddf906b8210825d1c98dcdee80994996f6d93fe70d93f1736e362c311ea1fa5d3bce28fe7111c2a9d0baabf6bb77cb9054c863f2d40b990f41a0766364b31f4cb68bafc05a757abe072d0b389091acff20f3ea906d01b9ca4fb4b251b84be30e93cb1017f8e1b1147120f6788548c759cf42c399c6b643deeb66a98eee89ade40807724a20e1a3423641b5f03040141914d3d81f9717a85140ffc052c781a59a18a52e08f00da35a5754ca4fbfa77c0c1265d9e28644ba89d4499a31b60e350eb61746207a0469b464303dbec4dbe13d297de3fc3b4e6bd37805ea69bf79e847633a8f68d8a053401f82fafc0c1dbc5f7d03729f306f0d048994b53504aeb0e9dafb93394e6d425d22ff198579d546c63c0c77407c43bf9fbfbfd62ca8ac316ca4d19e4631cbbd9cdf21ecfbb3eeacdfa75605d803184c11bf9ee7
+ 30942962e688c5fad693a6e88d21d61dfb51d8e84ffd090a5f7c31ef8f77e1a3e7ee77f71531e3d3e190bc8bbfd5e7b7792a0e361baee79c9db165033a83fda2f1972b75ad31e299ee69af7bb1c50870be803b17f6adc284bd18d10444b9af2a44be791515f2f229d549b8b85d0e05ac418c852336b917cf6b5cfde4f0521a19d3b888f72b71c5a5b11f96853f76da5cd954ecfde9b37f4f44f3187034c57790be1e696390b9ed4db6d660900b1bdf9f76447037ae56a1ec6d78560afa27aed79ef6b592db1056d97104d5cf8f16e5dc9e8c45915486c042ad29ed2c8084fb94ee9ebf18792b83220dc38936c3d2e09a1ef541fc7a440b6a09674a55860fd9467efe1580a6601720b36f128612b20837c6f4cc44a43deb771a001885bb17467d7ec350ddc648f3c13b579213b91d35c02481280efdee61cae175923fe9e5f218d61b146b71d9d7d60dbf740ee3f53fe46e7952cbca6595e56dfa02aecd623b6be5719f87de725d92df32838f1b61b4e7bae65b683619ed8286e70382f801c067548d6f83c701c92fb84d0e0256114882af2c8fe2b67e456f7c77637560a610693b6302d0f5e135c96036966aa6868b77d10e2272887491fce4ce8ec1e0fadc326707fa1a404384baec7b1ba0524ee1ee873662c1a530ea396fc5cf5fa3c8b117829cb144577bdce0cca193a180b0b2ba69ca8
+ fec31e70f7f6d5c2f5cbed9bd5a5998ed896fb4d36432b9ba8a6508fac5529cba750da9e2b651127c171fa7774d4c75b5b62fafc114c5775275a8ba20cbe7441a1709c2b0444d7f1721c368f35278c0b294b3cf8cb7fcad332f0f1bd2fdccb4c7e402c7efbfe9260b95ce72dc608897dc394490607c8914d29fd0a37036cdbe69df74e78cad0f11221306fd15acd622dd709a19fdcf134362c358efc9398162c38b32ae9e66d12d50489643c43a19da922d14a90823d92bf3253a6916dee9768af98ec865f2d2413aeb1455a0d0264a1348757aae7746ad86ebdfe6971dbeec2b30c36802e007da501bf27c68c5a7103d9e437ae6ab58f64b0ed67e258a7c7f9a9b07d6bb11e3e511d877085170d8c33e20a62f34c655cdfc2a788e69339ed9c08be0019130ec88b4a4b213d089bc182f8595547353bb36e1fb2df57405c982070a4ceff26e4ea2a3d2faa45f1f6a965c83429ce4ce07c6b5db04a4031247babd3cd8cf39861f4702c92ee85251ebe2456e4429f8a32efbac1e57c6baa36554dc807720077a8ca19a9db71710eefa1e9c202878b8b7f4a124db303ccd3a2dfe31cb5f0be4df44b5835cb95b089f5495ce35651a84ac26552c343dc63832a36c966c92ba8e661ddbdab08775d50c40790e597bdc5b452565d0465cd93d6bb681b2596252fd255e4a208eed904dfbab2e6fe232
+ 9c97cb3d15ecb63d3aff17e226f2e40c88ea6322bc6bbba4f6d750ed7f50908c3da02b488a4fc86f0270227efb45b6a5382c1994d49fdd2544c0d03b88e410df64cc8dabf83916f3a40257c02ee9d4b67f8dd3297a9695c3ef0d06a28ad66e7619c0bf0fd2542483bd6ec8e9fa829e7a521c522a372364b4c20e5cab35442ce1ac237c3fd9d177c229bdb4ee9667430826e059c59b12bbb5cf03f7291b0afc303844dcf1df174357d7e2f833043595f2d8bcf6271bd2e844238f460ae082f59aebb3d18c87d482688c58c5541c79d10d44ca6dc221faeab71a36c0ca8fa5eb0cf337077ae07bab63f7aca2caaa588340f8796a564788d7436276039e83f25c6350121078c10d896eb6d9cf6e7ea99290c10378e88d5e7309f17518e28454078d04bcb38f15d1a624cbc5c0d76878df58f220726c8365641e1fd2a66c9233bb3143af62c72bb06fc3cc627fbc66c9b778e254c4680c143b936c69a977fdbd3d5fad2ad6d974796d03e96989863d25de45313bb49421bacb3cd52e379c182b28bdbf18622026619be32e059d267bb1342e82dd0004f48e838ba2a379cd1e2bfc978b8aab80b79630a139c4dd89302547dc3296838f95a211f7a6f74d9e9f977832e7a6c4ccdce6e79c4735d700c81d6bb4c461d3288f41037abade34b7998ace0af5e7f9697e3042b171cdac15a7102d1b146db
+ 3b9057e22c274e6a6c156da70fbf9a07e0b7b22b90400aca401c05f5168483f66d5fc1db6e467463e652ca41ead157d29ce14c19c493234287578e0e6c21b6aca9f59d6591c09c81649d5c1e4bbb43745e83cd9c23d5b7b89282efba61e3e790dbce7aaae0011c81dae1c48fc4400bd81da44b2417682744bd06ae1b9c63a004d9345202e63eb4a4708e6ddb20be55c843ee3fa19ddacf7ad32d1ded060d9d8bd46bff386e0a3fe41260a8c90a8eb0089083e1b72278e0a7398b6e2e27c256ea426174d6a1fbe4067685f9eab61ace1a655d3ca35cf566fd148112e11ca4f39d0fbe041aba99a93e11c44e4ff07e830a1acfa07132d287fbcdb2eec82e4fb4fad847c29f601c578e6c7109340555fe16f82c058d60aa57d19baf6eccd59b8ffd789de6376dc9356b78494c5ea3d1c29bbeeba8e76433d3caa4adf0db15377834f5bb90f88b680030eb82b63fdd9f922d5bb0b054a50c8ac82c0925902dd351e8d9d61141d34b36f0a1d2a7b6ef6205ee1ceba611964e9e1268c57bed9cd5779961f38c7bc42fb9b66c024727ebe72ed9f6374eb44fa29ac11bf71c626a43c67b917a4481829a053644f769d0024104c9fd8f72fc7534323aab7efb20572fdbf68851c79aeee8137726145e4328fa70c38189f8441438947d6a49e3dd3dc9d5185d810aef71afd8dfbf96339ebd0e2a159f75d
+ 8c34c9bf37ca5cdd791371e4e835962b7d92b5d0924ccb071b841e7f96d0552abcdb3fc692f216fc687f72fbd360f534e2407d01f30ba9427f2fa5007dccb470c60fce127a577f91f07aaeaeff524b3fcdf9311171f443c5ad08b74b60ecbd8bfbb0fa842c18a5c8487f0247acdbeb393dc7cf376f6de99b13550c8db32a08c02a182dd15760da6c8bd3a7259724edec715570bb18465330666bff3a7147bae0d500fe771410efb11b348a194d7ce949ce074ec24fe5f7716671eadb824ff5e1668563a5398b833b1cab4e9d2df97783a52fd91b60d1c700ec0616208f99ad376de03162dd07dd42ffaa7c9ff4af7d48cde82c9dd040bd724039c929219079d23a7ca412aab0ddc833aac5a9afe819fae46cd8c8006dc4e96e11fe826df073b1ad9520b0442af3bde997b97d23bcf7a284dc89703e0b41b597ca1c64a23944cf6ab196ecd33b1cd764396eded169bcf62c7faa61f386ac64910852ef409c4c4242eb11a0ce5d13205891f3f6e8f568d781fd86636af3393918adcee3a73fac340f486d3c511a64c6587d0e0c553d087c3706bb8498dc059056b8ffd0d185df6c52b482bd55532550e1c9d37279ccf0ba698b90f185dc4c43aee53dacff0887fe842ecffb450088407443b709691fb10a0e9b38c2af46a60e9a02db9d8efcb3e89d0a19ba31ed3975eaa95d8fc6aed274f3a0e
+ bccc99d3c5fb1be2d5a2f5814688db811d8af8fc273a8e47620e23934c1ea642cf776fa276ad857cb023988ef39b237b00c72b85d86fed11fbdeaf31ced509c265822b560e7f0793eb5b53c5c7be3d855d146e2997f9974677dfa7a49f3c685bf24e8dcae56b3352c1038d8c7392af62ed22c5054157812ed4b14e6c7b9e4f8cba3fd99543ea467019ad74e2025b2b1c4195581ef91a88b999254ac748e748c4a50480a6cd3f5fd7d8bc919bdce7bf51925dc187df60af567ef232cb59d5583d604a19928c2699905446f2758fc7b640fbd0a2b9494b2b13cea88da31c5b643663f592e9b9ba580c16a2371dfdb223c7c803389b331e2412862c26cd9254e1db521f0851d9fe1d9d3cec7718fa785e227ffeda95e47944bd76ad718a1e27fdc7a51bea6f128f593cff860e82a9b474e0956830a35340616f4e8fbb10c94698b4310ee49b9398d0501af47982a7add81fef360000860926d09236532751a54107636120454e9b952ad891e645c74606a9869e5b6a4e20178decbf842d3aba603be3f4ff149b23776954b4b9898755f05b91fcee1574dc66de42547cee0b4f23c320224a737776bc4f04bcb996bef301b692d8b64d1d11d54dc5ef5760fda3e16571cac787d1f0e6de4a88b7f6ef8886734a451c4c971545d9ffe39d80eeaf9f1c77ab04364ad3281a4d41a250e410e138fc759
+ cdf4e408a38d26a72bee16e1ddb1055c391a09fae22209e891d93be9c0cb1a8515e5ff69b55c5d9bc83bf92316d3addc29ed0d3cc1f8c6635f0726014fc7cf5236e7757cac9d391821f239267010b89d3918df46e1b483e5afa999ae7345850e17cf93d2da84d84e1a0d2e2bb95eb890ac6fca1ebfb7387b799b02c275f915b5e4780dde3f738fc2432636d89d620f541d218d39dc7b1854e77c85d3661030e79d7838935724804e5885e901856debc53fd947b6f5239961943ad48d581d88e4ce26c0fbd342fac6159d2264ef4051fa29cb850649650537bcbf3ad06cf8736cf09df521eba9098f532953e1541b223db5f37de855f8673c59fdb1acce1b2cfc9fe50d38dc13f9809ea382cd4863c7c1c691eae1863f563054fa6a0bfb039d1dda3f250f52d155269e3f2ecfbfc57cb3add84f986ef9cb84f4c4b75d32d3edd960ceafbe69ac71a0a524bd79777f20fdfdd29d063e06c0bae7fd247592f05432406afb207f4476e0bed4e7b76395361a1bb7a16db6a95c59ddc1930053b93c51eee3f405f62a9e412d5c1aef4cc7a7ccb70d6d91ae27d477fcee7d84e1e3e519995127a43eb576d9518bd6112686fe7a90c7053d94f67c2878d3537af078ddfbdda06ba4c01888dbe6be9ef4f38e2f8d49a7d023996c516f1289fd9cfd4936089f0bcd0de5156d580b68554e8e9c3874a6b2d
+ 56bc736f49217c88859aa63ea1384f3b9dbdc8b30262d0efffddec03fc4241740d23917ef92fc7de3ae3665ff3c9397bf4fcde524cc403f28806317a0059ae93d82e3fb5cc49596c785f46427317d2f3c9d285d239383dfbea914ad84213e1e0121533dc696bee622d0f93ed8eef2e1eb408364adfca90eef0236a85c8d5c4a55dd42793d18b9eaceb8727e1a5bf01b1156ca04452485c6e4a9d40185664eec10c5fecc9dfd48536d5aa70c29eeb43c7a1a2ed73ff66a2604ed959a811e2268980958b2ab1682fb2a5966ab85163a34a9efc27d349625970f1",
+> 0x2000, &(0x7f00000048c0)={0x0, &(0x7f00000020c0)={0x18}, 0x0, 0x0, 0x0, 0x0,
+> 0x0, &(0x7f0000002280)={0x18, 0x0, 0x0, {0x9}}, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+> 0x0, 0x0})
+> 
+> 

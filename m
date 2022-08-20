@@ -2,96 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73DF59AC62
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF9059AC67
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244516AbiHTIDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 04:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58006 "EHLO
+        id S245271AbiHTIFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 04:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240876AbiHTID2 (ORCPT
+        with ESMTP id S244415AbiHTIFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 04:03:28 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751A3165BF;
-        Sat, 20 Aug 2022 01:03:26 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id y4so5878862plb.2;
-        Sat, 20 Aug 2022 01:03:26 -0700 (PDT)
+        Sat, 20 Aug 2022 04:05:12 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA34FB7768
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:05:10 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id u15so3902603ejt.6
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:05:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=c/T50bv5wpdPtILZzxvqohnY4keOYpr50uC/TDN3ebQ=;
-        b=B8N7y9blSkxvD3W9s/UNru23tAUCxcONWOPb8rTTj8Q4KhjwmljQKe16UtQM93V2nP
-         TbsZCa6JUHpHCToH5FjpAPugXsk4VBx09oEPuJ+qln5ZYHRkZKVjHzA+0xDocyqyFMJV
-         Cmob1V1dmKYFJaN8Q6V2zGvDo457CkFeHFkq4N5lBT2xKT0b2DOHJWMbSmLw9d8kwCQm
-         VaYzsN3+fzBp38sH63dMQS7fo/fyBNZDIBPqqiuZ+bWx3kzOveNtiJuAzZadDF4lOmAv
-         VUuWuSgB1lwDYX5yFeiP44NhS0vcMobYt7L+Hsu4ZIVBCuk2XP/HR1JVfHpL6ekq2mg8
-         ClFw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=C12ECdGG1RKxVZ00Sm1eAbakDJeM+iWoj3xaGjwbf9U=;
+        b=ulgurSA3DEgNLfIkCnnkMM55hIo5jwGFwLK/9lUH7SHsnJIjY3E5O35RnTs9YeJw57
+         3UIN2LZOvna+UWAlJHxYuuc3RY1EKVlxQ/v8QctYGdWOBDAhL0oOykjt/q3N4Gjie64m
+         /dKQKAQYlvRCxXDBIP0Q5SeWzadvRYn+X6WoUMlqiBlblmkFDsJ08mnEBVuUy0cje0Qw
+         CgPlnjVhULIYyH3pIijIXQntpn5vKC3svEoqm38MEpAW6TW/2Z3QgPsxWJdkUGdDu2/z
+         1q0jayA3F8Hpeqws7YUrmSfWHrozLZIooXYt7F5xuovPeMLzxXsgi3D6V972nTHSIeWv
+         SJIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=c/T50bv5wpdPtILZzxvqohnY4keOYpr50uC/TDN3ebQ=;
-        b=SVbwG+/ZmTr67yN47cFS514OeKBjqYr/tluuAVriO/7vP3vPvyPIjSsT9PNlIhjhPW
-         WcV6QiAQNyqCu5PjPozzaWfiScF3bsFELQkZnytCPWMym45eXfiM5d+F8FYXsf+rtB0W
-         8ptyyLsNTjstpB8Gi0Qb1bA6zxemceI7whXTk3Xp/HJ0WTE+Qy6h7hqSqN8I1XWsU9dr
-         eYExecGxy86ASTObnlmGjdK2WK9+B55NkAxbjL+JtWg3FM9L0wjFNlTCLr5ZVqAPRlRZ
-         V9QC/I593+rrOltI3HNcTadEHvgbkAQY5XRHeClSZct3fgxPNUTAXm8cMbhDCrfkw14J
-         tjNg==
-X-Gm-Message-State: ACgBeo1vTyqhrOnAi4LyDIF/3dOg+97fVNBVdP4uFRVNMKoA457qZfFM
-        gAdA1bPYTuzRcrMur4cbLNb7TBxqx8s=
-X-Google-Smtp-Source: AA6agR6x6nEO1XVz4OaT6zzmKtH6rMVmORnxVC6juWgptKO819OHmuh5hVq59mKPacvgLCher7UA2Q==
-X-Received: by 2002:a17:902:7208:b0:172:a9d6:527 with SMTP id ba8-20020a170902720800b00172a9d60527mr10903537plb.32.1660982605625;
-        Sat, 20 Aug 2022 01:03:25 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-78.three.co.id. [180.214.232.78])
-        by smtp.gmail.com with ESMTPSA id b6-20020a170903228600b0016dc8932725sm4387488plh.285.2022.08.20.01.03.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 20 Aug 2022 01:03:25 -0700 (PDT)
-Message-ID: <86a26310-eae0-35e8-ede9-e71825db1416@gmail.com>
-Date:   Sat, 20 Aug 2022 15:03:13 +0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=C12ECdGG1RKxVZ00Sm1eAbakDJeM+iWoj3xaGjwbf9U=;
+        b=p62FZ2FIOTAUWqgrhk4IRWoMn5uNHa7aM6CyqtwVs92aMDFHLhfwv8MZTDr5Rw2+tm
+         MioNMd32E/SmsRF+DTQfTg+45OvruLc015RD8qM5DFWEbcMGbWbFABEWuqCqlyCJPwPR
+         vFbtULSyPhE6FfEceHcbTHm1Db2/nEu64r12mf1/q22xiSHU4/atCOqXBbpDcfdRcXGQ
+         bxl6Z+3um0DEOyTGqbezN+XhwrRr2t08y5SCKn6ZNvAUHhJOgBXnXIaqUUsBeq5veJt4
+         8E1VeNuZYHeMUGePAT0D4VNpX6rwn+uztkAOdIT1tZCNBnRJfK5RWEdp7w5Ai/vNVGcX
+         EUEQ==
+X-Gm-Message-State: ACgBeo2jI1ZMGxRnHVC7n87uRDAWrN+xFiHvKRYrWV40LwFcvJz6sn46
+        yaFJ+fN8J7fg7DwRgCl+irkfQmw0zTLmv6dJqEEaxQ==
+X-Google-Smtp-Source: AA6agR7axdTBDNz5k1m9wqa5h+vTpUmPATrp3i9tpIvKP7B2b8K0bO9NoGU6orcc3CmM/DDxZI5k7SNUL0qNmizMdwM=
+X-Received: by 2002:a17:907:86ac:b0:731:5180:8aa0 with SMTP id
+ qa44-20020a17090786ac00b0073151808aa0mr7030817ejc.366.1660982709229; Sat, 20
+ Aug 2022 01:05:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3] docs: admin-guide/mm: Improve grammar on MM concepts
- documentation
-Content-Language: en-US
-To:     alexlzhu@fb.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kernel-team@fb.com
-References: <20220820000024.2494003-1-alexlzhu@fb.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220820000024.2494003-1-alexlzhu@fb.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220819153711.552247994@linuxfoundation.org>
+In-Reply-To: <20220819153711.552247994@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 20 Aug 2022 13:34:57 +0530
+Message-ID: <CA+G9fYvApY2VQcPdFrLDn8LhuN_zLdUW-yiPFq7TuPWamCkKKg@mail.gmail.com>
+Subject: Re: [PATCH 5.19 0/7] 5.19.3-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/20/22 07:00, alexlzhu@fb.com wrote:
-> From: Alexander Zhu <alexlzhu@fb.com>
-> 
-> Improve grammar on MM concepts documentation.
-> 
-> Signed-off-by: Alexander Zhu <alexlzhu@fb.com>
-> 
-> Changes in v3:
-> -Correct punctuation based on previous comment
-> 
-> Changes in v2:
-> -Correct the subject
-> -Adjust the description
+On Fri, 19 Aug 2022 at 21:09, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.19.3 release.
+> There are 7 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 21 Aug 2022 15:36:59 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.3-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-The changelog should be below the dashes. Otherwise LGTM.
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
--- 
-An old man doll... just what I always wanted! - Clara
+## Build
+* kernel: 5.19.3-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.19.y
+* git commit: 8c2c6014fe886925b313a6e8b6eb46763dafbaff
+* git describe: v5.19.2-8-g8c2c6014fe88
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.2-8-g8c2c6014fe88
+
+## No test Regressions (compared to v5.19.2)
+
+## No metric Regressions (compared to v5.19.2)
+
+## No test Fixes (compared to v5.19.2)
+
+## No metric Fixes (compared to v5.19.2)
+
+## Test result summary
+total: 167248, pass: 149293, fail: 1211, skip: 15719, xfail: 1025
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 314 total, 311 passed, 3 failed
+* arm64: 76 total, 74 passed, 2 failed
+* i386: 64 total, 58 passed, 6 failed
+* mips: 50 total, 47 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 65 total, 56 passed, 9 failed
+* riscv: 32 total, 27 passed, 5 failed
+* s390: 22 total, 20 passed, 2 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 69 total, 67 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

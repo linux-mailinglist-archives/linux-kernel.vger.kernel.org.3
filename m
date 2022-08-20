@@ -2,121 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1019359AD4E
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 12:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3FD59AD62
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 13:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345433AbiHTKzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 06:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
+        id S233477AbiHTK7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 06:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344182AbiHTKzR (ORCPT
+        with ESMTP id S239636AbiHTK7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 06:55:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1B39AF94
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 03:55:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F6B4B8013A
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 10:55:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB381C433D6;
-        Sat, 20 Aug 2022 10:55:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660992913;
-        bh=3N+NDI2cJKh99li5pLUDKXcxy68n6z1/LP/ToJrkZTg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mN+Ksxc2YnQIljxsn1KYA946GXSecuBUHJZgu9vmtUcaRpOCEvidcVsRanc/EYlAZ
-         zvSM4RhT6UxCWmLHN3BQE2dSwWHdV70BUZFY6uJ9F0g5l5VZ6+maBCkngsl5hVNyy+
-         8KFe94cU9OjV/d57FF4HJ6X30Bn+phJPA861qYCidDPfhWpSdACNDvbwSmmNMkKyJl
-         CcibQczNDY+20GaJlKgQUHd3xWgYHaLBZ1cEYiSriA4vRFjuiS00IwTq/Z7vPTPtFB
-         HxidjPFAI1dgYmtaKjwAmf5fO/l5hDHTA6+UEFb3lIrVAloCNOI00S449zcXRoOAWV
-         3LW0t29D6lvnQ==
-Received: by pali.im (Postfix)
-        id 3FEF75D0; Sat, 20 Aug 2022 12:55:10 +0200 (CEST)
-Date:   Sat, 20 Aug 2022 12:55:10 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Segher Boessenkool <segher@kernel.crashing.org>
-Subject: Re: [PATCH v1 2/5] powerpc/32: Don't always pass -mcpu=powerpc to
- the compiler
-Message-ID: <20220820105510.psagglbbfyve53fc@pali>
-References: <8abab4888da69ff78b73a56f64d9678a7bf684e9.1657549153.git.christophe.leroy@csgroup.eu>
- <d4df724691351531bf46d685d654689e5dfa0d74.1657549153.git.christophe.leroy@csgroup.eu>
- <20220818174634.6nkzcztzn6uqcrzg@pali>
+        Sat, 20 Aug 2022 06:59:33 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06D648E95
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 03:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660993171; x=1692529171;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6bvnfTT4/t+5ClYUhDOG/MQcIDUXZ10fpoddRgksaJw=;
+  b=i0UYoP9mkklpLYNgkV4T6BPtHZSIjTPd7dJwjarMHfHq2wHEj8LYqP15
+   tr1XUHTqoYJ4FtWruTBvAxIACVcaH3iaoJeXVZYDJjSk5sRBvG/VhDJXT
+   s7sU1H4QYYmTJVdDkemQp0/ImvLzc0TptFKKMNWpiaqHznKBLLIRm82oj
+   FfbYVuo4KIk1hq5TUPTSTvXu7IOGh2uqicUUmJkjF69NMLBYREJQkc/Sn
+   xywc2oijykIoM4J569S2BJJDbdVYOXcXfCD0EcaIRn9qGu8gW19KB2fB2
+   ho/qA2A4sBx18CUF52nlmXF4HwQMbGgmLCuZHBXA03z7iDYyjOdI6d/dq
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="293954172"
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="293954172"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 03:59:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="584947572"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 20 Aug 2022 03:59:29 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPMCO-0002XD-37;
+        Sat, 20 Aug 2022 10:59:28 +0000
+Date:   Sat, 20 Aug 2022 18:58:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jgunthorpe:iommufd 10/14] drivers/iommu/iommufd/device.c:59:
+ warning: expecting prototype for iommufd_bind_device(). Prototype was for
+ iommufd_device_bind() instead
+Message-ID: <202208201856.H1yTyIFO-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220818174634.6nkzcztzn6uqcrzg@pali>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 18 August 2022 19:46:34 Pali Rohár wrote:
-> On Monday 11 July 2022 16:19:30 Christophe Leroy wrote:
-> > Since commit 4bf4f42a2feb ("powerpc/kbuild: Set default generic
-> > machine type for 32-bit compile"), when building a 32 bits kernel
-> > with a bi-arch version of GCC, or when building a book3s/32 kernel,
-> > the option -mcpu=powerpc is passed to GCC at all time, relying on it
-> > being eventually overriden by a subsequent -mcpu=xxxx.
-> > 
-> > But when building the same kernel with a 32 bits only version of GCC,
-> > that is not done, relying on gcc being built with the expected default
-> > CPU.
-> > 
-> > This logic has two problems. First, it is a bit fragile to rely on
-> > whether the GCC version is bi-arch or not, because today we can have
-> > bi-arch versions of GCC configured with a 32 bits default. Second,
-> > there are some versions of GCC which don't support -mcpu=powerpc,
-> > for instance for e500 SPE-only versions.
-> > 
-> > So, stop relying on this approximative logic and allow the user to
-> > decide whether he/she wants to use the toolchain's default CPU or if
-> > he/she wants to set one, and allow only possible CPUs based on the
-> > selected target.
-> 
-> Hello! Exactly same issue is still in file arch/powerpc/boot/Makefile:
-> 
->   ifdef CONFIG_PPC64_BOOT_WRAPPER
->   ifdef CONFIG_CPU_LITTLE_ENDIAN
->   BOOTCFLAGS	+= -m64 -mcpu=powerpc64le
->   else
->   BOOTCFLAGS	+= -m64 -mcpu=powerpc64
->   endif
->   else
->   BOOTCFLAGS	+= -m32 -mcpu=powerpc
->   endif
-> 
-> It cause compile error:
-> 
->   make ARCH=powerpc CROSS_COMPILE=powerpc-linux-gnuspe- mpc85xx_smp_defconfig uImage
->   ...
->     BOOTAS  arch/powerpc/boot/crt0.o
->   powerpc-linux-gnuspe-gcc: error: unrecognized argument in option ‘-mcpu=powerpc’
->   powerpc-linux-gnuspe-gcc: note: valid arguments to ‘-mcpu=’ are: 8540 8548 native
->   make[1]: *** [arch/powerpc/boot/Makefile:231: arch/powerpc/boot/crt0.o] Error 1
+tree:   https://github.com/jgunthorpe/linux iommufd
+head:   6624f48e554fe6a880b261074a1c9580dc9b5384
+commit: e6ea33b10e22b67a040cb8bbe1068528adab762a [10/14] iommufd: Add kAPI toward external drivers for physical devices
+config: s390-randconfig-r035-20220820 (https://download.01.org/0day-ci/archive/20220820/202208201856.H1yTyIFO-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/jgunthorpe/linux/commit/e6ea33b10e22b67a040cb8bbe1068528adab762a
+        git remote add jgunthorpe https://github.com/jgunthorpe/linux
+        git fetch --no-tags jgunthorpe iommufd
+        git checkout e6ea33b10e22b67a040cb8bbe1068528adab762a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Now I have sent patch for this issue:
-https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20220820105200.30425-1-pali@kernel.org/
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > Reported-by: Pali Rohár <pali@kernel.org>
-> > Tested-by: Pali Rohár <pali@kernel.org>
-> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Segher Boessenkool <segher@kernel.crashing.org>
-> > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> > ---
-> >  arch/powerpc/Makefile                  | 26 +-------------------------
-> >  arch/powerpc/platforms/Kconfig.cputype | 21 ++++++++++++++++++---
-> >  2 files changed, 19 insertions(+), 28 deletions(-)
+All warnings (new ones prefixed by >>):
+
+   drivers/iommu/iommufd/device.c:59: warning: Function parameter or member 'dev' not described in 'iommufd_device_bind'
+>> drivers/iommu/iommufd/device.c:59: warning: expecting prototype for iommufd_bind_device(). Prototype was for iommufd_device_bind() instead
+
+
+vim +59 drivers/iommu/iommufd/device.c
+
+    40	
+    41	/**
+    42	 * iommufd_bind_device - Bind a physical device to an iommu fd
+    43	 * @ictx: iommufd file descriptor
+    44	 * @pdev: Pointer to a physical PCI device struct
+    45	 * @id: Output ID number to return to userspace for this device
+    46	 *
+    47	 * A successful bind establishes an ownership over the device and returns
+    48	 * struct iommufd_device pointer, otherwise returns error pointer.
+    49	 *
+    50	 * A driver using this API must set driver_managed_dma and must not touch
+    51	 * the device until this routine succeeds and establishes ownership.
+    52	 *
+    53	 * Binding a PCI device places the entire RID under iommufd control.
+    54	 *
+    55	 * The caller must undo this with iommufd_unbind_device()
+    56	 */
+    57	struct iommufd_device *iommufd_device_bind(struct iommufd_ctx *ictx,
+    58						   struct device *dev, u32 *id)
+  > 59	{
+    60		struct iommufd_device *idev;
+    61		struct iommu_group *group;
+    62		int rc;
+    63	
+    64	       /*
+    65	        * iommufd always sets IOMMU_CACHE because we offer no way for userspace
+    66	        * to restore cache coherency.
+    67	        */
+    68		if (!iommu_capable(dev->bus, IOMMU_CAP_CACHE_COHERENCY))
+    69			return ERR_PTR(-EINVAL);
+    70	
+    71		group = iommu_group_get(dev);
+    72		if (!group)
+    73			return ERR_PTR(-ENODEV);
+    74	
+    75		/*
+    76		 * FIXME: Use a device-centric iommu api, this won't work with
+    77		 * multi-device groups
+    78		 */
+    79		rc = iommu_group_claim_dma_owner(group, ictx);
+    80		if (rc)
+    81			goto out_group_put;
+    82	
+    83		idev = iommufd_object_alloc(ictx, idev, IOMMUFD_OBJ_DEVICE);
+    84		if (IS_ERR(idev)) {
+    85			rc = PTR_ERR(idev);
+    86			goto out_release_owner;
+    87		}
+    88		idev->ictx = ictx;
+    89		iommufd_ctx_get(ictx);
+    90		idev->dev = dev;
+    91		/* The calling driver is a user until iommufd_device_unbind() */
+    92		refcount_inc(&idev->obj.users);
+    93		/* group refcount moves into iommufd_device */
+    94		idev->group = group;
+    95	
+    96		/*
+    97		 * If the caller fails after this success it must call
+    98		 * iommufd_unbind_device() which is safe since we hold this refcount.
+    99		 * This also means the device is a leaf in the graph and no other object
+   100		 * can take a reference on it.
+   101		 */
+   102		iommufd_object_finalize(ictx, &idev->obj);
+   103		*id = idev->obj.id;
+   104		return idev;
+   105	
+   106	out_release_owner:
+   107		iommu_group_release_dma_owner(group);
+   108	out_group_put:
+   109		iommu_group_put(group);
+   110		return ERR_PTR(rc);
+   111	}
+   112	EXPORT_SYMBOL_GPL(iommufd_device_bind);
+   113	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

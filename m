@@ -2,109 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD15959B0CE
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 00:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFA659B0D9
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 00:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235605AbiHTWqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 18:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
+        id S235135AbiHTWvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 18:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234011AbiHTWq2 (ORCPT
+        with ESMTP id S229909AbiHTWvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 18:46:28 -0400
-Received: from mail.base45.de (mail.base45.de [IPv6:2001:67c:2050:320::77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024BA22505;
-        Sat, 20 Aug 2022 15:46:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fe80.eu;
-        s=20190804; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=WRiYwROZ16kVAe/wuAeCca/SXcJ/4o6AYy4x1BePKz4=; b=xChpAe7GlnOU0yPSil4rYT2m4g
-        h4i18+2YpWsIX9N6Ax3WCUN6oJFUtYMyoaBLZGBicAfusNdpuoV2AwHv/9dyLWObRGkWUfMEuo20j
-        xYotEAFzIjqGgUZM4AlcyKbrUjxxlMQ+m3mufhepAtgYJw1aO1qOcWPaNe1eRiClc4kZ3hHdHpaLn
-        GI4N3Snpx3zoD2AQXJzK2Ln6DeTA+0vIUfh0LldXHlc3f3thnXmvncvmXyZd2mVD0w85hEm4eISm5
-        yyT2wMXMeRdm4Fl2AjsSMag0kVfmXIpObzlKqboHc+FJCUwZOVauZmiW0wWDwpBMWy5RZf7aHSY9E
-        ALIAOu0Q==;
-Received: from [2a02:2454:9869:1a:9eb6:54ff:0:fa5] (helo=cerator.lan)
-        by mail.base45.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lynxis@fe80.eu>)
-        id 1oPXE6-00G2sh-JE; Sat, 20 Aug 2022 22:45:58 +0000
-From:   Alexander Couzens <lynxis@fe80.eu>
-To:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Daniel Golle <daniel@makrotopia.org>,
-        Alexander Couzens <lynxis@fe80.eu>
-Subject: [PATCH 4/4] net: mediatek: sgmii: set the speed according to the phy interface in AN
-Date:   Sun, 21 Aug 2022 00:45:38 +0200
-Message-Id: <20220820224538.59489-5-lynxis@fe80.eu>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220820224538.59489-1-lynxis@fe80.eu>
-References: <20220820224538.59489-1-lynxis@fe80.eu>
+        Sat, 20 Aug 2022 18:51:24 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5727225280
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 15:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661035880; x=1692571880;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=o/8gpyn/TPC49w6CaOtsacLFvWLi4lmatq3xYrqZaNw=;
+  b=X0XPEKSpLVCI8GWoA0/shX2wc2Do8W76+CfXvQpWjvBpZG+Zs1ygzIIP
+   YoqVd6/mwxMgRZBAyGIh1Q13fYgHjdFmM84uNzoKc0vH9hG9l98DDvHo7
+   Z1g/5IowYZLgTvUe+KRMFASBy4CUQYGphl7N5xI+5mqIi/7CpnE/gFfTj
+   jUGaRrlVzX6Lh9RIRP9G6koDTmKO8RSNVF9WqcIbvhjuAhQywvwVvVTVG
+   zvv6Ed2QeBWkjyOJ8z3nd2c2sNi+Y8rXt+p92KtQDHEQqt+p3rsj7MRso
+   xbzqwsJsyfelfhDb9Kt+KpTDLg/AE0olvJOuF1VnRuBlcTvUhe7q9IuBZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="357187302"
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="357187302"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 15:51:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="784472090"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 20 Aug 2022 15:51:18 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPXJF-0003JL-2R;
+        Sat, 20 Aug 2022 22:51:17 +0000
+Date:   Sun, 21 Aug 2022 06:50:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: cc_driver.c:undefined reference to `devm_ioremap_resource'
+Message-ID: <202208210659.ZhKgw7tr-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The non auto-negotiating code path is setting the correct speed for the
-interface. Ensure auto-negotiation code path is doing it as well.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cc1807b9158a909ffe829a5e222be756c57c9a90
+commit: 0f0a6a285ec0c7b0ac0b532f87a784605322f9ce watchdog: Convert to use devm_platform_ioremap_resource
+date:   3 years, 4 months ago
+config: s390-randconfig-s043-20220820 (https://download.01.org/0day-ci/archive/20220821/202208210659.ZhKgw7tr-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0f0a6a285ec0c7b0ac0b532f87a784605322f9ce
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0f0a6a285ec0c7b0ac0b532f87a784605322f9ce
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Signed-off-by: Alexander Couzens <lynxis@fe80.eu>
----
- drivers/net/ethernet/mediatek/mtk_sgmii.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-index aa69baf1a42f..75de2c73a048 100644
---- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
-+++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-@@ -21,13 +21,20 @@ static struct mtk_pcs *pcs_to_mtk_pcs(struct phylink_pcs *pcs)
- }
- 
- /* For SGMII interface mode */
--static int mtk_pcs_setup_mode_an(struct mtk_pcs *mpcs)
-+static int mtk_pcs_setup_mode_an(struct mtk_pcs *mpcs, phy_interface_t interface)
- {
- 	unsigned int val;
- 
- 	/* PHYA power down */
- 	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL, SGMII_PHYA_PWD);
- 
-+	/* Set SGMII phy speed */
-+	regmap_read(mpcs->regmap, mpcs->ana_rgc3, &val);
-+	val &= ~RG_PHY_SPEED_MASK;
-+	if (interface == PHY_INTERFACE_MODE_2500BASEX)
-+		val |= RG_PHY_SPEED_3_125G;
-+	regmap_write(mpcs->regmap, mpcs->ana_rgc3, val);
-+
- 	/* Setup the link timer and QPHY power up inside SGMIISYS */
- 	regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER,
- 		     SGMII_LINK_TIMER_DEFAULT);
-@@ -100,7 +107,7 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 	if (interface != PHY_INTERFACE_MODE_SGMII)
- 		err = mtk_pcs_setup_mode_force(mpcs, interface);
- 	else if (phylink_autoneg_inband(mode))
--		err = mtk_pcs_setup_mode_an(mpcs);
-+		err = mtk_pcs_setup_mode_an(mpcs, interface);
- 
- 	return err;
- }
+All errors (new ones prefixed by >>):
+
+   s390-linux-ld: drivers/phy/marvell/phy-mvebu-a3700-utmi.o: in function `mvebu_a3700_utmi_phy_probe':
+   phy-mvebu-a3700-utmi.c:(.text+0x3de): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/fsl-edma.o: in function `fsl_edma_probe':
+   fsl-edma.c:(.text+0x786): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: fsl-edma.c:(.text+0x7d6): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/idma64.o: in function `idma64_platform_probe':
+   idma64.c:(.text+0x1476): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/ti/edma.o: in function `edma_xbar_event_map':
+   edma.c:(.text+0x460): undefined reference to `of_address_to_resource'
+   s390-linux-ld: edma.c:(.text+0x488): undefined reference to `devm_ioremap'
+   s390-linux-ld: drivers/dma/ti/edma.o: in function `edma_probe':
+   edma.c:(.text+0x19aa): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/ti/omap-dma.o: in function `omap_dma_probe':
+   omap-dma.c:(.text+0x58): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/ti/dma-crossbar.o: in function `ti_am335x_xbar_probe':
+   dma-crossbar.c:(.text+0x272): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/dma/ti/dma-crossbar.o: in function `ti_dra7_xbar_probe':
+   dma-crossbar.c:(.text+0x586): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
+   exynos-trng.c:(.text+0x228): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/meson-rng.o:meson-rng.c:(.text+0x82): more undefined references to `devm_ioremap_resource' follow
+   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o: in function `sirfsoc_wdt_probe':
+   sirfsoc_wdt.c:(.text+0x106): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/crypto/ccree/cc_driver.o: in function `init_cc_resources':
+>> cc_driver.c:(.text+0x346): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/crypto/ccree/cc_debugfs.o: in function `cc_debugfs_init':
+   cc_debugfs.c:(.text+0xd4): undefined reference to `debugfs_create_regset32'
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

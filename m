@@ -2,47 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 937E359AAE9
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 05:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36F959AAEA
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 05:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244159AbiHTDTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 23:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
+        id S244549AbiHTDZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 23:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244019AbiHTDTh (ORCPT
+        with ESMTP id S229595AbiHTDZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 23:19:37 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12E356BA4
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 20:19:34 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4M8kMn0dGyzGpfF;
-        Sat, 20 Aug 2022 11:17:57 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 20 Aug 2022 11:19:32 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 20 Aug 2022 11:19:31 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
-CC:     Qian Cai <cai@lca.pw>, <linux-kernel@vger.kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH] mm: fix pgdat->kswap accessed concurrently
-Date:   Sat, 20 Aug 2022 11:25:06 +0800
-Message-ID: <20220820032506.126860-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
+        Fri, 19 Aug 2022 23:25:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CF0EEC7C
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 20:25:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660965929;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rCdaW8VW9KVhf4KlGQHWkOq32wI36GjplhXzdCZm9VA=;
+        b=A3lbZSS5pdMC8sltsATtA8GRgDXCHT3U/OETH/j3rE8mNQAo9NqqFAkaVtCu+5QKWMyHFA
+        6JUh/HUJIwQIKOB6Nry1FOl2U+W1JBTYHel9syUffTeUkNzum3XAYoty6jmrGLPW7AEdu/
+        NaERx2OSGcp9EauTmfxvHO4oyPaxDI8=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-633-igCt3x4AP6eeYy22Z5WJHQ-1; Fri, 19 Aug 2022 23:25:26 -0400
+X-MC-Unique: igCt3x4AP6eeYy22Z5WJHQ-1
+Received: by mail-pg1-f198.google.com with SMTP id e187-20020a6369c4000000b0041c8dfb8447so2761244pgc.23
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 20:25:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=rCdaW8VW9KVhf4KlGQHWkOq32wI36GjplhXzdCZm9VA=;
+        b=sPc56/CVoo360GkxIH7iCHTX1x4feDmR7ta1VLedtZ/HSqMuu5aRSkuBy3geFVlff+
+         +0PnHczprtmO49fmH5uTkrlrvJYQHw0xAP2UiWmCk1NSDtya6UwpdNkXG79enKQ0LjwV
+         HZmO5DuKWTiSI3CJJ+tX/7QC8/EfW0gKRxY6hI5+O72HWvhqynY7VJLCXETt4bFu+Tac
+         wKFEU4QU1K7jbiete/8H4kepgotiWFilP9Ex0a80vF8ws30Lo5PCADTlUOCYZZH83RYB
+         EPGRmthX/VoTraDwriPVe7zicLBSGFErI1dLXtol34/kHQ2sRkPk9vrJpJhfpTP6KWLm
+         6A9w==
+X-Gm-Message-State: ACgBeo3ne4HuL89wtXZefzMghwj/OJaFep1nJHOlfWiWYK1b+G/TLGPS
+        hjMZDPEIM2HGcwv6LBU1HzxGbi08xmGTlbQI1O4gK/FmrFWwK4iGfv3/xc6a9aVXuIiS0HDiTrT
+        4S5Ttb69KYT0AQj2hbLCncmgc
+X-Received: by 2002:a17:90b:4a0d:b0:1fa:c277:126e with SMTP id kk13-20020a17090b4a0d00b001fac277126emr13986424pjb.246.1660965925019;
+        Fri, 19 Aug 2022 20:25:25 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7G9enq5xkrmpDkzKybaz2ssbk1855D5ew/T350m3OaXXLhX8q18+DZC61QPqCJPA5d+4HTmA==
+X-Received: by 2002:a17:90b:4a0d:b0:1fa:c277:126e with SMTP id kk13-20020a17090b4a0d00b001fac277126emr13986406pjb.246.1660965924720;
+        Fri, 19 Aug 2022 20:25:24 -0700 (PDT)
+Received: from xps13.. ([240d:1a:c0d:9f00:4f2f:926a:23dd:8588])
+        by smtp.gmail.com with ESMTPSA id l7-20020a170903120700b0016d692ff95esm3906400plh.133.2022.08.19.20.25.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 20:25:24 -0700 (PDT)
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     mareklindner@neomailbox.ch, sw@simonwunderlich.de, a@unstable.cc,
+        sven@narfation.org
+Cc:     b.a.t.m.a.n@lists.open-mesh.org, linux-kernel@vger.kernel.org,
+        Shigeru Yoshida <syoshida@redhat.com>
+Subject: [PATCH] batman-adv: Fix hang up with small MTU hard-interface
+Date:   Sat, 20 Aug 2022 12:25:16 +0900
+Message-Id: <20220820032516.200446-1-syoshida@redhat.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,93 +75,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pgdat->kswap could be accessed concurrently by kswapd_run() and
-kcompactd(), it don't be protected by any lock, which leads to the
-following null-ptr-deref,
+The system hangs up when batman-adv soft-interface is created on
+hard-interface with small MTU.  For example, the following commands
+create batman-adv soft-interface on dummy interface with zero MTU:
 
-  vmscan: Failed to start kswapd on node 0
-  ...
-  BUG: KASAN: null-ptr-deref in kcompactd+0x440/0x504
-  Read of size 8 at addr 0000000000000024 by task kcompactd0/37
+  # ip link add name dummy0 type dummy
+  # ip link set mtu 0 dev dummy0
+  # ip link set up dev dummy0
+  # ip link add name bat0 type batadv
+  # ip link set dev dummy0 master bat0
 
-  CPU: 0 PID: 37 Comm: kcompactd0 Kdump: loaded Tainted: G           OE     5.10.60 #1
-  Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
-  Call trace:
-   dump_backtrace+0x0/0x394
-   show_stack+0x34/0x4c
-   dump_stack+0x158/0x1e4
-   __kasan_report+0x138/0x140
-   kasan_report+0x44/0xdc
-   __asan_load8+0x94/0xd0
-   kcompactd+0x440/0x504
-   kthread+0x1a4/0x1f0
-   ret_from_fork+0x10/0x18
+These commands cause the system hang up with the following messages:
 
-Fix it by adding READ_ONCE()|WRITE_ONCE().
+  [   90.578925][ T6689] batman_adv: bat0: Adding interface: dummy0
+  [   90.580884][ T6689] batman_adv: bat0: The MTU of interface dummy0 is too small (0) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
+  [   90.586264][ T6689] batman_adv: bat0: Interface activated: dummy0
+  [   90.590061][ T6689] batman_adv: bat0: Forced to purge local tt entries to fit new maximum fragment MTU (-320)
+  [   90.595517][ T6689] batman_adv: bat0: Forced to purge local tt entries to fit new maximum fragment MTU (-320)
+  [   90.598499][ T6689] batman_adv: bat0: Forced to purge local tt entries to fit new maximum fragment MTU (-320)
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+This patch fixes this issue by returning error when enabling
+hard-interface with small MTU size.
+
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
 ---
- mm/compaction.c |  4 +++-
- mm/vmscan.c     | 15 +++++++++------
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ net/batman-adv/hard-interface.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 640fa76228dd..aa1cfe47f046 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -1983,7 +1983,9 @@ static inline bool is_via_compact_memory(int order)
+diff --git a/net/batman-adv/hard-interface.c b/net/batman-adv/hard-interface.c
+index b8f8da7ee3de..dce5557800e9 100644
+--- a/net/batman-adv/hard-interface.c
++++ b/net/batman-adv/hard-interface.c
+@@ -700,6 +700,9 @@ int batadv_hardif_enable_interface(struct batadv_hard_iface *hard_iface,
+ 	int max_header_len = batadv_max_header_len();
+ 	int ret;
  
- static bool kswapd_is_running(pg_data_t *pgdat)
- {
--	return pgdat->kswapd && task_is_running(pgdat->kswapd);
-+	struct task_struct *t = READ_ONCE(pgdat->kswapd);
++	if (hard_iface->net_dev->mtu < ETH_MIN_MTU + max_header_len)
++		return -EINVAL;
 +
-+	return t && task_is_running(t);
- }
- 
- /*
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index b2b1431352dc..9abba714249e 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4642,16 +4642,19 @@ unsigned long shrink_all_memory(unsigned long nr_to_reclaim)
- void kswapd_run(int nid)
- {
- 	pg_data_t *pgdat = NODE_DATA(nid);
-+	struct task_struct *t;
- 
--	if (pgdat->kswapd)
-+	if (READ_ONCE(pgdat->kswapd))
- 		return;
- 
--	pgdat->kswapd = kthread_run(kswapd, pgdat, "kswapd%d", nid);
--	if (IS_ERR(pgdat->kswapd)) {
-+	t = kthread_run(kswapd, pgdat, "kswapd%d", nid);
-+	if (IS_ERR(t)) {
- 		/* failure at boot is fatal */
- 		BUG_ON(system_state < SYSTEM_RUNNING);
- 		pr_err("Failed to start kswapd on node %d\n", nid);
--		pgdat->kswapd = NULL;
-+		WRITE_ONCE(pgdat->kswapd, NULL);
-+	} else {
-+		WRITE_ONCE(pgdat->kswapd, t);
- 	}
- }
- 
-@@ -4661,11 +4664,11 @@ void kswapd_run(int nid)
-  */
- void kswapd_stop(int nid)
- {
--	struct task_struct *kswapd = NODE_DATA(nid)->kswapd;
-+	struct task_struct *kswapd = READ_ONCE(NODE_DATA(nid)->kswapd);
- 
- 	if (kswapd) {
- 		kthread_stop(kswapd);
--		NODE_DATA(nid)->kswapd = NULL;
-+		WRITE_ONCE(NODE_DATA(nid)->kswapd, NULL);
- 	}
- }
+ 	if (hard_iface->if_status != BATADV_IF_NOT_IN_USE)
+ 		goto out;
  
 -- 
-2.35.3
+2.37.2
 

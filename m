@@ -2,109 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0203659AB70
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 07:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990C359AB69
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 06:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241995AbiHTFDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 01:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
+        id S243302AbiHTEf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 00:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232693AbiHTFDa (ORCPT
+        with ESMTP id S229458AbiHTEf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 01:03:30 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363C81CFE7
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 22:03:25 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M8mjL3lSYz4x1N;
-        Sat, 20 Aug 2022 15:03:18 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1660971798;
-        bh=0sEwRnMPVEFaHqD7f0oYGXuiqcZfbLWw3WJeTLYhpEE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GaGnWo+YIlJOiBvorJosIxFan2VN8Wfk9oyJ/U3kmyl1y3Q4vhP5+kNDxiKhc/NtJ
-         7fH2uEPK7ZsBLU013RlREKMKobZszY0dpobZTyZZXFFBaa29duT0IyXnwYL5317JQL
-         ueOjtzD7YrLvlfbmHSZnkZLlnwNG6nc29pm07wq+HkIGX9c8yFc8gpUYgO+AsiznJ3
-         mQSM9YMkm4+UMlVGWkDEWFGqjKD4UZKsxmoQ2ubxeoxRA+2XAMQM34X68+kiRVvtfT
-         3kgapA20bV5mFMhUdU3TJlsUeMudfHwdVzAjrkoHfpr8zNhJSuGqwSlpI7IrVMoqJ2
-         S2oqB5z/7bZXQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        ruscur@russell.cc
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.0-3 tag
-Date:   Sat, 20 Aug 2022 15:03:18 +1000
-Message-ID: <87wnb3ld61.fsf@mpe.ellerman.id.au>
+        Sat, 20 Aug 2022 00:35:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0915DA3C2;
+        Fri, 19 Aug 2022 21:35:55 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M8m364hr8znTbf;
+        Sat, 20 Aug 2022 12:33:38 +0800 (CST)
+Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 20 Aug 2022 12:35:53 +0800
+Received: from k04.huawei.com (10.67.174.115) by
+ dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 20 Aug 2022 12:35:53 +0800
+From:   Pu Lehui <pulehui@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <stable@vger.kernel.org>,
+        <syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Pu Lehui <pulehui@huawei.com>
+Subject: [PATCH 5.10] bpf: Fix KASAN use-after-free Read in compute_effective_progs
+Date:   Sat, 20 Aug 2022 13:05:18 +0800
+Message-ID: <20220820050518.2118130-1-pulehui@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.115]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500019.china.huawei.com (7.185.36.180)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+From: Tadeusz Struk <tadeusz.struk@linaro.org>
 
-Hi Linus,
+commit 4c46091ee985ae84c60c5e95055d779fcd291d87 upstream.
 
-Please pull some more powerpc fixes for 6.0:
+Syzbot found a Use After Free bug in compute_effective_progs().
+The reproducer creates a number of BPF links, and causes a fault
+injected alloc to fail, while calling bpf_link_detach on them.
+Link detach triggers the link to be freed by bpf_link_free(),
+which calls __cgroup_bpf_detach() and update_effective_progs().
+If the memory allocation in this function fails, the function restores
+the pointer to the bpf_cgroup_link on the cgroup list, but the memory
+gets freed just after it returns. After this, every subsequent call to
+update_effective_progs() causes this already deallocated pointer to be
+dereferenced in prog_list_length(), and triggers KASAN UAF error.
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+To fix this issue don't preserve the pointer to the prog or link in the
+list, but remove it and replace it with a dummy prog without shrinking
+the table. The subsequent call to __cgroup_bpf_detach() or
+__cgroup_bpf_detach() will correct it.
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+Fixes: af6eea57437a ("bpf: Implement bpf_link-based cgroup BPF program attachment")
+Reported-by: <syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com>
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Cc: <stable@vger.kernel.org>
+Link: https://syzkaller.appspot.com/bug?id=8ebf179a95c2a2670f7cf1ba62429ec044369db4
+Link: https://lore.kernel.org/bpf/20220517180420.87954-1-tadeusz.struk@linaro.org
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ kernel/bpf/cgroup.c | 70 ++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 60 insertions(+), 10 deletions(-)
 
-are available in the git repository at:
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 6aa9e10c6335..d154e52dd7ae 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -653,6 +653,60 @@ static struct bpf_prog_list *find_detach_entry(struct list_head *progs,
+ 	return ERR_PTR(-ENOENT);
+ }
+ 
++/**
++ * purge_effective_progs() - After compute_effective_progs fails to alloc new
++ *			     cgrp->bpf.inactive table we can recover by
++ *			     recomputing the array in place.
++ *
++ * @cgrp: The cgroup which descendants to travers
++ * @prog: A program to detach or NULL
++ * @link: A link to detach or NULL
++ * @type: Type of detach operation
++ */
++static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog *prog,
++				  struct bpf_cgroup_link *link,
++				  enum bpf_attach_type type)
++{
++	struct cgroup_subsys_state *css;
++	struct bpf_prog_array *progs;
++	struct bpf_prog_list *pl;
++	struct list_head *head;
++	struct cgroup *cg;
++	int pos;
++
++	/* recompute effective prog array in place */
++	css_for_each_descendant_pre(css, &cgrp->self) {
++		struct cgroup *desc = container_of(css, struct cgroup, self);
++
++		if (percpu_ref_is_zero(&desc->bpf.refcnt))
++			continue;
++
++		/* find position of link or prog in effective progs array */
++		for (pos = 0, cg = desc; cg; cg = cgroup_parent(cg)) {
++			if (pos && !(cg->bpf.flags[type] & BPF_F_ALLOW_MULTI))
++				continue;
++
++			head = &cg->bpf.progs[type];
++			list_for_each_entry(pl, head, node) {
++				if (!prog_list_prog(pl))
++					continue;
++				if (pl->prog == prog && pl->link == link)
++					goto found;
++				pos++;
++			}
++		}
++found:
++		BUG_ON(!cg);
++		progs = rcu_dereference_protected(
++				desc->bpf.effective[type],
++				lockdep_is_held(&cgroup_mutex));
++
++		/* Remove the program from the array */
++		WARN_ONCE(bpf_prog_array_delete_safe_at(progs, pos),
++			  "Failed to purge a prog from array at index %d", pos);
++	}
++}
++
+ /**
+  * __cgroup_bpf_detach() - Detach the program or link from a cgroup, and
+  *                         propagate the change to descendants
+@@ -671,7 +725,6 @@ int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 	u32 flags = cgrp->bpf.flags[type];
+ 	struct bpf_prog_list *pl;
+ 	struct bpf_prog *old_prog;
+-	int err;
+ 
+ 	if (prog && link)
+ 		/* only one of prog or link can be specified */
+@@ -686,9 +739,12 @@ int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 	pl->prog = NULL;
+ 	pl->link = NULL;
+ 
+-	err = update_effective_progs(cgrp, type);
+-	if (err)
+-		goto cleanup;
++	if (update_effective_progs(cgrp, type)) {
++		/* if update effective array failed replace the prog with a dummy prog*/
++		pl->prog = old_prog;
++		pl->link = link;
++		purge_effective_progs(cgrp, old_prog, link, type);
++	}
+ 
+ 	/* now can actually delete it from this cgroup list */
+ 	list_del(&pl->node);
+@@ -700,12 +756,6 @@ int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 		bpf_prog_put(old_prog);
+ 	static_branch_dec(&cgroup_bpf_enabled_key);
+ 	return 0;
+-
+-cleanup:
+-	/* restore back prog or link */
+-	pl->prog = old_prog;
+-	pl->link = link;
+-	return err;
+ }
+ 
+ /* Must be called with cgroup_mutex held to avoid races. */
+-- 
+2.25.1
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.0-3
-
-for you to fetch changes up to f889a2e89ea5b4db5cf09765ee5e310be43c7b6f:
-
-  selftests/powerpc: Add missing PMU selftests to .gitignores (2022-08-15 20:59:17 +1000)
-
-- ------------------------------------------------------------------
-powerpc fixes for 6.0 #3
-
- - Fix atomic sleep warnings at boot due to get_phb_number() taking a mutex with a
-   spinlock held on some machines.
-
- - Add missing PMU selftests to .gitignores.
-
-Thanks to: Guenter Roeck, Russell Currey.
-
-- ------------------------------------------------------------------
-Michael Ellerman (1):
-      powerpc/pci: Fix get_phb_number() locking
-
-Russell Currey (1):
-      selftests/powerpc: Add missing PMU selftests to .gitignores
-
-
- arch/powerpc/kernel/pci-common.c                                | 16 ++++++++++------
- tools/testing/selftests/powerpc/pmu/event_code_tests/.gitignore | 20 ++++++++++++++++++++
- tools/testing/selftests/powerpc/pmu/sampling_tests/.gitignore   | 18 ++++++++++++++----
- 3 files changed, 44 insertions(+), 10 deletions(-)
- create mode 100644 tools/testing/selftests/powerpc/pmu/event_code_tests/.gitignore
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmMAHQUACgkQUevqPMjh
-pYAcqQ//TOGd1WWZmmOR7skVfa7mRdrHG0z5vZ0Zsx6e7TvgzugjrwCDIt19WIhG
-PL8j+UnkPZ4/3d5xz9/tnXT/QPPVSsUAbPAtzCb25f5TdSNOaqiDNlIIinUTikZm
-qTyf+Rbhfp3eIGZNOIDeYbWvuqKvVxEsJRffWfInzZ8QxbI7QJdIbO0biTxR8Tb5
-oEDnK2KWxn97K20Vlnw1u7sWvfaxQv+xMtFg4ztRRoQIw7ArPJt2tlleSqHHa1ts
-YEAoNJpWPZalWFNv71jdAJ0db1YKH61pMRATM1Axbq9sTRkERHAePHAvnQ5PW0r+
-ojVSMj9RWF/e+zqfaU7f8IyYrXKBTCryoOLozWjmFoAlWF5MB4F7p4nVi0A9DBxx
-MAZsuvlwG/SlkXzhImxJeUFyNt4p5AR+ogWdNoYtq6Tddrkr3J2g6wmxqpBamhfy
-GpXiesZ5XbLRCBixn3RiEKd6ngiqWPE1Bi4Dh9Pe7qJXEmn94DwnSP9FmMMy7pg7
-1uZRi2Fc+7+JkMPs3WvuDXaPmZt+IsKHEfwCokCyxMHmMz9bFQz3ibndmo2WaiKK
-LKatWmKeOdfEDiQUnMNug5hItad+wN1x2gcmseuMXVVket0go9odlEqzvnrZoGf7
-6D/ktlBdS8OFonqENuqdbH61Q93U3CqYKDXfB3royghRPlPLkCo=
-=Agbh
------END PGP SIGNATURE-----

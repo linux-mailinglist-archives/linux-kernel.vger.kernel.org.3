@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7DD59AFEF
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 21:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FE159AFF2
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 21:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiHTTgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 15:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
+        id S229930AbiHTThQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 15:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiHTTgi (ORCPT
+        with ESMTP id S229584AbiHTThN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 15:36:38 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E9D63D1
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 12:36:37 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oPUGl-00038H-Qq; Sat, 20 Aug 2022 21:36:31 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oPUGd-0006zB-Bm; Sat, 20 Aug 2022 21:36:23 +0200
-Date:   Sat, 20 Aug 2022 21:36:23 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Gireesh.Hiremath@in.bosch.com, linux-omap@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, bcousson@baylibre.com,
-        tony@atomide.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mkorpershoek@baylibre.com,
-        davidgow@google.com, swboyd@chromium.org, fengping.yu@mediatek.com,
-        y.oudjana@protonmail.com, rdunlap@infradead.org,
-        colin.king@intel.com, sjoerd.simons@collabora.co.uk,
-        VinayKumar.Shettar@in.bosch.com,
-        Govindaraji.Sivanantham@in.bosch.com, anaclaudia.dias@de.bosch.com
-Subject: Re: [PATCH v3 1/3] driver: input: matric-keypad: switch to gpiod
-Message-ID: <20220820193623.bnjgnydu3rkbdtbo@pengutronix.de>
-References: <20220819065946.9572-1-Gireesh.Hiremath@in.bosch.com>
- <20220819131231.nzi26cbrpgfrycl2@pengutronix.de>
- <YwAx38N0ICE37Vu9@google.com>
+        Sat, 20 Aug 2022 15:37:13 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691EC26FB
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 12:37:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661024232; x=1692560232;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cv2NkN6zY4d4QZTgnRmDpZG9w1iR4MlSe+j4QumdcsQ=;
+  b=MZtKox7x4pK9ONwjy08MqS5HsCJtXWvWPKg96CpC9VZbc3geT+Tq1PAG
+   sZyrF2LIcmDOSD+OZLsC9c7qD1S+L+sNfTXMgvqrBVmE1LbZVIeI+ClMe
+   DmbCyXxwOZdMrqTTOo5aQ+PO39lpQEDSN3WADNFJg5Xfy/rkFeLBmbhum
+   IuCFSGiFhisZUjl4d8jAOn3nKl/LSlILHFpPfxAAW5TO7UUGYPItK8YIb
+   zCn0I+LQFyZNtQr9rqqKY9Ry98fY6BoPhITA8IZWdOeqhI19Yo3OT/nOC
+   J3FF31bALnnw9gQ1BmYL5cvTnY/FqgtRPBDjlCAxBY/0rlCtcxaX6ZT86
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="354926748"
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="354926748"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 12:37:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="641587487"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 20 Aug 2022 12:37:10 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPUHO-000367-0x;
+        Sat, 20 Aug 2022 19:37:10 +0000
+Date:   Sun, 21 Aug 2022 03:37:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: kernel/trace/rv/monitors/wwnr/wwnr.c:18:19: sparse: sparse: symbol
+ 'rv_wwnr' was not declared. Should it be static?
+Message-ID: <202208210358.6HH3OrVs-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwAx38N0ICE37Vu9@google.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,97 +62,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cc1807b9158a909ffe829a5e222be756c57c9a90
+commit: ccc319dcb450d57b7befe924453d06804d83ba73 rv/monitor: Add the wwnr monitor
+date:   3 weeks ago
+config: sparc64-randconfig-s041-20220820 (https://download.01.org/0day-ci/archive/20220821/202208210358.6HH3OrVs-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ccc319dcb450d57b7befe924453d06804d83ba73
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout ccc319dcb450d57b7befe924453d06804d83ba73
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 SHELL=/bin/bash kernel/trace/rv/
 
-On 22-08-19, Dmitry Torokhov wrote:
-> On Fri, Aug 19, 2022 at 03:12:31PM +0200, Marco Felsch wrote:
-> > Hi Gireesh,
-> > 
-> > On 22-08-19, Gireesh.Hiremath@in.bosch.com wrote:
-> > > From: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
-> > > 
-> > > Switch from gpio API to gpiod API
-> > 
-> > Nice change.
-> > 
-> > Did you checked the users of this driver? This change changes the
-> > behaviour for actice_low GPIOs. A quick check showed that at least on
-> > upstream board: arch/arm/mach-pxa/palmtc.c uses active low GPIOs.
-> > 
-> > > Signed-off-by: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
-> > > 
-> > > Gbp-Pq: Topic apertis/guardian
-> > > Gbp-Pq: Name driver-input-matric-keypad-switch-gpio-to-gpiod.patch
-> > 
-> > Please drop this internal tags.
-> > 
-> > > ---
-> > >  drivers/input/keyboard/matrix_keypad.c | 84 ++++++++++----------------
-> > >  include/linux/input/matrix_keypad.h    |  4 +-
-> > >  2 files changed, 33 insertions(+), 55 deletions(-)
-> > > 
-> > > diff --git a/drivers/input/keyboard/matrix_keypad.c b/drivers/input/keyboard/matrix_keypad.c
-> > > index 30924b57058f..b99574edad9c 100644
-> > > --- a/drivers/input/keyboard/matrix_keypad.c
-> > > +++ b/drivers/input/keyboard/matrix_keypad.c
-> > > @@ -15,11 +15,10 @@
-> > >  #include <linux/interrupt.h>
-> > >  #include <linux/jiffies.h>
-> > >  #include <linux/module.h>
-> > > -#include <linux/gpio.h>
-> > > +#include <linux/gpio/consumer.h>
-> > >  #include <linux/input/matrix_keypad.h>
-> > >  #include <linux/slab.h>
-> > >  #include <linux/of.h>
-> > > -#include <linux/of_gpio.h>
-> > >  #include <linux/of_platform.h>
-> > >  
-> > >  struct matrix_keypad {
-> > > @@ -49,11 +48,11 @@ static void __activate_col(const struct matrix_keypad_platform_data *pdata,
-> > >  	bool level_on = !pdata->active_low;
-> > >  
-> > >  	if (on) {
-> > > -		gpio_direction_output(pdata->col_gpios[col], level_on);
-> > > +		gpiod_direction_output(pdata->col_gpios[col], level_on);
-> > 
-> > Now strange things can happen, if active_low is set and you specified
-> > GPIO_ACTIVE_LOW within the device-tree. We need a way to move to gpiod
-> > and keep the current behaviour.
-> > 
-> > >  	} else {
-> > > -		gpio_set_value_cansleep(pdata->col_gpios[col], !level_on);
-> > > +		gpiod_set_value_cansleep(pdata->col_gpios[col], !level_on);
-> > >  		if (!pdata->drive_inactive_cols)
-> > > -			gpio_direction_input(pdata->col_gpios[col]);
-> > > +			gpiod_direction_input(pdata->col_gpios[col]);
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-...
+sparse warnings: (new ones prefixed by >>)
+   kernel/trace/rv/monitors/wwnr/wwnr.c: note: in included file:
+   kernel/trace/rv/monitors/wwnr/wwnr.h:30:23: sparse: sparse: symbol 'automaton_wwnr' was not declared. Should it be static?
+>> kernel/trace/rv/monitors/wwnr/wwnr.c:18:19: sparse: sparse: symbol 'rv_wwnr' was not declared. Should it be static?
 
-> > > @@ -429,9 +410,6 @@ matrix_keypad_parse_dt(struct device *dev)
-> > >  	pdata->wakeup = of_property_read_bool(np, "wakeup-source") ||
-> > >  			of_property_read_bool(np, "linux,wakeup"); /* legacy */
-> > >  
-> > > -	if (of_get_property(np, "gpio-activelow", NULL))
-> > > -		pdata->active_low = true;
-> > > -
-> > 
-> > This removes backward compatibility, please don't do that.
-> 
-> I do not think there is a reasonable way of keeping the compatibility
-> while using gpiod API (sans abandoning polarity handling and using
-> *_raw() versions of API).
-> 
-> I would adjust the DTSes in the kernel and move on, especially given
-> that the DTSes in the kernel are inconsistent - they specify
-> gpio-activelow attribute while specifying "action high" in gpio
-> properties).
+vim +/rv_wwnr +18 kernel/trace/rv/monitors/wwnr/wwnr.c
 
-Yes, because the driver didn't respect that by not using the gpiod API.
-Got your point for the DTses but what about the boards based on the
-platform-data? Those boards must be changed as well.
+    17	
+  > 18	struct rv_monitor rv_wwnr;
+    19	DECLARE_DA_MON_PER_TASK(wwnr, unsigned char);
+    20	
 
-Also I thought DTB is firmware and we should never break it, now we
-doing it by this commit. Just to get your opinion on this.
-
-Regards,
-  Marco
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

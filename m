@@ -2,92 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F72A59AF71
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 20:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092B559AF83
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 20:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbiHTSOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 14:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
+        id S231310AbiHTSQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 14:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbiHTSOj (ORCPT
+        with ESMTP id S229472AbiHTSQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 14:14:39 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB382BB3C
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:14:38 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id vw19so585424ejb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=fJ+mgjT2uor3fzF3w2fg4p4jIoUEQwunlNQlMHXLtCo=;
-        b=UH0lhrTxgMvxau9HlVNw7CrHSJHpWNx7MZAhuOFwYCRGrGSK3ODQtb0w2OIG5iqNrx
-         S+BA6HtGY5kb+dm0kJaBA9V7+7EsEkkxiV4gbSzOk29NLI3IQvIOP19aZLmcvQ+A6yaW
-         77fSnn8ARLp5NWuGqWliQ/mB+sY/en6QO+R5o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=fJ+mgjT2uor3fzF3w2fg4p4jIoUEQwunlNQlMHXLtCo=;
-        b=oyZCS/VWI9J3CLvE3REqqi+6C0/5WJEc1xtTaD+KeczxkIznNncaohCONfezaIyR2A
-         CXU/gWJ57HlOfIFcjfgkqoOBenvsehsq42QoazkEOjzG7T3w7NqqVNe2Rw9Jvuqqy+tM
-         qrXZCd01HKHGbe2qurz9+oVMVbukRzwSNZLO8QgslHyiEIY3X0ZmnaJ/LTYpy+WdnjYc
-         yU4WMXnbhXNxstsLn6GxcF4YP3QyMYjiaf+a9+wlZPZ+Xi1Jhkjclbh0JxrXocG2CDe6
-         XH2B8HOXOIZ++OOW97BTkQIFl7Do6Vn6sbOq8gAZntysFpaEhm5ZdxROKFea1ZjOyOYn
-         lkzA==
-X-Gm-Message-State: ACgBeo1h1mJxzPQ3jEneJnnI3Au2x2l2h2wdbyvDnRiI7YcR9bVK6qq6
-        qtTwHmXvRKXR74TmIZ9ZIhOZ+dlRGYZQpfrc
-X-Google-Smtp-Source: AA6agR5QVL8Z/tBwKc5rc8X1ZipFirOk/AyuvYwZCLXon5GqJ7fLxZcE35GKB/RxKj5W+326gkBNdg==
-X-Received: by 2002:a17:907:d2a:b0:730:d34d:8a1c with SMTP id gn42-20020a1709070d2a00b00730d34d8a1cmr8227242ejc.574.1661019276858;
-        Sat, 20 Aug 2022 11:14:36 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906210a00b0072ee7b51d9asm3900745ejt.39.2022.08.20.11.14.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 20 Aug 2022 11:14:35 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id h24so8570750wrb.8
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:14:35 -0700 (PDT)
-X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id
- a8-20020a056000188800b00222ca41dc26mr6619808wri.442.1661019275424; Sat, 20
- Aug 2022 11:14:35 -0700 (PDT)
+        Sat, 20 Aug 2022 14:16:11 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3664017071
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661019370; x=1692555370;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TDA1eoaLC9crJK0rIYcZn/hEOf+s0OqEKsBKkN7RcWs=;
+  b=CI6ynh2OoTVB9kK8hnKtDQXRut04/71TnI9BuCpge59SHAg3OPD0fgf1
+   YYxVHLLwvK5K2bAqjJKG2BQ13EUDPgK5TvQJDCPwww7OapMgHBPoM5zMs
+   E9kQRaiY7XEG6WJNKYs2SYd3+XKlXaYVcjSy531qfIAbCvkHJLy+EiV+l
+   Ox9BELZsIH04GyYgndngebxJjuh2uX07JvlLJPmfXIFQ4cNdxDibeY9k0
+   EeM4eIEnzQ5a132dEVae2At2Nxc/u/XW+/ex83kXPtcba41/K0LBgBRah
+   eRAtXoz3E2SWQ71boDoYTJVzdVe2FbgSxQnZhdddahMNwxvcE3Nw7naaU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="294471738"
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="294471738"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 11:16:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="585015778"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 20 Aug 2022 11:16:07 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPT0x-00030V-0T;
+        Sat, 20 Aug 2022 18:16:07 +0000
+Date:   Sun, 21 Aug 2022 02:15:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>, Fuad Tabba <tabba@google.com>
+Subject: arch/arm64/kvm/hyp/nvhe/stacktrace.c:38:1: sparse: sparse: symbol
+ '__pcpu_scope_pkvm_stacktrace' was not declared. Should it be static?
+Message-ID: <202208210225.5VNIyPGA-lkp@intel.com>
 MIME-Version: 1.0
-References: <YwBWJYU9BjnGBy2c@ZenIV>
-In-Reply-To: <YwBWJYU9BjnGBy2c@ZenIV>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 20 Aug 2022 11:14:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whL7nCkQLwWG29c-ojeCPqbaHPsRzOxEoxO0HzLuZV+sw@mail.gmail.com>
-Message-ID: <CAHk-=whL7nCkQLwWG29c-ojeCPqbaHPsRzOxEoxO0HzLuZV+sw@mail.gmail.com>
-Subject: Re: [RFC][PATCHES] termios.h cleanups
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 8:34 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> It takes the helpers and INIT_C_CC into new header (termios-internal.h),
-> with defaults being in linux/termios-internal.h, unless an arch-specific
-> variant is provided in asm/termios-internal.h (only alpha and sparc end
-> up needing that).  Files that need that stuff (all 4 of them) include
-> linux/termios-internal.h.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   50cd95ac46548429e5bba7ca75cc97d11a697947
+commit: 6928bcc84bc4bd9a24a1cb1986418c3de76e1d99 KVM: arm64: Allocate shared pKVM hyp stacktrace buffers
+date:   4 weeks ago
+config: arm64-randconfig-s033-20220820 (https://download.01.org/0day-ci/archive/20220821/202208210225.5VNIyPGA-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6928bcc84bc4bd9a24a1cb1986418c3de76e1d99
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6928bcc84bc4bd9a24a1cb1986418c3de76e1d99
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
-I don't see anything obviously wrong here, and my main reaction is
-actually that I wish this went a bit further, and moved the whole
-kernel_termios_to_user_termios stuff into C code rather than having
-them in headers.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I don't think it's really worth inlining those things, and I wonder if
-we could just have the default "just copy directly to/from user space"
-as __weak functions, and then allow sparc and alpha to override them?
+sparse warnings: (new ones prefixed by >>)
+   arch/arm64/kvm/hyp/nvhe/stacktrace.c:12:1: sparse: sparse: symbol '__pcpu_scope_overflow_stack' was not declared. Should it be static?
+   arch/arm64/kvm/hyp/nvhe/stacktrace.c:15:1: sparse: sparse: symbol '__pcpu_scope_kvm_stacktrace_info' was not declared. Should it be static?
+>> arch/arm64/kvm/hyp/nvhe/stacktrace.c:38:1: sparse: sparse: symbol '__pcpu_scope_pkvm_stacktrace' was not declared. Should it be static?
 
-              Linus
+vim +/__pcpu_scope_pkvm_stacktrace +38 arch/arm64/kvm/hyp/nvhe/stacktrace.c
+
+    11	
+  > 12	DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack)
+    13		__aligned(16);
+    14	
+    15	DEFINE_PER_CPU(struct kvm_nvhe_stacktrace_info, kvm_stacktrace_info);
+    16	
+    17	/*
+    18	 * hyp_prepare_backtrace - Prepare non-protected nVHE backtrace.
+    19	 *
+    20	 * @fp : frame pointer at which to start the unwinding.
+    21	 * @pc : program counter at which to start the unwinding.
+    22	 *
+    23	 * Save the information needed by the host to unwind the non-protected
+    24	 * nVHE hypervisor stack in EL1.
+    25	 */
+    26	static void hyp_prepare_backtrace(unsigned long fp, unsigned long pc)
+    27	{
+    28		struct kvm_nvhe_stacktrace_info *stacktrace_info = this_cpu_ptr(&kvm_stacktrace_info);
+    29		struct kvm_nvhe_init_params *params = this_cpu_ptr(&kvm_init_params);
+    30	
+    31		stacktrace_info->stack_base = (unsigned long)(params->stack_hyp_va - PAGE_SIZE);
+    32		stacktrace_info->overflow_stack_base = (unsigned long)this_cpu_ptr(overflow_stack);
+    33		stacktrace_info->fp = fp;
+    34		stacktrace_info->pc = pc;
+    35	}
+    36	
+    37	#ifdef CONFIG_PROTECTED_NVHE_STACKTRACE
+  > 38	#include <asm/stacktrace/nvhe.h>
+    39	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

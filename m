@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843CD59B012
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 22:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2672A59B02C
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 22:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233987AbiHTT7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 15:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
+        id S233098AbiHTT7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 15:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbiHTT6l (ORCPT
+        with ESMTP id S232373AbiHTT6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 20 Aug 2022 15:58:41 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C73D2A24D
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 12:58:35 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id p9so5961532pfq.13
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 12:58:35 -0700 (PDT)
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44F12871F
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 12:58:37 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id c2so6772901plo.3
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 12:58:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc;
-        bh=Sr3mfLjIXUVPt2Cgs2+sTdfLuzfKP+HqrSqTYzV33qM=;
-        b=j3vTDZy4p2Le5Jv0g004C6FlSoKi1tbfV1xl1Chcm4rgJmgijjKKbt14lR0SYOgxh/
-         qSPHV6lqPVzbAm193b3dSHb8ziy34S7eilhgMrD6XwfUzm4KjF6cGaG1vPr8hH/1FGcn
-         GLeAeeydrXgAdYZV+YW1cN/gEkFTE0eYugQZScgx6tnKPrw4e553sr2Gz2P/qQYgWBfX
-         xU5mENf9vP/K7HumNytFxQS2VsjDGIpLWu+CsvxYJPyTFff4RyyDM02Fs4a3bFwXjyPR
-         JwcEwjhIm4YAdpOQzqWTzKA7JFHreBz96+o4A559dCwvbWGb21vk4dNdMnfW8v9xvPED
-         5g+w==
+        bh=dMFXg3AB8Kus5JNouLBHdMgn7Dy/CGRupLO5nuK1l3I=;
+        b=t3h0slct3P4QP/EX3QgcDT5fzOEi1f+sZtvp2hNV4pFegjz/A6N13zk1tbwW12sHrQ
+         keXZ6YdVdB61vvFtakAppATXAFJn6gqXcvlp0lNMtgiTpMGyUxNipWVIBpbOng7K9stK
+         ue4pcaiPHIvUh9bb6ndZLPz42dn5naMduzQb+L8BLvIkdyRFzEv53KSii/q5vlvJ8ZyV
+         RdqTQYp873mcqbEFjSs9UMHlv+sf0Sj7AooA27HWn3r6trpSZ21rs3aJF7FUbzKUSQ5r
+         BtE1pYh+RQKjrTsKYOzZNxwRKXSqFfroQAgTUQUu12gOWdNChZVj2WhBfi7RJGuMFx3m
+         A2xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=Sr3mfLjIXUVPt2Cgs2+sTdfLuzfKP+HqrSqTYzV33qM=;
-        b=T710SJqnRYvALZ5CRjcOdXy2CGVRWej6r45uPBtj1bPlZMugq8Y63YcBiVqDv3V27k
-         Ryte5eDCdQOYuvnjLeNQQWsZAUl3Taa7SMgwCWMUlLvBD99DpSsrFzMq3e87DovFW3as
-         LM1Dz74SLYG8a43sX8gN4sh9giuWMuCek4vcG4M7vFqJrMdk6lTZSyPC81NfNM2Eo7ep
-         25epM303Iwh10NhdN+RzrvrbQBQeZnQw78w1VviLdM/ejgLmI0sMSKsGBoDHWuA2gjUO
-         TOdwf1hQu3oD2q2fJMST3zNrAeihX3dqQPEss6UO6DWhhwi/k5X55icg3GAz093YyFyO
-         XHEA==
-X-Gm-Message-State: ACgBeo2xC58xr2MaD4NYN8fDvVmIQI9plm/NXY9fslrbOrD98eh5kzjy
-        V6vuDb7akUT1TP/qQXOkmDk2yA==
-X-Google-Smtp-Source: AA6agR47URWPJSwayd94xotbsO1f46lHE9aar40iSqylb83eDldTVhFKrWac2ORxP6lV9pykall+2A==
-X-Received: by 2002:a63:3d1:0:b0:41d:f1e0:c15e with SMTP id 200-20020a6303d1000000b0041df1e0c15emr11326001pgd.156.1661025514879;
-        Sat, 20 Aug 2022 12:58:34 -0700 (PDT)
+        bh=dMFXg3AB8Kus5JNouLBHdMgn7Dy/CGRupLO5nuK1l3I=;
+        b=tdaLDVewuMjHo2xzqv//sWENsIxyE9vxf665yDiPgTNWJiSsU1VyVyV3mhCs4K/cZL
+         Cgs/ROfjNBkRbGBFBKVwOK5iElrqlyyWc2MWDDYyDBjlJtofTU8Lew1H/a4Hix8Kve09
+         e/BiwKIpgtZFr/ofh81lixk4O2pbBIwQnHLIKGGIurAPZPvpWqchJue8c6avr8z6Yqom
+         o5ljb5+vpO7JcNwsvS96PRi/tWImIBkQ4fiSq2bz9pa2WGmuUPXpab5IXKuRp+hZHYKL
+         EVcwMac8cDVOdN8y4m2uRWgviIsyAetwG1zkh/Hb9f6xSIYHJyxqz8ofWE9/UMTchSef
+         oSnw==
+X-Gm-Message-State: ACgBeo3QUQeEN9yNz7qb9QOGPpl4IK64VweG2iJxCSxzRDNTMQoYevU1
+        fx6Wzvog2AWNYf5H47PHsdVMIQ==
+X-Google-Smtp-Source: AA6agR6RW//AMsJUUACM4DrHrFkG9shgWkxpnrOK53CzgPda+VodsA8Lz0C0AMVDuhec/F+nxjtIPg==
+X-Received: by 2002:a17:90b:3b8a:b0:1f5:56c3:54ac with SMTP id pc10-20020a17090b3b8a00b001f556c354acmr15312731pjb.2.1661025517240;
+        Sat, 20 Aug 2022 12:58:37 -0700 (PDT)
 Received: from platform-dev1.pensando.io ([12.226.153.42])
-        by smtp.gmail.com with ESMTPSA id u66-20020a626045000000b005363bc65bb1sm2316794pfb.91.2022.08.20.12.58.32
+        by smtp.gmail.com with ESMTPSA id u66-20020a626045000000b005363bc65bb1sm2316794pfb.91.2022.08.20.12.58.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 12:58:34 -0700 (PDT)
+        Sat, 20 Aug 2022 12:58:36 -0700 (PDT)
 From:   Brad Larson <brad@pensando.io>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
@@ -62,9 +62,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
         robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
         suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
         ulf.hansson@linaro.org, will@kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v6 08/17] MAINTAINERS: Add entry for AMD PENSANDO
-Date:   Sat, 20 Aug 2022 12:57:41 -0700
-Message-Id: <20220820195750.70861-9-brad@pensando.io>
+Subject: [PATCH v6 09/17] arm64: Add config for AMD Pensando SoC platforms
+Date:   Sat, 20 Aug 2022 12:57:42 -0700
+Message-Id: <20220820195750.70861-10-brad@pensando.io>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220820195750.70861-1-brad@pensando.io>
 References: <20220820195750.70861-1-brad@pensando.io>
@@ -79,33 +79,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Brad Larson <blarson@amd.com>
 
-Add entry for AMD PENSANDO maintainer and files
+Add ARCH_PENSANDO configuration option for AMD Pensando
+SoC based platforms.
 
 Signed-off-by: Brad Larson <blarson@amd.com>
 ---
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/arm64/Kconfig.platforms | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f512b430c7cb..b46379a15a86 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1802,6 +1802,15 @@ N:	allwinner
- N:	sun[x456789]i
- N:	sun50i
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 74e9e9de3759..4de253974544 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -225,6 +225,18 @@ config ARCH_NPCM
+ 	  General support for NPCM8xx BMC (Arbel).
+ 	  Nuvoton NPCM8xx BMC based on the Cortex A35.
  
-+ARM/AMD PENSANDO ARM64 ARCHITECTURE
-+M:	Brad Larson <blarson@amd.com>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Supported
-+F:	Documentation/devicetree/bindings/*/amd,pensando*
-+F:	arch/arm64/boot/dts/amd/elba*
-+F:	drivers/mfd/pensando*
-+F:	drivers/reset/reset-elbasr.c
++config ARCH_PENSANDO
++	bool "AMD Pensando Platforms"
++	help
++	  This enables support for the ARMv8 based AMD Pensando SoC
++	  family to include the Elba SoC.
 +
- ARM/Amlogic Meson SoC CLOCK FRAMEWORK
- M:	Neil Armstrong <narmstrong@baylibre.com>
- M:	Jerome Brunet <jbrunet@baylibre.com>
++	  AMD Pensando SoCs support a range of Distributed Services
++	  Cards in PCIe format installed into servers.  The Elba
++	  SoC includes 16 A-72 CPU cores, 144 programmable P4
++	  cores for a minimal latency/jitter datapath, and network
++	  interfaces up to 200 Gb/s.
++
+ config ARCH_QCOM
+ 	bool "Qualcomm Platforms"
+ 	select GPIOLIB
 -- 
 2.17.1
 

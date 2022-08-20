@@ -2,106 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEFF59ABF5
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 09:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FBC59ABFD
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 09:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245534AbiHTHPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 03:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
+        id S1343758AbiHTHRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 03:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343768AbiHTHP2 (ORCPT
+        with ESMTP id S243618AbiHTHRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 03:15:28 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119A4C6978
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 00:15:27 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id bq11so840442wrb.12
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 00:15:26 -0700 (PDT)
+        Sat, 20 Aug 2022 03:17:14 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEDEC6526;
+        Sat, 20 Aug 2022 00:17:13 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id g8so1924970plq.11;
+        Sat, 20 Aug 2022 00:17:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
-         :to:cc;
-        bh=MUPE+WCKiaoxRAdnteR3TsIHrvUD8FAr/F1eBQt4pX0=;
-        b=KdCJNWL2dR3N/ki0djnH1LZ3DEUE9n7v97f8kUj+j8kkKCp0bSS+9oKbmEHJxoM9Vp
-         QGw8rff2sdBxCz5RPsiif7+pTWd+ZiDH+l4SrNLaYb4zNo4XE6yejvcpjq+UsBlILEt2
-         rb8gxJMC0yP4bLfUNquuvA3LP7d/jNXAeXCnITM/pOMW/IlV09hz5xS/F4v94iF7nLKn
-         FN5+ufOPUAe2CKvQieqUeUsgVlvjf9NwJJ30avMQsq9ipIusKcqLWZ0ixeoH/0wxhxC+
-         PyKm4E767FcuRVp7Z3Vl05o1xbaaAD1Q0CTASgsC/tM3RR1WBi5/u72jJpHx2AyqBZDg
-         73lw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=tiWN3Tg8ccjmVvqr90gf5NMhps8BOid12A7i1GTF99Q=;
+        b=lRxVSoTELfA+v7Mi/OGz5h1My6Juy9x9ab0DzifkNU+5Suvk10dk3DSbNaPrjWh5Vf
+         LtQtX67i5bhzumqvfAk9R/3XDYE4Zw/QH56B2nayo1kQW/YrN0zjYrVz4jQrn+pVUN50
+         jlsnGHDHLqi8/wxD1nmw5RNjHZhqZi3VFzqjV8oihTVC7m+n8WTlck1KVXOy6+Flikxq
+         DpT6W3mj/+x8QWppk1kab/y4q8RCDapPbJcysUIx8kdpKlzRXRZNFWCA8yvc3zzrWA+V
+         jvLDrPdkkAlF3trr/foRUR5naK/FGMivJ8pmMa95YX3PZ6wp98jFHu4UC6TyJ5LnlOou
+         lAtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=MUPE+WCKiaoxRAdnteR3TsIHrvUD8FAr/F1eBQt4pX0=;
-        b=LMhRzwxktWDHviF1rygFLuGUY9bdMIQOuswsjeBFM8AkptiL+UJgtdekdWOVUuZdTC
-         LLBs5AhJs3KOF791km3aZg9v+GFd2NrGf4hwto9mEcqNYfguDou7FhnNUem0+YB0W2fJ
-         /HQlBw7hGyRDl0WTQGjF6t6Y51y+uupuTFxPSpUG/yNqEPCBc8zzz+cnIxZTuPC5ssAl
-         SxF4+ruDDYidqWomQeU9stf2ORHrZN3+oZMruQeRJqJwsQdGOc2GQhdILpFeI1wjob4X
-         CtxGl6xwFuHpXYNi5KGX1sFFFa0Sw11NXDMl8f5TnETXNJ4xTnpoGEnbMXJO7Rw47kId
-         7GWw==
-X-Gm-Message-State: ACgBeo1kI4fBEqTkK0j/8KzjLI6Ps5gjZQ1Ycrv5wKn6FaJ9HUNxd4oQ
-        ltMP3aVZhvAAoRGLXWPL3gHwu/d2D4sK1uo+tA0=
-X-Google-Smtp-Source: AA6agR66pRfE0qrWirj4m0fL4TX9iCkT1Fan7BxZqnxjZBoBCp4zilySUj4Hgdtnk4ngzfFJdoROSc7I4TBQ/MGXkEE=
-X-Received: by 2002:adf:ec4c:0:b0:225:2f42:39df with SMTP id
- w12-20020adfec4c000000b002252f4239dfmr5894756wrn.135.1660979725423; Sat, 20
- Aug 2022 00:15:25 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=tiWN3Tg8ccjmVvqr90gf5NMhps8BOid12A7i1GTF99Q=;
+        b=RZe4S7pkxrrJXH/y0pBMuJFG6fcRgBPCAD6gmWf85SklOGZlcl9e1XL8dYBY5UxiDJ
+         B3F2S12EPiymsBZ94qe9OY6x4/qZanXpkAqos6Se8bchY7mZdX3yhjsmOPx+JCXC/1By
+         vlqCm9AEi6GhmD1xqaFs5dyukjDuvLh9Vin/gtSgjJtjakjSs38o2qZfMTIxsAH5bJqX
+         NGzY6FwfAX1PCK27kak5JdndTaWpk68umwC+9qnvNVrAzQBHeN+HnmBvRrmua00JvPp9
+         FdlLFk55bUZpNLfutBojs+wO0jQpv4wJb43AP9xsRJ4SJQShccCRxIST/1ip7R9ghtZT
+         DNPg==
+X-Gm-Message-State: ACgBeo2RTzgA+Xsgcg7AqN7jvmDjWNT8FVA8jBKlPI5ZVV5NuhKGGe9t
+        uk76FsbFBXQoSwFhjQoD/Mr/oZxSavWwtzMLZu4=
+X-Google-Smtp-Source: AA6agR4759y9SRpgFsZRrkU8UKb9i8Maz87PVIpulGijhE+rZRTZKrky3ehLbyAaqtqCNeKOi0rWKA==
+X-Received: by 2002:a17:90b:380f:b0:1f5:55ef:a53a with SMTP id mq15-20020a17090b380f00b001f555efa53amr12110165pjb.14.1660979832641;
+        Sat, 20 Aug 2022 00:17:12 -0700 (PDT)
+Received: from mithil.localdomain ([103.19.226.223])
+        by smtp.gmail.com with ESMTPSA id j15-20020a17090a694f00b001faf273e4afsm1459019pjm.35.2022.08.20.00.17.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Aug 2022 00:17:11 -0700 (PDT)
+From:   Mithil Bavishi <bavishimithil@gmail.com>
+To:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     dmitry.torokhov@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org, sre@kernel.org,
+        tony@atomide.com, linux@armlinux.org.uk, bavishimithil@gmail.com,
+        contact@paulk.fr
+Subject: [PATCH 00/10] Add TWL6030 power off and powerbutton support
+Date:   Sat, 20 Aug 2022 12:46:50 +0530
+Message-Id: <20220820071659.1215-1-bavishimithil@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Reply-To: jerrydosso1@hotmail.com
-Sender: udoeze160@gmail.com
-Received: by 2002:a5d:5887:0:0:0:0:0 with HTTP; Sat, 20 Aug 2022 00:15:24
- -0700 (PDT)
-From:   Jerry Dosso <jerrydosso55@gmail.com>
-Date:   Sat, 20 Aug 2022 09:15:24 +0200
-X-Google-Sender-Auth: QWSCMBbUKtezJzLKwWqfEjQuCYo
-Message-ID: <CAG0PvUCQwKDJCdM=Y4-fUUaDV1x0UkRB2pvcwFWMZ88BPaisKA@mail.gmail.com>
-Subject: Mr Jerry Dosso
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:432 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [udoeze160[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jerrydosso55[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [jerrydosso1[at]hotmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello!
+
+This patchset is based off on an earlier series of patches submitted
+https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1110053.html
+It adds support for power off to the TWL6030 chipset, adds power button
+support to the TWL6030 chipset, moves power driver to the correct
+location, clean up in code from the original patch.
+
+Thanks, Mithil
+
+Mithil Bavishi (6):
+  power: reset: Move TWL4030 power driver from mfd
+  dt-bindings: power: reset: Move twl4030-power from mfd to power/reset
+  dt-bindings: input: twl-pwrbutton: Add support for twl6030-pwrbutton
+  dt-bindings: power: reset: Add bindings for twl6030-power
+  input: misc: Rename twl4030_pwrbutton to twl_pwrbutton
+  dt-bindings: input: Rename twl4030-pwrbutton to twl-pwrbutton
+
+Paul Kocialkowski (4):
+  power: reset: Add TWL6030 power driver, with minimal support for power
+    off
+  ARM: OMAP2+: Only select TWL4030_POWER for OMAP3
+  ARM: OMAP2+: Select TWL6030_POWER for OMAP4
+  input: misc: Add TWL6030 power button support to twl-pwrbutton
+
+ ...wl4030-pwrbutton.txt => twl-pwrbutton.txt} |  5 +-
+ .../{mfd => power/reset}/twl4030-power.txt    |  0
+ .../bindings/power/reset/twl6030-power.txt    | 31 +++++++
+ arch/arm/boot/dts/twl6030.dtsi                |  5 +
+ arch/arm/configs/omap2plus_defconfig          |  2 +-
+ arch/arm/mach-omap2/Kconfig                   |  3 +-
+ drivers/input/misc/Kconfig                    |  8 +-
+ drivers/input/misc/Makefile                   |  2 +-
+ .../{twl4030-pwrbutton.c => twl-pwrbutton.c}  | 75 ++++++++++-----
+ drivers/mfd/Kconfig                           | 13 ---
+ drivers/mfd/Makefile                          |  1 -
+ drivers/power/reset/Kconfig                   | 22 +++++
+ drivers/power/reset/Makefile                  |  2 +
+ drivers/{mfd => power/reset}/twl4030-power.c  |  0
+ drivers/power/reset/twl6030-power.c           | 93 +++++++++++++++++++
+ include/linux/mfd/twl.h                       |  1 +
+ 16 files changed, 217 insertions(+), 46 deletions(-)
+ rename Documentation/devicetree/bindings/input/{twl4030-pwrbutton.txt => twl-pwrbutton.txt} (72%)
+ rename Documentation/devicetree/bindings/{mfd => power/reset}/twl4030-power.txt (100%)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/twl6030-power.txt
+ rename drivers/input/misc/{twl4030-pwrbutton.c => twl-pwrbutton.c} (55%)
+ rename drivers/{mfd => power/reset}/twl4030-power.c (100%)
+ create mode 100644 drivers/power/reset/twl6030-power.c
+
 -- 
-My Dear Friend,
+2.25.1
 
-Did you receive the message i sent to you?
-
-Regards,
-
-Mr Jerry Dosso

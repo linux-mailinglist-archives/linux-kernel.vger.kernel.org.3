@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900F559B00E
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 22:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69EF159B01A
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 22:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbiHTT6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 15:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S231397AbiHTT6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 15:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbiHTT6T (ORCPT
+        with ESMTP id S231712AbiHTT6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 15:58:19 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BF6165AB
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 12:58:18 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id r14-20020a17090a4dce00b001faa76931beso10446144pjl.1
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 12:58:18 -0700 (PDT)
+        Sat, 20 Aug 2022 15:58:23 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9B71C108
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 12:58:21 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id y15so3067869pfr.9
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 12:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc;
-        bh=NTXAxyQL3waGEJkz3JFJl11ykh+V7CnflPyyCrkRmVo=;
-        b=aDa+MkMjVsjqpzMdLGR6xZaO83PwMwIyrZk1GxVo53E9S8vjB9rlObTewiew3FvTg9
-         PsmXG+TvLB+kgfj/mcJ2XaywU1rNXrEAUj3nPhpqmZ5YSLfTolGBVp2+oxHN3xxXv0V6
-         QyCuqJhpn2pRir62TbQzOyzsahTjKTvVsI2BqP3rWHEB8nifJPHLG1boGRd10ty1mUKH
-         iqj6LJQH+pu00fdELeJ+itJKXkM2mmWwl3xm2HTPAgoHIacTVprXbH+2jD1X+/PhvKv1
-         1c207Zornyjs8wquci/ZHDxlHF5mWGFuKOFM5SSeE5m7llxoQKCNdgE0dsrSJ+oasP6n
-         Xz6A==
+        bh=wz9MsUwmI5n+ymksjYC4EkZBI5QAxatLdHbVurA5ZlI=;
+        b=B8EI6enIRiLHMyZoWfn+OOYNPz31hR0ZY++Q94mK6NKM8A3wITa5OvTvgeINH8KgD4
+         AmuRI/+HTkNFJtsvXt23x2KKRBDeiIDx5CIfhzmS9w3Gme000XD+BSvtAo9hQRwTZUr3
+         MWC9RLksiznlY89PnUyIuGGUPD/9xLkT1fYwWsb9y7LRZTsm9e/Gj8FQsyut0jLf8CBs
+         Gb/qfpwINSLdJDqNn8WGC988FtkhZKkAep2W+Cw4e3SS/8huflK49+9iiDiLZv9T3164
+         EHpuw28I0pxqcuqerOIBOA99r0j7RkGTjWSbuqKI1U4ft3fcyU9qJbJVyGY0h4wZqxHi
+         xqtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=NTXAxyQL3waGEJkz3JFJl11ykh+V7CnflPyyCrkRmVo=;
-        b=eTu6A1WOBak49C/0wg5bxymKIt7eKZ/fi0qa4GioBhVe9p2UyCCqTsMMJTIPtC599F
-         hrN0TLFRiRCFywHZHZvrsxHE4xYCsPDhtkAWIDuufo3CLzV9MdjVQnVJJzWZwAJbocli
-         VYA9GhfaJmyQc8zYAAbvuOuqChbP8islNsq18X3EIaxQ04rIajgZ7sYxvBC+QBZmVPuY
-         nHKwIoNZeRYeoV4FBYrE4GwTEv3AlUjKXZc6fFPtp3LB+MG8UtbC2trWcdWpYO+p8hQs
-         EGqL5A0V+VgXxSTXevz1Gxa4Kh/R4tCHV57vlQRd8n9kGLKScUnCjVF6gmoSrgFTUWbv
-         Zs7Q==
-X-Gm-Message-State: ACgBeo2fQO++V4wqt+yZ8KHuj2OfJyrMDW5c9t6kjgVpQzX+vrYLjIsT
-        l2AECgwZOQeWrvk7/cFOld6i4Q==
-X-Google-Smtp-Source: AA6agR4lIy2KV6bT/mtcoUBCfdxboF9vk9E8rQOlcdA7QKnG74sjDawFROrHf2Z3OgHjdJ4lYC890g==
-X-Received: by 2002:a17:902:70c7:b0:170:9030:8219 with SMTP id l7-20020a17090270c700b0017090308219mr13177138plt.163.1661025498268;
-        Sat, 20 Aug 2022 12:58:18 -0700 (PDT)
+        bh=wz9MsUwmI5n+ymksjYC4EkZBI5QAxatLdHbVurA5ZlI=;
+        b=hZ0bE+WY/zxtXiS07BpaSo4KXIRbqYx5qm6mfnEhRal7kwkUYXLeI4KnRfptKgq7Ou
+         g4MR1gYJBylVqesg1lfKaU7bmgHE1s23dDqOZi7qTIETs//O6HpA/mlXnqFbL/vDtN6C
+         wfq97QC9/4ohX/536KmlYWVfhl85RBf5uw3sS/UQi4dJDbTVR80A187rP9ZR8QyFFAo4
+         eQTcixjIA1InP/Z55VjR5KiALyPwUY1zjRs2NHVSk/ZIxsj3XE2nUhoZpAarSf3+7JFw
+         noS+fKTf9N5z4zErd6bPkXvKmanVcIPJyRwYRY259qLa3LtR5lO45CAXqNA4eqOzMTU3
+         MtwQ==
+X-Gm-Message-State: ACgBeo2Qil65oyJ2162GzJlCuEgSOKbBmF4a0LVuczvmP1axyfgYFigg
+        3Blfle0b1hkuKjQaNa5kmtHYsiF8wNhVPY3W
+X-Google-Smtp-Source: AA6agR7hs5dMUXq2LiE7InqSQSJ3w32+PKzInx3oGBczozrPj5Qd2Ax7XXzFuEy4aAGPzi6V/t+b7Q==
+X-Received: by 2002:a65:4501:0:b0:3fc:4895:283b with SMTP id n1-20020a654501000000b003fc4895283bmr11262902pgq.231.1661025500870;
+        Sat, 20 Aug 2022 12:58:20 -0700 (PDT)
 Received: from platform-dev1.pensando.io ([12.226.153.42])
-        by smtp.gmail.com with ESMTPSA id u66-20020a626045000000b005363bc65bb1sm2316794pfb.91.2022.08.20.12.58.15
+        by smtp.gmail.com with ESMTPSA id u66-20020a626045000000b005363bc65bb1sm2316794pfb.91.2022.08.20.12.58.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 12:58:17 -0700 (PDT)
+        Sat, 20 Aug 2022 12:58:20 -0700 (PDT)
 From:   Brad Larson <brad@pensando.io>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
@@ -62,9 +62,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
         robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
         suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
         ulf.hansson@linaro.org, will@kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v6 02/17] dt-bindings: mmc: cdns: Add AMD Pensando Elba SoC
-Date:   Sat, 20 Aug 2022 12:57:35 -0700
-Message-Id: <20220820195750.70861-3-brad@pensando.io>
+Subject: [PATCH v6 03/17] dt-bindings: spi: cdns: Add compatible for AMD Pensando Elba SoC
+Date:   Sat, 20 Aug 2022 12:57:36 -0700
+Message-Id: <20220820195750.70861-4-brad@pensando.io>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220820195750.70861-1-brad@pensando.io>
 References: <20220820195750.70861-1-brad@pensando.io>
@@ -79,50 +79,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Brad Larson <blarson@amd.com>
 
-AMD Pensando Elba ARM 64-bit SoC is integrated with this IP and
-explicitly controls byte-lane enables.
+Document the cadence qspi controller compatible for AMD Pensando
+Elba SoC boards.  The Elba qspi fifo size is 1024.
 
 Signed-off-by: Brad Larson <blarson@amd.com>
 ---
- .../devicetree/bindings/mmc/cdns,sdhci.yaml         | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/spi/cdns,qspi-nor.yaml       | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-index 4207fed62dfe..964b610eeef2 100644
---- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-+++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-@@ -17,12 +17,14 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - amd,pensando-elba-sd4hc
-           - microchip,mpfs-sd4hc
-           - socionext,uniphier-sd4hc
-       - const: cdns,sd4hc
+diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+index 4707294d8f59..b9e49e90e280 100644
+--- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
++++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+@@ -20,11 +20,23 @@ allOf:
+       required:
+         - power-domains
  
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 2
- 
-   interrupts:
-     maxItems: 1
-@@ -118,6 +120,15 @@ required:
-   - interrupts
-   - clocks
- 
-+if:
-+  properties:
-+    compatible:
-+      const: amd,pensando-elba-sd4hc
-+then:
-+  properties:
-+    reg:
-+      minItems: 2
++  - if:
++      properties:
++        compatible:
++          enum:
++            - amd,pensando-elba-qspi
++    then:
++      properties:
++        cdns,fifo-depth:
++          enum: [ 128, 256, 1024 ]
++          default: 1024
 +
- unevaluatedProperties: false
- 
- examples:
+ properties:
+   compatible:
+     oneOf:
+       - items:
+           - enum:
++              - amd,pensando-elba-qspi
+               - ti,k2g-qspi
+               - ti,am654-ospi
+               - intel,lgm-qspi
 -- 
 2.17.1
 

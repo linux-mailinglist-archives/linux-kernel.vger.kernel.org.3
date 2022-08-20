@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B9559AB1A
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 06:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8492B59AB22
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 06:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241822AbiHTEEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 00:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S242444AbiHTEJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 00:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236400AbiHTEEe (ORCPT
+        with ESMTP id S239150AbiHTEJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 00:04:34 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187BA786FC
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 21:04:32 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-11c896b879bso7269869fac.3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 21:04:32 -0700 (PDT)
+        Sat, 20 Aug 2022 00:09:52 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7948DBFC6B
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 21:09:50 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id t8so6746129oie.8
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 21:09:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=J4ges1QP1SvDqTj0E1gs1t7/f2sDDibppIBG9MQZ7oc=;
-        b=z8nkR8XdE/UXRaPfqEBXyfJnSbkyZr4N7vE72kmnKaHfkPToXd173sO4H228973FXM
-         o6HNDEUPJ6OU6DwzgEb3w5V6SwEYL40JBO+UiOmfLd6vFNFig6ZJ96ocX4VAiOm+Xs1y
-         PsA8ELmayCzgAVfppGFnDkf18BaIabUg/xyLred17wh3BDNm1nI4XNlBWffnmnl34m7Y
-         gZMvNNgzrVn2RAc48Y6lfEmd9agvuKKI8ZM4lzXU6DIGcMnuHIHMoabjrWVXbkdCf+BW
-         x19+Uwi4zl8axvOCJWIoJtQxnmIqnrWAfK8zM3U/+4t1w0Grgv66w9V7sIH6ReYacdw3
-         8XnA==
+        bh=DFnPv3BCa7+XeLpbAr4ZTUKfcP7J9Jr+QvahQGLI9GE=;
+        b=pT7pc8FZs+WXWRlCiRCNZeertVApYopt8u3Rktj++J+F5CVH65mkvv2AVZhAUAZ5na
+         FTTugiyR7PWmHGwUwYBAdEien8O6H8MhLp4Mvy0Kn7ZFRkutXlWCens390MHEwdGCVgT
+         2UPavxFFWN23yzxg/jggvO2LbkzKI0y6jYbK2SaA/f1Ii0E4uW8WRgTDbQrJSMaE8rsu
+         UGh/U9PbTQErjyu0nm/szQAA7sAuarWD+m5Luo4CkMOTE+BZfm6Q+iTai3PWI+WxlmIM
+         GWtDIi2UIhegnwdVzJdIGsmD7CimqMJQYvttUilbXC8DP/o/mUSLvs/HfT+qJs1oR4Fp
+         vDXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=J4ges1QP1SvDqTj0E1gs1t7/f2sDDibppIBG9MQZ7oc=;
-        b=mrXAL0RP5gUVCXdq5Z6sDg8CZSPOnzZab0TgSvyLWV/L9dsBdbk++setbuO2GdiGLn
-         5yfj5+87FougcABwrRoxOctG8x00/H7ak6dtWoKOKkE/pgnq8CbXIlMqrZ6QyjRbts5F
-         qAWS/mVa7AcM/sqcy/HN5bgyU8zrdq5wD4qlGIoSAWYUT0WXNuklSjaG07Tyxcc0gLOC
-         Ql7REi5/xdoAZbt3UBhgYtvqjT4HYrcXyH7gEUiooDyGP4EghRyH4BkVHH1SNWcDikpQ
-         z7zCQnuV71TcUG9wCkI8ylm2hBuqy7bURsv2T9eLQ1CmcnAsuWHRNiTGp2/NoiKTEgeB
-         miNQ==
-X-Gm-Message-State: ACgBeo12+2oE34HGbq1LrnyYA8diz1JQwOnKkMwHV8eWmk1BHFJP0iME
-        BSFHBNPiBYG1sUz4hErZO/Xd9g==
-X-Google-Smtp-Source: AA6agR52x2MudBpZMlptyzqQwvA4mYMSCx5OStuX0uPhcge8aAm9KvjZWXEibFzzqjDCmVHM8tungg==
-X-Received: by 2002:a05:6870:e313:b0:10e:757c:d388 with SMTP id z19-20020a056870e31300b0010e757cd388mr5163145oad.280.1660968271399;
-        Fri, 19 Aug 2022 21:04:31 -0700 (PDT)
+        bh=DFnPv3BCa7+XeLpbAr4ZTUKfcP7J9Jr+QvahQGLI9GE=;
+        b=7yaolbcfSXItZNjg7B+6ZVZmcdQf/Z/CNIs9oMpBIz/Wvo+hruSW0BmlapE2+5ErXW
+         6mp3z2CW3IPkCmbGk/T/ReiDV1bqe40jqmyeOKnyk7nz2OSl1wjJveZjXW2N5BkIgvlR
+         9V4gVh4cgW3z6ksRta6DV/Q7N/IeRzXuLxTFbQdR82qZ9kLiiKqGHdrP07AOoJxHb+aK
+         /Kjb7+QbAT9gxJ69ziq1cbVP4N39NaWhbqWU+hbzU0JJLhqjZKi2YOP1OoYyhIHtC5vj
+         2k18W3jiLlt0E2Q/RHpQdOXSLUEu9C3AxqnspHIxqnVQVpWBXBNFkcgWwTZE7Zeqa7mJ
+         MVXQ==
+X-Gm-Message-State: ACgBeo0aNvCf0JEJHiRbS5x9Q8ss3yGZvPH4xyAdIxpcyIFzovbw34Lf
+        n9zc+JhCx3musDQsboD5gmRRow==
+X-Google-Smtp-Source: AA6agR66ORyTpy6wPM1zTQxRjWLFiDfl0P5mKwizRb4AhDcOIlpZwEzYZl28CEk5jxX3xsuKmXwAng==
+X-Received: by 2002:a05:6808:6c4:b0:342:9cf1:fb1 with SMTP id m4-20020a05680806c400b003429cf10fb1mr6762286oih.259.1660968589847;
+        Fri, 19 Aug 2022 21:09:49 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id s16-20020a056808209000b00339c7af0e8esm1457851oiw.51.2022.08.19.21.04.30
+        by smtp.gmail.com with ESMTPSA id y14-20020a9d460e000000b006370c0e5be0sm1640450ote.48.2022.08.19.21.09.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 21:04:30 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 23:04:28 -0500
+        Fri, 19 Aug 2022 21:09:49 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 23:09:47 -0500
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Prashant Malani <pmalani@chromium.org>
 Cc:     Stephen Boyd <swboyd@chromium.org>, Rob Herring <robh@kernel.org>,
@@ -60,7 +60,7 @@ Cc:     Stephen Boyd <swboyd@chromium.org>, Rob Herring <robh@kernel.org>,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Pin-yen Lin <treapking@chromium.org>
 Subject: Re: [PATCH 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
-Message-ID: <YwBdTAIqFbedC6Oa@builder.lan>
+Message-ID: <YwBei45gx4oVqSql@builder.lan>
 References: <20220810204750.3672362-1-bjorn.andersson@linaro.org>
  <20220810204750.3672362-2-bjorn.andersson@linaro.org>
  <a13bce60-25b4-d075-d56a-d1283e91e3ba@linaro.org>
@@ -68,16 +68,15 @@ References: <20220810204750.3672362-1-bjorn.andersson@linaro.org>
  <Yv1y9Wjp16CstJvK@baldur>
  <CAE-0n53AjJ_G6yZoTALWpKvZUdF+8nFZ+TQh=Ch=8xgdMVqDkw@mail.gmail.com>
  <CACeCKadP-AZ8OU4A=7CrwAz7yuLvMvjvAcw7K-FORFmkMvx7cA@mail.gmail.com>
- <CAE-0n53C+D=9gdSXKsjr4KZVrb-gpeo_EyuX3DfNKp19FoicXA@mail.gmail.com>
- <YwADGgNVwtKacUBR@builder.lan>
- <CACeCKaeXpU+AxFNAwkutMX9LT2XLgAv1XmwJRyj7Exqxg6v8rA@mail.gmail.com>
+ <YwAIGf59H9iKUhXF@builder.lan>
+ <CACeCKadt3aoz8MZvy+tGHCxiHOPty4cLcG7AGS+oMEVnREt4sw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACeCKaeXpU+AxFNAwkutMX9LT2XLgAv1XmwJRyj7Exqxg6v8rA@mail.gmail.com>
+In-Reply-To: <CACeCKadt3aoz8MZvy+tGHCxiHOPty4cLcG7AGS+oMEVnREt4sw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,86 +84,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 19 Aug 17:18 CDT 2022, Prashant Malani wrote:
+On Fri 19 Aug 17:55 CDT 2022, Prashant Malani wrote:
 
-> On Fri, Aug 19, 2022 at 2:39 PM Bjorn Andersson
+> On Fri, Aug 19, 2022 at 3:01 PM Bjorn Andersson
 > <bjorn.andersson@linaro.org> wrote:
 > >
-> > On Fri 19 Aug 15:49 CDT 2022, Stephen Boyd wrote:
 > >
-> > > > I like 2 endpoints to represent the usb-c-connector, but that doesn't seem
-> > > > to be compatible (without introducing `data-lanes`, at least) with all
-> > > > the various
-> > > > combinations on the remote side, if that remote side is a DRM bridge with DP
-> > > > output capability (like it6505 or anx7625).
-> > > > That type of DRM bridge supports 1, 2 or 4 lane DP connections.
-> > >
-> > > Why can't the remote side that's a pure DP bridge (it6505) bundle
-> > > however many lanes it wants into one endpoint? If it's a pure DP bridge
-> > > we should design the bridge binding to have up to 4 endpoints, but
-> > > sometimes 2 or 1 and then overlay data-lanes onto that binding so that
-> > > we can tell the driver how to remap the lanes if it can. If the hardware
-> > > can't support remapping lanes then data-lanes shouldn't be in the
-> > > binding.
+> > You can't physically connect 1, 2 or 4 lanes of DP from a DP chip to
+> > your usb-c-connector at the same time as you physically connect 0, 2 or
+> > 4 lanes of USB from a USB PHY.
 > 
-> 2 endpoints sounds fine to me. The overloading of the bridge-side endpoint
-> to mean different things depending on what it's connected to seemed odd to
-> me, but if that is acceptable for the bridge binding, then great.
-> 
-> > The existing implementation provides the interfaces usb_role_switch,
-> > usb_typec_mux and usb_typec_switch. These works based on the concept
-> > that the USB Type-C controller will request the endpoints connected to
-> > the usb-c-connector about changes such as "switch to host mode", "switch
-> > to 2+2 USB/DP combo" and "switch orientation to reverse". We use this
-> > same operations to inform any endpoint at any port about these events
-> > and they all react accordingly.
-> 
-> Right, but that implementation/assumption doesn't work so well when you
-> have 2 Type-C ports which might route to the same bridge (2 lane from each).
-> The other 2 lanes from the other endpoints can go to (say) a USB HUB.
+> I apologize in case I'm misunderstanding, but why is that not possible?
+> anx7625 allows that configuration (2 lane DP + 2 lane USB going to
+> a single USB-C-connector)
 > 
 
-Are you saying that two of your SS-lanes in connector A are connected to
-directly to the QMP PHY at the same time as two SS-lanes from connector
-B are connected to the same two pads on the QMP PHY - without any
-mux etc inbetween?
+Right, but you can not connect 4 lanes DP from one chip at the same time
+that you connect 4 lanes USB from another chip.
 
-I.e. that there are a set of pins in connector A which is directly
-connected to a set of pins in connector B?
+> Since the discussion is to support various conceivable hardware configurations
+> That same anx7625 can support 1 1-lane DP (or 2 1-lane DPs), and 1
+> 2-lane Type-C output.
+> The cross-point switch allows for that level of configuration.
+> 
 
+We're talking about the static configuration here, where you describe
+which component are connected together. We can not dynamically switch
+the Devicetree representation around to match what the Type-C controller
+negotiates.
 
-I was under the impression that in your hardware there's some component
-muxing the single DP output to one of the connectors. If so there should
-be no graph-link directly connecting the two usb-c-connectors and the
-one QMP PHY.
-
-Is this not the case?
-
+> > > So, how about 4 endpoints (1 for each SS lane) in the usb-c-connector port@1?
+> > > That should support every conceivable configuration and bridge/PHY hardware.
+> > > and also allows a way to specify any lane remapping (similar to what
+> > > "data lanes" does)
+> > > if that is required.
 > >
-> > Perhaps I'm misunderstanding your suggestion, but if you start
-> > representing each individual lane in the SuperSpeed interface I believe
-> > you would have to just abandon this interface and replace it with
-> > something like "give me USB on port@1/endpoint@0 and port@1/endpoint@1
-> > and give me DP on port@1/endpoint@2 and port@1/endpoint@3".
+> > Wouldn't that prevent you from handling orientation switching, given
+> > that the graph is static?
 > 
-> I don't think that is necessary. The switch driver can register the switches (
-> and it can find out which end-points map to the same usb-c-connector).
-> 
-> From the port driver, the port driver just needs to tell each switch
-> registered for it's port that "I want
-> DP Pin assignment C/ DP Pin assignment D / Plain USB3.x" and the
-> switch driver(s) can figure out what to output on its pins (since
-> the Type-C binding will specify ep0 = A2-A3 (TX1), ep1 = B10-B11 , etc)
-> 
-> orientation-switch can tell the switch if the signals need to be swapped around.
+> It depends. If the end-points from the usb-c-connector
+> go to the same switch, then it should allow orientation switching
+> (anx7625 allows
+> this). The port driver would just tell the orientation switch(es) attached to
+> it that we are in NORMAL or REVERSE orientation.
 > 
 
-In a typical Qualcomm design the QMP PHY is directly connected to the
-usb-c-connector and as such it is the component that implements
-usb_typec_mux and usb_typec_switch.
+But why do you need to express the relationship between these 2
+components with > 1 link in the graph?
+
+> The graph is static, since the hardware line routing between components
+> doesn't change (e.g SSTX1 from the Type-C port is always routed to Pin
+> X1,X2 on the switch hardware), but that is what the switch is for.
+> Note that in this case, the expectation is that
+> the switch driver only registers 1 switch (it can figure out that all
+> 4 endpoints
+> go to the same Type-C port).
+> 
+
+Why do we need to express this with 4 endpoints and then implement code
+to discover that the 4 endpoints points to the same remote? Why not just
+describe the logical relationship between the two components in one
+endpoint reference?
+
+> The limitation to orientation switching would depend on how the
+> hardware is routed.
 
 Regards,
 Bjorn
-
-> The above notwithstanding, it sounds like the 2-ep approach has more support
-> than 4 ep-approach, so this specific example is moot.

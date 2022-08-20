@@ -2,59 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C0E59A9C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 270DA59A9C8
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244488AbiHTAAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 20:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
+        id S244360AbiHTAGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 20:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244468AbiHTAAg (ORCPT
+        with ESMTP id S244099AbiHTAGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 20:00:36 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB5110892C
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 17:00:34 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JNspt0014491
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 17:00:34 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=LWMRE77bnNFWg7Nsyl1Ye5EBxaK3xcHccOJy7Y/ufjY=;
- b=ilzpRLIuvIId/J448qjt0POPQ3tVmgRZzFZwb4c6TpkXp6+p53Ej/nG27e5DgwxZh0yA
- qwS12yhUF8tGavh+qh1jkYsBnLrlb7dA3x2yHXenzKssQ+/Os5Vku/UlFwa/GyrSVn3x
- 7c6MCU0nvbw9qFl1duloignOLp+nYH+hFWM= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j1jqgwyth-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 17:00:33 -0700
-Received: from twshared13579.04.prn5.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 19 Aug 2022 17:00:32 -0700
-Received: by devvm301.eag0.facebook.com (Postfix, from userid 352741)
-        id 60FA5338437E; Fri, 19 Aug 2022 17:00:26 -0700 (PDT)
-From:   <alexlzhu@fb.com>
-To:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <Kernel-team@fb.com>
-CC:     Alexander Zhu <alexlzhu@fb.com>
-Subject: [PATCH v3] docs: admin-guide/mm: Improve grammar on MM concepts documentation
-Date:   Fri, 19 Aug 2022 17:00:24 -0700
-Message-ID: <20220820000024.2494003-1-alexlzhu@fb.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 19 Aug 2022 20:06:02 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CCAC57B6;
+        Fri, 19 Aug 2022 17:06:01 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id r14-20020a17090a4dce00b001faa76931beso8927594pjl.1;
+        Fri, 19 Aug 2022 17:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc;
+        bh=yC00KE65j+Axy9FPULOY4KYbcVa1VjZuo+YDP6XI95c=;
+        b=RMMBtA5Fx7V8blcknadGehzfeRW+h+ppNKjgIpKLfxTU/cZ1zlbKFM9VPw9VNZkEpG
+         H1iehANPbjI3U5YxKzRq1K0nldERCwzoZywEThoJv5j9Js0MljA/umBi9uimEG0ThlOk
+         3Qh2gaeXVmDpuASGHyNtPDd+udonwXvnxxSjgnpRxwNk4KDl3WXI9LznxzPUh9ZKRAqp
+         eYQbmSTai3LlBTfUxzW2/ZXOOBMuSFyJ/32q4fqPK8JJeTdSGu4KKqi/JCmtm7cI9EAE
+         2HH/1jZEmbFhf3mWtRIOOQHcSiLyFs8HH03vzOfumDGrngSjl250GpH84puPCU6XJXmQ
+         WjCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc;
+        bh=yC00KE65j+Axy9FPULOY4KYbcVa1VjZuo+YDP6XI95c=;
+        b=rxRPPGXg/sw0nYkKyyeNVgiXODHUoCpEaD0imTui4knMQOtjy/DhmBbK12l+XJ81R0
+         81wrbKFXDefS2Y8tdudPWuXU8jNyRrzfGNWNhHvAB5OM9Bz8DmrtmCLAPWbXiB71NQ55
+         o/Wm6tHMj6Wk+UETFta4LwcI5m9iHccsaVpnCrO0qi91UF909nMjlANOaxBe0jCAcPpp
+         bMZAA8RF2HBp7oiMyyo5TRTHUhU1PD7Wvhaa91Lg9HoBcT5SXZIFV5siOQ+MyQoIfPf2
+         PE7zx9jJf2N4f8JITwc7A5aTmI7xIm+BYNJuhOiKOLBefesBP6FCzvMmxpsnZdjbETA6
+         8NMA==
+X-Gm-Message-State: ACgBeo2jNUGfjTHectf5Q2+X2/g+uh/oPohXEbL5ZDKKUd890GWtMtsc
+        cmUSuXiWb+hEhZKVeV8vbGA=
+X-Google-Smtp-Source: AA6agR6uDi3t5sGu/sHmEspJdx7iqNOlWZ5ekNYrNy+qurpUU1ONjj6Q3BdIaqMCdIqsHj4RrHlpBQ==
+X-Received: by 2002:a17:902:d492:b0:16f:8583:9473 with SMTP id c18-20020a170902d49200b0016f85839473mr10037458plg.103.1660953961038;
+        Fri, 19 Aug 2022 17:06:01 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:a2f5])
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090264d700b0016b81679c1fsm3676888pli.216.2022.08.19.17.05.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 17:06:00 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+From:   Tejun Heo <tj@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Imran Khan <imran.f.khan@oracle.com>, kernel-team@fb.com
+Subject: [PATCHSET for-6.1] kernfs, cgroup: implement kernfs_deactivate() and cgroup_file_show()
+Date:   Fri, 19 Aug 2022 14:05:44 -1000
+Message-Id: <20220820000550.367085-1-tj@kernel.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: _0W1FzWbaW6l2Y5unmEpmNCoDwVodSoJ
-X-Proofpoint-GUID: _0W1FzWbaW6l2Y5unmEpmNCoDwVodSoJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-19_13,2022-08-18_01,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,293 +72,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Zhu <alexlzhu@fb.com>
+Hello,
 
-Improve grammar on MM concepts documentation.
+Currently, deactivated kernfs nodes are used for two purposes - during
+removal to kill and drain nodes and during creation to make multiple
+kernfs_nodes creations to succeed or fail as a group.
 
-Signed-off-by: Alexander Zhu <alexlzhu@fb.com>
+This patchset make kernfs [de]activation generic so that it can be used
+anytime to deactivate (hide and drain) and activate (show) kernfs nodes,
+and, on top, implement cgroup_file_show() which allows toggling cgroup file
+visiblity.
 
-Changes in v3:
--Correct punctuation based on previous comment
+This is for the following pending patchset to allow disabling PSI on
+per-cgroup basis:
 
-Changes in v2:
--Correct the subject
--Adjust the description
----
- Documentation/admin-guide/mm/concepts.rst | 142 +++++++++++-----------
- 1 file changed, 70 insertions(+), 72 deletions(-)
+ https://lore.kernel.org/all/20220808110341.15799-1-zhouchengming@bytedance.com/t/#u
 
-diff --git a/Documentation/admin-guide/mm/concepts.rst b/Documentation/ad=
-min-guide/mm/concepts.rst
-index c79f1e336222..9291508bcdd6 100644
---- a/Documentation/admin-guide/mm/concepts.rst
-+++ b/Documentation/admin-guide/mm/concepts.rst
-@@ -4,14 +4,13 @@
- Concepts overview
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--The memory management in Linux is a complex system that evolved over the
--years and included more and more functionality to support a variety of
--systems from MMU-less microcontrollers to supercomputers. The memory
--management for systems without an MMU is called ``nommu`` and it
--definitely deserves a dedicated document, which hopefully will be
--eventually written. Yet, although some of the concepts are the same,
--here we assume that an MMU is available and a CPU can translate a virtua=
-l
--address to a physical address.
-+The memory management subsystem is a complex codebase that evolved over =
-the
-+years to support a variety of systems from MMU-less microcontrollers to
-+supercomputers. The memory management subsystem for systems without an
-+MMU is called ``nommu`` and it deserves a dedicated document, which
-+hopefully will be written at some point. Although some of the concepts
-+are the same, here we assume that an MMU is available and a CPU can
-+translate a virtual address to a physical address.
-=20
- .. contents:: :local:
-=20
-@@ -29,89 +28,88 @@ of how these address ranges are defined.
- All this makes dealing directly with physical memory quite complex and
- to avoid this complexity a concept of virtual memory was developed.
-=20
--The virtual memory abstracts the details of physical memory from the
--application software, allows to keep only needed information in the
-+Virtual memory abstracts the details of physical memory from the
-+application software, allows for keeping only needed information in
- physical memory (demand paging) and provides a mechanism for the
- protection and controlled sharing of data between processes.
-=20
- With virtual memory, each and every memory access uses a virtual
- address. When the CPU decodes an instruction that reads (or
--writes) from (or to) the system memory, it translates the `virtual`
-+writes) from (or to) system memory, it translates the `virtual`
- address encoded in that instruction to a `physical` address that the
- memory controller can understand.
-=20
- The physical system memory is divided into page frames, or pages. The
- size of each page is architecture specific. Some architectures allow
--selection of the page size from several supported values; this
--selection is performed at the kernel build time by setting an
-+selection of page size from several supported values; this
-+selection is performed at kernel build time by setting an
- appropriate kernel configuration option.
-=20
--Each physical memory page can be mapped as one or more virtual
-+Each page in physical memory can be mapped as one or more virtual
- pages. These mappings are described by page tables that allow
- translation from a virtual address used by programs to the physical
--memory address. The page tables are organized hierarchically.
-+address. The page tables are organized hierarchically.
-=20
- The tables at the lowest level of the hierarchy contain physical
- addresses of actual pages used by the software. The tables at higher
--levels contain physical addresses of the pages belonging to the lower
-+levels contain physical addresses of pages belonging to lower
- levels. The pointer to the top level page table resides in a
--register. When the CPU performs the address translation, it uses this
-+register. When the CPU performs address translation, it uses this
- register to access the top level page table. The high bits of the
- virtual address are used to index an entry in the top level page
- table. That entry is then used to access the next level in the
--hierarchy with the next bits of the virtual address as the index to
--that level page table. The lowest bits in the virtual address define
-+hierarchy with the next bits of the virtual address as the index into
-+the page table at that level. The lowest bits in the virtual address def=
-ine
- the offset inside the actual page.
-=20
- Huge Pages
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--The address translation requires several memory accesses and memory
--accesses are slow relatively to CPU speed. To avoid spending precious
--processor cycles on the address translation, CPUs maintain a cache of
--such translations called Translation Lookaside Buffer (or
--TLB). Usually TLB is pretty scarce resource and applications with
--large memory working set will experience performance hit because of
--TLB misses.
-+Address translation requires several memory accesses and memory
-+accesses are slow relative to CPU speed. To avoid spending precious
-+processor cycles on address translation, CPUs maintain a cache of
-+such translations called the Translation Lookaside Buffer (or
-+TLB). Usually TLB is a scarce resource and applications with a
-+large in-memory working set will experience performance hit due to
-+TLB miss.
-=20
- Many modern CPU architectures allow mapping of the memory pages
- directly by the higher levels in the page table. For instance, on x86,
- it is possible to map 2M and even 1G pages using entries in the second
- and the third level page tables. In Linux such pages are called
--`huge`. Usage of huge pages significantly reduces pressure on TLB,
-+`huge`. Usage of huge pages significantly reduces pressure on the TLB,
- improves TLB hit-rate and thus improves overall system performance.
-=20
--There are two mechanisms in Linux that enable mapping of the physical
--memory with the huge pages. The first one is `HugeTLB filesystem`, or
-+There are two mechanisms in Linux that enable mapping of physical
-+memory with huge pages. The first one is `HugeTLB filesystem`, or
- hugetlbfs. It is a pseudo filesystem that uses RAM as its backing
--store. For the files created in this filesystem the data resides in
--the memory and mapped using huge pages. The hugetlbfs is described at
-+store. For files created in this filesystem the data resides in
-+memory and is mapped with huge pages. hugetlbfs is described at
- :ref:`Documentation/admin-guide/mm/hugetlbpage.rst <hugetlbpage>`.
-=20
--Another, more recent, mechanism that enables use of the huge pages is
--called `Transparent HugePages`, or THP. Unlike the hugetlbfs that
--requires users and/or system administrators to configure what parts of
--the system memory should and can be mapped by the huge pages, THP
--manages such mappings transparently to the user and hence the
--name. See
-+Another mechanism that enables use of huge pages is called
-+`Transparent HugePages`, or THP. Unlike hugetlbfs that requires
-+users and/or system administrators to configure what parts of
-+system memory can and should be mapped by huge pages, THP
-+manages such mappings transparently to the user, hence the name. See
- :ref:`Documentation/admin-guide/mm/transhuge.rst <admin_guide_transhuge>=
-`
--for more details about THP.
-+for more details on THP.
-=20
- Zones
- =3D=3D=3D=3D=3D
-=20
- Often hardware poses restrictions on how different physical memory
- ranges can be accessed. In some cases, devices cannot perform DMA to
--all the addressable memory. In other cases, the size of the physical
-+all the addressable memory. In other cases, the size of physical
- memory exceeds the maximal addressable size of virtual memory and
--special actions are required to access portions of the memory. Linux
-+special actions are required to access portions of memory. Linux
- groups memory pages into `zones` according to their possible
- usage. For example, ZONE_DMA will contain memory that can be used by
- devices for DMA, ZONE_HIGHMEM will contain memory that is not
- permanently mapped into kernel's address space and ZONE_NORMAL will
- contain normally addressed pages.
-=20
--The actual layout of the memory zones is hardware dependent as not all
-+The actual layout of memory zones is hardware dependent as not all
- architectures define all zones, and requirements for DMA are different
- for different platforms.
-=20
-@@ -131,10 +129,10 @@ counters. You can find more details about NUMA in
- Page cache
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--The physical memory is volatile and the common case for getting data
--into the memory is to read it from files. Whenever a file is read, the
-+Physical memory is volatile and the common case for getting data
-+into memory is to read it from files. Whenever a file is read, the
- data is put into the `page cache` to avoid expensive disk access on
--the subsequent reads. Similarly, when one writes to a file, the data
-+subsequent reads. Similarly, when one writes to a file, the data
- is placed in the page cache and eventually gets into the backing
- storage device. The written pages are marked as `dirty` and when Linux
- decides to reuse them for other purposes, it makes sure to synchronize
-@@ -145,10 +143,10 @@ Anonymous Memory
-=20
- The `anonymous memory` or `anonymous mappings` represent memory that
- is not backed by a filesystem. Such mappings are implicitly created
--for program's stack and heap or by explicit calls to mmap(2) system
--call. Usually, the anonymous mappings only define virtual memory areas
-+for the program's stack and heap or by explicit calls to the mmap(2) sys=
-tem
-+call. Usually, anonymous mappings only define virtual memory areas
- that the program is allowed to access. The read accesses will result
--in creation of a page table entry that references a special physical
-+in the creation of a page table entry that references a special physical
- page filled with zeroes. When the program performs a write, a regular
- physical page will be allocated to hold the written data. The page
- will be marked dirty and if the kernel decides to repurpose it,
-@@ -158,47 +156,47 @@ Reclaim
- =3D=3D=3D=3D=3D=3D=3D
-=20
- Throughout the system lifetime, a physical page can be used for storing
--different types of data. It can be kernel internal data structures,
--DMA'able buffers for device drivers use, data read from a filesystem,
-+different types of data. It can be for storing kernel internal data stru=
-ctures,
-+DMA'able buffers for device drivers to use, data read from a filesystem,
- memory allocated by user space processes etc.
-=20
--Depending on the page usage it is treated differently by the Linux
--memory management. The pages that can be freed at any time, either
--because they cache the data available elsewhere, for instance, on a
--hard disk, or because they can be swapped out, again, to the hard
-+Depending on page usage it is treated differently by the Linux
-+memory management subsystem. Pages that can be freed at any time,
-+either because they cache the data available elsewhere
-+(i.e., on a hard disk) or because they can be swapped out to the hard
- disk, are called `reclaimable`. The most notable categories of the
- reclaimable pages are page cache and anonymous memory.
-=20
- In most cases, the pages holding internal kernel data and used as DMA
- buffers cannot be repurposed, and they remain pinned until freed by
- their user. Such pages are called `unreclaimable`. However, in certain
--circumstances, even pages occupied with kernel data structures can be
-+circumstances, even pages occupied by kernel data structures can be
- reclaimed. For instance, in-memory caches of filesystem metadata can
--be re-read from the storage device and therefore it is possible to
--discard them from the main memory when system is under memory
-+be re-read from the storage device and thus it is possible to
-+discard them from main memory when the system is under memory
- pressure.
-=20
--The process of freeing the reclaimable physical memory pages and
--repurposing them is called (surprise!) `reclaim`. Linux can reclaim
--pages either asynchronously or synchronously, depending on the state
--of the system. When the system is not loaded, most of the memory is free
-+The process of freeing and repurposing reclaimable physical pages
-+is called (surprise!) `reclaim`. Linux can reclaim pages either
-+synchronously or asynchronously, depending on the state of the
-+system. When system load is light, most of the memory is free
- and allocation requests will be satisfied immediately from the free
--pages supply. As the load increases, the amount of the free pages goes
-+page supply. As the load increases, the number of the free pages goes
- down and when it reaches a certain threshold (low watermark), an
- allocation request will awaken the ``kswapd`` daemon. It will
--asynchronously scan memory pages and either just free them if the data
--they contain is available elsewhere, or evict to the backing storage
--device (remember those dirty pages?). As memory usage increases even
--more and reaches another threshold - min watermark - an allocation
--will trigger `direct reclaim`. In this case allocation is stalled
--until enough memory pages are reclaimed to satisfy the request.
-+asynchronously scan memory pages and either free them if the data
-+they contain is available elsewhere, or evict them to the backing
-+storage device (remember those dirty pages?). As memory usage
-+increases even more and reaches another threshold - min watermark - an
-+allocation will trigger `direct reclaim`. In this case allocation is
-+stalled until enough memory pages are reclaimed to satisfy the request.
-=20
- Compaction
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--As the system runs, tasks allocate and free the memory and it becomes
-+As the system runs, tasks allocate and free memory. Memory thus becomes
- fragmented. Although with virtual memory it is possible to present
--scattered physical pages as virtually contiguous range, sometimes it is
-+scattered physical pages as a virtually contiguous range, sometimes it i=
-s
- necessary to allocate large physically contiguous memory areas. Such
- need may arise, for instance, when a device driver requires a large
- buffer for DMA, or when THP allocates a huge page. Memory `compaction`
-@@ -214,10 +212,10 @@ daemon or synchronously as a result of a memory all=
-ocation request.
- OOM killer
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--It is possible that on a loaded machine memory will be exhausted and the
-+It is possible that under heavy load memory will be exhausted and the
- kernel will be unable to reclaim enough memory to continue to operate. I=
-n
- order to save the rest of the system, it invokes the `OOM killer`.
-=20
--The `OOM killer` selects a task to sacrifice for the sake of the overall
--system health. The selected task is killed in a hope that after it exits
-+The `OOM killer` selects a task to sacrifice for the sake of overall
-+system health. The selected task is killed in the hope that after it exi=
-ts
- enough memory will be freed to continue normal operation.
---=20
-2.30.2
+which requires hiding the corresponding cgroup interface files while
+disabled.
+
+This patchset contains the following seven patches.
+
+ 0001-kernfs-Simply-by-replacing-kernfs_deref_open_node-wi.patch
+ 0002-kernfs-Drop-unnecessary-mutex-local-variable-initial.patch
+ 0003-kernfs-Refactor-kernfs_get_open_node.patch
+ 0004-kernfs-Skip-kernfs_drain_open_files-more-aggressivel.patch
+ 0005-kernfs-Make-kernfs_drain-skip-draining-more-aggressi.patch
+ 0006-kernfs-Allow-kernfs-nodes-to-be-deactivated-and-re-a.patch
+ 0007-cgroup-Implement-cgroup_file_show.patch
+
+0001-0003 are misc prep patches. 0004-0006 implement kernsf_deactivate().
+0008 implements cgroup_file_show() on top. The patches are also available in
+the following git branch:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/tj/misc.git kernfs-deactivate
+
+diffstat follows. Thanks.
+
+ fs/kernfs/dir.c             |  120 +++++++++++++++++++++++++++++++++++++++++-------------------
+ fs/kernfs/file.c            |  139 +++++++++++++++++++++++++++++++---------------------------------------
+ fs/kernfs/kernfs-internal.h |    1
+ include/linux/cgroup.h      |    1
+ include/linux/kernfs.h      |    2 +
+ kernel/cgroup/cgroup.c      |   23 +++++++++++
+ 6 files changed, 172 insertions(+), 114 deletions(-)
+
+--
+tejun
+
 

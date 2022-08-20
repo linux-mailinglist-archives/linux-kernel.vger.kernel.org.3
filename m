@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF9859ABCA
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 08:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A18359ABD0
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 08:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244533AbiHTGnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 02:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S245384AbiHTGnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 02:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245024AbiHTGni (ORCPT
+        with ESMTP id S245025AbiHTGni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 20 Aug 2022 02:43:38 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DECF1183E
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 23:43:28 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id o22so7916098edc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 23:43:28 -0700 (PDT)
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE02812617
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 23:43:29 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gi31so5906509ejc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 23:43:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=dWDV/5GVcx0ceVlPM2V+MXtiSomLloUDOadV6lqtfMg=;
-        b=c2xrHvYIlUGROUVRIrTOI1acCiwZdrCJH145opnExd/fHYrjeIJgBZlZNfakbMvXem
-         3TQMfLEoeCGKAab/XSjfkxwzya4iteFwDooM9FWmVxfMB+p3xybknBqEMXbKcTy7kCu1
-         b05cqX2JvBKcPA4gf7EPbbLQbE/WLrdxQ0AWzczwkD92+wf7vLWecyDI5pI4RfGpuDJS
-         Zh6MqAn1uzsLzBHKuKDubvimx5U3cRjGhcfVNpJi7D2W0iKzp2A8er0IPwHBLmQC8TgK
-         C1ae7FFxUEQ57OwbQ5OR4ptHG5D6xo0fln/iWJ0JkPaT0A2nueznG4iMts+r9LyqtEvX
-         2TVg==
+        bh=Bgq9rqpIso9rl0vPsOVlAZuRxdq9H6kaSUSyTutuwoI=;
+        b=kUVmY6J+CfKBrjhC8OhBlsh1CKsjgQBGzaB2ylkt3QWkOrnMuy+8H5XbmzAybkX80y
+         VuHm1cLGQnJbNfcfaAu+buN8HiO7N1QLao4WNyFY7Htfp9nHD6G15VxgOwWg1cVYJ3Kx
+         USsrsK3/HBjFmU/HLqlFjG9KQ3wBA4wA3zKG1xS8djtTofppNERzHGcyp2Hge3rjWNHf
+         pAnkDug+NMHRtYrMh+53iQ8vcVV9/PE1dYPTE25Jwv6GK6floSNjsy97yAnYL4mk/+Aw
+         HWL148ceSvb3Njmo7uSCE0CJIJOQTGmTQ1B9EDLGvz+JrHsaYyXASwZVguOPfeL3xjyn
+         X4iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=dWDV/5GVcx0ceVlPM2V+MXtiSomLloUDOadV6lqtfMg=;
-        b=gAtfhlRjkPwzy3Z8gfajNm0UIA+LQyn+LqLy0FPMbfA/cQc5SYmPDldZedzaNGcpWn
-         yDWIBWed7Xq8AzvcA0xwkpU0c45sd6wFdYKkwVcJ6tHcSEVS2Ox5qJzF0xjKqrgMdVI2
-         jDNnES9nc5MmacpH567A8xqYcycgNOmpp9UqniqHPvwzDWaM1A/Rx85i0AsWmWcUgqP2
-         s3z84hhPZcTmXI0isUUlFMgKQhEf0u2rGHT794+LrhQmDfghhHDbKVa1U692TOtdm3Or
-         cRevqAsATYSrkZvXpIJfCXmp3kzL9HSbvvIWXuLDLDltPV3c+e3GBEaPvirtDbF9bAM9
-         /CxA==
-X-Gm-Message-State: ACgBeo0Q7uZqpWI3S3Lwlx0kc1kzBays4XnYpf0l4E9iUcyuh8Sw3qif
-        Ew/sx9vk6o5q5XsEgx4qexA=
-X-Google-Smtp-Source: AA6agR46t+9YK94cWnLir63Q/+nawfjA6O9Yc4vsU9nRjXI03iWoAlDdBKAMof8ayDO6kCfa1M97jg==
-X-Received: by 2002:aa7:ccd5:0:b0:445:cede:7936 with SMTP id y21-20020aa7ccd5000000b00445cede7936mr8552592edt.223.1660977807206;
-        Fri, 19 Aug 2022 23:43:27 -0700 (PDT)
+        bh=Bgq9rqpIso9rl0vPsOVlAZuRxdq9H6kaSUSyTutuwoI=;
+        b=QhZ5B2mop+v8SOeDnAZ7ooD9NWs59Q9PgIendoA9czuuwl1bg5zGsIhoRHw58iyQKN
+         DNFdpxTDJql3PJ9Q6Gmi41wIpv7UneRrd+d76cF7EzlznBj6mS+zOKIbNlzE06Io10Et
+         N4KnDPyMzHQFm2uQXcaiJ/B6tcjG2bMU6lh4FKr8Wad9gfXseowuNYHHJ5nsZ7valn1l
+         a8UFAd6NcPnHySIHTegoN4NHm4ESgQh6egQqw7umJjnFHGVuy6D57fHvffXTgQAOhzuS
+         RUIDFMEBTtncfzMEmkYoMb1y0Ayor89yiEPubJnTKn4vAeHHpuOuAIt2wPI4P8C6yvCJ
+         e0Kg==
+X-Gm-Message-State: ACgBeo1/MHUB5CVvnrDAQZVsukjH6UsaTMk/OvqFhhQUJcEUEJIy9O1Q
+        jtMss205gNy5J32TYgTz2xQp04Pik0PrMQ==
+X-Google-Smtp-Source: AA6agR6of3iUp/w71+objZLy3fm6yFRF9fQbTA3mm9pBUgJhE+P88mBVswX+uzLscl75fxC9WRwAbA==
+X-Received: by 2002:a17:907:a073:b0:730:a5a4:4b7d with SMTP id ia19-20020a170907a07300b00730a5a44b7dmr6756244ejc.533.1660977808187;
+        Fri, 19 Aug 2022 23:43:28 -0700 (PDT)
 Received: from nam-dell.vm.stuba.sk ([147.175.88.220])
-        by smtp.gmail.com with ESMTPSA id 27-20020a170906329b00b0073c0b87ba34sm2935816ejw.198.2022.08.19.23.43.26
+        by smtp.gmail.com with ESMTPSA id 27-20020a170906329b00b0073c0b87ba34sm2935816ejw.198.2022.08.19.23.43.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 23:43:26 -0700 (PDT)
+        Fri, 19 Aug 2022 23:43:27 -0700 (PDT)
 From:   Nam Cao <namcaov@gmail.com>
 To:     lkp@intel.com
 Cc:     Larry.Finger@lwfinger.net, gregkh@linuxfoundation.org,
         hdegoede@redhat.com, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         namcaov@gmail.com
-Subject: [PATCH v2 2/4] staging: rtl8723bs: remove member noise_level from struct dm_odm_t
-Date:   Sat, 20 Aug 2022 08:42:44 +0200
-Message-Id: <5a8256d3823baaa72775da80d821749dfbda7ad4.1660977536.git.namcaov@gmail.com>
+Subject: [PATCH v2 3/4] staging: rtl8723bs: remove odm_NoiseMonitor.o from Makefile
+Date:   Sat, 20 Aug 2022 08:42:45 +0200
+Message-Id: <47513f97b4492e35e6bbe5aea331c60da6bca5a8.1660977536.git.namcaov@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1660977535.git.namcaov@gmail.com>
 References: <cover.1660977535.git.namcaov@gmail.com>
@@ -72,25 +72,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-because it is not used.
+This is preparation to delete odm_NoiseMonitor.c and
+odm_NoiseMonitor.h because these files are useless.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/linux-staging/202208200447.kdEhBy9a-lkp@intel.com/
 Signed-off-by: Nam Cao <namcaov@gmail.com>
 ---
- drivers/staging/rtl8723bs/hal/odm.h | 1 -
+ drivers/staging/rtl8723bs/Makefile | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/staging/rtl8723bs/hal/odm.h b/drivers/staging/rtl8723bs/hal/odm.h
-index 19cfc2915458..033f22b0f394 100644
---- a/drivers/staging/rtl8723bs/hal/odm.h
-+++ b/drivers/staging/rtl8723bs/hal/odm.h
-@@ -863,7 +863,6 @@ struct dm_odm_t { /* DM_Out_Source_Dynamic_Mechanism_Structure */
- 	u8 Adaptivity_IGI_upper;
- 	u8 NHM_cnt_0;
- 
--	struct odm_noise_monitor noise_level;/* ODM_MAX_CHANNEL_NUM]; */
- 	/*  */
- 	/* 2 Define STA info. */
- 	/*  _ODM_STA_INFO */
+diff --git a/drivers/staging/rtl8723bs/Makefile b/drivers/staging/rtl8723bs/Makefile
+index 159ca1b9016b..bc7ff1dd14f9 100644
+--- a/drivers/staging/rtl8723bs/Makefile
++++ b/drivers/staging/rtl8723bs/Makefile
+@@ -33,7 +33,6 @@ r8723bs-y = \
+ 		hal/odm_DynamicTxPower.o \
+ 		hal/odm_EdcaTurboCheck.o \
+ 		hal/odm_HWConfig.o \
+-		hal/odm_NoiseMonitor.o \
+ 		hal/odm_RegConfig8723B.o \
+ 		hal/rtl8723b_cmd.o \
+ 		hal/rtl8723b_dm.o \
 -- 
 2.25.1
 

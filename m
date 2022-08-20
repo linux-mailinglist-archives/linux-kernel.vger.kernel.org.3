@@ -2,81 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8492B59AB22
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 06:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7870C59AB5F
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 06:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242444AbiHTEJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 00:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S241160AbiHTE2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 00:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239150AbiHTEJw (ORCPT
+        with ESMTP id S229458AbiHTE2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 00:09:52 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7948DBFC6B
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 21:09:50 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id t8so6746129oie.8
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 21:09:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=DFnPv3BCa7+XeLpbAr4ZTUKfcP7J9Jr+QvahQGLI9GE=;
-        b=pT7pc8FZs+WXWRlCiRCNZeertVApYopt8u3Rktj++J+F5CVH65mkvv2AVZhAUAZ5na
-         FTTugiyR7PWmHGwUwYBAdEien8O6H8MhLp4Mvy0Kn7ZFRkutXlWCens390MHEwdGCVgT
-         2UPavxFFWN23yzxg/jggvO2LbkzKI0y6jYbK2SaA/f1Ii0E4uW8WRgTDbQrJSMaE8rsu
-         UGh/U9PbTQErjyu0nm/szQAA7sAuarWD+m5Luo4CkMOTE+BZfm6Q+iTai3PWI+WxlmIM
-         GWtDIi2UIhegnwdVzJdIGsmD7CimqMJQYvttUilbXC8DP/o/mUSLvs/HfT+qJs1oR4Fp
-         vDXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=DFnPv3BCa7+XeLpbAr4ZTUKfcP7J9Jr+QvahQGLI9GE=;
-        b=7yaolbcfSXItZNjg7B+6ZVZmcdQf/Z/CNIs9oMpBIz/Wvo+hruSW0BmlapE2+5ErXW
-         6mp3z2CW3IPkCmbGk/T/ReiDV1bqe40jqmyeOKnyk7nz2OSl1wjJveZjXW2N5BkIgvlR
-         9V4gVh4cgW3z6ksRta6DV/Q7N/IeRzXuLxTFbQdR82qZ9kLiiKqGHdrP07AOoJxHb+aK
-         /Kjb7+QbAT9gxJ69ziq1cbVP4N39NaWhbqWU+hbzU0JJLhqjZKi2YOP1OoYyhIHtC5vj
-         2k18W3jiLlt0E2Q/RHpQdOXSLUEu9C3AxqnspHIxqnVQVpWBXBNFkcgWwTZE7Zeqa7mJ
-         MVXQ==
-X-Gm-Message-State: ACgBeo0aNvCf0JEJHiRbS5x9Q8ss3yGZvPH4xyAdIxpcyIFzovbw34Lf
-        n9zc+JhCx3musDQsboD5gmRRow==
-X-Google-Smtp-Source: AA6agR66ORyTpy6wPM1zTQxRjWLFiDfl0P5mKwizRb4AhDcOIlpZwEzYZl28CEk5jxX3xsuKmXwAng==
-X-Received: by 2002:a05:6808:6c4:b0:342:9cf1:fb1 with SMTP id m4-20020a05680806c400b003429cf10fb1mr6762286oih.259.1660968589847;
-        Fri, 19 Aug 2022 21:09:49 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id y14-20020a9d460e000000b006370c0e5be0sm1640450ote.48.2022.08.19.21.09.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 21:09:49 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 23:09:47 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Pin-yen Lin <treapking@chromium.org>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
-Message-ID: <YwBei45gx4oVqSql@builder.lan>
-References: <20220810204750.3672362-1-bjorn.andersson@linaro.org>
- <20220810204750.3672362-2-bjorn.andersson@linaro.org>
- <a13bce60-25b4-d075-d56a-d1283e91e3ba@linaro.org>
- <20220814210104.GA690892-robh@kernel.org>
- <Yv1y9Wjp16CstJvK@baldur>
- <CAE-0n53AjJ_G6yZoTALWpKvZUdF+8nFZ+TQh=Ch=8xgdMVqDkw@mail.gmail.com>
- <CACeCKadP-AZ8OU4A=7CrwAz7yuLvMvjvAcw7K-FORFmkMvx7cA@mail.gmail.com>
- <YwAIGf59H9iKUhXF@builder.lan>
- <CACeCKadt3aoz8MZvy+tGHCxiHOPty4cLcG7AGS+oMEVnREt4sw@mail.gmail.com>
+        Sat, 20 Aug 2022 00:28:33 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0375E1DA5C;
+        Fri, 19 Aug 2022 21:28:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660969711; x=1692505711;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MfnOB1XGKfPqVQCIzu0mFWkAanwpdmkBPanbEOLwVDU=;
+  b=V9dNXiZpekhdDkAN8b166m+jWFyLocce/Vq8FxL5J7RMxBt+XDKQZjWt
+   ORPgI3a48LLsLck0OERsb1CvCkv1HwRGxyGREBtF+Dh8KnWJrdETxafdM
+   19e0EoM0b9zIN+0l7n4RBtWBDC+mutn7hS3645coH8Vij3YLoaGXApM9E
+   u+9agRefGM5Wco8Pfu3M5c1N+wOIXnvLh4CAk2omoO6QZFoia08qtnzh4
+   HjVI4pJVF5AsiORKy7jb2jOR3YC0ikmJYd1Bc2MRFmDTqjCa8F3LDL0Wt
+   Kl9s5Jl5eslEqupZxdT9LjUzKQRLgRAJhYfQMnLQY1GfH29RksZZuVPKt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="290709954"
+X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
+   d="scan'208";a="290709954"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 21:28:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
+   d="scan'208";a="734600816"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 19 Aug 2022 21:28:24 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPG5w-00028t-0J;
+        Sat, 20 Aug 2022 04:28:24 +0000
+Date:   Sat, 20 Aug 2022 12:28:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+Cc:     kbuild-all@lists.01.org, Daniel Xu <dxu@dxuuu.xyz>,
+        pablo@netfilter.org, fw@strlen.de, toke@kernel.org,
+        martin.lau@linux.dev, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 4/5] bpf: Add support for writing to
+ nf_conn:mark
+Message-ID: <202208201201.h5mCZpcU-lkp@intel.com>
+References: <f44b2eebe48f0653949f59c5bcf23af029490692.1660951028.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACeCKadt3aoz8MZvy+tGHCxiHOPty4cLcG7AGS+oMEVnREt4sw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <f44b2eebe48f0653949f59c5bcf23af029490692.1660951028.git.dxu@dxuuu.xyz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,70 +68,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 19 Aug 17:55 CDT 2022, Prashant Malani wrote:
+Hi Daniel,
 
-> On Fri, Aug 19, 2022 at 3:01 PM Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> >
-> >
-> > You can't physically connect 1, 2 or 4 lanes of DP from a DP chip to
-> > your usb-c-connector at the same time as you physically connect 0, 2 or
-> > 4 lanes of USB from a USB PHY.
-> 
-> I apologize in case I'm misunderstanding, but why is that not possible?
-> anx7625 allows that configuration (2 lane DP + 2 lane USB going to
-> a single USB-C-connector)
-> 
+Thank you for the patch! Yet something to improve:
 
-Right, but you can not connect 4 lanes DP from one chip at the same time
-that you connect 4 lanes USB from another chip.
+[auto build test ERROR on bpf-next/master]
 
-> Since the discussion is to support various conceivable hardware configurations
-> That same anx7625 can support 1 1-lane DP (or 2 1-lane DPs), and 1
-> 2-lane Type-C output.
-> The cross-point switch allows for that level of configuration.
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/bpf-Remove-duplicate-PTR_TO_BTF_ID-RO-check/20220820-082411
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: nios2-randconfig-r005-20220820 (https://download.01.org/0day-ci/archive/20220820/202208201201.h5mCZpcU-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/20062077235a94dd0b856204b6dbddefe8342f01
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Xu/bpf-Remove-duplicate-PTR_TO_BTF_ID-RO-check/20220820-082411
+        git checkout 20062077235a94dd0b856204b6dbddefe8342f01
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-We're talking about the static configuration here, where you describe
-which component are connected together. We can not dynamically switch
-the Devicetree representation around to match what the Type-C controller
-negotiates.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > > So, how about 4 endpoints (1 for each SS lane) in the usb-c-connector port@1?
-> > > That should support every conceivable configuration and bridge/PHY hardware.
-> > > and also allows a way to specify any lane remapping (similar to what
-> > > "data lanes" does)
-> > > if that is required.
-> >
-> > Wouldn't that prevent you from handling orientation switching, given
-> > that the graph is static?
-> 
-> It depends. If the end-points from the usb-c-connector
-> go to the same switch, then it should allow orientation switching
-> (anx7625 allows
-> this). The port driver would just tell the orientation switch(es) attached to
-> it that we are in NORMAL or REVERSE orientation.
-> 
+All errors (new ones prefixed by >>):
 
-But why do you need to express the relationship between these 2
-components with > 1 link in the graph?
+   nios2-linux-ld: net/core/filter.o: in function `tc_cls_act_btf_struct_access':
+   filter.c:(.text+0xd54): undefined reference to `nf_conntrack_btf_struct_access'
+>> nios2-linux-ld: filter.c:(.text+0xd58): undefined reference to `nf_conntrack_btf_struct_access'
 
-> The graph is static, since the hardware line routing between components
-> doesn't change (e.g SSTX1 from the Type-C port is always routed to Pin
-> X1,X2 on the switch hardware), but that is what the switch is for.
-> Note that in this case, the expectation is that
-> the switch driver only registers 1 switch (it can figure out that all
-> 4 endpoints
-> go to the same Type-C port).
-> 
-
-Why do we need to express this with 4 endpoints and then implement code
-to discover that the 4 endpoints points to the same remote? Why not just
-describe the logical relationship between the two components in one
-endpoint reference?
-
-> The limitation to orientation switching would depend on how the
-> hardware is routed.
-
-Regards,
-Bjorn
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,130 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6458359B0A2
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 23:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1558859B0AC
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 00:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234175AbiHTVqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 17:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S229470AbiHTWAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 18:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234015AbiHTVqK (ORCPT
+        with ESMTP id S234011AbiHTWAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 17:46:10 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2523A2253A;
-        Sat, 20 Aug 2022 14:46:10 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-11c5505dba2so8860147fac.13;
-        Sat, 20 Aug 2022 14:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=cDwTnadNF9s/5BZIC2Iwo9Y0W/ZO8b+QhQ/rtfmxIzs=;
-        b=NFOXdOUz8B43laZgkcRmO0b7itJVFsEIq5lF/4VizARwkZu1K/Y+hP+2rHVYLcr/rf
-         uIKXM9bOUFUtctkpfJIsvosOKQ1UOpjprzkN6imlD/sm9Jw11rLKzcZOZNZH05eQ/R+l
-         tUrd9i4Em4NHz7RaY7xoxZS4FjCP573f9yJoNsMKYgJ8fnVGiVkp5Ijr2RtpsxAuXIqr
-         JjrXwVMWQGbTrVwMazzFQqrn7Tfn5oUHHq3zLKWrymcimQv7FJ0gxmbdwp18VncNicDo
-         aEsK038B8K2q807PYmjmMlyz4KpQBJoZf0FU1uHnr5buDCa8XyAgIvh+PnIQh/A95z2o
-         y9dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=cDwTnadNF9s/5BZIC2Iwo9Y0W/ZO8b+QhQ/rtfmxIzs=;
-        b=K7FRVG6o1/3QQ1c3kiKlw5smHxIMcVGQGqGnvZmxVxCZb2AW4MBaiyWu9kz1s/QDvc
-         s8+3hxA/5FZZqS6GZUAy9V2ANsatik5CvuLB32L9pUvXz4U0mJmZLaZGdhOriz9Pkzhr
-         eBzrTjighUPjKOSaLyOnbyfjlrUU70AKijbS90h6CdVClMnENRWHPN4jQvEmtGrJuHoo
-         giSHTlExpCTse2jc3CishUZLbw+MUmdhD2Mt7/R0h9Ytsi0aZfY7sI8DPeJxl8Yuqzpj
-         irJGT8PRzVrkH+wvylaUFQsEP6J9XvCgWYuFEttXqyF2lQ9YCzPMR9EEiMv9XLo8KjFM
-         NL3g==
-X-Gm-Message-State: ACgBeo0c/cbfyO8xLFaJhzQaS3/0hd3d5GL7m83dJSgsX3lqlq9FdZjE
-        /1nlSSy4kv7i8gKfC16OwXg=
-X-Google-Smtp-Source: AA6agR5m8i6cDVSUyjKjTszvxqDMwxyWWhX9H9cR0uQ41q27TFZZNChq3gFjcysQyUFaELD0CffV2g==
-X-Received: by 2002:a05:6870:c18f:b0:11c:abda:ba81 with SMTP id h15-20020a056870c18f00b0011cabdaba81mr5902010oad.229.1661031969439;
-        Sat, 20 Aug 2022 14:46:09 -0700 (PDT)
-Received: from localhost ([172.58.171.171])
-        by smtp.gmail.com with ESMTPSA id x10-20020a54400a000000b0034326ce9cb9sm1835034oie.20.2022.08.20.14.46.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 14:46:09 -0700 (PDT)
-Date:   Sat, 20 Aug 2022 14:46:06 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] lib/cpumask_kunit: log mask contents
-Message-ID: <YwFWHj0p/Uc0njme@yury-laptop>
-References: <cover.1661007338.git.sander@svanheule.net>
- <98cb4e5323c2059506e93cb39c32ba471031e487.1661007339.git.sander@svanheule.net>
+        Sat, 20 Aug 2022 18:00:14 -0400
+X-Greylist: delayed 1341 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 20 Aug 2022 15:00:09 PDT
+Received: from mail.base45.de (mail.base45.de [IPv6:2001:67c:2050:320::77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0BA13E09;
+        Sat, 20 Aug 2022 15:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fe80.eu;
+        s=20190804; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=jbV1371i5Ukeh0rbH2uM6B5K8Dm+kdefS/HHp+Iyam4=; b=nWoYvl5DQgAKhWm4gpfKp7TPPX
+        rWZ16GPPdw/DL2LVABuYgIUb50pjhC1vcajpjVQhryNhy6/kPMUGuVLw7gZUpnaBasbuQhGub9ui0
+        kctA4MO7YWTbhJ7a8nyvNEk+osvL2RPfQMztWE9GKLgCK9Za+dKY8QZtmM17b578APSY2OOMvDw0K
+        BlO0ihNHu7ySvM88PZvmC8OId9L7z+89j+0g5kE2w4ZXZBNLgIFEDPJcKTC+aSbo4EKokgaSGQwWu
+        /soeKX8WkH2Urs6HL1MhVIfTHXKYFnVzu0gtU1DNWh70n9yHZAzkGFY4/jbZN9HCdliYiHoHs/yHp
+        RWD+Xytg==;
+Received: from [2a02:2454:9869:1a:9eb6:54ff:0:fa5] (helo=cerator.lan)
+        by mail.base45.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <lynxis@fe80.eu>)
+        id 1oPW9p-00G1Te-HM; Sat, 20 Aug 2022 21:37:29 +0000
+From:   Alexander Couzens <lynxis@fe80.eu>
+To:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        "David S . Miller" <davem@davemloft.net>,
+        Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: [PATCH 1/2] net: mt7531: only do PLL once after the reset
+Date:   Sat, 20 Aug 2022 23:37:06 +0200
+Message-Id: <20220820213707.46138-1-lynxis@fe80.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <98cb4e5323c2059506e93cb39c32ba471031e487.1661007339.git.sander@svanheule.net>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 05:03:12PM +0200, Sander Vanheule wrote:
-> For extra context, log the contents of the masks under test.  This
-> should help with finding out why a certain test fails.
-> 
-> Link: https://lore.kernel.org/lkml/CABVgOSkPXBc-PWk1zBZRQ_Tt+Sz1ruFHBj3ixojymZF=Vi4tpQ@mail.gmail.com/
-> Suggested-by: David Gow <davidgow@google.com>
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> Reviewed-by: David Gow <davidgow@google.com>
-> ---
->  lib/cpumask_kunit.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/lib/cpumask_kunit.c b/lib/cpumask_kunit.c
-> index 4d353614d853..0f8059a5e93b 100644
-> --- a/lib/cpumask_kunit.c
-> +++ b/lib/cpumask_kunit.c
-> @@ -51,6 +51,10 @@
->  static cpumask_t mask_empty;
->  static cpumask_t mask_all;
->  
-> +#define STR_MASK(m)			#m
-> +#define TEST_CPUMASK_PRINT(test, mask)	\
-> +	kunit_info(test, "%s = '%*pbl'\n", STR_MASK(mask), nr_cpumask_bits, cpumask_bits(mask))
-> +
->  static void test_cpumask_weight(struct kunit *test)
->  {
->  	KUNIT_EXPECT_TRUE(test, cpumask_empty(&mask_empty));
-> @@ -103,6 +107,9 @@ static void test_cpumask_iterators_builtin(struct kunit *test)
->  	/* Ensure the dynamic masks are stable while running the tests */
->  	cpu_hotplug_disable();
->  
-> +	TEST_CPUMASK_PRINT(test, cpu_online_mask);
-> +	TEST_CPUMASK_PRINT(test, cpu_present_mask);
-> +
->  	EXPECT_FOR_EACH_CPU_BUILTIN_EQ(test, online);
->  	EXPECT_FOR_EACH_CPU_BUILTIN_EQ(test, present);
->  
-> @@ -114,6 +121,9 @@ static int test_cpumask_init(struct kunit *test)
->  	cpumask_clear(&mask_empty);
->  	cpumask_setall(&mask_all);
->  
-> +	TEST_CPUMASK_PRINT(test, &mask_all);
-> +	TEST_CPUMASK_PRINT(test, cpu_possible_mask);
-> +
+Move the PLL init of the switch out of the pad configuration of the port
+6 (usally cpu port).
 
-It sort of breaks the rule of silence. Can you make this print conditional
-on a test failure? If everything is OK, who wants to look into details? 
+Fix a unidirectional 100 mbit limitation on 1 gbit or 2.5 gbit links for
+outbound traffic on port 5 or port 6.
 
->  	return 0;
->  }
->  
-> -- 
-> 2.37.2
+Signed-off-by: Alexander Couzens <lynxis@fe80.eu>
+---
+ drivers/net/dsa/mt7530.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+index 835807911be0..95a57aeb466e 100644
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -506,14 +506,19 @@ static bool mt7531_dual_sgmii_supported(struct mt7530_priv *priv)
+ static int
+ mt7531_pad_setup(struct dsa_switch *ds, phy_interface_t interface)
+ {
+-	struct mt7530_priv *priv = ds->priv;
++	return 0;
++}
++
++static void
++mt7531_pll_setup(struct mt7530_priv *priv)
++{
+ 	u32 top_sig;
+ 	u32 hwstrap;
+ 	u32 xtal;
+ 	u32 val;
+ 
+ 	if (mt7531_dual_sgmii_supported(priv))
+-		return 0;
++		return;
+ 
+ 	val = mt7530_read(priv, MT7531_CREV);
+ 	top_sig = mt7530_read(priv, MT7531_TOP_SIG_SR);
+@@ -592,8 +597,6 @@ mt7531_pad_setup(struct dsa_switch *ds, phy_interface_t interface)
+ 	val |= EN_COREPLL;
+ 	mt7530_write(priv, MT7531_PLLGP_EN, val);
+ 	usleep_range(25, 35);
+-
+-	return 0;
+ }
+ 
+ static void
+@@ -2331,6 +2334,8 @@ mt7531_setup(struct dsa_switch *ds)
+ 		     SYS_CTRL_PHY_RST | SYS_CTRL_SW_RST |
+ 		     SYS_CTRL_REG_RST);
+ 
++	mt7531_pll_setup(priv);
++
+ 	if (mt7531_dual_sgmii_supported(priv)) {
+ 		priv->p5_intf_sel = P5_INTF_SEL_GMAC5_SGMII;
+ 
+@@ -2887,8 +2892,6 @@ mt7531_cpu_port_config(struct dsa_switch *ds, int port)
+ 	case 6:
+ 		interface = PHY_INTERFACE_MODE_2500BASEX;
+ 
+-		mt7531_pad_setup(ds, interface);
+-
+ 		priv->p6_interface = interface;
+ 		break;
+ 	default:
+-- 
+2.35.1
+

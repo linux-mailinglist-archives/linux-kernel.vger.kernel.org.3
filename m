@@ -2,85 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6688159AEA9
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 16:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D6959AEAB
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 16:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346196AbiHTOUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 10:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
+        id S1346310AbiHTOYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 10:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345296AbiHTOUD (ORCPT
+        with ESMTP id S1346217AbiHTOXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 10:20:03 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808F18284F
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 07:19:58 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-11cb3c811d9so6488436fac.1
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 07:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=uYTyRK/ggppk1qfefOckjXKBF0O296J6JFH4Dt5eYko=;
-        b=3ALe+YZ3NolhHC10gPVij5hIQS/axK6YJX07lmNRawIaEvsi/iw5Z2JoFnAhoi1JAU
-         dA2ODGBqWYvFY0NO7TzhLi/A/K+nNxZmGcOejI5GUKxvGE49SJqNSGj8gSpu7LKRrCz+
-         Lu5dMcEfVvY7NfMUyK7CcFauqqYS/Fa2Vrr7NbPmkpVLzCn8Ca/9t+YKuL4YFIl7xw+W
-         CKf2H0HKbvG5qIxYE9kKwGNzvZlyBSVRMvmjDjDfAM6UyjueJgihZJEHo4W+bg9SdLld
-         kbIrqqcPUyAHtmiEguCYTG1kv+5uidjvG0/v5DcvYfSrbL67FP3WUORnqzXKWSzFsCw5
-         Of8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=uYTyRK/ggppk1qfefOckjXKBF0O296J6JFH4Dt5eYko=;
-        b=JsygAEMx1IeQhQuuKMEZpqu80w77xKjzPbDty4ookZ2xbkgbhh4sWDidn1JXM5gJUx
-         y5iRzw3sZrjOxMJsMnhj9FgjGX/Cjp3muwxGKWyEig7C7XhCLgoKBueZWQ3msfLHATao
-         HoCFP52Cea+pjx5t31+6PqzTPPUKVQ5DcLXYVqXgfm1J6JK71ZOVXxkiSlpaCrV1FlSi
-         wZpaIhQDNDw+Qg5afdUdk0ZCre1So/Ec6L53vHayNn3+iFHjsoXJr7Eb/kdmswVIHGDx
-         6XFdPI3GI3DSQm6wNbZAb7ii/29jDElOyXPvI57Fwzj1NtKR07n/A2prs9SkssHh9gX6
-         9RXA==
-X-Gm-Message-State: ACgBeo2Kvtvr/HP4mGW2G1bVkNryEi8UDIt+QZ+jP6LZPIliTfTbu/W4
-        4McluYzBB1tbp/h0g/9meBswEKLR6fI5ebe4Q2Yu
-X-Google-Smtp-Source: AA6agR52QLPdtjhcKDNfssg95nnqcfijs4du1dcPBXuvnNBCw1vrwolb2DOlfqQoAki939g4m2/nBPAoDkWsSmniqMs=
-X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
- x13-20020a056870a78d00b0011c437bec70mr6285289oao.136.1661005197815; Sat, 20
- Aug 2022 07:19:57 -0700 (PDT)
+        Sat, 20 Aug 2022 10:23:53 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D13B1C13B
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 07:23:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661005433; x=1692541433;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2eoWGW5RTsfp6wncHXLsru9x/II2kVDL7PVh7uQDKkc=;
+  b=KMrmnowXTg//FXw7sMKTGcQuiZt/wIPo0iawGdNA6Ymksm7rK57AvWMw
+   AXoETzLok/VPNyyr0ccK01h2Ef0AGa0FZJcOFZvmbYjtevDuirjvrZyFC
+   fym3IOPeaaCKfU4/xRn5NVikt6kBKgbsV0GtLjM/gcwkk0MEdaFb7JyIz
+   zTIxHjQv5HpT9NF3362/U1AksAefsC55X6caYmIOB5xj91B15QjNUjRMJ
+   Qwp0s11+xM9pjsKbx4FDF7b2JqNsDOTNDikq4/EgIxNq0tvfGJGTsy4Yq
+   O3dLLe3Tig2LzDBGIBjo2V3c4fgpd4sOBbN9IG0fP8ivZuIWbS4655hoM
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="290739825"
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="290739825"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 07:23:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="584979042"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 20 Aug 2022 07:23:51 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPPOA-0002mN-2u;
+        Sat, 20 Aug 2022 14:23:50 +0000
+Date:   Sat, 20 Aug 2022 22:23:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/090-spi-hid 17/22]
+ drivers/hid/dockchannel-hid/dockchannel-hid.c:303:28: error: implicit
+ declaration of function 'FIELD_PREP'
+Message-ID: <202208202234.aXbQ3aiF-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220820082606.953886-1-floridsleeves@gmail.com>
-In-Reply-To: <20220820082606.953886-1-floridsleeves@gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sat, 20 Aug 2022 10:19:47 -0400
-Message-ID: <CAHC9VhSXMO7FxKAonxowYBCPjPfhhvuAErju8oU8qPgx62tiVw@mail.gmail.com>
-Subject: Re: [PATCH v1] selinux/ss/services.c: check the return value of
- audit_log_start() in security_sid_mls_copy()
-To:     lily <floridsleeves@gmail.com>
-Cc:     selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        cgzones@googlemail.com, michalorzel.eng@gmail.com,
-        xiujianfeng@huawei.com, omosnace@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 4:26 AM lily <floridsleeves@gmail.com> wrote:
->
-> The function audit_log_start() can fail, so its return value should be
-> checked against NULL.
->
-> Signed-off-by: Li Zhong <floridsleeves@gmail.com>
-> ---
->  security/selinux/ss/services.c | 3 +++
->  1 file changed, 3 insertions(+)
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   480924e97dddd088c4ed360eb12ecf92a30f19b1
+commit: 1d801ad9c4b08a5675701e82f600d9f462211a79 [17/22] hid: Add Apple DockChannel HID transport driver
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220820/202208202234.aXbQ3aiF-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/1d801ad9c4b08a5675701e82f600d9f462211a79
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout 1d801ad9c4b08a5675701e82f600d9f462211a79
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-audit_log_start() can safely return NULL as the audit_log_*()
-functions are designed to handle a NULL audit_buffer.  This is an
-expected behavior and not a bug.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dchid_cmd':
+>> drivers/hid/dockchannel-hid/dockchannel-hid.c:303:28: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+     303 |         iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
+         |                            ^~~~~~~~~~
+   In file included from include/linux/device.h:15,
+                    from drivers/hid/dockchannel-hid/dockchannel-hid.c:10:
+   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dchid_handle_ready':
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:569:37: warning: format '%ld' expects argument of type 'long int', but argument 3 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+     569 |                 dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
+         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:569:17: note: in expansion of macro 'dev_err'
+     569 |                 dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
+         |                 ^~~~~~~
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:569:70: note: format string is defined here
+     569 |                 dev_err(dchid->dev, "Bad length for ready message: %ld\n", length);
+         |                                                                    ~~^
+         |                                                                      |
+         |                                                                      long int
+         |                                                                    %d
+   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dchid_packet_work':
+>> drivers/hid/dockchannel-hid/dockchannel-hid.c:825:20: error: implicit declaration of function 'FIELD_GET'; did you mean 'FOLL_GET'? [-Werror=implicit-function-declaration]
+     825 |         int type = FIELD_GET(FLAGS_GROUP, shdr->flags);
+         |                    ^~~~~~~~~
+         |                    FOLL_GET
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:829:37: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'unsigned int' [-Wformat=]
+     829 |                 dev_err(dchid->dev, "Bad sub header length (%d > %ld)\n",
+         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:829:17: note: in expansion of macro 'dev_err'
+     829 |                 dev_err(dchid->dev, "Bad sub header length (%d > %ld)\n",
+         |                 ^~~~~~~
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:829:68: note: format string is defined here
+     829 |                 dev_err(dchid->dev, "Bad sub header length (%d > %ld)\n",
+         |                                                                  ~~^
+         |                                                                    |
+         |                                                                    long int
+         |                                                                  %d
+   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dchid_handle_ack':
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:855:44: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'unsigned int' [-Wformat=]
+     855 |                 dev_err(iface->dchid->dev, "Bad sub header length (%d > %ld)\n",
+         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:855:17: note: in expansion of macro 'dev_err'
+     855 |                 dev_err(iface->dchid->dev, "Bad sub header length (%d > %ld)\n",
+         |                 ^~~~~~~
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:855:75: note: format string is defined here
+     855 |                 dev_err(iface->dchid->dev, "Bad sub header length (%d > %ld)\n",
+         |                                                                         ~~^
+         |                                                                           |
+         |                                                                           long int
+         |                                                                         %d
+   drivers/hid/dockchannel-hid/dockchannel-hid.c: In function 'dockchannel_hid_probe':
+   drivers/hid/dockchannel-hid/dockchannel-hid.c:975:14: warning: variable 'defer' set but not used [-Wunused-but-set-variable]
+     975 |         bool defer = false;
+         |              ^~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/FIELD_PREP +303 drivers/hid/dockchannel-hid/dockchannel-hid.c
+
+   292	
+   293	static int dchid_cmd(struct dchid_iface *iface, u32 type, u32 req,
+   294			     void *data, size_t size, void *resp_buf, size_t resp_size)
+   295	{
+   296		int ret;
+   297		int report_id = *(u8*)data;
+   298	
+   299		mutex_lock(&iface->out_mutex);
+   300	
+   301		WARN_ON(iface->out_report != -1);
+   302		iface->out_report = report_id;
+ > 303		iface->out_flags = FIELD_PREP(FLAGS_GROUP, type) | FIELD_PREP(FLAGS_REQ, req);
+   304		iface->resp_buf = resp_buf;
+   305		iface->resp_size = resp_size;
+   306		reinit_completion(&iface->out_complete);
+   307	
+   308		ret = dchid_send(iface, iface->out_flags, data, size);
+   309		if (ret < 0)
+   310			goto done;
+   311	
+   312		if (!wait_for_completion_timeout(&iface->out_complete, msecs_to_jiffies(1000))) {
+   313			dev_err(iface->dchid->dev, "output report 0x%x to iface  %d (%s) timed out\n",
+   314				report_id, iface->index, iface->name);
+   315			ret = -ETIMEDOUT;
+   316			goto done;
+   317		}
+   318	
+   319		ret = iface->resp_size;
+   320		if (iface->retcode) {
+   321			dev_err(iface->dchid->dev,
+   322				"output report 0x%x to iface %d (%s) failed with err 0x%x\n",
+   323				report_id, iface->index, iface->name, iface->retcode);
+   324			ret = -EIO;
+   325		}
+   326	
+   327	done:
+   328		iface->tx_seq++;
+   329		iface->out_report = -1;
+   330		iface->out_flags = 0;
+   331		iface->resp_buf = NULL;
+   332		iface->resp_size = 0;
+   333		mutex_unlock(&iface->out_mutex);
+   334		return ret;
+   335	}
+   336	
 
 -- 
-paul-moore.com
+0-DAY CI Kernel Test Service
+https://01.org/lkp

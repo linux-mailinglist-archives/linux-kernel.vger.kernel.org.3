@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5022959ADAD
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 13:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D8159ADB6
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 13:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345061AbiHTLwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 07:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
+        id S233573AbiHTL4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 07:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241030AbiHTLwP (ORCPT
+        with ESMTP id S230061AbiHTL4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 07:52:15 -0400
+        Sat, 20 Aug 2022 07:56:16 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AF49E2C8;
-        Sat, 20 Aug 2022 04:52:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978B0248E2;
+        Sat, 20 Aug 2022 04:56:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CDC3B80B92;
-        Sat, 20 Aug 2022 11:52:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE46C433C1;
-        Sat, 20 Aug 2022 11:52:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E864B80B84;
+        Sat, 20 Aug 2022 11:56:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71B8CC433D6;
+        Sat, 20 Aug 2022 11:56:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660996332;
-        bh=EHHFSu4yACtrEkdzmPcb5OuIYaJ/erGqHqabiAFd4n0=;
+        s=k20201202; t=1660996573;
+        bh=MgC417tLSXd3BlaZH46ba+MTqWmzo/k/pKAsnyV/4G0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Uobzz6hGYwNST4mLp+32zhAK6hBM2uMuPL0tYHoaXf0VUw/lzTlKYbYBEwAIGG5s8
-         /vL9/34IUQoabbZ4/veM5PwU3SyN5rbMs0Mz2sefrt+/34t+6ENNsKzv8bhuZenELl
-         zUCZUKQdpFGSFl+ppucXaF3Lmn3ZDvxL2yRPzU7SJ2+uy7zHWoC6iiRqL5uN+Y6k1Z
-         eimAJsPvYMXo/c7OMoKd4vYV9B/vPYbyt2Y8BzIppm0iAfG3PoWDGT2a6mKurNo//g
-         UiqtAHhUizVfXi984+qDb/74ClB7njfQmhdHuH/LNFAEIWHR+0RMklLaEEnhvmTb+f
-         9pH+tXiyWvRBw==
-Date:   Sat, 20 Aug 2022 13:02:48 +0100
+        b=VaL2eQ/swY9p1WvSDHRYSdI4SBeymJ0+VTNe0SAEZUNxLJ3QwHN7y/y1ZJ0Sa2vlk
+         X4azJG69J4tay1rkhMIJZc/OeCkPknSapjJPIK0JRWRhvXeZRETaJ/ZJG64vJExkYc
+         FJPmpZwtIuxbBeJGAjGDoneXmmmSqPLTjE8S2RVnc4EYSmMz7D7Nl4GjoiyECYwkhP
+         i7GuDJM1n85PYlW40ejDskwj9znBnroQ9nrdAycXipksthAYKZS0b8WPlmrqMhm1tM
+         3t/Qn9sVySo8YFCnZNNC/+XozRACSyCbhz9tUdiDcOLnoc9E+P8Ps6w/sH6pLDZQig
+         ilGAnLLZoME1A==
+Date:   Sat, 20 Aug 2022 13:06:48 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Eddie James <eajames@linux.ibm.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Joel Stanley <joel@jms.id.au>
-Subject: Re: [PATCH v5 2/2] iio: pressure: dps310: Reset chip if MEAS_CFG is
- corrupt
-Message-ID: <20220820130248.7773a6b3@jic23-huawei>
-In-Reply-To: <CAHp75VegQspJJ9YT=2E3YvKh-hp9-AGincp4z0GdQbA0Vq4Zug@mail.gmail.com>
-References: <20220815145705.203017-1-eajames@linux.ibm.com>
-        <20220815145705.203017-3-eajames@linux.ibm.com>
-        <CAHp75VegQspJJ9YT=2E3YvKh-hp9-AGincp4z0GdQbA0Vq4Zug@mail.gmail.com>
+To:     Denys Zagorui <dzagorui@cisco.com>
+Cc:     Meng.Li@windriver.com, lars@metafoo.de,
+        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH] iio: ltc2497: Fix reading conversion results
+Message-ID: <20220820130648.5b9bc66f@jic23-huawei>
+In-Reply-To: <20220815091647.1523532-1-dzagorui@cisco.com>
+References: <20220815091647.1523532-1-dzagorui@cisco.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,62 +58,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 Aug 2022 23:16:55 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+On Mon, 15 Aug 2022 09:16:47 +0000
+Denys Zagorui <dzagorui@cisco.com> wrote:
 
-> On Mon, Aug 15, 2022 at 5:57 PM Eddie James <eajames@linux.ibm.com> wrote:
-> >
-> > Corruption of the MEAS_CFG register has been observed soon after
-> > system boot. In order to recover this scenario, check MEAS_CFG if
-> > measurement isn't ready, and if it's incorrect, reset the DPS310
-> > and execute the startup procedure.  
-> 
-> ...
-> 
-> > + * Called with lock held. Returns a negative value on error, a positive value
-> > + * when the device is not ready, and zero when the device is ready.  
-> 
-> Can we have
-> 
-> #define DPS310_DEVICE_NOT_READY  1
-> 
-> (or anonymous enum) and return it instead of abstract 1 or any other
-> positive number?
+> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> After the result of the previous conversion is read the chip
+> automatically starts a new conversion and doesn't accept new i2c
+> transfers until this conversion is completed which makes the function
+> return failure.
 
-Perhaps make it even clearer by returning the need to wait via another parameter
-rather than this being (probably) the only place in driver with a postive rc.
+That's rather nasty.
 
-bool reset_done;
+Could we add a cheeky sleep in the other path to ensure there is always
+time for the conversion to be done?  Not ideal, but might ensure
+there isn't a known problem path without introducing much complexity.
 
-rc = dps310_check_reset_meas_cfg(data, DPS310_TMP_RDY, &reset_done);
 
-if (reset_done) {
-}
-
-> 
-> ...
-> 
-> > +       rc = dps310_check_reset_meas_cfg(data, DPS310_TMP_RDY);
-> >         if (rc < 0)
-> >                 goto done;
-> >
-> > +       if (rc > 0) {
-> > +               rate = dps310_get_temp_samp_freq(data);
-> > +               timeout = DPS310_POLL_TIMEOUT_US(rate);
-> > +
-> > +               /*
-> > +                * Poll for sensor readiness; base the timeout upon the sample
-> > +                * rate.
-> > +                */
-> > +               rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG,
-> > +                                             ready, ready & DPS310_TMP_RDY,
-> > +                                             DPS310_POLL_SLEEP_US(timeout),
-> > +                                             timeout);
-> > +               if (rc)
-> > +                       goto done;
-> > +       }  
-> 
-> But have you tried to make a helper that takes a pointer to the
-> respective function?
-> 
+>=20
+> So add an early return iff the programming of the new address isn't
+> needed. Note this will not fix the problem in general, but all cases
+> that are currently used. Once this changes we get the failure back, but
+> this can be addressed when the need arises.
+>=20
+> Fixes: 69548b7c2c4f ("iio: adc: ltc2497: split protocol independent part =
+in a separate module ")
+> Reported-by: Meng Li <Meng.Li@windriver.com>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> Tested-by: Denys Zagorui <dzagorui@cisco.com>
+> ---
+>  drivers/iio/adc/ltc2497.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+>=20
+> diff --git a/drivers/iio/adc/ltc2497.c b/drivers/iio/adc/ltc2497.c
+> index f7c786f37ceb..78b93c99cc47 100644
+> --- a/drivers/iio/adc/ltc2497.c
+> +++ b/drivers/iio/adc/ltc2497.c
+> @@ -41,6 +41,19 @@ static int ltc2497_result_and_measure(struct ltc2497co=
+re_driverdata *ddata,
+>  		}
+> =20
+>  		*val =3D (be32_to_cpu(st->buf) >> 14) - (1 << 17);
+> +
+> +		/*
+> +		 * The part started a new conversion at the end of the above i2c
+> +		 * transfer, so if the address didn't change since the last call
+> +		 * everything is fine and we can return early.
+> +		 * If not (which should only happen when some sort of bulk
+> +		 * conversion is implemented) we have to program the new
+> +		 * address. Note that this probably fails as the conversion that
+> +		 * was triggered above is like not complete yet and the two
+> +		 * operations have to be done in a single transfer.
+> +		 */
+> +		if (ddata->addr_prev =3D=3D address)
+> +			return 0;
+>  	}
+> =20
+>  	ret =3D i2c_smbus_write_byte(st->client,
 

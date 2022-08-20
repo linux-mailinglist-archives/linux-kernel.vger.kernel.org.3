@@ -2,142 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E382259AE9F
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 16:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E36559AEA1
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 16:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345900AbiHTOK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 10:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
+        id S1346128AbiHTONF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 10:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344493AbiHTOKX (ORCPT
+        with ESMTP id S242015AbiHTOND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 10:10:23 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120078.outbound.protection.outlook.com [40.107.12.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511762DD3;
-        Sat, 20 Aug 2022 07:10:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iHqZ1w2K7YSwf8dPx0weaz7kDC8J77CNsEX5JoMFM7nLca0j8PXIg6tuu3X9fmN2oleohK5qRFwSCJJLK0lz8cTu/p2eRUIDCwVFxGZLOqwhY8PkcKYW3pnO6a9rILaYLYFsf8RwlDLC3MI9nObT3Z2ngA/NA/VEzKi15MCB/QVBF2chyWPYoCELYnWazScTaNLCQAKxrLri/xAovaSQpUvT1j8AdRELH8gd9ezS6mVxv4oKpHZivqz4VGuSEmFCqhjQ5+yyI9bNuBmpR30h7Q9Efpkms2pc9Lu3B+IWGG2D3rBkGkQysXPsZ5g9LjbBff/De22BI9TY1UiZIM9Tyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V5ea49WFG8pyITKzQOxZ4fczXCe+ecHpGQ8mVCTlLy8=;
- b=Igvhu8ijIi3gXDFle8MOHZcZd6AnbFPf1vAJkrSEBIM4OWat1sHer7p1XL1AKVx3M63NhZmuATCdZn+OYSzJQRd3jYTdlni1442hAuqIblo8kp38P/vTHITor6TeytArerZeoLJ5W0U7pYEqQPsdiut0xv6sM0iMpVGUj0w/p3wC1C70yOJQMSR2UF5I8PTSYOzRBxUxOMNJbKIttFzY7hgmtwHTG4OmFgf/e5yFojUuwt/7ANZ8gu+afncUPKAPQZin25ShrMw6MmZGZGa2g3RP+aOXyg6bBqSi44pjTVu5LI7JV0tpWiHYkVz4uIYC8Iq3jENht9ts6yeGO6IbPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V5ea49WFG8pyITKzQOxZ4fczXCe+ecHpGQ8mVCTlLy8=;
- b=msBsOKape5igSN93A9kV/mZWbxt/qrJ72lRCBV5AEy+1iNNorloX7341kVETOaGFghCjIWK1VCtO6NS+O2z6fkk1zTtCguMXy5a8UFNJ1kRpgh3NVieFBrISOl9KmolT5sYSjHPSCiQXhgK/rmvE5P78L3syfJz4XxXrNnA7M+K8jZwMKw9glsn6ru6MUMCcdwZUzDvbMTNbSwK3fumarhvuugoMDqEgMvgOnInPjVFKTonUueoHcWhbGLWUTJpb5Yz6xUqSqqifnU4oPA4oeFNDjuqazNEFaRXyhOFwY4DSBPmed7K2SAaBIZwHbKcqNwjHXhQjcVSNyck+Zhi9aw==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PAYP264MB4141.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:118::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.19; Sat, 20 Aug
- 2022 14:10:18 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::888e:a92e:a4ee:ce9e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::888e:a92e:a4ee:ce9e%5]) with mapi id 15.20.5546.021; Sat, 20 Aug 2022
- 14:10:18 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "sedat.dilek@gmail.com" <sedat.dilek@gmail.com>
-CC:     Masahiro Yamada <masahiroy@kernel.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: Build/boot problem with 7b4537199a4a (Re: [PATCH v6 02/10]
- kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS)
-Thread-Topic: Build/boot problem with 7b4537199a4a (Re: [PATCH v6 02/10]
- kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS)
-Thread-Index: AQHYtHvmHBMhgvHYdkutxUw4JYFhKa23sWCAgAAizoA=
-Date:   Sat, 20 Aug 2022 14:10:18 +0000
-Message-ID: <b6a7a909-8322-235d-1863-f751cc808ecc@csgroup.eu>
-References: <20220513113930.10488-1-masahiroy@kernel.org>
- <20220513113930.10488-3-masahiroy@kernel.org>
- <38605f6a-a568-f884-f06f-ea4da5b214f0@csgroup.eu>
- <CA+icZUU1R6vmmKussGBXGBzR8We2b5mAnfWT5BCcfvYY3vk+Zw@mail.gmail.com>
-In-Reply-To: <CA+icZUU1R6vmmKussGBXGBzR8We2b5mAnfWT5BCcfvYY3vk+Zw@mail.gmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1a1c4f8c-c050-49cd-745c-08da82b5b64f
-x-ms-traffictypediagnostic: PAYP264MB4141:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CgeBf26FCg/72X0JeiU3wVK9vsEW30GpLUQj2K7LUvRtSA9keivMZ64XdSA1N92KSyk6qSSHgNw4lsVta9tMDaK0BRTMtG872sPNLWZXC2lxlStX5mZVB0oajf9CV4Tnadfxz84FsLPhr5o7Mm+tv5X/85ylzRmWD/EpO/lbG/ysgOUX4iiSFzPRmMrhofeEF1woodC6sYDiltTK5lYKm6jhTEiGLMDmKzbkH13bTKGXiUypzIPWPSQjx6cV0vIaSniT78LHNI281Z2aFM/ypZyyVi2uuBKB9pRo7qvnKJaW+fKFTIr9w1nM84CHCtRUKYKLKniPFVb2OiFYDEf4dAOjNw8Jkp9t7Jfab2jGA2AzWkWWVpYvHLkS77GhujImmBbVjDIEUjkTg6ZSqb9MnzOOsgc6KMyrni0+0rLGXlYtNvyQi5VunEudzH9I4Mia34jcDdFnRV5BGknsXGU/TPCPwviimuIKqsmg1bt9R49jw0F/PvupRIUSD2iUWWK12sHh7VYcT6dmfpDjmFNaxSgB+Z3fbP5txSrlSFx7R/vHGOZF89KSb+7rY31aAvDmuJYgoc3SbL0UaCLRmm/TqAkd44ULIXAo4z9RRZB+Qhrc1iBezxoe2iQtqkJ41k5KmLV4ePy3sNCT44PBDTkLI8myUZnwP6BE8ucE3VMfDBejK+qKpFGjG2+Ax9MoGuIBh2hQy7fkbvtj6fnmdX4GSZjyQTg58faL85PVb9LpRRIPBkKFvtfODCwn+V5NXzrYb3D1OFBqrXrYe+yWJ+M9KLM7p0SkeTk8lXTqsfSycX4/setUd5f/xoV3UXFqQvhV6XTEOI2Jqa/WazMIdsuWqzXDaBnhr4kieC/8VyT3lwM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(39850400004)(346002)(376002)(91956017)(31696002)(76116006)(83380400001)(66446008)(66556008)(66946007)(64756008)(66476007)(8676002)(4326008)(2906002)(38100700002)(38070700005)(8936002)(44832011)(7416002)(5660300002)(6486002)(966005)(6512007)(26005)(31686004)(122000001)(71200400001)(54906003)(6916009)(41300700001)(36756003)(53546011)(86362001)(478600001)(316002)(6506007)(66574015)(186003)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bGsxM21YWCtVVkcrY0tHUFNuOWlhcEhmVlloOEFVbFpSd0NJUDRzdWFkZk0v?=
- =?utf-8?B?cG1SRDlYVk1OZlpTZ0RvdElQL0VuUXlLOFNuTVdSRlROQlBZbE5vRmlVZmN3?=
- =?utf-8?B?cUhKZEFBTlVsSU5uMlpsUElHUHlNSHNyYXJBWW11dFhRNjNxTXVSSGkvVGUx?=
- =?utf-8?B?bWlnNDlRamhzbVRmcjNYWThWZmN3MGEzRkFpbG94N3hKVzhCbEUxUE9lK3ht?=
- =?utf-8?B?WkpvSlpYQm1PbTUzNmtuakhWZlNlZTNVMjFmTWVuamQyeHRPaFZ2Q0V1UVFn?=
- =?utf-8?B?NEI0VjV6bnp5NzVEVWdSQUczd2NVZTR1dXFOT2psR25YMC96ODlEcjJST2ts?=
- =?utf-8?B?UnRubDEvcEtyTUxuaG5TYUExUHd6UUt0ZklVbXk1VW9va203MldKVXhoM3FU?=
- =?utf-8?B?bXpmdEY5VmxNd05IMUFNYSsrMjNOUVYzUHQ4TGlyNWZVaVZVVDd0NTNFZW5R?=
- =?utf-8?B?L0xVR2tQM0swU0pRbFVNeEhPcmRZUjhOUnNXWmZ6UXR0L1IyR1dWSy9YeWFk?=
- =?utf-8?B?YXFuNjIvWU00dmtjUDQzNGZGMi9lc3FHdXkxMzFaZ3NOV3JjckM1eE5xc2g2?=
- =?utf-8?B?b21hY2RFTDJjUUlDNDh3a1QzOVQ5UXAzT3E0cWI4VnhxM2RPZFRac0d2am9h?=
- =?utf-8?B?WFVBY2IrSENkMEk4cmdNWi9yR3hCdXF4dTl1UlArZjBONWJJdHFudGZxTDFH?=
- =?utf-8?B?TE1wNjErcFpoeSs2VnNPSkU3ZWFKQnRMTVZOZGlKWWx1ZGJZQUg2bkxkVkdj?=
- =?utf-8?B?M0c1RklzUDc4aU5ubnNSZGVER2c4cWd6YzhiNERxZnNQUXR6aTdPS2hpcTZM?=
- =?utf-8?B?elZvckZnRnRhd0NodmM4bVZtNWNiSXNmMnd3VkhFMTloRDhVSENnczF5TG5N?=
- =?utf-8?B?TFF5czBjMjBEV3NGL0hwd28zMExpR3k3bU5uQXErZG1hNnVhck1xQ2dCUnhh?=
- =?utf-8?B?YnR2R3RJemxlRUxLNml1TUNyWUdjd2h4TEpkSVRCc1BHSzBKNkxPQU5QcUhF?=
- =?utf-8?B?akpNQlE2Zk5FdlVRNUxYZk9LMHpDV2ZFNGRPN2lXM3JTVkd0UlkvK1JxaVpp?=
- =?utf-8?B?UFFVd1RoVGV3d1F5NVozdnFyU0NhaUhzTHg2WG9ZdUMzRFZDckk3WHVtYlIy?=
- =?utf-8?B?b0FuVTc5WXdFS2F3dCttMkU2eGV6RlNiSjRsQkphT3RBWlRhb0pSYVZ6UTZT?=
- =?utf-8?B?L3E5OGIrRUNTYm12eDZ2a3BXNWEvQkpsd1JvK3ovZWRNQTFiNXZkMnJqMzNl?=
- =?utf-8?B?SlcvUDVza3pZYXNrMnU0VzlXM2E2MzFXNWxrNG4vRTkxUjRXN01vbExPSFBG?=
- =?utf-8?B?ZDErdE5zN2xkV25OL1p5SmxINEwvU0xNcUl0OXlEUFVaNXRRUkZQK1ZnZTNp?=
- =?utf-8?B?TDRNallaQzVkRUhWUTA0eUZOblhjdFJ2TUpsYjlUVys5cjg4bmlydlI0ckt6?=
- =?utf-8?B?aXhwaHNiZlNIY1J3WlJyMG4xV2JPVEVNd0lPU2JYTWpMUGcwSHEzaHA4c0N6?=
- =?utf-8?B?bG9mVzFCUTA5TWliZ2N3Skttd0FKTkJmVElicHRFSUNhSHBwbk5CVE1OOTBi?=
- =?utf-8?B?RUJPRi9XQUhFanBPRmZuc3pOazNMUlNVMmEyd3U4eldMb1FLdkdicGM4c0Nq?=
- =?utf-8?B?NjgrWno0UmFPa0wwdktTbVRnd2F1bGZ6SWpwUElvMTY4QmRSVlVXTytnLzJR?=
- =?utf-8?B?WjNKMmtmTUlwNEp4bkNSRUhFK2VQclN0cG5sRlRWRVBBRUZRNi9Ld3V1SUhw?=
- =?utf-8?B?V0E4Uzlua1Y5R01BMkIxNXR5RnN4WTlxTllwU09pcjlxZTUvQXdVWlROTDI1?=
- =?utf-8?B?N0drdUpseU1GanA4R0g2NDd6dVd0TGNkcTRYQlRNZTI1cmljNzM1UlJ2dzkv?=
- =?utf-8?B?Y00zSFhYNzcyQWdETFNmL1E5N0MxL2EyeFFCMzhVSkJadEcvdTFnS29USGdu?=
- =?utf-8?B?aXlmSGFRZ0FSK1NYRUtObzRsenYwcjNseC96RHJUeDd6aTcvVzFQWXhnRXNJ?=
- =?utf-8?B?WEJueGxzU3hMbWtFNDBub05pZ1JxZnoydE1RV1JXSlR4aXpobWNQZUVab1Zm?=
- =?utf-8?B?WFJnaUtaSEpsUU9kZksyOXoxc3d4dlFtc2QvNjFKYU9rbGR4OUxHZm5yT2Rr?=
- =?utf-8?B?a21meDA2eVVSVHNoS3czVWUvZjVoNVA4R29FTjFIVVNZdUY0Y25uR0o4WFNM?=
- =?utf-8?B?OGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <99602D416A9B2241BC2B7C1836317288@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Sat, 20 Aug 2022 10:13:03 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC0A13DF7
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 07:13:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661004782; x=1692540782;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ttzPGvKZIyJgo8gnSjvuhzJLcsnOXQBCHZv1Wd3VnCM=;
+  b=RKbBBESnloZpfHKi8zHYcHci29e15PA0z8JD5ieXKpHsXxzt9rwZo640
+   1Xmst1+hfeGsTybrqlEuTomwSTIfAKm+R2HEtHMb9PYWimn7hU7o08U9F
+   9slM8HDbasHkWPihZPFkXQoerGEKszemkHSr9jVcnTilRLnYkIA+dKS+9
+   ZoN+wRdmNNMq5bzHV4+greSm4S0PnvYjrO0qmpuQjDI0SlHoCZiE5OoW1
+   vJDv5XQYe1Hz2tHKC/YAHX04yLxH4CDwnlCWKFd+PgO5Lfxn17Swdctg9
+   /z5A6jaLdqs/bGwYExVVYeLvBJDPid9uS87oo7Ps3TZMeNfpRNGuCWvbZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="272936964"
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="272936964"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 07:12:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="559243173"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 20 Aug 2022 07:12:51 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPPDW-0002m5-2P;
+        Sat, 20 Aug 2022 14:12:50 +0000
+Date:   Sat, 20 Aug 2022 22:12:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Subject: drivers/gpu/drm/msm/dp/dp_link.c:969
+ dp_link_process_link_status_update() warn: inconsistent indenting
+Message-ID: <202208202244.TNoVclTm-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a1c4f8c-c050-49cd-745c-08da82b5b64f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Aug 2022 14:10:18.5230
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 325i1wu5RL+VOQ34ivnHcJ9xgS3b1GauGXFd1rUhXHzz9YkKaJoy2nOKzPC0Ch+gwNsJJPrFnPlpv8iLxncXAGEKG7YlBxkxzqnKKGKCdSc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAYP264MB4141
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -145,46 +63,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDIwLzA4LzIwMjIgw6AgMTQ6MDUsIFNlZGF0IERpbGVrIGEgw6ljcml0wqA6DQo+IE9u
-IFNhdCwgQXVnIDIwLCAyMDIyIGF0IDEyOjA0IFBNIENocmlzdG9waGUgTGVyb3kNCj4gPGNocmlz
-dG9waGUubGVyb3lAY3Nncm91cC5ldT4gd3JvdGU6DQo+Pg0KPj4gSGksDQo+Pg0KPj4gTGUgMTMv
-MDUvMjAyMiDDoCAxMzozOSwgTWFzYWhpcm8gWWFtYWRhIGEgw6ljcml0IDoNCj4+PiBpbmNsdWRl
-L3tsaW51eCxhc20tZ2VuZXJpY30vZXhwb3J0LmggZGVmaW5lcyBhIHdlYWsgc3ltYm9sLCBfX2Ny
-Y18qDQo+Pj4gYXMgYSBwbGFjZWhvbGRlci4NCj4+Pg0KPj4+IEdlbmtzeW1zIHdyaXRlcyB0aGUg
-dmVyc2lvbiBDUkNzIGludG8gdGhlIGxpbmtlciBzY3JpcHQsIHdoaWNoIHdpbGwgYmUNCj4+PiB1
-c2VkIGZvciBmaWxsaW5nIHRoZSBfX2NyY18qIHN5bWJvbHMuIFRoZSBsaW5rZXIgc2NyaXB0IGZv
-cm1hdCBkZXBlbmRzDQo+Pj4gb24gQ09ORklHX01PRFVMRV9SRUxfQ1JDUy4gSWYgaXQgaXMgZW5h
-YmxlZCwgX19jcmNfKiBob2xkcyB0aGUgb2Zmc2V0DQo+Pj4gdG8gdGhlIHJlZmVyZW5jZSBvZiBD
-UkMuDQo+Pj4NCj4+PiBJdCBpcyB0aW1lIHRvIGdldCByaWQgb2YgdGhpcyBjb21wbGV4aXR5Lg0K
-Pj4+DQo+Pj4gTm93IHRoYXQgbW9kcG9zdCBwYXJzZXMgdGV4dCBmaWxlcyAoLiouY21kKSB0byBj
-b2xsZWN0IGFsbCB0aGUgQ1JDcywNCj4+PiBpdCBjYW4gZ2VuZXJhdGUgQyBjb2RlIHRoYXQgd2ls
-bCBiZSBsaW5rZWQgdG8gdGhlIHZtbGludXggb3IgbW9kdWxlcy4NCj4+Pg0KPj4+IEdlbmVyYXRl
-IGEgbmV3IEMgZmlsZSwgLnZtbGludXguZXhwb3J0LmMsIHdoaWNoIGNvbnRhaW5zIHRoZSBDUkNz
-IG9mDQo+Pj4gc3ltYm9scyBleHBvcnRlZCBieSB2bWxpbnV4LiBJdCBpcyBjb21waWxlZCBhbmQg
-bGlua2VkIHRvIHZtbGludXggaW4NCj4+PiBzY3JpcHRzL2xpbmstdm1saW51eC5zaC4NCj4+Pg0K
-Pj4+IFB1dCB0aGUgQ1JDcyBvZiBzeW1ib2xzIGV4cG9ydGVkIGJ5IG1vZHVsZXMgaW50byB0aGUg
-ZXhpc3RpbmcgKi5tb2QuYw0KPj4+IGZpbGVzLiBObyBhZGRpdGlvbmFsIGJ1aWxkIHN0ZXAgaXMg
-bmVlZGVkIGZvciBtb2R1bGVzLiBBcyBiZWZvcmUsDQo+Pj4gKi5tb2QuYyBhcmUgY29tcGlsZWQg
-YW5kIGxpbmtlZCB0byAqLmtvIGluIHNjcmlwdHMvTWFrZWZpbGUubW9kZmluYWwuDQo+Pj4NCj4+
-PiBObyBsaW5rZXIgbWFnaWMgaXMgdXNlZCBoZXJlLiBUaGUgbmV3IEMgaW1wbGVtZW50YXRpb24g
-d29ya3MgaW4gdGhlDQo+Pj4gc2FtZSB3YXksIHdoZXRoZXIgQ09ORklHX1JFTE9DQVRBQkxFIGlz
-IGVuYWJsZWQgb3Igbm90Lg0KPj4+IENPTkZJR19NT0RVTEVfUkVMX0NSQ1MgaXMgbm8gbG9uZ2Vy
-IG5lZWRlZC4NCj4+Pg0KPj4+IFByZXZpb3VzbHksIEtidWlsZCBpbnZva2VkIGFkZGl0aW9uYWwg
-JChMRCkgdG8gdXBkYXRlIHRoZSBDUkNzIGluDQo+Pj4gb2JqZWN0cywgYnV0IHRoaXMgc3RlcCBp
-cyB1bm5lZWRlZCB0b28uDQo+Pj4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBNYXNhaGlybyBZYW1hZGEg
-PG1hc2FoaXJveUBrZXJuZWwub3JnPg0KPj4+IFRlc3RlZC1ieTogTmF0aGFuIENoYW5jZWxsb3Ig
-PG5hdGhhbkBrZXJuZWwub3JnPg0KPj4+IFRlc3RlZC1ieTogTmljb2xhcyBTY2hpZXIgPG5pY29s
-YXNAZmphc2xlLmV1Pg0KPj4+IFJldmlld2VkLWJ5OiBOaWNvbGFzIFNjaGllciA8bmljb2xhc0Bm
-amFzbGUuZXU+DQo+Pg0KPj4gUHJvYmxlbSB3aXRoIHY2LjAtcmMxDQo+PiBQcm9ibGVtIHdpdGgg
-djUuMTkNCj4+IE5vIHByb2JsZW0gd2l0aCB2NS4xOA0KPj4NCj4+IEJpc2VjdGVkIHRvIDdiNDUz
-NzE5OWE0YSAoImtidWlsZDogbGluayBzeW1ib2wgQ1JDcyBhdCBmaW5hbCBsaW5rLA0KPj4gcmVt
-b3ZpbmcgQ09ORklHX01PRFVMRV9SRUxfQ1JDUyIpDQo+Pg0KPiANCj4gV2hhdCB5b3UgYXJlIGxv
-b2tpbmcgZm9yIGlzLi4uDQo+IA0KPiBjb21taXQgN2QxM2ZkOTZkZjg3NWE5ZDc4NmVlNmRjYzhm
-ZWM0NjBkMzVkNGIxMg0KPiAoIm1vZHBvc3Q6IGZpeCBtb2R1bGUgdmVyc2lvbmluZyB3aGVuIGEg
-c3ltYm9sIGxhY2tzIHZhbGlkIENSQyIpDQo+IA0KPiBJdCdzIHBlbmRpbmcgaW4ga2J1aWxkLmdp
-dCNmaXhlcy4NCj4gDQo+IC1TZWRhdC0NCj4gDQo+IFsxXSBodHRwczovL2dpdC5rZXJuZWwub3Jn
-L3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9tYXNhaGlyb3kvbGludXgta2J1aWxkLmdpdC9jb21t
-aXQvP2g9Zml4ZXMmaWQ9N2QxM2ZkOTZkZjg3NWE5ZDc4NmVlNmRjYzhmZWM0NjBkMzVkNGIxMg0K
-PiBbMl0gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvbWFz
-YWhpcm95L2xpbnV4LWtidWlsZC5naXQvbG9nLz9oPWZpeGVzDQo+IA0KDQpUaGF0IHBhdGNoIGRv
-ZXNuJ3QgZml4IHRoZSBwcm9ibGVtLg0KDQpDaHJpc3RvcGhl
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   50cd95ac46548429e5bba7ca75cc97d11a697947
+commit: 202aceac8bb3ae12d41dcd3ac9e6c3395963032b drm/msm/dp: replace DRM_DEBUG_DP marco with drm_dbg_dp
+date:   4 months ago
+config: microblaze-randconfig-m041-20220820 (https://download.01.org/0day-ci/archive/20220820/202208202244.TNoVclTm-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 12.1.0
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+smatch warnings:
+drivers/gpu/drm/msm/dp/dp_link.c:969 dp_link_process_link_status_update() warn: inconsistent indenting
+
+vim +969 drivers/gpu/drm/msm/dp/dp_link.c
+
+c943b4948b5848 Chandan Uddaraju 2020-08-27  941  
+c943b4948b5848 Chandan Uddaraju 2020-08-27  942  /**
+c943b4948b5848 Chandan Uddaraju 2020-08-27  943   * dp_link_process_link_status_update() - processes link status updates
+c943b4948b5848 Chandan Uddaraju 2020-08-27  944   * @link: Display Port link module data
+c943b4948b5848 Chandan Uddaraju 2020-08-27  945   *
+c943b4948b5848 Chandan Uddaraju 2020-08-27  946   * This function will check for changes in the link status, e.g. clock
+c943b4948b5848 Chandan Uddaraju 2020-08-27  947   * recovery done on all lanes, and trigger link training if there is a
+c943b4948b5848 Chandan Uddaraju 2020-08-27  948   * failure/error on the link.
+c943b4948b5848 Chandan Uddaraju 2020-08-27  949   *
+c943b4948b5848 Chandan Uddaraju 2020-08-27  950   * The function will return 0 if the a link status update has been processed,
+c943b4948b5848 Chandan Uddaraju 2020-08-27  951   * otherwise it will return -EINVAL.
+c943b4948b5848 Chandan Uddaraju 2020-08-27  952   */
+c943b4948b5848 Chandan Uddaraju 2020-08-27  953  static int dp_link_process_link_status_update(struct dp_link_private *link)
+c943b4948b5848 Chandan Uddaraju 2020-08-27  954  {
+ea530388e64bd5 Kuogee Hsieh     2020-11-03  955  	bool channel_eq_done = drm_dp_channel_eq_ok(link->link_status,
+ea530388e64bd5 Kuogee Hsieh     2020-11-03  956  			link->dp_link.link_params.num_lanes);
+ea530388e64bd5 Kuogee Hsieh     2020-11-03  957  
+ea530388e64bd5 Kuogee Hsieh     2020-11-03  958  	bool clock_recovery_done = drm_dp_clock_recovery_ok(link->link_status,
+ea530388e64bd5 Kuogee Hsieh     2020-11-03  959  			link->dp_link.link_params.num_lanes);
+c943b4948b5848 Chandan Uddaraju 2020-08-27  960  
+202aceac8bb3ae Kuogee Hsieh     2022-02-17  961  	drm_dbg_dp(link->drm_dev,
+202aceac8bb3ae Kuogee Hsieh     2022-02-17  962  		       "channel_eq_done = %d, clock_recovery_done = %d\n",
+ea530388e64bd5 Kuogee Hsieh     2020-11-03  963                          channel_eq_done, clock_recovery_done);
+ea530388e64bd5 Kuogee Hsieh     2020-11-03  964  
+ea530388e64bd5 Kuogee Hsieh     2020-11-03  965  	if (channel_eq_done && clock_recovery_done)
+ea530388e64bd5 Kuogee Hsieh     2020-11-03  966  		return -EINVAL;
+ea530388e64bd5 Kuogee Hsieh     2020-11-03  967  
+c943b4948b5848 Chandan Uddaraju 2020-08-27  968  
+c943b4948b5848 Chandan Uddaraju 2020-08-27 @969         return 0;
+c943b4948b5848 Chandan Uddaraju 2020-08-27  970  }
+c943b4948b5848 Chandan Uddaraju 2020-08-27  971  
+
+:::::: The code at line 969 was first introduced by commit
+:::::: c943b4948b5848fc0e07f875edbd35a973879e22 drm/msm/dp: add displayPort driver support
+
+:::::: TO: Chandan Uddaraju <chandanu@codeaurora.org>
+:::::: CC: Rob Clark <robdclark@chromium.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

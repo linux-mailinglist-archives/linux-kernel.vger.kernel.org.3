@@ -2,110 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC8159AAD3
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 05:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7481359AAD6
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 05:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236670AbiHTDGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 23:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
+        id S240904AbiHTDIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 23:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiHTDG1 (ORCPT
+        with ESMTP id S233564AbiHTDIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 23:06:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19AFD0754
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 20:06:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83DC0B82A22
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 03:06:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 323D7C433D6;
-        Sat, 20 Aug 2022 03:06:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660964783;
-        bh=RjXdwcWPdrL/4i/EG/8q1BEfNqlJJsKx6SU+UP5QRPw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cQJmhXReefvs4vo15RyLZNBCE1Z171mHdnAorUr5JRdxVCnsag7L5hfgJwsV2kAY+
-         CGpZmMHIp913AsoAqWdBYuY9HbNY6Im7aiXr8B9mEeXOwpikW3PRbdMU5pJitg7w3/
-         sYZHySvUpLrJLNYccWctGqR+pmOJ1ZczQubagG4xo4qHhjQZy9JAxR2BF/JdeyPGMd
-         drRUE0cyV/WMp3r8tqvGMJ4ib+oqAjgVtMSbb04l3y2X+gZiwWQwzwcPR0ATM9nnNO
-         aVbxbCFgy6NNZKIxwdaOw0vNRPnK2LkmdjKQ4SiGXIQ/5ZWLt0ecYok5NPvWzj7/Qa
-         TSmCb8YiLDPbA==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
-Subject: [PATCH] f2fs: remove gc_urgent_high_limited for cleanup
-Date:   Sat, 20 Aug 2022 11:06:00 +0800
-Message-Id: <20220820030600.3509403-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 19 Aug 2022 23:08:38 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0528813D61;
+        Fri, 19 Aug 2022 20:08:36 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id p9so4739796pfq.13;
+        Fri, 19 Aug 2022 20:08:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=8UAglJHMJxkOTcf2BnuldAe6AgkhGWdLKkc7swqzIfQ=;
+        b=HC1Wt7vMa8hBBYpjbK4vCX9Wc+yfeTFv49qXCDRKqnwIMmJe+Sx+WPbo7tr4BCaSSy
+         fSAfYBj1ij+nFGX7+GJuDMKFe6ZIdxtJalD2S2eqtviNmQehmULztfHGakn7ut7ckZbx
+         RkXdby54LIg5l3sRBfhdAmWvbgVIXzzU5H8jHwu4M7Z4/zwwhrdn5bq3txl3IIuEpLO3
+         rLWz4Ausci/SIRnfilFmA3H5dcbyFfSOG38qy4RVEl83G4ynJ+l07TARqnKFxToh2kxM
+         l6pnfTtrFXudsUtTKYAAJShysajZZTIv2L59ip4rTq/1JOkP9uDPYzhU0uKwN+J5CM1p
+         cIIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=8UAglJHMJxkOTcf2BnuldAe6AgkhGWdLKkc7swqzIfQ=;
+        b=DsJe6/FYXTXmSVtXH1NmLCGpL7Kv2KkHbwFDjziA/rFbsc8P4Cd5Sxl+Ef2mA2a2bI
+         Qo5AOmEZhEJ5nw3FXXHf6oj/f03geTcMng/hAUSlyP095ezal+g+7H3/eLQ1DheJ8w6y
+         ZTypVB761ysiXyQNu8D/b8bxbckVDvKylzGp52PzTVg3a00oa857D3sb844PbufBM/q3
+         LtV/iifkjFYZUplDY3u6UUIcHV0C9i5pYCxNIuSPPvxe1npZeTeeOqsqCXVm7vSA1l7X
+         tdp3dJI9aOWKiPlRncYY49qYVvbu0Qaf0Fx7TRHMrJ2Xf76hRLw/eCie9W3ubzPQa8uV
+         T1VQ==
+X-Gm-Message-State: ACgBeo3FkyGutqnDvruv4TcNWk7QatAmoNfO5A4QVTCA4XhWQUJoSbyV
+        LJalyVNsmFNXhPR9x/jtUxs=
+X-Google-Smtp-Source: AA6agR5biOH1hFN68+X2FV+eg4bhlK9NYrr6clVZ4KX9bi9VK6HKNWoI0Pc5l+6FWU91XcCwAxD2eA==
+X-Received: by 2002:a63:e906:0:b0:41b:eba0:8b6d with SMTP id i6-20020a63e906000000b0041beba08b6dmr8471072pgh.501.1660964915470;
+        Fri, 19 Aug 2022 20:08:35 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-69.three.co.id. [180.214.232.69])
+        by smtp.gmail.com with ESMTPSA id d2-20020a170902cec200b0016c5306917fsm3910435plg.53.2022.08.19.20.08.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 20:08:34 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 8BF9F102B2F; Sat, 20 Aug 2022 10:08:31 +0700 (WIB)
+Date:   Sat, 20 Aug 2022 10:08:31 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH net-next v1 7/7] ethtool: add interface to interact with
+ Ethernet Power Equipment
+Message-ID: <YwBQL7zxJjJSx8TC@debian.me>
+References: <20220819120109.3857571-1-o.rempel@pengutronix.de>
+ <20220819120109.3857571-8-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="PVHpDvkI+W+zf0ua"
+Content-Disposition: inline
+In-Reply-To: <20220819120109.3857571-8-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao.yu@oppo.com>
 
-Remove redundant sbi->gc_urgent_high_limited.
+--PVHpDvkI+W+zf0ua
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
----
- fs/f2fs/f2fs.h  | 1 -
- fs/f2fs/gc.c    | 8 ++++----
- fs/f2fs/sysfs.c | 1 -
- 3 files changed, 4 insertions(+), 6 deletions(-)
+On Fri, Aug 19, 2022 at 02:01:09PM +0200, Oleksij Rempel wrote:
+> +Kernel response contents:
+> +
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +  ``ETHTOOL_A_PSE_HEADER``                nested  reply header
+> +  ``ETHTOOL_A_PODL_PSE_ADMIN_STATE``          u8  Operational state of t=
+he PoDL
+> +                                                  PSE functions
+> +  ``ETHTOOL_A_PODL_PSE_PW_D_STATUS``          u8  power detection status=
+ of the
+> +                                                  PoDL PSE.
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 1e47d5e77ec7..088c3d1574b8 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1731,7 +1731,6 @@ struct f2fs_sb_info {
- 	unsigned int gc_mode;			/* current GC state */
- 	unsigned int next_victim_seg[2];	/* next segment in victim section */
- 	spinlock_t gc_urgent_high_lock;
--	bool gc_urgent_high_limited;		/* indicates having limited trial count */
- 	unsigned int gc_urgent_high_remaining;	/* remaining trial count for GC_URGENT_HIGH */
- 
- 	/* for skip statistic */
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index 2a3816c20f84..fd400d148afb 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -97,10 +97,10 @@ static int gc_thread_func(void *data)
- 		 */
- 		if (sbi->gc_mode == GC_URGENT_HIGH) {
- 			spin_lock(&sbi->gc_urgent_high_lock);
--			if (sbi->gc_urgent_high_limited &&
--					!sbi->gc_urgent_high_remaining--) {
--				sbi->gc_urgent_high_limited = false;
--				sbi->gc_mode = GC_NORMAL;
-+			if (sbi->gc_urgent_high_remaining) {
-+				sbi->gc_urgent_high_remaining--;
-+				if (!sbi->gc_urgent_high_remaining)
-+					sbi->gc_mode = GC_NORMAL;
- 			}
- 			spin_unlock(&sbi->gc_urgent_high_lock);
- 		}
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index eba5fb1629d7..39ebf0ad133a 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -527,7 +527,6 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
- 
- 	if (!strcmp(a->attr.name, "gc_urgent_high_remaining")) {
- 		spin_lock(&sbi->gc_urgent_high_lock);
--		sbi->gc_urgent_high_limited = t != 0;
- 		sbi->gc_urgent_high_remaining = t;
- 		spin_unlock(&sbi->gc_urgent_high_lock);
- 
--- 
-2.25.1
+I don't see malformed table warnings on my htmldocs build, although the
+table border for the third column is not long enough to cover the
+contents.
 
+> +Request contents:
+> +
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +  ``ETHTOOL_A_PSE_HEADER``                nested  request header
+> +  ``ETHTOOL_A_PODL_PSE_ADMIN_CONTROL``        u8  Control PoDL PSE Admin=
+ state
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+
+Same here too.
+
+In that case, I'd like to extend the border, like:
+
+---- >8 ----
+
+diff --git a/Documentation/networking/ethtool-netlink.rst b/Documentation/n=
+etworking/ethtool-netlink.rst
+index c8b09b57bd65ea..2560cf62d14f4e 100644
+--- a/Documentation/networking/ethtool-netlink.rst
++++ b/Documentation/networking/ethtool-netlink.rst
+@@ -1641,13 +1641,13 @@ Request contents:
+=20
+ Kernel response contents:
+=20
+-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+   ``ETHTOOL_A_PSE_HEADER``                nested  reply header
+   ``ETHTOOL_A_PODL_PSE_ADMIN_STATE``          u8  Operational state of the=
+ PoDL
+                                                   PSE functions
+   ``ETHTOOL_A_PODL_PSE_PW_D_STATUS``          u8  power detection status o=
+f the
+                                                   PoDL PSE.
+-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+=20
+ The ``ETHTOOL_A_PODL_PSE_ADMIN_STATE`` identifies the operational state of=
+ the
+ PoDL PSE functions.  The operational state of the PSE function can be chan=
+ged
+@@ -1673,10 +1673,10 @@ Sets PSE parameters.
+=20
+ Request contents:
+=20
+-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+   ``ETHTOOL_A_PSE_HEADER``                nested  request header
+   ``ETHTOOL_A_PODL_PSE_ADMIN_CONTROL``        u8  Control PoDL PSE Admin s=
+tate
+-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+ When set, the optional ``ETHTOOL_A_PODL_PSE_ADMIN_CONTROL`` attribute is u=
+sed
+ to control PoDL PSE Admin functions. This option is implementing
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--PVHpDvkI+W+zf0ua
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYwBQKgAKCRD2uYlJVVFO
+oy9/AQDwEH8Bz8WqHqwb641FcoN5aZY4DkOzXgMivWpQ5FhSIAD+J2xBRwk9/A/4
+B3CIxXOZo6mTgh0cQALvIAKmZVH8OgE=
+=iJp9
+-----END PGP SIGNATURE-----
+
+--PVHpDvkI+W+zf0ua--

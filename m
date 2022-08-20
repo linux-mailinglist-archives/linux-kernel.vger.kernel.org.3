@@ -2,64 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9964B59ADEF
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 14:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392AE59ADF1
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 14:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346399AbiHTMcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 08:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59940 "EHLO
+        id S1344999AbiHTMeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 08:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345561AbiHTMb6 (ORCPT
+        with ESMTP id S231621AbiHTMeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 08:31:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC83E6BCD2
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 05:31:57 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oPNdn-0005aE-Mi; Sat, 20 Aug 2022 14:31:51 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oPNdk-0002pe-TW; Sat, 20 Aug 2022 14:31:48 +0200
-Date:   Sat, 20 Aug 2022 14:31:48 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
-        Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        David Jander <david@protonic.nl>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v1 7/7] ethtool: add interface to interact with
- Ethernet Power Equipment
-Message-ID: <20220820123148.GH10138@pengutronix.de>
-References: <20220819120109.3857571-1-o.rempel@pengutronix.de>
- <20220819120109.3857571-8-o.rempel@pengutronix.de>
- <Yv/9XVjRaa5jwpBo@lunn.ch>
+        Sat, 20 Aug 2022 08:34:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FA01BEA9
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 05:33:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C376CB80926
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 12:33:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53AD6C433C1;
+        Sat, 20 Aug 2022 12:33:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660998834;
+        bh=mCz2SxJKYp8oLIDh+dfPccwFT6pIPPbM7vRC1B7QWME=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DBch2/TSovQN6bsHK3PYXvYmjx2yg/WBvzNi404oyhcuXHxP22Vpx73Rc0tI6hAtL
+         7p5eI8zlCjDwcow2VW3jrLtUl4RbN7MNBeEpAsXOYFUlND1OWD7QQlVUyb9n5JaDRA
+         0qQaLrd1/g5hWz0ovxwYHrJKPIkbt49e256KHrrd64BKTjZT0dVaUstVrR2EzIkx37
+         96kJTYUwiAaKPtPxFVJc2/4rOITmT644yH0EEu04gO6OoITQY/Bb31V2rskJfcqHBs
+         M169miU07sCQxviv/SMR7CgUgCVekCVrxNLMGDphs00Qtlwve4kcrhAyliMCZXRRP4
+         K4aXS/jywVBEg==
+Received: by pali.im (Postfix)
+        id 9F2095D0; Sat, 20 Aug 2022 14:33:51 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] powerpc/fsl-pci: Choose PCI host bridge with alias pci0 as the primary
+Date:   Sat, 20 Aug 2022 14:33:27 +0200
+Message-Id: <20220820123327.20551-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yv/9XVjRaa5jwpBo@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,60 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 11:15:09PM +0200, Andrew Lunn wrote:
-> > $ ip l
-> > ...
-> > 5: t1l1@eth0: <BROADCAST,MULTICAST> ..
-> > ...
-> > 
-> > $ ethtool --show-pse t1l1
-> > PSE attributs for t1l1:
-> > PoDL PSE Admin State: disabled
-> > PoDL PSE Power Detection Status: disabled
-> > 
-> > $ ethtool --set-pse t1l1 podl-pse-admin-control enable
-> > $ ethtool --show-pse t1l1
-> > PSE attributs for t1l1:
-> > PoDL PSE Admin State: enabled
-> > PoDL PSE Power Detection Status: delivering power
-> 
-> Here you seem to indicate that delivering power is totally independent
-> of the interface admin status, <BROADCAST,MULTICAST>. The interface is
-> admin down, yet you can make it deliver power. I thought there might
-> be a link between interface admin status and power? Do the standards
-> say anything about this? Is there some sort of industrial norm?
-> 
-> I'm also wondering about the defaults. It seems like the defaults you
-> are proposing is power is off by default, and you have to use ethtool
-> to enable power. That does not seem like the most friendly
-> settings. Why not an 'auto' mode where if the PHY has PoDL PSE
-> capabilities, on ifup it is enabled, on ifdown it is disabled? And you
-> can put it into a 'manual' mode where you control it independent of
-> administrative status of the interface?
+If there's no PCI host bridge with ISA then check for PCI host bridge with
+alias "pci0" (first PCI host bridge) and if it exists then choose it as the
+primary PCI host bridge.
 
-Hm. I would say, safe option is to enable PSE manually. Here are my
-reasons:
-- some system may require to have power be enabled on boot, before we
-  start to care about administrative state of the interface.
-- in some cases powered device should stay enabled, even if we do
-  ifup/ifdown
+This makes choice of primary PCI host bridge more stable across boots and
+updates as the last fallback candidate for primary PCI host bridge (if
+there is no choice) is selected arbitrary.
 
-I assume, safe defaults should be:
-- keep PSE always off, except system was configured to enable it on
-  boot.
-- keep PSE on after it was enabled, even on if up/down
-- bind PSE admin state to the interface state only if user explicitly
-  requested it.
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+ arch/powerpc/sysdev/fsl_pci.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-At this round is only default, manual mode is implemented. Automatic
-mode can be added later if needed.
-
-These are my points, but i'm open for discussion.
-
-Regards,
-Oleksij
+diff --git a/arch/powerpc/sysdev/fsl_pci.c b/arch/powerpc/sysdev/fsl_pci.c
+index 1011cfea2e32..e4b703943dd3 100644
+--- a/arch/powerpc/sysdev/fsl_pci.c
++++ b/arch/powerpc/sysdev/fsl_pci.c
+@@ -1125,6 +1125,19 @@ void __init fsl_pci_assign_primary(void)
+ 			return;
+ 	}
+ 
++	/*
++	 * If there's no PCI host bridge with ISA then check for
++	 * PCI host bridge with alias "pci0" (first PCI host bridge).
++	 */
++	np = of_find_node_by_path("pci0");
++	if (np && of_match_node(pci_ids, np) && of_device_is_available(np)) {
++		fsl_pci_primary = np;
++		of_node_put(np);
++		return;
++	}
++	if (np)
++		of_node_put(np);
++
+ 	/*
+ 	 * If there's no PCI host bridge with ISA, arbitrarily
+ 	 * designate one as primary.  This can go away once
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.20.1
+

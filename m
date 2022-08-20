@@ -2,118 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AFE559AC61
+	by mail.lfdr.de (Postfix) with ESMTP id D73DF59AC62
 	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245179AbiHTIEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 04:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        id S244516AbiHTIDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 04:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243060AbiHTIEC (ORCPT
+        with ESMTP id S240876AbiHTID2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 04:04:02 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E3D75CFF
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:03:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660982640; x=1692518640;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6JUrxYCKKv9Corxi85IfluTexRfbKr9u7r3UhCXYa8Q=;
-  b=HFGWRgSibZCi/4zI9YgpDlxB+GfEKXMcG/2ikm8kbKcsfUA6MNczPAJw
-   p1jWFoGL8il7kW0+cOcbEL4yOZRKkoSMz22svVwrtYcEzSNskjIoVlqHf
-   WJJFSLVzyiH8ssNSWeJA0+c7fPRNROfVpPDAsdBOjmuS5+MQJzIMXRAnV
-   5ZqbjYmQoeE/q/g2RO+fVGGZb3FLFnNgG7xsCfmCpYupemuLPdsA/DWuH
-   cK4Rw9ubvnxg8zvdPwmEkwFs1LMVyUSHsuAqw3i1jAYU9iav5rhGtzvV5
-   tYB2Xrg+E3nzjnjgYH82iTpue/hDUVC8hih7GfluDdEGgFmsMluI7cZ/H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="273551160"
-X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="273551160"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 01:03:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="936468917"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Aug 2022 01:03:57 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPJSX-0002Ln-0C;
-        Sat, 20 Aug 2022 08:03:57 +0000
-Date:   Sat, 20 Aug 2022 16:02:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning:
- no previous prototype for function '__ashldi3'
-Message-ID: <202208201544.3bfagcR3-lkp@intel.com>
+        Sat, 20 Aug 2022 04:03:28 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751A3165BF;
+        Sat, 20 Aug 2022 01:03:26 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id y4so5878862plb.2;
+        Sat, 20 Aug 2022 01:03:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=c/T50bv5wpdPtILZzxvqohnY4keOYpr50uC/TDN3ebQ=;
+        b=B8N7y9blSkxvD3W9s/UNru23tAUCxcONWOPb8rTTj8Q4KhjwmljQKe16UtQM93V2nP
+         TbsZCa6JUHpHCToH5FjpAPugXsk4VBx09oEPuJ+qln5ZYHRkZKVjHzA+0xDocyqyFMJV
+         Cmob1V1dmKYFJaN8Q6V2zGvDo457CkFeHFkq4N5lBT2xKT0b2DOHJWMbSmLw9d8kwCQm
+         VaYzsN3+fzBp38sH63dMQS7fo/fyBNZDIBPqqiuZ+bWx3kzOveNtiJuAzZadDF4lOmAv
+         VUuWuSgB1lwDYX5yFeiP44NhS0vcMobYt7L+Hsu4ZIVBCuk2XP/HR1JVfHpL6ekq2mg8
+         ClFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=c/T50bv5wpdPtILZzxvqohnY4keOYpr50uC/TDN3ebQ=;
+        b=SVbwG+/ZmTr67yN47cFS514OeKBjqYr/tluuAVriO/7vP3vPvyPIjSsT9PNlIhjhPW
+         WcV6QiAQNyqCu5PjPozzaWfiScF3bsFELQkZnytCPWMym45eXfiM5d+F8FYXsf+rtB0W
+         8ptyyLsNTjstpB8Gi0Qb1bA6zxemceI7whXTk3Xp/HJ0WTE+Qy6h7hqSqN8I1XWsU9dr
+         eYExecGxy86ASTObnlmGjdK2WK9+B55NkAxbjL+JtWg3FM9L0wjFNlTCLr5ZVqAPRlRZ
+         V9QC/I593+rrOltI3HNcTadEHvgbkAQY5XRHeClSZct3fgxPNUTAXm8cMbhDCrfkw14J
+         tjNg==
+X-Gm-Message-State: ACgBeo1vTyqhrOnAi4LyDIF/3dOg+97fVNBVdP4uFRVNMKoA457qZfFM
+        gAdA1bPYTuzRcrMur4cbLNb7TBxqx8s=
+X-Google-Smtp-Source: AA6agR6x6nEO1XVz4OaT6zzmKtH6rMVmORnxVC6juWgptKO819OHmuh5hVq59mKPacvgLCher7UA2Q==
+X-Received: by 2002:a17:902:7208:b0:172:a9d6:527 with SMTP id ba8-20020a170902720800b00172a9d60527mr10903537plb.32.1660982605625;
+        Sat, 20 Aug 2022 01:03:25 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-78.three.co.id. [180.214.232.78])
+        by smtp.gmail.com with ESMTPSA id b6-20020a170903228600b0016dc8932725sm4387488plh.285.2022.08.20.01.03.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 20 Aug 2022 01:03:25 -0700 (PDT)
+Message-ID: <86a26310-eae0-35e8-ede9-e71825db1416@gmail.com>
+Date:   Sat, 20 Aug 2022 15:03:13 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3] docs: admin-guide/mm: Improve grammar on MM concepts
+ documentation
+Content-Language: en-US
+To:     alexlzhu@fb.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kernel-team@fb.com
+References: <20220820000024.2494003-1-alexlzhu@fb.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220820000024.2494003-1-alexlzhu@fb.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
+On 8/20/22 07:00, alexlzhu@fb.com wrote:
+> From: Alexander Zhu <alexlzhu@fb.com>
+> 
+> Improve grammar on MM concepts documentation.
+> 
+> Signed-off-by: Alexander Zhu <alexlzhu@fb.com>
+> 
+> Changes in v3:
+> -Correct punctuation based on previous comment
+> 
+> Changes in v2:
+> -Correct the subject
+> -Adjust the description
 
-FYI, the error/warning still remains.
+The changelog should be below the dashes. Otherwise LGTM.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   50cd95ac46548429e5bba7ca75cc97d11a697947
-commit: f78b25ee922ef6faf59a258af1b9388ca894cfd9 mips: decompressor: do not copy source files while building
-date:   9 months ago
-config: mips-loongson1c_defconfig (https://download.01.org/0day-ci/archive/20220820/202208201544.3bfagcR3-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c9a41fe60ab62f7a40049c100adcc8087a47669b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f78b25ee922ef6faf59a258af1b9388ca894cfd9
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f78b25ee922ef6faf59a258af1b9388ca894cfd9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-Note: functions only called from assembly code should be annotated with the asmlinkage attribute
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/mips/boot/compressed/ashldi3.c:2:
->> arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning: no previous prototype for function '__ashldi3' [-Wmissing-prototypes]
-   long long notrace __ashldi3(long long u, word_type b)
-                     ^
-   arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   long long notrace __ashldi3(long long u, word_type b)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/__ashldi3 +9 arch/mips/boot/compressed/../../../../lib/ashldi3.c
-
-b35cd9884fa5d8 Palmer Dabbelt 2017-05-23  8  
-b35cd9884fa5d8 Palmer Dabbelt 2017-05-23 @9  long long notrace __ashldi3(long long u, word_type b)
-
-:::::: The code at line 9 was first introduced by commit
-:::::: b35cd9884fa5d81c9d5e7f57c9d03264ae2bd835 lib: Add shared copies of some GCC library routines
-
-:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
-:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+An old man doll... just what I always wanted! - Clara

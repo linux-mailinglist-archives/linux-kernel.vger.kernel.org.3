@@ -2,56 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E1C59B26B
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 09:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08FC259B27B
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 09:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbiHUHA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 03:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
+        id S229970AbiHUHBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 03:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiHUHAq (ORCPT
+        with ESMTP id S230093AbiHUHAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 03:00:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19D426130;
-        Sun, 21 Aug 2022 00:00:45 -0700 (PDT)
+        Sun, 21 Aug 2022 03:00:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D732AC45;
+        Sun, 21 Aug 2022 00:00:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61416B80BA7;
-        Sun, 21 Aug 2022 07:00:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 755D5C433C1;
-        Sun, 21 Aug 2022 07:00:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6988760DBD;
+        Sun, 21 Aug 2022 07:00:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F8EFC433C1;
+        Sun, 21 Aug 2022 07:00:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661065243;
-        bh=+tNLkwdaAJsFxR/g29LyPbKlXMNd23s45Xz6hLyafi4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JjvfgbVEKrkiyiicD02yuSHdUnYyPF4Roxsls9oxpS+o+VmcZDQ+bFM/foaHqpVBz
-         CLHgdNGIOCfMshCN521l+ZyGs7aFIA9g7sOgSWmXz7z1hSE5VfjLqKJF/OshGQAkUs
-         FPDTdSxmt6wg1RyhaFTXNxGaTgwRU2KCJWoIK4Ps=
+        s=korg; t=1661065252;
+        bh=s7VPN+oaTFY7tSucwup8RgiG7PYjh0syFZQzRlqgOaw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R0gKFWBl92vaM8c14IH0U1+S5/n39gXQZ2UbLL0Jkn766oZu6uIVwaT+NIVvsHk7M
+         LhTKs4EbCnSOu03aCyXI5HtvdqbJ/XybyD8p5QISWpsjOp7NIiRmussrd0m2lNVcFY
+         dkORY8m+6w2be/NOcgUaQM3fsNgPiMYZVDcrLYVQ=
+Date:   Sat, 20 Aug 2022 20:28:11 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 5.15 00/10] 5.15.62-rc2 review
-Date:   Sat, 20 Aug 2022 20:23:24 +0200
-Message-Id: <20220820182309.607584465@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Nicholas Piggin <npiggin@gmail.com>,
+        =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.10 000/545] 5.10.137-rc1 review
+Message-ID: <YwEnu7ChHnkgWF00@kroah.com>
+References: <20220819153829.135562864@linuxfoundation.org>
+ <CA+G9fYsj9ihvrUnMJ2zK-wLF6fcP6D6Kn7GRPqN3-BsrUVmr-Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.62-rc2.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.15.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.15.62-rc2
-X-KernelTest-Deadline: 2022-08-22T18:23+00:00
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYsj9ihvrUnMJ2zK-wLF6fcP6D6Kn7GRPqN3-BsrUVmr-Q@mail.gmail.com>
 X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
         DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -62,77 +59,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.15.62 release.
-There are 10 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+On Sat, Aug 20, 2022 at 02:11:53PM +0530, Naresh Kamboju wrote:
+> On Fri, 19 Aug 2022 at 21:16, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 5.10.137 release.
+> > There are 545 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Sun, 21 Aug 2022 15:36:59 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.137-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> Results from Linaro's test farm.
+> Following regression found on powerpc.
+> 
+> > Nicholas Piggin <npiggin@gmail.com>
+> >     KVM: PPC: Book3S HV: Remove virt mode checks from real mode handlers
+> 
+> The powerpc defconfig build failed on stable-rc 5.10 with gcc and clang.
+> 
+> In file included from arch/powerpc/kvm/book3s_xive.c:53:
+> arch/powerpc/kvm/book3s_xive.c:42:15: error: 'xive_vm_h_ipi' defined
+> but not used [-Werror=unused-function]
+>    42 | #define X_PFX xive_vm_
+>       |               ^~~~~~~~
+> arch/powerpc/kvm/book3s_xive_template.c:8:20: note: in definition of
+> macro 'XGLUE'
+>     8 | #define XGLUE(a,b) a##b
+>       |                    ^
+> arch/powerpc/kvm/book3s_xive_template.c:606:14: note: in expansion of
+> macro 'GLUE'
+>   606 | X_STATIC int GLUE(X_PFX,h_ipi)(struct kvm_vcpu *vcpu, unsigned
+> long server,
+>       |              ^~~~
+> arch/powerpc/kvm/book3s_xive_template.c:606:19: note: in expansion of
+> macro 'X_PFX'
+>   606 | X_STATIC int GLUE(X_PFX,h_ipi)(struct kvm_vcpu *vcpu, unsigned
+> long server,
+>       |                   ^~~~~
+> arch/powerpc/kvm/book3s_xive.c:42:15: error: 'xive_vm_h_eoi' defined
+> but not used [-Werror=unused-function]
+>    42 | #define X_PFX xive_vm_
+>       |               ^~~~~~~~
+> arch/powerpc/kvm/book3s_xive_template.c:8:20: note: in definition of
+> macro 'XGLUE'
+>     8 | #define XGLUE(a,b) a##b
+>       |                    ^
+> arch/powerpc/kvm/book3s_xive_template.c:501:14: note: in expansion of
+> macro 'GLUE'
+>   501 | X_STATIC int GLUE(X_PFX,h_eoi)(struct kvm_vcpu *vcpu, unsigned
+> long xirr)
+>       |              ^~~~
+> arch/powerpc/kvm/book3s_xive_template.c:501:19: note: in expansion of
+> macro 'X_PFX'
+>   501 | X_STATIC int GLUE(X_PFX,h_eoi)(struct kvm_vcpu *vcpu, unsigned
+> long xirr)
+>       |                   ^~~~~
+> arch/powerpc/kvm/book3s_xive.c:42:15: error: 'xive_vm_h_cppr' defined
+> but not used [-Werror=unused-function]
+>    42 | #define X_PFX xive_vm_
+>       |               ^~~~~~~~
+> arch/powerpc/kvm/book3s_xive_template.c:8:20: note: in definition of
+> macro 'XGLUE'
+>     8 | #define XGLUE(a,b) a##b
+>       |                    ^
+> arch/powerpc/kvm/book3s_xive_template.c:442:14: note: in expansion of
+> macro 'GLUE'
+>   442 | X_STATIC int GLUE(X_PFX,h_cppr)(struct kvm_vcpu *vcpu,
+> unsigned long cppr)
+>       |              ^~~~
+> arch/powerpc/kvm/book3s_xive_template.c:442:19: note: in expansion of
+> macro 'X_PFX'
+>   442 | X_STATIC int GLUE(X_PFX,h_cppr)(struct kvm_vcpu *vcpu,
+> unsigned long cppr)
+>       |                   ^~~~~
+> arch/powerpc/kvm/book3s_xive.c:42:15: error: 'xive_vm_h_ipoll' defined
+> but not used [-Werror=unused-function]
+>    42 | #define X_PFX xive_vm_
+>       |               ^~~~~~~~
+> arch/powerpc/kvm/book3s_xive_template.c:8:20: note: in definition of
+> macro 'XGLUE'
+>     8 | #define XGLUE(a,b) a##b
+>       |                    ^
+> arch/powerpc/kvm/book3s_xive_template.c:323:24: note: in expansion of
+> macro 'GLUE'
+>   323 | X_STATIC unsigned long GLUE(X_PFX,h_ipoll)(struct kvm_vcpu
+> *vcpu, unsigned long server)
+>       |                        ^~~~
+> arch/powerpc/kvm/book3s_xive_template.c:323:29: note: in expansion of
+> macro 'X_PFX'
+>   323 | X_STATIC unsigned long GLUE(X_PFX,h_ipoll)(struct kvm_vcpu
+> *vcpu, unsigned long server)
+>       |                             ^~~~~
+> arch/powerpc/kvm/book3s_xive.c:42:15: error: 'xive_vm_h_xirr' defined
+> but not used [-Werror=unused-function]
+>    42 | #define X_PFX xive_vm_
+>       |               ^~~~~~~~
+> arch/powerpc/kvm/book3s_xive_template.c:8:20: note: in definition of
+> macro 'XGLUE'
+>     8 | #define XGLUE(a,b) a##b
+>       |                    ^
+> arch/powerpc/kvm/book3s_xive_template.c:272:24: note: in expansion of
+> macro 'GLUE'
+>   272 | X_STATIC unsigned long GLUE(X_PFX,h_xirr)(struct kvm_vcpu *vcpu)
+>       |                        ^~~~
+> arch/powerpc/kvm/book3s_xive_template.c:272:29: note: in expansion of
+> macro 'X_PFX'
+>   272 | X_STATIC unsigned long GLUE(X_PFX,h_xirr)(struct kvm_vcpu *vcpu)
+>       |                             ^~~~~
+> cc1: all warnings being treated as errors
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
 
-Responses should be made by Mon, 22 Aug 2022 18:23:01 +0000.
-Anything received after that time might be too late.
-
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.62-rc2.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-and the diffstat can be found below.
-
-thanks,
+Thanks, I've dropped 2 powerpc kvm patches now that look to have caused
+this and will push out a -rc2 with that hopefully fixed up.
 
 greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.15.62-rc2
-
-Qu Wenruo <wqu@suse.com>
-    btrfs: raid56: don't trust any cached sector in __raid56_parity_recover()
-
-Qu Wenruo <wqu@suse.com>
-    btrfs: only write the sectors in the vertical stripe which has data stripes
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/ftrace: Use alternative RET encoding
-
-Peter Zijlstra <peterz@infradead.org>
-    x86/ibt,ftrace: Make function-graph play nice
-
-Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-    Revert "x86/ftrace: Use alternative RET encoding"
-
-Namjae Jeon <linkinjeon@kernel.org>
-    ksmbd: fix heap-based overflow in set_ntacl_dacl()
-
-Hyunchul Lee <hyc.lee@gmail.com>
-    ksmbd: prevent out of bound read for SMB2_WRITE
-
-Jamal Hadi Salim <jhs@mojatatu.com>
-    net_sched: cls_route: disallow handle of 0
-
-Jens Wiklander <jens.wiklander@linaro.org>
-    tee: add overflow check in register_shm_helper()
-
-Jens Axboe <axboe@kernel.dk>
-    io_uring: use original request task for inflight tracking
-
-
--------------
-
-Diffstat:
-
- Makefile                    |   4 +-
- arch/x86/kernel/ftrace.c    |   7 +--
- arch/x86/kernel/ftrace_64.S |  19 +++++--
- drivers/tee/tee_shm.c       |   3 +
- fs/btrfs/raid56.c           |  74 +++++++++++++++++++------
- fs/io_uring.c               |   2 +-
- fs/ksmbd/smb2misc.c         |   7 ++-
- fs/ksmbd/smb2pdu.c          |  45 +++++++++------
- fs/ksmbd/smbacl.c           | 130 ++++++++++++++++++++++++++++++--------------
- fs/ksmbd/smbacl.h           |   2 +-
- fs/ksmbd/vfs.c              |   5 ++
- net/sched/cls_route.c       |  10 ++++
- 12 files changed, 216 insertions(+), 92 deletions(-)
-
-

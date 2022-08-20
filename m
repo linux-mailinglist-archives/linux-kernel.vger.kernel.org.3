@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF9059AC67
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0064859AC76
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245271AbiHTIFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 04:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S245541AbiHTIIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 04:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244415AbiHTIFM (ORCPT
+        with ESMTP id S231132AbiHTIIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 04:05:12 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA34FB7768
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:05:10 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id u15so3902603ejt.6
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=C12ECdGG1RKxVZ00Sm1eAbakDJeM+iWoj3xaGjwbf9U=;
-        b=ulgurSA3DEgNLfIkCnnkMM55hIo5jwGFwLK/9lUH7SHsnJIjY3E5O35RnTs9YeJw57
-         3UIN2LZOvna+UWAlJHxYuuc3RY1EKVlxQ/v8QctYGdWOBDAhL0oOykjt/q3N4Gjie64m
-         /dKQKAQYlvRCxXDBIP0Q5SeWzadvRYn+X6WoUMlqiBlblmkFDsJ08mnEBVuUy0cje0Qw
-         CgPlnjVhULIYyH3pIijIXQntpn5vKC3svEoqm38MEpAW6TW/2Z3QgPsxWJdkUGdDu2/z
-         1q0jayA3F8Hpeqws7YUrmSfWHrozLZIooXYt7F5xuovPeMLzxXsgi3D6V972nTHSIeWv
-         SJIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=C12ECdGG1RKxVZ00Sm1eAbakDJeM+iWoj3xaGjwbf9U=;
-        b=p62FZ2FIOTAUWqgrhk4IRWoMn5uNHa7aM6CyqtwVs92aMDFHLhfwv8MZTDr5Rw2+tm
-         MioNMd32E/SmsRF+DTQfTg+45OvruLc015RD8qM5DFWEbcMGbWbFABEWuqCqlyCJPwPR
-         vFbtULSyPhE6FfEceHcbTHm1Db2/nEu64r12mf1/q22xiSHU4/atCOqXBbpDcfdRcXGQ
-         bxl6Z+3um0DEOyTGqbezN+XhwrRr2t08y5SCKn6ZNvAUHhJOgBXnXIaqUUsBeq5veJt4
-         8E1VeNuZYHeMUGePAT0D4VNpX6rwn+uztkAOdIT1tZCNBnRJfK5RWEdp7w5Ai/vNVGcX
-         EUEQ==
-X-Gm-Message-State: ACgBeo2jI1ZMGxRnHVC7n87uRDAWrN+xFiHvKRYrWV40LwFcvJz6sn46
-        yaFJ+fN8J7fg7DwRgCl+irkfQmw0zTLmv6dJqEEaxQ==
-X-Google-Smtp-Source: AA6agR7axdTBDNz5k1m9wqa5h+vTpUmPATrp3i9tpIvKP7B2b8K0bO9NoGU6orcc3CmM/DDxZI5k7SNUL0qNmizMdwM=
-X-Received: by 2002:a17:907:86ac:b0:731:5180:8aa0 with SMTP id
- qa44-20020a17090786ac00b0073151808aa0mr7030817ejc.366.1660982709229; Sat, 20
- Aug 2022 01:05:09 -0700 (PDT)
+        Sat, 20 Aug 2022 04:08:47 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77B92AC6D;
+        Sat, 20 Aug 2022 01:08:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1660982888; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Do4/0bKH2TLQt23fEbxQeWdNNRPu5G9ElmZ+hJQUxk4BjzxxyoiOJAuLgOGwxqlRU3g2VFT/J01b3Z/U/S6h3AGjkIfwulFClx0EzAc+mHfaIJjPtkPokeNz7VTDeOH3EoqG32rmcQkV2NQCoSXkHyON9sANAV9F4ywa+kTAAeQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1660982888; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=NeRoVH6YC+bOoPXLzZ/zHt1qQTsqVmbHTKnjSX+8XSQ=; 
+        b=Dvehy5nM+pLU8nUfOPCusyYb0akpPYUOUW3qzRkB0lderFkOqBXPQB/UFmVkVUAN5oIo+PSV9nETc10p5iPvbu0nfZiSq2CtTwZm3AhIF+XhIpN3zWQJULUtzxaEoDSWgZoHuWRaiZ2o/vvM51VfUWxF9ASNVRZG16oGLjWrvr0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1660982888;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
+        bh=NeRoVH6YC+bOoPXLzZ/zHt1qQTsqVmbHTKnjSX+8XSQ=;
+        b=FLgMImQ/DHgfxVRjJtEQTWm4Bz0LmhOGwJEUEoq5+bfs8lWSMjz6MpBHFbkSzs3H
+        BZYSD4KvDJCX/7C0tEXoZehBW7tO2pXFCKeThlt84WDZeOF6Cd52yS3TfKyUbubwbnQ
+        OyhH4Pm38StiQO62buSvGicXJ6+AvB/ajBP3lo4k=
+Received: from arinc9-PC.lan (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
+        with SMTPS id 1660982886821459.07285493323946; Sat, 20 Aug 2022 01:08:06 -0700 (PDT)
+From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+Subject: [PATCH v4 0/6] completely rework mediatek,mt7530 binding
+Date:   Sat, 20 Aug 2022 11:07:52 +0300
+Message-Id: <20220820080758.9829-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220819153711.552247994@linuxfoundation.org>
-In-Reply-To: <20220819153711.552247994@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 20 Aug 2022 13:34:57 +0530
-Message-ID: <CA+G9fYvApY2VQcPdFrLDn8LhuN_zLdUW-yiPFq7TuPWamCkKKg@mail.gmail.com>
-Subject: Re: [PATCH 5.19 0/7] 5.19.3-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,109 +78,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 at 21:09, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.19.3 release.
-> There are 7 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 21 Aug 2022 15:36:59 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.3-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hello.
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+This patch series brings complete rework of the mediatek,mt7530 binding.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+The binding is checked with "make dt_binding_check
+DT_SCHEMA_FILES=mediatek,mt7530.yaml".
 
-## Build
-* kernel: 5.19.3-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.19.y
-* git commit: 8c2c6014fe886925b313a6e8b6eb46763dafbaff
-* git describe: v5.19.2-8-g8c2c6014fe88
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.2-8-g8c2c6014fe88
+If anyone knows the GIC bit for interrupt for multi-chip module MT7530 in
+MT7623AI SoC, let me know. I'll add it to the examples.
 
-## No test Regressions (compared to v5.19.2)
+If anyone got a Unielec U7623 or another MT7623AI board, please reach out.
 
-## No metric Regressions (compared to v5.19.2)
+v4:
+- Define reg property on $defs as it's the same for all switch models.
 
-## No test Fixes (compared to v5.19.2)
+v3:
+- Add Rob's Reviewed-by: to first patch.
+- Explain why to invalidating reset-gpios and mediatek,mcm.
+- Do not change ethernet-ports to ports on examples.
+- Remove platform and, when possible, ethernet nodes from examples.
+- Remove pinctrl binding from examples.
+- Combine removing unnecesary lines patch with relocating port binding.
+- Define $defs of mt7530 and mt7531 port binding and refer to them in each
+compatible device.
+- Remove allOf: for cases where there's only a single if:.
+- Use else: for cpu port 6 which simplifies the binding.
+- State clearly that the DSA driver does not support the MT7530 switch in
+MT7620 SoCs.
 
-## No metric Fixes (compared to v5.19.2)
+v2:
+- Change the way of adding descriptions for each compatible string.
+- Split the patch for updating the json-schema.
+- Make slight changes on the patch for the binding description.
 
-## Test result summary
-total: 167248, pass: 149293, fail: 1211, skip: 15719, xfail: 1025
+Arınç ÜNAL (6):
+  dt-bindings: net: dsa: mediatek,mt7530: make trivial changes
+  dt-bindings: net: dsa: mediatek,mt7530: fix reset lines
+  dt-bindings: net: dsa: mediatek,mt7530: update examples
+  dt-bindings: net: dsa: mediatek,mt7530: define port binding per switch
+  dt-bindings: net: dsa: mediatek,mt7530: define phy-mode for switch models
+  dt-bindings: net: dsa: mediatek,mt7530: update binding description
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 314 total, 311 passed, 3 failed
-* arm64: 76 total, 74 passed, 2 failed
-* i386: 64 total, 58 passed, 6 failed
-* mips: 50 total, 47 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 65 total, 56 passed, 9 failed
-* riscv: 32 total, 27 passed, 5 failed
-* s390: 22 total, 20 passed, 2 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x86_64: 69 total, 67 passed, 2 failed
+ .../bindings/net/dsa/mediatek,mt7530.yaml       | 677 +++++++++++++++----
+ 1 file changed, 542 insertions(+), 135 deletions(-)
 
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
 
---
-Linaro LKFT
-https://lkft.linaro.org

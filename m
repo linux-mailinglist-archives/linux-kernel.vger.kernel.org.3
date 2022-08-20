@@ -2,168 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314B559A9DA
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C89359A9E1
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbiHTAIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 20:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
+        id S244780AbiHTAK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 20:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbiHTAIg (ORCPT
+        with ESMTP id S233206AbiHTAK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 20:08:36 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFF150700
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 17:08:33 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JNsWZq030760;
-        Sat, 20 Aug 2022 00:08:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=moJdl0qKa3tOleuYeGlbPTEX9w8AD68cnIDee+NQAyg=;
- b=k6R07Acm+kTT6saq2Mk4cqJ2/Rwo0SzZTjyZ6dnVRy/6/O7vblqRcmkQC6vRPvFm+P7s
- ye0hr8zuxRTksSxYPDoEvl+d+KPyvYPx+kvd2Rw0eXWWHNI0fwoPXo+gMlT5NaqcVpiQ
- 8zcGwbIg3VXb8o6yKW3ewHXgE+auobHvZr6eXTXrGXUS5zirxw3QDJVKrLzqs+nOjcki
- EN4F2At9xIPq5FCcuNkomxlKqJ8NK9cQJMb3f/K9njftq1KflfGTo6VEUjUE9kJLdpNP
- Yq4bjXiJrHRy1EIvtkqk+jHhapjXCs1Ae2+e13lwspYtfoF8A97r17MG6LtC0sIrZZou /Q== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j2mkp80c0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 20 Aug 2022 00:08:27 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27K06VKs007828;
-        Sat, 20 Aug 2022 00:08:27 GMT
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2044.outbound.protection.outlook.com [104.47.56.44])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hx2dbygdu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 20 Aug 2022 00:08:27 +0000
+        Fri, 19 Aug 2022 20:10:56 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F9C1156EA;
+        Fri, 19 Aug 2022 17:10:54 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QR2+LHOzxtyAxVXbXk/xFCHU57VZfVFu28wz3U91lxElqBcFetkmIymIolnFY+KmhlfqX6Pdi8Q4e+b7XMWTG8HIjYtkm9E7WbwfBBc1fYtveXCjYA2pAc2ho3ujdl52wQ14Ru6n7XWjZn+LYaMKPJlQuJiI2D7EKanawF18HsGeoGhcDzxO0E5xgu005u70JQIjTi9Dgvyxa2cZ6sYxGtS7hqpCvqwQvpDFPJMSap/4BXO8ifh1N/rjK01vBR7+e3Psuq8mzpXMNy8yBHADZ9zcLmy8bVESuOGdkBBy+7COuzmE1mRNVMtMtGpvVidZQYcs0XXv6YW1pm4kRoTi1Q==
+ b=IHiYa16LNX+K74mt925fRLFW7RvPQOlyu7jgeuTS/CiJ/HPq7vFerP7nuPjyfUVtgIduzXDUsru9wXCRj65OXYtKoVxG0DJ7qZUFs396kFwBeXTpaRiE+g36EeZmgxvXjC4afUsKGpr8vjonFd45yaNvMeXVoxXLkIV28d9a93RJdGq2PVcEXuqFRhYoF1WiXDcSgUBPM7qgDU8gp3kZLEM8XazrKLP7Gl/2BLa2oqRG5UvnBPtJd6NmVY6Fjt8dkBOU4GgagakCyxFwq4k5UcFqL7CLMSxsfWmkrXbnCKHwt5DoX2Kjnq+14h7pqc2//8OZWw1dRj8fXbJSHBBaVQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=moJdl0qKa3tOleuYeGlbPTEX9w8AD68cnIDee+NQAyg=;
- b=CyWFW/FCo6Zl4qrbbjyM8WlVD1cDEqTq/09nqO8TXZ9coU0w38ONSJ77RQ3OAk/323FENjB9moydgJb7NUH3uE10RZFAwP4SECjzstfT86llRpPo2wrOMsiImxmzOVYQKwEqib/AMy8cQdJIzIbMgbK6uBQOGqg2G2y1BdWgHDV6FsVVqCRQ+XAoDhxwPpE9U62Om39eyrDahcakMM1et9mwb6kbUdn3TBrjacZFlsQVYei/nCPyEI5SDqDArJzETh+kh59To1AdvWN1uaCu+FpwkC0P+UHPsGm5yVw8mvBUBwG7pPTiRlj3Z1V6Q8Ag56pLYY29Jei5Sb9YN6Vidg==
+ bh=8SgBpI88XZdgOUILSVXatK9tjCvJhYeRwXV0+YP4/zc=;
+ b=SeWwQqXyBI2kZMjW+yMpLR7E1t3mQGT8wRS0wz6pm+QvMjAGVC/8s9kJOsw5Eslz1Zqds1qTr2RfdHL57+gySGZP5RmntzEVf03WYlnTK63u2xtAkSiOJblMf8xK2q5mWcoPZNRXOea8glAONxiVs7QdDW9Nf1ogyNGbKqWAkyskpAHVz3IuF+K7uZ1b8kLJPycpEI7wT1eNA3BXyTXqg9/7H2k7B2rLXOEnqvrXMcj9vXLq/iiGMMOXcohXlIjve8KP6DLEHj754EScSUzUjJVu66TvUyTVwtBvdYDUIoNSUFjna0/bQxWDUPjNgd0CgLrMPvvhQjhgK362dpfvTg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+ smtp.mailfrom=synaptics.com; dmarc=pass action=none
+ header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=moJdl0qKa3tOleuYeGlbPTEX9w8AD68cnIDee+NQAyg=;
- b=UyJZ8qw9Y2Td1Y35RzyWx3dMhy97LplBwikQkNmgzlaG5SI23cz0oi5zX4A132eNCcrhzuLC4LNkYoEqNAZI5p4xMgYKA2zNiQBwEL33bZb3DHD10mUaBrJSRZtvCggGs8XpRI4rHqTsyHa5b/H7WKGb4EUdsUbQHRgvam2t2DU=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by SJ1PR10MB6001.namprd10.prod.outlook.com (2603:10b6:a03:488::19) with
+ bh=8SgBpI88XZdgOUILSVXatK9tjCvJhYeRwXV0+YP4/zc=;
+ b=ZAABbRanhLaItnc4CifncoKYKYOhomR3izuYLn+jyVFwZZshRuj/pSzzvkTL+fGFGhs8LopePxK24IE0eLHUK1QYE5cw8L2G1PNbDCZlxVTqPjI09aOUKASAyuvIxsJvrqGGNOncbYqinAIZWz7UUKnOB/2cW1k64AIFaUlZdF8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synaptics.com;
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
+ by PH0PR03MB6953.namprd03.prod.outlook.com (2603:10b6:510:170::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Sat, 20 Aug
- 2022 00:08:25 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::c1ba:c197:f81f:ec0]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::c1ba:c197:f81f:ec0%5]) with mapi id 15.20.5546.019; Sat, 20 Aug 2022
- 00:08:25 +0000
-Date:   Fri, 19 Aug 2022 17:08:23 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] Fix some issues when looking up hugetlb page
-Message-ID: <YwAl948ny7AZEfT1@monkey>
-References: <cover.1660902741.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1660902741.git.baolin.wang@linux.alibaba.com>
-X-ClientProxiedBy: BYAPR11CA0088.namprd11.prod.outlook.com
- (2603:10b6:a03:f4::29) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+ 2022 00:10:52 +0000
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::c832:eea0:1883:a19c]) by DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::c832:eea0:1883:a19c%3]) with mapi id 15.20.5546.016; Sat, 20 Aug 2022
+ 00:10:51 +0000
+Message-ID: <1f926989-eb13-14ee-e30d-ac6d01b86c52@synaptics.com>
+Date:   Sat, 20 Aug 2022 08:10:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/2] [WIP]: media: Add Synaptics compressed tiled format
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Tomasz Figa <tfiga@chromium.org>, dri-devel@lists.freedesktop.org,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, sakari.ailus@linux.intel.com,
+        ribalda@chromium.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sebastian.hesselbarth@gmail.com, jszhang@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220808162750.828001-1-randy.li@synaptics.com>
+ <20220808162750.828001-3-randy.li@synaptics.com>
+ <CAAFQd5AKjpJ+fPAeCqdNnJbS4R7SdaHkfyW4qG1xXr-sE801pQ@mail.gmail.com>
+ <13d37c15-79f3-4e16-8cf4-fc37846f4a04@synaptics.com>
+ <Yv7HnHE7bLmgq5D0@pendragon.ideasonboard.com>
+ <6da7faf329128312f0862f555d1a855437ae99f3.camel@ndufresne.ca>
+ <50dd9b7a-8f48-0799-57f6-048d20de8dcc@synaptics.com>
+ <2662ac698898f71f60b9b7e0ad4703854de1d012.camel@ndufresne.ca>
+From:   Hsia-Jun Li <Randy.Li@synaptics.com>
+In-Reply-To: <2662ac698898f71f60b9b7e0ad4703854de1d012.camel@ndufresne.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BY5PR17CA0044.namprd17.prod.outlook.com
+ (2603:10b6:a03:167::21) To DM6PR03MB5196.namprd03.prod.outlook.com
+ (2603:10b6:5:24a::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7db142eb-43d5-4e34-a362-08da824019f3
-X-MS-TrafficTypeDiagnostic: SJ1PR10MB6001:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5ebb44ff-fff7-413d-3a86-08da8240712d
+X-MS-TrafficTypeDiagnostic: PH0PR03MB6953:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U0+RpoVQGQLFaQ0L8iOSm5PqYCREhmNsT2g5YtnbMP7/5dRPAsJMRx+6Gfyco6PszthJpHxg2zcajf9Iy3bSzYXV+bkbNFJtUHO07su1c801baA9d/UuPmANtmGBWaa1PrJA5donJiv7Uq3SjnMgTjaDr16NG5+y6Ny1nvDZbOWRmt1+BLC4sI9KRUQWOGFaxBt2qhRe/xxeGyG80Uqv4A6pAc9sPZTZWLa5i7mzPvwtv4Yuj66JdaiC4KAaJ79KdLSrE/L44S7uqTintdbjoL2DZFQd73yfPkfvjfYlcU0OMJnIvPoaksSDuZ82wuJybTwAqjwCkdUDqgtK/KucVPPj4/OJaT+AfwYyoPPJHA0qeQ75ZWBI+ELxZiaJhuEnaXL999vtoJN779fXDF0HSiOJWiKz68GHlzb5uvOJvbKi7ivFAQBACQhZlMU9pSGzjGh4wu8cEswm9zJNi7F3o596rqbVvo9S4FHmUD7Lyd2/guuR4/+bWv9uiQ2hiwhao0SC1KzJEz1ULeejuTQfsfr/YZyOUm0OGwG70O4mRj3dUX47Km9SKA78c9Ji/31+h81BPG4DCCMGB9K61AUFzy5pjiKlwT4CXOPr31v8sfnOtx7vJrHaZHcQJMc39Vi4L+lFcpMnWEmgX8BmmrPfa+V57orqreL6J0+e/Sf0BWV7zrWo8AEH+Um43geU+bh4wdB0s5G+Yg7tGIUiUiob1w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(136003)(376002)(366004)(396003)(346002)(39860400002)(83380400001)(8676002)(66556008)(66476007)(2906002)(44832011)(8936002)(316002)(6916009)(66946007)(5660300002)(4326008)(53546011)(478600001)(86362001)(6486002)(33716001)(6506007)(41300700001)(6512007)(9686003)(38100700002)(26005)(186003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: /8uMFsRFwThqTOB1jTMlZSmW8pyEm/Os2/0G8p8bbYAOoG+bQk7hFZq7nvnOQ+7ZWT/GJc/KF6T9maizkfxxqjuHyrbExkWZrSV8TskDFAYQL8/RC8RJkjbsKcsHWWA7fvSJ37nm/ZgbGAw7fgeNGGYJ6d0jzAnbno96y/B4zk/pJ8RHBV93sNbdFJRb2V2xSpEPpCvTb6nQ3g8VlWWMSb9q2NHAF/APyFD1zVt5zMRrAyJu2wIMQYQ0EofuHycd0Ro70+B6CDxoul+rg39qipC3XoawAukp14YPB6avrrWzTxqbSL7WhmmWLlm/cWOfVIn4ARuDDDD1dn4MVHAvb1Fe0wWj0S/jgqmI9vk+L8oaM/pBv8OzR+oqelSNJijteUNUq3/2SHK/4ouBsg/JYF6jcgaxpw5X2/2NEerXYzx6ADd00HijTepA/SChwD7GrzvZCA06rsLf8xkZrt5EWE5KXyPDzrkboYbkGqj0JkpM3FOxYt48Gg4FiKT9OJkcWVoh1qqldOOurKXEgfniLXEak/8zQtVLYClpCcSY2Fu2vAQvzouVxcMbJv4Kl0r71UpO97vL6D3IgTPdU24R6kt52+UzXMymrX0RazOCov+Zd90UdS+zawF1nk94pwa3TLFX11PG5loGZHeUa5104OgCDxm8tUSbot3TVf7H/CFWQiKhHoW0s44OAAr/d4UV99UGXZFDZh7yjCRIAEBZBRhYW19DQ6B0VqxxD9wVPDI34Tkwiu1ptjy5f+b9E938pjtybWW9+wb1voUvE+DVle5aI70XgvIUA7JovvUjof7dx7eSIeOfMHBMOO3ucbY6QLeq3qeiu/zM6Gy7u9opt9Ual63V8bncReYcjbJbP3s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(376002)(396003)(39850400004)(346002)(366004)(41300700001)(83380400001)(6506007)(478600001)(6486002)(6512007)(966005)(38350700002)(38100700002)(86362001)(2906002)(186003)(52116002)(53546011)(31696002)(6666004)(5660300002)(8936002)(7416002)(26005)(4326008)(66574015)(66946007)(66556008)(66476007)(31686004)(6916009)(316002)(8676002)(2616005)(54906003)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Obh7PrRMgdEApL6rOmNmaSES22v42FpWGTCbAaicOOdx07roVz6yKyUyheEg?=
- =?us-ascii?Q?XjhGfBr0I/L96XIHtn8JLamrC/glzhxPcXRNy3jlGnk1QrdFFj700h0oYxR9?=
- =?us-ascii?Q?+Ed1npqwHlLSmXRWllhecpgPMmPpHE7apzj1CrMZ96VrqzYh4iKzXQwL7MEa?=
- =?us-ascii?Q?5Fuj5cZS+k6IGaEF1DuDkF7Af6d6uc1zz+Ngkcn4NfIapcIkTbQ5NW46mbyW?=
- =?us-ascii?Q?BPEfFSeV0Gk9lFqIzIpwJdqDk1jWK7y8WiXuZiEFXttL/OyJi7pE9FAwWyHL?=
- =?us-ascii?Q?+8ZXV2ZXE1WBa+BawIuN9hnlTw7kgcIoB2IVi0TyJiuLneaovliNcdUal7pt?=
- =?us-ascii?Q?2CWX/aowJmaS/hsZiTYflBaCn6ZDZp7yAs6D4flJnqYz00/BReHy+8Bul70q?=
- =?us-ascii?Q?FaN0PMc/xZ7sEbUG3ZLrjdsqJRBSGU5JagJ0P57VUKHjk+riRTDi7Soh4M4L?=
- =?us-ascii?Q?126BK8pGxC5CIB421N9vwaOdxkiqM4qFCf+nuk8HHbn9FYiFmZLail6nxuqH?=
- =?us-ascii?Q?8sH2WFBE+O8hF1bRDpYPkflG9+GAd4JvpfKjozgKGR0HaOnWZMzNc+gziBil?=
- =?us-ascii?Q?p/7gHHVPQ9/2i2GzgMNnhwBdaLSYdbXRfQI4zX+fv4L64VCbXFM06ucGe3Y7?=
- =?us-ascii?Q?m8W4v0cHX6r2i7hjWVyPg+RAB7LZPJ5BKUcPOa/1+twLu8AbYXct/pMCjByD?=
- =?us-ascii?Q?65S6IbX9q4EwW23ijbtHNYbWWcLj2xPJIgqSpzzs3aloXyg4VODV+GJLYmTO?=
- =?us-ascii?Q?+DZHcD2veC6BQO8MHImAssdEfEupWXcjrD07oOwm46eqZHFVHmO4KKrNI+Uf?=
- =?us-ascii?Q?PSOSz88vT2tnn2AcFr2YnfyX2tGNERpoobiiU9rypD6K/ls0f1trGeFiN7YC?=
- =?us-ascii?Q?Ik3f2yeKJw0lBDQtlp+mP9KLTsqHU6asTZ0ju65F4NFQ2YHjMMIiRw9DulWZ?=
- =?us-ascii?Q?iNl594TYUihlcPAhAkMsDbzzDH5KTdjVNAufWQc07AejMpK9T3e32P6VwcXm?=
- =?us-ascii?Q?qDXLrGWYNqPpvhAmD2TomPudVNOzESNnXk8jR3pJi4PhyaBpb3a8RjxO1s4C?=
- =?us-ascii?Q?1d+FZGCUyGLoDIP8kEMj6oFgOTZYL2cYep4arL0hWyy5mk45/u1ddXoX0QpK?=
- =?us-ascii?Q?IOG1RBp3J1+MAoudg5GsgM+EijET4r62NDfOnEx9uCEpXU5ZMce3D2NMB3BQ?=
- =?us-ascii?Q?mpCt0+rtBg5Y+lK1ysszm4/zj03KRYFu0wXkbiD7RAfhIv6iGkVyLQYckWPe?=
- =?us-ascii?Q?H53elj0+5ib6SBne1JzrV832OgoCPLD/FKHiNoslvNSw2aAHS1m2ZyxNzYO8?=
- =?us-ascii?Q?BRy6p4TsjcMQGHWB83XZHxzippDq+jjQhHuEim9Orin9avuKwtQRFa4inyB8?=
- =?us-ascii?Q?dKt6nE1yASV3PWKuZUnXfte184/D26UeSfhCh6R+LjpAOiO1c8/KqJATPn6T?=
- =?us-ascii?Q?8JaHak21oMvMUF2GcdZCjhY4vz/C76D2dW5SYSa4gFqmOzKcflKaodp5+L+i?=
- =?us-ascii?Q?xGUFWEDznbpUkdyVz6n/w4hR/YaNX+MYZQVhgRRU4HIeRRS976Wv8ntQ+5OG?=
- =?us-ascii?Q?qEc5bs6ss4xWZfy9sEtLdjT0rRZpj3c3/8uJ+8wpYcAdM9Uys85XsxKN15ff?=
- =?us-ascii?Q?RQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7db142eb-43d5-4e34-a362-08da824019f3
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NFNDRjU3bExnemlrMklHa3BCK0pKaFZXQ21BTEpwMU4vQzBmK1lsSUJ2MWtX?=
+ =?utf-8?B?c2VGcG1zWlEwVXlRTlhBZ0xOYW9wcEhMd3UzcE84VDN0Vm5CSUttYlRLdHFZ?=
+ =?utf-8?B?OXphdEFDcVVNSE8wQkpvNmdWVnR6dllhSUlaRFhYNisrUG9ac1N4NkxIajRy?=
+ =?utf-8?B?eFR2WExNSXcxUUxtSG56TlhjNkJIQjhDd1lIMWVXalpUZlY5MVNSRkVadG12?=
+ =?utf-8?B?Wm9GRi81Rjd5QW4wNW1WMU1pSDd6NHhoZ2crSVRiQ00zUExZR3ZFQTRUZkdu?=
+ =?utf-8?B?dE5yNHQxYk13K3J2U1JYMlBCSkdLUnY2ZDE0UDB3RllvZ1ZOamdtR3hPKy9B?=
+ =?utf-8?B?R3RkanhrZHR5R2w4NjV0TUFranQ0YU0wM3NzdjJsK0dZd1haejdxTE5ielRw?=
+ =?utf-8?B?MGhPWFZiUGZ2VWFtTWJrV2pTcDk0UGpXY3pKQnFGWXlNUEFyVStoVEkxOGNO?=
+ =?utf-8?B?ODA5dGRaWUo5U0lhNjVIVXpDUTYvYmZScHZzMlZUOUI1S3NOaWFzeitORnRG?=
+ =?utf-8?B?M25DaW9sZUJLVCtuRW1qNWxZWG1TQVROTktVY0NhbHpFUHJtZks2VjZSVWc4?=
+ =?utf-8?B?TUVJSXNZOUxsYm5DRCtRZHlaS2luTGpOMjNkbTJqWkdmZ0lnQXdlRnBDSktX?=
+ =?utf-8?B?WHhla2tFTnVYQVZSR1QrYW1nd3o2U3cyT2NkQ0lIVnd1cHdkTXhjTi9NbDFJ?=
+ =?utf-8?B?S2EzWUg0MEpEY2Z1R3NlOGJzd29TdVRONGlWN3gxMzkxT3RWTWVVNkdyYWlq?=
+ =?utf-8?B?WGZVSm9kM2RYTitsVWRXTjdhNW1vRWpWTEdTcUoxaUV1cEhDYTBENlNJRUJl?=
+ =?utf-8?B?MVY3WkdpQ0gzUmVEOFV4MCttdlJjbFV0OEp3c0VjTDhaYnlVdm84cktyL21r?=
+ =?utf-8?B?TTR2RXVMb1M5N2M0eC8wazFtckVmTzVLV0FDQkQ4Y3JLOEdueDg0RksrR1JS?=
+ =?utf-8?B?czlJYkhNVDhta3hVOU9FRzVFcXNzTVFVWjBsMWd1SUJ4d25hZkEzcUd1WnRG?=
+ =?utf-8?B?ZnpGS1ZkL0N4bnpDcWNpN0dFa0VyMW51L0JvQ243OExSZ1JNUi9URXBvejQw?=
+ =?utf-8?B?VXloK0NibW81djRJblFSN0t0V0hUOTlDWUR1NEh6QXlXcTdOZ05rUVFsV1Uv?=
+ =?utf-8?B?ZWZHRDVVcFRaUUFCYi9DTXViYWMxVmhvUit6UGYxMUxHODhtMDdvRE9yUmhm?=
+ =?utf-8?B?bGhXQWNnZnN6R2tTdXBNSmZGbnpHLzNnY3hhUStuUFZJOE5jWnFyZDYzdjVu?=
+ =?utf-8?B?YTk1U2d1MTd3L09FUVFJUzRkNktzbjdoN2xpZzNFTjdCS290RG9kQ05JUzUz?=
+ =?utf-8?B?T1E0Q1hyOVVoU2p1dWVCVElCU2pDQUN2SHlkaUtPRm9DT01PWGx0MklNVC9V?=
+ =?utf-8?B?TzZvbkpZZ0V2TkVtYnFrTlhLN1pkYmFzaEFrdmoxOHlqY0JjOEFyTzY1OEpW?=
+ =?utf-8?B?bk1OOXBwYW5mN25WQUM4Skk2YkxCL0NVbllzWVc4WHpYUmZyZkJwbUE5NmxE?=
+ =?utf-8?B?bkhhZ05KRldxalJ3QnFKVjlBZ1FqY0NXdGM4YjAzVEQ0RklObUtMS3JBTU9P?=
+ =?utf-8?B?b09uSXVkZnpSemUyMUxvemQxZUdLdkRLaFcrNXA4ck5IK0M5MFg5S1dOUnhM?=
+ =?utf-8?B?T2VTMjN5bEh4bTdJK3orZU1uS0pHNU9CQlNUOVFjSDFmMmxnSWphL1BHMHYz?=
+ =?utf-8?B?Q2pQdjJDYWdVVFEvZzFvQlZEbVUveW1vSEpGa2k2SFM5bWMwRTMvWFY4VzAy?=
+ =?utf-8?B?Nm1jd3Nsc0xobHg1ZWg2d05WNWNPUUNxbmlMOUNMZ0dESS9LL210eGNHakNG?=
+ =?utf-8?B?NmducXA2LzNlaDcrb1gzaFREb21scW9UZ01PSGVyQXprMm1MVWNqUDBadTNB?=
+ =?utf-8?B?SWMxemh2cVd0V01zVURVeGlIS3hBR2R3Z2d1RDBHOFFsc08wNjQ2SndMdFJ4?=
+ =?utf-8?B?WjA4blJuQ3V0MmVTcTg5Ykh2M00xTWRBWlNMZ0J6RTJOc0QvNlpzNmdQbEdT?=
+ =?utf-8?B?MHZKenBadFM0cUdyZzRnUVZOZTNyY3k0SjNFa2NvbkFDb0JidWRkekkraHQz?=
+ =?utf-8?B?a1dCRlAxdEl3Z0plT005L3NlNFhuakN4N0prRC83RkpGY3dydURPUUVFSWQw?=
+ =?utf-8?Q?H9yrbdKnLY1h3MJ9jrSYUnlXV?=
+X-OriginatorOrg: synaptics.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ebb44ff-fff7-413d-3a86-08da8240712d
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2022 00:08:25.2823
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2022 00:10:51.6840
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: e62Ba/UMKY/VyeHNsTQeInm4zzUtXnLChNF9vpTnQgH3dsJZRUmPBf68ImO0QqhC3Yg5j/XQEpU9wvdPjYP46A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR10MB6001
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-19_13,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=0
- malwarescore=0 phishscore=0 bulkscore=0 spamscore=0 mlxlogscore=673
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208190091
-X-Proofpoint-GUID: dqTv57LZt7C_ttoRagi7gHqVsPvqXV-V
-X-Proofpoint-ORIG-GUID: dqTv57LZt7C_ttoRagi7gHqVsPvqXV-V
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: LQWiizzDyrAAE3WAzCA3faIWQwM0E8Q/bvwBBsQqFtrdk40c5k154Wbph3ZRF467Vieb/Q3dwbjI4nRUBMkABg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR03MB6953
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/19/22 18:12, Baolin Wang wrote:
-> Hi,
+
+
+On 8/20/22 03:17, Nicolas Dufresne wrote:
+> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
 > 
-> On ARM64 architecture, it can support CONT-PTE/PMD size hugetlb. When
-> looking up hugetlb page by follow_page(), we will hold the incorrect
-> pte/pmd lock for the CONT-PTE/PMD size hugetlb page, which will make
-> the pte/pmd entry unstable even under the lock and cause some potential
-> race issues. So considering the CONT-PTE/PMD size hugetlb, this patch set
-> changes to use the correct function to get the correct pte/pmd entry lock
-> to make the pte/pmd entry stable.
+> 
+> Le vendredi 19 août 2022 à 23:44 +0800, Hsia-Jun Li a écrit :
+>>
+>> On 8/19/22 23:28, Nicolas Dufresne wrote:
+>>> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
+>>>
+>>>
+>>> Le vendredi 19 août 2022 à 02:13 +0300, Laurent Pinchart a écrit :
+>>>> On Thu, Aug 18, 2022 at 02:33:42PM +0800, Hsia-Jun Li wrote:
+>>>>> On 8/18/22 14:06, Tomasz Figa wrote:
+>>>>>> On Tue, Aug 9, 2022 at 1:28 AM Hsia-Jun Li <randy.li@synaptics.com> wrote:
+>>>>>>>
+>>>>>>> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+>>>>>>>
+>>>>>>> The most of detail has been written in the drm.
+>>>>
+>>>> This patch still needs a description of the format, which should go to
+>>>> Documentation/userspace-api/media/v4l/.
+>>>>
+>>>>>>> Please notice that the tiled formats here request
+>>>>>>> one more plane for storing the motion vector metadata.
+>>>>>>> This buffer won't be compressed, so you can't append
+>>>>>>> it to luma or chroma plane.
+>>>>>>
+>>>>>> Does the motion vector buffer need to be exposed to userspace? Is the
+>>>>>> decoder stateless (requires userspace to specify the reference frames)
+>>>>>> or stateful (manages the entire decoding process internally)?
+>>>>>
+>>>>> No, users don't need to access them at all. Just they need a different
+>>>>> dma-heap.
+>>>>>
+>>>>> You would only get the stateful version of both encoder and decoder.
+>>>>
+>>>> Shouldn't the motion vectors be stored in a separate V4L2 buffer,
+>>>> submitted through a different queue then ?
+>>>
+>>> Imho, I believe these should be invisible to users and pooled separately to
+>>> reduce the overhead. The number of reference is usually lower then the number of
+>>> allocated display buffers.
+>>>
+>> You can't. The motion vector buffer can't share with the luma and chroma
+>> data planes, nor the data plane for the compression meta data.
+>>
+>> You could consider this as a security requirement(the memory region for
+>> the MV could only be accessed by the decoder) or hardware limitation.
+>>
+>> It is also not very easy to manage such a large buffer that would change
+>> when the resolution changed.
+> 
+> Your argument are just aiming toward the fact that you should not let the user
+> allocate these in the first place. They should not be bound to the v4l2 buffer.
+> Allocate these in your driver, and leave to your user the pixel buffer (and
+> compress meta) allocation work.
+> 
+What I want to say is that userspace could allocate buffers then make 
+the v4l2 decoder import these buffers, but each planes should come from 
+the right DMA-heaps. Usually the userspace would know better the memory 
+occupation, it would bring some flexibility here.
 
-Thank you for looking at this.
+Currently, they are another thing bothers me, I need to allocate a small 
+piece of memory(less than 128KiB) as the compression metadata buffers as 
+I mentioned here. And these pieces of memory should be located in a 
+small region, or the performance could be badly hurt, besides, we don't 
+support IOMMU for this kind of data.
 
-I often get confused by arm64 CONT-PTE/PMD layout, so my understanding may be
-wrong.  Can we use the PMD page lock for locking both CONT-PTE and CONT-PMD
-entries?  Again, I may be confused by the CONT-* page table layout, but it
-seems these would all be referenced via that same PMD page of the page table.
-Or, perhaps CONT-PMD can span multiple PMD pages?
+Any idea about assign a small piece of memory from a pre-allocated 
+memory or select region(I don't think I could reserve them in a 
+DMA-heap) for a plane in the MMAP type buffer ?
 
-If we can use PMD page for locking, this would be much finer grain that
-lock in the mm.
+Besides, I am not very satisfied with the dynamic resolution change 
+steps if I understand it correct. Buffers reallocation should happen 
+when we receive the event not until the drain is done. A resolution 
+rising is very common when you are playing a network stream, it would be 
+better that the decoder decided how many buffers it need for the 
+previous sequence while the userspace could reallocate the reset of 
+buffers in the CAPTURE queue.
+> Other driver handle this just fine, if your v4l2 driver implement the v4l2
+> resolution change mechanism, is should be very simple to manage.
+> 
+>>>>
+>>>>>>> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
+>>>>>>> ---
+>>>>>>>     drivers/media/v4l2-core/v4l2-common.c | 1 +
+>>>>>>>     drivers/media/v4l2-core/v4l2-ioctl.c  | 2 ++
+>>>>>>>     include/uapi/linux/videodev2.h        | 2 ++
+>>>>>>>     3 files changed, 5 insertions(+)
+>>>>>>>
+>>>>>>> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+>>>>>>> index e0fbe6ba4b6c..f645278b3055 100644
+>>>>>>> --- a/drivers/media/v4l2-core/v4l2-common.c
+>>>>>>> +++ b/drivers/media/v4l2-core/v4l2-common.c
+>>>>>>> @@ -314,6 +314,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+>>>>>>>                    { .format = V4L2_PIX_FMT_SGBRG12,       .pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>>>>>>>                    { .format = V4L2_PIX_FMT_SGRBG12,       .pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>>>>>>>                    { .format = V4L2_PIX_FMT_SRGGB12,       .pixel_enc = V4L2_PIXEL_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>>>>>>> +               { .format = V4L2_PIX_FMT_NV12M_V4H1C, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 5, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2, .block_w = { 128, 128 }, .block_h = { 128, 128 } },
+>>>>>>>            };
+>>>>>>>            unsigned int i;
+>>>>>>>
+>>>>>>> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>>>>> index e6fd355a2e92..8f65964aff08 100644
+>>>>>>> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>>>>> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>>>>> @@ -1497,6 +1497,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>>>>>>>                    case V4L2_PIX_FMT_MT21C:        descr = "Mediatek Compressed Format"; break;
+>>>>>>>                    case V4L2_PIX_FMT_QC08C:        descr = "QCOM Compressed 8-bit Format"; break;
+>>>>>>>                    case V4L2_PIX_FMT_QC10C:        descr = "QCOM Compressed 10-bit Format"; break;
+>>>>>>> +               case V4L2_PIX_FMT_NV12M_V4H1C:  descr = "Synaptics Compressed 8-bit tiled Format";break;
+>>>>>>> +               case V4L2_PIX_FMT_NV12M_10_V4H3P8C:     descr = "Synaptics Compressed 10-bit tiled Format";break;
+>>>>>>>                    default:
+>>>>>>>                            if (fmt->description[0])
+>>>>>>>                                    return;
+>>>>>>> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+>>>>>>> index 01e630f2ec78..7e928cb69e7c 100644
+>>>>>>> --- a/include/uapi/linux/videodev2.h
+>>>>>>> +++ b/include/uapi/linux/videodev2.h
+>>>>>>> @@ -661,6 +661,8 @@ struct v4l2_pix_format {
+>>>>>>>     #define V4L2_PIX_FMT_NV12MT_16X16 v4l2_fourcc('V', 'M', '1', '2') /* 12  Y/CbCr 4:2:0 16x16 tiles */
+>>>>>>>     #define V4L2_PIX_FMT_NV12M_8L128      v4l2_fourcc('N', 'A', '1', '2') /* Y/CbCr 4:2:0 8x128 tiles */
+>>>>>>>     #define V4L2_PIX_FMT_NV12M_10BE_8L128 v4l2_fourcc_be('N', 'T', '1', '2') /* Y/CbCr 4:2:0 10-bit 8x128 tiles */
+>>>>>>> +#define V4L2_PIX_FMT_NV12M_V4H1C v4l2_fourcc('S', 'Y', '1', '2')   /* 12  Y/CbCr 4:2:0 tiles */
+>>>>>>> +#define V4L2_PIX_FMT_NV12M_10_V4H3P8C v4l2_fourcc('S', 'Y', '1', '0')   /* 12  Y/CbCr 4:2:0 10-bits tiles */
+>>>>>>>
+>>>>>>>     /* Bayer formats - see https://urldefense.proofpoint.com/v2/url?u=http-3A__www.siliconimaging.com_RGB-2520Bayer.htm&d=DwIFaQ&c=7dfBJ8cXbWjhc0BhImu8wVIoUFmBzj1s88r8EGyM0UY&r=P4xb2_7biqBxD4LGGPrSV6j-jf3C3xlR7PXU-mLTeZE&m=lkQiuhx0yMAYHGcW-0WaHlF3e2etMHsu-FoNIBdZILGH6FPigwSAmel2vAdcVLkp&s=JKsBzpb_3u9xv52MaMuT4U3T1pPqcObYkpHDBxvcx_4&e=   */
+>>>>>>>     #define V4L2_PIX_FMT_SBGGR8  v4l2_fourcc('B', 'A', '8', '1') /*  8  BGBG.. GRGR.. */
+>>>>
+>>>
+>>
+> 
+
 -- 
-Mike Kravetz
+Hsia-Jun(Randy) Li

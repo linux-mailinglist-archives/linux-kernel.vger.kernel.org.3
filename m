@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DB559ACCA
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 11:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB1D59ACCE
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 11:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343964AbiHTJQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 05:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
+        id S244285AbiHTJQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 05:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245610AbiHTJQt (ORCPT
+        with ESMTP id S231132AbiHTJQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 05:16:49 -0400
+        Sat, 20 Aug 2022 05:16:13 -0400
 Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF25B4430;
-        Sat, 20 Aug 2022 02:16:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9EDB4424;
+        Sat, 20 Aug 2022 02:16:10 -0700 (PDT)
 Received: from grover.sesame (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id 27K9FiMU016772;
+        by conuserg-09.nifty.com with ESMTP id 27K9FiMV016772;
         Sat, 20 Aug 2022 18:15:46 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 27K9FiMU016772
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 27K9FiMV016772
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1660986946;
-        bh=bY6+EI9V1BMBb57Vn4oX7gK4xNrUCHyq24HIGSTCGek=;
+        s=dec2015msa; t=1660986947;
+        bh=ZaA95r2hIvnjr0IyYniszHW9QBF5d9eg0OdtCM353VU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CfKRT02jM1vvZF0H7fL3OK90qa8+tmBKGbEnIwt9g5XoJt4zxoW87gXNAKrQaTRY+
-         wzCV3LZhV++TyfOtu8ibR/Y7bPbIc4Ly0AMBGGO5SEgpax6oYXI/a5/EyMNU+QSG+H
-         Nq52xJMbyyLeEv8XA55BfIDVVqJcOlKwm29qsUbbjWmMi2mx/dxc5dzL/uljXbVHSg
-         Uil4qRGNpceXcirabcCSnwwTMrdqfYYru8Wm8mywpYt3dXG0kwLWeZkdwEyxsUliVy
-         VQhREVF+ZtCaAXGg6qdDEPqcieggiKAYlvyIaedvmq5Va7G5EdcEI1Waqu2M5fzmDo
-         UkAXadP1HHTlA==
+        b=hwNzU0dZ+MDYxxD+j5qH42HEQBdHXs4vAokfVD/bFAS8n0YzRBhQgh15qZDT4aXXR
+         b4l3SimfMqUwoHSrQucKvqamk7A1PnB9Bllc3i2z27Msa4RySWnXPIQJKtzugv8OjY
+         8OyglTVbtwmmafyDRZ637Wz0oxd7mtuJVWdJ6DrXcnLaACGQq01MVKHgINC6TmKMc2
+         DdKtvKXKENxALGCjF/p/HDI9BBeOR5TWsaD050XJqkZvhIGVpOml5jCf0UJqwgSeEu
+         pNQ6d+dfKPXq2h8Doz7otwyvF3KhYihhtwm41CDGdslEN8MYpEUU/xBmYWnT9kCZNN
+         S6iM+2ARAvUFg==
 X-Nifty-SrcIP: [133.32.182.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] kbuild: do not deduplicate modules.order
-Date:   Sat, 20 Aug 2022 18:15:30 +0900
-Message-Id: <20220820091531.682096-3-masahiroy@kernel.org>
+        Dinh Nguyen <dinguyen@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH 4/4] nios2: move core-y in arch/nios2/Makefile to arch/nios2/Kbuild
+Date:   Sat, 20 Aug 2022 18:15:31 +0900
+Message-Id: <20220820091531.682096-4-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220820091531.682096-1-masahiroy@kernel.org>
 References: <20220820091531.682096-1-masahiroy@kernel.org>
@@ -53,70 +51,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AWK code was added to deduplicate modules.order in case $(obj-m)
-contains the same module multiple times, but it is actually unneeded
-since commit b2c885549122 ("kbuild: update modules.order only when
-contained modules are updated").
-
-The list is already deduplicated before being processed by AWK because
-$^ is the deduplicated list of prerequisites.
-(Please note the real-prereqs macro uses $^)
-
-Yet, modules.order will contain duplication if two different Makefiles
-build the same module:
-
-  foo/Makefile:
-
-      obj-m += bar/baz.o
-
-  foo/bar/Makefile:
-
-      obj-m += baz.o
-
-However, the parallel builds cannot properly handle this case in the
-first place. So, it is better to let it fail (as already done by
-scripts/modules-check.sh).
+Use obj-y to clean up Makefile.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- Makefile               | 5 +----
- scripts/Makefile.build | 2 +-
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ arch/nios2/Kbuild   | 2 ++
+ arch/nios2/Makefile | 4 ----
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index d8ca0738b9e1..8add796953ad 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1435,14 +1435,11 @@ endif
+diff --git a/arch/nios2/Kbuild b/arch/nios2/Kbuild
+index 4e39f7abdeb6..fc2952edd2de 100644
+--- a/arch/nios2/Kbuild
++++ b/arch/nios2/Kbuild
+@@ -1,4 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
  
- # Build modules
- #
--# A module can be listed more than once in obj-m resulting in
--# duplicate lines in modules.order files.  Those are removed
--# using awk while concatenating to the final file.
++obj-y += kernel/ mm/ platform/ boot/dts/
++
+ # for cleaning
+ subdir- += boot
+diff --git a/arch/nios2/Makefile b/arch/nios2/Makefile
+index d6a7499b814c..3f34e6831863 100644
+--- a/arch/nios2/Makefile
++++ b/arch/nios2/Makefile
+@@ -39,8 +39,6 @@ KBUILD_CFLAGS += -G 0
  
- PHONY += modules
- modules: $(if $(KBUILD_BUILTIN),vmlinux) modules_check modules_prepare
+ head-y		:= arch/nios2/kernel/head.o
+ libs-y		+= arch/nios2/lib/ $(LIBGCC)
+-core-y		+= arch/nios2/kernel/ arch/nios2/mm/
+-core-y		+= arch/nios2/platform/
  
--cmd_modules_order = $(AWK) '!x[$$0]++' $(real-prereqs) > $@
-+cmd_modules_order = cat $(real-prereqs) > $@
+ INSTALL_PATH ?= /tftpboot
+ nios2-boot := arch/$(ARCH)/boot
+@@ -48,8 +46,6 @@ BOOT_TARGETS = vmImage zImage
+ PHONY += $(BOOT_TARGETS) install
+ KBUILD_IMAGE := $(nios2-boot)/vmImage
  
- modules.order: $(subdir-modorder) FORCE
- 	$(call if_changed,modules_order)
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 784f46d41959..0df488d0bbb0 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -374,7 +374,7 @@ $(obj)/built-in.a: $(real-obj-y) FORCE
+-core-y	+= $(nios2-boot)/dts/
+-
+ all: vmImage
  
- cmd_modules_order = { $(foreach m, $(real-prereqs), \
- 	$(if $(filter %/modules.order, $m), cat $m, echo $(patsubst %.o,%.ko,$m));) :; } \
--	| $(AWK) '!x[$$0]++' - > $@
-+	> $@
- 
- $(obj)/modules.order: $(obj-m) FORCE
- 	$(call if_changed,modules_order)
+ $(BOOT_TARGETS): vmlinux
 -- 
 2.34.1
 

@@ -2,60 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A184559AC30
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 09:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D4359AC3C
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 09:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344152AbiHTHVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 03:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
+        id S1343630AbiHTHdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 03:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343762AbiHTHVe (ORCPT
+        with ESMTP id S244415AbiHTHdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 03:21:34 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA7CC877C
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 00:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660980093; x=1692516093;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mT2OnrZKI+5b1XrN4GgaNeXcyUNY+BY7YaSiluFAXnk=;
-  b=i5k52+pAozE+WF5BZ6bwpjPgkJnkd09AyYVMdStRuHgGRSjG19haScEE
-   rLiFokO0tGz/702aE1a8/1utflsX97pnfxi2pec7G6ICCvdIOA0R19onN
-   SCh3nqK/tz4WMvqY0nSoBoIJeWKCXIb+hr7QWEuOnQN6hibcy7zxIZ1Lw
-   NbSfy46qxZjEHTyxx7zTbV2jY4bQA3Ejy2ksXjNz1UTci2GHL5vozI2Ji
-   Cv8XFxC0S8uxC2/oxAmmz6IblUDRkGMozf5iP6/cNMpAxapxcpEtQqfAE
-   3dM8q8GacQq/YQ5CdLwJn9OWJLnVwDPlzkcv0i4SU+oiGiz6qR/UpZD4y
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="354885983"
-X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="354885983"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 00:21:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="676680674"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Aug 2022 00:21:31 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPInS-0002JP-1X;
-        Sat, 20 Aug 2022 07:21:30 +0000
-Date:   Sat, 20 Aug 2022 15:21:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Yi Liu <yi.l.liu@intel.com>
-Subject: [jgunthorpe:iommufd 3/14] drivers/iommu/iommufd/main.c:277: warning:
- expecting prototype for iommufd_ctxet(). Prototype was for iommufd_ctx_get()
- instead
-Message-ID: <202208201532.7dK1NH9N-lkp@intel.com>
+        Sat, 20 Aug 2022 03:33:15 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E25C47
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 00:33:12 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1660980789;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OXPB7dY7tQ2n85mgIrq2bkd3Z/lqPrZbbmrEZHKR2EI=;
+        b=V53qx512BBfkXrE3QHlAuCrjOL/BGRhH15a+RPQLzdh5ADOmo4WZzCYasXbWSLF7hQrROy
+        vzgnfu5PhZ7MljCwl1QuTRDtohzAPsG1odlzHbyoaNSseMMPQCu3EI9th7yo4q2B+Hygvm
+        W8put8C83HqTG+wE2Ncg5iamruWSeIw=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Subject: Re: [PATCH] mm: fix pgdat->kswap accessed concurrently
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20220820032506.126860-1-wangkefeng.wang@huawei.com>
+Date:   Sat, 20 Aug 2022 15:33:04 +0800
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>, Qian Cai <cai@lca.pw>,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <1E87F09C-4904-49E2-B45C-C408DD5F6F62@linux.dev>
+References: <20220820032506.126860-1-wangkefeng.wang@huawei.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,50 +52,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jgunthorpe/linux iommufd
-head:   6624f48e554fe6a880b261074a1c9580dc9b5384
-commit: a9a0de926a33cae4290bff0c0d7a0006fd1fd5a7 [3/14] iommufd: File descriptor, context, kconfig and makefiles
-config: s390-randconfig-r035-20220820 (https://download.01.org/0day-ci/archive/20220820/202208201532.7dK1NH9N-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/jgunthorpe/linux/commit/a9a0de926a33cae4290bff0c0d7a0006fd1fd5a7
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe iommufd
-        git checkout a9a0de926a33cae4290bff0c0d7a0006fd1fd5a7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/iommu/iommufd/main.c:277: warning: Function parameter or member 'ictx' not described in 'iommufd_ctx_get'
->> drivers/iommu/iommufd/main.c:277: warning: expecting prototype for iommufd_ctxet(). Prototype was for iommufd_ctx_get() instead
-   drivers/iommu/iommufd/main.c:307: warning: Function parameter or member 'ictx' not described in 'iommufd_ctx_put'
 
 
-vim +277 drivers/iommu/iommufd/main.c
+> On Aug 20, 2022, at 11:25, Kefeng Wang <wangkefeng.wang@huawei.com> =
+wrote:
+>=20
+> The pgdat->kswap could be accessed concurrently by kswapd_run() and
+> kcompactd(), it don't be protected by any lock, which leads to the
+> following null-ptr-deref,
+>=20
+>  vmscan: Failed to start kswapd on node 0
+>  ...
+>  BUG: KASAN: null-ptr-deref in kcompactd+0x440/0x504
+>  Read of size 8 at addr 0000000000000024 by task kcompactd0/37
+>=20
+>  CPU: 0 PID: 37 Comm: kcompactd0 Kdump: loaded Tainted: G           OE =
+    5.10.60 #1
+>  Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
+>  Call trace:
+>   dump_backtrace+0x0/0x394
+>   show_stack+0x34/0x4c
+>   dump_stack+0x158/0x1e4
+>   __kasan_report+0x138/0x140
+>   kasan_report+0x44/0xdc
+>   __asan_load8+0x94/0xd0
+>   kcompactd+0x440/0x504
+>   kthread+0x1a4/0x1f0
+>   ret_from_fork+0x10/0x18
+>=20
+> Fix it by adding READ_ONCE()|WRITE_ONCE().
+>=20
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+> mm/compaction.c |  4 +++-
+> mm/vmscan.c     | 15 +++++++++------
+> 2 files changed, 12 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index 640fa76228dd..aa1cfe47f046 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -1983,7 +1983,9 @@ static inline bool is_via_compact_memory(int =
+order)
+>=20
+> static bool kswapd_is_running(pg_data_t *pgdat)
+> {
+> -	return pgdat->kswapd && task_is_running(pgdat->kswapd);
+> +	struct task_struct *t =3D READ_ONCE(pgdat->kswapd);
+> +
+> +	return t && task_is_running(t);
+> }
+>=20
+> /*
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index b2b1431352dc..9abba714249e 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -4642,16 +4642,19 @@ unsigned long shrink_all_memory(unsigned long =
+nr_to_reclaim)
+> void kswapd_run(int nid)
+> {
+> 	pg_data_t *pgdat =3D NODE_DATA(nid);
+> +	struct task_struct *t;
+>=20
+> -	if (pgdat->kswapd)
+> +	if (READ_ONCE(pgdat->kswapd))
+> 		return;
+>=20
+> -	pgdat->kswapd =3D kthread_run(kswapd, pgdat, "kswapd%d", nid);
+> -	if (IS_ERR(pgdat->kswapd)) {
+> +	t =3D kthread_run(kswapd, pgdat, "kswapd%d", nid);
+> +	if (IS_ERR(t)) {
+> 		/* failure at boot is fatal */
+> 		BUG_ON(system_state < SYSTEM_RUNNING);
+> 		pr_err("Failed to start kswapd on node %d\n", nid);
+> -		pgdat->kswapd =3D NULL;
+> +		WRITE_ONCE(pgdat->kswapd, NULL);
+> +	} else {
+> +		WRITE_ONCE(pgdat->kswapd, t);
+> 	}
+> }
 
-   269	
-   270	/**
-   271	 * iommufd_ctxet - Get a context reference
-   272	 * @ictx - Context to get
-   273	 *
-   274	 * The caller must already hold a valid reference to ictx.
-   275	 */
-   276	void iommufd_ctx_get(struct iommufd_ctx *ictx)
- > 277	{
-   278		get_file(ictx->file);
-   279	}
-   280	EXPORT_SYMBOL_GPL(iommufd_ctx_get);
-   281	
+IIUC, the race is like the followings:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+CPU 0:					CPU 1:
+
+kswapd_run()
+	pgdat->kswapd =3D kthread_run()
+	if (IS_ERR(pgdat->kswapd))
+					kswapd_is_running
+						// load pgdat->kswapd =
+and it is NOT NULL.
+		pgdat->kswapd =3D NULL
+						=
+task_is_running(pgdat->kswapd); // NULL pointer dereference
+
+So
+
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+
+Thanks.
+
+>=20
+> @@ -4661,11 +4664,11 @@ void kswapd_run(int nid)
+>  */
+> void kswapd_stop(int nid)
+> {
+> -	struct task_struct *kswapd =3D NODE_DATA(nid)->kswapd;
+> +	struct task_struct *kswapd =3D =
+READ_ONCE(NODE_DATA(nid)->kswapd);
+>=20
+> 	if (kswapd) {
+> 		kthread_stop(kswapd);
+> -		NODE_DATA(nid)->kswapd =3D NULL;
+> +		WRITE_ONCE(NODE_DATA(nid)->kswapd, NULL);
+> 	}
+> }
+>=20
+> --=20
+> 2.35.3
+>=20
+>=20
+

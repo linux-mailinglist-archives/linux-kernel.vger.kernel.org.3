@@ -2,111 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3207D59ACA8
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86D359ACA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343584AbiHTIdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 04:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S1344514AbiHTIeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 04:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiHTIdD (ORCPT
+        with ESMTP id S1344431AbiHTIeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 04:33:03 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2EDBCC08;
-        Sat, 20 Aug 2022 01:33:02 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id y4so5912183plb.2;
-        Sat, 20 Aug 2022 01:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=GXMlBTj8rp/1n/HAGZvUMfQREbty/R31f1moliWBoWA=;
-        b=T8HQDdiGofhR2v7BqB3ArKm+chR0aJu0YhKXqtgF9rHeE8kPvQ5CZYUoWAQyg5dkma
-         mc7Vr8EtMFf0AnKDfymQZVONZuIocyzqs2gKg2T8b4jiCLNy3a8L3nZH6Pe1LjLQbnZt
-         8bWEuTn6ck3SLlq4RbCj6rpgHo7mPsmDmCO3Q6ImciJuDJjjzkMaghJN729MTpwO6yYd
-         u7YROk0Jgx748O806xs6zx2oxMD9Xk9rRshe5NaRX4GickiIodDtYQNYMwDITe+iktTG
-         Q4vCJp1ozAatF9Y57rocCTh5Viqm0+NQYfCw64knp9UWgKEi5YhzczbypbXO7H8RuzSB
-         y6sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=GXMlBTj8rp/1n/HAGZvUMfQREbty/R31f1moliWBoWA=;
-        b=fMiiL6wJJ2Jdl6KTMWeEUYagzfu4/xzTpqHdxjuxoXhRYmkrn8sBu23kz1bsN0xChu
-         1YjBpDfvEYHZ5BvR3L66wBnhDhBESbFZLW0IEh6z3Z4hpj/QzMFx/sdtOYrpEWfSauDW
-         cKVW+Pa3be8Ba6zD8nGoS7h6zE9F4fzOgSjYrskaxgagMSc7KioG8J6Puzi+jLn/47nd
-         vrS0ltslCd6SQZ5hc3SQOp27Lg0ZrUnkR1UGSMyUKvO6RNxSvbH5ydus0nUcrg9fW6GT
-         VhmGCpRu1xH0mOSV8CCnz7pW10tGulzc7WhoanLZIlHOIlXu/PhlqmHh73HeqSM2dTgl
-         ui7w==
-X-Gm-Message-State: ACgBeo18+x0p8vyksoaQMPuxthupts2MGveNBsLPfxq19xrW5DyCk19e
-        iJOah9j8ver5p9o90OcE84Y=
-X-Google-Smtp-Source: AA6agR5GF0Y5mkSIz6CGZOo1MvejXLJSQwOAWf5XeE1t9MEyHxUYvmdM/d0Dpg0bpAyNv0vRd/PG4w==
-X-Received: by 2002:a17:903:32c9:b0:171:2846:eef8 with SMTP id i9-20020a17090332c900b001712846eef8mr11768765plr.117.1660984382172;
-        Sat, 20 Aug 2022 01:33:02 -0700 (PDT)
-Received: from ccs100203-Sabre-15.home (2001-b011-7006-189e-d048-0cf2-8a80-70a2.dynamic-ip6.hinet.net. [2001:b011:7006:189e:d048:cf2:8a80:70a2])
-        by smtp.gmail.com with ESMTPSA id x24-20020aa79ad8000000b00528c8ed356dsm4857614pfp.96.2022.08.20.01.32.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 01:33:01 -0700 (PDT)
-From:   Shao-Tse Hung <ccs100203@gmail.com>
-To:     corbet@lwn.net, paulmck@kernel.org
-Cc:     frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, rostedt@goodmis.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, rcu@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shao-Tse Hung <ccs100203@gmail.com>
-Subject: [PATCH] doc/rcu: Update LWN articles at the beginning
-Date:   Sat, 20 Aug 2022 16:32:44 +0800
-Message-Id: <20220820083244.28338-1-ccs100203@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 20 Aug 2022 04:34:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0E77CB7B;
+        Sat, 20 Aug 2022 01:34:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EEFD60FE9;
+        Sat, 20 Aug 2022 08:34:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF04FC433C1;
+        Sat, 20 Aug 2022 08:34:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660984443;
+        bh=9OxVjge7yA+uu3+HiDLRVBmT3xNyvpP9JM8Uv/+wqz0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kk1sGUhcVFpLNk+X7kSJL2s9WU3jRf/bLQTA8u4mV3rryCCBEN0tFf/iZr3GJYfNN
+         H426diR+bEVMcKlD2Y66EbJLFILNmOG/tEEYbyD6KYgzpHxWmRKHNq11EsdWXFW78n
+         aUuNVCMFj/kfhk12m75ylwJQDXjpwGrsTycMsfOY3Na7/1rOF/kheX+QB6QNcnhdRu
+         w1LQxORzRK+94kMAIhjbGW1PsC/j1jmb2xMewZb/tsMFLwy4lww+AFVyFKKGvJcz0Q
+         x1qqKxK6FaN+urZ6wT6y1mcZrI8nUjyRiUEilskI69lDh6ApbOtOUaGcXXLInj8mrF
+         ZtiNuKG7XM/Dw==
+Date:   Sat, 20 Aug 2022 17:33:57 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
+        Tom Zanussi <zanussi@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/4] tracing/eprobes: Do not allow eprobes to use
+ $stack, or % for regs
+Message-Id: <20220820173357.4f2bd8700e8aad6f6ac20d3f@kernel.org>
+In-Reply-To: <20220820014832.854211663@goodmis.org>
+References: <20220820014035.531145719@goodmis.org>
+        <20220820014832.854211663@goodmis.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds LWN articles about RCU APIs which were released in 2019.
-Also, HTTP URLs are replaced by HTTPS.
+On Fri, 19 Aug 2022 21:40:36 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Signed-off-by: Shao-Tse Hung <ccs100203@gmail.com>
----
- Documentation/RCU/whatisRCU.rst | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> While playing with event probes (eprobes), I tried to see what would
+> happen if I attempted to retrieve the instruction pointer (%rip) knowing
+> that event probes do not use pt_regs. The result was:
+> 
+>  BUG: kernel NULL pointer dereference, address: 0000000000000024
+>  #PF: supervisor read access in kernel mode
+>  #PF: error_code(0x0000) - not-present page
+>  PGD 0 P4D 0
+>  Oops: 0000 [#1] PREEMPT SMP PTI
+>  CPU: 1 PID: 1847 Comm: trace-cmd Not tainted 5.19.0-rc5-test+ #309
+>  Hardware name: Hewlett-Packard HP Compaq Pro 6300 SFF/339A, BIOS K01
+> v03.03 07/14/2016
+>  RIP: 0010:get_event_field.isra.0+0x0/0x50
+>  Code: ff 48 c7 c7 c0 8f 74 a1 e8 3d 8b f5 ff e8 88 09 f6 ff 4c 89 e7 e8
+> 50 6a 13 00 48 89 ef 5b 5d 41 5c 41 5d e9 42 6a 13 00 66 90 <48> 63 47 24
+> 8b 57 2c 48 01 c6 8b 47 28 83 f8 02 74 0e 83 f8 04 74
+>  RSP: 0018:ffff916c394bbaf0 EFLAGS: 00010086
+>  RAX: ffff916c854041d8 RBX: ffff916c8d9fbf50 RCX: ffff916c255d2000
+>  RDX: 0000000000000000 RSI: ffff916c255d2008 RDI: 0000000000000000
+>  RBP: 0000000000000000 R08: ffff916c3a2a0c08 R09: ffff916c394bbda8
+>  R10: 0000000000000000 R11: 0000000000000000 R12: ffff916c854041d8
+>  R13: ffff916c854041b0 R14: 0000000000000000 R15: 0000000000000000
+>  FS:  0000000000000000(0000) GS:ffff916c9ea40000(0000)
+> knlGS:0000000000000000
+>  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>  CR2: 0000000000000024 CR3: 000000011b60a002 CR4: 00000000001706e0
+>  Call Trace:
+>   <TASK>
+>   get_eprobe_size+0xb4/0x640
+>   ? __mod_node_page_state+0x72/0xc0
+>   __eprobe_trace_func+0x59/0x1a0
+>   ? __mod_lruvec_page_state+0xaa/0x1b0
+>   ? page_remove_file_rmap+0x14/0x230
+>   ? page_remove_rmap+0xda/0x170
+>   event_triggers_call+0x52/0xe0
+>   trace_event_buffer_commit+0x18f/0x240
+>   trace_event_raw_event_sched_wakeup_template+0x7a/0xb0
+>   try_to_wake_up+0x260/0x4c0
+>   __wake_up_common+0x80/0x180
+>   __wake_up_common_lock+0x7c/0xc0
+>   do_notify_parent+0x1c9/0x2a0
+>   exit_notify+0x1a9/0x220
+>   do_exit+0x2ba/0x450
+>   do_group_exit+0x2d/0x90
+>   __x64_sys_exit_group+0x14/0x20
+>   do_syscall_64+0x3b/0x90
+>   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> 
+> Obviously this is not the desired result.
+> 
+> Move the testing for TPARG_FL_TPOINT which is only used for event probes
+> to the top of the "$" variable check, as all the other variables are not
+> used for event probes. Also add a check in the register parsing "%" to
+> fail if an event probe is used.
 
-diff --git a/Documentation/RCU/whatisRCU.rst b/Documentation/RCU/whatisRCU.rst
-index 77ea260efd12..682529123b9d 100644
---- a/Documentation/RCU/whatisRCU.rst
-+++ b/Documentation/RCU/whatisRCU.rst
-@@ -6,13 +6,15 @@ What is RCU?  --  "Read, Copy, Update"
- Please note that the "What is RCU?" LWN series is an excellent place
- to start learning about RCU:
- 
--| 1.	What is RCU, Fundamentally?  http://lwn.net/Articles/262464/
--| 2.	What is RCU? Part 2: Usage   http://lwn.net/Articles/263130/
--| 3.	RCU part 3: the RCU API      http://lwn.net/Articles/264090/
--| 4.	The RCU API, 2010 Edition    http://lwn.net/Articles/418853/
--| 	2010 Big API Table           http://lwn.net/Articles/419086/
--| 5.	The RCU API, 2014 Edition    http://lwn.net/Articles/609904/
--|	2014 Big API Table           http://lwn.net/Articles/609973/
-+| 1.	What is RCU, Fundamentally?  https://lwn.net/Articles/262464/
-+| 2.	What is RCU? Part 2: Usage   https://lwn.net/Articles/263130/
-+| 3.	RCU part 3: the RCU API      https://lwn.net/Articles/264090/
-+| 4.	The RCU API, 2010 Edition    https://lwn.net/Articles/418853/
-+| 	2010 Big API Table           https://lwn.net/Articles/419086/
-+| 5.	The RCU API, 2014 Edition    https://lwn.net/Articles/609904/
-+|	2014 Big API Table           https://lwn.net/Articles/609973/
-+| 6.	The RCU API, 2019 Edition    https://lwn.net/Articles/777036/
-+|	2019 Big API Table           https://lwn.net/Articles/777165/
- 
- 
- What is RCU?
+This looks good to me.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thanks!
+
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  kernel/trace/trace_probe.c | 21 +++++++++++++--------
+>  1 file changed, 13 insertions(+), 8 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> index 850a88abd33b..dec657af363c 100644
+> --- a/kernel/trace/trace_probe.c
+> +++ b/kernel/trace/trace_probe.c
+> @@ -283,7 +283,14 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
+>  	int ret = 0;
+>  	int len;
+>  
+> -	if (strcmp(arg, "retval") == 0) {
+> +	if (flags & TPARG_FL_TPOINT) {
+> +		if (code->data)
+> +			return -EFAULT;
+> +		code->data = kstrdup(arg, GFP_KERNEL);
+> +		if (!code->data)
+> +			return -ENOMEM;
+> +		code->op = FETCH_OP_TP_ARG;
+> +	} else if (strcmp(arg, "retval") == 0) {
+>  		if (flags & TPARG_FL_RETURN) {
+>  			code->op = FETCH_OP_RETVAL;
+>  		} else {
+> @@ -323,13 +330,6 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
+>  		code->op = FETCH_OP_ARG;
+>  		code->param = (unsigned int)param - 1;
+>  #endif
+> -	} else if (flags & TPARG_FL_TPOINT) {
+> -		if (code->data)
+> -			return -EFAULT;
+> -		code->data = kstrdup(arg, GFP_KERNEL);
+> -		if (!code->data)
+> -			return -ENOMEM;
+> -		code->op = FETCH_OP_TP_ARG;
+>  	} else
+>  		goto inval_var;
+>  
+> @@ -384,6 +384,11 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
+>  		break;
+>  
+>  	case '%':	/* named register */
+> +		if (flags & TPARG_FL_TPOINT) {
+> +			/* eprobes do not handle registers */
+> +			trace_probe_log_err(offs, BAD_VAR);
+> +			break;
+> +		}
+>  		ret = regs_query_register_offset(arg + 1);
+>  		if (ret >= 0) {
+>  			code->op = FETCH_OP_REG;
+> -- 
+> 2.35.1
+
+
 -- 
-2.25.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

@@ -2,101 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AAB59AEDB
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 17:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9FD59AEE0
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 17:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345854AbiHTPdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 11:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
+        id S1346179AbiHTPf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 11:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiHTPdf (ORCPT
+        with ESMTP id S1345955AbiHTPfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 11:33:35 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCE01209E;
-        Sat, 20 Aug 2022 08:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5sAr4rzx6SCv44UYAl1KMLXHp2wkDi6knE6w66LUH/Q=; b=aaf03K0StTdCGsUh+GWGmzlgJl
-        JKrPSsYEa6v5bWe3xzk01borQuEI+zplNIyVoz0BCek7ZHDCy/o9/IYypRkUS8E4g+BW6Ee4Qd6RN
-        +/WsjNTd1y6KsNSU5gYliZRqkWJTDppJvz0l/LzAktRV7J/o/vJwOPIg9AILhuOwuZxCG50OODHp9
-        3ZJDTjzFOx2KQZTUaMTZdXEH4nJJ+SgBh9siP9iQS93aNEqp0WI84GZk2LBKDOrgbtXPyJcJv4gI0
-        ENLU3xoVFCIxrhq7PTnmKBCDC6vuQSJZb62pxEM7MpY9sozDh3Fw05RwGDcL4spOQbs6W5b5msflF
-        elMNOfyg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oPQTb-006Pjx-AI;
-        Sat, 20 Aug 2022 15:33:31 +0000
-Date:   Sat, 20 Aug 2022 16:33:31 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Namjae Jeon <linkinjeon@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
-Subject: Re: [PATCH 4/5] ksmbd: don't open-code %pf
-Message-ID: <YwD+y2cXpcenIHlW@ZenIV>
-References: <Yv2qoNQg48rtymGE@ZenIV>
- <Yv2rCqD7M8fAhq5v@ZenIV>
- <CAKYAXd-Xsih1TKTbM0kTGmjQfpkbpp7d3u9E7USuwmiSXLVvBw@mail.gmail.com>
- <Yv6igFDtDa0vmq6H@ZenIV>
- <CAKYAXd-6fT5qG2VmVG6Q51Z8-_79cjKhERHDatR_z62w19+p1Q@mail.gmail.com>
- <YwBZPCy0RBc9hwIk@ZenIV>
- <CAKYAXd9DGgLJ=-hcdADXVZUqp2aYRkGr2YKpfUND6S_GuaWgWQ@mail.gmail.com>
+        Sat, 20 Aug 2022 11:35:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C58463F2E
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 08:35:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33860B8068C
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 15:35:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73429C433C1;
+        Sat, 20 Aug 2022 15:35:18 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] LoongArch: Fix build warnings in VDSO
+Date:   Sat, 20 Aug 2022 23:35:06 +0800
+Message-Id: <20220820153506.607928-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKYAXd9DGgLJ=-hcdADXVZUqp2aYRkGr2YKpfUND6S_GuaWgWQ@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 02:44:29PM +0900, Namjae Jeon wrote:
-> > OK...  FWIW, I've another ksmbd patch hanging around and it might be
-> > less PITA if I put it + those two patches into never-rebased branch
-> > (for-ksmbd) for ksmbd folks to pull from.  Fewer pointless conflicts
-> > that way...
-> Okay, Thanks for this. I'm trying to resend "ksmbd: fix racy issue
-> from using ->d_parent and ->d_name" patch to you, but It conflict with
-> these patches:)
-> We will pull them from that branch if you create it.
+Fix build warnings in VDSO as below:
 
-OK, pull request follows:
+arch/loongarch/vdso/vgettimeofday.c:9:5: warning: no previous prototype for '__vdso_clock_gettime' [-Wmissing-prototypes]
+    9 | int __vdso_clock_gettime(clockid_t clock,
+      |     ^~~~~~~~~~~~~~~~~~~~
+arch/loongarch/vdso/vgettimeofday.c:15:5: warning: no previous prototype for '__vdso_gettimeofday' [-Wmissing-prototypes]
+   15 | int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
+      |     ^~~~~~~~~~~~~~~~~~~
+arch/loongarch/vdso/vgettimeofday.c:21:5: warning: no previous prototype for '__vdso_clock_getres' [-Wmissing-prototypes]
+   21 | int __vdso_clock_getres(clockid_t clock_id,
+      |     ^~~~~~~~~~~~~~~~~~~
+arch/loongarch/vdso/vgetcpu.c:27:5: warning: no previous prototype for '__vdso_getcpu' [-Wmissing-prototypes]
+   27 | int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused)
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/vdso/vgetcpu.c       |  2 ++
+ arch/loongarch/vdso/vgettimeofday.c | 15 +++++++++------
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+diff --git a/arch/loongarch/vdso/vgetcpu.c b/arch/loongarch/vdso/vgetcpu.c
+index 43a0078e4418..e02e775f5360 100644
+--- a/arch/loongarch/vdso/vgetcpu.c
++++ b/arch/loongarch/vdso/vgetcpu.c
+@@ -24,6 +24,8 @@ static __always_inline const struct vdso_pcpu_data *get_pcpu_data(void)
+ 	return (struct vdso_pcpu_data *)(get_vdso_base() - VDSO_DATA_SIZE);
+ }
+ 
++extern
++int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused);
+ int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused)
+ {
+ 	int cpu_id;
+diff --git a/arch/loongarch/vdso/vgettimeofday.c b/arch/loongarch/vdso/vgettimeofday.c
+index b1f4548dae92..8f22863bd7ea 100644
+--- a/arch/loongarch/vdso/vgettimeofday.c
++++ b/arch/loongarch/vdso/vgettimeofday.c
+@@ -6,20 +6,23 @@
+  */
+ #include <linux/types.h>
+ 
+-int __vdso_clock_gettime(clockid_t clock,
+-			 struct __kernel_timespec *ts)
++extern
++int __vdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts);
++int __vdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts)
+ {
+ 	return __cvdso_clock_gettime(clock, ts);
+ }
+ 
+-int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
+-			struct timezone *tz)
++extern
++int __vdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz);
++int __vdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz)
+ {
+ 	return __cvdso_gettimeofday(tv, tz);
+ }
+ 
+-int __vdso_clock_getres(clockid_t clock_id,
+-			struct __kernel_timespec *res)
++extern
++int __vdso_clock_getres(clockid_t clock_id, struct __kernel_timespec *res);
++int __vdso_clock_getres(clockid_t clock_id, struct __kernel_timespec *res)
+ {
+ 	return __cvdso_clock_getres(clock_id, res);
+ }
+-- 
+2.31.1
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-ksmbd
-
-for you to fetch changes up to f2ea6d96500dd8947467f774d70700c1ba3ed8ef:
-
-  ksmbd: constify struct path (2022-08-20 10:54:48 -0400)
-
-----------------------------------------------------------------
-assorted ksmbd cleanups
-
-Al Viro <viro@zeniv.linux.org.uk>
-
-----------------------------------------------------------------
-Al Viro (3):
-      ksmbd: don't open-code file_path()
-      ksmbd: don't open-code %pD
-      ksmbd: constify struct path
-
- fs/ksmbd/misc.c    |  2 +-
- fs/ksmbd/misc.h    |  2 +-
- fs/ksmbd/smb2pdu.c | 33 ++++++++++++++++-----------------
- fs/ksmbd/smbacl.c  |  6 +++---
- fs/ksmbd/smbacl.h  |  6 +++---
- fs/ksmbd/vfs.c     | 18 ++++++++----------
- fs/ksmbd/vfs.h     |  2 +-
- 7 files changed, 33 insertions(+), 36 deletions(-)

@@ -2,140 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBDB59AEDD
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 17:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E438659AEF7
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 18:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345396AbiHTPbZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 20 Aug 2022 11:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
+        id S1345642AbiHTQED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 12:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiHTPbW (ORCPT
+        with ESMTP id S1345671AbiHTQD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 11:31:22 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B867697A
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 08:31:21 -0700 (PDT)
-Received: from [192.168.0.105] (unknown [136.169.224.60])
-        by mail.ispras.ru (Postfix) with ESMTPSA id CFF9740D403D;
-        Sat, 20 Aug 2022 15:31:19 +0000 (UTC)
-Message-ID: <6228a437bb9d7f677f5e97973518bcd555bc2a07.camel@ispras.ru>
-Subject: [POSSIBLE BUG] Dereferencing of NULL pointer
-From:   Rustam Subkhankulov <subkhankulov@ispras.ru>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org
-Date:   Sat, 20 Aug 2022 20:30:56 +0300
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Sat, 20 Aug 2022 12:03:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F6A1C122
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 09:03:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661011434;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dk1zbtbPz6wFeKktH5u18CfghQGE/vszg2cVU5h0PNU=;
+        b=QnwgELuMwCwPkf5O7M0JfexbXyI17IVkIDPSSyIjuZS78kUwIM8Y6VgDh9UnwjOVgIWI/U
+        NtE/B9OrZBetrN1vCpIZNwm+6HLaesOt1X18peANouS/glZExDe9ke7meez0MRV5SqbPL1
+        DqImv7JmsqymJrmtsalPPHmorqGuN7M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-656-N4TlRh6JNyaL8pFQZ5MCpg-1; Sat, 20 Aug 2022 12:03:50 -0400
+X-MC-Unique: N4TlRh6JNyaL8pFQZ5MCpg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E275080029D;
+        Sat, 20 Aug 2022 16:03:49 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C2DC42026D4C;
+        Sat, 20 Aug 2022 16:03:49 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 27KG3nT9015653;
+        Sat, 20 Aug 2022 12:03:49 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 27KG3muE015649;
+        Sat, 20 Aug 2022 12:03:49 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Sat, 20 Aug 2022 12:03:48 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Pavel Machek <pavel@denx.de>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Song Liu <song@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 5.15 089/779] md-raid10: fix KASAN warning
+In-Reply-To: <20220819104534.GA11901@duo.ucw.cz>
+Message-ID: <alpine.LRH.2.02.2208201202090.15558@file01.intranet.prod.int.rdu2.redhat.com>
+References: <20220815180337.130757997@linuxfoundation.org> <20220815180341.087873206@linuxfoundation.org> <20220819104534.GA11901@duo.ucw.cz>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Version: 6.0-rc1
 
-Description: 
 
-In function 'privcmd_ioctl_dm_op' (drivers/xen/privcmd.c: 615)return
-value of 'kcalloc' with GFP_KERNEL flag is assigned to "pages"
-variable. GFP_KERNEL flag does not guarantee, that the return value
-will not be NULL. In that case, there is a jump to the "out" label. 
+On Fri, 19 Aug 2022, Pavel Machek wrote:
 
----------------------------------------------------------------------
-667	pages = kcalloc(nr_pages, sizeof(*pages), GFP_KERNEL);
-668	if (!pages) {
-669		rc = -ENOMEM;
-670		goto out;
-671	}
----------------------------------------------------------------------
+> Hi!
+> 
+> > From: Mikulas Patocka <mpatocka@redhat.com>
+> > 
+> > commit d17f744e883b2f8d13cca252d71cfe8ace346f7d upstream.
+> > 
+> > There's a KASAN warning in raid10_remove_disk when running the lvm
+> > test lvconvert-raid-reshape.sh. We fix this warning by verifying that the
+> > value "number" is valid.
+> > 
+> > BUG: KASAN: slab-out-of-bounds in raid10_remove_disk+0x61/0x2a0 [raid10]
+> > Read of size 8 at addr ffff889108f3d300 by task mdX_raid10/124682
+> 
+> Is this place for array_index_nospec?
+> 
+> Best regards,
+> 								Pavel
 
-Variable 'pages' is passed to function 'unpin_user_pages_dirty_lock' as
-1st parameter at [drivers/xen/privcmd.c: 695].
+Hi
 
----------------------------------------------------------------------
-694	out:
-695		unlock_pages(pages, nr_pages);
----------------------------------------------------------------------
+I think it is not needed - userspace code can't trigger this code path at 
+will.
 
-Then, variable 'pages' is passed to function
-'unpin_user_pages_dirty_lock' as 1st parameter at
-[drivers/xen/privcmd.c: 612].
-
----------------------------------------------------------------------
-610	static void unlock_pages(struct page *pages[], unsigned int
-nr_pages)
-611	{
-612		unpin_user_pages_dirty_lock(pages, nr_pages, true);
-613	}
----------------------------------------------------------------------
-
-'pages' and 'npages' are passed as parameters to function
-'sanity_check_pinned_pages' at [mm/gup.c: 311].
-
----------------------------------------------------------------------
-299	void unpin_user_pages_dirty_lock(struct page **pages, unsigned
-long npages,
-300					 bool make_dirty)
-301	{
-302		unsigned long i;
-303     struct folio *folio;
-304     unsigned int nr;
-305		
-306		if (!make_dirty) {
-307			unpin_user_pages(pages, npages);
-308			return;
-309		}
-310
-311		sanity_check_pinned_pages(pages, npages);
----------------------------------------------------------------------
-
-In function 'sanity_check_pinned_pages', if
-(IS_ENABLED(CONFIG_DEBUG_VM)) and (npages > 0), NULL pointer 'pages' is
-dereferenced at [mm/gup.c: 51].
-
----------------------------------------------------------------------
-32	static inline void sanity_check_pinned_pages(struct page
-**pages,
-33						     unsigned long
-npages)
-34	{
-35		if (!IS_ENABLED(CONFIG_DEBUG_VM))
-36			return;
-..
-50		for (; npages; npages--, pages++) {
-51			struct page *page = *pages;
-								^^^^^^
-^
----------------------------------------------------------------------
-
-Else if (!IS_ENABLED(CONFIG_DEBUG_VM)) and (npages > 0) function
-'gup_folio_next' is called with 'pages' and 'npages' as parameters at
-[mm/gup.c: 311].
-
----------------------------------------------------------------------
-312		for (i = 0; i < npages; i += nr) {
-313			folio = gup_folio_next(pages, npages, i, &nr);
----------------------------------------------------------------------
-
-In function 'gup_folio_next' NULL pointer 'list' is dereferenced at
-[mm/gup.c: 263].
-
----------------------------------------------------------------------
-262	static inline struct folio *gup_folio_next(struct page **list,
-263			unsigned long npages, unsigned long i,
-unsigned int *ntails)
-264	{
-265		struct folio *folio = page_folio(list[i]);
-								
-		^^^^^^^^^
----------------------------------------------------------------------
+Mikulas
 

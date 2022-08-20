@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF82C59AF5E
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 20:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FB759AF60
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 20:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiHTSFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 14:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
+        id S229689AbiHTSII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 14:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiHTSFp (ORCPT
+        with ESMTP id S229517AbiHTSIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 14:05:45 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346A72D1D2;
-        Sat, 20 Aug 2022 11:05:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=2/0qrxj7HSrJO5jwPWZjY59WQuXjOzJXYQ9uh9ZAsQo=; b=zmQffzGzFl5ibBw5on7lF8ST1v
-        2o8nfgwHpCqaIHaIow+FY5OgF7ODiRRxBUwMZh2HrdmzQrbI0tgRn4GoIILjzvKQ87Ng7FaLoFBYk
-        wxHCYq6jZFKxytonwb4AVGxCvPy+WLCw9cbIGg36RhAI8PFhcUUqmUq3GLJSv33x18AWydnCSmOKv
-        kucLwxAHvjn8l96dQWFt2Z1A5Y8DzFMxv6eklTyl1EfncL9iK+jk7VphMvoRVRf2fxzn15jxhwpRk
-        CKqaW1FxWkboflAfYes1BDBePhfPJOY0w+tfwhgHmkWvvLYQM5zn3sRoSKbLf0jtiEun6R1aG8e34
-        EzLJeo6w==;
-Received: from [2601:1c0:6280:3f0:e65e:37ff:febd:ee53]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oPSqm-00BOEc-1k; Sat, 20 Aug 2022 18:05:36 +0000
-Message-ID: <b2e77db8-0037-e890-cdda-8bbce1786fa9@infradead.org>
-Date:   Sat, 20 Aug 2022 11:05:35 -0700
+        Sat, 20 Aug 2022 14:08:05 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEE333409;
+        Sat, 20 Aug 2022 11:08:04 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 27KI7p6l015563;
+        Sun, 21 Aug 2022 03:07:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 27KI7p6l015563
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1661018872;
+        bh=FeKZHjTdfUk4w1z7Mg9u17SjMLtylIKx4GxJxFhubsI=;
+        h=From:Date:Subject:To:Cc:From;
+        b=iQHvwLiJ6H+FnXnJy6H7RWbreVoh89NfucfaSFJ4HS+KqU6qd8kghgeOt/D/myYaP
+         V9DcAwpo0JeoaArrL422LeE6mKykmaMW60oVgnZDyL7yuZhwGAyRNYeXLTdlhokq9X
+         CUZT2KOISImFSF6bAEFbp6LXCqaJA577czMZ+pGMTrTTHqewdb98/8DANqfcH9dQOJ
+         97cnqM/u7jLXi6GnEr2hLXXBBMNC6pN3RKmJe7bw3m8D7sIEM49fd4ILpipjmWE8sh
+         BY4h24rS+sbTZivhhfkleVIG/0atqluT2XXMTpiyzASIu0B3q2keHUstWE6YUK546R
+         +589/DSjMqg1A==
+X-Nifty-SrcIP: [209.85.221.52]
+Received: by mail-wr1-f52.google.com with SMTP id h24so8559518wrb.8;
+        Sat, 20 Aug 2022 11:07:51 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1Ik4c5eKHELOuZZ1TD7RFQFFO9UY5v0h2+XeOo2prmJE2Ls6fK
+        8azEyXfM0JVeLFBkNsbq1AqSA2hMaUVJh3EXWOY=
+X-Google-Smtp-Source: AA6agR4TasFP18ZxhVawsw1UwGnDki15bB7tF77Y96KPQcoE6yovSm6Sya5lA2Lg29iUTaLPAX71nUQQjP/u9X4Ulx0=
+X-Received: by 2002:a5d:6248:0:b0:222:cd3b:94c8 with SMTP id
+ m8-20020a5d6248000000b00222cd3b94c8mr7118916wrv.97.1661018870405; Sat, 20 Aug
+ 2022 11:07:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] LoongArch: Select PCI_QUIRKS to avoid build error
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20220820025755.3110083-1-chenhuacai@loongson.cn>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220820025755.3110083-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 21 Aug 2022 03:07:03 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS55=qvacmoL3Ooio3yqYR9PLBjRjyp=ZWgdHojO1meoQ@mail.gmail.com>
+Message-ID: <CAK7LNAS55=qvacmoL3Ooio3yqYR9PLBjRjyp=ZWgdHojO1meoQ@mail.gmail.com>
+Subject: [GIT PULL] Kbuild fixes for v6.0-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Linus,
 
-
-On 8/19/22 19:57, Huacai Chen wrote:
-> PCI_LOONGSON is a mandatory for LoongArch and it is selected in Kconfig
-> unconditionally, but its dependency PCI_QUIRKS is missing and may cause
-> a build error when "make randconfig":
-> 
->    arch/loongarch/pci/acpi.c: In function 'pci_acpi_setup_ecam_mapping':
->>> arch/loongarch/pci/acpi.c:103:29: error: 'loongson_pci_ecam_ops' undeclared (first use in this function)
->      103 |                 ecam_ops = &loongson_pci_ecam_ops;
->          |                             ^~~~~~~~~~~~~~~~~~~~~
->    arch/loongarch/pci/acpi.c:103:29: note: each undeclared identifier is reported only once for each function it appears in
-> 
-> Kconfig warnings: (for reference only)
->    WARNING: unmet direct dependencies detected for PCI_LOONGSON
->    Depends on [n]: PCI [=y] && (MACH_LOONGSON64 [=y] || COMPILE_TEST [=y]) && (OF [=y] || ACPI [=y]) && PCI_QUIRKS [=n]
->    Selected by [y]:
->    - LOONGARCH [=y]
-> 
-> Fix it by selecting PCI_QUIRKS unconditionally, too.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
+Please pull some Kbuild fixes.
 Thanks.
 
-> ---
->  arch/loongarch/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 4abc9a28aba4..26aeb1408e56 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -111,6 +111,7 @@ config LOONGARCH
->  	select PCI_ECAM if ACPI
->  	select PCI_LOONGSON
->  	select PCI_MSI_ARCH_FALLBACKS
-> +	select PCI_QUIRKS
->  	select PERF_USE_VMALLOC
->  	select RTC_LIB
->  	select SMP
+
+
+
+
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+tags/kbuild-fixes-v6.0
+
+for you to fetch changes up to 4be72c1b9f298b4ad42391322eaddef64b282716:
+
+  scripts/clang-tools: Remove DeprecatedOrUnsafeBufferHandling check
+(2022-08-21 02:47:49 +0900)
+
+----------------------------------------------------------------
+Kbuild fixes for v6.0
+
+ - Fix module versioning broken on some architectures
+
+ - Make dummy-tools enable CONFIG_PPC_LONG_DOUBLE_128
+
+ - Remove -Wformat-zero-length, which has no warning instance
+
+ - Fix the order between drivers and libs in modules.order
+
+ - Fix false-positive warnings in clang-analyzer
+
+----------------------------------------------------------------
+Guru Das Srinagesh (1):
+      scripts/clang-tools: Remove DeprecatedOrUnsafeBufferHandling check
+
+Jiri Slaby (1):
+      kbuild: dummy-tools: pretend we understand __LONG_DOUBLE_128__
+
+Masahiro Yamada (2):
+      modpost: fix module versioning when a symbol lacks valid CRC
+      kbuild: fix the modules order between drivers and libs
+
+Nathan Chancellor (1):
+      scripts/Makefile.extrawarn: Do not disable clang's -Wformat-zero-length
+
+ Makefile                               | 6 ++----
+ scripts/Makefile.extrawarn             | 1 -
+ scripts/clang-tools/run-clang-tools.py | 1 +
+ scripts/dummy-tools/gcc                | 2 +-
+ scripts/mod/modpost.c                  | 4 +---
+ 5 files changed, 5 insertions(+), 9 deletions(-)
 
 -- 
-~Randy
+Best Regards
+Masahiro Yamada

@@ -2,205 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E43759A9FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DE759A9F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244972AbiHTAOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 20:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44900 "EHLO
+        id S244906AbiHTAOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 20:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244299AbiHTAOT (ORCPT
+        with ESMTP id S244299AbiHTAON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 20:14:19 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C705E678
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 17:14:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660954458; x=1692490458;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EnX6Yf3cZ2gQ4Fnr+UfQPDbVQijcZ+WwjUZMXTbYEfc=;
-  b=TeWRJzZagVRw1u+bBFV4x4Qxq8JEaA8p42a/AsK0l8i6yxG+3Gw60LPq
-   csyByiktafzFutlPZU+YNqJGw+yAbS37ZAf0fixOWrIJckyT0grybVeeI
-   DosrD/HtfxWJVZTbEr5f1WA6tw5sBWyqdm2AYagMIwPSzKuDEx5bULpl+
-   57899cTbjpyTDsBdM+2t/Y75pB4uLTcLdjigPnBKDN/YW8Cja0ogokUOs
-   sV6OVMp8oMQ9jXW5DTu4SEpPtytR58bGppvE1Vsick49EKLbnDjete5Fo
-   bBQeQUjd5Ym+bbjpgb56gwXP5otdM/LpAE7AQjfGlKnnncffQv8dLqy0G
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="280093171"
-X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="280093171"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 17:14:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="750692025"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Aug 2022 17:14:17 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPC80-0001we-15;
-        Sat, 20 Aug 2022 00:14:16 +0000
-Date:   Sat, 20 Aug 2022 08:13:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [intel-tdx:guest-hardening-rebased 35/36]
- drivers/virtio/virtio_mmio.c:611:13: error: implicit declaration of function
- 'cc_platform_has'
-Message-ID: <202208200821.ZCtdp6wi-lkp@intel.com>
+        Fri, 19 Aug 2022 20:14:13 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2046.outbound.protection.outlook.com [40.107.93.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDC04E875;
+        Fri, 19 Aug 2022 17:14:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JihxgWR8J4QxOI3+XneqEq4N6mDfW+ekbt4JzX6wp259Lml/Edp7+RhURYovE9zPG7VEYorFc4hr0Fuq2lyQTWPK9VdKpDNJSur/DRpRYWSgNc/qXtSay68hmPI8i7q1WxduIw/CPFzKWM72OxDQ0Zkt9WT2c143lXYsclk5iY/3KN8vpR1SGxAdB2wDyPjYVvIzZtGRL4YPsYoHcuJyudmajnsdAp/HQUrMzZJBvsn5QR4HqASp9wCC3YHJy4A/bb+mQT+R96UfdPISomlVE65vPDDgd2GEyBFjpowu7S0bSt8gJmMoG2qeuN1WkUW5awDqASAegVUM8ET8S17ykw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mWZol1S8wksbAdUAgv1sWZ2nTtSKCrOgqvGVel4v5Ak=;
+ b=Y7hTsGcrrXxdSshQGlKDCnc5QHR1XS45OnrSpy09SD16LbYO/x0C/BqTsbVIdsjrN1QiezD3KWlNx20hDuHvX/dXlDc3fCOLcji3mm8Ow32GBL5MNcSBI8RZAULYH1XkoNOB4tSTgAs3dyZYo6LShh1mws84qL0NtgLmhIfkl6RJ5mcXxSmwTIJTgloiJIPlbIS2MGfabTpfTUuclMN4wGPj7Ek2GO/ieqfYIgxdZkWdiAYQSn/y6CzWqWJRGMZ4wEftgkeCIgcNsLX/rFbZElUK5cms84n1kpU33XTYtGuTvFQfANqioWePnbd57qhUWYyGlE3QYCEjx329zR5LNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mWZol1S8wksbAdUAgv1sWZ2nTtSKCrOgqvGVel4v5Ak=;
+ b=QxWB1C2QJRPt0/DuSCZcA3mjgWAVGE8a3gn0deii72+bOB8WFmOf+x7FeNiApA8nIhZ0bSCBLod3kmIGcirOg5l6D87o1nurE+npjdpXewrmuAzMROquH65ryJPr/PqlNs+F3H0/C1CqWi+GRQh6i+NqWfa/qMYcR3yb8C5MyXrKANWaIuZ4hFtC6mZ4pjiRQPU7KzxiItPVRuOx8/doZmJ2/A0HfxOvbA5Pw5VJfNH86A3+jBWC1LLpzsUsUsZsJhJhxMRLT5rvV799zkF9+vY4BTmTGfBA3LQl0HzkLJB2BNmSLCc9YlBBwP6cYpHubGS0YGO+5E58N+h2pKqULA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by CY4PR12MB1797.namprd12.prod.outlook.com (2603:10b6:903:124::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Sat, 20 Aug
+ 2022 00:14:09 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::508d:221c:9c9e:e1a5%8]) with mapi id 15.20.5546.019; Sat, 20 Aug 2022
+ 00:14:09 +0000
+Message-ID: <ddfc77ae-eb64-79cd-ff7b-baa939cc26f2@nvidia.com>
+Date:   Fri, 19 Aug 2022 17:14:07 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 2/2] selftests/vm: use top_srcdir instead of
+ recomputing relative paths
+Content-Language: en-US
+To:     Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20220819191929.480108-1-axelrasmussen@google.com>
+ <20220819191929.480108-2-axelrasmussen@google.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20220819191929.480108-2-axelrasmussen@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0354.namprd03.prod.outlook.com
+ (2603:10b6:a03:39c::29) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1e93cd70-c049-4c03-8f79-08da8240e756
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1797:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pBQW3tmSH9QeBFFer8jk8Qmqo3Pfvd8fasoYiYy2kchv++gU70+biKf7s1ZgHOyNF1aDKz9btrMX1WEdowGTfhtfPjyF5MCdSgzZlINeXTJvwBxzIkQpJriNXVPMYhmpBH+0/LQyHPUpjj3kHnqhaapGHG3oXR2dlnq7L7/D/vEUe6tiFjEYXGqavhFP3X9IymiIQbL6/EKhAd35WD8/Y31O7l3pMTvbFgQ0d9au0Jtqps02l89XOYhTVdYxmIfUgWOrDkQSvU3iHh1HewBf1C2OHEwtbnw8mIwsD7S0HSVN64mRQm5NIUqenUBrE+8e1pWGc8vpR2/teqPY67twhQ4ocrOkrjE17K26qm9wJrHL1gCQMp4LLoU7BTCFEVCCith350ZjPyj4Xn4bVbA+tNdCC9Y8mN9pGuA2AJWwF5+M8OM1/S8bcacFSRZUsTKVSOUsvSDJoUFPLPKLV4hGOgtnHxU5A62RqiR6Y2/60Uyqq4ODKqb0EEuIMPzDpLNetH4cIyb0Jbfu4Y9N8E22a31zeNjRb4Z4WRfmUV3HwY1/Xmuvhu2RPC1F1/ACN0zZ0P9cYUOpl10tRa+LfihgdUZtH35FEXDXWic1YRrW9PlZvJQvg6iJsEsTGi4X0Tctmh9a99eDxIqwk85MFy4lKNTaRMgGRGjWNeugOoE/U2Ds0PdUZb5eAW7Hm5W4Des4R0FkdXg5srpZ52rsT+cS+onwMyUOW+0NlDuTbRoBMHUIjpcocM9KYyE20lUYmk6v1N/U01Fa8bIsmxhQxtEuawNYCuZOZNeC7mRNB0P52Vw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(346002)(396003)(376002)(366004)(478600001)(53546011)(6486002)(6512007)(66946007)(6506007)(8676002)(66476007)(66556008)(41300700001)(31686004)(36756003)(2906002)(86362001)(31696002)(26005)(110136005)(316002)(38100700002)(186003)(83380400001)(2616005)(5660300002)(4326008)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M3VRd1FSSEtiZ1VCSVZ4OVE3UFhYajd1VC9RVnJzKzRXc21Nd0k2UkdDYWJ5?=
+ =?utf-8?B?NFYrM1hFSFJRUHlQZ1FLcVNheUFQdzlxTnY0ZXljbVJuMnBUZTFSVTloSHY2?=
+ =?utf-8?B?TlcxcEMvRGNONzFIWDJoTUFpOXNvSzJkWjJweTlMUGJyRmkrZFkrV2RyVDRw?=
+ =?utf-8?B?TE5qN2Q3bWtaMWVIcFBGQUJBdnBaRC8yaTJIS3JtOTJ0VEZIZW93WEIzNzRF?=
+ =?utf-8?B?dFduZDYrcmZNRHFoM3hNdDRNVWtLRkdzN1ZJTW5DSWhQNGVJQlQ4SHdXQ0pH?=
+ =?utf-8?B?UUQ3bkdYaFczVHpBYld1ODh6UzQ1N1UreWIwcUZ1R09LSVpKcXRiMWVSKy9O?=
+ =?utf-8?B?MWtlRjhuY1Rwc2FXOUxsWjVjclJqOUJhQWY0TnlQK3lybTNXM1JKc0Q0NTBk?=
+ =?utf-8?B?VkloNjBlZzlGVWlibTdTRlhIRzh4MHZYU2dMblEvNUQ2TGE5eE1EcVV4cHkx?=
+ =?utf-8?B?WE9CQU5vVEpNMGZqNklNRUdkc0hIME1GMlZoM0RMc1B5a2FRODZYWXBJcG14?=
+ =?utf-8?B?cVVNMURvWWNlY1d4OUU1RytyTWdWMUwyUXVUSm9PbUhoRlptYUVaemRlQkV5?=
+ =?utf-8?B?ckVaRWpabDlxdm53K0VCbVBtZXBSTW5RZm1SckVzdlJFdTNZMFBsdEhvQ2Z0?=
+ =?utf-8?B?dXR5TlIrYjRFNHlYdmVQMGxqZXQ3TThwWFVhK1ZubW1ES2p1bTFpTDAwdUJD?=
+ =?utf-8?B?YitGa0E0cDNidkNOT2tDc3YvcGVjdElnOTVxYit3VUdOUERaYXRON3ZacnBL?=
+ =?utf-8?B?Mm9hYW92YkdXUHZVVTB3c1VXa3l2Zlh5QWUrZXoweU8wOEFUSDZKK1Y2MFRw?=
+ =?utf-8?B?ZUtaRzl1WDk1MGdTVUFIbUliVXlrSGQrbm9TNVRLaU10Q1FhN1dVQU1RTHdx?=
+ =?utf-8?B?cS83MXlCQTFPbTc5N3drcGh6QXVJWUlQZnRDdTVNREgwdDVGVllqSzI4cVN1?=
+ =?utf-8?B?eTIrelpPUEFINGNwTGpJVmtjVjNOME50YXozWUNTM3ExSktVVjdvTElIa2JZ?=
+ =?utf-8?B?eHNVY0N2UjdsZGZVejd6dlJhc2kybTU3alNOcnhZRm9VZDJrbkJVUkc4dk9t?=
+ =?utf-8?B?QlVMVy9xaldKWDVGd3JaVWp6SHFwR0g2c2V1ajZkck12eXJlRmlEZ0NaTC9Y?=
+ =?utf-8?B?YVBwOGl4SGtXZTB0WENUUG53cStYMFoyVG1MbFVKZm5IL1FuZngvdVFjdjds?=
+ =?utf-8?B?cmRpNEl1c3E3MFFESFhQMHFmTE9JZUo1ODBXMG9XVDdzT1Rvcjc2cDRXOTFK?=
+ =?utf-8?B?TUZ6cW5Ma0M5cXMrL1oyUDBHT3dnOEsvKzIzSVNDVmcxVUQ2akNDem9YcDQ4?=
+ =?utf-8?B?Qitqd3MrcUNEdkVUNmVwdHdjN1hOUUs4bk1jWkk1WWJ4bG9MSzhMTW5Hb0N4?=
+ =?utf-8?B?UkhtRkdGU1RRa0QwMnRjdGFVUnhublhOOWVQemhETTBLT0lFYTVwc0hJZURz?=
+ =?utf-8?B?eW1RcEZSVEdkeDN2cWNMamUyQmQ5aXhIVi9DSDExUGQ4K0g2WStJV21nUW1F?=
+ =?utf-8?B?K1JXUWhiWHcxeDl6NU5WTkN5YWlsWTBTNXJyd2prOVlDVmo1Y2xxRzk4NFlx?=
+ =?utf-8?B?MzNQNnpOMTc1ajJJdjRjVGRKRUFUcU5Jbm9tUWxEOUxER1JUOXZ3dEo1RFZy?=
+ =?utf-8?B?SERvcERLcDNuVzNVb3daNkFvbHliU2dQRiszdUFXdm1FVk14QW9sSElPeUU0?=
+ =?utf-8?B?VUozQXNVMXlnZmZXaFdNQzk1MGRUVVVxOG9GR2pyZlVRTndkbzBhUzBOUlZy?=
+ =?utf-8?B?S3pvRWNKZDZ6ZWdCVDc3bHFlUzRJazFrKzFIN3pQRVE0V2h4SEEzRHdSWW43?=
+ =?utf-8?B?ZHZmdjFlRC83TE1xazlsZkpoZXVmdVBNQ0hyM3Y1Ly91UElFcGRYKy84b1Mz?=
+ =?utf-8?B?WC9kZWNHUi83NUx1REZaTFRhSjhiNjVOVkhxbTViUmkzK2xqVWdiQmwzUDNX?=
+ =?utf-8?B?ZXlQd1FtTXg4TEN4Tk9UWFMyQlpBekJGeXM0K2FlNnZvV1RIN1IvQmNMSkZM?=
+ =?utf-8?B?YmVvTkpHaW5IMG1BZFdrTUlkbnBNcmlOc0gya1hhL1VsdDVOdTdoZXFJRHJT?=
+ =?utf-8?B?VU5FOEo0bkI5ZHJFckpST2ZySElYVERyNnZ5T2tzYzYxcWxQQ2ZtcDV5NnFz?=
+ =?utf-8?Q?UGdcqZ/V/2oOkZRKWzg8Vhqtx?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e93cd70-c049-4c03-8f79-08da8240e756
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2022 00:14:09.8179
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aS5j1mQmnvFNtRJRRrNtggjkCSiEAAKoMQmde5d7q11T46wF8HNU4Nhe1h9EQ+667G8+h4ses5v/f0Ff6uMWcQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1797
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/virtio/virtio_mmio.c
-tree:   https://github.com/intel/tdx.git guest-hardening-rebased
-head:   d941f409a509c084250b50a3b5fc1c3c84a596a0
-commit: 8aee8422c3b96f5d4dde1f31f8a96409a3e55c48 [35/36] virtio-mmio: Disable in TDX guest
-config: microblaze-buildonly-randconfig-r001-20220820 (https://download.01.org/0day-ci/archive/20220820/202208200821.ZCtdp6wi-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/8aee8422c3b96f5d4dde1f31f8a96409a3e55c48
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-hardening-rebased
-        git checkout 8aee8422c3b96f5d4dde1f31f8a96409a3e55c48
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/virtio/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/build_bug.h:5,
-                    from include/linux/bits.h:22,
-                    from include/linux/ioport.h:13,
-                    from include/linux/acpi.h:12,
-                    from drivers/virtio/virtio_mmio.c:57:
-   drivers/virtio/virtio_mmio.c: In function 'virtio_mmio_probe':
->> drivers/virtio/virtio_mmio.c:611:13: error: implicit declaration of function 'cc_platform_has' [-Werror=implicit-function-declaration]
-     611 |         if (cc_platform_has(CC_ATTR_GUEST_HARDENED))
-         |             ^~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: in definition of macro '__trace_if_var'
-      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                    ^~~~
-   drivers/virtio/virtio_mmio.c:611:9: note: in expansion of macro 'if'
-     611 |         if (cc_platform_has(CC_ATTR_GUEST_HARDENED))
-         |         ^~
->> drivers/virtio/virtio_mmio.c:611:29: error: 'CC_ATTR_GUEST_HARDENED' undeclared (first use in this function)
-     611 |         if (cc_platform_has(CC_ATTR_GUEST_HARDENED))
-         |                             ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: in definition of macro '__trace_if_var'
-      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                    ^~~~
-   drivers/virtio/virtio_mmio.c:611:9: note: in expansion of macro 'if'
-     611 |         if (cc_platform_has(CC_ATTR_GUEST_HARDENED))
-         |         ^~
-   drivers/virtio/virtio_mmio.c:611:29: note: each undeclared identifier is reported only once for each function it appears in
-     611 |         if (cc_platform_has(CC_ATTR_GUEST_HARDENED))
-         |                             ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: in definition of macro '__trace_if_var'
-      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                    ^~~~
-   drivers/virtio/virtio_mmio.c:611:9: note: in expansion of macro 'if'
-     611 |         if (cc_platform_has(CC_ATTR_GUEST_HARDENED))
-         |         ^~
-   cc1: some warnings being treated as errors
+On 8/19/22 12:19, Axel Rasmussen wrote:
+> In various places both in t/t/s/v/Makefile as well as some of the test
+> sources, we were referring to headers or directories using some fairly
+> long relative paths.
+> 
+> Since we have a working top_srcdir variable though, which refers to the
+> root of the kernel tree, we can clean up all of these "up and over"
+> relative paths, just relying on the single variable instead.
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> ---
+>   tools/testing/selftests/vm/Makefile    | 2 +-
+>   tools/testing/selftests/vm/gup_test.c  | 2 +-
+>   tools/testing/selftests/vm/hmm-tests.c | 4 ++--
+>   tools/testing/selftests/vm/ksm_tests.c | 2 +-
+>   4 files changed, 5 insertions(+), 5 deletions(-)
 
 
-vim +/cc_platform_has +611 drivers/virtio/virtio_mmio.c
+Very nice, thank you for the extra cleanup here.
 
-   604	
-   605	static int virtio_mmio_probe(struct platform_device *pdev)
-   606	{
-   607		struct virtio_mmio_device *vm_dev;
-   608		unsigned long magic;
-   609		int rc;
-   610	
- > 611		if (cc_platform_has(CC_ATTR_GUEST_HARDENED))
-   612			return -ENODEV;
-   613	
-   614		vm_dev = devm_kzalloc(&pdev->dev, sizeof(*vm_dev), GFP_KERNEL);
-   615		if (!vm_dev)
-   616			return -ENOMEM;
-   617	
-   618		vm_dev->vdev.dev.parent = &pdev->dev;
-   619		vm_dev->vdev.dev.release = virtio_mmio_release_dev;
-   620		vm_dev->vdev.config = &virtio_mmio_config_ops;
-   621		vm_dev->pdev = pdev;
-   622		INIT_LIST_HEAD(&vm_dev->virtqueues);
-   623		spin_lock_init(&vm_dev->lock);
-   624	
-   625		vm_dev->base = devm_platform_ioremap_resource(pdev, 0);
-   626		if (IS_ERR(vm_dev->base))
-   627			return PTR_ERR(vm_dev->base);
-   628	
-   629		/* Check magic value */
-   630		magic = readl(vm_dev->base + VIRTIO_MMIO_MAGIC_VALUE);
-   631		if (magic != ('v' | 'i' << 8 | 'r' << 16 | 't' << 24)) {
-   632			dev_warn(&pdev->dev, "Wrong magic value 0x%08lx!\n", magic);
-   633			return -ENODEV;
-   634		}
-   635	
-   636		/* Check device version */
-   637		vm_dev->version = readl(vm_dev->base + VIRTIO_MMIO_VERSION);
-   638		if (vm_dev->version < 1 || vm_dev->version > 2) {
-   639			dev_err(&pdev->dev, "Version %ld not supported!\n",
-   640					vm_dev->version);
-   641			return -ENXIO;
-   642		}
-   643	
-   644		vm_dev->vdev.id.device = readl(vm_dev->base + VIRTIO_MMIO_DEVICE_ID);
-   645		if (vm_dev->vdev.id.device == 0) {
-   646			/*
-   647			 * virtio-mmio device with an ID 0 is a (dummy) placeholder
-   648			 * with no function. End probing now with no error reported.
-   649			 */
-   650			return -ENODEV;
-   651		}
-   652		vm_dev->vdev.id.vendor = readl(vm_dev->base + VIRTIO_MMIO_VENDOR_ID);
-   653	
-   654		if (vm_dev->version == 1) {
-   655			writel(PAGE_SIZE, vm_dev->base + VIRTIO_MMIO_GUEST_PAGE_SIZE);
-   656	
-   657			rc = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
-   658			/*
-   659			 * In the legacy case, ensure our coherently-allocated virtio
-   660			 * ring will be at an address expressable as a 32-bit PFN.
-   661			 */
-   662			if (!rc)
-   663				dma_set_coherent_mask(&pdev->dev,
-   664						      DMA_BIT_MASK(32 + PAGE_SHIFT));
-   665		} else {
-   666			rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-   667		}
-   668		if (rc)
-   669			rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-   670		if (rc)
-   671			dev_warn(&pdev->dev, "Failed to enable 64-bit or 32-bit DMA.  Trying to continue, but this might not work.\n");
-   672	
-   673		platform_set_drvdata(pdev, vm_dev);
-   674	
-   675		rc = register_virtio_device(&vm_dev->vdev);
-   676		if (rc)
-   677			put_device(&vm_dev->vdev.dev);
-   678	
-   679		return rc;
-   680	}
-   681	
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 
+thanks,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+John Hubbard
+NVIDIA
+
+> 
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index d9fa6a9ea584..d516b8c38eed 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -25,7 +25,7 @@ MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/p
+>   # LDLIBS.
+>   MAKEFLAGS += --no-builtin-rules
+>   
+> -CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
+> +CFLAGS = -Wall -I $(top_srcdir) -I $(top_srcdir)/usr/include $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
+>   LDLIBS = -lrt -lpthread
+>   TEST_GEN_FILES = compaction_test
+>   TEST_GEN_FILES += gup_test
+> diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftests/vm/gup_test.c
+> index a309876d832f..e43879291dac 100644
+> --- a/tools/testing/selftests/vm/gup_test.c
+> +++ b/tools/testing/selftests/vm/gup_test.c
+> @@ -10,7 +10,7 @@
+>   #include <sys/types.h>
+>   #include <pthread.h>
+>   #include <assert.h>
+> -#include "../../../../mm/gup_test.h"
+> +#include <mm/gup_test.h>
+>   #include "../kselftest.h"
+>   
+>   #include "util.h"
+> diff --git a/tools/testing/selftests/vm/hmm-tests.c b/tools/testing/selftests/vm/hmm-tests.c
+> index 529f53b40296..98b949c279be 100644
+> --- a/tools/testing/selftests/vm/hmm-tests.c
+> +++ b/tools/testing/selftests/vm/hmm-tests.c
+> @@ -35,8 +35,8 @@
+>    * This is a private UAPI to the kernel test module so it isn't exported
+>    * in the usual include/uapi/... directory.
+>    */
+> -#include "../../../../lib/test_hmm_uapi.h"
+> -#include "../../../../mm/gup_test.h"
+> +#include <lib/test_hmm_uapi.h>
+> +#include <mm/gup_test.h>
+>   
+>   struct hmm_buffer {
+>   	void		*ptr;
+> diff --git a/tools/testing/selftests/vm/ksm_tests.c b/tools/testing/selftests/vm/ksm_tests.c
+> index f5e4e0bbd081..0d85be2350fa 100644
+> --- a/tools/testing/selftests/vm/ksm_tests.c
+> +++ b/tools/testing/selftests/vm/ksm_tests.c
+> @@ -11,7 +11,7 @@
+>   #include <err.h>
+>   
+>   #include "../kselftest.h"
+> -#include "../../../../include/vdso/time64.h"
+> +#include <include/vdso/time64.h>
+>   #include "util.h"
+>   
+>   #define KSM_SYSFS_PATH "/sys/kernel/mm/ksm/"
+

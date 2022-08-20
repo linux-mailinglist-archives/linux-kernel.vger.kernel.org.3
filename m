@@ -2,75 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDA859B049
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 22:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC1A59B054
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 22:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbiHTUNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 16:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
+        id S234140AbiHTURg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 16:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiHTUM6 (ORCPT
+        with ESMTP id S233870AbiHTURe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 16:12:58 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8DE2CDD3
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 13:12:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4hOW8ikp9BlC16NkIWVeHbEV6qbT3qh1PghkZPE+sv4=; b=EYQWVkjSwqrvFkoX1JvIf//bPD
-        rEItT472ljcmmgsALoCO69D1USt7lV7NN2hoP+xsAD1Ah5OswP5WxP1JOXL4tm3urS5R5B87k+xg0
-        zdzgMRBcKw0hntPg1U1qPeb34xYNx6wvUjZZLk8qIBk9b21bNrGuH8J5CwJIX6lUvd93VZia83lcZ
-        aqbUvKktpq2As8oMbi9WVjKaNVhiosQO71HL0ngBhKzpdjmFKkH0kQ3Xnwp1HWDDW4M1WUCJvSmvx
-        oRXT91l9CG7GKNY2Yu61jbnX4tRSwQ6qIgVKWglKp6ugPYKi3ldjZNkNQUJjrMhZti2PA1LT13BsH
-        bgZyDBKw==;
-Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=62329)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oPUpx-0005wt-AI; Sat, 20 Aug 2022 22:12:53 +0200
-Message-ID: <37a76651-a457-e50d-9a05-00ca9ed5d729@tronnes.org>
-Date:   Sat, 20 Aug 2022 22:12:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 05/35] drm/connector: Add TV standard property
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Sat, 20 Aug 2022 16:17:34 -0400
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E155A31232
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 13:17:33 -0700 (PDT)
+Date:   Sat, 20 Aug 2022 20:17:23 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1661026648; x=1661285848;
+        bh=KKmlMdBATxrw1fYuo6BKMHqUBdbBm2ifnz68GwDN770=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:Feedback-ID:From:To:
+         Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID;
+        b=ktXC7QeLApdlEuX8E4i5TioL2jUXuiPm1YNPiqPqZY+vvwFhCi6VCubuGbIrCBCas
+         Szbhy0cwhZzpAimnhkMp88ncd54Mw4dfxZ0pqnarq/0WNsZ4wIhLEJfA70oHfn7fqM
+         Xgnkof8cizyehXgeJ1Kt3Q40igXvNdrl4JfCoIug0lef0sLq7S3JH4oGVUl7ikvee1
+         YWwS2YGiU3huLpUhsnw9Rk35IeGyIQF63xgiH7TVKaj94FWNF3Uwj2KyNzFtg3ne5Q
+         JXb/oKV/iKvlcF9m57Vk/CKJshGcZQ6Eiza2rXDYOWXErmV8SN/7UT9V9oE1ZrHw4h
+         XlTgvInkGZ2NQ==
+To:     Arminder Singh <arminders208@outlook.com>
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@protonmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
         linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v1-5-3d53ae722097@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org
+Reply-To: =?utf-8?Q?Martin_Povi=C5=A1er?= <povik@protonmail.com>
+Subject: Re: [PATCH] i2c: pasemi: Add IRQ support for Apple Silicon
+Message-ID: <8387D093-6220-4849-9E09-D856A4362E97@protonmail.com>
+Feedback-ID: 6533334:user:proton
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,205 +56,90 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+> On 20. 8. 2022, at 21:45, Arminder Singh <arminders208@outlook.com> wrote=
+:
+>
+> This is the first time I'm interacting with the Linux mailing lists, so
+> please don't eviscerate me *too much* if I get the formatting wrong.
+> Of course I'm always willing to take criticism and improve my formatting
+> in the future.
+>
+> This patch adds support for IRQs to the PASemi I2C controller driver.
+> This will allow for faster performing I2C transactions on Apple Silicon
+> hardware, as previously, the driver was forced to poll the SMSTA register
+> for a set amount of time.
+>
+> With this patchset the driver on Apple silicon hardware will instead wait
+> for an interrupt which will signal the completion of the I2C transaction.
+> The timeout value for this completion will be the same as the current
+> amount of time the I2C driver polls for.
+>
+> This will result in some performance improvement since the driver will be
+> waiting for less time than it does right now on Apple Silicon hardware.
+>
+> The patch right now will only enable IRQs for Apple Silicon I2C chips,
+> and only if it's able to successfully request the IRQ from the kernel.
+>
+> =3D=3D=3D Testing =3D=3D=3D
+>
+> This patch has been tested on both the mainline Linux kernel tree and
+> the Asahi branch (https://github.com/AsahiLinux/linux.git) on both an
+> M1 and M2 MacBook Air, and it compiles successfully as both a module and
+> built-in to the kernel itself. The patch in both trees successfully boots
+> to userspace without any hitch.
+>
+> I do not have PASemi hardware on hand unfortunately, so I'm unable to tes=
+t
+> the impact of this patch on old PASemi hardware. This is also why I've
+> elected to do the IRQ request and enablement on the Apple platform driver
+> and not in the common file, as I'm not sure if PASemi hardware supports
+> IRQs.
+>
+> I also fixed a quick checkpatch warning on line 303. "i ++" is now "i++".
+>
+> Any and all critiques of the patch would be well appreciated.
+>
+>
+>
+>
+> Signed-off-by: Arminder Singh <arminders208@outlook.com>
 
-Den 29.07.2022 18.34, skrev Maxime Ripard:
-> The TV mode property has been around for a while now to select and get the
-> current TV mode output on an analog TV connector.
-> 
-> Despite that property name being generic, its content isn't and has been
-> driver-specific which makes it hard to build any generic behaviour on top
-> of it, both in kernel and user-space.
-> 
-> Let's create a new bitmask tv norm property, that can contain any of the
-> analog TV standards currently supported by kernel drivers. Each driver can
-> then pass in a bitmask of the modes it supports.
-> 
-> We'll then be able to phase out the older tv mode property.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> 
-> diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
-> index c06d0639d552..d7ff6c644c2f 100644
-> --- a/drivers/gpu/drm/drm_atomic_uapi.c
-> +++ b/drivers/gpu/drm/drm_atomic_uapi.c
-> @@ -700,6 +700,8 @@ static int drm_atomic_connector_set_property(struct drm_connector *connector,
->  		state->tv.margins.bottom = val;
->  	} else if (property == config->tv_mode_property) {
->  		state->tv.mode = val;
-> +	} else if (property == config->tv_norm_property) {
-> +		state->tv.norm = val;
->  	} else if (property == config->tv_brightness_property) {
->  		state->tv.brightness = val;
->  	} else if (property == config->tv_contrast_property) {
-> @@ -810,6 +812,8 @@ drm_atomic_connector_get_property(struct drm_connector *connector,
->  		*val = state->tv.margins.bottom;
->  	} else if (property == config->tv_mode_property) {
->  		*val = state->tv.mode;
-> +	} else if (property == config->tv_norm_property) {
-> +		*val = state->tv.norm;
->  	} else if (property == config->tv_brightness_property) {
->  		*val = state->tv.brightness;
->  	} else if (property == config->tv_contrast_property) {
-> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-> index e3142c8142b3..68a4e47f85a9 100644
-> --- a/drivers/gpu/drm/drm_connector.c
-> +++ b/drivers/gpu/drm/drm_connector.c
-> @@ -1637,6 +1637,7 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_properties);
->  /**
->   * drm_mode_create_tv_properties - create TV specific connector properties
->   * @dev: DRM device
-> + * @supported_tv_norms: Bitmask of TV norms supported (See DRM_MODE_TV_NORM_*)
->   * @num_modes: number of different TV formats (modes) supported
->   * @modes: array of pointers to strings containing name of each format
->   *
-> @@ -1649,11 +1650,40 @@ EXPORT_SYMBOL(drm_mode_create_tv_margin_properties);
->   * 0 on success or a negative error code on failure.
->   */
->  int drm_mode_create_tv_properties(struct drm_device *dev,
-> +				  unsigned int supported_tv_norms,
->  				  unsigned int num_modes,
->  				  const char * const modes[])
->  {
-> +	static const struct drm_prop_enum_list tv_norm_values[] = {
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_443) - 1, "NTSC-443" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_J) - 1, "NTSC-J" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_NTSC_M) - 1, "NTSC-M" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_60) - 1, "PAL-60" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_B) - 1, "PAL-B" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_D) - 1, "PAL-D" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_G) - 1, "PAL-G" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_H) - 1, "PAL-H" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_I) - 1, "PAL-I" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_M) - 1, "PAL-M" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_N) - 1, "PAL-N" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_PAL_NC) - 1, "PAL-Nc" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_60) - 1, "SECAM-60" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_B) - 1, "SECAM-B" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_D) - 1, "SECAM-D" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_G) - 1, "SECAM-G" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K) - 1, "SECAM-K" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_K1) - 1, "SECAM-K1" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_SECAM_L) - 1, "SECAM-L" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD480I) - 1, "hd480i" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD480P) - 1, "hd480p" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD576I) - 1, "hd576i" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD576P) - 1, "hd576p" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD720P) - 1, "hd720p" },
-> +		{ __builtin_ffs(DRM_MODE_TV_NORM_HD1080I) - 1, "hd1080i" },
-> +	};
->  	struct drm_property *tv_selector;
->  	struct drm_property *tv_subconnector;
-> +	struct drm_property *tv_norm;
->  	unsigned int i;
->  
->  	if (dev->mode_config.tv_select_subconnector_property)
-> @@ -1686,6 +1716,13 @@ int drm_mode_create_tv_properties(struct drm_device *dev,
->  	if (drm_mode_create_tv_margin_properties(dev))
->  		goto nomem;
->  
-> +	tv_norm = drm_property_create_bitmask(dev, 0, "tv norm",
-> +					   tv_norm_values, ARRAY_SIZE(tv_norm_values),
-> +					   supported_tv_norms);
-> +	if (!tv_norm)
-> +		goto nomem;
-> +	dev->mode_config.tv_norm_property = tv_norm;
-> +
->  	dev->mode_config.tv_mode_property =
->  		drm_property_create(dev, DRM_MODE_PROP_ENUM,
->  				    "mode", num_modes);
-> diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c
-> index 4a788c1c9058..457529e5d857 100644
-> --- a/drivers/gpu/drm/vc4/vc4_vec.c
-> +++ b/drivers/gpu/drm/vc4/vc4_vec.c
-> @@ -573,7 +573,9 @@ static int vc4_vec_bind(struct device *dev, struct device *master, void *data)
->  	struct vc4_vec *vec;
->  	int ret;
->  
-> -	ret = drm_mode_create_tv_properties(drm, ARRAY_SIZE(tv_mode_names),
-> +	ret = drm_mode_create_tv_properties(drm,
-> +					    0,
-> +					    ARRAY_SIZE(tv_mode_names),
->  					    tv_mode_names);
->  	if (ret)
->  		return ret;
-> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> index 1e9996b33cc8..78275e68ff66 100644
-> --- a/include/drm/drm_connector.h
-> +++ b/include/drm/drm_connector.h
-> @@ -143,6 +143,32 @@ enum subpixel_order {
->  
->  };
->  
-> +#define DRM_MODE_TV_NORM_NTSC_443	(1 << 0)
-> +#define DRM_MODE_TV_NORM_NTSC_J		(1 << 1)
-> +#define DRM_MODE_TV_NORM_NTSC_M		(1 << 2)
-> +#define DRM_MODE_TV_NORM_PAL_60		(1 << 3)
-> +#define DRM_MODE_TV_NORM_PAL_B		(1 << 4)
-> +#define DRM_MODE_TV_NORM_PAL_D		(1 << 5)
-> +#define DRM_MODE_TV_NORM_PAL_G		(1 << 6)
-> +#define DRM_MODE_TV_NORM_PAL_H		(1 << 7)
-> +#define DRM_MODE_TV_NORM_PAL_I		(1 << 8)
-> +#define DRM_MODE_TV_NORM_PAL_M		(1 << 9)
-> +#define DRM_MODE_TV_NORM_PAL_N		(1 << 10)
-> +#define DRM_MODE_TV_NORM_PAL_NC		(1 << 11)
-> +#define DRM_MODE_TV_NORM_SECAM_60	(1 << 12)
-> +#define DRM_MODE_TV_NORM_SECAM_B	(1 << 13)
-> +#define DRM_MODE_TV_NORM_SECAM_D	(1 << 14)
-> +#define DRM_MODE_TV_NORM_SECAM_G	(1 << 15)
-> +#define DRM_MODE_TV_NORM_SECAM_K	(1 << 16)
-> +#define DRM_MODE_TV_NORM_SECAM_K1	(1 << 17)
-> +#define DRM_MODE_TV_NORM_SECAM_L	(1 << 18)
-> +#define DRM_MODE_TV_NORM_HD480I		(1 << 19)
-> +#define DRM_MODE_TV_NORM_HD480P		(1 << 20)
-> +#define DRM_MODE_TV_NORM_HD576I		(1 << 21)
-> +#define DRM_MODE_TV_NORM_HD576P		(1 << 22)
-> +#define DRM_MODE_TV_NORM_HD720P		(1 << 23)
-> +#define DRM_MODE_TV_NORM_HD1080I	(1 << 24)
-> +
+Thanks for the patch!
 
-This is an area where DRM overlaps with v4l2, see:
-- include/dt-bindings/display/sdtv-standards.h
-- v4l2_norm_to_name()
+Tested-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
 
-Maybe we should follow suit, but if we do our own thing please mention
-why in the commit message.
+on Mac mini (2020) with M1, with in-kernel WIP sound drivers.
 
-Noralf.
+Some timing comparison on boot logs follows, three runs with
+and without the patch.
 
->  /**
->   * struct drm_scrambling: sink's scrambling support.
->   */
-> @@ -687,6 +713,7 @@ struct drm_tv_connector_state {
->  	enum drm_mode_subconnector subconnector;
->  	struct drm_connector_tv_margins margins;
->  	unsigned int mode;
-> +	unsigned int norm;
->  	unsigned int brightness;
->  	unsigned int contrast;
->  	unsigned int flicker_reduction;
-> @@ -1779,6 +1806,7 @@ void drm_connector_attach_dp_subconnector_property(struct drm_connector *connect
->  
->  int drm_mode_create_tv_margin_properties(struct drm_device *dev);
->  int drm_mode_create_tv_properties(struct drm_device *dev,
-> +				  unsigned int supported_tv_norms,
->  				  unsigned int num_modes,
->  				  const char * const modes[]);
->  void drm_connector_attach_tv_margin_properties(struct drm_connector *conn);
-> diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
-> index 6b5e01295348..d9e79def8b92 100644
-> --- a/include/drm/drm_mode_config.h
-> +++ b/include/drm/drm_mode_config.h
-> @@ -704,6 +704,12 @@ struct drm_mode_config {
->  	 */
->  	struct drm_property *dp_subconnector_property;
->  
-> +	/**
-> +	 * @tv_norm_property: Optional TV property to select the TV
-> +	 * standard output on the connector.
-> +	 */
-> +	struct drm_property *tv_norm_property;
-> +
->  	/**
->  	 * @tv_subconnector_property: Optional TV property to differentiate
->  	 * between different TV connector types.
-> 
+With:
+
+[    0.631034] ALSA device list:
+[    0.631403]   #0: Mac mini J274 integrated audio
+
+[    0.625559] ALSA device list:
+[    0.625997]   #0: Mac mini J274 integrated audio
+
+[    0.624561] ALSA device list:
+[    0.624913]   #0: Mac mini J274 integrated audio
+
+Without:
+
+[    0.681599] ALSA device list:
+[    0.682051]   #0: Mac mini J274 integrated audio
+
+[    0.677538] ALSA device list:
+[    0.677968]   #0: Mac mini J274 integrated audio
+
+[    0.686037] ALSA device list:
+[    0.686400]   #0: Mac mini J274 integrated audio
+
+(After I collected these I realised I don=E2=80=99t know to what exactly
+the timing of the print is anchored, but anyway it still suggests
+there is speed-up.)
+
+Best,
+Martin
+
+

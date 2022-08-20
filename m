@@ -2,60 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95F759AA4A
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8972759AA54
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 03:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243659AbiHTAzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 20:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
+        id S244844AbiHTA5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 20:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236835AbiHTAzV (ORCPT
+        with ESMTP id S239909AbiHTA5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 20:55:21 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6279C107ADA
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 17:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660956920; x=1692492920;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ip43NlnItFb9tN3qkW7h+1wOC/V3hBtAT/G2mnv9ZTI=;
-  b=EY4NsOkyyKpFqwFY4b3u+ac8occd1J/i8vKOAlRQ2vqLpoXCs0DG8gzb
-   XhTUVuVk1+wELeDKAqGDInDNp3b4o8YtgSQsm2K0aqj5WS08fHsa//2Ud
-   1gYxF360crqaQvN+JFvvdhiYiPwUfo4Z9xuO359Q+WuNhcBaMDzYCHjnM
-   1W+yzoPvpenD7o5DBCkiweEAD9MWoXwUKqQyyYwJ4Nswdpjvnvqq+7Qkd
-   HR2fN8mSRtq2zMjTCw5bNETZ0GvBp0kDZF+hjRgPL0ELM6e/qAkmxk5BR
-   US44IpbRuLwwySs1fHQlItdE1bvTG6sxoTcF9R4DKDRxa3KHx8cM3qx7l
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="293920869"
-X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="293920869"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 17:55:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,249,1654585200"; 
-   d="scan'208";a="676626195"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Aug 2022 17:55:18 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPCli-0001yB-0Q;
-        Sat, 20 Aug 2022 00:55:18 +0000
-Date:   Sat, 20 Aug 2022 08:54:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [intel-tdx:guest-hardening-rebased 16/36]
- arch/x86/coco/tdx/tdx-tests.c:66:12: warning: no previous prototype for
- 'kvm_unit_test_debug_init'
-Message-ID: <202208200809.O038j7ih-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        Fri, 19 Aug 2022 20:57:15 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E6BE107D8A;
+        Fri, 19 Aug 2022 17:57:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=4ginwr7HYN3S4UBiB6
+        IChkqn6tiWIxhJ8/YP+ouQkxc=; b=BcKdSvrNOpSP6XBx4Kq7gg2FpMRIxCSOy9
+        XrbeUrauyJkAWw3ITUybp1GZszFPQPpnRoIS23jOuhl+pJFa+yHUx63f41h++tVP
+        YngnYcRH9D/aLsTmITWZy/C+7u3JmmmuGf6swBZmAgtUQaPmCPiBU2NsEcWygF/H
+        hvD3ZWw2Y=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+        by smtp1 (Coremail) with SMTP id GdxpCgCnxtZcMQBjTCv_Vw--.51024S2;
+        Sat, 20 Aug 2022 08:57:00 +0800 (CST)
+From:   huanglei <huanglei814@163.com>
+To:     laurent.pinchart@ideasonboard.com
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huanglei <huanglei@kylinos.cn>
+Subject: [PATCH v3] media: uvcvideo: limit power line control for Sonix Technology
+Date:   Sat, 20 Aug 2022 08:56:58 +0800
+Message-Id: <20220820005658.21456-1-huanglei814@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: GdxpCgCnxtZcMQBjTCv_Vw--.51024S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Zw1fJFW8XF1UZr45JF4fZrb_yoW8WFWUpr
+        4kGayFyrW8GrWfuw17X3yDuFy5u3Z3GaySkF43Gws09F93Cr97WF9FyFyqkay2yF1IyF12
+        qr1kt39Ig3W5Kr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UNNV9UUUUU=
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: xkxd0wxohlmiqu6rljoofrz/1tbisB1j9lUMUKv3XgAAsz
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,37 +49,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch/x86/coco/tdx/Makefile
-arch/x86/coco/tdx/tdx-tests.c
-tree:   https://github.com/intel/tdx.git guest-hardening-rebased
-head:   d941f409a509c084250b50a3b5fc1c3c84a596a0
-commit: 5091d7c6068bf030df54dc48b303a1d25a7ef0a0 [16/36] x86/tdx-tests: Add a port of a kvm unit test
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220820/202208200809.O038j7ih-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/5091d7c6068bf030df54dc48b303a1d25a7ef0a0
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-hardening-rebased
-        git checkout 5091d7c6068bf030df54dc48b303a1d25a7ef0a0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/coco/tdx/
+From: huanglei <huanglei@kylinos.cn>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The device does not implement the power line control correctly. Add a
+corresponding control mapping override.
 
-All warnings (new ones prefixed by >>):
+Bus 003 Device 003: ID 3277:0072 Sonix Technology Co., Ltd. USB 2.0 Camera
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x3277
+  idProduct          0x0072
+  bcdDevice            1.00
+  iManufacturer           2 Sonix Technology Co., Ltd.
+  iProduct                1 USB 2.0 Camera
+  iSerial                 3 REV0001
+  bNumConfigurations      1
 
->> arch/x86/coco/tdx/tdx-tests.c:66:12: warning: no previous prototype for 'kvm_unit_test_debug_init' [-Wmissing-prototypes]
-      66 | int __init kvm_unit_test_debug_init(void)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~
+Signed-off-by: huanglei <huanglei@kylinos.cn>
+---
+ drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-
-vim +/kvm_unit_test_debug_init +66 arch/x86/coco/tdx/tdx-tests.c
-
-    65	
-  > 66	int __init kvm_unit_test_debug_init(void)
-
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 9c05776f11d1..e8f823685139 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -3264,6 +3264,15 @@ static const struct usb_device_id uvc_ids[] = {
+ 	  .bInterfaceSubClass	= 1,
+ 	  .bInterfaceProtocol	= 0,
+ 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_BPP) },
++	/* Sonix Technology USB 2.0 Camera */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x3277,
++	  .idProduct		= 0x0072,
++	  .bInterfaceClass	= USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= 0,
++	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
+ 	/* Acer EasyCamera */
+ 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+ 				| USB_DEVICE_ID_MATCH_INT_INFO,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus
+

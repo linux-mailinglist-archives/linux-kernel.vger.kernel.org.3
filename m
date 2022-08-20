@@ -2,63 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D5B59ADC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 14:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B101159ADC7
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 14:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345999AbiHTMBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 08:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S1345268AbiHTMB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 08:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243781AbiHTMA5 (ORCPT
+        with ESMTP id S1345987AbiHTMBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 08:00:57 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F99FA344E
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 05:00:56 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oPN9R-0001x5-Dv; Sat, 20 Aug 2022 14:00:29 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oPN9O-0000zR-NS; Sat, 20 Aug 2022 14:00:26 +0200
-Date:   Sat, 20 Aug 2022 14:00:26 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>
-Subject: Re: [PATCH net-next v1 4/7] net: pse-pd: add generic PSE driver
-Message-ID: <20220820120026.GF10138@pengutronix.de>
-References: <20220819120109.3857571-1-o.rempel@pengutronix.de>
- <20220819120109.3857571-5-o.rempel@pengutronix.de>
- <Yv/4du75DNO2Xykr@lunn.ch>
+        Sat, 20 Aug 2022 08:01:24 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1727EA347F
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 05:01:24 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id w138so3830362pfc.10
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 05:01:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=lDEkY/yeMPXbQUNcvN1NJWGfIdYQRwGMibZPIx8rNuw=;
+        b=PQbYi3anFSf+45hPdBCKJK8rMdAyTHn3vksXRezHdYXy4Ju6EhM33xwKuqR/Bw+yif
+         1I7Bx+XheCGL01YnU9FIzj8XRqH/kVTDaWknGLTkAUu3ojmTqYJg1KV+oh+LUbOby79D
+         9JJbeALKZ5aMAAbmmCPTMDWU3sZHor4SIRC4itru1T8WjBwKmE3WGMFDtNxRCXzBEl9p
+         BGbohuFK78kogdV9PNMCgcV1S1iNELVaIzvcTV8VFppSZBbVzxb5I9UvlpHXcuDMXIKH
+         igVtmtfNKTJltVmSkNNpKwpYBGZcdptysIaJYfvQ34rViJ4QXpUiV7qRpdAyqkCuDT6n
+         yXiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=lDEkY/yeMPXbQUNcvN1NJWGfIdYQRwGMibZPIx8rNuw=;
+        b=CqxOvMALakowmp6wVoa0pLfTcVVgzlHjWCH3kWkh97G2HObCZBdTatAIdtnJlMq9zt
+         +s1Hr1zvhQz6qW7uFijCPNAap9WTgZuOnDCYZsVA4SliYW/pAKh8dLmBhM59HVo7ay1n
+         ONqHb+p0+VTRP1KYJK5+75+nHkicpAU3QK9pPkSJXZvrgzaFJNtnUMUJwBSM/+y+Fm4V
+         J1o7bK5Bew2OuZRSCyh890gD+HSv1cz1kTFwC2s47+cE5uyY+8H2cI5wTONw6FPuKvxg
+         7LLeVAol/WS0pQlCOGHU+mU7sjVcx4amGJRxGQTNMj6c42kgVoqkNxUGY84AhLNkY0Z4
+         arkg==
+X-Gm-Message-State: ACgBeo03c0N2D93QUa055Ggso7FHitV0ZhOg42wpKtce8y1G+cWc+S0w
+        xee5ySUiZigMPZ1TgBbcRHUe
+X-Google-Smtp-Source: AA6agR7W75/oj+IheQfbyZ1gnRavn2Zy8YNefMFAJ7psKM8Kj/rmfwB0yx38hsZSgs04M5GS/z839Q==
+X-Received: by 2002:a05:6a00:a81:b0:530:2967:dc48 with SMTP id b1-20020a056a000a8100b005302967dc48mr12275238pfl.38.1660996883517;
+        Sat, 20 Aug 2022 05:01:23 -0700 (PDT)
+Received: from thinkpad ([220.158.158.232])
+        by smtp.gmail.com with ESMTPSA id 2-20020a630c42000000b004129741dd9dsm4251913pgm.51.2022.08.20.05.01.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Aug 2022 05:01:22 -0700 (PDT)
+Date:   Sat, 20 Aug 2022 17:31:16 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     kishon@ti.com, lpieralisi@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mie@igel.co.jp, kw@linux.com
+Subject: Re: [PATCH 2/5] misc: pci_endpoint_test: Fix the return value of
+ IOCTL
+Message-ID: <20220820120116.GC3151@thinkpad>
+References: <20220819145018.35732-1-manivannan.sadhasivam@linaro.org>
+ <20220819145018.35732-3-manivannan.sadhasivam@linaro.org>
+ <Yv+rTZ1u7HXmS5Qk@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yv/4du75DNO2Xykr@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Yv+rTZ1u7HXmS5Qk@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,93 +76,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 10:54:14PM +0200, Andrew Lunn wrote:
-> > +static int
-> > +gen_pse_podl_get_admin_sate(struct pse_controller_dev *pcdev, unsigned long id)
-> 
-> Should that be state?
-
-ack. fixed.
-
-> > +{
-> > +	struct gen_pse_priv *priv = to_gen_pse(pcdev);
+On Fri, Aug 19, 2022 at 05:25:01PM +0200, Greg KH wrote:
+> On Fri, Aug 19, 2022 at 08:20:15PM +0530, Manivannan Sadhasivam wrote:
+> > IOCTLs are supposed to return 0 for success and negative error codes for
+> > failure. Currently, this driver is returning 0 for failure and 1 for
+> > success, that's not correct. Hence, fix it!
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/misc/pci_endpoint_test.c | 163 ++++++++++++++-----------------
+> >  1 file changed, 76 insertions(+), 87 deletions(-)
+> > 
+> > diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+> > index db0458039d7d..bbf903c5a5bd 100644
+> > --- a/drivers/misc/pci_endpoint_test.c
+> > +++ b/drivers/misc/pci_endpoint_test.c
+> > @@ -174,13 +174,12 @@ static void pci_endpoint_test_free_irq_vectors(struct pci_endpoint_test *test)
+> >  	test->irq_type = IRQ_TYPE_UNDEFINED;
+> >  }
+> >  
+> > -static bool pci_endpoint_test_alloc_irq_vectors(struct pci_endpoint_test *test,
+> > +static int pci_endpoint_test_alloc_irq_vectors(struct pci_endpoint_test *test,
+> >  						int type)
+> >  {
+> > -	int irq = -1;
+> > +	int irq = -EINVAL;
+> >  	struct pci_dev *pdev = test->pdev;
+> >  	struct device *dev = &pdev->dev;
+> > -	bool res = true;
+> >  
+> >  	switch (type) {
+> >  	case IRQ_TYPE_LEGACY:
+> > @@ -202,15 +201,16 @@ static bool pci_endpoint_test_alloc_irq_vectors(struct pci_endpoint_test *test,
+> >  		dev_err(dev, "Invalid IRQ type selected\n");
+> >  	}
+> >  
+> > +	test->irq_type = type;
 > > +
-> > +	/* aPoDLPSEAdminState can be different to aPoDLPSEPowerDetectionStatus
-> > +	 * which is provided by the regulator.
-> > +	 */
-> > +	return priv->admin_state;
-> > +}
-> > +
-> > +static int
-> > +gen_pse_podl_set_admin_control(struct pse_controller_dev *pcdev,
-> > +			       unsigned long id,
-> > +			       enum ethtool_podl_pse_admin_state state)
-> > +{
-> > +	struct gen_pse_priv *priv = to_gen_pse(pcdev);
-> > +	int ret;
-> > +
-> > +	if (priv->admin_state == state)
-> > +		goto set_state;
+> >  	if (irq < 0) {
+> > -		irq = 0;
+> > -		res = false;
+> > +		test->num_irqs = 0;
+> > +		return irq;
 > 
-> return 0; ?
-
-ack. done
-
-> > +	platform_set_drvdata(pdev, priv);
-> > +
-> > +	priv->admin_state = ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED;
+> Why are you setting the type if there is an error?
 > 
-> There is the comment earlier:
+
+This was the original behaviour, so I kept it as it is. If it needs to be
+changed, then it should be done in a separate patch I believe.
+
 > 
-> 	/* aPoDLPSEAdminState can be different to aPoDLPSEPowerDetectionStatus
-> 	 * which is provided by the regulator.
+> >  	}
+> >  
+> > -	test->irq_type = type;
+> >  	test->num_irqs = irq;
+> >  
+> > -	return res;
+> > +	return 0;
+> >  }
+> >  
+> >  static void pci_endpoint_test_release_irq(struct pci_endpoint_test *test)
+> > @@ -225,7 +225,7 @@ static void pci_endpoint_test_release_irq(struct pci_endpoint_test *test)
+> >  	test->num_irqs = 0;
+> >  }
+> >  
+> > -static bool pci_endpoint_test_request_irq(struct pci_endpoint_test *test)
+> > +static int pci_endpoint_test_request_irq(struct pci_endpoint_test *test)
+> >  {
+> >  	int i;
+> >  	int err;
+> > @@ -240,7 +240,7 @@ static bool pci_endpoint_test_request_irq(struct pci_endpoint_test *test)
+> >  			goto fail;
+> >  	}
+> >  
+> > -	return true;
+> > +	return 0;
+> >  
+> >  fail:
+> >  	switch (irq_type) {
+> > @@ -260,10 +260,10 @@ static bool pci_endpoint_test_request_irq(struct pci_endpoint_test *test)
+> >  		break;
+> >  	}
+> >  
+> > -	return false;
+> > +	return err;
+> >  }
+> >  
+> > -static bool pci_endpoint_test_bar(struct pci_endpoint_test *test,
+> > +static int pci_endpoint_test_bar(struct pci_endpoint_test *test,
+> >  				  enum pci_barno barno)
+> >  {
+> >  	int j;
+> > @@ -272,7 +272,7 @@ static bool pci_endpoint_test_bar(struct pci_endpoint_test *test,
+> >  	struct pci_dev *pdev = test->pdev;
+> >  
+> >  	if (!test->bar[barno])
+> > -		return false;
+> > +		return -ENOMEM;
 > 
-> Is this because the regulator might of been turned on, but it has
-> detected a short and turned itself off? So it is administratively on,
-> but off in order to stop the magic smoke escaping?
+> How is this no memory?
+>
 
-ack. According to 30.15.1.1.3 aPoDLPSEPowerDetectionStatus, we may have
-following:
-/**
- * enum ethtool_podl_pse_pw_d_status - power detection status of the PoDL PSE.
- *	IEEE 802.3-2018 30.15.1.1.3 aPoDLPSEPowerDetectionStatus:
- * @ETHTOOL_PODL_PSE_PW_D_STATUS_UNKNOWN: PoDL PSE
- * @ETHTOOL_PODL_PSE_PW_D_STATUS_DISABLED: "The enumeration “disabled” is
- *	asserted true when the PoDL PSE state diagram variable mr_pse_enable is
- *	false"
- * @ETHTOOL_PODL_PSE_PW_D_STATUS_SEARCHING: "The enumeration “searching” is
- *	asserted true when either of the PSE state diagram variables
- *	pi_detecting or pi_classifying is true."
- * @ETHTOOL_PODL_PSE_PW_D_STATUS_DELIVERING: "The enumeration “deliveringPower”
- *	is asserted true when the PoDL PSE state diagram variable pi_powered is
- *	true."
- * @ETHTOOL_PODL_PSE_PW_D_STATUS_SLEEP: "The enumeration “sleep” is asserted
- *	true when the PoDL PSE state diagram variable pi_sleeping is true."
- * @ETHTOOL_PODL_PSE_PW_D_STATUS_IDLE: "The enumeration “idle” is asserted true
- *	when the logical combination of the PoDL PSE state diagram variables
- *	pi_prebiased*!pi_sleeping is true."
- * @ETHTOOL_PODL_PSE_PW_D_STATUS_ERROR: "The enumeration “error” is asserted
- *	true when the PoDL PSE state diagram variable overload_held is true."
- */
+No bar means a failure in pci_ioremap_bar() during probe. And that implies a
+failure while mapping the device's BAR in host memory. So -ENOMEM seems to be
+the apt error no.
+ 
+> Shouldn't this not even get here if the allocation failed?
+> 
 
-Probably all of them, except of ETHTOOL_PODL_PSE_PW_D_STATUS_SEARCHING can be
-potentially implemented in this driver on top of regulator framework.
+No, the driver tries to map PCI_STD_NUM_BARS which is 6 and if some of them are
+not available except BAR_0 then it just logs an error and continues. So it is
+not fatal.
 
-> But what about the other way around? Something has already turned the
-> regulator on, e.g. the bootloader. Should the default be
-> ETHTOOL_PODL_PSE_ADMIN_STATE_DISABLED even thought power is being
-> delivered? Do we want to put the regulator into the off state at
-> probe, so it is in a well defined state? Or set priv->admin_state to
-> whatever regulator_is_enabled() indicates?
+> >  
+> >  	size = pci_resource_len(pdev, barno);
+> >  
+> > @@ -285,13 +285,13 @@ static bool pci_endpoint_test_bar(struct pci_endpoint_test *test,
+> >  	for (j = 0; j < size; j += 4) {
+> >  		val = pci_endpoint_test_bar_readl(test, barno, j);
+> >  		if (val != 0xA0A0A0A0)
+> > -			return false;
+> > +			return -EINVAL;
+> 
+> Is this really an invalid value sent to the ioctl?
+> 
+> 
+> >  	}
+> >  
+> > -	return true;
+> > +	return 0;
+> >  }
+> >  
+> > -static bool pci_endpoint_test_legacy_irq(struct pci_endpoint_test *test)
+> > +static int pci_endpoint_test_legacy_irq(struct pci_endpoint_test *test)
+> >  {
+> >  	u32 val;
+> >  
+> > @@ -303,12 +303,12 @@ static bool pci_endpoint_test_legacy_irq(struct pci_endpoint_test *test)
+> >  	val = wait_for_completion_timeout(&test->irq_raised,
+> >  					  msecs_to_jiffies(1000));
+> >  	if (!val)
+> > -		return false;
+> > +		return -ETIMEDOUT;
+> >  
+> > -	return true;
+> > +	return 0;
+> >  }
+> >  
+> > -static bool pci_endpoint_test_msi_irq(struct pci_endpoint_test *test,
+> > +static int pci_endpoint_test_msi_irq(struct pci_endpoint_test *test,
+> >  				       u16 msi_num, bool msix)
+> >  {
+> >  	u32 val;
+> > @@ -324,19 +324,18 @@ static bool pci_endpoint_test_msi_irq(struct pci_endpoint_test *test,
+> >  	val = wait_for_completion_timeout(&test->irq_raised,
+> >  					  msecs_to_jiffies(1000));
+> >  	if (!val)
+> > -		return false;
+> > +		return -ETIMEDOUT;
+> >  
+> > -	if (pci_irq_vector(pdev, msi_num - 1) == test->last_irq)
+> > -		return true;
+> > +	if (pci_irq_vector(pdev, msi_num - 1) != test->last_irq)
+> > +		return -EINVAL;
+> 
+> Again, is this an invalid value passed to the ioctl?
+> 
+> Same for other places you are doing something and then returning this
+> error value, are you sure that is correct?
+> 
+> -EINVAL should be "the values you sent me was incorrect", not "something
+> bad happened based on what you gave me".
+> 
 
-Good question. I assume, automotive folks would love be able to enable
-regulator in the boot loader on the PSE to let the Powered Device boot parallel
-to the PSE.
+Okay. Will revisit all of them.
 
-Regards,
-Oleksij
+Thanks,
+Mani
+
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+மணிவண்ணன் சதாசிவம்

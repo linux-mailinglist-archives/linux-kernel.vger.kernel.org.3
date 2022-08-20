@@ -2,346 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1617359ACB0
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F9259ACAF
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344711AbiHTImo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 04:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S245403AbiHTImJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 04:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343849AbiHTImm (ORCPT
+        with ESMTP id S1344611AbiHTImH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 04:42:42 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DD68A6DB
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:42:41 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id g16so4771764qkl.11
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:42:41 -0700 (PDT)
+        Sat, 20 Aug 2022 04:42:07 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0984886FFD
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:42:06 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id o22so8102245edc.10
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:42:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=R+0WNPBIl0HuqlojWfX7vpKljMWq3/iAmKYaFMjduJA=;
-        b=VgitokBh0UfodBVDwP5QzUgmzCc1285YPeTX48nhtaSQwXcQAElSCKFgAvO71CMP5k
-         NKKFWRsm/EoeuP3fMv/hD+wvaPLKq6Jdr3fhUdtx8tIfqk/n81mymcC4xhWVVououEJt
-         +9YC6Nvj1i5nmU0NmnXycBeh1Apz6pDorh8cCYMwRj8xq2l5CZp68X/yxTFKAAJhrlC4
-         Y6cEaGRBmRcdD5udJmvDJK0Vkoh4AHmxwK4OVzL4rbBgDLkNomppT5+bbxgIClatql3s
-         qYEP+dsxIwLty2/vjylzy1Ay8wQqEQL+l7BsSvYl5Ms70ep57z3cuGhFjeO0A+lCNHLI
-         kz+Q==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ntTjbxdUm3MDErKQAVjGnhDOTUmCLMXKB9v/vZjYPM0=;
+        b=jScGbc/hd6xdg8aDGHhEvu5TS+/Wr3vfh5NqYz7htO8bZ9hx46Fo/wHFdVZUKEIL9M
+         sXO6FLrWU6HeB5lrSMX4lb/9M8J7IPbKP72nvknHPZ+NPfNkFKMS/U/yR2BbY5TwHHZG
+         SWsACWgBKrcDdHGQsYUBaFYSb4Q1Zud+RInaHfGNvHqs2UtyZ3ZxAK1BP350X3begZ/X
+         vrrDm/suq9vRHraGmF9orvkUN5EqSrh77WgjN8cfYgkfcEt7YN9xXiDP89se01T4OFJV
+         kJonLM1rSecK4etciKsg+D89FGnF1NnFaucefH68w+gzcciOs6RDzxJJm5MPRdouvE0M
+         TIXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=R+0WNPBIl0HuqlojWfX7vpKljMWq3/iAmKYaFMjduJA=;
-        b=YRU9SFXIQtgJb0NfL4hHazwfq5X0MKx6GyZOx1/UNekxbyZ2uLi87dFOm/1oKqcpKk
-         ntqZZtYrF469B3pWl9ss5/b3iLCdNYVK5u4PwoijX+fqxbFcrCEOJWrAtpWhOfqFrZ5F
-         Vn9gHX/gAtK7I8KvpeesZbe5T1L7GEP56zHwGnUgqAdkbSmBYytJdWD5iwnwf0GDfoaH
-         heRDisqL5JjQSdvCxmb6pPqLoKlFNmaAfG67UxXmJ+ktxqV7ju22HaTpf+7tHCzbSYB9
-         rSueqf/QpTLvlhNbiKFan8ZPR0A5xh+wxercEWY/jIoShyHvNLd/tuQigMTKnPsAJzJO
-         LRqg==
-X-Gm-Message-State: ACgBeo2/kw/Ii0V+VLe/uFgJPqh+dqUYcSZlQaDjhiXmPfy4/zQupmLj
-        AfBk2YD5xKZd3eGM/kX0oP4=
-X-Google-Smtp-Source: AA6agR46OmbecUXN3wq6g//sjNTs+4oHgLPlMjuuGjTeJa3MDc62NnU4atwOGOGsciQe9e1MjXhzrA==
-X-Received: by 2002:a05:620a:134f:b0:6bb:ffc4:d5b3 with SMTP id c15-20020a05620a134f00b006bbffc4d5b3mr66310qkl.327.1660984960728;
-        Sat, 20 Aug 2022 01:42:40 -0700 (PDT)
-Received: from sophie ([45.134.140.159])
-        by smtp.gmail.com with ESMTPSA id n1-20020ac86741000000b0031eebfcb369sm4410999qtp.97.2022.08.20.01.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 01:42:39 -0700 (PDT)
-Date:   Sat, 20 Aug 2022 01:40:26 -0700
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     "Huang, Shaoqin" <shaoqin.huang@intel.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH 8/8] memblock tests: add tests for memblock_trim_memory
-Message-ID: <20220820084026.GA13533@sophie>
-References: <cover.1660454730.git.remckee0@gmail.com>
- <ebbd1fd2c2a3d223a744adf24b4293a559a7003a.1660454730.git.remckee0@gmail.com>
- <9f6a0b68-6777-dd88-929c-2d4303b28984@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ntTjbxdUm3MDErKQAVjGnhDOTUmCLMXKB9v/vZjYPM0=;
+        b=CMrVy2jjfkAwLZv2RnXndzBJcyBoMwdQxmAOLnQ1xeLYhF16u05lpV4FqFRmjZ9eE0
+         SG+DB9HkSgiWD2ZLocQvr5YxKWg4PSISNdjbUM14kCVl4GBUEuO/8H9B1SISnixo50Ny
+         0zze8encHLCojsZmEfxjGjULx6XILR0EZqdAilxrRB8T2skNEOjd3U3x/PYOf4K3pMuk
+         Jvfy0Nf0RROpMfPDGgaCQCac4pUEuAZeB58ofC1s8ca+CTEzag9OCNs+ZVNV7RMPzN78
+         h3a05ny2w++q7LUTw0rq96bXD94OXK9hO/F/5J8qtLQEEez0Ll6p85hzggi29bQbHVEV
+         DMPQ==
+X-Gm-Message-State: ACgBeo1ObC6uIQ4NJf0Dsg1pkTdt1NOyq8ENLsCGWnBwKiVv8QVnEozD
+        A+TQO0Sh+6k0HrBf7OhH64tB+SHJ1GUEzD9a1aAUsg==
+X-Google-Smtp-Source: AA6agR41qvT8f/ZiJdy/AN7TzVIRTzPPeBb4Yh6H5iyb6/c6RcclKSHPU05It49tFbCxb2i3g462rWsAs7Dzgx9jHF8=
+X-Received: by 2002:aa7:d31a:0:b0:445:f4cd:b1c3 with SMTP id
+ p26-20020aa7d31a000000b00445f4cdb1c3mr8712289edq.110.1660984924470; Sat, 20
+ Aug 2022 01:42:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f6a0b68-6777-dd88-929c-2d4303b28984@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220819153829.135562864@linuxfoundation.org>
+In-Reply-To: <20220819153829.135562864@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 20 Aug 2022 14:11:53 +0530
+Message-ID: <CA+G9fYsj9ihvrUnMJ2zK-wLF6fcP6D6Kn7GRPqN3-BsrUVmr-Q@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/545] 5.10.137-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Nicholas Piggin <npiggin@gmail.com>,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 09:46:11AM +0800, Huang, Shaoqin wrote:
-> 
-> 
-> On 8/14/2022 1:54 PM, Rebecca Mckeever wrote:
-> > Add tests for memblock_trim_memory() for the following scenarios:
-> > - all regions aligned
-> > - one region unalign that is smaller than the alignment
-> > - one region unaligned at the base
-> > - one region unaligned at the end
-> > 
-> > Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> > ---
-> >   tools/testing/memblock/tests/basic_api.c | 223 +++++++++++++++++++++++
-> >   1 file changed, 223 insertions(+)
-> > 
-> > diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
-> > index d7f008e7a12a..c8bb44f20846 100644
-> > --- a/tools/testing/memblock/tests/basic_api.c
-> > +++ b/tools/testing/memblock/tests/basic_api.c
-> > @@ -8,6 +8,7 @@
-> >   #define FUNC_RESERVE					"memblock_reserve"
-> >   #define FUNC_REMOVE					"memblock_remove"
-> >   #define FUNC_FREE					"memblock_free"
-> > +#define FUNC_TRIM					"memblock_trim_memory"
-> >   static int memblock_initialization_check(void)
-> >   {
-> > @@ -1723,6 +1724,227 @@ static int memblock_bottom_up_checks(void)
-> >   	return 0;
-> >   }
-> > +/*
-> > + * A test that tries to trim memory when both ends of the memory region are
-> > + * aligned. Expect that the memory will not be trimmed. Expect the counter to
-> > + * not be updated.
-> > + */
-> > +static int memblock_trim_memory_aligned_check(void)
-> > +{
-> > +	struct memblock_region *rgn;
-> > +	phys_addr_t alignment = SMP_CACHE_BYTES;
-> > +
-> > +	rgn = &memblock.memory.regions[0];
-> > +
-> > +	struct region r = {
-> > +		.base = alignment,
-> > +		.size = alignment * 4
-> > +	};
-> > +
-> > +	PREFIX_PUSH();
-> > +
-> > +	reset_memblock_regions();
-> > +	memblock_add(r.base, r.size);
-> > +	memblock_trim_memory(alignment);
-> > +
-> > +	ASSERT_EQ(rgn->base, r.base);
-> > +	ASSERT_EQ(rgn->size, r.size);
-> > +
-> > +	ASSERT_EQ(memblock.memory.cnt, 1);
-> > +
-> > +	test_pass_pop();
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +/*
-> > + * A test that tries to trim memory when there are two available regions, r1 and
-> > + * r2. Region r1 is aligned on both ends and region r2 is unaligned on one end
-> > + * and smaller than the alignment:
-> > + *
-> > + *                                     alignment
-> > + *                                     |--------|
-> > + * |        +-----------------+        +------+   |
-> > + * |        |        r1       |        |  r2  |   |
-> > + * +--------+-----------------+--------+------+---+
-> > + *          ^        ^        ^        ^      ^
-> > + *          |________|________|________|      |
-> > + *                            |               Unaligned address
-> > + *                Aligned addresses
-> > + *
-> > + * Expect that r1 will not be trimmed and r2 will be removed. Expect the
-> > + * counter to be updated.
-> > + */
-> > +static int memblock_trim_memory_too_small_check(void)
-> > +{
-> > +	struct memblock_region *rgn;
-> > +	phys_addr_t alignment = SMP_CACHE_BYTES;
-> > +
-> > +	rgn = &memblock.memory.regions[0];
-> > +
-> > +	struct region r1 = {
-> > +		.base = alignment,
-> > +		.size = alignment * 2
-> > +	};
-> > +	struct region r2 = {
-> > +		.base = alignment * 4,
-> > +		.size = alignment - SZ_2
-> > +	};
-> > +
-> > +	PREFIX_PUSH();
-> > +
-> > +	reset_memblock_regions();
-> > +	memblock_add(r1.base, r1.size);
-> > +	memblock_add(r2.base, r2.size);
-> > +	memblock_trim_memory(alignment);
-> > +
-> > +	ASSERT_EQ(rgn->base, r1.base);
-> > +	ASSERT_EQ(rgn->size, r1.size);
-> > +
-> > +	ASSERT_EQ(memblock.memory.cnt, 1);
-> > +
-> > +	test_pass_pop();
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +/*
-> > + * A test that tries to trim memory when there are two available regions, r1 and
-> > + * r2. Region r1 is aligned on both ends and region r2 is unaligned at the base
-> > + * and aligned at the end:
-> > + *
-> > + *                               Unaligned address
-> > + *                                       |
-> > + *                                       v
-> > + * |        +-----------------+          +---------------+   |
-> > + * |        |        r1       |          |      r2       |   |
-> > + * +--------+-----------------+----------+---------------+---+
-> > + *          ^        ^        ^        ^        ^        ^
-> > + *          |________|________|________|________|________|
-> > + *                            |
-> > + *                    Aligned addresses
-> > + *
-> > + * Expect that r1 will not be trimmed and r2 will be trimmed at the base.
-> > + * Expect the counter to not be updated.
-> > + */
-> > +static int memblock_trim_memory_unaligned_base_check(void)
-> > +{
-> > +	struct memblock_region *rgn1, *rgn2;
-> > +	phys_addr_t alignment = SMP_CACHE_BYTES;
-> > +	phys_addr_t offset = SZ_2;
-> > +	phys_addr_t r2_base, r2_size;
-> > +
-> > +	rgn1 = &memblock.memory.regions[0];
-> > +	rgn2 = &memblock.memory.regions[1];
-> > +
-> > +	struct region r1 = {
-> > +		.base = alignment,
-> > +		.size = alignment * 2
-> > +	};
-> > +	struct region r2 = {
-> > +		.base = alignment * 4 + offset,
-> > +		.size = alignment * 2 - offset
-> > +	};
-> > +
-> > +	PREFIX_PUSH();
-> > +
-> > +	r2_base = r2.base + (alignment - offset);
-> > +	r2_size = r2.size - (alignment - offset);
-> 
-> Also the variable name.
-> 
-> > +
-> > +	reset_memblock_regions();
-> > +	memblock_add(r1.base, r1.size);
-> > +	memblock_add(r2.base, r2.size);
-> > +	memblock_trim_memory(alignment);
-> > +
-> > +	ASSERT_EQ(rgn1->base, r1.base);
-> > +	ASSERT_EQ(rgn1->size, r1.size);
-> > +
-> > +	ASSERT_EQ(rgn2->base, r2_base);
-> > +	ASSERT_EQ(rgn2->size, r2_size);
-> > +
-> > +	ASSERT_EQ(memblock.memory.cnt, 2);
-> > +
-> > +	test_pass_pop();
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +/*
-> > + * A test that tries to trim memory when there are two available regions, r1 and
-> > + * r2. Region r1 is aligned on both ends and region r2 is aligned at the base
-> > + * and unaligned at the end:
-> > + *
-> > + *                                             Unaligned address
-> > + *                                                     |
-> > + *                                                     v
-> > + * |        +-----------------+        +---------------+   |
-> > + * |        |        r1       |        |      r2       |   |
-> > + * +--------+-----------------+--------+---------------+---+
-> > + *          ^        ^        ^        ^        ^        ^
-> > + *          |________|________|________|________|________|
-> > + *                            |
-> > + *                    Aligned addresses
-> > + *
-> > + * Expect that r1 will not be trimmed and r2 will be trimmed at the base.
-> 								^
-> 							at the end.
+On Fri, 19 Aug 2022 at 21:16, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.137 release.
+> There are 545 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 21 Aug 2022 15:36:59 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.137-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I forgot to make this change in v2. I will include it in v3.
+Results from Linaro's test farm.
+Following regression found on powerpc.
 
-> > + * Expect the counter to not be updated.
-> > + */
-> > +static int memblock_trim_memory_unaligned_end_check(void)
-> > +{
-> > +	struct memblock_region *rgn1, *rgn2;
-> > +	phys_addr_t alignment = SMP_CACHE_BYTES;
-> > +	phys_addr_t offset = SZ_2;
-> > +	phys_addr_t r2_size;
-> > +
-> > +	rgn1 = &memblock.memory.regions[0];
-> > +	rgn2 = &memblock.memory.regions[1];
-> > +
-> > +	struct region r1 = {
-> > +		.base = alignment,
-> > +		.size = alignment * 2
-> > +	};
-> > +	struct region r2 = {
-> > +		.base = alignment * 4,
-> > +		.size = alignment * 2 - offset
-> > +	};
-> > +
-> > +	PREFIX_PUSH();
-> > +
-> > +	r2_size = r2.size - (alignment - offset);
-> > +
-> > +	reset_memblock_regions();
-> > +	memblock_add(r1.base, r1.size);
-> > +	memblock_add(r2.base, r2.size);
-> > +	memblock_trim_memory(alignment);
-> > +
-> > +	ASSERT_EQ(rgn1->base, r1.base);
-> > +	ASSERT_EQ(rgn1->size, r1.size);
-> > +
-> > +	ASSERT_EQ(rgn2->base, r2.base);
-> > +	ASSERT_EQ(rgn2->size, r2_size);
-> > +
-> > +	ASSERT_EQ(memblock.memory.cnt, 2);
-> > +
-> > +	test_pass_pop();
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int memblock_trim_memory_checks(void)
-> > +{
-> > +	prefix_reset();
-> > +	prefix_push(FUNC_TRIM);
-> > +	test_print("Running %s tests...\n", FUNC_TRIM);
-> > +
-> > +	memblock_trim_memory_aligned_check();
-> > +	memblock_trim_memory_too_small_check();
-> > +	memblock_trim_memory_unaligned_base_check();
-> > +	memblock_trim_memory_unaligned_end_check();
-> > +
-> > +	prefix_pop();
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   int memblock_basic_checks(void)
-> >   {
-> >   	memblock_initialization_check();
-> > @@ -1731,6 +1953,7 @@ int memblock_basic_checks(void)
-> >   	memblock_remove_checks();
-> >   	memblock_free_checks();
-> >   	memblock_bottom_up_checks();
-> > +	memblock_trim_memory_checks();
-> >   	return 0;
-> >   }
-> 
-> Others looks good.
+> Nicholas Piggin <npiggin@gmail.com>
+>     KVM: PPC: Book3S HV: Remove virt mode checks from real mode handlers
 
-Thanks,
-Rebecca
+The powerpc defconfig build failed on stable-rc 5.10 with gcc and clang.
+
+In file included from arch/powerpc/kvm/book3s_xive.c:53:
+arch/powerpc/kvm/book3s_xive.c:42:15: error: 'xive_vm_h_ipi' defined
+but not used [-Werror=unused-function]
+   42 | #define X_PFX xive_vm_
+      |               ^~~~~~~~
+arch/powerpc/kvm/book3s_xive_template.c:8:20: note: in definition of
+macro 'XGLUE'
+    8 | #define XGLUE(a,b) a##b
+      |                    ^
+arch/powerpc/kvm/book3s_xive_template.c:606:14: note: in expansion of
+macro 'GLUE'
+  606 | X_STATIC int GLUE(X_PFX,h_ipi)(struct kvm_vcpu *vcpu, unsigned
+long server,
+      |              ^~~~
+arch/powerpc/kvm/book3s_xive_template.c:606:19: note: in expansion of
+macro 'X_PFX'
+  606 | X_STATIC int GLUE(X_PFX,h_ipi)(struct kvm_vcpu *vcpu, unsigned
+long server,
+      |                   ^~~~~
+arch/powerpc/kvm/book3s_xive.c:42:15: error: 'xive_vm_h_eoi' defined
+but not used [-Werror=unused-function]
+   42 | #define X_PFX xive_vm_
+      |               ^~~~~~~~
+arch/powerpc/kvm/book3s_xive_template.c:8:20: note: in definition of
+macro 'XGLUE'
+    8 | #define XGLUE(a,b) a##b
+      |                    ^
+arch/powerpc/kvm/book3s_xive_template.c:501:14: note: in expansion of
+macro 'GLUE'
+  501 | X_STATIC int GLUE(X_PFX,h_eoi)(struct kvm_vcpu *vcpu, unsigned
+long xirr)
+      |              ^~~~
+arch/powerpc/kvm/book3s_xive_template.c:501:19: note: in expansion of
+macro 'X_PFX'
+  501 | X_STATIC int GLUE(X_PFX,h_eoi)(struct kvm_vcpu *vcpu, unsigned
+long xirr)
+      |                   ^~~~~
+arch/powerpc/kvm/book3s_xive.c:42:15: error: 'xive_vm_h_cppr' defined
+but not used [-Werror=unused-function]
+   42 | #define X_PFX xive_vm_
+      |               ^~~~~~~~
+arch/powerpc/kvm/book3s_xive_template.c:8:20: note: in definition of
+macro 'XGLUE'
+    8 | #define XGLUE(a,b) a##b
+      |                    ^
+arch/powerpc/kvm/book3s_xive_template.c:442:14: note: in expansion of
+macro 'GLUE'
+  442 | X_STATIC int GLUE(X_PFX,h_cppr)(struct kvm_vcpu *vcpu,
+unsigned long cppr)
+      |              ^~~~
+arch/powerpc/kvm/book3s_xive_template.c:442:19: note: in expansion of
+macro 'X_PFX'
+  442 | X_STATIC int GLUE(X_PFX,h_cppr)(struct kvm_vcpu *vcpu,
+unsigned long cppr)
+      |                   ^~~~~
+arch/powerpc/kvm/book3s_xive.c:42:15: error: 'xive_vm_h_ipoll' defined
+but not used [-Werror=unused-function]
+   42 | #define X_PFX xive_vm_
+      |               ^~~~~~~~
+arch/powerpc/kvm/book3s_xive_template.c:8:20: note: in definition of
+macro 'XGLUE'
+    8 | #define XGLUE(a,b) a##b
+      |                    ^
+arch/powerpc/kvm/book3s_xive_template.c:323:24: note: in expansion of
+macro 'GLUE'
+  323 | X_STATIC unsigned long GLUE(X_PFX,h_ipoll)(struct kvm_vcpu
+*vcpu, unsigned long server)
+      |                        ^~~~
+arch/powerpc/kvm/book3s_xive_template.c:323:29: note: in expansion of
+macro 'X_PFX'
+  323 | X_STATIC unsigned long GLUE(X_PFX,h_ipoll)(struct kvm_vcpu
+*vcpu, unsigned long server)
+      |                             ^~~~~
+arch/powerpc/kvm/book3s_xive.c:42:15: error: 'xive_vm_h_xirr' defined
+but not used [-Werror=unused-function]
+   42 | #define X_PFX xive_vm_
+      |               ^~~~~~~~
+arch/powerpc/kvm/book3s_xive_template.c:8:20: note: in definition of
+macro 'XGLUE'
+    8 | #define XGLUE(a,b) a##b
+      |                    ^
+arch/powerpc/kvm/book3s_xive_template.c:272:24: note: in expansion of
+macro 'GLUE'
+  272 | X_STATIC unsigned long GLUE(X_PFX,h_xirr)(struct kvm_vcpu *vcpu)
+      |                        ^~~~
+arch/powerpc/kvm/book3s_xive_template.c:272:29: note: in expansion of
+macro 'X_PFX'
+  272 | X_STATIC unsigned long GLUE(X_PFX,h_xirr)(struct kvm_vcpu *vcpu)
+      |                             ^~~~~
+cc1: all warnings being treated as errors
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.10.137-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 623e70e98313ed8ce5eb6da1ec87e1471d4e6af6
+* git describe: v5.10.136-546-g623e70e98313
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.136-546-g623e70e98313
+
+## Test Regressions (compared to v5.10.136)
+
+* powerpc, build
+  - clang-13-defconfig
+  - clang-14-defconfig
+  - clang-nightly-defconfig
+  - gcc-10-defconfig
+  - gcc-11-defconfig
+  - gcc-8-defconfig
+  - gcc-9-defconfig
+
+## No metric Regressions (compared to v5.10.136)
+
+## No test Fixes (compared to v5.10.136)
+
+## No metric Fixes (compared to v5.10.136)
+
+## Test result summary
+total: 125787, pass: 110926, fail: 582, skip: 13467, xfail: 812
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 309 total, 309 passed, 0 failed
+* arm64: 71 total, 69 passed, 2 failed
+* i386: 60 total, 58 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 44 passed, 7 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 64 total, 62 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

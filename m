@@ -2,125 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092B559AF83
+	by mail.lfdr.de (Postfix) with ESMTP id A094A59AF85
 	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 20:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbiHTSQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 14:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S231634AbiHTSQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 14:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiHTSQL (ORCPT
+        with ESMTP id S229472AbiHTSQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 14:16:11 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3664017071
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661019370; x=1692555370;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TDA1eoaLC9crJK0rIYcZn/hEOf+s0OqEKsBKkN7RcWs=;
-  b=CI6ynh2OoTVB9kK8hnKtDQXRut04/71TnI9BuCpge59SHAg3OPD0fgf1
-   YYxVHLLwvK5K2bAqjJKG2BQ13EUDPgK5TvQJDCPwww7OapMgHBPoM5zMs
-   E9kQRaiY7XEG6WJNKYs2SYd3+XKlXaYVcjSy531qfIAbCvkHJLy+EiV+l
-   Ox9BELZsIH04GyYgndngebxJjuh2uX07JvlLJPmfXIFQ4cNdxDibeY9k0
-   EeM4eIEnzQ5a132dEVae2At2Nxc/u/XW+/ex83kXPtcba41/K0LBgBRah
-   eRAtXoz3E2SWQ71boDoYTJVzdVe2FbgSxQnZhdddahMNwxvcE3Nw7naaU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="294471738"
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="294471738"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 11:16:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="585015778"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Aug 2022 11:16:07 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPT0x-00030V-0T;
-        Sat, 20 Aug 2022 18:16:07 +0000
-Date:   Sun, 21 Aug 2022 02:15:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>, Fuad Tabba <tabba@google.com>
-Subject: arch/arm64/kvm/hyp/nvhe/stacktrace.c:38:1: sparse: sparse: symbol
- '__pcpu_scope_pkvm_stacktrace' was not declared. Should it be static?
-Message-ID: <202208210225.5VNIyPGA-lkp@intel.com>
+        Sat, 20 Aug 2022 14:16:38 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963F117071
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:37 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id c39so9160796edf.0
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=zxudM2tcPvdpF6lvNkQWPZ2gRI9Z+4KijeRHmXked3o=;
+        b=lGuqy5RuA8LlN/SiSPC0Zgm+nIRAWvuxmyWCh+Z7y2RZ4rfhPsIMLB6bAtENbZU69O
+         FvRVSaQsFXCsoiPp/aQUN54t2x8DdzgZS2z0a29giaM5xgI6M+m1DYNT02aqmXE7zQhm
+         Oqbi3U2igj6+I7yeIQVeZfSE0mj6dC7F9h/dzao0JW/eWWmcXqqgB270gvPDHN+cOef2
+         XmT68N9tS77HnK5kgd9bcd1M8eNvlMoEsj30PVvQphg4UfdvifKnSdNGEBsUlPyOa7uj
+         nHjJGmKK0OD16DBc6gjJT0EmFKybTvPQzjoU+DsukqBJ6ZfG/qXCJ031vz628yHTSXPG
+         EVKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=zxudM2tcPvdpF6lvNkQWPZ2gRI9Z+4KijeRHmXked3o=;
+        b=i4Gk+F3sUFdoMHfjsmommR5DxcgFEleqKe2aS5bbDcJusjLNO/aZP+32mznbyaDG/d
+         7ebTxfvITcEnIUKagLPGyRwFWbOkv1Agsl38Ao+SnOXPgXplBh3s960ssmrZAetB09VE
+         Uk3lMtXal55qJkw6GfG7lS70JiuLNcAfhMnQiInG+rJLSURPlPGY2bX+NdnHwEmb7joU
+         oL6Y2r3ssl+CsJRcmXg8z6K3PvHOAktqZJjE401Cc4k96U7S14KWAayYelD8Q3eKpeE7
+         VeUBPn/a2O5RzlEGwPJA0fhtjO/8RYimb15AIqy2FbFiaATJCvdjR9vpRq4DNGiE21Tu
+         S+1Q==
+X-Gm-Message-State: ACgBeo1GwdZBb6wWOeDMhOn2L7nsyJgYejTKPL7l4uyPpKTKCr5VeNnR
+        VDBnXmU0iLkKIQYID3al6HY=
+X-Google-Smtp-Source: AA6agR67n8eYzr+YF+2nu35VSIKhyqXQWQDOmBUTahlwivUqUcAFqFT16f42A/fNTIP1avPdfM6zfQ==
+X-Received: by 2002:a05:6402:3907:b0:431:6776:64e7 with SMTP id fe7-20020a056402390700b00431677664e7mr10217794edb.0.1661019396245;
+        Sat, 20 Aug 2022 11:16:36 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb77.dynamic.kabel-deutschland.de. [95.90.187.119])
+        by smtp.gmail.com with ESMTPSA id g2-20020a17090604c200b0072af890f52dsm3887833eja.88.2022.08.20.11.16.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Aug 2022 11:16:35 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 00/19] staging: r8188eu: migrate os_dep/xmit_linux.c
+Date:   Sat, 20 Aug 2022 20:16:04 +0200
+Message-Id: <20220820181623.12497-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   50cd95ac46548429e5bba7ca75cc97d11a697947
-commit: 6928bcc84bc4bd9a24a1cb1986418c3de76e1d99 KVM: arm64: Allocate shared pKVM hyp stacktrace buffers
-date:   4 weeks ago
-config: arm64-randconfig-s033-20220820 (https://download.01.org/0day-ci/archive/20220821/202208210225.5VNIyPGA-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6928bcc84bc4bd9a24a1cb1986418c3de76e1d99
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6928bcc84bc4bd9a24a1cb1986418c3de76e1d99
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+This series moves the functions, or their functionality, from
+os_dep/xmit_linux.c to the core/* part of the driver and finally
+removes os_dep/xmit_linux.c and the xmit_osdep.h header.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Tested on x86_64 with Inter-Tech DMG-02.
 
-sparse warnings: (new ones prefixed by >>)
-   arch/arm64/kvm/hyp/nvhe/stacktrace.c:12:1: sparse: sparse: symbol '__pcpu_scope_overflow_stack' was not declared. Should it be static?
-   arch/arm64/kvm/hyp/nvhe/stacktrace.c:15:1: sparse: sparse: symbol '__pcpu_scope_kvm_stacktrace_info' was not declared. Should it be static?
->> arch/arm64/kvm/hyp/nvhe/stacktrace.c:38:1: sparse: sparse: symbol '__pcpu_scope_pkvm_stacktrace' was not declared. Should it be static?
+Please apply this on top of:
+[PATCH] staging: r8188eu: remove rtw_endofpktfile()
 
-vim +/__pcpu_scope_pkvm_stacktrace +38 arch/arm64/kvm/hyp/nvhe/stacktrace.c
+Thanks,
+Michael
 
-    11	
-  > 12	DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack)
-    13		__aligned(16);
-    14	
-    15	DEFINE_PER_CPU(struct kvm_nvhe_stacktrace_info, kvm_stacktrace_info);
-    16	
-    17	/*
-    18	 * hyp_prepare_backtrace - Prepare non-protected nVHE backtrace.
-    19	 *
-    20	 * @fp : frame pointer at which to start the unwinding.
-    21	 * @pc : program counter at which to start the unwinding.
-    22	 *
-    23	 * Save the information needed by the host to unwind the non-protected
-    24	 * nVHE hypervisor stack in EL1.
-    25	 */
-    26	static void hyp_prepare_backtrace(unsigned long fp, unsigned long pc)
-    27	{
-    28		struct kvm_nvhe_stacktrace_info *stacktrace_info = this_cpu_ptr(&kvm_stacktrace_info);
-    29		struct kvm_nvhe_init_params *params = this_cpu_ptr(&kvm_init_params);
-    30	
-    31		stacktrace_info->stack_base = (unsigned long)(params->stack_hyp_va - PAGE_SIZE);
-    32		stacktrace_info->overflow_stack_base = (unsigned long)this_cpu_ptr(overflow_stack);
-    33		stacktrace_info->fp = fp;
-    34		stacktrace_info->pc = pc;
-    35	}
-    36	
-    37	#ifdef CONFIG_PROTECTED_NVHE_STACKTRACE
-  > 38	#include <asm/stacktrace/nvhe.h>
-    39	
+Michael Straube (19):
+  staging: r8188eu: make rtw_remainder_len() static
+  staging: r8188eu: make rtw_os_xmit_schedule() static
+  staging: r8188eu: rename rtw_os_xmit_schedule()
+  staging: r8188eu: make rtw_os_xmit_resource_alloc() static
+  staging: r8188eu: rename rtw_os_xmit_resource_alloc()
+  staging: r8188eu: make rtw_os_xmit_resource_free() static
+  staging: r8188eu: rename rtw_os_xmit_resource_free()
+  staging: r8188eu: make _rtw_open_pktfile() static
+  staging: r8188eu: rename _rtw_open_pktfile()
+  staging: r8188eu: make _rtw_pktfile_read() static
+  staging: r8188eu: rename _rtw_pktfile_read()
+  staging: r8188eu: remove unnecessary initialization to zero
+  staging: r8188eu: move struct pkt_file to rtw_xmit.h
+  staging: r8188eu: move rtw_os_xmit_complete() to rtw_xmit.c
+  staging: r8188eu: rename rtw_os_xmit_complete()
+  staging: r8188eu: make rtw_os_pkt_complete() static
+  staging: r8188eu: rename rtw_os_pkt_complete()
+  staging: r8188eu: remove os_dep/xmit_linux.c
+  staging: r8188eu: remove xmit_osdep.h
+
+ drivers/staging/r8188eu/Makefile             |   1 -
+ drivers/staging/r8188eu/core/rtw_mlme.c      |  23 +-
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c  |   2 +-
+ drivers/staging/r8188eu/core/rtw_sta_mgt.c   |   1 -
+ drivers/staging/r8188eu/core/rtw_xmit.c      | 232 +++++++++++++++++--
+ drivers/staging/r8188eu/hal/rtl8188eu_xmit.c |   4 +-
+ drivers/staging/r8188eu/include/rtw_xmit.h   |  16 +-
+ drivers/staging/r8188eu/include/xmit_osdep.h |  48 ----
+ drivers/staging/r8188eu/os_dep/os_intfs.c    |   7 +-
+ drivers/staging/r8188eu/os_dep/usb_intf.c    |   1 -
+ drivers/staging/r8188eu/os_dep/xmit_linux.c  | 226 ------------------
+ 11 files changed, 251 insertions(+), 310 deletions(-)
+ delete mode 100644 drivers/staging/r8188eu/include/xmit_osdep.h
+ delete mode 100644 drivers/staging/r8188eu/os_dep/xmit_linux.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2
+

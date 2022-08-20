@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0598659B067
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 22:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0075559B078
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 22:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234827AbiHTUZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 16:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
+        id S232136AbiHTU3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 16:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234607AbiHTUZX (ORCPT
+        with ESMTP id S230371AbiHTU3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 16:25:23 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E88F27CEC
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 13:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=TNcLUG25D61wsd+8AYGkA+nwMhh+5ggO2Q1NQOH9X3o=; b=axpdxv1ZCZbm8Si5Ve9f9bLhtW
-        jjSE2yum/9uv+RAQkOEq4MIP9V5yb8J55pATLNFjrfLPFkXHEBpNhSNTe7XVn4hSoQGWrd6h1Lm8m
-        0r08gfDY5F9vPPIXXfsDJUTCv329BnH51/CvBrbqnyoJLQUhKzmPSqycGsJj51Kwuhe0uQ+uHiwzn
-        o6UwYRkkcJIfJR1iGEmYrtdJP4j36cE9n3w5/MYGgCyhX2SKXn/T5vxZIORXbS/orJmuheV+QyLOE
-        0E8gk+0JsdYR5J9v5UR/Z6aEA1bI8RkjZ3irPYX6bt5ne4qaZx7EJV0AkwUqwoT3Dsuo3+rzyq6KA
-        h9Efgyrw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oPV1y-006TGP-F5;
-        Sat, 20 Aug 2022 20:25:18 +0000
-Date:   Sat, 20 Aug 2022 21:25:18 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] tomoyo: use vsnprintf() properly
-Message-ID: <YwFDLhioFG5Mlwws@ZenIV>
+        Sat, 20 Aug 2022 16:29:03 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8F22408C;
+        Sat, 20 Aug 2022 13:29:02 -0700 (PDT)
+Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27KAHPG9020634;
+        Sat, 20 Aug 2022 20:28:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
+ bh=aZDdO0I6etmnaLZVKrrq7+bij97XxK4tSORRQyJrim0=;
+ b=NcwI3jBCjmY30YInGrR2rl8PPP5p3vw924k/kuMFQMudi0myxYBAA+tcHNwAYluylPEV
+ 6KqFjlLqbEwvxtsoLybH56OxWha5Aspkgst3my9Klr3hLJdjGWY2jTvq6+21dY+DYHwa
+ LVec//jQBrtnWvAKOPYRz9Ex4AJS1L2zBzQl2wQ4eLgPRb+6gKT8uu0qLJs0EqK0Gb5s
+ A0vw3FSDiZRArFH0B/nwS46oLZVw5xJkzt1LstlrCEQ3XURVHYd/NpWAuGiIJP5sxaMa
+ cMPDkP9SY/TdY7hPfID323RJb8R8Pp3UCaPKIUS/w4ZOVSnL9IKvVnzJBtb98flcindF ig== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3j2wqq2hak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 20 Aug 2022 20:28:48 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 69C35D2C9;
+        Sat, 20 Aug 2022 20:28:47 +0000 (UTC)
+Received: from anatevka.americas.hpqcorp.net (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 43760808C3D;
+        Sat, 20 Aug 2022 20:28:46 +0000 (UTC)
+From:   Jerry Hoemann <jerry.hoemann@hpe.com>
+To:     linux@roeck-us.net, wim@linux-watchdog.org
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jerry Hoemann <jerry.hoemann@hpe.com>
+Subject: [PATCH v2 0/2] watchdog/hpwdt: Enable hpwdt for ARM64 platforms
+Date:   Sat, 20 Aug 2022 14:28:19 -0600
+Message-Id: <20220820202821.1263837-1-jerry.hoemann@hpe.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: DJLiJoWhXQZiNx3FXJzytBfE7f86rC9M
+X-Proofpoint-ORIG-GUID: DJLiJoWhXQZiNx3FXJzytBfE7f86rC9M
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-20_08,2022-08-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ adultscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0
+ mlxlogscore=621 spamscore=0 clxscore=1015 bulkscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208200087
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Idiomatic way to find how much space sprintf output would take is
-	len = snprintf(NULL, 0, ...) + 1;
-Once upon a time there'd been libc implementations that blew chunks
-on that and somebody had come up with the following "cute" trick:
-	len = snprintf((char *) &len, 1, ...) + 1;
-for doing the same.  However, that's unidiomatic, harder to follow
-*and* any such libc implementation would violate both C99 and POSIX
-(since 2001).
-	IOW, this kludge is best buried along with such libc implementations,
-nevermind getting cargo-culted into newer code.  Our vsnprintf() does not
-suffer that braindamage, TYVM.
+Enable hpwdt for the rl300, an ARM64 based platform.
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- security/tomoyo/audit.c  | 2 +-
- security/tomoyo/common.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/security/tomoyo/audit.c b/security/tomoyo/audit.c
-index 023bedd9dfa3..7cf8fdbb29bf 100644
---- a/security/tomoyo/audit.c
-+++ b/security/tomoyo/audit.c
-@@ -423,7 +423,7 @@ void tomoyo_write_log(struct tomoyo_request_info *r, const char *fmt, ...)
- 	int len;
- 
- 	va_start(args, fmt);
--	len = vsnprintf((char *) &len, 1, fmt, args) + 1;
-+	len = vsnprintf(NULL, 0, fmt, args) + 1;
- 	va_end(args);
- 	va_start(args, fmt);
- 	tomoyo_write_log2(r, len, fmt, args);
-diff --git a/security/tomoyo/common.c b/security/tomoyo/common.c
-index ff17abc96e5c..f4cd9b58b205 100644
---- a/security/tomoyo/common.c
-+++ b/security/tomoyo/common.c
-@@ -2057,7 +2057,7 @@ int tomoyo_supervisor(struct tomoyo_request_info *r, const char *fmt, ...)
- 	bool quota_exceeded = false;
- 
- 	va_start(args, fmt);
--	len = vsnprintf((char *) &len, 1, fmt, args) + 1;
-+	len = vsnprintf(NULL, 0, fmt, args) + 1;
- 	va_end(args);
- 	/* Write /sys/kernel/security/tomoyo/audit. */
- 	va_start(args, fmt);
+Patch 1: watchdog/hpwdt.c: Include nmi.h only if CONFIG_HPWDT_NMI_DECODING
+
+ARM64 does not support NMI and does not have <asm/nmi.h>.  Include
+nmi.h only if CONFIG_HPWDT_NMI_DECODING is defined.
+
+Patch 2: watchdog/Kconfig:  Allow hpwdt.c to be built for ARM64.
+
+Allow hpwdt.c to be built for (ARM64 || X86) as this part of hwpdt doesn't
+use NMI.
+
+Make HPWDT_NMI_DECODING dependent upon X86 as NMI handlers are specific
+to X86 platforms.
+
+
+== Changes for v2 ==
+Update patch documentation.
+
+
+
+
+Jerry Hoemann (2):
+  watchdog/hpwdt: Include nmi.h only if CONFIG_HPWDT_NMI_DECODING
+  watchdog: Enable HP_WATCHDOG for ARM64 systems.
+
+ drivers/watchdog/Kconfig | 4 ++--
+ drivers/watchdog/hpwdt.c | 2 ++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
 -- 
-2.30.2
+2.37.1
 

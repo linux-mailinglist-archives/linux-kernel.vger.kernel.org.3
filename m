@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18DFF59AACC
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 04:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B9259AACA
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 04:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242436AbiHTC5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 22:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
+        id S243600AbiHTC6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 22:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiHTC5r (ORCPT
+        with ESMTP id S242572AbiHTC6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 22:57:47 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667DEC2758;
-        Fri, 19 Aug 2022 19:57:47 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id y18so4604987qtv.5;
-        Fri, 19 Aug 2022 19:57:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=8nQrH+5egSaKXmqGf2DeUinczEZu8mYWEg+gHBiviSU=;
-        b=Gtf0A/jKvkV2vWwClpTd0jS/+xh+stTbAaObdMDVXVCSMC1kH4oX+3EvemiQMv0Cu8
-         1LGawVSnPEOm4Hp5oAWCUxa5RKXH07Ppz1HTDMaVcMK6bSr/vB+BrMqXy4oEFImM4h0f
-         7JBp4QFRl3Jvvz/p8V74YfNl4xSZ8EY63pmSCG64BmRQe25jzsknraUjVdIQdz/OC3cy
-         UuLRw7VuZ0UdTkl+TndOCd+r2J3MAJ2DIuZgLuuav26yBEfl9LmnV0LiUhQ/1PIzImRh
-         m/zfH4d3VhCFI97veWqToobKVYWlHUTgkEqDXyfsBrKSsAEz/88G3vy4DDs6lJBRt7HV
-         7Kww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=8nQrH+5egSaKXmqGf2DeUinczEZu8mYWEg+gHBiviSU=;
-        b=SKKCb201MlDlxuSZz0PQTisc7d8iUKIUi8zHGjgXi/PBBE/AByX4t3INvrw5BK8mox
-         YxZWnwPV5Gw9rftZgzG6SK0VxoL/NsNIzHvg9a1PAt0t4QuXj0GOGh47gdLPBcwkud/U
-         QJYj5e9SrH0M44kPCL+EQ9YWNP1rAOpHQ/nmNFqD6y7pkRfDXBj3pzBOsJIFdqv4C1qT
-         vPz3NvtH9D0SFC7/hzTtJ/vk2JAG5Wnz6xfbHMDzafyP5aUlqXzc4SAIaai/M/SS2jjJ
-         KhSmuFw+p6DtPEwyNghOk58i16be0me8dDvc+nxvJ/d6G6sotpd4fsc6H40kih7mz4Aq
-         LcRg==
-X-Gm-Message-State: ACgBeo1q7zZ0pqk4JzTe+jPm7XK9jNY6D6fWl8JhFe8/MVAic3xBW5K3
-        C4851TbosmK+y5xr8bPHmjI=
-X-Google-Smtp-Source: AA6agR78A0Laf5T37YKB/npSsvs01FaWGZdSADrqD2iOzKUlv3SufyA9pTXdFOx3Zfwi6Yrt/jeHGQ==
-X-Received: by 2002:ac8:7dc1:0:b0:344:6104:eab6 with SMTP id c1-20020ac87dc1000000b003446104eab6mr8674172qte.455.1660964266497;
-        Fri, 19 Aug 2022 19:57:46 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id h10-20020a05620a284a00b006b98315c6fbsm5176381qkp.1.2022.08.19.19.57.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 19:57:46 -0700 (PDT)
-Message-ID: <cc31738f-53d7-df04-03fb-f6a32a9493fb@gmail.com>
-Date:   Fri, 19 Aug 2022 19:57:43 -0700
+        Fri, 19 Aug 2022 22:58:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A364DC4826;
+        Fri, 19 Aug 2022 19:58:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DABFB828A4;
+        Sat, 20 Aug 2022 02:58:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C0ECC433C1;
+        Sat, 20 Aug 2022 02:58:04 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] LoongArch: Select PCI_QUIRKS to avoid build error
+Date:   Sat, 20 Aug 2022 10:57:55 +0800
+Message-Id: <20220820025755.3110083-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [v2][PATCH] net: phy: Don't WARN for PHY_READY state in
- mdio_bus_phy_resume()
-Content-Language: en-US
-To:     Xiaolei Wang <xiaolei.wang@windriver.com>, andrew@lunn.ch,
-        hkallweit1@gmail.com
-Cc:     linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220819082451.1992102-1-xiaolei.wang@windriver.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220819082451.1992102-1-xiaolei.wang@windriver.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+PCI_LOONGSON is a mandatory for LoongArch and it is selected in Kconfig
+unconditionally, but its dependency PCI_QUIRKS is missing and may cause
+a build error when "make randconfig":
 
+   arch/loongarch/pci/acpi.c: In function 'pci_acpi_setup_ecam_mapping':
+>> arch/loongarch/pci/acpi.c:103:29: error: 'loongson_pci_ecam_ops' undeclared (first use in this function)
+     103 |                 ecam_ops = &loongson_pci_ecam_ops;
+         |                             ^~~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/pci/acpi.c:103:29: note: each undeclared identifier is reported only once for each function it appears in
 
-On 8/19/2022 1:24 AM, Xiaolei Wang wrote:
-> For some MAC drivers, they set the mac_managed_pm to true in its
-> ->ndo_open() callback. So before the mac_managed_pm is set to true,
-> we still want to leverage the mdio_bus_phy_suspend()/resume() for
-> the phy device suspend and resume. In this case, the phy device is
-> in PHY_READY, and we shouldn't warn about this. It also seems that
-> the check of mac_managed_pm in WARN_ON is redundant since we already
-> check this in the entry of mdio_bus_phy_resume(), so drop it.
-> 
-> Fixes: 744d23c71af3 ("net: phy: Warn about incorrect mdio_bus_phy_resume() state")
-> Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PCI_LOONGSON
+   Depends on [n]: PCI [=y] && (MACH_LOONGSON64 [=y] || COMPILE_TEST [=y]) && (OF [=y] || ACPI [=y]) && PCI_QUIRKS [=n]
+   Selected by [y]:
+   - LOONGARCH [=y]
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Fix it by selecting PCI_QUIRKS unconditionally, too.
 
-I see the use case you have and it does make sense to me, thanks!
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 4abc9a28aba4..26aeb1408e56 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -111,6 +111,7 @@ config LOONGARCH
+ 	select PCI_ECAM if ACPI
+ 	select PCI_LOONGSON
+ 	select PCI_MSI_ARCH_FALLBACKS
++	select PCI_QUIRKS
+ 	select PERF_USE_VMALLOC
+ 	select RTC_LIB
+ 	select SMP
 -- 
-Florian
+2.31.1
+

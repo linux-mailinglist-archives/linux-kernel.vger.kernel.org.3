@@ -2,110 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 026C459AD6F
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 13:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0231459AD68
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 13:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344891AbiHTLSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 07:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
+        id S1344966AbiHTLKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 07:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241192AbiHTLSc (ORCPT
+        with ESMTP id S1344938AbiHTLKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 07:18:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB7217585;
-        Sat, 20 Aug 2022 04:18:30 -0700 (PDT)
+        Sat, 20 Aug 2022 07:10:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3324C81B11;
+        Sat, 20 Aug 2022 04:10:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF628611B6;
-        Sat, 20 Aug 2022 11:18:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E52CAC433D6;
-        Sat, 20 Aug 2022 11:18:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBDBA61142;
+        Sat, 20 Aug 2022 11:10:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0E13C433C1;
+        Sat, 20 Aug 2022 11:10:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660994309;
-        bh=kELYW5Oc9wfTfaOtjKzFb+oTCYYXKgWBwjVIEpvSZzo=;
+        s=k20201202; t=1660993845;
+        bh=SpKcHb9Mx7w7JSXRfOmqDCXQ+vL+4rbX9cOzYzRr/qw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OKXpMSJ9vYjGxuMUK4WJCfaAgKUhsdFoXl0ESYoKwLeALqiPaBRqsnKgNy1y5tfVP
-         POuAAe/pRp8raThz+MWKIPZRQrOyQB+ALR/sYsTCh7ob5Ljs8mWQIA8CcPVFMf5UFO
-         qPhDg/8ih9B8aOMwhyWY6ohhs4p04ONPQAGpi4y0z9i/3tdZimjcpPS7keVMAFSpnZ
-         7NIeYCwSXRNaLAat5bRKCDrVVFnhFvbJxEc6MoC1+f6ERSgarAks05rB54cL/UyB6f
-         PXtDQniCITsSOKNxr4Cxr/oMF/1P3tvLOGpKwn7OhzEUOpsUdfh8q8tWfRbV6c5XZK
-         vZ52Htn66kgHw==
-Date:   Sat, 20 Aug 2022 20:18:24 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Tom Zanussi <zanussi@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH 2/4] tracing/eprobes: Do not hardcode $comm as a string
-Message-Id: <20220820201824.5637c4feff4a7674aebde60a@kernel.org>
-In-Reply-To: <20220820014833.035925907@goodmis.org>
-References: <20220820014035.531145719@goodmis.org>
-        <20220820014833.035925907@goodmis.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        b=C9i25GzTaM97Nx6qFmZVqM5XnwClDgfjAfOyZgIA4mUQmDgUoq4KIw+2+UKr2zJP5
+         fSzFWqIX3eeBIv5fLRYtGMcepwt4nzjEuYHcAJ7ilCe3wM5fbeMEFUfJrmeHY07lEj
+         GdnOmZASXD7tf8pEPtalvWpeUQdS0O3AHK0pAxRrL97kot8JE8H20OBAjZ+UMB2b/A
+         PauyahnJl6QTu9quHAD5/0z+D1pWloVVQsOghZ/udf9qmXHmE5gWUAgt8+iyw2Tazi
+         ao196c5R4aof9vkcznSxt4ogG43s/UrtlM2ziL3jZUUlSMQcHhEwTOBUbccBfOyOkH
+         CpTCly2FSZmmw==
+Date:   Sat, 20 Aug 2022 12:21:20 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 07/14] iio: ltc2688: Simplify using
+ devm_regulator_*get_enable()
+Message-ID: <20220820122120.57dddcab@jic23-huawei>
+In-Reply-To: <a29493f594c84b3bd852e462bbd3e591a8575a27.1660934107.git.mazziesaccount@gmail.com>
+References: <cover.1660934107.git.mazziesaccount@gmail.com>
+        <a29493f594c84b3bd852e462bbd3e591a8575a27.1660934107.git.mazziesaccount@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 21:40:37 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, 19 Aug 2022 22:19:17 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> Use devm_regulator_bulk_get_enable() instead of open coded bulk-get,
+> bulk-enable, add-action-to-disable-at-detach - pattern.
 > 
-> The variable $comm is hard coded as a string, which is true for both
-> kprobes and uprobes, but for event probes (eprobes) it is a field name. In
-> most cases the "comm" field would be a string, but there's no guarantee of
-> that fact.
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 > 
-> Do not assume that comm is a string. Not to mention, it currently forces
-> comm fields to fault, as string processing for event probes is currently
-> broken.
-
-Indeed. There should be an event argument which names "comm".
-Eprobe might refer it. BTW, does eprobe use any special common fields?
-I originally introduced "$" variable for such special variables.
-
-Thank you,
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > ---
->  kernel/trace/trace_probe.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> v2 => v3
+> Split to own patch.
+> ---
+>  drivers/iio/dac/ltc2688.c | 23 +++--------------------
+>  1 file changed, 3 insertions(+), 20 deletions(-)
 > 
-> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> index dec657af363c..23dcd52ad45c 100644
-> --- a/kernel/trace/trace_probe.c
-> +++ b/kernel/trace/trace_probe.c
-> @@ -622,9 +622,10 @@ static int traceprobe_parse_probe_arg_body(const char *argv, ssize_t *size,
+> diff --git a/drivers/iio/dac/ltc2688.c b/drivers/iio/dac/ltc2688.c
+> index 28bdde2d3088..fcad3efe62ea 100644
+> --- a/drivers/iio/dac/ltc2688.c
+> +++ b/drivers/iio/dac/ltc2688.c
+> @@ -84,7 +84,6 @@ struct ltc2688_chan {
+>  struct ltc2688_state {
+>  	struct spi_device *spi;
+>  	struct regmap *regmap;
+> -	struct regulator_bulk_data regulators[2];
+>  	struct ltc2688_chan channels[LTC2688_DAC_CHANNELS];
+>  	struct iio_chan_spec *iio_chan;
+>  	/* lock to protect against multiple access to the device and shared data */
+> @@ -902,13 +901,6 @@ static int ltc2688_setup(struct ltc2688_state *st, struct regulator *vref)
+>  			       LTC2688_CONFIG_EXT_REF);
+>  }
 >  
->  	/*
->  	 * Since $comm and immediate string can not be dereferenced,
-> -	 * we can find those by strcmp.
-> +	 * we can find those by strcmp. But ignore for eprobes.
->  	 */
-> -	if (strcmp(arg, "$comm") == 0 || strncmp(arg, "\\\"", 2) == 0) {
-> +	if (!(flags & TPARG_FL_TPOINT) &&
-> +	    strcmp(arg, "$comm") == 0 || strncmp(arg, "\\\"", 2) == 0) {
->  		/* The type of $comm must be "string", and not an array. */
->  		if (parg->count || (t && strcmp(t, "string")))
->  			goto out;
-> -- 
-> 2.35.1
+> -static void ltc2688_disable_regulators(void *data)
+> -{
+> -	struct ltc2688_state *st = data;
+> -
+> -	regulator_bulk_disable(ARRAY_SIZE(st->regulators), st->regulators);
+> -}
+> -
+>  static void ltc2688_disable_regulator(void *regulator)
+>  {
+>  	regulator_disable(regulator);
+> @@ -970,6 +962,7 @@ static int ltc2688_probe(struct spi_device *spi)
+>  	struct regulator *vref_reg;
+>  	struct device *dev = &spi->dev;
+>  	int ret;
+> +	static const char * const regulators[] = {"vcc", "iovcc"};
+trivial - slight preference for 
+ { "vcc", "iovcc" };
 
+This isn't as important as for numeric values as we get some readability
+from the quotes but still nice to have.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+For the whole static / vs non static. My personal preference is not
+to have the static marking but I don't care that much.
+
+>  
+>  	indio_dev = devm_iio_device_alloc(dev, sizeof(*st));
+>  	if (!indio_dev)
+> @@ -988,21 +981,11 @@ static int ltc2688_probe(struct spi_device *spi)
+>  		return dev_err_probe(dev, PTR_ERR(st->regmap),
+>  				     "Failed to init regmap");
+>  
+> -	st->regulators[0].supply = "vcc";
+> -	st->regulators[1].supply = "iovcc";
+> -	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(st->regulators),
+> -				      st->regulators);
+> -	if (ret)
+> -		return dev_err_probe(dev, ret, "Failed to get regulators\n");
+> -
+> -	ret = regulator_bulk_enable(ARRAY_SIZE(st->regulators), st->regulators);
+> +	ret = devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(regulators),
+> +					     regulators);
+>  	if (ret)
+>  		return dev_err_probe(dev, ret, "Failed to enable regulators\n");
+>  
+> -	ret = devm_add_action_or_reset(dev, ltc2688_disable_regulators, st);
+> -	if (ret)
+> -		return ret;
+> -
+>  	vref_reg = devm_regulator_get_optional(dev, "vref");
+>  	if (IS_ERR(vref_reg)) {
+>  		if (PTR_ERR(vref_reg) != -ENODEV)
+

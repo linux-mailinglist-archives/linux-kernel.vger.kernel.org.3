@@ -2,127 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652E059ADEB
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 14:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9964B59ADEF
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 14:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346337AbiHTM1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 08:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        id S1346399AbiHTMcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 08:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344848AbiHTM1r (ORCPT
+        with ESMTP id S1345561AbiHTMb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 08:27:47 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB76543E8;
-        Sat, 20 Aug 2022 05:27:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DBD27CE0E05;
-        Sat, 20 Aug 2022 12:27:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD14C433C1;
-        Sat, 20 Aug 2022 12:27:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660998463;
-        bh=assOHwgQdKBmJy5Y6XWkbZif7DaKqia6uNgtfAA8UVY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bMyKVb/N/JIQ9vcxfpfpLb0jkYMa6dvUqniv0ut1x7pN/QbxuNJTfrOu6AzWIFKz6
-         NtATJmFiUQ8ikRvezwCgb42wepJQIG/cIle1ET4M7cMuUmUyngai/vEoGLWNjG9nEF
-         Id+Xw+wOSz+eySeyYxSSsl1B4hSMxsHScapy6tR2Wx5LGqsGeTfnsvYIBwNpnGlmR7
-         8u1aA8Lu9zzmCUtTK9fJbowd1xdup7NGfig1nEn5NcXGUkA6A/Nix0nxhfd/NRVx0y
-         NpfzIj/lPb3PBafsX7tN3g9CeeYIjKr1qxZ2DZqli6Z3e318n1ULuQzNR3kvmy3Ttx
-         AzX0yVCtF70Lg==
-Date:   Sat, 20 Aug 2022 21:27:33 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Tom Zanussi <zanussi@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH 3/4] tracing/eprobes: Fix reading of string fields
-Message-Id: <20220820212733.f19ae9f07c0868af3a008077@kernel.org>
-In-Reply-To: <20220820014833.220833221@goodmis.org>
-References: <20220820014035.531145719@goodmis.org>
-        <20220820014833.220833221@goodmis.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 20 Aug 2022 08:31:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC83E6BCD2
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 05:31:57 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oPNdn-0005aE-Mi; Sat, 20 Aug 2022 14:31:51 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oPNdk-0002pe-TW; Sat, 20 Aug 2022 14:31:48 +0200
+Date:   Sat, 20 Aug 2022 14:31:48 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
+        Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Jander <david@protonic.nl>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v1 7/7] ethtool: add interface to interact with
+ Ethernet Power Equipment
+Message-ID: <20220820123148.GH10138@pengutronix.de>
+References: <20220819120109.3857571-1-o.rempel@pengutronix.de>
+ <20220819120109.3857571-8-o.rempel@pengutronix.de>
+ <Yv/9XVjRaa5jwpBo@lunn.ch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yv/9XVjRaa5jwpBo@lunn.ch>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 21:40:38 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Fri, Aug 19, 2022 at 11:15:09PM +0200, Andrew Lunn wrote:
+> > $ ip l
+> > ...
+> > 5: t1l1@eth0: <BROADCAST,MULTICAST> ..
+> > ...
+> > 
+> > $ ethtool --show-pse t1l1
+> > PSE attributs for t1l1:
+> > PoDL PSE Admin State: disabled
+> > PoDL PSE Power Detection Status: disabled
+> > 
+> > $ ethtool --set-pse t1l1 podl-pse-admin-control enable
+> > $ ethtool --show-pse t1l1
+> > PSE attributs for t1l1:
+> > PoDL PSE Admin State: enabled
+> > PoDL PSE Power Detection Status: delivering power
 > 
-> Currently when an event probe (eprobe) hooks to a string field, it does
-> not display it as a string, but instead as a number. This makes the field
-> rather useless. Handle the different kinds of strings, dynamic, static,
-> relational/dynamic etc.
+> Here you seem to indicate that delivering power is totally independent
+> of the interface admin status, <BROADCAST,MULTICAST>. The interface is
+> admin down, yet you can make it deliver power. I thought there might
+> be a link between interface admin status and power? Do the standards
+> say anything about this? Is there some sort of industrial norm?
 > 
-> Now when a string field is used, the ":string" type can be used to display
-> it:
-> 
->   echo "e:sw sched/sched_switch comm=$next_comm:string" > dynamic_events
+> I'm also wondering about the defaults. It seems like the defaults you
+> are proposing is power is off by default, and you have to use ethtool
+> to enable power. That does not seem like the most friendly
+> settings. Why not an 'auto' mode where if the PHY has PoDL PSE
+> capabilities, on ifup it is enabled, on ifdown it is disabled? And you
+> can put it into a 'manual' mode where you control it independent of
+> administrative status of the interface?
 
-Really nice!
+Hm. I would say, safe option is to enable PSE manually. Here are my
+reasons:
+- some system may require to have power be enabled on boot, before we
+  start to care about administrative state of the interface.
+- in some cases powered device should stay enabled, even if we do
+  ifup/ifdown
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+I assume, safe defaults should be:
+- keep PSE always off, except system was configured to enable it on
+  boot.
+- keep PSE on after it was enabled, even on if up/down
+- bind PSE admin state to the interface state only if user explicitly
+  requested it.
 
-Thank you!
+At this round is only default, manual mode is implemented. Automatic
+mode can be added later if needed.
 
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  kernel/trace/trace_eprobe.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index 550671985fd1..a1d3423ab74f 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -311,6 +311,27 @@ static unsigned long get_event_field(struct fetch_insn *code, void *rec)
->  
->  	addr = rec + field->offset;
->  
-> +	if (is_string_field(field)) {
-> +		switch (field->filter_type) {
-> +		case FILTER_DYN_STRING:
-> +			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
-> +			break;
-> +		case FILTER_RDYN_STRING:
-> +			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
-> +			break;
-> +		case FILTER_STATIC_STRING:
-> +			val = (unsigned long)addr;
-> +			break;
-> +		case FILTER_PTR_STRING:
-> +			val = (unsigned long)(*(char *)addr);
-> +			break;
-> +		default:
-> +			WARN_ON_ONCE(1);
-> +			return 0;
-> +		}
-> +		return val;
-> +	}
-> +
->  	switch (field->size) {
->  	case 1:
->  		if (field->is_signed)
-> -- 
-> 2.35.1
+These are my points, but i'm open for discussion.
 
-
+Regards,
+Oleksij
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

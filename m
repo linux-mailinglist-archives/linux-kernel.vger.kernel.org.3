@@ -2,36 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675A659AECC
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 17:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBDB59AEDD
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 17:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346505AbiHTPFt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 20 Aug 2022 11:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S1345396AbiHTPbZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 20 Aug 2022 11:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbiHTPFq (ORCPT
+        with ESMTP id S229605AbiHTPbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 11:05:46 -0400
+        Sat, 20 Aug 2022 11:31:22 -0400
 Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD929B1F0
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 08:05:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B867697A
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 08:31:21 -0700 (PDT)
 Received: from [192.168.0.105] (unknown [136.169.224.60])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 90E0540737B7;
-        Sat, 20 Aug 2022 15:05:36 +0000 (UTC)
-Message-ID: <7d4dd8009a777a7d32f4872dc0285878dbbb91b8.camel@ispras.ru>
-Subject: Re: [PATCH] platform/chrome: fix double-free in
- chromeos_laptop_prepare()
+        by mail.ispras.ru (Postfix) with ESMTPSA id CFF9740D403D;
+        Sat, 20 Aug 2022 15:31:19 +0000 (UTC)
+Message-ID: <6228a437bb9d7f677f5e97973518bcd555bc2a07.camel@ispras.ru>
+Subject: [POSSIBLE BUG] Dereferencing of NULL pointer
 From:   Rustam Subkhankulov <subkhankulov@ispras.ru>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+To:     Juergen Gross <jgross@suse.com>
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
         Alexey Khoroshilov <khoroshilov@ispras.ru>,
         ldv-project@linuxtesting.org
-Date:   Sat, 20 Aug 2022 20:05:13 +0300
-In-Reply-To: <YvnS7IKr/9VhffHX@google.com>
-References: <20220813220843.2373004-1-subkhankulov@ispras.ru>
-         <YvnS7IKr/9VhffHX@google.com>
+Date:   Sat, 20 Aug 2022 20:30:56 +0300
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.44.1-0ubuntu1 
@@ -45,30 +41,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-08-15 at 05:00 +0000, Tzung-Bi Shih wrote:
-> Alternatively, I would prefer to fix the double-free by setting
-> `i2c_peripherals` to NULL after [1].
+Version: 6.0-rc1
 
-Since 'cros_laptop->num_i2c_peripherals' is assigned with nonzero value
-(otherwise the code on 'err_out' is not executed), setting 
-'i2c_peripherals' to NULL after [1] will cause dereferencing of 
-NULL pointer in chromeos_laptop_destroy() at [2]. 
+Description: 
 
-[1]:
-https://elixir.bootlin.com/linux/v5.19/source/drivers/platform/chrome/chromeos_laptop.c#L787
-[2]:
-https://elixir.bootlin.com/linux/v5.19/source/drivers/platform/chrome/chromeos_laptop.c#L860
+In function 'privcmd_ioctl_dm_op' (drivers/xen/privcmd.c: 615)return
+value of 'kcalloc' with GFP_KERNEL flag is assigned to "pages"
+variable. GFP_KERNEL flag does not guarantee, that the return value
+will not be NULL. In that case, there is a jump to the "out" label. 
 
-> After a quick glance, I found an invalid memory access at [2] if
-> `i2c_peripherals` is NULL (see [3]). 
+---------------------------------------------------------------------
+667	pages = kcalloc(nr_pages, sizeof(*pages), GFP_KERNEL);
+668	if (!pages) {
+669		rc = -ENOMEM;
+670		goto out;
+671	}
+---------------------------------------------------------------------
 
-After applying the patch, there will be no invalid memory access at [2]
-if 'i2c_peripherals' is NULL, because in this situation 
-'cros_laptop->num_i2c_peripherals' is zero and there is no single 
-iteration of the loop.
+Variable 'pages' is passed to function 'unpin_user_pages_dirty_lock' as
+1st parameter at [drivers/xen/privcmd.c: 695].
 
-> Or was the double-free issue
-> discovered by
-> some static analysis?
+---------------------------------------------------------------------
+694	out:
+695		unlock_pages(pages, nr_pages);
+---------------------------------------------------------------------
 
-Yes, it was discovered by SVACE static analysis tool.
+Then, variable 'pages' is passed to function
+'unpin_user_pages_dirty_lock' as 1st parameter at
+[drivers/xen/privcmd.c: 612].
+
+---------------------------------------------------------------------
+610	static void unlock_pages(struct page *pages[], unsigned int
+nr_pages)
+611	{
+612		unpin_user_pages_dirty_lock(pages, nr_pages, true);
+613	}
+---------------------------------------------------------------------
+
+'pages' and 'npages' are passed as parameters to function
+'sanity_check_pinned_pages' at [mm/gup.c: 311].
+
+---------------------------------------------------------------------
+299	void unpin_user_pages_dirty_lock(struct page **pages, unsigned
+long npages,
+300					 bool make_dirty)
+301	{
+302		unsigned long i;
+303     struct folio *folio;
+304     unsigned int nr;
+305		
+306		if (!make_dirty) {
+307			unpin_user_pages(pages, npages);
+308			return;
+309		}
+310
+311		sanity_check_pinned_pages(pages, npages);
+---------------------------------------------------------------------
+
+In function 'sanity_check_pinned_pages', if
+(IS_ENABLED(CONFIG_DEBUG_VM)) and (npages > 0), NULL pointer 'pages' is
+dereferenced at [mm/gup.c: 51].
+
+---------------------------------------------------------------------
+32	static inline void sanity_check_pinned_pages(struct page
+**pages,
+33						     unsigned long
+npages)
+34	{
+35		if (!IS_ENABLED(CONFIG_DEBUG_VM))
+36			return;
+..
+50		for (; npages; npages--, pages++) {
+51			struct page *page = *pages;
+								^^^^^^
+^
+---------------------------------------------------------------------
+
+Else if (!IS_ENABLED(CONFIG_DEBUG_VM)) and (npages > 0) function
+'gup_folio_next' is called with 'pages' and 'npages' as parameters at
+[mm/gup.c: 311].
+
+---------------------------------------------------------------------
+312		for (i = 0; i < npages; i += nr) {
+313			folio = gup_folio_next(pages, npages, i, &nr);
+---------------------------------------------------------------------
+
+In function 'gup_folio_next' NULL pointer 'list' is dereferenced at
+[mm/gup.c: 263].
+
+---------------------------------------------------------------------
+262	static inline struct folio *gup_folio_next(struct page **list,
+263			unsigned long npages, unsigned long i,
+unsigned int *ntails)
+264	{
+265		struct folio *folio = page_folio(list[i]);
+								
+		^^^^^^^^^
+---------------------------------------------------------------------
+

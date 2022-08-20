@@ -2,114 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B7759AD08
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 11:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD8759AD0D
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 11:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245125AbiHTJxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 05:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
+        id S1344309AbiHTJ5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 05:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343944AbiHTJxR (ORCPT
+        with ESMTP id S231132AbiHTJ5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 05:53:17 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82059E65;
-        Sat, 20 Aug 2022 02:53:15 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id l33-20020a05600c1d2100b003a645240a95so1209710wms.1;
-        Sat, 20 Aug 2022 02:53:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=yTmsNckNaAZ+29w7J9XGVeljRtaRfGzpOqqruunQXzE=;
-        b=AlXZQgqol+ZQyYLLlNe6RE30IbbK4i+2hruYi71ZcbzDIh4uwlmRtZa8ZezQLM9CKH
-         Mwfepj5zZ3WB/LnhrR42Hvk3hRAisfyWGwwWuqJmuBXPQLPRbcKvJpHhjN491turXReH
-         J3UCfP6Tms2r+AQ6OyzZeEKsHriKLhr78lkJPy4s/z7J4LutVDWnACf6smV/yr+Y6YAZ
-         CUI6O4hpSAojf4uPh+9b64DF+Hsq57Yw1z4ROo3tZaK0tWvfGYsCTG+jVPgDCPIayM+d
-         u4s7EtO0s0ZhEV4gLLot0HuMfS7E6misvcoed0eIDcFhPPt373QEHVf3oSBknoFxj+1C
-         CyMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=yTmsNckNaAZ+29w7J9XGVeljRtaRfGzpOqqruunQXzE=;
-        b=DGtow8nFIMdHb+KMZXMAIkDvJz4Fe67efOA+poLCIePKPF/ngi4TYfwxRGqqukCQI6
-         7c2TcTu3Bi3D+bwa2UI0b5DyvH4UEvyrIyfOzZTzZj7Xb3Tne9jX5nfegLfcFCSWig9k
-         9IZUJUpoYnWFgD88vpkB80ye3iBcpb9GG7ZcwYl0qC/1a6a5reKmDJa3xFoIn50kksmm
-         zsbNiDTFmRNLFTbufTccM8hGBi3/GmJAjGyJ4IRj/R5eM+mUjgynEqdwNLD1C4ZKqLew
-         GSAZfPjkKXbnSRe49CP2+3vPNvz/xLK8sk4txe9c3VpuN4B4YiJh5PriqOaOv5TuY+c3
-         bjBQ==
-X-Gm-Message-State: ACgBeo0yflp7OOnv53IyMl32DyZIp/EoKZ1oGVZHUBzIzELPqJf2wkPK
-        iCJJLLCPXuiqfO/tU/3iHTo=
-X-Google-Smtp-Source: AA6agR6rO4EusgdhFNmVzGx+CBRQxesGceFjy+Mr30QRQ+4R2VVoL76UipBTN+V3VoBepajWSvJxLg==
-X-Received: by 2002:a1c:2701:0:b0:3a4:f86b:9d28 with SMTP id n1-20020a1c2701000000b003a4f86b9d28mr6894421wmn.168.1660989193955;
-        Sat, 20 Aug 2022 02:53:13 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05600c154e00b003a32251c3f9sm13609214wmg.5.2022.08.20.02.53.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 02:53:13 -0700 (PDT)
-Date:   Sat, 20 Aug 2022 10:53:10 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.19 0/7] 5.19.3-rc1 review
-Message-ID: <YwCvBu9ABJCTKywD@debian>
-References: <20220819153711.552247994@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819153711.552247994@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 20 Aug 2022 05:57:00 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D522A65817;
+        Sat, 20 Aug 2022 02:56:59 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id BB5B45C023C;
+        Sat, 20 Aug 2022 05:56:55 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute4.internal (MEProxy); Sat, 20 Aug 2022 05:56:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660989415; x=
+        1661075815; bh=kdaAC0zun6WCRzZrFQuABIy5yngIWQJVDLY5tm6Rge8=; b=z
+        +knXgqPKnfrkEtJt3sGcxBJkZpKqAlhwMj+QqtV7NIKmudXW+xI43CKG8YgL6vZJ
+        S+9KJcginCH7pEYuufb333TcRdVsfDNn8XqVJi4E3PFturGyyJeJ4SA6lCpWzrkj
+        OFsmmRRWRejokK5VnAcXed2s0S7ewXFOJB+oT1bApLYbjU9l3Ar3VDQK7Ku9KrYP
+        50dOcrqVczXe7f5tA8Qqh/rqmIOlFfVY2nSUiaD0ddrGRSqkIphY+PJs3428Eu0x
+        cZMmVloz03jtv4jKfTtffmIQb8X7pPIxr2tYJ+GLITRmrRH2yw4pxlbdgCltN48a
+        F0SNp4PMdf0hwXu7pJR5g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660989415; x=
+        1661075815; bh=kdaAC0zun6WCRzZrFQuABIy5yngIWQJVDLY5tm6Rge8=; b=c
+        b03vsUwSOrJyZsHaoz64PZG/b8vT8PvoGFWTRs/ouxm9HQ8DjeDVuSLWMYH4tiyu
+        Bh0G192rNDe0HBf/yO3jontQ6iNfxBaMZxcMQYY3Vv+I7PFOup3dOndJFN9rWPSu
+        vl21m2PTkj4Pjro9EyHZYvxqNLn4UbwnsBrQOzMZaXwb4wRPcnvyg6BpFQnBRV08
+        voTuPfI36Cmj8C5kx4C9axXWX6ctW1lYapZwCwtOCokMakGYZ5/TpW0jq+JX3Qn8
+        exTFGkJnOrMXaVWbIWQEEGDQiE4tYT7b9yrdyjmm6QsDgfAVMATg08N9Tn6NGKnb
+        BXXlzfbhYMU3aIoMCMp6Q==
+X-ME-Sender: <xms:5a8AY1AzzlEH9iwpT8crJF6DyqJULOrHkYz06MJuHNatB-PbJSoe-g>
+    <xme:5a8AYzjVmwzJ2C062nhWTmuf5vSIvAuUCbn2bF6LjMq1yptC4veXiZSqjjmVLptHN
+    jp8hPJKvBmVE96vg8I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeifedgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
+    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
+    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:5a8AYwlx6nZMkS1JUqQJS2qoJb8Qie8GNWpawDqUswLRUpqZXBdTrA>
+    <xmx:5a8AY_yij4oOSG2Nn4RcHKOGWp172zizxkky_Yur4fWl2oUoCRWkQQ>
+    <xmx:5a8AY6SRKhAf3bEvX3gcm0w1uo5IFg15BiBUEjOJt19bYDYP1wZi_w>
+    <xmx:568AY7KyxKX9cjDCuErqlHbJpvGzP-mmysuIGhLzHeFF-Zl7c-Ielw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C18AF36A0071; Sat, 20 Aug 2022 05:56:53 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <d91451dc-b9a2-4f10-b908-687cbb94bd73@www.fastmail.com>
+In-Reply-To: <20220815123613.3291770-2-chenhuacai@loongson.cn>
+References: <20220815123613.3291770-1-chenhuacai@loongson.cn>
+ <20220815123613.3291770-2-chenhuacai@loongson.cn>
+Date:   Sat, 20 Aug 2022 10:56:33 +0100
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Huacai Chen" <chenhuacai@loongson.cn>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Dinh Nguyen" <dinguyen@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        "Xuefeng Li" <lixuefeng@loongson.cn>,
+        "Guo Ren" <guoren@kernel.org>, "Xuerui Wang" <kernel@xen0n.name>,
+        "Andrew Morton" <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "Feiyang Chen" <chenfeiyang@loongson.cn>
+Subject: Re: [PATCH V10 1/4] MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init()
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Fri, Aug 19, 2022 at 05:39:16PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.3 release.
-> There are 7 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 21 Aug 2022 15:36:59 +0000.
-> Anything received after that time might be too late.
 
-Build test (gcc version 12.2.1 20220819):
-mips: 59 configs -> 1 failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> fails
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+=E5=9C=A82022=E5=B9=B48=E6=9C=8815=E6=97=A5=E5=85=AB=E6=9C=88 =E4=B8=8B=E5=
+=8D=881:36=EF=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
+> From: Feiyang Chen <chenfeiyang@loongson.cn>
+>
+> We are preparing to add sparse vmemmap support to LoongArch. MIPS and
+> LoongArch need to call pgd_init()/pud_init()/pmd_init() when populating
+> page tables, so adjust their prototypes to make generic helpers can ca=
+ll
+> them.
+>
+> NIOS2 declares pmd_init() but doesn't use, just remove it to avoid bui=
+ld
+> errors.
+>
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 
-Note:
-csky and mips allmodconfig fails with gcc-12, passes with gcc-11.
-Already reported for mainline.
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-mips: Booted on ci20 board. No regression. [2]
+For MIPS part :-)
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1663
-[3]. https://openqa.qa.codethink.co.uk/tests/1668
+[...]
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Thanks
+- Jiaxun
 
---
-Regards
-Sudip

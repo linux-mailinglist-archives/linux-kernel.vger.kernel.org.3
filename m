@@ -2,167 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C6159AA9F
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 04:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 732B659AAAB
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 04:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241216AbiHTCGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 22:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
+        id S239083AbiHTCRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 22:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiHTCGH (ORCPT
+        with ESMTP id S229672AbiHTCRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 22:06:07 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E51104471
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 19:06:04 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id gb36so11796277ejc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 19:06:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc;
-        bh=PGhNSQLIn/ZoIFIjGbm3ePERCEF0hihTt1y3R9iOg80=;
-        b=EjpOGt+n+VN/1y/8qbnTOTLkdvTXGd+Eyu2sa89rqbJW2T+djoGepA5BY4y0Cab7N/
-         4uTltTKW/kCCFesRxXG8wyyk3YJywtLYPwq1wXc+G9g+3AYdXBuRdqESxkfmwy7XjyI0
-         bJTFJFFugORG1om/MuxxuGUQi/QlhyTvMnYWwBEo4g2se4TbINfNhpHnl18v1oVzh9H/
-         Dww/kXsdQ/7AA0Fxo3G8ovXkQwhqOTLCntE8Kl87Xvxrbl24bwPqnxed2lHxaLjhYl97
-         mN3SeRDjI0AQpHanJPYcTSG1dlFCZBheT2T6CPLZ5zHllIAHBt5XnvFMjk1MWBYesTHp
-         OLBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
-         :to:cc;
-        bh=PGhNSQLIn/ZoIFIjGbm3ePERCEF0hihTt1y3R9iOg80=;
-        b=eESy34vbWWIcT2EyVqBIzqiZwkFtqCKjP01RGFb9TRMdaWL2j+gbQKIkiSfncfUhVo
-         lLSdD2eyeAmw5BG+rsxwv/gWuhkngpCm67NuL87doF3cjdF0+463BIwS34bZ0NCDcPWW
-         9TGesk5KeiufRciwmtYBstA3G/ymulQw5t0Y4a8FHtTHOBM+1UhPYa/ycEu3j5c19v5w
-         YWgvJojz9n4JHqwhCzYT1YWIB07eHVu+upWXLIT52WmhHUZKxsNUDj18hLeZAKxs/4cH
-         VnUfyDgtvjOCezThVegQaU4c9HCe4QpER5Cwu2Iph8UmCYgaOvwLmJXvIK2EFbtiFmAl
-         vm3A==
-X-Gm-Message-State: ACgBeo2/cXgF5E8wwQ7jr76UD9rtzl4PTsskYaVCQvYMGD/h40/W2UJk
-        hoRY3Dt6W23WHrvJHqAKBt4=
-X-Google-Smtp-Source: AA6agR7G9k+/d7JV7sNAZQ5LDRtXkrTgcCZ/VHRhnNf8pdCjVF2oMv2AQzXjhGCb9krBii0wYNHtSw==
-X-Received: by 2002:a17:907:6297:b0:72f:9aad:fcb with SMTP id nd23-20020a170907629700b0072f9aad0fcbmr6397591ejc.161.1660961162617;
-        Fri, 19 Aug 2022 19:06:02 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id gq10-20020a170906e24a00b00734b3194ecesm3062400ejb.163.2022.08.19.19.06.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 19 Aug 2022 19:06:01 -0700 (PDT)
-Date:   Sat, 20 Aug 2022 02:06:01 +0000
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Abel Wu <wuyun.abel@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Muchun Song <songmuchun@bytedance.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Wei Yang <richard.weiyang@linux.alibaba.com>
-Subject: Re: [PATCH v2] mm/mempolicy: fix lock contention on mems_allowed
-Message-ID: <20220820020601.vxeotpde5obuauqt@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20220811124157.74888-1-wuyun.abel@bytedance.com>
- <YvUM7KaJaY+xnN2Y@dhcp22.suse.cz>
- <YvUOCTlk7HSgJkdY@dhcp22.suse.cz>
+        Fri, 19 Aug 2022 22:17:17 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE44105F3F;
+        Fri, 19 Aug 2022 19:17:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E5479CE2834;
+        Sat, 20 Aug 2022 02:17:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 100BFC433B5;
+        Sat, 20 Aug 2022 02:17:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660961833;
+        bh=8iQAQ32qqDbHq5wsUf8jya/MYI4PvyumME5D7QFSNfA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=keOAy5JRV+yERuRjcNQRuLTUi6VHNW8WpWfYftL8l5pGvcoDy5AlIl3KxDRXBwwap
+         LwsVItIlzp2jtDZv+JHYixmc8ZJTiUv6lF8H5zpcvia5EYZ3lC4tPIneSEfJZvMmVF
+         hXtm5MNia9uxl1dxbkHX6WmPYLHgraKn79dM0D01tQHlc18l4oK6qK7SPeH8lXmdjq
+         v2vm+Euu84SqBALarEVKi4LSB5zHb5sKhhaEpW6JWhPh7zf89Q6y/d6aEsrfC4eQHg
+         0bx9pKDJi+9r4Fwc8e4lXJPz3Ovm8ZGfuJZUHGd1FL6tuvFgtwuVQI0do/Rm1RvMl8
+         DHaLqnWSUlZ1A==
+Received: by mail-vs1-f42.google.com with SMTP id l7so5878816vsc.0;
+        Fri, 19 Aug 2022 19:17:12 -0700 (PDT)
+X-Gm-Message-State: ACgBeo08TaDEb7v5veGEkT5oIQO8Qx3ghURHlKZ8flt/FdYdgl89vGb5
+        J1Pjyfi5IFzKkyOaysTQanIWKUsjAXQtcNDDAiA=
+X-Google-Smtp-Source: AA6agR4AdxdwgLKOpjY1WxAeizyGuDuybEZamKTt+850iPzH8Qsi1TMyozDV+i7fndmwC4ajsfbAEDnU9+bKDMCphi8=
+X-Received: by 2002:a67:d58b:0:b0:390:2574:6736 with SMTP id
+ m11-20020a67d58b000000b0039025746736mr2100279vsj.78.1660961832041; Fri, 19
+ Aug 2022 19:17:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvUOCTlk7HSgJkdY@dhcp22.suse.cz>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220819081403.7143-1-zhangqing@loongson.cn> <20220819081403.7143-2-zhangqing@loongson.cn>
+ <f9b12eed-a7a0-0f2b-4679-1f465e22cad6@loongson.cn> <20220819125343.1623d850@gandalf.local.home>
+ <06575d5e-7451-17ca-b5a8-4153816b3808@loongson.cn>
+In-Reply-To: <06575d5e-7451-17ca-b5a8-4153816b3808@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 20 Aug 2022 10:16:59 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4hVhid1=aaP-fDtdvYyJ+yJqkKeznEN5a9zF9S-dHgog@mail.gmail.com>
+Message-ID: <CAAhV-H4hVhid1=aaP-fDtdvYyJ+yJqkKeznEN5a9zF9S-dHgog@mail.gmail.com>
+Subject: Re: [PATCH 1/9] LoongArch/ftrace: Add basic support
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Ingo Molnar <mingo@redhat.com>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 04:11:21PM +0200, Michal Hocko wrote:
->fix the lkml address (fat fingers, sorry)
+Hi, all,
+
+On Sat, Aug 20, 2022 at 9:34 AM Qing Zhang <zhangqing@loongson.cn> wrote:
 >
->On Thu 11-08-22 16:06:37, Michal Hocko wrote:
->> [Cc Wei Yang who is author of 78b132e9bae9]
->> 
->> On Thu 11-08-22 20:41:57, Abel Wu wrote:
->> > The mems_allowed field can be modified by other tasks, so it isn't
->> > safe to access it with alloc_lock unlocked even in the current
->> > process context.
->> > 
->> > Say there are two tasks: A from cpusetA is performing set_mempolicy(2),
->> > and B is changing cpusetA's cpuset.mems:
->> > 
->> >   A (set_mempolicy)		B (echo xx > cpuset.mems)
->> >   -------------------------------------------------------
->> >   pol = mpol_new();
->> > 				update_tasks_nodemask(cpusetA) {
->> > 				  foreach t in cpusetA {
->> > 				    cpuset_change_task_nodemask(t) {
->> >   mpol_set_nodemask(pol) {
->> > 				      task_lock(t); // t could be A
->> >     new = f(A->mems_allowed);
->> > 				      update t->mems_allowed;
->> >     pol.create(pol, new);
->> > 				      task_unlock(t);
->> >   }
->> > 				    }
->> > 				  }
->> > 				}
->> >   task_lock(A);
->> >   A->mempolicy = pol;
->> >   task_unlock(A);
->> > 
->> > In this case A's pol->nodes is computed by old mems_allowed, and could
->> > be inconsistent with A's new mems_allowed.
->> 
->> Just to clarify. With an unfortunate timing and those two nodemasks
->> overlap the end user effect could be a premature OOM because some nodes
->> wouldn't be considered, right?
->> 
->> > While it is different when replacing vmas' policy: the pol->nodes is
->> > gone wild only when current_cpuset_is_being_rebound():
->> > 
->> >   A (mbind)			B (echo xx > cpuset.mems)
->> >   -------------------------------------------------------
->> >   pol = mpol_new();
->> >   mmap_write_lock(A->mm);
->> > 				cpuset_being_rebound = cpusetA;
->> > 				update_tasks_nodemask(cpusetA) {
->> > 				  foreach t in cpusetA {
->> > 				    cpuset_change_task_nodemask(t) {
->> >   mpol_set_nodemask(pol) {
->> > 				      task_lock(t); // t could be A
->> >     mask = f(A->mems_allowed);
->> > 				      update t->mems_allowed;
->> >     pol.create(pol, mask);
->> > 				      task_unlock(t);
->> >   }
->> > 				    }
->> >   foreach v in A->mm {
->> >     if (cpuset_being_rebound == cpusetA)
->> >       pol.rebind(pol, cpuset.mems);
->> >     v->vma_policy = pol;
->> >   }
->> >   mmap_write_unlock(A->mm);
->> > 				    mmap_write_lock(t->mm);
->> > 				    mpol_rebind_mm(t->mm);
->> > 				    mmap_write_unlock(t->mm);
->> > 				  }
->> > 				}
->> > 				cpuset_being_rebound = NULL;
->> > 
->> > In this case, the cpuset.mems, which has already done updating, is
->> > finally used for calculating pol->nodes, rather than A->mems_allowed.
->> > So it is OK to call mpol_set_nodemask() with alloc_lock unlocked when
->> > doing mbind(2).
->> > 
->> > Fixes: 78b132e9bae9 ("mm/mempolicy: remove or narrow the lock on current")
->> > Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
->> 
+>
+>
+> On 2022/8/20 =E4=B8=8A=E5=8D=8812:53, Steven Rostedt wrote:
+> > On Fri, 19 Aug 2022 17:29:29 +0800
+> > Jinyang He <hejinyang@loongson.cn> wrote:
+> >
+> >> It seems this patch adds non-dynamic ftrace, this code should not
+> >> appear here.
+> >> BTW is it really necessary for non-dynamic ftrace? I do not use it
+> >> directly and frequently, IMHO, non-dynamic can be completely
+> >>
+> >> replaced dynamic?
+> >
+> > Note, I keep the non dynamic ftrace around for debugging purposes.
+> >
+> > But sure, it's pretty useless. It's also good for bringing ftrace to a =
+new
+> > architecture (like this patch is doing), as it is easier to implement t=
+han
+> > dynamic ftrace, and getting the non-dynamic working is usually the firs=
+t
+> > step in getting dynamic ftrace working.
+> >
+> > But it's really up to the arch maintainers to keep it or not.
+> >
+> Before submitting, I saw that other architectures almost kept
+> non-dynamic methods without cleaning up, I tend to keep them.
+> How do you think, Huacai. :)
+I prefer to keep the non-dynamic method.
 
-Thanks for pointing out. This looks correct.
-
-Reviewed-by: Wei Yang <richard.weiyang@gmail.com>
-
+Huacai
+>
+> Thanks,
+> - Qing
+> > -- Steve
+> >
+>
+>

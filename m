@@ -2,116 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9FD59AEE0
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 17:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FB359AEEA
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 17:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346179AbiHTPf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 11:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
+        id S1346238AbiHTPht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 11:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345955AbiHTPfY (ORCPT
+        with ESMTP id S1345775AbiHTPhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 11:35:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C58463F2E
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 08:35:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33860B8068C
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 15:35:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73429C433C1;
-        Sat, 20 Aug 2022 15:35:18 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] LoongArch: Fix build warnings in VDSO
-Date:   Sat, 20 Aug 2022 23:35:06 +0800
-Message-Id: <20220820153506.607928-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
+        Sat, 20 Aug 2022 11:37:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA526AA06
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 08:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661009864;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CSUDwEi1svTWS13A5fcvj35eehBaJVIHJlmeSdMUK/M=;
+        b=cx1EAOZFIZNVYkUlcg2+QrxMupJaHKVBd/yPygNDCsxdyUQOQ8rd2xcKUTr5CUtAM0yywo
+        izedAR11QX9rMSNcAtvRtfYeTWQ4m+/iXwkuRenBVTcuGHxH5rX+OC9lyBAm4aX3PABXha
+        DZ+Ue0RpTWsDiR42GwihLzGsm+JewIM=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-35-5HGTBcVMOO2Tix7BXxhhhw-1; Sat, 20 Aug 2022 11:37:43 -0400
+X-MC-Unique: 5HGTBcVMOO2Tix7BXxhhhw-1
+Received: by mail-ed1-f69.google.com with SMTP id y16-20020a056402359000b0043db5186943so4383855edc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 08:37:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=CSUDwEi1svTWS13A5fcvj35eehBaJVIHJlmeSdMUK/M=;
+        b=x05i5bFlZy831hwP+icXowG8JCwS2SORbig6b7xFfx3YeGMRpi0u0vEsKyuu0IL767
+         zuIlGlkj6y89fOxKLOqyhF7qMGnHWaYLYI6pQT44S8itK/T8o6N8JpNtriAapYne/uT+
+         HCEiUZ7nf7Teuc4kMU4Uiyg35Iw6A2YbrmCk90PAJwbt8ZaMSv9kPpHRJWyW5iY+t0Cv
+         OvCVLhPcRZj0GauMCADEZDdyr6HvJGbXUC/A7OXaUtZ9GVb5xuvlN1c/lQu2Rhx3Iw0M
+         f/GjVG0haYvECz8Y2gV4QP+LBhSuNqidtJigkx/bNQUJk8ANOl375jSpPRo8WCIFn8Xy
+         kA8A==
+X-Gm-Message-State: ACgBeo105ubD4rvk/wUEcDiFlk3lI+sfBxt6SYBED2rjTywLI19QTK70
+        OU7cA1QgZQt6qAJouLo7VthgTo0nYwOeWjTWm77uni6z49XqYx3Kb7gkokQpTPQlsLbDpikcZ2r
+        0VfYY8dWu7ul2rv63lHy2N0Nl
+X-Received: by 2002:a05:6402:3495:b0:43d:d76e:e9ff with SMTP id v21-20020a056402349500b0043dd76ee9ffmr10158398edc.227.1661009862301;
+        Sat, 20 Aug 2022 08:37:42 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR56NKhopv/ioAeFb925MKnrc4gMGSU/vLUjnbjCFZdK2VcWWVNy8nDcXS+vYMB17jvhSSMtNQ==
+X-Received: by 2002:a05:6402:3495:b0:43d:d76e:e9ff with SMTP id v21-20020a056402349500b0043dd76ee9ffmr10158391edc.227.1661009862150;
+        Sat, 20 Aug 2022 08:37:42 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id ku7-20020a170907788700b0073d15dfdc09sm2324594ejc.11.2022.08.20.08.37.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 20 Aug 2022 08:37:41 -0700 (PDT)
+Message-ID: <1c4ffc37-df00-0487-2e4e-79b5178d9741@redhat.com>
+Date:   Sat, 20 Aug 2022 17:37:40 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: 6.0-rc1 regression block (blk_mq) / RCU task stuck errors +
+ block-io hang
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, rcu@vger.kernel.org
+References: <dd6844e7-f338-a4e9-2dad-0960e25b2ca1@redhat.com>
+ <17ccd5ae-0268-1bee-7822-1352f4c676ba@acm.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <17ccd5ae-0268-1bee-7822-1352f4c676ba@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix build warnings in VDSO as below:
+Hi Bart,
 
-arch/loongarch/vdso/vgettimeofday.c:9:5: warning: no previous prototype for '__vdso_clock_gettime' [-Wmissing-prototypes]
-    9 | int __vdso_clock_gettime(clockid_t clock,
-      |     ^~~~~~~~~~~~~~~~~~~~
-arch/loongarch/vdso/vgettimeofday.c:15:5: warning: no previous prototype for '__vdso_gettimeofday' [-Wmissing-prototypes]
-   15 | int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
-      |     ^~~~~~~~~~~~~~~~~~~
-arch/loongarch/vdso/vgettimeofday.c:21:5: warning: no previous prototype for '__vdso_clock_getres' [-Wmissing-prototypes]
-   21 | int __vdso_clock_getres(clockid_t clock_id,
-      |     ^~~~~~~~~~~~~~~~~~~
-arch/loongarch/vdso/vgetcpu.c:27:5: warning: no previous prototype for '__vdso_getcpu' [-Wmissing-prototypes]
-   27 | int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused)
+On 8/19/22 16:49, Bart Van Assche wrote:
+> On 8/19/22 05:01, Hans de Goede wrote:
+>> I've been dogfooding 6.0-rc1 on my main workstation and I have hit
+>> this pretty serious bug, serious enough for me to go back to 5.19
+>>
+>> My dmesg is showing various blk_mq (RCU?) related lockdep splats
+>> followed by some tasks getting stuck on disk-IO. E.g. "sync"
+>> is guaranteed to hang, but other tasks too.
+>>
+>> This seems to be mainly the case on "sd" disks (both sata
+>> and USB) where as my main nvme drive seems fine, which has
+>> probably saved me from worse issues...
+>>
+>> Here are 4 task stuck reports from my last boot, where
+>> I had to turn off the machine by keeping the power button
+>> pressed for 4 seconds.
+>>
+>> [ ... ]
+>>
+>> Sorry for not being able to write a better bug-report but I don't have
+>> the time to dive into this deeper. I hope this report is enough for
+>> someone to have a clue what is going on.
+> 
+> Thank you for the detailed report. I think this report is detailed enough to root-cause this issue, something that was not possible before this report.
+> 
+> Please help with verifying whether this patch fixes this issue: "[PATCH] scsi: sd: Revert "Rework asynchronous resume support"" (https://lore.kernel.org/linux-scsi/20220816172638.538734-1-bvanassche@acm.org/).
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/vdso/vgetcpu.c       |  2 ++
- arch/loongarch/vdso/vgettimeofday.c | 15 +++++++++------
- 2 files changed, 11 insertions(+), 6 deletions(-)
+Thanks that is very useful. I'm running 6.0-rc1 with this
+patch added now and so far I've not seen the problem re-occur.
 
-diff --git a/arch/loongarch/vdso/vgetcpu.c b/arch/loongarch/vdso/vgetcpu.c
-index 43a0078e4418..e02e775f5360 100644
---- a/arch/loongarch/vdso/vgetcpu.c
-+++ b/arch/loongarch/vdso/vgetcpu.c
-@@ -24,6 +24,8 @@ static __always_inline const struct vdso_pcpu_data *get_pcpu_data(void)
- 	return (struct vdso_pcpu_data *)(get_vdso_base() - VDSO_DATA_SIZE);
- }
- 
-+extern
-+int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused);
- int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused)
- {
- 	int cpu_id;
-diff --git a/arch/loongarch/vdso/vgettimeofday.c b/arch/loongarch/vdso/vgettimeofday.c
-index b1f4548dae92..8f22863bd7ea 100644
---- a/arch/loongarch/vdso/vgettimeofday.c
-+++ b/arch/loongarch/vdso/vgettimeofday.c
-@@ -6,20 +6,23 @@
-  */
- #include <linux/types.h>
- 
--int __vdso_clock_gettime(clockid_t clock,
--			 struct __kernel_timespec *ts)
-+extern
-+int __vdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts);
-+int __vdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts)
- {
- 	return __cvdso_clock_gettime(clock, ts);
- }
- 
--int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
--			struct timezone *tz)
-+extern
-+int __vdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz);
-+int __vdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz)
- {
- 	return __cvdso_gettimeofday(tv, tz);
- }
- 
--int __vdso_clock_getres(clockid_t clock_id,
--			struct __kernel_timespec *res)
-+extern
-+int __vdso_clock_getres(clockid_t clock_id, struct __kernel_timespec *res);
-+int __vdso_clock_getres(clockid_t clock_id, struct __kernel_timespec *res)
- {
- 	return __cvdso_clock_getres(clock_id, res);
- }
--- 
-2.31.1
+I was also seeing 6.0 suspend/resume issues on 2 laptops with
+sata disks (rather then NVME) which I did not yet get around
+to collecting logs from / reporting. I'm happy to report that
+those suspend/resume issues are also fixed by this.
+
+I'll reply to the patch with my Tested-by for this.
+
+Regards,
+
+Hans
 

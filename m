@@ -2,57 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED0A59AE62
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 15:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A290359AE67
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 15:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347129AbiHTNFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 09:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        id S1346807AbiHTNGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 09:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347001AbiHTNEv (ORCPT
+        with ESMTP id S1348420AbiHTNF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 09:04:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1973ED58;
-        Sat, 20 Aug 2022 06:04:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F4B4B80CD4;
-        Sat, 20 Aug 2022 13:04:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CFDEC433C1;
-        Sat, 20 Aug 2022 13:04:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661000687;
-        bh=ATtdrvkcuR3hWHOKkXQy2ngqguA00ip7E0D3sTSPCIg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lTknPk5Qu1GhYlavME8toSuj/c3jFiy1/xPvG2xC8vOYoXsKhK3Qk4Bkb+6NyIpTS
-         NcvtERb/4zFVzL52C6/uBzC6ILEQllG0JtjIPcbtwLERFJTYVsiXVktksbrOxfAPQa
-         TLIY5XGpagt2tBshaNoAAc3Z/odvWet61uDZt6/W6KprRdQ48j7Y9nxtyjWhGZr7h/
-         Am1hqf86HfIuaUpvTOzKm8C/NmMusyzOp0TKxCOgf2QOsPfgDFjloGKvphsnOtdE/i
-         Qlzvg0S7yUKd1G7veEnI+Zj2uiXWqdVRcA0sGB+Hi5InBFQRCfj6a1q6t3Xl1rB/N5
-         DUbSLjWXAUoaw==
-Date:   Sat, 20 Aug 2022 22:04:42 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Tom Zanussi <zanussi@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH 4/4] tracing/eprobes: Have event probes be consistent
- with kprobes and uprobes
-Message-Id: <20220820220442.776e1ddaf8836e82edb34d01@kernel.org>
-In-Reply-To: <20220820014833.395997394@goodmis.org>
-References: <20220820014035.531145719@goodmis.org>
-        <20220820014833.395997394@goodmis.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Sat, 20 Aug 2022 09:05:59 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F56FD06;
+        Sat, 20 Aug 2022 06:05:58 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id g18so6984629pju.0;
+        Sat, 20 Aug 2022 06:05:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=2zOBbjpazl8s57/XiU2lbdevcEWjRoAb9VSfq8YjUQg=;
+        b=ND4Av5P0qlLxEj7+crbFAgOALB0pd7miYDDOPKNvz3UzUj68fzMefaoMY1I9gHac40
+         dL74FQ9r4eOggMyubGiK176A+MoJbmX0RXYQ+poPLUvy3Exdi8DyFDRgK2drv65nb1Cz
+         LDhWpgdDXg+4I22AlbF7mrHVKP5Ji32WE2ITbEP7EBQ43s+uz7kDREKwFlpdNhZBmjYJ
+         j9harzTZrUZp87cCJFrXJRcQvIJCJ5R+7u2rabfhwYLZP/bv3mooj3d5qSWWNlSSVtm1
+         Z84TpdQQlt8KrsR1gS0kZJV0QGKcf4dNh0mFl1hjvyMeLu8K23LzwKfk/Jvt4QKmhObx
+         +aUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=2zOBbjpazl8s57/XiU2lbdevcEWjRoAb9VSfq8YjUQg=;
+        b=7v40BkBvn6lswQ5P3stx1CDnjQTcNcMC/cQn8qUafaU0ssyp99Y5IJZT0p+HG4NRuc
+         IKsItEojzkt+S809Zz76WvFz9OigyHtUYgXzB2gWfuhyHonog+7zDAM5rRIHAhqU89Ea
+         FlVRJa4/2kkKndaURoj0l3mg3ENKUqv2gojPmxbQyYVJ7V1IEhUEZs60TzZMP3wHcso+
+         O1ftKS6tzW+kts/JkGIPEEjAEeL1LUL5PVj+J1/mtjiTPNnl0MRn9kW1aXohSs/KaN+I
+         RborkyS60oNyL37RX43mySF9F3FDlvov8+WnsfYDWipRFtGSqKGqMcN0BZFEW9jnIJR9
+         AAnQ==
+X-Gm-Message-State: ACgBeo3MCCb9km+vAjCw8zpBfxyEIMpp3fdnEeueor4YlKDS1Ht8Gb3B
+        p6AHg5Lq5d/FD+IkpGJdVPPNDgsUEsI=
+X-Google-Smtp-Source: AA6agR7jWkYSTki/k2c0Y6EKP69+uqDweVtoCPWQRCpoopmtfW/s6ufzx7Ae7nwF+QPWN3LqtBjKnw==
+X-Received: by 2002:a17:90b:1d89:b0:1f5:a59:46b1 with SMTP id pf9-20020a17090b1d8900b001f50a5946b1mr13392684pjb.173.1661000757722;
+        Sat, 20 Aug 2022 06:05:57 -0700 (PDT)
+Received: from [192.168.43.80] (subs10b-223-255-225-239.three.co.id. [223.255.225.239])
+        by smtp.gmail.com with ESMTPSA id r1-20020a170902e3c100b001618b70dcc9sm4865960ple.101.2022.08.20.06.05.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 20 Aug 2022 06:05:57 -0700 (PDT)
+Message-ID: <d63cc303-0b73-4100-829d-01c6e3bb3548@gmail.com>
+Date:   Sat, 20 Aug 2022 20:05:47 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] doc/rcu: Update LWN articles at the beginning
+Content-Language: en-US
+To:     Shao-Tse Hung <ccs100203@gmail.com>, corbet@lwn.net,
+        paulmck@kernel.org
+Cc:     frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220820083244.28338-1-ccs100203@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220820083244.28338-1-ccs100203@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,156 +79,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 21:40:39 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On 8/20/22 15:32, Shao-Tse Hung wrote:
+> This patch adds LWN articles about RCU APIs which were released in 2019.
+> Also, HTTP URLs are replaced by HTTPS.
 > 
-> Currently, if a symbol "@" is attempted to be used with an event probe
-> (eprobes), it will cause a NULL pointer dereference crash.
-> 
-> Both kprobes and uprobes can reference data other than the main registers.
-> Such as immediate address, symbols and the current task name. Have eprobes
-> do the same thing.
-> 
-> For "comm", if "comm" is used and the event being attached to does not
-> have the "comm" field, then make it the "$comm" that kprobes has. This is
-> consistent to the way histograms and filters work.
 
-Hmm, I think I would better allow user to use $COMM to get comm string
-for kprobe/uprobe event users too. (There are many special variables...)
-Anyway, this looks good to me.
+Please write patch description in imperative mood (say "Add 2019 edition
+of RCU API documentation and use HTTPS links." instead).
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> -| 1.	What is RCU, Fundamentally?  http://lwn.net/Articles/262464/
+> -| 2.	What is RCU? Part 2: Usage   http://lwn.net/Articles/263130/
+> -| 3.	RCU part 3: the RCU API      http://lwn.net/Articles/264090/
+> -| 4.	The RCU API, 2010 Edition    http://lwn.net/Articles/418853/
+> -| 	2010 Big API Table           http://lwn.net/Articles/419086/
+> -| 5.	The RCU API, 2014 Edition    http://lwn.net/Articles/609904/
+> -|	2014 Big API Table           http://lwn.net/Articles/609973/
+> +| 1.	What is RCU, Fundamentally?  https://lwn.net/Articles/262464/
+> +| 2.	What is RCU? Part 2: Usage   https://lwn.net/Articles/263130/
+> +| 3.	RCU part 3: the RCU API      https://lwn.net/Articles/264090/
+> +| 4.	The RCU API, 2010 Edition    https://lwn.net/Articles/418853/
+> +| 	2010 Big API Table           https://lwn.net/Articles/419086/
+> +| 5.	The RCU API, 2014 Edition    https://lwn.net/Articles/609904/
+> +|	2014 Big API Table           https://lwn.net/Articles/609973/
+> +| 6.	The RCU API, 2019 Edition    https://lwn.net/Articles/777036/
+> +|	2019 Big API Table           https://lwn.net/Articles/777165/
+>  
 
-Thank you!
+I don't think line blocks are necessary for lists. Instead, use nested
+list. Why? Big API entry should be as sublist.
 
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  kernel/trace/trace_eprobe.c | 67 +++++++++++++++++++++++++++++++++----
->  1 file changed, 61 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index a1d3423ab74f..63218a541217 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -227,6 +227,7 @@ static int trace_eprobe_tp_arg_update(struct trace_eprobe *ep, int i)
->  	struct probe_arg *parg = &ep->tp.args[i];
->  	struct ftrace_event_field *field;
->  	struct list_head *head;
-> +	int ret = -ENOENT;
->  
->  	head = trace_get_fields(ep->event);
->  	list_for_each_entry(field, head, link) {
-> @@ -236,9 +237,17 @@ static int trace_eprobe_tp_arg_update(struct trace_eprobe *ep, int i)
->  			return 0;
->  		}
->  	}
-> +
-> +	/* Argument no found on event. But allow for comm and COMM to be used */
-> +	if (strcmp(parg->code->data, "COMM") == 0 ||
-> +	    strcmp(parg->code->data, "comm") == 0) {
-> +		parg->code->op = FETCH_OP_COMM;
-> +		ret = 0;
-> +	}
-> +
->  	kfree(parg->code->data);
->  	parg->code->data = NULL;
-> -	return -ENOENT;
-> +	return ret;
->  }
->  
->  static int eprobe_event_define_fields(struct trace_event_call *event_call)
-> @@ -363,16 +372,38 @@ static unsigned long get_event_field(struct fetch_insn *code, void *rec)
->  
->  static int get_eprobe_size(struct trace_probe *tp, void *rec)
->  {
-> +	struct fetch_insn *code;
->  	struct probe_arg *arg;
->  	int i, len, ret = 0;
->  
->  	for (i = 0; i < tp->nr_args; i++) {
->  		arg = tp->args + i;
-> -		if (unlikely(arg->dynamic)) {
-> +		if (arg->dynamic) {
->  			unsigned long val;
->  
-> -			val = get_event_field(arg->code, rec);
-> -			len = process_fetch_insn_bottom(arg->code + 1, val, NULL, NULL);
-> +			code = arg->code;
-> + retry:
-> +			switch (code->op) {
-> +			case FETCH_OP_TP_ARG:
-> +				val = get_event_field(code, rec);
-> +				break;
-> +			case FETCH_OP_IMM:
-> +				val = code->immediate;
-> +				break;
-> +			case FETCH_OP_COMM:
-> +				val = (unsigned long)current->comm;
-> +				break;
-> +			case FETCH_OP_DATA:
-> +				val = (unsigned long)code->data;
-> +				break;
-> +			case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
-> +				code++;
-> +				goto retry;
-> +			default:
-> +				continue;
-> +			}
-> +			code++;
-> +			len = process_fetch_insn_bottom(code, val, NULL, NULL);
->  			if (len > 0)
->  				ret += len;
->  		}
-> @@ -390,8 +421,28 @@ process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
->  {
->  	unsigned long val;
->  
-> -	val = get_event_field(code, rec);
-> -	return process_fetch_insn_bottom(code + 1, val, dest, base);
-> + retry:
-> +	switch (code->op) {
-> +	case FETCH_OP_TP_ARG:
-> +		val = get_event_field(code, rec);
-> +		break;
-> +	case FETCH_OP_IMM:
-> +		val = code->immediate;
-> +		break;
-> +	case FETCH_OP_COMM:
-> +		val = (unsigned long)current->comm;
-> +		break;
-> +	case FETCH_OP_DATA:
-> +		val = (unsigned long)code->data;
-> +		break;
-> +	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
-> +		code++;
-> +		goto retry;
-> +	default:
-> +		return -EILSEQ;
-> +	}
-> +	code++;
-> +	return process_fetch_insn_bottom(code, val, dest, base);
->  }
->  NOKPROBE_SYMBOL(process_fetch_insn)
->  
-> @@ -866,6 +917,10 @@ static int trace_eprobe_tp_update_arg(struct trace_eprobe *ep, const char *argv[
->  			trace_probe_log_err(0, BAD_ATTACH_ARG);
->  	}
->  
-> +	/* Handle symbols "@" */
-> +	if (!ret)
-> +		ret = traceprobe_update_arg(&ep->tp.args[i]);
-> +
->  	return ret;
->  }
->  
-> -- 
-> 2.35.1
-
+Thanks.
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+An old man doll... just what I always wanted! - Clara

@@ -2,70 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9186559AC6B
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D73F59AC7A
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344015AbiHTIJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 04:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
+        id S1344073AbiHTIKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 04:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343587AbiHTIJP (ORCPT
+        with ESMTP id S1344475AbiHTIKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 04:09:15 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BF24C609
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:09:11 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id a16so531271lfs.3
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:09:11 -0700 (PDT)
+        Sat, 20 Aug 2022 04:10:25 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEAF5FF44
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:10:21 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id z2so8072047edc.1
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:10:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=r4JTYj9qmkeOKWKWcNromnFZjQXRdXfr4tTRKL0mYFE=;
-        b=oGNYyYCcVgvXroyrv+4hnMFb+02o65cSD2yyvYiCVdDkCye17udVFugCaCkx3Ur+xp
-         TUxLu1wwOa57RiMmdLaD9xhRmKtMTJrHINTLUkDfU/xW6FR4bq8efSBZ1B8kYmizYWxz
-         6I6PGR2zKJzT1ajvwOamDEs3TYYxIHfI0Lwhg=
+        bh=1+lx3KfzLA3Bl+2mHK+2ai5gW3qN56may3qT3AObQ0Q=;
+        b=fx7VUWO2slXaKYm765QUsT+4fEO1cdEgTMvl6KQ+gBQdWPFocKfZ5EIvtHNSVNtyvd
+         KP1Yl1tzvWZffTTvKPc+/B0wnU4c+fmU0nqrmC+V0uWJ+nKoGbmr+Z/pQl1tYljmHxk0
+         OMdF54TgxFw73D+LhI4K5tTnIwndbCgGaau15CBN+onJOK+aaxCmDdEYuKwzrC9f5um6
+         mTHGpAf78owAEpnxzuUNwac8o+72nn9AekEbZnBmQhNBdX+8ty9qI7f9nQcvW1l4jBss
+         ssfQnILrbQSzPlsfYUXel661Ny73BEOmpTnA4o4iZuMRj3LFWcFgsaKy1YGZRYlZqfDA
+         8spw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=r4JTYj9qmkeOKWKWcNromnFZjQXRdXfr4tTRKL0mYFE=;
-        b=EG0JROBQnmIKq2kWMqCsT/m0VOAYQX6HJszdAgJNwERwzKSU5vvMcMprvJZxU2pZ/r
-         lArpviUh5YGR9i5WLmfar7JFSlQe5BaTLR08X750gloLUKEiuonIOjUb7rCJ6rwuxavV
-         KcrPt7i/gtQiLQPJFDH3tcEpivxG/YQQCz+1rccjl/dJDMkjjGkfcQSxOHAHAGewP0oc
-         QCXbni+s0RPiDupG3/C8jR/Hre6gsd0RxPzoX6rOLyIL2Yc+Lsb2OrhPMGBb2n+1u1V8
-         +NN9Dgs6RFmYURUdJ0iLePp0aqJl0L3RU2e90FUZ9/a88RDAsC3/8qVxhJ4SEW+mov7X
-         JNMg==
-X-Gm-Message-State: ACgBeo3jNJ4wcmg+WGlzwd0CSC+Y/I0v6tah4hf3pksY/I3IFqbbPXaj
-        YkrunBmwrkf+069U5k/WcEhuoKhnRSxHlBogNQ7xsw==
-X-Google-Smtp-Source: AA6agR7PSoYIN75wd+y8b/Q6GRXwfuKkotsd2MunPjbhD7CdjOdzrRz2E3RO7zy/zImiU20Jqng14NZ3NZiprHtRLxQ=
-X-Received: by 2002:a05:6512:3503:b0:48a:6060:5ebb with SMTP id
- h3-20020a056512350300b0048a60605ebbmr3481578lfs.429.1660982950073; Sat, 20
- Aug 2022 01:09:10 -0700 (PDT)
+        bh=1+lx3KfzLA3Bl+2mHK+2ai5gW3qN56may3qT3AObQ0Q=;
+        b=rXbZamcwLZIdW76VNS4lUXXO0X+04W4USNJkFkvneH4A/KapUGKIb9AL3lKHSLFPmc
+         ipe66DuPgKuJIaWbCAKB8Gz6H+eomx0grkyeWFbk1901jB0fxwGZGbBZY7MR1mEYeTBN
+         IOLLLkPUQx+n0Ye7/WMHD+4fYa8/hAClUCnGmgNfB2egJT6P5BcnzXzkPL7OIddDW+Cm
+         V0A2fjFvA04XFgRXMYTb0aC472zUtOkV3XCkemR6vy7bHMm2aGaM3luX63izOZqvbOEh
+         THo9GWWVlPq0ZLVociAblvcZod7EsAV75K4G86RJIttw9DEA0OJAAu7WUKEAMR4LJIvJ
+         A6dw==
+X-Gm-Message-State: ACgBeo04BoWvtISqsphM2PBBX1iA94tZhBIS6p7xLIvOxDNHuN0TUM6u
+        N7aNRxRtzhphAdgpNDCYETWH6+8NUtvwoStwefgUgQ==
+X-Google-Smtp-Source: AA6agR7WXe0PWfc39N6UpvpYHu32jxaWcRJJG1j4FYXEWbqmNIfVQhpiksNqua1pirBB/TuEltpR/QT/TSOvKkyuCRQ=
+X-Received: by 2002:a05:6402:13c6:b0:446:1c68:915b with SMTP id
+ a6-20020a05640213c600b004461c68915bmr7795778edx.208.1660983019184; Sat, 20
+ Aug 2022 01:10:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220817143529.257908-1-dario.binacchi@amarulasolutions.com>
- <20220817143529.257908-2-dario.binacchi@amarulasolutions.com> <b851147b-6453-c19e-7c31-a9cf8f87c1a4@linaro.org>
-In-Reply-To: <b851147b-6453-c19e-7c31-a9cf8f87c1a4@linaro.org>
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Sat, 20 Aug 2022 10:08:58 +0200
-Message-ID: <CABGWkvomGpo9zWi59YNYfRfzAZZ90D9_HaiVV3Gs_x_eQ59e5A@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/4] dt-bindings: net: can: add STM32 bxcan DT bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Dario Binacchi <dariobin@libero.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
+References: <20220819153710.430046927@linuxfoundation.org>
+In-Reply-To: <20220819153710.430046927@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 20 Aug 2022 13:40:07 +0530
+Message-ID: <CA+G9fYu783oU+cQA2akFBXMncE6UXO8B9rvNCt9Fg19GnHuADQ@mail.gmail.com>
+Subject: Re: [PATCH 5.18 0/6] 5.18.19-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -77,260 +70,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On Thu, Aug 18, 2022 at 10:22 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Fri, 19 Aug 2022 at 21:10, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On 17/08/2022 17:35, Dario Binacchi wrote:
-> > Add documentation of device tree bindings for the STM32 basic extended
-> > CAN (bxcan) controller.
-> >
-> > Signed-off-by: Dario Binacchi <dariobin@libero.it>
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> -------------------
+> NOTE, this is the LAST 5.18.y stable release.  This tree will be
+> end-of-life after this one.  Please move to 5.19.y at this point in time
+> or let us know why that is not possible.
+> -------------------
 >
-> You do not need two SoBs. Keep only one, matching the From field.
-
-I started implementing this driver in my spare time, so my intention
-was to keep track of it.
-
+> This is the start of the stable review cycle for the 5.18.19 release.
+> There are 6 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> > ---
-> >
-> >  .../devicetree/bindings/net/can/st,bxcan.yaml | 139 ++++++++++++++++++
-> >  1 file changed, 139 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/net/can/st,bxcan.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/net/can/st,bxcan.yaml b/Documentation/devicetree/bindings/net/can/st,bxcan.yaml
-> > new file mode 100644
-> > index 000000000000..f4cfd26e4785
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/net/can/st,bxcan.yaml
+> Responses should be made by Sun, 21 Aug 2022 15:36:59 +0000.
+> Anything received after that time might be too late.
 >
-> File name like compatible, so st,stm32-bxcan-core.yaml (or some other
-> name, see comment later)
-
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.19-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
 >
-> > @@ -0,0 +1,139 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/net/can/st,bxcan.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: STMicroelectronics bxCAN controller Device Tree Bindings
+> thanks,
 >
-> s/Device Tree Bindings//
-
->
-> > +
-> > +description: STMicroelectronics BxCAN controller for CAN bus
-> > +
-> > +maintainers:
-> > +  - Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> > +
-> > +allOf:
-> > +  - $ref: can-controller.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - st,stm32-bxcan-core
->
-> compatibles are supposed to be specific. If this is some type of
-> micro-SoC, then it should have its name/number. If it is dedicated
-> device, is the final name bxcan core? Google says  the first is true, so
-> you miss specific device part.
-
-I don't know if I understand correctly, I hope the change in version 2
-is what you requested.
-
->
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  resets:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    description:
-> > +      Input clock for registers access
-> > +    maxItems: 1
-> > +
-> > +  '#address-cells':
-> > +    const: 1
-> > +
-> > +  '#size-cells':
-> > +    const: 0
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - resets
-> > +  - clocks
-> > +  - '#address-cells'
-> > +  - '#size-cells'
-> > +
-> > +additionalProperties: false
-> > +
-> > +patternProperties:
->
-> This goes after "properties: in top level (before "required").
->
-> > +  "^can@[0-9]+$":
-> > +    type: object
-> > +    description:
-> > +      A CAN block node contains two subnodes, representing each one a CAN
-> > +      instance available on the machine.
-> > +
-> > +    properties:
-> > +      compatible:
-> > +        enum:
-> > +          - st,stm32-bxcan
->
-> Why exactly do you need compatible for the child? Is it an entierly
-> separate device?
-
-I took inspiration from other drivers for ST microcontroller
-peripherals (e. g. drivers/iio/adc/stm32-adc-core.c,
-drivers/iio/adc/stm32-adc.c) where
-some resources are shared between the peripheral instances. In the
-case of CAN, master (CAN1) and slave (CAN2) share the registers for
-configuring the filters and the clock.
-In the core module you can find the functions about the shared
-resources, while the childrens implement the driver.
-
->
-> Comments about specific part are applied here as well.
->
-> > +
-> > +      master:
->
-> Is this a standard property?
-
-no
-
-> I don't see it anywhere else. Non-standard
-> properties require vendor prefix.
-
-ok, you'll find it in V2.
-
-Thanks and regards,
-Dario
-
->
-> > +        description:
-> > +          Master and slave mode of the bxCAN peripheral is only relevant
-> > +          if the chip has two CAN peripherals. In that case they share
-> > +          some of the required logic, and that means you cannot use the
-> > +          slave CAN without the master CAN.
-> > +        type: boolean
-> > +
-> > +      reg:
-> > +        description: |
-> > +          Offset of CAN instance in CAN block. Valid values are:
-> > +            - 0x0:   CAN1
-> > +            - 0x400: CAN2
-> > +        maxItems: 1
-> > +
-> > +      interrupts:
-> > +        items:
-> > +          - description: transmit interrupt
-> > +          - description: FIFO 0 receive interrupt
-> > +          - description: FIFO 1 receive interrupt
-> > +          - description: status change error interrupt
-> > +
-> > +      interrupt-names:
-> > +        items:
-> > +          - const: tx
-> > +          - const: rx0
-> > +          - const: rx1
-> > +          - const: sce
-> > +
-> > +      resets:
-> > +        maxItems: 1
-> > +
-> > +      clocks:
-> > +        description:
-> > +          Input clock for registers access
-> > +        maxItems: 1
-> > +
-> > +    additionalProperties: false
-> > +
-> > +    required:
-> > +      - compatible
-> > +      - reg
-> > +      - interrupts
-> > +      - resets
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/stm32fx-clock.h>
-> > +    #include <dt-bindings/mfd/stm32f4-rcc.h>
-> > +
-> > +    can: can@40006400 {
-> > +        compatible = "st,stm32-bxcan-core";
-> > +        reg = <0x40006400 0x800>;
-> > +        resets = <&rcc STM32F4_APB1_RESET(CAN1)>;
-> > +        clocks = <&rcc 0 STM32F4_APB1_CLOCK(CAN1)>;
-> > +        #address-cells = <1>;
-> > +        #size-cells = <0>;
-> > +        status = "disabled";
->
-> No status in examples.
->
-> > +
-> > +        can1: can@0 {
-> > +            compatible = "st,stm32-bxcan";
-> > +            reg = <0x0>;
-> > +            interrupts = <19>, <20>, <21>, <22>;
-> > +            interrupt-names = "tx", "rx0", "rx1", "sce";
-> > +            resets = <&rcc STM32F4_APB1_RESET(CAN1)>;
-> > +            master;
-> > +            status = "disabled";
->
-> No status in examples.
->
->
-> > +        };
-> > +
-> > +        can2: can@400 {
-> > +            compatible = "st,stm32-bxcan";
-> > +            reg = <0x400>;
-> > +            interrupts = <63>, <64>, <65>, <66>;
-> > +            interrupt-names = "tx", "rx0", "rx1", "sce";
-> > +            resets = <&rcc STM32F4_APB1_RESET(CAN2)>;
-> > +            clocks = <&rcc 0 STM32F4_APB1_CLOCK(CAN2)>;
-> > +            status = "disabled";
->
-> No status in examples.
->
-> > +        };
-> > +    };
->
->
-> Best regards,
-> Krzysztof
+> greg k-h
 
 
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
--- 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Dario Binacchi
+## Build
+* kernel: 5.18.19-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.18.y
+* git commit: f06dacf3d236cd8b16b2a869572c0e849f2aa156
+* git describe: v5.18.18-7-gf06dacf3d236
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.18.y/build/v5.18.18-7-gf06dacf3d236
 
-Embedded Linux Developer
+## No test Regressions (compared to v5.18.18)
 
-dario.binacchi@amarulasolutions.com
+## No metric Regressions (compared to v5.18.18)
 
-__________________________________
+## No test Fixes (compared to v5.18.18)
 
+## No metric Fixes (compared to v5.18.18)
 
-Amarula Solutions SRL
+## Test result summary
+total: 138885, pass: 123740, fail: 932, skip: 13421, xfail: 792
 
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 313 total, 310 passed, 3 failed
+* arm64: 76 total, 74 passed, 2 failed
+* i386: 64 total, 58 passed, 6 failed
+* mips: 50 total, 47 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 65 total, 56 passed, 9 failed
+* riscv: 32 total, 27 passed, 5 failed
+* s390: 23 total, 20 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 69 total, 67 passed, 2 failed
 
-T. +39 042 243 5310
-info@amarulasolutions.com
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libgpiod[
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
 
-www.amarulasolutions.com
+--
+Linaro LKFT
+https://lkft.linaro.org

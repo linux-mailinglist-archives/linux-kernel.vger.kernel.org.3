@@ -2,87 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15ADA59AD99
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 13:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E654859ADA9
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 13:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345461AbiHTLkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 07:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        id S1345802AbiHTLvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 07:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242181AbiHTLkQ (ORCPT
+        with ESMTP id S1344838AbiHTLvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 07:40:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B499AFD4;
-        Sat, 20 Aug 2022 04:40:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A79ECB80B8E;
-        Sat, 20 Aug 2022 11:40:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDC45C433D6;
-        Sat, 20 Aug 2022 11:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660995613;
-        bh=EcUHd1SWLgvec3h1hgGjlCxBv5BJzZ8+dzXEcK4LL3Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Fbdj2EXsY4W47DuNQ5pBrs0wkqYfIttxu8Uh4cUt34F7eEj9+JPjk1XhmIArNQW0h
-         ZEZaRC5IrMNyZuYPbb4TXco1qb4PmYHmoP92iECSX90nf7uWeMdrwJ5YLkgTwNnFHV
-         aFmUP1mdqCLvJ53HKg62tbIWBY7Reu4MhuDzrPQUnuQoGnRS6+eJRhfijafW4pRNko
-         yke3ohY7AmtQZskcC/mJqsgTjl2AQegCidWKjZBQOCtceF1LfFWigfmz/sa3ENAUVS
-         K8Iow8bv7RaBwm+gkWRKkLX83Zw5tngJx2gl/F/WZOvDAmrNZz8oXjdoz2bHMSINAm
-         Cf+46OVN2FN9g==
-Date:   Sat, 20 Aug 2022 12:50:49 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Joel Stanley <joel@jms.id.au>
-Subject: Re: [PATCH v4 2/2] iio: pressure: dps310: Reset chip if MEAS_CFG is
- corrupt
-Message-ID: <20220820125049.4e35e721@jic23-huawei>
-In-Reply-To: <f56c7486-2b78-48ac-3c5d-c7c20d1e78f5@linux.ibm.com>
-References: <20220809211246.251006-1-eajames@linux.ibm.com>
-        <20220809211246.251006-3-eajames@linux.ibm.com>
-        <CAHp75VdbRiWxxbnW61SNdj+pC4skeRF3prXgPvKB+btjW3dLKw@mail.gmail.com>
-        <f56c7486-2b78-48ac-3c5d-c7c20d1e78f5@linux.ibm.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 20 Aug 2022 07:51:07 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA9A248DA;
+        Sat, 20 Aug 2022 04:51:03 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id 83so729420pfw.6;
+        Sat, 20 Aug 2022 04:51:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=673WIW76Z1Z00tbIt7+Ez7IqYGsJnXmx9K9copympOk=;
+        b=RffZTBmHyruOE6/ViFVFHN5oJdOpbN/TaSCGZdTlMfTowa6Gr4w9P4J/y72dDBONG3
+         BpWJ3Y1Zce6KjTMLcCY7vOR/iqkG4aHu2N+U4LSVdxf5ULmVaI6Xx487vPZd1jEACvps
+         McqIY+YtzNsJGbBY4h80/1KeMswNLKjlyL407067lR5Xc2WSsUAN0Awn50sgi+NjrYx0
+         VrcGj5ibVn+RSE/eYVAaIy0n9trelzaXxB6/xJ2L3h41JYzBfut9ABcS+bggSfV0nZj6
+         kU+Noz7vxtczHpCt4wn8DIIwq1Wbxgvq020Vpvz/vYelpIzqkafjzF0i0i63ezcx1yof
+         4GmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=673WIW76Z1Z00tbIt7+Ez7IqYGsJnXmx9K9copympOk=;
+        b=UPvSHiQ5cDrbJok5D1kS1LFMkuh6xNWXMSFKPY2FpNtyirXHuA2Pz+42oS/W8syMTa
+         JuRcwYfb6tUlvEIWdbHUMqmq3yQ/+fY6LbujmOPMJhTSu8t5LZXISsHouxhStmQFnIv8
+         ztmXaJ1drnEHukeDndO/SK7MuLxbJ7VV/BjwVL0k9TkpRB6QQ3HJqbHIqk9gjVKw3Myr
+         /OWV3RZxgi5p8HOpmZAU3uw++XEl5b7KIOhO5WQZqIAWzSF7jE2DYx3bNT7IK3biLqSc
+         ucBWbyssUWVv89K7Zbrj0+4Luq9rXf2sTprftdskpqVY0YRG9jYULr+Vkv8hYIw1+Ktf
+         0umg==
+X-Gm-Message-State: ACgBeo2vAn/0JyXy9BqhFSOKtlRIxgb4vBDI1DEvkLU4Uk4Kpamo8kks
+        wXxoggmIWWdKYr7evh6CbWfEs5rHyEk=
+X-Google-Smtp-Source: AA6agR6RaRM9Pnlyho6j/lzSbUs/REuPQGmcLF7c9WuuaP87Wpvl93MNaxPeoz2cEYmKetn91Ohhsg==
+X-Received: by 2002:a63:d0:0:b0:41b:c075:acb5 with SMTP id 199-20020a6300d0000000b0041bc075acb5mr9718815pga.480.1660996262556;
+        Sat, 20 Aug 2022 04:51:02 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o65-20020a625a44000000b0052d200c8040sm5056635pfb.211.2022.08.20.04.50.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Aug 2022 04:51:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 20 Aug 2022 04:50:58 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jerry Hoemann <jerry.hoemann@hpe.com>
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] watchdog/hpwdt: Build issue for ARM64 platforms
+Message-ID: <20220820115058.GB3958319@roeck-us.net>
+References: <20220819231423.1236664-1-jerry.hoemann@hpe.com>
+ <20220819231423.1236664-2-jerry.hoemann@hpe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819231423.1236664-2-jerry.hoemann@hpe.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 Aug 2022 08:59:03 -0500
-Eddie James <eajames@linux.ibm.com> wrote:
-
-> On 8/12/22 17:13, Andy Shevchenko wrote:
-> > On Wed, Aug 10, 2022 at 12:12 AM Eddie James <eajames@linux.ibm.com> wrote:  
-> >> Corruption of the MEAS_CFG register has been observed soon after
-> >> system boot. In order to recover this scenario, check MEAS_CFG if
-> >> measurement isn't ready, and if it's incorrect, reset the DPS310
-> >> and execute the startup procedure.  
-> > Looks like both patches miss the Fixes tag. Can you add them?  
+On Fri, Aug 19, 2022 at 05:14:22PM -0600, Jerry Hoemann wrote:
+> Fixes commit d48b0e173715 ("x86, nmi, drivers: Fix nmi splitup build bug")
 > 
+> Include <asm/nmi.h> only if CONFIG_HPWDT_NMI_DECODING is defined.
 > 
-> Well this isn't really a software fix - there's no identifiable bug in 
-> the driver. Just trying to recover the chip in this observed mystery 
-> scenario.
+The descrition doesn't describe the problem (what is the build issue ?),
+the fix reference should be a Fixes: tag, and the subject should describe
+what is done, not the problem (ie "Fix build issue...")
 
-The tag is useful as well for where to backport this to.
-Probably just tag the driver introduction.
+Thanks,
+Guenter
 
-Your description makes it clear we aren't finding faults in the
-driver - just that it didn't cover this undocumented case!
-
-Jonathan
-
+> Signed-off-by: Jerry Hoemann <jerry.hoemann@hpe.com>
+> ---
+>  drivers/watchdog/hpwdt.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/watchdog/hpwdt.c b/drivers/watchdog/hpwdt.c
+> index a5006a58e0db..f79f932bca14 100644
+> --- a/drivers/watchdog/hpwdt.c
+> +++ b/drivers/watchdog/hpwdt.c
+> @@ -20,7 +20,9 @@
+>  #include <linux/pci_ids.h>
+>  #include <linux/types.h>
+>  #include <linux/watchdog.h>
+> +#ifdef CONFIG_HPWDT_NMI_DECODING
+>  #include <asm/nmi.h>
+> +#endif
+>  #include <linux/crash_dump.h>
+>  
+>  #define HPWDT_VERSION			"2.0.4"
+> -- 
+> 2.37.1
+> 

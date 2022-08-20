@@ -2,125 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E163859A9BA
+	by mail.lfdr.de (Postfix) with ESMTP id 2295559A9B8
 	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244243AbiHSX6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 19:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
+        id S244280AbiHTAAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 20:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243995AbiHSX6e (ORCPT
+        with ESMTP id S234988AbiHTAAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 19:58:34 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4742CCA0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 16:58:31 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id c4so3604351iof.3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 16:58:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=rDwyn1S5gq2Gin6BY6HLPs0LNmV0efWzRqc/7asC50s=;
-        b=Aqx53FzjxjyJpnn5MqTwd5ZZ4M51eJjvQiQdEQENCELxfdHkekZbjwYZKskVRyxaKy
-         9lu/9m+TxGhmFLB1ej7ff71j24I1hlX4ms5IuyGy4rHDfkiPxYnUZZ1OIsd4zep+3pxg
-         vGEFtzE/UCGpGVkGsXKI5OIDQLaKgeIjNzI2U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=rDwyn1S5gq2Gin6BY6HLPs0LNmV0efWzRqc/7asC50s=;
-        b=gDKi/e8sngEMwDHH/oBAQjpoUMMznCMQFpK1jBpeqgsszl6S1n4JIicW9YUEBTx84s
-         n2GP1NwdHhFd5E3qhJzpckcoTEWswb68dw6P4WWL/tmkUGCJ4a0cFOPJT6+Rj+Gok9gh
-         59VXCEYUoIJPIYNUfI4taFx2kx7u4YRMYvxYchUIV9cyyTw0T37UdIAE4V1Cn85eDKXg
-         JK7lNkYtca+PHHO8OyIDoRBCCUrjpHqYvqMLsA8ON2vBaO1FNFkTP87Vl0MbLvKPFr8K
-         pjWaKpisaMcli5c/mY1YlSlT/ZyQWtx7ZK8PHSO6Z/CGqBsfOLrgoBQHDshw2mcQcqJR
-         UKMQ==
-X-Gm-Message-State: ACgBeo1QfQdXlkFdclEI0fkRnWsuSj9y9uFKGXacfOCH4fTaeRX5D0xO
-        Cu5edL8JWfciIYUtEkgTmsFSFg==
-X-Google-Smtp-Source: AA6agR6B/FI7i33mcGyyvznmIp2uha+oR/mT+5YCLx3tovXF3/1OvsY7aMDJVKFnTGj8eHp16GPriA==
-X-Received: by 2002:a05:6638:3a1a:b0:343:4ae3:9c0f with SMTP id cn26-20020a0566383a1a00b003434ae39c0fmr4774433jab.271.1660953511132;
-        Fri, 19 Aug 2022 16:58:31 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id f3-20020a056638112300b003484f2ea3edsm1546644jar.153.2022.08.19.16.58.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 16:58:30 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] selftests/vm: fix inability to build any vm tests
-To:     Axel Rasmussen <axelrasmussen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220819191929.480108-1-axelrasmussen@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <23f51904-c6b9-2052-e90c-675a3077cad1@linuxfoundation.org>
-Date:   Fri, 19 Aug 2022 17:58:29 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 19 Aug 2022 20:00:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4F0106FA9;
+        Fri, 19 Aug 2022 17:00:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC005618CD;
+        Sat, 20 Aug 2022 00:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 440CCC43140;
+        Sat, 20 Aug 2022 00:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660953617;
+        bh=U1ivDwlnKX82ycFfnYH3WKIeh1tmao/eqlSag+Agkwk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=GF2EP/bpkYKW+O8dfa18S5pL6f5vG5uLTogrFr3Bk87Ha3rZpetqbEOTgYGDCfeKD
+         vkbBZvMjk3tV/MEyKe2OJ0pW2BzPaNJY9VAXMAWnBcyABu0j/HhGiBUL6N2cq+BCEP
+         pMpCa0CKG440HztIQlgEnimBl4UCK1xVMdcaumkdNca8h5B4+fGDb2gK3c3JGmfJu9
+         yiYHpR2sSyBl8Gmy2+dSbF2gTVJ1YIGb+0WA1/llI6ttE9eoHkAZDZPU6Tuu2gA6Kg
+         RHFvnC23qaEKxUpywfcUsOEQUCQT8DhFi9HhZjkTlSqllnQ1n7SC2DKj9h0nqWnFot
+         hPz/o+Gl5bvhA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2E2E8E2A050;
+        Sat, 20 Aug 2022 00:00:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20220819191929.480108-1-axelrasmussen@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] net: prestera: add missing ABI compatibility check
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166095361718.16371.7500340870200772956.git-patchwork-notify@kernel.org>
+Date:   Sat, 20 Aug 2022 00:00:17 +0000
+References: <20220818111419.414877-1-maksym.glubokiy@plvision.eu>
+In-Reply-To: <20220818111419.414877-1-maksym.glubokiy@plvision.eu>
+To:     Maksym Glubokiy <maksym.glubokiy@plvision.eu>
+Cc:     tchornyi@marvell.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, yevhen.orlov@plvision.eu,
+        oleksandr.mazur@plvision.eu, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/19/22 1:19 PM, Axel Rasmussen wrote:
-> When we stopped using KSFT_KHDR_INSTALL, a side effect is we also
-> changed the value of `top_srcdir`. This can be seen by looking at the
-> code removed by commit 49de12ba06ef
-> ("selftests: drop KSFT_KHDR_INSTALL make target").
-> 
-> (Note though that this commit didn't break this, technically the one
-> before it did since that's the one that stopped KSFT_KHDR_INSTALL from
-> being used, even though the code was still there.)
-> 
-> Previously lib.mk reconfigured `top_srcdir` when KSFT_KHDR_INSTALL was
-> being used. Now, that's no longer the case.
-> 
-> As a result, the path to gup_test.h in vm/Makefile was wrong, and
-> since it's a dependency of all of the vm binaries none of them could
-> be built. Instead, we'd get an "error" like:
-> 
->      make[1]: *** No rule to make target
->          '/[...]/tools/testing/selftests/vm/compaction_test', needed by
-> 	'all'.  Stop.
-> 
-> So, modify lib.mk so it once again sets top_srcdir to the root of the
-> kernel tree.
-> 
-> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 18 Aug 2022 14:14:19 +0300 you wrote:
+> Fixes: fec7c9c73fd3 ("net: marvell: prestera: define MDB/flood domain entries and HW API to offload them to the HW")
+> Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+> Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
 > ---
->   tools/testing/selftests/lib.mk | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 947fc72413e9..d44c72b3abe3 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -40,6 +40,7 @@ ifeq (0,$(MAKELEVEL))
->       endif
->   endif
->   selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
-> +top_srcdir = $(selfdir)/../../..
->   
->   # The following are built by lib.mk common compile rules.
->   # TEST_CUSTOM_PROGS should be used by tests that require
-> 
+>  drivers/net/ethernet/marvell/prestera/prestera_hw.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-Applied to linux-kselftest fixes for the next rc.
+Here is the summary with links:
+  - [net-next] net: prestera: add missing ABI compatibility check
+    https://git.kernel.org/netdev/net-next/c/917edfb98c48
 
-thanks,
--- Shuah
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

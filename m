@@ -2,141 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBB659AEAC
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 16:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CD859AEAE
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 16:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344920AbiHTOXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 10:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
+        id S1346416AbiHTOdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 10:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346217AbiHTOXc (ORCPT
+        with ESMTP id S1346217AbiHTOdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 10:23:32 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B7413D26
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 07:23:31 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id m21so2744734uab.13
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 07:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc;
-        bh=s3WwiOFU4Cx25TV2VhuX+55GvPSt92ikN3uNkO5ZYHI=;
-        b=HNvCH5+aD1kqILurnYempphOknweSCuZbJtiWsmHfK50GiXR2jvzpV95UKBEVl4udd
-         fJTaE6XzKvvhJJiIfcRno70U2q2BUtJ7q7Eu33HjPdn9VVAe02YIp1khpbbxm9kRWBVq
-         /dEqZuHyiUY5mcj3BofBGk+MEDRsdBih0ruozMe82adoSidoN2EPnNWDo6nclvtantgL
-         Td8K1tXXf4i+/adfallyKlSmdiCSRYfMkRUX7k1wOZ66lS1hS18xcxxHZd8L5ZFrZ3SQ
-         uSWghHuQDGPVhYM8eOFWbnyt+Mwb+AIV1t1/koN0Mf6pZt939w6G8BkEvG2Eh37MjV/n
-         OrvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=s3WwiOFU4Cx25TV2VhuX+55GvPSt92ikN3uNkO5ZYHI=;
-        b=uFE9YUqZX1uqtdTXitPZXfx6YduCufrHaGdbZFX8+Y5t/fg4XsT+UMzVPXRr7UKAut
-         6oCAu3XyQHmwuBpzBAn9FyFlktfnjpYhCnQj/tTosZyJiv2GFJ/VbUvPoAu0VbFGOIzI
-         c9mHwJIvcZ117Rx/YC9XI1JLTV511ywtAwot/7II1jGZgiMqFyy0uoQkFnJpWtSjDs1H
-         BA4F2ch3cUb+lWMJ9fHkEsasFZiSxsh84kPO0WcQbMUMnLvXn3JMp+xv30G+DfOLqaZO
-         kEt9mY2ER6PHkH6qmbuqz9leWtgA5gyDN4fmcjFG/5Yj212rpeej2pHMCh6meZFhG0nm
-         eeYg==
-X-Gm-Message-State: ACgBeo0XjSJYpfDKY4mPXBsv184dcCOLp7CKIMneRYUFu1zgKREZaRkV
-        M5J+G+Xl9xpYuXEnmFvfn7iU1SrnS6WXjE/rsTw=
-X-Google-Smtp-Source: AA6agR63ONSuD+1j15VdQYXmbFc0A68q9VCDQi3Q/WIqd+X0Iu/Q9krKxzAbLPJVBYkF5kqvSZ5IRdsKhWmgP9apSwQ=
-X-Received: by 2002:ab0:24cc:0:b0:391:c681:7b7 with SMTP id
- k12-20020ab024cc000000b00391c68107b7mr4439545uan.16.1661005410564; Sat, 20
- Aug 2022 07:23:30 -0700 (PDT)
+        Sat, 20 Aug 2022 10:33:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F321014D08;
+        Sat, 20 Aug 2022 07:33:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FC8BB80CAD;
+        Sat, 20 Aug 2022 14:33:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E952AC433D6;
+        Sat, 20 Aug 2022 14:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661006018;
+        bh=/7B/Xs/HCL3KwHGK4v8gKrA+qwU9VsmeusLYvJqdSBs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pYA1RNwP46Oqkl4EvxCL/VVLLVJ6SXm1Xo9I897g3uyZ+Y2f7a86kcbLRMsYOMlDo
+         1fM9SkM7uvbsSbbCormVLazdZfOfxVnbD3k417++h3CdEbt4h0ptK066T0VFtGQrt7
+         WnzmwPJRzL21+MmBBGNmSApBBiMoMQ1gvJHHjrTU6tQt6jBHhXrvm8F17SUddtPDjH
+         4dBzSYMPrvy/kSHPjgmOSSaV9TJPwFWzp014kIZG4mkU1ZH8bEoz1qkcvzG5Emo6gE
+         XYC62n8OH6f14eywKUEkQWkWh49qSM5ojIJG5K/Cr6aGxcEYQBSGrRAC2fl7QeksFM
+         VUcMtQB3UpaCQ==
+Date:   Sat, 20 Aug 2022 10:33:36 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Conor.Dooley@microchip.com
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        gregkh@linuxfoundation.org, Brice.Goglin@inria.fr,
+        sudeep.holla@arm.com, Daire.McNamara@microchip.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.19 08/48] riscv: dts: microchip: Add mpfs'
+ topology information
+Message-ID: <YwDwwEXgGundXB1X@sashalap>
+References: <20220814161943.2394452-1-sashal@kernel.org>
+ <20220814161943.2394452-8-sashal@kernel.org>
+ <eeee7a72-8200-a374-8038-405605e0c290@microchip.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6122:911:0:0:0:0 with HTTP; Sat, 20 Aug 2022 07:23:29
- -0700 (PDT)
-Reply-To: uchennailobitenone@gmail.com
-From:   uchenna <okeyyoyopa7@gmail.com>
-Date:   Sat, 20 Aug 2022 14:23:29 +0000
-Message-ID: <CAH8nkvZ5bj-qWeWt+L5KiL3=Ke=qZuDs4MLhf=60G42_zJfnFg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:933 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.0 HK_RANDOM_ENVFROM Envelope sender username looks random
-        *  1.0 HK_RANDOM_FROM From username looks random
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [okeyyoyopa7[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [okeyyoyopa7[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <eeee7a72-8200-a374-8038-405605e0c290@microchip.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gratulacje!
+On Sun, Aug 14, 2022 at 04:31:08PM +0000, Conor.Dooley@microchip.com wrote:
+>On 14/08/2022 17:19, Sasha Levin wrote:
+>> From: Conor Dooley <conor.dooley@microchip.com>
+>>
+>> [ Upstream commit 88d319c6abaeb37f0e2323275eaf57a8388e0265 ]
+>>
+>> The mpfs has no cpu-map node, so tools like hwloc cannot correctly
+>> parse the topology. Add the node using the existing node labels.
+>>
+>+CC Greg
+>
+>Hey Sasha,
+>Technically this is an optional property so I didn't mark any of
+>the patches as CC: stable as they not really fixes. The plan to is
+>to fix the hwloc problem at the source rather than papering over it
+>with the dts:
+>https://lore.kernel.org/linux-riscv/20220715175155.3567243-1-mail@conchuod.ie/
+>
+>Those patches are delayed until after -rc1 as they weren't reviewed
+>from the riscv side prior to the arm64 tree closing, but the plan is
+>to backport those instead.
+>
+>I suppose there's no harm having these too, but I'll leave that up
+>to the better judgement of others... What do you (plural) think?
 
-Organizacja Narod=C3=B3w Zjednoczonych dosz=C5=82a do wniosku, =C5=BCe z po=
-moc=C4=85 nowo
-wybranego prezydenta z powodu Covid-19 (koronawirusa), kt=C3=B3ry
-spowodowa=C5=82 za=C5=82amanie gospodarcze w r=C3=B3=C5=BCne kraje i global=
-ne zagro=C5=BCenie
-dla tak wielu istnie=C5=84 ludzkich.
+I'll just drop these. Feel free to send us a note when the fix is
+ready...
 
- Organizacja Narod=C3=B3w Zjednoczonych zleci=C5=82a szwajcarskiemu bankowi
-=C5=9Bwiatowemu uwolnienie p=C5=82atno=C5=9Bci funduszu kompensacyjnego we =
-wsp=C3=B3=C5=82pracy
-z bankiem IBE w Wielkiej Brytanii.
-
-P=C5=82atno=C5=9B=C4=87 zostanie przekazana na kart=C4=99 bankomatow=C4=85 =
-Visa i wys=C5=82ana do
-szcz=C4=99=C5=9Bliwego beneficjenta, kt=C3=B3ry z=C5=82o=C5=BCy wniosek za =
-po=C5=9Brednictwem banku
-IBE w Wielkiej Brytanii za po=C5=9Brednictwem dyplomatycznej firmy
-kurierskiej znajduj=C4=85cej si=C4=99 w pobli=C5=BCu kraju beneficjenta.
-
-S=C4=85 to informacje wymagane przez kierownictwo Zjednoczonego Kr=C3=B3les=
-twa w
-celu dostarczenia p=C5=82atno=C5=9Bci z funduszu kompensacyjnego do progu k=
-raju
-beneficjenta.
-
-1. Twoje imi=C4=99 i nazwisko:
-2. Adres domowy:
-3. Miasto:
-4. Kraj:
-5. Zaw=C3=B3d:
-6. P=C5=82e=C4=87:
-7. Stan cywilny:
-8. Wiek:
-9. Paszport / dow=C3=B3d osobisty / prawo jazdy
-10. Numer telefonu:
-Skontaktuj si=C4=99 z naszym identyfikatorem e-mail agenta:
-nazwa solomo brandy
-
-ADRES EMIL (solomonbrandyfiveone@gmail.com ) dla Twojej p=C5=82atno=C5=9Bci=
- bez zw=C5=82oki,
-
-Pozdrowienia
-Pani Mary J. Robertson.
+-- 
+Thanks,
+Sasha

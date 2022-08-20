@@ -2,59 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE13259AD36
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 12:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650BB59AD40
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 12:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243060AbiHTK2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 06:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
+        id S1344532AbiHTK2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 06:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiHTK2e (ORCPT
+        with ESMTP id S232131AbiHTK2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 06:28:34 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4605933E13
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 03:28:29 -0700 (PDT)
+        Sat, 20 Aug 2022 06:28:35 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460E633E1F
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 03:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1660991312; x=1692527312;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N71MpjXg706YSx4PmMZk9ArRZjKn11uQEGm3a/oQ4V4=;
-  b=fy1wKq7FV+IXzQhDhKHTolqq0xeyUQFQYIg+EkHxfDaHhJjJOu9rn8s2
-   nabxUcH4v5CKfBsnbo/LeF0KCKrKIB7sfl2dw+YMht/2eAG3G4Ln+cbsO
-   e6Kbi1nV7ziKVN0rYSPycdwxfLsZswMMxfy+03HAJjBRXBnU0L6CJ2F6x
-   Vf7RECdSjqJQwo1mSDTrE/iBejQZFrsrJwlvLyGNzkgB++ihPMnI1VFJC
-   UerA15bMyuYIbExZ+Duiv7LXl5t5Hal5Azm6mKDMR222+Esp4KUTVrzgy
-   Odk7NU4Tdjya1Q+bCP7KpcevtoztiRzKla+Q4ngYi+/svcrPh/QDA2g46
+  bh=KiMO6n7qwHyyfiz5Iyi4WlNhBfm41i/GfNQTqNzgUfg=;
+  b=nkiL+F+WLCx3u1xxPkcV6Xug6VtZoGqk8zMdt1jcx6M9vdirWH2ScTHQ
+   9XXu79nN5QkF3YXaBdxTcgghJV8yXjSy4WmR5xxa0h2ckCPGh9Y2tlh1P
+   27lafMQbZTzbs11+qwK9UsTgksD1qlqET43biFzRBi8EP4/DJtW6CRRIR
+   ZaPjcuI6Y2R1ktllvQuSLRAijzADV1CcqBM/xBleRLieX6b08qOdxkFZs
+   geZFsrt39tLfYV6lM2MfeQTBDQjGtpZkCXpMCrr/afGJxZpsMIR8W/TWI
+   /PhTSMt772R3LCJNrqYyzFxJPqdIVu914eyiuckGyfgT3c99ascRw5zZz
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="354895492"
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="276197830"
 X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="354895492"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 03:28:29 -0700
+   d="scan'208";a="276197830"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 03:28:30 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="854008951"
+   d="scan'208";a="697804796"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 20 Aug 2022 03:28:27 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Aug 2022 03:28:27 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oPLiN-0002UR-02;
-        Sat, 20 Aug 2022 10:28:27 +0000
-Date:   Sat, 20 Aug 2022 18:28:03 +0800
+        id 1oPLiM-0002UN-3D;
+        Sat, 20 Aug 2022 10:28:26 +0000
+Date:   Sat, 20 Aug 2022 18:28:05 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>
-Subject: drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c:185
- dpu_core_perf_crtc_check() warn: inconsistent indenting
-Message-ID: <202208201810.AVMZPmng-lkp@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        "Huang, Ying" <ying.huang@intel.com>
+Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 157/170]
+ kernel/sched/fair.c:1571:14: error: implicit declaration of function
+ 'node_is_toptier'
+Message-ID: <202208201813.3qpwXbu9-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,110 +67,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   50cd95ac46548429e5bba7ca75cc97d11a697947
-commit: b3ed524f84f573ece1aa2f26e9db3c34a593e0d1 drm/msm: allow compile_test on !ARM
-date:   11 months ago
-config: microblaze-randconfig-m041-20220820 (https://download.01.org/0day-ci/archive/20220820/202208201810.AVMZPmng-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.1.0
+tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
+head:   1b745fa43c32e6a6ffb4d922114d75019830a9e2
+commit: f66f3c26148785882c6292f7ef32fd34d13d1a97 [157/170] mm/demotion: update node_is_toptier to work with memory tiers
+config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220820/202208201813.3qpwXbu9-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/f66f3c26148785882c6292f7ef32fd34d13d1a97
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
+        git checkout f66f3c26148785882c6292f7ef32fd34d13d1a97
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-New smatch warnings:
-drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c:185 dpu_core_perf_crtc_check() warn: inconsistent indenting
-drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c:1676 dpu_plane_init() warn: variable dereferenced before check 'pdpu->pipe_hw' (see line 1607)
-drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c:1006 dpu_kms_hw_init() warn: passing zero to 'PTR_ERR'
-drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c:112 dpu_rm_init() warn: passing zero to 'PTR_ERR'
-drivers/gpu/drm/msm/msm_gem.c:1184 msm_gem_new() warn: passing a valid pointer to 'PTR_ERR'
+All errors (new ones prefixed by >>):
 
-Old smatch warnings:
-drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c:1679 dpu_plane_init() warn: '&pdpu->mplane_list' not removed from list
-drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c:1065 dpu_kms_hw_init() warn: passing zero to 'PTR_ERR'
-drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c:141 dpu_rm_init() warn: passing zero to 'PTR_ERR'
-drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c:159 dpu_rm_init() warn: passing zero to 'PTR_ERR'
-drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c:183 dpu_rm_init() warn: passing zero to 'PTR_ERR'
-drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c:200 dpu_rm_init() warn: passing zero to 'PTR_ERR'
-drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c:217 dpu_rm_init() warn: passing zero to 'PTR_ERR'
-drivers/gpu/drm/msm/msm_gem.c:392 get_iova_locked() warn: passing a valid pointer to 'PTR_ERR'
+   kernel/sched/fair.c: In function 'should_numa_migrate_memory':
+>> kernel/sched/fair.c:1571:14: error: implicit declaration of function 'node_is_toptier' [-Werror=implicit-function-declaration]
+    1571 |             !node_is_toptier(src_nid)) {
+         |              ^~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-vim +185 drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
 
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  140  
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  141  int dpu_core_perf_crtc_check(struct drm_crtc *crtc,
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  142  		struct drm_crtc_state *state)
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  143  {
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  144  	u32 bw, threshold;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  145  	u64 bw_sum_of_intfs = 0;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  146  	enum dpu_crtc_client_type curr_client_type;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  147  	struct dpu_crtc_state *dpu_cstate;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  148  	struct drm_crtc *tmp_crtc;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  149  	struct dpu_kms *kms;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  150  
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  151  	if (!crtc || !state) {
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  152  		DPU_ERROR("invalid crtc\n");
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  153  		return -EINVAL;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  154  	}
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  155  
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  156  	kms = _dpu_crtc_get_kms(crtc);
-96630140040210 Drew Davenport     2019-09-06  157  	if (!kms->catalog) {
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  158  		DPU_ERROR("invalid parameters\n");
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  159  		return 0;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  160  	}
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  161  
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  162  	/* we only need bandwidth check on real-time clients (interfaces) */
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  163  	if (dpu_crtc_get_client_type(crtc) == NRT_CLIENT)
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  164  		return 0;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  165  
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  166  	dpu_cstate = to_dpu_crtc_state(state);
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  167  
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  168  	/* obtain new values */
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  169  	_dpu_core_perf_calc_crtc(kms, crtc, state, &dpu_cstate->new_perf);
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  170  
-cb88482e2570f6 Jayant Shekhar     2019-06-18  171  	bw_sum_of_intfs = dpu_cstate->new_perf.bw_ctl;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  172  	curr_client_type = dpu_crtc_get_client_type(crtc);
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  173  
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  174  	drm_for_each_crtc(tmp_crtc, crtc->dev) {
-49dfe764797b1e Jordan Crouse      2018-12-03  175  		if (tmp_crtc->enabled &&
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  176  		    (dpu_crtc_get_client_type(tmp_crtc) ==
-cb88482e2570f6 Jayant Shekhar     2019-06-18  177  				curr_client_type) && (tmp_crtc != crtc)) {
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  178  			struct dpu_crtc_state *tmp_cstate =
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  179  				to_dpu_crtc_state(tmp_crtc->state);
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  180  
-5b702d787b47e1 Stephen Boyd       2021-04-30  181  			DRM_DEBUG_ATOMIC("crtc:%d bw:%llu ctrl:%d\n",
-cb88482e2570f6 Jayant Shekhar     2019-06-18  182  				tmp_crtc->base.id, tmp_cstate->new_perf.bw_ctl,
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  183  				tmp_cstate->bw_control);
-c33b7c0389e17d Kalyan Thota       2020-07-16  184  
-cb88482e2570f6 Jayant Shekhar     2019-06-18 @185  				bw_sum_of_intfs += tmp_cstate->new_perf.bw_ctl;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  186  		}
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  187  
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  188  		/* convert bandwidth to kb */
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  189  		bw = DIV_ROUND_UP_ULL(bw_sum_of_intfs, 1000);
-5b702d787b47e1 Stephen Boyd       2021-04-30  190  		DRM_DEBUG_ATOMIC("calculated bandwidth=%uk\n", bw);
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  191  
-71dc6c08e4c53d Krishna Manikandan 2020-05-04  192  		threshold = kms->catalog->perf.max_bw_high;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  193  
-5b702d787b47e1 Stephen Boyd       2021-04-30  194  		DRM_DEBUG_ATOMIC("final threshold bw limit = %d\n", threshold);
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  195  
-c33b7c0389e17d Kalyan Thota       2020-07-16  196  		if (!threshold) {
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  197  			DPU_ERROR("no bandwidth limits specified\n");
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  198  			return -E2BIG;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  199  		} else if (bw > threshold) {
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  200  			DPU_ERROR("exceeds bandwidth: %ukb > %ukb\n", bw,
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  201  					threshold);
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  202  			return -E2BIG;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  203  		}
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  204  	}
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  205  
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  206  	return 0;
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  207  }
-25fdd5933e4c0f Jeykumar Sankaran  2018-06-27  208  
+vim +/node_is_toptier +1571 kernel/sched/fair.c
 
-:::::: The code at line 185 was first introduced by commit
-:::::: cb88482e2570f67a6f4e72569e5a18329d5536ab drm/msm/dpu: clean up references of DPU custom bus scaling
+118aa9e6092758 Huang Ying        2022-07-13  1558  
+10f39042711ba2 Rik van Riel      2014-01-27  1559  bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
+10f39042711ba2 Rik van Riel      2014-01-27  1560  				int src_nid, int dst_cpu)
+10f39042711ba2 Rik van Riel      2014-01-27  1561  {
+cb361d8cdef699 Jann Horn         2019-07-16  1562  	struct numa_group *ng = deref_curr_numa_group(p);
+10f39042711ba2 Rik van Riel      2014-01-27  1563  	int dst_nid = cpu_to_node(dst_cpu);
+10f39042711ba2 Rik van Riel      2014-01-27  1564  	int last_cpupid, this_cpupid;
+10f39042711ba2 Rik van Riel      2014-01-27  1565  
+301a39f0d73fef Huang Ying        2022-07-13  1566  	/*
+301a39f0d73fef Huang Ying        2022-07-13  1567  	 * The pages in slow memory node should be migrated according
+301a39f0d73fef Huang Ying        2022-07-13  1568  	 * to hot/cold instead of private/shared.
+301a39f0d73fef Huang Ying        2022-07-13  1569  	 */
+301a39f0d73fef Huang Ying        2022-07-13  1570  	if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
+301a39f0d73fef Huang Ying        2022-07-13 @1571  	    !node_is_toptier(src_nid)) {
+301a39f0d73fef Huang Ying        2022-07-13  1572  		struct pglist_data *pgdat;
+118aa9e6092758 Huang Ying        2022-07-13  1573  		unsigned long rate_limit;
+118aa9e6092758 Huang Ying        2022-07-13  1574  		unsigned int latency, th, def_th;
+301a39f0d73fef Huang Ying        2022-07-13  1575  
+301a39f0d73fef Huang Ying        2022-07-13  1576  		pgdat = NODE_DATA(dst_nid);
+118aa9e6092758 Huang Ying        2022-07-13  1577  		if (pgdat_free_space_enough(pgdat)) {
+118aa9e6092758 Huang Ying        2022-07-13  1578  			/* workload changed, reset hot threshold */
+118aa9e6092758 Huang Ying        2022-07-13  1579  			pgdat->nbp_threshold = 0;
+301a39f0d73fef Huang Ying        2022-07-13  1580  			return true;
+118aa9e6092758 Huang Ying        2022-07-13  1581  		}
+301a39f0d73fef Huang Ying        2022-07-13  1582  
+118aa9e6092758 Huang Ying        2022-07-13  1583  		def_th = sysctl_numa_balancing_hot_threshold;
+118aa9e6092758 Huang Ying        2022-07-13  1584  		rate_limit = sysctl_numa_balancing_promote_rate_limit << \
+118aa9e6092758 Huang Ying        2022-07-13  1585  			(20 - PAGE_SHIFT);
+118aa9e6092758 Huang Ying        2022-07-13  1586  		numa_promotion_adjust_threshold(pgdat, rate_limit, def_th);
+118aa9e6092758 Huang Ying        2022-07-13  1587  
+118aa9e6092758 Huang Ying        2022-07-13  1588  		th = pgdat->nbp_threshold ? : def_th;
+301a39f0d73fef Huang Ying        2022-07-13  1589  		latency = numa_hint_fault_latency(page);
+301a39f0d73fef Huang Ying        2022-07-13  1590  		if (latency >= th)
+301a39f0d73fef Huang Ying        2022-07-13  1591  			return false;
+301a39f0d73fef Huang Ying        2022-07-13  1592  
+23441fcb084b9e Huang Ying        2022-07-13  1593  		return !numa_promotion_rate_limit(pgdat, rate_limit,
+23441fcb084b9e Huang Ying        2022-07-13  1594  						  thp_nr_pages(page));
+301a39f0d73fef Huang Ying        2022-07-13  1595  	}
+301a39f0d73fef Huang Ying        2022-07-13  1596  
+10f39042711ba2 Rik van Riel      2014-01-27  1597  	this_cpupid = cpu_pid_to_cpupid(dst_cpu, current->pid);
+37355bdc5a1298 Mel Gorman        2018-10-01  1598  	last_cpupid = page_cpupid_xchg_last(page, this_cpupid);
+37355bdc5a1298 Mel Gorman        2018-10-01  1599  
+301a39f0d73fef Huang Ying        2022-07-13  1600  	if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
+301a39f0d73fef Huang Ying        2022-07-13  1601  	    !node_is_toptier(src_nid) && !cpupid_valid(last_cpupid))
+301a39f0d73fef Huang Ying        2022-07-13  1602  		return false;
+301a39f0d73fef Huang Ying        2022-07-13  1603  
+37355bdc5a1298 Mel Gorman        2018-10-01  1604  	/*
+37355bdc5a1298 Mel Gorman        2018-10-01  1605  	 * Allow first faults or private faults to migrate immediately early in
+37355bdc5a1298 Mel Gorman        2018-10-01  1606  	 * the lifetime of a task. The magic number 4 is based on waiting for
+37355bdc5a1298 Mel Gorman        2018-10-01  1607  	 * two full passes of the "multi-stage node selection" test that is
+37355bdc5a1298 Mel Gorman        2018-10-01  1608  	 * executed below.
+37355bdc5a1298 Mel Gorman        2018-10-01  1609  	 */
+98fa15f34cb379 Anshuman Khandual 2019-03-05  1610  	if ((p->numa_preferred_nid == NUMA_NO_NODE || p->numa_scan_seq <= 4) &&
+37355bdc5a1298 Mel Gorman        2018-10-01  1611  	    (cpupid_pid_unset(last_cpupid) || cpupid_match_pid(p, last_cpupid)))
+37355bdc5a1298 Mel Gorman        2018-10-01  1612  		return true;
+10f39042711ba2 Rik van Riel      2014-01-27  1613  
+10f39042711ba2 Rik van Riel      2014-01-27  1614  	/*
+10f39042711ba2 Rik van Riel      2014-01-27  1615  	 * Multi-stage node selection is used in conjunction with a periodic
+10f39042711ba2 Rik van Riel      2014-01-27  1616  	 * migration fault to build a temporal task<->page relation. By using
+10f39042711ba2 Rik van Riel      2014-01-27  1617  	 * a two-stage filter we remove short/unlikely relations.
+10f39042711ba2 Rik van Riel      2014-01-27  1618  	 *
+10f39042711ba2 Rik van Riel      2014-01-27  1619  	 * Using P(p) ~ n_p / n_t as per frequentist probability, we can equate
+10f39042711ba2 Rik van Riel      2014-01-27  1620  	 * a task's usage of a particular page (n_p) per total usage of this
+10f39042711ba2 Rik van Riel      2014-01-27  1621  	 * page (n_t) (in a given time-span) to a probability.
+10f39042711ba2 Rik van Riel      2014-01-27  1622  	 *
+10f39042711ba2 Rik van Riel      2014-01-27  1623  	 * Our periodic faults will sample this probability and getting the
+10f39042711ba2 Rik van Riel      2014-01-27  1624  	 * same result twice in a row, given these samples are fully
+10f39042711ba2 Rik van Riel      2014-01-27  1625  	 * independent, is then given by P(n)^2, provided our sample period
+10f39042711ba2 Rik van Riel      2014-01-27  1626  	 * is sufficiently short compared to the usage pattern.
+10f39042711ba2 Rik van Riel      2014-01-27  1627  	 *
+10f39042711ba2 Rik van Riel      2014-01-27  1628  	 * This quadric squishes small probabilities, making it less likely we
+10f39042711ba2 Rik van Riel      2014-01-27  1629  	 * act on an unlikely task<->page relation.
+10f39042711ba2 Rik van Riel      2014-01-27  1630  	 */
+10f39042711ba2 Rik van Riel      2014-01-27  1631  	if (!cpupid_pid_unset(last_cpupid) &&
+10f39042711ba2 Rik van Riel      2014-01-27  1632  				cpupid_to_nid(last_cpupid) != dst_nid)
+10f39042711ba2 Rik van Riel      2014-01-27  1633  		return false;
+10f39042711ba2 Rik van Riel      2014-01-27  1634  
+10f39042711ba2 Rik van Riel      2014-01-27  1635  	/* Always allow migrate on private faults */
+10f39042711ba2 Rik van Riel      2014-01-27  1636  	if (cpupid_match_pid(p, last_cpupid))
+10f39042711ba2 Rik van Riel      2014-01-27  1637  		return true;
+10f39042711ba2 Rik van Riel      2014-01-27  1638  
+10f39042711ba2 Rik van Riel      2014-01-27  1639  	/* A shared fault, but p->numa_group has not been set up yet. */
+10f39042711ba2 Rik van Riel      2014-01-27  1640  	if (!ng)
+10f39042711ba2 Rik van Riel      2014-01-27  1641  		return true;
+10f39042711ba2 Rik van Riel      2014-01-27  1642  
+10f39042711ba2 Rik van Riel      2014-01-27  1643  	/*
+4142c3ebb685bb Rik van Riel      2016-01-25  1644  	 * Destination node is much more heavily used than the source
+4142c3ebb685bb Rik van Riel      2016-01-25  1645  	 * node? Allow migration.
+10f39042711ba2 Rik van Riel      2014-01-27  1646  	 */
+4142c3ebb685bb Rik van Riel      2016-01-25  1647  	if (group_faults_cpu(ng, dst_nid) > group_faults_cpu(ng, src_nid) *
+4142c3ebb685bb Rik van Riel      2016-01-25  1648  					ACTIVE_NODE_FRACTION)
+10f39042711ba2 Rik van Riel      2014-01-27  1649  		return true;
+10f39042711ba2 Rik van Riel      2014-01-27  1650  
+10f39042711ba2 Rik van Riel      2014-01-27  1651  	/*
+4142c3ebb685bb Rik van Riel      2016-01-25  1652  	 * Distribute memory according to CPU & memory use on each node,
+4142c3ebb685bb Rik van Riel      2016-01-25  1653  	 * with 3/4 hysteresis to avoid unnecessary memory migrations:
+4142c3ebb685bb Rik van Riel      2016-01-25  1654  	 *
+4142c3ebb685bb Rik van Riel      2016-01-25  1655  	 * faults_cpu(dst)   3   faults_cpu(src)
+4142c3ebb685bb Rik van Riel      2016-01-25  1656  	 * --------------- * - > ---------------
+4142c3ebb685bb Rik van Riel      2016-01-25  1657  	 * faults_mem(dst)   4   faults_mem(src)
+10f39042711ba2 Rik van Riel      2014-01-27  1658  	 */
+4142c3ebb685bb Rik van Riel      2016-01-25  1659  	return group_faults_cpu(ng, dst_nid) * group_faults(p, src_nid) * 3 >
+4142c3ebb685bb Rik van Riel      2016-01-25  1660  	       group_faults_cpu(ng, src_nid) * group_faults(p, dst_nid) * 4;
+10f39042711ba2 Rik van Riel      2014-01-27  1661  }
+10f39042711ba2 Rik van Riel      2014-01-27  1662  
 
-:::::: TO: Jayant Shekhar <jshekhar@codeaurora.org>
-:::::: CC: Rob Clark <robdclark@chromium.org>
+:::::: The code at line 1571 was first introduced by commit
+:::::: 301a39f0d73fef87b631e25726f507f244273fa9 memory tiering: hot page selection with hint page fault latency
+
+:::::: TO: Huang Ying <ying.huang@intel.com>
+:::::: CC: Andrew Morton <akpm@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service

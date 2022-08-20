@@ -2,125 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C5759ADE0
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 14:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0629059ADCE
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 14:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346246AbiHTMRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 08:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S1345046AbiHTMH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 08:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345238AbiHTMRV (ORCPT
+        with ESMTP id S1346075AbiHTMHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 08:17:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21DB61D79
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 05:17:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660997839;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iy3aCCM0ofzhiGWBxDwAa5x5+aFSHrvtSCmy4RrpDTE=;
-        b=PpouliPgEtqN4U/9mRC90N3eXmpl28EmB/krwXcCQCx4FtD8KwA9FoFvmTU05wD1RK7J8y
-        iVzjplYCBS0kaEKI8qe4okCThC0d+Pepr7ADOCy4rDvSWT+VLp7ksMEkI6IHQfWhBnex/Y
-        KtEx195Owr1wiEGbclQyO5cLRIIizkU=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-492-OE4CQrrgM9GFzMZ8r8TciA-1; Sat, 20 Aug 2022 08:17:17 -0400
-X-MC-Unique: OE4CQrrgM9GFzMZ8r8TciA-1
-Received: by mail-ed1-f71.google.com with SMTP id c14-20020a05640227ce00b0043e5df12e2cso4219456ede.15
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 05:17:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=iy3aCCM0ofzhiGWBxDwAa5x5+aFSHrvtSCmy4RrpDTE=;
-        b=3yNzgJyxq7y3K3EEe1ualDHd5p3ba9pF8OWXA8PqCQHaJhglyPEwIU+rIkvA4Jv1VM
-         1T9JWNjlSWZOpZgXqf5tn1T3puzR/wq3aSOuIJOygXJ3Ya45AVaM655yUNdnJQtrybpu
-         1wJpClWj2io/4ey9n8C+4wqcXICdflG5TifvxOE7cQLs1qF1ntqzBJbKLbjhiOG2tH6L
-         c5HNQpZdaFZnrid2QpA0oXh/+hFTzfMRbPQbTFfFrvdSpaiMso8HKlqRsmtxZZTbGPw1
-         SydRMroXXnNR6tbMJMPHtoU0Iy/mBuNVqgHM7dGa4ZryS4F9w3eMfidKLXxgrPg9Bq41
-         PRew==
-X-Gm-Message-State: ACgBeo1v4ncDyv6K7MjeJbq0+UuMsIase1ph9XrOSU1d7XjtA1DdoazC
-        ZeqnAJqPKU9fJK2Yx+12eu+DEoYMuEWEfusHxwyY7Oz5JMdvrU2U7ZUCEk7y9qa7ZK8ww5OHyl3
-        JH+l3uUPhLCaY3DMj+YDwIxBZ
-X-Received: by 2002:a17:907:970b:b0:73d:5a29:959 with SMTP id jg11-20020a170907970b00b0073d5a290959mr3372642ejc.183.1660997836697;
-        Sat, 20 Aug 2022 05:17:16 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5nXo87Pd7eW6X9eQzTrY8FDGaHJn7EYV6wHukMmMfX/kPNkwcmlXtH1ZjmliARRqJ1I9GyPA==
-X-Received: by 2002:a17:907:970b:b0:73d:5a29:959 with SMTP id jg11-20020a170907970b00b0073d5a290959mr3372632ejc.183.1660997836515;
-        Sat, 20 Aug 2022 05:17:16 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id h7-20020a1709067cc700b0072f112a6ad2sm3575376ejp.97.2022.08.20.05.17.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 20 Aug 2022 05:17:14 -0700 (PDT)
-Message-ID: <63626444-a7ee-a0c4-ec0a-f44a810e25ea@redhat.com>
-Date:   Sat, 20 Aug 2022 14:17:12 +0200
+        Sat, 20 Aug 2022 08:07:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83F39D126;
+        Sat, 20 Aug 2022 05:07:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82859B80B8B;
+        Sat, 20 Aug 2022 12:07:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12FFFC433C1;
+        Sat, 20 Aug 2022 12:07:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660997238;
+        bh=ET+Eoevr87hUV2gzJcF2VdzryEshL8SZbQM1YaN7lUc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Mu0IER8MeSaURN+xVaCZP5DTyTFbAjgJUHn8FU4EvDvbCnTbGh5mZjZpS6EaOUTWj
+         /+7+KV1mOaWpPRvtZBJsv11uEO6Hi7ZCq/3qWAv4yxEyM+ZQYzAIMjSYI0sXxiNBBF
+         hhB/nE0KZtNqwLp3RomqB/knThT3xUknX693mhevrna0oXgwxRYqvqNJ9vCVLeSFvp
+         GIqPsY09eiJhCZy6bT7sD9UaCQuHy55Mli5LTxiWeMvXAyaUPECma0oICqpYyHeg7n
+         ajPBOwuUWT4twuhtyLj23v1j4pTi1ScHzrHXOu+wx0//fIqraS8Zkb7ZqQsjZxJASf
+         GxRtIytoZylMA==
+Date:   Sat, 20 Aug 2022 13:17:54 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Joe Simmons-Talbott <joetalbott@gmail.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] iio: Avoid multiple line dereference for mask
+Message-ID: <20220820131754.729d59a9@jic23-huawei>
+In-Reply-To: <20220819182012.219523-1-joetalbott@gmail.com>
+References: <20220819182012.219523-1-joetalbott@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 0/4] remove useless files
-Content-Language: en-US
-To:     Nam Cao <namcaov@gmail.com>, lkp@intel.com
-Cc:     Larry.Finger@lwfinger.net, gregkh@linuxfoundation.org,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-References: <202208200447.kdEhBy9a-lkp@intel.com>
- <cover.1660977535.git.namcaov@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <cover.1660977535.git.namcaov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 19 Aug 2022 14:20:12 -0400
+Joe Simmons-Talbott <joetalbott@gmail.com> wrote:
 
-Patch 1/4 seems to be missing?
-
-Also please squash patches 3 and 4:
-
-   staging: rtl8723bs: remove odm_NoiseMonitor.o from Makefile
-   staging: rtl8723bs: remove odm_NoiseMonitor.h and odm_NoiseMonitor.c
-
-together. Ion other words remove both the files and the Makefile
-target in a single patch please.
-
-Regards,
-
-Hans
-
-
-On 8/20/22 08:42, Nam Cao wrote:
-> Delete odm_NoiseMonitor.c and odm_NoiseMonitor.h because they are
-> useless. The first 2 commits are preparation, and the final commit is
-> actual removal.
+> Prefer lines > 80 characters over splitting dereferences across multiple
+> lines. Reported by checkpatch.pl.
 > 
-> v2: Add new patch to remove the file from Makefile, otherwise there is
-> build error as reported by kernel test bot.
+> Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>
+Applied to the togreg branch of iio.git which will get pushed out initially
+as testing for all the normal reasons...
+
+Jonathan
+
+> ---
+> changes in v2:
+> * Don't use a temporary variable.
 > 
-> Nam Cao (4):
->   staging: rtl8723bs: remove unused function ODM_InbandNoise_Monitor
->   staging: rtl8723bs: remove member noise_level from struct dm_odm_t
->   staging: rtl8723bs: remove odm_NoiseMonitor.o from Makefile
->   staging: rtl8723bs: remove odm_NoiseMonitor.h and odm_NoiseMonitor.c
+>  drivers/iio/industrialio-core.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
->  drivers/staging/rtl8723bs/Makefile            |   1 -
->  drivers/staging/rtl8723bs/hal/odm.h           |   2 -
->  .../staging/rtl8723bs/hal/odm_NoiseMonitor.c  | 130 ------------------
->  .../staging/rtl8723bs/hal/odm_NoiseMonitor.h  |  39 ------
->  drivers/staging/rtl8723bs/hal/odm_precomp.h   |   1 -
->  5 files changed, 173 deletions(-)
->  delete mode 100644 drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.c
->  delete mode 100644 drivers/staging/rtl8723bs/hal/odm_NoiseMonitor.h
-> 
+> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+> index 67d3d01d2dac..d38623c046cc 100644
+> --- a/drivers/iio/industrialio-core.c
+> +++ b/drivers/iio/industrialio-core.c
+> @@ -1303,8 +1303,7 @@ static int iio_device_add_channel_sysfs(struct iio_dev *indio_dev,
+>  
+>  	ret = iio_device_add_info_mask_type_avail(indio_dev, chan,
+>  						  IIO_SEPARATE,
+> -						  &chan->
+> -						  info_mask_separate_available);
+> +						  &chan->info_mask_separate_available);
+>  	if (ret < 0)
+>  		return ret;
+>  	attrcount += ret;
+> @@ -1318,8 +1317,7 @@ static int iio_device_add_channel_sysfs(struct iio_dev *indio_dev,
+>  
+>  	ret = iio_device_add_info_mask_type_avail(indio_dev, chan,
+>  						  IIO_SHARED_BY_TYPE,
+> -						  &chan->
+> -						  info_mask_shared_by_type_available);
+> +						  &chan->info_mask_shared_by_type_available);
+>  	if (ret < 0)
+>  		return ret;
+>  	attrcount += ret;
 

@@ -2,65 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F0C59AB1B
+	by mail.lfdr.de (Postfix) with ESMTP id A6B9559AB1A
 	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 06:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235053AbiHTEEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 00:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        id S241822AbiHTEEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 00:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiHTEEb (ORCPT
+        with ESMTP id S236400AbiHTEEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 00:04:31 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0126E2D5;
-        Fri, 19 Aug 2022 21:04:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660968269; x=1692504269;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cBvMddEtt4UQqHMg0rq14ho6Xv1Ko3mJzB2RdT3ptPQ=;
-  b=dLiArMA2G5dWN3EfEWIXqGuqwlGJMg4VCkGSBhWeIMWxR9YmY/b7ESlo
-   3JLejxtsNWDu/vLMPk7RAtube28xPa9gItcAnFD4i+zaYJqDXGJlW6vp+
-   vUPHpZpFQNfZXi2BqLWV8k1RLt8DMOosz1KkrByBR8xpNH1R1ozx1iaAA
-   ne6T4ja39rMJe6EcRz+LDliDpgbr65BxL0tj1RxL55qGTzJZWN1ji+B2/
-   zUdp2qohDEQXPZxcrgEdOAZp/n4VD6Ecy/7POEnx+Pq15xLjq5nrT8e6H
-   bTic5gDuh4jT9W0DDBs9BjKQYaazyQ/MYsAyBxgtkfFw9vMCneR4j4F6/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="272907718"
-X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="272907718"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 21:04:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="641468410"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 19 Aug 2022 21:04:24 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPFih-00027Q-16;
-        Sat, 20 Aug 2022 04:04:23 +0000
-Date:   Sat, 20 Aug 2022 12:03:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, hch@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        linux-arm-kernel@lists.infradead.org, Baoquan He <bhe@redhat.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v2 08/11] parisc: mm: Convert to GENERIC_IOREMAP
-Message-ID: <202208201135.YyN9CXsu-lkp@intel.com>
-References: <20220820003125.353570-9-bhe@redhat.com>
+        Sat, 20 Aug 2022 00:04:34 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187BA786FC
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 21:04:32 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-11c896b879bso7269869fac.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 21:04:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=J4ges1QP1SvDqTj0E1gs1t7/f2sDDibppIBG9MQZ7oc=;
+        b=z8nkR8XdE/UXRaPfqEBXyfJnSbkyZr4N7vE72kmnKaHfkPToXd173sO4H228973FXM
+         o6HNDEUPJ6OU6DwzgEb3w5V6SwEYL40JBO+UiOmfLd6vFNFig6ZJ96ocX4VAiOm+Xs1y
+         PsA8ELmayCzgAVfppGFnDkf18BaIabUg/xyLred17wh3BDNm1nI4XNlBWffnmnl34m7Y
+         gZMvNNgzrVn2RAc48Y6lfEmd9agvuKKI8ZM4lzXU6DIGcMnuHIHMoabjrWVXbkdCf+BW
+         x19+Uwi4zl8axvOCJWIoJtQxnmIqnrWAfK8zM3U/+4t1w0Grgv66w9V7sIH6ReYacdw3
+         8XnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=J4ges1QP1SvDqTj0E1gs1t7/f2sDDibppIBG9MQZ7oc=;
+        b=mrXAL0RP5gUVCXdq5Z6sDg8CZSPOnzZab0TgSvyLWV/L9dsBdbk++setbuO2GdiGLn
+         5yfj5+87FougcABwrRoxOctG8x00/H7ak6dtWoKOKkE/pgnq8CbXIlMqrZ6QyjRbts5F
+         qAWS/mVa7AcM/sqcy/HN5bgyU8zrdq5wD4qlGIoSAWYUT0WXNuklSjaG07Tyxcc0gLOC
+         Ql7REi5/xdoAZbt3UBhgYtvqjT4HYrcXyH7gEUiooDyGP4EghRyH4BkVHH1SNWcDikpQ
+         z7zCQnuV71TcUG9wCkI8ylm2hBuqy7bURsv2T9eLQ1CmcnAsuWHRNiTGp2/NoiKTEgeB
+         miNQ==
+X-Gm-Message-State: ACgBeo12+2oE34HGbq1LrnyYA8diz1JQwOnKkMwHV8eWmk1BHFJP0iME
+        BSFHBNPiBYG1sUz4hErZO/Xd9g==
+X-Google-Smtp-Source: AA6agR52x2MudBpZMlptyzqQwvA4mYMSCx5OStuX0uPhcge8aAm9KvjZWXEibFzzqjDCmVHM8tungg==
+X-Received: by 2002:a05:6870:e313:b0:10e:757c:d388 with SMTP id z19-20020a056870e31300b0010e757cd388mr5163145oad.280.1660968271399;
+        Fri, 19 Aug 2022 21:04:31 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id s16-20020a056808209000b00339c7af0e8esm1457851oiw.51.2022.08.19.21.04.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Aug 2022 21:04:30 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 23:04:28 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Pin-yen Lin <treapking@chromium.org>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Introduce GPIO-based SBU mux
+Message-ID: <YwBdTAIqFbedC6Oa@builder.lan>
+References: <20220810204750.3672362-1-bjorn.andersson@linaro.org>
+ <20220810204750.3672362-2-bjorn.andersson@linaro.org>
+ <a13bce60-25b4-d075-d56a-d1283e91e3ba@linaro.org>
+ <20220814210104.GA690892-robh@kernel.org>
+ <Yv1y9Wjp16CstJvK@baldur>
+ <CAE-0n53AjJ_G6yZoTALWpKvZUdF+8nFZ+TQh=Ch=8xgdMVqDkw@mail.gmail.com>
+ <CACeCKadP-AZ8OU4A=7CrwAz7yuLvMvjvAcw7K-FORFmkMvx7cA@mail.gmail.com>
+ <CAE-0n53C+D=9gdSXKsjr4KZVrb-gpeo_EyuX3DfNKp19FoicXA@mail.gmail.com>
+ <YwADGgNVwtKacUBR@builder.lan>
+ <CACeCKaeXpU+AxFNAwkutMX9LT2XLgAv1XmwJRyj7Exqxg6v8rA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220820003125.353570-9-bhe@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CACeCKaeXpU+AxFNAwkutMX9LT2XLgAv1XmwJRyj7Exqxg6v8rA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,86 +85,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baoquan,
+On Fri 19 Aug 17:18 CDT 2022, Prashant Malani wrote:
 
-I love your patch! Yet something to improve:
+> On Fri, Aug 19, 2022 at 2:39 PM Bjorn Andersson
+> <bjorn.andersson@linaro.org> wrote:
+> >
+> > On Fri 19 Aug 15:49 CDT 2022, Stephen Boyd wrote:
+> >
+> > > > I like 2 endpoints to represent the usb-c-connector, but that doesn't seem
+> > > > to be compatible (without introducing `data-lanes`, at least) with all
+> > > > the various
+> > > > combinations on the remote side, if that remote side is a DRM bridge with DP
+> > > > output capability (like it6505 or anx7625).
+> > > > That type of DRM bridge supports 1, 2 or 4 lane DP connections.
+> > >
+> > > Why can't the remote side that's a pure DP bridge (it6505) bundle
+> > > however many lanes it wants into one endpoint? If it's a pure DP bridge
+> > > we should design the bridge binding to have up to 4 endpoints, but
+> > > sometimes 2 or 1 and then overlay data-lanes onto that binding so that
+> > > we can tell the driver how to remap the lanes if it can. If the hardware
+> > > can't support remapping lanes then data-lanes shouldn't be in the
+> > > binding.
+> 
+> 2 endpoints sounds fine to me. The overloading of the bridge-side endpoint
+> to mean different things depending on what it's connected to seemed odd to
+> me, but if that is acceptable for the bridge binding, then great.
+> 
+> > The existing implementation provides the interfaces usb_role_switch,
+> > usb_typec_mux and usb_typec_switch. These works based on the concept
+> > that the USB Type-C controller will request the endpoints connected to
+> > the usb-c-connector about changes such as "switch to host mode", "switch
+> > to 2+2 USB/DP combo" and "switch orientation to reverse". We use this
+> > same operations to inform any endpoint at any port about these events
+> > and they all react accordingly.
+> 
+> Right, but that implementation/assumption doesn't work so well when you
+> have 2 Type-C ports which might route to the same bridge (2 lane from each).
+> The other 2 lanes from the other endpoints can go to (say) a USB HUB.
+> 
 
-[auto build test ERROR on akpm-mm/mm-everything]
+Are you saying that two of your SS-lanes in connector A are connected to
+directly to the QMP PHY at the same time as two SS-lanes from connector
+B are connected to the same two pads on the QMP PHY - without any
+mux etc inbetween?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/mm-ioremap-Convert-architectures-to-take-GENERIC_IOREMAP-way/20220820-083435
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: parisc-randconfig-r005-20220820 (https://download.01.org/0day-ci/archive/20220820/202208201135.YyN9CXsu-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/570f2a3347cc83c9ea71d3dbbebfad8ea085ecc6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Baoquan-He/mm-ioremap-Convert-architectures-to-take-GENERIC_IOREMAP-way/20220820-083435
-        git checkout 570f2a3347cc83c9ea71d3dbbebfad8ea085ecc6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc prepare
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from arch/parisc/include/asm/io.h:315,
-                    from include/linux/io.h:13,
-                    from include/linux/irq.h:20,
-                    from arch/parisc/include/asm/hardirq.h:13,
-                    from include/linux/hardirq.h:11,
-                    from arch/parisc/kernel/asm-offsets.c:21:
->> include/asm-generic/iomap.h:97: warning: "ioremap_wc" redefined
-      97 | #define ioremap_wc ioremap
-         | 
-   arch/parisc/include/asm/io.h:135: note: this is the location of the previous definition
-     135 | #define ioremap_wc(addr, size)  \
-         | 
-   include/linux/io.h: In function 'pci_remap_cfgspace':
->> include/linux/io.h:89:44: error: implicit declaration of function 'ioremap'; did you mean 'ioremap_np'? [-Werror=implicit-function-declaration]
-      89 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
-         |                                            ^~~~~~~
-         |                                            ioremap_np
->> include/linux/io.h:89:42: warning: pointer/integer type mismatch in conditional expression
-      89 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
-         |                                          ^
-   cc1: some warnings being treated as errors
-   make[2]: *** [scripts/Makefile.build:117: arch/parisc/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1207: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:222: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+I.e. that there are a set of pins in connector A which is directly
+connected to a set of pins in connector B?
 
 
-vim +89 include/linux/io.h
+I was under the impression that in your hardware there's some component
+muxing the single DP output to one of the connectors. If so there should
+be no graph-link directly connecting the two usb-c-connectors and the
+one QMP PHY.
 
-7d3dcf26a6559f Christoph Hellwig 2015-08-10  72  
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  73  #ifdef CONFIG_PCI
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  74  /*
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  75   * The PCI specifications (Rev 3.0, 3.2.5 "Transaction Ordering and
-b10eb2d50911f9 Hector Martin     2021-03-25  76   * Posting") mandate non-posted configuration transactions. This default
-b10eb2d50911f9 Hector Martin     2021-03-25  77   * implementation attempts to use the ioremap_np() API to provide this
-b10eb2d50911f9 Hector Martin     2021-03-25  78   * on arches that support it, and falls back to ioremap() on those that
-b10eb2d50911f9 Hector Martin     2021-03-25  79   * don't. Overriding this function is deprecated; arches that properly
-b10eb2d50911f9 Hector Martin     2021-03-25  80   * support non-posted accesses should implement ioremap_np() instead, which
-b10eb2d50911f9 Hector Martin     2021-03-25  81   * this default implementation can then use to return mappings compliant with
-b10eb2d50911f9 Hector Martin     2021-03-25  82   * the PCI specification.
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  83   */
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  84  #ifndef pci_remap_cfgspace
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  85  #define pci_remap_cfgspace pci_remap_cfgspace
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  86  static inline void __iomem *pci_remap_cfgspace(phys_addr_t offset,
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  87  					       size_t size)
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  88  {
-b10eb2d50911f9 Hector Martin     2021-03-25 @89  	return ioremap_np(offset, size) ?: ioremap(offset, size);
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  90  }
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  91  #endif
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  92  #endif
-cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  93  
+Is this not the case?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> >
+> > Perhaps I'm misunderstanding your suggestion, but if you start
+> > representing each individual lane in the SuperSpeed interface I believe
+> > you would have to just abandon this interface and replace it with
+> > something like "give me USB on port@1/endpoint@0 and port@1/endpoint@1
+> > and give me DP on port@1/endpoint@2 and port@1/endpoint@3".
+> 
+> I don't think that is necessary. The switch driver can register the switches (
+> and it can find out which end-points map to the same usb-c-connector).
+> 
+> From the port driver, the port driver just needs to tell each switch
+> registered for it's port that "I want
+> DP Pin assignment C/ DP Pin assignment D / Plain USB3.x" and the
+> switch driver(s) can figure out what to output on its pins (since
+> the Type-C binding will specify ep0 = A2-A3 (TX1), ep1 = B10-B11 , etc)
+> 
+> orientation-switch can tell the switch if the signals need to be swapped around.
+> 
+
+In a typical Qualcomm design the QMP PHY is directly connected to the
+usb-c-connector and as such it is the component that implements
+usb_typec_mux and usb_typec_switch.
+
+Regards,
+Bjorn
+
+> The above notwithstanding, it sounds like the 2-ep approach has more support
+> than 4 ep-approach, so this specific example is moot.

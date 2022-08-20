@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A8259AF8A
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 20:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D31759AF81
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 20:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbiHTSQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 14:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
+        id S232474AbiHTSQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 14:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbiHTSQm (ORCPT
+        with ESMTP id S231807AbiHTSQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 20 Aug 2022 14:16:42 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A12C3122E
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:40 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id z20so9104205edb.9
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6A231DC2
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:41 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 2so1124590edx.2
         for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=PDPIVySPMRGRZRtU+MncznrTlB37IpX4cguK3flnXUA=;
-        b=W6DOBFk9VRRaDkpOdo1jv6Hln3uFH5V6mWgZ2gRGnIL3XyaS+XbCDih+xoOeIcVBuF
-         zXUuymTgdqlQgfUIHsEbKsdks5120TOf3FFwrAMS5Y8uzZYMootTTKnlamQMQDnq1iux
-         YgDuMvwbebdCZjDGtWyqlvEgZtAkWwmeNu0H4x1qc/z7o9E27oQ7NNtopGCeWSdSFypi
-         OcWTztYmz/W3dF9LL3U40ZJVDlo24viwujT/jOgiivm5qn4AfJPPyTL82QrCjqyZJPi4
-         NtCXr4ug9d1qHfa8Tsdv9JAIPbePoqWT8JvxTlgvYK6hbIZCZM2Uu7Egoz2AnyKwUZMc
-         Xagg==
+        bh=2iiedlofv1fkN9T2ZU3EkgMCuLITjKpLLf2R2cOJIQM=;
+        b=AEsz7o6e8ncSjAOisRGbrXWqd6Lb6D6i+Z46CZA80zY6RxUf1xaBjVShI90lhKPXKR
+         zU+/SM2DNkL779x9nWZWNDKECu5BZNErW6zC1rey/U8ti8qN1Tdao/jwIsCpw+Iuc8KH
+         GBEQW42nGsInnKpWDqbmLIkpo/wYn3kgy4Vlw8JAiv3IQJ8rq/vVflTPQ/XWXOuL97qH
+         iiyp1D2ai5XI3rNjIkwnKQEqBaBVe1EKoAQNh7ibChZo0TGPGWBrdADpqgW9ChcFCVcz
+         tTxe/Ltte0jSnuX8QvmCb70JMcFkb8TtpjZY7kMebKZ/vR5GdNdxd3vMKKAmAj7CW4uT
+         sUTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=PDPIVySPMRGRZRtU+MncznrTlB37IpX4cguK3flnXUA=;
-        b=U/1m5CFDGhccTcuzRtNSpDfQsiw9P0erHautmosxPEnjiiLZKYKj7q1At6hh8fq5zQ
-         D7HUUohHfLEWxovcSdS7KcqImYLyQLZcpBbJwTygaZhNtE5mewdPOhqUkTJXcu2enCMj
-         q8qLugHOZdPsNYFW2M+jrsDvxu+ZhF3CJiw8L1nHMu/WZmpUptAixP+80bYk0CJ49mLU
-         NQ7bZMasbQOuPGlKO1ybS+Zste7314o4lejrg6Pw1UHd53gKO+OhHjtYCcvGrZzDeMJs
-         BMG3oVjwFVtTbESTbIziUC8RcUPadJgUjfZLLf7ry6FbmBzXKJFrixgMOnKvkLa1N1HJ
-         UGIw==
-X-Gm-Message-State: ACgBeo1ZKb4/cdrXQkGSeD1MsgtuWqpInW6GGtYy+Oo4nAwqLlnr3LGF
-        +8G0+OtdTemf+bm11AxwzYw=
-X-Google-Smtp-Source: AA6agR51CtFX/BfnsCvvr23jdZ8g508/rK5R9ppuxFwdC6mgQpmJtKQDHeakSfVfJhoNw1s2fv1meg==
-X-Received: by 2002:a05:6402:424f:b0:43e:6d89:4316 with SMTP id g15-20020a056402424f00b0043e6d894316mr10190158edb.408.1661019398953;
-        Sat, 20 Aug 2022 11:16:38 -0700 (PDT)
+        bh=2iiedlofv1fkN9T2ZU3EkgMCuLITjKpLLf2R2cOJIQM=;
+        b=NZiDWF/i+v8otmfDQ82ddOr/RzfIb+MtzoV09uSXG4TmFuIo4yfbMXBM9T/X3INBdi
+         juvNZQFSkahs+gDL05HNJF5K0FZr6hfNYUeXCc5unQVOVvjLtDFQ6g0Mpz0GUfaKKxNK
+         MyYN0uWjHUt4wYhTKfNrsEn2SRwWVmBCPFC3WWIUvOLzWzivNMAEpjpXSrjUWGmW6Tbd
+         wkI70A3LOUbVnanTILjSneE7MxUNBfaOTSdQMytPPksOQZzLmsOcEjq0DBD1EE47iL2V
+         AB/GlLSbubw7X1eXVlue2P1PHUBJl1+QWOScQrcvdkOIt3KJgqKYLUQF2Z+z0TpYF1cx
+         uPUQ==
+X-Gm-Message-State: ACgBeo1l+JEotnMwOWnU8sf3+ygP9AX5YFNqehulIyD7Ba7u8DtTSRlu
+        uZ3lpGbf687FM2jnACO4I10=
+X-Google-Smtp-Source: AA6agR74IV2U1FDGPjYlwqqWQ+oKl5C3hY8cBbfEiMjNzHak9YgN3Jd3OCf4FlS7WuUG6IED/0FoSQ==
+X-Received: by 2002:a05:6402:5384:b0:431:6d84:b451 with SMTP id ew4-20020a056402538400b004316d84b451mr10086593edb.46.1661019399652;
+        Sat, 20 Aug 2022 11:16:39 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb77.dynamic.kabel-deutschland.de. [95.90.187.119])
-        by smtp.gmail.com with ESMTPSA id g2-20020a17090604c200b0072af890f52dsm3887833eja.88.2022.08.20.11.16.38
+        by smtp.gmail.com with ESMTPSA id g2-20020a17090604c200b0072af890f52dsm3887833eja.88.2022.08.20.11.16.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 11:16:38 -0700 (PDT)
+        Sat, 20 Aug 2022 11:16:39 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 04/19] staging: r8188eu: make rtw_os_xmit_resource_alloc() static
-Date:   Sat, 20 Aug 2022 20:16:08 +0200
-Message-Id: <20220820181623.12497-5-straube.linux@gmail.com>
+Subject: [PATCH 05/19] staging: r8188eu: rename rtw_os_xmit_resource_alloc()
+Date:   Sat, 20 Aug 2022 20:16:09 +0200
+Message-Id: <20220820181623.12497-6-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220820181623.12497-1-straube.linux@gmail.com>
 References: <20220820181623.12497-1-straube.linux@gmail.com>
@@ -71,84 +71,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function rtw_os_xmit_resource_alloc() is only used in rtw_xmit.c.
-Make it static.
+The function rtw_os_xmit_resource_alloc() was moved from the os_dep
+directory. It looks like the driver was originaly written to support
+different operating systems. Obviously we do not need an extra 'os'
+in the function name that indicates that the function is operating
+system specific. Rename it to rtw_xmit_resource_alloc().
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_xmit.c      | 17 +++++++++++++++++
- drivers/staging/r8188eu/include/xmit_osdep.h |  2 --
- drivers/staging/r8188eu/os_dep/xmit_linux.c  | 16 ----------------
- 3 files changed, 17 insertions(+), 18 deletions(-)
+ drivers/staging/r8188eu/core/rtw_xmit.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index 48631ef56114..6f3a70a1ab3c 100644
+index 6f3a70a1ab3c..a1d2c2f78044 100644
 --- a/drivers/staging/r8188eu/core/rtw_xmit.c
 +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -33,6 +33,23 @@ void	_rtw_init_sta_xmit_priv(struct sta_xmit_priv *psta_xmitpriv)
+@@ -33,8 +33,8 @@ void	_rtw_init_sta_xmit_priv(struct sta_xmit_priv *psta_xmitpriv)
  	INIT_LIST_HEAD(&psta_xmitpriv->apsd);
  }
  
-+static int rtw_os_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitbuf,
-+				      u32 alloc_sz)
-+{
-+	pxmitbuf->pallocated_buf = kzalloc(alloc_sz, GFP_KERNEL);
-+	if (!pxmitbuf->pallocated_buf)
-+		return _FAIL;
-+
-+	pxmitbuf->pbuf = (u8 *)ALIGN((size_t)(pxmitbuf->pallocated_buf), XMITBUF_ALIGN_SZ);
-+	pxmitbuf->dma_transfer_addr = 0;
-+
-+	pxmitbuf->pxmit_urb = usb_alloc_urb(0, GFP_KERNEL);
-+	if (!pxmitbuf->pxmit_urb)
-+		return _FAIL;
-+
-+	return _SUCCESS;
-+}
-+
- s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+-static int rtw_os_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitbuf,
+-				      u32 alloc_sz)
++static int rtw_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitbuf,
++				   u32 alloc_sz)
  {
- 	int i;
-diff --git a/drivers/staging/r8188eu/include/xmit_osdep.h b/drivers/staging/r8188eu/include/xmit_osdep.h
-index 5a09355a142a..82b47b38bafd 100644
---- a/drivers/staging/r8188eu/include/xmit_osdep.h
-+++ b/drivers/staging/r8188eu/include/xmit_osdep.h
-@@ -30,8 +30,6 @@ struct xmit_buf;
+ 	pxmitbuf->pallocated_buf = kzalloc(alloc_sz, GFP_KERNEL);
+ 	if (!pxmitbuf->pallocated_buf)
+@@ -142,10 +142,10 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 		pxmitbuf->ext_tag = false;
  
- int rtw_xmit_entry(struct sk_buff *pkt, struct  net_device *pnetdev);
+ 		/* Tx buf allocation may fail sometimes, so sleep and retry. */
+-		res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
++		res = rtw_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
+ 		if (res == _FAIL) {
+ 			msleep(10);
+-			res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
++			res = rtw_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
+ 			if (res == _FAIL)
+ 				goto exit;
+ 		}
+@@ -179,7 +179,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
+ 		pxmitbuf->padapter = padapter;
+ 		pxmitbuf->ext_tag = true;
  
--int rtw_os_xmit_resource_alloc(struct adapter *padapter,
--			       struct xmit_buf *pxmitbuf, u32 alloc_sz);
- void rtw_os_xmit_resource_free(struct adapter *padapter,
- 			       struct xmit_buf *pxmitbuf, u32 free_sz);
- 
-diff --git a/drivers/staging/r8188eu/os_dep/xmit_linux.c b/drivers/staging/r8188eu/os_dep/xmit_linux.c
-index 9759ff5ea76d..fdecb5e1a784 100644
---- a/drivers/staging/r8188eu/os_dep/xmit_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/xmit_linux.c
-@@ -54,22 +54,6 @@ uint _rtw_pktfile_read(struct pkt_file *pfile, u8 *rmem, uint rlen)
- 	return len;
- }
- 
--int rtw_os_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitbuf, u32 alloc_sz)
--{
--	pxmitbuf->pallocated_buf = kzalloc(alloc_sz, GFP_KERNEL);
--	if (!pxmitbuf->pallocated_buf)
--		return _FAIL;
--
--	pxmitbuf->pbuf = (u8 *)ALIGN((size_t)(pxmitbuf->pallocated_buf), XMITBUF_ALIGN_SZ);
--	pxmitbuf->dma_transfer_addr = 0;
--
--	pxmitbuf->pxmit_urb = usb_alloc_urb(0, GFP_KERNEL);
--	if (!pxmitbuf->pxmit_urb)
--		return _FAIL;
--
--	return _SUCCESS;
--}
--
- void rtw_os_xmit_resource_free(struct adapter *padapter,
- 			       struct xmit_buf *pxmitbuf, u32 free_sz)
- {
+-		res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, max_xmit_extbuf_size + XMITBUF_ALIGN_SZ);
++		res = rtw_xmit_resource_alloc(padapter, pxmitbuf, max_xmit_extbuf_size + XMITBUF_ALIGN_SZ);
+ 		if (res == _FAIL) {
+ 			res = _FAIL;
+ 			goto exit;
 -- 
 2.37.2
 

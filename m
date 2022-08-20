@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353C759AC90
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DD659AC9A
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344426AbiHTI11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 04:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S245228AbiHTIaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 04:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343855AbiHTI1V (ORCPT
+        with ESMTP id S244457AbiHTIaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 04:27:21 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAC0BBA79
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:27:19 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id b16so8086116edd.4
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:27:19 -0700 (PDT)
+        Sat, 20 Aug 2022 04:30:08 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12427BC807
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:30:05 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id h22so2369700ejk.4
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:30:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=JrqMBHE8Y8s8z3OGnNSizMNZY+3dcPB6aIc4DL1jVDg=;
-        b=twIUq00Y1zciqnfpIq6CK2hx3j6laacR53xQFxiX++QUh2WeZdUcoSwliZZLX6RUhY
-         vb5mtfb73qaUbokQ0usaHlcJRhxT6VIKQVmoMk4Du3pgjgB8beeKG8MGAroU0neHvYS0
-         pZiWH3vmKBpYaAsvXM7rDE/T9nQPEoZx5Gy1BGQf+1Gj9kwLJNH3M5SW7cbjTCKM5aC4
-         NZu6EAB6Q4PLGbVpXl47tGSs/E7GT+1R3bqaOXrIAJsrUmHJ3s/GwSlpMd8Bf+xQbLgN
-         gpq30vys3ubJAr+yFPeb0PfCbLSNyDc5aMmbJZab19iFwJywrD+0e3GcGSrhHr8JDHw/
-         Fx9w==
+        d=amarulasolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=RS+9z5xIA7IJQfYdhvS13wGTMb0Y1SSjn5eINN5tz5M=;
+        b=KYglLr5IT5Q6SjG1hpSADMsfLqBTmSm2RePc/Mk+1a6/IuYwltxIMjKHELWXq0raEi
+         vJ8dtvWbLa7e3oCV42BvkGk1Rzu+b3b+GMAbinrVoPbJWAX7hYPbCjLZyV57Y30zDrxX
+         PMdQHOv6kMqvF2mbnxdajLqBjL3wVvx85kgpo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JrqMBHE8Y8s8z3OGnNSizMNZY+3dcPB6aIc4DL1jVDg=;
-        b=MD6rfC2BlDoZqPrMnMIOoYAXCWb47zw0A9YYxEtEsLWE1GhvM9uOmlXr8hl6JkhKZQ
-         isDPrqE/CNgCAhpx9XZzkzrmTJFXgHqB0QFV6ATMLYS0Hb+g5lgjeqaP955Pfb6eCbQd
-         fB7rVyb3EALwpA3fXbGBqrulQiTACP6IOPItq+J4K26aQPUnN1TH6jds7rHETU04c5C+
-         dwtRy7RmwG8zHYB+3Yc7wylAfDFOQ931VPGEw+D5KIG+szvVZU4XcGe8BV1GLyOcifGs
-         Gh0OYtLcyq6teH57IKmAiPc3GKlmcHo7Qy5n1untWbEq6t+Cpk6c9euiCUzWZH+36Fg0
-         bhkg==
-X-Gm-Message-State: ACgBeo2/I5sqlAtNfsGZKsZUx75udtKepptL3Fo/rNZ5teg7n812hHsQ
-        MYmcg4pl29zfihwNtyGEW64RTEa6RjhIRki1JaF/Iw==
-X-Google-Smtp-Source: AA6agR5csdidIYTyhrqeNb/E42Fq8Yhs+8IBZWqPfLFpKDf0eSeIu+aGzL0J5V5Scq3fzjIhW8L08uwZX2Ab1uT44aQ=
-X-Received: by 2002:a05:6402:353:b0:446:2d2c:3854 with SMTP id
- r19-20020a056402035300b004462d2c3854mr6324461edw.193.1660984037959; Sat, 20
- Aug 2022 01:27:17 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=RS+9z5xIA7IJQfYdhvS13wGTMb0Y1SSjn5eINN5tz5M=;
+        b=vM75G3OBDP2k47MUtQL5hSnQeIJtEYUYSC3vMZlioeurc8oRrzwy9gp3g8o7ZVjcIQ
+         1+YBsAeugJWJtFxKDe10vPTmlSvDHpOPnlbKqTVZyY3XKYMMCR6FOz24tmXC5ce7XVAY
+         zgFWZHVSg/8B4jr5s5FNZ38JvkxOiPY00PdrR9gj/u1JRKiHfYijdt/8SgyGY3AW7kj0
+         je+nHSzuV5ptGdeggtV86giM2rO3IFW5t8K0XA8waHrdTIhTKYYItCVCR6oDe4HhAI2O
+         YoYRV2SphqsyHn7awbt59atnBV0kGiojRXeZLFMmkd1RqWXlGLNTmE40pEP1juMbmRq2
+         l4JQ==
+X-Gm-Message-State: ACgBeo0wo5m3ZQIWTmpgCS3z8jqN+xBlcxuhN0X7jckVa0lBW26kvwLF
+        kUcauBKJ+5Cqc4Bv1Q4pgUbyDvOV1CiyIQ==
+X-Google-Smtp-Source: AA6agR4A8pPFIlY6qv6Yh7WGjQYbnonjfl0k2GshtoUrZurNwTFSfhBwDqSTiHrxzWK3LnU0zmuwtQ==
+X-Received: by 2002:a17:907:60c7:b0:731:14e2:af10 with SMTP id hv7-20020a17090760c700b0073114e2af10mr7085806ejc.92.1660984204133;
+        Sat, 20 Aug 2022 01:30:04 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-79-31-31-9.retail.telecomitalia.it. [79.31.31.9])
+        by smtp.gmail.com with ESMTPSA id gx14-20020a1709068a4e00b0072b33e91f96sm3336112ejc.190.2022.08.20.01.30.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Aug 2022 01:30:03 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        michael@amarulasolutions.com,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: [RFC PATCH v2 0/4] can: bxcan: add support for ST bxCAN controller
+Date:   Sat, 20 Aug 2022 10:29:32 +0200
+Message-Id: <20220820082936.686924-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220819153711.658766010@linuxfoundation.org>
-In-Reply-To: <20220819153711.658766010@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 20 Aug 2022 13:57:05 +0530
-Message-ID: <CA+G9fYtXnZP2vdAi4eU_ApC_YFz6TqTd6Eh5Mumb2=0Y_dK5Yw@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/14] 5.15.62-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,132 +79,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 at 21:11, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.62 release.
-> There are 14 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 21 Aug 2022 15:36:59 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.62-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+The series adds support for the basic extended CAN controller (bxCAN)
+found in many low- to middle-end STM32 SoCs.
 
-Results from Linaro's test farm.
-Following regression found on s390.
+The driver design (one core module and one driver module) was inspired
+by other ST drivers (e. g. drivers/iio/adc/stm32-adc.c,
+drivers/iio/adc/stm32-adc-core.c) where device instances share resources.
+The shared resources functions are implemented in the core module, the
+device driver in a separate module.
 
-> Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
->     kexec_file: drop weak attribute from functions
+The driver has been tested on the stm32f469i-discovery board with a
+kernel version 5.19.0-rc2 in loopback + silent mode:
 
-The s390 defconfig build failed on stable-rc 5.15 with gcc-11 and clang.
+ip link set can0 type can bitrate 125000 loopback on listen-only on
+ip link set up can0
+candump can0 -L &
+cansend can0 300#AC.AB.AD.AE.75.49.AD.D1
 
+For uboot and kernel compilation, as well as for rootfs creation I used
+buildroot:
 
-arch/s390/kernel/machine_kexec_file.c:336:5: error: redefinition of
-'arch_kexec_kernel_image_probe'
-int arch_kexec_kernel_image_probe(struct kimage *image, void *buf,
-    ^
-include/linux/kexec.h:190:1: note: previous definition is here
-arch_kexec_kernel_image_probe(struct kimage *image, void *buf,
-unsigned long buf_len)
-^
-1 error generated.
+make stm32f469_disco_sd_defconfig
+make
 
+but I had to patch can-utils and busybox as can-utils and iproute are
+not compiled for MMU-less microcotrollers. In the case of can-utils,
+replacing the calls to fork() with vfork(), I was able to compile the
+package with working candump and cansend applications, while in the
+case of iproute, I ran into more than one problem and finally I decided
+to extend busybox's ip link command for CAN-type devices. I'm still
+wondering if it was really necessary, but this way I was able to test
+the driver.
 
-## Build
-* kernel: 5.15.62-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: b79f9f8ea7ab2be6f724e8cde6db2a3fb057f62e
-* git describe: v5.15.61-15-gb79f9f8ea7ab
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.61-15-gb79f9f8ea7ab
+Changes in v2:
+- Change the file name into 'st,stm32-bxcan-core.yaml'.
+- Rename compatibles:
+  - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
+  - st,stm32-bxcan -> st,stm32f4-bxcan
+- Rename master property to st,can-master.
+- Remove the status property from the example.
+- Put the node child properties as required.
+- Remove a blank line.
+- Fix sparse errors.
+- Create a MAINTAINERS entry.
+- Remove the print of the registers address.
+- Remove the volatile keyword from bxcan_rmw().
+- Use tx ring algorithm to manage tx mailboxes.
+- Use can_{get|put}_echo_skb().
+- Update DT properties.
 
-## Test Regressions (compared to v5.15.61)
+Dario Binacchi (4):
+  dt-bindings: net: can: add STM32 bxcan DT bindings
+  ARM: dts: stm32: add CAN support on stm32f429
+  ARM: dts: stm32: add pin map for CAN controller on stm32f4
+  can: bxcan: add support for ST bxCAN controller
 
-* s390, build
-  - clang-13-defconfig
-  - clang-14-defconfig
-  - clang-nightly-defconfig
-  - gcc-10-defconfig
-  - gcc-11-defconfig
-  - gcc-9-defconfig
+ .../bindings/net/can/st,stm32-bxcan.yaml      |  136 +++
+ MAINTAINERS                                   |    7 +
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi        |   31 +
+ arch/arm/boot/dts/stm32f429.dtsi              |   30 +
+ drivers/net/can/Kconfig                       |    1 +
+ drivers/net/can/Makefile                      |    1 +
+ drivers/net/can/bxcan/Kconfig                 |   34 +
+ drivers/net/can/bxcan/Makefile                |    4 +
+ drivers/net/can/bxcan/bxcan-core.c            |  200 ++++
+ drivers/net/can/bxcan/bxcan-core.h            |   33 +
+ drivers/net/can/bxcan/bxcan-drv.c             | 1043 +++++++++++++++++
+ 11 files changed, 1520 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+ create mode 100644 drivers/net/can/bxcan/Kconfig
+ create mode 100644 drivers/net/can/bxcan/Makefile
+ create mode 100644 drivers/net/can/bxcan/bxcan-core.c
+ create mode 100644 drivers/net/can/bxcan/bxcan-core.h
+ create mode 100644 drivers/net/can/bxcan/bxcan-drv.c
 
-## No metric Regressions (compared to v5.15.61)
+-- 
+2.32.0
 
-## No test Fixes (compared to v5.15.61)
-
-## No metric Fixes (compared to v5.15.61)
-
-## Test result summary
-total: 140859, pass: 124026, fail: 701, skip: 15336, xfail: 796
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 314 total, 311 passed, 3 failed
-* arm64: 77 total, 75 passed, 2 failed
-* i386: 65 total, 59 passed, 6 failed
-* mips: 50 total, 47 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 59 total, 56 passed, 3 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 26 total, 14 passed, 12 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x86_64: 70 total, 68 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

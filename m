@@ -2,178 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9852459ACF8
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 11:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81C859AD04
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 11:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245713AbiHTJhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 05:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
+        id S1343849AbiHTJlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 05:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344268AbiHTJh2 (ORCPT
+        with ESMTP id S231132AbiHTJlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 05:37:28 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD9721830
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 02:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660988246; x=1692524246;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yvfMGO3Laqkb5ogXPBKhcPOb0MtBZlpNEgy6edwzeZA=;
-  b=Y/ZsnZyTjEhfsIHG7xZimPe1iVvJNz3xxkctMTNg1B/Hmf4tekgwqDrt
-   Pbod3DN8bwrP/OPq469/Q0v9n9QiYg1EotzrwxP1AlDYMnhD8cVsnmrVC
-   PYftiGHgkUOmmAishiD9ho1Zc2pNj6fya2B9ZWHvGV8RgUJEW3GbMDG9J
-   XoZ9dDE+rNwq+bQSixlCc8S+eVgPXwhAQMgwi6Re55diAr4ihAvvbkgIB
-   nmbjpKEiLiy2VX/lOCqGdqygHDv3fARNE/bwTKKnP0drtHx8h1UN2zxQt
-   v1uU1gOyWvDOZMxSyk3u4zj97bEpNUuLDQ6GpkBzRXiVxKZzcdYPT1kTu
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="293164756"
-X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="293164756"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 02:37:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="936480691"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Aug 2022 02:37:25 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPKuy-0002Rh-1r;
-        Sat, 20 Aug 2022 09:37:24 +0000
-Date:   Sat, 20 Aug 2022 17:37:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chuck Lever <chuck.lever@oracle.com>
-Subject: [linux-stable-rc:linux-4.19.y 2019/3658]
- include/linux/sunrpc/xdr.h:512:17: error: comparison is always false due to
- limited range of data type
-Message-ID: <202208201701.arornb8Z-lkp@intel.com>
+        Sat, 20 Aug 2022 05:41:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61C31C133
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 02:41:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DE3FB8013A
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 09:40:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B3AC433C1;
+        Sat, 20 Aug 2022 09:40:55 +0000 (UTC)
+Date:   Sat, 20 Aug 2022 10:40:51 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Evgenii Stepanov <eugenis@google.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64: mte: move register initialization to C
+Message-ID: <YwCsIm2nCXCEEgAd@arm.com>
+References: <20220819013526.2682765-1-pcc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220819013526.2682765-1-pcc@google.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+On Thu, Aug 18, 2022 at 06:35:26PM -0700, Peter Collingbourne wrote:
+> If FEAT_MTE2 is disabled via the arm64.nomte command line argument on a
+> CPU that claims to support FEAT_MTE2, the kernel will use Tagged Normal
+> in the MAIR. If we interpret arm64.nomte to mean that the CPU does not
+> in fact implement FEAT_MTE2, setting the system register like this may
+> lead to UNSPECIFIED behavior.
 
-FYI, the error/warning still remains.
+I'm not convinced by this wording. There is no UNDEFINED behaviour since
+proc.S checks the raw ID regs. Just passing arm64.nomte currently still
+allows fully defined behaviour (well, unless you try to map tag storage
+into the linear map but changing MAIR doesn't solve that anyway).
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-head:   deac5288db671ab8cdd05be7ee0f0601c6692c6b
-commit: 3a2789e8ccb4a3e2a631f6817a2d3bb98b8c4fd8 [2019/3658] NFSD: prevent integer overflow on 32 bit systems
-config: sparc64-randconfig-s052-20220820 (https://download.01.org/0day-ci/archive/20220820/202208201701.arornb8Z-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=3a2789e8ccb4a3e2a631f6817a2d3bb98b8c4fd8
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-4.19.y
-        git checkout 3a2789e8ccb4a3e2a631f6817a2d3bb98b8c4fd8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 SHELL=/bin/bash arch/sparc/kernel/
+[...]
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index 907401e4fffb..3554ff869f4b 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -2030,8 +2030,47 @@ static void bti_enable(const struct arm64_cpu_capabilities *__unused)
+>  #ifdef CONFIG_ARM64_MTE
+>  static void cpu_enable_mte(struct arm64_cpu_capabilities const *cap)
+>  {
+> +	u64 rgsr;
+> +
+>  	sysreg_clear_set(sctlr_el1, 0, SCTLR_ELx_ATA | SCTLR_EL1_ATA0);
+> +
+> +	/*
+> +	 * CnP must be enabled only after the MAIR_EL1 register has been set
+> +	 * up. Inconsistent MAIR_EL1 between CPUs sharing the same TLB may
+> +	 * lead to the wrong memory type being used for a brief window during
+> +	 * CPU power-up.
+> +	 *
+> +	 * CnP is not a boot feature so MTE gets enabled before CnP, but let's
+> +	 * make sure that is the case.
+> +	 */
+> +	BUG_ON(read_sysreg(ttbr0_el1) & TTBR_CNP_BIT);
+> +	BUG_ON(read_sysreg(ttbr1_el1) & TTBR_CNP_BIT);
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Ah, good point. SCOPE_BOOT_CPU features are initialised before the
+others even for late secondary CPUs, so that should work without having
+to reorder the features table.
 
-All errors (new ones prefixed by >>):
+> +
+> +	/* Normal Tagged memory type at the corresponding MAIR index */
+> +	sysreg_clear_set(
+> +		mair_el1, MAIR_ATTRIDX(MAIR_ATTR_MASK, MT_NORMAL_TAGGED),
+> +		MAIR_ATTRIDX(MAIR_ATTR_NORMAL_TAGGED, MT_NORMAL_TAGGED));
 
-   In file included from include/linux/sunrpc/sched.h:19,
-                    from include/linux/sunrpc/auth.h:15,
-                    from include/linux/nfs_fs.h:31,
-                    from arch/sparc/kernel/sys_sparc32.c:25:
-   include/linux/sunrpc/xdr.h: In function 'xdr_stream_decode_uint32_array':
->> include/linux/sunrpc/xdr.h:512:17: error: comparison is always false due to limited range of data type [-Werror=type-limits]
-     512 |         if (len > SIZE_MAX / sizeof(*p))
-         |                 ^
-   In file included from include/linux/ethtool.h:17,
-                    from include/linux/netdevice.h:41,
-                    from include/net/sock.h:51,
-                    from include/linux/tcp.h:23,
-                    from include/linux/ipv6.h:87,
-                    from include/net/ipv6.h:16,
-                    from include/linux/sunrpc/clnt.h:28,
-                    from include/linux/nfs_fs.h:32:
-   include/linux/compat.h: In function 'put_compat_sigset':
-   include/linux/compat.h:495:58: error: this statement may fall through [-Werror=implicit-fallthrough=]
-     495 |         case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
-         |                                                 ~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/compat.h:496:9: note: here
-     496 |         case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
-         |         ^~~~
-   include/linux/compat.h:496:58: error: this statement may fall through [-Werror=implicit-fallthrough=]
-     496 |         case 3: v.sig[5] = (set->sig[2] >> 32); v.sig[4] = set->sig[2];
-         |                                                 ~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/compat.h:497:9: note: here
-     497 |         case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-         |         ^~~~
-   include/linux/compat.h:497:58: error: this statement may fall through [-Werror=implicit-fallthrough=]
-     497 |         case 2: v.sig[3] = (set->sig[1] >> 32); v.sig[2] = set->sig[1];
-         |                                                 ~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/compat.h:498:9: note: here
-     498 |         case 1: v.sig[1] = (set->sig[0] >> 32); v.sig[0] = set->sig[0];
-         |         ^~~~
-   cc1: all warnings being treated as errors
+Nitpick: keep 'mair_el1' on the same line with sysreg_clear_set, I think
+it looks slightly better if MAIR_ATTRIDX are both aligned.
 
+[...]
+> -	/* set the TCR_EL1 bits */
+> -	mov_q	x10, TCR_MTE_FLAGS
+> -	orr	tcr, tcr, x10
 
-vim +512 include/linux/sunrpc/xdr.h
+I'd keep the TCR setting under #ifdef MTE or rather the TCR_MTE_FLAGS
+and make them 0 if !MTE. It gives us a chance to still test a kernel
+configuration where TBI1 == 0.
 
-   490	
-   491	/**
-   492	 * xdr_stream_decode_uint32_array - Decode variable length array of integers
-   493	 * @xdr: pointer to xdr_stream
-   494	 * @array: location to store the integer array or NULL
-   495	 * @array_size: number of elements to store
-   496	 *
-   497	 * Return values:
-   498	 *   On success, returns number of elements stored in @array
-   499	 *   %-EBADMSG on XDR buffer overflow
-   500	 *   %-EMSGSIZE if the size of the array exceeds @array_size
-   501	 */
-   502	static inline ssize_t
-   503	xdr_stream_decode_uint32_array(struct xdr_stream *xdr,
-   504			__u32 *array, size_t array_size)
-   505	{
-   506		__be32 *p;
-   507		__u32 len;
-   508		ssize_t retval;
-   509	
-   510		if (unlikely(xdr_stream_decode_u32(xdr, &len) < 0))
-   511			return -EBADMSG;
- > 512		if (len > SIZE_MAX / sizeof(*p))
-   513			return -EBADMSG;
-   514		p = xdr_inline_decode(xdr, len * sizeof(*p));
-   515		if (unlikely(!p))
-   516			return -EBADMSG;
-   517		if (array == NULL)
-   518			return len;
-   519		if (len <= array_size) {
-   520			if (len < array_size)
-   521				memset(array+len, 0, (array_size-len)*sizeof(*array));
-   522			array_size = len;
-   523			retval = len;
-   524		} else
-   525			retval = -EMSGSIZE;
-   526		for (; array_size > 0; p++, array++, array_size--)
-   527			*array = be32_to_cpup(p);
-   528		return retval;
-   529	}
-   530	#endif /* __KERNEL__ */
-   531	
+BTW, we end up setting the TCMA1 bit even when MTE is not supported. It
+shouldn't be a problem usually with RES0 bits which we know what they
+do.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Catalin

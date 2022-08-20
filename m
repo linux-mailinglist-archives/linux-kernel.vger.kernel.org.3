@@ -2,120 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CF959AB96
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 08:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA40759ABB2
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 08:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343583AbiHTGCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 02:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
+        id S244880AbiHTGOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 02:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244609AbiHTGAy (ORCPT
+        with ESMTP id S229458AbiHTGN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 02:00:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497F8A344F;
-        Fri, 19 Aug 2022 23:00:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660975254; x=1692511254;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=u4ijRhNdXBygE+nv8mY+JqN2kz1+O4efqM0hIzJAU60=;
-  b=Z7QVp+LHwcHYj5ohuC0c0l4ze+PiwXvUYJxrXB7OK87ywSNotUcAmk9Y
-   nqBOb8xNRb6RyjEMyLRcCnZSk1MxoOJ4DjiAFcjQxeWjohOTCYwHRl0vk
-   2Xy+iMT7IAglhMDfp+a4d2PVTDELDEgzpGpKeVy39Tlx+GNLuy7eArV/y
-   B5WqjNWGUvmrqt2N26mIt/CiOMViH3j6rcR/jR6jYEOwvHlAap4Xb2fNB
-   EIDbZnBY6ZtX4/dA7zb6Fhb/DZUimBOotZlKtqtoQxeAaUC+JlViY17GD
-   TzPRpVoZzkO+rZlRkIwFNvrzVtCuGW17de+msB/8DKtgH8Pe7Gd51k/Ua
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="379448986"
-X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="379448986"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 23:00:51 -0700
-X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="668857568"
-Received: from ls.sc.intel.com (HELO localhost) ([143.183.96.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2022 23:00:51 -0700
-From:   isaku.yamahata@intel.com
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
-        Will Deacon <will@kernel.org>
-Subject: [RFC PATCH 18/18] KVM: Remove cpus_hardware_enabled and related sanity check
-Date:   Fri, 19 Aug 2022 23:00:24 -0700
-Message-Id: <5dc935a4f03af56a38128701847935afe676307c.1660974107.git.isaku.yamahata@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1660974106.git.isaku.yamahata@intel.com>
-References: <cover.1660974106.git.isaku.yamahata@intel.com>
+        Sat, 20 Aug 2022 02:13:58 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BAA24F2B;
+        Fri, 19 Aug 2022 23:13:57 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aea1a.dynamic.kabel-deutschland.de [95.90.234.26])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id EC1C061EA192D;
+        Sat, 20 Aug 2022 08:13:53 +0200 (CEST)
+Message-ID: <04c9d5fa-5861-bbc3-3e2f-e18a73866645@molgen.mpg.de>
+Date:   Sat, 20 Aug 2022 08:13:52 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: WARNING: CPU: 1 PID: 83 at arch/x86/kernel/cpu/sgx/main.c:446
+ ksgxd+0x1b7/0x1d0
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Reinette Chatre <reinette.chatre@intel.com>
+Cc:     linux-sgx@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <ce0b4d26-3a6e-7c5a-5f66-44cba05f9f35@molgen.mpg.de>
+ <4253695b-85aa-a2fb-fbf6-718db8b6c20c@molgen.mpg.de>
+ <46e3483b-a5ab-2a05-8a28-f9ea87e881c3@intel.com>
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <46e3483b-a5ab-2a05-8a28-f9ea87e881c3@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Isaku Yamahata <isaku.yamahata@intel.com>
+Dear Dave,
 
-cpus_hardware_enabled mask seems incomplete protection against other kernel
-component using CPU virtualization feature.  Because it's obscure and
-incomplete, remove the check.
 
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
----
- virt/kvm/kvm_arch.c | 16 ++--------------
- 1 file changed, 2 insertions(+), 14 deletions(-)
+Thank you for your quick reply.
 
-diff --git a/virt/kvm/kvm_arch.c b/virt/kvm/kvm_arch.c
-index 94dd57bbc8bd..03946321a21c 100644
---- a/virt/kvm/kvm_arch.c
-+++ b/virt/kvm/kvm_arch.c
-@@ -12,22 +12,16 @@
- 
- #include <linux/kvm_host.h>
- 
--static cpumask_t cpus_hardware_enabled = CPU_MASK_NONE;
--
- static int __hardware_enable(void)
- {
--	int cpu = raw_smp_processor_id();
- 	int r;
- 
- 	WARN_ON_ONCE(preemptible());
- 
--	if (cpumask_test_cpu(cpu, &cpus_hardware_enabled))
--		return 0;
- 	r = kvm_arch_hardware_enable();
- 	if (r)
--		pr_info("kvm: enabling virtualization on CPU%d failed\n", cpu);
--	else
--		cpumask_set_cpu(cpu, &cpus_hardware_enabled);
-+		pr_info("kvm: enabling virtualization on CPU%d failed\n",
-+			smp_processor_id());
- 	return r;
- }
- 
-@@ -41,13 +35,7 @@ static void hardware_enable(void *arg)
- 
- static void hardware_disable(void *junk)
- {
--	int cpu = raw_smp_processor_id();
--
- 	WARN_ON_ONCE(preemptible());
--
--	if (!cpumask_test_cpu(cpu, &cpus_hardware_enabled))
--		return;
--	cpumask_clear_cpu(cpu, &cpus_hardware_enabled);
- 	kvm_arch_hardware_disable();
- }
- 
--- 
-2.25.1
 
+Am 19.08.22 um 20:28 schrieb Dave Hansen:
+> On 8/19/22 09:02, Paul Menzel wrote:
+>> On the Dell XPS 13 9370, Linux 5.18.16 prints the warning below:
+>>
+>> ```
+>> [    0.000000] Linux version 5.18.0-4-amd64 (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.3.0-5) 11.3.0, GNU ld (GNU Binutils for Debian) 2.38.90.20220713) #1 SMP PREEMPT_DYNAMIC Debian 5.18.16-1 (2022-08-10)
+>> [    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.18.0-4-amd64 root=UUID=56f398e0-1e25-4fda-aa9f-611dece4b333 ro quiet
+>> […]
+>> [    0.000000] DMI: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 07/06/2022
+>> […]
+>> [    0.235418] sgx: EPC section 0x40200000-0x45f7ffff
+
+> Would you be able to send the entire dmesg, along with:
+
+The log message are attached to the first message, where I missed to 
+carbon-copy linux-sgx@ [1].
+
+> 	cat /proc/iomem # (as root)
+> and
+> 	cpuid -1 --raw
+
+I am going to provide that next week. (Side note, Intel might have some 
+Dell XPS 9370 test machines in some QA lab.)
+
+> I'm suspecting either a BIOS problem.  Reinette (cc'd) also thought this
+> might be a case of the SGX initialization getting a bit too far along
+> when it should have been disabled.
+> 
+> We had some bugs where we didn't stop fast enough after spitting out the
+> "SGX Launch Control is locked..." errors.
+
+
+Kind regards,
+
+Paul
+
+
+[1]: 
+https://lore.kernel.org/lkml/ce0b4d26-3a6e-7c5a-5f66-44cba05f9f35@molgen.mpg.de/

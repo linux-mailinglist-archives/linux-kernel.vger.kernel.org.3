@@ -2,96 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9794E59AC8E
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353C759AC90
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 10:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344285AbiHTI0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 04:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60464 "EHLO
+        id S1344426AbiHTI11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 04:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiHTI0M (ORCPT
+        with ESMTP id S1343855AbiHTI1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 04:26:12 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A642D13D73;
-        Sat, 20 Aug 2022 01:26:11 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id jl18so5910169plb.1;
-        Sat, 20 Aug 2022 01:26:11 -0700 (PDT)
+        Sat, 20 Aug 2022 04:27:21 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAC0BBA79
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:27:19 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id b16so8086116edd.4
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 01:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=Dn2qS73bQA0BOB6QqauWx5nVdicgwt0wVWXhw2Mkp2A=;
-        b=RwcuIgF5zLlYNJrS0xlItMBbGXi0c1U+vNtKkAxbVGCFyB10DINwcV+XgsA7U7T+Ib
-         w9DFtEtmGITwH/DnsHRKohO1KOgVDZ2k8oKJJ+xrOGTxPDI6ynquJytxmGJtOCHc3RFQ
-         EC0CkTIvLVXHyCJdzbnX1YXx6q3Pj9QsiSc5CJsgEDETmVQ+ewxljU9W/bkJNfb1pgjS
-         dh5e0LYZbhdNak67FmwYYHA9ywNk917p4ACtUMO2pMff3f676dbj+tI7u4uKeWv5mXkV
-         jUr7Uu060H/CQH2HhVetMdAg49OIh1nDKAE71+V0GFIZacosnViKTOHycGGK2+MkP1+X
-         1JYA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=JrqMBHE8Y8s8z3OGnNSizMNZY+3dcPB6aIc4DL1jVDg=;
+        b=twIUq00Y1zciqnfpIq6CK2hx3j6laacR53xQFxiX++QUh2WeZdUcoSwliZZLX6RUhY
+         vb5mtfb73qaUbokQ0usaHlcJRhxT6VIKQVmoMk4Du3pgjgB8beeKG8MGAroU0neHvYS0
+         pZiWH3vmKBpYaAsvXM7rDE/T9nQPEoZx5Gy1BGQf+1Gj9kwLJNH3M5SW7cbjTCKM5aC4
+         NZu6EAB6Q4PLGbVpXl47tGSs/E7GT+1R3bqaOXrIAJsrUmHJ3s/GwSlpMd8Bf+xQbLgN
+         gpq30vys3ubJAr+yFPeb0PfCbLSNyDc5aMmbJZab19iFwJywrD+0e3GcGSrhHr8JDHw/
+         Fx9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=Dn2qS73bQA0BOB6QqauWx5nVdicgwt0wVWXhw2Mkp2A=;
-        b=Bv1qTfoK8LFCBAIei4PVU6qJW0vYfqwa+oXZIIe8XhxVrOQ7Dc6vukWYJIF7b2g4c7
-         caGi08u9VgIUepb6Q5uG/s0Y6HHAoX6IzC/6m+pmjSzQNLpoQEOS7ysBPnM5g4y2L4U+
-         FwOXY6pMatu4zr9o1N8kdcdz56dn3ZWACKrF5NkBcbOgVYG55cN1xF42E8PG+axYZWTY
-         MAJI0o2sxgTSJh0pDG9yrtPZeilnEqRVA3qQGMGv0CKyX3Cnd4Zntx2W2UXqDCONjZM1
-         VYiATO5zcFqk5OuHsfUj3oKU97ytXWb9J7N0fV+PSUEFzxOlTsh3jTartHQbC691TbxF
-         hVGw==
-X-Gm-Message-State: ACgBeo2+3upKiVBk26l1KFmfLyZGOOKutacvKGjIHx3S2cFW6+F1lfuE
-        IlKF0W0TQIgVmt4RMXs/53OxJbknxg5yX07q
-X-Google-Smtp-Source: AA6agR7GKnDBBB00N8fMol5XAklENQFxrBYZSCo5W0oGyfr30kbl8DeeSUM6j3bRGZk6QWRS4qzIqA==
-X-Received: by 2002:a17:90b:4b0c:b0:1f4:ffac:699a with SMTP id lx12-20020a17090b4b0c00b001f4ffac699amr18068530pjb.145.1660983971008;
-        Sat, 20 Aug 2022 01:26:11 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id y6-20020a655a06000000b0040ced958e8fsm3881512pgs.80.2022.08.20.01.26.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 01:26:10 -0700 (PDT)
-From:   lily <floridsleeves@gmail.com>
-To:     selinux@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, cgzones@googlemail.com,
-        michalorzel.eng@gmail.com, xiujianfeng@huawei.com,
-        omosnace@redhat.com, lily <floridsleeves@gmail.com>
-Subject: [PATCH v1] selinux/ss/services.c: check the return value of audit_log_start() in security_sid_mls_copy()
-Date:   Sat, 20 Aug 2022 01:26:06 -0700
-Message-Id: <20220820082606.953886-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=JrqMBHE8Y8s8z3OGnNSizMNZY+3dcPB6aIc4DL1jVDg=;
+        b=MD6rfC2BlDoZqPrMnMIOoYAXCWb47zw0A9YYxEtEsLWE1GhvM9uOmlXr8hl6JkhKZQ
+         isDPrqE/CNgCAhpx9XZzkzrmTJFXgHqB0QFV6ATMLYS0Hb+g5lgjeqaP955Pfb6eCbQd
+         fB7rVyb3EALwpA3fXbGBqrulQiTACP6IOPItq+J4K26aQPUnN1TH6jds7rHETU04c5C+
+         dwtRy7RmwG8zHYB+3Yc7wylAfDFOQ931VPGEw+D5KIG+szvVZU4XcGe8BV1GLyOcifGs
+         Gh0OYtLcyq6teH57IKmAiPc3GKlmcHo7Qy5n1untWbEq6t+Cpk6c9euiCUzWZH+36Fg0
+         bhkg==
+X-Gm-Message-State: ACgBeo2/I5sqlAtNfsGZKsZUx75udtKepptL3Fo/rNZ5teg7n812hHsQ
+        MYmcg4pl29zfihwNtyGEW64RTEa6RjhIRki1JaF/Iw==
+X-Google-Smtp-Source: AA6agR5csdidIYTyhrqeNb/E42Fq8Yhs+8IBZWqPfLFpKDf0eSeIu+aGzL0J5V5Scq3fzjIhW8L08uwZX2Ab1uT44aQ=
+X-Received: by 2002:a05:6402:353:b0:446:2d2c:3854 with SMTP id
+ r19-20020a056402035300b004462d2c3854mr6324461edw.193.1660984037959; Sat, 20
+ Aug 2022 01:27:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220819153711.658766010@linuxfoundation.org>
+In-Reply-To: <20220819153711.658766010@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 20 Aug 2022 13:57:05 +0530
+Message-ID: <CA+G9fYtXnZP2vdAi4eU_ApC_YFz6TqTd6Eh5Mumb2=0Y_dK5Yw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/14] 5.15.62-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function audit_log_start() can fail, so its return value should be
-checked against NULL. 
+On Fri, 19 Aug 2022 at 21:11, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.62 release.
+> There are 14 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 21 Aug 2022 15:36:59 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.62-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
----
- security/selinux/ss/services.c | 3 +++
- 1 file changed, 3 insertions(+)
+Results from Linaro's test farm.
+Following regression found on s390.
 
-diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-index fe5fcf571c56..41d4c4ed93b7 100644
---- a/security/selinux/ss/services.c
-+++ b/security/selinux/ss/services.c
-@@ -3271,6 +3271,9 @@ int security_sid_mls_copy(struct selinux_state *state,
- 				ab = audit_log_start(audit_context(),
- 						     GFP_ATOMIC,
- 						     AUDIT_SELINUX_ERR);
-+				if (!ab)
-+					goto out_unlock;
-+
- 				audit_log_format(ab,
- 						 "op=security_sid_mls_copy invalid_context=");
- 				/* don't record NUL with untrusted strings */
--- 
-2.25.1
+> Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+>     kexec_file: drop weak attribute from functions
 
+The s390 defconfig build failed on stable-rc 5.15 with gcc-11 and clang.
+
+
+arch/s390/kernel/machine_kexec_file.c:336:5: error: redefinition of
+'arch_kexec_kernel_image_probe'
+int arch_kexec_kernel_image_probe(struct kimage *image, void *buf,
+    ^
+include/linux/kexec.h:190:1: note: previous definition is here
+arch_kexec_kernel_image_probe(struct kimage *image, void *buf,
+unsigned long buf_len)
+^
+1 error generated.
+
+
+## Build
+* kernel: 5.15.62-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: b79f9f8ea7ab2be6f724e8cde6db2a3fb057f62e
+* git describe: v5.15.61-15-gb79f9f8ea7ab
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.61-15-gb79f9f8ea7ab
+
+## Test Regressions (compared to v5.15.61)
+
+* s390, build
+  - clang-13-defconfig
+  - clang-14-defconfig
+  - clang-nightly-defconfig
+  - gcc-10-defconfig
+  - gcc-11-defconfig
+  - gcc-9-defconfig
+
+## No metric Regressions (compared to v5.15.61)
+
+## No test Fixes (compared to v5.15.61)
+
+## No metric Fixes (compared to v5.15.61)
+
+## Test result summary
+total: 140859, pass: 124026, fail: 701, skip: 15336, xfail: 796
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 314 total, 311 passed, 3 failed
+* arm64: 77 total, 75 passed, 2 failed
+* i386: 65 total, 59 passed, 6 failed
+* mips: 50 total, 47 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 59 total, 56 passed, 3 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 26 total, 14 passed, 12 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 70 total, 68 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

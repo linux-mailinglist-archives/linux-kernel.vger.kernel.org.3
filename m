@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F0159AF77
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 20:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6944E59AF8B
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 20:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233176AbiHTSRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 14:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
+        id S234341AbiHTSRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 14:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiHTSQq (ORCPT
+        with ESMTP id S231965AbiHTSQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 20 Aug 2022 14:16:46 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5406E30F64
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:45 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id t5so9131369edc.11
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017B430F71
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:46 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id t5so9131383edc.11
         for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=tlMFx2z0JvLnlziapMufzUhDKuW3EwLTT6t3dqkzUYs=;
-        b=QiXUYODOT64yakclYO6S8gLkVQ6g5lz4PJ1CZvM7CvggGkJbRDBczDrfv0+wiYx9Bi
-         Ec8NdlIPgNC1n2g0AhUlK268Uecvfqv2mGDzP1/tQoN08kcuqqUrIkOWfrnebjnDMHVk
-         H04cLaT31VaYu3DV9J6Lz7Yl2UWdCQhLwzyVy5YK1sD/b4zsFPmVz9qXF7MwHVJ7Mqdr
-         BpL13pt//ZRiHFM760XtR4Z7868WFpR64/uDrQkTyEuxhHZ8jGjsECVQMnRtHOhjkzd0
-         f/gH/gD9KdN82rlclguJYN5L2dz8kSwnX1NF0f5F3DgsbqSoMXJQiyo5pkwcKG2y44Im
-         c8xg==
+        bh=GZU6i7aDhQpE9Y4RDqbtXF3Z4a0g0R6IbiFmWRA8yYM=;
+        b=KL6nER2nrF3su/u53V4e/nPH8TwgstfI7LTmxj9kEuH2LZvGlFTMY7xbnu5k/IS6gC
+         2QkMIapsaXz8ygipyYvpAefCe/2XagtRSC7difoSWdnt+Z2Z5vn+dv/522YfpBSbEEZd
+         mrvWfFfYFRnT9x1X5cylXTfszqVzqsvQtVgfM7aLWm91oe7l5ony9Ca5XaX3i86vy9wn
+         HA7+lCz2a3pO1CcNZf+hw+kqbEFruVHkIBK9W9UzgnVhjf/6jzRCI6tKz3KOWxKo0CRh
+         a189231pKGValY0cXoxWzEduJXA8069MVcOX66u7uqeBF7BZJwe8wdi7aMYPHeLLfb7C
+         gRhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=tlMFx2z0JvLnlziapMufzUhDKuW3EwLTT6t3dqkzUYs=;
-        b=fBLvIRat78bhoLnJXlYBwXOMtqQa5l3y2PV3/c1/LlF7cY3mWkOSyLiKEfdnoiKwDk
-         JNW0JGkMp3O7KA3LsMktPnAQ0SS/LNJ406eSUltdX4048Ei7BkHsKaeJLK+L21WyUpr/
-         41A9UeaMkuj7GVErs+T7sU8WH+N8MCg9XjbSRpjkVAFWiLzD/xz+VJW9N91LyT2if4Wt
-         129bcsR05ivipbm1iVnQA9VSRUQ/Xoi61hZRmxm0Nsjj4qayOsNRlSK72ouQyrTo2Ypf
-         p2Kd1bexQ32wczDg6++9uWy2ZtSYk/hoFBWUIoQW9vH6Ilk2mAxbqvd1W7R0fkZ34u5U
-         jz/w==
-X-Gm-Message-State: ACgBeo3H86/w63vdNIWTJVzvqS+7egpTKchp2G4Ch27yIjrQaXL89oEe
-        8j8R0viDDc9UamhXMN1ueaU=
-X-Google-Smtp-Source: AA6agR6I6IJYWnxPzBp2530EXNKAgGiNN8Ww81N5ix3KRcfivHZtsfooZ6C+kcj6P7sWwtrPc1zZ/g==
-X-Received: by 2002:a05:6402:350e:b0:446:145d:a3bb with SMTP id b14-20020a056402350e00b00446145da3bbmr10066463edd.23.1661019403855;
-        Sat, 20 Aug 2022 11:16:43 -0700 (PDT)
+        bh=GZU6i7aDhQpE9Y4RDqbtXF3Z4a0g0R6IbiFmWRA8yYM=;
+        b=kURDmf5ui2rJsx4+S9SEDLq4MhEbUgbyi4VWTvqjbJqF8dt+X5MxFqD8s1HfmYP7R3
+         OL6xckVZd8pGbDIryK73yiCSvao73sCa6EoRDyOKrxnCz4UFTtIOumZArgiOxBOx80k8
+         1Q6rLixscGYa7+QKc6zLGqRexbvKQiPZCPgE5Tb1nsYAqbIWZ3AQMePa2xo98K2r0D1i
+         1xpuR5BJv0dsnnlaLuqYweVvinm7XiozhjIHo4MJqoQeACbpFc2hc0Bw+PD6vG25X1g8
+         pL6QCjoJiEKZEqssa3rDTWbyAQy25MQHFRwJxDHgFldhwWOhMzoKJZOgECCh71W9ZL3h
+         +Wcw==
+X-Gm-Message-State: ACgBeo2OJB9F3alD398WswRe43bsSjGc/otMO86x6pXoTh/Bo7PxenzZ
+        gSceLwfJbazxFKGji7w3FlU=
+X-Google-Smtp-Source: AA6agR6oLVTY6qUsqCtwJ6uLznILUKKMYi6isg2sqEFLxh10zLVCr3PFa8YEiYu2OwIDQSa3929V5w==
+X-Received: by 2002:a05:6402:5212:b0:446:6910:5549 with SMTP id s18-20020a056402521200b0044669105549mr3632612edd.345.1661019404495;
+        Sat, 20 Aug 2022 11:16:44 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb77.dynamic.kabel-deutschland.de. [95.90.187.119])
         by smtp.gmail.com with ESMTPSA id g2-20020a17090604c200b0072af890f52dsm3887833eja.88.2022.08.20.11.16.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 11:16:43 -0700 (PDT)
+        Sat, 20 Aug 2022 11:16:44 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 11/19] staging: r8188eu: rename _rtw_pktfile_read()
-Date:   Sat, 20 Aug 2022 20:16:15 +0200
-Message-Id: <20220820181623.12497-12-straube.linux@gmail.com>
+Subject: [PATCH 12/19] staging: r8188eu: remove unnecessary initialization to zero
+Date:   Sat, 20 Aug 2022 20:16:16 +0200
+Message-Id: <20220820181623.12497-13-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220820181623.12497-1-straube.linux@gmail.com>
 References: <20220820181623.12497-1-straube.linux@gmail.com>
@@ -71,80 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to prefix the function name of _rtw_pktfile_read()
-with an underscore. Rename it to rtw_pktfile_read().
+The initialization to zero of the variable 'len' in rtw_pktfile_read()
+is not needed. It is immediately set to another value. Remove the
+initialization to zero. While at it, remove an extra space.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_xmit.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/staging/r8188eu/core/rtw_xmit.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index 26bf300e672b..51672984156b 100644
+index 51672984156b..f79889011cd1 100644
 --- a/drivers/staging/r8188eu/core/rtw_xmit.c
 +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -427,7 +427,7 @@ static uint rtw_remainder_len(struct pkt_file *pfile)
- 	       (size_t)(pfile->buf_start));
- }
+@@ -429,9 +429,9 @@ static uint rtw_remainder_len(struct pkt_file *pfile)
  
--static uint _rtw_pktfile_read(struct pkt_file *pfile, u8 *rmem, uint rlen)
-+static uint rtw_pktfile_read(struct pkt_file *pfile, u8 *rmem, uint rlen)
+ static uint rtw_pktfile_read(struct pkt_file *pfile, u8 *rmem, uint rlen)
  {
- 	uint	len = 0;
+-	uint	len = 0;
++	uint len;
  
-@@ -450,11 +450,11 @@ static void set_qos(struct pkt_file *ppktfile, struct pkt_attrib *pattrib)
- 	s32 user_prio = 0;
+-	len =  rtw_remainder_len(pfile);
++	len = rtw_remainder_len(pfile);
+ 	len = (rlen > len) ? len : rlen;
  
- 	rtw_open_pktfile(ppktfile->pkt, ppktfile);
--	_rtw_pktfile_read(ppktfile, (unsigned char *)&etherhdr, ETH_HLEN);
-+	rtw_pktfile_read(ppktfile, (unsigned char *)&etherhdr, ETH_HLEN);
- 
- 	/*  get user_prio from IP hdr */
- 	if (pattrib->ether_type == 0x0800) {
--		_rtw_pktfile_read(ppktfile, (u8 *)&ip_hdr, sizeof(ip_hdr));
-+		rtw_pktfile_read(ppktfile, (u8 *)&ip_hdr, sizeof(ip_hdr));
- /* 		user_prio = (ntohs(ip_hdr.tos) >> 5) & 0x3; */
- 		user_prio = ip_hdr.tos >> 5;
- 	} else if (pattrib->ether_type == 0x888e) {
-@@ -484,7 +484,7 @@ static s32 update_attrib(struct adapter *padapter, struct sk_buff *pkt, struct p
- 
- 
- 	rtw_open_pktfile(pkt, &pktfile);
--	_rtw_pktfile_read(&pktfile, (u8 *)&etherhdr, ETH_HLEN);
-+	rtw_pktfile_read(&pktfile, (u8 *)&etherhdr, ETH_HLEN);
- 
- 	pattrib->ether_type = ntohs(etherhdr.h_proto);
- 
-@@ -512,7 +512,7 @@ static s32 update_attrib(struct adapter *padapter, struct sk_buff *pkt, struct p
- 		/*  to prevent DHCP protocol fail */
- 		u8 tmp[24];
- 
--		_rtw_pktfile_read(&pktfile, &tmp[0], 24);
-+		rtw_pktfile_read(&pktfile, &tmp[0], 24);
- 		pattrib->dhcp_pkt = 0;
- 		if (pktfile.pkt_len > 282) {/* MINIMUM_DHCP_PACKET_SIZE) { */
- 			if (((tmp[21] == 68) && (tmp[23] == 67)) ||
-@@ -963,7 +963,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
- 	}
- 
- 	rtw_open_pktfile(pkt, &pktfile);
--	_rtw_pktfile_read(&pktfile, NULL, pattrib->pkt_hdrlen);
-+	rtw_pktfile_read(&pktfile, NULL, pattrib->pkt_hdrlen);
- 
- 	frg_inx = 0;
- 	frg_len = pxmitpriv->frag_len - 4;/* 2346-4 = 2342 */
-@@ -1021,9 +1021,9 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
- 
- 		if (bmcst) {
- 			/*  don't do fragment to broadcast/multicast packets */
--			mem_sz = _rtw_pktfile_read(&pktfile, pframe, pattrib->pktlen);
-+			mem_sz = rtw_pktfile_read(&pktfile, pframe, pattrib->pktlen);
- 		} else {
--			mem_sz = _rtw_pktfile_read(&pktfile, pframe, mpdu_len);
-+			mem_sz = rtw_pktfile_read(&pktfile, pframe, mpdu_len);
- 		}
- 
- 		pframe += mem_sz;
+ 	if (rmem)
 -- 
 2.37.2
 

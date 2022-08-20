@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C7959ACC6
+	by mail.lfdr.de (Postfix) with ESMTP id 7D49C59ACC7
 	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 11:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344771AbiHTJHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 05:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S1344787AbiHTJHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 05:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344142AbiHTJHV (ORCPT
+        with ESMTP id S1344723AbiHTJHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 20 Aug 2022 05:07:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC13215FD1
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 02:07:19 -0700 (PDT)
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E711EAEF
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 02:07:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660986439; x=1692522439;
+  t=1660986440; x=1692522440;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=e+fhSBhUXw+PrwJidYlL60Eq9XlCI8eZ7iwT5Qhz8wA=;
-  b=R2ikP/x2lgN8A70J0PxrbhKiUmEr5T36KaGKk9TfAmYa94RwaRqo5uZo
-   V9UMryJO+z5YPfqqqXDP46zaVYELVzZzfjHBJSoILZn+O+I4MzxFUHAGW
-   XA2W+yGHMmz8gtm5QhKlyibQOAc4ly00qEszUl0WI/WLPPVTtQOXVFXBH
-   xpXSzIshSNF+f5GC3clWY6ACe3+4dCDx/uOugYFOB6papVJH6fax/OUGC
-   JRpowIBRsaV2nCH9uZzTPlEf8Yu3M3wdFfT0O/n/WHqrC3pLBosCJ4ZVs
-   7+9EsQLDzA8yg7mCn6CIAo5rY+RIR+Tk97SnyEhDOd4ECROcJu6KU/IBN
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="357144629"
+  bh=+PRCtp9nMBiOcx1xfwMhkMwuyhC+f6B5I2A2SrEC+pk=;
+  b=ZGhwDZF4ZjwFylowYKycFzUhm0K0mQhhUMnk5YHLyEIKR8XZ+60s+ekG
+   rQFZEB8+/9oiq3yQX1P6rXLajirSCgPXNzDGRFSeanediJ0oagThoIJ8k
+   S4rc5uq9sd1FfF420gy1/C/NtqY6Ua+MudqVoRfRq41SPX+/tjP6SRyHz
+   57shVrkyC620CRtNtzPlMfaSDpBfk92/xL3+yMPSiE17SDP8ST/1caLxw
+   20u5gVZERwG+6k7muOniiD6ZDrg0x39B89x3pIL1YwMEDwxSMA5Wo51A3
+   DAcQeGZao7BgJV7NRzsyv9YCSGdeqp4e/lDI6L4BjK7FeG2zT5/9GPGk+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="293163125"
 X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="357144629"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 02:07:19 -0700
+   d="scan'208";a="293163125"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 02:07:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,250,1654585200"; 
-   d="scan'208";a="750770735"
+   d="scan'208";a="641506347"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Aug 2022 02:07:17 -0700
+  by orsmga001.jf.intel.com with ESMTP; 20 Aug 2022 02:07:17 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oPKRo-0002Px-1N;
+        id 1oPKRo-0002Pv-1J;
         Sat, 20 Aug 2022 09:07:16 +0000
-Date:   Sat, 20 Aug 2022 17:06:33 +0800
+Date:   Sat, 20 Aug 2022 17:06:35 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Haijun Liu <haijun.liu@mediatek.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         linux-kernel@vger.kernel.org,
-        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
-        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Subject: include/asm-generic/io.h:464:31: error: performing pointer
- arithmetic on a null pointer has undefined behavior
-Message-ID: <202208201655.jW7k2esR-lkp@intel.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        "Huang, Ying" <ying.huang@intel.com>
+Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 157/170]
+ kernel/sched/fair.c:1571:7: error: call to undeclared function
+ 'node_is_toptier'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202208201712.dNZF3ug7-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,125 +69,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Haijun,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   50cd95ac46548429e5bba7ca75cc97d11a697947
-commit: 13e920d93e37fcaef4a9309515798a3cae9dcf19 net: wwan: t7xx: Add core components
-date:   3 months ago
-config: s390-randconfig-r033-20220820 (https://download.01.org/0day-ci/archive/20220820/202208201655.jW7k2esR-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
+head:   1b745fa43c32e6a6ffb4d922114d75019830a9e2
+commit: f66f3c26148785882c6292f7ef32fd34d13d1a97 [157/170] mm/demotion: update node_is_toptier to work with memory tiers
+config: arm64-randconfig-r036-20220820 (https://download.01.org/0day-ci/archive/20220820/202208201712.dNZF3ug7-lkp@intel.com/config)
 compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c9a41fe60ab62f7a40049c100adcc8087a47669b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=13e920d93e37fcaef4a9309515798a3cae9dcf19
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 13e920d93e37fcaef4a9309515798a3cae9dcf19
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/f66f3c26148785882c6292f7ef32fd34d13d1a97
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
+        git checkout f66f3c26148785882c6292f7ef32fd34d13d1a97
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/wwan/t7xx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
->> include/asm-generic/io.h:464:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   12 errors generated.
+>> kernel/sched/fair.c:1571:7: error: call to undeclared function 'node_is_toptier'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+               !node_is_toptier(src_nid)) {
+                ^
+   kernel/sched/fair.c:2847:7: error: call to undeclared function 'node_is_toptier'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!node_is_toptier(mem_node) &&
+                ^
+   2 errors generated.
 
 
-vim +464 include/asm-generic/io.h
+vim +/node_is_toptier +1571 kernel/sched/fair.c
 
-3f7e212df82ca0 Arnd Bergmann  2009-05-13  450  
-9216efafc52ff9 Thierry Reding 2014-10-01  451  /*
-9216efafc52ff9 Thierry Reding 2014-10-01  452   * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
-9216efafc52ff9 Thierry Reding 2014-10-01  453   * implemented on hardware that needs an additional delay for I/O accesses to
-9216efafc52ff9 Thierry Reding 2014-10-01  454   * take effect.
-9216efafc52ff9 Thierry Reding 2014-10-01  455   */
-9216efafc52ff9 Thierry Reding 2014-10-01  456  
-f009c89df79abe John Garry     2020-03-28  457  #if !defined(inb) && !defined(_inb)
-f009c89df79abe John Garry     2020-03-28  458  #define _inb _inb
-214ba3584b2e2c Stafford Horne 2020-07-26  459  static inline u8 _inb(unsigned long addr)
-9216efafc52ff9 Thierry Reding 2014-10-01  460  {
-87fe2d543f8173 Sinan Kaya     2018-04-05  461  	u8 val;
-87fe2d543f8173 Sinan Kaya     2018-04-05  462  
-87fe2d543f8173 Sinan Kaya     2018-04-05  463  	__io_pbr();
-87fe2d543f8173 Sinan Kaya     2018-04-05 @464  	val = __raw_readb(PCI_IOBASE + addr);
-abbbbc83a210e9 Will Deacon    2019-02-22  465  	__io_par(val);
-87fe2d543f8173 Sinan Kaya     2018-04-05  466  	return val;
-9216efafc52ff9 Thierry Reding 2014-10-01  467  }
-9216efafc52ff9 Thierry Reding 2014-10-01  468  #endif
-9216efafc52ff9 Thierry Reding 2014-10-01  469  
+118aa9e6092758 Huang Ying        2022-07-13  1558  
+10f39042711ba2 Rik van Riel      2014-01-27  1559  bool should_numa_migrate_memory(struct task_struct *p, struct page * page,
+10f39042711ba2 Rik van Riel      2014-01-27  1560  				int src_nid, int dst_cpu)
+10f39042711ba2 Rik van Riel      2014-01-27  1561  {
+cb361d8cdef699 Jann Horn         2019-07-16  1562  	struct numa_group *ng = deref_curr_numa_group(p);
+10f39042711ba2 Rik van Riel      2014-01-27  1563  	int dst_nid = cpu_to_node(dst_cpu);
+10f39042711ba2 Rik van Riel      2014-01-27  1564  	int last_cpupid, this_cpupid;
+10f39042711ba2 Rik van Riel      2014-01-27  1565  
+301a39f0d73fef Huang Ying        2022-07-13  1566  	/*
+301a39f0d73fef Huang Ying        2022-07-13  1567  	 * The pages in slow memory node should be migrated according
+301a39f0d73fef Huang Ying        2022-07-13  1568  	 * to hot/cold instead of private/shared.
+301a39f0d73fef Huang Ying        2022-07-13  1569  	 */
+301a39f0d73fef Huang Ying        2022-07-13  1570  	if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING &&
+301a39f0d73fef Huang Ying        2022-07-13 @1571  	    !node_is_toptier(src_nid)) {
+301a39f0d73fef Huang Ying        2022-07-13  1572  		struct pglist_data *pgdat;
+118aa9e6092758 Huang Ying        2022-07-13  1573  		unsigned long rate_limit;
+118aa9e6092758 Huang Ying        2022-07-13  1574  		unsigned int latency, th, def_th;
+301a39f0d73fef Huang Ying        2022-07-13  1575  
+301a39f0d73fef Huang Ying        2022-07-13  1576  		pgdat = NODE_DATA(dst_nid);
+118aa9e6092758 Huang Ying        2022-07-13  1577  		if (pgdat_free_space_enough(pgdat)) {
+118aa9e6092758 Huang Ying        2022-07-13  1578  			/* workload changed, reset hot threshold */
+118aa9e6092758 Huang Ying        2022-07-13  1579  			pgdat->nbp_threshold = 0;
+301a39f0d73fef Huang Ying        2022-07-13  1580  			return true;
+118aa9e6092758 Huang Ying        2022-07-13  1581  		}
+301a39f0d73fef Huang Ying        2022-07-13  1582  
+118aa9e6092758 Huang Ying        2022-07-13  1583  		def_th = sysctl_numa_balancing_hot_threshold;
+118aa9e6092758 Huang Ying        2022-07-13  1584  		rate_limit = sysctl_numa_balancing_promote_rate_limit << \
+118aa9e6092758 Huang Ying        2022-07-13  1585  			(20 - PAGE_SHIFT);
+118aa9e6092758 Huang Ying        2022-07-13  1586  		numa_promotion_adjust_threshold(pgdat, rate_limit, def_th);
+118aa9e6092758 Huang Ying        2022-07-13  1587  
+118aa9e6092758 Huang Ying        2022-07-13  1588  		th = pgdat->nbp_threshold ? : def_th;
+301a39f0d73fef Huang Ying        2022-07-13  1589  		latency = numa_hint_fault_latency(page);
+301a39f0d73fef Huang Ying        2022-07-13  1590  		if (latency >= th)
+301a39f0d73fef Huang Ying        2022-07-13  1591  			return false;
+301a39f0d73fef Huang Ying        2022-07-13  1592  
+23441fcb084b9e Huang Ying        2022-07-13  1593  		return !numa_promotion_rate_limit(pgdat, rate_limit,
+23441fcb084b9e Huang Ying        2022-07-13  1594  						  thp_nr_pages(page));
+301a39f0d73fef Huang Ying        2022-07-13  1595  	}
+301a39f0d73fef Huang Ying        2022-07-13  1596  
+10f39042711ba2 Rik van Riel      2014-01-27  1597  	this_cpupid = cpu_pid_to_cpupid(dst_cpu, current->pid);
+37355bdc5a1298 Mel Gorman        2018-10-01  1598  	last_cpupid = page_cpupid_xchg_last(page, this_cpupid);
+37355bdc5a1298 Mel Gorman        2018-10-01  1599  
+301a39f0d73fef Huang Ying        2022-07-13  1600  	if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
+301a39f0d73fef Huang Ying        2022-07-13  1601  	    !node_is_toptier(src_nid) && !cpupid_valid(last_cpupid))
+301a39f0d73fef Huang Ying        2022-07-13  1602  		return false;
+301a39f0d73fef Huang Ying        2022-07-13  1603  
+37355bdc5a1298 Mel Gorman        2018-10-01  1604  	/*
+37355bdc5a1298 Mel Gorman        2018-10-01  1605  	 * Allow first faults or private faults to migrate immediately early in
+37355bdc5a1298 Mel Gorman        2018-10-01  1606  	 * the lifetime of a task. The magic number 4 is based on waiting for
+37355bdc5a1298 Mel Gorman        2018-10-01  1607  	 * two full passes of the "multi-stage node selection" test that is
+37355bdc5a1298 Mel Gorman        2018-10-01  1608  	 * executed below.
+37355bdc5a1298 Mel Gorman        2018-10-01  1609  	 */
+98fa15f34cb379 Anshuman Khandual 2019-03-05  1610  	if ((p->numa_preferred_nid == NUMA_NO_NODE || p->numa_scan_seq <= 4) &&
+37355bdc5a1298 Mel Gorman        2018-10-01  1611  	    (cpupid_pid_unset(last_cpupid) || cpupid_match_pid(p, last_cpupid)))
+37355bdc5a1298 Mel Gorman        2018-10-01  1612  		return true;
+10f39042711ba2 Rik van Riel      2014-01-27  1613  
+10f39042711ba2 Rik van Riel      2014-01-27  1614  	/*
+10f39042711ba2 Rik van Riel      2014-01-27  1615  	 * Multi-stage node selection is used in conjunction with a periodic
+10f39042711ba2 Rik van Riel      2014-01-27  1616  	 * migration fault to build a temporal task<->page relation. By using
+10f39042711ba2 Rik van Riel      2014-01-27  1617  	 * a two-stage filter we remove short/unlikely relations.
+10f39042711ba2 Rik van Riel      2014-01-27  1618  	 *
+10f39042711ba2 Rik van Riel      2014-01-27  1619  	 * Using P(p) ~ n_p / n_t as per frequentist probability, we can equate
+10f39042711ba2 Rik van Riel      2014-01-27  1620  	 * a task's usage of a particular page (n_p) per total usage of this
+10f39042711ba2 Rik van Riel      2014-01-27  1621  	 * page (n_t) (in a given time-span) to a probability.
+10f39042711ba2 Rik van Riel      2014-01-27  1622  	 *
+10f39042711ba2 Rik van Riel      2014-01-27  1623  	 * Our periodic faults will sample this probability and getting the
+10f39042711ba2 Rik van Riel      2014-01-27  1624  	 * same result twice in a row, given these samples are fully
+10f39042711ba2 Rik van Riel      2014-01-27  1625  	 * independent, is then given by P(n)^2, provided our sample period
+10f39042711ba2 Rik van Riel      2014-01-27  1626  	 * is sufficiently short compared to the usage pattern.
+10f39042711ba2 Rik van Riel      2014-01-27  1627  	 *
+10f39042711ba2 Rik van Riel      2014-01-27  1628  	 * This quadric squishes small probabilities, making it less likely we
+10f39042711ba2 Rik van Riel      2014-01-27  1629  	 * act on an unlikely task<->page relation.
+10f39042711ba2 Rik van Riel      2014-01-27  1630  	 */
+10f39042711ba2 Rik van Riel      2014-01-27  1631  	if (!cpupid_pid_unset(last_cpupid) &&
+10f39042711ba2 Rik van Riel      2014-01-27  1632  				cpupid_to_nid(last_cpupid) != dst_nid)
+10f39042711ba2 Rik van Riel      2014-01-27  1633  		return false;
+10f39042711ba2 Rik van Riel      2014-01-27  1634  
+10f39042711ba2 Rik van Riel      2014-01-27  1635  	/* Always allow migrate on private faults */
+10f39042711ba2 Rik van Riel      2014-01-27  1636  	if (cpupid_match_pid(p, last_cpupid))
+10f39042711ba2 Rik van Riel      2014-01-27  1637  		return true;
+10f39042711ba2 Rik van Riel      2014-01-27  1638  
+10f39042711ba2 Rik van Riel      2014-01-27  1639  	/* A shared fault, but p->numa_group has not been set up yet. */
+10f39042711ba2 Rik van Riel      2014-01-27  1640  	if (!ng)
+10f39042711ba2 Rik van Riel      2014-01-27  1641  		return true;
+10f39042711ba2 Rik van Riel      2014-01-27  1642  
+10f39042711ba2 Rik van Riel      2014-01-27  1643  	/*
+4142c3ebb685bb Rik van Riel      2016-01-25  1644  	 * Destination node is much more heavily used than the source
+4142c3ebb685bb Rik van Riel      2016-01-25  1645  	 * node? Allow migration.
+10f39042711ba2 Rik van Riel      2014-01-27  1646  	 */
+4142c3ebb685bb Rik van Riel      2016-01-25  1647  	if (group_faults_cpu(ng, dst_nid) > group_faults_cpu(ng, src_nid) *
+4142c3ebb685bb Rik van Riel      2016-01-25  1648  					ACTIVE_NODE_FRACTION)
+10f39042711ba2 Rik van Riel      2014-01-27  1649  		return true;
+10f39042711ba2 Rik van Riel      2014-01-27  1650  
+10f39042711ba2 Rik van Riel      2014-01-27  1651  	/*
+4142c3ebb685bb Rik van Riel      2016-01-25  1652  	 * Distribute memory according to CPU & memory use on each node,
+4142c3ebb685bb Rik van Riel      2016-01-25  1653  	 * with 3/4 hysteresis to avoid unnecessary memory migrations:
+4142c3ebb685bb Rik van Riel      2016-01-25  1654  	 *
+4142c3ebb685bb Rik van Riel      2016-01-25  1655  	 * faults_cpu(dst)   3   faults_cpu(src)
+4142c3ebb685bb Rik van Riel      2016-01-25  1656  	 * --------------- * - > ---------------
+4142c3ebb685bb Rik van Riel      2016-01-25  1657  	 * faults_mem(dst)   4   faults_mem(src)
+10f39042711ba2 Rik van Riel      2014-01-27  1658  	 */
+4142c3ebb685bb Rik van Riel      2016-01-25  1659  	return group_faults_cpu(ng, dst_nid) * group_faults(p, src_nid) * 3 >
+4142c3ebb685bb Rik van Riel      2016-01-25  1660  	       group_faults_cpu(ng, src_nid) * group_faults(p, dst_nid) * 4;
+10f39042711ba2 Rik van Riel      2014-01-27  1661  }
+10f39042711ba2 Rik van Riel      2014-01-27  1662  
 
-:::::: The code at line 464 was first introduced by commit
-:::::: 87fe2d543f817300e13f0ea683f38c122737856e io: change inX() to have their own IO barrier overrides
+:::::: The code at line 1571 was first introduced by commit
+:::::: 301a39f0d73fef87b631e25726f507f244273fa9 memory tiering: hot page selection with hint page fault latency
 
-:::::: TO: Sinan Kaya <okaya@codeaurora.org>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
+:::::: TO: Huang Ying <ying.huang@intel.com>
+:::::: CC: Andrew Morton <akpm@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service

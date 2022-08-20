@@ -2,85 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F8659AA0D
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92D059AA38
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 02:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245270AbiHTAel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 Aug 2022 20:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
+        id S245532AbiHTAkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 Aug 2022 20:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245250AbiHTAef (ORCPT
+        with ESMTP id S245130AbiHTAkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 Aug 2022 20:34:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AEDBC14
-        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 17:34:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9513B61909
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 00:34:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6504FC433C1;
-        Sat, 20 Aug 2022 00:34:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1660955673;
-        bh=exwuMdrg5qTnP1tlzlM00aIWZ/dJVmjgxKylsvSYu3k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aVTNR7yq91xjdaURJaNSqLHunfakxxuUr/eEVrt8kMCHd+Q91enZvb4cMVE7g2IkI
-         TzS35VhknhyIpH4y2y6h6y9EjMTZvcuJZVeJ1CbuaKN2WxNjrkPtXUkVzFxFc4h79h
-         4r2b/jCQM2N0jf4U8fRU41O1bsyqEjM2wxMSaHiw=
-Date:   Fri, 19 Aug 2022 17:34:31 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Bharata B Rao <bharata@amd.com>
-Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, Wei Xu <weixugc@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-Subject: Re: [PATCH v15 00/10] mm/demotion: Memory tiers and demotion
-Message-Id: <20220819173431.5c391297042eff209e821088@linux-foundation.org>
-In-Reply-To: <137cf90f-abf9-4a6d-08fb-ef3922685ba5@amd.com>
-References: <20220818131042.113280-1-aneesh.kumar@linux.ibm.com>
-        <137cf90f-abf9-4a6d-08fb-ef3922685ba5@amd.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 19 Aug 2022 20:40:00 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BA0113DF6
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 17:39:59 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id d6so1436419ilg.4
+        for <linux-kernel@vger.kernel.org>; Fri, 19 Aug 2022 17:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=iBopgMnmoUJvc7cVDH8fqn3f/dhwKkQ8lfdEKBMoa04=;
+        b=cLroeU3Ru7UQVtCk9D9W6zQ1lTLBKb+Ud+93k79Yhf+67A5RlOw79Q4+Wy1suVlHvu
+         v0U1NKAce3VfxwjRXOHCVSVrdjKpOSYgm+ZiZw8TyPY7gCWv0uGirTlEIq7TPOW5YFTv
+         Xrg1uIpWB8pjpVYAG54P7L7KzeLZoPW9YZAxI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc;
+        bh=iBopgMnmoUJvc7cVDH8fqn3f/dhwKkQ8lfdEKBMoa04=;
+        b=ne41zYzZ88g/OssFWYQdel2HJ5rCEGEensKFnoLSECBVH+rW75MDuMsC3oKkIbN0Fa
+         u2XhGS2GLwGLdZQlO/Yx4diTIJnQa6Zr+BxJsZJ640ws9OAxh7a55/nfwTknE+3QHPwl
+         nvgBD2qJEY+jSKK7vmppP6ERHH3VCWb5ub6LlmVUT3vgf+I05MZRehkVV1PxXkCQoygL
+         bIHfBpf6Oc1Lks7aFGR/bnsASMt2OFlnpcaL9y74CJami77vCjRZLxo547QYIqkZxZ9Z
+         E/0kTVevqhrn9xA8CVAk9wtHizrnZuY4Lcj7EwdW97Odrq10bbmrTctHJxXonnzzgSzy
+         rHyA==
+X-Gm-Message-State: ACgBeo1ZW04HJMnIJZ5LmkMTUAZIdVq7xL6bGu1pkLmFxlb2P9Sr86Ui
+        R4V2z3qTSjomPMnqVDqXQGoyuw==
+X-Google-Smtp-Source: AA6agR44VAlVKGhzUVWtLo63G30iCyCXxVgQSvLlhP9reqy7ykNJPCUkb8YUgpDvqaY/KAsXWIZm9Q==
+X-Received: by 2002:a92:d942:0:b0:2e8:fb76:c647 with SMTP id l2-20020a92d942000000b002e8fb76c647mr4745528ilq.86.1660955998731;
+        Fri, 19 Aug 2022 17:39:58 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id u17-20020a92da91000000b002e90d810961sm2157771iln.6.2022.08.19.17.39.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 17:39:58 -0700 (PDT)
+Subject: Re: [PATCH 5.19 0/7] 5.19.3-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220819153711.552247994@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <dbeec116-a78a-3aa5-0cc7-75d653ad2519@linuxfoundation.org>
+Date:   Fri, 19 Aug 2022 18:39:57 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20220819153711.552247994@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 11:57:18 +0530 Bharata B Rao <bharata@amd.com> wrote:
+On 8/19/22 9:39 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.3 release.
+> There are 7 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 21 Aug 2022 15:36:59 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.3-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-> > The kernel initialization code makes the decision on which exact tier a memory
-> > node should be assigned to based on the requests from the device drivers as well
-> > as the memory device hardware information provided by the firmware.
-> 
-> I gave this patchset a quick try on two setups:
-> 
-> 1. With QEMU, when an nvdimm device is bound to dax kmem driver, I can see
-> the memory node with pmem getting into a lower tier than DRAM.
-> 
-> 2. In an experimental CXL setup that has DRAM as part of CXL memory, I see that
-> CXL memory node falls into the same tier as the regular DRAM tier. This is
-> expected for now since there is no code (in low level ACPI driver?) yet to
-> map the latency or bandwidth info (when available from firmware) into an
-> abstract distance value, and register a memory type for the same. Guess these
-> bits can be covered as part of future enhancements.
+Compiled and booted on my test system. No dmesg regressions.
 
-Should I add your Tested-by:?
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

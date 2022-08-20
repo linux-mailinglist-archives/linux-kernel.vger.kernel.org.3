@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A094A59AF85
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 20:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1ADF59AF8C
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 20:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiHTSQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 14:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
+        id S231854AbiHTSQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 14:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiHTSQi (ORCPT
+        with ESMTP id S230285AbiHTSQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 14:16:38 -0400
+        Sat, 20 Aug 2022 14:16:39 -0400
 Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963F117071
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:37 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id c39so9160796edf.0
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E3330F68
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:38 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id t5so9131155edc.11
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 11:16:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=zxudM2tcPvdpF6lvNkQWPZ2gRI9Z+4KijeRHmXked3o=;
-        b=lGuqy5RuA8LlN/SiSPC0Zgm+nIRAWvuxmyWCh+Z7y2RZ4rfhPsIMLB6bAtENbZU69O
-         FvRVSaQsFXCsoiPp/aQUN54t2x8DdzgZS2z0a29giaM5xgI6M+m1DYNT02aqmXE7zQhm
-         Oqbi3U2igj6+I7yeIQVeZfSE0mj6dC7F9h/dzao0JW/eWWmcXqqgB270gvPDHN+cOef2
-         XmT68N9tS77HnK5kgd9bcd1M8eNvlMoEsj30PVvQphg4UfdvifKnSdNGEBsUlPyOa7uj
-         nHjJGmKK0OD16DBc6gjJT0EmFKybTvPQzjoU+DsukqBJ6ZfG/qXCJ031vz628yHTSXPG
-         EVKg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=GkFSCmCmtCp/tSVKJ+Jm/lmW9Ahq2ZlSjrqLfNvUxFs=;
+        b=X6IB1+8hZJ1jMHbhOTGVJktLBGjNSdr5Jmszn44QbM/Lmy9XnJCISYC6lb7G/Za6Lw
+         4d7ZAHtnw0GZoa8BWnIixUpK+jYW9FBvLj4nUYVYaeO8sKXOc+SYoLa63ky8p0Y8BR5f
+         Ecfj0mfhIsV8Pxrvzw6dbALHxxoPfmNfCTtS9h1MihyfmO0cyy+nWxf4hoa1pAfFsdLV
+         TIIMO7VlWYlGvnFGUzzFjMs0N2PkhB62u/q55ikZAWoL434e4G3TW9gJIL95tBq9fc0m
+         rjbtZ+NwsgO2CZTf+5RgFY1pirmQsuBO8rt64C+L/slS5iiNg9LMLjKicDYq+NVvu873
+         UgUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=zxudM2tcPvdpF6lvNkQWPZ2gRI9Z+4KijeRHmXked3o=;
-        b=i4Gk+F3sUFdoMHfjsmommR5DxcgFEleqKe2aS5bbDcJusjLNO/aZP+32mznbyaDG/d
-         7ebTxfvITcEnIUKagLPGyRwFWbOkv1Agsl38Ao+SnOXPgXplBh3s960ssmrZAetB09VE
-         Uk3lMtXal55qJkw6GfG7lS70JiuLNcAfhMnQiInG+rJLSURPlPGY2bX+NdnHwEmb7joU
-         oL6Y2r3ssl+CsJRcmXg8z6K3PvHOAktqZJjE401Cc4k96U7S14KWAayYelD8Q3eKpeE7
-         VeUBPn/a2O5RzlEGwPJA0fhtjO/8RYimb15AIqy2FbFiaATJCvdjR9vpRq4DNGiE21Tu
-         S+1Q==
-X-Gm-Message-State: ACgBeo1GwdZBb6wWOeDMhOn2L7nsyJgYejTKPL7l4uyPpKTKCr5VeNnR
-        VDBnXmU0iLkKIQYID3al6HY=
-X-Google-Smtp-Source: AA6agR67n8eYzr+YF+2nu35VSIKhyqXQWQDOmBUTahlwivUqUcAFqFT16f42A/fNTIP1avPdfM6zfQ==
-X-Received: by 2002:a05:6402:3907:b0:431:6776:64e7 with SMTP id fe7-20020a056402390700b00431677664e7mr10217794edb.0.1661019396245;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=GkFSCmCmtCp/tSVKJ+Jm/lmW9Ahq2ZlSjrqLfNvUxFs=;
+        b=4H9nvuhza/5H0nszAMebLHyQk4XgZZklR5dIXNE04cxN27GEhiHLnRpHJj2wHV3Cnq
+         AMwhHlOfCH8ovNbJEOd/opT+cpdhT2ryqtHw3d0N24Ip503ToiL6Icb0sp6xhWwZ7WSC
+         AaNXygZLxfPIf+5YUjpES4uBdvrjzcDP0SAgeL2rD2cJjMTI4YAZ8MKIl62X2f6gtapS
+         hHutbU3QD3XWVWYwTj9baLZNx9+OpWlcO8kd4yWm3jXYPZswUeorPgFN0XJHZUT5lu5w
+         lB3C67IIqoTRxjbv2izPq4T8Ah26+2wlVNT9uzOoaxM0R3lr5GZS9iEYF5lQbwQAsEnh
+         Ta4Q==
+X-Gm-Message-State: ACgBeo27e9BHnlXjTiigcmBjdSNciEDy2rU5HBCGCYw7Tg/kd6+ZHSAL
+        ijDWffxl9UTJ7b2q1PfJyng=
+X-Google-Smtp-Source: AA6agR5as52Vu9ai9fyg6MfnFuq4JB7GgBpqrwwZNS1CpH681S7teflIMGKbmIe06oWHmEIgY/b3Jg==
+X-Received: by 2002:a05:6402:524c:b0:43e:aba4:a42d with SMTP id t12-20020a056402524c00b0043eaba4a42dmr10279216edd.328.1661019396951;
         Sat, 20 Aug 2022 11:16:36 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb77.dynamic.kabel-deutschland.de. [95.90.187.119])
-        by smtp.gmail.com with ESMTPSA id g2-20020a17090604c200b0072af890f52dsm3887833eja.88.2022.08.20.11.16.35
+        by smtp.gmail.com with ESMTPSA id g2-20020a17090604c200b0072af890f52dsm3887833eja.88.2022.08.20.11.16.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 11:16:35 -0700 (PDT)
+        Sat, 20 Aug 2022 11:16:36 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 00/19] staging: r8188eu: migrate os_dep/xmit_linux.c
-Date:   Sat, 20 Aug 2022 20:16:04 +0200
-Message-Id: <20220820181623.12497-1-straube.linux@gmail.com>
+Subject: [PATCH 01/19] staging: r8188eu: make rtw_remainder_len() static
+Date:   Sat, 20 Aug 2022 20:16:05 +0200
+Message-Id: <20220820181623.12497-2-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220820181623.12497-1-straube.linux@gmail.com>
+References: <20220820181623.12497-1-straube.linux@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,54 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series moves the functions, or their functionality, from
-os_dep/xmit_linux.c to the core/* part of the driver and finally
-removes os_dep/xmit_linux.c and the xmit_osdep.h header.
+The function rtw_remainder_len() is only used in xmit_linux.c.
+Make it static.
 
-Tested on x86_64 with Inter-Tech DMG-02.
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
+---
+ drivers/staging/r8188eu/include/xmit_osdep.h | 1 -
+ drivers/staging/r8188eu/os_dep/xmit_linux.c  | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-Please apply this on top of:
-[PATCH] staging: r8188eu: remove rtw_endofpktfile()
-
-Thanks,
-Michael
-
-Michael Straube (19):
-  staging: r8188eu: make rtw_remainder_len() static
-  staging: r8188eu: make rtw_os_xmit_schedule() static
-  staging: r8188eu: rename rtw_os_xmit_schedule()
-  staging: r8188eu: make rtw_os_xmit_resource_alloc() static
-  staging: r8188eu: rename rtw_os_xmit_resource_alloc()
-  staging: r8188eu: make rtw_os_xmit_resource_free() static
-  staging: r8188eu: rename rtw_os_xmit_resource_free()
-  staging: r8188eu: make _rtw_open_pktfile() static
-  staging: r8188eu: rename _rtw_open_pktfile()
-  staging: r8188eu: make _rtw_pktfile_read() static
-  staging: r8188eu: rename _rtw_pktfile_read()
-  staging: r8188eu: remove unnecessary initialization to zero
-  staging: r8188eu: move struct pkt_file to rtw_xmit.h
-  staging: r8188eu: move rtw_os_xmit_complete() to rtw_xmit.c
-  staging: r8188eu: rename rtw_os_xmit_complete()
-  staging: r8188eu: make rtw_os_pkt_complete() static
-  staging: r8188eu: rename rtw_os_pkt_complete()
-  staging: r8188eu: remove os_dep/xmit_linux.c
-  staging: r8188eu: remove xmit_osdep.h
-
- drivers/staging/r8188eu/Makefile             |   1 -
- drivers/staging/r8188eu/core/rtw_mlme.c      |  23 +-
- drivers/staging/r8188eu/core/rtw_mlme_ext.c  |   2 +-
- drivers/staging/r8188eu/core/rtw_sta_mgt.c   |   1 -
- drivers/staging/r8188eu/core/rtw_xmit.c      | 232 +++++++++++++++++--
- drivers/staging/r8188eu/hal/rtl8188eu_xmit.c |   4 +-
- drivers/staging/r8188eu/include/rtw_xmit.h   |  16 +-
- drivers/staging/r8188eu/include/xmit_osdep.h |  48 ----
- drivers/staging/r8188eu/os_dep/os_intfs.c    |   7 +-
- drivers/staging/r8188eu/os_dep/usb_intf.c    |   1 -
- drivers/staging/r8188eu/os_dep/xmit_linux.c  | 226 ------------------
- 11 files changed, 251 insertions(+), 310 deletions(-)
- delete mode 100644 drivers/staging/r8188eu/include/xmit_osdep.h
- delete mode 100644 drivers/staging/r8188eu/os_dep/xmit_linux.c
-
+diff --git a/drivers/staging/r8188eu/include/xmit_osdep.h b/drivers/staging/r8188eu/include/xmit_osdep.h
+index 130dc06efe73..55347de455c8 100644
+--- a/drivers/staging/r8188eu/include/xmit_osdep.h
++++ b/drivers/staging/r8188eu/include/xmit_osdep.h
+@@ -37,7 +37,6 @@ int rtw_os_xmit_resource_alloc(struct adapter *padapter,
+ void rtw_os_xmit_resource_free(struct adapter *padapter,
+ 			       struct xmit_buf *pxmitbuf, u32 free_sz);
+ 
+-uint rtw_remainder_len(struct pkt_file *pfile);
+ void _rtw_open_pktfile(struct sk_buff *pkt, struct pkt_file *pfile);
+ uint _rtw_pktfile_read(struct pkt_file *pfile, u8 *rmem, uint rlen);
+ 
+diff --git a/drivers/staging/r8188eu/os_dep/xmit_linux.c b/drivers/staging/r8188eu/os_dep/xmit_linux.c
+index 85ef27735b88..33400a9b08e1 100644
+--- a/drivers/staging/r8188eu/os_dep/xmit_linux.c
++++ b/drivers/staging/r8188eu/os_dep/xmit_linux.c
+@@ -11,7 +11,7 @@
+ #include "../include/osdep_intf.h"
+ #include "../include/usb_osintf.h"
+ 
+-uint rtw_remainder_len(struct pkt_file *pfile)
++static uint rtw_remainder_len(struct pkt_file *pfile)
+ {
+ 	return pfile->buf_len - ((size_t)(pfile->cur_addr) -
+ 	       (size_t)(pfile->buf_start));
 -- 
 2.37.2
 

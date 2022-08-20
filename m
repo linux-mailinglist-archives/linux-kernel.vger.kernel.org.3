@@ -2,49 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D4359AC3C
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 09:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C768159AC4F
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 09:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343630AbiHTHdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 03:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
+        id S234071AbiHTHfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 03:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244415AbiHTHdP (ORCPT
+        with ESMTP id S244715AbiHTHfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 03:33:15 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E25C47
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 00:33:12 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1660980789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OXPB7dY7tQ2n85mgIrq2bkd3Z/lqPrZbbmrEZHKR2EI=;
-        b=V53qx512BBfkXrE3QHlAuCrjOL/BGRhH15a+RPQLzdh5ADOmo4WZzCYasXbWSLF7hQrROy
-        vzgnfu5PhZ7MljCwl1QuTRDtohzAPsG1odlzHbyoaNSseMMPQCu3EI9th7yo4q2B+Hygvm
-        W8put8C83HqTG+wE2Ncg5iamruWSeIw=
+        Sat, 20 Aug 2022 03:35:04 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D2B9677B;
+        Sat, 20 Aug 2022 00:35:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1660980858; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=grGB65a6Z/0gqEKmfSHQhJjp66VAGs6SVbgpbariwXdYYe3Lvb0SCLNQFfcSNXd0zEpN1l0dkwiwlNTeaZcF/haQYHoLamIUsPpY5/S9c/52rwcHs78WuZUJM5ziZhNbwLXAhuTCmuikYhVN5LgMiEOzKMloNtWn5hzKWxj6KFk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1660980858; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=EemleEMy15KCJL1YIgOwHrMRf0e9xmVdGltzEqsF9oo=; 
+        b=GSIO4MyUsJt7D/fCMpCJvjkt1SgHVU/JmaFdqG8J4bZaKtv4vHUkUaJmTdaniXWPUsgwjC20/0JkduQ+waAd03moN6MHsWizdJCTkfTAUgRgCFdebYbznYPsyZlfBk73iu02XD9cwnodJb0DMLnNgmCXPTe+3p62i2pLOQ37g0o=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1660980858;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=EemleEMy15KCJL1YIgOwHrMRf0e9xmVdGltzEqsF9oo=;
+        b=WX3Vjj2BYfqR+E9hObCL0/jXDYxssnkV3bhHeY5zo/f3Ic1EgZfBb0YMJIEku70N
+        tYx9jNidIu+AGP8/7/DAQ7Jwbw6vluzy/cfZyioXaYetL0/qX5ILdwo/5CLBKkG42Ry
+        r/EyTVBafKymP8m+PU3Vf9Tv+Enu1gnKcnuU+Hwg=
+Received: from [10.10.10.3] (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
+        with SMTPS id 166098085594979.27797162485172; Sat, 20 Aug 2022 00:34:15 -0700 (PDT)
+Message-ID: <0bf02926-753e-e8d5-1d87-f286ed743fb2@arinc9.com>
+Date:   Sat, 20 Aug 2022 10:34:08 +0300
 MIME-Version: 1.0
-Subject: Re: [PATCH] mm: fix pgdat->kswap accessed concurrently
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20220820032506.126860-1-wangkefeng.wang@huawei.com>
-Date:   Sat, 20 Aug 2022 15:33:04 +0800
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>, Qian Cai <cai@lca.pw>,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <1E87F09C-4904-49E2-B45C-C408DD5F6F62@linux.dev>
-References: <20220820032506.126860-1-wangkefeng.wang@huawei.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 4/7] dt-bindings: net: dsa: mediatek,mt7530: define
+ port binding per compatible
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220813154415.349091-1-arinc.unal@arinc9.com>
+ <20220813154415.349091-5-arinc.unal@arinc9.com>
+ <d2279a7d-bbc3-c772-1f30-251f056341bb@linaro.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <d2279a7d-bbc3-c772-1f30-251f056341bb@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,125 +85,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 19.08.2022 15:43, Krzysztof Kozlowski wrote:
+> On 13/08/2022 18:44, Arınç ÜNAL wrote:
+>> Define DSA port binding under each compatible device as each device
+>> requires different values for certain properties.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../bindings/net/dsa/mediatek,mt7530.yaml     | 116 +++++++++++++-----
+>>   1 file changed, 87 insertions(+), 29 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> index cc87f48d4d07..ff51a2f6875f 100644
+>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> @@ -130,35 +130,6 @@ properties:
+>>         ethsys.
+>>       maxItems: 1
+>>   
+>> -patternProperties:
+>> -  "^(ethernet-)?ports$":
+>> -    type: object
+>> -
+>> -    patternProperties:
+>> -      "^(ethernet-)?port@[0-9]+$":
+>> -        type: object
+>> -        description: Ethernet switch ports
+>> -
+> 
+> my comments from v1 apply here
+> 
+> None of the reasons you said force you to define properties in some
+> allOf:if:then subblock. These force you to constrain the properties in
+> allOf:if:then, but not define.
+> 
+> 
+>> I can split patternProperties to two sections, but I can't directly
+>> define the reg property like you put above.
+> 
+> Of course you can and original bindings were doing it.
+> 
+> Let me ask specific questions (yes, no):
+> 1. Are ethernet-ports and ethernet-port present in each variant?
+> 2. Is dsa-port.yaml applicable to each variant? (looks like that - three
+> compatibles, three all:if:then)
+> 3. If reg appearing in each variant?
+> 4. If above is true, if reg is maximum one item in each variant?
 
+All yes.
 
-> On Aug 20, 2022, at 11:25, Kefeng Wang <wangkefeng.wang@huawei.com> =
-wrote:
->=20
-> The pgdat->kswap could be accessed concurrently by kswapd_run() and
-> kcompactd(), it don't be protected by any lock, which leads to the
-> following null-ptr-deref,
->=20
->  vmscan: Failed to start kswapd on node 0
->  ...
->  BUG: KASAN: null-ptr-deref in kcompactd+0x440/0x504
->  Read of size 8 at addr 0000000000000024 by task kcompactd0/37
->=20
->  CPU: 0 PID: 37 Comm: kcompactd0 Kdump: loaded Tainted: G           OE =
-    5.10.60 #1
->  Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
->  Call trace:
->   dump_backtrace+0x0/0x394
->   show_stack+0x34/0x4c
->   dump_stack+0x158/0x1e4
->   __kasan_report+0x138/0x140
->   kasan_report+0x44/0xdc
->   __asan_load8+0x94/0xd0
->   kcompactd+0x440/0x504
->   kthread+0x1a4/0x1f0
->   ret_from_fork+0x10/0x18
->=20
-> Fix it by adding READ_ONCE()|WRITE_ONCE().
->=20
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
-> mm/compaction.c |  4 +++-
-> mm/vmscan.c     | 15 +++++++++------
-> 2 files changed, 12 insertions(+), 7 deletions(-)
->=20
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 640fa76228dd..aa1cfe47f046 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -1983,7 +1983,9 @@ static inline bool is_via_compact_memory(int =
-order)
->=20
-> static bool kswapd_is_running(pg_data_t *pgdat)
-> {
-> -	return pgdat->kswapd && task_is_running(pgdat->kswapd);
-> +	struct task_struct *t =3D READ_ONCE(pgdat->kswapd);
-> +
-> +	return t && task_is_running(t);
-> }
->=20
-> /*
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index b2b1431352dc..9abba714249e 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -4642,16 +4642,19 @@ unsigned long shrink_all_memory(unsigned long =
-nr_to_reclaim)
-> void kswapd_run(int nid)
-> {
-> 	pg_data_t *pgdat =3D NODE_DATA(nid);
-> +	struct task_struct *t;
->=20
-> -	if (pgdat->kswapd)
-> +	if (READ_ONCE(pgdat->kswapd))
-> 		return;
->=20
-> -	pgdat->kswapd =3D kthread_run(kswapd, pgdat, "kswapd%d", nid);
-> -	if (IS_ERR(pgdat->kswapd)) {
-> +	t =3D kthread_run(kswapd, pgdat, "kswapd%d", nid);
-> +	if (IS_ERR(t)) {
-> 		/* failure at boot is fatal */
-> 		BUG_ON(system_state < SYSTEM_RUNNING);
-> 		pr_err("Failed to start kswapd on node %d\n", nid);
-> -		pgdat->kswapd =3D NULL;
-> +		WRITE_ONCE(pgdat->kswapd, NULL);
-> +	} else {
-> +		WRITE_ONCE(pgdat->kswapd, t);
-> 	}
-> }
+> 
+> Looking at your patch, I think answer is 4x yes, which means you can
+> define them in one place and constrain in allOf:if:then, just like all
+> other schemas, because this one is not different.
 
-IIUC, the race is like the followings:
+If I understand correctly, I do this already with v3. Properties are 
+defined under the constructed node. Accepted values for properties are 
+constrained under if:then.
 
-CPU 0:					CPU 1:
-
-kswapd_run()
-	pgdat->kswapd =3D kthread_run()
-	if (IS_ERR(pgdat->kswapd))
-					kswapd_is_running
-						// load pgdat->kswapd =
-and it is NOT NULL.
-		pgdat->kswapd =3D NULL
-						=
-task_is_running(pgdat->kswapd); // NULL pointer dereference
-
-So
-
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-
-Thanks.
-
->=20
-> @@ -4661,11 +4664,11 @@ void kswapd_run(int nid)
->  */
-> void kswapd_stop(int nid)
-> {
-> -	struct task_struct *kswapd =3D NODE_DATA(nid)->kswapd;
-> +	struct task_struct *kswapd =3D =
-READ_ONCE(NODE_DATA(nid)->kswapd);
->=20
-> 	if (kswapd) {
-> 		kthread_stop(kswapd);
-> -		NODE_DATA(nid)->kswapd =3D NULL;
-> +		WRITE_ONCE(NODE_DATA(nid)->kswapd, NULL);
-> 	}
-> }
->=20
-> --=20
-> 2.35.3
->=20
->=20
-
+Arınç

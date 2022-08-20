@@ -2,119 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A685959B099
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 23:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0966259B09D
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 23:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233108AbiHTVff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 17:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
+        id S232752AbiHTVka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 17:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiHTVfd (ORCPT
+        with ESMTP id S229472AbiHTVkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 17:35:33 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513AB248FD;
-        Sat, 20 Aug 2022 14:35:31 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-11c5ee9bf43so8875556fac.5;
-        Sat, 20 Aug 2022 14:35:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=N/vun+D7IUXt8zZIrSi1UcOV4dJSkqwnucleotnERFA=;
-        b=Mz2tS9lSW78Yvud8sW15NgwBxwuHdZu6MVX1Eru/V01wd2UM23aNk4ia+25RICkEJI
-         QT+qg2ytHfyvvZOoRRbPUuavk8WWzzBflA6Jae/y2dSFBibziIAXPfh9oLkDi1/i4E2/
-         FrFkb1ssPpzswTAXRho4O8V0XWdFAJGWpOhtCEuUKu0oKI04M1qA1h4Uhu+Rk31DjvX9
-         JjtRqKXBCxMDW0RLh4GJbtyzrJKThcbOj+wXFvqzgDXbzyRUeXAHCRaKGwPj6fgtIhSh
-         ir5Ms681DgDkxPeKlBeC14GGQ6jhz1DY5W4mdKZdEben7U3kp+vS8FxVG15pATHcHhcS
-         JRUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=N/vun+D7IUXt8zZIrSi1UcOV4dJSkqwnucleotnERFA=;
-        b=VG0jEqOgenhNh9VnJX9PQNjHoR3zkGEu0CmwWE9YLJSEuucJqr09FI2GBDKjS+wv92
-         UAbxxi9AQW+T/xc3qzhkuR0oz8LN1MqXl29xvz29ISeUlRUm/mlt698dMAME+F/jgFAt
-         WjwHCDDjeiKbB9IZ3fDDU6wrUCjRwTd8UF5bUB1qYGeTVSQ0xEN89ZRewC/XnKyeg6lM
-         FPYpsIDc3H8hsTncce4Qq9V7rNv/jeFuhqaffK1QEQ0KJxW98+N6YAwQgQck6lVOaPGI
-         w7uL4wCZTB2ZZpzRe5j22I+GPV5ajUw5kPt0SNNndx2jIpbs0Yv9gRPGNN1a65rO0+vZ
-         pJFA==
-X-Gm-Message-State: ACgBeo1n0Rznh8E+dMblrXrSyZYEg0MeKkPDIZSjawGwb2YxgzxK7wgp
-        kMvMOqQARI9WJETgnbNVKXE=
-X-Google-Smtp-Source: AA6agR4M1fN5uJR+Vv0e+quXDFuDul2ppDf4+sTrmxARwrbuxC9w83hmosr/27E7otT3+m2Akw/JBQ==
-X-Received: by 2002:a05:6870:1708:b0:11c:9265:c882 with SMTP id h8-20020a056870170800b0011c9265c882mr6614157oae.153.1661031330394;
-        Sat, 20 Aug 2022 14:35:30 -0700 (PDT)
-Received: from localhost ([172.58.171.171])
-        by smtp.gmail.com with ESMTPSA id z24-20020a9d65d8000000b00638e49d4cadsm2002748oth.36.2022.08.20.14.35.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Aug 2022 14:35:30 -0700 (PDT)
-Date:   Sat, 20 Aug 2022 14:35:28 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+        Sat, 20 Aug 2022 17:40:21 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C2027CD9;
+        Sat, 20 Aug 2022 14:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661031619; x=1692567619;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LOzvEj7iLKGD5rk7k/t82D26qr+7N1ucQ2gJOw8QkWw=;
+  b=Gmt44B9YAQdDiMeybd6ONq3VkwI1RPDUBldukTw5CjcyOdzJLB+a40Kd
+   mV0U9e5t+qbaoBWWXtuR3IYWltq3obh+hiOKbWV6CAWtDaaF+SSscRjKx
+   DEW9INlYFVpl8BKW4t+CvsevILB0OfYBXZYgm0siJLZgxZ75lHV+AlhSi
+   4DT8EKPylejW68Odl7qL/dgJSzAD9G0TmqeCy9eBwwi/CWTr3mw8vaOXs
+   mxq/DJSiFR2qwS9ONV+Mee2uMh5x5Zml/M5k2f2V2TP4R/aRj6eat2k+E
+   YA/SWSsM70dkF7NrtK4ZjQpwpD1+LuE7Fmovuae+OnBPazUZ3/IqSo62I
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="357184689"
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="357184689"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 14:40:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="641601976"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 20 Aug 2022 14:40:16 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPWCV-0003Ex-1O;
+        Sat, 20 Aug 2022 21:40:15 +0000
+Date:   Sun, 21 Aug 2022 05:39:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arminder Singh <arminders208@outlook.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] lib/test_cpumask: drop cpu_possible_mask full test
-Message-ID: <YwFToOOFKsr/mL7X@yury-laptop>
-References: <cover.1661007338.git.sander@svanheule.net>
- <6dfd4d3a4d77f97f13ab3f22bc53c96c38ba908e.1661007339.git.sander@svanheule.net>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        Arminder Singh <arminders208@outlook.com>
+Subject: Re: [PATCH] i2c: pasemi: Add IRQ support for Apple Silicon
+Message-ID: <202208210548.MCoIwyQl-lkp@intel.com>
+References: <MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6dfd4d3a4d77f97f13ab3f22bc53c96c38ba908e.1661007339.git.sander@svanheule.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 05:03:09PM +0200, Sander Vanheule wrote:
-> When the number of CPUs that can possibly be brought online is known at
-> boot time, e.g. when HOTPLUG is disabled, nr_cpu_ids may be smaller than
-> NR_CPUS. In that case, cpu_possible_mask would not be completely filled,
-> and cpumask_full(cpu_possible_mask) can return false for valid system
-> configurations.
+Hi Arminder,
 
-It doesn't mean we can just give up. You can check validity of possible
-cpumask like this: 
-        KUNIT_EXPECT_EQ(test, nr_cpu_ids, cpumask_first_zero(&mask_all))
-        KUNIT_EXPECT_EQ(test, NR_CPUS, cpumask_first(&mask_all))
- 
-> Fixes: c41e8866c28c ("lib/test: introduce cpumask KUnit test suite")
-> Link: https://lore.kernel.org/lkml/346cb279-8e75-24b0-7d12-9803f2b41c73@riseup.net/
-> Reported-by: Maíra Canal <mairacanal@riseup.net>
-> Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> Tested-by: Maíra Canal <mairacanal@riseup.net>
-> Reviewed-by: David Gow <davidgow@google.com>
-> ---
-> Changes in v2:
-> Rewrite commit message to explain why this test is wrong
-> 
->  lib/test_cpumask.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/lib/test_cpumask.c b/lib/test_cpumask.c
-> index a31a1622f1f6..4ebf9f5805f3 100644
-> --- a/lib/test_cpumask.c
-> +++ b/lib/test_cpumask.c
-> @@ -54,7 +54,6 @@ static cpumask_t mask_all;
->  static void test_cpumask_weight(struct kunit *test)
->  {
->  	KUNIT_EXPECT_TRUE(test, cpumask_empty(&mask_empty));
-> -	KUNIT_EXPECT_TRUE(test, cpumask_full(cpu_possible_mask));
->  	KUNIT_EXPECT_TRUE(test, cpumask_full(&mask_all));
->  
->  	KUNIT_EXPECT_EQ(test, 0, cpumask_weight(&mask_empty));
-> -- 
-> 2.37.2
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on powerpc/next]
+[also build test WARNING on linus/master v6.0-rc1 next-20220819]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Arminder-Singh/i2c-pasemi-Add-IRQ-support-for-Apple-Silicon/20220821-034703
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: riscv-randconfig-r042-20220821 (https://download.01.org/0day-ci/archive/20220821/202208210548.MCoIwyQl-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c9a41fe60ab62f7a40049c100adcc8087a47669b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/98584b2b51d808ab582798c7a50511e8c1889ced
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Arminder-Singh/i2c-pasemi-Add-IRQ-support-for-Apple-Silicon/20220821-034703
+        git checkout 98584b2b51d808ab582798c7a50511e8c1889ced
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/i2c/busses/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/i2c/busses/i2c-pasemi-core.c:9:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/i2c/busses/i2c-pasemi-core.c:9:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/i2c/busses/i2c-pasemi-core.c:9:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/i2c/busses/i2c-pasemi-core.c:86:6: warning: variable 'status' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (smbus->use_irq) {
+               ^~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-pasemi-core.c:92:12: note: uninitialized use occurs here
+                   while (!(status & SMSTA_XEN) && timeout--) {
+                            ^~~~~~
+   drivers/i2c/busses/i2c-pasemi-core.c:86:2: note: remove the 'if' if its condition is always true
+           if (smbus->use_irq) {
+           ^~~~~~~~~~~~~~~~~~~~
+   drivers/i2c/busses/i2c-pasemi-core.c:83:21: note: initialize the variable 'status' to silence this warning
+           unsigned int status;
+                              ^
+                               = 0
+   8 warnings generated.
+
+
+vim +86 drivers/i2c/busses/i2c-pasemi-core.c
+
+    79	
+    80	static int pasemi_smb_waitready(struct pasemi_smbus *smbus)
+    81	{
+    82		int timeout = 10;
+    83		unsigned int status;
+    84		unsigned int bitmask = SMSTA_XEN | SMSTA_MTN;
+    85	
+  > 86		if (smbus->use_irq) {
+    87			reinit_completion(&smbus->irq_completion);
+    88			reg_write(smbus, REG_IMASK, bitmask);
+    89			wait_for_completion_timeout(&smbus->irq_completion, msecs_to_jiffies(10));
+    90			status = reg_read(smbus, REG_SMSTA);
+    91		} else {
+    92			while (!(status & SMSTA_XEN) && timeout--) {
+    93				msleep(1);
+    94				status = reg_read(smbus, REG_SMSTA);
+    95			}
+    96		}
+    97	
+    98	
+    99		/* Got NACK? */
+   100		if (status & SMSTA_MTN)
+   101			return -ENXIO;
+   102	
+   103		if (timeout < 0) {
+   104			dev_warn(smbus->dev, "Timeout, status 0x%08x\n", status);
+   105			reg_write(smbus, REG_SMSTA, status);
+   106			return -ETIME;
+   107		}
+   108	
+   109		/* Clear XEN */
+   110		reg_write(smbus, REG_SMSTA, SMSTA_XEN);
+   111	
+   112		return 0;
+   113	}
+   114	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

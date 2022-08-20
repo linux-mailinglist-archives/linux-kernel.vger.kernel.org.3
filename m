@@ -2,171 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3FD59AD62
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 13:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D72B559AD61
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 Aug 2022 13:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233477AbiHTK7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 06:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
+        id S1344496AbiHTLA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 07:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239636AbiHTK7d (ORCPT
+        with ESMTP id S1345679AbiHTLAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 06:59:33 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06D648E95
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 03:59:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660993171; x=1692529171;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6bvnfTT4/t+5ClYUhDOG/MQcIDUXZ10fpoddRgksaJw=;
-  b=i0UYoP9mkklpLYNgkV4T6BPtHZSIjTPd7dJwjarMHfHq2wHEj8LYqP15
-   tr1XUHTqoYJ4FtWruTBvAxIACVcaH3iaoJeXVZYDJjSk5sRBvG/VhDJXT
-   s7sU1H4QYYmTJVdDkemQp0/ImvLzc0TptFKKMNWpiaqHznKBLLIRm82oj
-   FfbYVuo4KIk1hq5TUPTSTvXu7IOGh2uqicUUmJkjF69NMLBYREJQkc/Sn
-   xywc2oijykIoM4J569S2BJJDbdVYOXcXfCD0EcaIRn9qGu8gW19KB2fB2
-   ho/qA2A4sBx18CUF52nlmXF4HwQMbGgmLCuZHBXA03z7iDYyjOdI6d/dq
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10444"; a="293954172"
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="293954172"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 03:59:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="584947572"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Aug 2022 03:59:29 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPMCO-0002XD-37;
-        Sat, 20 Aug 2022 10:59:28 +0000
-Date:   Sat, 20 Aug 2022 18:58:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:iommufd 10/14] drivers/iommu/iommufd/device.c:59:
- warning: expecting prototype for iommufd_bind_device(). Prototype was for
- iommufd_device_bind() instead
-Message-ID: <202208201856.H1yTyIFO-lkp@intel.com>
+        Sat, 20 Aug 2022 07:00:54 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFAF57216;
+        Sat, 20 Aug 2022 04:00:53 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id x23so6074792pll.7;
+        Sat, 20 Aug 2022 04:00:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=8wuUIWdis+xT0hudag4a14ELVYJVIG+o6tLrSegrIoA=;
+        b=j61CLE6fa59pokGfGnMEauJKsM2LM5X8woqRtjVW9NTQ6Y5kpAiWTx96vf7d8dGckw
+         fVo50+VzyS011jwN0OAUbTQRCkqSNls3M0X4N9RiXxlf4W4YutQxMT3ZcBdP5cIHGJUc
+         8x1JZqcFS7bb/HVnfV/WinwjjsqIJVCjcPRwJE7Wz+R/lOhhOdv0ojp9M4dyFuh5BZzQ
+         C2zBeoXohSc3s/zmDdjcg75DRwMWeLCvUfp/PTXXfxTZ2cCOAXOa0NlhiYeiLyEOHPe4
+         PDpUKpNCpaRDzu5xzQ5N/WUf6d32QF9drhjvaJLcpwQL0nW2X8iHYD4CgdVCdOMbj47W
+         8Y7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=8wuUIWdis+xT0hudag4a14ELVYJVIG+o6tLrSegrIoA=;
+        b=wVZVmRT1fwLmhlI4vVW/qdZEftjXNVS+j5XxuPO/0bopENMckTNv+qxEM9h7F9ixms
+         fbD4Zoxvvp/n/qC/Sxl0Mhher5JtO9dsl8kCbLpJAG6esU6TE1Bc+v2152FR0Dk2aUmb
+         1xEvGyzOlDHPQpFp0dyjccO1EOzPSnIUNq3Tj7Q65/dzLKK7isKX4SyEGo9PoAyLp6kk
+         xzId1rx8A9IB/XXiD4ZsbKgMbIeoO/GCm9aTS4zlzboxOS8UGU8DOttu5mi5E7bcr4is
+         FWh3yKeskCg4pNaVndhDwgyHa0r/+9P5lMn7o3HIK5jqdNCnoQaNzATLqqAOi9tsdTft
+         Fq7Q==
+X-Gm-Message-State: ACgBeo2kzpvwOyu4I9Lfbsj/bg6rv4xddV3vHKNLSvsAw0c/RcFvZuPi
+        QXEWBylJdg1KbUX3xvHIETIgvbG6+9yd5l3h144=
+X-Google-Smtp-Source: AA6agR69UjJy0KLH6Ee1SUGZ54BK+5j1ORpgxDR23VFhE+9QTX6186pijxlgLD6bPlh46L9BskLrEeHeRs7o0KEUU3I=
+X-Received: by 2002:a17:902:da8f:b0:16f:6b6:eed7 with SMTP id
+ j15-20020a170902da8f00b0016f06b6eed7mr11456056plx.85.1660993253488; Sat, 20
+ Aug 2022 04:00:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220816032846.2579217-1-imagedong@tencent.com>
+ <CAKwvOd=accNK7t_SOmybo3e4UcBKoZ6TBPjCHT3eSSpSUouzEA@mail.gmail.com>
+ <CADxym3Yxq0k_W43kVjrofjNoUUag3qwmpRGLLAQL1Emot3irPQ@mail.gmail.com>
+ <20220818165838.GM25951@gate.crashing.org> <CADxym3YEfSASDg9ppRKtZ16NLh_NhH253frd5LXZLGTObsVQ9g@mail.gmail.com>
+ <20220819152157.GO25951@gate.crashing.org>
+In-Reply-To: <20220819152157.GO25951@gate.crashing.org>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Sat, 20 Aug 2022 19:00:41 +0800
+Message-ID: <CADxym3Y-=6pRP=CunxRomfwXf58k0LyLm510WGtzsBnzjqdD4g@mail.gmail.com>
+Subject: Re: [PATCH net-next v4] net: skb: prevent the split of
+ kfree_skb_reason() by gcc
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>, kuba@kernel.org,
+        miguel.ojeda.sandonis@gmail.com, ojeda@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        asml.silence@gmail.com, imagedong@tencent.com,
+        luiz.von.dentz@intel.com, vasily.averin@linux.dev,
+        jk@codeconstruct.com.au, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jgunthorpe/linux iommufd
-head:   6624f48e554fe6a880b261074a1c9580dc9b5384
-commit: e6ea33b10e22b67a040cb8bbe1068528adab762a [10/14] iommufd: Add kAPI toward external drivers for physical devices
-config: s390-randconfig-r035-20220820 (https://download.01.org/0day-ci/archive/20220820/202208201856.H1yTyIFO-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 0ac597f3cacf60479ffd36b03766fa7462dabd78)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/jgunthorpe/linux/commit/e6ea33b10e22b67a040cb8bbe1068528adab762a
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe iommufd
-        git checkout e6ea33b10e22b67a040cb8bbe1068528adab762a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+Hello,
+On Fri, Aug 19, 2022 at 11:24 PM Segher Boessenkool
+<segher@kernel.crashing.org> wrote:
+>
+> Hi!
+>
+> On Fri, Aug 19, 2022 at 10:55:42PM +0800, Menglong Dong wrote:
+> > Thanks for your explanation about the usage of 'noinline' and 'no_icf'!
+> > I think 'noclone' seems enough in this case? As the function
+> > 'kfree_skb_reason' we talk about is a global function, I think that the
+> > compiler has no reason to make it inline, or be merged with another
+> > function.
+>
+> Whether something is inlined is decided per instance (except for
+> always_inline and noinline functions).  Of course the function body has
+> to be available for anything to be inlined, so barring LTO this can only
+> happen for function uses in the same source file.  Not very likely
+> indeed, but not entirely impossible either.
+>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I understand it now, the global function is indeed possible to be
+made inline by the compiler, and 'noinline' seems necessary
+here too.
 
-All warnings (new ones prefixed by >>):
+Maybe I can add a new compiler attribute like this:
 
-   drivers/iommu/iommufd/device.c:59: warning: Function parameter or member 'dev' not described in 'iommufd_device_bind'
->> drivers/iommu/iommufd/device.c:59: warning: expecting prototype for iommufd_bind_device(). Prototype was for iommufd_device_bind() instead
+/*
+ * Used by functions that use '__builtin_return_address'. These function
+ * don't want to be splited or made inline, which can make
+ * the '__builtin_return_address' got unexpected address.
+ */
+#define __fix_address noinline __noclone
 
+> A function can be merged if there is another function that does exactly
+> the same thing.  This is unlikely with functions that do some serious
+> work of course, but it is likely with stub-like functions.
+>
 
-vim +59 drivers/iommu/iommufd/device.c
+I understand how 'icf'(Identical Code Folding) works now. In the case
+we talk about, It seems fine even if the function is merged. The only
+effect of 'icf' is the change of function name, which doesn't affect
+the result of '__builtin_return_address(0)'.
 
-    40	
-    41	/**
-    42	 * iommufd_bind_device - Bind a physical device to an iommu fd
-    43	 * @ictx: iommufd file descriptor
-    44	 * @pdev: Pointer to a physical PCI device struct
-    45	 * @id: Output ID number to return to userspace for this device
-    46	 *
-    47	 * A successful bind establishes an ownership over the device and returns
-    48	 * struct iommufd_device pointer, otherwise returns error pointer.
-    49	 *
-    50	 * A driver using this API must set driver_managed_dma and must not touch
-    51	 * the device until this routine succeeds and establishes ownership.
-    52	 *
-    53	 * Binding a PCI device places the entire RID under iommufd control.
-    54	 *
-    55	 * The caller must undo this with iommufd_unbind_device()
-    56	 */
-    57	struct iommufd_device *iommufd_device_bind(struct iommufd_ctx *ictx,
-    58						   struct device *dev, u32 *id)
-  > 59	{
-    60		struct iommufd_device *idev;
-    61		struct iommu_group *group;
-    62		int rc;
-    63	
-    64	       /*
-    65	        * iommufd always sets IOMMU_CACHE because we offer no way for userspace
-    66	        * to restore cache coherency.
-    67	        */
-    68		if (!iommu_capable(dev->bus, IOMMU_CAP_CACHE_COHERENCY))
-    69			return ERR_PTR(-EINVAL);
-    70	
-    71		group = iommu_group_get(dev);
-    72		if (!group)
-    73			return ERR_PTR(-ENODEV);
-    74	
-    75		/*
-    76		 * FIXME: Use a device-centric iommu api, this won't work with
-    77		 * multi-device groups
-    78		 */
-    79		rc = iommu_group_claim_dma_owner(group, ictx);
-    80		if (rc)
-    81			goto out_group_put;
-    82	
-    83		idev = iommufd_object_alloc(ictx, idev, IOMMUFD_OBJ_DEVICE);
-    84		if (IS_ERR(idev)) {
-    85			rc = PTR_ERR(idev);
-    86			goto out_release_owner;
-    87		}
-    88		idev->ictx = ictx;
-    89		iommufd_ctx_get(ictx);
-    90		idev->dev = dev;
-    91		/* The calling driver is a user until iommufd_device_unbind() */
-    92		refcount_inc(&idev->obj.users);
-    93		/* group refcount moves into iommufd_device */
-    94		idev->group = group;
-    95	
-    96		/*
-    97		 * If the caller fails after this success it must call
-    98		 * iommufd_unbind_device() which is safe since we hold this refcount.
-    99		 * This also means the device is a leaf in the graph and no other object
-   100		 * can take a reference on it.
-   101		 */
-   102		iommufd_object_finalize(ictx, &idev->obj);
-   103		*id = idev->obj.id;
-   104		return idev;
-   105	
-   106	out_release_owner:
-   107		iommu_group_release_dma_owner(group);
-   108	out_group_put:
-   109		iommu_group_put(group);
-   110		return ERR_PTR(rc);
-   111	}
-   112	EXPORT_SYMBOL_GPL(iommufd_device_bind);
-   113	
+Thanks!
+Menglong Dong
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> gl;hf,
+>
+>
+> Segher

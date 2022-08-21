@@ -2,143 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9CA59B3D7
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 15:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A357259B3DA
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 15:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbiHUNIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 09:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
+        id S230269AbiHUNNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 09:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbiHUNIp (ORCPT
+        with ESMTP id S229537AbiHUNNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 09:08:45 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE316EE31
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 06:08:38 -0700 (PDT)
-Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 84C9230F30D;
-        Sun, 21 Aug 2022 15:08:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1661087316;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VjhSlZPk0mEuD8Fpe39Gjeez86YTbyIidGAdgcUUEDI=;
-        b=QSPUd/az8VzLjaK/XtMtlnrwqhU71MYB2nfTW317knMoxmV3OZFSBOH1Br5UMEOR34bshQ
-        IZHsZvw0yT0xUEb+VSwPN55OGKN8IjP+iZ8ut42PPU63UE1wKq0omrmUwVs7+yEgplGlIu
-        JZ62JzAU4oKgvfQqX/51PxAH2QRYHyze3ZBWgH5po32Zr2b3MeuBz89G0yox8SuAwb1p9U
-        J+j39raaKN4WRwH8im5hmUa3lyzJWpboc156e97L/XxzUFW9J3g/ESwes2nYnEvsYWJC2q
-        jiYDhXevvwzbYuPKVhwikNU5tb8L99TXMsIlwqfHXPwbiit6IN8DcHMxGOiwng==
-Message-ID: <9f28529005867512105182f8fa2b0f7b0d14b30d.camel@svanheule.net>
-Subject: Re: [PATCH v2 1/5] lib/test_cpumask: drop cpu_possible_mask full
- test
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        =?ISO-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        linux-kernel@vger.kernel.org
-Date:   Sun, 21 Aug 2022 15:08:33 +0200
-In-Reply-To: <YwFToOOFKsr/mL7X@yury-laptop>
-References: <cover.1661007338.git.sander@svanheule.net>
-         <6dfd4d3a4d77f97f13ab3f22bc53c96c38ba908e.1661007339.git.sander@svanheule.net>
-         <YwFToOOFKsr/mL7X@yury-laptop>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Sun, 21 Aug 2022 09:13:50 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3E013D79;
+        Sun, 21 Aug 2022 06:13:48 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id e4so6420577qvr.2;
+        Sun, 21 Aug 2022 06:13:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=DVYYQkpgpKgJVH0pRzj4zMYMOUP7iF2KNFjCHXK79jQ=;
+        b=pfmYWrgef2IB19viXabZpI/iK2diGQH8ZUwCTEzKcjpWGCuNHCeQ33tnF13l21WtON
+         2WnfUXgmF77GjBKWs8EhZ84XCGr4OxqWha7NixDGnE8FN/6eRrBOFVU67hZvR5GSwgPP
+         B2ceSvYLspYQNin8H/oo/2ncei6B4i/FRTKlR90bpyUtDlekzobogewHVEJBb1eHjsUr
+         Q6zaYQP5BxI8q20dDCRuu+QIbr3+cRbITz5nX6mF5jRFDJEEhHOJLpEPNrBRrqjgUxQ8
+         ZNq1e2/dzXVESPmZmh8P5vlFwqfmZaCEL297rGptIwiq9+pBDPDpdz4JcVQMYa++8c0K
+         lmJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=DVYYQkpgpKgJVH0pRzj4zMYMOUP7iF2KNFjCHXK79jQ=;
+        b=EeXCblkVxfKuxY4KSF5qPzWGBuvOn2zLBpa5JABeBcuQYZPfziPI6epp3xhaHouf/n
+         dE2NC56wc/kUTe5BF2kaW0gGixXqavMlpkcWHcQgnhkvE+IxZfkmI+RYDXyAzKIg3d2x
+         pewef0qeahhX6daVW5rgQNBA0bj2/DEVxmjEAQ+nWbc5iaeDXH4nvLWehAGRRkogz/83
+         hnDlMyyO97W9MW99D4VB1i7lRE77cc4zDvDHQP5Gk+N5gpQWplmSTGadrmEYH7QLhrXt
+         zbYNKqnqOwOWc4QFOu7TWvjgv0da/I2jyRpljicQyuWNbIWEStk1/FBTGTDKTJlrVlzV
+         Lw1g==
+X-Gm-Message-State: ACgBeo3H3KZHcT4e3ppO1QN/6YUQa/JYnB1CdvOM8CzHKrzz3XB0jIV5
+        P9rwr/y9kUFcRVMNJCfEHz+Ka2WT7cYvfPjvuKY=
+X-Google-Smtp-Source: AA6agR7RhA4NMn9ulbUAoaHTX1CvY477ewKXaIAGD/vR00gR46ZMbn4dwx0XQ1Ro2eKM0wKxjoVzOvB5nEm08WaBQSA=
+X-Received: by 2002:ad4:5baf:0:b0:476:6a9e:b5e1 with SMTP id
+ 15-20020ad45baf000000b004766a9eb5e1mr12286096qvq.64.1661087627560; Sun, 21
+ Aug 2022 06:13:47 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1660934107.git.mazziesaccount@gmail.com>
+ <a29493f594c84b3bd852e462bbd3e591a8575a27.1660934107.git.mazziesaccount@gmail.com>
+ <20220820122120.57dddcab@jic23-huawei> <412c5d22-d59b-9191-80dd-e3ca11360bc4@gmail.com>
+ <CAHp75VdoKtc2QqFcDuJ00KBz6mjg0fnM_WhyVqhCmDVo_3K6kg@mail.gmail.com>
+ <01fec744-f3d4-b633-d3ce-bcd86a153132@gmail.com> <CAHp75Vd3vyAZbWpZT9SmyD=ecGTAdVNWK=fs_n4OSAqGtGj_gg@mail.gmail.com>
+ <103abfae-6c0d-9a2e-2d59-0da4c8be3eb4@gmail.com>
+In-Reply-To: <103abfae-6c0d-9a2e-2d59-0da4c8be3eb4@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 21 Aug 2022 16:13:11 +0300
+Message-ID: <CAHp75VchPCHsBcx7mMoGUjz=s4hmfnO6t7DqtpWfg=aGrbo1Fg@mail.gmail.com>
+Subject: Re: [PATCH v3 07/14] iio: ltc2688: Simplify using devm_regulator_*get_enable()
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yury,
+On Sat, Aug 20, 2022 at 10:00 PM Matti Vaittinen
+<mazziesaccount@gmail.com> wrote:
+> On 8/20/22 20:41, Andy Shevchenko wrote:
+> > On Sat, Aug 20, 2022 at 8:30 PM Matti Vaittinen
+> > <mazziesaccount@gmail.com> wrote:
+> >> On 8/20/22 19:09, Andy Shevchenko wrote:
+> >>> On Sat, Aug 20, 2022 at 4:45 PM Matti Vaittinen
+> >>> <mazziesaccount@gmail.com> wrote:
+> >>>> On 8/20/22 14:21, Jonathan Cameron wrote:
+> >>>>> On Fri, 19 Aug 2022 22:19:17 +0300
+> >>>>> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> >
+> > ...
+> >
+> >>>>> For the whole static / vs non static. My personal preference is not
+> >>>>> to have the static marking but I don't care that much.
+> >>>>
+> >>>> I'd like to stick with the static here. I know this one particular array
+> >>>> does not have much of a footprint - but I'd like to encourage the habit
+> >>>> of considering the memory usage. This discussion serves as an example of
+> >>>> how unknown the impact of making const data static is. I didn't know
+> >>>> this myself until Sebastian educated me :)  Hence my strong preference
+> >>>> on keeping this 'static' as an example for others who are as ignorant as
+> >>>> I were ;) After all, having const data arrays static is quite an easy
+> >>>> way of improving things - and it really does matter when there is many
+> >>>> of arrays - or when they contain large data.
+> >>>
+> >>> But still the same comment about global scope of the variable is applied.
+> >>
+> >> I don't understand why you keep claiming the variable is global when it
+> >> is not?
+> >
+> > It is. The static keyword makes it global, but putting the entire
+> > definition into the function is asking for troubles.
 
-On Sat, 2022-08-20 at 14:35 -0700, Yury Norov wrote:
-> On Sat, Aug 20, 2022 at 05:03:09PM +0200, Sander Vanheule wrote:
-> > When the number of CPUs that can possibly be brought online is known at
-> > boot time, e.g. when HOTPLUG is disabled, nr_cpu_ids may be smaller tha=
-n
-> > NR_CPUS. In that case, cpu_possible_mask would not be completely filled=
-,
-> > and cpumask_full(cpu_possible_mask) can return false for valid system
-> > configurations.
->=20
-> It doesn't mean we can just give up. You can check validity of possible
-> cpumask like this:=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_EXPECT_EQ(test, nr_cpu_i=
-ds, cpumask_first_zero(&mask_all))
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_EXPECT_EQ(test, NR_CPUS,=
- cpumask_first(&mask_all))
+> Please, describe the trouble we can get with a local static const
+> variable? A real concrete threat there is. I have explained the benefit.
+> I have also explained the concrete possibility of name collision when we
+> really do a global out of local.
 
-Did you mean cpu_possible_mask, or mask_all?
+I told you, the benefit is not to play dirty tricks on developers,
+maintainers and reviewers. It's simply harder to read the code and get
+the usage of the variable that lifetime is out of scope of the
+function.
 
-For cpu_possible_mask, these tests are in test_cpumask_first(), albeit unde=
-r a
-slightly different form. Together with the tests in test_cpumask_weight() a=
-nd
-test_cpumask_last(), cpu_possible_mask is already one of the more constrain=
-ed
-masks.
+> > I guess some C standard chapter describes that in non-understandable language.
+> >
+> >>> As I explained before, hiding global variables inside a function is a
+> >>> bad code practice.
+> >>
+> >> I don't really get what you mean here. And I definitely don't see any
+> >> improvement if we would really use a global variable instead of a local one.
+> >
+> > The improvement is avoid hiding the global variable to the local namespace.
+>
+> I guess you mean that you may miss the fact that a variable stays there
+> even after execution exits the function, right? Ok, let's assume someone
+> misses this point when reading the code. Now, please describe me the
+> potential issues this can cause knowing our static is const and doesn't
+> change the value.
 
-For mask_all, the mask is filled up with nr_cpumask_bits <=3D NR_CPUS. I co=
-uld add
-cpumask_first(), cpumask_first_zero(), and cpumask_last() tests though.
+When you hide the static variable inside the function, you simply
+narrow visibility to the compiler, but the variable stays all the time
+the module is in.
 
-More tests could be also added for cpu_all_mask, since this does have all
-NR_CPUS bits set, but I think that belongs in a separate patch.
-
-I think the extra mask_all and cpu_all_mask test are out of scope for this
-patch, but they could be added in another patch (for 6.1).
-
-Best,
-Sander
-
-> =C2=A0
-> > Fixes: c41e8866c28c ("lib/test: introduce cpumask KUnit test suite")
-> > Link:
-> > https://lore.kernel.org/lkml/346cb279-8e75-24b0-7d12-9803f2b41c73@riseu=
-p.net/
-> > Reported-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
-> > Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> > Tested-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
-> > Reviewed-by: David Gow <davidgow@google.com>
-> > ---
-> > Changes in v2:
-> > Rewrite commit message to explain why this test is wrong
-> >=20
-> > =C2=A0lib/test_cpumask.c | 1 -
-> > =C2=A01 file changed, 1 deletion(-)
-> >=20
-> > diff --git a/lib/test_cpumask.c b/lib/test_cpumask.c
-> > index a31a1622f1f6..4ebf9f5805f3 100644
-> > --- a/lib/test_cpumask.c
-> > +++ b/lib/test_cpumask.c
-> > @@ -54,7 +54,6 @@ static cpumask_t mask_all;
-> > =C2=A0static void test_cpumask_weight(struct kunit *test)
-> > =C2=A0{
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0KUNIT_EXPECT_TRUE(test,=
- cpumask_empty(&mask_empty));
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0KUNIT_EXPECT_TRUE(test, cpum=
-ask_full(cpu_possible_mask));
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0KUNIT_EXPECT_TRUE(test,=
- cpumask_full(&mask_all));
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0KUNIT_EXPECT_EQ(test, 0=
-, cpumask_weight(&mask_empty));
-> > --=20
-> > 2.37.2
-
+-- 
+With Best Regards,
+Andy Shevchenko

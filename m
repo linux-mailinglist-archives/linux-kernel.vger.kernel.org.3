@@ -2,188 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4D759B248
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 08:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACCA59B256
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 08:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiHUGYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 02:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
+        id S229564AbiHUGlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 02:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiHUGYb (ORCPT
+        with ESMTP id S229441AbiHUGlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 02:24:31 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D12C23144
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 23:24:29 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id i26-20020a056e021d1a00b002e9865e8963so1417922ila.14
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 23:24:29 -0700 (PDT)
+        Sun, 21 Aug 2022 02:41:06 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC8A2A968
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 23:41:03 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id m66so8167245vsm.12
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 23:41:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=ytZKdYUnft3zw47YJkefPgcAf98Ms5YVeOG27pEj8AI=;
+        b=Zsi3WSxLYpU0pacztqUlVPW8iatV0LWto+9rVcDwlyQmTvcmPZhKvpWwU7Xpp/qKP6
+         iYXNQslvjML01mRxIc6xM+gAHCHsklGm9G2rM0stiX6V+ihgDnr/HoXKLzBmQ5k+FLqX
+         oQK9Ymt+V5VOZ0O8CFvfSHMZJ90IE0ksI2lfn6r3jR6RTaZwZSsR4Uekg2tEZp/5PpiS
+         sZtrYY4FsPqvR9d2liHWAde/uRqPK29gbuKllzGczBLgaQ/YBsDIWniFQtrZc8ZrqRpl
+         0JgJYcY3099gqq6OaKsPLBbt73Q8H2zqjZDyVRfpjICiXP47BcDsZpRyOBxee609GmrF
+         P41w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=PqboCOCwyASLavKwg3VOY5lF9ER/zs7glAbEsMVMddk=;
-        b=eOuwjXs8IzN25g7AXmatq3tuoJ+4yroBOfkPMRtrnY2AER7fo4FgA6I7/lGLNBtlNN
-         RYV7CK32BSLil+bSm03Rem/R79ConizKWZabmWhxHbWjdYFvIwSlkjW24R6YPgZtNewE
-         qRc+bGWlVE4IJ04OEmmf2m1pgDKXZRc4d2LAIZWyKFkWhdJlvWOnkm/ZBE48Pzb4hfT5
-         tvgq8Y3HZZdL55mc6bdxw+++5fKlB3d6Ths3ZJD4x2F23YsuWfURGZekktHr+bWB6Aan
-         frtYdNZ7Ndam9D4AEp7nYofUokOpWKK3WpOjBZDMKlcVjSBfnzTaZAfqq2yzTCJFKzw7
-         vEww==
-X-Gm-Message-State: ACgBeo1ykM2fkMQYz0Htf+GA/H9yZljjKJHPtxQn8D8Wnf9FWC6nGAsD
-        udKrDRs4kwTtq/RdFY1fvAQVtstVahE2c31hvaNLvPa/joen
-X-Google-Smtp-Source: AA6agR6toP/uLZC9/Mjkijg+F5nQ6hr+rCdJi9lecAXpeeLcIoxAQ14XnfJqhkKTT/uWDLkIQiomgqsjiSqdpNqL7EjR+nPCfDSE
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=ytZKdYUnft3zw47YJkefPgcAf98Ms5YVeOG27pEj8AI=;
+        b=GE9Ei+CFloL5bszdJqUcix2oTLJ2N0ibAJJjFGCqLmv6G+3WXs751SEHQf50pVE6HB
+         Vw8UMn/XPO8/Ji0HkPj4NYc/P6nzxHSh1zZq7KTxYRC8iJy1lhfrOxz/77CrFebgxofl
+         ir0KYbFsI84b++rUhZFbDlehISZDlyT5odST3My1Co1/LgLW6UBxH1sugLdVo0euBNDj
+         ACEY9hdoYL0BTKYAbDutT2Rde7fljVJ4QNHqkuq3ml+TRhkr5Ad1bPVo1FL53XfV7HQX
+         jMac8nJ+EO9liz+OJ91hUvVYgRautueU2FmoQVfIYl2ENqfNCcT4EmXEgY11a3MJIBLf
+         VrwQ==
+X-Gm-Message-State: ACgBeo196DRuEKg9gEoTl18r5pksIMyZmxlzgucUgqoRbXgxPDxCIeEB
+        l7DbxY90kcIrUjoQ2rFVlhPniCVbzyl1EQ==
+X-Google-Smtp-Source: AA6agR52Y1gL6ZNjDwk8h8fIHUi6BPZq3k5iTk1UOwABDIgsn8hPjCUcSZPeES+9oNlVuslWWIaVXg==
+X-Received: by 2002:a05:6102:2753:b0:38a:a86f:6ac5 with SMTP id p19-20020a056102275300b0038aa86f6ac5mr5132744vsu.80.1661064062655;
+        Sat, 20 Aug 2022 23:41:02 -0700 (PDT)
+Received: from localhost.localdomain ([2804:14c:4c2:8202::1001])
+        by smtp.gmail.com with ESMTPSA id x4-20020ab07784000000b00391bb2403adsm6695823uar.29.2022.08.20.23.40.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Aug 2022 23:41:02 -0700 (PDT)
+From:   Tales Aparecida <tales.aparecida@gmail.com>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     Tales Aparecida <tales.aparecida@gmail.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amd/display: remove unneeded defines from bios parser
+Date:   Sun, 21 Aug 2022 03:25:28 -0300
+Message-Id: <20220821062528.13416-1-tales.aparecida@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-Received: by 2002:a6b:5d0f:0:b0:688:6559:7a00 with SMTP id
- r15-20020a6b5d0f000000b0068865597a00mr6250707iob.42.1661063068701; Sat, 20
- Aug 2022 23:24:28 -0700 (PDT)
-Date:   Sat, 20 Aug 2022 23:24:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000028d96a05e6ba6266@google.com>
-Subject: [syzbot] possible deadlock in kcm_ioctl
-From:   syzbot <syzbot+e696806ef96cdd2d87cd@syzkaller.appspotmail.com>
-To:     ast@kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, f.fainelli@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
-        netdev@vger.kernel.org, nikolay@nvidia.com, pabeni@redhat.com,
-        sgarzare@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Removes DEFINEs that should have been removed after they were
+introduced to ObjectID.h by the commit abea57d70e90
+("drm/amdgpu: Add BRACKET_LAYOUT_ENUMs to ObjectID.h")
 
-syzbot found the following issue on:
-
-HEAD commit:    95d10484d66e Add linux-next specific files for 20220817
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=11b3b2f3080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2f5fa747986be53a
-dashboard link: https://syzkaller.appspot.com/bug?extid=e696806ef96cdd2d87cd
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1778e50d080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1379e5e3080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e696806ef96cdd2d87cd@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.0.0-rc1-next-20220817-syzkaller #0 Not tainted
-------------------------------------------------------
-syz-executor769/3613 is trying to acquire lock:
-ffff88801cb5c0f8 ((work_completion)(&strp->work)){+.+.}-{0:0}, at: __flush_work+0xdd/0xae0 kernel/workqueue.c:3066
-
-but task is already holding lock:
-ffff88801d5b0fb0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1687 [inline]
-ffff88801d5b0fb0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: kcm_attach net/kcm/kcmsock.c:1390 [inline]
-ffff88801d5b0fb0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: kcm_attach_ioctl net/kcm/kcmsock.c:1490 [inline]
-ffff88801d5b0fb0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: kcm_ioctl+0x396/0x1180 net/kcm/kcmsock.c:1696
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (sk_lock-AF_INET6){+.+.}-{0:0}:
-       lock_sock_nested+0x36/0xf0 net/core/sock.c:3391
-       do_strp_work net/strparser/strparser.c:398 [inline]
-       strp_work+0x40/0x130 net/strparser/strparser.c:415
-       process_one_work+0x991/0x1610 kernel/workqueue.c:2289
-       worker_thread+0x665/0x1080 kernel/workqueue.c:2436
-       kthread+0x2e4/0x3a0 kernel/kthread.c:376
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-
--> #0 ((work_completion)(&strp->work)){+.+.}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3095 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
-       validate_chain kernel/locking/lockdep.c:3829 [inline]
-       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
-       lock_acquire kernel/locking/lockdep.c:5666 [inline]
-       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
-       __flush_work+0x105/0xae0 kernel/workqueue.c:3069
-       __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3160
-       strp_done+0x64/0xf0 net/strparser/strparser.c:513
-       kcm_attach net/kcm/kcmsock.c:1429 [inline]
-       kcm_attach_ioctl net/kcm/kcmsock.c:1490 [inline]
-       kcm_ioctl+0x913/0x1180 net/kcm/kcmsock.c:1696
-       sock_do_ioctl+0xcc/0x230 net/socket.c:1169
-       sock_ioctl+0x2f1/0x640 net/socket.c:1286
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(sk_lock-AF_INET6);
-                               lock((work_completion)(&strp->work));
-                               lock(sk_lock-AF_INET6);
-  lock((work_completion)(&strp->work));
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor769/3613:
- #0: ffff88801d5b0fb0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1687 [inline]
- #0: ffff88801d5b0fb0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: kcm_attach net/kcm/kcmsock.c:1390 [inline]
- #0: ffff88801d5b0fb0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: kcm_attach_ioctl net/kcm/kcmsock.c:1490 [inline]
- #0: ffff88801d5b0fb0 (sk_lock-AF_INET6){+.+.}-{0:0}, at: kcm_ioctl+0x396/0x1180 net/kcm/kcmsock.c:1696
-
-stack backtrace:
-CPU: 0 PID: 3613 Comm: syz-executor769 Not tainted 6.0.0-rc1-next-20220817-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
- check_prev_add kernel/locking/lockdep.c:3095 [inline]
- check_prevs_add kernel/locking/lockdep.c:3214 [inline]
- validate_chain kernel/locking/lockdep.c:3829 [inline]
- __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
- lock_acquire kernel/locking/lockdep.c:5666 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
- __flush_work+0x105/0xae0 kernel/workqueue.c:3069
- __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3160
- strp_done+0x64/0xf0 net/strparser/strparser.c:513
- kcm_attach net/kcm/kcmsock.c:1429 [inline]
- kcm_attach_ioctl net/kcm/kcmsock.c:1490 [inline]
- kcm_ioctl+0x913/0x1180 net/kcm/kcmsock.c:1696
- sock_do_ioctl+0xcc/0x230 net/socket.c:1169
- sock_ioctl+0x2f1/0x640 net/socket.c:1286
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc907a73f09
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc5f76b0d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc907a73f09
-RDX: 00000000200000c0 RSI: 00000000000089e0 RDI: 0000000000000003
-
-
+Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ .../drm/amd/display/dc/bios/bios_parser2.c    | 19 -------------------
+ 1 file changed, 19 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
+index 09fbb7ad5362..ead4da11a992 100644
+--- a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
++++ b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
+@@ -44,25 +44,6 @@
+ 
+ #include "bios_parser_common.h"
+ 
+-/* Temporarily add in defines until ObjectID.h patch is updated in a few days */
+-#ifndef GENERIC_OBJECT_ID_BRACKET_LAYOUT
+-#define GENERIC_OBJECT_ID_BRACKET_LAYOUT          0x05
+-#endif /* GENERIC_OBJECT_ID_BRACKET_LAYOUT */
+-
+-#ifndef GENERICOBJECT_BRACKET_LAYOUT_ENUM_ID1
+-#define GENERICOBJECT_BRACKET_LAYOUT_ENUM_ID1	\
+-	(GRAPH_OBJECT_TYPE_GENERIC << OBJECT_TYPE_SHIFT |\
+-	GRAPH_OBJECT_ENUM_ID1 << ENUM_ID_SHIFT |\
+-	GENERIC_OBJECT_ID_BRACKET_LAYOUT << OBJECT_ID_SHIFT)
+-#endif /* GENERICOBJECT_BRACKET_LAYOUT_ENUM_ID1 */
+-
+-#ifndef GENERICOBJECT_BRACKET_LAYOUT_ENUM_ID2
+-#define GENERICOBJECT_BRACKET_LAYOUT_ENUM_ID2	\
+-	(GRAPH_OBJECT_TYPE_GENERIC << OBJECT_TYPE_SHIFT |\
+-	GRAPH_OBJECT_ENUM_ID2 << ENUM_ID_SHIFT |\
+-	GENERIC_OBJECT_ID_BRACKET_LAYOUT << OBJECT_ID_SHIFT)
+-#endif /* GENERICOBJECT_BRACKET_LAYOUT_ENUM_ID2 */
+-
+ #define DC_LOGGER \
+ 	bp->base.ctx->logger
+ 
+-- 
+2.37.2
+

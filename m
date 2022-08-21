@@ -2,84 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A360F59B2D4
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 10:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADBA059B2DF
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 10:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiHUIqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 04:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47836 "EHLO
+        id S230058AbiHUIxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 04:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiHUIqQ (ORCPT
+        with ESMTP id S229868AbiHUIxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 04:46:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CED237C2
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 01:46:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E41360C95
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:46:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FD46C433C1;
-        Sun, 21 Aug 2022 08:46:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661071574;
-        bh=KSvjY3lK/TpsVdGUuwm3DhwMl9q0nnxDdrUhtNsvEXI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e/fz+JoonaXfLWFDZZlK5dXsdGYkiHrmXZtB2BwJEKygSIzF8Dq+yw1ZJPTy3BZft
-         RCWIJP9po0gH3TIUHveqKpaDV+EtT8t+3PbdTNESaLEY83kbUiw2Utvlp/rrQYe6X6
-         4uNe0dJWyCBHGfZPMUF7F9zTOQyZDwz1m9UbRW3U=
-Date:   Sun, 21 Aug 2022 10:46:24 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Abhishek Shah <abhishek.shah@columbia.edu>
-Cc:     jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        bjohannesmeyer@gmail.com, jakobkoschel@gmail.com,
-        xiam0nd.tong@gmail.com, Gabriel Ryan <gabe@cs.columbia.edu>
-Subject: Re: data-race in set_console / vt_ioctl
-Message-ID: <YwHw4IlvxWgCrhB4@kroah.com>
-References: <CAEHB249P1XurGDtvfjzkEzP4qWEaL6FG4ENM=PYjk7-JZfnKrQ@mail.gmail.com>
- <Yv82cwVT9MXX2nx/@kroah.com>
+        Sun, 21 Aug 2022 04:53:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAB51C104;
+        Sun, 21 Aug 2022 01:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZG4Es9fzRMT5wrH3Tq+h9KlclsxiCzHKQ6STwuA6oEY=; b=NPTUpR2TGbEGKev6MERMWxooFG
+        ZiJJjPsPAHnqBUcO2CFAj6Vu6hAc3j5M6DeVz3k2hJd7xxalHutHctTFyvYAhRSiMuYQzdMYaAa9k
+        WBNgoPSU6TF4upc7I+yWqXWo+afkfRMrrsiTEmeBXwGm9kKSvw1mY2HuqMGQj1ybZWFBcviB7t/Jx
+        CNZtj16845VF1Evf0T8Auz57FsdmXm7IQcRaeQn96X3j+ZSDhD8Nyc4APtWOwsUqG0QARrCSLeVgb
+        xIMkJ0036ubpmdQL4mSj6MNnxsleHp2IQ98hONYLivxszc2hcm0EoaksqSX32ZF8ehDAQbYS5mLFa
+        jLqkzAsg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oPgi5-008Q9X-HL; Sun, 21 Aug 2022 08:53:33 +0000
+Date:   Sun, 21 Aug 2022 01:53:33 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH v4 6/9] f2fs: don't allow DIO reads but not DIO writes
+Message-ID: <YwHyjVwCGBqzzbd/@infradead.org>
+References: <20220722071228.146690-1-ebiggers@kernel.org>
+ <20220722071228.146690-7-ebiggers@kernel.org>
+ <YtyoF89iOg8gs7hj@google.com>
+ <Yt7dCcG0ns85QqJe@sol.localdomain>
+ <YuXyKh8Zvr56rR4R@google.com>
+ <YvrrEcw4E+rpDLwM@sol.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yv82cwVT9MXX2nx/@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YvrrEcw4E+rpDLwM@sol.localdomain>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 09:06:27AM +0200, Greg KH wrote:
-> On Thu, Aug 18, 2022 at 09:17:00PM -0400, Abhishek Shah wrote:
-> > Hi all,
-> > 
-> > We found a data race involving the *vt_dont_switch* variable. Upon further
-> > investigation, we see that this racing variable controls whether the
-> > callbacks will be scheduled in the console (see here
-> > <https://elixir.bootlin.com/linux/v5.18-rc5/source/drivers/tty/vt/vt.c#L3032>),
-> > but we are not sure of its security implications. Please let us know what
-> > you think.
-> 
-> Again, any patch that you might have to resolve this would be great, as
-> that's the easiest thing to review.
+On Mon, Aug 15, 2022 at 05:55:45PM -0700, Eric Biggers wrote:
+> So if the zoned device feature becomes widely adopted, then STATX_DIOALIGN will
+> be useless on all Android devices?  That sounds undesirable.  Are you sure that
 
-Given the your lack of responses to the developer's responding to your
-emails, and the fact that all of your original emails were sent in html
-format which was rejected by the public mailing lists so no one else
-could see them, I'm going to just drop all of these reports as being
-something pretty useless.
+We just need to fix f2fs to support direct I/O on zone devices.  There
+is not good reason not to support it, in fact the way how zoned devices
+requires appends with the Zone Append semantics makes direct I/O way
+safer than how f2fs does direct I/O currently on non-zoned devices.
 
-If you wish to submit future reports, please read the
-Documentation/process/researcher-guidelines.rst file on how to do this
-properly in a way that will be useful, and be sure to actually respond
-to developers who take the time to write back to your reports.
-
-This is not a one-way process.
-
-thanks,
-
-greg k-h
+Until then just supporting direct I/O reads on zoned devices for f2fs
+seems like a really bad choice given that it will lead to nasty cache
+incoherency.

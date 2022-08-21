@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF15159B59E
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 19:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F5759B59F
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 19:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbiHURbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 13:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
+        id S231301AbiHURbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 13:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiHURbJ (ORCPT
+        with ESMTP id S229537AbiHURbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 21 Aug 2022 13:31:09 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A13117A90;
-        Sun, 21 Aug 2022 10:31:06 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id a4so10675553wrq.1;
-        Sun, 21 Aug 2022 10:31:06 -0700 (PDT)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F1A17A94;
+        Sun, 21 Aug 2022 10:31:07 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id n4so10636399wrp.10;
+        Sun, 21 Aug 2022 10:31:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=pNG4G+DwLDhFmuP5MPNfWqVOnSu+/xUGuRdk4UBjqw0=;
-        b=UXcBNDkenBGwNMu/3GWsBnvB7gtkcR/JxOeG/pRsiyqsfKTPjhxvyRDOfPu3UmfOEP
-         Y7YiYC/2akv7mHHWzp6iMmL7UgceEiPP05sME56JiOaIzBKBGTSoVnuetmQTQNpYRLiD
-         uw7vq/8CHuZ/xGf/gOmZjIiTqqjXi+WekAjGGS76WcogkQZP2YgABg1uyt3wHEAQmT2z
-         feA/zBYL/PKLhDcuOV8JuVE5fhZ/b1A5+r9Gtpp82JebWyg9s0V9uAFeqDk81+uvgbFT
-         GAHUcueGKP5WZD4Plx7kN0q3zvD5Jy+K6/2jOiAAlM/RDJ35etsYJEYWPymK4X0fGEJe
-         mELw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=aSJ84KqrNn6MWyh6FORcW3yirHeYw6hYSs0IzGec01M=;
+        b=oMPqfpeHVVfNLHP2MjvlbDraFSkaHgYrFskuQI4NmmbhLtDnnhLOa3vC2pdNgKyy9t
+         +Fb4PAHxafTxVQLv2RdYwIQnu469rsfq3eC5wkJkZGheKOO0TwANXPxpol8qfr8qCYWM
+         jV075pLCfKUO0CMi68yqYoaMawBNfzo4UJxSCYGRmD0bnBj9Q7e28YKUOEKxio16M1I+
+         qb8ON1lB2aOqY+jhfsDiOnyXb+gY6gH6jLnP+97TO2I+mqwhlqhr1LFVdrFuUc24nUdj
+         Da6dWlIzJccvrTZ2TlyNOhkKBm4OBpPMrIBaiyljjVAwCOR40N+l5yczII4Td45mMr1Y
+         ScaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=pNG4G+DwLDhFmuP5MPNfWqVOnSu+/xUGuRdk4UBjqw0=;
-        b=H9LeU1i+fLrpAHYq95gAdRA0lVuMN8/bchWRG/ZvFa0OlfKAPlBmL9NpIQ2PS7fVh3
-         l3HGKGZgcnsFhy/ZY7qTcSO+pX8cdNOpHDXd/t9SDF5AJsB7DzAFegfEwtPtTbavFKtV
-         q3lY/B2fPupgAxFAMq/5Qvon176ekaX0o2refZaLxNWH5hcYyAXYPlBBxAsdoEzlHyIC
-         4zA4Fsnc4NWwQZ9kC+TPTQffKcv6RvFra/i9upQ6YdxLoLuCk4LoxwcgVAiB3ScrdgKv
-         w1b2cgn5C8jPAm9KJqWJIscgecuU/dRSMZFc67H/Cs3OOybJBEIAeFymBSOXbHyNZJWm
-         Fr6Q==
-X-Gm-Message-State: ACgBeo10WiPrb5Xp7KPem8MF6cKKwTxJ9nqcCQJv+a3htFNL9/MK2QHk
-        7ZLN66X6NBtvGFL9Jw1QUUk=
-X-Google-Smtp-Source: AA6agR6UjJd0cmOJ8JSdIgLww1DMnwTrCTIBW5LX94OLcDxq9nQQOzIHDtayKFKeiYBrrs8OYg6CzA==
-X-Received: by 2002:a05:6000:1f0a:b0:225:3bbd:c5e6 with SMTP id bv10-20020a0560001f0a00b002253bbdc5e6mr5703120wrb.126.1661103064463;
-        Sun, 21 Aug 2022 10:31:04 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=aSJ84KqrNn6MWyh6FORcW3yirHeYw6hYSs0IzGec01M=;
+        b=i5wwujPd0oHGM17ebfYd1b5+bJxY6v2PQXQKIXUWPOEsePFsD0joEWMU9kfoufGySA
+         L5uXaHPEmCiHhOu8l0fPx8Io4iNQFFp7A6aJ9AkIdNV/EQPkMC+XyZrGVk+jduhiNO0s
+         NUNS5SSJpaBRPvRzMF5iewH+mTF5MwwHb+51XVfmFm3r5Xn+OHwwLF74qo5PYP4ZU8Sg
+         4103ShXbBQ90EmkyLINxYwSlInzyvakicp1IG94HCfXDFw9vVxmL+jS5Gb74G7O0G0+R
+         i1bwDI6K2sRbXed6G2JA9D7IBu0jFR2q03tM5QZcdGRqq9qE1xx4h0GbjcRcbPf5D6Ua
+         4r/g==
+X-Gm-Message-State: ACgBeo3jtP4GHFEHrtFVX8A+03Isd1JXCMR1hCDvQCzahZN+hOZcRic/
+        eWHW3z8/QBuZFODoe7slQ8s=
+X-Google-Smtp-Source: AA6agR6fKo9R8ycp4Gb4tGnIr8ckPmGoMswlycqEn46ezfu/KXVXYdHG72MTfHpaSq4d5MQIOxl36Q==
+X-Received: by 2002:adf:eb01:0:b0:225:294d:c9c6 with SMTP id s1-20020adfeb01000000b00225294dc9c6mr8779399wrn.285.1661103065929;
+        Sun, 21 Aug 2022 10:31:05 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e0a:a77:3d70:9d84:ec8d:98d9:c29a])
-        by smtp.gmail.com with ESMTPSA id b18-20020adff912000000b00224f7c1328dsm9387205wrr.67.2022.08.21.10.31.02
+        by smtp.gmail.com with ESMTPSA id b18-20020adff912000000b00224f7c1328dsm9387205wrr.67.2022.08.21.10.31.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 10:31:03 -0700 (PDT)
+        Sun, 21 Aug 2022 10:31:05 -0700 (PDT)
 From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
+        Samuel Holland <samuel@sholland.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-Subject: [PATCH v2 0/4] Allwinner H6 GPU devfreq
-Date:   Sun, 21 Aug 2022 19:30:47 +0200
-Message-Id: <20220821173051.155038-1-peron.clem@gmail.com>
+Subject: [PATCH v2 1/4] arm64: defconfig: Enable devfreq cooling device
+Date:   Sun, 21 Aug 2022 19:30:48 +0200
+Message-Id: <20220821173051.155038-2-peron.clem@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220821173051.155038-1-peron.clem@gmail.com>
+References: <20220821173051.155038-1-peron.clem@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -74,37 +78,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Devfreq cooling device framework is used in Panfrost
+to throttle GPU in order to regulate its temperature.
 
-This is a refresh of previous patches sent to enable GPU Devfreq on H6
-Beelink GS1 but that wasn't stable at that time[0].
+Enable this driver for ARM64 SoC.
 
-With the recent fix on GPU PLL from Roman Stratiienko I have retested
-and everything seems stable and works as expected.
+Signed-off-by: Clément Péron <peron.clem@gmail.com>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Clement
-
-0: https://lore.kernel.org/lkml/CAJiuCce58Gaxf_Qg2cnMwvOgUqYU__eKb3MDX1Fe_+47htg2bA@mail.gmail.com/
-1: https://lore.kernel.org/linux-arm-kernel/2562485.k3LOHGUjKi@kista/T/
-
-Changes since v1:
- - proper sign-off with my personal email
- - sent serie to SoC Maintainer w/ cover letter
-
-Clément Péron (4):
-  arm64: defconfig: Enable devfreq cooling device
-  arm64: dts: allwinner: h6: Add cooling map for GPU
-  arm64: dts: allwinner: h6: Add GPU OPP table
-  arm64: dts: allwinner: beelink-gs1: Enable GPU OPP
-
- .../dts/allwinner/sun50i-h6-beelink-gs1.dts   |  2 +
- .../boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi | 88 +++++++++++++++++++
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  | 22 +++++
- arch/arm64/configs/defconfig                  |  1 +
- 4 files changed, 113 insertions(+)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
-
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index d5b2d2dd4904..109004e44d21 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -584,6 +584,7 @@ CONFIG_SENSORS_INA2XX=m
+ CONFIG_SENSORS_INA3221=m
+ CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
+ CONFIG_CPU_THERMAL=y
++CONFIG_DEVFREQ_THERMAL=y
+ CONFIG_THERMAL_EMULATION=y
+ CONFIG_IMX_SC_THERMAL=m
+ CONFIG_IMX8MM_THERMAL=m
 -- 
 2.34.1
 

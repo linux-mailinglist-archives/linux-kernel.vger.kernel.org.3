@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D016C59B59B
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 19:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF15159B59E
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 19:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiHURVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 13:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
+        id S231195AbiHURbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 13:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiHURVp (ORCPT
+        with ESMTP id S229491AbiHURbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 13:21:45 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2D6193D3
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 10:21:44 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id z187so8326114pfb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 10:21:44 -0700 (PDT)
+        Sun, 21 Aug 2022 13:31:09 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A13117A90;
+        Sun, 21 Aug 2022 10:31:06 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id a4so10675553wrq.1;
+        Sun, 21 Aug 2022 10:31:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=fl7PKJi3GOgL1+x5RqT6oZMi+wDpO4AP2SfnrI4ILyQ=;
-        b=yQ4GbyKKSjHfOuvO2bR4vUex8MAm55DE2+85ejBTB97eXYCHWI7XHz+55B9Hd9au5H
-         QSI52NaqISjSn7ho2gFjMXTiDIxjXun++0AKUCoK0269W48Y6FL/vhAjX3R0/2L3tfkQ
-         BX4BxYALmMQer6lHetooq+B47FBxMbIhoiNtPKgteR70TMVwEGGrdPbD3WZgz0+swnTq
-         xPahMi1r6jArK2FyT2Gfrwlv2pQH1Jo5Fka43rlNe3UAbzXMGO/igWtu4tfknKMKr1SM
-         pOhA56Xo+DZgYwZwFyGTl9w8Hl4ua+w3wdN6ecsSfWAElXExScEy4jooD07hHKhQUyid
-         Lkpw==
+        bh=pNG4G+DwLDhFmuP5MPNfWqVOnSu+/xUGuRdk4UBjqw0=;
+        b=UXcBNDkenBGwNMu/3GWsBnvB7gtkcR/JxOeG/pRsiyqsfKTPjhxvyRDOfPu3UmfOEP
+         Y7YiYC/2akv7mHHWzp6iMmL7UgceEiPP05sME56JiOaIzBKBGTSoVnuetmQTQNpYRLiD
+         uw7vq/8CHuZ/xGf/gOmZjIiTqqjXi+WekAjGGS76WcogkQZP2YgABg1uyt3wHEAQmT2z
+         feA/zBYL/PKLhDcuOV8JuVE5fhZ/b1A5+r9Gtpp82JebWyg9s0V9uAFeqDk81+uvgbFT
+         GAHUcueGKP5WZD4Plx7kN0q3zvD5Jy+K6/2jOiAAlM/RDJ35etsYJEYWPymK4X0fGEJe
+         mELw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=fl7PKJi3GOgL1+x5RqT6oZMi+wDpO4AP2SfnrI4ILyQ=;
-        b=twIF0PMw8uC/1pFPjPoSCXTPjnOE0xQ4lfYxplmXULoM9iGsfnYo4iOqtp+VrE+V/2
-         E5WX4vlm2/n39x3aCBhcSPeBM4lveAHKUjcnIu4pKPrYZFETIJij1cxTPT3ZA0x8HfbC
-         RiannZEx7ReG1P7kHnrXEPMmlS0bHT/IU9c9gl2yL9tQh56gVu7ECrEZqxPddcizAbG3
-         Nbpzpav8hCaNhof87Dh3YaX0KgOpygiA7+KDTMl11hUEK/gwX5lqPL3D555PhQBfPHZ7
-         buAvVNyE3Le9pBT3Mj/pgtC8WwU92XfDdKAbhGckxn9SM49/twZdUAjmIvPnXLfTOWmz
-         iaTw==
-X-Gm-Message-State: ACgBeo3GiRONXTygEN+D9Ub/rUueg0bb37eeyyzXizGABJJdK2gZdBm9
-        l/unnyNL2PIfOmsHQUgGwsEcGw==
-X-Google-Smtp-Source: AA6agR5GzyO0+yNf5fLNxJVUJTILIHIeMxhGrN4VBxDi17I9IdrsYy6C0Z/9QHrpPauxAeOveW3K3A==
-X-Received: by 2002:a63:2b4d:0:b0:41d:6d37:365 with SMTP id r74-20020a632b4d000000b0041d6d370365mr13952601pgr.325.1661102503842;
-        Sun, 21 Aug 2022 10:21:43 -0700 (PDT)
-Received: from C02GD5ZHMD6R.bytedance.net ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id h3-20020a62de03000000b0053639773ad8sm3665673pfg.119.2022.08.21.10.21.40
+        bh=pNG4G+DwLDhFmuP5MPNfWqVOnSu+/xUGuRdk4UBjqw0=;
+        b=H9LeU1i+fLrpAHYq95gAdRA0lVuMN8/bchWRG/ZvFa0OlfKAPlBmL9NpIQ2PS7fVh3
+         l3HGKGZgcnsFhy/ZY7qTcSO+pX8cdNOpHDXd/t9SDF5AJsB7DzAFegfEwtPtTbavFKtV
+         q3lY/B2fPupgAxFAMq/5Qvon176ekaX0o2refZaLxNWH5hcYyAXYPlBBxAsdoEzlHyIC
+         4zA4Fsnc4NWwQZ9kC+TPTQffKcv6RvFra/i9upQ6YdxLoLuCk4LoxwcgVAiB3ScrdgKv
+         w1b2cgn5C8jPAm9KJqWJIscgecuU/dRSMZFc67H/Cs3OOybJBEIAeFymBSOXbHyNZJWm
+         Fr6Q==
+X-Gm-Message-State: ACgBeo10WiPrb5Xp7KPem8MF6cKKwTxJ9nqcCQJv+a3htFNL9/MK2QHk
+        7ZLN66X6NBtvGFL9Jw1QUUk=
+X-Google-Smtp-Source: AA6agR6UjJd0cmOJ8JSdIgLww1DMnwTrCTIBW5LX94OLcDxq9nQQOzIHDtayKFKeiYBrrs8OYg6CzA==
+X-Received: by 2002:a05:6000:1f0a:b0:225:3bbd:c5e6 with SMTP id bv10-20020a0560001f0a00b002253bbdc5e6mr5703120wrb.126.1661103064463;
+        Sun, 21 Aug 2022 10:31:04 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:a77:3d70:9d84:ec8d:98d9:c29a])
+        by smtp.gmail.com with ESMTPSA id b18-20020adff912000000b00224f7c1328dsm9387205wrr.67.2022.08.21.10.31.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 10:21:43 -0700 (PDT)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinke Han <hanjinke.666@bytedance.com>
-Subject: [PATCH] ext4: do io submit when next to write page not continues
-Date:   Mon, 22 Aug 2022 01:21:26 +0800
-Message-Id: <20220821172126.45113-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Sun, 21 Aug 2022 10:31:03 -0700 (PDT)
+From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+Subject: [PATCH v2 0/4] Allwinner H6 GPU devfreq
+Date:   Sun, 21 Aug 2022 19:30:47 +0200
+Message-Id: <20220821173051.155038-1-peron.clem@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,47 +74,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinke Han <hanjinke.666@bytedance.com>
+Hi,
 
-In ext4_writepages, sometimes we leave the bio to next-to-write page for
-physic block merge. But if next page no longer continus, we'd better
-submit it immediately，
+This is a refresh of previous patches sent to enable GPU Devfreq on H6
+Beelink GS1 but that wasn't stable at that time[0].
 
-For extent inode, the chance of physic continue while logic block not
-continus is very small. If next to write page not coninus and unmapped,
-we may gather enough pages for extent and then do block allocation and
-mapping for it's extent. Then we try to merge to prev bio and get failed.
-For the prev bio, the waiting time is unnecessary.
+With the recent fix on GPU PLL from Roman Stratiienko I have retested
+and everything seems stable and works as expected.
 
-In that case, we have to flush the prev bio with holding all page locks
-of the extent. The submit_bio may be blocked by wbt or getting request
-which may take a while. Users also may be waiting for these page locks.
+Regards,
+Clement
 
-In fast do_map=0 mode, we also end this not much hope waiting soon and
-submit it without any page lock.
+0: https://lore.kernel.org/lkml/CAJiuCce58Gaxf_Qg2cnMwvOgUqYU__eKb3MDX1Fe_+47htg2bA@mail.gmail.com/
+1: https://lore.kernel.org/linux-arm-kernel/2562485.k3LOHGUjKi@kista/T/
 
-Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
----
- fs/ext4/inode.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Changes since v1:
+ - proper sign-off with my personal email
+ - sent serie to SoC Maintainer w/ cover letter
 
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 601214453c3a..2f7786c459c9 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -2608,6 +2608,12 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
- 			if (mpd->map.m_len > 0 && mpd->next_page != page->index)
- 				goto out;
- 
-+			/* Submit bio when page no longer continus and
-+			 * do it before taking other page's lock
-+			 */
-+			if (mpd->next_page != page->index && mpd->io_submit.io_bio)
-+				ext4_io_submit(&mpd->io_submit);
-+
- 			lock_page(page);
- 			/*
- 			 * If the page is no longer dirty, or its mapping no
+Clément Péron (4):
+  arm64: defconfig: Enable devfreq cooling device
+  arm64: dts: allwinner: h6: Add cooling map for GPU
+  arm64: dts: allwinner: h6: Add GPU OPP table
+  arm64: dts: allwinner: beelink-gs1: Enable GPU OPP
+
+ .../dts/allwinner/sun50i-h6-beelink-gs1.dts   |  2 +
+ .../boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi | 88 +++++++++++++++++++
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  | 22 +++++
+ arch/arm64/configs/defconfig                  |  1 +
+ 4 files changed, 113 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
+
 -- 
-2.20.1
+2.34.1
 

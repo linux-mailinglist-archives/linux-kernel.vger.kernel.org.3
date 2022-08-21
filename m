@@ -2,98 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0ACC59B30B
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 12:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CD859B312
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 12:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiHUKHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 06:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49104 "EHLO
+        id S230151AbiHUKLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 06:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiHUKHq (ORCPT
+        with ESMTP id S229436AbiHUKLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 06:07:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2204E26AF3;
-        Sun, 21 Aug 2022 03:07:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF21C60DEF;
-        Sun, 21 Aug 2022 10:07:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4990AC433C1;
-        Sun, 21 Aug 2022 10:07:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661076464;
-        bh=OswnZdvDgD55twhUiC3jfLmaXEs8tbfXHaC261uOFEo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rc2SkzienB0g8AoK+ZkpUsz6WwhvQ3G5h22vrGmMT4RUkhP69GRvfQoyyNeMbkkb5
-         hTuWeyq2ZgoJfs9z50zuAOIfcXPm//KFLCFWh5z++9kLAO4sFhR9Yn06M+kIlIACpj
-         Yne4FutbNvxI68mWLdnSq4bd8cQUCW9D1CeVC7CA=
-Date:   Sun, 21 Aug 2022 12:07:53 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH V2] tty: serial: lpuart: disable flow control while
- waiting for the transmit engine to complete
-Message-ID: <YwID+aTN+wptFdKa@kroah.com>
-References: <20220804070420.32186-1-sherry.sun@nxp.com>
- <YwHvAsOmMaa6rmm0@kroah.com>
- <DB9PR04MB84110E4B09CC05573584724F926E9@DB9PR04MB8411.eurprd04.prod.outlook.com>
+        Sun, 21 Aug 2022 06:11:51 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9286FFD3E;
+        Sun, 21 Aug 2022 03:11:49 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id ce26so476817ejb.11;
+        Sun, 21 Aug 2022 03:11:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=8ith3DKWqelfwAhl4fXB2Zj3+XrRanGIkq2gbaZNWZg=;
+        b=BVQpXwpBZgmCcpri72t9UYGSUWNIWbGX+mvKI914QY8tRVzJe+eeIW6Qh/v466eoXH
+         fqtZ9qkt9kzrgFQw4vvsffJYWvxDWABGWdj72gGBl+UQVV0nFx/FqLnPInnnqSkwvZiz
+         QAx3e/fFprENPZEkS4XD1h1f1dkIll6fgX8OBhc6HyYzEUEfBsScjnLGiqwELqIQJfdE
+         CXpkfkItL/NTWXet387ZBCBynIWBmmn5KciXvLRb/KXwolyGql54ceQ8n2zKycvV0r3S
+         RNr8UB6ykcmIvdBDzec7uUOA0eGooPOq6M9o5dvWGS520weyqQRDNqRik0CYBOTV/P1m
+         j0ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=8ith3DKWqelfwAhl4fXB2Zj3+XrRanGIkq2gbaZNWZg=;
+        b=6VsinoZI2o3WE51q0ZzibGqafmGtJq02mwLNQywbJm+VUjt0yNrScWZcsyDsOfvoWj
+         j6ix5Nd+cLmbxPaltGMe7etCbXNKy0hVA02ln0UgNxX17og17Y4Ct3RcXrHnH82TkUXW
+         0Nvxk1BBsgyWfiQcN4ISJx3z6A/1jciNY+w1pUhonzpstzTHwXW+uen/TbvIkRGfzxgG
+         H3W73OFfjBLHy7Fs4faqSX5ZbkpdGQW+1WjbRvkU/3afnqh5Ya08hHZSZVdGzrV9k5ze
+         Qrn1wqWhq251bQeMvptyjUCDRgKY5iu+rBABkTcYUnh/idVEWuY4x0mmQVrGaPvbU8vS
+         hKvQ==
+X-Gm-Message-State: ACgBeo04Z8gv5Oi5EtlvtKCDP1zBTIIJap2BnkK7JO02zg9BaX0b8Kqr
+        nDuwggEs0jxr1VBDmom0xLc=
+X-Google-Smtp-Source: AA6agR4kTu9YlV5YYbUUlwVhkyNFi6XbWVbAuGGc7J+qELenLCeL3rXs3jHQa/zJy5NHEabc6B1vAQ==
+X-Received: by 2002:a17:907:288a:b0:730:7f77:9550 with SMTP id em10-20020a170907288a00b007307f779550mr9534282ejc.216.1661076708009;
+        Sun, 21 Aug 2022 03:11:48 -0700 (PDT)
+Received: from gmail.com (195-38-113-151.pool.digikabel.hu. [195.38.113.151])
+        by smtp.gmail.com with ESMTPSA id j15-20020aa7c0cf000000b0043bbc9503ddsm6251027edp.76.2022.08.21.03.11.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 03:11:47 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sun, 21 Aug 2022 12:11:45 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+        kvm@vger.kernel.org, llvm@lists.linux.dev,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Borislav Petkov <bp@suse.de>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH v2] asm goto: eradicate CC_HAS_ASM_GOTO
+Message-ID: <YwIE4WDJXWK/LOR6@gmail.com>
+References: <CAADnVQJFc9AnH_9CW+bSRotkKvOmkO9jq-RF6dmyPYOpq691Yg@mail.gmail.com>
+ <20220819190640.2763586-1-ndesaulniers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DB9PR04MB84110E4B09CC05573584724F926E9@DB9PR04MB8411.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220819190640.2763586-1-ndesaulniers@google.com>
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 10:01:45AM +0000, Sherry Sun wrote:
-> > On Thu, Aug 04, 2022 at 03:04:20PM +0800, Sherry Sun wrote:
-> > > When the user initializes the uart port, and waits for the transmit
-> > > engine to complete in lpuart32_set_termios(), if the UART TX fifo has
-> > > dirty data and the UARTMODIR enable the flow control, the TX fifo may
-> > > never be empty. So here we should disable the flow control first to
-> > > make sure the transmit engin can complete.
-> > >
-> > > Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> > > ---
-> > > Changes in V2:
-> > > 1. Rephrase the commit log as suggested by Jiri.
-> > > ---
-> > >  drivers/tty/serial/fsl_lpuart.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/drivers/tty/serial/fsl_lpuart.c
-> > > b/drivers/tty/serial/fsl_lpuart.c index fc7d235a1e27..f0fccd2ff7ac
-> > > 100644
-> > > --- a/drivers/tty/serial/fsl_lpuart.c
-> > > +++ b/drivers/tty/serial/fsl_lpuart.c
-> > > @@ -2172,6 +2172,7 @@ lpuart32_set_termios(struct uart_port *port,
-> > struct ktermios *termios,
-> > >  	uart_update_timeout(port, termios->c_cflag, baud);
-> > >
-> > >  	/* wait transmit engin complete */
-> > > +	lpuart32_write(&sport->port, 0, UARTMODIR);
-> > >  	lpuart32_wait_bit_set(&sport->port, UARTSTAT, UARTSTAT_TC);
-> > >
-> > >  	/* disable transmit and receive */
-> > > --
-> > > 2.17.1
-> > 
-> > What commit id does this fix?  Should it be backported to older stable kernels?
-> 
-> This issue existed when the lpuart32_set_termios() was introduced. So the Fixes tag should be:
-> Fixes: 380c966c093e ("tty: serial: fsl_lpuart: add 32-bit register interface support"), and I believe it can be backported to the older stable kernels.
-> 
-> Should I send a V2 patch to add the Fixes tag?
 
-Yes please.
+* Nick Desaulniers <ndesaulniers@google.com> wrote:
+
+> GCC has supported asm goto since 4.5, and Clang has since version 9.0.0.
+> The minimum supported versions of these tools for the build according to
+> Documentation/process/changes.rst are 5.1 and 11.0.0 respectively.
+> 
+> Remove the feature detection script, Kconfig option, and clean up some
+> fallback code that is no longer supported.
+> 
+> The removed script was also testing for a GCC specific bug that was
+> fixed in the 4.7 release.
+> 
+> Also remove workarounds for bpftrace using clang older than 9.0.0, since
+> other BPF backend fixes are required at this point.
+> 
+> Link: https://lore.kernel.org/lkml/CAK7LNATSr=BXKfkdW8f-H5VT_w=xBpT2ZQcZ7rm6JfkdE+QnmA@mail.gmail.com/
+> Link: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48637
+> Acked-by: Borislav Petkov <bp@suse.de>
+> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+
+Reviewed-by: Ingo Molnar <mingo@kernel.org>
+
+Good riddance.
+
+Thanks,
+
+	Ingo

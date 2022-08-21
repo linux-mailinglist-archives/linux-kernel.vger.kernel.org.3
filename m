@@ -2,155 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF88F59B169
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 05:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D8859B176
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 05:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232637AbiHUDYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 23:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        id S231214AbiHUDhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 23:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbiHUDYc (ORCPT
+        with ESMTP id S229451AbiHUDhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 23:24:32 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6A7183AB
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 20:24:27 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id h8-20020a92c268000000b002e95299cff0so3212828ild.23
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 20:24:27 -0700 (PDT)
+        Sat, 20 Aug 2022 23:37:17 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD171A3AE
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 20:37:16 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id bh13so6686797pgb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 20:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc;
+        bh=7Cy38S/v14iSpfXg6lDZSkM0E5IwTzepWgNPaT88xr4=;
+        b=VZ+2EywCChAz0b+LK+wDm+d7YZhQpYUKC44xZiVQP3hzAXySgncNOpQfBQiZbWCguW
+         wzqwRQ7os/YAujuV+OKY+mug0T/BtYdJ6xhV3kEKE8oO3tgi6cW3HRMTPC3bHWxxa5l5
+         CuALZ+PQuVJ15I/t2NU0Zc+hW8oLrGYP6LgTCPOcrRQlLGNgli4HhLZeUXVZ7b9DRTpA
+         OxZdIvydhyov+NPKud8TTJJyYZo1CKiawAzguMINa/VgaBqoBRoyP8pohp94xW+OwJD1
+         vbtnAI6cnLcsxXqntqFpziWm4mgUJMf13exHNM3MIFGs6riV+ZYi+aWxbUmruM6Kt4ol
+         MxBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=yfbJcT7D4/A2Z/fy65K2GDMT1ViLIu5kwjvnoEqsULc=;
-        b=Q4Oa+VvJTWEcsiacZ3A1mKSmeI4pGLiz/w996jYnZMpOf9LsR+X6B/gkGKqz9JvVU0
-         dW8mj7eg7JY/WluMPyXofYI3thezaDwse5fX51Ziao6/cYzO3sdJutjenEV8EzqwShDl
-         waOyYdoXmWK7tuxawrcXpCcuxJEuyXWgav2KKlweEoMa79G5Uf8ElYTTyuAa/9omyiK6
-         cpq8ocGt8Xu1XkCoRx0xiLvaJrWARUIE1RtK8tlRlNeimHwJqRLdAhD3kkfDLJMn+DPw
-         SjGFXuQq0zj0SAMxrVAR+AphSWIaAaVghSTTzzEQKrOju34OJDxHvURMCvAk078oKifA
-         ukSQ==
-X-Gm-Message-State: ACgBeo1P2Ax/N/NKL1fgD1gM8bUtSM2LekLvpNm5AdJnMUWClsSimAcs
-        WB37Haz35v74z7YF69akL6xklP0EJsMZuryF6Ym8U6Cmr9jB
-X-Google-Smtp-Source: AA6agR6hyk9yiv9C5y/7TcogVYYbCoTEeA6dQypsbDn9e+AE9hm5E0Jembrw+bp89zghNjnRTQWLr5QyqUOIsPAixyrKC6IimIKm
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=7Cy38S/v14iSpfXg6lDZSkM0E5IwTzepWgNPaT88xr4=;
+        b=LEdePmn3/LVxpTuYeiftz6e6+Zr3UWvl3Qx4bkQrSJ5MdV2J02qb/fZRVO7Sh1L/dI
+         v7u8+8bbQ9S0Syzhr6ttOpCMdD7yJQuW3e0Gwdpdo0ByUxu8uvxYaBJvZnIwKE/Bc2gj
+         20VsudTGQl5HxrVH9fj/coHDfDOho1P2RkBZVxHE7R06kboBT2m4B6IKHCw06b/NMHij
+         PhhSfKcMUvySMQ6UgfoCRE8d0euwLAeFsgswWWe8z3wMXFE19i6C/oTgLmniieIq28OG
+         YOxMjGdb0HaA7oMtWUxbJpoZCKosFIFZv/R6200NJ/9cmwN3DCJCrH2aTwfhavVcleuE
+         WLKw==
+X-Gm-Message-State: ACgBeo2RGdXnIqJSgZIeJ8STIrNYUpC7p4V5BEYSeVFL/x3lnQ88zZqJ
+        LJe7p1uVGMPWA2kVQDIaYLAb1c93QJYVezekQjc=
+X-Google-Smtp-Source: AA6agR69LRhiQUL8xm9Nr4LnlQ02o1LiihaU6rNGrLJ5hxbGA9LvgwXReklCJX2IrHhzgouA4hEZCWHUlvONU7/nKw0=
+X-Received: by 2002:a63:1c64:0:b0:429:9ceb:57e with SMTP id
+ c36-20020a631c64000000b004299ceb057emr11820963pgm.429.1661053036205; Sat, 20
+ Aug 2022 20:37:16 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:4192:b0:684:6256:e892 with SMTP id
- bx18-20020a056602419200b006846256e892mr5995359iob.89.1661052266492; Sat, 20
- Aug 2022 20:24:26 -0700 (PDT)
-Date:   Sat, 20 Aug 2022 20:24:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004c3b1405e6b7de26@google.com>
-Subject: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in blk_mq_map_swqueue
-From:   syzbot <syzbot+ea55456e1ff28ef7f9ff@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com
+Sender: mrs.carolineedward@gmail.com
+Received: by 2002:a05:7301:3714:b0:72:aa92:d367 with HTTP; Sat, 20 Aug 2022
+ 20:37:15 -0700 (PDT)
+From:   CAROLINE EDWARD <gencarolineedward360@gmail.com>
+Date:   Sun, 21 Aug 2022 03:37:15 +0000
+X-Google-Sender-Auth: ShtJvg2h0GYMwsk75LNoLM0CXjo
+Message-ID: <CAFGwH=mt66LKt46j9_Ehywmfh4Sj+0jRF39on9A-C1nSun6h+A@mail.gmail.com>
+Subject: Good day,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        MONEY_FRAUD_5,NA_DOLLARS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:534 listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.9341]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [gencarolineedward360[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  1.0 NA_DOLLARS BODY: Talks about a million North American dollars
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  2.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Good day,
 
-syzbot found the following issue on:
+Am Caroline Edward, a staff general in the US Army presently serving
+in Syria as a combat instructor, I sincerely apologize for intruding
+into your privacy, this might come as a surprise to you, but nothing
+is more distressing to me at this time as i find myself forced by
+events beyond my control, i have summoned courage to contact you. I am
+a 45 years old lady, I am a widow and I have a son who is now 16 years
+of age.
 
-HEAD commit:    3cc40a443a04 Merge tag 'nios2_fixes_v6.0' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13cf3c7b080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f267ed4fb258122a
-dashboard link: https://syzkaller.appspot.com/bug?extid=ea55456e1ff28ef7f9ff
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+Some money in various currencies where discovered in barrels at a farm
+house in the middle East during a rescue operation in Iraq War,and it
+was agreed by Staff Sergeant Kenneth Buff and myself that some part of
+these money be shared between both of us, I was given a total of ($5
+Million US Dollars) as my own share , I kept this money in a
+consignment for a long while with a security Company which i declared
+and deposit as my personal effects and it has been secured and
+protected for years now with the diplomatic Delivery Service.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ea55456e1ff28ef7f9ff@syzkaller.appspotmail.com
+Now, the WAR in Iraq is over, and all possible problems that could
+have emanated from the shared money has been totally cleaned up and
+all file closed, all what was discovered in the Middle East is no more
+discussed, am now ready to retire from active services by the end of
+this month, but, i need a trustworthy person that can help me take
+possession of this funds and keep it safe while i work on my relief
+letters to join you so that we could discuss possible business
+partnership together with the money.
 
-scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
-BUG: unable to handle page fault for address: ffffdc0000000000
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 12026067 
-P4D 12026067 PUD 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Workqueue: events_unbound async_run_entry_fn
-RIP: 0010:blk_mq_map_swqueue+0xa86/0x1630 block/blk-mq.c:3722
-Code: 00 00 fc ff df 43 0f b6 04 37 84 c0 0f 85 49 02 00 00 41 0f b7 45 00 8d 48 01 66 41 89 4d 00 48 8d 1c c3 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 4c 8b 7c 24 68 74 08 48 89 df e8 36 7b c1 fd 48 8b
-RSP: 0000:ffffc90000b77380 EFLAGS: 00010a06
-RAX: 1fffe00000000000 RBX: ffff000000000000 RCX: 0000000000000001
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: ffffc90000b774f0 R08: ffffffff841bbbaa R09: ffffed1004143326
-R10: ffffed1004143326 R11: 1ffff11004143325 R12: dffffc0000000000
-R13: ffff888020a1998e R14: dffffc0000000000 R15: 1ffff11004143331
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdc0000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- blk_mq_init_allocated_queue+0x1a31/0x1c20 block/blk-mq.c:4119
- blk_mq_init_queue_data block/blk-mq.c:3908 [inline]
- blk_mq_init_queue+0x9f/0x120 block/blk-mq.c:3918
- scsi_alloc_sdev+0x697/0x9d0 drivers/scsi/scsi_scan.c:335
- scsi_probe_and_add_lun+0x1d1/0x4ab0 drivers/scsi/scsi_scan.c:1191
- __scsi_scan_target+0x1fb/0x10e0 drivers/scsi/scsi_scan.c:1673
- scsi_scan_channel drivers/scsi/scsi_scan.c:1761 [inline]
- scsi_scan_host_selected+0x394/0x6c0 drivers/scsi/scsi_scan.c:1790
- do_scsi_scan_host drivers/scsi/scsi_scan.c:1929 [inline]
- do_scan_async+0x12e/0x7b0 drivers/scsi/scsi_scan.c:1939
- async_run_entry_fn+0xa6/0x400 kernel/async.c:127
- process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30
- </TASK>
-Modules linked in:
-CR2: ffffdc0000000000
----[ end trace 0000000000000000 ]---
-RIP: 0010:blk_mq_map_swqueue+0xa86/0x1630 block/blk-mq.c:3722
-Code: 00 00 fc ff df 43 0f b6 04 37 84 c0 0f 85 49 02 00 00 41 0f b7 45 00 8d 48 01 66 41 89 4d 00 48 8d 1c c3 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 4c 8b 7c 24 68 74 08 48 89 df e8 36 7b c1 fd 48 8b
-RSP: 0000:ffffc90000b77380 EFLAGS: 00010a06
-RAX: 1fffe00000000000 RBX: ffff000000000000 RCX: 0000000000000001
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: ffffc90000b774f0 R08: ffffffff841bbbaa R09: ffffed1004143326
-R10: ffffed1004143326 R11: 1ffff11004143325 R12: dffffc0000000000
-R13: ffff888020a1998e R14: dffffc0000000000 R15: 1ffff11004143331
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdc0000000000 CR3: 000000000ca8e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 5 bytes skipped:
-   0:	43 0f b6 04 37       	movzbl (%r15,%r14,1),%eax
-   5:	84 c0                	test   %al,%al
-   7:	0f 85 49 02 00 00    	jne    0x256
-   d:	41 0f b7 45 00       	movzwl 0x0(%r13),%eax
-  12:	8d 48 01             	lea    0x1(%rax),%ecx
-  15:	66 41 89 4d 00       	mov    %cx,0x0(%r13)
-  1a:	48 8d 1c c3          	lea    (%rbx,%rax,8),%rbx
-  1e:	48 89 d8             	mov    %rbx,%rax
-  21:	48 c1 e8 03          	shr    $0x3,%rax
-* 25:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
-  2a:	4c 8b 7c 24 68       	mov    0x68(%rsp),%r15
-  2f:	74 08                	je     0x39
-  31:	48 89 df             	mov    %rbx,%rdi
-  34:	e8 36 7b c1 fd       	callq  0xfdc17b6f
-  39:	48                   	rex.W
-  3a:	8b                   	.byte 0x8b
+But I tell you what! No compensation can make up for the risk we are
+taken with our lives.You can confirm the genuineness of the findings
+by clicking on this web
+site:http://news.bbc.co.uk/2/hi/middle_east/2988455.stm
 
+I=E2=80=99m seeking your kind assistance to move the sum of US$5 Million
+Dollars to you as far as I can be assured that the money will be safe
+in your care until I  complete my service here in (SYRIA). The most
+important thing is; =E2=80=9CCan I Trust you=E2=80=9D?,As an officer on ACT=
+IVE DUTY am
+not allowed access to money, therefore, i have declared the content of
+the consignment as personal effect that i would like to be delivered
+to a friend. You will be rewarded with 30% of this funds for your
+help, all that is required is your trust between us till the money
+gets to you.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Sincerely,
+Gen. Caroline Edward.

@@ -2,86 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAB259B651
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 22:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CCF59B656
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 22:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiHUUex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 16:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
+        id S231734AbiHUUh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 16:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbiHUUeu (ORCPT
+        with ESMTP id S229541AbiHUUhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 16:34:50 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CC038AD;
-        Sun, 21 Aug 2022 13:34:48 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id z2so11557867edc.1;
-        Sun, 21 Aug 2022 13:34:48 -0700 (PDT)
+        Sun, 21 Aug 2022 16:37:24 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B258F1F60D;
+        Sun, 21 Aug 2022 13:37:23 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id s1so9941174lfp.6;
+        Sun, 21 Aug 2022 13:37:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=u0xBB4WUkDL1tOr4RrTmkzbO/MXDWUk8RIDFwSxLKdI=;
-        b=J/fpXmPtE5zJsfd66953UehJQLpxnFOnksELk8lhmNdj+8tDj+gLaagjzblKtntrdm
-         62Jr0ApVttBDxEiMuNkOUS02xDAzgKPYK5xZS6g3TkrOgbT9BDGSQlbNAogfO19ii77S
-         3lkrBmuYSCOsKxYDDg91JRuOIYxD9IyjsRioxB/GXn7jR9jewPXIkw1LRhjIjNcA+ExA
-         +r0IHy5Y1MPFRNoaN7PcSvv98uEWAg5D7x0UpwcbYvB1eidQazaJv5w8DCpD8pCdg7GZ
-         3IXoCtRb/qDOweuMdIpr8GaoRxk9uh6mtDr4mJMLk2/Eq9m00eSPiw22pmgfUeAeIq+4
-         7LRA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=Kyxqc5rAoGnqJE9WElx6EBMV8xqTT9IMMo5wUGHftok=;
+        b=Dh0wHSuPepRN05VF69M8apwh8NLGTSQ0rj+C/rKBVw0IFpwC/l6DdaykrHcU/GFVK3
+         j65op7R8+6uvo6xt6Hm+hLsbYWROiF69cK9jmg3p8MmDiL8Blk+0EdT8RbEyggVeOzBc
+         E2QsKkaKWDt1JPAsZ0gGBXgaqegBUQGrfiZMgTjVaVZOhhFaDQb3++pDcQlEvl7am52g
+         8E6BWjV+Gw0ldKKbOgvYlTmuD9T1/4Ci/JB85yxkUXh/xufOFYBgrBSHT/oyyeXslpji
+         F8UqfqqExfmA69cRW0nQRkii+2MeQCh28QX7vRrFow1xOw4ZvwWwfp9pNniBFtlAYFBl
+         s8zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=u0xBB4WUkDL1tOr4RrTmkzbO/MXDWUk8RIDFwSxLKdI=;
-        b=FKHMdlCnTzvu2N8XF9dlN2BGMuLm0WOGFUkFhsK2W7ncdnn4COvhv+mDWB8BCaZFtq
-         uw/TGuMV/oLeAnvejz9txC5uCXjvu7epDB2xLNcDHt7uCU3QbD4iHErsqpqfiQq3aB8D
-         fVN5lQGKkxtzhXo/CmUzUk7lG4qVZaKLrDYt2rOLQwrIdhGhk/Y5V7tshO3hbRErd+uN
-         H8tzAjQkgmVY9OcCrRW6VL74bUpyLSL1d00UWmk9efsLQVdgXPpU10ETUoUXfwvjMr06
-         e9Qxp+CwNlo/G9T2vYxnc2Oje0yXfgvJlZRU5RGDgk0KWJ28udMcqZ2yWuuELygLN/Xm
-         GSYA==
-X-Gm-Message-State: ACgBeo29MkFD++UXsq1mNVfC4k6f/eH49+vK5+ZnVQ8ECpRNnjF38oUX
-        Whe+i+BKMRSusybmq3Dq4mE=
-X-Google-Smtp-Source: AA6agR5Ng4qXqJJwNoXQ/uWqgJ1Nfyzc4aQQhyGalR3Xvf9QRBPmhj+GA1FiqHKO8+6D/1PyJy/Q+Q==
-X-Received: by 2002:a05:6402:4496:b0:446:9708:5e12 with SMTP id er22-20020a056402449600b0044697085e12mr4114619edb.165.1661114086858;
-        Sun, 21 Aug 2022 13:34:46 -0700 (PDT)
-Received: from ?IPV6:2a04:241e:502:a09c:4f96:3eb5:9f0e:290e? ([2a04:241e:502:a09c:4f96:3eb5:9f0e:290e])
-        by smtp.gmail.com with ESMTPSA id p7-20020a170906b20700b0073d706ac66csm1666322ejz.46.2022.08.21.13.34.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Aug 2022 13:34:46 -0700 (PDT)
-Message-ID: <fc05893d-7733-1426-3b12-7ba60ef2698f@gmail.com>
-Date:   Sun, 21 Aug 2022 23:34:44 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Kyxqc5rAoGnqJE9WElx6EBMV8xqTT9IMMo5wUGHftok=;
+        b=s2sjVdoDWpCIur57YRum23vVBmCg3fzHvGVuPrJ2fitS0nDcg82dCzj23mB6EsoslP
+         N0ftrc9SKaYm19uME2Hiq/Y1gvkqRUZ91vVmGv53WT/vOs6Gfwc6H+7U5hQ0/MTfB/qL
+         BPG4JtWo33LbmxG8mudboTXlAzGGx1p1tUT821VmCHqdJC0VinI0pFZyLIgcknjzn9US
+         lN0ck9bG9eTNauc5FjihPhYxbhGS63+8FUrPkCQKhwkU2PX4dloMNmTu08fhGJgMjY5N
+         eG/T/d0Eu1yx1jn/erV1KL7Foc30UW4wffgKBV+HKtijberAZR0XTHrVWJiwNAKegDfw
+         xPxA==
+X-Gm-Message-State: ACgBeo1zt3CAxZEooxEcPTQWANn5zu0uadfgXTZcF8qLJ51NI6DYx3Ue
+        ZeMsCvU76rZQqTKUx45Eai9qmffLdtLK1w==
+X-Google-Smtp-Source: AA6agR5VwSaYfHoh8jG3iAVAoEI5L/BpK4p7fvqv4IoaMtYGPgIHW0+SlQrUQ568FJAEHINaPrh7ZQ==
+X-Received: by 2002:ac2:50cf:0:b0:48a:f4ef:788b with SMTP id h15-20020ac250cf000000b0048af4ef788bmr5731853lfm.527.1661114241945;
+        Sun, 21 Aug 2022 13:37:21 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id x2-20020ac25dc2000000b0047dace7c7e5sm1606422lfq.212.2022.08.21.13.37.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 13:37:21 -0700 (PDT)
+Date:   Sun, 21 Aug 2022 23:37:19 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
+        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
+        ben.dooks@sifive.com, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jeegar.lakhani@sifive.com
+Subject: Re: [PATCH 00/11] Add support for enhanced SPI for Designware SPI
+ controllers
+Message-ID: <20220821203719.gxjxo24stzcf3a2x@mobilestation>
+References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 00/31] net/tcp: Add TCP-AO support
-Content-Language: en-US
-To:     Dmitry Safonov <dima@arista.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220818170005.747015-1-dima@arista.com>
-From:   Leonard Crestez <cdleonard@gmail.com>
-In-Reply-To: <20220818170005.747015-1-dima@arista.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,79 +76,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/22 19:59, Dmitry Safonov wrote:
-> This patchset implements the TCP-AO option as described in RFC5925. There
-> is a request from industry to move away from TCP-MD5SIG and it seems the time
-> is right to have a TCP-AO upstreamed. This TCP option is meant to replace
-> the TCP MD5 option and address its shortcomings. Specifically, it provides
-> more secure hashing, key rotation and support for long-lived connections
-> (see the summary of TCP-AO advantages over TCP-MD5 in (1.3) of RFC5925).
-> The patch series starts with six patches that are not specific to TCP-AO
-> but implement a general crypto facility that we thought is useful
-> to eliminate code duplication between TCP-MD5SIG and TCP-AO as well as other
-> crypto users. These six patches are being submitted separately in
-> a different patchset [1]. Including them here will show better the gain
-> in code sharing. Next are 18 patches that implement the actual TCP-AO option,
-> followed by patches implementing selftests.
+Hi Sudip
+
+On Tue, Aug 02, 2022 at 06:57:44PM +0100, Sudip Mukherjee wrote:
+> Some Synopsys SSI controllers support enhanced SPI which includes
+> Dual mode, Quad mode and Octal mode. DWC_ssi includes clock stretching
+> feature in enhanced SPI modes which can be used to prevent FIFO underflow
+> and overflow conditions while transmitting or receiving the data respectively.
+> This is only tested on controller version 1.03a.
 > 
-> The patch set was written as a collaboration of three authors (in alphabetical
-> order): Dmitry Safonov, Francesco Ruggeri and Salam Noureddine. Additional
-> credits should be given to Prasad Koya, who was involved in early prototyping
-> a few years back. There is also a separate submission done by Leonard Crestez
-> whom we thank for his efforts getting an implementation of RFC5925 submitted
-> for review upstream [2]. This is an independent implementation that makes
-> different design decisions.
+> Ben Dooks (1):
+>   spi: dw-apb-ssi: add generic 1.03a version
+> 
+> Sudip Mukherjee (10):
+>   spi: dw: define capability for enhanced spi
+>   spi: dw: add check for support of dual/quad/octal
+>   spi: dw: define spi_frf for dual/quad/octal modes
+>   spi: dw: use TMOD_RO to read in enhanced spi modes
+>   spi: dw: define SPI_CTRLR0 register and its fields
+>   spi: dw: update SPI_CTRLR0 register
+>   spi: dw: update NDF while writing in enhanced spi mode
+>   spi: dw: update buffer for enhanced spi mode
+>   spi: dw: prepare the transfer routine for enhanced mode
+>   spi: dw: initialize dwc-ssi-1.03a controller
 
-Is this based on something that Arista has had running for a while now 
-or is a recent new development?
+Thanks for the very useful series. I've started reviewing it and will
+share all my comments tomorrow.
 
-> For example, we chose a similar design to the TCP-MD5SIG implementation and
-> used setsockopt()s to program per-socket keys, avoiding the extra complexity
-> of managing a centralized key database in the kernel. A centralized database
-> in the kernel has dubious benefits since it doesn’t eliminate per-socket
-> setsockopts needed to specify which sockets need TCP-AO and what are the
-> currently preferred keys. It also complicates traffic key caching and
-> preventing deletion of in-use keys.
+-Sergey
 
-My implementation started with per-socket lists but switched to a global 
-list because this way is much easier to manage from userspace. In 
-practice userspace apps will want to ensure that all sockets use the 
-same set of keys anyway.
-
-> In this implementation, a centralized database of keys can be thought of
-> as living in user space and user applications would have to program those
-> keys on matching sockets. On the server side, the user application programs
-> keys (MKTS in TCP-AO nomenclature) on the listening socket for all peers that
-> are expected to connect. Prefix matching on the peer address is supported.
-> When a peer issues a successful connect, all the MKTs matching the IP address
-> of the peer are copied to the newly created socket. On the active side,
-> when a connect() is issued all MKTs that do not match the peer are deleted
-> from the socket since they will never match the peer. This implementation
-> uses three setsockopt()s for adding, deleting and modifying keys on a socket.
-> All three setsockopt()s have extensive sanity checks that prevent
-> inconsistencies in the keys on a given socket. A getsockopt() is provided
-> to get key information from any given socket.
-
-My series doesn't try to prevent inconsistencies inside the key lists 
-because it's not clear that the kernel should prevent userspace from 
-shooting itself in the foot. Worst case is connection failure on 
-misconfiguration which seems fine.
-
-The RFC doesn't specify in detail how key management is to be performed, 
-for example if two valid keys are available it doesn't mention which one 
-should be used. Some guidance is found in RFC8177 but again not very much.
-
-I implemented an ABI that can be used by userspace for RFC8177-style key 
-management and asked for feedback but received very little. If you had 
-come with a clear ABI proposal I would have tried to implement it.
-
-Here's a link to our older discussion:
-
-https://lore.kernel.org/netdev/e7f0449a-2bad-99ad-4737-016a0e6b8b84@gmail.com/
-
-Seeing an entirely distinct unrelated implementation is very unexpected. 
-What made you do this?
-
---
-Regards,
-Leonard
+> 
+>  .../bindings/spi/snps,dw-apb-ssi.yaml         |   1 +
+>  drivers/spi/spi-dw-core.c                     | 288 ++++++++++++++++--
+>  drivers/spi/spi-dw-mmio.c                     |  10 +
+>  drivers/spi/spi-dw.h                          |  19 ++
+>  4 files changed, 291 insertions(+), 27 deletions(-)
+> 
+> -- 
+> 2.30.2
+> 

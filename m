@@ -2,109 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2C459B61F
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 21:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A66959B623
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 21:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbiHUTSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 15:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
+        id S231315AbiHUTZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 15:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiHUTSH (ORCPT
+        with ESMTP id S231483AbiHUTZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 15:18:07 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E581CFCF;
-        Sun, 21 Aug 2022 12:18:06 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 12so7661876pga.1;
-        Sun, 21 Aug 2022 12:18:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=g4Jq3jLthELbJHukRc3Iv/BvScPnTFSVj9j7skCzo1c=;
-        b=kDU2UU5SlgmthEgn6AtfuD9P27Zu6gu7yy3Cr/bPAD5vrFnOsb6gEBqVTevTlfFmVa
-         FUbXWqT2/iWfzzIEzqSEvbkhwpkX1mvPiUblcOyvZ97u4FTJ8zBf95ylVpVMSUc4aStq
-         WdIiD5JKfvIV+Nsbnk+0v+ZtqT9a1ef3ceHZ25LnxU29ixiWYa+qRJWAsJCoD7szCzdk
-         Ht3ee/SzTjB+gUwiofg6iNOPClmm2V0IH2sAP8NbP7hqKC7mmOC964vkTk0YZUTkxY3Q
-         gRgrj4dZ21G6NTA54wS9d1DwsV9a7wMXg1VFlUbz1JliGRAX9/QcYiszo6ExeA/0u4wv
-         o7xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=g4Jq3jLthELbJHukRc3Iv/BvScPnTFSVj9j7skCzo1c=;
-        b=V83bQe69LIBhF/UrniBYmaTk+QfBN57Bls35xkv2e3SGMT2akRIENlAiZVB1d1Zm6F
-         FcT+FTIwwSyOt2fVR57q9isIdcHSRsSgTujY2IMLyMScgB7SG6K4sS7OLoJWmofw/yQl
-         DmQInESL0pX2yeXbZOpv7nlU11JXAdL91tiRvikef/v2y8pwyhyq/PtWRc4xOSVWvzyO
-         jNbtLtqnuaqyPx7UyNiW71Oi2GHkRQdgAgPN6u7oifPnl3aFT6NjJa2LxEdPYH1SJYOo
-         rPyO79SEnXRQvhLcK656qZEvJpXCpyyB8aTY/MJIiVbBeiJn7GfnEXbxAdxlKjxwHZ4T
-         8S4Q==
-X-Gm-Message-State: ACgBeo3LcKCiEMyQGm4P4EfCXj9fjVWe59o7uhwog5mOgLXkcxxlEA6+
-        eW5j4qmooTweXzvyjUKpk7s=
-X-Google-Smtp-Source: AA6agR7g0vUdHNB436qax714lzXjZm0PbKlo0UfLHsf2DpJCNmP1zuz4nFo5+5LXimvrXhQ3j3lZHw==
-X-Received: by 2002:a65:6d13:0:b0:41d:b593:e5ab with SMTP id bf19-20020a656d13000000b0041db593e5abmr14000051pgb.467.1661109485454;
-        Sun, 21 Aug 2022 12:18:05 -0700 (PDT)
-Received: from fedora.. ([103.159.189.146])
-        by smtp.gmail.com with ESMTPSA id w23-20020a627b17000000b0052d16416effsm7051203pfc.80.2022.08.21.12.17.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 12:18:05 -0700 (PDT)
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-To:     syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com
-Cc:     David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        paskripkin@gmail.com, skhan@linuxfoundation.org,
-        18801353760@163.com, Hawkins Jiawei <yin31149@gmail.com>,
-        Khalid Masum <khalid.masum.92@gmail.com>
-Subject: Re: [syzbot] WARNING: bad unlock balance in rxrpc_do_sendmsg
-Date:   Mon, 22 Aug 2022 01:17:51 +0600
-Message-Id: <20220821191751.222357-1-khalid.masum.92@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <000000000000ce327f05d537ebf7@google.com>
-References: <000000000000ce327f05d537ebf7@google.com>
+        Sun, 21 Aug 2022 15:25:31 -0400
+Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783C31FCE2;
+        Sun, 21 Aug 2022 12:25:28 -0700 (PDT)
+Date:   Sun, 21 Aug 2022 19:25:16 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
+        s=protonmail; t=1661109926; x=1661369126;
+        bh=PpJua1al93V3uzq5+TFc9GwHmULwcgRDaPB9VW74u5c=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
+         Feedback-ID:Message-ID;
+        b=HCtv7T5nP/SSAd7adMUESTk2YHhR2Y4dFurdtFS/DLZKQ/vIyOmy5Cs6ce7l/OF+P
+         JaffAlBtSSB237qJ7lQu5oz4K9rQc3JJY1METkynGFgecifannX4OPRb+9Z2NJqpm1
+         hiJmuIvagbv814CPHSFLgY0h5Ny2Sf/iVaVvPxKw=
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Molly Sophia <mollysophia379@gmail.com>
+From:   Caleb Connolly <caleb@connolly.tech>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Reply-To: Caleb Connolly <caleb@connolly.tech>
+Subject: Re: [PATCH] [RFC] arm64: dts: qcom: sdm845-xiaomi-polaris: Fix sde_dsi_active pinctrl
+Message-ID: <bc8380fc-faed-9f99-6d96-3c7c9afc66a1@connolly.tech>
+In-Reply-To: <629afd26008c2b1ba5822799ea7ea5b5271895e8.1660903997.git.geert+renesas@glider.be>
+References: <629afd26008c2b1ba5822799ea7ea5b5271895e8.1660903997.git.geert+renesas@glider.be>
+Feedback-ID: 10753939:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maybe we do not need to lock since no other timer_schedule needs 
-it. 
 
-Test if this fixes the issue.
----
-#syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb
- net/rxrpc/sendmsg.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/net/rxrpc/sendmsg.c b/net/rxrpc/sendmsg.c
-index 1d38e279e2ef..640e2ab2cc35 100644
---- a/net/rxrpc/sendmsg.c
-+++ b/net/rxrpc/sendmsg.c
-@@ -51,10 +51,8 @@ static int rxrpc_wait_for_tx_window_intr(struct rxrpc_sock *rx,
- 			return sock_intr_errno(*timeo);
- 
- 		trace_rxrpc_transmit(call, rxrpc_transmit_wait);
--		mutex_unlock(&call->user_mutex);
- 		*timeo = schedule_timeout(*timeo);
--		if (mutex_lock_interruptible(&call->user_mutex) < 0)
--			return sock_intr_errno(*timeo);
-+		return sock_intr_errno(*timeo);
- 	}
- }
- 
--- 
-2.37.1
+On 19/08/2022 11:14, Geert Uytterhoeven wrote:
+> "make dtbs_check" says:
+>
+>      bias-disable: boolean property with value b'\x00\x00\x00\x00'
+>
+> Fix this by dropping the offending value.
+>
+> Fixes: be497abe19bf08fb ("arm64: dts: qcom: Add support for Xiaomi Mi Mix=
+2s")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Reviewed-by: Caleb Connolly <caleb@connolly.tech>
+> ---
+> Marked RFC as I do not have the hardware or documentation.
+> Perhaps the "bias-disable" property should be dropped instead?
+
+This is correct, the ` =3D <0>` is a downstream style, but it does actually=
+ mean to disable the bias
+afaik, from downstream docs:
+
+- bias-disable:
+=09Usage: optional
+=09Value type: <none>
+=09Definition: The specified pins should be configued as no pull.
+
+
+> ---
+>   arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/ar=
+m64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+> index 7747081b98875aad..dba7c2693ff50073 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+> @@ -617,7 +617,7 @@ sde_dsi_active: sde-dsi-active {
+>   =09=09pins =3D "gpio6", "gpio10";
+>   =09=09function =3D "gpio";
+>   =09=09drive-strength =3D <8>;
+> -=09=09bias-disable =3D <0>;
+> +=09=09bias-disable;
+>   =09};
+>
+>   =09sde_dsi_suspend: sde-dsi-suspend {
+> --
+> 2.25.1
+>
+
+--
+Kind Regards,
+Caleb
 

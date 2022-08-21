@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D883259B3E6
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 15:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764C659B3E8
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 15:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiHUNYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 09:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48608 "EHLO
+        id S229754AbiHUN0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 09:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbiHUNYh (ORCPT
+        with ESMTP id S229599AbiHUNZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 09:24:37 -0400
-Received: from out199-8.us.a.mail.aliyun.com (out199-8.us.a.mail.aliyun.com [47.90.199.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B831E3F6
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 06:24:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R551e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VMnWTjg_1661088269;
-Received: from 30.0.165.201(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VMnWTjg_1661088269)
-          by smtp.aliyun-inc.com;
-          Sun, 21 Aug 2022 21:24:30 +0800
-Message-ID: <71c6c3cd-5022-dd7c-d8d0-d1c354c85f13@linux.alibaba.com>
-Date:   Sun, 21 Aug 2022 21:24:29 +0800
+        Sun, 21 Aug 2022 09:25:58 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84EB1EC61
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 06:25:57 -0700 (PDT)
+Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 0E8B830F324;
+        Sun, 21 Aug 2022 15:25:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1661088356;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YaUM92FmfgSVbdgrkEKDESj+y9oC2KFTF3Y2Ta4pFo0=;
+        b=bTTHfrz9EFfRj/zShsDRnRCKVK2QXZpQYFGY8fm9Y51qFCGTcZttaoRCyttF8iML6X8AOl
+        /xyBpzLv5ezCPA4SmHGgagoutJufgKzCfzzl9LK8HGRJg+g1Wa9riFSqE9buzV/TnZwcQL
+        LClAYeqtvZHfaupulRoQLCUxICVi/lv3JqjU12v2FhDfow+ZD80xBN4v4nO3nR7Nno+Blt
+        K4vXLXsxWGJWAZOCZh6kaZMi0uff2eB+g3ETHM5qX3XA86PC+cOlIQhgm0Re+V8iuewNOq
+        qa+fvYErKF24Rn8NVAW+TYRuGpoYNsGFB181qTDnciivcQHTswpCIHx2VmkNPg==
+Message-ID: <38507e4b4ab6972fa76d32d74da1911d6c4224d3.camel@svanheule.net>
+Subject: Re: [PATCH v2 0/5] cpumask: KUnit test suite fixes and improvements
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        =?ISO-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 21 Aug 2022 15:25:54 +0200
+In-Reply-To: <YwFa0xiM/b0N5X0w@yury-laptop>
+References: <cover.1661007338.git.sander@svanheule.net>
+         <YwFa0xiM/b0N5X0w@yury-laptop>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH 04/14] ocfs2: move from strlcpy with unused retval to
- strscpy
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, akpm <akpm@linux-foundation.org>
-Cc:     Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
-        ocfs2-devel@oss.oracle.com
-References: <20220818210123.7637-1-wsa+renesas@sang-engineering.com>
- <20220818210123.7637-4-wsa+renesas@sang-engineering.com>
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-In-Reply-To: <20220818210123.7637-4-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yury,
 
+On Sat, 2022-08-20 at 15:06 -0700, Yury Norov wrote:
+> On Sat, Aug 20, 2022 at 05:03:08PM +0200, Sander Vanheule wrote:
+> > This series fixes the reported issues, and implements the suggested
+> > improvements, for the version of the cpumask tests [1] that was merged
+> > with commit c41e8866c28c ("lib/test: introduce cpumask KUnit test
+> > suite").
+> >=20
+> > These changes include fixes for the tests, and better alignment with th=
+e
+> > KUnit style guidelines.
+>=20
+> I wrote a couple comments, but the series looks OK to me in general.
+> So for 2, 3 and 5:
+> Acked-by: Yury Norov <yury.norov@gmail.com>
+>=20
+> It's named as 'fix', but it fixes a test, and the kernel code itself
+> looks correct. So, do you want to take it into 6.0-rc, or in 6.1?
+>=20
+> I'm OK to do it this way or another, but for later -rc's it may look
+> too noisy. And I'm not sure where to put a threshold.
 
-On 8/19/22 5:01 AM, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
-> 
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Broken tests are worse than no tests IMHO, so I would at least like patches=
+ 1
+and 2 to be merged for 6.0-rc. I don't want people to end up with false
+positives, like Ma=C3=ADra did, for an entire release cycle.
 
-Acked-by: Joseph Qi <joseph.qi@linux.alibaba.com>
-> ---
->  fs/ocfs2/stackglue.c | 4 ++--
->  fs/ocfs2/super.c     | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/ocfs2/stackglue.c b/fs/ocfs2/stackglue.c
-> index dd77b7aaabf5..317126261523 100644
-> --- a/fs/ocfs2/stackglue.c
-> +++ b/fs/ocfs2/stackglue.c
-> @@ -334,10 +334,10 @@ int ocfs2_cluster_connect(const char *stack_name,
->  		goto out;
->  	}
->  
-> -	strlcpy(new_conn->cc_name, group, GROUP_NAME_MAX + 1);
-> +	strscpy(new_conn->cc_name, group, GROUP_NAME_MAX + 1);
->  	new_conn->cc_namelen = grouplen;
->  	if (cluster_name_len)
-> -		strlcpy(new_conn->cc_cluster_name, cluster_name,
-> +		strscpy(new_conn->cc_cluster_name, cluster_name,
->  			CLUSTER_NAME_MAX + 1);
->  	new_conn->cc_cluster_name_len = cluster_name_len;
->  	new_conn->cc_recovery_handler = recovery_handler;
-> diff --git a/fs/ocfs2/super.c b/fs/ocfs2/super.c
-> index 013a727bd7c8..ec46489b6c7e 100644
-> --- a/fs/ocfs2/super.c
-> +++ b/fs/ocfs2/super.c
-> @@ -2222,7 +2222,7 @@ static int ocfs2_initialize_super(struct super_block *sb,
->  		goto out_journal;
->  	}
->  
-> -	strlcpy(osb->vol_label, di->id2.i_super.s_label,
-> +	strscpy(osb->vol_label, di->id2.i_super.s_label,
->  		OCFS2_MAX_VOL_LABEL_LEN);
->  	osb->root_blkno = le64_to_cpu(di->id2.i_super.s_root_blkno);
->  	osb->system_dir_blkno = le64_to_cpu(di->id2.i_super.s_system_dir_blkno);
+Preferably I would also like to see 3 in 6.0-rc, so no renames will be need=
+ed in
+6.1 anymore. Not that I expect anything to depend on this symbol (or filena=
+me)
+by then, but I feel it's better not to risk that by waiting for 6.1.
+
+Patches 4 and 5 can go with 6.1, as far as I'm concerned. Especially as the=
+ mask
+logging patch (4) may need some work still.
+
+Best,
+Sander
+

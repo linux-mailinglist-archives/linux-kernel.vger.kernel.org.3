@@ -2,112 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CABD59B519
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 17:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE8859B51A
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 17:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbiHUPdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 11:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
+        id S231208AbiHUPfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 11:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiHUPc7 (ORCPT
+        with ESMTP id S229505AbiHUPfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 11:32:59 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1E018B25;
-        Sun, 21 Aug 2022 08:32:58 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id bs25so10460114wrb.2;
-        Sun, 21 Aug 2022 08:32:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=8MV32+Yt9m7Si5QwQLa4b3PLlpDqckrFp0ZXYWUDDos=;
-        b=NfDG8DsV7gJdva8ZhPOfYP8oH/CZM6cWqdSzl+jQILATlYWT4PXV2EsgUly3TyR1aI
-         FQfxS4phuKoDKwRsUBFya4KshB62lJPmuuevj3ihZpD05lr59cRv7B7Fn3UT1vZPWNlw
-         nFvxbAl5k9avcgruQQMfqFrTq7W2CtyziaFTg/IRihCih/85DXhxUY0Sajl8eS0AwA9p
-         ZGIJ4Ihqg4fx+e1iKXt0cG63wq3cFyUIRNdtJ84W9EaMdfqr3THgJdjUnzliLKUQep00
-         yULm20CXE50JSwm9zU20Ub1H++buQ6r26dVXY1J/oD9sIV5zy4PjzoUM1OQSifNA245S
-         mqug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=8MV32+Yt9m7Si5QwQLa4b3PLlpDqckrFp0ZXYWUDDos=;
-        b=hIP1Tk9qFZpaEBv+5KyusWRV2W3Ov3Puc7nSvcI1TQPh8OyzGJeOeWLviLu4/Ky801
-         XOL+mUEnUDDg7Au6qGtHnGjocn7EpoRSUDD91uwtFQyXgQNPvxshrLO7tm+7eqIsddwk
-         sDltfhRTO3Es6ADhPm8AJSMiedNEisxN8AYuI6L518R9e+dUj2Lb2TS3mbtgaWeu4IxN
-         nhdeAjQc+G59a6nFAcg/pwTSgxxERbnwe3+y7BgJRVUrEWN7b/yLGnNcNzjuthROsRHk
-         umzqaSEzXYAkSBfhNiVPcuQ8aKR4JzMg+3J+LQEd0jejcppn+kPU4MjQ3BCafZi6jiEr
-         2akQ==
-X-Gm-Message-State: ACgBeo1bqpZ5lottArdYUG1AhOWQ9Kpc+N6m+uoVlGVB0X0ufuGG1ar3
-        Gx/zPKJH9srW1Sv6btMleoI=
-X-Google-Smtp-Source: AA6agR7taoznKUYDE3QoriSpfUsWWleApS9nfWNXRocQa0hmQRiAAOxRR2w4xe0OMrBK/Fm74ZRvyQ==
-X-Received: by 2002:a5d:6c62:0:b0:222:cda4:e09e with SMTP id r2-20020a5d6c62000000b00222cda4e09emr8666167wrz.449.1661095976550;
-        Sun, 21 Aug 2022 08:32:56 -0700 (PDT)
-Received: from localhost ([2a03:b0c0:1:d0::dee:c001])
-        by smtp.gmail.com with ESMTPSA id 22-20020a05600c231600b003a5260b8392sm13762440wmo.23.2022.08.21.08.32.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 08:32:56 -0700 (PDT)
-Date:   Sun, 21 Aug 2022 15:32:55 +0000
-From:   Stafford Horne <shorne@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/10] 5.15.62-rc2 review
-Message-ID: <YwJQJxpsRDc6dqTJ@oscomms1>
-References: <20220820182309.607584465@linuxfoundation.org>
- <20220821120903.GB2332676@roeck-us.net>
+        Sun, 21 Aug 2022 11:35:12 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7035A188;
+        Sun, 21 Aug 2022 08:35:10 -0700 (PDT)
+X-QQ-mid: bizesmtp90t1661096098t4jd9sr8
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 21 Aug 2022 23:34:57 +0800 (CST)
+X-QQ-SSF: 01000000002000C0D000B00A0000000
+X-QQ-FEAT: cIAm9Ti9Z0yZJe7QcNpkLcgBz24pDhmuXbRFaFH5TArxrHTiFUs38fw+uZCQE
+        RcDScZ6Y2aRRJ1BLslL2IV7nYBZby9mDrTEaSPHrUBMWqD1RaLhDmivR+bNSCnnwITTlYVi
+        if+wAVHHpKkzSexMGmwWQQHpQyphJpc+ddBxUQjwXmBra4q4yXpT9QQbE7Oa/M0o0KIFYND
+        hk2F4GXYWeHUrIDxy3k/yD8qHdZvIytLERTUI1+TKA1c9JUpGkOOvGk71OjWkgG1srUsvPd
+        I8VXWCuKebwgmHMKvvKptFIwK3fhRls1Dv/lDjL4FdLj3hXin+2rkz9l7ZuYddtcQ9GbSt2
+        wP8oQphiwMBoCbwdWQQF3jARgl5q/6KnKU/tXqNE594LM8kTfCyJHdEyzV+RWNmZN0CkJXC
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] usb/serial: fix repeated words in comments
+Date:   Sun, 21 Aug 2022 23:34:41 +0800
+Message-Id: <20220821153441.6165-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220821120903.GB2332676@roeck-us.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_PBL,RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [43.154.54.12 listed in zen.spamhaus.org]
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [43.154.54.12 listed in wl.mailspike.net]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 05:09:03AM -0700, Guenter Roeck wrote:
-> On Sat, Aug 20, 2022 at 08:23:24PM +0200, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.15.62 release.
-> > There are 10 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Mon, 22 Aug 2022 18:23:01 +0000.
-> > Anything received after that time might be too late.
-> > 
-> 
-> Build results:
-> 	total: 159 pass: 159 fail: 0
-> Qemu test results:
-> 	total: 485 pass: 484 fail: 1
-> Failed tests:
-> 	openrisc:or1ksim_defconfig
-> 
-> The openrisc failure is a soft lockup during restart. I only recently
-> enabled the soft lockup detector, so this is probably either a false
-> positive or not a new problem. I'll try to track it down, but it is
-> not a concern for now.
-> 
-> Tested-by: Guenter Roeck <linux@roeck-us.net>
+ Delete the redundant word 'more'.
 
-Hi Guenter,
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/usb/serial/mct_u232.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-If you need help let me know, just let me know how to reproduce it.  I am
-currently working on some qemu patches to convert qemu to multithread-tcg.  I
-have fixed some lockup issues, but there are still some cases we get soft
-lockups.
+diff --git a/drivers/usb/serial/mct_u232.h b/drivers/usb/serial/mct_u232.h
+index e3d09a83cab1..f79a1f1b6a98 100644
+--- a/drivers/usb/serial/mct_u232.h
++++ b/drivers/usb/serial/mct_u232.h
+@@ -273,13 +273,13 @@ static int mct_u232_calculate_baud_rate(struct usb_serial *serial,
+  *  Bit 5: Data Set Ready (DSR). Reflects the state of the DSR line on the UART.
+  *  Bit 4: Clear To Send (CTS). Reflects the state of the CTS line on the UART.
+  *  Bit 3: Delta Data Carrier Detect (DDCD). Set to "1" if the -DCD line has
+- *	   changed state one more more times since the last time the MSR was
++ *	   changed state one more times since the last time the MSR was
+  *	   read by the host.
+  *  Bit 2: Trailing Edge Ring Indicator (TERI). Set to "1" if the -RI line has
+  *	   had a low to high transition since the last time the MSR was read by
+  *	   the host.
+  *  Bit 1: Delta Data Set Ready (DDSR). Set to "1" if the -DSR line has changed
+- *	   state one more more times since the last time the MSR was read by the
++ *	   state one more times since the last time the MSR was read by the
+  *	   host.
+  *  Bit 0: Delta Clear To Send (DCTS). Set to "1" if the -CTS line has changed
+  *	   state one more times since the last time the MSR was read by the
+-- 
+2.36.1
 
-If you have any details I can see if it's a similar issue.
-
--Stafford

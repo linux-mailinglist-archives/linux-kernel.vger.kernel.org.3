@@ -2,180 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBCB59B31B
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 12:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC8F59B31C
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 12:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiHUKRh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 21 Aug 2022 06:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
+        id S230167AbiHUKU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 06:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiHUKRc (ORCPT
+        with ESMTP id S229599AbiHUKUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 06:17:32 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA73612757
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 03:17:30 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id l20-20020a056e02067400b002dfa7256498so6457844ilt.4
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 03:17:30 -0700 (PDT)
+        Sun, 21 Aug 2022 06:20:55 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71748140AC
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 03:20:54 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id fy5so16263626ejc.3
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 03:20:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=LX+6Y3J7NBpt2yMeFwFFwIC5Leg2hEnRCyqHn0VPvDo=;
+        b=d07yH0kygyLJOxqLq2147/N73AxZ5f3tGbe8gvFccThsDGfONVLppvTah1r0vZZzrH
+         t4tZfFMWo9KLBgJ5A+/RgaqlGX9T2+xBb+LxfBnXArXQmpgxwnX6zqdxqDUZC/R0Ev++
+         SYYPvIQ8gMMW1pJfpY2A4tMehVCRhggcL1gtS0qM5H011ju2D2nKjRzoWysrUHcdOlnd
+         xa96IvjTF1wfLkVmEeFMNdSyEzfbs49MvQIfqnjHKqtgLdC4eerKfgMwZCDzqnx/+LTj
+         h6B6hXxLNmdizUP4zRbSrjQw++6llPyFsajCgKtmEhhHwdV4/ojdsaUi1S/22uLt7jY5
+         Xiww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:from:subject:message-id:date
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=LE1LCU4tNiknKVyA+WMm6zjkYRDeBGfWddeOl3Lef4w=;
-        b=OUD3nD+u8EB/P9gZris55CqEn0AHcixJOSFws5rcKE67ybMMUbyZV6iMZeP5Y6LPAm
-         W3c1miD2svUkyFF+9dkNY7gTkx7CZR2ar3jj6qEnqQjo3OQ/FJEXcngwiQ9tWYsE1aR4
-         XIkpAOIqEV9QYJo7Mn5+p2JGk6aM1Kc+rR2r5+RVxwKQRlEF/AcT/iytOEd8AVfc0MFY
-         rlHdzsP1nusvNyQLKpq6Kfp/d6X6Eea57sltVHxyiuyQesZtgYk+UsgGPrd7aS2dQOIB
-         nH+kfQeX8h+3SENQzVi6IgoRN64x4bceRL9g4fG5D7aJG0IQQz0htXasI6wuPskang5s
-         Xuig==
-X-Gm-Message-State: ACgBeo16wjMbkmFsxqwKiOeO8REQbFiI95i9hlZE5dUhf5MQ02Vs1hzi
-        4kpRHyf68GrT6Ck0DEgCSyS5lcvWjI8+de92iR6O/B9Xy74l
-X-Google-Smtp-Source: AA6agR6cTFTJE4DTxNRzC1mvv5FLi6A5SVpBpl+52m93EucjUlON1aYB3xVYz2TAlHJtIIi6zDetKSO2AIi9YnIZGGKmPPp6hWrQ
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=LX+6Y3J7NBpt2yMeFwFFwIC5Leg2hEnRCyqHn0VPvDo=;
+        b=1dZg9Au43p6ZuKGDZ1S7EXEJPY/fqEdZgket0omSr39Ep2/bqCoWU7WdhnIsgEFyh8
+         vfGAPUAx+R5ArcBqSctCT4lW2P86i9V8DfTBwssffCz0d3ob/4sDlmGIcfXxp4/vvd9L
+         hFZ3d0jRlBMane43tzXTgh+Gwu2u1M/wkn+im1SP6PdY0ZbqtE2CdCIu7YxGbkRMHVSQ
+         Z7XhQPAp2vye+PgnFLlQYttPutMhKDHToPXD/VnWPDixvVdlhlkwlRVAp+diaA2NPvKa
+         GlS10SSfrJJ+EQbo1iMpu93OH3n2QEf+S7bjI68XkE4fzUphM2LIcq+22E0hkluN7hIu
+         4dvg==
+X-Gm-Message-State: ACgBeo2qAmj9P7UCB+5S2ZHbfIZ/zFd4vxPrjxhnlJZByYo57KIhz2Ww
+        rXROTfzaXwk/TL8yHMnuRmY=
+X-Google-Smtp-Source: AA6agR4n45dKQUPg4qZz1vUJIc+mbL/zSceMyEviddXqiJNVG5avVlc9HCLXUsgGj61C64BxaWUKIg==
+X-Received: by 2002:a17:907:720b:b0:731:6e49:dc93 with SMTP id dr11-20020a170907720b00b007316e49dc93mr10151421ejc.421.1661077253044;
+        Sun, 21 Aug 2022 03:20:53 -0700 (PDT)
+Received: from gmail.com (195-38-113-151.pool.digikabel.hu. [195.38.113.151])
+        by smtp.gmail.com with ESMTPSA id c23-20020a056402101700b00445b3cab975sm6204043edu.56.2022.08.21.03.20.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 03:20:52 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sun, 21 Aug 2022 12:20:50 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-kernel@vger.kernel.org, jpoimboe@kernel.org,
+        peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com
+Subject: Re: [PATCH v2] x86/unwind/orc: unwind ftrace trampolines with
+ correct orc
+Message-ID: <YwIHAvSGOmDLZ42k@gmail.com>
+References: <20220819084334.244016-1-chenzhongjin@huawei.com>
+ <20220819132812.391619d2@gandalf.local.home>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:879a:0:b0:689:da06:93c6 with SMTP id
- f26-20020a5d879a000000b00689da0693c6mr1036946ion.202.1661077050248; Sun, 21
- Aug 2022 03:17:30 -0700 (PDT)
-Date:   Sun, 21 Aug 2022 03:17:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000086582105e6bda31b@google.com>
-Subject: [syzbot] possible deadlock in strp_work
-From:   syzbot <syzbot+9fc084a4348493ef65d2@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        edumazet@google.com, jakub@cloudflare.com,
-        john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819132812.391619d2@gandalf.local.home>
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+* Steven Rostedt <rostedt@goodmis.org> wrote:
 
-HEAD commit:    8755ae45a9e8 Add linux-next specific files for 20220819
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=10d3e2d3080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
-dashboard link: https://syzkaller.appspot.com/bug?extid=9fc084a4348493ef65d2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1136b1a5080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10bb167b080000
+> On Fri, 19 Aug 2022 16:43:34 +0800
+> Chen Zhongjin <chenzhongjin@huawei.com> wrote:
+> 
+> > When meeting ftrace trampolines in orc unwinding, unwinder uses address
+> > of ftrace_{regs_}call address to find the orc, which gets next frame at
+> > sp+176.
+> > 
+> > If there is an irq hitting at sub $0xa8,%rsp, the next frame should be
+> > sp+8 instead of 176. It makes unwinder skip correct frame and throw
+> > warnings such as "wrong direction" or "can't access registers", etc,
+> > depending on the content of the wrong frame address.
+> > 
+> > By adding the base address ftrace_{regs_}caller with the offset
+> > *ip - ops->trampoline*,
+> > we can get the correct address to find orc.
+> > 
+> > Also change "caller" to "tramp_addr" to make variable name conform to
+> > its content.
+> > 
+> > Fixes: 6be7fa3c74d1 ("ftrace, orc, x86: Handle ftrace dynamically allocated trampolines")
+> > Cc: <stable@vger.kernel.org>
+> > Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> 
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> 
+> Would someone from the tip tree care to pull this in?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9fc084a4348493ef65d2@syzkaller.appspotmail.com
+Picked it up into tip:x86/urgent with minor edits to the changelog - will 
+push it out after some testing.
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.0.0-rc1-next-20220819-syzkaller #0 Not tainted
-------------------------------------------------------
-kworker/u4:2/38 is trying to acquire lock:
-ffff888026598d30 (sk_lock-AF_INET){+.+.}-{0:0}, at: do_strp_work net/strparser/strparser.c:398 [inline]
-ffff888026598d30 (sk_lock-AF_INET){+.+.}-{0:0}, at: strp_work+0x40/0x130 net/strparser/strparser.c:415
+Thanks,
 
-but task is already holding lock:
-ffffc90000af7da8 ((work_completion)(&strp->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 ((work_completion)(&strp->work)){+.+.}-{0:0}:
-       __flush_work+0x105/0xae0 kernel/workqueue.c:3069
-       __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3160
-       strp_done+0x64/0xf0 net/strparser/strparser.c:513
-       kcm_attach net/kcm/kcmsock.c:1429 [inline]
-       kcm_attach_ioctl net/kcm/kcmsock.c:1490 [inline]
-       kcm_ioctl+0x913/0x1180 net/kcm/kcmsock.c:1696
-       sock_do_ioctl+0xcc/0x230 net/socket.c:1169
-       sock_ioctl+0x2f1/0x640 net/socket.c:1286
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (sk_lock-AF_INET){+.+.}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3095 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
-       validate_chain kernel/locking/lockdep.c:3829 [inline]
-       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
-       lock_acquire kernel/locking/lockdep.c:5666 [inline]
-       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
-       lock_sock_nested+0x36/0xf0 net/core/sock.c:3391
-       do_strp_work net/strparser/strparser.c:398 [inline]
-       strp_work+0x40/0x130 net/strparser/strparser.c:415
-       process_one_work+0x991/0x1610 kernel/workqueue.c:2289
-       worker_thread+0x665/0x1080 kernel/workqueue.c:2436
-       kthread+0x2e4/0x3a0 kernel/kthread.c:376
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock((work_completion)(&strp->work));
-                               lock(sk_lock-AF_INET);
-                               lock((work_completion)(&strp->work));
-  lock(sk_lock-AF_INET);
-
- *** DEADLOCK ***
-
-2 locks held by kworker/u4:2/38:
- #0: ffff88802642d138 ((wq_completion)kstrp){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff88802642d138 ((wq_completion)kstrp){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff88802642d138 ((wq_completion)kstrp){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
- #0: ffff88802642d138 ((wq_completion)kstrp){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
- #0: ffff88802642d138 ((wq_completion)kstrp){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
- #0: ffff88802642d138 ((wq_completion)kstrp){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
- #1: ffffc90000af7da8 ((work_completion)(&strp->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
-
-stack backtrace:
-CPU: 1 PID: 38 Comm: kworker/u4:2 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
-kworker/u4:2[38] cmdline: ��a�����
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Workqueue: kstrp strp_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:122 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
- check_prev_add kernel/locking/lockdep.c:3095 [inline]
- check_prevs_add kernel/locking/lockdep.c:3214 [inline]
- validate_chain kernel/locking/lockdep.c:3829 [inline]
- __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
- lock_acquire kernel/locking/lockdep.c:5666 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
- lock_sock_nested+0x36/0xf0 net/core/sock.c:3391
- do_strp_work net/strparser/strparser.c:398 [inline]
- strp_work+0x40/0x130 net/strparser/strparser.c:415
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+	Ingo

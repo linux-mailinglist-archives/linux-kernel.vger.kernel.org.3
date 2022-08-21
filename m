@@ -2,67 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB8759B6B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 01:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8843559B6B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 01:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbiHUXJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 19:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
+        id S231924AbiHUXNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 19:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231328AbiHUXJQ (ORCPT
+        with ESMTP id S231908AbiHUXNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 19:09:16 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6D613EBE
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 16:09:13 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 21 Aug 2022 19:13:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B4912AA4
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 16:13:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M9rlm38Xjz4wgr;
-        Mon, 22 Aug 2022 09:09:07 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1661123348;
-        bh=ot4vNPXID2qHzyKPZNzTF6jzsfFG44Rik1Jxj+q9etI=;
-        h=From:To:Subject:In-Reply-To:References:Date:From;
-        b=qnKx3AW22cbizwm3VfJDlQCqjy1Qh8ntG4y0D6gtqPBW8EcSMZqHYv2C4VF90ju19
-         9fS3oiyNGeZ5majD6ugg7+mGAX2z0RrePFUK3MrIlcMH2AcTQVieiJcDi2o+56BRYI
-         yacNyzgRYObAsD4vzOJdiYasClSjYqbHV0P/nqTkL28PcGn57Q6sQT/MY6TbVmEygg
-         cQX9+TKOVAhG9sOYNK5p2T3bMh+O0YW/DUrEB8JS//ehqg17f6dew7RnL40Z6cQSkA
-         4kKQzYDkwua5PMsLQK93WpWaWmvKlAkpf4NBlekF5PfSeS2O/oMf0oEVElgoqFs3rn
-         Vq0uCHqtiPe/g==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        akpm@linux-foundation.org
-Subject: Re: [PATCH] kernel: exit: cleanup release_thread()
-In-Reply-To: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
-References: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
-Date:   Mon, 22 Aug 2022 09:09:06 +1000
-Message-ID: <87r119kxd9.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C1CF60DEB
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 23:13:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 75542C43144;
+        Sun, 21 Aug 2022 23:13:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661123627;
+        bh=dxqP23U/LPwhwUrni+SBrGtiglUuoadc8DXJuoPfwMs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=NuhbzFNvmS0G6a0XRMiqnTw+dRBKNQvotTak9uS4vSFNeKcFRO7u1w3rOZMCosM2x
+         w/c058uMMTVUFsJnwZZ00pTlzIbdVomgFC+kFpahQ7OyjoMaaIfyte5imxAX9wNxPA
+         IM1rXuEE/USuInLTN0QWa3EcZXy8sM+FeRj9qw7kpXUuCcnXCSKJVGH97XcNx+6BrP
+         5+WfqRL+MOSG22KWPfHwwEref4hHfU6pjoloAqu5vpVCxmVKiguEvq9hD7mS8eep+z
+         +LDjaSVxIb2Q+2yztyd9sa4ul4embDdZVcbPUNRWrQ2AiDFiIFltlVlqKGW+6gGYPm
+         9UNS7vZi2TvPQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5F8E6C43142;
+        Sun, 21 Aug 2022 23:13:47 +0000 (UTC)
+Subject: Re: [GIT PULL] IRQ fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YwKfLrZvzIWmvYBL@gmail.com>
+References: <YwKfLrZvzIWmvYBL@gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YwKfLrZvzIWmvYBL@gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-urgent-2022-08-21
+X-PR-Tracked-Commit-Id: 57646d6769f13f9484ffc6869c493e25a6568073
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4daa6a81c07c54f989e70d682fa0bff568c14df0
+Message-Id: <166112362738.15654.8935540889271294799.pr-tracker-bot@kernel.org>
+Date:   Sun, 21 Aug 2022 23:13:47 +0000
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kefeng Wang <wangkefeng.wang@huawei.com> writes:
-> Only x86 has own release_thread(), introduce a new weak
-> release_thread() function to clean empty definitions in
-> other ARCHs.
->
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
-..
->  arch/powerpc/include/asm/processor.h    | 1 -
->  arch/powerpc/kernel/process.c           | 5 -----
+The pull request you sent on Sun, 21 Aug 2022 23:10:06 +0200:
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-urgent-2022-08-21
 
-cheers
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4daa6a81c07c54f989e70d682fa0bff568c14df0
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

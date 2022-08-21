@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30AA59B5EE
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 20:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3015359B5FF
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 20:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbiHUSTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 14:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
+        id S231293AbiHUSTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 14:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231703AbiHUSTC (ORCPT
+        with ESMTP id S231722AbiHUSTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 14:19:02 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67F11CFC1;
-        Sun, 21 Aug 2022 11:19:00 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id c16-20020a17090aa61000b001fb3286d9f7so294966pjq.1;
-        Sun, 21 Aug 2022 11:19:00 -0700 (PDT)
+        Sun, 21 Aug 2022 14:19:07 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422311E3DF;
+        Sun, 21 Aug 2022 11:19:04 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id 1so1222847pfu.0;
+        Sun, 21 Aug 2022 11:19:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Jefmh/chTekLzbM/ussShayTDA1/KVFu/osWTYpBS98=;
-        b=WMH6h8qOVU9GDf+A1jGtjFuhN3wUSb5DKdVO9OB/9TqGckhh6xF3p7sXG5Itj9GXBM
-         H1SZOXP4iee2g7Bzr5fKuWShQWBF0CnKh/FUcZ2dvlYQBLsD7w2Vxgk4PPx7NyRtSbDE
-         aSouWTTJV4PBFUbzsZaLZ8IF5wteoL67D7cWxxtcPZ1VnVuSi3XJApuKSONS6R9AzzkJ
-         nE2s0JyuCbMHeatvJ4msfrtw5vznIOu5Cl5jA20qb44qgU6241lQdSRjZR9rZks+QKtB
-         w7qyRc2y8Qgp4PGQ7L8OehegQKs6KSUbHfmuZb1GQZmEL/v0ze8zJPY6s/InUrhcHVK3
-         SGpQ==
+        bh=KXO1+rEYcOhr3W13ew7JJG2ZdVZOdgDfophycm+/cI0=;
+        b=h1aW2/zXYwlI9VvEyEDwQ9nir0RGoIYAQo3OYZ+A3Sp5OunvV1JlLiVC1VKPARnRSp
+         3CIOd5VGLg3RTOWctI8KMhDLNAaTyAMXGiqLBkVTj0nVK8Ad7WA401gjUBqpO+VbSp7/
+         k3KsR+5F/A14QIdl0m0StrFVoo0dqJG+EBJ/vQazrR2VyW+lCOKuIdcS1pYFGgMbgEu0
+         jPxgEl07gjPZKxHW8S7qYp68TPn8xBJxrS+XeLPRklEflMigP36Auo0NvLUJ7IQ3vWM/
+         80CH9dxNboipowi+j4daxl4cF6EBBaaS/4KStd9ixV5QyUjbftbikbaZ0wMyhLiQx/H3
+         zSFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Jefmh/chTekLzbM/ussShayTDA1/KVFu/osWTYpBS98=;
-        b=T8eiYUPd3/3RcA0s1NtR3tuZpkOrFnmeYHLeAuMrincCZgxLM5td1rVwTgApmFeKe+
-         5Myxyt/9+I/Z7oKWxwe7kZdkXrXcKKImInThG4kdHEfUd//j9HUlIiIDRqNbpQOE2BfS
-         vrkIUEP7NWixfIXz35Jctnb7FVPpFh224j+9pCOQJNoIJv1by9nsZZaXr5d8yXHOaxVO
-         x+CzdSKI8P3lyHnn/k6hPyTn5TtdPa1bwcbWlrN0RiN5QA7Z1Lg86TG9LVktPPpjbHVU
-         0WR4WbEt+l5SgGd2+e2yeQHkFK8Ko7tocTeJSY1iFoy24Flps1CGF8W2hDtI9p0ew1tu
-         nW1Q==
-X-Gm-Message-State: ACgBeo1H0cT7WhnY8LcYnmEyi/BNpI5WOmZAIhUyV+pEAohAWqnMr3h3
-        CT2qBoxoKNfwpO4BokEzxdI=
-X-Google-Smtp-Source: AA6agR59xeDDdukCYLQ+P3WWLp5KGrqni1O1UrEyEWs0/hLes29VrUFXlS2vHJ+xIiXb2XH+D7VjHw==
-X-Received: by 2002:a17:902:f70d:b0:16c:50a2:78d1 with SMTP id h13-20020a170902f70d00b0016c50a278d1mr16608447plo.34.1661105940414;
-        Sun, 21 Aug 2022 11:19:00 -0700 (PDT)
+        bh=KXO1+rEYcOhr3W13ew7JJG2ZdVZOdgDfophycm+/cI0=;
+        b=SytQtU3suzdc7VZTUYLdUTL5IvOE05qu9nFTGin5j7rtEE79dCFvO3CKy+MrVkrhlv
+         mwMM73bYZaXpKSXyAhH1QSm7F8wt/AdWYdCW6SvSg3hq7GjQWpXpG1W4EKpefvk69XGu
+         yL6wvZGZdKy1W1um1XQE/QDHa9BkBsAQsBxF2l6Q6S7+KwgGf4cBCwW2PMRb1BR/qnFg
+         bdf5027yXLIWwZU/yS0c5JBVfARbJwXX8yFeoPquh5IxyABlXijnCleTg/GBlJflsuOW
+         nRKtJnyNqwRVPqCLih64zSVri1XxO9UFFXp+IuRfygUkP3RuMDB7g8wGx5KZYSQ2OcUs
+         zhsA==
+X-Gm-Message-State: ACgBeo0hc95je4wJlAvJ+2CzRlNGxjOI4gCgbJreFWAQGQWOZ4Pgj83k
+        DbY/6Z7EelrA0qRSnpRw18M=
+X-Google-Smtp-Source: AA6agR6i0s4MALSYERHLBE5fmy618sONp39l+osO9fV7k/dJmjUVOWdy1MMzZG71HDJc5xKgxOAxbQ==
+X-Received: by 2002:a63:88c8:0:b0:41d:260c:ea29 with SMTP id l191-20020a6388c8000000b0041d260cea29mr14004283pgd.284.1661105943530;
+        Sun, 21 Aug 2022 11:19:03 -0700 (PDT)
 Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
-        by smtp.gmail.com with ESMTPSA id x24-20020aa79418000000b0052d50e14f1dsm6986695pfo.78.2022.08.21.11.18.58
+        by smtp.gmail.com with ESMTPSA id r6-20020a634406000000b0042a6dde1d66sm2711467pga.43.2022.08.21.11.19.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 11:18:59 -0700 (PDT)
+        Sun, 21 Aug 2022 11:19:01 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         Rob Clark <robdclark@chromium.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM SMMU DRIVERS),
-        iommu@lists.linux-foundation.org (open list:IOMMU DRIVERS),
-        iommu@lists.linux.dev (open list:IOMMU DRIVERS),
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/5] iommu/arm-smmu-qcom: Add private interface to tlbinv by ASID
-Date:   Sun, 21 Aug 2022 11:19:04 -0700
-Message-Id: <20220821181917.1188021-4-robdclark@gmail.com>
+Subject: [PATCH 4/5] drm/msm: Use separate ASID for each set of pgtables
+Date:   Sun, 21 Aug 2022 11:19:05 -0700
+Message-Id: <20220821181917.1188021-5-robdclark@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220821181917.1188021-1-robdclark@gmail.com>
 References: <20220821181917.1188021-1-robdclark@gmail.com>
@@ -86,134 +78,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-This will let the drm driver use different ASID values for each set of
-pgtables to avoid over-invalidation on unmap.
+Optimize TLB invalidation by using different ASID for each set of
+pgtables.  There can be scenarios where multiple processes end up
+with the same ASID (such as >256 processes using the GPU), but this
+is harmless, it will only result in some over-invalidation (but
+less over-invalidation compared to using ASID=0 for all processes)
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c |  1 +
- drivers/iommu/arm/arm-smmu/arm-smmu.c      | 43 ++++++++++++++++++++--
- drivers/iommu/arm/arm-smmu/arm-smmu.h      |  1 +
- include/linux/adreno-smmu-priv.h           |  2 +
- 4 files changed, 43 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/msm/msm_iommu.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-index 59b460c1c9a5..3230348729ab 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-@@ -229,6 +229,7 @@ static int qcom_adreno_smmu_init_context(struct arm_smmu_domain *smmu_domain,
- 	priv->get_fault_info = qcom_adreno_smmu_get_fault_info;
- 	priv->set_stall = qcom_adreno_smmu_set_stall;
- 	priv->resume_translation = qcom_adreno_smmu_resume_translation;
-+	priv->tlb_inv_by_id = arm_smmu_tlb_inv_by_id;
- 
- 	return 0;
- }
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-index 2ed3594f384e..624359bb2092 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-@@ -252,7 +252,7 @@ static void arm_smmu_tlb_sync_context(struct arm_smmu_domain *smmu_domain)
- 	spin_unlock_irqrestore(&smmu_domain->cb_lock, flags);
- }
- 
--static void arm_smmu_tlb_inv_context_s1(void *cookie)
-+static void arm_smmu_tlb_inv_context_s1_asid(void *cookie, u16 asid)
+diff --git a/drivers/gpu/drm/msm/msm_iommu.c b/drivers/gpu/drm/msm/msm_iommu.c
+index a54ed354578b..94c8c09980d1 100644
+--- a/drivers/gpu/drm/msm/msm_iommu.c
++++ b/drivers/gpu/drm/msm/msm_iommu.c
+@@ -33,6 +33,8 @@ static int msm_iommu_pagetable_unmap(struct msm_mmu *mmu, u64 iova,
+ 		size_t size)
  {
- 	struct arm_smmu_domain *smmu_domain = cookie;
+ 	struct msm_iommu_pagetable *pagetable = to_pagetable(mmu);
++	struct adreno_smmu_priv *adreno_smmu =
++		dev_get_drvdata(pagetable->parent->dev);
+ 	struct io_pgtable_ops *ops = pagetable->pgtbl_ops;
+ 	size_t unmapped = 0;
+ 
+@@ -43,7 +45,7 @@ static int msm_iommu_pagetable_unmap(struct msm_mmu *mmu, u64 iova,
+ 		size -= 4096;
+ 	}
+ 
+-	iommu_flush_iotlb_all(to_msm_iommu(pagetable->parent)->domain);
++	adreno_smmu->tlb_inv_by_id(adreno_smmu->cookie, pagetable->asid);
+ 
+ 	return (unmapped == size) ? 0 : -EINVAL;
+ }
+@@ -147,6 +149,7 @@ static int msm_fault_handler(struct iommu_domain *domain, struct device *dev,
+ 
+ struct msm_mmu *msm_iommu_pagetable_create(struct msm_mmu *parent)
+ {
++	static atomic_t asid = ATOMIC_INIT(1);
+ 	struct adreno_smmu_priv *adreno_smmu = dev_get_drvdata(parent->dev);
+ 	struct msm_iommu *iommu = to_msm_iommu(parent);
+ 	struct msm_iommu_pagetable *pagetable;
+@@ -210,12 +213,14 @@ struct msm_mmu *msm_iommu_pagetable_create(struct msm_mmu *parent)
+ 	pagetable->ttbr = ttbr0_cfg.arm_lpae_s1_cfg.ttbr;
+ 
  	/*
-@@ -261,21 +261,56 @@ static void arm_smmu_tlb_inv_context_s1(void *cookie)
+-	 * TODO we would like each set of page tables to have a unique ASID
+-	 * to optimize TLB invalidation.  But iommu_flush_iotlb_all() will
+-	 * end up flushing the ASID used for TTBR1 pagetables, which is not
+-	 * what we want.  So for now just use the same ASID as TTBR1.
++	 * ASID 0 is used for kernel mapped buffers in TTBR1, which we
++	 * do not need to invalidate when unmapping from TTBR0 pgtables.
++	 * The hw ASID is at *least* 8b, but can be 16b.  We just assume
++	 * the worst:
  	 */
- 	wmb();
- 	arm_smmu_cb_write(smmu_domain->smmu, smmu_domain->cfg.cbndx,
--			  ARM_SMMU_CB_S1_TLBIASID, smmu_domain->cfg.asid);
-+			  ARM_SMMU_CB_S1_TLBIASID, asid);
- 	arm_smmu_tlb_sync_context(smmu_domain);
+ 	pagetable->asid = 0;
++	while (!pagetable->asid)
++		pagetable->asid = atomic_inc_return(&asid) & 0xff;
+ 
+ 	return &pagetable->base;
  }
- 
--static void arm_smmu_tlb_inv_context_s2(void *cookie)
-+static void arm_smmu_tlb_inv_context_s1(void *cookie)
-+{
-+	struct arm_smmu_domain *smmu_domain = cookie;
-+
-+	arm_smmu_tlb_inv_context_s1_asid(cookie, smmu_domain->cfg.asid);
-+}
-+
-+static void arm_smmu_tlb_inv_context_s2_vmid(void *cookie, u16 vmid)
- {
- 	struct arm_smmu_domain *smmu_domain = cookie;
- 	struct arm_smmu_device *smmu = smmu_domain->smmu;
- 
- 	/* See above */
- 	wmb();
--	arm_smmu_gr0_write(smmu, ARM_SMMU_GR0_TLBIVMID, smmu_domain->cfg.vmid);
-+	arm_smmu_gr0_write(smmu, ARM_SMMU_GR0_TLBIVMID, vmid);
- 	arm_smmu_tlb_sync_global(smmu);
- }
- 
-+static void arm_smmu_tlb_inv_context_s2(void *cookie)
-+{
-+	struct arm_smmu_domain *smmu_domain = cookie;
-+
-+	arm_smmu_tlb_inv_context_s2_vmid(cookie, smmu_domain->cfg.vmid);
-+}
-+
-+void arm_smmu_tlb_inv_by_id(const void *cookie, u16 id)
-+{
-+	struct arm_smmu_domain *smmu_domain = (void *)cookie;
-+	struct arm_smmu_device *smmu = smmu_domain->smmu;
-+
-+	arm_smmu_rpm_get(smmu);
-+	switch (smmu_domain->stage) {
-+	case ARM_SMMU_DOMAIN_S1:
-+		arm_smmu_tlb_inv_context_s1_asid(smmu_domain, id);
-+		break;
-+	case ARM_SMMU_DOMAIN_S2:
-+	case ARM_SMMU_DOMAIN_NESTED:
-+		arm_smmu_tlb_inv_context_s2_vmid(smmu_domain, id);
-+		break;
-+	case ARM_SMMU_DOMAIN_BYPASS:
-+		break;
-+	}
-+
-+	arm_smmu_rpm_put(smmu);
-+}
-+
- static void arm_smmu_tlb_inv_range_s1(unsigned long iova, size_t size,
- 				      size_t granule, void *cookie, int reg)
- {
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.h b/drivers/iommu/arm/arm-smmu/arm-smmu.h
-index 2b9b42fb6f30..f6fb52d6f841 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu.h
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu.h
-@@ -527,6 +527,7 @@ struct arm_smmu_device *arm_smmu_impl_init(struct arm_smmu_device *smmu);
- struct arm_smmu_device *nvidia_smmu_impl_init(struct arm_smmu_device *smmu);
- struct arm_smmu_device *qcom_smmu_impl_init(struct arm_smmu_device *smmu);
- 
-+void arm_smmu_tlb_inv_by_id(const void *cookie, u16 id);
- void arm_smmu_write_context_bank(struct arm_smmu_device *smmu, int idx);
- int arm_mmu500_reset(struct arm_smmu_device *smmu);
- 
-diff --git a/include/linux/adreno-smmu-priv.h b/include/linux/adreno-smmu-priv.h
-index 4ad90541a095..c44fc68d4de8 100644
---- a/include/linux/adreno-smmu-priv.h
-+++ b/include/linux/adreno-smmu-priv.h
-@@ -50,6 +50,7 @@ struct adreno_smmu_fault_info {
-  *                 before set_ttbr0_cfg().  If stalling on fault is enabled,
-  *                 the GPU driver must call resume_translation()
-  * @resume_translation: Resume translation after a fault
-+ * @tlb_inv_by_id: Flush TLB by ASID/VMID
-  *
-  *
-  * The GPU driver (drm/msm) and adreno-smmu work together for controlling
-@@ -69,6 +70,7 @@ struct adreno_smmu_priv {
- 	void (*get_fault_info)(const void *cookie, struct adreno_smmu_fault_info *info);
- 	void (*set_stall)(const void *cookie, bool enabled);
- 	void (*resume_translation)(const void *cookie, bool terminate);
-+	void (*tlb_inv_by_id)(const void *cookie, u16 id);
- };
- 
- #endif /* __ADRENO_SMMU_PRIV_H */
 -- 
 2.37.2
 

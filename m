@@ -2,102 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB3559B3A3
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 13:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D8359B3AA
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 14:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbiHULzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 07:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
+        id S229625AbiHUMEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 08:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiHULy5 (ORCPT
+        with ESMTP id S229472AbiHUMD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 07:54:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD1413D1D;
-        Sun, 21 Aug 2022 04:54:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7947860E04;
-        Sun, 21 Aug 2022 11:54:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D09E1C433B5;
-        Sun, 21 Aug 2022 11:54:30 +0000 (UTC)
-Date:   Sun, 21 Aug 2022 12:54:22 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        akpm@linux-foundation.org
-Subject: Re: [PATCH] kernel: exit: cleanup release_thread()
-Message-ID: <YwIc7qbCWpIVKR2j@arm.com>
-References: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
+        Sun, 21 Aug 2022 08:03:57 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C32917069;
+        Sun, 21 Aug 2022 05:03:54 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id v4so7141956pgi.10;
+        Sun, 21 Aug 2022 05:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=tT9fTOF/JPnDPf7gs+4eVJI4k6ubzr58RBsHYFh88W8=;
+        b=l9zZd6t5v+I/1ZCw6Gayr1fvoXkFir/CsVD/OrOV8QiRN6vMymQYTqWRQpJ2gaPhCk
+         Pfo+myYrPchTX/LtyRtzd2WPoPFZHLYmydMJHiF4hBFVE+ILTCbK9cBxdFMoFAFfOWb2
+         NvEo/7It9uAB4Ox/LCLzZsTf++X/uI6o5IcNxzYBPs93D6YTyucwTyW9BtQnP6QcW8+X
+         mbZHtkN3hL5RNJU0isOVQjTodTnJ34wkX3rkHCWe9Hs4OxhbvXr+RZthNbuPrkSK9ep/
+         KogtyHnva1ApBzS/gqaQQAkkQqQbO00n8t2KdZhC8iGPbjK/5pqwSgTDiv17+/4Ko49l
+         h5Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=tT9fTOF/JPnDPf7gs+4eVJI4k6ubzr58RBsHYFh88W8=;
+        b=SXGWoKcwwAY9rKhNcU0cLkxU76zZg6vaEHX3GXzTVhf6Godf8vj5K3kBdVsQY+10U3
+         nfYYquiw50YhNK1fHtxcGIuIwGm1VzDGIv99wMFbDahqqcGAKqGocGhmplkN4PHC00jd
+         jZ7bZUOxyob7dScur4lqTgmltSFjY8zjHlzV4YROxyU8zSzcCuw28h5PBvFnwepAR6vc
+         joKgR0VX28uLObEUu9AirVcRVX0FfmE2exyHfnYmCs7ZcjqkLsYMypNCU3bsd6EEb7UM
+         yb/h86hUD3NetLz8SssMFZEmuAA8WGrMjy8ys9ayt+yDoyiBiK/I3kdVbCkN3s4dwwaD
+         Gsvw==
+X-Gm-Message-State: ACgBeo1ZfC9XAJ+oE9Gjh7FWEm3pLZ338UlGZ1p9WiB7fp1S2OJaenmh
+        YCNIghVQIeZBNkiWUjZGxo4JBzTK4kA=
+X-Google-Smtp-Source: AA6agR5KNnE4NfVoTTRH0ElaCHSvpH5Pnw78EQw/fjgM056leySEwf40VXvllSr46d8+SvAGA9EjAw==
+X-Received: by 2002:a63:5325:0:b0:41b:59f1:79d2 with SMTP id h37-20020a635325000000b0041b59f179d2mr13521789pgb.52.1661083433490;
+        Sun, 21 Aug 2022 05:03:53 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id cp7-20020a170902e78700b0016dc1df9bf7sm6412838plb.27.2022.08.21.05.03.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 05:03:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 21 Aug 2022 05:03:48 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/541] 5.10.137-rc2 review
+Message-ID: <20220821120348.GA2332676@roeck-us.net>
+References: <20220820182952.751374248@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220820182952.751374248@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 09:44:06AM +0800, Kefeng Wang wrote:
-> Only x86 has own release_thread(), introduce a new weak
-> release_thread() function to clean empty definitions in
-> other ARCHs.
+On Sat, Aug 20, 2022 at 08:39:26PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.137 release.
+> There are 541 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-[...]
->  arch/arm64/include/asm/processor.h      | 3 ---
->  arch/arm64/kernel/process.c             | 4 ----
+> Responses should be made by Mon, 22 Aug 2022 18:28:24 +0000.
+> Anything received after that time might be too late.
+> 
+Build results:
+	total: 163 pass: 162 fail: 1
+Failed builds:
+	um:defconfig
+Qemu test results:
+	total: 474 pass: 474 fail: 0
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+The build error is:
+
+Building um:defconfig ... failed
+--------------
+Error log:
+In file included from arch/um/include/shared/irq_user.h:10,
+                 from arch/um/include/shared/os.h:12,
+                 from arch/um/kernel/umid.c:9:
+include/linux/stddef.h:11:9: error: expected identifier before numeric constant
+   11 |         false   = 0,
+      |         ^~~~~
+include/linux/types.h:30:33: error: two or more data types in declaration specifiers
+   30 | typedef _Bool                   bool;
+      |                                 ^~~~
+In file included from arch/um/include/shared/os.h:17,
+                 from arch/um/kernel/umid.c:9:
+include/linux/types.h:30:1: warning: useless type name in empty declaration
+   30 | typedef _Bool                   bool;
+      | ^~~~~~~
+
+Bisect points to commit 6660dd43bbf ("um: seed rng using host OS rng"),
+and reverting it fixes the problem.
+
+Guenter

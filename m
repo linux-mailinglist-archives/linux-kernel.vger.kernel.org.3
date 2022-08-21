@@ -2,87 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB22A59B109
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 02:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6923159B110
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 02:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236040AbiHUAM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 20:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
+        id S235238AbiHUAbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 20:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiHUAMZ (ORCPT
+        with ESMTP id S230371AbiHUAa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 20:12:25 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374E71116B;
-        Sat, 20 Aug 2022 17:12:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661040744; x=1692576744;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OgpJQveWh/vXtivXtPcPMrum27LfVsDmLhL3OPvr4pA=;
-  b=ft3HCpJva1wHr2JsXt0hba7WwM7n/2L4maO7dy3SIW3S3fgSlI+kFz1l
-   DY4Op24Fy6lSaNQEWLkQNFmlagTZPJ4qw7gKXhfUodUEE5HRt5ShjIYh0
-   OtNawu+OofVN3VFJUuH/vuyGlQu8GsgxlBrmONoBN5qdnIGeXGPBoMof4
-   iL+3ZUoQ4eXDj9SeaKStFP7JjZQj1bn0CgEjV5QpaAE21J6/5j3VCetW9
-   phSNtP3kbPib3lwC5XaP1BSQ1Y2w0+JfWo6jwSbEM2DBST5PXyMIPgt5n
-   VqSExX6G4xKeytsRbaFedYIiIeBgz3TdGYMYuEcyEuYGLBzWvYguiw39R
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="273599675"
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="273599675"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 17:12:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="637701657"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 20 Aug 2022 17:12:22 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPYZh-0003OR-2b;
-        Sun, 21 Aug 2022 00:12:21 +0000
-Date:   Sun, 21 Aug 2022 08:11:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [lunn:v6.0-rc1-kirkwood-dt 32/57] htmldocs: Warning:
- Documentation/devicetree/bindings/spi/marvell,orion-spi.yaml references a
- file that doesn't exist:
- Documentation/devicetree/bindings/bus/mvebu-mbus.txt
-Message-ID: <202208210856.xKX1U4gx-lkp@intel.com>
+        Sat, 20 Aug 2022 20:30:58 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756EA26AC0;
+        Sat, 20 Aug 2022 17:30:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=41Yr0JmCMU+AK4AyIf/PPqS/cRIRXD6tybm1KRxE/EI=; b=GRiBmHwCi4NasUevEVTsHsS9ct
+        0xNYTPWvCC42cRyYFfw5b0pwo/CfjD+GYDJlQrUq52qt8l5aPf+wukjOTqNWzvRMkFFndkq4Rn6cZ
+        i0MDpGCKQ5l2UQdRBRbUy8UGiCksyaMixSkpyI3Ere7DYIkSTtuoI8loW/FzBsHRfvn3GX4sS/SFB
+        oLbkvB0qDBKo4G7KY3obpf2dzPonTeKdQuInm3uM05j+16VXrft4a2kuEnxLjD4iCPJ2tqkoXCE/K
+        mzsurd8viZ7HfjZ4bIU3mgxM80UNer40uXnpD5PNyEB4KQwiH7Pz6FTKZI76vCFuSYgPwHQEy08Tu
+        48YB4leQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oPYre-006Vs4-D9;
+        Sun, 21 Aug 2022 00:30:54 +0000
+Date:   Sun, 21 Aug 2022 01:30:54 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [RFC][PATCHES] termios.h cleanups
+Message-ID: <YwF8vibZ2/Xz7a/g@ZenIV>
+References: <YwBWJYU9BjnGBy2c@ZenIV>
+ <CAHk-=whL7nCkQLwWG29c-ojeCPqbaHPsRzOxEoxO0HzLuZV+sw@mail.gmail.com>
+ <YwErb9MnfTFCmOcA@ZenIV>
+ <CAHk-=wh91JqnMU+aN9NEy4vB9hePFEYLtiAVtS+U6VE-17pDBg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wh91JqnMU+aN9NEy4vB9hePFEYLtiAVtS+U6VE-17pDBg@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/lunn/linux.git v6.0-rc1-kirkwood-dt
-head:   ccd2fc5bd7bb1e532d745c8a145bac7e4aaa1614
-commit: 8198ea75cec5fbe318f7e46e7a11245e7106bef2 [32/57] DT: bus: Convert mvebu-mbus.txt bus controller to YAML
-reproduce:
-        # https://github.com/lunn/linux/commit/8198ea75cec5fbe318f7e46e7a11245e7106bef2
-        git remote add lunn https://github.com/lunn/linux.git
-        git fetch --no-tags lunn v6.0-rc1-kirkwood-dt
-        git checkout 8198ea75cec5fbe318f7e46e7a11245e7106bef2
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+On Sat, Aug 20, 2022 at 02:44:09PM -0700, Linus Torvalds wrote:
+> On Sat, Aug 20, 2022 at 11:44 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> >         Umm...  Might as well, I guess...  Where to put those, though?
+> > drivers/tty/tty_ioctl.c is not an option, unfortunately - it'll pick
+> > the local definitions, __weak or no __weak.
+> 
+> IThat bug is ancient history, and tty_ioctl.c is just fine.
+> 
+> Yes, we used to have the "you can't have __weak function definitions
+> in the same file that uses them" rule.
+> 
+> But it was due to a bug in gcc-4.1, which would inline weak functions.
+> 
+> But we long since gave up on gcc-4.1, and we have __weak functions
+> declarations in the same file as the use in multiple places. See for
+> example arch_release_task_struct() in kernel/fork.c.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> Warning: Documentation/devicetree/bindings/spi/marvell,orion-spi.yaml references a file that doesn't exist: Documentation/devicetree/bindings/bus/mvebu-mbus.txt
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+OK, that allows to reorder the whole thing better...  See #work.termios2
+(very lightly tested)

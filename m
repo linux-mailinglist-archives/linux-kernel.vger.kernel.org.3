@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D99959B156
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 04:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5D059B15E
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 05:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234380AbiHUCte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 22:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S235239AbiHUDEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 23:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbiHUCtc (ORCPT
+        with ESMTP id S236073AbiHUDEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 22:49:32 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A22F24095;
-        Sat, 20 Aug 2022 19:49:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 49C30CE0064;
-        Sun, 21 Aug 2022 02:49:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE789C433C1;
-        Sun, 21 Aug 2022 02:49:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661050166;
-        bh=NQPXhFg5BdDMCFze1MKNJpNFjVXRqm3HsERWvMoSabM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XKuC0yjUscAd/eUyEE1EjadDmF3GHpY/cvLE/6fWiT7zxCnfwPvuW7Xsr7VEuPNe8
-         MQlr6Q5BHAFakIxpZp/JQJURCXgFoTc+xCpcxTOjL4Q0NynwvyNqKneyoPTxZFzEOk
-         KhujIUin8/g9aQVBhILKs1bAsC7wjDDv/cfda6E6HRjnjue/jNOdGmictDM98fbrD0
-         RUO1UJYDioF5NsXGB7eyQAiqg/V8dqFSVDlngU//RWUTC5vfNVC/9wekCZFg6lya3i
-         F31/VjZwsRwy6+IXo7ifE4OvTw85JNfsivSa93ykKVd9+RP+iZ4pbWcv9x0YBXi4vu
-         sggPxJQOfoTQQ==
-Date:   Sun, 21 Aug 2022 10:49:19 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        s.hauer@pengutronix.de, l.stach@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        p.zabel@pengutronix.de, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        aisheng.dong@nxp.com, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V6 3/6] soc: imx: add i.MX93 SRC power domain driver
-Message-ID: <20220821024919.GJ149610@dragon>
-References: <20220719073541.197788-1-peng.fan@oss.nxp.com>
- <20220719073541.197788-4-peng.fan@oss.nxp.com>
+        Sat, 20 Aug 2022 23:04:32 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E750929CB4
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 20:04:28 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id i13-20020a056e02152d00b002e97839ff00so1604160ilu.15
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 20:04:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=/nXPIQGJRkolknwhdIPdZn9RGrbvOH9/zz0b+a2VlR4=;
+        b=noexl0Fth/vPgyI0UW1Ssb/OIL+pbiX6PdB2P57+03JoGcCBzMk9CpFxgecgGW5rkT
+         P7rk5oIRqjhwoGeGQivs6PpgXjws/A7oEAVGKBYMKCTA7Fg9OkxrgkXeayCKd4txvh+Y
+         p+dzR+cpBko3FHB9OHkM3R7bMQzhjQqTlVEsEbibcm7l1n0GiwrZcebMBZ/hoGU7U5pi
+         UbT2wbyNzzlpaVLMvsO2wB1cmhtpKSd1l4QK9P2ogK4T7Y8UO6Hmc8ivv9aQyxIQW/eB
+         H9EwD3VkYT4VkCnRaIUDTnTelDD30WBoh3xKJJ5C5+TWfRMlcdyXrTikORa4ngFvXi6W
+         E1DA==
+X-Gm-Message-State: ACgBeo3vGLshkuTwpnSIe562e1Zh+pCUoUT+RfRAAOvmoZ586dBq56ai
+        ez/BSHMixjtx1RXdeCRarGRbaE96Z2z5esS+IUViwlkwBLtO
+X-Google-Smtp-Source: AA6agR6aHHKzmsTVUTBZOFb87IDrhURrI7ZbxiVzpjFu5AdO8UzrQIq1z29F3AkEiYh/3in1Z830/lGKF00bUOhEL2e3Zl5GuYPf
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719073541.197788-4-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:6007:0:b0:2e4:464f:6e57 with SMTP id
+ u7-20020a926007000000b002e4464f6e57mr6974607ilb.181.1661051068273; Sat, 20
+ Aug 2022 20:04:28 -0700 (PDT)
+Date:   Sat, 20 Aug 2022 20:04:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e0dc1505e6b796c7@google.com>
+Subject: [syzbot] linux-next boot error: BUG: unable to handle kernel paging
+ request in enqueue_entity
+From:   syzbot <syzbot+e8d2360e9962d57f8072@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, bigeasy@linutronix.de,
+        bpf@vger.kernel.org, brauner@kernel.org, david@redhat.com,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, luto@kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,279 +58,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 03:35:38PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Support controlling power domain managed by System Reset
-> Controller(SRC). Current supported power domain is mediamix power
-> domain.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/soc/imx/Kconfig     |   8 ++
->  drivers/soc/imx/Makefile    |   1 +
->  drivers/soc/imx/imx93-pd.c  | 163 ++++++++++++++++++++++++++++++++++++
->  drivers/soc/imx/imx93-src.c |  32 +++++++
+Hello,
 
-Shouldn't a reset driver go to drivers/reset/?
+syzbot found the following issue on:
 
->  4 files changed, 204 insertions(+)
->  create mode 100644 drivers/soc/imx/imx93-pd.c
->  create mode 100644 drivers/soc/imx/imx93-src.c
-> 
-> diff --git a/drivers/soc/imx/Kconfig b/drivers/soc/imx/Kconfig
-> index a840494e849a..4b906791d6c7 100644
-> --- a/drivers/soc/imx/Kconfig
-> +++ b/drivers/soc/imx/Kconfig
-> @@ -20,4 +20,12 @@ config SOC_IMX8M
->  	  support, it will provide the SoC info like SoC family,
->  	  ID and revision etc.
->  
-> +config SOC_IMX9
-> +	tristate "i.MX9 SoC family support"
-> +	depends on ARCH_MXC || COMPILE_TEST
-> +	default ARCH_MXC && ARM64
-> +	select SOC_BUS
-> +	help
-> +	  If you say yes here, you get support for the NXP i.MX9 family
-> +
->  endmenu
-> diff --git a/drivers/soc/imx/Makefile b/drivers/soc/imx/Makefile
-> index 63cd29f6d4d2..a0baa2a01adb 100644
-> --- a/drivers/soc/imx/Makefile
-> +++ b/drivers/soc/imx/Makefile
-> @@ -7,3 +7,4 @@ obj-$(CONFIG_IMX_GPCV2_PM_DOMAINS) += gpcv2.o
->  obj-$(CONFIG_SOC_IMX8M) += soc-imx8m.o
->  obj-$(CONFIG_SOC_IMX8M) += imx8m-blk-ctrl.o
->  obj-$(CONFIG_SOC_IMX8M) += imx8mp-blk-ctrl.o
-> +obj-$(CONFIG_SOC_IMX9) += imx93-src.o imx93-pd.o
-> diff --git a/drivers/soc/imx/imx93-pd.c b/drivers/soc/imx/imx93-pd.c
-> new file mode 100644
-> index 000000000000..48437c303b78
-> --- /dev/null
-> +++ b/drivers/soc/imx/imx93-pd.c
-> @@ -0,0 +1,163 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2022 NXP
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/of_device.h>
-> +#include <linux/delay.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_domain.h>
-> +
-> +#define MIX_SLICE_SW_CTRL_OFF		0x20
-> +#define SLICE_SW_CTRL_PSW_CTRL_OFF_MASK	BIT(4)
-> +#define SLICE_SW_CTRL_PDN_SOFT_MASK	BIT(31)
-> +
-> +#define MIX_FUNC_STAT_OFF		0xB4
-> +
-> +#define FUNC_STAT_PSW_STAT_MASK		BIT(0)
-> +#define FUNC_STAT_RST_STAT_MASK		BIT(2)
-> +#define FUNC_STAT_ISO_STAT_MASK		BIT(4)
-> +
-> +struct imx93_power_domain {
-> +	struct generic_pm_domain genpd;
-> +	struct device *dev;
-> +	void __iomem *addr;
-> +	struct clk_bulk_data *clks;
-> +	int num_clks;
-> +	bool init_off;
-> +};
-> +
-> +#define to_imx93_pd(_genpd) container_of(_genpd, struct imx93_power_domain, genpd)
-> +
-> +static int imx93_pd_on(struct generic_pm_domain *genpd)
-> +{
-> +	struct imx93_power_domain *domain = to_imx93_pd(genpd);
-> +	void __iomem *addr = domain->addr;
-> +	u32 val;
-> +	int ret;
-> +
-> +	ret = clk_bulk_prepare_enable(domain->num_clks, domain->clks);
-> +	if (ret) {
-> +		dev_err(domain->dev, "failed to enable clocks for domain: %s\n", genpd->name);
-> +		return ret;
-> +	}
-> +
-> +	val = readl(addr + MIX_SLICE_SW_CTRL_OFF);
-> +	val &= ~SLICE_SW_CTRL_PDN_SOFT_MASK;
-> +	writel(val, addr + MIX_SLICE_SW_CTRL_OFF);
-> +
-> +	ret = readl_poll_timeout(addr + MIX_FUNC_STAT_OFF, val,
-> +				 !(val & FUNC_STAT_ISO_STAT_MASK), 1, 10000);
-> +	if (ret) {
-> +		dev_err(domain->dev, "pd_on timeout: name: %s, stat: %x\n", genpd->name, val);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int imx93_pd_off(struct generic_pm_domain *genpd)
-> +{
-> +	struct imx93_power_domain *domain = to_imx93_pd(genpd);
-> +	void __iomem *addr = domain->addr;
-> +	int ret;
-> +	u32 val;
-> +
-> +	/* Power off MIX */
-> +	val = readl(addr + MIX_SLICE_SW_CTRL_OFF);
-> +	val |= SLICE_SW_CTRL_PDN_SOFT_MASK;
-> +	writel(val, addr + MIX_SLICE_SW_CTRL_OFF);
-> +
-> +	ret = readl_poll_timeout(addr + MIX_FUNC_STAT_OFF, val,
-> +				 val & FUNC_STAT_PSW_STAT_MASK, 1, 1000);
-> +	if (ret) {
-> +		dev_err(domain->dev, "pd_off timeout: name: %s, stat: %x\n", genpd->name, val);
-> +		return ret;
-> +	}
-> +
-> +	clk_bulk_disable_unprepare(domain->num_clks, domain->clks);
-> +
-> +	return 0;
-> +};
-> +
-> +static int imx93_pd_remove(struct platform_device *pdev)
-> +{
-> +	struct imx93_power_domain *domain = platform_get_drvdata(pdev);
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +
-> +	if (!domain->init_off)
-> +		clk_bulk_disable_unprepare(domain->num_clks, domain->clks);
-> +
-> +	of_genpd_del_provider(np);
-> +	pm_genpd_remove(&domain->genpd);
-> +
-> +	return 0;
-> +}
-> +
-> +static int imx93_pd_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct imx93_power_domain *domain;
-> +	int ret;
-> +
-> +	domain = devm_kzalloc(dev, sizeof(*domain), GFP_KERNEL);
-> +	if (!domain)
-> +		return -ENOMEM;
+HEAD commit:    e1084bacab44 Add linux-next specific files for 20220816
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=14c686a5080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2f5fa747986be53a
+dashboard link: https://syzkaller.appspot.com/bug?extid=e8d2360e9962d57f8072
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Have a newline.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e8d2360e9962d57f8072@syzkaller.appspotmail.com
 
-> +	domain->addr = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(domain->addr))
-> +		return PTR_ERR(domain->addr);
-> +
-> +
+BUG: unable to handle page fault for address: ffffdc0000000008
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 11826067 P4D 11826067 PUD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 8 Comm: kworker/u4:0 Not tainted 6.0.0-rc1-next-20220816-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Workqueue: events_unbound async_run_entry_fn
+RIP: 0010:entity_before kernel/sched/fair.c:585 [inline]
+RIP: 0010:__entity_less kernel/sched/fair.c:621 [inline]
+RIP: 0010:rb_add_cached include/linux/rbtree.h:174 [inline]
+RIP: 0010:__enqueue_entity kernel/sched/fair.c:629 [inline]
+RIP: 0010:enqueue_entity+0x389/0x1520 kernel/sched/fair.c:4618
+Code: 00 0f 85 57 0e 00 00 48 8b 53 50 be 01 00 00 00 49 bd 00 00 00 00 00 fc ff df eb 03 48 89 c5 48 8d 7d 40 48 89 f8 48 c1 e8 03 <42> 80 3c 28 00 0f 85 77 0c 00 00 48 3b 55 40 4c 8d 65 10 78 06 4c
+RSP: 0000:ffffc900001e0b00 EFLAGS: 00010802
+RAX: 1fffe00000000008 RBX: ffff88801b1a5900 RCX: 0000000000000100
+RDX: 00000000f90154e3 RSI: 0000000000000000 RDI: ffff000000000040
+RBP: ffff000000000000 R08: ffff88801b1a5910 R09: ffff8880b9b3a080
+R10: fffffbfff1bbd5ba R11: 0000000000000001 R12: ffff88801fc28098
+R13: dffffc0000000000 R14: ffff8880b9b3a040 R15: ffff8880b9b3a050
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdc0000000008 CR3: 000000000bc8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ enqueue_task_fair+0x1ba/0xce0 kernel/sched/fair.c:5921
+ enqueue_task+0xad/0x3a0 kernel/sched/core.c:2066
+ activate_task kernel/sched/core.c:2091 [inline]
+ ttwu_do_activate+0x157/0x330 kernel/sched/core.c:3670
+ ttwu_queue kernel/sched/core.c:3875 [inline]
+ try_to_wake_up+0xcc0/0x1e60 kernel/sched/core.c:4198
+ wake_up_worker kernel/workqueue.c:865 [inline]
+ insert_work+0x27e/0x350 kernel/workqueue.c:1376
+ __queue_work+0x625/0x1210 kernel/workqueue.c:1527
+ queue_work_on+0x143/0x170 kernel/workqueue.c:1562
+ queue_work include/linux/workqueue.h:508 [inline]
+ schedule_work include/linux/workqueue.h:569 [inline]
+ __vfree_deferred mm/vmalloc.c:2718 [inline]
+ __vfree+0xb0/0xd0 mm/vmalloc.c:2742
+ vfree+0x5a/0x90 mm/vmalloc.c:2775
+ thread_stack_free_rcu+0x88/0xa0 kernel/fork.c:221
+ rcu_do_batch kernel/rcu/tree.c:2245 [inline]
+ rcu_core+0x7b5/0x1890 kernel/rcu/tree.c:2505
+ __do_softirq+0x1d3/0x9c6 kernel/softirq.c:571
+ invoke_softirq kernel/softirq.c:445 [inline]
+ __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
+ sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1106
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:lock_acquire+0x1ef/0x570 kernel/locking/lockdep.c:5634
+Code: eb a2 7e 83 f8 01 0f 85 e8 02 00 00 9c 58 f6 c4 02 0f 85 fb 02 00 00 48 83 7c 24 08 00 74 01 fb 48 b8 00 00 00 00 00 fc ff df <48> 01 c3 48 c7 03 00 00 00 00 48 c7 43 08 00 00 00 00 48 8b 84 24
+RSP: 0000:ffffc900000d7660 EFLAGS: 00000206
+RAX: dffffc0000000000 RBX: 1ffff9200001aece RCX: 6ba147c65e712bc2
+RDX: 1ffff11027fccc5e RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff908de947
+R10: fffffbfff211bd28 R11: 0000000000000000 R12: 0000000000000002
+R13: 0000000000000000 R14: ffffffff8bf89a80 R15: 0000000000000000
+ rcu_lock_acquire include/linux/rcupdate.h:280 [inline]
+ rcu_read_lock include/linux/rcupdate.h:706 [inline]
+ blk_mq_run_hw_queue+0xbf/0x490 block/blk-mq.c:2138
+ blk_mq_sched_restart block/blk-mq-sched.h:35 [inline]
+ __blk_mq_free_request+0x26c/0x3f0 block/blk-mq.c:624
+ blk_mq_free_request+0x35b/0x500 block/blk-mq.c:647
+ __scsi_execute+0x452/0x5d0 drivers/scsi/scsi_lib.c:261
+ scsi_execute_req include/scsi/scsi_device.h:479 [inline]
+ scsi_probe_lun drivers/scsi/scsi_scan.c:685 [inline]
+ scsi_probe_and_add_lun+0x521/0x3660 drivers/scsi/scsi_scan.c:1199
+ __scsi_scan_target+0x21f/0xdb0 drivers/scsi/scsi_scan.c:1673
+ scsi_scan_channel drivers/scsi/scsi_scan.c:1761 [inline]
+ scsi_scan_channel+0x148/0x1e0 drivers/scsi/scsi_scan.c:1737
+ scsi_scan_host_selected+0x2df/0x3b0 drivers/scsi/scsi_scan.c:1790
+ do_scsi_scan_host+0x1e8/0x260 drivers/scsi/scsi_scan.c:1929
+ do_scan_async+0x3e/0x500 drivers/scsi/scsi_scan.c:1939
+ async_run_entry_fn+0x98/0x530 kernel/async.c:127
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2312
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2459
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+CR2: ffffdc0000000008
+---[ end trace 0000000000000000 ]---
+RIP: 0010:entity_before kernel/sched/fair.c:585 [inline]
+RIP: 0010:__entity_less kernel/sched/fair.c:621 [inline]
+RIP: 0010:rb_add_cached include/linux/rbtree.h:174 [inline]
+RIP: 0010:__enqueue_entity kernel/sched/fair.c:629 [inline]
+RIP: 0010:enqueue_entity+0x389/0x1520 kernel/sched/fair.c:4618
+Code: 00 0f 85 57 0e 00 00 48 8b 53 50 be 01 00 00 00 49 bd 00 00 00 00 00 fc ff df eb 03 48 89 c5 48 8d 7d 40 48 89 f8 48 c1 e8 03 <42> 80 3c 28 00 0f 85 77 0c 00 00 48 3b 55 40 4c 8d 65 10 78 06 4c
+RSP: 0000:ffffc900001e0b00 EFLAGS: 00010802
+RAX: 1fffe00000000008 RBX: ffff88801b1a5900 RCX: 0000000000000100
+RDX: 00000000f90154e3 RSI: 0000000000000000 RDI: ffff000000000040
+RBP: ffff000000000000 R08: ffff88801b1a5910 R09: ffff8880b9b3a080
+R10: fffffbfff1bbd5ba R11: 0000000000000001 R12: ffff88801fc28098
+R13: dffffc0000000000 R14: ffff8880b9b3a040 R15: ffff8880b9b3a050
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdc0000000008 CR3: 000000000bc8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	00 0f                	add    %cl,(%rdi)
+   2:	85 57 0e             	test   %edx,0xe(%rdi)
+   5:	00 00                	add    %al,(%rax)
+   7:	48 8b 53 50          	mov    0x50(%rbx),%rdx
+   b:	be 01 00 00 00       	mov    $0x1,%esi
+  10:	49 bd 00 00 00 00 00 	movabs $0xdffffc0000000000,%r13
+  17:	fc ff df
+  1a:	eb 03                	jmp    0x1f
+  1c:	48 89 c5             	mov    %rax,%rbp
+  1f:	48 8d 7d 40          	lea    0x40(%rbp),%rdi
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1) <-- trapping instruction
+  2f:	0f 85 77 0c 00 00    	jne    0xcac
+  35:	48 3b 55 40          	cmp    0x40(%rbp),%rdx
+  39:	4c 8d 65 10          	lea    0x10(%rbp),%r12
+  3d:	78 06                	js     0x45
+  3f:	4c                   	rex.WR
 
-One newline is enough.
 
-> +	domain->num_clks = devm_clk_bulk_get_all(dev, &domain->clks);
-> +	if (domain->num_clks < 0)
-> +		return dev_err_probe(dev, domain->num_clks, "Failed to get domain's clocks\n");
-> +
-> +	domain->genpd.name = dev_name(dev);
-> +	domain->genpd.power_off = imx93_pd_off;
-> +	domain->genpd.power_on = imx93_pd_on;
-> +	domain->dev = dev;
-> +
-> +	domain->init_off = readl(domain->addr + MIX_FUNC_STAT_OFF) & FUNC_STAT_ISO_STAT_MASK;
-> +	/* Just to sync the status of hardware */
-> +	if (!domain->init_off) {
-> +		ret = clk_bulk_prepare_enable(domain->num_clks, domain->clks);
-> +		if (ret) {
-> +			dev_err(domain->dev, "failed to enable clocks for domain: %s\n",
-> +				domain->genpd.name);
-> +			return 0;
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-This is a case of success?
-
-> +		}
-> +	}
-> +
-> +	ret = pm_genpd_init(&domain->genpd, NULL, domain->init_off);
-> +	if (ret)
-> +		return ret;
-> +
-> +	platform_set_drvdata(pdev, domain);
-> +
-> +	return of_genpd_add_provider_simple(np, &domain->genpd);
-> +}
-> +
-> +static const struct of_device_id imx93_dt_ids[] = {
-> +	{ .compatible = "fsl,imx93-src-slice" },
-> +	{ }
-> +};
-
-MODULE_DEVICE_TABLE()?
-
-Shawn
-
-> +
-> +static struct platform_driver imx93_power_domain_driver = {
-> +	.driver = {
-> +		.name	= "imx93_power_domain",
-> +		.owner	= THIS_MODULE,
-> +		.of_match_table = imx93_dt_ids,
-> +	},
-> +	.probe = imx93_pd_probe,
-> +	.remove = imx93_pd_remove,
-> +};
-> +module_platform_driver(imx93_power_domain_driver);
-> +
-> +MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
-> +MODULE_DESCRIPTION("NXP i.MX93 power domain driver");
-> +MODULE_LICENSE("GPL");
-
-"GPL v2" since you have "SPDX-License-Identifier: GPL-2.0" claimed in
-the beginning?
-
-Shawn
-
-> diff --git a/drivers/soc/imx/imx93-src.c b/drivers/soc/imx/imx93-src.c
-> new file mode 100644
-> index 000000000000..6f14c241538e
-> --- /dev/null
-> +++ b/drivers/soc/imx/imx93-src.c
-> @@ -0,0 +1,32 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2022 NXP
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +
-> +static int imx93_src_probe(struct platform_device *pdev)
-> +{
-> +	return devm_of_platform_populate(&pdev->dev);
-> +}
-> +
-> +static const struct of_device_id imx93_dt_ids[] = {
-> +	{ .compatible = "fsl,imx93-src" },
-> +	{ }
-> +};
-> +
-> +static struct platform_driver imx93_src_driver = {
-> +	.driver = {
-> +		.name	= "imx93_src",
-> +		.owner	= THIS_MODULE,
-> +		.of_match_table = imx93_dt_ids,
-> +	},
-> +	.probe = imx93_src_probe,
-> +};
-> +module_platform_driver(imx93_src_driver);
-> +
-> +MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
-> +MODULE_DESCRIPTION("NXP i.MX93 src driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.25.1
-> 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

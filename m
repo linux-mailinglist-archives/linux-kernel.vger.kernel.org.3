@@ -2,235 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B9659B5CA
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 20:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4666F59B5CC
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 20:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiHUSE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 14:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S231458AbiHUSGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 14:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiHUSER (ORCPT
+        with ESMTP id S229491AbiHUSGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 14:04:17 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E9A1D0E6;
-        Sun, 21 Aug 2022 11:04:16 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id h22so7084524ejk.4;
-        Sun, 21 Aug 2022 11:04:16 -0700 (PDT)
+        Sun, 21 Aug 2022 14:06:50 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715AC1D329;
+        Sun, 21 Aug 2022 11:06:46 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id w29so2845662pfj.3;
+        Sun, 21 Aug 2022 11:06:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=w6SKvkLC4OBu3WKKHSHiRs3Yoxkr5LqytzcXu+IR0Bs=;
-        b=LdYa0R0lJzFpxj8ot+zbbW9UGIqeRqepnRaEQw597edLKf24TLkrr+xgvmMWQLcQF+
-         6xmYOVupoN/dW5kwLJZhRCueK5c9jbG+RAby3Y1+EP/Pp8kfXCMGI6gyJC89esPytIBP
-         l+byrhTCfdItcaPTGvzJQ+CctrD7xh2FHPN0aeJXjlFhLMR2R8Tgl9q/wKvb9ZE3LJ7v
-         MZLiEX48SqLVhQxuIk7xc4I7B1PP7ATLNdeQY8LBiPn4nPodxiGDDjwh3DlL3K09pkSQ
-         ANfXcMBFRj8oWcuRN0F1vt8VVdsW1j8Nr15YqE7IekemrCjvIUWA2Ky8wqLYAu4eeUUF
-         GTLQ==
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc;
+        bh=WZPcPJT9zvWPvsEM4NAAw/0jxPWsF3FxCjtklAsTneU=;
+        b=d+ULP6ImPM4qyQrpoTcaxqS4t1rNIDKoG7OxOCf0dGUgm5Xme3cn1hIdNHSCG0xZlF
+         5nmCYf2ya7e7bYzma6ZvFeJEUl2HEJeZ9FNJVyQBGRbZvsz4Pzj8cTWFGe/xoP02yQdd
+         X7YIlSX/3ZocjQouKIyOXu3TkXsIeM5SYrgTvqw0bDuymnkWeYuFwFnuCkHdTcXdD1Lp
+         E3T+p1pGQms5b89qhUX8OwwBpHd49rhVGdKQAJSGhnc/Y9b01iqRrPK1baV7QKLERUg6
+         TIxwdBGZIILGF+fEumPKLix/FH3ra5b93ySOBTX67dtpkZLH45WQ7urFmA+RIYPSaQ/w
+         jkYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=w6SKvkLC4OBu3WKKHSHiRs3Yoxkr5LqytzcXu+IR0Bs=;
-        b=xIlXS/p+GmCLqGubcPoY64G4uFQmv0xozemmPpwtGgIwjNLuO5h/exLiZC5yb1AZTO
-         EpQfslGr5ZDsNLl0GAZKj3oSFaLJ0xvxYtf2Yuqy2DQ9fL0jYua7ybGdgBpdtPSuLQ/b
-         ZUIvcLAjdIhQ33JzefFBJucP4pYv/3bTOItpG6VYKYKVr122VvTeVwNqYGWAZ4nWiKOh
-         GgPriKJBTFdSbghO09v7fY98Afj8Grlrw2HCCEsUHhdc7HzK/pyslpXcUS0Hn1yogCbG
-         zieqkK0TShefZq5XmML9B+jB85r9sWgIIRqnC8lnXZcy4cEwfGIE7JIWl0v/xNrn0Bj8
-         Y74w==
-X-Gm-Message-State: ACgBeo22+CKs31Sb6L3MiHm8UAOiomGOtlJ0aKus5/69JDf8UCOBru1V
-        0WlrPc8GDSwTK3cBWFaUQN4=
-X-Google-Smtp-Source: AA6agR73A7CjUFJiPOVLItJqC0yGGoK6vDTYLjGrbWCULimfKAqhuDPYG9RVpRjlj/xQcVj5PHrDUA==
-X-Received: by 2002:a17:906:ee89:b0:73d:70c5:1a4e with SMTP id wt9-20020a170906ee8900b0073d70c51a4emr2822482ejb.683.1661105054970;
-        Sun, 21 Aug 2022 11:04:14 -0700 (PDT)
-Received: from localhost.localdomain (host-87-17-106-94.retail.telecomitalia.it. [87.17.106.94])
-        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b007317f017e64sm5125916ejg.134.2022.08.21.11.04.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 11:04:13 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Kees Cook <keescook@chromium.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        "Theodore Ts'o" <tytso@mit.edu>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Viacheslav Dubeyko <slava@dubeyko.com>
-Subject: [RESEND PATCH 3/3] hfs: Replace kmap() with kmap_local_page() in btree.c
-Date:   Sun, 21 Aug 2022 20:04:00 +0200
-Message-Id: <20220821180400.8198-4-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220821180400.8198-1-fmdefrancesco@gmail.com>
-References: <20220821180400.8198-1-fmdefrancesco@gmail.com>
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=WZPcPJT9zvWPvsEM4NAAw/0jxPWsF3FxCjtklAsTneU=;
+        b=DKxEPcRgtAISCc0jgq4HCksTQyXHHEuUQ456pH73CURTvIcko+tX5jKMJH/2mrLJhi
+         0OEci3CNQD7ezy9R/L4LsPN/0FUEGvx6Fj8+M824079NjCbNblhNcfl345zaImL0g4/x
+         XHtWAFLOqujJG4+ZMH2J8tKqAoDfkJKKgcUhGIESEHe21hOYBt/GJa8d1c6ffbXVDZCE
+         hwqHatvN6dfB+1NZRGzD2gAtd/2gOqtOBvVNtQU1QNuyAC4uL+mxibqdBOXMv4VVlNeW
+         y0NZoo39AhLH8Jz0Q1wdkv8Sug79TRTLfQWsWHu+1UkoInebDGFFnt2Jk1ufI/75rt/6
+         75bQ==
+X-Gm-Message-State: ACgBeo1gf0gd/u29gFplEBvW/lXJEEDKaYwhr/A0B8XVSkTvh4EZGcoY
+        K2T3Ul8oax7v4btVxfyNg0iThoa7SvlnqA==
+X-Google-Smtp-Source: AA6agR7/vOXpsOzVSFiar3eeaTq2ScO0QeQ6uUTKJ/rNxtuujGomojIJYEGv4V4ZtwhlE8m7Y5CKuw==
+X-Received: by 2002:a63:4d4a:0:b0:423:1b0:e5c1 with SMTP id n10-20020a634d4a000000b0042301b0e5c1mr13719679pgl.585.1661105205846;
+        Sun, 21 Aug 2022 11:06:45 -0700 (PDT)
+Received: from Mahakal ([2401:4900:36a0:636e:62bf:3813:d194:e46f])
+        by smtp.gmail.com with ESMTPSA id r26-20020aa7989a000000b005367c6db0a4sm1424311pfl.183.2022.08.21.11.06.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 21 Aug 2022 11:06:45 -0700 (PDT)
+Date:   Sun, 21 Aug 2022 23:36:39 +0530
+From:   "<Vishal Badole>" <badolevishal1116@gmail.com>
+To:     sboyd@kernel.org
+Cc:     mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chinmoyghosh2001@gmail.com,
+        vimal.kumar32@gmail.com, Mintu Patel <mintupatel89@gmail.com>
+Subject: Re: [PATCH v3] Common clock: To list active consumers of clocks
+Message-ID: <20220821180637.GB6946@Mahakal>
+References: <20220624010550.582BBC341C7@smtp.kernel.org>
+ <1659463787-25976-1-git-send-email-badolevishal1116@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1659463787-25976-1-git-send-email-badolevishal1116@gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_MISSP_FREEMAIL,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,TO_NO_BRKTS_FROM_MSSP,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap() is being deprecated in favor of kmap_local_page().
+On Tue, Aug 02, 2022 at 11:39:47PM +0530, Vishal Badole wrote:
+> This feature lists the clock consumer's name and per-user enable count
+> in clock summary. Using this feature user can easily check which device
+> has acquired a perticular clock and it is enabled by respective device
+> or not.
+> for example:
+> $ cat /sys/kernel/debug/clk/clk_summary
+>                       enable  prepare  protect                           duty  hardware                            per-user
+>    clock               count    count    count    rate   accuracy phase cycle    enable   consumer                    count
+> ----------------------------------------------------------------------------------------------------------------------------
+>  clk_mcasp0_fixed         0        0        0    24576000      0     0  50000     Y      deviceless                      0
+>                                                                                          deviceless                      0
+>     clk_mcasp0            0        0        0    24576000      0     0  50000     N          simple-audio-card,cpu           0
+>                                                                                              deviceless                      0
+> 
+> Co-developed-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
+> Signed-off-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
+> Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
+> Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
+> Co-developed-by: Vimal Kumar <vimal.kumar32@gmail.com>
+> Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
+> Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
+> ---
+>  drivers/clk/clk.c | 46 +++++++++++++++++++++++++++++++++++-----------
+>  1 file changed, 35 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> index f00d4c1..c96079f 100644
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -102,6 +102,7 @@ struct clk {
+>  	unsigned long min_rate;
+>  	unsigned long max_rate;
+>  	unsigned int exclusive_count;
+> +	unsigned int enable_count;
+>  	struct hlist_node clks_node;
+>  };
+>  
+> @@ -1008,6 +1009,10 @@ void clk_disable(struct clk *clk)
+>  		return;
+>  
+>  	clk_core_disable_lock(clk->core);
+> +
+> +	if (clk->enable_count > 0)
+> +		clk->enable_count--;
+> +
+>  }
+>  EXPORT_SYMBOL_GPL(clk_disable);
+>  
+> @@ -1169,10 +1174,16 @@ EXPORT_SYMBOL_GPL(clk_restore_context);
+>   */
+>  int clk_enable(struct clk *clk)
+>  {
+> +	int ret;
+> +
+>  	if (!clk)
+>  		return 0;
+>  
+> -	return clk_core_enable_lock(clk->core);
+> +	ret = clk_core_enable_lock(clk->core);
+> +	if (!ret)
+> +		clk->enable_count++;
+> +
+> +	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(clk_enable);
+>  
+> @@ -2953,28 +2964,41 @@ static void clk_summary_show_one(struct seq_file *s, struct clk_core *c,
+>  				 int level)
+>  {
+>  	int phase;
+> +	struct clk *clk_user;
+> +	int multi_node = 0;
+>  
+> -	seq_printf(s, "%*s%-*s %7d %8d %8d %11lu %10lu ",
+> +	seq_printf(s, "%*s%-*s %-7d %-8d %-8d %-11lu %-10lu ",
+>  		   level * 3 + 1, "",
+> -		   30 - level * 3, c->name,
+> +		   35 - level * 3, c->name,
+>  		   c->enable_count, c->prepare_count, c->protect_count,
+>  		   clk_core_get_rate_recalc(c),
+>  		   clk_core_get_accuracy_recalc(c));
+>  
+>  	phase = clk_core_get_phase(c);
+>  	if (phase >= 0)
+> -		seq_printf(s, "%5d", phase);
+> +		seq_printf(s, "%-5d", phase);
+>  	else
+>  		seq_puts(s, "-----");
+>  
+> -	seq_printf(s, " %6d", clk_core_get_scaled_duty_cycle(c, 100000));
+> +	seq_printf(s, " %-6d", clk_core_get_scaled_duty_cycle(c, 100000));
+>  
+>  	if (c->ops->is_enabled)
+> -		seq_printf(s, " %9c\n", clk_core_is_enabled(c) ? 'Y' : 'N');
+> +		seq_printf(s, " %5c ", clk_core_is_enabled(c) ? 'Y' : 'N');
+>  	else if (!c->ops->enable)
+> -		seq_printf(s, " %9c\n", 'Y');
+> +		seq_printf(s, " %5c ", 'Y');
+>  	else
+> -		seq_printf(s, " %9c\n", '?');
+> +		seq_printf(s, " %5c ", '?');
+> +
+> +	hlist_for_each_entry(clk_user, &c->clks, clks_node) {
+> +		seq_printf(s, "%*s%-*s  %-4d\n",
+> +			   level * 3 + 2 + 105 * multi_node, "",
+> +			   30,
+> +			   clk_user->dev_id ? clk_user->dev_id : "deviceless",
+> +			   clk_user->enable_count);
+> +
+> +		multi_node = 1;
+> +	}
+> +
+>  }
+>  
+>  static void clk_summary_show_subtree(struct seq_file *s, struct clk_core *c,
+> @@ -2995,9 +3019,9 @@ static int clk_summary_show(struct seq_file *s, void *data)
+>  	struct clk_core *c;
+>  	struct hlist_head **lists = (struct hlist_head **)s->private;
+>  
+> -	seq_puts(s, "                                 enable  prepare  protect                                duty  hardware\n");
+> -	seq_puts(s, "   clock                          count    count    count        rate   accuracy phase  cycle    enable\n");
+> -	seq_puts(s, "-------------------------------------------------------------------------------------------------------\n");
+> +	seq_puts(s, "                                 enable  prepare  protect                                duty  hardware                            per-user\n");
+> +	seq_puts(s, "   clock                          count    count    count        rate   accuracy phase  cycle    enable   consumer                    count\n");
+> +	seq_puts(s, "-------------------------------------------------------------------------------------------------------------------------------------------\n");
+>  
+>  	clk_prepare_lock();
+>  
+> -- 
+> 2.7.4
+>
 
-Two main problems with kmap(): (1) It comes with an overhead as mapping
-space is restricted and protected by a global lock for synchronization and
-(2) it also requires global TLB invalidation when the kmap’s pool wraps
-and it might block when the mapping space is fully utilized until a slot
-becomes available.
+Hi Stephen,
+Please review the above patch. Here we have made the changes as per your
+review points. 
+Note: The example format in commit meassage is getting changed during
+copy paste but we are getting proper formatted and parsable output on
+actual target.
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-the tasks can be preempted and, when they are scheduled to run again, the
-kernel virtual addresses are restored and still valid.
 
-Since its use in btree.c is safe everywhere, it should be preferred.
-
-Therefore, replace kmap() with kmap_local_page() in btree.c. Where
-possible, use the suited standard helpers (memzero_page(), memcpy_page())
-instead of open coding kmap_local_page() plus memset() or memcpy().
-
-Tested in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
-HIGHMEM64GB enabled.
-
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- fs/hfs/btree.c | 30 ++++++++++++++++--------------
- 1 file changed, 16 insertions(+), 14 deletions(-)
-
-diff --git a/fs/hfs/btree.c b/fs/hfs/btree.c
-index 56c6782436e9..2fa4b1f8cc7f 100644
---- a/fs/hfs/btree.c
-+++ b/fs/hfs/btree.c
-@@ -80,7 +80,8 @@ struct hfs_btree *hfs_btree_open(struct super_block *sb, u32 id, btree_keycmp ke
- 		goto free_inode;
- 
- 	/* Load the header */
--	head = (struct hfs_btree_header_rec *)(kmap(page) + sizeof(struct hfs_bnode_desc));
-+	head = (struct hfs_btree_header_rec *)(kmap_local_page(page) +
-+					       sizeof(struct hfs_bnode_desc));
- 	tree->root = be32_to_cpu(head->root);
- 	tree->leaf_count = be32_to_cpu(head->leaf_count);
- 	tree->leaf_head = be32_to_cpu(head->leaf_head);
-@@ -119,12 +120,12 @@ struct hfs_btree *hfs_btree_open(struct super_block *sb, u32 id, btree_keycmp ke
- 	tree->node_size_shift = ffs(size) - 1;
- 	tree->pages_per_bnode = (tree->node_size + PAGE_SIZE - 1) >> PAGE_SHIFT;
- 
--	kunmap(page);
-+	kunmap_local(head);
- 	put_page(page);
- 	return tree;
- 
- fail_page:
--	kunmap(page);
-+	kunmap_local(head);
- 	put_page(page);
- free_inode:
- 	tree->inode->i_mapping->a_ops = &hfs_aops;
-@@ -170,7 +171,8 @@ void hfs_btree_write(struct hfs_btree *tree)
- 		return;
- 	/* Load the header */
- 	page = node->page[0];
--	head = (struct hfs_btree_header_rec *)(kmap(page) + sizeof(struct hfs_bnode_desc));
-+	head = (struct hfs_btree_header_rec *)(kmap_local_page(page) +
-+					       sizeof(struct hfs_bnode_desc));
- 
- 	head->root = cpu_to_be32(tree->root);
- 	head->leaf_count = cpu_to_be32(tree->leaf_count);
-@@ -181,7 +183,7 @@ void hfs_btree_write(struct hfs_btree *tree)
- 	head->attributes = cpu_to_be32(tree->attributes);
- 	head->depth = cpu_to_be16(tree->depth);
- 
--	kunmap(page);
-+	kunmap_local(head);
- 	set_page_dirty(page);
- 	hfs_bnode_put(node);
- }
-@@ -269,7 +271,7 @@ struct hfs_bnode *hfs_bmap_alloc(struct hfs_btree *tree)
- 
- 	off += node->page_offset;
- 	pagep = node->page + (off >> PAGE_SHIFT);
--	data = kmap(*pagep);
-+	data = kmap_local_page(*pagep);
- 	off &= ~PAGE_MASK;
- 	idx = 0;
- 
-@@ -282,7 +284,7 @@ struct hfs_bnode *hfs_bmap_alloc(struct hfs_btree *tree)
- 						idx += i;
- 						data[off] |= m;
- 						set_page_dirty(*pagep);
--						kunmap(*pagep);
-+						kunmap_local(data);
- 						tree->free_nodes--;
- 						mark_inode_dirty(tree->inode);
- 						hfs_bnode_put(node);
-@@ -291,14 +293,14 @@ struct hfs_bnode *hfs_bmap_alloc(struct hfs_btree *tree)
- 				}
- 			}
- 			if (++off >= PAGE_SIZE) {
--				kunmap(*pagep);
--				data = kmap(*++pagep);
-+				kunmap_local(data);
-+				data = kmap_local_page(*++pagep);
- 				off = 0;
- 			}
- 			idx += 8;
- 			len--;
- 		}
--		kunmap(*pagep);
-+		kunmap_local(data);
- 		nidx = node->next;
- 		if (!nidx) {
- 			printk(KERN_DEBUG "create new bmap node...\n");
-@@ -314,7 +316,7 @@ struct hfs_bnode *hfs_bmap_alloc(struct hfs_btree *tree)
- 		off = off16;
- 		off += node->page_offset;
- 		pagep = node->page + (off >> PAGE_SHIFT);
--		data = kmap(*pagep);
-+		data = kmap_local_page(*pagep);
- 		off &= ~PAGE_MASK;
- 	}
- }
-@@ -361,20 +363,20 @@ void hfs_bmap_free(struct hfs_bnode *node)
- 	}
- 	off += node->page_offset + nidx / 8;
- 	page = node->page[off >> PAGE_SHIFT];
--	data = kmap(page);
-+	data = kmap_local_page(page);
- 	off &= ~PAGE_MASK;
- 	m = 1 << (~nidx & 7);
- 	byte = data[off];
- 	if (!(byte & m)) {
- 		pr_crit("trying to free free bnode %u(%d)\n",
- 			node->this, node->type);
--		kunmap(page);
-+		kunmap_local(data);
- 		hfs_bnode_put(node);
- 		return;
- 	}
- 	data[off] = byte & ~m;
- 	set_page_dirty(page);
--	kunmap(page);
-+	kunmap_local(data);
- 	hfs_bnode_put(node);
- 	tree->free_nodes++;
- 	mark_inode_dirty(tree->inode);
--- 
-2.37.1
-
+Regards,
+Vishal

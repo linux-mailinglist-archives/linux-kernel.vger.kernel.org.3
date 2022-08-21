@@ -2,122 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 136F759B4FD
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 17:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE30A59B500
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 17:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbiHUPTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 11:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
+        id S231401AbiHUPUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 11:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiHUPTK (ORCPT
+        with ESMTP id S229561AbiHUPUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 11:19:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED78D13F74;
-        Sun, 21 Aug 2022 08:19:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5520160EFE;
-        Sun, 21 Aug 2022 15:19:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEA5FC433C1;
-        Sun, 21 Aug 2022 15:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661095146;
-        bh=J34zjnX+gdxLLSVH7y0L1d9EB4KoSbYPwfl1PzsdGp4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PQqMuHiaD3Dke+dr7z4AjjhA0rT3CUwrbzcIXut0+eeeiLnhdRuv4mPGch7qAoi6X
-         8UQ1tto1i35vM5WIUZGq9aTN2MRPFDe710JSYy09EVfJvq4FPjmiiNyGQ3GMGiAZtS
-         /5edwTd6dz9jglu7r9DoXXPrk+f9/2jUAN3vUU+ROm83j15Pzhx5AGX3wL8a5FaFOL
-         YaT5bHcLKqeJcLSJHv8Cv0LxNRgncOZw/bPcvP336361JCd0hzZGoZsy5QdaiZcALQ
-         yaThxbB+l3h2jv+MB+L4CZc7hq0VhgGdDtGOgThDkqlIhZeJ6d9Ay7VVCdcKQf9nH3
-         wkBnlyRU0+2IQ==
-Date:   Mon, 22 Aug 2022 00:19:02 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Tom Zanussi <zanussi@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] tracing/probes: Have kprobes and uprobes use
- $COMM too
-Message-Id: <20220822001902.170ae2e078bba021581279e2@kernel.org>
-In-Reply-To: <20220820134401.317014913@goodmis.org>
-References: <20220820134316.156058831@goodmis.org>
-        <20220820134401.317014913@goodmis.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 21 Aug 2022 11:20:42 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D515915718;
+        Sun, 21 Aug 2022 08:20:39 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1661095216tvo9v95l
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 21 Aug 2022 23:20:15 +0800 (CST)
+X-QQ-SSF: 01000000002000C0D000B00A0000000
+X-QQ-FEAT: QityeSR92A2caRpFjRcMmJVpE6RNh8LppFJhz+NlGpISUIgyuKE9MlW48Y77S
+        FpF3nN0qCYalUfZOvbdB64Uc+JCNYeh98vZoQCuXtBQadi4sgXctPpwXj0iCz0EoC6F7eHv
+        ZpPhLXspY/ekcdLBqugMNIU5ZqIVGy7rzM3v9QhfYw0ges+D+pjolCmtopWdLRE4J7yuw20
+        FsiYDoiB3FwJkapXytQGqikvsTv7xCGqWDq8YgXP0OwcYFxVFw/ModF/aEBx5xV0u7Tc9s1
+        ti3M9x5cpAUb5KxUJLp5Za/XRwPhywdzxMjia8SkfsVgvGgTZkqi3mU1L5I2SFrRihjekL8
+        /uWleCKKH/vhazVay+ymrMlQbVh2NVZa3G0ze7xUt03C+nCmvF6bAizUjyWRg==
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     daniel@zonque.org, haojian.zhuang@gmail.com,
+        robert.jarzmik@free.fr, balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] gadget/udc: fix repeated words in comments
+Date:   Sun, 21 Aug 2022 23:20:09 +0800
+Message-Id: <20220821152009.61380-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_PBL,RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *      [43.154.54.12 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [43.154.54.12 listed in wl.mailspike.net]
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 20 Aug 2022 09:43:21 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+ Delete the redundant word 'tell'.
 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> Both $comm and $COMM can be used to get current->comm in eprobes and the
-> filtering and histogram logic. Make kprobes and uprobes consistent in this
-> regard and allow both $comm and $COMM as well. Currently kprobes and
-> uprobes only handle $comm, which is inconsistent with the other utilities,
-> and can be confusing to users.
-> 
-> Link: https://lore.kernel.org/all/20220820220442.776e1ddaf8836e82edb34d01@kernel.org/
-> 
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/usb/gadget/udc/pxa25x_udc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-(Note that kprobes/uprobes doesn't need to record cpu/pid, because those
- are a part of common field and can be accessed from filter or histogram.
- Only comm must be recorded as string.)
-
-Thank you,
-
-> Cc: stable@vger.kernel.org
-> Fixes: 533059281ee5 ("tracing: probeevent: Introduce new argument fetching code")
-> Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  kernel/trace/trace_probe.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> index 4daabbb8b772..36dff277de46 100644
-> --- a/kernel/trace/trace_probe.c
-> +++ b/kernel/trace/trace_probe.c
-> @@ -314,7 +314,7 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
->  			}
->  		} else
->  			goto inval_var;
-> -	} else if (strcmp(arg, "comm") == 0) {
-> +	} else if (strcmp(arg, "comm") == 0 || strcmp(arg, "COMM") == 0) {
->  		code->op = FETCH_OP_COMM;
->  #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
->  	} else if (((flags & TPARG_FL_MASK) ==
-> @@ -625,7 +625,8 @@ static int traceprobe_parse_probe_arg_body(const char *argv, ssize_t *size,
->  	 * we can find those by strcmp. But ignore for eprobes.
->  	 */
->  	if (!(flags & TPARG_FL_TPOINT) &&
-> -	    (strcmp(arg, "$comm") == 0 || strncmp(arg, "\\\"", 2) == 0)) {
-> +	    (strcmp(arg, "$comm") == 0 || strcmp(arg, "$COMM") == 0 ||
-> +	     strncmp(arg, "\\\"", 2) == 0)) {
->  		/* The type of $comm must be "string", and not an array. */
->  		if (parg->count || (t && strcmp(t, "string")))
->  			goto out;
-> -- 
-> 2.35.1
-
-
+diff --git a/drivers/usb/gadget/udc/pxa25x_udc.c b/drivers/usb/gadget/udc/pxa25x_udc.c
+index c593fc383481..176e2b157021 100644
+--- a/drivers/usb/gadget/udc/pxa25x_udc.c
++++ b/drivers/usb/gadget/udc/pxa25x_udc.c
+@@ -1737,7 +1737,7 @@ static void handle_ep0 (struct pxa25x_udc *dev)
+ 				/* hardware automagic preventing STALL... */
+ 				if (dev->req_config) {
+ 					/* hardware sometimes neglects to tell
+-					 * tell us about config change events,
++					 * us about config change events,
+ 					 * so later ones may fail...
+ 					 */
+ 					WARNING("config change %02x fail %d?\n",
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.36.1
+

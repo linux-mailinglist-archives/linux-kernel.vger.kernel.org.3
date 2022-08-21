@@ -2,100 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD2659B533
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 17:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4E659B536
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 17:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiHUPti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 11:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S231586AbiHUPvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 11:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiHUPtg (ORCPT
+        with ESMTP id S230222AbiHUPve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 11:49:36 -0400
-Received: from mail.thepaulodoom.com (www.thepaulodoom.com [45.77.108.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE091F2FE
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thepaulodoom.com;
-        s=mail; t=1661096972;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lHgkvCFu+7/5o2QsPt7iXfrSWbO/n4tp4Oajyx2o5CI=;
-        b=QMj/FwExxxD9klUU0LWqOv3XprFUUcsb+tl/dTQFIKOQ5wzjk1c90X9U1eGQKNsCLh46gB
-        tBO9jSGJEDYZkgRbTzKC+8bw51qdBuHLM6VHi6V8vpQKtW7r9gWJqMNF624lUojeB3WS9Q
-        muYgYN+6IrrYjjAmytFDDNHRPK7aM2Y+5xFRFB9t2uAB4TFig1vHA8qgkvn3Yr4H17Qgyx
-        FkjeP6gmbTZDuUSNWjzU/2qqRjedxqzZ7mIBa6nxc+2E+TlyhQ4raEhFMfuBH6Ga0laxYK
-        BZLu+5bgEtsDxjt/tA9ti/mYObZvRxSgreGwScaEvnpjo0e0Cmez8R1OTxcVYgw9l59kas
-        l4Y4mIx/1RI2s3c75vTJHIMBR92I3QrGywe7xIcntCoyLrvD3vUDl/PiUM5+uhGfFGnVRm
-        AyDYrIav2LhDVMl+2z0pRvh7iqAS9GLEQTPocfIGX3aKJfTEX31TzzyNRWuD6WKb0gCVwu
-        EqJB4sQ1oB7A6PYfPolHodxTkH1WGmGx6bbajWUD0vlQYUmxTyVKjHf2rZhOEPvpYlKV7h
-        XL1VlojAQwfV1czMQYWnAkAwrMfGpnqZ9W5MhSat6lsSVejQ8dFlnh6HasF15QInfYOLfr
-        qKG98ZCU41I8bu/emzKdNjvzP05fAEi8C1noDVkqg46ZLOOBbFulY=
-Received: from [127.0.0.1] (h185.16.131.174.dynamic.ip.windstream.net [174.131.16.185])
-        by vultr.guest (OpenSMTPD) with ESMTPSA id 04288e26 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sun, 21 Aug 2022 15:49:31 +0000 (UTC)
-Date:   Sun, 21 Aug 2022 15:49:28 +0000
-From:   ThePaulODoom <thepaulodoom@thepaulodoom.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     arnd@arndb.de, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: char: mem: changed 'unsigned' to 'unsigned int'
-In-Reply-To: <YwHuSyur7AQ7PUsC@kroah.com>
-References: <YvxF0yn07ztg9r4A@gus-fring.localdomain> <Yv5SG8XMR2mZGAqG@kroah.com> <Yv7s5dedhRaDlsAC@gus-fring.localdomain> <YwHuSyur7AQ7PUsC@kroah.com>
-Message-ID: <BA62DE39-AFED-47BC-964C-8AF150A0B9F1@thepaulodoom.com>
+        Sun, 21 Aug 2022 11:51:34 -0400
+Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B031FCFA
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:51:33 -0700 (PDT)
+Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-31f445bd486so233893857b3.13
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc;
+        bh=lYgoSzYrNdAJHRDpvyMHA0AN8YmF5hdaYVpe90B0Tz8=;
+        b=G129SMtU59wTnXy7MwiVG+nTpWQiUzpSux/o6wewBlRFz0zPQ1/Z8IRQRyRWquc9qs
+         syqUwjIjxASz/a0t8a0omw75LNc4kxXe10lIXgT8Ml0ToLlkYXRLGGpNbTirKk7viSMl
+         NGGiQ2qV9CH+ASxTFSCD9sT6MtFK0oVcE5E24RTvemldBIXUS4VTqSj61T0mINZq8ghB
+         iLyWHD2k4BT5vc6ret9By7e6tYtuSFbne/CvYsTZ1FBsJ9YUfOj2+pklrbi9joWx/bJL
+         bK8LqucgegxItDHiTPRHyUuawJahyIdVXUDg/TNOYvNbTL8XLtjyeJUOEQCgL4aN8ayK
+         FtIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=lYgoSzYrNdAJHRDpvyMHA0AN8YmF5hdaYVpe90B0Tz8=;
+        b=QhDUvfLxUEkFGiRBVhtx85IzUtAAqtVybxzF+pDHmrMDQGKMprQt0AKVWAVO3vG5WF
+         96UcuCmcDhnbf0bt8wYC0l7ojJ+zaXy/SE9rQ8//NGziP9h6abrL32vC+8CPq3vyzrW6
+         ILJJ2VJlWQ1/r0Gf/6nsVmB+gSOTMxqkqUCaTzDuPorVuv+nNPzXtcsQqXQ58p7cRlsA
+         1LRBYiMieGDzvryOGodVJ4WWJvLF10zclSce/gN+q1S30SPIoFmQ0YpDLcqp5aAANW7n
+         29lTqzrfK55VfnyFBap0VAsjfHkSo4or9j2/OXz+fUcKW3Ree6fUaH7dIoy+i/H+JcJs
+         JtxQ==
+X-Gm-Message-State: ACgBeo0076fr+IH1jkCzrdpxaQyNSOGM0yBiGrAVa4t1aYF/TIKMXaus
+        PdtswFKnddAtCgG9mWvUuwpL5J4pn8RMbAyVNj8=
+X-Google-Smtp-Source: AA6agR5bTJ4M4PETne0iMMuN0ZjK7/wR++cUluLx7hI75BThYXXyq6W8cieq3t2p8+FucOCs3476tWRZXUL3iAgYqU0=
+X-Received: by 2002:a81:817:0:b0:333:c5c9:dfb4 with SMTP id
+ 23-20020a810817000000b00333c5c9dfb4mr16304549ywi.476.1661097092813; Sun, 21
+ Aug 2022 08:51:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+Sender: shadainarang444@gmail.com
+Received: by 2002:a05:7010:628e:b0:2ee:fd59:7df0 with HTTP; Sun, 21 Aug 2022
+ 08:51:32 -0700 (PDT)
+From:   Pavillion Tchi <tchipavillion7@gmail.com>
+Date:   Sun, 21 Aug 2022 15:51:32 +0000
+X-Google-Sender-Auth: 8xZbKLvR_GWLtosofcHxMj5rGb4
+Message-ID: <CAME1XYdcyb4q+6azGVj2GaLw_1xW80TupzRjD8ALnSDmOSCJxg@mail.gmail.com>
+Subject: Bonjour
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On August 21, 2022 8:35:23 AM UTC, Greg KH <gregkh@linuxfoundation=2Eorg> =
-wrote:
->On Thu, Aug 18, 2022 at 08:52:37PM -0500, Paul Lemmermann wrote:
->> On Thu, Aug 18, 2022 at 04:52:11PM +0200, Greg KH wrote:
->> > On Tue, Aug 16, 2022 at 08:35:31PM -0500, Paul Lemmermann wrote:
->> > > found with checkpatch=2Epl
->> >=20
->> > That is a very sparse changelog text=2E
->> >=20
->> > Why make this change?  Please be descriptive=2E
->> >=20
->> I wanted to make this change to be more fitting with the kernel coding
->> guidelines, and to reduce a WARNING made with checkpatch preferring the
->> use of 'unsigned int' over 'unsigned'=2E With NOMMU_MAP_COPY defined in
->> 'include/linux/fs=2Eh' as an unsigned integer, I felt like the change w=
-as
->> fitting=2E I was quickly reminded that the changelog was not properly d=
-one,=20
->> and I now understand that, and will learn from my mistake in the future=
-=2E
->> As I am a new kernel contributor, and looking to hone my skills, what a=
-re=20
->> my next steps?=20
->>=20
->> Should I:
->>=20
->> o Drop the patch and resubmit it,
->> o Simply drop the patch,
->> o Could I change it somehow?,
->> o Or something else?
->
->Try something else=2E  Start out by working in drivers/staging/ on basic
->coding style fixes and other things listed in the drivers/staging/*/TODO
->files=2E  That's the best place for new developers to get started and the=
-n
-
-That's what I'll do=2E Again, thank you for being patient and guiding me i=
-n the right direction!=20
-
-Many thanks,
-- Paul
+--=20
+Bonjour
+Avez-vous re=C3=A7u mon pr=C3=A9c=C3=A9dent e-mail ?

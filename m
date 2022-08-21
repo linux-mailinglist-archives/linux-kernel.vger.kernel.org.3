@@ -2,52 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C3F59B352
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 13:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC1059B374
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 13:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiHULbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 07:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
+        id S230230AbiHULgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 07:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiHULbP (ORCPT
+        with ESMTP id S230028AbiHULgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 07:31:15 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015CF2654D
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 04:31:15 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id q10-20020a056e020c2a00b002dedb497c7fso6537819ilg.16
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 04:31:14 -0700 (PDT)
+        Sun, 21 Aug 2022 07:36:20 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB40626565
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 04:36:18 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id k9so10091618wri.0
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 04:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=tBERBJeFmsU2gk0DqsvVk7OhaA+vX7d504uAWoZh04w=;
+        b=IunUk0SKEn1nH9A85B2rFGOdzLzvhKfM0gFlEIcPkoAPXo4AzUcYqEXCcOxLXWrj1z
+         AbEUWDg+04+jy3Fu0QvCXD1xFMIRaMvfxUVnKnfrfmoXEdYXprWWC/XNOT0FPBo1vL6D
+         k/3vEXLEjiDdQGt2zOykFohvkYMDkXZWpHoMkByk2xiRiRzlTuyOA4g+ASE0gOQttgih
+         o1Sl/4dF/zhAUA2z1C2A8eUPNoNGVU/0tLRmMgf56tCheoPeqQpcK3dL+sDn3uY5JQx3
+         hmmiLwc2CcOeVdFoM49uCkFVV7nbhStM9cZTEJKNIzPUk1T632l/nVD040fstWJ8inVu
+         e1bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=K0dtPPveIUhljS+m02PNzwfOPhGk9uEu12ddowdN54E=;
-        b=c+pq1ZHrJgC/j/hIpgEaqBUVcvvGty/efZ3yq2UTC96G96A+rBkqVc6q8JVcQmCDI4
-         DXBQqzok7rgcC2Zvvh3piwKvx78Y3i360czRx/t7tZL0G07Hc0mrpx4IEompDLPwMeCi
-         tCxh6IpP2+xPSBI2CGLKB8zKE9uQepTvjpxk2SUbXxVKQ2AQo+UCHqZUel6+bj3SdmoL
-         qH0bEq4nbTgrQqkvptw+Gp1CKej3UyEzp1UQJkVTcc85vzg4WQcI5C972g0Ogt7RgSVQ
-         XDZ/rAiZfpXMn2H8zRBmFgSkQEb6iPONEVHghs6SC+SUUNbj4gfJjA2OV2SSCJ5TEER9
-         8Ung==
-X-Gm-Message-State: ACgBeo30nn+RZMRlGP1lEFxn/IGKmlo12HLxyVepGs41pBbczMlXyQWZ
-        FqFMOgaaUdJdl6ZW/zY0VmttW5xw3o1/Tl9CqZRDdxunzbWZ
-X-Google-Smtp-Source: AA6agR64ifgzArmCmqG7R+Hj3GrLzf5B030PXh+D1owlOIUf8TVPsvUWr8erSJzprfuAHNARgqhKAawKvI+iQ06DJKngKyJvcAe1
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=tBERBJeFmsU2gk0DqsvVk7OhaA+vX7d504uAWoZh04w=;
+        b=bdzXQhAzyPoSNhUmOXDEKzJqbNuKszW9rZKtoU+XbRytTWKGmqxLDCC7Dtqdas3JHn
+         eZU0glmD8LPv0heHa7KVf4JkEV2BLovf54OpSrUu68iKoOYDkkpnRhbLkXJOzZaD3q4I
+         mkOKiNPCb58+MFoyxmz4d5x6viKqBMNKw3UJvVI0LNNXKjIb4jI7R8svEQ+QyT887kTE
+         InaZwPRZiA5wv1UwnpW4xfrvrqSvcEBWDiIfxyqFGKoqSwTik9uX6IkIaL5ThhEgd9q7
+         PY6AtzpUU6/y/3C8/zSqg/g0Bd4hUh844p4v5hqEBK9gCBSBz58Fhb3dN/dheU6m/pF3
+         ZwwQ==
+X-Gm-Message-State: ACgBeo3mds3WxCE1SK7bUFtu9/OdW9Cv4YrDznO7vXBk6sMkgtvgG1pN
+        o4GNYLivjjay38WUv+qv83zjHA==
+X-Google-Smtp-Source: AA6agR5cyZy9CZWot4+CBW4LaR0SdclbcYK3AcOGPU3Q+v5vUQoWQM9YfCtFYFfA5X3trYU8FH6ocQ==
+X-Received: by 2002:a5d:4882:0:b0:225:3148:9f85 with SMTP id g2-20020a5d4882000000b0022531489f85mr7667679wrq.224.1661081777100;
+        Sun, 21 Aug 2022 04:36:17 -0700 (PDT)
+Received: from henark71.. ([51.37.149.245])
+        by smtp.gmail.com with ESMTPSA id m9-20020a7bce09000000b003a3442f1229sm14071361wmc.29.2022.08.21.04.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 04:36:16 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Michal Simek <monstr@monstr.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [PATCH 0/6] Add an asm-generic cpuinfo_op declaration
+Date:   Sun, 21 Aug 2022 12:35:07 +0100
+Message-Id: <20220821113512.2056409-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1487:b0:2df:193b:3b77 with SMTP id
- n7-20020a056e02148700b002df193b3b77mr7661161ilk.304.1661081474401; Sun, 21
- Aug 2022 04:31:14 -0700 (PDT)
-Date:   Sun, 21 Aug 2022 04:31:14 -0700
-In-Reply-To: <20220821104952.1932-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000398ec005e6beabdf@google.com>
-Subject: Re: [syzbot] possible deadlock in rds_tcp_reset_callbacks
-From:   syzbot <syzbot+78c55c7bc6f66e53dce2@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,20 +88,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Conor Dooley <conor.dooley@microchip.com>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+RISC-V is missing a prototype for cpuinfo_op. Rather than adding yet
+another `extern const struct seq_operations cpuinfo_op;` to an arch
+specific header file, create an asm-generic variant and migrate the
+existing arch variants there too. Obv. there are other archs that use
+cpuinfo_op but don't declare it and surely also have the same warning?
+I went for the minimum change here, but would be perfectly happy to
+extend the change to all archs if this change is worthwhile. Or just
+make a header in arch/riscv, any of the three work for me!
 
-Reported-and-tested-by: syzbot+78c55c7bc6f66e53dce2@syzkaller.appspotmail.com
+If this isn't the approach I should've gone for, any direction would
+be great :) I tried pushing this last weekend to get LKP to test it but
+I got neither a build success nor a build failure email from it, so
+I figured I may as well just send the patches..
 
-Tested on:
+I wasn't too sure if this could be a single patch, so I split it out
+into a patch fixing the issue on RISC-V & copy-paste patches for each
+arch that I moved.
 
-commit:         8755ae45 Add linux-next specific files for 20220819
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=10ebe2d3080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
-dashboard link: https://syzkaller.appspot.com/bug?extid=78c55c7bc6f66e53dce2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12b61785080000
+Thanks,
+Conor.
 
-Note: testing is done by a robot and is best-effort only.
+Conor Dooley (6):
+  asm-generic: add a cpuinfo_ops definition in shared code
+  microblaze: use the asm-generic version of cpuinfo_op
+  s390: use the asm-generic version of cpuinfo_op
+  sh: use the asm-generic version of cpuinfo_op
+  sparc: use the asm-generic version of cpuinfo_op
+  x86: use the asm-generic version of cpuinfo_op
+
+ arch/microblaze/include/asm/processor.h | 2 +-
+ arch/riscv/include/asm/processor.h      | 1 +
+ arch/s390/include/asm/processor.h       | 2 +-
+ arch/sh/include/asm/processor.h         | 2 +-
+ arch/sparc/include/asm/cpudata.h        | 3 +--
+ arch/x86/include/asm/processor.h        | 2 +-
+ include/asm-generic/processor.h         | 7 +++++++
+ 7 files changed, 13 insertions(+), 6 deletions(-)
+ create mode 100644 include/asm-generic/processor.h
+
+-- 
+2.37.1
+

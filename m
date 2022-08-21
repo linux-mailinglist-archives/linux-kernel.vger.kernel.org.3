@@ -2,54 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893E059B625
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 21:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BAF59B62C
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 21:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbiHUTfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 15:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
+        id S231501AbiHUTrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 15:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbiHUTfE (ORCPT
+        with ESMTP id S229561AbiHUTrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 15:35:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485971145C
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 12:35:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE2CD60E93
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 19:35:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C380AC433C1;
-        Sun, 21 Aug 2022 19:35:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661110502;
-        bh=jgxL1Qs8GYGLT4GT8VygO4ulK8wsFTEx3R270HBPOKQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=h+JVEdklVVE1hP6eVJtOViMFQ2wCnbqkDpPratPe7aKXdS/tLe5KyhQujjJkx0cfF
-         xWSffLoOPTx5uM+v0JGf3I0UvhwZ8bMUG8GgDHpw0Hqmk3hLosg1fLJK14teGWcUIq
-         r5IvR9q4ZHkH3xYmuRmgKgGYXlUW1h7ephXRZIjp6CAGvRhR7kN7IikxEDwq6rDgJk
-         GiXW62OqaA4gTa9UcSMoTYVNfJvmiCv2iMSxwP1ftYlk92TKpClsUdySYSovqxn9jG
-         +yQ8P7OfR4xEHxWdFYLIfYbfR1+bGBvgv/oSrTB7J/TeDPIyJ5w5VWbOtsp8FZkQyQ
-         nqXLrRoPb2Trw==
-Message-ID: <6d8d1278ca1250313096accc4ca8967240d57677.camel@kernel.org>
-Subject: Re: [PATCH v2 0/2] tracing/hist: Add percentage histogram suffixes
-From:   Tom Zanussi <zanussi@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
-Date:   Sun, 21 Aug 2022 14:35:00 -0500
-In-Reply-To: <20220820113105.1c3b1dd3bea8a3d6d297de31@kernel.org>
-References: <165966330764.3826604.9358384228095103695.stgit@devnote2>
-         <40899e91a5a42f777111405fc2638a774f2ad6a4.camel@kernel.org>
-         <20220820113105.1c3b1dd3bea8a3d6d297de31@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Sun, 21 Aug 2022 15:47:06 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A6F1408C
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 12:47:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661111225; x=1692647225;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Xgq5pV8NmzafHjaVV82jPIGbVdCuhC2gTgsrPRjWnRk=;
+  b=e6XN0fWyNtJrl5l1AHDb0YHgxbRrGnauiom5N+9TD31ud/Sz3SV0SOI5
+   riKXNoa86qc6io27J3tdUI8fo/pSfgJAcynKgs6n74BlpL7Cj3aDyC0z5
+   ZaqyFxNwI94K8uqLVgO44l9mguZBWizFA8ubjGEt2crJJAeHXfvKkQFBd
+   wCulTZ4YCPoYVlYUnb/uuJ4muwmKPtObKjrDr9tQwSqLO0XFAOzSpDlR5
+   xRrKFMuYMgWwaPYd3eSdGwGmgeMV/xGJEFEIfAJ5W97T835mk1OFYy+5Z
+   h7S7DoA1dypJDCScRTONTPxHO3QeGwY3ota76DG8EQvmjG+GpY/5xFMjC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="292017462"
+X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
+   d="scan'208";a="292017462"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 12:47:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
+   d="scan'208";a="559496311"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Aug 2022 12:47:01 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPquS-0004QP-2M;
+        Sun, 21 Aug 2022 19:47:00 +0000
+Date:   Mon, 22 Aug 2022 03:46:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Igor Kononenko <i.kononenko@yadro.com>,
+        Corey Minyard <minyard@acm.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        openbmc@lists.ozlabs.org, Igor Kononenko <i.kononenko@yadro.com>,
+        openipmi-developer@lists.sourceforge.net,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] ipmi:kcs_bmc: Add cleanup regmap(interrupt-regs) on
+ a shutdown.
+Message-ID: <202208220317.cROZCTcB-lkp@intel.com>
+References: <fb81dda34f9db0b9f743b247a2464576dcccd7c9.1661094034.git.i.kononenko@yadro.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fb81dda34f9db0b9f743b247a2464576dcccd7c9.1661094034.git.i.kononenko@yadro.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,144 +70,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU2F0LCAyMDIyLTA4LTIwIGF0IDExOjMxICswOTAwLCBNYXNhbWkgSGlyYW1hdHN1IHdyb3Rl
-Ogo+IE9uIFRodSwgMTggQXVnIDIwMjIgMTU6NDE6MzAgLTA1MDAKPiBUb20gWmFudXNzaSA8emFu
-dXNzaUBrZXJuZWwub3JnPiB3cm90ZToKPiAKPiA+IEhpIE1hc2FtaSwKPiA+IAo+ID4gT24gRnJp
-LCAyMDIyLTA4LTA1IGF0IDEwOjM1ICswOTAwLCBNYXNhbWkgSGlyYW1hdHN1IChHb29nbGUpIHdy
-b3RlOgo+ID4gPiBIaSwKPiA+ID4gCj4gPiA+IEhlcmUgaXMgdGhlIDJuZCB2ZXJzaW9uIG9mIC5w
-ZXJjZW50IGFuZCAuZ3JhcGggc3VmZml4ZXMgZm9yCj4gPiA+IGhpc3RvZ3JhbQo+ID4gPiB0cmln
-Z2VyIHRvIHNob3cgdGhlIHZhbHVlIGluIHBlcmNlbnRhZ2UgYW5kIGluIGJhci1ncmFwaAo+ID4g
-PiByZXNwZWN0aXZlbHkuCj4gPiA+IAo+ID4gPiBUaGlzIHZlcnNpb24gdXNlcyBkaXY2NF8qKCkg
-Zm9yIGNhbGN1bGF0aW5nIHBlcmNlbnRhZ2VzIGFuZCBzaG93Cj4gPiA+IGFuCj4gPiA+IGVycm9y
-IGlmIGl0IGZhaWxzIHRvIGNhbGN1bGF0ZSBpdC4KPiA+ID4gCj4gPiAKPiA+ID4gVGhpcyB3aWxs
-IGhlbHAgdXMgdG8gY2hlY2sgdGhlIHRyZW5kIG9mIHRoZSBoaXN0b2dyYW0gaW5zdGFudGx5Cj4g
-PiA+IHdpdGhvdXQgdGhlIHBvc3QgcHJvY2Vzc2luZyB0b29sLgo+ID4gPiAKPiA+ID4gSGVyZSBz
-aG93cyB0aGUgZXhhbXBsZSBvZiB0aGUgcGVyY2VudGFnZSBhbmQgdGhlIGJhciBncmFwaCBvZgo+
-ID4gPiB0aGUgcnVudGltZSBvZiB0aGUgcnVubmluZyB0YXNrcy4KPiA+ID4gCj4gPiA+IC9zeXMv
-a2VybmVsL3RyYWNpbmcgIyBlY2hvCj4gPiA+IGhpc3Q6a2V5cz1waWQ6dmFscz1ydW50aW1lLnBl
-cmNlbnQscnVudGltZS5ncmFwaDpzb3J0Cj4gPiA+ID1waWQgPj4gZXZlbnRzL3NjaGVkL3NjaGVk
-X3N0YXRfcnVudGltZS90cmlnZ2VyCj4gPiA+IC9zeXMva2VybmVsL3RyYWNpbmcgIyBzbGVlcCAx
-MAo+ID4gPiAvc3lzL2tlcm5lbC90cmFjaW5nICMgY2F0IGV2ZW50cy9zY2hlZC9zY2hlZF9zdGF0
-X3J1bnRpbWUvaGlzdAo+ID4gPiAjIGV2ZW50IGhpc3RvZ3JhbQo+ID4gPiAjCj4gPiA+ICMgdHJp
-Z2dlciBpbmZvOgo+ID4gPiBoaXN0OmtleXM9cGlkOnZhbHM9aGl0Y291bnQscnVudGltZS5wZXJj
-ZW50LHJ1bnRpbWUuZ3JhcGg6c29ydD1waQo+ID4gPiBkOnNpemU9MjA0OCBbYWN0aXZlXQo+ID4g
-PiAjCj4gPiA+IAo+ID4gPiB7IHBpZDrCoMKgwqDCoMKgwqDCoMKgwqAgOCB9IGhpdGNvdW50OsKg
-wqDCoMKgwqDCoMKgwqAgMTHCoCBydW50aW1lOsKgwqDCoMKgwqDCoCA0LjExwqAKPiA+ID4gcnVu
-dGltZTogI8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAKPiA+ID4geyBwaWQ6
-wqDCoMKgwqDCoMKgwqDCoMKgIDkgfSBoaXRjb3VudDrCoMKgwqDCoMKgwqDCoMKgwqAgNMKgIHJ1
-bnRpbWU6wqDCoMKgwqDCoMKgIDEuMjjCoAo+ID4gPiBydW50aW1lOsKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgCj4gPiA+IHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAgMTQg
-fSBoaXRjb3VudDrCoMKgwqDCoMKgwqDCoMKgIDEwwqAgcnVudGltZTrCoMKgwqDCoMKgwqAgMi4y
-MsKgCj4gPiA+IHJ1bnRpbWU6wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCAKPiA+ID4geyBwaWQ6wqDCoMKgwqDCoMKgwqDCoCAxNSB9IGhpdGNvdW50OsKgwqDCoMKgwqDC
-oMKgwqDCoCAxwqAgcnVudGltZTrCoMKgwqDCoMKgwqAgMC4wN8KgCj4gPiA+IHJ1bnRpbWU6wqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAKPiA+ID4geyBwaWQ6wqDCoMKg
-wqDCoMKgwqDCoCAxNiB9IGhpdGNvdW50OsKgwqDCoMKgwqDCoMKgwqAgMjHCoCBydW50aW1lOsKg
-wqDCoMKgwqDCoCAzLjM1wqAKPiA+ID4gcnVudGltZTogI8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCAKPiA+ID4geyBwaWQ6wqDCoMKgwqDCoMKgwqDCoCA1NyB9IGhpdGNvdW50
-OsKgwqDCoMKgwqDCoMKgwqDCoCA2wqAgcnVudGltZTrCoMKgwqDCoMKgwqAgMi40McKgCj4gPiA+
-IHJ1bnRpbWU6ICPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgCj4gPiA+IHsg
-cGlkOsKgwqDCoMKgwqDCoMKgwqAgNjEgfSBoaXRjb3VudDrCoMKgwqDCoMKgwqDCoMKgIDQywqAg
-cnVudGltZTrCoMKgwqDCoMKgwqAgOS43OcKgCj4gPiA+IHJ1bnRpbWU6ICMjIyPCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgCj4gPiA+IHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAgNjYgfSBo
-aXRjb3VudDrCoMKgwqDCoMKgwqDCoMKgwqAgNcKgIHJ1bnRpbWU6wqDCoMKgwqDCoMKgIDAuNjnC
-oAo+ID4gPiBydW50aW1lOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-Cj4gPiA+IHsgcGlkOsKgwqDCoMKgwqDCoMKgIDE0NyB9IGhpdGNvdW50OsKgwqDCoMKgwqDCoMKg
-wqAgMzbCoCBydW50aW1lOsKgwqDCoMKgwqAgNDUuMzPCoAo+ID4gPiBydW50aW1lOiAjIyMjIyMj
-IyMjIyMjIyMjIyMjIwo+ID4gPiB7IHBpZDrCoMKgwqDCoMKgwqAgODU0OCB9IGhpdGNvdW50OsKg
-wqDCoMKgwqDCoMKgwqDCoCA5wqAgcnVudGltZTrCoMKgwqDCoMKgIDE3LjI1wqAKPiA+ID4gcnVu
-dGltZTogIyMjIyMjI8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAKPiA+ID4geyBwaWQ6wqDCoMKg
-wqDCoMKgIDg1NDkgfSBoaXRjb3VudDrCoMKgwqDCoMKgwqDCoMKgwqAgOMKgIHJ1bnRpbWU6wqDC
-oMKgwqDCoCAxMy40M8KgCj4gPiA+IHJ1bnRpbWU6ICMjIyMjwqDCoMKgwqAKPiA+ID4gCj4gPiAK
-PiA+IFRoaXMgaXMgYSByZWFsbHkgbmljZSBuZXcgZmVhdHVyZSwgdGhhbmtzIGZvciBhZGRpbmcg
-aXQhCj4gCj4gVGhhbmtzIQo+IAo+ID4gCj4gPiBJIGRpZCBub3RpY2Ugc29tZSBhbm9tYWxpZXMg
-d2hlbiBpdCBjb21lcyB0byBoaXRjb3VudCwgdGhvdWdoLsKgIEZvcgo+ID4gaW5zdGFuY2UsIElm
-IEkgZG8gc2ltaWxhciB0byBhYm92ZSB3aXRoIGhpdGNvdW50Ogo+ID4gCj4gPiDCoCAjIGVjaG8K
-PiA+ICdoaXN0OmtleXM9cGlkOnZhbHM9aGl0Y291bnQucGVyY2VudCxoaXRjb3VudC5ncmFwaDpz
-b3J0PXBpZCcKPiA+IMKgwqDCoCA+Pgo+ID4gc3lzL2tlcm5lbC9kZWJ1Zy90cmFjaW5nL2V2ZW50
-cy9zY2hlZC9zY2hlZF9zdGF0X3J1bnRpbWUvdHJpZ2dlcgo+ID4gwqDCoAo+ID4gwqAgIyBjYXQg
-aGlzdAo+ID4gCj4gPiDCoCAjIGV2ZW50IGhpc3RvZ3JhbQo+ID4gwqAgIwo+ID4gwqAgIyB0cmln
-Z2VyIGluZm86IGhpc3Q6a2V5cz1waWQ6dmFscz1oaXRjb3VudDpzb3J0PXBpZDpzaXplPTIwNDgK
-PiA+IFthY3RpdmVdCj4gPiDCoCB7IHBpZDrCoMKgwqDCoMKgwqDCoMKgIDE2IH0gaGl0Y291bnQ6
-wqDCoMKgwqDCoMKgIDIuMTEKPiA+IMKgIHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAgNjMgfSBoaXRj
-b3VudDrCoMKgwqDCoMKgwqAgNi4zMwo+ID4gwqAgeyBwaWQ6wqDCoMKgwqDCoMKgwqDCoCA2NCB9
-IGhpdGNvdW50OsKgwqDCoMKgwqDCoCA2LjMzCj4gPiAKPiA+IGl0IG9ubHkgc2hvd3Mgb25lIGNv
-bHVtbiB3aXRoIHBlcmNlbnQsIG5vIGdyYXBoLgo+IAo+IEhtbSwgY3VyaW91cy4gQWxzbywgdGhl
-IHRyaWdnZXIgaW5mbyBzZWVtcyBvZGQuCj4gCj4gPiAKPiA+IFNpbWlsYXJseSwgaWYgSSBkbyBq
-dXN0IGhpdGNvdW50IGFuZCBoaXRjb3VudC5ncmFwaCwgSSBvbmx5IGdldCB0aGUKPiA+IGdyYXBo
-LAo+ID4gbm8gc3RyYWlnaHQgaGl0Y291bnQ6Cj4gPiAKPiA+IMKgICMgZWNobyAnaGlzdDprZXlz
-PXBpZDp2YWxzPWhpdGNvdW50LGhpdGNvdW50LmdyYXBoOnNvcnQ9cGlkJwo+ID4gwqDCoMKgID4+
-Cj4gPiBzeXMva2VybmVsL2RlYnVnL3RyYWNpbmcvZXZlbnRzL3NjaGVkL3NjaGVkX3N0YXRfcnVu
-dGltZS90cmlnZ2VyCj4gPiAKPiA+IMKgICMgY2F0IGhpc3QKPiA+IMKgICMgZXZlbnQgaGlzdG9n
-cmFtCj4gPiDCoCAjCj4gPiDCoCAjIHRyaWdnZXIgaW5mbzogaGlzdDprZXlzPXBpZDp2YWxzPWhp
-dGNvdW50OnNvcnQ9cGlkOnNpemU9MjA0OAo+ID4gYWN0aXZlXQo+ID4gwqAgIwo+ID4gCj4gPiDC
-oCB7IHBpZDrCoMKgwqDCoMKgwqDCoMKgIDE2IH0gaGl0Y291bnQ6ICMjIyMjI8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgIAo+ID4gwqAgeyBwaWQ6wqDCoMKgwqDCoMKgwqDCoCA2MyB9IGhpdGNv
-dW50OiAjIyMjIyMjIyMjwqDCoMKgwqDCoMKgwqDCoMKgIAo+ID4gwqAgeyBwaWQ6wqDCoMKgwqDC
-oMKgwqDCoCA2NCB9IGhpdGNvdW50OiAjIyMjIyMjIyMjCj4gPiAKPiA+IEkgdGhpbmsgaXQncyBi
-ZWNhdXNlIHRoZXJlJ3Mgb25seSBvbmUgaGl0Y291bnQgdmFyaWFibGUgc2VydmluZwo+ID4gYm90
-aAo+ID4gUEVSQ0VOVCBhbmQgR1JBUEggZmxhZ3MsIGFuZCBuZXZlciBnZXRzIHRvIEdSQVBIIGlm
-IGJvdGggYXJlIHNldC7CoAo+ID4gU28KPiA+IG5lZWRzIHRvIGl0ZXJhdGUgb3ZlciBib3RoIGZs
-YWdzIGZvciBoaXRjb3VudCB0byBzZWUgd2hpY2ggb3IgaWYKPiA+IGJvdGgKPiA+IGFyZSBzZXQu
-Cj4gCj4gQWgsIEkgdGhvdWdodCBpZiBJIHNwZWNpZnkgdGhlIGhpdGNvdW50IHR3aWNlLCB0aGVy
-ZSB3b3VsZCBiZSAyCj4gaGl0Y291bnQKPiBmaWVsZHMsIGJ1dCBhY3R1YWxseSBpdCBpcyBub3Qu
-Cj4gCj4gPiDCoEFsc28sIGluIG9yZGVyIHRvIGp1c3QgcHJpbnQgdGhlIHN0cmFpZ2h0IGhpdGNv
-dW50IGlmIG9uZSBvZgo+ID4gdGhlIG90aGVyIGZsYWdzIGlzIHNldCBwcm9iYWJseSBuZWVkcyBh
-bm90aGVyIGZsYWcgZm9yIHRoYXQgY2FzZS4KPiAKPiBZZXMsIGJlY2F1c2UgaGl0Y291bnQgaXMg
-c2hvd24gb25seSBvbmNlLgo+IAo+ID4gCj4gPiBBbHNvLCB0aGUgdHJpZ2dlciBpbmZvIHN0cmlu
-ZyBhbHdheXMgb25seSBzaG93cyAndmFscz1oaXRjb3VudCcKPiA+IGV2ZW4gaWYKPiA+IHBlcmNl
-bnQgb3IgZ3JhcGggaXMgc2V0Lgo+IAo+IHllcywgdGhlIGhpdGNvdW50IHNlZWVtcyB0byBiZSBz
-cGVjaWFsLiBXb3VsZCB5b3Uga25vdyB3aHkgaGl0Y291bnQKPiBpcyBhbHdheXMgc2hvd24gYW5k
-IGhhbmRsZWQgaW4gc3VjaCB1bmlxdWUgd2F5Pwo+IChJZiB1c2VyIHNraXBzIHNldHRpbmcgdmFs
-cywgaXQgaXMgbmF0dWFsIHRvIHVzZSBoaXRjb3VudCBieSBkZWZhdWx0LAo+IGJ1dAo+IMKgaWYg
-dXNlciBzcGVjaWZpZXMgYW55IHZhbHMsIEkgd291bGQgbGlrZSB0byBkcm9wIGhpdGNvdW50Li4u
-KSAKCkl0IHdhcyBqdXN0IGFzc3VtZWQgdGhhdCB5b3UnZCBhbHdheXMgd2FudCB0byBzZWUgdGhl
-IGhpdGNvdW50LCBzbyBpdAp3YXMgYWRkZWQgdW5jb25kaXRpb25hbGx5IGFzIHRoZSBmaXJzdCB2
-YWx1ZS4gIEkgZG9uJ3QgdGhpbmsgd2UgY2FuCmp1c3QgZHJvcCBpdCBhdCB0aGlzIHBvaW50IGlm
-IGFub3RoZXIgdmFsdWUgaXMgc3BlY2lmaWVkIGFuZCB0aGUKaGl0Y291bnQgaXNuJ3QsIGJ1dCB3
-ZSBjb3VsZCBhZGQgYW5vdGhlciBzZWN0aW9uIHRoYXQgY291bGQgYmUgdXNlZCB0bwp0YWlsb3Ig
-dGhlIGRpc3BsYXkgdG8gZ2V0IHJpZCBvZiBpdCBlLmcuCgogZWNobyBoaXN0OmtleXM9cGlkOnZh
-bHM9aGl0Y291bnQ6c29ydD1waWQ6c2l6ZT0yMDQ4OmRpc3BsYXk9bm9faGl0Y291bnQsLi4uCgpU
-aGUgZGlzcGxheT0gc2VjdGlvbiBjb3VsZCBiZSB1c2VkIHRvIGFkZCBvdGhlciBjdXN0b21pemF0
-aW9uCnBvc3NpYmlsaXRpZXMgaW4gdGhlIGZ1dHVyZS4KCldoYXQgZG8geW91IHRoaW5rPwoKQXMg
-Zm9yIHRoZSBhbm9tYWxpZXMgSSBwb2ludGVkIG91dCB3aXRoIHRoZSBoaXRjb3VudCBpbiB5b3Vy
-IHBhdGNoZXMsCkknbSB0aGlua2luZyB0aGF0IGFkZGluZyBhIHBhdGNoIHRoYXQgYWxsb3dzIHRo
-ZSB1c2VyIHRvIGFkZCBtdWx0aXBsZQpoaXRjb3VudHMgYXMgd2l0aCBhbnkgb3RoZXIgdmFsdWUg
-c2hvdWxkIG1ha2UgdGhlIHByb2JsZW1zIGdvIGF3YXkgLQpsZXQgbWUgY3JlYXRlIGEgcGF0Y2gg
-dG8gZG8gdGhhdCBhbmQgdGhlbiB5b3Ugc2hvdWxkbid0IGhhdmUgdG8gbWFrZQphbnkgY2hhbmdl
-cyB0byB5b3Vycy4uCgpUb20KCj4gCj4gPiAKPiA+IEZpbmFsbHksIEknbSB3b25kZXJpbmcgaWYg
-bGFiZWxpbmcgdGhlIHBlcmNlbnQgY29sdW1uIGFzIHBlcmNlbnQKPiA+IHdvdWxkCj4gPiBtYWtl
-IHRoaW5ncyBjbGVhcmVyIGluIGNhc2VzIHdoZXJlIHlvdSBoYXZlIHRoZSBzdHJhaWdodCB2YWx1
-ZQo+ID4gYWxvbmcKPiA+IHdpdGggdGhlIHBlcmNlbnQgZS5nLiBjdXJyZW50bHkgd2UgaGF2ZToK
-PiA+IAo+ID4gwqAgIyBlY2hvIGhpc3Q6a2V5cz1waWQ6dmFscz1ydW50aW1lLHJ1bnRpbWUucGVy
-Y2VudDpzb3J0PXBpZMKgCj4gPiDCoMKgwqAKPiA+ID4+L3N5cy9rZXJuZWwvZGVidWcvdHJhY2lu
-Zy9ldmVudHMvc2NoZWQvc2NoZWRfc3RhdF9ydW50aW1lL3RyaWdnZXIKPiA+IMKgICMgY2F0IGhp
-c3QKPiA+IMKgICMgZXZlbnQgaGlzdG9ncmFtCj4gPiDCoCAjCj4gPiDCoCAjIHRyaWdnZXIgaW5m
-bzoKPiA+IGhpc3Q6a2V5cz1waWQ6dmFscz1oaXRjb3VudCxydW50aW1lLHJ1bnRpbWUucGVyY2Vu
-dDpzb3J0PXBpZDpzaXplPTIKPiA+IDA0OCBbYWN0aXZlXQo+ID4gwqAgIwo+ID4gCj4gPiDCoCB7
-IHBpZDrCoMKgwqDCoMKgwqDCoMKgIDE2IH0gaGl0Y291bnQ6wqDCoMKgwqDCoMKgwqDCoMKgIDPC
-oCBydW50aW1lOsKgwqDCoMKgwqAgNTA3NDLCoAo+ID4gcnVudGltZTrCoMKgwqDCoMKgwqAgMC4z
-Ngo+ID4gwqAgeyBwaWQ6wqDCoMKgwqDCoMKgwqDCoCA2MyB9IGhpdGNvdW50OsKgwqDCoMKgwqDC
-oMKgwqDCoCA2wqAgcnVudGltZTrCoMKgwqDCoCAxMjMzOTTCoAo+ID4gcnVudGltZTrCoMKgwqDC
-oMKgwqAgMC44OAo+ID4gCj4gPiB3aGljaCBzZWVlbXMgYSBsaXR0bGUgY29uZnVzaW5nLCAyIHJ1
-bnRpbWUgZmllbGRzIHdpdGggZGlmZmVyZW50Cj4gPiB2YWx1ZXMuwqAgTWF5YmUgc29tZXRoaW5n
-IGxpa2U/Ogo+ID4gCj4gPiDCoCB7IHBpZDrCoMKgwqDCoMKgwqDCoMKgIDE2IH0gaGl0Y291bnQ6
-wqDCoMKgwqDCoMKgwqDCoMKgIDPCoCBydW50aW1lOsKgwqDCoMKgwqAgNTA3NDLCoAo+ID4gcnVu
-dGltZSAoJSk6wqDCoMKgwqDCoMKgIDAuMzYKPiA+IMKgIHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAg
-NjMgfSBoaXRjb3VudDrCoMKgwqDCoMKgwqDCoMKgwqAgNsKgIHJ1bnRpbWU6wqDCoMKgwqAgMTIz
-Mzk0wqAKPiA+IHJ1bnRpbWUgKCUpOsKgwqDCoMKgwqDCoCAwLjg4Cj4gPiAKPiA+IEp1c3QgYSB0
-aG91Z2h0Li4KPiAKPiBBaCwgdGhhdCdzIGEgZ29vZCBpZGVhLgo+IExldCBtZSB1cGRhdGUgdGhl
-IHNlcmllcy4KPiAKPiBUaGFuayB5b3UhCj4gCj4gPiAKPiA+IFRvbQo+ID4gCj4gPiA+IMKgwqDC
-oMKgwqDCoMKgwqDCoMKgIAo+ID4gPiAKPiA+ID4gVG90YWxzOgo+ID4gPiDCoMKgwqAgSGl0czog
-MTUzCj4gPiA+IMKgwqDCoCBFbnRyaWVzOiAxMQo+ID4gPiDCoMKgwqAgRHJvcHBlZDogMAo+ID4g
-PiAKPiA+ID4gCj4gPiA+IFRoYW5rIHlvdSwKPiA+ID4gCj4gPiA+IC0tLQo+ID4gPiAKPiA+ID4g
-TWFzYW1pIEhpcmFtYXRzdSAoR29vZ2xlKSAoMik6Cj4gPiA+IMKgwqDCoMKgwqAgdHJhY2luZzog
-QWRkIC5wZXJjZW50IHN1ZmZpeCBvcHRpb24gdG8gaGlzdG9ncmFtIHZhbHVlcwo+ID4gPiDCoMKg
-wqDCoMKgIHRyYWNpbmc6IEFkZCAuZ3JhcGggc3VmZml4IG9wdGlvbiB0byBoaXN0b2dyYW0gdmFs
-dWUKPiA+ID4gCj4gPiA+IAo+ID4gPiDCoGtlcm5lbC90cmFjZS90cmFjZS5jwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHzCoMKgwqAgMyArCj4gPiA+IMKga2VybmVsL3RyYWNlL3RyYWNlX2V2ZW50
-c19oaXN0LmMgfMKgIDEyOQo+ID4gPiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KystLQo+ID4gPiDCoDIgZmlsZXMgY2hhbmdlZCwgMTI0IGluc2VydGlvbnMoKyksIDggZGVsZXRp
-b25zKC0pCj4gPiA+IAo+ID4gPiAtLQo+ID4gPiBNYXNhbWkgSGlyYW1hdHN1IChHb29nbGUpIDxt
-aGlyYW1hdEBrZXJuZWwub3JnPgo+ID4gCj4gCj4gCgo=
+Hi Igor,
 
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on cminyard-ipmi/for-next]
+[also build test ERROR on soc/for-next linus/master v6.0-rc1 next-20220819]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Igor-Kononenko/aspeed-lpc-Fix-lpc-snoop-probe-exception/20220822-000836
+base:   https://github.com/cminyard/linux-ipmi for-next
+config: riscv-randconfig-r042-20220821 (https://download.01.org/0day-ci/archive/20220822/202208220317.cROZCTcB-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 01ffe31cbb54bfd8e38e71b3cf804a1d67ebf9c1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/9c523bc00c11d0e9499bf6e3d3c5cc2fcf3fff8f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Igor-Kononenko/aspeed-lpc-Fix-lpc-snoop-probe-exception/20220822-000836
+        git checkout 9c523bc00c11d0e9499bf6e3d3c5cc2fcf3fff8f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/char/ipmi/kcs_bmc_aspeed.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/char/ipmi/kcs_bmc_aspeed.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/char/ipmi/kcs_bmc_aspeed.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/char/ipmi/kcs_bmc_aspeed.c:643:29: error: incompatible pointer types passing 'struct kcs_bmc *' to parameter of type 'struct kcs_bmc_device *' [-Werror,-Wincompatible-pointer-types]
+           aspeed_kcs_irq_mask_update(kcs_bmc, (KCS_BMC_EVENT_TYPE_IBF), 0);
+                                      ^~~~~~~
+   drivers/char/ipmi/kcs_bmc_aspeed.c:399:63: note: passing argument to parameter 'kcs_bmc' here
+   static void aspeed_kcs_irq_mask_update(struct kcs_bmc_device *kcs_bmc, u8 mask, u8 state)
+                                                                 ^
+   7 warnings and 1 error generated.
+
+
+vim +643 drivers/char/ipmi/kcs_bmc_aspeed.c
+
+   638	
+   639	static void aspeed_kcs_shutdown(struct platform_device *pdev)
+   640	{
+   641		struct kcs_bmc *kcs_bmc = dev_get_drvdata(&pdev->dev);
+   642	
+ > 643		aspeed_kcs_irq_mask_update(kcs_bmc, (KCS_BMC_EVENT_TYPE_IBF), 0);
+   644	}
+   645	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

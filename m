@@ -2,116 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CCF59B656
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 22:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A8F59B659
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 22:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbiHUUh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 16:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S231298AbiHUUkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 16:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiHUUhY (ORCPT
+        with ESMTP id S231429AbiHUUka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 16:37:24 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B258F1F60D;
-        Sun, 21 Aug 2022 13:37:23 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id s1so9941174lfp.6;
-        Sun, 21 Aug 2022 13:37:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=Kyxqc5rAoGnqJE9WElx6EBMV8xqTT9IMMo5wUGHftok=;
-        b=Dh0wHSuPepRN05VF69M8apwh8NLGTSQ0rj+C/rKBVw0IFpwC/l6DdaykrHcU/GFVK3
-         j65op7R8+6uvo6xt6Hm+hLsbYWROiF69cK9jmg3p8MmDiL8Blk+0EdT8RbEyggVeOzBc
-         E2QsKkaKWDt1JPAsZ0gGBXgaqegBUQGrfiZMgTjVaVZOhhFaDQb3++pDcQlEvl7am52g
-         8E6BWjV+Gw0ldKKbOgvYlTmuD9T1/4Ci/JB85yxkUXh/xufOFYBgrBSHT/oyyeXslpji
-         F8UqfqqExfmA69cRW0nQRkii+2MeQCh28QX7vRrFow1xOw4ZvwWwfp9pNniBFtlAYFBl
-         s8zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Kyxqc5rAoGnqJE9WElx6EBMV8xqTT9IMMo5wUGHftok=;
-        b=s2sjVdoDWpCIur57YRum23vVBmCg3fzHvGVuPrJ2fitS0nDcg82dCzj23mB6EsoslP
-         N0ftrc9SKaYm19uME2Hiq/Y1gvkqRUZ91vVmGv53WT/vOs6Gfwc6H+7U5hQ0/MTfB/qL
-         BPG4JtWo33LbmxG8mudboTXlAzGGx1p1tUT821VmCHqdJC0VinI0pFZyLIgcknjzn9US
-         lN0ck9bG9eTNauc5FjihPhYxbhGS63+8FUrPkCQKhwkU2PX4dloMNmTu08fhGJgMjY5N
-         eG/T/d0Eu1yx1jn/erV1KL7Foc30UW4wffgKBV+HKtijberAZR0XTHrVWJiwNAKegDfw
-         xPxA==
-X-Gm-Message-State: ACgBeo1zt3CAxZEooxEcPTQWANn5zu0uadfgXTZcF8qLJ51NI6DYx3Ue
-        ZeMsCvU76rZQqTKUx45Eai9qmffLdtLK1w==
-X-Google-Smtp-Source: AA6agR5VwSaYfHoh8jG3iAVAoEI5L/BpK4p7fvqv4IoaMtYGPgIHW0+SlQrUQ568FJAEHINaPrh7ZQ==
-X-Received: by 2002:ac2:50cf:0:b0:48a:f4ef:788b with SMTP id h15-20020ac250cf000000b0048af4ef788bmr5731853lfm.527.1661114241945;
-        Sun, 21 Aug 2022 13:37:21 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id x2-20020ac25dc2000000b0047dace7c7e5sm1606422lfq.212.2022.08.21.13.37.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 13:37:21 -0700 (PDT)
-Date:   Sun, 21 Aug 2022 23:37:19 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        greentime.hu@sifive.com, jude.onyenegecha@sifive.com,
-        william.salmon@sifive.com, adnan.chowdhury@sifive.com,
-        ben.dooks@sifive.com, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jeegar.lakhani@sifive.com
-Subject: Re: [PATCH 00/11] Add support for enhanced SPI for Designware SPI
- controllers
-Message-ID: <20220821203719.gxjxo24stzcf3a2x@mobilestation>
-References: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
+        Sun, 21 Aug 2022 16:40:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0FB20BD8;
+        Sun, 21 Aug 2022 13:40:29 -0700 (PDT)
+Received: from [10.3.2.13] (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9DE24660036A;
+        Sun, 21 Aug 2022 21:40:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661114427;
+        bh=Z2il1kngXjDQKOBuq7K0dhVJT9L7d/e1zgH7CmQvLiU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=k71g0emvhmeKjwzAJT0z95v48M3tVfuLio8KPqccCNWQquJrRIab1N9SHrGBlm89L
+         K7R86aNuryNXJhbfMdnkikx8maiRNlGhy7FdP1zilan2I+MohRvMctXrlu8KBho13d
+         CpvWSoJyUzlIdJNoliIhJYgcsFkCRzxdjizaAu4nIgurIpG+kz2AQjDVrXmxmDzr8J
+         LGmxgeNrFqS6oKTPOCfvd2HhBy2biikeWeJ9U3LFBQBAYDsE3y/6ZM5yeFbyGSSBup
+         xRj1ETKHiR1uDUYVMK0VRrlzLGXonvsP/PXgT2nIr8VCm7QNW6AJpQ9uFJ/qUpXO25
+         gtmh0j3uElVEg==
+Message-ID: <6a8f2555-1bd4-ac81-390e-b597e3c886f6@collabora.com>
+Date:   Sun, 21 Aug 2022 23:40:21 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220802175755.6530-1-sudip.mukherjee@sifive.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 2/3] media: cedrus: Set the platform driver data
+ earlier
+Content-Language: en-US
+To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        linux-media@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     kernel@collabora.com, stable@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220818203308.439043-1-nicolas.dufresne@collabora.com>
+ <4418189.LvFx2qVVIh@jernej-laptop>
+ <47ce07adc73887b5afaf9815a78b793d0e9a6b54.camel@collabora.com>
+ <4733096.GXAFRqVoOG@jernej-laptop>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <4733096.GXAFRqVoOG@jernej-laptop>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudip
+On 8/20/22 11:25, Jernej Škrabec wrote:
+> Dne petek, 19. avgust 2022 ob 17:37:20 CEST je Nicolas Dufresne napisal(a):
+>> Le vendredi 19 août 2022 à 06:17 +0200, Jernej Škrabec a écrit :
+>>> Dne četrtek, 18. avgust 2022 ob 22:33:07 CEST je Nicolas Dufresne 
+> napisal(a):
+>>>> From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>>>
+>>>> The cedrus_hw_resume() crashes with NULL deference on driver probe if
+>>>> runtime PM is disabled because it uses platform data that hasn't been
+>>>> set up yet. Fix this by setting the platform data earlier during probe.
+>>>
+>>> Does it even work without PM? Maybe it would be better if Cedrus would
+>>> select PM in Kconfig.
+>>
+>> I cannot comment myself on this, but it does not seem to invalidate this
+>> Dmitry's fix.
+> 
+> If NULL pointer dereference happens only when PM is disabled, then it does. I 
+> have PM always enabled and I never experienced above issue.
 
-On Tue, Aug 02, 2022 at 06:57:44PM +0100, Sudip Mukherjee wrote:
-> Some Synopsys SSI controllers support enhanced SPI which includes
-> Dual mode, Quad mode and Octal mode. DWC_ssi includes clock stretching
-> feature in enhanced SPI modes which can be used to prevent FIFO underflow
-> and overflow conditions while transmitting or receiving the data respectively.
-> This is only tested on controller version 1.03a.
-> 
-> Ben Dooks (1):
->   spi: dw-apb-ssi: add generic 1.03a version
-> 
-> Sudip Mukherjee (10):
->   spi: dw: define capability for enhanced spi
->   spi: dw: add check for support of dual/quad/octal
->   spi: dw: define spi_frf for dual/quad/octal modes
->   spi: dw: use TMOD_RO to read in enhanced spi modes
->   spi: dw: define SPI_CTRLR0 register and its fields
->   spi: dw: update SPI_CTRLR0 register
->   spi: dw: update NDF while writing in enhanced spi mode
->   spi: dw: update buffer for enhanced spi mode
->   spi: dw: prepare the transfer routine for enhanced mode
->   spi: dw: initialize dwc-ssi-1.03a controller
+Originally this fix was needed when I changed cedrus_hw_probe() to do
+the rpm-resume while was debugging the hang issue and then also noticed
+that the !PM should be broken. It's a good common practice for all
+drivers to have the drv data set early to avoid such problems, hence it
+won't hurt to make this change anyways.
 
-Thanks for the very useful series. I've started reviewing it and will
-share all my comments tomorrow.
+In practice nobody disables PM other than for debugging purposes and !PM
+handling is often broken in drivers. I assume that it might be even
+better to enable PM for all Allwiner SoCs and remove !PM handling from
+all the affected drivers, like it was done for Tegra some time ago.
 
--Sergey
-
-> 
->  .../bindings/spi/snps,dw-apb-ssi.yaml         |   1 +
->  drivers/spi/spi-dw-core.c                     | 288 ++++++++++++++++--
->  drivers/spi/spi-dw-mmio.c                     |  10 +
->  drivers/spi/spi-dw.h                          |  19 ++
->  4 files changed, 291 insertions(+), 27 deletions(-)
-> 
-> -- 
-> 2.30.2
-> 
+-- 
+Best regards,
+Dmitry

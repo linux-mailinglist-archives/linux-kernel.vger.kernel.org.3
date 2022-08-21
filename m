@@ -2,52 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D0859B2D2
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 10:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A360F59B2D4
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 10:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiHUInr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 04:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
+        id S229904AbiHUIqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 04:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiHUInp (ORCPT
+        with ESMTP id S229436AbiHUIqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 04:43:45 -0400
+        Sun, 21 Aug 2022 04:46:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852B61A05D;
-        Sun, 21 Aug 2022 01:43:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CED237C2
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 01:46:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02F1860DD1;
-        Sun, 21 Aug 2022 08:43:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9A10C433D6;
-        Sun, 21 Aug 2022 08:43:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661071423;
-        bh=4ow+87klzjK1s/ZPzynCOL4sSJYQb/HTm8PrOxl9BkE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rXjcbp199xnGbQfM/i1rvABsQl2S08RjdSV+MY9PpOU8/kvjWRBnEioz30Y6+dVrZ
-         2Y+/vii3uNu9cW7z3Ni+CR81+3K/5ZkLIRAnMFEYEdV/PRFJAwFA4fgdZRMIXwMUsu
-         Xewlok0ZGWB3Ortj1PjCnPO+UZ2uhP4OSCPtBqmkO4Lg37C/lp3BUx4M5oDM8qeIXW
-         srxPSm0QaYqMvZlUUk/X3XDkRdOpgVd2TUnDM8pPMHsQ+ZyJrOO6zeBERTRitMJgBG
-         mZtgW8AKorJLFXdmrlZ8OspHmxkgG6TiSJBUDx1dShYcYqNI63g0aj6VPAm2ksZRmp
-         AFvTNbvLTLFFg==
-Date:   Sun, 21 Aug 2022 10:43:39 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c-for-6.0-rc2
-Message-ID: <YwHwOwkBOAeoRuci@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E41360C95
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:46:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FD46C433C1;
+        Sun, 21 Aug 2022 08:46:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661071574;
+        bh=KSvjY3lK/TpsVdGUuwm3DhwMl9q0nnxDdrUhtNsvEXI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e/fz+JoonaXfLWFDZZlK5dXsdGYkiHrmXZtB2BwJEKygSIzF8Dq+yw1ZJPTy3BZft
+         RCWIJP9po0gH3TIUHveqKpaDV+EtT8t+3PbdTNESaLEY83kbUiw2Utvlp/rrQYe6X6
+         4uNe0dJWyCBHGfZPMUF7F9zTOQyZDwz1m9UbRW3U=
+Date:   Sun, 21 Aug 2022 10:46:24 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Abhishek Shah <abhishek.shah@columbia.edu>
+Cc:     jirislaby@kernel.org, linux-kernel@vger.kernel.org,
+        bjohannesmeyer@gmail.com, jakobkoschel@gmail.com,
+        xiam0nd.tong@gmail.com, Gabriel Ryan <gabe@cs.columbia.edu>
+Subject: Re: data-race in set_console / vt_ioctl
+Message-ID: <YwHw4IlvxWgCrhB4@kroah.com>
+References: <CAEHB249P1XurGDtvfjzkEzP4qWEaL6FG4ENM=PYjk7-JZfnKrQ@mail.gmail.com>
+ <Yv82cwVT9MXX2nx/@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="peF6uqEsAHXhFynL"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Yv82cwVT9MXX2nx/@kroah.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,71 +53,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Aug 19, 2022 at 09:06:27AM +0200, Greg KH wrote:
+> On Thu, Aug 18, 2022 at 09:17:00PM -0400, Abhishek Shah wrote:
+> > Hi all,
+> > 
+> > We found a data race involving the *vt_dont_switch* variable. Upon further
+> > investigation, we see that this racing variable controls whether the
+> > callbacks will be scheduled in the console (see here
+> > <https://elixir.bootlin.com/linux/v5.18-rc5/source/drivers/tty/vt/vt.c#L3032>),
+> > but we are not sure of its security implications. Please let us know what
+> > you think.
+> 
+> Again, any patch that you might have to resolve this would be great, as
+> that's the easiest thing to review.
 
---peF6uqEsAHXhFynL
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Given the your lack of responses to the developer's responding to your
+emails, and the fact that all of your original emails were sent in html
+format which was rejected by the public mailing lists so no one else
+could see them, I'm going to just drop all of these reports as being
+something pretty useless.
 
-Linus,
+If you wish to submit future reports, please read the
+Documentation/process/researcher-guidelines.rst file on how to do this
+properly in a way that will be useful, and be sure to actually respond
+to developers who take the time to write back to your reports.
 
-there have been some last minute changes to the commits which only
-affect the commit messages (added tags). The code changes have been
-tested by buildbots before.
+This is not a one-way process.
 
-Please pull.
+thanks,
 
-   Wolfram
-
-
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
-
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-=
-6.0-rc2
-
-for you to fetch changes up to d98bdd3a5b50446d8e010be5b04ce81c4eabf728:
-
-  i2c: imx: Make sure to unregister adapter on remove() (2022-08-21 10:27:3=
-3 +0200)
-
-----------------------------------------------------------------
-This pull request includes a revert to fix a regression introduced this
-merge window and a fix for proper error handling in the remove path of
-the iMX driver.
-
-----------------------------------------------------------------
-Uwe Kleine-K=C3=B6nig (1):
-      i2c: imx: Make sure to unregister adapter on remove()
-
-Wolfram Sang (1):
-      Revert "i2c: scmi: Replace open coded device_get_match_data()"
-
- drivers/i2c/busses/i2c-imx.c  | 20 +++++++++++---------
- drivers/i2c/busses/i2c-scmi.c |  9 +++++++--
- 2 files changed, 18 insertions(+), 11 deletions(-)
-
---peF6uqEsAHXhFynL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMB8DsACgkQFA3kzBSg
-Kba4MhAAm48sdzNwnxjHa0TEBMbQQkrvFqPk8YYVVN0BRuxNU7hDPzuBD7qWLB5x
-brslm7BLRSOcKDw3QgMkq476lYKGVv0AcCAgE52Y48FM7xAJe8yWLFDZsLbnSq/9
-nIjx1TNQMULuK1WTFq967VZXlR5HkS0apeRr94vkG6PD8rHVOjvFrStM4Ao8c0S+
-Mvtf/rYu3+6iLGAHaCYTPBb6ad4grJGjXVaiqdPbXPYwMq6IP1CmGAsTNRkftqaT
-bToBpLipGjDUZwNVnmZkM/WPRF9QMpSGOxTMB0DR5Ky5TnxBPvIO4v9lzIUHApCe
-xQUA39HUAAKEvmDKLgDWOBrEqTIGObPh8kv06Wgyl9JQbszkfgRiiTbU1rjNmjJa
-bP1BVQgoNjad+5b/V01TSTVA2o9TPvOTOPpt7AweX/2NZAYG4BZUaJK9KvVfMN+N
-nW7YcVyttiPpWTbxahMRnoftNTcaFtPEiBr39HDzy6n2LmMjZTTqZpbZvBniBzCg
-SSSKcQZbqrNQFUkF1u6McaqqPD+nggVRMfON3YSFf+05HhBu3tVIt8KwWIV8lb9v
-+WTSdxjkjHevb+uENyKJhczI4jEbHYF9/dk37oUCtw+11o0TpSLO3FAsQgGhWMu0
-GqX15OFRaP1kLVuuRbX/po20TxsZRRLJ17InlhFPcsfcb4/G8gw=
-=rTY2
------END PGP SIGNATURE-----
-
---peF6uqEsAHXhFynL--
+greg k-h

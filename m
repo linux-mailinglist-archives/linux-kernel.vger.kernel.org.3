@@ -2,81 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BFB59B587
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 18:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4209459B596
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 19:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiHUQuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 12:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S230270AbiHURPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 13:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiHUQuJ (ORCPT
+        with ESMTP id S229491AbiHURPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 12:50:09 -0400
-Received: from rfvt.org.uk (rfvt.org.uk [37.187.119.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C3B1C91E;
-        Sun, 21 Aug 2022 09:50:07 -0700 (PDT)
-Received: from wylie.me.uk (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sun, 21 Aug 2022 13:15:15 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83211C13C
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 10:15:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by rfvt.org.uk (Postfix) with ESMTPS id CB5FB82CC4;
-        Sun, 21 Aug 2022 17:50:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wylie.me.uk;
-        s=mydkim005; t=1661100601;
-        bh=q+x+Ol4FFP5xOeKSbHjfFQjd4jkWVjDlO4DK5fZcXCM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=n9ilN6+egqrx5676IDM6rRoFeo5RFASYYAMqC3nwoyEPWXvxuVFxbc62BpVkc7jXe
-         nCfMzPFVXsfBAm7IeBkX9Zlh1Pd9Vm3BuTcBsNPMhs05/V71v5wbvLCYgehqK/7mrT
-         fAERmPVg8K9gjVxVH3ahVxHHmKpT7pQbRGljQqiaXy1FA0Cdu6BmpFZQEP60WH2SCv
-         awcO+0Qy4whfipO8XLCyqfyfJtRMJbrAQVGFAzt3rw5W9MlWHqYnpLDg5rIlTPK97D
-         jpxenad8f+GqtFRSzMIs0kUfAkgRqFfr8ZRLsTpBwRR9r60NEwsglOj3v8fACXzf54
-         gd8ChZxE8QCVA==
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3F528CE0B3C
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 17:15:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE896C433D6;
+        Sun, 21 Aug 2022 17:15:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661102111;
+        bh=/YxzEa9cM7Ef+kzrSskBrq6YKw82hJWi2Yi0D4j4i8E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VaMwGGMGmaGF1+8f7BA8T3jnFyN9Y3T2yRQhqcuc7RHxaIBwXZJuLHqot010sNQkd
+         Dtv6hdBbjmTcW1p40l75tFJ5Onvn/KUl2WCeXWEtQgIuXfgY1+uO9g1Xb+iFa0aIF4
+         I/HZzurP1wDn+2Y4l11GZvnn6nUYTHPCmMYoXpYy4yxULHbKmHdycQWxC52ROn0Oqo
+         wcRYBRqctC135WPfKMfA+SRpB89PpJWR5QzLWW+bvk3zorwCt4ScVtQZDwonmxLKzk
+         fJ3ertrG9karfXrM7PGTxTzhDr8wyo5uTgc/37s2wk7L/ODNoNyqyg5NugrqokcSVW
+         ExAnTnGmale3Q==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] riscv: enable THP_SWAP for RV64
+Date:   Mon, 22 Aug 2022 01:05:59 +0800
+Message-Id: <20220821170559.840-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Message-ID: <25346.25145.488362.162952@wylie.me.uk>
-Date:   Sun, 21 Aug 2022 17:50:01 +0100
-From:   "Alan J. Wylie" <alan@wylie.me.uk>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: Regression in 5.19.0: USB errors during boot
-In-Reply-To: <20220821142610.GA2979@lst.de>
-References: <25342.20092.262450.330346@wylie.me.uk>
-        <Yv5Q8gDvVTGOHd8k@kroah.com>
-        <20220821062345.GA26598@lst.de>
-        <25345.60162.942383.502797@wylie.me.uk>
-        <20220821142610.GA2979@lst.de>
-X-Mailer: VM 8.2.0b under 27.2 (x86_64-pc-linux-gnu)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-at 16:26 on Sun 21-Aug-2022 Christoph Hellwig (hch@lst.de) wrote:
+I have a Sipeed Lichee RV dock board which only has 512MB DDR, so
+memory optimizations such as swap on zram are helpful. As is seen
+in commit d0637c505f8a ("arm64: enable THP_SWAP for arm64") and
+commit bd4c82c22c367e ("mm, THP, swap: delay splitting THP after
+swapped out"), THP_SWAP can improve the swap throughput significantly.
 
-> Thanks for confirming my suspicion.  I'd still like to fix the issue
-> with CONFIG_GART_IOMMU enabled once I've tracked it down.  Would you
-> be willing to test patches?
+Enable THP_SWAP for RV64, testing the micro-benchmark which is
+introduced by commit d0637c505f8a ("arm64: enable THP_SWAP for arm64")
+shows below numbers on the Lichee RV dock board:
 
-I'll be glad to help.
+thp swp throughput w/o patch: 66908 bytes/ms (mean of 10 tests)
+thp swp throughput w/ patch: 322638 bytes/ms (mean of 10 tests)
 
-I've also had a look in the loft and my box of bits for an old
-Athlon64/Opteron/Turion/Sempron processor, but I'm afraid all I've got
-are:
+Improved by 382%!
 
-Phenom II X6 1055T
-Phenom II X2 545
-Athlon 2  x2 270
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+---
+ arch/riscv/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index ed66c31e4655..19088c750c7f 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -45,6 +45,7 @@ config RISCV
+ 	select ARCH_WANT_FRAME_POINTERS
+ 	select ARCH_WANT_GENERAL_HUGETLB
+ 	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
++	select ARCH_WANTS_THP_SWAP if TRANSPARENT_HUGEPAGE
+ 	select BINFMT_FLAT_NO_DATA_START_OFFSET if !MMU
+ 	select BUILDTIME_TABLE_SORT if MMU
+ 	select CLONE_BACKWARDS
 -- 
-Alan J. Wylie                                          https://www.wylie.me.uk/
+2.34.1
 
-Dance like no-one's watching. / Encrypt like everyone is.
-Security is inversely proportional to convenience

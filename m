@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D56659B14B
+	by mail.lfdr.de (Postfix) with ESMTP id 5636B59B14C
 	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 04:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236557AbiHUCOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 22:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
+        id S236731AbiHUCOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 22:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235239AbiHUCO3 (ORCPT
+        with ESMTP id S236549AbiHUCOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 22:14:29 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5D61CB39
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 19:14:28 -0700 (PDT)
+        Sat, 20 Aug 2022 22:14:43 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402161EAC1
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 19:14:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661048068; x=1692584068;
+  t=1661048081; x=1692584081;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xmlQeiiEnoc+lUAWnQmldCWp4mLOcAHkktlrScaBRQs=;
-  b=H83BUKyS9l3TfKF/xKhLbMPU4pSW35oLh2wTSAMospCIBl+y1at9fWtP
-   yiYe7ANyRl6z+IsHQwk3rkZomchZAwuI64UABDjnRoQQSvRvCBMgi2+g2
-   t5UoUXm6nBskSjkg278GiCFnWzsXiPzsQHvv3mZ5GGGVsQxls3L5vxGos
-   B4zb0hoO+LoShTpM6DOi8WplVvf0TasM0wkWgd3SdSdxTfqCr/jiJdDZD
-   8LTtVNKSttzNE+lkx8jyYnxXszvNKZVl766mSDx61miTZ1wJu0jNo4b5V
-   iALm4LPDNNFMLYw3YondKs4YKyyXmzuiZrLlTA89cQWViJvXjmTqcvXI4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="357196219"
+  bh=X78ZVW51kkCwee4yfFupe/rwb6/p6rckcmItmL0kifk=;
+  b=HDuY+LCwmSwUS9YmjMsjYvHHIeehdOmlFIfe6QMCPk8OMhmRoshidZp+
+   fkgaImk+Kq3JZxYb69wgdwCMivHTDLvOnUZqkx+kpadSYi+hXQRhdY1d1
+   y1Yf9jIBYeejR0c/zgOZBPd7oW1eQKbH6Xr9VxsAhv83J3kdpLFYYQeLl
+   mERQFAtKstMnYYzO08c8RXv7XO4JVkUs74OMo+7GbTZL7LutRGSj4+jS7
+   FOFyJ9s6XQsTeZHbm3R21RsmQxVlTsAh36K5eOnWSBQVWk6UHmAMpjtTt
+   3MhjLWufdsNueJttr5ko3PMwxtDSR9I0AjYaX5v/ejNZzNsqPJFlk76xZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="272973601"
 X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="357196219"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 19:14:28 -0700
+   d="scan'208";a="272973601"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 19:14:29 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="637723660"
+   d="scan'208";a="559340729"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 20 Aug 2022 19:14:26 -0700
+  by orsmga003.jf.intel.com with ESMTP; 20 Aug 2022 19:14:26 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oPaTq-0003WN-0R;
+        id 1oPaTq-0003WP-0T;
         Sun, 21 Aug 2022 02:14:26 +0000
-Date:   Sun, 21 Aug 2022 10:13:44 +0800
+Date:   Sun, 21 Aug 2022 10:13:45 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/070-audio 12/16] sound/soc/codecs/cs42l84.c:264:10:
- error: 'const struct snd_soc_component_driver' has no member named
- 'non_legacy_dai_naming'; did you mean 'legacy_dai_naming'?
-Message-ID: <202208211004.6evbkKfp-lkp@intel.com>
+To:     Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: [linux-stable-rc:linux-5.15.y 3230/9817]
+ drivers/gpu/drm/i915/gt/intel_gt.c:966:2: error: format string is not a
+ string literal (potentially insecure)
+Message-ID: <202208211050.Lgvya5QM-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,56 +65,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/070-audio
-head:   51024ef467ff6c288e679bc72d0e3fcdd54d9b39
-commit: a97f70c444c0cb9842bc778c3c1def0142b2b8bf [12/16] wip: ASoC: cs42l84: Start new codec driver
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220821/202208211004.6evbkKfp-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+Hi Tvrtko,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+head:   decfb75fa34c3fc79f494f44b36d56d1d744edd5
+commit: 8a17a077e7e9ecce25c95dbdb27843d2d6c2f0f7 [3230/9817] drm/i915: Flush TLBs before releasing backing store
+config: x86_64-randconfig-r011-20220815 (https://download.01.org/0day-ci/archive/20220821/202208211050.Lgvya5QM-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6afcc4a459ead8809a0d6d9b4bf7b64bcc13582b)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/a97f70c444c0cb9842bc778c3c1def0142b2b8bf
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/070-audio
-        git checkout a97f70c444c0cb9842bc778c3c1def0142b2b8bf
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=8a17a077e7e9ecce25c95dbdb27843d2d6c2f0f7
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.15.y
+        git checkout 8a17a077e7e9ecce25c95dbdb27843d2d6c2f0f7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   sound/soc/codecs/cs42l84.c:244:5: warning: no previous prototype for 'cs42l84_component_probe' [-Wmissing-prototypes]
-     244 | int cs42l84_component_probe(struct snd_soc_component *component)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~
->> sound/soc/codecs/cs42l84.c:264:10: error: 'const struct snd_soc_component_driver' has no member named 'non_legacy_dai_naming'; did you mean 'legacy_dai_naming'?
-     264 |         .non_legacy_dai_naming  = 1,
-         |          ^~~~~~~~~~~~~~~~~~~~~
-         |          legacy_dai_naming
-   sound/soc/codecs/cs42l84.c: In function 'cs42l84_pll_config':
-   sound/soc/codecs/cs42l84.c:328:17: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-     328 |                 FIELD_PREP(CS42L84_ASP_FSYNC_CTL2_BCLK_PERIOD_LO, fsync & 0x7f));
-         |                 ^~~~~~~~~~
-   cc1: some warnings being treated as errors
+>> drivers/gpu/drm/i915/gt/intel_gt.c:966:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+           GEM_TRACE("\n");
+           ^~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:366:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:380:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/intel_gt.c:966:2: note: treat the string as an argument to avoid this
+   drivers/gpu/drm/i915/i915_gem.h:76:24: note: expanded from macro 'GEM_TRACE'
+   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
+                          ^
+   include/linux/kernel.h:366:3: note: expanded from macro 'trace_printk'
+                   do_trace_printk(fmt, ##__VA_ARGS__);    \
+                   ^
+   include/linux/kernel.h:380:30: note: expanded from macro 'do_trace_printk'
+                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
+                                              ^
+   1 error generated.
 
 
-vim +264 sound/soc/codecs/cs42l84.c
+vim +966 drivers/gpu/drm/i915/gt/intel_gt.c
 
-   254	
-   255	static const struct snd_soc_component_driver soc_component_dev_cs42l84 = {
-   256		.probe			= cs42l84_component_probe,
-   257		.controls			= cs42l84_snd_controls,
-   258		.num_controls		= ARRAY_SIZE(cs42l84_snd_controls),
-   259		.dapm_widgets		= cs42l84_dapm_widgets,
-   260		.num_dapm_widgets	= ARRAY_SIZE(cs42l84_dapm_widgets),
-   261		.dapm_routes		= cs42l84_audio_map,
-   262		.num_dapm_routes	= ARRAY_SIZE(cs42l84_audio_map),
-   263		.endianness		= 1,
- > 264		.non_legacy_dai_naming	= 1,
-   265	};
-   266	
+   927	
+   928	void intel_gt_invalidate_tlbs(struct intel_gt *gt)
+   929	{
+   930		static const i915_reg_t gen8_regs[] = {
+   931			[RENDER_CLASS]			= GEN8_RTCR,
+   932			[VIDEO_DECODE_CLASS]		= GEN8_M1TCR, /* , GEN8_M2TCR */
+   933			[VIDEO_ENHANCEMENT_CLASS]	= GEN8_VTCR,
+   934			[COPY_ENGINE_CLASS]		= GEN8_BTCR,
+   935		};
+   936		static const i915_reg_t gen12_regs[] = {
+   937			[RENDER_CLASS]			= GEN12_GFX_TLB_INV_CR,
+   938			[VIDEO_DECODE_CLASS]		= GEN12_VD_TLB_INV_CR,
+   939			[VIDEO_ENHANCEMENT_CLASS]	= GEN12_VE_TLB_INV_CR,
+   940			[COPY_ENGINE_CLASS]		= GEN12_BLT_TLB_INV_CR,
+   941		};
+   942		struct drm_i915_private *i915 = gt->i915;
+   943		struct intel_uncore *uncore = gt->uncore;
+   944		struct intel_engine_cs *engine;
+   945		enum intel_engine_id id;
+   946		const i915_reg_t *regs;
+   947		unsigned int num = 0;
+   948	
+   949		if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
+   950			return;
+   951	
+   952		if (GRAPHICS_VER(i915) == 12) {
+   953			regs = gen12_regs;
+   954			num = ARRAY_SIZE(gen12_regs);
+   955		} else if (GRAPHICS_VER(i915) >= 8 && GRAPHICS_VER(i915) <= 11) {
+   956			regs = gen8_regs;
+   957			num = ARRAY_SIZE(gen8_regs);
+   958		} else if (GRAPHICS_VER(i915) < 8) {
+   959			return;
+   960		}
+   961	
+   962		if (drm_WARN_ONCE(&i915->drm, !num,
+   963				  "Platform does not implement TLB invalidation!"))
+   964			return;
+   965	
+ > 966		GEM_TRACE("\n");
 
 -- 
 0-DAY CI Kernel Test Service

@@ -2,83 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E674659B4E6
+	by mail.lfdr.de (Postfix) with ESMTP id 555AA59B4E4
 	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 17:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiHUPLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 11:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
+        id S229447AbiHUPMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 11:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiHUPLm (ORCPT
+        with ESMTP id S229507AbiHUPMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 11:11:42 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D635FB5
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:11:40 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1661094695tad242yf
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 21 Aug 2022 23:11:33 +0800 (CST)
-X-QQ-SSF: 01000000000000C0D000B00A0000000
-X-QQ-FEAT: LE7C6P2vL8TJ2NV0d6Geu3qzKjOQ8egadwHhH5wys8q4sHfRqkS8ItdYYlKmf
-        /dEgdwtBIRd6zTV0MzVzAVvvzfIzQK7MW/4/IB/vO0P7bpJ6trKn7YMcX69VbWrM7Gpar7B
-        23tRKu6oqfb6elIzsVgwwUrIloJGMmw9tm8zM96GM/s8TGcx6zefKSTOuLO2qFlEJ81wspP
-        gm12i/HoktrIbtw5RP8vu7Yn7KGEOpKirOSZE88SnDzz5eBiDa+2hXxn64dw5qsGUPxZJZI
-        z8v4YEKvHSxrqsmLxgUTMhqOdbgeT8I/M1vQB60GHsfGhTHq5/nzp1r5aLIrn8rRGYCCfTm
-        QmQz3ZLd/ut3Vd659WDw90d2/20M3M6Vk47dU2B
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     linus.walleij@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] drivers/mfd: fix repeated words in comments
-Date:   Sun, 21 Aug 2022 23:11:27 +0800
-Message-Id: <20220821151127.54801-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Sun, 21 Aug 2022 11:12:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E8D22B0B
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:12:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661094732;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CjShao5KS7YTUwj6lZ8lmMaiescGPBNdHzi3GWQbqfo=;
+        b=NvSsKVvYIllr9cCDcisNvi9wFgU0ycK+4veV3PKasu2fszFmTlqzG1HakfMtPeB+8m20Cu
+        Zqob37vHnbIFvoF4njq84MFkqEjx6l9jWXiB7AE4z/G303xuU8V1O/O/Ze4h3aRZec2Mug
+        gdFxcN9l3jhXcEVC+y38u8qXemJAeF0=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-237-ELQudbh9PmGZvfVp1XVCIQ-1; Sun, 21 Aug 2022 11:12:11 -0400
+X-MC-Unique: ELQudbh9PmGZvfVp1XVCIQ-1
+Received: by mail-qt1-f198.google.com with SMTP id bz20-20020a05622a1e9400b003436a76c6e6so6765269qtb.1
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:12:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=CjShao5KS7YTUwj6lZ8lmMaiescGPBNdHzi3GWQbqfo=;
+        b=H9yMtkehpZRFKElb4OEO+NHaSi/AZk2PUAYkmrVny3mXZ3rSlYDAqN3h/Fei/3214R
+         knoAOWa8Mlk0xN8ErGFPgM31qVdTc8gJTXjcQc6JiglBsFcSL0nwhimdnw2wqIoTaTkk
+         AXua85iy+VBQRcARE+xYVCaCEAZl1bHOHqBkAimymLX5KZjKGdII2s3WC/0OefAICaTS
+         tx61GMMSfMfDKSLemkXIZh1QdNrwDn07HDxEwWDo8f0sqxEDBQa9FMKa/uNJX0wZZVJs
+         xlAZtD2+FUh4x+rfYJXnGOnC4IpXp/8FWLzMphPvvROybQOvkXkrWgc/kQFmgOVVvQHe
+         IYYw==
+X-Gm-Message-State: ACgBeo3kIeZgVCvEQVOU4IqJbXzMdVAFqFZknJVNeCDbTLj/UYdzFKO2
+        fqak125c4VEhit2lTMC0gtAF8ywISfKUI4hf0Os1dmWh6TqlltOytxQcHaYz1yFuQRG8kHkqJhd
+        2UzTn+/sntiK/zFmO6cYqBOFy8OJ7bN6A15btOE01
+X-Received: by 2002:a05:622a:110e:b0:343:6f02:99fd with SMTP id e14-20020a05622a110e00b003436f0299fdmr12672438qty.141.1661094731078;
+        Sun, 21 Aug 2022 08:12:11 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6Yo0YPKD7li1qO/+8j1V5fDwgE7RtNkUu23EP37Cq0Xx9xBuMRVvP/OGSR+LNvBObUlo8zk28WplryB0x2Lrs=
+X-Received: by 2002:a05:622a:110e:b0:343:6f02:99fd with SMTP id
+ e14-20020a05622a110e00b003436f0299fdmr12672425qty.141.1661094730890; Sun, 21
+ Aug 2022 08:12:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_PBL,RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [43.154.54.12 listed in wl.mailspike.net]
-        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        *      [43.154.54.12 listed in zen.spamhaus.org]
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+References: <20220821143038.46589-1-wangjianli@cdjrlc.com>
+In-Reply-To: <20220821143038.46589-1-wangjianli@cdjrlc.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Sun, 21 Aug 2022 17:12:00 +0200
+Message-ID: <CACO55ttLv=RtyLHYdOjbQmNGE_DScd0hfn-_Sxoo5+yavAK9Kw@mail.gmail.com>
+Subject: Re: [PATCH] subdev/clk: fix repeated words in comments
+To:     wangjianli <wangjianli@cdjrlc.com>
+Cc:     bskeggs@redhat.com, lyude@redhat.com, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'the'.
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/mfd/db8500-prcmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+thanks, and I'll push in a moment.
 
-diff --git a/drivers/mfd/db8500-prcmu.c b/drivers/mfd/db8500-prcmu.c
-index 56c61c99eb23..27a881da4d6e 100644
---- a/drivers/mfd/db8500-prcmu.c
-+++ b/drivers/mfd/db8500-prcmu.c
-@@ -798,7 +798,7 @@ void db8500_prcmu_get_abb_event_buffer(void __iomem **buf)
-  * @opp: The new ARM operating point to which transition is to be made
-  * Returns: 0 on success, non-zero on failure
-  *
-- * This function sets the the operating point of the ARM.
-+ * This function sets the operating point of the ARM.
-  */
- int db8500_prcmu_set_arm_opp(u8 opp)
- {
--- 
-2.36.1
+On Sun, Aug 21, 2022 at 4:34 PM wangjianli <wangjianli@cdjrlc.com> wrote:
+>
+>  Delete the redundant word 'at'.
+>
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> ---
+>  drivers/gpu/drm/nouveau/nvkm/subdev/clk/gm20b.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/clk/gm20b.c b/drivers/gpu/drm/nouveau/nvkm/subdev/clk/gm20b.c
+> index a139dafffe06..7c33542f651b 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/clk/gm20b.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/clk/gm20b.c
+> @@ -581,7 +581,7 @@ gm20b_clk_prog(struct nvkm_clk *base)
+>
+>         /*
+>          * Interim step for changing DVFS detection settings: low enough
+> -        * frequency to be safe at at DVFS coeff = 0.
+> +        * frequency to be safe at DVFS coeff = 0.
+>          *
+>          * 1. If voltage is increasing:
+>          * - safe frequency target matches the lowest - old - frequency
+> --
+> 2.36.1
+>
 

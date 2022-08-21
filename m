@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D585959B618
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 21:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C4B59B619
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 21:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbiHUTLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 15:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
+        id S231304AbiHUTMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 15:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiHUTLr (ORCPT
+        with ESMTP id S231193AbiHUTMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 15:11:47 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E86C1B7AE;
-        Sun, 21 Aug 2022 12:11:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661109085;
-        bh=xXlJFzE/RmrPZcunWw32jAe55Yko3tEOJOCDepAu6zY=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=K7VktiH7PTnbFQznNi4rXe0FqZWDvQcOuX/7VMezvHmQroLbpJgpH3rxeEugkVF0v
-         224P3vpqLMG4XtoOPFd0cgdSmJcwNakvNnDulhkeXI32MGFV1B3FkdI+pGGCRzHawM
-         Bh5+B8GdJtF6N0ajdDynbloqSw+1iHIPJ8XLatpE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.21] ([141.30.226.119]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mk0JW-1p9wkX25do-00kQ7D; Sun, 21
- Aug 2022 21:11:25 +0200
-Subject: Re: [PATCH 1/3] hwmon: (dell-smm) Fail probing when cooling device
- registration fails
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220821151713.11198-1-W_Armin@gmx.de>
- <20220821151713.11198-2-W_Armin@gmx.de>
- <20220821154145.v7da76besv2qzqhj@pali>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <ea06f15d-cb22-1d5d-9437-59d595e24e43@gmx.de>
-Date:   Sun, 21 Aug 2022 21:11:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Sun, 21 Aug 2022 15:12:38 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4720C1B7B1
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 12:12:37 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id s11so11369563edd.13
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 12:12:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=jILonV086DNQ+KWlOgi6a3UzHTGVyIQ7N2DF/l9R5Ms=;
+        b=d6as8TiE4LmDOL120eqrxKyMEZMpLMYZKRTGZ9J0ByyZvoY0XLB/GqMnanObaxp8tG
+         Et6snwtFVB3GEt0jNM4JMqVe2BcB8lm4JY2tItXb+W+tLJYgp6qHCj6+POofV6NPgPec
+         I/hoJdgZ2LFstLdE4PZ/cg+weAgbGm09rQFGDhCxCcMNGy+Df7n5hT6ZZ4kPFVjFOaBd
+         +GjwhLKxtkA4vPUPk1V4wYZW1/FGs5c8CBCvMt8Fcl1PYPY1IgPp8E0ZYik/1mjzC5+0
+         Fz2yAWujFXCSsMs7K9Qm0aOa0gI9+8eu6rJcp6zRcesak1GRhlIXN+HkyEaps/oNhvCN
+         HcYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=jILonV086DNQ+KWlOgi6a3UzHTGVyIQ7N2DF/l9R5Ms=;
+        b=Dgcjnmtim7b1kWtKzVTHQzFOxmpoMMuk0uqF5SCNFhObXVfOut6C9HLsJPAHvLnXzT
+         Xwa5LOznqwhMuE2OD+s6Sl75WMT8gXhTonKu+HhpxgZEo9fQf9qcYj4Kldjyzf7Ty/EN
+         HZ6A2xGgm0x343NpxQW9dblmjKJPc2MFdZu1w9Gu27vSmUApCQ2zaEfxoRAQLFxZxZzR
+         nMEYo79QYAwXPMgIMrWvlzhlcDLtKup7A4KHBw5Bdb8wazLyl9FPOc4aK2oO6JEeiSOk
+         Y1PEEj+aYdbnts8+1lYUR6P4+Sl6Ve4rDz0RPDR1eu5HTOodTDf6fw2hdPn+HmoA4zti
+         Ga3w==
+X-Gm-Message-State: ACgBeo3YfAhiNKRAsNwDLJmegF+s4ciRdUODVzTgz0jPJNcwLlzQj+L0
+        XswLT3loUsql6nobzzXqwmA=
+X-Google-Smtp-Source: AA6agR6jzKOvGqSaReSFOGzi1pxDqEbFCqv6BU5VfB4swj3L7QT90lmf8GbslEdWIeksHK/NQ0XJdg==
+X-Received: by 2002:a05:6402:2499:b0:440:942a:40c2 with SMTP id q25-20020a056402249900b00440942a40c2mr13743059eda.37.1661109155774;
+        Sun, 21 Aug 2022 12:12:35 -0700 (PDT)
+Received: from opensuse.localnet (host-87-17-106-94.retail.telecomitalia.it. [87.17.106.94])
+        by smtp.gmail.com with ESMTPSA id s13-20020a170906a18d00b0072af102e65csm5149520ejy.152.2022.08.21.12.12.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 12:12:33 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>
+Cc:     Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH v2] nvmet-tcp: Don't kmap() pages which can't come from HIGHMEM
+Date:   Sun, 21 Aug 2022 21:12:30 +0200
+Message-ID: <8107517.T7Z3S40VBb@opensuse>
+In-Reply-To: <20220821054602.GA25754@lst.de>
+References: <20220817184519.25141-1-fmdefrancesco@gmail.com> <20220821054602.GA25754@lst.de>
 MIME-Version: 1.0
-In-Reply-To: <20220821154145.v7da76besv2qzqhj@pali>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Provags-ID: V03:K1:kre3G2oBS9gCz9PF7rhKOEbMD4ubfZgE5R36d9SIbsk2jwAhVzF
- gLSShiiM6eIetS3CVSUoI+tsNlhcYYmAauD0gx4fPLhlZs50CbnfpaSDM899YS0bebkRPGe
- 1uYgoaW2jiDFxwo3zdqpO7j+9ZiSyNABYBP2NKHSwlaVUoNtHoKXOr4O/wCxweMHDvdV9gN
- dcbAC6q0Vl1j1dcbD0neA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Mw5h3K2QREQ=:GG737428vBK/FwPwKqcI3J
- x97t6CPRY8TRE/yFUmItZipSFFQxvRORxiKERQCWSKLVrqd/YZiUtKeQTa6OTQ5SE2SX0t+Gj
- bgTD4IW8hVbW5WThzwCeyNrDFnCeuioUtdN0mevddI6fnCyHIrG+hJqvFiH6DsrhACv5cVYaE
- btyMNb7edmSRC8IxD2q3rsoa5Uu/tRe2hgQEIKcuQ5Da+6unJU67kbm8tKRzkgTD2Ge1SJAGm
- inoNteatw3ajMN32CMrFAazMlZc6xcRWNmxHHG/FZLHytO4tAzDePBZDwV7iQQjvDmq5+8Afo
- vvpp1N2XklIyXYnACmEMTPpQ7n3QOUpvr+yvtx5LajqUaLoiCbOMI+pQBv5KWYCowouSTX0An
- vweTKNRoeEmckcMWae5XEJ/94dgaYtF8nbk0r4u8KKEBcGLIOWf85EiDfWh3hSa5eSyD7a3fC
- Mw/lquTbb7C4w8V/dFnmoEbuUemkwiPs2NAcbuI+747SPNh4iG39ha0zvzqFOparP+yFIAO4N
- huEW8RFaRzYMSHxLSvPgTvoCgMWGGrq57Yp8UJAWT7Fm+l/3mfg7B3t9m5SVNg+U1LdvJDYgU
- Xuil2X/qUeWCqJjlifZ3BC6CjXfGS0Stb+edeZ/lQrOyNyhMvlnUWSgumrvcRhwIvIdc7UcQH
- RFgMaZ+Y6LSx4AjtGVUafY6cx6dXofDX8eFLHRwNJjlhmKtCaD7sDhO5nVUaP06eIzR/OYU5s
- 8D1Dj2BHoTmDqXpptGSziw4ztXGrUbofC3wmhYkC7TfOkG0LvMPm70OdPxVk4y1P8Ydg5RWpr
- Dz+0m9uG2op2k4qyZEA7QqM+YUiAPM1U77/ucJ778W63xL4pNoAM3pCwfoD9eMvDf2sCtQMzV
- O6myyAeW5tLpKmwvsmC+2n4t3UqThwksEvN9lqFGKKmpX39RTH8s1IS/O+7/PBpwSPkHk8hp2
- p7r29cy3+0NzhE8WFZaVfjMvaVmia4wCTZbwAw3aonL/dF9jVXjzvRINWtf9ZNC6zzV3JFGvl
- ZbBEJKCGU12uljNhOlAOBgMFp/Qe/Elgq0RBG1r6jJiZ8CRH/aAO1T6B6HnHdD8rU04xLfypF
- 8Mm0rVOS6KwflBU4ToOc1P8R808BORnh1NkWEbhWAhKSs9eEe9y+dk4pg==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,55 +73,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 21.08.22 um 17:41 schrieb Pali Roh=C3=A1r:
+On domenica 21 agosto 2022 07:46:02 CEST Christoph Hellwig wrote:
+> This introduced tons of pointless over 80 character lines, please stick
+> to a proper coding style.
 
-> On Sunday 21 August 2022 17:17:11 Armin Wolf wrote:
->> Previously, it was thought that failing to register a cooling device
->> would not be critical, so the probing was not aborted in such a case.
->> This however would lead to userspace being unable to rely on those
->> cooling devices, since they might not represent all fans being present.
->> Fix that by failing probing when cooling device registration fails.
-> This patch does not fix address this issue fully. CONFIG_THERMAL can be
-> disabled during compile time and then cooling device would not be
-> registered too.
+I'm sorry for this mistake. I'll break those long lines in the next version.
+ 
+> Also or in-kernel I/O wouldn't it make more sense to use a BVEC iter
+> insted of a KVEC if we have the pages anyway?  Or does networking not
+> support them properly?
 
-I though of the cooling device feature as being optional "as a whole".
-So when CONFIG_THERMAL is disabled during compile time, the driver does
-not create any cooling devices. If however CONFIG_THERMAL was enabled
-during compile time, the driver should fail probing if it cannot register
-all cooling devices.
+I must admit I knew practically nothing about this code until I met it while 
+doing my long journey towards kmap() and kmap_atomic() removals. I can say the 
+same for regard to the differences between BVEC iter and KVEC iter. 
 
-Armin Wolf
+Since you are asking this, today I did some research and read code from other 
+drivers/subsystems, despite this particular issue is out of the scope of my 
+patch.
 
->> Tested on a Dell Inspiron 3505.
->>
->> Fixes: e0d3f7cb2606 ("hwmon: (dell-smm) Add cooling device support")
->> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->> ---
->>   drivers/hwmon/dell-smm-hwmon.c | 4 +---
->>   1 file changed, 1 insertion(+), 3 deletions(-)
->>
->> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hw=
-mon.c
->> index 7f8d95dd2717..1dab7591576a 100644
->> --- a/drivers/hwmon/dell-smm-hwmon.c
->> +++ b/drivers/hwmon/dell-smm-hwmon.c
->> @@ -1013,12 +1013,10 @@ static int __init dell_smm_init_hwmon(struct de=
-vice *dev)
->>
->>   		data->fan[i] =3D true;
->>
->> -		/* the cooling device is not critical, ignore failures */
->>   		if (IS_REACHABLE(CONFIG_THERMAL)) {
->>   			err =3D dell_smm_init_cdev(dev, i);
->>   			if (err < 0)
->> -				dev_warn(dev, "Failed to register cooling device for fan %u\n",
->> -					 i + 1);
->> +				return err;
->>   		}
->>
->>   		data->fan_nominal_speed[i] =3D devm_kmalloc_array(dev, data->i8k_fa=
-n_max + 1,
->> --
->> 2.30.2
->>
+I also read an interesting article in LWN: "The iov_iter interface" at 
+https://lwn.net/Articles/625077/
+
+I may very well be wrong, however I think that iov_iter_kvec() is better 
+suited here.
+
+@Sagi, anything to add to this discussion?
+
+Thanks,
+
+Fabio 
+
+
+

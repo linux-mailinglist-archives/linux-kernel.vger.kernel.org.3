@@ -2,79 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B1559B323
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 12:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E09859B326
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 12:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbiHUK2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 06:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S230072AbiHUKdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 06:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiHUK2I (ORCPT
+        with ESMTP id S229508AbiHUKdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 06:28:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7B318394;
-        Sun, 21 Aug 2022 03:28:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ezqnpfSoqTQDMJ+hJHVpOcv6CdCxoRGL+MI+YKi2ajc=; b=oGft0gECLBoMj2UBuNjBRRw7oU
-        +dq00PAmbDXUBvlm8/tj+3wvQ6+u1mI4tCmpI7ekjaZJY5bZRNO9OebH9SJpV1ysh/OWtfztRfWPW
-        oh7BrM3UcOp9ibf9eSMPU5DoNPWCirAlzoF7UBdHCRQtmm6dE/aZytFO5kBG+bAYbqLdyYZzrVtt/
-        iuZP3zYaHC4+P7CXpDkHhx26k0MpnTHE/dEowsrIT+sGbKv23kjGfdNLUtoruLSmY1Y3DtZhd/9Hl
-        3LYOd+8SlRhwWalnWFB/NWtwuYs86Tc9tyA9RmJoFdeb0dwyoEDgnWuoUSo1B+PY04MuuTWMM54Av
-        EsSC0QFw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oPiBE-00D7rG-Sc; Sun, 21 Aug 2022 10:27:44 +0000
-Date:   Sun, 21 Aug 2022 11:27:44 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <YwIIoFJrKPBXaRDW@casper.infradead.org>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
- <20220818132421.6xmjqduempmxnnu2@box>
- <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
+        Sun, 21 Aug 2022 06:33:08 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD936555;
+        Sun, 21 Aug 2022 03:33:07 -0700 (PDT)
+Date:   Sun, 21 Aug 2022 10:33:03 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1661077984;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AkL+xh74pmzfFytjn67BBr102XsZF2Xfe6HRVXtM7so=;
+        b=S3+AqkFsSz9JiuyMZnqyj0O02pAN9aFw7VNWtvICbxelndRaaAzbKau73xlkmRfagORR78
+        QLTFWsjMOAl0hjHlBI+MXEM3JoFI2UETkIVEPH4nvsT1b18ZN63d6Jaub13rsCksL6DEDi
+        XzfMOCQb9UHC0HNJ2lSkmOhc3e342neMV1Dm3sr/rGHoUZpNQ4tGoGKrCj16a0ncXqHpJd
+        Tm1rokMwBrTVqTiaYr/AaSV3GAn6YmaujiRh9vvysBTy8KuuU8zVIg7fNOLZL6uv2FzkiZ
+        d1n0C8K3izB/vM2ekA+w7EME5nwCCYf4t8zAI2SbdyOOq+/rZI04xGMIDeHtCg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1661077984;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AkL+xh74pmzfFytjn67BBr102XsZF2Xfe6HRVXtM7so=;
+        b=e3knuuocJacqoYUGNiIfZUa1eySg5TzieEZzQh9ETHOcWtxGaBIxudQ6338oQKoSheCNY7
+        FRMD5GHAfqU3xyBg==
+From:   "tip-bot2 for Chen Zhongjin" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/unwind/orc: Unwind ftrace trampolines with
+ correct ORC entry
+Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        <stable@vger.kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220819084334.244016-1-chenzhongjin@huawei.com>
+References: <20220819084334.244016-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
+Message-ID: <166107798320.401.17179497604353962909.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,19 +68,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 08:00:41PM -0700, Hugh Dickins wrote:
-> tmpfs and hugetlbfs and page cache are designed around sharing memory:
-> TDX is designed around absolutely not sharing memory; and the further
-> uses which Sean foresees appear not to need it as page cache either.
-> 
-> Except perhaps for page migration reasons.  It's somewhat incidental,  
-> but of course page migration knows how to migrate page cache, so
-> masquerading as page cache will give a short cut to page migration,
-> when page migration becomes at all possible.
+The following commit has been merged into the x86/urgent branch of tip:
 
-I haven't read the patch series, and I'm not taking a position one way
-or the other on whether this is better implemented as a shmem addition
-or a shim that asks shmem for memory.  Page migration can be done for
-driver memory by using PageMovable.  I just rewrote how it works, so
-the details are top of my mind at the moment if anyone wants something
-explained.  Commit 68f2736a8583 is the key one to look at.
+Commit-ID:     fc2e426b1161761561624ebd43ce8c8d2fa058da
+Gitweb:        https://git.kernel.org/tip/fc2e426b1161761561624ebd43ce8c8d2fa058da
+Author:        Chen Zhongjin <chenzhongjin@huawei.com>
+AuthorDate:    Fri, 19 Aug 2022 16:43:34 +08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Sun, 21 Aug 2022 12:19:32 +02:00
+
+x86/unwind/orc: Unwind ftrace trampolines with correct ORC entry
+
+When meeting ftrace trampolines in ORC unwinding, unwinder uses address
+of ftrace_{regs_}call address to find the ORC entry, which gets next frame at
+sp+176.
+
+If there is an IRQ hitting at sub $0xa8,%rsp, the next frame should be
+sp+8 instead of 176. It makes unwinder skip correct frame and throw
+warnings such as "wrong direction" or "can't access registers", etc,
+depending on the content of the incorrect frame address.
+
+By adding the base address ftrace_{regs_}caller with the offset
+*ip - ops->trampoline*, we can get the correct address to find the ORC entry.
+
+Also change "caller" to "tramp_addr" to make variable name conform to
+its content.
+
+[ mingo: Clarified the changelog a bit. ]
+
+Fixes: 6be7fa3c74d1 ("ftrace, orc, x86: Handle ftrace dynamically allocated trampolines")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220819084334.244016-1-chenzhongjin@huawei.com
+---
+ arch/x86/kernel/unwind_orc.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index 38185ae..0ea57da 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -93,22 +93,27 @@ static struct orc_entry *orc_find(unsigned long ip);
+ static struct orc_entry *orc_ftrace_find(unsigned long ip)
+ {
+ 	struct ftrace_ops *ops;
+-	unsigned long caller;
++	unsigned long tramp_addr, offset;
+ 
+ 	ops = ftrace_ops_trampoline(ip);
+ 	if (!ops)
+ 		return NULL;
+ 
++	/* Set tramp_addr to the start of the code copied by the trampoline */
+ 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS)
+-		caller = (unsigned long)ftrace_regs_call;
++		tramp_addr = (unsigned long)ftrace_regs_caller;
+ 	else
+-		caller = (unsigned long)ftrace_call;
++		tramp_addr = (unsigned long)ftrace_caller;
++
++	/* Now place tramp_addr to the location within the trampoline ip is at */
++	offset = ip - ops->trampoline;
++	tramp_addr += offset;
+ 
+ 	/* Prevent unlikely recursion */
+-	if (ip == caller)
++	if (ip == tramp_addr)
+ 		return NULL;
+ 
+-	return orc_find(caller);
++	return orc_find(tramp_addr);
+ }
+ #else
+ static struct orc_entry *orc_ftrace_find(unsigned long ip)

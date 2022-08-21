@@ -2,165 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCCE59B576
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 18:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 172AE59B57B
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 18:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbiHUQdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 12:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S231316AbiHUQkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 12:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiHUQdU (ORCPT
+        with ESMTP id S229799AbiHUQkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 12:33:20 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6231142
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 09:33:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=cK2+O3VjoIP+dBHuVJLTFqcdAxz4KQX5VWju7aZI310=; b=Z1EozxXmo9Qb2u1ChE243s0BYB
-        Pj0pgGlbPH6MlYUKB01Yz/YJIgGauKbAKX/1LEeEV638+i0xLqyt6UfvHNuNxfhHC4+zx2ML+K76n
-        RmL7BP3U23eMyj290TFVdJbQpuBeDEaPKQrpqxxFNC22KfONX0XYH3psnbLxsmAT8GY6LibqIyQLW
-        dLhOfhpooHFyjE2diYfifT/djb4VNH3IhtRWanrdEFszrDaN63SR3Q5tf9oD6pq342dtO/7NvDZvZ
-        +2UuUBq7bgyVS6+pRfkHBpmQlPNgjETA/Tn3mJH4lBIuMQ3+pVWQ3R3j/BrlSX+d/XjpeO79vjRs2
-        d2dJ4I3w==;
-Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=59050)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oPnsy-0005ky-4O; Sun, 21 Aug 2022 18:33:16 +0200
-Message-ID: <987d6114-5fcb-d668-3b0d-ad6d8723dfdb@tronnes.org>
-Date:   Sun, 21 Aug 2022 18:33:12 +0200
+        Sun, 21 Aug 2022 12:40:02 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E97186C1
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 09:39:59 -0700 (PDT)
+Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 36E7530F40D;
+        Sun, 21 Aug 2022 18:39:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1661099997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=btYU0hY8FQEp2zkTFhPT21xYKh/ZrlHIaS3DTYBgHhk=;
+        b=v/U9Uirf+4zpQTGdFbZWMp2SD96Q5Enw+AAp2oiyq//MlT5f5u+viebdwcHvmncoMsJsj+
+        mjUA5L8J1kRQF6POcwxLQIRovTYSoR3IOn6aKc4azPaO/sk2T9uAw41K1lgsWErLKmAbCJ
+        hC+JSxEXBABuQzVSHiR2c1tUooAeogaFO4dXNgIqabxG0OyThAimRJkMZkn+vxseVh+s0l
+        mDaaMA9t10wKjfgkfh0YYX/+1xIj87jk8WBlCeWXnDooK8T4Tch3YSh4j/mnkRZEUqLMgn
+        oaCQuT/N4/RRAwUEIsTk4zfAOEYmx+8nCZi2CNbH44qY876Av0nwQ7VrckEy+w==
+Message-ID: <100b2b54ff0839d4ddff70d43d5efa6d04300a78.camel@svanheule.net>
+Subject: Re: [PATCH v2 4/5] lib/cpumask_kunit: log mask contents
+From:   Sander Vanheule <sander@svanheule.net>
+To:     =?ISO-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+        Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 21 Aug 2022 18:39:53 +0200
+In-Reply-To: <b791c1ce-dd81-f864-dfe2-962ad5ac5d41@riseup.net>
+References: <cover.1661007338.git.sander@svanheule.net>
+         <98cb4e5323c2059506e93cb39c32ba471031e487.1661007339.git.sander@svanheule.net>
+         <YwFWHj0p/Uc0njme@yury-laptop>
+         <49f6eaa7e8586e4eba39d636ef034fc1626e3bc2.camel@svanheule.net>
+         <b791c1ce-dd81-f864-dfe2-962ad5ac5d41@riseup.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 00/35] drm: Analog TV Improvements
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ma=C3=ADra,
 
+On Sun, 2022-08-21 at 11:02 -0300, Ma=C3=ADra Canal wrote:
+>=20
+>=20
+> On 8/21/22 10:13, Sander Vanheule wrote:
+> > On Sat, 2022-08-20 at 14:46 -0700, Yury Norov wrote:
+> > > On Sat, Aug 20, 2022 at 05:03:12PM +0200, Sander Vanheule wrote:
+> > > > For extra context, log the contents of the masks under test.=C2=A0 =
+This
+> > > > should help with finding out why a certain test fails.
+> > > >=20
+> > > > Link:
+> > > > https://lore.kernel.org/lkml/CABVgOSkPXBc-PWk1zBZRQ_Tt+Sz1ruFHBj3ix=
+ojymZF=3DVi4tpQ@mail.gmail.com/
+> > > > Suggested-by: David Gow <davidgow@google.com>
+> > > > Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> > > > Reviewed-by: David Gow <davidgow@google.com>
+> > > > ---
+> > > > =C2=A0lib/cpumask_kunit.c | 10 ++++++++++
+> > > > =C2=A01 file changed, 10 insertions(+)
+> > > >=20
+> > > > diff --git a/lib/cpumask_kunit.c b/lib/cpumask_kunit.c
+> > > > index 4d353614d853..0f8059a5e93b 100644
+> > > > --- a/lib/cpumask_kunit.c
+> > > > +++ b/lib/cpumask_kunit.c
+> > > > @@ -51,6 +51,10 @@
+> > > > =C2=A0static cpumask_t mask_empty;
+> > > > =C2=A0static cpumask_t mask_all;
+> > > > =C2=A0
+> > > > +#define STR_MASK(m)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+#m
+> > > > +#define TEST_CPUMASK_PRINT(test, mask)=C2=A0\
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0kunit_info(test, "%s =3D=
+ '%*pbl'\n", STR_MASK(mask),
+> > > > nr_cpumask_bits,
+> > > > cpumask_bits(mask))
+> > > > +
+> > > > =C2=A0static void test_cpumask_weight(struct kunit *test)
+> > > > =C2=A0{
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0KUNIT_EXPECT_TRUE(t=
+est, cpumask_empty(&mask_empty));
+> > > > @@ -103,6 +107,9 @@ static void test_cpumask_iterators_builtin(stru=
+ct
+> > > > kunit
+> > > > *test)
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Ensure the dynam=
+ic masks are stable while running the tests
+> > > > */
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cpu_hotplug_disable=
+();
+> > > > =C2=A0
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0TEST_CPUMASK_PRINT(test,=
+ cpu_online_mask);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0TEST_CPUMASK_PRINT(test,=
+ cpu_present_mask);
+> > > > +
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0EXPECT_FOR_EACH_CPU=
+_BUILTIN_EQ(test, online);
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0EXPECT_FOR_EACH_CPU=
+_BUILTIN_EQ(test, present);
+> > > > =C2=A0
+> > > > @@ -114,6 +121,9 @@ static int test_cpumask_init(struct kunit *test=
+)
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cpumask_clear(&mask=
+_empty);
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cpumask_setall(&mas=
+k_all);
+> > > > =C2=A0
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0TEST_CPUMASK_PRINT(test,=
+ &mask_all);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0TEST_CPUMASK_PRINT(test,=
+ cpu_possible_mask);
+> > > > +
+> > >=20
+> > > It sort of breaks the rule of silence. Can you make this print condit=
+ional
+> > > on a test failure? If everything is OK, who wants to look into detail=
+s?=20
+> >=20
+> > I will change the macros to the _MSG versions, and log the mask there.
+> >=20
+> > I implemented this with kunit_info() as David proposed. AFAICT I can't =
+call=20
+> > kunit_info() only when the test fails, because the EXPECT_ macros don't
+> > return
+> > any result.
+>=20
+> Maybe you can use KUNIT_EXPECT_EQ_MSG to print a more detailed error and
+> avoid printing the info when the test doesn't fail.
 
-Den 29.07.2022 18.34, skrev Maxime Ripard:
-> Hi,
-> 
-> Here's a series aiming at improving the command line named modes support,
-> and more importantly how we deal with all the analog TV variants.
-> 
-> The named modes support were initially introduced to allow to specify the
-> analog TV mode to be used.
-> 
-> However, this was causing multiple issues:
-> 
->   * The mode name parsed on the command line was passed directly to the
->     driver, which had to figure out which mode it was suppose to match;
-> 
->   * Figuring that out wasn't really easy, since the video= argument or what
->     the userspace might not even have a name in the first place, but
->     instead could have passed a mode with the same timings;
-> 
->   * The fallback to matching on the timings was mostly working as long as
->     we were supporting one 525 lines (most likely NSTC) and one 625 lines
->     (PAL), but couldn't differentiate between two modes with the same
->     timings (NTSC vs PAL-M vs NSTC-J for example); 
-> 
->   * There was also some overlap with the tv mode property registered by 
->     drm_mode_create_tv_properties(), but named modes weren't interacting
->     with that property at all.
-> 
->   * Even though that property was generic, its possible values were
->     specific to each drivers, which made some generic support difficult.
-> 
-> Thus, I chose to tackle in multiple steps:
-> 
->   * A new TV norm property was introduced, with generic values, each driver
->     reporting through a bitmask what standard it supports to the userspace;
-> 
->   * This option was added to the command line parsing code to be able to
->     specify it on the kernel command line, and new atomic_check and reset
->     helpers were created to integrate properly into atomic KMS;
-> 
->   * The named mode parsing code is now creating a proper display mode for
->     the given named mode, and the TV standard will thus be part of the
->     connector state;
-> 
->   * Two drivers were converted and tested for now (vc4 and sun4i), with
->     some backward compatibility code to translate the old TV mode to the
->     new TV mode;
-> 
-> Unit tests were created along the way. Nouveau, ch7006 and gud are
-> currently broken for now since I expect that work to be reworked fairly
-> significantly. I'm also not entirely sure about how to migrate GUD to the
-> new property.
-> 
-> Let me know what you think,
-> Maxime
-> 
+Yes, this is what I currently have for use with the _MSG() variants of the
+macros:
 
-I don't know if it's related to this patchset or not, but I do get this:
++#define MASK_MSG(m)                    \
++       "%s contains %sCPUs %*pbl", #m, (cpumask_weight(m) ? "" : "no "), n=
+r_cpumask_bits, cpumask_bits(m)
++
 
-pi@pi4t:~ $ sudo dmesg -C && sudo modprobe -r vc4 && sudo modprobe vc4
-&& dmesg
-[  430.066211] Console: switching to colour dummy device 80x30
-[  431.294788] vc4-drm gpu: bound fe400000.hvs (ops vc4_hvs_ops [vc4])
-[  431.295115] vc4-drm gpu: bound fec13000.vec (ops vc4_vec_ops [vc4])
-[  431.295467] vc4-drm gpu: bound fe004000.txp (ops vc4_txp_ops [vc4])
-[  431.295804] vc4-drm gpu: bound fec12000.pixelvalve (ops vc4_crtc_ops
-[vc4])
-[  431.298895] [drm] Initialized vc4 0.0.0 20140616 for gpu on minor 0
-[  441.444250] vc4-drm gpu: [drm] *ERROR* [CRTC:68:crtc-1] flip_done
-timed out
-[  441.446529] Console: switching to colour frame buffer device 90x30
-[  451.684321] vc4-drm gpu: [drm] *ERROR* flip_done timed out
-[  451.684347] vc4-drm gpu: [drm] *ERROR* [CRTC:68:crtc-1] commit wait
-timed out
-[  461.924255] vc4-drm gpu: [drm] *ERROR* flip_done timed out
-[  461.924281] vc4-drm gpu: [drm] *ERROR* [CONNECTOR:45:Composite-1]
-commit wait timed out
-[  472.164006] vc4-drm gpu: [drm] *ERROR* flip_done timed out
-[  472.164031] vc4-drm gpu: [drm] *ERROR* [PLANE:61:plane-1] commit wait
-timed out
-[  482.403877] vc4-drm gpu: [drm] *ERROR* flip_done timed out
-[  482.403903] vc4-drm gpu: [drm] *ERROR* Timed out waiting for commit
-[  492.643799] vc4-drm gpu: [drm] *ERROR* [CRTC:68:crtc-1] flip_done
-timed out
-[  492.647073] vc4-drm gpu: [drm] fb0: vc4drmfb frame buffer device
+For example, with (bogus) KUNIT_EXPECT_TRUE_MSG(test, ..., MASK_MSG(mask)) =
+this
+becomes (trimmed):
 
-Noralf.
+$ ./tools/testing/kunit/kunit.py run  --build_dir=3Dbuild-um cpumask
+[...]
+[18:15:33] # test_cpumask_weight: EXPECTATION FAILED at lib/cpumask_kunit.c=
+:60
+[18:15:33] Expected cpumask_empty(((struct cpumask *)(1 ? (cpu_all_bits) : =
+(void *)sizeof(__check_is_bitmap(cpu_all_bits))))) to be true, but is false
+[18:15:33]=20
+[18:15:33] cpu_all_mask contains CPUs 0
+[18:15:33] # test_cpumask_weight: EXPECTATION FAILED at lib/cpumask_kunit.c=
+:61
+[18:15:33] Expected cpumask_full(&mask_empty) to be true, but is false
+[18:15:33]=20
+[18:15:33] &mask_empty contains no CPUs
+[18:15:33] not ok 1 - test_cpumask_weight
+[18:15:33] [FAILED] test_cpumask_weight
+[...]
+
+Or on a real system:
+[    1.246805]     # test_cpumask_weight: EXPECTATION FAILED at lib/cpumask=
+_kunit.c:59
+[    1.246805]     Expected cpumask_empty(((struct cpumask *)(1 ? (cpu_all_=
+bits) : (void *)sizeof(__check_is_bitmap(cpu_all_bits))))) to be true, but =
+is false
+[    1.246805]=20
+[    1.246805] cpu_all_mask contains CPUs 0-1
+[    1.249756]     not ok 1 - test_cpumask_weight
+
+I will send an updated series tomorrow, in case David or others have more m=
+ore comments.
+
+Best,
+Sander

@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCE759B2B0
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 10:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B057559B2B7
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 10:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiHUIGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 04:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S229804AbiHUIRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 04:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiHUIGY (ORCPT
+        with ESMTP id S229902AbiHUIP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 04:06:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD601A385
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 01:06:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAAC160C93
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:06:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EFABC433D7;
-        Sun, 21 Aug 2022 08:06:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661069181;
-        bh=KGLjvgZnXQOFUVGltKbS7dMihA1dC3pDWqrnJZ/juMU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZFz86GiJ7fa+hzQZNERgJQUjghMMLvXfKJmNiuEOlIuFw90rJcgSSHT34kK+Oy6jg
-         uW4/3kD7xlFh8i+rUEf00v3yP1N86Lo6R/5NN/6P1gLk4jblkf3U5gLRUEHLkwOUF2
-         j+n3noDUUW+28nZO64RibT+aiiS1jAglO9k94bAU1NEBKZOsn/EdWLC6P7dF9xV6uP
-         Chgq703dWdwQ0ld6c6E6EbQlHaZTREwVtdzbvMCQIDvs7r2XO5t3Vl3v/bhIIRWwuV
-         G0qdP1+Pn7zz2R/juGQIFzv+2Or9Tz+RVmb1Q2uWZBfYbneJOptalkZa1mSNvAbMCg
-         Fai0V76i6vrFA==
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     rostedt@goodmis.org
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        Ohad Sharabi <osharabi@habana.ai>
-Subject: [PATCH v2 3/3] habanalabs: trace DMA allocations
-Date:   Sun, 21 Aug 2022 11:06:08 +0300
-Message-Id: <20220821080608.27486-4-ogabbay@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220821080608.27486-1-ogabbay@kernel.org>
-References: <20220821080608.27486-1-ogabbay@kernel.org>
+        Sun, 21 Aug 2022 04:15:28 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14D61C136
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 01:15:25 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id bh11-20020a056602370b00b00688c8a2b56cso4290325iob.13
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 01:15:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=5NNw78fjZsnUXvVEAxNq4Tv/jLfrtC69PnIsZeDg9vw=;
+        b=l3scL//1qZRpMPdsBIZ2cd7y4Y7BVBb6GjTe3DnIc71abOlXtnhwNoYh7LIezDgEbG
+         j019H/PGbtI9vU5QW3dtfP2hlKrvIBuEJoKQUjmUo7L6JKbLa0r0VIGUW61I9dylMnk0
+         1EVHhJGBRAdCwlYYuFQgQ9fh9Etk2wrnXM6z60GFBKyjVt/tlZVPkIG0nMaHogIn1MIX
+         TH0+Qoq2PXJi0uDYBCRDHJV+ZO/JCA6iY9EX6uJhQw/ekN/3U3vJKEmpDpm8WkkDJ0Fa
+         I1ThiG8DzdIxMRSik+BLjwePsrZnu4tp4B/SW0waUyGcGJ3ip2Yu1lW8mmgW5CNu4WFv
+         r3VQ==
+X-Gm-Message-State: ACgBeo0YUml/dID0/MxUgyCrsHCuxKruq1VEsF+tXUstf1z99piOwefJ
+        z04wMXvVBRzP2oosITaIabrOeKDPYQOAds2DWjpYojcZ/0Ey
+X-Google-Smtp-Source: AA6agR5EnAm50Et/OCwgPw0eNqolIi56KqTa8X1oagg72eJ8BBxEUERfECSFLAALPm1UeYtemL+67P9apSCbCk3yyqM2OGLaXio5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:170f:b0:2e5:f6d2:4ea9 with SMTP id
+ u15-20020a056e02170f00b002e5f6d24ea9mr7142704ill.146.1661069725030; Sun, 21
+ Aug 2022 01:15:25 -0700 (PDT)
+Date:   Sun, 21 Aug 2022 01:15:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e85eff05e6bbeed3@google.com>
+Subject: [syzbot] usb-testing boot error: general protection fault in mm_alloc
+From:   syzbot <syzbot+0c4c86507aef43117d25@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, bigeasy@linutronix.de,
+        bpf@vger.kernel.org, brauner@kernel.org, david@redhat.com,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, luto@kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,248 +57,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ohad Sharabi <osharabi@habana.ai>
+Hello,
 
-This patch add tracepoints in the code for DMA allocation.
-The main purpose is to be able to cross data with the map operations and
-determine whether memory violation occurred, for example free DMA
-allocation before unmapping it from device memory.
+syzbot found the following issue on:
 
-To achieve this the DMA alloc/free code flows were refactored so that a
-single DMA tracepoint will catch many flows.
+HEAD commit:    ad57410d231d usb: gadget: rndis: use %u instead of %d to p..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=15b2b1a5080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
+dashboard link: https://syzkaller.appspot.com/bug?extid=0c4c86507aef43117d25
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-To get better understanding of what happened in the DMA allocations
-the real allocating function is added to the trace as well.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0c4c86507aef43117d25@syzkaller.appspotmail.com
 
-Signed-off-by: Ohad Sharabi <osharabi@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+general protection fault, probably for non-canonical address 0xffff000000000328: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff8200000001940-0xfff8200000001947]
+CPU: 0 PID: 266 Comm: kworker/u4:2 Not tainted 6.0.0-rc1-syzkaller-00005-gad57410d231d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:__kmem_cache_alloc_lru mm/slub.c:3258 [inline]
+RIP: 0010:kmem_cache_alloc+0x15d/0x4a0 mm/slub.c:3268
+Code: 51 08 48 8b 01 48 83 79 10 00 48 89 04 24 0f 84 7c 02 00 00 48 85 c0 0f 84 73 02 00 00 49 8b 3c 24 41 8b 4c 24 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 7b 02 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0000:ffffc900015dfe18 EFLAGS: 00010246
+RAX: ffff000000000000 RBX: ffff88810e746600 RCX: 0000000000000328
+RDX: 0000000000000338 RSI: 0000000000000cc0 RDI: 000000000003e3f0
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88810016d8c0
+R13: 0000000000000cc0 R14: ffffffff811440e9 R15: 0000000000000cc0
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 0000000007825000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ mm_alloc+0x19/0xc0 kernel/fork.c:1171
+ bprm_mm_init fs/exec.c:369 [inline]
+ alloc_bprm+0x1c3/0x900 fs/exec.c:1534
+ kernel_execve+0xab/0x500 fs/exec.c:1974
+ call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:__kmem_cache_alloc_lru mm/slub.c:3258 [inline]
+RIP: 0010:kmem_cache_alloc+0x15d/0x4a0 mm/slub.c:3268
+Code: 51 08 48 8b 01 48 83 79 10 00 48 89 04 24 0f 84 7c 02 00 00 48 85 c0 0f 84 73 02 00 00 49 8b 3c 24 41 8b 4c 24 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 7b 02 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0000:ffffc900015dfe18 EFLAGS: 00010246
+RAX: ffff000000000000 RBX: ffff88810e746600 RCX: 0000000000000328
+RDX: 0000000000000338 RSI: 0000000000000cc0 RDI: 000000000003e3f0
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88810016d8c0
+R13: 0000000000000cc0 R14: ffffffff811440e9 R15: 0000000000000cc0
+FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 0000000007825000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	51                   	push   %rcx
+   1:	08 48 8b             	or     %cl,-0x75(%rax)
+   4:	01 48 83             	add    %ecx,-0x7d(%rax)
+   7:	79 10                	jns    0x19
+   9:	00 48 89             	add    %cl,-0x77(%rax)
+   c:	04 24                	add    $0x24,%al
+   e:	0f 84 7c 02 00 00    	je     0x290
+  14:	48 85 c0             	test   %rax,%rax
+  17:	0f 84 73 02 00 00    	je     0x290
+  1d:	49 8b 3c 24          	mov    (%r12),%rdi
+  21:	41 8b 4c 24 28       	mov    0x28(%r12),%ecx
+  26:	40 f6 c7 0f          	test   $0xf,%dil
+* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
+  2e:	0f 85 7b 02 00 00    	jne    0x2af
+  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3d:	0f 94 c0             	sete   %al
+
+
 ---
-Changes in v2:
- - Avoid checking pointer is NULL in case tracing is disabled
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
- drivers/misc/habanalabs/common/device.c     | 49 +++++++++++++--------
- drivers/misc/habanalabs/common/habanalabs.h | 40 +++++++++++++----
- include/trace/events/habanalabs.h           | 19 ++++----
- 3 files changed, 73 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
-index ab2497b6d164..d4ba67bfbb2e 100644
---- a/drivers/misc/habanalabs/common/device.c
-+++ b/drivers/misc/habanalabs/common/device.c
-@@ -13,6 +13,8 @@
- #include <linux/pci.h>
- #include <linux/hwmon.h>
- 
-+#include <trace/events/habanalabs.h>
-+
- #define HL_RESET_DELAY_USEC		10000	/* 10ms */
- 
- enum dma_alloc_type {
-@@ -97,9 +99,10 @@ static int hl_access_sram_dram_region(struct hl_device *hdev, u64 addr, u64 *val
- }
- 
- static void *hl_dma_alloc_common(struct hl_device *hdev, size_t size, dma_addr_t *dma_handle,
--		gfp_t flag, enum dma_alloc_type alloc_type)
-+					gfp_t flag, enum dma_alloc_type alloc_type,
-+					const char *caller)
- {
--	void *ptr;
-+	void *ptr = NULL;
- 
- 	switch (alloc_type) {
- 	case DMA_ALLOC_COHERENT:
-@@ -113,11 +116,16 @@ static void *hl_dma_alloc_common(struct hl_device *hdev, size_t size, dma_addr_t
- 		break;
- 	}
- 
-+	if (trace_habanalabs_dma_alloc_enabled() && !ZERO_OR_NULL_PTR(ptr))
-+		trace_habanalabs_dma_alloc(hdev->dev, (u64) (uintptr_t) ptr, *dma_handle, size,
-+						caller);
-+
- 	return ptr;
- }
- 
- static void hl_asic_dma_free_common(struct hl_device *hdev, size_t size, void *cpu_addr,
--					dma_addr_t dma_handle, enum dma_alloc_type alloc_type)
-+					dma_addr_t dma_handle, enum dma_alloc_type alloc_type,
-+					const char *caller)
- {
- 	switch (alloc_type) {
- 	case DMA_ALLOC_COHERENT:
-@@ -130,39 +138,44 @@ static void hl_asic_dma_free_common(struct hl_device *hdev, size_t size, void *c
- 		hdev->asic_funcs->asic_dma_pool_free(hdev, cpu_addr, dma_handle);
- 		break;
- 	}
-+
-+	trace_habanalabs_dma_free(hdev->dev, (u64) (uintptr_t) cpu_addr, dma_handle, size, caller);
- }
- 
--void *hl_asic_dma_alloc_coherent(struct hl_device *hdev, size_t size, dma_addr_t *dma_handle,
--					gfp_t flag)
-+void *hl_asic_dma_alloc_coherent_caller(struct hl_device *hdev, size_t size, dma_addr_t *dma_handle,
-+					gfp_t flag, const char *caller)
- {
--	return hl_dma_alloc_common(hdev, size, dma_handle, flag, DMA_ALLOC_COHERENT);
-+	return hl_dma_alloc_common(hdev, size, dma_handle, flag, DMA_ALLOC_COHERENT, caller);
- }
- 
--void hl_asic_dma_free_coherent(struct hl_device *hdev, size_t size, void *cpu_addr,
--					dma_addr_t dma_handle)
-+void hl_asic_dma_free_coherent_caller(struct hl_device *hdev, size_t size, void *cpu_addr,
-+					dma_addr_t dma_handle, const char *caller)
- {
--	hl_asic_dma_free_common(hdev, size, cpu_addr, dma_handle, DMA_ALLOC_COHERENT);
-+	hl_asic_dma_free_common(hdev, size, cpu_addr, dma_handle, DMA_ALLOC_COHERENT, caller);
- }
- 
--void *hl_cpu_accessible_dma_pool_alloc(struct hl_device *hdev, size_t size, dma_addr_t *dma_handle)
-+void *hl_cpu_accessible_dma_pool_alloc_caller(struct hl_device *hdev, size_t size,
-+						dma_addr_t *dma_handle, const char *caller)
- {
--	return hl_dma_alloc_common(hdev, size, dma_handle, 0, DMA_ALLOC_CPU_ACCESSIBLE);
-+	return hl_dma_alloc_common(hdev, size, dma_handle, 0, DMA_ALLOC_CPU_ACCESSIBLE, caller);
- }
- 
--void hl_cpu_accessible_dma_pool_free(struct hl_device *hdev, size_t size, void *vaddr)
-+void hl_cpu_accessible_dma_pool_free_caller(struct hl_device *hdev, size_t size, void *vaddr,
-+						const char *caller)
- {
--	hl_asic_dma_free_common(hdev, size, vaddr, 0, DMA_ALLOC_CPU_ACCESSIBLE);
-+	hl_asic_dma_free_common(hdev, size, vaddr, 0, DMA_ALLOC_CPU_ACCESSIBLE, caller);
- }
- 
--void *hl_asic_dma_pool_zalloc(struct hl_device *hdev, size_t size, gfp_t mem_flags,
--					dma_addr_t *dma_handle)
-+void *hl_asic_dma_pool_zalloc_caller(struct hl_device *hdev, size_t size, gfp_t mem_flags,
-+					dma_addr_t *dma_handle, const char *caller)
- {
--	return hl_dma_alloc_common(hdev, size, dma_handle, mem_flags, DMA_ALLOC_POOL);
-+	return hl_dma_alloc_common(hdev, size, dma_handle, mem_flags, DMA_ALLOC_POOL, caller);
- }
- 
--void hl_asic_dma_pool_free(struct hl_device *hdev, void *vaddr, dma_addr_t dma_addr)
-+void hl_asic_dma_pool_free_caller(struct hl_device *hdev, void *vaddr, dma_addr_t dma_addr,
-+					const char *caller)
- {
--	hl_asic_dma_free_common(hdev, 0, vaddr, dma_addr, DMA_ALLOC_POOL);
-+	hl_asic_dma_free_common(hdev, 0, vaddr, dma_addr, DMA_ALLOC_POOL, caller);
- }
- 
- int hl_dma_map_sgtable(struct hl_device *hdev, struct sg_table *sgt, enum dma_data_direction dir)
-diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index 237a887b3a43..6e65ca05a1a0 100644
---- a/drivers/misc/habanalabs/common/habanalabs.h
-+++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -143,6 +143,25 @@ enum hl_mmu_enablement {
- 
- #define HL_MAX_DCORES			8
- 
-+/* DMA alloc/free wrappers */
-+#define hl_asic_dma_alloc_coherent(hdev, size, dma_handle, flags) \
-+	hl_asic_dma_alloc_coherent_caller(hdev, size, dma_handle, flags, __func__)
-+
-+#define hl_cpu_accessible_dma_pool_alloc(hdev, size, dma_handle) \
-+	hl_cpu_accessible_dma_pool_alloc_caller(hdev, size, dma_handle, __func__)
-+
-+#define hl_asic_dma_pool_zalloc(hdev, size, mem_flags, dma_handle) \
-+	hl_asic_dma_pool_zalloc_caller(hdev, size, mem_flags, dma_handle, __func__)
-+
-+#define hl_asic_dma_free_coherent(hdev, size, cpu_addr, dma_handle) \
-+	hl_asic_dma_free_coherent_caller(hdev, size, cpu_addr, dma_handle, __func__)
-+
-+#define hl_cpu_accessible_dma_pool_free(hdev, size, vaddr) \
-+	hl_cpu_accessible_dma_pool_free_caller(hdev, size, vaddr, __func__)
-+
-+#define hl_asic_dma_pool_free(hdev, vaddr, dma_addr) \
-+	hl_asic_dma_pool_free_caller(hdev, vaddr, dma_addr, __func__)
-+
- /*
-  * Reset Flags
-  *
-@@ -3444,15 +3463,18 @@ static inline bool hl_mem_area_crosses_range(u64 address, u32 size,
- }
- 
- uint64_t hl_set_dram_bar_default(struct hl_device *hdev, u64 addr);
--void *hl_asic_dma_alloc_coherent(struct hl_device *hdev, size_t size, dma_addr_t *dma_handle,
--					gfp_t flag);
--void hl_asic_dma_free_coherent(struct hl_device *hdev, size_t size, void *cpu_addr,
--					dma_addr_t dma_handle);
--void *hl_cpu_accessible_dma_pool_alloc(struct hl_device *hdev, size_t size, dma_addr_t *dma_handle);
--void hl_cpu_accessible_dma_pool_free(struct hl_device *hdev, size_t size, void *vaddr);
--void *hl_asic_dma_pool_zalloc(struct hl_device *hdev, size_t size, gfp_t mem_flags,
--					dma_addr_t *dma_handle);
--void hl_asic_dma_pool_free(struct hl_device *hdev, void *vaddr, dma_addr_t dma_addr);
-+void *hl_asic_dma_alloc_coherent_caller(struct hl_device *hdev, size_t size, dma_addr_t *dma_handle,
-+					gfp_t flag, const char *caller);
-+void hl_asic_dma_free_coherent_caller(struct hl_device *hdev, size_t size, void *cpu_addr,
-+					dma_addr_t dma_handle, const char *caller);
-+void *hl_cpu_accessible_dma_pool_alloc_caller(struct hl_device *hdev, size_t size,
-+						dma_addr_t *dma_handle, const char *caller);
-+void hl_cpu_accessible_dma_pool_free_caller(struct hl_device *hdev, size_t size, void *vaddr,
-+						const char *caller);
-+void *hl_asic_dma_pool_zalloc_caller(struct hl_device *hdev, size_t size, gfp_t mem_flags,
-+					dma_addr_t *dma_handle, const char *caller);
-+void hl_asic_dma_pool_free_caller(struct hl_device *hdev, void *vaddr, dma_addr_t dma_addr,
-+					const char *caller);
- int hl_dma_map_sgtable(struct hl_device *hdev, struct sg_table *sgt, enum dma_data_direction dir);
- void hl_dma_unmap_sgtable(struct hl_device *hdev, struct sg_table *sgt,
- 				enum dma_data_direction dir);
-diff --git a/include/trace/events/habanalabs.h b/include/trace/events/habanalabs.h
-index 09ca516e1624..f05c5fa668a2 100644
---- a/include/trace/events/habanalabs.h
-+++ b/include/trace/events/habanalabs.h
-@@ -51,15 +51,16 @@ DEFINE_EVENT(habanalabs_mmu_template, habanalabs_mmu_unmap,
- 	TP_ARGS(dev, virt_addr, phys_addr, page_size, flush_pte));
- 
- DECLARE_EVENT_CLASS(habanalabs_dma_alloc_template,
--	TP_PROTO(struct device *dev, u64 cpu_addr, u64 dma_addr, size_t size),
-+	TP_PROTO(struct device *dev, u64 cpu_addr, u64 dma_addr, size_t size, const char *caller),
- 
--	TP_ARGS(dev, cpu_addr, dma_addr, size),
-+	TP_ARGS(dev, cpu_addr, dma_addr, size, caller),
- 
- 	TP_STRUCT__entry(
- 		__string(dname, dev_name(dev))
- 		__field(u64, cpu_addr)
- 		__field(u64, dma_addr)
- 		__field(u32, size)
-+		__field(const char *, caller)
- 	),
- 
- 	TP_fast_assign(
-@@ -67,22 +68,24 @@ DECLARE_EVENT_CLASS(habanalabs_dma_alloc_template,
- 		__entry->cpu_addr = cpu_addr;
- 		__entry->dma_addr = dma_addr;
- 		__entry->size = size;
-+		__entry->caller = caller;
- 	),
- 
--	TP_printk("%s: cpu_addr: %#llx, dma_addr: %#llx, size: %#x",
-+	TP_printk("%s: cpu_addr: %#llx, dma_addr: %#llx, size: %#x, caller: %s",
- 		__get_str(dname),
- 		__entry->cpu_addr,
- 		__entry->dma_addr,
--		__entry->size)
-+		__entry->size,
-+		__entry->caller)
- );
- 
- DEFINE_EVENT(habanalabs_dma_alloc_template, habanalabs_dma_alloc,
--	TP_PROTO(struct device *dev, u64 cpu_addr, u64 dma_addr, size_t size),
--	TP_ARGS(dev, cpu_addr, dma_addr, size));
-+	TP_PROTO(struct device *dev, u64 cpu_addr, u64 dma_addr, size_t size, const char *caller),
-+	TP_ARGS(dev, cpu_addr, dma_addr, size, caller));
- 
- DEFINE_EVENT(habanalabs_dma_alloc_template, habanalabs_dma_free,
--	TP_PROTO(struct device *dev, u64 cpu_addr, u64 dma_addr, size_t size),
--	TP_ARGS(dev, cpu_addr, dma_addr, size));
-+	TP_PROTO(struct device *dev, u64 cpu_addr, u64 dma_addr, size_t size, const char *caller),
-+	TP_ARGS(dev, cpu_addr, dma_addr, size, caller));
- 
- #endif /* if !defined(_TRACE_HABANALABS_H) || defined(TRACE_HEADER_MULTI_READ) */
- 
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

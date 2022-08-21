@@ -2,152 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED50B59B635
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 22:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1553759B638
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 22:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbiHUUAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 16:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S231644AbiHUUHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 16:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiHUUAc (ORCPT
+        with ESMTP id S229924AbiHUUHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 16:00:32 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1848C193DE
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 13:00:31 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id w6-20020a056e02190600b002e74e05fdc2so7127779ilu.21
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 13:00:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=IgWUTkVD6oDrPjhnDopu5A3rN80gzl2jAUVz0qwuJp0=;
-        b=O9A/BGjB9X82eG03v+/udbIVCgdXs+xqtIrB2Urwlb2jmwacgtDC831vnku1mLpZtH
-         l7WtDuSscIjfrzMFu0/V8Onb3Q8cfoeymSZxh75yfOF12aIDdLhhOtIdhTS/7eS4V7BC
-         RdVxo1ysKgY/Ibi0XsCXhIOVNdSXi4JhH1atauTA0auw2E6tt+6apcULrnAgihowAuQ+
-         DMIdsdVqZXJTRh5nKfE/DYlRVxiyz7LstTJxu4f3Kd5U5bafHKRQ1PsOQ2sjKPenAgLb
-         JvoJlyIMLrAQo1hpejxUVi08l4nh1TPrmVaFInuKOaP1HzWmkla4S2Uc0Q1xRx99h706
-         5NYw==
-X-Gm-Message-State: ACgBeo3L+Y7XivGR4ieLcd/Map07+VznvoAPhk/vieeIqa/u6KOTdLLN
-        JuJcf/4ObKF2OANvKjaDl9PbM4YYnNmk3iqH0Q6O9iskN6KT
-X-Google-Smtp-Source: AA6agR5qmAL+GqOoGBG+IBLlxGMzbYOKfWee523dM5cckCyB1ptHkh3/grLRXj630PCaFzoslR/KDCXxLOei0Mh/UjQG2AT2fi7P
+        Sun, 21 Aug 2022 16:07:06 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A20212AA8;
+        Sun, 21 Aug 2022 13:07:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661112425; x=1692648425;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=elkD6lNBNO2nvsj5wXiKvhjqqWRzvqsgpv7fFNj1mGM=;
+  b=WuCA5LI4edpYJWDj898VR/XKkpd+x2+l+0tzVFsc3yj1m8X6OqvNifNi
+   XIdhwmLlMg/9HqkB9z7RtNzTlfoG7lov+GBXZCWhv/RXVoC+72oVGSioD
+   xmx/QDBrhVmnN6IsN89Q0tCOAosxnX3p2zfQGt/dNHZLF6Oll4nk80yeB
+   Z4SYRlnqFGXiVe1WB14LRG9LhglaMJEihMKJ91muHWAcmsj/Pf0eyodk4
+   KOue7gzjdDMvFsoD21EU8EylDRWslHj3tlDXVscY4nrt0IzkWbTuWvE1g
+   HXc0bFcyjln8SgH4bUGPN8+JJIxKv2L3XwhIo7Q+KrBbmm7zIWSgWTxV7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="280245195"
+X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
+   d="scan'208";a="280245195"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 13:07:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
+   d="scan'208";a="585252407"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 21 Aug 2022 13:07:02 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPrDp-0004RL-1M;
+        Sun, 21 Aug 2022 20:07:01 +0000
+Date:   Mon, 22 Aug 2022 04:06:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vimal Kumar <vimal.kumar32@gmail.com>, gregkh@linuxfoundation.org
+Cc:     kbuild-all@lists.01.org, chinmoyghosh2001@gmail.com,
+        Vimal Kumar <vimal.kumar32@gmail.com>,
+        Mintu Patel <mintupatel89@gmail.com>,
+        Vishal Badole <badolevishal1116@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] PM: runtime: Add support to disable wakeup sources
+Message-ID: <202208220446.3Qzss7sC-lkp@intel.com>
+References: <20220821134533.22901-1-vimal.kumar32@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1cf:b0:5e9:74e7:6b01 with SMTP id
- w15-20020a05660201cf00b005e974e76b01mr6831690iot.127.1661112030480; Sun, 21
- Aug 2022 13:00:30 -0700 (PDT)
-Date:   Sun, 21 Aug 2022 13:00:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000824e3805e6c5c875@google.com>
-Subject: [syzbot] usb-testing boot error: KASAN: out-of-bounds Read in __schedule
-From:   syzbot <syzbot+dc34dd8e1a7a138b88ac@syzkaller.appspotmail.com>
-To:     ebiederm@xmission.com, legion@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220821134533.22901-1-vimal.kumar32@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Vimal,
 
-syzbot found the following issue on:
+Thank you for the patch! Perhaps something to improve:
 
-HEAD commit:    568035b01cfb Linux 6.0-rc1
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=10c0a92d080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
-dashboard link: https://syzkaller.appspot.com/bug?extid=dc34dd8e1a7a138b88ac
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master v6.0-rc1 next-20220819]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dc34dd8e1a7a138b88ac@syzkaller.appspotmail.com
+url:    https://github.com/intel-lab-lkp/linux/commits/Vimal-Kumar/PM-runtime-Add-support-to-disable-wakeup-sources/20220821-214614
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: i386-randconfig-s003 (https://download.01.org/0day-ci/archive/20220822/202208220446.3Qzss7sC-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/dee2f4d4c4b79cbfc7b2c792294b5137872d7c0c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vimal-Kumar/PM-runtime-Add-support-to-disable-wakeup-sources/20220821-214614
+        git checkout dee2f4d4c4b79cbfc7b2c792294b5137872d7c0c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/base/power/
 
-==================================================================
-BUG: KASAN: out-of-bounds in schedule_debug kernel/sched/core.c:5736 [inline]
-BUG: KASAN: out-of-bounds in __schedule+0x2114/0x26f0 kernel/sched/core.c:6388
-Read of size 8 at addr ffffc900015f8000 by task kworker/u4:1/237
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-CPU: 1 PID: 237 Comm: kworker/u4:1 Not tainted 6.0.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x59/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- schedule_debug kernel/sched/core.c:5736 [inline]
- __schedule+0x2114/0x26f0 kernel/sched/core.c:6388
- preempt_schedule_common+0x45/0xc0 kernel/sched/core.c:6663
- __cond_resched+0x13/0x20 kernel/sched/core.c:8299
- might_resched include/linux/kernel.h:110 [inline]
- might_alloc include/linux/sched/mm.h:274 [inline]
- slab_pre_alloc_hook mm/slab.h:700 [inline]
- slab_alloc_node mm/slub.c:3157 [inline]
- slab_alloc mm/slub.c:3251 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3258 [inline]
- kmem_cache_alloc+0x2fe/0x4a0 mm/slub.c:3268
- prepare_kernel_cred+0x27/0x890 kernel/cred.c:717
- call_usermodehelper_exec_async+0x10e/0x580 kernel/umh.c:91
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+sparse warnings: (new ones prefixed by >>)
+>> drivers/base/power/wakeup_stats.c:225:37: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const [noderef] __user *from @@     got char const *buf @@
+   drivers/base/power/wakeup_stats.c:225:37: sparse:     expected void const [noderef] __user *from
+   drivers/base/power/wakeup_stats.c:225:37: sparse:     got char const *buf
 
-The buggy address belongs to stack of task kworker/u4:1/237
+vim +225 drivers/base/power/wakeup_stats.c
 
-The buggy address belongs to the virtual mapping at
- [ffffc900015f8000, ffffc90001601000) created by:
- kernel_clone+0xe7/0xab0 kernel/fork.c:2673
+   211	
+   212	static ssize_t disable_ws_store(struct class *class,
+   213					struct class_attribute *attr,
+   214					const char *buf, size_t len)
+   215	{
+   216		struct device		*dev;
+   217		struct wakeup_source	*ws;
+   218		char                    *ws_name;
+   219		int                     status;
+   220	
+   221		ws_name = kzalloc(sizeof(*(buf)), GFP_KERNEL);
+   222		if (!ws_name)
+   223			return -ENOMEM;
+   224	
+ > 225		if (copy_from_user(ws_name, buf, sizeof(*(buf))))
+   226			return -EFAULT;
+   227	
+   228		dev = class_find_device_by_name(wakeup_class, ws_name);
+   229		if (!dev)
+   230			pr_err("%s : %s dev not found\n", __func__, ws_name);
+   231	
+   232		ws = dev_get_drvdata(dev);
+   233		if (ws->dev->parent != NULL) {
+   234	
+   235			status = device_wakeup_disable(ws->dev->parent);
+   236			if (status < 0) {
+   237				/* In case of virtual device, return code will be -EINVAL
+   238				 * then unregister the wakeup source associated with it
+   239				 */
+   240				wakeup_source_unregister(ws);
+   241			}
+   242		} else
+   243			/* If the parent device is NULL, just unregister the wakeup source */
+   244			wakeup_source_unregister(ws);
+   245	
+   246		return len;
+   247	}
+   248	
 
-The buggy address belongs to the physical page:
-page:ffffea0004396940 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x10e5a5
-flags: 0x200000000000000(node=0|zone=2)
-raw: 0200000000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 26, tgid 26 (kworker/u4:1), ts 6964925972, free_ts 0
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x11cc/0x2a20 mm/page_alloc.c:4283
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
- __alloc_pages_bulk+0x9a1/0x1400 mm/page_alloc.c:5463
- alloc_pages_bulk_array_mempolicy+0x1b3/0x360 mm/mempolicy.c:2365
- vm_area_alloc_pages mm/vmalloc.c:2930 [inline]
- __vmalloc_area_node mm/vmalloc.c:3026 [inline]
- __vmalloc_node_range+0x576/0x13a0 mm/vmalloc.c:3196
- alloc_thread_stack_node kernel/fork.c:312 [inline]
- dup_task_struct kernel/fork.c:977 [inline]
- copy_process+0x13c0/0x6de0 kernel/fork.c:2087
- kernel_clone+0xe7/0xab0 kernel/fork.c:2673
- user_mode_thread+0xad/0xe0 kernel/fork.c:2742
- call_usermodehelper_exec_work kernel/umh.c:174 [inline]
- call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2ea/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffffc900015f7f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc900015f7f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc900015f8000: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-                   ^
- ffffc900015f8080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc900015f8100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

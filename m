@@ -2,189 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCE759B6AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 01:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3A159B6AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 01:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbiHUXCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 19:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S231883AbiHUXH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 19:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231328AbiHUXCU (ORCPT
+        with ESMTP id S231328AbiHUXH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 19:02:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69251FCC5
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 16:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661122938; x=1692658938;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mFgipm59hncFjiK65T534FRXbQUssltPnecmLAKLySI=;
-  b=mJ08kyQOH0Zia7sl+uynEhcDC9xi2003JYM3kyPmval8YeAFi2j8CHiZ
-   Rt4VDxl6Vj539Ivd8RV9UDgr9uzZvh/Oonf01+tS1XkmKCgZhztNfkplP
-   s0vlow1VmM360GN4jau2hyEsxlNOhmYnsNr1MHsCHQquO/F9V0PoB6Ne+
-   Rmkls0qxHXg/LLz7E2Lfgr+9VfEYD6QfolB9wICGOHZtyhgyFSR75rBLP
-   5HzBnkDrr+WT3EsB7BrILYBO8r9BG5QDxSLRs8bEed0b8FgS/OLMaNYav
-   ApEY7p99i1Z6TxLiTc5TieQOfUoYvHe/Fm5Gsegola5onOCO2hDxQkpAb
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="357266611"
-X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
-   d="scan'208";a="357266611"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 16:02:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
-   d="scan'208";a="559525198"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 21 Aug 2022 16:02:16 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPtxP-0004cX-1v;
-        Sun, 21 Aug 2022 23:02:15 +0000
-Date:   Mon, 22 Aug 2022 07:02:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- fc2e426b1161761561624ebd43ce8c8d2fa058da
-Message-ID: <6302b970.vFcDipENWnxAcKKr%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 21 Aug 2022 19:07:28 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C003718E31;
+        Sun, 21 Aug 2022 16:07:26 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 3942B3200902;
+        Sun, 21 Aug 2022 19:07:23 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sun, 21 Aug 2022 19:07:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1661123242; x=1661209642; bh=czDpEEAMWh
+        sY8eA8N88MVKQ3wyFIGynWGLd906dyt3Y=; b=pi2nckzTX3lXmAZq897Op8xOg9
+        yoJ+lwhZEcRwCsYaCRBVfpVY+74S1MEAoK7l+nfEd9h3YrHljfgu8ieIk/5Qy4bZ
+        gx//zG0EzqNlvA6d3ju9ThNRIVDaaaMVj8ugqBHbmMwFhSCystr/+vspPwwJpbdy
+        Hgk/gfzLvY9MkBM2zfDom+K5LWG6y0cNgEYrHKeuilKWJcat30UykzDGUpgTwwwg
+        vylok/AaZnXNIUjNm45HyMPyCc6hU3u0kU0yLYfuWEhO1wnShLVbzEMT5/CtSPzy
+        sGGq14+w/uUtoqESb5BY8R53Jy5M3+M5gQTjbNBYAV0pmJ9oi90O/gwSqo5Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1661123242; x=1661209642; bh=czDpEEAMWhsY8eA8N88MVKQ3wyFI
+        GynWGLd906dyt3Y=; b=rsAgZsKBm4XfAWRMar9HYypU4cGmGdzPTv15u8jX/UOh
+        Qunl+/tFVCJYGM179zfE4oKNAQfrm8mvlRcQZBatZUmjLjYRl9dShMjQ3SKUMSbi
+        r4pudOilJSepSqqeKWxaycFi7x5OZxS11Ep3hIYj7nQsDgCIcPq+Rqo0ET6VDfW8
+        gUbXFnnEnhrBMJXwU6SNy8ZPdpNUmYEpf2OEIVqkqcwpQHV2AYihzs11QRBgNsnX
+        sb0CUVb1uAk0pqBBJeTMZoACFqO5QbStwitjbwVCasgcsNoKSlf5Kx/MJGXSw39r
+        oFeEKO/Lb4Rf/CsRuarYP6tqvU1sEZTEBN2FFpTXGQ==
+X-ME-Sender: <xms:qroCYwU0bwdHdcR8qyb0ueHZ-j7ickrOsKe0OARk7O-m5lxIlOvr4g>
+    <xme:qroCY0nAp6XsGIihCyFbGo5VYvLNTINqyUa_RjLV_CkArGsUmOBibEr-BGSGA0UqB
+    KoOY-e9Ku92lHN004U>
+X-ME-Received: <xmr:qroCY0bN2sedCI0pjLuXe0l13ol9q3YnCbzKT9aWkSkRBQjajiHg1CCBbUHeVrvdVNdE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeiiedgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhuffvvefkjghfofggtgesthdtredtredtvdenucfhrhhomhepnfhukhgv
+    ucflohhnvghsuceolhhukhgvsehljhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnh
+    ephfeigedtveefjeeukeetfeektdeffeefteekfeffieeiteeigeehhfdutdeitdehnecu
+    ffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:qroCY_W2AeIVsLWI-SHPTQugw0OYk5FQaJ2e_j7h2UzU1vn6wtwJqA>
+    <xmx:qroCY6nIOiGK0IS8gC_cBO0vcqlwnGaXoNWbM3Kzo_KKb2b-_HiWqg>
+    <xmx:qroCY0fiAQFLKqCi-cLvp4-cBzRg1mIc4TxBr_j0D0bd-qWPLihq2w>
+    <xmx:qroCY_zhbH_zMGWr1Bi-yG3eD7mCTfT7sDiOmZTopMurgAKYOHEnKw>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 21 Aug 2022 19:07:19 -0400 (EDT)
+Date:   Mon, 22 Aug 2022 11:07:06 +1200
+From:   Luke Jones <luke@ljones.dev>
+Subject: Re: [PATCH] asus-wmi: Support the hardware GPU MUX on some laptops
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <UVMZGR.6LXKPONA9OS33@ljones.dev>
+In-Reply-To: <e186622e-f3e6-5715-9f6d-bc41fb41560d@amd.com>
+References: <20220813092624.6228-1-luke@ljones.dev>
+        <e186622e-f3e6-5715-9f6d-bc41fb41560d@amd.com>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: fc2e426b1161761561624ebd43ce8c8d2fa058da  x86/unwind/orc: Unwind ftrace trampolines with correct ORC entry
+Hi Mario,
 
-elapsed time: 727m
+On Mon, Aug 15 2022 at 23:16:12 -0500, Mario Limonciello 
+<mario.limonciello@amd.com> wrote:
+> On 8/13/22 04:26, Luke D. Jones wrote:
+>> Support the hardware GPU MUX switch available on some models. This
+>> switch can toggle the MUX between:
+>> 
+>> - 0, Dedicated mode
+>> - 1, Optimus mode
+>> 
+>> Optimus mode is the regular iGPU + dGPU available, while dedicated
+>> mode switches the system to have only the dGPU available.
+>> 
+>> Signed-off-by: Luke D. Jones <luke@ljones.dev>
+>> ---
+>>   .../ABI/testing/sysfs-platform-asus-wmi       | 11 ++++
+>>   drivers/platform/x86/asus-wmi.c               | 62 
+>> +++++++++++++++++++
+>>   include/linux/platform_data/x86/asus-wmi.h    |  3 +
+>>   3 files changed, 76 insertions(+)
+>> 
+>> diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi 
+>> b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+>> index 574b5170a37d..03124eab7f01 100644
+>> --- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
+>> +++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+>> @@ -58,6 +58,17 @@ Description:
+>>   			* 1 - overboost,
+>>   			* 2 - silent
+>>   +What:          /sys/devices/platform/<platform>/gpu_mux_mode
+>> +Date:          Aug 2022
+>> +KernelVersion: 6.1
+>> +Contact:       "Luke Jones" <luke@ljones.dev>
+>> +Description:
+>> +               Switch the GPU hardware MUX mode. Laptops with this 
+>> feature can
+>> +			   can be toggled to boot with only the dGPU (discrete mode) or 
+>> in
+>> +			   standard Optimus/Hybrid mode. On switch a reboot is required:
+>> +                       * 0 - Discrete GPU,
+>> +                       * 1 - Optimus/Hybrid,
+> 
+> This feel like it should probably export using 
+> /sys/class/firmware-attributes.  That's exactly how those types of 
+> attributes work.
+> 
+> As a bonus, software like fwupd 1.8.4 knows how to manipulate it and 
+> you don't need special documentation.
+> 
+>> +
+>>   What:          /sys/devices/platform/<platform>/dgpu_disable
+>>   Date:          Aug 2022
+>>   KernelVersion: 5.17
+>> diff --git a/drivers/platform/x86/asus-wmi.c 
+>> b/drivers/platform/x86/asus-wmi.c
+>> index e2b51b5550e8..0421ffb81927 100644
+>> --- a/drivers/platform/x86/asus-wmi.c
+>> +++ b/drivers/platform/x86/asus-wmi.c
+>> @@ -230,6 +230,7 @@ struct asus_wmi {
+>>     	bool egpu_enable_available;
+>>   	bool dgpu_disable_available;
+>> +	bool gpu_mux_mode_available;
+>>     	bool throttle_thermal_policy_available;
+>>   	u8 throttle_thermal_policy_mode;
+>> @@ -668,6 +669,59 @@ static ssize_t egpu_enable_store(struct device 
+>> *dev,
+>>   }
+>>   static DEVICE_ATTR_RW(egpu_enable);
+>>   +/* gpu mux switch 
+>> *************************************************************/
+>> +static int gpu_mux_mode_check_present(struct asus_wmi *asus)
+>> +{
+>> +	asus->gpu_mux_mode_available = asus_wmi_dev_is_present(asus, 
+>> ASUS_WMI_DEVID_GPU_MUX);
+>> +
+>> +   return 0;
+>> +}
+>> +
+>> +static ssize_t gpu_mux_mode_show(struct device *dev,
+>> +                  struct device_attribute *attr, char *buf)
+>> +{
+>> +   struct asus_wmi *asus = dev_get_drvdata(dev);
+>> +   int result;
+>> +
+>> +   result = asus_wmi_get_devstate_simple(asus, 
+>> ASUS_WMI_DEVID_GPU_MUX);
+>> +   if (result < 0)
+>> +       return result;
+>> +
+>> +   return sysfs_emit(buf, "%d\n", result);
+>> +}
+>> +
+>> +static ssize_t gpu_mux_mode_store(struct device *dev,
+>> +                   struct device_attribute *attr,
+>> +                   const char *buf, size_t count)
+>> +{
+>> +   struct asus_wmi *asus = dev_get_drvdata(dev);
+>> +   int result, err;
+>> +   u32 optimus;
+>> +
+>> +   err = kstrtou32(buf, 10, &optimus);
+>> +   if (err)
+>> +       return err;
+>> +
+>> +   if (optimus > 1)
+>> +       return -EINVAL;
+>> +
+>> +   err = asus_wmi_set_devstate(ASUS_WMI_DEVID_GPU_MUX, optimus, 
+>> &result);
+>> +   if (err) {
+>> +       dev_err(dev, "Failed to set GPU MUX mode: %d\n", err);
+>> +       return err;
+>> +   }
+>> +	/* !1 is considered a fail by ASUS */
+>> +	if (result != 1) {
+>> +		dev_warn(dev, "Failed to set GPU MUX mode (result): 0x%x\n", 
+>> result);
+>> +       return -EIO;
+>> +   }
+>> +
+>> +   sysfs_notify(&asus->platform_device->dev.kobj, NULL, 
+>> "gpu_mux_mode");
+>> +
+>> +   return count;
+>> +}
+>> +static DEVICE_ATTR_RW(gpu_mux_mode);
+>> +
+>>   /* Battery 
+>> ********************************************************************/
+>>     /* The battery maximum charging percentage */
+>> @@ -3165,6 +3219,7 @@ static struct attribute *platform_attributes[] 
+>> = {
+>>   	&dev_attr_touchpad.attr,
+>>   	&dev_attr_egpu_enable.attr,
+>>   	&dev_attr_dgpu_disable.attr,
+>> +	&dev_attr_gpu_mux_mode.attr,
+>>   	&dev_attr_lid_resume.attr,
+>>   	&dev_attr_als_enable.attr,
+>>   	&dev_attr_fan_boost_mode.attr,
+>> @@ -3195,6 +3250,8 @@ static umode_t asus_sysfs_is_visible(struct 
+>> kobject *kobj,
+>>   		ok = asus->egpu_enable_available;
+>>   	else if (attr == &dev_attr_dgpu_disable.attr)
+>>   		ok = asus->dgpu_disable_available;
+>> +	else if (attr == &dev_attr_gpu_mux_mode.attr)
+>> +		ok = asus->gpu_mux_mode_available;
+>>   	else if (attr == &dev_attr_fan_boost_mode.attr)
+>>   		ok = asus->fan_boost_mode_available;
+>>   	else if (attr == &dev_attr_throttle_thermal_policy.attr)
+>> @@ -3464,6 +3521,10 @@ static int asus_wmi_add(struct 
+>> platform_device *pdev)
+>>   	if (err)
+>>   		goto fail_dgpu_disable;
+>>   +	err = gpu_mux_mode_check_present(asus);
+>> +   if (err)
+>> +       goto fail_gpu_mux_mode;
+>> +
+>>   	err = fan_boost_mode_check_present(asus);
+>>   	if (err)
+>>   		goto fail_fan_boost_mode;
+>> @@ -3578,6 +3639,7 @@ static int asus_wmi_add(struct platform_device 
+>> *pdev)
+>>   fail_fan_boost_mode:
+>>   fail_egpu_enable:
+>>   fail_dgpu_disable:
+>> +fail_gpu_mux_mode:
+>>   fail_platform:
+>>   fail_panel_od:
+>>   	kfree(asus);
+>> diff --git a/include/linux/platform_data/x86/asus-wmi.h 
+>> b/include/linux/platform_data/x86/asus-wmi.h
+>> index a571b47ff362..c023332842a2 100644
+>> --- a/include/linux/platform_data/x86/asus-wmi.h
+>> +++ b/include/linux/platform_data/x86/asus-wmi.h
+>> @@ -98,6 +98,9 @@
+>>   /* dgpu on/off */
+>>   #define ASUS_WMI_DEVID_DGPU		0x00090020
+>>   +/* gpu mux switch, 0 = dGPU, 1 = Optimus */
+>> +#define ASUS_WMI_DEVID_GPU_MUX 0x00090016
+>> +
+>>   /* DSTS masks */
+>>   #define ASUS_WMI_DSTS_STATUS_BIT	0x00000001
+>>   #define ASUS_WMI_DSTS_UNKNOWN_BIT	0x00000002
+> 
 
-configs tested: 107
-configs skipped: 60
+You can see previous discussion here 
+https://lore.kernel.org/platform-driver-x86/c3bb0989-78d9-c513-1669-75407b2acbac@redhat.com/
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Below is Hans response verbatim:
 
-gcc tested configs:
-x86_64                              defconfig
-x86_64                               rhel-8.3
-i386                                defconfig
-x86_64                           allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-i386                          randconfig-a012
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a001
-i386                          randconfig-a003
-x86_64                        randconfig-a015
-i386                          randconfig-a005
-i386                             allyesconfig
-mips                     decstation_defconfig
-arm                           imxrt_defconfig
-mips                 decstation_r4k_defconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-arm                       imx_v6_v7_defconfig
-ia64                             alldefconfig
-sh                           se7619_defconfig
-arm                      integrator_defconfig
-csky                                defconfig
-microblaze                          defconfig
-sh                        edosk7705_defconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm64                               defconfig
-arm                        spear6xx_defconfig
-parisc64                         alldefconfig
-i386                          randconfig-c001
-mips                           jazz_defconfig
-arm                           h3600_defconfig
-sh                     magicpanelr2_defconfig
-alpha                               defconfig
-openrisc                            defconfig
-powerpc                 canyonlands_defconfig
-arm                          lpd270_defconfig
-arm                         lubbock_defconfig
-sh                                  defconfig
-parisc                generic-32bit_defconfig
-arm                         axm55xx_defconfig
-sh                             shx3_defconfig
-sh                           se7780_defconfig
-sh                          rsk7269_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-m68k                         apollo_defconfig
-sh                           se7724_defconfig
-arm                            lart_defconfig
-m68k                       m5275evb_defconfig
-arm                           sama5_defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220821
-powerpc                    adder875_defconfig
-arm                         s3c6400_defconfig
-arm                        cerfcube_defconfig
-powerpc                      arches_defconfig
-powerpc                      ppc6xx_defconfig
-sh                           se7343_defconfig
-parisc                              defconfig
+ > Yes it sounds like a BIOS setting is being toggled from within
+ > Linux, which would normally be done through the
+ > "firmware-attributes" class, but all existing "firmware-attributes"
+ > class drivers allow changing all BIOS setting not just a single
+ > setting, so using the  "firmware-attributes" class here is not really
+ > appropriate.
 
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-x86_64                        randconfig-a012
-i386                          randconfig-a002
-x86_64                        randconfig-a014
-i386                          randconfig-a004
-x86_64                        randconfig-a016
-i386                          randconfig-a006
-riscv                    nommu_virt_defconfig
-mips                malta_qemu_32r6_defconfig
-arm                       cns3420vb_defconfig
-hexagon              randconfig-r045-20220821
-riscv                randconfig-r042-20220821
-hexagon              randconfig-r041-20220821
-s390                 randconfig-r044-20220821
-x86_64                        randconfig-k001
-arm                           spitz_defconfig
-arm                         s5pv210_defconfig
-powerpc                 mpc8315_rdb_defconfig
-arm                          moxart_defconfig
-arm                         bcm2835_defconfig
+Kind regards,
+Luke.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+

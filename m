@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAE959B3C2
+	by mail.lfdr.de (Postfix) with ESMTP id 32CB859B3C1
 	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 14:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbiHUM0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 08:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
+        id S230125AbiHUM0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 08:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiHUM0N (ORCPT
+        with ESMTP id S230046AbiHUM0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 08:26:13 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6818A23BE7;
-        Sun, 21 Aug 2022 05:26:12 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9882329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9882:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D225F1EC02AD;
-        Sun, 21 Aug 2022 14:26:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1661084767;
+        Sun, 21 Aug 2022 08:26:22 -0400
+Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F9223BEC
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 05:26:19 -0700 (PDT)
+Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
+        by mxout4.routing.net (Postfix) with ESMTP id ED44210056D;
+        Sun, 21 Aug 2022 12:26:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1661084778;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=g1rcKArseoTcwKRluy/+n/zWWnLG0mmO4BjXiUTjTQo=;
-        b=Iybi51cDAMmwdoswfJCzVyrOZu2xIpJoc4ZLh3BwbIZvIxwN/Il3v3+/iw4QD6FBdGIV5p
-        4jYB7MwWbMe0uBbMOvcK74WMuQGkuULIapHbVjBsvf4CphE5n/UXtrjvPyO/BAD+581FMF
-        EHTbIc1eeAxKJ7PF6dHQI6hheajBQXI=
-Date:   Sun, 21 Aug 2022 14:25:59 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] x86/mtrr: fix MTRR fixup on APs
-Message-ID: <YwIkV7mYAC4Ebbwb@zn.tnic>
-References: <20220820092533.29420-1-jgross@suse.com>
- <20220820092533.29420-2-jgross@suse.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sMFlfeX2aC6HKvCECDsuOs6Q1DactqEaEZuFBtCbb0Y=;
+        b=Lsl3RpSxR1yZp6oBr1dPncH6TrrO/TNhABK3gUzPizRxnjkXEXJfI5WG76MOymIg/eorn7
+        2LFfo85lR8yIrNZyrPgDEYzZwisnvkbMuiBUgyq/xKaIOJdk0qb2gRk9oVcVJ2uVNkdTIz
+        gF145YOaQpOioWoLa3LsEKL2DS9JdHA=
+Received: from frank-G5.. (fttx-pool-80.245.78.134.bambit.de [80.245.78.134])
+        by mxbox4.masterlogin.de (Postfix) with ESMTPSA id 4639980873;
+        Sun, 21 Aug 2022 12:26:17 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Peter Geis <pgwipeout@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: [RESEND] rtc: hym8563: try multiple times to init device
+Date:   Sun, 21 Aug 2022 14:26:13 +0200
+Message-Id: <20220821122613.245026-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220820092533.29420-2-jgross@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: e85dcda5-d8c6-4d98-9a0f-33e88f26627b
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,155 +53,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 11:25:24AM +0200, Juergen Gross wrote:
-> When booting or resuming the system MTRR state is saved on the boot
-> processor and then this state is loaded into MTRRs of all other cpus.
+From: Peter Geis <pgwipeout@gmail.com>
 
-s/cpu/CPU/g
+RTC sometimes does not respond the first time in init.
+Try multiple times to get a response.
 
-Pls check all commit messages.
+Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+discussion from v1
+https://patchwork.kernel.org/project/linux-rockchip/patch/20220608161150.58919-2-linux@fw-web.de/
 
-> During update of the MTRRs the MTRR mechanism needs to be disabled by
-> writing the related MSR. The old contents of this MSR are saved in a
-> set of static variables and later those static variables are used to
-> restore the MSR.
-> 
-> In case the MSR contents need to be modified on a cpu due to the MSR
-> not having been initialized properly by the BIOS, the related update
-> function is modifying the static variables accordingly.
-> 
-> Unfortunately the MTRR state update is usually running on all cpus
-> at the same time, so using just one set of static variables for all
-> cpus is racy in case the MSR contents differ across cpus.
-> 
-> Fix that by using percpu variables for saving the MSR contents.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> ---
-> I thought adding a "Fixes:" tag for the kernel's initial git commit
-> would maybe be entertaining, but without being really helpful.
-> The percpu variables were preferred over on-stack ones in order to
-> avoid more code churn in followup patches decoupling PAT from MTRR
-> support.
+On Fri, Jul 8, 2022 at 12:18 PM Robin Murphy <robin.murphy@arm.com> wrote:
+> FWIW, given that HYM8563 is fairly common on RK3288 boards - I can't say
+> I've ever noticed an issue with mine, for instance - it seems dubious
+> that this would be a general issue of the chip itself. Are you sure it's
+> not a SoC or board-level issue with the I2C bus being in a funny initial
+> state, timings being marginal, or suchlike?
 
-So if that thing has been broken for so long and no one noticed, we
-could just as well not backport to stable at all...
+Peter Geis <pgwipeout@gmail.com>:
+I don't think this is an SoC issue since this is the first instance
+I've encountered it. Mind you we don't have the reset lines hooked up
+at all for the Rockchip i2c driver, so it's possible that's the case,
+but I'd imagine it would be observed more broadly if that was the
+case. I've tried pushing the timings out pretty far as well as bumping
+up the drive strength to no change. It seems to occur only with the
+hym rtc used on this board. I suspect it's a new variant of the hym
+that has slightly different behavior.
+---
+ drivers/rtc/rtc-hym8563.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-> V2:
-> - new patch
-> ---
->  arch/x86/kernel/cpu/mtrr/generic.c | 21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
-> index 558108296f3c..3d185fcf08ca 100644
-> --- a/arch/x86/kernel/cpu/mtrr/generic.c
-> +++ b/arch/x86/kernel/cpu/mtrr/generic.c
-> @@ -679,7 +679,8 @@ static bool set_mtrr_var_ranges(unsigned int index, struct mtrr_var_range *vr)
->  	return changed;
->  }
->  
-> -static u32 deftype_lo, deftype_hi;
-> +static DEFINE_PER_CPU(u32, deftype_lo);
-> +static DEFINE_PER_CPU(u32, deftype_hi);
-
-My APM says that the high 32 bits of the MTRRdefType MSR are reserved
-and MBZ. So you can drop the _hi thing and use 0 everywhere. Or rather a
-dummy = 0 var because of that damn rdmsr() macro.
-
-Or simply use a
-
-u64 deftype;
-
-use the rdmsrl/wrmsrl() variants and split it when passing to
-umtrr_wrmsr() because that thing wants 2 32s.
-
->  /**
->   * set_mtrr_state - Set the MTRR state for this CPU.
-> @@ -691,6 +692,7 @@ static unsigned long set_mtrr_state(void)
->  {
->  	unsigned long change_mask = 0;
->  	unsigned int i;
-> +	u32 *lo = this_cpu_ptr(&deftype_lo);
-
-The tip-tree preferred ordering of variable declarations at the
-beginning of a function is reverse fir tree order::
-
-	struct long_struct_name *descriptive_name;
-	unsigned long foo, bar;
-	unsigned int tmp;
-	int ret;
-
-The above is faster to parse than the reverse ordering::
-
-	int ret;
-	unsigned int tmp;
-	unsigned long foo, bar;
-	struct long_struct_name *descriptive_name;
-
-And even more so than random ordering::
-
-	unsigned long foo, bar;
-	int ret;
-	struct long_struct_name *descriptive_name;
-	unsigned int tmp;
-
-Please check all your patches.
-
->  	for (i = 0; i < num_var_ranges; i++) {
->  		if (set_mtrr_var_ranges(i, &mtrr_state.var_ranges[i]))
-> @@ -704,10 +706,10 @@ static unsigned long set_mtrr_state(void)
->  	 * Set_mtrr_restore restores the old value of MTRRdefType,
->  	 * so to set it we fiddle with the saved value:
->  	 */
-> -	if ((deftype_lo & 0xff) != mtrr_state.def_type
-> -	    || ((deftype_lo & 0xc00) >> 10) != mtrr_state.enabled) {
-> +	if ((*lo & 0xff) != mtrr_state.def_type
-> +	    || ((*lo & 0xc00) >> 10) != mtrr_state.enabled) {
->  
-> -		deftype_lo = (deftype_lo & ~0xcff) | mtrr_state.def_type |
-> +		*lo = (*lo & ~0xcff) | mtrr_state.def_type |
->  			     (mtrr_state.enabled << 10);
->  		change_mask |= MTRR_CHANGE_MASK_DEFTYPE;
->  	}
-> @@ -729,6 +731,8 @@ static DEFINE_RAW_SPINLOCK(set_atomicity_lock);
->  static void prepare_set(void) __acquires(set_atomicity_lock)
->  {
->  	unsigned long cr0;
-> +	u32 *lo = this_cpu_ptr(&deftype_lo);
-> +	u32 *hi = this_cpu_ptr(&deftype_hi);
-
-You don't need the pointers here - this_cpu_read() should be enough.
-
->  	/*
->  	 * Note that this is not ideal
-> @@ -763,10 +767,10 @@ static void prepare_set(void) __acquires(set_atomicity_lock)
->  	flush_tlb_local();
->  
->  	/* Save MTRR state */
-> -	rdmsr(MSR_MTRRdefType, deftype_lo, deftype_hi);
-> +	rdmsr(MSR_MTRRdefType, *lo, *hi);
->  
->  	/* Disable MTRRs, and set the default type to uncached */
-> -	mtrr_wrmsr(MSR_MTRRdefType, deftype_lo & ~0xcff, deftype_hi);
-> +	mtrr_wrmsr(MSR_MTRRdefType, *lo & ~0xcff, *hi);
->  
->  	/* Again, only flush caches if we have to. */
->  	if (!static_cpu_has(X86_FEATURE_SELFSNOOP))
-> @@ -775,12 +779,15 @@ static void prepare_set(void) __acquires(set_atomicity_lock)
->  
->  static void post_set(void) __releases(set_atomicity_lock)
->  {
-> +	u32 *lo = this_cpu_ptr(&deftype_lo);
-> +	u32 *hi = this_cpu_ptr(&deftype_hi);
-
-Ditto.
-
-Thx.
-
+diff --git a/drivers/rtc/rtc-hym8563.c b/drivers/rtc/rtc-hym8563.c
+index cc710d682121..d9d0b6615a07 100644
+--- a/drivers/rtc/rtc-hym8563.c
++++ b/drivers/rtc/rtc-hym8563.c
+@@ -13,6 +13,7 @@
+ #include <linux/clk-provider.h>
+ #include <linux/i2c.h>
+ #include <linux/bcd.h>
++#include <linux/delay.h>
+ #include <linux/rtc.h>
+ 
+ #define HYM8563_CTL1		0x00
+@@ -438,10 +439,16 @@ static irqreturn_t hym8563_irq(int irq, void *dev_id)
+ 
+ static int hym8563_init_device(struct i2c_client *client)
+ {
+-	int ret;
++	int ret, i;
+ 
+ 	/* Clear stop flag if present */
+-	ret = i2c_smbus_write_byte_data(client, HYM8563_CTL1, 0);
++	for (i = 0; i < 3; i++) {
++		ret = i2c_smbus_write_byte_data(client, HYM8563_CTL1, 0);
++		if (ret == 0)
++			break;
++		msleep(20);
++	}
++
+ 	if (ret < 0)
+ 		return ret;
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

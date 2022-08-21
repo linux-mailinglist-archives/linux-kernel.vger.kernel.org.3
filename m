@@ -2,100 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E4959B526
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 17:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 487C859B522
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 17:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbiHUPmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 11:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        id S231526AbiHUPlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 11:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiHUPmE (ORCPT
+        with ESMTP id S229505AbiHUPlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 11:42:04 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F099E1CB15
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:42:03 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id e19so7550159pju.1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:42:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=NH92h/s4Soe5U4MYFnUhteYLROiSYWktF09/ofBtT24=;
-        b=EEpjWqUAEIYey8Vx3R4wQW1i+pIpveVzAYWhkuJVyzMlMcYSksW42gb9vVxdbdwtVt
-         h0QEo2JaXKj7FU6/xva+F4kSIYiLdF1RlPh/v1ovJdDoR4aWPIM8ix203wijGolDJes+
-         N3aLkmyJDEIc3b5LOxUfHX4o9QCqrL3M8+KtFOMIDFxmjLEO4IP4w+l6uG9kesJTVH4A
-         dNcBowT5h6WgyP/0KLj50U/ZvHFCdjWczm1URgw2IGtTJtRSDXvxLLzPIleWL8RcKPmT
-         NuKzmIqtNvIginOpZUS0A9NMmF1A9R03GCZ8O35qY3GNAq9iTo8FC6+2wPuTKZUuCXtm
-         XF8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=NH92h/s4Soe5U4MYFnUhteYLROiSYWktF09/ofBtT24=;
-        b=arV2ZLAApZdA6CoPC8IFdeCysGyma8leuQsQXLYdsVH48NmexTuai8H86QwJUYgkq8
-         TWt8rzeu/6sM3F/urzpsFSjlkb+7gYOJgoGtQWVXT25ICOig9EUVUev8J2H9FgpDzrAD
-         RQoQWMtHxS+Ttx9Sh3QJPwkatjP7fMZbqfg7zY82CqRDfIujsXwKL8NUv5AWq/BunjPk
-         76oSgUqzsMw5cs+N61A1BuGz8atvfp2Rfq0IUT8ytGfi9C87e1rVCPm2jP6u7CHuISbS
-         mPBh5IE5WXJObtMGm6DL0fp6fLnA5v1OlyivLNk7sZ3nE4h8pX0VZtcyJUWqpEBRZpLm
-         Bh8g==
-X-Gm-Message-State: ACgBeo1Jgz6IwEOQsU3RR49cteZ53ERedrTrIN3rofXRPN5RRuRZbQju
-        ZYeHUtmjFTh12FYmRG6nyp7NHBt14sI=
-X-Google-Smtp-Source: AA6agR6l42SoHMuJQdAcYlj27AjNpDt8CSJhgvwnKOIkUXvOvez9Pi4r8WAwKc2GqOGP9PiY45ZX5A==
-X-Received: by 2002:a17:902:ba96:b0:170:9f15:b997 with SMTP id k22-20020a170902ba9600b001709f15b997mr15889474pls.34.1661096523078;
-        Sun, 21 Aug 2022 08:42:03 -0700 (PDT)
-Received: from localhost.localdomain ([113.172.183.227])
-        by smtp.googlemail.com with ESMTPSA id s10-20020aa78bca000000b00534e9aadbf7sm6857796pfd.182.2022.08.21.08.42.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 08:42:02 -0700 (PDT)
-From:   Bui Quang Minh <minhquangbui99@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Bui Quang Minh <minhquangbui99@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Subject: [PATCH] mm: Skip retry when new limit is not below old one in page_counter_set_max
-Date:   Sun, 21 Aug 2022 22:40:55 +0700
-Message-Id: <20220821154055.109635-1-minhquangbui99@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 21 Aug 2022 11:41:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C161CB14;
+        Sun, 21 Aug 2022 08:41:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B86B60F04;
+        Sun, 21 Aug 2022 15:41:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87BB5C433C1;
+        Sun, 21 Aug 2022 15:41:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661096508;
+        bh=93PclUVO1BVNqwydjTRtUJajm+fIYY5f8aL+MFhY4to=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jh78gCvtJcinyu+SuOhYYnq7P2u5/x1paSdyeGjHH2ZBSlWcGH4mrsMeq+AvwLBdr
+         Spwf/5jc0sO/95NeOtLsgM/ViQyXMsUwmNkRHx2GYEL/kjCDMCnz+FrmaHvd0yjdEJ
+         z7pcD/oG8QMkTrPUtYjjeclTUP6+taedShSJAo/s6I2hnV5IcEjdsJKCQv9wfUJy3o
+         hCm/QA2Q9enMNny1zRD0hWjH00zKsRtf/DHEQQj95wiVn59AhV1RmNz2o0M+9Lp8bq
+         Ir1bU/7ssG7d9xd9R3SZ9wljjiz+jbZJXWn67Pxj9fPEPaFyGydb1IsA6n+HqmGHf2
+         edMwEO20sqHFw==
+Received: by pali.im (Postfix)
+        id 9CA3B828; Sun, 21 Aug 2022 17:41:45 +0200 (CEST)
+Date:   Sun, 21 Aug 2022 17:41:45 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] hwmon: (dell-smm) Fail probing when cooling device
+ registration fails
+Message-ID: <20220821154145.v7da76besv2qzqhj@pali>
+References: <20220821151713.11198-1-W_Armin@gmx.de>
+ <20220821151713.11198-2-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220821151713.11198-2-W_Armin@gmx.de>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In page_counter_set_max, we want to make sure the new limit is not below
-the concurrently-changing counter value. We read the counter and check that
-the limit is not below the counter before the swap. After the swap, we read
-the counter again and retry in case the counter is incremented as this may
-violate the requirement. Even though the page_counter_try_charge can see
-the old limit, it is guaranteed that the counter is not above the old limit
-after the increment. So in case the new limit is not below the old limit,
-the counter is guaranteed to be not above the new limit too. We can skip
-the retry in this case to optimize a little bit.
+On Sunday 21 August 2022 17:17:11 Armin Wolf wrote:
+> Previously, it was thought that failing to register a cooling device
+> would not be critical, so the probing was not aborted in such a case.
+> This however would lead to userspace being unable to rely on those
+> cooling devices, since they might not represent all fans being present.
+> Fix that by failing probing when cooling device registration fails.
 
-Signed-off-by: Bui Quang Minh <minhquangbui99@gmail.com>
----
- mm/page_counter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch does not fix address this issue fully. CONFIG_THERMAL can be
+disabled during compile time and then cooling device would not be
+registered too.
 
-diff --git a/mm/page_counter.c b/mm/page_counter.c
-index eb156ff5d603..8a0cc24b60dd 100644
---- a/mm/page_counter.c
-+++ b/mm/page_counter.c
-@@ -193,7 +193,7 @@ int page_counter_set_max(struct page_counter *counter, unsigned long nr_pages)
- 
- 		old = xchg(&counter->max, nr_pages);
- 
--		if (page_counter_read(counter) <= usage)
-+		if (page_counter_read(counter) <= usage || nr_pages >= old)
- 			return 0;
- 
- 		counter->max = old;
--- 
-2.25.1
-
+> Tested on a Dell Inspiron 3505.
+> 
+> Fixes: e0d3f7cb2606 ("hwmon: (dell-smm) Add cooling device support")
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>  drivers/hwmon/dell-smm-hwmon.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index 7f8d95dd2717..1dab7591576a 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -1013,12 +1013,10 @@ static int __init dell_smm_init_hwmon(struct device *dev)
+> 
+>  		data->fan[i] = true;
+> 
+> -		/* the cooling device is not critical, ignore failures */
+>  		if (IS_REACHABLE(CONFIG_THERMAL)) {
+>  			err = dell_smm_init_cdev(dev, i);
+>  			if (err < 0)
+> -				dev_warn(dev, "Failed to register cooling device for fan %u\n",
+> -					 i + 1);
+> +				return err;
+>  		}
+> 
+>  		data->fan_nominal_speed[i] = devm_kmalloc_array(dev, data->i8k_fan_max + 1,
+> --
+> 2.30.2
+> 

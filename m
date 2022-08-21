@@ -2,55 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A6C59B46D
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 16:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 698EE59B476
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 16:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiHUO0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 10:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
+        id S230260AbiHUObU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 10:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiHUO0O (ORCPT
+        with ESMTP id S229460AbiHUObS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 10:26:14 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93681A38D;
-        Sun, 21 Aug 2022 07:26:13 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 600F767373; Sun, 21 Aug 2022 16:26:10 +0200 (CEST)
-Date:   Sun, 21 Aug 2022 16:26:10 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     "Alan J. Wylie" <alan@wylie.me.uk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: Regression in 5.19.0: USB errors during boot
-Message-ID: <20220821142610.GA2979@lst.de>
-References: <25342.20092.262450.330346@wylie.me.uk> <Yv5Q8gDvVTGOHd8k@kroah.com> <20220821062345.GA26598@lst.de> <25345.60162.942383.502797@wylie.me.uk>
+        Sun, 21 Aug 2022 10:31:18 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94921CB06
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 07:31:14 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1661092257tqxhds2p
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 21 Aug 2022 22:30:55 +0800 (CST)
+X-QQ-SSF: 0100000000200000B000B00A0000000
+X-QQ-FEAT: Wyle2N1OIGk9/qf4RjOezsRwFlh5szDP0qWpg9ROsqG5sbiWbn0ZK8iUFuwsj
+        r3CM24sDaCZXdJtyTH7UR/iKB5AGvqSXE0M2tE7adbPMbbOW+Eb5WCQZp7wOTqx1o8pRAsk
+        CXe2/Vqov+MGzRUTOHniT+Dk/IsNPg5rWpg/ABfRk3rweBuwLR1l5ZvGGk1vhHqaf7fgbzn
+        rMUljpC39odco41y9zm4P8FOqu1SK1SWgxRPJ2X3YqWxhYyZZqcr9X7TFSxgc/k4i8nnSlk
+        vhsnjdGrKcNZ6kbDdTnQ1r25m708Qr5zkou5kvQxUoIQM5/2/L7OgA3/Tqk/w1Ay7uSWacG
+        r0vR6qZ
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     bskeggs@redhat.com, kherbst@redhat.com, lyude@redhat.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] subdev/clk: fix repeated words in comments
+Date:   Sun, 21 Aug 2022 22:30:38 +0800
+Message-Id: <20220821143038.46589-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <25345.60162.942383.502797@wylie.me.uk>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_PBL,RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        *      [43.154.54.12 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [43.154.54.12 listed in wl.mailspike.net]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 09:21:22AM +0100, Alan J. Wylie wrote:
-> Comparing with another AMD system that doesn't show the problem,
-> I see that CONFIG_GART_IOMMU is only set on the one with the problem.
-> 
-> The configs have just had "make oldconfig" run on them for years, I
-> have no idea why one has it set.
-> 
-> Clearing it fixes the problem!
+ Delete the redundant word 'at'.
 
-Thanks for confirming my suspicion.  I'd still like to fix the issue
-with CONFIG_GART_IOMMU enabled once I've tracked it down.  Would you
-be willing to test patches?
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/subdev/clk/gm20b.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/clk/gm20b.c b/drivers/gpu/drm/nouveau/nvkm/subdev/clk/gm20b.c
+index a139dafffe06..7c33542f651b 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/clk/gm20b.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/clk/gm20b.c
+@@ -581,7 +581,7 @@ gm20b_clk_prog(struct nvkm_clk *base)
+ 
+ 	/*
+ 	 * Interim step for changing DVFS detection settings: low enough
+-	 * frequency to be safe at at DVFS coeff = 0.
++	 * frequency to be safe at DVFS coeff = 0.
+ 	 *
+ 	 * 1. If voltage is increasing:
+ 	 * - safe frequency target matches the lowest - old - frequency
+-- 
+2.36.1
+

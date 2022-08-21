@@ -2,201 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7913459B5BA
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 19:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABC959B5BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 19:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbiHURu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 13:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
+        id S230298AbiHURwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 13:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiHURu0 (ORCPT
+        with ESMTP id S229491AbiHURwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 13:50:26 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C3C17E1D
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 10:50:24 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id ca13so6047659ejb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 10:50:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=kCT+kY+pxIqvLumJULX2iwyMToWhruEPioR8K3WE5dw=;
-        b=LBkl15RlPsR/CVEaIxiYKWHevObk45s2/wFF3/uRIb5g8xBHeIrkPr1X4uSEy1rFCC
-         Tblo9enDqlZY8qGwB0F/kSTwzgpannOiTIPdw5zK3xyy5/OSSTcn1IAqKU7fPshCg80p
-         VH0ohjAo0oZBsmmmgrS+oi75pwOFeAp+ooB3sq6Bkai+gzjBBPzKgI+VZ8mfuFxKwRCx
-         FZuqjQg0y2WHjPIkFW9hOmvgDBMyfEqpEwoc/PzIGRXn3NnyGnRuVTgwP+rDCiQxAY8R
-         5qvBjEw/szW9uLtZJIa0f5hTB8HeS478rPKpkVRUxjgSBzm4bxvE/B/NVm/tdkGSKyrF
-         iLTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=kCT+kY+pxIqvLumJULX2iwyMToWhruEPioR8K3WE5dw=;
-        b=qYVVu1IgZcuOIBoKW0Qra7xpusP6vAMGJ8clKk83iVUDyrJmo6pbfcIJDyHtQKBVBW
-         A/qGmO09J0dg56uEechWVKwFoENHmSvj27c0WlnFgZ+CIo/CN/Fw85xKrn9CKC2+5vff
-         dUgx/omwNKiTns2UjVyKcSqfEPPat02ZxSOBK/2VN6MCrTvZFGTGAOAiLOz7Z7quxjGh
-         NDFSMLvDYnZYLUdVSxGBcmG8N3jKeMAKdKE2dLDOXxo0aCoa6jVtPol9S82uEGhVyblP
-         zr8BzOMF4QKy22PUsx8vLVHfoJNTlbhtjXOEeslSaf0v2Y72KwaLK16MD2hR6kAZRnV3
-         fmDQ==
-X-Gm-Message-State: ACgBeo05/VYnPDRqcN1qkRdztQ7rBPM1ZmtGJQUz7/3j3MY0mWhzJVME
-        e8x65LoUXAKh5frFZ4I3hkE=
-X-Google-Smtp-Source: AA6agR7bHl9NY0CG6093KT5YBUkgGAg/b2EmECMU3lp+pYN+emTuzF1YQ1g0/3MMfztObo5GXsMybQ==
-X-Received: by 2002:a17:907:6e8f:b0:73d:81a1:d565 with SMTP id sh15-20020a1709076e8f00b0073d81a1d565mr1018938ejc.675.1661104223409;
-        Sun, 21 Aug 2022 10:50:23 -0700 (PDT)
-Received: from localhost.localdomain (host-87-17-106-94.retail.telecomitalia.it. [87.17.106.94])
-        by smtp.gmail.com with ESMTPSA id u18-20020a1709061db200b00726c0e63b94sm5086252ejh.27.2022.08.21.10.50.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 10:50:21 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jan Kara <jack@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-kernel@vger.kernel.org
+        Sun, 21 Aug 2022 13:52:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A4C18357;
+        Sun, 21 Aug 2022 10:52:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4B6660F31;
+        Sun, 21 Aug 2022 17:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F7EAC433C1;
+        Sun, 21 Aug 2022 17:52:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661104338;
+        bh=4p7yfjIq1tiv/g9ut0gygVgmob/tNi6cVnkLCUCXz10=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JkdQhCJR/uZHyTuzxZahcWiQtflHyk0dww9r8YWVQFIDxSanYudlw4B/HZQ3qmpf2
+         bVCsro16+QMYkszaBCg20ENA2E5TlH0d7VIojnosLTR4BjdmpfKu5uB5NXJzHa8NMg
+         7Vlu5pJGi6c2igKdd/irLW0PBoqvXcDAIbyJuI/D/8Sxxv0NUCkAHemN7LyJWDfn/T
+         CusgC/HcHiSOtboPo/jfwNZKV4drJoDZ2NCFK4g5Q7RyISK9Y/MzdkcF+p2CA9Lr1V
+         lc3Z/KKdjLnB96GwDEpjt5iRjzn+KOcd5JgqI1eIyup7yRTawRbdmv/hV+dujxT+Yq
+         5H4Meemt8OAUA==
+From:   SeongJae Park <sj@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [RESEND PATCH v2] fs/isofs: Replace kmap() with kmap_local_page()
-Date:   Sun, 21 Aug 2022 19:50:12 +0200
-Message-Id: <20220821175012.6866-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        SeongJae Park <sj@kernel.org>, badari.pulavarty@intel.com,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] mm/damon/dbgfs: avoid duplicate context directory creation
+Date:   Sun, 21 Aug 2022 17:52:15 +0000
+Message-Id: <20220821175215.152419-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <YwEatUUtU8570PRV@kroah.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() is being deprecated in favor of kmap_local_page().
+Hi Greg,
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
+On Sat, 20 Aug 2022 19:32:37 +0200 Greg KH <gregkh@linuxfoundation.org> wrote:
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-Tasks can be preempted and, when scheduled to run again, the kernel
-virtual addresses are restored and still valid. It is faster than kmap()
-in kernels with HIGHMEM enabled.
+> On Fri, Aug 19, 2022 at 02:08:09PM -0700, Andrew Morton wrote:
+> > On Fri, 19 Aug 2022 17:19:30 +0000 SeongJae Park <sj@kernel.org> wrote:
+> > 
+> > > From: Badari Pulavarty <badari.pulavarty@intel.com>
+> > > 
+> > > When user tries to create a DAMON context via the DAMON debugfs
+> > > interface with a name of an already existing context, the context
+> > > directory creation silently fails but the context is added in the
+> > > internal data structure.  As a result, memory could leak and DAMON
+> > > cannot be turned on.  An example test case is as below:
+> > > 
+> > >     # cd /sys/kernel/debug/damon/
+> > >     # echo "off" >  monitor_on
+> > >     # echo paddr > target_ids
+> > >     # echo "abc" > mk_context
+> > >     # echo "abc" > mk_context
+> > >     # echo $$ > abc/target_ids
+> > >     # echo "on" > monitor_on  <<< fails
+> > > 
+> > > This commit fixes the issue by checking if the name already exist and
+> > > immediately returning '-EEXIST' in the case.
+> > > 
+> > > ...
+> > >
+> > > --- a/mm/damon/dbgfs.c
+> > > +++ b/mm/damon/dbgfs.c
+> > > @@ -795,7 +795,7 @@ static void dbgfs_destroy_ctx(struct damon_ctx *ctx)
+> > >   */
+> > >  static int dbgfs_mk_context(char *name)
+> > >  {
+> > > -	struct dentry *root, **new_dirs, *new_dir;
+> > > +	struct dentry *root, **new_dirs, *new_dir, *dir;
+> > >  	struct damon_ctx **new_ctxs, *new_ctx;
+> > >  
+> > >  	if (damon_nr_running_ctxs())
+> > > @@ -817,6 +817,12 @@ static int dbgfs_mk_context(char *name)
+> > >  	if (!root)
+> > >  		return -ENOENT;
+> > >  
+> > > +	dir = debugfs_lookup(name, root);
+> > > +	if (dir) {
+> > > +		dput(dir);
+> > > +		return -EEXIST;
+> > > +	}
+> > > +
+> > >  	new_dir = debugfs_create_dir(name, root);
+> > >  	dbgfs_dirs[dbgfs_nr_ctxs] = new_dir;
+> > 
+> > It would be simpler (and less racy) to check the debugfs_create_dir()
+> > return value for IS_ERR()?
+> > 
+> 
+> Yes, if you _HAVE_ to know if the code works properly (i.e. because your
+> feature totally depends on debugfs like damon does), or you have a
+> potential duplicate name like this, then sure, check the return value
+> and do something based on it.
+> 
+> It's odd enough that you should put a comment above the check just so I
+> don't go and send a patch to delete it later on :)
 
-Since kmap_local_page() can be safely used in compress.c, it should be
-called everywhere instead of kmap().
+Thank you for the kind explanation, Greg.  I will revise this patch to simply
+check the return value with a comment noticing it's really needed due to the
+potential duplicate names.
 
-Therefore, replace kmap() with kmap_local_page() in compress.c. Where it
-is needed, use memzero_page() instead of open coding kmap_local_page()
-plus memset() to fill the pages with zeros. Delete the redundant
-flush_dcache_page() in the two call sites of memzero_page().
 
-Tested with mkisofs on a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel
-with HIGHMEM64GB enabled.
+Thanks,
+SJ
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Jan Kara <jack@suse.cz>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
 
-Some days ago Andrew requested a resend of this patch.[1]
-
-v1->v2: Cast zisofs_sink_page to pointer to unsigned char.
-Reported-by: kernel test robot <lkp@intel.com>
-
-Many thanks to Jan Kara for the comments and suggestions provided with
-replying to my previous RFC.[2] Furthermore, I want to thank Ira Weiny for
-the advices he provided, especially about how to use mkisofs to test that
-this patch is working properly.
-
-[1] https://lore.kernel.org/all/20220801122709.8164-1-fmdefrancesco@gmail.com/
-[2] https://lore.kernel.org/lkml/20220726145024.rryvw7ot7j2c6tqv@quack3/
-
- fs/isofs/compress.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/fs/isofs/compress.c b/fs/isofs/compress.c
-index 95a19f25d61c..107007c38d08 100644
---- a/fs/isofs/compress.c
-+++ b/fs/isofs/compress.c
-@@ -67,8 +67,7 @@ static loff_t zisofs_uncompress_block(struct inode *inode, loff_t block_start,
- 		for ( i = 0 ; i < pcount ; i++ ) {
- 			if (!pages[i])
- 				continue;
--			memset(page_address(pages[i]), 0, PAGE_SIZE);
--			flush_dcache_page(pages[i]);
-+			memzero_page(pages[i], 0, PAGE_SIZE);
- 			SetPageUptodate(pages[i]);
- 		}
- 		return ((loff_t)pcount) << PAGE_SHIFT;
-@@ -120,7 +119,7 @@ static loff_t zisofs_uncompress_block(struct inode *inode, loff_t block_start,
- 	       zerr != Z_STREAM_END) {
- 		if (!stream.avail_out) {
- 			if (pages[curpage]) {
--				stream.next_out = page_address(pages[curpage])
-+				stream.next_out = kmap_local_page(pages[curpage])
- 						+ poffset;
- 				stream.avail_out = PAGE_SIZE - poffset;
- 				poffset = 0;
-@@ -176,6 +175,10 @@ static loff_t zisofs_uncompress_block(struct inode *inode, loff_t block_start,
- 				flush_dcache_page(pages[curpage]);
- 				SetPageUptodate(pages[curpage]);
- 			}
-+			if (stream.next_out != (unsigned char *)zisofs_sink_page) {
-+				kunmap_local(stream.next_out);
-+				stream.next_out = NULL;
-+			}
- 			curpage++;
- 		}
- 		if (!stream.avail_in)
-@@ -183,6 +186,8 @@ static loff_t zisofs_uncompress_block(struct inode *inode, loff_t block_start,
- 	}
- inflate_out:
- 	zlib_inflateEnd(&stream);
-+	if (stream.next_out && stream.next_out != (unsigned char *)zisofs_sink_page)
-+		kunmap_local(stream.next_out);
- 
- z_eio:
- 	mutex_unlock(&zisofs_zlib_lock);
-@@ -283,9 +288,7 @@ static int zisofs_fill_pages(struct inode *inode, int full_page, int pcount,
- 	}
- 
- 	if (poffset && *pages) {
--		memset(page_address(*pages) + poffset, 0,
--		       PAGE_SIZE - poffset);
--		flush_dcache_page(*pages);
-+		memzero_page(*pages, poffset, PAGE_SIZE - poffset);
- 		SetPageUptodate(*pages);
- 	}
- 	return 0;
-@@ -343,10 +346,8 @@ static int zisofs_read_folio(struct file *file, struct folio *folio)
- 	for (i = 0; i < pcount; i++, index++) {
- 		if (i != full_page)
- 			pages[i] = grab_cache_page_nowait(mapping, index);
--		if (pages[i]) {
-+		if (pages[i])
- 			ClearPageError(pages[i]);
--			kmap(pages[i]);
--		}
- 	}
- 
- 	err = zisofs_fill_pages(inode, full_page, pcount, pages);
-@@ -357,7 +358,6 @@ static int zisofs_read_folio(struct file *file, struct folio *folio)
- 			flush_dcache_page(pages[i]);
- 			if (i == full_page && err)
- 				SetPageError(pages[i]);
--			kunmap(pages[i]);
- 			unlock_page(pages[i]);
- 			if (i != full_page)
- 				put_page(pages[i]);
--- 
-2.37.1
-
+> 
+> thanks,
+> 
+> greg k-h
+> 

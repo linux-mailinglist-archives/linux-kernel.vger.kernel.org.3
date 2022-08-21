@@ -2,102 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1DF59B3AC
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 14:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C844D59B3AD
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 14:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiHUMJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 08:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
+        id S229766AbiHUMLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 08:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiHUMJG (ORCPT
+        with ESMTP id S229436AbiHUMLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 08:09:06 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55DB1EEDB;
-        Sun, 21 Aug 2022 05:09:05 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id s36-20020a17090a69a700b001faad0a7a34so11450327pjj.4;
-        Sun, 21 Aug 2022 05:09:05 -0700 (PDT)
+        Sun, 21 Aug 2022 08:11:44 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1151F2DA;
+        Sun, 21 Aug 2022 05:11:43 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id g18so8529386pju.0;
+        Sun, 21 Aug 2022 05:11:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=jSWPHPF0WUdeKO3v95owYqCqD0J91vuibFdMuHLrsek=;
-        b=EYAPmf7bOEyu89iB0FgnBiKG5BFcStMrfDXSq/CQmRFCxE2tsDSKDeKCreMRxCimui
-         7dyEbF195Dv846GFIPX7b0qe4HD64LJ71QzuGCF7wdSSeex90khuVQKt6RozX0COue3A
-         akaW9jkN2MfNQm5ImMK7ESoW/KNXOZL0oc8QVqJlVbsvZ1WRYYOmHmGGlEwLJviQfYwN
-         Qm1PpcRqFvqZXOlXniuJkf/9CnEdv94Jm4Pnj/HSHfkrOaiAypmwJKVZvRYlCq2CHZAy
-         lAijEYCq8Iheh4Ka5cHtTN1L75UssDxepwXOn3soMKizoB/CzLfGqVYBQ6KaG2M9H2ij
-         jA0w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=cgzLCp3a55Ep+0cEyKvv7krA21NYDyPYbH2CBGQzucg=;
+        b=poXDkZKa0JzQnuD+BhY6e3Qpe4nDrJkPgdPTBRYH/OlRSm6eZmzE2txYKd5dKC+HBw
+         DUmgcJYiQ0EZsxDNfyEKWV08OCsb882SCL7aFwQWpsotT9lwnQ5lwBu9UVBP4NiRNdDA
+         Xb0HRelNBBr1KPlvYmPANAncDMlD+fmI4txdHDw/Idhg/gPI4VkQ76Bu9cVYjGvAm2Xa
+         M1JRyU39Ppwq5Aowd7VMC6y3cAF+URXviAXKRbpasvcpPznqQPLu3fb+gvmQ4tRTv59r
+         50yrjR//InHFuuwQlfZ5sRlEibsHohmhZxLVw5W5AMy6XjOnW70YbOnT+/n2AEbbs4L8
+         wx4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=jSWPHPF0WUdeKO3v95owYqCqD0J91vuibFdMuHLrsek=;
-        b=4eGJaPa4J1e1aaoMQsWlSx9V8I0goK09lAZrsbf2QT10AI2z0+ex2o/ip4PSGBssX1
-         1CQ91eolbLh1sd5uNX7c9gER6CkJG7Of3Q/4y00OoBvDeugaE/M9DV8we0TGSK+aWO7+
-         4SSsfuVCIYPyA1T6TFdirAoK0sRlHtT2mFKfnzJDcmeza1jRse7xzPmiBD5fLqZ+INyR
-         gb87OHJlwxGl9McRBg21DFwBeRehMbDyELAsKln6Dl9pQhdsgLLJ5AIASwfpKP3TshiJ
-         nkQzdWyYyyrPVBatKt+6RnTAO3JKCN/+tI1HsGS9kE1R8hFT9KpzxPcDfcEfPDJOu2EA
-         cYig==
-X-Gm-Message-State: ACgBeo1/R5ynQaL5VVsaUytgzopVnQWCt/QmxCTU5aTl6uHdmHU8JQku
-        aB+io9Nfy99o1iUu3EEM+zE=
-X-Google-Smtp-Source: AA6agR5UGB4GaXL5bJB8KoPmRQYVO9SRORthSgOKQrSpfVzlhCALipiPsoUdy1q2p2fd/emJkcouhQ==
-X-Received: by 2002:a17:902:c945:b0:16d:d425:324a with SMTP id i5-20020a170902c94500b0016dd425324amr15317916pla.7.1661083745330;
-        Sun, 21 Aug 2022 05:09:05 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m12-20020a633f0c000000b0041c49af8156sm5591265pga.6.2022.08.21.05.09.04
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=cgzLCp3a55Ep+0cEyKvv7krA21NYDyPYbH2CBGQzucg=;
+        b=g8qAnPLMPhBP9M9hPPi/Ucz4RF45W/CMNN4YocMgo53jOyc//i5W3NFDmz3Gxhgg8z
+         6B/qLCc8Ri4rYbGgOuV/DfoojdlmezWIiDijFa/CjmiQlG9U9/3solh46YV9a/TZF+1h
+         RCw5W+uCW8FKelRqQMDKnZIS2XIhPJ4CzlCErR710KtSGzuPxeqg5xy7v7aQgQy0+r8y
+         7SdJmkPD1LE1aXCAVGmPfR+SqFoVPVFtMV6ecH8ks/yr8Di8TgR5QqXC4mSfA2pIdImC
+         XJ65/uTDmDU6WXHm9V+UfB1fiZtVskML58l3j7ouM6l5kb2LyWmi06Hefj9gNgbQ21+2
+         0TFw==
+X-Gm-Message-State: ACgBeo2Q+sJZjdbm5J6/O4y/EjUfNBUwCDiy8ETdO2U275y/IeS4zq+U
+        i+soH0qul8FUcHFdehjlBzM=
+X-Google-Smtp-Source: AA6agR7pAMSWL1n/638qdO1lxqloqjisDk1HkpPCyJeZIn35O3Uvx1FjH0BRNAugQBk352snoSZZ1Q==
+X-Received: by 2002:a17:902:8d95:b0:172:e11e:65da with SMTP id v21-20020a1709028d9500b00172e11e65damr2698288plo.4.1661083903320;
+        Sun, 21 Aug 2022 05:11:43 -0700 (PDT)
+Received: from localhost ([36.112.204.208])
+        by smtp.gmail.com with ESMTPSA id g2-20020a632002000000b0042988a04bfdsm5602411pgg.9.2022.08.21.05.11.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 05:09:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 21 Aug 2022 05:09:03 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/10] 5.15.62-rc2 review
-Message-ID: <20220821120903.GB2332676@roeck-us.net>
-References: <20220820182309.607584465@linuxfoundation.org>
+        Sun, 21 Aug 2022 05:11:42 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     dvyukov@google.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+2af3bc9585be7f23f290@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, syzkaller@googlegroups.com,
+        viro@zeniv.linux.org.uk, willy@infradead.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        paskripkin@gmail.com, skhan@linuxfoundation.org,
+        18801353760@163.com, Hawkins Jiawei <yin31149@gmail.com>
+Subject: [PATCH] fs: fix WARNING in mark_buffer_dirty (4)
+Date:   Sun, 21 Aug 2022 20:10:39 +0800
+Message-Id: <20220821121038.3527-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CACT4Y+bUtBuhD7_BAN+NavEfhBNOavqF0CJkrZ+Gc4pYeLiy+g@mail.gmail.com>
+References: <CACT4Y+bUtBuhD7_BAN+NavEfhBNOavqF0CJkrZ+Gc4pYeLiy+g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220820182309.607584465@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 08:23:24PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.62 release.
-> There are 10 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Mon, 22 Aug 2022 18:23:01 +0000.
-> Anything received after that time might be too late.
-> 
+Syzkaller reports bug as follows:
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3684 at fs/buffer.c:1081 mark_buffer_dirty+0x59d/0xa20 fs/buffer.c:1081
+[...]
+Call Trace:
+ <TASK>
+ minix_put_super+0x199/0x500 fs/minix/inode.c:49
+ generic_shutdown_super+0x14c/0x400 fs/super.c:462
+ kill_block_super+0x97/0xf0 fs/super.c:1394
+ deactivate_locked_super+0x94/0x160 fs/super.c:332
+ deactivate_super+0xad/0xd0 fs/super.c:363
+ cleanup_mnt+0x3a2/0x540 fs/namespace.c:1186
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ ptrace_notify+0x114/0x140 kernel/signal.c:2353
+ ptrace_report_syscall include/linux/ptrace.h:420 [inline]
+ ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
+ syscall_exit_work kernel/entry/common.c:249 [inline]
+ syscall_exit_to_user_mode_prepare+0x129/0x280 kernel/entry/common.c:276
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
+ syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+ [...]
+ </TASK>
+------------------------------------
 
-Build results:
-	total: 159 pass: 159 fail: 0
-Qemu test results:
-	total: 485 pass: 484 fail: 1
-Failed tests:
-	openrisc:or1ksim_defconfig
+During VFS releasing the minix's superblock, kernel will calls
+sync_filesystem() to write out and wait upon all dirty data
+associated with this superblock.
 
-The openrisc failure is a soft lockup during restart. I only recently
-enabled the soft lockup detector, so this is probably either a false
-positive or not a new problem. I'll try to track it down, but it is
-not a concern for now.
+Yet the problem is that this write may fail, then kernel will
+clear BH_Uptodate flag in superblock's struct buffer_head
+in end_buffer_async_write(). When kernel returns from
+sync_filesystem() and calls sop->put_super()
+(which is minix_put_super()), it will triggers the warning
+for struct buffer_head is not uptodate in mark_buffer_dirty().
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+This patch solves it by handling sync_filesystem() write error
+in minix_put_super(), before calling mark_buffer_dirty()
 
-Guenter
+Reported-and-tested-by: syzbot+2af3bc9585be7f23f290@syzkaller.appspotmail.com
+Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+---
+ fs/minix/inode.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/fs/minix/inode.c b/fs/minix/inode.c
+index da8bdd1712a7..8e9a8057dcfe 100644
+--- a/fs/minix/inode.c
++++ b/fs/minix/inode.c
+@@ -42,17 +42,27 @@ static void minix_put_super(struct super_block *sb)
+ {
+ 	int i;
+ 	struct minix_sb_info *sbi = minix_sb(sb);
++	struct buffer_head *sbh = sbi->s_sbh;
+ 
+ 	if (!sb_rdonly(sb)) {
+ 		if (sbi->s_version != MINIX_V3)	 /* s_state is now out from V3 sb */
+ 			sbi->s_ms->s_state = sbi->s_mount_state;
+-		mark_buffer_dirty(sbi->s_sbh);
++
++		lock_buffer(sbh);
++		if (buffer_write_io_error(sbh)) {
++			clear_buffer_write_io_error(sbh);
++			set_buffer_uptodate(sbh);
++			printk("MINIX-fs warning: superblock detected "
++			       "previous I/O error\n");
++		}
++		mark_buffer_dirty(sbh);
++		unlock_buffer(sbh);
+ 	}
+ 	for (i = 0; i < sbi->s_imap_blocks; i++)
+ 		brelse(sbi->s_imap[i]);
+ 	for (i = 0; i < sbi->s_zmap_blocks; i++)
+ 		brelse(sbi->s_zmap[i]);
+-	brelse (sbi->s_sbh);
++	brelse (sbh);
+ 	kfree(sbi->s_imap);
+ 	sb->s_fs_info = NULL;
+ 	kfree(sbi);
+-- 
+2.25.1
+

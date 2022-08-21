@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2746059B2C5
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 10:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45FF59B2C4
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 10:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiHUI2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 04:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
+        id S229992AbiHUI2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 04:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiHUI2b (ORCPT
+        with ESMTP id S229921AbiHUI2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 04:28:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A0F1181A
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 01:28:30 -0700 (PDT)
+        Sun, 21 Aug 2022 04:28:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B47612D11
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 01:28:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1170760D30
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:28:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9AF9C433D7
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:28:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B622B80BA7
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:28:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1B60C433C1;
+        Sun, 21 Aug 2022 08:28:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661070509;
-        bh=MGnmvJUW0ll/R4GUqQFaXoqwxTbM37z68rC/6+H4N7k=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=J6cXC2+85P07rJ4RHhC7x3xfM1vN+D81+2luQwn/iVpAgm778Kp3ciZYfs5gjZi9m
-         8P9xVUB2OzvltSsXvJRBLZF3TFCmj0MHc7kUGzmffIAkQGWp13Y3U51yj5SgagCo8c
-         09cIV4pQosi0wCI+RDC6CUJV+TgSLP9wKe+p22z52WzxVIiZdN54S7hLB2VbINX8gR
-         ZMxHe7gWIndt000kbR67YvT8dRix1NsNsN30HzBabWBoEZEgSXAj607KxFFdAk1XMU
-         tQsZHuTE069n84SUm7vaEFAqgSKWfi0El8tvx6+oXjkQBbf/foPea93Sq8P9eOn6IS
-         3eYFPZCdzXdFA==
+        s=k20201202; t=1661070510;
+        bh=GRaLVWQmFrTUjDgibZ+O3NZz+X6pZ7tTDAWYF24bdB4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=u/0g4X5OcYPJ3ZXzp1/8U987cBd+gK3pgeV1ub0z5ldvuIRGBXsCBmmuLX9gXWb+t
+         MLpGujeXVEbkHtJrkPbcDOUTXGsR8eWvd0xe1cmGct8c7tpqCfcHiuy2FvYKp8eQOm
+         3dyES0VK9fG/xyfDMNHe9aDrhmrh5s/5UKPWC0gX7ngjX3+bI70MQyPPVHrp3Qf9bL
+         QOrlpeoVKH6fzehkMAH+mdI4V0807uCECNk3yCBm+7PqMsLctxq4IWVKcQp0PtZEdr
+         ICH0rkNA2H7hB3ZFav9Hkt650jDjecS332MXO4Neh22wYelgo6IApKTWQAszrD7OVf
+         K3TqE853MwFKQ==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Subject: [PATCH 2/5] habanalabs: select FW_LOADER in Kconfig
-Date:   Sun, 21 Aug 2022 11:28:20 +0300
-Message-Id: <20220821082823.62846-2-ogabbay@kernel.org>
+Cc:     Dafna Hirschfeld <dhirschfeld@habana.ai>
+Subject: [PATCH 3/5] habanalabs: if map page fails don't try to unmap it
+Date:   Sun, 21 Aug 2022 11:28:21 +0300
+Message-Id: <20220821082823.62846-3-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220821082823.62846-1-ogabbay@kernel.org>
 References: <20220821082823.62846-1-ogabbay@kernel.org>
@@ -52,26 +53,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver is loading firmware to the device and we use the firmware
-loading functions from the FW_LOADER module.
+From: Dafna Hirschfeld <dhirschfeld@habana.ai>
 
+The original code tried to unmap a page that was not mapped as part of
+the map page error path.
+
+Signed-off-by: Dafna Hirschfeld <dhirschfeld@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/misc/habanalabs/common/mmu/mmu.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/misc/habanalabs/Kconfig b/drivers/misc/habanalabs/Kconfig
-index 861c81006c6d..bd01d0d940c0 100644
---- a/drivers/misc/habanalabs/Kconfig
-+++ b/drivers/misc/habanalabs/Kconfig
-@@ -10,6 +10,7 @@ config HABANA_AI
- 	select HWMON
- 	select DMA_SHARED_BUFFER
- 	select CRC32
-+	select FW_LOADER
- 	help
- 	  Enables PCIe card driver for Habana's AI Processors (AIP) that are
- 	  designed to accelerate Deep Learning inference and training workloads.
+diff --git a/drivers/misc/habanalabs/common/mmu/mmu.c b/drivers/misc/habanalabs/common/mmu/mmu.c
+index 60740de47b34..4153aec55594 100644
+--- a/drivers/misc/habanalabs/common/mmu/mmu.c
++++ b/drivers/misc/habanalabs/common/mmu/mmu.c
+@@ -403,6 +403,8 @@ int hl_mmu_map_contiguous(struct hl_ctx *ctx, u64 virt_addr,
+ 			dev_err(hdev->dev,
+ 				"Map failed for va 0x%llx to pa 0x%llx\n",
+ 				curr_va, curr_pa);
++			/* last mapping failed so don't try to unmap it - reduce off by page_size */
++			off -= page_size;
+ 			goto unmap;
+ 		}
+ 	}
 -- 
 2.25.1
 

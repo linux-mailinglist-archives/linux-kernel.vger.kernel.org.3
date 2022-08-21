@@ -2,160 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF7659B5BF
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 19:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F5A59B5C7
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 20:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbiHUR7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 13:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        id S231249AbiHUSEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 14:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiHUR7X (ORCPT
+        with ESMTP id S229560AbiHUSEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 13:59:23 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8421B786;
-        Sun, 21 Aug 2022 10:59:22 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id e19so7720873pju.1;
-        Sun, 21 Aug 2022 10:59:22 -0700 (PDT)
+        Sun, 21 Aug 2022 14:04:10 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC41D1D0C1;
+        Sun, 21 Aug 2022 11:04:07 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id gt3so4936538ejb.12;
+        Sun, 21 Aug 2022 11:04:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:from:to:cc;
-        bh=V8bMKICvP7gE2r6LcG1wlsTsLSU26soKtKY7qWy9Wdc=;
-        b=S0XUUuEUtqHoMKuAHC6MaSekJn5w0mUC5kPanzQid4f55PZHgge8jF9nLWBEoxSVP/
-         5CjEYnvcKyLLHHFobQkfx5iOXFAbwc+0FPD1JjfA7vjQlkwRdA5wwTKpz87KjVjt6bvw
-         CY9U0SOGEW6nASmQlPKsN2dt+/ewWpQO7Syw046EJTIi2oe1lPQOq3eHO4zZAkGCmIKF
-         dc4fdZT5k0VxRVDWhKM7fqBLbbgs9JvzIE0BdvtcSzRxUaAZhDwtDPrP4qH/xKx4inHH
-         jSQ9bnbTjPmQT7g6oyqt+eMIUBp/KMAE+pW+DImQ8z9/wMjUarWRyjpc4PhoISv6UzF1
-         rvdw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=SnhFAU92/LDV9kUU3gKzxKJbWQLSKVpEjj7raxC0lig=;
+        b=pQQoM5ZNU2eBoou1JQdDKcmrM7WftSjPRuErPcwrv5kp0R9G35ugATUBSJBvMwMviQ
+         7boEzFWSAbPAOx2ng94W0LE1zL4FqWVshVrE1pX+85rbjUPp9WhQCmVUS0muAI4D791r
+         22ss3Zbb9tABhHeg+Z3CuiZzmOmHe4i5AwN0wMzwToodJpplRckiYOUzmVxAoPWOciu6
+         myvO88+dReeSS29fiCmtFdfzin2XL6Ti3cU5GHfdFHThHSIs/2Na6McZKZhwl7/Vc2vZ
+         QIFJLFP2B0aeD0gxDXRNqipkoe9QfrKe0I5GXNPD8cJI8/YN3wBI7+cek0UVyo2Brxmq
+         l+jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc;
-        bh=V8bMKICvP7gE2r6LcG1wlsTsLSU26soKtKY7qWy9Wdc=;
-        b=hkpU36q5ONiuaLHjej6wxm+m84biU5QUI4FUfYhpCTwbdGS49u6zi8hlSNTE7uNuEW
-         kSxk48CsF2TxABSxoAe8taW1i2XMr35s/dZfwHKaGutKlGV7h7OcowCKrLvNZf9q8+Py
-         RMOL9QY5I+bfaCiqtiGVTq+UeR0WB3QXS5OX4Qu/Ir78FM4ZtfbMzy5EeLFoDM/n6nU6
-         7rw/UNVvbSv0SbmKVfU5jMkm6KDoxHSltR7ZRfdUbIycitqS0Et4ePa/DaD/BaoXrJqH
-         xjaXkA89bwzzQzSN/hDp0Tg8vc9Ek07S+a3tOWqwZCYMqWEq6Jaw8P/9KH7atyiiIpIM
-         fBRA==
-X-Gm-Message-State: ACgBeo2RUHOQYf4C65TI/AT/j/KLU/9/9j1KLdfr6v18MYl2gfxEzyzE
-        oe5emOpROgPBj8kl4635gaA=
-X-Google-Smtp-Source: AA6agR5EHmpdNmL63tYfMWUIEIcspviH71F+4o95fTsCQaD/vkiojCk0zfoe3xW4KvqaYbdTbYR8Ug==
-X-Received: by 2002:a17:90a:1c02:b0:1e0:df7:31f2 with SMTP id s2-20020a17090a1c0200b001e00df731f2mr24020256pjs.222.1661104761500;
-        Sun, 21 Aug 2022 10:59:21 -0700 (PDT)
-Received: from Mahakal ([2401:4900:36a0:636e:62bf:3813:d194:e46f])
-        by smtp.gmail.com with ESMTPSA id 201-20020a6214d2000000b0052dbad1ea2esm6947355pfu.6.2022.08.21.10.59.17
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 21 Aug 2022 10:59:21 -0700 (PDT)
-Date:   Sun, 21 Aug 2022 23:29:14 +0530
-From:   "<Vishal Badole>" <badolevishal1116@gmail.com>
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chinmoyghosh2001@gmail.com" <chinmoyghosh2001@gmail.com>,
-        "mintupatel89@gmail.com" <mintupatel89@gmail.com>,
-        "vimal.kumar32@gmail.com" <vimal.kumar32@gmail.com>
-Subject: Re: [PATCH] Common clock: =?utf-8?B?4oCL?= =?utf-8?B?4oCLVG8=?= list
- active consumers of clocks
-Message-ID: <20220821175912.GA6946@Mahakal>
-References: <CAEXpiVQihEadxsNodarz2-wxSAipfpzEaA8zKpnozszC+weYTQ@mail.gmail.com>
- <20220610194013.DD39DC34114@smtp.kernel.org>
- <20220622170219.GA6978@Mahakal>
- <20220624010550.582BBC341C7@smtp.kernel.org>
- <20220626182517.GA26001@Mahakal>
- <MW5PR84MB1842824E0F57D0EC46381B09AB9D9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
- <20220808170001.GB5239@Mahakal>
- <MW5PR84MB18429934C99C9AE6289D620BAB6E9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=SnhFAU92/LDV9kUU3gKzxKJbWQLSKVpEjj7raxC0lig=;
+        b=O2Qpu/HGnGP3YCUm25si9YjTET84e2v9jgkM1+OjnvkJeNBuMoNNsw0NsiikMuARB9
+         4dJLQjsghTb/yzrHcfKgnLkhetdZCpN4TWh3YBj9Ly/zD4pI9Jj9Ex2tsgYo6EqWJeP/
+         zPUAxQh09DMXCF9QNx5PyQM090aoeiwLdbQ3XB18MGHa+i1Yg/Bso6vhDJF5vUWTGpOT
+         ZJ4CFbEpCZgYEL/mtK0a0DLLiPrBrFpum+Dulh/GrPN+4Eoza33SAiAy/UP3aNEjjSeP
+         4gubQcjCJ+DRZSDSybS13Xc0u/o5Ke2Xuo0aR1Rd4QM4vz/ydxXw8qy74yiXrH5+IvwE
+         2sgg==
+X-Gm-Message-State: ACgBeo2m3R8DQfeQWY1oENmnXGYDSEKCG8P9zAb0Uj4lZS5QNhCRYx8G
+        lzMoiJc8wTaaPdL+t7E3SQg=
+X-Google-Smtp-Source: AA6agR4Ycs0/kntvbEa1LIUVO98PPIBWCulFiH7pyO9H7OXbKYw0CXiqMdavpTj1XXS9Wul36KVCtw==
+X-Received: by 2002:a17:906:84ef:b0:731:82a8:ea03 with SMTP id zp15-20020a17090684ef00b0073182a8ea03mr10837945ejb.462.1661105046132;
+        Sun, 21 Aug 2022 11:04:06 -0700 (PDT)
+Received: from localhost.localdomain (host-87-17-106-94.retail.telecomitalia.it. [87.17.106.94])
+        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b007317f017e64sm5125916ejg.134.2022.08.21.11.04.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 11:04:04 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Kees Cook <keescook@chromium.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        "Theodore Ts'o" <tytso@mit.edu>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [RESEND PATCH 0/3] hfs: Replace kmap() with kmap_local_page()
+Date:   Sun, 21 Aug 2022 20:03:57 +0200
+Message-Id: <20220821180400.8198-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <MW5PR84MB18429934C99C9AE6289D620BAB6E9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_MISSP_FREEMAIL,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 05:07:00AM +0000, Elliott, Robert (Servers) wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: <Vishal Badole> <badolevishal1116@gmail.com>
-> > Sent: Monday, August 8, 2022 12:00 PM
-> > To: Elliott, Robert (Servers) <elliott@hpe.com>
-> > Cc: Stephen Boyd <sboyd@kernel.org>; mturquette@baylibre.com; inux-
-> > clk@vger.kernel.org; linux-kernel@vger.kernel.org; chinmoyghosh2001@gmail.com;
-> > mintupatel89@gmail.com; vimal.kumar32@gmail.com
-> > Subject: Re: [PATCH] Common clock: ​​To list active consumers of clocks
-> > 
-> > On Tue, Aug 02, 2022 at 10:49:17PM +0000, Elliott, Robert (Servers) wrote:
-> > >
-> > >
-> > > > -----Original Message-----
-> > > > From: <Vishal Badole> <badolevishal1116@gmail.com>
-> > > > Sent: Sunday, June 26, 2022 1:25 PM
-> > > > To: Stephen Boyd <sboyd@kernel.org>; mturquette@baylibre.com; inux-
-> > > > clk@vger.kernel.org; linux-kernel@vger.kernel.org
-> > > > Cc: chinmoyghosh2001@gmail.com; mintupatel89@gmail.com;
-> > > > vimal.kumar32@gmail.com
-> > > > Subject: Re: [PATCH] Common clock: ​​To list active consumers of clocks
-> > > >
-> > > ...
-> > > > We will remove above prints in the revised patch. We are facing
-> > > > indentation issue whle printing consumer in summary
-> > > > as given below
-> > > >                                  enable  prepare  protect
-> > duty  hardware            per-user
-> > > >   clock                          count    count    count
-> > rateccuracy phase  cycle    enable  consumer   count
-> > > >   clk_mcasp0_fixed                   0        0        0
-> > 24576000     0  50000         Y
-> > > >   deviceless        0
-> > >
-> > > Consider making the kernel output simple, greppable, and parseable (e.g.,
-> > > comma-separated fields, one entry per line, no multi-line column headers)
-> > > and let a userspace tool do the fancy formatting.
-> > >
-> > Hi Robert,
-> > We have raised another patch for the same. Please find the below link
-> > for reference:
-> > 
-> > https://www.spinics.net/lists/kernel/msg4459705.html
-> 
-> That output is still not parsable.
-> 
-> I suggest making the kernel output more like:
->   clock,enable count,prepare count,protect count,rate,accuracy,phase,duty cycle,hardware enable,consumer,per-user count
->   clk_mcasp0_fixed,0,0,0,24576000,0,0,50000,Y,deviceless,0
->   clk_mcasp0,0,0,0,24576000,0,0,50000,N,simple-audio-card;cpu,0
-> 
-> and make a userspace program like lsmod, lscpu, lsblk, lspci, 
-> or lsusb to print the data with fancy columns or apply
-> other filters.
-> 
-> That allows adding or removing column headers, assuming the
-> userspace program doesn't hardcode assumptions about them.
->
+kmap() is being deprecated in favor of kmap_local_page().
 
-Hi Robert,
-As per the review given by stephen Boyd, who is one of maintainer of
-clk.c, suggested to add consumer's name and per user count in clock
-summary only. We are also getting proper formatted and parsable output
-on our target board console but when we copy and paste the same in
-commit message its format is getting changed. Please apply this patch
-and check on your target.
+There are two main problems with kmap(): (1) It comes with an overhead as
+mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
-Regards,
-Vishal
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
+
+Since its use in fs/hfs is safe everywhere, it should be preferred.
+
+Therefore, replace kmap() with kmap_local_page() in fs/hfs. Where
+possible, use the suited standard helpers (memzero_page(), memcpy_page())
+instead of open coding kmap_local_page() plus memset() or memcpy().
+
+Fix a bug due to a page being not unmapped if the code jumps to the
+"fail_page" label (1/3).
+
+Tested in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
+HIGHMEM64GB enabled.
+
+Few days ago Andrew requested a resend of this series. In the meantime
+I'm also forwarding a "Reviewed-by" tag from Viacheslav Dubeyko.
+
+Fabio M. De Francesco (3):
+  hfs: Unmap the page in the "fail_page" label
+  hfs: Replace kmap() with kmap_local_page() in bnode.c
+  hfs: Replace kmap() with kmap_local_page() in btree.c
+
+ fs/hfs/bnode.c | 32 ++++++++++++--------------------
+ fs/hfs/btree.c | 29 ++++++++++++++++-------------
+ 2 files changed, 28 insertions(+), 33 deletions(-)
+
+-- 
+2.37.1
+

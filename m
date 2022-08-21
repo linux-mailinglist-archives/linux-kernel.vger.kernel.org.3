@@ -2,127 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D02159B147
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 04:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D56659B14B
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 04:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236545AbiHUCG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 22:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S236557AbiHUCOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 22:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233554AbiHUCGW (ORCPT
+        with ESMTP id S235239AbiHUCO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 Aug 2022 22:06:22 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10198186FE;
-        Sat, 20 Aug 2022 19:06:22 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id o123so7958328vsc.3;
-        Sat, 20 Aug 2022 19:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=1a9o11nrbt8l9Dxa/LaB4FbQcO2jVF1njMU4jgfxm10=;
-        b=jGjRAf+/Zn4r3ujXn4UvUUVpAX5jvYKaTvbrmkGU2XKN1L3ikzvepj9LTAyhVhfRNG
-         bAJzOraVqNEZewDYYgrv7/tg9rv4mStI+XBRdE/xIqJ28tciheGtSYEUpM2KvdnR6HY9
-         162Eq8VnLusezz7ecYmVZhQryNI1o8tlNph6UZSMpDIzIKQy5rwX5yxgOFpAcTK050HP
-         A2GxM2TSGySBjRtYPrbFbUxNtTSO7zL8z6Rh1BwlR81Ne3PUOArkYhkEBHge8vXQ67et
-         s45mPXf0QG0FusKgInmaxQUBshUU8jKtb8FctphrbNvF4DMe+WMXK2pQRwwat5z94RAC
-         gaZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=1a9o11nrbt8l9Dxa/LaB4FbQcO2jVF1njMU4jgfxm10=;
-        b=HkviydYWHEOUsgTVwDO5gKvnwzjplChYbtgvMPCDqq5Y/yANOIJcJstRa+dsHRGSn0
-         Jrr9u2zugySIfDyiUPH6NwufsD4sRIbNNBaAow6fQAlR6YKpWqLYmqqogVw22cyH5Oqg
-         1xVEsTDV0SlGeMzssbApRh6aCBGxzg62IrD/OgzqQw8lGP2rm4iV7rflSlaTwcFLIGag
-         DlRRn73Up2DwYA8OR1fHJRZU/VJgcqsp79kaJx+//LQcT6mkzWrYWXcP/zrvT05Md7Gr
-         t3kHRxBCzJ0q6t31FjmXommo80qvN47JWx+BrJQi+ExcNEPj3ry/f/MaNo8w7c+gP8OF
-         p7aQ==
-X-Gm-Message-State: ACgBeo30VOg2CqWejUUzoHAI2weUi2yUR7695SmR6umOV1p4C3hBm0wx
-        5xLrx5dJhpZVwvDZJuh+f8kV7TIeDS4NUUz8RBU=
-X-Google-Smtp-Source: AA6agR5K87YPtaxh3q3HxU04dWcBu+cE//vPS9Jl1hznEx/UtUZNy7IWOBFYRoYLq2johEBaMsV0IlXkTrCPapAhANU=
-X-Received: by 2002:a05:6102:3e82:b0:38a:ab1a:2702 with SMTP id
- m2-20020a0561023e8200b0038aab1a2702mr5195779vsv.29.1661047580975; Sat, 20 Aug
- 2022 19:06:20 -0700 (PDT)
+        Sat, 20 Aug 2022 22:14:29 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5D61CB39
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 19:14:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661048068; x=1692584068;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xmlQeiiEnoc+lUAWnQmldCWp4mLOcAHkktlrScaBRQs=;
+  b=H83BUKyS9l3TfKF/xKhLbMPU4pSW35oLh2wTSAMospCIBl+y1at9fWtP
+   yiYe7ANyRl6z+IsHQwk3rkZomchZAwuI64UABDjnRoQQSvRvCBMgi2+g2
+   t5UoUXm6nBskSjkg278GiCFnWzsXiPzsQHvv3mZ5GGGVsQxls3L5vxGos
+   B4zb0hoO+LoShTpM6DOi8WplVvf0TasM0wkWgd3SdSdxTfqCr/jiJdDZD
+   8LTtVNKSttzNE+lkx8jyYnxXszvNKZVl766mSDx61miTZ1wJu0jNo4b5V
+   iALm4LPDNNFMLYw3YondKs4YKyyXmzuiZrLlTA89cQWViJvXjmTqcvXI4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="357196219"
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="357196219"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 19:14:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
+   d="scan'208";a="637723660"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 20 Aug 2022 19:14:26 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPaTq-0003WN-0R;
+        Sun, 21 Aug 2022 02:14:26 +0000
+Date:   Sun, 21 Aug 2022 10:13:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 12/16] sound/soc/codecs/cs42l84.c:264:10:
+ error: 'const struct snd_soc_component_driver' has no member named
+ 'non_legacy_dai_naming'; did you mean 'legacy_dai_naming'?
+Message-ID: <202208211004.6evbkKfp-lkp@intel.com>
 MIME-Version: 1.0
-References: <Yv2qoNQg48rtymGE@ZenIV> <Yv2rCqD7M8fAhq5v@ZenIV>
- <CAKYAXd-Xsih1TKTbM0kTGmjQfpkbpp7d3u9E7USuwmiSXLVvBw@mail.gmail.com>
- <Yv6igFDtDa0vmq6H@ZenIV> <CAKYAXd-6fT5qG2VmVG6Q51Z8-_79cjKhERHDatR_z62w19+p1Q@mail.gmail.com>
- <YwBZPCy0RBc9hwIk@ZenIV> <CAKYAXd9DGgLJ=-hcdADXVZUqp2aYRkGr2YKpfUND6S_GuaWgWQ@mail.gmail.com>
- <YwD+y2cXpcenIHlW@ZenIV>
-In-Reply-To: <YwD+y2cXpcenIHlW@ZenIV>
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 20 Aug 2022 21:06:09 -0500
-Message-ID: <CAH2r5msb_n2LxUAPGRzDfFRfJ7HFv2SrAb1N5_nKJVscJH04bQ@mail.gmail.com>
-Subject: Re: [PATCH 4/5] ksmbd: don't open-code %pf
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-merged into ksmbd-for-next
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   51024ef467ff6c288e679bc72d0e3fcdd54d9b39
+commit: a97f70c444c0cb9842bc778c3c1def0142b2b8bf [12/16] wip: ASoC: cs42l84: Start new codec driver
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220821/202208211004.6evbkKfp-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/a97f70c444c0cb9842bc778c3c1def0142b2b8bf
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/070-audio
+        git checkout a97f70c444c0cb9842bc778c3c1def0142b2b8bf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-On Sat, Aug 20, 2022 at 10:34 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Sat, Aug 20, 2022 at 02:44:29PM +0900, Namjae Jeon wrote:
-> > > OK...  FWIW, I've another ksmbd patch hanging around and it might be
-> > > less PITA if I put it + those two patches into never-rebased branch
-> > > (for-ksmbd) for ksmbd folks to pull from.  Fewer pointless conflicts
-> > > that way...
-> > Okay, Thanks for this. I'm trying to resend "ksmbd: fix racy issue
-> > from using ->d_parent and ->d_name" patch to you, but It conflict with
-> > these patches:)
-> > We will pull them from that branch if you create it.
->
-> OK, pull request follows:
->
-> The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
->
->   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-ksmbd
->
-> for you to fetch changes up to f2ea6d96500dd8947467f774d70700c1ba3ed8ef:
->
->   ksmbd: constify struct path (2022-08-20 10:54:48 -0400)
->
-> ----------------------------------------------------------------
-> assorted ksmbd cleanups
->
-> Al Viro <viro@zeniv.linux.org.uk>
->
-> ----------------------------------------------------------------
-> Al Viro (3):
->       ksmbd: don't open-code file_path()
->       ksmbd: don't open-code %pD
->       ksmbd: constify struct path
->
->  fs/ksmbd/misc.c    |  2 +-
->  fs/ksmbd/misc.h    |  2 +-
->  fs/ksmbd/smb2pdu.c | 33 ++++++++++++++++-----------------
->  fs/ksmbd/smbacl.c  |  6 +++---
->  fs/ksmbd/smbacl.h  |  6 +++---
->  fs/ksmbd/vfs.c     | 18 ++++++++----------
->  fs/ksmbd/vfs.h     |  2 +-
->  7 files changed, 33 insertions(+), 36 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   sound/soc/codecs/cs42l84.c:244:5: warning: no previous prototype for 'cs42l84_component_probe' [-Wmissing-prototypes]
+     244 | int cs42l84_component_probe(struct snd_soc_component *component)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/codecs/cs42l84.c:264:10: error: 'const struct snd_soc_component_driver' has no member named 'non_legacy_dai_naming'; did you mean 'legacy_dai_naming'?
+     264 |         .non_legacy_dai_naming  = 1,
+         |          ^~~~~~~~~~~~~~~~~~~~~
+         |          legacy_dai_naming
+   sound/soc/codecs/cs42l84.c: In function 'cs42l84_pll_config':
+   sound/soc/codecs/cs42l84.c:328:17: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+     328 |                 FIELD_PREP(CS42L84_ASP_FSYNC_CTL2_BCLK_PERIOD_LO, fsync & 0x7f));
+         |                 ^~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
+vim +264 sound/soc/codecs/cs42l84.c
+
+   254	
+   255	static const struct snd_soc_component_driver soc_component_dev_cs42l84 = {
+   256		.probe			= cs42l84_component_probe,
+   257		.controls			= cs42l84_snd_controls,
+   258		.num_controls		= ARRAY_SIZE(cs42l84_snd_controls),
+   259		.dapm_widgets		= cs42l84_dapm_widgets,
+   260		.num_dapm_widgets	= ARRAY_SIZE(cs42l84_dapm_widgets),
+   261		.dapm_routes		= cs42l84_audio_map,
+   262		.num_dapm_routes	= ARRAY_SIZE(cs42l84_audio_map),
+   263		.endianness		= 1,
+ > 264		.non_legacy_dai_naming	= 1,
+   265	};
+   266	
 
 -- 
-Thanks,
-
-Steve
+0-DAY CI Kernel Test Service
+https://01.org/lkp

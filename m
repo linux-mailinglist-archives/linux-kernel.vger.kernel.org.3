@@ -2,56 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2537559B66B
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 23:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC1959B673
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 23:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiHUVVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 17:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S231800AbiHUVj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 17:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiHUVVQ (ORCPT
+        with ESMTP id S229541AbiHUVjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 17:21:16 -0400
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFDB17041;
-        Sun, 21 Aug 2022 14:21:15 -0700 (PDT)
-Received: by mail-pl1-f181.google.com with SMTP id jl18so8324103plb.1;
-        Sun, 21 Aug 2022 14:21:15 -0700 (PDT)
+        Sun, 21 Aug 2022 17:39:53 -0400
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F63C1E3FD
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 14:39:52 -0700 (PDT)
+Received: by mail-pf1-f177.google.com with SMTP id x15so7775254pfp.4
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 14:39:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=7hWEQ4EyGrRlJd2RpmmrF42tsj+N1vQRBA8ec0fDmQE=;
-        b=2p+AKm/KqEATA+2e3U89K2iCFPV9Teefa4rUkgaqoB/J5sOC3OCd7435BJJgg5oxo2
-         RSZWaOf/V3c9lHKhTI7uFHnjPf5Fj6gKxIVohL6WSovCnv91Z46Ot5sauUOhpg0nhx+F
-         3JL5EL7ylbzFC8GHiM6dK1w2QUwSRlNCZY+4OG8imvovAeSYQB/QMYq9augAM2L0/N82
-         8yyxIkjUDPXoEN8ZzervGPjGs0PY5dC7x+fHTQ14eqLePv0hfg+TfJLLUFkiZR0Ivb4W
-         tgY0ZPdvaHlAiIZUV7ZaWO3Le3IAhaIIlHpzPkWzAYSSNOoN0jgYq66pT7CsBlCG6htE
-         95ag==
-X-Gm-Message-State: ACgBeo36BXycVy9hvJaXAA/p/0zcus3AWiEAyQnS1gCziEzNuzufYMCT
-        sIUvkRIYvsw9K996u2K3UGQ=
-X-Google-Smtp-Source: AA6agR4uHOqkTf6kXuwBojmUlIiwF4wVtPSsNuZgfMB7eWC5G9MgAQXxJkifsxYxjVOfyVEUbxSdug==
-X-Received: by 2002:a17:902:7242:b0:171:398d:9e66 with SMTP id c2-20020a170902724200b00171398d9e66mr17673380pll.19.1661116874959;
-        Sun, 21 Aug 2022 14:21:14 -0700 (PDT)
+        bh=TBTta4D/RBg6tfd42bSdioiS4BURRGR92bmrXX7PSxk=;
+        b=a+AAAAGlxNu0iSrh8ke0N/QwPo3tadXJSGg+6ovsQm86s8uR7Ln6f2FINygfc2rmI1
+         tjnpaX+Et9HEMiJb3vG2AVL31eFJ+xZPmUxJMjLBBD3OCX9aZpRuLCySR5dEQEUtXW1K
+         bpLenT1NQCjgxBnPOQiRoDtMenL2Lp4UrovEhkz3axujoE+SWn81FCFGfA1+i4eWML3O
+         TkHU7s6PPBohXsJZB+xfFK+68XudtOqtX+N6Oa2IPV0y7tbOtGcljP5ssvnnoXcXCvjO
+         pyKVuQB8zFzglbwoJrL6hBgmIbs9/8BQWLsUADrmJFX1mL0/yLGY7xpoIh9ezETZhjzH
+         iowg==
+X-Gm-Message-State: ACgBeo2sFD+M5s+1IurG3Y5mbJ2PdXXsUtwTbfNnAhoZ/RgxQycNm+TQ
+        2iwM1eJFiNpW/HIxTN4U5wgcPtSiLLE=
+X-Google-Smtp-Source: AA6agR7jBOTXtAvQb55RQQdijz5f57/iDe1kqGfzCOx66Nn9Fu6G2GOy8remsvcztaKAOyV13OWctw==
+X-Received: by 2002:a63:445a:0:b0:42a:306e:5e30 with SMTP id t26-20020a63445a000000b0042a306e5e30mr12115659pgk.40.1661117991746;
+        Sun, 21 Aug 2022 14:39:51 -0700 (PDT)
 Received: from [192.168.3.217] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id j7-20020a170903024700b00172ea8ff334sm901640plh.7.2022.08.21.14.21.12
+        by smtp.gmail.com with ESMTPSA id q7-20020a170902a3c700b00172bf229dfdsm5189073plb.97.2022.08.21.14.39.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Aug 2022 14:21:13 -0700 (PDT)
-Message-ID: <400efea9-1635-25e9-8924-1813bb8e9d4f@acm.org>
-Date:   Sun, 21 Aug 2022 14:21:12 -0700
+        Sun, 21 Aug 2022 14:39:50 -0700 (PDT)
+Message-ID: <27d0dde8-344c-1dd0-cc26-0e10c4e1f296@acm.org>
+Date:   Sun, 21 Aug 2022 14:39:48 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.2
-Subject: Re: [syzbot] INFO: task hung in scsi_remove_host
+Subject: Re: [PATCH v2] driver core: Fix bus_type.match() error handling
 Content-Language: en-US
-To:     syzbot <syzbot+bafeb834708b1bb750bc@syzkaller.appspotmail.com>,
-        jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        syzkaller-bugs@googlegroups.com, Ming Lei <ming.lei@redhat.com>
-References: <000000000000b5187d05e6c08086@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Isaac Manjarres <isaacmanjarres@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Saravana Kannan <saravanak@google.com>, stable@kernel.org,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+References: <YvvQOBk9T3J1uX8k@google.com>
+ <20220817010559.GA1880847@roeck-us.net> <YvxAfiSOrzy7/c1J@google.com>
+ <20220818225932.GA3433999@roeck-us.net> <Yv7bd6Yl8+thp2CY@google.com>
+ <20220819112832.GA3106213@roeck-us.net> <Yv/MKymRC9O04Nqu@google.com>
+ <baa1f65a-d983-0518-3979-7099679995f2@acm.org>
+ <20220819220841.GA3230067@roeck-us.net>
+ <12b231ea-dc7d-bb09-3986-32a07a63acd4@acm.org>
+ <20220820114801.GA3958319@roeck-us.net>
 From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <000000000000b5187d05e6c08086@google.com>
+In-Reply-To: <20220820114801.GA3958319@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -65,42 +78,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/21/22 06:42, syzbot wrote:
-> INFO: task kworker/1:3:3625 blocked for more than 143 seconds.
->        Not tainted 6.0.0-rc1-syzkaller-00399-g15b3f48a4339 #0
+On 8/20/22 04:48, Guenter Roeck wrote:
+> INFO: task init:283 blocked for more than 122 seconds.
+>        Tainted: G                 N 6.0.0-rc1-00303-g963a70bee588 #3
 > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:kworker/1:3     state:D stack:24520 pid: 3625 ppid:     2 flags:0x00004000
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->   <TASK>
->   context_switch kernel/sched/core.c:5182 [inline]
->   __schedule+0xadf/0x52b0 kernel/sched/core.c:6494
->   schedule+0xda/0x1b0 kernel/sched/core.c:6570
->   scsi_remove_host+0x348/0x440 drivers/scsi/hosts.c:199
->   quiesce_and_remove_host drivers/usb/storage/usb.c:867 [inline]
->   usb_stor_disconnect+0x115/0x260 drivers/usb/storage/usb.c:1087
->   usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
->   device_remove drivers/base/dd.c:520 [inline]
->   device_remove+0x11f/0x170 drivers/base/dd.c:512
->   __device_release_driver drivers/base/dd.c:1209 [inline]
->   device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1235
->   bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
->   device_del+0x4f3/0xc80 drivers/base/core.c:3704
->   usb_disable_device+0x356/0x7a0 drivers/usb/core/message.c:1419
->   usb_disconnect.cold+0x259/0x6ed drivers/usb/core/hub.c:2235
->   hub_port_connect drivers/usb/core/hub.c:5197 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
->   port_event drivers/usb/core/hub.c:5653 [inline]
->   hub_event+0x1f86/0x4610 drivers/usb/core/hub.c:5735
->   process_one_work+0x991/0x1610 kernel/workqueue.c:2289
->   worker_thread+0x665/0x1080 kernel/workqueue.c:2436
->   kthread+0x2e4/0x3a0 kernel/kthread.c:376
->   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
->   </TASK>
-Hi Ming,
+> task:init            state:D stack:    0 pid:  283 ppid:     1 flags:0x00000000
+>   __schedule from schedule+0x70/0x118
+>   schedule from scsi_remove_host+0x178/0x1c4
+>   scsi_remove_host from usb_stor_disconnect+0x40/0xe8
+>   usb_stor_disconnect from usb_unbind_interface+0x78/0x274
+>   usb_unbind_interface from device_release_driver_internal+0x1a4/0x230
+>   device_release_driver_internal from bus_remove_device+0xd0/0x100
+>   bus_remove_device from device_del+0x174/0x3ec
+>   device_del from usb_disable_device+0xcc/0x178
+>   usb_disable_device from usb_disconnect+0xcc/0x274
+>   usb_disconnect from usb_disconnect+0x98/0x274
+>   usb_disconnect from usb_remove_hcd+0xd0/0x16c
+>   usb_remove_hcd from host_stop+0x38/0xa8
+>   host_stop from ci_hdrc_remove+0x40/0x134
+>   ci_hdrc_remove from platform_remove+0x24/0x54
+>   platform_remove from device_release_driver_internal+0x1a4/0x230
+>   device_release_driver_internal from bus_remove_device+0xd0/0x100
+>   bus_remove_device from device_del+0x174/0x3ec
+>   device_del from platform_device_del.part.0+0x10/0x78
+>   platform_device_del.part.0 from platform_device_unregister+0x18/0x28
+>   platform_device_unregister from ci_hdrc_remove_device+0xc/0x24
+>   ci_hdrc_remove_device from ci_hdrc_imx_remove+0x28/0xfc
+>   ci_hdrc_imx_remove from device_shutdown+0x178/0x230
+>   device_shutdown from __do_sys_reboot+0x168/0x258
+>   __do_sys_reboot from ret_fast_syscall+0x0/0x1c
 
-Do you agree that the issue reported above should be fixed by reverting the
-patch series "scsi: core: Call blk_mq_free_tag_set() earlier"?
+Hi Guenter,
+
+Thank you for having shared this information. I think this deadlock is 
+the result of holding a reference on /dev/sda (by the mount() system 
+call) while calling scsi_remove_host().
+
+It seems wrong to me that ci_hdrc_imx_shutdown() calls 
+ci_hdrc_imx_remove() - I think that function should only do the minimum 
+that is required to prepare for shutdown instead of calling 
+scsi_remove_host() indirectly.
+
+That being said, the patch series "scsi: core: Call 
+blk_mq_free_tag_set() earlier" probably will have to be reverted because 
+of the following deadlock reported by syzbot: 
+https://lore.kernel.org/linux-scsi/000000000000b5187d05e6c08086@google.com/
 
 Thanks,
 

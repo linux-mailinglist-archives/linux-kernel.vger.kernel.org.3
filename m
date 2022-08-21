@@ -2,52 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB6E59B32F
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 13:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C300459B33D
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 13:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiHULIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 07:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
+        id S229538AbiHULRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 07:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiHULIP (ORCPT
+        with ESMTP id S229460AbiHULRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 07:08:15 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44B1F2D
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 04:08:13 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id n13-20020a056e02140d00b002dfa5464967so6428411ilo.19
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 04:08:13 -0700 (PDT)
+        Sun, 21 Aug 2022 07:17:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9464A24F21
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 04:17:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661080664;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AxRts5aJ3HNvwn7dKavqQBNSNcUCmP54o8Yv9Iyp9m8=;
+        b=W28/KW19fVoLvXdzvx5EyRkGGeR0FoxbOCiMf20ag7X1+YvdIOmwmpJ9OneYkjKTNJHw/I
+        JXyzSvZfCpIN8z8CI/4O+saB+2LHZT7QZBoQb8c+095+vUTKAAP+r7Nmj+ELMBvNo0SGLG
+        tRYspS3MUg6BCtdbxWxdFqawtVujyPQ=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-509-MBcwq-XXPo-6VFKoJal1gA-1; Sun, 21 Aug 2022 07:17:41 -0400
+X-MC-Unique: MBcwq-XXPo-6VFKoJal1gA-1
+Received: by mail-pj1-f70.google.com with SMTP id t10-20020a17090a4e4a00b001fab2c791dcso4818824pjl.5
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 04:17:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=fltaNMKt2+22E8y3r6VHjG+0AEE0+JQww0vhwiR7T5k=;
-        b=cKVFUesYZ4OhxPY07Q9sOuUVPawiCzGAt9jmA/5J+7EJi2BHkw1cGgUefsXm90+wEb
-         2b2JVVQSL8DTsfqjmLuD31qfIBsUGoy45IrbzJgIcmK2rXohzCY6CsQdMH99TNjp2A2n
-         r+36jIaUOgr0hOcKynJZGTbvyv6CmK/7nOltXOQXpfec0zsDFCiDvyCX28B7iEXmUNH2
-         2cG52eE07eBQuZeR24M/k85GhzccWM3Tcu6QSCJ12Ey4N21zz+N2FDvJMbz595ftjrj2
-         xkFFhbmTcLEFbsXcUY8WXqyy8oxZ7NFcFjJDPSWTiIL6ZpGoWyVJ6bfgNHrRACLI3C/A
-         Sj4Q==
-X-Gm-Message-State: ACgBeo2KP9SzzIJ6hBNokUUtLPxeVurmJZ+6Gn43cs24H4uQbVv2RgZw
-        8CXPoC4tEOnT0/ErWvy0NEa46EfighjVLdxDLYWcKo66RHM8
-X-Google-Smtp-Source: AA6agR4MLdnEFOXrMdbuKX/AyhsGmAefaq+1NG4/k7peTWb2pugVPvzUVEMKhkr6rNJwca6dWBCzWey0RPuvyBWugg92yTNDjzsP
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=AxRts5aJ3HNvwn7dKavqQBNSNcUCmP54o8Yv9Iyp9m8=;
+        b=KXKth31M4ON5BlsI6KQbPX20UoWF6vRwYCvsreUlM012EkKlq/QFLqfhKKEU4Mm6ok
+         oH6vypZtz6Trpt5PR+84/+FbAmmnVimtRug9k3AUM5n/937N2/PLZ0SodkmheqEbX2o8
+         kxP2TEedFHi5sYGujUUbd6BpcLCMFXl+aOjBgTry9XDwHxcQ7P9vW+WWgQ4dorOWu0I1
+         RKlxDIib4FC1IhC6GhB+6t8g6wJ3wWb9+uSHyNMttzn5qRu2sU6PqDSblV2PXPqI+NRB
+         oJEAKSVdvPPzxltkH12brO6/0H3PdoHKbXdmjS+kBC4UP29/zEFV5hlZRg2KxlB3abNH
+         7dqw==
+X-Gm-Message-State: ACgBeo2+Ss36/F2GOvRFOX6GvfLJpd4iHA7qcPZT+X3PoqE7yT9GzjZU
+        b+m7qPljY+AnFOMvKyDd7JgzaalQwMMa6d1qkw0p6cG0OfqGWOatunQSchtPYOZiAlt65eKpC/c
+        8i7+plcpJ5UyN05I+wPsWD0al
+X-Received: by 2002:a17:90a:e586:b0:1fa:d28b:ab9b with SMTP id g6-20020a17090ae58600b001fad28bab9bmr16538357pjz.47.1661080660364;
+        Sun, 21 Aug 2022 04:17:40 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4kgULb8Oe4M5i8Q1aOVIChTcGskCxiNDQX9B8sJq/7wZLjPKLFXM/9i4rUtW/O1NjahDdO7Q==
+X-Received: by 2002:a17:90a:e586:b0:1fa:d28b:ab9b with SMTP id g6-20020a17090ae58600b001fad28bab9bmr16538337pjz.47.1661080660102;
+        Sun, 21 Aug 2022 04:17:40 -0700 (PDT)
+Received: from xps13.. ([240d:1a:c0d:9f00:4f2f:926a:23dd:8588])
+        by smtp.gmail.com with ESMTPSA id w128-20020a623086000000b00536463e3802sm2835382pfw.36.2022.08.21.04.17.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 04:17:39 -0700 (PDT)
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     deller@gmx.de
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Shigeru Yoshida <syoshida@redhat.com>
+Subject: [PATCH] fbcon: Destroy mutex on freeing struct fb_info
+Date:   Sun, 21 Aug 2022 20:17:31 +0900
+Message-Id: <20220821111731.247446-1-syoshida@redhat.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-Received: by 2002:a92:c908:0:b0:2e9:549d:2e7b with SMTP id
- t8-20020a92c908000000b002e9549d2e7bmr4086768ilp.143.1661080092978; Sun, 21
- Aug 2022 04:08:12 -0700 (PDT)
-Date:   Sun, 21 Aug 2022 04:08:12 -0700
-In-Reply-To: <20220821101652.1872-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e2b58805e6be580b@google.com>
-Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in kvm_put_kvm
-From:   syzbot <syzbot+ee478a0237db20ef61f1@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,20 +74,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+It's needed to destroy bl_curve_mutex on freeing struct fb_info since
+the mutex is embedded in the structure and initialized when it's
+allocated.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+---
+ drivers/video/fbdev/core/fbsysfs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Reported-and-tested-by: syzbot+ee478a0237db20ef61f1@syzkaller.appspotmail.com
+diff --git a/drivers/video/fbdev/core/fbsysfs.c b/drivers/video/fbdev/core/fbsysfs.c
+index c2a60b187467..4d7f63892dcc 100644
+--- a/drivers/video/fbdev/core/fbsysfs.c
++++ b/drivers/video/fbdev/core/fbsysfs.c
+@@ -84,6 +84,10 @@ void framebuffer_release(struct fb_info *info)
+ 	if (WARN_ON(refcount_read(&info->count)))
+ 		return;
+ 
++#if IS_ENABLED(CONFIG_FB_BACKLIGHT)
++	mutex_destroy(&info->bl_curve_mutex);
++#endif
++
+ 	kfree(info->apertures);
+ 	kfree(info);
+ }
+-- 
+2.37.2
 
-Tested on:
-
-commit:         7ebfc85e Merge tag 'net-6.0-rc1' of git://git.kernel.o..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=12379b85080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=924833c12349a8c0
-dashboard link: https://syzkaller.appspot.com/bug?extid=ee478a0237db20ef61f1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=13d2c57b080000
-
-Note: testing is done by a robot and is best-effort only.

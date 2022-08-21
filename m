@@ -2,77 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDCB59B5E6
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 20:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C3D59B5EB
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 20:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbiHUSSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 14:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        id S231676AbiHUSSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 14:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbiHUSSs (ORCPT
+        with ESMTP id S231655AbiHUSSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 14:18:48 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D314167DE;
-        Sun, 21 Aug 2022 11:18:46 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so9289455pjl.0;
-        Sun, 21 Aug 2022 11:18:46 -0700 (PDT)
+        Sun, 21 Aug 2022 14:18:50 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B1B15FF5;
+        Sun, 21 Aug 2022 11:18:49 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y15so4438886pfr.9;
+        Sun, 21 Aug 2022 11:18:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=c7bGOCwCut3qJRTlJSLX/tQ+GZfNMJd7MaxTPLedcU4=;
-        b=P3dwVwj3ElFzcjZaUJDdt6flBmuan50tBUY6b7hDWZFmqDSN9OLs2alfaT6XMsOYo3
-         FDeIDa7PRo/TtuGvXJKZ4NVPSkCSL474me2baWzTNoG357uWKrB7Q4EgSSs4nfKSXQvz
-         XJXmoQzgm937dSG/jaMw2T5DcO9bkCUFOVfSDbBhMU8vbYIxJQCv5dIw5RFfora9fEYI
-         99bzHsi1qj6q6qYPa7IXMLHGy7PW/Ru61aTfqSe/xvbDlTiC6eNjy2N9F312nnmsaKN+
-         urYPskRD8xI5V/iv8VRKsKUgP08hQwaJU+7b0yjDnyi3EF73NNjEDnGnCbdq6/+Gsrns
-         Vlhw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=oSgkN+dTN7nRZb20JasKAqJ/0pKCu6M2zNDhcnKlGu0=;
+        b=MkZHKAGKHan5H72D8tPjvl3t5B0A1ynHIQaPnJRJ5crpXL2QupZxn+K5xNrx16Jowe
+         T8gGwT9SKtRepT3P1aZFte+0Fu4PCMbqwqf/I2pL5Oj7WdW2FWmJ1dafGEsMI46JAZed
+         CjLfcNP1U+8SAIAe2NdElNpU/XaECGX77/aNshLSGmH3yo5QZUBVsbG55lCQkxSfBEmo
+         ktbahVOVyTLG5IStMa+S3UEG0T3v6983R4ptNSKz1WlJkOIV4ieio6MMTZ9S6ZSvNLkx
+         re5Sz1ZHevGLSNH80ua19vTRoQIC4NYZSAK4LPtqwOXPH02oMly8hfL8F0f225yicMtY
+         CYZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=c7bGOCwCut3qJRTlJSLX/tQ+GZfNMJd7MaxTPLedcU4=;
-        b=MdlK6AhVG9T8iu8hQwE0ggk4rvTQQCMTX+bvmyYN/3frsvwnXBhpYXk7fNG1ubP22K
-         WFi+ZMck4qvnBlqOse3cBJyQZv5LXa7JH+KtI0W1Owwsh6agq3rTR2P2xTLdvYP4mCGM
-         MI1hcPY6qiiOeBfvUQucAKa/AlYDefaS5owKXFXg3m87jUb5ZdsVDZUGYfBYg00vN2dy
-         /rh4U5qs2UbNZ1oPMIxHsdcf3yEEiXompB8vqD+Pzupp+c5Ed3cpk71gKdrtCkcHJlj0
-         RwFMaf1s28zbmyFEYzl3IXFB/SCj3ockVJ08hkr3BNfTfisb2+/kbwVoWW13GNVl1+AM
-         DBCQ==
-X-Gm-Message-State: ACgBeo3M2salMa7XUap+mTnQp3AXIY/Vn0LD3ZusoqrRKU4OnPmjycwH
-        URAUKnaqebt5Cj2o7KhCStc=
-X-Google-Smtp-Source: AA6agR57mA7zNviZGDBPe/nd5LlRYobJ2Lt2nZD/kVP6bCUNXwMGM4G4e4fsuQBTH/AKetIff6wKKA==
-X-Received: by 2002:a17:90b:514:b0:1f5:59b2:fceb with SMTP id r20-20020a17090b051400b001f559b2fcebmr19459511pjz.82.1661105925043;
-        Sun, 21 Aug 2022 11:18:45 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=oSgkN+dTN7nRZb20JasKAqJ/0pKCu6M2zNDhcnKlGu0=;
+        b=xLz70WE9aM++Ajp++4KNCTjNbilSA44yfkTSl7sb3qa6gh6mWp/aWHz3SHIXjZKgKM
+         gOzfSjCLjmiNlrXxkoGrKoKxCMRyS7f1kQo/EKHH1+PfdebJa8kN2sB6Z+G96Fpzx33K
+         0eclWJUsdQ/c6KA/hF+LIv5zaBLaDALWIZBGv4nlf8XpHILXDIPieundZUbdb9Np5Y2W
+         lGBhAMUSwHrUveKz9D3dc8xfVUqZOrH1rbSw6FJsbhArlH4VjkQgzsTKTrcm1RQKT+2Z
+         7u03Pn5OKNmnkVYeRCtc8AUJsmXSSYmcD4a+ECW8wNCAybTdvOUsNMY39YcTIYnWSd3f
+         YeFw==
+X-Gm-Message-State: ACgBeo1cAx/emiBQoFPEY78qx+ZqSXDeZz0ZpYC+1yaMSeeJw6FTBY6h
+        nnatZPxVWN8BNkj4oP0SvZyZse5f/0g=
+X-Google-Smtp-Source: AA6agR6WWMc3ZkdxZ/qB/4q1PzNtoY5Nih3Ar2rTZXIOvK3bglEb6Kp9bCIcl/7BDvowbchcx6VF7Q==
+X-Received: by 2002:a63:5b4f:0:b0:426:9c52:a1f with SMTP id l15-20020a635b4f000000b004269c520a1fmr14188278pgm.511.1661105928539;
+        Sun, 21 Aug 2022 11:18:48 -0700 (PDT)
 Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
-        by smtp.gmail.com with ESMTPSA id z10-20020aa7990a000000b005364e0ec330sm3098307pff.59.2022.08.21.11.18.43
+        by smtp.gmail.com with ESMTPSA id p27-20020aa79e9b000000b00535bed953e8sm7147739pfq.94.2022.08.21.11.18.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 11:18:43 -0700 (PDT)
+        Sun, 21 Aug 2022 11:18:47 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
         Rob Clark <robdclark@chromium.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        iommu@lists.linux.dev (open list:IOMMU DRIVERS),
-        iommu@lists.linux-foundation.org (open list:IOMMU DRIVERS),
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM SMMU DRIVERS),
-        linux-kernel@vger.kernel.org (open list),
-        Loic Poulain <loic.poulain@linaro.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sean Paul <sean@poorly.run>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: [PATCH 0/5] drm/msm+iommu/arm-smmu-qcom: tlbinv optimizations
-Date:   Sun, 21 Aug 2022 11:19:01 -0700
-Message-Id: <20220821181917.1188021-1-robdclark@gmail.com>
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/5] iommu/arm-smmu-qcom: Fix indentation
+Date:   Sun, 21 Aug 2022 11:19:02 -0700
+Message-Id: <20220821181917.1188021-2-robdclark@gmail.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220821181917.1188021-1-robdclark@gmail.com>
+References: <20220821181917.1188021-1-robdclark@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,29 +73,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Two additions to adreno_smmu_priv to allow for a couple of
-optimizations:
+Plus typo.
 
- + Use a separate ASID for each set of pgtables to avoid
-   over-invalidation.
- + Detect the case of unmapping from non-current pgtables
-   where we can skip the redundant tlbinv
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ include/linux/adreno-smmu-priv.h | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Rob Clark (5):
-  iommu/arm-smmu-qcom: Fix indentation
-  iommu/arm-smmu-qcom: Provide way to access current TTBR0
-  iommu/arm-smmu-qcom: Add private interface to tlbinv by ASID
-  drm/msm: Use separate ASID for each set of pgtables
-  drm/msm: Skip tlbinv on unmap from non-current pgtables
-
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c      |  6 +++
- drivers/gpu/drm/msm/msm_iommu.c            | 44 +++++++++++++++++++---
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 10 +++++
- drivers/iommu/arm/arm-smmu/arm-smmu.c      | 43 +++++++++++++++++++--
- drivers/iommu/arm/arm-smmu/arm-smmu.h      |  1 +
- include/linux/adreno-smmu-priv.h           | 18 +++++----
- 6 files changed, 106 insertions(+), 16 deletions(-)
-
+diff --git a/include/linux/adreno-smmu-priv.h b/include/linux/adreno-smmu-priv.h
+index c637e0997f6d..ac4c2c0ab724 100644
+--- a/include/linux/adreno-smmu-priv.h
++++ b/include/linux/adreno-smmu-priv.h
+@@ -37,7 +37,7 @@ struct adreno_smmu_fault_info {
+ /**
+  * struct adreno_smmu_priv - private interface between adreno-smmu and GPU
+  *
+- * @cookie:        An opque token provided by adreno-smmu and passed
++ * @cookie:        An opaque token provided by adreno-smmu and passed
+  *                 back into the callbacks
+  * @get_ttbr1_cfg: Get the TTBR1 config for the GPUs context-bank
+  * @set_ttbr0_cfg: Set the TTBR0 config for the GPUs context bank.  A
+@@ -61,12 +61,12 @@ struct adreno_smmu_fault_info {
+  * it's domain.
+  */
+ struct adreno_smmu_priv {
+-    const void *cookie;
+-    const struct io_pgtable_cfg *(*get_ttbr1_cfg)(const void *cookie);
+-    int (*set_ttbr0_cfg)(const void *cookie, const struct io_pgtable_cfg *cfg);
+-    void (*get_fault_info)(const void *cookie, struct adreno_smmu_fault_info *info);
+-    void (*set_stall)(const void *cookie, bool enabled);
+-    void (*resume_translation)(const void *cookie, bool terminate);
++	const void *cookie;
++	const struct io_pgtable_cfg *(*get_ttbr1_cfg)(const void *cookie);
++	int (*set_ttbr0_cfg)(const void *cookie, const struct io_pgtable_cfg *cfg);
++	void (*get_fault_info)(const void *cookie, struct adreno_smmu_fault_info *info);
++	void (*set_stall)(const void *cookie, bool enabled);
++	void (*resume_translation)(const void *cookie, bool terminate);
+ };
+ 
+ #endif /* __ADRENO_SMMU_PRIV_H */
 -- 
 2.37.2
 

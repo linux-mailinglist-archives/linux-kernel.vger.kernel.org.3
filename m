@@ -2,143 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6593F59B318
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 12:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBCB59B31B
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 12:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiHUKQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 06:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
+        id S230154AbiHUKRh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 21 Aug 2022 06:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiHUKQg (ORCPT
+        with ESMTP id S229599AbiHUKRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 06:16:36 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70048.outbound.protection.outlook.com [40.107.7.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1946F120B0;
-        Sun, 21 Aug 2022 03:16:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hj3SYMmsdCTTvfVbkeQRhr1iuvTa1ml0MUhxMGksroSUeceuWS4ai2VGT4Wl8S+M1s0anZWzd5sFM/MPEaLyIXWJm6kV+NYo4f/I5vAlazuI6urLlRBH6pBV0/zPZWXg+i0+k15H1BdtGLWUfv+sidvM8prR5bpKiO1UNRIuBclSNSx6ADZD/e80wL7M79pirYJuz30CuuMBTR/FD5cMAG9kR0aioqIvpZn329UoNkgtUFiqvh/OUpaopuEZ4cihuaeDAYCIiU5uGTWQuHCEtggIU/J6MLuETgRW0xbgjoN1DvXM16AIeMV8CS/qgU/cGZchWPzwZM8UnVAZ4Avkqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sh8V9SfX8ZnIH1WS76ORFoVHS+aWdB7VGEaN+jy6mXA=;
- b=UCfhGEyJ00h6WI3yU0V9+YSBiaVLBIfEYu+GfQhecs8kjGTksZpaD5zWdzTqblWBlFTsHEpIcaZDJUtcDNudcm7BuZqAdMQFtwUIQMoUjOooBunjQpQx4Vdi2MRQZz1QvfAeKdwFnCV41EQ7rjzSd1ZtMubnFWumnqkY5nIWKUlhZWKhJEAAhTV1BBhO/yqd2azG9tuxzDWCTXh4TG+YW0J3Qyv37l3T3VdLte6qnMDipTb+ipHQ8r8IjB5zThUWU5g4ZHPdHS96ck4vKfeUPckl4FM7+Z8PzM2XWDD94BrO7uNVf/VsGI/oUxFlo+HJJ6SacZf03Eg3eqY04WcYuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sh8V9SfX8ZnIH1WS76ORFoVHS+aWdB7VGEaN+jy6mXA=;
- b=k+wUDfkUcOdEs+gbz0D4Fnh3IiVq4aWIcIef0LLqFTrfgfIqrHpowocfNjiHNE4hC5Sev7NJsKvoP4IfjA6TwHjsbGNOMwIAhgfnQVb7vmYxn2NSe4qlQPPPm63HVVZFFhmvb6VOvt4vkOsrz4FZ+AUyV6uaO91fdsMJRZwd3H4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB9PR04MB8411.eurprd04.prod.outlook.com (2603:10a6:10:24c::9)
- by AM9PR04MB7554.eurprd04.prod.outlook.com (2603:10a6:20b:2da::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Sun, 21 Aug
- 2022 10:16:32 +0000
-Received: from DB9PR04MB8411.eurprd04.prod.outlook.com
- ([fe80::582a:9810:a2d2:94f4]) by DB9PR04MB8411.eurprd04.prod.outlook.com
- ([fe80::582a:9810:a2d2:94f4%5]) with mapi id 15.20.5546.021; Sun, 21 Aug 2022
- 10:16:32 +0000
-From:   Sherry Sun <sherry.sun@nxp.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: [PATCH V3] tty: serial: lpuart: disable flow control while waiting for the transmit engine to complete
-Date:   Sun, 21 Aug 2022 18:15:27 +0800
-Message-Id: <20220821101527.10066-1-sherry.sun@nxp.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SG2P153CA0010.APCP153.PROD.OUTLOOK.COM (2603:1096::20) To
- DB9PR04MB8411.eurprd04.prod.outlook.com (2603:10a6:10:24c::9)
+        Sun, 21 Aug 2022 06:17:32 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA73612757
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 03:17:30 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id l20-20020a056e02067400b002dfa7256498so6457844ilt.4
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 03:17:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:from:subject:message-id:date
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=LE1LCU4tNiknKVyA+WMm6zjkYRDeBGfWddeOl3Lef4w=;
+        b=OUD3nD+u8EB/P9gZris55CqEn0AHcixJOSFws5rcKE67ybMMUbyZV6iMZeP5Y6LPAm
+         W3c1miD2svUkyFF+9dkNY7gTkx7CZR2ar3jj6qEnqQjo3OQ/FJEXcngwiQ9tWYsE1aR4
+         XIkpAOIqEV9QYJo7Mn5+p2JGk6aM1Kc+rR2r5+RVxwKQRlEF/AcT/iytOEd8AVfc0MFY
+         rlHdzsP1nusvNyQLKpq6Kfp/d6X6Eea57sltVHxyiuyQesZtgYk+UsgGPrd7aS2dQOIB
+         nH+kfQeX8h+3SENQzVi6IgoRN64x4bceRL9g4fG5D7aJG0IQQz0htXasI6wuPskang5s
+         Xuig==
+X-Gm-Message-State: ACgBeo16wjMbkmFsxqwKiOeO8REQbFiI95i9hlZE5dUhf5MQ02Vs1hzi
+        4kpRHyf68GrT6Ck0DEgCSyS5lcvWjI8+de92iR6O/B9Xy74l
+X-Google-Smtp-Source: AA6agR6cTFTJE4DTxNRzC1mvv5FLi6A5SVpBpl+52m93EucjUlON1aYB3xVYz2TAlHJtIIi6zDetKSO2AIi9YnIZGGKmPPp6hWrQ
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f79e3e56-c976-4044-2b1f-08da835e3802
-X-MS-TrafficTypeDiagnostic: AM9PR04MB7554:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mlY+BnUAPzh04rYmYGtcbiRpPYrwFvSZDgQhLzOFH6Glh/w/YpMWmaH5M7odJttAB3ettwR7UBEFQxSSOcTjJDqmQei7Wbwm42Cfo/os/kj0DJKS/98SS/32b9d9MknNCs5NIQdutu8ITcdWRHv6/RAka2a5K7xqil0rmyiKmTMGR7DPLeqGvbnZMln9uQYYBY4HzDNEeeF2fOqefKBOaY8/4TwFx2o6Z7jFm0uEkMjfwWgDQCWo6fOvJpTMveGlKSigRgXVve3I6mbUGcIg3ArayAXap1wjqTtfIVyFwZ6dps9oFriWSlyLgHvnzQFDmoZLUKSqc6VsLpm/yGywYJsUnrEt4grm8Xz2m9Mob/XgVFvSeEaX9ZyJfrG2LIZQG6f8HH703WK4TjxFHfpl3BxwlNXeLUJfCO/UxSqz12crkl4G5Q6dnt3FQ+3VpL+St/smGIy3AVT7hxteBnZ0UqJIQ/+wMrGdvBikM4gQbdmaQ7HIcr/H78jIjg+Lm1CacR1nWWRMhzkgle4Hv/AOxN6kcbcv25sPPqTxayJboXEx1I7jN7o1oWgdqzs98zz0pi5WI6EsOF+nu32lCXfsHOqJhknhsOCJEOAxfKEdWoiZgeCWvn3kIDoWXDX4hhvKx1GWz+hyUlRBaZz8kMqHUqcI/42hz1BoFvGawjU3WZLbLKNIAiwt9TxaBxoBFyjuKdCCQi8sbP0JXiJ3gqM+GZvHzz0Qp+t4OU7tfMEQPZy0cUOp/TUjwRr5oTBIhP3d
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8411.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(366004)(136003)(396003)(346002)(38100700002)(38350700002)(6486002)(478600001)(186003)(83380400001)(2906002)(44832011)(36756003)(5660300002)(41300700001)(8936002)(1076003)(86362001)(4326008)(66556008)(8676002)(66476007)(66946007)(6666004)(2616005)(6506007)(52116002)(6512007)(316002)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?D8/0GYsszQ0ToOTC74izl0QuLkXP4ymCvE3VxTKP/jVVyBIhW7Cyf9aqCUPa?=
- =?us-ascii?Q?CWugtFO1/r17XBUizCKXxhtFVb7XlsNjEOevY9dMPIqb+wE0RCNOCA2dtAxT?=
- =?us-ascii?Q?5hYmZROhSX5evikobDpWTgOlwHzlhcKUuCV2JdaY4bN2/gqjXoveMPhja+lb?=
- =?us-ascii?Q?mm+Phu7d5APgiJ8C7hNvmgW4WI4y7yoYIRm1Us3jTyRIjAQVgDXlX+ZMqL3K?=
- =?us-ascii?Q?NDZ9zVi7ec3+gtRUdKBbjzjDN7CraJxZwoxJHsSS8AIn/rJUz4uHdKcvkAt5?=
- =?us-ascii?Q?vb+2JobrRKsCObk1Hyk8sWwksZkw5oKgCCsCs5VBdWEIzfoopZTh9l4wGg5t?=
- =?us-ascii?Q?CtCH5S8zaxG53KaAyCt3yrzkWMB63CQFBmeOh1IipOsULNGlraASwUyLm7aS?=
- =?us-ascii?Q?2ROiC9ppCinhWDNoHvEa4HuoZom+CqOoIytK+l/5kduskDq+dlwfp+ZGmob2?=
- =?us-ascii?Q?8n9103lvc2RkMq8Vd/Z+71Ri0mUa8KD2ME87rW+NRVTkwMX1g8Sb5dzEVVNt?=
- =?us-ascii?Q?ujrS916VmgRZXb6BV5M8fRelOtMXWBh2Ns7tWOu+8sdxdSyHmUbjZdk5xRhz?=
- =?us-ascii?Q?noc/2e+vMLONkmoW2CsKb1cjJ/MGyeJo9NejBTKOi7CuZf38qtC7bQp0jhZT?=
- =?us-ascii?Q?seo9+g6fKch2EWf+jRZoJctWLiWjrzoCeK3i0Z1wLynjPHhbOHLGPKb8Wv6r?=
- =?us-ascii?Q?ss+sVQLL4bNUH1m4e3/ThYXJ0VBbjjOs2E4pT4Y9L06A6uedx6RFp7AmMMNU?=
- =?us-ascii?Q?n3VnWPO9Jv8hlU2UNg6afJMUCFYuOJthsz0dego1ZDlFZnEXjLlHEUZ/t0EY?=
- =?us-ascii?Q?tF2C3qIJW6ZFAdZRQFt3lC3OGiDKOG32zI1MbL5veY73EKatACkD1yLFpI/B?=
- =?us-ascii?Q?8sDXI7r6eSgN9LWKl7g5UhiJcXW1qQDg1d84JrGecrjKWfCdLrh0e8PPjPR2?=
- =?us-ascii?Q?KoSpdiOTKpIekHfwQZGBwoa51a6wkPMdwIvtDznRQiKLWM8080fQ37oS6PYI?=
- =?us-ascii?Q?lA/MyFx9DhtehtWezz8oJYim4dh2NnFVyO2ux0WQlwAAa6WZFrYHAI7u2HuT?=
- =?us-ascii?Q?8tATq+EshMSOeH0UnTe/vCm0yyJFTGEbsRyHVtzcw+k01IYmX2mvhshTnPZy?=
- =?us-ascii?Q?NVHhKxM4r8aioKaVx0yv6zDzmI5o/x53sw3yQvhll8gL85OH9oHs4DZcXZQV?=
- =?us-ascii?Q?2T3ecsUYz0Du9S6x/NfFPrLUkOJNvd2r1iK5erI4ysIwRzGQtjkOUM/HXb6W?=
- =?us-ascii?Q?Ypmvf/9zh/pyBhvKYeATkc1vdINhZe9pNpWAEqfduwJKbablIG9ZXZ2I6Rb/?=
- =?us-ascii?Q?EZepBOxBpmRajSUJYNCPhjVIVSm1c1SW17CLkdzKJIDHFMFBNfpzQtDCcH1b?=
- =?us-ascii?Q?8vBBkFRti4WKncEPJjlWUqPmuIsK5VuVIhFREadI/bBfoc1naqjtPUpMj2Rg?=
- =?us-ascii?Q?nE1PT0gpYNXR4jsgg1wvupLeWKiRQwSu9BtUErrbCXv5CdaAjIvpKNZ2r5Nh?=
- =?us-ascii?Q?Ck5HQBBFlbmlA4vIdtoyyTHGy5RaYYTz0BSxggf47MzGq/cA6KHa4B/vtodT?=
- =?us-ascii?Q?9RXqjgZSdHORIR51/cNs1DtpMPENKRn4cqJ1CXjR?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f79e3e56-c976-4044-2b1f-08da835e3802
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8411.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2022 10:16:31.9301
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TjF3kI/oeyuSr32YCJhAW2D21SnHYFI2hM/XzYUgkidBtDB025TL0JPJq9Q29m4ihncBdKgACF5hVNtGThc1Jg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7554
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:879a:0:b0:689:da06:93c6 with SMTP id
+ f26-20020a5d879a000000b00689da0693c6mr1036946ion.202.1661077050248; Sun, 21
+ Aug 2022 03:17:30 -0700 (PDT)
+Date:   Sun, 21 Aug 2022 03:17:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000086582105e6bda31b@google.com>
+Subject: [syzbot] possible deadlock in strp_work
+From:   syzbot <syzbot+9fc084a4348493ef65d2@syzkaller.appspotmail.com>
+To:     bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        edumazet@google.com, jakub@cloudflare.com,
+        john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the user initializes the uart port, and waits for the transmit
-engine to complete in lpuart32_set_termios(), if the UART TX fifo has
-dirty data and the UARTMODIR enable the flow control, the TX fifo may
-never be empty. So here we should disable the flow control first to make
-sure the transmit engin can complete.
+Hello,
 
-Fixes: 380c966c093e ("tty: serial: fsl_lpuart: add 32-bit register interface support")
-Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+syzbot found the following issue on:
+
+HEAD commit:    8755ae45a9e8 Add linux-next specific files for 20220819
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10d3e2d3080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
+dashboard link: https://syzkaller.appspot.com/bug?extid=9fc084a4348493ef65d2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1136b1a5080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10bb167b080000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9fc084a4348493ef65d2@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.0.0-rc1-next-20220819-syzkaller #0 Not tainted
+------------------------------------------------------
+kworker/u4:2/38 is trying to acquire lock:
+ffff888026598d30 (sk_lock-AF_INET){+.+.}-{0:0}, at: do_strp_work net/strparser/strparser.c:398 [inline]
+ffff888026598d30 (sk_lock-AF_INET){+.+.}-{0:0}, at: strp_work+0x40/0x130 net/strparser/strparser.c:415
+
+but task is already holding lock:
+ffffc90000af7da8 ((work_completion)(&strp->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 ((work_completion)(&strp->work)){+.+.}-{0:0}:
+       __flush_work+0x105/0xae0 kernel/workqueue.c:3069
+       __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3160
+       strp_done+0x64/0xf0 net/strparser/strparser.c:513
+       kcm_attach net/kcm/kcmsock.c:1429 [inline]
+       kcm_attach_ioctl net/kcm/kcmsock.c:1490 [inline]
+       kcm_ioctl+0x913/0x1180 net/kcm/kcmsock.c:1696
+       sock_do_ioctl+0xcc/0x230 net/socket.c:1169
+       sock_ioctl+0x2f1/0x640 net/socket.c:1286
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (sk_lock-AF_INET){+.+.}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain kernel/locking/lockdep.c:3829 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
+       lock_acquire kernel/locking/lockdep.c:5666 [inline]
+       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+       lock_sock_nested+0x36/0xf0 net/core/sock.c:3391
+       do_strp_work net/strparser/strparser.c:398 [inline]
+       strp_work+0x40/0x130 net/strparser/strparser.c:415
+       process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+       worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+       kthread+0x2e4/0x3a0 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock((work_completion)(&strp->work));
+                               lock(sk_lock-AF_INET);
+                               lock((work_completion)(&strp->work));
+  lock(sk_lock-AF_INET);
+
+ *** DEADLOCK ***
+
+2 locks held by kworker/u4:2/38:
+ #0: ffff88802642d138 ((wq_completion)kstrp){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff88802642d138 ((wq_completion)kstrp){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff88802642d138 ((wq_completion)kstrp){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff88802642d138 ((wq_completion)kstrp){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff88802642d138 ((wq_completion)kstrp){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff88802642d138 ((wq_completion)kstrp){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+ #1: ffffc90000af7da8 ((work_completion)(&strp->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+
+stack backtrace:
+CPU: 1 PID: 38 Comm: kworker/u4:2 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
+kworker/u4:2[38] cmdline: ��a�����
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Workqueue: kstrp strp_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:122 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain kernel/locking/lockdep.c:3829 [inline]
+ __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5666 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+ lock_sock_nested+0x36/0xf0 net/core/sock.c:3391
+ do_strp_work net/strparser/strparser.c:398 [inline]
+ strp_work+0x40/0x130 net/strparser/strparser.c:415
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+
+
 ---
-Changes in V3:
-1. Add the Fixes tag.
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Changes in V2:
-1. Rephrase the commit log as suggested by Jiri.
----
- drivers/tty/serial/fsl_lpuart.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index f6c33cd228c8..fb2ad5d0d368 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -2191,6 +2191,7 @@ lpuart32_set_termios(struct uart_port *port, struct ktermios *termios,
- 	uart_update_timeout(port, termios->c_cflag, baud);
- 
- 	/* wait transmit engin complete */
-+	lpuart32_write(&sport->port, 0, UARTMODIR);
- 	lpuart32_wait_bit_set(&sport->port, UARTSTAT, UARTSTAT_TC);
- 
- 	/* disable transmit and receive */
--- 
-2.17.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

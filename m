@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA75F59B102
+	by mail.lfdr.de (Postfix) with ESMTP id 8351459B101
 	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 02:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236767AbiHUAJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 20:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41094 "EHLO
+        id S236556AbiHUAJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 20:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235643AbiHUAIg (ORCPT
+        with ESMTP id S235646AbiHUAIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 20 Aug 2022 20:08:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4147912748;
-        Sat, 20 Aug 2022 17:08:32 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB5F11C11
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 17:08:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81583B80B66;
-        Sun, 21 Aug 2022 00:08:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E382C43140;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D35CBB80B69
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 00:08:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89242C43141;
         Sun, 21 Aug 2022 00:08:30 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oPYWD-005Dkz-06;
+        id 1oPYWD-005DlX-0f;
         Sat, 20 Aug 2022 20:08:45 -0400
-Message-ID: <20220821000844.870621395@goodmis.org>
+Message-ID: <20220821000845.047156494@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sat, 20 Aug 2022 20:07:40 -0400
+Date:   Sat, 20 Aug 2022 20:07:41 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, Krister Johansen <kjlx@templeofstupid.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: [for-linus][PATCH 03/10] tracing/perf: Fix double put of trace event when init fails
+        Yang Jihong <yangjihong1@huawei.com>
+Subject: [for-linus][PATCH 04/10] ftrace: Fix NULL pointer dereference in is_ftrace_trampoline when
+ ftrace is dead
 References: <20220821000737.328590235@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,88 +48,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+From: Yang Jihong <yangjihong1@huawei.com>
 
-If in perf_trace_event_init(), the perf_trace_event_open() fails, then it
-will call perf_trace_event_unreg() which will not only unregister the perf
-trace event, but will also call the put() function of the tp_event.
+ftrace_startup does not remove ops from ftrace_ops_list when
+ftrace_startup_enable fails:
 
-The problem here is that the trace_event_try_get_ref() is called by the
-caller of perf_trace_event_init() and if perf_trace_event_init() returns a
-failure, it will then call trace_event_put(). But since the
-perf_trace_event_unreg() already called the trace_event_put() function, it
-triggers a WARN_ON().
+register_ftrace_function
+  ftrace_startup
+    __register_ftrace_function
+      ...
+      add_ftrace_ops(&ftrace_ops_list, ops)
+      ...
+    ...
+    ftrace_startup_enable // if ftrace failed to modify, ftrace_disabled is set to 1
+    ...
+  return 0 // ops is in the ftrace_ops_list.
 
- WARNING: CPU: 1 PID: 30309 at kernel/trace/trace_dynevent.c:46 trace_event_dyn_put_ref+0x15/0x20
+When ftrace_disabled = 1, unregister_ftrace_function simply returns without doing anything:
+unregister_ftrace_function
+  ftrace_shutdown
+    if (unlikely(ftrace_disabled))
+            return -ENODEV;  // return here, __unregister_ftrace_function is not executed,
+                             // as a result, ops is still in the ftrace_ops_list
+    __unregister_ftrace_function
+    ...
 
-If perf_trace_event_reg() does not call the trace_event_try_get_ref() then
-the perf_trace_event_unreg() should not be calling trace_event_put(). This
-breaks symmetry and causes bugs like these.
+If ops is dynamically allocated, it will be free later, in this case,
+is_ftrace_trampoline accesses NULL pointer:
 
-Pull out the trace_event_put() from perf_trace_event_unreg() and call it
-in the locations that perf_trace_event_unreg() is called. This not only
-fixes this bug, but also brings back the proper symmetry of the reg/unreg
-vs get/put logic.
+is_ftrace_trampoline
+  ftrace_ops_trampoline
+    do_for_each_ftrace_op(op, ftrace_ops_list) // OOPS! op may be NULL!
 
-Link: https://lore.kernel.org/all/cover.1660347763.git.kjlx@templeofstupid.com/
-Link: https://lkml.kernel.org/r/20220816192817.43d5e17f@gandalf.local.home
+Syzkaller reports as follows:
+[ 1203.506103] BUG: kernel NULL pointer dereference, address: 000000000000010b
+[ 1203.508039] #PF: supervisor read access in kernel mode
+[ 1203.508798] #PF: error_code(0x0000) - not-present page
+[ 1203.509558] PGD 800000011660b067 P4D 800000011660b067 PUD 130fb8067 PMD 0
+[ 1203.510560] Oops: 0000 [#1] SMP KASAN PTI
+[ 1203.511189] CPU: 6 PID: 29532 Comm: syz-executor.2 Tainted: G    B   W         5.10.0 #8
+[ 1203.512324] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+[ 1203.513895] RIP: 0010:is_ftrace_trampoline+0x26/0xb0
+[ 1203.514644] Code: ff eb d3 90 41 55 41 54 49 89 fc 55 53 e8 f2 00 fd ff 48 8b 1d 3b 35 5d 03 e8 e6 00 fd ff 48 8d bb 90 00 00 00 e8 2a 81 26 00 <48> 8b ab 90 00 00 00 48 85 ed 74 1d e8 c9 00 fd ff 48 8d bb 98 00
+[ 1203.518838] RSP: 0018:ffffc900012cf960 EFLAGS: 00010246
+[ 1203.520092] RAX: 0000000000000000 RBX: 000000000000007b RCX: ffffffff8a331866
+[ 1203.521469] RDX: 0000000000000000 RSI: 0000000000000008 RDI: 000000000000010b
+[ 1203.522583] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8df18b07
+[ 1203.523550] R10: fffffbfff1be3160 R11: 0000000000000001 R12: 0000000000478399
+[ 1203.524596] R13: 0000000000000000 R14: ffff888145088000 R15: 0000000000000008
+[ 1203.525634] FS:  00007f429f5f4700(0000) GS:ffff8881daf00000(0000) knlGS:0000000000000000
+[ 1203.526801] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1203.527626] CR2: 000000000000010b CR3: 0000000170e1e001 CR4: 00000000003706e0
+[ 1203.528611] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 1203.529605] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-Cc: stable@vger.kernel.org
-Fixes: 1d18538e6a092 ("tracing: Have dynamic events have a ref counter")
-Reported-by: Krister Johansen <kjlx@templeofstupid.com>
-Reviewed-by: Krister Johansen <kjlx@templeofstupid.com>
-Tested-by: Krister Johansen <kjlx@templeofstupid.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+Therefore, when ftrace_startup_enable fails, we need to rollback registration
+process and remove ops from ftrace_ops_list.
+
+Link: https://lkml.kernel.org/r/20220818032659.56209-1-yangjihong1@huawei.com
+
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_event_perf.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ kernel/trace/ftrace.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/kernel/trace/trace_event_perf.c b/kernel/trace/trace_event_perf.c
-index a114549720d6..61e3a2620fa3 100644
---- a/kernel/trace/trace_event_perf.c
-+++ b/kernel/trace/trace_event_perf.c
-@@ -157,7 +157,7 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
- 	int i;
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 601ccf1b2f09..4baa99363b16 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -2937,6 +2937,16 @@ int ftrace_startup(struct ftrace_ops *ops, int command)
  
- 	if (--tp_event->perf_refcount > 0)
--		goto out;
-+		return;
+ 	ftrace_startup_enable(command);
  
- 	tp_event->class->reg(tp_event, TRACE_REG_PERF_UNREGISTER, NULL);
++	/*
++	 * If ftrace is in an undefined state, we just remove ops from list
++	 * to prevent the NULL pointer, instead of totally rolling it back and
++	 * free trampoline, because those actions could cause further damage.
++	 */
++	if (unlikely(ftrace_disabled)) {
++		__unregister_ftrace_function(ops);
++		return -ENODEV;
++	}
++
+ 	ops->flags &= ~FTRACE_OPS_FL_ADDING;
  
-@@ -176,8 +176,6 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
- 			perf_trace_buf[i] = NULL;
- 		}
- 	}
--out:
--	trace_event_put_ref(tp_event);
- }
- 
- static int perf_trace_event_open(struct perf_event *p_event)
-@@ -241,6 +239,7 @@ void perf_trace_destroy(struct perf_event *p_event)
- 	mutex_lock(&event_mutex);
- 	perf_trace_event_close(p_event);
- 	perf_trace_event_unreg(p_event);
-+	trace_event_put_ref(p_event->tp_event);
- 	mutex_unlock(&event_mutex);
- }
- 
-@@ -292,6 +291,7 @@ void perf_kprobe_destroy(struct perf_event *p_event)
- 	mutex_lock(&event_mutex);
- 	perf_trace_event_close(p_event);
- 	perf_trace_event_unreg(p_event);
-+	trace_event_put_ref(p_event->tp_event);
- 	mutex_unlock(&event_mutex);
- 
- 	destroy_local_trace_kprobe(p_event->tp_event);
-@@ -347,6 +347,7 @@ void perf_uprobe_destroy(struct perf_event *p_event)
- 	mutex_lock(&event_mutex);
- 	perf_trace_event_close(p_event);
- 	perf_trace_event_unreg(p_event);
-+	trace_event_put_ref(p_event->tp_event);
- 	mutex_unlock(&event_mutex);
- 	destroy_local_trace_uprobe(p_event->tp_event);
- }
+ 	return 0;
 -- 
 2.35.1

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1265959B5A1
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 19:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE7359B5A4
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 19:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbiHURbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 13:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        id S231383AbiHURbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 13:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiHURbK (ORCPT
+        with ESMTP id S229491AbiHURbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 13:31:10 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31ACD17AAF;
-        Sun, 21 Aug 2022 10:31:09 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id a4so10675641wrq.1;
-        Sun, 21 Aug 2022 10:31:09 -0700 (PDT)
+        Sun, 21 Aug 2022 13:31:11 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA20817A90;
+        Sun, 21 Aug 2022 10:31:10 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id h1so4522318wmd.3;
+        Sun, 21 Aug 2022 10:31:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=xXtd3T1/ZmQUyro/3HUWSi05URHaw6Uj3JAxrNnokZQ=;
-        b=WrCaNmPmrBGJvcCKPkD/xrN9evhffeqMgS/b4hmh1mBEAG1Ow5N7Zlj9BKGmeGuRTS
-         afuBjwzks5LCQ3PW0m6IJJLbkIGaOzMU61twhKeaK+a3jSc+HVE/e9OwQF5pGnG0TXTd
-         XHJfJh5GchRTl5S7oIvp9AT1+WvBSk/Y2iAdc2kV9tDYRm69BZKtf1t4v/LkukH/OD0j
-         9pdGK/Nb9rZFvsTDw2Z6SQdxGe1KsQ/RvNxSnw64Ems1gjopQnrZ3AN9oI6V5eXvqt4X
-         0fCk39/so6YeaVn06GZkQgl84qmoxDZ29mwKlXyUnYzJTpCxDOmlkU55l8lPiNhuph6X
-         olBg==
+        bh=rVeHL3XvYGZ6orYIoYz1XXXquShX0TNS4nHwqMLcSJ8=;
+        b=BWcTk6yoxL1icGJDYiDE/gy02YAodotBzePCyFqUDjMk3W3m+9a/P1wWigW0BwdqGW
+         clnaCETFOGOYLBzqxPUdJxI2fsY3GUPPZnISYqp3Z5tDW50VnienqWRueZFhwn0Az64n
+         VJ4rTgYFx9ANOhpJD7xa4JCM51yIAol3DG0HgX9coAz3acighJ2rKXvbR6SYEn7NRgM9
+         f/DPDF3JalF9uGY2J3HYKkfBG29ZZbp0tEGnaoth8VXutPSL5Ep1zlCF/dI2PwuJg2nJ
+         ZY1HXi/jT3om7aeE6z9PM4m7AIx0A3MO3A3BPkEUy9x3LT5uSfMF+aXrDzYZ0o0cLT8l
+         eb9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=xXtd3T1/ZmQUyro/3HUWSi05URHaw6Uj3JAxrNnokZQ=;
-        b=gst1Nu7V7XNz20GgPf28WjSrQmDQzTKWW1OFTVOIHUtsaeBHUoabUPdsEhxXtESm2a
-         PBfOgz6T/yh3TbyWDI/+mdd4eiK4R1JUU5AcnlsUOMiA6Kgx28y8/uSQ3cng4GeeE66R
-         Bx91BNmck5ulZqksWYpIy9JZnoBwq/C74MHcz2412pvjyaacw9e0TwAh5aWfgJUbbHJc
-         n71Se2cH9qD5p4bKY/IHa9kxwm+CnAHHzKSBMBu8I6DVxoWVRjUSgjATMzfBUFImpgtf
-         dqtafLk/nG7dhoCT4bDwUX3NW55IPFHKHUi/P4J4bDu5i5/Ga5faRF6UDtoHEjFlKHMR
-         e3HQ==
-X-Gm-Message-State: ACgBeo2S9S3I1w+gFoEx5BFbzVlInhdCTom4jWhXUDRVwSK/Jh6E+mBv
-        Ua+nT046OkOAkSTgAi2gUzI=
-X-Google-Smtp-Source: AA6agR4viVgw7SRXAAacJiqkBrwpN7r4KswavSgQ6UWx06oXqqUMu6VnRmfkNRqzLYnrE+PRPvYBUQ==
-X-Received: by 2002:a5d:43d1:0:b0:225:2707:dee with SMTP id v17-20020a5d43d1000000b0022527070deemr8873986wrr.25.1661103067713;
-        Sun, 21 Aug 2022 10:31:07 -0700 (PDT)
+        bh=rVeHL3XvYGZ6orYIoYz1XXXquShX0TNS4nHwqMLcSJ8=;
+        b=N4r/DsyvKcLKLlYL2nePJFwI/1cewGU1YYCzp8Q2m9KL8zu9gY4VY+KTrj8SsRg/97
+         DIiV12AQyPhHXQUiYwsAvpSq61MgJjqdnid1cbfbyOolUjecvaB8bPAj4Ms0hClcfuF9
+         +GQXgPaJBzJSlnDvGvutM501bBi9yGNfE2/3IeKGwEDBWqSd6c3P/Bh02OnlpFm9Oewu
+         /37/jBK91HP06HAG0OL+syjFbuEl8v9AX8bk5RcW600roL8UeRB2zjBYEK3bOQRrFWki
+         IpXH+1AB0VpJIcGbRz/62FNJLB9x9b1Gaa6VWCY6q10ZlgZDZOLOF3jhuoWqNnWGcH1m
+         pdJA==
+X-Gm-Message-State: ACgBeo3XO0M7hx+g5oUUXnjQD0EanmT5iSNtIqmevKkvg13zC4t75EUJ
+        Lol2OpFPTUMavbxx1h6JvkhLYnXjN+qTog==
+X-Google-Smtp-Source: AA6agR4O1FHEREDqGDsj8VJ42P/BMWkbYBZbIH43j2PApyw1cDuPDlt54sD4PfatY62c4hcqxfxxbg==
+X-Received: by 2002:a05:600c:3846:b0:3a6:5292:f8af with SMTP id s6-20020a05600c384600b003a65292f8afmr3625313wmr.50.1661103069186;
+        Sun, 21 Aug 2022 10:31:09 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e0a:a77:3d70:9d84:ec8d:98d9:c29a])
-        by smtp.gmail.com with ESMTPSA id b18-20020adff912000000b00224f7c1328dsm9387205wrr.67.2022.08.21.10.31.06
+        by smtp.gmail.com with ESMTPSA id b18-20020adff912000000b00224f7c1328dsm9387205wrr.67.2022.08.21.10.31.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 10:31:07 -0700 (PDT)
+        Sun, 21 Aug 2022 10:31:08 -0700 (PDT)
 From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -57,9 +57,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-Subject: [PATCH v2 2/4] arm64: dts: allwinner: h6: Add cooling map for GPU
-Date:   Sun, 21 Aug 2022 19:30:49 +0200
-Message-Id: <20220821173051.155038-3-peron.clem@gmail.com>
+Subject: [PATCH v2 3/4] arm64: dts: allwinner: h6: Add GPU OPP table
+Date:   Sun, 21 Aug 2022 19:30:50 +0200
+Message-Id: <20220821173051.155038-4-peron.clem@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220821173051.155038-1-peron.clem@gmail.com>
 References: <20220821173051.155038-1-peron.clem@gmail.com>
@@ -76,53 +76,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a simple cooling map for the GPU.
+Add an Operating Performance Points table for the GPU to
+enable Dynamic Voltage & Frequency Scaling on the H6.
+
+The voltage range is set with minival voltage set to the target
+and the maximal voltage set to 1.2V. This allow DVFS framework to
+work properly on board with fixed regulator.
 
 Signed-off-by: Clément Péron <peron.clem@gmail.com>
 ---
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 22 ++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ .../boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi | 88 +++++++++++++++++++
+ 1 file changed, 88 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-index 5a28303d3d4c..943ae5374dd6 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
-@@ -186,6 +186,7 @@ gpu: gpu@1800000 {
- 			clocks = <&ccu CLK_GPU>, <&ccu CLK_BUS_GPU>;
- 			clock-names = "core", "bus";
- 			resets = <&ccu RST_BUS_GPU>;
-+			#cooling-cells = <2>;
- 			status = "disabled";
- 		};
- 
-@@ -1075,6 +1076,27 @@ gpu-thermal {
- 			polling-delay-passive = <0>;
- 			polling-delay = <0>;
- 			thermal-sensors = <&ths 1>;
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
+new file mode 100644
+index 000000000000..a66204243515
+--- /dev/null
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-gpu-opp.dtsi
+@@ -0,0 +1,88 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++// Copyright (C) 2022 Clément Péron <peron.clem@gmail.com>
 +
-+			trips {
-+				gpu_alert: gpu-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
++/ {
++	gpu_opp_table: gpu-opp-table {
++		compatible = "operating-points-v2";
 +
-+				gpu-crit {
-+					temperature = <100000>;
-+					hysteresis = <0>;
-+					type = "critical";
-+				};
-+			};
++		opp@216000000 {
++			opp-hz = /bits/ 64 <216000000>;
++			opp-microvolt = <810000 810000 1200000>;
++		};
 +
-+			cooling-maps {
-+				map0 {
-+					trip = <&gpu_alert>;
-+					cooling-device = <&gpu THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 	};
- };
++		opp@264000000 {
++			opp-hz = /bits/ 64 <264000000>;
++			opp-microvolt = <810000 810000 1200000>;
++		};
++
++		opp@312000000 {
++			opp-hz = /bits/ 64 <312000000>;
++			opp-microvolt = <810000 810000 1200000>;
++		};
++
++		opp@336000000 {
++			opp-hz = /bits/ 64 <336000000>;
++			opp-microvolt = <810000 810000 1200000>;
++		};
++
++		opp@360000000 {
++			opp-hz = /bits/ 64 <360000000>;
++			opp-microvolt = <820000 820000 1200000>;
++		};
++
++		opp@384000000 {
++			opp-hz = /bits/ 64 <384000000>;
++			opp-microvolt = <830000 830000 1200000>;
++		};
++
++		opp@408000000 {
++			opp-hz = /bits/ 64 <408000000>;
++			opp-microvolt = <840000 840000 1200000>;
++		};
++
++		opp@420000000 {
++			opp-hz = /bits/ 64 <420000000>;
++			opp-microvolt = <850000 850000 1200000>;
++		};
++
++		opp@432000000 {
++			opp-hz = /bits/ 64 <432000000>;
++			opp-microvolt = <860000 860000 1200000>;
++		};
++
++		opp@456000000 {
++			opp-hz = /bits/ 64 <456000000>;
++			opp-microvolt = <870000 870000 1200000>;
++		};
++
++		opp@504000000 {
++			opp-hz = /bits/ 64 <504000000>;
++			opp-microvolt = <890000 890000 1200000>;
++		};
++
++		opp@540000000 {
++			opp-hz = /bits/ 64 <540000000>;
++			opp-microvolt = <910000 910000 1200000>;
++		};
++
++		opp@576000000 {
++			opp-hz = /bits/ 64 <576000000>;
++			opp-microvolt = <930000 930000 1200000>;
++		};
++
++		opp@624000000 {
++			opp-hz = /bits/ 64 <624000000>;
++			opp-microvolt = <950000 950000 1200000>;
++		};
++
++		opp@756000000 {
++			opp-hz = /bits/ 64 <756000000>;
++			opp-microvolt = <1040000 1040000 1200000>;
++		};
++	};
++
++};
++
++&gpu {
++	operating-points-v2 = <&gpu_opp_table>;
++};
 -- 
 2.34.1
 

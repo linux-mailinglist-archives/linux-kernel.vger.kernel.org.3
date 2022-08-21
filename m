@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C345B59B4B8
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 16:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A5B59B4BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 16:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbiHUO6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 10:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38758 "EHLO
+        id S231210AbiHUO7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 10:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiHUO6k (ORCPT
+        with ESMTP id S230172AbiHUO66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 10:58:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F6812D2C;
-        Sun, 21 Aug 2022 07:58:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5339E60ED9;
-        Sun, 21 Aug 2022 14:58:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A2DC433C1;
-        Sun, 21 Aug 2022 14:58:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661093917;
-        bh=kHtSJJdSb5C1JB9aewBxAMhHPhe3/IM67slgEkhiwWo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DX6c4BvqgiTGxO54bqH+1mdl13t/nrkpKbImk8SK/8tKwMjaMbigo/qyV9utGkUbP
-         QZr3ICbvJ61nmM7jkk9P9enwBEVH6Eda+JgmH/k2jYlDPPgaDSF16EAGa7nKfQD9qA
-         wbcXnfdULPR/g5MOAW2DUQZbIswio1ZZWYMA/MjscXHmRhDMCc2plvESu3SRV01B1/
-         30gKKPAhcxd6PPssC18N2DTeaam/PQ301gkegFNBWeiuttnKEzcfBAml7tiug1OmvH
-         oW16jVeTEO/d/ntyUMez0yJfwX/yhaAeZlHDHoomLt7ziZTP8A+m2/M4+WP/6FbsCG
-         hNDxWi3NXOQHw==
-Received: by mail-vs1-f45.google.com with SMTP id k2so8774398vsk.8;
-        Sun, 21 Aug 2022 07:58:37 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3O9xX88ZsUR+AweOXKkExGgYxe7KuNdY7nWC+rdncg5hWiHY+s
-        xs/wtRcPswudA9Uy2u12uz59moHJH+Vmq2B3OfQ=
-X-Google-Smtp-Source: AA6agR52dvUeZPndqE7U5B77AH/eS8kJVI1IhCWM5jBdSF8suGsuqilniBG/DQ4A0T3mOEctflFpAeCjBNzxGDTGoE4=
-X-Received: by 2002:a67:d483:0:b0:38f:4981:c4f3 with SMTP id
- g3-20020a67d483000000b0038f4981c4f3mr5328685vsj.59.1661093916769; Sun, 21 Aug
- 2022 07:58:36 -0700 (PDT)
+        Sun, 21 Aug 2022 10:58:58 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D9413E32;
+        Sun, 21 Aug 2022 07:58:56 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1661093925tvxkcjjm
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 21 Aug 2022 22:58:44 +0800 (CST)
+X-QQ-SSF: 0100000000200010B000B00A0000000
+X-QQ-FEAT: znfcQSa1hKbKZkYhV9HDBhW5K8s8OaP5VjlK5FpvfRLvWySaY0EHwSNuttPD9
+        HxydUy6qQFVBzKIP3Fvex+/gWEffvpuviO+rNAurpq18QMTuRdkr7EU23DQcFY4lNfXQODg
+        W6dKqiu1PlBHJi0oHuuGuBH/VgQ0yiVOVtSTDKw/UK34SBPOWXi6/V2Rk/yKOMenXqJxr/P
+        Tm9RqE4ELN7hxNgWrYlz5HOgg4bO3ijoMQes4qzIRPSpWecW4UbPsM8esjL0OMCUMOGbhLP
+        ZqEmGnQP2fDJWheLZDLTcpdN2PbabWRs7Sh5QJ6JpZOOaQK34vARl/71XKTxoAA0waS7i5J
+        ttkNF5j7TbUIwhFHO6T7AjO/3k8GwDE8TQYpPXFZ6fVOR+KnzY=
+X-QQ-GoodBg: 0
+From:   wangjianli <wangjianli@cdjrlc.com>
+To:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wangjianli <wangjianli@cdjrlc.com>
+Subject: [PATCH] scsi/lpfc: fix repeated words in comments
+Date:   Sun, 21 Aug 2022 22:58:37 +0800
+Message-Id: <20220821145837.50480-1-wangjianli@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <YwF8vibZ2/Xz7a/g@ZenIV> <20220821010239.1554132-1-viro@zeniv.linux.org.uk>
- <CAAhV-H4AcEOqeZ45Pb+8FN3G9k1wXKYhdgV8Uk=yqXSPAHrQvA@mail.gmail.com>
-In-Reply-To: <CAAhV-H4AcEOqeZ45Pb+8FN3G9k1wXKYhdgV8Uk=yqXSPAHrQvA@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sun, 21 Aug 2022 22:58:23 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5O=sbLqtOWQp-m8f=Cdyyty1bAQwJGth0Jsj6YVmJkQw@mail.gmail.com>
-Message-ID: <CAAhV-H5O=sbLqtOWQp-m8f=Cdyyty1bAQwJGth0Jsj6YVmJkQw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] loongarch: remove generic-y += termios.h
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_PBL,RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [43.154.54.12 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [43.154.54.12 listed in wl.mailspike.net]
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Huacai Chen <chenhuacai@kernel.org>
+ Delete the redundant word 'on'.
 
-On Sun, Aug 21, 2022 at 10:56 PM Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> Acked-by: chenhuacai <chenhuacai@kernel.org>
->
-> On Sun, Aug 21, 2022 at 9:02 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > not really needed - UAPI mandatory-y += termios.h is sufficient...
-> >
-> > Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> > ---
-> >  arch/loongarch/include/asm/Kbuild | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/arch/loongarch/include/asm/Kbuild b/arch/loongarch/include/asm/Kbuild
-> > index 83bc0681e72b..f2bcfcb4e311 100644
-> > --- a/arch/loongarch/include/asm/Kbuild
-> > +++ b/arch/loongarch/include/asm/Kbuild
-> > @@ -21,7 +21,6 @@ generic-y += shmbuf.h
-> >  generic-y += statfs.h
-> >  generic-y += socket.h
-> >  generic-y += sockios.h
-> > -generic-y += termios.h
-> >  generic-y += termbits.h
-> >  generic-y += poll.h
-> >  generic-y += param.h
-> > --
-> > 2.30.2
-> >
+Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+---
+ drivers/scsi/lpfc/lpfc_nportdisc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
+index 639f86635127..a997cb559ff0 100644
+--- a/drivers/scsi/lpfc/lpfc_nportdisc.c
++++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
+@@ -240,7 +240,7 @@ lpfc_els_abort(struct lpfc_hba *phba, struct lpfc_nodelist *ndlp)
+ 	if (phba->sli_rev == LPFC_SLI_REV4)
+ 		spin_lock(&pring->ring_lock);
+ 	list_for_each_entry_safe(iocb, next_iocb, &pring->txcmplq, list) {
+-	/* Add to abort_list on on NDLP match. */
++	/* Add to abort_list on NDLP match. */
+ 		if (lpfc_check_sli_ndlp(phba, pring, iocb, ndlp))
+ 			list_add_tail(&iocb->dlist, &abort_list);
+ 	}
+-- 
+2.36.1
+

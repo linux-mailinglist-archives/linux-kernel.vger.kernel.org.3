@@ -2,115 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC8F59B31C
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 12:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C75059B31D
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 12:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbiHUKU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 06:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
+        id S230175AbiHUK0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 06:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiHUKUz (ORCPT
+        with ESMTP id S229546AbiHUK0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 06:20:55 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71748140AC
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 03:20:54 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id fy5so16263626ejc.3
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 03:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=LX+6Y3J7NBpt2yMeFwFFwIC5Leg2hEnRCyqHn0VPvDo=;
-        b=d07yH0kygyLJOxqLq2147/N73AxZ5f3tGbe8gvFccThsDGfONVLppvTah1r0vZZzrH
-         t4tZfFMWo9KLBgJ5A+/RgaqlGX9T2+xBb+LxfBnXArXQmpgxwnX6zqdxqDUZC/R0Ev++
-         SYYPvIQ8gMMW1pJfpY2A4tMehVCRhggcL1gtS0qM5H011ju2D2nKjRzoWysrUHcdOlnd
-         xa96IvjTF1wfLkVmEeFMNdSyEzfbs49MvQIfqnjHKqtgLdC4eerKfgMwZCDzqnx/+LTj
-         h6B6hXxLNmdizUP4zRbSrjQw++6llPyFsajCgKtmEhhHwdV4/ojdsaUi1S/22uLt7jY5
-         Xiww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=LX+6Y3J7NBpt2yMeFwFFwIC5Leg2hEnRCyqHn0VPvDo=;
-        b=1dZg9Au43p6ZuKGDZ1S7EXEJPY/fqEdZgket0omSr39Ep2/bqCoWU7WdhnIsgEFyh8
-         vfGAPUAx+R5ArcBqSctCT4lW2P86i9V8DfTBwssffCz0d3ob/4sDlmGIcfXxp4/vvd9L
-         hFZ3d0jRlBMane43tzXTgh+Gwu2u1M/wkn+im1SP6PdY0ZbqtE2CdCIu7YxGbkRMHVSQ
-         Z7XhQPAp2vye+PgnFLlQYttPutMhKDHToPXD/VnWPDixvVdlhlkwlRVAp+diaA2NPvKa
-         GlS10SSfrJJ+EQbo1iMpu93OH3n2QEf+S7bjI68XkE4fzUphM2LIcq+22E0hkluN7hIu
-         4dvg==
-X-Gm-Message-State: ACgBeo2qAmj9P7UCB+5S2ZHbfIZ/zFd4vxPrjxhnlJZByYo57KIhz2Ww
-        rXROTfzaXwk/TL8yHMnuRmY=
-X-Google-Smtp-Source: AA6agR4n45dKQUPg4qZz1vUJIc+mbL/zSceMyEviddXqiJNVG5avVlc9HCLXUsgGj61C64BxaWUKIg==
-X-Received: by 2002:a17:907:720b:b0:731:6e49:dc93 with SMTP id dr11-20020a170907720b00b007316e49dc93mr10151421ejc.421.1661077253044;
-        Sun, 21 Aug 2022 03:20:53 -0700 (PDT)
-Received: from gmail.com (195-38-113-151.pool.digikabel.hu. [195.38.113.151])
-        by smtp.gmail.com with ESMTPSA id c23-20020a056402101700b00445b3cab975sm6204043edu.56.2022.08.21.03.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 03:20:52 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sun, 21 Aug 2022 12:20:50 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-kernel@vger.kernel.org, jpoimboe@kernel.org,
-        peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com
-Subject: Re: [PATCH v2] x86/unwind/orc: unwind ftrace trampolines with
- correct orc
-Message-ID: <YwIHAvSGOmDLZ42k@gmail.com>
-References: <20220819084334.244016-1-chenzhongjin@huawei.com>
- <20220819132812.391619d2@gandalf.local.home>
+        Sun, 21 Aug 2022 06:26:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8518818370
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 03:26:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661077608;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+3QVb79a/vM9MbV5I6Z+Mja7e4xfR8TMDPfEhKJPwL8=;
+        b=BOfJrOsXvBkqzUyoLtvulP475jjMB4eUFfjnc4FpI6uQSDpoU5bQSI4wYwLBM36/FEjO+g
+        lxIjIf3Dl+EOg3J+bYG0toA5B0yaBeSFykBMDyt4K1wnQSCdoj6OL3/PqarNstxTPBlovg
+        /gZgy7UEVsCK8H9WE3mxoobxMyNrpaY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-594-6cl6ybc1OPmEWafrk-we5w-1; Sun, 21 Aug 2022 06:26:44 -0400
+X-MC-Unique: 6cl6ybc1OPmEWafrk-we5w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53132811E75;
+        Sun, 21 Aug 2022 10:26:44 +0000 (UTC)
+Received: from localhost (ovpn-12-55.pek2.redhat.com [10.72.12.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 82408141511A;
+        Sun, 21 Aug 2022 10:26:43 +0000 (UTC)
+Date:   Sun, 21 Aug 2022 18:26:40 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kbuild-all@lists.01.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH v2 08/11] parisc: mm: Convert to GENERIC_IOREMAP
+Message-ID: <YwIIYHYnkJkY4yf3@MiWiFi-R3L-srv>
+References: <20220820003125.353570-9-bhe@redhat.com>
+ <202208201135.YyN9CXsu-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819132812.391619d2@gandalf.local.home>
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <202208201135.YyN9CXsu-lkp@intel.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-* Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> On Fri, 19 Aug 2022 16:43:34 +0800
-> Chen Zhongjin <chenzhongjin@huawei.com> wrote:
+On 08/20/22 at 12:03pm, kernel test robot wrote:
+> Hi Baoquan,
 > 
-> > When meeting ftrace trampolines in orc unwinding, unwinder uses address
-> > of ftrace_{regs_}call address to find the orc, which gets next frame at
-> > sp+176.
-> > 
-> > If there is an irq hitting at sub $0xa8,%rsp, the next frame should be
-> > sp+8 instead of 176. It makes unwinder skip correct frame and throw
-> > warnings such as "wrong direction" or "can't access registers", etc,
-> > depending on the content of the wrong frame address.
-> > 
-> > By adding the base address ftrace_{regs_}caller with the offset
-> > *ip - ops->trampoline*,
-> > we can get the correct address to find orc.
-> > 
-> > Also change "caller" to "tramp_addr" to make variable name conform to
-> > its content.
-> > 
-> > Fixes: 6be7fa3c74d1 ("ftrace, orc, x86: Handle ftrace dynamically allocated trampolines")
-> > Cc: <stable@vger.kernel.org>
-> > Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> I love your patch! Yet something to improve:
 > 
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> [auto build test ERROR on akpm-mm/mm-everything]
 > 
-> Would someone from the tip tree care to pull this in?
+> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/mm-ioremap-Convert-architectures-to-take-GENERIC_IOREMAP-way/20220820-083435
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> config: parisc-randconfig-r005-20220820 (https://download.01.org/0day-ci/archive/20220820/202208201135.YyN9CXsu-lkp@intel.com/config)
+> compiler: hppa-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/570f2a3347cc83c9ea71d3dbbebfad8ea085ecc6
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Baoquan-He/mm-ioremap-Convert-architectures-to-take-GENERIC_IOREMAP-way/20220820-083435
+>         git checkout 570f2a3347cc83c9ea71d3dbbebfad8ea085ecc6
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc prepare
 
-Picked it up into tip:x86/urgent with minor edits to the changelog - will 
-push it out after some testing.
+Thanks for reporting. While it failed with "hppa-linux-gcc: unknown compiler" as below showing. Could you help check and tell what's wrong?
 
-Thanks,
+[root@ ~]# ls
+0day  anaconda-ks.cfg  bin  EFI_BOOT_ENTRY.TXT  linux  NETBOOT_METHOD.TXT  original-ks.cfg  RECIPE.TXT
+[root@ ~]# ls 0day/gcc-12.1.0-nolibc/
+hppa-linux  x86_64-gcc-12.1.0-nolibc_hppa-linux.tar.xz
+[root@ ~]# ls bin/make.cross 
+bin/make.cross
+[root@ ~]# pwd
+/root
+[root@ ~]# cd linux/
+[root@ linux]# pwd
+/root/linux
 
-	Ingo
+[root@ linux]# COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=/root/linux/build_dir ARCH=parisc prepare
+Compiler will be installed in /root/0day
+PATH=/root/0day/gcc-12.1.0-nolibc/hppa-linux/bin:/root/.local/bin:/root/bin:/usr/lib64/ccache:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+make --keep-going --jobs=160 W=1 O=/root/linux/build_dir ARCH=parisc prepare
+make[1]: Entering directory '/root/linux/build_dir'
+/root/0day/gcc-12.1.0-nolibc/hppa-linux/bin/hppa-linux-gcc: /root/0day/gcc-12.1.0-nolibc/hppa-linux/bin/hppa-linux-gcc: cannot execute binary file
+  SYNC    include/config/auto.conf.cmd
+/root/0day/gcc-12.1.0-nolibc/hppa-linux/bin/hppa-linux-gcc: /root/0day/gcc-12.1.0-nolibc/hppa-linux/bin/hppa-linux-gcc: cannot execute binary file
+  GEN     Makefile
+hppa-linux-gcc: unknown compiler
+scripts/Kconfig.include:44: Sorry, this compiler is not supported.
+make[3]: *** [../scripts/kconfig/Makefile:77: syncconfig] Error 1
+make[2]: *** [../Makefile:632: syncconfig] Error 2
+make[1]: *** [/root/linux/Makefile:734: include/config/auto.conf.cmd] Error 2
+make[1]: Failed to remake makefile 'include/config/auto.conf.cmd'.
+make[1]: Failed to remake makefile 'include/config/auto.conf'.
+  GEN     Makefile
+Error: kernelrelease not valid - run 'make prepare' to update it
+make[1]: Target 'prepare' not remade because of errors.
+make[1]: Leaving directory '/root/linux/build_dir'
+make: *** [Makefile:222: __sub-make] Error 2
+make: Target 'prepare' not remade because of errors.
+
+
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All error/warnings (new ones prefixed by >>):
+> 
+>    In file included from arch/parisc/include/asm/io.h:315,
+>                     from include/linux/io.h:13,
+>                     from include/linux/irq.h:20,
+>                     from arch/parisc/include/asm/hardirq.h:13,
+>                     from include/linux/hardirq.h:11,
+>                     from arch/parisc/kernel/asm-offsets.c:21:
+> >> include/asm-generic/iomap.h:97: warning: "ioremap_wc" redefined
+>       97 | #define ioremap_wc ioremap
+>          | 
+>    arch/parisc/include/asm/io.h:135: note: this is the location of the previous definition
+>      135 | #define ioremap_wc(addr, size)  \
+>          | 
+>    include/linux/io.h: In function 'pci_remap_cfgspace':
+> >> include/linux/io.h:89:44: error: implicit declaration of function 'ioremap'; did you mean 'ioremap_np'? [-Werror=implicit-function-declaration]
+>       89 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
+>          |                                            ^~~~~~~
+>          |                                            ioremap_np
+> >> include/linux/io.h:89:42: warning: pointer/integer type mismatch in conditional expression
+>       89 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
+>          |                                          ^
+>    cc1: some warnings being treated as errors
+>    make[2]: *** [scripts/Makefile.build:117: arch/parisc/kernel/asm-offsets.s] Error 1
+>    make[2]: Target '__build' not remade because of errors.
+>    make[1]: *** [Makefile:1207: prepare0] Error 2
+>    make[1]: Target 'prepare' not remade because of errors.
+>    make: *** [Makefile:222: __sub-make] Error 2
+>    make: Target 'prepare' not remade because of errors.
+> 
+> 
+> vim +89 include/linux/io.h
+> 
+> 7d3dcf26a6559f Christoph Hellwig 2015-08-10  72  
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  73  #ifdef CONFIG_PCI
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  74  /*
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  75   * The PCI specifications (Rev 3.0, 3.2.5 "Transaction Ordering and
+> b10eb2d50911f9 Hector Martin     2021-03-25  76   * Posting") mandate non-posted configuration transactions. This default
+> b10eb2d50911f9 Hector Martin     2021-03-25  77   * implementation attempts to use the ioremap_np() API to provide this
+> b10eb2d50911f9 Hector Martin     2021-03-25  78   * on arches that support it, and falls back to ioremap() on those that
+> b10eb2d50911f9 Hector Martin     2021-03-25  79   * don't. Overriding this function is deprecated; arches that properly
+> b10eb2d50911f9 Hector Martin     2021-03-25  80   * support non-posted accesses should implement ioremap_np() instead, which
+> b10eb2d50911f9 Hector Martin     2021-03-25  81   * this default implementation can then use to return mappings compliant with
+> b10eb2d50911f9 Hector Martin     2021-03-25  82   * the PCI specification.
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  83   */
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  84  #ifndef pci_remap_cfgspace
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  85  #define pci_remap_cfgspace pci_remap_cfgspace
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  86  static inline void __iomem *pci_remap_cfgspace(phys_addr_t offset,
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  87  					       size_t size)
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  88  {
+> b10eb2d50911f9 Hector Martin     2021-03-25 @89  	return ioremap_np(offset, size) ?: ioremap(offset, size);
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  90  }
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  91  #endif
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  92  #endif
+> cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  93  
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+> 
+

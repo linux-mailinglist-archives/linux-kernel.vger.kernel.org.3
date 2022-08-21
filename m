@@ -2,110 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A15C59B671
+	by mail.lfdr.de (Postfix) with ESMTP id A595459B672
 	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 23:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbiHUVk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 17:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
+        id S231838AbiHUVlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 17:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiHUVkX (ORCPT
+        with ESMTP id S231687AbiHUVlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 17:40:23 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A211EAC0;
-        Sun, 21 Aug 2022 14:40:22 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id gi31so11396623ejc.5;
-        Sun, 21 Aug 2022 14:40:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=/HVT7GUvY6+TC++f6Cv4hO1tp2O629oMpPfXSVwaQLA=;
-        b=RYc25A5JuGfMMVdJ6ZPp2v1vj1ITYYM40su+Mx8AMDH/71qTY8ertOPlK0AAIQ2IDu
-         8/dGm43sd2YkwsiE1cblpWSTCdyR8ljhEq9x0nb8aTGYgIsizbjtePqiThGgWWXSpvD5
-         Xc+zXXpDtFy2Iuspm1xaSe3W/GGiWfERC+9c5/wWQRo44jfDSJ+kfVUSDz0Wu/EfB+x5
-         S5IzCDwvRd9bG5EzYtRDwGCiA7Orxynr0gGASF+K90rXZr+8AuwIyaTLZZvFkzRLihdy
-         xJoTVeOuMBcr+QzSJmuiCD/UVPc6fFTPQP0mJ5b0uMb2Ip1jgxPHNfQfnsOCv21tANN1
-         4ynw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=/HVT7GUvY6+TC++f6Cv4hO1tp2O629oMpPfXSVwaQLA=;
-        b=Pbuk+0sN83YiKYkfEct4uYPHqoSQt+wh94B63xsSzBDot7DRKmsu1jpNfdQmd959cq
-         tG80d+v+KXC/IceNqLC6kO4aFGILv2PBofPbXsX93qlAqxZ4Ph9na/OyoINNsvrbxmpv
-         x6oxlmUKeWLlwCr47M4Sce683an0E2fs4T7f04NuO7oMGVwDJdUl2EbAM50tky6c4JUV
-         lFQjZhFlFlLPdUVSeg7TXG41OR1IK1ofWRCaN07rkLkFJKvQYEp/aHg5QyqKPfglQDU1
-         c+sWzqVbymdVt3gt8Kj35M7QCCxG6eoe9bUbFJWej2NPf8Llgz5fg839WW3dlJayLoE7
-         XoIg==
-X-Gm-Message-State: ACgBeo09KbXLg2IVntqIcGj6PxVExo2pV4rGYK01V1XzJEDSKgrczvi2
-        nGI1+7bp5QJP1P3W7W7hK5w=
-X-Google-Smtp-Source: AA6agR7jraIuXtLvUo9DatL3q0vu1JyYpWqVhby3TIbGuvaloPALXZSVzPnBmWMoAWvzQF0bKesIHw==
-X-Received: by 2002:a17:906:d550:b0:733:8e1a:f7 with SMTP id cr16-20020a170906d55000b007338e1a00f7mr11155721ejc.580.1661118021173;
-        Sun, 21 Aug 2022 14:40:21 -0700 (PDT)
-Received: from gmail.com (195-38-113-151.pool.digikabel.hu. [195.38.113.151])
-        by smtp.gmail.com with ESMTPSA id b2-20020aa7dc02000000b0043a7c24a669sm6959977edu.91.2022.08.21.14.40.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 14:40:20 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sun, 21 Aug 2022 23:40:18 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Steve French <smfrench@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: strlcpy() notes (was Re: [GIT PULL] smb3 client fixes)
-Message-ID: <YwKmQllm8Thr3scO@gmail.com>
-References: <CAH2r5mtDFpaAWeGCtrfm_WPM6j-Gkt_O80=nKfp6y39aXaBr6w@mail.gmail.com>
- <CAHk-=wi+xbVq++uqW9YgWpHjyBHNB8a-xad+Xp23-B+eodLCEA@mail.gmail.com>
+        Sun, 21 Aug 2022 17:41:16 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983661EAC0;
+        Sun, 21 Aug 2022 14:41:15 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b9882329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9882:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 37F911EC02AD;
+        Sun, 21 Aug 2022 23:41:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1661118069;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=KIcMde7mEwkhghZiqNjJmux9e20lzrNLzuoUxjrdEyk=;
+        b=fRJjagWVesGdFFoceT6Hc3D7jkvR02MBb5zWtq1w8zsMTxMbd6ZkjyTeAq4arHakBVOn1T
+        KHITZZ/q5/4f5Fgkn4htYS/3zm+nTTaVmtGAzqPuPiH+mRCPbc5oOmbZfLlivPD2JBF7nK
+        ijtRrQXVmQbuujcURhRd5hUUvnLDGBY=
+Date:   Sun, 21 Aug 2022 23:41:04 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 01/10] x86/mtrr: fix MTRR fixup on APs
+Message-ID: <YwKmcFuKlq3/MzVi@zn.tnic>
+References: <20220820092533.29420-1-jgross@suse.com>
+ <20220820092533.29420-2-jgross@suse.com>
+ <YwIkV7mYAC4Ebbwb@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wi+xbVq++uqW9YgWpHjyBHNB8a-xad+Xp23-B+eodLCEA@mail.gmail.com>
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <YwIkV7mYAC4Ebbwb@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-* Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> So I despise strlcpy(), but I think strscpy() is kind of broken too.
-> For the generic case, it really should have two separate buffer sizes.
+On Sun, Aug 21, 2022 at 02:25:59PM +0200, Borislav Petkov wrote:
+> > Fix that by using percpu variables for saving the MSR contents.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Juergen Gross <jgross@suse.com>
+> > ---
+> > I thought adding a "Fixes:" tag for the kernel's initial git commit
+> > would maybe be entertaining, but without being really helpful.
+> > The percpu variables were preferred over on-stack ones in order to
+> > avoid more code churn in followup patches decoupling PAT from MTRR
+> > support.
 > 
->  (2) if you expect the destination buffer contents to be untouched
-> past the terminating NUL character, you're simply out of luck
-> 
-> The strscpy() assumption is that it can arbitrarily write to the
-> destination buffer.
-> 
-> So the best way to think of "strscpy()" is really as a "optimized
-> memcpy for strings". That's almost exactly how it acts. It will do a
-> memcpy(), but stop when it notices that it has copied a NUL character.
+> So if that thing has been broken for so long and no one noticed, we
+> could just as well not backport to stable at all...
 
-Not to shed-paint this too much, but would it help if the naming reflected 
-that property of chunk-size NUL-(over)write a bit better?
+Yeah, you can't do that.
 
-- memcpy_str(), memstrcpy(), memscpy(), etc.?
+The whole day today I kept thinking that something's wrong with this
+here. As in, why hasn't it been reported until now.
 
-Developers do tend to think differently about operations that are named 
-after memcpy(). Here the argument order and semantics are pretty close to 
-memcpy() - if the naming is similar, we'd want people to think of it as a 
-memcpy(), not a string-copy.
+You say above:
 
-[ Personally I'd prefer memcpy_str(): it's a variant of memcpy() that stops 
-  earlier if possible, and does the 'early stop' safely & robustly. ]
+"... for all cpus is racy in case the MSR contents differ across cpus."
 
-Thanks,
+But they don't differ:
 
-	Ingo
+"7.7.5 MTRRs in Multi-Processing Environments
+
+In multi-processing environments, the MTRRs located in all processors
+must characterize memory in the same way. Generally, this means that
+identical values are written to the MTRRs used by the processors. This
+also means that values CR0.CD and the PAT must be consistent across
+processors. Failure to do so may result in coherency violations or loss
+of atomicity. Processor implementations do not check the MTRR settings
+in other processors to ensure consistency. It is the responsibility of
+system software to initialize and maintain MTRR consistency across all
+processors."
+
+And you can't have different fixed MTRR type on each CPU - that would
+lead to all kinds of nasty bugs.
+
+And here's from a big fat box:
+
+$ rdmsr -a 0x2ff | uniq -c
+    256 c00
+
+All 256 CPUs have the def type set to the same thing.
+
+Now, if all CPUs go write that same deftype_lo variable in the
+rendezvous handler, the only issue that could happen is if a read
+sees a partial write. BUT, AFAIK, x86 doesn't tear 32-bit writes so I
+*think* all CPUs see the same value being corrected by using mtrr_state
+previously saved on the BSP.
+
+As I said, we should've seen this exploding left and right otherwise...
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

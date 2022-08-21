@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C68259B1C2
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 06:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A375559B1C1
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 06:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiHUEoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 00:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
+        id S229631AbiHUEo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 00:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiHUEo0 (ORCPT
+        with ESMTP id S229452AbiHUEo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 21 Aug 2022 00:44:26 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEAA14087
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 21:44:24 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id k9-20020a056e021a8900b002e5bd940e96so6056703ilv.13
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053F21408D
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 21:44:25 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id i13-20020a056e02152d00b002e97839ff00so1725864ilu.15
         for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 21:44:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=bVZXnPdyq13OL3gTqrTuRwM/LzaBY2wVApRqSobDy+M=;
-        b=EUw3i10HvHqDiQ1PYgqhNYFqF7PtPmHSTUvkeHVwcWkMFjQ2Pl5KzqpJyLW/RuzWBh
-         wuoEExJRmWma1z0P9w/lhHkWkkdT9rzAxulrTXJwjxmBvx+qN3/pK5GGCuJ0lxE6lnWA
-         SJ1iM0qo8Yic2/MGASL5XSwW/EmwHjEjBRZC0NBPlmWBLxOQWi0cdANd7+Y48/aKxpTa
-         4qndJ0MOKrGboVpI7IRPT+pI7UY0dLyW94Ojy085mfO/OQKf06zw5V4gCSxorXxGHR8d
-         MHG2IhUEQAe+bpmE8hZiNZLi4ngia36+IAgS92U0d39XkqMJNbWRvUS/s/9scdswo+nF
-         NCIw==
-X-Gm-Message-State: ACgBeo0djTzZOZeCrX48E8kpkPstSZ+0JMBKwkez0aVjwlMbgyocEcrA
-        BEk8qYst13hZ1iO093NSV4V+Ux1dVvqWrm8H8Bw1wLa0ZoyM
-X-Google-Smtp-Source: AA6agR4li2Niup/6JXfm8rwixUjv0fRIYSvRlavbxJvrRzUgYLE7razoFui2K7MDR37gpymzYNK4fxtM534c95mw32IKKOR0pwLD
+        bh=VHKZiUFvVveW+ZNFOk9sw/xMqdpjBk9d4cmaGhKiFD0=;
+        b=WhsXD8DX13FKUOki7DOWRmAFhl85mkLrjXFSpmYapL7tBjLGSSlEPb7GsJ0UMlMh9j
+         e2rX4QojGHrQnphDQaZfk4KFwjJyuvCIG5wGgSFqj//MSr3VjdIn9rY0X2gFr8cae772
+         EiQ8Qp9KFmpvYH9WX0zNXCLlH86ipOeG3S+1A1JumclIUwWNh5anM5r/2gF1SRMFCr2Z
+         8qGe4zUYi0Y+j3nYUnzeNC91OU5JRZlUQbpwla4aJNPcDbrhmTIwzQQNWCozv7/qn9Bq
+         Yvhxv9bdh6NP7cBbqfnacTCx7jPYRWVkKqlnj/rtBxjB7zGHVaOjynzhXSTYKmBTIjGh
+         dsqg==
+X-Gm-Message-State: ACgBeo1cs6kAjIPUUp5zKx+DJdhZPk0OnOpI3ooFzr171+HyBR45iIwv
+        fUXqYJPV/zJQ6W+1gnb2QIva7vetgAvuUStVsBWGPUxCHSru
+X-Google-Smtp-Source: AA6agR6dtEaFlYT6hOdJ6l253kXiqOh9Y5K9TDV9VYT4WbwC/St+hwLWPADxZUftmTjdsI80CXfylLzcqqPH/T0KhVbSzgBS3nxk
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1bc8:b0:2e9:8401:477a with SMTP id
- x8-20020a056e021bc800b002e98401477amr1529904ilv.265.1661057064062; Sat, 20
- Aug 2022 21:44:24 -0700 (PDT)
+X-Received: by 2002:a05:6e02:12c9:b0:2df:1c38:94c3 with SMTP id
+ i9-20020a056e0212c900b002df1c3894c3mr6813987ilm.62.1661057064372; Sat, 20 Aug
+ 2022 21:44:24 -0700 (PDT)
 Date:   Sat, 20 Aug 2022 21:44:24 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004155f505e6b8fc3b@google.com>
-Subject: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in kobject_add
-From:   syzbot <syzbot+995136d881b59882b2b6@syzkaller.appspotmail.com>
+Message-ID: <00000000000046101a05e6b8fc53@google.com>
+Subject: [syzbot] upstream boot error: general protection fault in usb_set_configuration
+From:   syzbot <syzbot+86cb6a0f6d50dbe4ff23@syzkaller.appspotmail.com>
 To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
         rafael@kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
@@ -61,99 +60,121 @@ syzbot found the following issue on:
 
 HEAD commit:    3cc40a443a04 Merge tag 'nios2_fixes_v6.0' of git://git.ker..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1525710d080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=130a0067080000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=3b9175e0879a7749
-dashboard link: https://syzkaller.appspot.com/bug?extid=995136d881b59882b2b6
+dashboard link: https://syzkaller.appspot.com/bug?extid=86cb6a0f6d50dbe4ff23
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 userspace arch: i386
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+995136d881b59882b2b6@syzkaller.appspotmail.com
+Reported-by: syzbot+86cb6a0f6d50dbe4ff23@syzkaller.appspotmail.com
 
-usbcore: registered new interface driver nfcmrvl
-Loading iSCSI transport class v2.0-870.
-scsi host0: Virtio SCSI HBA
-st: Version 20160209, fixed bufsize 32768, s/g segs 256
-Rounding down aligned max_sectors from 4294967295 to 4294967288
-db_root: cannot open: /etc/target
-slram: not enough parameters.
-ftl_cs: FTL header not found.
-wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
-wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
-MACsec IEEE 802.1AE
-tun: Universal TUN/TAP device driver, 1.6
-vcan: Virtual CAN interface driver
-vxcan: Virtual CAN Tunnel driver
-slcan: serial line CAN interface driver
-CAN device driver interface
-usbcore: registered new interface driver usb_8dev
-usbcore: registered new interface driver ems_usb
-usbcore: registered new interface driver gs_usb
-usbcore: registered new interface driver kvaser_usb
-usbcore: registered new interface driver mcba_usb
-usbcore: registered new interface driver peak_usb
-e100: Intel(R) PRO/100 Network Driver
-e100: Copyright(c) 1999-2006 Intel Corporation
-e1000: Intel(R) PRO/1000 Network Driver
-e1000: Copyright (c) 1999-2006 Intel Corporation.
-e1000e: Intel(R) PRO/1000 Network Driver
-e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
-mkiss: AX.25 Multikiss, Hans Albas PE1AYX
-AX.25: 6pack driver, Revision: 0.3.0
-AX.25: bpqether driver version 004
-PPP generic driver version 2.4.2
-PPP BSD Compression module registered
-PPP Deflate Compression module registered
-PPP MPPE Compression module registered
-NET: Registered PF_PPPOX protocol family
-PPTP driver version 0.8.5
-SLIP: version 0.8.4-NET3.019-NEWTTY (dynamic channels, max=256) (6 bit encapsulation enabled).
-CSLIP: code copyright 1989 Regents of the University of California.
-SLIP linefill/keepalive option.
-hdlc: HDLC support module revision 1.22
-LAPB Ethernet driver version 0.02
-usbcore: registered new interface driver ath9k_htc
-usbcore: registered new interface driver carl9170
-usbcore: registered new interface driver ath6kl_usb
-usbcore: registered new interface driver ar5523
-usbcore: registered new interface driver ath10k_usb
-usbcore: registered new interface driver rndis_wlan
-mac80211_hwsim: initializing netlink
-BUG: unable to handle page fault for address: ffffdc0000000000
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 11826067 P4D 11826067 PUD 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 #0
+hub 1-0:1.0: USB hub found
+hub 1-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.1: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.1: Dummy host controller
+dummy_hcd dummy_hcd.1: new USB bus registered, assigned bus number 2
+usb usb2: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.00
+usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb2: Product: Dummy host controller
+usb usb2: Manufacturer: Linux 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 dummy_hcd
+usb usb2: SerialNumber: dummy_hcd.1
+hub 2-0:1.0: USB hub found
+hub 2-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.2: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.2: Dummy host controller
+dummy_hcd dummy_hcd.2: new USB bus registered, assigned bus number 3
+usb usb3: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.00
+usb usb3: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb3: Product: Dummy host controller
+usb usb3: Manufacturer: Linux 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 dummy_hcd
+usb usb3: SerialNumber: dummy_hcd.2
+hub 3-0:1.0: USB hub found
+hub 3-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.3: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.3: Dummy host controller
+dummy_hcd dummy_hcd.3: new USB bus registered, assigned bus number 4
+usb usb4: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.00
+usb usb4: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb4: Product: Dummy host controller
+usb usb4: Manufacturer: Linux 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 dummy_hcd
+usb usb4: SerialNumber: dummy_hcd.3
+hub 4-0:1.0: USB hub found
+hub 4-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.4: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.4: Dummy host controller
+dummy_hcd dummy_hcd.4: new USB bus registered, assigned bus number 5
+usb usb5: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.00
+usb usb5: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb5: Product: Dummy host controller
+usb usb5: Manufacturer: Linux 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 dummy_hcd
+usb usb5: SerialNumber: dummy_hcd.4
+hub 5-0:1.0: USB hub found
+hub 5-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.5: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.5: Dummy host controller
+dummy_hcd dummy_hcd.5: new USB bus registered, assigned bus number 6
+usb usb6: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.00
+usb usb6: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb6: Product: Dummy host controller
+usb usb6: Manufacturer: Linux 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 dummy_hcd
+usb usb6: SerialNumber: dummy_hcd.5
+general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff8200000004000-0xfff8200000004007]
+CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:string_nocheck lib/vsprintf.c:643 [inline]
-RIP: 0010:string+0x1bb/0x3d0 lib/vsprintf.c:725
-Code: 48 3b 5c 24 08 74 4b e8 e3 42 59 fd 48 89 df 48 83 c3 01 48 b9 00 00 00 00 00 fc ff df 48 89 f8 48 89 fa 48 c1 e8 03 83 e2 07 <0f> b6 04 08 38 d0 7f 08 84 c0 0f 85 cc 01 00 00 44 0f b6 63 ff 31
-RSP: 0000:ffffc90000067410 EFLAGS: 00010046
-RAX: 1fffe00000000000 RBX: ffff000000000001 RCX: dffffc0000000000
-RDX: 0000000000000000 RSI: ffffffff8422c86d RDI: ffff000000000000
-RBP: ffffc900000676eb R08: 0000000000000005 R09: 0000000000000000
-R10: 00000000ffffffff R11: 0000000000000001 R12: 00000000ffffffff
-R13: ffffc900000676e8 R14: ffff000000000000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:kmem_cache_alloc_trace+0x164/0x3e0 mm/slub.c:3282
+Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 bf 01 00 00 48 85 c0 0f 84 b6 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 c2 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0000:ffffc90000067008 EFLAGS: 00010246
+RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000800
+RDX: 0000000000006649 RSI: 0000000000000dc0 RDI: 000000000003dce0
+RBP: ffff888011842140 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000dc0 R14: 0000000000000a20 R15: 0000000000000dc0
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+CR2: 0000000000000000 CR3: 000000000bc8e000 CR4: 00000000003506e0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- vsnprintf+0x71b/0x14f0 lib/vsprintf.c:2782
- vprintk_store+0x2d8/0xae0 kernel/printk/printk.c:2155
- vprintk_emit+0x14c/0x5f0 kernel/printk/printk.c:2252
- vprintk+0x80/0x90 kernel/printk/printk_safe.c:50
- _printk+0xba/0xed kernel/printk/printk.c:2292
- kobject_add.cold+0x4a/0x5e lib/kobject.c:404
- device_add+0x368/0x1e90 drivers/base/core.c:3452
- device_create_groups_vargs+0x203/0x280 drivers/base/core.c:4194
- device_create+0xdf/0x120 drivers/base/core.c:4236
- mac80211_hwsim_new_radio+0x3ab/0x4dd0 drivers/net/wireless/mac80211_hwsim.c:3821
- init_mac80211_hwsim+0x5aa/0x73b drivers/net/wireless/mac80211_hwsim.c:5379
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ kobject_uevent_env+0x230/0x1640 lib/kobject_uevent.c:524
+ device_add+0xb72/0x1e90 drivers/base/core.c:3498
+ usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd4/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:530 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:609
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:748
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:778
+ __device_attach_driver+0x206/0x2e0 drivers/base/dd.c:901
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x1e4/0x530 drivers/base/dd.c:973
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xbd5/0x1e90 drivers/base/core.c:3517
+ usb_new_device.cold+0x685/0x10ad drivers/usb/core/hub.c:2573
+ register_root_hub+0x421/0x573 drivers/usb/core/hcd.c:1017
+ usb_add_hcd.cold+0x100c/0x13a1 drivers/usb/core/hcd.c:2998
+ dummy_hcd_probe+0x19f/0x310 drivers/usb/gadget/udc/dummy_hcd.c:2676
+ platform_probe+0xfc/0x1f0 drivers/base/platform.c:1400
+ call_driver_probe drivers/base/dd.c:530 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:609
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:748
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:778
+ __device_attach_driver+0x206/0x2e0 drivers/base/dd.c:901
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+ __device_attach+0x1e4/0x530 drivers/base/dd.c:973
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+ device_add+0xbd5/0x1e90 drivers/base/core.c:3517
+ platform_device_add+0x35e/0x820 drivers/base/platform.c:717
+ dummy_hcd_init+0x5d5/0xba7 drivers/usb/gadget/udc/dummy_hcd.c:2829
  do_one_initcall+0xfe/0x650 init/main.c:1296
  do_initcall_level init/main.c:1369 [inline]
  do_initcalls init/main.c:1385 [inline]
@@ -163,42 +184,42 @@ Call Trace:
  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
  </TASK>
 Modules linked in:
-CR2: ffffdc0000000000
 ---[ end trace 0000000000000000 ]---
-RIP: 0010:string_nocheck lib/vsprintf.c:643 [inline]
-RIP: 0010:string+0x1bb/0x3d0 lib/vsprintf.c:725
-Code: 48 3b 5c 24 08 74 4b e8 e3 42 59 fd 48 89 df 48 83 c3 01 48 b9 00 00 00 00 00 fc ff df 48 89 f8 48 89 fa 48 c1 e8 03 83 e2 07 <0f> b6 04 08 38 d0 7f 08 84 c0 0f 85 cc 01 00 00 44 0f b6 63 ff 31
-RSP: 0000:ffffc90000067410 EFLAGS: 00010046
-RAX: 1fffe00000000000 RBX: ffff000000000001 RCX: dffffc0000000000
-RDX: 0000000000000000 RSI: ffffffff8422c86d RDI: ffff000000000000
-RBP: ffffc900000676eb R08: 0000000000000005 R09: 0000000000000000
-R10: 00000000ffffffff R11: 0000000000000001 R12: 00000000ffffffff
-R13: ffffc900000676e8 R14: ffff000000000000 R15: 0000000000000000
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:kmem_cache_alloc_trace+0x164/0x3e0 mm/slub.c:3282
+Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 bf 01 00 00 48 85 c0 0f 84 b6 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 c2 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0000:ffffc90000067008 EFLAGS: 00010246
+RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000800
+RDX: 0000000000006649 RSI: 0000000000000dc0 RDI: 000000000003dce0
+RBP: ffff888011842140 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000dc0 R14: 0000000000000a20 R15: 0000000000000dc0
 FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	48 3b 5c 24 08       	cmp    0x8(%rsp),%rbx
-   5:	74 4b                	je     0x52
-   7:	e8 e3 42 59 fd       	callq  0xfd5942ef
-   c:	48 89 df             	mov    %rbx,%rdi
-   f:	48 83 c3 01          	add    $0x1,%rbx
-  13:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
-  1a:	fc ff df
-  1d:	48 89 f8             	mov    %rdi,%rax
-  20:	48 89 fa             	mov    %rdi,%rdx
-  23:	48 c1 e8 03          	shr    $0x3,%rax
-  27:	83 e2 07             	and    $0x7,%edx
-* 2a:	0f b6 04 08          	movzbl (%rax,%rcx,1),%eax <-- trapping instruction
-  2e:	38 d0                	cmp    %dl,%al
-  30:	7f 08                	jg     0x3a
-  32:	84 c0                	test   %al,%al
-  34:	0f 85 cc 01 00 00    	jne    0x206
-  3a:	44 0f b6 63 ff       	movzbl -0x1(%rbx),%r12d
-  3f:	31                   	.byte 0x31
+   0:	8b 51 08             	mov    0x8(%rcx),%edx
+   3:	48 8b 01             	mov    (%rcx),%rax
+   6:	48 83 79 10 00       	cmpq   $0x0,0x10(%rcx)
+   b:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+  10:	0f 84 bf 01 00 00    	je     0x1d5
+  16:	48 85 c0             	test   %rax,%rax
+  19:	0f 84 b6 01 00 00    	je     0x1d5
+  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
+  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
+  26:	40 f6 c7 0f          	test   $0xf,%dil
+* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
+  2e:	0f 85 c2 01 00 00    	jne    0x1f6
+  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3d:	0f 94 c0             	sete   %al
 
 
 ---

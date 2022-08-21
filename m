@@ -2,131 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6B659B53F
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 17:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA6059B54B
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 17:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbiHUPyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 11:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
+        id S231607AbiHUP6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 11:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiHUPyK (ORCPT
+        with ESMTP id S229561AbiHUP6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 11:54:10 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E71BC18;
-        Sun, 21 Aug 2022 08:54:09 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id v23so2654655plo.9;
-        Sun, 21 Aug 2022 08:54:09 -0700 (PDT)
+        Sun, 21 Aug 2022 11:58:15 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868FDD7C;
+        Sun, 21 Aug 2022 08:58:14 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id 62so6601598iov.5;
+        Sun, 21 Aug 2022 08:58:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=bkh2RmwQz43pDpH6k4U/hhGBE1MuNMuBG/1+04H09nA=;
-        b=ZNuEb7fEQxkPm2NNO2ZrPhQhxg0BwQRwImIdnuP6Yf88nqeoybObA5gVPi/QaxeDl2
-         lMXau9nQFQN/XhXyesFCEWMsBo63C+eAi4u/rVGieZyYN6kjxqcl9iQynZQedN1tPBzG
-         p9r5Xen6HBfl0pr9MDJ/T9bZd8jQhITDM3DCPkOKstNtSgKgnUcU4OkutHqMZLY9IB4M
-         LxnMaAipIehqbD/frL8KKAdKDq5WHiWncxGG+XnFkP+QSY9P5FNr50Ldcf15qF/GFEz1
-         7qHy/tzRU9+cVvIjIXToTf2d0996+QJIJ8MknJHzydRBfWG/RTxdTViurjUjKHHfqlPh
-         NvnA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=jl057+Trbv3ToeVWTsybg5kXr0sDHbVCziecNl2AV6Y=;
+        b=gSYXLG0m3nEyXiI/Jq1RB2mepjUqkocLXXiGtLSoFgwxJXH6PuvYrv3JFLRtpkE4yZ
+         vN6bnu/cPzJoMtTuKFQHGchDqvdDZjqdZ58E9y1CaVo5LT3VPiKNDzhRagQgK0WedDMK
+         2XRBWjPM4VMrwuYmj3a18rCuajEHRbCQvLKPEsLdtoMW2knsGotQHF1ipXy4uxCEcmfx
+         zkEoy9u0MWc1br52yfE0eyLXElhZuvhG2yXaFrwcpgAV43unHMsYaRdsJakz3KIHxguc
+         p7vVa6wMNNUxzgUDi1Sfb8kSj1gScc0zmfn2LtBOR5mwFhy7DR8mgddZ3M79p7D9MhJt
+         AP2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=bkh2RmwQz43pDpH6k4U/hhGBE1MuNMuBG/1+04H09nA=;
-        b=iOOxiap0gygtD/aF+i88KCPp4IPkQ/rp+/Y50qzeusTMhaKyvD1eltifOK14W5Djsn
-         HnZVOoIbzu5PC/NiYmu6MLI2aTy6M0B09V4Xr31frjc0cMsXbTlgC3YzGAOeljEFs1nY
-         ADX3PkZXWBDG6RjFqNh6njHbzk2XJdk17YD6RwHWeXrDRrJwumAzh7rkECuIeJKQEgAV
-         djEqtbr9iMHM4ITqorNYiq71teFUAA85XlVazXxBeT445ABJo7Y9ZOYvkJfHrlZHCH5I
-         u0Sf6tkpq8fnTRWCjCs4P9HwX+9NlVjH/Xmf3B5voUl/A2uovjzbB474fB0BZBvHkIrr
-         N+jg==
-X-Gm-Message-State: ACgBeo3JKihDabMQYQUHM7suhLHIq9nVGFSie2JctDmSDmPKF/XITCDV
-        Gk32Bf5lcyZQftM7OJUdnJn6nKFaNUQ=
-X-Google-Smtp-Source: AA6agR5Zh5My6hY3phecIGV+h3IPFUyS+zATf/VZj14J1TTIDjXcv0iGZrjT1Z8iftL+CvaKJJHV8Q==
-X-Received: by 2002:a17:903:28c:b0:172:e5f7:f58c with SMTP id j12-20020a170903028c00b00172e5f7f58cmr2283522plr.37.1661097248488;
-        Sun, 21 Aug 2022 08:54:08 -0700 (PDT)
-Received: from localhost (c-73-25-156-94.hsd1.or.comcast.net. [73.25.156.94])
-        by smtp.gmail.com with ESMTPSA id l8-20020a170903244800b0016bea74d11esm2910408pls.267.2022.08.21.08.54.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 08:54:07 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm: De-open-code some CP_EVENT_WRITE
-Date:   Sun, 21 Aug 2022 08:54:35 -0700
-Message-Id: <20220821155441.1092134-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=jl057+Trbv3ToeVWTsybg5kXr0sDHbVCziecNl2AV6Y=;
+        b=YQjTDKq9fdERF1rQKMDGduSW5sk5BJx8vsic3mrJtrmntCLA7R2yu5g45Ld+Fyf2+m
+         mzeeizM6li7/20PmG7wRdaBRRrU2jQyZOSK6MdfGvSEYmhIiWJKdsYx7uEzlGrqRFcrO
+         yW/nl8psKp5DXQ+MzB1uOGjqfV2mETqRlhI+csjJPxUSVU5LK8TWcYMoZIGk7Ik9UItx
+         j/hrie7BesyFHfuLLhZhgre7ZeJgJw4oCua9gTNT8TkUUENvsrL6EV9GS0bdd2t9FdKo
+         AgELNQLGiAeF78AukyzCQDMum+XDq8vNogb9tasTgnMTV3EqjH+A1hENTDWmB4OUg9Ja
+         ofjw==
+X-Gm-Message-State: ACgBeo1GYMkbWG8RD+YsCpZ1l1kyhikTnOypiYmnYcVoq+t2zBDoTDXj
+        MjxNdoqJN5SOe1M6zIXwKpZiez5pAp6vyA7fyJk/c7imPTs=
+X-Google-Smtp-Source: AA6agR6eQf/e2pEF818vApDCSFB8aXweqxuUn+lxjrAQ5KWz/mhdyriIpsoGD5KP2qmT9XOsR02iY8GYLa4BmuoYFfE=
+X-Received: by 2002:a05:6602:1343:b0:689:2942:9b57 with SMTP id
+ i3-20020a056602134300b0068929429b57mr6999688iov.75.1661097493907; Sun, 21 Aug
+ 2022 08:58:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000ce327f05d537ebf7@google.com> <20220821125751.4185-1-yin31149@gmail.com>
+In-Reply-To: <20220821125751.4185-1-yin31149@gmail.com>
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+Date:   Sun, 21 Aug 2022 21:58:02 +0600
+Message-ID: <CAABMjtF2GeNyTf6gQ1hk0BiXKY9HWQStBAk_R3w6MCFQ3bOYzA@mail.gmail.com>
+Subject: Re: [PATCH] rxrpc: fix bad unlock balance in rxrpc_do_sendmsg
+To:     Hawkins Jiawei <yin31149@gmail.com>
+Cc:     syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-kernel-mentees 
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        linux-afs@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Sun, Aug 21, 2022 at 6:58 PM Hawkins Jiawei <yin31149@gmail.com> wrote:
+>
+> Syzkaller reports bad unlock balance bug as follows:
+> ------------[ cut here ]------------
+> WARNING: bad unlock balance detected!
+> syz-executor.0/4094 is trying to release lock (&call->user_mutex) at:
+> [<ffffffff87c1d8d1>] rxrpc_do_sendmsg+0x851/0x1110 net/rxrpc/sendmsg.c:754
+> but there are no more locks to release!
+>
+> other info that might help us debug this:
+> no locks held by syz-executor.0/4094.
+>
+> stack backtrace:
+> [...]
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x57/0x7d lib/dump_stack.c:106
+>  print_unlock_imbalance_bug include/trace/events/lock.h:69 [inline]
+>  __lock_release kernel/locking/lockdep.c:5333 [inline]
+>  lock_release.cold+0x49/0x4e kernel/locking/lockdep.c:5686
+>  __mutex_unlock_slowpath+0x99/0x5e0 kernel/locking/mutex.c:907
+>  rxrpc_do_sendmsg+0x851/0x1110 net/rxrpc/sendmsg.c:754
+>  sock_sendmsg_nosec net/socket.c:714 [inline]
+>  sock_sendmsg+0xab/0xe0 net/socket.c:734
+>  ____sys_sendmsg+0x5c2/0x7a0 net/socket.c:2485
+>  ___sys_sendmsg+0xdb/0x160 net/socket.c:2539
+>  __sys_sendmsg+0xc3/0x160 net/socket.c:2568
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>  [...]
+>  </TASK>
+> ------------------------------------
+>
+> When kernel wants to send a message through an RxRPC socket in
+> rxrpc_do_sendmsg(), kernel should hold the call->user_mutex lock,
+> or it will triggers bug when releasing this lock before returning
+> from rxrpc_do_sendmsg().
+>
+> Yet the problem is that during rxrpc_do_sendmsg(), kernel may call
+> rxrpc_wait_for_tx_window_intr() to wait for space to appear in the
+> tx queue or a signal to occur. When kernel fails the
+> mutex_lock_interruptible(), kernel will returns from the
+> rxrpc_wait_for_tx_window_intr() without acquiring the mutex lock, then
+> triggers bug when releasing the mutex lock in rxrpc_do_sendmsg().
+>
+> This patch solves it by acquiring the call->user_mutex lock, when
+> kernel fails the mutex_lock_interruptible() before returning from
+> the rxrpc_wait_for_tx_window_intr().
+>
+> Reported-and-tested-by: syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com
+> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+> ---
+>  net/rxrpc/sendmsg.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/rxrpc/sendmsg.c b/net/rxrpc/sendmsg.c
+> index 1d38e279e2ef..e13043d357d5 100644
+> --- a/net/rxrpc/sendmsg.c
+> +++ b/net/rxrpc/sendmsg.c
+> @@ -53,8 +53,10 @@ static int rxrpc_wait_for_tx_window_intr(struct rxrpc_sock *rx,
+>                 trace_rxrpc_transmit(call, rxrpc_transmit_wait);
+>                 mutex_unlock(&call->user_mutex);
+>                 *timeo = schedule_timeout(*timeo);
+> -               if (mutex_lock_interruptible(&call->user_mutex) < 0)
+> +               if (mutex_lock_interruptible(&call->user_mutex) < 0) {
+> +                       mutex_lock(&call->user_mutex);
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/adreno/a3xx_gpu.c | 2 +-
- drivers/gpu/drm/msm/adreno/a4xx_gpu.c | 2 +-
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+The interruptible version fails to acquire the lock. So why is it okay to
+force it to acquire the mutex_lock since we are in the interrupt context?
+>                         return sock_intr_errno(*timeo);
+> +               }
+>         }
+>  }
 
-diff --git a/drivers/gpu/drm/msm/adreno/a3xx_gpu.c b/drivers/gpu/drm/msm/adreno/a3xx_gpu.c
-index 0ab0e1dd8bbb..2c8b9899625b 100644
---- a/drivers/gpu/drm/msm/adreno/a3xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a3xx_gpu.c
-@@ -68,7 +68,7 @@ static void a3xx_submit(struct msm_gpu *gpu, struct msm_gem_submit *submit)
- 
- 	/* BIT(31) of CACHE_FLUSH_TS triggers CACHE_FLUSH_TS IRQ from GPU */
- 	OUT_PKT3(ring, CP_EVENT_WRITE, 3);
--	OUT_RING(ring, CACHE_FLUSH_TS | BIT(31));
-+	OUT_RING(ring, CACHE_FLUSH_TS | CP_EVENT_WRITE_0_IRQ);
- 	OUT_RING(ring, rbmemptr(ring, fence));
- 	OUT_RING(ring, submit->seqno);
- 
-diff --git a/drivers/gpu/drm/msm/adreno/a4xx_gpu.c b/drivers/gpu/drm/msm/adreno/a4xx_gpu.c
-index 0c6b2a6d0b4c..7cb8d9849c07 100644
---- a/drivers/gpu/drm/msm/adreno/a4xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a4xx_gpu.c
-@@ -62,7 +62,7 @@ static void a4xx_submit(struct msm_gpu *gpu, struct msm_gem_submit *submit)
- 
- 	/* BIT(31) of CACHE_FLUSH_TS triggers CACHE_FLUSH_TS IRQ from GPU */
- 	OUT_PKT3(ring, CP_EVENT_WRITE, 3);
--	OUT_RING(ring, CACHE_FLUSH_TS | BIT(31));
-+	OUT_RING(ring, CACHE_FLUSH_TS | CP_EVENT_WRITE_0_IRQ);
- 	OUT_RING(ring, rbmemptr(ring, fence));
- 	OUT_RING(ring, submit->seqno);
- 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 4d501100b9e4..c8ad8aeca777 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -146,7 +146,7 @@ static void a6xx_set_pagetable(struct a6xx_gpu *a6xx_gpu,
- 	 */
- 
- 	OUT_PKT7(ring, CP_EVENT_WRITE, 1);
--	OUT_RING(ring, 0x31);
-+	OUT_RING(ring, CACHE_INVALIDATE);
- 
- 	if (!sysprof) {
- 		/*
--- 
-2.37.2
-
+thanks,
+  -- Khalid Masum

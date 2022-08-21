@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839FB59B21C
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 07:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9A759B21E
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 07:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiHUFeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 01:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
+        id S230012AbiHUFef convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 21 Aug 2022 01:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiHUFe3 (ORCPT
+        with ESMTP id S229834AbiHUFea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 01:34:29 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D3F13E30
+        Sun, 21 Aug 2022 01:34:30 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D054313EAB
         for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 22:34:28 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id i4-20020a056e0212c400b002e5c72b3bd7so6089050ilm.6
+Received: by mail-il1-f199.google.com with SMTP id k9-20020a056e021a8900b002e5bd940e96so6117437ilv.13
         for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 22:34:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=SLinpRF80PqnXFMCOcLvqp4Pl9d+bNqtJ3TSPEcxUxE=;
-        b=oy720l0a8To+mugmOeR8/dGVzrthrov4FKBOE0mywlTeI6walz8VXJH+b8skEaOGIS
-         NgE5QUBGo2CnisEEYh5trrovzmSSqg9vNKA91FzK3B5HL8N/joJmM1jrdplNIRVsAhd2
-         eyuZWfPsK8lv/z8h8Mgk/H7qcce5DQm8LdQmlJLw6DWot6ueO8kgmzBYmntg3kBcaAZ+
-         wHjAwfsgfXgTNXMSfooaJz1XexuT0oahNJ1JNJ6JLdcFdEbYcUTcQkjWRmfpUvGcmOyQ
-         +obesLRfRh+YgEpKh7xxrO7wrx/yPivPpJa5QoI4KGn5OiE8TQnDbaAQT+K4H9WFzJS0
-         urew==
-X-Gm-Message-State: ACgBeo3vuOdWdLcN/70sfQHxnM3M9nkN2M2tD+gnCkYbZBhcrTZks48z
-        Xrrd3T04pcihCJmcY7KrVaUQNrVG5LBIPA3EuTOc8JldKceo
-X-Google-Smtp-Source: AA6agR5J93whK1w5u2ICPb5aH+ztLDAichtMjLLgbuc9JCKTBb/iBRYUyO46BgZt4/5duMeXtvn4X1H4UO3dwrrR8wyfs+HMCBF4
+        h=content-transfer-encoding:to:from:subject:message-id:date
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=a+etxQMTB+vR5J4K1rcBznEYzEFIprZpeNGFNGTbBMY=;
+        b=V3fa1NQ64aMsOzK0UmkOwXyeDn9whtYxWHw0A1MzujKo+lKc08CrNaEJYE1MA2gB/C
+         UJx392xbQF6dU/2ny7THlalteaX5wkLxeNg1MpHfdofNTPSjt+Mjzy0g1L1eY+OYqk0q
+         VSwtn6d2ZViWJJ8usQ2nMnYFFDqbd+3aum2tw5b2j5v/8Cv9THfGH1Qcb8HPCmbwLd2z
+         DgG8ykP4r2lG4LBFIM0HTei2Go/9B17ffrRqzz/WEnrdGxq7zt0eLvpY+29yTwO5Scw2
+         Wr0Lu3qjDwwaqNI5xzrl/BreJRO157edab90UvHAolp3rdiGqIjSqr8kjmzQHL4AGg5D
+         nnmA==
+X-Gm-Message-State: ACgBeo2uN0Bmiu6CtL8e1ozqqRsFy7dQtCTfbH8QZToyA2Si6kOs8ipL
+        40jSI5aCXji34KX8j3DwIKaC7YX9OzvGdMKiiXiKa3wd8eLC
+X-Google-Smtp-Source: AA6agR48w2x3OID+s9oHXffsyfKk30YfJGdt/O6WfKg5cTLowRFzkpnMlq+fj+9tQuX2KZUfJ10i5KnabXqYPfIonjnMvJ/nCgJO
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:438d:b0:344:cb31:89d3 with SMTP id
- bo13-20020a056638438d00b00344cb3189d3mr6848132jab.6.1661060067845; Sat, 20
- Aug 2022 22:34:27 -0700 (PDT)
-Date:   Sat, 20 Aug 2022 22:34:27 -0700
+X-Received: by 2002:a6b:6717:0:b0:688:d287:fa83 with SMTP id
+ b23-20020a6b6717000000b00688d287fa83mr6227528ioc.71.1661060068138; Sat, 20
+ Aug 2022 22:34:28 -0700 (PDT)
+Date:   Sat, 20 Aug 2022 22:34:28 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004b6dfe05e6b9af89@google.com>
-Subject: [syzbot] WARNING in vmap_pages_range_noflush (2)
-From:   syzbot <syzbot+616ff0452fec30f4dcfd@syzkaller.appspotmail.com>
-To:     ast@kernel.org, bjorn@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
-        hawk@kernel.org, john.fastabend@gmail.com,
-        jonathan.lemon@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, maciej.fijalkowski@intel.com,
-        magnus.karlsson@intel.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000004fe8f805e6b9af20@google.com>
+Subject: [syzbot] possible deadlock in rds_tcp_reset_callbacks
+From:   syzbot <syzbot+78c55c7bc6f66e53dce2@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        rds-devel@oss.oracle.com, santosh.shilimkar@oracle.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
@@ -63,69 +62,112 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    95d10484d66e Add linux-next specific files for 20220817
+HEAD commit:    8755ae45a9e8 Add linux-next specific files for 20220819
 git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=14bf9423080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2f5fa747986be53a
-dashboard link: https://syzkaller.appspot.com/bug?extid=616ff0452fec30f4dcfd
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=107cf485080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
+dashboard link: https://syzkaller.appspot.com/bug?extid=78c55c7bc6f66e53dce2
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1409d63d080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=169a9fc3080000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e678cb080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13f68e5b080000
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+616ff0452fec30f4dcfd@syzkaller.appspotmail.com
+Reported-by: syzbot+78c55c7bc6f66e53dce2@syzkaller.appspotmail.com
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3614 at mm/vmalloc.c:476 vmap_pages_pte_range mm/vmalloc.c:476 [inline]
-WARNING: CPU: 1 PID: 3614 at mm/vmalloc.c:476 vmap_pages_pmd_range mm/vmalloc.c:500 [inline]
-WARNING: CPU: 1 PID: 3614 at mm/vmalloc.c:476 vmap_pages_pud_range mm/vmalloc.c:518 [inline]
-WARNING: CPU: 1 PID: 3614 at mm/vmalloc.c:476 vmap_pages_p4d_range mm/vmalloc.c:536 [inline]
-WARNING: CPU: 1 PID: 3614 at mm/vmalloc.c:476 vmap_small_pages_range_noflush mm/vmalloc.c:558 [inline]
-WARNING: CPU: 1 PID: 3614 at mm/vmalloc.c:476 vmap_pages_range_noflush+0x992/0xb90 mm/vmalloc.c:587
-Modules linked in:
-CPU: 1 PID: 3614 Comm: syz-executor206 Not tainted 6.0.0-rc1-next-20220817-syzkaller #0
+======================================================
+WARNING: possible circular locking dependency detected
+6.0.0-rc1-next-20220819-syzkaller #0 Not tainted
+------------------------------------------------------
+kworker/u4:3/46 is trying to acquire lock:
+ffff888027dc40e8 ((work_completion)(&(&cp->cp_send_w)->work)){+.+.}-{0:0}, at: __flush_work+0xdd/0xae0 kernel/workqueue.c:3066
+
+but task is already holding lock:
+ffff88807e18da70 (k-sk_lock-AF_INET6){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1712 [inline]
+ffff88807e18da70 (k-sk_lock-AF_INET6){+.+.}-{0:0}, at: rds_tcp_reset_callbacks+0x1bf/0x4d0 net/rds/tcp.c:169
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (k-sk_lock-AF_INET6){+.+.}-{0:0}:
+       lock_sock_nested+0x36/0xf0 net/core/sock.c:3391
+       lock_sock include/net/sock.h:1712 [inline]
+       tcp_sock_set_cork+0x16/0x90 net/ipv4/tcp.c:3328
+       rds_send_xmit+0x386/0x2540 net/rds/send.c:194
+       rds_send_worker+0x92/0x2e0 net/rds/threads.c:200
+       process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+       worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+       kthread+0x2e4/0x3a0 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+-> #0 ((work_completion)(&(&cp->cp_send_w)->work)){+.+.}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain kernel/locking/lockdep.c:3829 [inline]
+       __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
+       lock_acquire kernel/locking/lockdep.c:5666 [inline]
+       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+       __flush_work+0x105/0xae0 kernel/workqueue.c:3069
+       __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3160
+       rds_tcp_reset_callbacks+0x1cb/0x4d0 net/rds/tcp.c:171
+       rds_tcp_accept_one+0x9d5/0xd10 net/rds/tcp_listen.c:203
+       rds_tcp_accept_worker+0x55/0x80 net/rds/tcp.c:529
+       process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+       worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+       kthread+0x2e4/0x3a0 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(k-sk_lock-AF_INET6);
+                               lock((work_completion)(&(&cp->cp_send_w)->work));
+                               lock(k-sk_lock-AF_INET6);
+  lock((work_completion)(&(&cp->cp_send_w)->work));
+
+ *** DEADLOCK ***
+
+4 locks held by kworker/u4:3/46:
+ #0: ffff8880275f7938 ((wq_completion)krdsd){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff8880275f7938 ((wq_completion)krdsd){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff8880275f7938 ((wq_completion)krdsd){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff8880275f7938 ((wq_completion)krdsd){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff8880275f7938 ((wq_completion)krdsd){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff8880275f7938 ((wq_completion)krdsd){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+ #1: ffffc90000b77da8 ((work_completion)(&rtn->rds_tcp_accept_w)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+ #2: ffff8880733c4088 (&tc->t_conn_path_lock){+.+.}-{3:3}, at: rds_tcp_accept_one+0x892/0xd10 net/rds/tcp_listen.c:195
+ #3: ffff88807e18da70 (k-sk_lock-AF_INET6){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1712 [inline]
+ #3: ffff88807e18da70 (k-sk_lock-AF_INET6){+.+.}-{0:0}, at: rds_tcp_reset_callbacks+0x1bf/0x4d0 net/rds/tcp.c:169
+
+stack backtrace:
+CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 6.0.0-rc1-next-20220819-syzkaller #0
+kworker/u4:3[46] cmdline: ��a�����
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:vmap_pages_pte_range mm/vmalloc.c:476 [inline]
-RIP: 0010:vmap_pages_pmd_range mm/vmalloc.c:500 [inline]
-RIP: 0010:vmap_pages_pud_range mm/vmalloc.c:518 [inline]
-RIP: 0010:vmap_pages_p4d_range mm/vmalloc.c:536 [inline]
-RIP: 0010:vmap_small_pages_range_noflush mm/vmalloc.c:558 [inline]
-RIP: 0010:vmap_pages_range_noflush+0x992/0xb90 mm/vmalloc.c:587
-Code: c7 c7 e0 fa f8 89 c6 05 aa 6c 0d 0c 01 e8 c7 10 7e 07 0f 0b e9 48 fe ff ff e8 ba d7 bf ff 0f 0b e9 1d ff ff ff e8 ae d7 bf ff <0f> 0b e9 11 ff ff ff e8 a2 d7 bf ff 4c 8b 7c 24 20 4c 89 ff e8 45
-RSP: 0018:ffffc9000398faa8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88806fbbad48 RCX: 0000000000000000
-RDX: ffff88801f1f0000 RSI: ffffffff81bc3da2 RDI: 0000000000000007
-RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 8000000000000163 R14: dffffc0000000000 R15: ffffc9000d9a9000
-FS:  0000555555c6f300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000040 CR3: 000000002111f000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Workqueue: krdsd rds_tcp_accept_worker
 Call Trace:
  <TASK>
- vmap_pages_range mm/vmalloc.c:621 [inline]
- vmap+0x1b4/0x330 mm/vmalloc.c:2837
- xdp_umem_addr_map net/xdp/xdp_umem.c:51 [inline]
- xdp_umem_reg net/xdp/xdp_umem.c:223 [inline]
- xdp_umem_create+0xcf7/0x1180 net/xdp/xdp_umem.c:252
- xsk_setsockopt+0x73e/0x9e0 net/xdp/xsk.c:1100
- __sys_setsockopt+0x2d6/0x690 net/socket.c:2252
- __do_sys_setsockopt net/socket.c:2263 [inline]
- __se_sys_setsockopt net/socket.c:2260 [inline]
- __x64_sys_setsockopt+0xba/0x150 net/socket.c:2260
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f848f588b29
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdd237dcc8 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f848f588b29
-RDX: 0000000000000004 RSI: 000000000000011b RDI: 0000000000000003
-RBP: 00007f848f54ccd0 R08: 0000000000000020 R09: 0000000000000000
-R10: 0000000020000040 R11: 0000000000000246 R12: 00007f848f54cd60
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ __dump_stack lib/dump_stack.c:122 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain kernel/locking/lockdep.c:3829 [inline]
+ __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5666 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
+ __flush_work+0x105/0xae0 kernel/workqueue.c:3069
+ __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3160
+ rds_tcp_reset_callbacks+0x1cb/0x4d0 net/rds/tcp.c:171
+ rds_tcp_accept_one+0x9d5/0xd10 net/rds/tcp_listen.c:203
+ rds_tcp_accept_worker+0x55/0x80 net/rds/tcp.c:529
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
  </TASK>
 
 

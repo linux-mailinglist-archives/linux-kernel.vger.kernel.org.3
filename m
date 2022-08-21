@@ -2,400 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7032B59B644
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 22:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B18559B64B
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 22:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbiHUUQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 16:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
+        id S231664AbiHUUSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 16:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbiHUUQE (ORCPT
+        with ESMTP id S230267AbiHUUSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 16:16:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E4D19C3E
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 13:16:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16DBBB80E26
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 20:16:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4512C433D7;
-        Sun, 21 Aug 2022 20:15:58 +0000 (UTC)
-Date:   Sun, 21 Aug 2022 16:16:14 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [GIT PULL v2] tracing: Fixes for v6.0-rc1
-Message-ID: <20220821161614.017ddc4f@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 21 Aug 2022 16:18:06 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987381A043;
+        Sun, 21 Aug 2022 13:18:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661113085; x=1692649085;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VGwu4UYZpz4PTveoCzdOe9uswm9TgrvREj3LygEgkig=;
+  b=m2yU0tvXY+g/Rph2K2AxfWM4suBNCxDSt8vHVUbsidpR050Gb8DMz+sD
+   UydPtZ8jtPJcCJRDygUQdRYE07fdGu+l5pMDiW81+gUstAm9+hQ0UA5gx
+   t5+7E6y/yMHE38OEK+c9Rz0SPWlMRCW2ilGgaFEctY9yZGJj+T50Yi6a3
+   O2ijbXsNbBBSU9D5KKpJcmTr/moQEaI1BkyMIsJobVbU1wVHFF61VQIvM
+   jC6nZ7Yd12EpynbRaJGRvcGCiA4YEWiNTW09+Vz8yD2Jy4fPhTuyoDj+3
+   dkd6URrA/IHRm8pSFxf/p9L1P9aGmVX9P241q6jIIMKRWCX39+WnY4am8
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="357258062"
+X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
+   d="scan'208";a="357258062"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 13:18:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,253,1654585200"; 
+   d="scan'208";a="676980543"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 21 Aug 2022 13:18:02 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oPrOT-0004Rz-2Q;
+        Sun, 21 Aug 2022 20:18:01 +0000
+Date:   Mon, 22 Aug 2022 04:17:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vimal Kumar <vimal.kumar32@gmail.com>, gregkh@linuxfoundation.org
+Cc:     kbuild-all@lists.01.org, chinmoyghosh2001@gmail.com,
+        Vimal Kumar <vimal.kumar32@gmail.com>,
+        Mintu Patel <mintupatel89@gmail.com>,
+        Vishal Badole <badolevishal1116@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] PM: runtime: Add support to disable wakeup sources
+Message-ID: <202208220446.ZLg90bEJ-lkp@intel.com>
+References: <20220821134533.22901-1-vimal.kumar32@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220821134533.22901-1-vimal.kumar32@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Vimal,
 
-Linus,
+Thank you for the patch! Perhaps something to improve:
 
-Various fixes for tracing:
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master v6.0-rc1 next-20220819]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
- - Fix a return value of traceprobe_parse_event_name()
+url:    https://github.com/intel-lab-lkp/linux/commits/Vimal-Kumar/PM-runtime-Add-support-to-disable-wakeup-sources/20220821-214614
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: i386-randconfig-c021 (https://download.01.org/0day-ci/archive/20220822/202208220446.ZLg90bEJ-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
 
- - Fix NULL pointer dereference from failed ftrace enabling
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
- - Fix NULL pointer dereference when asking for registers from eprobes
+cocci warnings: (new ones prefixed by >>)
+>> drivers/base/power/wakeup_stats.c:221:11-18: WARNING opportunity for memdup_user
 
- - Make eprobes consistent with kprobes/uprobes, filters and histograms
-
-
-Please pull the latest trace-v6.0-rc1-2 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-trace-v6.0-rc1-2
-
-Tag SHA1: 82fae5b2d7b77fb04c57f5b5344eddc490d2b0ff
-Head SHA1: b2380577d4fe1c0ef3fa50417f1e441c016e4cbe
-
-Changes since v1: https://lore.kernel.org/all/20220821120334.036a533e@gandalf.local.home/ 
-
-  - Removed sparse warning "fix".
-
-Lukas Bulwahn (1):
-      tracing: React to error return from traceprobe_parse_event_name()
-
-Steven Rostedt (Google) (7):
-      tracing/perf: Fix double put of trace event when init fails
-      tracing/eprobes: Do not allow eprobes to use $stack, or % for regs
-      tracing/eprobes: Do not hardcode $comm as a string
-      tracing/eprobes: Fix reading of string fields
-      tracing/eprobes: Have event probes be consistent with kprobes and uprobes
-      tracing/probes: Have kprobes and uprobes use $COMM too
-      tracing: Have filter accept "common_cpu" to be consistent
-
-Yang Jihong (1):
-      ftrace: Fix NULL pointer dereference in is_ftrace_trampoline when ftrace is dead
-
-----
- kernel/trace/ftrace.c           | 10 +++++
- kernel/trace/trace_eprobe.c     | 93 +++++++++++++++++++++++++++++++++++++----
- kernel/trace/trace_event_perf.c |  7 ++--
- kernel/trace/trace_events.c     |  1 +
- kernel/trace/trace_probe.c      | 29 ++++++++-----
- 5 files changed, 119 insertions(+), 21 deletions(-)
----------------------------
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 601ccf1b2f09..4baa99363b16 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -2937,6 +2937,16 @@ int ftrace_startup(struct ftrace_ops *ops, int command)
- 
- 	ftrace_startup_enable(command);
- 
-+	/*
-+	 * If ftrace is in an undefined state, we just remove ops from list
-+	 * to prevent the NULL pointer, instead of totally rolling it back and
-+	 * free trampoline, because those actions could cause further damage.
-+	 */
-+	if (unlikely(ftrace_disabled)) {
-+		__unregister_ftrace_function(ops);
-+		return -ENODEV;
-+	}
-+
- 	ops->flags &= ~FTRACE_OPS_FL_ADDING;
- 
- 	return 0;
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index 4a0e9d927443..1783e3478912 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -227,6 +227,7 @@ static int trace_eprobe_tp_arg_update(struct trace_eprobe *ep, int i)
- 	struct probe_arg *parg = &ep->tp.args[i];
- 	struct ftrace_event_field *field;
- 	struct list_head *head;
-+	int ret = -ENOENT;
- 
- 	head = trace_get_fields(ep->event);
- 	list_for_each_entry(field, head, link) {
-@@ -236,9 +237,20 @@ static int trace_eprobe_tp_arg_update(struct trace_eprobe *ep, int i)
- 			return 0;
- 		}
- 	}
-+
-+	/*
-+	 * Argument not found on event. But allow for comm and COMM
-+	 * to be used to get the current->comm.
-+	 */
-+	if (strcmp(parg->code->data, "COMM") == 0 ||
-+	    strcmp(parg->code->data, "comm") == 0) {
-+		parg->code->op = FETCH_OP_COMM;
-+		ret = 0;
-+	}
-+
- 	kfree(parg->code->data);
- 	parg->code->data = NULL;
--	return -ENOENT;
-+	return ret;
- }
- 
- static int eprobe_event_define_fields(struct trace_event_call *event_call)
-@@ -311,6 +323,27 @@ static unsigned long get_event_field(struct fetch_insn *code, void *rec)
- 
- 	addr = rec + field->offset;
- 
-+	if (is_string_field(field)) {
-+		switch (field->filter_type) {
-+		case FILTER_DYN_STRING:
-+			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
-+			break;
-+		case FILTER_RDYN_STRING:
-+			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
-+			break;
-+		case FILTER_STATIC_STRING:
-+			val = (unsigned long)addr;
-+			break;
-+		case FILTER_PTR_STRING:
-+			val = (unsigned long)(*(char *)addr);
-+			break;
-+		default:
-+			WARN_ON_ONCE(1);
-+			return 0;
-+		}
-+		return val;
-+	}
-+
- 	switch (field->size) {
- 	case 1:
- 		if (field->is_signed)
-@@ -342,16 +375,38 @@ static unsigned long get_event_field(struct fetch_insn *code, void *rec)
- 
- static int get_eprobe_size(struct trace_probe *tp, void *rec)
- {
-+	struct fetch_insn *code;
- 	struct probe_arg *arg;
- 	int i, len, ret = 0;
- 
- 	for (i = 0; i < tp->nr_args; i++) {
- 		arg = tp->args + i;
--		if (unlikely(arg->dynamic)) {
-+		if (arg->dynamic) {
- 			unsigned long val;
- 
--			val = get_event_field(arg->code, rec);
--			len = process_fetch_insn_bottom(arg->code + 1, val, NULL, NULL);
-+			code = arg->code;
-+ retry:
-+			switch (code->op) {
-+			case FETCH_OP_TP_ARG:
-+				val = get_event_field(code, rec);
-+				break;
-+			case FETCH_OP_IMM:
-+				val = code->immediate;
-+				break;
-+			case FETCH_OP_COMM:
-+				val = (unsigned long)current->comm;
-+				break;
-+			case FETCH_OP_DATA:
-+				val = (unsigned long)code->data;
-+				break;
-+			case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
-+				code++;
-+				goto retry;
-+			default:
-+				continue;
-+			}
-+			code++;
-+			len = process_fetch_insn_bottom(code, val, NULL, NULL);
- 			if (len > 0)
- 				ret += len;
- 		}
-@@ -369,8 +424,28 @@ process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
- {
- 	unsigned long val;
- 
--	val = get_event_field(code, rec);
--	return process_fetch_insn_bottom(code + 1, val, dest, base);
-+ retry:
-+	switch (code->op) {
-+	case FETCH_OP_TP_ARG:
-+		val = get_event_field(code, rec);
-+		break;
-+	case FETCH_OP_IMM:
-+		val = code->immediate;
-+		break;
-+	case FETCH_OP_COMM:
-+		val = (unsigned long)current->comm;
-+		break;
-+	case FETCH_OP_DATA:
-+		val = (unsigned long)code->data;
-+		break;
-+	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
-+		code++;
-+		goto retry;
-+	default:
-+		return -EILSEQ;
-+	}
-+	code++;
-+	return process_fetch_insn_bottom(code, val, dest, base);
- }
- NOKPROBE_SYMBOL(process_fetch_insn)
- 
-@@ -845,6 +920,10 @@ static int trace_eprobe_tp_update_arg(struct trace_eprobe *ep, const char *argv[
- 			trace_probe_log_err(0, BAD_ATTACH_ARG);
- 	}
- 
-+	/* Handle symbols "@" */
-+	if (!ret)
-+		ret = traceprobe_update_arg(&ep->tp.args[i]);
-+
- 	return ret;
- }
- 
-@@ -883,7 +962,7 @@ static int __trace_eprobe_create(int argc, const char *argv[])
- 	trace_probe_log_set_index(1);
- 	sys_event = argv[1];
- 	ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2, 0);
--	if (!sys_event || !sys_name) {
-+	if (ret || !sys_event || !sys_name) {
- 		trace_probe_log_err(0, NO_EVENT_INFO);
- 		goto parse_error;
- 	}
-diff --git a/kernel/trace/trace_event_perf.c b/kernel/trace/trace_event_perf.c
-index a114549720d6..61e3a2620fa3 100644
---- a/kernel/trace/trace_event_perf.c
-+++ b/kernel/trace/trace_event_perf.c
-@@ -157,7 +157,7 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
- 	int i;
- 
- 	if (--tp_event->perf_refcount > 0)
--		goto out;
-+		return;
- 
- 	tp_event->class->reg(tp_event, TRACE_REG_PERF_UNREGISTER, NULL);
- 
-@@ -176,8 +176,6 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
- 			perf_trace_buf[i] = NULL;
- 		}
- 	}
--out:
--	trace_event_put_ref(tp_event);
- }
- 
- static int perf_trace_event_open(struct perf_event *p_event)
-@@ -241,6 +239,7 @@ void perf_trace_destroy(struct perf_event *p_event)
- 	mutex_lock(&event_mutex);
- 	perf_trace_event_close(p_event);
- 	perf_trace_event_unreg(p_event);
-+	trace_event_put_ref(p_event->tp_event);
- 	mutex_unlock(&event_mutex);
- }
- 
-@@ -292,6 +291,7 @@ void perf_kprobe_destroy(struct perf_event *p_event)
- 	mutex_lock(&event_mutex);
- 	perf_trace_event_close(p_event);
- 	perf_trace_event_unreg(p_event);
-+	trace_event_put_ref(p_event->tp_event);
- 	mutex_unlock(&event_mutex);
- 
- 	destroy_local_trace_kprobe(p_event->tp_event);
-@@ -347,6 +347,7 @@ void perf_uprobe_destroy(struct perf_event *p_event)
- 	mutex_lock(&event_mutex);
- 	perf_trace_event_close(p_event);
- 	perf_trace_event_unreg(p_event);
-+	trace_event_put_ref(p_event->tp_event);
- 	mutex_unlock(&event_mutex);
- 	destroy_local_trace_uprobe(p_event->tp_event);
- }
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 181f08186d32..0356cae0cf74 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -176,6 +176,7 @@ static int trace_define_generic_fields(void)
- 
- 	__generic_field(int, CPU, FILTER_CPU);
- 	__generic_field(int, cpu, FILTER_CPU);
-+	__generic_field(int, common_cpu, FILTER_CPU);
- 	__generic_field(char *, COMM, FILTER_COMM);
- 	__generic_field(char *, comm, FILTER_COMM);
- 
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 850a88abd33b..36dff277de46 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -283,7 +283,14 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
- 	int ret = 0;
- 	int len;
- 
--	if (strcmp(arg, "retval") == 0) {
-+	if (flags & TPARG_FL_TPOINT) {
-+		if (code->data)
-+			return -EFAULT;
-+		code->data = kstrdup(arg, GFP_KERNEL);
-+		if (!code->data)
-+			return -ENOMEM;
-+		code->op = FETCH_OP_TP_ARG;
-+	} else if (strcmp(arg, "retval") == 0) {
- 		if (flags & TPARG_FL_RETURN) {
- 			code->op = FETCH_OP_RETVAL;
- 		} else {
-@@ -307,7 +314,7 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
- 			}
- 		} else
- 			goto inval_var;
--	} else if (strcmp(arg, "comm") == 0) {
-+	} else if (strcmp(arg, "comm") == 0 || strcmp(arg, "COMM") == 0) {
- 		code->op = FETCH_OP_COMM;
- #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
- 	} else if (((flags & TPARG_FL_MASK) ==
-@@ -323,13 +330,6 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
- 		code->op = FETCH_OP_ARG;
- 		code->param = (unsigned int)param - 1;
- #endif
--	} else if (flags & TPARG_FL_TPOINT) {
--		if (code->data)
--			return -EFAULT;
--		code->data = kstrdup(arg, GFP_KERNEL);
--		if (!code->data)
--			return -ENOMEM;
--		code->op = FETCH_OP_TP_ARG;
- 	} else
- 		goto inval_var;
- 
-@@ -384,6 +384,11 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
- 		break;
- 
- 	case '%':	/* named register */
-+		if (flags & TPARG_FL_TPOINT) {
-+			/* eprobes do not handle registers */
-+			trace_probe_log_err(offs, BAD_VAR);
-+			break;
-+		}
- 		ret = regs_query_register_offset(arg + 1);
- 		if (ret >= 0) {
- 			code->op = FETCH_OP_REG;
-@@ -617,9 +622,11 @@ static int traceprobe_parse_probe_arg_body(const char *argv, ssize_t *size,
- a
- 	/*
- 	 * Since $comm and immediate string can not be dereferenced,
--	 * we can find those by strcmp.
-+	 * we can find those by strcmp. But ignore for eprobes.
- 	 */
--	if (strcmp(arg, "$comm") == 0 || strncmp(arg, "\\\"", 2) == 0) {
-+	if (!(flags & TPARG_FL_TPOINT) &&
-+	    (strcmp(arg, "$comm") == 0 || strcmp(arg, "$COMM") == 0 ||
-+	     strncmp(arg, "\\\"", 2) == 0)) {
- 		/* The type of $comm must be "string", and not an array. */
- 		if (parg->count || (t && strcmp(t, "string")))
- 			goto out;
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

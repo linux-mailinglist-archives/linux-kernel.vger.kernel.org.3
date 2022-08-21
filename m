@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8351459B101
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 02:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9E859B104
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 02:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236556AbiHUAJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 20:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S237056AbiHUAJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 20:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235646AbiHUAIg (ORCPT
+        with ESMTP id S235680AbiHUAIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 20 Aug 2022 20:08:36 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB5F11C11
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 17:08:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC2B12AA7;
+        Sat, 20 Aug 2022 17:08:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D35CBB80B69
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 00:08:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89242C43141;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0983BB80B6A;
+        Sun, 21 Aug 2022 00:08:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27C1C433C1;
         Sun, 21 Aug 2022 00:08:30 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oPYWD-005DlX-0f;
+        id 1oPYWD-005Dm5-1G;
         Sat, 20 Aug 2022 20:08:45 -0400
-Message-ID: <20220821000845.047156494@goodmis.org>
+Message-ID: <20220821000845.228939352@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sat, 20 Aug 2022 20:07:41 -0400
+Date:   Sat, 20 Aug 2022 20:07:42 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Yang Jihong <yangjihong1@huawei.com>
-Subject: [for-linus][PATCH 04/10] ftrace: Fix NULL pointer dereference in is_ftrace_trampoline when
- ftrace is dead
+        stable@vger.kernel.org,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Subject: [for-linus][PATCH 05/10] tracing/eprobes: Do not allow eprobes to use $stack, or % for regs
 References: <20220821000737.328590235@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,92 +48,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Jihong <yangjihong1@huawei.com>
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-ftrace_startup does not remove ops from ftrace_ops_list when
-ftrace_startup_enable fails:
+While playing with event probes (eprobes), I tried to see what would
+happen if I attempted to retrieve the instruction pointer (%rip) knowing
+that event probes do not use pt_regs. The result was:
 
-register_ftrace_function
-  ftrace_startup
-    __register_ftrace_function
-      ...
-      add_ftrace_ops(&ftrace_ops_list, ops)
-      ...
-    ...
-    ftrace_startup_enable // if ftrace failed to modify, ftrace_disabled is set to 1
-    ...
-  return 0 // ops is in the ftrace_ops_list.
+ BUG: kernel NULL pointer dereference, address: 0000000000000024
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 0 P4D 0
+ Oops: 0000 [#1] PREEMPT SMP PTI
+ CPU: 1 PID: 1847 Comm: trace-cmd Not tainted 5.19.0-rc5-test+ #309
+ Hardware name: Hewlett-Packard HP Compaq Pro 6300 SFF/339A, BIOS K01
+v03.03 07/14/2016
+ RIP: 0010:get_event_field.isra.0+0x0/0x50
+ Code: ff 48 c7 c7 c0 8f 74 a1 e8 3d 8b f5 ff e8 88 09 f6 ff 4c 89 e7 e8
+50 6a 13 00 48 89 ef 5b 5d 41 5c 41 5d e9 42 6a 13 00 66 90 <48> 63 47 24
+8b 57 2c 48 01 c6 8b 47 28 83 f8 02 74 0e 83 f8 04 74
+ RSP: 0018:ffff916c394bbaf0 EFLAGS: 00010086
+ RAX: ffff916c854041d8 RBX: ffff916c8d9fbf50 RCX: ffff916c255d2000
+ RDX: 0000000000000000 RSI: ffff916c255d2008 RDI: 0000000000000000
+ RBP: 0000000000000000 R08: ffff916c3a2a0c08 R09: ffff916c394bbda8
+ R10: 0000000000000000 R11: 0000000000000000 R12: ffff916c854041d8
+ R13: ffff916c854041b0 R14: 0000000000000000 R15: 0000000000000000
+ FS:  0000000000000000(0000) GS:ffff916c9ea40000(0000)
+knlGS:0000000000000000
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 0000000000000024 CR3: 000000011b60a002 CR4: 00000000001706e0
+ Call Trace:
+  <TASK>
+  get_eprobe_size+0xb4/0x640
+  ? __mod_node_page_state+0x72/0xc0
+  __eprobe_trace_func+0x59/0x1a0
+  ? __mod_lruvec_page_state+0xaa/0x1b0
+  ? page_remove_file_rmap+0x14/0x230
+  ? page_remove_rmap+0xda/0x170
+  event_triggers_call+0x52/0xe0
+  trace_event_buffer_commit+0x18f/0x240
+  trace_event_raw_event_sched_wakeup_template+0x7a/0xb0
+  try_to_wake_up+0x260/0x4c0
+  __wake_up_common+0x80/0x180
+  __wake_up_common_lock+0x7c/0xc0
+  do_notify_parent+0x1c9/0x2a0
+  exit_notify+0x1a9/0x220
+  do_exit+0x2ba/0x450
+  do_group_exit+0x2d/0x90
+  __x64_sys_exit_group+0x14/0x20
+  do_syscall_64+0x3b/0x90
+  entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-When ftrace_disabled = 1, unregister_ftrace_function simply returns without doing anything:
-unregister_ftrace_function
-  ftrace_shutdown
-    if (unlikely(ftrace_disabled))
-            return -ENODEV;  // return here, __unregister_ftrace_function is not executed,
-                             // as a result, ops is still in the ftrace_ops_list
-    __unregister_ftrace_function
-    ...
+Obviously this is not the desired result.
 
-If ops is dynamically allocated, it will be free later, in this case,
-is_ftrace_trampoline accesses NULL pointer:
+Move the testing for TPARG_FL_TPOINT which is only used for event probes
+to the top of the "$" variable check, as all the other variables are not
+used for event probes. Also add a check in the register parsing "%" to
+fail if an event probe is used.
 
-is_ftrace_trampoline
-  ftrace_ops_trampoline
-    do_for_each_ftrace_op(op, ftrace_ops_list) // OOPS! op may be NULL!
-
-Syzkaller reports as follows:
-[ 1203.506103] BUG: kernel NULL pointer dereference, address: 000000000000010b
-[ 1203.508039] #PF: supervisor read access in kernel mode
-[ 1203.508798] #PF: error_code(0x0000) - not-present page
-[ 1203.509558] PGD 800000011660b067 P4D 800000011660b067 PUD 130fb8067 PMD 0
-[ 1203.510560] Oops: 0000 [#1] SMP KASAN PTI
-[ 1203.511189] CPU: 6 PID: 29532 Comm: syz-executor.2 Tainted: G    B   W         5.10.0 #8
-[ 1203.512324] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-[ 1203.513895] RIP: 0010:is_ftrace_trampoline+0x26/0xb0
-[ 1203.514644] Code: ff eb d3 90 41 55 41 54 49 89 fc 55 53 e8 f2 00 fd ff 48 8b 1d 3b 35 5d 03 e8 e6 00 fd ff 48 8d bb 90 00 00 00 e8 2a 81 26 00 <48> 8b ab 90 00 00 00 48 85 ed 74 1d e8 c9 00 fd ff 48 8d bb 98 00
-[ 1203.518838] RSP: 0018:ffffc900012cf960 EFLAGS: 00010246
-[ 1203.520092] RAX: 0000000000000000 RBX: 000000000000007b RCX: ffffffff8a331866
-[ 1203.521469] RDX: 0000000000000000 RSI: 0000000000000008 RDI: 000000000000010b
-[ 1203.522583] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8df18b07
-[ 1203.523550] R10: fffffbfff1be3160 R11: 0000000000000001 R12: 0000000000478399
-[ 1203.524596] R13: 0000000000000000 R14: ffff888145088000 R15: 0000000000000008
-[ 1203.525634] FS:  00007f429f5f4700(0000) GS:ffff8881daf00000(0000) knlGS:0000000000000000
-[ 1203.526801] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 1203.527626] CR2: 000000000000010b CR3: 0000000170e1e001 CR4: 00000000003706e0
-[ 1203.528611] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[ 1203.529605] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-Therefore, when ftrace_startup_enable fails, we need to rollback registration
-process and remove ops from ftrace_ops_list.
-
-Link: https://lkml.kernel.org/r/20220818032659.56209-1-yangjihong1@huawei.com
-
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+Cc: stable@vger.kernel.org
+Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/ftrace.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ kernel/trace/trace_probe.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 601ccf1b2f09..4baa99363b16 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -2937,6 +2937,16 @@ int ftrace_startup(struct ftrace_ops *ops, int command)
+diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+index 850a88abd33b..dec657af363c 100644
+--- a/kernel/trace/trace_probe.c
++++ b/kernel/trace/trace_probe.c
+@@ -283,7 +283,14 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
+ 	int ret = 0;
+ 	int len;
  
- 	ftrace_startup_enable(command);
+-	if (strcmp(arg, "retval") == 0) {
++	if (flags & TPARG_FL_TPOINT) {
++		if (code->data)
++			return -EFAULT;
++		code->data = kstrdup(arg, GFP_KERNEL);
++		if (!code->data)
++			return -ENOMEM;
++		code->op = FETCH_OP_TP_ARG;
++	} else if (strcmp(arg, "retval") == 0) {
+ 		if (flags & TPARG_FL_RETURN) {
+ 			code->op = FETCH_OP_RETVAL;
+ 		} else {
+@@ -323,13 +330,6 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
+ 		code->op = FETCH_OP_ARG;
+ 		code->param = (unsigned int)param - 1;
+ #endif
+-	} else if (flags & TPARG_FL_TPOINT) {
+-		if (code->data)
+-			return -EFAULT;
+-		code->data = kstrdup(arg, GFP_KERNEL);
+-		if (!code->data)
+-			return -ENOMEM;
+-		code->op = FETCH_OP_TP_ARG;
+ 	} else
+ 		goto inval_var;
  
-+	/*
-+	 * If ftrace is in an undefined state, we just remove ops from list
-+	 * to prevent the NULL pointer, instead of totally rolling it back and
-+	 * free trampoline, because those actions could cause further damage.
-+	 */
-+	if (unlikely(ftrace_disabled)) {
-+		__unregister_ftrace_function(ops);
-+		return -ENODEV;
-+	}
-+
- 	ops->flags &= ~FTRACE_OPS_FL_ADDING;
+@@ -384,6 +384,11 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
+ 		break;
  
- 	return 0;
+ 	case '%':	/* named register */
++		if (flags & TPARG_FL_TPOINT) {
++			/* eprobes do not handle registers */
++			trace_probe_log_err(offs, BAD_VAR);
++			break;
++		}
+ 		ret = regs_query_register_offset(arg + 1);
+ 		if (ret >= 0) {
+ 			code->op = FETCH_OP_REG;
 -- 
 2.35.1

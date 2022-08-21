@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E08159B216
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 07:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839FB59B21C
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 07:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiHUF3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 01:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S229971AbiHUFeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 01:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiHUF3h (ORCPT
+        with ESMTP id S229379AbiHUFe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 01:29:37 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585F12B18F
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 22:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661059776; x=1692595776;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LPXXsTJb75anKjvRsLfVn5v387PcNPtkQFCgjaMQWA0=;
-  b=Y9NZ0xVvl/aM5t1kLaVKtYuda6tYmw72WHbzOm76fC4ouNK+vCa+qynu
-   7deuxDP3vzizcizcbFWkhZEWQs5F7VvXl/6LfRnQllQCp9WAa1vm5jdMT
-   GLlKHWHiKcKYtqTHj/d8SIZkFQPhA06+f37j7Ju/7kjRh4EYxwRrEkWsk
-   GTrbhjrdbmNXYt54VeEPveSP86tZ5Btr/QHu9QEaOtTNXIEnkiVgSZGFY
-   qI3YM4mrjUE1+bPzkMHhHJDoUpMTF53KULV0Veae/8WKjDvFoySU3Bhsh
-   TmKuhEhwIIBZjXFvLi/EDBwSDQYVdFNSfW3QxpnffADH7hbbn51Smg0bW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="273613684"
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="273613684"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 22:29:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="637759365"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 20 Aug 2022 22:29:33 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPdWe-0003hP-2W;
-        Sun, 21 Aug 2022 05:29:32 +0000
-Date:   Sun, 21 Aug 2022 13:28:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rob Gardner <rob.gardner@oracle.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/sparc/kernel/traps_64.c:268:6: error: no previous declaration
- for 'is_no_fault_exception'
-Message-ID: <202208211303.SUJk39Cv-lkp@intel.com>
+        Sun, 21 Aug 2022 01:34:29 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D3F13E30
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 22:34:28 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id i4-20020a056e0212c400b002e5c72b3bd7so6089050ilm.6
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 22:34:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=SLinpRF80PqnXFMCOcLvqp4Pl9d+bNqtJ3TSPEcxUxE=;
+        b=oy720l0a8To+mugmOeR8/dGVzrthrov4FKBOE0mywlTeI6walz8VXJH+b8skEaOGIS
+         NgE5QUBGo2CnisEEYh5trrovzmSSqg9vNKA91FzK3B5HL8N/joJmM1jrdplNIRVsAhd2
+         eyuZWfPsK8lv/z8h8Mgk/H7qcce5DQm8LdQmlJLw6DWot6ueO8kgmzBYmntg3kBcaAZ+
+         wHjAwfsgfXgTNXMSfooaJz1XexuT0oahNJ1JNJ6JLdcFdEbYcUTcQkjWRmfpUvGcmOyQ
+         +obesLRfRh+YgEpKh7xxrO7wrx/yPivPpJa5QoI4KGn5OiE8TQnDbaAQT+K4H9WFzJS0
+         urew==
+X-Gm-Message-State: ACgBeo3vuOdWdLcN/70sfQHxnM3M9nkN2M2tD+gnCkYbZBhcrTZks48z
+        Xrrd3T04pcihCJmcY7KrVaUQNrVG5LBIPA3EuTOc8JldKceo
+X-Google-Smtp-Source: AA6agR5J93whK1w5u2ICPb5aH+ztLDAichtMjLLgbuc9JCKTBb/iBRYUyO46BgZt4/5duMeXtvn4X1H4UO3dwrrR8wyfs+HMCBF4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:438d:b0:344:cb31:89d3 with SMTP id
+ bo13-20020a056638438d00b00344cb3189d3mr6848132jab.6.1661060067845; Sat, 20
+ Aug 2022 22:34:27 -0700 (PDT)
+Date:   Sat, 20 Aug 2022 22:34:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004b6dfe05e6b9af89@google.com>
+Subject: [syzbot] WARNING in vmap_pages_range_noflush (2)
+From:   syzbot <syzbot+616ff0452fec30f4dcfd@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bjorn@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
+        hawk@kernel.org, john.fastabend@gmail.com,
+        jonathan.lemon@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, maciej.fijalkowski@intel.com,
+        magnus.karlsson@intel.com, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,84 +59,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Hello,
 
-FYI, the error/warning still remains.
+syzbot found the following issue on:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   15b3f48a4339e3c16acf18624e2b7f60bc5e9a2c
-commit: b6fe1089667a7afcc2cf92cdaec590c7b8381715 sparc64: Handle additional cases of no fault loads
-date:   4 years, 11 months ago
-config: sparc64-randconfig-c033-20220821 (https://download.01.org/0day-ci/archive/20220821/202208211303.SUJk39Cv-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 7.5.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b6fe1089667a7afcc2cf92cdaec590c7b8381715
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b6fe1089667a7afcc2cf92cdaec590c7b8381715
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross W=1 O=build_dir ARCH=sparc64 SHELL=/bin/bash arch/sparc/kernel/
+HEAD commit:    95d10484d66e Add linux-next specific files for 20220817
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14bf9423080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2f5fa747986be53a
+dashboard link: https://syzkaller.appspot.com/bug?extid=616ff0452fec30f4dcfd
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1409d63d080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=169a9fc3080000
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+616ff0452fec30f4dcfd@syzkaller.appspotmail.com
 
-All errors (new ones prefixed by >>):
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3614 at mm/vmalloc.c:476 vmap_pages_pte_range mm/vmalloc.c:476 [inline]
+WARNING: CPU: 1 PID: 3614 at mm/vmalloc.c:476 vmap_pages_pmd_range mm/vmalloc.c:500 [inline]
+WARNING: CPU: 1 PID: 3614 at mm/vmalloc.c:476 vmap_pages_pud_range mm/vmalloc.c:518 [inline]
+WARNING: CPU: 1 PID: 3614 at mm/vmalloc.c:476 vmap_pages_p4d_range mm/vmalloc.c:536 [inline]
+WARNING: CPU: 1 PID: 3614 at mm/vmalloc.c:476 vmap_small_pages_range_noflush mm/vmalloc.c:558 [inline]
+WARNING: CPU: 1 PID: 3614 at mm/vmalloc.c:476 vmap_pages_range_noflush+0x992/0xb90 mm/vmalloc.c:587
+Modules linked in:
+CPU: 1 PID: 3614 Comm: syz-executor206 Not tainted 6.0.0-rc1-next-20220817-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:vmap_pages_pte_range mm/vmalloc.c:476 [inline]
+RIP: 0010:vmap_pages_pmd_range mm/vmalloc.c:500 [inline]
+RIP: 0010:vmap_pages_pud_range mm/vmalloc.c:518 [inline]
+RIP: 0010:vmap_pages_p4d_range mm/vmalloc.c:536 [inline]
+RIP: 0010:vmap_small_pages_range_noflush mm/vmalloc.c:558 [inline]
+RIP: 0010:vmap_pages_range_noflush+0x992/0xb90 mm/vmalloc.c:587
+Code: c7 c7 e0 fa f8 89 c6 05 aa 6c 0d 0c 01 e8 c7 10 7e 07 0f 0b e9 48 fe ff ff e8 ba d7 bf ff 0f 0b e9 1d ff ff ff e8 ae d7 bf ff <0f> 0b e9 11 ff ff ff e8 a2 d7 bf ff 4c 8b 7c 24 20 4c 89 ff e8 45
+RSP: 0018:ffffc9000398faa8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff88806fbbad48 RCX: 0000000000000000
+RDX: ffff88801f1f0000 RSI: ffffffff81bc3da2 RDI: 0000000000000007
+RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: 8000000000000163 R14: dffffc0000000000 R15: ffffc9000d9a9000
+FS:  0000555555c6f300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000040 CR3: 000000002111f000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ vmap_pages_range mm/vmalloc.c:621 [inline]
+ vmap+0x1b4/0x330 mm/vmalloc.c:2837
+ xdp_umem_addr_map net/xdp/xdp_umem.c:51 [inline]
+ xdp_umem_reg net/xdp/xdp_umem.c:223 [inline]
+ xdp_umem_create+0xcf7/0x1180 net/xdp/xdp_umem.c:252
+ xsk_setsockopt+0x73e/0x9e0 net/xdp/xsk.c:1100
+ __sys_setsockopt+0x2d6/0x690 net/socket.c:2252
+ __do_sys_setsockopt net/socket.c:2263 [inline]
+ __se_sys_setsockopt net/socket.c:2260 [inline]
+ __x64_sys_setsockopt+0xba/0x150 net/socket.c:2260
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f848f588b29
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffdd237dcc8 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f848f588b29
+RDX: 0000000000000004 RSI: 000000000000011b RDI: 0000000000000003
+RBP: 00007f848f54ccd0 R08: 0000000000000020 R09: 0000000000000000
+R10: 0000000020000040 R11: 0000000000000246 R12: 00007f848f54cd60
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
->> arch/sparc/kernel/traps_64.c:268:6: error: no previous declaration for 'is_no_fault_exception' [-Werror=missing-declarations]
-    bool is_no_fault_exception(struct pt_regs *regs)
-         ^~~~~~~~~~~~~~~~~~~~~
-   arch/sparc/kernel/traps_64.c:2117:6: error: no previous declaration for 'sun4v_nonresum_error_user_handled' [-Werror=missing-declarations]
-    bool sun4v_nonresum_error_user_handled(struct pt_regs *regs,
-         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-vim +/is_no_fault_exception +268 arch/sparc/kernel/traps_64.c
-
-   267	
- > 268	bool is_no_fault_exception(struct pt_regs *regs)
-   269	{
-   270		unsigned char asi;
-   271		u32 insn;
-   272	
-   273		if (get_user(insn, (u32 __user *)regs->tpc) == -EFAULT)
-   274			return false;
-   275	
-   276		/*
-   277		 * Must do a little instruction decoding here in order to
-   278		 * decide on a course of action. The bits of interest are:
-   279		 *  insn[31:30] = op, where 3 indicates the load/store group
-   280		 *  insn[24:19] = op3, which identifies individual opcodes
-   281		 *  insn[13] indicates an immediate offset
-   282		 *  op3[4]=1 identifies alternate space instructions
-   283		 *  op3[5:4]=3 identifies floating point instructions
-   284		 *  op3[2]=1 identifies stores
-   285		 * See "Opcode Maps" in the appendix of any Sparc V9
-   286		 * architecture spec for full details.
-   287		 */
-   288		if ((insn & 0xc0800000) == 0xc0800000) {    /* op=3, op3[4]=1   */
-   289			if (insn & 0x2000)		    /* immediate offset */
-   290				asi = (regs->tstate >> 24); /* saved %asi       */
-   291			else
-   292				asi = (insn >> 5);	    /* immediate asi    */
-   293			if ((asi & 0xf2) == ASI_PNF) {
-   294				if (insn & 0x1000000) {     /* op3[5:4]=3       */
-   295					handle_ldf_stq(insn, regs);
-   296					return true;
-   297				} else if (insn & 0x200000) { /* op3[2], stores */
-   298					return false;
-   299				}
-   300				handle_ld_nf(insn, regs);
-   301				return true;
-   302			}
-   303		}
-   304		return false;
-   305	}
-   306	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

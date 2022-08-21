@@ -2,186 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA2E59B6A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 00:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6AB59B6A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 00:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbiHUWnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 18:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        id S231848AbiHUWrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 18:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiHUWnJ (ORCPT
+        with ESMTP id S229948AbiHUWrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 18:43:09 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F074F19C2E
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 15:43:07 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id b2so6999749qvp.1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 15:43:07 -0700 (PDT)
+        Sun, 21 Aug 2022 18:47:18 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF2E1AF15;
+        Sun, 21 Aug 2022 15:47:17 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso12295222pjk.0;
+        Sun, 21 Aug 2022 15:47:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=SLQM5J0xWlA5wbIdPKtFesag8huNtFa4txc60rMlobs=;
-        b=LCe/vgen+XCMH74gOLjR7bN1ArujZ6DZNPJ6V53+IEZ6OgRPAwymR/F67fphTrZJ7i
-         WX/OvPvYDb/q0lzT6y/ojevJgVtkkrJVME07VVUjhe+W7SrXZWha/xHvLbEo6dn99ALm
-         RnU0FdS39Zd379nE+54lq5MlVZdTagm7AXtwD5nlksNAy8MY/8Kd/r5nFNZmDzU9lks7
-         Kl8wGX1X2MLbJYkrWRYSh7eTAwvMiT/+8r/He0mVxOkpPhFRsaNUQXxkeIZIYl0Dclq2
-         /fa1qWEhJOXvtuNsFdztaVKjysOZ6qJ3qfrrLqosuTGWz6e0b+we+E1tOoYP6nMxFiPu
-         hQuw==
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=QmrK5C2AYCT+3vtlxA+/1DfLvakD1ir/7enLA1nC9To=;
+        b=nxVRuW6ySNgSzZGlAbuaGsal9N3SaGyjaaGPHTIXN0HDvFeZFA/LOXs7A2Hy4FLrTx
+         cDz0bCDsnxC4hKto89xsgVxwT4QekuqQHI3pL98v5cpM8qd2Mmp1BzcsrQBxf3t4g4U+
+         kDzBkXwEF7iuqxhUQSoUYKm5TpjddLK1bK2IpIxnQPq3HZTeb+2Sm0GSFfbbGshJqXuG
+         AqAcAq53QaVv+R4+8HlUaqTI098XDaYi/0RezeVs9d/nCsSCFni20fzE6/11j60kBoBh
+         1orZBMzZfrL0yW5cmIepYsCzqDV7oQ7ygbW7px6x7BJ7xuk6c8ghGZE2J9pdd+QEvR3f
+         M9rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=SLQM5J0xWlA5wbIdPKtFesag8huNtFa4txc60rMlobs=;
-        b=qKgm8UcdNS8fMGUcOaoP3ZgjpMvHKURfcwW/Kgk8tEdJmnPsI9cvGOmqkWdHLIC8Ol
-         oOFASUU9whH4pxEbrEjPrn1HO8Y/Vq46gXfwOmqKkPy+GXwlMMWKtfdabsLIgL2nT/Gp
-         Y/tL/IEdOTteSsRfZvmGgtOkq1oToivFJwTvOO0vBsiYs/pcCdQDDqAdyPGyN0j3yzyO
-         nmwIlgNFrQnTOaMcks/I1juaXPUgg2XYR4Ddw932Kz7EXtiUrUFDIgjfT6LPnsy3tdGy
-         O92e3u/C6dy3oL9LZWox3IAdiwXMlCNFw9nOGwQArZdPJL3ECXdYWFIYk4k5pbFt5M64
-         +FXg==
-X-Gm-Message-State: ACgBeo3DwOGhlHzDJNdUT8bxTA0s8lUxjjHjdKGQwb+P30ljp9GMCu0l
-        4hhX17xDIwgFN2gGrHyvkinMCQ==
-X-Google-Smtp-Source: AA6agR4jUAHSGLWTrHVAFXBM1VWQtLl/q6Bx2pU2iMNntHvDE7gUn5RyeTtfpxPXQQyVdyC/TQ5EXQ==
-X-Received: by 2002:a05:6214:d6d:b0:496:e11b:69e9 with SMTP id 13-20020a0562140d6d00b00496e11b69e9mr2366488qvs.45.1661121786638;
-        Sun, 21 Aug 2022 15:43:06 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id g25-20020ac84b79000000b00342fc6a8e25sm7805333qts.50.2022.08.21.15.43.05
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=QmrK5C2AYCT+3vtlxA+/1DfLvakD1ir/7enLA1nC9To=;
+        b=iUqMQVTKk3bnt6rY0T8Ar1g1yH4IFfi/Y1YiASxD4ois/M5cZOh8S9NT+6TR+ZFlvG
+         TeP9cH/Y+eYSNNeGOd4Rqz/LVJofL4O4sueb8ak30X8AWxqYEP75kKZlk9psHNamdid+
+         09FK7l/gddwlYOkynQNJi+c44MCmWZ+1XWHqmx7Ao+sDpkvPHCbv+vQtaPVDiNzhjSr1
+         NVtTyOCSRBVByyxJoU+khNf05pCeQGR6jCZWVvhLzfNKmjURxA6486Dmz52oUu9NO5WZ
+         +WxKvr9CmCK51I5JE/YK0ir1+cMZmy2meTCkrribuVCQuxc7k2346o56CAEeHtshqtZz
+         d33Q==
+X-Gm-Message-State: ACgBeo0fIloA3uGc8ftogV98pstixRsthCFReAq4SViLOTiyQVgpTzWp
+        VItOGsh1I6V7NsCL9zAx6+OSZc1zx98=
+X-Google-Smtp-Source: AA6agR5fgFTD7qPk0QzeGpoYRzJdks4YNumcgBR8Sul4gsk6eCwcO0y7c8EVhXU9sVRT3Qkzljk7Wg==
+X-Received: by 2002:a17:90b:3c4e:b0:1fa:fc10:580f with SMTP id pm14-20020a17090b3c4e00b001fafc10580fmr1677625pjb.108.1661122037089;
+        Sun, 21 Aug 2022 15:47:17 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b204-20020a621bd5000000b005361af33036sm2890765pfb.22.2022.08.21.15.47.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 15:43:06 -0700 (PDT)
-Date:   Sun, 21 Aug 2022 18:43:04 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, mranostay@ti.com
-Subject: Re: [PATCH v5 2/3] Documentation: ABI: sysfs-bus-counter: add
- capture items
-Message-ID: <YwK0+BNSo4X2KA29@fedora>
-References: <20220817141620.256481-1-jpanis@baylibre.com>
- <20220817141620.256481-3-jpanis@baylibre.com>
+        Sun, 21 Aug 2022 15:47:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 21 Aug 2022 15:47:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 00/10] 5.15.62-rc2 review
+Message-ID: <20220821224713.GA1875188@roeck-us.net>
+References: <20220820182309.607584465@linuxfoundation.org>
+ <20220821120903.GB2332676@roeck-us.net>
+ <YwJQJxpsRDc6dqTJ@oscomms1>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2NJOCRB2znqdE3uV"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817141620.256481-3-jpanis@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YwJQJxpsRDc6dqTJ@oscomms1>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Aug 21, 2022 at 03:32:55PM +0000, Stafford Horne wrote:
+> On Sun, Aug 21, 2022 at 05:09:03AM -0700, Guenter Roeck wrote:
+> > On Sat, Aug 20, 2022 at 08:23:24PM +0200, Greg Kroah-Hartman wrote:
+> > > This is the start of the stable review cycle for the 5.15.62 release.
+> > > There are 10 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > > 
+> > > Responses should be made by Mon, 22 Aug 2022 18:23:01 +0000.
+> > > Anything received after that time might be too late.
+> > > 
+> > 
+> > Build results:
+> > 	total: 159 pass: 159 fail: 0
+> > Qemu test results:
+> > 	total: 485 pass: 484 fail: 1
+> > Failed tests:
+> > 	openrisc:or1ksim_defconfig
+> > 
+> > The openrisc failure is a soft lockup during restart. I only recently
+> > enabled the soft lockup detector, so this is probably either a false
+> > positive or not a new problem. I'll try to track it down, but it is
+> > not a concern for now.
+> > 
+> > Tested-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> Hi Guenter,
+> 
+> If you need help let me know, just let me know how to reproduce it.  I am
+> currently working on some qemu patches to convert qemu to multithread-tcg.  I
+> have fixed some lockup issues, but there are still some cases we get soft
+> lockups.
+> 
+> If you have any details I can see if it's a similar issue.
+> 
 
---2NJOCRB2znqdE3uV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+All I can say is that it happens with qemu 7.0, it happens more or less
+randomly with all kernel versions as far as I can see, and it isn't a real
+lockup but something wrong with time management. The lockup is reported
+almost immediately on shutdown. It reports something like
 
-On Wed, Aug 17, 2022 at 04:16:19PM +0200, Julien Panis wrote:
-> This commit adds capture items to counter ABI file
-> (e.g. TI ECAP used in capture operating mode).
->=20
-> Signed-off-by: Julien Panis <jpanis@baylibre.com>
-> ---
->  Documentation/ABI/testing/sysfs-bus-counter | 49 +++++++++++++++++++++
->  1 file changed, 49 insertions(+)
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-bus-counter b/Documentation/=
-ABI/testing/sysfs-bus-counter
-> index 06c2b3e27e0b..52ddec7cc76a 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-counter
-> +++ b/Documentation/ABI/testing/sysfs-bus-counter
-> @@ -203,6 +203,24 @@ Description:
->  		both edges:
->  			Any state transition.
-> =20
-> +What:		/sys/bus/counter/devices/counterX/countY/count_cumul
-> +KernelVersion:	6.0
-> +Contact:	jpanis@baylibre.com
-> +Description:
-> +		Read-only attribute that indicates the raw cumulated count
-> +		since count Y start, computed as follow:
-> +		count_cumul =3D (max_counter_val + 1) * nb_counter_overflows
+reboot: Restarting system
+watchdog: BUG: soft lockup - CPU#0 stuck for 371s! [init:225]
+Modules linked in:
+CPU: 0 PID: 225 Comm: init Not tainted 6.0.0-rc1-00303-g963a70bee588 #1
 
-Implement this instead as "num_overflows" (COUNTER_COMP_COUNT_U64) and
-"ceiling" (COUNTER_COMP_CEILING). You need to expose the count ceiling
-anyway and a new "num_overflows" attribute would be useful for other
-drivers as well.
+but it doesn't really wait for that much time; the message is seen almost
+immediately. I don't do anything special, just boot the openrisc emulation
+and restart. I have the following options enabled.
 
-> +What:		/sys/bus/counter/devices/counterX/countY/captureZ
-> +KernelVersion:	6.0
-> +Contact:	jpanis@baylibre.com
-> +Description:
-> +		Read-only attributes that indicate the last raw timestamp captured
-> +		for the respective capture Z register.
-> +		Raw timestamp can be converted to nanoseconds as follow:
-> +		time_ns =3D 10^9 * (captureZ + count_cumul) / frequency
-> +		count_cumul and frequency parameters are described in this document.
+CONFIG_LOCKUP_DETECTOR CONFIG_SOFTLOCKUP_DETECTOR CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC
+CONFIG_DETECT_HUNG_TASK CONFIG_BOOTPARAM_HUNG_TASK_PANIC
 
-Rework this description to make it more general: remove the nanoseconds
-conversion formula and references to timestamps. The concept of a
-capture is general enough that it could be provided by counter devices
-that are not necessarily timestamping. Instead this description should
-simply state that this attribute is a historical capture of the Count Y
-count data where Z (if present) is the respective capture buffer element
-offset.
+The problem is not seen without those options.
 
->  What:		/sys/bus/counter/devices/counterX/countY/ceiling_component_id
->  What:		/sys/bus/counter/devices/counterX/countY/floor_component_id
->  What:		/sys/bus/counter/devices/counterX/countY/count_mode_component_id
-> @@ -213,6 +231,8 @@ What:		/sys/bus/counter/devices/counterX/countY/presc=
-aler_component_id
->  What:		/sys/bus/counter/devices/counterX/countY/preset_component_id
->  What:		/sys/bus/counter/devices/counterX/countY/preset_enable_component_=
-id
->  What:		/sys/bus/counter/devices/counterX/countY/signalZ_action_component=
-_id
-> +What:		/sys/bus/counter/devices/counterX/countY/count_cumul_component_id
-> +What:		/sys/bus/counter/devices/counterX/countY/captureZ_component_id
->  What:		/sys/bus/counter/devices/counterX/signalY/cable_fault_component_id
->  What:		/sys/bus/counter/devices/counterX/signalY/cable_fault_enable_comp=
-onent_id
->  What:		/sys/bus/counter/devices/counterX/signalY/filter_clock_prescaler_=
-component_id
-> @@ -345,3 +365,32 @@ Description:
->  			via index_polarity. The index function (as enabled via
->  			preset_enable) is performed synchronously with the
->  			quadrature clock on the active level of the index input.
-> +
-> +What:		/sys/bus/counter/devices/counterX/signalY/polarityZ
-> +KernelVersion:	6.0
-> +Contact:	jpanis@baylibre.com
-> +Description:
-> +		Capture modules include N timestamp capture registers.
-> +		For all N sequenced timestamp capture events
-> +		(1->2->3->...->N->1->...), edge polarity can be selected.
-> +		The following polarities are available:
-> +
-> +		rising edge:
-> +			Low state transitions to high state.
-> +
-> +		falling edge:
-> +			High state transitions to low state.
-
-Other drivers could use "polarity" for signals that are not related to
-captures, so remove the language referencing timestamping and generalize
-it to simply refer to selecting the Signal Y edge polarity where Z (if
-present) is the respective polarity sequence position.
-
-William Breathitt Gray
-
---2NJOCRB2znqdE3uV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHQEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYwK09wAKCRC1SFbKvhIj
-K8oDAPdLQOsV0FlcmpzhIjokWkcH5BVTKUkR7GjQ2TQlty8TAQCZWfBCROCuCvP5
-MmMLxq00AF6NW8X7KSdJEupDC04oCA==
-=WaOi
------END PGP SIGNATURE-----
-
---2NJOCRB2znqdE3uV--
+Guenter

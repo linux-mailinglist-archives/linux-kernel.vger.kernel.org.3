@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFAB259B18A
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 06:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBDC59B1BC
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 06:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiHUERi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 00:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
+        id S229552AbiHUEkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 00:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiHUERe (ORCPT
+        with ESMTP id S229567AbiHUEj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 00:17:34 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4592A417
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 21:17:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661055453; x=1692591453;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9x6aBvnCQITL3DEL0tA2RlqgQLgFLpsEln844SncwfI=;
-  b=GlNxLyhIX6xfUB1z9d0+fn0Ig5wR5BmC6Qysl1WinFP8YF8VzLSVfsoU
-   IJh8l+zyg/rWkWdqCEQzkOXR2xrLk2ZfZTg78MK7BpuWDL3jOMeDB+mIc
-   chRuGHznchAAg82MJQ5KaTX/xvDlScWg0ApKcp9JWkPuag6Om/21gbJHd
-   9WoH042bQBmUOL/Updowj2gqv87OUbjjh1k35BWh4NGC1A8DDnq3fmyyI
-   haGY7zoS9QSnUdNL8/AQehPVMJsFujgkyKsItlXCxQo5f3/O40Y6x4CW5
-   5LdTlp1k4ccBj3DBJqSkZivNw+DfQa0lMI3gLeZV6PxYTyZTzddfLqvoU
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10445"; a="293220895"
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="293220895"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2022 21:17:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,251,1654585200"; 
-   d="scan'208";a="641659931"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 20 Aug 2022 21:17:31 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oPcOw-0003df-2x;
-        Sun, 21 Aug 2022 04:17:30 +0000
-Date:   Sun, 21 Aug 2022 12:17:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:393:28:
- sparse: sparse: incorrect type in argument 1 (different base types)
-Message-ID: <202208211251.eSw2xmFX-lkp@intel.com>
+        Sun, 21 Aug 2022 00:39:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F72D1BEB3
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 21:39:54 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oPckJ-0007TV-Kd; Sun, 21 Aug 2022 06:39:35 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oPckG-0007zt-4g; Sun, 21 Aug 2022 06:39:32 +0200
+Date:   Sun, 21 Aug 2022 06:39:32 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH net-next v1 7/7] ethtool: add interface to interact with
+ Ethernet Power Equipment
+Message-ID: <20220821043932.GJ10138@pengutronix.de>
+References: <20220819120109.3857571-1-o.rempel@pengutronix.de>
+ <20220819120109.3857571-8-o.rempel@pengutronix.de>
+ <YwEk8h9C9XhT6Yyc@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YwEk8h9C9XhT6Yyc@lunn.ch>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,77 +66,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   15b3f48a4339e3c16acf18624e2b7f60bc5e9a2c
-commit: edd4a8667355607345b76d5652adc0f300a28970 s390/boot: get rid of startup archive
-date:   4 months ago
-config: s390-randconfig-s053-20220821 (https://download.01.org/0day-ci/archive/20220821/202208211251.eSw2xmFX-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=edd4a8667355607345b76d5652adc0f300a28970
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout edd4a8667355607345b76d5652adc0f300a28970
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
+On Sat, Aug 20, 2022 at 08:16:18PM +0200, Andrew Lunn wrote:
+> On Fri, Aug 19, 2022 at 02:01:09PM +0200, Oleksij Rempel wrote:
+> > Add interface to support Power Sourcing Equipment. At current step it
+> > provides generic way to address all variants of PSE devices as defined
+> > in IEEE 802.3-2018 but support only objects specified for IEEE 802.3-2018 104.4
+> > PoDL Power Sourcing Equipment (PSE).
+> > 
+> > Currently supported and mandatory objects are:
+> > IEEE 802.3-2018 30.15.1.1.3 aPoDLPSEPowerDetectionStatus
+> > IEEE 802.3-2018 30.15.1.1.2 aPoDLPSEAdminState
+> > IEEE 802.3-2018 30.15.1.2.1 acPoDLPSEAdminControl
+> > 
+> > This is minimal interface needed to control PSE on each separate
+> > ethernet port but it provides not all mandatory objects specified in
+> > IEEE 802.3-2018.
+> 
+> > +static int pse_get_pse_attributs(struct net_device *dev,
+> > +				 struct pse_reply_data *data)
+> > +{
+> > +	struct phy_device *phydev = dev->phydev;
+> > +	int ret;
+> > +
+> > +	if (!phydev)
+> > +		return -EOPNOTSUPP;
+> > +
+> > +	mutex_lock(&phydev->lock);
+> > +	if (!phydev->psec) {
+> > +		ret = -EOPNOTSUPP;
+> > +		goto error_unlock;
+> > +	}
+> > +
+> > +	ret = pse_podl_get_admin_sate(phydev->psec);
+> > +	if (ret < 0)
+> > +		goto error_unlock;
+> > +
+> > +	data->podl_pse_admin_state = ret;
+> > +
+> > +	ret = pse_podl_get_pw_d_status(phydev->psec);
+> > +	if (ret < 0)
+> > +		goto error_unlock;
+> > +
+> > +	data->podl_pse_pw_d_status = ret;
+> 
+> I'm wondering how this is going to scale. At some point, i expect
+> there will be an implementation that follows C45.2.9. I see 14 values
+> which could be returned. I don't think 14 ops in the driver structure
+> makes sense. Plus c30.15.1 defines other values.
+> 
+> The nice thing about netlink is you can have as many or are little
+> attributes in the message as you want. For cable testing, i made use
+> of this. There is no standardisation, different PHYs offer different
+> sorts of results. So i made the API flexible. The PHY puts whatever
+> results it has into the message, and ethtool(1) just walks the message
+> and prints what is in it.
+> 
+> I'm wondering if we want a similar sort of API here?
+> net/ethtool/pse-pd.c allocates the netlink messages, adds the header,
+> and then passes it to the driver. The driver then uses helpers from
+> ethtool to add whatever attributes it wants to the message. pse-pd
+> then completes the message, and returns it to user space? This seems
+> like it will scale better.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Yes. Sounds good. I'll make a new version.
 
-sparse warnings: (new ones prefixed by >>)
-   arch/s390/boot/decompressor.c: note: in included file (through arch/s390/include/uapi/../../../../lib/decompress_unxz.c):
->> arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:393:28: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
-   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:393:28: sparse:     expected restricted __le32 const [usertype] *p
-   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:393:28: sparse:     got unsigned int const [usertype] *
-   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:427:48: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
-   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:427:48: sparse:     expected restricted __le32 const [usertype] *p
-   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:427:48: sparse:     got unsigned int const [usertype] *
-   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:435:37: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
-   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:435:37: sparse:     expected restricted __le32 const [usertype] *p
-   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:435:37: sparse:     got unsigned int const [usertype] *
-   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:459:28: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
-   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:459:28: sparse:     expected restricted __le32 const [usertype] *p
-   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:459:28: sparse:     got unsigned int const [usertype] *
-
-vim +393 arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c
-
-24fa0402a9b6a5 Lasse Collin 2011-01-12  385  
-24fa0402a9b6a5 Lasse Collin 2011-01-12  386  /* Decode the Stream Header field (the first 12 bytes of the .xz Stream). */
-24fa0402a9b6a5 Lasse Collin 2011-01-12  387  static enum xz_ret dec_stream_header(struct xz_dec *s)
-24fa0402a9b6a5 Lasse Collin 2011-01-12  388  {
-24fa0402a9b6a5 Lasse Collin 2011-01-12  389  	if (!memeq(s->temp.buf, HEADER_MAGIC, HEADER_MAGIC_SIZE))
-24fa0402a9b6a5 Lasse Collin 2011-01-12  390  		return XZ_FORMAT_ERROR;
-24fa0402a9b6a5 Lasse Collin 2011-01-12  391  
-24fa0402a9b6a5 Lasse Collin 2011-01-12  392  	if (xz_crc32(s->temp.buf + HEADER_MAGIC_SIZE, 2, 0)
-24fa0402a9b6a5 Lasse Collin 2011-01-12 @393  			!= get_le32(s->temp.buf + HEADER_MAGIC_SIZE + 2))
-24fa0402a9b6a5 Lasse Collin 2011-01-12  394  		return XZ_DATA_ERROR;
-24fa0402a9b6a5 Lasse Collin 2011-01-12  395  
-24fa0402a9b6a5 Lasse Collin 2011-01-12  396  	if (s->temp.buf[HEADER_MAGIC_SIZE] != 0)
-24fa0402a9b6a5 Lasse Collin 2011-01-12  397  		return XZ_OPTIONS_ERROR;
-24fa0402a9b6a5 Lasse Collin 2011-01-12  398  
-24fa0402a9b6a5 Lasse Collin 2011-01-12  399  	/*
-24fa0402a9b6a5 Lasse Collin 2011-01-12  400  	 * Of integrity checks, we support only none (Check ID = 0) and
-24fa0402a9b6a5 Lasse Collin 2011-01-12  401  	 * CRC32 (Check ID = 1). However, if XZ_DEC_ANY_CHECK is defined,
-24fa0402a9b6a5 Lasse Collin 2011-01-12  402  	 * we will accept other check types too, but then the check won't
-24fa0402a9b6a5 Lasse Collin 2011-01-12  403  	 * be verified and a warning (XZ_UNSUPPORTED_CHECK) will be given.
-24fa0402a9b6a5 Lasse Collin 2011-01-12  404  	 */
-4f8d7abaa413c3 Lasse Collin 2021-10-11  405  	if (s->temp.buf[HEADER_MAGIC_SIZE + 1] > XZ_CHECK_MAX)
-4f8d7abaa413c3 Lasse Collin 2021-10-11  406  		return XZ_OPTIONS_ERROR;
-4f8d7abaa413c3 Lasse Collin 2021-10-11  407  
-24fa0402a9b6a5 Lasse Collin 2011-01-12  408  	s->check_type = s->temp.buf[HEADER_MAGIC_SIZE + 1];
-24fa0402a9b6a5 Lasse Collin 2011-01-12  409  
-
-:::::: The code at line 393 was first introduced by commit
-:::::: 24fa0402a9b6a537e87e38341e78b7da86486846 decompressors: add XZ decompressor module
-
-:::::: TO: Lasse Collin <lasse.collin@tukaani.org>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
+Regards,
+Oleksij
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

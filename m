@@ -2,53 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED82259B2C9
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 10:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E7059B2CA
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 10:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiHUIfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 04:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
+        id S230032AbiHUIfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 04:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiHUIe6 (ORCPT
+        with ESMTP id S229379AbiHUIfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 04:34:58 -0400
+        Sun, 21 Aug 2022 04:35:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207A92019B
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 01:34:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2346E2019B
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 01:35:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7439B80BA8
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:34:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25823C433D6;
-        Sun, 21 Aug 2022 08:34:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1661070894;
-        bh=20bfYxtW+Yr7k7ErW02zCv8pfIkLjFIGs7QupK/WDcM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=L5hbzJagX8Wf5aRXMYM+M4Fnx7BSB5Q2rcVlJhyudGZAXI6AsRc+lSPoyYho/qtVG
-         lzGvwCG2w56seph/1oXXqgnpTUgYZgjl3nt9vsmnQt3R6C5WdovaWXmdV84gXOornz
-         0NWz5pS1kRvolze5s0e92TLlWobqCUlL16sWe+No=
-Date:   Sun, 21 Aug 2022 01:34:53 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     syzbot <syzbot+c14f12d4b695168145b0@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com,
-        Alistair Popple <apopple@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [syzbot] general protection fault in sanity_check_pinned_pages
-Message-Id: <20220821013453.fea6ca8a3a4f241e6560ad79@linux-foundation.org>
-In-Reply-To: <000000000000fb7fc005e6baf0f3@google.com>
-References: <000000000000fb7fc005e6baf0f3@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by ams.source.kernel.org (Postfix) with ESMTPS id C39D6B80BE6
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 08:35:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF35C433C1;
+        Sun, 21 Aug 2022 08:35:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661070914;
+        bh=dJRLj2Yh+6Z6dojFVG/cgRPsHfQr7JbfY58ziUilRX0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N0SyUpxl15opjdscNJ9BNLkMcgeUf8M8lc4lXSIZ4TnXzhgaGUbEOeIbkHFY8+zCp
+         Vt1Z4WrtQp0hWWsNdigeIMWDB5PlLOOtUrZ8R8YQLvDm2Hd23iRTn2J6yqXLkC4b51
+         0uLuyk6Gpzc4KSETWsQz2pUdkmjIybYZL3HX1kFg=
+Date:   Sun, 21 Aug 2022 10:35:23 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Paul Lemmermann <thepaulodoom@thepaulodoom.com>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: char: mem: changed 'unsigned' to 'unsigned int'
+Message-ID: <YwHuSyur7AQ7PUsC@kroah.com>
+References: <YvxF0yn07ztg9r4A@gus-fring.localdomain>
+ <Yv5SG8XMR2mZGAqG@kroah.com>
+ <Yv7s5dedhRaDlsAC@gus-fring.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yv7s5dedhRaDlsAC@gus-fring.localdomain>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,113 +52,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 21 Aug 2022 00:04:24 -0700 syzbot <syzbot+c14f12d4b695168145b0@syzkaller.appspotmail.com> wrote:
+On Thu, Aug 18, 2022 at 08:52:37PM -0500, Paul Lemmermann wrote:
+> On Thu, Aug 18, 2022 at 04:52:11PM +0200, Greg KH wrote:
+> > On Tue, Aug 16, 2022 at 08:35:31PM -0500, Paul Lemmermann wrote:
+> > > found with checkpatch.pl
+> > 
+> > That is a very sparse changelog text.
+> > 
+> > Why make this change?  Please be descriptive.
+> > 
+> I wanted to make this change to be more fitting with the kernel coding
+> guidelines, and to reduce a WARNING made with checkpatch preferring the
+> use of 'unsigned int' over 'unsigned'. With NOMMU_MAP_COPY defined in
+> 'include/linux/fs.h' as an unsigned integer, I felt like the change was
+> fitting. I was quickly reminded that the changelog was not properly done, 
+> and I now understand that, and will learn from my mistake in the future.
+> As I am a new kernel contributor, and looking to hone my skills, what are 
+> my next steps? 
+> 
+> Should I:
+> 
+> o Drop the patch and resubmit it,
+> o Simply drop the patch,
+> o Could I change it somehow?,
+> o Or something else?
 
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    95d10484d66e Add linux-next specific files for 20220817
-> git tree:       linux-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=175b81d3080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2f5fa747986be53a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=c14f12d4b695168145b0
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160e24b5080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10f105f3080000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+c14f12d4b695168145b0@syzkaller.appspotmail.com
-> 
-> general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-> CPU: 0 PID: 3608 Comm: syz-executor314 Not tainted 6.0.0-rc1-next-20220817-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> RIP: 0010:_compound_head include/linux/page-flags.h:253 [inline]
-> RIP: 0010:sanity_check_pinned_pages+0x25e/0xec0 mm/gup.c:52
+Try something else.  Start out by working in drivers/staging/ on basic
+coding style fixes and other things listed in the drivers/staging/*/TODO
+files.  That's the best place for new developers to get started and then
+after you have some experience with how the development process works,
+you can branch out into other subsystems doing real work.
 
-Thanks.  Another GUP explosion.
+hope this helps,
 
-> Code: a2 06 00 00 e8 f3 8a c9 ff 4c 89 f0 48 c1 e8 03 80 3c 18 00 0f 85 8e 0a 00 00 4d 8b 26 49 8d 44 24 08 48 89 04 24 48 c1 e8 03 <80> 3c 18 00 0f 85 8b 0a 00 00 49 8b 6c 24 08 31 ff 49 89 ef 41 83
-> RSP: 0018:ffffc900039df6d0 EFLAGS: 00010202
-> RAX: 0000000000000001 RBX: dffffc0000000000 RCX: 0000000000000000
-> RDX: ffff88802763bb00 RSI: ffffffff81b28a5d RDI: 0000000000000007
-> RBP: 000000000000034e R08: 0000000000000007 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-> R13: 0000000000000001 R14: ffffc900039df7c8 R15: 0000000000000000
-> FS:  00007fc2d0fe9700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000020001600 CR3: 0000000076052000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  unpin_user_pages_dirty_lock mm/gup.c:311 [inline]
->  unpin_user_pages_dirty_lock+0x4a/0x4c0 mm/gup.c:299
->  rds_rdma_free_op+0x28d/0x3c0 net/rds/rdma.c:501
->  rds_cmsg_rdma_args+0x32c/0x1540 net/rds/rdma.c:797
->  rds_cmsg_send net/rds/send.c:1005 [inline]
->  rds_sendmsg+0x1c5c/0x3040 net/rds/send.c:1316
->  sock_sendmsg_nosec net/socket.c:714 [inline]
->  sock_sendmsg+0xcf/0x120 net/socket.c:734
->  ____sys_sendmsg+0x6eb/0x810 net/socket.c:2482
->  ___sys_sendmsg+0x110/0x1b0 net/socket.c:2536
->  __sys_sendmsg+0xf3/0x1c0 net/socket.c:2565
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7fc2d1036e39
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007fc2d0fe9308 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-> RAX: ffffffffffffffda RBX: 00007fc2d10bf408 RCX: 00007fc2d1036e39
-> RDX: 0000000000000000 RSI: 0000000020001600 RDI: 0000000000000004
-> RBP: 00007fc2d10bf400 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc2d10bf40c
-> R13: 00007fc2d108d004 R14: 632e79726f6d656d R15: 0000000000022000
->  </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:_compound_head include/linux/page-flags.h:253 [inline]
-> RIP: 0010:sanity_check_pinned_pages+0x25e/0xec0 mm/gup.c:52
-> Code: a2 06 00 00 e8 f3 8a c9 ff 4c 89 f0 48 c1 e8 03 80 3c 18 00 0f 85 8e 0a 00 00 4d 8b 26 49 8d 44 24 08 48 89 04 24 48 c1 e8 03 <80> 3c 18 00 0f 85 8b 0a 00 00 49 8b 6c 24 08 31 ff 49 89 ef 41 83
-> RSP: 0018:ffffc900039df6d0 EFLAGS: 00010202
-> RAX: 0000000000000001 RBX: dffffc0000000000 RCX: 0000000000000000
-> RDX: ffff88802763bb00 RSI: ffffffff81b28a5d RDI: 0000000000000007
-> RBP: 000000000000034e R08: 0000000000000007 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-> R13: 0000000000000001 R14: ffffc900039df7c8 R15: 0000000000000000
-> FS:  00007fc2d0fe9700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000000002034d000 CR3: 0000000076052000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess):
->    0:	a2 06 00 00 e8 f3 8a 	movabs %al,0xffc98af3e8000006
->    7:	c9 ff
->    9:	4c 89 f0             	mov    %r14,%rax
->    c:	48 c1 e8 03          	shr    $0x3,%rax
->   10:	80 3c 18 00          	cmpb   $0x0,(%rax,%rbx,1)
->   14:	0f 85 8e 0a 00 00    	jne    0xaa8
->   1a:	4d 8b 26             	mov    (%r14),%r12
->   1d:	49 8d 44 24 08       	lea    0x8(%r12),%rax
->   22:	48 89 04 24          	mov    %rax,(%rsp)
->   26:	48 c1 e8 03          	shr    $0x3,%rax
-> * 2a:	80 3c 18 00          	cmpb   $0x0,(%rax,%rbx,1) <-- trapping instruction
->   2e:	0f 85 8b 0a 00 00    	jne    0xabf
->   34:	49 8b 6c 24 08       	mov    0x8(%r12),%rbp
->   39:	31 ff                	xor    %edi,%edi
->   3b:	49 89 ef             	mov    %rbp,%r15
->   3e:	41                   	rex.B
->   3f:	83                   	.byte 0x83
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+greg k-h

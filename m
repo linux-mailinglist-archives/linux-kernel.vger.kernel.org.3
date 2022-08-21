@@ -2,62 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D46559B3E5
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 15:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D883259B3E6
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 15:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiHUNYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 09:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
+        id S229481AbiHUNYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 09:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiHUNXz (ORCPT
+        with ESMTP id S230016AbiHUNYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 09:23:55 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CA615716;
-        Sun, 21 Aug 2022 06:23:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wh63hAobc1uVljLnJ+kI643Y5QH17ip9W3Tm3J/v7dA=; b=lxj1L3R2YRxu87z0ZJ+bgooI9o
-        NW+gwuzuGaPN6AVBGJEnno6SRG/SZI/L7Mw92tlmqNgofzA+R2NxMM+1vvkWneixst24iTCG0fLE2
-        QAEPW+mAidZGlp+z3Ly5puWR6vbkyF8qYSz6k7Ozu1t8BmOEKwnxuofPKfBvwIIKc3v/agPHJGayN
-        BZY2G/GdiNbcqH9CeHCKs8WEl5y68hpqBECAriNXK4baid8DOFkJPre9Z2XXKjZKdSO+gQI9MQDPk
-        X7YqXRbYA7+bW18hThXnPobhomG40fhktnPgkeBrwzmznPSWIyH8dOwn/9pCr5Ir2XjbvCA9FePGG
-        LHySku4Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oPkvP-00Ac7b-7l; Sun, 21 Aug 2022 13:23:35 +0000
-Date:   Sun, 21 Aug 2022 06:23:35 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] LoongArch: Use TLB for ioremap()
-Message-ID: <YwIx1xoAmsp8cHMN@infradead.org>
-References: <20220815124612.3328670-1-chenhuacai@loongson.cn>
+        Sun, 21 Aug 2022 09:24:37 -0400
+Received: from out199-8.us.a.mail.aliyun.com (out199-8.us.a.mail.aliyun.com [47.90.199.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B831E3F6
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 06:24:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R551e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VMnWTjg_1661088269;
+Received: from 30.0.165.201(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VMnWTjg_1661088269)
+          by smtp.aliyun-inc.com;
+          Sun, 21 Aug 2022 21:24:30 +0800
+Message-ID: <71c6c3cd-5022-dd7c-d8d0-d1c354c85f13@linux.alibaba.com>
+Date:   Sun, 21 Aug 2022 21:24:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815124612.3328670-1-chenhuacai@loongson.cn>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH 04/14] ocfs2: move from strlcpy with unused retval to
+ strscpy
+Content-Language: en-US
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, akpm <akpm@linux-foundation.org>
+Cc:     Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
+        ocfs2-devel@oss.oracle.com
+References: <20220818210123.7637-1-wsa+renesas@sang-engineering.com>
+ <20220818210123.7637-4-wsa+renesas@sang-engineering.com>
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+In-Reply-To: <20220818210123.7637-4-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 08:46:12PM +0800, Huacai Chen wrote:
-> We can support more cache attributes (CC, SUC and WUC) and page
-> protection when we use TLB for ioremap().
 
-Please build this on top of the series that extents the generic ioremap
-code for these use cases instead of duplicating the generic ioremap
-code.
+
+On 8/19/22 5:01 AM, Wolfram Sang wrote:
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+> 
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+Acked-by: Joseph Qi <joseph.qi@linux.alibaba.com>
+> ---
+>  fs/ocfs2/stackglue.c | 4 ++--
+>  fs/ocfs2/super.c     | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/ocfs2/stackglue.c b/fs/ocfs2/stackglue.c
+> index dd77b7aaabf5..317126261523 100644
+> --- a/fs/ocfs2/stackglue.c
+> +++ b/fs/ocfs2/stackglue.c
+> @@ -334,10 +334,10 @@ int ocfs2_cluster_connect(const char *stack_name,
+>  		goto out;
+>  	}
+>  
+> -	strlcpy(new_conn->cc_name, group, GROUP_NAME_MAX + 1);
+> +	strscpy(new_conn->cc_name, group, GROUP_NAME_MAX + 1);
+>  	new_conn->cc_namelen = grouplen;
+>  	if (cluster_name_len)
+> -		strlcpy(new_conn->cc_cluster_name, cluster_name,
+> +		strscpy(new_conn->cc_cluster_name, cluster_name,
+>  			CLUSTER_NAME_MAX + 1);
+>  	new_conn->cc_cluster_name_len = cluster_name_len;
+>  	new_conn->cc_recovery_handler = recovery_handler;
+> diff --git a/fs/ocfs2/super.c b/fs/ocfs2/super.c
+> index 013a727bd7c8..ec46489b6c7e 100644
+> --- a/fs/ocfs2/super.c
+> +++ b/fs/ocfs2/super.c
+> @@ -2222,7 +2222,7 @@ static int ocfs2_initialize_super(struct super_block *sb,
+>  		goto out_journal;
+>  	}
+>  
+> -	strlcpy(osb->vol_label, di->id2.i_super.s_label,
+> +	strscpy(osb->vol_label, di->id2.i_super.s_label,
+>  		OCFS2_MAX_VOL_LABEL_LEN);
+>  	osb->root_blkno = le64_to_cpu(di->id2.i_super.s_root_blkno);
+>  	osb->system_dir_blkno = le64_to_cpu(di->id2.i_super.s_system_dir_blkno);

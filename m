@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D7F59B13A
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 04:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0479E59B140
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 Aug 2022 04:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235956AbiHUCEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 Aug 2022 22:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S236374AbiHUCEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 Aug 2022 22:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235919AbiHUCE1 (ORCPT
+        with ESMTP id S236072AbiHUCE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 20 Aug 2022 22:04:27 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD97167D7
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 19:04:25 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id i13-20020a056e02152d00b002e97839ff00so1524648ilu.15
-        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 19:04:25 -0700 (PDT)
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423D117A8E
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 19:04:26 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id t7-20020a6b6407000000b00684ed320f97so4270052iog.11
+        for <linux-kernel@vger.kernel.org>; Sat, 20 Aug 2022 19:04:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=A/zzpYW1tI4lloz1zH6jwjZDuRD2LG4tBGIDFKtm7Fk=;
-        b=yYPkS43XL1FunAcvEwpaXm8i1EWRXYeNuR5u6S/j0TvllWXId/TikTbFmKJ//vXkQk
-         IXHZLlFNAzqdTZGApB5urxX/Y74kGDK3oFKoge2FLY3AjqCxPgP/7pfaT9Jv4nJCFVCa
-         qOv9QiPy1pxFs3Q86kzqlKMliMr0jV7aJcJJ59K1BquHwYBAo71Up4kmbJ4WpMAzId9s
-         e4mOp4P1vTiNa5tQFEmbbhtRRvAsWuDtTlq5x0X/rd9xUjjaE8FbtG60JXaWi4wLlX7W
-         lW6ECZx+lmRlAZMaH+CIOMVuPrtiWmrcd9mrqz+OTlzD05SIWq9qy7QQ7FUGblaFRcFo
-         Y9jQ==
-X-Gm-Message-State: ACgBeo04a9isc94GOVfoi7yEwcg99YH2g2QMWRGaga6oORDIH6mf2eph
-        l1nYnMyWWl2UjGwO8purn84fdO5RMwTej3kJbhreL8WwnBUt
-X-Google-Smtp-Source: AA6agR6GMU82BcVllkaESQsbE+fuErrxfN16OoFxjAi4lzVf2Mr1+qFfdbf2ZIzLsUN2FG/7tHBRHPqAsht+EW+jOZ2curz4lwVJ
+        bh=8DXCsqDwMlY8bkEPsMdGfPqYVLUcBI/2W2rtPo8M28Y=;
+        b=sD0cLxcvslOSIYHoTFHPzSgAW9ant3YFj1HgnXpzkuyVrABf1YZN1/sBfQrky/UxGH
+         V/wrHTuGO6oAiTs9TUVZ6MiqvlpwpWyl0FDU3rrvPq8WRsMpe5kCfnEz2qE3RS4XvSe0
+         sAHq9WRnTf9lYUFvfs+cY1JFSU9hoTCl52H/JdSGdvLo+kG0n2AZKt5goIQ1Z4Wc29nW
+         GJMPOH3jVlnr0d5/jno68557lQ2OqhEFMLDp5m+vDmtOWaRbYeLLacm3FQiTDWtkEd7H
+         QwH1vHVzsJgDa1eLbzCFJ26Q8c/4kmJw+HqZPwvc1Qamf5vPKf9lfDcL0zI9BSqoV7Li
+         gDAw==
+X-Gm-Message-State: ACgBeo3htV+gIlzqXdSbRNVsjsvyu83OfcYV8yEN4WRBEavf8/lnavKG
+        En6uUIr8xs+RY/qIEY7dWixFjVWKtXEVYZhsAbCYy7qWzrBe
+X-Google-Smtp-Source: AA6agR6pVg53ZXyKGtfREadSfTef7vhzkIS25thAsLMzDU8crgMXvGs7U2HlaFfQDP5oE4O+naLvwD5sJWGNFgxk4WYz12C4sZOW
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1482:b0:688:d06b:223e with SMTP id
- a2-20020a056602148200b00688d06b223emr6125885iow.3.1661047465195; Sat, 20 Aug
- 2022 19:04:25 -0700 (PDT)
+X-Received: by 2002:a05:6638:2482:b0:343:3ab0:4925 with SMTP id
+ x2-20020a056638248200b003433ab04925mr6375704jat.173.1661047465474; Sat, 20
+ Aug 2022 19:04:25 -0700 (PDT)
 Date:   Sat, 20 Aug 2022 19:04:25 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001e3e0305e6b6c076@google.com>
-Subject: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in kernfs_new_node
-From:   syzbot <syzbot+e80c44ef751cb1889491@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, syzkaller-bugs@googlegroups.com,
-        tj@kernel.org
+Message-ID: <0000000000002282c605e6b6c0e1@google.com>
+Subject: [syzbot] upstream boot error: stack segment fault in __alloc_skb
+From:   syzbot <syzbot+b8a1f71feb027c4e2f06@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,31 +62,14 @@ syzbot found the following issue on:
 
 HEAD commit:    3cc40a443a04 Merge tag 'nios2_fixes_v6.0' of git://git.ker..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1053627b080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=10720067080000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=f267ed4fb258122a
-dashboard link: https://syzkaller.appspot.com/bug?extid=e80c44ef751cb1889491
+dashboard link: https://syzkaller.appspot.com/bug?extid=b8a1f71feb027c4e2f06
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e80c44ef751cb1889491@syzkaller.appspotmail.com
+Reported-by: syzbot+b8a1f71feb027c4e2f06@syzkaller.appspotmail.com
 
-Console: switching to colour frame buffer device 128x48
-platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
-usbcore: registered new interface driver udl
-brd: module loaded
-loop: module loaded
-zram: Added device: zram0
-null_blk: disk nullb0 created
-null_blk: module loaded
-Guest personality initialized and is inactive
-VMCI host device registered (name=vmci, major=10, minor=120)
-Initialized host personality
-usbcore: registered new interface driver rtsx_usb
-usbcore: registered new interface driver viperboard
-usbcore: registered new interface driver dln2
-usbcore: registered new interface driver pn533_usb
-nfcsim 0.2 initialized
-usbcore: registered new interface driver port100
 usbcore: registered new interface driver nfcmrvl
 Loading iSCSI transport class v2.0-870.
 scsi host0: Virtio SCSI HBA
@@ -120,36 +103,50 @@ mkiss: AX.25 Multikiss, Hans Albas PE1AYX
 AX.25: 6pack driver, Revision: 0.3.0
 AX.25: bpqether driver version 004
 PPP generic driver version 2.4.2
-BUG: unable to handle page fault for address: ffffdc0000000006
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 12026067 P4D 12026067 PUD 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
+PPP BSD Compression module registered
+PPP Deflate Compression module registered
+PPP MPPE Compression module registered
+NET: Registered PF_PPPOX protocol family
+PPTP driver version 0.8.5
+SLIP: version 0.8.4-NET3.019-NEWTTY (dynamic channels, max=256) (6 bit encapsulation enabled).
+CSLIP: code copyright 1989 Regents of the University of California.
+SLIP linefill/keepalive option.
+hdlc: HDLC support module revision 1.22
+LAPB Ethernet driver version 0.02
+usbcore: registered new interface driver ath9k_htc
+usbcore: registered new interface driver carl9170
+usbcore: registered new interface driver ath6kl_usb
+usbcore: registered new interface driver ar5523
+usbcore: registered new interface driver ath10k_usb
+usbcore: registered new interface driver rndis_wlan
+mac80211_hwsim: initializing netlink
+stack segment: 0000 [#1] PREEMPT SMP KASAN
 CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc1-syzkaller-00017-g3cc40a443a04 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:kernfs_root fs/kernfs/kernfs-internal.h:66 [inline]
-RIP: 0010:kernfs_new_node+0x3e/0x160 fs/kernfs/dir.c:655
-Code: 89 44 24 04 41 89 cc 41 89 d7 49 89 f5 48 89 fb 48 bd 00 00 00 00 00 fc ff df e8 1d 26 75 ff 48 8d 7b 30 48 89 f8 48 c1 e8 03 <80> 3c 28 00 74 05 e8 c7 c4 c8 ff 4c 8b 73 30 4d 85 f6 4c 0f 44 f3
-RSP: 0000:ffffc90000067a48 EFLAGS: 00010a06
-RAX: 1fffe00000000006 RBX: ffff000000000000 RCX: ffff888012228000
-RDX: 0000000000000000 RSI: ffffffff8b23d2c0 RDI: ffff000000000030
-RBP: dffffc0000000000 R08: 0000000000000000 R09: 0000000000000004
-R10: fffffbfff19cdabd R11: 1ffffffff19cdabc R12: 0000000000000000
-R13: ffffffff8b23d2c0 R14: ffff888147423e80 R15: 000000000000a1ff
+RIP: 0010:__kmalloc_node_track_caller+0x17a/0x3f0 mm/slub.c:4955
+Code: 00 48 c1 e8 3a 44 39 f0 0f 85 24 01 00 00 49 8b 3c 24 40 f6 c7 0f 0f 85 73 02 00 00 45 84 c0 0f 84 6c 02 00 00 41 8b 44 24 28 <48> 8b 5c 05 00 48 8d 4a 08 48 89 e8 65 48 0f c7 0f 0f 94 c0 a8 01
+RSP: 0000:ffffc90000067858 EFLAGS: 00010202
+RAX: 0000000000000800 RBX: 0000000000082cc0 RCX: 0000000000000000
+RDX: 0000000000003088 RSI: 0000000000082cc0 RDI: 000000000003d960
+RBP: ffff000000000000 R08: dffffc0000000001 R09: fffffbfff1c4ade6
+R10: fffffbfff1c4ade6 R11: 1ffffffff1c4ade5 R12: ffff888012042140
+R13: 0000000000082cc0 R14: 00000000ffffffff R15: 0000000000001000
 FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdc0000000006 CR3: 000000000ca8e000 CR4: 00000000003506f0
+CR2: ffff88823ffff000 CR3: 000000000ca8e000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- kernfs_create_link+0x9f/0x1f0 fs/kernfs/symlink.c:39
- sysfs_do_create_link_sd+0x85/0x100 fs/sysfs/symlink.c:44
- device_add_class_symlinks drivers/base/core.c:3239 [inline]
- device_add+0x642/0xf90 drivers/base/core.c:3465
- device_create_groups_vargs drivers/base/core.c:4194 [inline]
- device_create+0x252/0x2e0 drivers/base/core.c:4236
- ppp_init+0xfb/0x157 drivers/net/ppp/ppp_generic.c:1410
+ kmalloc_reserve net/core/skbuff.c:358 [inline]
+ __alloc_skb+0x11d/0x620 net/core/skbuff.c:430
+ alloc_skb include/linux/skbuff.h:1257 [inline]
+ nlmsg_new include/net/netlink.h:953 [inline]
+ ctrl_build_mcgrp_msg net/netlink/genetlink.c:997 [inline]
+ genl_ctrl_event+0x16f/0xc40 net/netlink/genetlink.c:1083
+ genl_register_family+0x10df/0x1390 net/netlink/genetlink.c:432
+ hwsim_init_netlink+0x21/0x9b drivers/net/wireless/mac80211_hwsim.c:4972
+ init_mac80211_hwsim+0x185/0xa08 drivers/net/wireless/mac80211_hwsim.c:5285
  do_one_initcall+0xbd/0x2b0 init/main.c:1296
  do_initcall_level+0x168/0x218 init/main.c:1369
  do_initcalls+0x4b/0x8c init/main.c:1385
@@ -158,41 +155,37 @@ Call Trace:
  ret_from_fork+0x1f/0x30
  </TASK>
 Modules linked in:
-CR2: ffffdc0000000006
 ---[ end trace 0000000000000000 ]---
-RIP: 0010:kernfs_root fs/kernfs/kernfs-internal.h:66 [inline]
-RIP: 0010:kernfs_new_node+0x3e/0x160 fs/kernfs/dir.c:655
-Code: 89 44 24 04 41 89 cc 41 89 d7 49 89 f5 48 89 fb 48 bd 00 00 00 00 00 fc ff df e8 1d 26 75 ff 48 8d 7b 30 48 89 f8 48 c1 e8 03 <80> 3c 28 00 74 05 e8 c7 c4 c8 ff 4c 8b 73 30 4d 85 f6 4c 0f 44 f3
-RSP: 0000:ffffc90000067a48 EFLAGS: 00010a06
-RAX: 1fffe00000000006 RBX: ffff000000000000 RCX: ffff888012228000
-RDX: 0000000000000000 RSI: ffffffff8b23d2c0 RDI: ffff000000000030
-RBP: dffffc0000000000 R08: 0000000000000000 R09: 0000000000000004
-R10: fffffbfff19cdabd R11: 1ffffffff19cdabc R12: 0000000000000000
-R13: ffffffff8b23d2c0 R14: ffff888147423e80 R15: 000000000000a1ff
+RIP: 0010:__kmalloc_node_track_caller+0x17a/0x3f0 mm/slub.c:4955
+Code: 00 48 c1 e8 3a 44 39 f0 0f 85 24 01 00 00 49 8b 3c 24 40 f6 c7 0f 0f 85 73 02 00 00 45 84 c0 0f 84 6c 02 00 00 41 8b 44 24 28 <48> 8b 5c 05 00 48 8d 4a 08 48 89 e8 65 48 0f c7 0f 0f 94 c0 a8 01
+RSP: 0000:ffffc90000067858 EFLAGS: 00010202
+RAX: 0000000000000800 RBX: 0000000000082cc0 RCX: 0000000000000000
+RDX: 0000000000003088 RSI: 0000000000082cc0 RDI: 000000000003d960
+RBP: ffff000000000000 R08: dffffc0000000001 R09: fffffbfff1c4ade6
+R10: fffffbfff1c4ade6 R11: 1ffffffff1c4ade5 R12: ffff888012042140
+R13: 0000000000082cc0 R14: 00000000ffffffff R15: 0000000000001000
 FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdc0000000006 CR3: 000000000ca8e000 CR4: 00000000003506f0
+CR2: ffff88823ffff000 CR3: 000000000ca8e000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	89 44 24 04          	mov    %eax,0x4(%rsp)
-   4:	41 89 cc             	mov    %ecx,%r12d
-   7:	41 89 d7             	mov    %edx,%r15d
-   a:	49 89 f5             	mov    %rsi,%r13
-   d:	48 89 fb             	mov    %rdi,%rbx
-  10:	48 bd 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbp
-  17:	fc ff df
-  1a:	e8 1d 26 75 ff       	callq  0xff75263c
-  1f:	48 8d 7b 30          	lea    0x30(%rbx),%rdi
-  23:	48 89 f8             	mov    %rdi,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	80 3c 28 00          	cmpb   $0x0,(%rax,%rbp,1) <-- trapping instruction
-  2e:	74 05                	je     0x35
-  30:	e8 c7 c4 c8 ff       	callq  0xffc8c4fc
-  35:	4c 8b 73 30          	mov    0x30(%rbx),%r14
-  39:	4d 85 f6             	test   %r14,%r14
-  3c:	4c 0f 44 f3          	cmove  %rbx,%r14
+   0:	00 48 c1             	add    %cl,-0x3f(%rax)
+   3:	e8 3a 44 39 f0       	callq  0xf0394442
+   8:	0f 85 24 01 00 00    	jne    0x132
+   e:	49 8b 3c 24          	mov    (%r12),%rdi
+  12:	40 f6 c7 0f          	test   $0xf,%dil
+  16:	0f 85 73 02 00 00    	jne    0x28f
+  1c:	45 84 c0             	test   %r8b,%r8b
+  1f:	0f 84 6c 02 00 00    	je     0x291
+  25:	41 8b 44 24 28       	mov    0x28(%r12),%eax
+* 2a:	48 8b 5c 05 00       	mov    0x0(%rbp,%rax,1),%rbx <-- trapping instruction
+  2f:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  33:	48 89 e8             	mov    %rbp,%rax
+  36:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3b:	0f 94 c0             	sete   %al
+  3e:	a8 01                	test   $0x1,%al
 
 
 ---

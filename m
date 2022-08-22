@@ -2,243 +2,456 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB8459C2E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EB759C2F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236542AbiHVPdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
+        id S236813AbiHVPfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235301AbiHVPdn (ORCPT
+        with ESMTP id S234980AbiHVPfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:33:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79EEF587
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:33:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF2A461158
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:33:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA02EC43470;
-        Mon, 22 Aug 2022 15:33:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661182419;
-        bh=L+xylg2Ga9OgepjcsWkpAAwkZaOwU0VdxyIlnOTzoP0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ouIW1BYa0TIGv3Bm6vn3QC9pMFbE1oMr/c9uk71Rv5zPHKUnr1YQfDzYxH1Ln79ez
-         GxNdHDxBheoFb+j/l0QdnN/SjDf6p+fIiQIwTCIXF1U4Q0g6LEx2BcxFbfHmG4dWnt
-         kw+xF9MDswN2XT1xew9ctStO5YzlCUnmzMzpYX/m5serD0eBCVHOuxb8urUr3VmZZe
-         v0/QPB6TixrIGyeNZZdAOx4dAban0IQdEQzDpBtEm/97Wp8VKJ5o5+RqwrnKkkL8So
-         TZ+94BoGITKV28Pq7V4IofHuV2a3un2vt3b6HiA2aV2MIKIZmFYTsn+lHBWIxJRPtf
-         73A2gZAQ3hx0g==
-Received: by pali.im (Postfix)
-        id 1590597B; Mon, 22 Aug 2022 17:33:36 +0200 (CEST)
-Date:   Mon, 22 Aug 2022 17:33:35 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Nick Child <nick.child@ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] powerpc: Add support for early debugging via Serial
- 16550 console
-Message-ID: <20220822153335.v5gc26jfbbqyj3et@pali>
-References: <20220819211254.22192-1-pali@kernel.org>
- <b23ecdd1-fe34-f0f7-be7f-da8624096447@csgroup.eu>
+        Mon, 22 Aug 2022 11:35:17 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069C2193D8;
+        Mon, 22 Aug 2022 08:35:15 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MEgMA7019503;
+        Mon, 22 Aug 2022 15:35:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=1T0zjuUta9L4qIdn0EcgU1uX2pA3Mnjvz1QHmKooIAA=;
+ b=a6HI6jC3MLNKGyWBHWuHOChSFPm2pnXWxet0unr0r8OpJqIiQGpVEwJFg2HH32MEH9Sk
+ qnuHrRAw4ByYfr+INlm66/fQ+h6XqvFBVJjB/yQrHOAUzvlZkOonT+1AxS4Dztb/5pYY
+ svr14sE3O6ZXqz5zrGOTom8xZ8UBmOgYCoot63eL7QH5suaHaNKJ/O2drksCHPxvLEZN
+ zjKH1xWf94mbcF08pQQ3nLXlANxliGYqhtvQ+f/HNN98FMKZqafbHpLnCNWUfcA/KGPK
+ LTe0C35piYZZ1JCrwLcJBIts0rVYssSAhNeLLZpa+vvmw7cpXaAFhvc9g1xjIe5kuNe9 Eg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j2vwnvwtu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Aug 2022 15:35:07 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27MFZ655027277
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Aug 2022 15:35:06 GMT
+Received: from quicinc.com (10.49.16.6) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 22 Aug
+ 2022 08:35:06 -0700
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Jeff Johnson" <quic_jjohnson@quicinc.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] soc: qcom: qmi: use const for struct qmi_elem_info
+Date:   Mon, 22 Aug 2022 08:34:35 -0700
+Message-ID: <20220822153435.7856-1-quic_jjohnson@quicinc.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b23ecdd1-fe34-f0f7-be7f-da8624096447@csgroup.eu>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: LYnBoD5W3dIOyY_XJAFd3LkWf5PNl7Vy
+X-Proofpoint-ORIG-GUID: LYnBoD5W3dIOyY_XJAFd3LkWf5PNl7Vy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-22_10,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0
+ mlxlogscore=881 spamscore=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208220067
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 22 August 2022 14:25:57 Christophe Leroy wrote:
-> Le 19/08/2022 à 23:12, Pali Rohár a écrit :
-> > Currently powerpc early debugging contains lot of platform specific
-> > options, but does not support standard UART / serial 16550 console.
-> > 
-> > Later legacy_serial.c code supports registering UART as early debug console
-> > from device tree but it is not early during booting, but rather later after
-> > machine description code finishes.
-> > 
-> > So for real early debugging via UART is current code unsuitable.
-> > 
-> > Add support for new early debugging option CONFIG_PPC_EARLY_DEBUG_16550
-> > which enable Serial 16550 console on address defined by new option
-> > CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR and by stride by option
-> > CONFIG_PPC_EARLY_DEBUG_16550_STRIDE.
-> > 
-> > With this change it is possible to debug powerpc machine descriptor code.
-> > For example this early debugging code can print on serial console also
-> > "No suitable machine description found" error which is done before
-> > legacy_serial.c code.
-> > 
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > ---
-> > Tested on P2020 board. It allowed me do debug and implement this patch series:
-> > https://lore.kernel.org/linuxppc-dev/20220819191557.28116-1-pali@kernel.org/
-> 
-> Build failure if I select it on mpc885_ads_defconfig :
-> 
->    LD      vmlinux.o
->    MODPOST vmlinux.symvers
->    MODINFO modules.builtin.modinfo
->    GEN     modules.builtin
->    CC      .vmlinux.export.o
->    LD      .tmp_vmlinux.kallsyms1
-> powerpc64-linux-ld: arch/powerpc/kernel/udbg.o: in function 
-> `udbg_early_init':
-> /home/chleroy/linux-powerpc/arch/powerpc/kernel/udbg.c:71: undefined 
-> reference to `udbg_init_debug_16550'
-> 
-> 
-> 
-> > ---
-> >   arch/powerpc/Kconfig.debug       | 14 ++++++++++++++
-> >   arch/powerpc/include/asm/udbg.h  |  1 +
-> >   arch/powerpc/kernel/udbg.c       |  2 ++
-> >   arch/powerpc/kernel/udbg_16550.c | 33 ++++++++++++++++++++++++++++++++
-> >   4 files changed, 50 insertions(+)
-> > 
-> > diff --git a/arch/powerpc/Kconfig.debug b/arch/powerpc/Kconfig.debug
-> > index 9f363c143d86..a4e7d90a45d2 100644
-> > --- a/arch/powerpc/Kconfig.debug
-> > +++ b/arch/powerpc/Kconfig.debug
-> > @@ -276,6 +276,11 @@ config PPC_EARLY_DEBUG_OPAL_HVSI
-> >   	  Select this to enable early debugging for the PowerNV platform
-> >   	  using an "hvsi" console
-> >   
-> > +config PPC_EARLY_DEBUG_16550
-> > +	bool "Serial 16550"
-> > +	help
-> > +	  Select this to enable early debugging via Serial 16550 console
-> > +
-> 
-> Putting it before EARLY_DEBUG_MEMCONS means that configs that were 
-> previously selectiong EARLY_DEBUG_MEMCONS will now select 
-> EARLY_DEBUG_16550 instead.
-> 
-> Add a dependency to PPC_UDBG_16550 to avoid the build failure I mentionned ?
+Currently all usage of struct qmi_elem_info, which is used to define
+the QMI message encoding/decoding rules, does not use const. This
+prevents clients from registering const arrays. Since these arrays are
+always pre-defined, they should be const, so add the const qualifier
+to all places in the QMI interface where struct qmi_elem_info is used.
 
-Yea, there is really missing dependency. I will fix it.
+Once this patch is in place, clients can independently update their
+pre-defined arrays to be const, as demonstrated in the QMI sample
+code.
 
-> >   config PPC_EARLY_DEBUG_MEMCONS
-> >   	bool "In memory console"
-> >   	help
-> > @@ -355,6 +360,15 @@ config PPC_EARLY_DEBUG_CPM_ADDR
-> >   	  platform probing is done, all platforms selected must
-> >   	  share the same address.
-> >   
-> > +config PPC_EARLY_DEBUG_16550_PHYSADDR
-> > +	hex "Early debug Serial 16550 physical address"
-> > +	depends on PPC_EARLY_DEBUG_16550
-> 
-> A default value is necessary here to avoid prompts during defconfig builds.
-> 
-> > +
-> > +config PPC_EARLY_DEBUG_16550_STRIDE
-> > +	int "Early debug Serial 16550 stride"
-> > +	depends on PPC_EARLY_DEBUG_16550
-> > +	default 1
-> > +
-> >   config FAIL_IOMMU
-> >   	bool "Fault-injection capability for IOMMU"
-> >   	depends on FAULT_INJECTION
-> > diff --git a/arch/powerpc/include/asm/udbg.h b/arch/powerpc/include/asm/udbg.h
-> > index b4aa0d88ce2c..20b5a37ab772 100644
-> > --- a/arch/powerpc/include/asm/udbg.h
-> > +++ b/arch/powerpc/include/asm/udbg.h
-> > @@ -53,6 +53,7 @@ extern void __init udbg_init_ehv_bc(void);
-> >   extern void __init udbg_init_ps3gelic(void);
-> >   extern void __init udbg_init_debug_opal_raw(void);
-> >   extern void __init udbg_init_debug_opal_hvsi(void);
-> > +extern void __init udbg_init_debug_16550(void);
-> 
-> 'extern' keywork is pointless and deprecated for function prototypes, 
-> please don't add new ones.
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
 
-I used extern keyword to follow existing coding style.
+v2:
+Added missing const to skip_to_next_elem() return type
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Checkpatch reports:
-> 
-> CHECK: extern prototypes should be avoided in .h files
-> #77: FILE: arch/powerpc/include/asm/udbg.h:56:
-> +extern void __init udbg_init_debug_16550(void);
-> 
-> 
-> >   
-> >   #endif /* __KERNEL__ */
-> >   #endif /* _ASM_POWERPC_UDBG_H */
-> > diff --git a/arch/powerpc/kernel/udbg.c b/arch/powerpc/kernel/udbg.c
-> > index b1544b2f6321..92b3fc258d11 100644
-> > --- a/arch/powerpc/kernel/udbg.c
-> > +++ b/arch/powerpc/kernel/udbg.c
-> > @@ -67,6 +67,8 @@ void __init udbg_early_init(void)
-> >   	udbg_init_debug_opal_raw();
-> >   #elif defined(CONFIG_PPC_EARLY_DEBUG_OPAL_HVSI)
-> >   	udbg_init_debug_opal_hvsi();
-> > +#elif defined(CONFIG_PPC_EARLY_DEBUG_16550)
-> > +	udbg_init_debug_16550();
-> >   #endif
-> >   
-> >   #ifdef CONFIG_PPC_EARLY_DEBUG
-> > diff --git a/arch/powerpc/kernel/udbg_16550.c b/arch/powerpc/kernel/udbg_16550.c
-> > index d3942de254c6..46f2d831d7c9 100644
-> > --- a/arch/powerpc/kernel/udbg_16550.c
-> > +++ b/arch/powerpc/kernel/udbg_16550.c
-> > @@ -8,6 +8,7 @@
-> >   #include <asm/udbg.h>
-> >   #include <asm/io.h>
-> >   #include <asm/reg_a2.h>
-> > +#include <asm/early_ioremap.h>
-> >   
-> >   extern u8 real_readb(volatile u8 __iomem  *addr);
-> >   extern void real_writeb(u8 data, volatile u8 __iomem *addr);
-> > @@ -335,3 +336,35 @@ void __init udbg_init_debug_microwatt(void)
-> >   }
-> >   
-> >   #endif /* CONFIG_PPC_EARLY_DEBUG_MICROWATT */
-> > +
-> > +#ifdef CONFIG_PPC_EARLY_DEBUG_16550
-> > +
-> > +static void __iomem *udbg_uart_early_addr;
-> > +
-> > +void __init udbg_init_debug_16550(void)
-> > +{
-> > +	udbg_uart_early_addr = early_ioremap(CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR, 0x1000);
-> > +	udbg_uart_init_mmio(udbg_uart_early_addr, CONFIG_PPC_EARLY_DEBUG_16550_STRIDE);
-> > +}
-> > +
-> > +static int __init udbg_init_debug_16550_ioremap(void)
-> > +{
-> > +	void __iomem *addr;
-> > +
-> > +	if (!udbg_uart_early_addr)
-> > +		return 0;
-> > +
-> > +	addr = ioremap(CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR, 0x1000);
-> > +	if (WARN_ON(!addr))
-> > +		return -ENOMEM;
-> > +
-> > +	udbg_uart_init_mmio(addr, CONFIG_PPC_EARLY_DEBUG_16550_STRIDE);
-> > +	early_iounmap(udbg_uart_early_addr, 0x1000);
-> > +	udbg_uart_early_addr = NULL;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +early_initcall(udbg_init_debug_16550_ioremap);
-> > +
-> > +#endif /* CONFIG_PPC_EARLY_DEBUG_16550 */
+ drivers/soc/qcom/qmi_encdec.c    | 50 ++++++++++++++++----------------
+ drivers/soc/qcom/qmi_interface.c | 12 ++++----
+ include/linux/soc/qcom/qmi.h     | 20 ++++++-------
+ samples/qmi/qmi_sample_client.c  | 10 +++----
+ 4 files changed, 47 insertions(+), 45 deletions(-)
+
+diff --git a/drivers/soc/qcom/qmi_encdec.c b/drivers/soc/qcom/qmi_encdec.c
+index 328cc8237191..b7158e3c3a0b 100644
+--- a/drivers/soc/qcom/qmi_encdec.c
++++ b/drivers/soc/qcom/qmi_encdec.c
+@@ -57,11 +57,11 @@ do { \
+ #define TLV_TYPE_SIZE sizeof(u8)
+ #define OPTIONAL_TLV_TYPE_START 0x10
+ 
+-static int qmi_encode(struct qmi_elem_info *ei_array, void *out_buf,
++static int qmi_encode(const struct qmi_elem_info *ei_array, void *out_buf,
+ 		      const void *in_c_struct, u32 out_buf_len,
+ 		      int enc_level);
+ 
+-static int qmi_decode(struct qmi_elem_info *ei_array, void *out_c_struct,
++static int qmi_decode(const struct qmi_elem_info *ei_array, void *out_c_struct,
+ 		      const void *in_buf, u32 in_buf_len, int dec_level);
+ 
+ /**
+@@ -76,10 +76,10 @@ static int qmi_decode(struct qmi_elem_info *ei_array, void *out_c_struct,
+  *
+  * Return: struct info of the next element that can be encoded.
+  */
+-static struct qmi_elem_info *skip_to_next_elem(struct qmi_elem_info *ei_array,
+-					       int level)
++static const struct qmi_elem_info *
++skip_to_next_elem(const struct qmi_elem_info *ei_array, int level)
+ {
+-	struct qmi_elem_info *temp_ei = ei_array;
++	const struct qmi_elem_info *temp_ei = ei_array;
+ 	u8 tlv_type;
+ 
+ 	if (level > 1) {
+@@ -101,11 +101,11 @@ static struct qmi_elem_info *skip_to_next_elem(struct qmi_elem_info *ei_array,
+  *
+  * Return: Expected minimum length of the QMI message or 0 on error.
+  */
+-static int qmi_calc_min_msg_len(struct qmi_elem_info *ei_array,
++static int qmi_calc_min_msg_len(const struct qmi_elem_info *ei_array,
+ 				int level)
+ {
+ 	int min_msg_len = 0;
+-	struct qmi_elem_info *temp_ei = ei_array;
++	const struct qmi_elem_info *temp_ei = ei_array;
+ 
+ 	if (!ei_array)
+ 		return min_msg_len;
+@@ -194,13 +194,13 @@ static int qmi_encode_basic_elem(void *buf_dst, const void *buf_src,
+  * Return: The number of bytes of encoded information on success or negative
+  * errno on error.
+  */
+-static int qmi_encode_struct_elem(struct qmi_elem_info *ei_array,
++static int qmi_encode_struct_elem(const struct qmi_elem_info *ei_array,
+ 				  void *buf_dst, const void *buf_src,
+ 				  u32 elem_len, u32 out_buf_len,
+ 				  int enc_level)
+ {
+ 	int i, rc, encoded_bytes = 0;
+-	struct qmi_elem_info *temp_ei = ei_array;
++	const struct qmi_elem_info *temp_ei = ei_array;
+ 
+ 	for (i = 0; i < elem_len; i++) {
+ 		rc = qmi_encode(temp_ei->ei_array, buf_dst, buf_src,
+@@ -233,13 +233,13 @@ static int qmi_encode_struct_elem(struct qmi_elem_info *ei_array,
+  * Return: The number of bytes of encoded information on success or negative
+  * errno on error.
+  */
+-static int qmi_encode_string_elem(struct qmi_elem_info *ei_array,
++static int qmi_encode_string_elem(const struct qmi_elem_info *ei_array,
+ 				  void *buf_dst, const void *buf_src,
+ 				  u32 out_buf_len, int enc_level)
+ {
+ 	int rc;
+ 	int encoded_bytes = 0;
+-	struct qmi_elem_info *temp_ei = ei_array;
++	const struct qmi_elem_info *temp_ei = ei_array;
+ 	u32 string_len = 0;
+ 	u32 string_len_sz = 0;
+ 
+@@ -289,11 +289,11 @@ static int qmi_encode_string_elem(struct qmi_elem_info *ei_array,
+  * Return: The number of bytes of encoded information on success or negative
+  * errno on error.
+  */
+-static int qmi_encode(struct qmi_elem_info *ei_array, void *out_buf,
++static int qmi_encode(const struct qmi_elem_info *ei_array, void *out_buf,
+ 		      const void *in_c_struct, u32 out_buf_len,
+ 		      int enc_level)
+ {
+-	struct qmi_elem_info *temp_ei = ei_array;
++	const struct qmi_elem_info *temp_ei = ei_array;
+ 	u8 opt_flag_value = 0;
+ 	u32 data_len_value = 0, data_len_sz;
+ 	u8 *buf_dst = (u8 *)out_buf;
+@@ -468,13 +468,13 @@ static int qmi_decode_basic_elem(void *buf_dst, const void *buf_src,
+  * Return: The total size of the decoded data elements on success, negative
+  * errno on error.
+  */
+-static int qmi_decode_struct_elem(struct qmi_elem_info *ei_array,
++static int qmi_decode_struct_elem(const struct qmi_elem_info *ei_array,
+ 				  void *buf_dst, const void *buf_src,
+ 				  u32 elem_len, u32 tlv_len,
+ 				  int dec_level)
+ {
+ 	int i, rc, decoded_bytes = 0;
+-	struct qmi_elem_info *temp_ei = ei_array;
++	const struct qmi_elem_info *temp_ei = ei_array;
+ 
+ 	for (i = 0; i < elem_len && decoded_bytes < tlv_len; i++) {
+ 		rc = qmi_decode(temp_ei->ei_array, buf_dst, buf_src,
+@@ -514,7 +514,7 @@ static int qmi_decode_struct_elem(struct qmi_elem_info *ei_array,
+  * Return: The total size of the decoded data elements on success, negative
+  * errno on error.
+  */
+-static int qmi_decode_string_elem(struct qmi_elem_info *ei_array,
++static int qmi_decode_string_elem(const struct qmi_elem_info *ei_array,
+ 				  void *buf_dst, const void *buf_src,
+ 				  u32 tlv_len, int dec_level)
+ {
+@@ -522,7 +522,7 @@ static int qmi_decode_string_elem(struct qmi_elem_info *ei_array,
+ 	int decoded_bytes = 0;
+ 	u32 string_len = 0;
+ 	u32 string_len_sz = 0;
+-	struct qmi_elem_info *temp_ei = ei_array;
++	const struct qmi_elem_info *temp_ei = ei_array;
+ 
+ 	if (dec_level == 1) {
+ 		string_len = tlv_len;
+@@ -564,10 +564,10 @@ static int qmi_decode_string_elem(struct qmi_elem_info *ei_array,
+  *
+  * Return: Pointer to struct info, if found
+  */
+-static struct qmi_elem_info *find_ei(struct qmi_elem_info *ei_array,
+-				     u32 type)
++static const struct qmi_elem_info *find_ei(const struct qmi_elem_info *ei_array,
++					   u32 type)
+ {
+-	struct qmi_elem_info *temp_ei = ei_array;
++	const struct qmi_elem_info *temp_ei = ei_array;
+ 
+ 	while (temp_ei->data_type != QMI_EOTI) {
+ 		if (temp_ei->tlv_type == (u8)type)
+@@ -590,11 +590,11 @@ static struct qmi_elem_info *find_ei(struct qmi_elem_info *ei_array,
+  * Return: The number of bytes of decoded information on success, negative
+  * errno on error.
+  */
+-static int qmi_decode(struct qmi_elem_info *ei_array, void *out_c_struct,
++static int qmi_decode(const struct qmi_elem_info *ei_array, void *out_c_struct,
+ 		      const void *in_buf, u32 in_buf_len,
+ 		      int dec_level)
+ {
+-	struct qmi_elem_info *temp_ei = ei_array;
++	const struct qmi_elem_info *temp_ei = ei_array;
+ 	u8 opt_flag_value = 1;
+ 	u32 data_len_value = 0, data_len_sz = 0;
+ 	u8 *buf_dst = out_c_struct;
+@@ -713,7 +713,7 @@ static int qmi_decode(struct qmi_elem_info *ei_array, void *out_c_struct,
+  * Return: Buffer with encoded message, or negative ERR_PTR() on error
+  */
+ void *qmi_encode_message(int type, unsigned int msg_id, size_t *len,
+-			 unsigned int txn_id, struct qmi_elem_info *ei,
++			 unsigned int txn_id, const struct qmi_elem_info *ei,
+ 			 const void *c_struct)
+ {
+ 	struct qmi_header *hdr;
+@@ -767,7 +767,7 @@ EXPORT_SYMBOL(qmi_encode_message);
+  * errno on error.
+  */
+ int qmi_decode_message(const void *buf, size_t len,
+-		       struct qmi_elem_info *ei, void *c_struct)
++		       const struct qmi_elem_info *ei, void *c_struct)
+ {
+ 	if (!ei)
+ 		return -EINVAL;
+@@ -781,7 +781,7 @@ int qmi_decode_message(const void *buf, size_t len,
+ EXPORT_SYMBOL(qmi_decode_message);
+ 
+ /* Common header in all QMI responses */
+-struct qmi_elem_info qmi_response_type_v01_ei[] = {
++const struct qmi_elem_info qmi_response_type_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_SIGNED_2_BYTE_ENUM,
+ 		.elem_len	= 1,
+diff --git a/drivers/soc/qcom/qmi_interface.c b/drivers/soc/qcom/qmi_interface.c
+index c8c4c730b135..57052726299d 100644
+--- a/drivers/soc/qcom/qmi_interface.c
++++ b/drivers/soc/qcom/qmi_interface.c
+@@ -305,7 +305,7 @@ EXPORT_SYMBOL(qmi_add_server);
+  * Return: Transaction id on success, negative errno on failure.
+  */
+ int qmi_txn_init(struct qmi_handle *qmi, struct qmi_txn *txn,
+-		 struct qmi_elem_info *ei, void *c_struct)
++		 const struct qmi_elem_info *ei, void *c_struct)
+ {
+ 	int ret;
+ 
+@@ -736,7 +736,8 @@ EXPORT_SYMBOL(qmi_handle_release);
+ static ssize_t qmi_send_message(struct qmi_handle *qmi,
+ 				struct sockaddr_qrtr *sq, struct qmi_txn *txn,
+ 				int type, int msg_id, size_t len,
+-				struct qmi_elem_info *ei, const void *c_struct)
++				const struct qmi_elem_info *ei,
++				const void *c_struct)
+ {
+ 	struct msghdr msghdr = {};
+ 	struct kvec iv;
+@@ -787,7 +788,7 @@ static ssize_t qmi_send_message(struct qmi_handle *qmi,
+  */
+ ssize_t qmi_send_request(struct qmi_handle *qmi, struct sockaddr_qrtr *sq,
+ 			 struct qmi_txn *txn, int msg_id, size_t len,
+-			 struct qmi_elem_info *ei, const void *c_struct)
++			 const struct qmi_elem_info *ei, const void *c_struct)
+ {
+ 	return qmi_send_message(qmi, sq, txn, QMI_REQUEST, msg_id, len, ei,
+ 				c_struct);
+@@ -808,7 +809,7 @@ EXPORT_SYMBOL(qmi_send_request);
+  */
+ ssize_t qmi_send_response(struct qmi_handle *qmi, struct sockaddr_qrtr *sq,
+ 			  struct qmi_txn *txn, int msg_id, size_t len,
+-			  struct qmi_elem_info *ei, const void *c_struct)
++			  const struct qmi_elem_info *ei, const void *c_struct)
+ {
+ 	return qmi_send_message(qmi, sq, txn, QMI_RESPONSE, msg_id, len, ei,
+ 				c_struct);
+@@ -827,7 +828,8 @@ EXPORT_SYMBOL(qmi_send_response);
+  * Return: 0 on success, negative errno on failure.
+  */
+ ssize_t qmi_send_indication(struct qmi_handle *qmi, struct sockaddr_qrtr *sq,
+-			    int msg_id, size_t len, struct qmi_elem_info *ei,
++			    int msg_id, size_t len,
++			    const struct qmi_elem_info *ei,
+ 			    const void *c_struct)
+ {
+ 	struct qmi_txn txn;
+diff --git a/include/linux/soc/qcom/qmi.h b/include/linux/soc/qcom/qmi.h
+index b1f80e756d2a..469e02d2aa0d 100644
+--- a/include/linux/soc/qcom/qmi.h
++++ b/include/linux/soc/qcom/qmi.h
+@@ -75,7 +75,7 @@ struct qmi_elem_info {
+ 	enum qmi_array_type array_type;
+ 	u8 tlv_type;
+ 	u32 offset;
+-	struct qmi_elem_info *ei_array;
++	const struct qmi_elem_info *ei_array;
+ };
+ 
+ #define QMI_RESULT_SUCCESS_V01			0
+@@ -102,7 +102,7 @@ struct qmi_response_type_v01 {
+ 	u16 error;
+ };
+ 
+-extern struct qmi_elem_info qmi_response_type_v01_ei[];
++extern const struct qmi_elem_info qmi_response_type_v01_ei[];
+ 
+ /**
+  * struct qmi_service - context to track lookup-results
+@@ -173,7 +173,7 @@ struct qmi_txn {
+ 	struct completion completion;
+ 	int result;
+ 
+-	struct qmi_elem_info *ei;
++	const struct qmi_elem_info *ei;
+ 	void *dest;
+ };
+ 
+@@ -189,7 +189,7 @@ struct qmi_msg_handler {
+ 	unsigned int type;
+ 	unsigned int msg_id;
+ 
+-	struct qmi_elem_info *ei;
++	const struct qmi_elem_info *ei;
+ 
+ 	size_t decoded_size;
+ 	void (*fn)(struct qmi_handle *qmi, struct sockaddr_qrtr *sq,
+@@ -249,23 +249,23 @@ void qmi_handle_release(struct qmi_handle *qmi);
+ 
+ ssize_t qmi_send_request(struct qmi_handle *qmi, struct sockaddr_qrtr *sq,
+ 			 struct qmi_txn *txn, int msg_id, size_t len,
+-			 struct qmi_elem_info *ei, const void *c_struct);
++			 const struct qmi_elem_info *ei, const void *c_struct);
+ ssize_t qmi_send_response(struct qmi_handle *qmi, struct sockaddr_qrtr *sq,
+ 			  struct qmi_txn *txn, int msg_id, size_t len,
+-			  struct qmi_elem_info *ei, const void *c_struct);
++			  const struct qmi_elem_info *ei, const void *c_struct);
+ ssize_t qmi_send_indication(struct qmi_handle *qmi, struct sockaddr_qrtr *sq,
+-			    int msg_id, size_t len, struct qmi_elem_info *ei,
++			    int msg_id, size_t len, const struct qmi_elem_info *ei,
+ 			    const void *c_struct);
+ 
+ void *qmi_encode_message(int type, unsigned int msg_id, size_t *len,
+-			 unsigned int txn_id, struct qmi_elem_info *ei,
++			 unsigned int txn_id, const struct qmi_elem_info *ei,
+ 			 const void *c_struct);
+ 
+ int qmi_decode_message(const void *buf, size_t len,
+-		       struct qmi_elem_info *ei, void *c_struct);
++		       const struct qmi_elem_info *ei, void *c_struct);
+ 
+ int qmi_txn_init(struct qmi_handle *qmi, struct qmi_txn *txn,
+-		 struct qmi_elem_info *ei, void *c_struct);
++		 const struct qmi_elem_info *ei, void *c_struct);
+ int qmi_txn_wait(struct qmi_txn *txn, unsigned long timeout);
+ void qmi_txn_cancel(struct qmi_txn *txn);
+ 
+diff --git a/samples/qmi/qmi_sample_client.c b/samples/qmi/qmi_sample_client.c
+index 78fcedbd25e2..c045e3d24326 100644
+--- a/samples/qmi/qmi_sample_client.c
++++ b/samples/qmi/qmi_sample_client.c
+@@ -42,7 +42,7 @@ struct test_name_type_v01 {
+ 	char name[TEST_MAX_NAME_SIZE_V01];
+ };
+ 
+-static struct qmi_elem_info test_name_type_v01_ei[] = {
++static const struct qmi_elem_info test_name_type_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_DATA_LEN,
+ 		.elem_len	= 1,
+@@ -71,7 +71,7 @@ struct test_ping_req_msg_v01 {
+ 	struct test_name_type_v01 client_name;
+ };
+ 
+-static struct qmi_elem_info test_ping_req_msg_v01_ei[] = {
++static const struct qmi_elem_info test_ping_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_UNSIGNED_1_BYTE,
+ 		.elem_len	= 4,
+@@ -113,7 +113,7 @@ struct test_ping_resp_msg_v01 {
+ 	struct test_name_type_v01 service_name;
+ };
+ 
+-static struct qmi_elem_info test_ping_resp_msg_v01_ei[] = {
++static const struct qmi_elem_info test_ping_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+@@ -172,7 +172,7 @@ struct test_data_req_msg_v01 {
+ 	struct test_name_type_v01 client_name;
+ };
+ 
+-static struct qmi_elem_info test_data_req_msg_v01_ei[] = {
++static const struct qmi_elem_info test_data_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_DATA_LEN,
+ 		.elem_len	= 1,
+@@ -224,7 +224,7 @@ struct test_data_resp_msg_v01 {
+ 	struct test_name_type_v01 service_name;
+ };
+ 
+-static struct qmi_elem_info test_data_resp_msg_v01_ei[] = {
++static const struct qmi_elem_info test_data_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type	= QMI_STRUCT,
+ 		.elem_len	= 1,
+-- 
+2.37.0
+

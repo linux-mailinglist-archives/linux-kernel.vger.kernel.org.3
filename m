@@ -2,163 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BAD59C541
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C58259C547
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235817AbiHVRmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
+        id S235681AbiHVRpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbiHVRmu (ORCPT
+        with ESMTP id S236551AbiHVRnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:42:50 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA9B3FA2C;
-        Mon, 22 Aug 2022 10:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661190169; x=1692726169;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Y53/KudNdbIzmX5QqtH/lR6gjek3SwZONNfF08ZSfqI=;
-  b=ddqzkTqtaxs0A2bSAJA92eHQYHEEj4+pERUhoErHLeUGXM/e1CgCRyYq
-   ZpMUlR1diUBamT7NX/EnSa3k0SZOP61YOGer0C8VXSzoPgvEcu7v8zQiA
-   aOcO2Cnz2rG/uY0OjI6FROjvg/WOsewyyAPFp2+5epBBrW2fo9iRyNL4m
-   tEw8ftBw5zFRRxdJWCwUCkYSM+Fxu/UeEeTVb79dBCUx97TNlRJYn5vfw
-   wcHHIf5EwMtB403xvsoDg8fN3Y91KTp8YtKyV8m7ZAIz9UYUZdJ2ZzUZI
-   zRdD4wA43SZHqTYcFN/2A+ORarjcHB/magn5namfSeE3YuVj3wSGwJuFZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="273232336"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="273232336"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 10:42:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="751374322"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Aug 2022 10:42:49 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 22 Aug 2022 10:42:49 -0700
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 22 Aug 2022 10:42:48 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 22 Aug 2022 10:42:48 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 22 Aug 2022 10:42:48 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fgXW0+1t1sGWfSAFwcfH68/x9/ERcX0wQtw5spItJr9tNIVEA6918r6WEFaSm+AKW3IX084+aXKq7YPgEvVlxdJQCWD4yrje7gzZP0XDiycKuijOHT6jp1TNpFFVQnOaM4xVNT9HjBV2SoaPPMOGVR7fPU6AA3vsymUSqP967c1oSp2f8PeWyuJnGBdX1Ioyw5tNZGV90xrSXAM7l1TRxLXEZAm/wo+PwJ5+V9jm/L/UejZIgi2v0tmQBthBHBVErNuy+excRA+JukSMmK4p25dO0sxeUIYN0NtxWVW9bIUKVw9aIbAmULHj40sp1Qmxjyozc7wTQjLZCSAaHfMpvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PTuO1zrhewXfjxuciBika8cG5aV5+pYkf0ZvYYll8c8=;
- b=Z3Bx87ctRlV2YzR2J7F/jl+A4Ct8d6NUtBXpr2EOafmwT+u5v3/ABKL26Qwnf7MUe48Y79FDFt8zRcn+8otBaF4uyMTMQ3zL2ppFL6dj2jsbkjcFw0uE5ypgo7jTCY9CHIpR679hz0+KoUIvPxI0TpnKkS511BL4jkZWMR8P+oNF+/iK/OBM9RltmhLkwDSoXhpWtCnlxhmnA37WOAXBbV5r+34iFq35UwQQQuigtlSqcceVUnHcjjP+sIMCpzJb0cAWYfEXZUtP0mqve6x2rqNTQ6mmGEL5OCN7WR/3wGvkkjxhqEFfgwZ3N9HjahEoyzQYXeD9ZtqTeO5DaVrBVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB3113.namprd11.prod.outlook.com (2603:10b6:5:69::19) by
- SJ0PR11MB4831.namprd11.prod.outlook.com (2603:10b6:a03:2d2::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Mon, 22 Aug
- 2022 17:42:45 +0000
-Received: from DM6PR11MB3113.namprd11.prod.outlook.com
- ([fe80::9c27:edae:2e08:8874]) by DM6PR11MB3113.namprd11.prod.outlook.com
- ([fe80::9c27:edae:2e08:8874%7]) with mapi id 15.20.5546.023; Mon, 22 Aug 2022
- 17:42:45 +0000
-From:   "Laba, SlawomirX" <slawomirx.laba@intel.com>
-To:     ivecera <ivecera@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "Keller, Jacob E" <jacob.e.keller@intel.com>,
-        "Piotrowski, Patryk" <patryk.piotrowski@intel.com>,
-        Vitaly Grinberg <vgrinber@redhat.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH net] iavf: Detach device during reset task
-Thread-Topic: [PATCH net] iavf: Detach device during reset task
-Thread-Index: AQHYsyNwOjkGMXAyxk6WhUnxS4n8Aq27MxGw
-Date:   Mon, 22 Aug 2022 17:42:44 +0000
-Message-ID: <DM6PR11MB311314DD438AE5A5AA4F5ED687719@DM6PR11MB3113.namprd11.prod.outlook.com>
-References: <20220818165558.997984-1-ivecera@redhat.com>
-In-Reply-To: <20220818165558.997984-1-ivecera@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.500.17
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b5311416-8d49-4e2f-71ab-08da8465b88f
-x-ms-traffictypediagnostic: SJ0PR11MB4831:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SJtIML5FzQ9qwiMunCiX7wiRGAEzEyhztORLnJT/E/MXW1mH0CczcdnjpskTnFTEieG1suxl22oJZuJY3EejoxHrU01jegmPJ0PDb/CwkqO/lagFBU1/TgT1vDpvRAOeq2BF9SM0iR+p9G15alul/PFjXRr7TaGgmngPVm/4fMmQWVX9sAMDwlMHoua5O3bs4LgVQAY5544gRTXHrjvas1StfUw3DVmPutla999MAUVACKnHOG4Xc0dr+ZhVO1kWkyZxhjPa70kJpPHbXWL2iGsgssh8P+fRk4tNPvS27wae3Z2yespfWBSiQRbmXgRl1AHg2tKScXBqg+W5M3p2Rq5gJkNAy9jOkHc1K0W5eXtwzTDJl+thY+113ZcBGGLbIpMFLR7ipe9wU2xg4LzsZkthDQ0vvrSMV/jr9jGWwcUxijh9UJHQWUcy4eXybD/cPYUExKXezuyxJEAaVRvfydINLZYaJdoDGf5MrJtMOj9a+oV+WsMr+vCIq44c39JFdmCiMNX1AdHW/LmO/DZoBEPqLTD6iRU0W9vHFeIg5H0bX2qvE++RLXqt4T/d+93ecPn/DBlFA4JuWR1OpU/Dmc+kVLLLIPhGWYUtH3kmbAY4peTw6KdgMhmLu5blBrLdU93YGIDnOfq1TV6lWNX5OjjY5xE+q+X1Oqlv6cRuZDX1gAjuNeYwWBsFA6vG2Dtw1+37Ely3wuIuDbOz2Gsie/EkyQwBjs8Z92PODwoMDQGIaS1GvQFT4JbPaM9tVJPV
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3113.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(39860400002)(376002)(396003)(346002)(366004)(64756008)(66446008)(66476007)(66556008)(4326008)(8676002)(66946007)(76116006)(122000001)(38100700002)(38070700005)(86362001)(82960400001)(5660300002)(52536014)(8936002)(2906002)(53546011)(7696005)(6506007)(41300700001)(9686003)(26005)(55016003)(478600001)(71200400001)(316002)(83380400001)(186003)(110136005)(54906003)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?SoD2MV7J+yDeaB8nAzSmgmOtJ9YUGG5kLdbrqP9JK8XmYQE/QyRj4RoGLAyL?=
- =?us-ascii?Q?dSemDjU4bnMWBjLzXAJicLHO+iYgipQYm+XayZs/WkYIoTESpi2S8+EckQIS?=
- =?us-ascii?Q?vDwMMpeKHtHSvfqMo3jt5zAHs/2lXS47EgTitHvWEP2UaXbiTBWytwgIvr3t?=
- =?us-ascii?Q?rFnrXD+zHyfNBtDBNG46Uf1n/NrGg0R62bzxME02bbNVmno88bXItrUD8nR1?=
- =?us-ascii?Q?jHiKQCkKeSY2vQ1sv5DXazKiIBXBvmqeiR+JymauN45G9vtjcf7hZXm+VVlc?=
- =?us-ascii?Q?BfZcLxQY/mSd8okejwcmzqPHUJi/JH1d1s3WjRzSKWamfps6cVagAb0jFw1H?=
- =?us-ascii?Q?tatzgAUPFC7y6ELSYs+zRAENc2P41AVft5xFh+lIIQgChaRp5QXvCRf0Qwhh?=
- =?us-ascii?Q?kDWa6DadvWm6vzncG/tLtaWerQZan7x9xCRhXEPosw49Qnhk8p1wG8HBF+mU?=
- =?us-ascii?Q?WjPij4mF+DfrU6BgBo2MP/4XDS4z6vpstVBgAR6Z+qTjmk0a5onSG0QgQByZ?=
- =?us-ascii?Q?4sew3KiG/GoRNnHlsFNyIu3P36zysVyylo2cJgr5bUJKOzU1rU9Tn3g9FrjR?=
- =?us-ascii?Q?qY0eYmHe8ignPLVgVMjVUQgz67fgLZf9YH1JGyCxNAvT0SBwpVxyWQGU8Zxj?=
- =?us-ascii?Q?N7B+PqwwAY4xg4VQg8iXLUOzA4I2dMZONZcirHpiIf23Wfy9V9fLaoyttK99?=
- =?us-ascii?Q?LFjA5MLev420W92rhoFntD/x/tTLj2sTn7DVp7HJWPOi9ick0wrgXZW5fieQ?=
- =?us-ascii?Q?i+/ONeXdHNPYND50rSZqDimCdia/XK+lL7MzRwai3PqUD0Puo188NQ2FqOf9?=
- =?us-ascii?Q?w7cwvELxLEJmi+N7UdSkS0wtd3VDLjc1w9FjPFPhjSJy2rHEqkAXlnmpeX3t?=
- =?us-ascii?Q?qGIbEd89z0b9RSsNq9ONfzBUt2uTn/DVNKGcv+6jluz1ZWsMOSP8CJsf3X1L?=
- =?us-ascii?Q?9XR1avY7PUTiT/Ttg64enHmLNe9B5h9AEVdtCRvpPgxIWQ2lrgNiWCp0QD19?=
- =?us-ascii?Q?qUYFp4wD+5VfxyDBbQQOZf7/HW+tdonDFUtos0eE5eMpzUSgnoau+uRpfsuU?=
- =?us-ascii?Q?cc6iPLtgdEb4pgI9RZ3ipJqMjwAOCM+WDb0N8PpL9DI9M/KPiJgBQ33R+6VD?=
- =?us-ascii?Q?kPWVk0NywR5Vlvx+9ytP69ZpSZpAqLixZkxd4U37WjAcYei0cNKe5HlROF2A?=
- =?us-ascii?Q?91/RIPt7RlbH0jQuC6LOopKKcn3KnJvesQd0KQz6NOYXcpePQp7l3VNsTdaE?=
- =?us-ascii?Q?vCdmqALkynmKmgaUgAX0dokhkp9pdtAxoX8YPI5rYdnWoY/shdeqRLKmBw/u?=
- =?us-ascii?Q?s7SW9yD80taZhfSqQCa/RnffHFFaLJ82BAKAxoYeBsivX22qsFM4WiJVCVJU?=
- =?us-ascii?Q?RJP57YbXvCHY0z6LVaFe6oihTNWGqb+k8yzeFdPlNCJwSLTzqL6JfZJGKwkO?=
- =?us-ascii?Q?4x57pyXEcX8dW/xyDPe/IO6kwO4bEEjrYsIc88qAfulTmFyCgFHLlA1tDYVV?=
- =?us-ascii?Q?zPhGfGP7fzv/Z6FDHVAsoPGvSNYDi55BggQfNH3sr8GDPlewuBbAcpRB8NC+?=
- =?us-ascii?Q?ZRnYPEKt6QKSanwxJANSMF+Hf4nwDOT1TpGb/G1Y?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 22 Aug 2022 13:43:33 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEF81CB38
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:43:27 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id m15so3644921pjj.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:43:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=f3n9zw83ec+Iaxuow/m9Y94VHHvJBz+8h9M5RHlcf9c=;
+        b=PGxWME4hHumZfnoJLWIyZfCDFx6G4W+h19ZXcIelhmvvfGLSHB/jFK/xLTlrgMxnYd
+         Bu9DmRRyDxFndNLtGGwcxhTv90zg4rBV5B5tlYVjRqCiQEF4XUUMa0n3HxbEk3X1wWve
+         5HiNfxZUQ/4l3QxQYP1mZ1EGwwjxAVNvM7QzlS+DDuVB8uUuX8SBgrnw0rs/fNsqZTVz
+         JiACxMMANN00WeP4vdLO2Un9krvEXmvgBlAarY/AXfhrnAqUOKaI/hIh0S2HyCWNEWUc
+         v4y3gO12OyYpWXs2/Ub4FLMcvJvEB+DPtRJgD/g3FNsw9ieVpHWhiH4/LBeWNTRtSOp4
+         InJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=f3n9zw83ec+Iaxuow/m9Y94VHHvJBz+8h9M5RHlcf9c=;
+        b=bjFZXr8kxoa13kkdxaXmODfKhzhkJoV+X38a1MtGlqiDw5kFuAnuYF2ozC0bO4Qnvv
+         OfXDvIVDiS1RieEDpMy+5m91euzR38k6C19ZZPu23kgEkTVGFEj4L3vK0emEaojYySFt
+         OdtvBnLhp6YY+xz/UNWIHROg59vsJSyYXezDyQkCix3hlrO4YvSoRsGvTUtDEI5TTRKB
+         CHLqbBWhOzjPEIGPrH9AJ2PxbhlUbiKAR6D4d0mULedb+JKG7vpQKIq0SFEGmgZ5RBKh
+         zTHilwyu9KW7kOwDOq/1hu3V+8nHtk9HwEZfwDsOIKREO1fo/jdCtrSAY6afy+orDml+
+         evYQ==
+X-Gm-Message-State: ACgBeo2emIlcxg4X0jwNI9ZgGoP7+4hXr9bW55DyVwBEA9HTExz/RWdY
+        bPsGGy5Gay9vkjDGClrElHGM3g==
+X-Google-Smtp-Source: AA6agR504aqRET5QyBY+jSoS1EiwOQ6z1CuGkV3LfLqYc9+x/lXk3gMbWxY+SY9gwIdSXpjZBlx08w==
+X-Received: by 2002:a17:902:f606:b0:172:6522:4bfc with SMTP id n6-20020a170902f60600b0017265224bfcmr20862197plg.133.1661190207200;
+        Mon, 22 Aug 2022 10:43:27 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id u23-20020a63f657000000b0042a93b625d4sm3372848pgj.27.2022.08.22.10.43.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 10:43:26 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 11:43:23 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
+        mike.leach@linaro.org, leo.yan@linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/4] coresight: Re-use same function for similar sysfs
+ register accessors
+Message-ID: <20220822174323.GD1583519@p14s>
+References: <20220725145221.517776-1-james.clark@arm.com>
+ <20220725145221.517776-4-james.clark@arm.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3113.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5311416-8d49-4e2f-71ab-08da8465b88f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Aug 2022 17:42:44.9005
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yI6K8dyYN3lU1B4phSD7MamQ5rK41K9oRv7yv/hoZTPYYbD+8soF9bp1lvzcVct1RQzmfPyyRwbzZQTybHbrLDmFyYPa8TN4QNSIEFJg0JY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4831
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220725145221.517776-4-james.clark@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -166,126 +73,356 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: ivecera <ivecera@redhat.com>
-> Sent: Thursday, August 18, 2022 6:56 PM
-> To: netdev@vger.kernel.org
-> Cc: Keller, Jacob E <jacob.e.keller@intel.com>; Piotrowski, Patryk
-> <patryk.piotrowski@intel.com>; Vitaly Grinberg <vgrinber@redhat.com>;
-> Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L
-> <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>; Eric
-> Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo
-> Abeni <pabeni@redhat.com>; Jeff Kirsher <jeffrey.t.kirsher@intel.com>;
-> moderated list:INTEL ETHERNET DRIVERS <intel-wired-lan@lists.osuosl.org>;
-> open list <linux-kernel@vger.kernel.org>
-> Subject: [PATCH net] iavf: Detach device during reset task
->=20
-> iavf_reset_task() takes crit_lock at the beginning and holds it during wh=
-ole call.
-> The function subsequently calls
-> iavf_init_interrupt_scheme() that grabs RTNL. Problem occurs when userspa=
-ce
-> initiates during the reset task any ndo callback that runs under RTNL lik=
-e
-> iavf_open() because some of that functions tries to take crit_lock. This =
-leads to
-> classic A-B B-A deadlock scenario.
->=20
-> To resolve this situation the device should be detached in
-> iavf_reset_task() prior taking crit_lock to avoid subsequent ndos running=
- under
-> RTNL and reattach the device at the end.
->=20
-> Fixes: 62fe2a865e6d ("i40evf: add missing rtnl_lock() around
-> i40evf_set_interrupt_capability")
-> Cc: Jacob Keller <jacob.e.keller@intel.com>
-> Cc: Patryk Piotrowski <patryk.piotrowski@intel.com>
-> Tested-by: Vitaly Grinberg <vgrinber@redhat.com>
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+On Mon, Jul 25, 2022 at 03:52:20PM +0100, James Clark wrote:
+> Currently each accessor macro creates an identical function which wastes
+> space in the text area and pollutes the ftrace function names. Change it
+> so that the same function is used, but the register to access is passed
+> in as parameter rather than baked into each function.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
 > ---
->  drivers/net/ethernet/intel/iavf/iavf_main.c | 22 +++++++++++++++------
->  1 file changed, 16 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c
-> b/drivers/net/ethernet/intel/iavf/iavf_main.c
-> index f39440ad5c50..ee8f911b57ea 100644
-> --- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-> +++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-> @@ -2877,6 +2877,13 @@ static void iavf_reset_task(struct work_struct
-> *work)
->  	int i =3D 0, err;
->  	bool running;
->=20
-> +	/*
-> +	 * Detach interface to avoid subsequent NDO callbacks
-> +	 */
-
-nit:
-The comment should start this way: /* Detach ...
-
-> +	rtnl_lock();
-> +	netif_device_detach(netdev);
-> +	rtnl_unlock();
+>  drivers/hwtracing/coresight/coresight-catu.c  | 25 ++++-------
+>  drivers/hwtracing/coresight/coresight-core.c  | 14 ++++++
+>  drivers/hwtracing/coresight/coresight-etb10.c | 25 ++++-------
+>  .../coresight/coresight-etm3x-sysfs.c         | 31 +++++--------
+>  drivers/hwtracing/coresight/coresight-priv.h  | 40 +++++++++--------
+>  .../coresight/coresight-replicator.c          |  7 +--
+>  drivers/hwtracing/coresight/coresight-stm.c   | 37 ++++++----------
+>  .../hwtracing/coresight/coresight-tmc-core.c  | 43 ++++++-------------
+>  8 files changed, 92 insertions(+), 130 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-catu.c b/drivers/hwtracing/coresight/coresight-catu.c
+> index 9d89c4054046..bc90a03f478f 100644
+> --- a/drivers/hwtracing/coresight/coresight-catu.c
+> +++ b/drivers/hwtracing/coresight/coresight-catu.c
+> @@ -365,24 +365,15 @@ static const struct etr_buf_operations etr_catu_buf_ops = {
+>  	.get_data = catu_get_data_etr_buf,
+>  };
+>  
+> -coresight_simple_reg32(devid, CORESIGHT_DEVID);
+> -coresight_simple_reg32(control, CATU_CONTROL);
+> -coresight_simple_reg32(status, CATU_STATUS);
+> -coresight_simple_reg32(mode, CATU_MODE);
+> -coresight_simple_reg32(axictrl, CATU_AXICTRL);
+> -coresight_simple_reg32(irqen, CATU_IRQEN);
+> -coresight_simple_reg64(sladdr, CATU_SLADDRLO, CATU_SLADDRHI);
+> -coresight_simple_reg64(inaddr, CATU_INADDRLO, CATU_INADDRHI);
+> -
+>  static struct attribute *catu_mgmt_attrs[] = {
+> -	&dev_attr_devid.attr,
+> -	&dev_attr_control.attr,
+> -	&dev_attr_status.attr,
+> -	&dev_attr_mode.attr,
+> -	&dev_attr_axictrl.attr,
+> -	&dev_attr_irqen.attr,
+> -	&dev_attr_sladdr.attr,
+> -	&dev_attr_inaddr.attr,
+> +	coresight_simple_reg32(devid, CORESIGHT_DEVID),
+> +	coresight_simple_reg32(control, CATU_CONTROL),
+> +	coresight_simple_reg32(status, CATU_STATUS),
+> +	coresight_simple_reg32(mode, CATU_MODE),
+> +	coresight_simple_reg32(axictrl, CATU_AXICTRL),
+> +	coresight_simple_reg32(irqen, CATU_IRQEN),
+> +	coresight_simple_reg64(sladdr, CATU_SLADDRLO, CATU_SLADDRHI),
+> +	coresight_simple_reg64(inaddr, CATU_INADDRLO, CATU_INADDRHI),
+>  	NULL,
+>  };
+>  
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> index 1edfec1e9d18..b46b5184411e 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -60,6 +60,20 @@ EXPORT_SYMBOL_GPL(coresight_barrier_pkt);
+>  
+>  static const struct cti_assoc_op *cti_assoc_ops;
+>  
+> +ssize_t coresight_simple_show(struct device *_dev,
+> +			      struct device_attribute *attr, char *buf)
+> +{
+> +	struct coresight_device *csdev = container_of(_dev, struct coresight_device, dev);
+> +	struct cs_ext_attribute *cs_attr = container_of(attr, struct cs_ext_attribute, attr);
+> +	u64 val;
 > +
->  	/* When device is being removed it doesn't make sense to run the reset
->  	 * task, just return in such a case.
->  	 */
-> @@ -2884,7 +2891,7 @@ static void iavf_reset_task(struct work_struct *wor=
-k)
->  		if (adapter->state !=3D __IAVF_REMOVE)
->  			queue_work(iavf_wq, &adapter->reset_task);
->=20
-> -		return;
-> +		goto reset_finish;
-
-Correct me if I'm wrong.
-In case when you fail to grab a crit_lock you'd jump to the reset_finish la=
-bel and unlock the locks you didn't lock.
-
->  	}
->=20
->  	while (!mutex_trylock(&adapter->client_lock))
-> @@ -2954,7 +2961,6 @@ static void iavf_reset_task(struct work_struct *wor=
-k)
->=20
->  	if (running) {
->  		netif_carrier_off(netdev);
-> -		netif_tx_stop_all_queues(netdev);
->  		adapter->link_up =3D false;
->  		iavf_napi_disable_all(adapter);
->  	}
-> @@ -3081,10 +3087,8 @@ static void iavf_reset_task(struct work_struct
-> *work)
->=20
->  	adapter->flags &=3D ~IAVF_FLAG_REINIT_ITR_NEEDED;
->=20
-> -	mutex_unlock(&adapter->client_lock);
-> -	mutex_unlock(&adapter->crit_lock);
-> +	goto reset_finish;
->=20
-> -	return;
->  reset_err:
->  	if (running) {
->  		set_bit(__IAVF_VSI_DOWN, adapter->vsi.state); @@ -3092,9
-> +3096,15 @@ static void iavf_reset_task(struct work_struct *work)
->  	}
->  	iavf_disable_vf(adapter);
->=20
-> +	dev_err(&adapter->pdev->dev, "failed to allocate resources during
-> +reinit\n");
+> +	pm_runtime_get_sync(_dev->parent);
+> +	val = csdev_access_relaxed_read_pair(&csdev->access, cs_attr->lo_off, cs_attr->hi_off);
+> +	pm_runtime_put_sync(_dev->parent);
+> +	return scnprintf(buf, PAGE_SIZE, "0x%llx\n", val);
+> +}
+> +EXPORT_SYMBOL_GPL(coresight_simple_show);
 > +
-> +reset_finish:
->  	mutex_unlock(&adapter->client_lock);
->  	mutex_unlock(&adapter->crit_lock);
-> -	dev_err(&adapter->pdev->dev, "failed to allocate resources during
-> reinit\n");
+>  void coresight_set_cti_ops(const struct cti_assoc_op *cti_op)
+>  {
+>  	cti_assoc_ops = cti_op;
+> diff --git a/drivers/hwtracing/coresight/coresight-etb10.c b/drivers/hwtracing/coresight/coresight-etb10.c
+> index 405bb3355cb1..8aa6e4f83e42 100644
+> --- a/drivers/hwtracing/coresight/coresight-etb10.c
+> +++ b/drivers/hwtracing/coresight/coresight-etb10.c
+> @@ -655,24 +655,15 @@ static const struct file_operations etb_fops = {
+>  	.llseek		= no_llseek,
+>  };
+>  
+> -coresight_simple_reg32(rdp, ETB_RAM_DEPTH_REG);
+> -coresight_simple_reg32(sts, ETB_STATUS_REG);
+> -coresight_simple_reg32(rrp, ETB_RAM_READ_POINTER);
+> -coresight_simple_reg32(rwp, ETB_RAM_WRITE_POINTER);
+> -coresight_simple_reg32(trg, ETB_TRG);
+> -coresight_simple_reg32(ctl, ETB_CTL_REG);
+> -coresight_simple_reg32(ffsr, ETB_FFSR);
+> -coresight_simple_reg32(ffcr, ETB_FFCR);
+> -
+>  static struct attribute *coresight_etb_mgmt_attrs[] = {
+> -	&dev_attr_rdp.attr,
+> -	&dev_attr_sts.attr,
+> -	&dev_attr_rrp.attr,
+> -	&dev_attr_rwp.attr,
+> -	&dev_attr_trg.attr,
+> -	&dev_attr_ctl.attr,
+> -	&dev_attr_ffsr.attr,
+> -	&dev_attr_ffcr.attr,
+> +	coresight_simple_reg32(rdp, ETB_RAM_DEPTH_REG),
+> +	coresight_simple_reg32(sts, ETB_STATUS_REG),
+> +	coresight_simple_reg32(rrp, ETB_RAM_READ_POINTER),
+> +	coresight_simple_reg32(rwp, ETB_RAM_WRITE_POINTER),
+> +	coresight_simple_reg32(trg, ETB_TRG),
+> +	coresight_simple_reg32(ctl, ETB_CTL_REG),
+> +	coresight_simple_reg32(ffsr, ETB_FFSR),
+> +	coresight_simple_reg32(ffcr, ETB_FFCR),
+>  	NULL,
+>  };
+>  
+> diff --git a/drivers/hwtracing/coresight/coresight-etm3x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm3x-sysfs.c
+> index 12f8e8176c7e..1d059947ae32 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm3x-sysfs.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm3x-sysfs.c
+> @@ -1252,28 +1252,19 @@ static struct attribute *coresight_etm_attrs[] = {
+>  	NULL,
+>  };
+>  
+> -coresight_simple_reg32(etmccr, ETMCCR);
+> -coresight_simple_reg32(etmccer, ETMCCER);
+> -coresight_simple_reg32(etmscr, ETMSCR);
+> -coresight_simple_reg32(etmidr, ETMIDR);
+> -coresight_simple_reg32(etmcr, ETMCR);
+> -coresight_simple_reg32(etmtraceidr, ETMTRACEIDR);
+> -coresight_simple_reg32(etmteevr, ETMTEEVR);
+> -coresight_simple_reg32(etmtssvr, ETMTSSCR);
+> -coresight_simple_reg32(etmtecr1, ETMTECR1);
+> -coresight_simple_reg32(etmtecr2, ETMTECR2);
 > +
-> +	rtnl_lock();
-> +	netif_device_attach(netdev);
-> +	rtnl_unlock();
+
+Extra newline, and if I am correct removing the above and adding what follows
+will result in 2 extra newline.
+
+>  
+>  static struct attribute *coresight_etm_mgmt_attrs[] = {
+> -	&dev_attr_etmccr.attr,
+> -	&dev_attr_etmccer.attr,
+> -	&dev_attr_etmscr.attr,
+> -	&dev_attr_etmidr.attr,
+> -	&dev_attr_etmcr.attr,
+> -	&dev_attr_etmtraceidr.attr,
+> -	&dev_attr_etmteevr.attr,
+> -	&dev_attr_etmtssvr.attr,
+> -	&dev_attr_etmtecr1.attr,
+> -	&dev_attr_etmtecr2.attr,
+> +	coresight_simple_reg32(etmccr, ETMCCR),
+> +	coresight_simple_reg32(etmccer, ETMCCER),
+> +	coresight_simple_reg32(etmscr, ETMSCR),
+> +	coresight_simple_reg32(etmidr, ETMIDR),
+> +	coresight_simple_reg32(etmcr, ETMCR),
+> +	coresight_simple_reg32(etmtraceidr, ETMTRACEIDR),
+> +	coresight_simple_reg32(etmteevr, ETMTEEVR),
+> +	coresight_simple_reg32(etmtssvr, ETMTSSCR),
+> +	coresight_simple_reg32(etmtecr1, ETMTECR1),
+> +	coresight_simple_reg32(etmtecr2, ETMTECR2),
+>  	NULL,
+>  };
+>  
+> diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
+> index cf8ae768106e..6680f5929429 100644
+> --- a/drivers/hwtracing/coresight/coresight-priv.h
+> +++ b/drivers/hwtracing/coresight/coresight-priv.h
+> @@ -39,24 +39,30 @@
+>  
+>  #define ETM_MODE_EXCL_KERN	BIT(30)
+>  #define ETM_MODE_EXCL_USER	BIT(31)
+> +struct cs_ext_attribute {
+> +	struct device_attribute attr;
+> +	u32 lo_off;
+> +	u32 hi_off;
+
+I touched based on those in my previous comment, i.e it should be s32 rather
+than u32.
+
+> +};
+>  
+> -#define __coresight_simple_show(name, lo_off, hi_off)		\
+> -static ssize_t name##_show(struct device *_dev,				\
+> -			   struct device_attribute *attr, char *buf)	\
+> -{									\
+> -	struct coresight_device *csdev = container_of(_dev, struct coresight_device, dev); \
+> -	u64 val;							\
+> -	pm_runtime_get_sync(_dev->parent);				\
+> -	val = csdev_access_relaxed_read_pair(&csdev->access, lo_off, hi_off);	\
+> -	pm_runtime_put_sync(_dev->parent);				\
+> -	return scnprintf(buf, PAGE_SIZE, "0x%llx\n", val);		\
+> -}									\
+> -static DEVICE_ATTR_RO(name)
+> -
+> -#define coresight_simple_reg32(name, offset)			\
+> -	__coresight_simple_show(name, offset, -1)
+> -#define coresight_simple_reg64(name, lo_off, hi_off)		\
+> -	__coresight_simple_show(name, lo_off, hi_off)
+> +extern ssize_t coresight_simple_show(struct device *_dev,
+> +				     struct device_attribute *attr, char *buf);
+> +
+> +#define coresight_simple_reg32(name, offset)				\
+> +	(&((struct cs_ext_attribute[]) {				\
+> +	   {								\
+> +		__ATTR(name, 0444, coresight_simple_show, NULL),	\
+> +		offset, -1						\
+> +	   }								\
+> +	})[0].attr.attr)
+> +
+> +#define coresight_simple_reg64(name, lo_off, hi_off)			\
+> +	(&((struct cs_ext_attribute[]) {				\
+> +	   {								\
+> +		__ATTR(name, 0444, coresight_simple_show, NULL),	\
+> +		lo_off, hi_off						\
+> +	   }								\
+> +	})[0].attr.attr)
+>  
+>  extern const u32 coresight_barrier_pkt[4];
+>  #define CORESIGHT_BARRIER_PKT_SIZE (sizeof(coresight_barrier_pkt))
+> diff --git a/drivers/hwtracing/coresight/coresight-replicator.c b/drivers/hwtracing/coresight/coresight-replicator.c
+> index 7cffcbb2ec42..4dd50546d7e4 100644
+> --- a/drivers/hwtracing/coresight/coresight-replicator.c
+> +++ b/drivers/hwtracing/coresight/coresight-replicator.c
+> @@ -196,12 +196,9 @@ static const struct coresight_ops replicator_cs_ops = {
+>  	.link_ops	= &replicator_link_ops,
+>  };
+>  
+> -coresight_simple_reg32(idfilter0, REPLICATOR_IDFILTER0);
+> -coresight_simple_reg32(idfilter1, REPLICATOR_IDFILTER1);
+> -
+>  static struct attribute *replicator_mgmt_attrs[] = {
+> -	&dev_attr_idfilter0.attr,
+> -	&dev_attr_idfilter1.attr,
+> +	coresight_simple_reg32(idfilter0, REPLICATOR_IDFILTER0),
+> +	coresight_simple_reg32(idfilter1, REPLICATOR_IDFILTER1),
+>  	NULL,
+>  };
+>  
+> diff --git a/drivers/hwtracing/coresight/coresight-stm.c b/drivers/hwtracing/coresight/coresight-stm.c
+> index 4a31905604fe..463f449cfb79 100644
+> --- a/drivers/hwtracing/coresight/coresight-stm.c
+> +++ b/drivers/hwtracing/coresight/coresight-stm.c
+> @@ -634,19 +634,6 @@ static ssize_t traceid_store(struct device *dev,
 >  }
->=20
->  /**
-> --
-> 2.35.1
-
+>  static DEVICE_ATTR_RW(traceid);
+>  
+> -coresight_simple_reg32(tcsr, STMTCSR);
+> -coresight_simple_reg32(tsfreqr, STMTSFREQR);
+> -coresight_simple_reg32(syncr, STMSYNCR);
+> -coresight_simple_reg32(sper, STMSPER);
+> -coresight_simple_reg32(spter, STMSPTER);
+> -coresight_simple_reg32(privmaskr, STMPRIVMASKR);
+> -coresight_simple_reg32(spscr, STMSPSCR);
+> -coresight_simple_reg32(spmscr, STMSPMSCR);
+> -coresight_simple_reg32(spfeat1r, STMSPFEAT1R);
+> -coresight_simple_reg32(spfeat2r, STMSPFEAT2R);
+> -coresight_simple_reg32(spfeat3r, STMSPFEAT3R);
+> -coresight_simple_reg32(devid, CORESIGHT_DEVID);
+> -
+>  static struct attribute *coresight_stm_attrs[] = {
+>  	&dev_attr_hwevent_enable.attr,
+>  	&dev_attr_hwevent_select.attr,
+> @@ -657,18 +644,18 @@ static struct attribute *coresight_stm_attrs[] = {
+>  };
+>  
+>  static struct attribute *coresight_stm_mgmt_attrs[] = {
+> -	&dev_attr_tcsr.attr,
+> -	&dev_attr_tsfreqr.attr,
+> -	&dev_attr_syncr.attr,
+> -	&dev_attr_sper.attr,
+> -	&dev_attr_spter.attr,
+> -	&dev_attr_privmaskr.attr,
+> -	&dev_attr_spscr.attr,
+> -	&dev_attr_spmscr.attr,
+> -	&dev_attr_spfeat1r.attr,
+> -	&dev_attr_spfeat2r.attr,
+> -	&dev_attr_spfeat3r.attr,
+> -	&dev_attr_devid.attr,
+> +	coresight_simple_reg32(tcsr, STMTCSR),
+> +	coresight_simple_reg32(tsfreqr, STMTSFREQR),
+> +	coresight_simple_reg32(syncr, STMSYNCR),
+> +	coresight_simple_reg32(sper, STMSPER),
+> +	coresight_simple_reg32(spter, STMSPTER),
+> +	coresight_simple_reg32(privmaskr, STMPRIVMASKR),
+> +	coresight_simple_reg32(spscr, STMSPSCR),
+> +	coresight_simple_reg32(spmscr, STMSPMSCR),
+> +	coresight_simple_reg32(spfeat1r, STMSPFEAT1R),
+> +	coresight_simple_reg32(spfeat2r, STMSPFEAT2R),
+> +	coresight_simple_reg32(spfeat3r, STMSPFEAT3R),
+> +	coresight_simple_reg32(devid, CORESIGHT_DEVID),
+>  	NULL,
+>  };
+>  
+> diff --git a/drivers/hwtracing/coresight/coresight-tmc-core.c b/drivers/hwtracing/coresight/coresight-tmc-core.c
+> index 781d213526b7..07abf28ad725 100644
+> --- a/drivers/hwtracing/coresight/coresight-tmc-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-tmc-core.c
+> @@ -251,36 +251,21 @@ static enum tmc_mem_intf_width tmc_get_memwidth(u32 devid)
+>  	return memwidth;
+>  }
+>  
+> -coresight_simple_reg32(rsz, TMC_RSZ);
+> -coresight_simple_reg32(sts, TMC_STS);
+> -coresight_simple_reg32(trg, TMC_TRG);
+> -coresight_simple_reg32(ctl, TMC_CTL);
+> -coresight_simple_reg32(ffsr, TMC_FFSR);
+> -coresight_simple_reg32(ffcr, TMC_FFCR);
+> -coresight_simple_reg32(mode, TMC_MODE);
+> -coresight_simple_reg32(pscr, TMC_PSCR);
+> -coresight_simple_reg32(axictl, TMC_AXICTL);
+> -coresight_simple_reg32(authstatus, TMC_AUTHSTATUS);
+> -coresight_simple_reg32(devid, CORESIGHT_DEVID);
+> -coresight_simple_reg64(rrp, TMC_RRP, TMC_RRPHI);
+> -coresight_simple_reg64(rwp, TMC_RWP, TMC_RWPHI);
+> -coresight_simple_reg64(dba, TMC_DBALO, TMC_DBAHI);
+> -
+>  static struct attribute *coresight_tmc_mgmt_attrs[] = {
+> -	&dev_attr_rsz.attr,
+> -	&dev_attr_sts.attr,
+> -	&dev_attr_rrp.attr,
+> -	&dev_attr_rwp.attr,
+> -	&dev_attr_trg.attr,
+> -	&dev_attr_ctl.attr,
+> -	&dev_attr_ffsr.attr,
+> -	&dev_attr_ffcr.attr,
+> -	&dev_attr_mode.attr,
+> -	&dev_attr_pscr.attr,
+> -	&dev_attr_devid.attr,
+> -	&dev_attr_dba.attr,
+> -	&dev_attr_axictl.attr,
+> -	&dev_attr_authstatus.attr,
+> +	coresight_simple_reg32(rsz, TMC_RSZ),
+> +	coresight_simple_reg32(sts, TMC_STS),
+> +	coresight_simple_reg64(rrp, TMC_RRP, TMC_RRPHI),
+> +	coresight_simple_reg64(rwp, TMC_RWP, TMC_RWPHI),
+> +	coresight_simple_reg32(trg, TMC_TRG),
+> +	coresight_simple_reg32(ctl, TMC_CTL),
+> +	coresight_simple_reg32(ffsr, TMC_FFSR),
+> +	coresight_simple_reg32(ffcr, TMC_FFCR),
+> +	coresight_simple_reg32(mode, TMC_MODE),
+> +	coresight_simple_reg32(pscr, TMC_PSCR),
+> +	coresight_simple_reg32(devid, CORESIGHT_DEVID),
+> +	coresight_simple_reg64(dba, TMC_DBALO, TMC_DBAHI),
+> +	coresight_simple_reg32(axictl, TMC_AXICTL),
+> +	coresight_simple_reg32(authstatus, TMC_AUTHSTATUS),
+>  	NULL,
+>  };
+>  
+> -- 
+> 2.28.0
+> 

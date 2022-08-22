@@ -2,116 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD3C59BDF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCDE159BE05
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbiHVK4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 06:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S234338AbiHVK7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 06:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiHVK4n (ORCPT
+        with ESMTP id S234249AbiHVK67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 06:56:43 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6FF31EDC;
-        Mon, 22 Aug 2022 03:56:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661165802; x=1692701802;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=sJN5WeBsvGXOKHDiMc4Ct+sVwyokaJcZFdngtgXZnI8=;
-  b=hTS4gtAA8Rpp/MUzUewua/vLimdIGNLldSB6eGrh0dnlk1hnRGzNlO/j
-   gRYBcjrH3hpZNveDQhjLFWfU4SYD9JEFBLST9Mt/Vy2OkoY5ii52tpRCc
-   QWuPst6qnWJey6jrwQeMatMFLgux9Z7NLsPJGnikr+1cv08HixbOGBLJq
-   O21zX2RDZWNfk6h+xSZDpROVdpfIp7mikjCCqNq4MP9U4AptdOD8BFtvS
-   xPoP1elkSk59in6D/cfiRu+w5G45zFyH7ktb/gXKBJDc0hBhBF0vcWhpb
-   BVIclPLrMcL+eNMuPUt7FqKz5z0qQE8E1UX7HE1Bn7W/b1LDIWJP9wJ0g
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="292125783"
-X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="292125783"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 03:56:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="751243026"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 22 Aug 2022 03:56:37 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 22 Aug 2022 13:56:36 +0300
-Date:   Mon, 22 Aug 2022 13:56:36 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Dell XPS 13 9370: ucsi_acpi USBC000:00: UCSI_GET_PDOS returned 0
- bytes
-Message-ID: <YwNg5L7ymdSgHUrJ@kuha.fi.intel.com>
-References: <726661bf-b95f-02fc-e7c5-c222820ee257@molgen.mpg.de>
- <Yv+sqa8wdqiuSUZ3@kroah.com>
- <ab679efe-df85-d2d2-2a4e-842ff9b59b6d@molgen.mpg.de>
+        Mon, 22 Aug 2022 06:58:59 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9278C3123A;
+        Mon, 22 Aug 2022 03:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1661165937; x=1692701937;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7s4PF8RXbYEqzbeQRRYuac3gOnJi1NGTK0dQaORCsDM=;
+  b=Riw5dd7lqsS6ee91GmGMLqcdtTahtBKnneBP1Gte6mTIBgsRwkXXAucU
+   1WDP2pNsnz+U03havLObtz6LkXCJ7IlnSBq8jAbq+E/X9oHnzu7aZzV32
+   SOapGBCYgxy3hX3+J0/lLnOH+HSwA8eEINh1GSurG2Z+h0nrpVu9Lcfzu
+   w=;
+X-IronPort-AV: E=Sophos;i="5.93,254,1654560000"; 
+   d="scan'208";a="1046875127"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-b09d0114.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 10:58:35 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-b09d0114.us-east-1.amazon.com (Postfix) with ESMTPS id 27E6D8150F;
+        Mon, 22 Aug 2022 10:58:32 +0000 (UTC)
+Received: from EX19D013UWA003.ant.amazon.com (10.13.138.202) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Mon, 22 Aug 2022 10:58:32 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D013UWA003.ant.amazon.com (10.13.138.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Mon, 22 Aug 2022 10:58:32 +0000
+Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
+ (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Mon, 22 Aug 2022 10:58:32
+ +0000
+Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
+        id A00FD4C8B; Mon, 22 Aug 2022 10:58:30 +0000 (UTC)
+From:   Eliav Farber <farbere@amazon.com>
+To:     <brgl@bgdev.pl>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
+        <jonnyc@amazon.com>, <hanochu@amazon.com>, <ronenk@amazon.com>,
+        <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
+        <amitlavi@amazon.com>, <almogbs@amazon.com>, <dkl@amazon.com>,
+        <dwmw@amazon.co.uk>
+Subject: [PATCH v2 0/2] add power-supply control to enable eeprom usage
+Date:   Mon, 22 Aug 2022 10:58:28 +0000
+Message-ID: <20220822105830.22790-1-farbere@amazon.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ab679efe-df85-d2d2-2a4e-842ff9b59b6d@molgen.mpg.de>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+First patch describes the new binding property.
+Second patch adds the functionality to the driver.
 
-On Fri, Aug 19, 2022 at 05:59:54PM +0200, Paul Menzel wrote:
-> Am 19.08.22 um 17:30 schrieb Greg KH:
-> > On Fri, Aug 19, 2022 at 03:37:00PM +0200, Paul Menzel wrote:
-> 
-> > > On the Dell XPS 13 9370 with Debian sid/unstable, connecting a Dell DA300
-> > > port replicator Linux 5.18.16 logs a warning:
-> > > 
-> > > ```
-> > > $ dmesg
-> > > [    0.000000] Linux version 5.18.0-4-amd64 (debian-kernel@lists.debian.org)
-> > > (gcc-11 (Debian 11.3.0-5) 11.3.0, GNU ld (GNU Binutils for Debian)
-> > > 2.38.90.20220713) #1 SMP PREEMPT_DYNAMIC Debian 5.18.16-1 (2022-08-10)
-> > > [    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.18.0-4-amd64
-> > > root=UUID=56f398e0-1e25-4fda-aa9f-611dece4b333 ro quiet
-> > > […]
-> > > [    0.000000] DMI: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 07/06/2022
-> > > […]
-> > > [   13.900028] ucsi_acpi USBC000:00: UCSI_GET_PDOS returned 0 bytes
-> > > ```
-> > 
-> > What warning?
-> 
-> `ucsi_acpi USBC000:00: UCSI_GET_PDOS returned 0 bytes` has log level
-> warning.
+Change between v2 and v1:
+- Use a gpio regulator for power-supply control.
 
-Thanks for the report.
+Eliav Farber (2):
+  dt-bindings: at24: add new optional power-supply property
+  eeprom: at24: add support for power-supply control
 
-That warning is meant to indicate that the underlying firmware (most
-likely the Embedded Controller firmware) is buggy and unable to tell
-us the Power Data Objects (PDO) that the partner device advertised.
-
-However, you will also see the warning if the firmware has notified
-our driver about a contract with the partner simply before making
-those objects available for the operating system. That problem is
-known, and it has actually already been worked around in the driver -
-the PDOs are now "polled" for a while after the firmware notification.
-
-I'll see if I can reproduce the problem so I understand exactly what's
-going on in this case - I should have access to one of those XPS 13
-9370 laptops.
-
-But I'll in any case clean up this part of the driver, so the warning
-should go away - one way or the other.
-
-thanks,
+ .../devicetree/bindings/eeprom/at24.txt       |  3 ++
+ drivers/misc/eeprom/at24.c                    | 41 +++++++++++++++++++
+ 2 files changed, 44 insertions(+)
 
 -- 
-heikki
+2.37.1
+

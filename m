@@ -2,147 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE3859CBAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD94459CBA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234666AbiHVWmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 18:42:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
+        id S232172AbiHVWm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 18:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237790AbiHVWm0 (ORCPT
+        with ESMTP id S232281AbiHVWmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 18:42:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3106150716;
-        Mon, 22 Aug 2022 15:42:24 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 22 Aug 2022 18:42:25 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E499750726
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:42:23 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3D8FC374F3;
+        by ms.lwn.net (Postfix) with ESMTPSA id 7BC412AE;
         Mon, 22 Aug 2022 22:42:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661208143; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L8tdsVzVyDJM4BV8U6INcBMyETt5VDqLfPWrM+9ANZU=;
-        b=Wr3CoLUChRliBIcsKBEP1ARTBdMKIOxqorZDI5PC02cuVv0LuNzxNwZ1mFTqVb+7JBZfoX
-        LL26ihunLovvcTYQcNmjUYPDT4M9P9JN52Z6d716ibtdAE1bnPXlUzvKCWl56tXGcZft6y
-        NhQsHRd9e09zuZfA90lOARNSJ6/HILI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661208143;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L8tdsVzVyDJM4BV8U6INcBMyETt5VDqLfPWrM+9ANZU=;
-        b=qZqaiUA+p1D36amScnShCHJ24rJTyLaa5teureTyNmBQZIY+cXaWtrvpBQYngEYOJIQLbp
-        dy+/koo412I3GbAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7967F1332D;
-        Mon, 22 Aug 2022 22:42:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0pRhDUwGBGPzJAAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 22 Aug 2022 22:42:20 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 7BC412AE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1661208143; bh=iwqKafgKtoHa324ilfuky7BSyJRg7gT/fs7VjGkALSo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aRdcQyCW/A7Z5VIL5621ZkbZtdqcnj3EO3Pl1hChdS9Y/JbZNm/KS6r+IMdWW0ECc
+         oriPpL3MNc8iZXu/N92NPWtPwXnzmyI+QJu5aE9bkhT9Mg6C0e4yUIGo6nNH2phIs0
+         7T4OxACmxmsyeCU4GrlVhd7Uki5gC4KnT6hCQXVeYloOySBPVMpGy4lrP8ecozrkqM
+         UP0D7PZF6czpdUXbeXGp0TEL4OyRCk2CzLguIUqP4FdvK/cedcQ4T3NGMm6OEnK2bn
+         DpEJbwdIBdHCOYpQPRX5Jv2jErolZIW3GENv6GjUDK1i8YAJeqapKzy2yZsUxu5uwc
+         uXxgTArttFn3w==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     linux-kernel@vger.kernel.org, ksummit@lists.linux.dev
+Cc:     tab-elections@lists.linuxfoundation.org
+Subject: Technical Advisory Board election info and call for nominees
+Date:   Mon, 22 Aug 2022 16:42:22 -0600
+Message-ID: <87ilmj6gtt.fsf@meer.lwn.net>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Jeff Layton" <jlayton@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        "Trond Myklebust" <trondmy@hammerspace.com>,
-        "Dave Chinner" <david@fromorbit.com>
-Subject: Re: [PATCH] iversion: update comments with info about atime updates
-In-reply-to: <20220822133309.86005-1-jlayton@kernel.org>
-References: <20220822133309.86005-1-jlayton@kernel.org>
-Date:   Tue, 23 Aug 2022 08:42:15 +1000
-Message-id: <166120813594.23264.3095357572943917078@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022, Jeff Layton wrote:
-> Add an explicit paragraph codifying that atime updates due to reads
-> should not be counted against the i_version counter. None of the
-> existing subsystems that use the i_version want those counted, and
-> there is an easy workaround for those that do.
->=20
-> Cc: NeilBrown <neilb@suse.de>
-> Cc: Trond Myklebust <trondmy@hammerspace.com>
-> Cc: Dave Chinner <david@fromorbit.com>
-> Link: https://lore.kernel.org/linux-xfs/166086932784.5425.17134712694961326=
-033@noble.neil.brown.name/#t
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  include/linux/iversion.h | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
->=20
-> diff --git a/include/linux/iversion.h b/include/linux/iversion.h
-> index 3bfebde5a1a6..da6cc1cc520a 100644
-> --- a/include/linux/iversion.h
-> +++ b/include/linux/iversion.h
-> @@ -9,8 +9,8 @@
->   * ---------------------------
->   * The change attribute (i_version) is mandated by NFSv4 and is mostly for
->   * knfsd, but is also used for other purposes (e.g. IMA). The i_version mu=
-st
-> - * appear different to observers if there was a change to the inode's data=
- or
-> - * metadata since it was last queried.
-> + * appear different to observers if there was an explicit change to the in=
-ode's
-> + * data or metadata since it was last queried.
+The 2022 election for membership on the Linux Foundation Technical Advisory
+Board (TAB) will be held electronically during the 2022 Kernel Summit and
+Linux Plumbers Conference, from September 12 to 14.  This announcement
+covers both the call for candidates and the details of voting in this
+election.
 
-Should rename change the i_version?
-It does not explicitly change data or metadata, though it seems to
-implicitly change the ctime.
+The TAB exists to provide advice from the kernel community to the Linux
+Foundation; it also serves to facilitate interactions both within the
+community and with outside entities.  Over the last year, the TAB has
+continued its assistance with the UMN "false commits" episode (including
+drafting a set of guidelines for researchers working with the community),
+overseen the organization of the Linux Plumbers Conference, put together
+guidelines for corporate support of kernel developers and maintainers,
+advised on code-of-conduct issues, and more.
 
->   *
->   * Observers see the i_version as a 64-bit number that never decreases. If=
- it
->   * remains the same since it was last checked, then nothing has changed in=
- the
-> @@ -18,6 +18,12 @@
->   * anything about the nature or magnitude of the changes from the value, o=
-nly
->   * that the inode has changed in some fashion.
->   *
-> + * Note that atime updates due to reads or similar activity do _not_ repre=
-sent
-> + * an explicit change to the inode. If the only change is to the atime and=
- it
-> + * wasn't set via utimes() or a similar mechanism, then i_version should n=
-ot be
-> + * incremented. If an observer cares about atime updates, it should plan to
-> + * fetch and store them in conjunction with the i_version.
-> + *
+CALL FOR NOMINATIONS
 
-If an implicit atime update happened to make the atime go backwards
-(possible, but not common), the updating i_version should be permitted,
-and possibly should be preferred.
+The TAB has ten members serving two-year terms; half of the board is
+elected each year.  The members whose terms are expiring this year are:
 
-NeilBrown
+ - Laura Abbott
+ - Christian Brauner
+ - Kees Cook
+ - Chris Mason
+ - Dan Williams
 
+The members whose terms expire next year are:
 
->   * Not all filesystems properly implement the i_version counter. Subsystem=
-s that
->   * want to use i_version field on an inode should first check whether the
->   * filesystem sets the SB_I_VERSION flag (usually via the IS_I_VERSION mac=
-ro).
-> --=20
-> 2.37.2
->=20
->=20
+ - Jonathan Corbet
+ - Greg Kroah-Hartman
+ - Sasha Levin
+ - Steve Rostedt
+ - Ted Ts'o
+
+Anybody who meets the voting criteria (described below) may self-nominate
+to run in this election.  To nominate yourself, please send an email to:
+
+  tech-board-discuss@lists.linux-foundation.org
+
+Please include a short (<= 200 words) statement describing why you are
+running and what you would like to accomplish on the TAB; these statements
+will be collected and made publicly available.
+
+The nomination deadline is 9:00AM IST (GMT+1) on September 12.
+
+VOTING IN THE TAB ELECTION
+
+The criteria for voting in this year's TAB election are unchanged from
+2021.  To be eligible to vote, you must have at least three commits in a
+released mainline or stable kernel that:
+
+ - Have a commit date in 2021 or later
+ - List your email in a Signed-off-by, Tested-by, Reported-by, Reviewed-by,
+   or Acked-by tag.
+
+Everybody with at least 50 commits meeting this description will receive
+a ballot automatically; they will receive an email confirming this
+status shortly.  Eligible voters with less than 50 commits can receive a
+ballot by sending a request to tab-elections@lists.linuxfoundation.org.
+
+We will, once again, be using the Condorcet Internet Voting Service (CIVS)
+https://civs1.civs.us/ . This is a voting service focused on security and
+privacy. There are sample polls on the website if you would like to see
+what a ballot will look like.
+
+Please contact tab-elections@lists.linuxfoundation.org if you have any
+questions.
+

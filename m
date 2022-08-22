@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B183459CA83
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 23:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E6B59CA8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 23:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237851AbiHVVIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 17:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
+        id S237885AbiHVVLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 17:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237626AbiHVVIr (ORCPT
+        with ESMTP id S237048AbiHVVLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 17:08:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684F32F038;
-        Mon, 22 Aug 2022 14:08:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED65261315;
-        Mon, 22 Aug 2022 21:08:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2D3EC433C1;
-        Mon, 22 Aug 2022 21:08:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1661202525;
-        bh=nKbiyNWYpVKB+Hwt2mf/xNvxcNjbAbIus/sQjP8jnW0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LBb/wjffwju7RJR12v2axipRiMOItkI7iMW6Uh4KYfDKSVtlaTO5RzkJxt24N0eDZ
-         15xjNUw5vEr1u+oswKkWyMfGX6T+VoA7QsdV4KNVpN36Trr3LNf89PEOuCsP0OpmL5
-         lPvd03vcEP0kHIiIVj0eTqjUIVsdxspxaOM80dEE=
-Date:   Mon, 22 Aug 2022 14:08:44 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     xu xin <cgel.zte@gmail.com>
-Cc:     adobriyan@gmail.com, willy@infradead.org, hughd@google.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, xu xin <xu.xin16@zte.com.cn>,
-        Xiaokai Ran <ran.xiaokai@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH] ksm: count allocated ksm rmap_items for each process
-Message-Id: <20220822140844.26cfb85dead5e0e5c4de4737@linux-foundation.org>
-In-Reply-To: <20220822053653.204150-1-xu.xin16@zte.com.cn>
-References: <20220822053653.204150-1-xu.xin16@zte.com.cn>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
+        Mon, 22 Aug 2022 17:11:11 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47EB47BB2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 14:11:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661202669; x=1692738669;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9uEjUrx1BvA19/wl9sg2vuY7NmpmeLBmaJAfmOpH5FA=;
+  b=YdHTEHQGtd43Y47TI7lBLHp/BNTvFokUQsntMRG8PBIJfSIrlMiJP4He
+   6Sr9ucMRFTtqcoN7wVVYfODa2/1mDM+YGT4E4HEYQ1ug8Omo90lR6SQzX
+   M0LSElgyl1KSHguVURzi2fmF0u+xrkuGt6+tCthQecd2Q+51eOUpybRLi
+   xZkr91BlwB9ce+YwSaFONWZjgev7cdfuB1xzDYC9cSfprXDLO0K85thvm
+   q4/lXhgbb7ydP1Z2XIcUZG0Pm9Ox+oDm77YCZCUsVmTQU5g+f3mAdG6Jd
+   AkDk7FAmC2BVd7s1nlJNEug1FNdfQGAOu+7KLjFiiQN73z/pleSBMA/lS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="294805221"
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="294805221"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 14:11:09 -0700
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="751434809"
+Received: from sraksht-mobl.amr.corp.intel.com (HELO [10.212.204.203]) ([10.212.204.203])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 14:11:08 -0700
+Message-ID: <a5df4929-24aa-79bf-c5d0-98efbf323132@intel.com>
+Date:   Mon, 22 Aug 2022 14:11:07 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: PKU usage improvements for threads
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     =?UTF-8?Q?Stephen_R=c3=b6ttger?= <sroettger@google.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Andy Lutomirski <luto@kernel.org>
+References: <202208221331.71C50A6F@keescook>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <202208221331.71C50A6F@keescook>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022 05:36:53 +0000 xu xin <cgel.zte@gmail.com> wrote:
+On 8/22/22 13:40, Kees Cook wrote:
+> 1) It appears to be a bug that a thread without the correct PK can make
+> VMAs covered by a separate PK, out from under other threads. (e.g. mmap
+> a new mapping to wipe out the defined PK for it.) It seems that PK checks
+> should be made when modifying VMAs.
 
-> KSM can save memory by merging identical pages, but also can consume
-> additional memory, because it needs to generate rmap_items to save
-> each scanned page's brief rmap information. Some of these pages may
-> be merged, but some may not be abled to be merged after being checked
-> several times, which are unprofitable memory consumed.
-> 
-> The information about whether KSM save memory or consume memory in
-> system-wide range can be determined by the comprehensive calculation
-> of pages_sharing, pages_shared, pages_unshared and pages_volatile.
-> A simple approximate calculation:
-> 
-> 	profit ≈ pages_sharing * sizeof(page) - (all_rmap_items) *
-> 	         sizeof(rmap_item);
-> 
-> where all_rmap_items equals to the sum of pages_sharing, pages_shared,
-> pages_unshared and pages_volatile.
-> 
-> But we cannot calculate this kind of ksm profit inner single-process wide
-> because the information of ksm rmap_item's number of a process is lacked.
-> For user applications, if this kind of information could be obtained,
-> it helps upper users know how beneficial the ksm-policy (like madvise)
-> they are using brings, and then optimize their app code. For example,
-> one application madvise 1000 pages as MERGEABLE, while only a few pages
-> are really merged, then it's not cost-efficient.
-> 
-> So we add a new interface /proc/<pid>/ksm_alloced_items for each
-> process to indicate the total allocated ksm rmap_items of this process.
+Hi Kees,
 
-Please add documentation for this profcs item in the appropriate place
-under Documentation/.  And please ensure that the documentation
-provides readers with a decent amount of information about how to use
-this information to improve their system's operation.
+Could you give an example of this?  Is this something along the lines of
+a mmap(MAP_FIXED) wiping out an earlier mapping?  Or, is it more subtle
+than that?
 
+I'm not sure I know of any bugs in the area.
+
+> 2) It would be very helpful to have a mechanism for the signal stack to
+> be PK aware, in the sense that the kernel would switch to a predefined
+> PK. i.e. having a new interface to sigaltstack() which includes a PK.
+
+Are you thinking that when switching to the sigaltstack that it would
+also pick up a specific PKRU value?  Or, that it would ensure that PKRU
+allows access to the sigaltstack's pkey?  Logically something like this:
+
+	stack_t sas = {
+		ss_sp = stack_ptr;
+		ss_flags = ... flags;
+		ss_size = ...;
+		ss_pkey = 12;
+	};
+
+Then the kernel would set up RSP to point to ss_sp, and do (logically):
+
+   pkkru &= ~(3<<(12*2)); // clear Write and Access-disable for pkey-12
+
+before building the signal frame running the signal handler?
+
+> Are either of these something the PKU authors have considered? (Or are
+> there some details we're missing in this area?)
+
+We've talked about having signal behavior which might give different
+PKRU values at signal entry, but nothing too concrete.  Something like
+that wouldn't be *awful* to implement.  It would also be nice that it
+would be confined to folks that set up special signal handlers anyway
+and that context is already pretty special.
+
+I'd love to hear more why this behavior is useful and how it will be used.

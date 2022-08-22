@@ -2,113 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6557E59B71F
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 02:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AD359B725
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 03:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbiHVA5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 20:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S232176AbiHVBBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 21:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbiHVA5m (ORCPT
+        with ESMTP id S229948AbiHVBBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 20:57:42 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9933A205EB;
-        Sun, 21 Aug 2022 17:57:39 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M9v416DlyzXdbp;
-        Mon, 22 Aug 2022 08:53:21 +0800 (CST)
-Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 22 Aug
- 2022 08:57:37 +0800
-From:   Weilong Chen <chenweilong@huawei.com>
-To:     <yangyicong@hisilicon.com>, <wsa@kernel.org>,
-        <chenweilong@huawei.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH next] i2c: i2c-hisi: Add support for initializing control module via DT
-Date:   Mon, 22 Aug 2022 09:00:31 +0800
-Message-ID: <20220822010031.97769-1-chenweilong@huawei.com>
-X-Mailer: git-send-email 2.31.GIT
+        Sun, 21 Aug 2022 21:01:52 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15ABE201A8;
+        Sun, 21 Aug 2022 18:01:51 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M9vFj6wXxz4x1N;
+        Mon, 22 Aug 2022 11:01:45 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661130106;
+        bh=6l9j7X22BBA4N65+/fw8NpRm9wwmtmsASnaDP6DcOUQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bXna29IRdNDjYgbgweAkj+3drBgKC84AYZtQcJvHH/Fl2Uz9gFjWoMuQ7yLk+h/WW
+         EEIwu+SOYK7bcKQ43iemROLVuUyxtylobUTXUBxlzZvctplP4n/ipFJmAFZ/URXtYd
+         0G3iVyb7SmUnQ9VxGFZRBZC9YA0uYsRhDMOs4oYTRECDMk6p5wvuFX/po8DVbytfLA
+         3wkcRqyAk6pUqQEYT/9SF5OqP9dbiHwD+WpgqZIo3GGYoOfZbphtWSTpQjVjMfOqcB
+         YCZPw5oiBk+E4wH+EYZvHgjSBbROhYoxnbVKFvCjplssPGZMpyNomOc1Xqk2yP/0Ou
+         acfClBBLHYmzg==
+Date:   Mon, 22 Aug 2022 11:01:44 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Daniel =?UTF-8?B?TcO8bGxlcg==?= <deso@posteo.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>
+Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
+Message-ID: <20220822110144.199455d6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/np7iLFcswnasyimVYWlLVVK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The HiSilicon I2C controller can be used on embedded platform, which
-boot from devicetree.
+--Sig_/np7iLFcswnasyimVYWlLVVK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Weilong Chen <chenweilong@huawei.com>
----
- drivers/i2c/busses/Kconfig    |  2 +-
- drivers/i2c/busses/i2c-hisi.c | 13 ++++++++++++-
- 2 files changed, 13 insertions(+), 2 deletions(-)
+Hi all,
 
-diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-index 7284206b278b..6d0fdf48e97d 100644
---- a/drivers/i2c/busses/Kconfig
-+++ b/drivers/i2c/busses/Kconfig
-@@ -673,7 +673,7 @@ config I2C_HIGHLANDER
- 
- config I2C_HISI
- 	tristate "HiSilicon I2C controller"
--	depends on (ARM64 && ACPI) || COMPILE_TEST
-+	depends on ARM64 || COMPILE_TEST
- 	help
- 	  Say Y here if you want to have Hisilicon I2C controller support
- 	  available on the Kunpeng Server.
-diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-index 76c3d8f6fc3c..cba9a6830b23 100644
---- a/drivers/i2c/busses/i2c-hisi.c
-+++ b/drivers/i2c/busses/i2c-hisi.c
-@@ -16,6 +16,8 @@
- #include <linux/platform_device.h>
- #include <linux/property.h>
- #include <linux/units.h>
-+#include <linux/acpi.h>
-+#include <linux/of.h>
- 
- #define HISI_I2C_FRAME_CTRL		0x0000
- #define   HISI_I2C_FRAME_CTRL_SPEED_MODE	GENMASK(1, 0)
-@@ -483,17 +485,26 @@ static int hisi_i2c_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+#ifdef CONFIG_ACPI
- static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
- 	{ "HISI03D1", 0 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
-+#endif
-+
-+static const struct of_device_id hisi_i2c_dts_ids[] = {
-+	{ .compatible = "hisilicon,hisi-i2c", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
- 
- static struct platform_driver hisi_i2c_driver = {
- 	.probe		= hisi_i2c_probe,
- 	.driver		= {
- 		.name	= "hisi-i2c",
--		.acpi_match_table = hisi_i2c_acpi_ids,
-+		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
-+		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
- 	},
- };
- module_platform_driver(hisi_i2c_driver);
--- 
-2.31.GIT
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
+  tools/testing/selftests/bpf/DENYLIST.s390x
+
+between commit:
+
+  27e23836ce22 ("selftests/bpf: Add lru_bug to s390x deny list")
+
+from the bpf tree and commit:
+
+  b979f005d9b1 ("selftest/bpf: Add setget_sockopt to DENYLIST.s390x")
+
+from the bpf-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/bpf/DENYLIST.s390x
+index 5cadfbdadf36,a708c3dcc154..000000000000
+--- a/tools/testing/selftests/bpf/DENYLIST.s390x
++++ b/tools/testing/selftests/bpf/DENYLIST.s390x
+@@@ -65,4 -65,4 +65,5 @@@ send_signa
+  select_reuseport                         # intermittently fails on new s3=
+90x setup
+  xdp_synproxy                             # JIT does not support calling k=
+ernel function                                (kfunc)
+  unpriv_bpf_disabled                      # fentry
+ +lru_bug                                  # prog 'printk': failed to auto-=
+attach: -524
++ setget_sockopt                           # attach unexpected error: -524 =
+                                              (trampoline)
+
+--Sig_/np7iLFcswnasyimVYWlLVVK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMC1XgACgkQAVBC80lX
+0GxfMAf/RpVbYOcDE3iGxTsojuJZ4d8t7OgQZu7trQZwAc2EtWXxtP09bwURSe2D
+s9Ah3TD2guoOHKEeQ4mDCMMryITDJ/E1qY2H/shn1XbGerBThC+hJwQ1Lx19OkDr
+57Yp4/wDnQ5oSnXb4Pb6z5LAtF5KkleQ5yl5vnxa/6xsYKRF+fn6ufpBCrPPdkWP
+b+g8embFhny5mEfvjYwQ9QPcceCH9QfDJSUSYwK9HxHbdV5zMzJX4nwCXSxuAJgs
+vXd/Of9ZE3Gf5ocoglptg2xJ21hx0nkE6USg1Y9u55OxOIsaq7cyqc6P57cd1gAu
+lhuHI8jgKce4U4NgqIf3tM51zNmwoQ==
+=hvXH
+-----END PGP SIGNATURE-----
+
+--Sig_/np7iLFcswnasyimVYWlLVVK--

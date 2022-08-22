@@ -2,118 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A0B59C4B7
+	by mail.lfdr.de (Postfix) with ESMTP id D925859C4BA
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237250AbiHVRKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
+        id S236896AbiHVRKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234096AbiHVRJw (ORCPT
+        with ESMTP id S236446AbiHVRJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:09:52 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F80C422FC
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:09:08 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id ca13so11255349ejb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=FBSmStkotiGF5Og7ExawLkOys7P/24UjQfsLmwYIr/M=;
-        b=a1uslqfzoUrzXGd0AtZpa/7qVFuOyaBocH8utbCHMh+IkSOo3bi2iA+PM0xZRNUJXv
-         t1cspoXmBEBzEkIS9Wllb9Qh/U1c5tYnnJ4nHm80ZZthOK6BkFbBx1u7VhL2Ep9q2HGo
-         sz1FnS+mb8UOtjAbiizHgEwMu4Gfjzk0Cl1cM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=FBSmStkotiGF5Og7ExawLkOys7P/24UjQfsLmwYIr/M=;
-        b=Ztgs2yfOZgeYw7MoQ9unVl16Gm9bCs8SOGrhl8Pzx/D4MvXKssZ3aZTCJM1o/aly7d
-         xCdX9d1dlxdAFxsv0t4rDtTNVIhrC5CjuRypAgDh0zEmommFHwR2wMWwJvfdVD2f0eR2
-         h/XOp3vKZKwCieur+Nxm4OUZ0NSN6ch6d6jbjE7MVRtWoKjagXViwuKbpCxuGUa6aziu
-         tB48QYV8JtTNdd2mdcTzzpSVtVCK3cmsXg4xFRX89jQ1B01+6V/huQig8ckOLIkWxaXd
-         SUX2FvN1N6MB7Z3nBq+7HJiBSUc8oveODDTH55csM4EXR56gsmMsoraz8eGpZEL4fPwv
-         AXhA==
-X-Gm-Message-State: ACgBeo1varbUimvS2+1s5D+QMtaS8Edjq68jgggyHQzKsmmKJSomt8Ch
-        tjVkGXiyj1KAdTFBhe/Yx0/LAaQlu6uWVj2l
-X-Google-Smtp-Source: AA6agR7fM49rkpjBt7Is6pFsXAkbGNnn583eCSC3MqCuOskDElTIM0ivCcfUSb83yy37klL0roOdHA==
-X-Received: by 2002:a17:906:9bd8:b0:73d:83d1:2222 with SMTP id de24-20020a1709069bd800b0073d83d12222mr3250852ejc.557.1661188146313;
-        Mon, 22 Aug 2022 10:09:06 -0700 (PDT)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170906218200b0073306218484sm6405339eju.26.2022.08.22.10.09.05
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 10:09:05 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id l33-20020a05600c1d2100b003a645240a95so4008900wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:09:05 -0700 (PDT)
-X-Received: by 2002:a05:600c:657:b0:3a5:e4e6:ee24 with SMTP id
- p23-20020a05600c065700b003a5e4e6ee24mr15334285wmm.68.1661188144843; Mon, 22
- Aug 2022 10:09:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
-In-Reply-To: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 22 Aug 2022 10:08:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
-Message-ID: <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
-Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
+        Mon, 22 Aug 2022 13:09:54 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83457CE3E;
+        Mon, 22 Aug 2022 10:09:17 -0700 (PDT)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MBJfC2B57z67xMh;
+        Tue, 23 Aug 2022 01:05:55 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 22 Aug 2022 19:09:14 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 22 Aug
+ 2022 18:09:14 +0100
+Date:   Mon, 22 Aug 2022 18:09:12 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     <linuxarm@huawei.com>, <linux-cxl@vger.kernel.org>,
         Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mark Rutland <mark.rutland@arm.com>
+CC:     <john.garry@huawei.com>, Peter Zijlstra <peterz@infradead.org>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Alison Schofield" <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [RFC PATCH 2/4] cxl/pci: Find and register CXL PMU devices
+Message-ID: <20220822180852.000002f9@huawei.com>
+In-Reply-To: <20220812151214.2025-3-Jonathan.Cameron@huawei.com>
+References: <20220812151214.2025-1-Jonathan.Cameron@huawei.com>
+        <20220812151214.2025-3-Jonathan.Cameron@huawei.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 2:39 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
->
-> I'd like to ask what do you think about this patch?
+On Fri, 12 Aug 2022 16:12:12 +0100
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
 
-I really don't like it. It adds a pointless read barrier only because
-you didn't want to do it properly.
+> CXL PMU devices can be found from entries in the Register
+> Locator DVSEC.
+> 
+> In order to register the minimum number of IRQ vectors necessary
+> to support all CPMUs found, separate the registration into two
+> steps.  First find the devices, and query the IRQs used and then
+> register the devices. Between these two steps, request the
+> IRQ vectors necessary and enable bus master support.
+> 
+> Future IRQ users for CXL type 3 devices (e.g. DOEs) will need to
+> follow a similar pattern the number of vectors necessary is known
+> before any parts of the driver stack rely on their availability.
+> 
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+A few bugs in here that the kernel test robot found.
 
-On x86, it doesn't matter, since rmb is a no-op and only a scheduling
-barrier (and not noticeable in this case anyway).
+I'll send a v2 shortly with those tidied up.
 
-On other architectures, it might.
+One observation is that cxl/core/core.h dereferences
+a struct cxl_memdev element which means we have a header ordering
+dependency between that and cxl/cxlmem.h which we should find a clean
+way to fix.
+ 
+> 
+> ---
+> 
+> Open questions
+> 1) Is this IRQ vector 'count' / request then use approach flexible
+>    enough for other interrupt users on these devices.
+> 2) Does hanging the CPMU off the PCI device make sense. These can
+>    occur in Switch upstream ports as well.
+> 3) Naming.  It would be nice if the device naming indicated which
+>    EP these were associated with, but that wouldn't be inline
+>    with the rest of the CXL bus device naming.  What is best
+>    option here?
+> ---
+>  drivers/cxl/core/Makefile |  1 +
+>  drivers/cxl/core/core.h   |  3 ++
+>  drivers/cxl/core/cpmu.c   | 67 ++++++++++++++++++++++++++++++++++
+>  drivers/cxl/core/port.c   |  2 ++
+>  drivers/cxl/core/regs.c   | 29 +++++++++++++++
+>  drivers/cxl/cpmu.h        | 54 ++++++++++++++++++++++++++++
+>  drivers/cxl/cxl.h         | 15 ++++++++
+>  drivers/cxl/cxlpci.h      |  1 +
+>  drivers/cxl/pci.c         | 76 ++++++++++++++++++++++++++++++++++++++-
+>  9 files changed, 247 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cxl/core/Makefile b/drivers/cxl/core/Makefile
+> index 79c7257f4107..1318e8a6830f 100644
+> --- a/drivers/cxl/core/Makefile
+> +++ b/drivers/cxl/core/Makefile
+> @@ -10,4 +10,5 @@ cxl_core-y += memdev.o
+>  cxl_core-y += mbox.o
+>  cxl_core-y += pci.o
+>  cxl_core-y += hdm.o
+> +cxl_core-y += cpmu.o
+>  cxl_core-$(CONFIG_CXL_REGION) += region.o
+> diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
+> index 1d8f87be283f..d2b12cdfd61f 100644
+> --- a/drivers/cxl/core/core.h
+> +++ b/drivers/cxl/core/core.h
+> @@ -14,12 +14,14 @@ extern struct device_attribute dev_attr_create_pmem_region;
+>  extern struct device_attribute dev_attr_delete_region;
+>  extern struct device_attribute dev_attr_region;
+>  extern const struct device_type cxl_pmem_region_type;
+> +extern const struct device_type cxl_cpmu_type;
+>  extern const struct device_type cxl_region_type;
+>  void cxl_decoder_kill_region(struct cxl_endpoint_decoder *cxled);
+>  #define CXL_REGION_ATTR(x) (&dev_attr_##x.attr)
+>  #define CXL_REGION_TYPE(x) (&cxl_region_type)
+>  #define SET_CXL_REGION_ATTR(x) (&dev_attr_##x.attr),
+>  #define CXL_PMEM_REGION_TYPE(x) (&cxl_pmem_region_type)
+> +#define CXL_CPMU_TYPE(x) (&cxl_cpmu_region_type)
+>  int cxl_region_init(void);
+>  void cxl_region_exit(void);
+>  #else
+> @@ -37,6 +39,7 @@ static inline void cxl_region_exit(void)
+>  #define CXL_REGION_TYPE(x) NULL
+>  #define SET_CXL_REGION_ATTR(x)
+>  #define CXL_PMEM_REGION_TYPE(x) NULL
+> +#define CXL_CPMU_TYPE(x) NULL
+>  #endif
+>  
 
-But on all architectures it's just ugly.
+Side note, the presence of 
+cxl_ep_load() in here means anything including this header needs to include
+cxlmem.h which seems a bit of a violation of layering between the core
+headers and more driver specific ones.
 
-I suggested in an earlier thread that you just do it right with an
-explicit smp_load_acquire() and a manual bit test.
 
-So why don't we just create a "test_bit_acquire()" and be done with
-it? We literally created clear_bit_unlock() for the opposite reason,
-and your comments about the new barrier hack even point to it.
+>  struct cxl_send_command;
+> diff --git a/drivers/cxl/core/cpmu.c b/drivers/cxl/core/cpmu.c
+> new file mode 100644
+> index 000000000000..2d17d4083c8f
+> --- /dev/null
+> +++ b/drivers/cxl/core/cpmu.c
+> @@ -0,0 +1,67 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright(c) 2022 Huawei. All rights reserved. */
+> +
+> +#include <linux/device.h>
+> +#include <linux/slab.h>
+> +#include <linux/idr.h>
+> +#include <cpmu.h>
+> +#include <cxl.h>
+> +
+> +static DEFINE_IDA(cpmu_ida);
+> +
+> +static void cxl_cpmu_release(struct device *dev)
+> +{
+> +	struct cxl_cpmu *cpmu = container_of(dev, struct cxl_cpmu, dev);
+> +
+> +	ida_free(&cpmu_ida, cpmu->id);
+> +	kfree(cpmu);
+> +}
+> +
+> +const struct device_type cxl_cpmu_type = {
 
-Why is "clear_bit_unlock()" worthy of a real helper, but
-"test_bit_acquire()" is not and people who want it have to use this
-horrendous hack?
+Should include core/core.h to avoid a should this be static warning.
 
-Please stop adding random barriers already. Just do it right. I've
-said this before, why do you then keep doing this and asking for
-comments?
+> +	.name = "cxl_cpmu",
+> +	.release = cxl_cpmu_release,
+> +};
+> +
+> +static void remove_dev(void *dev)
+> +{
+> +	device_del(dev);
+> +}
+> +
 
-My reply will remain the same: JUST DO IT RIGHT.
 
-                Linus
+> diff --git a/drivers/cxl/cpmu.h b/drivers/cxl/cpmu.h
+> new file mode 100644
+> index 000000000000..880077bf0b9f
+> --- /dev/null
+> +++ b/drivers/cxl/cpmu.h
+> @@ -0,0 +1,54 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright(c) 2022 Huawei
+> + * CXL Specification rev 3.0 Setion 8.2.7 (CPMU Register Interface)
+> + */
+> +#ifndef CXL_CPMU_H
+> +#define CXL_CPMU_H
+> +
+> +#define CPMU_CAP_REG			0x0
+> +#define   CPMU_CAP_NUM_COUNTERS_MSK		GENMASK_ULL(4, 0)
+> +#define   CPMU_CAP_COUNTER_WIDTH_MSK		GENMASK_ULL(15, 8)
+> +#define   CPMU_CAP_NUM_EVN_CAP_REG_SUP_MSK	GENMASK_ULL(24, 20)
+> +#define   CPMU_CAP_FILTERS_SUP_MSK		GENMASK_ULL(39, 32)
+> +#define   CPMU_CAP_MSI_N_MSK			GENMASK_ULL(47, 44)
+> +#define   CPMU_CAP_WRITEABLE_WHEN_FROZEN	BIT(48)
+> +#define   CPMU_CAP_FREEZE			BIT(49)
+> +#define   CPMU_CAP_INT				BIT(50)
+BIT_ULL() needed for these.
+
+> +#define   CPMU_CAP_VERSION_MSK			GENMASK_ULL(63, 60)
+> +
+> +#define CPMU_OVERFLOW_REG		0x10
+> +#define CPMU_FREEZE_REG			0x18
+> +#define CPMU_EVENT_CAP_REG(n)		(0x100 + 8 * (n))
+> +#define   CPMU_EVENT_CAP_SUPPORTED_EVENTS_MSK	GENMASK_ULL(31, 0)
+> +#define   CPMU_EVENT_CAP_GROUP_ID_MSK		GENMASK_ULL(47, 32)
+> +#define   CPMU_EVENT_CAP_VENDOR_ID_MSK		GENMASK_ULL(63, 48)
+> +
+> +#define CPMU_COUNTER_CFG_REG(n)		(0x200 + 8 * (n))
+> +#define   CPMU_COUNTER_CFG_TYPE_MSK		GENMASK_ULL(1, 0)
+> +#define     CPMU_COUNTER_CFG_TYPE_FREE_RUN	0
+> +#define     CPMU_COUNTER_CFG_TYPE_FIXED_FUN	1
+> +#define     CPMU_COUNTER_CFG_TYPE_CONFIGURABLE	2
+> +#define   CPMU_COUNTER_CFG_ENABLE		BIT(8)
+> +#define   CPMU_COUNTER_CFG_INT_ON_OVRFLW	BIT(9)
+> +#define   CPMU_COUNTER_CFG_FREEZE_ON_OVRFLW	BIT(10)
+> +#define   CPMU_COUNTER_CFG_EDGE			BIT(11)
+> +#define   CPMU_COUNTER_CFG_INVERT		BIT(12)
+> +#define   CPMU_COUNTER_CFG_THRESHOLD_MSK	GENMASK_ULL(23, 16)
+> +#define   CPMU_COUNTER_CFG_EVENTS_MSK		GENMASK_ULL(55, 24)
+> +#define   CPMU_COUNTER_CFG_EVENT_GRP_ID_IDX_MSK	GENMASK_ULL(63, 59)
+> +
+> +#define CPMU_FILTER_CFG_REG(n, f)	(0x400 + 4 * ((f) + (n) * 8))
+> +#define   CPMU_FILTER_CFG_VALUE_MSK		GENMASK(15, 0)
+> +
+> +#define CPMU_COUNTER_REG(n)			(0xc00 + 8 * (n))
+> +
+> +#define CPMU_REGMAP_SIZE 0xe00 /* Table 8-32 CXL 3.0 specification */
+> +struct cxl_cpmu {
+> +	struct device dev;
+> +	void __iomem *base;
+> +	int id;
+> +};
+> +
+> +#define to_cxl_cpmu(dev) container_of(dev, struct cxl_cpmu, dev)
+> +#endif

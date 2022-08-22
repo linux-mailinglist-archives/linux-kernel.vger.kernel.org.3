@@ -2,175 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 188B759BCF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98B059BD03
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiHVJjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 05:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
+        id S233487AbiHVJkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231577AbiHVJi5 (ORCPT
+        with ESMTP id S234432AbiHVJkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 05:38:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2E01401A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:38:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661161135;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=zfpY3ryladZYLXHgzfscfqjYbCZN7BmzG+/csBCpaf0=;
-        b=QCHThwmL+b654gaFWwuPU0jKnNy5CSvG3T4EUV26WKf8XGfPMCZyZodx7CMbDBLEwdiUPK
-        1UPtNylrkriWHsm/NW3BQi9NJPU9BncEtn3X+2zjNRAaT6KzV4LzR8rSvoQEHAE7PQLwkm
-        Ff/9dT7FsQI9c2Qf3k6RyVgdzSKHZ0U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-H8i-0JuyPRi0A0xPOS7Glw-1; Mon, 22 Aug 2022 05:38:52 -0400
-X-MC-Unique: H8i-0JuyPRi0A0xPOS7Glw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F19BC8037AF;
-        Mon, 22 Aug 2022 09:38:51 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CB8871121314;
-        Mon, 22 Aug 2022 09:38:51 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 27M9cp1c032579;
-        Mon, 22 Aug 2022 05:38:51 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 27M9colo032575;
-        Mon, 22 Aug 2022 05:38:50 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Mon, 22 Aug 2022 05:38:50 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH] wait_on_bit: add an acquire memory barrier
-Message-ID: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Mon, 22 Aug 2022 05:40:49 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBEF2ED4C
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:40:47 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id Q3vIojkHpGYmzQ3vIop5B6; Mon, 22 Aug 2022 11:40:46 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 22 Aug 2022 11:40:46 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-media@vger.kernel.org
+Subject: [PATCH] media: dw100: Fix an error handling path in dw100_probe()
+Date:   Mon, 22 Aug 2022 11:40:43 +0200
+Message-Id: <7213b90d0d872be154cff81aec1ad8a4a77116af.1661161223.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+After a successful call to media_device_init() it is safer to call
+media_device_init().
 
-I'd like to ask what do you think about this patch? Do you want to commit 
-it - or do you think that the barrier should be added to the callers of 
-wait_on_bit?
+Add the missing call in the error handling path of the probe, as already
+done in the remove function.
 
-Mikulas
-
-
-
-From: Mikulas Patocka <mpatocka@redhat.com>
-
-There are several places in the kernel where wait_on_bit is not followed
-by a memory barrier (for example, in drivers/md/dm-bufio.c:new_read). On
-architectures with weak memory ordering, it may happen that memory
-accesses that follow wait_on_bit are reordered before wait_on_bit and they
-may return invalid data.
-
-Fix this class of bugs by adding an acquire memory barrier to wait_on_bit,
-wait_on_bit_io, wait_on_bit_timeout and wait_on_bit_action. The code that
-uses these functions should clear the bit using the function
-clear_bit_unlock.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Cc: stable@vger.kernel.org
-
+Fixes: bd090d4d995a ("media: dw100: Add i.MX8MP dw100 dewarper driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- include/linux/wait_bit.h |   16 ++++++++++++----
- kernel/sched/wait_bit.c  |    2 ++
- 2 files changed, 14 insertions(+), 4 deletions(-)
+ drivers/media/platform/nxp/dw100/dw100.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Index: linux-2.6/include/linux/wait_bit.h
-===================================================================
---- linux-2.6.orig/include/linux/wait_bit.h	2022-08-20 14:33:44.000000000 +0200
-+++ linux-2.6/include/linux/wait_bit.h	2022-08-20 15:41:43.000000000 +0200
-@@ -71,8 +71,10 @@ static inline int
- wait_on_bit(unsigned long *word, int bit, unsigned mode)
- {
- 	might_sleep();
--	if (!test_bit(bit, word))
-+	if (!test_bit(bit, word)) {
-+		smp_acquire__after_ctrl_dep();	/* should pair with clear_bit_unlock */
- 		return 0;
-+	}
- 	return out_of_line_wait_on_bit(word, bit,
- 				       bit_wait,
- 				       mode);
-@@ -96,8 +98,10 @@ static inline int
- wait_on_bit_io(unsigned long *word, int bit, unsigned mode)
- {
- 	might_sleep();
--	if (!test_bit(bit, word))
-+	if (!test_bit(bit, word)) {
-+		smp_acquire__after_ctrl_dep();	/* should pair with clear_bit_unlock */
- 		return 0;
-+	}
- 	return out_of_line_wait_on_bit(word, bit,
- 				       bit_wait_io,
- 				       mode);
-@@ -123,8 +127,10 @@ wait_on_bit_timeout(unsigned long *word,
- 		    unsigned long timeout)
- {
- 	might_sleep();
--	if (!test_bit(bit, word))
-+	if (!test_bit(bit, word)) {
-+		smp_acquire__after_ctrl_dep();	/* should pair with clear_bit_unlock */
- 		return 0;
-+	}
- 	return out_of_line_wait_on_bit_timeout(word, bit,
- 					       bit_wait_timeout,
- 					       mode, timeout);
-@@ -151,8 +157,10 @@ wait_on_bit_action(unsigned long *word,
- 		   unsigned mode)
- {
- 	might_sleep();
--	if (!test_bit(bit, word))
-+	if (!test_bit(bit, word)) {
-+		smp_acquire__after_ctrl_dep();	/* should pair with clear_bit_unlock */
- 		return 0;
-+	}
- 	return out_of_line_wait_on_bit(word, bit, action, mode);
- }
- 
-Index: linux-2.6/kernel/sched/wait_bit.c
-===================================================================
---- linux-2.6.orig/kernel/sched/wait_bit.c	2022-08-20 14:33:44.000000000 +0200
-+++ linux-2.6/kernel/sched/wait_bit.c	2022-08-20 15:41:39.000000000 +0200
-@@ -49,6 +49,8 @@ __wait_on_bit(struct wait_queue_head *wq
- 			ret = (*action)(&wbq_entry->key, mode);
- 	} while (test_bit(wbq_entry->key.bit_nr, wbq_entry->key.flags) && !ret);
- 
-+	smp_acquire__after_ctrl_dep();	/* should pair with clear_bit_unlock */
-+
- 	finish_wait(wq_head, &wbq_entry->wq_entry);
- 
- 	return ret;
+diff --git a/drivers/media/platform/nxp/dw100/dw100.c b/drivers/media/platform/nxp/dw100/dw100.c
+index 94518f0e486b..b3b057798ab6 100644
+--- a/drivers/media/platform/nxp/dw100/dw100.c
++++ b/drivers/media/platform/nxp/dw100/dw100.c
+@@ -1623,6 +1623,7 @@ static int dw100_probe(struct platform_device *pdev)
+ error_v4l2:
+ 	video_unregister_device(vfd);
+ err_m2m:
++	media_device_cleanup(&dw_dev->mdev);
+ 	v4l2_m2m_release(dw_dev->m2m_dev);
+ err_v4l2:
+ 	v4l2_device_unregister(&dw_dev->v4l2_dev);
+-- 
+2.34.1
 

@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7DF59BB76
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13C959BB84
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234026AbiHVIYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
+        id S234051AbiHVIYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233912AbiHVIXp (ORCPT
+        with ESMTP id S233937AbiHVIXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:23:45 -0400
+        Mon, 22 Aug 2022 04:23:46 -0400
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352E9B488;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3519AB1FC;
         Mon, 22 Aug 2022 01:23:35 -0700 (PDT)
 Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MB4zR2LXtz1N7HW;
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MB4zR4wk3z1N7Vq;
         Mon, 22 Aug 2022 16:20:03 +0800 (CST)
 Received: from localhost.localdomain (10.67.164.66) by
  canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
@@ -36,10 +36,11 @@ CC:     <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
         <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
         Barry Song <21cnbao@gmail.com>, <wangkefeng.wang@huawei.com>,
         <xhao@linux.alibaba.com>, <prime.zeng@hisilicon.com>,
-        <anshuman.khandual@arm.com>, Barry Song <v-songbaohua@oppo.com>
-Subject: [PATCH v3 1/4] Revert "Documentation/features: mark BATCHED_UNMAP_TLB_FLUSH doesn't apply to ARM64"
-Date:   Mon, 22 Aug 2022 16:21:17 +0800
-Message-ID: <20220822082120.8347-2-yangyicong@huawei.com>
+        <anshuman.khandual@arm.com>,
+        Anshuman Khandual <khandual@linux.vnet.ibm.com>
+Subject: [PATCH v3 2/4] mm/tlbbatch: Introduce arch_tlbbatch_should_defer()
+Date:   Mon, 22 Aug 2022 16:21:18 +0800
+Message-ID: <20220822082120.8347-3-yangyicong@huawei.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220822082120.8347-1-yangyicong@huawei.com>
 References: <20220822082120.8347-1-yangyicong@huawei.com>
@@ -59,49 +60,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Barry Song <v-songbaohua@oppo.com>
+From: Anshuman Khandual <khandual@linux.vnet.ibm.com>
 
-This reverts commit 6bfef171d0d74cb050112e0e49feb20bfddf7f42.
+The entire scheme of deferred TLB flush in reclaim path rests on the
+fact that the cost to refill TLB entries is less than flushing out
+individual entries by sending IPI to remote CPUs. But architecture
+can have different ways to evaluate that. Hence apart from checking
+TTU_BATCH_FLUSH in the TTU flags, rest of the decision should be
+architecture specific.
 
-I was wrong. Though ARM64 has hardware TLB flush, but it is not free
-and it is still expensive.
-We still have a good chance to enable batched and deferred TLB flush
-on ARM64 for memory reclamation. A possible way is that we only queue
-tlbi instructions in hardware's queue. When we have to broadcast TLB,
-we broadcast it by dsb. We just need to get adapted the existing
-BATCHED_UNMAP_TLB_FLUSH.
-
-Tested-by: Xin Hao <xhao@linux.alibaba.com>
-Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+Signed-off-by: Anshuman Khandual <khandual@linux.vnet.ibm.com>
+[https://lore.kernel.org/linuxppc-dev/20171101101735.2318-2-khandual@linux.vnet.ibm.com/]
 Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+[Rebase and fix incorrect return value type]
 ---
- Documentation/features/arch-support.txt        | 1 -
- Documentation/features/vm/TLB/arch-support.txt | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ arch/x86/include/asm/tlbflush.h | 12 ++++++++++++
+ mm/rmap.c                       |  9 +--------
+ 2 files changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/features/arch-support.txt b/Documentation/features/arch-support.txt
-index 118ae031840b..d22a1095e661 100644
---- a/Documentation/features/arch-support.txt
-+++ b/Documentation/features/arch-support.txt
-@@ -8,5 +8,4 @@ The meaning of entries in the tables is:
-     | ok |  # feature supported by the architecture
-     |TODO|  # feature not yet supported by the architecture
-     | .. |  # feature cannot be supported by the hardware
--    | N/A|  # feature doesn't apply to the architecture
+diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+index cda3118f3b27..8a497d902c16 100644
+--- a/arch/x86/include/asm/tlbflush.h
++++ b/arch/x86/include/asm/tlbflush.h
+@@ -240,6 +240,18 @@ static inline void flush_tlb_page(struct vm_area_struct *vma, unsigned long a)
+ 	flush_tlb_mm_range(vma->vm_mm, a, a + PAGE_SIZE, PAGE_SHIFT, false);
+ }
  
-diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
-index 039e4e91ada3..1c009312b9c1 100644
---- a/Documentation/features/vm/TLB/arch-support.txt
-+++ b/Documentation/features/vm/TLB/arch-support.txt
-@@ -9,7 +9,7 @@
-     |       alpha: | TODO |
-     |         arc: | TODO |
-     |         arm: | TODO |
--    |       arm64: | N/A  |
-+    |       arm64: | TODO |
-     |        csky: | TODO |
-     |     hexagon: | TODO |
-     |        ia64: | TODO |
++static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
++{
++	bool should_defer = false;
++
++	/* If remote CPUs need to be flushed then defer batch the flush */
++	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
++		should_defer = true;
++	put_cpu();
++
++	return should_defer;
++}
++
+ static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
+ {
+ 	/*
+diff --git a/mm/rmap.c b/mm/rmap.c
+index edc06c52bc82..a17a004550c6 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -687,17 +687,10 @@ static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
+  */
+ static bool should_defer_flush(struct mm_struct *mm, enum ttu_flags flags)
+ {
+-	bool should_defer = false;
+-
+ 	if (!(flags & TTU_BATCH_FLUSH))
+ 		return false;
+ 
+-	/* If remote CPUs need to be flushed then defer batch the flush */
+-	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
+-		should_defer = true;
+-	put_cpu();
+-
+-	return should_defer;
++	return arch_tlbbatch_should_defer(mm);
+ }
+ 
+ /*
 -- 
 2.24.0
 

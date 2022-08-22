@@ -2,120 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC4459C2A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3422659C2A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236361AbiHVP0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
+        id S236659AbiHVPZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236526AbiHVPYa (ORCPT
+        with ESMTP id S236654AbiHVPYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:24:30 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6ACF54
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:20:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661181609; x=1692717609;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PxH1XESOn3k/TaEO+M/yHzwrNdK4vC1UrGySGCfqGZI=;
-  b=OStXxSH0ylWCfCKLDuyUgSvzfL2JRSZrKYOWI/EBavTeOi/JsDTtg0lI
-   j4UsGn9Ux75/WH+tZ2SZzutgUGZTtdMkadAOdBgKn3BZ1jyqgHf4awmcg
-   cxOdiKOwqdyF8PMur+UrujqMpVHbVTwJeDm5XGyJ8JRLVcZRdjprPbmUz
-   gdBAjhYGvZI9v4d/Mrz0Q+PC8X4HxBD1qRE2Ski9Uf8g9tvCRnMxOHHZ2
-   rouaGBWwSaDaa1srYSvy5GLCqqNECeypVyIlObMa/q7vBQgHjmU6nvG8G
-   oTe869NqOU4uufnjwvalqw+9mzmOaacSR8oCFq5hrBDv5VQnGAyhAspdV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="355172261"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="355172261"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 08:20:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="612080496"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga007.fm.intel.com with ESMTP; 22 Aug 2022 08:20:08 -0700
-Received: from [10.252.212.31] (kliang2-mobl1.ccr.corp.intel.com [10.252.212.31])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Mon, 22 Aug 2022 11:24:37 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6032964F7
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:20:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 269AF5806C8;
-        Mon, 22 Aug 2022 08:20:07 -0700 (PDT)
-Message-ID: <feb6f311-1379-7482-21e3-94cf7e797495@linux.intel.com>
-Date:   Mon, 22 Aug 2022 11:20:05 -0400
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0F634346C1;
+        Mon, 22 Aug 2022 15:20:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661181656; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EOugp0arXi6PbnZspKBUOzjZp1e4ktn4gDiB2vuIYYU=;
+        b=s4590lSMJAQ601yDxFsZVYneQsn6DwfFjYfUFfKcK2gIl2wuIIxRjhIeHl/jSyccbKwP1G
+        LRQTmQ68P0iMdIuM2mYFno0Zgq27TCHYJUR58KGF4alQECUnYp/63yTXdaiOJYM3bZl6Y3
+        +iFOA3BKgzYb0sngAbHf18Cy6r0rvn4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661181656;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EOugp0arXi6PbnZspKBUOzjZp1e4ktn4gDiB2vuIYYU=;
+        b=z6j9pD47ERTNCUbZfNwdCmXEQOHSCwqe1Wt1BFPqvGlV5vn+FPmZIg5DtwqkPsoaaXdMqE
+        rDaeAHQqbnnWjSAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D547E1332D;
+        Mon, 22 Aug 2022 15:20:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FDwFNNeeA2MPFgAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 22 Aug 2022 15:20:55 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 0D2F3A066F; Mon, 22 Aug 2022 17:20:55 +0200 (CEST)
+Date:   Mon, 22 Aug 2022 17:20:55 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Jan Kara <jack@suse.cz>, Gaosheng Cui <cuigaosheng1@huawei.com>,
+        eparis@redhat.com, mszeredi@redhat.com, amir73il@gmail.com,
+        linux-audit@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next] audit: fix potential double free on error path from
+ fsnotify_add_inode_mark
+Message-ID: <20220822152055.hitwrvi3lmldhcgx@quack3>
+References: <20220822022905.1949007-1-cuigaosheng1@huawei.com>
+ <20220822085050.hxj6qmgj2x2tj6uv@quack3>
+ <CAHC9VhSw0zJWQEm-GCzQy_-4-X-yVuzvX1wBFcYMkG1mOXy+BA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [RESEND PATCH] perf/x86/intel: Fix unchecked MSR access error for
- Alder Lake N
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     acme@redhat.com, linux-kernel@vger.kernel.org,
-        alexander.shishkin@linux.intel.com, ak@linux.intel.com,
-        Jianfeng Gao <jianfeng.gao@intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>
-References: <20220818181530.2355034-1-kan.liang@linux.intel.com>
- <Yv9EVP6O9r867om4@worktop.programming.kicks-ass.net>
- <Yv9Kw21Wl/f6KJTk@worktop.programming.kicks-ass.net>
- <b54cd275-4fa6-9b5c-fdc2-858d2f7c1b46@linux.intel.com>
- <YwOKyBL7lNmyaFqs@worktop.programming.kicks-ass.net>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <YwOKyBL7lNmyaFqs@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhSw0zJWQEm-GCzQy_-4-X-yVuzvX1wBFcYMkG1mOXy+BA@mail.gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-08-22 9:55 a.m., Peter Zijlstra wrote:
-> On Mon, Aug 22, 2022 at 09:24:57AM -0400, Liang, Kan wrote:
->> I think the only issue should be the PMU name. The non-hybrid PMU name
->> is "cpu". The hybrid PMU name is "cpu_$coretype". If we move the
->> ALDERLAKE_N to the non-hybrid PMU, the PMU name will be changed from
->> "cpu_atom" to "cpu". It will be different from the rest of
->> {ALDER,RAPTOP}LAKE.
->>
->> Also, I think we have to update the perf tool for the events because of
->> the PMU name change.
->>
->> But I guess it should be OK, since the ALDERLAKE_N was just added and we
->> know its an Atom-only system.
+On Mon 22-08-22 10:34:15, Paul Moore wrote:
+> On Mon, Aug 22, 2022 at 4:50 AM Jan Kara <jack@suse.cz> wrote:
+> > On Mon 22-08-22 10:29:05, Gaosheng Cui wrote:
+> > > Audit_alloc_mark() assign pathname to audit_mark->path, on error path
+> > > from fsnotify_add_inode_mark(), fsnotify_put_mark will free memory
+> > > of audit_mark->path, but the caller of audit_alloc_mark will free
+> > > the pathname again, so there will be double free problem.
+> > >
+> > > Fix this by resetting audit_mark->path to NULL pointer on error path
+> > > from fsnotify_add_inode_mark().
+> > >
+> > > Fixes: 7b1293234084d ("fsnotify: Add group pointer in fsnotify_init_mark()")
+> > > Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> >
+> > Good spotting! The patch looks good to me. Feel free to add:
+> >
+> > Reviewed-by: Jan Kara <jack@suse.cz>
+> >
+> > > ---
+> > >  kernel/audit_fsnotify.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/kernel/audit_fsnotify.c b/kernel/audit_fsnotify.c
+> > > index 6432a37ac1c9..c565fbf66ac8 100644
+> > > --- a/kernel/audit_fsnotify.c
+> > > +++ b/kernel/audit_fsnotify.c
+> > > @@ -102,6 +102,7 @@ struct audit_fsnotify_mark *audit_alloc_mark(struct audit_krule *krule, char *pa
+> > >
+> > >       ret = fsnotify_add_inode_mark(&audit_mark->mark, inode, 0);
+> > >       if (ret < 0) {
+> > > +             audit_mark->path = NULL;
+> > >               fsnotify_put_mark(&audit_mark->mark);
 > 
-> cpu/caps/pmu_name should be 'Gracemont', which is exactly like all the
-> other !hybrid setups. Surely perf-tools already knows about this
-> pattern.
-> 
-> IOW, if you need to change perf-tools for this, someone did something
-> wrong somewhere.
+> As I'm tracing the code path from audit through fsnotify, and back
+> into audit, I'm wondering if we still have a problem.  When
+> fsnotify_add_inode_mark() fails it will end up freeing not just
+> audit_mark->path, but audit_mark itself via audit_fsnotify_mark_free()
+> (via a call into fsnotify_put_mark()), yes?
 
-The event list for ADL and RPL is different from the non-hybrid
-platforms. We combine the events from big core and small core into a
-single file and use the PMU name to distinguish from them. The PMU name
-is either cpu_core or cpu_atom.
+I don't think so. fsnotify_add_mark_locked() will call fsnotify_put_mark()
+but that is just a counter part to fsnotify_get_mark() a few lines above.
+The caller of fsnotify_add_inode_mark() still holds its own mark reference
+which prevents mark from being freed.
 
-If we change the ADL-N to non-hybrid, the simplest way is to create a
-dedicate gracemont event list. Or we have to specially handle the ADL-N
-in the parsing codes. We have to update the tool for either way.
-
-> 
-> (also, I just noticed, 'Tremont' is the *only* PMU that has a
-> capitalized name, perhaps we don't want Gracemont to follow but instead
-> fix tremont if that is still possible)
-
-I don't think the tool rely on the name under cpu/caps/pmu_name.
-The event list rely on the CPU model number.
-It should be OK to fix the tremont name.
-
-
-Thanks,
-Kan
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

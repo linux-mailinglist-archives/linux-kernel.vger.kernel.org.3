@@ -2,88 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE91E59C888
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EABC59C897
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237993AbiHVTVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 15:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
+        id S238404AbiHVTV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 15:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238626AbiHVTUw (ORCPT
+        with ESMTP id S238612AbiHVTUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 15:20:52 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB7750183;
-        Mon, 22 Aug 2022 12:19:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=+7qd52N+R+Sb4ct0/RwuDfez59xnxOcYNoEXOOggkG8=;
-        t=1661195987; x=1662405587; b=gHAICJVkWzz3irH3yLRMXjJmfIFhT4+odxyb/DZjOTqgtq/
-        roLjB41mFKJYuzUEFosFe5AQVJpEa5cfGGa48OFl+DpWypq6DmUrCX3omFQG0jyaceMG8ZwIPtZlk
-        cByPuFcJazv89Nliz8RrVT701jAI8Cbjm67G2j2P+kLYkYwPEItsO46lWr3HX6pUl4j8r9Brp0rSr
-        VcQhWTZJ8SXRApPkENOzHoZW7UpJBXl2bR9BILFAyuGGZzLllv6Nz9lnTB1PcjbkDyAPZvwO1YVum
-        uLMLRq2zRMtPF2jZOsPJzCaWPf1Hp75Ub/kRuXwCo2Xjt7FqdqLh02N4ukx90/pg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1oQCxX-00Edep-2e;
-        Mon, 22 Aug 2022 21:19:39 +0200
-Message-ID: <7f9a39d1d1557afa09aa8b657a40f0c03e621cfa.camel@sipsolutions.net>
-Subject: Re: Aw: Re:  Re: help for driver porting - missing member
- preset_chandef in struct wireless_dev
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Date:   Mon, 22 Aug 2022 21:19:38 +0200
-In-Reply-To: <trinity-94aeced0-7aab-4359-9c74-1616a17464bd-1661187572028@3c-app-gmx-bap06>
-References: <trinity-de687d18-b2a2-4cde-9383-a4d6ddba6a77-1661177057496@3c-app-gmx-bap06>
-         <b081ef6eb978070740f31f48a1f4be1807f51168.camel@sipsolutions.net>
-         <trinity-64c5eed8-8b6b-4b33-9204-89aff4fce7db-1661186571606@3c-app-gmx-bap06>
-         <51a1b56a4d9ed825cb47cf364c5bd72f3338a1a6.camel@sipsolutions.net>
-         <trinity-94aeced0-7aab-4359-9c74-1616a17464bd-1661187572028@3c-app-gmx-bap06>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Mon, 22 Aug 2022 15:20:49 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9D54F672;
+        Mon, 22 Aug 2022 12:19:43 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id 53-20020a9d0838000000b006371d896343so8349852oty.10;
+        Mon, 22 Aug 2022 12:19:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=RZ1oGebuMKpJEbiPzGnoljYw5urwJldyFB+scivuSGA=;
+        b=J82D8BoNx8nY5YAT05F57vtD23DoQL5hq63k8TB6ClweDHPX8oKZdyEoqt4Ay/OHrR
+         qcgC59QwDI6A4fp00S8cRXwQbCjwZDBvpaqezCn0Z7hSAaFaLbPwf/YSPLktHcZH9dkM
+         WprT+m1RL5Vk665ruTBBgtmF3rYomZFW/v7BNcW1oS28pqhYMkdTL+4KV2Br/PcQSnaX
+         gF2NHAPAbK6k/DW++PsAvzLcMz55R/9NCDbFfNgIhC9xxBru6Xat/zX7psiApmq99DBP
+         eBpf9ASbNOxDlBvQhStgIwsXHPZVOh1CL6z7nFN4Lf35aiHYYqYgG2wRP/obN5M6r/ER
+         l3XA==
+X-Gm-Message-State: ACgBeo0//PG61Eq4U+qlCBxUwsNXKaLp9HE2XDzwCJCo2kHO4NEidrMx
+        eCRxquZ+viAMNfbKsoXG7A==
+X-Google-Smtp-Source: AA6agR7jg9n404zse1cC27270kM/5YJfT5XwC0i0bGLJFJD/IXgbOA6s+I+Nbp/hMQQGJ1ESzcH1bg==
+X-Received: by 2002:a05:6830:56:b0:639:bbb:f0cf with SMTP id d22-20020a056830005600b006390bbbf0cfmr5802691otp.161.1661195983103;
+        Mon, 22 Aug 2022 12:19:43 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w16-20020a4a3550000000b00435785e7b49sm2599297oog.19.2022.08.22.12.19.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 12:19:42 -0700 (PDT)
+Received: (nullmailer pid 278879 invoked by uid 1000);
+        Mon, 22 Aug 2022 19:19:41 -0000
+Date:   Mon, 22 Aug 2022 14:19:41 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: add QCOM SM6115 display clock
+ bindings
+Message-ID: <20220822191941.GA262452-robh@kernel.org>
+References: <20220819201231.23474-1-a39.skl@gmail.com>
+ <20220819201231.23474-2-a39.skl@gmail.com>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819201231.23474-2-a39.skl@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-08-22 at 18:59 +0200, Frank Wunderlich wrote:
-> > Gesendet: Montag, 22. August 2022 um 18:43 Uhr
-> > Von: "Johannes Berg" <johannes@sipsolutions.net>
->=20
-> > On Mon, 2022-08-22 at 18:42 +0200, Frank Wunderlich wrote:
->=20
-> > > thanks for response, commented out the use of the member and the
-> > > wdev
-> > > assignment as it was then unused
-> > > can you tell me which api-call this should be?
-> > > i just want to make sure this is really done as i up-ported the
-> > > driver
-> > > from 4.9, so if the api-call was introduced later it is maybe
-> > > missing.
-> >=20
-> > No sorry, I don't know how the driver was/is using it, so I can't
-> > tell
-> > you how to replace it.
->=20
-> can you give me possible calls (if there are multiple candidates)
-> which may set the channel (without mesh)
-> for me to check or maybe implement?
+On Fri, Aug 19, 2022 at 10:12:21PM +0200, Adam Skladowski wrote:
+> Add device tree bindings for display clock controller for
+> Qualcomm Technology Inc's SM6115 SoC.
+> 
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+> ---
+>  .../bindings/clock/qcom,sm6115-dispcc.yaml    | 88 +++++++++++++++++++
+>  .../dt-bindings/clock/qcom,sm6115-dispcc.h    | 36 ++++++++
+>  2 files changed, 124 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,sm6115-dispcc.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml
+> new file mode 100644
+> index 000000000000..c9b97281171c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml
+> @@ -0,0 +1,88 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/qcom,sm6115-dispcc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Display Clock Controller Binding for SM6115
+> +
+> +maintainers:
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Well it seems to access it inside the start_ap callback, so it should
-just check the configuration instea
+As of today, bouncing...
+
+Otherwise, looks fine.
+
+> +
+> +description: |
+> +  Qualcomm display clock control module which supports the clocks and
+> +  power domains on SM6115.
+> +
+> +  See also:
+> +    dt-bindings/clock/qcom,sm6115-dispcc.h
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,sm6115-dispcc
+> +
+> +  clocks:
+> +    items:
+> +      - description: Board XO source
+> +      - description: Byte clock from DSI PHY0
+> +      - description: Pixel clock from DSI PHY0
+> +      - description: GPLL0 clock from GCC
+> +      - description: GPLL0 div clock from GCC
+> +      - description: Board sleep clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: bi_tcxo
+> +      - const: dsi0_phy_pll_out_byteclk
+> +      - const: dsi0_phy_pll_out_dsiclk
+> +      - const: gcc_disp_gpll0_clk_src
+> +      - const: gcc_disp_gpll0_div_clk_src
+> +      - const: sleep_clk
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  '#reset-cells':
+> +    const: 1
+> +
+> +  '#power-domain-cells':
+> +    const: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - '#clock-cells'
+> +  - '#reset-cells'
+> +  - '#power-domain-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,rpmcc.h>
+> +    #include <dt-bindings/clock/qcom,gcc-sm6115.h>
+> +    clock-controller@5f00000 {
+> +      compatible = "qcom,sm6115-dispcc";
+> +      reg = <0x5f00000 0x20000>;
+> +      clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
+> +               <&dsi0_phy 0>,
+> +               <&dsi0_phy 1>,
+> +               <&gcc GCC_DISP_GPLL0_CLK_SRC>,
+> +               <&gcc GCC_DISP_GPLL0_DIV_CLK_SRC>,
+> +               <&sleep_clk>;
+> +      clock-names = "bi_tcxo",
+> +                    "dsi0_phy_pll_out_byteclk",
+> +                    "dsi0_phy_pll_out_dsiclk",
+> +                    "gcc_disp_gpll0_clk_src",
+> +                    "gcc_disp_gpll0_div_clk_src",
+> +                    "sleep_clk";
+> +      #clock-cells = <1>;
+> +      #reset-cells = <1>;
+> +      #power-domain-cells = <1>;
+> +    };
+> +...
+> diff --git a/include/dt-bindings/clock/qcom,sm6115-dispcc.h b/include/dt-bindings/clock/qcom,sm6115-dispcc.h
+> new file mode 100644
+> index 000000000000..d1a6c45b5029
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/qcom,sm6115-dispcc.h
+> @@ -0,0 +1,36 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Copyright (c) 2022, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#ifndef _DT_BINDINGS_CLK_QCOM_DISP_CC_SM6115_H
+> +#define _DT_BINDINGS_CLK_QCOM_DISP_CC_SM6115_H
+> +
+> +/* DISP_CC clocks */
+> +#define DISP_CC_PLL0			0
+> +#define DISP_CC_PLL0_OUT_MAIN		1
+> +#define DISP_CC_MDSS_AHB_CLK		2
+> +#define DISP_CC_MDSS_AHB_CLK_SRC	3
+> +#define DISP_CC_MDSS_BYTE0_CLK		4
+> +#define DISP_CC_MDSS_BYTE0_CLK_SRC	5
+> +#define DISP_CC_MDSS_BYTE0_DIV_CLK_SRC	6
+> +#define DISP_CC_MDSS_BYTE0_INTF_CLK	7
+> +#define DISP_CC_MDSS_ESC0_CLK		8
+> +#define DISP_CC_MDSS_ESC0_CLK_SRC	9
+> +#define DISP_CC_MDSS_MDP_CLK		10
+> +#define DISP_CC_MDSS_MDP_CLK_SRC	11
+> +#define DISP_CC_MDSS_MDP_LUT_CLK	12
+> +#define DISP_CC_MDSS_NON_GDSC_AHB_CLK	13
+> +#define DISP_CC_MDSS_PCLK0_CLK		14
+> +#define DISP_CC_MDSS_PCLK0_CLK_SRC	15
+> +#define DISP_CC_MDSS_ROT_CLK		16
+> +#define DISP_CC_MDSS_ROT_CLK_SRC	17
+> +#define DISP_CC_MDSS_VSYNC_CLK		18
+> +#define DISP_CC_MDSS_VSYNC_CLK_SRC	19
+> +#define DISP_CC_SLEEP_CLK		20
+> +#define DISP_CC_SLEEP_CLK_SRC		21
+> +
+> +/* DISP_CC GDSCR */
+> +#define MDSS_GDSC			0
+> +
+> +#endif
+> -- 
+> 2.25.1
+> 
+> 

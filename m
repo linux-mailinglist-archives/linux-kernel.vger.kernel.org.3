@@ -2,377 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178E459C34D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077C659C355
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236916AbiHVPqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
+        id S235651AbiHVPr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236576AbiHVPqR (ORCPT
+        with ESMTP id S236919AbiHVPq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:46:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5435F46
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:45:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661183150;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jcdTIiPpDWEXrCgBvbIca+zo9nIGWeS72vZ/R3cAAFU=;
-        b=a/+FbX3De7F7s/KCdCsRtM3dXOkoyulxfLu2d5lPq/eEL8hcPu7W/nSth4e0O71SiDGoXp
-        E+VwCoP+wTzTFb0j1g19B1HS6oP1X8KJk9sNOOi2x5BO+OH7JvNT9DSoqQ9+L2OtEZU9AS
-        wMUPsW/pxHzZtcYisUV09w5jgRQos7Q=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-670-0EKL9HduNCeOraUl2duvYw-1; Mon, 22 Aug 2022 11:45:49 -0400
-X-MC-Unique: 0EKL9HduNCeOraUl2duvYw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1BDA7382F1A0;
-        Mon, 22 Aug 2022 15:45:49 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EAA77492C3B;
-        Mon, 22 Aug 2022 15:45:47 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <000000000000ce327f05d537ebf7@google.com>
-References: <000000000000ce327f05d537ebf7@google.com>
-To:     syzbot <syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        marc.dionne@auristor.com, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING: bad unlock balance in rxrpc_do_sendmsg
-MIME-Version: 1.0
+        Mon, 22 Aug 2022 11:46:59 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4F22AC7E
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:46:41 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MD9hwP019431
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:46:41 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=8zXpm14EGuqhyqf0p13qAZn19TCZbKqpMNlRU+Ix6hQ=;
+ b=DpdQXAjk/WeGHHuU2aUyqfUtXnQNV8zHGHkcvCSfabaxj8bLD35U2jjgxzkVjaFaKV9e
+ inwG9G7HdGw6VGOJeCCWBYv5fGlIeZ1sCYvjV8pTBuLVf/zyI6/2IzTpt5BJa9M5Ebh3
+ R8bG1LPy0b99mz/Ksdk8vQgehqx3vS0feM0= 
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j4aedh51n-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:46:41 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PY1h/pRUfl75Wnx0iG86xl9N9bjAAWnc5vs2yoY6rGXtCx8PpM06oR/GEHL6YLo9DY5IUL9sqA9lTTh4WBY6RsHk5BPwtJDeGR1NGwonHTwl1AAFoR0U1XxoUEVNacjjBlwhfZrjdeLcj4bJwIDbG62/aVhEJZO3gKXC1sFTcAPbhv9WouVMAQhD5/I70oPwgreQZ3PcMAZae+1gSVi7BNLXsyk9RRQR/KW0TbEXB07lODPqMxK2emAKtCvI6LaHmyw16Oad3q3mCtHf6KDHjVAZRFcOOTeMruhtKbTlj+HVVfSdQSOnzPGCPmJkspRzkpQzIHL/+lCbkta/n/VoKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8zXpm14EGuqhyqf0p13qAZn19TCZbKqpMNlRU+Ix6hQ=;
+ b=bJb/FqIyePtfpbH1E3VB9tmp3T1tVnlOLLMzgcq4PYHoDpyGGo3JqOjfZ7tzTLgkt3LIdv8jK/79PN/JASo951v4YOexIqa8QO4vZXDuUOn3tAxLqMQ50Tql7KKGackab8WEvcHB78aK0LOBdEqyazEUBpJPJ+IN+d8x+cz5XkiDZc78yjdaiHdmne465aYmTgTXvgxLju/pejhA+1qiobDzytbqu+ZHecYaw0g+fw/Av7HQZZBoLbXs1rV3VTblzDC8d5ACiGGYiA0sO1G8ZN6FWBGq9V5MI91DW4Xd7HaXBwPiezs+fOuIPydUjgndp+bpF4R8ioKP9730+TYkBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by DM5PR15MB1259.namprd15.prod.outlook.com (2603:10b6:3:b3::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Mon, 22 Aug
+ 2022 15:46:38 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::c488:891f:57b:d5da]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::c488:891f:57b:d5da%7]) with mapi id 15.20.5546.022; Mon, 22 Aug 2022
+ 15:46:38 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Linux-MM <linux-mm@kvack.org>, lkml <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        X86 ML <x86@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Kernel Team <Kernel-team@fb.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>, Song Liu <song@kernel.org>
+Subject: Re: [RFC 0/5] vmalloc_exec for modules and BPF programs
+Thread-Topic: [RFC 0/5] vmalloc_exec for modules and BPF programs
+Thread-Index: AQHYs1RC3fzFDgbD7kKge/abI0eC0q27FhIA
+Date:   Mon, 22 Aug 2022 15:46:38 +0000
+Message-ID: <4D089469-B32B-4347-A811-B1E5EE011307@fb.com>
+References: <20220818224218.2399791-1-song@kernel.org>
+In-Reply-To: <20220818224218.2399791-1-song@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.1)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0dcc4a15-4067-4e03-fb32-08da84558068
+x-ms-traffictypediagnostic: DM5PR15MB1259:EE_
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bjTUo5EPLag/dEXCjxJM0RZu+IUmiceaFpIjL22fGO/0mjK9q8ibPrNpRwqZR6jdKZnOYbbR6UDh+BrHJWC/1p3MUQged+mnzuaijhqxivgQUCunzRez9N7CSf0CWKlrh2XvgWour9p0gPR4B9RX8Kimv6O9Qd92DStTusTanBOtYlLgjlQ7jiCdUHbayZSC9P7GDFXGdvLhGj30emYV1rBp5H/0CPBVF0N/32Bh253+4aQiqwlaFnOmFqbKnCtaFQPgCbe0nmZBkpUR700+bcybCS5gsXvWeUZqbLZ4dAh4c/OMJoG3nkBYOHBdOWTGylEsg3XeefG93gaIgfz4/6gvYtTO9PIsHgAIYKip1SdkFvsAMuC9thOQ+ldtVpDVJhkFyiiR9Gq5IcI9F4bcrHi4nPt7Cq4SeZZy7Oshin5UuC3Da90aNUngnVlB6dLLIEWzDmULglbTVo+OLjUv66Oxci8WcG3Nl+E5RKWMwLsgJuRdl32JL9iGKBjpwH8aeEoXOk/JezzvDsm1JSngaUaSUQkTACl02KUElXDP8aLpgbJD7r8dgeA1EG5TFyGXkJTPeVJXhfJgsBntUXU740IjvThbhdZLBkjncJoSUNbg+Cbyus5sHpMbdnMWmhDui/Anf9KQLbmZhc9GUqzIqVUWOzy4mn2XmQ+/k/9vtvWzsrXHktYpHYkWf0JbQkolUOW6NTTEfyrkkLtkDyv+jMM3TFaEy2GUkEWFelCNaet/PxlrE1ln+frSHSa58jWdzUYdWw9J4QwAbNclESaguYx7yx/+Yv9lFhQO/8O2Kdpom6iLOdOeUZ+P/OOZTPssuvr3hIicF9ZiOyoeU7eQTtuW8Mx5TW369dAR36LfFngAJw+ZcWdP+wgoggRVS0JV
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(39860400002)(346002)(366004)(376002)(83380400001)(38070700005)(122000001)(66476007)(38100700002)(76116006)(71200400001)(66946007)(91956017)(316002)(33656002)(478600001)(66446008)(4326008)(6486002)(8676002)(966005)(64756008)(54906003)(6916009)(86362001)(186003)(6512007)(2616005)(7416002)(8936002)(41300700001)(36756003)(66556008)(2906002)(53546011)(6506007)(5660300002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ODxdT3K7qbn3wTEaSIwDQEzWRiER8x/2U7xQbpK+wM0W+Orf9OjpaRQJw0j8?=
+ =?us-ascii?Q?2fEvvZ+urM0kBYbIA48BnOfgjvUWK/GNKVreumAUdZrJgtTz12qb4HWwIFZZ?=
+ =?us-ascii?Q?SU3Bt/2s1pzK0kpuHgP323303VTQP2pMuxNcojzs4UB2tazL3zzELOcMNBia?=
+ =?us-ascii?Q?N6z+ffqLdTHNE2AOM8oqTf299niLTbHUWB/nCSZLfBQ3OSW1cI0FbDX0M76m?=
+ =?us-ascii?Q?Lkfcu5AbH1+Oo8PUlvcIWCdCak9ROs6yyuuwunCYxFgn3nz8/DtNn5QzHMnf?=
+ =?us-ascii?Q?YeouvNmDJKN7tKL6XeBzuKBxqjnfaAwvi3kgBpLN52L1GFJf3Xb/krQjlJSN?=
+ =?us-ascii?Q?xIH1D/mGnCOiQRXgFRkqBbdd8wmhYRbez2D4/MzZDnKJW9DQ/9ypM84h26Rn?=
+ =?us-ascii?Q?H/7HqONs7Lz6/7iePO71BIvhnw6Ny/goMvqylq/4hR3Y+hvWq4sXST3dcrA0?=
+ =?us-ascii?Q?uA6Lh+gnJa9G5eNCKSYCNUyhubudyQPUkTyVA/I/sWVegHxNQKh2L3fa209x?=
+ =?us-ascii?Q?3xjnGKzl0NyL5EtSyBPPwHQYZi/QPulKRnTczp5FWGZygUT7Dii7UpyOh4NY?=
+ =?us-ascii?Q?VS1eU2T4wJMfOxK9KerT8pMiFVH8i7jvT27axXjsdw1UkgKbfs60HGYFyOpF?=
+ =?us-ascii?Q?HRRS8wKJ2jf6rn7nxF5b3UfcGEj4cx/Sts7uWskM3l2y2Eur8neE75fNL198?=
+ =?us-ascii?Q?0w4gFhWyJ+7TcW1Au7h1HKGuZIhPJ01QPFESGk2Q31FYyaE2GGlZuXH0cgyG?=
+ =?us-ascii?Q?tWEOoibDO82f1DfxmVbQqFeI6DZqi3HV19j5Rr3/ubrQ41acBTHFznat0zYR?=
+ =?us-ascii?Q?I7wr1QtOipOl7fD1aEBRkPqaWmaHGR2VJwP13/jF9p7g0tliHk38fgdfu8mI?=
+ =?us-ascii?Q?1UJP3IrUqNQ7XLoOzJoOnB0HQDJgWjJh8oti23s80rZIIQNs51PyMVhUdEpy?=
+ =?us-ascii?Q?OLp0ezAFx5DchFFHNWwq4m5nsdxS+jmkxbuc4sr8X525ZUt5XtC+MsAIKXyH?=
+ =?us-ascii?Q?VLXwvioQRSo/BvrpASPsNPl7ZBk0tbQIxWJr47XgxHPc00YMcfpNho+ij9mt?=
+ =?us-ascii?Q?i6nc+/2MYXce3p9DwIoM6qAxX9M0H9fu/A/8zTX2YeqvSoeWR79XgGyQfO5E?=
+ =?us-ascii?Q?D4jmXrU8xJ1bszHFKmNC60RUhEkLl6CdlhH960TswX16fxCEBLTnm16+gzTi?=
+ =?us-ascii?Q?8tuaK84wr4BhNiY8L6VMPlAr7pHgKolhAFnMi0+NKGlhEbZIXcSIqPFbosie?=
+ =?us-ascii?Q?5sCPfHSmug7ro7WKCUiAGDs9BQlwf1M8CwRIMz0U8JedUO964mj1gvCPjFdT?=
+ =?us-ascii?Q?qCsZ/S9Z38oEX/3n0xAvtxdyhcECuIaoRefCnXKEsAJah+BY0M4AZ6HWyFTG?=
+ =?us-ascii?Q?vKFH/NFhjj0/w6s1Shnh7KlLFPeIo/Ygtj40zMOu1nerG1OixPu7AwkT20tB?=
+ =?us-ascii?Q?jZp72NJbrgvriTpL/B7ya5rZOies8Q6YZaWHW+WsY4SOrPVUIkBWRLjLMLnm?=
+ =?us-ascii?Q?KJzuPyWWLWAX00vibCLC08//Zpkxv0AH1s0kg5JuGY1sM261qJQbS2qwFeQv?=
+ =?us-ascii?Q?yMYX2IEdL7XyW9CunHijCAfwpw9S7h1u6WVwWoZ6vrcUXWopAIc5cyjYGOhv?=
+ =?us-ascii?Q?1S1oF4Z8XWS0ASIdmlUY/L0=3D?=
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1959172.1661183147.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 22 Aug 2022 16:45:47 +0100
-Message-ID: <1959174.1661183147@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+Content-ID: <F3564A5263DA564ABCE8202E8CE8D969@namprd15.prod.outlook.com>
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0dcc4a15-4067-4e03-fb32-08da84558068
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Aug 2022 15:46:38.7483
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IhQvozpsnASbrvOAcYbnF3x2k0AK3Qtlur+f6Bi/E/n/jGg4G7mtoA5kz4pqlso3yBjKLeGxwruZWhf9+jHGzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1259
+X-Proofpoint-GUID: uIdR9u-t11T-S7MZQaELPIwCedXMeWWg
+X-Proofpoint-ORIG-GUID: uIdR9u-t11T-S7MZQaELPIwCedXMeWWg
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-22_10,2022-08-22_02,2022-06-22_01
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git ma=
-ster
 
-rxrpc: Fix locking in rxrpc's sendmsg
 
-Fix three bugs in the rxrpc's sendmsg implementation:
+> On Aug 18, 2022, at 3:42 PM, Song Liu <song@kernel.org> wrote:
+> 
+> This set is a prototype that allows dynamic kernel text (modules, bpf
+> programs, various trampolines, etc.) to share huge pages. The idea is
+> similar to Peter's suggestion in [1]. Please refer to each patch for
+> more detais.
+> 
+> The ultimate goal is to only host kernel text in 2MB pages (for x86_64).
+> 
+> Please share your comments on this.
+> 
+> Thanks!
+> 
+> [1] https://lore.kernel.org/bpf/Ys6cWUMHO8XwyYgr@hirez.programming.kicks-ass.net/
 
- (1) rxrpc_new_client_call() should release the socket lock when returning
-     an error from rxrpc_get_call_slot().
+Hi Peter, 
 
- (2) rxrpc_wait_for_tx_window_intr() will return without the call mutex
-     held in the event that we're interrupted by a signal whilst waiting
-     for tx space on the socket or relocking the call mutex afterwards.
+Could you please share your feedback on this? 
 
-     Fix this by: (a) moving the unlock/lock of the call mutex up to
-     rxrpc_send_data() such that the lock is not held around all of
-     rxrpc_wait_for_tx_window*() and (b) indicating to higher callers
-     whether we're return with the lock dropped.  Note that this means
-     recvmsg() will not block on this call whilst we're waiting.
+Thanks,
+Song
 
- (3) After dropping and regaining the call mutex, rxrpc_send_data() needs
-     to go and recheck the state of the tx_pending buffer and the
-     tx_total_len check in case we raced with another sendmsg() on the sam=
-e
-     call.
+PS: I guess vger dropped my patch again. :( The set is also available at
 
-Thinking on this some more, it might make sense to have different locks fo=
-r
-sendmsg() and recvmsg().  There's probably no need to make recvmsg() wait
-for sendmsg().  It does mean that recvmsg() can return MSG_EOR indicating
-that a call is dead before a sendmsg() to that call returns - but that can
-currently happen anyway.
+https://git.kernel.org/pub/scm/linux/kernel/git/song/linux.git 
 
-Without fix (2), something like the following can be induced:
+branch vmalloc_exec. 
 
-        WARNING: bad unlock balance detected!
-        5.16.0-rc6-syzkaller #0 Not tainted
-        -------------------------------------
-        syz-executor011/3597 is trying to release lock (&call->user_mutex)=
- at:
-        [<ffffffff885163a3>] rxrpc_do_sendmsg+0xc13/0x1350 net/rxrpc/sendm=
-sg.c:748
-        but there are no more locks to release!
-
-        other info that might help us debug this:
-        no locks held by syz-executor011/3597.
-        ...
-        Call Trace:
-         <TASK>
-         __dump_stack lib/dump_stack.c:88 [inline]
-         dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-         print_unlock_imbalance_bug include/trace/events/lock.h:58 [inline=
-]
-         __lock_release kernel/locking/lockdep.c:5306 [inline]
-         lock_release.cold+0x49/0x4e kernel/locking/lockdep.c:5657
-         __mutex_unlock_slowpath+0x99/0x5e0 kernel/locking/mutex.c:900
-         rxrpc_do_sendmsg+0xc13/0x1350 net/rxrpc/sendmsg.c:748
-         rxrpc_sendmsg+0x420/0x630 net/rxrpc/af_rxrpc.c:561
-         sock_sendmsg_nosec net/socket.c:704 [inline]
-         sock_sendmsg+0xcf/0x120 net/socket.c:724
-         ____sys_sendmsg+0x6e8/0x810 net/socket.c:2409
-         ___sys_sendmsg+0xf3/0x170 net/socket.c:2463
-         __sys_sendmsg+0xe5/0x1b0 net/socket.c:2492
-         do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-         do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-         entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-[Thanks to Hawkins Jiawei and Khalid Masum for their attempts to fix this]
-
-Fixes: bc5e3a546d55 ("rxrpc: Use MSG_WAITALL to tell sendmsg() to temporar=
-ily ignore signals")
-Reported-by: syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com
-cc: Hawkins Jiawei <yin31149@gmail.com>
-cc: Khalid Masum <khalid.masum.92@gmail.com>
-cc: Dan Carpenter <dan.carpenter@oracle.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
- net/rxrpc/call_object.c |    4 +-
- net/rxrpc/sendmsg.c     |   92 ++++++++++++++++++++++++++++--------------=
-------
- 2 files changed, 57 insertions(+), 39 deletions(-)
-
-diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
-index 84d0a4109645..6401cdf7a624 100644
---- a/net/rxrpc/call_object.c
-+++ b/net/rxrpc/call_object.c
-@@ -285,8 +285,10 @@ struct rxrpc_call *rxrpc_new_client_call(struct rxrpc=
-_sock *rx,
- 	_enter("%p,%lx", rx, p->user_call_ID);
- =
-
- 	limiter =3D rxrpc_get_call_slot(p, gfp);
--	if (!limiter)
-+	if (!limiter) {
-+		release_sock(&rx->sk);
- 		return ERR_PTR(-ERESTARTSYS);
-+	}
- =
-
- 	call =3D rxrpc_alloc_client_call(rx, srx, gfp, debug_id);
- 	if (IS_ERR(call)) {
-diff --git a/net/rxrpc/sendmsg.c b/net/rxrpc/sendmsg.c
-index 1d38e279e2ef..3c3a626459de 100644
---- a/net/rxrpc/sendmsg.c
-+++ b/net/rxrpc/sendmsg.c
-@@ -51,10 +51,7 @@ static int rxrpc_wait_for_tx_window_intr(struct rxrpc_s=
-ock *rx,
- 			return sock_intr_errno(*timeo);
- =
-
- 		trace_rxrpc_transmit(call, rxrpc_transmit_wait);
--		mutex_unlock(&call->user_mutex);
- 		*timeo =3D schedule_timeout(*timeo);
--		if (mutex_lock_interruptible(&call->user_mutex) < 0)
--			return sock_intr_errno(*timeo);
- 	}
- }
- =
-
-@@ -290,37 +287,48 @@ static int rxrpc_queue_packet(struct rxrpc_sock *rx,=
- struct rxrpc_call *call,
- static int rxrpc_send_data(struct rxrpc_sock *rx,
- 			   struct rxrpc_call *call,
- 			   struct msghdr *msg, size_t len,
--			   rxrpc_notify_end_tx_t notify_end_tx)
-+			   rxrpc_notify_end_tx_t notify_end_tx,
-+			   bool *_dropped_lock)
- {
- 	struct rxrpc_skb_priv *sp;
- 	struct sk_buff *skb;
- 	struct sock *sk =3D &rx->sk;
-+	enum rxrpc_call_state state;
- 	long timeo;
--	bool more;
--	int ret, copied;
-+	bool more =3D msg->msg_flags & MSG_MORE;
-+	int ret, copied =3D 0;
- =
-
- 	timeo =3D sock_sndtimeo(sk, msg->msg_flags & MSG_DONTWAIT);
- =
-
- 	/* this should be in poll */
- 	sk_clear_bit(SOCKWQ_ASYNC_NOSPACE, sk);
- =
-
-+reload:
-+	ret =3D -EPIPE;
- 	if (sk->sk_shutdown & SEND_SHUTDOWN)
--		return -EPIPE;
--
--	more =3D msg->msg_flags & MSG_MORE;
--
-+		goto maybe_error;
-+	state =3D READ_ONCE(call->state);
-+	ret =3D -ESHUTDOWN;
-+	if (state >=3D RXRPC_CALL_COMPLETE)
-+		goto maybe_error;
-+	ret =3D -EPROTO;
-+	if (state !=3D RXRPC_CALL_CLIENT_SEND_REQUEST &&
-+	    state !=3D RXRPC_CALL_SERVER_ACK_REQUEST &&
-+	    state !=3D RXRPC_CALL_SERVER_SEND_REPLY)
-+		goto maybe_error;
-+
-+	ret =3D -EMSGSIZE;
- 	if (call->tx_total_len !=3D -1) {
--		if (len > call->tx_total_len)
--			return -EMSGSIZE;
--		if (!more && len !=3D call->tx_total_len)
--			return -EMSGSIZE;
-+		if (len - copied > call->tx_total_len)
-+			goto maybe_error;
-+		if (!more && len - copied !=3D call->tx_total_len)
-+			goto maybe_error;
- 	}
- =
-
- 	skb =3D call->tx_pending;
- 	call->tx_pending =3D NULL;
- 	rxrpc_see_skb(skb, rxrpc_skb_seen);
- =
-
--	copied =3D 0;
- 	do {
- 		/* Check to see if there's a ping ACK to reply to. */
- 		if (call->ackr_reason =3D=3D RXRPC_ACK_PING_RESPONSE)
-@@ -331,16 +339,8 @@ static int rxrpc_send_data(struct rxrpc_sock *rx,
- =
-
- 			_debug("alloc");
- =
-
--			if (!rxrpc_check_tx_space(call, NULL)) {
--				ret =3D -EAGAIN;
--				if (msg->msg_flags & MSG_DONTWAIT)
--					goto maybe_error;
--				ret =3D rxrpc_wait_for_tx_window(rx, call,
--							       &timeo,
--							       msg->msg_flags & MSG_WAITALL);
--				if (ret < 0)
--					goto maybe_error;
--			}
-+			if (!rxrpc_check_tx_space(call, NULL))
-+				goto wait_for_space;
- =
-
- 			/* Work out the maximum size of a packet.  Assume that
- 			 * the security header is going to be in the padded
-@@ -468,6 +468,27 @@ static int rxrpc_send_data(struct rxrpc_sock *rx,
- efault:
- 	ret =3D -EFAULT;
- 	goto out;
-+
-+wait_for_space:
-+	ret =3D -EAGAIN;
-+	if (msg->msg_flags & MSG_DONTWAIT)
-+		goto maybe_error;
-+	mutex_unlock(&call->user_mutex);
-+	*_dropped_lock =3D true;
-+	ret =3D rxrpc_wait_for_tx_window(rx, call, &timeo,
-+				       msg->msg_flags & MSG_WAITALL);
-+	if (ret < 0)
-+		goto maybe_error;
-+	if (call->interruptibility =3D=3D RXRPC_INTERRUPTIBLE) {
-+		if (mutex_lock_interruptible(&call->user_mutex) < 0) {
-+			ret =3D sock_intr_errno(timeo);
-+			goto maybe_error;
-+		}
-+	} else {
-+		mutex_lock(&call->user_mutex);
-+	}
-+	*_dropped_lock =3D false;
-+	goto reload;
- }
- =
-
- /*
-@@ -629,6 +650,7 @@ int rxrpc_do_sendmsg(struct rxrpc_sock *rx, struct msg=
-hdr *msg, size_t len)
- 	enum rxrpc_call_state state;
- 	struct rxrpc_call *call;
- 	unsigned long now, j;
-+	bool dropped_lock =3D false;
- 	int ret;
- =
-
- 	struct rxrpc_send_params p =3D {
-@@ -737,21 +759,13 @@ int rxrpc_do_sendmsg(struct rxrpc_sock *rx, struct m=
-sghdr *msg, size_t len)
- 			ret =3D rxrpc_send_abort_packet(call);
- 	} else if (p.command !=3D RXRPC_CMD_SEND_DATA) {
- 		ret =3D -EINVAL;
--	} else if (rxrpc_is_client_call(call) &&
--		   state !=3D RXRPC_CALL_CLIENT_SEND_REQUEST) {
--		/* request phase complete for this client call */
--		ret =3D -EPROTO;
--	} else if (rxrpc_is_service_call(call) &&
--		   state !=3D RXRPC_CALL_SERVER_ACK_REQUEST &&
--		   state !=3D RXRPC_CALL_SERVER_SEND_REPLY) {
--		/* Reply phase not begun or not complete for service call. */
--		ret =3D -EPROTO;
- 	} else {
--		ret =3D rxrpc_send_data(rx, call, msg, len, NULL);
-+		ret =3D rxrpc_send_data(rx, call, msg, len, NULL, &dropped_lock);
- 	}
- =
-
- out_put_unlock:
--	mutex_unlock(&call->user_mutex);
-+	if (!dropped_lock)
-+		mutex_unlock(&call->user_mutex);
- error_put:
- 	rxrpc_put_call(call, rxrpc_call_put);
- 	_leave(" =3D %d", ret);
-@@ -779,6 +793,7 @@ int rxrpc_kernel_send_data(struct socket *sock, struct=
- rxrpc_call *call,
- 			   struct msghdr *msg, size_t len,
- 			   rxrpc_notify_end_tx_t notify_end_tx)
- {
-+	bool dropped_lock =3D false;
- 	int ret;
- =
-
- 	_enter("{%d,%s},", call->debug_id, rxrpc_call_states[call->state]);
-@@ -796,7 +811,7 @@ int rxrpc_kernel_send_data(struct socket *sock, struct=
- rxrpc_call *call,
- 	case RXRPC_CALL_SERVER_ACK_REQUEST:
- 	case RXRPC_CALL_SERVER_SEND_REPLY:
- 		ret =3D rxrpc_send_data(rxrpc_sk(sock->sk), call, msg, len,
--				      notify_end_tx);
-+				      notify_end_tx, &dropped_lock);
- 		break;
- 	case RXRPC_CALL_COMPLETE:
- 		read_lock_bh(&call->state_lock);
-@@ -810,7 +825,8 @@ int rxrpc_kernel_send_data(struct socket *sock, struct=
- rxrpc_call *call,
- 		break;
- 	}
- =
-
--	mutex_unlock(&call->user_mutex);
-+	if (!dropped_lock)
-+		mutex_unlock(&call->user_mutex);
- 	_leave(" =3D %d", ret);
- 	return ret;
- }
+> 
+> Song Liu (5):
+>  vmalloc: introduce vmalloc_exec and vfree_exec
+>  bpf: use vmalloc_exec
+>  modules, x86: use vmalloc_exec for module core
+>  vmalloc_exec: share a huge page with kernel text
+>  vmalloc: vfree_exec: free unused vm_struct
+> 
+> arch/x86/Kconfig              |   1 +
+> arch/x86/kernel/alternative.c |  30 ++++-
+> arch/x86/kernel/module.c      |   1 +
+> arch/x86/mm/init_64.c         |   3 +-
+> include/linux/vmalloc.h       |  16 +--
+> kernel/bpf/core.c             | 155 ++------------------------
+> kernel/module/main.c          |  23 ++--
+> kernel/module/strict_rwx.c    |   3 -
+> kernel/trace/ftrace.c         |   3 +-
+> mm/nommu.c                    |   7 ++
+> mm/vmalloc.c                  | 200 +++++++++++++++++++++++++++++-----
+> 11 files changed, 239 insertions(+), 203 deletions(-)
+> 
+> --
+> 2.30.2
 

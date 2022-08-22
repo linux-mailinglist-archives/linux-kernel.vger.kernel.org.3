@@ -2,83 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB4259CA0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6531D59CA16
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237375AbiHVUeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 16:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
+        id S237428AbiHVUfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 16:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237394AbiHVUeK (ORCPT
+        with ESMTP id S232020AbiHVUfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 16:34:10 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C41E2AC44
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:34:09 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id d23so12537641lfl.13
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:34:08 -0700 (PDT)
+        Mon, 22 Aug 2022 16:35:15 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B4E5508F
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:35:15 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id d21so4219499eje.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:35:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=n+5KOQrd1zcRYfj9IdOVX1teuqbwsnScpQd/P5v+XSc=;
-        b=MnkO0GK7zPhGQTTU5nw22JzPP9cYth/4/+c9bbtGBTRxAlXSdkDkEvSNUvm33QL5t8
-         lh4V8HDA8GJw9DsqErxuEZxsOWEDElCOuEvrTQ8ApAHvDNqbm59AvfwlaHzhYTeulNWD
-         cVLULTK4JVItAv4cPkixwjXDi+ZNr7lBjMMyOIrwVQhgApjnpK1NCiStUIYwHLmIFY+N
-         qCru4TN8N+SMWvE1C3787wclJFRAAEO7GYowJviQYOiGIdgUUM5xbzhVVHgnBGWd/Hr+
-         L6kYIDRD6ZbrYauBfF6bREQLbSdCCIaXmvg4g8oU/sngSa9//hAjP2d2mokpGgsrQfp3
-         0GKQ==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=kg3si/WqZ2UuGBgeFpee5ChSULBO+SUIk5ZvymvbTKI=;
+        b=HIdP2i1AcaynwhPmy7b1DkZMhAXV/hh+1VoI2Ojp/UHcpa7E1+BZ7UE+hb260Uw0JK
+         +ITfNjAdpzm+GhURNGNdHBfuXdPu1Y68bYDqdf+p7oazv0UgB5+SN/jzwovYQPZnHkXp
+         85gT+RgQD+3G/YWWOk4hx1ZHKELEo92QzDAKc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=n+5KOQrd1zcRYfj9IdOVX1teuqbwsnScpQd/P5v+XSc=;
-        b=ChFgGh7m04tpApLwYyhIKplohsdO45JUZi0m3pXvSHy8IApymxc5bJJYgzUdncE/cS
-         VnisYX7i2be13b+jYzVKp+BqUDsXT/bkdX3pEVCIiNeaRwprr8rMemL8W6iJSbC2LLKQ
-         bYTKigGAKjDNy5f+MobtXRLC3AUA6Es4cbyDUwroV/xhd4Cv0SYYyK0lxE+YC0f5B5iO
-         N0nKvFT1ezIx0v2MKZVB8vwDmiFn6eNCK3Ztvv1N1Lw8GWv1jfmFM3cJMf5R1grh6fd0
-         TIFBDSiz3F68KEbnHPw+OnlXMClU0KiLvTp+kaqZbE2venQZqtjsXv7HlyjJteOd2PI/
-         i06A==
-X-Gm-Message-State: ACgBeo0V8+mEIHA5RC98XzgCt4yHHIDQzpZ/DMEVt6HIvLCkuHSVIDtx
-        /Cm6IlhgY4kj4omf+by3u+snZA==
-X-Google-Smtp-Source: AA6agR753dxf3W5qo9qPUq3jDVTHWl504cW4UYh1AEjc/sllgbZkCbVKuNBo4Z3dcTm6sKBfN/fDrg==
-X-Received: by 2002:a05:6512:1583:b0:492:c028:d2f3 with SMTP id bp3-20020a056512158300b00492c028d2f3mr7999834lfb.216.1661200447407;
-        Mon, 22 Aug 2022 13:34:07 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id 13-20020a05651c128d00b0025e4c560475sm1991849ljc.96.2022.08.22.13.34.06
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=kg3si/WqZ2UuGBgeFpee5ChSULBO+SUIk5ZvymvbTKI=;
+        b=LI3IRDLmpF4EWK1uX+1dHEnK6fmw1lS35M58J4L0uXlWr35GZI9FqT1t1jFPiIqIFj
+         k4v0U3fo7n/0Vb9h78z64WjOlEQqumKnclKMTUkcnxafkD/3PM72xKeJpfcE3EPeg6ri
+         2lN/oShBOD1w5kPmpIxe/SZ0NCHECTL7XN8y/FUScz5O7Cdbxh/POzILIwC4jJERs18t
+         U1WTZiU0q7vZuRQs17SUBVCNh7r9jg8ZwIQVooMak4hFtYYEUjJwrkj4NLfdY03KIN4q
+         sAhrySrIWpFkP2FlnmokfwPlJxshfG1DHKieTyPgm40+/D/2W5Psi1ZDpsZ9FlJ0ma2P
+         YAuw==
+X-Gm-Message-State: ACgBeo3H6GG2IwdQoegW90OC8LrJ9x1aW8nQdfXCuYvfBgT9goRmgiIb
+        9C+5R9x/AyUfo9eqsyibroaBQGxXK3W1cgf7ELg=
+X-Google-Smtp-Source: AA6agR6C0Flmj2Zp/iueS2cyYch+jRaM5GIIXZMaO28rfkDOhvy+nsLXpKBybCKpk0Ufn5h0JLaOgw==
+X-Received: by 2002:a17:907:e89:b0:730:af06:e345 with SMTP id ho9-20020a1709070e8900b00730af06e345mr14610464ejc.665.1661200513460;
+        Mon, 22 Aug 2022 13:35:13 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id d19-20020a056402401300b0044655cb588esm268124eda.12.2022.08.22.13.35.12
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 13:34:07 -0700 (PDT)
-Message-ID: <e13e644e-0f18-b338-1068-e4405def3c6f@linaro.org>
-Date:   Mon, 22 Aug 2022 23:34:06 +0300
+        Mon, 22 Aug 2022 13:35:12 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so6639009wms.5
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:35:12 -0700 (PDT)
+X-Received: by 2002:a05:600c:4c06:b0:3a5:4eec:eb4b with SMTP id
+ d6-20020a05600c4c0600b003a54eeceb4bmr59560wmp.151.1661200501419; Mon, 22 Aug
+ 2022 13:35:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 4/7] drm/msm/dp: Add SDM845 DisplayPort instance
-Content-Language: en-GB
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220810035013.3582848-1-bjorn.andersson@linaro.org>
- <20220810035013.3582848-5-bjorn.andersson@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220810035013.3582848-5-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220819221616.2107893-1-saravanak@google.com> <20220819221616.2107893-2-saravanak@google.com>
+In-Reply-To: <20220819221616.2107893-2-saravanak@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 22 Aug 2022 13:34:48 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WfrBAbO8pKmema_8nPFHTNc5nZE2X3RWpT8S53PiCkGQ@mail.gmail.com>
+Message-ID: <CAD=FV=WfrBAbO8pKmema_8nPFHTNc5nZE2X3RWpT8S53PiCkGQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] Revert "driver core: Delete driver_deferred_probe_check_state()"
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Peng Fan <peng.fan@nxp.com>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, iommu@lists.linux.dev,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,21 +95,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/08/2022 06:50, Bjorn Andersson wrote:
-> The Qualcomm SDM845 platform has a single DisplayPort controller, with
-> the same design as SC7180, so add support for this by reusing the SC7180
-> definition.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Hi,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
+On Fri, Aug 19, 2022 at 3:16 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> This reverts commit 9cbffc7a59561be950ecc675d19a3d2b45202b2b.
+>
+> There are a few more issues to fix that have been reported in the thread
+> for the original series [1]. We'll need to fix those before this will work.
+> So, revert it for now.
+>
+> [1] - https://lore.kernel.org/lkml/20220601070707.3946847-1-saravanak@google.com/
+>
+> Fixes: 9cbffc7a5956 ("driver core: Delete driver_deferred_probe_check_state()")
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Tested-by: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
 > ---
->   drivers/gpu/drm/msm/dp/dp_display.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
+>  drivers/base/dd.c             | 30 ++++++++++++++++++++++++++++++
+>  include/linux/device/driver.h |  1 +
+>  2 files changed, 31 insertions(+)
 
--- 
-With best wishes
-Dmitry
-
+Tested-by: Douglas Anderson <dianders@chromium.org>

@@ -2,127 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B4D59CAE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 23:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E4159CAEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 23:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238146AbiHVVeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 17:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
+        id S232429AbiHVVgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 17:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238137AbiHVVeJ (ORCPT
+        with ESMTP id S230393AbiHVVgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 17:34:09 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4C9222BC
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 14:34:07 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-337ed9110c2so164678477b3.15
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 14:34:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=dI1HM2qpD13pHVf8vcdUDtzAR56g72bb/Lagcy2hQJo=;
-        b=NW7jcTketQHOa31a5ZOmDT3goDI2B8/cHmva8ClRVt6pOzcdpSI2qKr5ovG9u5Fmn0
-         mHlEwL16EzQa2MlP8Oknzi3Mp7ukSkGQgB38UTNNuj7pdPfgHg1fWIJsgXANKkwZHlyd
-         fTfqOWZH2tfo/TovUGebIood8ZVgiBpgN85kI3Vky+IJp8b7gIu9zd7rnnRx7wWbA82j
-         wDAib8CWzWxNdT1O7EJaYSQVdX5Fhz2mQagBESo7gbOXghye842FSINVuebwXDf9xAx9
-         u59eBDQeMV6lYbp2Pjxn8Dhl5wADAoatnaX3K/pGqJBPqnSZ+hcudXYwTx/qu5HTCVpv
-         ATVQ==
+        Mon, 22 Aug 2022 17:36:09 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDBD33419;
+        Mon, 22 Aug 2022 14:36:08 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id o204so6332287oia.12;
+        Mon, 22 Aug 2022 14:36:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=dI1HM2qpD13pHVf8vcdUDtzAR56g72bb/Lagcy2hQJo=;
-        b=FV5XV85CVo91TXqI8uW96WZqztMeh7fJHbigXRz+4/S9p694CubB2bvpaj2ZjWgtXJ
-         +2PgbzqA++DqCidmEAsMS9MMkAFIy+0RG7IY9rlWDL5EUO6yVal5kErnHNt/N0SF5vW/
-         GzoB6lqTGMmbW4MdOgCerDKCpqQwBqc67YNoHl0ybvWZd89cH3zGWKkOZW/v9y4kikbR
-         SZo1APW6J4x5SdG0RVbT0n673UfSb4vzmq+lzvz0hgWKIH4yCwFCrvVaNMGuiBQQDh2Y
-         JE2hIcVhlDxy/27h3+YnpIgEfeonOlOm330GzNgnQU3awTOqWAbFtq5jFpGi/+pTgtHt
-         KdPA==
-X-Gm-Message-State: ACgBeo0i/a10wZKst6q2lKW6DkuBxQKLaule/AXunr36J+5UaD+3WjdK
-        hlG++EC4aqh6Gk7roCpwD31tNn3CFqM+
-X-Google-Smtp-Source: AA6agR4nULUg2CVMU5RXXoLFXgyGL8q9ciVi+6GVip8nhfi+e/KN0hQHNcuJH5vW1+5AdSa2kK+7ei0h9mVd
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:2768:cfe4:142e:cbca])
- (user=irogers job=sendgmr) by 2002:a25:4013:0:b0:695:b3ca:c165 with SMTP id
- n19-20020a254013000000b00695b3cac165mr6439198yba.406.1661204047024; Mon, 22
- Aug 2022 14:34:07 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 14:33:52 -0700
-In-Reply-To: <20220822213352.75721-1-irogers@google.com>
-Message-Id: <20220822213352.75721-2-irogers@google.com>
-Mime-Version: 1.0
-References: <20220822213352.75721-1-irogers@google.com>
-X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
-Subject: [PATCH v1 2/2] perf test: Stat test for repeat with a weak group
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=AvpFKTVtlMBq+hw7JoGPDSmZsSCDfKdJ6eZg738PV4U=;
+        b=72I+AXieE7zyZUobZ1ufOEOuqE72ls1/XoS2SRbub8GYr+enpAUKHFftyB7T/g9PsT
+         d8HsYp7XBiQvR5M5YJfNuTlkcjtNwJgM3vfwMIQ+ewKQ76Wf4R9xi5hMaW4zLMFoo767
+         y4RN192nT3pw3SDzdK0R09yjl33kI3I97MFMEMpaxXKxCipO/N1BOF+T03WgCSPLl5H+
+         hxSTzP5ZHhnr2aBzyzygPujtML59P65HS5jZxchepKMmH9ax9BYsaveqJSBA+02cFlfP
+         i8NrM6ELnDQX9v1efZKzSalhJXbRoJAcRQxZhKY08C9BUDGq2REHhygiREXMxje+kzvD
+         W2Og==
+X-Gm-Message-State: ACgBeo0ZpkO0dNg9pvD+7Loz+YcDTP5xs3te03svEsIP/WWymYmH2dsu
+        KOaN7ILVNa/FsCNRqHU8YA==
+X-Google-Smtp-Source: AA6agR6jZHhw2YeqgJxqXl680sCfPVMjKdmRhCqYuprtJx5xwbSQ6YIMVFssbFBfSKcD4+SZ8ZzMhg==
+X-Received: by 2002:a05:6808:3d1:b0:343:4049:6899 with SMTP id o17-20020a05680803d100b0034340496899mr126053oie.152.1661204168260;
+        Mon, 22 Aug 2022 14:36:08 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id fq36-20020a0568710b2400b0011d02a3fa63sm1688347oab.14.2022.08.22.14.36.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 14:36:07 -0700 (PDT)
+Received: (nullmailer pid 894715 invoked by uid 1000);
+        Mon, 22 Aug 2022 21:36:07 -0000
+Date:   Mon, 22 Aug 2022 16:36:07 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     wei.fang@nxp.com
+Cc:     netdev@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        f.fainelli@gmail.com, edumazet@google.com, andrew@lunn.ch,
+        davem@davemloft.net, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, kuba@kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        hkallweit1@gmail.com, linux@armlinux.org.uk
+Subject: Re: [PATCH V2 net-next 1/2] dt-bindings: net: tja11xx: add
+ nxp,refclk_in property
+Message-ID: <20220822213607.GA894623-robh@kernel.org>
+References: <20220822015949.1569969-1-wei.fang@nxp.com>
+ <20220822015949.1569969-2-wei.fang@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822015949.1569969-2-wei.fang@nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Breaking a weak group requires multiple passes of an evlist, with
-multiple runs this can introduce bugs ultimately leading to
-segfaults. Add a test to cover this.
+On Mon, 22 Aug 2022 09:59:48 +0800, wei.fang@nxp.com wrote:
+> From: Wei Fang <wei.fang@nxp.com>
+> 
+> TJA110x REF_CLK can be configured as interface reference clock
+> intput or output when the RMII mode enabled. This patch add the
+> property to make the REF_CLK can be configurable.
+> 
+> Signed-off-by: Wei Fang <wei.fang@nxp.com>
+> ---
+> V2 change:
+> Correct the property name and a typo.
+> ---
+>  .../devicetree/bindings/net/nxp,tja11xx.yaml    | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/tests/shell/stat.sh | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/tools/perf/tests/shell/stat.sh b/tools/perf/tests/shell/stat.sh
-index 9313ef2739e0..26a51b48aee4 100755
---- a/tools/perf/tests/shell/stat.sh
-+++ b/tools/perf/tests/shell/stat.sh
-@@ -28,6 +28,24 @@ test_stat_record_report() {
-   echo "stat record and report test [Success]"
- }
- 
-+test_stat_repeat_weak_groups() {
-+  echo "stat repeat weak groups test"
-+  if ! perf stat -e '{cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles}' \
-+     true 2>&1 | grep -q 'seconds time elapsed'
-+  then
-+    echo "stat repeat weak groups test [Skipped event parsing failed]"
-+    return
-+  fi
-+  if ! perf stat -r2 -e '{cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles,cycles}:W' \
-+    true > /dev/null 2>&1
-+  then
-+    echo "stat repeat weak groups test [Failed]"
-+    err=1
-+    return
-+  fi
-+  echo "stat repeat weak groups test [Success]"
-+}
-+
- test_topdown_groups() {
-   # Topdown events must be grouped with the slots event first. Test that
-   # parse-events reorders this.
-@@ -75,6 +93,7 @@ test_topdown_weak_groups() {
- 
- test_default_stat
- test_stat_record_report
-+test_stat_repeat_weak_groups
- test_topdown_groups
- test_topdown_weak_groups
- exit $err
--- 
-2.37.2.609.g9ff673ca1a-goog
-
+Acked-by: Rob Herring <robh@kernel.org>

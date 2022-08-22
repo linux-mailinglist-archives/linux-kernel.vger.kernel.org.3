@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DDB59C9A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C60C59C9A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbiHVUJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 16:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
+        id S232507AbiHVUJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 16:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232242AbiHVUJT (ORCPT
+        with ESMTP id S232278AbiHVUJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 16:09:19 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAEA52460
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:09:18 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id s11so15341265edd.13
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:09:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=YrWKYX54XcRB+7IefpmY6sNaaz9UJEYvmrEmm7qSZ0w=;
-        b=YZscAe3hvQ0GokHKrJV2pgBBBdaOb19jklY1so7x0tSJ3zokBPhqGM4y0pGoaxaOuj
-         3dDRW4fLhxoFrKpfS1D/GZ26cm0qgE75QCuCSNxci8zCKLUmRutksku1sYJGYnLZX4fh
-         yjpr0K1vrN6Yer42eYdbtS7qCmk0UB/Zw0XQDaRsQ2i4xkFA9SOVZNZn06PVqj30Yvnl
-         dDqfIazJVFqjPjfi8EffFFrV8cBnbThGdolRAZaOfUV8zPsIEhRy143aOqj3nodEixdQ
-         aGs336eeTsPKaVrdF09pk4sY7MtHPfT0pJW1inoesuoKBUitXXH+kWQlnWzbiAfwWsr8
-         D0lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=YrWKYX54XcRB+7IefpmY6sNaaz9UJEYvmrEmm7qSZ0w=;
-        b=jfoEyPU/sfEo8OkVKJ/VmUlr4UGn0PPtNFe4Fk/INpV3JoTW0jO3VqW1tuF7qzCXFA
-         qen1pTRkt77ZGKzD03SkIWP4OSkNjTSkV+EST+g5ubH5pAYofFIrEQza7xRGMQRJjcGl
-         wUy7TSqXniMDvtTncv+uViQcCL2MKZBgNW9leRsp0t2mSd8HH/HE2ZbC6//PM4d9bwx2
-         IKVZrjlzVNQtyVEpgmhLNDP21Qz/oms15HwYkNPBARkxs7bJOTCuABhSY9Ga5S8TC2D9
-         stMfH5P9TyirrTuu51U1vLKYezPf61EZOrFSzDPbspcQ+kKACX+eokR6qU97fgyM+r3F
-         PPtw==
-X-Gm-Message-State: ACgBeo3m7mwu5FmGyLlIJTdphzlkKpjJ/zvi+cAh94DiiBsCUdnPdZd9
-        mePEzkYBnTidgqeRDEpt9ALZnL2ECx5RIoGNEpkTaA==
-X-Google-Smtp-Source: AA6agR4s5hz9NH5pqWr3RTrYVcWyakcoE03sHmsj+SPDDimTow1sGJFpuYGQx6+0ltAYD4Y6ruT0BCn4teZ0Z6tMAiM=
-X-Received: by 2002:a05:6402:22b8:b0:445:fb3f:dc3d with SMTP id
- cx24-20020a05640222b800b00445fb3fdc3dmr678328edb.378.1661198956693; Mon, 22
- Aug 2022 13:09:16 -0700 (PDT)
+        Mon, 22 Aug 2022 16:09:32 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC6452450;
+        Mon, 22 Aug 2022 13:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661198965;
+        bh=vM8dIaRuq/YyehZA7pwQXyRcVb/iqx4/5RXN88g/5yk=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=FHe5bxd/m91Xqz8hJnf4R/2aI49TeCdh6y1KyycViLZI5eVSfrUZzNbHSS3np9Pzp
+         z5ie0nYjWxJr8rJRpG4giWYTyAbqe2uget3xw8N1hyIg0drbCEiAMPVT4NvgsMTFJ0
+         Cr6gTxtplVEbcFIThwf2cPgLCQIk6uf5Lml0jhh0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.190.222]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mk0NU-1pAFrB00Vc-00kLGk; Mon, 22
+ Aug 2022 22:09:25 +0200
+Message-ID: <5fcc858a-c9f2-0a9c-ded9-5df2d794e3be@gmx.de>
+Date:   Mon, 22 Aug 2022 22:09:23 +0200
 MIME-Version: 1.0
-References: <20220819053234.241501-1-tales.aparecida@gmail.com> <20220819053234.241501-8-tales.aparecida@gmail.com>
-In-Reply-To: <20220819053234.241501-8-tales.aparecida@gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 22 Aug 2022 13:09:05 -0700
-Message-ID: <CAGS_qxoVuRPF39kcVBWGuhnmaixfLAkPN6HaDRyuXmDHqmWPXg@mail.gmail.com>
-Subject: Re: [PATCH 7/8] lib: overflow: update reference to kunit-tool
-To:     Tales Aparecida <tales.aparecida@gmail.com>
-Cc:     Sadiya Kazi <sadiyakazi@google.com>, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        davidgow@google.com, corbet@lwn.net, brendan.higgins@linux.dev,
-        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
-        mwen@igalia.com, andrealmeid@riseup.net, mairacanal@riseup.net,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] fbcon: Destroy mutex on freeing struct fb_info
+Content-Language: en-US
+To:     Shigeru Yoshida <syoshida@redhat.com>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220821111731.247446-1-syoshida@redhat.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220821111731.247446-1-syoshida@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:wzAQ+Bzi2y+wnwtxdQ3Yh8A8Ue1WmeKBSk3OxvudWmIMPj8FvMF
+ 1Or2PMxUF4oW3Y95M2RWK56cDZk0IE7uyI7o3VlNKI9/waB0hLyJEuflAcvJaln/BPjJe/J
+ EYFrUAnhShD2IV+2ylG6f7BQIvP1zN5uLpnWPqTU7vTKzd/Da9dKSTSCCXAt5BKplTFNAvd
+ axHr1aMdYjt5YesvTzqHQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:RdCxWpvtXEE=:9E5cH3on88rnyv/vob6GXh
+ RG7v94IoM1Y4H1Cv+c8XldzzygqbKr3N6xkqxYN6ZXBjP01cdyO9PJgdvA+l0Ws2CvfgB86Bf
+ leNTbh1i9wx72zMF4A4vg6qYewdxREdGrxUsHvEALvNYmiVi08LpEW57QLN4cx6kXFTt32mxx
+ trK6LDJPWoUDOrTtS0gVopd1vNTpFLWv4UuTiZsDQ/6g7QloiiwBjpWwewoM+0krD2tt+emiO
+ dQs5Ik6HiJAkKZ0PE0LC5TrOEDqPA6XRBGF6jkBxKDA7BFSTbPuS0vjgBX/RL9TUgbhRx7zfG
+ JeoKIZi3fgSiAMFXuMdWRt/GO3KAixGOeKKprN9DkW7tMJuyGAarliY4ulTNT+tsrfv9qUvkk
+ 6AQEO1VykNXoCL0IsScXaA/qbfGGMFcqAy5S9BDHaj80lah3frd+MUScZp+l+LMXUILqwChs7
+ 5Ywfg2gTxb4+8cXbDs7qXehX/yHbY7xZieOrFGgQpx5kZoCe/Ny0YsVFb99cTN/on69r9bPV2
+ Wp8zyFSJgj+PmnPid/vbgi2j0eOKDMyxoIZTIE5gOItWhT1QImBHnRGeuQ67G3jq9K9yNhvM8
+ v5EA1aJl/PlWVCmohnUX2BByfGm0T7gvK4UhDSSwcway2/IJE0uW97RAlGsPerH0IlIRS/pLh
+ C3vVHiI8R9TKllvssRkPIL+l5Qwwu0PlLS5KbmvV1J5TWNYSReq1CnHa/lMxJ/B1mu2CInI62
+ Bf2an6VqkiqDH+qQhjdAyDy5EF90XpS7Ama+ACuU0rzmlzcNyVz9k+/DYdXDWMMf16Pk7fgx9
+ bqaP6WQ/f6o+GkS5F7xfnjXv/lL8OW4hyJ4Oypz4SNxE9YRd2LzJdv1LhysLzSgd0n/3sHg+H
+ SWc8z0zcqwpDfxKVuVDag0aa5pLa+Bh3R9T6ypwzeLwcdzDb7zDWtLaFJRNQb3KPBQCapZJvD
+ TRRAFunscZx7qAtU+ZpqDN6EazMdAKTEi3lsqCci1aQCxEYtpP0ew3ZTkQY1wjCrzB/6AytFm
+ x1NKtnTJkAl5ySQ2YQPZY3R6GXe61JMS4R869JV0hOAjQ9JKMRCg34WYiunn5JNHCMWkVlUke
+ NuUJBSZQPhoQKx9Pj19ToKNoXb8Y0APLdAxoWgoNc3CeouIJ6j7dGHXmQ==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,32 +72,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 10:33 PM Tales Aparecida
-<tales.aparecida@gmail.com> wrote:
+On 8/21/22 13:17, Shigeru Yoshida wrote:
+> It's needed to destroy bl_curve_mutex on freeing struct fb_info since
+> the mutex is embedded in the structure and initialized when it's
+> allocated.
 >
-> Replace URL with an updated path to the full Documentation page
->
-> Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
+> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+
+applied.
+Thanks,
+Helge
+
 > ---
->  lib/overflow_kunit.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/video/fbdev/core/fbsysfs.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-> index 7e3e43679b73..78075106c0df 100644
-> --- a/lib/overflow_kunit.c
-> +++ b/lib/overflow_kunit.c
-> @@ -1,7 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0 OR MIT
->  /*
->   * Test cases for arithmetic overflow checks. See:
-> - * https://www.kernel.org/doc/html/latest/dev-tools/kunit/kunit-tool.html#configuring-building-and-running-tests
-> + * "Running tests with kunit_tool" at Documentation/dev-tools/kunit/start.rst
+> diff --git a/drivers/video/fbdev/core/fbsysfs.c b/drivers/video/fbdev/co=
+re/fbsysfs.c
+> index c2a60b187467..4d7f63892dcc 100644
+> --- a/drivers/video/fbdev/core/fbsysfs.c
+> +++ b/drivers/video/fbdev/core/fbsysfs.c
+> @@ -84,6 +84,10 @@ void framebuffer_release(struct fb_info *info)
+>  	if (WARN_ON(refcount_read(&info->count)))
+>  		return;
+>
+> +#if IS_ENABLED(CONFIG_FB_BACKLIGHT)
+> +	mutex_destroy(&info->bl_curve_mutex);
+> +#endif
+> +
+>  	kfree(info->apertures);
+>  	kfree(info);
+>  }
 
-Oh, I thought I had sent a patch out for this.
-The rewritten version of the patch is
-https://www.kernel.org/doc/html/latest/dev-tools/kunit/run_wrapper.html
-That's what I was intending to rewrite this line to point to.
-
-But if people like a Documentation/ path to start.rst instead, that also works.
-
-Daniel

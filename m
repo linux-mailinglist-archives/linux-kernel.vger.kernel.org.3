@@ -2,75 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F5159C08F
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E5459C097
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235110AbiHVN3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 09:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
+        id S235341AbiHVNay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 09:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235190AbiHVN3k (ORCPT
+        with ESMTP id S235047AbiHVNaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 09:29:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D7518346;
-        Mon, 22 Aug 2022 06:29:39 -0700 (PDT)
+        Mon, 22 Aug 2022 09:30:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB3B1F615;
+        Mon, 22 Aug 2022 06:30:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B50761196;
-        Mon, 22 Aug 2022 13:29:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D7E7C433C1;
-        Mon, 22 Aug 2022 13:29:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661174978;
-        bh=tKR+1ncaLktuwBqOq+cs01Cvto2mRKf0wx5WnwSpD0c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LTkh9d2Haa525kwq2grlzk2TfJzupWlmdIDQ5qo0V4w55EsXMCH6v1DJh2tvLXpfu
-         DrZ7mhtp3qKmb7fNWOImHLVlYbOQdRn88AvwmFxXXov+Y+Bv007ApBHm64gHBnHBZr
-         s2NReW++3jE2tMLkvDU/VdpAQO1j8Q8pySCO8tns=
-Date:   Mon, 22 Aug 2022 15:29:35 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Gupta, Nipun" <Nipun.Gupta@amd.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
-        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
-        "saravanak@google.com" <saravanak@google.com>,
-        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "okaya@kernel.org" <okaya@kernel.org>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [RFC PATCH v2 2/6] bus/cdx: add the cdx bus driver
-Message-ID: <YwOEv6107RfU5p+H@kroah.com>
-References: <20220803122655.100254-1-nipun.gupta@amd.com>
- <20220817150542.483291-1-nipun.gupta@amd.com>
- <20220817150542.483291-3-nipun.gupta@amd.com>
- <Yv0KHROjESUI59Pd@kroah.com>
- <DM6PR12MB3082D966CFC0FA1C2148D8FAE8719@DM6PR12MB3082.namprd12.prod.outlook.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E829B8121C;
+        Mon, 22 Aug 2022 13:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 05D60C433D7;
+        Mon, 22 Aug 2022 13:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661175017;
+        bh=b78FFULhsO3Za6l2UbreH9pHhLIqoEqFwFu/lJt1sfo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=IsoMtGYjH+a8wVoz5Xl6W9iAKX5vDka6VdBsqzEP8GwyaydWjAYZMse3ViCIEhsCn
+         XV49PelLo17lst8zuUIWC7ZpHwrdO/qJ2FmCGYl0C3Q06KSObZmw8svrYJ50Xo76tw
+         AwMU6SwPMpzZOrlxGgkbyT2wcYXYWwrp9oU37m2Y7mbmeXeG6Lc7X+qVKbCse4e6AC
+         FXeg8zC6APA1/O32kcp4Kvnugzp91y4OEhK4btfNGiSYRdaZQOQgCM4yg45YzAxwVF
+         t0AvhxVNyVEa8mP8Bh+iAroVFPusXeBtm4VaPKJfRi3blsdWxOpW2F+MARCjgGQXyA
+         d0iC3w3goPCTw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E2C95C04E59;
+        Mon, 22 Aug 2022 13:30:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR12MB3082D966CFC0FA1C2148D8FAE8719@DM6PR12MB3082.namprd12.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v4 0/8] net: lan966x: Add lag support
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166117501692.5977.2992380067711592787.git-patchwork-notify@kernel.org>
+Date:   Mon, 22 Aug 2022 13:30:16 +0000
+References: <20220817193449.1673002-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20220817193449.1673002-1-horatiu.vultur@microchip.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux@armlinux.org.uk, vladimir.oltean@nxp.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -81,63 +59,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 01:21:47PM +0000, Gupta, Nipun wrote:
-> [AMD Official Use Only - General]
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 17 Aug 2022 21:34:41 +0200 you wrote:
+> Add lag support for lan966x.
+> First 4 patches don't do any changes to the current behaviour, they
+> just prepare for lag support. While the rest is to add the lag support.
 > 
+> v3->v4:
+> - aggregation configuration is global for all bonds, so make sure that
+>   there can't be enabled multiple configurations at the same time
+> - return error faster from lan966x_foreign_bridging_check, don't
+>   continue the search if the error is seen already
+> - flush fdb workqueue when a port leaves a bridge or lag.
 > 
-> 
-> > -----Original Message-----
-> > From: Greg KH <gregkh@linuxfoundation.org>
-> > Sent: Wednesday, August 17, 2022 9:03 PM
-> > To: Gupta, Nipun <Nipun.Gupta@amd.com>
-> > Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; rafael@kernel.org;
-> > eric.auger@redhat.com; alex.williamson@redhat.com; cohuck@redhat.com;
-> > Gupta, Puneet (DCG-ENG) <puneet.gupta@amd.com>;
-> > song.bao.hua@hisilicon.com; mchehab+huawei@kernel.org; maz@kernel.org;
-> > f.fainelli@gmail.com; jeffrey.l.hugo@gmail.com; saravanak@google.com;
-> > Michael.Srba@seznam.cz; mani@kernel.org; yishaih@nvidia.com;
-> > jgg@ziepe.ca; linux-kernel@vger.kernel.org; devicetree@vger.kernel.org;
-> > kvm@vger.kernel.org; okaya@kernel.org; Anand, Harpreet
-> > <harpreet.anand@amd.com>; Agarwal, Nikhil <nikhil.agarwal@amd.com>;
-> > Simek, Michal <michal.simek@amd.com>; git (AMD-Xilinx) <git@amd.com>
-> > Subject: Re: [RFC PATCH v2 2/6] bus/cdx: add the cdx bus driver
-> > 
-> > [CAUTION: External Email]
-> > 
-> > On Wed, Aug 17, 2022 at 08:35:38PM +0530, Nipun Gupta wrote:
-> > > CDX bus driver manages the scanning and populating FPGA
-> > > based devices present on the CDX bus.
-> > >
-> > > The bus driver sets up the basic infrastructure and fetches
-> > > the device related information from the firmware. These
-> > > devices are registered as platform devices.
-> > 
-> > Ick, why?  These aren't platform devices, they are CDX devices.  Make
-> > them real devices here, don't abuse the platform device interface for
-> > things that are not actually on the platform bus.
-> 
-> CDX is a virtual bus (FW based) which discovers FPGA based platform
-> devices based on communication with FW.
+> [...]
 
-virtual busses are fine to have as a real bus in the kernel, no problem
-there.
+Here is the summary with links:
+  - [net-next,v4,1/8] net: lan966x: Add registers used to configure lag interfaces
+    https://git.kernel.org/netdev/net-next/c/7c300735a1a1
+  - [net-next,v4,2/8] net: lan966x: Split lan966x_fdb_event_work
+    https://git.kernel.org/netdev/net-next/c/9b4ed7d262f3
+  - [net-next,v4,3/8] net: lan966x: Flush fdb workqueue when port is leaving a bridge.
+    https://git.kernel.org/netdev/net-next/c/86bac7f11788
+  - [net-next,v4,4/8] net: lan966x: Expose lan966x_switchdev_nb and lan966x_switchdev_blocking_nb
+    https://git.kernel.org/netdev/net-next/c/d6208adfc9a9
+  - [net-next,v4,5/8] net: lan966x: Extend lan966x_foreign_bridging_check
+    https://git.kernel.org/netdev/net-next/c/a751ea4d74e9
+  - [net-next,v4,6/8] net: lan966x: Add lag support for lan966x
+    https://git.kernel.org/netdev/net-next/c/cabc9d49333d
+  - [net-next,v4,7/8] net: lan966x: Extend FDB to support also lag
+    https://git.kernel.org/netdev/net-next/c/9be99f2d1d28
+  - [net-next,v4,8/8] net: lan966x: Extend MAC to support also lag interfaces.
+    https://git.kernel.org/netdev/net-next/c/e09ce97778e8
 
-> These devices are essentially platform devices as these are memory mapped
-> on system bus, but having a property that they are dynamically discovered
-> via FW and are rescannable.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If they are dynamically discoverable and rescannable, then great, it's a
-bus in the kernel and NOT a platform device.
 
-> I think your point is correct in the sense that CDX bus is not an actual bus,
-> but a FW based mechanism to discover FPGA based platform devices.
-> 
-> Can you kindly suggest us if we should have the CDX platform device scanning
-> code as a CDX bus in "drivers/bus/" folder OR have it in "drivers/fpga/" or
-> "drivers/platform/" or which other suitable location?
-
-drivers/cdx/ ?
-
-thanks,
-
-greg k-h

@@ -2,87 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E18B59C606
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4139459C612
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:25:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237415AbiHVSXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 14:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
+        id S235126AbiHVSYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 14:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbiHVSW6 (ORCPT
+        with ESMTP id S237425AbiHVSYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 14:22:58 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D178047B97;
-        Mon, 22 Aug 2022 11:22:57 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id v125so13234528oie.0;
-        Mon, 22 Aug 2022 11:22:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=0Qoldrnk1OOisFOprUKbgJfO+ztr4gzIbivup1sV7ig=;
-        b=t+2EpcIV1uUS4QVlzbL43gyDj7JlL26Sotyp1vNgtp0uNb8JfGrvoUhOYsbzGP7yOe
-         AWcyaof0/LMcz7KOE49uFyVxylKdqYzwVscoq5riPLvO7UzXRfGzcvmDQfaueljTt4X9
-         uI6MDNyyq5T+0m7vEhoWOb55XJx0Zw8DuUhH8NSeu/8NGxcOZhxbCrtx3L0QzA/1hUv4
-         +IdFGbk7xGXYOjx9TAHDHJ8C6ae54ezzaYY127yfuIHgcfzzMQXZJZ+83taHBsIR3vdQ
-         o/px8BDoqpm18EusmS7uZsItX8xv8rQ3Bf5FngV720+/pnRtTM3pAZMuyJP3yypRfG7f
-         QWtw==
-X-Gm-Message-State: ACgBeo2yHWi09A5eAQZty0vuiOS/DykxAdqVoqO7FpZDn78fBloi5C6J
-        62fAjPuSkKO+m5+WhIQlmQ==
-X-Google-Smtp-Source: AA6agR6W2WOiZtmbA+066xdS7uLzllg7qZidjvvWBjMfuzyQ2cDQHRcW3NbhntdvtXkdXa+pc7crqQ==
-X-Received: by 2002:aca:2110:0:b0:343:26cf:c6cf with SMTP id 16-20020aca2110000000b0034326cfc6cfmr12281154oiz.276.1661192576902;
-        Mon, 22 Aug 2022 11:22:56 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g22-20020a056830161600b0063715f7eef8sm3025060otr.38.2022.08.22.11.22.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 11:22:56 -0700 (PDT)
-Received: (nullmailer pid 107284 invoked by uid 1000);
-        Mon, 22 Aug 2022 18:22:55 -0000
-Date:   Mon, 22 Aug 2022 13:22:55 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Gireesh.Hiremath@in.bosch.com
-Cc:     linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bcousson@baylibre.com, tony@atomide.com,
-        krzysztof.kozlowski+dt@linaro.org, dmitry.torokhov@gmail.com,
-        mkorpershoek@baylibre.com, davidgow@google.com,
-        m.felsch@pengutronix.de, swboyd@chromium.org,
-        fengping.yu@mediatek.com, y.oudjana@protonmail.com,
-        rdunlap@infradead.org, colin.king@intel.com,
-        sjoerd.simons@collabora.co.uk, VinayKumar.Shettar@in.bosch.com,
-        Govindaraji.Sivanantham@in.bosch.com, anaclaudia.dias@de.bosch.com
-Subject: Re: [PATCH v3 3/3] dt-bindings: input: gpio-matrix-keypad: add
- reduced matrix keypad bindings definition
-Message-ID: <20220822182255.GA97986-robh@kernel.org>
-References: <20220819065946.9572-1-Gireesh.Hiremath@in.bosch.com>
- <20220819065946.9572-3-Gireesh.Hiremath@in.bosch.com>
+        Mon, 22 Aug 2022 14:24:08 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA141A81F;
+        Mon, 22 Aug 2022 11:24:03 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 11:23:56 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1661192642;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bQzUYJbzeSJVtDIpGsHXApQTdq+ArDiyBUiXh9dJl9c=;
+        b=ko5CwHMhDHobyMV2JTCqgpMz2+52hcGSQVRXn7bUUUSzOzmxP9AFk+/mRkwC+S5zY6MqdX
+        F2q4LAhYZbvIHrC86yIgvLfaWvRCGsb0n0M91E3H2sYMBQDtjW1gtraZ1MHGzTdRTZPXQf
+        PJRtOi3CP/lPjq5dDiL0j6nSDxN5b2s=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Oliver Sang <oliver.sang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] mm: page_counter: remove unneeded atomic ops for
+ low/min
+Message-ID: <YwPJvGL6ZhgrYTeK@P9FQF9L96D>
+References: <20220822001737.4120417-1-shakeelb@google.com>
+ <20220822001737.4120417-2-shakeelb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819065946.9572-3-Gireesh.Hiremath@in.bosch.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220822001737.4120417-2-shakeelb@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 06:59:46AM +0000, Gireesh.Hiremath@in.bosch.com wrote:
-> From: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
+On Mon, Aug 22, 2022 at 12:17:35AM +0000, Shakeel Butt wrote:
+> For cgroups using low or min protections, the function
+> propagate_protected_usage() was doing an atomic xchg() operation
+> irrespectively. It only needs to do that operation if the new value of
+> protection is different from older one. This patch does that.
 > 
-> Add binding definition for the support of the reduced matrix
-> keypad driver.
+> To evaluate the impact of this optimization, on a 72 CPUs machine, we
+> ran the following workload in a three level of cgroup hierarchy with top
+> level having min and low setup appropriately. More specifically
+> memory.min equal to size of netperf binary and memory.low double of
+> that.
 > 
-> Signed-off-by: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
+>  $ netserver -6
+>  # 36 instances of netperf with following params
+>  $ netperf -6 -H ::1 -l 60 -t TCP_SENDFILE -- -m 10K
+> 
+> Results (average throughput of netperf):
+> Without (6.0-rc1)	10482.7 Mbps
+> With patch		14542.5 Mbps (38.7% improvement)
+> 
+> With the patch, the throughput improved by 38.7%
+
+Nice savings!
+
+> 
+> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> Reported-by: kernel test robot <oliver.sang@intel.com>
 > ---
->  .../bindings/input/gpio-matrix-keypad.txt     | 96 +++++++++++++++++++
->  1 file changed, 96 insertions(+)
+>  mm/page_counter.c | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/mm/page_counter.c b/mm/page_counter.c
+> index eb156ff5d603..47711aa28161 100644
+> --- a/mm/page_counter.c
+> +++ b/mm/page_counter.c
+> @@ -17,24 +17,23 @@ static void propagate_protected_usage(struct page_counter *c,
+>  				      unsigned long usage)
+>  {
+>  	unsigned long protected, old_protected;
+> -	unsigned long low, min;
+>  	long delta;
+>  
+>  	if (!c->parent)
+>  		return;
+>  
+> -	min = READ_ONCE(c->min);
+> -	if (min || atomic_long_read(&c->min_usage)) {
+> -		protected = min(usage, min);
+> +	protected = min(usage, READ_ONCE(c->min));
+> +	old_protected = atomic_long_read(&c->min_usage);
+> +	if (protected != old_protected) {
+>  		old_protected = atomic_long_xchg(&c->min_usage, protected);
+>  		delta = protected - old_protected;
+>  		if (delta)
+>  			atomic_long_add(delta, &c->parent->children_min_usage);
 
-This needs to be converted to DT schema first for this level of change.
+What if there is a concurrent update of c->min_usage? Then the patched version
+can miss an update. I can't imagine a case when it will lead to bad consequences,
+so probably it's ok. But not super obvious.
+I think the way to think of it is that a missed update will be fixed by the next
+one, so it's ok to run some time with old numbers.
 
-Rob
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+
+Thanks!

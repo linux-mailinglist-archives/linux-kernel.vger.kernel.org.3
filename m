@@ -2,69 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3B359BD0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF6759BD14
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbiHVJlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 05:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        id S234540AbiHVJnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234517AbiHVJlt (ORCPT
+        with ESMTP id S234539AbiHVJnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 05:41:49 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959802FFF5;
-        Mon, 22 Aug 2022 02:41:47 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4910C1F8C6;
-        Mon, 22 Aug 2022 09:41:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661161306; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=M3r5c5Toc91HcVVVt7XVwoDf7zKZfsbphKJblBDQC9s=;
-        b=Gsl58xvgTN1vEplfGhffVP0Cvn7KLT7D4zYtWQy643KISdCUGUZSgLlXYesnNRJymRwqVr
-        Sv8iXTY9GWj+XYD6sgDZUxcbO1yS+2U1gVcEHNj4+XC6WnXVxz7nwJ4MBSxGw5+8CSn2df
-        okNN0th1HSgMlqNv0Q8SBNzdnLON1mQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661161306;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=M3r5c5Toc91HcVVVt7XVwoDf7zKZfsbphKJblBDQC9s=;
-        b=ogpajHacZexQC89EVqMEhcQyZVb4PEWbmrEZAjgsCzYC3g0o4OGFQa5HO4TkTzXleh9w11
-        L8FQ9crjr5xwVjCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B460B13523;
-        Mon, 22 Aug 2022 09:41:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id B1PeKFlPA2NSeAAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Mon, 22 Aug 2022 09:41:45 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 5a23cab6;
-        Mon, 22 Aug 2022 09:42:37 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-Cc:     wenqingliu0120@gmail.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
-        Baokun Li <libaokun1@huawei.com>
-Subject: [PATCH v4] ext4: fix bug in extents parsing when eh_entries == 0 and eh_depth > 0
-Date:   Mon, 22 Aug 2022 10:42:35 +0100
-Message-Id: <20220822094235.2690-1-lhenriques@suse.de>
+        Mon, 22 Aug 2022 05:43:45 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DE712A9F
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:43:44 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27M5vsDm006019;
+        Mon, 22 Aug 2022 04:43:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=0rMjsfIEKN4ipYLg0AamTXV0c/Pfbz0ZkWoRcZMo1T4=;
+ b=Zr6k5jZxuZHFUKdyWFkmHk0koTnb4cfxOSuRzdIEjr+eg/pgaSvSk5mhdEGiaVEdjFoH
+ XoaOH5wLAOQdnkjYmiG3ilXJ9aabgISgL8B9p6SGwrc6v4lfIhYYqNseOEHBca+q0ylh
+ Bfhm7MYslVBE4zhgCA/5ni6brv4VZpYp0KX/CkVHL+Z2joq/IQwBIvS9jipbL70LZ8Eu
+ WVE+BE4kg/up0VWlqJrhhZ+uDvOFwMikKpoPIcAYKPd4HwmN4P6ZiWO4arZ9jikD5ZFN
+ bo1A4I9dM0ACKA99OdN3ylCG907pmGQi4pzQPxmHA1sLIigKOgYJA6rO7cmB5sBpL4rX tw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3j2x129xut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Aug 2022 04:43:33 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Mon, 22 Aug
+ 2022 04:43:31 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.9 via Frontend
+ Transport; Mon, 22 Aug 2022 04:43:31 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B022EB06;
+        Mon, 22 Aug 2022 09:43:31 +0000 (UTC)
+Date:   Mon, 22 Aug 2022 09:43:31 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     Lee Jones <lee.jones@linaro.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH v2 18/30] mfd: wm8994: Remove #ifdef guards for PM
+ related functions
+Message-ID: <20220822094331.GK92394@ediswmail.ad.cirrus.com>
+References: <20220808174107.38676-1-paul@crapouillou.net>
+ <20220808174107.38676-19-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220808174107.38676-19-paul@crapouillou.net>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: wIzQa6MtbzHk2AFFboJjrlAuJP4szjOw
+X-Proofpoint-ORIG-GUID: wIzQa6MtbzHk2AFFboJjrlAuJP4szjOw
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,81 +68,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When walking through an inode extents, the ext4_ext_binsearch_idx() function
-assumes that the extent header has been previously validated.  However, there
-are no checks that verify that the number of entries (eh->eh_entries) is
-non-zero when depth is > 0.  And this will lead to problems because the
-EXT_FIRST_INDEX() and EXT_LAST_INDEX() will return garbage and result in this:
+On Mon, Aug 08, 2022 at 07:40:55PM +0200, Paul Cercueil wrote:
+> Use the new RUNTIME_PM_OPS() and pm_ptr() macros to handle the
+> .runtime_suspend/.runtime_resume callbacks.
+> 
+> These macros allow the suspend and resume functions to be automatically
+> dropped by the compiler when CONFIG_PM is disabled, without having
+> to use #ifdef guards.
+> 
+> This has the advantage of always compiling these functions in,
+> independently of any Kconfig option. Thanks to that, bugs and other
+> regressions are subsequently easier to catch.
+> 
+> Note that this driver should probably use the new
+> DEFINE_RUNTIME_DEV_PM_OPS() macro instead, which will provide
+> .suspend/.resume callbacks, pointing to pm_runtime_force_suspend() and
+> pm_runtime_force_resume() respectively; unless those callbacks really
+> aren't needed.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
 
-[  135.245946] ------------[ cut here ]------------
-[  135.247579] kernel BUG at fs/ext4/extents.c:2258!
-[  135.249045] invalid opcode: 0000 [#1] PREEMPT SMP
-[  135.250320] CPU: 2 PID: 238 Comm: tmp118 Not tainted 5.19.0-rc8+ #4
-[  135.252067] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
-[  135.255065] RIP: 0010:ext4_ext_map_blocks+0xc20/0xcb0
-[  135.256475] Code:
-[  135.261433] RSP: 0018:ffffc900005939f8 EFLAGS: 00010246
-[  135.262847] RAX: 0000000000000024 RBX: ffffc90000593b70 RCX: 0000000000000023
-[  135.264765] RDX: ffff8880038e5f10 RSI: 0000000000000003 RDI: ffff8880046e922c
-[  135.266670] RBP: ffff8880046e9348 R08: 0000000000000001 R09: ffff888002ca580c
-[  135.268576] R10: 0000000000002602 R11: 0000000000000000 R12: 0000000000000024
-[  135.270477] R13: 0000000000000000 R14: 0000000000000024 R15: 0000000000000000
-[  135.272394] FS:  00007fdabdc56740(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
-[  135.274510] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  135.276075] CR2: 00007ffc26bd4f00 CR3: 0000000006261004 CR4: 0000000000170ea0
-[  135.277952] Call Trace:
-[  135.278635]  <TASK>
-[  135.279247]  ? preempt_count_add+0x6d/0xa0
-[  135.280358]  ? percpu_counter_add_batch+0x55/0xb0
-[  135.281612]  ? _raw_read_unlock+0x18/0x30
-[  135.282704]  ext4_map_blocks+0x294/0x5a0
-[  135.283745]  ? xa_load+0x6f/0xa0
-[  135.284562]  ext4_mpage_readpages+0x3d6/0x770
-[  135.285646]  read_pages+0x67/0x1d0
-[  135.286492]  ? folio_add_lru+0x51/0x80
-[  135.287441]  page_cache_ra_unbounded+0x124/0x170
-[  135.288510]  filemap_get_pages+0x23d/0x5a0
-[  135.289457]  ? path_openat+0xa72/0xdd0
-[  135.290332]  filemap_read+0xbf/0x300
-[  135.291158]  ? _raw_spin_lock_irqsave+0x17/0x40
-[  135.292192]  new_sync_read+0x103/0x170
-[  135.293014]  vfs_read+0x15d/0x180
-[  135.293745]  ksys_read+0xa1/0xe0
-[  135.294461]  do_syscall_64+0x3c/0x80
-[  135.295284]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-This patch simply adds an extra check in __ext4_ext_check(), verifying that
-eh_entries is not 0 when eh_depth is > 0.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215941
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216283
-Cc: Baokun Li <libaokun1@huawei.com>
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
----
- fs/ext4/extents.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-Changes since v3:
-- Fixed typo (I had 'eh_depth' instead of 'depth')
-
-Changes since v2:
-- Dropped usage of le16_to_cpu() because we're comparing values against 0
-- Use 'depth' instead of 'eh->eh_depth' because we've checked earlier that
-  both have the same value.
-
-
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index c148bb97b527..5235974126bd 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -460,6 +460,10 @@ static int __ext4_ext_check(const char *function, unsigned int line,
- 		error_msg = "invalid eh_entries";
- 		goto corrupted;
- 	}
-+	if (unlikely((eh->eh_entries == 0) && (depth > 0))) {
-+		error_msg = "eh_entries is 0 but eh_depth is > 0";
-+		goto corrupted;
-+	}
- 	if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
- 		error_msg = "invalid extent entries";
- 		goto corrupted;
+Thanks,
+Charles

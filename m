@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4EE59C21F
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240EB59C20A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235837AbiHVPDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S235833AbiHVPCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235828AbiHVPC6 (ORCPT
+        with ESMTP id S235803AbiHVPCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:02:58 -0400
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9754939B8D;
-        Mon, 22 Aug 2022 08:02:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1661180551; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=QSf4nmiLJx5ozxBoq+i1Fb0X2Eb0ZWVcugm0/fOUu4TUeNhfuzECMygE58LgJprE6gcIFmIjBQktQia5WMx6gFf1qp9kKmxVIzfFcgyFp7/j6fxyF7Mo71nRtqi0Y1Q0MvlDWBV4LZwHw6GSDE1PhH/s4zvrgyPTSY/hShN219I=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1661180551; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=/u/Wny60TF8LyG87rvYOmsY9vkwmsddSZaOyk12HpDI=; 
-        b=edKXGteBo64NDoFyisLen9BIUUSJVL/v7jUdSeoOaTOTLToKILM9BYvmckQyrgjNEI3FgSspAMu2ENXXxg7T639DaakkIxkQDk1tBHori7md3DYeiBKocRlvI+0XHQD+ixFAJuG/W1YhVwdlStQzWtvQw8dZgcI3/uKdrIRvM1Y=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1661180551;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=/u/Wny60TF8LyG87rvYOmsY9vkwmsddSZaOyk12HpDI=;
-        b=nKRg/6yn1laoseGxgZ4Byzzs6tgeatmM6XgjGzyaXNxBUtxEl0mnXZnXcpgWEHv/
-        fa2KAB+aUJ+YQGYq6AU9Zohca7NUdTW7Hnva6CUOKqxAwXCUvEP3azqlw7CpCs/1asn
-        6UwPJeYuVJZAq4fXslD+gxv4HLzuSNfJjpINvrSQ=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1661180540583918.6664486750254; Mon, 22 Aug 2022 20:32:20 +0530 (IST)
-Date:   Mon, 22 Aug 2022 20:32:20 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Matthew Wilcox" <willy@infradead.org>
-Cc:     "david" <david@fromorbit.com>, "djwong" <djwong@kernel.org>,
-        "fgheet255t" <fgheet255t@gmail.com>, "hch" <hch@infradead.org>,
-        "linux-ext4" <linux-ext4@vger.kernel.org>,
-        "linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "linux-xfs" <linux-xfs@vger.kernel.org>,
-        "riteshh" <riteshh@linux.ibm.com>,
-        "syzbot+a8e049cd3abd342936b6" 
-        <syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com>,
-        "syzkaller-bugs" <syzkaller-bugs@googlegroups.com>
-Message-ID: <182c6137693.20a934d213186.5712495322312393662@siddh.me>
-In-Reply-To: <YwOYMJrvBuoVye7R@casper.infradead.org>
-References: <182c028abf0.2dc6f7c973088.2963173753499991828@siddh.me>
- <20220821114816.24193-1-code@siddh.me>
- <YwOWiDKhVxm7m0fa@casper.infradead.org>
- <182c607e79a.820e4a7012709.6365464609772129416@siddh.me> <YwOYMJrvBuoVye7R@casper.infradead.org>
-Subject: Re: [syzbot] WARNING in iomap_iter
-MIME-Version: 1.0
+        Mon, 22 Aug 2022 11:02:36 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DE239B8B;
+        Mon, 22 Aug 2022 08:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=lhCp3gazHoqKuo+KxPlFiFXB4bVV+NWLkmVgJm8ISfs=;
+        t=1661180553; x=1662390153; b=VoeHtuEV3nEO6VPHeCJSmc4SevyieyAix0LfuyKG0pL8o8f
+        +rxqDlylJyJq/lHFWzhYC7HqumR18QtNRHJC/2O2BGcSNx2Z3OTHSh8LLJcNATtypcn3caITbCLxS
+        E2rC1z5d2JExA5YQKf6oWbiu3GtB1PkM6dJpHprIl8A/qyuzGDis1430s8f0Ag9ScqGoQOCrFWjMT
+        skLzabRRX/dcEczxyZYl0I4C55KV5EAvP1IPhQpwNIXoubUrNWPl8yrSgEzYCIPNR40py5PE9pWTx
+        YMlcs4EjwuiHakOLkepssY/7FWBLbfqn0pGJl7rYWwki+J9cyKTPO1BBakeGL7EA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1oQ8wZ-00EZ1L-30;
+        Mon, 22 Aug 2022 17:02:24 +0200
+Message-ID: <b081ef6eb978070740f31f48a1f4be1807f51168.camel@sipsolutions.net>
+Subject: Re: help for driver porting - missing member preset_chandef in
+ struct wireless_dev
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Frank Wunderlich <frank-w@public-files.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Date:   Mon, 22 Aug 2022 17:02:21 +0200
+In-Reply-To: <trinity-de687d18-b2a2-4cde-9383-a4d6ddba6a77-1661177057496@3c-app-gmx-bap06>
+References: <trinity-de687d18-b2a2-4cde-9383-a4d6ddba6a77-1661177057496@3c-app-gmx-bap06>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+MIME-Version: 1.0
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022 20:22:32 +0530  Matthew Wilcox  wrote:
-> But it's not an integer.  It's a bitfield.  Nobody checks lo_flags for
-> "is it less than zero".  That makes it very different from lo_offset.
+On Mon, 2022-08-22 at 16:04 +0200, Frank Wunderlich wrote:
+> hi,
+>=20
+> i'm working on porting an old/huge wireless driver (mt6625l) [2] to linux=
+ 6.0 [1]
+>=20
+> i hang on missing member preset_chandef in struct wireless_dev
+>=20
+> 	struct wireless_dev *wdev =3D dev->ieee80211_ptr;
+> 	struct cfg80211_chan_def *chandef =3D &wdev->preset_chandef;
+>=20
+> it looks like this member is moved from the wdev into some mesh structure=
+...my driver does not support mesh. any chance to fix this?
+>=20
 
-Thanks for clarifying, I see where I was wrong. I overlooked its use as a
-bitfield.
+Yes. Make sure the driver doesn't access it, it should get stuff through
+other APIs.
 
-Thanks,
-Siddh
+johannes

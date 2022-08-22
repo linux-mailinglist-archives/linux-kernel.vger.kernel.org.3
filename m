@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0704259C454
+	by mail.lfdr.de (Postfix) with ESMTP id A635059C456
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236575AbiHVQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
+        id S232621AbiHVQpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237123AbiHVQo5 (ORCPT
+        with ESMTP id S237131AbiHVQpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:44:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB25518E25;
-        Mon, 22 Aug 2022 09:44:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 570726120C;
-        Mon, 22 Aug 2022 16:44:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB504C433C1;
-        Mon, 22 Aug 2022 16:44:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661186695;
-        bh=hFhF+HtHsqWMVE4q3w289LQbuAM7D1wcvxRb+QUpfz4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=JZWYE0xu4YHJCN761L/B/S7shttEN9JIplBp8bjrBVbaTuxf5lqzOwY958FZcdd2E
-         CS9PmsVuBmZFL66bOK9NYptOLyhNPXcUxjklnbfGLy9VXzQIrjgdhv6dblfWPXLrFh
-         L5DnEOFsAkAYlKbmD22qD5pY+OtaSzqZMdmWtdQvKGtDYxTmblrraCiHo1AFsc4YaG
-         4lG6frtyvLdVletNg57g4HeDjntAGCpUEfLY6668a6KAvSMaVE3xzf8ienyI4ufk84
-         OwMnAF1t3H8im1vaO1ZEPq4JlPIAe7SaAVP0qh/LkFxWieDbJQ8mVtoJsR+j8a2WR6
-         jWi3Fj9R+z7PQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4C7925C05A0; Mon, 22 Aug 2022 09:44:55 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 09:44:55 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Shao-Tse Hung <ccs100203@gmail.com>
-Cc:     corbet@lwn.net, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, rostedt@goodmis.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, rcu@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] doc/rcu: Update LWN articles at the beginning
-Message-ID: <20220822164455.GH6159@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220820083244.28338-1-ccs100203@gmail.com>
+        Mon, 22 Aug 2022 12:45:22 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB9818393
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:45:21 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id gt3so9963697ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=hcFkdybpCNy+TrLwiiJNxRWM75St/es/Q6qYC3rPfCE=;
+        b=gbP+Fv762ay8jKmLRSPptjSIc7rRdqRUlpV0zkkJmVORzUkMFDQa+RsU1RpPbEGCyq
+         qSIQ4z2kdlsk6NLqzqS5cR6LOGKHKUHJJ9gP6RxlZbRpkQqNxnrLbvvTsBWZB7+MdOoY
+         govbZ7BTknWj6L2kw+EBz9fvMd64Xnie6B1aU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=hcFkdybpCNy+TrLwiiJNxRWM75St/es/Q6qYC3rPfCE=;
+        b=0gvUdhI7GGqo+rGWX8RGnjnbGATm7rxaxG7B/1mA/ho0BtrvLOJp/6U2muk8jihXjb
+         9c7gx+eO6rTyCs/Kv1D11V+LxK7qt4RfcsldpEmlUP7AjMdmn9dhQSM9D19+Q25Xb6ry
+         1o+GECXKJCWsSytiR+4gCK0hMqFUtue2xK7v8kMJ0tacLsc5vWgVorPjGDGPv/vwOXUw
+         CdW7cCdSqZ7WkfuAEsS1jnUYFZTm7ifBbBQ41VagMipSi4zYDe5Wyml0bsI49TZlFo7T
+         5B6pxphrWSvFnQYvrCKtXzpb+OPJPwG0lsb/XfYnW9rQukyId94siugcBLR76cjS3sR6
+         2ndQ==
+X-Gm-Message-State: ACgBeo2Fr52SK9tN61TvLI+JA3E4C+vL3PqeMkRIi05o3pPPUkWdyBcI
+        c3Hp9paFLdW3id2d6QmrhKOdIZ/j/Nvhbdt1
+X-Google-Smtp-Source: AA6agR6MV/c6UTLO1pD3/YTR7RfKvejeUHXttPuNiL7s3tAvWl3k628aQ8RPpfxY2o3Jq8XHyaPwyw==
+X-Received: by 2002:a17:907:7d90:b0:738:2f9b:9869 with SMTP id oz16-20020a1709077d9000b007382f9b9869mr13993343ejc.186.1661186719237;
+        Mon, 22 Aug 2022 09:45:19 -0700 (PDT)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id l13-20020aa7d94d000000b004418c7d633bsm2912eds.18.2022.08.22.09.45.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 09:45:18 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id bd26-20020a05600c1f1a00b003a5e82a6474so6333696wmb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:45:18 -0700 (PDT)
+X-Received: by 2002:a05:600c:2195:b0:3a6:b3c:c100 with SMTP id
+ e21-20020a05600c219500b003a60b3cc100mr12375309wme.8.1661186718159; Mon, 22
+ Aug 2022 09:45:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220820083244.28338-1-ccs100203@gmail.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220822092557.210209-1-yangjihong1@huawei.com>
+ <YwNcgdk/p18Cr+uv@gmail.com> <YwOBKwPmW/FX6hSS@kernel.org>
+In-Reply-To: <YwOBKwPmW/FX6hSS@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 22 Aug 2022 09:45:02 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjRLxmiTWiy4f1wa4S3NRK1kdZoAind_AtBGvNx=CdhYg@mail.gmail.com>
+Message-ID: <CAHk-=wjRLxmiTWiy4f1wa4S3NRK1kdZoAind_AtBGvNx=CdhYg@mail.gmail.com>
+Subject: Re: [PATCH] perf tools: Fix compile error for x86
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Yang Jihong <yangjihong1@huawei.com>, bp@suse.de,
+        ndesaulniers@google.com, nathan@kernel.org,
+        alexandre.belloni@bootlin.com, namhyung@kernel.org,
+        jolsa@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 04:32:44PM +0800, Shao-Tse Hung wrote:
-> This patch adds LWN articles about RCU APIs which were released in 2019.
-> Also, HTTP URLs are replaced by HTTPS.
-> 
-> Signed-off-by: Shao-Tse Hung <ccs100203@gmail.com>
+On Mon, Aug 22, 2022 at 6:14 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Linus, I'll prep a pull req later today or you can apply this so that we
+> can reduce the window where tools/perf/ isn't building.
 
-Good catch, queued, thank you!
+Ok, I took that patch directly. Thanks,
 
-							Thanx, Paul
-
-> ---
->  Documentation/RCU/whatisRCU.rst | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/RCU/whatisRCU.rst b/Documentation/RCU/whatisRCU.rst
-> index 77ea260efd12..682529123b9d 100644
-> --- a/Documentation/RCU/whatisRCU.rst
-> +++ b/Documentation/RCU/whatisRCU.rst
-> @@ -6,13 +6,15 @@ What is RCU?  --  "Read, Copy, Update"
->  Please note that the "What is RCU?" LWN series is an excellent place
->  to start learning about RCU:
->  
-> -| 1.	What is RCU, Fundamentally?  http://lwn.net/Articles/262464/
-> -| 2.	What is RCU? Part 2: Usage   http://lwn.net/Articles/263130/
-> -| 3.	RCU part 3: the RCU API      http://lwn.net/Articles/264090/
-> -| 4.	The RCU API, 2010 Edition    http://lwn.net/Articles/418853/
-> -| 	2010 Big API Table           http://lwn.net/Articles/419086/
-> -| 5.	The RCU API, 2014 Edition    http://lwn.net/Articles/609904/
-> -|	2014 Big API Table           http://lwn.net/Articles/609973/
-> +| 1.	What is RCU, Fundamentally?  https://lwn.net/Articles/262464/
-> +| 2.	What is RCU? Part 2: Usage   https://lwn.net/Articles/263130/
-> +| 3.	RCU part 3: the RCU API      https://lwn.net/Articles/264090/
-> +| 4.	The RCU API, 2010 Edition    https://lwn.net/Articles/418853/
-> +| 	2010 Big API Table           https://lwn.net/Articles/419086/
-> +| 5.	The RCU API, 2014 Edition    https://lwn.net/Articles/609904/
-> +|	2014 Big API Table           https://lwn.net/Articles/609973/
-> +| 6.	The RCU API, 2019 Edition    https://lwn.net/Articles/777036/
-> +|	2019 Big API Table           https://lwn.net/Articles/777165/
->  
->  
->  What is RCU?
-> -- 
-> 2.25.1
-> 
+              Linus

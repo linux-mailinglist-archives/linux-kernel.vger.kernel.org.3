@@ -2,89 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE7A59BD3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA0A59BD3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbiHVJ5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 05:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
+        id S233632AbiHVJ6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234569AbiHVJ5A (ORCPT
+        with ESMTP id S234058AbiHVJ6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 05:57:00 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E199731DC4;
-        Mon, 22 Aug 2022 02:56:59 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5133E2B3;
-        Mon, 22 Aug 2022 11:56:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661162218;
-        bh=HItqUbPown0MuVwTPfUbAILw8/+d0rHi9wXNaFSpNjk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cbRlKX8k5Pg7aVgZ0GrNQACjH1DxMaf1YWnwExaQWkjyXscljXgOV2PsWaI15NyEe
-         XHnaZcGkMZd/p9RkunmCGx2S2tQPmWjTK1bsTnkOghrs1e3Fxt/gy1F0YQaehyHh2j
-         xCKwBaAa13IALeex34cpG/R2iIrjTsZkrBQttY1k=
-Date:   Mon, 22 Aug 2022 12:56:54 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: dw100: Fix an error handling path in dw100_probe()
-Message-ID: <YwNS5jr2+ersua9B@pendragon.ideasonboard.com>
-References: <7213b90d0d872be154cff81aec1ad8a4a77116af.1661161223.git.christophe.jaillet@wanadoo.fr>
+        Mon, 22 Aug 2022 05:58:44 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C262A13FB8
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:58:41 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id b16so13154478edd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:58:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=DikM8GP/zEgRKFkeZTRN3UycE9/iW+eHLe67ZzKLAZQ=;
+        b=Wl2oalmWGoQbER5lNS9DCPG4y0KuFVUtNaWzmJrO4iMaBuzBGF9DVDEEWjvAoUqm0X
+         J5lkNGbLMXX3LM4wz164xprUD5Cy2wTrjcNeRuXdekOi6CUbU1DzNOYW5gyky/iip/J8
+         jxsKITCJ8NG/AHXk7Kh21rLhpBp3qJ8ghaTXyxt36c3oXq3iwSe5l7Ahtnc8N7VrN6Fn
+         ip6hJlsKaAR+QdoCeMddarQEPj4tCpfg/oH18TUg18ofFtWB8e443IqP8+1rAQZIo2qo
+         cVbW/RzwR6jOwS2xgMy+dxc8p6/orbgZfDCw32NHEKMUNzn4lPHRKmzy/xmt79BFSnuA
+         4flA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=DikM8GP/zEgRKFkeZTRN3UycE9/iW+eHLe67ZzKLAZQ=;
+        b=QMc+xyWKPRntd9+iZs9qJFWS84I+VMhxGUIKy3MrIhLWF76xZI+feMp25kaGlBpRuB
+         y2jNnkzq8efKvdpsxLCQiOaLtzcR18NF8dJGVbEkJgQ/UJGuv3/OzqiBL72lQqWC+Va3
+         PWkXn270E6p9h/H5ZzlpF/TyCGYsL2ZhA9SJwS8st9yqR2LAx0nVvO9UoMRhYXr1JzSm
+         zok0GqHf1tl+/yRCW7hJtjbQkrHKjuDL3W59AeAsSptI+5khF6toR4/UuHpUeERbXW5x
+         QkLN0FzZFb0sCUvCwa6ivN2HfYbhMyOz6UjaWOih/Q4X7VfQ4NeOpz22/8dtKqg7oMIb
+         pMWQ==
+X-Gm-Message-State: ACgBeo2PaIx88bvuzi4i0WIC6xhVxzuZy69E70jfNdsZNSATFORUcj5o
+        tjzNtd4I4dFWLV2NU0H1tcvHBPyT24B3GNG6tkpApg==
+X-Google-Smtp-Source: AA6agR7I2oN3K0JAQXS8hyINKiXT0zhk9qavhsNLEtMZN0Vg92HZvALyZb+pb1TRv+RFH0XNVSn9y76P+YE34qcKveE=
+X-Received: by 2002:a50:9f44:0:b0:445:dfca:87da with SMTP id
+ b62-20020a509f44000000b00445dfca87damr15233906edf.105.1661162320224; Mon, 22
+ Aug 2022 02:58:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7213b90d0d872be154cff81aec1ad8a4a77116af.1661161223.git.christophe.jaillet@wanadoo.fr>
+References: <20220819060801.10443-1-jinpu.wang@ionos.com> <20220819060801.10443-2-jinpu.wang@ionos.com>
+ <YwMPG38aLAKjO/69@kili>
+In-Reply-To: <YwMPG38aLAKjO/69@kili>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Mon, 22 Aug 2022 11:58:29 +0200
+Message-ID: <CAMGffEkQWk8x6fqEqip7hW_BxfhMEvEdmTMg3-XOr7aJ+jJ3-g@mail.gmail.com>
+Subject: Re: [PATCH v1 01/19] mailbox: bcm-ferxrm-mailbox: Fix error check for dma_map_sg
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+On Mon, Aug 22, 2022 at 7:07 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Fri, Aug 19, 2022 at 08:07:43AM +0200, Jack Wang wrote:
+> > dma_map_sg return 0 on error, fix the error check, and return -EIO
+> > to caller.
+> >
+> > Cc: Jassi Brar <jassisinghbrar@gmail.com>
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+>
+> This needs a Fixes tag.
+>
+> Fixes: dbc049eee730 ("mailbox: Add driver for Broadcom FlexRM ring manager")
 
-Thank you for the patch.
-
-On Mon, Aug 22, 2022 at 11:40:43AM +0200, Christophe JAILLET wrote:
-> After a successful call to media_device_init() it is safer to call
-> media_device_init().
-
-I assume you meant media_device_cleanup() ? With this fixed,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> Add the missing call in the error handling path of the probe, as already
-> done in the remove function.
-> 
-> Fixes: bd090d4d995a ("media: dw100: Add i.MX8MP dw100 dewarper driver")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/media/platform/nxp/dw100/dw100.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/media/platform/nxp/dw100/dw100.c b/drivers/media/platform/nxp/dw100/dw100.c
-> index 94518f0e486b..b3b057798ab6 100644
-> --- a/drivers/media/platform/nxp/dw100/dw100.c
-> +++ b/drivers/media/platform/nxp/dw100/dw100.c
-> @@ -1623,6 +1623,7 @@ static int dw100_probe(struct platform_device *pdev)
->  error_v4l2:
->  	video_unregister_device(vfd);
->  err_m2m:
-> +	media_device_cleanup(&dw_dev->mdev);
->  	v4l2_m2m_release(dw_dev->m2m_dev);
->  err_v4l2:
->  	v4l2_device_unregister(&dw_dev->v4l2_dev);
-
--- 
-Regards,
-
-Laurent Pinchart
+Will add in the next version.
+Thank you!
+>
+> regards,
+> dan carpenter
+>

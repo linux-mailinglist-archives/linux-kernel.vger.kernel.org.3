@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8612659BE3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C6059BE3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbiHVLJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
+        id S232440AbiHVLKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234330AbiHVLJM (ORCPT
+        with ESMTP id S229727AbiHVLJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:09:12 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4D133E26
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:08:01 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id e21so8523436edc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:08:01 -0700 (PDT)
+        Mon, 22 Aug 2022 07:09:52 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E641A393
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:09:50 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id ce26so4693650ejb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:09:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=UBOByeB2MXYBWF0Ngo8u4UdkkfztEsDE7yNqsiJ1+80=;
-        b=BzsFOpc1/Mc0X9z223lsXWZS/tY4y0+joi4BEv5glMXwdMgLaEhyVlaoSyz0K3ya5T
-         Ik7dnernQfgtBGmb+OvhwETWQh2h1AZJR54hTZepWY1rjP3ebDuqzWjStEC3jbFZAaw8
-         K3gES4WqS6qJyzcuG97gJlbc1py4dUVk1Dm2de26RCPo8+VMeeWYLdPHDpYmZUAx9/uT
-         V6Th/pdzLwmss/lYVTMINZDV4WCGgQdDMtOtbeznxVHJbvPD3E7QhLY5CRFw9vGUoXgt
-         BPaaxk1C3EAsbeHb+beUDVIHdJo8ahLgoYZ8fLqanNhVk7TuErun4JI3xtOxsLTl5M6V
-         esLQ==
+        bh=kz4lUJFQeluTJdkQDoeD1e50ln0ulghIHI6OqES8gKk=;
+        b=i/UEwikqQugib7mXXYh1BRVhl0BDo7FLssixho48gXZzYRnlia9B01V0s5bMceXkoJ
+         eOVUbhVR2tmEgCZhHfGd7Jc/u1q0JOw3K5G4G9mSU+k35+ZyDATep27G2XbMqQjQC5GX
+         m30dLQ/D5J7TvfcB0GgrSKVFiJt5kjVboLGl9aHZroQo9g57empGvEcqmWUN/bkUUGAI
+         6itN++O9xzE7pzNM3f4ZLOP0xNVpBPen8TfFEZoVj8MV8U/PMHmIJ/ZRkvcoUz/jNbd4
+         VM7kmatmc4/qlanS04I8bNJm4rXe5Ja/9O2irdSRKnx55K3OqdyvfdjUxlGG1UZIvKGd
+         ERiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=UBOByeB2MXYBWF0Ngo8u4UdkkfztEsDE7yNqsiJ1+80=;
-        b=XqlQQqS/MTvcFt4c+1nUPREuf9fPFhsYsBn6T1cDuAyzpW1sEVMU6cyg4gtfrbSIJQ
-         S3Gvq6I12H7o0fvolge/D5Ai2WKMHVAeMVdVmT4sXSp7eUb9O62R4i3MTE57ct19U57J
-         VFceJlPmw6aqhSBYXCGAe6PwndDbcWeqWqLhlrWrFBcs9mILr+WQDZjN0OZrLYdwc1s6
-         FzL0AIPykEPr8KxuBV5Yw+sOR5/uq5JikkUaXX121xZpO29Uf8/nmHntbqjh5ODqJd6K
-         oohzESLS+9QRVsdthIBVirObsWe7yQoAMCcdL03HcJD8Dpiogj8egySGpCLRE6n2DZnR
-         p6IQ==
-X-Gm-Message-State: ACgBeo1Beg6eYFAlr9usVO9M0U4tUOFWFsXKdlvnyCJWDXOjmFjVmCZb
-        D2D7D4YSzLRsyxPrTFRzH5dbaEwuGikpEkIHbX/3vQ==
-X-Google-Smtp-Source: AA6agR6I8GpDbmShK/nTtNn95EOVxEW+y17uLeMbs/P/mq4HbiEMfUtFHz3h1LT8uPmBbs95HSDU97bm3dLNTUXQr5A=
-X-Received: by 2002:a05:6402:641:b0:446:d:bd64 with SMTP id
- u1-20020a056402064100b00446000dbd64mr16181153edx.32.1661166479741; Mon, 22
- Aug 2022 04:07:59 -0700 (PDT)
+        bh=kz4lUJFQeluTJdkQDoeD1e50ln0ulghIHI6OqES8gKk=;
+        b=jIGMRt5n+TtcjCLhXl3UdtHaCaqtzqrvJ5kW8TEq+brmew+lJwQepW0KQj6PNtQl5Q
+         yPk4ZnLYxBeDvLhLwMA88WH5K08T8fXU976Kjm/FzAD+Da+hRpyIivvA8A5s3Ozjj3SI
+         44n+JmNNPoC/OIzupuDCdbTk4VlNIdSHQ7x0MEyLqqpXtcCQeVngDslZRS3vnpuSedNY
+         DwgU5l0yN8nHaNyh+HpznM9jm5xiSvXnLfC3mo6/CZs2N2cas0UU774EGRXtx5SoW+VC
+         jbFVHeQKvDGyw76dNKlk+uVepdltlujyJ77X5jOc+hbHnLL+gvxFbLN3GR+E6eZElDS+
+         uTYA==
+X-Gm-Message-State: ACgBeo0Jt27rlED2gelVpwrxZUKuxxt+lwExwIaWJiiVSdUFDtqi5sU4
+        q4VPu/8PoaYdpG8daqe+Kh/5nUD7EwhsQ5P9jhOeRA==
+X-Google-Smtp-Source: AA6agR4SJQb77HChPBxtTvM9Bte1KKm8Fo45SwdpWpY1Zsair1ydEkJJ3pCJgYtXmfdBO3jr3fmVklL0zmnURpynhpY=
+X-Received: by 2002:a17:906:974f:b0:73d:716a:7d98 with SMTP id
+ o15-20020a170906974f00b0073d716a7d98mr4698929ejy.208.1661166588704; Mon, 22
+ Aug 2022 04:09:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220809214556.2489822-1-robh@kernel.org>
-In-Reply-To: <20220809214556.2489822-1-robh@kernel.org>
+References: <20220810111023.280908-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220810111023.280908-1-krzysztof.kozlowski@linaro.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 22 Aug 2022 13:07:48 +0200
-Message-ID: <CACRpkdbSycBG6ZiXfEHLquiyAMu=et81LAaGZbj38bhAccCSkw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,ipq6018: Fix example
- 'gpio-ranges' size
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+Date:   Mon, 22 Aug 2022 13:09:37 +0200
+Message-ID: <CACRpkdaonse-DXwrBBup99EOUchQWJ9LS3H-E1WVzgy450ZxgA@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dts: integratorap: align SPI node name with dtschema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sricharan R <sricharan@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -72,23 +69,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 11:46 PM Rob Herring <robh@kernel.org> wrote:
+On Wed, Aug 10, 2022 at 1:10 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-> 'gpio-ranges' entries have a fixed size of 1 phandle plus arg 3 cells.
-> The qcom,ipq6018-pinctrl example is a cell short:
+> The node names should be generic and DT schema expects certain pattern:
 >
-> Documentation/devicetree/bindings/pinctrl/qcom,ipq6018-pinctrl.example.dtb: pinctrl@1000000: gpio-ranges:0: [1, 0, 80] is too short
->         From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/gpio/gpio.yaml
+>   ssp@300000: $nodename:0: 'ssp@300000' does not match '^spi(@.*|-[0-9a-f])*$'
 >
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Please ack and I can send to Linus before rc1.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Sorry for delay, was on vacation :/
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
-I think as binding maintainer you can just submit this kind of smaller stuff
-without any subsystem consent, if you have it acked by Krzysztof, even more so.
+I already have a patch for this from Kuldeep, will send upstream ASAP, thanks
+anyway!
 
 Yours,
 Linus Walleij

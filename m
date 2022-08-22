@@ -2,91 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB76C59BFCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDD959BFDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235009AbiHVMxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 08:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
+        id S234424AbiHVMzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 08:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbiHVMxF (ORCPT
+        with ESMTP id S229565AbiHVMzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:53:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C772D2E9D7;
-        Mon, 22 Aug 2022 05:53:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 382D66114E;
-        Mon, 22 Aug 2022 12:53:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 987DEC433C1;
-        Mon, 22 Aug 2022 12:53:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661172780;
-        bh=rj/ycRt2QVeN81Z/fUk7ab6KMGPqZAW+nMcstsfmS8Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oVWokBz+DX+bapA0CYvYHbyKforLuOEsTLIjEyTcJWhMTk1ALS7rCB+gVZQJZZ/BW
-         6DMS1MWpYd2fS9o0r4X03up8Szz8YdDdiVQGHFEUXmTBg1FQBwUafpEmOHH51x69DY
-         3nfhTUd1BWhTf5Ex4tmTKOCcjv2RvVwLeyvrRbQ8UoClAT1djSqJczB8p0D7Ugqjg3
-         T5I/LmUSKdJ20a1VPqIDyDvUA0ufaklbS7j1hUMmTfBxDgzWR76GZbE0CEvrgTtuIx
-         cB8TW2TLO4AF1hZrIO747uCVmtjLZwDwwZbFcwcPARHV4X1a8yB9cq+Xjavw/qUN+D
-         6vHWX+tMizN5A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oQ6vJ-0001ob-64; Mon, 22 Aug 2022 14:52:57 +0200
-Date:   Mon, 22 Aug 2022 14:52:57 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        devicetree@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-Subject: Re: [PATCH v2 0/8] PCI: qcom: Add support for SC8280XP and SA8540P
-Message-ID: <YwN8KR5GMZzkcMck@hovoldconsulting.com>
-References: <20220714071348.6792-1-johan+linaro@kernel.org>
- <166089832025.262926.4406465315336249603.b4-ty@kernel.org>
+        Mon, 22 Aug 2022 08:55:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D59D1901C;
+        Mon, 22 Aug 2022 05:55:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6632912FC;
+        Mon, 22 Aug 2022 05:55:23 -0700 (PDT)
+Received: from [10.57.15.77] (unknown [10.57.15.77])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4AEF13F718;
+        Mon, 22 Aug 2022 05:55:17 -0700 (PDT)
+Message-ID: <c64e838a-dace-73dd-8ab9-7284166cf742@arm.com>
+Date:   Mon, 22 Aug 2022 13:55:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166089832025.262926.4406465315336249603.b4-ty@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/3] iommu/dma: Move public interfaces to linux/iommu.h
+Content-Language: en-GB
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     joro@8bytes.org, will@kernel.org, catalin.marinas@arm.com,
+        jean-philippe@linaro.org, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
+        tglx@linutronix.de, maz@kernel.org, alex.williamson@redhat.com,
+        cohuck@redhat.com, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-acpi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <cover.1660668998.git.robin.murphy@arm.com>
+ <9cd99738f52094e6bed44bfee03fa4f288d20695.1660668998.git.robin.murphy@arm.com>
+ <YwNmosMGZdGtY3LX@infradead.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <YwNmosMGZdGtY3LX@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 10:40:49AM +0200, Lorenzo Pieralisi wrote:
-> On Thu, 14 Jul 2022 09:13:40 +0200, Johan Hovold wrote:
-> > This series adds support for the PCIe controllers found on SC8280XP and
-> > SA8540P.
-> > 
-> > Included are also three patches that clean up the way the driver handles
-> > different IP revisions (e.g. by modelling optional clocks as being truly
-> > optional).
-> > 
-> > [...]
+On 2022-08-22 12:21, Christoph Hellwig wrote:
+>> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+>> index 70393fbb57ed..79cb6eb560a8 100644
+>> --- a/include/linux/iommu.h
+>> +++ b/include/linux/iommu.h
+>> @@ -1059,4 +1059,40 @@ void iommu_debugfs_setup(void);
+>>   static inline void iommu_debugfs_setup(void) {}
+>>   #endif
+>>   
+>> +#ifdef CONFIG_IOMMU_DMA
+>> +#include <linux/msi.h>
 > 
-> I tweaked commits as-per thread discussion (please check them, I had
-> to fix minor rebase conflicts) and applied to pci/qcom, thanks!
+> I don't think msi.h is actually needed here.
+> 
+> Just make the struct msi_desc and struct msi_msg forward declarations
+> unconditional and we should be fine.
 
-Not sure if you missed that Stanimir had acked the whole series:
+dma-iommu.c still needs to pick up msi.h for the actual definitions 
+somehow, so it seemed logical to keep things the same shape as before. 
+However I don't have a particularly strong preference either way.
 
-	https://lore.kernel.org/all/aa11b2ec-7196-7423-151c-1797966d0cd2@mm-sol.com/
-
-Looks good, otherwise. Thanks!
-
-Johan
+Thanks,
+Robin.

@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8C359BCC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED04959BCBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234440AbiHVJWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 05:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
+        id S234348AbiHVJWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234395AbiHVJWR (ORCPT
+        with ESMTP id S234191AbiHVJW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 05:22:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED1131EF7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661160101;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ixrzf48o81ZG4Mo8flPV032r4wlVh+vKK+0eiWqJd9A=;
-        b=U4BOBx2lsABi5vsn8R70AaQ0rqLByxOnxLdaXFf2fWIGT1RPgEQ8nNOc2jkhelG7pqSprq
-        hEMRSL9cDZKFaWjcKl8xYvy6GTeiNeGq+jaOX8rfZer3Hc4Oz2DOXqV296MmbjZf97pwpu
-        qRJX4l+N3nDPJnhf7yJ0QvzsNUGWMhU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-378-X6vpEYv1Mlq9hFQ5ng612w-1; Mon, 22 Aug 2022 05:21:36 -0400
-X-MC-Unique: X6vpEYv1Mlq9hFQ5ng612w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B6DF5299E746;
-        Mon, 22 Aug 2022 09:21:35 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D640DC15BBD;
-        Mon, 22 Aug 2022 09:21:33 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <924818.1661158094@warthog.procyon.org.uk>
-References: <924818.1661158094@warthog.procyon.org.uk> <20220821125751.4185-1-yin31149@gmail.com> <000000000000ce327f05d537ebf7@google.com>
-To:     Hawkins Jiawei <yin31149@gmail.com>
-Cc:     dhowells@redhat.com,
-        syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com,
-        Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        paskripkin@gmail.com, skhan@linuxfoundation.org,
-        18801353760@163.com
-Subject: Re: [PATCH] rxrpc: fix bad unlock balance in rxrpc_do_sendmsg
+        Mon, 22 Aug 2022 05:22:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817A32D1E1;
+        Mon, 22 Aug 2022 02:21:48 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MB6J13D1RznTl8;
+        Mon, 22 Aug 2022 17:19:29 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 22 Aug 2022 17:21:46 +0800
+Subject: Re: [PATCH] mm/hugetlb: remove unused local variable dst_entry in
+ copy_hugetlb_page_range()
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+CC:     kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>
+References: <20220822082525.26071-1-lukas.bulwahn@gmail.com>
+ <08fec67b-788e-1c9e-606e-903db3bcad67@huawei.com>
+ <CAKXUXMysz=6NHq6tJcxHbm5vy4usVq2XEDp9q+ydmcHcqGw94A@mail.gmail.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <5450a153-382d-7476-8674-4a615d08eebe@huawei.com>
+Date:   Mon, 22 Aug 2022 17:21:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <992102.1661160093.1@warthog.procyon.org.uk>
-Date:   Mon, 22 Aug 2022 10:21:33 +0100
-Message-ID: <992103.1661160093@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAKXUXMysz=6NHq6tJcxHbm5vy4usVq2XEDp9q+ydmcHcqGw94A@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Actually, there's another bug here too: if rxrpc_wait_for_tx_window() drops
-the call mutex then it needs to reload the pending packet state in
-rxrpc_send_data() as it may have raced with another sendmsg().
+On 2022/8/22 17:05, Lukas Bulwahn wrote:
+> On Mon, Aug 22, 2022 at 10:51 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>>
+>> On 2022/8/22 16:25, Lukas Bulwahn wrote:
+>>> Commit a0e4f7b82610 ("mm/hugetlb: make detecting shared pte more reliable")
+>>> modifies copy_hugetlb_page_range() such that huge_ptep_get(dst_pte) and the
+>>> local variable dst_entry is not used explicitly in this function.
+>>>
+>>> Remove this unused local variable dst_entry in copy_hugetlb_page_range().
+>>> No functional change.
+>>>
+>>> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+>>
+>> LGTM. Thanks for your patch.
+>>
+>> Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+>>
+>> BTW: I will send a v2 of that series soon. So the above commit id might change.
+>>
+> 
+> Feel free to just squash this code improvement into your next v2 patch.
 
-David
+Will do it. Thanks for your report and cleanup.
+
+Thanks,
+Miaohe Lin
+
+> 
+> Lukas
+> .
+> 
 

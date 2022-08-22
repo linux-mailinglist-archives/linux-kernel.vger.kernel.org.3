@@ -2,110 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210F359C96C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629F559C8F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237578AbiHVT7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 15:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
+        id S238084AbiHVTcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 15:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbiHVT7K (ORCPT
+        with ESMTP id S238911AbiHVTai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 15:59:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463A32ED48;
-        Mon, 22 Aug 2022 12:59:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53E5361268;
-        Mon, 22 Aug 2022 19:59:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB98C433D6;
-        Mon, 22 Aug 2022 19:59:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661198343;
-        bh=DyI3t8tEVvUlMKrONGNmpaBQQiZiHW1qaggJxfPqUDA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ogIxteFut606xWhAb+66+D56KTO0OHtro0EOuQEf7paZ+0CSRSBbd/MgYoJ+XtvqQ
-         aLmrrdozqKgXnGe7kZPZQvnfNsHsb5l9kK2sNTDgBAZ204P1exn1ddAwam+jNgS78+
-         KawD5/gAdzBoMbunRYJBdVGlurbi9KOGRPdv8/4bkkzi51IazbiusDCzyH/EER1w6a
-         Y0cNtQmthaxrLBUjS9HQJ3l4rw1PzXN/s8dpH0KGisj5kPsppxUjcQ95iTrmWcvy31
-         O2F2u6XJ2NBGJcGejmFvXQMyV5SHTqrf4KdOx+XH2F9hg6o8VOHHqKlFFqJoddxHVp
-         ryfIEocGA/Bsg==
-Date:   Mon, 22 Aug 2022 20:24:35 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Ciprian Regus <ciprian.regus@analog.com>
-Cc:     <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH 1/3] dt-bindings: iio: adc: Add docs for LTC2499
-Message-ID: <20220822202435.7dd54583@jic23-huawei>
-In-Reply-To: <20220822125106.1106798-2-ciprian.regus@analog.com>
-References: <20220822125106.1106798-1-ciprian.regus@analog.com>
-        <20220822125106.1106798-2-ciprian.regus@analog.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Mon, 22 Aug 2022 15:30:38 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB8758DD1;
+        Mon, 22 Aug 2022 12:25:10 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-11ba6e79dd1so14089985fac.12;
+        Mon, 22 Aug 2022 12:25:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=aqQ8EKilZNTR/MiCMHbW5S0C4/ZNQc/wn/QhlT3yNkA=;
+        b=HHRrQqJTaYyqhm5SEDs341jEyGlML3vtqXjVKpOHBTjv3ttwjL7OnxgK+nqeSnVKXi
+         y70iz9zINragPQhuSlP19IB523DCRvy4flbU6uJ+oG+PV31js8BC6KmxdRwBxlxxSPf/
+         ncsowbC9REklUj8jL6A6/Lkep0G6YZlLqOsvFoeQ3yurUczS4ZKwflENkTPPN06oifRO
+         kVLEmzWsJI9USHdpOhFuM1jIirrpmYCBNV3kdqWrY6DpSI0Vv+d8qUT1B36xGnRYmp4M
+         AB0+L6iA6vI58ueiI3r858qCjB57/r9kV/tAZDgRBwR95AWNmaPhHsyPN7TV1gSOvSNh
+         5msw==
+X-Gm-Message-State: ACgBeo34NZ9N8dkHsIfOXRxkeiRqnZkOfbDohAY8H+KWo/kxEoNbQLlT
+        tkLBPs2xxzaziB04DHja4A==
+X-Google-Smtp-Source: AA6agR6WVI+/ceHbcBFR3xERiwrg/JO0+C7B4r7ga9Jn2f2JU+p2NFgk5jKwJ+rdMDIxRELPayZTxg==
+X-Received: by 2002:a05:6870:5591:b0:10e:20d0:b2cb with SMTP id n17-20020a056870559100b0010e20d0b2cbmr13027000oao.12.1661196292263;
+        Mon, 22 Aug 2022 12:24:52 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w9-20020a0568080d4900b00334c2e81dfbsm2802210oik.0.2022.08.22.12.24.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 12:24:51 -0700 (PDT)
+Received: (nullmailer pid 306067 invoked by uid 1000);
+        Mon, 22 Aug 2022 19:24:50 -0000
+Date:   Mon, 22 Aug 2022 14:24:50 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Mithil Bavishi <bavishimithil@gmail.com>
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dmitry.torokhov@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, sre@kernel.org, tony@atomide.com,
+        linux@armlinux.org.uk, contact@paulk.fr
+Subject: Re: [PATCH 05/10] dt-bindings: power: reset: Add bindings for
+ twl6030-power
+Message-ID: <20220822192450.GA297299-robh@kernel.org>
+References: <20220820071659.1215-1-bavishimithil@gmail.com>
+ <20220820071659.1215-6-bavishimithil@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220820071659.1215-6-bavishimithil@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022 15:51:04 +0300
-Ciprian Regus <ciprian.regus@analog.com> wrote:
-
-> Update the bindings documentation for ltc2497 to include the ltc2499.
+On Sat, Aug 20, 2022 at 12:46:55PM +0530, Mithil Bavishi wrote:
+> Adds documentation for the twl6030 power driver.
 > 
-> Signed-off-by: Ciprian Regus <ciprian.regus@analog.com>
-Looks fine to me.  Maybe a separate patch to add the ltc2496 binding
-given the driver is included in this MAINTAINERS entry?
-A random comment inline.
-
-Jonathan
-
+> Signed-off-by: Paul Kocialkowski <contact@paulk.fr>
+> Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
 > ---
->  Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml | 6 +++++-
->  MAINTAINERS                                                 | 1 +
->  2 files changed, 6 insertions(+), 1 deletion(-)
+>  .../bindings/power/reset/twl6030-power.txt    | 31 +++++++++++++++++++
+
+New bindings must be DT schema format.
+
+>  1 file changed, 31 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/twl6030-power.txt
 > 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml b/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
-> index c1772b568cd1..7bb30eafc543 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
-> @@ -13,10 +13,14 @@ description: |
->    16bit ADC supporting up to 16 single ended or 8 differential inputs.
->    I2C interface.
->  
-> +  https://www.analog.com/media/en/technical-documentation/data-sheets/2497fb.pdf
-> +  https://www.analog.com/media/en/technical-documentation/data-sheets/2499fe.pdf
+> diff --git a/Documentation/devicetree/bindings/power/reset/twl6030-power.txt b/Documentation/devicetree/bindings/power/reset/twl6030-power.txt
+> new file mode 100644
+> index 000000000..946bb3d9f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/twl6030-power.txt
+> @@ -0,0 +1,31 @@
+> +Texas Instruments TWL family (twl6030) reset and power management module
 > +
->  properties:
->    compatible:
-> -    const:
-> +    enum:
->        lltc,ltc2497
-> +      lltc,ltc2499
->  
->    reg: true
->    vref-supply: true
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 9d7f64dc0efe..3c847619ceb1 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1327,6 +1327,7 @@ W:	https://ez.analog.com/linux-software-drivers
->  F:	Documentation/ABI/testing/sysfs-bus-iio-frequency-ad9523
->  F:	Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4350
->  F:	Documentation/devicetree/bindings/iio/*/adi,*
-> +F:	Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
->  F:	Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
+> +For now, the binding only supports the complete shutdown of the system after
+> +poweroff.
+> +
+> +Required properties:
+> +- compatible : must be
+> +       "ti,twl6030-power"
+> +
+> +Optional properties:
+> +
+> +- ti,system-power-controller: This indicates that TWL6030 is the
 
-Unrelated question, but why is this here given the wild cards above match?
+We have a generic property for this.
 
->  F:	drivers/iio/*/ad*
->  F:	drivers/iio/adc/ltc249*
+> +  power supply master of the system. With this flag, the chip will
+> +  initiate an ACTIVE-to-OFF or SLEEP-to-OFF transition when the
+> +  system poweroffs.
+> +
+> +Example:
+> +&i2c1 {
+> +       clock-frequency = <2600000>;
+> +
+> +       twl: twl@48 {
+> +               reg = <0x48>;
+> +               interrupts = <7>; /* SYS_NIRQ cascaded to intc */
+> +               interrupt-parent = <&intc>;
+> +
+> +               twl_power: power {
+> +                       compatible = "ti,twl6030-power";
+> +                       ti,system-power-controller;
+
+Why do you need a child node here? There aren't any resources for the 
+sub-block.
+
+Rob

@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A459859C59A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EFE59C59F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237262AbiHVR7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
+        id S236315AbiHVSA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 14:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237348AbiHVR7f (ORCPT
+        with ESMTP id S235716AbiHVSAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:59:35 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB81F45F59
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:59:33 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id bq11so7611032wrb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:59:33 -0700 (PDT)
+        Mon, 22 Aug 2022 14:00:54 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0B246214
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:00:53 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id c4so8130340iof.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:00:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=7yBJRGwvl/pzUs+EDHj7+n2SkDx+t8AASlR3dqtZZaU=;
-        b=YrTEYKKZZJ4+AKSYYoKlNFNH/p/HLBInnCt9pvlW0TOn3RykpWYHy34gjepSzQZY7R
-         Yv7//FXhXGLAk+nHdErdXid773KJEqpXbQ3V7zZoD77P3KYy25Xb5dbumGodd1uCgAVT
-         DXVyeMdRK+clNTwopsLiF0MzjeDfIaiUspH4h3vB+OcwBNn68ZPIC00EK/MA70F/v3Z8
-         +1+l3Duh0ZbIxXAzlF5zScOTz1q4UY0FXnf9iFlZwJfQIS34YFtOubfJ4P1GYK1EPq3a
-         aLhk0jo/R7tLEzIWKW5sgPe0JOVORpSQnhj+tNR8BfVTLLffCJM1pTSRWul4Mke3e5OU
-         yu4w==
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Yy+VCdeRgyIswu0CubtFfhUCsZgH35AGFG4Ign730ws=;
+        b=Mo+5ifl51BAeqfBpFxhVxm/AfNbeeoQ/9eB5mIIsoaF06OdGvL3SX6o5cyHpgQ3Qfo
+         WG5wV//8QaYLWW+It1muL+YFBS8gqV99Ds2cAn92ukJ/uJ27xOI6q9/lfOx2PJ5jHPLK
+         26tsZLwQ0HTIcDLjt/RpJbCVcnhkt1FY0i4Jw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=7yBJRGwvl/pzUs+EDHj7+n2SkDx+t8AASlR3dqtZZaU=;
-        b=7z9IS4wYROF6YQnh0QCYztdXPrDKGYuxsyeDs8L5yPrSVhoQMVvoLPr1wsz51+13C6
-         9zaE1OGBvzbgERKt3UxNkzMwMZ/VPVE9sedyS4OgPBp83b9PS8cLhocNbKv1Pi2Tjmvh
-         7XOESrnV18zmAnb6RRfs7cHwqVk4C6Ltqd41EZhCzOxZwhdu9fP37oEmxbVeHmM0Lhes
-         UbSWYsaUikpw3Fvwu4iV1/YJTx2lQtcrbrMjpyl9mwk33GX3Gt+4kYjezVfV1bWCsDUc
-         j3GBhxL8gMSHUAMUpxYEL8lxSI6z+mMlTz4K7gO2Psu59wchM+mn6mSViFYbuZ59jnpF
-         Yp5g==
-X-Gm-Message-State: ACgBeo20Z9W8KSVkmVrnuOdmpD2Cp6lVbPQRML/1g45NSp7+UBCMvkvt
-        d8Dm0R7zpzrBqNOrCjS7k9c=
-X-Google-Smtp-Source: AA6agR54fhx4TBdfypPsE0ikMuSvjARjCrHEb/YsmcAd6NF2wc6qTzPphSV/Qw7BzJQhbB9NLke3pQ==
-X-Received: by 2002:a05:6000:156b:b0:222:c789:cb2d with SMTP id 11-20020a056000156b00b00222c789cb2dmr11648628wrz.197.1661191172237;
-        Mon, 22 Aug 2022 10:59:32 -0700 (PDT)
-Received: from [192.168.1.100] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id r38-20020a05600c322600b003a2e92edeccsm17150184wmp.46.2022.08.22.10.59.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 10:59:31 -0700 (PDT)
-Message-ID: <5102d3a2-56b1-7111-72c9-905cd56f86bf@gmail.com>
-Date:   Mon, 22 Aug 2022 19:59:28 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Yy+VCdeRgyIswu0CubtFfhUCsZgH35AGFG4Ign730ws=;
+        b=T5IFqqR71rIas8qsF/PMp6cGExvkAyx2P3iYNToSAo8Z4+fqB7KtNNRFH7fCxVs3pS
+         zHMaCibxdIIXhm4Xya/xrE5gHAMWTIybbr8bKFqphMkhZj1ZkWpwLt7jGnEwBajyqSMk
+         stqFpaIC/ORLSIrYaA+hDTGEPuOXWkYNqymIiKFog387bejH3BqWX3v2n8y/u1lsDyzH
+         K3DE05ReboUrRaGwhLULv/o1yzBR5JOWbMwiHdHQSXzUyvhvKmOioHgqD0ClHhfRsOSe
+         wdNIHj5ywjrivPBN9EN1FsW53KiZ3UbsS/QeBNRj+OR8IlWvcPixZcmXeaZXf2NwYgzh
+         Y39w==
+X-Gm-Message-State: ACgBeo27NR9iqPWnVXwY9qoxQn69FLNMRK3VRD8xwkRR2NrrCZF4hTMC
+        UuOQeLnucdOQhPcb1icurjtxfYy0UluX2uFj6hZDjg==
+X-Google-Smtp-Source: AA6agR4PiAg9W3J1Kjke4ZDulydfcB5kDGfFIWEbvF6a+CadWvvy79fC0sF+MDSVFsweS5N3LvlJoANsx/yaGdmPsGU=
+X-Received: by 2002:a5d:9914:0:b0:67c:2039:caff with SMTP id
+ x20-20020a5d9914000000b0067c2039caffmr9087348iol.201.1661191252848; Mon, 22
+ Aug 2022 11:00:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] staging: r8188eu: remove unused module parameter
- rtw_chip_version
-Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220821123138.8070-1-straube.linux@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220821123138.8070-1-straube.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com> <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+In-Reply-To: <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 22 Aug 2022 14:00:41 -0400
+Message-ID: <CAEXW_YTtQNTLEj9wz9ETt=6USLYO2yrJcSZ-mkiVVHj7y6Z12g@mail.gmail.com>
+Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mikulas Patocka <mpatocka@redhat.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/21/22 14:31, Michael Straube wrote:
-> The module parameter rtw_chip_version sets the chip_version field of
-> struct registry_priv but that field is never used in the driver code.
-> Remove the unused module parameter.
-> 
-> Signed-off-by: Michael Straube <straube.linux@gmail.com>
-> ---
->   drivers/staging/r8188eu/include/drv_types.h | 1 -
->   drivers/staging/r8188eu/os_dep/os_intfs.c   | 3 ---
->   2 files changed, 4 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/include/drv_types.h b/drivers/staging/r8188eu/include/drv_types.h
-> index 79351b3aa60d..1bd0c8f3a358 100644
-> --- a/drivers/staging/r8188eu/include/drv_types.h
-> +++ b/drivers/staging/r8188eu/include/drv_types.h
-> @@ -37,7 +37,6 @@
->   #define FW_RTL8188EU	"rtlwifi/rtl8188eufw.bin"
->   
->   struct registry_priv {
-> -	u8	chip_version;
->   	u8	rfintfs;
->   	u8	lbkmode;
->   	u8	hci;
-> diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
-> index 2d2a1c27d433..dd4e6aac3509 100644
-> --- a/drivers/staging/r8188eu/os_dep/os_intfs.c
-> +++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
-> @@ -22,7 +22,6 @@ MODULE_FIRMWARE(FW_RTL8188EU);
->   #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
->   
->   /* module param defaults */
-> -static int rtw_chip_version = 0x00;
->   static int rtw_rfintfs = HWPI;
->   static int rtw_lbkmode;/* RTL8712_AIR_TRX; */
->   static int rtw_network_mode = Ndis802_11IBSS;/* Ndis802_11Infrastructure; infra, ad-hoc, auto */
-> @@ -104,7 +103,6 @@ char *rtw_initmac;  /*  temp mac address if users want to use instead of the mac
->   
->   module_param(rtw_initmac, charp, 0644);
->   module_param(rtw_channel_plan, int, 0644);
-> -module_param(rtw_chip_version, int, 0644);
->   module_param(rtw_rfintfs, int, 0644);
->   module_param(rtw_lbkmode, int, 0644);
->   module_param(rtw_network_mode, int, 0644);
-> @@ -151,7 +149,6 @@ static uint loadparam(struct adapter *padapter)
->   {
->   	struct registry_priv  *registry_par = &padapter->registrypriv;
->   
-> -	registry_par->chip_version = (u8)rtw_chip_version;
->   	registry_par->rfintfs = (u8)rtw_rfintfs;
->   	registry_par->lbkmode = (u8)rtw_lbkmode;
->   	registry_par->network_mode  = (u8)rtw_network_mode;
+On Mon, Aug 22, 2022 at 1:39 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Mon, Aug 22, 2022 at 10:08 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > So why don't we just create a "test_bit_acquire()" and be done with
+> > it? We literally created clear_bit_unlock() for the opposite reason,
+> > and your comments about the new barrier hack even point to it.
+>
+> Here's a patch that is
+>
+>  (a) almost entirely untested (I checked that one single case builds
+> and seems to generate the expected code)
+>
+>  (b) needs some more loving
+>
+> but seems to superficially work.
+>
+> At a minimum this needs to be split into two (so the bitop and the
+> wait_on_bit parts split up), and that whole placement of
+> <asm/barrier.h> and generic_bit_test_acquire() need at least some
+> thinking about, but on the whole it seems reasonable.
+>
+> For example, it would make more sense to have this in
+> <asm-generic/bitops/lock.h>, but not all architectures include that,
+> and some do their own version. I didn't want to mess with
+> architecture-specific headers, so this illogically just uses
+> generic-non-atomic.h.
+>
+> Maybe just put it in <linux/bitops.h> directly?
+>
+> So I'm not at all claiming that this is a great patch. It definitely
+> needs more work, and a lot more testing.
+>
+> But I think this is at least the right _direction_ to take here.
+>
+> And yes, I think it also would have been better if
+> "clear_bit_unlock()" would have been called "clear_bit_release()", and
+> we'd have more consistent naming with our ordered atomics. But it's
+> probably not worth changing.
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+Also, as a suggestion to Mikulas or whoever works on this - update the
+ORDERING section of Documentation/atomic_bitops.txt too?
+
+Thanks,
+
+ - Joel

@@ -2,56 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C8A59BC30
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1162659BC37
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234130AbiHVJBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 05:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
+        id S234097AbiHVJDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234085AbiHVJA5 (ORCPT
+        with ESMTP id S231464AbiHVJDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 05:00:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE202E9EF;
-        Mon, 22 Aug 2022 02:00:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFD6960AD7;
-        Mon, 22 Aug 2022 09:00:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB127C433D7;
-        Mon, 22 Aug 2022 09:00:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661158855;
-        bh=/r635Nf0GeBhwc+wnSHRPBxLAAUJnF8htkFn+8pytfU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YhoZieWNU1+BD+y8GAvexW7gtzw7/8i91r4/y0ie7lO6GwzasEo6h4TcPTAthtF7G
-         VaSKrfTZCUcpOYqPi6QKh6EpdG6AdqZVXyU6mEjiRnVKN2LUXHowPqoZfLUQA6stXS
-         dR3BTN2HCl2cnMqaVjKlL1iW5n184HVDqy7L8Q7w=
-Date:   Mon, 22 Aug 2022 11:00:52 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     stable <stable@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-x86_64@vger.kernel.org
-Subject: Re: LTS kernel Linux 4.14.290 unable to boot with edk2-ovmf (x86_64
- UEFI runtime)
-Message-ID: <YwNFxIouYoRo/wT+@kroah.com>
-References: <2d6012e8-805d-4225-80ed-d317c28f1899@gmx.com>
- <YwMhXX6OhROLZ/LR@kroah.com>
- <1ed5a33a-b667-0e8e-e010-b4365f3713d6@gmx.com>
- <YwMxRAfrrsPE6sNI@kroah.com>
- <8aff5c17-d414-2412-7269-c9d15f574037@gmx.com>
- <YwM3DwvPIGkfE4Tu@kroah.com>
- <acc6051b-748f-4f06-63b3-919eb831217c@gmx.com>
+        Mon, 22 Aug 2022 05:03:16 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECBC18D
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:03:13 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3246910dac3so273997147b3.12
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:03:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=EuziAoq5ZbtPrSZbeUk8bQqTzuyS7XPxbOwKK2h6M3I=;
+        b=Sw3kIy20SNGugBW8dL2ZMcQGAgqJ/0rc8tznUC4Q0+BOOO85ccRBiVpJitf6eK1Iaa
+         RjQCiALJNCBQ6CFRTYn5FHPW8bV5kgVDvlP6Yq32hZslXgIJmJr+Jna1zxeXneR38Ihj
+         34zAejNuIsR38piTK9NXJDONa4Y76Jh9fsQBE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=EuziAoq5ZbtPrSZbeUk8bQqTzuyS7XPxbOwKK2h6M3I=;
+        b=fkRQLvGbZRIqAMw/YewGTJSt9tNoy5veJjj3nMReYFGYTPUiJr670cRg3ZAnD16Ds7
+         K0GFGiEn5a6MUvESkVs6iwozs0kP16FMtuHgsMjGvIsHPIs6Kb1qlnAcAS+f8tuJ0YuL
+         loTfudsIXX9g6f6wI2iZhidnnVWLwMu7f0fpaa2nnwV0T/FfAT2o9uPUTwfwnaZ7+dfp
+         t6c/5q26UMkJSmz+BFyedsCMvaUA8+0YZDuFBUWqrhVjP7/5zpUyy2NK867lr1jXKdQ8
+         QNPxXWbI1QJIegOXSnke0owL+lbhIv8wZ6ML4b+Yup3EPmeHBS107m9citD03D2b3Zuc
+         U3kg==
+X-Gm-Message-State: ACgBeo2AlHPa3JnwCB/AC807kwmjHW+ubEduZcAQPIU6KzO8T5wwsg6m
+        8EaBUeaT2WCzeG79VHAoAyjOvA6i1rU7FqdL+2o/8Q==
+X-Google-Smtp-Source: AA6agR6APdt78F3uw+1hsI55dL+JHbLtSlHcfqi0jLhAPn0QEEgxu7vETGl/x/2GaGSTbsdSnHe62HeLvEmG/XpC7hM=
+X-Received: by 2002:a05:6902:100b:b0:695:bd4e:95d6 with SMTP id
+ w11-20020a056902100b00b00695bd4e95d6mr2569366ybt.595.1661158993033; Mon, 22
+ Aug 2022 02:03:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acc6051b-748f-4f06-63b3-919eb831217c@gmx.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220815104739.v7.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
+ <Yvnq5o5f+qp5zs1c@kroah.com>
+In-Reply-To: <Yvnq5o5f+qp5zs1c@kroah.com>
+From:   Daniil Lunev <dlunev@chromium.org>
+Date:   Mon, 22 Aug 2022 19:03:02 +1000
+Message-ID: <CAONX=-fScRJt-j1USO6gKXm780S=XBGHVc_LUziSZDiStc5P6A@mail.gmail.com>
+Subject: Re: [PATCH v7] ufs: core: print UFSHCD capabilities in controller's
+ sysfs node
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Keoseong Park <keosung.park@samsung.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,79 +74,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 04:13:03PM +0800, Qu Wenruo wrote:
-> 
-> 
-> On 2022/8/22 15:58, Greg KH wrote:
-> > On Mon, Aug 22, 2022 at 03:49:51PM +0800, Qu Wenruo wrote:
-> > > 
-> > > 
-> > > On 2022/8/22 15:33, Greg KH wrote:
-> > > > On Mon, Aug 22, 2022 at 03:24:53PM +0800, Qu Wenruo wrote:
-> > > > > 
-> > > > > 
-> > > > > On 2022/8/22 14:25, Greg KH wrote:
-> > > > > > On Mon, Aug 22, 2022 at 09:15:59AM +0800, Qu Wenruo wrote:
-> > > > > > > Hi,
-> > > > > > > 
-> > > > > > > When backporting some btrfs specific patches to all LTS kernels, I found
-> > > > > > > v4.14.290 kernel unable to boot as a KVM guest with edk2-ovmf
-> > > > > > > (edk2-ovmf: 202205, qemu 7.0.0, libvirt 1:8.6.0).
-> > > > > > > 
-> > > > > > > While all other LTS/stable branches (4.19.x, 5.4.x, 5.10.x, 5.15.x,
-> > > > > > > 5.18.x, 5.19.x) can boot without a hipccup.
-> > > > > > > 
-> > > > > > > I tried the following configs, but none of them can even provide an
-> > > > > > > early output:
-> > > > > > > 
-> > > > > > > - CONFIG_X86_VERBOSE_BOOTUP
-> > > > > > > - CONFIG_EARLY_PRINTK
-> > > > > > > - CONFIG_EARLY_PRINTK_EFI
-> > > > > > > 
-> > > > > > > Is this a known bug or something new?
-> > > > > > 
-> > > > > > Has this ever worked properly on this very old kernel tree?  If so, can
-> > > > > > you use 'git bisect' to find the offending commit?
-> > > > > 
-> > > > > Unfortunately the initial v4.14 from upstream can not even be compiled.
-> > > > 
-> > > > Really?  Try using an older version of gcc and you should be fine.  It
-> > > > did build properly back in 2017 when it was released :)
-> > > 
-> > > Yeah, I'm pretty sure my toolchain is too new for v4.14.0. But my distro
-> > > only provides the latest and mostly upstream packages.
-> > > 
-> > > It may be a even worse disaster to find a way to rollback to older
-> > > toolchains using my distro...
-> > > 
-> > > Also my hardware may not be well suited for older kernels either.
-> > > (Zen 3 CPU used here)
-> > > 
-> > > In fact, I even find it hard just to locate a v4.14.x tag that can compile.
-> > > After some bisection between v4.14.x tags, only v4.14.268 and newer tags
-> > > can even be compiled using latest toolchain.
-> > > (But still tons of warning, and tons of objdump warnings against
-> > > insn_get_length()).
-> > > 
-> > > I'm not sure what's the normal practice for backports to such old branch.
-> > > 
-> > > Do you stable guys keep dedicated VMs loaded with older distro just for
-> > > these old branches?
-> > 
-> > I don't, that's why those kernels can be built with newer versions of
-> > gcc.
-> > 
-> > Your distro should have a version of gcc-10 or gcc-9 that can be
-> > installed, right?
-> 
-> This may sounds like a meme, but I'm really using Archlinux for my VM
-> and host, and it doesn't provide older GCC at all.
+On Mon, Aug 15, 2022 at 4:42 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> Please provide a lot more information about this in the changelog text.
+> What would you want to see here if you had to review this change?
 
-Archlinux does provide older gcc versions, that's what I use.
+Hi Greg,
+Sorry for toppost, let me try again.
+Can you clarify what specifically is missing from the changelog?
+The comment used to be on the "c" file, but now is moved to the
+documentation. Is there anything specific missing? Or do you
+mean commit messages?
 
-It still supports gcc11 in the main repo, and there is gcc10 in AUR as
-well as gcc9.  Try those!
-
-good luck!
-
-greg k-h
+Thanks,
+Daniil

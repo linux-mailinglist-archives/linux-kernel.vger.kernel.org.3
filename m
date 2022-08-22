@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC76759BE2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB8C59BE28
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234514AbiHVLFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
+        id S232825AbiHVLFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233981AbiHVLEW (ORCPT
+        with ESMTP id S234359AbiHVLEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:04:22 -0400
+        Mon, 22 Aug 2022 07:04:23 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8460827CD4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77BC27CE8
         for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:04:20 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1oQ5Dx-0005S0-Fs; Mon, 22 Aug 2022 13:04:05 +0200
+        id 1oQ5Dw-0005PQ-As; Mon, 22 Aug 2022 13:04:04 +0200
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1oQ5Dw-001Hme-MC; Mon, 22 Aug 2022 13:04:04 +0200
+        id 1oQ5Dv-001Hm2-F6; Mon, 22 Aug 2022 13:04:03 +0200
 Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1oQ5Ds-009gyq-Ce; Mon, 22 Aug 2022 13:04:00 +0200
+        id 1oQ5Ds-009gyz-DC; Mon, 22 Aug 2022 13:04:00 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Woojung Huh <woojung.huh@microchip.com>,
         UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
@@ -39,9 +39,9 @@ To:     Woojung Huh <woojung.huh@microchip.com>,
         Paolo Abeni <pabeni@redhat.com>
 Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v2 05/17] net: dsa: microchip: forward error value on all ksz_pread/ksz_pwrite functions
-Date:   Mon, 22 Aug 2022 13:03:46 +0200
-Message-Id: <20220822110358.2310055-6-o.rempel@pengutronix.de>
+Subject: [PATCH net-next v2 06/17] net: dsa: microchip: ksz9477: add error handling to ksz9477_r/w_phy
+Date:   Mon, 22 Aug 2022 13:03:47 +0200
+Message-Id: <20220822110358.2310055-7-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220822110358.2310055-1-o.rempel@pengutronix.de>
 References: <20220822110358.2310055-1-o.rempel@pengutronix.de>
@@ -60,73 +60,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ksz_read*/ksz_write* are able to return errors, so forward it.
+Now ksz_pread/ksz_pwrite can return error value. So, make use of it.
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 ---
- drivers/net/dsa/microchip/ksz_common.h | 26 ++++++++++++++------------
- 1 file changed, 14 insertions(+), 12 deletions(-)
+ drivers/net/dsa/microchip/ksz9477.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index baaeb60533faf..be0e5d6ef2bf0 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -393,40 +393,42 @@ static inline int ksz_write64(struct ksz_device *dev, u32 reg, u64 value)
- 	return regmap_bulk_write(dev->regmap[2], reg, val, 2);
- }
- 
--static inline void ksz_pread8(struct ksz_device *dev, int port, int offset,
-+static inline int ksz_pread8(struct ksz_device *dev, int port, int offset,
- 			      u8 *data)
+diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
+index d986be78183c4..13c4ded84b1db 100644
+--- a/drivers/net/dsa/microchip/ksz9477.c
++++ b/drivers/net/dsa/microchip/ksz9477.c
+@@ -278,6 +278,7 @@ static void ksz9477_r_phy_quirks(struct ksz_device *dev, u16 addr, u16 reg,
+ int ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
  {
--	ksz_read8(dev, dev->dev_ops->get_port_addr(port, offset), data);
-+	return ksz_read8(dev, dev->dev_ops->get_port_addr(port, offset), data);
+ 	u16 val = 0xffff;
++	int ret;
+ 
+ 	/* No real PHY after this. Simulate the PHY.
+ 	 * A fixed PHY can be setup in the device tree, but this function is
+@@ -318,7 +319,10 @@ int ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
+ 			break;
+ 		}
+ 	} else {
+-		ksz_pread16(dev, addr, 0x100 + (reg << 1), &val);
++		ret = ksz_pread16(dev, addr, 0x100 + (reg << 1), &val);
++		if (ret)
++			return ret;
++
+ 		ksz9477_r_phy_quirks(dev, addr, reg, &val);
+ 	}
+ 
+@@ -335,11 +339,9 @@ int ksz9477_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val)
+ 
+ 	/* No gigabit support.  Do not write to this register. */
+ 	if (!(dev->features & GBIT_SUPPORT) && reg == MII_CTRL1000)
+-		return 0;
++		return -ENXIO;
+ 
+-	ksz_pwrite16(dev, addr, 0x100 + (reg << 1), val);
+-
+-	return 0;
++	return ksz_pwrite16(dev, addr, 0x100 + (reg << 1), val);
  }
  
--static inline void ksz_pread16(struct ksz_device *dev, int port, int offset,
-+static inline int ksz_pread16(struct ksz_device *dev, int port, int offset,
- 			       u16 *data)
- {
--	ksz_read16(dev, dev->dev_ops->get_port_addr(port, offset), data);
-+	return ksz_read16(dev, dev->dev_ops->get_port_addr(port, offset), data);
- }
- 
--static inline void ksz_pread32(struct ksz_device *dev, int port, int offset,
-+static inline int ksz_pread32(struct ksz_device *dev, int port, int offset,
- 			       u32 *data)
- {
--	ksz_read32(dev, dev->dev_ops->get_port_addr(port, offset), data);
-+	return ksz_read32(dev, dev->dev_ops->get_port_addr(port, offset), data);
- }
- 
--static inline void ksz_pwrite8(struct ksz_device *dev, int port, int offset,
-+static inline int ksz_pwrite8(struct ksz_device *dev, int port, int offset,
- 			       u8 data)
- {
--	ksz_write8(dev, dev->dev_ops->get_port_addr(port, offset), data);
-+	return ksz_write8(dev, dev->dev_ops->get_port_addr(port, offset), data);
- }
- 
--static inline void ksz_pwrite16(struct ksz_device *dev, int port, int offset,
-+static inline int ksz_pwrite16(struct ksz_device *dev, int port, int offset,
- 				u16 data)
- {
--	ksz_write16(dev, dev->dev_ops->get_port_addr(port, offset), data);
-+	return ksz_write16(dev, dev->dev_ops->get_port_addr(port, offset),
-+			   data);
- }
- 
--static inline void ksz_pwrite32(struct ksz_device *dev, int port, int offset,
-+static inline int ksz_pwrite32(struct ksz_device *dev, int port, int offset,
- 				u32 data)
- {
--	ksz_write32(dev, dev->dev_ops->get_port_addr(port, offset), data);
-+	return ksz_write32(dev, dev->dev_ops->get_port_addr(port, offset),
-+			   data);
- }
- 
- static inline void ksz_prmw8(struct ksz_device *dev, int port, int offset,
+ void ksz9477_cfg_port_member(struct ksz_device *dev, int port, u8 member)
 -- 
 2.30.2
 

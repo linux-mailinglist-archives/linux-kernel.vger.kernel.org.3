@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C2959BD96
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 843B259BD9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234058AbiHVKbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 06:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
+        id S233792AbiHVKby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 06:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbiHVKbs (ORCPT
+        with ESMTP id S233279AbiHVKbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 22 Aug 2022 06:31:48 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EF22F3B1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 03:31:47 -0700 (PDT)
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFC42F3A7;
+        Mon, 22 Aug 2022 03:31:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1661164307; x=1692700307;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9ex5t4ytfumm6Wsq9uJG78mnESKnj7rd8OGsNfvqKSQ=;
-  b=DYx5yFP4f5S1+Y00BzxZChqdelMwz1dQ8TeerKxOQCuGVqiyKHCqfzbt
-   tuke0N/JJPe5+c8uApvrVItNR8DAs/yrMY6znbmuHQZe1g7+B4y4F6cm7
-   XM0mkidAotXJAwCINl4WjgDdXYi9M+DmnuX/+DBp9x+MG6F/WH1B5yPXE
-   2+tWJ20BfgvlLnXxfd7bBW7/vqYSeyAqSUBu+MDAYhOORBEw2yeQ0cWH3
-   besSmxW0alL53ld3ouBpdXY+Z1V0EtgcwDo9hkyhq8U3FZ0j69A69F1KW
-   MTq1fx2hn0i4+hM2E0wVrIgcDlVOxc/MX0qV+VWm9U0HbKaCW11vRuv4m
+  bh=OA61iMl2LAMBDM5zyrTEbmJe1CFMJNkn6xjVOIt/ELk=;
+  b=J+Yd1rFb9jR4BaBPx9GPzqT4btKzQ1Z/SBCOb6ZNxq3QGMSVEV+GStPp
+   zez05EeYTOM670PCoiYHTZgGQwPBaIJhyl2wI/vnU7BQqY64Gk05j0uJH
+   evFF6aUwjIqb1gJfRaCcRN1Jj4swF5nCg783vz5kFkAKIEtpr1l00DLXu
+   /b2zyYdz8wbegB3ulI0qmO3cLCVl15I6fyX3RhW6SfhHmfYaLAFgDOEtJ
+   zdtvhfnVY4u0lAaSDrkn/1w/kyZ9IIlW+FjURdUZfC/XM6lrMg/3A3QP7
+   blw+HtGbRAR3sXQoLKftxrEEVfy9wPxpnP5wp+XGq3m/mref/O0P31pnT
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="273133309"
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="355109729"
 X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="273133309"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 03:31:47 -0700
+   d="scan'208";a="355109729"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 03:31:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="698240197"
+   d="scan'208";a="641981514"
 Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Aug 2022 03:31:45 -0700
+  by orsmga001.jf.intel.com with ESMTP; 22 Aug 2022 03:31:45 -0700
 Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oQ4ie-0005DE-2C;
+        id 1oQ4ie-0005DB-27;
         Mon, 22 Aug 2022 10:31:44 +0000
-Date:   Mon, 22 Aug 2022 18:31:21 +0800
+Date:   Mon, 22 Aug 2022 18:31:22 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: drivers/base/power/domain.c:2894:34: warning: unused variable
- 'idle_state_match'
-Message-ID: <202208221825.M4zoR8e6-lkp@intel.com>
+To:     Aditya Srivastava <yashsri421@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: arch/mips/pci/pci-ar2315.c:6: warning: This comment starts with
+ '/**', but isn't a kernel-doc comment. Refer
+ Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202208221854.8ASrzjKa-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konrad,
+Hi Aditya,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+FYI, the error/warning still remains.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   1c23f9e627a7b412978b4e852793c5e3c3efc555
-commit: 7d0221fb59125181a31ef3a561306c70fb238bc7 soc/qcom: Make QCOM_RPMPD select PM_GENERIC_DOMAINS/_OF
-date:   7 weeks ago
-config: x86_64-buildonly-randconfig-r004-20220822 (https://download.01.org/0day-ci/archive/20220822/202208221825.M4zoR8e6-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+commit: 3e58e839150db0857dfcb3a0bb3d4af4c6ac1abf scripts: kernel-doc: add warning for comment not following kernel-doc syntax
+date:   1 year, 5 months ago
+config: mips-randconfig-r016-20220821 (https://download.01.org/0day-ci/archive/20220822/202208221854.8ASrzjKa-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7d0221fb59125181a31ef3a561306c70fb238bc7
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3e58e839150db0857dfcb3a0bb3d4af4c6ac1abf
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 7d0221fb59125181a31ef3a561306c70fb238bc7
+        git checkout 3e58e839150db0857dfcb3a0bb3d4af4c6ac1abf
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/base/power/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/base/power/domain.c:2894:34: warning: unused variable 'idle_state_match' [-Wunused-const-variable]
-   static const struct of_device_id idle_state_match[] = {
-                                    ^
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
-   Depends on [n]: PM_GENERIC_DOMAINS [=y] && OF [=n]
-   Selected by [m]:
-   - QCOM_RPMPD [=m] && QCOM_SMD_RPM [=y]
+>> arch/mips/pci/pci-ar2315.c:6: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Both AR2315 and AR2316 chips have PCI interface unit, which supports DMA
 
 
-vim +/idle_state_match +2894 drivers/base/power/domain.c
+vim +6 arch/mips/pci/pci-ar2315.c
 
-5d6be70add65e3 Ulf Hansson 2018-06-29  2893  
-30f604283e05d3 Lina Iyer   2016-10-14 @2894  static const struct of_device_id idle_state_match[] = {
-598da548ef7892 Lina Iyer   2016-11-03  2895  	{ .compatible = "domain-idle-state", },
-30f604283e05d3 Lina Iyer   2016-10-14  2896  	{ }
-30f604283e05d3 Lina Iyer   2016-10-14  2897  };
-30f604283e05d3 Lina Iyer   2016-10-14  2898  
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  @6   * Both AR2315 and AR2316 chips have PCI interface unit, which supports DMA
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29   7   * and interrupt. PCI interface supports MMIO access method, but does not
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29   8   * seem to support I/O ports.
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29   9   *
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  10   * Read/write operation in the region 0x80000000-0xBFFFFFFF causes
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  11   * a memory read/write command on the PCI bus. 30 LSBs of address on
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  12   * the bus are taken from memory read/write request and 2 MSBs are
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  13   * determined by PCI unit configuration.
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  14   *
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  15   * To work with the configuration space instead of memory is necessary set
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  16   * the CFG_SEL bit in the PCI_MISC_CONFIG register.
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  17   *
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  18   * Devices on the bus can perform DMA requests via chip BAR1. PCI host
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  19   * controller BARs are programmend as if an external device is programmed.
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  20   * Which means that during configuration, IDSEL pin of the chip should be
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  21   * asserted.
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  22   *
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  23   * We know (and support) only one board that uses the PCI interface -
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  24   * Fonera 2.0g (FON2202). It has a USB EHCI controller connected to the
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  25   * AR2315 PCI bus. IDSEL pin of USB controller is connected to AD[13] line
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  26   * and IDSEL pin of AR2315 is connected to AD[16] line.
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  27   */
+3ed7a2a702dc0f Sergey Ryazanov 2014-10-29  28  
 
-:::::: The code at line 2894 was first introduced by commit
-:::::: 30f604283e05d34cb10108c7ba017e5f4fc9d62c PM / Domains: Allow domain power states to be read from DT
+:::::: The code at line 6 was first introduced by commit
+:::::: 3ed7a2a702dc0f5bc44d67f27a1a289356b5dc42 MIPS: ath25: add AR2315 PCI host controller driver
 
-:::::: TO: Lina Iyer <lina.iyer@linaro.org>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+:::::: TO: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 -- 
 0-DAY CI Kernel Test Service

@@ -2,54 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5500959BD54
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B43759BD5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbiHVKG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 06:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
+        id S234579AbiHVKIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 06:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232398AbiHVKGy (ORCPT
+        with ESMTP id S234584AbiHVKIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 06:06:54 -0400
+        Mon, 22 Aug 2022 06:08:47 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D31672AC77;
-        Mon, 22 Aug 2022 03:06:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59AF012A97;
+        Mon, 22 Aug 2022 03:08:46 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B675513D5;
-        Mon, 22 Aug 2022 03:06:53 -0700 (PDT)
-Received: from [10.57.15.77] (unknown [10.57.15.77])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C0A723F718;
-        Mon, 22 Aug 2022 03:06:48 -0700 (PDT)
-Message-ID: <3b88438d-1bb0-e980-b4db-1f8663dc6042@arm.com>
-Date:   Mon, 22 Aug 2022 11:06:43 +0100
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C1C113D5;
+        Mon, 22 Aug 2022 03:08:49 -0700 (PDT)
+Received: from [10.57.17.196] (unknown [10.57.17.196])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D3E773F718;
+        Mon, 22 Aug 2022 03:08:43 -0700 (PDT)
+Message-ID: <f64f6cbf-73cf-e59a-5f6d-7303125bee66@arm.com>
+Date:   Mon, 22 Aug 2022 11:08:37 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] mmc: sdhci-xenon: Fix 2G limitation on AC5 SoC
-Content-Language: en-GB
-To:     Christoph Hellwig <hch@infradead.org>,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hu Ziji <huziji@marvell.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Elad Nachman <enachman@marvell.com>, iommu@lists.linux.dev,
-        Mickey Rachamim <mickeyr@marvell.com>
-References: <20220808095237.GA15939@plvision.eu>
- <6c94411c-4847-526c-d929-c9523aa65c11@intel.com>
- <20220808122652.GA6599@plvision.eu>
- <3f96b382-aede-1f52-33cb-5f95715bdf59@intel.com>
- <3d16ebad-ea6c-555e-2481-ca5fb08a6c66@arm.com>
- <20220816205129.GA6438@plvision.eu>
- <94888b3b-8f54-367d-c6b4-5ebfeeafe4c4@arm.com>
- <20220817160730.GA17202@plvision.eu>
- <80d2538c-bac4-cc4f-85ae-352fcf86321d@arm.com>
- <20220818120740.GA21548@plvision.eu> <YwHOCHmKaf7yfgOD@infradead.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YwHOCHmKaf7yfgOD@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] perf: python: Fix build when PYTHON_CONFIG is user
+ supplied
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ian Rogers <irogers@google.com>
+Cc:     linux-perf-users@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20220728093946.1337642-1-james.clark@arm.com>
+ <CAP-5=fXnR=LSk-bO02V7HzWTTCrsbnM1w63_YYqSMEgy0vM-PQ@mail.gmail.com>
+ <YuLi14u3DQ+ShH9w@kernel.org>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <YuLi14u3DQ+ShH9w@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -60,27 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-21 07:17, Christoph Hellwig wrote:
-> On Thu, Aug 18, 2022 at 03:07:40PM +0300, Vadym Kochan wrote:
->> It works with the following changes:
->>
->>      #1 dma-ranges = <0x0 0x0 0x2 0x0 0x0 0x80000000>;
->>
->>      #3 swiotlb="force"
->>
->> Is it OK to force the memory allocation from the start for the swiotlb ?
-> 
-> It should be ok, but isn't really optimal.
-> 
-> I wonder if we should just allow DT to specify the swiotlb buffer
-> location.  Basically have yet another RESERVEDMEM_OF_DECLARE variant
-> for it, which shouldn't be all that much work except for figuring
-> out the interaction with the various kernel command line options.
 
-We already have all the information we need in the DT (and ACPI), the 
-arm64 init code just needs to do a better job of interpreting it 
-properly. I'll see what I can come up with once I've finished what I'm 
-currently tied up in.
 
-Thanks,
-Robin.
+On 28/07/2022 20:26, Arnaldo Carvalho de Melo wrote:
+> Em Thu, Jul 28, 2022 at 09:37:32AM -0700, Ian Rogers escreveu:
+>> On Thu, Jul 28, 2022 at 2:40 AM James Clark <james.clark@arm.com> wrote:
+>>>
+>>> The previous change to Python autodetection had a small mistake where
+>>> the auto value was used to determine the Python binary, rather than the
+>>> user supplied value. The Python binary is only used for one part of the
+>>> build process, rather than the final linking, so it was producing
+>>> correct builds in most scenarios, especially when the auto detected
+>>> value matched what the user wanted, or the system only had a valid set
+>>> of Pythons.
+>>>
+>>> Change it so that the Python binary path is derived from either the
+>>> PYTHON_CONFIG value or PYTHON value, depending on what is specified by
+>>> the user. This was the original intention.
+>>>
+>>> This error was spotted in a build failure an odd cross compilation
+>>> environment after commit 4c41cb46a732fe82 ("perf python: Prefer
+>>> python3") was merged.
+>>>
+>>> Fixes: 630af16eee495f58 ("perf tools: Use Python devtools for version autodetection rather than runtime")
+>>> Signed-off-by: James Clark <james.clark@arm.com>
+>>
+>> Acked-by: Ian Rogers <irogers@google.com>
+> 
+> Thanks, applied.
+
+Hi Arnaldo,
+
+I couldn't find this change in any of your branches. Do you know if it
+got dropped somehow or was there an issue with it?
+
+Thanks
+James
+
+> 
+> - Arnaldo
+> 
+>  
+>> Thanks,
+>> Ian
+>>
+>>> ---
+>>>  tools/perf/Makefile.config | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+>>> index d3c254c0f5c6..a69da9f34486 100644
+>>> --- a/tools/perf/Makefile.config
+>>> +++ b/tools/perf/Makefile.config
+>>> @@ -265,7 +265,7 @@ endif
+>>>  # defined. get-executable-or-default fails with an error if the first argument is supplied but
+>>>  # doesn't exist.
+>>>  override PYTHON_CONFIG := $(call get-executable-or-default,PYTHON_CONFIG,$(PYTHON_AUTO))
+>>> -override PYTHON := $(call get-executable-or-default,PYTHON,$(subst -config,,$(PYTHON_AUTO)))
+>>> +override PYTHON := $(call get-executable-or-default,PYTHON,$(subst -config,,$(PYTHON_CONFIG)))
+>>>
+>>>  grep-libs  = $(filter -l%,$(1))
+>>>  strip-libs  = $(filter-out -l%,$(1))
+>>> --
+>>> 2.28.0
+>>>
+> 

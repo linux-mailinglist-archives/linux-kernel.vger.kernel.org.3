@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBF459B827
+	by mail.lfdr.de (Postfix) with ESMTP id 95A6F59B828
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 05:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbiHVDx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 23:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
+        id S230094AbiHVDxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 23:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbiHVDxZ (ORCPT
+        with ESMTP id S232630AbiHVDxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 23:53:25 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E7C6338
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 20:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=zTBrQi6tIHnpiZJcLtL9JGqfihQa+Uot5l+YHLsSKrU=; b=yU0c+4dj7PJ4pHovwDZMqOakG5
-        kLJ+s38h9D7SfdV41AYLVig5CGyaTJp+yb1rT6ZQZX6pFLW3zQLvGLTNQwY9a3AwRpF6KZayqxf8+
-        Itgy2L8nsAbjTkfodDLVLVo1MryD2liICOS8lB7x+TQ0gP4i03iCclgyR3nBQg/wWb80vI8TfMASi
-        1oCfmk4ti2SqVOvE0qdrSPALegV6PXL9pF45lK4UyqZQ8AyH0xbDszy0qWubUx5/mLzpqijzzvmkR
-        hzR093ck590rou/62nsxjfo8eWRG2AymqJ5FvKSaDEP6kNCDt4iWVY1MoNNKTh2kePf8A9uy9FuZV
-        k6+ZlYWg==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oPyV6-004Y5h-Pd; Mon, 22 Aug 2022 03:53:20 +0000
-Message-ID: <f7214c7d-d573-ef4a-413d-28a63d293838@infradead.org>
-Date:   Sun, 21 Aug 2022 20:53:19 -0700
+        Sun, 21 Aug 2022 23:53:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C9312A92;
+        Sun, 21 Aug 2022 20:53:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2D19B80B2C;
+        Mon, 22 Aug 2022 03:53:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B37E5C433D6;
+        Mon, 22 Aug 2022 03:53:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661140423;
+        bh=KnereuJVCdo2L1ZRIGBE+Gv8IEBSjxz1ez2467JsVEU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aZSDG5GAKFyRkC9xit/0ss2rSYh47O0/vy2Wwo/8IvRJbDRkJ2hAp1EKljDG5fEUQ
+         X9UMvgIvMpji3k0zvjfiyltYIsR0utluOMjmSEzNO+kyKwCDUHPvBQU145k7EorKX2
+         PgHZ/4vI1B7GYks78XUKJbkAuu7oBtL3prvErS4Wi4Om6fpxSgREjsqeaOKKnKgxga
+         +rX+tw8/q1rfdYzA5d35RoU3JzmMpu0Wh0Wz8NOyeuuxOHDX6q3oDGWu9uwXTRoLWh
+         Xi8nmR5H7LG0mbpsEU8Yqr6JDxVU4DsYyhUYxMfZMpowhfbaix5hakFZnlszZl1NEx
+         f1Aba9YWqPwVw==
+Date:   Mon, 22 Aug 2022 11:53:37 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Leo Li <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH devicetree 2/3] arm64: dts: ls1028a: mark enetc port 3 as
+ a DSA master too
+Message-ID: <20220822035337.GU149610@dragon>
+References: <20220818140519.2767771-1-vladimir.oltean@nxp.com>
+ <20220818140519.2767771-3-vladimir.oltean@nxp.com>
+ <f646670f8ebc64cf1a3080330d54d733@walle.cc>
+ <20220818144521.sctrmqcfzi6e6l3e@skbuf>
+ <830a44530ce643aa111e74aa5815babf@walle.cc>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] powerpc: export cpu_smallcore_map for modules
-Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>, linux-kernel@vger.kernel.org
-Cc:     "Gautham R . Shenoy" <ego@linux.vnet.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, amd-gfx@lists.freedesktop.org,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>
-References: <20220819210112.7924-1-rdunlap@infradead.org>
- <87o7wdkkt4.fsf@mpe.ellerman.id.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <87o7wdkkt4.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <830a44530ce643aa111e74aa5815babf@walle.cc>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,29 +62,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/21/22 20:40, Michael Ellerman wrote:
-> Randy Dunlap <rdunlap@infradead.org> writes:
->> Fix build error when CONFIG_DRM_AMDGPU=m:
->>
->> ERROR: modpost: "cpu_smallcore_map" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
->>
->> by exporting 'cpu_smallcore_map' just as other per_cpu
->> symbols are exported.
->>
->> drivers/gpu/drm/amd/amdkfd/kfd_device.c calls cpu_smt_mask().
->> This is an inline function on powerpc which references
->> cpu_smallcore_map.
->>
->> Fixes: 425752c63b6f ("powerpc: Detect the presence of big-cores via "ibm, thread-groups"")
->> Fixes: 7bc913085765 ("drm/amdkfd: Try to schedule bottom half on same core")
+On Thu, Aug 18, 2022 at 05:08:57PM +0200, Michael Walle wrote:
+> Am 2022-08-18 16:45, schrieb Vladimir Oltean:
+> > On Thu, Aug 18, 2022 at 04:44:28PM +0200, Michael Walle wrote:
+> > > status should be the last property, no?
+> > 
+> > idk, should it?
 > 
-> That 2nd commit is not in mainline, only linux-next.
-> 
-> I don't mind merging this fix preemptively, but is that SHA stable?
+> IIRC Shawn pointed that out. If I'm mistaken, then do it for the
+> consistency within fsl-ls1028a.dtsi :)
 
-Felix, Alex, can you answer that, please?
+Yeah, I prefer to have 'status' be the last.
 
--- 
-~Randy
+Shawn

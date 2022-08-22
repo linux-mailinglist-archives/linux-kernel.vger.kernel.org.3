@@ -2,106 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E1359BF3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F48F59BF45
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234928AbiHVMHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 08:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
+        id S233467AbiHVMJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 08:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234862AbiHVMHW (ORCPT
+        with ESMTP id S232460AbiHVMI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:07:22 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3750339BBC;
-        Mon, 22 Aug 2022 05:07:21 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1661170001txl6mzdn
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 22 Aug 2022 20:06:39 +0800 (CST)
-X-QQ-SSF: 01000000002000C0D000B00A0000000
-X-QQ-FEAT: CR3LFp2JE4m1XgG8B6AP/kJtqaE0mJj6j7qwJI03u6WS7tx5jEQ2pm9PxITr5
-        rbUSKzKwoz9OWwCOsRVzPKH36fxal0QFN/sqdebBghyMp1Bp+Kj3R5km95KemhjB6U/boD/
-        UQBRkll3ZbAylv4awr24cisZa8GpgLqEiv7wTa3Ewg+phDdDL91k4p44Q5gV+1y99j1e4Mb
-        wi503zQyMBObcvvSDnpXSCWTPmCucWpDIa72G4+/TId8GNoVgWtPXxgrXm+seJCedOSU2Cc
-        Ykfta4mlJxUp6aNoX7MDEZaLSLOWI8Fp4lRdcX7snQGoiRyUmsdVuSdQaWCftUskXNuEqJg
-        P7XjUtycrAEI7o4gS1P0WeDP22/3cOWX7LAop5wo6Xr/hJ9AOwnL2bwUunLdQ==
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        dianders@chromium.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] tty/seria: fix repeated words in comments
-Date:   Mon, 22 Aug 2022 20:06:33 +0800
-Message-Id: <20220822120633.16753-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 22 Aug 2022 08:08:57 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A75B175A9;
+        Mon, 22 Aug 2022 05:08:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47C0012FC;
+        Mon, 22 Aug 2022 05:08:58 -0700 (PDT)
+Received: from [10.57.14.241] (unknown [10.57.14.241])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11DA13F718;
+        Mon, 22 Aug 2022 05:08:52 -0700 (PDT)
+Message-ID: <638e0a6e-10d2-8552-a61f-c4c001a2cbe9@arm.com>
+Date:   Mon, 22 Aug 2022 13:08:51 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_00,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,RCVD_IN_PBL,RCVD_IN_SBL_CSS,
-        RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?43.154.54.12>]
-        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        *      [43.154.54.12 listed in zen.spamhaus.org]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [43.154.54.12 listed in wl.mailspike.net]
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 2/2] cpufreq: CPPC: Change FIE default
+Content-Language: en-US
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+        robert.moore@intel.com, punit.agrawal@bytedance.com,
+        ionela.voinescu@arm.com, pierre.gondois@arm.com,
+        linux-kernel@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org
+References: <20220819162547.141333-1-jeremy.linton@arm.com>
+ <20220819162547.141333-3-jeremy.linton@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220819162547.141333-3-jeremy.linton@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'as'.
- Delete the redundant word 'the'.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/tty/serial/fsl_lpuart.c | 2 +-
- drivers/tty/serial/kgdboc.c     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 0d6e62f6bb07..fff4fa8d73ca 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -2787,7 +2787,7 @@ static int __maybe_unused lpuart_suspend(struct device *dev)
- 		 * EDMA driver during suspend will forcefully release any
- 		 * non-idle DMA channels. If port wakeup is enabled or if port
- 		 * is console port or 'no_console_suspend' is set the Rx DMA
--		 * cannot resume as as expected, hence gracefully release the
-+		 * cannot resume as expected, hence gracefully release the
- 		 * Rx DMA path before suspend and start Rx DMA path on resume.
- 		 */
- 		if (irq_wake) {
-diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index 79b7db8580e0..a471fc132acb 100644
---- a/drivers/tty/serial/kgdboc.c
-+++ b/drivers/tty/serial/kgdboc.c
-@@ -343,7 +343,7 @@ static int param_set_kgdboc_var(const char *kmessage,
- 	 * Configure with the new params as long as init already ran.
- 	 * Note that we can get called before init if someone loads us
- 	 * with "modprobe kgdboc kgdboc=..." or if they happen to use the
--	 * the odd syntax of "kgdboc.kgdboc=..." on the kernel command.
-+	 * odd syntax of "kgdboc.kgdboc=..." on the kernel command.
- 	 */
- 	if (configured >= 0)
- 		ret = configure_kgdboc();
--- 
-2.36.1
+On 8/19/22 17:25, Jeremy Linton wrote:
+> FIE is mostly implemented as PCC mailboxes on arm machines.  This was
+> enabled by default without any data suggesting that it does anything
+> but hurt system performance. Lets change the default to 'n' until
+> hardware appears which clearly benefits.
+> 
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+> ---
+>   drivers/cpufreq/Kconfig.arm | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index 954749afb5fe..ad66d8f15db0 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -22,7 +22,7 @@ config ACPI_CPPC_CPUFREQ
+>   config ACPI_CPPC_CPUFREQ_FIE
+>   	bool "Frequency Invariance support for CPPC cpufreq driver"
+>   	depends on ACPI_CPPC_CPUFREQ && GENERIC_ARCH_TOPOLOGY
+> -	default y
+> +	default n
+>   	help
+>   	  This extends frequency invariance support in the CPPC cpufreq driver,
+>   	  by using CPPC delivered and reference performance counters.
 
+LGTM
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>

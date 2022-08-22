@@ -2,54 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89BC59CA01
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DD659CA04
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbiHVUbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 16:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
+        id S237229AbiHVUcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 16:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiHVUbd (ORCPT
+        with ESMTP id S229819AbiHVUcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 16:31:33 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DEB52811
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:31:32 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id z4-20020a6b0a04000000b006887f66dcf3so6256107ioi.18
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:31:32 -0700 (PDT)
+        Mon, 22 Aug 2022 16:32:16 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4D352827
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:32:15 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id x25so11693308ljm.5
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:32:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=gUUJGDZZ7SmwoHkhrT602wMnsCfmfrGrVbXmH2wIM3g=;
+        b=Z+tUKeClXChR4jRlQGg41fHbT2bJsJZqVxlH7TSDRnIKVcsWoXGws6FK/hz5EGuT4S
+         yPu/tIYvMiV5u9nagc3sJ7K7VFdaJs3UH//tmuGoe95tcbMp5ov4mybmPAqUAwktzqOI
+         V0PJNpbtkpzFVVxtumlOm80eN4+ci0qXNJMp0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=L6rHlb+QVkpCy3JjjTuB9q/wSvRkx3+nKR7iFrZendk=;
-        b=0bR6ccklv8OXaBrImKmPCtMe8Tvy1A0nNPiXD7ekm5lmXKewj8Mi+TSPXXDQZWO20a
-         JGweWcZn/MclEEvYK1rftBSDPibBFztiW00sCuIlxaRvjOlARM7Zphu3JiYVtopNmZnl
-         FTanTBqDtfUXbtI0DAbe/FccvUzjmCJ/JoDHn529cxBfJmtglm9rfMH3bOR1+v7Bw9M6
-         KzgwfrWFfzZ2nrQ+Grrn/y4K77JBExATuu6uVEBhN7g/nXt0oJMBd7cwr0bt0pkmAlk0
-         XP2iKCb/o5G5dyciuu+CMRpSbf5lrpEM6P0ModsYRS54XKvigoNuRp2mgwTRlCn6nzqB
-         PCaw==
-X-Gm-Message-State: ACgBeo0p8iXncX2n7he+yvUSZ8uBeMRYqxsmEhEB+NJZTaUEfUzE6b4G
-        cvcjzWLnZW2zLsW5arR7ZZ51o2+uulEx2bo3veN5Kpq9MbNv
-X-Google-Smtp-Source: AA6agR49izOrgMlPsJuGLN8uZ3HnpLFPJ7ln25fBjB8Ggo5U1zxw1lxSSKfdBDW85tiE3l1YHK+0RTzMGU3C3tmPMZBAmrm07+OG
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=gUUJGDZZ7SmwoHkhrT602wMnsCfmfrGrVbXmH2wIM3g=;
+        b=JG3MSxmQE8mV4pq1uywz0vTqmoe/3uApjXhRQ1Q1o2pZd4oHEYF3IxsRoyf4PxLzwy
+         niCmvfzdDynNlTQ/LkLH0/w81Y0lcbl25inFpAGk+LgFDYB3MJWbyH7Qd/p59qA+dKjB
+         LRJiKuR3pjSBs2+p1heelJcQiErmjlkoQHKN2jc9CAxgLFfKPHm+Zm6jtFEnGs/mK9V6
+         WBrdMm3/Asw1jl2OLkwMZEs3Bsan9r9ZGk+KMGqmjkYcocR2/pikBVZXRZx1dtE76rM+
+         FvCJRGcv8fCT1E2y/lG/PMAiXVHzbSytoojwoaB1RjMOJpTFe9pPmHTCbgv0hAejUOeq
+         upbg==
+X-Gm-Message-State: ACgBeo2jUgeOuIvv1YGlNrOAAv+RkCPLy7q0Z4hxyg2fkZrHAVsEDr6U
+        HN4HZDy6dK+WsG4JBuzRA/X/dTlWAs3qJ87vATQ=
+X-Google-Smtp-Source: AA6agR4WW4Wl7xr7ee6xHDqmzztHmF6kGA17QLUgSbDC/tUww/81C/mBcMR8Vagt+7Ry3/OwKuWsPQ==
+X-Received: by 2002:a05:651c:221e:b0:25f:f069:1c13 with SMTP id y30-20020a05651c221e00b0025ff0691c13mr6516675ljq.390.1661200333323;
+        Mon, 22 Aug 2022 13:32:13 -0700 (PDT)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id k17-20020a05651239d100b0048d076373d0sm2088004lfu.98.2022.08.22.13.32.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 13:32:12 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id d23so12531815lfl.13
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:32:12 -0700 (PDT)
+X-Received: by 2002:a05:6000:1541:b0:222:cf65:18d7 with SMTP id
+ 1-20020a056000154100b00222cf6518d7mr11504823wry.659.1661200321380; Mon, 22
+ Aug 2022 13:32:01 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:bb85:0:b0:349:defb:da42 with SMTP id
- g5-20020a02bb85000000b00349defbda42mr2729099jan.209.1661200292047; Mon, 22
- Aug 2022 13:31:32 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 13:31:32 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004ef49705e6da5557@google.com>
-Subject: [syzbot] usb-testing boot error: BUG: unable to handle kernel paging
- request in put_prev_entity
-From:   syzbot <syzbot+27fb2fab2e8cd029d352@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, ebiederm@xmission.com, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        oleg@redhat.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
+References: <20220819221616.2107893-1-saravanak@google.com> <20220819221616.2107893-4-saravanak@google.com>
+In-Reply-To: <20220819221616.2107893-4-saravanak@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 22 Aug 2022 13:31:47 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Wrf2k1gY9+B0WW6D2nhvSHNfWAQrW+y4Td=-u08xe+rQ@mail.gmail.com>
+Message-ID: <CAD=FV=Wrf2k1gY9+B0WW6D2nhvSHNfWAQrW+y4Td=-u08xe+rQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] Revert "PM: domains: Delete usage of driver_deferred_probe_check_state()"
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Peng Fan <peng.fan@nxp.com>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, iommu@lists.linux.dev,
+        netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,102 +95,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot found the following issue on:
+On Fri, Aug 19, 2022 at 3:16 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> This reverts commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a.
+>
+> Quite a few issues have been reported [1][2][3][4][5][6] on the original
+> commit. While about half of them have been fixed, I'll need to fix the rest
+> before driver_deferred_probe_check_state() can be deleted. So, revert the
+> deletion for now.
+>
+> [1] - https://lore.kernel.org/all/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
+> [2] - https://lore.kernel.org/all/CM6REZS9Z8AC.2KCR9N3EFLNQR@otso/
+> [3] - https://lore.kernel.org/all/CAD=FV=XYVwaXZxqUKAuM5c7NiVjFz5C6m6gAHSJ7rBXBF94_Tg@mail.gmail.com/
+> [4] - https://lore.kernel.org/all/Yvpd2pwUJGp7R+YE@euler/
+> [5] - https://lore.kernel.org/lkml/20220601070707.3946847-2-saravanak@google.com/
+> [6] - https://lore.kernel.org/all/CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com/
+>
+> Fixes: 5a46079a9645 ("PM: domains: Delete usage of driver_deferred_probe_check_state()")
+> Reported-by: Peng Fan <peng.fan@nxp.com>
+> Reported-by: Luca Weiss <luca.weiss@fairphone.com>
+> Reported-by: Doug Anderson <dianders@chromium.org>
+> Reported-by: Colin Foster <colin.foster@in-advantage.com>
+> Reported-by: Tony Lindgren <tony@atomide.com>
+> Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Tested-by: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+>  drivers/base/power/domain.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-HEAD commit:    ad57410d231d usb: gadget: rndis: use %u instead of %d to p..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=15f8653d080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3cb39b084894e9a5
-dashboard link: https://syzkaller.appspot.com/bug?extid=27fb2fab2e8cd029d352
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+27fb2fab2e8cd029d352@syzkaller.appspotmail.com
-
-BUG: unable to handle page fault for address: ffffdc0000000001
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 100026067 P4D 100026067 PUD 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 251 Comm: kworker/u4:2 Not tainted 6.0.0-rc1-syzkaller-00005-gad57410d231d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:__rb_insert lib/rbtree.c:115 [inline]
-RIP: 0010:rb_insert_color+0x6d/0x7a0 lib/rbtree.c:436
-Code: 48 89 d8 48 c1 e8 03 42 80 3c 28 00 0f 85 48 05 00 00 48 8b 2b 40 f6 c5 01 0f 85 81 01 00 00 48 8d 7d 08 48 89 f8 48 c1 e8 03 <42> 80 3c 28 00 0f 85 01 05 00 00 4c 8b 75 08 49 39 de 0f 84 6d 01
-RSP: 0000:ffffc9000157fc10 EFLAGS: 00010802
-RAX: 1fffe00000000001 RBX: ffff88810e6e0090 RCX: 1ffff11021cb53a4
-RDX: 1ffff11021cb53a2 RSI: ffff8881f6937bf0 RDI: ffff000000000008
-RBP: ffff000000000000 R08: ffff88810e5a9d10 R09: ffff8881f6937bc0
-R10: ffffffff89ca5057 R11: 0000000000000001 R12: ffff88810e5a9d10
-R13: dffffc0000000000 R14: dffffc0000000000 R15: 000000003aefdc00
-FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdc0000000001 CR3: 0000000007825000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- rb_insert_color_cached include/linux/rbtree.h:114 [inline]
- rb_add_cached include/linux/rbtree.h:183 [inline]
- __enqueue_entity kernel/sched/fair.c:629 [inline]
- put_prev_entity+0x1d4/0x4c0 kernel/sched/fair.c:4722
- pick_next_task_fair+0xa42/0xf80 kernel/sched/fair.c:7443
- __pick_next_task kernel/sched/core.c:5804 [inline]
- pick_next_task kernel/sched/core.c:6313 [inline]
- __schedule+0x3a3/0x26f0 kernel/sched/core.c:6458
- preempt_schedule_common+0x45/0xc0 kernel/sched/core.c:6663
- __cond_resched+0x13/0x20 kernel/sched/core.c:8299
- might_resched include/linux/kernel.h:110 [inline]
- percpu_down_read include/linux/percpu-rwsem.h:49 [inline]
- cgroup_threadgroup_change_begin include/linux/cgroup-defs.h:740 [inline]
- exit_signals+0x26/0x8b0 kernel/signal.c:2949
- do_exit+0x50d/0x2930 kernel/exit.c:751
- call_usermodehelper_exec_async+0x418/0x580 kernel/umh.c:125
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Modules linked in:
-CR2: ffffdc0000000001
----[ end trace 0000000000000000 ]---
-RIP: 0010:__rb_insert lib/rbtree.c:115 [inline]
-RIP: 0010:rb_insert_color+0x6d/0x7a0 lib/rbtree.c:436
-Code: 48 89 d8 48 c1 e8 03 42 80 3c 28 00 0f 85 48 05 00 00 48 8b 2b 40 f6 c5 01 0f 85 81 01 00 00 48 8d 7d 08 48 89 f8 48 c1 e8 03 <42> 80 3c 28 00 0f 85 01 05 00 00 4c 8b 75 08 49 39 de 0f 84 6d 01
-RSP: 0000:ffffc9000157fc10 EFLAGS: 00010802
-RAX: 1fffe00000000001 RBX: ffff88810e6e0090 RCX: 1ffff11021cb53a4
-RDX: 1ffff11021cb53a2 RSI: ffff8881f6937bf0 RDI: ffff000000000008
-RBP: ffff000000000000 R08: ffff88810e5a9d10 R09: ffff8881f6937bc0
-R10: ffffffff89ca5057 R11: 0000000000000001 R12: ffff88810e5a9d10
-R13: dffffc0000000000 R14: dffffc0000000000 R15: 000000003aefdc00
-FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdc0000000001 CR3: 0000000007825000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	48 89 d8             	mov    %rbx,%rax
-   3:	48 c1 e8 03          	shr    $0x3,%rax
-   7:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1)
-   c:	0f 85 48 05 00 00    	jne    0x55a
-  12:	48 8b 2b             	mov    (%rbx),%rbp
-  15:	40 f6 c5 01          	test   $0x1,%bpl
-  19:	0f 85 81 01 00 00    	jne    0x1a0
-  1f:	48 8d 7d 08          	lea    0x8(%rbp),%rdi
-  23:	48 89 f8             	mov    %rdi,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1) <-- trapping instruction
-  2f:	0f 85 01 05 00 00    	jne    0x536
-  35:	4c 8b 75 08          	mov    0x8(%rbp),%r14
-  39:	49 39 de             	cmp    %rbx,%r14
-  3c:	0f                   	.byte 0xf
-  3d:	84 6d 01             	test   %ch,0x1(%rbp)
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Tested-by: Douglas Anderson <dianders@chromium.org>

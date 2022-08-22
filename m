@@ -2,139 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CC059C5C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF0259C5CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236244AbiHVSIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 14:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59958 "EHLO
+        id S236408AbiHVSKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 14:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234980AbiHVSIv (ORCPT
+        with ESMTP id S236820AbiHVSKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 14:08:51 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90D41D0DA
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:08:49 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id h78so8971191iof.13
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:08:49 -0700 (PDT)
+        Mon, 22 Aug 2022 14:10:37 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A144622B
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:10:35 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id by13-20020a056a00400d00b0052ec5a1cd4dso4903725pfb.21
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:10:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=WgzWzZj00zOWLrpbCwQ4WTwiDIwDcKzbwKa8iAf7tLg=;
-        b=OWC1nKVBtluEW62ASQUxzNEKPaHq+xaPILPsqberXSM3ZYA8aUQyGYB7lYfxVvO3Kx
-         02oQPI4Hbh1a3fXkORCfP/LGkRxymrN2VbrNgvOeSz6RdEkVVWDFzSS/DH1ojr0uBAqu
-         IGw2jTYyP8dKkaI73RXI091fqraCH6NvcfoR0=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=qlD6NeLsjzcixDwtOHCxTrg3u7mh8GFZd+CsXJLZniE=;
+        b=Zo9A95i3UccLuWai9d8/rafLsVcTppbLB6LThLylbNiZN8uVtjIWgFt6dmcy7arPza
+         jGvhEJ6Xr8JqHxQl2TNVtqN9D+9jAxTPMdrJC86OwU3dfdtOeNEiM3aUQ6zIFPa/4GKn
+         VcG/k3B6HMrfvvsS1ejioW9mvQYjw9oYM0L+l2pm2xtSQtqkgVmhHUEGSN7a42ZaBMxq
+         tIGmy4fUWQfvoi1UBLd5vLM94l5EoG0t5r8sAxGwBZuGpmuzWScJ04cKJ82TmETH3+hQ
+         qY2p7lmqImUGENosyXeJYGjFN863cksQXaTMb42qh7IzSd8SXo5B/JRxMNLo5WQme4kS
+         dJ7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=WgzWzZj00zOWLrpbCwQ4WTwiDIwDcKzbwKa8iAf7tLg=;
-        b=rIZbmXTV83zE3oAk2LDZuQiHeQov9+pzX+HFlIXp/xgqsBGMxJkgX3RzLO4u74E8/R
-         8SGRFkQGMZCSvo5GxmTkHo40op6plEpFTQYf3vzlxearB0RVFVXyEJqOe54zuJHeZntQ
-         otMqI5UHO3+F03f89R0ehfG8baJauBCFIqQMrcGXfpF0VxWElmeY/JeXiQiKuGWuz9l6
-         MWwf0/oQgZ23SlrD3Gjp5n0mazm3lV3AFnXvj/ebci9LTk2bIPVzKdjRUOmQjCt938tN
-         +LrqdkKNS2/0w8AxBy2t2rWD3y1NC45vsvPHzWhSazXZYw5l4mw7J4ygISncC4QKbXJu
-         jo7g==
-X-Gm-Message-State: ACgBeo3G7h20yAtX6mnx22mYYKHv8ukWytBVTD1fOjQx9mGl+op3Y+za
-        t61pqJGaJGcRZR+KQdUjB1glVUEoBw7qJTiqo/od/A==
-X-Google-Smtp-Source: AA6agR7cV0NmQ6+Pqp4g7/80o66iJ+BRcBW4jtTnfFVQmkwALzchwVQ5BWOGJnuehHgZpFba5YCOnN125O5Tw0wa6SA=
-X-Received: by 2002:a5d:9914:0:b0:67c:2039:caff with SMTP id
- x20-20020a5d9914000000b0067c2039caffmr9103230iol.201.1661191729339; Mon, 22
- Aug 2022 11:08:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220822021520.6996-1-kernelfans@gmail.com> <20220822021520.6996-7-kernelfans@gmail.com>
-In-Reply-To: <20220822021520.6996-7-kernelfans@gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Mon, 22 Aug 2022 14:08:38 -0400
-Message-ID: <CAEXW_YRH11xFg-0nQfvv59SMFCW=SNTEEL0oHJKTs1X45wGr7w@mail.gmail.com>
-Subject: Re: [RFC 06/10] rcu/hotplug: Make rcutree_dead_cpu() parallel
-To:     Pingfan Liu <kernelfans@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Price <steven.price@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=qlD6NeLsjzcixDwtOHCxTrg3u7mh8GFZd+CsXJLZniE=;
+        b=khyt3BsaC6oe5+u86Nruzxn1+Vw5l6Gi4QI6rnHLdt5CPjOEsn1ST8VtKEiYz9Zytf
+         fiVCwZyyMaPyfxXOV5OPPpEaX8uXj65AH5kHOd2tY0/nnHH+3ABqDJu5xJyxTbpC+M6R
+         FBtCvFVnuITw+lnGUKNFTbyjUG20ovMefz+33C+iYu3cZe48UdwGjy+VwNm4T2BlaxuN
+         bGFVhWtwKGK/az5L5QBi2PrmGGwruMVyfyztNud59w0aF/MguNpBzKJ/sLTn2ksdRWrW
+         pK++gaVtCQI0q5Z54JIXEvcykFwtgNcNrEW0tOgw7PhCuMQ/kkrZP4MT7uZisxsDV7Kh
+         KN6w==
+X-Gm-Message-State: ACgBeo3r6G5cGoFAmqoTNFbQ9uVVH1L9c0gFAUI6IdaG6ovwcFuvuPKk
+        /voxCNLsB+3rXbcZJTNAwL/mvsgTQNPVhEfe
+X-Google-Smtp-Source: AA6agR5CXQQiS+1zFYsmDhF9Fy+ePsTwFuotO+BWRhclkJ7/SuOGlEcaMFAZ1R/hJk280pakCYkFLYb+hDsf1rwO
+X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
+ (user=sadiyakazi job=sendgmr) by 2002:a05:6a00:855:b0:52e:f01d:723a with SMTP
+ id q21-20020a056a00085500b0052ef01d723amr21871779pfk.31.1661191834758; Mon,
+ 22 Aug 2022 11:10:34 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 18:09:56 +0000
+Message-Id: <20220822180956.4013497-1-sadiyakazi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH] Documentation: KUnit: Reword kunit_tool guide
+From:   Sadiya Kazi <sadiyakazi@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, corbet@lwn.net
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sadiya Kazi <sadiyakazi@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 10:16 PM Pingfan Liu <kernelfans@gmail.com> wrote:
->
-> In order to support parallel, rcu_state.n_online_cpus should be
-> atomic_dec()
+Updated the kunit_tool.rst guide to streamline it. The following changes
+were made:
+1. Updated headings
+2. Reworded content across sections
+3. Added a cross reference to full list of command-line args
 
-What does Parallel mean? Is that some kexec terminology?
+Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+---
+ Documentation/dev-tools/kunit/kunit-tool.rst | 82 ++++++++++----------
+ 1 file changed, 42 insertions(+), 40 deletions(-)
 
-Thanks,
+diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
+index ae52e0f489f9..33186679f5de 100644
+--- a/Documentation/dev-tools/kunit/kunit-tool.rst
++++ b/Documentation/dev-tools/kunit/kunit-tool.rst
+@@ -1,8 +1,10 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+-=================
+-kunit_tool How-To
+-=================
++========================
++Understanding kunit_tool
++========================
++
++This page introduces the kunit_tool and covers the concepts and working of this tool.
+ 
+ What is kunit_tool?
+ ===================
+@@ -10,39 +12,37 @@ What is kunit_tool?
+ kunit_tool is a script (``tools/testing/kunit/kunit.py``) that aids in building
+ the Linux kernel as UML (`User Mode Linux
+ <http://user-mode-linux.sourceforge.net/>`_), running KUnit tests, parsing
+-the test results and displaying them in a user friendly manner.
++the test results and displaying them in a user-friendly manner.
+ 
+ kunit_tool addresses the problem of being able to run tests without needing a
+ virtual machine or actual hardware with User Mode Linux. User Mode Linux is a
+ Linux architecture, like ARM or x86; however, unlike other architectures it
+-compiles the kernel as a standalone Linux executable that can be run like any
++compiles the kernel as a standalone Linux executable. This executable can be run like any
+ other program directly inside of a host operating system. To be clear, it does
+ not require any virtualization support: it is just a regular program.
+ 
+-What is a .kunitconfig?
+-=======================
++What is .kunitconfig?
++=====================
+ 
+-It's just a defconfig that kunit_tool looks for in the build directory
+-(``.kunit`` by default).  kunit_tool uses it to generate a .config as you might
+-expect. In addition, it verifies that the generated .config contains the CONFIG
+-options in the .kunitconfig; the reason it does this is so that it is easy to
+-be sure that a CONFIG that enables a test actually ends up in the .config.
++.kunitconfig is a default configuration file (defconfig) that kunit_tool looks
++for in the build directory (``.kunit``). The kunit_tool uses this file to
++generate a .config. Additionally, it also verifies that the generated .config contains the CONFIG options in the .kunitconfig file. This is done to make sure that a CONFIG that enables a test is  actually part of the .config file.
+ 
+-It's also possible to pass a separate .kunitconfig fragment to kunit_tool,
++It is also possible to pass a separate .kunitconfig fragment to kunit_tool,
+ which is useful if you have several different groups of tests you wish
+-to run independently, or if you want to use pre-defined test configs for
++to run independently, or if you want to use pre-defined test configurations for
+ certain subsystems.
+ 
+-Getting Started with kunit_tool
++Getting started with kunit_tool
+ ===============================
+ 
+-If a kunitconfig is present at the root directory, all you have to do is:
++If a kunitconfig is present at the root directory, run the following command:
+ 
+ .. code-block:: bash
+ 
+ 	./tools/testing/kunit/kunit.py run
+ 
+-However, you most likely want to use it with the following options:
++However, most likely you may want to use it with the following options:
+ 
+ .. code-block:: bash
+ 
+@@ -68,20 +68,20 @@ For a list of all the flags supported by kunit_tool, you can run:
+ 
+ 	./tools/testing/kunit/kunit.py run --help
+ 
+-Configuring, Building, and Running Tests
++Configuring, building, and running tests
+ ========================================
+ 
+-It's also possible to run just parts of the KUnit build process independently,
+-which is useful if you want to make manual changes to part of the process.
++It is also possible to run specific parts of the KUnit build process independently.
++This is useful if you want to make manual changes to part of the process.
+ 
+-A .config can be generated from a .kunitconfig by using the ``config`` argument
++If you want to generate a .config from a .kunitconfig, you can use the ``config`` argument
+ when running kunit_tool:
+ 
+ .. code-block:: bash
+ 
+ 	./tools/testing/kunit/kunit.py config
+ 
+-Similarly, if you just want to build a KUnit kernel from the current .config,
++Similarly, if you want to build a KUnit kernel from the current .config,
+ you can use the ``build`` argument:
+ 
+ .. code-block:: bash
+@@ -95,33 +95,31 @@ run the kernel and display the test results with the ``exec`` argument:
+ 
+ 	./tools/testing/kunit/kunit.py exec
+ 
+-The ``run`` command which is discussed above is equivalent to running all three
++The ``run`` command, discussed above is equivalent to running all three
+ of these in sequence.
+ 
+ All of these commands accept a number of optional command-line arguments. The
+ ``--help`` flag will give a complete list of these, or keep reading this page
+ for a guide to some of the more useful ones.
+ 
+-Parsing Test Results
++Parsing test results
+ ====================
+ 
+-KUnit tests output their results in TAP (Test Anything Protocol) format.
+-kunit_tool will, when running tests, parse this output and print a summary
+-which is much more pleasant to read. If you wish to look at the raw test
+-results in TAP format, you can pass the ``--raw_output`` argument.
++The output of the KUnit test results are displayed in TAP (Test Anything Protocol) format.
++When running tests, the kunit_tool parses this output and prints a plaintext, human-readable summary. To view the raw test results in TAP format, you can use the ``--raw_output`` argument.
+ 
+ .. code-block:: bash
+ 
+ 	./tools/testing/kunit/kunit.py run --raw_output
+ 
+ The raw output from test runs may contain other, non-KUnit kernel log
+-lines. You can see just KUnit output with ``--raw_output=kunit``:
++lines. To view only the KUnit output, you can use ``--raw_output=kunit``:
+ 
+ .. code-block:: bash
+ 
+ 	./tools/testing/kunit/kunit.py run --raw_output=kunit
+ 
+-If you have KUnit results in their raw TAP format, you can parse them and print
++If you have KUnit results in the raw TAP format, you can parse them and print
+ the human-readable summary with the ``parse`` command for kunit_tool. This
+ accepts a filename for an argument, or will read from standard input.
+ 
+@@ -135,11 +133,11 @@ accepts a filename for an argument, or will read from standard input.
+ This is very useful if you wish to run tests in a configuration not supported
+ by kunit_tool (such as on real hardware, or an unsupported architecture).
+ 
+-Filtering Tests
++Filtering tests
+ ===============
+ 
+-It's possible to run only a subset of the tests built into a kernel by passing
+-a filter to the ``exec`` or ``run`` commands. For example, if you only wanted
++It is possible to run only a subset of the tests built into a kernel by passing
++a filter to the ``exec`` or ``run`` commands. For example, if you want
+ to run KUnit resource tests, you could use:
+ 
+ .. code-block:: bash
+@@ -148,15 +146,14 @@ to run KUnit resource tests, you could use:
+ 
+ This uses the standard glob format for wildcards.
+ 
+-Running Tests on QEMU
++Running tests on QEMU
+ =====================
+ 
+-kunit_tool supports running tests on QEMU as well as via UML (as mentioned
+-elsewhere). The default way of running tests on QEMU requires two flags:
++kunit_tool supports running tests on QEMU as well as via UML. The default way of running tests on QEMU requires two flags:
+ 
+ ``--arch``
+ 	Selects a collection of configs (Kconfig as well as QEMU configs
+-	options, etc) that allow KUnit tests to be run on the specified
++	options and so on) that allow KUnit tests to be run on the specified
+ 	architecture in a minimal way; this is usually not much slower than
+ 	using UML. The architecture argument is the same as the name of the
+ 	option passed to the ``ARCH`` variable used by Kbuild. Not all
+@@ -196,8 +193,8 @@ look something like this:
+ 		--jobs=12 \
+ 		--qemu_config=./tools/testing/kunit/qemu_configs/x86_64.py
+ 
+-Other Useful Options
+-====================
++Other useful options
++======================
+ 
+ kunit_tool has a number of other command-line arguments which can be useful
+ when adapting it to fit your environment or needs.
+@@ -228,5 +225,10 @@ Some of the more useful ones are:
+         dependencies by adding ``CONFIG_KUNIT_ALL_TESTS=1`` to your
+         .kunitconfig is preferable.
+ 
+-There are several other options (and new ones are often added), so do check
++There are several other options (and new ones are often added), so do run
+ ``--help`` if you're looking for something not mentioned here.
++For more information on these options, see `Command-line-arguments
++<https://www.kernel.org/doc/html/latest/dev-tools/kunit/run_wrapper.html#command-line-arguments>`__
++
++
++.
+-- 
+2.37.1.595.g718a3a8f04-goog
 
- - Joel
-
->
-> Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
-> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Steven Price <steven.price@arm.com>
-> Cc: "Peter Zijlstra
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> To: linux-kernel@vger.kernel.org
-> To: rcu@vger.kernel.org
-> ---
->  kernel/cpu.c      | 1 +
->  kernel/rcu/tree.c | 3 ++-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index 1261c3f3be51..90debbe28e85 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -1872,6 +1872,7 @@ static struct cpuhp_step cpuhp_hp_states[] = {
->                 .name                   = "RCU/tree:prepare",
->                 .startup.single         = rcutree_prepare_cpu,
->                 .teardown.single        = rcutree_dead_cpu,
-> +               .support_kexec_parallel = true,
->         },
->         /*
->          * On the tear-down path, timers_dead_cpu() must be invoked
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 79aea7df4345..07d31e16c65e 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -2168,7 +2168,8 @@ int rcutree_dead_cpu(unsigned int cpu)
->         if (!IS_ENABLED(CONFIG_HOTPLUG_CPU))
->                 return 0;
->
-> -       WRITE_ONCE(rcu_state.n_online_cpus, rcu_state.n_online_cpus - 1);
-> +       /* Hot remove path allows parallel, while Hot add races against remove on lock */
-> +       atomic_dec((atomic_t *)&rcu_state.n_online_cpus);
->         /* Adjust any no-longer-needed kthreads. */
->         rcu_boost_kthread_setaffinity(rnp, -1);
->         // Stop-machine done, so allow nohz_full to disable tick.
-> --
-> 2.31.1
->

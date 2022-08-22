@@ -2,60 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E7A59C2C9
+	by mail.lfdr.de (Postfix) with ESMTP id 44A8459C2C7
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234503AbiHVP3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S236358AbiHVP3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236642AbiHVP3A (ORCPT
+        with ESMTP id S236470AbiHVP3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:29:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E3D11815
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:28:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A3A661122
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:28:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B499C43470;
-        Mon, 22 Aug 2022 15:28:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661182135;
-        bh=SIasQlAEFjGCSRt/CEHtDDFWf9zOQKXzw2OystW7yS0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T50xCBWWaV5QoBpJDmOOFH7Mff5Ib3Sev/Y9BLrJWykYJ87jo/wnqMfaMqHLHxCzO
-         ebFN6eCI8NbUWyBIA8kbmOD5Etwx4FgXmHg8xoY51bRmNI6YJl7odKqs8ZbVhIHzCU
-         WFKpgEVoWcaNEhC3qnnUy3FKM1/qtvzKqWbNMjVcVjH8ixbZo+fzhKUqkMN6vQh8g9
-         PjfbcQgo0bV1FCdyvjRNZgkaSWCHOqDBcPBYxkDcfF8Glg17GRmEV9KyotXfRm5SwQ
-         jUE1Jl6aZtBvQt7jikq9qpJ7Ee0pyKUSfviMm/G5P9sO/CaJBB5Bk9CmqfIpdhWG/Y
-         VuMBeSExtUq8w==
-Received: by pali.im (Postfix)
-        id 63EDD97B; Mon, 22 Aug 2022 17:28:52 +0200 (CEST)
-Date:   Mon, 22 Aug 2022 17:28:52 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Nick Child <nick.child@ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] powerpc: Add support for early debugging via Serial
- 16550 console
-Message-ID: <20220822152852.y5fjpmjjasbu2wab@pali>
-References: <20220819211254.22192-1-pali@kernel.org>
- <35c0ff6a-387d-3c01-66b3-f659cfe67c2a@infradead.org>
- <20220819223848.lvxakjjzfdjvyqgu@pali>
- <d12435b4-0caa-ba06-f0a5-8c9268bb8dfd@csgroup.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d12435b4-0caa-ba06-f0a5-8c9268bb8dfd@csgroup.eu>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Mon, 22 Aug 2022 11:29:07 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE39C13CF3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:29:05 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id n4so13661377wrp.10
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:29:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc;
+        bh=Tj/TeA1Vba5/YB2iX5+tYIMrGWJcVWB+zymgkTHRpAI=;
+        b=ggvUSWKEViLarUpllfN8d3/D/U3wXUfnghmeXfQzCGOlRYHhcU8UMzw/F+Bimd1PfO
+         zNyWPt+OcrJ9/jp2YaN0/V06NbEurpv8kfhhxbxDnA4dncOMgBVIMsnkoDQ84ndL0S55
+         Hhk4mGLPxrL5ffb9JwxdEFu38eJwdJLT6MJs403e09BL5yutuC36oNq8raxcJxoTfBxx
+         bYENxKw1cYcFPdk0rcbI4r/XcbmXoBJmbwyKBmyFFhFj7wG15WWHbGLbB0nIpEUjIRkc
+         sGBQWBkGqZViw77T2vsLwAfY3/nLH8nyjKe5hcg7qKr7SuLyWM5ahcrcin+v872QyJjc
+         42OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc;
+        bh=Tj/TeA1Vba5/YB2iX5+tYIMrGWJcVWB+zymgkTHRpAI=;
+        b=THU8Lk0YQRUxw1l5Btmf2qqLz/RY/MRIJiHua4M2TQznWmt2BfYl8BktHaO4dtjFmP
+         dSU/PnGc802RAisLmfkLhLyI/Dr6aq1KIzaqUjyMleveTCnnPvwRC/VooxpnIzcocyys
+         L9FrJLAKi+kTIjPrT50AQX3Oj887fRZX8XISzlkt9audpbEufda0x+2iGYDexgN9O2NE
+         exeFKpIgDv8Fr8VRCFd/j486xzxoP6QcyWQybib5EKDCmJolbGusjrYLgxwbhz77NmVs
+         CTCtQV/0k6QWc5CxzD8sFCTIQdJrvMaPdvFfjL7hbhAzQnpLnPJquWVrNXa++ga6Anyz
+         tG/A==
+X-Gm-Message-State: ACgBeo3ZfMClLKRxhqSKZ8mwn2Jhz9nTp7mKojicc/UDOFSalKRzZOYk
+        aAHoyOipydU8eJi28BXSJ+YzvQ==
+X-Google-Smtp-Source: AA6agR5jyKhduztzqIDdkOhDPCZJoNwrA8EEV359JObFTzjtKAAYctHbcxiaZLRQPrwTe5m6Oe8cZQ==
+X-Received: by 2002:a05:6000:1867:b0:21f:f2cf:74a8 with SMTP id d7-20020a056000186700b0021ff2cf74a8mr11195780wri.344.1661182144304;
+        Mon, 22 Aug 2022 08:29:04 -0700 (PDT)
+Received: from smtpclient.apple (global-5-141.n-2.net.cam.ac.uk. [131.111.5.141])
+        by smtp.gmail.com with ESMTPSA id o14-20020adfcf0e000000b0021f1ec8776fsm12053546wrj.61.2022.08.22.08.29.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Aug 2022 08:29:03 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH 06/12] riscv: dts: allwinner: Add the D1 SoC base
+ devicetree
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <44b6f601-1a11-aacf-5592-5b61550afb9f@microchip.com>
+Date:   Mon, 22 Aug 2022 16:29:02 +0100
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>, andre.przywara@arm.com,
+        devicetree <devicetree@vger.kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        jernej.skrabec@gmail.com, prabhakar.mahadev-lad.rj@bp.renesas.com,
+        wens@csie.org, robh+dt@kernel.org, palmer@dabbelt.com,
+        krzysztof.kozlowski+dt@linaro.org, paul.walmsley@sifive.com,
+        linux-riscv@lists.infradead.org, linux-sunxi@lists.linux.dev
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C0B4F750-1C99-408A-A2DA-B72BBF7361B4@jrtc27.com>
+References: <20220815050815.22340-1-samuel@sholland.org>
+ <20220815050815.22340-7-samuel@sholland.org>
+ <20220815141159.10edeba5@donnerap.cambridge.arm.com>
+ <3cd9ed5b-8348-38ac-feb1-9a7da858cebc@microchip.com>
+ <932aaefd-e2ca-ef26-bf30-e315fb271ec5@sholland.org>
+ <ff9e8bd3-c5f7-6319-060e-250151087a8e@microchip.com>
+ <c6cba83ea9eea7fc41a9e78d0e45487b21f0f560.camel@icenowy.me>
+ <c7599abd-c4cf-9ddd-1e74-e47dec9366d4@microchip.com>
+ <CAMuHMdUHVpj9ikE2NxpBSBtTG8K6v92vGdbw3GLmEYUoVzatvg@mail.gmail.com>
+ <538ae41e-664f-2efb-f941-9a063b727b6a@microchip.com>
+ <CAMuHMdWWbR+Y=bJ7gdqV3d+ffHE1-hwQf-Owb8FAvZAaScdOgA@mail.gmail.com>
+ <44b6f601-1a11-aacf-5592-5b61550afb9f@microchip.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,19 +91,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 22 August 2022 14:13:30 Christophe Leroy wrote:
-> >> CONFIG_PPC_EARLY_DEBUG_16550=y
-> >> # CONFIG_PPC_EARLY_DEBUG_MEMCONS is not set
-> >> CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR=
-> >> CONFIG_PPC_EARLY_DEBUG_16550_STRIDE=1
-> >>
-> >> which then causes a kconfig prompt when starting
-> >> the build...
-> > 
-> > Cannot we set somehow that PPC_EARLY_DEBUG_16550 would be disabled by
-> > default when upgrading defconfig?
-> 
-> The only solution I see is to put it at the end of the list, so that the 
-> previous default value which is PPC_EARLY_DEBUG_MEMCONS gets selected.
+On 22 Aug 2022, at 14:56, conor.dooley@microchip.com wrote:
+>=20
+> On 22/08/2022 13:31, Geert Uytterhoeven wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you =
+know the content is safe
+>>=20
+>=20
+>=20
+>>> Do you think this is worth doing? Or are you just providing an
+>>> example of what could be done?
+>>=20
+>> Just some brainstorming...
+>>=20
+>>> Where would you envisage putting these macros? I forget the order
+>>> of the CPP operations that are done, can they be put in the dts?
+>>=20
+>> The SOC_PERIPHERAL_IRQ() macro should be defined in the
+>> ARM-based SoC.dtsi file and the RISC-V-based SoC.dtsi file.
+>=20
+> Right, one level up but ~the same result.
+>=20
+>=20
+>>>> Nice! But it's gonna be a very large interrupt-map.
+>>>=20
+>>> I quite like the idea of not duplicating files across the archs
+>>> if it can be helped, but not at the expense of making them hard to
+>>> understand & I feel like unfortunately the large interrupt map is
+>>> in that territory.
+>>=20
+>> I feel the same.
+>> Even listing both interrupt numbers in SOC_PERIPHERAL_IRQ(na, nr)
+>> is a risk for making mistakes.
+>>=20
+>> So personally, I'm in favor of teaching dtc arithmetic, so we can
+>> handle the offset in SOC_PERIPHERAL_IRQ().
+>=20
+> Yup, in the same boat here. mayb I'll get bored enough to bite..
 
-Does it work for all cases? If yes, then it looks like an elegant solution.
+Note that GPL=E2=80=99ed dtc isn=E2=80=99t the only implementation. =
+FreeBSD uses a
+BSD-licensed implementation[1] and so adding new features like this to
+GPL dtc that actually get used would require us to reimplement it too.
+I don=E2=80=99t know how much effort it would be but please keep this in =
+mind.
+
+Jess
+
+[1] https://github.com/davidchisnall/dtc=

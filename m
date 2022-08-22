@@ -2,168 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E4459BFBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A292459BFCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235185AbiHVMwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 08:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
+        id S235209AbiHVMww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 08:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiHVMwI (ORCPT
+        with ESMTP id S235143AbiHVMwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:52:08 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3322E6B6
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 05:52:04 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.186.194])
-        by baptiste.telenet-ops.be with bizsmtp
-        id Acs22800Q4C55Sk01cs2tJ; Mon, 22 Aug 2022 14:52:02 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oQ6uQ-0025vm-D1
-        for linux-kernel@vger.kernel.org; Mon, 22 Aug 2022 14:52:02 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oQ6uP-000U0x-RO
-        for linux-kernel@vger.kernel.org; Mon, 22 Aug 2022 14:52:01 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-Subject: Build regressions/improvements in v6.0-rc2
-Date:   Mon, 22 Aug 2022 14:52:01 +0200
-Message-Id: <20220822125201.115256-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAHk-=wj_XDfMiVXuo6A98KF4MsXxtyuMP_OtOGw87xnKERcfAg@mail.gmail.com>
-References: <CAHk-=wj_XDfMiVXuo6A98KF4MsXxtyuMP_OtOGw87xnKERcfAg@mail.gmail.com>
+        Mon, 22 Aug 2022 08:52:43 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2088.outbound.protection.outlook.com [40.107.223.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761142E9CA;
+        Mon, 22 Aug 2022 05:52:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MSeWCHq/H5Z1UfabfSOoxWrtdG8BwcMEddkbjGExnNLirZNkQWA+c1Emt+vkvziLFIqj5EPBVVEBEZiyxP3bv9t6+iyNQ302FgU1RhzJNB+RRRdMmx7oA6LdIbGwdf8nTVnBgec/x6Eon7A2E8E9TqUYKR3HZXmg7CoW29/dKer728p+hqufsGeOnxu+N7el6WMqNKpwLnSlIpn3kRgVuk+C0xSXSaGMyyUsjRZ4HC1KOlvZdAjp4RZ3S4o+WgCkeZf07tCl4u9wTWGQaLhSS6qb2Kvprll+xIZw+joMNfuPnlBwAeOhhpAtYLdVgCq3oNK1ptDNXpDYXMEAArXhNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yTVtNZG6iDcTwU33RBGkkRMnmA3hG/11ANVaNFKEa7Y=;
+ b=V+XQmLT9RtoDkzV/m+e6PAgU0qSLLcijmhexBtQCYcg5YVrzB5tyKVy0sE6ZCtGP1oyJ4lfbzUqn1v4Yn2hbrYsUgf5UQMMO7Td+TfONuliYVcVNcE3UaUjhLERg/+1gAcZUa1K6ESMD5ck9SkAIjnV17T/6Y1J/mrcXZpz+78LgAd15aqbdQRdVEtMgQieYi/pSA/MRvyqeO/od/xMHjw8gMiL27CHqbQbrchxoy5zmSYXb5wLcr2z47B1h+Lz1cl4GA5UwdXy0kII1YpHsNGo8P3/7xXpNlU7VGFM6RubpKof7y+jkfwikS6264wqOEb7zR76SOaw5K7g16A8SZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yTVtNZG6iDcTwU33RBGkkRMnmA3hG/11ANVaNFKEa7Y=;
+ b=XuBv9Gty/rnCRQu401mJwoEx4DEgtD3GJI6+tBXkBY0DDOeKUurK4bNKUtF4uaBlwfFbrbpR86BmGiP+crE7ZXF72rUHbzouCu0NVJDswhjvsGgflkKcAsJrRyPTfVMIRDvClvZnu61Kv+XpA4BFhVu5SqtvRJQ/DTKAb5Q75qQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5712.namprd12.prod.outlook.com (2603:10b6:510:1e3::13)
+ by SJ1PR12MB6050.namprd12.prod.outlook.com (2603:10b6:a03:48b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Mon, 22 Aug
+ 2022 12:52:40 +0000
+Received: from PH7PR12MB5712.namprd12.prod.outlook.com
+ ([fe80::e459:32ff:cdfc:fc8b]) by PH7PR12MB5712.namprd12.prod.outlook.com
+ ([fe80::e459:32ff:cdfc:fc8b%9]) with mapi id 15.20.5546.022; Mon, 22 Aug 2022
+ 12:52:40 +0000
+Message-ID: <06e9a357-422d-1870-ae72-18e74964caf3@amd.com>
+Date:   Mon, 22 Aug 2022 18:22:25 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 04/13] x86/cpufeatures: Add LbrExtV2 feature bit
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, bp@alien8.de, acme@kernel.org, namhyung@kernel.org,
+        jolsa@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        dave.hansen@linux.intel.com, like.xu.linux@gmail.com,
+        Stephane Eranian <eranian@google.com>, ananth.narayan@amd.com,
+        ravi.bangoria@amd.com, santosh.shukla@amd.com
+References: <cover.1660211399.git.sandipan.das@amd.com>
+ <172d2b0df39306ed77221c45ee1aa62e8ae0548d.1660211399.git.sandipan.das@amd.com>
+ <YvotoHMaLE1XawiO@worktop.programming.kicks-ass.net>
+ <CABPqkBQ1YLAu+sJC_U4QsQuo3PuzUwRDrNm9KcrUAEUxeBaYbg@mail.gmail.com>
+ <YwNG1XzcyR5ys+rA@worktop.programming.kicks-ass.net>
+From:   Sandipan Das <sandipan.das@amd.com>
+In-Reply-To: <YwNG1XzcyR5ys+rA@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN0PR01CA0038.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:49::7) To PH7PR12MB5712.namprd12.prod.outlook.com
+ (2603:10b6:510:1e3::13)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e8962ffd-e9fb-4ac2-c6ea-08da843d326e
+X-MS-TrafficTypeDiagnostic: SJ1PR12MB6050:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mhe50/MpAAcxe4wJFOSfqL6tCXNomdJqFDfRfkaD/G5Ffp5qu+nlpEPBp4HRxzmB7T1BUQ/sfPujS8TKGngGiI4w6aPpmsz1qnIuWyY8mCM+OHdqazSzhDDZlk77R7bL8EwernovEmQm9aQpJ3zes3kMefVUAkT7xxrL9XYxeSGhDxPjPnP4WK7rF+i5vtYu4CADCkr/eW8YMjwBdeLALLhr003wjpU8ozK4rvdqdXUb6AInugMtteFYJhh1F9v2jbqj8Y3VNrNEcVWWl06TZQCQkOAVc6n6ed0PLlqOR1TXCMxHdYPRm0juuhquxKXacm/xjmUQZVZPewjPEOFz4J5tiWzRsOutfGW1/+FmV/gcSF6PmppADoxs5sS0uss1Iew2tV0+paSH9akTK+AWFLBBWlN03JA//k2yPr+gLRok09mMKxcf/VUUl0Wu+itFkv0S1qER0DmBia3Cn10NG/T4x9AHE/YKIqrdvqLMbq8XWoT23wOQyg8KQPxN/bSuKU9q2vTiQ8FC6XYj+S7zYOsuJ80Xkda6v18Jzy5my9WYgswjd4Dd27wekYt5h0hCfSC6WSJhDnq8hKgCVeaPU5+1TOZ0CxnG03Zr+klr4kc+WIL166k8FX5NvnB+M8xpH782lUorPFTRi4xlpCvet4eZYPNd13tutVPasEcYYUqdzBOBEMBVTsUClMWKwCn2d0HP1hcUcFAZZhokvaHyXlJLtEygXwCcU0VMZ6GCHRQWMWUon/vLyq+A38vh4zNwQt6LtEyAuOM6f8jSneW9iQToL6W7Y7gRd1hQxgB4yO0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5712.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(396003)(366004)(376002)(136003)(66946007)(66556008)(8676002)(66476007)(8936002)(4326008)(6916009)(316002)(186003)(31686004)(44832011)(7416002)(5660300002)(36756003)(2906002)(41300700001)(53546011)(2616005)(6666004)(86362001)(6512007)(26005)(31696002)(83380400001)(6486002)(478600001)(6506007)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a3Y2NmpudEUySkQ3Y1hlaUEvdlRTSnNPTUFmN09rZUs5RlZCcUdOL0dlTXRu?=
+ =?utf-8?B?VVBoZGlCVXZjMGJza1M2UEFGSnJScG1CVmFCZnRPSTV1UUg0T05VYWsyK0hB?=
+ =?utf-8?B?b1FjUjhZclFGNGUzZG1FWkFuQVZKRHhqeFU1SFRKY0toTXVhWU5neVpXVFVC?=
+ =?utf-8?B?NTlJR0VMcy8xVXFlSzB2NWhFczVBV3hwdzFLblVIT0x5Q0RRc0xsMnMyeEVt?=
+ =?utf-8?B?M1I4b09VZUNBcnd4MzBlR21vMGsyUkNrV1lzQkY3RmZZTHdUQ21VdE5Pb1Fh?=
+ =?utf-8?B?d2lSNE44MUlETnBkRUViMDZQZjNkWm9DaUUraW1CeWhYUDZRalVobnVtcFM4?=
+ =?utf-8?B?N2lFMHIwNFR3Tng4NXdXZVVERndjWWVaY2E5b3FCaVllTDJWWXhockFlbmtj?=
+ =?utf-8?B?MjJnSVRXY2hvNnpnbVYvZVNXUVZkRG5rSkh1Y2h6dzgyNldHS2tNUjlaNzZG?=
+ =?utf-8?B?cW0wcW03ZGFzNi9OSTdVRXdIR0pRVHpWZ1luUVRqODlMZVR6TWZvVzBFdExz?=
+ =?utf-8?B?a3oybklGTVBLY0ZyRUlyZ2U2MHRoUTNGR2taSzc3Zm8rVEJNZ0xQaFJCb0U1?=
+ =?utf-8?B?U2sxMkUvbHNpMTJwM1ZWVU5tWXZaekx1bXNsUURpMGJqeW1CWlhub2Vjei95?=
+ =?utf-8?B?M09Sd1dPVGcxL1BWU0Y3V0d5R2dxQytndnV5YWFJcHVxWGc3R254NUs2eVZw?=
+ =?utf-8?B?VWtsY2tpYVYvUzRFR3NCeUJlckVLZy84Snd4NEpXRzNjVmgvbm5BR2lGNHNH?=
+ =?utf-8?B?S0FBYVRxK3Y3bjNlWEFmUlEzTmZEUmFUT2o4N25QQkhIR2gyd2F4aVZiMkNz?=
+ =?utf-8?B?MUVWRGprTmhTM3A1TVRZOEdNa1krUnovTHhQWGJWQWgzaWFlYWlyWjhWNm5D?=
+ =?utf-8?B?dG1nQVRNU0crQVBKd3VqUnBmYXlBOHkwcklDVFFFek5OUUR6L3ZDNTVJZ1JL?=
+ =?utf-8?B?RzVWSmYrOGFuUzRXK3J4TGgxNm5lNEhkYk5nU0piamhoMVlMYzdNUWVvaVdm?=
+ =?utf-8?B?bkttRE03dGdoMk5sSy9xUjlUMjhwMkFMZGJqTE9hL2d3QXBHbmU2OXNZMWVW?=
+ =?utf-8?B?cjBiVENEMDdYK3Q3VFIvR3BEMHdSSWdUOExEVTFZMHRvSTlDYUExeWc5aVFn?=
+ =?utf-8?B?Sm5OSXJnOUxCR2ZOcnJCVTJWNUJqaDZVdjRDc3dXYm55NU1rMXZ5enAzWEZt?=
+ =?utf-8?B?ZEczZ21IenhVb2xzK3JRZDhNb1JTQzRMelI5SWNxUmVubkNLNnJHRzZoV3dS?=
+ =?utf-8?B?SkcwUnhNb0hSblJmYkhPRUN5UTJwU01heU5IVEN3MTgvemxyWXVhQlVjQTFG?=
+ =?utf-8?B?b3gyeWswRTRhT1haZGUzVmp6S0E0NjZib3RHOCt3VmNjT0JDN2JrbTJvcU02?=
+ =?utf-8?B?UksrbW9lSE5NM2Nrd2t5Rjh1RjlWSUlLY25BeC9rUENac2U2OXFaZWNocGVz?=
+ =?utf-8?B?ZHVTM2RvNGhoS0JDbms1Vm9aYlU4bk9SNld3czJCZHV5VjZiTjhOdzlidUR6?=
+ =?utf-8?B?eGg0ZTZqTjlEcEZLN255cUR2TFJaMDY2VElrYmlwbjlJNm11dC83WEk4ZVly?=
+ =?utf-8?B?K25GTEVFMTZTWFJ0NUN0WEc2OHA2Q01mQUJMcnJiYk5LeWlmaXUvOXQ5WXd6?=
+ =?utf-8?B?eXM3a1BhcmhGekJXVktpcEZyR1Jja3dLL2laSzNpNUM0d0J1SnZ5UlFoTEhD?=
+ =?utf-8?B?RW54ZWpaSUpnc01mSTF5T0s1dzBRMXNaOEFaa0JPT2dKK25sdUs1dUQ3bHEw?=
+ =?utf-8?B?WGV6bHFyb3ZzdzI5bUJvOHk3REplZG9nbnRzRURWUGhCSXpXZTM4YXBUR2RO?=
+ =?utf-8?B?ejlKWjhJL3lWV0V6UkVtUTcxMGUrUTh0bXN1enBkZ1BpR1VxQjYrVTRMRTlh?=
+ =?utf-8?B?NCs2UlU5NGo3MkhlNGk4U25sYTlOeEtDc2l0bVBaaExNeWJ6SXEzM3BjejA3?=
+ =?utf-8?B?cHp6TlFiWTRwU1FHYVNRai9ZVzd6MEtDdzYwTGg0RWtpcksxZTZXMzFuOFdO?=
+ =?utf-8?B?VXpyRnM3ZzllNXhTSS9DN2Y1NWxsNUJIcmdPUUpVZkxFTmVleXBPM3BxNmFR?=
+ =?utf-8?B?TGUzRGpzUFlrcGNZR0hHRTVRRDIzcEgwSkMydVpmc2FaVDdXMmcyNDJISEhy?=
+ =?utf-8?Q?JT/FOz8J9eWxPHD1QCjbJoWJK?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8962ffd-e9fb-4ac2-c6ea-08da843d326e
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5712.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 12:52:40.5037
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3ieDpJpXzP3qrM0jhNxz4As6UoJgluNb/A+bnAVkKjGeANb3p/PANuDhci0h5XIr1QKARvk5nx130MCDiIh6Cw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6050
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is the list of build error/warning regressions/improvements in
-v6.0-rc2[1] compared to v5.19[2].
+Hi Peter,
 
-Summarized:
-  - build errors: +21/-20
-  - build warnings: +8/-28
+On 8/22/2022 2:35 PM, Peter Zijlstra wrote:
+> On Mon, Aug 15, 2022 at 12:42:23PM -0700, Stephane Eranian wrote:
+>> Hi,
+>>
+>> On Mon, Aug 15, 2022 at 4:27 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>>>
+>>> On Thu, Aug 11, 2022 at 05:59:52PM +0530, Sandipan Das wrote:
+>>>> CPUID leaf 0x80000022 i.e. ExtPerfMonAndDbg advertises some new performance
+>>>> monitoring features for AMD processors.
+>>>>
+>>>> Bit 1 of EAX indicates support for Last Branch Record Extension Version 2
+>>>> (LbrExtV2) features. If found to be set during PMU initialization, the EBX
+>>>> bits of the same leaf can be used to determine the number of available LBR
+>>>> entries.
+>>>>
+>>>> For better utilization of feature words, LbrExtV2 is added as a scattered
+>>>> feature bit.
+>>>>
+>>>> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+>>>> ---
+>>>>  arch/x86/include/asm/cpufeatures.h | 2 +-
+>>>>  arch/x86/kernel/cpu/scattered.c    | 1 +
+>>>>  2 files changed, 2 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+>>>> index 393f2bbb5e3a..e3fa476a24b0 100644
+>>>> --- a/arch/x86/include/asm/cpufeatures.h
+>>>> +++ b/arch/x86/include/asm/cpufeatures.h
+>>>> @@ -96,7 +96,7 @@
+>>>>  #define X86_FEATURE_SYSCALL32                ( 3*32+14) /* "" syscall in IA32 userspace */
+>>>>  #define X86_FEATURE_SYSENTER32               ( 3*32+15) /* "" sysenter in IA32 userspace */
+>>>>  #define X86_FEATURE_REP_GOOD         ( 3*32+16) /* REP microcode works well */
+>>>> -/* FREE!                                ( 3*32+17) */
+>>>> +#define X86_FEATURE_LBREXT_V2                ( 3*32+17) /* AMD Last Branch Record Extension Version 2 */
+>>>>  #define X86_FEATURE_LFENCE_RDTSC     ( 3*32+18) /* "" LFENCE synchronizes RDTSC */
+>>>>  #define X86_FEATURE_ACC_POWER                ( 3*32+19) /* AMD Accumulated Power Mechanism */
+>>>>  #define X86_FEATURE_NOPL             ( 3*32+20) /* The NOPL (0F 1F) instructions */
+>>>> diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
+>>>> index dbaa8326d6f2..6be46dffddbf 100644
+>>>> --- a/arch/x86/kernel/cpu/scattered.c
+>>>> +++ b/arch/x86/kernel/cpu/scattered.c
+>>>> @@ -44,6 +44,7 @@ static const struct cpuid_bit cpuid_bits[] = {
+>>>>       { X86_FEATURE_PROC_FEEDBACK,    CPUID_EDX, 11, 0x80000007, 0 },
+>>>>       { X86_FEATURE_MBA,              CPUID_EBX,  6, 0x80000008, 0 },
+>>>>       { X86_FEATURE_PERFMON_V2,       CPUID_EAX,  0, 0x80000022, 0 },
+>>>> +     { X86_FEATURE_LBREXT_V2,        CPUID_EAX,  1, 0x80000022, 0 },
+>>>>       { 0, 0, 0, 0, 0 }
+>>>>  };
+>>>
+>>> Would LBR_V2 work at all? It being a new version already seems to imply
+>>> extention, no? Then again, I suppose there's an argument to be had for
+>>> avoiding confusion vs the Intel LBR thing.. Couldn't you have called
+>>> this BRS_V2 :-)
+>>>
+>> I believe it is called v2 because there was already a LBR in previous
+>> generations, however it
+> 
+> That's not the question; It's currently called LBREXT_V2, which is a bit
+> of a shit name. Then again LBR_V2 is too because AMD and Intel LBR are
+> quite different. So in that respect BRS_V2 would be an ever so much
+> better name.
 
-JFYI, when comparing v6.0-rc2[1] to v6.0-rc1[3], the summaries are:
-  - build errors: +0/-10
-  - build warnings: +0/-0
+AMD LbrExtV2 is similar to Intel LBR. Unlike BRS, LbrExtV2 does not rely on
+interrupt holding. The branch records are "frozen" at the time of counter
+overflow.
 
-Happy fixing! ;-)
-
-Thanks to the linux-next team for providing the build service.
-
-[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/1c23f9e627a7b412978b4e852793c5e3c3efc555/ (all 135 configs)
-[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/3d7cb6b04c3f3115719235cc6866b10326de34cd/ (all 135 configs)
-[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/568035b01cfb107af8d2e4bd2fb9aea22cf5b868/ (all 135 configs)
-
-
-*** ERRORS ***
-
-21 error regressions:
-  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: .cfi_endproc without corresponding .cfi_startproc:  => 32
-  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: bad or irreducible absolute expression:  => 16
-  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: junk at end of line, first unrecognized character is `:':  => 16
-  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `be 0x100(%sr2,%r0)':  => 29
-  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldi 0,%r20':  => 30
-  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldw 0(%sp),%r31':  => 26
-  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ble 0x100(%sr2,%r0)':  => 51, 46
-  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 0,%r25':  => 44
-  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 1,%r25':  => 49
-  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 173,%r20':  => 45, 50
-  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.callinfo':  => 40
-  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.entry':  => 41
-  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.exit':  => 54
-  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.proc':  => 39
-  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.procend':  => 55
-  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.stringz':  => 76
-  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn30/display_mode_vba_30.c: error: the frame size of 2096 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 6806:1
-  + /kisskb/src/include/linux/bitfield.h: error: call to '__field_overflow' declared with attribute error: value doesn't fit into mask:  => 151:3
-  + {standard input}: Error: displacement to undefined symbol .L377 overflows 12-bit field:  => 2286
-  + {standard input}: Error: displacement to undefined symbol .L378 overflows 8-bit field :  => 2302
-  + {standard input}: Error: displacement to undefined symbol .L382 overflows 8-bit field :  => 2213
-
-20 error improvements:
-  - /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible function types from 'void (*)(long unsigned int)' to 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int)' [-Werror=cast-function-type]: 1639:13, 1756:13 => 
-  - /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible function types from 'void (*)(struct mm_struct *)' to 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int)' [-Werror=cast-function-type]: 1662:29, 1674:29 => 
-  - /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible function types from 'void (*)(struct mm_struct *, long unsigned int)' to 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int)' [-Werror=cast-function-type]: 1767:21 => 
-  - /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible function types from 'void (*)(struct vm_area_struct *, long unsigned int)' to 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int)' [-Werror=cast-function-type]: 1741:29, 1726:29 => 
-  - /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible function types from 'void (*)(struct vm_area_struct *, long unsigned int,  long unsigned int)' to 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int)' [-Werror=cast-function-type]: 1711:29, 1694:29 => 
-  - /kisskb/src/arch/um/include/asm/processor-generic.h: error: called object is not a function or function pointer: 103:18 => 
-  - /kisskb/src/crypto/blake2b_generic.c: error: the frame size of 2288 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]: 109:1 => 
-  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: control reaches end of non-void function [-Werror=return-type]: 1614:1 => 
-  - /kisskb/src/drivers/gpu/drm/r128/r128_cce.c: error: case label does not reduce to an integer constant: 418:2, 417:2 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
-  - {standard input}: Error: displacement to undefined symbol .L271 overflows 12-bit field: 1625 => 
-  - {standard input}: Error: displacement to undefined symbol .L271 overflows 8-bit field : 1634 => 
-  - {standard input}: Error: displacement to undefined symbol .L318 overflows 8-bit field : 1681, 1711, 1665, 1693 => 
-  - {standard input}: Error: pcrel too far: 1686, 1618, 1656, 1702, 1672, 1698, 1655, 1685, 1684, 1660, 1670, 1635, 1700, 1657, 1609, 1649, 1673, 1705, 1644, 1676, 1667, 1629, 1632, 1695 => 2232, 2247, 2259, 2221, 2229, 2216, 2249, 2209, 2262, 2215, 2293, 2248, 2204, 2274, 2261, 2217, 2231, 2206
-  - {standard input}: Error: unknown opcode: 1713 => 
-
-
-*** WARNINGS ***
-
-8 warning regressions:
-  + /kisskb/src/fs/ext4/readpage.c: warning: the frame size of 1132 bytes is larger than 1024 bytes [-Wframe-larger-than=]:  => 407:1
-  + /kisskb/src/fs/mpage.c: warning: the frame size of 1092 bytes is larger than 1024 bytes [-Wframe-larger-than=]:  => 308:1
-  + /kisskb/src/fs/mpage.c: warning: the frame size of 1144 bytes is larger than 1024 bytes [-Wframe-larger-than=]:  => 634:1
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata):  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata):  => N/A
-  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o: section mismatch in reference: qede_forced_speed_maps (section: .data) -> qede_forced_speed_100000 (section: .init.rodata):  => N/A
-  + modpost: WARNING: modpost: vmlinux.o: section mismatch in reference: __trace_event_discard_commit (section: .text.unlikely) -> initcall_level_names (section: .init.data):  => N/A
-  + {standard input}: Warning: overflow in branch to .L3; converted into longer instruction sequence:  => 2308
-
-28 warning improvements:
-  - /kisskb/src/fs/ext4/readpage.c: warning: the frame size of 1136 bytes is larger than 1024 bytes [-Wframe-larger-than=]: 407:1 => 
-  - /kisskb/src/fs/mpage.c: warning: the frame size of 1088 bytes is larger than 1024 bytes [-Wframe-larger-than=]: 303:1 => 
-  - /kisskb/src/fs/mpage.c: warning: the frame size of 1148 bytes is larger than 1024 bytes [-Wframe-larger-than=]: 638:1 => 
-  - arch/m68k/configs/multi_defconfig: warning: symbol value 'm' invalid for ZPOOL: 61 => 
-  - arch/m68k/configs/sun3_defconfig: warning: symbol value 'm' invalid for ZPOOL: 37 => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14410): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14428): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14440): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14458): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14470): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14488): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x144a0): Section mismatch in reference from the variable qed_mfw_legacy_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x144f0): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14508): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14520): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14538): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14550): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14568): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14580): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o(.data+0x14598): Section mismatch in reference from the variable qed_mfw_ext_maps to the variable .init.rodata:qed_mfw_legacy_bb_100g: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47b0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47c8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47e0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47f8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4810): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4828): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4840): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
-  - modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x52bc): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names: N/A => 
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+- Sandipan

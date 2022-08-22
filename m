@@ -2,86 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E4159CAEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 23:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7A759CAF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 23:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbiHVVgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 17:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
+        id S237005AbiHVVgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 17:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbiHVVgJ (ORCPT
+        with ESMTP id S231669AbiHVVg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 17:36:09 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDBD33419;
-        Mon, 22 Aug 2022 14:36:08 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id o204so6332287oia.12;
-        Mon, 22 Aug 2022 14:36:08 -0700 (PDT)
+        Mon, 22 Aug 2022 17:36:29 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF02152DEC
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 14:36:28 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id bt10so4102949lfb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 14:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=5ru0aABhHpkFT/xNIs3ZgPkQqBJ5OZsLkRi6XtgKWDc=;
+        b=dcayZoNHlCo4X2lBZCOuItLTviaZ8g58d6ch9c4HiqsrmeMeUSPmuGQecK7tHnrrcU
+         BGZDNtotPI8KTh71ufRsdBAJD9I0Wn/JaS/a7cuRQDPcdnZDdr/puIhkK7LQ17LqLP5m
+         F7mSDEKTuFxE0vpJK7tIpCoMZbPYmyZue3712Yl2OWgNZkQLUxtOw67pP67r7PPaDnhE
+         Dr5EV0ORbmC57dz2HQvVdfUabDG0a3X94rd8sabU5Gtm3YMD/R+b5qXEve4IGMY19D6n
+         BGVAXE8R6X58ZONsUKzTfAJuS/dmi8A3ymiKeFW/UExxBF4ePGcUFyPDhIOVZoMoPMMc
+         aMFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=AvpFKTVtlMBq+hw7JoGPDSmZsSCDfKdJ6eZg738PV4U=;
-        b=72I+AXieE7zyZUobZ1ufOEOuqE72ls1/XoS2SRbub8GYr+enpAUKHFftyB7T/g9PsT
-         d8HsYp7XBiQvR5M5YJfNuTlkcjtNwJgM3vfwMIQ+ewKQ76Wf4R9xi5hMaW4zLMFoo767
-         y4RN192nT3pw3SDzdK0R09yjl33kI3I97MFMEMpaxXKxCipO/N1BOF+T03WgCSPLl5H+
-         hxSTzP5ZHhnr2aBzyzygPujtML59P65HS5jZxchepKMmH9ax9BYsaveqJSBA+02cFlfP
-         i8NrM6ELnDQX9v1efZKzSalhJXbRoJAcRQxZhKY08C9BUDGq2REHhygiREXMxje+kzvD
-         W2Og==
-X-Gm-Message-State: ACgBeo0ZpkO0dNg9pvD+7Loz+YcDTP5xs3te03svEsIP/WWymYmH2dsu
-        KOaN7ILVNa/FsCNRqHU8YA==
-X-Google-Smtp-Source: AA6agR6jZHhw2YeqgJxqXl680sCfPVMjKdmRhCqYuprtJx5xwbSQ6YIMVFssbFBfSKcD4+SZ8ZzMhg==
-X-Received: by 2002:a05:6808:3d1:b0:343:4049:6899 with SMTP id o17-20020a05680803d100b0034340496899mr126053oie.152.1661204168260;
-        Mon, 22 Aug 2022 14:36:08 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id fq36-20020a0568710b2400b0011d02a3fa63sm1688347oab.14.2022.08.22.14.36.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 14:36:07 -0700 (PDT)
-Received: (nullmailer pid 894715 invoked by uid 1000);
-        Mon, 22 Aug 2022 21:36:07 -0000
-Date:   Mon, 22 Aug 2022 16:36:07 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     wei.fang@nxp.com
-Cc:     netdev@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        f.fainelli@gmail.com, edumazet@google.com, andrew@lunn.ch,
-        davem@davemloft.net, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, kuba@kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        hkallweit1@gmail.com, linux@armlinux.org.uk
-Subject: Re: [PATCH V2 net-next 1/2] dt-bindings: net: tja11xx: add
- nxp,refclk_in property
-Message-ID: <20220822213607.GA894623-robh@kernel.org>
-References: <20220822015949.1569969-1-wei.fang@nxp.com>
- <20220822015949.1569969-2-wei.fang@nxp.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=5ru0aABhHpkFT/xNIs3ZgPkQqBJ5OZsLkRi6XtgKWDc=;
+        b=uduW96Wc/7shm/RvuVyFrYmZ1vO6nPKFf1dmaidFrzUqsqRNKIVJbRPzGX8cCI8Wfo
+         uOvfxFVK4FyJ5t84EGyd3pAWnN+Qy3mbL4/38XMoDqpt4YtJVO9OyD2fIJfBDOjBzHLx
+         W961xgefZYy07KBtiH5uUCzH+pSn2ZRs4/1zYM9ZvZj43GDQvDCBHCt104J9YtadeHQd
+         Asa14gPd5ixB+RXTK99vNs5BdIdD1PGAdULDEHex+zrG/2il4OF7b9esOIeIrOuUfVtA
+         HUIC6yfT3LXo8NCl2eUCl0UbNOIQ2obtA+HaSBYSB8ywy/GSSkj+JR4AhCsYgGpbKVPW
+         gVYQ==
+X-Gm-Message-State: ACgBeo14Z8psMO2+DgksEcUXRKTT6Ayl7+HykS/ohCutl+hY6liarOs2
+        yIFJ5anw0FC6Vz/XtKURNpVVotEqw+KzsExOzFnWhA==
+X-Google-Smtp-Source: AA6agR4VQdfm3FFb0/UvTwdOZ1B/U6O/llTvGCtgfXsaf06xvjwNGX6p0asM/se/N286IcpWF+PmcstxsiQQmfXjyoo=
+X-Received: by 2002:a05:6512:33d6:b0:492:c423:1672 with SMTP id
+ d22-20020a05651233d600b00492c4231672mr7240817lfg.432.1661204186888; Mon, 22
+ Aug 2022 14:36:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822015949.1569969-2-wei.fang@nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <CANXV_XwgZMCGXijfoUyZ9+KyM6Rgeqiq-sCfubyj_16d-2CN=A@mail.gmail.com>
+ <20220815013317.26121-1-dmitrii.bundin.a@gmail.com> <CAKwvOdnnSAozX8bQ9HeSw12BV9OjpzyDmXk_BGczjVVQNN+7tQ@mail.gmail.com>
+ <CANXV_Xw2wzwDdJkyV1nHPQm2JTt48SLrNc7YwrfcxOwuFA-z3w@mail.gmail.com> <CAKwvOdkiq_byi1QeCvSGb2fd+0AJ1k9WNnsHJMeaaQcPRy1Wxg@mail.gmail.com>
+In-Reply-To: <CAKwvOdkiq_byi1QeCvSGb2fd+0AJ1k9WNnsHJMeaaQcPRy1Wxg@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 22 Aug 2022 14:36:14 -0700
+Message-ID: <CAKwvOdkPwbD-c0V-up2Ufzb-Uh7LLyD12X0FKeBa=hn+cSPA9Q@mail.gmail.com>
+Subject: Re: [PATCH v3] kbuild: add debug level and macro defs options
+To:     Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Fangrui Song <maskray@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022 09:59:48 +0800, wei.fang@nxp.com wrote:
-> From: Wei Fang <wei.fang@nxp.com>
-> 
-> TJA110x REF_CLK can be configured as interface reference clock
-> intput or output when the RMII mode enabled. This patch add the
-> property to make the REF_CLK can be configurable.
-> 
-> Signed-off-by: Wei Fang <wei.fang@nxp.com>
-> ---
-> V2 change:
-> Correct the property name and a typo.
-> ---
->  .../devicetree/bindings/net/nxp,tja11xx.yaml    | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
+On Mon, Aug 22, 2022 at 9:45 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> > So it seems like a reasonable choice to provide a debug info
+> > level config that would explicitly set the level without relying on
+> > implicits. The default value of the config is set to -g2 to not change
+> > the build behavior that was before introducing the option. And it
+> > works for both older and newer versions of GCC/Clang in the same way.
+> > The benefits of the -g1 option are indeed questionable except that it
+> > produces an image with ~20% less in size.
+>
+> Until there's a concrete need, YAGNI.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Or add -g1 to CONFIG_DEBUG_INFO_REDUCED.
+-- 
+Thanks,
+~Nick Desaulniers

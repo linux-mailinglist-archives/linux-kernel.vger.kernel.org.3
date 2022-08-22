@@ -2,85 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3328C59C03E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1327959C049
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235002AbiHVNLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 09:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
+        id S234868AbiHVNMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 09:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233450AbiHVNLw (ORCPT
+        with ESMTP id S234803AbiHVNMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 09:11:52 -0400
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F13B140F1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 06:11:50 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1661173908; bh=HTMe+NWdQhVrv4pk9fiHKxQBTpwr9lj6IAS27IV/VvE=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=q8L1pggjM0PWgIqJYCIL22femgo3CMmkx0sHKqqiWpKLGyDateOmHoMO2m3Jdpns4
-         pzMV1WmAXjXHC9xY7YeZueMmQYvpvJnomm4uMbPMJ1LJoTNpz49IJjCzAK99y2lC5u
-         xad/jYkJEXvQ9UBtmtWFntivWc3hmV2UGB+mIGi4=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH] ASoC: dapm: Export new 'graph.dot' file in debugfs
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
-In-Reply-To: <YwN+0yHSOSC2aD+J@sirena.org.uk>
-Date:   Mon, 22 Aug 2022 15:11:48 +0200
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <6EDC1D4B-4B84-49A2-A60A-EA15D27251A7@cutebit.org>
-References: <20220822095242.3779-1-povik+lin@cutebit.org>
- <YwN2Pd4Ez08yDFno@sirena.org.uk>
- <3234D74E-0DFF-4BB5-87ED-6135BAC1F31D@cutebit.org>
- <YwN+0yHSOSC2aD+J@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 22 Aug 2022 09:12:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69B533E2E
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 06:12:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 518B1B811FE
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:12:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0BF4C433B5;
+        Mon, 22 Aug 2022 13:12:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661173935;
+        bh=SiAIv6X2Q3SDevkUGpEJlAHs0fbikeFuvz77rYEBmLM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZseYsuPxJl4C7J1GlHJnJxCSeS+0xOQmdr/wWirhal2oC8PyOsr5z0KAdTH//V2vY
+         MsXvMob8jBLkpE5DnzZi8wquZ7PvsB9qgvURrCg+QKbNcVsbY3CYD7/JIhWHMq9Y1C
+         5U/q9dTg6og8NuPUJNtqZ59e1A0xqz82LcdQOvaW/lgmw/G7Msq9gdehWGRxvz4tiM
+         sk8AiT3q2fR7Oi3SGZ4aPADfYi7FlZb7sjAXLJeIcDttzT72WakfjBED5vKVSgwt/H
+         2vqxMuyxzbFIVFLwSp/qcjs8RFIxlFVp4dHxCMVREpFU9KZ2mA4TwrwdQqfM+CVt1E
+         EhEExxIJe2GVQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B2077404A1; Mon, 22 Aug 2022 10:12:12 -0300 (-03)
+Date:   Mon, 22 Aug 2022 10:12:12 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Borislav Petkov <bp@suse.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [tools/ breakage] asm goto: eradicate CC_HAS_ASM_GOTO
+Message-ID: <YwOArA3ZdI8WtVSU@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hey,
 
-> On 22. 8. 2022, at 15:04, Mark Brown <broonie@kernel.org> wrote:
->=20
-> On Mon, Aug 22, 2022 at 02:38:09PM +0200, Martin Povi=C5=A1er wrote:
->>> On 22. 8. 2022, at 14:27, Mark Brown <broonie@kernel.org> wrote:
->=20
->>> There was a tool floating about in the past (last copy I knew about =
-was
->>> on Wolfson's git but they took that down) - can we not just continue =
-to
->>> do that?
->=20
->> I don=E2=80=99t know the tool or where would I find it. I think =
-it=E2=80=99s neat
->=20
-> Copying in Charles and Richard who might know about the status of the
-> tool Dimitris wrote.
+	The cset below broke tools/perf/, please either not update
+tools/ headers (tools developers will notice the difference when
+building tools by means of tools/perf/check-headers.sh and see what
+is needed to keep it in sync) or do a 'make tools/all'.
 
-Thanks.
+	Someone seems to have sent a fix, I'll take a look.
 
->> simply having a =E2=80=98graph.dot=E2=80=99 at hand, especially since =
-it requires
->> little code. (Although sure there=E2=80=99s the danger of it =
-growing.)
->=20
-> I'm also worried about people going in and wanting other more tool
-> specific formats adding, if we didn't have anything at all it'd be one
-> thing but we do have something.
+- Arnaldo
 
-Sure, although I would argue DOT is by a large margin the standard
-format to represent graphs in.
+    asm goto: eradicate CC_HAS_ASM_GOTO
 
-Best,
-Martin
+    GCC has supported asm goto since 4.5, and Clang has since version 9.0.0.
+    The minimum supported versions of these tools for the build according to
+    Documentation/process/changes.rst are 5.1 and 11.0.0 respectively.
+
+    Remove the feature detection script, Kconfig option, and clean up some
+    fallback code that is no longer supported.
+
+    The removed script was also testing for a GCC specific bug that was
+    fixed in the 4.7 release.
+
+    Also remove workarounds for bpftrace using clang older than 9.0.0, since
+    other BPF backend fixes are required at this point.
+
+    Link: https://lore.kernel.org/lkml/CAK7LNATSr=BXKfkdW8f-H5VT_w=xBpT2ZQcZ7rm6JfkdE+QnmA@mail.gmail.com/
+    Link: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48637
+    Acked-by: Borislav Petkov <bp@suse.de>
+    Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+    Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+    Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+    Reviewed-by: Ingo Molnar <mingo@kernel.org>
+    Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+    Reviewed-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 

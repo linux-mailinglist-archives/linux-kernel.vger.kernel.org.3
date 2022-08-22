@@ -2,277 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBCB59C415
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CEC759C3F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236999AbiHVQ1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S236589AbiHVQVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiHVQ1V (ORCPT
+        with ESMTP id S236448AbiHVQVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:27:21 -0400
-X-Greylist: delayed 322 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 Aug 2022 09:27:18 PDT
-Received: from mx01.puc.rediris.es (outbound2mad.lav.puc.rediris.es [130.206.19.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCA640E09
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:27:18 -0700 (PDT)
-Received: from mta-out03.sim.rediris.es (mta-out03.sim.rediris.es [130.206.24.45])
-        by mx01.puc.rediris.es  with ESMTP id 27MGL5av008437-27MGL5ax008437
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Mon, 22 Aug 2022 18:21:05 +0200
-Received: from mta-out03.sim.rediris.es (localhost.localdomain [127.0.0.1])
-        by mta-out03.sim.rediris.es (Postfix) with ESMTPS id A76F0302A8C5;
-        Mon, 22 Aug 2022 18:21:05 +0200 (CEST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mta-out03.sim.rediris.es (Postfix) with ESMTP id 932C63049C41;
-        Mon, 22 Aug 2022 18:21:05 +0200 (CEST)
-X-Amavis-Modified: Mail body modified (using disclaimer) -
-        mta-out03.sim.rediris.es
-Received: from mta-out03.sim.rediris.es ([127.0.0.1])
-        by localhost (mta-out03.sim.rediris.es [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id LBajIlpnifdK; Mon, 22 Aug 2022 18:21:05 +0200 (CEST)
-Received: from lt-gp.iram.es (haproxy02.sim.rediris.es [130.206.24.70])
-        by mta-out03.sim.rediris.es (Postfix) with ESMTPA id DD52C302A8C5;
-        Mon, 22 Aug 2022 18:21:04 +0200 (CEST)
-Date:   Mon, 22 Aug 2022 18:21:00 +0200
-From:   Gabriel Paubert <paubert@iram.es>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nick Child <nick.child@ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] powerpc: Add support for early debugging via Serial
- 16550 console
-Message-ID: <YwOs7LxpyDubCSyF@lt-gp.iram.es>
-References: <20220819211254.22192-1-pali@kernel.org>
- <b23ecdd1-fe34-f0f7-be7f-da8624096447@csgroup.eu>
- <20220822153335.v5gc26jfbbqyj3et@pali>
+        Mon, 22 Aug 2022 12:21:43 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A2F3F315;
+        Mon, 22 Aug 2022 09:21:41 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MC5uep010996;
+        Mon, 22 Aug 2022 18:21:19 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=GhxUbNh5RCiYPiqmL1j1FpxzGmHGClyYuT8hQo3nCHY=;
+ b=QVzmyqS/8QByMpz0zLd1pYktHZfBhpuda4O5DGivCNBj+rcdLme5sLy7WeBmAc/+0Is+
+ cBEAQ1w+mi37EUDuMYK3yZ6nGeuUNS2TEySvzKS1N7AKjhgDzGP2vAw1+gHgmq/aD0yE
+ ZE0WeZ8V5zdUbrNwiGNjNbJr4gv9vBeZbPG6ALvwPUgZ0vhItEcg5V2pOsORNqC1vPEQ
+ BesAb0oQgkoNhlL0WfW8e9lWbQT3ZVivElMjvtZST1XpGZzlAxWtMgDlOn5ERk0CIEA1
+ wU3U53SNvxkAO97NKMjB/LF5nVIVjT/ZE/fhR1oXyoVRjPejOB0RPwYO9mCY0AKo9ZOQ Gw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3j2x2yryc7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Aug 2022 18:21:19 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 74E6B100034;
+        Mon, 22 Aug 2022 18:21:17 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DCC1224553B;
+        Mon, 22 Aug 2022 18:21:17 +0200 (CEST)
+Received: from [10.201.21.72] (10.75.127.116) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 22 Aug
+ 2022 18:21:17 +0200
+Message-ID: <319927f9-5265-81fd-2c6b-7c5146d90687@foss.st.com>
+Date:   Mon, 22 Aug 2022 18:21:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20220822153335.v5gc26jfbbqyj3et@pali>
-Content-Transfer-Encoding: quoted-printable
-X-FE-Policy-ID: 23:8:0:SYSTEM
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=iram.es; s=DKIM; c=relaxed/relaxed;
- h=date:from:to:cc:subject:message-id:references:mime-version:content-type;
- bh=P7Z6k3A8poRGgY/r2fVngWTDGFg6NAUY66Qf9n627IU=;
- b=OyMQyYGzrjUYNUmcunzhWkDUU5JjJFTOsKqT+SUVtt2g3UnIhxWU+iwHp0FTD8lRwEuEnymDs9vF
-        8EK3OI7gFDHC36L1qm6HHO4WcA93SesWX2QJvzkglm+3lguFSpQPiQ/+Q62vIoM4/X54Mzo7HMaw
-        lZj1G7AVI8jASBE3EV0QpsKmpXVxys1JksNuF3CyKd2LLcYdMXRpmwQXrcnvKqhd8sYuLbRuhLMi
-        j8N0Ncfrv2sdTd3NWghjMxUBNRu4gF4S03hGWZPLXFxrnpzXwxK0ZoT1WSW3MM3/Tn7tBb+4xRYj
-        YRELdnG9Xm3v9zgH1rh48s36yf1JxyqSDiZGwg==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: (subset) [PATCH v3 0/2] spi: stm32_qspi: use QSPI bus as 8 lines
+ communication channel
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <christophe.kerello@foss.st.com>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20220816161344.2599908-1-patrice.chotard@foss.st.com>
+ <166118433897.209120.16190099503428270567.b4-ty@kernel.org>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <166118433897.209120.16190099503428270567.b4-ty@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.116]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-22_10,2022-08-22_02,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 05:33:35PM +0200, Pali Roh=E1r wrote:
-> On Monday 22 August 2022 14:25:57 Christophe Leroy wrote:
-> > Le 19/08/2022 =E0 23:12, Pali Roh=E1r a =E9crit=A0:
-> > > Currently powerpc early debugging contains lot of platform specific
-> > > options, but does not support standard UART / serial 16550 console.
-> > >=20
-> > > Later legacy_serial.c code supports registering UART as early debug=
- console
-> > > from device tree but it is not early during booting, but rather lat=
-er after
-> > > machine description code finishes.
-> > >=20
-> > > So for real early debugging via UART is current code unsuitable.
-> > >=20
-> > > Add support for new early debugging option CONFIG_PPC_EARLY_DEBUG_1=
-6550
-> > > which enable Serial 16550 console on address defined by new option
-> > > CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR and by stride by option
-> > > CONFIG_PPC_EARLY_DEBUG_16550_STRIDE.
-> > >=20
-> > > With this change it is possible to debug powerpc machine descriptor=
- code.
-> > > For example this early debugging code can print on serial console a=
-lso
-> > > "No suitable machine description found" error which is done before
-> > > legacy_serial.c code.
-> > >=20
-> > > Signed-off-by: Pali Roh=E1r <pali@kernel.org>
-> > > ---
-> > > Tested on P2020 board. It allowed me do debug and implement this pa=
-tch series:
-> > > https://lore.kernel.org/linuxppc-dev/20220819191557.28116-1-pali@ke=
-rnel.org/
-> >=20
-> > Build failure if I select it on mpc885_ads_defconfig :
-> >=20
-> >    LD      vmlinux.o
-> >    MODPOST vmlinux.symvers
-> >    MODINFO modules.builtin.modinfo
-> >    GEN     modules.builtin
-> >    CC      .vmlinux.export.o
-> >    LD      .tmp_vmlinux.kallsyms1
-> > powerpc64-linux-ld: arch/powerpc/kernel/udbg.o: in function=20
-> > `udbg_early_init':
-> > /home/chleroy/linux-powerpc/arch/powerpc/kernel/udbg.c:71: undefined=20
-> > reference to `udbg_init_debug_16550'
-> >=20
-> >=20
-> >=20
-> > > ---
-> > >   arch/powerpc/Kconfig.debug       | 14 ++++++++++++++
-> > >   arch/powerpc/include/asm/udbg.h  |  1 +
-> > >   arch/powerpc/kernel/udbg.c       |  2 ++
-> > >   arch/powerpc/kernel/udbg_16550.c | 33 +++++++++++++++++++++++++++=
-+++++
-> > >   4 files changed, 50 insertions(+)
-> > >=20
-> > > diff --git a/arch/powerpc/Kconfig.debug b/arch/powerpc/Kconfig.debu=
-g
-> > > index 9f363c143d86..a4e7d90a45d2 100644
-> > > --- a/arch/powerpc/Kconfig.debug
-> > > +++ b/arch/powerpc/Kconfig.debug
-> > > @@ -276,6 +276,11 @@ config PPC_EARLY_DEBUG_OPAL_HVSI
-> > >   	  Select this to enable early debugging for the PowerNV platform
-> > >   	  using an "hvsi" console
-> > >  =20
-> > > +config PPC_EARLY_DEBUG_16550
-> > > +	bool "Serial 16550"
-> > > +	help
-> > > +	  Select this to enable early debugging via Serial 16550 console
-> > > +
-> >=20
-> > Putting it before EARLY_DEBUG_MEMCONS means that configs that were=20
-> > previously selectiong EARLY_DEBUG_MEMCONS will now select=20
-> > EARLY_DEBUG_16550 instead.
-> >=20
-> > Add a dependency to PPC_UDBG_16550 to avoid the build failure I menti=
-onned ?
->=20
-> Yea, there is really missing dependency. I will fix it.
->=20
-> > >   config PPC_EARLY_DEBUG_MEMCONS
-> > >   	bool "In memory console"
-> > >   	help
-> > > @@ -355,6 +360,15 @@ config PPC_EARLY_DEBUG_CPM_ADDR
-> > >   	  platform probing is done, all platforms selected must
-> > >   	  share the same address.
-> > >  =20
-> > > +config PPC_EARLY_DEBUG_16550_PHYSADDR
-> > > +	hex "Early debug Serial 16550 physical address"
-> > > +	depends on PPC_EARLY_DEBUG_16550
-> >=20
-> > A default value is necessary here to avoid prompts during defconfig b=
-uilds.
-> >=20
-> > > +
-> > > +config PPC_EARLY_DEBUG_16550_STRIDE
-> > > +	int "Early debug Serial 16550 stride"
-> > > +	depends on PPC_EARLY_DEBUG_16550
-> > > +	default 1
-> > > +
-> > >   config FAIL_IOMMU
-> > >   	bool "Fault-injection capability for IOMMU"
-> > >   	depends on FAULT_INJECTION
-> > > diff --git a/arch/powerpc/include/asm/udbg.h b/arch/powerpc/include=
-/asm/udbg.h
-> > > index b4aa0d88ce2c..20b5a37ab772 100644
-> > > --- a/arch/powerpc/include/asm/udbg.h
-> > > +++ b/arch/powerpc/include/asm/udbg.h
-> > > @@ -53,6 +53,7 @@ extern void __init udbg_init_ehv_bc(void);
-> > >   extern void __init udbg_init_ps3gelic(void);
-> > >   extern void __init udbg_init_debug_opal_raw(void);
-> > >   extern void __init udbg_init_debug_opal_hvsi(void);
-> > > +extern void __init udbg_init_debug_16550(void);
-> >=20
-> > 'extern' keywork is pointless and deprecated for function prototypes,=
-=20
-> > please don't add new ones.
->=20
-> I used extern keyword to follow existing coding style.
+Hi Mark
 
-In this case it's better to remove existing extern specifications in the
-surrounding lines. Increasing a bit the footprint of the patch is
-justified, and does not significantly increase the risk of conflicts
-with other patches, unlike the gratuitous churn we see sometimes.
+I just noticed that the cleanup() callback is useless as the gpiod is 
+automatically freed by devm.
 
-	Gabriel
->=20
-> > Checkpatch reports:
-> >=20
-> > CHECK: extern prototypes should be avoided in .h files
-> > #77: FILE: arch/powerpc/include/asm/udbg.h:56:
-> > +extern void __init udbg_init_debug_16550(void);
-> >=20
-> >=20
-> > >  =20
-> > >   #endif /* __KERNEL__ */
-> > >   #endif /* _ASM_POWERPC_UDBG_H */
-> > > diff --git a/arch/powerpc/kernel/udbg.c b/arch/powerpc/kernel/udbg.=
-c
-> > > index b1544b2f6321..92b3fc258d11 100644
-> > > --- a/arch/powerpc/kernel/udbg.c
-> > > +++ b/arch/powerpc/kernel/udbg.c
-> > > @@ -67,6 +67,8 @@ void __init udbg_early_init(void)
-> > >   	udbg_init_debug_opal_raw();
-> > >   #elif defined(CONFIG_PPC_EARLY_DEBUG_OPAL_HVSI)
-> > >   	udbg_init_debug_opal_hvsi();
-> > > +#elif defined(CONFIG_PPC_EARLY_DEBUG_16550)
-> > > +	udbg_init_debug_16550();
-> > >   #endif
-> > >  =20
-> > >   #ifdef CONFIG_PPC_EARLY_DEBUG
-> > > diff --git a/arch/powerpc/kernel/udbg_16550.c b/arch/powerpc/kernel=
-/udbg_16550.c
-> > > index d3942de254c6..46f2d831d7c9 100644
-> > > --- a/arch/powerpc/kernel/udbg_16550.c
-> > > +++ b/arch/powerpc/kernel/udbg_16550.c
-> > > @@ -8,6 +8,7 @@
-> > >   #include <asm/udbg.h>
-> > >   #include <asm/io.h>
-> > >   #include <asm/reg_a2.h>
-> > > +#include <asm/early_ioremap.h>
-> > >  =20
-> > >   extern u8 real_readb(volatile u8 __iomem  *addr);
-> > >   extern void real_writeb(u8 data, volatile u8 __iomem *addr);
-> > > @@ -335,3 +336,35 @@ void __init udbg_init_debug_microwatt(void)
-> > >   }
-> > >  =20
-> > >   #endif /* CONFIG_PPC_EARLY_DEBUG_MICROWATT */
-> > > +
-> > > +#ifdef CONFIG_PPC_EARLY_DEBUG_16550
-> > > +
-> > > +static void __iomem *udbg_uart_early_addr;
-> > > +
-> > > +void __init udbg_init_debug_16550(void)
-> > > +{
-> > > +	udbg_uart_early_addr =3D early_ioremap(CONFIG_PPC_EARLY_DEBUG_165=
-50_PHYSADDR, 0x1000);
-> > > +	udbg_uart_init_mmio(udbg_uart_early_addr, CONFIG_PPC_EARLY_DEBUG_=
-16550_STRIDE);
-> > > +}
-> > > +
-> > > +static int __init udbg_init_debug_16550_ioremap(void)
-> > > +{
-> > > +	void __iomem *addr;
-> > > +
-> > > +	if (!udbg_uart_early_addr)
-> > > +		return 0;
-> > > +
-> > > +	addr =3D ioremap(CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR, 0x1000);
-> > > +	if (WARN_ON(!addr))
-> > > +		return -ENOMEM;
-> > > +
-> > > +	udbg_uart_init_mmio(addr, CONFIG_PPC_EARLY_DEBUG_16550_STRIDE);
-> > > +	early_iounmap(udbg_uart_early_addr, 0x1000);
-> > > +	udbg_uart_early_addr =3D NULL;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +early_initcall(udbg_init_debug_16550_ioremap);
-> > > +
-> > > +#endif /* CONFIG_PPC_EARLY_DEBUG_16550 */
- 
+As you haven't send your pull request, do you accept a fixup patch you will squash 
+with patch [2/2] "spi: stm32_qspi: Add transfer_one_message() spi callback"
+or standalone patch ?
 
+Thanks
+Patrice
+
+
+On 8/22/22 18:05, Mark Brown wrote:
+> On Tue, 16 Aug 2022 18:13:42 +0200, patrice.chotard@foss.st.com wrote:
+>> From: Patrice Chotard <patrice.chotard@foss.st.com>
+>>
+>> The goal of this series is to allow to use QSPI bus as a 8 lines communication
+>> channel for specific purpose.
+>>
+>> The QSPI block offers the possibility to communicate with 2 flashes in
+>> parrallel using the dual flash mode, 8 data lines are then used.
+>> Usage of cs-gpios populated and spi-tx-bus-width / spi-rx-bus-width both set to 8,
+>> is needed to enable dual flash mode.
+>>
+>> [...]
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> 
+> Thanks!
+> 
+> [2/2] spi: stm32_qspi: Add transfer_one_message() spi callback
+>       commit: b051161f44d414e736fa2b011245441bae9babd7
+> 
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> 
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+> 
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+> 
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+> 
+> Thanks,
+> Mark

@@ -2,32 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10AA259BEA3
+	by mail.lfdr.de (Postfix) with ESMTP id 58B5959BEA4
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbiHVLiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
+        id S234668AbiHVLid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234270AbiHVLiS (ORCPT
+        with ESMTP id S234458AbiHVLi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:38:18 -0400
+        Mon, 22 Aug 2022 07:38:29 -0400
 Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5E72608
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:38:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE1610FD9;
+        Mon, 22 Aug 2022 04:38:26 -0700 (PDT)
 Received: from dev011.ch-qa.sw.ru ([172.29.1.16])
         by relay.virtuozzo.com with esmtp (Exim 4.95)
         (envelope-from <alexander.atanasov@virtuozzo.com>)
-        id 1oQ5jW-00Gyo9-Jf;
-        Mon, 22 Aug 2022 13:38:05 +0200
+        id 1oQ5ja-00Gyo9-I4;
+        Mon, 22 Aug 2022 13:38:09 +0200
 From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
+To:     Jonathan Corbet <corbet@lwn.net>
 Cc:     kernel@openvz.org,
         Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v3 2/4] Enable balloon drivers to report inflated memory
-Date:   Mon, 22 Aug 2022 14:37:45 +0300
-Message-Id: <20220822113747.3630776-3-alexander.atanasov@virtuozzo.com>
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v3 3/4] Display inflated memory to users
+Date:   Mon, 22 Aug 2022 14:37:46 +0300
+Message-Id: <20220822113747.3630776-4-alexander.atanasov@virtuozzo.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220822113747.3630776-1-alexander.atanasov@virtuozzo.com>
 References: <20220822113747.3630776-1-alexander.atanasov@virtuozzo.com>
@@ -42,93 +43,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add counters to be updated by the balloon drivers.
-Create balloon notifier to propagate changes.
+Add InflatedTotal and InflatedFree to /proc/meminfo
 
 Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
 ---
- include/linux/balloon.h | 18 ++++++++++++++++++
- mm/balloon.c            | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 54 insertions(+)
+ Documentation/filesystems/proc.rst |  6 ++++++
+ fs/proc/meminfo.c                  | 10 ++++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/include/linux/balloon.h b/include/linux/balloon.h
-index 46ac8f61f607..59657da77d95 100644
---- a/include/linux/balloon.h
-+++ b/include/linux/balloon.h
-@@ -57,6 +57,24 @@ struct balloon_dev_info {
- 			struct page *page, enum migrate_mode mode);
- };
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index e7aafc82be99..690e1b90ffee 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -991,6 +991,8 @@ Example output. You may not have all of these fields.
+     VmallocUsed:       40444 kB
+     VmallocChunk:          0 kB
+     Percpu:            29312 kB
++    InflatedTotal:   2097152 kB
++    InflatedFree:          0 kB
+     HardwareCorrupted:     0 kB
+     AnonHugePages:   4149248 kB
+     ShmemHugePages:        0 kB
+@@ -1138,6 +1140,10 @@ VmallocChunk
+ Percpu
+               Memory allocated to the percpu allocator used to back percpu
+               allocations. This stat excludes the cost of metadata.
++InflatedTotal and InflatedFree
++               Amount of memory that is inflated by the balloon driver.
++               Due to differences among the drivers inflated memory
++               is subtracted from TotalRam or from MemFree.
+ HardwareCorrupted
+               The amount of RAM/memory in KB, the kernel identifies as
+               corrupted.
+diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+index 6e89f0e2fd20..7182886efdbf 100644
+--- a/fs/proc/meminfo.c
++++ b/fs/proc/meminfo.c
+@@ -16,6 +16,9 @@
+ #ifdef CONFIG_CMA
+ #include <linux/cma.h>
+ #endif
++#ifdef CONFIG_MEMORY_BALLOON
++#include <linux/balloon.h>
++#endif
+ #include <asm/page.h>
+ #include "internal.h"
  
-+extern atomic_long_t mem_balloon_inflated_total_kb;
-+extern atomic_long_t mem_balloon_inflated_free_kb;
-+
-+void balloon_set_inflated_total(long inflated_kb);
-+void balloon_set_inflated_free(long inflated_kb);
-+
-+#define BALLOON_CHANGED_TOTAL 0
-+#define BALLOON_CHANGED_FREE  1
-+
-+int register_balloon_notifier(struct notifier_block *nb);
-+void unregister_balloon_notifier(struct notifier_block *nb);
-+
-+#define balloon_notifier(fn, pri) ({						\
-+	static struct notifier_block fn##_mem_nb __meminitdata =\
-+		{ .notifier_call = fn, .priority = pri };			\
-+	register_balloon_notifier(&fn##_mem_nb);				\
-+})
-+
- struct page *balloon_page_alloc(void);
- void balloon_page_enqueue(struct balloon_dev_info *b_dev_info,
- 				 struct page *page);
-diff --git a/mm/balloon.c b/mm/balloon.c
-index 22b3e876bc78..8e1d5855fef8 100644
---- a/mm/balloon.c
-+++ b/mm/balloon.c
-@@ -7,8 +7,44 @@
- #include <linux/mm.h>
- #include <linux/slab.h>
- #include <linux/export.h>
-+#include <linux/notifier.h>
- #include <linux/balloon.h>
+@@ -153,6 +156,13 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+ 		    global_zone_page_state(NR_FREE_CMA_PAGES));
+ #endif
  
-+atomic_long_t mem_balloon_inflated_total_kb = ATOMIC_LONG_INIT(0);
-+atomic_long_t mem_balloon_inflated_free_kb = ATOMIC_LONG_INIT(0);
-+SRCU_NOTIFIER_HEAD_STATIC(balloon_chain);
++#ifdef CONFIG_MEMORY_BALLOON
++	seq_printf(m,  "InflatedTotal:  %8ld kB\n",
++		atomic_long_read(&mem_balloon_inflated_total_kb));
++	seq_printf(m,  "InflatedFree:   %8ld kB\n",
++		atomic_long_read(&mem_balloon_inflated_free_kb));
++#endif
 +
-+int register_balloon_notifier(struct notifier_block *nb)
-+{
-+	return srcu_notifier_chain_register(&balloon_chain, nb);
-+}
-+EXPORT_SYMBOL(register_balloon_notifier);
-+
-+void unregister_balloon_notifier(struct notifier_block *nb)
-+{
-+	srcu_notifier_chain_unregister(&balloon_chain, nb);
-+}
-+EXPORT_SYMBOL(unregister_balloon_notifier);
-+
-+static int balloon_notify(unsigned long val)
-+{
-+	return srcu_notifier_call_chain(&balloon_chain, val, NULL);
-+}
-+
-+void balloon_set_inflated_total(long inflated_kb)
-+{
-+	atomic_long_set(&mem_balloon_inflated_total_kb, inflated_kb);
-+	balloon_notify(BALLOON_CHANGED_TOTAL);
-+}
-+EXPORT_SYMBOL(balloon_set_inflated_total);
-+
-+void balloon_set_inflated_free(long inflated_kb)
-+{
-+	atomic_long_set(&mem_balloon_inflated_free_kb, inflated_kb);
-+	balloon_notify(BALLOON_CHANGED_FREE);
-+}
-+EXPORT_SYMBOL(balloon_set_inflated_free);
-+
- static void balloon_page_enqueue_one(struct balloon_dev_info *b_dev_info,
- 				     struct page *page)
- {
+ 	hugetlb_report_meminfo(m);
+ 
+ 	arch_report_meminfo(m);
 -- 
 2.31.1
 

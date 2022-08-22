@@ -2,135 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC20659BF41
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E1359BF3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234330AbiHVMHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 08:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
+        id S234928AbiHVMHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 08:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234933AbiHVMGo (ORCPT
+        with ESMTP id S234862AbiHVMHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:06:44 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5143055F;
-        Mon, 22 Aug 2022 05:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661169980;
-        bh=hhrfKulgIvWnC29k0lTd5flxmJIeXghHePCBFVX3MSg=;
-        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=fy/jpVlBlBOE+JOCKZSCQfmVJf3HF8iochCZcjb53yOfQqDy+X4au1l9yG/WTsK07
-         l3d5WCgA20hCqWxh4W+VpUulwweDWZ1JswcIBsrhiZB8OTMqts9OZXtzxVz8+IZgCl
-         ViIj8rtP3KrJZ3Q9inU4zF8d11oa7qnqQ7a/Q+04=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1M9nxt-1oVJFu464b-005p3D; Mon, 22
- Aug 2022 14:06:20 +0200
-Message-ID: <c150cfb1-f719-6cd5-41ca-ca6ca23a4792@gmx.com>
-Date:   Mon, 22 Aug 2022 20:06:15 +0800
+        Mon, 22 Aug 2022 08:07:22 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3750339BBC;
+        Mon, 22 Aug 2022 05:07:21 -0700 (PDT)
+X-QQ-mid: bizesmtp89t1661170001txl6mzdn
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 22 Aug 2022 20:06:39 +0800 (CST)
+X-QQ-SSF: 01000000002000C0D000B00A0000000
+X-QQ-FEAT: CR3LFp2JE4m1XgG8B6AP/kJtqaE0mJj6j7qwJI03u6WS7tx5jEQ2pm9PxITr5
+        rbUSKzKwoz9OWwCOsRVzPKH36fxal0QFN/sqdebBghyMp1Bp+Kj3R5km95KemhjB6U/boD/
+        UQBRkll3ZbAylv4awr24cisZa8GpgLqEiv7wTa3Ewg+phDdDL91k4p44Q5gV+1y99j1e4Mb
+        wi503zQyMBObcvvSDnpXSCWTPmCucWpDIa72G4+/TId8GNoVgWtPXxgrXm+seJCedOSU2Cc
+        Ykfta4mlJxUp6aNoX7MDEZaLSLOWI8Fp4lRdcX7snQGoiRyUmsdVuSdQaWCftUskXNuEqJg
+        P7XjUtycrAEI7o4gS1P0WeDP22/3cOWX7LAop5wo6Xr/hJ9AOwnL2bwUunLdQ==
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        jason.wessel@windriver.com, daniel.thompson@linaro.org,
+        dianders@chromium.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] tty/seria: fix repeated words in comments
+Date:   Mon, 22 Aug 2022 20:06:33 +0800
+Message-Id: <20220822120633.16753-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        stable <stable@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-x86_64@vger.kernel.org
-References: <2d6012e8-805d-4225-80ed-d317c28f1899@gmx.com>
- <YwMhXX6OhROLZ/LR@kroah.com> <1ed5a33a-b667-0e8e-e010-b4365f3713d6@gmx.com>
- <YwMxRAfrrsPE6sNI@kroah.com> <8aff5c17-d414-2412-7269-c9d15f574037@gmx.com>
- <YwM3DwvPIGkfE4Tu@kroah.com> <acc6051b-748f-4f06-63b3-919eb831217c@gmx.com>
- <YwNFxIouYoRo/wT+@kroah.com> <34793a7b-64e4-f1cb-b84e-5804b4f6fac3@gmx.com>
- <20220822115811.GE17080@1wt.eu>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: LTS kernel Linux 4.14.290 unable to boot with edk2-ovmf (x86_64
- UEFI runtime)
-In-Reply-To: <20220822115811.GE17080@1wt.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:NsbTg2Iway9vOeR2iqUbct9/YeyiOtQeRSeYJm5cw0TQCp6poRZ
- oQC7O7aVqzYsu6sC7gn2sKx1o0vjKKfp1PIZsbACJ1yvmER+GwfAmU+MzHl37Eft3o7w16F
- NRVCUaTBOkCfP6uFcp8y6r0da/BzTI8sU0aiHH80buVxXfjidOO5zw1vmhEF/3vxoFxxZVv
- oIMZFbD9Qm61NDItjHPrA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Q9ilmBReL2I=:C5smlabipydkaMl6KC6s7r
- k5Xe1Znp05bOz+gZUtOKRIbY2eQEAqcFpEJYjSwSmdRqp5Z7Kq8i5CZKHaqj2nhx14zKMb59G
- mLXgbwL5dnt12043384QA/Du9FuCadN1Vx+9QbnROVhivm5AYGfFIJA4e3fRva0IMQcEOeo4e
- 3o9UFoE4rIhBQD7KvmzhPBbdnTqMhKg/Fq+IXhuspj4XDFa2imV/hyfvfs0CtT/98K0fAgPzI
- 63EQazp8k8rVLXZM9vMwyxG/VeilxfDFqkhaQj6PI5L/7vcRKq8g3ngtAjlNxTUiNGDguOcV0
- 5+xr1LTyubVDK8KDoO8VnryI/Rgw3lFDMKTpoL/vRrQC5zRXps29S+cKZLoF+eszWJELEh+ii
- uoBo7yBWf0eHPpsSSHf19nxVwI2UN72kbBybauXvtr9trGM3bvuUggugdQsU+QKXYVVhRlhm2
- 3mM8UEfl840eBjSD21CiG4Q7OYrnp3lXjfJ0/TUELC6P54Fnb95njN7Oo6A+FDdVs+IMtaKp/
- HQ6i9WlrkzUdG64VMrUA5LtXXIMAe7eK+G7HHxin280JQulggxWwckAFUnVsAjicuVpisihND
- Rv3XcKxyJsYDsZ2uYH/1wt+iyuk/Qmoanaaf/n7BPb/yAuG2x7UxZnGmBy7BZsrpsznuGDkx8
- g8TeCyiJxDtSCTbY71+YyQaLvKiCmnhpd/Q9D/FpSI3AJkJXh05+9F3IAXgFlWdwtmLRRf875
- aF2tlxJaQm9dWiFTVl+CoVpZIZy/lV9BvZjkAr5cJ/k77twBxkQPhlKi4nhqvhAJKNkZHuhPJ
- RN6HQkFzgxkJ6xrTc/8Z6d230OF5+P8v0iHHGsViSneiXNlMRZh80ugpzrduKQ+IYg8ITM9f9
- x8cyP9iuFjC/F86pCTZWm5ft3iuE4/rh+y51YDbb1cubbNxUEkboaZ6C7Q14hIEpOVVH3voNY
- o6QKuJDaEK3UyeKZnM1SDemq0Il+uDpr/ri8MnRrC2/IKKTwx1ooYVw35Rx/StiK5petuxzmR
- zH4Dza6eTPRhzcSrpJRFoCqvsXMwuW0oQOfV4NNafqsqNc4kYUu0MpNJ/OK2QiurbMYlvX9t/
- K29agjHtv1vTV/s917uvq0bUSCGkSF7fNu5DNXOSBayTLfvV9BpMzqHRg==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_00,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,RCVD_IN_PBL,RCVD_IN_SBL_CSS,
+        RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?43.154.54.12>]
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *      [43.154.54.12 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [43.154.54.12 listed in wl.mailspike.net]
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+ Delete the redundant word 'as'.
+ Delete the redundant word 'the'.
 
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/tty/serial/fsl_lpuart.c | 2 +-
+ drivers/tty/serial/kgdboc.c     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2022/8/22 19:58, Willy Tarreau wrote:
-> On Mon, Aug 22, 2022 at 07:43:18PM +0800, Qu Wenruo wrote:
->> Tried to compile gcc10 from AUR, which failed to compile.
->>
->>
->> Anyway, thanks to the advice from Willy, I got the pre-built crosstool
->> (gcc 7.5) set up, with some small tweaks like disabling
->> CONFIG_RANDOMIZE_BASE to workaround the RELOCS failure, it at least
->> compiles for v4.14.0.
->>
->> Although there is still warning from test_gen_len:
->>
->>   Warning: ffffffff818158cc:	0f ff e9             	ud0    %ecx,%ebp
->>   Warning: objdump says 3 bytes, but insn_get_length() says 2
->>   Warning: arch/x86/tools/test_get_len found difference at
->> <cpu_idle_poll>:ffffffff818159b0
->
-> Strange, sounds like a binutils issue though I could be wrong.
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index 0d6e62f6bb07..fff4fa8d73ca 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -2787,7 +2787,7 @@ static int __maybe_unused lpuart_suspend(struct device *dev)
+ 		 * EDMA driver during suspend will forcefully release any
+ 		 * non-idle DMA channels. If port wakeup is enabled or if port
+ 		 * is console port or 'no_console_suspend' is set the Rx DMA
+-		 * cannot resume as as expected, hence gracefully release the
++		 * cannot resume as expected, hence gracefully release the
+ 		 * Rx DMA path before suspend and start Rx DMA path on resume.
+ 		 */
+ 		if (irq_wake) {
+diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
+index 79b7db8580e0..a471fc132acb 100644
+--- a/drivers/tty/serial/kgdboc.c
++++ b/drivers/tty/serial/kgdboc.c
+@@ -343,7 +343,7 @@ static int param_set_kgdboc_var(const char *kmessage,
+ 	 * Configure with the new params as long as init already ran.
+ 	 * Note that we can get called before init if someone loads us
+ 	 * with "modprobe kgdboc kgdboc=..." or if they happen to use the
+-	 * the odd syntax of "kgdboc.kgdboc=..." on the kernel command.
++	 * odd syntax of "kgdboc.kgdboc=..." on the kernel command.
+ 	 */
+ 	if (configured >= 0)
+ 		ret = configure_kgdboc();
+-- 
+2.36.1
 
-I'm using CROSS_COMPILE=3D option, which should cover the objdump from the
-prebuilt "x86_64-linux-objdump" from that precompiled 7.5 crosstool.
-
->
->> And unfortunately v4.14 still fails to boot, even with GCC 7.5, which
->> provides an almost perfect (except above wanrings) build.
->>
->> I also tried to reduce the CPUid, from host-passthru to qemu64, and
->> rebuild, no change (same test_get_len wanrings, same boot failure).
->>
->> No clue at all now, would try older debian in a VM then.
->
-> I suggest that instead of switching distros you should rather first
-> try 4.14.0 to verify if there was a regression affecting your system.
-
-Already tried, the v4.14 above really means v4.14.0 (aka v4.14 tag
-directly from upstream, not from stable).
-
-And the latest v4.14.290 can not boot neither, even rebuilt using that
-toolchain.
-
-> And if so, then a bisect will certainly be welcome. If it still does
-> not work, then maybe a different distro could help, though I doubt it.
-
-Will try debian for now, or even try some older hardware if I could find..=
-.
-
-Thanks,
-Qu
-
->
-> Willy

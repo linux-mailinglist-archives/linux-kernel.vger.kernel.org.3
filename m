@@ -2,148 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071A859B8C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 07:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B4759B8C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 07:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbiHVFgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 01:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
+        id S232714AbiHVFhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 01:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbiHVFf5 (ORCPT
+        with ESMTP id S232691AbiHVFhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 01:35:57 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFB9255B8
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 22:35:56 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id f21so9886207pjt.2
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 22:35:56 -0700 (PDT)
+        Mon, 22 Aug 2022 01:37:00 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC40425C43;
+        Sun, 21 Aug 2022 22:36:59 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id bf22so9863756pjb.4;
+        Sun, 21 Aug 2022 22:36:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=QS6R5nZMIK6gA3aruuq42VvpoButXSF80ZMGO0OR8L0=;
-        b=kKvvmUU2WSBCymUSA5+wbvHN1r2QYyYxauHAjmwr4b5D3khHa7EyE2dBFabTOhF4UT
-         9/2P78WbU9LJE8Vo7cAa8/JHNTCs8BqYDwWt9zqFcDkCU0lRWHMWRD3/fX/ofzuQBfj5
-         9gg+A0pngTHaBK3pfZpLUtID7LuxdYzugDAvi1yULyVGtJm9anD5IdcpYbbh2ts6O0IF
-         R4j9yv7nbynfpgCNhMLzu/+Q7wQ65fnBtSK2qxoVdJ+lyAi4ws+3P82P4Teu7dWfbgwJ
-         XHdfZRlIxeIHOKX/6vmNmDrYJlo3uvbwWr7CZL2R6mGrDbQzTt0Be2r0PzfJncVs3mMT
-         54RQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=p9b3HF7NOO+RGMYMFh1iU6dTss0goYi3FrKED6tvlcI=;
+        b=R4z8h19vGmoWgMalE+Csm4ISmIjwSwIFYcqGhUV1/f6isNdEiwlOuDT6pH1AAS0HkM
+         UYxEDcnavfzk8uSEPZqxsLr9jy2yJ8xpGRnDtT271Nu0zJQ9a1NUbwmMwycLkHx0dEtT
+         U7DPL8MdobB5I4vGacq2PKdeu7+RptHHNIAYAVI4ls2TlX8wvEw/TW6bBk0f4zWSncFV
+         1Ht+Oh0SDdUoYDkw4m9dCVpmSF8jnlhXkCz7z8PgESLnvoXEq/mkmKs33jDPExDj4LGm
+         rHiTMQ0ZJSIvLIuNO+XrX3+QoIaeZPFegHC0gykFz2Sh3i1ipF00yejDsBtcGzZu5U0o
+         hOgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=QS6R5nZMIK6gA3aruuq42VvpoButXSF80ZMGO0OR8L0=;
-        b=WfFY8aNkU17dbc/G0sOV3A2ZLa2kpIeG9Y06VbMWICo7WpM77n0ISWs0VLg1JH2YAg
-         0/pcDYwrxgYMino60oHQOcKLEFEn5XxZXsv8xzFlRZAVMvUCY1I9ipJVn8ttcACx0TzS
-         D3UDXA3oDkiFEsiACbFf38bK1xJUS23875gSmjb+BpzqIp3/HrJSu9Pl6Q+Yldp7QXUy
-         8WUbO+t8De04CW0uy2CS7QhKe4r/irqGUpREafAWkeCVagnVU7I8IRJEXfLsjtWaxw9q
-         Wdg7F/75WE6z6bddma/Sk4LhvRpXCuz0ZRIDvV6NXYsjZfLz8qpkeK301iLmUQNjVQrA
-         yZXQ==
-X-Gm-Message-State: ACgBeo1v7BJ4xDTL2ZDwXGvDST7f8VKRKY66NVsH0olnJTbcIY1M87f9
-        B6H5NMp9I/1T0nM3TYSBS5RAFpC+hTItUeIRJPqbbA==
-X-Google-Smtp-Source: AA6agR7JBggyeN+ALMC17ITNb5ULT/kTmDt31iHyxtQJv1UdDcInVmjE6Truhipy96YiKUShdKsTNoXYiRJgBZAeV7A=
-X-Received: by 2002:a17:902:c411:b0:170:91ff:884b with SMTP id
- k17-20020a170902c41100b0017091ff884bmr18722820plk.58.1661146555850; Sun, 21
- Aug 2022 22:35:55 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=p9b3HF7NOO+RGMYMFh1iU6dTss0goYi3FrKED6tvlcI=;
+        b=oe4CtT3Oz++FJF8K5cHcDqM8tFultNpQuI8R17q4SGyFmoVZos8IIk/izfQEIQaN3f
+         JHAeN51vDPqplLowvlLrHPpmE5YMeSSSPXVjuPg/ug5Taa3zIhzV9N97DS5wRkbNXO3V
+         LgYwfYc+i8zzrccHJwRpc4tEmWxqV+Dn5P/IW7hNr2J/V9x7C2na3PM9twQrasCQEXeB
+         ixeca8kb6ezTSyqqR83/IGDuHvuOkmMDjPPqlhxHogAWCKvD9n7CgTK9iKXCUxj+Z004
+         ZQwqvR8kantE8mxctNaDOeVNuVGe+eFUdQl9Gl62mfQZdrOd9KEL16BKSVCs033bXdU1
+         zeig==
+X-Gm-Message-State: ACgBeo2YSPqxzjbIfnaHyW7OljY0ENzHu/iKOXGillJ9vxu41ONAEAzF
+        KSs2gEydN2iONeJZQt14wvE=
+X-Google-Smtp-Source: AA6agR5Ww4o26uoqIbG6IVhMRsgZLAx2riNOYto8gOgOZcu6mYdhoN4+8wXvBPXZo+xpg2PT0f4M1Q==
+X-Received: by 2002:a17:90b:4a07:b0:1f5:1aff:4ab with SMTP id kk7-20020a17090b4a0700b001f51aff04abmr27387328pjb.216.1661146619187;
+        Sun, 21 Aug 2022 22:36:59 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id a2-20020a170902ecc200b00172f3b76625sm435597plh.161.2022.08.21.22.36.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 22:36:58 -0700 (PDT)
+From:   xu xin <cgel.zte@gmail.com>
+X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
+To:     akpm@linux-foundation.org
+Cc:     adobriyan@gmail.com, willy@infradead.org, hughd@google.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, xu xin <xu.xin16@zte.com.cn>,
+        Xiaokai Ran <ran.xiaokai@zte.com.cn>,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        CGEL ZTE <cgel.zte@gmail.com>
+Subject: [PATCH] ksm: count allocated ksm rmap_items for each process
+Date:   Mon, 22 Aug 2022 05:36:53 +0000
+Message-Id: <20220822053653.204150-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220819094952.2602066-1-jens.wiklander@linaro.org> <Yv9nr4/XQI0Tl4XO@kroah.com>
-In-Reply-To: <Yv9nr4/XQI0Tl4XO@kroah.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Mon, 22 Aug 2022 07:35:44 +0200
-Message-ID: <CAHUa44HGOQz+gb6wKG7gCQaXo4XvLMcXYd4Afkv2233qX+0r0A@mail.gmail.com>
-Subject: Re: [PATCH v3] tee: add overflow check in register_shm_helper()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Jerome Forissier <jerome.forissier@linaro.org>,
-        stable@vger.kernel.org, Nimish Mishra <neelam.nimish@gmail.com>,
-        Anirban Chakraborty <ch.anirban00727@gmail.com>,
-        Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>,
-        Linus Torvalds <torvalds@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 12:36 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Aug 19, 2022 at 11:49:52AM +0200, Jens Wiklander wrote:
-> > With special lengths supplied by user space, register_shm_helper() has
-> > an integer overflow when calculating the number of pages covered by a
-> > supplied user space memory region. This causes
-> > internal_get_user_pages_fast() a helper function of
-> > pin_user_pages_fast() to do a NULL pointer dereference.
-> >
-> > [   14.141620] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
-> > [   14.142556] Mem abort info:
-> > [   14.142829]   ESR = 0x0000000096000044
-> > [   14.143237]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > [   14.143742]   SET = 0, FnV = 0
-> > [   14.144052]   EA = 0, S1PTW = 0
-> > [   14.144348]   FSC = 0x04: level 0 translation fault
-> > [   14.144767] Data abort info:
-> > [   14.145053]   ISV = 0, ISS = 0x00000044
-> > [   14.145394]   CM = 0, WnR = 1
-> > [   14.145766] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004278e000
-> > [   14.146279] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
-> > [   14.147435] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-> > [   14.148026] Modules linked in:
-> > [   14.148595] CPU: 1 PID: 173 Comm: optee_example_a Not tainted 5.19.0 #11
-> > [   14.149204] Hardware name: QEMU QEMU Virtual Machine, BIOS 0.0.0 02/06/2015
-> > [   14.149832] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [   14.150481] pc : internal_get_user_pages_fast+0x474/0xa80
-> > [   14.151640] lr : internal_get_user_pages_fast+0x404/0xa80
-> > [   14.152408] sp : ffff80000a88bb30
-> > [   14.152711] x29: ffff80000a88bb30 x28: 0000fffff836d000 x27: 0000fffff836e000
-> > [   14.153580] x26: fffffc0000000000 x25: fffffc0000f4a1c0 x24: ffff00000289fb70
-> > [   14.154634] x23: ffff000002702e08 x22: 0000000000040001 x21: ffff8000097eec60
-> > [   14.155378] x20: 0000000000f4a1c0 x19: 00e800007d287f43 x18: 0000000000000000
-> > [   14.156215] x17: 0000000000000000 x16: 0000000000000000 x15: 0000fffff836cfb0
-> > [   14.157068] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-> > [   14.157747] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-> > [   14.158576] x8 : ffff00000276ec80 x7 : 0000000000000000 x6 : 000000000000003f
-> > [   14.159243] x5 : 0000000000000000 x4 : ffff000041ec4eac x3 : ffff000002774cb8
-> > [   14.159977] x2 : 0000000000000004 x1 : 0000000000000010 x0 : 0000000000000000
-> > [   14.160883] Call trace:
-> > [   14.161166]  internal_get_user_pages_fast+0x474/0xa80
-> > [   14.161763]  pin_user_pages_fast+0x24/0x4c
-> > [   14.162227]  register_shm_helper+0x194/0x330
-> > [   14.162734]  tee_shm_register_user_buf+0x78/0x120
-> > [   14.163290]  tee_ioctl+0xd0/0x11a0
-> > [   14.163739]  __arm64_sys_ioctl+0xa8/0xec
-> > [   14.164227]  invoke_syscall+0x48/0x114
-> > [   14.164653]  el0_svc_common.constprop.0+0x44/0xec
-> > [   14.165130]  do_el0_svc+0x2c/0xc0
-> > [   14.165498]  el0_svc+0x2c/0x84
-> > [   14.165847]  el0t_64_sync_handler+0x1ac/0x1b0
-> > [   14.166258]  el0t_64_sync+0x18c/0x190
-> > [   14.166878] Code: 91002318 11000401 b900f7e1 f9403be1 (f820d839)
-> > [   14.167666] ---[ end trace 0000000000000000 ]---
-> >
-> > Fix this by adding an overflow check when calculating the end of the
-> > memory range. Also add an explicit call to access_ok() in
-> > tee_shm_register_user_buf() to catch an invalid user space address
-> > early.
-> >
-> > Fixes: 033ddf12bcf5 ("tee: add register user memory")
-> > Cc: stable@vger.kernel.org
-> > Reported-by: Nimish Mishra <neelam.nimish@gmail.com>
-> > Reported-by: Anirban Chakraborty <ch.anirban00727@gmail.com>
-> > Reported-by: Debdeep Mukhopadhyay <debdeep.mukhopadhyay@gmail.com>
-> > Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
-> > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
->
-> This conflicts with 573ae4f13f63 ("tee: add overflow check in
-> register_shm_helper()") in Linus's tree :(
->
+KSM can save memory by merging identical pages, but also can consume
+additional memory, because it needs to generate rmap_items to save
+each scanned page's brief rmap information. Some of these pages may
+be merged, but some may not be abled to be merged after being checked
+several times, which are unprofitable memory consumed.
 
-I'm sorry, I didn't notice that a fixed up version was already applied.
+The information about whether KSM save memory or consume memory in
+system-wide range can be determined by the comprehensive calculation
+of pages_sharing, pages_shared, pages_unshared and pages_volatile.
+A simple approximate calculation:
 
-Thanks,
-Jens
+	profit ≈ pages_sharing * sizeof(page) - (all_rmap_items) *
+	         sizeof(rmap_item);
+
+where all_rmap_items equals to the sum of pages_sharing, pages_shared,
+pages_unshared and pages_volatile.
+
+But we cannot calculate this kind of ksm profit inner single-process wide
+because the information of ksm rmap_item's number of a process is lacked.
+For user applications, if this kind of information could be obtained,
+it helps upper users know how beneficial the ksm-policy (like madvise)
+they are using brings, and then optimize their app code. For example,
+one application madvise 1000 pages as MERGEABLE, while only a few pages
+are really merged, then it's not cost-efficient.
+
+So we add a new interface /proc/<pid>/ksm_alloced_items for each
+process to indicate the total allocated ksm rmap_items of this process.
+
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+---
+ fs/proc/base.c           | 15 +++++++++++++++
+ include/linux/mm_types.h |  5 +++++
+ mm/ksm.c                 |  2 ++
+ 3 files changed, 22 insertions(+)
+
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index 93f7e3d971e4..b6317981492a 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -3196,6 +3196,19 @@ static int proc_pid_ksm_merging_pages(struct seq_file *m, struct pid_namespace *
+ 
+ 	return 0;
+ }
++static int proc_pid_ksm_rmp_items(struct seq_file *m, struct pid_namespace *ns,
++				struct pid *pid, struct task_struct *task)
++{
++	struct mm_struct *mm;
++
++	mm = get_task_mm(task);
++	if (mm) {
++		seq_printf(m, "%lu\n", mm->ksm_rmp_items);
++		mmput(mm);
++	}
++
++	return 0;
++}
+ #endif /* CONFIG_KSM */
+ 
+ #ifdef CONFIG_STACKLEAK_METRICS
+@@ -3331,6 +3344,7 @@ static const struct pid_entry tgid_base_stuff[] = {
+ #endif
+ #ifdef CONFIG_KSM
+ 	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
++	ONE("ksm_rmp_items",  S_IRUSR, proc_pid_ksm_rmp_items),
+ #endif
+ };
+ 
+@@ -3668,6 +3682,7 @@ static const struct pid_entry tid_base_stuff[] = {
+ #endif
+ #ifdef CONFIG_KSM
+ 	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
++	ONE("ksm_rmp_items",  S_IRUSR, proc_pid_ksm_rmp_items),
+ #endif
+ };
+ 
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index cf97f3884fda..0b9e76275ea7 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -671,6 +671,11 @@ struct mm_struct {
+ 		 * merging.
+ 		 */
+ 		unsigned long ksm_merging_pages;
++		/*
++		 * Represent how many pages are checked for ksm merging
++		 * including merged and not merged.
++		 */
++		unsigned long ksm_rmp_items;
+ #endif
+ 	} __randomize_layout;
+ 
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 478bcf26bfcd..fc9879d7049f 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -421,6 +421,7 @@ static inline struct rmap_item *alloc_rmap_item(void)
+ static inline void free_rmap_item(struct rmap_item *rmap_item)
+ {
+ 	ksm_rmap_items--;
++	rmap_item->mm->ksm_rmp_items--;
+ 	rmap_item->mm = NULL;	/* debug safety */
+ 	kmem_cache_free(rmap_item_cache, rmap_item);
+ }
+@@ -2265,6 +2266,7 @@ static struct rmap_item *get_next_rmap_item(struct mm_slot *mm_slot,
+ 	if (rmap_item) {
+ 		/* It has already been zeroed */
+ 		rmap_item->mm = mm_slot->mm;
++		rmap_item->mm->ksm_rmp_items++;
+ 		rmap_item->address = addr;
+ 		rmap_item->rmap_list = *rmap_list;
+ 		*rmap_list = rmap_item;
+-- 
+2.25.1
+

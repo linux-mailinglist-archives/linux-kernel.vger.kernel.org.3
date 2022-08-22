@@ -2,147 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476A959CB1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 23:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6514B59CB1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 23:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237635AbiHVVuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 17:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
+        id S238367AbiHVVvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 17:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiHVVuB (ORCPT
+        with ESMTP id S232277AbiHVVvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 17:50:01 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252FA5140C
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 14:50:00 -0700 (PDT)
+        Mon, 22 Aug 2022 17:51:19 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187BF51A3D
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 14:51:18 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id q16so6451806ile.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 14:51:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661205000; x=1692741000;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=pixz7g+KkMzwbfbZ7vhsdaC9zaHW9EzQWos4Q+nR9cQ=;
-  b=pCUdK+pOnRe4/PQ3PWA/HUoyh63QH3Bmfpv29OzLFc5dlGVmEF+FeUUA
-   iPAJ3vinVaMMMDgePzP9kRRL3ysKEbav7ZxhcalFbqNusYNTZFNNejU+d
-   /KWk7cyt/omT4/5bC9AViftSeCPWzhj72HABETt6jZ1ZeMe0/UyysRXk7
-   o=;
-X-IronPort-AV: E=Sophos;i="5.93,255,1654560000"; 
-   d="scan'208";a="232840128"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 21:49:48 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com (Postfix) with ESMTPS id 95A828127C;
-        Mon, 22 Aug 2022 21:49:46 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 22 Aug 2022 21:49:45 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.162.140) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Mon, 22 Aug 2022 21:49:43 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <keescook@chromium.org>
-CC:     <ayudutta@amazon.com>, <brauner@kernel.org>, <kuni1840@gmail.com>,
-        <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
-        <luto@amacapital.net>,
-        <syzbot+ab17848fe269b573eb71@syzkaller.appspotmail.com>,
-        <wad@chromium.org>
-Subject: Re: [PATCH v1] seccomp: Release filter when copy_process() fails.
-Date:   Mon, 22 Aug 2022 14:49:35 -0700
-Message-ID: <20220822214935.29842-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <202208221414.A0E13E7@keescook>
-References: <202208221414.A0E13E7@keescook>
+        d=linuxfoundation.org; s=google;
+        h=content-language:mime-version:user-agent:date:message-id:subject
+         :from:cc:to:from:to:cc;
+        bh=r7t9Oi0FWdEfU1/Gx1SJk3VkZlxWdHjkakFrtVUOi7s=;
+        b=agu3gY8q8YWsKytAVqdigAB1K8zGLrb8hcHOudJ67sSIZy1vUpxCs8RJ2wmrcrjSpD
+         YQkBMpTta7mX0lLZlMOVwJPc2NcyUX6quCmOY47mo+S/MdpSKN9Kj4EBbXwXO8wzMDaZ
+         /qt7Ycv9JK9xddFlfvEhzwx/Eu9xz8EBsJnpk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-language:mime-version:user-agent:date:message-id:subject
+         :from:cc:to:x-gm-message-state:from:to:cc;
+        bh=r7t9Oi0FWdEfU1/Gx1SJk3VkZlxWdHjkakFrtVUOi7s=;
+        b=bmNBO2zHn6LZsr8ljy0pjrj+Y4hyvg5kX06f/EQcF9o1ZM1BUNNVlLQ2VLFWAq/55v
+         bQ1dMymTK79HRj0Ggv+TH7IKsNvW/pMMfiOeXS3mor8gBQwdAYlCSNCMs17PqOEa3Exb
+         FYS8ag6bMJZ7Hd/oSN20fLg2STbHDr/1qqWjPe+m7BhgVjq5HjmcbKlaqm5L/0zPSe+w
+         6COEO8tSJ5IH4YisxJIUKjyuPZ5eIZca3SK+bKzmYY9FeTgOrRYRJ6QxjGBTTXJNQVgy
+         rcE04cEAKsyRWnF8AO67+2XGOBAm3e+danKDzriNa2yc+CdepsieyzTYl5pRlacw+7qV
+         63DA==
+X-Gm-Message-State: ACgBeo3Wd3rxFxP2Bx0XxzvfWr065CKo/XrEK7oGOkcTOVjGmLUbJzLf
+        UOdmOlQMEzgZxMgtFaB6r+N2n+Zkrw/tZw==
+X-Google-Smtp-Source: AA6agR7HIZD7blMcGKGpRmmDGNb8NqdGLuyqB+yRwqzun7FNylmlIFlj+OasNJF/mrs0ivkEqHUjNg==
+X-Received: by 2002:a05:6e02:12c2:b0:2de:d6b5:3d9c with SMTP id i2-20020a056e0212c200b002ded6b53d9cmr11137348ilm.165.1661205077480;
+        Mon, 22 Aug 2022 14:51:17 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id j131-20020a026389000000b00342b327d709sm5585987jac.71.2022.08.22.14.51.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 14:51:16 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest update for Linux 6.0-rc3
+Message-ID: <2ccb5e70-2130-827a-5f05-c0264f1e3cf8@linuxfoundation.org>
+Date:   Mon, 22 Aug 2022 15:51:16 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.140]
-X-ClientProxiedBy: EX13D01UWA001.ant.amazon.com (10.43.160.60) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed;
+ boundary="------------768DA08281CF6AD3F86621CC"
+Content-Language: en-US
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Kees Cook <keescook@chromium.org>
-Date:   Mon, 22 Aug 2022 14:16:03 -0700
-> On Mon, Aug 22, 2022 at 01:44:36PM -0700, Kuniyuki Iwashima wrote:
-> > Our syzbot instance reported memory leaks in do_seccomp() [0], similar
-> > to the report [1].  It shows that we miss freeing struct seccomp_filter
-> > and some objects included in it.
-> > 
-> > We can reproduce the issue with the program below [2] which calls one
-> > seccomp() and two clone() syscalls.
-> > 
-> > The first clone()d child exits earlier than its parent and sends a
-> > signal to kill it during the second clone(), more precisely before the
-> > fatal_signal_pending() test in copy_process().  When the parent receives
-> > the signal, it has to destroy the embryonic process and return -EINTR to
-> > user space.  In the failure path, we have to call seccomp_filter_release()
-> > to decrement the filter's ref count.
-> > 
-> > Initially, we called it in free_task() called from the failure path, but
-> > the commit 3a15fb6ed92c ("seccomp: release filter after task is fully
-> > dead") moved it to release_task() to notify user space as early as possible
-> > that the filter is no longer used.
-> > 
-> > To keep the change, let's call seccomp_filter_release() in copy_process()
-> > and add a WARN_ON_ONCE() in free_task() for future debugging.
-> 
-> Thanks for tracking this down! I think I'd prefer to avoid changing the
-> semantics around the existing seccomp refcount lifetime, so what about
-> just moving copy_seccomp() below the last possible error path?
+This is a multi-part message in MIME format.
+--------------768DA08281CF6AD3F86621CC
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Actually, I also thought of it but avoid it because it means we move the
-signal check relatively earlier than before, so would-be-killed processes
-could consume more resouces.
+Hi Linus,
 
-What do you think about this?
+Please pull the following Kselftest update for Linux 6.0-rc3.
 
-> 
-> 
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 90c85b17bf69..e7f4e7f1e01e 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -2409,12 +2409,6 @@ static __latent_entropy struct task_struct *copy_process(
->  
->  	spin_lock(&current->sighand->siglock);
->  
-> -	/*
-> -	 * Copy seccomp details explicitly here, in case they were changed
-> -	 * before holding sighand lock.
-> -	 */
-> -	copy_seccomp(p);
-> -
->  	rv_task_fork(p);
->  
->  	rseq_fork(p, clone_flags);
-> @@ -2431,6 +2425,14 @@ static __latent_entropy struct task_struct *copy_process(
->  		goto bad_fork_cancel_cgroup;
->  	}
->  
-> +	/* No more failures paths after this point. */
-> +
-> +	/*
-> +	 * Copy seccomp details explicitly here, in case they were changed
-> +	 * before holding sighand lock.
-> +	 */
-> +	copy_seccomp(p);
-> +
->  	init_task_pid_links(p);
->  	if (likely(p->pid)) {
->  		ptrace_init_task(p, (clone_flags & CLONE_PTRACE) || trace);
-> 
-> 
-> Totally untested, but I think it would fix this?
-> 
-> -Kees
-> 
-> -- 
-> Kees Cook
+This Kselftest fixes update for Linux 6.0-rc3 consists of fixes
+and warnings to vm and sgx test builds.
+
+sgx test fails to build without this change on new distros.
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+
+   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.0-rc3
+
+for you to fetch changes up to bdbf0617bbc3641af158d1aeffeebb1505f76263:
+
+   selftests/vm: fix inability to build any vm tests (2022-08-19 17:57:20 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-fixes-6.0-rc3
+
+This Kselftest fixes update for Linux 6.0-rc3 consists of fixes
+and warnings to vm and sgx test builds.
+
+----------------------------------------------------------------
+Axel Rasmussen (1):
+       selftests/vm: fix inability to build any vm tests
+
+Kristen Carlson Accardi (1):
+       selftests/sgx: Ignore OpenSSL 3.0 deprecated functions warning
+
+  tools/testing/selftests/lib.mk          | 1 +
+  tools/testing/selftests/sgx/sigstruct.c | 6 ++++++
+  2 files changed, 7 insertions(+)
+----------------------------------------------------------------
+
+--------------768DA08281CF6AD3F86621CC
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-fixes-6.0-rc3.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-fixes-6.0-rc3.diff"
+
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 947fc72413e9..d44c72b3abe3 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -40,6 +40,7 @@ ifeq (0,$(MAKELEVEL))
+     endif
+ endif
+ selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
++top_srcdir = $(selfdir)/../../..
+ 
+ # The following are built by lib.mk common compile rules.
+ # TEST_CUSTOM_PROGS should be used by tests that require
+diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+index 50c5ab1aa6fa..a07896a46364 100644
+--- a/tools/testing/selftests/sgx/sigstruct.c
++++ b/tools/testing/selftests/sgx/sigstruct.c
+@@ -17,6 +17,12 @@
+ #include "defines.h"
+ #include "main.h"
+ 
++/*
++ * FIXME: OpenSSL 3.0 has deprecated some functions. For now just ignore
++ * the warnings.
++ */
++#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
++
+ struct q1q2_ctx {
+ 	BN_CTX *bn_ctx;
+ 	BIGNUM *m;
+
+--------------768DA08281CF6AD3F86621CC--

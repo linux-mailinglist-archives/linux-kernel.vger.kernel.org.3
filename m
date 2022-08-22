@@ -2,137 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E3959C03A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C62D59C046
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235018AbiHVNKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 09:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
+        id S235039AbiHVNMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 09:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234934AbiHVNJ6 (ORCPT
+        with ESMTP id S234521AbiHVNMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 09:09:58 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D216C22BEB;
-        Mon, 22 Aug 2022 06:09:56 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id l21so10563738ljj.2;
-        Mon, 22 Aug 2022 06:09:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc;
-        bh=vigYgSEq8XNq0GNKbbIvxMXyahHUCUs5sjRm7+jzlAc=;
-        b=NAy+QHjlAUfAF+0E95smBz9TJ7pgnNqV0/+Acohr5RjSf02nCPAGkQ+pFPggURwPeX
-         zRyiPUy6gLGtGBvdyFvEpY4i+9kLUc3a9K1mJJW6klXx+dV6iNVBwfdBFfGclLlWsSKc
-         wwy5CfuU6Umz8mvsHk5SDTkqkRBI41DgEnEIh3L8fix43WRj6cIBHh6jUwou+rV0cWis
-         r0A5lhU/NqD9H1HwQiagH22yBnoNJHG/XsEGUYedXEWD/02Ca2fauPsIGQyj6SURbbAV
-         7NXqd4ceJyahjYHtOIFLpbP07hSf6AeFJcFNKS31VgrTkTCDU0j5EEsKpRfhQiNAFdEa
-         D7Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=vigYgSEq8XNq0GNKbbIvxMXyahHUCUs5sjRm7+jzlAc=;
-        b=O+x8LZslJSosZVmTRQrKRpY+LARJW9ouPKJ7wEyCYx4qEWZ9r4vDQnFguF8UZILuLh
-         BvRV3PVwrl5nwfBHQhjWJXcwmdu0Zb2MUHyJKnkqwe+sLo9siOJXNBsRiO/3MLEpCGbc
-         fNDf32f15gUPqVXY4BI4CzGZ7g8VNXDFFJhz0Mo/BaS5nmig8rFnXl1evCZLjSuqJWjn
-         XsoKQpUNNo3rxmLxmgASx8PiLrUkObIDJEi6cl51wwl09f7APZPYw5TchgEyI19xGdoM
-         3KUxBMisPg6hCQCnWsxgZxUaU0VioqSxttRDM2aoHIcOEgDl9WQ6a2BGQmXXsziXUcPR
-         Crpw==
-X-Gm-Message-State: ACgBeo2D+kAH8GEpGbFLyFFyULFVI25bWotQVw23Kiq1EjGPFAq1e+cm
-        lil2rkFFSrhNn3ZX4DJd5Z3Ba5rDPOZR/A==
-X-Google-Smtp-Source: AA6agR5A55b/w/+RqBS9nJXJtBTCYbFkCFhxVZ/4Z5ZKcrs5fj5l1pPwWXAHQ8XkZjrkmmXNmOa0Rg==
-X-Received: by 2002:a2e:92c4:0:b0:25d:9d30:5d61 with SMTP id k4-20020a2e92c4000000b0025d9d305d61mr6134684ljh.202.1661173795023;
-        Mon, 22 Aug 2022 06:09:55 -0700 (PDT)
-Received: from [10.0.0.127] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
-        by smtp.gmail.com with ESMTPSA id v11-20020a2ea44b000000b0025e42174f0csm1817832ljn.70.2022.08.22.06.09.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 06:09:54 -0700 (PDT)
-Message-ID: <1d4eb194-aab7-42c7-f33f-4b89e607dc6c@gmail.com>
-Date:   Mon, 22 Aug 2022 16:12:20 +0300
+        Mon, 22 Aug 2022 09:12:42 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE4533E3A;
+        Mon, 22 Aug 2022 06:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Pmaf/7Gcj7yUXj9lfFijn0lHnAtMyFGBEGv7jKC4glY=; b=VnJFQ/GqGILH+2rdH6itFRAGSC
+        t+CAGFHwsZHEpc2+rLLnHKJO8AcBu7Bkz/zVbbedoZW3xnc0JQgkfY7cdeXGJhmvPKZpcXj9v4iaE
+        iaKe79K8QNuEtyf8+C2amwgJJ87YGAQK6OJ5ftv0P4RacuXG2iz9ecXxyz6v1a7zIaqc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oQ7EM-00EDzw-L8; Mon, 22 Aug 2022 15:12:38 +0200
+Date:   Mon, 22 Aug 2022 15:12:38 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Tristram Ha <Tristram.Ha@microchip.com>
+Subject: Re: [RFC Patch net-next v2] net: dsa: microchip: lan937x: enable
+ interrupt for internal phy link detection
+Message-ID: <YwOAxh7Bc12OornD@lunn.ch>
+References: <20220822092017.5671-1-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Vaishnav Achath <vaishnav.a@ti.com>, vkoul@kernel.org,
-        broonie@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     vigneshr@ti.com, kishon@ti.com
-References: <20220822091531.27827-1-vaishnav.a@ti.com>
- <20220822091531.27827-2-vaishnav.a@ti.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-Subject: Re: [PATCH 1/2] dmaengine: ti: k3-udma: Respond TX done if
- DMA_PREP_INTERRUPT is not requested
-In-Reply-To: <20220822091531.27827-2-vaishnav.a@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822092017.5671-1-arun.ramadoss@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Aug 22, 2022 at 02:50:17PM +0530, Arun Ramadoss wrote:
+> This patch enables the interrupts for internal phy link detection for
+> LAN937x. The interrupt enable bits are active low. It first enables port
+> interrupt and then port phy interrupt. Also patch register the irq
+> thread and in the ISR routine it clears the POR_READY_STS bit.
+> POR_READY_STS bit is write one clear bit and all other bit in the
+> register are read only. Since phy interrupts are handled by the lan937x
+> phy layer, switch interrupt routine does not read the phy layer
+> interrupts.
 
-
-On 22/08/2022 12:15, Vaishnav Achath wrote:
-> When the DMA consumer driver does not expect the callback for TX done,
-> There is no need to perform the channel RT byte counter calculations 
-> and estimate the completion but return complete on first attempt itself.
-> This assumes that the consumer who did not request DMA_PREP_INTERRUPT 
-> has its own mechanism for understanding TX completion, example: MCSPI
-> EOW interrupt can be used as TX completion signal for a SPI transaction.
-
-The check is in place to make sure that we don't leave stale data in the
-DMA fabric.
-If you drop the check then it is going to be possible that some TX data
-is going to be lost.
-Could be one out of 10K transfers or 100K, but if that happens it is not
-going to be easy to figure out.
-Let's say we go the packet back, but PDMA is still have data to send and
-the IP stops transmitting (externally clocked bus, some delay, etc).
-Is it going to be OK to disable the channel?
-
-> 
-> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
-> ---
->  drivers/dma/ti/k3-udma.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-> index 39b330ada200..03d579068453 100644
-> --- a/drivers/dma/ti/k3-udma.c
-> +++ b/drivers/dma/ti/k3-udma.c
-> @@ -263,6 +263,7 @@ struct udma_chan_config {
->  	enum udma_tp_level channel_tpl; /* Channel Throughput Level */
->  
->  	u32 tr_trigger_type;
-> +	unsigned long tx_flags;
->  
->  	/* PKDMA mapped channel */
->  	int mapped_channel_id;
-> @@ -1057,7 +1058,7 @@ static bool udma_is_desc_really_done(struct udma_chan *uc, struct udma_desc *d)
->  
->  	/* Only TX towards PDMA is affected */
->  	if (uc->config.ep_type == PSIL_EP_NATIVE ||
-> -	    uc->config.dir != DMA_MEM_TO_DEV)
-> +	    uc->config.dir != DMA_MEM_TO_DEV || !(uc->config.tx_flags & DMA_PREP_INTERRUPT))
->  		return true;
->  
->  	peer_bcnt = udma_tchanrt_read(uc, UDMA_CHAN_RT_PEER_BCNT_REG);
-> @@ -3418,6 +3419,8 @@ udma_prep_slave_sg(struct dma_chan *chan, struct scatterlist *sgl,
->  	if (!burst)
->  		burst = 1;
->  
-> +	uc->config.tx_flags = tx_flags;
+> +static irqreturn_t lan937x_switch_irq_thread(int irq, void *dev_id)
+> +{
+> +	struct ksz_device *dev = dev_id;
+> +	irqreturn_t result = IRQ_NONE;
+> +	u32 data;
+> +	int ret;
 > +
->  	if (uc->config.pkt_mode)
->  		d = udma_prep_slave_sg_pkt(uc, sgl, sglen, dir, tx_flags,
->  					   context);
+> +	/* Read global interrupt status register */
+> +	ret = ksz_read32(dev, REG_SW_INT_STATUS__4, &data);
+> +	if (ret)
+> +		return result;
+> +
+> +	if (data & POR_READY_INT) {
+> +		ret = ksz_write32(dev, REG_SW_INT_STATUS__4, POR_READY_INT);
+> +		if (ret)
+> +			return result;
+> +	}
+> +
+> +	return result;
+> +}
 
--- 
-Péter
+I don't understand how this all fits together. How do you get from
+this interrupt handler into the PHY interrupt handler?
+
+The hardware looks similar to the mv88e6xxx driver. You have a top
+level interrupt controller which indicates a port has some sort of
+interrupt handler. This is the mv88e6xxx_g1_irq_thread_work(). It
+finds which port triggered the interrupt and then hands the interrupt
+off to the nested interrupt handler.
+
+mv88e6xxx_g2_irq_thread_fn() is the nested per port interrupt
+handler. It reads the per port interrupt status register, find the
+interrupt handler and calls the nested interrupt handler.
+
+This all glues together because phylib does a request_threaded_irq()
+for the PHY interrupt, so this last nested interrupt handler is in
+phylib.
+
+	Andrew

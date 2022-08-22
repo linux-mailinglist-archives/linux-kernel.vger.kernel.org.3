@@ -2,111 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF80B59C3A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5BC59C3A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235705AbiHVQCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44662 "EHLO
+        id S235350AbiHVQFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236344AbiHVQCG (ORCPT
+        with ESMTP id S233909AbiHVQFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:02:06 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE1030F60
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:02:05 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id w13so4680978pgq.7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:02:05 -0700 (PDT)
+        Mon, 22 Aug 2022 12:05:12 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB2D1BE83
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:05:11 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 12so9787107pga.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:05:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=/t37Y/XRZJtMV+m9MWZM5nZfrYqA7SIqOEoInluHa74=;
-        b=vn5frK8UBLnyvshTin6f/PIYv++RSvtQBbd4DJPuQ7AE4++orS/CaUpYAKU/Lsp9b7
-         8gJQT7lpcBBScAGQnTpurRvuE6ZJDe/IbqpHNJ2HSu55kz5sbRaJABugUWPvP/EtbUyL
-         6wWscbO7vzai66hmo4fUGLLMn0FGE7foNNsHjzgaSRzNgs4gWzuA9Ojr9WEN6TfTQusH
-         aMsBYKPVeSYo2NcCo40NsWQSlgxH1ypnn4NjATTIPK2uYvaQoT3pFhUGPblX9AoDj5kY
-         zWg5+OHFmyEyIB8gYf29XJkE/rZ0Roo4hH8TbbQXLynfuGyb3df/VwCoWzqE4Z7cTJLJ
-         1W0A==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Gsdq66BkjynIpRPrwWnOavgdKVDsGQ5+owwtyl9S4wc=;
+        b=FCtgY9iinm8oIY5V3F0fuHisMULPTP8CQ+xh/Bo5Gk3eVocKSH5pJdqM+NrFCk5yNp
+         C/YGEDtKfv2IeT6AmCu73ng/KgcB1e3J6zvGZBDJaQRXHcj3tN23Tv/MhEOscujEMLJ5
+         xyYk5bpEg2crzlxiekFp9X9OD/yfiaG6k0mDe8aulUmg8Umb7MrkjHZX4pGlK3JTLFNe
+         Ywl56Z7zDPixLCxQT7eP7burucLhwhQBi8Bmc51HtR0S3LB5qkV698CWc9NctsG4DkCE
+         5U6M+vkFI6nGdhVyAgLZmrPCSAgv732qwe2Dng3VOnpr0ocEVXV6qBHvaBbf6pfIfatM
+         h98g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=/t37Y/XRZJtMV+m9MWZM5nZfrYqA7SIqOEoInluHa74=;
-        b=duAbwfN3/P6AG7NhL9y4P2KzuGDzCVMsg3Q7ptC50rAqnKrCMw8R5SRZ1R9Zqt7v7+
-         frtN1tWf+u4wbh8UQ/lVOGM4qXZjBBdhqud68LHOROMYICmqvUEBt2iH8jU3IsOZY7/R
-         eOqmJM7i6mmlmhyA24QDggooCA6Mis9llZ9QC48tWhAU1fzZSETiUyWFp+NPHSafohoz
-         KUqFR32ZSrHmLfRVVvNIN9bph1rhirHMdXQ1zrzqcfagzZPaXulMUulEXqWbpB3D172S
-         wTc+2T/EmzPJwmx4taPiml1AiO3XaiRvC5+DXMTrNoM2IEOI7tkVJ+x0W60Q4PmDaIOM
-         u08g==
-X-Gm-Message-State: ACgBeo3Di8rHHhAgW/RjD0oUWNJXMQEaCVCuCknHQdGgSIQepktJhFOI
-        yjZ9NjGqEa77ZBdEyIDYqvKZ3g==
-X-Google-Smtp-Source: AA6agR6jRUlV7R30+1RiGKXPv/OnKqwkmFkuRZ8RG9kwsxsXEfaH5hrD9w2dLOIRvYz/TpjFVeVmlg==
-X-Received: by 2002:a63:131c:0:b0:427:7f15:470f with SMTP id i28-20020a63131c000000b004277f15470fmr18004165pgl.232.1661184125347;
-        Mon, 22 Aug 2022 09:02:05 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170902654500b00172bd7505e6sm7059021pln.12.2022.08.22.09.02.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 09:02:04 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 10:02:02 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, Jonathan Corbet <corbet@lwn.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH] coresight: docs: Fix a broken reference
-Message-ID: <20220822160202.GB1583519@p14s>
-References: <c7f864854e9e03916017712017ff59132c51c338.1659251193.git.christophe.jaillet@wanadoo.fr>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Gsdq66BkjynIpRPrwWnOavgdKVDsGQ5+owwtyl9S4wc=;
+        b=WNgQo6Q3M3lxEhyEtQcw0Mm+FUrGGqZxIHx8o1VG3zn7xDUHpvezgD4X5m0tIEzJJd
+         ZTzpm+3YJiLuOXn4F9MzpfgNpu+q40TyFg/PiCNjQvS39ZgUnQi7osxUsqMoNAahh20u
+         qoHc8WZc7ive6g9C2ykNTZf3Sa9L/SecoOsvcb65CPMp04YBvsD5OSf9TKjnuB90km0t
+         V8zwmoZWs7XkEzgURNmQvr7Tkcstr1+vLuNN+LaekZ6iFPr9CmuLLuSe5+3opg0+54H6
+         aBr+ciM2PzXyzcv36xRnodt0n2irVjwjhjzuQvXuyNlYQ/qbtqt1KLRSQc0K9O9PLg6r
+         MMCA==
+X-Gm-Message-State: ACgBeo0Lt0EcS4B01iUp4SFxbkmJHrgT0TDoup0fs2Mrk5bfudyz5+VK
+        HKeMb6Z5zv5tFrrF5Ap5G16KW2W4wMoZrm7rYvzSHA==
+X-Google-Smtp-Source: AA6agR6sdwDfhdjqCX6dqJyxJ5ybluZ96v9XhwuPllXX1mMtxZCnsOVM4A+fRNO2CxOVQx85qxZzBP7d5u49kiL0mQY=
+X-Received: by 2002:a63:5f8e:0:b0:429:c286:4ef7 with SMTP id
+ t136-20020a635f8e000000b00429c2864ef7mr17156340pgb.166.1661184310649; Mon, 22
+ Aug 2022 09:05:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c7f864854e9e03916017712017ff59132c51c338.1659251193.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220822001737.4120417-1-shakeelb@google.com> <20220822001737.4120417-3-shakeelb@google.com>
+ <YwNZD4YlRkvQCWFi@dhcp22.suse.cz> <CALvZod5pw_7hnH44hdC3rDGQxQB2XATrViNNGosG3FnUoWo-4A@mail.gmail.com>
+ <YwOde3qFvne7Umld@dhcp22.suse.cz>
+In-Reply-To: <YwOde3qFvne7Umld@dhcp22.suse.cz>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Mon, 22 Aug 2022 09:04:59 -0700
+Message-ID: <CALvZod4whYX+0ZuCGgyKuG-Q_9d0g7N_x+=WXOeB_1TM=3Q7vg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mm: page_counter: rearrange struct page_counter fields
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Oliver Sang <oliver.sang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 31, 2022 at 09:06:48AM +0200, Christophe JAILLET wrote:
-> Since the commit in Fixes: tag, "coresight-cpu-debug.txt" has been turned
-> into "arm,coresight-cpu-debug.yaml".
-> 
-> Update the doc accordingly to avoid a 'make htmldocs' warning
-> 
-> Fixes: 66d052047ca8 ("dt-bindings: arm: Convert CoreSight CPU debug to DT schema")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  Documentation/trace/coresight/coresight-cpu-debug.rst | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
+On Mon, Aug 22, 2022 at 8:15 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 22-08-22 08:06:14, Shakeel Butt wrote:
+> [...]
+> > > >  struct page_counter {
+> > > > +     /*
+> > > > +      * Make sure 'usage' does not share cacheline with any other field. The
+> > > > +      * memcg->memory.usage is a hot member of struct mem_cgroup.
+> > > > +      */
+> > > > +     PC_PADDING(_pad1_);
+> > >
+> > > Why don't you simply require alignment for the structure?
+> >
+> > I don't just want the alignment of the structure. I want different
+> > fields of this structure to not share the cache line. More
+> > specifically the 'high' and 'usage' fields. With this change the usage
+> > will be its own cache line, the read-most fields will be on separate
+> > cache line and the fields which sometimes get updated on charge path
+> > based on some condition will be a different cache line from the
+> > previous two.
+>
+> I do not follow. If you make an explicit requirement for the structure
+> alignement then the first field in the structure will be guarantied to
+> have that alignement and you achieve the rest to be in the other cache
+> line by adding padding behind that.
 
-Applied.
-
-Thanks,
-Mathieu
-
-> diff --git a/Documentation/trace/coresight/coresight-cpu-debug.rst b/Documentation/trace/coresight/coresight-cpu-debug.rst
-> index 993dd294b81b..836b35532667 100644
-> --- a/Documentation/trace/coresight/coresight-cpu-debug.rst
-> +++ b/Documentation/trace/coresight/coresight-cpu-debug.rst
-> @@ -117,7 +117,8 @@ divide into below cases:
->  Device Tree Bindings
->  --------------------
->  
-> -See Documentation/devicetree/bindings/arm/coresight-cpu-debug.txt for details.
-> +See Documentation/devicetree/bindings/arm/arm,coresight-cpu-debug.yaml for
-> +details.
->  
->  
->  How to use the module
-> -- 
-> 2.34.1
-> 
+Oh, you were talking explicitly about _pad1_, yes, we can remove it
+and make the struct cache align. I will do it in the next version.

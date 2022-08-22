@@ -2,106 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67DE59BA1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8075459BA2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbiHVHTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 03:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41120 "EHLO
+        id S233185AbiHVHY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 03:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiHVHTT (ORCPT
+        with ESMTP id S231261AbiHVHYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 03:19:19 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97C813CDA;
-        Mon, 22 Aug 2022 00:19:18 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so10356496pjf.2;
-        Mon, 22 Aug 2022 00:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=03jo1+f8X3EXXKFUBIJeAZG4V9px5mryHYSkj2Zd4n8=;
-        b=pA1jdg+xuB/MBjFO+tnrbUfRwIwk8NjKBvPbX+U4uSnJRafMOMjI1atzqhTXmwpcqU
-         uqI1cx1w0+la3/N0efzt/xCZPOEr8jcmHKGPbu4eyJY5L8quVq0kMXd2U5jJihWlHLMQ
-         t/H2lBPFheBrxEMtX9M/6OZAv9EPCyuL/BS0pTQWMeRDb9JI3dTBNI0ZCkdR+sqRAUfl
-         /uR8B/OYtM/yOYbX2ysxkNFmvWqRCURrVsnMtZn4HMoHnmio0uF20f4cxu/6222nHcvV
-         oACmN3WweoN00q1OnZ2LXwlHAYxdWhBYcgLFynvR0Dby2+514Y3l8dg63zyQvGRWaeow
-         KF7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=03jo1+f8X3EXXKFUBIJeAZG4V9px5mryHYSkj2Zd4n8=;
-        b=m0+KLSXhLZrKNKjigQ5dRRDsbuXPlsqAlM/zBq8u3DX5rCDLPWajxCiBjT/0HG8YH4
-         yYhKQvD1wApaianq8TAuG+i1mJDoaDQs+TM11T0H0KkqQU6/rwDNW3MLta8T0ADrgJUo
-         +Cc9M46slLpgQ3juPdTPvjywVR8hz3dnvsDrDPBjK39Cne9GL+reNCNI++z1+mkcHL06
-         2IiDTd62RJeitDGzRK5Pirizz18XBd0nXaqXir+6uc0zbqs/kp/PTMcKSnxX8jqHqa+E
-         58H5TPo2OfhjMrHCkR165ZHCP9aDDuZC5O8xPrhg7gz1zGonhCtsptSFPriOBhowWt+X
-         uWhQ==
-X-Gm-Message-State: ACgBeo0LAK2udfrB1PgJsRgqcClWsCt0IVXyCV7JPL4OERvIt5g52tkb
-        HBQSrvyME9v0BgRJ8rtF/Iw=
-X-Google-Smtp-Source: AA6agR5WnXDUV5MQwujJjQN1TuZSCgnkZwKzqgjYDKUr/W2Bcn0Lx5PJjWBL1OVFtGd288lgYqyGbg==
-X-Received: by 2002:a17:903:1d1:b0:172:e12b:71b2 with SMTP id e17-20020a17090301d100b00172e12b71b2mr6141394plh.60.1661152758257;
-        Mon, 22 Aug 2022 00:19:18 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.141.8])
-        by smtp.gmail.com with ESMTPSA id d7-20020a17090ad3c700b001f3095af6a9sm7330394pjw.38.2022.08.22.00.19.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 00:19:17 -0700 (PDT)
-From:   Haimin Zhang <tcs.kernel@gmail.com>
-X-Google-Original-From: Haimin Zhang <tcs_kernel@tencent.com>
-To:     alex.aring@gmail.com, stefan@datenfreihafen.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-wpan@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Haimin Zhang <tcs_kernel@tencent.com>
-Subject: [PATCH] net/ieee802154: fix uninit value bug in dgram_sendmsg
-Date:   Mon, 22 Aug 2022 15:19:02 +0800
-Message-Id: <20220822071902.3419042-1-tcs_kernel@tencent.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 22 Aug 2022 03:24:12 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 Aug 2022 00:24:06 PDT
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9434126AFD
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:24:06 -0700 (PDT)
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 202208220723019bc9868db15d1bf3ca
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 22 Aug 2022 09:23:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=r7BtDQLOW251uN75TYMP1O5bGG3YbkEmqdbzsYUFKHE=;
+ b=ScfAorxdKBryBwB7DnUcxTodtjbojOx3xnqFabuRrs3cwCuFoPB3f6gEO7Ai/+Qu7eYdgX
+ fUdrk5po9VS9YyDL5UiGapVGZGYbUpkJE6gKLbK1Qa0sL0JxoiO2nVzKx9JbMJ+O1p53Geot
+ CYo87ArhLfnqqbocfoLxRvx9UoXzk=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 1/6] tty: n_gsm: add enumeration for gsm encodings
+Date:   Mon, 22 Aug 2022 09:21:33 +0200
+Message-Id: <20220822072138.3123-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is uninit value bug in dgram_sendmsg function in
-net/ieee802154/socket.c when the length of valid data pointed by the
-msg->msg_name isn't verified.
+From: Daniel Starke <daniel.starke@siemens.com>
 
-This length is specified by msg->msg_namelen. Function
-ieee802154_addr_from_sa is called by dgram_sendmsg, which use
-msg->msg_name as struct sockaddr_ieee802154* and read it, that will
-eventually lead to uninit value read. So we should check the length of
-msg->msg_name is not less than sizeof(struct sockaddr_ieee802154)
-before entering the ieee802154_addr_from_sa.
+Add an enumeration for the gsm mux encoding types to improve code
+readability and to avoid invalid values. Only two values are defined by the
+standard:
+- basic option mode
+- advanced option mode (uses ISO HDLC standard transparency mechanism)
 
-Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
+Also remove redundant configuration in gsmld_open(). The same value is
+already set in gsm_alloc_mux() which is also called in gsmld_open().
+
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- net/ieee802154/socket.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/tty/n_gsm.c | 31 +++++++++++++++++--------------
+ 1 file changed, 17 insertions(+), 14 deletions(-)
 
-diff --git a/net/ieee802154/socket.c b/net/ieee802154/socket.c
-index 718fb77bb..efbe08590 100644
---- a/net/ieee802154/socket.c
-+++ b/net/ieee802154/socket.c
-@@ -655,6 +655,10 @@ static int dgram_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
- 	if (msg->msg_name) {
- 		DECLARE_SOCKADDR(struct sockaddr_ieee802154*,
- 				 daddr, msg->msg_name);
-+		if (msg->msg_namelen < sizeof(*daddr)) {
-+			err = -EINVAL;
-+			goto out_skb;
-+		}
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index caa5c14ed57f..5bf09d129357 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -184,6 +184,11 @@ struct gsm_control {
+ 	int error;	/* Error if any */
+ };
  
- 		ieee802154_addr_from_sa(&dst_addr, &daddr->addr);
- 	} else {
++enum gsm_encoding {
++	GSM_BASIC_OPT,
++	GSM_ADV_OPT,
++};
++
+ enum gsm_mux_state {
+ 	GSM_SEARCH,
+ 	GSM_START,
+@@ -230,7 +235,7 @@ struct gsm_mux {
+ 	unsigned int address;
+ 	unsigned int count;
+ 	bool escape;
+-	int encoding;
++	enum gsm_encoding encoding;
+ 	u8 control;
+ 	u8 fcs;
+ 	u8 *txframe;			/* TX framing buffer */
+@@ -694,7 +699,7 @@ static int gsm_send(struct gsm_mux *gsm, int addr, int cr, int control)
+ 	*dp++ = (addr << 2) | (ocr << 1) | EA;
+ 	*dp++ = control;
+ 
+-	if (gsm->encoding == 0)
++	if (gsm->encoding == GSM_BASIC_OPT)
+ 		*dp++ = EA; /* Length of data = 0 */
+ 
+ 	*dp = 0xFF - gsm_fcs_add_block(INIT_FCS, msg->data, dp - msg->data);
+@@ -813,7 +818,7 @@ static int gsm_send_packet(struct gsm_mux *gsm, struct gsm_msg *msg)
+ 	int len, ret;
+ 
+ 
+-	if (gsm->encoding == 0) {
++	if (gsm->encoding == GSM_BASIC_OPT) {
+ 		gsm->txframe[0] = GSM0_SOF;
+ 		memcpy(gsm->txframe + 1, msg->data, msg->len);
+ 		gsm->txframe[msg->len + 1] = GSM0_SOF;
+@@ -965,7 +970,7 @@ static void __gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
+ 	u8 *fcs = dp + msg->len;
+ 
+ 	/* Fill in the header */
+-	if (gsm->encoding == 0) {
++	if (gsm->encoding == GSM_BASIC_OPT) {
+ 		if (msg->len < 128)
+ 			*--dp = (msg->len << 1) | EA;
+ 		else {
+@@ -2508,7 +2513,7 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
+ 	spin_lock_init(&gsm->control_lock);
+ 	spin_lock_init(&gsm->tx_lock);
+ 
+-	if (gsm->encoding == 0)
++	if (gsm->encoding == GSM_BASIC_OPT)
+ 		gsm->receive = gsm0_receive;
+ 	else
+ 		gsm->receive = gsm1_receive;
+@@ -2618,7 +2623,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
+ 	gsm->n2 = N2;
+ 	gsm->ftype = UIH;
+ 	gsm->adaption = 1;
+-	gsm->encoding = 1;
++	gsm->encoding = GSM_ADV_OPT;
+ 	gsm->mru = 64;	/* Default to encoding 1 so these should be 64 */
+ 	gsm->mtu = 64;
+ 	gsm->dead = true;	/* Avoid early tty opens */
+@@ -2651,7 +2656,7 @@ static void gsm_copy_config_values(struct gsm_mux *gsm,
+ {
+ 	memset(c, 0, sizeof(*c));
+ 	c->adaption = gsm->adaption;
+-	c->encapsulation = gsm->encoding;
++	c->encapsulation = (int)gsm->encoding;
+ 	c->initiator = gsm->initiator;
+ 	c->t1 = gsm->t1;
+ 	c->t2 = gsm->t2;
+@@ -2719,7 +2724,7 @@ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
+ 	gsm->initiator = c->initiator;
+ 	gsm->mru = c->mru;
+ 	gsm->mtu = c->mtu;
+-	gsm->encoding = c->encapsulation;
++	gsm->encoding = c->encapsulation ? GSM_ADV_OPT : GSM_BASIC_OPT;
+ 	gsm->adaption = c->adaption;
+ 	gsm->n2 = c->n2;
+ 
+@@ -2942,8 +2947,6 @@ static int gsmld_open(struct tty_struct *tty)
+ 	tty->receive_room = 65536;
+ 
+ 	/* Attach the initial passive connection */
+-	gsm->encoding = 1;
+-
+ 	gsmld_attach_gsm(tty, gsm);
+ 
+ 	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
+@@ -3345,7 +3348,7 @@ static int gsm_modem_upd_via_msc(struct gsm_dlci *dlci, u8 brk)
+ 	struct gsm_control *ctrl;
+ 	int len = 2;
+ 
+-	if (dlci->gsm->encoding != 0)
++	if (dlci->gsm->encoding != GSM_BASIC_OPT)
+ 		return 0;
+ 
+ 	modembits[0] = (dlci->addr << 2) | 2 | EA;  /* DLCI, Valid, EA */
+@@ -3374,7 +3377,7 @@ static int gsm_modem_update(struct gsm_dlci *dlci, u8 brk)
+ 		/* Send convergence layer type 2 empty data frame. */
+ 		gsm_modem_upd_via_data(dlci, brk);
+ 		return 0;
+-	} else if (dlci->gsm->encoding == 0) {
++	} else if (dlci->gsm->encoding == GSM_BASIC_OPT) {
+ 		/* Send as MSC control message. */
+ 		return gsm_modem_upd_via_msc(dlci, brk);
+ 	}
+@@ -3398,8 +3401,8 @@ static int gsm_carrier_raised(struct tty_port *port)
+ 	 * Basic mode with control channel in ADM mode may not respond
+ 	 * to CMD_MSC at all and modem_rx is empty.
+ 	 */
+-	if (gsm->encoding == 0 && gsm->dlci[0]->mode == DLCI_MODE_ADM &&
+-	    !dlci->modem_rx)
++	if (gsm->encoding == GSM_BASIC_OPT &&
++	    gsm->dlci[0]->mode == DLCI_MODE_ADM && !dlci->modem_rx)
+ 		return 1;
+ 
+ 	return dlci->modem_rx & TIOCM_CD;
 -- 
-2.27.0
+2.34.1
 

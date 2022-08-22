@@ -2,61 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D34A59C47B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CDD59C47D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235786AbiHVQ67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
+        id S235638AbiHVQ7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234891AbiHVQ65 (ORCPT
+        with ESMTP id S234891AbiHVQ7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:58:57 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747D713F4A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661187536; x=1692723536;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lw0sAPkCENe0vTSIoAyxyGpPW+YUlIRxQmC+3cqpAgY=;
-  b=QfcE5RLw9EzV8tYQ4VZkaZ/wX8Vpx2gFPUVL2RQcYgxIO52NI0NHIpZG
-   BYBWrmxwzXtBoGnn4Dyhkcflpu8mazCxOXNGcaD07eObHN9iZ1eTmCbLE
-   zbVHpVnk4xPI5rc6IqpY6UBOiiUHF8m/Om44xDBnUaQVqYKhN2XdDskSf
-   1IheV3gDu6GNtRrQSZBipyyYRLed/cbEXMF9wQtHBJqtVEfl7mHns51CK
-   SyaEVbw8xKyezVlzSYiL9w4WlkMU2yHgzeSd6JFggsJj+3yvm3YemL21A
-   +6DFjmNhRHQQDy4O6XgQh1FQv3zbYKerzvdu/f4j3GHqZTHGQ4MNMg+hY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="294257288"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="294257288"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 09:58:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="937114179"
-Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Aug 2022 09:58:54 -0700
-Received: from kbuild by dd9b29378baa with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQAlJ-0000UF-20;
-        Mon, 22 Aug 2022 16:58:53 +0000
-Date:   Tue, 23 Aug 2022 00:58:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Nathan Chancellor <natechancellor@gmail.com>
-Subject: drivers/gpu/drm/i915/i915_sw_fence.c:90:20: error: unused function
- 'debug_fence_init_onstack'
-Message-ID: <202208230005.ZOG0eeUT-lkp@intel.com>
+        Mon, 22 Aug 2022 12:59:46 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8731582D;
+        Mon, 22 Aug 2022 09:59:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661187572;
+        bh=5PSC9KSJrN+I36eNSPKjGlpKRWxpUHmV809ABk5XYNA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=kDfXABW7iW0nU9B1THa8LsK5H7JyeXUxYozdWiY9EqF+rfK7uQkvIGYIrS82RQXX6
+         wIE+RlfCugVkpBrZULNlva9m+4Q7BmrMj1iuGsPZc8vZXo1kiZz8K9bYOXzz0eOVuH
+         GzmAN0HEdag92KgJfXcbtYgXB10uUbbUydgoxP3U=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [157.180.225.169] ([157.180.225.169]) by web-mail.gmx.net
+ (3c-app-gmx-bap06.server.lan [172.19.172.76]) (via HTTP); Mon, 22 Aug 2022
+ 18:59:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Message-ID: <trinity-94aeced0-7aab-4359-9c74-1616a17464bd-1661187572028@3c-app-gmx-bap06>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Aw: Re:  Re: help for driver porting - missing member
+ preset_chandef in struct wireless_dev
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 22 Aug 2022 18:59:32 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <51a1b56a4d9ed825cb47cf364c5bd72f3338a1a6.camel@sipsolutions.net>
+References: <trinity-de687d18-b2a2-4cde-9383-a4d6ddba6a77-1661177057496@3c-app-gmx-bap06>
+ <b081ef6eb978070740f31f48a1f4be1807f51168.camel@sipsolutions.net>
+ <trinity-64c5eed8-8b6b-4b33-9204-89aff4fce7db-1661186571606@3c-app-gmx-bap06>
+ <51a1b56a4d9ed825cb47cf364c5bd72f3338a1a6.camel@sipsolutions.net>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:2s3gh0jmW12zBhGE7SZcZoJY4MnkmIMVIlAhSZp0+27jdAYGlfgY5+dx0cLwEW1WkBhfu
+ NzOKvq2oSEll7T+WrIrS3F9724W7yC8Ux6OyBO5M7VR/IO19W3Bqg608FnVGAwV0wmIUFLbN/he2
+ xKuXsHxtt2B8YolPYiu2cSq6zh29RF6xGkIpJvawOsnubVolBFbODCx3PYR1A5I+EWMN34ZG4R5/
+ 2Ye2gb4+AkE3Jw0mdkVsW3zfzgF/9MUySSg3cTf5fVzNkkWiT1AmJ2kOAHQgJN7wOXdHI1vAegp3
+ bQ=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CCSo7lWpAx0=:m6GmAua6YxcBSihifFIo1d
+ oTmRhQMqfmNLyRR7AoxqBEeIogEADi0u+VunsDOUpu2j8/MjkzZyQHGiSU4HhfdJDTY4jxxkp
+ /65XqW4dvodZLlkMrI38n/DJTZfojtaNDY5X2K+ghmsKRmHLu/Qt2zRWMVhA1NAPgOnc0NO4/
+ +jXMiMbqYdapWEDFXBTHR114H5ygzWAxZWGW5Bk0/RM9SfpDLLAJ4e9KqebBabCdzv8qjL34N
+ jrMhPmMgr2U4F0aIIgohIrt8Sao2dumCduAHeQMOxG7K+rmBs0dyFyYQhDjDAf30MT6pmyjcn
+ NxRJUDqUXCyrjyr9WbDG1DehGa4/PEBPXufjbn+ENizi95PpHz0+AGdTgbPujqfvnZFIHdhZv
+ ifFepjdO9J6QWKHHvvrOZzRiNo1HxCnabN5dGdZWTol7RoomFQOcpTvOsDgIZCtzjlOzhjprh
+ w1Wl5yeH2bUttH4Ka9vBYuxONcKosCibwatH4I15Ly0649/VTFy6bIY+nC95HZOQqbVKkgDL+
+ s1lCHOdVQHf6rKD+eHyhGA6XqBQkPxdnjmnhgmHve41rzTU5XDFk7Z72EbYBkLBV2TLmUxBaX
+ CZJYKktV3Q4wHoy4KJkuDvmHaD+pbo1sS0cSoWOwXUsGktoV9tocQpov2dV1sJsBV2xiB6BBL
+ Id3M4QQ4fbD9K+qLyyeiBjnKw9IrC8I+pdYEGeZcXi/zxyaQhX5LyATJtHIHHe4YZH/BFL3YW
+ Ap5UhyS5kYu4904AGWSj9q5oEf2EUn7z+1o+N4yNWl2nf7fWsyOftlyOZIxugXKkui5jYuwy9
+ 5EMmFrK
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,76 +77,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
 
-FYI, the error/warning still remains.
+> Gesendet: Montag, 22. August 2022 um 18:43 Uhr
+> Von: "Johannes Berg" <johannes@sipsolutions.net>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1c23f9e627a7b412978b4e852793c5e3c3efc555
-commit: 9f4069b055d1508c833115df7493b6e0001e5c9b drm/i915: re-disable -Wframe-address
-date:   2 years, 4 months ago
-config: x86_64-randconfig-a005-20220822 (https://download.01.org/0day-ci/archive/20220823/202208230005.ZOG0eeUT-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9f4069b055d1508c833115df7493b6e0001e5c9b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 9f4069b055d1508c833115df7493b6e0001e5c9b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> On Mon, 2022-08-22 at 18:42 +0200, Frank Wunderlich wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> > thanks for response, commented out the use of the member and the wdev
+> > assignment as it was then unused
+> > can you tell me which api-call this should be?
+> > i just want to make sure this is really done as i up-ported the driver
+> > from 4.9, so if the api-call was introduced later it is maybe missing.
+>
+> No sorry, I don't know how the driver was/is using it, so I can't tell
+> you how to replace it.
 
-All errors (new ones prefixed by >>):
+can you give me possible calls (if there are multiple candidates) which ma=
+y set the channel (without mesh)
+for me to check or maybe implement?
 
->> drivers/gpu/drm/i915/i915_sw_fence.c:90:20: error: unused function 'debug_fence_init_onstack' [-Werror,-Wunused-function]
-   static inline void debug_fence_init_onstack(struct i915_sw_fence *fence)
-                      ^
->> drivers/gpu/drm/i915/i915_sw_fence.c:111:20: error: unused function 'debug_fence_free' [-Werror,-Wunused-function]
-   static inline void debug_fence_free(struct i915_sw_fence *fence)
-                      ^
-   2 errors generated.
+> johannes
 
-
-vim +/debug_fence_init_onstack +90 drivers/gpu/drm/i915/i915_sw_fence.c
-
-fc1584059d6c43 Chris Wilson 2016-11-25   89  
-214707fc2ce08d Chris Wilson 2017-10-12  @90  static inline void debug_fence_init_onstack(struct i915_sw_fence *fence)
-214707fc2ce08d Chris Wilson 2017-10-12   91  {
-214707fc2ce08d Chris Wilson 2017-10-12   92  }
-214707fc2ce08d Chris Wilson 2017-10-12   93  
-fc1584059d6c43 Chris Wilson 2016-11-25   94  static inline void debug_fence_activate(struct i915_sw_fence *fence)
-fc1584059d6c43 Chris Wilson 2016-11-25   95  {
-fc1584059d6c43 Chris Wilson 2016-11-25   96  }
-fc1584059d6c43 Chris Wilson 2016-11-25   97  
-fc1584059d6c43 Chris Wilson 2016-11-25   98  static inline void debug_fence_set_state(struct i915_sw_fence *fence,
-fc1584059d6c43 Chris Wilson 2016-11-25   99  					 int old, int new)
-fc1584059d6c43 Chris Wilson 2016-11-25  100  {
-fc1584059d6c43 Chris Wilson 2016-11-25  101  }
-fc1584059d6c43 Chris Wilson 2016-11-25  102  
-fc1584059d6c43 Chris Wilson 2016-11-25  103  static inline void debug_fence_deactivate(struct i915_sw_fence *fence)
-fc1584059d6c43 Chris Wilson 2016-11-25  104  {
-fc1584059d6c43 Chris Wilson 2016-11-25  105  }
-fc1584059d6c43 Chris Wilson 2016-11-25  106  
-fc1584059d6c43 Chris Wilson 2016-11-25  107  static inline void debug_fence_destroy(struct i915_sw_fence *fence)
-fc1584059d6c43 Chris Wilson 2016-11-25  108  {
-fc1584059d6c43 Chris Wilson 2016-11-25  109  }
-fc1584059d6c43 Chris Wilson 2016-11-25  110  
-fc1584059d6c43 Chris Wilson 2016-11-25 @111  static inline void debug_fence_free(struct i915_sw_fence *fence)
-fc1584059d6c43 Chris Wilson 2016-11-25  112  {
-fc1584059d6c43 Chris Wilson 2016-11-25  113  }
-fc1584059d6c43 Chris Wilson 2016-11-25  114  
-
-:::::: The code at line 90 was first introduced by commit
-:::::: 214707fc2ce08d09982bc4fe4b7a1c1f010e82be drm/i915/selftests: Wrap a timer into a i915_sw_fence
-
-:::::: TO: Chris Wilson <chris@chris-wilson.co.uk>
-:::::: CC: Chris Wilson <chris@chris-wilson.co.uk>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Frank

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065DD59B8E9
+	by mail.lfdr.de (Postfix) with ESMTP id 9861B59B8EB
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 08:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbiHVGCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 02:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S232557AbiHVGCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 02:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiHVGCD (ORCPT
+        with ESMTP id S229499AbiHVGCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 02:02:03 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2072.outbound.protection.outlook.com [40.107.105.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40811F624;
-        Sun, 21 Aug 2022 23:02:01 -0700 (PDT)
+        Mon, 22 Aug 2022 02:02:07 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2042.outbound.protection.outlook.com [40.107.105.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2DB1F624;
+        Sun, 21 Aug 2022 23:02:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GRRu3mzmHWNLJWukQ4cEkPu4M5nWESC1zpOKkjHD1KF++GatiImhXC2mgjx4Q1OwNnNgkhR4hpYNlsC5NIJ5bYgZZaGhDkDXWyBlT1n1Xz/5mb8BYAWVhWUH1zkcmFojQkkEhbw4WefkmygJvKmtre/Xw5pj3aon1lbUTE0UZkZZ+TrVb5LbtdzuP/mNdWedn23JHXoqDIDBNQ64QPFfgkxXD3VEdPLSmAbZRLv4pcOUKNwJT8WuhagM0bd9kWHm5plUK7laB+sDD7dYHYsiwN/r9AjfRwnQaSL0srq2Nz0LZgAxKDmJxNKq/32fykTeAvA0jyKT+m2mT1B/Ex8mLw==
+ b=Whdgn5CG25N0VQ4CUcxYuJyCq9iE/0Mfg8GF8PJlk8ewxjrhf77OSOJ/cl9PmYE+lvcO6f0fLowrZ+jMwwwjTODf0psdMRMcofO9ohYnSRr5LpWknxR8DT0Y9XEQlnIehSWhzr+Jcx/HP5oymhTINDs3Kegl62G86PmKB5TLw47mh4MsmF6kAY08yDKsittkas/hP8f7ZLbME8bvLikoGRdRTpSfaUv0g6JR2KiCux8naO8bN36v90Fo80g56XSeOEOGjs4Hf+Wc8hr4ruEOmlBrJTBLn8bNebHyjC12MLv3BrHWqTIQSd6aBif4QTFUT7MkeFzEOznIZ8SBnpVPpQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NvvEDPH556ZUe5L3tm4OPGJBCGaB+VuPfIpMhs6HGXU=;
- b=Qoiwz1ZxFwFaxhfeUtpss3KXTNRfyCl5a58x7vJ85vQjXx47HZYQF+PlufPuDEmZhjPB3BcFEDd/VIB2fGKPdxPE+ToIqlpHJks4Zk7lVYEgUyNYi6Kj5hFUd2OfhQ0anPfXjwQHgTR666RCuZG6gE9a4IyqvJx1wO+fv064OtTDoFsZDJqmC3giphYkcjdLrJ9Q6A49Ct3qCrhqn6G42ypdh3iVWxIalLb+cYcjF+L2FkRrSDHnEJwhICIYTZ0x93CeuC4KeOZDbU/JgS74fNwTo7lBiRckvbhDFhWXoEZn/SMjvYF7ghSJaAR5u0bjhgnHVnPqvfHlWfxyvvJNcA==
+ bh=lAxYOfz3sZc+r6ojdxKXSBJrhK0IXn6bj0q+c+eoq+I=;
+ b=nNABbCiEb0cttG/H2Uh06ht+hPInjwHX6hHzpn/NTZqoVGeML6ZImInA84k/FC7wMLs1PjGa47i7Ew5Sccz+BD1KSE8vEzj8nmJf2Xs3XFsHgP5Z+cjfZ7lmrguC+0iDsWCP+S4KM0TY1ZAabJfYJZ9qNiJLJJL0uzdPIOzfhliHBtdbggUScr9RzE0ePohmtiTxz4rc8uDvEzuGE8p2yftxvt++DAbD3bsrSOzdnDqwcerfiQR6LISdO71wXkqKuqVnSDHnJFCfCtMAU+jkWq7BaZ8m8M3T9louPObuQs8D3fbIyOaPnDA9Ha0Vdc/Q08B4g08oewAmc+BCCNpfOg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NvvEDPH556ZUe5L3tm4OPGJBCGaB+VuPfIpMhs6HGXU=;
- b=Vx1T9pymdd7NYH8/knT21rxwIJAwrGRVGW0kQhZXQBCSTcLeT/+Ufe6Z+1O0TnZkTowqZUnk0dQPQzsqcuUs3vVms5ZkYKXrjdYi4A6eBMteUgd/KrSTCFJW9JGoKncvYK8CHg0QKLmSaStMwoWyEQAJbaVmu1a523+5lZo80ug=
+ bh=lAxYOfz3sZc+r6ojdxKXSBJrhK0IXn6bj0q+c+eoq+I=;
+ b=XTZOzy33Lbz2JOvmKsRPhXSiBNroI+NI6Ymx9jE7WoD2Tpt8ohOYEul1+E3EajkMeskBVQhVXX042Czp/vJlrmZIcxIlnemca1QVjLPg6gUubCIOX8Em26DyWXqB0Aa/cxUqflvYY+H55UPIaMrocA/2ud6ybR6ifNdwQED4+P0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
  by DB7PR04MB4604.eurprd04.prod.outlook.com (2603:10a6:5:35::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Mon, 22 Aug
- 2022 06:01:59 +0000
+ 2022 06:02:03 +0000
 Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
  ([fe80::2549:869e:d80b:3a1b]) by AM7PR04MB7046.eurprd04.prod.outlook.com
  ([fe80::2549:869e:d80b:3a1b%6]) with mapi id 15.20.5504.027; Mon, 22 Aug 2022
- 06:01:59 +0000
+ 06:02:03 +0000
 From:   Liu Ying <victor.liu@nxp.com>
 To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
@@ -48,10 +48,12 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         festevam@gmail.com, linux-imx@nxp.com, saravanak@google.com,
         gregkh@linuxfoundation.org, geert+renesas@glider.be,
         krzysztof.kozlowski@linaro.org, robh@kernel.org
-Subject: [PATCH RESEND v4 0/2] drivers: bus: Add Freescale i.MX8qxp pixel link MSI bus support
-Date:   Mon, 22 Aug 2022 14:03:21 +0800
-Message-Id: <20220822060323.3481384-1-victor.liu@nxp.com>
+Subject: [PATCH RESEND v4 1/2] drivers: bus: simple-pm-bus: Use clocks
+Date:   Mon, 22 Aug 2022 14:03:22 +0800
+Message-Id: <20220822060323.3481384-2-victor.liu@nxp.com>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220822060323.3481384-1-victor.liu@nxp.com>
+References: <20220822060323.3481384-1-victor.liu@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SG2PR06CA0224.apcprd06.prod.outlook.com
@@ -59,51 +61,51 @@ X-ClientProxiedBy: SG2PR06CA0224.apcprd06.prod.outlook.com
  (2603:10a6:20b:113::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e56ebdc2-d1ce-402f-dcac-08da8403d33c
+X-MS-Office365-Filtering-Correlation-Id: abfe2cd4-7d7b-49e5-250b-08da8403d5d9
 X-MS-TrafficTypeDiagnostic: DB7PR04MB4604:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a+QUMk2W9DYtHH6PgztNhNDIyZwWf2KFRoAOtceaKtSnEbWbwUYJK5RfPWNiocko7m4HHZU+wqdWdGbb2vFiAT++E9Z+V/+yA9ZVrm3xC+Bdz3Fdb0emhj3RUeM5gIFF898TUr8r3dx5eHXd0rJW5VLZnvVTLP0ixrxy9jMCEKHUrS3lcI4JleeHOL41P3cPwsTBgOFvUTxwS0UEq+ASzx71dCZ17LN1EXUKQnDb5sNe+rWs5yPHgq961RL1eh1PeVx+1xREkPvuAwI/Oa6WllHcUHeHe0gYKPvyLuN8CO7scmGbHX156y7stNDj8jxfW+mSmA4ajQ726LFGE6UKNkq05YIc8J2hElcqZBS2FG4JK6umK1GvVr1L3FMO91LP2ka+ivnzdWxSQ4Hro3ZmwD6kVwb2xS54cjpKixk6C22KKRiDbBQ5CM83VnpbcPmlnT2MXHKjf3RUcAyFx8+Ayg/U67fZVEogb1qfrzFT/CVmIzimqfcvRU/DVzfi21VaRG1ch9b2r7YCG8yF7+BS7UG00yRlK2T1OAfZn9oHPqmID12g7xSOKwW7SjdW83VllRiLJgInBBFc86U+s9sHE2WFo5/60lqXsxQBjwkw6SwA2DD8k5EiSs+En1Pl2VK6hkxLQ8Wl9SILjAlbrNLp0zjaFuvgQKNQ46fue4llTSGpw/2BTM9iPvRM2TlhiB/qYJUXoLcrbd/g4u6RcWvvh/3mLYIZCO7tVFfZhFl6sem+F0QIflvBGYXS46c9coj8GPzGyTeAQrVCAEJiY+zNgA==
+X-Microsoft-Antispam-Message-Info: DWxkYL5N/2rQvjN3dXwsbfF2CrxTe3nrjujZS1G8It+OafXHGv69b1d5jpV/nb5j2uazzzwMJbJ9okkWlaytxzE0rLJqmZd5swiY/H9Q6UACLfUempxo+U1dRQ09u2QlSPJVsrVxqy9/PRcfmBnuAS6fz0qeJT1zhMhCXH9Y0TbdJ6eYeBCfAe/nbZcLlOwCQdqu/uGI/kfpmXl+ZuvVJOvagUZUwRR4Vx32vWFkIijy+8WxX1N8RUtifOxFBIsQMOHIfF2n1Gq/GXMecp7VSmHIDHxrwRzHbQHDTpeJo7Iv4Sfyzpz3Wc3yJiosUnkyMqfyp7ss16MyIGLCRMFV/0LqHQ2YRpD2EGH0UlnzSCGSoxNcYZ/i7sQGR2HKq0tp9lp7iCETPkgjQupa04gXA/V60VFybTussBZFqXwOQIDgZariqFjAbWRvEVwx8eKhulTqdXNZ681KINZiCRSyzr2nUMur0Yx7aPQJJKHnKJ97u9u4jogNgXLh2l7LK8JX/iCtVZbrDcuP4Pbq3lzlqueC9u1v3dsv/6sZt6kyLfpQdKa8L8VE7M0XRJ46EmLcOSBXQ0CWmqVd9hNkcvA68zKySBrJzrF9jsFjn+y5DvfsCRTnbescdWk2LrGh1nQA7sn1eVbWVf/ug7c7axTD6zQIega4TbAn+5uhdsuPW9ZkH9EbQthfSLaEPqH4f78QpQN40SZXdIvDqo7kHLFdGOgy0Ao+pPvAijAb2OhPIljlwmTfDR/vHlAwV2OMJFjMLWDtt5hMxIZPpOp68mXbfg==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(39860400002)(376002)(136003)(396003)(346002)(86362001)(83380400001)(38100700002)(38350700002)(316002)(8936002)(66556008)(5660300002)(7416002)(66946007)(66476007)(8676002)(2906002)(4326008)(1076003)(2616005)(186003)(41300700001)(478600001)(6486002)(52116002)(6506007)(6512007)(26005)(6666004)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+vkq23pe7SXACX8uXIveepABLqCs/DgRGClJMPn03mNgpEnYkqpVcqsIw2yV?=
- =?us-ascii?Q?cdmcLpKS+06Ay9zo8i+FamXdiEgEi0JQWlYfv2Ri4Jvci3CmXoYb7e894TYL?=
- =?us-ascii?Q?Ze/6xDkM03+ATkW0ecEX1P2nH7I0Bc1jEzrCv3+xF7gztdkITU0amo/R+ppf?=
- =?us-ascii?Q?Dh8VgLcRlAXUvM7hj1/V5sEnDqubPqNPvPAp/flbzkK1ZfB0yiPVICgATb5V?=
- =?us-ascii?Q?zXJB3pF+qepbrJt9ROgQXGEpKnB+eW5bgO0whAv3rL7Ox8LKwVYa+SuIoNsl?=
- =?us-ascii?Q?8xqoipXFlc+4eZ2fGMxxHuL4MHlfzphvoyISgBLXQwrpeoQkjRIcmuqIf1xV?=
- =?us-ascii?Q?lOSfFHOxIEN9UeuSfxODPIjYbOs0uAguVoQspfKvxn/iqbqzCHWLYNf6X3pA?=
- =?us-ascii?Q?2kOWAoOMV9KQJ3oPUZwea04A9jAcD6eBs/y6GYEaCVweg6hW6va01k5H5o2j?=
- =?us-ascii?Q?/HL3WZgKaGAiBZYL8s/YwWDyP6rQDJCPGKhNE9sMzASKpvp+0cgmSDQel7Yz?=
- =?us-ascii?Q?3nLajngEXHHFQwbztFuI8UCcmH+aezHFj0GV5gp65lkn5A7ka4Js8o2QuRyH?=
- =?us-ascii?Q?HVqpUkHJatYQME4gNReiAkKuX+hsZ17O9LzmzsDHCZcaTxl5eFG+aaXqT0Fh?=
- =?us-ascii?Q?K+qhBDX09kENA5WRa4evFG6UKwqtJMtEuTGoKfiGj/ZtNQ//J8ZjiMWQ9DI2?=
- =?us-ascii?Q?OBRjJhAfxa2iT89sfvEILTZ9WLdQToyHRxdSgimG6NxxzedHehVPsU0EYQxH?=
- =?us-ascii?Q?j/e25MRX4kvWFIuVJ9vAlVRKwEiOyNfqYZaNjqF5v1tEpcWWVrGuWlc1s0yx?=
- =?us-ascii?Q?0jpZPFs50rh6KksLyT7G5O931uBJjFN0ZziNmtoVS++T9xXBzVJGnrUf7Rho?=
- =?us-ascii?Q?Sm3A+kKMAci+7kPXhie+GW9fmlz/PKx+344WLyvQW1Gtircgg9AuC8h01WqL?=
- =?us-ascii?Q?p6TzzcDxpH5J/q9OvxEnMAD9OuXavFdYKh0IWFHXurfH+dXtTJq5N3fUDafU?=
- =?us-ascii?Q?HAPy347SYmyqjTripqd4OkfwG0/MGCARQYBNzowvHj9rcNy64ep6DUH7l7Gb?=
- =?us-ascii?Q?FU7x2fTyAQWdSMU8MjR4CqTcOsFWt6KDjzrb1/G1m1N0DyrcsXJBSos18ltZ?=
- =?us-ascii?Q?NGBVXKS76dqQpgaW62SU7SqbgsYFCTq78W6qbUkbeuzhq9jQMPX73vTzrHoJ?=
- =?us-ascii?Q?7QvO+1m27w1PlKKjEnoM+NuuBnMuL0vxiQysxPB8DBzQ5+tfFB2/wiQiGjJb?=
- =?us-ascii?Q?nNbx1UpAbNymEqhwC2cahUeGgS/76A9Eo4B58fgXCTpstVDIEC+yB21US0rQ?=
- =?us-ascii?Q?zgz3w/7I9ksmCfxGG1GquhOIarvOzzFydGFyBq/d4zt1pcgybIgLAFaNh1kH?=
- =?us-ascii?Q?x+b8iRXFerr+nsfNLz/sV5qYTRJKJYxNSGtK9JyMG8ZKOXyCa307iVh5ngrP?=
- =?us-ascii?Q?6J8mKCbwLn+gJMoBgHTFubSXIASPnuJxPDdTBiDmoQzvwE30GKpISNU907iH?=
- =?us-ascii?Q?gCjLI7q63WMcQ0YPNoNEwAgObT2WBTBRdCHf0h/vxfyAALZ5oS0JgTsIY4Oa?=
- =?us-ascii?Q?pz4Wk4fH3NcE0eaUVwyVX2zhKOTMYzfe74fakjyQ?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iKIOIiWACpzUG09mPPXQQ3UyD7RXidpIDhTCOt/nSwYI9DbXoo+QcEf63Lvc?=
+ =?us-ascii?Q?4DT9LN3Dgy7PI0XdhBcny50cg9ngoZqRclMKcbSer/KQja3RDpE9z71eR8UV?=
+ =?us-ascii?Q?vgbmNgmnDXy2j3dIPQaAEL9ZhfqwWS63Fq77/bPftmHddv8+rW1+iiBlLROH?=
+ =?us-ascii?Q?KNBo+PNBwRedKWWYLdu0X0hVhE63CTYISZs2Bl5l97kZ2Ljf0RPOY5ebaLR6?=
+ =?us-ascii?Q?mdz/1LQGUsnIv9nWIqDX0xlzHq4INyPIId0TgS2XqCQELTWaYdbEhRAlo+Mg?=
+ =?us-ascii?Q?p/xJTDVTlp2vZLbdsBpqg4gdJXl3hlcVOplthwx4mGNj63bzCeDuL3Ey1T8G?=
+ =?us-ascii?Q?D5cizS6CoWLmWYpwKD+ZUPvQy7OaJAv0UNYfGjUl8ryFJNxNjkQKDvv3QC2U?=
+ =?us-ascii?Q?493IgtUYGTLigGDNWC1bRN1ILMIlCXSOMnNg9mgOwvIZQ5Xs+2fCEcfdvOLD?=
+ =?us-ascii?Q?HvP0gzD2vr/0rCEnlckd+3aFHNqKY9rgA4QRa/1FmZZgRczTUnqSlt7ShZ6b?=
+ =?us-ascii?Q?eKmH3LuD7l+5rizj8P3I0Ayw9jYre+fK+BnDzQXfpRZsvlFdV6E5buHi58g9?=
+ =?us-ascii?Q?dEiLgytA9oQvbzgQl+VWnwf9Vk2C1YUE0FZl46bVLLxM/tfMyqqVDYfCjZzv?=
+ =?us-ascii?Q?v2AYsk3/ELQ7peyEnXbLmAILwWCNFD8a3SJOm8cICJWqWMa9Z3Cx/T6+2/yS?=
+ =?us-ascii?Q?2c6fNqnKv6KjyxxfbbtckvHJ81FWXC+SfgeMTUCMA4iMyHQgw7Q2a6yLwO0T?=
+ =?us-ascii?Q?CeqmojjL+32HwOQ/hiDkkJIh3xpYFRE2F5P2mYsKNvkna5P144nniZ8uRffa?=
+ =?us-ascii?Q?p4mCyUl8qoyUDqkpC7vQsWaAY+rhoF3d8Kp26KYilT8LL7ovGodeDN1TlxuL?=
+ =?us-ascii?Q?H8U3FZ6upPvhW9glBKm4fJ8+wBTmLbk25x3X0cxG4WluG5Xw2nSqOXMRWmM7?=
+ =?us-ascii?Q?gY3Ps1dVtqnGJjKBqE2cKGigHtRNXTJDEO9pbO2+HI9fqs61YCn3dV2o1Y+x?=
+ =?us-ascii?Q?t/lKhDyslPE88kqzec+C/xWzyUzoNJL9xGURHLLObidnNYaRzBLuKvZIYZdf?=
+ =?us-ascii?Q?mSPi3pD8TGSFZnn38fVPhMoRtMARv2O8428urn7q2NjEqFjG7VLtdCHaAaDf?=
+ =?us-ascii?Q?QNO7IntDHB0QS/Rtzobft00M3CD2a+MJoirmzYRs5YzO8uGff2Lwa786+2x/?=
+ =?us-ascii?Q?IBbJelGDQEZJBxzJUiFP719eDIGPWKYWzuciUWSMJTDUVh8MiBG/pyWChQeP?=
+ =?us-ascii?Q?t/vUQhmXjlwJxP4cGg5IoIHoXyfAiCSI/TZ4XXbeiCUvCc0qo/2sw9vpdlUM?=
+ =?us-ascii?Q?dvVXK38gKO8KZe0fT4BmcBjrYO1HBIp9NKREqEz1ruPSoKAc2kBX9LZwxk18?=
+ =?us-ascii?Q?4xinBEBfHgNPR8u4bAoiRUHTyu09yJ6NMb4Vai7vt0dlXVqL1Eoo6N1+efNn?=
+ =?us-ascii?Q?bCjZMjDcg2vJwiZU42DMii6OwUTuOBR3OPDCmB0GhLO4kZ8UkfzH+zyhXiqy?=
+ =?us-ascii?Q?+1i53Jsw4JUcEXHy3KlQLmHujebxicL8H46JUXTfbo/RLV/V+uFbDo94YTbK?=
+ =?us-ascii?Q?JV4i6MEnfw4aWLDi+M6ZZQmWyS9W7nNCkfhenqmi?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e56ebdc2-d1ce-402f-dcac-08da8403d33c
+X-MS-Exchange-CrossTenant-Network-Message-Id: abfe2cd4-7d7b-49e5-250b-08da8403d5d9
 X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 06:01:59.1970
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 06:02:03.6392
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Log8xVufg1mYyl+oKS3DOwN5wIAPwjIZ6N7lPdq1RYkCpZ5g3Hix5GB5dvVRjF0dYNNxLgrhvP3x+RrJsq/L7w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: J7QIRSFBRNG+TMWo3Glhy2l2oSbpy7TIoNB7210tRGryuUmyIqoyFoibtkKUDLz9fmS9MEVbkI3nGmkh8mNrPg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4604
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
@@ -115,51 +117,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Simple Power-Managed bus controller may need functional clock(s)
+to be enabled before child devices connected to the bus can be
+accessed.  Get the clock(s) as a bulk and enable/disable the
+clock(s) when the bus is being power managed.
 
-This series aims to add Freescale i.MX8qxp pixel link MSI bus support
-by using the existing simple-pm-bus driver. A power domain and two input
-clocks need to be enabled before the MSI bus accesses it's child devices,
-which matches what a simple power-managed bus is(See simple-pm-bus.yaml).
+One example is that Freescale i.MX8qxp pixel link MSI bus controller
+needs MSI clock and AHB clock to be enabled before accessing child
+devices.
 
-Patch 1 enables/disables functional clock(s) as a bulk in the
-simple-pm-bus driver when the simple-pm-bus is being power managed,
-since the MSI bus takes the two input clocks as functional clocks.
-
-Patch 2 adds dt-bindings for the MSI bus.
-
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Liu Ying <victor.liu@nxp.com>
+---
 v3->v4:
-* Drop patch 1 in v3, because simple-bus/simple-mfd devices probed by the
-  simple-pm-bus driver should not be child nodes of simple-pm-bus at all,
-  as simple-bus/simple-mfd's child devices PM operations cannot be propagated
-  to simple-pm-bus. Those simple-bus/simple-mfd devices needs dedicated drivers.
 * Drop unnecessary 'bus == NULL' check from simple_pm_bus_runtime_{suspend,resume}.
-  for patch 1 in v4. (Geert)
-* Add Geert's R-b tag on patch 1 in v4.
-* Add child nodes in the example MSI bus node of the MSI bus dt-binding. (Krzysztof)
-* Resend v4 to imply this series is based on v6.0-rc1 so that there are not any
-  dependencies for the MSI bus dt-binding. (Rob)
+  (Geert)
+* Add Geert's R-b tag.
 
-v2->v3:
-* Add a pattern property to allow child nodes in the MSI bus dt-binding. (Rob)
+v1->v3:
+* No change.
 
-v1->v2:
-Address Krzysztof's comments on patch 3:
-* Add a select to explicitly select the MSI bus dt-binding.
-* List 'simple-pm-bus' explicitly as one item of compatible strings.
-* Require compatible and reg properties.
-* Put reg property just after compatible property in example.
+ drivers/bus/simple-pm-bus.c | 48 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-
-Liu Ying (2):
-  drivers: bus: simple-pm-bus: Use clocks
-  dt-bindings: bus: Add Freescale i.MX8qxp pixel link MSI bus binding
-
- .../bus/fsl,imx8qxp-pixel-link-msi-bus.yaml   | 232 ++++++++++++++++++
- drivers/bus/simple-pm-bus.c                   |  48 ++++
- 2 files changed, 280 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml
-
+diff --git a/drivers/bus/simple-pm-bus.c b/drivers/bus/simple-pm-bus.c
+index 6b8d6257ed8a..d7b043fefde9 100644
+--- a/drivers/bus/simple-pm-bus.c
++++ b/drivers/bus/simple-pm-bus.c
+@@ -8,17 +8,24 @@
+  * for more details.
+  */
+ 
++#include <linux/clk.h>
+ #include <linux/module.h>
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ 
++struct simple_pm_bus {
++	struct clk_bulk_data *clks;
++	int num_clks;
++};
++
+ static int simple_pm_bus_probe(struct platform_device *pdev)
+ {
+ 	const struct device *dev = &pdev->dev;
+ 	const struct of_dev_auxdata *lookup = dev_get_platdata(dev);
+ 	struct device_node *np = dev->of_node;
+ 	const struct of_device_id *match;
++	struct simple_pm_bus *bus;
+ 
+ 	/*
+ 	 * Allow user to use driver_override to bind this driver to a
+@@ -44,6 +51,16 @@ static int simple_pm_bus_probe(struct platform_device *pdev)
+ 			return -ENODEV;
+ 	}
+ 
++	bus = devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
++	if (!bus)
++		return -ENOMEM;
++
++	bus->num_clks = devm_clk_bulk_get_all(&pdev->dev, &bus->clks);
++	if (bus->num_clks < 0)
++		return dev_err_probe(&pdev->dev, bus->num_clks, "failed to get clocks\n");
++
++	dev_set_drvdata(&pdev->dev, bus);
++
+ 	dev_dbg(&pdev->dev, "%s\n", __func__);
+ 
+ 	pm_runtime_enable(&pdev->dev);
+@@ -67,6 +84,36 @@ static int simple_pm_bus_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static int simple_pm_bus_runtime_suspend(struct device *dev)
++{
++	struct simple_pm_bus *bus = dev_get_drvdata(dev);
++
++	clk_bulk_disable_unprepare(bus->num_clks, bus->clks);
++
++	return 0;
++}
++
++static int simple_pm_bus_runtime_resume(struct device *dev)
++{
++	struct simple_pm_bus *bus = dev_get_drvdata(dev);
++	int ret;
++
++	ret = clk_bulk_prepare_enable(bus->num_clks, bus->clks);
++	if (ret) {
++		dev_err(dev, "failed to enable clocks: %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct dev_pm_ops simple_pm_bus_pm_ops = {
++	SET_RUNTIME_PM_OPS(simple_pm_bus_runtime_suspend,
++			   simple_pm_bus_runtime_resume, NULL)
++	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
++				      pm_runtime_force_resume)
++};
++
+ #define ONLY_BUS	((void *) 1) /* Match if the device is only a bus. */
+ 
+ static const struct of_device_id simple_pm_bus_of_match[] = {
+@@ -85,6 +132,7 @@ static struct platform_driver simple_pm_bus_driver = {
+ 	.driver = {
+ 		.name = "simple-pm-bus",
+ 		.of_match_table = simple_pm_bus_of_match,
++		.pm = &simple_pm_bus_pm_ops,
+ 	},
+ };
+ 
 -- 
 2.37.1
 

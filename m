@@ -2,252 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DF759C51E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D2C59C520
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbiHVRjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S236642AbiHVRjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236164AbiHVRjC (ORCPT
+        with ESMTP id S236608AbiHVRjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:39:02 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC563342B;
-        Mon, 22 Aug 2022 10:38:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661189940; x=1692725940;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=56J3BaFEq21EQ2evXLfHjiL1CH3IElyselRwXcR0iIY=;
-  b=Vpt+L2PLRg6lqJevpjOxeSQf2WUFQYWdPfvPl9arNWVQbsbjM9qsbS59
-   thdQl3IM5nSC+LHjD3hZLHW4FDXYH/vterCAKyWuqDrU5DjVp7VFTVcPU
-   E78Ii/H0Jcw1DsLRzLmT0rv6TeGm1jXe2Eptj2uk9zldUU25TPlOWLEer
-   dKmTncPtiaTFh74vxHl1bl4nGYjbkYyYdYi6I3SPKUkw6CnMyiPwY15C4
-   WxrrzI0YrlENVRi4WjI/i3EK/9CTkc89aCWb0oLaZgJcRltQtXuYVFtdl
-   yI8cJpTls03q1jzjcDwzUJehiIm5QRxmwP1TvfAYeU5buLOL5P3znz7zM
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="355209352"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="355209352"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 10:38:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="559837688"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga003.jf.intel.com with ESMTP; 22 Aug 2022 10:38:58 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 22 Aug 2022 10:38:58 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 22 Aug 2022 10:38:58 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 22 Aug 2022 10:38:58 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 22 Aug 2022 10:38:58 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SDWSbLL0O+F29JzE9SOwG69/r3oO8U/5gjqyZ9ecy2/OuEm234kWBY7W5v1HvkPYDSivMMr+NlTkg0zkM0Bpwa2R++1HMI/h6zcMMWJ0dvmuwqrunyKvFdLn4SXneFm2k1fA/va+e52qDrbXQQEZVRi5vpvkVyUoXSnht4qzInmohR0eKMjxhhw1m3bhEORn1CMn3xKdnpJWOfNwC6Px+2RluqZ9AqS6N4gjjg18L+dpxwVg12R1V18StIbzP5VNmC12yZAuYyVZVD6pfZIsEYlE6v/vnnnV5uf16I25qlNkonvJhpyktixDNzzwFnHA0krvqv4PbiBLb5ZX5muPLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=56J3BaFEq21EQ2evXLfHjiL1CH3IElyselRwXcR0iIY=;
- b=CCRGtUplOaCyfVbXSXhgYGKXG8oJy+x0myLICe+uH5fZ+q78t6nNEW1K8qB9LDfmXhSXDf5T6HuvS3L3DeoVFxTG/ecwOiBjHvfia/k9jeWC8sX52NfDrypiZ1fFOCxC3+ZnrTb2Vw5Q6DCMwPCDp48ubbMCPxT86JJSL2CLaf26pgKAuuPiVnKASm7hnJZEUVE3m+FQZbz8xwLZLOdDItHnf1Bi3cWozqNdAzTolkCt3Cx5n4uhvLOdvIZqwGqkzhC5gxm2tb94slYgxJviCEx8OyrDyenrW9xIEV9XcIAeuZDjAU0Rd3giUYG0lkOLHkzA7lmbH20DFsm692Se4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM5PR11MB1899.namprd11.prod.outlook.com (2603:10b6:3:10b::14)
- by DM6PR11MB3564.namprd11.prod.outlook.com (2603:10b6:5:137::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.18; Mon, 22 Aug
- 2022 17:38:56 +0000
-Received: from DM5PR11MB1899.namprd11.prod.outlook.com
- ([fe80::e5bc:d418:aa62:955c]) by DM5PR11MB1899.namprd11.prod.outlook.com
- ([fe80::e5bc:d418:aa62:955c%10]) with mapi id 15.20.5546.023; Mon, 22 Aug
- 2022 17:38:55 +0000
-Message-ID: <2d608273-e37d-cb2c-45da-3213aba55f8e@intel.com>
-Date:   Mon, 22 Aug 2022 10:38:51 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v1] uio: dfl: add IOPLL user-clock feature id
-Content-Language: en-US
-To:     Xu Yilun <yilun.xu@intel.com>
-CC:     Peter Colberg <peter.colberg@intel.com>, Wu Hao <hao.wu@intel.com>,
-        "Tom Rix" <trix@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <matthew.gerlach@linux.intel.com>,
-        <basheer.ahmed.muddebihal@intel.com>, <tianfei.zhang@intel.com>,
-        <marpagan@redhat.com>, <lgoncalv@redhat.com>
-References: <20220817213746.4986-1-peter.colberg@intel.com>
- <Yv29ev8OKyEYcaf/@yilunxu-OptiPlex-7050>
- <acdf9c04-0816-5995-da90-c53153ffac59@intel.com>
- <YwMKzC6HwjYqDxIs@yilunxu-OptiPlex-7050>
-From:   Russ Weight <russell.h.weight@intel.com>
-In-Reply-To: <YwMKzC6HwjYqDxIs@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: MW4PR04CA0140.namprd04.prod.outlook.com
- (2603:10b6:303:84::25) To DM5PR11MB1899.namprd11.prod.outlook.com
- (2603:10b6:3:10b::14)
+        Mon, 22 Aug 2022 13:39:39 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96553F332
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:37 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z2so14913454edc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=YETYSBdZGbHL0Tg4tG/TWQHUhawdSjZCU30HLw/bqZQ=;
+        b=fulab83oMTsxW7dccBev0p+7W/JBtblNus6/b6WUjgoN5VyafMscsPXwGVYeMsounJ
+         lEFO63eSxG8frytNPBzG4RgXoD/rrgVP5ESe2yR8VUYSaht5/TKg5qfWl14CgWTAO4iC
+         giT/EN094TdnbvBlJOLD83hL2ktihC1451bGE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=YETYSBdZGbHL0Tg4tG/TWQHUhawdSjZCU30HLw/bqZQ=;
+        b=dzoap8eORU4EQG28fLdQfZVWAmoQSC8KcsID8uV2+hWyPamkTR+56p7UavWutRFHh5
+         zigbjww+CbetEwillBPZ/IZjWnJq0Cw7HbBnwyBTpbzBupAKgabtSF6O/nCU5yEHD0yG
+         Ok/dSGHOY3eqa9212S0gQUIxW/Q7e4NjBYuMRaZd4NQzTue6OWvsh6Rg7Athr43PikLs
+         42pNhZ2DahIplGW0WT2J9L4q1nUiZGAq9AnhSW+KmIQucY37ajIPpuSjT1AbNOKkncjy
+         hYlhOcuSuSaGzdw0SBkf/8rrjvGL4iBe1ZJZkjcukzItif7IIEUc0a6VPxXFYDuMZHHa
+         Aavg==
+X-Gm-Message-State: ACgBeo3Yvh5v6PL10zAzd3041AFF7l6ufXTazPwKToq8Tjl1oKs5gQDN
+        h3fLEshJpAIFROp+AfgryKaoWNDF+E9WaaPB
+X-Google-Smtp-Source: AA6agR7BEf9SRjM50m0v7mBcIWs1LVvRNgiyn3Lli598YGUFty42UvuBISWrCr5iP9miBOrRaPFEeQ==
+X-Received: by 2002:a05:6402:350b:b0:43e:f4be:c447 with SMTP id b11-20020a056402350b00b0043ef4bec447mr197663edd.427.1661189976517;
+        Mon, 22 Aug 2022 10:39:36 -0700 (PDT)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id bv19-20020a170906b1d300b0073923a68974sm6409941ejb.206.2022.08.22.10.39.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 10:39:35 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id r16so14123958wrm.6
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:34 -0700 (PDT)
+X-Received: by 2002:adf:e843:0:b0:225:221f:262 with SMTP id
+ d3-20020adfe843000000b00225221f0262mr11599499wrn.193.1661189974089; Mon, 22
+ Aug 2022 10:39:34 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ed69a2d6-4130-4ec4-0c3d-08da84652fa3
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3564:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gb5m6PcYkrPu1Zap+92pxwa2OiUI5qr7YcLbR4FGiIVy0n+QLKnVDX9imHaMC1F3m7blO+xFJ/BOAwTsQuxgBNUF/6bcqJYg2PIiA3n+wkRsc4TPh1nLPR2SB4abfg0hogCiwIz+rvwLpLN/xjv8I0BxZHOfXre9cRE2FpEs6oTXCP8BqODQYHEO+32RTG3139Ao+XZT45CiLXJkz8XAc3tW1d2sO8lEbSes9y94IVZbZp7yJPFyl38BeJzYD2+gbKrXVQ2vylmkBevBSvaLQ8zhXy8gJM/ByOSMbF7aokJ51WgtyYn/xqdEpsqqzn84ktQW5QGvcqIz/rGw+foexIRKJxMNw9tfhoyL3YkEY1C86vuNWJQDxwyE013RBeJqc6vlFjj+nZ/4w0XtElK1u6/wH/8vcXC4HL+O0PVbc8TrVslkNcJ+c+uMbsQGRi0iGnApIRq6cdz0ROAu+4Hgnr6FcfnBzerr0XtmSUErlS4M1JIAS8/kfrt4sTVhl2JfbdU8cXMepUF9YnPcxavGcR+OMb0VpFDu5mryXUL+upLD5cCjwv0hk943VuFbzL+b6cjfEnUTBCvw+9GJbDI+kubfzwmaOpDVS2khe2vVJ/rrkkixYNlV6JFc+NuwksRA4ASWloibQ7FmS+Te+ljG0Qk+QAXgdXE7P3gEbxZXlvSSiJaeizbUisejbQGzViEhYc22h6UtATKw5nlOq6dZruIuiJ9oYgUUCguD3Z/59W4XN4fPhRjwCum/zlFcPPrgcFe+vOIXoUPnOC5lOSfnnkRf9uMVIGbqfptirzE0rGLRd+o09LCfpxblTTXbo06Hx8DuVRKakm+AAu249kNmwp0fwI2ZhDoIe/qDjhUhE5U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1899.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(39860400002)(376002)(346002)(366004)(136003)(82960400001)(86362001)(31696002)(38100700002)(316002)(54906003)(37006003)(6636002)(966005)(8936002)(6862004)(5660300002)(66946007)(66556008)(66476007)(8676002)(4326008)(2906002)(83380400001)(186003)(2616005)(478600001)(6486002)(41300700001)(26005)(53546011)(6512007)(6506007)(6666004)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dC9VYkNzQXZLSWlXcFduUFdieTNaRmtvc2lQeEV0QVkrc25WVUUzMnROTVRx?=
- =?utf-8?B?MFZDcVVzWWh4V01lVmtnaGdRYkJCT1ZrZWt6bUExZStOV0RHb2pLWlcyelJU?=
- =?utf-8?B?SGNldFZISFgzWDF5ZmU1TlgvU2ZwcVRkUUNKdm1LenpkYnIwa202UGNQM2lB?=
- =?utf-8?B?dWJqKzhIV2wxSTVSdGdhaGNHWlg2RFcwb0o2N1p2b2gyVGNkVHNaamdkSW9l?=
- =?utf-8?B?NHVBTkZrejlWOHhaNnYrdUJ2V2x2emZoWGVMMGNzUm94ME9ua2JScVZxeUNs?=
- =?utf-8?B?Y2lWeG1PWDJOcFNiOWhwVWdlNEpwVGJjbGlBQTVzK01oL0RDMk5tK1hzdE9T?=
- =?utf-8?B?Nk82bkdlV1FOYWh2SUdEYVozcFR6UDQ2SDZGU3VLYzFidzR6ZmRRTTVpalJF?=
- =?utf-8?B?Z3MyMXBUQmNnQ0I5TmdyTXo5cmN5TzNDL3FEWC9tQWx5L2twUW1QTHlDd1Fw?=
- =?utf-8?B?T3Z2aEJpYVU5WUtHYnlGeFBhZlRvK245K0Q1M0JsMEZwYVk0c1B5aW15aUFt?=
- =?utf-8?B?TGFVWmh0TzJGRlpPQ1JsczhwV1VpcTRVSVM5TlFLSFJJNHg2dWlFWm1uMTFP?=
- =?utf-8?B?cW04L3c3K01JUGFjQnNNWGVLOUdwdDIycTNxQjNaNEtQWU9uNlFubWJ6NEhw?=
- =?utf-8?B?aUNiSnphdmJiUGxLRFB3L2cyUUJXejdkRDFGNEVUeDNTN1FGS0lhMUUyR3VK?=
- =?utf-8?B?NnVJQTdyQUc4cVJya3REbG1rR2daOHU5TVoybWJmUkE5SUJ1RGovcXFtWW4x?=
- =?utf-8?B?MFF4SHVQSEIrNTVJN1FxV0lCVjBjNklNM0xuVjJjaEVROXlocDNja2g0bzhH?=
- =?utf-8?B?dXBVdy9rcW9LVEgycDhYMmJBWFEvV2NCWVBEOUJoTGJmem9kdUd5NVpEOTBv?=
- =?utf-8?B?TmtHQ0tXK3dseGUrTndKdXdob0RlRlJCUTVocm4wQ1Q3R1hKOGkzaXRmdkxa?=
- =?utf-8?B?RHZFMzlHUXA4WFE3bUFMaHRHeE1BeTE2MXFLdnFRUlNhRzQyMGhXMW41V3F1?=
- =?utf-8?B?WmcwRlYyOWY2dGFPOFVCYk5HcVNxNjNoRjR5RDd5emw4M1dheGpPQkxGQ2Q0?=
- =?utf-8?B?dDRNak5lM01DRHdzenp0ajFlLzQ3U2FZYnFEaTA1QmlVbVgxeGtKYU5ydFYr?=
- =?utf-8?B?RTFHVys2L2dBSGY0TWhDU1lQd3RBb1hwS01rQmJ3MG96NHVhU3FvUTArTzQ3?=
- =?utf-8?B?Ykk5bCs0Ymt4anNkT09BdWtxQkczVnRjdzc3clRma01CYkFEaTNmMHQwQ0hl?=
- =?utf-8?B?Q2tvZG5TMXFqbDN0VEE0Q0J2TklBVUlFa0ZLVjB3L0JqaHNyUUc4cE5GMkU2?=
- =?utf-8?B?ZXBKbWhSOGJZWFJndU5jcGpXc0FGd1M4ZG5xdlYyekUzWDlNMGl1Tzl4bW1J?=
- =?utf-8?B?VTNIY29LbXdGUEV3VUhycm1zRGlQVit1TVRudWdtSCtuOHM0RGZmWE9OU1Aw?=
- =?utf-8?B?ZDdFc1dOY20zWWVmdDV5d3UvL2dMVlJ6MU1TOEt2a3RnSjFLWUIxWDArTUNU?=
- =?utf-8?B?MDZENGRJQ0lFQW01aXJ0WjZwWjlGMVRhM3lLVkk5ZnA1V0NoVVRHQmdrbzZx?=
- =?utf-8?B?MWtFMUxKZkttWCs1N0UvMkxieEExYUF1RWVSSGE1b2Q5cTJwcEliRGdSTGtY?=
- =?utf-8?B?T0YveFFSeDRhdXhhVXN0QWtCckozOCticUlCTy9WTXVyKzRSN2paL3NYUi9s?=
- =?utf-8?B?d3ZzYXlBeDdLckROeTN5TTZ0L005bHF0Y1pTc2t2b0dCL2t6a1VlYmdkTXNY?=
- =?utf-8?B?OXcvbmNjSmdNSjNEUi9ZaGdic0thRHgyNlo3di8yamtMSnFodHVJVFdWdVdB?=
- =?utf-8?B?OEgxNWJnL1hibExCbkNia0kxS1l2Z0lBd01ERUJPRk1La0RkOVl0TWcwbHZy?=
- =?utf-8?B?dTZGMThvZFBCMEc5aFhIQURqMjFMNHZVLzRHbS9ZZTFnVDhoNTc1RzFzZTZn?=
- =?utf-8?B?NFNtMFRtV1Q1UGFCL1JKMVJhSE9VZnJiYTU3Q3g4Qy9kUTQ3b2t1WHkxYjA5?=
- =?utf-8?B?djBsaDVnRHFkN3lOd2h1RUNxWEJ2bVgrMXM3K2ExR25LeDE1Wlh2VFAxR2Z2?=
- =?utf-8?B?eDRiQ280MWoya3ZuNEhUL0pxenZGNzFNUGxST1JWNFhTQ3BHaGU2WitZWllz?=
- =?utf-8?B?S0IrRWJqSUtvbkpLdjIwWWcwUWdrSmNPS1dQRUV0YkZEL2Q0Q0dkZDJ3Ym1Y?=
- =?utf-8?B?SlE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed69a2d6-4130-4ec4-0c3d-08da84652fa3
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1899.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 17:38:55.3999
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XMvs93MYFD5++MSUSBye8hDmNTj8eMud86mNvKQTPFr/UZB2TWFL6JmC/xU1yAJd5TdtTg/KMQm77kE8P59pfGjhsABSojMqhPAn0Ji7pp4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3564
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
+In-Reply-To: <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 22 Aug 2022 10:39:17 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+Message-ID: <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Content-Type: multipart/mixed; boundary="0000000000004fa1b205e6d7ee0b"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--0000000000004fa1b205e6d7ee0b
+Content-Type: text/plain; charset="UTF-8"
 
+On Mon, Aug 22, 2022 at 10:08 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> So why don't we just create a "test_bit_acquire()" and be done with
+> it? We literally created clear_bit_unlock() for the opposite reason,
+> and your comments about the new barrier hack even point to it.
 
-On 8/21/22 21:49, Xu Yilun wrote:
-> On 2022-08-18 at 17:38:35 -0600, Russ Weight wrote: >> >> >> On 8/17/22 2=
-1:18, Xu Yilun wrote: >>> On 2022-08-17 at 17:37:46 -0400, Peter Colberg wr=
-ote: >>>> Add a Device Feature List (DFL) feature id for the >>>> configura=
-ble IOPLL user clock source, which can be used to >>>> configure the clock =
-speeds that are used for RTL logic that is >>>> programmed into the Partial=
- Reconfiguration (PR) region of an >>>> FPGA. >>> Why not use linux clock f=
-ramework for this IOPLL? And let the PR >>> driver set it togeter with the =
-RTL logic reporgramming? >> >> Hi Yilun, >> >> We previously explored the p=
-ossibility of plugging into the linux >> clock framework. For this device, =
-setting a desired frequency is >> heavily dependent on a table of values th=
-at must be programmed in >> order to achieve the desired clock speeds. >> >=
-> Here is an example table, indexed by frequency. The first element >> in e=
-ach entry is the frequency in kHz: >> >> https://github.com/OPAE/opae-sdk/b=
-lob/master/libraries/plugins/xfpga/usrclk/fpga_user_clk_freq.h >> >>
->> >> >> >> >> We previously experimented with a kernel-space driver. The
->> implementation exported a sysfs node into which the table values >> for =
-the desired frequency would be written in order to set the >> desired frequ=
-ency. The function of the driver was to execute the >> logic required to pr=
-ogram the device. We did not think this >> implementation should be up-stre=
-amed. >> >> It isn't practical to upstream the frequency tables as they are=
- >> subject to change for future devices. For example, if the >> reference =
-frequency changed in a future device, a whole new table >> of values would =
-have to be added for the new device. In a recent >> transition to a new dev=
-ice, the range of frequencies was increased >> which required an extension =
-to an existing table. > > Making a table for the inputs & outputs is always=
- a easier way to > get things done, but the trade off is, as you said, exte=
-nsion to the > table every time for new outputs. > > So do we really need a=
-ll parameters to be in a table, or these are > actually the outcome of some=
- calculation? Is it possible just > Implementing the calculation.
-For each desired frequency, the table values are produced by calling
-the quartus tool, the same tool that generates the IOPLL RTL logic.
-The quartus tool allows the RTL designer to select different options
-which can affect the table values. For example, the current IOPLL
-used in OFS has two frequency outputs and the desired relationship
-between the two frequencies is 1x/2x until the 2x frequency reaches
-a threshold (about 800MHz) and then the relationship is modified.
+Here's a patch that is
 
-To convert this process into an algorithm would require reverse
-engineering the quartus algorithm for the set of variables and
-clock relationships in a specific implementation. The resulting
-algorithm would have a very narrow application; we would have to
-upstream additional algorithms for future, modified implementations.
-Also, customers have the ability to modify the IOPLL implementation
-if they choose. A table driven driver enables customers to easily
-adapt the driver to their implementation.
+ (a) almost entirely untested (I checked that one single case builds
+and seems to generate the expected code)
 
-We think a userspace table-driven driver is the best approach for
-supporting the user clock.
+ (b) needs some more loving
 
-- Russ
+but seems to superficially work.
 
-> > > If I remember correctly, linux clk framework enables a generic clk > =
-caculation mechanism. It encourages people to model the internal > refclk, =
-plls (and deviders?) separately and construct the clk tree. > Then the spec=
-ified calculation could be simpler for each clk driver. > > I'm not sure th=
-e clk framework fits all your need, but please > investigate it firstly. > =
->> >> A previous implementation of the user clock was also implemented >> i=
-n user-space. The kernel driver exported each of the registers, >> but all =
-of the logic was implemented in user-space. The kernel >> portion can be vi=
-ewed here: >> >> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/l=
-inux.git/tree/drivers/fpga/dfl-afu-main.c#n380 >> >> >> >> >> >> >> This is=
- our reasoning in choosing to implement this driver in
->> user-space. Would you consider a uio based user-space driver to be >> ac=
-ceptable for in this case? > > As usual, we firstly make clear why existing=
- framework cannot fit > the case and should be implemented in userspace, th=
-en everything > would be OK. > > Thanks, Yilun > >> >> - Russ >> >> >>> >>>=
- Thanks, Yilun >>> >>>> The DFL feature id table can be found at: >>>> http=
-s://github.com/OPAE/dfl-feature-id >>>> >>>> Signed-off-by: Peter Colberg <=
-peter.colberg@intel.com> --- >>>> drivers/uio/uio_dfl.c | 2 ++ 1 file chang=
-ed, 2 insertions(+) >>>> >>>> diff --git a/drivers/uio/uio_dfl.c b/drivers/=
-uio/uio_dfl.c >>>> index 8f39cc8bb034..69e93f3e7faf 100644 --- >>>> a/drive=
-rs/uio/uio_dfl.c +++ b/drivers/uio/uio_dfl.c @@ -46,10 >>>> +46,12 @@ stati=
-c int uio_dfl_probe(struct dfl_device *ddev) >>>> >>>> #define FME_FEATURE_=
-ID_ETH_GROUP 0x10 #define >>>> FME_FEATURE_ID_HSSI_SUBSYS 0x15 +#define >>>=
-> PORT_FEATURE_ID_IOPLL_USRCLK 0x14 >>>> >>>> static const struct dfl_devic=
-e_id uio_dfl_ids[] =3D { { FME_ID, >>>> FME_FEATURE_ID_ETH_GROUP }, { FME_I=
-D, >>>>
-FME_FEATURE_ID_HSSI_SUBSYS }, + { PORT_ID, >>>> PORT_FEATURE_ID_IOPLL_USRCL=
-K }, { } }; MODULE_DEVICE_TABLE(dfl, >>>> uio_dfl_ids); -- 2.28.0 >>>> >>
+At a minimum this needs to be split into two (so the bitop and the
+wait_on_bit parts split up), and that whole placement of
+<asm/barrier.h> and generic_bit_test_acquire() need at least some
+thinking about, but on the whole it seems reasonable.
 
+For example, it would make more sense to have this in
+<asm-generic/bitops/lock.h>, but not all architectures include that,
+and some do their own version. I didn't want to mess with
+architecture-specific headers, so this illogically just uses
+generic-non-atomic.h.
+
+Maybe just put it in <linux/bitops.h> directly?
+
+So I'm not at all claiming that this is a great patch. It definitely
+needs more work, and a lot more testing.
+
+But I think this is at least the right _direction_ to take here.
+
+And yes, I think it also would have been better if
+"clear_bit_unlock()" would have been called "clear_bit_release()", and
+we'd have more consistent naming with our ordered atomics. But it's
+probably not worth changing.
+
+               Linus
+
+--0000000000004fa1b205e6d7ee0b
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l751lwl30>
+X-Attachment-Id: f_l751lwl30
+
+IGluY2x1ZGUvYXNtLWdlbmVyaWMvYml0b3BzL2dlbmVyaWMtbm9uLWF0b21pYy5oIHwgOSArKysr
+KysrKysKIGluY2x1ZGUvYXNtLWdlbmVyaWMvYml0b3BzL25vbi1hdG9taWMuaCAgICAgICAgIHwg
+MSArCiBpbmNsdWRlL2xpbnV4L2JpdG9wcy5oICAgICAgICAgICAgICAgICAgICAgICAgICB8IDIg
+Ky0KIGluY2x1ZGUvbGludXgvd2FpdF9iaXQuaCAgICAgICAgICAgICAgICAgICAgICAgIHwgOCAr
+KysrLS0tLQoga2VybmVsL3NjaGVkL3dhaXRfYml0LmMgICAgICAgICAgICAgICAgICAgICAgICAg
+fCAyICstCiA1IGZpbGVzIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0p
+CgpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9hc20tZ2VuZXJpYy9iaXRvcHMvZ2VuZXJpYy1ub24tYXRv
+bWljLmggYi9pbmNsdWRlL2FzbS1nZW5lcmljL2JpdG9wcy9nZW5lcmljLW5vbi1hdG9taWMuaApp
+bmRleCAzZDVlYmQyNDY1MmIuLmY1NmEyNTJkYjllOCAxMDA2NDQKLS0tIGEvaW5jbHVkZS9hc20t
+Z2VuZXJpYy9iaXRvcHMvZ2VuZXJpYy1ub24tYXRvbWljLmgKKysrIGIvaW5jbHVkZS9hc20tZ2Vu
+ZXJpYy9iaXRvcHMvZ2VuZXJpYy1ub24tYXRvbWljLmgKQEAgLTQsNiArNCw3IEBACiAjZGVmaW5l
+IF9fQVNNX0dFTkVSSUNfQklUT1BTX0dFTkVSSUNfTk9OX0FUT01JQ19ICiAKICNpbmNsdWRlIDxs
+aW51eC9iaXRzLmg+CisjaW5jbHVkZSA8YXNtL2JhcnJpZXIuaD4KIAogI2lmbmRlZiBfTElOVVhf
+QklUT1BTX0gKICNlcnJvciBvbmx5IDxsaW51eC9iaXRvcHMuaD4gY2FuIGJlIGluY2x1ZGVkIGRp
+cmVjdGx5CkBAIC0xNTgsNCArMTU5LDEyIEBAIGNvbnN0X3Rlc3RfYml0KHVuc2lnbmVkIGxvbmcg
+bnIsIGNvbnN0IHZvbGF0aWxlIHVuc2lnbmVkIGxvbmcgKmFkZHIpCiAJcmV0dXJuICEhKHZhbCAm
+IG1hc2spOwogfQogCitzdGF0aWMgX19hbHdheXNfaW5saW5lIGJvb2wKK2dlbmVyaWNfdGVzdF9i
+aXRfYWNxdWlyZSh1bnNpZ25lZCBsb25nIG5yLCBjb25zdCB2b2xhdGlsZSB1bnNpZ25lZCBsb25n
+ICphZGRyKQoreworCXVuc2lnbmVkIGxvbmcgbWFzayA9IEJJVF9NQVNLKG5yKTsKKwl1bnNpZ25l
+ZCBsb25nICpwID0gKCh1bnNpZ25lZCBsb25nICopYWRkcikgKyBCSVRfV09SRChucik7CisJcmV0
+dXJuIHNtcF9sb2FkX2FjcXVpcmUocCkgJiBtYXNrOworfQorCiAjZW5kaWYgLyogX19BU01fR0VO
+RVJJQ19CSVRPUFNfR0VORVJJQ19OT05fQVRPTUlDX0ggKi8KZGlmZiAtLWdpdCBhL2luY2x1ZGUv
+YXNtLWdlbmVyaWMvYml0b3BzL25vbi1hdG9taWMuaCBiL2luY2x1ZGUvYXNtLWdlbmVyaWMvYml0
+b3BzL25vbi1hdG9taWMuaAppbmRleCA1YzM3Y2VkMzQzYWUuLjcxZjhkNTRhNTE5NSAxMDA2NDQK
+LS0tIGEvaW5jbHVkZS9hc20tZ2VuZXJpYy9iaXRvcHMvbm9uLWF0b21pYy5oCisrKyBiL2luY2x1
+ZGUvYXNtLWdlbmVyaWMvYml0b3BzL25vbi1hdG9taWMuaApAQCAtMTMsNiArMTMsNyBAQAogI2Rl
+ZmluZSBhcmNoX19fdGVzdF9hbmRfY2hhbmdlX2JpdCBnZW5lcmljX19fdGVzdF9hbmRfY2hhbmdl
+X2JpdAogCiAjZGVmaW5lIGFyY2hfdGVzdF9iaXQgZ2VuZXJpY190ZXN0X2JpdAorI2RlZmluZSBh
+cmNoX3Rlc3RfYml0X2FjcXVpcmUgZ2VuZXJpY190ZXN0X2JpdF9hY3F1aXJlCiAKICNpbmNsdWRl
+IDxhc20tZ2VuZXJpYy9iaXRvcHMvbm9uLWluc3RydW1lbnRlZC1ub24tYXRvbWljLmg+CiAKZGlm
+ZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvYml0b3BzLmggYi9pbmNsdWRlL2xpbnV4L2JpdG9wcy5o
+CmluZGV4IGNmOWJmNjUwMzlmMi4uMjJhZGY3NGQ1YzI1IDEwMDY0NAotLS0gYS9pbmNsdWRlL2xp
+bnV4L2JpdG9wcy5oCisrKyBiL2luY2x1ZGUvbGludXgvYml0b3BzLmgKQEAgLTU5LDcgKzU5LDcg
+QEAgZXh0ZXJuIHVuc2lnbmVkIGxvbmcgX19zd19od2VpZ2h0NjQoX191NjQgdyk7CiAjZGVmaW5l
+IF9fdGVzdF9hbmRfY2xlYXJfYml0KG5yLCBhZGRyKQliaXRvcChfX190ZXN0X2FuZF9jbGVhcl9i
+aXQsIG5yLCBhZGRyKQogI2RlZmluZSBfX3Rlc3RfYW5kX2NoYW5nZV9iaXQobnIsIGFkZHIpCWJp
+dG9wKF9fX3Rlc3RfYW5kX2NoYW5nZV9iaXQsIG5yLCBhZGRyKQogI2RlZmluZSB0ZXN0X2JpdChu
+ciwgYWRkcikJCWJpdG9wKF90ZXN0X2JpdCwgbnIsIGFkZHIpCi0KKyNkZWZpbmUgdGVzdF9iaXRf
+YWNxdWlyZShuciwgYWRkcikJZ2VuZXJpY190ZXN0X2JpdF9hY3F1aXJlKG5yLCBhZGRyKQogLyoK
+ICAqIEluY2x1ZGUgdGhpcyBoZXJlIGJlY2F1c2Ugc29tZSBhcmNoaXRlY3R1cmVzIG5lZWQgZ2Vu
+ZXJpY19mZnMvZmxzIGluCiAgKiBzY29wZQpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC93YWl0
+X2JpdC5oIGIvaW5jbHVkZS9saW51eC93YWl0X2JpdC5oCmluZGV4IDdkZWMzNmFlY2JkOS4uNzcy
+NWI3NTc5Yjc4IDEwMDY0NAotLS0gYS9pbmNsdWRlL2xpbnV4L3dhaXRfYml0LmgKKysrIGIvaW5j
+bHVkZS9saW51eC93YWl0X2JpdC5oCkBAIC03MSw3ICs3MSw3IEBAIHN0YXRpYyBpbmxpbmUgaW50
+CiB3YWl0X29uX2JpdCh1bnNpZ25lZCBsb25nICp3b3JkLCBpbnQgYml0LCB1bnNpZ25lZCBtb2Rl
+KQogewogCW1pZ2h0X3NsZWVwKCk7Ci0JaWYgKCF0ZXN0X2JpdChiaXQsIHdvcmQpKQorCWlmICgh
+dGVzdF9iaXRfYWNxdWlyZShiaXQsIHdvcmQpKQogCQlyZXR1cm4gMDsKIAlyZXR1cm4gb3V0X29m
+X2xpbmVfd2FpdF9vbl9iaXQod29yZCwgYml0LAogCQkJCSAgICAgICBiaXRfd2FpdCwKQEAgLTk2
+LDcgKzk2LDcgQEAgc3RhdGljIGlubGluZSBpbnQKIHdhaXRfb25fYml0X2lvKHVuc2lnbmVkIGxv
+bmcgKndvcmQsIGludCBiaXQsIHVuc2lnbmVkIG1vZGUpCiB7CiAJbWlnaHRfc2xlZXAoKTsKLQlp
+ZiAoIXRlc3RfYml0KGJpdCwgd29yZCkpCisJaWYgKCF0ZXN0X2JpdF9hY3F1aXJlKGJpdCwgd29y
+ZCkpCiAJCXJldHVybiAwOwogCXJldHVybiBvdXRfb2ZfbGluZV93YWl0X29uX2JpdCh3b3JkLCBi
+aXQsCiAJCQkJICAgICAgIGJpdF93YWl0X2lvLApAQCAtMTIzLDcgKzEyMyw3IEBAIHdhaXRfb25f
+Yml0X3RpbWVvdXQodW5zaWduZWQgbG9uZyAqd29yZCwgaW50IGJpdCwgdW5zaWduZWQgbW9kZSwK
+IAkJICAgIHVuc2lnbmVkIGxvbmcgdGltZW91dCkKIHsKIAltaWdodF9zbGVlcCgpOwotCWlmICgh
+dGVzdF9iaXQoYml0LCB3b3JkKSkKKwlpZiAoIXRlc3RfYml0X2FjcXVpcmUoYml0LCB3b3JkKSkK
+IAkJcmV0dXJuIDA7CiAJcmV0dXJuIG91dF9vZl9saW5lX3dhaXRfb25fYml0X3RpbWVvdXQod29y
+ZCwgYml0LAogCQkJCQkgICAgICAgYml0X3dhaXRfdGltZW91dCwKQEAgLTE1MSw3ICsxNTEsNyBA
+QCB3YWl0X29uX2JpdF9hY3Rpb24odW5zaWduZWQgbG9uZyAqd29yZCwgaW50IGJpdCwgd2FpdF9i
+aXRfYWN0aW9uX2YgKmFjdGlvbiwKIAkJICAgdW5zaWduZWQgbW9kZSkKIHsKIAltaWdodF9zbGVl
+cCgpOwotCWlmICghdGVzdF9iaXQoYml0LCB3b3JkKSkKKwlpZiAoIXRlc3RfYml0X2FjcXVpcmUo
+Yml0LCB3b3JkKSkKIAkJcmV0dXJuIDA7CiAJcmV0dXJuIG91dF9vZl9saW5lX3dhaXRfb25fYml0
+KHdvcmQsIGJpdCwgYWN0aW9uLCBtb2RlKTsKIH0KZGlmZiAtLWdpdCBhL2tlcm5lbC9zY2hlZC93
+YWl0X2JpdC5jIGIva2VybmVsL3NjaGVkL3dhaXRfYml0LmMKaW5kZXggZDQ3ODhmODEwYjU1Li4w
+YjFjZDk4NWRjMjcgMTAwNjQ0Ci0tLSBhL2tlcm5lbC9zY2hlZC93YWl0X2JpdC5jCisrKyBiL2tl
+cm5lbC9zY2hlZC93YWl0X2JpdC5jCkBAIC00Nyw3ICs0Nyw3IEBAIF9fd2FpdF9vbl9iaXQoc3Ry
+dWN0IHdhaXRfcXVldWVfaGVhZCAqd3FfaGVhZCwgc3RydWN0IHdhaXRfYml0X3F1ZXVlX2VudHJ5
+ICp3YnFfCiAJCXByZXBhcmVfdG9fd2FpdCh3cV9oZWFkLCAmd2JxX2VudHJ5LT53cV9lbnRyeSwg
+bW9kZSk7CiAJCWlmICh0ZXN0X2JpdCh3YnFfZW50cnktPmtleS5iaXRfbnIsIHdicV9lbnRyeS0+
+a2V5LmZsYWdzKSkKIAkJCXJldCA9ICgqYWN0aW9uKSgmd2JxX2VudHJ5LT5rZXksIG1vZGUpOwot
+CX0gd2hpbGUgKHRlc3RfYml0KHdicV9lbnRyeS0+a2V5LmJpdF9uciwgd2JxX2VudHJ5LT5rZXku
+ZmxhZ3MpICYmICFyZXQpOworCX0gd2hpbGUgKHRlc3RfYml0X2FjcXVpcmUod2JxX2VudHJ5LT5r
+ZXkuYml0X25yLCB3YnFfZW50cnktPmtleS5mbGFncykgJiYgIXJldCk7CiAKIAlmaW5pc2hfd2Fp
+dCh3cV9oZWFkLCAmd2JxX2VudHJ5LT53cV9lbnRyeSk7CiAK
+--0000000000004fa1b205e6d7ee0b--

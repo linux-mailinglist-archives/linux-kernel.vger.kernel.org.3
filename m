@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62D759C132
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1F159C13C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235496AbiHVOB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 10:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
+        id S235537AbiHVOAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 10:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235428AbiHVOAZ (ORCPT
+        with ESMTP id S234427AbiHVOAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 10:00:25 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213DC31DFE
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 07:00:24 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id u6so8972023eda.12
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 07:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=1xFTGxtPnY5rz14UsZfYBsBqowiRgdh5xBnWEgT36ds=;
-        b=v59zmBDYtRB+lVZpv+1Ag5zbMri2KBagr6ZKeFVLQy75tNiPJ1rM0ZhbeQHALFySWH
-         IFO9pDQMz/bE10arladkmQA5wsuS5Nbf1fbmbYX3IpQNtfmhkGmX1pWOpfWMzRNZpU6X
-         Jfix+MLXkkmL8r0nTh4WlJm8Ipe4vGqx0AiOlJi3fUBSVNJ7exJzk6FZ6BCa2EPk8hgx
-         +XDVJeYCN8TGn7XjsfrMLjemNKBEjBxil1chEIk6j2SYxVPQ+YOORLgF7PqrPZ8prHmV
-         XxucP/m3bqqlGNLwvSordUuZQVxhOdyIsbBKBcgnQuVP+KJhQ8yos6MyBM94EvAhcOBm
-         tICw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=1xFTGxtPnY5rz14UsZfYBsBqowiRgdh5xBnWEgT36ds=;
-        b=SQgZFHGnqQfKD7HcBvGtqKS/WYqoLuP2sQ3gT+jJW7vAe0A83HT2H8KCVHJCG3w/zi
-         RHsM5VqUyeDdlBWNAzXo0AQU1/wO/Yq8WHNyT0hzh4MqL1kWZSkOQfgMLAgHE/3hNBom
-         ua0htJ3hNBe+SgtCCJ5z20pBkQQrzBBZ6XqO0vC43/LgWgpJdl+V+vl+7X4woxDqsC7/
-         qj9V+kNBiIlYsLXkUk4Us1XuN3HhBfq5ZQtLseTqvqO03JJkGZ6UfY/Y47NnfOGzWeu0
-         kZq02eHtuNfzmovTWMoXz+6OXaEyYLAU/Sz/1l9NPRXz6KOVvd1GYznIuu5k+6PWOxgw
-         0rug==
-X-Gm-Message-State: ACgBeo3S7qj0tnaU1pNHuEOpJBuV+/qFXXCJfH/b6q4c26hxk5t+DQfE
-        NFmszCjBDx+66Ns27WFAGS4JrUZmr0i14BkoLaqfdBFMuphg2A==
-X-Google-Smtp-Source: AA6agR5cRiKE8XqOz+NcGgEGpahFtal3270yjgEmkMdeEf7MFInCL5IdrjTe14coVeo/FF3SC8RjmC/D0lBogqHTLCM=
-X-Received: by 2002:a05:6402:353:b0:446:2d2c:3854 with SMTP id
- r19-20020a056402035300b004462d2c3854mr13843348edw.193.1661176822067; Mon, 22
- Aug 2022 07:00:22 -0700 (PDT)
+        Mon, 22 Aug 2022 10:00:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B537C37FA9;
+        Mon, 22 Aug 2022 07:00:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A890611B4;
+        Mon, 22 Aug 2022 14:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C97BC433D6;
+        Mon, 22 Aug 2022 14:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661176815;
+        bh=ygchDD9pK3y0Nzdc29fCKU0n3nN9ciMhH2E2TIBjbGo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AicG4BqWHqvSkZEt+dyB/y8VkSh6VTgepBeptecuWUrSlyfYDwbk///q06IAda4vn
+         tsGExcBV+ocWncCtEwyHxjTpYRJF/A/sIe7TCpBCFu9UCFmQ1ELspYR9rlYT7Bsj0G
+         v268fs2iAnAPijWh5H0oD2UIvJ/POoSXJ1h6O4E2bM/rWge9nT3azJs93t+hXSFdBl
+         CneuGKnO8hBVBSkdU+qelhoSdFfG/P3QuZ0XktMqTJXyJAiPf/vxBt0LneXfNcDkI8
+         Ukw/H/C+CRX4WCRVvOJ3/9vaQMeawHKjXbBwM1QuTtqrc1n3+HQBXJK+dNIhKJDK1l
+         wXXdvV0l4CRxw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F405C04E59;
+        Mon, 22 Aug 2022 14:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 22 Aug 2022 19:30:10 +0530
-Message-ID: <CA+G9fYuecPu-n-ujLsv7vL8RjEJA-6rOZjc363+p1oo6v-FKKQ@mail.gmail.com>
-Subject: Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
-To:     open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev
-Cc:     Russell King <linux@armlinux.org.uk>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Rob Herring <robh@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/2] r8152: fix flow control settings
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166117681551.22523.4597726864619729966.git-patchwork-notify@kernel.org>
+Date:   Mon, 22 Aug 2022 14:00:15 +0000
+References: <20220818080620.14538-392-nic_swsd@realtek.com>
+In-Reply-To: <20220818080620.14538-392-nic_swsd@realtek.com>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,109 +58,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The arm64 Qualcomm db410c device boot failed intermittently on
-Linux next-20220822 and Linux mainline 6.0.0-rc1.
+Hello:
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-[    0.000000] Linux version 6.0.0-rc1 (tuxmake@tuxmake)
-(aarch64-linux-gnu-gcc (Debian 11.3.0-3) 11.3.0, GNU ld (GNU Binutils
-for Debian) 2.38.90.20220713) #1 SMP PREEMPT @1661110347
-[    0.000000] Machine model: Qualcomm Technologies, Inc. APQ 8016 SBC
-<trim>
-[    3.609382] Loading compiled-in X.509 certificates
-[    3.702306] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000008
-[    3.702380] Mem abort info:
-[    3.710225]   ESR = 0x0000000096000004
-[    3.711454] s3: Bringing 0uV into 375000-375000uV
-[    3.712713]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    3.717378] s4: Bringing 0uV into 1800000-1800000uV
-[    3.721289]   SET = 0, FnV = 0
-[    3.727634] l1: Bringing 0uV into 375000-375000uV
-[    3.731266]   EA = 0, S1PTW = 0
-[    3.731278]   FSC = 0x04: level 0 translation fault
-[    3.735046] l2: Bringing 0uV into 1200000-1200000uV
-[    3.739166] Data abort info:
-[    3.742737] l4: Bringing 0uV into 1750000-1750000uV
-[    3.746980]   ISV = 0, ISS = 0x00000004
-[    3.746991]   CM = 0, WnR = 0
-[    3.752504] l5: Bringing 0uV into 1750000-1750000uV
-[    3.754966] [0000000000000008] user address but active_mm is swapper
-[    3.754981] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-[    3.754991] Modules linked in:
-[    3.755002] CPU: 1 PID: 10 Comm: kworker/u8:1 Not tainted 6.0.0-rc1 #1
-[    3.760279] l6: Bringing 0uV into 1800000-1800000uV
-[    3.763370] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-[    3.763378] Workqueue: events_unbound deferred_probe_work_func
-[    3.767152] l7: Bringing 0uV into 1750000-1750000uV
-[    3.771188] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    3.771199] pc : pl011_probe+0x30/0x154
-[    3.778480] l8: Bringing 0uV into 1750000-1750000uV
-[    3.783073] lr : amba_probe+0x11c/0x1b0
-[    3.783086] sp : ffff800008073b50
-[    3.783090] x29: ffff800008073b50 x28: 0000000000000000
-[    3.787102] l9: Bringing 0uV into 1750000-1750000uV
-[    3.792712]  x27: 0000000000000000
-[    3.792720] x26: ffff80000af7a368 x25: ffff00000341f00d x24: ffff00003fcdce60
-[    3.798382] l10: Bringing 0uV into 1750000-1750000uV
-[    3.804432] x23: ffff80000adf0fb8 x22: 0000000000000000 x21: ffff000003c02800
-[    3.804449] x20: ffff000003c029b0 x19: 0000000000000000
-[    3.811003] l11: Bringing 0uV into 1750000-1750000uV
-[    3.814850]  x18: ffffffffffffffff
-[    3.814858] x17: 0000000000000000 x16: ffff00003fc4d040 x15: ffff000003c6fb8a
-[    3.814874] x14: ffffffffffffffff
-[    3.822730] l12: Bringing 0uV into 1750000-1750000uV
-[    3.825611]  x13: 00000000000005cf x12: 071c71c71c71c71c
-[    3.825623] x11: 00000000000005cf x10: 0000000000000c00 x9 : ffff8000088ead60
-[    3.831391] l13: Bringing 0uV into 1750000-1750000uV
-[    3.834290]
-[    3.834293] x8 : ffff00000367ad60 x7 : ffff00003fc69ccc x6 : 0000000000000001
-[    3.834310] x5 : ffff80000aa8f000
-[    3.838735] l14: Bringing 0uV into 1750000-1750000uV
-[    3.842798]  x4 : ffff80000aa8f2e8 x3 : 0000000000000000
-[    3.842810] x2 : ffff80000b035380 x1 : 0000000000000000 x0 : ffff000003c02800
-[    3.848640] l15: Bringing 0uV into 1750000-1750000uV
-[    3.851134]
-[    3.851138] Call trace:
-[    3.859837] l16: Bringing 0uV into 1750000-1750000uV
-[    3.863375]  pl011_probe+0x30/0x154
-[    3.863389]  amba_probe+0x11c/0x1b0
-[    3.863400]  really_probe+0xc8/0x3e0
-[    3.871415] l17: Bringing 0uV into 3300000-3300000uV
-[    3.875438]  __driver_probe_device+0x84/0x190
-[    3.875450]  driver_probe_device+0x44/0x100
-[    3.881633] l18: Bringing 0uV into 1750000-1750000uV
-[    3.883860]  __device_attach_driver+0xa4/0x150
-[    3.989109]  bus_for_each_drv+0x84/0xe0
-[    3.992982]  __device_attach+0xb0/0x1f0
-[    3.996714]  device_initial_probe+0x20/0x30
-[    4.000533]  bus_probe_device+0xa4/0xb0
-[    4.004699]  deferred_probe_work_func+0xa8/0xfc
-[    4.008521]  process_one_work+0x1dc/0x450
-[    4.013034]  worker_thread+0x2d0/0x450
-[    4.017200]  kthread+0x108/0x110
-[    4.020844]  ret_from_fork+0x10/0x20
-[    4.024237] Code: 910e0042 d2800013 a9025bf5 aa0003f5 (f9400436)
-[    4.027801] ---[ end trace 0000000000000000 ]---
-[  137.808813] random: crng init done
+On Thu, 18 Aug 2022 16:06:18 +0800 you wrote:
+> These patches fix the settings of RX FIFO about flow control.
+> 
+> Hayes Wang (2):
+>   r8152: fix the units of some registers for RTL8156A
+>   r8152: fix the RX FIFO settings when suspending
+> 
+>  drivers/net/usb/r8152.c | 27 ++++++++++++---------------
+>  1 file changed, 12 insertions(+), 15 deletions(-)
 
-ref:
-https://lkft.validation.linaro.org/scheduler/job/5419258#L2278
+Here is the summary with links:
+  - [net,1/2] r8152: fix the units of some registers for RTL8156A
+    https://git.kernel.org/netdev/net/c/6dc4df12d741
+  - [net,2/2] r8152: fix the RX FIFO settings when suspending
+    https://git.kernel.org/netdev/net/c/b75d61201444
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
-  git_sha: e3f259d33c0ebae1b6e4922c7cdb50e864c81928
-  git_describe: v6.0-rc1-409-ge3f259d33c0e
-  kernel_version: 6.0.0-rc1
-  kernel-config: https://builds.tuxbuild.com/2DgA4YUQ8t1rgsLXKtyXRLM7wdg/config
-  vmlinux: https://builds.tuxbuild.com/2DgA4YUQ8t1rgsLXKtyXRLM7wdg/vmlinux.xz
-  System.map: https://builds.tuxbuild.com/2DgA4YUQ8t1rgsLXKtyXRLM7wdg/System.map
-  build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/618915641
-  artifact-location: https://builds.tuxbuild.com/2DgA4YUQ8t1rgsLXKtyXRLM7wdg
-  toolchain: gcc-11
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---
-Linaro LKFT
-https://lkft.linaro.org
+

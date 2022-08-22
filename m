@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A0059CA54
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950E659CA5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbiHVUrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 16:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S237704AbiHVUu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 16:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232105AbiHVUrO (ORCPT
+        with ESMTP id S234517AbiHVUux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 16:47:14 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF2C558DE
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:47:14 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id l18-20020a6bd112000000b0067cb64ad9b2so6347016iob.20
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:47:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=ckYm9/frTHKg5Q1caJilSY/IDUA7LKV/J33LIJTS+6o=;
-        b=xlx5Shf3WIL0aBc2q5a2rtZ1tbuwsdP+zZ64/0IRSxi0e0PBGvdgJfUDWK0pzXWwf2
-         fT9xRf20+5ZBkQRXRLjgsxnJ5iWODrSo0hlynszlyIxvWd9mOWgR+4SdwKS3zmZeFaPW
-         6PgoiTZu7RVF+BtwhirAMXInouddunqXRKJ9Pfb1rq5Ry9f2Ddt+nH+3brRYdrQXA7ES
-         rOPPJ1vtulE+LwCbJk19Pk8JWLUptEXHflLR80hQSVlUq7Vv92T7CNy2hsol7i/iNX3Q
-         2TCJJFJ1ylUDf6RF2BzlBJvusQfP7zziuMrogM7ZajQ+gdyNhJTEkfB/2czzrRkR6njv
-         PaTA==
-X-Gm-Message-State: ACgBeo0vwqKLMZiGt3N2A4tUOh8jzc/gFpk4cOzJvmZWxmRgzLkDoAU+
-        zKXxHhDlDvn1UGPWaO7BIgG2X+FtRxXwgak5fk6fGbUwL3x6
-X-Google-Smtp-Source: AA6agR6YKQu5Soa4+q0bPpVeFbN8zg4kkMp/JQTJsc3IEH4Oq0YU6kHxNZ9NCy4plQ/ZFex72UUsvPyPZFK9XSwxn+cG2NVsEMVN
+        Mon, 22 Aug 2022 16:50:53 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6896C50040;
+        Mon, 22 Aug 2022 13:50:51 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id A3F7E1C0005; Mon, 22 Aug 2022 22:50:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1661201449;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fZ/pgSVExMd0u5k55JxcceZ7T5/ac1VGYLI2Pl48nAw=;
+        b=BjtHnrzjejjTBlfHYD7qko+43NbC0qN1C1K4S0mY7A24qVUxhC1tCg0mIqxqpEUrnPgVla
+        srBaus38/LBTcnsHCLDzt12gsBpbBgyexLT6miJ+oRzX/rw1I+IX/k2JaQXXJYjwcuxFqI
+        v7Jn4drq8K1FyUHs5S63KguG+ySahcg=
+Date:   Mon, 22 Aug 2022 22:50:49 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
+        icenowy@aosc.xyz, martijn@brixit.nl,
+        kernel list <linux-kernel@vger.kernel.org>,
+        phone-devel@vger.kernel.org, mchehab@kernel.org,
+        linux-media@vger.kernel.org
+Subject: Re: gc2145 camera driver (front camera on PinePhone)
+Message-ID: <20220822205049.GA18272@duo.ucw.cz>
+References: <20220822180531.GA27226@duo.ucw.cz>
+ <20220822182058.xnpwfdjm7zmoid7y@core>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1683:b0:345:9e65:cd07 with SMTP id
- f3-20020a056638168300b003459e65cd07mr10403135jat.128.1661201233559; Mon, 22
- Aug 2022 13:47:13 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 13:47:13 -0700
-In-Reply-To: <000000000000b5187d05e6c08086@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006d456105e6da8d58@google.com>
-Subject: Re: [syzbot] INFO: task hung in scsi_remove_host
-From:   syzbot <syzbot+bafeb834708b1bb750bc@syzkaller.appspotmail.com>
-To:     bvanassche@acm.org, dsterba@suse.com, hch@lst.de, hdanton@sina.com,
-        jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        ming.lei@redhat.com, nborisov@suse.com,
-        syzkaller-bugs@googlegroups.com, wqu@suse.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="UlVJffcvxoiEqYs2"
+Content-Disposition: inline
+In-Reply-To: <20220822182058.xnpwfdjm7zmoid7y@core>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
 
-commit ae643a74ebdb150b004601d0d5fe5a1faba9b04d
-Author: Qu Wenruo <wqu@suse.com>
-Date:   Sun May 22 11:47:48 2022 +0000
+--UlVJffcvxoiEqYs2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    btrfs: introduce a data checksum checking helper
+Hi!
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=176ef485080000
-start commit:   e3f259d33c0e Merge tag 'i2c-for-6.0-rc2' of git://git.kern..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=14eef485080000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10eef485080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3bd9363f7b80ef9c
-dashboard link: https://syzkaller.appspot.com/bug?extid=bafeb834708b1bb750bc
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=108e1a3d080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=154720f3080000
+> > I'd like to mainline support for gc2145 camera on pinephone. So far I
+> > did trivial cleanups over the Megi's driver. I started with 5.15
+> > version from Mobian.  I guess yaml description of the binding needs to
+> > be provided, too? (Would someone have a good starting point here?)
+> >=20
+> > Any hints? Are there better starting points?
+>=20
+> Here's some reverse engineering work: https://xnux.eu/tablet-hacking/#017
+> that went into it, that may be helpful.
 
-Reported-by: syzbot+bafeb834708b1bb750bc@syzkaller.appspotmail.com
-Fixes: ae643a74ebdb ("btrfs: introduce a data checksum checking helper")
+Thanks for pointer. I was able to find register descriptions (etc) on
+the web, but I assume you already know about these?
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--UlVJffcvxoiEqYs2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYwPsKQAKCRAw5/Bqldv6
+8rDwAJ4gLtDlsznXiPxQoOv8TKYRJ6siuwCbBH6YrDQfUFBZ8FoTiPkbEnHrQps=
+=2MYQ
+-----END PGP SIGNATURE-----
+
+--UlVJffcvxoiEqYs2--

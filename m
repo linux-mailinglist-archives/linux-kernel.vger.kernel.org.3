@@ -2,133 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957E059C99D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F3259C9B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232228AbiHVUJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 16:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
+        id S232720AbiHVUMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 16:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232145AbiHVUJG (ORCPT
+        with ESMTP id S232688AbiHVUMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 16:09:06 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8C851A0E
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661198945; x=1692734945;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=X3lntCW8tAwLfXyBJz2LcFV/4aMYlTAULIq84PkjceU=;
-  b=kS03XLUjtkYmpsZWKKnyRXD8xgsqgXIYnFczZtigOhUAY2+cJK53F7NJ
-   P9qeazAMqYe2sYBDPXUNied+Gu8FRbqL+iJ7o5mZpow8koIoIQDH5RIWT
-   PykABPrESd8Ej6TRebCZDLGE+V7t4Zhwhy6kSk2dl97kcZq75Q+eQLvSh
-   ITC3U+CUA/MumGHZ/u/Oo5fRcpKjXuF8LhaVCPIYAchHS08mqGlArkggu
-   CRXjsPQeKmsJsHojWdtkYpI8hwdEQIxu7qR+VGT8C36RK+o/HvxM+62yh
-   4QudD7ihIZJfxTcihRBn5/2aSZjNjkkhzNXVtLg5R9QFbX/NwR3UdG9rj
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="276539358"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="276539358"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 13:09:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="698414222"
-Received: from otc-wp-03.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.79])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Aug 2022 13:09:04 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        x86@kernel.org, Joerg Roedel <joro@8bytes.org>,
-        "Lu Baolu" <baolu.lu@linux.intel.com>
-Cc:     Raj Ashok <ashok.raj@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Borislav Petkov" <bp@alien8.de>, "Ingo Molnar" <mingo@redhat.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: [PATCH 2/2] iommu: Use the user PGD for SVA if PTI is enabled
-Date:   Mon, 22 Aug 2022 13:12:13 -0700
-Message-Id: <20220822201213.352289-3-jacob.jun.pan@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220822201213.352289-1-jacob.jun.pan@linux.intel.com>
-References: <20220822201213.352289-1-jacob.jun.pan@linux.intel.com>
+        Mon, 22 Aug 2022 16:12:35 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF39543CB
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:12:32 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id f17so5262729pfk.11
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:12:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=EnKbvX9xMcUF8bvw923k4bLQbt044bTDeeYvXJD7Czs=;
+        b=ZRBjLD5DfpCjiGPnLVcp8T95oJyFpcwl/FshmKOsc5f+ipkEpmrxPMkPmtNGASxBXZ
+         t3eX8tLsBzZOra5EHFU340BNRI7sV3qioe6iMcHKeW4bNdir3ZUqQgW9oBK5xwc1tPDl
+         t+obqjrxd4v8QHRJ6GR08bTFPAwtZz789dhwI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=EnKbvX9xMcUF8bvw923k4bLQbt044bTDeeYvXJD7Czs=;
+        b=JHi/U2LRzSkv6qaVYikbQdSrKie27gg6UfpHVxdnaMbGJzp8QYqdsDP1m9f5PZthKU
+         nkiyQ7r1l2evU8d47VXX48wfZ8yFLdPtQ4OE6Y+YVbV/SpK0W/F1OUxQwLBqx2+hYpPY
+         R8jCt36bsDcQhvS3wFXyXkS26GLDa9OOm01zodOegIlfObAcEJSG27RaZOcJ4kSV9Uz6
+         9LXLH9wTWz1Wz4XSKEhAgnhPc2qtnkk2ZmQdGc3gk4oU8jdQtCAE0T+YSh606vntSHjz
+         p9ORn54M/8tDSGIIST2/phK1Or1WJYrTNNFUOvKotn3DWJoX4qB8J0o39iv8nEyrdKa5
+         cK6Q==
+X-Gm-Message-State: ACgBeo3vS9qLJZ5hDmCYCZZzBE2QZNsY+9gs5Sukbj1gdIe7o9amHKUg
+        6THrA5g3LmlF5Kon0zOeWxUQcw==
+X-Google-Smtp-Source: AA6agR5G+bqfudvWxfo80uSnqhz04LgJNbj8hzZj4TJPUbvcxTt36OI0WWl0Nwrzjkz/NDeeRDq2IQ==
+X-Received: by 2002:a63:5252:0:b0:42a:9680:bd9c with SMTP id s18-20020a635252000000b0042a9680bd9cmr7772626pgl.469.1661199152102;
+        Mon, 22 Aug 2022 13:12:32 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n14-20020a170903110e00b0016d6963cb12sm8773868plh.304.2022.08.22.13.12.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 13:12:31 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 13:12:30 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        thomas.hellstrom@linux.intel.com, jani.nikula@intel.com,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, chris@chris-wilson.co.uk,
+        airlied@linux.ie, linux-hardening@vger.kernel.org,
+        matthew.auld@intel.com, mchehab@kernel.org, nirmoy.das@intel.com,
+        Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+Subject: Re: [PATCH v7 1/8] overflow: Move and add few utility macros into
+ overflow
+Message-ID: <202208221301.366A33DACA@keescook>
+References: <20220816093525.184940-1-gwan-gyeong.mun@intel.com>
+ <20220816093525.184940-2-gwan-gyeong.mun@intel.com>
+ <Yv10sQADwdZrIV42@alfio.lan>
+ <202208171657.63AE7AC@keescook>
+ <f3370fb1-5318-c662-294b-2c7fe693efd6@intel.com>
+ <52c09fde-f788-4c2b-efdc-d1783dbc0f6c@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <52c09fde-f788-4c2b-efdc-d1783dbc0f6c@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With page table isolation, the kernel manages two sets of page tables
-for each process: one for user one for kernel. When enabling SVA, the
-current x86 IOMMU drivers bind device and PASID with the kernel copy
-of the process page table.
+On Tue, Aug 23, 2022 at 04:32:10AM +0900, Gwan-gyeong Mun wrote:
+> On 8/22/22 11:05 PM, Andrzej Hajda wrote:
+> > On 18.08.2022 02:12, Kees Cook wrote:
+> > > On Thu, Aug 18, 2022 at 01:07:29AM +0200, Andi Shyti wrote:
+> > > > [...]
+> > > > > +#define safe_conversion(ptr, value) ({ \
+> > > > > +    typeof(value) __v = (value); \
+> > > > > +    typeof(ptr) __ptr = (ptr); \
+> > > > > +    overflows_type(__v, *__ptr) ? 0 : ((*__ptr =
+> > > > > (typeof(*__ptr))__v), 1); \
+> > > > > +})
+> > > 
+> > > I try to avoid "safe" as an adjective for interface names, since it
+> > > doesn't really answer "safe from what?" This looks more like "assign, but
+> > > zero when out of bounds". And it can be built from existing macros here:
+> > > 
+> > >     if (check_add_overflow(0, value, ptr))
+> > >         *ptr = 0;
+> > > 
+> > > I actually want to push back on this a bit, because there can still be
+> > > logic bugs built around this kind of primitive. Shouldn't out-of-bounds
+> > > assignments be seen as a direct failure? I would think this would be
+> > > sufficient:
+> > > 
+> > > #define check_assign(value, ptr)    check_add_overflow(0, value, ptr)
+> > > 
+> > > And callers would do:
+> > > 
+> > >     if (check_assign(value, &var))
+> > >         return -EINVAL;
+> > > 
+> Yes, I also like check_assign() you suggested more than safe_conversion.
+> As shown below, it would be more readable to return true when assign
+> succeeds and false when it fails. What do you think?
 
-While there is no known "Meltdown" type of DMA attack, exposing
-kernel mapping to DMA intended for userspace makes the system vulnerable
-unnecessarily. It also breaks the intention of PTI.
+No, this inverts the style of all the other check_*() functions, so it
+should remain "non-zero is failure".
 
-This patch replaces kernel page table PGD with the user counterpart,
-thus fulfill the promise of PTI on the DMA side.
+> /**
+>  * check_assign - perform a type conversion (cast) of an source value into
+>  * a new variable, checking that the destination is large enough to hold the
+>  * source value.
+>  *
+>  * @value: Source value
+>  * @ptr: Destination pointer address, If the pointer type is not used, a
+> warning message is output during build.
+>  *
+>  * Returns:
+>  * If the value would overflow the destination, it returns false. If not
+> return true.
+>  */
+> #define check_assign(value, ptr) __must_check_overflow(({	\
+> 	typecheck_pointer(ptr); 		\
+> 	!__builtin_add_overflow(0, value, ptr);	\
+> }))
 
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
----
- drivers/iommu/amd/iommu_v2.c | 4 +++-
- drivers/iommu/intel/svm.c    | 5 ++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+Please don't use the __builtin*s, instead stick to the check_* family,
+as they correctly wrap the builtins and perform type checking, etc. As
+mentioned, check_assign() should just be:
 
-diff --git a/drivers/iommu/amd/iommu_v2.c b/drivers/iommu/amd/iommu_v2.c
-index 696d5555be57..aea3075b94af 100644
---- a/drivers/iommu/amd/iommu_v2.c
-+++ b/drivers/iommu/amd/iommu_v2.c
-@@ -600,6 +600,7 @@ int amd_iommu_bind_pasid(struct pci_dev *pdev, u32 pasid,
- 	struct pasid_state *pasid_state;
- 	struct device_state *dev_state;
- 	struct mm_struct *mm;
-+	pgd_t *pgd;
- 	u32 sbdf;
- 	int ret;
- 
-@@ -645,8 +646,9 @@ int amd_iommu_bind_pasid(struct pci_dev *pdev, u32 pasid,
- 	if (ret)
- 		goto out_unregister;
- 
-+	pgd = static_cpu_has(X86_FEATURE_PTI) ? kernel_to_user_pgdp(mm->pgd) : mm->pgd;
- 	ret = amd_iommu_domain_set_gcr3(dev_state->domain, pasid,
--					__pa(pasid_state->mm->pgd));
-+					__pa(pgd));
- 	if (ret)
- 		goto out_clear_state;
- 
-diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-index 8bcfb93dda56..7472cd98d3e8 100644
---- a/drivers/iommu/intel/svm.c
-+++ b/drivers/iommu/intel/svm.c
-@@ -332,6 +332,7 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
- 	struct intel_svm *svm;
- 	unsigned long sflags;
- 	int ret = 0;
-+	pgd_t *pgd;
- 
- 	svm = pasid_private_find(mm->pasid);
- 	if (!svm) {
-@@ -394,7 +395,9 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
- 	sflags = (flags & SVM_FLAG_SUPERVISOR_MODE) ?
- 			PASID_FLAG_SUPERVISOR_MODE : 0;
- 	sflags |= cpu_feature_enabled(X86_FEATURE_LA57) ? PASID_FLAG_FL5LP : 0;
--	ret = intel_pasid_setup_first_level(iommu, dev, mm->pgd, mm->pasid,
-+
-+	pgd = static_cpu_has(X86_FEATURE_PTI) ? kernel_to_user_pgdp(mm->pgd) : mm->pgd;
-+	ret = intel_pasid_setup_first_level(iommu, dev, pgd, mm->pasid,
- 					    FLPT_DEFAULT_DID, sflags);
- 	if (ret)
- 		goto free_sdev;
+#define check_assign(value, ptr)    check_add_overflow(0, value, ptr)
+
+I don't think any of the other code is needed? What's the use-case for
+the other stuff? i.e. Why does anything need overflows_type()?
+
+-Kees
+
 -- 
-2.25.1
-
+Kees Cook

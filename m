@@ -2,102 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D3459C396
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0C559C39D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236924AbiHVQBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43556 "EHLO
+        id S236946AbiHVQBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236964AbiHVQAq (ORCPT
+        with ESMTP id S236976AbiHVQAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:00:46 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE60515A38;
-        Mon, 22 Aug 2022 09:00:45 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id 2so10355825pll.0;
-        Mon, 22 Aug 2022 09:00:45 -0700 (PDT)
+        Mon, 22 Aug 2022 12:00:49 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81ADC165A5
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:00:48 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id v23so5041666plo.9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:00:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc;
-        bh=FvmQjkF9ZDVyA2Ag3uiBTxGfKnCghKIGSTohZ1i8iLk=;
-        b=cFpOtxOtzfwaOsqhR7c/P3zSbO5PHe4Aej+Z/5qu74aoA7L+quYCbnIn/S99JrbZL6
-         PD6Pi8OxWArtogsHXuK0ihoZSsvqkNvgBO7FdtcWCgu2qHt6ynk51RRP1aWdlYZua8+w
-         gyArMnH/NQO4J2BidgzfPlHNYnvbekZidzdZRSquB8uKz8P4fu9jsZ6qwp2fEkQ+qKhc
-         yQGPHJ6243rt874dTpW05S/lvzzfld9kNDo5y5pcoX8AsgPQpHPsl/A0jKmVEAHyw8Af
-         0jsOvYB+6Tr8FxPMlIY07LTcu8Dp7xFRvmn0J3Zod+6dGBgQ8SAxQy4bsT0eSjwE4D9M
-         iJMg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=Eusj5tRM9kHkp0fXxuOOeVVvjzsgsdMohVFpv8zrLO4=;
+        b=cQyu75g/cav4GQAjP/WFxwtJxNW8VZmv3fp1w4YDEmZ4de270lSdk7jaTICAtxFBT0
+         bspKfS7XijoVt3aiWe0v6mUfwrTsQZ9q4SnlJ4qABDAY+DLiLCnGUmescm0Lis5SwU3f
+         R6mrpB5h/jTR0+8+JRmONZQxGjNbmFK4+EqW3as2dks6zno7VUy/b0AA5cb18YpbrZTr
+         ZV7SySP1+LT9ZLkpM/bjJhczWSsGEJQxPw9/FgetzMOKsuRK6e3MOuNmjipZFcjKlsHf
+         6TkxQlC/55P89aJwRmFAOiW8beu0W4n6zHTXnbr//GyndxAki9BoBpqk2oN965pV5K8u
+         DuLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc;
-        bh=FvmQjkF9ZDVyA2Ag3uiBTxGfKnCghKIGSTohZ1i8iLk=;
-        b=qPdCEz9QqPZ+vFhBEd7HB0ZeweJ6LW/l2KGMj9n0xxFkHX5FmEB3xHQJyVqeK0nXJT
-         Oq4oKg2ySP9ZPlUQHWoYM2Fx5scrsxzOCCXscFsstiGyXfR+3Bdgqbc/TRtHb2LJEfty
-         N6zlXKBxnd79AjztNBrxOtgdn6V9cUaUnS052d/zHtUAoEuLMVSpf2E/0REaM101q19v
-         kjNRBR4mFVf3bA8jPbrg0lmSjyCDIq28xEF3Zqy52mIhEfgVxraC+vOdJLDMAZLuWuLF
-         7wh59aofs4jyGczzbCxcUhfYd75NBUliyTvZd4xJI96Hojg28FgOaRhw0ZO6fJ85NHfy
-         Q5Cg==
-X-Gm-Message-State: ACgBeo0L2SY6h0C6OUM46eOJgMFk+KwAnG7CcvCzMVSCrxZGTdllbp/z
-        nbGd6Tp5J7Ls8pH8pne5ANs=
-X-Google-Smtp-Source: AA6agR59LmQbdWEk89W5X/9af1tkd4/BZkxiS++0OJ8Sc4EFOQjnWk2t9ViZSha0gb8OweAPai7m3A==
-X-Received: by 2002:a17:90a:ab15:b0:1f4:fc25:f180 with SMTP id m21-20020a17090aab1500b001f4fc25f180mr29314176pjq.144.1661184045466;
-        Mon, 22 Aug 2022 09:00:45 -0700 (PDT)
-Received: from [127.0.0.1] ([103.159.189.130])
-        by smtp.gmail.com with ESMTPSA id g21-20020a170902d1d500b0016397da033csm8539060plb.62.2022.08.22.09.00.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 09:00:45 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 22:00:37 +0600
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-To:     Hawkins Jiawei <yin31149@gmail.com>, dan.carpenter@oracle.com
-CC:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
-        kuba@kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
-        netdev@vger.kernel.org, pabeni@redhat.com, paskripkin@gmail.com,
-        syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
-Subject: Re: [PATCH] rxrpc: fix bad unlock balance in rxrpc_do_sendmsg
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220822153944.6204-1-yin31149@gmail.com>
-References: <20220822140532.GF2695@kadam> <20220822153944.6204-1-yin31149@gmail.com>
-Message-ID: <0ED076C1-6250-43EA-A7BE-948DFAEE851A@gmail.com>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Eusj5tRM9kHkp0fXxuOOeVVvjzsgsdMohVFpv8zrLO4=;
+        b=kWV8znkUqX+zT4N61AAqjwDYSvlY7UoUd/dOKtv9czYhrcwk8rZltexhNxtXPDhoGr
+         WUH1zjx3GY9A11JrfSU/x+z6YeTfJi7xSNSw3Wxb8A9VOA6516vFgj++ii4F4JZUS5NW
+         M7wA6YFpG+EH66947Sz/TWhekwRdVPeoc5HkDq+orW4eVOFSrZn35xhuWvcdLDMoOMkl
+         il+6sO1QZ5qnUl/uLYkf6s9fgVKA2w7+bDNDIbGgooAXWIqXgywbs/x1Sv6Lg75eemDq
+         fAvXHKipFp225izlHJpuuo1S1m1cJAT7i4sUEU+F5nOVxfQxUAJ5HI/RW3N9EvcxF7BI
+         rI3g==
+X-Gm-Message-State: ACgBeo0sbI0BUqU/TK9sYcPcBr4191a5LyTDkH60ai1iHIXVkfY6pVer
+        sTyAfeDT0X+RKcvVtX3MJUw3uw==
+X-Google-Smtp-Source: AA6agR6fCF0L6EVpaGRYH0oYC7Z/nnw1ZkOquqr0XVyEDXvA/D2z9UwNWnUew/rZ57W3EBNWQSBhhw==
+X-Received: by 2002:a17:903:187:b0:172:dc6b:5ec6 with SMTP id z7-20020a170903018700b00172dc6b5ec6mr9390423plg.95.1661184046711;
+        Mon, 22 Aug 2022 09:00:46 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id nk24-20020a17090b195800b001fb3522d53asm1837027pjb.34.2022.08.22.09.00.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 09:00:46 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 16:00:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     cgel.zte@gmail.com
+Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>
+Subject: Re: [PATCH linux-next v2] KVM: SVM: Remove the unneeded result
+ variable
+Message-ID: <YwOoKk5PLnEDGI2A@google.com>
+References: <20220822013720.199757-1-ye.xingchen@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822013720.199757-1-ye.xingchen@zte.com.cn>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Aug 22, 2022, cgel.zte@gmail.com wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Return the value from sev_guest_activate(&activate, error) and
+> sev_issue_cmd_external_user(f.file, id, data, error) directly
+> instead of storing it in another redundant variable.And also change
+> the position of handle and asid to simplify the code.
+> 
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+> v1 -> v2
+> Suggested-by: SeanChristopherson <seanjc@google.com>
+> 
+> Change the position of handle and asid.
+> Change the explain about this patch.
+> Dropping the comment about asid + handle.
+>  arch/x86/kvm/svm/sev.c | 19 ++++++-------------
+>  1 file changed, 6 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 28064060413a..4448f2e512b9 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -276,31 +276,24 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>  
+>  static int sev_bind_asid(struct kvm *kvm, unsigned int handle, int *error)
+>  {
+> -	struct sev_data_activate activate;
+> -	int asid = sev_get_asid(kvm);
+> -	int ret;
+> -
+> -	/* activate ASID on the given handle */
+> -	activate.handle = handle;
+> -	activate.asid   = asid;
+> -	ret = sev_guest_activate(&activate, error);
+> +	struct sev_data_activate activate = {
+> +		.handle = handle,
+> +		.asid = sev_get_asid(kvm),
+> +	};
+>  
+> -	return ret;
+> +	return sev_guest_activate(&activate, error);
+>  }
+>  
+>  static int __sev_issue_cmd(int fd, int id, void *data, int *error)
+>  {
+>  	struct fd f;
+> -	int ret;
+>  
+>  	f = fdget(fd);
+>  	if (!f.file)
+>  		return -EBADF;
+>  
+> -	ret = sev_issue_cmd_external_user(f.file, id, data, error);
+> -
+>  	fdput(f);
+> -	return ret;
+> +	return sev_issue_cmd_external_user(f.file, id, data, error);
 
+Again, this is broken, the fdput() needs to stay after f.file is consumed, i.e.
+eliminating "ret" is wrong.
 
-On August 22, 2022 9:39:43 PM GMT+06:00, Hawkins Jiawei <yin31149@gmail=2E=
-com> wrote:
->On Mon, 22 Aug 2022 at 22:06, Dan Carpenter <dan=2Ecarpenter@oracle=2Ecom=
-> wrote:
-
->I trid this before, it doesn't work as Dan points out=2E I think
->it seems that mutex_is_locked() only checks whether there is a task
-
-I see=2E
->holding the mutex, but do not check whether it is current task holding
->mutex=2E I also tried lockdep_is_held(), lockdep_is_held() seems can dete=
-ct
-
-Ok=2E
->call->user_mutex is still held accurately, although this cannot be the pa=
-tch=2E
-
-Useful to know! Thanks for the information=2E
-
-  -- Khalid Masum=20
-
+>  }
+>  
+>  static int sev_issue_cmd(struct kvm *kvm, int id, void *data, int *error)
+> -- 
+> 2.25.1

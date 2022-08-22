@@ -2,89 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 034F459C60E
+	by mail.lfdr.de (Postfix) with ESMTP id EE98F59C611
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236271AbiHVSY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 14:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
+        id S235677AbiHVSZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 14:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237422AbiHVSYY (ORCPT
+        with ESMTP id S235224AbiHVSZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 14:24:24 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABE6481D3;
-        Mon, 22 Aug 2022 11:24:20 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id u14so13212917oie.2;
-        Mon, 22 Aug 2022 11:24:20 -0700 (PDT)
+        Mon, 22 Aug 2022 14:25:04 -0400
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08A61837F;
+        Mon, 22 Aug 2022 11:25:03 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id h20-20020a056830165400b00638ac7ddba5so8268506otr.4;
+        Mon, 22 Aug 2022 11:25:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=kHHAGkcdDwIUojsw/Qh9mTAcNHVZ/83Lhyn//UEbyGE=;
-        b=KCM5lV6jh22OXLeWJuB2PF+QCC0TgTlKK3tnexJR1au8KWsichEDWaCgGAcFCNypyW
-         kXjuQYUUYyJJAWRTUDHD8gMnbvjz7KAhtnVgYlwWblmovisc9lM5nYimMJh8aIRbALUk
-         t78kFsAIAm/+ZYWUKzomcf9jBtjuppSb8eiNvjB459eBts2v2db+Wuzyn4ma/LNx5VbC
-         Y7SuDm0G56V/4aVvzl0Mj7e2kWzzII5g7Nu4bBfJBkYZUJKmmKCciSDhqR/NpO4ZkwNu
-         0qmnj1jmLNaPUKkk+hk0+pzZPUvJr9iP+Z8CohSlwgN2Xf64/Vcc4qdnA+ZpSeZeRJOa
-         okBg==
-X-Gm-Message-State: ACgBeo3SdrQGZWMmd2AzZBddFm+xglkb48wcrBNKXRCsnQZxun9D/u9y
-        5lEvcevkRGpkbyyYAOYT5g==
-X-Google-Smtp-Source: AA6agR4GcnCSOqfMPx7kKucGwdxFpONZqkYeDNNgwvLBMASnPewmx+dR5MZxR1QRtg6AOjnDW1mCwA==
-X-Received: by 2002:a05:6808:3a9:b0:343:4b14:ccce with SMTP id n9-20020a05680803a900b003434b14cccemr11840129oie.41.1661192659071;
-        Mon, 22 Aug 2022 11:24:19 -0700 (PDT)
+        bh=KgI6tvcF5ekm6PkD5j91BZaJAeBSFOE8AYovOrfGK1o=;
+        b=wLyZIxjOqXeEvdrue5CYYnPGxWGSQfA094SHLyMW/eP/0dYjsKllcDxvdzUb/UmwXT
+         qtO5nisY4RgfgqtzjbZodkkTGy+FTeSaBjafOhV5IyfbD54t6PowJx+rm97mWA/1+r6H
+         jmEe0qaFjQBfkJrmLh+viFdo7DbBeI1p3req+2XTUdDj4E/smSYR8N7SvMlaEMxvO2pE
+         DoRzvV1Z5mKNvePQgxN6YoEW4jvEPRlxKy6kB2GFt3Qnht+xhMPBWXf9zCgwxHsRo51M
+         SlqNsNuQncQefVqtVgThCbR7ZxRj3hsFG/IuXYRleTxJCFmxNccZbeQ+V4EWOu6Q79Fa
+         FIQw==
+X-Gm-Message-State: ACgBeo0JixTAHg4Lv3LOC/HNF8mmNP1lGnLlr2VnVAKNoJ2NcxqOL3PL
+        3/wYCx5I36te2hONrEc4oA==
+X-Google-Smtp-Source: AA6agR5txWZKQZG3RQw2mRr0rNhMvBqip6eol4eL2ljd2cDvICfAIwhZ+UURdLKdP33prwbEegj2DQ==
+X-Received: by 2002:a9d:6a4d:0:b0:638:9c7b:40fe with SMTP id h13-20020a9d6a4d000000b006389c7b40femr8140146otn.37.1661192703024;
+        Mon, 22 Aug 2022 11:25:03 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t20-20020a9d5914000000b0061cbd18bd18sm3145285oth.45.2022.08.22.11.24.18
+        by smtp.gmail.com with ESMTPSA id s63-20020aca4542000000b00342df642fd3sm2706471oia.48.2022.08.22.11.25.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 11:24:18 -0700 (PDT)
-Received: (nullmailer pid 109846 invoked by uid 1000);
-        Mon, 22 Aug 2022 18:24:18 -0000
-Date:   Mon, 22 Aug 2022 13:24:18 -0500
+        Mon, 22 Aug 2022 11:25:02 -0700 (PDT)
+Received: (nullmailer pid 111155 invoked by uid 1000);
+        Mon, 22 Aug 2022 18:25:00 -0000
+Date:   Mon, 22 Aug 2022 13:25:00 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [RFT PATCH v3 01/16] dt-bindings: mfd: qcom,tcsr: add several
- devices
-Message-ID: <20220822182418.GA109764-robh@kernel.org>
-References: <20220819083209.50844-1-krzysztof.kozlowski@linaro.org>
- <20220819083209.50844-2-krzysztof.kozlowski@linaro.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Subject: Re: [PATCH 1/7] dt-bindings: phy: mediatek,tphy: add support type of
+ SGMII
+Message-ID: <20220822182500.GA111114-robh@kernel.org>
+References: <20220819091344.2274-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819083209.50844-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220819091344.2274-1-chunfeng.yun@mediatek.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 11:31:54 +0300, Krzysztof Kozlowski wrote:
-> Document existing (MSM8996, SC7280) and new compatibles for TCSR syscon
-> registers (QCS404, SC7180, SDM630, SDM845, SM8150, MSM8998).
+On Fri, 19 Aug 2022 17:13:38 +0800, Chunfeng Yun wrote:
+> Add support ethernet SGMII, forgot to update type supported.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+> Fixes: c01608b3b46b ("dt-bindings: phy: mediatek: tphy: support type switch by pericfg")
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
-> 
-> Changes since v2:
-> 1. Add more compatibles.
-> 
-> Changes since v1:
-> 1. Correct order of compatibles.
-> ---
->  Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>

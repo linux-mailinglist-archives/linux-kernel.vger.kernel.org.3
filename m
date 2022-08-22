@@ -2,113 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE03D59CBD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A9F59CBD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 01:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238293AbiHVW6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 18:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
+        id S238510AbiHVXAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 19:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiHVW6Q (ORCPT
+        with ESMTP id S238358AbiHVXAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 18:58:16 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532FDB4A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:58:14 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id h9-20020a9d5549000000b0063727299bb4so8714570oti.9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:58:14 -0700 (PDT)
+        Mon, 22 Aug 2022 19:00:08 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2724F64A
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 16:00:06 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id l7so12538169vsc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 16:00:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc;
-        bh=ZQcp0BRRM98lOS/g0KHNAVFcxGrlDNSNcE9n5lyzj74=;
-        b=AY3JnAa0u0PCO/OLlstQQme7k5X4CjbQb4LyJxjNuFarcLkWEhPvAXKaWwxdF/n/OH
-         iOWPoBasc1WzdUznFH6n2/15y79SvpqRUs0C8WiWV0Y2mCrAlDiW/QDBO8aF/9+2SlKy
-         2vJbVtOSadV9XPeuJo7UM/nLUp5U3v1XsXecE=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=CM+r2jDGi3Z1TY+2nDEEa9bz6Cg3yXP3SO7YhqCHkfo=;
+        b=Fr4ZUOwdWXPMWZ0VIHwPHNgnoI5vRT/AKqrE1La5ulyUniUsetq7t6w4qi4Tj30KgQ
+         aujMKcxmiWsb3YvpamUxbl8zMbQJJbv1lsgsyWYXtBqwUGVgpV2Ydzp1NdfAUnMkovb2
+         lIG66WjOS9iJKkXJLidAFbWQthLLWYlTUg7QI0vTlpePU0jcFWQoI3qBJiKJxSBBKJzI
+         /TSaEZxLBRFc7HzsZro7nHfqq5FJdPwiaZFUIvnj9rKwwXaqHHfg2ewEb3/+WyJThfJ5
+         YlW5CrXOD4oDXH94xu4+GKkDslxcKAjdavOsENDv+vxICJgtGpTqmDNJuttyCBg7if6i
+         A/8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
-        bh=ZQcp0BRRM98lOS/g0KHNAVFcxGrlDNSNcE9n5lyzj74=;
-        b=i+/VVtSy5y61c0qYtzAp+Y9k+ynVC/zf7MW+yqwMV4/MhSwIpzwtYCxG//5aFYCAyz
-         yHA27JzI2WVwE8FN7U6fjs2Sbc38xusuojwB6I50dysm4m+fsTjTrIkkjW4v2lEzv0yJ
-         djYZ+qoRK3FjkfGxUE1Yi64GoTdzqafKje2YwfDUuzApYrWtEdqEZZDaychs5QlLzojZ
-         pb3cws95Tg9Zg25K8ucyX9HQJopj1cpsbfpuBt40r6SxGjAXNbJ+weVAv1l2ZUocSYLq
-         CdMsK5GrpvYY3HutREJrThP8rLWMYNTui43Kfarwk8A3+REIht9/6LaVpGE8HORrIgEw
-         s37A==
-X-Gm-Message-State: ACgBeo0PV9vliUnKtvuDUYNTAYh1phIXvi+im5sNUhneqCax2YA+pUw2
-        Ciev3XuBadXuz6MHOpzOspEcdwuc6mpgyKJzf6sfsg==
-X-Google-Smtp-Source: AA6agR7P8++dkGVe69xdBJY4hZiKYOYJmykx57SIKThzQUVxO3vkQz9gif5F2unmCzp5cRjkm17S5wP/RnwarP3zDwY=
-X-Received: by 2002:a9d:738c:0:b0:638:9962:8cb6 with SMTP id
- j12-20020a9d738c000000b0063899628cb6mr8354707otk.73.1661209093673; Mon, 22
- Aug 2022 15:58:13 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 22 Aug 2022 17:58:13 -0500
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=CM+r2jDGi3Z1TY+2nDEEa9bz6Cg3yXP3SO7YhqCHkfo=;
+        b=oe+Ir8OE6PFcAF36LvkOPtkZ2JWX5CPtOTsQb0lPrl7Ge98Wqdt24q36e2/5N7ZZ6F
+         9v5v71iC+ehFuMLX87YwCihQr16TiIYg4czym03znf00hl6YlrBik5OGQHAqpN+alhk6
+         k+Bj+ZJVvoXdFgcfmRMlcKKda26m4iv+b9/HxF41YqKWqHrVeY00SMsnhgMOhDJpX+Kh
+         HPV3z4xTctTpaNrQhq0tpK2ej7O0ZqVgzgDYOu+sDjjgBFuwlqxXy04VGQMbBoHcdGbw
+         ZkmmWLnbcbVKEkJ1JycD6USRm2eMCbTKtCpMhEoiwnewu1de6wg1LSl1kL76bOLdCsKM
+         NvHQ==
+X-Gm-Message-State: ACgBeo0F5OKiMzDkGZBYaEEYMXtAI/wkThP96AYKLBjFAWEhzy4xo/5M
+        UscEWj5BA1+paNvmoRTkzXQPR9rBzUd4Wf6z6QZ+Ow==
+X-Google-Smtp-Source: AA6agR4ntjaDOEyCR2SDMeJVOZxMHCydD8GIIAaP1VehTb6mhepvnStH8hXJl00Zruvm8pbCQA7Bu0zLne8+bUujE48=
+X-Received: by 2002:a67:b009:0:b0:38a:e0f2:4108 with SMTP id
+ z9-20020a67b009000000b0038ae0f24108mr8469258vse.9.1661209205446; Mon, 22 Aug
+ 2022 16:00:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220822144026.v3.1.Idd188ff3f9caddebc17ac357a13005f93333c21f@changeid>
-References: <20220822144026.v3.1.Idd188ff3f9caddebc17ac357a13005f93333c21f@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 22 Aug 2022 17:58:13 -0500
-Message-ID: <CAE-0n53udqQiEjBnB9oO+fuBUbWEvE1NZXBCsBW7qPCTYzK3_A@mail.gmail.com>
-Subject: Re: [PATCH v3] platform/chrome: cros_ec: Expose suspend_timeout_ms in debugfs
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Evan Green <evgreen@chromium.org>
-Cc:     Rajat Jain <rajatja@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220531223100.510392-1-surenb@google.com> <20220531223100.510392-2-surenb@google.com>
+ <20220822152119.96d40c884078229ee3e6b25e@linux-foundation.org>
+ <CAOUHufbysRjhX_AiFirjvWCR129t4_bELd1wFQG+fBsZpzhgYw@mail.gmail.com> <20220822154822.366a9e4527b748cf99d98637@linux-foundation.org>
+In-Reply-To: <20220822154822.366a9e4527b748cf99d98637@linux-foundation.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Mon, 22 Aug 2022 16:59:29 -0600
+Message-ID: <CAOUHufa1zc3fMWsyyz1uB6_gsgVPk1Hw_T31WzWK58QVgsQSAQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        David Rientjes <rientjes@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>, brauner@kernel.org,
+        hch@infradead.org, oleg@redhat.com,
+        David Hildenbrand <david@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Evan Green (2022-08-22 14:40:40)
-> In modern Chromebooks, the embedded controller has a mechanism where
-> it will watch a hardware-controlled line that toggles in suspend, and
-> wake the system up if an expected sleep transition didn't occur. This
-> can be very useful for detecting power management issues where the
-> system appears to suspend, but doesn't actually reach its lowest
-> expected power states.
+On Mon, Aug 22, 2022 at 4:48 PM Andrew Morton <akpm@linux-foundation.org> wrote:
 >
-> Sometimes it's useful in debug and test scenarios to be able to control
-> the duration of that timeout, or even disable the EC timeout mechanism
-> altogether. Add a debugfs control to set the timeout to values other
-> than the EC-defined default, for more convenient debug and
-> development iteration.
+> On Mon, 22 Aug 2022 16:33:51 -0600 Yu Zhao <yuzhao@google.com> wrote:
 >
-> Signed-off-by: Evan Green <evgreen@chromium.org>
-> Reviewed-by: Prashant Malani <pmalani@chromium.org>
-
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-
-One nit below
-
-> diff --git a/Documentation/ABI/testing/debugfs-cros-ec b/Documentation/ABI/testing/debugfs-cros-ec
-> index 1fe0add99a2a99..66fe915acd739b 100644
-> --- a/Documentation/ABI/testing/debugfs-cros-ec
-> +++ b/Documentation/ABI/testing/debugfs-cros-ec
-> @@ -54,3 +54,25 @@ Description:
->                 this feature.
+> > > --- a/mm/vmscan.c~mm-delete-unused-mmf_oom_victim-flag-fix
+> > > +++ a/mm/vmscan.c
+> > > @@ -3429,9 +3429,6 @@ static bool should_skip_mm(struct mm_str
+> > >         if (size < MIN_LRU_BATCH)
+> > >                 return true;
+> > >
+> > > -       if (mm_is_oom_victim(mm))
+> > > -               return true;
+> > > -
+> > >         return !mmget_not_zero(mm);
+> > >  }
+> > >
+> > > @@ -4127,9 +4124,6 @@ restart:
+> > >
+> > >                 walk_pmd_range(&val, addr, next, args);
+> > >
+> > > -               if (mm_is_oom_victim(args->mm))
+> > > -                       return 1;
+> > > -
+> > >                 /* a racy check to curtail the waiting time */
+> > >                 if (wq_has_sleeper(&walk->lruvec->mm_state.wait))
+> > >                         return 1;
+> > > _
+> > >
+> > > Please confirm?
+> >
+> > LGTM.  The deleted checks are not about correctness.
 >
->                 Output will be in the format: "0x%08x\n".
-> +
-> +What:          /sys/kernel/debug/<cros-ec-device>/suspend_timeout_ms
-> +Date:          August 2022
-> +KernelVersion: 6.1
-> +Description:
-> +               Some ECs have a feature where they will track transitions to the
+> OK, for now.
+>
+> > I've queued
+> >
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -3402,7 +3402,7 @@ static bool should_skip_mm(struct mm_struct *mm,
+> > struct lru_gen_mm_walk *walk)
+> >         if (size < MIN_LRU_BATCH)
+> >                 return true;
+> >
+> > -       if (mm_is_oom_victim(mm))
+> > +       if (test_bit(MMF_OOM_REAP_QUEUED, &mm->flags))
+> >                 return true;
+> >
+> >         return !mmget_not_zero(mm);
+> > @@ -4109,7 +4109,7 @@ static int walk_pud_range(p4d_t *p4d, unsigned
+> > long start, unsigned long end,
+> >
+> >                 walk_pmd_range(&val, addr, next, args);
+> >
+> > -               if (mm_is_oom_victim(args->mm))
+> > +               if (test_bit(MMF_OOM_REAP_QUEUED, &args->mm->flags))
+> >                         return 1;
+> >
+> >                 /* a racy check to curtail the waiting time */
+>
+> Oh.  Why?  What does this change do?
 
-s/to the/of/
+The MMF_OOM_REAP_QUEUED flag is similar to the deleted MMF_OOM_VICTIM
+flag, but it's set at a later stage during an OOM kill.
 
-> +               a hardware-controlled sleep line, such as Intel's SLP_S0 line,
-> +               in order to detect cases where a system failed to go into deep
+When either is set, the OOM reaper is probably already freeing the
+memory of this mm_struct, or at least it's going to. So there is no
+need to dwell on it in the reclaim path, hence not about correctness.

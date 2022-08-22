@@ -2,169 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADB159C235
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1C859C257
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236094AbiHVPIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S236108AbiHVPKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236102AbiHVPII (ORCPT
+        with ESMTP id S236109AbiHVPJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:08:08 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB8F3B96C
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:06:30 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 73so9608946pgb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:06:30 -0700 (PDT)
+        Mon, 22 Aug 2022 11:09:16 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904C43C16D
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:07:13 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MEkSsK022999;
+        Mon, 22 Aug 2022 15:06:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=YZEj8uKtj7x8DCtjy9/uf+S5MMFOo691+RgbPTCKqHE=;
+ b=J75tYDJl8hqWUMngU7E/1qArYIQ7e64+THAI1zyVb6f+s57xBTGuaKiY45EtPL2RgKsE
+ 4wJoFDv/VsfN7qeaVI01HxStESt1NOdFfNYNM1X49q1o7PCTTBl/vN/zzBheMPNwIwAG
+ zVb8lyKrRv2HvRYTeiifTmNY5wuqsqh99DCjo/Z86VCNLcDxgqDnMVNxypO3kx1v7XYM
+ O4ZPyPxUbMU6KX3Zo67WRFH4limSb4VDR1sKeK+3jmxtxrndV5NHT5C9gu2/qSP0qAmF
+ 50p8H6Z5nTQvlxlGkq69HLccaZA513+4miEzlOmIkFFoidPfk6F6m/Q8hOIh15hv5zNK Ug== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j4ar8gbm6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Aug 2022 15:06:18 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27ME4NTg031804;
+        Mon, 22 Aug 2022 15:06:17 GMT
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2048.outbound.protection.outlook.com [104.47.51.48])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3j3mjd38wp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Aug 2022 15:06:17 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ndMWfXurBgqx0JSxBqKrwscVNcvzsOkxCaBpVVy2CxitifARpmnSs3HCZ/jcHHjRufYl3VQgEMUIgU4AqJUKwQ64Zt+aNVIeqTn0XD1A33mnyJL72TuieTu4DuS4PoRjyseheET9bfzMFJstYcmLGmk0yd/7SA6bkpcGKUA9YOnInj7YFXJu4xXLNT3At91uIDvIgRhhZ6yw+plQ1ZAWdfwaAkW0UE7J/VhUCX23FcZChlf47X4WfbRgRgcaqIStubHCbrQ2QzWoI91Uj/+gHKMd5qDmJv5vZ8eTWlI3yhFfi03nTC7HpXIVPDhiHRPuF92YnzzRraPsSLcse4sr1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YZEj8uKtj7x8DCtjy9/uf+S5MMFOo691+RgbPTCKqHE=;
+ b=DppTIum61bM6lmtrvj71aGklE187Csvroxu3PR0883fvGvR9+SnzLgLKuORONfswNXVZCA7BwPAWeaIcUG8LbIEU2q7uv2k9nbGpv4+il4GxvANl3RQvAFXQ+KEyfL6Hp7MQqrBC33EXkSw5ayhbEGbr5BvPx+Eh8OQERz9M9zqaFFc3GwzjMEYSUe5XfkaYHfDnTUTE0kz4CgrRmfcHi2GKxrY1rO2s5U1bIA3XFtHt7TunEYTcmHbiI74Q0QXwZeYS45OKc967LbM8cVQYXYp1+yo+96mgqdjuXx4RgsF8662E3dKJqDx+Oxi1cvRlJh49AgmeAlF8JVNJTMMtwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=rfnLOnYHfibKVs6Fb4CyKhxW8tJzjkgGwDzJoC+bA0Y=;
-        b=WrEDmTe0u3FiZugr1PESRLE48S+q7XVC3UauDjAcW6HIAjvR0HdyDSvY4Yh8Xv56pD
-         zPk2pcgIpSUnoaMXQGMFXbv7itfEgQxASZu3plwAPK03XvXa6lCQJD9NZXVJ5o1FBtB8
-         X3x7rF1QRsVh4MXlsOXYfj66zh30hHfyZ2JsCANksMqp18M7jGVX8W3hXJJrdalpRqiG
-         suK5gjJfRKexqrQW/aKqFE+rYX7mOOZjjtfZCMzUoTVD8zZSvk9fiLVnIeZIGLgGzJaA
-         dDSVJr3UUABWryrmO8Xl1VpIQ5ZWGOWL9XjGltxQGHICMF2l1LmnoW0euDwnBGjZS2e+
-         1bmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=rfnLOnYHfibKVs6Fb4CyKhxW8tJzjkgGwDzJoC+bA0Y=;
-        b=YxiRWlzmxQtiLnp+Lu8vyap65yXLYbjvBB0N6CeX7uw/wf3YY5Wr7Ys5Ai/YfDLS83
-         rDvfNbbnAdNqWFOVr45XdOBpTgFmUtvhQQDcUIh/gTb9H/MH8U7susntAIu3Tw2QWkAK
-         PHnMHM/cH4++SHZW9LbYl8Pz/Md19624dFfAOCpALpGHXZvLrO2aiVAUGOF6pCE9hnMk
-         Bs1XxAervRsSjFMQ5E3xncuIumSq5FaNEUF2J7koZ8Isbe3SVw3sq2AXzrndj91wgFPd
-         njs0DZd42VMEcq2kC19mCfLQruO8BqkcnzLiYA3FgDxrqVflfWsBDdY8dMY5FnCS6Z0N
-         TZ5A==
-X-Gm-Message-State: ACgBeo2R9NqnVEManHAM4Lto1TB5LW4+QjDXCCh4mXRMQvS/2qcAu4JC
-        Wei0rzz4lnp2qoAyxqs8tHHr4YiLEOGjEFbXNSXR+A==
-X-Google-Smtp-Source: AA6agR5ItK2qWDc7jjr7fBTr2W7+SERWzFKsbKa/joz2WD3UuK5X9GUCKjlxWu+Hd97AdsMRT/n9+/7Fvy1T5C4iolI=
-X-Received: by 2002:a05:6a00:2392:b0:52e:b4fb:848 with SMTP id
- f18-20020a056a00239200b0052eb4fb0848mr21499685pfc.8.1661180785557; Mon, 22
- Aug 2022 08:06:25 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YZEj8uKtj7x8DCtjy9/uf+S5MMFOo691+RgbPTCKqHE=;
+ b=gE6pBEebj9oG4kcq3jVQMPHP9rUdBknm6cd+0c9BmIJtBbBN0FWGIIcEHjHQD7AZ9ddMbfFMSb3cUlQcJvxD68SSEZw6Jb+rC+1odn0tfhMHng/JcLz3nT4DEHKF1ItEepvvERLK7Ege0xtjRpNymJMMzVSE9QfSpNB9xDmyuKk=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by SJ1PR10MB5931.namprd10.prod.outlook.com (2603:10b6:a03:48a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.19; Mon, 22 Aug
+ 2022 15:06:15 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::3d34:ebb5:d9df:98b3]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::3d34:ebb5:d9df:98b3%5]) with mapi id 15.20.5546.023; Mon, 22 Aug 2022
+ 15:06:15 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH v13 34/70] s390: remove vma linked list walks
+Thread-Topic: [PATCH v13 34/70] s390: remove vma linked list walks
+Thread-Index: AQHYtji5Wb6NpXAvq0G/1X93t3Gdsw==
+Date:   Mon, 22 Aug 2022 15:06:14 +0000
+Message-ID: <20220822150128.1562046-35-Liam.Howlett@oracle.com>
+References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
+In-Reply-To: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.35.1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 964129c9-6e60-420d-3f6d-08da844fdbba
+x-ms-traffictypediagnostic: SJ1PR10MB5931:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KG7lTGpGOYwZh+771AZho9G5Wl9v2LZyz9pBFE4Tca9jGHfFzN/HWosHcSokC7inr1ce80KlH3UwUp87jGgJOjSVGbwAlMqs7nH7LN5+CB2eZnDBEQTL/+KY/7XO7lgRNOXDzvqTpzdqXfW6bjIxkXAbeadIZpamrDEgMlTlZo1YQI5M76EJRDTVdepN5owUnD68086UkdERVarj35vg5CkRqSfBIW6YJeExEPeEu2y43h1FZM1WSRzS4NZHSsrQTXQPuXU1kUtJKWWnT2a2EGYnl7CnVAVJnpLeos1pTmIQR3Nk6+/m7TEdUcmkNJuq5l2DicvU4eSjmHTvyacZBdM/esLLpb+sCqcKpTfY0OmIFkUyowm0nwlGkBUw0qtGElyDsuqMo19fI2iim+gvgaM/ord1TcYpU8eUyzS2O7PlkOvvtm6PkdnnRBgBUdV/qqdGIGd4Xn3n/Umfr/wMImI6+oyTUArObl6sAOODaU1cfg2ITKS+vopgX19KIV4HZ6AOyPpq63yWcf2FVm1XHvD6Ufm2zeRlORrj/HERrzazw463pC6wmkZZiCrvWIYb9XDR25bBNy8OV1Gpfi17WRFHrSE2X2d4PlQY6afwZ+E1NmTK8NrlSSmy3SIX2mQ1SXMCY5CkdZ9Fgyv/KvueLl8ZzL95+UubekA4Neaimlt+MALbkJZl9f8Px9hclT2DEDisH7+bKCOzHKHiu9CJGX7pCwp2zufdBCLEiy+SD2ih4EvvyR1rVeRlndKrgVBIyUr4Ew9HZoK6/xImfvmcxQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(396003)(366004)(39860400002)(136003)(346002)(110136005)(83380400001)(6506007)(54906003)(6512007)(36756003)(6486002)(26005)(5660300002)(478600001)(41300700001)(1076003)(186003)(66946007)(66556008)(66446008)(44832011)(4326008)(64756008)(86362001)(2906002)(8676002)(71200400001)(66476007)(38070700005)(2616005)(76116006)(122000001)(316002)(8936002)(91956017)(38100700002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?5g5mCAXLyAk9rgn8RZ4mM5m2szhbVczMuIryGHxuTjpB8y5kArEppmvmup?=
+ =?iso-8859-1?Q?xWsi0i8o4Azv1/oJ4QEEZjQY0HSjxRxfzlFNDXKC81P1gpHEXLP4c1hqSY?=
+ =?iso-8859-1?Q?r4Xd5Pe0YDKwkhJb0Y+YNe2+CFzGhb28CavtyHgWkTZ44VMwLR/6m1HCig?=
+ =?iso-8859-1?Q?zZXo518JkEooGlCBoA80aRjKZNFoxiyEgCEdbzdcTKNZVaYu5LzIbD3IsW?=
+ =?iso-8859-1?Q?4i45kjIvGt08qS6hztxnp7TmmP9YH+RKk9KhwtZK2oLEzYeTg706x58e1E?=
+ =?iso-8859-1?Q?6g4h1bi2b2mKfWNjzP2MTjkxFvb+qXOX+fEncXI8KIDmKPDKZoPLEuwl/9?=
+ =?iso-8859-1?Q?Lfrd5sYiIzvBiZIvLxknog05GC9DWXQ/EEkmbNyiN5sphCJPlnv1AiCUoM?=
+ =?iso-8859-1?Q?uSDb/eCQXOGZp6uKhRDpceTYZIjTtzloPr13ZnQ++zZ2IXp0nb+xUDiUsA?=
+ =?iso-8859-1?Q?WHBpd9/ShweDCJztyZ/YWLzt75DJr6T7VGrvdt562JU851vm1bG41/+pbi?=
+ =?iso-8859-1?Q?3bP/cRT0WZo4whVQ9RbrjYbQzIoeLpAYj0q3RvameOYfyQ4kQW9Dlwz+AO?=
+ =?iso-8859-1?Q?ARpswlet6DCOg8LPb8hVrxbPMRoKaCFT2eHjUB9IuCPnv7FIa1MmxDAdsV?=
+ =?iso-8859-1?Q?3OEKFrBO4GXNA4OGM4inpEaPWhR/Zpn5M04SNQZAe0H4Efpad1QNqq5yaw?=
+ =?iso-8859-1?Q?AA7oZmMo8OokS1oSgmFSW495O0MMdY/LTQ8OVfED+kwCB/5dZzY7eOIs5a?=
+ =?iso-8859-1?Q?ZKCFzFGaIUDpR9cr5xGssC8ecyvMLZ39SMeadMY2b0XkoyHuZrDfK/CrhE?=
+ =?iso-8859-1?Q?lg/vD/SxHEZIMoecQ3eoFdv8uW3wZbnR53pP55h3AxDfXLbbaugcAuCQRu?=
+ =?iso-8859-1?Q?PsbGlo7/CqAx1LePbO8k+c57m0CYYp1CEX3237JTSHN+2yn+waiiOJcv+t?=
+ =?iso-8859-1?Q?A+PRG7dR9C7GG0rZOX4tAKbhMh9zj9O6duA3vY7/TqNzQHfyNYLdyz2puu?=
+ =?iso-8859-1?Q?f+K0rQ/1huWKqyyxqwt/YHkVhjOmQAHyd/np+LSueF1NqiWWxPuE2IXKVx?=
+ =?iso-8859-1?Q?/gqntacHFjlh9WmkKHL6VDcsh727k4KpiDy2OUnvNdqiLeAOFXFoJFSAxd?=
+ =?iso-8859-1?Q?Q1TeXsIHuN/8Fl3SpFiFVuRvTEBorY9HXsBJvYnMzPs/5/wlrOwcgqvMjl?=
+ =?iso-8859-1?Q?k/cWk/LdOU6852zGlHio1aLLtyZAJxv5dKYsAq47fpUYEN0vzRQe+xI4Ez?=
+ =?iso-8859-1?Q?vXf0iL5gTxmVbMJ9vc4cA3ibGPFMmrFMvpRKaXgGswV4ITkpfe9wnn2cTP?=
+ =?iso-8859-1?Q?FZajvuOD+jKiCPmMfJjQVcvhYGyhfdaxoXmLMQjTcX+zOdLebijyqw7xx5?=
+ =?iso-8859-1?Q?3uvXY7/lN3SAR15OWP4xcmKFOR5Tu62/dwAC4fAA6l43X+Cjc+g9P6qoiK?=
+ =?iso-8859-1?Q?zn2qfnOIyyvuweuUnuxMVf3P5/Ug4VwlXZf9wVFv1MHNo0IhkRfMkbSYSY?=
+ =?iso-8859-1?Q?4cZ+zTc5Lp7JdR2hYHL5ILTe7vwRmxqJvFMv7wzUCqcNgySKZblvlE5AUm?=
+ =?iso-8859-1?Q?j+uhsNR/aPeWc6NABykbR5kwYJ981DA4f+qPAvNuwqF3rkHUASxouj/Fpv?=
+ =?iso-8859-1?Q?PixLWAo2tGFGn24oD85EBBXCDpWbXoAC9lgqIrFyxixBV8VFe8O2ImAw?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220822001737.4120417-1-shakeelb@google.com> <20220822001737.4120417-3-shakeelb@google.com>
- <YwNZD4YlRkvQCWFi@dhcp22.suse.cz>
-In-Reply-To: <YwNZD4YlRkvQCWFi@dhcp22.suse.cz>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Mon, 22 Aug 2022 08:06:14 -0700
-Message-ID: <CALvZod5pw_7hnH44hdC3rDGQxQB2XATrViNNGosG3FnUoWo-4A@mail.gmail.com>
-Subject: Re: [PATCH 2/3] mm: page_counter: rearrange struct page_counter fields
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Oliver Sang <oliver.sang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 964129c9-6e60-420d-3f6d-08da844fdbba
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Aug 2022 15:06:14.9576
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pdoHRNlUlK4k21ZdrQqP536rrkLsaGPFPcqRfTMLLffb/lOlJnmvm2Hp0kuR6BiI+mvxyZZVba44LUF3Pdftcg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR10MB5931
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-22_09,2022-08-22_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999 adultscore=0
+ spamscore=0 phishscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208220065
+X-Proofpoint-ORIG-GUID: u3fOGSzH3rBS3t-1O7uGvkdQqsJsEQA6
+X-Proofpoint-GUID: u3fOGSzH3rBS3t-1O7uGvkdQqsJsEQA6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 3:23 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Mon 22-08-22 00:17:36, Shakeel Butt wrote:
-> > With memcg v2 enabled, memcg->memory.usage is a very hot member for
-> > the workloads doing memcg charging on multiple CPUs concurrently.
-> > Particularly the network intensive workloads. In addition, there is a
-> > false cache sharing between memory.usage and memory.high on the charge
-> > path. This patch moves the usage into a separate cacheline and move all
-> > the read most fields into separate cacheline.
-> >
-> > To evaluate the impact of this optimization, on a 72 CPUs machine, we
-> > ran the following workload in a three level of cgroup hierarchy with top
-> > level having min and low setup appropriately. More specifically
-> > memory.min equal to size of netperf binary and memory.low double of
-> > that.
->
-> Again the workload description is not particularly useful. I guess the
-> only important aspect is the netserver part below and the number of CPUs
-> because min and low setup doesn't have much to do with this, right? At
-> least that is my reading of the memory.high mentioned above.
->
+From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 
-The experiment numbers below are for only this patch independently
-i.e. the unnecessary min/low atomic xchg() is still happening for both
-setups. I could run the experiment without setting min and low but I
-wanted to keep the setup exactly the same for all three optimizations.
+Use the VMA iterator instead.
 
-This patch and the following perf numbers shows only the impact of
-removing false sharing in struct page_counter for memcg->memory on the
-charging code path.
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+---
+ arch/s390/kernel/vdso.c | 3 ++-
+ arch/s390/mm/gmap.c     | 6 ++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-> >  $ netserver -6
-> >  # 36 instances of netperf with following params
-> >  $ netperf -6 -H ::1 -l 60 -t TCP_SENDFILE -- -m 10K
-> >
-> > Results (average throughput of netperf):
-> > Without (6.0-rc1)     10482.7 Mbps
-> > With patch            12413.7 Mbps (18.4% improvement)
-> >
-> > With the patch, the throughput improved by 18.4%.
-> >
-> > One side-effect of this patch is the increase in the size of struct
-> > mem_cgroup. However for the performance improvement, this additional
-> > size is worth it. In addition there are opportunities to reduce the size
-> > of struct mem_cgroup like deprecation of kmem and tcpmem page counters
-> > and better packing.
-> >
-> > Signed-off-by: Shakeel Butt <shakeelb@google.com>
-> > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > ---
-> >  include/linux/page_counter.h | 34 +++++++++++++++++++++++-----------
-> >  1 file changed, 23 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/include/linux/page_counter.h b/include/linux/page_counter.h
-> > index 679591301994..8ce99bde645f 100644
-> > --- a/include/linux/page_counter.h
-> > +++ b/include/linux/page_counter.h
-> > @@ -3,15 +3,27 @@
-> >  #define _LINUX_PAGE_COUNTER_H
-> >
-> >  #include <linux/atomic.h>
-> > +#include <linux/cache.h>
-> >  #include <linux/kernel.h>
-> >  #include <asm/page.h>
-> >
-> > +#if defined(CONFIG_SMP)
-> > +struct pc_padding {
-> > +     char x[0];
-> > +} ____cacheline_internodealigned_in_smp;
-> > +#define PC_PADDING(name)     struct pc_padding name
-> > +#else
-> > +#define PC_PADDING(name)
-> > +#endif
-> > +
-> >  struct page_counter {
-> > +     /*
-> > +      * Make sure 'usage' does not share cacheline with any other field. The
-> > +      * memcg->memory.usage is a hot member of struct mem_cgroup.
-> > +      */
-> > +     PC_PADDING(_pad1_);
->
-> Why don't you simply require alignment for the structure?
-
-I don't just want the alignment of the structure. I want different
-fields of this structure to not share the cache line. More
-specifically the 'high' and 'usage' fields. With this change the usage
-will be its own cache line, the read-most fields will be on separate
-cache line and the fields which sometimes get updated on charge path
-based on some condition will be a different cache line from the
-previous two.
+diff --git a/arch/s390/kernel/vdso.c b/arch/s390/kernel/vdso.c
+index 5075cde77b29..535099f2736d 100644
+--- a/arch/s390/kernel/vdso.c
++++ b/arch/s390/kernel/vdso.c
+@@ -69,10 +69,11 @@ static struct page *find_timens_vvar_page(struct vm_are=
+a_struct *vma)
+ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+ {
+ 	struct mm_struct *mm =3D task->mm;
++	VMA_ITERATOR(vmi, mm, 0);
+ 	struct vm_area_struct *vma;
+=20
+ 	mmap_read_lock(mm);
+-	for (vma =3D mm->mmap; vma; vma =3D vma->vm_next) {
++	for_each_vma(vmi, vma) {
+ 		unsigned long size =3D vma->vm_end - vma->vm_start;
+=20
+ 		if (!vma_is_special_mapping(vma, &vvar_mapping))
+diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
+index 62758cb5872f..02d15c8dc92e 100644
+--- a/arch/s390/mm/gmap.c
++++ b/arch/s390/mm/gmap.c
+@@ -2515,8 +2515,9 @@ static const struct mm_walk_ops thp_split_walk_ops =
+=3D {
+ static inline void thp_split_mm(struct mm_struct *mm)
+ {
+ 	struct vm_area_struct *vma;
++	VMA_ITERATOR(vmi, mm, 0);
+=20
+-	for (vma =3D mm->mmap; vma !=3D NULL; vma =3D vma->vm_next) {
++	for_each_vma(vmi, vma) {
+ 		vma->vm_flags &=3D ~VM_HUGEPAGE;
+ 		vma->vm_flags |=3D VM_NOHUGEPAGE;
+ 		walk_page_vma(vma, &thp_split_walk_ops, NULL);
+@@ -2584,8 +2585,9 @@ int gmap_mark_unmergeable(void)
+ 	struct mm_struct *mm =3D current->mm;
+ 	struct vm_area_struct *vma;
+ 	int ret;
++	VMA_ITERATOR(vmi, mm, 0);
+=20
+-	for (vma =3D mm->mmap; vma; vma =3D vma->vm_next) {
++	for_each_vma(vmi, vma) {
+ 		ret =3D ksm_madvise(vma, vma->vm_start, vma->vm_end,
+ 				  MADV_UNMERGEABLE, &vma->vm_flags);
+ 		if (ret)
+--=20
+2.35.1

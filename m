@@ -2,114 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D8459BA06
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4651459BA0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbiHVHIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 03:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
+        id S233247AbiHVHKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 03:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232950AbiHVHIq (ORCPT
+        with ESMTP id S233333AbiHVHKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 03:08:46 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D35513D5F
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:08:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4B4CF33E10;
-        Mon, 22 Aug 2022 07:08:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661152123; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NA0kLecKkbEPuy+QziXKxLugfBAhixGPNsxIPQUKjGI=;
-        b=kSpDNWZgJw9yZTi2McPVhwPWreQnHY5cQwBre6r6eFLvm8dSmq+mEDVSYaqsS/D8qOmZX3
-        +phgH4Bhdk6ki0dllOoNJ0SD3nACn+3ODSxmQLQse4qjV9ouRF0Xk/lZNEAtzXwX0Gxv0X
-        SpJgjITa4gv9mXJJ9nvjZfaXoZZfCl8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 274A513523;
-        Mon, 22 Aug 2022 07:08:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id EkXSBnsrA2OfGQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 22 Aug 2022 07:08:43 +0000
-Date:   Mon, 22 Aug 2022 09:08:42 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     lizhe.67@bytedance.com
-Cc:     Jason@zx2c4.com, akpm@linux-foundation.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        lizefan.x@bytedance.com, mark-pk.tsai@mediatek.com,
-        mhiramat@kernel.org, rostedt@goodmis.org, vbabka@suse.cz,
-        yuanzhu@bytedance.com
-Subject: Re: [PATCH] page_ext: move up page_ext_init() to catch early page
- allocation if DEFERRED_STRUCT_PAGE_INIT is n
-Message-ID: <YwMresZeGmEA6qZP@dhcp22.suse.cz>
-References: <Yv3r6Y1vh+6AbY4+@dhcp22.suse.cz>
- <20220820010257.11488-1-lizhe.67@bytedance.com>
+        Mon, 22 Aug 2022 03:10:46 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77D62983C
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:10:45 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id w10so496360edc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=OXJSHC3u10OP+HTbMpSxeKMRN8oREsLJAZ1clqoMmSE=;
+        b=RA4HZQCDGyC/SIDeLGpy5vj438ALKhnGrTPthx9WF5F5HpgPWbDULm3ZlExFGAc+XU
+         9TsJVTaLDSbjyoumB0uaFuxID66Xi0UX+lP/uzTBbVBLCqQfOQBFVLTsNaa1Nu1gFVPM
+         yeD6KyTOSzgfNeF+ICDsLrL4weCG72go6GbDCuVATFaQLL1ywpBnEq0oz5qGr/kfWznP
+         HPQ43J8OvsDDKcrL7nl4kCWc1P9UBD8HnAqD/6Ukgwy98732aajgzuqiLeH2wptvoSh0
+         cKvsSp87AAINTffTiuu/6mUev0LmUwqTYB3ivP+ugQlsh02tsfcavwdvLsx6Mp6hSRbf
+         tEJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=OXJSHC3u10OP+HTbMpSxeKMRN8oREsLJAZ1clqoMmSE=;
+        b=t8sU0OqBqb0uv54nWL6Mrr2lKb7T7fucoQlmWqf7vZgmnyGoukTCHboddMfbPuflYC
+         wSGzpaWa5ZIIkxbecmRa7kwOGIHUm26Ckd/jAjHEe7ZrSC5ROoPckcCd9gOja/dRrKFP
+         U7N3b/Kt+2OMRdTZHVYfzY87w7QRGXM6soY2JAa4EtH89bZnVBCvYfPeRTl92BpVW0RB
+         hP9UcpNacO6ZCg1yDAZh12mZc8FswStWBjUu0KB946OQezVlHqNrAZ/Q42I79FNVhS3R
+         lgiGTIRsiNj6SZWr9mKJxWceVVsjy9HCKrcfggtl68TlAigJ8vlNesGNBTYWLnpd00JI
+         5/Yg==
+X-Gm-Message-State: ACgBeo0189KqPDoat4IF6I1oIVcxtWy664FWjyxNclrw84b+avcJrlzz
+        WMxw6Z71uiSiplIgTDEDqqmDuECvg5qAfgA3sNqpbav3hdE=
+X-Google-Smtp-Source: AA6agR6GlsGATx8E1XQpTn7CSZWm+8KDw8Qzr9k38Vth1pGheZzAb26A/rhtk2zLUbTv2V3eAdYhXR2P8sP7f+aMfWg=
+X-Received: by 2002:a05:6402:5106:b0:440:3693:e67b with SMTP id
+ m6-20020a056402510600b004403693e67bmr15167256edd.226.1661152244210; Mon, 22
+ Aug 2022 00:10:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220820010257.11488-1-lizhe.67@bytedance.com>
+References: <20220819060801.10443-1-jinpu.wang@ionos.com> <20220819060801.10443-15-jinpu.wang@ionos.com>
+ <20220821055745.GA26064@lst.de> <CAMGffEkhQd6oGgg+m9AUkquYnkufyrt1ptEkg5LG_HE_7s-Vsw@mail.gmail.com>
+ <20220822062537.GA21455@lst.de>
+In-Reply-To: <20220822062537.GA21455@lst.de>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Mon, 22 Aug 2022 09:10:33 +0200
+Message-ID: <CAMGffEk1CJAkaZi5GHrKdW-y1HQRUuo0YfRuGR8hFpNe1dZyoA@mail.gmail.com>
+Subject: Re: [PATCH v1 14/19] nvme-rdma: Fix error check for ib_dma_map_sg
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 20-08-22 09:02:57, lizhe.67@bytedance.com wrote:
-> On 2022-08-18 7:36 UTC, mhocko@suse.com wrote:
-> >> From: Li Zhe <lizhe.67@bytedance.com>
-> >> 
-> >> In 'commit 2f1ee0913ce5 ("Revert "mm: use early_pfn_to_nid in page_ext_init"")',
-> >> we call page_ext_init() after page_alloc_init_late() to avoid some panic
-> >> problem. It seems that we cannot track early page allocations in current
-> >> kernel even if page structure has been initialized early.
-> >> 
-> >> This patch move up page_ext_init() to catch early page allocations when
-> >> DEFERRED_STRUCT_PAGE_INIT is n. After this patch, we only need to turn
-> >> DEFERRED_STRUCT_PAGE_INIT to n then we are able to analyze the early page
-> >> allocations. This is useful especially when we find that the free memory
-> >> value is not the same right after different kernel booting.
+On Mon, Aug 22, 2022 at 8:25 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Mon, Aug 22, 2022 at 07:12:23AM +0200, Jinpu Wang wrote:
+> > On Sun, Aug 21, 2022 at 7:57 AM Christoph Hellwig <hch@lst.de> wrote:
+> > >
+> > > Please don't send me just two random patches out of a series, as I
+> > > have no way to review them.  If the patches are independent, send them
+> > > independently and if they depend on common prep work send the entire
+> > > series to everyone.
+> > Hi Christoph,
 > >
-> >is this actually useful in practice? I mean who is going to disable
-> >DEFERRED_STRUCT_PAGE_INIT and recompile the kernel for debugging early
-> >allocations?
-> 
-> Yes it is useful. We use this method to catch the difference of early
-> page allocations between two kernel.
-
-I was not questioning the functionality itself but the way how it is
-achieved. Recompiling the kernel to achieve debuggability has proven to
-be really a bad approach historically. Most people are using
-pre-compiled kernels these days.
-
-> > I do see how debugging those early allocations might be useful but that
-> > would require a boot time option to be practical IMHO. Would it make
-> > sense to add a early_page_ext parameter which would essentially disable
-> > the deferred ipage initialization. That should be quite trivial to
-> > achieve (just hook into defer_init AFAICS).
-> 
-> It is a good idea. A cmdline parameter is a flexible and dynamic method for
-> us to decide whether to defer page's and page_ext's initilization. For
-> comparison, this patch provides a static method to decide whether to defer
-> page's and page_ext's initilization. They are not conflicting. My next
-> work is trying to achieve your idea.
-
-They are not conflicting but this patch adds ifdefs and additional code
-that needs compile time testing with different options set. I.e. it adds
-maintenance burden for something that can be achieved by better means.
-So if you are ok to work on the runtime knob then I would propose to
-drop this patch from the mm tree and replace it by a trivial patch to
-allow early boot debugging by a cmd line parameter.
--- 
-Michal Hocko
-SUSE Labs
+> > As mentioned in the cover letter, the bugfixes are all independent,
+> > for each of the drivers.
+>
+> I still haven't seen the cover letter as it was never sent to me.
+> But if patches are independent please send a series per subsystem
+> as that makes that very clear.
+Thanks for the hint, this definitely helps the subsystem maintainer to
+get a clear background.
+I'll do it in the future.

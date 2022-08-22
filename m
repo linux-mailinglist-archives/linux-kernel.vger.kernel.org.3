@@ -2,89 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE6359C3F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBCB59C415
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236308AbiHVQUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S236999AbiHVQ1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234147AbiHVQUJ (ORCPT
+        with ESMTP id S229524AbiHVQ1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:20:09 -0400
-Received: from mx0b-00364e01.pphosted.com (mx0b-00364e01.pphosted.com [148.163.139.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A463F1E9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:20:05 -0700 (PDT)
-Received: from pps.filterd (m0167075.ppops.net [127.0.0.1])
-        by mx0b-00364e01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MGJXLW013205
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:20:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=mime-version :
- references : in-reply-to : from : date : message-id : subject : to : cc :
- content-type; s=pps01; bh=lL+jIgSBvIyxjoVVxdSt+mBrExHYO8gEXwp3Ap6tqQo=;
- b=UqBpfOENWlJJ0MexN1mHDsEnXyGak24lZVN6ZwkcAJbbObwDSklL8O7xsxeaMCkejEjn
- NxRrBzB+Ck9YOmH0dwXk1eevCO5Y8Q7zTe8qHFzA3Ab04IWpq1k/RlKvPpEhcrlFZOSB
- rKiYMVODiJ0HmN3thjL+QDRsjwViB2FSNN34LClpkJRE2ml8qfX6cqH3iyypRUWvC8p2
- WmBaOU0GiwDr81py9Kzph+Xi3UOoU0HlrXoaTZ+S2Kpqcp4J1lAMuoL0sivm3OhY/SUP
- 46lmEF5Z4SZYlw0sXej0CMlKzRTFXBlv93BVhR2sS8pmHM96pVh9tsvbb0ofB8jSrXqO bw== 
-Received: from sendprdmail22.cc.columbia.edu (sendprdmail22.cc.columbia.edu [128.59.72.24])
-        by mx0b-00364e01.pphosted.com (PPS) with ESMTPS id 3j2wj6bm5a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:20:04 -0400
-Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com [209.85.221.199])
-        by sendprdmail22.cc.columbia.edu (8.14.7/8.14.4) with ESMTP id 27MGK2nd026682
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:20:02 -0400
-Received: by mail-vk1-f199.google.com with SMTP id b19-20020a1fb213000000b0037d0dfd4db1so1811354vkf.12
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:20:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=lL+jIgSBvIyxjoVVxdSt+mBrExHYO8gEXwp3Ap6tqQo=;
-        b=wdFyvcMRrc4SctGn1DhOZKh705IqvwqLkOT50PJUcJj3HokAtoIPdeS1IXTfMgHWYE
-         1Jpjby5fZlWqftpWhOT7x68wVQldFGGgD/kHqGWDm2lvwqlFv0JViJowpyCpXrZuk5HN
-         C15mxiTdaf0oNX/7xoo7QzNKhdhzraTaKmT3/UOi947KwKvPmI1jqxjVrJ0SGw6z/R9E
-         KdBOPaKulUteAme6mSM+1leEzvTwOBi8BTOgWoB0Gy5HcIsnekO5PjJPXqeJpPbCi5ol
-         HCXF6INeFtQo726d0rnHcbQuly2ZVBKN8ObpRrHNV+X9EkEXdrUqGJMOdClFFicPuoqY
-         qMwg==
-X-Gm-Message-State: ACgBeo1Du7wcIL7p+2TRa8oMjCm+dd+b+oCahMTizJMN3hmcmvj4NG0Z
-        RnpXpXbn+I/iJfM21xskUjJz4KMtm13vxAHvyRLfJrTbVSOzVuzFPzsaRr+tvf3BXxH4yn4y10W
-        LR+8C2E+xn6qIKVxjsjAWAabk8zwSSBGKm6niA2KeCexD0QKT
-X-Received: by 2002:a05:6130:64c:b0:390:f639:5ac4 with SMTP id bh12-20020a056130064c00b00390f6395ac4mr7692150uab.98.1661185201989;
-        Mon, 22 Aug 2022 09:20:01 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4aDBstx+gZ0tfQtYI/tazQw44//p/soUNDTq7MSnhgREgUkhWqjWhJO8bkdWbFSdUzkD9ocmCnPa8xyVA9HvA=
-X-Received: by 2002:a05:6130:64c:b0:390:f639:5ac4 with SMTP id
- bh12-20020a056130064c00b00390f6395ac4mr7692137uab.98.1661185201773; Mon, 22
- Aug 2022 09:20:01 -0700 (PDT)
+        Mon, 22 Aug 2022 12:27:21 -0400
+X-Greylist: delayed 322 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 Aug 2022 09:27:18 PDT
+Received: from mx01.puc.rediris.es (outbound2mad.lav.puc.rediris.es [130.206.19.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCA640E09
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:27:18 -0700 (PDT)
+Received: from mta-out03.sim.rediris.es (mta-out03.sim.rediris.es [130.206.24.45])
+        by mx01.puc.rediris.es  with ESMTP id 27MGL5av008437-27MGL5ax008437
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Mon, 22 Aug 2022 18:21:05 +0200
+Received: from mta-out03.sim.rediris.es (localhost.localdomain [127.0.0.1])
+        by mta-out03.sim.rediris.es (Postfix) with ESMTPS id A76F0302A8C5;
+        Mon, 22 Aug 2022 18:21:05 +0200 (CEST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mta-out03.sim.rediris.es (Postfix) with ESMTP id 932C63049C41;
+        Mon, 22 Aug 2022 18:21:05 +0200 (CEST)
+X-Amavis-Modified: Mail body modified (using disclaimer) -
+        mta-out03.sim.rediris.es
+Received: from mta-out03.sim.rediris.es ([127.0.0.1])
+        by localhost (mta-out03.sim.rediris.es [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id LBajIlpnifdK; Mon, 22 Aug 2022 18:21:05 +0200 (CEST)
+Received: from lt-gp.iram.es (haproxy02.sim.rediris.es [130.206.24.70])
+        by mta-out03.sim.rediris.es (Postfix) with ESMTPA id DD52C302A8C5;
+        Mon, 22 Aug 2022 18:21:04 +0200 (CEST)
+Date:   Mon, 22 Aug 2022 18:21:00 +0200
+From:   Gabriel Paubert <paubert@iram.es>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nick Child <nick.child@ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] powerpc: Add support for early debugging via Serial
+ 16550 console
+Message-ID: <YwOs7LxpyDubCSyF@lt-gp.iram.es>
+References: <20220819211254.22192-1-pali@kernel.org>
+ <b23ecdd1-fe34-f0f7-be7f-da8624096447@csgroup.eu>
+ <20220822153335.v5gc26jfbbqyj3et@pali>
 MIME-Version: 1.0
-References: <CAEHB24-9hXY+TgQKxJB4bE9a9dFD9C+Lan+ShBwpvwaHVAGMFg@mail.gmail.com>
- <YtoWqEkKzvimzWS5@gondor.apana.org.au> <CAEHB249ygptvp9wpynMF7zZ2Kcet0+bwLVuVg5UReZHOU1+8HA@mail.gmail.com>
- <YuNGR/5U5pSo6YM3@gondor.apana.org.au> <YuuZgsdmJK8roKLD@gondor.apana.org.au>
-In-Reply-To: <YuuZgsdmJK8roKLD@gondor.apana.org.au>
-From:   Gabriel Ryan <gabe@cs.columbia.edu>
-Date:   Mon, 22 Aug 2022 12:19:54 -0400
-Message-ID: <CALbthtcfPn5qc0HecmK9iN-o+ZWDVid4bwzZJmO2sthw3fKFBQ@mail.gmail.com>
-Subject: Re: [PATCH] af_key: Do not call xfrm_probe_algs in parallel
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Abhishek Shah <abhishek.shah@columbia.edu>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, steffen.klassert@secunet.com,
-        linux-kernel@vger.kernel.org, Fan Du <fan.du@windriver.com>,
-        Steffen Klassert <klassert@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Proofpoint-GUID: kVkg5wvMRzMcSeBmF6pNyka3-AoshHSU
-X-Proofpoint-ORIG-GUID: kVkg5wvMRzMcSeBmF6pNyka3-AoshHSU
-X-CU-OB: Yes
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-22_10,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=10 mlxscore=0 clxscore=1015 impostorscore=10 bulkscore=10
- suspectscore=0 mlxlogscore=999 phishscore=0 spamscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208220070
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20220822153335.v5gc26jfbbqyj3et@pali>
+Content-Transfer-Encoding: quoted-printable
+X-FE-Policy-ID: 23:8:0:SYSTEM
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=iram.es; s=DKIM; c=relaxed/relaxed;
+ h=date:from:to:cc:subject:message-id:references:mime-version:content-type;
+ bh=P7Z6k3A8poRGgY/r2fVngWTDGFg6NAUY66Qf9n627IU=;
+ b=OyMQyYGzrjUYNUmcunzhWkDUU5JjJFTOsKqT+SUVtt2g3UnIhxWU+iwHp0FTD8lRwEuEnymDs9vF
+        8EK3OI7gFDHC36L1qm6HHO4WcA93SesWX2QJvzkglm+3lguFSpQPiQ/+Q62vIoM4/X54Mzo7HMaw
+        lZj1G7AVI8jASBE3EV0QpsKmpXVxys1JksNuF3CyKd2LLcYdMXRpmwQXrcnvKqhd8sYuLbRuhLMi
+        j8N0Ncfrv2sdTd3NWghjMxUBNRu4gF4S03hGWZPLXFxrnpzXwxK0ZoT1WSW3MM3/Tn7tBb+4xRYj
+        YRELdnG9Xm3v9zgH1rh48s36yf1JxyqSDiZGwg==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,47 +71,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can confirm we tested this patch and it prevents the race we
-detected in xfrm_ealg_get_byname / xfrm_probe_algs.
+On Mon, Aug 22, 2022 at 05:33:35PM +0200, Pali Roh=E1r wrote:
+> On Monday 22 August 2022 14:25:57 Christophe Leroy wrote:
+> > Le 19/08/2022 =E0 23:12, Pali Roh=E1r a =E9crit=A0:
+> > > Currently powerpc early debugging contains lot of platform specific
+> > > options, but does not support standard UART / serial 16550 console.
+> > >=20
+> > > Later legacy_serial.c code supports registering UART as early debug=
+ console
+> > > from device tree but it is not early during booting, but rather lat=
+er after
+> > > machine description code finishes.
+> > >=20
+> > > So for real early debugging via UART is current code unsuitable.
+> > >=20
+> > > Add support for new early debugging option CONFIG_PPC_EARLY_DEBUG_1=
+6550
+> > > which enable Serial 16550 console on address defined by new option
+> > > CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR and by stride by option
+> > > CONFIG_PPC_EARLY_DEBUG_16550_STRIDE.
+> > >=20
+> > > With this change it is possible to debug powerpc machine descriptor=
+ code.
+> > > For example this early debugging code can print on serial console a=
+lso
+> > > "No suitable machine description found" error which is done before
+> > > legacy_serial.c code.
+> > >=20
+> > > Signed-off-by: Pali Roh=E1r <pali@kernel.org>
+> > > ---
+> > > Tested on P2020 board. It allowed me do debug and implement this pa=
+tch series:
+> > > https://lore.kernel.org/linuxppc-dev/20220819191557.28116-1-pali@ke=
+rnel.org/
+> >=20
+> > Build failure if I select it on mpc885_ads_defconfig :
+> >=20
+> >    LD      vmlinux.o
+> >    MODPOST vmlinux.symvers
+> >    MODINFO modules.builtin.modinfo
+> >    GEN     modules.builtin
+> >    CC      .vmlinux.export.o
+> >    LD      .tmp_vmlinux.kallsyms1
+> > powerpc64-linux-ld: arch/powerpc/kernel/udbg.o: in function=20
+> > `udbg_early_init':
+> > /home/chleroy/linux-powerpc/arch/powerpc/kernel/udbg.c:71: undefined=20
+> > reference to `udbg_init_debug_16550'
+> >=20
+> >=20
+> >=20
+> > > ---
+> > >   arch/powerpc/Kconfig.debug       | 14 ++++++++++++++
+> > >   arch/powerpc/include/asm/udbg.h  |  1 +
+> > >   arch/powerpc/kernel/udbg.c       |  2 ++
+> > >   arch/powerpc/kernel/udbg_16550.c | 33 +++++++++++++++++++++++++++=
++++++
+> > >   4 files changed, 50 insertions(+)
+> > >=20
+> > > diff --git a/arch/powerpc/Kconfig.debug b/arch/powerpc/Kconfig.debu=
+g
+> > > index 9f363c143d86..a4e7d90a45d2 100644
+> > > --- a/arch/powerpc/Kconfig.debug
+> > > +++ b/arch/powerpc/Kconfig.debug
+> > > @@ -276,6 +276,11 @@ config PPC_EARLY_DEBUG_OPAL_HVSI
+> > >   	  Select this to enable early debugging for the PowerNV platform
+> > >   	  using an "hvsi" console
+> > >  =20
+> > > +config PPC_EARLY_DEBUG_16550
+> > > +	bool "Serial 16550"
+> > > +	help
+> > > +	  Select this to enable early debugging via Serial 16550 console
+> > > +
+> >=20
+> > Putting it before EARLY_DEBUG_MEMCONS means that configs that were=20
+> > previously selectiong EARLY_DEBUG_MEMCONS will now select=20
+> > EARLY_DEBUG_16550 instead.
+> >=20
+> > Add a dependency to PPC_UDBG_16550 to avoid the build failure I menti=
+onned ?
+>=20
+> Yea, there is really missing dependency. I will fix it.
+>=20
+> > >   config PPC_EARLY_DEBUG_MEMCONS
+> > >   	bool "In memory console"
+> > >   	help
+> > > @@ -355,6 +360,15 @@ config PPC_EARLY_DEBUG_CPM_ADDR
+> > >   	  platform probing is done, all platforms selected must
+> > >   	  share the same address.
+> > >  =20
+> > > +config PPC_EARLY_DEBUG_16550_PHYSADDR
+> > > +	hex "Early debug Serial 16550 physical address"
+> > > +	depends on PPC_EARLY_DEBUG_16550
+> >=20
+> > A default value is necessary here to avoid prompts during defconfig b=
+uilds.
+> >=20
+> > > +
+> > > +config PPC_EARLY_DEBUG_16550_STRIDE
+> > > +	int "Early debug Serial 16550 stride"
+> > > +	depends on PPC_EARLY_DEBUG_16550
+> > > +	default 1
+> > > +
+> > >   config FAIL_IOMMU
+> > >   	bool "Fault-injection capability for IOMMU"
+> > >   	depends on FAULT_INJECTION
+> > > diff --git a/arch/powerpc/include/asm/udbg.h b/arch/powerpc/include=
+/asm/udbg.h
+> > > index b4aa0d88ce2c..20b5a37ab772 100644
+> > > --- a/arch/powerpc/include/asm/udbg.h
+> > > +++ b/arch/powerpc/include/asm/udbg.h
+> > > @@ -53,6 +53,7 @@ extern void __init udbg_init_ehv_bc(void);
+> > >   extern void __init udbg_init_ps3gelic(void);
+> > >   extern void __init udbg_init_debug_opal_raw(void);
+> > >   extern void __init udbg_init_debug_opal_hvsi(void);
+> > > +extern void __init udbg_init_debug_16550(void);
+> >=20
+> > 'extern' keywork is pointless and deprecated for function prototypes,=
+=20
+> > please don't add new ones.
+>=20
+> I used extern keyword to follow existing coding style.
 
-Best,
+In this case it's better to remove existing extern specifications in the
+surrounding lines. Increasing a bit the footprint of the patch is
+justified, and does not significantly increase the risk of conflicts
+with other patches, unlike the gratuitous churn we see sometimes.
 
-Gabe
+	Gabriel
+>=20
+> > Checkpatch reports:
+> >=20
+> > CHECK: extern prototypes should be avoided in .h files
+> > #77: FILE: arch/powerpc/include/asm/udbg.h:56:
+> > +extern void __init udbg_init_debug_16550(void);
+> >=20
+> >=20
+> > >  =20
+> > >   #endif /* __KERNEL__ */
+> > >   #endif /* _ASM_POWERPC_UDBG_H */
+> > > diff --git a/arch/powerpc/kernel/udbg.c b/arch/powerpc/kernel/udbg.=
+c
+> > > index b1544b2f6321..92b3fc258d11 100644
+> > > --- a/arch/powerpc/kernel/udbg.c
+> > > +++ b/arch/powerpc/kernel/udbg.c
+> > > @@ -67,6 +67,8 @@ void __init udbg_early_init(void)
+> > >   	udbg_init_debug_opal_raw();
+> > >   #elif defined(CONFIG_PPC_EARLY_DEBUG_OPAL_HVSI)
+> > >   	udbg_init_debug_opal_hvsi();
+> > > +#elif defined(CONFIG_PPC_EARLY_DEBUG_16550)
+> > > +	udbg_init_debug_16550();
+> > >   #endif
+> > >  =20
+> > >   #ifdef CONFIG_PPC_EARLY_DEBUG
+> > > diff --git a/arch/powerpc/kernel/udbg_16550.c b/arch/powerpc/kernel=
+/udbg_16550.c
+> > > index d3942de254c6..46f2d831d7c9 100644
+> > > --- a/arch/powerpc/kernel/udbg_16550.c
+> > > +++ b/arch/powerpc/kernel/udbg_16550.c
+> > > @@ -8,6 +8,7 @@
+> > >   #include <asm/udbg.h>
+> > >   #include <asm/io.h>
+> > >   #include <asm/reg_a2.h>
+> > > +#include <asm/early_ioremap.h>
+> > >  =20
+> > >   extern u8 real_readb(volatile u8 __iomem  *addr);
+> > >   extern void real_writeb(u8 data, volatile u8 __iomem *addr);
+> > > @@ -335,3 +336,35 @@ void __init udbg_init_debug_microwatt(void)
+> > >   }
+> > >  =20
+> > >   #endif /* CONFIG_PPC_EARLY_DEBUG_MICROWATT */
+> > > +
+> > > +#ifdef CONFIG_PPC_EARLY_DEBUG_16550
+> > > +
+> > > +static void __iomem *udbg_uart_early_addr;
+> > > +
+> > > +void __init udbg_init_debug_16550(void)
+> > > +{
+> > > +	udbg_uart_early_addr =3D early_ioremap(CONFIG_PPC_EARLY_DEBUG_165=
+50_PHYSADDR, 0x1000);
+> > > +	udbg_uart_init_mmio(udbg_uart_early_addr, CONFIG_PPC_EARLY_DEBUG_=
+16550_STRIDE);
+> > > +}
+> > > +
+> > > +static int __init udbg_init_debug_16550_ioremap(void)
+> > > +{
+> > > +	void __iomem *addr;
+> > > +
+> > > +	if (!udbg_uart_early_addr)
+> > > +		return 0;
+> > > +
+> > > +	addr =3D ioremap(CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR, 0x1000);
+> > > +	if (WARN_ON(!addr))
+> > > +		return -ENOMEM;
+> > > +
+> > > +	udbg_uart_init_mmio(addr, CONFIG_PPC_EARLY_DEBUG_16550_STRIDE);
+> > > +	early_iounmap(udbg_uart_early_addr, 0x1000);
+> > > +	udbg_uart_early_addr =3D NULL;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +early_initcall(udbg_init_debug_16550_ioremap);
+> > > +
+> > > +#endif /* CONFIG_PPC_EARLY_DEBUG_16550 */
+ 
 
-
-On Thu, Aug 4, 2022 at 6:03 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> When namespace support was added to xfrm/afkey, it caused the
-> previously single-threaded call to xfrm_probe_algs to become
-> multi-threaded.  This is buggy and needs to be fixed with a mutex.
->
-> Reported-by: Abhishek Shah <abhishek.shah@columbia.edu>
-> Fixes: 283bc9f35bbb ("xfrm: Namespacify xfrm state/policy locks")
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
->
-> diff --git a/net/key/af_key.c b/net/key/af_key.c
-> index fb16d7c4e1b8..20e73643b9c8 100644
-> --- a/net/key/af_key.c
-> +++ b/net/key/af_key.c
-> @@ -1697,9 +1697,12 @@ static int pfkey_register(struct sock *sk, struct sk_buff *skb, const struct sad
->                 pfk->registered |= (1<<hdr->sadb_msg_satype);
->         }
->
-> +       mutex_lock(&pfkey_mutex);
->         xfrm_probe_algs();
->
->         supp_skb = compose_sadb_supported(hdr, GFP_KERNEL | __GFP_ZERO);
-> +       mutex_unlock(&pfkey_mutex);
-> +
->         if (!supp_skb) {
->                 if (hdr->sadb_msg_satype != SADB_SATYPE_UNSPEC)
->                         pfk->registered &= ~(1<<hdr->sadb_msg_satype);
-> --
-> Email: Herbert Xu <herbert@gondor.apana.org.au>
-> Home Page: http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
-
--- 
-Gabriel Ryan
-PhD Candidate at Columbia University
-cs.columbia.edu/~gabe

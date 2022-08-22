@@ -2,135 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B621659BA9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD2359BAA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233385AbiHVHtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 03:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
+        id S233389AbiHVHuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 03:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233288AbiHVHtj (ORCPT
+        with ESMTP id S233364AbiHVHt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 03:49:39 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D7416586;
-        Mon, 22 Aug 2022 00:49:32 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id F28C81884643;
-        Mon, 22 Aug 2022 07:49:28 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id E1D1E25032B7;
-        Mon, 22 Aug 2022 07:49:28 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id BB1D4A1A0048; Mon, 22 Aug 2022 07:49:28 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Mon, 22 Aug 2022 03:49:59 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF52165B3;
+        Mon, 22 Aug 2022 00:49:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661154595;
+        bh=OU34lRpO/1OTDjZ9Diuvg5jc+I14siphOEscXix5Otk=;
+        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=V+lcO0VqLmjQGTx03pqc3q7B/6LGyJ4CETKflXzSBuBXD6Uh/Zk1U6jbwD46eRAmC
+         d1TF6oyqzoyVyqD/FWoqs5mlLU9sJiANtf5yDG8r02llJ7iQynPa0DpKyuq8DtT1ni
+         2DEJC/f7CsU0x6VQzldWzG3bQ2rf0HSnVwF5ri1k=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MD9XF-1oYWVH2NFp-0097IY; Mon, 22
+ Aug 2022 09:49:55 +0200
+Message-ID: <8aff5c17-d414-2412-7269-c9d15f574037@gmx.com>
+Date:   Mon, 22 Aug 2022 15:49:51 +0800
 MIME-Version: 1.0
-Date:   Mon, 22 Aug 2022 09:49:28 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <YwMW4iGccDu6jpaZ@shredder>
-References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
- <YvkM7UJ0SX+jkts2@shredder>
- <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
- <YwHZ1J9DZW00aJDU@shredder>
- <ce4266571b2b47ae8d56bd1f790cb82a@kapio-technology.com>
- <YwMW4iGccDu6jpaZ@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <c2822d6dd66a1239ff8b7bfd06019008@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable <stable@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-x86_64@vger.kernel.org
+References: <2d6012e8-805d-4225-80ed-d317c28f1899@gmx.com>
+ <YwMhXX6OhROLZ/LR@kroah.com> <1ed5a33a-b667-0e8e-e010-b4365f3713d6@gmx.com>
+ <YwMxRAfrrsPE6sNI@kroah.com>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+Subject: Re: LTS kernel Linux 4.14.290 unable to boot with edk2-ovmf (x86_64
+ UEFI runtime)
+In-Reply-To: <YwMxRAfrrsPE6sNI@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:CnIpYoLCgBjfRiNPGj4hRiKW6uk13KaR20i+1Yhg/1MIpBe9iQa
+ xVNH0d3Pzb8D4PHfTZEsx2d7kn7FEuOIdAOCO8TJFRd89FpuQyWT+3t0F59sYaeTpsFvFGz
+ jbNHh4KnGgsFUknPeNjigbydyGiwkzm6lK+LItqPHmVcAh9PLUsEMuzZ8YxB6Ca5iGHlGs5
+ 3JLmfMEXifuSnptogNGpg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kJmpDuL2TRA=:OnAi3T5f1Cid4aWffjfNVy
+ +76gGuuScHi18HHkaEZmvWxZzbnTjuKbvY6M+8oH1dVAdDJprEcCk27hx6vzov1EMdSV54Wlk
+ C4MeHttatZZR+zLffJbIL8DOnpAn3PRk3XRHBWXZNl/8JmwnWznC0AgVxpheSCMUC+OaXTVTY
+ tjdrYCqzGWeOMvaBN+hUXSYQjEI382LErPSOtih1KFdLpE27yrnBU/zP0kCGM5Z32E4/Iac4K
+ nez7TgxU48GepAIvJRemSl8y4RfMMts64Qm1//qBsl1CqjBl4pu3DZssx8ADUAtA9y2wSQ7oy
+ kBzVsnGknG3nz7sCYGIQeDyu8kzNk2GlQCBk8AlYghsJK1XP9II2CzE3jugwRAs+eQVi5AEiq
+ O3lovvQkaeW2wQ6/SSRddrMnSci5L4bkScosg/01eRZ3VpiKKq18a98CWGgMphEjBgvyfaDZA
+ LdkawV+Y4m6fbkzbhjL0PQGzwcWwD5Kh8QkRAHVb9hK076QXPnrhi6mzQUZ7+X4xFBx6iYHWP
+ 3Xlyp7tbJvT3H+/0DAr+uZagw0mwFxLDcnZ1zudC5J+Ye6fLh3o12PvUbMea0jze1jQxUyi6T
+ H6ZKwrPNPSfr4ww5O2tZ/+eo6/C14R0fxTnCgHlfQ469B7Sd4dysLXPn/jkGbCESkIjaR5kJy
+ SbprgqF+Nfg4R5juP48Fq2KhmVgPsYZVp4ZcQvuDCrjPhfJG6HeLN/humqak+6Cb2jtm5kNRc
+ XerO0d4E7VRRqs1LEIpqb5REsxKkq3L/lktilKsUvi+ziA8v8wbkLOZ4pbxplbJNcWCB1C6qA
+ 2kQ2a5qWlT3ZYyyxZGfWAymWzj2OY77mgtem93duB7neaGptdHE5kxF1ifNmKxF1/Itursmea
+ BtUakmplDc0UhslpaCVxFgi6mDD/8MRTYXA24axirXCRZv1Js6bVP63pt0RbkAMWfjouxsLDY
+ 1A8h0dWlLGf5BY4ZgSysT+w7A5LJUVaifXiO68vroJWFHccYAADdcs6bXimqTpiKeHWamarxt
+ xU8En9L0rxWZvLY3+wZeDhLivKKP3wGQZtpMSw4oN2g5VVNDYRRCwjzzJNOLO+wKIHNxV2c4n
+ xfd10OIXysbWap1ZB6pTDDMSj2Hkx0qiYnfZ7zPbOu5FA/AKt2GEEcoCg==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-22 07:40, Ido Schimmel wrote:
-> On Sun, Aug 21, 2022 at 03:43:04PM +0200, netdev@kapio-technology.com 
-> wrote:
-> 
-> I personally think that the mv88e6xxx semantics are very weird (e.g., 
-> no
-> roaming, traffic blackhole) and I don't want them to determine how the
-> feature works in the pure software bridge or other hardware
-> implementations. On the other hand, I understand your constraints and I
-> don't want to create a situation where user space is unable to
-> understand how the data path works from the bridge FDB dump with
-> mv88e6xxx.
-> 
-> My suggestion is to have mv88e6xxx report the "locked" entry to the
-> bridge driver with additional flags that describe its behavior in terms
-> of roaming, ageing and forwarding.
-> 
-> In terms of roaming, since in mv88e6xxx the entry can't roam you should
-> report the entry with the "sticky" flag.
 
-As I am not familiar with roaming in this context, I need to know how 
-the SW bridge should behave in this case. In this I am assuming that 
-roaming is regarding unauthorized entries.
-In this case, is the roaming only between locked ports or does the 
-roaming include that the entry can move to a unlocked port, resulting in 
-the locked flag getting removed?
 
-> In terms of ageing, since
-> mv88e6xxx is the one doing the ageing and not the bridge driver, report
-> the entry with the "extern_learn" flag.
+On 2022/8/22 15:33, Greg KH wrote:
+> On Mon, Aug 22, 2022 at 03:24:53PM +0800, Qu Wenruo wrote:
+>>
+>>
+>> On 2022/8/22 14:25, Greg KH wrote:
+>>> On Mon, Aug 22, 2022 at 09:15:59AM +0800, Qu Wenruo wrote:
+>>>> Hi,
+>>>>
+>>>> When backporting some btrfs specific patches to all LTS kernels, I fo=
+und
+>>>> v4.14.290 kernel unable to boot as a KVM guest with edk2-ovmf
+>>>> (edk2-ovmf: 202205, qemu 7.0.0, libvirt 1:8.6.0).
+>>>>
+>>>> While all other LTS/stable branches (4.19.x, 5.4.x, 5.10.x, 5.15.x,
+>>>> 5.18.x, 5.19.x) can boot without a hipccup.
+>>>>
+>>>> I tried the following configs, but none of them can even provide an
+>>>> early output:
+>>>>
+>>>> - CONFIG_X86_VERBOSE_BOOTUP
+>>>> - CONFIG_EARLY_PRINTK
+>>>> - CONFIG_EARLY_PRINTK_EFI
+>>>>
+>>>> Is this a known bug or something new?
+>>>
+>>> Has this ever worked properly on this very old kernel tree?  If so, ca=
+n
+>>> you use 'git bisect' to find the offending commit?
+>>
+>> Unfortunately the initial v4.14 from upstream can not even be compiled.
+>
+> Really?  Try using an older version of gcc and you should be fine.  It
+> did build properly back in 2017 when it was released :)
 
-Just for the record, I see that entries coming from the driver to the 
-bridge will always have the "extern learn" flag set as can be seen from 
-the SWITCHDEV_FDB_ADD_TO_BRIDGE events handling in br_switchdev_event() 
-in br.c, which I think is the correct behavior.
+Yeah, I'm pretty sure my toolchain is too new for v4.14.0. But my distro
+only provides the latest and mostly upstream packages.
 
-> In terms of forwarding, in
-> mv88e6xxx the entry discards all matching packets. We can introduce a
-> new FDB flag that instructs the entry to silently discard all matching
-> packets. Like we have with blackhole routes and nexthops.
+It may be a even worse disaster to find a way to rollback to older
+toolchains using my distro...
 
-Any suggestions to the name of this flag?
+Also my hardware may not be well suited for older kernels either.
+(Zen 3 CPU used here)
 
-> 
-> I believe that the above suggestion allows you to fully describe how
-> these entries work in mv88e6xxx while keeping the bridge driver in sync
-> with complete visibility towards user space.
-> 
-> It also frees the pure software implementation from the constraints of
-> mv88e6xxx, allowing "locked" entries to behave like any other
-> dynamically learned entries modulo the fact that they cannot "unlock" a
-> locked port.
-> 
-> Yes, it does mean that user space will get a bit different behavior 
-> with
-> mv88e6xxx compared to a pure software solution, but a) It's only the
-> corner cases that act a bit differently. As a whole, the feature works
-> largely the same. b) User space has complete visibility to understand
-> the behavior of the offloaded data path.
-> 
+In fact, I even find it hard just to locate a v4.14.x tag that can compile=
+.
+After some bisection between v4.14.x tags, only v4.14.268 and newer tags
+can even be compiled using latest toolchain.
+(But still tons of warning, and tons of objdump warnings against
+insn_get_length()).
 
->> 
->> I will change it in iproute2 to:
->> bridge link set dev DEV mab on|off
-> 
-> And s/BR_PORT_MACAUTH/BR_PORT_MAB/ ?
+I'm not sure what's the normal practice for backports to such old branch.
 
-Sure, I will do that. :-)
+Do you stable guys keep dedicated VMs loaded with older distro just for
+these old branches?
+If so, any recommendation on those kinda retro distro?
+
+Thanks,
+Qu
+
+>
+> thanks,
+>
+> greg k-h

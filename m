@@ -2,189 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7D059C4FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1082E59C501
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237253AbiHVR01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
+        id S236973AbiHVR2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234147AbiHVR0Z (ORCPT
+        with ESMTP id S234147AbiHVR2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:26:25 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5122ED68;
-        Mon, 22 Aug 2022 10:26:23 -0700 (PDT)
-Received: from [192.168.2.145] (unknown [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ADF9E6601700;
-        Mon, 22 Aug 2022 18:26:20 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661189181;
-        bh=pmsRP1UXaTtiHegBem/61L12myeersMjGdLcVL0rNCE=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=UPEOCEX3pH3VO2mAxLkubYlxditd/egLQ0BalYwyWhoBHucjlKChmMAEwr+17rFbi
-         KxyYZRmPUbe1jh7Z0hj6+otBBZA2TGL7JoC6W13D7Eh/nMzVHxMbTznLLu/+HVJ/AS
-         emLmezMbDz2bnjwS5MvSHL0HTpFumkAeZjzKNKlvmLqAp5vIxfU64N4yUmfTOObm3k
-         ZOZ5FRHncXFJ2fI1t5UE2P0itXdnGFX7N3ono08HicqWN6bQt4CvoOMzV4RYx7WETb
-         EJCkqQ5FxQ7RvqVrPL4iY7UE8O86KbO6+D2VLKLos/Zx+0gyBo/EliIt+IBeiOckXk
-         6qm2y8su8amAg==
-Message-ID: <e9bde303-6474-aa0b-7880-cf7d8b163983@collabora.com>
-Date:   Mon, 22 Aug 2022 20:26:15 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v8 2/2] drm/gem: Don't map imported GEMs
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        kernel@collabora.com, Daniel Vetter <daniel@ffwll.ch>
-References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
- <20220701090240.1896131-3-dmitry.osipenko@collabora.com>
- <2bb95e80-b60a-36c0-76c8-a06833032c77@amd.com>
- <CAF6AEGtqPeF1DjmBKgzWK39Yi81YiNjTjDNn85TKx7uwicFTSA@mail.gmail.com>
- <2a646ce4-c2ec-3b11-77a0-cc720afd6fe1@collabora.com>
- <YvOav/vF2awVWIu0@phenom.ffwll.local>
- <CAF6AEGvfAJgwBe4+sK0gAkZ++MwH9x4=698C8XSnmfYNMFZqfA@mail.gmail.com>
- <9674d00e-c0d6-ceba-feab-5dc475bda694@collabora.com>
- <CAF6AEGv1cVC9ZNMwpwFOki5CrwD3kSAHM9EUFZGWY-y5zcQsCg@mail.gmail.com>
- <fc019528-7ec7-9e5b-1b6d-c44da14346cf@collabora.com>
- <CAF6AEGv8zSd0fEYB9hd2QOyTt53gFSQoL8JdZtCvtCdYfMfB2Q@mail.gmail.com>
- <73b51dde-689f-64ce-a1c8-0d7c84a2ed66@collabora.com>
- <CAF6AEGuR1cRQYaQBYGnMBzy=XJUcN2o2gzabZaGO2Dj62Uq1DA@mail.gmail.com>
- <CAF6AEGvvR1NUd_GKP=Bxp3VTDMBYT+OwTkkgOWxgYFijZaVVEQ@mail.gmail.com>
- <5f118e10-db7a-a128-1e87-c9dddb65b2ac@collabora.com>
- <2ce5ff0a-9ab2-d146-04db-487a64714fce@gmail.com>
- <cf8cd8da-08d2-5e70-a239-2a67da37c9ea@collabora.com>
-In-Reply-To: <cf8cd8da-08d2-5e70-a239-2a67da37c9ea@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 22 Aug 2022 13:28:45 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FD1326C3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:28:44 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-337ed9110c2so155076887b3.15
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:28:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=yzjS+LywkTWL8WvWDA7N7t+zpqj6zc8ZGGsibUAWoXc=;
+        b=HvLX6cWQF1notA4Yggh9p9vMeoaGyxWp/t/sue/w1EOhy3i1JIiuey4oxPZFoTXNkp
+         P0xEOo5gccH+H9j24WUunpcJJ5nNsVe6U4DNlAGPE0q+NLNbItfpCnDKap4y590e6+I0
+         DsREykmxLQzMWVi0O7PwTnp3DA05QKKE7r800Ei8eVr5Ku7wtgbvi1cWeHOwiOpzuGMW
+         yK9vxeBzvWjVYDcWtWecyxrytUGB4q4rohMIum5MXXtJ+fkmC//pGsypRGYAIK2WKAVr
+         DcQCTcMGzB6qMvz+QbE5y+SaivL0FXuiTyYe9IlNd2FR3urGrf1k936KA8QaPa9Y3yZY
+         YbFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=yzjS+LywkTWL8WvWDA7N7t+zpqj6zc8ZGGsibUAWoXc=;
+        b=Nk6/FJDagpUlbmjvOuLwCj6oAXgrR57j/2HmsIho6m03koCWf+deKv/THBk+0s/g8N
+         IM4fATn4WUweJ6c68z0F0yMn9SB3guzgd8ISo4r3THSEkbgNqCV57W3Rt7uPo9KEElEb
+         PSYBqrJh9Kf2RriuiUUKNLJhaxIs5Pgbc7pgxGZkHjYPcFNOCZva5B4qBcsUPP7Zv/fX
+         cqNFc/lquaxq337EIusCokpYaV8AYjCImcSK0MLsX2+bquZKaRcs/No4f/DwnCzYJeKi
+         YgagmBYZrWA+ILpdr/mWW4AbHNT4Yug9ogWnFQQnKdazLWfnnPTgOVEc3oNDkQ8BvkcB
+         8msg==
+X-Gm-Message-State: ACgBeo1LwDFd+k+uYO5499kjYLqejJLloLTdoLxu50TAbXiT52wzSIBY
+        YKzh1eygFVk41cbkn3XbM3ajqxVD6A==
+X-Google-Smtp-Source: AA6agR5pKK4GPpIqDTf9/ajoMTVtP1y9QH/7kTtaiFafgYADIP+eyPoY+AVJfw7OFW9JT34FZvouDUfvwA==
+X-Received: from timvp-p620-9115096.bld.corp.google.com ([2620:15c:183:200:762:7c61:946f:731])
+ (user=timvp job=sendgmr) by 2002:a81:7c2:0:b0:335:90cb:1962 with SMTP id
+ 185-20020a8107c2000000b0033590cb1962mr21509762ywh.173.1661189323446; Mon, 22
+ Aug 2022 10:28:43 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 11:28:40 -0600
+Message-Id: <20220822112832.v6.1.I55189adfdb8d025fc991a0fa820ec09078619b15@changeid>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.609.g9ff673ca1a-goog
+Subject: [PATCH v6] platform/chrome: cros_ec_lpc: Move host event to prepare/complete
+From:   Tim Van Patten <timvp@google.com>
+To:     rrangel@chromium.org, robbarnes@google.com
+Cc:     Tim Van Patten <timvp@google.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/16/22 22:55, Dmitry Osipenko wrote:
-> On 8/16/22 15:03, Christian König wrote:
->> Am 16.08.22 um 13:44 schrieb Dmitry Osipenko:
->>> [SNIP]
->>>> The other complication I noticed is that we don't seem to keep around
->>>> the fd after importing to a GEM handle.  And I could imagine that
->>>> doing so could cause issues with too many fd's.  So I guess the best
->>>> thing is to keep the status quo and let drivers that cannot mmap
->>>> imported buffers just fail mmap?
->>> That actually should be all the drivers excluding those that use
->>> DRM-SHMEM because only DRM-SHMEM uses dma_buf_mmap(), that's why it
->>> works for Panfrost. I'm pretty sure mmaping of imported GEMs doesn't
->>> work for the MSM driver, isn't it?
->>>
->>> Intel and AMD drivers don't allow to map the imported dma-bufs. Both
->>> refuse to do the mapping.
->>>
->>> Although, AMDGPU "succeeds" to do the mapping using
->>> AMDGPU_GEM_DOMAIN_GTT, but then touching the mapping causes bus fault,
->>> hence mapping actually fails. I think it might be the AMDGPU
->>> driver/libdrm bug, haven't checked yet.
->>
->> That's then certainly broken somehow. Amdgpu should nerve ever have
->> allowed to mmap() imported DMA-bufs and the last time I check it didn't.
-> 
-> I'll take a closer look. So far I can only tell that it's a kernel
-> driver issue because once I re-applied this "Don't map imported GEMs"
-> patch, AMDGPU began to refuse mapping AMDGPU_GEM_DOMAIN_GTT.
-> 
->>> So we're back to the point that neither of DRM drivers need to map
->>> imported dma-bufs and this was never tested. In this case this patch is
->>> valid, IMO.
-> 
-> Actually, I'm now looking at Etnaviv and Nouveau and seems they should
-> map imported dma-buf properly. I know that people ran Android on
-> Etnaviv. So maybe devices with a separated GPU/display need to map
-> imported display BO for Android support. Wish somebody who ran Android
-> on one of these devices using upstream drivers could give a definitive
-> answer. I may try to test Nouveau later on.
-> 
+Update cros_ec_lpc_pm_ops to call cros_ec_lpc_prepare() during PM
+.prepare() and cros_ec_lpc_complete() during .complete(). This moves the
+host event that the AP sends and allows the EC to log entry/exit of AP's
+suspend/resume more accurately.
 
-Nouveau+Intel combo doesn't work because of [1] that says:
+Signed-off-by: Tim Van Patten <timvp@google.com>
+---
 
-"Refuse to fault imported pages. This should be handled (if at all) by
-redirecting mmap to the exporter."
+Changes in v6:
+- Fully restore fixes from v3.
 
-[1]
-https://elixir.bootlin.com/linux/v5.19/source/drivers/gpu/drm/ttm/ttm_bo_vm.c#L154
+Changes in v5:
+- Restore fixes from v3.
 
-Interestingly, I noticed that there are IGT tests which check prime
-mmaping of Nouveau+Intel [2] (added 9 years ago), but they fail as well,
-as expected. The fact that IGT has such tests is interesting because it
-suggests that the mapping worked in the past. It's also surprising that
-nobody cared to fix the failing tests. For the reference, I checked
-v5.18 and today's linux-next.
+Changes in v4:
+- Update title and description.
 
-[2]
-https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/tests/prime_nv_test.c#L132
+Changes in v3:
+- Update cros_ec_lpc_suspend() to cros_ec_lpc_prepare()
+- Update cros_ec_lpc_resume() to cros_ec_lpc_complete()
 
-Starting subtest: nv_write_i915_cpu_mmap_read
-Received signal SIGBUS.
-Stack trace:
- #0 [fatal_sig_handler+0x163]
- #1 [__sigaction+0x50]
- #2 [__igt_unique____real_main354+0x406]
- #3 [main+0x23]
- #4 [__libc_start_call_main+0x80]
- #5 [__libc_start_main+0x89]
- #6 [_start+0x25]
-Subtest nv_write_i915_cpu_mmap_read: CRASH (0,005s)
+Changes in v2:
+- Include cros_ec_resume() return value in dev_info() output.
+- Guard setting .prepare/.complete with #ifdef CONFIG_PM_SLEEP.
 
-Starting subtest: nv_write_i915_gtt_mmap_read
-Received signal SIGBUS.
-Stack trace:
- #0 [fatal_sig_handler+0x163]
- #1 [__sigaction+0x50]
- #2 [__igt_unique____real_main354+0x33d]
- #3 [main+0x23]
- #4 [__libc_start_call_main+0x80]
- #5 [__libc_start_main+0x89]
- #6 [_start+0x25]
-Subtest nv_write_i915_gtt_mmap_read: CRASH (0,004s)
+ drivers/platform/chrome/cros_ec_lpc.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-I'm curious about the Etnaviv driver because it uses own shmem
-implementation and maybe it has a working mmaping of imported GEMs since
-it imports the dma-buf pages into Entaviv BO. Although, it should be
-risking to map pages using a different caching attributes (WC) from the
-exporter, which is prohibited on ARM ad then one may try to map imported
-udmabuf.
-
-Apparently, the Intel DG TTM driver should be able to map imported
-dma-buf because it sets TTM_TT_FLAG_EXTERNAL_MAPPABLE.
-
-Overall, it still questionable to me whether it's worthwhile to allow
-the mmaping of imported GEMs since only Panfrost/Lima can do it out of
-all drivers and h/w that I tested. Feels like drivers that can do the
-mapping have it just because they can and not because they need.
-
+diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
+index 7677ab3c0ead..4158bdeee197 100644
+--- a/drivers/platform/chrome/cros_ec_lpc.c
++++ b/drivers/platform/chrome/cros_ec_lpc.c
+@@ -530,23 +530,31 @@ static const struct dmi_system_id cros_ec_lpc_dmi_table[] __initconst = {
+ MODULE_DEVICE_TABLE(dmi, cros_ec_lpc_dmi_table);
+ 
+ #ifdef CONFIG_PM_SLEEP
+-static int cros_ec_lpc_suspend(struct device *dev)
++static int cros_ec_lpc_prepare(struct device *dev)
+ {
+ 	struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
+ 
++	dev_info(dev, "Prepare EC suspend\n");
++
+ 	return cros_ec_suspend(ec_dev);
+ }
+ 
+-static int cros_ec_lpc_resume(struct device *dev)
++static void cros_ec_lpc_complete(struct device *dev)
+ {
+ 	struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
++	int ret;
++
++	ret = cros_ec_resume(ec_dev);
+ 
+-	return cros_ec_resume(ec_dev);
++	dev_info(dev, "EC resume completed: ret = %d\n", ret);
+ }
+ #endif
+ 
+ static const struct dev_pm_ops cros_ec_lpc_pm_ops = {
+-	SET_LATE_SYSTEM_SLEEP_PM_OPS(cros_ec_lpc_suspend, cros_ec_lpc_resume)
++#ifdef CONFIG_PM_SLEEP
++	.prepare = cros_ec_lpc_prepare,
++	.complete = cros_ec_lpc_complete
++#endif
+ };
+ 
+ static struct platform_driver cros_ec_lpc_driver = {
 -- 
-Best regards,
-Dmitry
+2.37.2.609.g9ff673ca1a-goog
+

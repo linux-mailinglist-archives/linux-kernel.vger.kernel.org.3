@@ -2,83 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FE559C288
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DC459C286
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236563AbiHVPWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
+        id S236582AbiHVPXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236470AbiHVPV5 (ORCPT
+        with ESMTP id S236482AbiHVPV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:21:57 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CBB40E02;
-        Mon, 22 Aug 2022 08:15:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 22 Aug 2022 11:21:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86863E767;
+        Mon, 22 Aug 2022 08:15:10 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 02F15CE12E6;
-        Mon, 22 Aug 2022 15:15:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43675C433B5;
-        Mon, 22 Aug 2022 15:15:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661181312;
-        bh=Flt2fNTf33YYN+sp4CP8u8A0ibFdtD0FZot9OODKhMk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hrAxaiOh6dVwItj/jEl7ojMqVVBChpG9MdST54WmEYfYLd3Gfj91IQ6lQU0XvBiSg
-         KP/8p4Ha98p6hP2a6/BeAKdaNXWGjk9A/pO4BahtMMBYp8hAHR+jcJXivnAcCTdYz8
-         2krWE2xJoHW6a8J6WSSAxd1FcqyVdJmKkNe5iYDGyQl56pBAxXzOJ77L/DhIKHudzd
-         4r2J9AYsrNmKFOEfdv7t67jRz28cmxaReE+labLvfK5NQT8sexrEMwlK6DSdeLnr9V
-         ZYD49hgibMI7GA7Gw8uTUGSFC/I4cyzCoQc1cKd6Ky1aB94L33NSp8rGrZDz6AOl41
-         7Vc2Pudg1Oe2w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oQ98w-00074m-H2; Mon, 22 Aug 2022 17:15:10 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH RESEND 3/3] media: flexcop-usb: use usb_endpoint_maxp()
-Date:   Mon, 22 Aug 2022 17:14:56 +0200
-Message-Id: <20220822151456.27178-4-johan@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220822151456.27178-1-johan@kernel.org>
-References: <20220822151456.27178-1-johan@kernel.org>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9F132202FF;
+        Mon, 22 Aug 2022 15:15:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661181308; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ko/ZbbYlRZVDcCBDACh47r5MpCi7V/QJtzGfx/uTT4o=;
+        b=AXWrARvl88HySuV2IvKZojEAAxu+6WFr21jizwVhd03l87uhLlzEhtWF1q5t+tYCKFoU1r
+        zhU9Xf5P/O2u82zIGY3fhc2PPA5D+bx5XJNxv1WYALMnAhhLQVdq10YN3QdYT/wpkS5CBR
+        HnhzLzMG9IccwSBFROGrZYIj9DWOx1g=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6F85F1332D;
+        Mon, 22 Aug 2022 15:15:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id U/SfGHydA2PFEwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 22 Aug 2022 15:15:08 +0000
+Date:   Mon, 22 Aug 2022 17:15:07 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Oliver Sang <oliver.sang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/3] mm: page_counter: rearrange struct page_counter
+ fields
+Message-ID: <YwOde3qFvne7Umld@dhcp22.suse.cz>
+References: <20220822001737.4120417-1-shakeelb@google.com>
+ <20220822001737.4120417-3-shakeelb@google.com>
+ <YwNZD4YlRkvQCWFi@dhcp22.suse.cz>
+ <CALvZod5pw_7hnH44hdC3rDGQxQB2XATrViNNGosG3FnUoWo-4A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALvZod5pw_7hnH44hdC3rDGQxQB2XATrViNNGosG3FnUoWo-4A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the usb_endpoint_maxp() helper instead of open coding.
+On Mon 22-08-22 08:06:14, Shakeel Butt wrote:
+[...]
+> > >  struct page_counter {
+> > > +     /*
+> > > +      * Make sure 'usage' does not share cacheline with any other field. The
+> > > +      * memcg->memory.usage is a hot member of struct mem_cgroup.
+> > > +      */
+> > > +     PC_PADDING(_pad1_);
+> >
+> > Why don't you simply require alignment for the structure?
+> 
+> I don't just want the alignment of the structure. I want different
+> fields of this structure to not share the cache line. More
+> specifically the 'high' and 'usage' fields. With this change the usage
+> will be its own cache line, the read-most fields will be on separate
+> cache line and the fields which sometimes get updated on charge path
+> based on some condition will be a different cache line from the
+> previous two.
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/media/usb/b2c2/flexcop-usb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I do not follow. If you make an explicit requirement for the structure
+alignement then the first field in the structure will be guarantied to
+have that alignement and you achieve the rest to be in the other cache
+line by adding padding behind that.
 
-diff --git a/drivers/media/usb/b2c2/flexcop-usb.c b/drivers/media/usb/b2c2/flexcop-usb.c
-index 7102b346db05..790787f0eba8 100644
---- a/drivers/media/usb/b2c2/flexcop-usb.c
-+++ b/drivers/media/usb/b2c2/flexcop-usb.c
-@@ -430,7 +430,7 @@ static int flexcop_usb_transfer_init(struct flexcop_usb *fc_usb)
- 	int bufsize, i, j, ret;
- 	int buffer_offset = 0;
- 
--	frame_size = le16_to_cpu(alt->endpoint[0].desc.wMaxPacketSize);
-+	frame_size = usb_endpoint_maxp(&alt->endpoint[0].desc);
- 	bufsize = B2C2_USB_NUM_ISO_URB * B2C2_USB_FRAMES_PER_ISO * frame_size;
- 
- 	deb_ts("creating %d iso-urbs with %d frames each of %d bytes size = %d.\n",
 -- 
-2.35.1
-
+Michal Hocko
+SUSE Labs

@@ -2,390 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C743059CA29
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739A559CA2D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237586AbiHVUix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 16:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
+        id S237591AbiHVUjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 16:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237574AbiHVUiv (ORCPT
+        with ESMTP id S237598AbiHVUj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 16:38:51 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EE813F49;
-        Mon, 22 Aug 2022 13:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661200729; x=1692736729;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=L1JKI3Teo35fKplr/WkSwRWlWYHPFD8SYCN4Wqb2jVs=;
-  b=Y+fPyTUEGQIj0Qwsa6tsGSTuh12Kwdvlopp+3bEA4gzGsZwPyL1QfTlH
-   HNspgzXtw5s8CMRSsJxcyte+Zfmw1cCsr8JovQ/PWgOm13tHPA8AtR7JG
-   8WJW/X1S5UIz66pN77nC/ky+pWKlKY6svToSgsCt1ddtcE4chyDvt03ld
-   8G1j/iWMFXbC/4bjxelXGyAVSX3n9YoKLlJ7l+cY46mKZMkw8E5b/H8RB
-   pc/E0NtRJs9j9CAeog28/SyptBTQCyMsb3tMHQdxNV9GHJG4DJua5WQPR
-   YIcPgbULn5pf+hM+V2jke6Zuxo/7PqOMcLlUF9S469KkNjBa43w3vI263
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="291069509"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="291069509"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 13:38:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="698422163"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Aug 2022 13:38:49 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 22 Aug 2022 13:38:49 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 22 Aug 2022 13:38:48 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 22 Aug 2022 13:38:48 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 22 Aug 2022 13:38:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KMroaNhHtCEyBXVFn/6a86vp3khWX0hDRocLl9RQAElyj5/dKWihbRJdb3VV9dqzPjDT2yX51F37cSeKXSQO1PAXvRws4BtTbWy2TqK2+i0ti4raSB0G2bB5EJqRSBntdoPh3YClUU1I6AvAKweTW1IclFX82tmHZFxinQX3LJRv2sE5YOFMhGoVnlz3dxfkoD/wmcmr5cyKROe8zOooRF7khH0UjMtDxrnB0VhHgnVDfok4DWguO7DBbUa3yWhValN73MGfmjZXi/2hYizNjwDc6vhg74xzIMjJ9k0eISouWfk4fAsFaOAEBiGGkXUTeEEfInyveAKYq3/YHS7whA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3hUTJLOxl0bP+khqLNOLg3DOJ6sQQeUfEkzIm+GS8Rk=;
- b=EyRhtM8oZtQ4rDtwgKvoeS9E74f42zGl0Klv64Ns4ezIioyS63fOXtQSs8z9eQ9xu5Df3xbI2fITQZZhC8DFRMKM+F9VN6QTNFVJCYeNhhkQeNjF7cWdT6d2qjHyUZCCHC26z90LP6bPP2ICMhjrF22Aaff/2gWHohJ/9yQ6iHfHeTW7dvnUitMRzKEmk7V+n/MKeDIXAzZI7OX9ffzCEAYhJ4DYb0aOn4L7KOU5Zktxd/Ugps3dyiiLRIWqLiJORsDRfOq6vRLd8O6GZtd1zC41HZ4UVQ6z3uO8OYzePS0FRXcXnV/sMif3teiOj6iXuRMnFJnQRC90u1+Y+DuogA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by BL0PR11MB2930.namprd11.prod.outlook.com (2603:10b6:208:73::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.19; Mon, 22 Aug
- 2022 20:38:10 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::4ef:8e90:8ed9:870]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::4ef:8e90:8ed9:870%6]) with mapi id 15.20.5546.021; Mon, 22 Aug 2022
- 20:38:10 +0000
-Date:   Mon, 22 Aug 2022 13:38:05 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH 1/2] PCI: Allow drivers to request exclusive config
- regions
-Message-ID: <YwPpLWgG37ObTMAP@iweiny-desk3>
-References: <20220822005237.540039-1-ira.weiny@intel.com>
- <20220822005237.540039-2-ira.weiny@intel.com>
- <YwMktMqN0oFgCeZn@kroah.com>
- <6303dcb63e3e1_1b32294d9@dwillia2-xfh.jf.intel.com.notmuch>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <6303dcb63e3e1_1b32294d9@dwillia2-xfh.jf.intel.com.notmuch>
-X-ClientProxiedBy: BYAPR11CA0106.namprd11.prod.outlook.com
- (2603:10b6:a03:f4::47) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Mon, 22 Aug 2022 16:39:28 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D79A4457D
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:39:27 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-324ec5a9e97so326725627b3.7
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:39:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=azYpYNhsQdFZ4hTXixgIKWt06patLToUHV+Y876Ymo0=;
+        b=EvsqbE/Il9kLi6nxChedGykxC38feEtm+cXu2oDwyfRd19JEPvBdhsxa1fKY75U3Td
+         M2NWeIk45MM39nIpoRwg+RTGGhMsb6znDaWf2ukwE61WpsS22xac85KnlmIpkYVG76di
+         4NoFxOs+7/wb86ni2UVbyfg/wqnL5eIALu59olOrOFefixudrAgwaFMVJZ1wbg3xUQdr
+         IEKFg7gm0RnUUHE8TAy3A2vrbpURpv/25BL84fIXy4CX4Kt7scZoB6yENtNrijGyg0dG
+         Afc9Ydgm132+7M3paR7DsI40oMRizvVrXg8+zgzVONiWeqkMqt8wPjb8JYJsbNNsNxsC
+         4PKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=azYpYNhsQdFZ4hTXixgIKWt06patLToUHV+Y876Ymo0=;
+        b=RhGSDMz7XPki8ldalQaguvPnHOgdIjrkcmOZ2QMf75YzydqTUfnmkOMXRRsH931KlT
+         4WewnpYNU6V/bVlQaplEI6L7wocuiTVlz4Z5B098mwt7wFGQaMBikcqoTUp2glPnXwyj
+         yoSxBEj3TqLY+5f17sK2CU/Z5CIWJ2SdKOfuB68f/v+WvmiC1uuI2ZSGOl9g9OCjfBhT
+         BArDY0G4V50xGEvxG1K8Go/GqODyzJcNyyPZ+Pm8hQwgp6pEF5sGVRkSSVoFq1uK+I6c
+         KxJJfxYi7IpIFxdKzKJRyslAP/w9F2xOw5AeAucNvvKUFcJz/hkBdzGR2s8KEKTcBqma
+         fZSQ==
+X-Gm-Message-State: ACgBeo1lHuGtMMcHUModSyzezmRRWKFEPb/rjs3VKsdm1VKF9OSSE1hi
+        3hdkW0uw1dMPu28LcPENvPMudBCberPifYq4fLMTAA==
+X-Google-Smtp-Source: AA6agR4E7Ell9PoZYflisbEDkzwB19P3GP2Kt4RqgwkK7wTEAhZpP/xjVKDvjd6wumEt/3csxI3OKVh3XyTccx/RmPg=
+X-Received: by 2002:a25:ef0f:0:b0:695:b3d1:15c1 with SMTP id
+ g15-20020a25ef0f000000b00695b3d115c1mr6357909ybd.80.1661200766338; Mon, 22
+ Aug 2022 13:39:26 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9613723a-d7c7-4bd4-8a9c-08da847e3a44
-X-MS-TrafficTypeDiagnostic: BL0PR11MB2930:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DuVFevXclbqWm2wAqNlPMEO7qzOIfPBIS6hXhY092EG7VlD7zRnWNaHKgfoE0DlJRp9kyg73NTODtwrrFV+JRgzphtYI3wdQEoKkMhW28d1AraoGZQ1/fkbiOnDlgM08X+ehqpQ9/2RuI+qoiP3AFSw++xkPq5iTZcFBCBEGHXn1d/d8tIgdduyYDSd/iCN+HdYbI/jahJtmf8QhY44FH23c+zhZjV73BvWvFs2B3CMHI2dFtY1Nz4XEB0x/2weZPPfnfsmV2U+p/AMuA+4ScJZO2EUrCwZ/3m8d8zN/hDVcMLWYM9ALbTciBgLN7ElvBtcVg2Psi6qzTZ2zOS45GfDlZ2vXNJApLBuzdEbo8s4LDvGUGP1bM6L8WIQS/kzPd2Tk4SSQdBZkb9YLiuvPjHf+8Z9qFztQXf8cZfLAiv09WexRGo2T5O/ThvlnANk66EbGGQ0V2W+FeRd8WR7X9viIFohcOEgsJOcBNtmfMuTUmB7iHnNLlFK+uqIei5hUECjiLzDIoEy1cNMcbTGuCf+nHq8SQcImxG/qLA0/k/4GXm0woWhmeL/hDLkqyyQZgfsolVs8jxqz0nx+osLbeGoGliYwGdXaZKQVdE3TFsNgd3CpVO9bO+fSVr5fNTv5iSGKTOPqlANIh/CaI27M99rUJgq5lMdUil/SB0BfWJdA1thkv+CL2BG81MpYZM4VA9iW5OjD0Zxzd5IcX0vXIGh1WfS5Vi4NH+7/e3Y07kcZrjBzc7RVniChiVJkPltXA4f3Cv2iIE81QbeemKLNXA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(39860400002)(136003)(366004)(396003)(376002)(44832011)(41300700001)(5660300002)(6862004)(8936002)(316002)(86362001)(6486002)(966005)(478600001)(66556008)(66946007)(9686003)(186003)(26005)(66476007)(4326008)(8676002)(83380400001)(33716001)(82960400001)(6512007)(6666004)(6506007)(6636002)(2906002)(38100700002)(54906003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LmMoZ8FTGD8b/0dspk2Jm5QmSLGqGsd3hyqqfRhiK7xKigD61oSlDM7VOqA7?=
- =?us-ascii?Q?yO+Dw+cWcVU9gc+ZPOq1cDSO4mULQh6ER8mzMC4olP4rtKpuSyShfdP2SnIQ?=
- =?us-ascii?Q?HlTo1mOV6zEOxrvs35P3nNivYgWqpHnX7YsWbA+w9g6J8+Q/dwILCH0CWhoN?=
- =?us-ascii?Q?OVS3fe6KsSbTWg12A6rZU0ODbbKalScTOFEzYmyZ/PTUJWmfNnls3eXNfdjq?=
- =?us-ascii?Q?ws9GWk3Eg0C89MAAEUzYz2bYt6mfB+GsP7to1KtvmMUrvU4QXzVbH3m6sCDC?=
- =?us-ascii?Q?rMtE9YsEznSgCROzMzyS1Omr6bW4zCnuhd2hTsZ50HvefHKxMmcXbnShQOs5?=
- =?us-ascii?Q?qgjdDfT3lMKzqFJ9l3zL67+xN0LWUImMPrYFeHdXi+js4jdyEYhaQ3x7vvrB?=
- =?us-ascii?Q?ntdJ7S2BK/kQ6hcmzK7SVEFY+ccdUOE7hAp0lor2s9wf7WAfDWOlo+fzyutd?=
- =?us-ascii?Q?MVoFxhQuwgPM+fcPIa4QHdVmBIvfmLVumATXw2kPJXIiMUx82n44KBa+Iyo8?=
- =?us-ascii?Q?2PAkRaZxRq980dydYY2w1OyL23gFjm9FLZCYzijUER7EZT6WDg/7ZV7JO/Rm?=
- =?us-ascii?Q?96SAtj0Ns8NqiZvZD4sIQVgFPsw2KrhiczLADer2NLPk+HucyhZMTbUEPiv5?=
- =?us-ascii?Q?NZP3NRnvPvJXsbAtzuPlLMXRcvhTwDEsKaXDKhNTd3DcqB8cOV1A6nsjQwn9?=
- =?us-ascii?Q?6IRhUFpZIJdEI0qCu7gIJu8xOB2zZASBU0CfexpZc8nImzdnQjmPs4g6Hl7x?=
- =?us-ascii?Q?8rKWTis/L3Ohbp9/R8BtfEmxQYp2ZN4wq9eBeFOaZOR1xxrXEQf4NTj9aGgZ?=
- =?us-ascii?Q?wqizfYFDmKXXajBaAmeU5WSo5ShRo0ubYPaNKjel+cxwJKhXYAME641/WabH?=
- =?us-ascii?Q?ORWFxBP7Jx7APK8Esmtlhs9DUtoLjL9DQzyybB65B1Wd7cLa4oUIfxhb277a?=
- =?us-ascii?Q?z2RFUR+bVZongR3RaqRWEb8eLe6nVcJBD3n5AnADkoEkXl2OMbUXADzZqJtQ?=
- =?us-ascii?Q?ubwZA6HTa4xRzH9ijxkJ6RHeUIHbXQyL3uKXNG8IMJVdgKBn3e5BLZO+6iDl?=
- =?us-ascii?Q?dTjQ9I2BFNpD8or8MxI/nZhlSW2IxyjMonJzTy5Bd3MKtWmDkb0H+fzgJxLZ?=
- =?us-ascii?Q?rsY9s9HxOt0MnHyNCC7BlX25mi4l63Qx/s00eBgRuLIJkmUFkqXC45CZv0ik?=
- =?us-ascii?Q?mOFJMzZEMlh0OZj4Nl3uhUAEYYK6+15JXjy7rBoI2I4KLUgCKxl0ncl1JHLS?=
- =?us-ascii?Q?/7OS66uo0RFCmEH2M6gjQt+YGMy+JOQW4mszjDo9aaBJsken8/ZaNRmApSl3?=
- =?us-ascii?Q?NJ8DvnVHB37Nsw8Zu/jTBAaXzw9P63O8u9ZuoBUHVB4JYJxKWfqrhjJZI5Oy?=
- =?us-ascii?Q?4lZeZZqm+4pW80L86t3wpxDzzPh3nSs91Lpa8nVch2darbSBtVkWSGNaTvYG?=
- =?us-ascii?Q?Lgnb6Q7G+M0ZkO/64ns5CRo7zb9IT6lxdgFzWSv+GFqE7DjUv4NMehwXPxoE?=
- =?us-ascii?Q?Eu5NEXOF6HVkEjmenS5pBQQtrCDkDe1iqnczZ653ktLIbls2R11gZ2Rgr0xz?=
- =?us-ascii?Q?LdnYbRtAeF3TnK3KVD90TaN1qTyNJTxwBWC/ovC5?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9613723a-d7c7-4bd4-8a9c-08da847e3a44
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 20:38:10.6049
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RJk4mBN2Av0waI4XRfhgrXqy8vhEq36TbLF8RflUzjwbrNW5hbkTyi5Ru24sft+cThDJYwIFnRZWSNi9KTbRlQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB2930
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+G9fYuecPu-n-ujLsv7vL8RjEJA-6rOZjc363+p1oo6v-FKKQ@mail.gmail.com>
+In-Reply-To: <CA+G9fYuecPu-n-ujLsv7vL8RjEJA-6rOZjc363+p1oo6v-FKKQ@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 22 Aug 2022 13:38:50 -0700
+Message-ID: <CAGETcx_EpQx-QRtCbbcEDpLHSnNeYysNEnmTOQL4+vb4zzvk4Q@mail.gmail.com>
+Subject: Re: Unable to handle kernel NULL pointer dereference at virtual
+ address 0000000000000008
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Russell King <linux@armlinux.org.uk>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Rob Herring <robh@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 12:44:54PM -0700, Dan Williams wrote:
-> Greg Kroah-Hartman wrote:
-> > On Sun, Aug 21, 2022 at 08:52:36PM -0400, ira.weiny@intel.com wrote:
-> > > From: Ira Weiny <ira.weiny@intel.com>
-> > > 
-> > > PCI config space access from user space has traditionally been
-> > > unrestricted with writes being an understood risk for device operation.
-> > > 
-> > > Unfortunately, device breakage or odd behavior from config writes lacks
-> > > indicators that can leave driver writers confused when evaluating
-> > > failures.  This is especially true with the new PCIe Data Object
-> > > Exchange (DOE) mailbox protocol where backdoor shenanigans from user
-> > > space through things such as vendor defined protocols may affect device
-> > > operation without complete breakage.
-> > 
+On Mon, Aug 22, 2022 at 7:00 AM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> The arm64 Qualcomm db410c device boot failed intermittently on
+> Linux next-20220822 and Linux mainline 6.0.0-rc1.
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> [    0.000000] Linux version 6.0.0-rc1 (tuxmake@tuxmake)
+> (aarch64-linux-gnu-gcc (Debian 11.3.0-3) 11.3.0, GNU ld (GNU Binutils
+> for Debian) 2.38.90.20220713) #1 SMP PREEMPT @1661110347
+> [    0.000000] Machine model: Qualcomm Technologies, Inc. APQ 8016 SBC
+> <trim>
+> [    3.609382] Loading compiled-in X.509 certificates
+> [    3.702306] Unable to handle kernel NULL pointer dereference at
+> virtual address 0000000000000008
+> [    3.702380] Mem abort info:
+> [    3.710225]   ESR = 0x0000000096000004
+> [    3.711454] s3: Bringing 0uV into 375000-375000uV
+> [    3.712713]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    3.717378] s4: Bringing 0uV into 1800000-1800000uV
+> [    3.721289]   SET = 0, FnV = 0
+> [    3.727634] l1: Bringing 0uV into 375000-375000uV
+> [    3.731266]   EA = 0, S1PTW = 0
+> [    3.731278]   FSC = 0x04: level 0 translation fault
+> [    3.735046] l2: Bringing 0uV into 1200000-1200000uV
+> [    3.739166] Data abort info:
+> [    3.742737] l4: Bringing 0uV into 1750000-1750000uV
+> [    3.746980]   ISV = 0, ISS = 0x00000004
+> [    3.746991]   CM = 0, WnR = 0
+> [    3.752504] l5: Bringing 0uV into 1750000-1750000uV
+> [    3.754966] [0000000000000008] user address but active_mm is swapper
+> [    3.754981] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> [    3.754991] Modules linked in:
+> [    3.755002] CPU: 1 PID: 10 Comm: kworker/u8:1 Not tainted 6.0.0-rc1 #1
+> [    3.760279] l6: Bringing 0uV into 1800000-1800000uV
+> [    3.763370] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> [    3.763378] Workqueue: events_unbound deferred_probe_work_func
+> [    3.767152] l7: Bringing 0uV into 1750000-1750000uV
+> [    3.771188] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    3.771199] pc : pl011_probe+0x30/0x154
+> [    3.778480] l8: Bringing 0uV into 1750000-1750000uV
+> [    3.783073] lr : amba_probe+0x11c/0x1b0
+> [    3.783086] sp : ffff800008073b50
+> [    3.783090] x29: ffff800008073b50 x28: 0000000000000000
+> [    3.787102] l9: Bringing 0uV into 1750000-1750000uV
+> [    3.792712]  x27: 0000000000000000
+> [    3.792720] x26: ffff80000af7a368 x25: ffff00000341f00d x24: ffff00003fcdce60
+> [    3.798382] l10: Bringing 0uV into 1750000-1750000uV
+> [    3.804432] x23: ffff80000adf0fb8 x22: 0000000000000000 x21: ffff000003c02800
+> [    3.804449] x20: ffff000003c029b0 x19: 0000000000000000
+> [    3.811003] l11: Bringing 0uV into 1750000-1750000uV
+> [    3.814850]  x18: ffffffffffffffff
+> [    3.814858] x17: 0000000000000000 x16: ffff00003fc4d040 x15: ffff000003c6fb8a
+> [    3.814874] x14: ffffffffffffffff
+> [    3.822730] l12: Bringing 0uV into 1750000-1750000uV
+> [    3.825611]  x13: 00000000000005cf x12: 071c71c71c71c71c
+> [    3.825623] x11: 00000000000005cf x10: 0000000000000c00 x9 : ffff8000088ead60
+> [    3.831391] l13: Bringing 0uV into 1750000-1750000uV
+> [    3.834290]
+> [    3.834293] x8 : ffff00000367ad60 x7 : ffff00003fc69ccc x6 : 0000000000000001
+> [    3.834310] x5 : ffff80000aa8f000
+> [    3.838735] l14: Bringing 0uV into 1750000-1750000uV
+> [    3.842798]  x4 : ffff80000aa8f2e8 x3 : 0000000000000000
+> [    3.842810] x2 : ffff80000b035380 x1 : 0000000000000000 x0 : ffff000003c02800
+> [    3.848640] l15: Bringing 0uV into 1750000-1750000uV
+> [    3.851134]
+> [    3.851138] Call trace:
+> [    3.859837] l16: Bringing 0uV into 1750000-1750000uV
+> [    3.863375]  pl011_probe+0x30/0x154
+> [    3.863389]  amba_probe+0x11c/0x1b0
+> [    3.863400]  really_probe+0xc8/0x3e0
+> [    3.871415] l17: Bringing 0uV into 3300000-3300000uV
+> [    3.875438]  __driver_probe_device+0x84/0x190
+> [    3.875450]  driver_probe_device+0x44/0x100
+> [    3.881633] l18: Bringing 0uV into 1750000-1750000uV
+> [    3.883860]  __device_attach_driver+0xa4/0x150
+> [    3.989109]  bus_for_each_drv+0x84/0xe0
+> [    3.992982]  __device_attach+0xb0/0x1f0
+> [    3.996714]  device_initial_probe+0x20/0x30
+> [    4.000533]  bus_probe_device+0xa4/0xb0
+> [    4.004699]  deferred_probe_work_func+0xa8/0xfc
+> [    4.008521]  process_one_work+0x1dc/0x450
+> [    4.013034]  worker_thread+0x2d0/0x450
+> [    4.017200]  kthread+0x108/0x110
+> [    4.020844]  ret_from_fork+0x10/0x20
+> [    4.024237] Code: 910e0042 d2800013 a9025bf5 aa0003f5 (f9400436)
+> [    4.027801] ---[ end trace 0000000000000000 ]---
+> [  137.808813] random: crng init done
+>
 
-I was about to respond when I saw Dan's message so I will respond to both of
-you.
+Hi Naresh,
 
-> > What userspace tools are out there messing with PCI config space through
-> > userspace on these devices today?  How is this the kernel's fault if
-> > someone runs such a thing?
+Thanks for the report!
 
-It is not the kernels fault but multi-party actors on a DOE mailbox can result
-in the kernel getting incorrect responses for it's valid query.  After my
-conversation with Jonathan during DOE development[1] I'm more convinced that
-this tainting of the kernel will be valuable.
+These two patches together should fix the issue:
+https://lore.kernel.org/lkml/20220818172852.3548-1-isaacmanjarres@google.com/
+https://lore.kernel.org/lkml/20220817184026.3468620-1-isaacmanjarres@google.com/
 
-[1] https://lore.kernel.org/linux-cxl/20220704074508.00000cac@Huawei.com/
+Can you give them a shot please?
 
-> > 
-> > > A prior proposal restricted read and writes completely.[1]  Greg and
-> > > Bjorn pointed out that proposal is flawed for a couple of reasons.
-> > > First, lspci should always be allowed and should not interfere with any
-> > > device operation.  Second, setpci is a valuable tool that is sometimes
-> > > necessary and it should not be completely restricted.[2]  Finally
-> > > methods exist for full lock of device access if required.
-> > > 
-> > > Even though access should not be restricted it would be nice for driver
-> > > writers to be able to flag critical parts of the config space such that
-> > > interference from user space can be detected.
-> > > 
-> > > Introduce pci_request_config_region_exclusive() to mark exclusive config
-> > > regions.  Such regions trigger a warning and kernel taint if accessed
-> > > via user space.
-> > > 
-> > > [1] https://lore.kernel.org/all/161663543465.1867664.5674061943008380442.stgit@dwillia2-desk3.amr.corp.intel.com/
-> > > [2] https://lore.kernel.org/all/YF8NGeGv9vYcMfTV@kroah.com/
-> > > 
-> > > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > Suggested-by: Dan Williams <dan.j.williams@intel.com>
-> > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > > 
-> > > ---
-> > > Changes from[1]:
-> > > 	Change name to pci_request_config_region_exclusive()
-> > > 	Don't flag reads at all.
-> > > 	Allow writes with a warn and taint of the kernel.
-> > > 	Update commit message
-> > > 	Forward port to latest tree.
-> > > ---
-> > >  drivers/pci/pci-sysfs.c |  6 ++++++
-> > >  drivers/pci/probe.c     |  6 ++++++
-> > >  include/linux/ioport.h  |  2 ++
-> > >  include/linux/pci.h     | 16 ++++++++++++++++
-> > >  kernel/resource.c       | 13 ++++++++-----
-> > >  5 files changed, 38 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> > > index fc804e08e3cb..de41d761bdf5 100644
-> > > --- a/drivers/pci/pci-sysfs.c
-> > > +++ b/drivers/pci/pci-sysfs.c
-> > > @@ -755,6 +755,12 @@ static ssize_t pci_write_config(struct file *filp, struct kobject *kobj,
-> > >  	if (ret)
-> > >  		return ret;
-> > >  
-> > > +	if (resource_is_exclusive(&dev->config_resource, off,
-> > > +				  count)) {
-> > > +		pci_warn(dev, "Write to restricted range %llx detected", off);
-> 
-> Note to Ira, I would expect a message like:
-> 
-> "Unexpected user write to kernel-exclusive config offset %#llx\n"
+Also, in general, it'd be nice if you could report issues in the
+original thread of the patch causing issues. It would make it easier
+to keep track of all the issues.
 
-Done.
-
-> 
-> ...this probaly also wants current->comm similar to the
-> lockdown_is_locked_down() warning.
-
-Done.
-
-> 
-> > Will this allow any user to spam the kernel log from userspace?  You
-> > might want to rate-limit it, right?
-> 
-> It should be a once-only message. You only get one chance to trample on
-> a configuration address range that the kernel cares about and then
-> tainted.
-
-Yes my bad.  I should have thought of this.  Changed to pci_WARN_ONCE().
-
-> 
-> > > +		add_taint(TAINT_USER, LOCKDEP_STILL_OK);
-> > > +	}
-> > > +
-> > >  	if (off > dev->cfg_size)
-> > >  		return 0;
-> > >  	if (off + count > dev->cfg_size) {
-> > > diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> > > index 6280e780a48c..d81d7457058b 100644
-> > > --- a/drivers/pci/probe.c
-> > > +++ b/drivers/pci/probe.c
-> > > @@ -2303,6 +2303,12 @@ struct pci_dev *pci_alloc_dev(struct pci_bus *bus)
-> > >  	INIT_LIST_HEAD(&dev->bus_list);
-> > >  	dev->dev.type = &pci_dev_type;
-> > >  	dev->bus = pci_bus_get(bus);
-> > > +	dev->config_resource = (struct resource) {
-> > > +		.name = "PCI Config",
-> > > +		.start = 0,
-> > > +		.end = -1,
-> > > +	};
-> > > +
-> > >  #ifdef CONFIG_PCI_MSI
-> > >  	raw_spin_lock_init(&dev->msi_lock);
-> > >  #endif
-> > > diff --git a/include/linux/ioport.h b/include/linux/ioport.h
-> > > index 616b683563a9..cf1de55d14da 100644
-> > > --- a/include/linux/ioport.h
-> > > +++ b/include/linux/ioport.h
-> > > @@ -312,6 +312,8 @@ extern void __devm_release_region(struct device *dev, struct resource *parent,
-> > >  				  resource_size_t start, resource_size_t n);
-> > >  extern int iomem_map_sanity_check(resource_size_t addr, unsigned long size);
-> > >  extern bool iomem_is_exclusive(u64 addr);
-> > > +extern bool resource_is_exclusive(struct resource *resource, u64 addr,
-> > > +				  resource_size_t size);
-> > >  
-> > >  extern int
-> > >  walk_system_ram_range(unsigned long start_pfn, unsigned long nr_pages,
-> > > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > > index 81a57b498f22..dde37bfa0ca5 100644
-> > > --- a/include/linux/pci.h
-> > > +++ b/include/linux/pci.h
-> > > @@ -409,6 +409,7 @@ struct pci_dev {
-> > >  	 */
-> > >  	unsigned int	irq;
-> > >  	struct resource resource[DEVICE_COUNT_RESOURCE]; /* I/O and memory regions + expansion ROMs */
-> > > +	struct resource config_resource;		 /* driver exclusive config ranges */
-> > 
-> > So the driver only gets 1 range to mark this way?
-> 
-> No, config_resource is just the base of the resource tree to walk
-> similar to how iomem_resource is consumed in the current
-> iomem_is_exclusive() implementation.
-
-I had to double check but yea, Dan is correct here.
-
-> 
-> > What are the ranges for typical devices that have this problem?
-> 
-> Unfortunately DOE is an extended capability that can pop any number of
-> instances in that per-device list.
-> 
-> Although I also think there is potential to use this in something like
-> pci_iomap() to trigger a future warning if userspace mucks with the BARs
-> that the driver is using.
-> 
-> > This still feels very odd to me, how far do we have to go to protect
-> > userspace from doing bad things on systems when they have the
-> > permissions and access to do those bad things?
-> 
-> Right, this mechanism isn't about protection as much as it is reserving
-> the space for kernel implementations of DOE protocols. Outright
-> 'protection' is already there today in the form CONFIG_LOCK_DOWN_KERNEL
-> that prevents userspace config writes. There just are not many distro
-> kernels that turn that protection on.
-
-I agree that there is no real protection.  This is just a way of us knowing
-that bug reports have outside influence which can have real bad consequences.
-
-> 
-> > What are you trying to protect yourself from, bogus bug reports by
-> > people doing bad things and then blaming you?  That's easy to handle,
-> > just ignore them :)
-
-I think the problem is that the bug report could be very difficult to know that
-something bad was done.  I'm ok with ignoring them.  But this makes it clear
-that the bug report was potentially user doing bad things.
-
-I see bug reports being something like:
-
-"Kernel issued query for CDAT.  Device returned garbage."
-
-Vs
-
-"Tainted kernel (error message seen) issued query for CDAT.  Device returned
-garbage."
-
-The first could be a malfunctioning device.  Where the second can clearly be
-pushed back to the user to stop doing bad things.  I can't in good conscience
-ignore the first report.
-
-> 
-> I asked Ira to push on this to protect the kernel from people like me,
-> :). So, there is this massively complicated specification for device
-> attestation and link integrity / encryption protection (SPDM and IDE)
-> that has applications to both PCIe and CXL. I do not see a path in the
-> near term to land that support in the kernel.
-> 
-> DOE being user accessible though, lends itself to pure userspace
-> implementations of SPDM and IDE infrastructure. I want to develop that
-> infrastructure, but also have the kernel reserve the space / right to
-> obviate that implementation with kernel control of the DOE mailbox, SPDM
-> sessions, and IDE keys in the future.
-> 
-> The warning helps keeps proof-of-concept and/or proprietary DOE code out
-> of production release streams on the observation that end users tend to
-> demand warn-free and taint-free kernel deployments.
-> 
-> Similar to CONFIG_IO_STRICT_DEVMEM, just turn this warning off if you
-> are a distribution kernel vendor who does not care about DOE vendor
-> tools affecting system state, and turn on CONFIG_LOCK_DOWN_KERNEL if you
-> are on the other end of the spectrum and want protection from such
-> things. The warn is middle-road option that I expect most distros would
-> use.
-
-FWIW I did not add any Kconfig for the feature.  Should I?
-
-Ira
+Thanks,
+Saravana

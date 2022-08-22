@@ -2,158 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9BF59BD7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958E859BD85
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234643AbiHVKTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 06:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S233586AbiHVKVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 06:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbiHVKTc (ORCPT
+        with ESMTP id S232056AbiHVKVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 06:19:32 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6EC13F63;
-        Mon, 22 Aug 2022 03:19:31 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MA5fik005803;
-        Mon, 22 Aug 2022 10:19:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=6DK9CQElqdoyqaUXts0NbOYao3Vo8Di7W1eEMnk1U8c=;
- b=3Rh/CnRRty0njUZOM0mPdo/M0Xj+bm8HmAUQyZAS3ZN29QNyFHCNW2phNlYX5AUCHbBr
- dkQHWOAiYqqW+oqAGHrcYfztAP4XRwgzA4xMthlEetHXXo1bz2QL9la3r1jQDUAgMOSX
- Z+uF/2UO2I0qjcdvwsGl4gVRVG9P0UOlD02hxZADDI85xnGh9nWjhABEDwlpprxXExQ1
- mNWX7VLp5twkqRtd7J6jzmBuVUIe0zbWcYWomanjonYmQwva3SFNQSCw1e3isTS5mYy4
- zytItVG1c1CvPYJPVzVVvlsLxhOYRmbxFSNvQsANXqqNMJL5/gHPNE8FB0zuqEA4/Eo/ QA== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j47r2g0yg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Aug 2022 10:19:21 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27M8nQ9s011357;
-        Mon, 22 Aug 2022 10:19:19 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2046.outbound.protection.outlook.com [104.47.51.46])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j3mm83n07-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Aug 2022 10:19:19 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z6rFQks6MmbXheEfkNjRb8zuj3nWr5mnk7cvMUw2uJrwsYeq4jLSQv0dUGww4yBhW0m0Opft26KyzvivUtYB+Vt/oo/NeJKZzrh9AiV1tu9wf4myxgqxt4K82GQsbJb/cY2USrtHX3INFEbkr5QSJNsk08q8VSI80zLOCIGcrlOUr2DVufkejz4L0x6E0ySOoqc6a6b9XwtqrorxmCiAp9NDUYY93ZSMfyCOGktocyFku6NIBybeneJCHBHYNAj+XoLKETXX/Yeef4TYQZjPuDL7xi70Hr8Axb3MCkB02lfh5pD3Q6LYbECb2gyUhSWqMqBDVh3X+Z4YRGnScuYv+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6DK9CQElqdoyqaUXts0NbOYao3Vo8Di7W1eEMnk1U8c=;
- b=RkytWZ7bCDsfjWwQzdYTgOkfMmkCNgh7o5gM4uhAA+M79svd0Boy8wQU80rdEphKG2fuOMpYv4zerm7uZgqLYH+/St9aDBhRIig/ETqMck0MtBfUtDzR2gSaXSzMvx1xbaJhVrZggQzhXTeJciddEW/XaPBBXNIzWxVQn5eOrNoY1MT60sOSmb/DjgiqzECFViqYRcqGfU2AN+8mh/FkdyjdooxoPUlc303wGmKE+ufLS27uf/yZQNdNbJY8j8QwE1Cz1hER5H/0XvovBS+Zwz6R6/x7/DDm7pEXvExhxGpAc8+8gECsit4qovoFLQV07x31hQQqFqGHQ7HKGse1aQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6DK9CQElqdoyqaUXts0NbOYao3Vo8Di7W1eEMnk1U8c=;
- b=LeweUWdG3Jo2tBwd7qFRI3kHqb62mp8f38FZvITulnWIzbA953Z7othdS9p0Fi1P+viy0HXcGBzzNRhNvmUhpqz/QPe9tg5sotjXLkD/BBsahzW7syJzp80Ak07/TEJ6XgPRnpQHOHMACMisZ3hpylRwRn5WBgreaDrkWQYHHh8=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by SN6PR10MB2800.namprd10.prod.outlook.com
- (2603:10b6:805:db::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.19; Mon, 22 Aug
- 2022 10:19:13 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026%3]) with mapi id 15.20.5546.022; Mon, 22 Aug 2022
- 10:19:13 +0000
-Date:   Mon, 22 Aug 2022 13:18:51 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: dw100: Fix an error handling path in dw100_probe()
-Message-ID: <20220822101851.GC2695@kadam>
-References: <7213b90d0d872be154cff81aec1ad8a4a77116af.1661161223.git.christophe.jaillet@wanadoo.fr>
+        Mon, 22 Aug 2022 06:21:49 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62BE2A72C;
+        Mon, 22 Aug 2022 03:21:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661163708; x=1692699708;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iS2KabOwGx1pGkjnF3Mooe8NyNxyaR8bIWE1W2q8zfA=;
+  b=NHrcF9XVJxRDXYbxL2gdYhZDn9wNkbrF46CxWqygexCPXuijq/kTl5Tb
+   1iWnUU8Scu+oZEOUk0s/ATwZn56PpVCjRLzdDmGuN+oIrb8j9SEsVCa6r
+   lQFvpMuLKpwQ8byQXOzGpOYn2ucE/O/A1fNxquUCh9v13ywmsL2s1BOs4
+   +1AemVmAW+bO/Q96FfC6pDtfn0kjMeSDTqqBSR1JkAufz7Gh1hCVsW9E5
+   nJfK+f73QuhMXwApbB4Gl7wFAgebRcWfhD4wJC6RiccbPnvR+Z5x/OeVx
+   /dv+zzednNbXsiXOoosiWCKrRNcfXArqNG0l2mTHH+hHgwF6WL7c/1I10
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="276406120"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="276406120"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 03:21:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="641978995"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 22 Aug 2022 03:21:44 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQ4Yy-0005Cd-0s;
+        Mon, 22 Aug 2022 10:21:44 +0000
+Date:   Mon, 22 Aug 2022 18:21:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     kbuild-all@lists.01.org, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, aisheng.dong@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V7 4/6] soc: imx: add i.MX93 media blk ctrl driver
+Message-ID: <202208221843.9zfKWQu1-lkp@intel.com>
+References: <20220822083106.156914-5-peng.fan@oss.nxp.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7213b90d0d872be154cff81aec1ad8a4a77116af.1661161223.git.christophe.jaillet@wanadoo.fr>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0023.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4d::16)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9d0410e9-a8a8-4ea5-2b6c-08da8427c211
-X-MS-TrafficTypeDiagnostic: SN6PR10MB2800:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bIhpFSj5MtWj2bdpbgdiA+gjeBP89WfgdXLzdvRv/Rp7Pn7qTY+vOoN2erS9+EeZFEfOpVHSwfBspPbMKmxQ/nulWQuJ1oUXCpBLKFSW52dNIzVW1wcx8IBV+mq2ewlkxF6tcqRhrBEjyWhkvvVcvMoc+eABmUKSDHfWHSULNONotIyQm/3RPDUhLPbh0KYR4+D+CFs9tJMl108e0mkW+83DJo63aoHqHSZ1+MUWQz1z8/APq0sx0PhBifZmXSJxwct/sA5BKgFu36VZKyOIFY/Yi7cyvMzgocMK9TdlCF7P1SMW0GfSAd2QRlrJD4hvxNaGguQG4KBIXh1/5Utabja3scx6+7nj/mK3YIVdh0cP5eub8zgpLQRsxdacA8rQZs6WRRbBDUvyqsW1GRKwd2fIgb071NQrSNpmML8MEFdGbTflPdTQfXWfJ46SdbyQalrQG+jHL5EVL1NaLH/1gXWFXvsc1nyLJW2GKtlrSwmez0KI/Hml6VC57Bl5vAqgAiyZtZxps5X0njiQ2PA2w53plUpZGuR20LCpHNXwx8LhO1/hszrfq4HDkV50Cy/AoaJBRyKSpJEcWRt5dF1e65ro7Cw3jvb3oAy4C8vlQ7Usz6ctqvCs2v4MEcWxkPgxyrYdkl57VPKd7an6PLV/yPCg8Mf8V+HuTV52jfAP1j3RfqMd78JyS5MjkD+cJCEcmk5DlLvf492V59HoQfkxzDBRHXj5D9gfd1NuwN+OPfgTaqQnh12Nbyn2ddu+V8MpMsxoi798nei2QfnCG5PRAw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(366004)(346002)(136003)(39860400002)(396003)(33716001)(86362001)(558084003)(33656002)(38100700002)(38350700002)(316002)(5660300002)(6666004)(44832011)(8936002)(4326008)(6916009)(54906003)(8676002)(6486002)(66476007)(66946007)(66556008)(1076003)(186003)(2906002)(26005)(52116002)(6506007)(41300700001)(478600001)(9686003)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WfD0zhfYr3b4WUp1XuBh/6snlAuFx7ryk8EA3MXg7+gZ5/NOAMblHFck4bpw?=
- =?us-ascii?Q?znJlNMaKu+xeeGYxXR9eJWRlwcADars3Dw0OwCn+2iRf/sJMh4MbqLTdcuGb?=
- =?us-ascii?Q?bNgmysc9M5RK47gq1KnK6Fk07RgshdPbVqmERxQIEvGMixX+xOQ4xpNPbSgG?=
- =?us-ascii?Q?dGTPntltOr9E6G5WQ+1ufw9FQctHOMObtR8h/vtyxPhp9PAU7rx2/elmQRbG?=
- =?us-ascii?Q?xZhv/qe+R9AFfLghJSlksiA/eMLutPp8HuY2hYS0DnV4uDA9x6n0db66bwvh?=
- =?us-ascii?Q?NPvRiWyrQ7PWdY2EVDvsVFaa3q9tt3HEdBbSDg/yRshj7UYSKKULM37HaB3J?=
- =?us-ascii?Q?zp1Kvx5LyKF1A7l2nJVbcFwl2hQ41Q9HcHQfKkkXERcYbcXJNxAGfvA2G3RN?=
- =?us-ascii?Q?bEdV6nqlmiaAwGsVIKx3ao/v4QZF6t6zM2uMBMsZG5mHeShJ0oYiiV/VmKRp?=
- =?us-ascii?Q?/D4T1FeAGHDD9Ps9Ozq1tnGLYesRaRd0hiBERm7ypu6iwauqeiwun5AUqdOO?=
- =?us-ascii?Q?cOrU9UHHCBBiyl75SRY6JoB7C6/2hCmXpYD9R++eZ2V2u9tWb6x6GvxxWWf6?=
- =?us-ascii?Q?9q+NJlvKZsVmM2cOBVlYS2jWPKnPDkDZqGG4Vb6Dx3mNy7rzmwWoG+GlRnc5?=
- =?us-ascii?Q?1SkCNLFX8pjUNUC1yvX2iZT/jaNXAX2pOL9BRABH7t76/k9cVTACehuT2Blt?=
- =?us-ascii?Q?bKH6H2edpINywiqj4aSE9sTKMiOWCMLeHqkRfHXNm6Z+7E/p9vHPz+5lWdLj?=
- =?us-ascii?Q?BtighyCZKOc43u1KyamA3NMiM2MTq5gn/HoyzrgWG5Y5fFWB1h+t24etlkh7?=
- =?us-ascii?Q?rSQI3OBfSjsy+HoDoeJiLajRyRU7CNd5xUhR7Ik0/XZbtmBW9Kfy46ylkt9w?=
- =?us-ascii?Q?Vgrr9XvkmaybEExgwhsV3sKrtlZXryocamNfOXQdluPYEjWY7jSodKBUaSpQ?=
- =?us-ascii?Q?0jdi1otTQVbciAZxkqiizk+SVeMpKYXTtSSeGFuMpKDk8X7Q3pyTprjq/QV8?=
- =?us-ascii?Q?qqzIRvbaHBbZEraOSNgsmUIyk+SV7S95zZa5kMzkaQzOkKeQ8tBmGlQ2bgU9?=
- =?us-ascii?Q?3LmVOc5Icf3PA+19tZsglwydBLYWldueMliPak2rOgZB0huj3CtbKtSzB+L2?=
- =?us-ascii?Q?LR+KLADgvdQbiFjYpyDKHVfL0IQlDeHlTCo11eZUZe1DIU/9nXj2u1LX/TGZ?=
- =?us-ascii?Q?X5yD+lS2a2UYBjqaLGQ/x8uEDirwkuBq0Sgd4KMn2IHtuKdxGuDOEeFYPURv?=
- =?us-ascii?Q?vjiSwgzvI7FWPDgC7kZCzWUYYK90JWYhjLfHbEb1JshFkbAmxv7essGAnWAV?=
- =?us-ascii?Q?I8aNl35m50fGWoQMoM4+6Re2VgNQsIaN1SAiZrC0hsXASzvz60OzroiYzhkl?=
- =?us-ascii?Q?9tDp4PokqjpSbZg5K/EX0hkFbfiQ0KgmUYmC4I3Sxhb+u9mZwm8aIt1Z8xNH?=
- =?us-ascii?Q?WpWR95KZ8zFuRZvKJLkxdy4W8okGaiAl9Dy6BJStZkyFOgbGYLgOZZw/R2I8?=
- =?us-ascii?Q?1PmP+4iheVJ/F2I7UD1iAVkosjjP/t69NgsFV9qHgW4mkCAiF3ngfJYA8R2G?=
- =?us-ascii?Q?KLLCPbOPsAt2DdcJk6dNRrwRFGa0PfrpuPfcrz9taz4KO1jP/GMCkzzQaRXo?=
- =?us-ascii?Q?EA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d0410e9-a8a8-4ea5-2b6c-08da8427c211
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 10:19:13.6153
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /FI0PgwLZDgTQ7ofD5zk1iWbtNIgUmlfPb2w/BqaVInSv3JrDhpkyRCREwxsiP5rgVrw2ImgxJJiQpzWK1QJLELyI7wg51MyKCQvA/O75vQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2800
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-22_05,2022-08-22_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 spamscore=0
- phishscore=0 adultscore=0 mlxscore=0 malwarescore=0 mlxlogscore=838
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208220044
-X-Proofpoint-GUID: glA-sPgh26c6f1BbPFgO4FInJzamh5QM
-X-Proofpoint-ORIG-GUID: glA-sPgh26c6f1BbPFgO4FInJzamh5QM
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220822083106.156914-5-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 11:40:43AM +0200, Christophe JAILLET wrote:
-> After a successful call to media_device_init() it is safer to call
-> media_device_init().
+Hi "Peng,
 
-s/media_device_init/media_device_cleanup/.
+Thank you for the patch! Yet something to improve:
 
-regards,
-dan carpenter
+[auto build test ERROR on shawnguo/for-next]
+[also build test ERROR on linus/master v6.0-rc2 next-20220822]
+[cannot apply to robh/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/imx-support-i-MX93-SRC-and-mediamix-blk-ctrl/20220822-163300
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220822/202208221843.9zfKWQu1-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7b6c02f1e51855f1a4b862f3b638721cd64077d4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Peng-Fan-OSS/imx-support-i-MX93-SRC-and-mediamix-blk-ctrl/20220822-163300
+        git checkout 7b6c02f1e51855f1a4b862f3b638721cd64077d4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/soc/imx/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/soc/imx/imx93-blk-ctrl.c: In function 'imx93_blk_ctrl_probe':
+>> drivers/soc/imx/imx93-blk-ctrl.c:214:35: error: 'SZ_4K' undeclared (first use in this function)
+     214 |                 .max_register   = SZ_4K,
+         |                                   ^~~~~
+   drivers/soc/imx/imx93-blk-ctrl.c:214:35: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +/SZ_4K +214 drivers/soc/imx/imx93-blk-ctrl.c
+
+   198	
+   199	static int imx93_blk_ctrl_probe(struct platform_device *pdev)
+   200	{
+   201		struct device *dev = &pdev->dev;
+   202		const struct imx93_blk_ctrl_data *bc_data = of_device_get_match_data(dev);
+   203		const struct imx93_blk_ctrl_domain_data *bus = bc_data->bus;
+   204		struct imx93_blk_ctrl *bc;
+   205		void __iomem *base;
+   206		int i, ret;
+   207	
+   208		struct regmap_config regmap_config = {
+   209			.reg_bits	= 32,
+   210			.val_bits	= 32,
+   211			.reg_stride	= 4,
+   212			.rd_table	= bus->reg_access_table,
+   213			.wr_table	= bus->reg_access_table,
+ > 214			.max_register   = SZ_4K,
+   215		};
+   216	
+   217		bc = devm_kzalloc(dev, sizeof(*bc), GFP_KERNEL);
+   218		if (!bc)
+   219			return -ENOMEM;
+   220	
+   221		bc->dev = dev;
+   222	
+   223		base = devm_platform_ioremap_resource(pdev, 0);
+   224		if (IS_ERR(base))
+   225			return PTR_ERR(base);
+   226	
+   227		bc->regmap = devm_regmap_init_mmio(dev, base, &regmap_config);
+   228		if (IS_ERR(bc->regmap))
+   229			return dev_err_probe(dev, PTR_ERR(bc->regmap),
+   230					     "failed to init regmap\n");
+   231	
+   232		bc->domains = devm_kcalloc(dev, bc_data->num_domains + 1,
+   233					   sizeof(struct imx93_blk_ctrl_domain),
+   234					   GFP_KERNEL);
+   235		if (!bc->domains)
+   236			return -ENOMEM;
+   237	
+   238		bc->onecell_data.num_domains = bc_data->num_domains;
+   239		bc->onecell_data.xlate = imx93_blk_ctrl_xlate;
+   240		bc->onecell_data.domains =
+   241			devm_kcalloc(dev, bc_data->num_domains,
+   242				     sizeof(struct generic_pm_domain *), GFP_KERNEL);
+   243		if (!bc->onecell_data.domains)
+   244			return -ENOMEM;
+   245	
+   246		for (i = 0; i < bus->num_clks; i++)
+   247			bc->clks[i].id = bus->clk_names[i];
+   248		bc->num_clks = bus->num_clks;
+   249	
+   250		ret = devm_clk_bulk_get(dev, bc->num_clks, bc->clks);
+   251		if (ret) {
+   252			dev_err_probe(dev, ret, "failed to get bus clock\n");
+   253			return ret;
+   254		}
+   255	
+   256		for (i = 0; i < bc_data->num_domains; i++) {
+   257			const struct imx93_blk_ctrl_domain_data *data = &bc_data->domains[i];
+   258			struct imx93_blk_ctrl_domain *domain = &bc->domains[i];
+   259			int j;
+   260	
+   261			domain->data = data;
+   262	
+   263			for (j = 0; j < data->num_clks; j++)
+   264				domain->clks[j].id = data->clk_names[j];
+   265	
+   266			ret = devm_clk_bulk_get(dev, data->num_clks, domain->clks);
+   267			if (ret) {
+   268				dev_err_probe(dev, ret, "failed to get clock\n");
+   269				goto cleanup_pds;
+   270			}
+   271	
+   272			domain->genpd.name = data->name;
+   273			domain->genpd.power_on = imx93_blk_ctrl_power_on;
+   274			domain->genpd.power_off = imx93_blk_ctrl_power_off;
+   275			domain->bc = bc;
+   276	
+   277			ret = pm_genpd_init(&domain->genpd, NULL, true);
+   278			if (ret) {
+   279				dev_err_probe(dev, ret, "failed to init power domain\n");
+   280				goto cleanup_pds;
+   281			}
+   282	
+   283			bc->onecell_data.domains[i] = &domain->genpd;
+   284		}
+   285	
+   286		pm_runtime_enable(dev);
+   287	
+   288		ret = of_genpd_add_provider_onecell(dev->of_node, &bc->onecell_data);
+   289		if (ret) {
+   290			dev_err_probe(dev, ret, "failed to add power domain provider\n");
+   291			goto cleanup_pds;
+   292		}
+   293	
+   294		dev_set_drvdata(dev, bc);
+   295	
+   296		return 0;
+   297	
+   298	cleanup_pds:
+   299		for (i--; i >= 0; i--)
+   300			pm_genpd_remove(&bc->domains[i].genpd);
+   301	
+   302		return ret;
+   303	}
+   304	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

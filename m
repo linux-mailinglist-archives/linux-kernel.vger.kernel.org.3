@@ -2,197 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9A159C872
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7432B59C93F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235629AbiHVTQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 15:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
+        id S238322AbiHVTtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 15:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237619AbiHVTPU (ORCPT
+        with ESMTP id S237151AbiHVTtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 15:15:20 -0400
-Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42DA2419B7;
-        Mon, 22 Aug 2022 12:15:03 -0700 (PDT)
-Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id BDDCADA5;
-        Mon, 22 Aug 2022 22:17:55 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com BDDCADA5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1661195875;
-        bh=SEhYhWwAeDvbFaGOXmwsrF7W8fxPLjwKBh4/wA6K/zg=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=ZgW/iuwQqU0xOX9db7A1b2Z7LelR635HyKx9fU0ZyBroYKdp3bRtW+vLNRXltuOj5
-         vZpyktUfepgY5M4f6dxAi3828cDZEkrn0S+AygtqE6ALYyZ26f8FkuIyCeggbrtKoA
-         lrXLp04T/m/bdFoSarELRhFmQsY1chxVs3noKEJE=
-Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:14:41 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 18/18] EDAC/synopsys: Add mapping-based memory size calculation
-Date:   Mon, 22 Aug 2022 22:14:27 +0300
-Message-ID: <20220822191427.27969-19-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220822191427.27969-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220822191427.27969-1-Sergey.Semin@baikalelectronics.ru>
+        Mon, 22 Aug 2022 15:49:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC2D33A3A;
+        Mon, 22 Aug 2022 12:49:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37216B812A3;
+        Mon, 22 Aug 2022 19:49:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B9AC433C1;
+        Mon, 22 Aug 2022 19:49:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661197749;
+        bh=RZpX33SQG/uaVlRMoFcxzWwH5bvWTFtzv9I8YsCSbE4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=q+VD/QLyJ92ZHhvqcfdQKu2Qc5w83Eo+uwDBdycXuPumZoT7FaBfATXrjIOkxM2Jp
+         Wx6elk7eJvxUOiOKtqIRE79BMjJpV87lH8afcA7LBTtZZ0xEyPGKfwZzMIUV9fgiPa
+         BUKxprIFsdAcbJEaoLM4j1+jxlHvN4aWvzFK1njZpPgXtxn0xviCP2FLa8uBQlOrSu
+         9yJ/SCu9y37LjhjATOF1YrStPG0XHxtd4cfcE0yX3PeCQjH5DNFM37qN7aFF3JxB8X
+         DfSz/+6d0O3+kKuMYCkcYF2AHupnssukCVbYmhGMCqh4SbA7xfkFjWp0VFyc8vsRRg
+         O07nrRcJnJYPA==
+Date:   Mon, 22 Aug 2022 20:14:40 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 07/14] iio: ltc2688: Simplify using
+ devm_regulator_*get_enable()
+Message-ID: <20220822201419.20149725@jic23-huawei>
+In-Reply-To: <9482dea1-fd70-00a7-df4c-640772ea53b4@fi.rohmeurope.com>
+References: <cover.1660934107.git.mazziesaccount@gmail.com>
+        <a29493f594c84b3bd852e462bbd3e591a8575a27.1660934107.git.mazziesaccount@gmail.com>
+        <20220820122120.57dddcab@jic23-huawei>
+        <412c5d22-d59b-9191-80dd-e3ca11360bc4@gmail.com>
+        <CAHp75VdoKtc2QqFcDuJ00KBz6mjg0fnM_WhyVqhCmDVo_3K6kg@mail.gmail.com>
+        <01fec744-f3d4-b633-d3ce-bcd86a153132@gmail.com>
+        <CAHp75Vd3vyAZbWpZT9SmyD=ecGTAdVNWK=fs_n4OSAqGtGj_gg@mail.gmail.com>
+        <103abfae-6c0d-9a2e-2d59-0da4c8be3eb4@gmail.com>
+        <CAHp75VchPCHsBcx7mMoGUjz=s4hmfnO6t7DqtpWfg=aGrbo1Fg@mail.gmail.com>
+        <9482dea1-fd70-00a7-df4c-640772ea53b4@fi.rohmeurope.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the size of the memory attached to the controller is retrieved
-by means of the si_meminfo() method. It isn't quite correct because the
-system may have more than one memory controller. There is a better and
-more portable approach available to find out the attached memory size.
-Since now we have the full HIF/SDRAM mapping table available right in the
-device probe procedure and the DQ-bus width is detected at that stage too,
-that info can be used to calculate the total memory size accessible
-over the corresponding DW uMCTL2 DDR controller. It can be done since the
-hardware reference manual demands that none two SDRAM bits are mapped to
-the same HIF bit [1] and that the unused SDRAM address bits mapping must
-be disabled [2].
 
-Note the size calculation procedure takes the ranks mapping into account.
-That part will be removed after we add the multi-ranked MC registration.
+Interesting to see the different mental models used when reading code.
 
-[1] DesignWare® Cores Enhanced Universal DDR Memory Controller (uMCTL2)
-    Databook, Version 3.91a, October 2020, p.108
-[2] DesignWare® Cores Enhanced Universal DDR Memory Controller (uMCTL2)
-    Databook, Version 3.91a, October 2020, p.109
+Overall I'm fine with either static within function or static outside
+function depending on author preference + for short cases like this
+I'm also fine with them on the stack.
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- drivers/edac/synopsys_edac.c | 66 ++++++++++++++++++++++++++----------
- 1 file changed, 49 insertions(+), 17 deletions(-)
+Obviously can only speak for what I'll take into IIO!
 
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index 2bdf606ba2b9..90b57986a9b5 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -960,20 +960,6 @@ static inline enum dev_type snps_get_dtype(u32 mstr)
- 	return DEV_UNKNOWN;
- }
- 
--/**
-- * snps_get_memsize - Read the size of the attached memory device.
-- *
-- * Return: the memory size in bytes.
-- */
--static u32 snps_get_memsize(void)
--{
--	struct sysinfo inf;
--
--	si_meminfo(&inf);
--
--	return inf.totalram * inf.mem_unit;
--}
--
- /**
-  * snps_get_mtype - Returns controller memory type.
-  * @mstr:	Master CSR value.
-@@ -1388,6 +1374,51 @@ static void snps_get_addr_map(struct snps_edac_priv *priv)
- 	snps_get_hif_rank_map(priv, regval);
- }
- 
-+/**
-+ * snps_get_sdram_size - Calculate SDRAM size.
-+ * @priv:	DDR memory controller private data.
-+ *
-+ * The total size of the attached memory is calculated based on the HIF/SDRAM
-+ * mapping table. It can be done since the hardware reference manual demands
-+ * that none two SDRAM bits should be mapped to the same HIF bit and that the
-+ * unused SDRAM address bits mapping must be disabled.
-+ *
-+ * Return: the memory size in bytes.
-+ */
-+static u64 snps_get_sdram_size(struct snps_edac_priv *priv)
-+{
-+	struct snps_hif_sdram_map *map = &priv->hif_sdram_map;
-+	u64 size = 0;
-+	int i;
-+
-+	for (i = 0; i < DDR_MAX_ROW_WIDTH; i++) {
-+		if (map->row[i] != DDR_ADDRMAP_UNUSED)
-+			size++;
-+	}
-+
-+	for (i = 0; i < DDR_MAX_COL_WIDTH; i++) {
-+		if (map->col[i] != DDR_ADDRMAP_UNUSED)
-+			size++;
-+	}
-+
-+	for (i = 0; i < DDR_MAX_BANK_WIDTH; i++) {
-+		if (map->bank[i] != DDR_ADDRMAP_UNUSED)
-+			size++;
-+	}
-+
-+	for (i = 0; i < DDR_MAX_BANKGRP_WIDTH; i++) {
-+		if (map->bankgrp[i] != DDR_ADDRMAP_UNUSED)
-+			size++;
-+	}
-+
-+	for (i = 0; i < DDR_MAX_RANK_WIDTH; i++) {
-+		if (map->rank[i] != DDR_ADDRMAP_UNUSED)
-+			size++;
-+	}
-+
-+	return 1ULL << (size + priv->info.dq_width);
-+}
-+
- /**
-  * snps_init_csrows - Initialize the csrow data.
-  * @mci:	EDAC memory controller instance.
-@@ -1400,7 +1431,8 @@ static void snps_init_csrows(struct mem_ctl_info *mci)
- 	struct snps_edac_priv *priv = mci->pvt_info;
- 	struct csrow_info *csi;
- 	struct dimm_info *dimm;
--	u32 size, row, width;
-+	u32 row, width;
-+	u64 size;
- 	int j;
- 
- 	/* Actual SDRAM-word width for which ECC is calculated */
-@@ -1408,13 +1440,13 @@ static void snps_init_csrows(struct mem_ctl_info *mci)
- 
- 	for (row = 0; row < mci->nr_csrows; row++) {
- 		csi = mci->csrows[row];
--		size = snps_get_memsize();
-+		size = snps_get_sdram_size(priv);
- 
- 		for (j = 0; j < csi->nr_channels; j++) {
- 			dimm		= csi->channels[j]->dimm;
- 			dimm->edac_mode	= EDAC_SECDED;
- 			dimm->mtype	= priv->info.sdram_mode;
--			dimm->nr_pages	= (size >> PAGE_SHIFT) / csi->nr_channels;
-+			dimm->nr_pages	= PHYS_PFN(size) / csi->nr_channels;
- 			dimm->grain	= width;
- 			dimm->dtype	= priv->info.dev_cfg;
- 		}
--- 
-2.35.1
+Jonathan
+
+
 

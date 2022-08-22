@@ -2,127 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65DA59CB9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE3859CBAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238345AbiHVWlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 18:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
+        id S234666AbiHVWmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 18:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbiHVWlS (ORCPT
+        with ESMTP id S237790AbiHVWm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 18:41:18 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BD9193F6
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:41:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661208075; x=1692744075;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=l6AcQXtZoUrGSYmI0Nyks60UXBALKJWo/hybvTs+Bmc=;
-  b=LsccqduzhoVfV8Vq6otQzYxnujbOWFMV2kbm9bGyEyKooAQSIlXZsep2
-   EhmtAkjQIgLcXWtP3+XEP3mcozKRTjNoK97mVLI1AzaA6W6JVtInAjCrY
-   MLjq82roP5XI7b6a5EAqIORAyL0OvnGVEHBQ5iD9iajpJQ9EU6OEMpcqO
-   K9d+d+PLetgnzLajzLzUO66GL8cxPq3SHNgQajGt8i56AaZ9ZrU0Zk24B
-   UjKstZvwmbN3MG1ug9q2UXnbrX2zOmLbnzj9ym5x7qSJ6lSYnmLLngMxX
-   tiCCfeko69J9fvW72lE6u1pXH12iQ8hrkTXt/ms46Mv/MIPwTUTxlznsd
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="379827678"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="379827678"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 15:41:02 -0700
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="698453395"
-Received: from eteeman-mobl1.amr.corp.intel.com (HELO [10.212.253.86]) ([10.212.253.86])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 15:41:01 -0700
-Message-ID: <08c5b818-a030-4c97-80f7-52ee42dc1f79@linux.intel.com>
-Date:   Mon, 22 Aug 2022 15:41:00 -0700
+        Mon, 22 Aug 2022 18:42:26 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3106150716;
+        Mon, 22 Aug 2022 15:42:24 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3D8FC374F3;
+        Mon, 22 Aug 2022 22:42:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661208143; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L8tdsVzVyDJM4BV8U6INcBMyETt5VDqLfPWrM+9ANZU=;
+        b=Wr3CoLUChRliBIcsKBEP1ARTBdMKIOxqorZDI5PC02cuVv0LuNzxNwZ1mFTqVb+7JBZfoX
+        LL26ihunLovvcTYQcNmjUYPDT4M9P9JN52Z6d716ibtdAE1bnPXlUzvKCWl56tXGcZft6y
+        NhQsHRd9e09zuZfA90lOARNSJ6/HILI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661208143;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L8tdsVzVyDJM4BV8U6INcBMyETt5VDqLfPWrM+9ANZU=;
+        b=qZqaiUA+p1D36amScnShCHJ24rJTyLaa5teureTyNmBQZIY+cXaWtrvpBQYngEYOJIQLbp
+        dy+/koo412I3GbAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7967F1332D;
+        Mon, 22 Aug 2022 22:42:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0pRhDUwGBGPzJAAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 22 Aug 2022 22:42:20 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v9 1/6] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>, Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220728034420.648314-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Yv5KNyX992ddvVtD@zn.tnic> <20abfa00-b70c-f151-9ee4-5668f09f4ace@intel.com>
- <YwP27a6/9Yq8LBM3@zn.tnic> <be080a46-e6c2-995b-9064-a8506c38bef8@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <be080a46-e6c2-995b-9064-a8506c38bef8@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Jeff Layton" <jlayton@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        "Trond Myklebust" <trondmy@hammerspace.com>,
+        "Dave Chinner" <david@fromorbit.com>
+Subject: Re: [PATCH] iversion: update comments with info about atime updates
+In-reply-to: <20220822133309.86005-1-jlayton@kernel.org>
+References: <20220822133309.86005-1-jlayton@kernel.org>
+Date:   Tue, 23 Aug 2022 08:42:15 +1000
+Message-id: <166120813594.23264.3095357572943917078@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, 22 Aug 2022, Jeff Layton wrote:
+> Add an explicit paragraph codifying that atime updates due to reads
+> should not be counted against the i_version counter. None of the
+> existing subsystems that use the i_version want those counted, and
+> there is an easy workaround for those that do.
+>=20
+> Cc: NeilBrown <neilb@suse.de>
+> Cc: Trond Myklebust <trondmy@hammerspace.com>
+> Cc: Dave Chinner <david@fromorbit.com>
+> Link: https://lore.kernel.org/linux-xfs/166086932784.5425.17134712694961326=
+033@noble.neil.brown.name/#t
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  include/linux/iversion.h | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/include/linux/iversion.h b/include/linux/iversion.h
+> index 3bfebde5a1a6..da6cc1cc520a 100644
+> --- a/include/linux/iversion.h
+> +++ b/include/linux/iversion.h
+> @@ -9,8 +9,8 @@
+>   * ---------------------------
+>   * The change attribute (i_version) is mandated by NFSv4 and is mostly for
+>   * knfsd, but is also used for other purposes (e.g. IMA). The i_version mu=
+st
+> - * appear different to observers if there was a change to the inode's data=
+ or
+> - * metadata since it was last queried.
+> + * appear different to observers if there was an explicit change to the in=
+ode's
+> + * data or metadata since it was last queried.
 
-On 8/22/22 2:44 PM, Dave Hansen wrote:
-> On 8/22/22 14:36, Borislav Petkov wrote:
->> Which makes my initial suggestion of calling this whole guest
->> functionality a "tdx" driver not such a bad idea... Depends on
->> whether there will be a split at all or it'll continue gaining more
->> functionality.
-> 
-> Yep, let's get the crystal ball out.
-> 
-> TDX folks:
-> 
-> What other ioctl()s are in the pipeline for the guest side?
+Should rename change the i_version?
+It does not explicitly change data or metadata, though it seems to
+implicitly change the ctime.
 
-In addition to the GetReport support currently implemented, we have
-following two attestation related IOCTLs in the pipeline.
+>   *
+>   * Observers see the i_version as a 64-bit number that never decreases. If=
+ it
+>   * remains the same since it was last checked, then nothing has changed in=
+ the
+> @@ -18,6 +18,12 @@
+>   * anything about the nature or magnitude of the changes from the value, o=
+nly
+>   * that the inode has changed in some fashion.
+>   *
+> + * Note that atime updates due to reads or similar activity do _not_ repre=
+sent
+> + * an explicit change to the inode. If the only change is to the atime and=
+ it
+> + * wasn't set via utimes() or a similar mechanism, then i_version should n=
+ot be
+> + * incremented. If an observer cares about atime updates, it should plan to
+> + * fetch and store them in conjunction with the i_version.
+> + *
 
-1. GetQuote     - Adds support to get signed Quote for the given TDREPORT. This
-                  is currently in the review process.
-2. VerifyReport - Verifies whether given Reportdata is generated in
-                  the current platform. It is only enabled in v1.5 TDX
-                  Module specification.
+If an implicit atime update happened to make the atime go backwards
+(possible, but not common), the updating i_version should be permitted,
+and possibly should be preferred.
 
-In addition to above, I think there is a possibility to add IOCTL to get
-storage keys from the ACPI SVKL table. Storage Volume Key Table (SVKL) is
-used by the VBIOS to share keys required to access encrypted drives. Although
-we don't have a clear requirement, I suspect that we might add IOCTL for it.
+NeilBrown
 
-Kirill/Isaku/Kai, If I missed any other IOCTL requirements, please add it.
-              
-> 
-> What ioctl()s are in the pipeline for the host side?  Are they all part
-> of /dev/kvm, or are there any TDX-specific "drivers" for the host?
-> 
-> We want to avoid both:
-> 
->  1. A driver called /dev/tdx (or "tdx-guest) which is only and will only
->     ever do TDX guest attestation.
 
->  2. A driver called /dev/tdx-guest-attest which shares a ton of
->     functionality with some future TDX guest feature like
->     /dev/tdx-guest-snazzy-feature-foo.  Then, a new driver every time
->     a new snazzy TDX feature shows up.
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+>   * Not all filesystems properly implement the i_version counter. Subsystem=
+s that
+>   * want to use i_version field on an inode should first check whether the
+>   * filesystem sets the SB_I_VERSION flag (usually via the IS_I_VERSION mac=
+ro).
+> --=20
+> 2.37.2
+>=20
+>=20

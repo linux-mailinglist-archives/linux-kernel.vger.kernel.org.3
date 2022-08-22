@@ -2,82 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E09C59C2BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4E359C2C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236509AbiHVP1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
+        id S236536AbiHVP2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236407AbiHVP0n (ORCPT
+        with ESMTP id S236538AbiHVP2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:26:43 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E6A3ECC0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:24:36 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id vw19so8261468ejb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:24:36 -0700 (PDT)
+        Mon, 22 Aug 2022 11:28:18 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EBB6427
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:27:30 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id k9so13696773wri.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:27:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=+T86Wl72f+FeWeRtOGkVlmWRkAxRXlHA5m5R3vqpGWs=;
-        b=Ol0z0PkAjZXBna32Isqt8G4NNZVcvypCiD7npmdqQUrUng9iYrmXQC6mZ9uyeKe+HU
-         cL69L/rzWsjJlHO2ALmaAx1ltJf+3dbncIBnOawpF4XoHXnqoZeovsw5Xc+gbrZTFEjY
-         dCjgW6BBlBQ0ZCL3PY9LQlTsHnuxHWVSPkhNw=
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=+v4yKbwJErYTuQ2Ufma5DTI3KicddoMcYUAjV+10QH4=;
+        b=jOVa5k+VR0xECB0FvAPknlvOs70kbJwGA0M6vShkkwU/M+ofySHJMBFDImFvCfRy43
+         +porc14Ri8mjhpMzvx7NhnAN900R01op2vihQ+M0GZGwamuFkLPbvmcL4f9AoWBVy3+G
+         CvVfDCVWKrZTo5LXpnv2tC7Ov19YCStZu2DVm2gw+nTI3ChqsiAoho+n80ZJQN1Kul43
+         QXTkjqiQ3O7Czm8qdTQfkKBLy8TI71V5QoDWAe7k9EZrttHfOY6eoQwTY1TipUQ/Wexi
+         p6+3SMepTaVRgUqL7NNfzAiF4LcN7QSGHsEqX/4QS8LOE/VGxdo/x6mdLeDb+KOZnmva
+         dQjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=+T86Wl72f+FeWeRtOGkVlmWRkAxRXlHA5m5R3vqpGWs=;
-        b=k6Xn5921p7BRXdzkynhH/OX2HKPF86D7l0l5KmVoQORBKPPXA5Ns/RBDgoIczlVm8c
-         xygjL2LiXoh2FoyiphzKZ3cV6qM4BhQMVnynZPYOBfn7npSqpxmLQMxC22lFY4Av+ehx
-         N2TSFMmr5OFa6WOSsxNkGLoVowBDEMUrUaIRqqBl88VqcKsBxbF6BvOqpepO70kyryYR
-         JVkFSxpxSw5hEhHIu3RX6m5RAlkqkE52pTfPSeufrRb4bRHCI3aN/Smlh2Ha+vFOy55M
-         DP6z8Ey4BZiiZGQhgDgf+4/FVCIFODl4XW2qDL4m9vbaxaHdoAlQzHIAXw2lTkU3MFhv
-         6gew==
-X-Gm-Message-State: ACgBeo3Jk4LV2RO9IfU3HDnCXvBLsLBw5ARuGRu4IJVVCcsI+R+j89lO
-        fILLBnLHBaf5viB4LP1C1Dv7q1MamE+2hKKdnqu9BA==
-X-Google-Smtp-Source: AA6agR5j8M3rqBkCxM8dnHG6ED3RCNQdniNKcKwM4yLtbj+oQVl6x+Revnno5eoSlvEEgoKpvmg1Nap22zvMyWaen9w=
-X-Received: by 2002:a17:906:8a4a:b0:73d:8471:e34b with SMTP id
- gx10-20020a1709068a4a00b0073d8471e34bmr2856240ejc.523.1661181874865; Mon, 22
- Aug 2022 08:24:34 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=+v4yKbwJErYTuQ2Ufma5DTI3KicddoMcYUAjV+10QH4=;
+        b=c1gb6Wo2nfrlaPmznwWF7gP72sVVYF+16MaUjAW8KOSM3TNK2Fy+UvjApXyIXZl11G
+         sHxOVmXrjk7y+sDOyMKYUrLH2L+Z45bbk4mHShoKqhm7hwh010/xeMRqG3ltQXiqfqP5
+         BbYn10VC4FCkniejj3Zk9Fr89ujmZrBM8+E8+gcFMEnwuNm7k8DhScUfuI0Jx2CAOiOo
+         VNcAfHQ1vW7KdIxXdfJXfAZELwKpbJ8ggXjtn4IQ4y7iO6yLjSVTDU79K9xqUYFSsE3A
+         G9bom6rm9IMBFAdS+VH6vZ/al9pLBU7vMtATxxsUGFtm4x8SxFhKazAAxAU5AFNQ8gx7
+         oBOw==
+X-Gm-Message-State: ACgBeo1jh/VIcAcyBGzKsvVyOrPlmFU28uu25yff0bHQSzOXGzg3XSDO
+        AgLkbIw4fW4JRBtkvoDSNZOqIg==
+X-Google-Smtp-Source: AA6agR7oEwBwW1qpYTRjGd7zeB5BXy6D1qbA9ArFwSTnG12IGsnupD9b4ZC3CKX2TbWM1fY8P9y06g==
+X-Received: by 2002:a05:6000:1a8b:b0:222:cac3:769a with SMTP id f11-20020a0560001a8b00b00222cac3769amr10524573wry.120.1661182048866;
+        Mon, 22 Aug 2022 08:27:28 -0700 (PDT)
+Received: from blmsp.fritz.box ([2001:4090:a245:8020:2658:1f7c:362:3e99])
+        by smtp.gmail.com with ESMTPSA id u18-20020adfdb92000000b0021eaf4138aesm14492011wri.108.2022.08.22.08.27.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 08:27:28 -0700 (PDT)
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Fabien Parent <parent.f@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH v4 0/4] clk: mediatek: Add mt8365 support
+Date:   Mon, 22 Aug 2022 17:26:48 +0200
+Message-Id: <20220822152652.3499972-1-msp@baylibre.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220822115257.7457-1-goriainov@ispras.ru>
-In-Reply-To: <20220822115257.7457-1-goriainov@ispras.ru>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 22 Aug 2022 17:24:24 +0200
-Message-ID: <CAJfpeguyD-znkZVwmiYZCK6tMsoJc+UzMKnkWxb7TToT1DFb4Q@mail.gmail.com>
-Subject: Re: [PATCH] ovl: Fix potential memory leak
-To:     Stanislav Goriainov <goriainov@ispras.ru>
-Cc:     linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022 at 13:53, Stanislav Goriainov <goriainov@ispras.ru> wrote:
->
-> ovl: Fix potential memory leak in ovl_lookup()
->
-> If memory for uperredirect was allocated with kstrdup()
-> in upperdir != NULL and d.redirect != NULL path,
-> it may be lost when upperredirect is reassigned later.
+Hi,
 
-Can't happen because the first assignment of upperredirect will only
-happen if upperdentry is non-NULL, while second one will only happen
-if upperdentry is NULL.   I understand why static checker fails to see
-this: it doesn't know that dentry->d_name will never contain '/'.  In
-this case the looped call to ovl_lookup_single() can be ignored and it
-is trivial to prove that d.redirect can only be set if *ret is
-non-NULL.
+This series adds a clock driver for the mt8365 SoC.
 
-Thanks,
-Miklos
+Thanks for the feedback so far.
+
+Best,
+Markus
+
+Based on https://lore.kernel.org/linux-mediatek/20220813083249.45427-1-y.oudjana@protonmail.com/
+
+Changes in v4:
+- Rebased onto v6.0-rc1
+- Fixed some minor things documented in the patches.
+
+Earlier versions:
+v2 - https://lore.kernel.org/linux-mediatek/20220530214434.1012889-1-fparent@baylibre.com/
+v3 - https://lore.kernel.org/linux-mediatek/20220811084433.2598575-1-msp@baylibre.com/
+
+Fabien Parent (2):
+  dt-bindings: clock: mediatek: add bindings for MT8365 SoC
+  clk: mediatek: add driver for MT8365 SoC
+
+Markus Schneider-Pargmann (2):
+  clk: mediatek: Provide mtk_devm_alloc_clk_data
+  clk: mediatek: Export required common code symbols
+
+ .../bindings/clock/mediatek,mt8365-clock.yaml |   42 +
+ .../clock/mediatek,mt8365-sys-clock.yaml      |   47 +
+ drivers/clk/mediatek/Kconfig                  |   50 +
+ drivers/clk/mediatek/Makefile                 |    7 +
+ drivers/clk/mediatek/clk-mt8365-apu.c         |   55 +
+ drivers/clk/mediatek/clk-mt8365-cam.c         |   57 +
+ drivers/clk/mediatek/clk-mt8365-mfg.c         |   63 +
+ drivers/clk/mediatek/clk-mt8365-mm.c          |  112 ++
+ drivers/clk/mediatek/clk-mt8365-vdec.c        |   63 +
+ drivers/clk/mediatek/clk-mt8365-venc.c        |   52 +
+ drivers/clk/mediatek/clk-mt8365.c             | 1155 +++++++++++++++++
+ drivers/clk/mediatek/clk-mtk.c                |   37 +-
+ drivers/clk/mediatek/clk-mtk.h                |    2 +
+ .../dt-bindings/clock/mediatek,mt8365-clk.h   |  373 ++++++
+ 14 files changed, 2110 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt8365-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt8365-sys-clock.yaml
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-apu.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-cam.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-mfg.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-mm.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-vdec.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-venc.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365.c
+ create mode 100644 include/dt-bindings/clock/mediatek,mt8365-clk.h
+
+-- 
+2.37.2
+

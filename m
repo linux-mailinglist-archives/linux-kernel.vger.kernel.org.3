@@ -2,162 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3646359BC16
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1779559BC18
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbiHVI4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
+        id S233266AbiHVI5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233380AbiHVI4S (ORCPT
+        with ESMTP id S233088AbiHVI5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:56:18 -0400
-Received: from burlywood.elm.relay.mailchannels.net (burlywood.elm.relay.mailchannels.net [23.83.212.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BABB2AE07
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:56:15 -0700 (PDT)
-X-Sender-Id: spamcontrol26|x-authuser|administracion@corporacionabgsac.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 7A599761B85;
-        Mon, 22 Aug 2022 08:56:14 +0000 (UTC)
-Received: from priva170.spindns.com (unknown [127.0.0.6])
-        (Authenticated sender: spamcontrol26)
-        by relay.mailchannels.net (Postfix) with ESMTPA id D3509761643;
-        Mon, 22 Aug 2022 08:56:10 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661158573; a=rsa-sha256;
-        cv=none;
-        b=P53J48fGltNu+nqueaIkEjc5QxoU2mceQIxw4lFhdsJ1ICu2Y02c34Bxfvk18e+zVUrxp/
-        /t4VTxD3MeiLtAaKRrP3f/fXGFalit+h4Cmxha4RrrVEDuPOe6relKfmnyhzlEK1bx9Vd1
-        b0WYek81F69mI+y2rXtb+G5HlCjXLd5DS5Uq5VElOs3GHRWtx4qKzBQfiqAo/wz1O0ZdmY
-        zqJYz18eKdGX1yNOpgNOPtNOuNVaUpb92rl4wSlbzO7WyFfZwnsWMN/iu+Q7bvaHGPpy9y
-        JB+fki1S75RkfvQyeItCDLhqJ8ymNPxeP6fWe4ZeShS+JXzG3kXfrz47noNrpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1661158573;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=wJxBS8GljCGjZnih+ZbPmMZBqXOVtTCPRbpHKRKCnmo=;
-        b=dHNn1ocf46wAsIteqZJavgdzcF9f25Mq4p8yPdhNYBBmgS+McCTVlYQxC6wLm6ZW8PLwSb
-        iSNKOOwNigL+3VXMe1CqefmW5S5Axulwv9pviNZlGabiMWyLXPg/xqMtDpHPvO2ATbuTpA
-        Z4nFP+1nGTuNE2kGkbyZFQPzuHkxn0OmhNXC/ri0syCB35aVGSbmj3aKW58dTY587oTpJu
-        aN/roL+yR/O3gNnIIUesOp2lFyR+NKYCu1j4RHRec9rNKGmp9AF1jEn0jJq5rFaOHQ9gbW
-        viGDNpiM5Mwltt8yHQ+JebiJCZm4N2caYaHjrMbhi2MIoYSOd3jUbrGwSrLOaw==
-ARC-Authentication-Results: i=1;
-        rspamd-769cfffc99-gz2kr;
-        auth=pass smtp.auth=spamcontrol26
- smtp.mailfrom=administracion@corporacionabgsac.com
-X-Sender-Id: spamcontrol26|x-authuser|administracion@corporacionabgsac.com
-X-MC-Relay: Junk
-X-MailChannels-SenderId: spamcontrol26|x-authuser|administracion@corporacionabgsac.com
-X-MailChannels-Auth-Id: spamcontrol26
-X-Inform-Industry: 0e04940350cad0bb_1661158573948_497585332
-X-MC-Loop-Signature: 1661158573948:1428180309
-X-MC-Ingress-Time: 1661158573948
-Received: from priva170.spindns.com (priva170.spindns.com [75.102.22.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
-        by 100.116.106.110 (trex/6.7.1);
-        Mon, 22 Aug 2022 08:56:13 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=corporacionabgsac.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wJxBS8GljCGjZnih+ZbPmMZBqXOVtTCPRbpHKRKCnmo=; b=Kk4+klS5WhNJBJs9rW68BMbkbq
-        BctFq4bZ5Vj6ACEkc8heVHctTb1nWWS70Oz/JG4k9gwEljHzgKSZaXau3wCTlZO7+IFJi4yFGmx5A
-        7ZC1KQop2kq3VUUuOIHonOt6qTJBu8H5VYtDlfbMrI3IXZr+ZxwmXhVzvPKyMpSKEvHf7hJt7PbZz
-        P9+5otnFidGcDRPJPvotLZiRpoTl1oO30fRM+bE9enP6eEY4KvocZmlGFkruAvj4iyGCqVAHJmK/F
-        jxKvmXpstu6sOSNu6HU8Co2dek+uozaFBjmgSDgNMqR/35j8ayH1mXDwZBBFO2ypANCBPTPkS3l13
-        Ln0ZuIkw==;
-Received: from [::1] (port=45266 helo=priva170.spindns.com)
-        by priva170.spindns.com with esmtpa (Exim 4.95)
-        (envelope-from <administracion@corporacionabgsac.com>)
-        id 1oQ3E5-000Ghr-4h;
-        Mon, 22 Aug 2022 04:56:07 -0400
+        Mon, 22 Aug 2022 04:57:32 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF39A2AE07
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:57:30 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id s1so11520716lfp.6
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:57:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:from:to:cc;
+        bh=km5sUamP86E8C09XJHKxgEiMfglAtrZZbG1g5902shE=;
+        b=mwGXlYgDeWHtuPn9+fhwIJNDqqHi8U0Oa0bWBgUL0Pbm+koLCTIPmRarbN1Oymcs0I
+         SDfpo2ECZWgwI4vygb2X5IDoOgTCZjxIg4IpTyrvEQjdnc1lMuMus4OLkA6+XlAYwM+Z
+         Pnf8dUh88dY9XcFpuW7He6W90OMS3nhfkZiZQO32NhwBDZFy2wj50RlGLCtIdSYk8O0J
+         gYAhXHNfrNkcs551GsKFFXTYVhTCEi0LdUgiMNrHszzn7owT3jIs6T5wlZqm2YMvIoEq
+         4+9/bDaQqImDHTeGGCcek8UN+CgEjQEKBQnJAG8cERkQgla7jsQJ9Lgo9f2eC07o9ToI
+         L3bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc;
+        bh=km5sUamP86E8C09XJHKxgEiMfglAtrZZbG1g5902shE=;
+        b=jBM3Dw0+W7NyBiYgAaiINCctKTALdlf4kCUq3dgmJhd8Hi0LLi6ull8H5EhXfoq+Px
+         aRsiuZCdUlsOZnDAq6sWxgrM6yjN2LmCV29alV2StWe7X0mUrcVHrjYYtXbMCShE+PFc
+         el3w7+xL4+wNFGk4PkvFcVG6J1WOYtJTdvKa6qOzRjcVifMrbEB/nDWlXACCbIoW5JDW
+         3nJcbARAvRSepZIgsxW6P9AnKhOg2nhdDIjW/0Nbal5lZoKCHP/ytPp2ggaKIbVZm7nO
+         VtXoCV6/g7nIJD4xLg83QckmSsHY4Jome4FiVzyY+JiGYB3zMsHFecAfqdk4unSzXQMy
+         mYQg==
+X-Gm-Message-State: ACgBeo3daU0DrJdlp0pAMyKEx5WAmZqzvQPj/lkjk49/U6E6quRp8Unk
+        OYurlg7dGmfU7k83wlfYQIY7/LqhWj+4ZA==
+X-Google-Smtp-Source: AA6agR69A81MYkmHldVuGgogi1ujKmdM8pAvTqfRMtvZzTU6zcjS+6Uua5ug7h2YyUbaP4GpRzjM5A==
+X-Received: by 2002:a05:6512:3f19:b0:48a:874f:534 with SMTP id y25-20020a0565123f1900b0048a874f0534mr6494951lfa.446.1661158648923;
+        Mon, 22 Aug 2022 01:57:28 -0700 (PDT)
+Received: from [10.10.53.53] (81-18-220-16.static.chello.pl. [81.18.220.16])
+        by smtp.googlemail.com with ESMTPSA id d16-20020a0565123d1000b0048ae518364dsm946326lfv.148.2022.08.22.01.57.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 01:57:28 -0700 (PDT)
+From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
+X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Message-ID: <9a15b1cf-692c-1b0d-02a6-316cbd954525@gmail.com>
+Date:   Mon, 22 Aug 2022 10:57:26 +0200
 MIME-Version: 1.0
-Date:   Mon, 22 Aug 2022 03:56:04 -0500
-From:   Michael Kinciad <administracion@corporacionabgsac.com>
-To:     undisclosed-recipients:;
-Subject: Positive OUTREACH
-Reply-To: michaelkinciad@outlook.com
-Mail-Reply-To: michaelkinciad@outlook.com
-User-Agent: Roundcube Webmail/1.5.2
-Message-ID: <603f9e02fe543e730a1397babc7ec753@corporacionabgsac.com>
-X-Sender: administracion@corporacionabgsac.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-YourOrg-MailScanner-Information: Please contact the ISP for more information
-X-YourOrg-MailScanner-ID: 1oQ3E5-000Ghr-4h
-X-YourOrg-MailScanner: Found to be clean
-X-YourOrg-MailScanner-SpamCheck: 
-X-YourOrg-MailScanner-From: administracion@corporacionabgsac.com
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        ODD_FREEM_REPTO,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-AuthUser: administracion@corporacionabgsac.com
-X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?23.83.212.26>]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [23.83.212.26 listed in wl.mailspike.net]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.2 ODD_FREEM_REPTO Has unusual reply-to header
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 00/35] drm: Analog TV Improvements
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <dom@raspberrypi.com>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
+ <987d6114-5fcb-d668-3b0d-ad6d8723dfdb@tronnes.org>
+ <20220822074800.qzyctchqn5usr55g@houat>
+In-Reply-To: <20220822074800.qzyctchqn5usr55g@houat>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Maxime,
+
+I tried testing and reviewing your changes properly over the last weekend, but
+ultimately ran into this ("flip_done timed out" etc.) issue and was unable to
+mitigate it, at least so far. This seems to pop up every time I try to change
+modes in any way (either change the TV norm, or just try doing
+"xrandr --output Composite-1 --off" followed by bringing it back on; it also
+means that the Pi goes unusable when the DE's screen saving routine kicks in).
+
+I'm using a Pi 4, and it works with the rpi-5.13.y branch
+https://github.com/raspberrypi/linux, but seemingly nothing newer.
+I specifically tried rpi-5.14.y, rpi-5.15.y and rpi-5.19.y - rpi-5.15.y,
+which is the current main branch in Raspberry Pi OS, seems to be broken since
+forever; at least since my patches (originally written for 5.10) landed there.
+
+I'll try identifying the issue further, possibly later today, and maybe check
+the rpi-6.0.y branch as well.
+
+Best regards,
+Mateusz Kwiatkowski
+
+W dniu 22.08.2022 o 09:48, Maxime Ripard pisze:
+> Hi,
+>
+> On Sun, Aug 21, 2022 at 06:33:12PM +0200, Noralf Trønnes wrote:
+>> Den 29.07.2022 18.34, skrev Maxime Ripard:
+>>> Hi,
+>>>
+>>> Here's a series aiming at improving the command line named modes support,
+>>> and more importantly how we deal with all the analog TV variants.
+>>>
+>>> The named modes support were initially introduced to allow to specify the
+>>> analog TV mode to be used.
+>>>
+>>> However, this was causing multiple issues:
+>>>
+>>>   * The mode name parsed on the command line was passed directly to the
+>>>     driver, which had to figure out which mode it was suppose to match;
+>>>
+>>>   * Figuring that out wasn't really easy, since the video= argument or what
+>>>     the userspace might not even have a name in the first place, but
+>>>     instead could have passed a mode with the same timings;
+>>>
+>>>   * The fallback to matching on the timings was mostly working as long as
+>>>     we were supporting one 525 lines (most likely NSTC) and one 625 lines
+>>>     (PAL), but couldn't differentiate between two modes with the same
+>>>     timings (NTSC vs PAL-M vs NSTC-J for example); 
+>>>
+>>>   * There was also some overlap with the tv mode property registered by 
+>>>     drm_mode_create_tv_properties(), but named modes weren't interacting
+>>>     with that property at all.
+>>>
+>>>   * Even though that property was generic, its possible values were
+>>>     specific to each drivers, which made some generic support difficult.
+>>>
+>>> Thus, I chose to tackle in multiple steps:
+>>>
+>>>   * A new TV norm property was introduced, with generic values, each driver
+>>>     reporting through a bitmask what standard it supports to the userspace;
+>>>
+>>>   * This option was added to the command line parsing code to be able to
+>>>     specify it on the kernel command line, and new atomic_check and reset
+>>>     helpers were created to integrate properly into atomic KMS;
+>>>
+>>>   * The named mode parsing code is now creating a proper display mode for
+>>>     the given named mode, and the TV standard will thus be part of the
+>>>     connector state;
+>>>
+>>>   * Two drivers were converted and tested for now (vc4 and sun4i), with
+>>>     some backward compatibility code to translate the old TV mode to the
+>>>     new TV mode;
+>>>
+>>> Unit tests were created along the way. Nouveau, ch7006 and gud are
+>>> currently broken for now since I expect that work to be reworked fairly
+>>> significantly. I'm also not entirely sure about how to migrate GUD to the
+>>> new property.
+>>>
+>>> Let me know what you think,
+>>> Maxime
+>>>
+>> I don't know if it's related to this patchset or not, but I do get this:
+>>
+>> pi@pi4t:~ $ sudo dmesg -C && sudo modprobe -r vc4 && sudo modprobe vc4
+>> && dmesg
+>> [  430.066211] Console: switching to colour dummy device 80x30
+>> [  431.294788] vc4-drm gpu: bound fe400000.hvs (ops vc4_hvs_ops [vc4])
+>> [  431.295115] vc4-drm gpu: bound fec13000.vec (ops vc4_vec_ops [vc4])
+>> [  431.295467] vc4-drm gpu: bound fe004000.txp (ops vc4_txp_ops [vc4])
+>> [  431.295804] vc4-drm gpu: bound fec12000.pixelvalve (ops vc4_crtc_ops
+>> [vc4])
+>> [  431.298895] [drm] Initialized vc4 0.0.0 20140616 for gpu on minor 0
+>> [  441.444250] vc4-drm gpu: [drm] *ERROR* [CRTC:68:crtc-1] flip_done
+>> timed out
+>> [  441.446529] Console: switching to colour frame buffer device 90x30
+>> [  451.684321] vc4-drm gpu: [drm] *ERROR* flip_done timed out
+>> [  451.684347] vc4-drm gpu: [drm] *ERROR* [CRTC:68:crtc-1] commit wait
+>> timed out
+>> [  461.924255] vc4-drm gpu: [drm] *ERROR* flip_done timed out
+>> [  461.924281] vc4-drm gpu: [drm] *ERROR* [CONNECTOR:45:Composite-1]
+>> commit wait timed out
+>> [  472.164006] vc4-drm gpu: [drm] *ERROR* flip_done timed out
+>> [  472.164031] vc4-drm gpu: [drm] *ERROR* [PLANE:61:plane-1] commit wait
+>> timed out
+>> [  482.403877] vc4-drm gpu: [drm] *ERROR* flip_done timed out
+>> [  482.403903] vc4-drm gpu: [drm] *ERROR* Timed out waiting for commit
+>> [  492.643799] vc4-drm gpu: [drm] *ERROR* [CRTC:68:crtc-1] flip_done
+>> timed out
+>> [  492.647073] vc4-drm gpu: [drm] fb0: vc4drmfb frame buffer device
+> Module unloading/reloading has been janky for a while.
+>
+> I've fixed it up recently but it doesn't surprise me that there's still
+> some situation that won't work. Is it on a Pi3?
+>
+> Maxime
 
 
-Dear Prospective,
-
-Leus Pham Netherlnads B.V  (NL), is one of the leading 
-bio-pharmaceutical medical drugs manufacturing companies in Europe & 
-Middle East.
-
-
-
-We are looking for a well-grounded entrepreneur /business individual in 
-your Country to represent this company in sourcing for most of our basic 
-raw materials used in  manufacturing of rare medications used in the 
-production of most vaccines, cancer treatment and other life-saving 
-pharmaceuticals including Madagascar's prescription for VOC treatment.
-
-
-
-This may not be your area of business/profession, but it will surely be 
-another revenue-generating pathway outside your professional network if 
-you find this interesting. This is because our company is yet to find a 
-supplier to purchase from after we lost our previous supplier.
-
-
-
-More Details on Profit and Processing Available on Request.
-
-
-
-Warmest Regards,
-
-Michael Kinciad.
-
-Senior Research Specialist
-
-www.leuspharm.nl

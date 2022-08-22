@@ -2,84 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD7459BA15
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67DE59BA1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiHVHRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 03:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
+        id S231422AbiHVHTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 03:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbiHVHRS (ORCPT
+        with ESMTP id S230090AbiHVHTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 03:17:18 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FC12983F
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:17:16 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id gk3so19353605ejb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:17:16 -0700 (PDT)
+        Mon, 22 Aug 2022 03:19:19 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97C813CDA;
+        Mon, 22 Aug 2022 00:19:18 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so10356496pjf.2;
+        Mon, 22 Aug 2022 00:19:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Gaa0lwSjZPTc4bVJ2hqicvvuLqdOW4udzcfR7NaiRHI=;
-        b=M/UaYnsUtCt6mPqwP1lVf++v8xMIOrW9C6Kg9bDmxQ0QnAiExFRmK4h/k9NuIOFkVA
-         VwjxItHNrcI70bQjQ2wBv/D3Sfd317muov+aHX9nsJt5Rh2MDEuE9Pso7KRnc0XvhUMf
-         zpodMoTpFV7Oz5KtvFXNTlXeZe6s+8e/q0cIddnSiGzQZJcUL3PsGYe0UoX8VuLNyxYz
-         w4D0wLZWnGzJ3fVonuENjQXosJzT1+jWKvXkSGfTbVM60qtBenZ3yt6RM3/AL6wpf+Bq
-         I+eQIXX1C4NfmEIbfiOUW3etgh0y6wWrwSof/2XQ7moq2qZ7uNrtfDm0s9nkC+aT1H5K
-         4zlw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=03jo1+f8X3EXXKFUBIJeAZG4V9px5mryHYSkj2Zd4n8=;
+        b=pA1jdg+xuB/MBjFO+tnrbUfRwIwk8NjKBvPbX+U4uSnJRafMOMjI1atzqhTXmwpcqU
+         uqI1cx1w0+la3/N0efzt/xCZPOEr8jcmHKGPbu4eyJY5L8quVq0kMXd2U5jJihWlHLMQ
+         t/H2lBPFheBrxEMtX9M/6OZAv9EPCyuL/BS0pTQWMeRDb9JI3dTBNI0ZCkdR+sqRAUfl
+         /uR8B/OYtM/yOYbX2ysxkNFmvWqRCURrVsnMtZn4HMoHnmio0uF20f4cxu/6222nHcvV
+         oACmN3WweoN00q1OnZ2LXwlHAYxdWhBYcgLFynvR0Dby2+514Y3l8dg63zyQvGRWaeow
+         KF7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Gaa0lwSjZPTc4bVJ2hqicvvuLqdOW4udzcfR7NaiRHI=;
-        b=dOdo2E/Lk1zAOAxNnxfGbSrtr8ZZTOEu4Zh12ybpr/tX2UMrq8dp6fpPUUqectJshj
-         EM+mrAkZmhXqtigx5lAA4NDE9LJ5Zx2fVdJqRRV2RpJI4Ftfr6O0j84owFv4QDKtFNyS
-         9F+33DhaFDEfdJB5OmtRMp11rC9s8ygEvMKwBQGrtPDPZ/fDX88risMSHiUO6pctFc6I
-         DmZX+WdVbJY/QptKxm2Dj+BmDP0ArT8db0PH8du5H8mPYP4eLhn32kR8HuPCJlIExzcL
-         ltmLaNhUMs3x/2rNoLxj6/iCu79ywHdNUEwuhRurhYb5HRlq8zEmzEXGOGDL69zzSiF/
-         l5AQ==
-X-Gm-Message-State: ACgBeo2BtycbG4OYlZduaWzi3nrJJ6T9ryYGyX1Knuocg4t70QsU+7Sg
-        vT/7uf/w1pE4m8+vGflL43XOq0TtrfrMdrst1rTzrw==
-X-Google-Smtp-Source: AA6agR73uKO2M1GT0YRuKM53bMH2gd8jc1RJ7ufpRpKcAUtHxCYB8PQsgSIiqJd83qj16XYbBfYnbtBrJcQViywhxlg=
-X-Received: by 2002:a17:906:58c8:b0:6fe:91d5:18d2 with SMTP id
- e8-20020a17090658c800b006fe91d518d2mr12284228ejs.190.1661152634983; Mon, 22
- Aug 2022 00:17:14 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=03jo1+f8X3EXXKFUBIJeAZG4V9px5mryHYSkj2Zd4n8=;
+        b=m0+KLSXhLZrKNKjigQ5dRRDsbuXPlsqAlM/zBq8u3DX5rCDLPWajxCiBjT/0HG8YH4
+         yYhKQvD1wApaianq8TAuG+i1mJDoaDQs+TM11T0H0KkqQU6/rwDNW3MLta8T0ADrgJUo
+         +Cc9M46slLpgQ3juPdTPvjywVR8hz3dnvsDrDPBjK39Cne9GL+reNCNI++z1+mkcHL06
+         2IiDTd62RJeitDGzRK5Pirizz18XBd0nXaqXir+6uc0zbqs/kp/PTMcKSnxX8jqHqa+E
+         58H5TPo2OfhjMrHCkR165ZHCP9aDDuZC5O8xPrhg7gz1zGonhCtsptSFPriOBhowWt+X
+         uWhQ==
+X-Gm-Message-State: ACgBeo0LAK2udfrB1PgJsRgqcClWsCt0IVXyCV7JPL4OERvIt5g52tkb
+        HBQSrvyME9v0BgRJ8rtF/Iw=
+X-Google-Smtp-Source: AA6agR5WnXDUV5MQwujJjQN1TuZSCgnkZwKzqgjYDKUr/W2Bcn0Lx5PJjWBL1OVFtGd288lgYqyGbg==
+X-Received: by 2002:a17:903:1d1:b0:172:e12b:71b2 with SMTP id e17-20020a17090301d100b00172e12b71b2mr6141394plh.60.1661152758257;
+        Mon, 22 Aug 2022 00:19:18 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.8])
+        by smtp.gmail.com with ESMTPSA id d7-20020a17090ad3c700b001f3095af6a9sm7330394pjw.38.2022.08.22.00.19.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 00:19:17 -0700 (PDT)
+From:   Haimin Zhang <tcs.kernel@gmail.com>
+X-Google-Original-From: Haimin Zhang <tcs_kernel@tencent.com>
+To:     alex.aring@gmail.com, stefan@datenfreihafen.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-wpan@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Haimin Zhang <tcs_kernel@tencent.com>
+Subject: [PATCH] net/ieee802154: fix uninit value bug in dgram_sendmsg
+Date:   Mon, 22 Aug 2022 15:19:02 +0800
+Message-Id: <20220822071902.3419042-1-tcs_kernel@tencent.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220728155652.29516-1-henning.schild@siemens.com> <20220728155652.29516-3-henning.schild@siemens.com>
-In-Reply-To: <20220728155652.29516-3-henning.schild@siemens.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 22 Aug 2022 09:17:04 +0200
-Message-ID: <CACRpkda-OBwgAW1V8DOnw8z4-DLr=TpTAokm2jg_b31du-BRvg@mail.gmail.com>
-Subject: Re: [PATCH 2/4] gpio-f7188x: use unique labels for banks/chips
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Kuan-Wei Ho <cwho@nuvoton.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 5:57 PM Henning Schild
-<henning.schild@siemens.com> wrote:
+There is uninit value bug in dgram_sendmsg function in
+net/ieee802154/socket.c when the length of valid data pointed by the
+msg->msg_name isn't verified.
 
-> So that drivers building on top can find those pins with GPIO_LOOKUP
-> helpers.
->
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+This length is specified by msg->msg_namelen. Function
+ieee802154_addr_from_sa is called by dgram_sendmsg, which use
+msg->msg_name as struct sockaddr_ieee802154* and read it, that will
+eventually lead to uninit value read. So we should check the length of
+msg->msg_name is not less than sizeof(struct sockaddr_ieee802154)
+before entering the ieee802154_addr_from_sa.
 
-That's nice.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
+---
+ net/ieee802154/socket.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Yours,
-Linus Walleij
+diff --git a/net/ieee802154/socket.c b/net/ieee802154/socket.c
+index 718fb77bb..efbe08590 100644
+--- a/net/ieee802154/socket.c
++++ b/net/ieee802154/socket.c
+@@ -655,6 +655,10 @@ static int dgram_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 	if (msg->msg_name) {
+ 		DECLARE_SOCKADDR(struct sockaddr_ieee802154*,
+ 				 daddr, msg->msg_name);
++		if (msg->msg_namelen < sizeof(*daddr)) {
++			err = -EINVAL;
++			goto out_skb;
++		}
+ 
+ 		ieee802154_addr_from_sa(&dst_addr, &daddr->addr);
+ 	} else {
+-- 
+2.27.0
+

@@ -2,190 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327C459C182
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16E059C186
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235506AbiHVOSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 10:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S235270AbiHVOVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 10:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234670AbiHVOR6 (ORCPT
+        with ESMTP id S234670AbiHVOV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 10:17:58 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68D73AB16
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 07:17:57 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-11c5ee9bf43so13024258fac.5
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 07:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=T4vb96jQImn+i7N+D+K6WfydPyXmqWxDxWTvbMb6X6k=;
-        b=TSe2SpGBDir+805CwFZZRWD/MemoC2HuwK/SSS3DBQpDRZxUkl1RQZxQsy+Z/r/AjB
-         vwIcwtqAjxVKv2dqFVyebvk9YvkebeTDDnDnDDBt35YGLQTbDCu9WqElnjmcHiSJJ/xC
-         26N0JmEZAQledrqS4J76lCYhzKCWh4UXp79r/dSCnv4sm9Wj93xsRJVwV4sbp8PAHIt5
-         UNkYJmBD7dGfq8qCMEt9wPpoDJnOXPKtJACKvyFZP9pvk2Te0zgKgWdyXUf7U4w9wGrz
-         OKH8413KujqZ19DCigNt3V37AbBbVWfFShePKATvDfVYfYcIzCXeUMTC1mqC5AR0ibRs
-         rUgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=T4vb96jQImn+i7N+D+K6WfydPyXmqWxDxWTvbMb6X6k=;
-        b=Irr4UU5snNBlI8EGlZ/3msFLQ4iKmHzOibkXOJYQIBqmaSXemBFbv5AXrAU6hricrX
-         khT+cDJeUCLNwULcaUGkrHRNBw8kd0zRbspmQuWc2AIZqzG+bVrE8APWgd8mGCXKkrmD
-         2KIKqz7C59IWDQfDbftuykEiDmNHqN5L/w8GZatJqKRqCZuBjxQ2ljp0h5gGnwSYRpXg
-         lF6RtZcYyA/X0sQgU4s5AcXpOPSAPcAO4LFx8mJFuFkCL6JYf8oNp6AsuDZ8RRSuahA0
-         PGaNTxBjnMnnadmSB70u2qpHv+OhKrCmBufKtSB8MAoEhiw3L/aRsmWSyvFArBuxGi4n
-         fHCw==
-X-Gm-Message-State: ACgBeo3oI1FocM+N6tra+QmHiiO1p1cDoiT/7+ROztXU3EQzR3pQiYzo
-        r+d+UBN/LzpNa7LbvbBbqaXYpdx46BM=
-X-Google-Smtp-Source: AA6agR4DytZAiZQiILumzfX6Xko7IOgkVAwZLDqistJHJxOlGPWKiAZZDTL4vD1ZKAp+oddRa9YtTw==
-X-Received: by 2002:a05:6870:f2a7:b0:11c:49bb:aa6a with SMTP id u39-20020a056870f2a700b0011c49bbaa6amr12012961oap.35.1661177876998;
-        Mon, 22 Aug 2022 07:17:56 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id q6-20020a056871080600b0011cf5ff4a6bsm1027877oap.55.2022.08.22.07.17.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 07:17:56 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 07:15:45 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Pingfan Liu <kernelfans@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Price <steven.price@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [RFC 07/10] lib/cpumask: Introduce cpumask_not_dying_but()
-Message-ID: <YwOPkc1cpoD/hs2D@yury-laptop>
-References: <20220822021520.6996-1-kernelfans@gmail.com>
- <20220822021520.6996-8-kernelfans@gmail.com>
+        Mon, 22 Aug 2022 10:21:28 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE03B25EA7
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 07:21:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8AB801FD7A;
+        Mon, 22 Aug 2022 14:21:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661178086; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IEU+aYjqkWSSgkevWjw+jiompUJ5KbhBmDIvKBs70uA=;
+        b=rCtHS21fIAGgjvJ1XCdTgBAxGFqSPEXhiwaSjA0AzY2/HsVmKnevHXd8oq9dAT7rAZk+kV
+        jI6jkthjhAkJ9JHw0K14V9ME/I5dl4oI7zkWX/YBP9tlZEGN4KDs/ngRvVoQSp9pHAABa4
+        QAwZj3sG3Vis8gN4D51sKhQ2/GMc10w=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6C12713523;
+        Mon, 22 Aug 2022 14:21:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id aAIRGOaQA2N6egAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 22 Aug 2022 14:21:26 +0000
+Date:   Mon, 22 Aug 2022 16:21:25 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     iommu@lists.linux.dev, Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] dma-pool: limit DMA and DMA32 zone size pools
+Message-ID: <YwOQ5Q+aZRBB0xk+@dhcp22.suse.cz>
+References: <20220817060647.1032426-1-hch@lst.de>
+ <20220817060647.1032426-4-hch@lst.de>
+ <Yvzk2wE7ta+zSZOQ@dhcp22.suse.cz>
+ <20220821104416.GC30530@lst.de>
+ <YwNBHbYXpatJHD0K@dhcp22.suse.cz>
+ <20220822111447.GA8935@lst.de>
+ <YwNx6Q+FSwpKUOQ2@dhcp22.suse.cz>
+ <20220822122759.GA14932@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220822021520.6996-8-kernelfans@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220822122759.GA14932@lst.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 10:15:17AM +0800, Pingfan Liu wrote:
-> During cpu hot-removing, the dying cpus are still in cpu_online_mask.
-> On the other hand, A subsystem will migrate its broker from the dying
-> cpu to a online cpu in its teardown cpuhp_step.
+On Mon 22-08-22 14:27:59, Christoph Hellwig wrote:
+> On Mon, Aug 22, 2022 at 02:09:13PM +0200, Michal Hocko wrote:
+> > OK, so you are worried about configurations that lack ZONE_DMA32 because
+> > that memory range is covered by ZONE_DMA? I thought though simply do not
+> > have CONFIG_ZONE_DMA32. Or am I wrong here?
 > 
-> After enabling the teardown of cpus in parallel, cpu_online_mask can not
-> tell those dying from the real online.
-> 
-> Introducing a function cpumask_not_dying_but() to pick a real online
-> cpu.
-> 
-> Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-> Cc: Yury Norov <yury.norov@gmail.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Steven Price <steven.price@arm.com>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> Cc: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> To: linux-kernel@vger.kernel.org
-> ---
->  include/linux/cpumask.h |  3 +++
->  kernel/cpu.c            |  3 +++
->  lib/cpumask.c           | 18 ++++++++++++++++++
->  3 files changed, 24 insertions(+)
-> 
-> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> index 0d435d0edbcb..d2033a239a07 100644
-> --- a/include/linux/cpumask.h
-> +++ b/include/linux/cpumask.h
-> @@ -317,6 +317,9 @@ unsigned int cpumask_any_but(const struct cpumask *mask, unsigned int cpu)
->  	return i;
->  }
->  
-> +/* for parallel kexec reboot */
-> +int cpumask_not_dying_but(const struct cpumask *mask, unsigned int cpu);
-> +
->  #define CPU_BITS_NONE						\
->  {								\
->  	[0 ... BITS_TO_LONGS(NR_CPUS)-1] = 0UL			\
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index 90debbe28e85..771e344f8ff9 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -1282,6 +1282,9 @@ static void cpus_down_no_rollback(struct cpumask *cpus)
->  	struct cpuhp_cpu_state *st;
->  	unsigned int cpu;
->  
-> +	for_each_cpu(cpu, cpus)
-> +		set_cpu_dying(cpu, true);
-> +
->  	/* launch ap work one by one, but not wait for completion */
->  	for_each_cpu(cpu, cpus) {
->  		st = per_cpu_ptr(&cpuhp_state, cpu);
-> diff --git a/lib/cpumask.c b/lib/cpumask.c
-> index 8baeb37e23d3..6474f07ed87a 100644
-> --- a/lib/cpumask.c
-> +++ b/lib/cpumask.c
-> @@ -7,6 +7,24 @@
->  #include <linux/memblock.h>
->  #include <linux/numa.h>
->  
-> +/* Used in parallel kexec-reboot cpuhp callbacks */
-> +int cpumask_not_dying_but(const struct cpumask *mask,
-> +					   unsigned int cpu)
-> +{
-> +	unsigned int i;
-> +
-> +	if (CONFIG_SHUTDOWN_NONBOOT_CPUS) {
+> Zones can disappear when they are empty.  Normally that affects
+> ZONE_NORMAL and ZONE_HIGHMEM, but it can also happen to ZONE_DMA32
+> when there is not enough memory.
 
-Hmm... Would it even work? Anyways, the documentation says:
-Within code, where possible, use the IS_ENABLED macro to convert a Kconfig
-symbol into a C boolean expression, and use it in a normal C conditional:
+Correct but that is essentially the same problem as ZONE_DMA becoming
+empty. Or maybe I am just completely missing what you are trying to
+say/ask?
 
-.. code-block:: c
+My whole point was that if those zones are configured and you cannot
+pre-allocate the pool then this can be either a result of OOM on that
+zone or zone completely empty. In either case the pool would be empty
+and if that is something worth bothering^Wnotifying an admin about then
+better provide something useful rather than over messaging for one case
+and be silent about the other. See my point?
 
-        if (IS_ENABLED(CONFIG_SOMETHING)) {
-                ...
-        }
-
-
-> +		cpumask_check(cpu);
-> +		for_each_cpu(i, mask)
-> +			if (i != cpu && !cpumask_test_cpu(i, cpu_dying_mask))
-> +				break;
-> +		return i;
-> +	} else {
-> +		return cpumask_any_but(mask, cpu);
-> +	}
-> +}
-> +EXPORT_SYMBOL(cpumask_not_dying_but);
-
-I don't like how you create a dedicated function for a random
-mask. Dying mask is nothing special, right? What you really
-need is probably this:
-        cpumask_andnot_any_but(mask, cpu_dying_mask, cpu);
-
-Now, if you still think it's worth that, you can add a trivial wrapper
-for cpu_dying_mask. (But please pick some other name, because
-'not dying but' sounds like a hangover description. :) )
-
-Thanks,
-Yury
-
-> +
->  /**
->   * cpumask_next_wrap - helper to implement for_each_cpu_wrap
->   * @n: the cpu prior to the place to search
-> -- 
-> 2.31.1
+-- 
+Michal Hocko
+SUSE Labs

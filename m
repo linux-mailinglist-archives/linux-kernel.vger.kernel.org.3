@@ -2,113 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FD359CAF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 23:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E8F59CAF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 23:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237735AbiHVVj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 17:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
+        id S238182AbiHVVjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 17:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbiHVVjY (ORCPT
+        with ESMTP id S237803AbiHVVji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 17:39:24 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098F85140C;
-        Mon, 22 Aug 2022 14:39:23 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id cb8so9045126qtb.0;
-        Mon, 22 Aug 2022 14:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=sxi9ytifq3/mVWcX0hMlbgf9nV334o7a7Q5oIkk527I=;
-        b=GKo2haEYD7YEnDqw24uLXOendXqM/c8mpfO1Vgt04VLwRGGpsP4jH7PsI4kawVDTCU
-         3vtY7byYY9/39rk/ISdKeK/2i+Y9ZVoY9gWJFfwkFL/qhhzCj7EUZI7La6EUp4Mhwb4T
-         gYR3sLoxAMpttUjtod9GP2znRxOw9iw5yqSG0gLpftBd7a0EeiwfktqaeEwJWePPuAvj
-         BjovEFRmHnEDQP5W6KekQDuPKL3OE54+hpt2ZkDQvC6+3IYmqHpHOPQrR6kNLg1HwV/A
-         w8x+/npsuSO4ZK4IGztR6eMaPhTjKRmrH/TwF/Lw7gEGNILYuPJM/geNj5k72hgQtfvq
-         uMdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=sxi9ytifq3/mVWcX0hMlbgf9nV334o7a7Q5oIkk527I=;
-        b=kjCK4MGJmr3J+EiVRe0G4VUB9tnBfiA9ZAezWPIm65slSBZS93oKQlLjkmockLRDaf
-         /i9GpnZFK7PwuNLe86b8k7lfhngRmA6V7OGG3Tko+iqG34Drq7POtg3eXg7VA+YF6Xow
-         mXhjjus/Xe6xfPnVRM0EAn2mjbWw1wiBBLyphTkZ20ciffDBDcarPObMKutJmhMVlvnV
-         q7hDBFps8mtPgREMkvLEDX7+ocIHaVPwyqXoPyoKb+38SbBnSI7GeuHjS/ppdBwKoRMN
-         U6H8ttT3zWuqU143RRcyFFpf4uHlY295LmkeZhLaxRcEIrrWv7E63n9SOlswc0ByiWYk
-         llIQ==
-X-Gm-Message-State: ACgBeo1Sh51YRn3xw3mgLLWOWmzxzv1d3N9wWDH501TVuCeWx6yqnLcI
-        oDNAt1fWe+kqcDluBhuxcKrrvAqm/0aPTpRP7Tk=
-X-Google-Smtp-Source: AA6agR4bklJsYdlNPi5QudeYa9AdfLgdLrsTb0MEyzz9ExYee2xFE2eQBEYo8lA82AcI5RJJOYT0PyTptF2zyrN98vE=
-X-Received: by 2002:ac8:5786:0:b0:343:3051:170d with SMTP id
- v6-20020ac85786000000b003433051170dmr16913009qta.429.1661204362041; Mon, 22
- Aug 2022 14:39:22 -0700 (PDT)
+        Mon, 22 Aug 2022 17:39:38 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C074652097;
+        Mon, 22 Aug 2022 14:39:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1661204375; x=1692740375;
+  h=from:to:subject:date:message-id:mime-version;
+  bh=ZrNeU8CEeIl3AZc1VJMb4npC0a4B7n74iwOT/dV4tiA=;
+  b=1UIoy1rZmEVyUGihuaoN4hIXY7FbrfX7sHcJfiQLhtl3XZQ0R39tL+S8
+   8bvZ16uECMXjJmeekQVB5yWQduUsuhAU5q8kqiDB6RsHHD5rfgS+c7cmb
+   J45awJC3G2KhcTs00TJFjXpTDs2txbqUszplMQ8tn7tWz+G5XOZXVjuur
+   0ty5Zp8nsdt81ueTfXLGeqcQnNwluVaZJbQr0euN/qHHIFUZmbfqPakec
+   rNYpJRUOHF5G0/0ALw3usVA46DKJUP80UNbN/Re4fN7laWx8ThMZMo9Yd
+   Nrp+xzVfj4NmhAywzS4YGtSGnSSPEk+GiANFMrQ7wYTRH7pJv9WsltA6K
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="187595698"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Aug 2022 14:39:35 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 22 Aug 2022 14:39:34 -0700
+Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Mon, 22 Aug 2022 14:39:33 -0700
+From:   Jerry Ray <jerry.ray@microchip.com>
+To:     "David S . Miller " <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jerry Ray <jerry.ray@microchip.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>
+Subject: [PATCH] micrel: ksz8851: fixes struct pointer issue
+Date:   Mon, 22 Aug 2022 16:39:32 -0500
+Message-ID: <20220822213932.12848-1-jerry.ray@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220822181853.23063-1-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220822181853.23063-1-Sergey.Semin@baikalelectronics.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 23 Aug 2022 00:38:45 +0300
-Message-ID: <CAHp75VefTEy7jFAFnZe5A+d+2+984RMRDqxtPDJnd+E+dbZw=w@mail.gmail.com>
-Subject: Re: [PATCH] spi: dw: Add deferred controller registration support
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 9:19 PM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
->
-> It's pretty possible to have the spi_register_controller() method
-> returning -EPROBE_DEFER status in case, for instance, if the GPIOs used
-> for the CS implementation aren't ready to be requested due to the
-> corresponding platform devices still pending to be probed. Let's make sure
-> the DW SSI driver won't print error message in that case by calling the
-> dev_err_probe() function if the SPI-registration procedure exited with
-> a non-zero status.
+Issue found during code review. This bug has no impact as long as the
+ks8851_net structure is the first element of the ks8851_net_spi structure.
+As long as the offset to the ks8851_net struct is zero, the container_of()
+macro is subtracting 0 and therefore no damage done. But if the
+ks8851_net_spi struct is ever modified such that the ks8851_net struct
+within it is no longer the first element of the struct, then the bug would
+manifest itself and cause problems.
 
-Shouldn't there be a Fixes tag?
+struct ks8851_net is contained within ks8851_net_spi.
+ks is contained within kss.
+kss is the priv_data of the netdev structure.
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
+---
+ drivers/net/ethernet/micrel/ks8851_spi.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> ---
->  drivers/spi/spi-dw-core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index f87d97ccd2d6..99edddf9958b 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -955,7 +955,7 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
->
->         ret = spi_register_controller(master);
->         if (ret) {
-> -               dev_err(&master->dev, "problem registering spi master\n");
-> +               dev_err_probe(dev, ret, "problem registering spi master\n");
->                 goto err_dma_exit;
->         }
->
-> --
-> 2.35.1
->
-
-
+diff --git a/drivers/net/ethernet/micrel/ks8851_spi.c b/drivers/net/ethernet/micrel/ks8851_spi.c
+index 479406ecbaa3..13c76352ae8d 100644
+--- a/drivers/net/ethernet/micrel/ks8851_spi.c
++++ b/drivers/net/ethernet/micrel/ks8851_spi.c
+@@ -413,7 +413,8 @@ static int ks8851_probe_spi(struct spi_device *spi)
+ 
+ 	spi->bits_per_word = 8;
+ 
+-	ks = netdev_priv(netdev);
++	kss = netdev_priv(netdev);
++	ks = &kss->ks8851;
+ 
+ 	ks->lock = ks8851_lock_spi;
+ 	ks->unlock = ks8851_unlock_spi;
+@@ -433,8 +434,6 @@ static int ks8851_probe_spi(struct spi_device *spi)
+ 		 IRQ_RXPSI)	/* RX process stop */
+ 	ks->rc_ier = STD_IRQ;
+ 
+-	kss = to_ks8851_spi(ks);
+-
+ 	kss->spidev = spi;
+ 	mutex_init(&kss->lock);
+ 	INIT_WORK(&kss->tx_work, ks8851_tx_work);
 -- 
-With Best Regards,
-Andy Shevchenko
+2.17.1
+

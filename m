@@ -2,143 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD2359BAA1
+	by mail.lfdr.de (Postfix) with ESMTP id 1E36459BA9F
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbiHVHuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 03:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
+        id S233451AbiHVHuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 03:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233364AbiHVHt7 (ORCPT
+        with ESMTP id S233435AbiHVHuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 03:49:59 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF52165B3;
+        Mon, 22 Aug 2022 03:50:03 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9192A414
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:49:58 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id z2so12759068edc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Xt7sUJQ+aMJj9heYVbH58SruiAfLtzcBF4RZu/5f3ug=;
+        b=rsY19QIao4S4MIiPcndmxJ/lUJkZ3wgbfJ6gAIwmeUjwbKR8ITGonQux7yCtKKClD+
+         /OwFji4+MLFoLb9jC0j99XndeYi/bccJ+jpgNFTc0lXYBYLaAleiwPdpFUm1/rQD9Hm5
+         lJ2FD4Ij183DVlHaU+nbQTYL4TBqq7iJlmS0NfCRDsk/mCJs0LDnQsvdHmAXn1YqXrTn
+         7tGsT8SXdSKh9CThquNhCv28umaIkvq5evvrYsNitj9UHlU1AFG0U8yCurPDAESw4LG3
+         b7joR24coTZYEcXXLGNzzpBPOLg6ZXvh6/rVGQOnA87+IWLBGtQhxgDxJHo19HF9MPg6
+         JKwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Xt7sUJQ+aMJj9heYVbH58SruiAfLtzcBF4RZu/5f3ug=;
+        b=vxWhCkb1xvBLkupQpC+cPqYJ5Qk9lvu1Tz0p+fFd8vttwzfHVCNs3M12d2l7ndiqVE
+         aG8ych+njjKbjYHlDLpO1XQWwIJZ2Z+RDdItDkmVW8EOTC1KlUG9k5SWio4rFDhQPNHe
+         mbxKtnSnhlRn+eShV3ed6PSo0HaEK/uw6TL5Uk0cHkYO/rBUXHtJq0RsU/4XGW/hcgEq
+         whZJ9uwel0jrgB/SfUKDbOlvbt02AQOVsyWoBGxQG3augizGDYieBXLsKQTqckfwpxNa
+         hDnNFN2ETsz/bWAK277ftvMhxPu5lmNVaMyggtFF2XEalTwkei8pxXjL63esC7O6WH++
+         JZzQ==
+X-Gm-Message-State: ACgBeo0V0WWkNWOJ8UVYonvJmJbFAyVJ5bf+/xdd7iVmBeGiYoiGXDlU
+        Bsf8dviw4k6br4B4y8rR3gTZ7A==
+X-Google-Smtp-Source: AA6agR6OWI+3Yqy+/iaFOuEehpy2yEnM1di8bY439xitvmKJgJvBKjGbEJcnYOMoxDew0jloPWCZRQ==
+X-Received: by 2002:aa7:cd79:0:b0:446:1fee:290e with SMTP id ca25-20020aa7cd79000000b004461fee290emr13736652edb.163.1661154597141;
         Mon, 22 Aug 2022 00:49:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661154595;
-        bh=OU34lRpO/1OTDjZ9Diuvg5jc+I14siphOEscXix5Otk=;
-        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=V+lcO0VqLmjQGTx03pqc3q7B/6LGyJ4CETKflXzSBuBXD6Uh/Zk1U6jbwD46eRAmC
-         d1TF6oyqzoyVyqD/FWoqs5mlLU9sJiANtf5yDG8r02llJ7iQynPa0DpKyuq8DtT1ni
-         2DEJC/f7CsU0x6VQzldWzG3bQ2rf0HSnVwF5ri1k=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MD9XF-1oYWVH2NFp-0097IY; Mon, 22
- Aug 2022 09:49:55 +0200
-Message-ID: <8aff5c17-d414-2412-7269-c9d15f574037@gmx.com>
-Date:   Mon, 22 Aug 2022 15:49:51 +0800
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id bi4-20020a170906a24400b0072af4af2f46sm5764857ejb.74.2022.08.22.00.49.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 00:49:56 -0700 (PDT)
+Message-ID: <b41b5065-c012-3b3a-2980-3eba25e0a071@blackwall.org>
+Date:   Mon, 22 Aug 2022 10:49:55 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
+ Thunderbird/91.10.0
+Subject: Re: [PATCH net v2 RESEND] net: neigh: don't call kfree_skb() under
+ spin_lock_irqsave()
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     stable <stable@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-x86_64@vger.kernel.org
-References: <2d6012e8-805d-4225-80ed-d317c28f1899@gmx.com>
- <YwMhXX6OhROLZ/LR@kroah.com> <1ed5a33a-b667-0e8e-e010-b4365f3713d6@gmx.com>
- <YwMxRAfrrsPE6sNI@kroah.com>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: LTS kernel Linux 4.14.290 unable to boot with edk2-ovmf (x86_64
- UEFI runtime)
-In-Reply-To: <YwMxRAfrrsPE6sNI@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:CnIpYoLCgBjfRiNPGj4hRiKW6uk13KaR20i+1Yhg/1MIpBe9iQa
- xVNH0d3Pzb8D4PHfTZEsx2d7kn7FEuOIdAOCO8TJFRd89FpuQyWT+3t0F59sYaeTpsFvFGz
- jbNHh4KnGgsFUknPeNjigbydyGiwkzm6lK+LItqPHmVcAh9PLUsEMuzZ8YxB6Ca5iGHlGs5
- 3JLmfMEXifuSnptogNGpg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kJmpDuL2TRA=:OnAi3T5f1Cid4aWffjfNVy
- +76gGuuScHi18HHkaEZmvWxZzbnTjuKbvY6M+8oH1dVAdDJprEcCk27hx6vzov1EMdSV54Wlk
- C4MeHttatZZR+zLffJbIL8DOnpAn3PRk3XRHBWXZNl/8JmwnWznC0AgVxpheSCMUC+OaXTVTY
- tjdrYCqzGWeOMvaBN+hUXSYQjEI382LErPSOtih1KFdLpE27yrnBU/zP0kCGM5Z32E4/Iac4K
- nez7TgxU48GepAIvJRemSl8y4RfMMts64Qm1//qBsl1CqjBl4pu3DZssx8ADUAtA9y2wSQ7oy
- kBzVsnGknG3nz7sCYGIQeDyu8kzNk2GlQCBk8AlYghsJK1XP9II2CzE3jugwRAs+eQVi5AEiq
- O3lovvQkaeW2wQ6/SSRddrMnSci5L4bkScosg/01eRZ3VpiKKq18a98CWGgMphEjBgvyfaDZA
- LdkawV+Y4m6fbkzbhjL0PQGzwcWwD5Kh8QkRAHVb9hK076QXPnrhi6mzQUZ7+X4xFBx6iYHWP
- 3Xlyp7tbJvT3H+/0DAr+uZagw0mwFxLDcnZ1zudC5J+Ye6fLh3o12PvUbMea0jze1jQxUyi6T
- H6ZKwrPNPSfr4ww5O2tZ/+eo6/C14R0fxTnCgHlfQ469B7Sd4dysLXPn/jkGbCESkIjaR5kJy
- SbprgqF+Nfg4R5juP48Fq2KhmVgPsYZVp4ZcQvuDCrjPhfJG6HeLN/humqak+6Cb2jtm5kNRc
- XerO0d4E7VRRqs1LEIpqb5REsxKkq3L/lktilKsUvi+ziA8v8wbkLOZ4pbxplbJNcWCB1C6qA
- 2kQ2a5qWlT3ZYyyxZGfWAymWzj2OY77mgtem93duB7neaGptdHE5kxF1ifNmKxF1/Itursmea
- BtUakmplDc0UhslpaCVxFgi6mDD/8MRTYXA24axirXCRZv1Js6bVP63pt0RbkAMWfjouxsLDY
- 1A8h0dWlLGf5BY4ZgSysT+w7A5LJUVaifXiO68vroJWFHccYAADdcs6bXimqTpiKeHWamarxt
- xU8En9L0rxWZvLY3+wZeDhLivKKP3wGQZtpMSw4oN2g5VVNDYRRCwjzzJNOLO+wKIHNxV2c4n
- xfd10OIXysbWap1ZB6pTDDMSj2Hkx0qiYnfZ7zPbOu5FA/AKt2GEEcoCg==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     den@openvz.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org
+References: <20220822025346.3758558-1-yangyingliang@huawei.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20220822025346.3758558-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 22/08/2022 05:53, Yang Yingliang wrote:
+> It is not allowed to call kfree_skb() from hardware interrupt
+> context or with interrupts being disabled. So add all skb to
+> a tmp list, then free them after spin_unlock_irqrestore() at
+> once.
+> 
+> Fixes: 66ba215cb513 ("neigh: fix possible DoS due to net iface start/stop loop")
+> Suggested-by: Denis V. Lunev <den@openvz.org>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+> v2:
+>   move all skb to a tmp list, then free them after spin_unlock_irqrestore().
+> ---
+>  net/core/neighbour.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
 
-
-On 2022/8/22 15:33, Greg KH wrote:
-> On Mon, Aug 22, 2022 at 03:24:53PM +0800, Qu Wenruo wrote:
->>
->>
->> On 2022/8/22 14:25, Greg KH wrote:
->>> On Mon, Aug 22, 2022 at 09:15:59AM +0800, Qu Wenruo wrote:
->>>> Hi,
->>>>
->>>> When backporting some btrfs specific patches to all LTS kernels, I fo=
-und
->>>> v4.14.290 kernel unable to boot as a KVM guest with edk2-ovmf
->>>> (edk2-ovmf: 202205, qemu 7.0.0, libvirt 1:8.6.0).
->>>>
->>>> While all other LTS/stable branches (4.19.x, 5.4.x, 5.10.x, 5.15.x,
->>>> 5.18.x, 5.19.x) can boot without a hipccup.
->>>>
->>>> I tried the following configs, but none of them can even provide an
->>>> early output:
->>>>
->>>> - CONFIG_X86_VERBOSE_BOOTUP
->>>> - CONFIG_EARLY_PRINTK
->>>> - CONFIG_EARLY_PRINTK_EFI
->>>>
->>>> Is this a known bug or something new?
->>>
->>> Has this ever worked properly on this very old kernel tree?  If so, ca=
-n
->>> you use 'git bisect' to find the offending commit?
->>
->> Unfortunately the initial v4.14 from upstream can not even be compiled.
->
-> Really?  Try using an older version of gcc and you should be fine.  It
-> did build properly back in 2017 when it was released :)
-
-Yeah, I'm pretty sure my toolchain is too new for v4.14.0. But my distro
-only provides the latest and mostly upstream packages.
-
-It may be a even worse disaster to find a way to rollback to older
-toolchains using my distro...
-
-Also my hardware may not be well suited for older kernels either.
-(Zen 3 CPU used here)
-
-In fact, I even find it hard just to locate a v4.14.x tag that can compile=
-.
-After some bisection between v4.14.x tags, only v4.14.268 and newer tags
-can even be compiled using latest toolchain.
-(But still tons of warning, and tons of objdump warnings against
-insn_get_length()).
-
-I'm not sure what's the normal practice for backports to such old branch.
-
-Do you stable guys keep dedicated VMs loaded with older distro just for
-these old branches?
-If so, any recommendation on those kinda retro distro?
-
-Thanks,
-Qu
-
->
-> thanks,
->
-> greg k-h
+LGTM,
+Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>

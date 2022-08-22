@@ -2,80 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E619B59C3ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8445059C3E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236197AbiHVQSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
+        id S236257AbiHVQSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234679AbiHVQSE (ORCPT
+        with ESMTP id S234679AbiHVQSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:18:04 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB14C33E2C;
-        Mon, 22 Aug 2022 09:18:02 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id r83-20020a1c4456000000b003a5cb389944so8069115wma.4;
-        Mon, 22 Aug 2022 09:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc;
-        bh=6ixFGQG5e9RKRZHpz9Cu92U2YnlZwaXuKgNBpkgvxkE=;
-        b=cDRpGmx7LsRKFvYcCRTxTVMl8aKQmv5vX5bo6SPWyEkhiLqp9QMkwVYRNC5BAZ+wR1
-         BOoSjyuKZKEu8Z3NSX8Wj92W4KlpRO3iOzt5mVwVTusK5Om+hzKibrjEU0PugeP9PoyA
-         nhQJwgIqiDRGyikQzvIyF+0Q6hN2k28XSiBNTkgXvI6kBdOrnylNh6OmRers2WVhyMhX
-         UIfaA8iC70+0PYVxTQPvcPMxmM+/2cAAPBcd34RKK+MpOchyR/SEXb8giLxR/jLy1bOx
-         dH1WYp+JDfi0ATjYj/NiKnnKiNNFCUOYGBoWo12MJrdhGmHUocs0GsCDrkQ4GE46bMtw
-         aLTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=6ixFGQG5e9RKRZHpz9Cu92U2YnlZwaXuKgNBpkgvxkE=;
-        b=7mI1xzCkL6YKLM84oPsDwf5OS4YKFivG7N3SAHMH0cWWTy1rzTLUN9bXzCJPxjU/vc
-         QdqIUzR4r2WPFeo5hGcoWXWhvjpqvrxydBC06Jtkty7nlxysI2R6KiFSp5f2yKYVMy1d
-         gsu9BFuQGRTZduJ6KZt433iQHORbyLYsl9wo5pr0ua+fwyk6Og//DmFj2oNydLfAOYuL
-         NhfCz9QOsiT9C4FxfUTY52k7IB8gBTtab48FCLa+oSs1O0NHH41Bl4lWPfRn+y+TZ/Fo
-         Y8xWK77r2H8N9lmkRvctJ/Xr22mwztAGFu7BOK5A9b6gR7YX5MmYt6Ubr8RL1/5iK1Kk
-         pP3g==
-X-Gm-Message-State: ACgBeo0vdFWxiyeKsVwjuPlB47USWOaI6H/pzKbuISKn5P/13iyePxSR
-        KyJ8VvMV7rwDEhA0lwgutomwR/tpo70=
-X-Google-Smtp-Source: AA6agR7y7pHj5qGSGOXHJmt+ZxMtu/Zf41zSLzBGKYd5mK6HGK789VisccjsBBRadh0oYVXV5FulIw==
-X-Received: by 2002:a05:600c:502b:b0:3a5:d36a:8b93 with SMTP id n43-20020a05600c502b00b003a5d36a8b93mr15707189wmr.180.1661185081107;
-        Mon, 22 Aug 2022 09:18:01 -0700 (PDT)
-Received: from [192.168.0.30] ([47.62.125.55])
-        by smtp.gmail.com with ESMTPSA id o23-20020a05600c511700b003a5c1e916c8sm17342525wms.1.2022.08.22.09.17.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 09:17:59 -0700 (PDT)
-Message-ID: <36dde9aa-b6ea-7194-c1bc-94d52c02649b@gmail.com>
-Date:   Mon, 22 Aug 2022 18:17:58 +0200
+        Mon, 22 Aug 2022 12:18:10 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328953AE62;
+        Mon, 22 Aug 2022 09:18:07 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id E10B74C248F;
+        Mon, 22 Aug 2022 16:18:06 +0000 (UTC)
+Received: from pdx1-sub0-mail-a277.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 208124C30AB;
+        Mon, 22 Aug 2022 16:18:06 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661185086; a=rsa-sha256;
+        cv=none;
+        b=he+6pfStdmUtiqfFr7MpsEEKqlodSKxXS27hOGjoIxEm1s0DdiWXMw9ZOg5M7eMBWIm4KV
+        nEDhKJcEZrBO6MlzLBr1dvSKlzqSpIauxILzGKq9xB7V2AiquGDh+eqKtV+FmFllMx9uJH
+        MI1djFbYXbAkMy+ai8Or4KEx5QLrY+3xLKGJ4Hx7gKju6mPw5RdPkTjOJ3zfv7XVm8G6uo
+        8yq49ISAU+P2/xE9QwR4Q6aXeTj3GOtm+E6MYza85YGf7gVkxFArupPUFFYfGh2t3JzAbT
+        Pp3qxxwyu/m9yEI4lIUSb17ygoSXUWl5hRnjlIYJpOq2/RErmdofGxuL/wgd+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1661185086;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=6WTVl+O0uOXo5Sob6hcZzuOu9eJCgnmbOZgt8cwx8c4=;
+        b=mdghzveEMKbiCVY3D4osZG9FXyryXTONDjhm3U2a4clCvjAWR9a01Xvnp0VqokAwwfypfq
+        AUqB9Baksd5Wc/PtwYYd91s+O83pZooOr1QWJ26o8zPkb82uJTNwjuDFvSBEHKbZtd1+vC
+        GRMjn2HdsFYEhqWQBtrDL/gmLixFIYaVvo2eUHFoU5D+AigoC6bK/3MF6LPTcqk1cBhEgr
+        axgP3mIEpMMxkOUo1lekNb8Tom96uGlD+5wGecbImS9YOgC9t6HVHE0H5dE5acwuqJm7kP
+        dNHwlSNkq+GujL8EwdPw9aDkJ+1vVyliEjruOhUp+MIE0f29+hWdPBuc2/oXxg==
+ARC-Authentication-Results: i=1;
+        rspamd-79945fd77c-k4h86;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Decisive-Attack: 5bf7aeac017f5eb8_1661185086491_4271913256
+X-MC-Loop-Signature: 1661185086491:3361885017
+X-MC-Ingress-Time: 1661185086491
+Received: from pdx1-sub0-mail-a277.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.110.28.247 (trex/6.7.1);
+        Mon, 22 Aug 2022 16:18:06 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a277.dreamhost.com (Postfix) with ESMTPSA id 4MBHb10qYWz2m;
+        Mon, 22 Aug 2022 09:18:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1661185085;
+        bh=6WTVl+O0uOXo5Sob6hcZzuOu9eJCgnmbOZgt8cwx8c4=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=IjeBNlAdvNsiUgUNnyuOGYPz/hn8cBrst79pooavCeMKw4M7B8CUOV957izl1hpSO
+         9AbQjYdX128EIQ666RHUEF/6auwXEPei37PdCeFEm7ju+IrIlE4O1E/xDCj9IFgnpc
+         83r8y+r4tF13YnZ1ZJgJJ4NSl/KpWFpGR3R2sbL9JBgZhrClS48yInWNLckQE9/Gev
+         Wj7bMiTzUMpYWcBMtB1TVptbrF0qknXsA8OIu3Af9ICpSUz1evWleZLjZmWz+czZTS
+         wt+vbaguInNMV6vJJyKiUG2w+8isqwbpQI7kkZiC5hlBazD8VqS9hEr6bSosVVQmcs
+         G+4BJ4ZLlfh8g==
+Date:   Mon, 22 Aug 2022 09:18:02 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     ira.weiny@intel.com
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        a.manzanares@samsung.com, linux-kernel@vger.kernel.org,
+        linux-cxl@vger.kernel.org
+Subject: Re: [RFC PATCH 0/9] CXL: Read and clear event logs
+Message-ID: <20220822161802.h47v7yfrqufeltqt@offworld>
+References: <20220813053243.757363-1-ira.weiny@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Content-Language: en-US
-To:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>
-References: <20220822144303.3438467-1-msp@baylibre.com>
- <20220822144303.3438467-3-msp@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v3 2/4] soc: mediatek: Add support of WAY_EN operations
-In-Reply-To: <20220822144303.3438467-3-msp@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220813053243.757363-1-ira.weiny@intel.com>
+User-Agent: NeoMutt/20220429
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,340 +103,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 12 Aug 2022, ira.weiny@intel.com wrote:
 
+>From: Ira Weiny <ira.weiny@intel.com>
+>
+>Event records inform the OS of various device events.  Events are not needed
+>for any kernel operation but various user level software will want to track
+>events.
+>
+>Add event reporting through the trace event mechanism.  On driver load read and
+>clear all device events.
+>
+>Normally interrupts will trigger new events to be reported as they occur.
+>Because the interrupt code is still being worked on this series provides a
+>cxl-test mechanism to create a series of events and trigger the reporting of
+>those events.
 
-On 22/08/2022 16:43, Markus Schneider-Pargmann wrote:
-> From: Alexandre Bailon <abailon@baylibre.com>
-> 
-> This updates the power domain to support WAY_EN operations. These
-> operations enable a path between different units of the chip and are
-> labeled as 'way_en' in the register descriptions.
-> 
-> This operation is required by the mt8365 for the MM power domain.
-> 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> ---
-> 
-> Notes:
->      Changes in v3:
->      - Separated the way_en functions for clarity
->      - Added some checks for infracfg_nao
->      
->      Changes in v2:
->      - some minor style fixes.
->      - Renamed 'wayen' to 'way_en' to clarify the meaning
->      - Updated commit message
-> 
->   drivers/soc/mediatek/mtk-pm-domains.c | 162 +++++++++++++++++++++-----
->   drivers/soc/mediatek/mtk-pm-domains.h |  28 +++--
->   2 files changed, 149 insertions(+), 41 deletions(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
-> index 9734f1091c69..c2cbe0de6aa1 100644
-> --- a/drivers/soc/mediatek/mtk-pm-domains.c
-> +++ b/drivers/soc/mediatek/mtk-pm-domains.c
-> @@ -43,6 +43,7 @@ struct scpsys_domain {
->   	struct clk_bulk_data *clks;
->   	int num_subsys_clks;
->   	struct clk_bulk_data *subsys_clks;
-> +	struct regmap *infracfg_nao;
->   	struct regmap *infracfg;
->   	struct regmap *smi;
->   	struct regulator *supply;
-> @@ -117,26 +118,61 @@ static int scpsys_sram_disable(struct scpsys_domain *pd)
->   					MTK_POLL_TIMEOUT);
->   }
->   
-> -static int _scpsys_bus_protect_enable(const struct scpsys_bus_prot_data *bpd, struct regmap *regmap)
-> +static int __scpsys_bus_protect_enable(const struct scpsys_bus_prot_data *bpd,
-> +				       struct regmap *regmap)
-> +{
-> +	u32 val;
-> +	u32 mask = bpd->bus_prot_mask;
-> +	u32 sta_mask = bpd->bus_prot_sta_mask;
-> +
-> +	if (bpd->bus_prot_reg_update)
-> +		regmap_set_bits(regmap, bpd->bus_prot_set, mask);
-> +	else
-> +		regmap_write(regmap, bpd->bus_prot_set, mask);
-> +
-> +	return regmap_read_poll_timeout(regmap, bpd->bus_prot_sta, val,
-> +					(val & sta_mask) == sta_mask,
-> +					MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-> +}
-> +
-> +static int scpsys_bus_way_disable(const struct scpsys_bus_prot_data *bpd,
-> +				  struct regmap *regmap,
-> +				  struct regmap *ack_regmap)
-> +{
-> +	u32 val;
-> +	u32 mask = bpd->bus_prot_mask;
-> +	u32 sta_mask = bpd->bus_prot_sta_mask;
-> +
-> +	if (bpd->bus_prot_reg_update)
-> +		regmap_clear_bits(regmap, bpd->bus_prot_set, mask);
-> +	else
-> +		regmap_write(regmap, bpd->bus_prot_set, mask);
-> +
-> +	if (bpd->ignore_clr_ack)
-> +		return 0;
-> +
-> +	return regmap_read_poll_timeout(ack_regmap, bpd->bus_prot_sta, val,
-> +					(val & sta_mask) == sta_mask,
-> +					MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-> +}
-> +
-> +static int _scpsys_bus_protect_enable(const struct scpsys_bus_prot_data *bpd,
-> +				      struct regmap *regmap, struct regmap *infracfg_nao)
->   {
->   	int i, ret;
->   
->   	for (i = 0; i < SPM_MAX_BUS_PROT_DATA; i++) {
-> -		u32 val, mask = bpd[i].bus_prot_mask;
-> -
-> -		if (!mask)
-> +		if (!bpd[i].bus_prot_mask)
->   			break;
->   
-> -		if (bpd[i].bus_prot_reg_update)
-> -			regmap_set_bits(regmap, bpd[i].bus_prot_set, mask);
-> +		if (bpd[i].way_en)
-> +			ret = scpsys_bus_way_disable(&bpd[i], regmap, infracfg_nao);
->   		else
-> -			regmap_write(regmap, bpd[i].bus_prot_set, mask);
-> -
-> -		ret = regmap_read_poll_timeout(regmap, bpd[i].bus_prot_sta,
-> -					       val, (val & mask) == mask,
-> -					       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-> -		if (ret)
-> +			ret = __scpsys_bus_protect_enable(&bpd[i], regmap);
-> +		if (ret) {
-> +			pr_err("%s %d %d\n", __PRETTY_FUNCTION__, __LINE__, ret);
->   			return ret;
-> +		}
->   	}
->   
->   	return 0;
-> @@ -146,37 +182,71 @@ static int scpsys_bus_protect_enable(struct scpsys_domain *pd)
->   {
->   	int ret;
->   
-> -	ret = _scpsys_bus_protect_enable(pd->data->bp_infracfg, pd->infracfg);
-> +	ret = _scpsys_bus_protect_enable(pd->data->bp_infracfg,
-> +					 pd->infracfg, pd->infracfg_nao);
->   	if (ret)
->   		return ret;
->   
-> -	return _scpsys_bus_protect_enable(pd->data->bp_smi, pd->smi);
-> +	return _scpsys_bus_protect_enable(pd->data->bp_smi, pd->smi, NULL);
-> +}
-> +
-> +static int __scpsys_bus_protect_disable(const struct scpsys_bus_prot_data *bpd,
-> +					struct regmap *regmap)
-> +{
-> +	u32 val;
-> +	u32 mask = bpd->bus_prot_mask;
-> +	u32 sta_mask = bpd->bus_prot_sta_mask;
-> +
-> +	if (bpd->bus_prot_reg_update)
-> +		regmap_clear_bits(regmap, bpd->bus_prot_clr, mask);
-> +	else
-> +		regmap_write(regmap, bpd->bus_prot_clr, mask);
-> +
-> +	if (bpd->ignore_clr_ack)
-> +		return 0;
-> +
-> +	return regmap_read_poll_timeout(regmap, bpd->bus_prot_sta, val,
-> +					!(val & sta_mask), MTK_POLL_DELAY_US,
-> +					MTK_POLL_TIMEOUT);
-> +}
-> +
-> +static int scpsys_bus_way_enable(const struct scpsys_bus_prot_data *bpd,
-> +				 struct regmap *regmap,
-> +				 struct regmap *ack_regmap)
-> +{
-> +	u32 val;
-> +	u32 mask = bpd->bus_prot_mask;
-> +	u32 sta_mask = bpd->bus_prot_sta_mask;
-> +
-> +	if (bpd->bus_prot_reg_update)
-> +		regmap_set_bits(regmap, bpd->bus_prot_clr, mask);
-> +	else
-> +		regmap_write(regmap, bpd->bus_prot_clr, mask);
-> +
-> +	return regmap_read_poll_timeout(ack_regmap, bpd->bus_prot_sta, val,
-> +					(val & sta_mask) == sta_mask,
-> +					MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
->   }
->   
->   static int _scpsys_bus_protect_disable(const struct scpsys_bus_prot_data *bpd,
-> -				       struct regmap *regmap)
-> +				       struct regmap *regmap,
-> +				       struct regmap *infracfg_nao)
->   {
->   	int i, ret;
->   
->   	for (i = SPM_MAX_BUS_PROT_DATA - 1; i >= 0; i--) {
-> -		u32 val, mask = bpd[i].bus_prot_mask;
-> -
-> -		if (!mask)
-> +		if (!bpd[i].bus_prot_mask)
->   			continue;
->   
-> -		if (bpd[i].bus_prot_reg_update)
-> -			regmap_clear_bits(regmap, bpd[i].bus_prot_clr, mask);
-> +		if (bpd[i].way_en)
-> +			ret = scpsys_bus_way_enable(&bpd[i], regmap,
-> +						    infracfg_nao);
->   		else
-> -			regmap_write(regmap, bpd[i].bus_prot_clr, mask);
-> -
-> -		if (bpd[i].ignore_clr_ack)
-> -			continue;
-> -
-> -		ret = regmap_read_poll_timeout(regmap, bpd[i].bus_prot_sta,
-> -					       val, !(val & mask),
-> -					       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-> -		if (ret)
-> +			ret = __scpsys_bus_protect_disable(&bpd[i], regmap);
-> +		if (ret) {
-> +			pr_err("%s %d %d\n", __PRETTY_FUNCTION__, __LINE__, ret);
->   			return ret;
-> +		}
->   	}
->   
->   	return 0;
-> @@ -186,11 +256,12 @@ static int scpsys_bus_protect_disable(struct scpsys_domain *pd)
->   {
->   	int ret;
->   
-> -	ret = _scpsys_bus_protect_disable(pd->data->bp_smi, pd->smi);
-> +	ret = _scpsys_bus_protect_disable(pd->data->bp_smi, pd->smi, NULL);
->   	if (ret)
->   		return ret;
->   
-> -	return _scpsys_bus_protect_disable(pd->data->bp_infracfg, pd->infracfg);
-> +	return _scpsys_bus_protect_disable(pd->data->bp_infracfg,
-> +			pd->infracfg, pd->infracfg_nao);
->   }
->   
->   static int scpsys_regulator_enable(struct regulator *supply)
-> @@ -294,6 +365,21 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
->   	return 0;
->   }
->   
-> +static bool scpsys_bp_infracfg_has_way_en(const struct scpsys_bus_prot_data *bpd)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < SPM_MAX_BUS_PROT_DATA; i++) {
-> +		if (!bpd[i].bus_prot_mask)
-> +			break;
+Where is this irq code being worked on? I've asked about this for async mbox
+commands, and Jonathan has also posted some code for the PMU implementation.
 
-So MT8365_POWER_DOMAIN_MM will return false as the first member of bp_infracfg 
-is BUS_PROT_WR(...)
+Could we not just start with an initial MSI/MSI-X support? Then gradually
+interested users can be added? So each "feature" would need to do implement
+it's "get message number" and to install the isr just do the standard:
 
-Apart from that, why don't you use a CAPS to acheive the same?
+      irq = pci_irq_vector(pdev, num);
+      irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s_%s\n", dev_name(dev),
+			       cxl_irq_cap_table[feature].name);
+      rc = devm_request_irq(dev, irq, isr_fn, IRQF_SHARED, irq_name, info);
 
-> +
-> +		if (bpd[i].way_en)
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
->   static struct
->   generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_node *node)
->   {
-> @@ -364,6 +450,20 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
->   			return ERR_CAST(pd->smi);
->   	}
->   
-> +	if (scpsys_bp_infracfg_has_way_en(pd->data->bp_smi)) {
-> +		dev_err(scpsys->dev, "bp_smi does not support WAY_EN\n");
+The only complexity I see for this is to know the number of vectors to request
+apriori, for which we'd have to get the larges value of all CXL features that
+can support interrupts. Something like the following? One thing I have not
+considered in this is the DOE stuff.
 
-Do we really need to check the correctness of the driver data at runtime?
+Thanks,
+Davidlohr
 
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
-> +	pd->infracfg_nao = syscon_regmap_lookup_by_phandle_optional(
-> +		node, "mediatek,infracfg_nao");
+------
+diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+index 88e3a8e54b6a..b334d2f497c1 100644
+--- a/drivers/cxl/cxlmem.h
++++ b/drivers/cxl/cxlmem.h
+@@ -245,6 +245,8 @@ struct cxl_dev_state {
+	resource_size_t component_reg_phys;
+	u64 serial;
 
-Not in the binding description.
++	int irq_type; /* MSI-X, MSI */
++
+	struct xarray doe_mbs;
 
-> +	if (IS_ERR(pd->infracfg_nao)) {
-> +		if (scpsys_bp_infracfg_has_way_en(pd->data->bp_infracfg))
-> +			return ERR_CAST(pd->infracfg_nao);
-> +
-> +		pd->infracfg_nao = NULL;
-> +	}
-> +
->   	num_clks = of_clk_get_parent_count(node);
->   	if (num_clks > 0) {
->   		/* Calculate number of subsys_clks */
-> diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/soc/mediatek/mtk-pm-domains.h
-> index 7d3c0c36316c..974c68a1d89c 100644
-> --- a/drivers/soc/mediatek/mtk-pm-domains.h
-> +++ b/drivers/soc/mediatek/mtk-pm-domains.h
-> @@ -41,23 +41,29 @@
->   
->   #define SPM_MAX_BUS_PROT_DATA		6
->   
-> -#define _BUS_PROT(_mask, _set, _clr, _sta, _update, _ignore) {	\
-> -		.bus_prot_mask = (_mask),			\
-> -		.bus_prot_set = _set,				\
-> -		.bus_prot_clr = _clr,				\
-> -		.bus_prot_sta = _sta,				\
-> -		.bus_prot_reg_update = _update,			\
-> -		.ignore_clr_ack = _ignore,			\
-> +#define _BUS_PROT(_mask, _sta_mask, _set, _clr, _sta, _update, _ignore, _way_en) {	\
-> +		.bus_prot_mask = (_mask),				\
-> +		.bus_prot_set = _set,					\
-> +		.bus_prot_clr = _clr,					\
-> +		.bus_prot_sta = _sta,					\
-> +		.bus_prot_sta_mask = _sta_mask,				\
-> +		.bus_prot_reg_update = _update,				\
-> +		.ignore_clr_ack = _ignore,				\
-> +		.way_en = _way_en,					\
->   	}
->   
->   #define BUS_PROT_WR(_mask, _set, _clr, _sta)			\
-> -		_BUS_PROT(_mask, _set, _clr, _sta, false, false)
-> +		_BUS_PROT(_mask, _mask, _set, _clr, _sta, false, false, false)
->   
->   #define BUS_PROT_WR_IGN(_mask, _set, _clr, _sta)		\
-> -		_BUS_PROT(_mask, _set, _clr, _sta, false, true)
-> +		_BUS_PROT(_mask, _mask, _set, _clr, _sta, false, true, false)
->   
->   #define BUS_PROT_UPDATE(_mask, _set, _clr, _sta)		\
-> -		_BUS_PROT(_mask, _set, _clr, _sta, true, false)
-> +		_BUS_PROT(_mask, _mask, _set, _clr, _sta, true, false, false)
-> +
-> +#define BUS_PROT_WAY_EN(_en_mask, _sta_mask, _set, _sta)	\
-> +		_BUS_PROT(_en_mask, _sta_mask, _set, _set, _sta, true, false, \
-> +			  true)
->   
->   #define BUS_PROT_UPDATE_TOPAXI(_mask)				\
->   		BUS_PROT_UPDATE(_mask,				\
-> @@ -70,8 +76,10 @@ struct scpsys_bus_prot_data {
->   	u32 bus_prot_set;
->   	u32 bus_prot_clr;
->   	u32 bus_prot_sta;
-> +	u32 bus_prot_sta_mask;
+	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
+diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
+index eec597dbe763..95f4b91f43b1 100644
+--- a/drivers/cxl/cxlpci.h
++++ b/drivers/cxl/cxlpci.h
+@@ -53,15 +53,6 @@
+  #define	    CXL_DVSEC_REG_LOCATOR_BLOCK_ID_MASK			GENMASK(15, 8)
+  #define     CXL_DVSEC_REG_LOCATOR_BLOCK_OFF_LOW_MASK		GENMASK(31, 16)
 
-I'm not very happy with the naming. In the end we need an extra mask for bus 
-protection using WAY_EN. But right now I can't come up with a good name.
+-/* Register Block Identifier (RBI) */
+-enum cxl_regloc_type {
+-	CXL_REGLOC_RBI_EMPTY = 0,
+-	CXL_REGLOC_RBI_COMPONENT,
+-	CXL_REGLOC_RBI_VIRT,
+-	CXL_REGLOC_RBI_MEMDEV,
+-	CXL_REGLOC_RBI_TYPES
+-};
+-
+  static inline resource_size_t cxl_regmap_to_base(struct pci_dev *pdev,
+						 struct cxl_register_map *map)
+  {
+@@ -75,4 +66,44 @@ int devm_cxl_port_enumerate_dports(struct cxl_port *port);
+  struct cxl_dev_state;
+  int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm);
+  void read_cdat_data(struct cxl_port *port);
++
++#define CXL_IRQ_CAPABILITY_TABLE				\
++	C(ISOLATION, "isolation", NULL),			\
++	C(PMU, "pmu_overflow", NULL), /* per pmu instance */	\
++	C(MBOX, "mailbox", NULL), /* primary-only */		\
++	C(EVENT, "event", NULL),
++
++#undef C
++#define C(a, b, c) CXL_IRQ_CAPABILITY_##a
++enum  { CXL_IRQ_CAPABILITY_TABLE };
++#undef C
++#define C(a, b, c) { b, c }
++/**
++ * struct cxl_irq_cap - CXL feature that is capable of receiving MSI/MSI-X irqs.
++ *
++ * @name: Name of the device generating this interrupt.
++ * @get_max_msgnum: Get the feature's largest interrupt message number. In cases
++ *                  where there is only one instance it also indicates which
++ *                  MSI/MSI-X vector is used for the interrupt message generated
++ *                  in association with the feature. If the feature does not
++ *                  have the Interrupt Supported bit set, then return -1.
++ */
++struct cxl_irq_cap {
++	const char *name;
++	int (*get_max_msgnum)(struct cxl_dev_state *cxlds);
++};
++
++static const
++struct cxl_irq_cap cxl_irq_cap_table[] = { CXL_IRQ_CAPABILITY_TABLE };
++#undef C
++
++/* Register Block Identifier (RBI) */
++enum cxl_regloc_type {
++	CXL_REGLOC_RBI_EMPTY = 0,
++	CXL_REGLOC_RBI_COMPONENT,
++	CXL_REGLOC_RBI_VIRT,
++	CXL_REGLOC_RBI_MEMDEV,
++	CXL_REGLOC_RBI_TYPES
++};
++
+  #endif /* __CXL_PCI_H__ */
+diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+index faeb5d9d7a7a..c0fe78e0559b 100644
+--- a/drivers/cxl/pci.c
++++ b/drivers/cxl/pci.c
+@@ -387,6 +387,52 @@ static int cxl_setup_regs(struct pci_dev *pdev, enum cxl_regloc_type type,
+	return rc;
+  }
 
-Regards,
-Matthias
++static void cxl_pci_free_irq_vectors(void *data)
++{
++	pci_free_irq_vectors(data);
++}
++
++static int cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
++{
++	struct device *dev = cxlds->dev;
++	struct pci_dev *pdev = to_pci_dev(dev);
++	int rc, i, vectors = -1;
++
++	for (i = 0; i < ARRAY_SIZE(cxl_irq_cap_table); i++) {
++		int irq;
++
++		if (!cxl_irq_cap_table[i].get_max_msgnum)
++			continue;
++
++		irq = cxl_irq_cap_table[i].get_max_msgnum(cxlds);
++		vectors = max_t(int, irq, vectors);
++	}
++
++	if (vectors == -1)
++		return -EINVAL; /* no irq support whatsoever */
++
++	vectors++;
++	rc = pci_alloc_irq_vectors(pdev, vectors, vectors, PCI_IRQ_MSIX);
++	if (rc < 0) {
++		rc = pci_alloc_irq_vectors(pdev, vectors, vectors, PCI_IRQ_MSI);
++		if (rc < 0)
++			return rc;
++
++		cxlds->irq_type = PCI_IRQ_MSI;
++	} else {
++		cxlds->irq_type = PCI_IRQ_MSIX;
++	}
++
++	if (rc != vectors) {
++		pci_err(pdev, "Not enough interrupts; use polling where supported\n");
++		/* Some got allocated; clean them up */
++		cxl_pci_free_irq_vectors(pdev);
++		return -ENOSPC;
++	}
++
++	return devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
++}
++
+  static void cxl_pci_destroy_doe(void *mbs)
+  {
+	xa_destroy(mbs);
+@@ -476,6 +522,9 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 
->   	bool bus_prot_reg_update;
->   	bool ignore_clr_ack;
-> +	bool way_en;
->   };
->   
->   /**
+	cxlds->component_reg_phys = cxl_regmap_to_base(pdev, &map);
+
++	if (cxl_pci_alloc_irq_vectors(cxlds))
++		cxlds->irq_type = 0;
++
+	devm_cxl_pci_create_doe(cxlds);
+
+	rc = cxl_pci_setup_mailbox(cxlds);

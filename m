@@ -2,136 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59BF59C5F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E0B59C5F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237390AbiHVSVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 14:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44390 "EHLO
+        id S237399AbiHVSV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 14:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237382AbiHVSVa (ORCPT
+        with ESMTP id S237388AbiHVSVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 14:21:30 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B1646DBA
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:21:29 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id 20so10660749plo.10
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:21:29 -0700 (PDT)
+        Mon, 22 Aug 2022 14:21:55 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF64474DC
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:21:54 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-10cf9f5b500so13907665fac.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=E7zU9Fzk9/s8JYdJzxIIZaSlDzKG1TaAOakaBWBMg+w=;
-        b=qvCi9A4voRrGsoTjj5ynU//V1tHrgBYKCKmlc0Iz2kCmwFkyDZnlX2Hjo7aLW+FLUD
-         ZmHaS9ffoG9ZpFOZFjObLabjNl2F6C8WIQXhMiav/UoWG0D3UW6oRepvBWdDiCtFkftX
-         jizt96LLs6acqoItxeO4hvNHLvrgOMiib3dzM4x0NbYubCrm+4Fmyc5YSVAkaQ5g16ym
-         SoH+Gv6T4W2KxIC3V6w0ov5Dk22LxkLVG659u8aFpLVSy36PGBPyPaLZ93jlBLhLTxRV
-         o1hvAd8G1y/LeGY5t4bbau8pqI9QDfvNsEAl5UZ9gbvLjQzwD+ZWzpreVVNqMHfCYFg0
-         GtsQ==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=KxeXKUeRuVUgo6T1WQOko+Q6K9NOCAx+pcM9TQPoDKY=;
+        b=emDZmyCuj4uPG4Bgx/jCNx3nI+rZTnqfKonJwV+kryOTW3PkTafUzA44hv7DwATmP9
+         OVVB9s3lcyJLsx9o8Qvumz4rXuUpC/OQn6ReZ2/4zq5vJciV/wtkLZQPyZV4zLwmGPWM
+         4KcwuzMZ8QzvcN6krVs1/S0uO/WgHkx0mv2I8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=E7zU9Fzk9/s8JYdJzxIIZaSlDzKG1TaAOakaBWBMg+w=;
-        b=6cIADgbV7c8yntcQoSouIwuBbktsGUSR4oKIH9exndtygN0VP8wDiakN2jBkNkPgKz
-         mR9+A2f3+RrdaNi+6rK/3sC5/Tdi+YYt//fM+EeXkgHdgNLdmyT086au0i4Y4Nq6Fj+t
-         B1P9QgPyu8L2owR63thadYqSkaIf0lpBR26bPD4OACwOq55aMkIsIFk+5fa6V7LKD0qS
-         PFvOYx44D7ea1RW00euIUuZCCFFV4OcjvSXC0vNbqcXiodoesIz3rkgPTThLXe6sJwvn
-         FcW7EOduHZXeWwWqIKBW4h9Oh8rRMD16UttvnXWjv58m8mQjD/pfcexK5YcaOoeMbour
-         eXEg==
-X-Gm-Message-State: ACgBeo2uh4ThwqDh5JUwBJvkMXlmIAkeimcxOPOhe/lAd7fSA0lDG8Lp
-        8RQ5D7G59lnIoL1a/NrC9v9uCQ==
-X-Google-Smtp-Source: AA6agR7vb5+ovbrhwIC9w6kPjkD7YVOZqKQ5FF5oNjnlofS9EdadoYakfeT/QbmkLPxz2bM2QFJVKA==
-X-Received: by 2002:a17:90b:4a10:b0:1fb:2e77:a33 with SMTP id kk16-20020a17090b4a1000b001fb2e770a33mr6737392pjb.67.1661192488570;
-        Mon, 22 Aug 2022 11:21:28 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id o7-20020a17090a744700b001fb23c28e9asm2878749pjk.2.2022.08.22.11.21.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 11:21:28 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 18:21:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        "Liang, Kan" <kan.liang@linux.intel.com>, acme@redhat.com,
-        linux-kernel@vger.kernel.org, alexander.shishkin@linux.intel.com,
-        Jianfeng Gao <jianfeng.gao@intel.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>
-Subject: Re: [RESEND PATCH] perf/x86/intel: Fix unchecked MSR access error
- for Alder Lake N
-Message-ID: <YwPJJKxKI4vfQEVn@google.com>
-References: <20220818181530.2355034-1-kan.liang@linux.intel.com>
- <Yv+ggf6PRjL8Eio1@worktop.programming.kicks-ass.net>
- <80eea4f7-bb1e-ebb9-37db-9317b8d9c28f@linux.intel.com>
- <YwOVJO05Ge8V9y5i@worktop.programming.kicks-ass.net>
- <c09ba37c-f685-15a3-3042-8cb3a0f91282@linux.intel.com>
- <YwOk991q0iBgcQWC@worktop.programming.kicks-ass.net>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=KxeXKUeRuVUgo6T1WQOko+Q6K9NOCAx+pcM9TQPoDKY=;
+        b=hGdRDLapQ2ast1CCspl3g+WTgoFLeNDjxwH6FrjMxtUaV6LMKCDwWymhXUD/s03t0o
+         bqLXNsc0lFam7Okw3Rbxc4/q3xr9K7VerODNcypO6sSwE4W9pHmd+5yfvKJPqL+Ps4rW
+         hNIbfNWDWAamJhc754xmCenT9CdC2IFz7Bhz7Umdwg9vH0dgW+CsosfxOewh9rQ+WqfZ
+         0Dk5eptaXqEoIzHsU0o42dpRf+wH0WKiIgduDuchGMAHDRAnKcGLejTPiHVKlS1ZQdcx
+         jDLH8yONYJ4LoI//LYSBRi9ywSVZWDNAjxxXtKgu5tnPg4XV1MgLABv4D9mCcYb+7G3j
+         G88g==
+X-Gm-Message-State: ACgBeo1tmAq04ua+2Y5lnDBEEmClRivpOEKT5lf8PrzrwAkTVAHeLS+N
+        N1iT1KzsjNAiLcDPh6qrsAMODbmgFHm+TA==
+X-Google-Smtp-Source: AA6agR68iIoJ5G6l3bR8zwgE0PTkfXlkejU70HymvsqQF5SDyKYyTJxwVcFX0gJXYWF6iZ9DEomVSg==
+X-Received: by 2002:a05:6870:d585:b0:11b:9660:96e9 with SMTP id u5-20020a056870d58500b0011b966096e9mr12623639oao.65.1661192513403;
+        Mon, 22 Aug 2022 11:21:53 -0700 (PDT)
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com. [209.85.160.42])
+        by smtp.gmail.com with ESMTPSA id l11-20020a056870218b00b000f32fb9d2bfsm2985929oae.5.2022.08.22.11.21.50
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 11:21:51 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-10cf9f5b500so13907465fac.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:21:50 -0700 (PDT)
+X-Received: by 2002:a05:6870:d0d4:b0:10d:4a2:2c0e with SMTP id
+ k20-20020a056870d0d400b0010d04a22c0emr13587797oaa.232.1661192510574; Mon, 22
+ Aug 2022 11:21:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwOk991q0iBgcQWC@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1660739276.git.duoming@zju.edu.cn> <b861ce56ba555109a67f85a146a785a69f0a3c95.1660739276.git.duoming@zju.edu.cn>
+ <YvzicURy8t2JdQke@kroah.com> <176e7de7.8a223.182ac1fbc47.Coremail.duoming@zju.edu.cn>
+ <Yv5TefZcrUPY1Qjc@kroah.com> <5108e03b.8c156.182b1a2973f.Coremail.duoming@zju.edu.cn>
+In-Reply-To: <5108e03b.8c156.182b1a2973f.Coremail.duoming@zju.edu.cn>
+From:   Brian Norris <briannorris@chromium.org>
+Date:   Mon, 22 Aug 2022 11:21:36 -0700
+X-Gmail-Original-Message-ID: <CA+ASDXNN81VczMTUt8=AyeytbMjy2vAGi_aVW_MNha9D99Z5VA@mail.gmail.com>
+Message-ID: <CA+ASDXNN81VczMTUt8=AyeytbMjy2vAGi_aVW_MNha9D99Z5VA@mail.gmail.com>
+Subject: Re: [PATCH v7 1/2] devcoredump: remove the useless gfp_t parameter in
+ dev_coredumpv and dev_coredumpm
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        amit karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>, kvalo@kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "<netdev@vger.kernel.org>" <netdev@vger.kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022, Peter Zijlstra wrote:
-> On Mon, Aug 22, 2022 at 05:08:55PM +0200, Andi Kleen wrote:
-> > 
-> > > diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> > > index 2db93498ff71..232e24324fd7 100644
-> > > --- a/arch/x86/events/intel/core.c
-> > > +++ b/arch/x86/events/intel/core.c
-> > > @@ -4473,6 +4473,11 @@ static bool init_hybrid_pmu(int cpu)
-> > >   	struct x86_hybrid_pmu *pmu = NULL;
-> > >   	int i;
-> > > +	if (boot_cpu_has(X86_FEATURE_HYPERVISOR)) {
-> > > +		pr_warn_once("hybrid PMU and virt are incompatible\n");
-> > > +		return false;
-> > > +	}
-> > 
-> > It's totally possible to virtualize hybrid correctly, so I don't think this
-> > is justified
-> 
-> With a magic incantation and a sacrificial chicken sure,
+Hi,
 
-Pretty sure this one requires at least a goat.
+On Thu, Aug 18, 2022 at 8:47 AM <duoming@zju.edu.cn> wrote:
+> On Thu, 18 Aug 2022 16:58:01 +0200 Greg KH wrote:
+> > No, that is not necessary.  Do the work now so that there is no flag day
+> > and you don't have to worry about new users, it will all "just work".
+>
+> Do you mean we should replace dev_set_name() in dev_coredumpm() to some other
+> functions that could work both in interrupt context and process context?
 
-> but the typical guest will not have it set up right and we'll get the kernel
-> doing *splat*.
+No.
 
-I 100% agree that typical VMMs will not get this right, but at the same time I
-think this is firmly a host _kernel_ bug.
+I believe the suggestion is that rather than change the signature for
+dev_coredumpv() (which means everyone has to agree on the new
+signature on day 1), you should introduce a new API, like
+dev_coredumpv_noatomic() (I'm not good at naming [1]) with the
+signature you want, and then migrate users over. Once we have a
+release with no users of the old API, we drop it.
 
-Checking X86_FEATURE_HYPERVISOR in the guest won't handle things like trying to
-run a non-hyrbid vCPU model on a hybrid CPU, because IIUC, the "is_hybrid()" is
-purely based on FMS, i.e. will be false if someone enumerates a big core vCPU on
-a hybrid CPU.
+There are plenty of examples of the kernel community doing similar
+transitions. You can search around for examples, but a quick search of
+my own shows something like this:
+https://lwn.net/Articles/735887/
+(In particular, timer_setup() was introduced, and all setup_timer()
+users were migrated to it within a release or two.)
 
-So until KVM gets sane handling, shouldn't this be?
+Brian
 
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index f969410d0c90..0a8accfc3018 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -2999,12 +2999,8 @@ void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap)
-        }
+[1] Seriously, dev_coredumpv_noatomic() is not a name I want to see
+last very long. Maybe some other trivial modification? Examples:
 
-        cap->version            = x86_pmu.version;
--       /*
--        * KVM doesn't support the hybrid PMU yet.
--        * Return the common value in global x86_pmu,
--        * which available for all cores.
--        */
--       cap->num_counters_gp    = x86_pmu.num_counters;
-+       /* KVM doesn't support the hybrid PMU yet. */
-+       cap->num_counters_gp    = is_hybrid() ? 0 : x86_pmu.num_counters;
-        cap->num_counters_fixed = x86_pmu.num_counters_fixed;
-        cap->bit_width_gp       = x86_pmu.cntval_bits;
-        cap->bit_width_fixed    = x86_pmu.cntval_bits;
-
+dev_core_dumpv()
+dev_coredump_v()
+device_coredumpv()
+...

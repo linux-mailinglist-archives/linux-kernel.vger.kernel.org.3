@@ -2,163 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA4A59CB3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7176559CB40
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237762AbiHVV7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 17:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
+        id S238016AbiHVWAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 18:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiHVV7s (ORCPT
+        with ESMTP id S229819AbiHVWAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 17:59:48 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B7F19C13
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 14:59:47 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id n23-20020a7bc5d7000000b003a62f19b453so5456484wmk.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 14:59:47 -0700 (PDT)
+        Mon, 22 Aug 2022 18:00:16 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829163DF02
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:00:15 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id w138so9033333pfc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:00:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc;
-        bh=ynuYihZWZ0kAQ4LlyTu0kPhjqQvQSMdMHCz5+9btL4g=;
-        b=h4r5N+9PCdNWJgiHHD7yNUcPqWeII/k4P0MZmgSg8+roBLCj2/qsTwG1ukd2RX9pZm
-         Wu0ueIi+0F1SeHm4ZmBVTfm758BwjbIXGn2DrH6BrzpCtsxZbSExA1jZM0qtKPpuALfY
-         TMQsl5XARCJIYpAcW5PUtjIfQviuHTOfCUeJY=
+        d=flatmax-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=k7QztPNY6f5UPLhFzQe/bCAaGoEOsA+9S8peUjdBlTk=;
+        b=c/WEgMnCXQKbLNgvEBP8td0Sx3mSDaOuW5vJixarP5cB4HVOlwXWV7YHZNlHV6wKk1
+         qap2wSHRjwj8hGabgU8iqHb7uEBpz7J82eh8P6R8Q1qRSFYIFU8aQh+1WW2j8FwiMA3A
+         HQfQDT4JHh7UiHHwrVjOG6IWx19Lv7rlRPKMS3Ua4lKhD8k7mBr5pcCrF7p17wcUTG9U
+         W+PsUGz0g8Sj+XTMw6EZr72lPcqggh+SUb1apuwoYAQRl6FQ+hcYt1MN/4QzCsc/B9vI
+         SuTwVo2Ev6dG9sTc5hD2uIrrYKMKwf1qnd/Ihd7R5viPBb1A9MVu6SEVEoSw5IygzRXp
+         IXBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc;
-        bh=ynuYihZWZ0kAQ4LlyTu0kPhjqQvQSMdMHCz5+9btL4g=;
-        b=yIQdSU/CutSliVz8sslnO1nTyQnDdO7JDbl/JqbygxbKqFCGDLc0tbvkKkFDdUNB3m
-         DAI33omXO7Vm74g/W6yB3AYyCscluq8Kihihjim3J8TsYib7KXl5+n8U2b/keXbQyzXg
-         Go2lXLszPUoFdfeXPOjvZ8JVO7jrrut83MSaKPefP0vRWW1/jBMUoiPdY6wXdISzdHR2
-         7PZVUyqHJmraniq4VrwQ0iW+T+PlT1q+Js3j8Q44L6w9g+mgGx9ce86fwAf+xQ59wBWM
-         I1esQLhqlP3EXTVjZzrhVgLXPMOIXNlHUWOYcEidrbjjHjTZ+qqRy16POp0OLFfH8L16
-         eA5g==
-X-Gm-Message-State: ACgBeo1YKPGY07B2cHDadbAhFNrb5WhQmbLy8yQDChLnt9C/cyD7kFk2
-        wk+T3ISXGap4G4MayXs43PxnN5ln40s3mg==
-X-Google-Smtp-Source: AA6agR4eAgTgLnRn2o+SuA1/JZNb6CRhGYCvTA7EamJmIPnuQaM1HNboLADEpWmlb9w+zpnMGPybtg==
-X-Received: by 2002:a7b:c016:0:b0:3a5:fff2:62f4 with SMTP id c22-20020a7bc016000000b003a5fff262f4mr218337wmb.104.1661205586484;
-        Mon, 22 Aug 2022 14:59:46 -0700 (PDT)
-Received: from ?IPv6:2001:8b0:aba:5f3c:6994:a175:4613:7bc4? ([2001:8b0:aba:5f3c:6994:a175:4613:7bc4])
-        by smtp.gmail.com with ESMTPSA id bg19-20020a05600c3c9300b003a5e7435190sm21569924wmb.32.2022.08.22.14.59.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 14:59:45 -0700 (PDT)
-Message-ID: <4e6fa793f58e23bb53ab161b9ab119a35020b7e6.camel@linuxfoundation.org>
-Subject: Re: [PATCH] init/Kconfig: fix CC_HAS_ASM_GOTO_TIED_OUTPUT test with
- dash
-From:   Richard Purdie <richard.purdie@linuxfoundation.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Mon, 22 Aug 2022 22:59:43 +0100
-In-Reply-To: <CAK7LNAQTHO3Za9UpeCCkdNo-mQS8ORgbfwXCJKKr4FCZ3VqT2Q@mail.gmail.com>
-References: <20220804190320.262510-1-alexandre.belloni@bootlin.com>
-         <CAKwvOd=3N8_Rx1P8J7pVnjM6sEzJA233BnwmD1VyMRqgujq2_Q@mail.gmail.com>
-         <7eacd1d9-42ba-fd61-7f37-0635cebcb33d@infradead.org>
-         <e902a360e3759c7f87d98d71d79a0d5cbe935e3e.camel@linuxfoundation.org>
-         <CAK7LNART2XQYy2hN1afODbuCMj+_VX9Ojh5nVCoY-hwXRAwSWA@mail.gmail.com>
-         <0725ccc9abce84695573539c5f3d9d061384469d.camel@linuxfoundation.org>
-         <CAK7LNAQTHO3Za9UpeCCkdNo-mQS8ORgbfwXCJKKr4FCZ3VqT2Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=k7QztPNY6f5UPLhFzQe/bCAaGoEOsA+9S8peUjdBlTk=;
+        b=0f6VYdBF+ygoVX6pTPDwemFo7/tRGRBJAFAJ4Hr3MVfc5xeVMMuhC+LTEY2aLUB3V/
+         boja4ZO9hbdUuzu0+ONXsuclutFEBCk2SiCS416ZR32FL53jYsdm69iTwgihtZQQSggw
+         ZdKdbLh5IswIHvO4LEhGNoqZnI6ON41wzkDCMAe4qlayH2dPlk2inC4N0sebzfnFJWS8
+         4h/K/Z16v7Wwb//cdNbhI5c5/HLJNJ6Na/+W+lQoCSiqce1Zkzw9aEjrRwhZhGKpAecm
+         KK53tzrXdu38soMKCjjbe0YlxbuiNkSzQji/o5ysPdQqU4pqBpOKsUCLRcl0fDVUsMc8
+         oVCA==
+X-Gm-Message-State: ACgBeo0rpl/3FNlL2Q4i4sHo/8bwmx0zyxH8qa0IddW1xR5VtJ0mVoSp
+        YmWNeRHBZm3G4Qr40+DF9eJNiw==
+X-Google-Smtp-Source: AA6agR6duxF3m0MIusH+8dSELwpye5RmZc+z35IyCWoipxGYYNLN70/tfTT/CqoBOD/cFCtjYZ5d9A==
+X-Received: by 2002:a05:6a00:2486:b0:536:777b:6a64 with SMTP id c6-20020a056a00248600b00536777b6a64mr9649685pfv.65.1661205614943;
+        Mon, 22 Aug 2022 15:00:14 -0700 (PDT)
+Received: from ?IPV6:2406:3400:213:70c0:73b4:2cc5:1ada:53cd? ([2406:3400:213:70c0:73b4:2cc5:1ada:53cd])
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902bccc00b0016db7f49cc2sm8817503pls.115.2022.08.22.15.00.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 15:00:14 -0700 (PDT)
+Message-ID: <72de09df-5dee-8bd0-5c91-359e4bc36ca8@flatmax.com>
+Date:   Tue, 23 Aug 2022 08:00:07 +1000
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ASoC: codes: src4xxx: Avoid clang
+ -Wsometimes-uninitialized in src4xxx_hw_params()
+Content-Language: en-AU
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, kernel test robot <lkp@intel.com>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+References: <20220822183101.1115095-1-nathan@kernel.org>
+From:   Matt Flax <flatmax@flatmax.com>
+In-Reply-To: <20220822183101.1115095-1-nathan@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-08-19 at 17:40 +0900, Masahiro Yamada wrote:
-> On Fri, Aug 19, 2022 at 6:46 AM Richard Purdie
-> <richard.purdie@linuxfoundation.org> wrote:
-> >=20
-> > On Fri, 2022-08-19 at 04:31 +0900, Masahiro Yamada wrote:
-> > > On Thu, Aug 18, 2022 at 6:14 PM Richard Purdie
-> > > <richard.purdie@linuxfoundation.org> wrote:
-> > > >=20
-> > > > This problem is a little more subtle.
-> > > >=20
-> > > > As far as I could work out, exec() is used on entries like this in
-> > > > kConfig. exec() falls back to /bin/sh so it is hard to see where th=
-is
-> > > > would be changed to be /bin/bash.
-> > >=20
-> > >=20
-> > >=20
-> > > Kconfig uses popen() to execute a shell command.
-> > >=20
-> > > See do_shell() in scripts/kconfig/preprocess.c
-> > >=20
-> > > popen(3) says that
-> > > "the command is passed to /bin/sh using the -c flag.
-> > > interpretation, if any, is performed by the shell."
-> > >=20
-> > > GNU Make is the same.
-> > > Make uses /bin/sh to execute commands in
-> > > recipe lines and $(shell ...) functions.
-> > > You can change the default shell via 'SHELL' variable.
-> >=20
-> > That makes sense. I don't think we can easily change the shell popen()
-> > uses.
-> >=20
-> > >=20
-> > > BTW, Richard is here, so let me ask about BitBake.
-> > >=20
-> > > The manual [3] clearly says:
-> > >=20
-> > > "When you create these types of functions in your recipe or class fil=
-es,
-> > > you need to follow the shell programming rules. The scripts are
-> > > executed by /bin/sh,
-> > > which may not be a bash shell but might be something such as dash.
-> > > You should not use Bash-specific script (bashisms)"
-> > >=20
-> > > I just thought BitBake ran shell code in bash before,
-> > > but I might have misunderstood.
-> > > Do OE/Yocto allow only POSIX shell code?
-> >=20
-> > Bitbake runs shell code with /bin/sh so we don't allow bashisms and
-> > that has always been the case.
-> >=20
-> > Like this case in the kernel, we do get people submitting changes which
-> > were only tested with bash which can be frustrating but the manual and
-> > our policy is quite clear. We just fix any that do creep through and
-> > have test systems that have dash to try and catch them too.
-> >=20
-> > Cheers,
-> >=20
-> > Richard
->=20
-> Thanks.
-> So, Bitbake is the same approach as the kernel.
+Hi Nathan,
 
-Yes, effectively.
->=20
-> This is a patch set to use bash forcibly. FWIW.
->=20
-> https://lore.kernel.org/lkml/20220819065604.295572-1-masahiroy@kernel.org=
-/
+On 23/8/22 04:31, Nathan Chancellor wrote:
+> Clang warns:
+>
+>    sound/soc/codecs/src4xxx.c:280:3: error: variable 'd' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>                    default:
+>                    ^~~~~~~
+>    sound/soc/codecs/src4xxx.c:298:59: note: uninitialized use occurs here
+>                    ret = regmap_write(src4xxx->regmap, SRC4XXX_RCV_PLL_11, d);
+>                                                                            ^
+>    sound/soc/codecs/src4xxx.c:223:20: note: initialize the variable 'd' to silence this warning
+>            int val, pj, jd, d;
+>                              ^
+>                              = 0
 
-Thanks, I'm watching with interest to see what happens.
 
-The original patch causing issues was backported into several stable
-releases and this won't be so we have a bit of a challenge there but we
-have also started carrying patches to fix that too so as long as things
-get fixed in master we should be ok in the long run and I'm happy.
+If you really want to get rid of these warnings, you can use this 
+default for the variables :
 
-Cheers,
+pj = 0x0;
+jd=0xff;
 
-Richard
+d = 0xff;
+
+It doesn't really make sense why we would choose to initialise these 
+variables, but if you want to silence the preprocessor, then perhaps 
+those values. Put a message that defaults are not known nor specified in 
+the data sheet and these values are chosen to be unlikely matches of 
+real world values - which ensures regmap updates later from an initial 
+unknown chip state after refresh. All a bit messy really.
+
+
+> According to the comment in the default case, other parts of the chip
+> are still functional without these values so just return 0 in the
+> default case to avoid using these variables uninitialized.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1691
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>   sound/soc/codecs/src4xxx.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/sound/soc/codecs/src4xxx.c b/sound/soc/codecs/src4xxx.c
+> index a8f143057b41..cf45caa4bf7f 100644
+> --- a/sound/soc/codecs/src4xxx.c
+> +++ b/sound/soc/codecs/src4xxx.c
+> @@ -283,7 +283,7 @@ static int src4xxx_hw_params(struct snd_pcm_substream *substream,
+>   			 */
+>   			dev_info(component->dev,
+>   				"Couldn't set the RCV PLL as this master clock rate is unknown\n");
+> -			break;
+> +			return 0;
+
+
+Don't return here, the rest of the chip is still functional and probably 
+in use. Print the dev_info and continue.
+
+
 

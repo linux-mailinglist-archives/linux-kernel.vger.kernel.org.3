@@ -2,96 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A16359BE71
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4941959BE73
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234157AbiHVL2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
+        id S234194AbiHVL2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234070AbiHVL2m (ORCPT
+        with ESMTP id S234170AbiHVL2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:28:42 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB1C11145
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:28:40 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id ca13so9244051ejb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:28:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=RILhH6Aq9u12AHXrJLapVf/35ykvKgXZJJKhDUJ3u5o=;
-        b=W/FLeb+GN/UehRVpHTVUl3UWfEaP4LnB1oyOCWYS3tUzt43GdMgRFKogbJL7ZyFvpF
-         QbhKRwjCvxpZqfapq8M8QbKjv0NDNTRs+xo6F1FSw/pUQtHppxwGh3pYGTh4PZ00g0IR
-         eyynmLwtdeajoNl4zUfaZnL166+WdYZUzKF7iYxMlKQ/6KI8spXmN1cvFlFZh6BUIWJz
-         0Epw9Q4bwqe+QbZ9KNvLFPd+O/HauG5nfdywKF+YUck869jCfl1c+k5qKC0kEojyf6rF
-         XeCvoAGFCrAtawgmoXnlyJy4QqWLDUQp4FGvOf6jBtmtjAK8PE8tD+lR4DcegAgoY6dw
-         wbxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=RILhH6Aq9u12AHXrJLapVf/35ykvKgXZJJKhDUJ3u5o=;
-        b=NWb1TH6fnEeWbE7UsQpxUFIp7Vw/Qp+n697g/2T85Wdyl+b4H4vhOlEl9vbKdVuZ+e
-         VLY5J9g0kd2sq6lfD+iya0QAKAhF1lFGc63qOw8CZ3org07cPNgfDmIPABqBakUV2sB3
-         oBwLH8UBtlnAyyE3KMBR4Ck5zQ1tIFfbsrHmuX77NiEXEu+MbyHErOjKjOEueuaQxyxY
-         59b4fuE6TYGTYVeb556rn3xT0flTAlMKPOnBWA50aXzfq14YC5BVZHuiSmdOv97nQOeV
-         ooj5kgBnIbY4JDVJ4Bb+UB42Z4eJZ1i2vIskirXaBJwzXlq5GdTXuEyZYuXJC7VMy/ar
-         H/EQ==
-X-Gm-Message-State: ACgBeo0NtV7YkpAdaz/qzebSlQf9MrJ4ZTGYxyXieh7j9JT2cZkAhY4O
-        qPUWY7j6bvWtMw17MP68rqpgOLBuocmAjgozxfHKGbqvgYpUyQ==
-X-Google-Smtp-Source: AA6agR4oXIhMWvyTykV73Rd+VMMf8KizpzG+NuEN/NiSVIDY85ROM3a/ErCmdsahH06lkeq0eo3hUDt62A3a1KcpM9A=
-X-Received: by 2002:a17:907:9686:b0:73d:1de0:7fbe with SMTP id
- hd6-20020a170907968600b0073d1de07fbemr9625140ejc.500.1661167719419; Mon, 22
- Aug 2022 04:28:39 -0700 (PDT)
+        Mon, 22 Aug 2022 07:28:46 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDC113DD3;
+        Mon, 22 Aug 2022 04:28:44 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MB96T0mQVznTgw;
+        Mon, 22 Aug 2022 19:26:25 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 22 Aug 2022 19:28:42 +0800
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>, <xuwei5@huawei.com>
+Subject: Re: [PATCH next] i2c: i2c-hisi: Add support for initializing control
+ module via DT
+To:     Weilong Chen <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
+        <wsa@kernel.org>
+References: <20220822010031.97769-1-chenweilong@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <614d97d1-fee7-d8c8-761f-52e7d5d5c42b@huawei.com>
+Date:   Mon, 22 Aug 2022 19:28:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-References: <20220815120834.1562544-1-lewis.hanly@microchip.com> <20220815120834.1562544-2-lewis.hanly@microchip.com>
-In-Reply-To: <20220815120834.1562544-2-lewis.hanly@microchip.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 22 Aug 2022 13:28:28 +0200
-Message-ID: <CACRpkdbk_ZqYnDzXgmbnAxhs+mEe9f2X-y++9HDS-O=UO_tUmg@mail.gmail.com>
-Subject: Re: [PATCH v6 1/1] gpio: mpfs: add polarfire soc gpio support
-To:     lewis.hanly@microchip.com
-Cc:     linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        brgl@bgdev.pl, linux-kernel@vger.kernel.org, palmer@dabbelt.com,
-        maz@kernel.org, conor.dooley@microchip.com,
-        daire.mcnamara@microchip.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220822010031.97769-1-chenweilong@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 2:08 PM <lewis.hanly@microchip.com> wrote:
+Hi Weilong,
 
-> From: Lewis Hanly <lewis.hanly@microchip.com>
->
-> Add a driver to support the Polarfire SoC gpio controller
->
-> Signed-off-by: Lewis Hanly <lewis.hanly@microchip.com>
+Thanks for the patch.
 
-This looks like  textbook example of a driver that can use
-CONFIG_GPIO_GENERIC
+It'll be more straightforward for me to make the subject as
+"[PATCH] i2c: hisi: Add initial device tree support".
 
-> +config GPIO_POLARFIRE_SOC
-> +       bool "Microchip FPGA GPIO support"
-> +       depends on OF_GPIO
-> +       select GPIOLIB_IRQCHIP
+On 2022/8/22 9:00, Weilong Chen wrote:
+> The HiSilicon I2C controller can be used on embedded platform, which
+> boot from devicetree.
+> 
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> ---
+>  drivers/i2c/busses/Kconfig    |  2 +-
+>  drivers/i2c/busses/i2c-hisi.c | 13 ++++++++++++-
+>  2 files changed, 13 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 7284206b278b..6d0fdf48e97d 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -673,7 +673,7 @@ config I2C_HIGHLANDER
+>  
+>  config I2C_HISI
+>  	tristate "HiSilicon I2C controller"
+> -	depends on (ARM64 && ACPI) || COMPILE_TEST
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Say Y here if you want to have Hisilicon I2C controller support
+>  	  available on the Kunpeng Server.
+> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+> index 76c3d8f6fc3c..cba9a6830b23 100644
+> --- a/drivers/i2c/busses/i2c-hisi.c
+> +++ b/drivers/i2c/busses/i2c-hisi.c
+> @@ -16,6 +16,8 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/property.h>
+>  #include <linux/units.h>
+> +#include <linux/acpi.h>
+> +#include <linux/of.h>
+>  
 
-select GPIO_GENERIC
+The headers should be in alphabetical order.
 
-See e.g. drivers/gpio/gpio-ftgpio010.c for an example
-of how to use bgpio_init() to set up the helper library to handle
-the GPIO side of things and combine it with an irqchip.
-You get get/set_multiple() for free with this approach.
-Also see documentation for bgpio_init() in
-drivers/gpio/gpio-mmio.c.
+>  #define HISI_I2C_FRAME_CTRL		0x0000
+>  #define   HISI_I2C_FRAME_CTRL_SPEED_MODE	GENMASK(1, 0)
+> @@ -483,17 +485,26 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +#ifdef CONFIG_ACPI
+>  static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
+>  	{ "HISI03D1", 0 },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
+> +#endif
+> +
+> +static const struct of_device_id hisi_i2c_dts_ids[] = {
+> +	{ .compatible = "hisilicon,hisi-i2c", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
+>  
 
-Yours,
-Linus Walleij
+This should be protected by CONFIG_OF as well, just like ACPI ids.
+hisi_i2c_of_ids should be better according to the convention.
+
+Thanks,
+Yicong
+
+>  static struct platform_driver hisi_i2c_driver = {
+>  	.probe		= hisi_i2c_probe,
+>  	.driver		= {
+>  		.name	= "hisi-i2c",
+> -		.acpi_match_table = hisi_i2c_acpi_ids,
+> +		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
+> +		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
+>  	},
+>  };
+>  module_platform_driver(hisi_i2c_driver);
+> 

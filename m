@@ -2,58 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6961B59C921
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A593759C923
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238908AbiHVTkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 15:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
+        id S238317AbiHVTmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 15:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238905AbiHVTks (ORCPT
+        with ESMTP id S237530AbiHVTmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 15:40:48 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2F648CAD;
-        Mon, 22 Aug 2022 12:40:46 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id o204so5958296oia.12;
-        Mon, 22 Aug 2022 12:40:46 -0700 (PDT)
+        Mon, 22 Aug 2022 15:42:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988D048E8F
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:42:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661197333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J4GHfux6w3/w2b7KxiBzPcOgQglBM7+/Ly21ZzyiIj4=;
+        b=hORPowuShSYQuTkquq7jSW6d6T6YXylBG5mDm7OSBHtoMDsPWctEdWgUxZ4VNNFzOO4oj2
+        zROcHzWqhKCexMD2o7JLfRRWvLVzWq4EQmQn+BS3zQQP9JP4mBCPMo4cLePgG6raKHdIMZ
+        g6v9owAVdjTY3r2Joo0InNvERT8Atcs=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-177-84Mc871iORGgtb6blSAVqA-1; Mon, 22 Aug 2022 15:42:12 -0400
+X-MC-Unique: 84Mc871iORGgtb6blSAVqA-1
+Received: by mail-qk1-f199.google.com with SMTP id v13-20020a05620a0f0d00b006b5f0ec742eso10399096qkl.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:42:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=F7N0M14f2U+FDQpQWgJZ3u/jY5t4RVFyRkfLvEHA7mY=;
-        b=B5DeLtZurSKGeHdcsiQJwqteKnPcgR+5tKLtlpJcLVF1pJeJ7Z4mxWiGrtDVr9z1+8
-         +M7X2Vz1etTgea9Rbeu5UTxZndrFZR6TFyDLy+PAQio2uJ4cds2gAXUdOv0cKGIvTcxv
-         puNpOQ42aAaCim6QNKyI3skO+a40q51KGheoY0nmMmG8rOqcWpZ3SBsXzMCIxDQgaPhC
-         L/Vm9nBBj7KSb4ZNEb4XC6eO/IbkgoaFRCpSVQ8P7ZggQ5mb4xotJc8dDO0+962oIVuZ
-         3tUOWX07Lb89ZOxRff34NmH3GQnMkEzzKjmMYK+K5W4b0vgXlEd7YR8yMZFESGnrG9Zc
-         O0aQ==
-X-Gm-Message-State: ACgBeo1XQSjnHrgxhVcjAX17HJx8hMZUHdMxhBVZVdvbl3qoBcBJUJL0
-        dWN31+Imv2iN7n6ZVnHWDQ==
-X-Google-Smtp-Source: AA6agR5XMr5FgVv8vQek4MUAACWDV/kl827jsCrHAB1xrqsqfBvLvnIBX7DvPsTcNbpI/ADfzC+dRw==
-X-Received: by 2002:a05:6808:1b2a:b0:344:b633:50f8 with SMTP id bx42-20020a0568081b2a00b00344b63350f8mr12274922oib.42.1661197246089;
-        Mon, 22 Aug 2022 12:40:46 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v134-20020acaac8c000000b00344f28a7a4csm2755758oie.22.2022.08.22.12.40.44
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=J4GHfux6w3/w2b7KxiBzPcOgQglBM7+/Ly21ZzyiIj4=;
+        b=GdzGtKi3D9HFHqRIJxmGLflTncpRrknRCachuLxU+2BDmgR/7dV3T9py1jRZLdD+wI
+         fiTxU3kFpcw36a40RFOZ5NAG8MN5DB6GG8EdDwrcE0bNuRfkYZxh2CKDQS9clmLNvmaJ
+         v5cVvf+9gKWUfL5knRu+Fl4sBO6192Es+f0Wz3bc5XZOzKAlD37tdyBzztvFomFCY96K
+         BrWJpfJWonIn5RD8VYDGt5mhReSDNiMrECcKlkGyoxTj25DEzxZlSbErlj2y67a8slnq
+         4Aw23p2KifoKQgp2loWWfjcS7h9IPHflzRdNe/mizvfA3rDtM21kgKyrDaOzcPPte8yv
+         CUXg==
+X-Gm-Message-State: ACgBeo01M+oOKU/nE6IyYNjXnlCcTLkz7TeLk1ybMSdMBJBYFvhmI/Yw
+        lH6n3rQRXA6/WAqOr2sT68dqBbu5CGHdjokbu2LUcmCxYjaEE9/ElR28JXZWAPeu1NSR1frDT6y
+        cFLy0CM0/XmG+dDCW0bvRDwS9
+X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id s13-20020a05620a254d00b006ab84b825ebmr13533960qko.383.1661197332136;
+        Mon, 22 Aug 2022 12:42:12 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5IEzuFn0RfsfxXNTzE3MUceYDNF8SxLxnAMuUUMZCTNC28EXLcXLDtyXi4dTDnDXzhCL/qCA==
+X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id s13-20020a05620a254d00b006ab84b825ebmr13533948qko.383.1661197331901;
+        Mon, 22 Aug 2022 12:42:11 -0700 (PDT)
+Received: from halaneylaptop ([2600:1700:1ff0:d0e0::48])
+        by smtp.gmail.com with ESMTPSA id c13-20020ac8054d000000b00343681ee2e2sm9309351qth.35.2022.08.22.12.42.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 12:40:45 -0700 (PDT)
-Received: (nullmailer pid 413613 invoked by uid 1000);
-        Mon, 22 Aug 2022 19:40:42 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Ciprian Regus <ciprian.regus@analog.com>
-Cc:     devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        jic23@kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, u.kleine-koenig@pengutronix.de,
-        robh+dt@kernel.org
-In-Reply-To: <20220822125106.1106798-2-ciprian.regus@analog.com>
-References: <20220822125106.1106798-1-ciprian.regus@analog.com> <20220822125106.1106798-2-ciprian.regus@analog.com>
-Subject: Re: [PATCH 1/3] dt-bindings: iio: adc: Add docs for LTC2499
-Date:   Mon, 22 Aug 2022 14:40:42 -0500
-Message-Id: <1661197242.564541.413612.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Mon, 22 Aug 2022 12:42:11 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 14:42:09 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, bmasney@redhat.com
+Subject: Re: [PATCH] regulator: core: Clean up on enable failure
+Message-ID: <20220822194209.b7mpb3wgvqwjybg5@halaneylaptop>
+References: <20220819194336.382740-1-ahalaney@redhat.com>
+ <YwATSglfJEgG6V73@sirena.org.uk>
+ <CAD=FV=UWn8a9C3j0Ky9JWqo_2AvOE=ORVP94zHftGQLsxFdXyw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=UWn8a9C3j0Ky9JWqo_2AvOE=ORVP94zHftGQLsxFdXyw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,43 +79,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022 15:51:04 +0300, Ciprian Regus wrote:
-> Update the bindings documentation for ltc2497 to include the ltc2499.
+On Fri, Aug 19, 2022 at 04:03:24PM -0700, Doug Anderson wrote:
+> Hi,
 > 
-> Signed-off-by: Ciprian Regus <ciprian.regus@analog.com>
-> ---
->  Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml | 6 +++++-
->  MAINTAINERS                                                 | 1 +
->  2 files changed, 6 insertions(+), 1 deletion(-)
+> On Fri, Aug 19, 2022 at 3:48 PM Mark Brown <broonie@kernel.org> wrote:
+> >
+> > On Fri, Aug 19, 2022 at 02:43:36PM -0500, Andrew Halaney wrote:
+> >
+> > > -     if (regulator->uA_load && regulator->enable_count == 1)
+> > > -             return drms_uA_update(rdev);
+> > > +     if (regulator->uA_load && regulator->enable_count == 1) {
+> > > +             ret = drms_uA_update(rdev);
+> >
+> > I am vaugely surprised and a bit concerned that drms_uA_update() can
+> > fail...
 > 
+> In his original email Andrew implied that his system was misconfigured
+> when he was seeing this error. I presume this isn't common which is
+> why nobody had noticed this before now, but given that the function
+> drms_uA_update() does return an error code it seems like we should
+> handle it properly in the caller.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Doug was right, I thought my devicetree was bad. But after spending the
+morning trying to write a reply about why exactly it was bad, I realized
+that it might not be that. I agree with him that this patch makes sense
+(to me at least) regardless.
 
-yamllint warnings/errors:
+Here I am reporting on how a recent change in qcom-rpmh-regulator.c made
+this appear (no idea yet if the change is at fault, or if I've got some
+other misconfiguration though in my devicetree!):
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml: properties:compatible:enum: 'lltc,ltc2497 lltc,ltc2499' is not of type 'array'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml: properties:compatible:enum: 'lltc,ltc2497 lltc,ltc2499' is not of type 'array'
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml: properties:compatible:enum: 'lltc,ltc2497 lltc,ltc2499' is not of type 'array'
-	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml: ignoring, error in schema: properties: compatible: enum
-Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.example.dtb:0:0: /example-0/i2c/adc@76: failed to match any schema with compatible: ['lltc,ltc2497']
+    https://lore.kernel.org/all/20220822193153.zn2oxljmd76awqot@halaneylaptop/
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+Thanks,
+Andrew
 

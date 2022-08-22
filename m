@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE3159BFAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0D959BFB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235172AbiHVMrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 08:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S235181AbiHVMuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 08:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbiHVMra (ORCPT
+        with ESMTP id S229882AbiHVMuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:47:30 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BC33AB03;
-        Mon, 22 Aug 2022 05:47:29 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id z22-20020a056830129600b0063711f456ceso7602909otp.7;
-        Mon, 22 Aug 2022 05:47:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=7cbjI0WaZhQTvZlNz7q5LmNIlRjDT3q4dyHallkLrTo=;
-        b=CVhIP2M47w0eAhmUTcrlpYx2JKuSBdky0u8RWxwjXTgF7jPPfvZqtWxadk6wlfo3LQ
-         uiSl1hKd7tvRyMPsiNXc79cwLyYFtr5UADc3xacySrFPokO0qZLY4hi+Y0wTEODHl6Kw
-         CMLnSEiZjGRNmyVYkqurblMx7e7XJhUrAcP4lEbAraLfr65jcXlboaRT4PpnxauqWsMy
-         DxggInkjgCtEFeoKR6fxIdSitAnEUXpqCURE0o6eaVSinYAgZNLCm2NEqAN1llQmUAuM
-         A5T0jhSzNkT5+jmYMic8ndRqDRyXHDzME8qpcQ8EOdveo/lAdYxcMB/Qz5OPORNZCNJn
-         yUGQ==
-X-Gm-Message-State: ACgBeo0CBloaoQ8xySKTrdKo26ct4QylppTBG1kI/H9LD7XR8bBc5T68
-        ica1ixaSSDlCfybb8oOLOp6Jr5fEMg==
-X-Google-Smtp-Source: AA6agR6HuU3nFQ4lGlufxXNkmmzngtFFlaInk7mDi0EkehJepEpbode3NOBV0cAGi7IkodNWlHOamA==
-X-Received: by 2002:a05:6830:310d:b0:637:1b6c:6647 with SMTP id b13-20020a056830310d00b006371b6c6647mr7668149ots.170.1661172448975;
-        Mon, 22 Aug 2022 05:47:28 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k4-20020a056870570400b0010f07647598sm2978471oap.7.2022.08.22.05.47.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 05:47:28 -0700 (PDT)
-Received: (nullmailer pid 3653297 invoked by uid 1000);
-        Mon, 22 Aug 2022 12:47:28 -0000
-Date:   Mon, 22 Aug 2022 07:47:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: reset: syscon-reboot: Add priority
- property
-Message-ID: <20220822124728.GA3641041-robh@kernel.org>
-References: <20220820102925.29476-1-pali@kernel.org>
+        Mon, 22 Aug 2022 08:50:52 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940342CE27;
+        Mon, 22 Aug 2022 05:50:51 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 37D6D2B3;
+        Mon, 22 Aug 2022 14:50:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1661172649;
+        bh=wU4ONctRZSKCRxX625nmts14wxrRJ5eBmdXPz3iSBqY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C1912lHlGZYYAf46PBNc6FBKALHLz9Cz975vVlRCZAqqC06/907G0h8iP4QW5Vqaj
+         V4l3sjGQBanU06xLcR4NfxVqYmp6KY6fitEnmiza9ynO7pN7BcYYw6ZFWxU+7WAlWe
+         FdLaTJjBJfZJbZYqk0ZOOIgmNovwkZl7B4GYPMq0=
+Date:   Mon, 22 Aug 2022 15:50:45 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     huanglei <huanglei814@163.com>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huanglei <huanglei@kylinos.cn>
+Subject: Re: [PATCH v3] media: uvcvideo: limit power line control for Sonix
+ Technology
+Message-ID: <YwN7pSpORzIZaaSW@pendragon.ideasonboard.com>
+References: <20220820005658.21456-1-huanglei814@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220820102925.29476-1-pali@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220820005658.21456-1-huanglei814@163.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 12:29:23PM +0200, Pali Rohár wrote:
-> This new optional priority property allows to specify custom priority level
-> of reset device. Default level was always 192.
+Hello Huang Lei,
 
-Why do we need/want this? What problem does it solve?
+Thank you for the patch.
 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
->  .../devicetree/bindings/power/reset/syscon-reboot.yaml        | 4 ++++
->  1 file changed, 4 insertions(+)
+On Sat, Aug 20, 2022 at 08:56:58AM +0800, huanglei wrote:
+> From: huanglei <huanglei@kylinos.cn>
 > 
-> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
-> index da2509724812..d905133aab27 100644
-> --- a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
-> +++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
-> @@ -42,6 +42,10 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      description: The reset value written to the reboot register (32 bit access).
->  
-> +  priority:
+> The device does not implement the power line control correctly. Add a
+> corresponding control mapping override.
+> 
+> Bus 003 Device 003: ID 3277:0072 Sonix Technology Co., Ltd. USB 2.0 Camera
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               2.00
+>   bDeviceClass          239 Miscellaneous Device
+>   bDeviceSubClass         2
+>   bDeviceProtocol         1 Interface Association
+>   bMaxPacketSize0        64
+>   idVendor           0x3277
+>   idProduct          0x0072
+>   bcdDevice            1.00
+>   iManufacturer           2 Sonix Technology Co., Ltd.
+>   iProduct                1 USB 2.0 Camera
+>   iSerial                 3 REV0001
+>   bNumConfigurations      1
+> 
+> Signed-off-by: huanglei <huanglei@kylinos.cn>
 
-A bit too generic for the name.
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-> +    $ref: /schemas/types.yaml#/definitions/sint32
-> +    description: Priority level of this syscon reset device. Default 192.
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 9c05776f11d1..e8f823685139 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -3264,6 +3264,15 @@ static const struct usb_device_id uvc_ids[] = {
+>  	  .bInterfaceSubClass	= 1,
+>  	  .bInterfaceProtocol	= 0,
+>  	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_FORCE_BPP) },
+> +	/* Sonix Technology USB 2.0 Camera */
+> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> +	  .idVendor		= 0x3277,
+> +	  .idProduct		= 0x0072,
+> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> +	  .bInterfaceSubClass	= 1,
+> +	  .bInterfaceProtocol	= 0,
+> +	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
+>  	/* Acer EasyCamera */
+>  	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+>  				| USB_DEVICE_ID_MATCH_INT_INFO,
 
-default: 192
+-- 
+Regards,
 
-
-Though I'm not really sure about the whole concept of this in DT. Where 
-does 192 come from? Presumably if we have more than 1 reset device, then 
-'priority' is needed in multiple places. So you need a common schema 
-defining the property (as property types should be defined exactly 
-once) which this schema can reference.
-
-Rob
+Laurent Pinchart

@@ -2,122 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC6159C6D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A54E259C6E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237686AbiHVSoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 14:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
+        id S237084AbiHVSog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 14:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237735AbiHVSn4 (ORCPT
+        with ESMTP id S237662AbiHVSoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 14:43:56 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55E032A8E
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:41:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=GSc+FFbHmjS7NAbuOO3m1oBbCI5XMGPuUEvX7+QGZu8=; b=QTPxXaQ/eoUoyBsgGgrDhFxzNW
-        lDMa780ZtOW0oNg3vHGtO8em3YDdmzrZCTZ49UDblVTiArHQbk0s2f1VDh3qFrQTc3MPKpClDzns8
-        VSuekjkKFjH0Aev5Aepk2NlMmM8oawtD98v2yJWdFMEomgKYWwyMjMCDxEu4QdejlQDnk8Vlo+p13
-        txzflyVa9/PFTDX/jAh7Lb5hvYG8dHfMpo3kitbybg3oA2wSjCH7uhCNqR8I7haVU5nX7ZwkGVyWn
-        VlJgUnjbXFyXxHMzb5FmitNebTD3Vw2bdFZOGQf7b0L2ctj6YWERtldgxRsJpQmNcUVMbmrku0Q9S
-        8ZUKlVjQ==;
-Received: from [177.102.4.147] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oQCLD-00FaJe-NI; Mon, 22 Aug 2022 20:40:03 +0200
-Message-ID: <b37d3df4-9042-b195-c083-742e2057dfed@igalia.com>
-Date:   Mon, 22 Aug 2022 15:39:47 -0300
+        Mon, 22 Aug 2022 14:44:16 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9868E3ECCE;
+        Mon, 22 Aug 2022 11:41:39 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id bb16so13240813oib.11;
+        Mon, 22 Aug 2022 11:41:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=nSpbooGUn1Mt7oSof4jzbbiXRG+FuCsB5diR7kREr48=;
+        b=I3bAS+z4rQrKcYjEmnf3bZkofjfffokWqkz6TaRIEY73pi1507fZRw3gCYdS+HxYTE
+         GvQgSePvH3T25LOae6yyFGNFU7SZdFuPraiH2Oi4tJLsPuQiHam6d/HbCiDWl15af3YR
+         blqI5nTU0AtBznd+EzDyHgfIi89Uj1MU4RvXV4yt4hGyeGDMsmEJd9hbOqHyAG783ckH
+         p0uJGUhSjMlO9I7pCawRtohvVNC+GuIX4Wb0wNsZpcNa2mGGcAZku+q1Gq2Low4DaT2v
+         jQXh23M5ryRgD/Yb+o6mVaUbXSXh7TxjfGNEFhLWx0sdZiu+FPzT8Qf7ysZJzo0bLqRf
+         4n9A==
+X-Gm-Message-State: ACgBeo3VabRSyc4gl44VmVHMWzHkSiu+nmTFXTWCZ5G5uKUvCspXsl/3
+        xGiDJhQcPbaypsbYixJNyg==
+X-Google-Smtp-Source: AA6agR56Nf3RD5BXTvurqe0XPNuGN69wHgFFLG1esBh4D4BkW2owp82251e0iwnFwwCq/maIkstmrQ==
+X-Received: by 2002:a05:6808:1892:b0:344:d066:5171 with SMTP id bi18-20020a056808189200b00344d0665171mr9439150oib.195.1661193673435;
+        Mon, 22 Aug 2022 11:41:13 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id kw37-20020a056870ac2500b0011c6b9abb67sm3043748oab.46.2022.08.22.11.41.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 11:41:13 -0700 (PDT)
+Received: (nullmailer pid 138889 invoked by uid 1000);
+        Mon, 22 Aug 2022 18:41:12 -0000
+Date:   Mon, 22 Aug 2022 13:41:12 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH net-next v1 1/7] dt-bindings: net: pse-dt: add bindings
+ for generic PSE controller
+Message-ID: <20220822184112.GA113650-robh@kernel.org>
+References: <20220819120109.3857571-1-o.rempel@pengutronix.de>
+ <20220819120109.3857571-2-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 0/3] x86/crash: Fix double NMI shootdown bug
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20220518001647.1291448-1-seanjc@google.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220518001647.1291448-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819120109.3857571-2-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2022 21:16, Sean Christopherson wrote:
-> Fix a double NMI shootdown bug found and debugged by Guilherme, who did all
-> the hard work.  NMI shootdown is a one-time thing; the handler leaves NMIs
-> blocked and enters halt.  At best, a second (or third...) shootdown is an
-> expensive nop, at worst it can hang the kernel and prevent kexec'ing into
-> a new kernel, e.g. prior to the hardening of register_nmi_handler(), a
-> double shootdown resulted in a double list_add(), which is fatal when running
-> with CONFIG_BUG_ON_DATA_CORRUPTION=y.
+On Fri, Aug 19, 2022 at 02:01:03PM +0200, Oleksij Rempel wrote:
+> Add binding for generic Ethernet PSE controller.
 > 
-> With the "right" kexec/kdump configuration, emergency_vmx_disable_all() can
-> be reached after kdump_nmi_shootdown_cpus() (currently the only two users
-> of nmi_shootdown_cpus()).
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  .../bindings/net/pse-pd/generic-pse.yaml      | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/pse-pd/generic-pse.yaml
 > 
-> To fix, move the disabling of virtualization into crash_nmi_callback(),
-> remove emergency_vmx_disable_all()'s callback, and do a shootdown for
-> emergency_vmx_disable_all() if and only if a shootdown hasn't yet occurred.
-> The only thing emergency_vmx_disable_all() cares about is disabling VMX/SVM
-> (obviously), and since I can't envision a use case for an NMI shootdown that
-> doesn't want to disable virtualization, doing that in the core handler means
-> emergency_vmx_disable_all() only needs to ensure _a_ shootdown occurs, it
-> doesn't care when that shootdown happened or what callback may have run.
-> 
-> Patch 2 is a related bug fix found while exploring ideas for patch 1.
-> Patch 3 is a cleanup to try to prevent future "fixed VMX but not SVM"
-> style bugs.
-> 
-> Guilherme and Vitaly, I dropped your Tested-by and Reviewed-by tags
-> since the relevant patches changed a decent amount.
-> 
-> v2:
->   - Use a NULL handler and crash_ipi_issued instead of a magic nop
->     handler. [tglx]
->   - Add comments to call out that modifying the existing handler
->     once the NMI is sent may cause explosions.
->   - Add a patch to cleanup cpu_emergency_vmxoff().
-> 
-> v1: https://lore.kernel.org/all/20220511234332.3654455-1-seanjc@google.com
-> 
-> Sean Christopherson (3):
->   x86/crash: Disable virt in core NMI crash handler to avoid double
->     shootdown
->   x86/reboot: Disable virtualization in an emergency if SVM is supported
->   x86/virt: Fold __cpu_emergency_vmxoff() into its sole caller
-> 
->  arch/x86/include/asm/reboot.h  |  1 +
->  arch/x86/include/asm/virtext.h | 14 +-----
->  arch/x86/kernel/crash.c        | 16 +-----
->  arch/x86/kernel/reboot.c       | 89 +++++++++++++++++++++++++---------
->  4 files changed, 69 insertions(+), 51 deletions(-)
-> 
-> 
-> base-commit: a7fed5c0431dbfa707037848830f980e0f93cfb3
+> diff --git a/Documentation/devicetree/bindings/net/pse-pd/generic-pse.yaml b/Documentation/devicetree/bindings/net/pse-pd/generic-pse.yaml
+> new file mode 100644
+> index 0000000000000..64f91efa79a56
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/pse-pd/generic-pse.yaml
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/pse-pd/generic-pse.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic Power Sourcing Equipment
+> +
+> +maintainers:
+> +  - Oleksij Rempel <o.rempel@pengutronix.de>
+> +
+> +description: |
+> +  Generic PSE controller. The device must be referenced by the PHY node
+> +  to control power injection to the Ethernet cable.
 
+Isn't this separate from the PHY other than you need to associate 
+supplies with ethernet ports?
 
-Hey folks, is there any news about this series?
-I saw a ping from Sean some time ago...so, this is a re-ping heh
+Is there a controller here? Or it is just a regulator consumer 
+associated with an ethernet port?
 
-Thanks,
+> +
+> +properties:
+> +  compatible:
+> +    const: ieee802.3-podl-pse-generic
 
+Is this for 802.3bu only (which is where PoDL comes from) or all the 
+flavors? If all, do they need to be distinguished?
 
-Guilherme
+'generic' is redundant.
+
+> +
+> +  '#pse-cells':
+
+What's this for? You don't have a consumer.
+
+> +    const: 0
+> +
+> +  ieee802.3-podl-pse-supply:
+
+Seems a bit long
+
+> +    description: |
+
+Don't need '|' if no formatting to maintain.
+
+> +      Power supply for the PSE controller
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - '#pse-cells'
+> +  - ieee802.3-podl-pse-supply
+> +
+> +examples:
+> +  - |
+> +    ethernet-pse-1 {
+> +      compatible = "ieee802.3-podl-pse-generic";
+> +      ieee802.3-podl-pse-supply = <&reg_t1l1>;
+> +      #pse-cells = <0>;
+> +    };
+> -- 
+> 2.30.2
+> 
+> 

@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005B459BBAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8423559BBA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233975AbiHVI35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:29:57 -0400
+        id S234048AbiHVIaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:30:01 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233929AbiHVI3p (ORCPT
+        with ESMTP id S233985AbiHVI3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:29:45 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70057.outbound.protection.outlook.com [40.107.7.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F091E3C5;
-        Mon, 22 Aug 2022 01:29:41 -0700 (PDT)
+        Mon, 22 Aug 2022 04:29:54 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2079.outbound.protection.outlook.com [40.107.21.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A34425EB2;
+        Mon, 22 Aug 2022 01:29:45 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dlno88qQ4/KBX9hKrO3rOsaqFcpiT2Hd5kV/XaA+wd1ZQ0rkxzcgK5iJJJzAO7P55lS4MDXR2JHLCdaJX83yWqoEnHcM1qmiUmlnGZVXUevRs59FJChAqlfHMhGOPwSi6WwF5uXlFBpKfYKsM2SWpFxnxdcjex/BzAIB6wxuwdqtuNQpLMkyuOtTsmXrcTDGloelIVlzO7hjWVRYdNtjolO/qEzjA1M0RUfZLEEyf9d7Cw27YySR0RC/47sD5o7hLpfFESo9fZFO3gBvxRZYjxarI2lecm7VLAyGRNKxWbt09Vkj64KX2wAdET1NymPO0JkYRoVIShGbMOn3WPdOww==
+ b=GDTRC++rd5iyIo/qtQHHVInOsH1egK3qEudsKRGu/H+gX5+/aiTDareoxAITihwGNo1qbAHgVnBTcaGyOV/JjRhlKxUiprvtI+2SD+DhgHwHv8cIIogERAjxUmIQDaKupSZTSFEGVGOQ8Y70Be+J+k0lfLo6cHu5RjvRvWueev0I5so1dEDTeovUhg6qLDy/OPu/Rr1YJwIsQPwnmIA3nMalzzDAxfaeLU1pMTsuZr5ymbHoh2fDRd/yHVmdMXVRP8IlcKPpj/YUaH0puFZhYt/URU1FnOyzDP7qYudEwc5d3bMmyH/33bZQdh+HbJAUvAK42Z71p+jeavD7VflsxQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0XgVov/aAL+68kSo7lADupymmzviYiPYf5BGaMcsJok=;
- b=OODlPZxBUNi/N/XCb8jUhxg23weoJs1EU3ASFC/ajCIFmwMnf112iB9AFrK1Kyu8ncGs2KwD6+/ytWb8FbgrV/wbA73hk/xc/pF3B5uKEVbekn5tU99A3t7VdpGk7bbPqS537C+NXBgi1x/dEHUaDbXuGdpmpdkW3Qsf3Z9v0RX94b0WI8GNfnTM/otS/bVpJOaDEJC3uHFqITi80Wx8x+XRQPycy/IcepoewusG7psetFRL/wp7vx42QRt9wKZdkNqj2POMG4/H6OuRF8CvIvLbu2LgCe/uXgAPc+ozXGtt6I7zgZie6+vULj+5xBak+c8Amn5jaQA+nr/p3kREmg==
+ bh=CsCaRBpQ/Qo6ngtFJicRPgXAFRru6zsj2tgUwW/6xtM=;
+ b=GlbzTCbK6l1GBuJstXmVMF/IPEhBh7EBT3z86HvioUyH8KvVpl1h46NpITgOQiVfCZwg4bYeC1YRRr9Y71uilCKWUQ0IXI3EiTcr5DxGO0vFaVeTQQ2nTSSm0MCYhJUUuyAEJFoF31oxjC79XFTFatODJ5YzHenZ75k4JuZvZ8RW+pEauEgBNiIrBEF1LUSkcco2xZikhy4CRKjrEvPGe2kKqtDecRIzliyf6Iitn3qrgkEhcUReFeUXsDJ4V8VWtfaaU3a5lHDE2+4G1MiiD14KEkZexmuVSmGiE4bFvjlBWWL49c/Wgb3Gs0kQ7B0Dgr9TXz9aLQOqwiMtYTe4YQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0XgVov/aAL+68kSo7lADupymmzviYiPYf5BGaMcsJok=;
- b=hVLlooG6gHcSmYEV8mgZf8LQGPBN8crvOGwdmt6Mw4lXMudO4sL8UGJG6wC7oz7+B6wNGxo1jOpHfeOkXNo7cO7tEHJ4wO9u6o4tjAK+5M41BRiZaqhnHocb8+UrQy5x0HMouNAVcLz1QdQcJHeZvgUnWsL9eO07AXyz/t1d/GY=
+ bh=CsCaRBpQ/Qo6ngtFJicRPgXAFRru6zsj2tgUwW/6xtM=;
+ b=l/fe3wYM7DYZA0h/lQqUe9Yl8n5zw9JlsGUZcczxEVY8RIvkSyHpKrpU181cvIGh5V2JkHOWqzpqq9Old+CeykFVxfwy/3qC9qVEo0UpWUr3xNj7m9Z6PCO9xP71pjA//z9pYhwDUy4xUyDbHEqoGuncOgDFPqKSRDY7sAEu6FA=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by VI1PR04MB6128.eurprd04.prod.outlook.com (2603:10a6:803:ff::16) with
+ by VI1PR04MB3997.eurprd04.prod.outlook.com (2603:10a6:803:4a::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Mon, 22 Aug
- 2022 08:29:37 +0000
+ 2022 08:29:41 +0000
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::3c6c:b7e6:a93d:d442]) by DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::3c6c:b7e6:a93d:d442%6]) with mapi id 15.20.5546.021; Mon, 22 Aug 2022
- 08:29:37 +0000
+ 08:29:41 +0000
 From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de
 Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
         aisheng.dong@nxp.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH V7 2/6] dt-bindings: soc: add i.MX93 mediamix blk ctrl
-Date:   Mon, 22 Aug 2022 16:31:02 +0800
-Message-Id: <20220822083106.156914-3-peng.fan@oss.nxp.com>
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V7 3/6] soc: imx: add i.MX93 SRC power domain driver
+Date:   Mon, 22 Aug 2022 16:31:03 +0800
+Message-Id: <20220822083106.156914-4-peng.fan@oss.nxp.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220822083106.156914-1-peng.fan@oss.nxp.com>
 References: <20220822083106.156914-1-peng.fan@oss.nxp.com>
@@ -63,53 +62,53 @@ X-ClientProxiedBy: SI2PR01CA0041.apcprd01.prod.exchangelabs.com
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b753c5a6-2349-488a-1463-08da84187326
-X-MS-TrafficTypeDiagnostic: VI1PR04MB6128:EE_
+X-MS-Office365-Filtering-Correlation-Id: b1bac5f0-22a4-433a-a042-08da84187564
+X-MS-TrafficTypeDiagnostic: VI1PR04MB3997:EE_
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: r5am+RAKEOzaNhyAECIQw4mAELuN+JbtqaHxI18McdVJnrNwrrPgaJ6Z9syFl9mLEwgnNnIk4+zLQrAc4c9i3v3Szj2chjH1KOxI8aMtkjubzfIpf5Un7v3EMaDooZGxFiZzSHK3Th2SwECa3tezlhj1CrwQdbFYSPHmxA1GzDH0C+uVmjVLPVw4LDKXePbdWn//OygES0LZpbSc8bLYq6Fzw2UzOWIzuj1ve4GO+ut5syfodrZ54Tpvg6Cw1Pa2sqVWL57+JbAuQITZgOuDSVA3sBtLEEtxiu4mDhF9TqIP6mBEhIPquwE0JCUDeYPmo87CGAO8AEIBBZelGGQ2sWaKjdhM8eN+PIjOJvMs/1Xo7ZUSlzI+fYDcpbS8QumyJ8ARNA1y4VOBELJ41/waQnXpn2FeUr+e3DxcC1rUdFgaT9Ebe3P3Y0n54wIH1F7gmQpLAcrR7wCZPB7WbaoErcgCUwiftpzvU4MAjFWR1I9VZ9hK9UQ7uojTYwU+s6QryY4PA6qvG3SNxM6sRJQvhXdl/KKyMlIUeae+jsOeMoifM3E/vc2RxI4FGC+c1aGCaiH8P3yeeJ6bYsE0ndR3dGFjPg7P5tX0BhSsQkoMs2CvOombNVh+tI4uQwMVq0bSnQjazkLbpqZ1JDfziIRFnA4duHK/KYcrRE3Q4vVbhR5vc29iJ2V79MgMJJfbgmBfzD0PFgJCtl9tKd255toUNuiel/cZUPUmTRoqJTxRd4ZytcqwBgfITm5i3c6s8epjZf6NF2Bu4ryht168N1NW8buBp5d9TspZcaGxdWNR3iluW3/SR2aMSfSkdoOzdH1eBJWzMPJrncaeUGnz6JaSUA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(396003)(366004)(346002)(39860400002)(1076003)(186003)(83380400001)(54906003)(316002)(2616005)(26005)(86362001)(52116002)(6506007)(41300700001)(7416002)(6512007)(5660300002)(6666004)(38100700002)(38350700002)(966005)(6486002)(478600001)(66476007)(66946007)(4326008)(8676002)(66556008)(2906002)(8936002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 0AMj+wwIHFwDVCgaSuklTX7jOGknLdq2BR+zNP7Ocv7fjvVr9xCs5WHyJL+fUcyYpeLL/6ORqtY+zoGF8GtJDrl409UOezKIVP3FXqhIN8yT7yq+u/3Dwb9FfNoAzz8IukG5yR3Wf7cRjLpqThp0OY9ePOlpczbQSL8w26aB7uFQJZ6SMm8zVp7z1flXYQaiKg/Jg00a8Za6iFupK8vsd523HYldGz80IM6vezMEV5bcMPd/tOvpz1kQLVtMR871ZE8gTPKWzoKWMHo0Cl1rOhCrQRbgB7CIWb7auWg2pc+w5ktjFkGYXPdlgihMSgU3WK3WeqRi8TKk0BTjYUnyV1smQmMZsWb2IE6JQvj/gTaWGAE9xeelF2ECEJULx7kNTKoOmRTpDAGjhwKeEm9rdmfTst7Midg3IPZyBDCZSbBh/xPcxEfjLpDFmNy+km13CWhusWLX7DsXKOzlAGhcFrP9u78lsHLdGYb0V57oucml46PihlC5xmXJJQq7YIlmf31Dtm4SlEaHeLKTx5c4XvBk4g4DL3gS8hyS/wGk4wyVFbFelIOKkHvqLV9OoAw+6NW0HaLKbpILRxhx0lYrKRy7jWqrIF0RnrSOPXCKrZXAPuQgQJ7yKbn7ZY+HHrMyysU15C8zNLpAWRrrNfNzI6Be62tLHj+BDVt72Jjp31YEGXP82G06xx7eKbpxBnAfcaXyX4qlSVYH7e6jShxKDRe8HmvIw+omvpqMrAs/9EwHHe5rwdzNksoPRMOgarf5oHRVR7/MBqjo+bmNpGgu8g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(346002)(136003)(366004)(376002)(83380400001)(86362001)(38350700002)(38100700002)(66946007)(66556008)(8676002)(66476007)(4326008)(478600001)(6486002)(5660300002)(8936002)(316002)(6512007)(26005)(2906002)(186003)(2616005)(1076003)(6506007)(52116002)(41300700001)(6666004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?H4zRJjoBFKZMrV++wovIEILlzVV6T4e7UlG+sRoSV2D8LV9HfdoEY4GPn6aU?=
- =?us-ascii?Q?SEND3u90BlGMaURWVHEKeUATy2gpKLHVxaAK27HKrpCN7IBvkIeSl41SqTO2?=
- =?us-ascii?Q?ViSVnZaM9RBaLIe2z2as8NSVmYUdtXi7m7LdiN7VEFk/aveFCb+NUl2jnKjd?=
- =?us-ascii?Q?G762KvIFmQfSxs5jtxfSDNSS2WABnk5xtZ0Ou2y6bWOMf69GcX05cR5faPK8?=
- =?us-ascii?Q?ESt1+kRmSVEUULRdDJIDvCkro4TZf39e5svLj6Iwqk4IoHSu/kQlq+jtZpt9?=
- =?us-ascii?Q?YQ6Dvrig+A3trRGYLwnqgW+E5vVblWokj9KEpZibsT7jRq38wQ1N9R862/Ix?=
- =?us-ascii?Q?fp6hK1ABeOq+D30pUAHaMh8wzIuCeIa3A53CGmwocQbx5dbjsIVyVyt2+efC?=
- =?us-ascii?Q?2R9vzX+z7GvEOGoYxGSdZhTatEVPedPePxZIjNvN0LEm0kxw5tinpmJzbWGh?=
- =?us-ascii?Q?OpdcXQKHeegwUDdsCwjm146c5T2QlMQcBbZlMQhoAJh9aSq2scvsFrKOnHaN?=
- =?us-ascii?Q?e44lERKD3Mn6K0dXzMUjwDMrEWR/f2I86nfEOI68cJ4KG4GZ0sm3SQDRYt+g?=
- =?us-ascii?Q?IQEA3q1JexT+SJvbINHC2lWncW4CAbE2/VGZ+dAkvn/wG+qL4DeUI7wwtw48?=
- =?us-ascii?Q?HbbLZpOkW+L1YEKSy7UVQqvyKk4rcEa1vxgirrFuAr+6azBRpHuIYgRNm3+D?=
- =?us-ascii?Q?XWtWg2Z8s+ZkA321kqocvRY0BTzYEEZ5bf9vJwkhtx0Q85lptYXw0+31hgT3?=
- =?us-ascii?Q?Z2lTqFlZnT4qML446rZZvIGu2kxDqBVELwmjNVUjg5foXjqmS16K6NSgJZwS?=
- =?us-ascii?Q?ejNLuypC9rl5MmqD41T2apuj7l2TX+WX5MN3OPA0ymYYN+j4CkdQk5GOKYbS?=
- =?us-ascii?Q?N8nTg9ixEYkNGvfcf0Xft7vpHABNGS2Xa4f+fhrW1KZrxny0FUZQCL5TCkCo?=
- =?us-ascii?Q?zTzi+LT987srr/lM3oFjcugYl3Ig8J5QNESSrJppcnDgmsJ0HrqOlzrf17KN?=
- =?us-ascii?Q?wm7ACr5QircFZuu2Q++PPLJwUv+S+pZpNfYSeYw6MTrPp6l7GjWGzBEhZm38?=
- =?us-ascii?Q?A9QXKpfGGz9eiZsSl4LkLgvKnVtXTRKUN6AJqmqmrkoQWD/yuj2fKaq/wgsa?=
- =?us-ascii?Q?od2jVMJTmDUtnt11zsjdlP9OAiE7xO2Ur/idIHDpd1mpCKC2Fn0EQy7TDpfq?=
- =?us-ascii?Q?mZwMkjq6kQMGlexO0SO4nRBSBfQ6iAX6QYybnzw+px4tRnljxpei6lhvVKQB?=
- =?us-ascii?Q?h4/MJm1XqL9OOKphqHbI8gG26K8m8dzqnEbPOVaxZMpkTZybDlMI6nanQYYu?=
- =?us-ascii?Q?CIlcnGakIJT5FezEbnMoBi5q5XyOleZyQNU87/kZQms/FOKiRqDMXuHyLHcu?=
- =?us-ascii?Q?JROHhXuyHDExwkIHsb4it30ZiVk0yRGR0stg4Rdp+jK23iRzvExaBZCxWIIr?=
- =?us-ascii?Q?eZ5ROLnWg5NzVpRdAEMkYE9QCg56nz2x4nWDqoQnVW++wMEaYxMCHGAYysWJ?=
- =?us-ascii?Q?b0V3ti/h3RKO3V0vdblNtZGp8+7COYxcOLQzVbL54q2qJqHlM9is5KMTO3NS?=
- =?us-ascii?Q?l7HpGJS9BWrFSFTg2b5lktikx1SHIwVmvnQs3KRa?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?90lKwrbNSeTDar0fTuM1OVCI0nOExBkvFU0RHm8tLRMsCTlYWIyLjlYCC//7?=
+ =?us-ascii?Q?DM+VqA7wtZjctBsoNSr1NpQG4Ry3hk3eCjSPMeqlR1HqCJ18dtMbAHLBFFCG?=
+ =?us-ascii?Q?6CUxblM3/dlFINqBHy7CuyWVAoQhShhHHc58dz1isENH6igVDEDGx1i4tkfs?=
+ =?us-ascii?Q?fA6tMMN7OaeVGN7SFtlJ4Pp+BQRveX255S1Ltgtdds178UK+YZzHJ3d7ZikO?=
+ =?us-ascii?Q?qHoHq13akIbhCnbgDt+DwrudUck65MqIhr3oAhHavSjpu9w9VNuGMWpkUCdw?=
+ =?us-ascii?Q?deFUXRt0PGgDso1GwAfyBNqO4+8ddi76+PT7xlLaLCEpHv7clq/xQfHVdMiq?=
+ =?us-ascii?Q?he7mP7t2AXnz5y553g+TpnOhupHeTAFEFWNbGtnRox310XX0o3Hoy+KsB/d+?=
+ =?us-ascii?Q?TWzL2pImssebEHSu4XE65Dd09w9yq0KuI4ZIXEmdQaONA1mEXZIeumlz+o7e?=
+ =?us-ascii?Q?+DoVRcRqnaESsjd7eUMV+ros4F3FxlctuVRjOdOhf3z8HH3ZkutBOufkD5dk?=
+ =?us-ascii?Q?pzeXRfWz/efRa/XlIVmSjIIngtESd2KeZMYaDTBkwnpDaRPg3f21rvkZd7bg?=
+ =?us-ascii?Q?VItJTr36E0vkeDk/KblzzP55zyun7IMtrYq2NOVctzMbnSDz4NFiCq/CUYKN?=
+ =?us-ascii?Q?3vWCarJvOBwakSIvnbEXrl52ju7jBRrjCn0N93hhb/eEthoE4Df/7+/wN5qY?=
+ =?us-ascii?Q?orvA4sUjHE0cZbwNJNL4cHYcDYdVCrLlRpW9neP98EKYuozUWgzLR78HPBO7?=
+ =?us-ascii?Q?IWjTdnWbadzB4OHcqSjgZEpFjKM9AQABkqZLyRIjg5oY6bTgJBn1A6Br5+wK?=
+ =?us-ascii?Q?H1GM8TdXm6AgGCMmH5gnHZxvVYjUxBb5iheSf25VjctCeusvVtv/hwfton/+?=
+ =?us-ascii?Q?EZEUd0NKO6whs7bGI+450sRdtq+2bK2wRuxDsWlpOg7qQAt8chtCZMJSqydK?=
+ =?us-ascii?Q?Em7XkZlqTnyyNMUNVrYyXeEk1bLGY92EPohuja73wFs0KgOih7isk597eby6?=
+ =?us-ascii?Q?wOk7iAQzXJkTx6VohOuAut5+qMzSz6TtHz13iABuwqPVX/hhjvYSRhKlWS3g?=
+ =?us-ascii?Q?d2fMA/sgJnzv/s8yui7Ox4kE+CIf+dfrZ7B55uqef1RdankK6P8bUqEH4lm9?=
+ =?us-ascii?Q?wxR+b5SsBgA49Dz6MxLyfUWR6dSWbuU2OT2UEUGX7j0WuxOzPZltyugqEgq+?=
+ =?us-ascii?Q?uJhFqRCO/f/4cv6IzgcbhcVRLszthPP9la5iTQUtzU3c84A/zA8YAbe/YhTi?=
+ =?us-ascii?Q?wJVYKX9+asWEI2FpY6WPl97uaOJ9+FtJ7He5KsCrW/cCUmly5Kbzx3ZfJ15W?=
+ =?us-ascii?Q?FvNFWc7Ax/xOjFrtWzRZZYoTJGXDaFq2Qm2fXfiCzV9W7BonFcqWLK8Y03FQ?=
+ =?us-ascii?Q?wBGb98nk/6Wk6eallXuBMJEC7NpZYCH1WrLc1n3vx5RB9nAieecXFMikvyI2?=
+ =?us-ascii?Q?ucm/bnVETJoWFFH5pfWFnmvuJcUK0v0Vd+TOcZjMhgFZg06az+5YkIKT09n6?=
+ =?us-ascii?Q?tguVnP7VsbthrLu9iaG9gPguj7/Apg2d6bs91QPRtDEfe8roPvoXgulE9GsD?=
+ =?us-ascii?Q?ZccpSodm4zWv9K0uPungUmV4TobUQhAmF3XqGg67?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b753c5a6-2349-488a-1463-08da84187326
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1bac5f0-22a4-433a-a042-08da84187564
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 08:29:37.4178
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 08:29:41.1686
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yKvhoCIF2bA0NSDv9SUisLEJruXNk6Z3Xv6fCcj5dAH+jg4hIB0O8v3gz+fkP1TFd56Rj3NtFkVk/Nhtj7vnlA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6128
+X-MS-Exchange-CrossTenant-UserPrincipalName: sCfBh17pqekN62FksdliCvE9xdACrb9wJTd+xQNDodFHJxNQeRM8lri9VlYZlBJjdZNHysGKkLiKFPmw/T0VuA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3997
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -121,124 +120,255 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peng Fan <peng.fan@nxp.com>
 
-Add DT bindings for i.MX93 MEDIAMIX BLK CTRL.
+Support controlling power domain managed by System Reset
+Controller(SRC). Current supported power domain is mediamix power
+domain.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- .../soc/imx/fsl,imx93-media-blk-ctrl.yaml     | 80 +++++++++++++++++++
- include/dt-bindings/power/fsl,imx93-power.h   | 15 ++++
- 2 files changed, 95 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
- create mode 100644 include/dt-bindings/power/fsl,imx93-power.h
+ drivers/soc/imx/Kconfig     |   8 ++
+ drivers/soc/imx/Makefile    |   1 +
+ drivers/soc/imx/imx93-pd.c  | 164 ++++++++++++++++++++++++++++++++++++
+ drivers/soc/imx/imx93-src.c |  33 ++++++++
+ 4 files changed, 206 insertions(+)
+ create mode 100644 drivers/soc/imx/imx93-pd.c
+ create mode 100644 drivers/soc/imx/imx93-src.c
 
-diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
+diff --git a/drivers/soc/imx/Kconfig b/drivers/soc/imx/Kconfig
+index a840494e849a..4b906791d6c7 100644
+--- a/drivers/soc/imx/Kconfig
++++ b/drivers/soc/imx/Kconfig
+@@ -20,4 +20,12 @@ config SOC_IMX8M
+ 	  support, it will provide the SoC info like SoC family,
+ 	  ID and revision etc.
+ 
++config SOC_IMX9
++	tristate "i.MX9 SoC family support"
++	depends on ARCH_MXC || COMPILE_TEST
++	default ARCH_MXC && ARM64
++	select SOC_BUS
++	help
++	  If you say yes here, you get support for the NXP i.MX9 family
++
+ endmenu
+diff --git a/drivers/soc/imx/Makefile b/drivers/soc/imx/Makefile
+index 63cd29f6d4d2..a0baa2a01adb 100644
+--- a/drivers/soc/imx/Makefile
++++ b/drivers/soc/imx/Makefile
+@@ -7,3 +7,4 @@ obj-$(CONFIG_IMX_GPCV2_PM_DOMAINS) += gpcv2.o
+ obj-$(CONFIG_SOC_IMX8M) += soc-imx8m.o
+ obj-$(CONFIG_SOC_IMX8M) += imx8m-blk-ctrl.o
+ obj-$(CONFIG_SOC_IMX8M) += imx8mp-blk-ctrl.o
++obj-$(CONFIG_SOC_IMX9) += imx93-src.o imx93-pd.o
+diff --git a/drivers/soc/imx/imx93-pd.c b/drivers/soc/imx/imx93-pd.c
 new file mode 100644
-index 000000000000..792ebecec22d
+index 000000000000..042a89cb53da
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
-@@ -0,0 +1,80 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/imx/fsl,imx93-media-blk-ctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NXP i.MX93 Media blk-ctrl
-+
-+maintainers:
-+  - Peng Fan <peng.fan@nxp.com>
-+
-+description:
-+  The i.MX93 MEDIAMIX domain contains control and status registers known
-+  as MEDIAMIX Block Control (MEDIAMIX BLK_CTRL). These registers include
-+  clocking, reset, and miscellaneous top-level controls for peripherals
-+  within the MEDIAMIX domain
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: fsl,imx93-media-blk-ctrl
-+      - const: syscon
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#power-domain-cells':
-+    const: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 10
-+
-+  clock-names:
-+    items:
-+      - const: apb
-+      - const: axi
-+      - const: nic
-+      - const: disp
-+      - const: cam
-+      - const: pxp
-+      - const: lcdif
-+      - const: isi
-+      - const: csi
-+      - const: dsi
-+
-+required:
-+  - compatible
-+  - reg
-+  - power-domains
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/imx93-clock.h>
-+    #include <dt-bindings/power/fsl,imx93-power.h>
-+
-+    media_blk_ctrl: system-controller@4ac10000 {
-+      compatible = "fsl,imx93-media-blk-ctrl", "syscon";
-+      reg = <0x4ac10000 0x10000>;
-+      power-domains = <&mediamix>;
-+      clocks = <&clk IMX93_CLK_MEDIA_APB>,
-+               <&clk IMX93_CLK_MEDIA_AXI>,
-+               <&clk IMX93_CLK_NIC_MEDIA_GATE>,
-+               <&clk IMX93_CLK_MEDIA_DISP_PIX>,
-+               <&clk IMX93_CLK_CAM_PIX>,
-+               <&clk IMX93_CLK_PXP_GATE>,
-+               <&clk IMX93_CLK_LCDIF_GATE>,
-+               <&clk IMX93_CLK_ISI_GATE>,
-+               <&clk IMX93_CLK_MIPI_CSI_GATE>,
-+               <&clk IMX93_CLK_MIPI_DSI_GATE>;
-+               clock-names = "apb", "axi", "nic", "disp", "cam",
-+                             "pxp", "lcdif", "isi", "csi", "dsi";
-+      #power-domain-cells = <1>;
-+    };
-diff --git a/include/dt-bindings/power/fsl,imx93-power.h b/include/dt-bindings/power/fsl,imx93-power.h
-new file mode 100644
-index 000000000000..17f9f015bf7d
---- /dev/null
-+++ b/include/dt-bindings/power/fsl,imx93-power.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
++++ b/drivers/soc/imx/imx93-pd.c
+@@ -0,0 +1,164 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ *  Copyright 2022 NXP
++ * Copyright 2022 NXP
 + */
 +
-+#ifndef __DT_BINDINGS_IMX93_POWER_H__
-+#define __DT_BINDINGS_IMX93_POWER_H__
++#include <linux/clk.h>
++#include <linux/of_device.h>
++#include <linux/delay.h>
++#include <linux/iopoll.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/pm_domain.h>
 +
-+#define IMX93_MEDIABLK_PD_MIPI_DSI		0
-+#define IMX93_MEDIABLK_PD_MIPI_CSI		1
-+#define IMX93_MEDIABLK_PD_PXP			2
-+#define IMX93_MEDIABLK_PD_LCDIF			3
-+#define IMX93_MEDIABLK_PD_ISI			4
++#define MIX_SLICE_SW_CTRL_OFF		0x20
++#define SLICE_SW_CTRL_PSW_CTRL_OFF_MASK	BIT(4)
++#define SLICE_SW_CTRL_PDN_SOFT_MASK	BIT(31)
 +
-+#endif
++#define MIX_FUNC_STAT_OFF		0xB4
++
++#define FUNC_STAT_PSW_STAT_MASK		BIT(0)
++#define FUNC_STAT_RST_STAT_MASK		BIT(2)
++#define FUNC_STAT_ISO_STAT_MASK		BIT(4)
++
++struct imx93_power_domain {
++	struct generic_pm_domain genpd;
++	struct device *dev;
++	void __iomem *addr;
++	struct clk_bulk_data *clks;
++	int num_clks;
++	bool init_off;
++};
++
++#define to_imx93_pd(_genpd) container_of(_genpd, struct imx93_power_domain, genpd)
++
++static int imx93_pd_on(struct generic_pm_domain *genpd)
++{
++	struct imx93_power_domain *domain = to_imx93_pd(genpd);
++	void __iomem *addr = domain->addr;
++	u32 val;
++	int ret;
++
++	ret = clk_bulk_prepare_enable(domain->num_clks, domain->clks);
++	if (ret) {
++		dev_err(domain->dev, "failed to enable clocks for domain: %s\n", genpd->name);
++		return ret;
++	}
++
++	val = readl(addr + MIX_SLICE_SW_CTRL_OFF);
++	val &= ~SLICE_SW_CTRL_PDN_SOFT_MASK;
++	writel(val, addr + MIX_SLICE_SW_CTRL_OFF);
++
++	ret = readl_poll_timeout(addr + MIX_FUNC_STAT_OFF, val,
++				 !(val & FUNC_STAT_ISO_STAT_MASK), 1, 10000);
++	if (ret) {
++		dev_err(domain->dev, "pd_on timeout: name: %s, stat: %x\n", genpd->name, val);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int imx93_pd_off(struct generic_pm_domain *genpd)
++{
++	struct imx93_power_domain *domain = to_imx93_pd(genpd);
++	void __iomem *addr = domain->addr;
++	int ret;
++	u32 val;
++
++	/* Power off MIX */
++	val = readl(addr + MIX_SLICE_SW_CTRL_OFF);
++	val |= SLICE_SW_CTRL_PDN_SOFT_MASK;
++	writel(val, addr + MIX_SLICE_SW_CTRL_OFF);
++
++	ret = readl_poll_timeout(addr + MIX_FUNC_STAT_OFF, val,
++				 val & FUNC_STAT_PSW_STAT_MASK, 1, 1000);
++	if (ret) {
++		dev_err(domain->dev, "pd_off timeout: name: %s, stat: %x\n", genpd->name, val);
++		return ret;
++	}
++
++	clk_bulk_disable_unprepare(domain->num_clks, domain->clks);
++
++	return 0;
++};
++
++static int imx93_pd_remove(struct platform_device *pdev)
++{
++	struct imx93_power_domain *domain = platform_get_drvdata(pdev);
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->of_node;
++
++	if (!domain->init_off)
++		clk_bulk_disable_unprepare(domain->num_clks, domain->clks);
++
++	of_genpd_del_provider(np);
++	pm_genpd_remove(&domain->genpd);
++
++	return 0;
++}
++
++static int imx93_pd_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->of_node;
++	struct imx93_power_domain *domain;
++	int ret;
++
++	domain = devm_kzalloc(dev, sizeof(*domain), GFP_KERNEL);
++	if (!domain)
++		return -ENOMEM;
++
++	domain->addr = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(domain->addr))
++		return PTR_ERR(domain->addr);
++
++	domain->num_clks = devm_clk_bulk_get_all(dev, &domain->clks);
++	if (domain->num_clks < 0)
++		return dev_err_probe(dev, domain->num_clks, "Failed to get domain's clocks\n");
++
++	domain->genpd.name = dev_name(dev);
++	domain->genpd.power_off = imx93_pd_off;
++	domain->genpd.power_on = imx93_pd_on;
++	domain->dev = dev;
++
++	domain->init_off = readl(domain->addr + MIX_FUNC_STAT_OFF) & FUNC_STAT_ISO_STAT_MASK;
++	/* Just to sync the status of hardware */
++	if (!domain->init_off) {
++		ret = clk_bulk_prepare_enable(domain->num_clks, domain->clks);
++		if (ret) {
++			dev_err(domain->dev, "failed to enable clocks for domain: %s\n",
++				domain->genpd.name);
++			return ret;
++		}
++	}
++
++	ret = pm_genpd_init(&domain->genpd, NULL, domain->init_off);
++	if (ret)
++		return ret;
++
++	platform_set_drvdata(pdev, domain);
++
++	return of_genpd_add_provider_simple(np, &domain->genpd);
++}
++
++static const struct of_device_id imx93_dt_ids[] = {
++	{ .compatible = "fsl,imx93-src-slice" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, imx93_dt_ids);
++
++static struct platform_driver imx93_power_domain_driver = {
++	.driver = {
++		.name	= "imx93_power_domain",
++		.owner	= THIS_MODULE,
++		.of_match_table = imx93_dt_ids,
++	},
++	.probe = imx93_pd_probe,
++	.remove = imx93_pd_remove,
++};
++module_platform_driver(imx93_power_domain_driver);
++
++MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
++MODULE_DESCRIPTION("NXP i.MX93 power domain driver");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/soc/imx/imx93-src.c b/drivers/soc/imx/imx93-src.c
+new file mode 100644
+index 000000000000..830cbb9541c1
+--- /dev/null
++++ b/drivers/soc/imx/imx93-src.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright 2022 NXP
++ */
++
++#include <linux/module.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++
++static int imx93_src_probe(struct platform_device *pdev)
++{
++	return devm_of_platform_populate(&pdev->dev);
++}
++
++static const struct of_device_id imx93_dt_ids[] = {
++	{ .compatible = "fsl,imx93-src" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, imx93_dt_ids);
++
++static struct platform_driver imx93_src_driver = {
++	.driver = {
++		.name	= "imx93_src",
++		.owner	= THIS_MODULE,
++		.of_match_table = imx93_dt_ids,
++	},
++	.probe = imx93_src_probe,
++};
++module_platform_driver(imx93_src_driver);
++
++MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
++MODULE_DESCRIPTION("NXP i.MX93 src driver");
++MODULE_LICENSE("GPL");
 -- 
 2.37.1
 

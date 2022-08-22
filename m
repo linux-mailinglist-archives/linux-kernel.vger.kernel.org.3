@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388F559B6F4
+	by mail.lfdr.de (Postfix) with ESMTP id C912159B6F6
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 02:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbiHVAR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 20:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
+        id S231992AbiHVASJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 20:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiHVARz (ORCPT
+        with ESMTP id S231995AbiHVASE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 20:17:55 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6BD20194
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 17:17:53 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-324966c28e5so160864767b3.3
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 17:17:53 -0700 (PDT)
+        Sun, 21 Aug 2022 20:18:04 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B439201AF
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 17:18:01 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id u3-20020a170902e5c300b00172ba9301ceso5619109plf.10
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 17:18:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=PKFRaxD4qQqEIFqu3chPSEEEaimoA7SPNFa30ZMS/uU=;
-        b=HizZvrBQiCe/lTGkboVezrNH98vpHv6pPqN3AxEJH/hFrU99YqU4n2tDb7vx0BDvjD
-         bQrrXzlJxZNS5VEi+6ur1985jYp1mqaVxFam9zQg29fgy4j8FDwrvk2EWIEw9zZcLyy8
-         ZrbSnLWlxJzAlcK4inCb0YBuOPVU8Pf6wgn3U0AS+YKBi3N8fLf+SDkLifHnsuVpXtE9
-         VW+MgYxWYsl4FT5vPrWtjoQKUyoGIDwGhmbfEnhOfVukKNjsvqjWPYthJA+lrTU4JyRJ
-         Sj3VMg2YYPUcwhLJDwgqi0QQBI7r5yYyU5d+lRAwuifJcVjqGV647qwS/PzhpquTv4FZ
-         z7vQ==
+        bh=V/ZZIFSPKFcCAZIO5J88CNRgR4nImf4CDqSEwHgZtc8=;
+        b=VRt8PiD5az0Dl+WRznAYAHoEFU2MambiOUqw9hJIF1ucU60TS0sVFR1bUuaJD8nPng
+         xGG21VhjqfptsMV9A8m6NtDIcNUxnu3moTzE7NDuS0132TTFDbZUQdoq7PUgYhDiEc88
+         VWXGevOtBTC071FhOwLWbdC2RbpbtXjJBP30qVmnMrkSyaRORF9MkIgIOE44YT8fPxhx
+         MXMroQq5cbkgX/PlRdMgvF1WbQYDo+Czb0BC6hLgVyoEUZLM+nIZRg1Iz+BkUSiS19+u
+         NDrsfq1Tm8UcqdVd/B6tTxgxOaUMNvPwSrhSYvXv0b64wiY5pKs+NN5viMa0qiHMezJn
+         gzSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=PKFRaxD4qQqEIFqu3chPSEEEaimoA7SPNFa30ZMS/uU=;
-        b=lOIbAcTTQoVMnBw3U5wieLb61o6Lp0HhT2kMCOIT8cV3GkpsIMyMcRPrrZhFV9LeL3
-         Heeo9J6tMhkZ1MCjk4PRxPUyA+gl0ozY8FUGXAfVqCB7BP2mTqXrdz782C7K90ek8Wmh
-         EeDPqgeXUe2Z07bzLgLtVIWl2OeDJNMboWt0mgwVthZ1kQz+ONsfshgVTnvB+HcYGizb
-         eGuAM2E/viBgegkHn9ooFTlvKGpTQI0ZhrYTXdX1xlcPG84TEbN2O7o5UhWmo+PDWbcT
-         GcaQ5IEG17rxM0/G/P5TlB5VDAR66HwnM1JrN0t9alhVri/jqlGQyjAgt3dhkJs2/zbO
-         PeRg==
-X-Gm-Message-State: ACgBeo3xZvdi1u++RjY4jhxm86wYdFxj96dC0QsH/PlcG9Rob6kV09aQ
-        XSvpOx6keN7vPNKvlgg3Q72jdhwyirjZPg==
-X-Google-Smtp-Source: AA6agR7ugDocQyFMo7I0NUqJCeOZethCdyIXG6uExhXVb1g/djDmpfI1UlZI7JLxJy/0h1pcp1JCf7rda8Xqlw==
+        bh=V/ZZIFSPKFcCAZIO5J88CNRgR4nImf4CDqSEwHgZtc8=;
+        b=IFXf/LoBMrQ/1yb3BgnhYFZ6S1a5lgahk8pOA70WnE5GySr9kcxOw1tH6XP6a+vyZz
+         uw4ZND52GeUiN2AGzzcVQ0ZlZbqy6SjrTMz2+e7jjR0KzZl55c1pN6BFtR4xXLEIqWcO
+         77ewb8BZ/jHbZa9K4J3ENtXbZVERizUVqKyS0ZsDU1EeWPTHPZKTn9lMPynOrrs3DWAT
+         Lef+O2SkR9GTGY/vSRfcCFbmfPlVaFu07mJX4Q/QG4QGfIC4c39Ri/HW/WUci4vtUyID
+         A3LYI6MlJ2OGDmTJZleIA1VdokjcLeisNPb3RX7jdqRSnYny2zUC+p2okHWhnkSON43v
+         M0xQ==
+X-Gm-Message-State: ACgBeo2dfy9yMHXQS7P7yljYWy1G8b7Vzbh0MTxbN3zH2jTCZIq7zAzo
+        CHP/dhYw0SlLjvqgEb2MekHNLI19MnYKjw==
+X-Google-Smtp-Source: AA6agR4ZgdLQRLm8RNOfyL+FjO9Haoqcxi6ZB51K8Zqax6/eLDbW7KkNV8E35m3mv6YMj7ylkoz8NrwpsF9kng==
 X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
- (user=shakeelb job=sendgmr) by 2002:a81:9b17:0:b0:335:c382:48d with SMTP id
- s23-20020a819b17000000b00335c382048dmr17808577ywg.244.1661127473042; Sun, 21
- Aug 2022 17:17:53 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 00:17:35 +0000
+ (user=shakeelb job=sendgmr) by 2002:a17:902:da8e:b0:172:9f0b:3778 with SMTP
+ id j14-20020a170902da8e00b001729f0b3778mr17761139plx.166.1661127480895; Sun,
+ 21 Aug 2022 17:18:00 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 00:17:36 +0000
 In-Reply-To: <20220822001737.4120417-1-shakeelb@google.com>
-Message-Id: <20220822001737.4120417-2-shakeelb@google.com>
+Message-Id: <20220822001737.4120417-3-shakeelb@google.com>
 Mime-Version: 1.0
 References: <20220822001737.4120417-1-shakeelb@google.com>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH 1/3] mm: page_counter: remove unneeded atomic ops for low/min
+Subject: [PATCH 2/3] mm: page_counter: rearrange struct page_counter fields
 From:   Shakeel Butt <shakeelb@google.com>
 To:     Johannes Weiner <hannes@cmpxchg.org>,
         Michal Hocko <mhocko@kernel.org>,
@@ -78,10 +78,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For cgroups using low or min protections, the function
-propagate_protected_usage() was doing an atomic xchg() operation
-irrespectively. It only needs to do that operation if the new value of
-protection is different from older one. This patch does that.
+With memcg v2 enabled, memcg->memory.usage is a very hot member for
+the workloads doing memcg charging on multiple CPUs concurrently.
+Particularly the network intensive workloads. In addition, there is a
+false cache sharing between memory.usage and memory.high on the charge
+path. This patch moves the usage into a separate cacheline and move all
+the read most fields into separate cacheline.
 
 To evaluate the impact of this optimization, on a 72 CPUs machine, we
 ran the following workload in a three level of cgroup hierarchy with top
@@ -95,51 +97,82 @@ that.
 
 Results (average throughput of netperf):
 Without (6.0-rc1)	10482.7 Mbps
-With patch		14542.5 Mbps (38.7% improvement)
+With patch		12413.7 Mbps (18.4% improvement)
 
-With the patch, the throughput improved by 38.7%
+With the patch, the throughput improved by 18.4%.
+
+One side-effect of this patch is the increase in the size of struct
+mem_cgroup. However for the performance improvement, this additional
+size is worth it. In addition there are opportunities to reduce the size
+of struct mem_cgroup like deprecation of kmem and tcpmem page counters
+and better packing.
 
 Signed-off-by: Shakeel Butt <shakeelb@google.com>
 Reported-by: kernel test robot <oliver.sang@intel.com>
 ---
- mm/page_counter.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ include/linux/page_counter.h | 34 +++++++++++++++++++++++-----------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
 
-diff --git a/mm/page_counter.c b/mm/page_counter.c
-index eb156ff5d603..47711aa28161 100644
---- a/mm/page_counter.c
-+++ b/mm/page_counter.c
-@@ -17,24 +17,23 @@ static void propagate_protected_usage(struct page_counter *c,
- 				      unsigned long usage)
- {
- 	unsigned long protected, old_protected;
--	unsigned long low, min;
- 	long delta;
+diff --git a/include/linux/page_counter.h b/include/linux/page_counter.h
+index 679591301994..8ce99bde645f 100644
+--- a/include/linux/page_counter.h
++++ b/include/linux/page_counter.h
+@@ -3,15 +3,27 @@
+ #define _LINUX_PAGE_COUNTER_H
  
- 	if (!c->parent)
- 		return;
+ #include <linux/atomic.h>
++#include <linux/cache.h>
+ #include <linux/kernel.h>
+ #include <asm/page.h>
  
--	min = READ_ONCE(c->min);
--	if (min || atomic_long_read(&c->min_usage)) {
--		protected = min(usage, min);
-+	protected = min(usage, READ_ONCE(c->min));
-+	old_protected = atomic_long_read(&c->min_usage);
-+	if (protected != old_protected) {
- 		old_protected = atomic_long_xchg(&c->min_usage, protected);
- 		delta = protected - old_protected;
- 		if (delta)
- 			atomic_long_add(delta, &c->parent->children_min_usage);
- 	}
++#if defined(CONFIG_SMP)
++struct pc_padding {
++	char x[0];
++} ____cacheline_internodealigned_in_smp;
++#define PC_PADDING(name)	struct pc_padding name
++#else
++#define PC_PADDING(name)
++#endif
++
+ struct page_counter {
++	/*
++	 * Make sure 'usage' does not share cacheline with any other field. The
++	 * memcg->memory.usage is a hot member of struct mem_cgroup.
++	 */
++	PC_PADDING(_pad1_);
+ 	atomic_long_t usage;
+-	unsigned long min;
+-	unsigned long low;
+-	unsigned long high;
+-	unsigned long max;
++	PC_PADDING(_pad2_);
  
--	low = READ_ONCE(c->low);
--	if (low || atomic_long_read(&c->low_usage)) {
--		protected = min(usage, low);
-+	protected = min(usage, READ_ONCE(c->low));
-+	old_protected = atomic_long_read(&c->low_usage);
-+	if (protected != old_protected) {
- 		old_protected = atomic_long_xchg(&c->low_usage, protected);
- 		delta = protected - old_protected;
- 		if (delta)
+ 	/* effective memory.min and memory.min usage tracking */
+ 	unsigned long emin;
+@@ -23,16 +35,16 @@ struct page_counter {
+ 	atomic_long_t low_usage;
+ 	atomic_long_t children_low_usage;
+ 
+-	/* legacy */
+ 	unsigned long watermark;
+ 	unsigned long failcnt;
+ 
+-	/*
+-	 * 'parent' is placed here to be far from 'usage' to reduce
+-	 * cache false sharing, as 'usage' is written mostly while
+-	 * parent is frequently read for cgroup's hierarchical
+-	 * counting nature.
+-	 */
++	/* Keep all the read most fields in a separete cacheline. */
++	PC_PADDING(_pad3_);
++
++	unsigned long min;
++	unsigned long low;
++	unsigned long high;
++	unsigned long max;
+ 	struct page_counter *parent;
+ };
+ 
 -- 
 2.37.1.595.g718a3a8f04-goog
 

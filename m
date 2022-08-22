@@ -2,115 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7FE59B88C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 06:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09A459B897
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 06:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbiHVEtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 00:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35708 "EHLO
+        id S231956AbiHVE6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 00:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbiHVEtV (ORCPT
+        with ESMTP id S231694AbiHVE6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 00:49:21 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF351EECB
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 21:49:20 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y127so6275484pfy.5
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 21:49:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=dz0eDoI9Fm2huCzymSoFjXyBRequkEKf77GU02TCpJg=;
-        b=RsIfUWsSxHJb4qyOMDo7RSBNTBGsCvAIuCsedLI9rb8AYt+57z/oEh5/+DYmyGeZWI
-         W+8gKvSiD4RQV+KftMAmCPAoqzc3HfD6qnT4EGbr7MaSauh/cEpQsHf3+y9m/iBhReLh
-         hfjYadiAVocBHeck75BFwS38YukmKokJgEW6ah3V+fzlfr62gkldHInq1VH6e2meyUUo
-         b+vy6+DSi+pr90hcoYHKfk/XHGMZO7Hb3gfilTebse2Dhu2b9S078/0bapWSprhkFzhc
-         VESpdNvwX76tBVMUxjzx5YfKEQS3HOVn3G+D7mtZEQtO4cuquhOAschWIscA4UlYwyiU
-         gVCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=dz0eDoI9Fm2huCzymSoFjXyBRequkEKf77GU02TCpJg=;
-        b=eiXUCNsoejKiYtZq45wywVUT5Fo+NE5us0V9KagWfUmboDa6QExmcsI7/x6sNtGw7q
-         6CM7kYNdFxxURDNvgxH5wl3FzjGdi7+10DgMhNT2BWtZP7dy0Um9KF2Eu1Y8RLN8poyv
-         xzIjrV/p6xfZ5AFb4MypVWDdYxhgFwW5FSpax/8canUsnR+4naAd40fhXbN4WsXswW7+
-         aySrJhEQ813G7YVrDlbSWcl0MK7s6SoYiU6ug5upAoP5ZzU/6v2u1hjZf96FC4ArY4nG
-         CmXBaR36SZ3tg5RobWHbb+I3O6Jv3NH/4vRCDYVkdFXQ8DDLb51EcaF5TG3wkmkG1xCx
-         hxbQ==
-X-Gm-Message-State: ACgBeo3MRe5ZESK2seXgueggJbcWfhooz2sX7vGrF5nDYWzAdPLVTVeM
-        MHjY6aH4qY9hq2SlF9nwKmX3qsj7p9dkQg==
-X-Google-Smtp-Source: AA6agR5Pto6O2hn+/T8fBSD4xUC2PEFnt4pycOkWtUdbLvcxAEKqIzPx+I5jR5lX3nfb3zKy7kV0KQ==
-X-Received: by 2002:a63:2bcc:0:b0:40c:95b5:46a4 with SMTP id r195-20020a632bcc000000b0040c95b546a4mr15468612pgr.535.1661143759926;
-        Sun, 21 Aug 2022 21:49:19 -0700 (PDT)
-Received: from [10.191.0.6] ([199.101.192.185])
-        by smtp.gmail.com with ESMTPSA id il10-20020a17090b164a00b001f21646d1a4sm14254198pjb.1.2022.08.21.21.49.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Aug 2022 21:49:19 -0700 (PDT)
-Subject: Re: [PATCH v11 00/13] iommu: SVA and IOPF refactoring
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Eric Auger <eric.auger@redhat.com>, Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220817012024.3251276-1-baolu.lu@linux.intel.com>
-From:   Zhangfei Gao <zhangfei.gao@linaro.org>
-Message-ID: <890a99fe-1e9b-85bd-e4bc-b746ae17b827@linaro.org>
-Date:   Mon, 22 Aug 2022 12:49:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 22 Aug 2022 00:58:32 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FDBE0E1;
+        Sun, 21 Aug 2022 21:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661144311; x=1692680311;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/rA08EkKshgmbDIpcT1/pWksM4Su7kRxSiCqNoDLNEs=;
+  b=nW4fMCJmW5ex5URirrhpeR8yvubYEuroknsNG6SijULXApGXGHqZsjom
+   frMR/6ugGcoFdeukhj7lm+mKbvktquo7HeqVmXETrzZQdk3IZrQMNxb9U
+   +xKzbcDf1fbu4P8FgSdUaL1IYXhpNUPeqR1oGaprDACW7p8YyPVxiNpXJ
+   9D4Ehv1DEmk6nW0orFGaR/V2WZymrsEmcZJmT9QFDw8LomXvwnbTFLKQC
+   8kmffL8mB7ZK+T139OksXa6496m4i+b8waukKcIcivKc7L2EdKDPhqsPE
+   IytooClf+RXogoBAV6Yzd8av0Y7ZR/bcES7nLTydjlt3fpLn9slYkOHn/
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="280289702"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="280289702"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 21:58:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="936880202"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Aug 2022 21:58:27 -0700
+Date:   Mon, 22 Aug 2022 12:49:16 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     Peter Colberg <peter.colberg@intel.com>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        marpagan@redhat.com, lgoncalv@redhat.com
+Subject: Re: [PATCH v1] uio: dfl: add IOPLL user-clock feature id
+Message-ID: <YwMKzC6HwjYqDxIs@yilunxu-OptiPlex-7050>
+References: <20220817213746.4986-1-peter.colberg@intel.com>
+ <Yv29ev8OKyEYcaf/@yilunxu-OptiPlex-7050>
+ <acdf9c04-0816-5995-da90-c53153ffac59@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220817012024.3251276-1-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acdf9c04-0816-5995-da90-c53153ffac59@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-08-18 at 17:38:35 -0600, Russ Weight wrote:
+> 
+> 
+> On 8/17/22 21:18, Xu Yilun wrote:
+> > On 2022-08-17 at 17:37:46 -0400, Peter Colberg wrote:
+> >> Add a Device Feature List (DFL) feature id for the configurable
+> >> IOPLL user clock source, which can be used to configure the clock
+> >> speeds that are used for RTL logic that is programmed into the
+> >> Partial Reconfiguration (PR) region of an FPGA.
+> > Why not use linux clock framework for this IOPLL? And let the PR
+> > driver set it togeter with the RTL logic reporgramming?
+> 
+> Hi Yilun,
+> 
+> We previously explored the possibility of plugging into the linux
+> clock framework. For this device, setting a desired frequency is
+> heavily dependent on a table of values that must be programmed in
+> order to achieve the desired clock speeds.
+> 
+> Here is an example table, indexed by frequency. The first element
+> in each entry is the frequency in kHz:
+> 
+> https://github.com/OPAE/opae-sdk/blob/master/libraries/plugins/xfpga/usrclk/fpga_user_clk_freq.h
+> 
+> We previously experimented with a kernel-space driver. The
+> implementation exported a sysfs node into which the table values for
+> the desired frequency would be written in order to set the desired
+> frequency. The function of the driver was to execute the logic
+> required to program the device. We did not think this implementation
+> should be up-streamed.
+> 
+> It isn't practical to upstream the frequency tables as they are
+> subject to change for future devices. For example, if the reference
+> frequency changed in a future device, a whole new table of values would
+> have to be added for the new device. In a recent transition to a new
+> device, the range of frequencies was increased which required an
+> extension to an existing table.
 
+Making a table for the inputs & outputs is always a easier way to get
+things done, but the trade off is, as you said, extension to the table
+every time for new outputs.
 
-On 2022/8/17 上午9:20, Lu Baolu wrote:
-> Hi folks,
->
-> The former part of this series introduces the IOMMU interfaces to attach
-> or detach an iommu domain to/from a pasid of a device, and refactors the
-> exsiting IOMMU SVA implementation by assigning an SVA type of iommu
-> domain to a shared virtual address and replacing sva_bind/unbind iommu
-> ops with a set_dev_pasid domain ops.
->
-> The latter part changes the existing I/O page fault handling framework
-> from only serving SVA to a generic one. Any driver or component could
-> handle the I/O page faults for its domain in its own way by installing
-> an I/O page fault handler.
->
-> This series has been functionally tested on an x86 machine and compile
-> tested for all architectures.
->
-> This series is also available on github:
-> [2] https://github.com/LuBaolu/intel-iommu/commits/iommu-sva-refactoring-v11
->
-> Please review and suggest.
-Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
-On arm64 (Kunpeng920) with uacce.
+So do we really need all parameters to be in a table, or these are
+actually the outcome of some calculation? Is it possible just
+Implementing the calculation.
 
-Thanks
+If I remember correctly, linux clk framework enables a generic clk
+caculation mechanism. It encourages people to model the internal
+refclk, plls (and deviders?) separately and construct the clk tree.
+Then the specified calculation could be simpler for each clk driver.
+
+I'm not sure the clk framework fits all your need, but please
+investigate it firstly.
+
+> 
+> A previous implementation of the user clock was also implemented in
+> user-space. The kernel driver exported each of the registers, but
+> all of the logic was implemented in user-space. The kernel portion
+> can be viewed here:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/fpga/dfl-afu-main.c#n380
+> 
+> This is our reasoning in choosing to implement this driver in
+> user-space. Would you consider a uio based user-space driver to
+> be acceptable for in this case?
+
+As usual, we firstly make clear why existing framework cannot fit the
+case and should be implemented in userspace, then everything would be
+OK.
+
+Thanks,
+Yilun
+
+> 
+> - Russ
+> 
+> 
+> >
+> > Thanks,
+> > Yilun
+> >
+> >> The DFL feature id table can be found at:
+> >> https://github.com/OPAE/dfl-feature-id
+> >>
+> >> Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+> >> ---
+> >>  drivers/uio/uio_dfl.c | 2 ++
+> >>  1 file changed, 2 insertions(+)
+> >>
+> >> diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
+> >> index 8f39cc8bb034..69e93f3e7faf 100644
+> >> --- a/drivers/uio/uio_dfl.c
+> >> +++ b/drivers/uio/uio_dfl.c
+> >> @@ -46,10 +46,12 @@ static int uio_dfl_probe(struct dfl_device *ddev)
+> >>  
+> >>  #define FME_FEATURE_ID_ETH_GROUP	0x10
+> >>  #define FME_FEATURE_ID_HSSI_SUBSYS	0x15
+> >> +#define PORT_FEATURE_ID_IOPLL_USRCLK	0x14
+> >>  
+> >>  static const struct dfl_device_id uio_dfl_ids[] = {
+> >>  	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
+> >>  	{ FME_ID, FME_FEATURE_ID_HSSI_SUBSYS },
+> >> +	{ PORT_ID, PORT_FEATURE_ID_IOPLL_USRCLK },
+> >>  	{ }
+> >>  };
+> >>  MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
+> >> -- 
+> >> 2.28.0
+> >>
+> 

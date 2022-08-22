@@ -2,77 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9403259C293
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BD559C28D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236435AbiHVPWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49508 "EHLO
+        id S236454AbiHVPXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236360AbiHVPVm (ORCPT
+        with ESMTP id S236488AbiHVPV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:21:42 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B4CFEB;
-        Mon, 22 Aug 2022 08:15:03 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MEN4Tk026992;
-        Mon, 22 Aug 2022 15:14:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ziRHlhdWOqB3+OcKTt2N/6sWF1VDetC0OT1u7hEIOGI=;
- b=YRHiTHehj4Ezf7pXiUctS2ySmleIQdi8iDaVyYjfqKu+En0ejS2hNJNm9uYYqPRSjldF
- 87346CxoG81u4HzOY5VAtiROHUAdcmo9wOlNymuTM/yZdFDX9f/30a0g6mI10u7wGLMu
- GC6g/XPyY6FBZb4gd0RuWa47Xx1JcZPyECBRmcX8Ch4ybMlpvOoT0IIBiO8T9vPLWTIJ
- +8mlXNNy/ki5BkwhKctwjCvUl2rpMqUmSrX3notZG68A0a5ZmHFy0hTA8HAa3LJNqqTr
- FaZ5QAlsxs0fPQGckb+bNINrKiwnrM9jRz7GkOctcQdR/TPrL7pFVVoVVSfcRUVJCwWi dQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j2vwn4ude-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Aug 2022 15:14:42 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27MFEev4021733
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Aug 2022 15:14:41 GMT
-Received: from [10.110.115.186] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 22 Aug
- 2022 08:14:40 -0700
-Message-ID: <79580753-6290-2da4-2949-c408333b8af5@quicinc.com>
-Date:   Mon, 22 Aug 2022 08:14:39 -0700
+        Mon, 22 Aug 2022 11:21:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3348E419AF;
+        Mon, 22 Aug 2022 08:15:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88AD7B8124B;
+        Mon, 22 Aug 2022 15:15:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B43C433D7;
+        Mon, 22 Aug 2022 15:15:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661181312;
+        bh=oOBpV+kQLcdiRCH072jVwXy/v1KyShAjHL22oLdvKHA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HsrBkCQWygotKWt7en6snLQp4SqotmjCROvU3SBDUbETbDylHfFwl7Hr+k0FWJepv
+         7ENSIdVG19jlULLzwf5i0Etae9QAT5rAxG2B0Iz0wdJgDr+hRZdGhSkwFLIr7yD33R
+         /1FtusFInldvFnVWqwhmOn4UZG/Tjpn9CNnN4GfzefpbV0xbjH+b/gyQf25j4/ci0i
+         D+5M9JAlNqGtaRwdKHK4qOdAHwbzGq9M5pTIFKlJipuOiGN4H0vWzHjqZVsqQpZDd8
+         8+kGq07VcgqPha0SfwBRngp6u9yccyiN7rUUSTTKMLikE5spiTWoTMK26Lp1eOD5w1
+         4oOXWUEPmqLSw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oQ98w-00074f-7o; Mon, 22 Aug 2022 17:15:10 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH RESEND 0/3] media: flexcop-usb: probe cleanups
+Date:   Mon, 22 Aug 2022 17:14:53 +0200
+Message-Id: <20220822151456.27178-1-johan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/4] soc: qcom: qmi: use const for struct qmi_elem_info
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-References: <20220822151146.30366-1-quic_jjohnson@quicinc.com>
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <20220822151146.30366-1-quic_jjohnson@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _HXF-9hDe2ZBCeh-WdCIq9iSkEEBYFEZ
-X-Proofpoint-ORIG-GUID: _HXF-9hDe2ZBCeh-WdCIq9iSkEEBYFEZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-22_09,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- mlxlogscore=644 adultscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 suspectscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208220065
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,22 +57,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-please ignore this, rookie git send-email mistake
+This series cleans up the probe helper functions a bit to make the code
+more readable.
 
-On 8/22/2022 8:11 AM, Jeff Johnson wrote:
-> Currently all usage of struct qmi_elem_info, which is used to define
-> the QMI message encoding/decoding rules, does not use const. This
-> prevents clients from registering const arrays. Since these arrays are
-> always pre-defined, they should be const, so add the const qualifier
-> to all places in the QMI interface where struct qmi_elem_info is used.
-> 
-> Once this patch is in place, clients can independently update their
-> pre-defined arrays to be const, as demonstrated in the QMI sample
-> code.
-> 
-> Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-> ---
-> 
-> v2:
-> Added missing const to skip_to_next_elem() return type
-> Reported-by: kernel test robot <lkp@intel.com>
+It has been two months and two completely ignored reminders since this
+was first posted so resending.
+
+Can someone please pick this up and let me know when that has been done?
+
+Note that these apply on top of the fix resent here:
+
+	https://lore.kernel.org/r/20220822151027.27026-1-johan@kernel.org
+
+Johan
+
+
+Johan Hovold (3):
+  media: flexcop-usb: clean up endpoint sanity checks
+  media: flexcop-usb: clean up URB initialisation
+  media: flexcop-usb: use usb_endpoint_maxp()
+
+ drivers/media/usb/b2c2/flexcop-usb.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
+
+-- 
+2.35.1
+

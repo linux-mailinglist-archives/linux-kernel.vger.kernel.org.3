@@ -2,150 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA21D59C9FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04E659C9FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237147AbiHVU3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 16:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
+        id S237181AbiHVU3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 16:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237005AbiHVU3N (ORCPT
+        with ESMTP id S237169AbiHVU3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 16:29:13 -0400
-Received: from mx0b-00364e01.pphosted.com (mx0b-00364e01.pphosted.com [148.163.139.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC89F51A02
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:29:10 -0700 (PDT)
-Received: from pps.filterd (m0167075.ppops.net [127.0.0.1])
-        by mx0b-00364e01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MKPNXj018440
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 16:29:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=mime-version :
- references : in-reply-to : from : date : message-id : subject : to : cc :
- content-type : content-transfer-encoding; s=pps01;
- bh=RO6XnNaJa5CLPESo4BXMgCV8xs+Ov+oCGIYJUBbQBFE=;
- b=mu8+NDuumu4WlBmynPceEpgGZ3/uNMmxh+3oomQ5V4IDiK7YH3nO0MnF4Usu76ADPpBh
- OFIovx+0CQCiz9zOKMU0w5tVQuXtH0fxJzjO+QSM/wMMUUp/iXxczikJAF34V56zWIer
- obK5h0p8kLgzp6engoK8s3oWqhvitdhXu1cRdaYTFj4cfKck41OCHT2RreJXqaM77LiD
- Fu0r8KlOrwcUQcDSXx1dlZmt8wF5B6hnUfi/IebNyZJsdRvtSnvqsK9E6FZMhxR6t8Ac
- MZzfaaRb5exnAM7r/CpiFt2ptjJlInRYPOnt2KILrVDJnLouFvRbPHzQysBGlz1h3CiG qw== 
-Received: from sendprdmail20.cc.columbia.edu (sendprdmail20.cc.columbia.edu [128.59.72.22])
-        by mx0b-00364e01.pphosted.com (PPS) with ESMTPS id 3j2wj6ddns-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 16:29:09 -0400
-Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com [209.85.221.197])
-        by sendprdmail20.cc.columbia.edu (8.14.7/8.14.4) with ESMTP id 27MKT9x3075578
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 16:29:09 -0400
-Received: by mail-vk1-f197.google.com with SMTP id w187-20020a1fadc4000000b0037ceefea1c7so1935886vke.7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:29:09 -0700 (PDT)
+        Mon, 22 Aug 2022 16:29:37 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F7B51A1E
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:29:35 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-334dc616f86so326344177b3.8
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:29:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=3ghqxlUVpYAPvNZ/Fd381BfRXG/4offmxhbYt9HADrc=;
+        b=s47Dap0xMD0o0a7vVi9aMnbkj5ze1IHKpyOsoauBFgvtF0z8zE1Gq6jXk0ySkQ8li6
+         tQXecAxQMOGmHlrmGoA8gNudrsQE9/klv6tpAeDw+uN9buGwppEP7D1BOAJL8sOU1WWs
+         ChlWSnE00t7Pe2mRhadRJ7oaLER0hFNVmWZd+dVB9mUNzaHHOG9t6aMrWevepzsdim+q
+         vdpEwlujfgeQImmGBidsNDOHp9CHmgAaKrBsqq/CrCjJXo4YkrR9RGaKZvvlmFq+nyCg
+         BZORUkg1qYa8r4dbhqAZg/jv0iZz/B8dKdULef7T9H/mmpYaildEgimt3zXTw7rfCKoN
+         MhZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=RO6XnNaJa5CLPESo4BXMgCV8xs+Ov+oCGIYJUBbQBFE=;
-        b=kI5D0ObmDz2vlCBRz+p/a8LpB8Y9ULQfn+1bAqHeemx/cNVvNG4k+DSwo3LJDDk7dr
-         Z6INnWaNoqYxxaiZy4kx1teO23XEwlNW1b+8W2t0wY6MCVNi6QiyxvX2cSt6ZJdw6DjL
-         Mll3G/aI/J4ozDyVCSLpPHTLZTybOCX+Z+53ANr6tnk1bihCwCuL6C75E4M8UcVl21Q/
-         RENuihVUIUH+eZ2MPKvxFX0DceiQOe2ZVjcux5cVP19NUaan804z4vGxeZiPdiJ4gq70
-         3SCtComWASsI/VzyiLtLR1xdWunPJ6rs3Bf4vRRi5TQ4JpbWE1CRkMOw6k31D2I+3Xyw
-         dUKA==
-X-Gm-Message-State: ACgBeo3Ve3wGH3c8d9lvSiHG8DIxN3M/h3CBVWpqIgSwVLPRu8HGjNOm
-        hguNEJ8G2TQsQa9HdybRuu4Suaq6Y2dhE0Fkt2onUgCvobWEuiRPRLSbLQo9qpIFfx8qy4ZGtYf
-        M89J22VDXBFaHqjC4887yoel7s435QiZ4f+vOB7dQkxiGGcTI
-X-Received: by 2002:a67:d493:0:b0:390:4c24:804c with SMTP id g19-20020a67d493000000b003904c24804cmr3487911vsj.71.1661200148779;
-        Mon, 22 Aug 2022 13:29:08 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6qAuh4CBQQNbGpkDG+XPmmtL1rFL2gufNf/IROiaU3yjSyNpB7b9ZKlVkr4paudFC/qWGrCOIFqO6h9/Vqt60=
-X-Received: by 2002:a67:d493:0:b0:390:4c24:804c with SMTP id
- g19-20020a67d493000000b003904c24804cmr3487895vsj.71.1661200148572; Mon, 22
- Aug 2022 13:29:08 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=3ghqxlUVpYAPvNZ/Fd381BfRXG/4offmxhbYt9HADrc=;
+        b=dfEzrm9TdkB3ERZFNtL5vBjJgim+DWE5+TlmOknz2n1MPYtor7QQ7fIbyYi9ZKjv/l
+         4Hx/H7zZXcYogVK3OuQH+JxvqUNE3HomG11qYH4iyA4J+I7u5H62YNBXnQPt7wvzyfvm
+         Rkxmq2pHXkAzjHUxsudGvfG7GYwxKufvD/uYIeET5DGlw/nazmh6gjE6tCY2pNQRTMnG
+         fQ1jK+rEDzF3oTBcCsPJ3WTBdCDez1UpNX7ZSEDl88ViHUyvA+BO/gtnPGcDQsF2w4Ph
+         uAowOtELUA9oHkAqREyLXL2YxhkiAxoIhnbmi3VR+FINgjE9wIxL0pKDz6uCcjARfnvF
+         UVXA==
+X-Gm-Message-State: ACgBeo2wV+M4MA71p/DVG8NNMTqgViQMNxTKAoLsioopPDt9/5UeDJVq
+        GZAz9hgdRJnm1mNJ/C1JFXyULwtrpO+UxMo7A9E0sQ==
+X-Google-Smtp-Source: AA6agR5M/3KtnGznrm02DeFRvjK+3D9/NBjPkCtgRvg6VLE0oHYqb9h6gxSAs4N48Rq27P88TkmF8eeFYBdb9b3f6PM=
+X-Received: by 2002:a25:b083:0:b0:695:9a91:317d with SMTP id
+ f3-20020a25b083000000b006959a91317dmr7417640ybj.387.1661200174730; Mon, 22
+ Aug 2022 13:29:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAEHB2488dNqBKcgWLSeq500JLC1+q6RV=ENcUPm=rN9bWf0QkQ@mail.gmail.com>
- <20220819123542.GA2461@breakpoint.cc>
-In-Reply-To: <20220819123542.GA2461@breakpoint.cc>
-From:   Gabriel Ryan <gabe@cs.columbia.edu>
-Date:   Mon, 22 Aug 2022 16:29:01 -0400
-Message-ID: <CALbthtdzW-_4TVngjt-VjCS6GqCEP967-UE7oEoDkBAVaRFOzw@mail.gmail.com>
-Subject: Re: data-race in nf_tables_newtable / nf_tables_newtable
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Abhishek Shah <abhishek.shah@columbia.edu>, coreteam@netfilter.org,
-        davem@davemloft.net, edumazet@google.com, kadlec@netfilter.org,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, pabeni@redhat.com,
-        pablo@netfilter.org, linux-kernel@vger.kernel.org
+References: <20220822103130.3466-1-sunshouxin@chinatelecom.cn>
+In-Reply-To: <20220822103130.3466-1-sunshouxin@chinatelecom.cn>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 22 Aug 2022 13:29:23 -0700
+Message-ID: <CANn89i+MPc6bJe_nfyrksgYipY0Mqeey=05Ctj8B4S_j5bYOvA@mail.gmail.com>
+Subject: Re: [PATCH] bonding: Remove unnecessary check
+To:     Sun Shouxin <sunshouxin@chinatelecom.cn>
+Cc:     Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        huyd12@chinatelecom.cn
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-GUID: BfgrHsHrQa0hg-0ThGZHEi0CZVBb6w4W
-X-Proofpoint-ORIG-GUID: BfgrHsHrQa0hg-0ThGZHEi0CZVBb6w4W
-X-CU-OB: Yes
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-22_12,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=10 mlxscore=0 clxscore=1015 impostorscore=10 bulkscore=10
- suspectscore=0 mlxlogscore=999 phishscore=0 spamscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208220082
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
-
-I just looked at the lock event trace from our report and it looks
-like two distinct commit mutexes were held when the race was
-triggered. I think the race is probably on the table_handle variable
-on net/netfilter/nf_tables_api.c:1221, and not the table->handle field
-being written to.
-
-Racing increments to table_handle could cause it to either overcount
-or undercount. Could that be an issue?
-
-Best,
-
-Gabe
-
-On Fri, Aug 19, 2022 at 8:35 AM Florian Westphal <fw@strlen.de> wrote:
+On Mon, Aug 22, 2022 at 3:33 AM Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
 >
-> Abhishek Shah <abhishek.shah@columbia.edu> wrote:
-> > Hi all,
-> >
-> > We found a race involving the table->handle variable here
-> > <https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__elixir.bootlin.=
-com_linux_v5.18-2Drc5_source_net_netfilter_nf-5Ftables-5Fapi.c-23L1221&d=3D=
-DwIBAg&c=3D009klHSCxuh5AI1vNQzSO0KGjl4nbi2Q0M1QLJX9BeE&r=3DEyAJYRJu01oaAhhV=
-VY3o8zKgZvacDAXd_PNRtaqACCo&m=3DxlZC-wDg7fkTm6_4HfcoDqYfJx_OU2L5HHX2q_yTYZZ=
-CEDCFAg-9I7T1gNmXPISg&s=3DJYkSOriQVx_3lJhAzBo7yqhe4bnf2Sy96cPL0L1NIn8&e=3D =
- >.
-> > This race advances the pointer, which can cause out-of-bounds memory
-> > accesses in the future. Please let us know what you think.
-> >
-> > Thanks!
-> >
-> >
-> > *---------------------Report-----------------*
-> > *read-write* to 0xffffffff883a01e8 of 8 bytes by task 6542 on cpu 0:
-> >  nf_tables_newtable+0x6dc/0xc00 net/netfilter/nf_tables_api.c:1221
-> >  nfnetlink_rcv_batch net/netfilter/nfnetlink.c:513 [inline]
->
-> [..]
->
-> > *read-write* to 0xffffffff883a01e8 of 8 bytes by task 6541 on cpu 1:
-> >  nf_tables_newtable+0x6dc/0xc00 net/netfilter/nf_tables_api.c:1221
-> >  nfnetlink_rcv_batch net/netfilter/nfnetlink.c:513 [inline]
->
-> [..]
->
-> I don't understand.  Like all batch operations, nf_tables_newtable is
-> supposed to run with the transaction mutex held, i.e. parallel execution
-> is not expected.
->
-> There is a lockdep assertion at start of nf_tables_newtable(); I
-> don't see how its possible that two threads can run this concurrently.
+> This check is not necessary since the commit d5410ac7b0ba
+> ("net:bonding:support balance-alb interface with vlan to bridge").
 
---=20
-Gabriel Ryan
-PhD Candidate at Columbia University
+Please provide more details. I fail to see the relation between d5410ac7b0ba
+and this patch, thanks.
+
+>
+> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+> ---
+>  drivers/net/bonding/bond_main.c | 13 -------------
+>  1 file changed, 13 deletions(-)
+>
+> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> index 50e60843020c..6b0f0ce9b9a1 100644
+> --- a/drivers/net/bonding/bond_main.c
+> +++ b/drivers/net/bonding/bond_main.c
+> @@ -1578,19 +1578,6 @@ static rx_handler_result_t bond_handle_frame(struct sk_buff **pskb)
+>
+>         skb->dev = bond->dev;
+>
+> -       if (BOND_MODE(bond) == BOND_MODE_ALB &&
+> -           netif_is_bridge_port(bond->dev) &&
+> -           skb->pkt_type == PACKET_HOST) {
+> -
+> -               if (unlikely(skb_cow_head(skb,
+> -                                         skb->data - skb_mac_header(skb)))) {
+> -                       kfree_skb(skb);
+> -                       return RX_HANDLER_CONSUMED;
+> -               }
+> -               bond_hw_addr_copy(eth_hdr(skb)->h_dest, bond->dev->dev_addr,
+> -                                 bond->dev->addr_len);
+> -       }
+> -
+>         return ret;
+>  }
+>
+> --
+> 2.27.0
+>

@@ -2,182 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298BF59BB17
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A8E59BB29
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233808AbiHVIIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
+        id S229933AbiHVINQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233703AbiHVIHt (ORCPT
+        with ESMTP id S231278AbiHVINL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:07:49 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2071.outbound.protection.outlook.com [40.107.105.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5E71A3B2;
-        Mon, 22 Aug 2022 01:07:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JN7KtooMpF6t1FNy3dJAZTCQ1hxGXeRJ1IBgl0fmgsKrGXgu+BsIf06qSfbqFj8TL30Lz64qupaBHz0Rly3g8Nyd7wazfThUdGT5B/xnXJG3WRWMy8qk+WR0MiP4lTr32uLxpE/C5yfuOyBHMJPYBGJvTf6QFxfK51sBVi96447DyiTxrDiIDQ94ozhoKoM0rM6Go07Lno8DYyVSTZGIiLIeg5onmKpHXe1RbA7DHsuPoVBLGT3vp8fYEJ2TVltHaSD5fYQI8MTH/713PP9Eaq4wZWBPsVqE6jG5a1RJH6XlE6Sjy+7JlTuctxe2smwkbl6Y6hUpRgct2GoMgB/aSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=41q4oOyN56yST2XHYBVpzBeIcfZDnh4QhwBVOdQ8D4M=;
- b=CYxCTfC/v4yIyzYiIXaw8KlDORLfX5gtaZYkIDtqDX0G8TgTke81SIKk7TrCDmDWfJs2TVkYGPRrUJSWDHE4BjKB4eBUhqyLvdaaQsTm5eDSJAq3Zpjn252jd0eQTR/655eRStiaSQWQrBS1pg0EHlHjy1S0vRgRe66ynNMtJsTpDITnj7GU4RZI4LKKuA0anq26spcJYdP9EWyLTlR5yi7vCrWabihz3dknWJ4z7eSw4pzAJ/PiLTEtIak1/VwzYc10bv+V3g8E1soETppSaGqm1uoCNVoHCU+gwkbtF7Pc85ZGjE3T1G5i5nnNs06hPcDz5WcC6zkJXt2vppym5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=41q4oOyN56yST2XHYBVpzBeIcfZDnh4QhwBVOdQ8D4M=;
- b=RVNhSCamXGhUZXygVNqHYC6hXgiwP+b0NeEZygRHCxJYi3tUfN6EYS0rhzQD06UWRg85gN1WioT+DuQ6HmuOLrAgG/YLGDAWr/rNZ4zAtoGMCU1oEbFU3jCUvRw5S8u7rLxYQrMP2hv5XKnAtHL+1KTQ6m45BEjKcm3wgBquh7U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by AM0PR04MB6499.eurprd04.prod.outlook.com (2603:10a6:208:173::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Mon, 22 Aug
- 2022 08:07:22 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::2549:869e:d80b:3a1b]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::2549:869e:d80b:3a1b%6]) with mapi id 15.20.5504.027; Mon, 22 Aug 2022
- 08:07:22 +0000
-From:   Liu Ying <victor.liu@nxp.com>
-To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, guido.gunther@puri.sm,
-        marcel.ziswiler@toradex.com, laurentiu.palcu@oss.nxp.com
-Subject: [PATCH v11 6/6] MAINTAINERS: add maintainer for i.MX8qxp DPU DRM driver
-Date:   Mon, 22 Aug 2022 16:07:56 +0800
-Message-Id: <20220822080756.37400-7-victor.liu@nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220822080756.37400-1-victor.liu@nxp.com>
-References: <20220822080756.37400-1-victor.liu@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0128.apcprd02.prod.outlook.com
- (2603:1096:4:188::20) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+        Mon, 22 Aug 2022 04:13:11 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9961001;
+        Mon, 22 Aug 2022 01:13:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661155988;
+        bh=VF47xpSy5FMXLFoHD4vWRnBzqe4OlQT5XGbK7tkpYXU=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=IVQw/rdTWqU73uPZgM+iIdgxTLOl++xT82L4OfB9UYPsnw0lKlNc+xOpoRLuT4Vdp
+         H/5zYEWDEGOr/st/28+/t8Z3KMeE0XrWd650BAx26xzSpE0DLsCH8/OjiebSUdn0yg
+         +XiMw+YtJ+hqyC6ZLsKaSS+KHu5mhoVf0qoDCK38=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MhD2Y-1p3Cmv0A5q-00eJ17; Mon, 22
+ Aug 2022 10:13:08 +0200
+Message-ID: <acc6051b-748f-4f06-63b3-919eb831217c@gmx.com>
+Date:   Mon, 22 Aug 2022 16:13:03 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 863c3b67-ec32-49b2-eaf5-08da841556f9
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6499:EE_
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Q7/Jlm7Vt7D2MW01zM6a3YlTtRjKLQkWLuNJAofyUUtgUOXGfAGOGMaqEvCYdC4I0EC6HqMXTbqLYIiDPCKHChQ4CEDMJ/YlyMy+cJJjU1d0u/x/0i8dRgF02MmQ6asq5sQ/XVnyBaoktyrNkiVXsktC7Hb4/Xccx4qCG0Bfixb+DOG/Uw2nQYnZCRqo3OKYpH+/8jiOJwW4u6k5wD02kXgFvnkBLKKQBEvP5HPl40SkUhHUVxz7cV0cLQXOIDDazmqq/a149zzATh2q8rLLUS/pXveoISGKdRuQOhwbqO/577/WQh1MWWLDtYSwRWvSBV/bXPEUvFFhkh2TaFjq/ZxtPQWxTa0BUrdt/CoWU17ioV9+c26KMiYVmznJv7FVxRTkeVxQu8ui+QjEjW8ur3XwXA3szXCx3uKjnQlT6sHyCHwRU15u6yIMTUqwfF8Pu1bo9i1iMBiNrt6ltgHMrvaqdcyBBAzB2lxKjaeLmtzZp2ZMP6KpZ2S3K+SDiK7tZoPYDx6Y6pEIZ7iKUOqUhYfTNnuNa5hFxXf7KvBTU8Kaxyu87Rtzw8PdqOcdMEULl9G71FiOzbw+l/5XtIN2hDbv5jLgnQwO7Z7b7sVEpqj2/PTzQSJgetOS16Zm7GLzhC+d9sE6smg6QmMcipljpdRVHqCPtCioLDURpInLgM5HHNZULYyqFJbOJDegHp2GvGIkzAybBtfOPGIZl4R2MJ8m7yfi4wcX5T3R2E8PjrQgUkbkJDTKXOO8UhgdCI9hIorNQzwjgJ8x0R1VNudeGg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(39860400002)(136003)(346002)(366004)(396003)(41300700001)(6666004)(6506007)(6486002)(478600001)(186003)(1076003)(2616005)(8936002)(6512007)(52116002)(26005)(2906002)(5660300002)(7416002)(316002)(86362001)(66946007)(66556008)(4326008)(8676002)(66476007)(38350700002)(38100700002)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iJReOKEsVBhIKe5ke3fmmvdfxO20yV1ZJPj5ifs+qtOVJGtpz1DNot6jB4cx?=
- =?us-ascii?Q?/qM1kSlBYExdKAwiouCcwMU5lMCtZD2yna6t/lTfwXtUlR3WxAaQB7QPPmR9?=
- =?us-ascii?Q?dRV859cYvYCP0qheZJ6EKhNcXyARVzVTeQvwxluMdpEmn/PjAC+qnswm4kW6?=
- =?us-ascii?Q?ruIV37XGMkAwQZ27zewyjdIVohV62VMgkxU5T5JLwPc578ijHhkd+8aUq6r9?=
- =?us-ascii?Q?KD6ja/Lo4+PIDSDwCeuJfxMjgGvgMw5D2sHd6Vd4p1YCvhG7pMfgyfSKN1Zw?=
- =?us-ascii?Q?dBT0i5A19k1GlnNXR1asR5mLqIx4Nzyxb4TpPrkVeasP/UPCGqYoXo4j8ZOr?=
- =?us-ascii?Q?HYJulHAk1tfynUqijWz+8/Y5f+m74UEUg19HhxIWsQWvtDNXV/knfHUdOIBx?=
- =?us-ascii?Q?KclniiePFmjCIjB0eTOhrHISN0Yob0nqCUtD4dZcheTChL9BS2/BWei/qaEc?=
- =?us-ascii?Q?Ohlaf9deF3kY8a8CD7Io9iw1NPFfdxTWCGoWR+jpe9NJPxrFkcFQxamQFbyr?=
- =?us-ascii?Q?tnZlP66GCyTxi03+hRyIlfXupeLTXqN9eS+N7RUWlPywLBvavISDV0upg1LY?=
- =?us-ascii?Q?ur2UaH4qCVOM0vTg98i+/rTGCdzD8DVyzq4/Daw6NAodkX5LEg/feyapOr2W?=
- =?us-ascii?Q?2/TlTBtNiuyySZKYS2a61CUHzwMSyPJid/vr4uL5HPoMO9HiOup/BRIbSfit?=
- =?us-ascii?Q?ZCkfsGTX6YufEIwLLgMjWtKFGvygeGeQ/qZ3is2G5Ch9mADUtDza+EnHZEsB?=
- =?us-ascii?Q?v4hFHlZEeRs+nZ5cqxLKfG50aF9lPi0Diq5/6GUjAWbgaGiLydlWbh92NRCI?=
- =?us-ascii?Q?MshIVdzDYlNyDNq1M2ZZjHchluKGUeibnYhHWR4UIfHTFgsC4jmrWEqmJOa2?=
- =?us-ascii?Q?Ng/DF1oDHrjDzy4bjKV8w6c34RbiAQvd4+ENWHsWxC1EuCQozzrAjyATG8he?=
- =?us-ascii?Q?4wxRYaqJMAIjPc9uG4d7fPKgdZursV6/uu2qkm9bRIGo2kBWuHc6o4gDg2bV?=
- =?us-ascii?Q?R/Pl9iGZ1MkkDunrMCZpKm3jBE1OtCNXi0bYq2cLtx6yTkPWx0223wzY9zDW?=
- =?us-ascii?Q?HwoCsYw7z16PLlP3SxrAcCNsLIAlV2+/+LW//iPvLaaEONNkS7Nj0Bv73qHG?=
- =?us-ascii?Q?x5QhTlZtkFv3DM4ozO8LvcvHibnVJw8sBoTFjBPz+kaBL4Co8GybTNKWc8az?=
- =?us-ascii?Q?VqEgBUioZn0Nz27hJxSBRrCCOViUF6NafA0bRaSTx4p7K5ZydZwu+T06Yize?=
- =?us-ascii?Q?uqErsdKZTZAvZopeuaMA5M6H3RiY/VUDzNmkUymVvst9xkEFOjEIcsmazcUc?=
- =?us-ascii?Q?ySr9nHZQ/9VEi3eRDBnt1STvuyJJul/JdUzIZ4MKOJpNLphfianDU9eiPKNM?=
- =?us-ascii?Q?42wxTRzq3O0n/Dd3tbD6yLxRo7k4ReBMFO/jCsPPHRkABLGC1QsnGgIyofgA?=
- =?us-ascii?Q?xVEZQxKexFn0WuU6MbC2beDbEYNHu3HYbVTvnESOY4owhGso6isI3Qa2T+4O?=
- =?us-ascii?Q?xVJhF+qNFe+9PLunGw0+doitIbWGKzILWZ14D7fq63QuZlM2rPs5Tz216x7F?=
- =?us-ascii?Q?FXUIgEm9xDLZ75kaqWvyYVUiZTSaCPn9QGng81Ga?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 863c3b67-ec32-49b2-eaf5-08da841556f9
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 08:07:21.9109
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UW4k6AQQ0R0t95tRru/w/O867jSSjXlIv1pSCsCukpB3rKaVSKhESN8iMZlfqpP+CJHtjoetRY+HlB5GDlqcbQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6499
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: LTS kernel Linux 4.14.290 unable to boot with edk2-ovmf (x86_64
+ UEFI runtime)
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable <stable@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-x86_64@vger.kernel.org
+References: <2d6012e8-805d-4225-80ed-d317c28f1899@gmx.com>
+ <YwMhXX6OhROLZ/LR@kroah.com> <1ed5a33a-b667-0e8e-e010-b4365f3713d6@gmx.com>
+ <YwMxRAfrrsPE6sNI@kroah.com> <8aff5c17-d414-2412-7269-c9d15f574037@gmx.com>
+ <YwM3DwvPIGkfE4Tu@kroah.com>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <YwM3DwvPIGkfE4Tu@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:sa08DhrSOFunKMqMAgmYyystR5b0QdhInYEnY/iilAcBcCRmr2O
+ jULTD4n6NLrmyiBAHcczjIeXmmZyQQEEYMpjNLtb3WX3FsNCh21G++VRWgbYEL3tStNSTM9
+ UxmyS3XTy2TxMjvjkp3MHhjyypzKX0n1od5cEx/mhrCoFioEHH+IQ/8Hyd482bazh50ZkOs
+ WKW1E0ma9g1teivfwu3BA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7v3WyKqh90c=:vfXhF5ASvCGzNdxahB2n72
+ LRcZIHkygQ2OHfY9TL5uMPjXFJcgmh4FgtaM+CqeqSeDBh4nGzHNjRl/qjoXCtFK8jAsy/tCC
+ zgIs/D5uSHKMrW36u4g/Lsv3pDcH/0ER0ZT82VIMo3eVGcBZr5a1x3/eKcm3cA3Y5zOxlLtTC
+ WRVk2//VvPhK9MOYe6/1XwHE40O4sIE2RrhR5t04yJLRZtniVlKnVPaVNuu1n6y70UYap59r/
+ tZg4JSMDsaCc/VHllbL5PXt+xGfPQPKdGr76c8hAPdvq4miC1NTs9qo1Ut40GrbUdI4xRD9vQ
+ lxUAjOtGC8O1euDaPPnJjN3ms/nFxkNdHIcBmX3ddE+FLCyCfpw0Ms1bLrRIFJlzxjK6CLZvW
+ t6Zm6UTufgmZCYZ1/e//rzw3DWDU+7KFT7xOZXoIpkLxOe981HQ9cXkNYTxgZRSYGCRtQFKAN
+ y0FJ9dC8iOvuXBY3x85f7e6LPcoian2xnIiJbfxPlBREeY2VGMuBXF2Ef5ktJlb5qYX+6clfm
+ 6o0La93oz+hbQ/+Aeb5RebE6tXaVpJndZ2qCE4T3Oun62GjgpTBHYpbF1NKEb+eHjwtcXbCZm
+ XidrB6bmWwcQ8yxuhDq2zZpA8HwBE57wuvBIWGlVwYdSFdqZ/kIuIJmYTl6RcmBVb6B1U7pZ2
+ FnHvfpJ5N2pJx+T2UslFJEqDVSQPkW/3sgV7WviVCCbE6ffi0JPGLrqyo7wfQMGh/T2zaKiQs
+ pRL33l6HCvgnm6xYV8Ma1RT98BMb59AAvw+YaEh2TrKRNFrLEAW1Yfgg39v49/2sGtAcs1BgC
+ kjbeZ+GF8/vPR5T8JYZ6e9sZC1i5ypfTOyjNy/EDaMs/dwLLx7hBjkmhRCJ6OHCZ0/GuBnUim
+ ZnDfGZL89TWkkpbKl0x5D2Bm+8XvXicMj/vGSZDcTZhcRXiXmveZfWwcVENdzB4cT65YY9iT8
+ aNCsM3AhDcRP7T6oaxoJ/FWtj0h8Ckm5PMv9F2qQsDYNVAbXo5TDbQic765Y/WMrJLSDhQhvy
+ bv0msPgdcpZBeSXppWWLlpmeihOZCuBWF8chaYL6sc2ziJY7PU2W7hk2dtqy7Sr31rl9kkGoq
+ S81hIZJWwvrWthoeX7x4MUv6bX2ZJDLWPvcvAjPTUtVuh0N6QaZt1EU7oqTe0pxsKZiuncabl
+ peaxYYx6i9YSg6Uye69xXyUcNqXeqzFAEbCF7oBBwqodk9v6Gyg2NLxC++6BDuVlmgf0oemkJ
+ lPiGP+eT2yoJZn4l1+gRG1C622VUpAS7g1oLsCd7Yywen8JCb0chf6/P2iU2qeekmINa8atdl
+ 7Rj7xICUyqs3mJBFfxCBN9g1RDXFuA==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself as the maintainer of the i.MX8qxp DPU DRM driver.
 
-Acked-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
----
-v10->v11:
-* Rebase upon v6.0-rc1.
 
-v9->v10:
-* Add Laurentiu's A-b tag.
+On 2022/8/22 15:58, Greg KH wrote:
+> On Mon, Aug 22, 2022 at 03:49:51PM +0800, Qu Wenruo wrote:
+>>
+>>
+>> On 2022/8/22 15:33, Greg KH wrote:
+>>> On Mon, Aug 22, 2022 at 03:24:53PM +0800, Qu Wenruo wrote:
+>>>>
+>>>>
+>>>> On 2022/8/22 14:25, Greg KH wrote:
+>>>>> On Mon, Aug 22, 2022 at 09:15:59AM +0800, Qu Wenruo wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>> When backporting some btrfs specific patches to all LTS kernels, I =
+found
+>>>>>> v4.14.290 kernel unable to boot as a KVM guest with edk2-ovmf
+>>>>>> (edk2-ovmf: 202205, qemu 7.0.0, libvirt 1:8.6.0).
+>>>>>>
+>>>>>> While all other LTS/stable branches (4.19.x, 5.4.x, 5.10.x, 5.15.x,
+>>>>>> 5.18.x, 5.19.x) can boot without a hipccup.
+>>>>>>
+>>>>>> I tried the following configs, but none of them can even provide an
+>>>>>> early output:
+>>>>>>
+>>>>>> - CONFIG_X86_VERBOSE_BOOTUP
+>>>>>> - CONFIG_EARLY_PRINTK
+>>>>>> - CONFIG_EARLY_PRINTK_EFI
+>>>>>>
+>>>>>> Is this a known bug or something new?
+>>>>>
+>>>>> Has this ever worked properly on this very old kernel tree?  If so, =
+can
+>>>>> you use 'git bisect' to find the offending commit?
+>>>>
+>>>> Unfortunately the initial v4.14 from upstream can not even be compile=
+d.
+>>>
+>>> Really?  Try using an older version of gcc and you should be fine.  It
+>>> did build properly back in 2017 when it was released :)
+>>
+>> Yeah, I'm pretty sure my toolchain is too new for v4.14.0. But my distr=
+o
+>> only provides the latest and mostly upstream packages.
+>>
+>> It may be a even worse disaster to find a way to rollback to older
+>> toolchains using my distro...
+>>
+>> Also my hardware may not be well suited for older kernels either.
+>> (Zen 3 CPU used here)
+>>
+>> In fact, I even find it hard just to locate a v4.14.x tag that can comp=
+ile.
+>> After some bisection between v4.14.x tags, only v4.14.268 and newer tag=
+s
+>> can even be compiled using latest toolchain.
+>> (But still tons of warning, and tons of objdump warnings against
+>> insn_get_length()).
+>>
+>> I'm not sure what's the normal practice for backports to such old branc=
+h.
+>>
+>> Do you stable guys keep dedicated VMs loaded with older distro just for
+>> these old branches?
+>
+> I don't, that's why those kernels can be built with newer versions of
+> gcc.
+>
+> Your distro should have a version of gcc-10 or gcc-9 that can be
+> installed, right?
 
-v8->v9:
-* No change.
+This may sounds like a meme, but I'm really using Archlinux for my VM
+and host, and it doesn't provide older GCC at all.
 
-v7->v8:
-* No change.
+>  Or maybe use the gcc versions on kernel.org that only
+> work for kernel builds?
+>
+>> If so, any recommendation on those kinda retro distro?
+>
+> Try installing an old version of Debian, or better yet, use a distro
+> that provides old versions of gcc :)
 
-v6->v7:
-* No change.
+I guess that's the only way to go.
 
-v5->v6:
-* No change.
+Thanks for all the advice,
+Qu
 
-v4->v5:
-* No change.
-
-v3->v4:
-* No change.
-
-v2->v3:
-* No change.
-
-v1->v2:
-* No change.
-
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8a5012ba6ff9..ffc8da8d5a8b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6861,6 +6861,15 @@ F:	Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pixel-link.yaml
- F:	Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pxl2dpi.yaml
- F:	drivers/gpu/drm/bridge/imx/
- 
-+DRM DRIVERS FOR FREESCALE i.MX8QXP
-+M:	Liu Ying <victor.liu@nxp.com>
-+L:	dri-devel@lists.freedesktop.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/display/imx/fsl,imx8qxp-dprc.yaml
-+F:	Documentation/devicetree/bindings/display/imx/fsl,imx8qxp-dpu.yaml
-+F:	Documentation/devicetree/bindings/display/imx/fsl,imx8qxp-prg.yaml
-+F:	drivers/gpu/drm/imx/dpu/
-+
- DRM DRIVERS FOR GMA500 (Poulsbo, Moorestown and derivative chipsets)
- M:	Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
- L:	dri-devel@lists.freedesktop.org
--- 
-2.37.1
-
+>
+> good luck!
+>
+> greg k-h

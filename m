@@ -2,116 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD94459CBA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2D759CBA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbiHVWm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 18:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
+        id S234147AbiHVWm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 18:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbiHVWmZ (ORCPT
+        with ESMTP id S237790AbiHVWmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 18:42:25 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E499750726
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:42:23 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 7BC412AE;
-        Mon, 22 Aug 2022 22:42:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 7BC412AE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1661208143; bh=iwqKafgKtoHa324ilfuky7BSyJRg7gT/fs7VjGkALSo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aRdcQyCW/A7Z5VIL5621ZkbZtdqcnj3EO3Pl1hChdS9Y/JbZNm/KS6r+IMdWW0ECc
-         oriPpL3MNc8iZXu/N92NPWtPwXnzmyI+QJu5aE9bkhT9Mg6C0e4yUIGo6nNH2phIs0
-         7T4OxACmxmsyeCU4GrlVhd7Uki5gC4KnT6hCQXVeYloOySBPVMpGy4lrP8ecozrkqM
-         UP0D7PZF6czpdUXbeXGp0TEL4OyRCk2CzLguIUqP4FdvK/cedcQ4T3NGMm6OEnK2bn
-         DpEJbwdIBdHCOYpQPRX5Jv2jErolZIW3GENv6GjUDK1i8YAJeqapKzy2yZsUxu5uwc
-         uXxgTArttFn3w==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     linux-kernel@vger.kernel.org, ksummit@lists.linux.dev
-Cc:     tab-elections@lists.linuxfoundation.org
-Subject: Technical Advisory Board election info and call for nominees
-Date:   Mon, 22 Aug 2022 16:42:22 -0600
-Message-ID: <87ilmj6gtt.fsf@meer.lwn.net>
+        Mon, 22 Aug 2022 18:42:54 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CF95141B;
+        Mon, 22 Aug 2022 15:42:53 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-33365a01f29so334613457b3.2;
+        Mon, 22 Aug 2022 15:42:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=HSdoxsJ0k6gi0gsdGDs4RmvY3VdrRt/X1WP13pkBsqU=;
+        b=C3O0dWqKjUV3GXIxPrazUCrC1qZ8vJXzfPUCnaeFt/paXuYseHJFcPGlmSxCM14FGF
+         WJbmQlxGHA2MgIuv+R+K5DzQkVq8q6aSUY/f6hG8Xr9LTg/y31VSixfUpY72oo5SjjOE
+         egfTtL0WveMBMQE1lZgccfd5I4v6eFLVO9C/BIosaS50mLcQuMN7ImL6MMihx7HYao7o
+         TiQS65HRw+zHe7q0hZ5iVJIZhZMikl588HNHGk/AM7peHpw8OiF6HBUCCWBaxvBufxgs
+         5kE7xT5n8cdsBza4ZP1G1jXZj4o+sq9t+ozeeWlSqN3PovjjkP7tZb3ptMxUa5A0O5r6
+         HygA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=HSdoxsJ0k6gi0gsdGDs4RmvY3VdrRt/X1WP13pkBsqU=;
+        b=MurVcqXqDcgMGJ8Psbme+rkLG9NcEJhKnHE6AlMSsyWvK35bwqX5+La3d2wGGUKtB0
+         Sx+pY10DGTRWiGCgDsrdEQq+b6ZLCp/QsprMi+Q/49Id46kXnCV534t88tfmw51XLWui
+         Q/91DGeyrNzHj2Okg9sTp3aQMR9hWBeuUrTp2sGW++4wlD1D9iYSqQPdaiimtZLzgHpy
+         lkX9qnGPELVGFb8IYUW137wcNSzL9X9uv0lPaHHvythap8HWFe3XqBpiu7OUYRDTaRbX
+         AQoUVC8f2OhxoDLNY980gkN7Kh17PlQ55VSTFyJ/6NHDnhccXDkO+vCT48TyWStl02rb
+         iVmA==
+X-Gm-Message-State: ACgBeo1aiYfCbNuGh0xREM9sZSerrQTKc8t+vp5sBW3PlQGvES9ogfu1
+        wS96g6FyjfrBUpkg0jUbftHlvzRRkVuJ4bmpNzU=
+X-Google-Smtp-Source: AA6agR5j2z1EgEY6ADYmvGvAzZLL2kTZhI6Ws+fREQaJa7ShHYh+KSQlTaAXsJcSSTgeLsWdxumZ0lziQUjPKdz+S7s=
+X-Received: by 2002:a25:8a85:0:b0:671:715e:a1b0 with SMTP id
+ h5-20020a258a85000000b00671715ea1b0mr21425930ybl.98.1661208172405; Mon, 22
+ Aug 2022 15:42:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <CANXV_XwgZMCGXijfoUyZ9+KyM6Rgeqiq-sCfubyj_16d-2CN=A@mail.gmail.com>
+ <20220815013317.26121-1-dmitrii.bundin.a@gmail.com> <CAKwvOdnnSAozX8bQ9HeSw12BV9OjpzyDmXk_BGczjVVQNN+7tQ@mail.gmail.com>
+ <CANXV_Xw2wzwDdJkyV1nHPQm2JTt48SLrNc7YwrfcxOwuFA-z3w@mail.gmail.com>
+ <CAKwvOdkiq_byi1QeCvSGb2fd+0AJ1k9WNnsHJMeaaQcPRy1Wxg@mail.gmail.com> <CAKwvOdkPwbD-c0V-up2Ufzb-Uh7LLyD12X0FKeBa=hn+cSPA9Q@mail.gmail.com>
+In-Reply-To: <CAKwvOdkPwbD-c0V-up2Ufzb-Uh7LLyD12X0FKeBa=hn+cSPA9Q@mail.gmail.com>
+From:   Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+Date:   Tue, 23 Aug 2022 01:42:41 +0300
+Message-ID: <CANXV_XzdTTYc2w7Ur8zY=ijOofg91yfF7RLhedbVH0rmi3c2yA@mail.gmail.com>
+Subject: Re: [PATCH v3] kbuild: add debug level and macro defs options
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Fangrui Song <maskray@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 2022 election for membership on the Linux Foundation Technical Advisory
-Board (TAB) will be held electronically during the 2022 Kernel Summit and
-Linux Plumbers Conference, from September 12 to 14.  This announcement
-covers both the call for candidates and the details of voting in this
-election.
+On Tue, Aug 23, 2022 at 12:36 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> or perhaps that simply needs to be `-g -gsplit-dwarf`?  In which case,
+> that if/else could just be re-arranged.
 
-The TAB exists to provide advice from the kernel community to the Linux
-Foundation; it also serves to facilitate interactions both within the
-community and with outside entities.  Over the last year, the TAB has
-continued its assistance with the UMN "false commits" episode (including
-drafting a set of guidelines for researchers working with the community),
-overseen the organization of the Linux Plumbers Conference, put together
-guidelines for corporate support of kernel developers and maintainers,
-advised on code-of-conduct issues, and more.
+How about simply assigning DEBUG_CFLAGS   := -g at the very beginning
+without any conditions? This would provide the default with the
+possibility of overriding later and -gsplit-dwarf does not necessarily
+come with -g implicitly.
 
-CALL FOR NOMINATIONS
+> Honestly, I really don't think we need to be wrapping every compiler
+> command line flag under the sun in a kconfig option.
 
-The TAB has ten members serving two-year terms; half of the board is
-elected each year.  The members whose terms are expiring this year are:
+This indeed sounds reasonable to me. So the key point here is to not
+bloat the kconfig with options related to every compiler flag. But I
+think it still might be useful to provide some option that would
+include sort of full debug information compilers may produce. With
+this approach there would be, in fact 3 different levels of debug
+information supported by Kconfig: reduced, default and full. The full
+level would increase everything like -g3, and -fdebug-macro for Clang,
+and probably others.
 
- - Laura Abbott
- - Christian Brauner
- - Kees Cook
- - Chris Mason
- - Dan Williams
+> Or add -g1 to CONFIG_DEBUG_INFO_REDUCED.
 
-The members whose terms expire next year are:
+I ran some tests and there was indeed some decrease in size. That
+combination probably might be useful.
 
- - Jonathan Corbet
- - Greg Kroah-Hartman
- - Sasha Levin
- - Steve Rostedt
- - Ted Ts'o
+Any thoughts?
 
-Anybody who meets the voting criteria (described below) may self-nominate
-to run in this election.  To nominate yourself, please send an email to:
-
-  tech-board-discuss@lists.linux-foundation.org
-
-Please include a short (<= 200 words) statement describing why you are
-running and what you would like to accomplish on the TAB; these statements
-will be collected and made publicly available.
-
-The nomination deadline is 9:00AM IST (GMT+1) on September 12.
-
-VOTING IN THE TAB ELECTION
-
-The criteria for voting in this year's TAB election are unchanged from
-2021.  To be eligible to vote, you must have at least three commits in a
-released mainline or stable kernel that:
-
- - Have a commit date in 2021 or later
- - List your email in a Signed-off-by, Tested-by, Reported-by, Reviewed-by,
-   or Acked-by tag.
-
-Everybody with at least 50 commits meeting this description will receive
-a ballot automatically; they will receive an email confirming this
-status shortly.  Eligible voters with less than 50 commits can receive a
-ballot by sending a request to tab-elections@lists.linuxfoundation.org.
-
-We will, once again, be using the Condorcet Internet Voting Service (CIVS)
-https://civs1.civs.us/ . This is a voting service focused on security and
-privacy. There are sample polls on the website if you would like to see
-what a ballot will look like.
-
-Please contact tab-elections@lists.linuxfoundation.org if you have any
-questions.
-
+Regards
+Dmitrii

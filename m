@@ -2,198 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071D559BB8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB5C59BB8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233042AbiHVI2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33202 "EHLO
+        id S232779AbiHVI1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233260AbiHVI2B (ORCPT
+        with ESMTP id S231927AbiHVI1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:28:01 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B5FE0C1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:27:59 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27M7xu3L018866;
-        Mon, 22 Aug 2022 08:27:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : mime-version; s=corp-2022-7-12;
- bh=VN3rV3WtuhaCYDcgnYraSf3+4vsucGsTie2hShaZgL4=;
- b=C7zUaesVsTpwHukvUkVNWq18UlPPFzaBAeY1LownLt8l3iRF8lmAm/1NMHhhHQhLXQG0
- VJUsSzWL5g52WOixkKgVxwZYd9R+Cywkg2+/zv7Yik09C/cC2F6F+V8ahyuuJvBiFrxK
- 8p2/oo+0Si3bmXA88VldA+ugNZyKO1v/Qb0e4i93uqj1ZaqcAE1fqv3Z2P0TBBnhZ8B9
- oqAKJ8vUsoxC25zeUn+uupNp2xGDDeBvHXJ+QjWEdhB0bShSq3m2Buco5oosP3nARVTH
- 6orXDx+OhO6pAnMsSWcCIES+agibbWM6SBDY53WtfNuJHN533t7SHtvNrrTaggZYGxDu Tw== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j45wbg2qm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Aug 2022 08:27:46 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27M5rfAf038322;
-        Mon, 22 Aug 2022 08:27:45 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j3mkfrrkc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Aug 2022 08:27:45 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iTlpDyYJPX/i0YgUspJSrDzFPxRdrOziAVyOrFadNFUIbrnOud7SuZcP2/+ze2YFeFSqbET94FuDZwhofNjG+APhFrqeJhwNKIJLa+6eljTcJ4X6PwrlSeFzIdULEnMd700TFoohDic/sF6ouumh65vpI2wtLAvlxoPm1I20NUcMzdiIqodPoXZWudYWyTnvWkvMRowyAzf0BHcJUdn9HrnQZDCjakv5p+wVmNv1ewDztwj5jJFw4LkoFcSI6GJqoG+lQbZ2fFIGD6u2KG1Hom8ZeEgeKf0HkCfZ7SBuT9MmTyt6SlRhfcndCGBoPdKHgG9dju27loQJ6dxpKh7sCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VN3rV3WtuhaCYDcgnYraSf3+4vsucGsTie2hShaZgL4=;
- b=f4OWlEI/XbJRhJydM20RKuHRqxAF04IATWbsrzdWMGhtKBQbFbO9kherp2C7/40XK8LsojhaB41C9UTxaGB7bZI5YKRyRRXbcKbOGx4KBUWqUgVLOLsOaY1gRm2SxFH4noZWod79aswETNkpI59UAAL33pGyIjRez71YQUbrJgx9SrM1B9eL7lDo/VKCVuQpuTMU7CWy30aagfiFO1Hw08k5tTWCrzmN4iuO3Fs0aIvpTbYvn/JIFtOE3g6Kxfb3HqgN4drod9ThHgCu2ESbP+mvW2huOKiPxfOskaZ5+xPI/W0VkFd1QglL/J8H0ydM0idJjiGyu2lD/hW4S5BjXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VN3rV3WtuhaCYDcgnYraSf3+4vsucGsTie2hShaZgL4=;
- b=DjH8zukTCSX1b8P2GoNDz9UtiyL7X8ExjEh7HAxjHGMiwsDnOjZhooJCZ+0otDuI1ZqAn9Jsq/+K5SyeWIATDAxWOv5Q5oCF7NMcsPyDiFx9+ycQ+bke1o8diGY1gjKiazZrLS6TWBtaurWLVAjA9Wgwc8+6M/tohdAfMHl6NVw=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BN0PR10MB4903.namprd10.prod.outlook.com
- (2603:10b6:408:122::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Mon, 22 Aug
- 2022 08:27:43 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026%3]) with mapi id 15.20.5546.022; Mon, 22 Aug 2022
- 08:27:43 +0000
-Date:   Mon, 22 Aug 2022 11:27:31 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kbuild@lists.01.org, Mia Lin <mimi05633@gmail.com>
-Cc:     lkp@intel.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: drivers/rtc/rtc-nct3018y.c:112 nct3018y_get_alarm_mode() error: we
- previously assumed 'alarm_enable' could be null (see line 96)
-Message-ID: <202208211110.jFk2KTL5-lkp@intel.com>
+        Mon, 22 Aug 2022 04:27:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C7755A2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:27:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661156861; x=1692692861;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pZFyRLLcKilsUuU4T3dWTly/amYGpZtgRPnOkL03t2o=;
+  b=Wl2uILdjpocETICk1gVpEZBvm2CYj6qFajXj2qGXydWEaMPh1riH8+bf
+   qopBiIvfU9zPYQ/ewoDpZqXBnCMW+jFp8b3xgx6+iCna8QC23pQYXMvG8
+   DsepwP8OiGgmpCMSYuNv92m/1UFItlbLpQ/IE3T9Xh43vjdN9rd2jyvzI
+   jypiUpymzvk7ZK/M4sMflakuH5y4K+zq21nCgznIIKS59Jg8YpMQZnHYS
+   vu36N6SG5lCjff0eLs4At/oLpi+rN9TfbFimFHO3mqIIfz69oGw5M2U2V
+   lUU7SiGvtudQG+6G7jbkSKJGT3B5mfZVKFy2ErnMH1O7FmHPZ5LEd8HwO
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="292098537"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="292098537"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 01:27:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="936949242"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Aug 2022 01:27:39 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQ2mY-00057N-2G;
+        Mon, 22 Aug 2022 08:27:38 +0000
+Date:   Mon, 22 Aug 2022 16:27:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: mm/page_alloc.c:6050:6: warning: unused variable 'cpu'
+Message-ID: <202208221625.NXXjg2Cm-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MR2P264CA0078.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:32::18) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9f4db844-62f3-46c5-6270-08da84182ee9
-X-MS-TrafficTypeDiagnostic: BN0PR10MB4903:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C7jPdd5dNlx6KUoug1yxfFeXNespYYODGokKX9GvIt4JlMwxgAd+L4sukTmuh1hVFCZU4Z65pzy5/j7nxoHnKtaUmEaK4cEHUPKqDJQf5I41o6B35996L0+3L4daEE5B9clr1XJ0w4fAYVyBeJchgVWXFFwtFC8Czs2KWvg11h0kB3XmiB4ycbgI8WCA+dHqghTi5pUz2aSw+Iqr+86Ak+0+nd71HU/5XAREhS1fwTr+pvewcc+7KKhSf8RjOgPYdxSAVUKyJbQ7wz+vgFfmOodZuNUwrSLYXnCrt9LDdFUhx/pQTL7FD1RHqpdbTmQ3ANoqELvHwRSrWRe+R7YVevSD8MB2T/OHl9vGp6Nd4fvyEa87iKqP1fgiFg3v7czyEqNllZAWzqYl0fl6DQwPIz9ytQyuDp7C63czlaki4srk2BLs+xTsd7YFyT0lOl87T296Y246plgzFcu+Sk2VePbUQPxc2FPSNDB12/ZBrSdXZrqzzWBWVy3PoTGTjzYIi3DpwjYmYy8ii2TV+eMV7DqzPe3nqSZatt9Hz71W8Ql8v4/hL7w+AhWN5vrUS0xlbmTUUe6ITx2wkKoMXBpQMnbhluVOLEWHxpxSxyG40mYEZLBqMvW50VudhOD2UQ8Kk6UMse8+sUWb6LmhbbYH37iZrxMSa6GH63RFAZZcYNNftfHhL+CO9A3S3l2/JbEvDgY2KBD1QhqX5e67yUFYJw6JhhNxeB+JKY5GOpe8ugEfcDOFKQDYmgYN9FqLxYL5O+lzF6OLWUVJvrprnwX8vh8qO9UvNqc6I89msiSk6sBXIcweIdQiuDZf++3K5lmwkjH0/0KmYOeM72s8PoEtyA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(136003)(346002)(39860400002)(396003)(376002)(41300700001)(6666004)(6506007)(966005)(6486002)(478600001)(1076003)(9686003)(52116002)(6512007)(26005)(83380400001)(2906002)(5660300002)(44832011)(186003)(8936002)(316002)(6916009)(8676002)(66476007)(66556008)(4326008)(38100700002)(38350700002)(86362001)(66946007)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5lRsm/h1+f/2GN7jgD/N07XSOOs2g7U50cvqB3jwM4eI7Y1+QrnH+tqeNd3G?=
- =?us-ascii?Q?C3QCDYxMEK8gRXscegRYEuyy+HR0HY06ERjgt7ckSDarQHGZkahpL5wCceaj?=
- =?us-ascii?Q?9/h483M2dutE/wYSV92lLNz2EiRDP1bgsrW993925GD7qIEEzs7y+wFFs4rd?=
- =?us-ascii?Q?TDtDCVuh8fUTnCKT25ijrBPI8armN17X9Q2n6m+AJcOnZ+cATrwLD4K9nOnl?=
- =?us-ascii?Q?UYgXvM/6m/JNFRdHGg9Aq7yP3lnj284YnqSetDNff7tVEdro/GdNxnXR4G8m?=
- =?us-ascii?Q?BpoIdIDi9uzZIcaIF8S+as2Qnc5dkBhGgL83CWCANcYoxU+5ci3jmgfoZcdz?=
- =?us-ascii?Q?IpMN3RfW4a65HqXX98lYh9CwR4atErL7Dvc8+0e8PfB87JAGr//N0nezDBYd?=
- =?us-ascii?Q?ROKzRTS9qHgpOmI1fbBdgTiNR1+bATlMqYvTB8yEy1pWp1CmH7G6rhHLorma?=
- =?us-ascii?Q?ug4HVhgFugTCmpJ/dkeMKyRCoLNAeFBZSjsS6ImnyKx7aUURaacg7CbMCM9Y?=
- =?us-ascii?Q?yrMUNLrvQpOvyd4N1ff4XFQ1VPB4TRVXz1lEd5uaTDyhQYJmmMjYQYNRzyU9?=
- =?us-ascii?Q?B3ftllA0ka9L3wi8cg14yQ+donINb6Mfv+rid4Zka8asOmnLKFhHY715yiUA?=
- =?us-ascii?Q?D0Izkq4uyhq/Oo82T7lJvx1aQmJsQ7uQ0HQJ/G6WEuK0iNVO0aUIp2a5caTs?=
- =?us-ascii?Q?IQSfRLz81guvQIG6HOeELEQXeggin4UZBcekSynRvDk2wl2bpl6bUcuwEiIh?=
- =?us-ascii?Q?gbki78oRroklUcDUOiDrzFlwjOaKzNPJScNj9CpUPjtdovs2NkYmNlwaNs8U?=
- =?us-ascii?Q?fXMMqY12Yv+kxVzpxbQjZV7CWdh29cSKjKmBB+YKkhbtKhRXbhiEtqrONtr8?=
- =?us-ascii?Q?dUBI0zAXWlaumBkdXLUSz9Jo+S11wZQ3zB8M3QNbLiSUMRCsKTZt3sQkgpq4?=
- =?us-ascii?Q?/zbANO7Sn6v9ITm4atu5uy26z7+Rj6IkP58P1pTexrVg1yz7Cp5cI1RCfRwd?=
- =?us-ascii?Q?8KP+GF1NU4a6Mfqa2fTYWB0rTL0+xasdhUm8SJFz6N08PyjhkQotoN37H3L5?=
- =?us-ascii?Q?JXiH2ke0rJlbPSbtrKxil0Rl/0W6ysmc/8lUMDsdNZ4nAlb1ULPUIsicFYFF?=
- =?us-ascii?Q?bx6yVnkZY4MccH4htTu4nTap/vx4A1SZLvi+td3/IWfAWTEbqvRYibTXxu2F?=
- =?us-ascii?Q?10sS/43xbumFyfhPjMqXuuK4XpPRndpKr3Htppne9k46w3cogvjjXY//NYvW?=
- =?us-ascii?Q?kBKZgA4aUdAVl+HAFMDpqrSHduKiAXktgW3pStGADH/sR3A78g/9hY8HT2CI?=
- =?us-ascii?Q?yVYr/b2PR1btPTIwsNZf9yYX2Gq5R59chJRavWN70DAH487S86ulBqA/vw7Y?=
- =?us-ascii?Q?krczyv4J96k4Mk52dv5p0hOiavlHB0pZtQSxF1aRbph0Pz9cG2l6voF2qEgr?=
- =?us-ascii?Q?myxDGh9g4Czh2ka0bAWX1rsEjUNb7TIuz8/Fm61dKtHQghorWt69x7rpNh2K?=
- =?us-ascii?Q?ieTCXDuCHurA3Iw/1EwX82+hsLDQlC+kAeMdjxVje1YvUx2A3s3Z+WzyyX4w?=
- =?us-ascii?Q?r38BhRIFy6rGQVbclR6MvNeoKrabhCcRNviDNopSD9wtxt+CHjkLngkarLB5?=
- =?us-ascii?Q?hA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f4db844-62f3-46c5-6270-08da84182ee9
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 08:27:42.8881
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uAkFH+Y+Hr8BrA1jQAoZ1QcixkeQXszMYeI+xiiZolzWDf+AOzs8H3Qo7+/idAi2qhKu8qddBk7AK5m9v7n6x4HNr9E45kR4yV0QQOI1Two=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB4903
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-22_04,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
- phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208220035
-X-Proofpoint-GUID: yxZ83kNvOZ5LunYXKmOi1QeWSf5gnXBY
-X-Proofpoint-ORIG-GUID: yxZ83kNvOZ5LunYXKmOi1QeWSf5gnXBY
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   15b3f48a4339e3c16acf18624e2b7f60bc5e9a2c
-commit: 5adbaed16cc63542057627642d2414f603f2db69 rtc: Add NCT3018Y real time clock driver
-config: arm64-randconfig-m031-20220821 (https://download.01.org/0day-ci/archive/20220821/202208211110.jFk2KTL5-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220822-110006/Liu-Shixin/mm-proc-collect-percpu-free-pages-into-the-free-pages/20220822-095948
+head:   8190723fa00c3bbaa252ce0f3cbb4dac1a9cb6ff
+commit: 8190723fa00c3bbaa252ce0f3cbb4dac1a9cb6ff mm, proc: collect percpu free pages into the free pages
+date:   5 hours ago
+config: i386-randconfig-a001-20220822 (https://download.01.org/0day-ci/archive/20220822/202208221625.NXXjg2Cm-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8190723fa00c3bbaa252ce0f3cbb4dac1a9cb6ff
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220822-110006/Liu-Shixin/mm-proc-collect-percpu-free-pages-into-the-free-pages/20220822-095948
+        git checkout 8190723fa00c3bbaa252ce0f3cbb4dac1a9cb6ff
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-smatch warnings:
-drivers/rtc/rtc-nct3018y.c:112 nct3018y_get_alarm_mode() error: we previously assumed 'alarm_enable' could be null (see line 96)
-drivers/rtc/rtc-nct3018y.c:112 nct3018y_get_alarm_mode() error: we previously assumed 'alarm_flag' could be null (see line 104)
+All warnings (new ones prefixed by >>):
 
-vim +/alarm_enable +112 drivers/rtc/rtc-nct3018y.c
+>> mm/page_alloc.c:6050:6: warning: unused variable 'cpu' [-Wunused-variable]
+           int cpu, nid;
+               ^
+   1 warning generated.
 
-5adbaed16cc635 Mia Lin 2022-07-13   91  static int nct3018y_get_alarm_mode(struct i2c_client *client, unsigned char *alarm_enable,
-5adbaed16cc635 Mia Lin 2022-07-13   92  				   unsigned char *alarm_flag)
-5adbaed16cc635 Mia Lin 2022-07-13   93  {
-5adbaed16cc635 Mia Lin 2022-07-13   94  	int flags;
-5adbaed16cc635 Mia Lin 2022-07-13   95  
-5adbaed16cc635 Mia Lin 2022-07-13  @96  	if (alarm_enable) {
-5adbaed16cc635 Mia Lin 2022-07-13   97  		dev_dbg(&client->dev, "%s:NCT3018Y_REG_CTRL\n", __func__);
-5adbaed16cc635 Mia Lin 2022-07-13   98  		flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
-5adbaed16cc635 Mia Lin 2022-07-13   99  		if (flags < 0)
-5adbaed16cc635 Mia Lin 2022-07-13  100  			return flags;
-5adbaed16cc635 Mia Lin 2022-07-13  101  		*alarm_enable = flags & NCT3018Y_BIT_AIE;
-5adbaed16cc635 Mia Lin 2022-07-13  102  	}
-5adbaed16cc635 Mia Lin 2022-07-13  103  
-5adbaed16cc635 Mia Lin 2022-07-13 @104  	if (alarm_flag) {
-                                                    ^^^^^^^^^^
-These can be NULL
 
-5adbaed16cc635 Mia Lin 2022-07-13  105  		dev_dbg(&client->dev, "%s:NCT3018Y_REG_ST\n", __func__);
-5adbaed16cc635 Mia Lin 2022-07-13  106  		flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_ST);
-5adbaed16cc635 Mia Lin 2022-07-13  107  		if (flags < 0)
-5adbaed16cc635 Mia Lin 2022-07-13  108  			return flags;
-5adbaed16cc635 Mia Lin 2022-07-13  109  		*alarm_flag = flags & NCT3018Y_BIT_AF;
-5adbaed16cc635 Mia Lin 2022-07-13  110  	}
-5adbaed16cc635 Mia Lin 2022-07-13  111  
-5adbaed16cc635 Mia Lin 2022-07-13 @112  	dev_dbg(&client->dev, "%s:alarm_enable:%x alarm_flag:%x\n",
-5adbaed16cc635 Mia Lin 2022-07-13  113  		__func__, *alarm_enable, *alarm_flag);
-                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
-Dereferenced in debug code.
+vim +/cpu +6050 mm/page_alloc.c
 
-5adbaed16cc635 Mia Lin 2022-07-13  114  
-5adbaed16cc635 Mia Lin 2022-07-13  115  	return 0;
-5adbaed16cc635 Mia Lin 2022-07-13  116  }
+377e4f167664d8 Rabin Vincent             2012-12-11  6037  
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6038  /*
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6039   * Show free area list (used inside shift_scroll-lock stuff)
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6040   * We also calculate the percentage fragmentation. We do this by counting the
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6041   * memory on each free list with the exception of the first item on the list.
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6042   *
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6043   * Bits in @filter:
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6044   * SHOW_MEM_FILTER_NODES: suppress nodes that are not allowed by current's
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6045   *   cpuset.
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6046   */
+9af744d743170b Michal Hocko              2017-02-22  6047  void show_free_areas(unsigned int filter, nodemask_t *nodemask)
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6048  {
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6049  	unsigned long free_pcp = 0;
+dcadcf1c30619e Gang Li                   2022-07-06 @6050  	int cpu, nid;
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6051  	struct zone *zone;
+599d0c954f91d0 Mel Gorman                2016-07-28  6052  	pg_data_t *pgdat;
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6053  
+ee99c71c59f897 KOSAKI Motohiro           2009-03-31  6054  	for_each_populated_zone(zone) {
+9af744d743170b Michal Hocko              2017-02-22  6055  		if (show_mem_node_skip(filter, zone_to_nid(zone), nodemask))
+ddd588b5dd55f1 David Rientjes            2011-03-22  6056  			continue;
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6057  
+8190723fa00c3b Liu Shixin                2022-08-22  6058  		free_pcp += nr_free_zone_pcplist_pages(zone);
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6059  	}
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6060  
+a731286de62294 KOSAKI Motohiro           2009-09-21  6061  	printk("active_anon:%lu inactive_anon:%lu isolated_anon:%lu\n"
+a731286de62294 KOSAKI Motohiro           2009-09-21  6062  		" active_file:%lu inactive_file:%lu isolated_file:%lu\n"
+8d92890bd6b850 NeilBrown                 2020-06-01  6063  		" unevictable:%lu dirty:%lu writeback:%lu\n"
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6064  		" slab_reclaimable:%lu slab_unreclaimable:%lu\n"
+d1ce749a0db122 Bartlomiej Zolnierkiewicz 2012-10-08  6065  		" mapped:%lu shmem:%lu pagetables:%lu bounce:%lu\n"
+eb2169cee36fc4 liuhailong                2021-09-02  6066  		" kernel_misc_reclaimable:%lu\n"
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6067  		" free:%lu free_pcp:%lu free_cma:%lu\n",
+599d0c954f91d0 Mel Gorman                2016-07-28  6068  		global_node_page_state(NR_ACTIVE_ANON),
+599d0c954f91d0 Mel Gorman                2016-07-28  6069  		global_node_page_state(NR_INACTIVE_ANON),
+599d0c954f91d0 Mel Gorman                2016-07-28  6070  		global_node_page_state(NR_ISOLATED_ANON),
+599d0c954f91d0 Mel Gorman                2016-07-28  6071  		global_node_page_state(NR_ACTIVE_FILE),
+599d0c954f91d0 Mel Gorman                2016-07-28  6072  		global_node_page_state(NR_INACTIVE_FILE),
+599d0c954f91d0 Mel Gorman                2016-07-28  6073  		global_node_page_state(NR_ISOLATED_FILE),
+599d0c954f91d0 Mel Gorman                2016-07-28  6074  		global_node_page_state(NR_UNEVICTABLE),
+11fb998986a72a Mel Gorman                2016-07-28  6075  		global_node_page_state(NR_FILE_DIRTY),
+11fb998986a72a Mel Gorman                2016-07-28  6076  		global_node_page_state(NR_WRITEBACK),
+d42f3245c7e299 Roman Gushchin            2020-08-06  6077  		global_node_page_state_pages(NR_SLAB_RECLAIMABLE_B),
+d42f3245c7e299 Roman Gushchin            2020-08-06  6078  		global_node_page_state_pages(NR_SLAB_UNRECLAIMABLE_B),
+50658e2e04c12d Mel Gorman                2016-07-28  6079  		global_node_page_state(NR_FILE_MAPPED),
+11fb998986a72a Mel Gorman                2016-07-28  6080  		global_node_page_state(NR_SHMEM),
+f0c0c115fb8194 Shakeel Butt              2020-12-14  6081  		global_node_page_state(NR_PAGETABLE),
+c41f012ade0b95 Michal Hocko              2017-09-06  6082  		global_zone_page_state(NR_BOUNCE),
+eb2169cee36fc4 liuhailong                2021-09-02  6083  		global_node_page_state(NR_KERNEL_MISC_RECLAIMABLE),
+c41f012ade0b95 Michal Hocko              2017-09-06  6084  		global_zone_page_state(NR_FREE_PAGES),
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6085  		free_pcp,
+c41f012ade0b95 Michal Hocko              2017-09-06  6086  		global_zone_page_state(NR_FREE_CMA_PAGES));
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6087  
+599d0c954f91d0 Mel Gorman                2016-07-28  6088  	for_each_online_pgdat(pgdat) {
+9af744d743170b Michal Hocko              2017-02-22  6089  		if (show_mem_node_skip(filter, pgdat->node_id, nodemask))
+c02e50bb8a55a7 Michal Hocko              2017-02-22  6090  			continue;
+c02e50bb8a55a7 Michal Hocko              2017-02-22  6091  
+599d0c954f91d0 Mel Gorman                2016-07-28  6092  		printk("Node %d"
+599d0c954f91d0 Mel Gorman                2016-07-28  6093  			" active_anon:%lukB"
+599d0c954f91d0 Mel Gorman                2016-07-28  6094  			" inactive_anon:%lukB"
+599d0c954f91d0 Mel Gorman                2016-07-28  6095  			" active_file:%lukB"
+599d0c954f91d0 Mel Gorman                2016-07-28  6096  			" inactive_file:%lukB"
+599d0c954f91d0 Mel Gorman                2016-07-28  6097  			" unevictable:%lukB"
+599d0c954f91d0 Mel Gorman                2016-07-28  6098  			" isolated(anon):%lukB"
+599d0c954f91d0 Mel Gorman                2016-07-28  6099  			" isolated(file):%lukB"
+50658e2e04c12d Mel Gorman                2016-07-28  6100  			" mapped:%lukB"
+11fb998986a72a Mel Gorman                2016-07-28  6101  			" dirty:%lukB"
+11fb998986a72a Mel Gorman                2016-07-28  6102  			" writeback:%lukB"
+11fb998986a72a Mel Gorman                2016-07-28  6103  			" shmem:%lukB"
+11fb998986a72a Mel Gorman                2016-07-28  6104  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+11fb998986a72a Mel Gorman                2016-07-28  6105  			" shmem_thp: %lukB"
+11fb998986a72a Mel Gorman                2016-07-28  6106  			" shmem_pmdmapped: %lukB"
+11fb998986a72a Mel Gorman                2016-07-28  6107  			" anon_thp: %lukB"
+11fb998986a72a Mel Gorman                2016-07-28  6108  #endif
+11fb998986a72a Mel Gorman                2016-07-28  6109  			" writeback_tmp:%lukB"
+991e7673859ed4 Shakeel Butt              2020-08-06  6110  			" kernel_stack:%lukB"
+991e7673859ed4 Shakeel Butt              2020-08-06  6111  #ifdef CONFIG_SHADOW_CALL_STACK
+991e7673859ed4 Shakeel Butt              2020-08-06  6112  			" shadow_call_stack:%lukB"
+991e7673859ed4 Shakeel Butt              2020-08-06  6113  #endif
+f0c0c115fb8194 Shakeel Butt              2020-12-14  6114  			" pagetables:%lukB"
+599d0c954f91d0 Mel Gorman                2016-07-28  6115  			" all_unreclaimable? %s"
+599d0c954f91d0 Mel Gorman                2016-07-28  6116  			"\n",
+599d0c954f91d0 Mel Gorman                2016-07-28  6117  			pgdat->node_id,
+599d0c954f91d0 Mel Gorman                2016-07-28  6118  			K(node_page_state(pgdat, NR_ACTIVE_ANON)),
+599d0c954f91d0 Mel Gorman                2016-07-28  6119  			K(node_page_state(pgdat, NR_INACTIVE_ANON)),
+599d0c954f91d0 Mel Gorman                2016-07-28  6120  			K(node_page_state(pgdat, NR_ACTIVE_FILE)),
+599d0c954f91d0 Mel Gorman                2016-07-28  6121  			K(node_page_state(pgdat, NR_INACTIVE_FILE)),
+599d0c954f91d0 Mel Gorman                2016-07-28  6122  			K(node_page_state(pgdat, NR_UNEVICTABLE)),
+599d0c954f91d0 Mel Gorman                2016-07-28  6123  			K(node_page_state(pgdat, NR_ISOLATED_ANON)),
+599d0c954f91d0 Mel Gorman                2016-07-28  6124  			K(node_page_state(pgdat, NR_ISOLATED_FILE)),
+50658e2e04c12d Mel Gorman                2016-07-28  6125  			K(node_page_state(pgdat, NR_FILE_MAPPED)),
+11fb998986a72a Mel Gorman                2016-07-28  6126  			K(node_page_state(pgdat, NR_FILE_DIRTY)),
+11fb998986a72a Mel Gorman                2016-07-28  6127  			K(node_page_state(pgdat, NR_WRITEBACK)),
+1f06b81aea5ecb Alexander Polakov         2017-04-07  6128  			K(node_page_state(pgdat, NR_SHMEM)),
+11fb998986a72a Mel Gorman                2016-07-28  6129  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+57b2847d3c1dc1 Muchun Song               2021-02-24  6130  			K(node_page_state(pgdat, NR_SHMEM_THPS)),
+a1528e21f8915e Muchun Song               2021-02-24  6131  			K(node_page_state(pgdat, NR_SHMEM_PMDMAPPED)),
+69473e5de87389 Muchun Song               2021-02-24  6132  			K(node_page_state(pgdat, NR_ANON_THPS)),
+11fb998986a72a Mel Gorman                2016-07-28  6133  #endif
+11fb998986a72a Mel Gorman                2016-07-28  6134  			K(node_page_state(pgdat, NR_WRITEBACK_TEMP)),
+991e7673859ed4 Shakeel Butt              2020-08-06  6135  			node_page_state(pgdat, NR_KERNEL_STACK_KB),
+991e7673859ed4 Shakeel Butt              2020-08-06  6136  #ifdef CONFIG_SHADOW_CALL_STACK
+991e7673859ed4 Shakeel Butt              2020-08-06  6137  			node_page_state(pgdat, NR_KERNEL_SCS_KB),
+991e7673859ed4 Shakeel Butt              2020-08-06  6138  #endif
+f0c0c115fb8194 Shakeel Butt              2020-12-14  6139  			K(node_page_state(pgdat, NR_PAGETABLE)),
+c73322d098e4b6 Johannes Weiner           2017-05-03  6140  			pgdat->kswapd_failures >= MAX_RECLAIM_RETRIES ?
+c73322d098e4b6 Johannes Weiner           2017-05-03  6141  				"yes" : "no");
+599d0c954f91d0 Mel Gorman                2016-07-28  6142  	}
+599d0c954f91d0 Mel Gorman                2016-07-28  6143  
+ee99c71c59f897 KOSAKI Motohiro           2009-03-31  6144  	for_each_populated_zone(zone) {
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6145  		int i;
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6146  
+9af744d743170b Michal Hocko              2017-02-22  6147  		if (show_mem_node_skip(filter, zone_to_nid(zone), nodemask))
+ddd588b5dd55f1 David Rientjes            2011-03-22  6148  			continue;
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6149  
+8190723fa00c3b Liu Shixin                2022-08-22  6150  		free_pcp = nr_free_zone_pcplist_pages(zone);
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6151  
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6152  		show_node(zone);
+1f84a18fc010d7 Joe Perches               2016-10-27  6153  		printk(KERN_CONT
+1f84a18fc010d7 Joe Perches               2016-10-27  6154  			"%s"
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6155  			" free:%lukB"
+a6ea8b5b9f1ce3 Liangcai Fan              2021-11-05  6156  			" boost:%lukB"
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6157  			" min:%lukB"
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6158  			" low:%lukB"
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6159  			" high:%lukB"
+e47b346aba0873 lijiazi                   2019-11-30  6160  			" reserved_highatomic:%luKB"
+71c799f4982d34 Minchan Kim               2016-07-28  6161  			" active_anon:%lukB"
+71c799f4982d34 Minchan Kim               2016-07-28  6162  			" inactive_anon:%lukB"
+71c799f4982d34 Minchan Kim               2016-07-28  6163  			" active_file:%lukB"
+71c799f4982d34 Minchan Kim               2016-07-28  6164  			" inactive_file:%lukB"
+71c799f4982d34 Minchan Kim               2016-07-28  6165  			" unevictable:%lukB"
+5a1c84b404a717 Mel Gorman                2016-07-28  6166  			" writepending:%lukB"
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6167  			" present:%lukB"
+9feedc9d831e18 Jiang Liu                 2012-12-12  6168  			" managed:%lukB"
+4a0aa73f1d613b KOSAKI Motohiro           2009-09-21  6169  			" mlocked:%lukB"
+4a0aa73f1d613b KOSAKI Motohiro           2009-09-21  6170  			" bounce:%lukB"
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6171  			" free_pcp:%lukB"
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6172  			" local_pcp:%ukB"
+d1ce749a0db122 Bartlomiej Zolnierkiewicz 2012-10-08  6173  			" free_cma:%lukB"
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6174  			"\n",
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6175  			zone->name,
+88f5acf88ae6a9 Mel Gorman                2011-01-13  6176  			K(zone_page_state(zone, NR_FREE_PAGES)),
+a6ea8b5b9f1ce3 Liangcai Fan              2021-11-05  6177  			K(zone->watermark_boost),
+418589663d6011 Mel Gorman                2009-06-16  6178  			K(min_wmark_pages(zone)),
+418589663d6011 Mel Gorman                2009-06-16  6179  			K(low_wmark_pages(zone)),
+418589663d6011 Mel Gorman                2009-06-16  6180  			K(high_wmark_pages(zone)),
+e47b346aba0873 lijiazi                   2019-11-30  6181  			K(zone->nr_reserved_highatomic),
+71c799f4982d34 Minchan Kim               2016-07-28  6182  			K(zone_page_state(zone, NR_ZONE_ACTIVE_ANON)),
+71c799f4982d34 Minchan Kim               2016-07-28  6183  			K(zone_page_state(zone, NR_ZONE_INACTIVE_ANON)),
+71c799f4982d34 Minchan Kim               2016-07-28  6184  			K(zone_page_state(zone, NR_ZONE_ACTIVE_FILE)),
+71c799f4982d34 Minchan Kim               2016-07-28  6185  			K(zone_page_state(zone, NR_ZONE_INACTIVE_FILE)),
+71c799f4982d34 Minchan Kim               2016-07-28  6186  			K(zone_page_state(zone, NR_ZONE_UNEVICTABLE)),
+5a1c84b404a717 Mel Gorman                2016-07-28  6187  			K(zone_page_state(zone, NR_ZONE_WRITE_PENDING)),
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6188  			K(zone->present_pages),
+9705bea5f833f4 Arun KS                   2018-12-28  6189  			K(zone_managed_pages(zone)),
+4a0aa73f1d613b KOSAKI Motohiro           2009-09-21  6190  			K(zone_page_state(zone, NR_MLOCK)),
+4a0aa73f1d613b KOSAKI Motohiro           2009-09-21  6191  			K(zone_page_state(zone, NR_BOUNCE)),
+d1bfcdb8ce0ea6 Konstantin Khlebnikov     2015-04-14  6192  			K(free_pcp),
+28f836b6777b6f Mel Gorman                2021-06-28  6193  			K(this_cpu_read(zone->per_cpu_pageset->count)),
+33e077bd6059a5 Minchan Kim               2016-07-28  6194  			K(zone_page_state(zone, NR_FREE_CMA_PAGES)));
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6195  		printk("lowmem_reserve[]:");
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6196  		for (i = 0; i < MAX_NR_ZONES; i++)
+1f84a18fc010d7 Joe Perches               2016-10-27  6197  			printk(KERN_CONT " %ld", zone->lowmem_reserve[i]);
+1f84a18fc010d7 Joe Perches               2016-10-27  6198  		printk(KERN_CONT "\n");
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6199  	}
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6200  
+ee99c71c59f897 KOSAKI Motohiro           2009-03-31  6201  	for_each_populated_zone(zone) {
+d00181b96eb86c Kirill A. Shutemov        2015-11-06  6202  		unsigned int order;
+d00181b96eb86c Kirill A. Shutemov        2015-11-06  6203  		unsigned long nr[MAX_ORDER], flags, total = 0;
+377e4f167664d8 Rabin Vincent             2012-12-11  6204  		unsigned char types[MAX_ORDER];
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6205  
+9af744d743170b Michal Hocko              2017-02-22  6206  		if (show_mem_node_skip(filter, zone_to_nid(zone), nodemask))
+ddd588b5dd55f1 David Rientjes            2011-03-22  6207  			continue;
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6208  		show_node(zone);
+1f84a18fc010d7 Joe Perches               2016-10-27  6209  		printk(KERN_CONT "%s: ", zone->name);
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6210  
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6211  		spin_lock_irqsave(&zone->lock, flags);
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6212  		for (order = 0; order < MAX_ORDER; order++) {
+377e4f167664d8 Rabin Vincent             2012-12-11  6213  			struct free_area *area = &zone->free_area[order];
+377e4f167664d8 Rabin Vincent             2012-12-11  6214  			int type;
+377e4f167664d8 Rabin Vincent             2012-12-11  6215  
+377e4f167664d8 Rabin Vincent             2012-12-11  6216  			nr[order] = area->nr_free;
+8f9de51a4a98ba Kirill Korotaev           2006-06-23  6217  			total += nr[order] << order;
+377e4f167664d8 Rabin Vincent             2012-12-11  6218  
+377e4f167664d8 Rabin Vincent             2012-12-11  6219  			types[order] = 0;
+377e4f167664d8 Rabin Vincent             2012-12-11  6220  			for (type = 0; type < MIGRATE_TYPES; type++) {
+b03641af680959 Dan Williams              2019-05-14  6221  				if (!free_area_empty(area, type))
+377e4f167664d8 Rabin Vincent             2012-12-11  6222  					types[order] |= 1 << type;
+377e4f167664d8 Rabin Vincent             2012-12-11  6223  			}
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6224  		}
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6225  		spin_unlock_irqrestore(&zone->lock, flags);
+377e4f167664d8 Rabin Vincent             2012-12-11  6226  		for (order = 0; order < MAX_ORDER; order++) {
+1f84a18fc010d7 Joe Perches               2016-10-27  6227  			printk(KERN_CONT "%lu*%lukB ",
+1f84a18fc010d7 Joe Perches               2016-10-27  6228  			       nr[order], K(1UL) << order);
+377e4f167664d8 Rabin Vincent             2012-12-11  6229  			if (nr[order])
+377e4f167664d8 Rabin Vincent             2012-12-11  6230  				show_migration_types(types[order]);
+377e4f167664d8 Rabin Vincent             2012-12-11  6231  		}
+1f84a18fc010d7 Joe Perches               2016-10-27  6232  		printk(KERN_CONT "= %lukB\n", K(total));
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6233  	}
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6234  
+dcadcf1c30619e Gang Li                   2022-07-06  6235  	for_each_online_node(nid) {
+dcadcf1c30619e Gang Li                   2022-07-06  6236  		if (show_mem_node_skip(filter, nid, nodemask))
+dcadcf1c30619e Gang Li                   2022-07-06  6237  			continue;
+dcadcf1c30619e Gang Li                   2022-07-06  6238  		hugetlb_show_meminfo_node(nid);
+dcadcf1c30619e Gang Li                   2022-07-06  6239  	}
+949f7ec5760b02 David Rientjes            2013-04-29  6240  
+11fb998986a72a Mel Gorman                2016-07-28  6241  	printk("%ld total pagecache pages\n", global_node_page_state(NR_FILE_PAGES));
+e6f3602d2c5881 Larry Woodman             2008-02-04  6242  
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6243  	show_swap_cache_info();
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6244  }
+^1da177e4c3f41 Linus Torvalds            2005-04-16  6245  
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
-

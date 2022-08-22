@@ -2,122 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D8059BBF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81C759BC02
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbiHVItu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
+        id S233862AbiHVIvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232048AbiHVItl (ORCPT
+        with ESMTP id S233692AbiHVIu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:49:41 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A712E6A6;
-        Mon, 22 Aug 2022 01:49:37 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id x19so9309988plc.5;
-        Mon, 22 Aug 2022 01:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=iCDhhI8vpKAF6ccQbhIqtzhgqF2l3okiXUrZiiXnnm0=;
-        b=W9Bhg7iSBNOgvnU4J2cCOmqNHfLa6kD+gS/Usqk3AknhHc4v+WiAGy+JIEpPk93F0v
-         ZshHrlelmZNNgf8KNqLcb2tdv1RVNyQ8n2r9V1LafUXbS29Nfdmtx3Bk4T2UYNjQbWdQ
-         IROe8E7Zl0eewBHK1sXgs9MmGbJECKFYcUSw81vfilrCvGg+ZbUA4gOLuTUO6Q7BEYJe
-         MN+Wo90tD7jV4sH/X4vyuwR3x5Dph7r+EdaKdioVD6yx07RcnroQp+rGacCErIWwFtuE
-         QhTbdQdv1J//jmz2eZQHWOI5vKSy3TwcG8mOESrZt1vrbVa3t25yUqVLuSQfBzvMQnt4
-         I0Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=iCDhhI8vpKAF6ccQbhIqtzhgqF2l3okiXUrZiiXnnm0=;
-        b=VcMRJ34isvyMSdDDD+OPbnMLfThLay1pBwGTa4GBu5tmRA82NvFljBJ6wGWtZmk0Gv
-         ttjLVwjGt/z9Wd8vCgSvltjhb02ItUACWx5dbUg26w//0c35j2aQuUOWJ1gHiTKpwxp0
-         8xehUYDBnF1cCLL/M4u6T/1NIghMYeTgDcTXV8DOmbIA5F1TzoIyrYCry/sjvjPuc6HG
-         kSvVcajYXYKrN+4xOGBLDnfOe2wCtNMtH0vLPXzYz7eELVLTPNEjO/EXzTrHOEngVDFH
-         cw66SJFNfmv4mxbHN9qb15lXmpyvDZ/73uQCUgvVYa08ImSIYmwROs/qVbVoqa2a9RId
-         892g==
-X-Gm-Message-State: ACgBeo1tHY5uzHESZIGo3aDsoiqi3fwNjyTNlaY5Ygv9FOH3bZoWMqKg
-        iqxe2heRrwE4a9biylT94YE=
-X-Google-Smtp-Source: AA6agR6cvVQaqLj53v88y85bXAGnA2dBM9QOcc34rNSyJrlGP9xIQiKAtSUBCGRWwgaBCUY9lmf8Ow==
-X-Received: by 2002:a17:903:2602:b0:172:ba94:1590 with SMTP id jd2-20020a170903260200b00172ba941590mr17217787plb.146.1661158177309;
-        Mon, 22 Aug 2022 01:49:37 -0700 (PDT)
-Received: from fedora ([103.230.148.185])
-        by smtp.gmail.com with ESMTPSA id c2-20020a634e02000000b00401a9bc0f33sm6874136pgb.85.2022.08.22.01.49.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 01:49:36 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 14:19:28 +0530
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     keescook@chromium.org, shuah@kernel.org, brauner@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, guoren@kernel.org
-Cc:     luto@amacapital.net, wad@chromium.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, bpf@vger.kernel.org,
-        linux-csky@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] selftests/seccomp: Check CAP_SYS_ADMIN capability in the
- test mode_filter_without_nnp
-Message-ID: <YwNDGAVrik3DvWZf@fedora>
-References: <20220731092529.28760-1-gautammenghani201@gmail.com>
+        Mon, 22 Aug 2022 04:50:57 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9012E681
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:50:52 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 6B21934061;
+        Mon, 22 Aug 2022 08:50:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661158251; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9SZ0mZe3MzFvJr/cNp8TMyuZqwMYPabbtk/rywqpBHw=;
+        b=NJkapjOPJgsts9AXcO0qbL7GBTkS+KR9fFBu2IJTniOQn9WFIX/3MIWeb/sSY33frzXSUg
+        tvBlF4Scfc7LERdI2ZbvryWnEU/vxNRl3drD+342IULMRahpYh+O4RsrsbUnYAevOrw6BP
+        HIyrOXN0eoMvYNDTC08avNHhiaLSiLU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661158251;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9SZ0mZe3MzFvJr/cNp8TMyuZqwMYPabbtk/rywqpBHw=;
+        b=wg0PExrWXWEnVb6i2Yi8UaI8OUfUEwqk4ToZCyVsXzxr8Ngngh2t42edBhjR/oVDyi/OiB
+        MuIEY0PC5XmVYUBw==
+Received: from quack3.suse.cz (unknown [10.100.200.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D13052C141;
+        Mon, 22 Aug 2022 08:50:50 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 580C6A066D; Mon, 22 Aug 2022 10:50:50 +0200 (CEST)
+Date:   Mon, 22 Aug 2022 10:50:50 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc:     paul@paul-moore.com, eparis@redhat.com, mszeredi@redhat.com,
+        jack@suse.cz, amir73il@gmail.com, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next] audit: fix potential double free on error path from
+ fsnotify_add_inode_mark
+Message-ID: <20220822085050.hxj6qmgj2x2tj6uv@quack3>
+References: <20220822022905.1949007-1-cuigaosheng1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220731092529.28760-1-gautammenghani201@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220822022905.1949007-1-cuigaosheng1@huawei.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 31, 2022 at 02:55:29PM +0530, Gautam Menghani wrote:
-> In the "mode_filter_without_nnp" test in seccomp_bpf, there is currently
-> a TODO which asks to check the capability CAP_SYS_ADMIN instead of euid.
-> This patch adds support to check if the calling process has the flag 
-> CAP_SYS_ADMIN, and also if this flag has CAP_EFFECTIVE set.
+On Mon 22-08-22 10:29:05, Gaosheng Cui wrote:
+> Audit_alloc_mark() assign pathname to audit_mark->path, on error path
+> from fsnotify_add_inode_mark(), fsnotify_put_mark will free memory
+> of audit_mark->path, but the caller of audit_alloc_mark will free
+> the pathname again, so there will be double free problem.
 > 
-> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> Fix this by resetting audit_mark->path to NULL pointer on error path
+> from fsnotify_add_inode_mark().
+> 
+> Fixes: 7b1293234084d ("fsnotify: Add group pointer in fsnotify_init_mark()")
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+
+Good spotting! The patch looks good to me. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  kernel/audit_fsnotify.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 136df5b76319..16b0edc520ef 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -392,6 +392,8 @@ TEST(mode_filter_without_nnp)
->  		.filter = filter,
->  	};
->  	long ret;
-> +	cap_t cap = cap_get_proc();
-> +	cap_flag_value_t is_cap_sys_admin = 0;
+> diff --git a/kernel/audit_fsnotify.c b/kernel/audit_fsnotify.c
+> index 6432a37ac1c9..c565fbf66ac8 100644
+> --- a/kernel/audit_fsnotify.c
+> +++ b/kernel/audit_fsnotify.c
+> @@ -102,6 +102,7 @@ struct audit_fsnotify_mark *audit_alloc_mark(struct audit_krule *krule, char *pa
 >  
->  	ret = prctl(PR_GET_NO_NEW_PRIVS, 0, NULL, 0, 0);
->  	ASSERT_LE(0, ret) {
-> @@ -400,8 +402,8 @@ TEST(mode_filter_without_nnp)
->  	errno = 0;
->  	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog, 0, 0);
->  	/* Succeeds with CAP_SYS_ADMIN, fails without */
-> -	/* TODO(wad) check caps not euid */
-> -	if (geteuid()) {
-> +	cap_get_flag(cap, CAP_SYS_ADMIN, CAP_EFFECTIVE, &is_cap_sys_admin);
-> +	if (!is_cap_sys_admin) {
->  		EXPECT_EQ(-1, ret);
->  		EXPECT_EQ(EACCES, errno);
->  	} else {
+>  	ret = fsnotify_add_inode_mark(&audit_mark->mark, inode, 0);
+>  	if (ret < 0) {
+> +		audit_mark->path = NULL;
+>  		fsnotify_put_mark(&audit_mark->mark);
+>  		audit_mark = ERR_PTR(ret);
+>  	}
 > -- 
-> 2.34.1
+> 2.25.1
 > 
-
-Hi,
-
-Please review the above patch and let me know if any changes are required.
-
-Thanks,
-Gautam
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

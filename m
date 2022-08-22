@@ -2,139 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D4659C401
+	by mail.lfdr.de (Postfix) with ESMTP id 7638F59C402
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236761AbiHVQWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
+        id S236967AbiHVQXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235888AbiHVQWw (ORCPT
+        with ESMTP id S236958AbiHVQXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:22:52 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0A23F330
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:22:51 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3246910dac3so307489917b3.12
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:22:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=zBnLNnOuEm5lJhwtbUOYYe47b/c/6C+EcZMDaQGtBP4=;
-        b=pyq/6kJ6DsGWQlpt2s0VXNeG1rxbZvr1f8onglt28Gp3w96/d34SrxrZQKd8GAMLm+
-         msURTCw8d+HAGTCxXo+r1oPnP78lH3o/XZjrXAJql3eo/TWCz7OLc+KEwApPb0UJ7Hpl
-         FNm3OiQC2PTNuqZz8hzOyFowdGYaSR6FkBfiC3dfAhvA5oImQffN/izIYDhbbUtANHEn
-         3QyD1kGFtLsm3q0e56fiqMtObmqSmqyVA3koNFPZ1gFzMjjkRg1073VPTHRa79YYJ50A
-         L0VFjNfjcflJ6KITQLbLCagavJ31oWZyTuDrDWqMfEggK36BvBoMpUHUXSYo98tozrvY
-         IK2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=zBnLNnOuEm5lJhwtbUOYYe47b/c/6C+EcZMDaQGtBP4=;
-        b=oYudKQ5vgMETebAU42FfsEL6hSJ7xCqAoucaMa84WsjCf1g96U+ieJQaatFqsf9vgB
-         fy0LobECYKV5VqIS5DaGR9iIKTVrPW7C+V07hxJ4GUpJdK3xKpnfOtv3wapC+l/h7vGN
-         P9eO/wtuLUp0zWojf34NIRfz18pbkWNjaLCknGg0rqEQglb+YWABBL+BJoXGzEiNflbv
-         qZNtCRFoBAb+/dPMyoXwlHMIkKdhtnATSdA6TsihIAe06Ihq1I0YlN0glxcRN0ecI+jU
-         aA5aBETts58Z1/5dJl1IWNpFMrksS/Psv0FfTbEwNr1fKJUdvNDtAXrfaSi1nA44mTBF
-         CGXw==
-X-Gm-Message-State: ACgBeo1nJVsOrmgdGkZmd3mSVsrRSB5yRFa5uY+oNmQrIYrmcF2RUGSw
-        9/iurh+yJU71sddju93KFX1gTIyp3ojMWRzgnh+Ivw==
-X-Google-Smtp-Source: AA6agR4U9cjCs7IQEA6wPhRWTBAzKHRxHy5hIjO+FjyWQehv0ldLHYX7kwD9c7qskJP7JL5/agrY+5wWjvdBiM0x1p0=
-X-Received: by 2002:a25:5091:0:b0:690:1f61:a7c9 with SMTP id
- e139-20020a255091000000b006901f61a7c9mr20337108ybb.55.1661185370392; Mon, 22
- Aug 2022 09:22:50 -0700 (PDT)
+        Mon, 22 Aug 2022 12:23:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64623F330;
+        Mon, 22 Aug 2022 09:23:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6047CB815FC;
+        Mon, 22 Aug 2022 16:22:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2476CC4347C;
+        Mon, 22 Aug 2022 16:22:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661185378;
+        bh=biuYM5Wo1aN4Uc70XLQMc1KWtn0aEFg1laOYV4x1E/4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=N20YTc8cZ7KVHZzmtmfw0ttl9cGHZK/DLftpuAMa0hgEZizusL7ETyemPBOIfP2kI
+         aa6g/eaYWnClwhbxvUBr3CS12MAayFh7dAHubSG9ieSnfr5JB35ZYc3dR2A0LeLU6k
+         EuUJQCFAlhlMPtkOCtHjaUm1lNXtze3F+pi2U5tFbOHlVVHgFoUlXhpvUQV2WzmjWw
+         DUMxVxTGoKDAyOPru5+AI8toTlywJ3HHNzfNYyQbZyZZFeizioPn0BIVmCogRJdCF5
+         eAL0DtiUBdApu5TXD6fM/qG5wQRrBlDmnScz2lEOEqv4KbZyol4+33VivcmswQ2ZYA
+         3JXh8qjiNU4bw==
+Message-ID: <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>
+Subject: Re: [PATCH] iversion: update comments with info about atime updates
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Dave Chinner <david@fromorbit.com>
+Date:   Mon, 22 Aug 2022 12:22:55 -0400
+In-Reply-To: <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>
+References: <20220822133309.86005-1-jlayton@kernel.org>
+         <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-References: <cover.1651800598.git.peilin.ye@bytedance.com> <cover.1661158173.git.peilin.ye@bytedance.com>
-In-Reply-To: <cover.1661158173.git.peilin.ye@bytedance.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 22 Aug 2022 09:22:39 -0700
-Message-ID: <CANn89iJsOHK1qgudpfFW9poC4NRBZiob-ynTOuRBkuJTw6FaJw@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 net-next 0/5] net: Qdisc backpressure infrastructure
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Dave Taht <dave.taht@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 2:10 AM Peilin Ye <yepeilin.cs@gmail.com> wrote:
->
-> From: Peilin Ye <peilin.ye@bytedance.com>
->
-> Hi all,
->
-> Currently sockets (especially UDP ones) can drop a lot of packets at TC
-> egress when rate limited by shaper Qdiscs like HTB.  This patchset series
-> tries to solve this by introducing a Qdisc backpressure mechanism.
->
-> RFC v1 [1] used a throttle & unthrottle approach, which introduced several
-> issues, including a thundering herd problem and a socket reference count
-> issue [2].  This RFC v2 uses a different approach to avoid those issues:
->
->   1. When a shaper Qdisc drops a packet that belongs to a local socket due
->      to TC egress congestion, we make part of the socket's sndbuf
->      temporarily unavailable, so it sends slower.
->
->   2. Later, when TC egress becomes idle again, we gradually recover the
->      socket's sndbuf back to normal.  Patch 2 implements this step using a
->      timer for UDP sockets.
->
-> The thundering herd problem is avoided, since we no longer wake up all
-> throttled sockets at the same time in qdisc_watchdog().  The socket
-> reference count issue is also avoided, since we no longer maintain socket
-> list on Qdisc.
->
-> Performance is better than RFC v1.  There is one concern about fairness
-> between flows for TBF Qdisc, which could be solved by using a SFQ inner
-> Qdisc.
->
-> Please see the individual patches for details and numbers.  Any comments,
-> suggestions would be much appreciated.  Thanks!
->
-> [1] https://lore.kernel.org/netdev/cover.1651800598.git.peilin.ye@bytedance.com/
-> [2] https://lore.kernel.org/netdev/20220506133111.1d4bebf3@hermes.local/
->
-> Peilin Ye (5):
->   net: Introduce Qdisc backpressure infrastructure
->   net/udp: Implement Qdisc backpressure algorithm
->   net/sched: sch_tbf: Use Qdisc backpressure infrastructure
->   net/sched: sch_htb: Use Qdisc backpressure infrastructure
->   net/sched: sch_cbq: Use Qdisc backpressure infrastructure
->
+On Mon, 2022-08-22 at 11:40 -0400, Mimi Zohar wrote:
+> On Mon, 2022-08-22 at 09:33 -0400, Jeff Layton wrote:
+> > Add an explicit paragraph codifying that atime updates due to reads
+> > should not be counted against the i_version counter. None of the
+> > existing subsystems that use the i_version want those counted, and
+> > there is an easy workaround for those that do.
+> >=20
+> > Cc: NeilBrown <neilb@suse.de>
+> > Cc: Trond Myklebust <trondmy@hammerspace.com>
+> > Cc: Dave Chinner <david@fromorbit.com>
+> > Link: https://lore.kernel.org/linux-xfs/166086932784.5425.1713471269496=
+1326033@noble.neil.brown.name/#t
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > ---
+> >  include/linux/iversion.h | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
+> > index 3bfebde5a1a6..da6cc1cc520a 100644
+> > --- a/include/linux/iversion.h
+> > +++ b/include/linux/iversion.h
+> > @@ -9,8 +9,8 @@
+> >   * ---------------------------
+> >   * The change attribute (i_version) is mandated by NFSv4 and is mostly=
+ for
+> >   * knfsd, but is also used for other purposes (e.g. IMA). The i_versio=
+n must
+> > - * appear different to observers if there was a change to the inode's =
+data or
+> > - * metadata since it was last queried.
+> > + * appear different to observers if there was an explicit change to th=
+e inode's
+> > + * data or metadata since it was last queried.
+> >   *
+> >   * Observers see the i_version as a 64-bit number that never decreases=
+. If it
+> >   * remains the same since it was last checked, then nothing has change=
+d in the
+> > @@ -18,6 +18,12 @@
+> >   * anything about the nature or magnitude of the changes from the valu=
+e, only
+> >   * that the inode has changed in some fashion.
+> >   *
+> > + * Note that atime updates due to reads or similar activity do _not_ r=
+epresent
+> > + * an explicit change to the inode. If the only change is to the atime=
+ and it
+>=20
+> Thanks, Jeff.  The ext4 patch increments i_version on file metadata
+> changes.  Could the wording here be more explicit to reflect changes
+> based on either inode data or metadata changes?
+>=20
+>=20
 
-I think the whole idea is wrong.
+Thanks Mimi,
 
-Packet schedulers can be remote (offloaded, or on another box)
+Care to suggest some wording?
 
-The idea of going back to socket level from a packet scheduler should
-really be a last resort.
+The main issue we have is that ext4 and xfs both increment i_version on
+atime updates due to reads. I have patches in flight to fix those, but
+going forward, we want to ensure that i_version gets incremented on all
+changes _except_ for atime updates.
 
-Issue of having UDP sockets being able to flood a network is tough, I
-am not sure the core networking stack
-should pretend it can solve the issue.
+The best wording we have at the moment is what Trond suggested, which is
+to classify the changes to the inode as "explicit" (someone or something
+made a deliberate change to the inode) and "implicit" (the change to the
+inode was due to activity such as reads that don't actually change
+anything).
 
-Note that FQ based packet schedulers can also help already.
+Is there a better way to describe this?
+
+> > + * wasn't set via utimes() or a similar mechanism, then i_version shou=
+ld not be
+> > + * incremented. If an observer cares about atime updates, it should pl=
+an to
+> > + * fetch and store them in conjunction with the i_version.
+> > + *
+> >   * Not all filesystems properly implement the i_version counter. Subsy=
+stems that
+> >   * want to use i_version field on an inode should first check whether =
+the
+> >   * filesystem sets the SB_I_VERSION flag (usually via the IS_I_VERSION=
+ macro).
+>=20
+>=20
+
+--=20
+Jeff Layton <jlayton@kernel.org>

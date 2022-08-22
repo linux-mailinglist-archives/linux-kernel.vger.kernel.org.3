@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D290D59C12E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C3959C13E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235592AbiHVOAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 10:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S235475AbiHVOBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 10:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234803AbiHVOAV (ORCPT
+        with ESMTP id S235593AbiHVOAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 10:00:21 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E7B39B94;
-        Mon, 22 Aug 2022 07:00:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 683FACE12B2;
-        Mon, 22 Aug 2022 14:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B2336C43143;
-        Mon, 22 Aug 2022 14:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661176816;
-        bh=o1mTwFEtV6pXVr33Ti6bgAgVs4MqCeyJkctMEiUk4Y4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=e7L00i9T7NoD64qaLZQ33PlrPCbncrWfGyefn45hRJlI1WwzF9ORrYqK7UCU3bSgE
-         LkAtO70oTaw3YpZ0mH3myL5Fqb/fMm4iwivrPYc/G8I6bw0ujRJ9VZyowWKR/AFP4/
-         9SlulVcmg5LxFoc0WrNasTaOkbAoJUQdlIJ4TXv6kRBpRsl69/M+mjJuDtTF92ZNRi
-         3FA2iZN2f41oClMN3rQ6w0O2L0huspAOGqc+CN2xj08aoyVPfwFsE9BZnnX4uz5Ocj
-         I1ud3rGNuEcnE0+/wR3aKJg3MN37J458xXrwiZY6bRPeSfO0kmyhudI1C8jaqNYD6a
-         7BEROrAKWHIWw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A0413E2A03D;
-        Mon, 22 Aug 2022 14:00:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 22 Aug 2022 10:00:52 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFB5371BC
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 07:00:50 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id pm13so2157250pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 07:00:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=kjJw1lixEQIrNLEOEvpfk899fKXlaGFwMiOH1KRB12M=;
+        b=sbS1HvywFSfEMOSLBpwixOVInNvRZMvLa/Kj6cjMDiERtJknENs/JEaFvkLTsox6lW
+         HD4cdPRvoxqqXTG5v+ldcmJu09E5vUo4y5L0I/ER8IAiD0ZOxI4Wo+c7YpbRruCkY90x
+         TKXI3k0gBBHXJPm3aepPOBUOKMJ4TwA9uWK4eIa18oC/p7cgWdEweLt7eo9ssLSs55Zp
+         rRYp8v+TiuKMipQB7gIvSf4UJogx6PjiN9ftTebRgwJBYh6jVgxg7D1cPaVMeW8UwbNo
+         vkF4NzQlk+Pg+7XmzLnG1rD36ZCLjlE4iQbIsU+DZTRn0G9PxCoMSpoo8sbxSdOJZ8T3
+         1S1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=kjJw1lixEQIrNLEOEvpfk899fKXlaGFwMiOH1KRB12M=;
+        b=HjNfFhMFxTEk2RKIb8IeLvJNwePIQepVtFFedm5o4A1fOjdxzUNDMWJ98cTgqAkPtL
+         smTUL+G1aHQt4uviuIdsrZclJ1IDKKMraeT/JduYv02Svg168rR4ZjMozr2S5vk4trWE
+         izaRm3gpfu+ivLhdI7RC96T9qqrqwWQky70WDwxJNQclURNUIsINr5TtSlTBIiGc2VRK
+         xHw3vdU0YMfY0TXQelQxJ5fhh8ULHnre2MDEtKoi/mk0p118/jdtefVzmOaPBMs3uCe1
+         zq4+O0vef9cbfT5nkeX2SyJGB1HytMnBbRxLq3d99OqG9Abv/jYIkE/gc6mxs7kpPsnI
+         Brjw==
+X-Gm-Message-State: ACgBeo3J1KqG6d/88zPc32gJAc+4tpE2fCennUKcjs2u2/nMMho1TvkL
+        O/mMNjdS9WHSWflOvo8lANEW/sji6aSnJWnq0mILtg==
+X-Google-Smtp-Source: AA6agR5FvMT6MZWvn7FQCgowa6/lGiwYVOR8wnvEisKJw3867tepZ75KayAqpGFx016KD7WcPU7jnVR//s8gg9qIrRs=
+X-Received: by 2002:a17:902:8683:b0:171:3114:7678 with SMTP id
+ g3-20020a170902868300b0017131147678mr20494169plo.172.1661176849884; Mon, 22
+ Aug 2022 07:00:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: prestera: cache port state for non-phylink
- ports too
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166117681665.22523.8363355515341094096.git-patchwork-notify@kernel.org>
-Date:   Mon, 22 Aug 2022 14:00:16 +0000
-References: <20220818111821.415972-1-maksym.glubokiy@plvision.eu>
-In-Reply-To: <20220818111821.415972-1-maksym.glubokiy@plvision.eu>
-To:     Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-Cc:     tchornyi@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        yevhen.orlov@plvision.eu, oleksandr.mazur@plvision.eu,
-        taras.chornyi@plvision.eu, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
+ <CADYN=9JM1nnjC9LypHqrz7JJjbZLpm8rArDUy4zgYYrajErBnA@mail.gmail.com> <e4843a98-0bde-829c-f77a-56d45ba324d7@digikod.net>
+In-Reply-To: <e4843a98-0bde-829c-f77a-56d45ba324d7@digikod.net>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Mon, 22 Aug 2022 16:00:37 +0200
+Message-ID: <CADYN=9+CFEV9QpNbhi6gKqJr1V5Jc8Q5hGhCD_ESkRXP2X3gbQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/landlock: fix broken include of linux/landlock.h
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Guillaume <guillaume.tucker@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Tim.Bird@sony.com,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,28 +72,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Sat, 13 Aug 2022 at 14:31, Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wr=
+ote:
+>
+>
+> On 13/08/2022 12:01, Anders Roxell wrote:
+> > On Wed, 3 Aug 2022 at 22:14, Guillaume Tucker
+> > <guillaume.tucker@collabora.com> wrote:
+> >>
+> >> Revert part of the earlier changes to fix the kselftest build when
+> >> using a sub-directory from the top of the tree as this broke the
+> >> landlock test build as a side-effect when building with "make -C
+> >> tools/testing/selftests/landlock".
+> >>
+> >> Reported-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
+> >> Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers depe=
+ndency")
+> >> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+> >> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> >
+> > Building with this patch doesn't work, it gives this output:
+> > make[3]: Entering directory
+> > '/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+> > make[3]: Leaving directory
+> > '/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+> > make[3]: *** No rule to make target
+> > '/home/anders/.cache/tuxmake/builds/78/build/kselftest/landlock/base_te=
+st',
+> > needed by 'all'.  Stop.
+> >
+> > I'm building like this:
+> > tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-12
+> > --kconfig defconfig kselftest
+> >
+> > which translates into this make command:
+> > make --silent --keep-going --jobs=3D32
+> > O=3D/home/anders/.cache/tuxmake/builds/78/build
+> > INSTALL_PATH=3D/home/anders/.cache/tuxmake/builds/78/build/kselftest_in=
+stall
+> > ARCH=3Dx86_64 CROSS_COMPILE=3Dx86_64-linux-gnu- kselftest-install
+>
+> This works well for me.
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Interesting
 
-On Thu, 18 Aug 2022 14:18:21 +0300 you wrote:
-> Port event data must stored to port-state cache regardless of whether
-> the port uses phylink or not since this data is used by ethtool.
-> 
-> Fixes: 52323ef75414 ("net: marvell: prestera: add phylink support")
-> Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-> Signed-off-by: Maksym Glubokiy <maksym.glubokiy@plvision.eu>
-> 
-> [...]
+> Which commit is checkout?
 
-Here is the summary with links:
-  - [net-next] net: prestera: cache port state for non-phylink ports too
-    https://git.kernel.org/netdev/net-next/c/704438dd4f03
+I used the latest next tag, I tried to on todays tag as well
+next-20220822 and I see
+the same issue.
+building without 'O=3D...' I can build the landlock tests...
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>
+>
+> >
+> > building without this patch works, see below:
+> >
+> > make[3]: Entering directory
+> > '/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+> > x86_64-linux-gnu-gcc -Wall -O2 -isystem
+> > /home/anders/.cache/tuxmake/builds/77/build/usr/include    base_test.c
+> >   -o /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/bas=
+e_test
+> > -lcap
+> > x86_64-linux-gnu-gcc -Wall -O2 -isystem
+> > /home/anders/.cache/tuxmake/builds/77/build/usr/include    fs_test.c
+> > -o /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/fs_te=
+st
+> > -lcap
+> > x86_64-linux-gnu-gcc -Wall -O2 -isystem
+> > /home/anders/.cache/tuxmake/builds/77/build/usr/include
+> > ptrace_test.c  -o
+> > /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/ptrace_t=
+est
+> > -lcap
+> > x86_64-linux-gnu-gcc -Wall -O2 -isystem
+> > /home/anders/.cache/tuxmake/builds/77/build/usr/include    true.c  -o
+> > /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/true
+> > -static
+> > make[3]: Leaving directory
+> > '/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+> Does this work if you revert this patch, commit a917dd94b832
+> ("selftests/landlock: drop deprecated headers dependency") and commit
+> f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")?
+>
+> This patch mainly revert commit a917dd94b832, so I don't see the issue.
+>
+>
+> >
+> > Cheers,
+> > Anders
+> >
+> >> ---
+> >>   tools/testing/selftests/landlock/Makefile | 7 +++++--
+> >>   1 file changed, 5 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing=
+/selftests/landlock/Makefile
+> >> index a6959df28eb0..02868ac3bc71 100644
+> >> --- a/tools/testing/selftests/landlock/Makefile
+> >> +++ b/tools/testing/selftests/landlock/Makefile
+> >> @@ -9,10 +9,13 @@ TEST_GEN_PROGS :=3D $(src_test:.c=3D)
+> >>   TEST_GEN_PROGS_EXTENDED :=3D true
+> >>
+> >>   OVERRIDE_TARGETS :=3D 1
+> >> +top_srcdir :=3D ../../../..
+> >>   include ../lib.mk
+> >>
+> >> +khdr_dir =3D $(top_srcdir)/usr/include
+> >> +
+> >>   $(OUTPUT)/true: true.c
+> >>          $(LINK.c) $< $(LDLIBS) -o $@ -static
+> >>
+> >> -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
+> >> -       $(LINK.c) $< $(LDLIBS) -o $@ -lcap
+> >> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_=
+harness.h common.h
+> >> +       $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
+> >> --
+> >> 2.30.2
+> >>

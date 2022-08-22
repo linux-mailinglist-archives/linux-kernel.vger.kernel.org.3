@@ -2,160 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EA859CB6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A091D59CB50
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238160AbiHVW2D convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 22 Aug 2022 18:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
+        id S234720AbiHVWIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 18:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232461AbiHVW2B (ORCPT
+        with ESMTP id S234666AbiHVWIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 18:28:01 -0400
-X-Greylist: delayed 4256 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 Aug 2022 15:27:59 PDT
-Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693D1491F2;
-        Mon, 22 Aug 2022 15:27:59 -0700 (PDT)
-Received: from [45.44.224.220] (port=49006 helo=[192.168.1.179])
-        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <olivier@trillion01.com>)
-        id 1oQEn7-0007uE-5u;
-        Mon, 22 Aug 2022 17:17:01 -0400
-Message-ID: <61abfb5a517e0ee253b0dc7ba9cd32ebd558bcb0.camel@trillion01.com>
-Subject: Re: [PATCH 2/2] coredump: Allow coredumps to pipes to work with
- io_uring
-From:   Olivier Langlois <olivier@trillion01.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        io-uring@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 22 Aug 2022 17:16:59 -0400
-In-Reply-To: <87mtd3rals.fsf_-_@email.froward.int.ebiederm.org>
-References: <192c9697e379bf084636a8213108be6c3b948d0b.camel@trillion01.com>
-         <9692dbb420eef43a9775f425cb8f6f33c9ba2db9.camel@trillion01.com>
-         <87h7i694ij.fsf_-_@disp2133>
-         <1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com>
-         <b3e43e07c68696b83a5bf25664a3fa912ba747e2.camel@trillion01.com>
-         <13250a8d-1a59-4b7b-92e4-1231d73cbdda@gmail.com>
-         <878rw9u6fb.fsf@email.froward.int.ebiederm.org>
-         <303f7772-eb31-5beb-2bd0-4278566591b0@gmail.com>
-         <87ilsg13yz.fsf@email.froward.int.ebiederm.org>
-         <8218f1a245d054c940e25142fd00a5f17238d078.camel@trillion01.com>
-         <a29a1649-5e50-4221-9f44-66a35fbdff80@kernel.dk>
-         <87y1wnrap0.fsf_-_@email.froward.int.ebiederm.org>
-         <87mtd3rals.fsf_-_@email.froward.int.ebiederm.org>
-Organization: Trillion01 Inc
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.3 
+        Mon, 22 Aug 2022 18:08:34 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC82215FE9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:08:33 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id r141so9514905iod.4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:08:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-language:mime-version:user-agent:date:message-id:subject
+         :from:cc:to:from:to:cc;
+        bh=PO/x/lcGxwJuGHeoVdebBw0jfaxk4xanIPuLnTroQB8=;
+        b=UE5morJYl8WKwxtRgQBozd/4eWed/1OLiDZS7ZAmPKt6wne8S0zSAY9a/pYk+SH1rF
+         nN+evzFaSnpvy5ytnX40b+y8B4SEj/TLtUru5L+Kms6PMjkJ2aBuWvgOebNpyCWxyJ9V
+         I4eHLvnYLZRoebAUvFi1J3diWyHq9kGpSQTfY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-language:mime-version:user-agent:date:message-id:subject
+         :from:cc:to:x-gm-message-state:from:to:cc;
+        bh=PO/x/lcGxwJuGHeoVdebBw0jfaxk4xanIPuLnTroQB8=;
+        b=0RJH5S9V7om3Z/44avBId+rwhmY+GZEGzSbE7B3SjsT0TcjnxMlHviUK379IUCoG0p
+         RUqkSYSrUqObtSUXqwOHGDvGQJWtQhT9jtwcx6jjCYpzGEczxzyBe5OsBrIFn7hlbU3k
+         5xArO4r7N0RMI0vFYz98X/285pTKB4D4ZqaTGztJ34doc7weU+2t3Xw/6AEx0jsc0zEL
+         F4KSKV8Sjw0zv69KYCbKZfKJ/oK2mS/N5w6TOlU76UPKMR7z8Gs0vik6pbjglJh5JEmU
+         oA1aDBd10dyVZkZA/vSyXRp5jGzCDAB2lJNnGRqQg+rbWPvM0hfeiaA42rbpCfMmX9VM
+         xzTA==
+X-Gm-Message-State: ACgBeo1GBL5Az3LrVpXeLwoAHasOFTm7EHmz/BgvdZmwjlJlARGFx3gl
+        s67XjMn84oOw0GtCTcEphPX39yYwRwjaqw==
+X-Google-Smtp-Source: AA6agR6nRT7b99pV0tfx6ExxJGTOZeine4C8N+sdZHFkmkeWW/t5r3gdGMTY7FrZj9i6iGSiHb69lg==
+X-Received: by 2002:a05:6638:470d:b0:349:c2f7:59c4 with SMTP id cs13-20020a056638470d00b00349c2f759c4mr5674015jab.223.1661206112922;
+        Mon, 22 Aug 2022 15:08:32 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id d37-20020a023f25000000b0033197f42be0sm5518637jaa.157.2022.08.22.15.08.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 15:08:32 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] KUnit fixes update for Linux 6.0-rc3
+Message-ID: <83371a8c-9f40-3947-51d0-07efc15bdae2@linuxfoundation.org>
+Date:   Mon, 22 Aug 2022 16:08:31 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - trillion01.com
-X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
-X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed;
+ boundary="------------A398DC0BE7E221BC49E8E404"
+Content-Language: en-US
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-20 at 11:51 -0500, Eric W. Biederman wrote:
-> 
-> Now that io_uring like everything else stops for coredumps in
-> get_signal the code can once again allow any interruptible
-> condition after coredump_wait to interrupt the coredump.
-> 
-> Clear TIF_NOTIFY_SIGNAL after coredump_wait, to guarantee that
-> anything that sets TIF_NOTIFY_SIGNAL before coredump_wait completed
-> won't cause the coredumps to interrupted.
-> 
-> With all of the other threads in the process stopped io_uring doesn't
-> call task_work_add on the thread running do_coredump.  Combined with
-> the clearing of TIF_NOTIFY_SIGNAL this allows processes that use
-> io_uring to coredump through pipes.
-> 
-> Restore dump_interrupted to be a simple call to signal_pending
-> effectively reverting commit 06af8679449d ("coredump: Limit what can
-> interrupt coredumps").  At this point only SIGKILL delivered to the
-> coredumping thread should be able to cause signal_pending to return
-> true.
-> 
-> A nice followup would be to find a reliable race free way to modify
-> task_work_add and probably set_notify_signal to skip setting
-> TIF_NOTIFY_SIGNAL once it is clear a task will no longer process
-> signals and other interruptible conditions.  That would allow
-> TIF_NOTIFY_SIGNAL to be cleared where TIF_SIGPENDING is cleared in
-> coredump_zap_process.
-> 
-> To be as certain as possible that this works, I tested this with
-> commit 1d5f5ea7cb7d ("io-wq: remove worker to owner tw dependency")
-> reverted.  Which means that not only is TIF_NOTIFY_SIGNAL prevented
-> from stopping coredumps to pipes, the sequence of stopping threads to
-> participate in the coredump avoids deadlocks that were possible
-> previously.
-> 
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> 
-Hi Eric,
+This is a multi-part message in MIME format.
+--------------A398DC0BE7E221BC49E8E404
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-What is stopping the task calling do_coredump() to be interrupted and
-call task_work_add() from the interrupt context?
+Hi Linus,
 
-This is precisely what I was experiencing last summer when I did work
-on this issue.
+Please pull the following KUnit fixes update for Linux 6.0-rc3.
 
-My understanding of how async I/O works with io_uring is that the task
-is added to a wait queue without being put to sleep and when the
-io_uring callback is called from the interrupt context, task_work_add()
-is called so that the next time io_uring syscall is invoked, pending
-work is processed to complete the I/O.
+This KUnit fixes update for Linux 6.0-rc3 consists of fixes to mmc
+test and fix to load .kunit_test_suites section when CONFIG_KUNIT=m,
+and not just when KUnit is built-in.
 
-So if:
+Please note that this KUnit update touches mmc driver Kconfig and
+kernel/module/main.c.
 
-1. io_uring request is initiated AND the task is in a wait queue
-2. do_coredump() is called before the I/O is completed
+diff is attached.
 
-IMHO, this is how you end up having task_work_add() called while the
-coredump is generated.
+thanks,
+-- Shuah
 
-So far, the only way that I have found making sure that this was not
-happening was to cancel every pending io_uring requests before writing
-the coredump by calling io_uring_task_cancel():
+----------------------------------------------------------------
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -43,7 +43,7 @@
- #include <linux/timekeeping.h>
- #include <linux/sysctl.h>
- #include <linux/elf.h>
--
-+#include <linux/io_uring.h>
- #include <linux/uaccess.h>
- #include <asm/mmu_context.h>
- #include <asm/tlb.h>
-@@ -561,6 +561,8 @@
- 		need_suid_safe = true;
- 	}
- 
-+	io_uring_task_cancel();
-+
- 	retval = coredump_wait(siginfo->si_signo, &core_state);
- 	if (retval < 0)
- 		goto fail_creds;
+   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
+are available in the Git repository at:
 
-Greetings,
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-6.0-rc3
 
+for you to fetch changes up to 41a55567b9e31cb852670684404654ec4fd0d8d6:
+
+   module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m (2022-08-15 13:51:07 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-kunit-fixes-6.0-rc3
+
+This KUnit fixes update for Linux 6.0-rc3 consists of fixes to mmc
+test and fix to load .kunit_test_suites section when CONFIG_KUNIT=m,
+and not just when KUnit is built-in.
+
+----------------------------------------------------------------
+David Gow (2):
+       mmc: sdhci-of-aspeed: test: Fix dependencies when KUNIT=m
+       module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
+
+  drivers/mmc/host/Kconfig | 1 +
+  kernel/module/main.c     | 2 +-
+  2 files changed, 2 insertions(+), 1 deletion(-)
+----------------------------------------------------------------
+
+--------------A398DC0BE7E221BC49E8E404
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-kunit-fixes-6.0-rc3.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-kunit-fixes-6.0-rc3.diff"
+
+diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+index 10c563999d3d..e63608834411 100644
+--- a/drivers/mmc/host/Kconfig
++++ b/drivers/mmc/host/Kconfig
+@@ -171,6 +171,7 @@ config MMC_SDHCI_OF_ASPEED
+ config MMC_SDHCI_OF_ASPEED_TEST
+ 	bool "Tests for the ASPEED SDHCI driver" if !KUNIT_ALL_TESTS
+ 	depends on MMC_SDHCI_OF_ASPEED && KUNIT
++	depends on (MMC_SDHCI_OF_ASPEED=m || KUNIT=y)
+ 	default KUNIT_ALL_TESTS
+ 	help
+ 	  Enable KUnit tests for the ASPEED SDHCI driver. Select this
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 6a477c622544..a4e4d84b6f4e 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2099,7 +2099,7 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ 					      sizeof(*mod->static_call_sites),
+ 					      &mod->num_static_call_sites);
+ #endif
+-#ifdef CONFIG_KUNIT
++#if IS_ENABLED(CONFIG_KUNIT)
+ 	mod->kunit_suites = section_objs(info, ".kunit_test_suites",
+ 					      sizeof(*mod->kunit_suites),
+ 					      &mod->num_kunit_suites);
+
+--------------A398DC0BE7E221BC49E8E404--

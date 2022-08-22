@@ -2,180 +2,458 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8C259BBEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC5659BBF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbiHVIqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S233145AbiHVIrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiHVIqg (ORCPT
+        with ESMTP id S229794AbiHVIr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:46:36 -0400
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50074.outbound.protection.outlook.com [40.107.5.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1156A2D1C6;
-        Mon, 22 Aug 2022 01:46:35 -0700 (PDT)
+        Mon, 22 Aug 2022 04:47:29 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF1C2CE2A
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:47:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661158047; x=1692694047;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=fRI74ILS17XWRV5fQ65xgMgQ0xFcUdJrGAJrZkrNLWA=;
+  b=DncZ5dQf4YwnqI/VVHji988q12OLPzgDD35wL7vKR2dqKoW7WL/kO1Tf
+   TrfxDJCh6pXO/bOOPFRsd3ptV0YE2nRScRcTa0KWfuZB0cEfRKFBmpUt8
+   FxK/oKDYKiTflB26HWOdbB0vq5/aKZAWRkhHefFuML4wBKatq0t4WXYD1
+   fEh+vXHH36Ybi1Dnr5i3BYZGA4NhlJg9byccKbXqIuhm3RulftgWL96Mv
+   3iFPiceD63aXaQrcCsRmeDdQUi1LBbxFSr/LEHcDiTenVaDw1/fkxMDI1
+   TudKy0LA7sIK0hHSlA4SWwYnM3Pxyl3kBL9XAEaG3SxPlPActRmhWV64w
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="379651776"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="379651776"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 01:47:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="698213140"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Aug 2022 01:47:27 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 22 Aug 2022 01:47:26 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 22 Aug 2022 01:47:26 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 22 Aug 2022 01:47:26 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=meHW75pgDDp5Ed0NgqvagnHuyObdcsR43PX+8dYl6E823n7vWgw8PVI/q1mGDjaA+Z5hTfz874EG6QN73eyEFXDBB156lkMqATf37K73oozmPgVqAFJJSnZxFDnDc/ODnN6R4vIEStd1gF0FKC/G9IQhY5vI0SupQDLpI7SFX3s7Py8RnYGUcbeFyoWrQw9UnD53detEO1KqcxKhItRON6cY2ZJx/AX3Kz+3oK8k3YwZchag8gRxDz4oPPSsA6pYtI88uyVxKzK32cCphV/lgZhH/fxWe/EPnpEdRdeesQQlsaLuAgF+NFli3tM8a1Vw8gzZlTGNCbxPGs9Xns7j5A==
+ b=cwB2AyCWSWkpcJ5IgK7LeEGV+7rfmLI5oW77d1DOEGPuJNK/ntLSKXwbRv2VQ0fOcB7RqEPQo356LudIVoTouPT0W7wMY9bVjECsMZW4r93duYlaY6QZkqS9WewhY72fiffim3E9Q2GBG7nbaQGVZagFFncrSzXzCgGb1FXnYUcvUyzdh908ujfVuxgf5dxkS+CYOQ257QswKinvklRyL96YLv3NR4ZMCYt0Cv/Slq51/YXAcOT9U6g6JoLQ64hyuExcnhfNya3hMf5J6VpkqnHT7WXNa7ayHC7Rb1Ss+bTxRZ0TelP8lKsYcKH/CvfRovzbMvz+Nma73MqoEf8hvQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ptK3mEjOqJ00oM8iZrBShJOi7SVjZAlRqIvlnaa2AOY=;
- b=gsc9Yfy3XNWPoCbadrhnABEYXUEb8b3ij4/nUnK5Tr3FNKFXSG46vdu2OXtybXPgadUl52IWYU760k1cJpcSg+moeVYcuMeDRe4TuvJCcb3VCx2zyIoJGszfu9BeB7QIIxBfPJUWV7HNbY6TbTEU8zYXp4jaODmROFVg6XTzx+3EIRkgXnJj7gO16PXN57gqYj6xo/7VmgohfzYszhRRAf7kROhqMOw861jt9KOOt4khaQvR43m8lvySUUm5YyFXk7Jkyrj50V0QXbHQiGdw+OyawIsrrW2HwSf9pQv24GShEx2F5MeyCRmYe/Tpx0HIQFanrhyaHe66hTdkiu4YVw==
+ bh=oMkoiB1U/4pgBTpr7Us0U0mjR+ZqUgI8fxHRt6OD6Mo=;
+ b=KG1zWMKMo1ZOqXzC+osrJXsIfoAMIGvZyeUNE5vD0TyTbUbta5xhpW2Ye/hrWAmzp3jIdotB5NG1SQEPFlZsSYnJF9BK/jzP22JFq3Sd8hfmpX1X1IEhdyMuywV/vEF4CTcWnITDMP25tDWD7naI9g0f5sdfn2s59KiwKVQk2Lhm3jqI0gaTgHY7XLF+sqweegov+b+tF+BBPiiZTRyuAqYrePFSP5GEC4NyigksdoZWwr+rxl71MmcZ1qyazJhtJOQ+uMooqvKYwfUfCWDqky7fgz8KoAV9ehGBPBQijGWx/9YmThkMQdSzYBDczQX0qwk02iWwGq67AwJW/GYAbg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ptK3mEjOqJ00oM8iZrBShJOi7SVjZAlRqIvlnaa2AOY=;
- b=VWksD7X5gfA53Ift+ehcnj0PeU5/snDsFMzyqlOgoTHT/kKmv1Yh/I7gpopwF5nY0Upp/mcIl/NJ124VZQwaDzUaNTU5N3sEQrE+vBut7YKbdMSNiVLlU+rDLFFh151/bMV6FL7maFgcxpWWtDvmPjFrvVOnNSRx6vdjbFSdQ+8=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DB7PR04MB4171.eurprd04.prod.outlook.com (2603:10a6:5:26::28) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM4PR11MB5310.namprd11.prod.outlook.com (2603:10b6:5:391::19)
+ by MWHPR11MB1967.namprd11.prod.outlook.com (2603:10b6:300:111::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Mon, 22 Aug
- 2022 08:46:32 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442%6]) with mapi id 15.20.5546.021; Mon, 22 Aug 2022
- 08:46:31 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "wsa@kernel.org" <wsa@kernel.org>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.21; Mon, 22 Aug
+ 2022 08:47:19 +0000
+Received: from DM4PR11MB5310.namprd11.prod.outlook.com
+ ([fe80::50fb:ef2b:38da:6049]) by DM4PR11MB5310.namprd11.prod.outlook.com
+ ([fe80::50fb:ef2b:38da:6049%5]) with mapi id 15.20.5546.023; Mon, 22 Aug 2022
+ 08:47:19 +0000
+From:   "Zhang, Weihong" <weihong.zhang@intel.com>
+To:     "Hu, Robert" <robert.hu@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Clark Wang <xiaoning.wang@nxp.com>
-Subject: RE: [PATCH V2 0/7] i2c-imx-lpi2c: add IPG clock
-Thread-Topic: [PATCH V2 0/7] i2c-imx-lpi2c: add IPG clock
-Thread-Index: AQHYsW876SxYc4rxXUGbKvyYc8nHU626pHbA
-Date:   Mon, 22 Aug 2022 08:46:31 +0000
-Message-ID: <DU0PR04MB9417E7BD5F1FB7A8E00BAA3F88719@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220816125526.2978895-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20220816125526.2978895-1-peng.fan@oss.nxp.com>
+        "Zhang, Weihong" <weihong.zhang@linux.intel.com>
+Subject: RE: [PATCHv6 09/11] selftests/x86/lam: Add mmap and SYSCALL test
+ cases for linear-address masking
+Thread-Topic: [PATCHv6 09/11] selftests/x86/lam: Add mmap and SYSCALL test
+ cases for linear-address masking
+Thread-Index: AQHYsF2klaR0mms/cE6Gw+7wKWKS1K215uGAgAEoEnA=
+Date:   Mon, 22 Aug 2022 08:47:18 +0000
+Message-ID: <DM4PR11MB531021EF2652531F037D21BBEE719@DM4PR11MB5310.namprd11.prod.outlook.com>
+References: <20220815041803.17954-1-kirill.shutemov@linux.intel.com>
+ <20220815041803.17954-10-kirill.shutemov@linux.intel.com>
+ <CY5PR11MB6187230204E669607437716FE06C9@CY5PR11MB6187.namprd11.prod.outlook.com>
+In-Reply-To: <CY5PR11MB6187230204E669607437716FE06C9@CY5PR11MB6187.namprd11.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.6.500.17
+dlp-reaction: no-action
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
+ header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: df147d29-8199-4150-122d-08da841acfd7
-x-ms-traffictypediagnostic: DB7PR04MB4171:EE_
+x-ms-office365-filtering-correlation-id: 5e8028d7-d4e2-40ff-eb85-08da841aebfd
+x-ms-traffictypediagnostic: MWHPR11MB1967:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: UTyWrX+oGzkJp8sETypcdGQ2ECRJW4YUWXZc7VONg9EX6mQmlKd2arfVyMpnf7TKWkT+aTi3nJtIOaS7BeqFC1QEVWmqi0q1zM+mS7KQJm7fcq6AywEwpobhir6gPE/+NhtOhc5S/GENONnw2a5ItXJpzDYCIkIwFFbvPdz4YxJP4/Zmnxfj3fuN7mvcRxPn4J9UiKRjm3WMr/EjRTpUzfkuOMq3gKVIiaWObhd+6ulj6+hdgGo4jQco6xnjr30vQ5iynRbeaOrha8gMg1zyXjXuGrT7cPlOVB3Q7W1u1Zj1BU4+m5nDtVuIkCGDf8Rntw9pwplfbkMyQR2t96nD2QbH9eyYI6mHIQEgFWeoqKPnu52Jt5mWWLz/do0j3Ok/FHnCPfKT+Fy3ufGsVKlRtBRct+pLYcU3/IZZNuTeANrdR/hJsxfQco97bEUgfkiDMWXv0NTYg6ukEBemYHjUznpLQWxdIDo5v0tJlJcBTKGz6NwDYWCiS1oMGpRJpVnWyvqF3ucIvqobi291eHaDNeNA576pSjIpW8kSkOD82UP34abmhm7R7INeWiv4ywGZGGNWyFPNChsm+ilhksusnuFbcVOaOecbuv1ZVqF/oQne3Wri44n4sZJNWt3GXwqYWSy2k9tVH5RfDAFEk+dyIbV3Jb/VXrh4bOLZw0Nrx/NkGz+PmqwXxDjo3C6ZKIJc3IyoGZH9FgnVZD04l0w3aKDMzpn6ej7zL/iJXBO2aJkQxWuEgQ6bRrUqu+8UcZ7MOPGVpJEmvp7YOuX2S8gItA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(39860400002)(366004)(396003)(136003)(66476007)(76116006)(8676002)(64756008)(4326008)(66556008)(66446008)(66946007)(86362001)(110136005)(54906003)(33656002)(122000001)(38100700002)(38070700005)(83380400001)(186003)(8936002)(26005)(9686003)(7696005)(6506007)(71200400001)(41300700001)(478600001)(7416002)(316002)(55016003)(2906002)(52536014)(44832011)(5660300002);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: 81eZjiqTgQCiYBObY1kTrMxDDVkExKzNXBcBeoZQM/00U1qyCSkeF8jqnNV1ebTv8x7oBlQZ3TfDwV3dF/mBsW8wkK1OR8/o7IHvfMiFQ+dwBjq0zbkvc3e0YQYeU8ssklU0cFmZKT5jQBOBXrOJCf4hRfQQxM/jQB/whmojuAii4G6KGGs7N30TXDGafptTTk7Pj2XYYAM8CzjzJaG6tP2z/QoFAtDV/wC517wMFP+mEH4BOLU+KZQa7FxRxKi9Fz19DPuvIzGnMQ8SAa8IKPV78+lGC2eMfDmDFDtwwhUP5F4RrYl/QxKkVurrbWZ3ERD34G6tG7hQHBDthT32kx323E46JcKlAaq37rQbBuFIV68w2rkLfAIZWMh2n6rcio0ZZegeaCu/oUWk1GBaK62Ap3RYksFjApstkV6KhBbvHS3zVw3Zv6FWLWRDnsjV5twTb7a0beRZSnQoc06VlgymfH9mbeEH2Lg8dHEAWHmsEBDWb4iTYwvRdCXaE/JZV2Z6Tpi/Ur84W7TQByg/JvpJYLagljifKUt6iGW+4zWeiJrJQxHn0aTnHwk7MNVZiJq/5SxtqsOtVGdXHbhs8nCd+4Kg9Q3IVa9IbfDPPuRdj53VK7XUVDMdrSwk8Bz1UEAVY21unoxhHyuH94FpN93E3ZPro4566K/B7+hz+ccZ10HMJR3mnGsMND5y8xmvEPh7RahtfFl4cp6jwc+QJ0k/LTXWzGFNqBGutlH1o0iU1/WSSo/J/+fhxJdDF7l7IksxGpap9mD9ULP4wJmJyA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5310.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(396003)(366004)(136003)(39860400002)(346002)(9686003)(64756008)(4326008)(2906002)(8676002)(7416002)(5660300002)(52536014)(8936002)(66476007)(66446008)(66556008)(66946007)(76116006)(7696005)(53546011)(6506007)(33656002)(26005)(186003)(55016003)(478600001)(41300700001)(71200400001)(82960400001)(86362001)(83380400001)(110136005)(316002)(54906003)(38070700005)(122000001)(38100700002);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eSzAauO7FAqf5pJk8O9yTh4lerqZcR1O5vYL77GEy1cVwOK8Qy1BAv4k2W+l?=
- =?us-ascii?Q?Q6zMh+lQ6HpvmYT4MQpBu8u4JgjTomAod5cqEgqd2biy21t+jdcLPSKG0EoK?=
- =?us-ascii?Q?un6WNoXn7GCVkIU4ju2esiBXs4grzUBddjlKPYAOWOuuN1k/6osrkv16SasR?=
- =?us-ascii?Q?wU1pxA7cNxnoG99R0KjS6gztfGqSJzOusFHR0Sd13EuYHC/amWJ4tHM0HJuH?=
- =?us-ascii?Q?ItEfzS3tzNmdTRi4EaytP3C1T++JYMHk/KyceCswdJYA9b7bzKQ8de97C+vt?=
- =?us-ascii?Q?DZd6L1XNkoDesZNjNUz5NMaWZ9MujyMsdkWa4/P3Z7xN0tkgBx/0emZB7JzG?=
- =?us-ascii?Q?8PoKN52SvesgYfKRt/B5xiH8lfOP7xxC3iL6CBmcohnsuHfa99yELHSDIoZC?=
- =?us-ascii?Q?4le7Z3YV9avCDDMxiQ9Cj2cf8B+ccCLOu8k8JwN+0E8G1wCL2i/BWlE0XT8F?=
- =?us-ascii?Q?O7xnYuf93Lxq+9nwbEiaSbJEKnYBnKk21V32kyKJLdMMzmEEAe8D45Tw+vCc?=
- =?us-ascii?Q?re1KnN5EfRnHUey1cwYYd62zOhxU6DwHcagloEicTvWtCmwt2wfkDtLMTrGK?=
- =?us-ascii?Q?3sm0nKq6Cuh/FlFjSjrHWoAMlglOJ3r1gHvIfkTwmWHuKZ5TZQ1wohsVjgaz?=
- =?us-ascii?Q?Y09RxgxVCcZxL5c31My9OkswTj1kAiTU7U4qaHObwDwwelK0c4W5Mvp42dpC?=
- =?us-ascii?Q?HLNDzZNlQ0WxjZ0rBZvnF6hTrz41JSiRma3wp9Tox8l+i3Xe0AqZnWMRCWQy?=
- =?us-ascii?Q?1B1YcSwP/GOWz3rMqORXshOdgTGw/CFLZMrTAfiTJ8qeRHjmnxsWEoEkaOIV?=
- =?us-ascii?Q?80h3oZ7OiyIV+TfYuS7Ta1UjSVfZ6JAu+LUqiHxFGkvrG3orKCbb6JfOzc1O?=
- =?us-ascii?Q?HwjwnJTsk2JD/IPLwSmkUYBsGzrsNcaZRpQ1oMXxI29jArr8/onymZdYTWoa?=
- =?us-ascii?Q?Vj4aK2mvl3zJ0EsZdftKz+FXMiUgc1AeMFUyY4FhDQ6fH2zOTPi5VubSuasZ?=
- =?us-ascii?Q?k260aipntdXZC63G+IAahE5U4FkW2DPGI1fUWtLxhXxHb26+t2U113P5lv5O?=
- =?us-ascii?Q?+zPb1zhSq90HF6HwDlGi/PRq/aTb7llx2QDhI/PVwmXJzhOGAaLVoBCVsWf+?=
- =?us-ascii?Q?BJxiIuHpTn+P4NqBiugLJCLyPWrL/vypjexjaOUgFU7y2AVVRUwQI83LNyIm?=
- =?us-ascii?Q?F6xDmL3J9yMzqTqixlEmLJZ6LdKlD407KOlS1ICTaLdgYhpSba0jkmcQWznh?=
- =?us-ascii?Q?U7JAGM748nGcSSW40d6WMxNv/Ad7xz5T1ggKEAiJcUKgYjnnNy8MviDEYhKX?=
- =?us-ascii?Q?0fO1M6doXZbuc5YA1nt84x0cLKxHtgvkHWpISJhqXH0UKniv3hX5apqG8kmE?=
- =?us-ascii?Q?ViQiKG9HM+TG2wtBjIpG15d7x0mzDsCSzEdXrhHn6jF+K3e2NNrs3qLRO2mQ?=
- =?us-ascii?Q?MFwi7M4qE2a4DfwwVgll9EsYnZaXSX+ehykaTP9H3RZVX+S/IUS69SWnSuiY?=
- =?us-ascii?Q?tyuGXsSfQXlVa6IfckiLzxWdoYQ5NLeI1eO3b8Xkg7OX8tOqdEr7VQYjPKH0?=
- =?us-ascii?Q?bdRv0I35HMpL07nTOI++AQcK3B9CrFD8QcfGbrG6?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QYfBDPoiaimY59O0cPQL2H8UQKt2wV0M0O0d0uyYp+Ov9pWqavzG/6oCvw0S?=
+ =?us-ascii?Q?XQl7j5QODM6U+MuntaFpXLLrm7dCmIcvXaZHm8qCWwp2xSLyLBBkRPVKKswB?=
+ =?us-ascii?Q?tBmJmZuQnMVU5UsPHmhi2DUhIWHJcWV/dnqwQjVMFJjPiRrJR+nklR9j9BoF?=
+ =?us-ascii?Q?i/OAdkob0VoaRKVU25ap5i9G4+e5qgDvOLcHU9aUwwhNanr4EZHfcpD/MGGx?=
+ =?us-ascii?Q?uWnvg7oWw0IIt9sPoRrIZvpFxBI+3ajZ6L1aYDl6JAnd/q7YOf3Ijsai7qf2?=
+ =?us-ascii?Q?Vak1Dkc5uU/emfG3WyIFknnRIZHXz4iKOyuoMrPR0SvD2Y5s5/LLxGlOeR8D?=
+ =?us-ascii?Q?qGB5E3CHO0Lc9UsVA+z7cFeftsSJe6lu4wjTY2Si7hTNHXdf8AqiOPL41E+Y?=
+ =?us-ascii?Q?GSSX8kO2NNlSZ4wk5wGb4eqdJPBEZMDh1BrSKPjkYf+DDfesMgcUdESGc/Yr?=
+ =?us-ascii?Q?kWEinxr9r2Uadpq4nY2DpPEXyyEieDL1Btfh5O/0IvWmAtffqwFRfFwXp3y1?=
+ =?us-ascii?Q?XreecJtAu0pOc538dTJUx9jf8wDvNO9gDASSdGA+syDD51GYEkbcmznpuqcz?=
+ =?us-ascii?Q?AJvShOlYENHmAk/N6wztQKaveedRShdUB+Vpv0eVnGXGxtCS+dmwkatse8B9?=
+ =?us-ascii?Q?NPJcApSGigp+NjoLvrT1bxXZ2/lZmSFFXjrXjSmtPCWLWZWfQ2ItfkvqzB79?=
+ =?us-ascii?Q?NU3ZGwuFWOWb+/Gt9GfJU6Hq24EJ4OTxbx1EkbPljjLdWGPNp9Q/rctttbN+?=
+ =?us-ascii?Q?UjlRckKDtb1dz/WO4/vTle5V+nJFFKrIxqHqwOMP5WZLFbbyqGKn7k+Ajtmw?=
+ =?us-ascii?Q?j8DWiuBLI8Z3sl7/91a05lQfP0pTTbNnvTI/O8PIyXp1byOnxoPLlbX4PBk+?=
+ =?us-ascii?Q?3pW3PbTd0YMr+t7j6ucg5cZ5J7/GNWdKdaeybxDj4b7XCT1TOD+TeqXs5STq?=
+ =?us-ascii?Q?HYjxoCCERuIUvdHG4/eHpK3cmbyQJRayydkBCuvmzyD9kRCDSxsH6fRaL2ko?=
+ =?us-ascii?Q?KdSV89b371PXrspXTKqz1gxj74CzMbslsauhkyMQ4gdReMld1Tu4EjPH3M0f?=
+ =?us-ascii?Q?v1B9B3/XIR7R6cl3FHnr7SLfM+q/E3VxFS451g7+WP1HKgUDJm2tnaZ4jSR8?=
+ =?us-ascii?Q?jiInU2VCNjnj+QQLTicOPkB1Q+D7WVV6omuEa5yBgmYM56fTT9m4J0qoTf5V?=
+ =?us-ascii?Q?ZFZXxjqU1kxLNjjywRgXiXuX19HvPhr2De2GW9MJhkUVofpDSYE8y8WqCrFM?=
+ =?us-ascii?Q?lVcJUil/Eafe9fi3MagzVxaQj5FW91hIclSUgXAjhS6zlPQfuXIjfQd5x5o8?=
+ =?us-ascii?Q?mdaxPBEEehWdLTcdpJCh4csICQ1gVonKUd/TCA69FHdxHnJUnqAsbAhxmvZH?=
+ =?us-ascii?Q?3tLK+CZ2eLeGXDK7Fvl1DeEEhtG7UwLB/ZatQYGI/Qddz2osNIcpiAoTuxGD?=
+ =?us-ascii?Q?6QsHaJz03jkR8zmsKUn7KEUo4V6DzA0empqM76J95oN4zaSJB+mtee2HAC7p?=
+ =?us-ascii?Q?BizfGb4L3dc11KzDM9kWSD3cKjY82xNQhLylLnr8Gbw3wuqQ8PSk2qB3QIDP?=
+ =?us-ascii?Q?GfsXNqLf6oLZ34iA0DHjCk6JKCxfrnln0ZTuHKvW?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: df147d29-8199-4150-122d-08da841acfd7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Aug 2022 08:46:31.6560
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5310.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e8028d7-d4e2-40ff-eb85-08da841aebfd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Aug 2022 08:47:18.9180
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8YA09tBAlprHfHBvaamhFO4Cf570/pf2UD3plEESWscJERPjVOOmlerm0ut1IqTY1qOF4/B20CRHALeE+xHquw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4171
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: zQfqP+Dnz3CzVycYmS5UweIcvPnJYHiezUeyv8Cy2iBjDucxpAE92zaZeykho7BILLuLrLJNRvcbS0VysYVFCg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1967
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: [PATCH V2 0/7] i2c-imx-lpi2c: add IPG clock
 
-+ Wolfram Sang I2C maintainer.
 
-Krzysztof,
-
-Do you have time to give a look whether this patchset is ok for you?
-Please forgive if this is too early ping. Some i.MX93 dts update pending
-
-Thanks,
-Peng.
-
+> -----Original Message-----
+> From: Hu, Robert <robert.hu@intel.com>
+> Sent: Friday, August 19, 2022 4:15 PM
+> To: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>; Dave Hansen
+> <dave.hansen@linux.intel.com>; Lutomirski, Andy <luto@kernel.org>; Peter
+> Zijlstra <peterz@infradead.org>
+> Cc: x86@kernel.org; Kostya Serebryany <kcc@google.com>; Andrey Ryabinin
+> <ryabinin.a.a@gmail.com>; Andrey Konovalov <andreyknvl@gmail.com>;
+> Alexander Potapenko <glider@google.com>; Taras Madan
+> <tarasmadan@google.com>; Dmitry Vyukov <dvyukov@google.com>; H . J .
+> Lu <hjl.tools@gmail.com>; Andi Kleen <ak@linux.intel.com>; Edgecombe,
+> Rick P <rick.p.edgecombe@intel.com>; linux-mm@kvack.org; linux-
+> kernel@vger.kernel.org; Zhang, Weihong <weihong.zhang@intel.com>
+> Subject: RE: [PATCHv6 09/11] selftests/x86/lam: Add mmap and SYSCALL test
+> cases for linear-address masking
 >=20
-> From: Peng Fan <peng.fan@nxp.com>
+> > -----Original Message-----
+> > From: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Sent: Monday, August 15, 2022 12:18
+> > To: Dave Hansen <dave.hansen@linux.intel.com>; Lutomirski, Andy
+> > <luto@kernel.org>; Peter Zijlstra <peterz@infradead.org>
+> > Cc: x86@kernel.org; Kostya Serebryany <kcc@google.com>; Andrey
+> > Ryabinin <ryabinin.a.a@gmail.com>; Andrey Konovalov
+> > <andreyknvl@gmail.com>; Alexander Potapenko <glider@google.com>;
+> Taras
+> > Madan <tarasmadan@google.com>; Dmitry Vyukov
+> <dvyukov@google.com>; H .
+> > J . Lu <hjl.tools@gmail.com>; Andi Kleen <ak@linux.intel.com>;
+> > Edgecombe, Rick P <rick.p.edgecombe@intel.com>; linux-mm@kvack.org;
+> > linux- kernel@vger.kernel.org; Zhang, Weihong
+> <weihong.zhang@intel.com>; Kirill A .
+> > Shutemov <kirill.shutemov@linux.intel.com>
+> > Subject: [PATCHv6 09/11] selftests/x86/lam: Add mmap and SYSCALL test
+> > cases for linear-address masking
+> >
+> > From: Weihong Zhang <weihong.zhang@intel.com>
+> >
+> > Add mmap and SYSCALL test cases.
+> >
+> > SYSCALL test cases:
+> >
+> >  - LAM supports set metadata in high bits 62:57 (LAM_U57) of a user
+> > pointer, pass
+> >    the pointer to SYSCALL, SYSCALL can dereference the pointer and
+> > return correct
+> >    result.
+> >
+> >  - Disable LAM, pass a pointer with metadata in high bits to SYSCALL,
+> >    SYSCALL returns -1 (EFAULT).
+> >
+> > MMAP test cases:
+> >
+> >  - Enable LAM_U57, MMAP with low address (below bits 47), set metadata
+> >    in high bits of the address, dereference the address should be
+> >    allowed.
+> >
+> >  - Enable LAM_U57, MMAP with high address (above bits 47), set metadata
+> >    in high bits of the address, dereference the address should be
+> >    allowed.
+> >
+> > Signed-off-by: Weihong Zhang <weihong.zhang@intel.com>
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > ---
+> >  tools/testing/selftests/x86/lam.c | 135
+> > +++++++++++++++++++++++++++++-
+> >  1 file changed, 132 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/x86/lam.c
+> > b/tools/testing/selftests/x86/lam.c
+> > index 4c6c6dbf7db6..e9e92ab7fea8 100644
+> > --- a/tools/testing/selftests/x86/lam.c
+> > +++ b/tools/testing/selftests/x86/lam.c
+> > @@ -7,6 +7,7 @@
+> >  #include <signal.h>
+> >  #include <setjmp.h>
+> >  #include <sys/mman.h>
+> > +#include <sys/utsname.h>
+> >  #include <sys/wait.h>
+> >  #include <inttypes.h>
+> >
+> > @@ -27,11 +28,18 @@
+> >  /* Specified test function bits */
+> >  #define FUNC_MALLOC             0x1
+> >  #define FUNC_BITS               0x2
+> > +#define FUNC_MMAP               0x4
+> > +#define FUNC_SYSCALL            0x8
+> >
+> > -#define TEST_MASK               0x3
+> > +#define TEST_MASK               0xf
+> > +
+> > +#define LOW_ADDR                (0x1UL << 30)
+> > +#define HIGH_ADDR               (0x3UL << 48)
+> >
+> >  #define MALLOC_LEN              32
+> >
+> > +#define PAGE_SIZE               (4 << 10)
+> > +
+> >  struct testcases {
+> >  	unsigned int later;
+> >  	int expected; /* 2: SIGSEGV Error; 1: other errors */ @@ -47,6 +55,7
+> > @@ jmp_buf segv_env;  static void segv_handler(int sig)  {
+> >  	ksft_print_msg("Get segmentation fault(%d).", sig);
+> > +
+> >  	siglongjmp(segv_env, 1);
+> >  }
+> >
+> > @@ -59,6 +68,16 @@ static inline int cpu_has_lam(void)
+> >  	return (cpuinfo[0] & (1 << 26));
+> >  }
+> >
+> > +/* Check 5-level page table feature in CPUID.(EAX=3D07H,
+> > +ECX=3D00H):ECX.[bit 16] */ static inline int cpu_has_la57(void) {
+> > +	unsigned int cpuinfo[4];
+> > +
+> > +	__cpuid_count(0x7, 0, cpuinfo[0], cpuinfo[1], cpuinfo[2],
+> > +cpuinfo[3]);
+> > +
+> > +	return (cpuinfo[2] & (1 << 16));
+> > +}
+> > +
+> >  /*
+> >   * Set tagged address and read back untag mask.
+> >   * check if the untagged mask is expected.
+> > @@ -204,6 +223,68 @@ static int handle_malloc(struct testcases *test)
+> >  	return ret;
+> >  }
+> >
+> > +static int handle_mmap(struct testcases *test) {
+> > +	void *ptr;
+> > +	unsigned int flags =3D MAP_PRIVATE | MAP_ANONYMOUS |
+> MAP_FIXED;
+> > +	int ret =3D 0;
+> > +
+> > +	if (test->later =3D=3D 0 && test->lam !=3D 0)
+> > +		if (set_lam(test->lam) !=3D 0)
+> > +			return 1;
+> > +
+> > +	ptr =3D mmap((void *)test->addr, PAGE_SIZE, PROT_READ |
+> > PROT_WRITE,
+> > +		   flags, -1, 0);
+> > +	if (ptr =3D=3D MAP_FAILED) {
+> > +		if (test->addr =3D=3D HIGH_ADDR)
+> > +			if (!cpu_has_la57())
+> > +				return 3; /* unsupport LA57 */
+> > +		return 1;
+> > +	}
+> > +
+> > +	if (test->later !=3D 0 && test->lam !=3D 0)
+> > +		if (set_lam(test->lam) !=3D 0)
+> > +			ret =3D 1;
+> > +
+> > +	if (ret =3D=3D 0) {
+> > +		if (sigsetjmp(segv_env, 1) =3D=3D 0) {
+> > +			signal(SIGSEGV, segv_handler);
+> > +			ret =3D handle_lam_test(ptr, test->lam);
+> > +		} else {
+> > +			ret =3D 2;
+> > +		}
+> > +	}
+> > +
+> > +	munmap(ptr, PAGE_SIZE);
+> > +	return ret;
+> > +}
+> > +
+> > +static int handle_syscall(struct testcases *test) {
+> > +	struct utsname unme, *pu;
+> > +	int ret =3D 0;
+> > +
+> > +	if (test->later =3D=3D 0 && test->lam !=3D 0)
+> > +		if (set_lam(test->lam) !=3D 0)
+> > +			return 1;
+> > +
+> > +	if (sigsetjmp(segv_env, 1) =3D=3D 0) {
+> > +		signal(SIGSEGV, segv_handler);
+> > +		pu =3D (struct utsname *)get_metadata((uint64_t)&unme,
+> test-
+> > >lam);
+> > +		ret =3D uname(pu);
+> > +		if (ret < 0)
+> > +			ret =3D 1;
+> > +	} else {
+> > +		ret =3D 2;
+> > +	}
+> > +
+> > +	if (test->later !=3D 0 && test->lam !=3D 0)
+> > +		if (set_lam(test->lam) !=3D -1 && ret =3D=3D 0)
+> > +			ret =3D 1;
+> > +
+> > +	return ret;
+> > +}
+> > +
+> >  static int fork_test(struct testcases *test)  {
+> >  	int ret, child_ret;
+> > @@ -259,7 +340,6 @@ static struct testcases malloc_cases[] =3D {
+> >  	},
+> >  };
+> >
+> > -
+> >  static struct testcases bits_cases[] =3D {
+> >  	{
+> >  		.test_func =3D handle_max_bits,
+> > @@ -267,11 +347,54 @@ static struct testcases bits_cases[] =3D {
+> >  	},
+> >  };
+> >
+> > +static struct testcases syscall_cases[] =3D {
+> > +	{
+> > +		.later =3D 0,
+> > +		.lam =3D LAM_U57_BITS,
+> > +		.test_func =3D handle_syscall,
+> > +		.msg =3D "SYSCALL: LAM_U57. syscall with metadata\n",
+> > +	},
+> > +	{
+> > +		.later =3D 1,
+> > +		.expected =3D 1,
+> > +		.lam =3D LAM_U57_BITS,
+> > +		.test_func =3D handle_syscall,
+> > +		.msg =3D "SYSCALL:[Negtive] Disable LAM. Dereferencing
+> pointer
+> [Hu, Robert]
+> Trivial, Negtive --> Negative.
 >=20
-> V2:
->  use clk bulk API in driver to support backward compatibility.
->  Include a new patch, patch 1.
+Thanks, will fix the typo.
+> > with metadata.\n",
+> > +	},
+> > +};
+> > +
+> > +static struct testcases mmap_cases[] =3D {
+> [Hu, Robert]
+> Can mmap also have negative case?
 >=20
-> The i.MX LPI2C needs PER and IPG clock, not just PER or IPG clock.
-> The current driver/dts/bindings use one CLK. Although it works with with
-> upstream kernel, but it not match the hardware design. If IPG clock is
-> disabled, the LPI2C will not work.
->=20
-> There are changes made to ARM32 i.MX7ULP dts, ARM64 i.MX8 dts, dt-
-> bindings, and the lpi2c driver.
->=20
-> The driver is updated to use bulk clk API to avoid break backward
-> compatibility. But it is hard to avoid dtbs_check pass, because the dts a=
-nd
-> binding update are in separate patches.
->=20
-> Peng Fan (7):
->   ARM: dts: imx7ulp: update the LPI2C clock-names
->   dt-bindings: i2c: i2c-imx-lpi2c: add ipg clk
->   dt-bindings: i2c: i2c-imx-lpi2c: add dmas property
->   dt-bindings: i2c: i2c-imx-lpi2c: add i.MX93
->   arm64: dts: imx8-ss-dma: add IPG clock for i2c
->   ARM: dts: imx7ulp: Add IPG clock for lpi2c
->   i2c: imx-lpi2c: use bulk clk API
->=20
->  .../bindings/i2c/i2c-imx-lpi2c.yaml           | 20 +++++++++++++---
->  arch/arm/boot/dts/imx7ulp.dtsi                | 10 ++++----
->  .../arm64/boot/dts/freescale/imx8-ss-dma.dtsi | 20 +++++++++-------
->  drivers/i2c/busses/i2c-imx-lpi2c.c            | 24 +++++++++----------
->  4 files changed, 47 insertions(+), 27 deletions(-)
->=20
-> --
-> 2.37.1
+Mmap just get a pointer. under U57 mode, negative case for mmap can refer t=
+o malloc cases.
+> > +	{
+> > +		.later =3D 1,
+> > +		.expected =3D 0,
+> > +		.lam =3D LAM_U57_BITS,
+> > +		.addr =3D HIGH_ADDR,
+> > +		.test_func =3D handle_mmap,
+> > +		.msg =3D "MMAP: First mmap high address, then set
+> > LAM_U57.\n",
+> > +	},
+> > +	{
+> > +		.later =3D 0,
+> > +		.expected =3D 0,
+> > +		.lam =3D LAM_U57_BITS,
+> > +		.addr =3D HIGH_ADDR,
+> > +		.test_func =3D handle_mmap,
+> > +		.msg =3D "MMAP: First LAM_U57, then High address.\n",
+> > +	},
+> > +	{
+> > +		.later =3D 0,
+> > +		.expected =3D 0,
+> > +		.lam =3D LAM_U57_BITS,
+> > +		.addr =3D LOW_ADDR,
+> > +		.test_func =3D handle_mmap,
+> > +		.msg =3D "MMAP: First LAM_U57, then Low address.\n",
+> > +	},
+> > +};
+> > +
+> >  static void cmd_help(void)
+> >  {
+> >  	printf("usage: lam [-h] [-t test list]\n");
+> >  	printf("\t-t test list: run tests specified in the test list,
+> > default:0x%x\n", TEST_MASK);
+> > -	printf("\t\t0x1:malloc; 0x2:max_bits;\n");
+> > +	printf("\t\t0x1:malloc; 0x2:max_bits; 0x4:mmap; 0x8:syscall.\n");
+> >  	printf("\t-h: help\n");
+> >  }
+> >
+> > @@ -311,6 +434,12 @@ int main(int argc, char **argv)
+> >  	if (tests & FUNC_BITS)
+> >  		run_test(bits_cases, ARRAY_SIZE(bits_cases));
+> >
+> > +	if (tests & FUNC_MMAP)
+> > +		run_test(mmap_cases, ARRAY_SIZE(mmap_cases));
+> > +
+> > +	if (tests & FUNC_SYSCALL)
+> > +		run_test(syscall_cases, ARRAY_SIZE(syscall_cases));
+> > +
+> >  	ksft_set_plan(tests_cnt);
+> >
+> >  	return ksft_exit_pass();
+> > --
+> > 2.35.1
 

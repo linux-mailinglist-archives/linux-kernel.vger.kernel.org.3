@@ -2,64 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBDD59C482
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C8E59C485
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236429AbiHVRBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
+        id S235306AbiHVRB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233343AbiHVRBG (ORCPT
+        with ESMTP id S233343AbiHVRBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:01:06 -0400
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F842CE17;
-        Mon, 22 Aug 2022 10:01:05 -0700 (PDT)
-Received: by mail-oo1-f50.google.com with SMTP id d63-20020a4a5242000000b0044880019622so2025409oob.13;
-        Mon, 22 Aug 2022 10:01:05 -0700 (PDT)
+        Mon, 22 Aug 2022 13:01:55 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA1C2CE17
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:01:53 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id g8so6586470plq.11
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=hISs2+Lj2zz9ocjh89OwJmc05bBvn26H1BdqKuz/c9o=;
+        b=NOz0ftgWBUONI4K6xRlOuRT36flqRPmzJBevhTDG7H5UWwyKFRMINFxIpdmfd4u4QI
+         CaJiP6wqGLU2LDVGRVz1EwRbz+Ba9rpv5JXI5fZr7VxxA2CBqyD3scB9K9jOID9Ph3Rx
+         0dV6+sZUwQjuybtiPFUZh66o+aKLGY9PHr0Ya/h/TmboC0deyk2mkIs1yLguUKQEOka3
+         tKvfKKO2cQJT/3OfS9J5fMXMPj8ECZ7c/kr7ZX1ETDKk15j//qPrPcpp2bnY+mEpeSL4
+         gjiNC6awGs/OnLdVUJ9f7qkRCUxqCvP8e5uKPOiM4Mz3EEeqKlzHQf8A8eNvGatJHh74
+         1G7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=vllOTj75NMj9Xtj4lVknt1y4y0/yrOawPpDzQK1s7XY=;
-        b=DWmuac1Mp8762LLTb28EB8pNoFqzDeZMJ0ttvYZKhTQxL6Zi85IPKVBU8L/FTiaXC7
-         SsO662yBsPKP7foSC7tmV9m7gMaffxPJUsdxvD0be9KcAR6EZaih0WJariFg7f/US8I3
-         gOoLSqFKpUal88QGSApF8Ge3lJoQcNL7JRZL6lc60D2hs+PuJENCT+rI+RZvhUTfpNeK
-         jUDw55yCrTB1CrSUeQLKD5XE0F2WQ4lnqzzkdKA/scFbzY/sBnYR7mIjj0w9geWhwW/c
-         Wr5mic0TNjcRML7/SrxH3oI7OITuZA2tRE4p86qFLBCxOH+cuP9OPXAK1GHtfCEzQ7Ma
-         BatQ==
-X-Gm-Message-State: ACgBeo254yXGryClkIsEmPGjUwLVRPiP0/RxzSt1DZ5hhI1a5qge2rXl
-        B1siS4KynaPtx1IjY29tJA==
-X-Google-Smtp-Source: AA6agR7f7iG5WZv9hUN29PKotnQLZ188Y9PJABNFzMfCJeDdQBw7SZ57RoQtRac3zi8ntAyYvNRADQ==
-X-Received: by 2002:a4a:abcf:0:b0:428:47bc:4bc0 with SMTP id o15-20020a4aabcf000000b0042847bc4bc0mr7000784oon.15.1661187664664;
-        Mon, 22 Aug 2022 10:01:04 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q12-20020a9d630c000000b0061c80e20c7dsm3019384otk.81.2022.08.22.10.00.57
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=hISs2+Lj2zz9ocjh89OwJmc05bBvn26H1BdqKuz/c9o=;
+        b=eVl1KdCDXAXQzxjLQs8Rum8N9BFyUy4vdF1NNrp5KbNAVfdya4mXqAS7NbDAhwJdtr
+         nZyPajXRLoE7B5X+gr+OXxb2CFbrqSgoC+4674rykdEpp+wiT9/GOD7khNwVlfvTCw9E
+         esp0AviWeTh+2VFrjP23p/YmJcoJgmVsFw4slNZny0aP+D0jUix7LNuHOVLZZqydnf25
+         jiERRhazp/IC5gnWDvD6Fk5wwdLA1NWhPHMmMwB23POfLhiVsJyiVgGY8ASNjxV7sZY5
+         PpkV9EQZsZZZVN1AOcfmvORyRPExBxqEf/Hixd/6gyW6ucs3poNBLLKfKK2SNk1RUFRK
+         3XXw==
+X-Gm-Message-State: ACgBeo26tkS4aXpbgDuWF/u279Z70ONsjFZg7Qi1kOXJ14nS6oplnOx5
+        vdSdVcWr0xEjwE0idqWf/Lpu2w==
+X-Google-Smtp-Source: AA6agR6y6MvImrDfOKpRHaP76KrDOZE2lPG3W4xYzVQy6r86lB96UyXhh1HAfgfxABjIE9OT1hMoCg==
+X-Received: by 2002:a17:90b:1c82:b0:1ee:eb41:b141 with SMTP id oo2-20020a17090b1c8200b001eeeb41b141mr24430852pjb.143.1661187713337;
+        Mon, 22 Aug 2022 10:01:53 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u64-20020a627943000000b0052c7ff2ac74sm9191026pfc.17.2022.08.22.10.01.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 10:00:59 -0700 (PDT)
-Received: (nullmailer pid 4151205 invoked by uid 1000);
-        Mon, 22 Aug 2022 17:00:56 -0000
-Date:   Mon, 22 Aug 2022 12:00:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc/85xx: DTS: Add CPLD definitions for P1021RDB
- Combo Board CPL Design
-Message-ID: <20220822170056.GA4135542-robh@kernel.org>
-References: <20220819084433.26011-1-pali@kernel.org>
+        Mon, 22 Aug 2022 10:01:52 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 17:01:49 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 03/26] x86/hyperv: Update 'struct hv_enlightened_vmcs'
+ definition
+Message-ID: <YwO2fSCGXnE/9mc2@google.com>
+References: <20220802160756.339464-1-vkuznets@redhat.com>
+ <20220802160756.339464-4-vkuznets@redhat.com>
+ <Yv5ZFgztDHzzIQJ+@google.com>
+ <875yiptvsc.fsf@redhat.com>
+ <Yv59dZwP6rNUtsrn@google.com>
+ <87czcsskkj.fsf@redhat.com>
+ <YwOm7Ph54vIYAllm@google.com>
+ <87edx8xn8h.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220819084433.26011-1-pali@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <87edx8xn8h.fsf@redhat.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,81 +85,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 10:44:33AM +0200, Pali Rohár wrote:
-> P1021RDB Combo Board CPLD Design is used on following Freescale boards:
-> P1021RDB-PC, P1020RDB-PD, P1020MBG-PC, P1020UTM-PC and P2020RDB-PCA.
+On Mon, Aug 22, 2022, Vitaly Kuznetsov wrote:
+> Sean Christopherson <seanjc@google.com> writes:
 > 
-> Add CPLD definitions for all these boards for which already exist DTS file.
+> > On Mon, Aug 22, 2022, Vitaly Kuznetsov wrote:
+> >> So I reached out to Microsoft and their answer was that for all these new
+> >> eVMCS fields (including *PerfGlobalCtrl) observing architectural VMX
+> >> MSRs should be enough. *PerfGlobalCtrl case is special because of Win11
+> >> bug (if we expose the feature in VMX feature MSRs but don't set
+> >> CPUID.0x4000000A.EBX BIT(0) it just doesn't boot).
+> >
+> > I.e. TSC_SCALING shouldn't be gated on the flag?  If so, then the 2-D array approach
+> > is overkill since (a) the CPUID flag only controls PERF_GLOBAL_CTRL and (b) we aren't
+> > expecting any more flags in the future.
+> >
 > 
-> CPLD has bank size 128kB, it is connected via CS3 on LBC and mapped to
-> memory range 0xFFA00000~0xFFA1FFFF.
+> Unfortunately, we have to gate the presence of these new features on
+> something, otherwise VMM has no way to specify which particular eVMCS
+> "revision" it wants (TL;DR: we will break migration).
 > 
-> As CPLD firmware is common on all these boards, use just one compatible
-> string "fsl,p1021rdb-pc-cpld".
+> My initial implementation was inventing 'eVMCS revision' concept:
+> https://lore.kernel.org/kvm/20220629150625.238286-7-vkuznets@redhat.com/
 > 
-> In some DTS files is CPLD already defined, but definition is either
-> incomplete or wrong. So fix it.
+> which is needed if we don't gate all these new fields on CPUID.0x4000000A.EBX BIT(0).
 > 
-> All these boards have via CPLD connected max6370 watchdog at offset 0x2
-> with GPIO 11, status led at offset 0x8 and reset controller at offset 0xd.
-> Additionally P1020MBG-PC and P1020RDB-PD boards have FXO led at offset 0x9
-> and FXS leds at offset 0xa.
-> 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
->  arch/powerpc/boot/dts/fsl/p1020mbg-pc.dtsi    | 92 +++++++++++++++++++
->  arch/powerpc/boot/dts/fsl/p1020mbg-pc_32b.dts |  6 +-
->  arch/powerpc/boot/dts/fsl/p1020mbg-pc_36b.dts |  6 +-
->  arch/powerpc/boot/dts/fsl/p1020rdb-pd.dts     | 44 +++++++--
->  arch/powerpc/boot/dts/fsl/p1020utm-pc.dtsi    | 37 ++++++++
->  arch/powerpc/boot/dts/fsl/p1020utm-pc_32b.dts |  4 +-
->  arch/powerpc/boot/dts/fsl/p1020utm-pc_36b.dts |  4 +-
->  arch/powerpc/boot/dts/fsl/p1021rdb-pc.dtsi    | 37 ++++++++
->  arch/powerpc/boot/dts/fsl/p1021rdb-pc_32b.dts |  5 +-
->  arch/powerpc/boot/dts/fsl/p1021rdb-pc_36b.dts |  5 +-
->  arch/powerpc/boot/dts/fsl/p2020rdb-pc.dtsi    | 33 ++++++-
->  11 files changed, 251 insertions(+), 22 deletions(-)
-> 
-> diff --git a/arch/powerpc/boot/dts/fsl/p1020mbg-pc.dtsi b/arch/powerpc/boot/dts/fsl/p1020mbg-pc.dtsi
-> index a24699cfea9c..c73996dcd809 100644
-> --- a/arch/powerpc/boot/dts/fsl/p1020mbg-pc.dtsi
-> +++ b/arch/powerpc/boot/dts/fsl/p1020mbg-pc.dtsi
-> @@ -83,6 +83,95 @@
->  		compatible = "vitesse-7385";
->  		reg = <0x2 0x0 0x20000>;
->  	};
-> +
-> +	cpld@3,0 {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		compatible = "fsl,p1021rdb-pc-cpld", "simple-bus", "syscon";
-> +		reg = <0x3 0x0 0x20000>;
-> +		ranges = <0x0 0x3 0x0 0x20000>;
-> +
-> +		watchdog@2 {
-> +			compatible = "maxim,max6370";
-> +			reg = <0x2 0x1>;
-> +			gpios = <&gpio 11 1>;
-> +		};
-> +
-> +		led@8 {
+> Going forward, we will still (likely) need something when new fields show up.
 
-The register-bit-led schema says this should be 'led@8,0'. Did you 
-run 'dtbs_check'? 
+My comments from that thread still apply.  Adding "revisions" or feature flags
+isn't maintanable, e.g. at best KVM will end up with a ridiculous number of flags.
 
-But that's going to conflict with what simple-bus schema says. I don't 
-know that 'simple-bus' is really appropriate here. The CPLD isn't really 
-just a bus. 'simple-mfd' is what's more commonly used with 'syscon'.
+Looking at QEMU, which I strongly suspect is the only VMM that enables
+KVM_CAP_HYPERV_ENLIGHTENED_VMCS, it does the sane thing of enabling the capability
+before grabbing the VMX MSRs.
 
+So, why not simply apply filtering for host accesses as well?  E.g.
 
-> +			compatible = "register-bit-led";
-> +			reg = <0x8 0x1>;
-> +			offset = <0x8>;
-> +			mask = <0x1>;
-> +			active-low;
-> +			default-state = "keep";
-> +			label = "status";
-> +			function = "status";
-> +			color = <6>; /* LED_COLOR_ID_YELLOW */
-> +		};
+		/*
+		 * New Enlightened VMCS fields always lag behind their hardware
+		 * counterparts, filter out fields that are not yet defined.
+		 */
+		if (vmx->nested.enlightened_vmcs_enabled)
+			nested_evmcs_filter_control_msr(vcpu, msr_info);
+
+and then the eVMCS can end up being:
+
+static bool evmcs_has_perf_global_ctrl(struct kvm_vcpu *vcpu)
+{
+	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+
+	/*
+	 * PERF_GLOBAL_CTRL is filtered only for guest accesses, and all guest
+	 * accesses should be gated on Hyper-V being enabled and initialized.
+	 */
+	if (WARN_ON_ONCE(!hv_vcpu))
+		return false;
+
+	return hv_vcpu->cpuid_cache.nested_ebx & HV_X64_NESTED_EVMCS1_PERF_GLOBAL_CTRL;
+}
+
+static u32 evmcs_get_unsupported_ctls(struct kvm_vcpu *vcpu, u32 msr_index,
+				      bool host_initiated)
+{
+	u32 unsupported_ctrls;
+
+	switch (msr_index) {
+	case MSR_IA32_VMX_EXIT_CTLS:
+	case MSR_IA32_VMX_TRUE_EXIT_CTLS:
+		unsupported_ctrls = EVMCS1_UNSUPPORTED_VMEXIT_CTRL;
+		if (!host_initiated && !evmcs_has_perf_global_ctrl(vcpu))
+			unsupported_ctrls |= VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
+		return unsupported_ctrls;
+	case MSR_IA32_VMX_ENTRY_CTLS:
+	case MSR_IA32_VMX_TRUE_ENTRY_CTLS:
+		unsupported_ctrls = EVMCS1_UNSUPPORTED_VMENTRY_CTRL;
+		if (!host_initiated && !evmcs_has_perf_global_ctrl(vcpu))
+			unsupported_ctrls |= VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
+		return unsupported_ctrls;
+	case MSR_IA32_VMX_PROCBASED_CTLS2:
+		return EVMCS1_UNSUPPORTED_2NDEXEC;
+	case MSR_IA32_VMX_TRUE_PINBASED_CTLS:
+	case MSR_IA32_VMX_PINBASED_CTLS:
+		return EVMCS1_UNSUPPORTED_PINCTRL;
+	case MSR_IA32_VMX_VMFUNC:
+		return EVMCS1_UNSUPPORTED_VMFUNC;
+	default:
+		KVM_BUG_ON(1, vcpu->kvm);
+		return 0;
+	}
+}
+
+void nested_evmcs_filter_control_msr(struct kvm_vcpu *vcpu,
+				     struct msr_data *msr_info)
+{
+	u64 unsupported_ctrls;
+	
+	if (!msr_info->host_initiated && !vcpu->arch.hyperv_enabled)
+		return;
+
+	unsupported_ctrls = evmcs_get_unsupported_ctls(vcpu, msr_info->index,
+						       msr_info->host_initiated);
+	if (msr_info->index == MSR_IA32_VMX_VMFUNC)
+		msr_info->data &= ~unsupported_ctrls;
+	else
+		msr_info->data &= ~(unsupported_ctrls << 32);
+}
+
+static bool nested_evmcs_is_valid_controls(struct kvm_vcpu *vcpu,
+					   u32 msr_index, u32 val)
+{
+	return val & evmcs_get_unsupported_ctls(vcpu, msr_index, false);
+}
 

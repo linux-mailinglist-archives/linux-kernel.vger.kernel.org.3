@@ -2,57 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5323E59C5FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C131359C600
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237407AbiHVSWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 14:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S237035AbiHVSWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 14:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236665AbiHVSW0 (ORCPT
+        with ESMTP id S237411AbiHVSWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 14:22:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E8C474F6;
-        Mon, 22 Aug 2022 11:22:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD804B81722;
-        Mon, 22 Aug 2022 18:22:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 841D2C433C1;
-        Mon, 22 Aug 2022 18:22:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661192542;
-        bh=/tpyJXjO6Yic3E7IJcvmUnNa+4Nr/vUf3u9YFHixZ2Y=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=dnzwHnapIewwCmDXke2kVm+53LUPX25tcSri8h9z1XwTOrzjVRRBlVNWKf5mPkijV
-         FkQRmiQhlSxjra5I9JIN6Z5GmlEZeR7b6hcqegQmCFGxBTSG6oO/CdXCSRz6z26bxT
-         FEWwhyagbBr6MT7BnM0Uc8LxiQr1EMQBqQ1Cin84/2FMe7qrYb9dMwrKFRmsABGL9B
-         heeA1DvdFBzp3cfobc4L/MKNuxfR00iZPF4t+Krs/picmPCS7BCaHJCzPLiDYfUQQa
-         7etSOl/AFLEeTAr5vj80NIZ4D4gaqciXIC3bETNlQnVbeTPdCQRHc1bGWKb+38hw+c
-         Rh1R91RQ2ANcg==
-Message-ID: <4cc84440d954c022d0235bf407a60da66a6ccc39.camel@kernel.org>
-Subject: Re: [PATCH] iversion: update comments with info about atime updates
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Dave Chinner <david@fromorbit.com>
-Date:   Mon, 22 Aug 2022 14:22:20 -0400
-In-Reply-To: <18827b350fbf6719733fda814255ec20d6dcf00f.camel@linux.ibm.com>
-References: <20220822133309.86005-1-jlayton@kernel.org>
-         <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>
-         <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>
-         <18827b350fbf6719733fda814255ec20d6dcf00f.camel@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Mon, 22 Aug 2022 14:22:35 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B75474FA
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:22:33 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id bx38so11386643ljb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=W5y5XX8f1s39d+qb+Ap4JPBqkkKGvwJEJMCAPr9uk5M=;
+        b=k28PldqGUnjNILcrlYE1sV3gSoayM8/qsaLXeWPeCWUewLucdlyVkOSpUSErZsylX8
+         Ga/kflW5Bzm154IEoc3dlTPd6a0XacXlurXQMJs0+qld3bwC4iOuomPhrL9rtgLYFNJl
+         fOOf8+mcr8MiZqkJCHZ1UqxucL15GP3bS/if9N0mEmrPHRoshehyEag8QiIS+Z1QKe57
+         YvI6Ae7zVCaEkU3VQ0pnQ1bIvUhYe96MPS5PQCuBDVarzZg9feXk3rQeNbsA7y5z2dJY
+         Pd67KqIAElwTiNAq59eYBLNQxSeWsJeSp03b8EssoOWRwx1uWot+BD/iQKJoxHtwHlXR
+         Uy7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=W5y5XX8f1s39d+qb+Ap4JPBqkkKGvwJEJMCAPr9uk5M=;
+        b=d9/GMOGKLm6fFrMUB6KWDjub+G4fCD09ih8NYoN/V+9ObkgLXCMUAc0X68wBV49q78
+         9htwdMOMr746SDw6bvShnip0ciNtM7AOHXFcpCqdcRwRlAsE/5gNeQCvyaM6dyeIV1xQ
+         SJHC3QcWNG4a3aOFyyaSpcJOzwVEqtjtUK1Dka9TksBZLJj3Iyvzrou3PLCvyY/9cuLf
+         Dkx8j8kCCYZX3RGgllb05oioQZdd5YyUybeV1vvgoxT2KiwNq+xINY5nQGk9YjAx3pDc
+         MtgLn6LwACAlKbD4TGE8s4EgIq3P4m+8UEtWfAtI8D/UuuJdfP1QFVWTjtJkxS//PrUD
+         vWoQ==
+X-Gm-Message-State: ACgBeo1v6BkCMpmc3w/ywzIYMjVAD2uxc1lpQ3oQ54cEL1fHIoDoq0Ho
+        uXqZ1YZPT4L6eZ8ANjwgQrHfSg==
+X-Google-Smtp-Source: AA6agR5GStlxeysuHFO7ASxExehsD+K7KqUYnLgzhe2iyPjejimLMZ1FC3zwPQVm1/hU/axz0aIOQg==
+X-Received: by 2002:a05:651c:88e:b0:261:b5e5:8622 with SMTP id d14-20020a05651c088e00b00261b5e58622mr5327485ljq.99.1661192552112;
+        Mon, 22 Aug 2022 11:22:32 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id a4-20020a05651c210400b00261c30d71e5sm1243004ljq.67.2022.08.22.11.22.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 11:22:31 -0700 (PDT)
+Message-ID: <f5561edc-f2fc-05c6-8f24-e0b362989302@linaro.org>
+Date:   Mon, 22 Aug 2022 21:22:29 +0300
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v6 03/17] dt-bindings: spi: cdns: Add compatible for AMD
+ Pensando Elba SoC
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de, blarson@amd.com,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        gsomlo@gmail.com, gerg@linux-m68k.org, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
+        broonie@kernel.org, yamada.masahiro@socionext.com,
+        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, ulf.hansson@linaro.org, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20220820195750.70861-1-brad@pensando.io>
+ <20220820195750.70861-4-brad@pensando.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220820195750.70861-4-brad@pensando.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,152 +88,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-08-22 at 13:39 -0400, Mimi Zohar wrote:
-> On Mon, 2022-08-22 at 12:22 -0400, Jeff Layton wrote:
-> > On Mon, 2022-08-22 at 11:40 -0400, Mimi Zohar wrote:
-> > > On Mon, 2022-08-22 at 09:33 -0400, Jeff Layton wrote:
-> > > > Add an explicit paragraph codifying that atime updates due to reads
-> > > > should not be counted against the i_version counter. None of the
-> > > > existing subsystems that use the i_version want those counted, and
-> > > > there is an easy workaround for those that do.
-> > > >=20
-> > > > Cc: NeilBrown <neilb@suse.de>
-> > > > Cc: Trond Myklebust <trondmy@hammerspace.com>
-> > > > Cc: Dave Chinner <david@fromorbit.com>
-> > > > Link: https://lore.kernel.org/linux-xfs/166086932784.5425.171347126=
-94961326033@noble.neil.brown.name/#t
-> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > > ---
-> > > >  include/linux/iversion.h | 10 ++++++++--
-> > > >  1 file changed, 8 insertions(+), 2 deletions(-)
-> > > >=20
-> > > > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
-> > > > index 3bfebde5a1a6..da6cc1cc520a 100644
-> > > > --- a/include/linux/iversion.h
-> > > > +++ b/include/linux/iversion.h
-> > > > @@ -9,8 +9,8 @@
-> > > >   * ---------------------------
-> > > >   * The change attribute (i_version) is mandated by NFSv4 and is mo=
-stly for
-> > > >   * knfsd, but is also used for other purposes (e.g. IMA). The i_ve=
-rsion must
-> > > > - * appear different to observers if there was a change to the inod=
-e's data or
-> > > > - * metadata since it was last queried.
-> > > > + * appear different to observers if there was an explicit change t=
-o the inode's
-> > > > + * data or metadata since it was last queried.
-> > > >   *
-> > > >   * Observers see the i_version as a 64-bit number that never decre=
-ases. If it
-> > > >   * remains the same since it was last checked, then nothing has ch=
-anged in the
-> > > > @@ -18,6 +18,12 @@
-> > > >   * anything about the nature or magnitude of the changes from the =
-value, only
-> > > >   * that the inode has changed in some fashion.
-> > > >   *
-> > > > + * Note that atime updates due to reads or similar activity do _no=
-t_ represent
-> > > > + * an explicit change to the inode. If the only change is to the a=
-time and it
-> > >=20
-> > > Thanks, Jeff.  The ext4 patch increments i_version on file metadata
-> > > changes.  Could the wording here be more explicit to reflect changes
-> > > based on either inode data or metadata changes?b
-> > >=20
-> > >=20
-> >=20
-> > Thanks Mimi,
-> >=20
-> > Care to suggest some wording?
-> >=20
-> > The main issue we have is that ext4 and xfs both increment i_version on
-> > atime updates due to reads. I have patches in flight to fix those, but
-> > going forward, we want to ensure that i_version gets incremented on all
-> > changes _except_ for atime updates.
-> >=20
-> > The best wording we have at the moment is what Trond suggested, which i=
-s
-> > to classify the changes to the inode as "explicit" (someone or somethin=
-g
-> > made a deliberate change to the inode) and "implicit" (the change to th=
-e
-> > inode was due to activity such as reads that don't actually change
-> > anything).
-> >=20
-> > Is there a better way to describe this?
->=20
-> "explicit change to the inode" probably implies both the inode file
-> data and metadata, but let's call it out by saying "an explicit change
-> to either the inode data or metadata".
->=20
-> >=20
-> > > > + * wasn't set via utimes() or a similar mechanism, then i_version =
-should not be
-> > > > + * incremented. If an observer cares about atime updates, it shoul=
-d plan to
-> > > > + * fetch and store them in conjunction with the i_version.
-> > > > + *
-> > > >   * Not all filesystems properly implement the i_version counter. S=
-ubsystems that
-> > > >   * want to use i_version field on an inode should first check whet=
-her the
-> > > >   * filesystem sets the SB_I_VERSION flag (usually via the IS_I_VER=
-SION macro).
-> > >=20
-> > >=20
-> >=20
->=20
->=20
+On 20/08/2022 22:57, Brad Larson wrote:
+> From: Brad Larson <blarson@amd.com>
+> 
+> Document the cadence qspi controller compatible for AMD Pensando
+> Elba SoC boards.  The Elba qspi fifo size is 1024.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
 
-Thanks Mimi,
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-Here's what I have now. I'll plan to send a v2 patch once others have
-had a chance to comment as well.
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 
--- Jeff
-
-diff --git a/include/linux/iversion.h b/include/linux/iversion.h
-index 3bfebde5a1a6..524abd372100 100644
---- a/include/linux/iversion.h
-+++ b/include/linux/iversion.h
-@@ -9,8 +9,8 @@
-  * ---------------------------
-  * The change attribute (i_version) is mandated by NFSv4 and is mostly for
-  * knfsd, but is also used for other purposes (e.g. IMA). The i_version mu=
-st
-- * appear different to observers if there was a change to the inode's data=
- or
-- * metadata since it was last queried.
-+ * appear different to observers if there was an explicit change to the in=
-ode's
-+ * data or metadata since it was last queried.
-  *
-  * Observers see the i_version as a 64-bit number that never decreases. If=
- it
-  * remains the same since it was last checked, then nothing has changed in=
- the
-@@ -18,6 +18,13 @@
-  * anything about the nature or magnitude of the changes from the value, o=
-nly
-  * that the inode has changed in some fashion.
-  *
-+ * Note that atime updates due to reads or similar activity do not represe=
-nt
-+ * an explicit change to the inode data or metadata. If the only change is=
- to
-+ * the atime and it wasn't set via utimes() or a similar mechanism, then
-+ * i_version should not be incremented. If an observer cares about atime
-+ * updates, it should plan to fetch and store them in conjunction with the
-+ * i_version.
-+ *
-  * Not all filesystems properly implement the i_version counter. Subsystem=
-s that
-  * want to use i_version field on an inode should first check whether the
-  * filesystem sets the SB_I_VERSION flag (usually via the IS_I_VERSION mac=
-ro).
+If a tag was not added on purpose, please state why and what changed.
 
 
---=20
-Jeff Layton <jlayton@kernel.org>
+
+Best regards,
+Krzysztof

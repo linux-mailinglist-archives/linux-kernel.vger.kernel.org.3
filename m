@@ -2,368 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8AA59C1F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AFD59C201
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235578AbiHVOzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 10:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S235665AbiHVO4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 10:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235690AbiHVOza (ORCPT
+        with ESMTP id S235609AbiHVO4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 10:55:30 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5739186E9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 07:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661180128; x=1692716128;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jp07TlypUxlyl1goj8H3yNz8FZQcolvoVw0g67erES0=;
-  b=kmvgYvripyI3eQecaQTHtHRM3Y5KQD0Av2SrHlNPBJOevuFWqGLBw75n
-   VPKKC0uGf++TVDAgxXFcZb+lIFslNNdRYfRtyNUNB0naDWfNTHu8BGYLR
-   IgWH52SdDEbGj1zm+Te1EX+zVnKsQpM6HM+JOzh+o8m+Xxzp9BU71KAVh
-   Ol9lKReZYhWudmRTKzYma27iKhI6D15AkZbR10iVMj1BtkRryqxdmvG4s
-   T4I7oy6l+J2vmFsZdDoDUjIHoQaZFPvINOD/+uOr2Gqw+8O7OVCvHjWBb
-   UuyDpiZERmED4qpENLtZBAeLkUgfsIu+8DQWWY3iTwHsKjFwTtGZjA8ii
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="280403868"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="280403868"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 07:55:28 -0700
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="612072086"
-Received: from vjuntune-mobl1.ger.corp.intel.com (HELO [10.249.43.87]) ([10.249.43.87])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 07:55:26 -0700
-Message-ID: <18ee9831-eca1-ab84-61dc-bfef21f87515@linux.intel.com>
-Date:   Mon, 22 Aug 2022 16:55:23 +0200
+        Mon, 22 Aug 2022 10:56:11 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763B830556
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 07:56:10 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id jm11so10128245plb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 07:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Q7WYgfj+D74q3tCpU5JrwR7f8DS8YPdEHB5QL4Zw+3E=;
+        b=jjZM2OFr/3FVWHbl+N6HxUndM4ZQsTxjvR0U5CsuexneKgVxqdV1bXLtaFMj4Z0OGG
+         3rbrlz78/uOXN4/dBpeueMFz7QDTr89EvKklVfCjuU38Xe6odVZy5ZIZfFogK2w9Kz08
+         O2Xg6uOeH2cAeEZ7kHIG3YkhVp1G7ltowW0IQOo8qvWCACurSPdYzcOV5ebirHsqU4fv
+         BrKhmOCSgPClIiIzFGj5oOJ2erOyckssP0wY1islBfgBntr7B/hpZWVE5+nTof6D/jks
+         FYtLJt7EkaEUp/kmK6o9V8yjRSu6idnj6Btq68OCK3Qjp59HUWfIapwm0yH6RRbPlx4F
+         UBMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Q7WYgfj+D74q3tCpU5JrwR7f8DS8YPdEHB5QL4Zw+3E=;
+        b=wCVJJmgaYrADwAwzvZ1YNb8qLFoWyymty9DOVro24zMjxvNc7cLjUj7yXY+BL+Hk4G
+         v7z/EyNYpHr+0LMSwaogBgtxVpjXeMJ6IA8yAIQ7DdxdQjTa3+M5Ztm3+n8SU2gaYRp7
+         Vif2FTe81JKHSZUejmckOfohUL+5Iz+XrduvQAzuvqt1C40S54SwJKBRveIwjUza6+E6
+         POWJNQvQW+x/sEZZqyLT+9ev0Tv4w3CExhfqbjPWdS+Dd1QAvLzSUcujulzynOZ4xcbm
+         Eh4QOFSujO8Bg/cBfcZtK73YHEODu+4MInEnjY/sRvnsn7iuifOn6pKWev7PgNbplUJq
+         npRg==
+X-Gm-Message-State: ACgBeo1TC2mZvvYJ7b4dMetyMqHYsIaNrV+g+TubLKrd+xpyf5dMubr5
+        wjaFNyuA7GANWid4gXvaDdHdLnP4OD0IkizUkGI4lw==
+X-Google-Smtp-Source: AA6agR4pjeCo4sfTRvPxIMsKbhBf7tq6lkeLni7LueWtlNFZuZBasGE1lD6mN+eHQeRHv7PGybIw63IFG+r7joXQ1gM=
+X-Received: by 2002:a17:90b:4d0f:b0:1f7:ae99:b39d with SMTP id
+ mw15-20020a17090b4d0f00b001f7ae99b39dmr23665783pjb.237.1661180169772; Mon, 22
+ Aug 2022 07:56:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH 11/12] ASoC: cs42l42: Add Soundwire support
-Content-Language: en-US
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>, broonie@kernel.org
-Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220819125230.42731-1-rf@opensource.cirrus.com>
- <20220819125230.42731-12-rf@opensource.cirrus.com>
- <44359e9c-4891-17e7-5e0d-392d4751ccf5@linux.intel.com>
- <8a280ad7-ee62-75e0-6bd0-d6396fa27db2@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <8a280ad7-ee62-75e0-6bd0-d6396fa27db2@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220822001737.4120417-1-shakeelb@google.com> <20220822001737.4120417-2-shakeelb@google.com>
+ <YwNSlZFPMgclrSCz@dhcp22.suse.cz> <YwNX+vq9svMynVgW@dhcp22.suse.cz>
+In-Reply-To: <YwNX+vq9svMynVgW@dhcp22.suse.cz>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Mon, 22 Aug 2022 07:55:58 -0700
+Message-ID: <CALvZod720nwfP68OM2QtyyWJpOV5aO8xF6iuN0U2hpX9Pzj8PA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mm: page_counter: remove unneeded atomic ops for low/min
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Oliver Sang <oliver.sang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Richard for your answers, good discussion. There are several
-topics I could use more details to understand your line of thought and
-requirements, see below.
+On Mon, Aug 22, 2022 at 3:18 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 22-08-22 11:55:33, Michal Hocko wrote:
+> > On Mon 22-08-22 00:17:35, Shakeel Butt wrote:
+> [...]
+> > > diff --git a/mm/page_counter.c b/mm/page_counter.c
+> > > index eb156ff5d603..47711aa28161 100644
+> > > --- a/mm/page_counter.c
+> > > +++ b/mm/page_counter.c
+> > > @@ -17,24 +17,23 @@ static void propagate_protected_usage(struct page_counter *c,
+> > >                                   unsigned long usage)
+> > >  {
+> > >     unsigned long protected, old_protected;
+> > > -   unsigned long low, min;
+> > >     long delta;
+> > >
+> > >     if (!c->parent)
+> > >             return;
+> > >
+> > > -   min = READ_ONCE(c->min);
+> > > -   if (min || atomic_long_read(&c->min_usage)) {
+> > > -           protected = min(usage, min);
+> > > +   protected = min(usage, READ_ONCE(c->min));
+> > > +   old_protected = atomic_long_read(&c->min_usage);
+> > > +   if (protected != old_protected) {
+> >
+> > I have to cache that code back into brain. It is really subtle thing and
+> > it is not really obvious why this is still correct. I will think about
+> > that some more but the changelog could help with that a lot.
+>
+> OK, so the this patch will be most useful when the min > 0 && min <
+> usage because then the protection doesn't really change since the last
+> call. In other words when the usage grows above the protection and your
+> workload benefits from this change because that happens a lot as only a
+> part of the workload is protected. Correct?
 
->>> - Intel Soundwire host controllers have a low-power clock-stop mode that
->>>    requires resetting all peripherals when resuming. This is not
->>> compatible
->>>    with the plug-detect and button-detect because it will clear the
->>>    condition that caused the wakeup before the driver can handle it. So
->>>    clock-stop must be blocked when a snd_soc_jack handler is registered.
->>
->> What do you mean by 'clock-stop must be blocked'? The peripheral cannot
->> prevent the host from stopping the clock.
-> 
-> Are you sure about that? We're going to have serious problems if the
-> Intel manager driver can clock-stop even though there are peripheral
-> drivers still using the clock.
-> 
-> Currently the Intel code will only clock-stop when it goes into
-> runtime suspend, which only happens if all peripheral drivers are also
-> in runtime suspend. Or on system suspend, which is handled specially by
-> the cs42l42 driver. If you are saying this isn't guaranteed behavior
-> then we'll need to add something to the core Soundwire core code to tell
-> it when it's allowed to clock-stop.
+Yes, that is correct. I hope the experiment setup is clear now.
 
-If the peripheral remains pm_runtime active, the manager will never
-suspend, but power-wise that's a non-starter.
+>
+> Unless I have missed anything this shouldn't break the correctness but I
+> still have to think about the proportional distribution of the
+> protection because that adds to the complexity here.
 
-The premise is that the audio subsystem goes to a low-power state with
-only a detector running. The functionality will resume on *any* in-band
-wake coming from the peripheral.
-
-> I tried returning an error from the codec driver clk_stop() callback but
-> the core code and cadence code treat that as unexpected and dev_err()
-> it, then the intel.c code ignores the error and carries on suspending.
-
-Yes, we ignore those errors on purpose, because when the system restarts
-the device will have gone through a reset sequence. I don't see a good
-reason to prevent a pm_runtime or system suspend, this would have very
-large impacts on standby power.
-
->  Maybe this is explained
->> further down in this patch, but that statement is a bit odd.
->>
->> Even if the condition that caused the wakeup was cleared, presumably
->> when resetting the device the same condition will be raised again, no?
->>
->>> +static int cs42l42_sdw_dai_hw_params(struct snd_pcm_substream
->>> *substream,
->>> +                     struct snd_pcm_hw_params *params,
->>> +                     struct snd_soc_dai *dai)
->>> +{
->>> +    struct cs42l42_private *cs42l42 =
->>> snd_soc_component_get_drvdata(dai->component);
->>> +    struct sdw_stream_runtime *sdw_stream =
->>> snd_soc_dai_get_dma_data(dai, substream);
->>> +    struct sdw_stream_config sconfig;
->>> +    struct sdw_port_config pconfig;
->>> +    unsigned int pdn_mask;
->>> +    int ret;
->>> +
->>> +    if (!sdw_stream)
->>> +        return -EINVAL;
->>> +
->>> +    /* Needed for PLL configuration when we are notified of new bus
->>> config */
->>> +    cs42l42->sample_rate = params_rate(params);
->>> +
->>> +    memset(&sconfig, 0, sizeof(sconfig));
->>> +    memset(&pconfig, 0, sizeof(pconfig));
->>> +
->>> +    sconfig.frame_rate = params_rate(params);
->>> +    sconfig.ch_count = params_channels(params);
->>> +    sconfig.bps = snd_pcm_format_width(params_format(params));
->>> +    pconfig.ch_mask = GENMASK(sconfig.ch_count - 1, 0);
->>> +
->>> +    if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
->>> +        sconfig.direction = SDW_DATA_DIR_RX;
->>> +        pconfig.num = CS42L42_SDW_PLAYBACK_PORT;
->>> +        pdn_mask = CS42L42_HP_PDN_MASK;
->>> +    } else {
->>> +        sconfig.direction = SDW_DATA_DIR_TX;
->>> +        pconfig.num = CS42L42_SDW_CAPTURE_PORT;
->>> +        pdn_mask = CS42L42_ADC_PDN_MASK;
->>> +    }
->>> +
->>> +    /*
->>> +     * The DAI-link prepare() will trigger Soundwire DP prepare. But
->>> CS42L42
->>> +     * DP will only prepare if the HP/ADC is already powered-up. The
->>> +     * DAI prepare() and DAPM sequence run after DAI-link prepare()
->>> so the
->>> +     * PDN bit must be written here.
->>> +     */
->>
->> Why not make use of the callbacks that were added precisely to let the
->> codec driver perform device-specific operations? You can add your own
->> code in pre and post operation for both prepare and bank switch. It's
->> not clear why you would do this in a hw_params (which can be called
->> multiple times per ALSA conventions).
->>
-> 
-> Ah, I'd not noticed the port_prep callback. Maybe it didn't exist when
-> this code was first written.
-
-it's been upstream since 4.17 in 2018, and earlier in internal releases.
-
->>> +    regmap_clear_bits(cs42l42->regmap, CS42L42_PWR_CTL1, pdn_mask);
->>> +    usleep_range(CS42L42_HP_ADC_EN_TIME_US,
->>> CS42L42_HP_ADC_EN_TIME_US + 1000);
->>> +
->>> +    ret = sdw_stream_add_slave(cs42l42->sdw_peripheral, &sconfig,
->>> &pconfig, 1, sdw_stream);
->>> +    if (ret) {
->>> +        dev_err(dai->dev, "Failed to add sdw stream: %d\n", ret);
->>> +        goto err;
->>> +    }
->>> +
->>> +    cs42l42_src_config(dai->component, params_rate(params));
->>> +
->>> +    return 0;
->>> +
->>> +err:
->>> +    regmap_set_bits(cs42l42->regmap, CS42L42_PWR_CTL1, pdn_mask);
->>> +
->>> +    return ret;
->>> +}
->>> +
-
->>> +static void cs42l42_sdw_init(struct sdw_slave *peripheral)
->>> +{
->>> +    struct cs42l42_private *cs42l42 =
->>> dev_get_drvdata(&peripheral->dev);
->>> +    int ret = 0;
->>> +
->>> +    regcache_cache_only(cs42l42->regmap, false);
->>> +
->>> +    ret = cs42l42_init(cs42l42);
->>> +    if (ret < 0) {
->>> +        regcache_cache_only(cs42l42->regmap, true);
->>> +        return;
->>> +    }
->>> +
->>> +    /* Write out any cached changes that happened between probe and
->>> attach */
->>> +    ret = regcache_sync(cs42l42->regmap);
->>> +    if (ret < 0)
->>> +        dev_warn(cs42l42->dev, "Failed to sync cache: %d\n", ret);
->>> +
->>> +    /* Disable internal logic that makes clock-stop conditional */
->>> +    regmap_clear_bits(cs42l42->regmap, CS42L42_PWR_CTL3,
->>> CS42L42_SW_CLK_STP_STAT_SEL_MASK);
->>> +
->>> +    /*
->>> +     * pm_runtime is needed to control bus manager suspend, and to
->>
->> I don't think the intent is that the codec can control the manager
->> suspend, but that the manager cannot be suspended by the framework
->> unless the codec suspends first?
->>
-> 
-> That sounds the same to me. But I can re-word the comment.
-
-the initial wording makes it sound like you want to actively control the
-manager state, that's different to letting the framework deal with the
-parent-child relationship.
-
-> 
->>> +     * recover from an unattach_request when the manager suspends.
->>> +     * Autosuspend delay must be long enough to enumerate.
->>
->> No, this last sentence is not correct. The enumeration can be done no
->> matter what pm_runtime state the Linux codec device is in. And it's
->> really the other way around, it's when the codec reports as ATTACHED
->> that the codec driver will be resumed.
->>
-> 
-> It can't if the device has powered off. So there has to be some way to
-> ensure the codec driver won't suspend before the core has completed
-> enumeration and notified an ATTACH to the codec driver.
-
-Powered-off? We don't have any mechanisms in SoundWire to deal with
-power. Can you describe what the sequence should be?
-
-All existing codecs will look for the sync pattern as soon as the bus
-reset is complete. The functionality behind the interface might be off,
-but that's a separate topic.
-
-if it's required to resume the child device when the manager resumes, so
-as to deal with sideband power management then indeed this would be a
-SoundWire core change. It's not hard to do, we've already implemented a
-loop to force codec devices to pm_runtime resume in a .prepare callback,
-we could tag the device with the flag.
-
->>> +     */
->>> +    pm_runtime_set_autosuspend_delay(cs42l42->dev, 3000);
->>> +    pm_runtime_use_autosuspend(cs42l42->dev);
->>> +    pm_runtime_set_active(cs42l42->dev);
->>> +    pm_runtime_enable(cs42l42->dev);
->>> +    pm_runtime_mark_last_busy(cs42l42->dev);
->>> +    pm_runtime_idle(cs42l42->dev);
->>> +}
-
->>>   static const struct snd_soc_dapm_route cs42l42_audio_map[] = {
->>> @@ -559,6 +564,20 @@ static int cs42l42_set_jack(struct
->>> snd_soc_component *component, struct snd_soc_
->>>   {
->>>       struct cs42l42_private *cs42l42 =
->>> snd_soc_component_get_drvdata(component);
->>>   +    /*
->>> +     * If the Soundwire controller issues bus reset when coming out of
->>> +     * clock-stop it will erase the jack state. This can lose button
->>> press
->>> +     * events, and plug/unplug interrupt bits take between 125ms and
->>> 1500ms
->>> +     * before they are valid again.
->>> +     * Prevent this by holding our pm_runtime to block clock-stop.
->>> +     */
->>> +    if (cs42l42->sdw_peripheral) {
->>> +        if (jk)
->>> +            pm_runtime_get_sync(cs42l42->dev);
->>> +        else
->>> +            pm_runtime_put_autosuspend(cs42l42->dev);
->>> +    }
->>> +
->>
->> I *really* don't understand this sequence.
->>
->> The bus will be suspended when ALL devices have been idle for some time.
->> If the user presses a button AFTER the bus is suspended, the device can
->> still use the in-band wake and resume.
-> 
-> Only if it has that capability. The cs42l42 has very limited wake
-> capability and cannot wake on interrupt, and it certainly can't accept
-> the Intel code resetting it before it has a chance to find out what
-> condition caused the wake.
-> 
->> Granted the button press will be lost but the plug/unplug status will
->> still be handled with a delay.
->>
-> 
-> I'm finding it difficult to believe it's acceptable to end users for
-> button events to be lost.
-
-I don't understand what 'limited wake functionality' means. It can
-either generate a wake or it cannot.
-
-In the event that it can, then the Intel manager will detect an in-band
-wake and restart the system. When the headset device enumerates and
-initializes, it should initiate a check for the jack status. Button
-press will be handled once plug-in status is confirmed.
-
-I don't think there is a requirement to keep track of every button press
-why the system is suspended. The user-experience is that the system
-restarts and plug-in or button-press are handled at some point. It would
-be counter-productive to prevent the Intel manager from suspending to
-save even 500ms on restart.
-
->>>       /* Prevent race with interrupt handler */
->>>       mutex_lock(&cs42l42->irq_lock);
->>>       cs42l42->jack = jk;
->>> @@ -1645,9 +1664,11 @@ irqreturn_t cs42l42_irq_thread(int irq, void
->>> *data)
->>>       unsigned int current_button_status;
->>>       unsigned int i;
->>>   +    pm_runtime_get_sync(cs42l42->dev);
->>>       mutex_lock(&cs42l42->irq_lock);
->>>       if (cs42l42->suspended || !cs42l42->init_done) {
->>>           mutex_unlock(&cs42l42->irq_lock);
->>> +        pm_runtime_put_autosuspend(cs42l42->dev);
->>>           return IRQ_NONE;
->>>       }
->>>   @@ -1750,6 +1771,8 @@ irqreturn_t cs42l42_irq_thread(int irq, void
->>> *data)
->>>       }
->>>         mutex_unlock(&cs42l42->irq_lock);
->>> +    pm_runtime_mark_last_busy(cs42l42->dev);
->>> +    pm_runtime_put_autosuspend(cs42l42->dev);
->>>         return IRQ_HANDLED;
->>
->> Again in SoundWire more you should not use a dedicated interrupt.
->> There's something missing in the explanations on why this thread is
->> required.
->>
-> 
-> Do you have a situation where it will actually cause a problem or are
-> you just saying that in an ideal world where all the hardware was
-> perfect it wouldn't need one?
-> Bear in mind that cs42l42 is roughly 7 years old so its Soundwire
-> implementation may not be all that you'd expect from a device designed
-> today to SW1.2 with Soundwire as its primary interface.
-
-Nothing is ideal in a standard, there's always different
-interpretations, that's ok.
-
-We've never seen a device with a dedicated interrupt line and I think
-it's only fair to ask why it was necessary. It's extra complexity for
-BIOS integration, possibly machine driver, and more validation work.
-
-If the message was that a dedicated interrupt line is required, let's
-enable it. If the in-band wake is good-enough, then let's avoid more
-options.
+The patch is not changing any semantics. It is just removing an
+unnecessary atomic xchg() for a specific scenario (min > 0 && min <
+usage). I don't think there will be any change related to proportional
+distribution of the protection.

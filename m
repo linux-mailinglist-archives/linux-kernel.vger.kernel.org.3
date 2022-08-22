@@ -2,82 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62DBF59B76C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 04:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A21759B774
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 04:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbiHVCIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 22:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
+        id S232319AbiHVCK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 22:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232314AbiHVCIe (ORCPT
+        with ESMTP id S232059AbiHVCK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 22:08:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32151DF0F;
-        Sun, 21 Aug 2022 19:08:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 672C260F04;
-        Mon, 22 Aug 2022 02:08:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB4CEC433C1;
-        Mon, 22 Aug 2022 02:08:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661134111;
-        bh=S1O4SKhsVT/Ufrlz5CzLeavuTbPmz0Mr2z/zmvq0/y0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SCPKFaK7Gs6nd23rvEk4KJdE4PWFRczwv67YiZN56+dzM2JD5CeHY8ucdF9buaRF4
-         nqVdkTwgRdfYvspy8T0E88FK4z6G/kzyFbDLez9zfhUg4EJ2c8Pf7egmTDgsbu1Axa
-         HjKySQB0esdcRn1Vl9s1sMmt9qU5upfBuYJFEA2z+uhaTk1gJbF9Ee3Xmi8rsRaigF
-         ZpkjEGYPfDV0FBNCcaWuZ/O/PREFkvC8WYR6eLQO3WANoQ/oW2WraOAeku9CEczkbC
-         bl7aEH4JGZ5QyxntSraBZrcs14eob1ACh87AduzR2owII5b2pYlA+NUScgKsQsgCFI
-         mFTNuphoXv15g==
-Date:   Mon, 22 Aug 2022 10:08:24 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Olof Johansson <olof@lixom.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/2] arm64: dts: freescale: verdin-imx8mm/p: fix
- atmel_mxt_ts reset polarity
-Message-ID: <20220822020824.GM149610@dragon>
-References: <20220812213905.216065-1-marcel@ziswiler.com>
+        Sun, 21 Aug 2022 22:10:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F199A1FCCC
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 19:10:25 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M9wh023fNzXdrl;
+        Mon, 22 Aug 2022 10:06:08 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 22 Aug 2022 10:10:24 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 22 Aug 2022 10:10:23 +0800
+Subject: Re: [PATCH -next] driver core: switch to use dev_err_probe()
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <rafael@kernel.org>
+References: <20220819094656.1945653-1-yangyingliang@huawei.com>
+ <Yv9a9+iREzQWYecQ@kroah.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <1d4d1ef7-7386-cf8f-0a5a-04690ec27ed6@huawei.com>
+Date:   Mon, 22 Aug 2022 10:10:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220812213905.216065-1-marcel@ziswiler.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yv9a9+iREzQWYecQ@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 11:39:03PM +0200, Marcel Ziswiler wrote:
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> 
-> 
-> Unfortunately, I was not aware of this reset GPIO polarity fix when
-> I submitted initial support. Let us correct this oversight. Thanks!
-> 
-> 
-> Marcel Ziswiler (2):
->   arm64: dts: freescale: verdin-imx8mm: fix atmel_mxt_ts reset polarity
->   arm64: dts: freescale: verdin-imx8mp: fix atmel_mxt_ts reset polarity
+Hi,
 
-Applied both, thanks!
+On 2022/8/19 17:42, Greg KH wrote:
+> On Fri, Aug 19, 2022 at 05:46:56PM +0800, Yang Yingliang wrote:
+>> Use dev_err_probe() to simplify code and print error code.
+>>
+>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>> ---
+>>   drivers/base/core.c | 8 +++-----
+>>   1 file changed, 3 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/base/core.c b/drivers/base/core.c
+>> index 753e7cca0f40..e51a09f9d0ec 100644
+>> --- a/drivers/base/core.c
+>> +++ b/drivers/base/core.c
+>> @@ -2507,11 +2507,9 @@ static ssize_t uevent_store(struct device *dev, struct device_attribute *attr,
+>>   	int rc;
+>>   
+>>   	rc = kobject_synth_uevent(&dev->kobj, buf, count);
+>> -
+>> -	if (rc) {
+>> -		dev_err(dev, "uevent: failed to send synthetic uevent\n");
+>> -		return rc;
+>> -	}
+>> +	if (rc)
+>> +		return dev_err_probe(dev, rc,
+>> +				     "uevent: failed to send synthetic uevent\n");
+> I do not understand this at all, this is not on the probe path at all,
+> so why is this function needed?
+>
+> Have you tested this?  What was the resulting output before and after
+> this change?
+Yes, after this change, the error code will be print.
+>
+> thanks,
+>
+> greg k-h
+> .

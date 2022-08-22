@@ -2,311 +2,397 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C140B59C0E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D98959C0E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235565AbiHVNqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 09:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
+        id S235363AbiHVNr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 09:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235404AbiHVNpa (ORCPT
+        with ESMTP id S235572AbiHVNqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 09:45:30 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2075.outbound.protection.outlook.com [40.107.100.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92974399C4;
-        Mon, 22 Aug 2022 06:45:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=leEcWbKh9TFobmTlIWAoqYcd8UahdHn31DTe4oyhU7S75xiGQpunNU2528p/o5FSdLvLmFTO0REvYM4SEdFq3In68fuBBekLroavfjjP5X7iHV/gic5quGY06clfOz3jmx8tX8O/rlc03lx6nfYNnUsMz9fHh9yyedA102rI6ONAP4sPXZXC0vRt/bcmDCc21OOX3BU87UeufZAuqAIm38zD/Wfh3n1bSeF0EfCYosVJB/AwTonjhCmBPL5Mrivc4ISFtQU4UVELn9DwGqHcnr7HCts0R42B/SWb7KoezoOcYmoQyY3+vBMb5bF0WCWbyDlz3YKjMYAJlb0d0WkfGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2mckrytaVq2bzb8pFP6ub3Ne6JltGzq7PI6oJB03wpc=;
- b=Ykp8hI76i+kqUqzVonSzm3mufBn0xbXPlRQsLRnB4PWd3t4IFA6fuXBcESVhS9bC/vpQVPqlnFuUd9Lw7WiHm+UItt5UAPq7jdhiE1uodmiRNQlshfba/xae8kQl+uER5vDf9GTbhQWsa7xPr/k69cW2PHP1uTymVpE5WTrWSNwQsVRDmTyi5E2Z4lPhom1FYIaOV6vMGQOvETavlmGgLAEvh+gjwpHeaIIH2OEcDN1EwElwYbSOVMQmXEq8q+S9JvKTJt0/DodGvCqKArOIZmduU4d7r+RorU4v4crdmtgnYVRzKjFhCND2bF4bBv/omNw3DovIVH5ueeODT+LYtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2mckrytaVq2bzb8pFP6ub3Ne6JltGzq7PI6oJB03wpc=;
- b=sxkTcMlAYcWRMgPcwW6revvRK117wv1ODSCcvmttOSK6AL9HbNzfDMZStjkxjZ5io74IPsfPb3h499uRDHCWIF8nGEsuNmEn7qYHWBU0o5k2rdWbh7U69i93JJvdoK+WUOjnO+SCLQNOXAR/iTOiIE18jv0OJU6exUD6mRPd65s=
-Received: from MW4PR03CA0349.namprd03.prod.outlook.com (2603:10b6:303:dc::24)
- by MW2PR12MB2489.namprd12.prod.outlook.com (2603:10b6:907:d::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.22; Mon, 22 Aug
- 2022 13:45:08 +0000
-Received: from CO1NAM11FT079.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dc:cafe::b2) by MW4PR03CA0349.outlook.office365.com
- (2603:10b6:303:dc::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.20 via Frontend
- Transport; Mon, 22 Aug 2022 13:45:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT079.mail.protection.outlook.com (10.13.175.134) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5546.7 via Frontend Transport; Mon, 22 Aug 2022 13:45:08 +0000
-Received: from [127.0.1.1] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 22 Aug
- 2022 08:45:06 -0500
-Subject: [PATCH v3 10/10] Documentation/x86: Update resctrl_ui.rst for new
- features
-From:   Babu Moger <babu.moger@amd.com>
-To:     <fenghua.yu@intel.com>, <reinette.chatre@intel.com>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>
-CC:     <eranian@google.com>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <corbet@lwn.net>,
-        <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <bagasdotme@gmail.com>
-Date:   Mon, 22 Aug 2022 08:45:06 -0500
-Message-ID: <166117590621.6695.11208770898633353328.stgit@bmoger-ubuntu>
-In-Reply-To: <166117559756.6695.16047463526634290701.stgit@bmoger-ubuntu>
-References: <166117559756.6695.16047463526634290701.stgit@bmoger-ubuntu>
-User-Agent: StGit/1.1.dev103+g5369f4c
+        Mon, 22 Aug 2022 09:46:11 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C4E31DC2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 06:46:09 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id x23so9961938pll.7
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 06:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=VM1LOnfvG6lRye3k9GzMe4BVO/yQlLzRyWScu+FkURY=;
+        b=QXFfnLmeZXSqG03B54twCsq5akj/c8JDncdjiD4zQ7etZ0T9KsvOR1S7aYLuHdQfV9
+         yLPNvtKQF3760ale5O6k2UU1ytxwcg1SARWu7blaYGvAJ3yPMVkwPtdWoxIdhKN/Nj+8
+         CH3Vy9i+PN3R6wW0qYpnL4S59DZH+O0tKJlz/5hlGNErm/B6q+HMWXmAbhgYqern/ID1
+         tCmnojM1Nn4slOGvQk+p/rh5WHrGbrukU+11GVV90kOolGYRb+GDcYO1aTe+subHJdl1
+         J6Ws4VRoTyac6VlniFwBY6kVrXQZ/YzIO90B5yF+6zMRwgldQpyg9YdwgHKvXPQ1kzIx
+         dsiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=VM1LOnfvG6lRye3k9GzMe4BVO/yQlLzRyWScu+FkURY=;
+        b=ohq46zGU/V0HnlKWCMBB+oyWZb5cOeHLcVvVWThXkn1l7aOM2kf+d+7ZPjbfIy/oct
+         6is4vCtwuR7pH1MZ2/+ziCQQ/1DsxYNRwFd7ZmjBuiBLyb4yWmxMUGuJcFNTCzA68bQd
+         wTD5eK+Z0clVYKgtiAnLStqbNC/bJ3OX/hPGawK/Jls/MEFNAVwof10a2lcKQo0vMJfK
+         /ryXgrGhjnB/lDbhjIxTEngYYtR7PXtKsJLyIrB5qatsHzLHubYNP6Wssracaybr9Wlz
+         P26CkO/NF6woJBByXaDg9trADS1jC94AKYSC57XD2MH4qFCvUQGpJT5e84VC9VW8EIzp
+         cUeg==
+X-Gm-Message-State: ACgBeo0GgBSORbES81sITY10ydUKwJBICnQ3/S3ne5q2okcwFQPTRS/d
+        PIgnu3Ocl52cwhfaGP8xI/k=
+X-Google-Smtp-Source: AA6agR4VHYcU1AMDSG0zQmGzOsMBQAMX9s+oPEL1S4/zxG1ppXNYCkj8O6NfRqSGab1I0shu3sRISA==
+X-Received: by 2002:a17:902:eb43:b0:172:cd04:a3c9 with SMTP id i3-20020a170902eb4300b00172cd04a3c9mr12372219pli.111.1661175968099;
+        Mon, 22 Aug 2022 06:46:08 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id n18-20020a170902d2d200b001713af9e85dsm1721510plc.180.2022.08.22.06.46.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 06:46:06 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 22:46:01 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Waiman Long <longman@redhat.com>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Xin Long <lucien.xin@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/slab_common: Deleting kobject in kmem_cache_destroy()
+ without holding slab_mutex/cpu_hotplug_lock
+Message-ID: <YwOImVd+nRUsSAga@hyeyoo>
+References: <20220809205901.76595-1-longman@redhat.com>
+ <48b66d90-34ae-8666-d9ee-2d36c82a6653@suse.cz>
+ <34d80543-322f-9c76-ad7d-d7c734163fa0@redhat.com>
+ <ac08e3f6-f167-2382-5266-959e7339c04a@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dc47a3d4-3790-429b-45aa-08da8444873c
-X-MS-TrafficTypeDiagnostic: MW2PR12MB2489:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3nbyLIux2HcrXsTwUt/CYA0ilEa+CA8lc515g0h8E+lUbtE4wjHqZkmRpVlja0iEI814DnezXus4y9khq/jxe7QQZl1lmUrhjQKQYZHoN4o8gSOC4iFYPO1ROIdYWWNnfh3k7uPd2/YC8WT+hDS3/MjTwLDa5EQ2LYhLxv2annfkuGaEns9354KsL+jA7Kq8mvWhT7ScFIROSON0PSRQ0CnFTc759/ZzgD/M4ajwybJVoH3VGqpY0kdWDB0cBhW40alErAPQrHJiSi8y+5+tAIA43fEOwb7uJzgT+PkmyhmhVryp+mJQYFnSPr/k/w/nOJi7tm21CiEVxeUhEj4521W3oyqBqG5ZsnvjtuY0ymLspc64wSjcLx2Ce7GLgna+iMiWiUwmn1PVmJvuB+qkCs5puBYrm4R93WRWCn/SM4Ru1aR6dyYnUBONsw6Ci4zIcj3w9JVPDbagG9SF4A2aYFmJMO419xsmNWuHyStSuRKp3U1rwU0utwvxSPXfYx6lWwhklti9gxRjwSZwD4oyUnuWrOlO4xrOmEToAldUTTroQ1UFYnpU1iVANMH8v5vXBB0Ey+LyczzyL9asmisdFJTfez/I4EtrGir+LNWVw5l2gr7OKdVCPHn+LObK6yeJYDHOE8Ldw8zce8Ssf5qhjJbeBqy9WCWgwDRniQDZcprKrcXNSvRoFXezFpLbK6XrlC94b3vfGhRuhvTGgH+w3ATegFgoQ6/q6wl/LiiFXtEsJIKFPc922+DBqf6X6qlb43fGO2EohUsp2ZLH5o2S3XLEa7Xxw0kjnTRms+g7+8ds9BGljKNVPYWI+5rT3FhYg3aVQc9A0lx6Eioptlbbxg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(7916004)(4636009)(346002)(39860400002)(396003)(376002)(136003)(36840700001)(46966006)(40470700004)(81166007)(26005)(44832011)(5660300002)(7416002)(2906002)(103116003)(15650500001)(8936002)(9686003)(82310400005)(40460700003)(33716001)(36860700001)(16526019)(426003)(336012)(186003)(86362001)(356005)(83380400001)(40480700001)(47076005)(82740400003)(54906003)(110136005)(41300700001)(8676002)(4326008)(478600001)(70586007)(70206006)(16576012)(316002)(71626007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 13:45:08.5988
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc47a3d4-3790-429b-45aa-08da8444873c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT079.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2489
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ac08e3f6-f167-2382-5266-959e7339c04a@suse.cz>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the documentation for the new features:=0A=
-1. Slow Memory Bandwidth allocation.=0A=
-   With this feature, the QOS  enforcement policies can be applied=0A=
-   to the external slow memory connected to the host. QOS enforcement=0A=
-   is accomplished by assigning a Class Of Service (COS) to a processor=0A=
-   and specifying allocations or limits for that COS for each resource=0A=
-   to be allocated.=0A=
-=0A=
-2. Bandwidth Monitoring Event Configuration (BMEC).=0A=
-   The bandwidth monitoring events mbm_total_bytes and mbm_local_bytes=0A=
-   are set to count all the total and local reads/writes respectively.=0A=
-   With the introduction of slow memory, the two counters are not=0A=
-   enough to count all the different types are memory events. With the=0A=
-   feature BMEC, the users have the option to configure mbm_total_bytes=0A=
-   and mbm_local_bytes to count the specific type of events.=0A=
-=0A=
-Also add configuration instructions with examples.=0A=
-=0A=
-Signed-off-by: Babu Moger <babu.moger@amd.com>=0A=
-Reviewed-by: Ingo Molnar <mingo@kernel.org>=0A=
----=0A=
- Documentation/x86/resctrl.rst |  126 +++++++++++++++++++++++++++++++++++++=
-++++=0A=
- 1 file changed, 126 insertions(+)=0A=
-=0A=
-diff --git a/Documentation/x86/resctrl.rst b/Documentation/x86/resctrl.rst=
-=0A=
-index 71a531061e4e..871d0f031ab5 100644=0A=
---- a/Documentation/x86/resctrl.rst=0A=
-+++ b/Documentation/x86/resctrl.rst=0A=
-@@ -167,6 +167,12 @@ with the following files:=0A=
- 		bytes) at which a previously used LLC_occupancy=0A=
- 		counter can be considered for re-use.=0A=
- =0A=
-+"mon_configurable":=0A=
-+                Provides the information if the events mbm_total and=0A=
-+                mbm_local are configurable. See the configuration=0A=
-+                details for "mbm_total_config" and "mbm_local_config"=0A=
-+                for more information.=0A=
-+=0A=
- Finally, in the top level of the "info" directory there is a file=0A=
- named "last_cmd_status". This is reset with every "command" issued=0A=
- via the file system (making new directories or writing to any of the=0A=
-@@ -264,6 +270,32 @@ When monitoring is enabled all MON groups will also co=
-ntain:=0A=
- 	the sum for all tasks in the CTRL_MON group and all tasks in=0A=
- 	MON groups. Please see example section for more details on usage.=0A=
- =0A=
-+"mbm_total_config", "mbm_local_config":=0A=
-+        This contains the current event configuration for the events=0A=
-+        mbm_total_bytes and mbm_local_bytes, respectively, when the=0A=
-+        Bandwidth Monitoring Event Configuration (BMEC) feature is support=
-ed.=0A=
-+        These files are organized by L3 domains under the subdirectories=
-=0A=
-+        "mon_L3_00" and "mon_L3_01". When BMEC is supported, the events=0A=
-+        mbm_local_bytes and mbm_total_bytes are configurable.=0A=
-+=0A=
-+        Following are the types of events supported:=0A=
-+=0A=
-+        =3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-+        Bits    Description=0A=
-+        =3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-+        6       Dirty Victims from the QOS domain to all types of memory=
-=0A=
-+        5       Reads to slow memory in the non-local NUMA domain=0A=
-+        4       Reads to slow memory in the local NUMA domain=0A=
-+        3       Non-temporal writes to non-local NUMA domain=0A=
-+        2       Non-temporal writes to local NUMA domain=0A=
-+        1       Reads to memory in the non-local NUMA domain=0A=
-+        0       Reads to memory in the local NUMA domain=0A=
-+        =3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-+=0A=
-+        By default, the mbm_total_bytes configuration is set to 0x7F to co=
-unt=0A=
-+        all the event types and the mbm_local_bytes configuration is set t=
-o=0A=
-+        0x15 to count all the local memory events.=0A=
-+=0A=
- Resource allocation rules=0A=
- -------------------------=0A=
- =0A=
-@@ -464,6 +496,14 @@ Memory bandwidth domain is L3 cache.=0A=
- =0A=
- 	MB:<cache_id0>=3Dbw_MBps0;<cache_id1>=3Dbw_MBps1;...=0A=
- =0A=
-+Slow Memory bandwidth Allocation (when supported)=0A=
-+-------------------------------------------------=0A=
-+=0A=
-+Slow Memory b/w domain is L3 cache.=0A=
-+::=0A=
-+=0A=
-+	SB:<cache_id0>=3Dbandwidth0;<cache_id1>=3Dbandwidth1;...=0A=
-+=0A=
- Reading/writing the schemata file=0A=
- ---------------------------------=0A=
- Reading the schemata file will show the state of all resources=0A=
-@@ -479,6 +519,44 @@ which you wish to change.  E.g.=0A=
-   L3DATA:0=3Dfffff;1=3Dfffff;2=3D3c0;3=3Dfffff=0A=
-   L3CODE:0=3Dfffff;1=3Dfffff;2=3Dfffff;3=3Dfffff=0A=
- =0A=
-+Reading/writing the schemata file (on AMD systems)=0A=
-+--------------------------------------------------=0A=
-+Reading the schemata file will show the state of all resources=0A=
-+on all domains. When writing the memory bandwidth allocation you=0A=
-+only need to specify those values in an absolute number expressed=0A=
-+in 1/8 GB/s increments. To allocate bandwidth limit of 2GB, you=0A=
-+need to specify the value 16 (16 * 1/8 =3D 2).  E.g.=0A=
-+::=0A=
-+=0A=
-+  # cat schemata=0A=
-+    MB:0=3D2048;1=3D2048;2=3D2048;3=3D2048=0A=
-+    L3:0=3Dffff;1=3Dffff;2=3Dffff;3=3Dffff=0A=
-+=0A=
-+  # echo "MB:1=3D16" > schemata=0A=
-+  # cat schemata=0A=
-+    MB:0=3D2048;1=3D  16;2=3D2048;3=3D2048=0A=
-+    L3:0=3Dffff;1=3Dffff;2=3Dffff;3=3Dffff=0A=
-+=0A=
-+Reading/writing the schemata file (on AMD systems) with slow memory=0A=
-+-------------------------------------------------------------------=0A=
-+Reading the schemata file will show the state of all resources=0A=
-+on all domains. When writing the memory bandwidth allocation you=0A=
-+only need to specify those values in an absolute number expressed=0A=
-+in 1/8 GB/s increments. To allocate bandwidth limit of 8GB, you=0A=
-+need to specify the value 64 (64 * 1/8 =3D 8).  E.g.=0A=
-+::=0A=
-+=0A=
-+  # cat schemata=0A=
-+    SB:0=3D2048;1=3D2048;2=3D2048;3=3D2048=0A=
-+    MB:0=3D2048;1=3D2048;2=3D2048;3=3D2048=0A=
-+    L3:0=3Dffff;1=3Dffff;2=3Dffff;3=3Dffff=0A=
-+=0A=
-+  # echo "SB:1=3D64" > schemata=0A=
-+  # cat schemata=0A=
-+    SB:0=3D2048;1=3D  64;2=3D2048;3=3D2048=0A=
-+    MB:0=3D2048;1=3D2048;2=3D2048;3=3D2048=0A=
-+    L3:0=3Dffff;1=3Dffff;2=3Dffff;3=3Dffff=0A=
-+=0A=
- Cache Pseudo-Locking=0A=
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
- CAT enables a user to specify the amount of cache space that an=0A=
-@@ -1210,6 +1288,54 @@ View the llc occupancy snapshot::=0A=
-   # cat /sys/fs/resctrl/p1/mon_data/mon_L3_00/llc_occupancy=0A=
-   11234000=0A=
- =0A=
-+Example 5 (Configure and Monitor specific event types)=0A=
-+------------------------------------------------------=0A=
-+=0A=
-+A single socket system which has real time tasks running on cores 0-4=0A=
-+and non real time tasks on other CPUs. We want to monitor the memory=0A=
-+bandwidth allocation for specific events.=0A=
-+::=0A=
-+=0A=
-+  # mount -t resctrl resctrl /sys/fs/resctrl=0A=
-+  # cd /sys/fs/resctrl=0A=
-+  # mkdir p1=0A=
-+=0A=
-+Move the CPUs 0-4 over to p1::=0A=
-+=0A=
-+  # echo 0xf > p1/cpus=0A=
-+=0A=
-+View the current mbm_local_bytes::=0A=
-+=0A=
-+  # cat /sys/fs/resctrl/p1/mon_data/mon_L3_00/mbm_local_bytes=0A=
-+  112501=0A=
-+=0A=
-+Change the mbm_local_bytes to count mon-temporal writes to both local=0A=
-+and non-local NUMA domain. Refer to event supported bitmap under=0A=
-+mbm_local_config::=0A=
-+=0A=
-+  # echo 0xc > /sys/fs/resctrl/p1/mon_data/mon_L3_00/mbm_local_config=0A=
-+=0A=
-+View the updated mbm_local_bytes::=0A=
-+=0A=
-+  # cat /sys/fs/resctrl/p1/mon_data/mon_L3_00/mbm_local_bytes=0A=
-+  12601=0A=
-+=0A=
-+Similar experiment on mbm_total_bytes. First view the current mbm_total_by=
-tes::=0A=
-+=0A=
-+  # cat /sys/fs/resctrl/p1/mon_data/mon_L3_00/mbm_total_bytes=0A=
-+  1532501=0A=
-+=0A=
-+Change the mbm_total_bytes to count only reads to slow memory on both loca=
-l=0A=
-+and non-local NUMA domain. Refer to event supported bitmap under=0A=
-+mbm_total_config::=0A=
-+=0A=
-+  # echo 0x30 > /sys/fs/resctrl/p1/mon_data/mon_L3_00/mbm_total_config=0A=
-+=0A=
-+View the updated mbm_total_bytes::=0A=
-+=0A=
-+  # cat /sys/fs/resctrl/p1/mon_data/mon_L3_00/mbm_total_bytes=0A=
-+  104562=0A=
-+=0A=
- Intel RDT Errata=0A=
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
- =0A=
-=0A=
+On Mon, Aug 22, 2022 at 02:03:33PM +0200, Vlastimil Babka wrote:
+> On 8/10/22 16:08, Waiman Long wrote:
+> > On 8/10/22 05:34, Vlastimil Babka wrote:
+> >> On 8/9/22 22:59, Waiman Long wrote:
+> >>> A circular locking problem is reported by lockdep due to the following
+> >>> circular locking dependency.
+> >>>
+> >>>    +--> cpu_hotplug_lock --> slab_mutex --> kn->active#126 --+
+> >>>    |                                                         |
+> >>>    +---------------------------------------------------------+
+> >>
+> >> This sounded familiar and I've found a thread from January:
+> >>
+> >> https://lore.kernel.org/all/388098b2c03fbf0a732834fc01b2d875c335bc49.1642170196.git.lucien.xin@gmail.com/
+> >>
+> >> But that seemed to be specific to RHEL-8 RT kernel and not reproduced with
+> >> mainline. Is it different this time? Can you share the splats?
+> > 
+> > I think this is easier to reproduce on a RT kernel, but it also happens in a
+> > non-RT kernel. One example splat that I got was
+> > 
+> > [ 1777.114757] ======================================================
+> > [ 1777.121646] WARNING: possible circular locking dependency detected
+> > [ 1777.128544] 4.18.0-403.el8.x86_64+debug #1 Not tainted
+> > [ 1777.134280] ------------------------------------------------------
+> 
+> Yeah that's non-RT, but still 4.18 kernel, as in Xin Long's thread
+> referenced above. That wasn't reproducible in current mainline and I would
+> expect yours also isn't, because it would be reported by others too.
 
+I can confirm this splat is reproducible on 6.0-rc1 when conditions below are met:
+	1) Lockdep is enabled
+	2) kmem_cache_destroy() is executed at least once (e.g. loading slub_kunit module)
+	3) flush_all() is executed at least once (e.g. writing to /sys/kernel/<slab>/cpu_partial)
+
+[   51.408901] ======================================================
+[   51.409925] WARNING: possible circular locking dependency detected
+[   51.410940] 6.0.0-rc1+ #1554 Tainted: G    B            N
+[   51.411845] ------------------------------------------------------
+[   51.412855] sh/578 is trying to acquire lock:
+[   51.413578] ffffffff8307d890 (cpu_hotplug_lock){++++}-{0:0}, at: cpu_partial_store+0x56/0xa0
+[   51.414948] 
+[   51.414948] but task is already holding lock:
+[   51.415908] ffff888103166740 (kn->active#43){++++}-{0:0}, at: kernfs_fop_write_iter+0x118/0x210
+[   51.417270] 
+[   51.417270] which lock already depends on the new lock.
+[   51.417270] 
+[   51.417825] 
+[   51.417825] the existing dependency chain (in reverse order) is:
+[   51.418336] 
+[   51.418336] -> #2 (kn->active#43){++++}-{0:0}:
+[   51.418744]        __kernfs_remove+0x2fe/0x3b0
+[   51.419054]        kernfs_remove+0x36/0x50
+[   51.419337]        __kobject_del+0x2e/0xd0
+[   51.419622]        kobject_del+0xf/0x20
+[   51.419912]        kmem_cache_destroy+0xd8/0x110
+[   51.420273]        test_exit+0x1a/0x30
+[   51.420570]        kunit_try_run_case+0x65/0x80
+[   51.420926]        kunit_generic_run_threadfn_adapter+0x16/0x30
+[   51.421391]        kthread+0xf2/0x120
+[   51.421699]        ret_from_fork+0x22/0x30
+[   51.422042] 
+[   51.422042] -> #1 (slab_mutex){+.+.}-{3:3}:
+[   51.422513]        __mutex_lock+0xa5/0x9a0
+[   51.422858]        kmem_cache_destroy+0x26/0x110
+[   51.423241]        test_exit+0x1a/0x30
+[   51.423557]        kunit_try_run_case+0x65/0x80
+[   51.423938]        kunit_generic_run_threadfn_adapter+0x16/0x30
+[   51.424432]        kthread+0xf2/0x120
+[   51.424739]        ret_from_fork+0x22/0x30
+[   51.425080] 
+[   51.425080] -> #0 (cpu_hotplug_lock){++++}-{0:0}:
+[   51.425593]        __lock_acquire+0x1122/0x1dd0
+[   51.425971]        lock_acquire+0xd5/0x300
+[   51.426312]        cpus_read_lock+0x3c/0xd0
+[   51.426660]        cpu_partial_store+0x56/0xa0
+[   51.427030]        slab_attr_store+0x20/0x40
+[   51.427388]        kernfs_fop_write_iter+0x15b/0x210
+[   51.427798]        vfs_write+0x346/0x4c0
+[   51.428128]        ksys_write+0x65/0xf0
+[   51.428457]        do_syscall_64+0x5c/0x90
+[   51.428801]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   51.429262] 
+[   51.429262] other info that might help us debug this:
+[   51.429262] 
+[   51.429918] Chain exists of:
+[   51.429918]   cpu_hotplug_lock --> slab_mutex --> kn->active#43
+[   51.429918] 
+[   51.430763]  Possible unsafe locking scenario:
+[   51.430763] 
+[   51.431251]        CPU0                    CPU1
+[   51.431629]        ----                    ----
+[   51.432008]   lock(kn->active#43);
+[   51.432293]                                lock(slab_mutex);
+[   51.432754]                                lock(kn->active#43);
+[   51.433219]   lock(cpu_hotplug_lock);
+[   51.433508] 
+[   51.433508]  *** DEADLOCK ***
+[   51.433508] 
+[   51.433963] 3 locks held by sh/578:
+[   51.434224]  #0: ffff88811a982460 (sb_writers#7){.+.+}-{0:0}, at: ksys_write+0x65/0xf0
+[   51.434800]  #1: ffff88811a8ea888 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x110/0x210
+[   51.435478]  #2: ffff888103166740 (kn->active#43){++++}-{0:0}, at: kernfs_fop_write_iter+0x118/0x0
+[   51.436174] 
+[   51.436174] stack backtrace:
+[   51.436539] CPU: 4 PID: 578 Comm: sh Tainted: G    B            N 6.0.0-rc1+ #1554
+[   51.437130] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+[   51.437803] Call Trace:
+[   51.438008]  <TASK>
+[   51.438187]  dump_stack_lvl+0x56/0x73
+[   51.438493]  check_noncircular+0x102/0x120
+[   51.438831]  __lock_acquire+0x1122/0x1dd0
+[   51.439162]  lock_acquire+0xd5/0x300
+[   51.439444]  ? cpu_partial_store+0x56/0xa0
+[   51.439773]  cpus_read_lock+0x3c/0xd0
+[   51.440063]  ? cpu_partial_store+0x56/0xa0
+[   51.440402]  cpu_partial_store+0x56/0xa0
+[   51.440730]  slab_attr_store+0x20/0x40
+[   51.441039]  kernfs_fop_write_iter+0x15b/0x210
+[   51.441387]  vfs_write+0x346/0x4c0
+[   51.441666]  ksys_write+0x65/0xf0
+[   51.441942]  do_syscall_64+0x5c/0x90
+[   51.442237]  ? asm_exc_page_fault+0x22/0x30
+[   51.442578]  ? lockdep_hardirqs_on+0x7d/0x100
+[   51.442931]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   51.443359] RIP: 0033:0x7f6428c9415c
+[   51.443645] Code: 8b 7c 24 08 89 c5 e8 c5 ff ff ff 89 ef 89 44 24 08 e8 e8 13 03 00 8b 44 24 08 43
+[   51.445133] RSP: 002b:00007fff556ee9d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+[   51.445742] RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007f6428c9415c
+[   51.446316] RDX: 0000000000000002 RSI: 000055e65f1c17f0 RDI: 0000000000000001
+[   51.446862] RBP: 000055e65f1c17f0 R08: fefefefefefefeff R09: fffffeffffff0000
+[   51.447415] R10: 0000000000000001 R11: 0000000000000246 R12: 0000000000000002
+[   51.447994] R13: 00007f6428c79690 R14: 0000000000000001 R15: 00007fff556eea48
+[   51.448552]  </TASK>
+
+> Also in both cases the lockdep (in 4.18) seems to have issue with
+> cpus_read_lock() which is a rwsem taken for read, so not really exclusive in
+> order to cause the reported deadlock.
+
+Agreed.
+
+> So I suspected lockdep was improved since 4.18 to not report a false
+> positive, but we never confirmed.
+
+Seems not improved as it reports on 6.0-rc1.
+May fix lockdep instead of fixing SLUB?
+
+> So I'm still not convinced mainline needs any fix right now, but I'll check
+> the v3 anyway in case it simplifies things wrt the kernfs locking, which
+> does complicate stuff in any case.
+> 
+> > [ 1777.141176] slub_cpu_partia/4113 is trying to acquire lock:
+> > [ 1777.147395] ffffffffaef95b20 (cpu_hotplug_lock){++++}-{0:0}, at:
+> > cpu_partial_store+0x47/0xa0
+> > [ 1777.156837]
+> >                but task is already holding lock:
+> > [ 1777.163346] ffff88811bd17578 (kn->count#126){++++}-{0:0}, at:
+> > kernfs_fop_write+0x1d0/0x410
+> > [ 1777.172591]
+> >                which lock already depends on the new lock.
+> > 
+> > [ 1777.181718]
+> >                the existing dependency chain (in reverse order) is:
+> > [ 1777.190070]
+> >                -> #2 (kn->count#126){++++}-{0:0}:
+> > [ 1777.196688]        lock_acquire+0x1db/0x8e0
+> > [ 1777.201360]        __kernfs_remove+0x617/0x800
+> > [ 1777.206320]        kernfs_remove+0x1d/0x30
+> > [ 1777.210891]        kobject_del+0x8e/0x150
+> > [ 1777.215360]        kmem_cache_destroy+0x10d/0x130
+> > [ 1777.220615]        bioset_exit+0x1e3/0x2c0
+> > [ 1777.225189]        blk_release_queue+0x20d/0x310
+> > [ 1777.230336]        kobject_release+0x105/0x390
+> > [ 1777.235296] scsi_device_dev_release_usercontext+0x5e3/0xd60
+> > [ 1777.242198]        execute_in_process_context+0x27/0x130
+> > [ 1777.248131]        device_release+0xa1/0x210
+> > [ 1777.252899]        kobject_release+0x105/0x390
+> > [ 1777.257857]        scsi_alloc_sdev+0xa1e/0xc80
+> > [ 1777.262820]        scsi_probe_and_add_lun+0x809/0x2da0
+> > [ 1777.268557]        __scsi_scan_target+0x1c1/0xb60
+> > [ 1777.273801]        scsi_scan_channel+0xe2/0x150
+> > [ 1777.278855]        scsi_scan_host_selected+0x1fb/0x2a0
+> > [ 1777.284590]        do_scan_async+0x3e/0x440
+> > [ 1777.289258]        async_run_entry_fn+0xd8/0x660
+> > [ 1777.294413]        process_one_work+0x919/0x17c0
+> > [ 1777.299568]        worker_thread+0x87/0xb40
+> > [ 1777.304227]        kthread+0x30d/0x3c0
+> > [ 1777.308411]        ret_from_fork+0x3a/0x50
+> > [ 1777.312984]
+> >                -> #1 (slab_mutex){+.+.}-{3:3}:
+> > [ 1777.319309]        lock_acquire+0x1db/0x8e0
+> > [ 1777.323978]        __mutex_lock+0x154/0x15d0
+> > [ 1777.328745]        kmem_cache_destroy+0x3f/0x130
+> > [ 1777.333898]        bioset_exit+0x1e3/0x2c0
+> > [ 1777.338469]        blk_release_queue+0x20d/0x310
+> > [ 1777.343623]        kobject_release+0x105/0x390
+> > [ 1777.348582] scsi_device_dev_release_usercontext+0x5e3/0xd60
+> > [ 1777.355481]        execute_in_process_context+0x27/0x130
+> > [ 1777.361409]        device_release+0xa1/0x210
+> > [ 1777.366175]        kobject_release+0x105/0x390
+> > [ 1777.371135]        scsi_alloc_sdev+0xa1e/0xc80
+> > [ 1777.376096]        scsi_probe_and_add_lun+0x809/0x2da0
+> > [ 1777.381824]        __scsi_scan_target+0x1c1/0xb60
+> > [ 1777.387073]        scsi_scan_channel+0xe2/0x150
+> > [ 1777.392128]        scsi_scan_host_selected+0x1fb/0x2a0
+> > [ 1777.397864]        do_scan_async+0x3e/0x440
+> > [ 1777.402533]        async_run_entry_fn+0xd8/0x660
+> > [ 1777.407688]        process_one_work+0x919/0x17c0
+> > [ 1777.412841]        worker_thread+0x87/0xb40
+> > [ 1777.417509]        kthread+0x30d/0x3c0
+> > [ 1777.421693]        ret_from_fork+0x3a/0x50
+> > [ 1777.426263]
+> >                -> #0 (cpu_hotplug_lock){++++}-{0:0}:
+> > [ 1777.433168]        check_prevs_add+0x3fa/0x18b0
+> > [ 1777.438226]        __lock_acquire+0x21b3/0x2b80
+> > [ 1777.443273]        lock_acquire+0x1db/0x8e0
+> > [ 1777.447940]        cpus_read_lock+0x40/0xc0
+> > [ 1777.452611]        cpu_partial_store+0x47/0xa0
+> > [ 1777.457571]        slab_attr_store+0x20/0x30
+> > [ 1777.462338]        kernfs_fop_write+0x255/0x410
+> > [ 1777.467394]        vfs_write+0x157/0x460
+> > [ 1777.471777]        ksys_write+0xb8/0x170
+> > [ 1777.476155]        do_syscall_64+0xa5/0x450
+> > [ 1777.480828]        entry_SYSCALL_64_after_hwframe+0x6a/0xdf
+> > [ 1777.487041]
+> >                other info that might help us debug this:
+> > 
+> > [ 1777.495975] Chain exists of:
+> >                  cpu_hotplug_lock --> slab_mutex --> kn->count#126
+> > 
+> > [ 1777.507443]  Possible unsafe locking scenario:
+> > 
+> > [ 1777.514049]        CPU0                    CPU1
+> > [ 1777.519102]        ----                    ----
+> > [ 1777.524155]   lock(kn->count#126);
+> > [ 1777.527956]                                lock(slab_mutex);
+> > [ 1777.534274] lock(kn->count#126);
+> > [ 1777.540885]   lock(cpu_hotplug_lock);
+> > [ 1777.544964]
+> >                 *** DEADLOCK ***
+> > 
+> > [ 1777.551570] 3 locks held by slub_cpu_partia/4113:
+> > [ 1777.556820]  #0: ffff8881319884d0 (sb_writers#4){.+.+}-{0:0}, at:
+> > vfs_write+0x31c/0x460
+> > [ 1777.565771]  #1: ffff888161d39490 (&of->mutex){+.+.}-{3:3}, at:
+> > kernfs_fop_write+0x1ad/0x410
+> > [ 1777.575203]  #2: ffff88811bd17578 (kn->count#126){++++}-{0:0}, at:
+> > kernfs_fop_write+0x1d0/0x410
+> > [ 1777.584928]
+> >                stack backtrace:
+> > [ 1777.589792] CPU: 65 PID: 4113 Comm: slub_cpu_partia Kdump: loaded Not
+> > tainted 4.18.0-403.el8.x86_64+debug #1
+> > [ 1777.600767] Hardware name: Lenovo ThinkSystem SR635 -[7Y98XXXXXX]-/System
+> > Board, BIOS CFE103A 07/04/2019
+> > [ 1777.611342] Call Trace:
+> > [ 1777.614072]  dump_stack+0x5c/0x80
+> > [ 1777.617777]  check_noncircular+0x27f/0x320
+> > [ 1777.622352]  ? print_circular_bug+0x440/0x440
+> > [ 1777.627215]  ? kernel_text_address+0x125/0x140
+> > [ 1777.632170]  ? mark_lock.part.31+0xf4/0xd40
+> > [ 1777.636841]  ? is_dynamic_key+0x220/0x220
+> > [ 1777.641326]  check_prevs_add+0x3fa/0x18b0
+> > [ 1777.645798]  ? sched_clock+0x5/0x10
+> > [ 1777.649695]  ? sched_clock_cpu+0x18/0x1e0
+> > [ 1777.654175]  ? check_irq_usage+0xa20/0xa20
+> > [ 1777.658750]  ? find_held_lock+0x1c0/0x1c0
+> > [ 1777.663225]  ? sched_clock_cpu+0x18/0x1e0
+> > [ 1777.667705]  __lock_acquire+0x21b3/0x2b80
+> > [ 1777.672192]  lock_acquire+0x1db/0x8e0
+> > [ 1777.676279]  ? cpu_partial_store+0x47/0xa0
+> > [ 1777.680854]  ? rcu_read_unlock+0x50/0x50
+> > [ 1777.685239]  ? sysfs_file_ops+0x160/0x160
+> > [ 1777.689718]  cpus_read_lock+0x40/0xc0
+> > [ 1777.693806]  ? cpu_partial_store+0x47/0xa0
+> > [ 1777.698380]  cpu_partial_store+0x47/0xa0
+> > [ 1777.702761]  slab_attr_store+0x20/0x30
+> > [ 1777.706944]  kernfs_fop_write+0x255/0x410
+> > [ 1777.711424]  vfs_write+0x157/0x460
+> > [ 1777.715224]  ksys_write+0xb8/0x170
+> > [ 1777.719023]  ? __ia32_sys_read+0xb0/0xb0
+> > [ 1777.723406]  ? lockdep_hardirqs_on_prepare+0x294/0x3e0
+> > [ 1777.729144]  ? do_syscall_64+0x22/0x450
+> > [ 1777.733429]  do_syscall_64+0xa5/0x450
+> > [ 1777.737518]  entry_SYSCALL_64_after_hwframe+0x6a/0xdf
+> > [ 1777.743159] RIP: 0033:0x7f4fe9b2ead8
+> > [ 1777.747153] Code: 89 02 48 c7 c0 ff ff ff ff eb b3 0f 1f 80 00 00 00 00
+> > f3 0f 1e fa 48 8d 05 45 4c 2a 00 8b 00 85 c0 75 17 b8 01 00 00 00 0f 05 <48>
+> > 3d 00 f0 ff ff 77 58 c3 0f 1f 80 00 00 00 00 41 54 49 89 d4 55
+> > [ 1777.768112] RSP: 002b:00007ffcc2173d48 EFLAGS: 00000246 ORIG_RAX:
+> > 0000000000000001
+> > [ 1777.776565] RAX: ffffffffffffffda RBX: 0000000000000002 RCX:
+> > 00007f4fe9b2ead8
+> > [ 1777.784530] RDX: 0000000000000002 RSI: 000055d41293eb70 RDI:
+> > 0000000000000001
+> > [ 1777.792495] RBP: 000055d41293eb70 R08: 000000000000000a R09:
+> > 0000000000000003
+> > [ 1777.800459] R10: 000000000000000a R11: 0000000000000246 R12:
+> > 00007f4fe9dcf6e0
+> > [ 1777.808425] R13: 0000000000000002 R14: 00007f4fe9dca860 R15:
+> > 0000000000000002
+> > 
+> > The cpu_partial_store() method call flush_all() which takes the
+> > cpu_hotplug_lock completing the cycle.
+> > 
+> > Cheers,
+> > Longman
+> > 
+> 
+
+-- 
+Thanks,
+Hyeonggon

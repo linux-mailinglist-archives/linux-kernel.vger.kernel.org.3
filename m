@@ -2,65 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5344959CB5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5CA59CB63
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238375AbiHVWTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 18:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
+        id S238065AbiHVWVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 18:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbiHVWS7 (ORCPT
+        with ESMTP id S231466AbiHVWVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 18:18:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D4A30F5F;
-        Mon, 22 Aug 2022 15:18:59 -0700 (PDT)
+        Mon, 22 Aug 2022 18:21:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824B84D26A;
+        Mon, 22 Aug 2022 15:21:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E133DB81979;
-        Mon, 22 Aug 2022 22:18:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B4EC433C1;
-        Mon, 22 Aug 2022 22:18:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661206736;
-        bh=lbcG/7heY9/JOFnDhcj6xbKcHok+D8FUqe/aKxOcKf8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z8C/OSIeggQ9gE6xHp8ktHYev5VYLgZE3JSSG+pulWkB+NxV7bArGgYloECSKaTEe
-         za+YaqntbyDojm+TQRjxYduMRpzVqfTz1XkUo+hAdLzfK5dWEXGDKALrjeHUlYGkN0
-         Sqa5amT13mAZdb2V31RpXkKqOFYFys/iumTa1CgJ+iFUFuvYr7tWMd0g2IcPG6J4i2
-         Ugt4Uhdk4TIyfF9dI9/YoFxkpdeOqBwzOcHMWadPYhNc+y+DzLwxrTabG2gE5sXS8N
-         uI7Gn8QnO4bxofXXwBtuiWDU5vwHlr2L0Bh59sP+m2O4/HN8KdNxGTG65W0aGaUFhw
-         rBjH3EYZnGsNA==
-Date:   Tue, 23 Aug 2022 00:18:52 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     aisheng.dong@nxp.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, xiaoning.wang@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V2 7/7] i2c: imx-lpi2c: use bulk clk API
-Message-ID: <YwQAzBUuFvGUlrmX@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, aisheng.dong@nxp.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, xiaoning.wang@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-References: <20220816125526.2978895-1-peng.fan@oss.nxp.com>
- <20220816125526.2978895-8-peng.fan@oss.nxp.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SNO4dW2CIYUSOHuv"
-Content-Disposition: inline
-In-Reply-To: <20220816125526.2978895-8-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A25F6134E;
+        Mon, 22 Aug 2022 22:21:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8ED8C433D6;
+        Mon, 22 Aug 2022 22:21:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1661206881;
+        bh=5+dnYijmph9j6r03H83ENF5D6tCqRSMA7zXrvGscJRw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Y0ue13+62oMUgAjV9ILcmIWjJ5FwskKcbdYBwur2vKZDZoKkHxLRAJKvyfOsz+dV0
+         74pW5JwXQXaPIb712dr/YhnST0oSv/xswDTRK3h/2XcaDedtlKB/veiDOwKmlL20EZ
+         5FtdESRE0T6NFirhe6oY/KR/1TrxXyasW+gEPXVI=
+Date:   Mon, 22 Aug 2022 15:21:19 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
+        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
+        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
+        hch@infradead.org, oleg@redhat.com, david@redhat.com,
+        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
+        jhubbard@nvidia.com, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com,
+        Yu Zhao <yuzhao@google.com>
+Subject: Re: [PATCH RESEND v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
+Message-Id: <20220822152119.96d40c884078229ee3e6b25e@linux-foundation.org>
+In-Reply-To: <20220531223100.510392-2-surenb@google.com>
+References: <20220531223100.510392-1-surenb@google.com>
+        <20220531223100.510392-2-surenb@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,36 +60,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 31 May 2022 15:31:00 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
 
---SNO4dW2CIYUSOHuv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> With the last usage of MMF_OOM_VICTIM in exit_mmap gone, this flag is
+> now unused and can be removed.
+> 
+> ...
+>
+> --- a/include/linux/oom.h
+> +++ b/include/linux/oom.h
+> @@ -77,15 +77,6 @@ static inline bool tsk_is_oom_victim(struct task_struct * tsk)
+>  	return tsk->signal->oom_mm;
+>  }
+>  
+> -/*
+> - * Use this helper if tsk->mm != mm and the victim mm needs a special
+> - * handling. This is guaranteed to stay true after once set.
+> - */
+> -static inline bool mm_is_oom_victim(struct mm_struct *mm)
+> -{
+> -	return test_bit(MMF_OOM_VICTIM, &mm->flags);
+> -}
+> -
 
+The patch "mm: multi-gen LRU: support page table walks" from the MGLRU
+series
+(https://lkml.kernel.org/r/20220815071332.627393-9-yuzhao@google.com)
+adds two calls to mm_is_oom_victim(), so my build broke.
 
-> -	clk_disable_unprepare(lpi2c_imx->clk);
-> +	clk_bulk_disable(lpi2c_imx->num_clks, lpi2c_imx->clks);
+I assume the fix is simply
 
-Why is there no 'unprepare' with bulk?
+--- a/mm/vmscan.c~mm-delete-unused-mmf_oom_victim-flag-fix
++++ a/mm/vmscan.c
+@@ -3429,9 +3429,6 @@ static bool should_skip_mm(struct mm_str
+ 	if (size < MIN_LRU_BATCH)
+ 		return true;
+ 
+-	if (mm_is_oom_victim(mm))
+-		return true;
+-
+ 	return !mmget_not_zero(mm);
+ }
+ 
+@@ -4127,9 +4124,6 @@ restart:
+ 
+ 		walk_pmd_range(&val, addr, next, args);
+ 
+-		if (mm_is_oom_victim(args->mm))
+-			return 1;
+-
+ 		/* a racy check to curtail the waiting time */
+ 		if (wq_has_sleeper(&walk->lruvec->mm_state.wait))
+ 			return 1;
+_
 
-
---SNO4dW2CIYUSOHuv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMEAMwACgkQFA3kzBSg
-Kba5EQ//VXnGL1C4B0a//cAO8UEoVGlawafffYMhWe3JEjtI7E2hZKSdu9lDyFdQ
-0HYdjMlZLyJZjfAYPs+GT6vKHN0vYTzuxDbZRk7r9aWVa0AG6xxgH2/qLLAk2CAK
-ZzBlASlKfv2mZpJ73ZG0Iz9T5WY5VkSngm16Ycr/6sRC4rkmzZ794PvPhKD2xjWr
-a8npBv1FPDjr96z1Bg1GrjbAUqChUTTCc2YsDkHgWnOEhZbRyMl1oaGKTpMPgLIT
-4HnbL1WG7TL2FPcU3VDruVDm2R9ZCoJOAkqNbCIjVnYLd3ePKPOvmBnbyfAoxKnp
-LZAj5a6xDYZGief0mIemgv4lGKPxt9tjgJndX/xk97axUO1pB8YVpcZ5XEDvTUSq
-KiMeNFFqMaOkOKtTBhLDxDlGTTclF/DtuCzZEW4qYCjnBZOa9XqAsX9GbGAD3GAX
-VoeSS9XaoN7Bkq4nGzxXg4uHGXiW26TH4ByqcQtlHo1TagMLA946bL9U1z96Mqvd
-BX1ILO3D8rFW5WwAyoJrWMC6AbdBhzatVy3yOaAEt0nKsBp0Wu/qSwSKd2yAllm4
-CRkWlm5Jf9DnvWgCCJewH6nS+qtU10ujzca1SYzsDAPg6csLnE40c6CsfzvWTHbu
-eHqIkKPtCCkMAT82sN1SYLt25qYdAZzD1wXAR9QYjdlBIVcpRTQ=
-=Iftg
------END PGP SIGNATURE-----
-
---SNO4dW2CIYUSOHuv--
+Please confirm?

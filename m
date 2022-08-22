@@ -2,100 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9B859B70E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 02:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BC959B711
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 02:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbiHVAdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 20:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
+        id S232111AbiHVAjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 20:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbiHVAde (ORCPT
+        with ESMTP id S232088AbiHVAjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 20:33:34 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12613EE3F;
-        Sun, 21 Aug 2022 17:33:31 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7435A5C00FE;
-        Sun, 21 Aug 2022 20:33:30 -0400 (EDT)
-Received: from imap46 ([10.202.2.96])
-  by compute2.internal (MEProxy); Sun, 21 Aug 2022 20:33:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1661128410; x=1661214810; bh=27h43v4nBT
-        AlRXCBZnK4UG8wbYzUzFCpxbi0BMYrkbM=; b=Lc2jpMR5ay89ru7Qj+gW2zMRXV
-        D7lvXBFEaVaJ7MUM8mGTC3F6Bp0dxWKK5/e7X221AX+rTnZt76/Mv1betZBnHBZH
-        JQud96s4tkPI2thDQqUq/FwzPcBrtwjX3P6wEfuYvTXT9qIrVr3T+jglTQhr3qlU
-        FckvCctyWfcVYciIiuejKxrJqpAhoSsllq372abYk1N7mlmTxgHIej4C+1xwfjqC
-        gN8QXQyUCRkEXPfnPhnLUXiyX69KAOuLeTXtFoaEddc8c2ghnMvPkDerfdxSCscu
-        lDpJYpa5K8WBEQKC3VFgphBhcZksLyyPTrBdglHKJ4uXLJt14iVxbs/dueiw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1661128410; x=
-        1661214810; bh=27h43v4nBTAlRXCBZnK4UG8wbYzUzFCpxbi0BMYrkbM=; b=l
-        592CXRTNKqmCcnghN5YrbqfnlJAqYJ5/f4sKVN1/fZRVJTRZcezwsSabP7rJWqxt
-        jZTXUFtLTFQVZqIv3V8HZ9aQ3lEi3WDYa/IZB8H/IonbvATHrmlLh3EdE4mG3zn6
-        dA3hvkeHRSBOTMf0v27ytrZY/TSjmk3JBN4nrJDsn9RNgVS58YltAIe/51MK6ciU
-        Gf+VIMtkiu9JVdAnSSit6BElF6hiNcvsk4hheWCeZ2Hx5RFTpQhyn9FRhy8YfaUT
-        J4Ukb1eVnO/3JWzuf7K6fva5uarQMoXsRebPFVYRXx0RJLg2EgUA2+vHXsoWCCLs
-        cBszWecnTWMss65I1dy8Q==
-X-ME-Sender: <xms:2s4CYzK0yxz3h5fegyVUgvhdbPTHwu-RseMyvjOifmJ0dt7BQFFAZA>
-    <xme:2s4CY3LBrggaoLgaey-MTQx1gY2NT3OkGG8smH2aFi-iOV3vZJc1wrF75MNYGzWYS
-    ZH4LwwsGf_QtKm74A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeiiedgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvvefutgfgse
-    htqhertderreejnecuhfhrohhmpedfvfhomhcuhfhithiihhgvnhhrhidfuceothhomhes
-    thhomhdqfhhithiihhgvnhhrhidrmhgvrdhukheqnecuggftrfgrthhtvghrnhepiefhge
-    eikefgueejtddvueevheeikeeghfehtdffgeeigeeujeeggeffjeeuvdeknecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepthhomhesthhomhdqfh
-    hithiihhgvnhhrhidrmhgvrdhukh
-X-ME-Proxy: <xmx:2s4CY7shrdwtyrF2g4MZ2GcrsHjKOAkhXsxcJ2KY8A2AHUz9Qu_RqA>
-    <xmx:2s4CY8bKTAnnU2CiV9FQNKUa_6SCj5kmqqv2DoX7tLgMuMth4fUU3A>
-    <xmx:2s4CY6b-q9ILy9zViLhBQOTv1fj5OU77D_2zl_pOVIeysl6lazwedA>
-    <xmx:2s4CYyrGoIsoIW2e0LZWSTQRT-FAIs6Y6x7ffKyWbN8xPEAcvuCgng>
-Feedback-ID: iefc945ae:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2B1DC2A20075; Sun, 21 Aug 2022 20:33:30 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <81f06224-2472-4696-b56a-2f4286902d0f@www.fastmail.com>
-In-Reply-To: <20220821001114.ahnb4f6hcykt5nrm@notapiano>
-References: <20220815123004.252014-1-tom@tom-fitzhenry.me.uk>
- <20220815123004.252014-3-tom@tom-fitzhenry.me.uk>
- <20220821001114.ahnb4f6hcykt5nrm@notapiano>
-Date:   Mon, 22 Aug 2022 00:33:08 +0000
-From:   "Tom Fitzhenry" <tom@tom-fitzhenry.me.uk>
-To:     =?UTF-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <n@nfraprado.net>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, martijn@brixit.nl, ayufan@ayufan.eu, megi@xff.cz,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] arm64: dts: rockchip: Add initial support for Pine64
- PinePhone Pro
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 21 Aug 2022 20:39:07 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0054312A9A;
+        Sun, 21 Aug 2022 17:39:04 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M9tht1h7bznTgT;
+        Mon, 22 Aug 2022 08:36:46 +0800 (CST)
+Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 22 Aug
+ 2022 08:39:02 +0800
+From:   Weilong Chen <chenweilong@huawei.com>
+To:     <yangyicong@hisilicon.com>, <wsa@kernel.org>,
+        <chenweilong@huawei.com>
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] i2c: i2c-hisi: Add support for initializing control module via DT
+Date:   Mon, 22 Aug 2022 08:41:57 +0800
+Message-ID: <20220822004157.90548-1-chenweilong@huawei.com>
+X-Mailer: git-send-email 2.31.GIT
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 21 Aug 2022, at 12:11 AM, N=C3=ADcolas F. R. A. Prado wrote:
-> Indeed booting from the SD card also works with this minimal DT. Also =
-confirmed
-> that eMMC, thermal sensors, power button, regulators and UART are all =
-working.
+The HiSilicon I2C controller can be used on embedded platform, which
+boot from devicetree.
 
-Thanks for the testing! I will include your Tested-by in v4.
+Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+---
+ drivers/i2c/busses/Kconfig    |  2 +-
+ drivers/i2c/busses/i2c-hisi.c | 13 ++++++++++++-
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 7284206b278b..6d0fdf48e97d 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -673,7 +673,7 @@ config I2C_HIGHLANDER
+ 
+ config I2C_HISI
+ 	tristate "HiSilicon I2C controller"
+-	depends on (ARM64 && ACPI) || COMPILE_TEST
++	depends on ARM64 || COMPILE_TEST
+ 	help
+ 	  Say Y here if you want to have Hisilicon I2C controller support
+ 	  available on the Kunpeng Server.
+diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+index 76c3d8f6fc3c..cba9a6830b23 100644
+--- a/drivers/i2c/busses/i2c-hisi.c
++++ b/drivers/i2c/busses/i2c-hisi.c
+@@ -16,6 +16,8 @@
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ #include <linux/units.h>
++#include <linux/acpi.h>
++#include <linux/of.h>
+ 
+ #define HISI_I2C_FRAME_CTRL		0x0000
+ #define   HISI_I2C_FRAME_CTRL_SPEED_MODE	GENMASK(1, 0)
+@@ -483,17 +485,26 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_ACPI
+ static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
+ 	{ "HISI03D1", 0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
++#endif
++
++static const struct of_device_id hisi_i2c_dts_ids[] = {
++	{ .compatible = "hisilicon,hisi-i2c", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
+ 
+ static struct platform_driver hisi_i2c_driver = {
+ 	.probe		= hisi_i2c_probe,
+ 	.driver		= {
+ 		.name	= "hisi-i2c",
+-		.acpi_match_table = hisi_i2c_acpi_ids,
++		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
++		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
+ 	},
+ };
+ module_platform_driver(hisi_i2c_driver);
+-- 
+2.31.GIT
+

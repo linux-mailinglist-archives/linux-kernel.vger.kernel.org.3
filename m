@@ -2,156 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7422659C66C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9121659C670
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237339AbiHVSdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 14:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S235780AbiHVSeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 14:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237531AbiHVScz (ORCPT
+        with ESMTP id S237464AbiHVSdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 14:32:55 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B834BA5C
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:32:29 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id x23so10693452pll.7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:32:29 -0700 (PDT)
+        Mon, 22 Aug 2022 14:33:19 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946F6491F4;
+        Mon, 22 Aug 2022 11:32:57 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id r10so7426267oie.1;
+        Mon, 22 Aug 2022 11:32:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=3pKOuS9bPCfHx4b2cjVQc088kaA5gmugVVhXnoWl0R4=;
-        b=sU5v9o7Maz94cphiUk0iGtYwZ8KgUY4HSf9XbHNsFwxHC8SpRbMTv/X+qxPZGvDsDE
-         K6BFujPXC48leKW1lCzKWMK+si2TFy9/Cm/Lhx6r1OtvxzaT5ARQwxfsmb8hIMSHRW7b
-         lSpNszsvnbTDk+8nNGK3gV8uA1jALtymYVTInzRaSsPvbJTIHoEe9nmrC9RgnPGlFzj9
-         MialtQ15T2tbbFUtllvwY/gsgSHxGNjnOkCiAh8R3zeW4NdgxCcoWnTKH5OczqsWzre6
-         wM2h9jqXOzm3GSSsJDB0FpIIKqpd1SxhjC/+H5D3VCtROl1xDQI/8rDkC/BS2kkANKEz
-         cd7A==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=1xmFogWnIvNdwdlTrmK1SuS0i1HcmsumGSpd55c4S+w=;
+        b=CDJxFqDsz6m7yWC8X5zRoIOEGYNzekCGsaOVwkt6QczVj+STJ1R922UNcn3Oq9GUkY
+         2UlYqMlLOAaZibfiiSSqAZslrtE/X+Ec3Ym9+QXTwJIP2ToNlqpq3TeR5JEm8ieo+Kub
+         SjufC2NY3OMN791+w34Co01GCTlYi6rcaQHkLizmBqr9kOJs1OpwMiM94mGRtnjkEQIN
+         0SBLacC2QHAblNrceey4IaD4tM/7stLpiRRtQ3/ColisGrPXJr5ojJn78dA8/Vs/Sc3Q
+         r+k2MESQINePiU2imFYlSc4vkr4xHmOiDaY1yx5OlnD5e2y7zq9uxdUX7cFsmZHXC+N0
+         gOXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=3pKOuS9bPCfHx4b2cjVQc088kaA5gmugVVhXnoWl0R4=;
-        b=Imi1S05+uPlgWd7x85FZfIRLrQEPnOJrwqzUEX3kTZmGbB1hGJl2F58WiVNByHY7of
-         /qkmrVe1C+l1eOhdTNn5YgylxbFNZ/rQz7F9CswSGVNDEcKYggiqreIyko8mMUjOplGP
-         oi3aHOeOPWRI7SrM+PHNsNhq36/jCQjEZiaAhSpkdCfwfMJ5ndIvysuFfrun+eQMgSsL
-         Z55MiUy7NaYzsrBaHWkYQpMDKsRdy6JXPZ62Ts+ub6zbT/fQhbTziH5oSHWAaruBnhJI
-         LNO3InJd6lHmH+ASGtLVETOHMx7OsjpLMGGenWBhjRrJaSRMigTfLLR168qx5SPIa+8J
-         QvvQ==
-X-Gm-Message-State: ACgBeo3VPVfCrYElfoSXpPEjvqQh6JLfSGdgiZoI2cDfuAKyYdizlaO7
-        BmohmCdjY8HQ7/7FQpN6SGCsRQ==
-X-Google-Smtp-Source: AA6agR5t8vY6wHth/oFQzUUROc10MQ6sPeWK+Nlnqjg1jl3To2ype6CO7nYnon+0rfKqNYo16+sJHQ==
-X-Received: by 2002:a17:90b:3b85:b0:1fb:18f6:c65f with SMTP id pc5-20020a17090b3b8500b001fb18f6c65fmr9748839pjb.217.1661193147720;
-        Mon, 22 Aug 2022 11:32:27 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x15-20020a170902ec8f00b0016be527753bsm787162plg.264.2022.08.22.11.32.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 11:32:27 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 18:32:23 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 03/26] x86/hyperv: Update 'struct hv_enlightened_vmcs'
- definition
-Message-ID: <YwPLt2e7CuqMzjt1@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-4-vkuznets@redhat.com>
- <Yv5ZFgztDHzzIQJ+@google.com>
- <875yiptvsc.fsf@redhat.com>
- <Yv59dZwP6rNUtsrn@google.com>
- <87czcsskkj.fsf@redhat.com>
- <YwOm7Ph54vIYAllm@google.com>
- <87edx8xn8h.fsf@redhat.com>
- <YwO2fSCGXnE/9mc2@google.com>
- <878rngxjb7.fsf@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=1xmFogWnIvNdwdlTrmK1SuS0i1HcmsumGSpd55c4S+w=;
+        b=Qx49LTJUCHZ8Eazk0716nSGaMOUWLH5EMgbMwN4JKbALiBn8Scj0lEO0ILWLjm5ugG
+         XN0MQglRQqxfXtAEpDlDKBsZCHtMYKAPoUa/s4VC3Ylq+j2pGsHKahchxe17MVI/odcQ
+         8SJYADNsTF3UnaXxj6Gg4wkPOgkfZbVtNZlR2oGQZSSYn9j/JQec3/Lin9Z1+Er07lfn
+         gnRSAeQhUTOvggjCtpufARJSU4Vk75Prq/Gt/ygmSyp1Um6bv2lu0qAbgZBOh3J1BpAk
+         pIt0+4gETv3ppVIqygCAJ/3RilLrWh93QU6dAqUdjyc0idfN82gUGk+Rjt1KhgCWaDV6
+         cDnQ==
+X-Gm-Message-State: ACgBeo03vdQAwzlBQREELiMVXfld9kT6cSD6x+V20S6kafOt2Fkf8xpV
+        j3zGLs1qDLek7EXBQuBvkjPHEllD8ceP8FntIvYgkJMAXflYPw==
+X-Google-Smtp-Source: AA6agR4vtM0FyDcPYwh7ADQGjGUQShqkGdAo04DYUDZFMQVDgFU+/mrcQsSqoiz3gGxDcd0r/01ksxOHm3ktF3jWSE8=
+X-Received: by 2002:a05:6808:1c03:b0:345:20f7:926d with SMTP id
+ ch3-20020a0568081c0300b0034520f7926dmr8709061oib.47.1661193176554; Mon, 22
+ Aug 2022 11:32:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <878rngxjb7.fsf@redhat.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220816175246.42401-1-vishal.moola@gmail.com> <20220816175246.42401-3-vishal.moola@gmail.com>
+In-Reply-To: <20220816175246.42401-3-vishal.moola@gmail.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Mon, 22 Aug 2022 11:32:45 -0700
+Message-ID: <CAOzc2pwCRrz55Swikywucq=yO3t6zGM9gx+qMuqF89vo6kdCKQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] btrfs: Convert __process_pages_contig() to use filemap_get_folios_contig()
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-btrfs@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> 
-> > On Mon, Aug 22, 2022, Vitaly Kuznetsov wrote:
-> >> My initial implementation was inventing 'eVMCS revision' concept:
-> >> https://lore.kernel.org/kvm/20220629150625.238286-7-vkuznets@redhat.com/
-> >> 
-> >> which is needed if we don't gate all these new fields on CPUID.0x4000000A.EBX BIT(0).
-> >> 
-> >> Going forward, we will still (likely) need something when new fields show up.
-> >
-> > My comments from that thread still apply.  Adding "revisions" or feature flags
-> > isn't maintanable, e.g. at best KVM will end up with a ridiculous number of flags.
-> >
-> > Looking at QEMU, which I strongly suspect is the only VMM that enables
-> > KVM_CAP_HYPERV_ENLIGHTENED_VMCS, it does the sane thing of enabling the capability
-> > before grabbing the VMX MSRs.
-> >
-> > So, why not simply apply filtering for host accesses as well?
-> 
-> (I understand that using QEMU to justify KVM's behavior is flawed but...)
-> 
-> QEMU's migration depends on the assumption that identical QEMU's command
-> lines create identical (from guest PoV) configurations. Assume we have
-> (simplified)
-> 
-> "-cpu CascadeLake-Sever,hv-evmcs"
-> 
-> on both source and destination but source host is newer, i.e. its KVM
-> knows about TSC Scaling in eVMCS and destination host has no idea about
-> it. If we just apply filtering upon vCPU creation, guest visible MSR
-> values are going to be different, right? Ok, assuming QEMU also migrates
-> VMX feature MSRs (TODO: check if that's true), we will be able to fail
-> mirgration late (which is already much worse than not being able to
-> create the desired configuration on destination, 'fail early') if we use
-> in-KVM filtering to throw an error to userspace. But if we blindly
-> filter control MSRs on the destination, 'TscScaling' will just disapper
-> undreneath the guest. This is unlikely to work.
-
-But all of that holds true irrespetive of eVMCS.  If QEMU attempts to migrate a
-nested guest from a KVM that supports TSC_SCALING to a KVM that doesn't support
-TSC_SCALING, then TSC_SCALING is going to disappear and VM-Entry on the dest will
-fail.  I.e. QEMU _must_ be able to detect the incompatibility and not attempt
-the migration.  And with that code in place, QEMU doesn't need to do anything new
-for eVMCS, it Just Works.
-
-> In any case, what we need, is an option for VMM (read: QEMU) to create
-> the configuration with 'TscScaling' filtered out even KVM supports the
-> bit in eVMCS. This way the guest will be able to migrate backwards to an
-> older KVM which doesn't support it, i.e.
-> 
-> '-cpu CascadeLake-Sever,hv-evmcs'
->  creates the 'origin' eVMCS configuration, no TscScaling
-> 
-> '-cpu CascadeLake-Sever,hv-evmcs,hv-evmcs-2022' creates the updated one.
-
-Again, this conundrum exists irrespective of eVMCS.  Properly solve the problem
-for regular nVMX and eVMCS should naturally work.
-
-> KVM_CAP_HYPERV_ENLIGHTENED_VMCS is bad as it only takes 'eVMCS' version
-> as a parameter (as we assumed it will always change when new fields are
-> added, but that turned out to be false). That's why I suggested
-> KVM_CAP_HYPERV_ENLIGHTENED_VMCS2.
-
-Enumerating features via versions is such a bad API though, e.g. if there's a
-bug with nested TSC_SCALING, userspace can't disable just nested TSC_SCALING
-without everything else under the inscrutable "hv-evmcs-2022" being collateral
-damage.
+On Tue, Aug 16, 2022 at 10:53 AM Vishal Moola (Oracle)
+<vishal.moola@gmail.com> wrote:
+>
+> Convert to use folios throughout. This is in preparation for the removal of
+> find_get_pages_contig(). Now also supports large folios.
+>
+> Since we may receive more than nr_pages pages, nr_pages may underflow.
+> Since nr_pages > 0 is equivalent to index <= end_index, we replaced it
+> with this check instead.
+>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> ---
+>  fs/btrfs/extent_io.c | 33 +++++++++++++++------------------
+>  1 file changed, 15 insertions(+), 18 deletions(-)
+>
+> diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
+> index 8f6b544ae616..f16929bc531b 100644
+> --- a/fs/btrfs/extent_io.c
+> +++ b/fs/btrfs/extent_io.c
+> @@ -1882,9 +1882,8 @@ static int __process_pages_contig(struct address_space *mapping,
+>         pgoff_t start_index = start >> PAGE_SHIFT;
+>         pgoff_t end_index = end >> PAGE_SHIFT;
+>         pgoff_t index = start_index;
+> -       unsigned long nr_pages = end_index - start_index + 1;
+>         unsigned long pages_processed = 0;
+> -       struct page *pages[16];
+> +       struct folio_batch fbatch;
+>         int err = 0;
+>         int i;
+>
+> @@ -1893,16 +1892,17 @@ static int __process_pages_contig(struct address_space *mapping,
+>                 ASSERT(processed_end && *processed_end == start);
+>         }
+>
+> -       if ((page_ops & PAGE_SET_ERROR) && nr_pages > 0)
+> +       if ((page_ops & PAGE_SET_ERROR) && start_index <= end_index)
+>                 mapping_set_error(mapping, -EIO);
+>
+> -       while (nr_pages > 0) {
+> -               int found_pages;
+> +       folio_batch_init(&fbatch);
+> +       while (index <= end_index) {
+> +               int found_folios;
+> +
+> +               found_folios = filemap_get_folios_contig(mapping, &index,
+> +                               end_index, &fbatch);
+>
+> -               found_pages = find_get_pages_contig(mapping, index,
+> -                                    min_t(unsigned long,
+> -                                    nr_pages, ARRAY_SIZE(pages)), pages);
+> -               if (found_pages == 0) {
+> +               if (found_folios == 0) {
+>                         /*
+>                          * Only if we're going to lock these pages, we can find
+>                          * nothing at @index.
+> @@ -1912,23 +1912,20 @@ static int __process_pages_contig(struct address_space *mapping,
+>                         goto out;
+>                 }
+>
+> -               for (i = 0; i < found_pages; i++) {
+> +               for (i = 0; i < found_folios; i++) {
+>                         int process_ret;
+> -
+> +                       struct folio *folio = fbatch.folios[i];
+>                         process_ret = process_one_page(fs_info, mapping,
+> -                                       pages[i], locked_page, page_ops,
+> +                                       &folio->page, locked_page, page_ops,
+>                                         start, end);
+>                         if (process_ret < 0) {
+> -                               for (; i < found_pages; i++)
+> -                                       put_page(pages[i]);
+>                                 err = -EAGAIN;
+> +                               folio_batch_release(&fbatch);
+>                                 goto out;
+>                         }
+> -                       put_page(pages[i]);
+> -                       pages_processed++;
+> +                       pages_processed += folio_nr_pages(folio);
+>                 }
+> -               nr_pages -= found_pages;
+> -               index += found_pages;
+> +               folio_batch_release(&fbatch);
+>                 cond_resched();
+>         }
+>  out:
+> --
+> 2.36.1
+>
+Just following up on these btrfs patches (2/7, 3/7, 4/7). Does anyone have
+time to review them this week? Feedback would be appreciated.

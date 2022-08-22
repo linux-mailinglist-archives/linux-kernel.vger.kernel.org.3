@@ -2,119 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 991C959B713
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 02:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B24E59B71C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 02:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbiHVAmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 20:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
+        id S232166AbiHVAxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 20:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbiHVAmB (ORCPT
+        with ESMTP id S232156AbiHVAxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 20:42:01 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58211838F;
-        Sun, 21 Aug 2022 17:42:00 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M9tmG4qmNznTgT;
-        Mon, 22 Aug 2022 08:39:42 +0800 (CST)
-Received: from [10.174.179.106] (10.174.179.106) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 22 Aug 2022 08:41:59 +0800
-Subject: Re: [PATCH 1/2] i2c: i2c-hisi: Add support for initializing control
- module via DT
-To:     <yangyicong@hisilicon.com>, <wsa@kernel.org>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220822004157.90548-1-chenweilong@huawei.com>
-From:   chenweilong <chenweilong@huawei.com>
-Message-ID: <bcb788b1-c1f2-4129-c539-593d8160e80d@huawei.com>
-Date:   Mon, 22 Aug 2022 08:41:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        Sun, 21 Aug 2022 20:53:05 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E65205E8;
+        Sun, 21 Aug 2022 17:53:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661129582; x=1692665582;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vAVd2DD6t9I+Xtmsril7vUCCDTiDliFF7Nj/PCNMHkc=;
+  b=fuP2Arglkj/rrQtGKf67SibUIet0qRKeKRn1TD4oBkD8ukzGnZjVHxtP
+   1LWFzd0CCmQApoh2H/SmvW4/q2yYAHS9SFPEKROTbaDiamkzO69jNlN+4
+   Qeu3ysQM1XhJ1BR8D5dCifbS+PPr+8UcZ8pZL7nssRxDC7+lOz823x8iB
+   R7/whcXs22UTrTEcPobKWyCXwIj9lza32H491S3dVBI89i/H+ihalysgC
+   AE0/CUmRPmh2J8O3dyFbCMNVFGMitTrULcvHkco//yZH8Anu2uc13xlyh
+   23B/EgkMVfNHEhrnAHWEOV0XC98I5U4zqdDYIxik00GTjYhy44PY+5laO
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="294574753"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="294574753"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 17:53:01 -0700
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="669297118"
+Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.213.163.128])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2022 17:52:39 -0700
+From:   ira.weiny@intel.com
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: [PATCH 0/2] CXL: Taint user access to DOE mailbox config space
+Date:   Sun, 21 Aug 2022 20:52:35 -0400
+Message-Id: <20220822005237.540039-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-In-Reply-To: <20220822004157.90548-1-chenweilong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.179.106]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bad patch description, please ignore this patch.
-Apologize.
-On 2022/8/22 8:41, Weilong Chen wrote:
-> The HiSilicon I2C controller can be used on embedded platform, which
-> boot from devicetree.
->
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-> ---
->  drivers/i2c/busses/Kconfig    |  2 +-
->  drivers/i2c/busses/i2c-hisi.c | 13 ++++++++++++-
->  2 files changed, 13 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> index 7284206b278b..6d0fdf48e97d 100644
-> --- a/drivers/i2c/busses/Kconfig
-> +++ b/drivers/i2c/busses/Kconfig
-> @@ -673,7 +673,7 @@ config I2C_HIGHLANDER
->  
->  config I2C_HISI
->  	tristate "HiSilicon I2C controller"
-> -	depends on (ARM64 && ACPI) || COMPILE_TEST
-> +	depends on ARM64 || COMPILE_TEST
->  	help
->  	  Say Y here if you want to have Hisilicon I2C controller support
->  	  available on the Kunpeng Server.
-> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
-> index 76c3d8f6fc3c..cba9a6830b23 100644
-> --- a/drivers/i2c/busses/i2c-hisi.c
-> +++ b/drivers/i2c/busses/i2c-hisi.c
-> @@ -16,6 +16,8 @@
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
->  #include <linux/units.h>
-> +#include <linux/acpi.h>
-> +#include <linux/of.h>
->  
->  #define HISI_I2C_FRAME_CTRL		0x0000
->  #define   HISI_I2C_FRAME_CTRL_SPEED_MODE	GENMASK(1, 0)
-> @@ -483,17 +485,26 @@ static int hisi_i2c_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_ACPI
->  static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
->  	{ "HISI03D1", 0 },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
-> +#endif
-> +
-> +static const struct of_device_id hisi_i2c_dts_ids[] = {
-> +	{ .compatible = "hisilicon,hisi-i2c", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
->  
->  static struct platform_driver hisi_i2c_driver = {
->  	.probe		= hisi_i2c_probe,
->  	.driver		= {
->  		.name	= "hisi-i2c",
-> -		.acpi_match_table = hisi_i2c_acpi_ids,
-> +		.acpi_match_table = ACPI_PTR(hisi_i2c_acpi_ids),
-> +		.of_match_table = of_match_ptr(hisi_i2c_dts_ids),
->  	},
->  };
->  module_platform_driver(hisi_i2c_driver);
+From: Ira Weiny <ira.weiny@intel.com>
 
+PCI config space access from user space has traditionally been unrestricted
+with writes being an understood risk for device operation.
+
+Unfortunately, device breakage or odd behavior from config writes lacks
+indicators that can leave driver writers confused when evaluating failures.
+This is especially true with the new PCIe Data Object Exchange (DOE) mailbox
+protocol where backdoor shenanigans from user space through things such as
+vendor defined protocols may affect device operation without complete breakage.
+
+Even though access should not be restricted it would be nice for driver writers
+to be able to flag critical parts of the config space such that interference
+from user space can be detected.
+
+Introduce pci_request_config_region_exclusive() and use it in the CXL driver
+for DOE config space.
+
+Ira Weiny (2):
+  PCI: Allow drivers to request exclusive config regions
+  cxl/doe: Request exclusive DOE access
+
+ drivers/cxl/pci.c             |  5 +++++
+ drivers/pci/pci-sysfs.c       |  6 ++++++
+ drivers/pci/probe.c           |  6 ++++++
+ include/linux/ioport.h        |  2 ++
+ include/linux/pci.h           | 16 ++++++++++++++++
+ include/uapi/linux/pci_regs.h |  1 +
+ kernel/resource.c             | 13 ++++++++-----
+ 7 files changed, 44 insertions(+), 5 deletions(-)
+
+
+base-commit: 1cd8a2537eb07751d405ab7e2223f20338a90506
+-- 
+2.37.2
 

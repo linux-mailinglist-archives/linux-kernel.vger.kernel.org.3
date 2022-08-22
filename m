@@ -2,136 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB15559BA3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A4A59BA3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbiHVH1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 03:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S232070AbiHVH1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 03:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiHVH1n (ORCPT
+        with ESMTP id S229496AbiHVH1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 03:27:43 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E730F29CB0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661153262; x=1692689262;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZIX/nHo7zid4qKFYJG9ZTmbJikpG6pbFmXZh0kFzUE8=;
-  b=LKkNXzV4+uyBXae4s5i17fxuPpsQGSTSolOnTY4Ll1Icia23z/YFgqI+
-   tYNtYjZFBce/iVrnyQf5AXURpShw0NDqL7qEBCqNxcTt7zMo7aZ6At1zu
-   28Rv6ioigMonrWIXSWaPtRhjJLAMwk3nnkbPKqakjmsDfNJnOXzQ1LUu8
-   u51FcS1+ba08U2uJC8N8ZFHLc1yNysaYJPs1Cia0A8CaX45aBqcNqmn+8
-   /pVhlIVliNIWt3Jc+3kJDk87RZrv6cWLGLC/qL4fFau5BPGW7+7SZaxPO
-   TI3Fx5IHbHQXPg43AUMQfGcHBnNhw105uOSa8ZwAdbYOmCDvBokn6e200
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="379636725"
-X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="379636725"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 00:27:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="936930985"
-Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Aug 2022 00:27:37 -0700
-Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQ1qS-00054l-1W;
-        Mon, 22 Aug 2022 07:27:36 +0000
-Date:   Mon, 22 Aug 2022 15:26:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: ld.lld: error: undefined symbol: drm_gem_fb_get_obj
-Message-ID: <202208221506.0Lo051G4-lkp@intel.com>
+        Mon, 22 Aug 2022 03:27:19 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916C829CB4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:27:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 43E8C5C8E3;
+        Mon, 22 Aug 2022 07:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661153237; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QOSZ1gao5/3E8NwCd+xFOFyj6wHAE0KqY6dM+F15eTY=;
+        b=D1v7Rzn8hkS/j8FC79rIDlh6LSkmKqTkZElaHBNiKH8zFdkA5fyDxbpTGYkfW7HGNMe9lV
+        /yAxxvRie+Snh4pL4dY1J2t5JZGLWQbVvsEnyyWkh3gmUjR+2komdG4sqBwfye7m17JkPh
+        SktY9C9jZl3ReOdmsRG0x8HWTPxXHUQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 22C1E13523;
+        Mon, 22 Aug 2022 07:27:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eRsjBtUvA2MuIQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 22 Aug 2022 07:27:17 +0000
+Date:   Mon, 22 Aug 2022 09:27:16 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Aaron Lu <aaron.lu@intel.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        huang ying <huang.ying.caritas@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Huang Ying <ying.huang@intel.com>
+Subject: Re: [PATCH RFC] mm, proc: add PcpFree to meminfo
+Message-ID: <YwMv1A1rVNZQuuOo@dhcp22.suse.cz>
+References: <20220816084426.135528-1-wangkefeng.wang@huawei.com>
+ <CAC=cRTN=vbrgOsH7PNNMV+Coyabp=H_XF99MUL00kfET=K-32w@mail.gmail.com>
+ <578084e8-bdc3-6e4e-f390-4202a8bc7c1d@huawei.com>
+ <Yv8+bxiZ8+Rw+wu3@ziqianlu-Dell-Optiplex7000>
+ <31718e40-51e9-c14d-f7f5-526ba26d0db8@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <31718e40-51e9-c14d-f7f5-526ba26d0db8@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1c23f9e627a7b412978b4e852793c5e3c3efc555
-commit: 57f6190a60ecc19f1ddddac0d7ea6524229271a9 drm/panel: ws2401: Add driver for WideChips WS2401
-date:   1 year, 1 month ago
-config: x86_64-randconfig-a002-20220822 (https://download.01.org/0day-ci/archive/20220822/202208221506.0Lo051G4-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57f6190a60ecc19f1ddddac0d7ea6524229271a9
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 57f6190a60ecc19f1ddddac0d7ea6524229271a9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Fri 19-08-22 17:53:27, Liu Shixin wrote:
+> 
+> 
+> On 2022/8/19 15:40, Aaron Lu wrote:
+> > On Tue, Aug 16, 2022 at 05:24:07PM +0800, Kefeng Wang wrote:
+> >> On 2022/8/16 16:48, huang ying wrote:
+> >>> On Tue, Aug 16, 2022 at 4:38 PM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+> >>>> From: Liu Shixin <liushixin2@huawei.com>
+> >>>>
+> >>>> The page on pcplist could be used, but not counted into memory free or
+> >>>> avaliable, and pcp_free is only showed by show_mem(). Since commit
+> >>>> d8a759b57035 ("mm, page_alloc: double zone's batchsize"), there is a
+> >>>> significant decrease in the display of free memory, with a large number
+> >>>> of cpus and nodes, the number of pages in the percpu list can be very
+> >>>> large, so it is better to let user to know the pcp count.
+> >>> Can you show some data?
+> >> 80M+ with 72cpus/2node
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I would expect that such system would have quite some memory as well and
+80MB wouldn't be a really noticeable. What is that amount in %tage 
 
-All errors (new ones prefixed by >>):
+> > 80M+ for a 2 node system doesn't sound like a significant number.
+> >
+> >>> Another choice is to count PCP free pages in MemFree.  Is that OK for
+> >>> your use case too?
+> >> Yes, the user will make policy according to MemFree, we think count PCP free
+> >> pages
+> >>
+> >> in MemFree is better, but don't know whether it is right way.
+> >>
+> > Is there a real problem where user makes a sub-optimal policy due to the
+> > not accounted 80M+ free memory?
+> I need to explain that 80M+ is the increased after patch d8a759b57035. Actually in my test,
+> the pcplist is about 114M after system startup, and in high load scenarios, the pcplist memory
+> can reach 300M+.
+> The downstream has sensed the memory change after the kernel is updated, which has an
+> actual impact on them. That's why I sent this patch to ask if should count this
+> part of memory.
 
->> ld.lld: error: undefined symbol: drm_gem_fb_get_obj
-   >>> referenced by drm_mipi_dbi.c:203 (drivers/gpu/drm/drm_mipi_dbi.c:203)
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
-   >>> referenced by drm_mipi_dbi.c:258 (drivers/gpu/drm/drm_mipi_dbi.c:258)
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_fb_dirty) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_fb_swab
-   >>> referenced by drm_mipi_dbi.c:219 (drivers/gpu/drm/drm_mipi_dbi.c:219)
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_atomic_helper_connector_destroy_state
-   >>> referenced by drm_mipi_dbi.c
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_connector_funcs) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_gem_fb_create_with_dirty
-   >>> referenced by drm_mipi_dbi.c
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_atomic_helper_check
-   >>> referenced by drm_mipi_dbi.c
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_atomic_helper_commit
-   >>> referenced by drm_mipi_dbi.c
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_mode_config_funcs) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_fb_xrgb8888_to_rgb565
-   >>> referenced by drm_mipi_dbi.c:224 (drivers/gpu/drm/drm_mipi_dbi.c:224)
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_fb_memcpy
-   >>> referenced by drm_mipi_dbi.c:221 (drivers/gpu/drm/drm_mipi_dbi.c:221)
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_buf_copy) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_atomic_helper_damage_merged
-   >>> referenced by drm_mipi_dbi.c:318 (drivers/gpu/drm/drm_mipi_dbi.c:318)
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_pipe_update) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_simple_display_pipe_init
-   >>> referenced by drm_mipi_dbi.c:529 (drivers/gpu/drm/drm_mipi_dbi.c:529)
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_dev_init_with_formats) in archive drivers/built-in.a
---
->> ld.lld: error: undefined symbol: drm_atomic_helper_connector_reset
-   >>> referenced by drm_mipi_dbi.c
-   >>>               gpu/drm/drm_mipi_dbi.o:(mipi_dbi_connector_funcs) in archive drivers/built-in.a
-..
+It would be really great to be more explicit about this. Because if this
+is really runtime noticeable then we might need to consider an improved
+tunning or way to manually configure the pcp batch sizes. Reporting the
+amount on its own is unlikely going to help without being able to do
+anything about that.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Michal Hocko
+SUSE Labs

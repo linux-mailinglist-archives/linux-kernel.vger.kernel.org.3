@@ -2,132 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3131859BDCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5681C59BDD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbiHVKq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 06:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
+        id S233456AbiHVKsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 06:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233411AbiHVKqH (ORCPT
+        with ESMTP id S229509AbiHVKr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 06:46:07 -0400
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B933121A;
-        Mon, 22 Aug 2022 03:46:06 -0700 (PDT)
-Received: by mail-qk1-f176.google.com with SMTP id j6so7488738qkl.10;
-        Mon, 22 Aug 2022 03:46:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=1JBBO1Gon6h+53jLetxo2erRdLEP73QBoztcgKCnoH0=;
-        b=SHNNDQgGLFHMoprNZ8RBRgbrsVmPUDYGa/CquB35xtF/i+lxhssclR7cjFrzNWs7gq
-         1xxO4uG9f+wwwT65w92ktVAi4DOxSbUmAfpofkt+oGZC8NNRTE32XuOQaApLMI7EivGp
-         ZELhtfEaasmSD1PLhjzc2HCz+SvJpEyAJ+YkwtQk2+IOqWYOa2vF0hm8izhBmd4hit+6
-         eYFOGUHAAk3eU2z29NBjjd81Bmje4f1HVhFN5fZg/xcUnz9D/ABANREEXp2boRyAeCMv
-         lnypZ2cHjTlmURHkddCriTZhPye5qLyj0TWZF60vGNfGv5Gl7/NOqVyLLem2dpgfm7db
-         oe3g==
-X-Gm-Message-State: ACgBeo219vGkbx+BZkBIl7uvPbsxz8sCpb1ZlwvZ0ezBCHoO7B5ePG1j
-        i2XzR2wJDLn9w0hYDfb9Mqy4tkBbxOYaPg==
-X-Google-Smtp-Source: AA6agR43/DF+QHVs/gjcNYpfs/qTULGMZ5RqXQ2tScC2xOSyT21xHyNMUPcvIviqn31tharS1g/VWw==
-X-Received: by 2002:a05:620a:408a:b0:6bb:58dc:1e66 with SMTP id f10-20020a05620a408a00b006bb58dc1e66mr12493251qko.707.1661165164918;
-        Mon, 22 Aug 2022 03:46:04 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id v16-20020a05620a0f1000b006b97151d2b3sm10725387qkl.67.2022.08.22.03.46.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 03:46:04 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-33387bf0c4aso280418437b3.11;
-        Mon, 22 Aug 2022 03:46:04 -0700 (PDT)
-X-Received: by 2002:a25:e004:0:b0:695:d8b6:57e7 with SMTP id
- x4-20020a25e004000000b00695d8b657e7mr510074ybg.380.1661165164007; Mon, 22 Aug
- 2022 03:46:04 -0700 (PDT)
+        Mon, 22 Aug 2022 06:47:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56C72F644;
+        Mon, 22 Aug 2022 03:47:58 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 52FA31FA1F;
+        Mon, 22 Aug 2022 10:47:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661165277; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1M/Zuyl600zh5OmjL3aP6WKCrt6KbCa7RpzoykruBZw=;
+        b=CkwIN1GEx3GNBlcdPWCiBCFdLpTLxcdkjLWaTODElEHE6mTTBhiKC+1N97hT5Gz7LlqnCH
+        9mMMdfZ0twoTWASkE/SJ3FgnBurhvYRkyqd0DI3+quAaHB4mw7f7mtFJzsVjB8LW2Bdx9C
+        YwCnI1D7ziUWN9oC2VhGGm3yZP3sBJw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 343901332D;
+        Mon, 22 Aug 2022 10:47:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id sEDfCd1eA2OTFwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 22 Aug 2022 10:47:57 +0000
+Date:   Mon, 22 Aug 2022 12:47:56 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Oliver Sang <oliver.sang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] memcg: increase MEMCG_CHARGE_BATCH to 64
+Message-ID: <YwNe3HBxzF+fWb2n@dhcp22.suse.cz>
+References: <20220822001737.4120417-1-shakeelb@google.com>
+ <20220822001737.4120417-4-shakeelb@google.com>
 MIME-Version: 1.0
-References: <20220821113512.2056409-1-mail@conchuod.ie> <CAMuHMdV_dpijX7YqSR+24wWDQr4roi7EBm1nbhJuWkoidAcCng@mail.gmail.com>
- <ac6eacdf-81ad-42ec-3f3e-2db4c5ef76cf@microchip.com>
-In-Reply-To: <ac6eacdf-81ad-42ec-3f3e-2db4c5ef76cf@microchip.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 22 Aug 2022 12:45:52 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWCXOqNjcK1ZrFA3jUtzv+PUqfEr-7PyZNg38-X+SG5Qw@mail.gmail.com>
-Message-ID: <CAMuHMdWCXOqNjcK1ZrFA3jUtzv+PUqfEr-7PyZNg38-X+SG5Qw@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Add an asm-generic cpuinfo_op declaration
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Conor Dooley <mail@conchuod.ie>, Michal Simek <monstr@monstr.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822001737.4120417-4-shakeelb@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+On Mon 22-08-22 00:17:37, Shakeel Butt wrote:
+> For several years, MEMCG_CHARGE_BATCH was kept at 32 but with bigger
+> machines and the network intensive workloads requiring througput in
+> Gbps, 32 is too small and makes the memcg charging path a bottleneck.
+> For now, increase it to 64 for easy acceptance to 6.0. We will need to
+> revisit this in future for ever increasing demand of higher performance.
 
-On Mon, Aug 22, 2022 at 12:05 PM <Conor.Dooley@microchip.com> wrote:
-> On 22/08/2022 10:36, Geert Uytterhoeven wrote:
-> > On Sun, Aug 21, 2022 at 1:36 PM Conor Dooley <mail@conchuod.ie> wrote:
-> >>   arch/microblaze/include/asm/processor.h | 2 +-
-> >>   arch/riscv/include/asm/processor.h      | 1 +
-> >>   arch/s390/include/asm/processor.h       | 2 +-
-> >>   arch/sh/include/asm/processor.h         | 2 +-
-> >>   arch/sparc/include/asm/cpudata.h        | 3 +--
-> >>   arch/x86/include/asm/processor.h        | 2 +-
-> >>   include/asm-generic/processor.h         | 7 +++++++
-> >>   7 files changed, 13 insertions(+), 6 deletions(-)
-> >>   create mode 100644 include/asm-generic/processor.h
-> >
-> > I was a bit surprised not to find fs/proc/cpuinfo.c in the diffstat
-> > above. That file already has an external declaration for cpuinfo_op,
-> > and uses it rather unconditionally (that is, if CONFIG_PROC_FS=y)
-> > on all architectures.
-> >
-> > So I think you can just move that to include/linux/processor.h, include
-> > the latter everywhere, and drop all architecture-specific copies.
->
-> This is the sort of thing I was really hoping to hear, so fine by
-> me.. When you say "everywhere", I assume you mean in every arch
-> and not just the ones listed here that already have it in an arch
-> specific header?
+Yes, the batch size has always been an arbitrary number. I do not think
+there have ever been any solid grounds for the value we have now except
+we need something and SWAP_CLUSTER_MAX was a good enough template.
 
-Yes, above every user, to silence the sparse "foo was not
-declared. Should it be static?" warnings.
+Increasing it to 64 sounds like a reasonable step. It would be great to
+have it scale based on the number of CPUs and potentially other factors
+but that would be hard to get right and actually hard to evaluate
+because it will depend on the specific workload.
+ 
+> Please note that the memcg charge path drain the per-cpu memcg charge
+> stock, so there should not be any oom behavior change.
+
+It will have an effect on other stuff as well like high limit reclaim
+backoff and stast flushing.
+ 
+> To evaluate the impact of this optimization, on a 72 CPUs machine, we
+> ran the following workload in a three level of cgroup hierarchy with top
+> level having min and low setup appropriately. More specifically
+> memory.min equal to size of netperf binary and memory.low double of
+> that.
+
+a similar feedback to the test case description as with other patches.
+> 
+>  $ netserver -6
+>  # 36 instances of netperf with following params
+>  $ netperf -6 -H ::1 -l 60 -t TCP_SENDFILE -- -m 10K
+> 
+> Results (average throughput of netperf):
+> Without (6.0-rc1)       10482.7 Mbps
+> With patch              17064.7 Mbps (62.7% improvement)
+> 
+> With the patch, the throughput improved by 62.7%.
+> 
+> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+
+Anyway
+Acked-by: Michal Hocko <mhocko@suse.com>
 
 Thanks!
 
-Gr{oetje,eeting}s,
+> ---
+>  include/linux/memcontrol.h | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 4d31ce55b1c0..70ae91188e16 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -354,10 +354,11 @@ struct mem_cgroup {
+>  };
+>  
+>  /*
+> - * size of first charge trial. "32" comes from vmscan.c's magic value.
+> - * TODO: maybe necessary to use big numbers in big irons.
+> + * size of first charge trial.
+> + * TODO: maybe necessary to use big numbers in big irons or dynamic based of the
+> + * workload.
+>   */
+> -#define MEMCG_CHARGE_BATCH 32U
+> +#define MEMCG_CHARGE_BATCH 64U
+>  
+>  extern struct mem_cgroup *root_mem_cgroup;
+>  
+> -- 
+> 2.37.1.595.g718a3a8f04-goog
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Michal Hocko
+SUSE Labs

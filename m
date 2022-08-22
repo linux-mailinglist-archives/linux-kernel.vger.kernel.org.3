@@ -2,81 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8C659C8D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210F359C96C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238724AbiHVT37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 15:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
+        id S237578AbiHVT7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 15:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238761AbiHVT3k (ORCPT
+        with ESMTP id S232463AbiHVT7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 15:29:40 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312604F65F;
-        Mon, 22 Aug 2022 12:24:09 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id o15-20020a9d718f000000b00638c1348012so8381090otj.2;
-        Mon, 22 Aug 2022 12:24:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=8zy7YCWL5YZTEH0yzkezpqZ96keenfHSDIKWTIiVfgw=;
-        b=ADXtPQ0Zl0lz8VdHyI2ow6pdVOSGSxaLMhEEKIUHXfX/uqASKhc9MY9DnCeM2tKFhY
-         Rr6iIJoNMuYM6R9yfC6LiZZ6iC02g2IffcsHEVfdvgwPoXCt1ZOUAbAPS5tOtUZvn+Gw
-         MlMTq4rxS65TbwVhnQ0s6GfRVipID4s0R+xiWM3R2a5ndnSv1WGttVETSDfG0JoiBvz0
-         QOqk1i/QmGokI2MC/x+lBcy0jFjBHe7LVX2UxtgvRJ8Xk/Stj3rTNYfuGvLB7mET2/9U
-         insjQFJuuY4KLWoARUAxayNKclTz6EO2pfJOo1Pp+L7CSXIr2q1LjCZI46XN6GOO+vFa
-         dwZQ==
-X-Gm-Message-State: ACgBeo1CtAkDzrshnQhYQvkVdtmUvCTWFt4eXCU28y1goQ7JVRan8tkz
-        uJnoUaycwIjFc7I4zx76AQ==
-X-Google-Smtp-Source: AA6agR4Yhy+q1icNwprzoYLj6JYDzQtQ1J/JCtznjaPHD+6F092GBaDf5PsttXwKM4eRbJgkp/cPdg==
-X-Received: by 2002:a05:6830:90c:b0:637:18c0:b750 with SMTP id v12-20020a056830090c00b0063718c0b750mr7936744ott.385.1661196188346;
-        Mon, 22 Aug 2022 12:23:08 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m3-20020a0568301e6300b00636d6571ff7sm3059517otr.70.2022.08.22.12.23.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 12:23:07 -0700 (PDT)
-Received: (nullmailer pid 296993 invoked by uid 1000);
-        Mon, 22 Aug 2022 19:23:06 -0000
-Date:   Mon, 22 Aug 2022 14:23:06 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Mithil Bavishi <bavishimithil@gmail.com>
-Cc:     tony@atomide.com, dmitry.torokhov@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-omap@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, linux-input@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        sre@kernel.org, linux-pm@vger.kernel.org, contact@paulk.fr,
-        linux@armlinux.org.uk
-Subject: Re: [PATCH 02/10] dt-bindings: power: reset: Move twl4030-power from
- mfd to power/reset
-Message-ID: <20220822192306.GA296915-robh@kernel.org>
-References: <20220820071659.1215-1-bavishimithil@gmail.com>
- <20220820071659.1215-3-bavishimithil@gmail.com>
+        Mon, 22 Aug 2022 15:59:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463A32ED48;
+        Mon, 22 Aug 2022 12:59:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53E5361268;
+        Mon, 22 Aug 2022 19:59:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB98C433D6;
+        Mon, 22 Aug 2022 19:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661198343;
+        bh=DyI3t8tEVvUlMKrONGNmpaBQQiZiHW1qaggJxfPqUDA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ogIxteFut606xWhAb+66+D56KTO0OHtro0EOuQEf7paZ+0CSRSBbd/MgYoJ+XtvqQ
+         aLmrrdozqKgXnGe7kZPZQvnfNsHsb5l9kK2sNTDgBAZ204P1exn1ddAwam+jNgS78+
+         KawD5/gAdzBoMbunRYJBdVGlurbi9KOGRPdv8/4bkkzi51IazbiusDCzyH/EER1w6a
+         Y0cNtQmthaxrLBUjS9HQJ3l4rw1PzXN/s8dpH0KGisj5kPsppxUjcQ95iTrmWcvy31
+         O2F2u6XJ2NBGJcGejmFvXQMyV5SHTqrf4KdOx+XH2F9hg6o8VOHHqKlFFqJoddxHVp
+         ryfIEocGA/Bsg==
+Date:   Mon, 22 Aug 2022 20:24:35 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Ciprian Regus <ciprian.regus@analog.com>
+Cc:     <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH 1/3] dt-bindings: iio: adc: Add docs for LTC2499
+Message-ID: <20220822202435.7dd54583@jic23-huawei>
+In-Reply-To: <20220822125106.1106798-2-ciprian.regus@analog.com>
+References: <20220822125106.1106798-1-ciprian.regus@analog.com>
+        <20220822125106.1106798-2-ciprian.regus@analog.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220820071659.1215-3-bavishimithil@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 20 Aug 2022 12:46:52 +0530, Mithil Bavishi wrote:
-> Move the documentation for twl4030-power from mfd to power/reset
-> 
-> Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
-> ---
->  .../devicetree/bindings/{mfd => power/reset}/twl4030-power.txt    | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename Documentation/devicetree/bindings/{mfd => power/reset}/twl4030-power.txt (100%)
-> 
+On Mon, 22 Aug 2022 15:51:04 +0300
+Ciprian Regus <ciprian.regus@analog.com> wrote:
 
-Acked-by: Rob Herring <robh@kernel.org>
+> Update the bindings documentation for ltc2497 to include the ltc2499.
+> 
+> Signed-off-by: Ciprian Regus <ciprian.regus@analog.com>
+Looks fine to me.  Maybe a separate patch to add the ltc2496 binding
+given the driver is included in this MAINTAINERS entry?
+A random comment inline.
+
+Jonathan
+
+> ---
+>  Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml | 6 +++++-
+>  MAINTAINERS                                                 | 1 +
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml b/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
+> index c1772b568cd1..7bb30eafc543 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
+> @@ -13,10 +13,14 @@ description: |
+>    16bit ADC supporting up to 16 single ended or 8 differential inputs.
+>    I2C interface.
+>  
+> +  https://www.analog.com/media/en/technical-documentation/data-sheets/2497fb.pdf
+> +  https://www.analog.com/media/en/technical-documentation/data-sheets/2499fe.pdf
+> +
+>  properties:
+>    compatible:
+> -    const:
+> +    enum:
+>        lltc,ltc2497
+> +      lltc,ltc2499
+>  
+>    reg: true
+>    vref-supply: true
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9d7f64dc0efe..3c847619ceb1 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1327,6 +1327,7 @@ W:	https://ez.analog.com/linux-software-drivers
+>  F:	Documentation/ABI/testing/sysfs-bus-iio-frequency-ad9523
+>  F:	Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4350
+>  F:	Documentation/devicetree/bindings/iio/*/adi,*
+> +F:	Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
+>  F:	Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
+
+Unrelated question, but why is this here given the wild cards above match?
+
+>  F:	drivers/iio/*/ad*
+>  F:	drivers/iio/adc/ltc249*

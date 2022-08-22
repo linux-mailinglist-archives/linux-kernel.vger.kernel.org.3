@@ -2,141 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9144259B7DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 05:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF38659B7DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 05:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbiHVDGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 23:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        id S232323AbiHVDNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 23:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbiHVDGu (ORCPT
+        with ESMTP id S231359AbiHVDNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 23:06:50 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D1A18373;
-        Sun, 21 Aug 2022 20:06:48 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4M9y0B1mMxz6V2TB;
-        Mon, 22 Aug 2022 11:05:14 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgCn3rrF8gJjlLq4Ag--.54125S3;
-        Mon, 22 Aug 2022 11:06:46 +0800 (CST)
-Subject: Re: [PATCH v7 1/9] blk-throttle: fix that io throttle can only work
- for single bio
-To:     Yu Kuai <yukuai1@huaweicloud.com>, Tejun Heo <tj@kernel.org>
-Cc:     mkoutny@suse.com, axboe@kernel.dk, ming.lei@redhat.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20220802140415.2960284-1-yukuai1@huaweicloud.com>
- <20220802140415.2960284-2-yukuai1@huaweicloud.com>
- <Yvvx+/d2+OMROUOe@slm.duckdns.org>
- <712e0f29-94ba-d3d3-ce21-cba4d6092008@huaweicloud.com>
- <Yv0qbDR+cxKeZ3nD@slm.duckdns.org>
- <83c8b253-2ebb-5af6-8ce1-6dc3b84cf182@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <b1791e41-4945-a0d8-8067-3841ce10fddd@huaweicloud.com>
-Date:   Mon, 22 Aug 2022 11:06:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 21 Aug 2022 23:13:49 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A40FA18C
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 20:13:41 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M9y6F00yGzlVhr;
+        Mon, 22 Aug 2022 11:10:28 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 22 Aug 2022 11:13:39 +0800
+Subject: Re: [bug report] mm/hugetlb: various bugs with avoid_reserve case in
+ alloc_huge_page()
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <d449c6d1-314f-5b90-6d68-3773e2722d7f@huawei.com>
+ <Yv7AlZyNaAgpB4Qg@monkey> <5b1b60d6-e699-2330-0b6f-14c8dd5d78d4@huawei.com>
+ <Yv/gUCt+ayp/KSoO@monkey>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <ded23976-5caf-62f2-a587-7cb8a8e0edef@huawei.com>
+Date:   Mon, 22 Aug 2022 11:13:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <83c8b253-2ebb-5af6-8ce1-6dc3b84cf182@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgCn3rrF8gJjlLq4Ag--.54125S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7trWUKry3Xw48Aw48GrWrAFb_yoW8tF45pF
-        WIva1vkFWqyrn29F4xtr1Y9Fnayr4rZr45Zry5Jry7Z3s8Cr1SkrWIqr1Ykrnrur4kC3Wj
-        vF4kt3s3GrW5ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+In-Reply-To: <Yv/gUCt+ayp/KSoO@monkey>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 2022/8/20 3:11, Mike Kravetz wrote:
+> On 08/19/22 15:20, Miaohe Lin wrote:
+>> On 2022/8/19 6:43, Mike Kravetz wrote:
+>>> On 08/17/22 16:31, Miaohe Lin wrote:
+>>>> Hi all:
+>>>>     When I investigate the mm/hugetlb.c code again, I found there are a few possible issues
+>>>> with avoid_reserve case. (It's really hard to follow the relevant code for me.) Please take
+>>>> a look at the below analysis:
+>>>
+>>> Thank you for taking a close look at this code!
+>>>
+>>> I agree that the code is hard to follow.  I have spent many hours/days/weeks
+>>> chasing down the cause of incorrect reservation counts.  I imagine there could
+>>> be more issues, especially when you add the uncommon avoid_reserve and
+>>> MAP_NORESERVE processing.
+>>
+>> Many thanks for your time and reply, Mike!
+> 
+> Well, hugetlb reservations interrupted my sleep again :)  See below.
 
-在 2022/08/18 9:23, Yu Kuai 写道:
-> Hi, Tejun!
-> 
-> 在 2022/08/18 1:50, Tejun Heo 写道:
->> Hello,
->>
->> On Wed, Aug 17, 2022 at 09:13:38AM +0800, Yu Kuai wrote:
->>>> So, as a fix for the immediate problem, I guess this might do but 
->>>> this feels
->>>> really fragile. How can we be certain that re-entering only happens 
->>>> because
->>>> of splitting? What if future core development changes that? It seems 
->>>> to be
->>>> solving the problem in the wrong place. Shouldn't we flag the bio 
->>>> indicating
->>>> that it's split when we're splitting the bio so that we only limit 
->>>> them for
->>>> iops in the first place?
->>>
->>> Splited bio is tracked in __bio_clone:
->>
->> As the word is used in commit messages and comments, the past perfect 
->> form
->> of the verb "split" is "split". It looks like "splitted" is used in rare
->> cases but dictionary says it's an archaic form.
-> 
-> Ok, thanks for pointing it out, I'll change that in next iteration.
->>
->>> if (bio_flagged(bio_src, BIO_THROTTLED))
->>>     bio_set_flag(bio, BIO_THROTTLED);
+Another day scratching my hair for hugetlb reservations. :)
 
-While implementing the new method, I found that there seems to be a
-misunderstanding here, the code seems to try to add flag to split bio
-so that it won't be throttled again for bps limit, however:
+> 
+>>>
+>>>> 1.avoid_reserve issue with h->resv_huge_pages in alloc_huge_page.
+>>>
+>>> Did you actually see this issue, or is it just based on code inspection?
+>>
+>> No, it's based on code inspection. ;)
+>>
+>>> I tried to recreate, but could not.  When looking closer, this may not
+>>> even be possible.
+>>>
+>>>>     Assume:
+>>>> 	h->free_huge_pages 60
+>>>> 	h->resv_huge_pages 30
+>>>> 	spool->rsv_hpages  30
+>>>
+>>> OK.
+>>>
+>>>>
+>>>>     When avoid_reserve is true, after alloc_huge_page(), we will have:
+>>>
+>>> Take a close look at the calling paths for alloc_huge_page when avoid_reserve
+>>> is true.  There are only two such call paths.
+>>> 1) copy_hugetlb_page_range - We allocate pages in the 'early COW' processing.
+>>>    In such cases, the pages are private and not associated with a file, or
+>>>    filesystem or subpool (spool).  Therefore, there should be no spool
+>>>    modifications.
+>>
+>> Agree.
+>>
+>>> 2) hugetlb_wp (formerly called hugetlb_cow) - Again, we are allocating a
+>>>    private page and should not be modifying spool.
+>>
+>> Agree.
+>>
+>>>
+>>> If the above is correct, then we will not modify spool->rsv_hpages which
+>>> leads to the inconsistent results.
+>>
+>> I missed to verify whether spool will be modified in avoid_reserve case. Sorry about that.
+>>
+> 
+> That is how it SHOULD work.  However, there is a problem with a MAP_PRIVATE
+> mapping of a hugetlb file.  In this case, subpool_vma will return the
+> subpool associated with the file, and we will end up with a leaked reservation
+> as in your example.  I have verified with test code.
 
-1) for blk throttle, split bio is issued directly and will never be
-throttled again, while orignal bio will go through throttle path again.
-2) if cloned bio is directed to a new disk, the flag is cleared anyway.
->>>
->>> And currenty, the iops limit and bps limit are treated differently,
->>> however there are only one flag 'BIO_THROTTLED' and they can't be
->>> distinguished.
->>>
->>> Perhaps I can use two flags, for example BIO_IOPS_THROTTLED and
->>> BIO_BPS_THROTTLED, this way only iops limit can be handled and bps
->>> limit can be skipped for splited bio.
->>>
->>> What do you think?
+Thanks for your time and verification.
+
+> 
+> The first thought I had is that something like the following should be added.
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 474bfbe9929e..5aa19574e890 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -254,7 +258,9 @@ static inline struct hugepage_subpool *subpool_inode(struct inode *inode)
+>  
+>  static inline struct hugepage_subpool *subpool_vma(struct vm_area_struct *vma)
+>  {
+> -	return subpool_inode(file_inode(vma->vm_file));
+> +	if (vma->vm_flags & (VM_MAYSHARE | VM_SHARED))
+
+Maybe checking for VM_MAYSHARE is enough? It seems VM_SHARED can't be set while VM_MAYSHARE isn't set.
+But this change looks good for me to fix the discussed issue.
+
+> +		return subpool_inode(file_inode(vma->vm_file));
+> +	return NULL;		/* no subpool for private mappings */
+>  }
+>  
+>  /* Helper that removes a struct file_region from the resv_map cache and returns
+> 
+> 
+> That certainly addresses the MAP_PRIVATE mapping of a hugetlb file issue.
+> I will collect up patches for issues we discover and submit together.
+
+Thanks for doing this.
+BTW: IIUC, If MAP_PRIVATE mapping never consumes reservation, issue 2 and 3 shouldn't be possible.
+
+> 
+>>> It is confusing that MAP_NORESERVE does not imply avoid_reserve will be
+>>> passed to alloc_huge_page.
 >>
->> I think the code would be a lot more intuitive and less fragile if we 
->> used
->> two flags but the bits in the bi_flags field are a scarce resource
->> unfortunately. Even then, I think the right thing to do here is using two
->> flags.
-> 
-> Yes, the field 'bio->bi_flags' is unsigned short, and there are only two
-> bits left. I'll use the new sulution which will acquire a new bit.
-> 
-> Thanks,
-> Kuai
+>> It's introduced to guarantee that COW faults for a process that called mmap(MAP_PRIVATE) will succeed via commit
+>> 04f2cbe35699 ("hugetlb: guarantee that COW faults for a process that called mmap(MAP_PRIVATE) on hugetlbfs will succeed").
+>> It seems it has nothing to do with MAP_NORESERVE.
 >>
->> Thanks.
+>>>
+>>>> 	spool->rsv_hpages  29 /* hugepage_subpool_get_pages decreases it. */
+>>>> 	h->free_huge_pages 59
+>>>> 	h->resv_huge_pages 30 /* rsv_hpages is used, but *h->resv_huge_pages is not modified accordingly*. */
+>>>>
+>>>>     If the hugetlb page is freed later, we will have:
+>>>> 	spool->rsv_hpages  30 /* hugepage_subpool_put_pages increases it. */
+>>>> 	h->free_huge_pages 60
+>>>> 	h->resv_huge_pages 31 /* *increased wrongly* due to hugepage_subpool_put_pages(spool, 1) == 0. */
+>>>> 			   ^^
+>>>>
+>>>
+>>> I'll take a closer look at 2 and 3 when we determine if 1 is a possible
+>>> issue or not.
 >>
+>> I want to propose removing the avoid_reserve code. When called from above case 1) or 2), vma_needs_reservation()
+>> will always return 1 as there's no reservation for it. Also hugepage_subpool_get_pages() will always return 1 as
+>> it's not associated with a spool. So when avoid_reserve == true, map_chg and gbl_chg must be 1 and vma_has_reserves()
+>> will always return "false". As a result, passing in avoid_reserve == true will do nothing in fact. So it can be simply
+>> removed. Or am I miss something again?
 > 
-> .
-> 
+> I will take a closer look.  But, at a high level if avoid_reserve == true and
+> all pages are reserved we must fail the allocation or attempt dynamic
+> allocation if overcommit is allowed.  So, it seems we at least need the
+> flag to make this decision.
+
+Yes, you're right.
+
+Thanks,
+Miaohe Lin
 

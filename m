@@ -2,119 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F4759C3F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E6059C3FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236500AbiHVQVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
+        id S236969AbiHVQWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236326AbiHVQV1 (ORCPT
+        with ESMTP id S236713AbiHVQWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:21:27 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42663F313;
-        Mon, 22 Aug 2022 09:21:26 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id f17so4662915pfk.11;
-        Mon, 22 Aug 2022 09:21:26 -0700 (PDT)
+        Mon, 22 Aug 2022 12:22:04 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6893FA0F
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:21:59 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-32a09b909f6so308610827b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:21:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=UO2tpDseOUxSc2DoPMk1lJXbq9Ou2Xvd17vKqQ346TI=;
-        b=NqoE5HM5tKCXP2Vk/Ulo+aX+pzqYFxcHdyfmJZ+IP0QSDf03mG4DTq3N/39NoWTGJg
-         FbwoVOfAUMFbpEEGlXvx/UMEp7sbWV2o9UL+312ZVrBBO2vN9NmbniiGAZQaIJrcCJyg
-         xfXi3KqTBmlGsDnplAZt/FN2eVAA23EtbNtTm4CKZG2xd+i2zYORImbV+l9MGmqJAkNX
-         RR9iFJEqFJ/c1zFzcJavtjiRD9LN9GTYA/MId++OMO03GTucoDssLk12bBLFQmyeL1uS
-         KI/l5nmhGuOURs67RBxve2JOVSKZuXWC80PaSuzUdS3JcDsxAvXmJZCMXenddHhlNExD
-         2tWQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=haN84sN1RdcncSckg2dQ3RgLJ/cE7ZR6YcXEJeAkpTY=;
+        b=pmOOuJBsRUQLDSHE3FVE+d6VG4klW7oHGh5f55Rshh3xjecHv8PQn1xVg21EmgGrym
+         DTcvROUy/A2WBHZ84eFf5NsoBwY/ThYaASqz96yvYKu0r/hx40ax0GBxZjkMxdGVT+jG
+         D+4pDYeMUixalJTINcUi1dVEMBqOAnLMSNqFOl0AI5XzRLb6fSGYZ09BwJqSz87vAcGG
+         zFR+Z+a1u86zJCBUmrGmo6U8AynjTMFI7vmHQRTHILX4Y68VnjIR6Mohyry+Jf1z1sC4
+         ZWFkkF2/eswgNK5riySwm7ky5wkJsEdkzQnpw5RRFB1vxUHgECt8Yho3VeJfDrJpe37h
+         G/aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=UO2tpDseOUxSc2DoPMk1lJXbq9Ou2Xvd17vKqQ346TI=;
-        b=tpZyvIvDe3WTPPBX7p865qyNdB5wt1Tl42yRutUSz408WT5dAKmyPAV4xKQWoetoq+
-         qrtTr/rkjFDs9F6l7ZfBzDvuc4kcoJHjW3tUtUYtIWAs5gZLFLNKLuSZID7/4Vu3zkVg
-         LaO+sHRa9BwQG6sRP4ChKGCKti/CTEGfrYXKCsHUGExRCkiKFa9Ju7GrFJ+sKIyuhl3p
-         2x+ulP1EmxfK3G9AVPpjuuV3rMCRqh3BHkh2EROXkYdgDJIwW7hyaPuatRqD3O4cpIOc
-         9SNRIe0nduCIT6AbsLDW91Gi/Km/jOQA1GlE5qSSozY6iUfNE//kB2dXo8jdmd4g7Usf
-         I+TQ==
-X-Gm-Message-State: ACgBeo1LZ6gbJlUkjz2iPdzG5P7kvTor0Dx9W2GeQFLfydd2O0V2POex
-        vxAL3/mum5JnsAUBg3Z2iKg=
-X-Google-Smtp-Source: AA6agR6hhRMJidekydr5ggwv0mneoGAsDNB5VGKTBZn71OieWRN04J8C+eMHmtns2YdEzwWx6THi5Q==
-X-Received: by 2002:a63:4f4f:0:b0:429:f656:69a6 with SMTP id p15-20020a634f4f000000b00429f65669a6mr17515021pgl.287.1661185286112;
-        Mon, 22 Aug 2022 09:21:26 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w18-20020aa79552000000b00536e2ae5938sm618855pfq.213.2022.08.22.09.21.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 09:21:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 22 Aug 2022 09:21:24 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (dell-smm) Improve warning messages
-Message-ID: <20220822162124.GB4098765@roeck-us.net>
-References: <20220821151713.11198-1-W_Armin@gmx.de>
- <20220821151713.11198-4-W_Armin@gmx.de>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=haN84sN1RdcncSckg2dQ3RgLJ/cE7ZR6YcXEJeAkpTY=;
+        b=fkU/PB9pFbzF36RdwaTh3Qwexg8mxY5Jpa0oCpbvMRrA2/Vyt3iVBl9FGq80Wy4hND
+         DQT/3hirYx2ej0K1A6PF4x3tBgQH4fNChdGL0pRdqiE9j/b55283t9oPi6py1WuD48Y8
+         fXXLfRB8Cp9jjcys9AAIJMPRcYvlRt/nTyDsmEgbt4jui0bPuAYZzY8R4EJDuSh13buU
+         4j7iBMYBEQCdbNCwryJb2UrlLIf7MTw9gYN1ygfYXeqjpbd5ivGJqtfLfWa2pwssAxQu
+         WFz36I2YiDaa5hwuIdosbTxEPWpNXCSFruqfDsg0OLGZkpNXgCrAjb6pyOkSusZgrDO2
+         UikA==
+X-Gm-Message-State: ACgBeo0T6yEN8IGPjQaqR2vrQ1ZgzO1sPYDoo637wrTgdPoKTZaoVVlq
+        GzD0cSGctfbHelZgkKKlrRjKNFoyE65jziVd2BMNiw==
+X-Google-Smtp-Source: AA6agR59lzOnwIvjU57G5SX6HnX2FwDAfM3O5C43yyHEv+JuVUaLrFyxiAxwa2tdFmdzRLuZw16zKecgK+rlAjMdM8U=
+X-Received: by 2002:a25:3b51:0:b0:695:2474:3996 with SMTP id
+ i78-20020a253b51000000b0069524743996mr15473174yba.110.1661185318357; Mon, 22
+ Aug 2022 09:21:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220821151713.11198-4-W_Armin@gmx.de>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220802113957.v3.1.I2c8c550183162e7594309b66d19af696b8d84552@changeid>
+ <Yv27K4+rLfskcQdm@google.com>
+In-Reply-To: <Yv27K4+rLfskcQdm@google.com>
+From:   Tim Van Patten <timvp@google.com>
+Date:   Mon, 22 Aug 2022 10:21:47 -0600
+Message-ID: <CANkg5ewGUcWagRNOLfbRx8hLqgX+FfdYGB5Qt7tO5=zicGBVDg@mail.gmail.com>
+Subject: Re: [PATCH v3] platform/chrome: cros_ec: Send host event for prepare/complete
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     rrangel@chromium.org, robbarnes@google.com,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 21, 2022 at 05:17:13PM +0200, Armin Wolf wrote:
-> When dell-smm-hwmon is loaded on a machine with a buggy BIOS
-> with the option "force" being enabled, it wrongly prints
-> what the buggy features where disabled. This may cause
-> users to wrongly assume that the driver still protects them
-> from these BIOS bugs even with "force" being enabled.
-> Change the warning message to avoid such a misunderstanding.
-> 
-> Tested on a Dell Inspiron 3505.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index f7bab1a91b93..bf13852afe48 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1354,13 +1354,13 @@ static int __init dell_smm_probe(struct platform_device *pdev)
->  	platform_set_drvdata(pdev, data);
-> 
->  	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
-> -		dev_warn(&pdev->dev, "broken Dell BIOS detected, disallow fan support\n");
-> +		dev_warn(&pdev->dev, "BIOS has broken fan support\n");
+On Wed, Aug 17, 2022 at 10:08 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> On Tue, Aug 02, 2022 at 11:40:08AM -0600, Tim Van Patten wrote:
+> > Update cros_ec_lpc_pm_ops to call cros_ec_lpc_prepare() during PM
+> > .prepare() and cros_ec_lpc_complete() during .complete(). This allows the
+> > EC to log entry/exit of AP's suspend/resume more accurately.
+>
+> As what I commented on [1], the term "host event" in the commit title is
+> confusing.  Also, as this is a cros_ec_lpc specific patch, please change
+> the prefix.
 
-I don't see that as improvement. It no longer mentions that fan support
-is disabled if it is disabled.
+I've updated the prefix to "cros_ec_lpc" and the title/description to
+indicate that this CL moves when the host event is sent to
+.prepare()/.complete().
 
->  		if (!force)
->  			data->disallow_fan_support = true;
->  	}
-> 
->  	if (dmi_check_system(i8k_blacklist_fan_type_dmi_table)) {
-> -		dev_warn(&pdev->dev, "broken Dell BIOS detected, disallow fan type call\n");
-> +		dev_warn(&pdev->dev, "BIOS has broken fan type call\n");
+> [1]: https://patchwork.kernel.org/project/chrome-platform/patch/20220706205136.v2.1.Ic7a7c81f880ab31533652e0928aa6e687bb268b5@changeid/#24934911
+>
+> > -static int cros_ec_lpc_resume(struct device *dev)
+> > +static void cros_ec_lpc_complete(struct device *dev)
+> >  {
+> >       struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
+> > +     int ret;
+> > +
+> > +     ret = cros_ec_resume(ec_dev);
+> >
+> > -     return cros_ec_resume(ec_dev);
+> > +     dev_info(dev, "EC resume completed: ret = %d\n", ret);
+>
+> cros_ec_resume() always returns 0.
 
-Same as above.
+Yes, it always returns 0 today, but that may not be the case forever.
+ While "ret" is not returned by cros_ec_resume() today, it's possible
+for it to be non-zero and someone may update cros_ec_resume() to
+return that status.
 
->  		if (!force)
->  			data->disallow_fan_type_call = true;
->  	}
-> --
-> 2.30.2
-> 
+https://github.com/torvalds/linux/blob/1c23f9e627a7b412978b4e852793c5e3c3efc555/drivers/platform/chrome/cros_ec.c#L378
+
+Additionally, everyone passes along the return code of cros_ec_resume():
+
+    drivers/platform/chrome/cros_ec_i2c.c
+    331:    return cros_ec_resume(ec_dev);
+
+    drivers/platform/chrome/cros_ec_rpmsg.c
+    285:    return cros_ec_resume(ec_dev);
+
+    drivers/platform/chrome/cros_ec_ishtp.c
+    766:    return cros_ec_resume(client_data->ec_dev);
+
+    drivers/platform/chrome/cros_ec_spi.c
+    808:    return cros_ec_resume(ec_dev);
+
+    drivers/platform/chrome/cros_ec_uart.c
+    390:    return cros_ec_resume(ec_dev);
+
+    drivers/platform/chrome/cros_ec_lpc.c
+    530:    return cros_ec_resume(ec_dev);
+
+I'm going to leave this as-is, since it's good practice to check
+return values (and log bad status) and so we don't need to update this
+code in case cros_ec_resume() does return a non-zero value in the
+future.
+
+-- 
+
+Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997

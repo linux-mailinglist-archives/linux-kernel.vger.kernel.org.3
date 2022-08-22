@@ -2,95 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF7A59C8BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1326A59C8C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238254AbiHVTX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 15:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S238612AbiHVT0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 15:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238582AbiHVTWF (ORCPT
+        with ESMTP id S238748AbiHVTYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 15:22:05 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF4A48EB7;
-        Mon, 22 Aug 2022 12:21:32 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id h20-20020a056830165400b00638ac7ddba5so8371611otr.4;
-        Mon, 22 Aug 2022 12:21:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=dLuy42xybjawVvlwKq6PcTXdKNjM/zlBr9syVIOuOUc=;
-        b=Kg9JWkf56w3Bh9AyBps4C5jpIw5GZGoGt6rDJuxPpu3Zot9upIURlf18U9PTeuoVEY
-         p5vKBW7Nc5u3PLsWER7xu9pRZ9/P9oQhXR0awbY0vQhMwYaAI7qPXjUb9TL6mRFY49WS
-         luINECFy5u6hTsYrIDhG4XkqEZJhv7dHRvoTr29J5WtYS3/a3etR40q/wQEmuqN/dfpV
-         TaAa65EexezcE0z12hwKlFraOgkl+1d8v7JdijONLB+JVia9Lnknd2nww/6AJlybpYLk
-         G2Bp6p7Oiv9Zy+QGSyZhkMfbbvd2w9FsFy/AzfJTOHiEB64luwDcICCs1+JfYWsMZykx
-         VHcg==
-X-Gm-Message-State: ACgBeo392RwYb0R6hYFEwOrptWR2u/LfSaHfSdwYgm1kOnsoyq/n26Is
-        tQZL+gqkl19uVEq46Q9nzA==
-X-Google-Smtp-Source: AA6agR7ddkKQDSebPyTEWK0KoRUwJdvioaZ5/ox3N9C7Dih8cAiNGW2HHL0ILp2VaJE5MUM54nOLkg==
-X-Received: by 2002:a9d:6019:0:b0:639:25fb:c8aa with SMTP id h25-20020a9d6019000000b0063925fbc8aamr2951391otj.64.1661196091707;
-        Mon, 22 Aug 2022 12:21:31 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bx14-20020a0568081b0e00b003450abf4404sm2752855oib.21.2022.08.22.12.21.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 12:21:31 -0700 (PDT)
-Received: (nullmailer pid 288097 invoked by uid 1000);
-        Mon, 22 Aug 2022 19:21:30 -0000
-Date:   Mon, 22 Aug 2022 14:21:30 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 2/7] dt-bindings: PCI: microchip,pcie-host: fix
- missing clocks properties
-Message-ID: <20220822192130.GA288034-robh@kernel.org>
-References: <20220819231415.3860210-1-mail@conchuod.ie>
- <20220819231415.3860210-3-mail@conchuod.ie>
+        Mon, 22 Aug 2022 15:24:13 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2015F52E62
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:22:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661196120; x=1692732120;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BXjabKXvUP6pIOQf6cTQSSsp5mRc8PrmGqdNnHdELwo=;
+  b=ko22IerKHvVCIslQH3IRkEekm2iP2lawD3D2KXbEYQ0fhesWW2cBiDMC
+   1lfiieM9/WFn4t+5mv0IVRmwNYwTxLI/StQpkpO8/N9SzYhnqBO4XyNsQ
+   W73nZMYDJ5reKRfQOmet0ZKefYSHT6rUfFCQP9xcwpnvC8AyujeKXErTQ
+   5IrvEvjAuRilHK2NS/+UW0O8UuKKMCbhiX6pZOcgsf4tXR2lUMT9IuFs9
+   VnqEwLi5EIuNgOsH87zUndxqP+wJVU+9Jz/6ZoJDih5ihOwnnkJXIHp5p
+   SMuB2dZct2Aex2AlcvvnHZxHJDRZ5/74oQ4aL7BoU7Wi/O+8em/9/tqrN
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="355232771"
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="355232771"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 12:21:32 -0700
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="585654843"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.255.228.10]) ([10.255.228.10])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 12:21:32 -0700
+Message-ID: <0362e4e8-ab27-735d-510e-1dc208ccd17f@linux.intel.com>
+Date:   Mon, 22 Aug 2022 21:21:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819231415.3860210-3-mail@conchuod.ie>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RESEND PATCH] perf/x86/intel: Fix unchecked MSR access error for
+ Alder Lake N
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     "Liang, Kan" <kan.liang@linux.intel.com>, acme@redhat.com,
+        linux-kernel@vger.kernel.org, alexander.shishkin@linux.intel.com,
+        Jianfeng Gao <jianfeng.gao@intel.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>
+References: <20220818181530.2355034-1-kan.liang@linux.intel.com>
+ <Yv+ggf6PRjL8Eio1@worktop.programming.kicks-ass.net>
+ <80eea4f7-bb1e-ebb9-37db-9317b8d9c28f@linux.intel.com>
+ <YwOVJO05Ge8V9y5i@worktop.programming.kicks-ass.net>
+ <c09ba37c-f685-15a3-3042-8cb3a0f91282@linux.intel.com>
+ <YwOk991q0iBgcQWC@worktop.programming.kicks-ass.net>
+ <YwPJJKxKI4vfQEVn@google.com>
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <YwPJJKxKI4vfQEVn@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 20 Aug 2022 00:14:11 +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Recent versions of dt-schema warn about unevaluatedProperties:
-> arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dtb: pcie@2000000000: Unevaluated properties are not allowed ('clock-names', 'clocks', 'legacy-interrupt-controller', 'microchip,axi-m-atr0' were unexpected)
->         From schema: Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> 
-> The clocks are required to enable interfaces between the FPGA fabric
-> and the core complex, so add them to the binding.
-> 
-> Fixes: 6ee6c89aac35 ("dt-bindings: PCI: microchip: Add Microchip PolarFire host binding")
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> dt-schema v2022.08 is required to replicate
-> ---
->  .../bindings/pci/microchip,pcie-host.yaml     | 27 +++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+>
+> Checking X86_FEATURE_HYPERVISOR in the guest won't handle things like trying to
+> run a non-hyrbid vCPU model on a hybrid CPU, because IIUC, the "is_hybrid()" is
+> purely based on FMS, i.e. will be false if someone enumerates a big core vCPU on
+> a hybrid CPU.
+>
+> So until KVM gets sane handling, shouldn't this be?
+>
+> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+> index f969410d0c90..0a8accfc3018 100644
+> --- a/arch/x86/events/core.c
+> +++ b/arch/x86/events/core.c
+> @@ -2999,12 +2999,8 @@ void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap)
+>          }
+>
+>          cap->version            = x86_pmu.version;
+> -       /*
+> -        * KVM doesn't support the hybrid PMU yet.
+> -        * Return the common value in global x86_pmu,
+> -        * which available for all cores.
+> -        */
+> -       cap->num_counters_gp    = x86_pmu.num_counters;
+> +       /* KVM doesn't support the hybrid PMU yet. */
+> +       cap->num_counters_gp    = is_hybrid() ? 0 : x86_pmu.num_counters;
+
+That's just the PMU. Arguably if you don't handle hybrid affinity you 
+shouldn't report the hybrid bit ever to the guest. So need more than that.
+
+But I guess Peter is concerned about the case when an old KVM is the 
+host.  I think a short term workaround for that is fine, but I don't 
+think it's a good idea to completely disable it since that will break 
+future setups with correct hybrid hypervisor too. We already probe the 
+PMU MSRs, can't we detect this case there too?
+
+-Andi
+

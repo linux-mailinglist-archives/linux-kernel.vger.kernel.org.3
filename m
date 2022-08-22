@@ -2,96 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E36459BA9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08B159BAA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbiHVHuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 03:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
+        id S233435AbiHVHvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 03:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233435AbiHVHuD (ORCPT
+        with ESMTP id S233445AbiHVHvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 03:50:03 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9192A414
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:49:58 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id z2so12759068edc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Xt7sUJQ+aMJj9heYVbH58SruiAfLtzcBF4RZu/5f3ug=;
-        b=rsY19QIao4S4MIiPcndmxJ/lUJkZ3wgbfJ6gAIwmeUjwbKR8ITGonQux7yCtKKClD+
-         /OwFji4+MLFoLb9jC0j99XndeYi/bccJ+jpgNFTc0lXYBYLaAleiwPdpFUm1/rQD9Hm5
-         lJ2FD4Ij183DVlHaU+nbQTYL4TBqq7iJlmS0NfCRDsk/mCJs0LDnQsvdHmAXn1YqXrTn
-         7tGsT8SXdSKh9CThquNhCv28umaIkvq5evvrYsNitj9UHlU1AFG0U8yCurPDAESw4LG3
-         b7joR24coTZYEcXXLGNzzpBPOLg6ZXvh6/rVGQOnA87+IWLBGtQhxgDxJHo19HF9MPg6
-         JKwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Xt7sUJQ+aMJj9heYVbH58SruiAfLtzcBF4RZu/5f3ug=;
-        b=vxWhCkb1xvBLkupQpC+cPqYJ5Qk9lvu1Tz0p+fFd8vttwzfHVCNs3M12d2l7ndiqVE
-         aG8ych+njjKbjYHlDLpO1XQWwIJZ2Z+RDdItDkmVW8EOTC1KlUG9k5SWio4rFDhQPNHe
-         mbxKtnSnhlRn+eShV3ed6PSo0HaEK/uw6TL5Uk0cHkYO/rBUXHtJq0RsU/4XGW/hcgEq
-         whZJ9uwel0jrgB/SfUKDbOlvbt02AQOVsyWoBGxQG3augizGDYieBXLsKQTqckfwpxNa
-         hDnNFN2ETsz/bWAK277ftvMhxPu5lmNVaMyggtFF2XEalTwkei8pxXjL63esC7O6WH++
-         JZzQ==
-X-Gm-Message-State: ACgBeo0V0WWkNWOJ8UVYonvJmJbFAyVJ5bf+/xdd7iVmBeGiYoiGXDlU
-        Bsf8dviw4k6br4B4y8rR3gTZ7A==
-X-Google-Smtp-Source: AA6agR6OWI+3Yqy+/iaFOuEehpy2yEnM1di8bY439xitvmKJgJvBKjGbEJcnYOMoxDew0jloPWCZRQ==
-X-Received: by 2002:aa7:cd79:0:b0:446:1fee:290e with SMTP id ca25-20020aa7cd79000000b004461fee290emr13736652edb.163.1661154597141;
-        Mon, 22 Aug 2022 00:49:57 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id bi4-20020a170906a24400b0072af4af2f46sm5764857ejb.74.2022.08.22.00.49.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 00:49:56 -0700 (PDT)
-Message-ID: <b41b5065-c012-3b3a-2980-3eba25e0a071@blackwall.org>
-Date:   Mon, 22 Aug 2022 10:49:55 +0300
+        Mon, 22 Aug 2022 03:51:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFA12AE0D
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:51:10 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oQ2D8-0001Hr-1H; Mon, 22 Aug 2022 09:51:02 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oQ2D7-000666-1O; Mon, 22 Aug 2022 09:51:01 +0200
+Date:   Mon, 22 Aug 2022 09:51:01 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     mchehab@kernel.org, laurent.pinchart+renesas@ideasonboard.com,
+        jacopo+renesas@jmondi.org, akinobu.mita@gmail.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 2/4] media: mt9m111: fix subdev API usage
+Message-ID: <20220822075101.75dv3cv2evb2qeqq@pengutronix.de>
+References: <20220818144712.997477-1-m.felsch@pengutronix.de>
+ <20220818144712.997477-2-m.felsch@pengutronix.de>
+ <YwMiJYympE18tkmm@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net v2 RESEND] net: neigh: don't call kfree_skb() under
- spin_lock_irqsave()
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     den@openvz.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org
-References: <20220822025346.3758558-1-yangyingliang@huawei.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220822025346.3758558-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YwMiJYympE18tkmm@paasikivi.fi.intel.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/08/2022 05:53, Yang Yingliang wrote:
-> It is not allowed to call kfree_skb() from hardware interrupt
-> context or with interrupts being disabled. So add all skb to
-> a tmp list, then free them after spin_unlock_irqrestore() at
-> once.
-> 
-> Fixes: 66ba215cb513 ("neigh: fix possible DoS due to net iface start/stop loop")
-> Suggested-by: Denis V. Lunev <den@openvz.org>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
-> v2:
->   move all skb to a tmp list, then free them after spin_unlock_irqrestore().
-> ---
->  net/core/neighbour.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
+Hi Sakari,
 
-LGTM,
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+On 22-08-22, Sakari Ailus wrote:
+> Hi Marco,
+> 
+> On Thu, Aug 18, 2022 at 04:47:10PM +0200, Marco Felsch wrote:
+> > In case of I2C transfer failures the driver return failure codes which
+> > are not allowed according the API documentation. Fix that by ignore the
+> > register access failure codes.
+> > 
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > ---
+> >  drivers/media/i2c/mt9m111.c | 116 ++++++++++++++++++++----------------
+> >  1 file changed, 66 insertions(+), 50 deletions(-)
+> > 
+> > diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
+> > index cdaf283e1309..53c4dac4e4bd 100644
+> > --- a/drivers/media/i2c/mt9m111.c
+> > +++ b/drivers/media/i2c/mt9m111.c
+> > @@ -455,7 +455,7 @@ static int mt9m111_set_selection(struct v4l2_subdev *sd,
+> >  	struct mt9m111 *mt9m111 = to_mt9m111(client);
+> >  	struct v4l2_rect rect = sel->r;
+> >  	int width, height;
+> > -	int ret, align = 0;
+> > +	int align = 0;
+> >  
+> >  	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE ||
+> >  	    sel->target != V4L2_SEL_TGT_CROP)
+> > @@ -481,14 +481,13 @@ static int mt9m111_set_selection(struct v4l2_subdev *sd,
+> >  	width = min(mt9m111->width, rect.width);
+> >  	height = min(mt9m111->height, rect.height);
+> >  
+> > -	ret = mt9m111_setup_geometry(mt9m111, &rect, width, height, mt9m111->fmt->code);
+> > -	if (!ret) {
+> > -		mt9m111->rect = rect;
+> > -		mt9m111->width = width;
+> > -		mt9m111->height = height;
+> > -	}
+> >  
+> > -	return ret;
+> > +	mt9m111_setup_geometry(mt9m111, &rect, width, height, mt9m111->fmt->code);
+> 
+> If the function can fail, it'd be much better to move it to s_stream
+> callback than ignore the error.
+> 
+> Same for the rest of such changes.
+
+I did that in the following patch, but I can merge them if you want.
+
+Regards,
+  Marco

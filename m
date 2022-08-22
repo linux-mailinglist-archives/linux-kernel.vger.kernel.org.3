@@ -2,133 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3498759C428
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD7459C42D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237039AbiHVQbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S237058AbiHVQcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236433AbiHVQbq (ORCPT
+        with ESMTP id S236058AbiHVQcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:31:46 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012ED7663;
-        Mon, 22 Aug 2022 09:31:45 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id x19so8063124pfq.1;
-        Mon, 22 Aug 2022 09:31:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=PtAIPgFqoQUO64v/KOef+4bUGN2kfRm6hDdkk4Zv0oY=;
-        b=e0sOAQG//vdFW8vX8cBOSYtya0lKnR3J+a2ptFpwoPbBYh7CqNBP3TeMwcDjOlHM7g
-         aG4pH3P3g/vp3zPV39J9NnnLtsGhOhP/mVWpqJY27K7VBzg//FdO0PjV9NkMAl+t6PBP
-         MktEu4fDcCGeOdNgaLF3JFuMZoCXnzrJrIbpiqkZf1IAvqJsFoD0WyDGNfli0n9KwDeg
-         YPBC9aXZJRUtElZZ8eOVdJqJj8a2KblBtOwuMCzuCOFFpGJnjPArfd24/2ncBlZ12ADw
-         tro1FiBMtkSu2aUyT4RZeM24z2CeBJv8+b5lbjpH1JKCOA6hWO0qFqMZOF3kr9ra2KFl
-         W/6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=PtAIPgFqoQUO64v/KOef+4bUGN2kfRm6hDdkk4Zv0oY=;
-        b=39ddLldHcTCj98Vre3NH+TdJcqSIGl1IG7jw2EXmpNuB3TYk+XwJ3OpEhQXYIvwsPO
-         AmMUrFSGeB1jkwYjdVx5VCOjcrzHGoYpicj6GMrWlvmbRcFaRRjms2r6bgDNpB+h5Ev1
-         Ai3Tf5laJm1pELStWCmxAz1qMy0MIn1CBr3M0OGzf0Loi6tuQqbb6SfhRhKRspFyYu7V
-         vRv8DeU8Qc1NXh9A/1VRN11tQS6pjG3E+u1FqRkgCZRZpLG5WLrtI8YTSgY+cynYRbSn
-         s8gyfloRMeZUR9+CCYLLXXX6uxMXDUG6bg/0/E3EYcn6mxdWmTvfMXN8sgMuU9yZbtiI
-         3+/A==
-X-Gm-Message-State: ACgBeo0/KsPkd1xaxzTzy/KYB+e/xwSG+ssrgNmPTNKnZPcLZUjlnZzG
-        OMCYapEUHLosemVZMyr0JyU=
-X-Google-Smtp-Source: AA6agR7z5YapYBS8d6KsvLkx1zI+Bq8Uhhlzd9ItkhULgaEp2zf6sfdvo49KhvVG2pxr44J2zprxdA==
-X-Received: by 2002:a05:6a00:1a0c:b0:528:6baa:a2e3 with SMTP id g12-20020a056a001a0c00b005286baaa2e3mr21815051pfv.27.1661185904408;
-        Mon, 22 Aug 2022 09:31:44 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x64-20020a628643000000b005368192372fsm3251656pfd.200.2022.08.22.09.31.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 09:31:43 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 22 Aug 2022 09:31:42 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dwmw@amazon.co.uk,
-        rtanwar@maxlinear.com
-Subject: Re: [PATCH v2 14/16] hwmon: (mr75203) parse thermal coefficients
- from device-tree
-Message-ID: <20220822163142.GE4098765@roeck-us.net>
-References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-15-farbere@amazon.com>
- <20220818202839.GA3431511@roeck-us.net>
- <e0b133e7-ac81-acf4-3783-44edf58d6426@amazon.com>
- <20220819113842.GD3106213@roeck-us.net>
- <20200e60-c4e2-d272-1417-005994766380@amazon.com>
+        Mon, 22 Aug 2022 12:32:51 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7016A3B961;
+        Mon, 22 Aug 2022 09:32:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=1UuOn20+XY0HqqG0VXzejs2+7IqQXphAhg4cgVYS3dg=; b=nJ2q9nEUFEZ9M34sewvnWrwq20
+        v68QufA9N7lafkixp2/44RYzrofmutij2cgiL2VNVoVtwvxBRI/xz0G5BNmYeTwQtD0h6KnFBNW85
+        alBh8LgDUT+KqKrEgEAq+ErZCmCtCoALU1AOLA3kE0ZSEYYsiS+af2koiC9upmw0lIZm6ibJtRcwL
+        dDbtYXhLcHIgfZ2SsaiE5agcMOtEM+4N9E84mc2JTu10a/iMJiz5jKTlKr3cQTw9FjVsr2xelGLri
+        lpyl2RN721DM8RQOEHKCRJajOg23/ZbePGpbl+xxxenbywk3AyGZ/zOGvgmUdu3W5F7pCg0pOU2Ww
+        Xmc0SDrg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33882)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oQALz-000287-9h; Mon, 22 Aug 2022 17:32:43 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oQALw-0002KS-Li; Mon, 22 Aug 2022 17:32:40 +0100
+Date:   Mon, 22 Aug 2022 17:32:40 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: Re: [PATCH net] net: phy: Warn if phy is attached when removing
+Message-ID: <YwOvqLacWLQNcIk6@shell.armlinux.org.uk>
+References: <20220816163701.1578850-1-sean.anderson@seco.com>
+ <20220819164519.2c71823e@kernel.org>
+ <YwAo42QkTgD0kOqz@shell.armlinux.org.uk>
+ <b476d7b1-1221-2275-e445-6a70b3a31fe6@seco.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200e60-c4e2-d272-1417-005994766380@amazon.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <b476d7b1-1221-2275-e445-6a70b3a31fe6@seco.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 04:41:07PM +0300, Farber, Eliav wrote:
-> On 8/19/2022 2:38 PM, Guenter Roeck wrote:
-> > On Fri, Aug 19, 2022 at 10:57:58AM +0300, Farber, Eliav wrote:
-> > > On 8/18/2022 11:28 PM, Guenter Roeck wrote:
-> > > > The calculation was just changed to use new defaults in a previous
-> > > > patch. This patch makes it quite clear that the coefficients
-> > > > are implementation (?) dependent. So the previous patch just changes
-> > > > the defaults to (presumably) the coefficients used in your system.
-> > > > That is inappropriate. Adding non-default corefficients is ok
-> > > > and makes sense is supported by the chip, but changing defaults
-> > > > isn't.
-> > > The calculation was changed in previous patch to match series 5 of the
-> > > Moortec Embedded Temperature Sensor (METS) datasheet.
-> > > In our SOC we use series 6 which has a slightly different equation and
-> > > different coefficients.
-> > 
-> > If the coefficients are different based on the series, it would probably
-> > make sense to create a separate devicetree compatible property for
-> > series 6
-> > instead or requiring the user to list the actual coefficients. Those can
-> > still be present, but the code should be able to use the defaults for
-> > each series.
-> There is a different set of coefficients for series 5 and for series 6,
-> so it would make sense to add a single property (e.g. series) instead
-> of adding 4 properties, one for each coefficient.
-> But that would not always be enough.
-> The Moortec datasheet explicitly says that coefficients can vary between
-> product and product, and be different from the default values.
-> That is the situation in our SOC.
-> The coefficients we use are slightly different from the defaults for
-> series 6.
-> So just adding a single series property would not be enough, and we would
-> anyway want to have the option to specifically determine the coefficient
-> values.
-> Do you suggest to add both, also series and also coefficients? (and I can
-> fail the probe in case both are set, to avoid conflicts).
+On Mon, Aug 22, 2022 at 12:00:28PM -0400, Sean Anderson wrote:
+> In the last thread I posted this snippet:
 > 
+> diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+> index a74b320f5b27..05894e1c3e59 100644
+> --- a/drivers/net/phy/phy_device.c
+> +++ b/drivers/net/phy/phy_device.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/phy.h>
+>  #include <linux/phy_led_triggers.h>
+>  #include <linux/property.h>
+> +#include <linux/rtnetlink.h>
+>  #include <linux/sfp.h>
+>  #include <linux/skbuff.h>
+>  #include <linux/slab.h>
+> @@ -3111,6 +3112,13 @@ static int phy_remove(struct device *dev)
+>  {
+>         struct phy_device *phydev = to_phy_device(dev);
+>  
+> +	// I'm pretty sure this races with multiple unbinds...
+> +       rtnl_lock();
+> +       device_unlock(dev);
+> +       dev_close(phydev->attached_dev);
+> +       device_lock(dev);
+> +       rtnl_unlock();
+> +       WARN_ON(phydev->attached_dev);
+> +
+>         cancel_delayed_work_sync(&phydev->state_queue);
+>  
+>         mutex_lock(&phydev->lock);
+> ---
+> 
+> Would this be acceptable? Can the locking be fixed?
 
-It should not be necessary to provide explicit default values for any of the
-series. Yes, default values can be overwritten with explicit coefficient
-properties, but it should not be necessary to provide those if the defaults
-are used. So I would expect separate compatible properties for each of the
-supported series plus separate coefficient properties.
+I can't comment on that.
 
-However, since we are discussiong DT properties here, I'll step back and let
-DT maintainers decide.
+> > Addressing the PCS part of the patch posting and unrelated to what we
+> > do for phylib...
+> > 
+> > However, I don't see "we'll do this for phylib, so we can do it for
+> > PCS as well" as much of a sane argument - we don't have bazillions
+> > of network drivers to fix to make this work for PCS. We currently
+> > have no removable PCS (they don't appear with a driver so aren't
+> > even bound to anything.) So we should add the appropriate handling
+> > when we start to do this.
+> > 
+> > Phylink has the capability to take the link down when something goes
+> > away, and if the PCS goes away, that's exactly what should happen,
+> > rather than oopsing the kernel.
+> 
+> Yeah, but we can't just call phylink_stop; we have to call the function
+> which will call phylink_stop, which is different for MAC drivers and
+> for DSA drivers.
 
-Thanks,
-Guenter
+I think that's way too much and breaks the phylink design. phylink_stop
+is designed to be called only from ndo_close() - and to be paired with
+phylink_start().
+
+When I talk about "taking the link down" what I mean by that is telling
+the network device that the *link* *is* *down* and no more. In other
+words, having phylink_resolve() know that there should be a PCS but it's
+gone, and therefore the link should not come up in its current
+configuration.
+
+> I think we'd need something like
+> 
+> struct phylink_pcs *pcs_get(struct device *dev, const char *id,
+> 			    void (*detach)(struct phylink_pcs *, void *),
+> 			    void *priv)
+> 
+> which would also require that pcs_get is called before phylink_start,
+> instead of in probe (which is what every existing user does).
+
+That would at least allow the MAC driver to take action when the PCS
+gets removed.
+
+> This whole thing has me asking the question: why do we allow unbinding
+> in-use devices in the first place?
+
+The driver model was designed that way from the start, because in most
+cases when something is unplugged from the system, the "remove" driver
+callback is just a notification that the device has already gone.
+Failing it makes no sense, because software can't magic the device
+back.
+
+Take an example of a USB device. The user unplugs it, it's gone from
+the system, but the system briefly still believes the device to be
+present for a while. It eventually notices that the device has gone,
+and the USB layer unregisters the struct device - which has the effect
+of unbinding the device from the driver and eventually cleaning up the
+struct device.
+
+This can and does happen with Ethernet PHYs ever since we started
+supporting SFPs with Ethernet PHYs. The same thing is true there -
+you can pull the module at any moment, it will be gone, and the
+system will catch up with its physical disconnection some point later.
+It's no good trying to make ->remove say "no, the device is still in
+use, I won't let you remove it" because there's nothing software can
+do to prevent the going of the device - the device has already
+physically gone.
+
+I don't think that's the case with PCS - do we really have any PCS
+that can be disconnected from the system while it's running? Maybe
+ones in a FPGA and the FPGA can be reprogrammed at runtime (yes,
+people have really done this in the past.)
+
+If we don't want to support "hotpluggable" PCS, then there's a
+simple solution to this - the driver model has the facility to suppress
+the bind/unbind driver files in sysfs, which means userspace can't
+unbind the device. If there's also no way to make the struct device go
+away in the kernel, then effectively the driver can then only be
+unbound if the driver is built as a module.
+
+At that point, we always have the option of insisting that PCS drivers
+are never modules - and then we have the situation where a PCS will
+never disappear from the system once the driver has picked up on it.
+
+Of course, those PCS that are tightly bound to their MACs can still
+come and go along with their MACs, but it's up to the MAC driver to
+make that happen safely (unregistering the netdev first, which will
+have the effect of calling ndo_close(), taking the network device
+down and preventing further access to the netdev - standard netdev
+MAC driver stuff.)
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

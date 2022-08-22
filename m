@@ -2,132 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F1359B6F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 02:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024DC59B6FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 02:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbiHVAS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 20:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S232018AbiHVATI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 20:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbiHVASN (ORCPT
+        with ESMTP id S231995AbiHVATF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 20:18:13 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AA31FCC4
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 17:18:10 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-337ed9110c2so117891507b3.15
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 17:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=DTW77A/Vjl+d5bcQDIprq1tGD6UgniZYOTpaR8iNZIc=;
-        b=Dg9yytO9IkPtQr0hKr1opAsmaHFl6Ti0qmk9dgNkQKa6EeZnhuamJ8wFuDDpvnSucO
-         3jnI66hn0RZluaprAxAC9vZCxkQXXdYA0KwOtMgEey7a9lQkqmoQ767sSys3ES+TUduk
-         8r9futG6QW922rVpAUoBuyvHCBDkXpj6Z6uIr5bt4pi4JjwABrXPfF7E2R9JF1EvrU3W
-         3HTuZx9jrCVbRGBo1EjBv/Hu+VbfEktqbj+TpV4cjusZQtsDY5OAzcQ1W3tgUYcjFPCH
-         ebqBDDU8/54Qiztpi0pJPbzqNXn5hxGVXBNshftViCKjFt6eCv7LnIrPsIrM9eVLCdKl
-         WwwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=DTW77A/Vjl+d5bcQDIprq1tGD6UgniZYOTpaR8iNZIc=;
-        b=JS58fn8TIHPt1vZB4fXIjYWV8xZxtV8/Pw1an0WAHowYcPqNNajFkBnsBad7m/bXx7
-         qLXmnVGTjiSO/bBp8AdNAfljR4Lx6fazVuDUhnSUbeFlqA27HIkNCAAz33v34cWuElWK
-         HLHYGQbbXt+t3gwfAyAVNbk6uI9BgcDTTptlGkOcvPeXqookza0IgJUpFD1YMuEu3bzy
-         z7K6uRWclaT4KgC5qubfAVlvUcWWiiE1Lgg2FvKW6yVsRvXCZbIQk28AUtSYooHQKbhg
-         LyWhfV5sLf34REN4hiA3SMaaauUw1TXFhwZhp203WXpC40++Q+tKUq+wPvTOxFl8dkLH
-         sFmQ==
-X-Gm-Message-State: ACgBeo0SbWeR0Gn63QW3gWVbuZcOAzZEMrkGj43hUIr/UwmGEt+nX/AD
-        pWWSpTQL7WUFfDEvaxYHZx6orwUjSV5mPw==
-X-Google-Smtp-Source: AA6agR6tW1MO8bdpOOCAdPjlI2KgLdp2empQdKN2rFu+N7JEzRBKSYp9P+zG59MACSGNvPbZ7uCstsPP+839Yw==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:28b])
- (user=shakeelb job=sendgmr) by 2002:a25:9f8d:0:b0:686:9a3d:6f85 with SMTP id
- u13-20020a259f8d000000b006869a3d6f85mr16587811ybq.400.1661127489865; Sun, 21
- Aug 2022 17:18:09 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 00:17:37 +0000
-In-Reply-To: <20220822001737.4120417-1-shakeelb@google.com>
-Message-Id: <20220822001737.4120417-4-shakeelb@google.com>
-Mime-Version: 1.0
-References: <20220822001737.4120417-1-shakeelb@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH 3/3] memcg: increase MEMCG_CHARGE_BATCH to 64
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>
-Cc:     "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Oliver Sang <oliver.sang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 21 Aug 2022 20:19:05 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8039B15727;
+        Sun, 21 Aug 2022 17:19:03 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id E149A5C00E4;
+        Sun, 21 Aug 2022 20:19:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sun, 21 Aug 2022 20:19:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1661127542; x=1661213942; bh=L2nkszgY5W
+        OfLgRzK4a0UTYpubHoRBwTEQkzg8BqgV8=; b=LygE7oGCZGQrEJbufqeGM76mIs
+        M/PjtSxgA2DNSOl0S9uAEKPMLttVPpdcpeQtAYCtAER1eepiE08PzrOCipnx84CC
+        7TeESltxOHCNzR00fyTlWpbr1IP/18FiyEldDA2Dfha/bS4nYa+XMzdrHwMixa1G
+        DUJ5a8pBQn62QdhtEI6aOdQSTi95UgOuaiqEoA7H632q/VL4pHOsHBSNKuyQ3Znm
+        iIQQ/N4OXJ/dPOFI0PIY8t9Z0mKX0Ju1STgytjFFtaitRQg0Eqk4p3gxb1Rga5yY
+        QvsUR+9l/dxo0uOXGrqFvDznHSIaoxWpUe4KWY1wxO3Y/goCJJB5QM/RoTTw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1661127542; x=
+        1661213942; bh=L2nkszgY5WOfLgRzK4a0UTYpubHoRBwTEQkzg8BqgV8=; b=o
+        gfLdqt6wbPAR0sXCwaq4zcEkmMMKZCZ/ESqK/G/zVM/WjKnbtqZAzMCCEFrpakke
+        42TvM0/0qykA39za++YftSeMEjruEGHwYgt5BPhnvURBXmiO0RdupD0oX1gEr1Ss
+        yFGXqvT6RnaoPO8aQQ0f6s4GI/fsAq5p+aFDEZ3RjuWqeKYcdeyCmwudT18oI6Dz
+        5ErkfTUsK2XLd2325kJi9K71OOvvWQuWMEwjNvhYPI8+IDDCm+GfCchb5qCBAVSg
+        RnNX2Uxd2RMdr4Pure0tQqgmy/UO2iwOXjbTPWKM3nLSBtouHHftiVjyeD/TecnR
+        W0X/RnjgwKr1r8kOqPYtg==
+X-ME-Sender: <xms:dssCYxQx4TasUzZxR4pdf88CLkmagWVgum4J6A83ATl65KXfeCrgGQ>
+    <xme:dssCY6z5X47wBkPU6Z6QuGRQr161ErGsdmg_e-10lnj8I_Gj6tEcK8uOgxB2ewUK6
+    cCOKvh5893XKkr-dQ>
+X-ME-Received: <xmr:dssCY20uHiNgRzO4861SmEehuRCZTffIVbqcGp4FOMYTFML7TtInpw5pGOfifWlUOobjYg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeiiedgfeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefkffggfgfuvfevfhfhjggtgfesth
+    ekredttdefjeenucfhrhhomhepvfhomhcuhfhithiihhgvnhhrhicuoehtohhmsehtohhm
+    qdhfihhtiihhvghnrhihrdhmvgdruhhkqeenucggtffrrghtthgvrhhnpeelgfffheegtd
+    fgudefhfdvveeviedttedthfevgeeugffgveeujeefteetteeigfenucffohhmrghinhep
+    khgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepthhomhesthhomhdqfhhithiihhgvnhhrhidrmhgvrdhukh
+X-ME-Proxy: <xmx:dssCY5Ae76hQ1mLulG_Bfu6PZRHNyT5a5jYHGw9nrkpSxEx5zRTAgg>
+    <xmx:dssCY6gnSQxOsWLxVPM2KoD7vMVBSJyFA2tvFRyuqOCn1kPaToURcw>
+    <xmx:dssCY9pujbTvodKmvRtB_wWwNtBdLJ9UIejjG0q1AzxW2ZubDxye0w>
+    <xmx:dssCY64g--RsODk7U39RdeC3t2zOnVd4MGOw7OzydtrHAo5YMg2jyw>
+Feedback-ID: iefc945ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 21 Aug 2022 20:19:01 -0400 (EDT)
+Message-ID: <460cd42b-4192-6761-7313-268a684e1e28@tom-fitzhenry.me.uk>
+Date:   Mon, 22 Aug 2022 10:19:00 +1000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCH v3 2/2] arm64: dts: rockchip: Add initial support for
+ Pine64 PinePhone Pro
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <n@nfraprado.net>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, martijn@brixit.nl, ayufan@ayufan.eu, megi@xff.cz,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220815123004.252014-1-tom@tom-fitzhenry.me.uk>
+ <20220815123004.252014-3-tom@tom-fitzhenry.me.uk>
+ <20220818030547.eblbmchutmnn6jih@notapiano>
+From:   Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+In-Reply-To: <20220818030547.eblbmchutmnn6jih@notapiano>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For several years, MEMCG_CHARGE_BATCH was kept at 32 but with bigger
-machines and the network intensive workloads requiring througput in
-Gbps, 32 is too small and makes the memcg charging path a bottleneck.
-For now, increase it to 64 for easy acceptance to 6.0. We will need to
-revisit this in future for ever increasing demand of higher performance.
+On 18/8/22 13:05, Nícolas F. R. A. Prado wrote:
 
-Please note that the memcg charge path drain the per-cpu memcg charge
-stock, so there should not be any oom behavior change.
+> thanks for getting the upstreaming of this DT going. Some comments below.
 
-To evaluate the impact of this optimization, on a 72 CPUs machine, we
-ran the following workload in a three level of cgroup hierarchy with top
-level having min and low setup appropriately. More specifically
-memory.min equal to size of netperf binary and memory.low double of
-that.
+No worries, thank you for your review!
 
- $ netserver -6
- # 36 instances of netperf with following params
- $ netperf -6 -H ::1 -l 60 -t TCP_SENDFILE -- -m 10K
+> You're also adding the SD controller here. Does it work as is? If so add it to
+> the commit description as well.
+I will note this in v4.
+>> +/* PinePhone Pro datasheet:
+> First comment line should be empty following the coding style [1]. Like you did
+> for the copyrights above.
+>
+> [1] https://www.kernel.org/doc/html/latest/process/coding-style.html#commenting
 
-Results (average throughput of netperf):
-Without (6.0-rc1)       10482.7 Mbps
-With patch              17064.7 Mbps (62.7% improvement)
+I will do this in v4.
 
-With the patch, the throughput improved by 62.7%.
+> This signal is called vcc_sys in the datasheet, so I suggest we keep that name
+> here. It's not everyday that we get a device with a publicly available datasheet
+> :^).
 
-Signed-off-by: Shakeel Butt <shakeelb@google.com>
-Reported-by: kernel test robot <oliver.sang@intel.com>
----
- include/linux/memcontrol.h | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Indeed! :) I will do this in v4.
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 4d31ce55b1c0..70ae91188e16 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -354,10 +354,11 @@ struct mem_cgroup {
- };
- 
- /*
-- * size of first charge trial. "32" comes from vmscan.c's magic value.
-- * TODO: maybe necessary to use big numbers in big irons.
-+ * size of first charge trial.
-+ * TODO: maybe necessary to use big numbers in big irons or dynamic based of the
-+ * workload.
-  */
--#define MEMCG_CHARGE_BATCH 32U
-+#define MEMCG_CHARGE_BATCH 64U
- 
- extern struct mem_cgroup *root_mem_cgroup;
- 
--- 
-2.37.1.595.g718a3a8f04-goog
-
+> + rk818: pmic@1c {
+>> +		compatible = "rockchip,rk818";
+>> +		reg = <0x1c>;
+>> +		interrupt-parent = <&gpio1>;
+>> +		interrupts = <RK_PC5 IRQ_TYPE_LEVEL_LOW>;
+>> +		#clock-cells = <1>;
+>> +		clock-output-names = "xin32k", "rk808-clkout2";
+> What about keeping the datasheet names here too? clk32kout1, clk32kout2
+Per Megi's response, I'll stick with the current names.
+>> +			vcc_1v8: vcc_wl: DCDC_REG4 {
+>  From the datasheet, vcc_wl is actually wired to vcc3v3_sys. But looks like
+> vcc_wl is only used for bluetooth and you're not enabling it yet anyway, so just
+> drop this extra label, and it can be added when bluetooth is added (or not, and
+> then the bluetooth supply just points directly to vcc3v3_sys).
+Good catch, I will remove the vcc_wl label.
+>> +			vcc_power_on: LDO_REG4 {
+>> +				regulator-name = "vcc_power_on";
+> The name on the datasheet for this one is rk818_pwr_on.
+I will use the name rk818_pwr_on in v4.
+>> +
+>> +&cluster1_opp {
+>> +	opp06 {
+>> +		status = "disabled";
+>> +	};
+> There's actually an opp06 node in the OPP for RK3399-T, only that the frequency
+> is slightly lower. Maybe you could keep it enabled but override the frequency?
+>
+> Or given the above point about the max voltages, maybe it would be best to have
+> a separate OPP table after all?
+Per Megi's response/rationale, I'll keep the existing table, but 
+re-introduce cluster1_opp/opp06 with updated frequency/voltage, aligned 
+with the RK3399-T datasheet.
+>> +
+>> +	opp07 {
+>> +		status = "disabled";
+>> +	};
+>> +};
+>> +
+>> +&io_domains {
+>> +	status = "okay";
+> Let's keep the status at the end of the node for consistency with the rest.
+I will do this in v4.

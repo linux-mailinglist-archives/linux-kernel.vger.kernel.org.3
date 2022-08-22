@@ -2,169 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A247B59BDEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3187059BDF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233953AbiHVKyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 06:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
+        id S234015AbiHVKyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 06:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbiHVKyC (ORCPT
+        with ESMTP id S233960AbiHVKyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 06:54:02 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFE410FC1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 03:54:01 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id q18so9193149ljg.12
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 03:54:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=qUJzeAA0zGAS1ziTyPpIwPEe4uv+VPYIR9XMGD7ii3Q=;
-        b=zS3GUMwVqjObBA9yF5EBFw5i8T4tvqI0WJm3QKWgwuNQskUJA1nQZRNYN7mXVH6eKp
-         BXXJgVnO7b3OxwwmzlUoxkxxprQiYtoLk+sWv1BU/B50dwHNuZ2UkXWKcivTJWATWOuf
-         tPcFq7G74B3Y4yLQOgu4O0FTV8b1WUkxEcIGfN5AXBz8owhYy8BM6cFA9RBJVhjVtm05
-         BKNxqx0ASZVpEObqTtBm1GsfLmd83YyXYpGusTPRs1Ace2isVx1jfkzK4fVOGr3hdE1A
-         w91cHt3yl/roRhk6IgHsrNwexe+NYBOOBqb6dZfsW2dUZeq0iFyaMLQ7OdYnEUfEQD8Z
-         n5Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=qUJzeAA0zGAS1ziTyPpIwPEe4uv+VPYIR9XMGD7ii3Q=;
-        b=7zYCS3A6rWJULhfSni8V3y/KrbElISYuX8YQxJ9GPyg9sJjDaUT15l9z/7bURy/Zfz
-         FyOGx0wEjiT2dZ0+XWrmhmBCLUSpvM1UahQln8dJe8M05MbjzGIYzjyZY7ddgybc205Z
-         O0yzEUozCkHh1gJbY5iam2pR2zNS/Ql7hw96GnwiqoBoOqTqM5OBn4RctQtOHTV7kQ2q
-         Lta8sdRf/GrM2n3MqTM0DAWBnuCI/qq0HmWlQw2zHRqO10ImSApqNvA6cSMj1rFZnqR2
-         jnLeNkYsu7Nsew3D09T19SIuYyMCFSzAtlIXpHJNWLpCoibMu/JVGRu3l3+ovqzeJ2yf
-         V7FA==
-X-Gm-Message-State: ACgBeo3iQE+hols0XwVxrGjOMqrtDiV5iWjdRkOT6IICzrL5nqZSUnB9
-        PJ5nfpCf+1t9YDKymFfWoZdcxSO1hlNwptONv+Br7w==
-X-Google-Smtp-Source: AA6agR5TbBnQzeewFLNJT2B20rIJ4J1PMANfqfPlA8kVn7/qRNYu/IMOKiDXsiM+z3emf7Y2A2IYdLt6WrjEEvVIqsQ=
-X-Received: by 2002:a2e:b746:0:b0:261:cc50:35cf with SMTP id
- k6-20020a2eb746000000b00261cc5035cfmr1612272ljo.4.1661165639489; Mon, 22 Aug
- 2022 03:53:59 -0700 (PDT)
+        Mon, 22 Aug 2022 06:54:06 -0400
+Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B972510570
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 03:54:04 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id Q54Do2dalkifIQ54Do40A4; Mon, 22 Aug 2022 12:54:02 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 22 Aug 2022 12:54:02 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <23fbee0f-4d9c-344f-9fb4-f9cc77f38ed3@wanadoo.fr>
+Date:   Mon, 22 Aug 2022 12:54:00 +0200
 MIME-Version: 1.0
-References: <20220820195750.70861-1-brad@pensando.io> <20220820195750.70861-18-brad@pensando.io>
-In-Reply-To: <20220820195750.70861-18-brad@pensando.io>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 22 Aug 2022 12:53:22 +0200
-Message-ID: <CAPDyKFoYdQirftoEQAMBwXKXqSo-tu9EUvL6B6vHCj6cDd14ug@mail.gmail.com>
-Subject: Re: [PATCH v6 17/17] mmc: sdhci-cadence: Support mmc hardware reset
-To:     Brad Larson <brad@pensando.io>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, adrian.hunter@intel.com,
-        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
-        blarson@amd.com, brijeshkumar.singh@amd.com,
-        catalin.marinas@arm.com, gsomlo@gmail.com, gerg@linux-m68k.org,
-        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee.jones@linaro.org, broonie@kernel.org,
-        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
-        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
-        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        will@kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] media: dw100: Fix an error handling path in dw100_probe()
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-media@vger.kernel.org
+References: <7213b90d0d872be154cff81aec1ad8a4a77116af.1661161223.git.christophe.jaillet@wanadoo.fr>
+ <YwNS5jr2+ersua9B@pendragon.ideasonboard.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <YwNS5jr2+ersua9B@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 20 Aug 2022 at 21:58, Brad Larson <brad@pensando.io> wrote:
->
-> From: Brad Larson <blarson@amd.com>
->
-> Add support for mmc hardware reset with a reset-controller
-> which would need to be enabled in the device tree with
-> a supporting driver.  The default is disabled for all
-> existing designs.
->
-> Signed-off-by: Brad Larson <blarson@amd.com>
-> ---
->  drivers/mmc/host/sdhci-cadence.c | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->
-> diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
-> index c662c63d49fa..35d37b9aba63 100644
-> --- a/drivers/mmc/host/sdhci-cadence.c
-> +++ b/drivers/mmc/host/sdhci-cadence.c
-> @@ -12,6 +12,7 @@
->  #include <linux/mmc/mmc.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> +#include <linux/reset.h>
->
->  #include "sdhci-pltfm.h"
->
-> @@ -70,6 +71,7 @@ struct sdhci_cdns_priv {
->         spinlock_t wrlock;      /* write lock */
->         bool enhanced_strobe;
->         void (*priv_writel)(struct sdhci_cdns_priv *priv, u32 val, void __iomem *reg);
-> +       struct reset_control *rst_hw;
->         unsigned int nr_phy_params;
->         struct sdhci_cdns_phy_param phy_params[];
->  };
-> @@ -458,6 +460,22 @@ static void sdhci_cdns_hs400_enhanced_strobe(struct mmc_host *mmc,
->                                          SDHCI_CDNS_HRS06_MODE_MMC_HS400);
->  }
->
-> +static void sdhci_mmc_hw_reset(struct mmc_host *mmc)
+Le 22/08/2022 à 11:56, Laurent Pinchart a écrit :
+> Hi Christophe,
+> 
+> Thank you for the patch.
+> 
+> On Mon, Aug 22, 2022 at 11:40:43AM +0200, Christophe JAILLET wrote:
+>> After a successful call to media_device_init() it is safer to call
+>> media_device_init().
+> 
+> I assume you meant media_device_cleanup() ? With this fixed,
 
-Nitpick: Probably better to be consistent with the prefixes for
-function names. So, I suggest changing this to
-"sdhci_cdns_mmc_hw_reset".
++1.
+I assume that it can be fixed when applied (otherwise tell me and I'll 
+send a v2).
 
-> +{
-> +       struct sdhci_host *host = mmc_priv(mmc);
-> +       struct sdhci_cdns_priv *priv = sdhci_cdns_priv(host);
-> +
-> +       dev_info(mmc_dev(host->mmc), "emmc hardware reset\n");
+CJ
 
-Maybe it's sufficient with dev_dbg?
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+>> Add the missing call in the error handling path of the probe, as already
+>> done in the remove function.
+>>
+>> Fixes: bd090d4d995a ("media: dw100: Add i.MX8MP dw100 dewarper driver")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>>   drivers/media/platform/nxp/dw100/dw100.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/media/platform/nxp/dw100/dw100.c b/drivers/media/platform/nxp/dw100/dw100.c
+>> index 94518f0e486b..b3b057798ab6 100644
+>> --- a/drivers/media/platform/nxp/dw100/dw100.c
+>> +++ b/drivers/media/platform/nxp/dw100/dw100.c
+>> @@ -1623,6 +1623,7 @@ static int dw100_probe(struct platform_device *pdev)
+>>   error_v4l2:
+>>   	video_unregister_device(vfd);
+>>   err_m2m:
+>> +	media_device_cleanup(&dw_dev->mdev);
+>>   	v4l2_m2m_release(dw_dev->m2m_dev);
+>>   err_v4l2:
+>>   	v4l2_device_unregister(&dw_dev->v4l2_dev);
+> 
 
-> +
-> +       reset_control_assert(priv->rst_hw);
-> +       /* For eMMC, minimum is 1us but give it 9us for good measure */
-> +       udelay(9);
-> +
-> +       reset_control_deassert(priv->rst_hw);
-> +       /* For eMMC, minimum is 200us but give it 300us for good measure */
-> +       usleep_range(300, 1000);
-> +}
-> +
->  static int sdhci_cdns_probe(struct platform_device *pdev)
->  {
->         struct sdhci_host *host;
-> @@ -520,6 +538,17 @@ static int sdhci_cdns_probe(struct platform_device *pdev)
->         if (ret)
->                 goto free;
->
-> +       if (host->mmc->caps & MMC_CAP_HW_RESET) {
-> +               priv->rst_hw = devm_reset_control_get_optional_exclusive(dev, "hw");
-> +               if (IS_ERR(priv->rst_hw)) {
-> +                       ret = PTR_ERR(priv->rst_hw);
-> +                       if (ret == -ENOENT)
-> +                               priv->rst_hw = NULL;
-> +               } else {
-> +                       host->mmc_host_ops.card_hw_reset = sdhci_mmc_hw_reset;
-> +               }
-> +       }
-> +
->         ret = sdhci_add_host(host);
->         if (ret)
->                 goto free;
-> --
-
-Other than the comments above, I wonder about what merging strategy we
-should use for the series. I believe it looks fine for me to pick up
-the mmc related patches, thus we can apply patches on a per subsystem
-basis, right?
-
-Kind regards
-Uffe

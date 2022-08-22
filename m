@@ -2,126 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BE559C466
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916E259C46A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236491AbiHVQuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S236414AbiHVQus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235558AbiHVQuT (ORCPT
+        with ESMTP id S235558AbiHVQur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:50:19 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E204F19C35
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:50:17 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id p18so10436751plr.8
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=YCUb29U7ueKm8lDxo3bX5HZtnKqRa+bl+Jwo6C09d/w=;
-        b=hmaYfkUYxxpsJikrrGUf5nV6qCZ+5zqAWPwh19taLTgqxNk/04bvHILaHLShsSrJeT
-         vUA0ynppIa4yDX4K4PGXUUMxoE6yGC2YP5hR93eZ/gQanqR+Ihn1uetQthctFbIQ1BAn
-         HT69+OI4PegU7GlVWkUHqlJoM+R9jF1xzW6cDfPmdgoKaLYOPIvvUY645eJ5m1pxIvPp
-         TpBBxwr/zem44vy1Sg5q7aH6XnopsRoP7o5fQcsobkqKqBMYxdi+eHbYDbA80cbVfMgZ
-         WNuLcOoXrbV//xDjcf1o387frXd2hntRIlZGALGCO99rJaPmgl/BqmY2Q3v5tnG03cVa
-         awFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=YCUb29U7ueKm8lDxo3bX5HZtnKqRa+bl+Jwo6C09d/w=;
-        b=ZzJNdHfrqrLLHF9DBMadQS2VsawmlF4rYGfUC7NwTzkWoGVAQS/dwg9aSLHPSNSTWK
-         FQ2foVjxbQJqdEG6SS1GRLoFYG2NdRR69mbSOr2xy6k7G7/5Zw6MXsU3oQwTQUSOjBNm
-         nFumrKmWZk3yqPc2qb7FZVJldxTxysCWQhq9kLjkqD/VSKBuQKBOhf6dobXiZUZIAcKD
-         KyW0vwBk+/4IMIzEdxcTBdPhmwtiuFnoCtRrvy8ia07DFCzcuAU6esg6guag4+CSyq4y
-         vPFedv5UIHNHQnN8Kx191Z/CAikwZdtcHFxrshR+yVK06hvVwaOd734YoFSw85R5kRLj
-         KbRw==
-X-Gm-Message-State: ACgBeo09TqikQ5gRgY7JkKp/oNNb7cOmrrcMR2eyCaOj42RUWPhZqKZl
-        UR9jJ1F6GN2aQ373tauJsp0PjQ==
-X-Google-Smtp-Source: AA6agR79nW5rPKOD9DWavuVdySV+shyFKjsmzqMC8PFtXIf5own2pA/eDZmGSL61O2X7Gsr0RqxMrQ==
-X-Received: by 2002:a17:90b:281:b0:1fb:151b:b5cf with SMTP id az1-20020a17090b028100b001fb151bb5cfmr9905672pjb.166.1661187017335;
-        Mon, 22 Aug 2022 09:50:17 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id v2-20020a626102000000b005361708275fsm6510422pfb.217.2022.08.22.09.50.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 09:50:16 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 16:50:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 09/26] KVM: VMX: nVMX: Support TSC scaling and
- PERF_GLOBAL_CTRL with enlightened VMCS
-Message-ID: <YwOzxYLMeFuN23W+@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-10-vkuznets@redhat.com>
- <Yv5zn4qTl0aiaQvh@google.com>
- <87sflssllu.fsf@redhat.com>
- <Yv/CME8B1ueOMY5M@google.com>
- <87ilmkslzd.fsf@redhat.com>
+        Mon, 22 Aug 2022 12:50:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DD91C93C;
+        Mon, 22 Aug 2022 09:50:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDD3E6120C;
+        Mon, 22 Aug 2022 16:50:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6FE7C433D6;
+        Mon, 22 Aug 2022 16:50:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661187045;
+        bh=irFANRY3GsRjnwPRI0klPXy+ob+GF+Bw2G52YNbFAI0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ijr/HM85cyz6VY0jd4a5MoWWZnMiH7N8aCu9H0tmPQE7N9pwWgBRK+uINBNYY7HYx
+         iH0koBmAN8HQtsctV4cYzd7PulXqWvejNJ3nCTb3GLDdNbYxSdfJX1ap52dVios0sE
+         AiBtZRS8YSFOw1c0lerTWmkc52E7sz9ISPIKiXZAQSUmvdvfLsH30C4eOW5QXKdU1a
+         qu3EKa3sxvYKZqTUfPx9n+3Bqy4VXg5NSPBTPPOLECYSzV0ud0ESuivqhSMhocdL2R
+         tr+IgDdimQ88E659yB31S2Whpez6zjzJdzck/2eyR2fWvTXtu6i5Goz9Zi3EY9CKuo
+         k/1z14geqGyDw==
+Date:   Mon, 22 Aug 2022 17:50:40 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Patrice CHOTARD <patrice.chotard@foss.st.com>
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        christophe.kerello@foss.st.com, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: (subset) [PATCH v3 0/2] spi: stm32_qspi: use QSPI bus as 8 lines
+ communication channel
+Message-ID: <YwOz4MJ5zc4YOb4s@sirena.org.uk>
+References: <20220816161344.2599908-1-patrice.chotard@foss.st.com>
+ <166118433897.209120.16190099503428270567.b4-ty@kernel.org>
+ <319927f9-5265-81fd-2c6b-7c5146d90687@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Ru+ez317Ifnz+ENP"
 Content-Disposition: inline
-In-Reply-To: <87ilmkslzd.fsf@redhat.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <319927f9-5265-81fd-2c6b-7c5146d90687@foss.st.com>
+X-Cookie: Do not write in this space.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> > But that also raises the question of whether or not KVM should honor hyperv_enabled
-> > when filtering MSRs.  Same question for nested VM-Enter.  nested_enlightened_vmentry()
-> > will "fail" without an assist page, and the guest can't set the assist page without
-> > hyperv_enabled==true, but nothing prevents the host from stuffing the assist page.
-> 
-> The case sounds more like a misbehaving VMM to me. It would probably be
-> better to fail nested_enlightened_vmentry() immediately on !hyperv_enabled.
 
-Hmm, sort of.  If KVM fails explicitly fails nested VM-Enter, then allowing the
-guest to read the VMX MSRs with the same buggy setup is odd, e.g. nested VMX is
-effectively unsupported at that point since there is nothing the guest can do to
-make nested VM-Enter succeed.  Extending the "fail VM-Enter" behavior would be to
-inject #GP on RDMSR, and at that point KVM is well into "made up architecture"
-behavior.
+--Ru+ez317Ifnz+ENP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All in all, I don't think it's worth forcing the issue, even though I do agree that
-the VMM is being weird if it's enabling KVM_CAP_HYPERV_ENLIGHTENED_VMCS but not
-advertising Hyper-V.
+On Mon, Aug 22, 2022 at 06:21:16PM +0200, Patrice CHOTARD wrote:
+> Hi Mark
+>=20
+> I just noticed that the cleanup() callback is useless as the gpiod is=20
+> automatically freed by devm.
+>=20
+> As you haven't send your pull request, do you accept a fixup patch you wi=
+ll squash=20
+> with patch [2/2] "spi: stm32_qspi: Add transfer_one_message() spi callbac=
+k"
+> or standalone patch ?
 
-> > If we fix the kvm_hv_set_cpuid() allocation failure, then we can also guarantee
-> > that vcpu->arch.hyperv is non-NULL if vcpu->arch.hyperv_enabled==true.  And then
-> > we can add gate guest eVMCS flow on hyperv_enabled, and evmcs_get_unsupported_ctls()
-> > can then WARN if hv_vcpu is NULL.
-> >
-> 
-> Alternatively, we can just KVM_BUG_ON() in kvm_hv_set_cpuid() when
-> allocation fails, at least for the time being as the VM is likely
-> useless anyway.
+Normally you should just send an incremental patch but since it was the
+top commit of the branch and I only just pushed it I've dropped this
+commit (b051161f44d414e736fa2b011245441bae9babd7) so you can resend
+with the fix squashed in if you want.
 
-I'd prefer not to use KVM_BUG_ON() in this case.  A proper fix isn't that much
-more code, and this isn't a KVM bug unless we conciously make it one :-)
+--Ru+ez317Ifnz+ENP
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> > Assuming I'm not overlooking something, I'll fold in yet more patches.
-> >
-> 
-> Thanks for the thorough review here and don't hesitate to speak up when
-> you think it's too much of a change to do upon queueing)
+-----BEGIN PGP SIGNATURE-----
 
-Heh, this definitely snowballed beyond "fixup on queue".  Let's sort out how to
-address the filtering issue and then decide how to handle v6.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMDs98ACgkQJNaLcl1U
+h9DjzQf/Xo7tBkOen7IJaH+SY49+yGc6Dq0+ywUqN5DVyTWKStCNrtpcCNWwph2a
+DV79ZqI4YEaptZq95gwDcaxLxnFHxG9qGIXzPbScCKDyvMkjc9DWqDAMiq+A+PYX
+awYxyh7tFX7zpfbD/2Pm61SpPg4myZNxbX+gq7tcB9j53+ULFJOeiSva9YQE1rNm
+jrDLOLIgzbQTFXbsQ3K8Ipi6rbwTfHhHHs6ubzJlWcStXzxF4EZlggbv3PBW1bpt
+IQp/+8hXNnpQl3NfsLpkGldV6gtBDS1P16quHh/cMZNiEOAAKtBtIbFUE+IJY4QQ
+Pqr9astR2dA5vinRQx1+7maV1g84Bw==
+=gTVk
+-----END PGP SIGNATURE-----
+
+--Ru+ez317Ifnz+ENP--

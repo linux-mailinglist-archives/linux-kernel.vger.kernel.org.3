@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1708859C33D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C38859C34A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236843AbiHVPmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        id S236863AbiHVPnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236755AbiHVPlw (ORCPT
+        with ESMTP id S236362AbiHVPme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:41:52 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170821CFC3;
-        Mon, 22 Aug 2022 08:41:48 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id e4so8395598qvr.2;
-        Mon, 22 Aug 2022 08:41:48 -0700 (PDT)
+        Mon, 22 Aug 2022 11:42:34 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC0C27154
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:42:23 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id ds12-20020a17090b08cc00b001fae6343d9fso6064173pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:42:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc;
-        bh=cRvGK+nfZIMwtiejaDileiwHPvBs7s1NtuCURg1xkOE=;
-        b=jrIMSLP1O0YpmecScYkEyzJrB11luBCBk7dY8gXgO+9dVe6uTS9YjcXSs+Ta5OH1sV
-         dXHvi7zstA8c4+yeoSq6Ynqtg3+Pt1rYjxvkNcbx5rOihOE/RiUAWJp5bdf7H+4uz8tk
-         KywVzWly9gjOTSr8FzpDKLVQUOBlSeikDyiCQGM5ouYLMl1N7a5sOj8e6Dn3mZIlfqrg
-         doR5BHOHDXum4QOY+Kpf43/7h9SwVIYRj9yIktK86uPksWD11jIlT93UN5hUZFtKRE9W
-         Qoh6Pa7XE+GeU5tV50GZL695dNnS9HEKr2xWG2d7cAMi/OeM/Hp8umiCVKxSfLsjeu2Z
-         e5lw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=nSOJmzz8FKLZ+aQzB03j8a24xuRTz7j+vJV5QntIObE=;
+        b=VJPk1mdRqKLL7wk8+sp0hf3sEZ1CzpxGNzCOfFiiwyzqI9EpkI4q39h4WL8vkWJmLn
+         pchUUPA7z2kr3aB8+u5Jw5Pqmt+K/XhSfyIlDOMlFL7crU6B69R8N5wb3+TakeKBdspZ
+         MCleAtNIxNrvmE+gsljTRn1fcNdNX/f+dw7vCEZkLY5XeYP5gkGGmQAauixO9q51D0F+
+         RDKUvzzCfq0zXBp7qXUmpfNiUqq5DgbKNO8qiyNHQfiZREAOr6Dv+6oJL609Yv6t0MYc
+         6vu4ITw/4Jg0kRk4ThKQfWY/sFcgez0tQvBfQ3E/SAc2vkwQFDWouV1gcxCM//8MOCzM
+         nL7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=cRvGK+nfZIMwtiejaDileiwHPvBs7s1NtuCURg1xkOE=;
-        b=WUyZEdc/J6SpJtYaKgDRdtw6FuwNaOq3ETd9z2ZGufhdR8WAVxxxPU+VCJYHZ1Z7hi
-         x0R8w2vdMJW0qj19W5emAqodw2I4/SSZ+jRKTZD4j3HzB3xeeuM/+aiBzzXRIulFgTfo
-         iZYjuoHfe4udyUUHIWONBqIv/EA1eS8/RJc8XpPCX3WLVNiBx09jf94Z5XbnDAuy1FaT
-         HCbDkQFUHhSLt5JeuKfEot4049oP8CnigUCCUcVjDDjl8yTyzHdgTud2XBGoxbOdtW3c
-         3JXMng9LdPczVvBia4IZ1vzCrLSDdVw89qeFyaQydCHtiqqQtf0rXSXGqyKyyqyRyoLW
-         9Hfg==
-X-Gm-Message-State: ACgBeo3c+ZmQ5zzjJDWst72S5VnYgWadziJplfCu06+nEFMiB6PpvJ1K
-        YTgEDUUWwh2PAA5osbN8uwY=
-X-Google-Smtp-Source: AA6agR76hATzF/fDLbd6N41mySAOy78wgkBSUZiZKFl8do1rkquH1626SX3sseMpeZ7SIVjZHhCKWA==
-X-Received: by 2002:a05:6214:e68:b0:474:89bf:ca1b with SMTP id jz8-20020a0562140e6800b0047489bfca1bmr16197681qvb.107.1661182907114;
-        Mon, 22 Aug 2022 08:41:47 -0700 (PDT)
-Received: from valhalla (2603-7081-5203-61c3-0000-0000-0000-1449.res6.spectrum.com. [2603:7081:5203:61c3::1449])
-        by smtp.gmail.com with ESMTPSA id u5-20020a05620a0c4500b006b5e296452csm10854329qki.54.2022.08.22.08.41.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 08:41:45 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 11:41:43 -0400
-From:   Christopher Carbone <chris.m.carbone@gmail.com>
-To:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
-        gregkh@linuxfoundation.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] Split multiple assignments to individual lines.
-Message-ID: <YwOjt+ZrQkKFGRH9@valhalla>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=nSOJmzz8FKLZ+aQzB03j8a24xuRTz7j+vJV5QntIObE=;
+        b=eEVgrirOY8VXPk5hmz+nhNHdbCjQQrVq6I7eR0Q5d1wmV4I+quhMuyRiqYPUAeHJXG
+         XpyolaYOurK2JV54RpS0b2VGj2sGVkrA0IQHdIxK0olAy0lX0XN8oLvITthAzwTdyuqO
+         5R8IYDzGfE/4Ql1E3Mms15X85onK22Hi6BRK/KI1J9hmFvl77xQVCFc2KFLKs1bczzGD
+         yLvNv1jUZ3qt12q7gkkog3cT5/Vq4z2kyczOAjVFuwcoG1IyzW655JLiKdtnIB0o7hbR
+         HwQhzPBFddPlP8lFd5k4Vh/cAH8e8fGFiph14z/W9SbNqsXyfERnIMwI/fI1ISzFg+Nc
+         aLwg==
+X-Gm-Message-State: ACgBeo0Ga1g1h3TLALUJJKpw9EL9rlBVVh31mN6NakyuZDdvsRifZoYD
+        HvaH7vhB88z83KDFtfIOtUrkrziN+pAzYEUzekj/XFjoJhI=
+X-Google-Smtp-Source: AA6agR43+zQXbyALqGJ21buqeHmjKqrLr6l/7xJZ3v2b7XWr6N/+et5ywnsHQTHosHsAaHDGBcCllGTWFsCkAt0m1QI=
+X-Received: by 2002:a17:90b:1189:b0:1f5:1311:cd89 with SMTP id
+ gk9-20020a17090b118900b001f51311cd89mr28976132pjb.181.1661182942742; Mon, 22
+ Aug 2022 08:42:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220816083854.1491886-1-raychi@google.com> <20220816083854.1491886-3-raychi@google.com>
+ <Yvtb93dhvhTS5xYB@kroah.com>
+In-Reply-To: <Yvtb93dhvhTS5xYB@kroah.com>
+From:   Ray Chi <raychi@google.com>
+Date:   Mon, 22 Aug 2022 23:42:11 +0800
+Message-ID: <CAPBYUsA0LAYUBtXRuGwo=neLjWyojRUU91vnRE=k6rcimgSVbA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] usb: xhci: add check_init_status hook support
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     mathias.nyman@intel.com, stern@rowland.harvard.edu,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Albert Wang <albertccwang@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,61 +70,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adhere to Linux kernel coding style.
+On Tue, Aug 16, 2022 at 4:57 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Aug 16, 2022 at 04:38:54PM +0800, Ray Chi wrote:
+> > In general, xHCI didn't do anything for port initialization. However,
+> > there are some requirement or limitation on various platforms, so
+> > vendors need to do some error handlings if the device connected to a
+> > broken USB accessory.
+> >
+> > This patch also add the hook to xhci_driver_overrides so that vendors
+> > can add their specific protection easily if needed.
+> >
+> > Signed-off-by: Ray Chi <raychi@google.com>
+> > ---
+> >  drivers/usb/host/xhci.c | 17 +++++++++++++++++
+> >  drivers/usb/host/xhci.h |  1 +
+> >  2 files changed, 18 insertions(+)
+> >
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index 65858f607437..f237af9d6e2e 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -4358,6 +4358,20 @@ static int xhci_enable_device(struct usb_hcd *hcd, struct usb_device *udev)
+> >       return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY);
+> >  }
+> >
+> > +/*
+> > + * The function could get the status of port initialization.
+> > + */
+> > +static int xhci_check_init_status(struct usb_hcd *hcd, struct usb_device *udev, int r)
+> > +{
+> > +     /*
+> > +      * In general, this function is not necessory. Some platforms may
+> > +      * need doing error handling when the port initialization takes a
+> > +      * long time to do. The device can use the override callback to
+> > +      * do specific handlings.
+> > +      */
+> > +     return 0;
+> > +}
+>
+> For obvious technical and legal reasons, we are not allowed to add
+> "hooks" to the kernel where there are no in-kernel users.  Nor would you
+> want us to do so.
+>
 
-Reported by checkpatch:
+Agree on this. I am trying another way to achieve the same goal.
 
-CHECK: multiple assignments should be avoided
+> So I really do not understand this patch series at all.
+>
+> What driver wants to do odd things here?  What needs to happen that the
+> in-tree drivers are not doing properly?  Why not get the needed fixes in
+> the in-kernel drivers instead of trying to add random hooks that some
+> out-of-tree code would use instead.
+>
+> confused,
+>
+> greg k-h
 
-Signed-off-by: Christopher Carbone <chris.m.carbone@gmail.com>
----
- drivers/staging/sm750fb/sm750.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+I will prepare a new commit to do it.
 
-diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-index dbd1159a2ef0..a0f8ae359248 100644
---- a/drivers/staging/sm750fb/sm750.c
-+++ b/drivers/staging/sm750fb/sm750.c
-@@ -386,7 +386,8 @@ static int lynxfb_ops_set_par(struct fb_info *info)
- 
- 	ret = lynxfb_set_color_offsets(info);
- 
--	var->height = var->width = -1;
-+	var->width = -1;
-+	var->height = var->width;
- 	var->accel_flags = 0;/*FB_ACCELF_TEXT;*/
- 
- 	if (ret) {
-@@ -498,7 +499,8 @@ static int lynxfb_ops_check_var(struct fb_var_screeninfo *var,
- 		return ret;
- 	}
- 
--	var->height = var->width = -1;
-+	var->width = -1;
-+	var->height = var->width;
- 	var->accel_flags = 0;/* FB_ACCELF_TEXT; */
- 
- 	/* check if current fb's video memory big enough to hold the onscreen*/
-@@ -723,7 +725,8 @@ static int lynxfb_set_fbinfo(struct fb_info *info, int index)
- 		0x800f0 + (int)crtc->channel * 0x140;
- 
- 	pr_info("crtc->cursor.mmio = %p\n", crtc->cursor.mmio);
--	crtc->cursor.max_h = crtc->cursor.max_w = 64;
-+	crtc->cursor.max_w = 64;
-+	crtc->cursor.max_h = crtc->cursor.max_w;
- 	crtc->cursor.size = crtc->cursor.max_h * crtc->cursor.max_w * 2 / 8;
- 	crtc->cursor.vstart = sm750_dev->pvMem + crtc->cursor.offset;
- 
-@@ -1027,7 +1030,8 @@ static int lynxfb_pci_probe(struct pci_dev *pdev,
- 	if (!sm750_dev)
- 		return err;
- 
--	sm750_dev->fbinfo[0] = sm750_dev->fbinfo[1] = NULL;
-+	sm750_dev->fbinfo[1] = NULL;
-+	sm750_dev->fbinfo[0] = sm750_dev->fbinfo[1];
- 	sm750_dev->devid = pdev->device;
- 	sm750_dev->revid = pdev->revision;
- 	sm750_dev->pdev = pdev;
--- 
-2.37.2
-
+Thanks,
+Ray

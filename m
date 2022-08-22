@@ -2,313 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A0159C82B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB48859C83E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238257AbiHVTJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 15:09:10 -0400
+        id S238231AbiHVTMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 15:12:47 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238218AbiHVTI0 (ORCPT
+        with ESMTP id S238340AbiHVTMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 15:08:26 -0400
-Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D09E26DE;
-        Mon, 22 Aug 2022 12:08:17 -0700 (PDT)
-Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id 921DADB5;
-        Mon, 22 Aug 2022 22:11:01 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 921DADB5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1661195461;
-        bh=wKkcN3HZX1AdoJ6/AuZ/ZUEzqQK3g/fN1ZxHj04NS0w=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=Z0oBWhAAsn4j8h+pkCJjO7PLszrppdjFAm2Q60n1w3krhgHAldy3HEuiLEsGG+YHp
-         YLRLOHJmLkEEow6sc5rmdlAHZah7r7YYur8fOaF2tkVViQYAxMuE+gfwOpibbX0Sj6
-         KRvJp28HHaVQPUUvRuYUhRZFpsJXAYH9dEnAedU4=
-Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 22 Aug 2022 22:07:47 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 22 Aug 2022 15:12:32 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC91B50192;
+        Mon, 22 Aug 2022 12:10:59 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-f2a4c51c45so14061074fac.9;
+        Mon, 22 Aug 2022 12:10:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=RyQ2R2dv/3M8lzsIjXV0R+NCfbe4VzghtrRY+W8bSpw=;
+        b=NgASn6HwOi7Ul2finqIyuP+L6l7CvFEdLq1GEKX/jlp+4Oque+xqsoEG44nmMDdX6u
+         afl/cLtOu1ctBMjaIzELMoS9/TLnbpgWOoUJnDxmu7wqs9YgrqCb5mRpJh+50FC1D6Ad
+         Eoad+YvuNWq2zO6p1Jc/nfVJBz+zPgadz37aeCkUsCBqSEu++F6GTh3vEqSjYwc4Md2g
+         V+6V5/XKGvYUXnDdcG/hw6f9S1zRpz2Bw2h7698g4yV9ZjetVzlZEHu+4Sy8GwOki58I
+         ljAbrIsJXJT5WIIhwXCQy1WgceIskKv5oL93hTP5mR+hXBl7neL9am+f0Xz5OWlW2dQ8
+         Qijg==
+X-Gm-Message-State: ACgBeo0z8saK6DL5cXNczgQyuBB6I6UKzInwDb22LC4DGxgNPVAL37/l
+        VMluwo86M/ZVt7EZ3mhurA==
+X-Google-Smtp-Source: AA6agR5bA4WycmNTvTD2/U7R6fOagPZP//u9KeaYWrui4/55tDupOwumUUqlIU8jnWDyBbSuSIc46Q==
+X-Received: by 2002:a05:6870:1715:b0:11d:80d4:9972 with SMTP id h21-20020a056870171500b0011d80d49972mr1394577oae.52.1661195458566;
+        Mon, 22 Aug 2022 12:10:58 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j23-20020a056808035700b003449ff2299esm2752348oie.4.2022.08.22.12.10.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 12:10:58 -0700 (PDT)
+Received: (nullmailer pid 223613 invoked by uid 1000);
+        Mon, 22 Aug 2022 19:10:57 -0000
+Date:   Mon, 22 Aug 2022 14:10:57 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        devicetree@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 20/20] EDAC/synopsys: Convert to using BIT/GENMASK/FIELD_x macros
-Date:   Mon, 22 Aug 2022 22:07:30 +0300
-Message-ID: <20220822190730.27277-21-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
+        Stephen Boyd <swboyd@chromium.org>
+Subject: Re: [PATCH v4 5/6] dt-bindings: drm/msm/gpu: Add optional resets
+Message-ID: <20220822191057.GA223526-robh@kernel.org>
+References: <1660927246-11327-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220819221017.v4.5.Ieffadd08a071a233213ced4406bf84bb5922ab9a@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819221017.v4.5.Ieffadd08a071a233213ced4406bf84bb5922ab9a@changeid>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of using the very handy helpers denoted in the subject the driver
-has been created with the open-coded {mask,shift} statements. It makes the
-code bulky, prone to mistakes and much harder to read. Seeing there are
-many places in the driver implementing the CSR fields get/set pattern
-let's use the FIELD_GET()/FIELD_PREP() macros introduced in the kernel
-specifically for that case. In addition we suggest to use the BIT() and
-GENMASK() macros to generate the CSR flags/masks. While at it unify the
-row, column, rank, bank and bank group macros names to be looking in the
-same way as the fields of the snps_ecc_error_info structure.
+On Fri, 19 Aug 2022 22:10:44 +0530, Akhil P Oommen wrote:
+> Add an optional reference to GPUCC reset which can be used to ensure cx
+> gdsc collapse during gpu recovery.
+> 
+> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> ---
+> 
+> Changes in v4:
+> - New patch in v4
+> 
+>  Documentation/devicetree/bindings/display/msm/gpu.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- drivers/edac/synopsys_edac.c | 124 +++++++++++++++++------------------
- 1 file changed, 61 insertions(+), 63 deletions(-)
-
-diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
-index 9ac0c8c4e3b8..bcef9672f700 100644
---- a/drivers/edac/synopsys_edac.c
-+++ b/drivers/edac/synopsys_edac.c
-@@ -6,6 +6,8 @@
-  * Copyright (C) 2012 - 2014 Xilinx, Inc.
-  */
- 
-+#include <linux/bits.h>
-+#include <linux/bitfield.h>
- #include <linux/edac.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-@@ -90,22 +92,19 @@
- #define DDR_MSTR_DEV_X8			0x1
- #define DDR_MSTR_DEV_X16		0x2
- #define DDR_MSTR_DEV_X32		0x3
--#define DDR_MSTR_BUSWIDTH_MASK		0x3000
--#define DDR_MSTR_BUSWIDTH_SHIFT		12
-+#define DDR_MSTR_BUSWIDTH_MASK		GENMASK(13, 12)
- #define DDRCTL_EWDTH_16			2
- #define DDRCTL_EWDTH_32			1
- #define DDRCTL_EWDTH_64			0
- 
- /* ECC CFG0 register definitions */
--#define ECC_CFG0_MODE_MASK		0x7
-+#define ECC_CFG0_MODE_MASK		GENMASK(2, 0)
- #define ECC_CFG0_MODE_SECDED		0x4
- 
- /* ECC status register definitions */
--#define ECC_STAT_UECNT_MASK		0xF0000
--#define ECC_STAT_UECNT_SHIFT		16
--#define ECC_STAT_CECNT_MASK		0xF00
--#define ECC_STAT_CECNT_SHIFT		8
--#define ECC_STAT_BITNUM_MASK		0x7F
-+#define ECC_STAT_UE_MASK		GENMASK(23, 16)
-+#define ECC_STAT_CE_MASK		GENMASK(15, 8)
-+#define ECC_STAT_BITNUM_MASK		GENMASK(6, 0)
- 
- /* ECC control/clear register definitions */
- #define ECC_CTRL_CLR_CE_ERR		BIT(0)
-@@ -116,49 +115,41 @@
- #define ECC_CTRL_EN_UE_IRQ		BIT(9)
- 
- /* ECC error count register definitions */
--#define ECC_ERRCNT_UECNT_MASK		0xFFFF0000
--#define ECC_ERRCNT_UECNT_SHIFT		16
--#define ECC_ERRCNT_CECNT_MASK		0xFFFF
-+#define ECC_ERRCNT_UECNT_MASK		GENMASK(31, 16)
-+#define ECC_ERRCNT_CECNT_MASK		GENMASK(15, 0)
- 
- /* DDR QOS Interrupt register definitions */
- #define DDR_QOS_IRQ_STAT_OFST		0x20200
--#define DDR_QOSUE_MASK			0x4
--#define	DDR_QOSCE_MASK			0x2
--#define	ECC_CE_UE_INTR_MASK		0x6
-+#define DDR_QOSUE_MASK			BIT(2)
-+#define DDR_QOSCE_MASK			BIT(1)
-+#define ECC_CE_UE_INTR_MASK		(DDR_QOSUE_MASK | DDR_QOSCE_MASK)
- #define DDR_QOS_IRQ_EN_OFST		0x20208
- #define DDR_QOS_IRQ_DB_OFST		0x2020C
- 
- /* ECC Corrected Error Register Mask and Shifts*/
--#define ECC_CEADDR0_RW_MASK		0x3FFFF
--#define ECC_CEADDR0_RNK_MASK		BIT(24)
--#define ECC_CEADDR1_BNKGRP_MASK		0x3000000
--#define ECC_CEADDR1_BNKNR_MASK		0x70000
--#define ECC_CEADDR1_COL_MASK		0xFFF
--#define ECC_CEADDR1_BNKGRP_SHIFT	24
--#define ECC_CEADDR1_BNKNR_SHIFT		16
-+#define ECC_CEADDR0_RANK_MASK		GENMASK(27, 24)
-+#define ECC_CEADDR0_ROW_MASK		GENMASK(17, 0)
-+#define ECC_CEADDR1_BANKGRP_MASK	GENMASK(25, 24)
-+#define ECC_CEADDR1_BANK_MASK		GENMASK(23, 16)
-+#define ECC_CEADDR1_COL_MASK		GENMASK(11, 0)
- 
- /* ECC Poison register shifts */
--#define ECC_POISON0_RANK_SHIFT		24
--#define ECC_POISON0_RANK_MASK		BIT(24)
--#define ECC_POISON0_COLUMN_SHIFT	0
--#define ECC_POISON0_COLUMN_MASK		0xFFF
--#define ECC_POISON1_BG_SHIFT		28
--#define ECC_POISON1_BG_MASK		0x30000000
--#define ECC_POISON1_BANKNR_SHIFT	24
--#define ECC_POISON1_BANKNR_MASK		0x7000000
--#define ECC_POISON1_ROW_SHIFT		0
--#define ECC_POISON1_ROW_MASK		0x3FFFF
-+#define ECC_POISON0_RANK_MASK		GENMASK(27, 24)
-+#define ECC_POISON0_COL_MASK		GENMASK(11, 0)
-+#define ECC_POISON1_BANKGRP_MASK	GENMASK(29, 28)
-+#define ECC_POISON1_BANK_MASK		GENMASK(26, 24)
-+#define ECC_POISON1_ROW_MASK		GENMASK(17, 0)
- 
- /* DDR Memory type defines */
--#define MEM_TYPE_DDR3			0x1
--#define MEM_TYPE_LPDDR3			0x8
--#define MEM_TYPE_DDR2			0x4
--#define MEM_TYPE_DDR4			0x10
--#define MEM_TYPE_LPDDR4			0x20
-+#define MEM_TYPE_DDR3			BIT(0)
-+#define MEM_TYPE_DDR2			BIT(2)
-+#define MEM_TYPE_LPDDR3			BIT(3)
-+#define MEM_TYPE_DDR4			BIT(4)
-+#define MEM_TYPE_LPDDR4			BIT(5)
- 
- /* DDRC ECC CE & UE poison mask */
--#define ECC_CEPOISON_MASK		0x3
--#define ECC_UEPOISON_MASK		0x1
-+#define ECC_CEPOISON_MASK		GENMASK(1, 0)
-+#define ECC_UEPOISON_MASK		BIT(0)
- 
- /* DDRC Device config shifts/masks */
- #define DDR_MAX_ROW_SHIFT		18
-@@ -303,38 +294,40 @@ static int snps_get_error_info(struct snps_edac_priv *priv)
- 	if (!regval)
- 		return 1;
- 
--	p->ceinfo.bitpos = (regval & ECC_STAT_BITNUM_MASK);
-+	p->ceinfo.bitpos = FIELD_GET(ECC_STAT_BITNUM_MASK, regval);
- 
- 	regval = readl(base + ECC_ERRCNT_OFST);
--	p->ce_cnt = regval & ECC_ERRCNT_CECNT_MASK;
--	p->ue_cnt = (regval & ECC_ERRCNT_UECNT_MASK) >> ECC_ERRCNT_UECNT_SHIFT;
-+	p->ce_cnt = FIELD_GET(ECC_ERRCNT_CECNT_MASK, regval);
-+	p->ue_cnt = FIELD_GET(ECC_ERRCNT_UECNT_MASK, regval);
- 	if (!p->ce_cnt)
- 		goto ue_err;
- 
- 	regval = readl(base + ECC_CEADDR0_OFST);
--	p->ceinfo.row = (regval & ECC_CEADDR0_RW_MASK);
-+	p->ceinfo.row = FIELD_GET(ECC_CEADDR0_ROW_MASK, regval);
-+
- 	regval = readl(base + ECC_CEADDR1_OFST);
--	p->ceinfo.bank = (regval & ECC_CEADDR1_BNKNR_MASK) >>
--					ECC_CEADDR1_BNKNR_SHIFT;
--	p->ceinfo.bankgrp = (regval & ECC_CEADDR1_BNKGRP_MASK) >>
--					ECC_CEADDR1_BNKGRP_SHIFT;
--	p->ceinfo.col = (regval & ECC_CEADDR1_COL_MASK);
-+	p->ceinfo.bank = FIELD_GET(ECC_CEADDR1_BANK_MASK, regval);
-+	p->ceinfo.bankgrp = FIELD_GET(ECC_CEADDR1_BANKGRP_MASK, regval);
-+	p->ceinfo.col = FIELD_GET(ECC_CEADDR1_COL_MASK, regval);
-+
- 	p->ceinfo.data = readl(base + ECC_CSYND0_OFST);
-+
- 	edac_dbg(2, "ECCCSYN0: 0x%08X ECCCSYN1: 0x%08X ECCCSYN2: 0x%08X\n",
- 		 readl(base + ECC_CSYND0_OFST), readl(base + ECC_CSYND1_OFST),
- 		 readl(base + ECC_CSYND2_OFST));
-+
- ue_err:
- 	if (!p->ue_cnt)
- 		goto out;
- 
- 	regval = readl(base + ECC_UEADDR0_OFST);
--	p->ueinfo.row = (regval & ECC_CEADDR0_RW_MASK);
-+	p->ueinfo.row = FIELD_GET(ECC_CEADDR0_ROW_MASK, regval);
-+
- 	regval = readl(base + ECC_UEADDR1_OFST);
--	p->ueinfo.bankgrp = (regval & ECC_CEADDR1_BNKGRP_MASK) >>
--					ECC_CEADDR1_BNKGRP_SHIFT;
--	p->ueinfo.bank = (regval & ECC_CEADDR1_BNKNR_MASK) >>
--					ECC_CEADDR1_BNKNR_SHIFT;
--	p->ueinfo.col = (regval & ECC_CEADDR1_COL_MASK);
-+	p->ueinfo.bankgrp = FIELD_GET(ECC_CEADDR1_BANKGRP_MASK, regval);
-+	p->ueinfo.bank = FIELD_GET(ECC_CEADDR1_BANK_MASK, regval);
-+	p->ueinfo.col = FIELD_GET(ECC_CEADDR1_COL_MASK, regval);
-+
- 	p->ueinfo.data = readl(base + ECC_UESYND0_OFST);
- 
- out:
-@@ -509,7 +502,8 @@ static bool snps_get_ecc_state(void __iomem *base)
- {
- 	u32 regval;
- 
--	regval = readl(base + ECC_CFG0_OFST) & ECC_CFG0_MODE_MASK;
-+	regval = readl(base + ECC_CFG0_OFST);
-+	regval = FIELD_GET(ECC_CFG0_MODE_MASK, regval);
- 
- 	return (regval == ECC_CFG0_MODE_SECDED);
- }
-@@ -699,13 +693,13 @@ static void snps_data_poison_setup(struct snps_edac_priv *priv)
- 	if (priv->rank_shift[0])
- 		rank = (hif_addr >> priv->rank_shift[0]) & BIT(0);
- 
--	regval = (rank << ECC_POISON0_RANK_SHIFT) & ECC_POISON0_RANK_MASK;
--	regval |= (col << ECC_POISON0_COLUMN_SHIFT) & ECC_POISON0_COLUMN_MASK;
-+	regval = FIELD_PREP(ECC_POISON0_RANK_MASK, rank) |
-+		 FIELD_PREP(ECC_POISON0_COL_MASK, col);
- 	writel(regval, priv->baseaddr + ECC_POISON0_OFST);
- 
--	regval = (bankgrp << ECC_POISON1_BG_SHIFT) & ECC_POISON1_BG_MASK;
--	regval |= (bank << ECC_POISON1_BANKNR_SHIFT) & ECC_POISON1_BANKNR_MASK;
--	regval |= (row << ECC_POISON1_ROW_SHIFT) & ECC_POISON1_ROW_MASK;
-+	regval = FIELD_PREP(ECC_POISON1_BANKGRP_MASK, bankgrp) |
-+		 FIELD_PREP(ECC_POISON1_BANK_MASK, bank) |
-+		 FIELD_PREP(ECC_POISON1_ROW_MASK, row);
- 	writel(regval, priv->baseaddr + ECC_POISON1_OFST);
- }
- 
-@@ -744,10 +738,14 @@ static ssize_t inject_data_poison_show(struct device *dev,
- {
- 	struct mem_ctl_info *mci = to_mci(dev);
- 	struct snps_edac_priv *priv = mci->pvt_info;
-+	const char *errstr;
-+	u32 regval;
-+
-+	regval = readl(priv->baseaddr + ECC_CFG1_OFST);
-+	errstr = FIELD_GET(ECC_CEPOISON_MASK, regval) == ECC_CEPOISON_MASK ?
-+		 "Correctable Error" : "UnCorrectable Error";
- 
--	return sprintf(data, "Data Poisoning: %s\n\r",
--			(((readl(priv->baseaddr + ECC_CFG1_OFST)) & 0x3) == 0x3)
--			? ("Correctable Error") : ("UnCorrectable Error"));
-+	return sprintf(data, "Data Poisoning: %s\n\r", errstr);
- }
- 
- static ssize_t inject_data_poison_store(struct device *dev,
-@@ -854,7 +852,7 @@ static void snps_setup_column_address_map(struct snps_edac_priv *priv, u32 *addr
- 	int index;
- 
- 	memtype = readl(priv->baseaddr + DDR_MSTR_OFST);
--	width = (memtype & DDR_MSTR_BUSWIDTH_MASK) >> DDR_MSTR_BUSWIDTH_SHIFT;
-+	width = FIELD_GET(DDR_MSTR_BUSWIDTH_MASK, memtype);
- 
- 	priv->col_shift[0] = 0;
- 	priv->col_shift[1] = 1;
--- 
-2.35.1
-
+Acked-by: Rob Herring <robh@kernel.org>

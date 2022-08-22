@@ -2,132 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8207A59C40A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF97F59C40E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236978AbiHVQX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S236986AbiHVQYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236971AbiHVQXy (ORCPT
+        with ESMTP id S235654AbiHVQYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:23:54 -0400
-Received: from mx0b-00364e01.pphosted.com (mx0b-00364e01.pphosted.com [148.163.139.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3F8E0BA
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:23:50 -0700 (PDT)
-Received: from pps.filterd (m0167074.ppops.net [127.0.0.1])
-        by mx0b-00364e01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27MGLfC4014271
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:23:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=mime-version :
- references : in-reply-to : from : date : message-id : subject : to : cc :
- content-type : content-transfer-encoding; s=pps01;
- bh=nNg3+xLbzEB5TIQhmklxgT3ZoTAReamxKtezVw1wVlM=;
- b=QW0lghpXxI7WrwuJAKReuBaF7WmB4egi+YS/QlFT0jBVVNNnE/fynb8y0fhw+HaflcLj
- uD5Gu0uGFCeTf6WYO1KfUsAtYskiqxgSmdx0BNk8QqlGqO9jswdmWFelOsY52vBUcO4B
- moO6uQeUrw2xIs/7ltzIBYyUsE69okT4ZkhLHdmt5UW/23BKmBEDjgWpTr5yYbX0Ffwh
- rpwoDlrBEACO/BSQ+8mt7/Au0OEAOnH1xZLneF6MEjnjjUH9MQMmpN4pUcJHZ+PWTJgt
- mpZLrkK8ho72owVxN62Y/mDM/aNzeW3fPxRNBeJQGFaw9kdfEyIFMtqYpkdfJLn9qyyB 1w== 
-Received: from sendprdmail21.cc.columbia.edu (sendprdmail21.cc.columbia.edu [128.59.72.23])
-        by mx0b-00364e01.pphosted.com (PPS) with ESMTPS id 3j2wj5bgwb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:23:49 -0400
-Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com [209.85.222.70])
-        by sendprdmail21.cc.columbia.edu (8.14.7/8.14.4) with ESMTP id 27MGNKCg097797
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:23:49 -0400
-Received: by mail-ua1-f70.google.com with SMTP id q8-20020ab054c8000000b00383a1b97212so2277749uaa.11
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:23:49 -0700 (PDT)
+        Mon, 22 Aug 2022 12:24:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2461440BF4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:24:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661185484;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z+8JZGtkVxOmbIeQgHkw8hE6eGekXQYn3qmLX4nEH6U=;
+        b=V20Jqrdc7BnugIBn6lnu7DJJ4hLLqgoUJlwifJpewMZrwiMcdrhfCNBrtbV6c08lRl61q3
+        ki/u8D5MurtroLqft84sH8pYZuLJJMnYRdYUkeiguy5bquuSoxsMfplkEye0azQd+Etl0h
+        /CFBqgAsBsc3/Aur5HM+N/0yuunlo7w=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-576-QHDiVHyIOqOO2fd1TJqwDA-1; Mon, 22 Aug 2022 12:24:43 -0400
+X-MC-Unique: QHDiVHyIOqOO2fd1TJqwDA-1
+Received: by mail-wm1-f70.google.com with SMTP id c25-20020a05600c0ad900b003a5ebad295aso2087540wmr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:24:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=nNg3+xLbzEB5TIQhmklxgT3ZoTAReamxKtezVw1wVlM=;
-        b=LCOqr/DsSxwll2CO5QekzjA+a3KveWL3m1en2yX5cQBKJliqi23Jqvw7RNmfKJuHNB
-         zNL6j0pM4CsyM7mWYiJfhf1tIhgDRqZH1QULfK5JQoGsdNDZzxhdGkhcLoeABpgXIAm+
-         bjKXgvxrMI7OxVzZHX/8DGqW/TYZSU8bcvMF/bIpRZ/HAoziDP/AIVkH4diPOuxWGQfJ
-         HnVYHF0pnCHcf4x3As0/YuHFgxyM+tmmXocBHvWmAKOBDpYGqc4CsJajBwMNjN8pwFTA
-         ALH4nZPFrXaNPly+4dw5NBdZfEhyyVrfT7hH/OyPryb+Z2znvw446BgtPy3l9b6JrbmM
-         KYXg==
-X-Gm-Message-State: ACgBeo3OYHgOytR6ho8BW0E1PKSLDdbOdFMcQhwmJ0nQU2DDAC5+tPvi
-        1VZ87J5wmA5CFTAcAoQx6ssDASp8syZtMmbi1o++oC65HIvogs7IpuE08SCGsxT76cg8AhJyI8w
-        UxXgrk+okQm8+EboY7YXvqrREwDCkIkFbU5YtJEiTkdZFbrfW
-X-Received: by 2002:a05:6102:5490:b0:380:3982:2f97 with SMTP id bk16-20020a056102549000b0038039822f97mr7406550vsb.84.1661185429042;
-        Mon, 22 Aug 2022 09:23:49 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5q6SPrJjxuIl18CZC1pulVqW+49GzrIat3iewIkEtcOWg2YVzMSKn7SNwOprCSHkZLtvOk+L0yvhDy4p0vwPI=
-X-Received: by 2002:a05:6102:5490:b0:380:3982:2f97 with SMTP id
- bk16-20020a056102549000b0038039822f97mr7406541vsb.84.1661185428835; Mon, 22
- Aug 2022 09:23:48 -0700 (PDT)
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=z+8JZGtkVxOmbIeQgHkw8hE6eGekXQYn3qmLX4nEH6U=;
+        b=V94ibThTVA89osZyaNY+98pQn9YnY40RdiNatJ3Ex9Cj+mp/comv25qYlGREGmQx7E
+         BvFoBrsY97mFjO2Yc60FGZNGNnuudN93BylcXIkFU4eAD/bDQlLt9H14P3rFiZJHMiu6
+         BEONdAXHghrqQSRLtcavxm25XvnvBBX+DNkOfRVnQxJDVW4vJtiLrjq1NiKn/L6vblXe
+         Shfw44BKb00I0PSkFZciFr+1agyLdtSa8rXRW+9qSa4niHsuMlYXc2UST0msPxtHzLe9
+         oycVlE64Y5fbTzVJa59IexTG+Mn+/LkRYkSiSLKZk0gkp2ochGMMXVwYh8LMM/Jz4F4m
+         YsmQ==
+X-Gm-Message-State: ACgBeo2fxnom70PeTrpe5G95VhTgb2xlfNO6zyMuXr59fQ5AGZXdVEnT
+        MgO/YV6EPCskT6nPkX/3xenqX8r9Qfnkamxa/R2/n6aZnvjqqXt1yeICatS5TU7RCQX8wnWmMh9
+        fWIrZUr2zCyvvw41Xi2PG5EXI9cFASvdQePblCd3KE+m+bvW9ZByCNhdl0dLQzvjZWTueYk0o8z
+        Tq
+X-Received: by 2002:a05:600c:4c21:b0:3a5:3c02:5f83 with SMTP id d33-20020a05600c4c2100b003a53c025f83mr12938085wmp.7.1661185481880;
+        Mon, 22 Aug 2022 09:24:41 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4JktIIM3YnkZ0hZg4t+vSbZRizc51oECyEp4vgtwebh5kaTgN4SZT2vRicR3YFSKegjL7eRQ==
+X-Received: by 2002:a05:600c:4c21:b0:3a5:3c02:5f83 with SMTP id d33-20020a05600c4c2100b003a53c025f83mr12938064wmp.7.1661185481675;
+        Mon, 22 Aug 2022 09:24:41 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id b18-20020a5d6352000000b002252751629dsm11907400wrw.24.2022.08.22.09.24.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 09:24:41 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 03/26] x86/hyperv: Update 'struct
+ hv_enlightened_vmcs' definition
+In-Reply-To: <YwOrG3W3zAZ7VNJu@google.com>
+References: <20220802160756.339464-1-vkuznets@redhat.com>
+ <20220802160756.339464-4-vkuznets@redhat.com>
+ <Yv5ZFgztDHzzIQJ+@google.com> <875yiptvsc.fsf@redhat.com>
+ <Yv59dZwP6rNUtsrn@google.com> <87czcsskkj.fsf@redhat.com>
+ <YwOrG3W3zAZ7VNJu@google.com>
+Date:   Mon, 22 Aug 2022 18:24:40 +0200
+Message-ID: <87bkscxn3r.fsf@redhat.com>
 MIME-Version: 1.0
-References: <CAEHB248ZfrhSr3V3Ag59fCPoBmm+O==mFrgq7xQipoSgew_Row@mail.gmail.com>
- <20220818192852.0934313f@gandalf.local.home>
-In-Reply-To: <20220818192852.0934313f@gandalf.local.home>
-From:   Gabriel Ryan <gabe@cs.columbia.edu>
-Date:   Mon, 22 Aug 2022 12:23:41 -0400
-Message-ID: <CALbthte5MZbXfWh05NqHOXvUWx9dLL7OxT9Lf7+aALiYb4u_5w@mail.gmail.com>
-Subject: Re: data-race in pcpu_alloc / pcpu_nr_pages
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Abhishek Shah <abhishek.shah@columbia.edu>,
-        linux-kernel@vger.kernel.org, mingo@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-GUID: sdPzr4egpu5duuL-uWXtaSL8kGl3NHxn
-X-Proofpoint-ORIG-GUID: sdPzr4egpu5duuL-uWXtaSL8kGl3NHxn
-X-CU-OB: Yes
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-22_10,2022-08-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 malwarescore=0 mlxscore=0 spamscore=0 priorityscore=1501
- lowpriorityscore=10 bulkscore=10 adultscore=0 clxscore=1015
- impostorscore=10 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2207270000 definitions=main-2208220070
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve,
+Sean Christopherson <seanjc@google.com> writes:
 
-Makes sense, thanks for taking the time to review this for us!
-
-Best,
-
-Gabe
-
-
-On Thu, Aug 18, 2022 at 7:28 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> On Mon, Aug 22, 2022, Vitaly Kuznetsov wrote:
+>> So I reached out to Microsoft and their answer was that for all these new
+>> eVMCS fields (including *PerfGlobalCtrl) observing architectural VMX
+>> MSRs should be enough. *PerfGlobalCtrl case is special because of Win11
+>> bug (if we expose the feature in VMX feature MSRs but don't set
+>> CPUID.0x4000000A.EBX BIT(0) it just doesn't boot).
 >
-> On Thu, 18 Aug 2022 18:29:00 -0400
-> Abhishek Shah <abhishek.shah@columbia.edu> wrote:
->
-> > Hi all,
-> >
-> > We found a race involving the *pcpu_nr_populated *variable. We discover=
-ed
-> > that the racing variable is used in meminfo_proc_show
-> > <https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__elixir.bootlin.=
-com_linux_v5.18-2Drc5_source_fs_proc_meminfo.c-23L123&d=3DDwICAg&c=3D009klH=
-SCxuh5AI1vNQzSO0KGjl4nbi2Q0M1QLJX9BeE&r=3DEyAJYRJu01oaAhhVVY3o8zKgZvacDAXd_=
-PNRtaqACCo&m=3DJaafDoHfUv9wBvITwFrxb8GW82J0sFuH-p1ItZM6jxU4b2c4UzG6SAgIIAX_=
-vLz9&s=3DAHf4mjYOVq3qPnt65oFSjl4kztRIYFGagjntxAqUFWE&e=3D  >,
-> > but we were not sure if there were other security-relevant implications=
- of
-> > this race. Please let us know what you think.
->
-> So you see that the number displayed in meminfo can be written to while
-> it's being read?  As it's a long value, it is likely to be accurate (the
-> value before or after the update). pcpu_nr_pages() is only used to displa=
-y
-> the number of pages in meminfo.
->
-> I don't see any problem here.
->
-> -- Steve
+> Does this mean that KVM-on-HyperV needs to avoid using the PERF_GLOBAL_CTRL fields
+> when the bit is not set?
 
---=20
-Gabriel Ryan
-PhD Candidate at Columbia University
+It doesn't have to, based on the reply I got from Microsoft, if 
+PERF_GLOBAL_CTRL is exposed in architectural VMX feature MSRs than eVMCS
+fields are guaranteed to be present. The PV bit is 'extra'.
+
+-- 
+Vitaly
+

@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DEE59C8F3
+	by mail.lfdr.de (Postfix) with ESMTP id A9E2559C8F5
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238792AbiHVTcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 15:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
+        id S238707AbiHVTdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 15:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239147AbiHVTa6 (ORCPT
+        with ESMTP id S239494AbiHVTbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 15:30:58 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7DA1DA69;
-        Mon, 22 Aug 2022 12:26:41 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id h22so12954744ejk.4;
-        Mon, 22 Aug 2022 12:26:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=34B6ZerjP73aR6id6f0RzGACZQ2hivLWBiIjVWGXY18=;
-        b=Sw7nurMhQNzh2Ro2WO/7hDZvbDJWnymb8aEHmWyPcPtzZFf0xh55xykAysGabanPx8
-         bwR3E9cvmCjyv5skEtJrII0H5kSOQZ98reJCYQz2sGAlF85pQLWHILn2iXDAyLcjLC23
-         G+pxFizeSoyncxtrvkY0d8xy8kFYIsAXgClTe+RH79TF+nE5WdDdWK18MF9a6O/QvvZF
-         r6muGcUzeasHJAh3E4obaF6CDJyBtA9kt/NdSuWS+bO2mMZhnGoFHeH02NGnT0T7RSTG
-         MplNH/KyclIsIiMODOxj+WHkvBbRMLMeoAxOVzb4++n8wAewuL+8lsBAJjQZhvGWBvHE
-         zHIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=34B6ZerjP73aR6id6f0RzGACZQ2hivLWBiIjVWGXY18=;
-        b=7Df5sUivcSgfTO70xiKLYx+c+aZASqKm7gYio1PqP9aECMbImJAxtNr6Mmof7vOTbu
-         0DRJtIa3IcEK93enl48f8M0Oo69uWVqhgMRNx32Uedug0GKr5oeR5kc4JMmS01HSikKo
-         koHlRl3xDzjGFXY0X9D4XJcJLJWw+Ayx/Hyv7uFo+95fXla6u8lQ1Ax10VLkqA7HiaG/
-         nY6sxiUQHLDQI9x/6XPLm54UHf14A9ez8i2+6EtLqVDUnW/AUPdc9lIgAh3xk9ZtLGxs
-         p5NuCQroOUxyp169lVYEiYyoLJr5Oukc+ko0Y05e/K2Jv40WR60EUwVqo9exIvlr5bf0
-         j4Xg==
-X-Gm-Message-State: ACgBeo0wsD8gjCjj2qyNSUQIZcOMbPqePkf/4ZkwHavJhJpplv7uhj2u
-        xLbFYp86TKuZeKVXnbzHzzc=
-X-Google-Smtp-Source: AA6agR7IwMlgtrcN3HByLXR3b2uPu3TTKrTqwjGyDMZq9RruqDF1DlexxH1hQj9n0MYiZP/6PDBqnw==
-X-Received: by 2002:a17:907:a056:b0:73d:5b60:5aae with SMTP id gz22-20020a170907a05600b0073d5b605aaemr9173089ejc.238.1661196399927;
-        Mon, 22 Aug 2022 12:26:39 -0700 (PDT)
-Received: from nuc ([2a02:168:633b:1:1e69:7aff:fe05:97e6])
-        by smtp.gmail.com with ESMTPSA id z22-20020a170906435600b007308812ce89sm6611027ejm.168.2022.08.22.12.26.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 12:26:39 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 21:26:37 +0200
-From:   =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     mic@digikod.net, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, corbet@lwn.net,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH -next 3/5] landlock/selftests: add selftests for chmod
- and chown
-Message-ID: <YwPYbY/HbHTOv7Ux@nuc>
-References: <20220822114701.26975-1-xiujianfeng@huawei.com>
- <20220822114701.26975-4-xiujianfeng@huawei.com>
+        Mon, 22 Aug 2022 15:31:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2391F1D330;
+        Mon, 22 Aug 2022 12:29:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3B5760BC5;
+        Mon, 22 Aug 2022 19:29:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD7CC433C1;
+        Mon, 22 Aug 2022 19:29:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661196573;
+        bh=EUirQLLNP7hOsCjZnx2sV4TuIc9Zb4vvS+mAipxKh2M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uvPiSS4beKT9aG7xQ8zSwQTtIFHPhjUQt4piTXo/fIWLTvu17nhdOvsq+ZeYJe9Te
+         7OI0SqqDR3B8cyIBdujMHDWtzE01y5K2LdVq3GnNtXbiiiuIO+XRDOH5d4R4ZI+46R
+         lYsH/D9Nmnbegl1CTYfDJqS+NBHiWY4KGNgPRWi/nZDapM1y0XQU3b6BJw77j+6Tp6
+         gvDRnzKaFNxJl8Zi+nT7V74OxALy5+Ias1HxWaK6yqn2K2fLoZPryeiDISS/Rdpdig
+         Mnd6rjmC1yikw8eljMhFKVg8u8wZLVCpRg28w1PTtseAxldYuGbigqjFpgfTBlDAVh
+         KwoaQjcFYtziQ==
+Date:   Mon, 22 Aug 2022 20:29:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Rob Herring <robh+dt@kernel.org>, Pratyush Yadav <p.yadav@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Herve Codina <herve.codina@bootlin.com>
+Subject: Re: [PATCH v2 2/2] spi: fsl-spi: Implement trailing bits
+Message-ID: <YwPZF6fjZkn2tozH@sirena.org.uk>
+References: <cover.1646060734.git.christophe.leroy@csgroup.eu>
+ <fe4a3946a66ede73f6d6871700f2aaf0171372a1.1646060734.git.christophe.leroy@csgroup.eu>
+ <YhzqbYW1q5bPNWXn@sirena.org.uk>
+ <7afaab3d-50e0-4716-18d4-41eabc2a9cb9@csgroup.eu>
+ <Yhz0/1kiAy7Mlgtv@sirena.org.uk>
+ <f9046e68-ff22-2652-48dc-d277b4af75dd@csgroup.eu>
+ <YwO5l/KpXoKJVawq@sirena.org.uk>
+ <c4950a61-ba9a-5897-1f04-bb2c56979d7d@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WLYBq0WlMGbH0CuE"
 Content-Disposition: inline
-In-Reply-To: <20220822114701.26975-4-xiujianfeng@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c4950a61-ba9a-5897-1f04-bb2c56979d7d@csgroup.eu>
+X-Cookie: Do not write in this space.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 07:46:59PM +0800, Xiu Jianfeng wrote:
-> +TEST_F_FORK(layout1, unhandled_chmod)
-> +{
-> +	const struct rule rules[] = {
-> +		{
-> +			.path = file2_s3d1,
-> +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
-> +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
-> +		},
-> +		{
-> +			.path = file3_s3d1,
-> +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
-> +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
-> +		},
-> +		{},
-> +	};
-> +	const int ruleset_fd =
-> +		create_ruleset(_metadata, ACCESS_RW, rules);
-> +
-> +	ASSERT_LE(0, ruleset_fd);
-> +	enforce_ruleset(_metadata, ruleset_fd);
-> +	ASSERT_EQ(0, close(ruleset_fd));
-> +
-> +	ASSERT_EQ(0, test_chmod(file2_s3d1));
-> +	ASSERT_EQ(0, test_fchmod(file2_s3d1));
-> +	ASSERT_EQ(0, test_chmod(file3_s3d1));
-> +	ASSERT_EQ(0, test_chmod(dir_s3d1));
-> +}
 
-I missed it in the previous mail:
+--WLYBq0WlMGbH0CuE
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There are also the chown variants lchown() and fchownat(), as well as
-the chmod variant fchmodat(), which might be interesting to test,
-especially the symlink scenarios.
+On Mon, Aug 22, 2022 at 06:38:22PM +0000, Christophe Leroy wrote:
+> Le 22/08/2022 =E0 19:15, Mark Brown a =E9crit=A0:
 
-fchmodat() has a AT_SYMLINK_NOFOLLOW flag which does the chmod
-equivalent to lchown().
+> I think we already addressed this possibility back in 2016, see=20
+> https://lore.kernel.org/linux-spi/20160824111206.GD22076@sirena.org.uk/
 
---
+> The conclusion was that it was not possible to accomplish it with cs_chan=
+ge.
+
+> Or did we miss something at that time ?
+
+No, I think that's fine - your proposal has some overlap but is fine.
+
+--WLYBq0WlMGbH0CuE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMD2RcACgkQJNaLcl1U
+h9BpjAgAgbRxXDYgdu9wb/vJghve0BVH9SPSVadgMxYQGWp/LeFlTbnpbFIM+53F
+04wyp3cbGJFllREDxptRBug9rySiuAsRtHD+CkEqz7ztgR8h8qxwjuUDmdjGyaYO
+Bw8Luc+BYePG940V3niAE1zza9E15MdDKOpKtcCYxaEzL7WENT98fF1FILjRqAqM
+PpRYeDMAmTUyLUmmSnVNHUtYLIhTfahDtI/Zn2mYpZ2OQ0YHv+BP3+yhcWZGsJ0P
+2XuYxkl61A42nU3TysJoVEkqd0Xjx2iEFAt2g4L8xyydz1RH1WIHOE2sYgrCWQs9
+wiy6bp2p2KbV8Jjt2os2Vpm7eLAYtQ==
+=vpgG
+-----END PGP SIGNATURE-----
+
+--WLYBq0WlMGbH0CuE--

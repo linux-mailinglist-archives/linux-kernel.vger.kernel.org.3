@@ -2,90 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED04959BCBF
+	by mail.lfdr.de (Postfix) with ESMTP id A5CAA59BCBE
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234348AbiHVJWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 05:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S234364AbiHVJXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234191AbiHVJW2 (ORCPT
+        with ESMTP id S234363AbiHVJWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 05:22:28 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817A32D1E1;
-        Mon, 22 Aug 2022 02:21:48 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MB6J13D1RznTl8;
-        Mon, 22 Aug 2022 17:19:29 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 22 Aug 2022 17:21:46 +0800
-Subject: Re: [PATCH] mm/hugetlb: remove unused local variable dst_entry in
- copy_hugetlb_page_range()
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-CC:     kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220822082525.26071-1-lukas.bulwahn@gmail.com>
- <08fec67b-788e-1c9e-606e-903db3bcad67@huawei.com>
- <CAKXUXMysz=6NHq6tJcxHbm5vy4usVq2XEDp9q+ydmcHcqGw94A@mail.gmail.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <5450a153-382d-7476-8674-4a615d08eebe@huawei.com>
-Date:   Mon, 22 Aug 2022 17:21:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 22 Aug 2022 05:22:33 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAB3103B;
+        Mon, 22 Aug 2022 02:22:13 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 09:22:10 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1661160131;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WqD4dwkcta/FIB4mvo8R8Bl3bXln57ojkCv8je5A1Xo=;
+        b=b3koV1ZL/Y+u6wqLAxXqWJkDvTiX9Mw9Qw7P+uAp4nBHbGviRfDLlspjxVumZOB4s1OTl7
+        /t7+FRnNSsTm2Np9oAL081PLknCHxeWp+Iufc2wd7ZtNBVYe4Z5Ju7Ho8a3a1FcnschPR/
+        onlgEFfNYqMtdWd1iMNM1D7dMyfqlNuQAVhhXB1h2k7MynTGh1Szmz5JfvO02ZJYzJDxvR
+        vnuGBMjadtZE6cN97EoXFbhSJB/oCtselE8nsTvrVrNsR+xXlkKQ8xkykfBMIgmHFGjjHE
+        JnB9VMzkDWuRmlsJXs2f+fXItFnCug6Gf92AtJp8EGiQ6a61y3aWYuS1unpLpw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1661160131;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WqD4dwkcta/FIB4mvo8R8Bl3bXln57ojkCv8je5A1Xo=;
+        b=G0+0/Hzyl9yY7K/BAoosChrGo/02K9cD2nuftLQ77aJWrSGpI/r+Q8i/F9s4v25Eob35ez
+        MYVBNDkzNCsKBwAA==
+From:   "tip-bot2 for Namhyung Kim" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: locking/core] locking: Add __lockfunc to slow path functions
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220810220346.1919485-1-namhyung@kernel.org>
+References: <20220810220346.1919485-1-namhyung@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAKXUXMysz=6NHq6tJcxHbm5vy4usVq2XEDp9q+ydmcHcqGw94A@mail.gmail.com>
+Message-ID: <166116013010.401.3026894317996177541.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/22 17:05, Lukas Bulwahn wrote:
-> On Mon, Aug 22, 2022 at 10:51 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->>
->> On 2022/8/22 16:25, Lukas Bulwahn wrote:
->>> Commit a0e4f7b82610 ("mm/hugetlb: make detecting shared pte more reliable")
->>> modifies copy_hugetlb_page_range() such that huge_ptep_get(dst_pte) and the
->>> local variable dst_entry is not used explicitly in this function.
->>>
->>> Remove this unused local variable dst_entry in copy_hugetlb_page_range().
->>> No functional change.
->>>
->>> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
->>
->> LGTM. Thanks for your patch.
->>
->> Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
->>
->> BTW: I will send a v2 of that series soon. So the above commit id might change.
->>
-> 
-> Feel free to just squash this code improvement into your next v2 patch.
+The following commit has been merged into the locking/core branch of tip:
 
-Will do it. Thanks for your report and cleanup.
+Commit-ID:     501f7f69bca195da266de83eb2c26c30813fba97
+Gitweb:        https://git.kernel.org/tip/501f7f69bca195da266de83eb2c26c30813fba97
+Author:        Namhyung Kim <namhyung@kernel.org>
+AuthorDate:    Wed, 10 Aug 2022 15:03:46 -07:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Fri, 19 Aug 2022 19:47:51 +02:00
 
-Thanks,
-Miaohe Lin
+locking: Add __lockfunc to slow path functions
 
-> 
-> Lukas
-> .
-> 
+So that we can skip the functions in the perf lock contention and other
+places like /proc/PID/wchan.
 
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Waiman Long <longman@redhat.com>
+Link: https://lore.kernel.org/r/20220810220346.1919485-1-namhyung@kernel.org
+---
+ arch/x86/include/asm/qspinlock_paravirt.h | 13 +++++++------
+ kernel/locking/qrwlock.c                  |  4 ++--
+ kernel/locking/qspinlock.c                |  2 +-
+ kernel/locking/qspinlock_paravirt.h       |  4 ++--
+ 4 files changed, 12 insertions(+), 11 deletions(-)
+
+diff --git a/arch/x86/include/asm/qspinlock_paravirt.h b/arch/x86/include/asm/qspinlock_paravirt.h
+index 892fd8c..60ece59 100644
+--- a/arch/x86/include/asm/qspinlock_paravirt.h
++++ b/arch/x86/include/asm/qspinlock_paravirt.h
+@@ -12,7 +12,7 @@
+  */
+ #ifdef CONFIG_64BIT
+ 
+-PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock_slowpath);
++__PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock_slowpath, ".spinlock.text");
+ #define __pv_queued_spin_unlock	__pv_queued_spin_unlock
+ #define PV_UNLOCK		"__raw_callee_save___pv_queued_spin_unlock"
+ #define PV_UNLOCK_SLOWPATH	"__raw_callee_save___pv_queued_spin_unlock_slowpath"
+@@ -20,9 +20,10 @@ PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock_slowpath);
+ /*
+  * Optimized assembly version of __raw_callee_save___pv_queued_spin_unlock
+  * which combines the registers saving trunk and the body of the following
+- * C code:
++ * C code.  Note that it puts the code in the .spinlock.text section which
++ * is equivalent to adding __lockfunc in the C code:
+  *
+- * void __pv_queued_spin_unlock(struct qspinlock *lock)
++ * void __lockfunc __pv_queued_spin_unlock(struct qspinlock *lock)
+  * {
+  *	u8 lockval = cmpxchg(&lock->locked, _Q_LOCKED_VAL, 0);
+  *
+@@ -36,7 +37,7 @@ PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock_slowpath);
+  *   rsi = lockval           (second argument)
+  *   rdx = internal variable (set to 0)
+  */
+-asm    (".pushsection .text;"
++asm    (".pushsection .spinlock.text;"
+ 	".globl " PV_UNLOCK ";"
+ 	".type " PV_UNLOCK ", @function;"
+ 	".align 4,0x90;"
+@@ -65,8 +66,8 @@ asm    (".pushsection .text;"
+ 
+ #else /* CONFIG_64BIT */
+ 
+-extern void __pv_queued_spin_unlock(struct qspinlock *lock);
+-PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock);
++extern void __lockfunc __pv_queued_spin_unlock(struct qspinlock *lock);
++__PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock, ".spinlock.text");
+ 
+ #endif /* CONFIG_64BIT */
+ #endif
+diff --git a/kernel/locking/qrwlock.c b/kernel/locking/qrwlock.c
+index 2e16009..d2ef312 100644
+--- a/kernel/locking/qrwlock.c
++++ b/kernel/locking/qrwlock.c
+@@ -18,7 +18,7 @@
+  * queued_read_lock_slowpath - acquire read lock of a queued rwlock
+  * @lock: Pointer to queued rwlock structure
+  */
+-void queued_read_lock_slowpath(struct qrwlock *lock)
++void __lockfunc queued_read_lock_slowpath(struct qrwlock *lock)
+ {
+ 	/*
+ 	 * Readers come here when they cannot get the lock without waiting
+@@ -63,7 +63,7 @@ EXPORT_SYMBOL(queued_read_lock_slowpath);
+  * queued_write_lock_slowpath - acquire write lock of a queued rwlock
+  * @lock : Pointer to queued rwlock structure
+  */
+-void queued_write_lock_slowpath(struct qrwlock *lock)
++void __lockfunc queued_write_lock_slowpath(struct qrwlock *lock)
+ {
+ 	int cnts;
+ 
+diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
+index 65a9a10..2b23378 100644
+--- a/kernel/locking/qspinlock.c
++++ b/kernel/locking/qspinlock.c
+@@ -313,7 +313,7 @@ static __always_inline u32  __pv_wait_head_or_lock(struct qspinlock *lock,
+  * contended             :    (*,x,y) +--> (*,0,0) ---> (*,0,1) -'  :
+  *   queue               :         ^--'                             :
+  */
+-void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
++void __lockfunc queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+ {
+ 	struct mcs_spinlock *prev, *next, *node;
+ 	u32 old, tail;
+diff --git a/kernel/locking/qspinlock_paravirt.h b/kernel/locking/qspinlock_paravirt.h
+index e84d21a..6afc249 100644
+--- a/kernel/locking/qspinlock_paravirt.h
++++ b/kernel/locking/qspinlock_paravirt.h
+@@ -489,7 +489,7 @@ gotlock:
+  * PV versions of the unlock fastpath and slowpath functions to be used
+  * instead of queued_spin_unlock().
+  */
+-__visible void
++__visible __lockfunc void
+ __pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
+ {
+ 	struct pv_node *node;
+@@ -544,7 +544,7 @@ __pv_queued_spin_unlock_slowpath(struct qspinlock *lock, u8 locked)
+ #include <asm/qspinlock_paravirt.h>
+ 
+ #ifndef __pv_queued_spin_unlock
+-__visible void __pv_queued_spin_unlock(struct qspinlock *lock)
++__visible __lockfunc void __pv_queued_spin_unlock(struct qspinlock *lock)
+ {
+ 	u8 locked;
+ 

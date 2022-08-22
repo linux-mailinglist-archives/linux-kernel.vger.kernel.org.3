@@ -2,96 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED3159BF91
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BDC59BF93
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233602AbiHVMhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 08:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S235084AbiHVMiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 08:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbiHVMht (ORCPT
+        with ESMTP id S230503AbiHVMiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:37:49 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31D432EC4;
-        Mon, 22 Aug 2022 05:37:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661171869; x=1692707869;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=e3JlxpdhiD9UYCrKvjGxLM7DfMY6XOiLi0Am25BRKKM=;
-  b=g9MGVxQ35MxG8BfOdm6Wy0iROMoRFqPcr9i6cW9AXiUDL/3eO9Pn4TAs
-   EF9cV/NmYRkb0SFpYYxOEhVIbr0SX4OroP9oKs7goUOWZ633uBxrmrGII
-   78/l85xz6JcWn20ZPZAq+7phfKOwqvJFEQd1wrvQzXXrCuffd0YAN6VgD
-   w=;
-X-IronPort-AV: E=Sophos;i="5.93,254,1654560000"; 
-   d="scan'208";a="122087194"
-Subject: Re: [PATCH v2 06/16] hwmon: (mr75203) fix multi-channel voltage reading
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 12:37:28 +0000
-Received: from EX13MTAUEB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-388992e0.us-west-2.amazon.com (Postfix) with ESMTPS id 40D0EE04FA;
-        Mon, 22 Aug 2022 12:37:27 +0000 (UTC)
-Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
- EX13MTAUEB001.ant.amazon.com (10.43.60.96) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 22 Aug 2022 12:37:25 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Mon, 22 Aug 2022 12:37:24 +0000
-Received: from [10.220.236.67] (10.220.236.67) by mail-relay.amazon.com
- (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Mon, 22 Aug 2022 12:37:21 +0000
-Message-ID: <dd7eaa83-d8b4-c744-1611-d7b504e27a15@amazon.com>
-Date:   Mon, 22 Aug 2022 15:37:20 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
-        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
-        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
-        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>,
-        "Farber, Eliav" <farbere@amazon.com>
-References: <20220817054321.6519-1-farbere@amazon.com>
- <20220817054321.6519-7-farbere@amazon.com>
- <20220818200350.GA3287916@roeck-us.net>
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <20220818200350.GA3287916@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 22 Aug 2022 08:38:17 -0400
+Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559E212C
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 05:38:13 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1661171890; bh=wS7eBcU6IrGgczgQRn/ar+Ts2JGTgJKTlU4UR4ZP25U=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=bzkKcz9aP0I6aeaU5C1aSTqv5/6IwA5HePKFdPxuaNr0X09HB12RFYLdDjGvKHbLI
+         Im5zOhghXB6T4gVQMpk+IpcIBkcOQTaJdnbfoKRWr+Gn6nCWvq1N3gcxnRiAzVOJtG
+         zVmVJXE0fP6qDFTxoOVix9nG9fk7IOsRP9q5DzsE=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH] ASoC: dapm: Export new 'graph.dot' file in debugfs
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
+In-Reply-To: <YwN2Pd4Ez08yDFno@sirena.org.uk>
+Date:   Mon, 22 Aug 2022 14:38:09 +0200
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3234D74E-0DFF-4BB5-87ED-6135BAC1F31D@cutebit.org>
+References: <20220822095242.3779-1-povik+lin@cutebit.org>
+ <YwN2Pd4Ez08yDFno@sirena.org.uk>
+To:     Mark Brown <broonie@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/18/2022 11:03 PM, Guenter Roeck wrote:
-> On Wed, Aug 17, 2022 at 05:43:11AM +0000, Eliav Farber wrote:
->> - Fix voltage reading to support number of channels in VM IP (CH_NUM).
->> - Configure the ip-polling register to enable polling for all channels.
->>
->
-> That fails to explain what is actually wrong in the current code.
-> Also, one fix per patch, please.
-I moved the configuration of the ip-polling register to a separate patch.
 
-The problem in the current code is that it allocates in_config according
-to the total number of voltage monitors and not according to the total
-number of channels in all voltage monitors.
-Therefore it didn’t create enough sysfs to read all inputs.
-Also pvr_read_in() only tries to access the first channel in each voltage
-monitor.
-I will add this explanation to next version.
+> On 22. 8. 2022, at 14:27, Mark Brown <broonie@kernel.org> wrote:
+>=20
+> On Mon, Aug 22, 2022 at 11:52:42AM +0200, Martin Povi=C5=A1er wrote:
+>=20
+>> Provide a DOT summary of the DAPM graph in a newly added 'graph.dot'
+>> file in debugfs, placed in the card's DAPM directory.
+>=20
+> There was a tool floating about in the past (last copy I knew about =
+was
+> on Wolfson's git but they took that down) - can we not just continue =
+to
+> do that?
 
---
-Thanks, Eliav
+I don=E2=80=99t know the tool or where would I find it. I think it=E2=80=99=
+s neat
+simply having a =E2=80=98graph.dot=E2=80=99 at hand, especially since it =
+requires
+little code. (Although sure there=E2=80=99s the danger of it growing.)
+
+Martin
+

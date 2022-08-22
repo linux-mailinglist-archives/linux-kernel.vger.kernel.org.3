@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C8959C150
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB94259C151
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 16:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235593AbiHVOGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 10:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
+        id S235614AbiHVOGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 10:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235465AbiHVOGI (ORCPT
+        with ESMTP id S234215AbiHVOGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 10:06:08 -0400
+        Mon, 22 Aug 2022 10:06:09 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150CA26AD6;
-        Mon, 22 Aug 2022 07:06:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8D725290;
+        Mon, 22 Aug 2022 07:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661177167; x=1692713167;
+  t=1661177168; x=1692713168;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=WxpzUL26H200ZgJ78BIfcOFc7J6X4Yom54/sexDTpps=;
-  b=V9dAV//gmkKFcRUhW6Pf0wfHKAetHq10jdfnzIKN074FSbcWL2IXhQVE
-   OWPPTg6jsPkLNf7YyvVWw6UbMI8pWpnsQ9xg0QIYYBSRLBOpdEcbl9Rwz
-   VobHP6d/hMOuPAcKIOmAlllquM62Fa6h+m4LKM66X7CNGZWK0+3Igcn0T
-   kYRBLKIyLv891M0H1ZNonm82Xq1s+2JNLOJ+03lKjOaQSQNA+1f1BzukU
-   1qTriRrM8U3T7ecqGvcjpxyh4Vbt/J14y83c6VMHvHwSiB/E7s4lOOnPM
-   cRiIyfDa0l6JQh+PNcAipdSkqYGA5zjnpU4Orbavbp8ippBDSG615+hye
+  bh=TLxCowTuiycxIkNM4i5ZvR8SCdmJF+q2NSnhQlqLy2o=;
+  b=ajS2tn7k87EzQkGf1k9HJiZErqK73B4/n4sLoVpq9TFc/1gHy9BvPGJ3
+   N4OTK4aevVxkxsO3DNnqQEunF2dMfkjoE8MEfQTkoLE1K8VGh0tlm8PlL
+   6qxxab8cRYnpmERETsBHAQ//A2hH5ui+NDw9UyMczijVj+KDPn8co2in4
+   L9EyoI/ybw9jCd9alSQIT+c2CPq0TaLdbD3D1u5n+p9dyv5CHR+ohww1Y
+   JcX+NQRemoLiHThUg2xLsbavHg/pBzIJKij6I5AnzZb66cM82eXto6fFU
+   xJY5IKdm1638mlMZZjSZqBLKzwKLHvqodw3f7Wi8FqeEAGVxokiGc78nx
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="294209617"
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="294209621"
 X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="294209617"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+   d="scan'208";a="294209621"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 07:05:40 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="937051599"
+   d="scan'208";a="698297865"
 Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Aug 2022 07:05:37 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Aug 2022 07:05:38 -0700
 Received: from kbuild by dd9b29378baa with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oQ83d-0000CR-19;
+        id 1oQ83d-0000CX-1L;
         Mon, 22 Aug 2022 14:05:37 +0000
-Date:   Mon, 22 Aug 2022 22:05:02 +0800
+Date:   Mon, 22 Aug 2022 22:05:04 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "D. Starke" <daniel.starke@siemens.com>,
-        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     kbuild-all@lists.01.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: Re: [PATCH 3/6] tty: n_gsm: replace use of gsm_read_ea() with
- gsm_read_ea_val()
-Message-ID: <202208222147.WfFRmf1r-lkp@intel.com>
-References: <20220822072138.3123-3-daniel.starke@siemens.com>
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+Subject: Re: [PATCH] soc: qcom: qmi: use const for struct qmi_elem_info
+Message-ID: <202208222141.fcwTIcFt-lkp@intel.com>
+References: <20220822064648.30794-1-quic_jjohnson@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220822072138.3123-3-daniel.starke@siemens.com>
+In-Reply-To: <20220822064648.30794-1-quic_jjohnson@quicinc.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -68,109 +68,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Starke",
+Hi Jeff,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on linus/master v6.0-rc2 next-20220822]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.0-rc2 next-20220822]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/D-Starke/tty-n_gsm-add-enumeration-for-gsm-encodings/20220822-152532
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: i386-randconfig-a003-20220822 (https://download.01.org/0day-ci/archive/20220822/202208222147.WfFRmf1r-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Johnson/soc-qcom-qmi-use-const-for-struct-qmi_elem_info/20220822-144905
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 1c23f9e627a7b412978b4e852793c5e3c3efc555
+config: nios2-randconfig-s051-20220821 (https://download.01.org/0day-ci/archive/20220822/202208222141.fcwTIcFt-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 12.1.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/66ec0ad14dba76f793ec89ecdc7e6d7b3c550873
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/84f0de3071b40fad5e5a48ad27b16ce28f9210fb
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review D-Starke/tty-n_gsm-add-enumeration-for-gsm-encodings/20220822-152532
-        git checkout 66ec0ad14dba76f793ec89ecdc7e6d7b3c550873
+        git fetch --no-tags linux-review Jeff-Johnson/soc-qcom-qmi-use-const-for-struct-qmi_elem_info/20220822-144905
+        git checkout 84f0de3071b40fad5e5a48ad27b16ce28f9210fb
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/tty/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/soc/qcom/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+sparse warnings: (new ones prefixed by >>)
+>> drivers/soc/qcom/qmi_encdec.c:94:16: sparse: sparse: incorrect type in return expression (different modifiers) @@     expected struct qmi_elem_info * @@     got struct qmi_elem_info const *[assigned] temp_ei @@
+   drivers/soc/qcom/qmi_encdec.c:94:16: sparse:     expected struct qmi_elem_info *
+   drivers/soc/qcom/qmi_encdec.c:94:16: sparse:     got struct qmi_elem_info const *[assigned] temp_ei
 
->> drivers/tty/n_gsm.c:1928:34: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-                   pr_debug("%d bytes for tty\n", len);
-                                                  ^~~
-   include/linux/printk.h:588:26: note: expanded from macro 'pr_debug'
-           dynamic_pr_debug(fmt, ##__VA_ARGS__)
-                                   ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:163:22: note: expanded from macro 'dynamic_pr_debug'
-                              pr_fmt(fmt), ##__VA_ARGS__)
-                                             ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
-           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
-                                                                 ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
-                   func(&id, ##__VA_ARGS__);               \
-                               ^~~~~~~~~~~
-   drivers/tty/n_gsm.c:1925:9: note: initialize the variable 'len' to silence this warning
-           int len;
-                  ^
-                   = 0
-   1 warning generated.
+vim +94 drivers/soc/qcom/qmi_encdec.c
 
-
-vim +/len +1928 drivers/tty/n_gsm.c
-
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1907  
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1908  /**
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1909   *	gsm_dlci_data		-	data arrived
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1910   *	@dlci: channel
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1911   *	@data: block of bytes received
-724ac070ffc7a1 drivers/tty/n_gsm.c  Jiri Slaby          2020-08-18  1912   *	@clen: length of received block
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1913   *
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1914   *	A UI or UIH frame has arrived which contains data for a channel
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1915   *	other than the control channel. If the relevant virtual tty is
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1916   *	open we shovel the bits down it, if not we drop them.
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1917   */
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1918  
-4feb7a4a124444 drivers/tty/n_gsm.c  Tony Lindgren       2019-01-13  1919  static void gsm_dlci_data(struct gsm_dlci *dlci, const u8 *data, int clen)
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1920  {
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1921  	/* krefs .. */
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1922  	struct tty_port *port = &dlci->port;
-2e124b4a390ca8 drivers/tty/n_gsm.c  Jiri Slaby          2013-01-03  1923  	struct tty_struct *tty;
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1924  	unsigned int modem = 0;
-66ec0ad14dba76 drivers/tty/n_gsm.c  Daniel Starke       2022-08-22  1925  	int len;
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1926  
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1927  	if (debug & 16)
-2e124b4a390ca8 drivers/tty/n_gsm.c  Jiri Slaby          2013-01-03 @1928  		pr_debug("%d bytes for tty\n", len);
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1929  	switch (dlci->adaption)  {
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1930  	/* Unsupported types */
-3e913eebdfbb56 drivers/tty/n_gsm.c  Gustavo A. R. Silva 2019-02-25  1931  	case 4:		/* Packetised interruptible data */
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1932  		break;
-3e913eebdfbb56 drivers/tty/n_gsm.c  Gustavo A. R. Silva 2019-02-25  1933  	case 3:		/* Packetised uininterruptible voice/data */
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1934  		break;
-3e913eebdfbb56 drivers/tty/n_gsm.c  Gustavo A. R. Silva 2019-02-25  1935  	case 2:		/* Asynchronous serial with line state in each frame */
-66ec0ad14dba76 drivers/tty/n_gsm.c  Daniel Starke       2022-08-22  1936  		len = gsm_read_ea_val(&modem, data, clen);
-66ec0ad14dba76 drivers/tty/n_gsm.c  Daniel Starke       2022-08-22  1937  		if (len < 1)
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1938  			return;
-2e124b4a390ca8 drivers/tty/n_gsm.c  Jiri Slaby          2013-01-03  1939  		tty = tty_port_tty_get(port);
-2e124b4a390ca8 drivers/tty/n_gsm.c  Jiri Slaby          2013-01-03  1940  		if (tty) {
-66ec0ad14dba76 drivers/tty/n_gsm.c  Daniel Starke       2022-08-22  1941  			gsm_process_modem(tty, dlci, modem, len);
-1adf6fee58ca25 drivers/tty/n_gsm.c  Daniel Starke       2022-04-14  1942  			tty_wakeup(tty);
-2e124b4a390ca8 drivers/tty/n_gsm.c  Jiri Slaby          2013-01-03  1943  			tty_kref_put(tty);
-2e124b4a390ca8 drivers/tty/n_gsm.c  Jiri Slaby          2013-01-03  1944  		}
-66ec0ad14dba76 drivers/tty/n_gsm.c  Daniel Starke       2022-08-22  1945  		/* Skip processed modem data */
-66ec0ad14dba76 drivers/tty/n_gsm.c  Daniel Starke       2022-08-22  1946  		data += len;
-66ec0ad14dba76 drivers/tty/n_gsm.c  Daniel Starke       2022-08-22  1947  		clen -= len;
-df561f6688fef7 drivers/tty/n_gsm.c  Gustavo A. R. Silva 2020-08-23  1948  		fallthrough;
-3e913eebdfbb56 drivers/tty/n_gsm.c  Gustavo A. R. Silva 2019-02-25  1949  	case 1:		/* Line state will go via DLCI 0 controls only */
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1950  	default:
-66ec0ad14dba76 drivers/tty/n_gsm.c  Daniel Starke       2022-08-22  1951  		tty_insert_flip_string(port, data, clen);
-2e124b4a390ca8 drivers/tty/n_gsm.c  Jiri Slaby          2013-01-03  1952  		tty_flip_buffer_push(port);
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1953  	}
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1954  }
-e1eaea46bb4020 drivers/char/n_gsm.c Alan Cox            2010-03-26  1955  
+9b8a11e8261527 Bjorn Andersson 2017-12-05  59  
+84f0de3071b40f Jeff Johnson    2022-08-21  60  static int qmi_encode(const struct qmi_elem_info *ei_array, void *out_buf,
+9b8a11e8261527 Bjorn Andersson 2017-12-05  61  		      const void *in_c_struct, u32 out_buf_len,
+9b8a11e8261527 Bjorn Andersson 2017-12-05  62  		      int enc_level);
+9b8a11e8261527 Bjorn Andersson 2017-12-05  63  
+84f0de3071b40f Jeff Johnson    2022-08-21  64  static int qmi_decode(const struct qmi_elem_info *ei_array, void *out_c_struct,
+9b8a11e8261527 Bjorn Andersson 2017-12-05  65  		      const void *in_buf, u32 in_buf_len, int dec_level);
+9b8a11e8261527 Bjorn Andersson 2017-12-05  66  
+9b8a11e8261527 Bjorn Andersson 2017-12-05  67  /**
+9b8a11e8261527 Bjorn Andersson 2017-12-05  68   * skip_to_next_elem() - Skip to next element in the structure to be encoded
+9b8a11e8261527 Bjorn Andersson 2017-12-05  69   * @ei_array: Struct info describing the element to be skipped.
+9b8a11e8261527 Bjorn Andersson 2017-12-05  70   * @level: Depth level of encoding/decoding to identify nested structures.
+9b8a11e8261527 Bjorn Andersson 2017-12-05  71   *
+9b8a11e8261527 Bjorn Andersson 2017-12-05  72   * This function is used while encoding optional elements. If the flag
+9b8a11e8261527 Bjorn Andersson 2017-12-05  73   * corresponding to an optional element is not set, then encoding the
+9b8a11e8261527 Bjorn Andersson 2017-12-05  74   * optional element can be skipped. This function can be used to perform
+9b8a11e8261527 Bjorn Andersson 2017-12-05  75   * that operation.
+9b8a11e8261527 Bjorn Andersson 2017-12-05  76   *
+9b8a11e8261527 Bjorn Andersson 2017-12-05  77   * Return: struct info of the next element that can be encoded.
+9b8a11e8261527 Bjorn Andersson 2017-12-05  78   */
+84f0de3071b40f Jeff Johnson    2022-08-21  79  static struct qmi_elem_info *skip_to_next_elem(const struct qmi_elem_info *ei_array,
+9b8a11e8261527 Bjorn Andersson 2017-12-05  80  					       int level)
+9b8a11e8261527 Bjorn Andersson 2017-12-05  81  {
+84f0de3071b40f Jeff Johnson    2022-08-21  82  	const struct qmi_elem_info *temp_ei = ei_array;
+9b8a11e8261527 Bjorn Andersson 2017-12-05  83  	u8 tlv_type;
+9b8a11e8261527 Bjorn Andersson 2017-12-05  84  
+9b8a11e8261527 Bjorn Andersson 2017-12-05  85  	if (level > 1) {
+9b8a11e8261527 Bjorn Andersson 2017-12-05  86  		temp_ei = temp_ei + 1;
+9b8a11e8261527 Bjorn Andersson 2017-12-05  87  	} else {
+9b8a11e8261527 Bjorn Andersson 2017-12-05  88  		do {
+9b8a11e8261527 Bjorn Andersson 2017-12-05  89  			tlv_type = temp_ei->tlv_type;
+9b8a11e8261527 Bjorn Andersson 2017-12-05  90  			temp_ei = temp_ei + 1;
+9b8a11e8261527 Bjorn Andersson 2017-12-05  91  		} while (tlv_type == temp_ei->tlv_type);
+9b8a11e8261527 Bjorn Andersson 2017-12-05  92  	}
+9b8a11e8261527 Bjorn Andersson 2017-12-05  93  
+9b8a11e8261527 Bjorn Andersson 2017-12-05 @94  	return temp_ei;
+9b8a11e8261527 Bjorn Andersson 2017-12-05  95  }
+9b8a11e8261527 Bjorn Andersson 2017-12-05  96  
 
 -- 
 0-DAY CI Kernel Test Service

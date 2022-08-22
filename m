@@ -2,95 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B51A59BE58
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC5559BE57
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbiHVLUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
+        id S233944AbiHVLVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbiHVLUq (ORCPT
+        with ESMTP id S233910AbiHVLVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:20:46 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCD01EAFE
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:20:45 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id gt3so8048773ejb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=cgJN2ys9qVPNZ5LS8BKgDsHmvC/ytmOYuYaJYA/HCmg=;
-        b=dp12s38RtePIj9ZwHxOMYV2XISJFfRJui+/uiiQF7B5539RHm0SmyzakQqhAluf7Mc
-         ZexTMrxhsOjYh4hIW/BK4OfL0v4oMY5bwAprTNFfHdxE+DfAOflCnV8hLIhTDBz1FBM6
-         Ufk/PGgg1jp1ruzvmCZndel0jQQWxyIZBVnFCkHZYngDz2Onhm2REId9OBDjCqNVkDlU
-         uZXi9Q/c6eLgJVt7kk13pYitak+3Tpbsy1u9NrFaRh13R4uT2WEvRiKg4DfrlTMvZJ7E
-         Ht3BgtUiN8SuJcczU7B1GK0Kyh0r4Q/4uddqYPNkJdNIJ67jJFlYt8SwTVMxB7QVfCX2
-         o2pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=cgJN2ys9qVPNZ5LS8BKgDsHmvC/ytmOYuYaJYA/HCmg=;
-        b=WSYze+xMRqwDGCJTRZfZ4h1rfDkawR3TUNOE9sc9gnXjbE0MAfyLSII4OZSJzMjw7X
-         XrelR5acIYoQ5zctJsRQxdxueSaGPbdJgYrDBelllPi9iaQvGmCWqMXodeQTFh+sjC9n
-         SK1J2SzhoQg+s5CkjxSxJu7wHz++Hav/3B43XnoYLGGRYFWcXijP+PuJmZv7MiW9RFeq
-         ACWB+MJMf/xdGuFAVDJMyXaleG/VwsPc+v7ZQVpg5g/77fHhoujoRolBvfCKWaE1zFHz
-         rPZ07APupkGqtH+8Hmc8+iP3612yA9Jn6IiPQZO4U9Gtyz6aZnNyBkK64S9odkAR0KPU
-         dNwg==
-X-Gm-Message-State: ACgBeo0gzz5XXyB4wwFux3vjVLZ2PRxRUUKhzt6231MpkPjyGi6oVI61
-        qJ8215U5YgkQBSTseq4/XOQ0SCI1pYmDs8brtpwE6Q==
-X-Google-Smtp-Source: AA6agR4T6Kaw/vxtVJKoeTJ6uuu+b/StMskQT4k6L0VQvGtA8MKgg/P6udOicBqmXtdGE9yzS8e3SEKhOJCbVa6vmfs=
-X-Received: by 2002:a17:906:974f:b0:73d:716a:7d98 with SMTP id
- o15-20020a170906974f00b0073d716a7d98mr4732698ejy.208.1661167244102; Mon, 22
- Aug 2022 04:20:44 -0700 (PDT)
+        Mon, 22 Aug 2022 07:21:17 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B281F63E;
+        Mon, 22 Aug 2022 04:21:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ktMzlSFdVQYUGp03litM44l4Gx4FNd+6ZShF2nft75g=; b=ljTOP2NOOOEPk/1TF0QWa2ajJK
+        KqVDEbmCr3KQ/zmtQkDGm+QLYYN700ufnjfEvy1vtpoJ4aVO/lgj72RIHglIaG925iWDmeOjw3dKV
+        czsJEaLgSURBV5wXu11GNsq/cyf4fehp4tVZce8bAqBR2CAwf6z35O0JglOYWn5R/jhd5UDHOoHgb
+        Y2cfZz3F+KsGqv4Q4FR7ewbMpiTTX0ulhL4skI3GErKOcf0l/8usRywD9U9tl7oQsoQoAtvEPS+W6
+        GeeraySviOpmiP/U4zpRidJB9qXKKrL/8KB2RW1gBml8txR18tMwhdxARX18wedHD0OKaP1CQVC0A
+        BSGHMG1w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oQ5UQ-0087Er-3k; Mon, 22 Aug 2022 11:21:06 +0000
+Date:   Mon, 22 Aug 2022 04:21:06 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     joro@8bytes.org, will@kernel.org, catalin.marinas@arm.com,
+        jean-philippe@linaro.org, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
+        tglx@linutronix.de, maz@kernel.org, alex.williamson@redhat.com,
+        cohuck@redhat.com, iommu@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-acpi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH 2/3] iommu/dma: Move public interfaces to linux/iommu.h
+Message-ID: <YwNmosMGZdGtY3LX@infradead.org>
+References: <cover.1660668998.git.robin.murphy@arm.com>
+ <9cd99738f52094e6bed44bfee03fa4f288d20695.1660668998.git.robin.murphy@arm.com>
 MIME-Version: 1.0
-References: <20220815110240.18293-1-chenzhongjin@huawei.com>
-In-Reply-To: <20220815110240.18293-1-chenzhongjin@huawei.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 22 Aug 2022 13:20:32 +0200
-Message-ID: <CACRpkdZsdggUptPkPhzzu8vv9moSO+rjvZxZRb1VqJ2xWjY=HQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH] ARM: Recover kretprobes return address for EABI
- stack unwinder
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux@armlinux.org.uk, arnd@arndb.de,
-        ardb@kernel.org, rmk+kernel@armlinux.org.uk, rostedt@goodmis.org,
-        nick.hawkins@hpe.com, john@phrozen.org, mhiramat@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9cd99738f52094e6bed44bfee03fa4f288d20695.1660668998.git.robin.murphy@arm.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 1:06 PM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 70393fbb57ed..79cb6eb560a8 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -1059,4 +1059,40 @@ void iommu_debugfs_setup(void);
+>  static inline void iommu_debugfs_setup(void) {}
+>  #endif
+>  
+> +#ifdef CONFIG_IOMMU_DMA
+> +#include <linux/msi.h>
 
-> 'fed240d9c974 ("ARM: Recover kretprobe modified return address in stacktrace")'
-> has implemented kretprobes return address recovery for FP
-> unwinder, this patch makes it works for EABI unwinder.
->
-> It saves __kretprobe_trampoline address in LR on stack to identify
-> and recover the correct return address in EABI unwinder.
->
-> Since EABI doesn't use r11 as frame pointer, we need to use SP to
-> identify different kretprobes addresses. Here the value of SP has fixed
-> distance to conventional FP position so it's fine to use it.
->
-> Passed kunit kprobes_test on QEMU.
->
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+I don't think msi.h is actually needed here.
 
-This looks correct to me FWIW I understand the assembly
-but I'm vaguely unfamiliar with the kprobe API, but anyway:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Would you please drop it into Russell's patch tracker?
-
-Yours,
-Linus Walleij
+Just make the struct msi_desc and struct msi_msg forward declarations
+unconditional and we should be fine.

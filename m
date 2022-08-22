@@ -2,120 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3F859BBC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC1E59BBCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233227AbiHVIh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46382 "EHLO
+        id S232719AbiHVIiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbiHVIh4 (ORCPT
+        with ESMTP id S233615AbiHVIit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:37:56 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADF32C67A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:37:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=hsUU+M8inv09Ir/zuanJetA2licV
-        zhMzd31+/Qc062w=; b=NVkwDgOPZ1Hr4Lbbc5MAOnCaS0237NRp8x6WfbIHtqB6
-        tl44Pm5GFRZr3iwYxwD6MBg46TVQZADvJvH9nadaBmGhcAbsZbvFABrrQApeM7q9
-        Ilo+UPZEiN0fsmswdxOcBBzTYUz3EXlL03V1LD1WWsL5CdmMChnOQUgfdWbFTUw=
-Received: (qmail 1214028 invoked from network); 22 Aug 2022 10:37:47 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Aug 2022 10:37:47 +0200
-X-UD-Smtp-Session: l3s3148p1@MiDDXNDmnOkgAwDPXxw3AFlguiwjsjwa
-Date:   Mon, 22 Aug 2022 10:37:47 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Alexandra Winter <wintera@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] s390: move from strlcpy with unused retval to strscpy
-Message-ID: <YwNAW2Zp6o7Z//Y2@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Alexandra Winter <wintera@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        Benjamin Block <bblock@linux.ibm.com>, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220818210102.7301-1-wsa+renesas@sang-engineering.com>
- <YwM4y78boN4s1VNo@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        Mon, 22 Aug 2022 04:38:49 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A524213D04;
+        Mon, 22 Aug 2022 01:38:48 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 26B01E10D7;
+        Mon, 22 Aug 2022 01:38:17 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id NzF1olkKBo4b; Mon, 22 Aug 2022 01:38:16 -0700 (PDT)
+Message-ID: <77baacb930bf2ba1a65cb1515e6795b48d2d4ed5.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1661157496; bh=Or8IwOdSKEWwlGznaa4jIrIy54u6R0bhCX7D8BpveYc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=G+0ygPseRNiuy7XIUI/F0uRFYjM3u+rJkq/3MHDCQ8gA+QlYmcfFp1vFHIlaVXNYi
+         kyChZfMM6UUO7+Dm+75vexUyQOzpVeClDtMbs2DDX0wS5tfysSJ7Z9mpErUvOPg22l
+         TGxDkJSmIQKXuAUiM81XxXxyAUSGKWwRZU/mGP6+v+9nTRKTzN39VKNdw4qj+KHVcc
+         eGH+I+C46hYGWHBFVSyZvu3I3KzNIV5TvLIZCrEr5ZwIpRXiS2rF9vFkGmiX+3F4/w
+         cuRwbLchuWwx2sAZmUAb9o1EP0IQFvtF+4ybV57q6SjZeuYAgg7hQ5D9/HLhswUsN6
+         cj9XA0AK9NYIg==
+Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when
+ needing interrupts
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
+        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        l.stach@pengutronix.de, aford173@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date:   Mon, 22 Aug 2022 10:38:10 +0200
+In-Reply-To: <CAPDyKFpz0HG_AzCkj8LkyisO1fjJiiyX2QjKTWDTLng2O7PDgA@mail.gmail.com>
+References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
+         <20220726083257.1730630-2-martin.kepplinger@puri.sm>
+         <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
+         <d1db07c8ca57c72b4f0820fcb6832dd7e4501055.camel@puri.sm>
+         <CAPDyKFpz0HG_AzCkj8LkyisO1fjJiiyX2QjKTWDTLng2O7PDgA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ABC3aCasbFWYlJHr"
-Content-Disposition: inline
-In-Reply-To: <YwM4y78boN4s1VNo@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Freitag, dem 19.08.2022 um 16:53 +0200 schrieb Ulf Hansson:
+> On Fri, 19 Aug 2022 at 11:17, Martin Kepplinger
+> <martin.kepplinger@puri.sm> wrote:
+> > 
+> > Am Dienstag, dem 26.07.2022 um 17:07 +0200 schrieb Ulf Hansson:
+> > > On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
+> > > <martin.kepplinger@puri.sm> wrote:
+> > > > 
+> > > > If for example the power-domains' power-supply node (regulator)
+> > > > needs
+> > > > interrupts to work, the current setup with noirq callbacks
+> > > > cannot
+> > > > work; for example a pmic regulator on i2c, when suspending,
+> > > > usually
+> > > > already
+> > > > times out during suspend_noirq:
+> > > > 
+> > > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
+> > > > 
+> > > > So fix system suspend and resume for these power-domains by
+> > > > using
+> > > > the
+> > > > "outer" suspend/resume callbacks instead. Tested on the imx8mq-
+> > > > librem5 board,
+> > > > but by looking at the dts, this will fix imx8mq-evk and
+> > > > possibly
+> > > > many other
+> > > > boards too.
+> > > > 
+> > > > This is designed so that genpd providers just say "this genpd
+> > > > needs
+> > > > interrupts" (by setting the flag) - without implying an
+> > > > implementation.
+> > > > 
+> > > > Initially system suspend problems had been discussed at
+> > > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
+> > > > which led to discussing the pmic that contains the regulators
+> > > > which
+> > > > serve as power-domain power-supplies:
+> > > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
+> > > > 
+> > > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > > > ---
+> > > >  drivers/base/power/domain.c | 13 +++++++++++--
+> > > >  include/linux/pm_domain.h   |  5 +++++
+> > > >  2 files changed, 16 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/base/power/domain.c
+> > > > b/drivers/base/power/domain.c
+> > > > index 5a2e0232862e..58376752a4de 100644
+> > > > --- a/drivers/base/power/domain.c
+> > > > +++ b/drivers/base/power/domain.c
+> > > > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops
+> > > > genpd_spin_ops = {
+> > > >  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
+> > > > GENPD_FLAG_ACTIVE_WAKEUP)
+> > > >  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
+> > > > GENPD_FLAG_CPU_DOMAIN)
+> > > >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
+> > > > GENPD_FLAG_RPM_ALWAYS_ON)
+> > > > +#define genpd_irq_on(genpd)            (genpd->flags &
+> > > > GENPD_FLAG_IRQ_ON)
+> > > > 
+> > > >  static inline bool irq_safe_dev_in_sleep_domain(struct device
+> > > > *dev,
+> > > >                 const struct generic_pm_domain *genpd)
+> > > > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct
+> > > > generic_pm_domain
+> > > > *genpd,
+> > > >         genpd->domain.ops.runtime_suspend =
+> > > > genpd_runtime_suspend;
+> > > >         genpd->domain.ops.runtime_resume =
+> > > > genpd_runtime_resume;
+> > > >         genpd->domain.ops.prepare = genpd_prepare;
+> > > > -       genpd->domain.ops.suspend_noirq = genpd_suspend_noirq;
+> > > > -       genpd->domain.ops.resume_noirq = genpd_resume_noirq;
+> > > > +
+> > > > +       if (genpd_irq_on(genpd)) {
+> > > > +               genpd->domain.ops.suspend =
+> > > > genpd_suspend_noirq;
+> > > > +               genpd->domain.ops.resume = genpd_resume_noirq;
+> > > > +       } else {
+> > > > +               genpd->domain.ops.suspend_noirq =
+> > > > genpd_suspend_noirq;
+> > > > +               genpd->domain.ops.resume_noirq =
+> > > > genpd_resume_noirq;
+> > > 
+> > > As we discussed previously, I am thinking that it may be better
+> > > to
+> > > move to using genpd->domain.ops.suspend_late and
+> > > genpd->domain.ops.resume_early instead.
+> > 
+> > Wouldn't that better be a separate patch (on top)? Do you really
+> > want
+> > me to change the current behaviour (default case) to from noirq to
+> > late? Then I'll resend this series with such a patch added.
+> 
+> Sorry, I wasn't clear enough, the default behaviour should remain as
+> is.
+> 
+> What I meant was, when genpd_irq_on() is true, we should use the
+> genpd->domain.ops.suspend_late and genpd->domain.ops.resume_early.
 
---ABC3aCasbFWYlJHr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Testing that shows that this isn't working. I can provide the logs
+later, but suspend fails and I think it makes sense: "suspend_late" is
+simply already too late when i2c (or any needed driver) uses "suspend".
 
-Hi Alexander,
-
-> Could you please explain why you skipped strlcpy() usage in
-> drivers/s390/char/diag_ftp.c and drivers/s390/char/sclp_ftp.c?
-
-Sure. It is a bit hidden in $subject, but the key is to convert strlcpy
-instances for now which do not check the return value. This is the
-low-hanging fruit.
-
-Converting the other uses checking the return value needs to be done
-manually and much more carfully. I wanted to this as a second step, but
-if you prefer to have everything converted in one go, I can give your
-subsystem a priority boost. Would you prefer that?
-
-Thanks and happy hacking,
-
-   Wolfram
+> 
+> Kind regards
+> Uffe
 
 
---ABC3aCasbFWYlJHr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmMDQFsACgkQFA3kzBSg
-Kbbcew/9EjjU46h1Hw7hn47Z8s7LOJ86qovV0HqE8I6JiZmPknoKxmBppnvrlG/5
-sGdJVtiWUpHmedA5M+DQYLFO2ZxeGeluaQOg22nsMbGmb7V7W0LosiZUm/Er7pOd
-qbXdLrgVnDzWIRfDVEh0HvJT3RNrc8WhmrW5MeBW4Dnhvwccn6kxCnVVAb66lnQ5
-m5qwdFjHgrCsf4QhNCZ1o8g/dwGjirIJjT7svqFirSMB81q3tNA/yNr2XLarOuDb
-kCtKyKHOHr4Vzy4uxi6HnpvYz8nYE+tF04rB+nqNYLeCoEM8R42zz3kuaA95vQYg
-3mcCYr3tZIGDZV6kdCYrFq2e9iQf2w3XmdrlSe31CBUGugL/jx89DOfNaOCUba1k
-lWNdmUJDUmicmcBeR6Yv/arWqMnkmBLABURl9WmXmrbl6ya9Dh/bM3vjSV+WoJVv
-GhiUgQKgEdi3pWhrRBYoRk//OtgEu5fxFIGs90DYlrXGLdsCQk3L0Ng/IR/MZ/jG
-jZjkD/4arMVqz+EPOI9nhxflWh70q/oKgdvejgmsGIEz8EIxEyukvi61Ea/VDuJf
-C96kGPeR6A0F2RiG0wtesUZM9PAE3TKr3LNDM4UNZ5/BgBVzD4XFCq3BKYHsHv/0
-SMHb42lEJze4FeBTAJ+R+AjL1Ckgz4MzNG816dblvKDHfU5B24E=
-=183G
------END PGP SIGNATURE-----
-
---ABC3aCasbFWYlJHr--

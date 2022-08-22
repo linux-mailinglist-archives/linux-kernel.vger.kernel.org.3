@@ -2,88 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0D259BBF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D8059BBF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234122AbiHVItB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
+        id S232963AbiHVItu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233841AbiHVIso (ORCPT
+        with ESMTP id S232048AbiHVItl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:48:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067439FCE
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:48:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661158101;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hf0005VbFoqadMHqE2/k8IMSgs4M7ELH98Ps6ciAPSE=;
-        b=G0Bsx/PeugOuSsWTIYWimTgroy7E9RtIsr8ARDadyY0hEEJcVk3XlBvZYmAL07PT6hLH+q
-        Cl8eKlnIeMvUyWgu4+NNzlyIFMN64SpnZ5IoYG12UC6XopYGXTUBIiuZSjXgVnTDYpuABE
-        cjpdPscmb8Wr6A1m4eAV2TBGn3o/6XY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-548-Yeqpuf_3Ngep_gSMOePBeA-1; Mon, 22 Aug 2022 04:48:17 -0400
-X-MC-Unique: Yeqpuf_3Ngep_gSMOePBeA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 46FF28037AF;
-        Mon, 22 Aug 2022 08:48:17 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 530E74010D2A;
-        Mon, 22 Aug 2022 08:48:15 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220821125751.4185-1-yin31149@gmail.com>
-References: <20220821125751.4185-1-yin31149@gmail.com> <000000000000ce327f05d537ebf7@google.com>
-To:     Hawkins Jiawei <yin31149@gmail.com>
-Cc:     dhowells@redhat.com,
-        syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com,
-        Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        paskripkin@gmail.com, skhan@linuxfoundation.org,
-        18801353760@163.com
-Subject: Re: [PATCH] rxrpc: fix bad unlock balance in rxrpc_do_sendmsg
+        Mon, 22 Aug 2022 04:49:41 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A712E6A6;
+        Mon, 22 Aug 2022 01:49:37 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id x19so9309988plc.5;
+        Mon, 22 Aug 2022 01:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=iCDhhI8vpKAF6ccQbhIqtzhgqF2l3okiXUrZiiXnnm0=;
+        b=W9Bhg7iSBNOgvnU4J2cCOmqNHfLa6kD+gS/Usqk3AknhHc4v+WiAGy+JIEpPk93F0v
+         ZshHrlelmZNNgf8KNqLcb2tdv1RVNyQ8n2r9V1LafUXbS29Nfdmtx3Bk4T2UYNjQbWdQ
+         IROe8E7Zl0eewBHK1sXgs9MmGbJECKFYcUSw81vfilrCvGg+ZbUA4gOLuTUO6Q7BEYJe
+         MN+Wo90tD7jV4sH/X4vyuwR3x5Dph7r+EdaKdioVD6yx07RcnroQp+rGacCErIWwFtuE
+         QhTbdQdv1J//jmz2eZQHWOI5vKSy3TwcG8mOESrZt1vrbVa3t25yUqVLuSQfBzvMQnt4
+         I0Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=iCDhhI8vpKAF6ccQbhIqtzhgqF2l3okiXUrZiiXnnm0=;
+        b=VcMRJ34isvyMSdDDD+OPbnMLfThLay1pBwGTa4GBu5tmRA82NvFljBJ6wGWtZmk0Gv
+         ttjLVwjGt/z9Wd8vCgSvltjhb02ItUACWx5dbUg26w//0c35j2aQuUOWJ1gHiTKpwxp0
+         8xehUYDBnF1cCLL/M4u6T/1NIghMYeTgDcTXV8DOmbIA5F1TzoIyrYCry/sjvjPuc6HG
+         kSvVcajYXYKrN+4xOGBLDnfOe2wCtNMtH0vLPXzYz7eELVLTPNEjO/EXzTrHOEngVDFH
+         cw66SJFNfmv4mxbHN9qb15lXmpyvDZ/73uQCUgvVYa08ImSIYmwROs/qVbVoqa2a9RId
+         892g==
+X-Gm-Message-State: ACgBeo1tHY5uzHESZIGo3aDsoiqi3fwNjyTNlaY5Ygv9FOH3bZoWMqKg
+        iqxe2heRrwE4a9biylT94YE=
+X-Google-Smtp-Source: AA6agR6cvVQaqLj53v88y85bXAGnA2dBM9QOcc34rNSyJrlGP9xIQiKAtSUBCGRWwgaBCUY9lmf8Ow==
+X-Received: by 2002:a17:903:2602:b0:172:ba94:1590 with SMTP id jd2-20020a170903260200b00172ba941590mr17217787plb.146.1661158177309;
+        Mon, 22 Aug 2022 01:49:37 -0700 (PDT)
+Received: from fedora ([103.230.148.185])
+        by smtp.gmail.com with ESMTPSA id c2-20020a634e02000000b00401a9bc0f33sm6874136pgb.85.2022.08.22.01.49.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 01:49:36 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 14:19:28 +0530
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     keescook@chromium.org, shuah@kernel.org, brauner@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, guoren@kernel.org
+Cc:     luto@amacapital.net, wad@chromium.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, bpf@vger.kernel.org,
+        linux-csky@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] selftests/seccomp: Check CAP_SYS_ADMIN capability in the
+ test mode_filter_without_nnp
+Message-ID: <YwNDGAVrik3DvWZf@fedora>
+References: <20220731092529.28760-1-gautammenghani201@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <924817.1661158094.1@warthog.procyon.org.uk>
-Date:   Mon, 22 Aug 2022 09:48:14 +0100
-Message-ID: <924818.1661158094@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220731092529.28760-1-gautammenghani201@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hawkins Jiawei <yin31149@gmail.com> wrote:
+On Sun, Jul 31, 2022 at 02:55:29PM +0530, Gautam Menghani wrote:
+> In the "mode_filter_without_nnp" test in seccomp_bpf, there is currently
+> a TODO which asks to check the capability CAP_SYS_ADMIN instead of euid.
+> This patch adds support to check if the calling process has the flag 
+> CAP_SYS_ADMIN, and also if this flag has CAP_EFFECTIVE set.
+> 
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> ---
+>  tools/testing/selftests/seccomp/seccomp_bpf.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 136df5b76319..16b0edc520ef 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -392,6 +392,8 @@ TEST(mode_filter_without_nnp)
+>  		.filter = filter,
+>  	};
+>  	long ret;
+> +	cap_t cap = cap_get_proc();
+> +	cap_flag_value_t is_cap_sys_admin = 0;
+>  
+>  	ret = prctl(PR_GET_NO_NEW_PRIVS, 0, NULL, 0, 0);
+>  	ASSERT_LE(0, ret) {
+> @@ -400,8 +402,8 @@ TEST(mode_filter_without_nnp)
+>  	errno = 0;
+>  	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog, 0, 0);
+>  	/* Succeeds with CAP_SYS_ADMIN, fails without */
+> -	/* TODO(wad) check caps not euid */
+> -	if (geteuid()) {
+> +	cap_get_flag(cap, CAP_SYS_ADMIN, CAP_EFFECTIVE, &is_cap_sys_admin);
+> +	if (!is_cap_sys_admin) {
+>  		EXPECT_EQ(-1, ret);
+>  		EXPECT_EQ(EACCES, errno);
+>  	} else {
+> -- 
+> 2.34.1
+> 
 
-> -		if (mutex_lock_interruptible(&call->user_mutex) < 0)
-> +		if (mutex_lock_interruptible(&call->user_mutex) < 0) {
-> +			mutex_lock(&call->user_mutex);
+Hi,
 
-Yeah, as Khalid points out that kind of makes the interruptible lock
-pointless.  Either rxrpc_send_data() needs to return a separate indication
-that we returned without the lock held or it needs to always drop the lock on
-error (at least for ERESTARTSYS/EINTR) which can be checked for higher up.
+Please review the above patch and let me know if any changes are required.
 
-David
-
+Thanks,
+Gautam

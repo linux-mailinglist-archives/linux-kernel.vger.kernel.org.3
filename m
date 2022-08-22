@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05AE559C562
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3999059C566
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236676AbiHVRue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S236941AbiHVRui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236941AbiHVRu3 (ORCPT
+        with ESMTP id S236949AbiHVRu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 22 Aug 2022 13:50:29 -0400
 Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2AF3AB0F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A097931DC6;
         Mon, 22 Aug 2022 10:50:24 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id CCAFA5FD05;
-        Mon, 22 Aug 2022 20:50:21 +0300 (MSK)
+        by mail.sberdevices.ru (Postfix) with ESMTP id 430205FD06;
+        Mon, 22 Aug 2022 20:50:22 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1661190621;
-        bh=kNxXhkdr74OhUzWIPaRNsxTjWoPYvj2BCzIs18HaIVo=;
+        s=mail; t=1661190622;
+        bh=bT3dFp5MzD46j/1XA/ZxsG4fdU9e/Xi1qpgLMC8LesI=;
         h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=pv3GaHZWRyqvHkNzqlrMYE3LLky/2MHiU/8NkDMRkUl+bbyJ9KMjSXlMXPlfr8jHG
-         YwGWGsFkpI4Y4Uh6fppmmDb6uGVZcCRu9LJ/d9iCxbSs1BySDnGagvgtwMXQhzJJ31
-         CdwQfOfOLE85IAVVFjK65tI2cRM5zs4qAwqvDkR89J/H2yswkq/Z1fNvhulHR3pB6s
-         PZWYZWpj4rE3KY6jBgwgJzMe0CC/lQhRo9r9Ur+yNbGo7XATwC/m4W9fxxbkKjIK57
-         rq0va21+oxRhMPb9sIS2I9UzVAHpBr2mS3koE+zb3j4HWz/QCOb4hNapDJfWELUGux
-         5lVlGzeRgVStg==
+        b=YTrnqqdFCZJ9aplJfFGzwJlxqG34opd9ykXFG2Qm3a3BzWL3f5uXJFbGQp23iLdMu
+         ru1W1PTfYTEJN7qEzqrVLDaRG2lyNjviANiJfMmUGbCusLTk134CNhglFvV7wjtaLG
+         Zo0sLYKRhCnmjG6TaQjLCZT4jjYmd7atq+78tDAILihodTmhG711T6KLnsjH/yixQY
+         pXp7dnASzhI8DPbt3twVLjC+XRrql+kIiu0h2xtUd1hQ9nsQZnSQ/Yd5SXeTAhwcDB
+         KkkS1O6OgsJyPLio4ehy2i6Fp+zFVjpyIfogNG/ED6Ecb1fFyrPFC0dy5S6v/rY01K
+         Vkhk65xDBSvxg==
 Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
         by mail.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 22 Aug 2022 20:50:21 +0300 (MSK)
+        Mon, 22 Aug 2022 20:50:22 +0300 (MSK)
 From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
 To:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "jic23@kernel.org" <jic23@kernel.org>,
@@ -54,12 +54,15 @@ CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
         kernel <kernel@sberdevices.ru>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Subject: [PATCH v7 1/4] lib/string_helpers: Add str_read_write() helper
-Thread-Topic: [PATCH v7 1/4] lib/string_helpers: Add str_read_write() helper
-Thread-Index: AQHYtk+D9XpDTIOHIU+ilaS68VvtsQ==
-Date:   Mon, 22 Aug 2022 17:49:23 +0000
-Message-ID: <20220822175011.2886-2-ddrokosov@sberdevices.ru>
+        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v7 2/4] dt-bindings: vendor-prefixes: add MEMSensing
+ Microsystems Co., Ltd.
+Thread-Topic: [PATCH v7 2/4] dt-bindings: vendor-prefixes: add MEMSensing
+ Microsystems Co., Ltd.
+Thread-Index: AQHYtk+EUdprLtPo8k2esinN+rPXbw==
+Date:   Mon, 22 Aug 2022 17:49:24 +0000
+Message-ID: <20220822175011.2886-3-ddrokosov@sberdevices.ru>
 References: <20220822175011.2886-1-ddrokosov@sberdevices.ru>
 In-Reply-To: <20220822175011.2886-1-ddrokosov@sberdevices.ru>
 Accept-Language: ru-RU, en-US
@@ -86,30 +89,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+MEMSensing Microsystems (Suzhou, China) Co., Ltd. operates as a micro
+electromechanical system technology company which produces micro
+electromechanical system microphones and sensors.
+MEMSensing Microsystems (Suzhou, China) Co., Ltd. applies its products
+in consumer electronics, industrial control, medical electronics
+and automotive, and other fields.
 
-Add str_read_write() helper to return 'read' or 'write' string literal.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- include/linux/string_helpers.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/linux/string_helpers.h b/include/linux/string_helpers.=
-h
-index 4d72258d42fd..9e22cd78f3b8 100644
---- a/include/linux/string_helpers.h
-+++ b/include/linux/string_helpers.h
-@@ -126,4 +126,9 @@ static inline const char *str_enabled_disabled(bool v)
- 	return v ? "enabled" : "disabled";
- }
-=20
-+static inline const char *str_read_write(bool v)
-+{
-+	return v ? "read" : "write";
-+}
-+
- #endif
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Docum=
+entation/devicetree/bindings/vendor-prefixes.yaml
+index 0496773a3c4d..404b40eac011 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -761,6 +761,8 @@ patternProperties:
+     description: MELFAS Inc.
+   "^mellanox,.*":
+     description: Mellanox Technologies
++  "^memsensing,.*":
++    description: MEMSensing Microsystems Co., Ltd.
+   "^memsic,.*":
+     description: MEMSIC Inc.
+   "^menlo,.*":
 --=20
 2.36.0

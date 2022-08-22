@@ -2,175 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC1E59BBCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0674A59BBC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232719AbiHVIiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
+        id S233384AbiHVIih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbiHVIit (ORCPT
+        with ESMTP id S233777AbiHVIi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:38:49 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A524213D04;
-        Mon, 22 Aug 2022 01:38:48 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 26B01E10D7;
-        Mon, 22 Aug 2022 01:38:17 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NzF1olkKBo4b; Mon, 22 Aug 2022 01:38:16 -0700 (PDT)
-Message-ID: <77baacb930bf2ba1a65cb1515e6795b48d2d4ed5.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1661157496; bh=Or8IwOdSKEWwlGznaa4jIrIy54u6R0bhCX7D8BpveYc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=G+0ygPseRNiuy7XIUI/F0uRFYjM3u+rJkq/3MHDCQ8gA+QlYmcfFp1vFHIlaVXNYi
-         kyChZfMM6UUO7+Dm+75vexUyQOzpVeClDtMbs2DDX0wS5tfysSJ7Z9mpErUvOPg22l
-         TGxDkJSmIQKXuAUiM81XxXxyAUSGKWwRZU/mGP6+v+9nTRKTzN39VKNdw4qj+KHVcc
-         eGH+I+C46hYGWHBFVSyZvu3I3KzNIV5TvLIZCrEr5ZwIpRXiS2rF9vFkGmiX+3F4/w
-         cuRwbLchuWwx2sAZmUAb9o1EP0IQFvtF+4ybV57q6SjZeuYAgg7hQ5D9/HLhswUsN6
-         cj9XA0AK9NYIg==
-Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when
- needing interrupts
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Date:   Mon, 22 Aug 2022 10:38:10 +0200
-In-Reply-To: <CAPDyKFpz0HG_AzCkj8LkyisO1fjJiiyX2QjKTWDTLng2O7PDgA@mail.gmail.com>
-References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
-         <20220726083257.1730630-2-martin.kepplinger@puri.sm>
-         <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
-         <d1db07c8ca57c72b4f0820fcb6832dd7e4501055.camel@puri.sm>
-         <CAPDyKFpz0HG_AzCkj8LkyisO1fjJiiyX2QjKTWDTLng2O7PDgA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Mon, 22 Aug 2022 04:38:29 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1D0B7C0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:38:24 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id vw19so6045514ejb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=5OBoHrdlmLoJOWu5Z6u5wsXYdDXsGII6yOBzDwmmk64=;
+        b=Q5AWfYM/rPqlMVN4qyTDPaeV/0+Fk0sK5jGatklasd63Xvzc/Kde3ny7t+KQZiqhIi
+         xsESJzpeoc5Lj7GBHNkmN+DL75GF2tfoLYlTL0t5oybt5T4qkzTZOtSnum4SCRoVeD+5
+         OwXvk2cy7EyTb3Gu6Hkp4xMVbEeb1iQSjZIJPPlEuaZSTW7Bq71o5TtgXC8JUKif7xJ8
+         vvKdA/XZ8SX+JhfY6W5XqInUgwpTUMu5HM0oEiNREievTLz9/od5tYsgeuCNeCISgGJI
+         7BYkKKmxWsn9xLuTDXk1pJ8ACucfi4oWsaMV/NjeMxbD2ocFyhJNvN9MVGBz62abvbCY
+         QbSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=5OBoHrdlmLoJOWu5Z6u5wsXYdDXsGII6yOBzDwmmk64=;
+        b=cORIPSG1Yz4aGiuMhyhYLVVrhVQ3ss66FdituIdwTRGy9xdi8YA8Xll60LshEaGvG5
+         EhjhSJWtCyUIjJB791bVcKUB+hXarusHMu97klTEGSYA4yp5Zi7PMEH86xJjk2FHvPNE
+         dB1D+6F6vRpRLnGwrH155+gUKw/1ox+LQ0Z2m25aYV9Rif00YQIYf2GGi/4bbt91DAHX
+         kliZ/sft8fqkBDs+3Z3G+TbPsSHD9uCv7l4fBPr4WVWEGBoNt2NP9mwofGcHZRPn3dPF
+         UFKY0P8Xpk9o7aNJmr9YkxVga3oeQxvHkjlVIn+N1T+Q0jZcRjc5vvbMwMiUoHvgib3d
+         uD5A==
+X-Gm-Message-State: ACgBeo3E/coQLa4lfLjVrbojd+3K77/f0kDI5vn4vPHxuk3+nlWMJXVG
+        sCYKjQVCAHxWah2zpFnj+sJjgcaMcHFgYrKWbeSxJQ==
+X-Google-Smtp-Source: AA6agR6ZR63Fh74m2vscZd7j1aOwLRpZQ7CAvO0GxPchmdyIMOJWkKrwFuKZZRefZqXis0gsyYLXWca4nOtfLFidPho=
+X-Received: by 2002:a17:906:58c8:b0:6fe:91d5:18d2 with SMTP id
+ e8-20020a17090658c800b006fe91d518d2mr12458571ejs.190.1661157503046; Mon, 22
+ Aug 2022 01:38:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220802095252.2486591-1-foss+kernel@0leil.net>
+In-Reply-To: <20220802095252.2486591-1-foss+kernel@0leil.net>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 22 Aug 2022 10:38:11 +0200
+Message-ID: <CACRpkdZXTtar73-HP8_wcAsCYw7JOgPwkXZt-_3s0GdoggBABw@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/1] Making Rockchip IO domains dependency from other
+ devices explicit
+To:     Quentin Schulz <foss+kernel@0leil.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     heiko@sntech.de, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, dem 19.08.2022 um 16:53 +0200 schrieb Ulf Hansson:
-> On Fri, 19 Aug 2022 at 11:17, Martin Kepplinger
-> <martin.kepplinger@puri.sm> wrote:
-> > 
-> > Am Dienstag, dem 26.07.2022 um 17:07 +0200 schrieb Ulf Hansson:
-> > > On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
-> > > <martin.kepplinger@puri.sm> wrote:
-> > > > 
-> > > > If for example the power-domains' power-supply node (regulator)
-> > > > needs
-> > > > interrupts to work, the current setup with noirq callbacks
-> > > > cannot
-> > > > work; for example a pmic regulator on i2c, when suspending,
-> > > > usually
-> > > > already
-> > > > times out during suspend_noirq:
-> > > > 
-> > > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> > > > 
-> > > > So fix system suspend and resume for these power-domains by
-> > > > using
-> > > > the
-> > > > "outer" suspend/resume callbacks instead. Tested on the imx8mq-
-> > > > librem5 board,
-> > > > but by looking at the dts, this will fix imx8mq-evk and
-> > > > possibly
-> > > > many other
-> > > > boards too.
-> > > > 
-> > > > This is designed so that genpd providers just say "this genpd
-> > > > needs
-> > > > interrupts" (by setting the flag) - without implying an
-> > > > implementation.
-> > > > 
-> > > > Initially system suspend problems had been discussed at
-> > > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > > > which led to discussing the pmic that contains the regulators
-> > > > which
-> > > > serve as power-domain power-supplies:
-> > > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> > > > 
-> > > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > > > ---
-> > > >  drivers/base/power/domain.c | 13 +++++++++++--
-> > > >  include/linux/pm_domain.h   |  5 +++++
-> > > >  2 files changed, 16 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/base/power/domain.c
-> > > > b/drivers/base/power/domain.c
-> > > > index 5a2e0232862e..58376752a4de 100644
-> > > > --- a/drivers/base/power/domain.c
-> > > > +++ b/drivers/base/power/domain.c
-> > > > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops
-> > > > genpd_spin_ops = {
-> > > >  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
-> > > > GENPD_FLAG_ACTIVE_WAKEUP)
-> > > >  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
-> > > > GENPD_FLAG_CPU_DOMAIN)
-> > > >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
-> > > > GENPD_FLAG_RPM_ALWAYS_ON)
-> > > > +#define genpd_irq_on(genpd)            (genpd->flags &
-> > > > GENPD_FLAG_IRQ_ON)
-> > > > 
-> > > >  static inline bool irq_safe_dev_in_sleep_domain(struct device
-> > > > *dev,
-> > > >                 const struct generic_pm_domain *genpd)
-> > > > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct
-> > > > generic_pm_domain
-> > > > *genpd,
-> > > >         genpd->domain.ops.runtime_suspend =
-> > > > genpd_runtime_suspend;
-> > > >         genpd->domain.ops.runtime_resume =
-> > > > genpd_runtime_resume;
-> > > >         genpd->domain.ops.prepare = genpd_prepare;
-> > > > -       genpd->domain.ops.suspend_noirq = genpd_suspend_noirq;
-> > > > -       genpd->domain.ops.resume_noirq = genpd_resume_noirq;
-> > > > +
-> > > > +       if (genpd_irq_on(genpd)) {
-> > > > +               genpd->domain.ops.suspend =
-> > > > genpd_suspend_noirq;
-> > > > +               genpd->domain.ops.resume = genpd_resume_noirq;
-> > > > +       } else {
-> > > > +               genpd->domain.ops.suspend_noirq =
-> > > > genpd_suspend_noirq;
-> > > > +               genpd->domain.ops.resume_noirq =
-> > > > genpd_resume_noirq;
-> > > 
-> > > As we discussed previously, I am thinking that it may be better
-> > > to
-> > > move to using genpd->domain.ops.suspend_late and
-> > > genpd->domain.ops.resume_early instead.
-> > 
-> > Wouldn't that better be a separate patch (on top)? Do you really
-> > want
-> > me to change the current behaviour (default case) to from noirq to
-> > late? Then I'll resend this series with such a patch added.
-> 
-> Sorry, I wasn't clear enough, the default behaviour should remain as
-> is.
-> 
-> What I meant was, when genpd_irq_on() is true, we should use the
-> genpd->domain.ops.suspend_late and genpd->domain.ops.resume_early.
+On Tue, Aug 2, 2022 at 11:53 AM Quentin Schulz <foss+kernel@0leil.net> wrote:
 
-Testing that shows that this isn't working. I can provide the logs
-later, but suspend fails and I think it makes sense: "suspend_late" is
-simply already too late when i2c (or any needed driver) uses "suspend".
+> Some background on IO domains on Rockchip:
+>
+> On some Rockchip SoCs, some SoC pins are split in what are called IO
+> domains.
+>
+> An IO domain is supplied power externally, by regulators from a PMIC for
+> example. This external power supply is then used by the IO domain as
+> "supply" for the IO pins if they are outputs.
+>
+> Each IO domain can configure which voltage the IO pins will be operating
+> on (1.8V or 3.3V).
+>
+> There already exists an IO domain driver for Rockchip SoCs[1]. This
+> driver allows to explicit the relationship between the external power
+> supplies and IO domains[2]. This makes sure the regulators are enabled
+> by the Linux kernel so the IO domains are supplied with power and
+> correctly configured as per the supplied voltage.
+> This driver is a regulator consumer and does not offer any other
+> interface for device dependency.
 
-> 
-> Kind regards
-> Uffe
+What makes me confused about the patch is the relationship, if any,
+between this "IO domain" and generic power domains (genpd) that has
+been worked on for ~10 years.
 
+I am worried that we are reinventing the world.
 
+While my intuitive feeling is that genpd power domains are only on-chip
+and not considering off-chip pins, I am not so sure that it warrants
+its own abstraction and want to know whether this can be retrofit into
+genpd rather than inventing this?
+
+Documentation/devicetree/bindings/power/power-domain.yaml
+include/linux/pm_domain.h
+
+Yours,
+Linus Walleij

@@ -2,123 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6414F59BE2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF04159BE37
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbiHVLEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S233270AbiHVLJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbiHVLEW (ORCPT
+        with ESMTP id S234040AbiHVLJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:04:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D722F27B1D
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:04:19 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQ5Dx-0005Rf-AE; Mon, 22 Aug 2022 13:04:05 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQ5Dw-001HmU-EX; Mon, 22 Aug 2022 13:04:04 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oQ5Ds-009h0c-It; Mon, 22 Aug 2022 13:04:00 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v2 17/17] net: dsa: microchip: remove IS_9893 flag
-Date:   Mon, 22 Aug 2022 13:03:58 +0200
-Message-Id: <20220822110358.2310055-18-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220822110358.2310055-1-o.rempel@pengutronix.de>
-References: <20220822110358.2310055-1-o.rempel@pengutronix.de>
+        Mon, 22 Aug 2022 07:09:08 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE21A33E28;
+        Mon, 22 Aug 2022 04:07:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661166445;
+        bh=EuJxpwGW0kCugTdVp6i68Y2ET4g43DToAA8wC2D/R9I=;
+        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=d0BpwRlHZBoGxfuGd+9gR2HxSGzpf7d3gkxIKLPvwMhMef8WNjPEiGRRRlk61PI9O
+         OC8t6qoDDR5kP+9eY7Uu7/Xb+6ZUvPPR74/MGmJqhv0eCL/BPe6m3cMOF8wmZwNae6
+         LSvjxL52OrIZ9Ga0SfVBJYII5/BjUcjveR673dZE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MD9XF-1oYZaP0Vhx-0097DU; Mon, 22
+ Aug 2022 13:07:24 +0200
+Message-ID: <9aa83875-0a05-6b28-b4df-4071ba8ee343@gmx.com>
+Date:   Mon, 22 Aug 2022 19:07:19 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-x86_64@vger.kernel.org
+References: <2d6012e8-805d-4225-80ed-d317c28f1899@gmx.com>
+ <YwMhXX6OhROLZ/LR@kroah.com> <1ed5a33a-b667-0e8e-e010-b4365f3713d6@gmx.com>
+ <YwMxRAfrrsPE6sNI@kroah.com> <8aff5c17-d414-2412-7269-c9d15f574037@gmx.com>
+ <20220822080456.GB17080@1wt.eu>
+ <4c42af33-dc05-315a-87d9-be0747a74df4@gmx.com>
+ <20220822083044.GC17080@1wt.eu>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+Subject: Re: LTS kernel Linux 4.14.290 unable to boot with edk2-ovmf (x86_64
+ UEFI runtime)
+In-Reply-To: <20220822083044.GC17080@1wt.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:jWPvej0a40zHz8DlCmHr7AlmcK/R5vwa89aDPsLwwWdX22f54+P
+ Af4xer/hyzXOaWtJwtX3zI1DOVMDap9dP+o+8PItJr5VZmrVhKq39HQfZKedzM0Dc+8Wl9E
+ CO7/PdBHX9XDQua3A9IiBypYqGfyrePLUPxwBwQC4sSMIR8wB9sg46CY+eivCaLzUVadFe6
+ jYL4a96hnK/dIhsDir4CA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fhXrvUu250M=:X/DS/ITfEIdrL8bPByhVlR
+ m9yhoSSJoUImyHOStY74la41aAD/APodgWvCCPIpbitayHAcpg6SxKAw/TZ37UlEmHkOHuwNo
+ 36bLP1aEmj1fFHCbRvSck65ARA51qW7eK37EXcSrKFmlRQxPK86dkHiG/GlmAUmQs8ynvQVFE
+ mpIQ97ynJgxk7G26m+QpbGp6XnAcysT34HKF7jonOACpVz+QliVzmujkKsEuPqaDAnaHkNp7Q
+ T4LXpsvAYvMfJHlqbskTeFBcncFmhW+1t3/bXHatT0g1PgYPHfZKlemsZlLV1A8A64wxT2961
+ R2ulyfK8cFdjTx35iCWRedcZhN3oo+nSRMAuv9x/2do+PdHCTADL+9oG+t1urMwwUaPTAwQ6u
+ aJDcCzKnh4vGRF7KuNJRu4WEZ3vrmOF26lNGP+v24g/f93sswP4+sQPBiPv4UNtRQ6EEGA4vY
+ pQyMh6tSRKSzKlQ473uyw0UjcTkesIdhggkTFpMpKjU6kmZOgh3MwUv5zTPhDi83vn1zg7LYj
+ mXRJhh3rINH2CI59fa86T8NRdcdktQz7B4Xco8rgo1dotnuQxsRyq7OGxSo2cavVgKJW0zUSR
+ 0bsp8SlzVCcKf8m3xf2ucRhnswTHaYrZNgP4eS1Y9TTbhhIFYbTB+7aV8lzj3VDdffDpmrjrt
+ ZWYhJV/DmrNrfbj9So0qJwACTT/xsNvhdR4I8D709ivBQBBEBQ1+Gm0RtAvh8KMzOais+FiSy
+ 7f36Z1j+cTHNpySzc4flo1Hqp1A4+cTVcw4dNs//2qreIvrbFVoe4bY1fiD6fYMKt5UflRaFM
+ NPSYdmaJqFYkVTooqGI1j2bIc5IKOYGfNhIil/ydnszf5SDN6w7EGPRSTOw8gk2RIIlqbAEEm
+ dsk9dG84zB29Yu8VFdx5WM5XedKaf8h4We9K0AI13JcYtotlGOvxjn9Ef+bzVp7J9zyrD5IvU
+ 2hHonGYoyQtNjZnKvOdDHZWoCwYL2XqEFekuek/tXD+XtjRlXDXs/V+Xl0s+VIPwL0soYlnQW
+ oDIpFmU7ce4Bt5AUbJD1npvm6tLsVCJmUVbaIvmjgs5Z8kulSXKOWovS36gZ1IYAyU190+ok/
+ 1TNeQXRwJL5wa6TIPdFmWa+jqXRgrC/uvoTf4EJwblixzlBNf/+FgFH4g==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use chip_id as other places of this code do it
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/dsa/microchip/ksz9477.c    | 3 ---
- drivers/net/dsa/microchip/ksz_common.c | 3 ++-
- drivers/net/dsa/microchip/ksz_common.h | 4 ----
- 3 files changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index 1dae75af8e1b9..6f857922eb3e2 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -1165,9 +1165,6 @@ int ksz9477_switch_init(struct ksz_device *dev)
- 	if (ret)
- 		return ret;
- 
--	if (dev->chip_id == KSZ9893_CHIP_ID)
--		dev->features |= IS_9893;
--
- 	return 0;
- }
- 
-diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-index a863d4feb4135..08491a67dc359 100644
---- a/drivers/net/dsa/microchip/ksz_common.c
-+++ b/drivers/net/dsa/microchip/ksz_common.c
-@@ -1865,7 +1865,8 @@ static void ksz_set_xmii(struct ksz_device *dev, int port,
- 	case PHY_INTERFACE_MODE_RGMII_RXID:
- 		data8 |= bitval[P_RGMII_SEL];
- 		/* On KSZ9893, disable RGMII in-band status support */
--		if (dev->features & IS_9893)
-+		if (dev->chip_id == KSZ9893_CHIP_ID ||
-+		    dev->chip_id == KSZ8563_CHIP_ID)
- 			data8 &= ~P_MII_MAC_MODE;
- 		break;
- 	default:
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index 1b327bca1fb88..54c1cba35a9d8 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -118,7 +118,6 @@ struct ksz_device {
- 	unsigned long mib_read_interval;
- 	u16 mirror_rx;
- 	u16 mirror_tx;
--	u32 features;			/* chip specific features */
- 	u16 port_mask;
- };
- 
-@@ -541,9 +540,6 @@ static inline int is_lan937x(struct ksz_device *dev)
- 
- #define SW_START			0x01
- 
--/* Used with variable features to indicate capabilities. */
--#define IS_9893				BIT(2)
--
- /* xMII configuration */
- #define P_MII_DUPLEX_M			BIT(6)
- #define P_MII_100MBIT_M			BIT(4)
--- 
-2.30.2
+On 2022/8/22 16:30, Willy Tarreau wrote:
+> On Mon, Aug 22, 2022 at 04:19:49PM +0800, Qu Wenruo wrote:
+>>> Regardless, if you need an older compiler, just use these ones:
+>>>
+>>>      https://mirrors.edge.kernel.org/pub/tools/crosstool/
+>>>
+>>> They go back to 4.9.4 for x86, you'll surely find the right one for yo=
+ur
+>>> usage. I've long used 4.7.4 for kernels up to 4.9 and 6.5 for 4.19 and
+>>> above, so something within that area will surely match your needs.
+>>
+>> BTW, it would be way more awesome if the page can provide some hint on
+>> the initial release date of the compilers.
+>>
+>> It would help a lot of choose the toolchain then.
+>
+> It wouldn't help, if you look closely, you'll notice that in the "other
+> releases" section you have the most recent version of each of them. That
+> does not preclude the existence of the branch earlier. For example gcc-9
+> was released in 2019 and 9.5 was emitted 3 years later. That's quite an
+> amplitude that doesn't help.
 
+Maybe I'm totally wrong, but if GCC10.1 is released May 2020, and even
+10.4 is released 2022, then shouldn't we expect the kernel releases
+around 2020 can be compiled for all GCC 10.x releases?
+
+Thus the initial release date should be a good enough hint for most cases.
+
+If go this method, for v4.14 I guess I should go gcc 7.x, as gcc 7.1 is
+released May 2017, even the latest 7.5 is released 2019.
+
+Or is my uneducated guess completely wrong?
+
+Thanks,
+Qu
+
+>
+> Willy

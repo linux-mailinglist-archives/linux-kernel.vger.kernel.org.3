@@ -2,82 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E91859C0EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4828F59C0F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235377AbiHVNsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 09:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
+        id S235359AbiHVNuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 09:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235310AbiHVNsa (ORCPT
+        with ESMTP id S231176AbiHVNuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 09:48:30 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA7BBE1A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 06:48:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YF7MJpPCJtc8Urz7rYZCvMK8j3cGw0f0gRKAs00wVEk=; b=QHfWlkzVLdI+AGdCPDZQKGS/DU
-        qV0mVroQeBjGW53Rpmo62vsSxsuhyEu9O4pnjkgNJQR7atycHNLELQh+er8s9KQB7mcBtJBm1mH7V
-        HxVCgrQYpiOnecQwX+q5gW3aRf0+eN/B6OqYVsoWHSr81tK8i2IhpXTX3mL0NP38EoUAfqPM3FKqt
-        ttoil8b4LrgLvyVx1u1q6aGgU8UpEjWYUDqeB1WVw66fQ8yvlsKiIxyxX8d1rHj62ZssNEr4N/nfp
-        a8UZVGH3h2sgF/1ycqMudCam+NCYhhf9mgu4CG8SIFkooaNNEesrVyU746Vo+MidkZ/04saPEuWx1
-        QcAegKMA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQ7mn-00565A-V9; Mon, 22 Aug 2022 13:48:14 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 817749804A3; Mon, 22 Aug 2022 15:48:12 +0200 (CEST)
-Date:   Mon, 22 Aug 2022 15:48:12 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     acme@redhat.com, linux-kernel@vger.kernel.org,
-        alexander.shishkin@linux.intel.com, ak@linux.intel.com,
-        Jianfeng Gao <jianfeng.gao@intel.com>
-Subject: Re: [RESEND PATCH] perf/x86/intel: Fix unchecked MSR access error
- for Alder Lake N
-Message-ID: <YwOJHLuX57Q4e/wH@worktop.programming.kicks-ass.net>
-References: <20220818181530.2355034-1-kan.liang@linux.intel.com>
- <Yv+ggf6PRjL8Eio1@worktop.programming.kicks-ass.net>
- <80eea4f7-bb1e-ebb9-37db-9317b8d9c28f@linux.intel.com>
+        Mon, 22 Aug 2022 09:50:07 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D025E26104;
+        Mon, 22 Aug 2022 06:50:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4A5DECE12D4;
+        Mon, 22 Aug 2022 13:50:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FCD5C433D7;
+        Mon, 22 Aug 2022 13:50:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661176202;
+        bh=PkPJyZp0RJEudQRyQhF1AVCrZqBQGaVx6WsnuFkdofY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DaE7Ix7iJ+WK0FJur7tmTaCv1JRfa4OFhEEW4D0zxXr2yLuZ7ij78PFz7ogP1RVab
+         6bNZB4LSBD8L5dD9kskxMLrzPglQc4S0sEqzVC22/XnhRxdZRc97jHMAFCiDfGHMEa
+         5S55Nzj+phrBYvGv5vX7h5EZKmQrOCplwB3Cl7uwg59aL8lfrHZjg8XIQMTyGmx8Ed
+         aI7nUjKiEiaOEFWYM2oqlXKHLsAk7VrT468Jqc7WkF3larrIfg56Q3HQBpSbMqvYEu
+         3AolSIlNN9cjGMD2Yw48mXAGi94hb8ev8jITIIc6ucIED1opyYbWlBcBBDHwRgtNd3
+         baR8iKjy7UarA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1650E404A1; Mon, 22 Aug 2022 10:50:00 -0300 (-03)
+Date:   Mon, 22 Aug 2022 10:50:00 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf: python: Fix build when PYTHON_CONFIG is user
+ supplied
+Message-ID: <YwOJiBG+K877d+Ou@kernel.org>
+References: <20220728093946.1337642-1-james.clark@arm.com>
+ <CAP-5=fXnR=LSk-bO02V7HzWTTCrsbnM1w63_YYqSMEgy0vM-PQ@mail.gmail.com>
+ <YuLi14u3DQ+ShH9w@kernel.org>
+ <f64f6cbf-73cf-e59a-5f6d-7303125bee66@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <80eea4f7-bb1e-ebb9-37db-9317b8d9c28f@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <f64f6cbf-73cf-e59a-5f6d-7303125bee66@arm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 09:28:31AM -0400, Liang, Kan wrote:
+Em Mon, Aug 22, 2022 at 11:08:37AM +0100, James Clark escreveu:
 > 
 > 
-> On 2022-08-19 10:38 a.m., Peter Zijlstra wrote:
-> > On Thu, Aug 18, 2022 at 11:15:30AM -0700, kan.liang@linux.intel.com wrote:
-> >> From: Kan Liang <kan.liang@linux.intel.com>
+> On 28/07/2022 20:26, Arnaldo Carvalho de Melo wrote:
+> > Em Thu, Jul 28, 2022 at 09:37:32AM -0700, Ian Rogers escreveu:
+> >> On Thu, Jul 28, 2022 at 2:40 AM James Clark <james.clark@arm.com> wrote:
+> >>>
+> >>> The previous change to Python autodetection had a small mistake where
+> >>> the auto value was used to determine the Python binary, rather than the
+> >>> user supplied value. The Python binary is only used for one part of the
+> >>> build process, rather than the final linking, so it was producing
+> >>> correct builds in most scenarios, especially when the auto detected
+> >>> value matched what the user wanted, or the system only had a valid set
+> >>> of Pythons.
+> >>>
+> >>> Change it so that the Python binary path is derived from either the
+> >>> PYTHON_CONFIG value or PYTHON value, depending on what is specified by
+> >>> the user. This was the original intention.
+> >>>
+> >>> This error was spotted in a build failure an odd cross compilation
+> >>> environment after commit 4c41cb46a732fe82 ("perf python: Prefer
+> >>> python3") was merged.
+> >>>
+> >>> Fixes: 630af16eee495f58 ("perf tools: Use Python devtools for version autodetection rather than runtime")
+> >>> Signed-off-by: James Clark <james.clark@arm.com>
 > >>
-> >> For some Alder Lake N machine, the below unchecked MSR access error may be
-> >> triggered.
-> >>
-> >> [ 0.088017] rcu: Hierarchical SRCU implementation.
-> >> [ 0.088017] unchecked MSR access error: WRMSR to 0x38f (tried to write
-> >> 0x0001000f0000003f) at rIP: 0xffffffffb5684de8 (native_write_msr+0x8/0x30)
-> >> [ 0.088017] Call Trace:
-> >> [ 0.088017] <TASK>
-> >> [ 0.088017] __intel_pmu_enable_all.constprop.46+0x4a/0xa0
+> >> Acked-by: Ian Rogers <irogers@google.com>
 > > 
-> > FWIW, I seem to get the same error when booting KVM on my ADL. I'm
-> > fairly sure the whole CPUID vs vCPU thing is a trainwreck.
+> > Thanks, applied.
 > 
-> We will enhance the CPUID to address the issues. Hopefully, we can have
-> them supported in the next generation.
+> Hi Arnaldo,
+> 
+> I couldn't find this change in any of your branches. Do you know if it
+> got dropped somehow or was there an issue with it?
 
-How!? A vCPU can readily migrate between a big and small CPU. There is
-no way the guest can sanely program the (v)MSRs and expect it to work.
+Applied it to my local perf/urgent branch, testing now. I thought I had
+processed it, not really :-\
+
+- Arnaldo

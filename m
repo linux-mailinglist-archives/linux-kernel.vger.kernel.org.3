@@ -2,133 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C67459BBE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110C259BBED
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233542AbiHVInl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S232180AbiHVIqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiHVIni (ORCPT
+        with ESMTP id S229565AbiHVIqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:43:38 -0400
+        Mon, 22 Aug 2022 04:46:08 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC0013DF3;
-        Mon, 22 Aug 2022 01:43:36 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27M8AbHF004949;
-        Mon, 22 Aug 2022 08:43:17 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04AE2A25A;
+        Mon, 22 Aug 2022 01:46:07 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27M8K0DV002427;
+        Mon, 22 Aug 2022 08:45:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
  : subject : message-id : content-type : in-reply-to : mime-version;
- s=corp-2022-7-12; bh=3uhdjkOeNbB7UhfLALKaVnRKWUeiz36tguYXpBXGkUA=;
- b=VUGJwhaFeTuKXiEtx+Xn/sUBSGJ6XhR01doE3V9kanVuslJb/fu0zBNSFGMq5lUnB+09
- fU26+Ql0ndM9iVSYWmiBttwH8k1XmyMpFv+PnH0xA6SMRWFDCocPMaGwr5JJ7E5ex8Ti
- vIwk5w/I2rjR7DjMcMeT8VracrPw2lLIZvFDrbjbSxc/i2T4sZ/yhTmsOSPuI3CE3zS9
- vQwy7RJu4LRWypD2BskysdnLBP+IGcr+yaSspShHCRwON3iK49Ip2Fq+5bK0iqrDY6AX
- X+3qUISlefJ8xW9QjmpX9vMmNaeJv17gYZWsJSM9IvuK9MwiFo1ocDVvtHktVdR2F7gk 9Q== 
+ s=corp-2022-7-12; bh=bXtP+jhWSI9YtQAoJBzNA8U3hurwyUDO2JnRtT/cKg4=;
+ b=cotfquOtZVOxnC1l1aj/Kza+SEP+D6oTrAN4YuYdD/E8yDThwV5tHJfrHIVuvvLXIe2i
+ zX53yeA5N7cFtjcfXs4T8LzFtD79DRY5vg+QDNLxAzLtPLHXei5KhgnkV5nIZ8pSwngQ
+ oXaCS6OWRL/dh1J0PvHj0dBJPy2hgpxaWbfVqOWmokfWZsqwNalFzPgJHCU9ZGjJm1VL
+ ilRfyt7bWSSKzqHW7vFqcojw6DyF1zNWkgcS5DRbbgfncP5cAwYdUqDjGIeK+kzjbhrk
+ rTsGTPJKOjQjBnRoWEoru8uvyPam85tHIlNGx6i/R5utoXgEtJ7pg6zvwRjQUOAROF3l 3A== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j462882ge-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j466h02kh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Aug 2022 08:43:16 +0000
+        Mon, 22 Aug 2022 08:45:03 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27M5U2Cw038092;
-        Mon, 22 Aug 2022 08:43:15 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j3mkfs7ys-1
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27M8Z7AW038204;
+        Mon, 22 Aug 2022 08:45:02 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2046.outbound.protection.outlook.com [104.47.57.46])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j3mkfs9cx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Aug 2022 08:43:15 +0000
+        Mon, 22 Aug 2022 08:45:01 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WwOJFuosohCfp6zLet1X58+3ji56DmRUmSVvtibJRiEnFyxrSKn+n6HJFFGBZtVsINxKm+++sq+GWfuuAiZH4QI4hpGuL7sKbHX5gfdan9Jhp5gr66dEP4cTqPC5QpFp1DmGWejxWbOnEEhqKZqXXYqkhBRV5uhYUNhu8uYXKbJ5wcZEGil71H5Daod7/Ar4uO3Fom1wx9uHDBPY0rFBQYxv57g6Gb7nhUM5fNwb2GBKNNgoOKJ2YxrTu0W88GZYXQ4qRHll2HFT1MdmY3Y0s1WfdO4oU4jPwQU4TexnFt4mHbWEHFOLKhxY28nCf044L7M9tlkQ8MHC0Ds1hibbJA==
+ b=R5jfvuxjg6SFv6Z8LvcH0sJ5bBlM4VKrbHroCwPJEPPIYb44WSNPQByKnJlo/DD7bG5jDI9cks1fxXjFAKV6O+5RgmTqP+83z7ON9xlwxvZl4deGsveA4tPTBecXIsv/aMAYbDc3WANdkOg9pClBctC6KtigQizndgDHcg789I5P7xi5gZq65BQxZvjvRUsUL7TRv63xGRsXR5bZgCSXN4w+annwpI4Cjr5WCFQocS/Fwa4JA37McfMRZBkAovHULp60lLP9QsgwEfDpFxiCmN78gCuFitqSIU0lPT9fSTCieXXScsfIt+NqMFLZyf+GHF9w7M87/Tr5X2bZvwcAkA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3uhdjkOeNbB7UhfLALKaVnRKWUeiz36tguYXpBXGkUA=;
- b=m4R0T2/iq66HvljzMhzcPgxsYT+PTHDZEaHU75eNtEFgJUaFSqcfmOv1G7ZvIpApocbEkJOs22wVCGkXNK/wzPNVUub0eM9n+2OZSNEVHtLESjRS3+l1rXK8GojrM4YNkIEsJuD8y81Qrto7yYRT50GyLShsonh91zqrjjvQqqmxjZf5wvMxCrtkbCcgBwSlz/XPHgZnjERS/g98lO0rXbW59iz5xH+7GwUKmAurmqDBKEd0mViPPrpA5ON2EDRnpctDQ7potuOKsl5rDajCieyPjqzTymkqTweGAXbW7ZOyLKamcqPjEat12WIHKjg4AZupJ45jm1rcOuTsswPhVw==
+ bh=bXtP+jhWSI9YtQAoJBzNA8U3hurwyUDO2JnRtT/cKg4=;
+ b=QPwuochC4RqzZWJFLJn2w6TmBQVTeySnN90ygXGlhRM7+gVyuEzdfXUXLuNVCj8lObFNOQgs7RIXtdWN9o9EWyiQHzC5e6yZkffcebez7VmBByvny9kugaKAaZROCN08/SluB1UycdgR8q9gTvMVo+55c4u4Wkpvwvg4L9sf6jL9sRVP2wOyPPnZEyqi1MP5Mp5LdOjHP+wJUeC5L01oSW63tdyYsnq57eNA/iUQZPcDa++ma4o73iPLZukj13DmbmXiFMVfPF5zReZIHnkYpsXgFKgKSnXfGCZdfIOEE8XrdvA3EiMC20tJQcH8TgketpSXKDeyi8ur/D+YZJkxog==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3uhdjkOeNbB7UhfLALKaVnRKWUeiz36tguYXpBXGkUA=;
- b=bud9Zlw+aeJ4tpOlajOW8BiEpyuvTQoaGnt60bVUTdFRoxpRBS5jNAteZH89T9sTPeY//E3FvWjV3DptYYmWJao9rZtIxiH3EZauzArKFb3dt7JSIj/rwHGiihbN1siJPTeXTZ+/3ODN397m51YY6rgn9KpZpwQK2sTDy8XYdyE=
+ bh=bXtP+jhWSI9YtQAoJBzNA8U3hurwyUDO2JnRtT/cKg4=;
+ b=Mgzo53ZKxpcvmlX056OOLL+/RgzbK84DRtonAgtgjA3a4Gkak24J1ZvqodEcwW2ED9I8kw5KgYm/EJmY9EZV1IE/UsQOlUXZq/ocibBftQQ6M4LnLcdNy3x+JKOqN4pSrfqfTHbTm3TYbI/LrjjcTuLJcv5MEFBF8DvhIOON5Kc=
 Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
  (2603:10b6:301:2d::28) by BN7PR10MB2561.namprd10.prod.outlook.com
  (2603:10b6:406:c9::17) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.19; Mon, 22 Aug
- 2022 08:43:13 +0000
+ 2022 08:44:54 +0000
 Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
  ([fe80::209e:de4d:68ea:c026]) by MWHPR1001MB2365.namprd10.prod.outlook.com
  ([fe80::209e:de4d:68ea:c026%3]) with mapi id 15.20.5546.022; Mon, 22 Aug 2022
- 08:43:12 +0000
-Date:   Mon, 22 Aug 2022 11:42:49 +0300
+ 08:44:54 +0000
+Date:   Mon, 22 Aug 2022 11:44:30 +0300
 From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kbuild@lists.01.org, Conor Dooley <conor.dooley@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
+To:     kbuild@lists.01.org, Arminder Singh <arminders208@outlook.com>,
+        linux-kernel@vger.kernel.org
 Cc:     lkp@intel.com, kbuild-all@lists.01.org,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v9 3/4] pwm: add microchip soft ip corePWM driver
-Message-ID: <202208212329.XETz1mt0-lkp@intel.com>
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        Arminder Singh <arminders208@outlook.com>
+Subject: Re: [PATCH] i2c: pasemi: Add IRQ support for Apple Silicon
+Message-ID: <202208220231.f88sizqa-lkp@intel.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819085703.4161266-4-conor.dooley@microchip.com>
+In-Reply-To: <MN2PR01MB535838492432C910F2381F929F6F9@MN2PR01MB5358.prod.exchangelabs.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNXP275CA0012.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:19::24)
+X-ClientProxiedBy: JNAP275CA0072.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4f::23)
  To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 96bae38f-2715-4d06-dcc9-08da841a58ad
+X-MS-Office365-Filtering-Correlation-Id: 0010a8e1-c469-4fd1-eaef-08da841a95a5
 X-MS-TrafficTypeDiagnostic: BN7PR10MB2561:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: daV9pf5UVmbPaunSTCYqiSsUL0vg3tMpR+7vt718RYj+blqmFkRShjomR2npiIvq0r1J0i5QxJP627BM3iXEIJn7y6F4ms2ntPvxC+54fes4qh5deHpfZrCC9m2T8TRHkq7euSo0D2/wWew+efVBx7jB8oER+0h8ydPxxVbWn/gSEAnb7xyofjX8rdYhBtmb0fy7qtU/IYAIszRTWPmSfEQ6DrzUkJMe/T5OZOU+rghRaIkSFcNdiqMn1bo3BAAXeanFhcMtzFn5ijeBIhbynmcZExelWN0t81czOwHSbruqE3cieMSxlEX/AL4itYl/vb62ZsntRI3j7Khlhh66515KPvRz8iuUe2WeW8eKpvGK+FS9aUQ6om79KN7TWX2oVd8E8cRDlQG7PWHoReyw/N5+lO9gbLHlqmmF4ZwCpw3ZK9n7o6+knq7B4e/D7Icw7o8gEoZeFBjkAnJ5kcQVBElEmd0jbpL2okJOYK8Q3JYprv7f3me1J6udZkCNn6KYluBnDSqIo1SYg32FyGLi9AIFu7rarK6Wd+JvZi1X4aWzJ+mgoVYB/FyXPlRtVfiGZwVs1HO4CBZx+KkFw0X+iXs2xgTXAgquplxyibBa7NmgR9A6Yx/mQoXUhQQRwnQDUP8ZoKV8S7CNhSYO0PdDYMrL8uKQSsYwHrOdEKr7xXk1Z/eQ7Lu9bkZc6BOtKzp3JPt5713mvcDLIWq4mf35DfEUP/xJ9/rXLSyWkIklBr+6wDDsDZSg3Nu6yEGx8QvCttHVpKRqfFeWUprUW2lZn7u5DtzR6y+/AOZNQGvJLaOAy+IoS6LQ+wupZpULWiKFzQ4nlXbPZEkVMM6is3Ucqg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(366004)(376002)(39860400002)(346002)(6666004)(52116002)(6506007)(26005)(6512007)(9686003)(478600001)(966005)(6486002)(41300700001)(83380400001)(2906002)(186003)(1076003)(4326008)(7416002)(8676002)(66946007)(66476007)(66556008)(5660300002)(8936002)(44832011)(110136005)(316002)(54906003)(36756003)(38100700002)(38350700002)(86362001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: iiURD78QU1subsP24s7NcyY3JaRsuqmagOI+Q9ZwTVRjgnxMoD5ua/9SBIaDFhR6TUAMhNcZmPu51UlcyzZ8oY+SfAWURTdxDbQ6aSndLIRXd5/UgV9Nr2WCIsdKgespnGzBj1PvoeOHglDlxKCSBquXdvQj0OdkGS/KBZR17RVojlQrckzwYhs74TQW76ilIKcamoHnT86XwjKqbOIn2AKtUT7EzxwRq4m+xmiSZfKigwZDoZAQtBC0WDdqvfOj5J7cG58KSu+2cuoP+NP5JKHOFmQxGafR5rvqj3+WadY4i4SUZF75t35uMm7/4EQoWzG2LGRiCq5uLOZkpUr6qECQe0/wvJCbgdgS5Ab8c5f9NhZ4MLxlivKUO6ZP2beheo2P/cZ/nlV8QavETqyWw15wiepMRLz5hdqCdEucSo8G05u0+celEFgU632ASqCNbSun7kKuxXXD963EEKrxsZJ3dnQIzb5B3moF6kGSvzpsp209Ly083f9EZjAZAEC6gMbTctJDEcl93Wnksqb/NyOONjufMAyDnA7asacn+uYR5q5xh5b7B0cemkQYVrkvBY7kltHFCR5EqjkamFQhCR644MFb/Rcxisr0VMfd68pBsj8Km6AOQ2emYUgeAWjLpZpferv0ecN7pmMYhBQm90cYACvCD7af++uwW1ieJt9tTNxIO/JOeV7pe8CfXp/YVDrNlj/QnW5grUwAetiNowoSdBOfRl9o6dnHPwStudAGT2MTZVS6Am/Z9SX2W7CJ0qN1X8Zc4vSdzt0ag7C1zW0m/YDLn3VbWiDcLirMtHQnNYokjvqPyMW4lqmGh0WQmWTBPT82Mm1eJph43EC3E3PbSwfbbNX54PCs+AEGNEOE9Kpk+Dh48ic5I6xHS+04
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(366004)(376002)(39860400002)(346002)(47660400002)(6666004)(52116002)(6506007)(26005)(6512007)(9686003)(478600001)(966005)(6486002)(41300700001)(83380400001)(2906002)(186003)(1076003)(4326008)(7416002)(8676002)(66946007)(66476007)(66556008)(5660300002)(8936002)(44832011)(316002)(54906003)(36756003)(38100700002)(38350700002)(86362001)(46800400005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4NtxvYdeWAlURfeA8ifEC5dfym9jmp+5T6o3Bec6aYfkhyNpTEn6m5amwK8I?=
- =?us-ascii?Q?ceG8PwDu5cXO7NneiDLhj+Om8IXZma6FJP4NC/6pcSLolyxOrkBGbVGaP0qE?=
- =?us-ascii?Q?rvN3tPT7ArDKt7yx/TI8nFKweM1ojb1u+hqplvAecX2qPSIkbDw/OnLlqcep?=
- =?us-ascii?Q?hDcNZpAJERfdXFyHTO3QZtul1Tu0bHrJel4fJpLg7rEXGdTr1It6mQ9ihTex?=
- =?us-ascii?Q?/SUhQWzQJARZ5hnD0U6QyfbFv9dkffTACpEcDr1qiUM7vsoEDNiZS2IuJUov?=
- =?us-ascii?Q?TECrci2awOp2uG9j/rAcfP3ECma28LVaYbNGfMnrqz+VE00yg1zmVqE6q6ns?=
- =?us-ascii?Q?hBDUqw/1CRV2z6/4skdrjI5jm+JL0mdFvVFrGwHoog0k1tnzqWLaoHdy9pD0?=
- =?us-ascii?Q?Mm4rnHlLQKLsesxB+IgXkbAor5V6lxIeLCHjajtj0XlbGn9I+aNtzaCYEHZG?=
- =?us-ascii?Q?W9FntfH5Py1V0JwJYTep4jSwh5yum8V5vLJSIzxUkShozunpOEY1JtJH92rt?=
- =?us-ascii?Q?AUqv2szUI57yZAHKztdmt2VR4MCg7cUi+tkqIgCAhAE3jZk1R5gYYvYdPTS1?=
- =?us-ascii?Q?bIYnGZk4ovSuILdZ3jEAZoij4b+yb5TNQHBMaPRQjwqaC2ZJrnO5IGuiulEO?=
- =?us-ascii?Q?cNmeer5Kr2LPr2hwJ7nw7BsrrFvCNjnYE9VDJWrLrBIrxnHN/ebBdEZxTr9r?=
- =?us-ascii?Q?WLiIbLhDFKxhmRPO/jPEVDXT0HxoEYq6UojyeYF6Ua9Jk19F03w5/QgA4ZVk?=
- =?us-ascii?Q?d1fhdzPz2odw7u4+2giKh6aqbXpDN+8a7rci4SbkEGbVipFMaTx2y1xYszGk?=
- =?us-ascii?Q?yEoNU0qIfa6cV4/NWwuWLBC514TJDbdjp3wYbUF0x5rEtPyCxV1Tm+39Aa/t?=
- =?us-ascii?Q?NpEGmjxpgMAza7f32ymqu2ySXGOCm1Iv2IwCn0zH2U82+XUCwbuYUic5yePC?=
- =?us-ascii?Q?q0d4NipiTS+mAPLH1sZixS1JtSmfn2g/LzHnkifxyqBcY81O7LylLBUfDK/e?=
- =?us-ascii?Q?1SQZh9ip8xr5Y50sMEibrNZuNZNESWtzU5AqaSDO1oXYReWvqcABpi2WzdkX?=
- =?us-ascii?Q?AUad/XnPpMACQYcRE1Rb4OKL+G3u0wWVuFCsCDsUsV4EV7/xkJw+XZ3yGovc?=
- =?us-ascii?Q?AphKUmB0+CVoJ3WPl6KkibtvVdXqjvVLkRyJCKWPM+SJHDzxj39ubWGM27i4?=
- =?us-ascii?Q?nuMTjKSYti+dkhrbmfpaLkK8FF908uqahOpDUaxTTX4wF4WOQOesMMTj6N4o?=
- =?us-ascii?Q?B/GvvTfBHhwipi8ElEFuVhg+eYU8dlbeQHlX0bicHksRnvlwsGlEtZ3HZXmV?=
- =?us-ascii?Q?PG/CPmj7BcpPG70Z4aXCrbQTUiouG8CBTveVL6oRfNwhHhae2wcZ+3z4/y8g?=
- =?us-ascii?Q?3t4CeJgJtc3xWoLolgjQ3nbSg5f4liosbxH7Gt7xo7mHJTmPE/rRfHJTXkYq?=
- =?us-ascii?Q?0Yg4LO+sfpJu9h2n8nCOF9vCb/eXUlK6hoSQuX3kw1QH92WkPaOIKEaBXC4c?=
- =?us-ascii?Q?dLoxs4BdNvavCp0LgvceskXzTxPvLTRS0B0RIyBIsfc4lObLxrcOASavMjsd?=
- =?us-ascii?Q?p7kgpZIL57x09KMc1zKK2cn43cOPnqpTRMyYD0NsMKvgWJ3p5MjXE2fw+xrp?=
- =?us-ascii?Q?QA=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xPFz5KsjcasP9sQUZVT7bRmNJTGj/xq9+GceR9KxlL/UZBQUVkW7NUIWL7G7?=
+ =?us-ascii?Q?L+tyM5RNsWzVqSbH7R58xJomo7FGDPK+WJL7bpuHqCrk9WXSecciuIl7G/rv?=
+ =?us-ascii?Q?XPhA6BXQuXt66JhkrdoHcr6bABxyY6LcYTi4tk8J7YJyxkANGIrrSpZQ1sKO?=
+ =?us-ascii?Q?CJO7uhYD4SeosswAX0o2aROqEH7MBzeEbrbK8GdLc487PTlnvYKfsZbnnKLS?=
+ =?us-ascii?Q?mLrGL8BnTdSdi+F5JKRdIuvmxue7iLTyuoAUHT76rftkyAgCNxVSY7HRuBxh?=
+ =?us-ascii?Q?G+CBMd/6qviB7p6fclyAaAGaBOFZ6HLjI2aTpSDiutoi/O0AbDwAv8FtNy0O?=
+ =?us-ascii?Q?7MZ46gujLoAvGFaVudBLC412U56qkgHGjMF/zxKgrFhev3vN556+T+r6UqDs?=
+ =?us-ascii?Q?Nd+hrTdJOVbLA+Gk7mZTrfSwmjK6OudV3BHr+ueqkly7g97rFYOmnShR83ur?=
+ =?us-ascii?Q?Q6W6idF1HTF88YvGgIp+zBd9gGzrQO7SkOplIWIZlF6aweGpfQqmzCO7aogP?=
+ =?us-ascii?Q?JI5kFYKMwy6kbDxePTD2U9suuWPtrnfwrLn55VZwNhgJ5J9jDU4m2u+3wXGh?=
+ =?us-ascii?Q?zyu9BGUKIpMw4Kn8/NiWXJkadg3/Lxu3uZGLcl9+S/M3qDrBfZtGKNtwg5JK?=
+ =?us-ascii?Q?ktqYLMCTJaYVBMVTBVTZBvmMvWVMMbeiaBvEjdmTxC0n5t9fBkzV9Nsui/Ak?=
+ =?us-ascii?Q?zrz4m2Rgr1Vxqpmy4/2sFi3EOKrN/CtHMpzWWuY/P2S06X5WNiu7vavGn8PC?=
+ =?us-ascii?Q?B/Ma+XFzQxou0fdPsaip6IsB+T3tFe4jaZ5BPUrNzjalW6qeGvY+1Bxrwrra?=
+ =?us-ascii?Q?PJOm/xEVXEBO9/Im4mH1A9JuWW4Iz7SMMGj+hOyCxch5l5zqb9HZEGBoFLtK?=
+ =?us-ascii?Q?OHZW0OwNzrFgRmcRG2KOpjRaiq2IIp6swC46rZrZNpcNEKJ/PPT7Wv8oIsgC?=
+ =?us-ascii?Q?LCuM0+SZlH4cB6WknSeEwu2rL+bo43ACdjHmbT9aCsnXXfKWmvnNvi03HXWw?=
+ =?us-ascii?Q?+v655VJJyktKyaGNJIWYJIaKz402U9nrMuRzF2Stcf9zueV/Z2Pw+cLz8qvG?=
+ =?us-ascii?Q?X0GXll3gooVeL/4JHtTe7UYzKb0dS5sP+iwrXuNxeKlW6uEFceThD169qx89?=
+ =?us-ascii?Q?8c8C/y9G43nhrIgZuqg6x5q/iRcoUbVm+OucjuPRu0VAVz/idswVhCxLB6fr?=
+ =?us-ascii?Q?UOFlRTw4ag7XXh6oRRooX/rF0TF5pPYX6ZnIzo5VLE6ExBQwoqFZfZ/ryLul?=
+ =?us-ascii?Q?ct40bc516/zLvvGClAcHLLlq+Hj8RxQFb4gWOTZW0SNth+OIRDUQG+FLit31?=
+ =?us-ascii?Q?o21cQNYnO9DuchZ4C7zmBg6KJNvazROqNVVxRDvTVXNoSmDuOUSLvQqJad25?=
+ =?us-ascii?Q?dhFsraLePaKcM6pg7xkP8i5oEIw5dLqyGo2Wsbq8FL1kd27rnGqA8k+RWrJe?=
+ =?us-ascii?Q?xApTh6lefJuDMoRQ7mjZrqIUW4PTIc40D48C5JqcySz30m8r2akJRhtbUBQi?=
+ =?us-ascii?Q?yvfwFkv6P3lOJskw+7932SN5eDLjAnY1/AvR/3GVfT51Dphhlk8CAftswPot?=
+ =?us-ascii?Q?G4D1eCehp+6RYCq/YKjj6Udcs1eycsC5xFJpNNKC9YJQzbooTkcGRm7H+ChM?=
+ =?us-ascii?Q?ZA=3D=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96bae38f-2715-4d06-dcc9-08da841a58ad
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0010a8e1-c469-4fd1-eaef-08da841a95a5
 X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 08:43:12.1901
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 08:44:54.4634
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: e627TWhi9IFfDNtahN1EqBDHE5ygFWUzo4LwTDzKmXDWtrwSxmzWPLoMjP5d0X5iuRRpFzrEMEvZl3TRwVY9YSONfhPfof/r4ZRKtXbsgmY=
+X-MS-Exchange-CrossTenant-UserPrincipalName: Gmc6v4bhU6YCUKriKuCbh4v3B8qbNi4HHsiknHZaFu23KVauWpBad/cnhNBHirrewMc7+SYxzWsjuNl/NubW1j2CyPVmBRtQByYy2ujFuAU=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR10MB2561
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
@@ -136,135 +138,74 @@ X-Proofpoint-Virus-Version: vendor=baseguard
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
  phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208220036
-X-Proofpoint-ORIG-GUID: inUmolzi8k3Sul71ygiqLkin7Q-oUFtk
-X-Proofpoint-GUID: inUmolzi8k3Sul71ygiqLkin7Q-oUFtk
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FAKE_REPLY_C,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ engine=8.12.0-2207270000 definitions=main-2208220037
+X-Proofpoint-ORIG-GUID: yWtAwSOKStO3TcI33We8aUeZakfhGg-6
+X-Proofpoint-GUID: yWtAwSOKStO3TcI33We8aUeZakfhGg-6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FAKE_REPLY_C,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+Hi Arminder,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Conor-Dooley/Microchip-soft-ip-corePWM-driver/20220819-170106
-base:   568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-config: arm64-randconfig-m031-20220821 (https://download.01.org/0day-ci/archive/20220821/202208212329.XETz1mt0-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Arminder-Singh/i2c-pasemi-Add-IRQ-support-for-Apple-Silicon/20220821-034703
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: parisc-randconfig-m031-20220821 (https://download.01.org/0day-ci/archive/20220822/202208220231.f88sizqa-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 12.1.0
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
 smatch warnings:
-drivers/pwm/pwm-microchip-core.c:295 mchp_core_pwm_apply() warn: inconsistent returns '&mchp_core_pwm->lock'.
+drivers/i2c/busses/i2c-pasemi-core.c:92 pasemi_smb_waitready() error: uninitialized symbol 'status'.
 
-vim +295 drivers/pwm/pwm-microchip-core.c
+vim +/status +92 drivers/i2c/busses/i2c-pasemi-core.c
 
-ae39414af22131 Conor Dooley 2022-08-19  200  static int mchp_core_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-ae39414af22131 Conor Dooley 2022-08-19  201  			       const struct pwm_state *state)
-ae39414af22131 Conor Dooley 2022-08-19  202  {
-ae39414af22131 Conor Dooley 2022-08-19  203  	struct mchp_core_pwm_chip *mchp_core_pwm = to_mchp_core_pwm(chip);
-ae39414af22131 Conor Dooley 2022-08-19  204  	struct pwm_state current_state = pwm->state;
-ae39414af22131 Conor Dooley 2022-08-19  205  	bool period_locked;
-ae39414af22131 Conor Dooley 2022-08-19  206  	u64 duty_steps;
-ae39414af22131 Conor Dooley 2022-08-19  207  	u16 prescale;
-ae39414af22131 Conor Dooley 2022-08-19  208  	u8 period_steps;
-ae39414af22131 Conor Dooley 2022-08-19  209  	int ret;
-ae39414af22131 Conor Dooley 2022-08-19  210  
-ae39414af22131 Conor Dooley 2022-08-19  211  	mutex_lock(&mchp_core_pwm->lock);
-ae39414af22131 Conor Dooley 2022-08-19  212  
-ae39414af22131 Conor Dooley 2022-08-19  213  	if (!state->enabled) {
-ae39414af22131 Conor Dooley 2022-08-19  214  		mchp_core_pwm_enable(chip, pwm, false, current_state.period);
-ae39414af22131 Conor Dooley 2022-08-19  215  		mutex_unlock(&mchp_core_pwm->lock);
-ae39414af22131 Conor Dooley 2022-08-19  216  		return 0;
-ae39414af22131 Conor Dooley 2022-08-19  217  	}
-ae39414af22131 Conor Dooley 2022-08-19  218  
-ae39414af22131 Conor Dooley 2022-08-19  219  	/*
-ae39414af22131 Conor Dooley 2022-08-19  220  	 * If the only thing that has changed is the duty cycle or the polarity,
-ae39414af22131 Conor Dooley 2022-08-19  221  	 * we can shortcut the calculations and just compute/apply the new duty
-ae39414af22131 Conor Dooley 2022-08-19  222  	 * cycle pos & neg edges
-ae39414af22131 Conor Dooley 2022-08-19  223  	 * As all the channels share the same period, do not allow it to be
-ae39414af22131 Conor Dooley 2022-08-19  224  	 * changed if any other channels are enabled.
-ae39414af22131 Conor Dooley 2022-08-19  225  	 * If the period is locked, it may not be possible to use a period
-ae39414af22131 Conor Dooley 2022-08-19  226  	 * less than that requested. In that case, we just abort.
-ae39414af22131 Conor Dooley 2022-08-19  227  	 */
-ae39414af22131 Conor Dooley 2022-08-19  228  	period_locked = mchp_core_pwm->channel_enabled & ~(1 << pwm->hwpwm);
-ae39414af22131 Conor Dooley 2022-08-19  229  
-ae39414af22131 Conor Dooley 2022-08-19  230  	if (period_locked) {
-ae39414af22131 Conor Dooley 2022-08-19  231  		u16 hw_prescale;
-ae39414af22131 Conor Dooley 2022-08-19  232  		u8 hw_period_steps;
-ae39414af22131 Conor Dooley 2022-08-19  233  
-ae39414af22131 Conor Dooley 2022-08-19  234  		mchp_core_pwm_calc_period(chip, state, (u8 *)&prescale, &period_steps);
-ae39414af22131 Conor Dooley 2022-08-19  235  		hw_prescale = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PRESCALE);
-ae39414af22131 Conor Dooley 2022-08-19  236  		hw_period_steps = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PERIOD);
-ae39414af22131 Conor Dooley 2022-08-19  237  
-ae39414af22131 Conor Dooley 2022-08-19  238  		if ((period_steps + 1) * (prescale + 1) <
-ae39414af22131 Conor Dooley 2022-08-19  239  		    (hw_period_steps + 1) * (hw_prescale + 1)) {
-ae39414af22131 Conor Dooley 2022-08-19  240  			mutex_unlock(&mchp_core_pwm->lock);
-ae39414af22131 Conor Dooley 2022-08-19  241  			return -EINVAL;
-ae39414af22131 Conor Dooley 2022-08-19  242  		}
-ae39414af22131 Conor Dooley 2022-08-19  243  
-ae39414af22131 Conor Dooley 2022-08-19  244  		/*
-ae39414af22131 Conor Dooley 2022-08-19  245  		 * It is possible that something could have set the period_steps
-ae39414af22131 Conor Dooley 2022-08-19  246  		 * register to 0xff, which would prevent us from setting a 100%
-ae39414af22131 Conor Dooley 2022-08-19  247  		 * duty cycle, as explained in the mchp_core_pwm_calc_period()
-ae39414af22131 Conor Dooley 2022-08-19  248  		 * above.
-ae39414af22131 Conor Dooley 2022-08-19  249  		 * The period is locked and we cannot change this, so we abort.
-ae39414af22131 Conor Dooley 2022-08-19  250  		 */
-ae39414af22131 Conor Dooley 2022-08-19  251  		if (period_steps == MCHPCOREPWM_PERIOD_STEPS_MAX)
-ae39414af22131 Conor Dooley 2022-08-19  252  			return -EINVAL;
+8032214346c0c8 drivers/i2c/busses/i2c-pasemi.c      Julia Lawall   2010-09-05   80  static int pasemi_smb_waitready(struct pasemi_smbus *smbus)
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   81  {
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   82  	int timeout = 10;
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   83  	unsigned int status;
+98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   84  	unsigned int bitmask = SMSTA_XEN | SMSTA_MTN;
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   85  
+98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   86  	if (smbus->use_irq) {
+98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   87  		reinit_completion(&smbus->irq_completion);
+98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   88  		reg_write(smbus, REG_IMASK, bitmask);
+98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   89  		wait_for_completion_timeout(&smbus->irq_completion, msecs_to_jiffies(10));
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   90  		status = reg_read(smbus, REG_SMSTA);
+98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   91  	} else {
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  @92  		while (!(status & SMSTA_XEN) && timeout--) {
 
-mutex_unlock(&mchp_core_pwm->lock); before the retun?
+"status" not intialized.
 
-ae39414af22131 Conor Dooley 2022-08-19  253  
-ae39414af22131 Conor Dooley 2022-08-19  254  		prescale = hw_prescale;
-ae39414af22131 Conor Dooley 2022-08-19  255  		period_steps = hw_period_steps;
-ae39414af22131 Conor Dooley 2022-08-19  256  	} else if (!current_state.enabled || current_state.period != state->period) {
-ae39414af22131 Conor Dooley 2022-08-19  257  		ret = mchp_core_pwm_calc_period(chip, state, (u8 *)&prescale, &period_steps);
-ae39414af22131 Conor Dooley 2022-08-19  258  		if (ret) {
-ae39414af22131 Conor Dooley 2022-08-19  259  			mutex_unlock(&mchp_core_pwm->lock);
-ae39414af22131 Conor Dooley 2022-08-19  260  			return ret;
-ae39414af22131 Conor Dooley 2022-08-19  261  		}
-ae39414af22131 Conor Dooley 2022-08-19  262  		mchp_core_pwm_apply_period(mchp_core_pwm, prescale, period_steps);
-ae39414af22131 Conor Dooley 2022-08-19  263  	} else {
-ae39414af22131 Conor Dooley 2022-08-19  264  		prescale = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PRESCALE);
-ae39414af22131 Conor Dooley 2022-08-19  265  		period_steps = readb_relaxed(mchp_core_pwm->base + MCHPCOREPWM_PERIOD);
-ae39414af22131 Conor Dooley 2022-08-19  266  
-ae39414af22131 Conor Dooley 2022-08-19  267  		/*
-ae39414af22131 Conor Dooley 2022-08-19  268  		 * As above, it is possible that something could have set the
-ae39414af22131 Conor Dooley 2022-08-19  269  		 * period_steps register to 0xff, which would prevent us from
-ae39414af22131 Conor Dooley 2022-08-19  270  		 * setting a 100% duty cycle, as explained above.
-ae39414af22131 Conor Dooley 2022-08-19  271  		 * As the period is not locked, we are free to fix this.
-ae39414af22131 Conor Dooley 2022-08-19  272  		 */
-ae39414af22131 Conor Dooley 2022-08-19  273  		if (period_steps == MCHPCOREPWM_PERIOD_STEPS_MAX) {
-ae39414af22131 Conor Dooley 2022-08-19  274  			period_steps -= 1;
-ae39414af22131 Conor Dooley 2022-08-19  275  			mchp_core_pwm_apply_period(mchp_core_pwm, prescale, period_steps);
-ae39414af22131 Conor Dooley 2022-08-19  276  		}
-ae39414af22131 Conor Dooley 2022-08-19  277  	}
-ae39414af22131 Conor Dooley 2022-08-19  278  
-ae39414af22131 Conor Dooley 2022-08-19  279  	duty_steps = mchp_core_pwm_calc_duty(chip, pwm, state, prescale, period_steps);
-ae39414af22131 Conor Dooley 2022-08-19  280  
-ae39414af22131 Conor Dooley 2022-08-19  281  	/*
-ae39414af22131 Conor Dooley 2022-08-19  282  	 * Because the period is per channel, it is possible that the requested
-ae39414af22131 Conor Dooley 2022-08-19  283  	 * duty cycle is longer than the period, in which case cap it to the
-ae39414af22131 Conor Dooley 2022-08-19  284  	 * period, IOW a 100% duty cycle.
-ae39414af22131 Conor Dooley 2022-08-19  285  	 */
-ae39414af22131 Conor Dooley 2022-08-19  286  	if (duty_steps > period_steps)
-ae39414af22131 Conor Dooley 2022-08-19  287  		duty_steps = period_steps + 1;
-ae39414af22131 Conor Dooley 2022-08-19  288  
-ae39414af22131 Conor Dooley 2022-08-19  289  	mchp_core_pwm_apply_duty(chip, pwm, state, duty_steps, period_steps);
-ae39414af22131 Conor Dooley 2022-08-19  290  
-ae39414af22131 Conor Dooley 2022-08-19  291  	mchp_core_pwm_enable(chip, pwm, true, state->period);
-ae39414af22131 Conor Dooley 2022-08-19  292  
-ae39414af22131 Conor Dooley 2022-08-19  293  	mutex_unlock(&mchp_core_pwm->lock);
-ae39414af22131 Conor Dooley 2022-08-19  294  
-ae39414af22131 Conor Dooley 2022-08-19 @295  	return 0;
-ae39414af22131 Conor Dooley 2022-08-19  296  }
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   93  			msleep(1);
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   94  			status = reg_read(smbus, REG_SMSTA);
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   95  		}
+98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   96  	}
+98584b2b51d808 drivers/i2c/busses/i2c-pasemi-core.c Arminder Singh 2022-08-20   97  
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13   98  
+be8a1f7cd4501c drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-11-15   99  	/* Got NACK? */
+be8a1f7cd4501c drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-11-15  100  	if (status & SMSTA_MTN)
+be8a1f7cd4501c drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-11-15  101  		return -ENXIO;
+be8a1f7cd4501c drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-11-15  102  
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  103  	if (timeout < 0) {
+c06f50ed36cc0a drivers/i2c/busses/i2c-pasemi.c      Sven Peter     2021-10-08  104  		dev_warn(smbus->dev, "Timeout, status 0x%08x\n", status);
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  105  		reg_write(smbus, REG_SMSTA, status);
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  106  		return -ETIME;
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  107  	}
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  108  
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  109  	/* Clear XEN */
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  110  	reg_write(smbus, REG_SMSTA, SMSTA_XEN);
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  111  
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  112  	return 0;
+beb58aa39e6e5a drivers/i2c/busses/i2c-pasemi.c      Olof Johansson 2007-02-13  113  }
 
 -- 
 0-DAY CI Kernel Test Service

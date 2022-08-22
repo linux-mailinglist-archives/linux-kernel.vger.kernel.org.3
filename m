@@ -2,173 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F336459BC44
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A08B59BC3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233534AbiHVJFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 05:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
+        id S234159AbiHVJFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234143AbiHVJD2 (ORCPT
+        with ESMTP id S234146AbiHVJD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 22 Aug 2022 05:03:28 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B882184;
-        Mon, 22 Aug 2022 02:03:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1661158992; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/BpMnlAU7QlyBal9Ml6AXqdPCMk964dk628E6HF4/7I=;
-        b=z5Yz2KFwTThKueUxoAnnOk9yOk04UN7nLhbmXbIlW1warVc0D4xrttnlNAVSk7baD7iFR7
-        0ZSbxN00/MxyG6lohewdN29dLIRtLhxOqdNguvecWRD1jqUU1X4+lOdAhSzi2UuKMjcMz8
-        HCM10Rx9l1Sy//CbEj0YO/PDdxmxv6M=
-Date:   Mon, 22 Aug 2022 11:03:03 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 4/4] input: joystick: Fix buffer data parsing
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Artur Rojek <contact@artur-rojek.eu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Message-Id: <3HE0HR.IPKJTTCKEJUA1@crapouillou.net>
-In-Reply-To: <20220819185339.7f488ad8@jic23-huawei>
-References: <20220817105643.95710-1-contact@artur-rojek.eu>
-        <20220817105643.95710-5-contact@artur-rojek.eu>
-        <20220819185339.7f488ad8@jic23-huawei>
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8672DEB9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:03:21 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id o22so12964715edc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:03:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=PfP60D9HcZlcTmmRkDILCGp84nMKR71wAxP/XLHNcOc=;
+        b=dcOe3X+PKAbEoSgP1SZmV125Z3qv1XttTwkArPyYcr4xSsp1l0HctYY2pv0uExaNHs
+         BSjz8aI9/G3YSdKhzFhH4CM26Cp3NbzkVihaziCi6knnGjVWDuodYzoqNDXyfNKbrhPb
+         UHDG2NBq7HvBzE/cVwbtE5cAhkXQhMN87foLuPRlelhuP82lAzr5Yde41DKpyBIzO+mN
+         HIVVXPLUopYlfKhEimJOiRXK27dIR5p0EdpWDotSbKPfnQzDABmMtGMYeN6kyfaZbYRN
+         0s61P20Acr+L1GVSLBYmoWZlAAvXC2NhF9tw6XT5iUBlLjrqMQ71IR+FoqGenpIcgCK0
+         3j0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=PfP60D9HcZlcTmmRkDILCGp84nMKR71wAxP/XLHNcOc=;
+        b=cNio36h9yBrUMsIwSB4A9PTtA+VagJsHcGI8baIlNgjWqpBu0a0MnHHd9CgDx/cJM7
+         Q8J0fSWNCWH+wKiS6A1MDK4r1dwfgkm/3FZpEHHd0KICr6APicRFV2ri50ZOmCVISMZZ
+         xiwvT0KfsOa049UBZoJfdzdsoVlvQTdmzSxA5q+ZFEuDQ7h+bsTcHBS5m/yW3gANIWzI
+         tS7ned0x7Y+2qD9XK5PdaYG7bFoRQMshFfi+nOo16XcUY1/L0/I7zBCOB7nU7D3AJSoc
+         vy0gc04rZcxLvmcZkEveuPto2T5O5JSEtR/hqoZnuXAqUDuhbc50Vi8+8bdwEpG25lx1
+         2Jag==
+X-Gm-Message-State: ACgBeo1Jlc74L4+ekcaj77gTIk2noIsI6EyLAPvXm/ptXIL0WqgY2OAS
+        WNWs2LI57FJc1jWsTb3pJPFwAmSPlQxbNnuv1yAmXw==
+X-Google-Smtp-Source: AA6agR4jfiw9ukbwgaBM5kt0WK81+CDs8BDK8ocqBwlyo9nrKF50l8XJTQbKiqdo/xZ0koN9LAIfirRH7ThqRuR3Ic4=
+X-Received: by 2002:a05:6402:1f8c:b0:43e:8fab:76c with SMTP id
+ c12-20020a0564021f8c00b0043e8fab076cmr15225219edc.126.1661158999829; Mon, 22
+ Aug 2022 02:03:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+References: <20220808025121.110223-1-jhlspies@gmail.com>
+In-Reply-To: <20220808025121.110223-1-jhlspies@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 22 Aug 2022 11:03:08 +0200
+Message-ID: <CACRpkda6VoNjJfKY3+oCvdB+V6O_4cumKpjVSdBb9e8mEmHF6g@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: rockchip: Enhance support for IRQ_TYPE_EDGE_BOTH
+To:     =?UTF-8?B?Sm/Do28gSC4gU3BpZXM=?= <jhlspies@gmail.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+On Mon, Aug 8, 2022 at 4:53 AM Jo=C3=A3o H. Spies <jhlspies@gmail.com> wrot=
+e:
 
-Le ven., ao=FBt 19 2022 at 18:53:39 +0100, Jonathan Cameron=20
-<jic23@kernel.org> a =E9crit :
-> On Wed, 17 Aug 2022 12:56:43 +0200
-> Artur Rojek <contact@artur-rojek.eu> wrote:
->=20
->>  Don't try to access buffer data of a channel by its scan index.=20
->> Instead,
->>  use the newly introduced `iio_find_channel_offset_in_buffer` to get=20
->> the
->>  correct data offset.
->>=20
->>  The scan index of a channel does not represent its position in a=20
->> buffer,
->>  as the buffer will contain data for enabled channels only, affecting
->>  data offsets and alignment.
->>=20
->>  Fixes: 2c2b364fddd5 ("Input: joystick - add ADC attached joystick=20
->> driver.")
->>  Reported-by: Chris Morgan <macromorgan@hotmail.com>
->>  Tested-by: Paul Cercueil <paul@crapouillou.net>
->>  Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
->>  ---
->>   drivers/input/joystick/adc-joystick.c | 26=20
->> +++++++++++++++++---------
->>   1 file changed, 17 insertions(+), 9 deletions(-)
->>=20
->>  diff --git a/drivers/input/joystick/adc-joystick.c=20
->> b/drivers/input/joystick/adc-joystick.c
->>  index c0deff5d4282..aed853ebe1d1 100644
->>  --- a/drivers/input/joystick/adc-joystick.c
->>  +++ b/drivers/input/joystick/adc-joystick.c
->>  @@ -6,6 +6,7 @@
->>   #include <linux/ctype.h>
->>   #include <linux/input.h>
->>   #include <linux/iio/iio.h>
->>  +#include <linux/iio/buffer.h>
->>   #include <linux/iio/consumer.h>
->>   #include <linux/module.h>
->>   #include <linux/platform_device.h>
->>  @@ -46,36 +47,43 @@ static void adc_joystick_poll(struct input_dev=20
->> *input)
->>   static int adc_joystick_handle(const void *data, void *private)
->>   {
->>   	struct adc_joystick *joy =3D private;
->>  +	struct iio_buffer *buffer;
->>   	enum iio_endian endianness;
->>  -	int bytes, msb, val, idx, i;
->>  -	const u16 *data_u16;
->>  +	int bytes, msb, val, off;
->>  +	const u8 *chan_data;
->>  +	unsigned int i;
->>   	bool sign;
->>=20
->>   	bytes =3D joy->chans[0].channel->scan_type.storagebits >> 3;
->>=20
->>   	for (i =3D 0; i < joy->num_chans; ++i) {
->>  -		idx =3D joy->chans[i].channel->scan_index;
->>   		endianness =3D joy->chans[i].channel->scan_type.endianness;
->>   		msb =3D joy->chans[i].channel->scan_type.realbits - 1;
->>   		sign =3D tolower(joy->chans[i].channel->scan_type.sign) =3D=3D 's';
->>  +		buffer =3D iio_channel_cb_get_iio_buffer(joy->buffer);
->>  +		off =3D iio_find_channel_offset_in_buffer(joy->chans[i].indio_dev,
->>  +							joy->chans[i].channel,
->>  +							buffer);
->=20
-> With this call replaced with one that instead uses
->=20
-> 		off =3D iio_find_channel_offset_in_buffer(joy->chans, i);
->=20
-> which I'm fairly sure is enough via the info in chans[x]->channel to=20
-> establish this offset.
->=20
-> All is good, though you should probably cache it as doing that maths=20
-> every
-> time seems excessive.
->=20
->=20
->>  +		if (off < 0)
->>  +			return off;
->>  +
->>  +		chan_data =3D (const u8 *)data + off;
->>=20
->>   		switch (bytes) {
->>   		case 1:
->>  -			val =3D ((const u8 *)data)[idx];
->>  +			val =3D *chan_data;
->>   			break;
->>   		case 2:
->>  -			data_u16 =3D (const u16 *)data + idx;
->>  -
->>   			/*
->>   			 * Data is aligned to the sample size by IIO core.
->>   			 * Call `get_unaligned_xe16` to hide type casting.
->>   			 */
->>   			if (endianness =3D=3D IIO_BE)
->>  -				val =3D get_unaligned_be16(data_u16);
->>  +				val =3D get_unaligned_be16(chan_data);
->=20
-> I obviously missed this previously but these are aligned so we don't=20
-> need the
-> unaligned form.
+> Switching between falling/rising edges for IRQ_TYPE_EDGE_BOTH on pins tha=
+t
+> require debounce can cause the device to lose events due to a desync
+> between pin state and irq type.
+>
+> This problem is resolved by switching between IRQ_TYPE_LEVEL_LOW and
+> IRQ_TYPE_LEVEL_HIGH instead.
+>
+> Fixes: 936ee26 ("gpio/rockchip: add driver for rockchip gpio")
+> Signed-off-by: Jo=C3=A3o H. Spies <jhlspies@gmail.com>
 
-Yes, the comment above says that it's used to hide type casting.
+No reaction from maintainers so I'm just gonna assume this fix is
+correct and applied for fixes.
 
-Cheers,
--Paul
-
->>   			else if (endianness =3D=3D IIO_LE)
->>  -				val =3D get_unaligned_le16(data_u16);
->>  +				val =3D get_unaligned_le16(chan_data);
->>   			else /* IIO_CPU */
->>  -				val =3D *data_u16;
->>  +				val =3D *(const u16 *)chan_data;
->>   			break;
->>   		default:
->>   			return -EINVAL;
->=20
-
-
+Yours,
+Linus Walleij

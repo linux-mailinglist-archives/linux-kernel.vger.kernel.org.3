@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABD259C0B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81AF59C08D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbiHVNjF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 22 Aug 2022 09:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
+        id S235165AbiHVN3d convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 22 Aug 2022 09:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234115AbiHVNjD (ORCPT
+        with ESMTP id S235153AbiHVN3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 09:39:03 -0400
+        Mon, 22 Aug 2022 09:29:09 -0400
 Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2523A95BA
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 06:39:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6555140EF
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 06:29:01 -0700 (PDT)
 Received: from mailer.emlix.com (p5098be52.dip0.t-ipconnect.de [80.152.190.82])
         (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 5DDBD601AF;
+        by mx1.emlix.com (Postfix) with ESMTPS id 47F045FD66;
         Mon, 22 Aug 2022 15:04:37 +0200 (CEST)
 From:   Rolf Eike Beer <eb@emlix.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/6] mm: pagewalk: fix documentation of PTE hole handling
-Date:   Mon, 22 Aug 2022 15:01:32 +0200
-Message-ID: <3695521.kQq0lBPeGt@devpool047>
+Subject: [PATCH 4/6] mm: pagewalk: add api documentation for walk_page_range_novma()
+Date:   Mon, 22 Aug 2022 15:02:36 +0200
+Message-ID: <8991525.CDJkKcVGEf@devpool047>
 Organization: emlix GmbH
 In-Reply-To: <3200642.44csPzL39Z@devpool047>
 References: <3200642.44csPzL39Z@devpool047>
@@ -41,35 +41,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Empty PTEs are passed to the pte_entry callback, not to pte_hole.
-
 Signed-off-by: Rolf Eike Beer <eb@emlix.com>
 ---
- include/linux/pagewalk.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ mm/pagewalk.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/pagewalk.h b/include/linux/pagewalk.h
-index ac7b38ad5903..f3fafb731ffd 100644
---- a/include/linux/pagewalk.h
-+++ b/include/linux/pagewalk.h
-@@ -15,12 +15,12 @@ struct mm_walk;
-  *			this handler is required to be able to handle
-  *			pmd_trans_huge() pmds.  They may simply choose to
-  *			split_huge_page() instead of handling it explicitly.
-- * @pte_entry:		if set, called for each non-empty PTE (lowest-level)
-- *			entry
-+ * @pte_entry:		if set, called for each PTE (lowest-level) entry,
-+ *			including empty ones
-  * @pte_hole:		if set, called for each hole at all levels,
-- *			depth is -1 if not known, 0:PGD, 1:P4D, 2:PUD, 3:PMD
-- *			4:PTE. Any folded depths (where PTRS_PER_P?D is equal
-- *			to 1) are skipped.
-+ *			depth is -1 if not known, 0:PGD, 1:P4D, 2:PUD, 3:PMD.
-+ *			Any folded depths (where PTRS_PER_P?D is equal to 1)
-+ *			are skipped.
-  * @hugetlb_entry:	if set, called for each hugetlb entry
-  * @test_walk:		caller specific callback function to determine whether
-  *			we walk over the current vma or not. Returning 0 means
+diff --git a/mm/pagewalk.c b/mm/pagewalk.c
+index a06eb100fe4e..dc3c850cd148 100644
+--- a/mm/pagewalk.c
++++ b/mm/pagewalk.c
+@@ -493,7 +493,15 @@ int walk_page_range(struct mm_struct *mm, unsigned long start,
+ 	return 0;
+ }
+ 
+-/*
++/**
++ * walk_page_range_novma - walk a range of pagetables not backed by a vma
++ * @mm:		mm_struct representing the target process of page table walk
++ * @start:	start address of the virtual address range
++ * @end:	end address of the virtual address range
++ * @ops:	operation to call during the walk
++ * @pgd:	pgd to walk if different from mm->pgd
++ * @private:	private data for callbacks' usage
++ *
+  * Similar to walk_page_range() but can walk any page tables even if they are
+  * not backed by VMAs. Because 'unusual' entries may be walked this function
+  * will also not lock the PTEs for the pte_entry() callback. This is useful for
 -- 
 2.37.2
 

@@ -2,55 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32CD959C3D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7DC59C3E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235914AbiHVQO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S235995AbiHVQQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235004AbiHVQOY (ORCPT
+        with ESMTP id S234679AbiHVQQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:14:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2C32C10B
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:14:23 -0700 (PDT)
+        Mon, 22 Aug 2022 12:16:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDB932A8D
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:16:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC1DF611D7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 16:14:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5D95C433C1;
-        Mon, 22 Aug 2022 16:14:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1CC4DB80923
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 16:16:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF83CC433D6;
+        Mon, 22 Aug 2022 16:16:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661184862;
-        bh=VfxwmQyY1k2NzPt+1UZYvEgGjJI2gAhCSwC0aBuS5l0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e1NwVfeJ9Ad/qSBNDH68vNs1WvlmFEYBCjEdHHePKRbkFqng4aiLqjPoiRXO0Wx1e
-         IA5FZYoULIcx3QO5frlh9X197PP8TtK++mizaMp+FfrnqNoNzITLLz1oS0TDp9+JA6
-         0yRVMQSS7zG9T6Teuc8ubsI/mGd/GKIXFPcLULQKsKhpDn1QGJSUaGcBOJL3v9EQbM
-         FMlCJI7iqDMCi0X9vLxRSeA8R14dwZ4+DDiWIIYEvH2t0cLSLw90ESOTdgu58oExJL
-         5WMcHbb2KLtCP/Z8sdP1n0FBT9z01iJmqeoMKSSr8JZlGwsI7z1UrZRRtuTFaQLuD3
-         yBdeuNX22JvGQ==
-Date:   Mon, 22 Aug 2022 17:14:17 +0100
+        s=k20201202; t=1661185010;
+        bh=UiXb2+IBr/+FeUeGj2fK3A3sBhK3Gk+nK73Gmj2BI44=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=OIvi7Hy3Wy7YzQaAFa4txlFtLSxYVbwEEI0bs0/4ELJ42FcyDaSBlaI8vhb0QWTK6
+         e3MoT1LExcjjJvlzN9lxCCDPq0+7FLgo4AFgF2QMZ8fhQQkiyvpG7qHnRvrb0SPPRg
+         S/NKmgMUqDvzJTcL7RWxXUMz1MfYW8ZTKQzXVNE20IYmO1gGkRPYuHoJVXZpR4Lj9G
+         fS0sDNZOP6/DMywzVMdvsH5qk/N8KftQftDdL7+HR5zaBYOOCZEnL58/5pUaLQXUF2
+         wp1pwK4fcPBvu+DeCW4UWGWILgr9Wy0aAuyzNzdcwcDAigpQ2fyFNHaiRrVS7Tys0k
+         +GQuYvgHiZdsA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+To:     lgirdwood@gmail.com, Andrew Halaney <ahalaney@redhat.com>
+Cc:     dianders@chromium.org, bmasney@redhat.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: dapm: Export new 'graph.dot' file in debugfs
-Message-ID: <YwOrWf3+9c3o5FPO@sirena.org.uk>
-References: <20220822095242.3779-1-povik+lin@cutebit.org>
- <YwN2Pd4Ez08yDFno@sirena.org.uk>
- <3234D74E-0DFF-4BB5-87ED-6135BAC1F31D@cutebit.org>
- <19b60ea9-6bee-1cc9-5384-89231fce3a99@linux.intel.com>
+In-Reply-To: <20220819194336.382740-1-ahalaney@redhat.com>
+References: <20220819194336.382740-1-ahalaney@redhat.com>
+Subject: Re: [PATCH] regulator: core: Clean up on enable failure
+Message-Id: <166118500944.215002.10320899094541954077.b4-ty@kernel.org>
+Date:   Mon, 22 Aug 2022 17:16:49 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="/lY9LArAiCvVh4P1"
-Content-Disposition: inline
-In-Reply-To: <19b60ea9-6bee-1cc9-5384-89231fce3a99@linux.intel.com>
-X-Cookie: Do not write in this space.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fe10a
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,36 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 19 Aug 2022 14:43:36 -0500, Andrew Halaney wrote:
+> If regulator_enable() fails, enable_count is incremented still.
+> A consumer, assuming no matching regulator_disable() is necessary on
+> failure, will then get this error message upon regulator_put()
+> since enable_count is non-zero:
+> 
+>     [    1.277418] WARNING: CPU: 3 PID: 1 at drivers/regulator/core.c:2304 _regulator_put.part.0+0x168/0x170
+> 
+> [...]
 
---/lY9LArAiCvVh4P1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Mon, Aug 22, 2022 at 03:06:03PM +0200, Pierre-Louis Bossart wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-> The Chrome folks used an 'asoc_dapm_graph' python script since 2014
-> according to the copyright information. IIRC it was python2 so might
-> need a bit of work.
+Thanks!
 
-> https://chromium.googlesource.com/chromiumos/third_party/adhd/+/refs/heads/master/scripts/asoc_dapm_graph
+[1/1] regulator: core: Clean up on enable failure
+      commit: c32f1ebfd26bece77141257864ed7b4720da1557
 
-That's a different tool but also interesting - doesn't look like it's
-too advanced Python wise so should be fairly easy to update for any
-Python 3 incompatibilities.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---/lY9LArAiCvVh4P1
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMDq1kACgkQJNaLcl1U
-h9CgJQf/T/noyjLy9gGJUSy87tOqoWe7zUNpA0QTr56GbMNO9ICucL8cwYYuoqkL
-JH7Fi++XqbeFFCSsfC13R4cwaJgYCRAshf2Za/IsSn9TTT8InHl6n4OHXo2hV/4E
-4VB7dDPi5pfG2qZXLcJmDMKXekSmUAwPhso0+F/1Yvo6sruKwtYb6DPthKKpadJF
-tXWrYhxxt7/LmDL62PBqUEUV9y7rWj7Hc6tI2Rtba4HGlra+jdQNbMOZDo+3ipkL
-FY8A6RqLDI7J02C8OUEkO77u8jYs3mBlmfiPzZE9EcXhqXlYiWpS7EvPXhL4i0DT
-/L/N6X2H/jfMtn3ywl7/oGFBAjRNfQ==
-=0/Pw
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---/lY9LArAiCvVh4P1--
+Thanks,
+Mark

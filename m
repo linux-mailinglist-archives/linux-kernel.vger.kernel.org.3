@@ -2,101 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7014559BF86
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7559659BF87
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234807AbiHVMcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 08:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
+        id S235066AbiHVMdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 08:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbiHVMcp (ORCPT
+        with ESMTP id S230503AbiHVMdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:32:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF396BF4A;
-        Mon, 22 Aug 2022 05:32:44 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B03D612FC;
-        Mon, 22 Aug 2022 05:32:47 -0700 (PDT)
-Received: from [10.57.15.77] (unknown [10.57.15.77])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AEB0A3F718;
-        Mon, 22 Aug 2022 05:32:38 -0700 (PDT)
-Message-ID: <d5016c1e-55d9-4224-278a-50377d4c6454@arm.com>
-Date:   Mon, 22 Aug 2022 13:32:32 +0100
+        Mon, 22 Aug 2022 08:33:03 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75ABEBF4A;
+        Mon, 22 Aug 2022 05:33:01 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1661171567tc67godh
+Received: from localhost.localdomain ( [182.148.14.124])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 22 Aug 2022 20:32:45 +0800 (CST)
+X-QQ-SSF: 01000000002000C0D000B00A0000000
+X-QQ-FEAT: W+onFc5Tw4PahOvmZM6UxUA85VWZnx9QqbYzIamVuUUXjg8BOThf6BNm9i319
+        BZwr7n9YaL1n8XSgUYJZk4r86k4+2jNhEPaC+PyMi2V+ZuQBgfNm7VFQgZyDApLhJTz+XaH
+        IYm1UlOUL10FB8W0NV4Yw9S95TUBRQcAp7RrYl0+OoJqJTQAuHPUTSOYockMk2XaAccdx6E
+        mI52Nq5HnDPPLGMX2488Z1R/M1x4/m3Pd+xXYLCr+PMufhe9nzBO7en5h4g7khKmslzIdZE
+        Gf9c1SKUZ0iTcHPy7rSMGTCdf4516lRUYr/KC/WRI4hZSfsZc1o9W+SP5av6SOxANRU9Dfk
+        l5MlAn1afuu2CVzePTQbp/5sgcmuiVKdK9AeoXd7PG984NQDw81dofse5aOpszYm3cNh/gP
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, lukasz.luba@arm.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] drivers/thermal: fix repeated words in comments
+Date:   Mon, 22 Aug 2022 20:32:39 +0800
+Message-Id: <20220822123239.28400-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 4/4] swiotlb: panic if nslabs is too small
-Content-Language: en-GB
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Yu Zhao <yuzhao@google.com>, dongli.zhang@oracle.com,
-        ak@linux.intel.com, akpm@linux-foundation.org,
-        alexander.sverdlin@nokia.com, andi.kleen@intel.com, bp@alien8.de,
-        bp@suse.de, cminyard@mvista.com, corbet@lwn.net,
-        damien.lemoal@opensource.wdc.com, dave.hansen@linux.intel.com,
-        iommu@lists.linux-foundation.org, joe.jin@oracle.com,
-        joe@perches.com, keescook@chromium.org, kirill.shutemov@intel.com,
-        kys@microsoft.com, linux-doc@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, ltykernel@gmail.com,
-        michael.h.kelley@microsoft.com, mingo@redhat.com,
-        m.szyprowski@samsung.com, parri.andrea@gmail.com,
-        paulmck@kernel.org, pmladek@suse.com, rdunlap@infradead.org,
-        tglx@linutronix.de, thomas.lendacky@amd.com,
-        Tianyu.Lan@microsoft.com, tsbogend@alpha.franken.de,
-        vkuznets@redhat.com, wei.liu@kernel.org, x86@kernel.org
-References: <20220611082514.37112-5-dongli.zhang@oracle.com>
- <20220820012031.1285979-1-yuzhao@google.com>
- <f8c743d8-fcbe-4ef7-5f86-d63086552ffd@arm.com>
- <YwNn92WP3rP4ylZu@infradead.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YwNn92WP3rP4ylZu@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_00,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,RCVD_IN_PBL,RCVD_IN_SBL_CSS,
+        RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?43.154.54.12>]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [43.154.54.12 listed in zen.spamhaus.org]
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [43.154.54.12 listed in wl.mailspike.net]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-22 12:26, Christoph Hellwig wrote:
-> On Mon, Aug 22, 2022 at 10:49:09AM +0100, Robin Murphy wrote:
->> Hmm, it's possible this might be quietly fixed by 20347fca71a3, but either
->> way I'm not sure why we would need to panic *before* we've even tried to
->> allocate anything, when we could simply return with no harm done? If we've
->> ended up calculating (or being told) a buffer size which is too small to be
->> usable, that should be no different to disabling SWIOTLB entirely.
-> 
-> Hmm.  I think this might be a philosophical question, but I think
-> failing the boot with a clear error report for a configuration that is
-> supposed to work but can't is way better than just panicing later on.
+ Delete the redundant word 'device'.
+ Delete the redundant word 'which'.
 
-Depends which context of "supposed to work" you mean there. The most 
-logical reason to end up with a tiny SWIOTLB size is because you don't 
-expect to need SWIOTLB, therefore if there's now a functional minimum 
-size limit, failing gracefully such that the system keeps working as 
-before is correct in that context. Even if we assume the expectation 
-goes the other way, then it should be on SWIOTLB to adjust the initial 
-allocation size to whatever minimum it now needs, which as I say it 
-looks like 20347fca71a3 might do anyway. Creating new breakage by 
-panicking instead of making a decision one way or the other was never 
-the right answer.
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/thermal/cpufreq_cooling.c | 2 +-
+ drivers/thermal/thermal_of.c      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->> Historically, passing "swiotlb=1" on the command line has been used to save
->> memory when the user knows SWIOTLB isn't needed. That should definitely not
->> be allowed to start panicking.
-> 
-> I've never seen swiotlb=1 advertized as a way to disable swiotlb.
-> That's always been swiotlb=noforce, which cleanly disables it.
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index b8151d95a806..13551b386e72 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -495,7 +495,7 @@ static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
+ 
+ /**
+  * __cpufreq_cooling_register - helper function to create cpufreq cooling device
+- * @np: a valid struct device_node to the cooling device device tree node
++ * @np: a valid struct device_node to the cooling device tree node
+  * @policy: cpufreq policy
+  * Normally this should be same as cpufreq policy->related_cpus.
+  * @em: Energy Model of the cpufreq policy
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index b65d435cb92f..91bbed308305 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -651,7 +651,7 @@ EXPORT_SYMBOL_GPL(devm_thermal_zone_of_sensor_register);
+ /**
+  * devm_thermal_zone_of_sensor_unregister - Resource managed version of
+  *				thermal_zone_of_sensor_unregister().
+- * @dev: Device for which which resource was allocated.
++ * @dev: Device for which resource was allocated.
+  * @tzd: a pointer to struct thermal_zone_device where the sensor is registered.
+  *
+  * This function removes the sensor callbacks and private data from the
+-- 
+2.36.1
 
-No, it's probably not been advertised as such, but it's what clearly 
-fell out of the available options before "noforce" was added (which was 
-considerably more recently than "always"), and the fact is that people 
-*are* still using it even today (presumably copy-pasted through Android 
-BSPs since before 4.10).
-
-Thanks,
-Robin.

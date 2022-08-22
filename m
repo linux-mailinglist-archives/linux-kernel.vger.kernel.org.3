@@ -2,279 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B51B59BBBE
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE81759BBBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbiHVIgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45698 "EHLO
+        id S234075AbiHVIhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbiHVIgj (ORCPT
+        with ESMTP id S234065AbiHVIg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:36:39 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F6B2B601;
-        Mon, 22 Aug 2022 01:36:38 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27M8DkTW022065;
-        Mon, 22 Aug 2022 08:36:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=BZ9FJcxb7PQETdvtuVkYIl4AIf6QqXOJHUn4XibynCY=;
- b=L4YAPJX66dzFGoQj2gDF8Hsmr7344A2ZUtNOmI2Nf5tjiFnoDKfgAyIKINgihl1hmM3m
- wD44Lb5IZ0EBjCfYYs/LaFLQV4ekuDicxPXBkEY/Aj7HtmqAcd4mm8LLb2eu6R5rv+fh
- 3oazPEwkYgE1lcZt7pUuiqkCAWAci1nEF7MSOZ78D7Dn9t6QmvH75Gy6HZhsh+bzA4S7
- JmFumxVZ+EhGGeXeYXe4RsUi8uIVpH3bdlgbAkDvHT7PBqSKIXqA40hwX3/txvPnMC3K
- 5N4JwlN1Vqr0dSN8Z/TNObzrjeRY/wVGe+dlJPLsYjW7PQs4FBunkPVXyPnLiF6GZowh bQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j463srkt0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Aug 2022 08:36:10 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27M8FNam031973;
-        Mon, 22 Aug 2022 08:36:09 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j463srks0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Aug 2022 08:36:09 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27M8L55l011993;
-        Mon, 22 Aug 2022 08:36:07 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3j2q88t57s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 Aug 2022 08:36:07 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27M8X8vW34275586
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Aug 2022 08:33:08 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6B45011C04A;
-        Mon, 22 Aug 2022 08:36:04 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB14E11C052;
-        Mon, 22 Aug 2022 08:36:03 +0000 (GMT)
-Received: from [9.171.10.26] (unknown [9.171.10.26])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 22 Aug 2022 08:36:03 +0000 (GMT)
-Message-ID: <388e7af7-be76-61a3-a9ce-9a148097610e@linux.ibm.com>
-Date:   Mon, 22 Aug 2022 10:36:03 +0200
+        Mon, 22 Aug 2022 04:36:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B834A2BB30;
+        Mon, 22 Aug 2022 01:36:55 -0700 (PDT)
+Received: from [IPv6:2a00:23c6:c311:3401:aff1:6187:b5e5:cd67] (unknown [IPv6:2a00:23c6:c311:3401:aff1:6187:b5e5:cd67])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: martyn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0565A6600357;
+        Mon, 22 Aug 2022 09:36:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661157413;
+        bh=q2cob7vZa8oaQ/85iPX5mKBKU2Xr2jvMDFEVAB1HqZU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=jQ9hVK91IJ5aDT8BV1h6YPYJE9/EmNvjaFna2ks1o9gHqGKLttP/iePIkClgHpEos
+         KUyQZzxWp8iIpD4jY03EH5letv1Ma/liCfwQ4+H5wcIUQKT4/aZrmWMIEuTHjlViV2
+         FuTSZFMTSaA9TNNq5hwR4FdeFHGg2FDGcR5Y9/PwzszPT8AEnvM8waG6DONldwz6O/
+         XNo4DIpdNr8cxcIgYt4Nf/c8W295pCQs+Sh6UBTff8sIgDdnkba5M1NKEQXqvLhcYa
+         VbHzZEbKYrrtk4RQz6L5FZucEQNshGM+CC8AcBmgk3x4/sTPNvRBPC1UV8c+XJ1hFZ
+         2TlyLHqxHl9uw==
+Message-ID: <370beac7c85da4f1b57d8d78715d2a0676d19cf9.camel@collabora.com>
+Subject: Re: [RFC PATCH] gpio: pca953x: Support for pcal6534
+From:   Martyn Welch <martyn.welch@collabora.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Mon, 22 Aug 2022 09:36:52 +0100
+In-Reply-To: <CAHp75Vc1bnUGt66LYRAVuJP+OnhLTaU=AN1JdvfiH44O9_eO8g@mail.gmail.com>
+References: <20220817112818.787771-1-martyn.welch@collabora.com>
+         <CAHp75Vc1bnUGt66LYRAVuJP+OnhLTaU=AN1JdvfiH44O9_eO8g@mail.gmail.com>
+Organization: Collabora Ltd.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2] KVM: s390: pci: Hook to access KVM lowlevel from VFIO
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, mjrosato@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org, lkp@intel.com,
-        borntraeger@linux.ibm.com, farman@linux.ibm.com,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, schnelle@linux.ibm.com, frankja@linux.ibm.com,
-        alex.williamson@redhat.com, cohuck@redhat.com
-References: <20220819122945.9309-1-pmorel@linux.ibm.com>
- <0bea8b2c-3345-e475-01f7-fd9c44096244@infradead.org>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <0bea8b2c-3345-e475-01f7-fd9c44096244@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3WOxVt9VlURVIiO71LjIWo_pDSyUMHk9
-X-Proofpoint-ORIG-GUID: KJhfxuCNCsMQiYYq1V0c_lSoKffrfNLH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-22_04,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- phishscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
- suspectscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208220036
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 2022-08-20 at 01:35 +0300, Andy Shevchenko wrote:
+> On Wed, Aug 17, 2022 at 2:29 PM Martyn Welch
+> <martyn.welch@collabora.com> wrote:
+> >=20
+> > The pcal6534[1] is a 34-bit I/O expander with more than a passing
+> > resemblance to the pcal6524[2] currently supported by the gpio-
+> > pca953x
+> > driver, however whilst the registers seem to functionally match
+> > perfectly, the alignment of the register banks in the chips address
+> > space do not follow the pattern expected by the existing driver.
+> > For
+>=20
+> does not
+>=20
+> > instance, as the chip provides 34 I/O, which requires bannks of 5
+> > 8-bit
+> > registers to provide input state, output state, etc. as do the 40
+> > I/O
+> > variants, however the 40 I/O variants layout the banks of registers
+> > on
+> > 8-byte boundaries, whilst the pcal6534 does not space out the banks
+> > at
+> > all. Additionally the extended functionality starts at 30h rather
+> > than
+> > 40h and I suspect there will be other similar differences that I've
+> > not
+> > yet discovered.
+>=20
+> The below shouldn't be in the commit message, but rather in the
+> comments (after the cutter '---' line below). And due to these two
+> paragraphs I consider this as an RFC (and it is luckily marked like
+> this), so, Bart, please do not apply this, we need more eyes and
+> datasheet reading before going on this.
+>=20
+
+Yep, not even close to mergeable, sent to the list mainly for comment
+on whether to try and cram this into this driver or create a separate
+driver for it.
+
+> > I suspect that this may add some additional complexity to the
+> > driver and
+> > I'm not sure whether this will be welcome. I've done a few cursory
+> > searches to see if there are other chips which follow the pattern
+> > of the
+> > pcal6534 and have so far only found the pi4ioe5v6534q[3], which
+> > appears
+> > to be funcitonaly identical to the pcal6534.
+> >=20
+> > I'm currently wondering whether a submission to extend the pcal6534
+> > is likely to be deemed acceptable. If so whether something like the
+>=20
+> so, whether
+>=20
+> > attached approach would be OK, or whether anyone has better ideas
+> > on how
+> > to achieve this. Alternatively I'd be happy to create a new driver
+> > to
+> > support the pcal6534 if that's deemed more appropriate.
+>=20
+> > [1] https://www.nxp.com/docs/en/data-sheet/PCAL6534.pdf
+> > [2] https://www.nxp.com/docs/en/data-sheet/PCAL6524.pdf
+> > [3] https://www.diodes.com/assets/Datasheets/PI4IOE5V6534Q.pdf
+>=20
+> Convert these to Datasheet: tags.
+>=20
+> ...
+>=20
+> > =C2=A0#define PCA957X_TYPE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 BIT(13)
+> > =C2=A0#define PCA_TYPE_MASK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 GENMASK(15, 12)
+> >=20
+> > +#define PCAL6534_ALIGN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ BIT(16)
+>=20
+> I believe it should be a chip TYPE.
+>=20
+
+I didn't do this as functionality wise it seems to basically be
+PCA953X_TYPE, just with the alignment of the registers being very
+different. I could add a PCAL6534_TYPE if you prefer.
+
+> ...
+>=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { "xra1202", 8=C2=A0 | PCA95=
+3X_TYPE },
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { "pi4ioe5v6534q", 34 | PCA953X_T=
+YPE | PCA_LATCH_INT |
+> > PCAL6534_ALIGN, },
+>=20
+> What's this and why is it not ordered?
+>=20
+
+The entries in pca953x_id[] appear to be ordered in the same order as
+pca953x_dt_ids[], where the entries are grouped by manufacturer. This
+chip is manufactured by diodes (as mentioned in the commit message), so
+put it in it's own block following president. The manufacturers weren't
+ordered alphabetically, so assumed ordered by when they were added.
+
+> ...
+>=20
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int bank_shift =3D pca953x_bank_s=
+hift(chip);
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int bank =3D (reg & REG_ADDR_MASK=
+) >> bank_shift;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int offset =3D reg & (BIT(bank_sh=
+ift) - 1);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int bank;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int offset;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (chip->driver_data & PCAL6534_=
+ALIGN) {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 bank =3D (reg & REG_ADDR_MASK) / NBANK(chip);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 offset =3D reg - (bank * NBANK(chip));
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 int bank_shift =3D pca953x_bank_shift(chip);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 bank =3D (reg & REG_ADDR_MASK) >> bank_shift;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 offset =3D reg & (BIT(bank_shift) - 1);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>=20
+> I'm wondering if it can be moved to bank_shift()=C2=A0 and possibly a new
+> helper to get an offset.
+>=20
+
+Due to the different register spacing, I don't think these chips obey
+any offset based rules. For the record, I've done a bit more work here
+to get it returning the correct values for all the extended registers.
+What I currently have is this (which I don't particularly like and
+would be open to alternative implementations):
 
 
-On 8/19/22 23:10, Randy Dunlap wrote:
-> 
-> 
-> On 8/19/22 05:29, Pierre Morel wrote:
->> We have a cross dependency between KVM and VFIO when using
->> s390 vfio_pci_zdev extensions for PCI passthrough
->> To be able to keep both subsystem modular we add a registering
->> hook inside the S390 core code.
->>
->> This fixes a build problem when VFIO is built-in and KVM is built
->> as a module.
->>
->> Reported-by: Randy Dunlap <rdunlap@infradead.org>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
->> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
->> Fixes: 09340b2fca007 ("KVM: s390: pci: add routines to start/stop interpretive execution")
->> Cc: <stable@vger.kernel.org>
-> 
-> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-> 
-> Thanks.
+ static u8 pca953x_recalc_addr(struct pca953x_chip *chip, int reg, int
+off)
+ {
+-       int bank_shift =3D pca953x_bank_shift(chip);
+-       int addr =3D (reg & PCAL_GPIO_MASK) << bank_shift;
+-       int pinctrl =3D (reg & PCAL_PINCTRL_MASK) << 1;
+-       u8 regaddr =3D pinctrl | addr | (off / BANK_SZ);
++       int bank_shift;
++       int addr;
++       int pinctrl;
++       u8 regaddr;
++
++       if (chip->driver_data & PCAL6534_ALIGN) {
++               addr =3D (reg & PCAL_GPIO_MASK) * NBANK(chip);
++
++               switch(reg) {
++               case PCAL953X_OUT_STRENGTH:
++               case PCAL953X_IN_LATCH:
++               case PCAL953X_PULL_EN:
++               case PCAL953X_PULL_SEL:
++               case PCAL953X_INT_MASK:
++               case PCAL953X_INT_STAT:
++               case PCAL953X_OUT_CONF:
++                       pinctrl =3D ((reg & PCAL_PINCTRL_MASK) >> 1) +
+0x20;
++                       break;
++               case PCAL6524_INT_EDGE:
++               case PCAL6524_INT_CLR:
++               case PCAL6524_IN_STATUS:
++               case PCAL6524_OUT_INDCONF:
++               case PCAL6524_DEBOUNCE:
++                       pinctrl =3D ((reg & PCAL_PINCTRL_MASK) >> 1) +
+0x1c;
++                       break;
++               }
++               regaddr =3D pinctrl + addr + (off / BANK_SZ);
++       } else {
++               bank_shift =3D pca953x_bank_shift(chip);
++               addr =3D (reg & PCAL_GPIO_MASK) << bank_shift;
++               pinctrl =3D (reg & PCAL_PINCTRL_MASK) << 1;
++               regaddr =3D pinctrl | addr | (off / BANK_SZ);
++       }
+=20
+        return regaddr;
+ }
 
-Thanks Randy,
+As I said, whilst the functionality of this chip seems to closely match
+some of the others driven by this driver, the register offsets are
+quite different and hard to incorporate cleanly in this driver due to
+the way it determines register locations.
 
-Regards,
-Pierre
+> ...
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < NBANK(chip); i+=
++) {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 value[i] =3D bitmap_get_value8(val, i * BANK_SZ);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 dev_err(&chip->client->dev, "value[%d] =3D %x\n", i,
+> > value[i]);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_err(&chip->client->dev, "rega=
+ddr: %x\n", regaddr);
+>=20
+> dev_err() ?!
+>=20
 
+Quick and dirty debug. The code was included in RFC to help show the
+path I was taking to include support for this device and is definitely
+not ready for merging.
 
-> 
->> ---
->>   arch/s390/include/asm/kvm_host.h | 17 ++++++-----------
->>   arch/s390/kvm/pci.c              | 12 ++++++++----
->>   arch/s390/pci/Makefile           |  2 +-
->>   arch/s390/pci/pci_kvm_hook.c     | 11 +++++++++++
->>   drivers/vfio/pci/vfio_pci_zdev.c |  8 ++++++--
->>   5 files changed, 32 insertions(+), 18 deletions(-)
->>   create mode 100644 arch/s390/pci/pci_kvm_hook.c
->>
->> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
->> index f39092e0ceaa..b1e98a9ed152 100644
->> --- a/arch/s390/include/asm/kvm_host.h
->> +++ b/arch/s390/include/asm/kvm_host.h
->> @@ -1038,16 +1038,11 @@ static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
->>   #define __KVM_HAVE_ARCH_VM_FREE
->>   void kvm_arch_free_vm(struct kvm *kvm);
->>   
->> -#ifdef CONFIG_VFIO_PCI_ZDEV_KVM
->> -int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm);
->> -void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev);
->> -#else
->> -static inline int kvm_s390_pci_register_kvm(struct zpci_dev *dev,
->> -					    struct kvm *kvm)
->> -{
->> -	return -EPERM;
->> -}
->> -static inline void kvm_s390_pci_unregister_kvm(struct zpci_dev *dev) {}
->> -#endif
->> +struct zpci_kvm_hook {
->> +	int (*kvm_register)(void *opaque, struct kvm *kvm);
->> +	void (*kvm_unregister)(void *opaque);
->> +};
->> +
->> +extern struct zpci_kvm_hook zpci_kvm_hook;
->>   
->>   #endif
->> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
->> index 4946fb7757d6..bb8c335d17b9 100644
->> --- a/arch/s390/kvm/pci.c
->> +++ b/arch/s390/kvm/pci.c
->> @@ -431,8 +431,9 @@ static void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
->>    * available, enable them and let userspace indicate whether or not they will
->>    * be used (specify SHM bit to disable).
->>    */
->> -int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm)
->> +static int kvm_s390_pci_register_kvm(void *opaque, struct kvm *kvm)
->>   {
->> +	struct zpci_dev *zdev = opaque;
->>   	int rc;
->>   
->>   	if (!zdev)
->> @@ -510,10 +511,10 @@ int kvm_s390_pci_register_kvm(struct zpci_dev *zdev, struct kvm *kvm)
->>   	kvm_put_kvm(kvm);
->>   	return rc;
->>   }
->> -EXPORT_SYMBOL_GPL(kvm_s390_pci_register_kvm);
->>   
->> -void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev)
->> +static void kvm_s390_pci_unregister_kvm(void *opaque)
->>   {
->> +	struct zpci_dev *zdev = opaque;
->>   	struct kvm *kvm;
->>   
->>   	if (!zdev)
->> @@ -566,7 +567,6 @@ void kvm_s390_pci_unregister_kvm(struct zpci_dev *zdev)
->>   
->>   	kvm_put_kvm(kvm);
->>   }
->> -EXPORT_SYMBOL_GPL(kvm_s390_pci_unregister_kvm);
->>   
->>   void kvm_s390_pci_init_list(struct kvm *kvm)
->>   {
->> @@ -678,6 +678,8 @@ int kvm_s390_pci_init(void)
->>   
->>   	spin_lock_init(&aift->gait_lock);
->>   	mutex_init(&aift->aift_lock);
->> +	zpci_kvm_hook.kvm_register = kvm_s390_pci_register_kvm;
->> +	zpci_kvm_hook.kvm_unregister = kvm_s390_pci_unregister_kvm;
->>   
->>   	return 0;
->>   }
->> @@ -685,6 +687,8 @@ int kvm_s390_pci_init(void)
->>   void kvm_s390_pci_exit(void)
->>   {
->>   	mutex_destroy(&aift->aift_lock);
->> +	zpci_kvm_hook.kvm_register = NULL;
->> +	zpci_kvm_hook.kvm_unregister = NULL;
->>   
->>   	kfree(aift);
->>   }
->> diff --git a/arch/s390/pci/Makefile b/arch/s390/pci/Makefile
->> index bf557a1b789c..5ae31ca9dd44 100644
->> --- a/arch/s390/pci/Makefile
->> +++ b/arch/s390/pci/Makefile
->> @@ -5,5 +5,5 @@
->>   
->>   obj-$(CONFIG_PCI)	+= pci.o pci_irq.o pci_dma.o pci_clp.o pci_sysfs.o \
->>   			   pci_event.o pci_debug.o pci_insn.o pci_mmio.o \
->> -			   pci_bus.o
->> +			   pci_bus.o pci_kvm_hook.o
->>   obj-$(CONFIG_PCI_IOV)	+= pci_iov.o
->> diff --git a/arch/s390/pci/pci_kvm_hook.c b/arch/s390/pci/pci_kvm_hook.c
->> new file mode 100644
->> index 000000000000..ff34baf50a3e
->> --- /dev/null
->> +++ b/arch/s390/pci/pci_kvm_hook.c
->> @@ -0,0 +1,11 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * VFIO ZPCI devices support
->> + *
->> + * Copyright (C) IBM Corp. 2022.  All rights reserved.
->> + *	Author(s): Pierre Morel <pmorel@linux.ibm.com>
->> + */
->> +#include <linux/kvm_host.h>
->> +
->> +struct zpci_kvm_hook zpci_kvm_hook;
->> +EXPORT_SYMBOL_GPL(zpci_kvm_hook);
->> diff --git a/drivers/vfio/pci/vfio_pci_zdev.c b/drivers/vfio/pci/vfio_pci_zdev.c
->> index e163aa9f6144..0cbdcd14f1c8 100644
->> --- a/drivers/vfio/pci/vfio_pci_zdev.c
->> +++ b/drivers/vfio/pci/vfio_pci_zdev.c
->> @@ -151,7 +151,10 @@ int vfio_pci_zdev_open_device(struct vfio_pci_core_device *vdev)
->>   	if (!vdev->vdev.kvm)
->>   		return 0;
->>   
->> -	return kvm_s390_pci_register_kvm(zdev, vdev->vdev.kvm);
->> +	if (zpci_kvm_hook.kvm_register)
->> +		return zpci_kvm_hook.kvm_register(zdev, vdev->vdev.kvm);
->> +
->> +	return -ENOENT;
->>   }
->>   
->>   void vfio_pci_zdev_close_device(struct vfio_pci_core_device *vdev)
->> @@ -161,5 +164,6 @@ void vfio_pci_zdev_close_device(struct vfio_pci_core_device *vdev)
->>   	if (!zdev || !vdev->vdev.kvm)
->>   		return;
->>   
->> -	kvm_s390_pci_unregister_kvm(zdev);
->> +	if (zpci_kvm_hook.kvm_unregister)
->> +		zpci_kvm_hook.kvm_unregister(zdev);
->>   }
-> 
+> ...
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { .compatible =3D "diodes,pi4ioe5=
+v6534q", .data =3D OF_953X(34,
+> > PCA_LATCH_INT | PCAL6534_ALIGN), },
+>=20
+> As per above.
+>=20
 
--- 
-Pierre Morel
-IBM Lab Boeblingen

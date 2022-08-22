@@ -2,119 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DF359BF0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA4F59BF10
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234390AbiHVL5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
+        id S231279AbiHVL6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbiHVL5u (ORCPT
+        with ESMTP id S234444AbiHVL6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:57:50 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1051CB3F;
-        Mon, 22 Aug 2022 04:57:48 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1661169441tiskbbm1
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 22 Aug 2022 19:57:20 +0800 (CST)
-X-QQ-SSF: 01000000002000C0D000B00A0000000
-X-QQ-FEAT: DRnj/z+SqaeRMdvzCF5hP1VCgxalyLxoT6tk51nbzQFtwFwK+Bbd25Y6AQxoz
-        ofCOPGCc42PERnEORGG5s08+rMCeiLDfxl7T0VwKN2GSe0ltM5cKZW92nazVIu3h1Se5RI1
-        mfsMBER1WmALZQlqaSgv+gwg8u2qpHMrz7wCSseLaoWDkuLUYV30ia/Sd1/Joe7Id4W5VVy
-        70PQPcX8a22vcFF+veJ/Lof6GnMjpKmectKPVhRF7mKFxxrGfAAQKclGhjpiHUMOXa9U/4Y
-        voTZYoZy+jftLpMFxqk6CTaquchekW+7ayc/F6rmmoc7UI4fonwtwPQQpqD2XUnsLN9lq0d
-        ryMOr3lt7AlLKyUDsjkkVygHFb44EoLgtvR1cqjpZMmX+MGod3hfdBCdqcJww==
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     balbi@kernel.org, daniel@zonque.org, haojian.zhuang@gmail.com,
-        robert.jarzmik@free.fr
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] gadget/udc: fix repeated words in comments
-Date:   Mon, 22 Aug 2022 19:57:07 +0800
-Message-Id: <20220822115707.11425-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 22 Aug 2022 07:58:18 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E069286;
+        Mon, 22 Aug 2022 04:58:12 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 27MBwBf8019247;
+        Mon, 22 Aug 2022 13:58:11 +0200
+Date:   Mon, 22 Aug 2022 13:58:11 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-x86_64@vger.kernel.org
+Subject: Re: LTS kernel Linux 4.14.290 unable to boot with edk2-ovmf (x86_64
+ UEFI runtime)
+Message-ID: <20220822115811.GE17080@1wt.eu>
+References: <2d6012e8-805d-4225-80ed-d317c28f1899@gmx.com>
+ <YwMhXX6OhROLZ/LR@kroah.com>
+ <1ed5a33a-b667-0e8e-e010-b4365f3713d6@gmx.com>
+ <YwMxRAfrrsPE6sNI@kroah.com>
+ <8aff5c17-d414-2412-7269-c9d15f574037@gmx.com>
+ <YwM3DwvPIGkfE4Tu@kroah.com>
+ <acc6051b-748f-4f06-63b3-919eb831217c@gmx.com>
+ <YwNFxIouYoRo/wT+@kroah.com>
+ <34793a7b-64e4-f1cb-b84e-5804b4f6fac3@gmx.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_00,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,RCVD_IN_PBL,RCVD_IN_SBL_CSS,
-        RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?43.154.54.12>]
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        *      [43.154.54.12 listed in zen.spamhaus.org]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [43.154.54.12 listed in wl.mailspike.net]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <34793a7b-64e4-f1cb-b84e-5804b4f6fac3@gmx.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'tell'.
- Delete the redundant word 'also'.
- Delete the redundant word 'with'.
+On Mon, Aug 22, 2022 at 07:43:18PM +0800, Qu Wenruo wrote:
+> Tried to compile gcc10 from AUR, which failed to compile.
+> 
+> 
+> Anyway, thanks to the advice from Willy, I got the pre-built crosstool
+> (gcc 7.5) set up, with some small tweaks like disabling
+> CONFIG_RANDOMIZE_BASE to workaround the RELOCS failure, it at least
+> compiles for v4.14.0.
+> 
+> Although there is still warning from test_gen_len:
+> 
+>  Warning: ffffffff818158cc:	0f ff e9             	ud0    %ecx,%ebp
+>  Warning: objdump says 3 bytes, but insn_get_length() says 2
+>  Warning: arch/x86/tools/test_get_len found difference at
+> <cpu_idle_poll>:ffffffff818159b0
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/usb/gadget/udc/at91_udc.c   | 2 +-
- drivers/usb/gadget/udc/core.c       | 2 +-
- drivers/usb/gadget/udc/pxa25x_udc.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Strange, sounds like a binutils issue though I could be wrong.
 
-diff --git a/drivers/usb/gadget/udc/at91_udc.c b/drivers/usb/gadget/udc/at91_udc.c
-index 728987280373..c80d0902bb30 100644
---- a/drivers/usb/gadget/udc/at91_udc.c
-+++ b/drivers/usb/gadget/udc/at91_udc.c
-@@ -994,7 +994,7 @@ static const struct usb_gadget_ops at91_udc_ops = {
- 	.udc_stop		= at91_stop,
- 
- 	/*
--	 * VBUS-powered devices may also also want to support bigger
-+	 * VBUS-powered devices may also want to support bigger
- 	 * power budgets after an appropriate SET_CONFIGURATION.
- 	 */
- 	/* .vbus_power		= at91_vbus_power, */
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index b5b42f7a299b..8dd8fbd44d65 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -900,7 +900,7 @@ EXPORT_SYMBOL_GPL(usb_gadget_unmap_request);
- 
- /**
-  * usb_gadget_giveback_request - give the request back to the gadget layer
-- * @ep: the endpoint to be used with with the request
-+ * @ep: the endpoint to be used with the request
-  * @req: the request being given back
-  *
-  * This is called by device controller drivers in order to return the
-diff --git a/drivers/usb/gadget/udc/pxa25x_udc.c b/drivers/usb/gadget/udc/pxa25x_udc.c
-index c593fc383481..176e2b157021 100644
---- a/drivers/usb/gadget/udc/pxa25x_udc.c
-+++ b/drivers/usb/gadget/udc/pxa25x_udc.c
-@@ -1737,7 +1737,7 @@ static void handle_ep0 (struct pxa25x_udc *dev)
- 				/* hardware automagic preventing STALL... */
- 				if (dev->req_config) {
- 					/* hardware sometimes neglects to tell
--					 * tell us about config change events,
-+					 * us about config change events,
- 					 * so later ones may fail...
- 					 */
- 					WARNING("config change %02x fail %d?\n",
--- 
-2.36.1
+> And unfortunately v4.14 still fails to boot, even with GCC 7.5, which
+> provides an almost perfect (except above wanrings) build.
+> 
+> I also tried to reduce the CPUid, from host-passthru to qemu64, and
+> rebuild, no change (same test_get_len wanrings, same boot failure).
+> 
+> No clue at all now, would try older debian in a VM then.
 
+I suggest that instead of switching distros you should rather first
+try 4.14.0 to verify if there was a regression affecting your system.
+And if so, then a bisect will certainly be welcome. If it still does
+not work, then maybe a different distro could help, though I doubt it.
+
+Willy

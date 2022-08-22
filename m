@@ -2,101 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F032059BDAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CB359BDAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233484AbiHVKgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 06:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S230178AbiHVKiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 06:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbiHVKgE (ORCPT
+        with ESMTP id S229586AbiHVKh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 06:36:04 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4EA30F75
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 03:36:01 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id s36-20020a17090a69a700b001faad0a7a34so13489019pjj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 03:36:01 -0700 (PDT)
+        Mon, 22 Aug 2022 06:37:59 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9642FFC0;
+        Mon, 22 Aug 2022 03:37:58 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id bj12so3208168ejb.13;
+        Mon, 22 Aug 2022 03:37:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=nG5cok1QPdhwgOd/fGPOrpOpdg7Z3WhBB1mOKBv5Fpo=;
-        b=quXugk55Ne0wGuoSR333VhDnDjpLcGold1fym5jNCA/m8WAQoA2xpBORPVWTju6Jhl
-         i8UlH+ao2OtrGRQH97FtoVBurfanJl9J0twl2f/ovvD2iC7SlmWVIp3PFz32CXTWu43f
-         vaprIWzWj6d/ZRkwOIR6hADB2HFRH/G7aitNAmdC3Xcx8khePprrAwRbFIg2LycAy31Z
-         VK9+ZaDk6lCQm5oHTVwLjR3e4SFLOS1Tq/Ujz479LTWCgYNTASuLzOZVt1Uq4Y2v3+rX
-         MMQ2KrvIF/BnMwjXUyqLTKrxzSA/o99Z2uaBVbg9/IKOF5DKPB6e9LeKyO7JBknu1NvS
-         RRbQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc;
+        bh=Fic3qiVWuOXlTHP1LZdbaPSid2L5A3dsT7KZevdChfs=;
+        b=IHCuOUhy56vMwdwjLTG9NYX3fgcJdjJPjKhyta6Qno0VyVYmrtpv9plgj6qwWD/X2s
+         HwucGO9KuL0+fghF4vJmR4n6VrUCKt9Z1rHhlw2k27NTRRAGdLmbtW4v6PfYv0ohFFge
+         +XizqygcAKRGewcldYjjgWNN5F1sii+PSyPdOcaGhBabVrUjtVUM1abOU8eeWfl3fgEX
+         lUWYUW0pzYBASu2+AuJdgXCGAJVQfzFcGfJiTsq+RXzRk1ILQyG1WUAKMKKmp7/64veg
+         7LGqhggBuNU9M9ktMRIynqbAQVfL3FdjdzZuktCWyNiSuug2eGT+XuMWFl+4q31DvBvO
+         zrwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=nG5cok1QPdhwgOd/fGPOrpOpdg7Z3WhBB1mOKBv5Fpo=;
-        b=7zCmFV0vUr4cENZ+sFOZtkAPthc4vlQBh5wXVJ7WBP7oiFkm/qUa7IQmiUjnY2x4JJ
-         K+IShjuwO/srYiVo2M68yx4flByKJLJufW1gKJXobMbTQQBc710gD2HkzXREUHo0E1xu
-         1T68FG1kZBbocxPc2irBnLxOCUaBDv/jN1Z46jzpThdLGt/L4jqCbIhyQlHnGCWQln4E
-         fusK/34WmCXxAMYoU8ziY9Q9dZxY+i2qkWw+Rx0/tYmtlo7QOXPoZTR/j7fODsAIrSir
-         70imh4lyuDufczxwdewLL86BaMYnNQRuYR2COKzV0AVKREWEV4elhFByqkQo81hYiOp7
-         frdg==
-X-Gm-Message-State: ACgBeo2ic/zUHd4xoPhM2C9i/KT4BxV6MJzZLpalcgqUHt1DWs+tns9e
-        uX0rE4+RS8ob0dn7L0im14TQFKyWQ3IQjI0IJn5A/A==
-X-Google-Smtp-Source: AA6agR7BxTBuWzfu3tg263op/3bMmcPuFH4fqcAvnn05v7nq16Dw+WAx7QuiyNFiCFQaO8KLW+YvxUt+NWpsPB7N2j8=
-X-Received: by 2002:a17:90a:4e07:b0:1fb:1253:475b with SMTP id
- n7-20020a17090a4e0700b001fb1253475bmr9006629pjh.0.1661164560580; Mon, 22 Aug
- 2022 03:36:00 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc;
+        bh=Fic3qiVWuOXlTHP1LZdbaPSid2L5A3dsT7KZevdChfs=;
+        b=4ZO3/CTlBcDlHALq/lCRCMj9ybT+M4X8HKm6VWCCIQ1oNmgIWl+K5JmRPs1IEcg4ix
+         Q72avHcWaNqEiXGQkQVIOk9ectRn+uOaqPcDq1aawzK4upWTSovDw382ELgDg+p1fzPq
+         4kcZqFsDlUjEdJFebS5Ovg5ba18uis+0tl0Aiw5Dz7tk6dDMzQ1je2Gv9y7Dj1aTB4O9
+         P0rad6VWgDaY6zrH7NyA1aOHr9I7Xur0cgiP2RuUjzUIAmY/qo0nPexlUPZRVvxdhSvi
+         Y/ltOORlbPo4ndKQY8NHvLUp5OqUZO8UAKZdB7Q7FhAZ3ZPxSzmhB5MtBUpKOMEPGP3w
+         v+IA==
+X-Gm-Message-State: ACgBeo3iHPvsna1iKBnc157r8oX/taEiKX9zwEpiWgvz0wo59mlLLRDv
+        +s7x5Eyx9Zrj6hKBskhPqYA=
+X-Google-Smtp-Source: AA6agR61ZJH1BrR2M4z9iHGxFWbQH+3OJQa8rlccLSppDIjyOOz9ZmPu5f2e5WGvyZY474HoWqaSiw==
+X-Received: by 2002:a17:907:a408:b0:73d:6696:50af with SMTP id sg8-20020a170907a40800b0073d669650afmr6162308ejc.369.1661164676572;
+        Mon, 22 Aug 2022 03:37:56 -0700 (PDT)
+Received: from gmail.com (195-38-113-151.pool.digikabel.hu. [195.38.113.151])
+        by smtp.gmail.com with ESMTPSA id l17-20020a1709063d3100b00711edab7622sm5941550ejf.40.2022.08.22.03.37.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 03:37:55 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Mon, 22 Aug 2022 12:37:53 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     bp@suse.de, ndesaulniers@google.com, nathan@kernel.org,
+        alexandre.belloni@bootlin.com, acme@kernel.org,
+        namhyung@kernel.org, jolsa@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf tools: Fix compile error for x86
+Message-ID: <YwNcgdk/p18Cr+uv@gmail.com>
+References: <20220822092557.210209-1-yangjihong1@huawei.com>
 MIME-Version: 1.0
-References: <20220812071526.414285-1-jsd@semihalf.com> <YwB/aWRxyemPay58@shikoro>
-In-Reply-To: <YwB/aWRxyemPay58@shikoro>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Mon, 22 Aug 2022 12:35:49 +0200
-Message-ID: <CAOtMz3Ptx-xoGUUtAbssJsggmKrD+rX3nv6KMo3LJOE3ip0RYw@mail.gmail.com>
-Subject: Re: [PATCH v2] i2c: designware: Introduce semaphore reservation timer
- to AMDPSP driver
-To:     Wolfram Sang <wsa@kernel.org>, Jan Dabros <jsd@semihalf.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, rrangel@chromium.org,
-        mw@semihalf.com, upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220822092557.210209-1-yangjihong1@huawei.com>
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sob., 20 sie 2022 o 08:30 Wolfram Sang <wsa@kernel.org> napisa=C5=82(a):
->
-> On Fri, Aug 12, 2022 at 09:15:26AM +0200, Jan Dabros wrote:
-> > In order to optimize performance, limit amount of back and forth
-> > transactions between x86 and PSP. This is done by introduction of
-> > semaphore reservation period - that is window in which x86 isn't
-> > releasing the bus immediately after each I2C transaction.
-> >
-> > In order to protect PSP from being starved while waiting for
-> > arbitration, after a programmed time bus is automatically released by a
-> > deferred function.
-> >
-> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
->
-> Fixed this checkpatch check:
->
-> CHECK: Blank lines aren't necessary after an open brace '{'
-> #60: FILE: drivers/i2c/busses/i2c-designware-amdpsp.c:265:
 
-Are you using the default checkpatch.pl script available on the top of
-tree kernel baseline? For some reason my checkpatch.pl hasn't reported
-this, but (due to operational error) I used the version of script from
-5.10 stabilize branch..
+* Yang Jihong <yangjihong1@huawei.com> wrote:
 
-> and applied to for-next, thanks!
+> Commit a0a12c3ed057 ("asm goto: eradicate CC_HAS_ASM_GOTO") eradicates
+> CC_HAS_ASM_GOTO, perf on x86 call asm_volatile_goto when compiling __GEN_RMWcc.
+> However, asm_volatile_goto is not declared, which causes compilation error:
+> 
+> In file included from /home/linux/tools/include/asm/../../arch/x86/include/asm/atomic.h:7,
+>                  from /home/linux/tools/include/asm/atomic.h:6,
+>                  from /home/linux/tools/include/linux/atomic.h:5,
+>                  from /home/linux/tools/include/linux/refcount.h:41,
+>                  from /home/linux/tools/lib/perf/include/internal/cpumap.h:5,
+>                  from /home/linux/tools/perf/util/cpumap.h:7,
+>                  from /home/linux/tools/perf/util/env.h:7,
+>                  from /home/linux/tools/perf/util/header.h:12,
+>                  from pmu-events/pmu-events.c:9:
+> /home/linux/tools/include/asm/../../arch/x86/include/asm/atomic.h: In function ‘atomic_dec_and_test’:
+> /home/linux/tools/include/asm/../../arch/x86/include/asm/rmwcc.h:7:2: error: implicit declaration of function ‘asm_volatile_goto’ [-Werror=implicit-function-declaration]
+>   asm_volatile_goto (fullop "; j" cc " %l[cc_label]"  \
+>   ^~~~~~~~~~~~~~~~~
+> 
+> Solution:
+> Define asm_volatile_goto in compiler_types.h if not declared.
+> 
+> Currently, only x86 architecture uses asm_volatile_goto.
+> Theoretically, this patch affects only the x86 architecture.
+> 
+> Fixes: a0a12c3ed057 ("asm goto: eradicate CC_HAS_ASM_GOTO")
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> ---
+>  tools/include/linux/compiler_types.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/tools/include/linux/compiler_types.h b/tools/include/linux/compiler_types.h
+> index 24ae3054f304..1bdd834bdd57 100644
+> --- a/tools/include/linux/compiler_types.h
+> +++ b/tools/include/linux/compiler_types.h
+> @@ -36,4 +36,8 @@
+>  #include <linux/compiler-gcc.h>
+>  #endif
+>  
+> +#ifndef asm_volatile_goto
+> +#define asm_volatile_goto(x...) asm goto(x)
+> +#endif
 
-Thanks!
+Tested-by: Ingo Molnar <mingo@kernel.org>
 
-Best Regards,
-Jan
+Thanks,
+
+	Ingo

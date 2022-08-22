@@ -2,96 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4941159BA6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051D459BA6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232556AbiHVHmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 03:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
+        id S233003AbiHVHnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 03:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiHVHmP (ORCPT
+        with ESMTP id S232789AbiHVHn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 03:42:15 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48E62A717
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:42:14 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id c2so9189918plo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=friendlyarm-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=7QyUas+FLnoDjvpQTXVOSCYRlddQJ/V4Mg+5MhKdl9Q=;
-        b=QPO//93mdKVvWHp2CKcq0d+X658L9tym1FpekTAlU2DNGlkkPpdqsqEOBCqdEC4SVj
-         utYuG74InxUGt9KzeUDvA6XbZTGQBy+Z/19vOVnrl+8udG84eiZKN2qCYycA4FZRrvgT
-         CUDkkUzrPy04StLWUM+kH/uDVUlAnmiS2NH4Jywu1V1MovqJVwzSWGdoWlAdwxNXOmcV
-         BcyDOn3W74jFZlyglbXGywdLgkwQPoHBXWgniop+2bn3wrYNftabqNPAK+vmJh5/HZ82
-         o3wgmP7+n1OuyDam+Tzcsx2saB6boTlqIS5J1ZVdo/jr8Q4tXTbNYwMJXcdL+Vo2TtZ1
-         VJ7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=7QyUas+FLnoDjvpQTXVOSCYRlddQJ/V4Mg+5MhKdl9Q=;
-        b=lzahNlcxuJJ9hk6sRFzsH8aGweqfj1Fs3qYwjIWzyk90fJ9Da7qjIzdK2YIbtCu6vs
-         bTMey9XU6Iu0ZI/BJjVfTDsV6j9MudDTCTS7FuGNssd/D9A2omt4emzctGYBUaiQnZiW
-         gFcPJf/vP8sdgR7n88cIwVX4TWoUkAGy45I55Ly0dglyHGLylnQPOJX8WQi2vHdCUbf2
-         Sj6H16+t/vZUeNTDCROuvWWhAVjCBhgUM7KOPXgRpi5bBAL7RHoTPbEVeiN9FbdWxMl/
-         77Kck5FXs+/4x7F7uplhz/rwYAolH8M98E/Iv80Cx3OOuz+odmoDXi1luZv08c8QKKwx
-         riPg==
-X-Gm-Message-State: ACgBeo08KqsSr5CGBTPjdTMb57IoPuvbby9V+6Ffi/2MwhPW8nh3QuO3
-        PqyddX+fPtT3fHFpmkh64DeG9Q==
-X-Google-Smtp-Source: AA6agR5IRJNG091ZHau7uJZbUp8ZOq74fSoZSXgaKeNT8eQQ7nf9J+rsRcnPQS/9g+Rnrr3t8QcdqA==
-X-Received: by 2002:a17:902:ba96:b0:170:9f15:b997 with SMTP id k22-20020a170902ba9600b001709f15b997mr18513567pls.34.1661154134357;
-        Mon, 22 Aug 2022 00:42:14 -0700 (PDT)
-Received: from jensen.next ([113.109.76.237])
-        by smtp.gmail.com with ESMTPSA id s21-20020a170903201500b0016bf5557690sm2936254pla.4.2022.08.22.00.42.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 00:42:13 -0700 (PDT)
-From:   Jensen Huang <jensenhuang@friendlyarm.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Cc:     Jensen Huang <jensenhuang@friendlyarm.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: rockchip: add enable-strobe-pulldown to emmc phy on rk3399
-Date:   Mon, 22 Aug 2022 15:41:39 +0800
-Message-Id: <20220822074139.3810-1-jensenhuang@friendlyarm.com>
-X-Mailer: git-send-email 2.37.0
+        Mon, 22 Aug 2022 03:43:29 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA47559C;
+        Mon, 22 Aug 2022 00:43:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661154206; x=1692690206;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5F+8Hcgg/FkfZnmb7UcC1acSmNGhXhtbTS0JyylKkzQ=;
+  b=D2jE3ZaLmlN+Awv2KXIsyVTA6SPRNOvvvYD9aogr89GT8mRwLZNs8NrS
+   rphmkEA+un0VIZkeZTUaxwkdMnZ8TwgapHAKgr8CTvT6FlfMAOfLcgSxK
+   pm8K47sxRj0GHxCb/HKvcxBBg8+NVsU5roPg1f9DhJEQq0Yxn4bXGDDEY
+   XX4WH+pCNs8SOzwNjzkogOUh6SWLZs5oKviM4F3n7STTB+3PYUwgHAz3S
+   x0mOdvi8c2vcBERSUrCsyOGDcbiFzelArAQ9jyEq+QNGX/fvD753aXpHd
+   zEmLoahIn5twDljiH3fiACWg1YdZTMZ/2fOKw2gevVF2NXwHl9EMf6c18
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="293345348"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="293345348"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 00:43:25 -0700
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="677118580"
+Received: from zhaohaif-mobl1.ccr.corp.intel.com (HELO [10.254.211.156]) ([10.254.211.156])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 00:43:20 -0700
+Message-ID: <3751881a-7478-c1cb-4d77-a9483fbeed83@linux.intel.com>
+Date:   Mon, 22 Aug 2022 15:43:18 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v11 04/13] PCI: Allow PASID only when ACS enforced on
+ upstreaming path
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220818230020.GA2401272@bhelgaas>
+From:   Ethan Zhao <haifeng.zhao@linux.intel.com>
+In-Reply-To: <20220818230020.GA2401272@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Internal pull-down for strobe line (GRF_EMMCPHY_CON2[9]) was disabled
-by commit 8b5c2b45b8f0, which causes I/O error in HS400 mode.
 
-Tested on NanoPC-T4.
+在 2022/8/19 7:00, Bjorn Helgaas 写道:
+> On Thu, Aug 18, 2022 at 07:53:15PM +0800, Baolu Lu wrote:
+>> On 2022/8/18 05:17, Bjorn Helgaas wrote:
+>>> On Wed, Aug 17, 2022 at 09:20:15AM +0800, Lu Baolu wrote:
+>>>> Some configurations of the PCI fabric will route device originated TLP
+>>>> packets based on the memory addresses.
+>>> This makes it sound like a few unusual configurations will route TLPs
+>>> based on memory addresses, but address routing is the default for all
+>>> PCIe Memory Requests, and ACS provides a way to override that default.
+>>>
+>>>> These configurations are incompatible with PASID as the PASID
+>>>> packets form a distinct address space.
+>>> I would say "the Requester ID/PASID combination forms a distinct
+>>> address space."
+>>>
+>>>> For instance, any configuration where switches are present
+>>>> without ACS enabled is incompatible.
+>>>>
+>>>> This enhances the pci_enable_pasid() interface by requiring the ACS to
+>>>> support Source Validation, Request Redirection, Completer Redirection,
+>>>> and Upstream Forwarding. This effectively means that devices cannot
+>>>> spoof their requester ID, requests and completions cannot be redirected,
+>>>> and all transactions are forwarded upstream, even as it passes through a
+>>>> bridge where the target device is downstream.
+>>> I think your patch actually requires all those features to be not just
+>>> "supported" but actually*enabled*  for the entire path leading to the
+>>> device.
+>>>
+>>> To use the terms from the spec:
+>>>
+>>>     "P2P Request Redirect"
+>>>     "P2P Completion Redirect"
+>>>     "Requester ID, Requests, and Completions"
+>>>
+>>> and maybe something like:
+>>>
+>>>     ... even if the TLP looks like a P2P Request because its memory
+>>>     address (ignoring the PASID) would fall in a bridge window and would
+>>>     normally be routed downstream.
+>> Thank you for the suggestions. I will rephrase the commit message
+>> accordingly like this:
+>>
+>>
+>> PCI: Allow PASID only when ACS enforced on upstreaming path
+> PCI: Enable PASID only when ACS RR & UF enabled on upstream path
+>
+> The Requester ID/Process Address Space ID (PASID) combination
+> identifies an address space distinct from the PCI bus address space,
+> e.g., an address space defined by an IOMMU.
+>
+> But the PCIe fabric routes Memory Requests based on the TLP address,
+> ignoring any PASID (PCIe r6.0, sec 2.2.10.4), so a TLP with PASID that
+> *should* go upstream to the IOMMU may instead be routed as a P2P
+> Request if its address falls in a bridge window.
+>
+> To ensure that all Memory Requests with PASID are routed upstream,
+> only enable PASID if ACS P2P Request Redirect and Upstream Forwarding
+> are enabled for the path leading to the device.
 
-Fixes: 8b5c2b45b8f0 ("phy: rockchip: set pulldown for strobe line in dts")
-Signed-off-by: Jensen Huang <jensenhuang@friendlyarm.com>
+Seeing these comments, my questions gone.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index 9d5b0e8c9cca..9491cafbbaa3 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-@@ -1561,6 +1561,7 @@ emmc_phy: phy@f780 {
- 			clock-names = "emmcclk";
- 			drive-impedance-ohm = <50>;
- 			#phy-cells = <0>;
-+			rockchip,enable-strobe-pulldown;
- 			status = "disabled";
- 		};
- 
+Thanks Bjorn !
+
+>> The PCIe fabric routes TLPs based on memory addresses for all PCIe Memory
+>> Requests regardless of whether TLPs have PASID prefixes. This is stated in
+>> section "2.2.10.2 End-End TLP Prefix Processing" of the specification:
+>>
+>>    The presence of an End-End TLP Prefix does not alter the routing of a
+>>    TLP. TLPs are routed based on the routing rules covered in Section
+>>    2.2.4 .
+>>
+>> As the Requester ID/PASID combination forms a distinct address space. The
+>> memory address based routing is not compatible for PASID TLPs anymore.
+>> Therefore we have to rely on ACS to override that default.
+>>
+>> This enhances pci_enable_pasid() interface by requiring the ACS features
+>> to be enabled for the entire path leading to the device. So that even if
+>> the TLP looks like a P2P Request because its memory address (ignoring the
+>> PASID) would fall in a bridge window and would normally be routed
+>> downstream.
+>>
+>> Best regards,
+>> baolu
+
 -- 
-2.37.0
+"firm, enduring, strong, and long-lived"
 

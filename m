@@ -2,160 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024DC59B6FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 02:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A7559B701
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 02:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiHVATI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 20:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
+        id S232047AbiHVAUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 20:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbiHVATF (ORCPT
+        with ESMTP id S232025AbiHVAUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 20:19:05 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8039B15727;
-        Sun, 21 Aug 2022 17:19:03 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id E149A5C00E4;
-        Sun, 21 Aug 2022 20:19:02 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sun, 21 Aug 2022 20:19:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1661127542; x=1661213942; bh=L2nkszgY5W
-        OfLgRzK4a0UTYpubHoRBwTEQkzg8BqgV8=; b=LygE7oGCZGQrEJbufqeGM76mIs
-        M/PjtSxgA2DNSOl0S9uAEKPMLttVPpdcpeQtAYCtAER1eepiE08PzrOCipnx84CC
-        7TeESltxOHCNzR00fyTlWpbr1IP/18FiyEldDA2Dfha/bS4nYa+XMzdrHwMixa1G
-        DUJ5a8pBQn62QdhtEI6aOdQSTi95UgOuaiqEoA7H632q/VL4pHOsHBSNKuyQ3Znm
-        iIQQ/N4OXJ/dPOFI0PIY8t9Z0mKX0Ju1STgytjFFtaitRQg0Eqk4p3gxb1Rga5yY
-        QvsUR+9l/dxo0uOXGrqFvDznHSIaoxWpUe4KWY1wxO3Y/goCJJB5QM/RoTTw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1661127542; x=
-        1661213942; bh=L2nkszgY5WOfLgRzK4a0UTYpubHoRBwTEQkzg8BqgV8=; b=o
-        gfLdqt6wbPAR0sXCwaq4zcEkmMMKZCZ/ESqK/G/zVM/WjKnbtqZAzMCCEFrpakke
-        42TvM0/0qykA39za++YftSeMEjruEGHwYgt5BPhnvURBXmiO0RdupD0oX1gEr1Ss
-        yFGXqvT6RnaoPO8aQQ0f6s4GI/fsAq5p+aFDEZ3RjuWqeKYcdeyCmwudT18oI6Dz
-        5ErkfTUsK2XLd2325kJi9K71OOvvWQuWMEwjNvhYPI8+IDDCm+GfCchb5qCBAVSg
-        RnNX2Uxd2RMdr4Pure0tQqgmy/UO2iwOXjbTPWKM3nLSBtouHHftiVjyeD/TecnR
-        W0X/RnjgwKr1r8kOqPYtg==
-X-ME-Sender: <xms:dssCYxQx4TasUzZxR4pdf88CLkmagWVgum4J6A83ATl65KXfeCrgGQ>
-    <xme:dssCY6z5X47wBkPU6Z6QuGRQr161ErGsdmg_e-10lnj8I_Gj6tEcK8uOgxB2ewUK6
-    cCOKvh5893XKkr-dQ>
-X-ME-Received: <xmr:dssCY20uHiNgRzO4861SmEehuRCZTffIVbqcGp4FOMYTFML7TtInpw5pGOfifWlUOobjYg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeiiedgfeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefkffggfgfuvfevfhfhjggtgfesth
-    ekredttdefjeenucfhrhhomhepvfhomhcuhfhithiihhgvnhhrhicuoehtohhmsehtohhm
-    qdhfihhtiihhvghnrhihrdhmvgdruhhkqeenucggtffrrghtthgvrhhnpeelgfffheegtd
-    fgudefhfdvveeviedttedthfevgeeugffgveeujeefteetteeigfenucffohhmrghinhep
-    khgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepthhomhesthhomhdqfhhithiihhgvnhhrhidrmhgvrdhukh
-X-ME-Proxy: <xmx:dssCY5Ae76hQ1mLulG_Bfu6PZRHNyT5a5jYHGw9nrkpSxEx5zRTAgg>
-    <xmx:dssCY6gnSQxOsWLxVPM2KoD7vMVBSJyFA2tvFRyuqOCn1kPaToURcw>
-    <xmx:dssCY9pujbTvodKmvRtB_wWwNtBdLJ9UIejjG0q1AzxW2ZubDxye0w>
-    <xmx:dssCY64g--RsODk7U39RdeC3t2zOnVd4MGOw7OzydtrHAo5YMg2jyw>
-Feedback-ID: iefc945ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 21 Aug 2022 20:19:01 -0400 (EDT)
-Message-ID: <460cd42b-4192-6761-7313-268a684e1e28@tom-fitzhenry.me.uk>
-Date:   Mon, 22 Aug 2022 10:19:00 +1000
+        Sun, 21 Aug 2022 20:20:53 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E0E20185
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 17:20:52 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 2so3868585edx.2
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 17:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=itKnzEEgxdRanMi9GUPBS95li3Z7do6JuAGWEAWhYEg=;
+        b=guVICWeqFQ8c3vdR8GBUuEyOVA0+5EO5OmTjHqWEu6VFAbXZCzD8du432ghmvYgJhQ
+         RvhjnmWNjHAres1/WFOa7u85aN+wL7vVAGauR2TkbUDtfiEBAXM8d8woD4OK3YR4i9By
+         ROoju+R4k73Q8z6CL8yQaelkmRtkkt2ChGCPVsaia6rbwlV4wz6sduV7nkHR4czQ01aV
+         nTYqLzKSWXx8g3YTHTp1n3tr3K0/HL5bsdRB9fZYGzYXdMycMvI6WQgC+dNqstFVupCb
+         Dr7SNfpCd7U3oIUkjp6zD1NCoV474OmknfhA3jNoJFdCbarhzlTJZXkn6gHjiS5kG4O4
+         fcTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=itKnzEEgxdRanMi9GUPBS95li3Z7do6JuAGWEAWhYEg=;
+        b=5I+SLRkQK/pQjf7oahFg53eZbBV99AtHl6U4LCu/+tg9Of3GSQEsW6MkNfGl4vjHWJ
+         dTXzj+UOHFsDpEuFYnAtWl9oaLDXneNc7BZaH7VB68iHSlhRJGulMg2p/f8Yd3HE7uwU
+         zFDKkrts8R/+bxoVSGibnaIISLBWVvHsNK3EfstWQAB6aEBoI73ffPZhLnqn7kLu9Q7S
+         21Pi+d1VyKoiu6+TsihqeaO0PJUKgVRucQewlu+S65x1SQLhngPOt4MwSXAigre8j5Js
+         W3MUndyYhXmwfFE9UTDy0EhGhvnnMm05JXnKTGOcjIbY7FrMhbm704hh7gDYiBLcydKl
+         N3lw==
+X-Gm-Message-State: ACgBeo2pMRLgWno4kpVw6NAHhcEF6JDwUoLDZ6h8IAM3EjqDOoZmjeEv
+        77EBStQDqkZ+CiNYoNqZVzUTycrzOmGdAt3UUY3PwQ==
+X-Google-Smtp-Source: AA6agR6lSgQcCZCvUYP8FRcUweR76r3Cilqo11shbVm7XXhBywGbxJf+ReHNDI1Bu4CF5Iaxy+qp6DBFFwaZW8Mqmh4=
+X-Received: by 2002:a05:6402:5ca:b0:43b:6e01:482c with SMTP id
+ n10-20020a05640205ca00b0043b6e01482cmr14637867edx.189.1661127650293; Sun, 21
+ Aug 2022 17:20:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.3
-Subject: Re: [PATCH v3 2/2] arm64: dts: rockchip: Add initial support for
- Pine64 PinePhone Pro
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <n@nfraprado.net>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, martijn@brixit.nl, ayufan@ayufan.eu, megi@xff.cz,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220815123004.252014-1-tom@tom-fitzhenry.me.uk>
- <20220815123004.252014-3-tom@tom-fitzhenry.me.uk>
- <20220818030547.eblbmchutmnn6jih@notapiano>
-From:   Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
-In-Reply-To: <20220818030547.eblbmchutmnn6jih@notapiano>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220822001737.4120417-1-shakeelb@google.com> <20220822001737.4120417-2-shakeelb@google.com>
+In-Reply-To: <20220822001737.4120417-2-shakeelb@google.com>
+From:   Soheil Hassas Yeganeh <soheil@google.com>
+Date:   Sun, 21 Aug 2022 20:20:14 -0400
+Message-ID: <CACSApvbSnCN8Fy1E3KyhkBDF=_h4vg==eoJGzM1Njf0ArX+zcg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mm: page_counter: remove unneeded atomic ops for low/min
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Oliver Sang <oliver.sang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
+        cgroups@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/8/22 13:05, Nícolas F. R. A. Prado wrote:
-
-> thanks for getting the upstreaming of this DT going. Some comments below.
-
-No worries, thank you for your review!
-
-> You're also adding the SD controller here. Does it work as is? If so add it to
-> the commit description as well.
-I will note this in v4.
->> +/* PinePhone Pro datasheet:
-> First comment line should be empty following the coding style [1]. Like you did
-> for the copyrights above.
+On Sun, Aug 21, 2022 at 8:17 PM Shakeel Butt <shakeelb@google.com> wrote:
 >
-> [1] https://www.kernel.org/doc/html/latest/process/coding-style.html#commenting
-
-I will do this in v4.
-
-> This signal is called vcc_sys in the datasheet, so I suggest we keep that name
-> here. It's not everyday that we get a device with a publicly available datasheet
-> :^).
-
-Indeed! :) I will do this in v4.
-
-> + rk818: pmic@1c {
->> +		compatible = "rockchip,rk818";
->> +		reg = <0x1c>;
->> +		interrupt-parent = <&gpio1>;
->> +		interrupts = <RK_PC5 IRQ_TYPE_LEVEL_LOW>;
->> +		#clock-cells = <1>;
->> +		clock-output-names = "xin32k", "rk808-clkout2";
-> What about keeping the datasheet names here too? clk32kout1, clk32kout2
-Per Megi's response, I'll stick with the current names.
->> +			vcc_1v8: vcc_wl: DCDC_REG4 {
->  From the datasheet, vcc_wl is actually wired to vcc3v3_sys. But looks like
-> vcc_wl is only used for bluetooth and you're not enabling it yet anyway, so just
-> drop this extra label, and it can be added when bluetooth is added (or not, and
-> then the bluetooth supply just points directly to vcc3v3_sys).
-Good catch, I will remove the vcc_wl label.
->> +			vcc_power_on: LDO_REG4 {
->> +				regulator-name = "vcc_power_on";
-> The name on the datasheet for this one is rk818_pwr_on.
-I will use the name rk818_pwr_on in v4.
->> +
->> +&cluster1_opp {
->> +	opp06 {
->> +		status = "disabled";
->> +	};
-> There's actually an opp06 node in the OPP for RK3399-T, only that the frequency
-> is slightly lower. Maybe you could keep it enabled but override the frequency?
+> For cgroups using low or min protections, the function
+> propagate_protected_usage() was doing an atomic xchg() operation
+> irrespectively. It only needs to do that operation if the new value of
+> protection is different from older one. This patch does that.
 >
-> Or given the above point about the max voltages, maybe it would be best to have
-> a separate OPP table after all?
-Per Megi's response/rationale, I'll keep the existing table, but 
-re-introduce cluster1_opp/opp06 with updated frequency/voltage, aligned 
-with the RK3399-T datasheet.
->> +
->> +	opp07 {
->> +		status = "disabled";
->> +	};
->> +};
->> +
->> +&io_domains {
->> +	status = "okay";
-> Let's keep the status at the end of the node for consistency with the rest.
-I will do this in v4.
+> To evaluate the impact of this optimization, on a 72 CPUs machine, we
+> ran the following workload in a three level of cgroup hierarchy with top
+> level having min and low setup appropriately. More specifically
+> memory.min equal to size of netperf binary and memory.low double of
+> that.
+>
+>  $ netserver -6
+>  # 36 instances of netperf with following params
+>  $ netperf -6 -H ::1 -l 60 -t TCP_SENDFILE -- -m 10K
+>
+> Results (average throughput of netperf):
+> Without (6.0-rc1)       10482.7 Mbps
+> With patch              14542.5 Mbps (38.7% improvement)
+>
+> With the patch, the throughput improved by 38.7%
+>
+> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+
+Nice speed up!
+
+Acked-by: Soheil Hassas Yeganeh <soheil@google.com>
+
+> ---
+>  mm/page_counter.c | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+>
+> diff --git a/mm/page_counter.c b/mm/page_counter.c
+> index eb156ff5d603..47711aa28161 100644
+> --- a/mm/page_counter.c
+> +++ b/mm/page_counter.c
+> @@ -17,24 +17,23 @@ static void propagate_protected_usage(struct page_counter *c,
+>                                       unsigned long usage)
+>  {
+>         unsigned long protected, old_protected;
+> -       unsigned long low, min;
+>         long delta;
+>
+>         if (!c->parent)
+>                 return;
+>
+> -       min = READ_ONCE(c->min);
+> -       if (min || atomic_long_read(&c->min_usage)) {
+> -               protected = min(usage, min);
+> +       protected = min(usage, READ_ONCE(c->min));
+> +       old_protected = atomic_long_read(&c->min_usage);
+> +       if (protected != old_protected) {
+>                 old_protected = atomic_long_xchg(&c->min_usage, protected);
+>                 delta = protected - old_protected;
+>                 if (delta)
+>                         atomic_long_add(delta, &c->parent->children_min_usage);
+>         }
+>
+> -       low = READ_ONCE(c->low);
+> -       if (low || atomic_long_read(&c->low_usage)) {
+> -               protected = min(usage, low);
+> +       protected = min(usage, READ_ONCE(c->low));
+> +       old_protected = atomic_long_read(&c->low_usage);
+> +       if (protected != old_protected) {
+>                 old_protected = atomic_long_xchg(&c->low_usage, protected);
+>                 delta = protected - old_protected;
+>                 if (delta)
+> --
+> 2.37.1.595.g718a3a8f04-goog
+>

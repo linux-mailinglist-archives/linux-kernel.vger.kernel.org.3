@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F5759C2F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB8459C2E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236658AbiHVPeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
+        id S236542AbiHVPdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236640AbiHVPeI (ORCPT
+        with ESMTP id S235301AbiHVPdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:34:08 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8976FE09E;
-        Mon, 22 Aug 2022 08:34:06 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80DB6ED1;
-        Mon, 22 Aug 2022 08:34:09 -0700 (PDT)
-Received: from entos-ampere-02.shanghai.arm.com (entos-ampere-02.shanghai.arm.com [10.169.212.212])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8503A3F70D;
-        Mon, 22 Aug 2022 08:33:57 -0700 (PDT)
-From:   Jia He <justin.he@arm.com>
-To:     Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
-        nd@arm.com, "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        linux-doc@vger.kernel.org, Jia He <justin.he@arm.com>,
-        stable@kernel.org
-Subject: [PATCH v3 3/9] EDAC/ghes: Make ghes_edac a proper module to remove the dependency on ghes
-Date:   Mon, 22 Aug 2022 15:33:17 +0000
-Message-Id: <20220822153323.187184-4-justin.he@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220822153323.187184-1-justin.he@arm.com>
-References: <20220822153323.187184-1-justin.he@arm.com>
+        Mon, 22 Aug 2022 11:33:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79EEF587
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:33:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF2A461158
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:33:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA02EC43470;
+        Mon, 22 Aug 2022 15:33:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661182419;
+        bh=L+xylg2Ga9OgepjcsWkpAAwkZaOwU0VdxyIlnOTzoP0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ouIW1BYa0TIGv3Bm6vn3QC9pMFbE1oMr/c9uk71Rv5zPHKUnr1YQfDzYxH1Ln79ez
+         GxNdHDxBheoFb+j/l0QdnN/SjDf6p+fIiQIwTCIXF1U4Q0g6LEx2BcxFbfHmG4dWnt
+         kw+xF9MDswN2XT1xew9ctStO5YzlCUnmzMzpYX/m5serD0eBCVHOuxb8urUr3VmZZe
+         v0/QPB6TixrIGyeNZZdAOx4dAban0IQdEQzDpBtEm/97Wp8VKJ5o5+RqwrnKkkL8So
+         TZ+94BoGITKV28Pq7V4IofHuV2a3un2vt3b6HiA2aV2MIKIZmFYTsn+lHBWIxJRPtf
+         73A2gZAQ3hx0g==
+Received: by pali.im (Postfix)
+        id 1590597B; Mon, 22 Aug 2022 17:33:36 +0200 (CEST)
+Date:   Mon, 22 Aug 2022 17:33:35 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Nick Child <nick.child@ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] powerpc: Add support for early debugging via Serial
+ 16550 console
+Message-ID: <20220822153335.v5gc26jfbbqyj3et@pali>
+References: <20220819211254.22192-1-pali@kernel.org>
+ <b23ecdd1-fe34-f0f7-be7f-da8624096447@csgroup.eu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <b23ecdd1-fe34-f0f7-be7f-da8624096447@csgroup.eu>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,260 +64,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in
-apci_init()") introduced a bug that ghes_edac_register() would be invoked
-before edac_init(). Because at that time, the bus "edac" hadn't been even
-registered, this created sysfs /devices/mc0 instead of
-/sys/devices/system/edac/mc/mc0 on an Ampere eMag server.
+On Monday 22 August 2022 14:25:57 Christophe Leroy wrote:
+> Le 19/08/2022 à 23:12, Pali Rohár a écrit :
+> > Currently powerpc early debugging contains lot of platform specific
+> > options, but does not support standard UART / serial 16550 console.
+> > 
+> > Later legacy_serial.c code supports registering UART as early debug console
+> > from device tree but it is not early during booting, but rather later after
+> > machine description code finishes.
+> > 
+> > So for real early debugging via UART is current code unsuitable.
+> > 
+> > Add support for new early debugging option CONFIG_PPC_EARLY_DEBUG_16550
+> > which enable Serial 16550 console on address defined by new option
+> > CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR and by stride by option
+> > CONFIG_PPC_EARLY_DEBUG_16550_STRIDE.
+> > 
+> > With this change it is possible to debug powerpc machine descriptor code.
+> > For example this early debugging code can print on serial console also
+> > "No suitable machine description found" error which is done before
+> > legacy_serial.c code.
+> > 
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > ---
+> > Tested on P2020 board. It allowed me do debug and implement this patch series:
+> > https://lore.kernel.org/linuxppc-dev/20220819191557.28116-1-pali@kernel.org/
+> 
+> Build failure if I select it on mpc885_ads_defconfig :
+> 
+>    LD      vmlinux.o
+>    MODPOST vmlinux.symvers
+>    MODINFO modules.builtin.modinfo
+>    GEN     modules.builtin
+>    CC      .vmlinux.export.o
+>    LD      .tmp_vmlinux.kallsyms1
+> powerpc64-linux-ld: arch/powerpc/kernel/udbg.o: in function 
+> `udbg_early_init':
+> /home/chleroy/linux-powerpc/arch/powerpc/kernel/udbg.c:71: undefined 
+> reference to `udbg_init_debug_16550'
+> 
+> 
+> 
+> > ---
+> >   arch/powerpc/Kconfig.debug       | 14 ++++++++++++++
+> >   arch/powerpc/include/asm/udbg.h  |  1 +
+> >   arch/powerpc/kernel/udbg.c       |  2 ++
+> >   arch/powerpc/kernel/udbg_16550.c | 33 ++++++++++++++++++++++++++++++++
+> >   4 files changed, 50 insertions(+)
+> > 
+> > diff --git a/arch/powerpc/Kconfig.debug b/arch/powerpc/Kconfig.debug
+> > index 9f363c143d86..a4e7d90a45d2 100644
+> > --- a/arch/powerpc/Kconfig.debug
+> > +++ b/arch/powerpc/Kconfig.debug
+> > @@ -276,6 +276,11 @@ config PPC_EARLY_DEBUG_OPAL_HVSI
+> >   	  Select this to enable early debugging for the PowerNV platform
+> >   	  using an "hvsi" console
+> >   
+> > +config PPC_EARLY_DEBUG_16550
+> > +	bool "Serial 16550"
+> > +	help
+> > +	  Select this to enable early debugging via Serial 16550 console
+> > +
+> 
+> Putting it before EARLY_DEBUG_MEMCONS means that configs that were 
+> previously selectiong EARLY_DEBUG_MEMCONS will now select 
+> EARLY_DEBUG_16550 instead.
+> 
+> Add a dependency to PPC_UDBG_16550 to avoid the build failure I mentionned ?
 
-To remove the dependency of ghes_edac on ghes, make it a proper module. Use
-a list to save the probing devices in ghes_probe(), and defer the
-ghes_edac_register() to module_init() of the new ghes_edac module by
-iterating over the devices list.
+Yea, there is really missing dependency. I will fix it.
 
-Co-developed-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Jia He <justin.he@arm.com>
-Fixes: dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in apci_init()")
-Cc: stable@kernel.org
-Cc: Shuai Xue <xueshuai@linux.alibaba.com>
----
- drivers/acpi/apei/ghes.c | 35 ++++++++++++++++++++++--
- drivers/edac/Kconfig     |  4 +--
- drivers/edac/ghes_edac.c | 59 +++++++++++++++++++++++++---------------
- include/acpi/ghes.h      | 23 ++++------------
- 4 files changed, 77 insertions(+), 44 deletions(-)
+> >   config PPC_EARLY_DEBUG_MEMCONS
+> >   	bool "In memory console"
+> >   	help
+> > @@ -355,6 +360,15 @@ config PPC_EARLY_DEBUG_CPM_ADDR
+> >   	  platform probing is done, all platforms selected must
+> >   	  share the same address.
+> >   
+> > +config PPC_EARLY_DEBUG_16550_PHYSADDR
+> > +	hex "Early debug Serial 16550 physical address"
+> > +	depends on PPC_EARLY_DEBUG_16550
+> 
+> A default value is necessary here to avoid prompts during defconfig builds.
+> 
+> > +
+> > +config PPC_EARLY_DEBUG_16550_STRIDE
+> > +	int "Early debug Serial 16550 stride"
+> > +	depends on PPC_EARLY_DEBUG_16550
+> > +	default 1
+> > +
+> >   config FAIL_IOMMU
+> >   	bool "Fault-injection capability for IOMMU"
+> >   	depends on FAULT_INJECTION
+> > diff --git a/arch/powerpc/include/asm/udbg.h b/arch/powerpc/include/asm/udbg.h
+> > index b4aa0d88ce2c..20b5a37ab772 100644
+> > --- a/arch/powerpc/include/asm/udbg.h
+> > +++ b/arch/powerpc/include/asm/udbg.h
+> > @@ -53,6 +53,7 @@ extern void __init udbg_init_ehv_bc(void);
+> >   extern void __init udbg_init_ps3gelic(void);
+> >   extern void __init udbg_init_debug_opal_raw(void);
+> >   extern void __init udbg_init_debug_opal_hvsi(void);
+> > +extern void __init udbg_init_debug_16550(void);
+> 
+> 'extern' keywork is pointless and deprecated for function prototypes, 
+> please don't add new ones.
 
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index 8cb65f757d06..9c52183e3ad9 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -120,6 +120,9 @@ module_param_named(disable, ghes_disable, bool, 0);
- static LIST_HEAD(ghes_hed);
- static DEFINE_MUTEX(ghes_list_mutex);
- 
-+static LIST_HEAD(ghes_devs);
-+static DEFINE_MUTEX(ghes_devs_mutex);
-+
- /*
-  * Because the memory area used to transfer hardware error information
-  * from BIOS to Linux can be determined only in NMI, IRQ or timer
-@@ -1378,7 +1381,11 @@ static int ghes_probe(struct platform_device *ghes_dev)
- 
- 	platform_set_drvdata(ghes_dev, ghes);
- 
--	ghes_edac_register(ghes, &ghes_dev->dev);
-+	ghes->dev = &ghes_dev->dev;
-+
-+	mutex_lock(&ghes_devs_mutex);
-+	list_add_tail(&ghes->elist, &ghes_devs);
-+	mutex_unlock(&ghes_devs_mutex);
- 
- 	/* Handle any pending errors right away */
- 	spin_lock_irqsave(&ghes_notify_lock_irq, flags);
-@@ -1442,7 +1449,9 @@ static int ghes_remove(struct platform_device *ghes_dev)
- 
- 	ghes_fini(ghes);
- 
--	ghes_edac_unregister(ghes);
-+	mutex_lock(&ghes_devs_mutex);
-+	list_del_rcu(&ghes->elist);
-+	mutex_unlock(&ghes_devs_mutex);
- 
- 	kfree(ghes);
- 
-@@ -1500,6 +1509,28 @@ void __init acpi_ghes_init(void)
- 		pr_info(GHES_PFX "Failed to enable APEI firmware first mode.\n");
- }
- 
-+/*
-+ * Known x86 systems that prefer GHES error reporting:
-+ */
-+static struct acpi_platform_list plat_list[] = {
-+	{"HPE   ", "Server  ", 0, ACPI_SIG_FADT, all_versions},
-+	{ } /* End */
-+};
-+
-+struct list_head *ghes_get_devices(bool force)
-+{
-+	int idx = -1;
-+
-+	if (IS_ENABLED(CONFIG_X86)) {
-+		idx = acpi_match_platform_list(plat_list);
-+		if (idx < 0 && !force)
-+			return NULL;
-+	}
-+
-+	return &ghes_devs;
-+}
-+EXPORT_SYMBOL_GPL(ghes_get_devices);
-+
- void ghes_register_report_chain(struct notifier_block *nb)
- {
- 	atomic_notifier_chain_register(&ghes_report_chain, nb);
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 17562cf1fe97..df45db81858b 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -53,8 +53,8 @@ config EDAC_DECODE_MCE
- 	  has been initialized.
- 
- config EDAC_GHES
--	bool "Output ACPI APEI/GHES BIOS detected errors via EDAC"
--	depends on ACPI_APEI_GHES && (EDAC=y)
-+	tristate "Output ACPI APEI/GHES BIOS detected errors via EDAC"
-+	depends on ACPI_APEI_GHES
- 	select UEFI_CPER
- 	help
- 	  Not all machines support hardware-driven error report. Some of those
-diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
-index 7b8d56a769f6..bb3ea42ba70b 100644
---- a/drivers/edac/ghes_edac.c
-+++ b/drivers/edac/ghes_edac.c
-@@ -60,6 +60,8 @@ module_param(force_load, bool, 0);
- 
- static bool system_scanned;
- 
-+static struct list_head *ghes_devs;
-+
- /* Memory Device - Type 17 of SMBIOS spec */
- struct memdev_dmi_entry {
- 	u8 type;
-@@ -387,34 +389,15 @@ static struct notifier_block ghes_edac_mem_err_nb = {
- 	.priority	= 0,
- };
- 
--/*
-- * Known systems that are safe to enable this module.
-- */
--static struct acpi_platform_list plat_list[] = {
--	{"HPE   ", "Server  ", 0, ACPI_SIG_FADT, all_versions},
--	{ } /* End */
--};
--
--int ghes_edac_register(struct ghes *ghes, struct device *dev)
-+static int ghes_edac_register(struct device *dev)
- {
- 	bool fake = false;
- 	struct mem_ctl_info *mci;
- 	struct ghes_pvt *pvt;
- 	struct edac_mc_layer layers[1];
- 	unsigned long flags;
--	int idx = -1;
- 	int rc = 0;
- 
--	if (IS_ENABLED(CONFIG_X86)) {
--		/* Check if safe to enable on this system */
--		idx = acpi_match_platform_list(plat_list);
--		if (!force_load && idx < 0)
--			return -ENODEV;
--	} else {
--		force_load = true;
--		idx = 0;
--	}
--
- 	/* finish another registration/unregistration instance first */
- 	mutex_lock(&ghes_reg_mutex);
- 
-@@ -458,7 +441,7 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
- 		pr_info("This system has a very crappy BIOS: It doesn't even list the DIMMS.\n");
- 		pr_info("Its SMBIOS info is wrong. It is doubtful that the error report would\n");
- 		pr_info("work on such system. Use this driver with caution\n");
--	} else if (idx < 0) {
-+	} else if (force_load) {
- 		pr_info("This EDAC driver relies on BIOS to enumerate memory and get error reports.\n");
- 		pr_info("Unfortunately, not all BIOSes reflect the memory layout correctly.\n");
- 		pr_info("So, the end result of using this driver varies from vendor to vendor.\n");
-@@ -530,7 +513,7 @@ int ghes_edac_register(struct ghes *ghes, struct device *dev)
- 	return rc;
- }
- 
--void ghes_edac_unregister(struct ghes *ghes)
-+static void ghes_edac_unregister(struct ghes *ghes)
- {
- 	struct mem_ctl_info *mci;
- 	unsigned long flags;
-@@ -566,3 +549,35 @@ void ghes_edac_unregister(struct ghes *ghes)
- unlock:
- 	mutex_unlock(&ghes_reg_mutex);
- }
-+
-+static int __init ghes_edac_init(void)
-+{
-+	struct ghes *g, *g_tmp;
-+
-+	if (!IS_ENABLED(CONFIG_X86))
-+		force_load = true;
-+
-+	ghes_devs = ghes_get_devices(force_load);
-+	if (!ghes_devs)
-+		return -ENODEV;
-+
-+	list_for_each_entry_safe(g, g_tmp, ghes_devs, elist) {
-+		ghes_edac_register(g->dev);
-+	}
-+
-+	return 0;
-+}
-+module_init(ghes_edac_init);
-+
-+static void __exit ghes_edac_exit(void)
-+{
-+	struct ghes *g, *g_tmp;
-+
-+	list_for_each_entry_safe(g, g_tmp, ghes_devs, elist) {
-+		ghes_edac_unregister(g);
-+	}
-+}
-+module_exit(ghes_edac_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Output ACPI APEI/GHES BIOS detected errors module via EDAC");
-diff --git a/include/acpi/ghes.h b/include/acpi/ghes.h
-index 5cbd38b6e4e1..150c0b9500d6 100644
---- a/include/acpi/ghes.h
-+++ b/include/acpi/ghes.h
-@@ -27,6 +27,8 @@ struct ghes {
- 		struct timer_list timer;
- 		unsigned int irq;
- 	};
-+	struct device *dev;
-+	struct list_head elist;
- };
- 
- struct ghes_estatus_node {
-@@ -69,28 +71,13 @@ int ghes_register_vendor_record_notifier(struct notifier_block *nb);
-  * @nb: pointer to the notifier_block structure of the vendor record handler.
-  */
- void ghes_unregister_vendor_record_notifier(struct notifier_block *nb);
-+struct list_head *ghes_get_devices(bool force);
-+#else
-+static inline struct list_head *ghes_get_devices(bool force) { return NULL; }
- #endif
- 
- int ghes_estatus_pool_init(int num_ghes);
- 
--/* From drivers/edac/ghes_edac.c */
--
--#ifdef CONFIG_EDAC_GHES
--int ghes_edac_register(struct ghes *ghes, struct device *dev);
--
--void ghes_edac_unregister(struct ghes *ghes);
--
--#else
--static inline int ghes_edac_register(struct ghes *ghes, struct device *dev)
--{
--	return -ENODEV;
--}
--
--static inline void ghes_edac_unregister(struct ghes *ghes)
--{
--}
--#endif
--
- static inline int acpi_hest_get_version(struct acpi_hest_generic_data *gdata)
- {
- 	return gdata->revision >> 8;
--- 
-2.25.1
+I used extern keyword to follow existing coding style.
 
+> Checkpatch reports:
+> 
+> CHECK: extern prototypes should be avoided in .h files
+> #77: FILE: arch/powerpc/include/asm/udbg.h:56:
+> +extern void __init udbg_init_debug_16550(void);
+> 
+> 
+> >   
+> >   #endif /* __KERNEL__ */
+> >   #endif /* _ASM_POWERPC_UDBG_H */
+> > diff --git a/arch/powerpc/kernel/udbg.c b/arch/powerpc/kernel/udbg.c
+> > index b1544b2f6321..92b3fc258d11 100644
+> > --- a/arch/powerpc/kernel/udbg.c
+> > +++ b/arch/powerpc/kernel/udbg.c
+> > @@ -67,6 +67,8 @@ void __init udbg_early_init(void)
+> >   	udbg_init_debug_opal_raw();
+> >   #elif defined(CONFIG_PPC_EARLY_DEBUG_OPAL_HVSI)
+> >   	udbg_init_debug_opal_hvsi();
+> > +#elif defined(CONFIG_PPC_EARLY_DEBUG_16550)
+> > +	udbg_init_debug_16550();
+> >   #endif
+> >   
+> >   #ifdef CONFIG_PPC_EARLY_DEBUG
+> > diff --git a/arch/powerpc/kernel/udbg_16550.c b/arch/powerpc/kernel/udbg_16550.c
+> > index d3942de254c6..46f2d831d7c9 100644
+> > --- a/arch/powerpc/kernel/udbg_16550.c
+> > +++ b/arch/powerpc/kernel/udbg_16550.c
+> > @@ -8,6 +8,7 @@
+> >   #include <asm/udbg.h>
+> >   #include <asm/io.h>
+> >   #include <asm/reg_a2.h>
+> > +#include <asm/early_ioremap.h>
+> >   
+> >   extern u8 real_readb(volatile u8 __iomem  *addr);
+> >   extern void real_writeb(u8 data, volatile u8 __iomem *addr);
+> > @@ -335,3 +336,35 @@ void __init udbg_init_debug_microwatt(void)
+> >   }
+> >   
+> >   #endif /* CONFIG_PPC_EARLY_DEBUG_MICROWATT */
+> > +
+> > +#ifdef CONFIG_PPC_EARLY_DEBUG_16550
+> > +
+> > +static void __iomem *udbg_uart_early_addr;
+> > +
+> > +void __init udbg_init_debug_16550(void)
+> > +{
+> > +	udbg_uart_early_addr = early_ioremap(CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR, 0x1000);
+> > +	udbg_uart_init_mmio(udbg_uart_early_addr, CONFIG_PPC_EARLY_DEBUG_16550_STRIDE);
+> > +}
+> > +
+> > +static int __init udbg_init_debug_16550_ioremap(void)
+> > +{
+> > +	void __iomem *addr;
+> > +
+> > +	if (!udbg_uart_early_addr)
+> > +		return 0;
+> > +
+> > +	addr = ioremap(CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR, 0x1000);
+> > +	if (WARN_ON(!addr))
+> > +		return -ENOMEM;
+> > +
+> > +	udbg_uart_init_mmio(addr, CONFIG_PPC_EARLY_DEBUG_16550_STRIDE);
+> > +	early_iounmap(udbg_uart_early_addr, 0x1000);
+> > +	udbg_uart_early_addr = NULL;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +early_initcall(udbg_init_debug_16550_ioremap);
+> > +
+> > +#endif /* CONFIG_PPC_EARLY_DEBUG_16550 */

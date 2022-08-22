@@ -2,223 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29AE59B8AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 07:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 638D859B8B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 07:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbiHVFRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 01:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
+        id S232143AbiHVFT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 01:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiHVFRn (ORCPT
+        with ESMTP id S229727AbiHVFT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 01:17:43 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD94252BC;
-        Sun, 21 Aug 2022 22:17:42 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 123B5350BE;
-        Mon, 22 Aug 2022 05:17:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661145461; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vY1VH6lzIy1Y3/cwRE8IBW/WLXqJEr5eviMiPFX0swQ=;
-        b=HBZEF7XSESCertmpJliJY4FEAGK5r/EXPrw26qxuyQ5/V/1rH+j2snQNrKyjJVer9l+eaU
-        T4itY8Lle5XGowj+UnMh5IPf/rt5g9SyU+ewpDRSLFXqaQoa9fjhLVno7wpqwx0OXePDBu
-        dhNB3XOFIC/pZTk+ovSi51TDHVYh7JI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BEFEF13523;
-        Mon, 22 Aug 2022 05:17:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ax/bLHQRA2ORdwAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 22 Aug 2022 05:17:40 +0000
-Message-ID: <f205da1c-db33-299c-5fc6-922a8ebd1983@suse.com>
-Date:   Mon, 22 Aug 2022 07:17:40 +0200
+        Mon, 22 Aug 2022 01:19:26 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD4C25587;
+        Sun, 21 Aug 2022 22:19:25 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id z187so9260721pfb.12;
+        Sun, 21 Aug 2022 22:19:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=giyJvb5MceZvmd+O7/+oUKyqv96Z2OFMCAAIUudAKGg=;
+        b=Xyg+c3MLt+j8GVAFZFpwninxt4lQlSHMK//4kJAKEPIHIHid6x6susbixn211WqNG/
+         NpFzsY9hHF3bgVg6K0n+dMoJfyv753nns2sP4NOyRixOG8ixWot0Ot8PnK+zHABUs3b7
+         IMfo1mrvQIzw2rBIhWpLbv8JBHN79TjG0bC0bw7LGgjA/gZhOX9E2qQvLvo+ef6giAIE
+         f/cL7m/dYpWm5H+HwCcvk/9skMNPp2e8WM3F9yGd8S2ipbQK2OVXWbo3rXiOgYd7ZbfW
+         4+tL1jwXHbeHr623zr4tStyNXcIfbN0fPggNqudDiBk0b8sQg9z5Wn28FrJFNwUR2AAN
+         7bQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=giyJvb5MceZvmd+O7/+oUKyqv96Z2OFMCAAIUudAKGg=;
+        b=6wLUn2VC3WybkXr/IugGMR5Cf3B716NpoIchqFxHeDiT3WEyHdgG2YICT6XuD285Ex
+         34cKEc9nbBZgYTCjumgIcfsiCBXbJl7mOmiosadZiMSs4lBuauSYy1CFZ5gYeLZ8ZDZJ
+         Ogx/GBaCrcwpfxZP8GYqqaUFGq00YVEntVCTIqKEMMJZO0QqsmU8hPF+P3uXtYZS471N
+         KI/JtAHpcsXkRMtYweUAJxiW92qQg2JB/39GrRyhp0QCliQbRE+psqAj+yLEk4acIlVf
+         fUpqXWQ4WYM/O3XdauIXHp1aBDB5QwAcxhErG48CzaSrtjz9UOG0cW+Pf0YDPhX1w+w0
+         cnNQ==
+X-Gm-Message-State: ACgBeo0BrjHN7dR/hJaEcG0GiHgVx5+tCBAZYbimIlRoMr2K8xQ1pQQY
+        7janTB+4dpJNQ3lyjm2vbIk=
+X-Google-Smtp-Source: AA6agR7YaKl/EFWBRm94AS2E4wLWUVRtwJh5qzuhEq/OkUV9lHc9qUF9gFkqO8X+fv/G2DiMxPO6dw==
+X-Received: by 2002:a05:6a00:1393:b0:536:5b8a:c35b with SMTP id t19-20020a056a00139300b005365b8ac35bmr8330817pfg.5.1661145564683;
+        Sun, 21 Aug 2022 22:19:24 -0700 (PDT)
+Received: from localhost ([36.112.86.8])
+        by smtp.gmail.com with ESMTPSA id y9-20020a634b09000000b004114cc062f0sm6387798pga.65.2022.08.21.22.19.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 22:19:24 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     khalid.masum.92@gmail.com
+Cc:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
+        kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com, paskripkin@gmail.com,
+        syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
+Subject: Re: [PATCH] rxrpc: fix bad unlock balance in rxrpc_do_sendmsg
+Date:   Mon, 22 Aug 2022 13:19:07 +0800
+Message-Id: <20220822051907.104443-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAABMjtHJX6Rm1Ndg+bECbERWkFYdWbDDYd1-5bVFTu-qwKW=sA@mail.gmail.com>
+References: <CAABMjtHJX6Rm1Ndg+bECbERWkFYdWbDDYd1-5bVFTu-qwKW=sA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 01/10] x86/mtrr: fix MTRR fixup on APs
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, stable@vger.kernel.org
-References: <20220820092533.29420-1-jgross@suse.com>
- <20220820092533.29420-2-jgross@suse.com> <YwIkV7mYAC4Ebbwb@zn.tnic>
- <YwKmcFuKlq3/MzVi@zn.tnic>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <YwKmcFuKlq3/MzVi@zn.tnic>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------rgQoxPG8PxAqRPi5h4dr3iHz"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------rgQoxPG8PxAqRPi5h4dr3iHz
-Content-Type: multipart/mixed; boundary="------------deTqKyETXm5My9umETo0yKcn";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: xen-devel@lists.xenproject.org, x86@kernel.org,
- linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, stable@vger.kernel.org
-Message-ID: <f205da1c-db33-299c-5fc6-922a8ebd1983@suse.com>
-Subject: Re: [PATCH v2 01/10] x86/mtrr: fix MTRR fixup on APs
-References: <20220820092533.29420-1-jgross@suse.com>
- <20220820092533.29420-2-jgross@suse.com> <YwIkV7mYAC4Ebbwb@zn.tnic>
- <YwKmcFuKlq3/MzVi@zn.tnic>
-In-Reply-To: <YwKmcFuKlq3/MzVi@zn.tnic>
+On Mon, 22 Aug 2022 at 00:42, Khalid Masum <khalid.masum.92@gmail.com> wrote:
+>
+> On Sun, Aug 21, 2022 at 9:58 PM Khalid Masum <khalid.masum.92@gmail.com> wrote:
+> >
+> > On Sun, Aug 21, 2022 at 6:58 PM Hawkins Jiawei <yin31149@gmail.com> wrote:
+> > >
+> > The interruptible version fails to acquire the lock. So why is it okay to
+> > force it to acquire the mutex_lock since we are in the interrupt context?
+>
+> Sorry, I mean, won't the function lose its ability of being interruptible?
+> Since we are forcing it to acquire the lock.
+> > >                         return sock_intr_errno(*timeo);
+> > > +               }
+> > >         }
+> > >  }
+> >
+> > thanks,
+> >   -- Khalid Masum
+Hi, Khalid
 
---------------deTqKyETXm5My9umETo0yKcn
-Content-Type: multipart/mixed; boundary="------------yphORmUAsvDAEqIX7KyC60fC"
+In my opinion, _intr in rxrpc_wait_for_tx_window_intr() seems referring
+that, the loop in function should be interrupted when a signal
+arrives(Please correct me if I am wrong):
+> /*
+>  * Wait for space to appear in the Tx queue or a signal to occur.
+>  */
+> static int rxrpc_wait_for_tx_window_intr(struct rxrpc_sock *rx,
+> 					 struct rxrpc_call *call,
+> 					 long *timeo)
+> {
+> 	for (;;) {
+> 		set_current_state(TASK_INTERRUPTIBLE);
+> 		if (rxrpc_check_tx_space(call, NULL))
+> 			return 0;
+> 
+> 		if (call->state >= RXRPC_CALL_COMPLETE)
+> 			return call->error;
+> 
+> 		if (signal_pending(current))
+> 			return sock_intr_errno(*timeo);
+> 
+> 		trace_rxrpc_transmit(call, rxrpc_transmit_wait);
+> 		mutex_unlock(&call->user_mutex);
+> 		*timeo = schedule_timeout(*timeo);
+> 		if (mutex_lock_interruptible(&call->user_mutex) < 0)
+> 			return sock_intr_errno(*timeo);
+> 	}
+> }
 
---------------yphORmUAsvDAEqIX7KyC60fC
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+To be more specific, when a signal arrives,
+rxrpc_wait_for_tx_window_intr() should know when executing
+mutex_lock_interruptible() and get a non-zero value. Then
+rxrpc_wait_for_tx_window_intr() should be interrupted, which means
+function should be returned.
 
-T24gMjEuMDguMjIgMjM6NDEsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gU3VuLCBB
-dWcgMjEsIDIwMjIgYXQgMDI6MjU6NTlQTSArMDIwMCwgQm9yaXNsYXYgUGV0a292IHdyb3Rl
-Og0KPj4+IEZpeCB0aGF0IGJ5IHVzaW5nIHBlcmNwdSB2YXJpYWJsZXMgZm9yIHNhdmluZyB0
-aGUgTVNSIGNvbnRlbnRzLg0KPj4+DQo+Pj4gQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcN
-Cj4+PiBTaWduZWQtb2ZmLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+
-Pj4gLS0tDQo+Pj4gSSB0aG91Z2h0IGFkZGluZyBhICJGaXhlczoiIHRhZyBmb3IgdGhlIGtl
-cm5lbCdzIGluaXRpYWwgZ2l0IGNvbW1pdA0KPj4+IHdvdWxkIG1heWJlIGJlIGVudGVydGFp
-bmluZywgYnV0IHdpdGhvdXQgYmVpbmcgcmVhbGx5IGhlbHBmdWwuDQo+Pj4gVGhlIHBlcmNw
-dSB2YXJpYWJsZXMgd2VyZSBwcmVmZXJyZWQgb3ZlciBvbi1zdGFjayBvbmVzIGluIG9yZGVy
-IHRvDQo+Pj4gYXZvaWQgbW9yZSBjb2RlIGNodXJuIGluIGZvbGxvd3VwIHBhdGNoZXMgZGVj
-b3VwbGluZyBQQVQgZnJvbSBNVFJSDQo+Pj4gc3VwcG9ydC4NCj4+DQo+PiBTbyBpZiB0aGF0
-IHRoaW5nIGhhcyBiZWVuIGJyb2tlbiBmb3Igc28gbG9uZyBhbmQgbm8gb25lIG5vdGljZWQs
-IHdlDQo+PiBjb3VsZCBqdXN0IGFzIHdlbGwgbm90IGJhY2twb3J0IHRvIHN0YWJsZSBhdCBh
-bGwuLi4NCj4gDQo+IFllYWgsIHlvdSBjYW4ndCBkbyB0aGF0Lg0KPiANCj4gVGhlIHdob2xl
-IGRheSB0b2RheSBJIGtlcHQgdGhpbmtpbmcgdGhhdCBzb21ldGhpbmcncyB3cm9uZyB3aXRo
-IHRoaXMNCj4gaGVyZS4gQXMgaW4sIHdoeSBoYXNuJ3QgaXQgYmVlbiByZXBvcnRlZCB1bnRp
-bCBub3cuDQo+IA0KPiBZb3Ugc2F5IGFib3ZlOg0KPiANCj4gIi4uLiBmb3IgYWxsIGNwdXMg
-aXMgcmFjeSBpbiBjYXNlIHRoZSBNU1IgY29udGVudHMgZGlmZmVyIGFjcm9zcyBjcHVzLiIN
-Cj4gDQo+IEJ1dCB0aGV5IGRvbid0IGRpZmZlcjoNCj4gDQo+ICI3LjcuNSBNVFJScyBpbiBN
-dWx0aS1Qcm9jZXNzaW5nIEVudmlyb25tZW50cw0KPiANCj4gSW4gbXVsdGktcHJvY2Vzc2lu
-ZyBlbnZpcm9ubWVudHMsIHRoZSBNVFJScyBsb2NhdGVkIGluIGFsbCBwcm9jZXNzb3JzDQo+
-IG11c3QgY2hhcmFjdGVyaXplIG1lbW9yeSBpbiB0aGUgc2FtZSB3YXkuIEdlbmVyYWxseSwg
-dGhpcyBtZWFucyB0aGF0DQo+IGlkZW50aWNhbCB2YWx1ZXMgYXJlIHdyaXR0ZW4gdG8gdGhl
-IE1UUlJzIHVzZWQgYnkgdGhlIHByb2Nlc3NvcnMuIFRoaXMNCj4gYWxzbyBtZWFucyB0aGF0
-IHZhbHVlcyBDUjAuQ0QgYW5kIHRoZSBQQVQgbXVzdCBiZSBjb25zaXN0ZW50IGFjcm9zcw0K
-PiBwcm9jZXNzb3JzLiBGYWlsdXJlIHRvIGRvIHNvIG1heSByZXN1bHQgaW4gY29oZXJlbmN5
-IHZpb2xhdGlvbnMgb3IgbG9zcw0KPiBvZiBhdG9taWNpdHkuIFByb2Nlc3NvciBpbXBsZW1l
-bnRhdGlvbnMgZG8gbm90IGNoZWNrIHRoZSBNVFJSIHNldHRpbmdzDQo+IGluIG90aGVyIHBy
-b2Nlc3NvcnMgdG8gZW5zdXJlIGNvbnNpc3RlbmN5LiBJdCBpcyB0aGUgcmVzcG9uc2liaWxp
-dHkgb2YNCj4gc3lzdGVtIHNvZnR3YXJlIHRvIGluaXRpYWxpemUgYW5kIG1haW50YWluIE1U
-UlIgY29uc2lzdGVuY3kgYWNyb3NzIGFsbA0KPiBwcm9jZXNzb3JzLiINCj4gDQo+IEFuZCB5
-b3UgY2FuJ3QgaGF2ZSBkaWZmZXJlbnQgZml4ZWQgTVRSUiB0eXBlIG9uIGVhY2ggQ1BVIC0g
-dGhhdCB3b3VsZA0KPiBsZWFkIHRvIGFsbCBraW5kcyBvZiBuYXN0eSBidWdzLg0KPiANCj4g
-QW5kIGhlcmUncyBmcm9tIGEgYmlnIGZhdCBib3g6DQo+IA0KPiAkIHJkbXNyIC1hIDB4MmZm
-IHwgdW5pcSAtYw0KPiAgICAgIDI1NiBjMDANCj4gDQo+IEFsbCAyNTYgQ1BVcyBoYXZlIHRo
-ZSBkZWYgdHlwZSBzZXQgdG8gdGhlIHNhbWUgdGhpbmcuDQo+IA0KPiBOb3csIGlmIGFsbCBD
-UFVzIGdvIHdyaXRlIHRoYXQgc2FtZSBkZWZ0eXBlX2xvIHZhcmlhYmxlIGluIHRoZQ0KPiBy
-ZW5kZXp2b3VzIGhhbmRsZXIsIHRoZSBvbmx5IGlzc3VlIHRoYXQgY291bGQgaGFwcGVuIGlz
-IGlmIGEgcmVhZA0KPiBzZWVzIGEgcGFydGlhbCB3cml0ZS4gQlVULCBBRkFJSywgeDg2IGRv
-ZXNuJ3QgdGVhciAzMi1iaXQgd3JpdGVzIHNvIEkNCj4gKnRoaW5rKiBhbGwgQ1BVcyBzZWUg
-dGhlIHNhbWUgdmFsdWUgYmVpbmcgY29ycmVjdGVkIGJ5IHVzaW5nIG10cnJfc3RhdGUNCj4g
-cHJldmlvdXNseSBzYXZlZCBvbiB0aGUgQlNQLg0KPiANCj4gQXMgSSBzYWlkLCB3ZSBzaG91
-bGQndmUgc2VlbiB0aGlzIGV4cGxvZGluZyBsZWZ0IGFuZCByaWdodCBvdGhlcndpc2UuLi4N
-Cg0KQW5kIHRoZW4gdGhlcmUgaXMgbXRycl9zdGF0ZV93YXJuKCkgaW4gYXJjaC94ODYva2Vy
-bmVsL2NwdS9tdHJyL2dlbmVyaWMuYw0Kd2hpY2ggaGFzIGEgY29tbWVudCBzYXlpbmc6DQoN
-Ci8qIFNvbWUgQklPUydzIGFyZSBtZXNzZWQgdXAgYW5kIGRvbid0IHNldCBhbGwgTVRSUnMg
-dGhlIHNhbWUhICovDQoNClllcywgdGhlIGNoYW5jZXMgYXJlIHNsaW0gdG8gaGl0IHN1Y2gg
-YSBib3gsIGJ1dCB5b3VyIHJlYXNvbmluZyBzdWdnZXN0cw0KSSBzaG91bGQgcmVtb3ZlIHRo
-ZSByZWxhdGVkIGNvZGU/DQoNCg0KSnVlcmdlbg0K
---------------yphORmUAsvDAEqIX7KyC60fC
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+So I think, acquiring mutex_lock() seems won't effect its ability
+of being interruptible.(Please correct me if I am wrong).
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+What's more, when the kernel return from
+rxrpc_wait_for_tx_window_intr(), it will only handles the error case
+before unlocking the call->user_mutex, which won't cost a long time.
+So I think it seems Ok to acquire the call->user_mutex when
+rxrpc_wait_for_tx_window_intr() is interrupted by a signal.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
 
---------------yphORmUAsvDAEqIX7KyC60fC--
+On Mon, 22 Aug 2022 at 03:18, Khalid Masum <khalid.masum.92@gmail.com> wrote:
+>
+> Maybe we do not need to lock since no other timer_schedule needs
+> it.
+>
+> Test if this fixes the issue.
+> ---
+> diff --git a/net/rxrpc/sendmsg.c b/net/rxrpc/sendmsg.c
+> index 1d38e279e2ef..640e2ab2cc35 100644
+> --- a/net/rxrpc/sendmsg.c
+> +++ b/net/rxrpc/sendmsg.c
+> @@ -51,10 +51,8 @@ static int rxrpc_wait_for_tx_window_intr(struct rxrpc_sock *rx,
+>                         return sock_intr_errno(*timeo);
+>
+>                 trace_rxrpc_transmit(call, rxrpc_transmit_wait);
+> -               mutex_unlock(&call->user_mutex);
+>                 *timeo = schedule_timeout(*timeo);
+> -               if (mutex_lock_interruptible(&call->user_mutex) < 0)
+> -                       return sock_intr_errno(*timeo);
+> +               return sock_intr_errno(*timeo);
+>         }
+>  }
+>
+> --
+> 2.37.1
+>
 
---------------deTqKyETXm5My9umETo0yKcn--
-
---------------rgQoxPG8PxAqRPi5h4dr3iHz
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMDEXQFAwAAAAAACgkQsN6d1ii/Ey+K
-uAf9ErHr/q4mtRTikw5ZZb+gOGyCc5mQVvD5RuFlHFGttHwwSvmxAWlgEsqb6rQZA/tRVojtFjhK
-dZzS0uSvK3bnGUW67nNOkgMzXMq5vt0ij0BLtzOozcBECdpKo5YyrcDMd6ehM8A04u3mKYfJWU4N
-F+MZSADB5Ybn9rktoOBCG37blBle03PJbYAWQB2T1FZDtLsFBupsPrji8AzHoXyVsoSkZKpFzoS9
-DPno3dmARyUgHY/BZHOLyFk3PQotRYJ0YmBLjrMP/oNdAWp4fpQyGaadtrFObKni7vXa4fD321f0
-5DsGSjSSDaM1Nyx/XdCjRAszyFsewiaQhrdvwJ4ZFg==
-=d92A
------END PGP SIGNATURE-----
-
---------------rgQoxPG8PxAqRPi5h4dr3iHz--
+If it is still improper to patch this bug by acquiring the
+call->user_mutex, I wonder if it is better to check before unlocking the lock
+in rxrpc_do_sendmsg(), because kernel will always unlocking the call->user_mutex
+in the end of the rxrpc_do_sendmsg():
+> int rxrpc_do_sendmsg(struct rxrpc_sock *rx, struct msghdr *msg, size_t len)
+> 	__releases(&rx->sk.sk_lock.slock)
+> 	__releases(&call->user_mutex)
+> {
+> 	...
+> out_put_unlock:
+> 	mutex_unlock(&call->user_mutex);
+> error_put:
+> 	rxrpc_put_call(call, rxrpc_call_put);
+> 	_leave(" = %d", ret);
+> 	return ret;
+> 
+> error_release_sock:
+> 	release_sock(&rx->sk);
+> 	return ret;
+> }

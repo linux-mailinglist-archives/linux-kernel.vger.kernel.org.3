@@ -2,246 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CBC59B83A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 06:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA0459B83F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 06:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbiHVELV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 00:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
+        id S232400AbiHVENp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 00:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiHVELS (ORCPT
+        with ESMTP id S230425AbiHVENm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 00:11:18 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726F018352
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 21:11:16 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id be9so5632023lfb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 21:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=YYEY3HoesRJZtmoDYsjk2PeXO/8ic8daNq/Rhp63QXE=;
-        b=nMxd/KKAfmi9hX+XxVxfkxX5iYtyBEtMc5poYZWipGZYRuOhGFCmzQgS4HbdfEOsNz
-         sZCPtah+HiPjQgjkFNVh5fKMo8Jy+GKaPqGHO3qmXrAef8K+FmbBrUn7r/iEhMHHuUGu
-         DdPrzk2u+JXQBr2JQ8JQe1BlB7vdYPBbmSVwNthmQBXWPEEcqngFN/SuQr2mFObuRfNL
-         kahVGqa/blCUuu9ixofWB+4+/m34dmYh5o3AicoBJhVU5eaoLJmVgCKyoDc6ma/V0IZ3
-         2KDF8eC7lfHHDsCS9mdRaiwVCtQduukPcHja09S1LWspz6e4yCyep31dr9Ja0HVbLuwQ
-         OnFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=YYEY3HoesRJZtmoDYsjk2PeXO/8ic8daNq/Rhp63QXE=;
-        b=MaUVklKVkf5un3nUNSYsj10Hq/QYPMTZ3Qtyax0cvK5M9FWWrDp+yKtERctS6ZvmvN
-         t/qfO8JCJeWL0w3DDIOi5y+a3IqVAc7vxEhdIFRSAWuPB7m/JDvs6GNoUogHCErSCsr1
-         GJpeSdH3qgHMiS7CpXwYyNW5dGzqebQOMB0WzDGkmCHDmPEZsJn30FuRWso2OEakFixx
-         9TagyTno9QAKW61+qZhdAxdR61o/rzAmZHZ1DeIj0KURuojsz6g8CgzvkiAY4U6OYprl
-         7+Jn6GzevBmSLLdf3+/pVpgvfjUTr+URSou6zDL22w6ZSbc31lzPkb7h+YR305DBV0ow
-         MLqg==
-X-Gm-Message-State: ACgBeo2wKi3mpqZAdWVsRzCrQF39Z09WsswoC82mWNkiRleCPzhs3bss
-        QsbRhmS08P6W8h2Kz4TfKhqeRxpPgr4Kw8uRbJ3CSw==
-X-Google-Smtp-Source: AA6agR5sp7USyoNUU/Gd0/0ibra+Svt9ZC65OIwCGbgcFub0pqBtOl3i/uVsHxppsnK6R4p6FbZE0sVR3vMiG5PBuXg=
-X-Received: by 2002:a05:6512:3c87:b0:492:d161:c014 with SMTP id
- h7-20020a0565123c8700b00492d161c014mr3803885lfv.490.1661141474717; Sun, 21
- Aug 2022 21:11:14 -0700 (PDT)
+        Mon, 22 Aug 2022 00:13:42 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3463AB7D1;
+        Sun, 21 Aug 2022 21:13:40 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27M4DGVa046672;
+        Sun, 21 Aug 2022 23:13:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1661141596;
+        bh=WU5HjxtWjXnyPJ1rD+Irph5DqOHoAcuxx5L+dEWF/QA=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=aB5cMCvUHKS26UpWNSJGSvo19vLFRkzPi03rx/GQBHa+r7BfMz1GMLiaPSVrGvtFc
+         ABn+2XMDlk6Lj5Wu9DMbElv5Y2cjO1y92A/X6qD8btyZdPfee0rAiL7ARmgqHEZHOL
+         3J+V/DD5Rxpf2LKoOTJi0gO+n2i9lWtL6krDDjcU=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27M4DFbj080319
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 21 Aug 2022 23:13:15 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Sun, 21
+ Aug 2022 23:13:15 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Sun, 21 Aug 2022 23:13:15 -0500
+Received: from [10.24.69.241] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27M4DAaL047419;
+        Sun, 21 Aug 2022 23:13:11 -0500
+Message-ID: <130bc5c3-176d-f6ee-276f-5a04add15cd2@ti.com>
+Date:   Mon, 22 Aug 2022 09:43:09 +0530
 MIME-Version: 1.0
-References: <20220816100617.90720-1-mie@igel.co.jp> <YvtxAN7E4nmZmL/X@kroah.com>
- <Yvuvpd9n59mp96p0@lpieralisi> <695ab9b3-8385-e8bd-0095-14b07de66b15@ti.com>
- <YvzNg5ROnxEApDgS@kroah.com> <632f447c-fe1a-e6aa-2fda-73669964fc92@ti.com>
- <20220819105255.GD215264@thinkpad> <20220819145253.GA35978@thinkpad>
-In-Reply-To: <20220819145253.GA35978@thinkpad>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Mon, 22 Aug 2022 13:10:58 +0900
-Message-ID: <CANXvt5oKUeBS5GdcUeV-A7sk+C=SGWSf83qTkxOti4zsXuCXjA@mail.gmail.com>
-Subject: Re: [PATCH] misc: pci_endpoint_test: Fix pci_endpoint_test_{copy,write,read}()
- panic
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pci@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>, <linux@armlinux.org.uk>,
+        <vladimir.oltean@nxp.com>, <grygorii.strashko@ti.com>,
+        <vigneshr@ti.com>, <nsekhar@ti.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kishon@ti.com>, <s-vadapalli@ti.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: net: ti: k3-am654-cpsw-nuss: Update
+ bindings for J7200 CPSW5G
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+References: <20220816060139.111934-1-s-vadapalli@ti.com>
+ <20220816060139.111934-2-s-vadapalli@ti.com>
+ <79e58157-f8f2-6ca8-1aa6-b5cf6c83d9e6@linaro.org>
+ <31c3a5b0-17cc-ad7b-6561-5834cac62d3e@ti.com>
+ <9c331cdc-e34a-1146-fb83-84c2107b2e2a@linaro.org>
+ <176ab999-e274-e22a-97d8-31f655b16800@ti.com>
+ <da82e71f-e32c-7adb-250e-0c80cc6e30bd@ti.com>
+ <0ca78aad-2145-c88b-a26e-9ababa38df6e@ti.com>
+ <9d9c2f78-db3e-71aa-2cdd-e2d9aa2b30cf@linaro.org>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <9d9c2f78-db3e-71aa-2cdd-e2d9aa2b30cf@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=E5=B9=B48=E6=9C=8819=E6=97=A5(=E9=87=91) 23:53 Manivannan Sadhasivam <=
-manivannan.sadhasivam@linaro.org>:
->
-> On Fri, Aug 19, 2022 at 04:23:03PM +0530, Manivannan Sadhasivam wrote:
-> > On Fri, Aug 19, 2022 at 04:08:13PM +0530, Kishon Vijay Abraham I wrote:
-> > > +Mani
-> > >
-> > > On 17/08/22 16:44, Greg Kroah-Hartman wrote:
-> > > > On Wed, Aug 17, 2022 at 02:18:58PM +0530, Kishon Vijay Abraham I wr=
-ote:
-> > > >> Hi Lorenzo,
-> > > >>
-> > > >> On 16/08/22 20:24, Lorenzo Pieralisi wrote:
-> > > >>> On Tue, Aug 16, 2022 at 12:27:12PM +0200, Greg Kroah-Hartman wrot=
-e:
-> > > >>>> On Tue, Aug 16, 2022 at 07:06:17PM +0900, Shunsuke Mie wrote:
-> > > >>>>> Although dma_map_single() doesn't permit zero length mapping, t=
-he each
-> > > >>>>> test functions called the function without zero checking.
-> > > >>>>>
-> > > >>>>> A panic was reported on arm64:
-> > > >>>>>
-> > > >>>>> [   60.137988] ------------[ cut here ]------------
-> > > >>>>> [   60.142630] kernel BUG at kernel/dma/swiotlb.c:624!
-> > > >>>>> [   60.147508] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-> > > >>>>> [   60.152992] Modules linked in: dw_hdmi_cec crct10dif_ce simp=
-le_bridge rcar_fdp1 vsp1 rcar_vin videobuf2_vmalloc rcar_csi2 v4l
-> > > >>>>> 2_mem2mem videobuf2_dma_contig videobuf2_memops pci_endpoint_te=
-st videobuf2_v4l2 videobuf2_common rcar_fcp v4l2_fwnode v4l2_asyn
-> > > >>>>> c videodev mc gpio_bd9571mwv max9611 pwm_rcar ccree at24 authen=
-c libdes phy_rcar_gen3_usb3 usb_dmac display_connector pwm_bl
-> > > >>>>> [   60.186252] CPU: 0 PID: 508 Comm: pcitest Not tainted 6.0.0-=
-rc1rpci-dev+ #237
-> > > >>>>> [   60.193387] Hardware name: Renesas Salvator-X 2nd version bo=
-ard based on r8a77951 (DT)
-> > > >>>>> [   60.201302] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT =
--SSBS BTYPE=3D--)
-> > > >>>>> [   60.208263] pc : swiotlb_tbl_map_single+0x2c0/0x590
-> > > >>>>> [   60.213149] lr : swiotlb_map+0x88/0x1f0
-> > > >>>>> [   60.216982] sp : ffff80000a883bc0
-> > > >>>>> [   60.220292] x29: ffff80000a883bc0 x28: 0000000000000000 x27:=
- 0000000000000000
-> > > >>>>> [   60.227430] x26: 0000000000000000 x25: ffff0004c0da20d0 x24:=
- ffff80000a1f77c0
-> > > >>>>> [   60.234567] x23: 0000000000000002 x22: 0001000040000010 x21:=
- 000000007a000000
-> > > >>>>> [   60.241703] x20: 0000000000200000 x19: 0000000000000000 x18:=
- 0000000000000000
-> > > >>>>> [   60.248840] x17: 0000000000000000 x16: 0000000000000000 x15:=
- ffff0006ff7b9180
-> > > >>>>> [   60.255977] x14: ffff0006ff7b9180 x13: 0000000000000000 x12:=
- 0000000000000000
-> > > >>>>> [   60.263113] x11: 0000000000000000 x10: 0000000000000000 x9 :=
- 0000000000000000
-> > > >>>>> [   60.270249] x8 : 0001000000000010 x7 : ffff0004c6754b20 x6 :=
- 0000000000000000
-> > > >>>>> [   60.277385] x5 : ffff0004c0da2090 x4 : 0000000000000000 x3 :=
- 0000000000000001
-> > > >>>>> [   60.284521] x2 : 0000000040000000 x1 : 0000000000000000 x0 :=
- 0000000040000010
-> > > >>>>> [   60.291658] Call trace:
-> > > >>>>> [   60.294100]  swiotlb_tbl_map_single+0x2c0/0x590
-> > > >>>>> [   60.298629]  swiotlb_map+0x88/0x1f0
-> > > >>>>> [   60.302115]  dma_map_page_attrs+0x188/0x230
-> > > >>>>> [   60.306299]  pci_endpoint_test_ioctl+0x5e4/0xd90 [pci_endpoi=
-nt_test]
-> > > >>>>> [   60.312660]  __arm64_sys_ioctl+0xa8/0xf0
-> > > >>>>> [   60.316583]  invoke_syscall+0x44/0x108
-> > > >>>>> [   60.320334]  el0_svc_common.constprop.0+0xcc/0xf0
-> > > >>>>> [   60.325038]  do_el0_svc+0x2c/0xb8
-> > > >>>>> [   60.328351]  el0_svc+0x2c/0x88
-> > > >>>>> [   60.331406]  el0t_64_sync_handler+0xb8/0xc0
-> > > >>>>> [   60.335587]  el0t_64_sync+0x18c/0x190
-> > > >>>>> [   60.339251] Code: 52800013 d2e00414 35fff45c d503201f (d4210=
-000)
-> > > >>>>> [   60.345344] ---[ end trace 0000000000000000 ]---
-> > > >>>>>
-> > > >>>>> To fix it, this patch adds checkings the payload length if it i=
-s zero.
-> > > >>>>>
-> > > >>>>> Fixes: 343dc693f7b7 ("misc: pci_endpoint_test: Prevent some int=
-eger overflows")
-> > > >>>>> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > > >>>>> ---
-> > > >>>>>  drivers/misc/pci_endpoint_test.c | 6 +++---
-> > > >>>>>  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > >>>>>
-> > > >>>>> diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pc=
-i_endpoint_test.c
-> > > >>>>> index 8f786a225dcf..d45426a73396 100644
-> > > >>>>> --- a/drivers/misc/pci_endpoint_test.c
-> > > >>>>> +++ b/drivers/misc/pci_endpoint_test.c
-> > > >>>>> @@ -364,7 +364,7 @@ static bool pci_endpoint_test_copy(struct p=
-ci_endpoint_test *test,
-> > > >>>>>       }
-> > > >>>>>
-> > > >>>>>       size =3D param.size;
-> > > >>>>> -     if (size > SIZE_MAX - alignment)
-> > > >>>>> +     if (size > SIZE_MAX - alignment || !size)
-> > > >>>>>               goto err;
-> > > >>>>
-> > > >>>> Can we test size first?  And do it in the ioctl handler in one p=
-lace so
-> > > >>>> you don't have to add it everywhere?
-> > > >>>>
-> > > >>>> Or have a "validate all parameters" function that you do it in o=
-ne
-> > > >>>> place?
-> > > >>>>
-> > > >>>> Also, all of these ioctl handlers are wrong, they are returning =
-"0" to
-> > > >>>> userspace if they fail, which is not correct at all.
-> > > >>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t/tree/tools/pci/pcitest.c
-> > > >>> This is bad, thanks Greg for spotting it.
-> > > >>>
-> > > >>> @Kishon, we have to fix it asap, please let me know if you
-> > > >>> can post a patch promptly.
-> > > >>
-> > > >> The userspace tool (pcitest [1]) that calls these IOCTLS prints "N=
-OT
-> > > >> OKAY" on 0 and "OKAY" for 1.
-> > > >>
-> > > >> I'll change to negative value for error and still keep '0' for dat=
-a
-> > > >> mismatch error?
-> > > >
-> > > > No, 0 as a return value from a system call means "success".  You ca=
-n not
-> > > > redefine it to mean something else for a tiny single kernel driver,
-> > > > otherwise so much for consistency.
-> > > >
-> > > > 0 is success, -ERROR_NUMBER is an error, please read the ioctl man =
-page.
-> > >
-> > > Thanks Greg!
-> > >
-> > > Mani, Would you be able to post a patch fixing it? If not I'll post i=
-t
-> > > mid next week.
-> > >
-> >
-> > Will do!
-> >
->
-> Done! But I haven't fixed the size issue that _this_ patch fixes. I'll le=
-ave it
-> up to Shunsuke.
-I'll do that.
+Hello Krzysztof,
 
-> Thanks,
-> Mani
->
-> > Thanks,
-> > Mani
-> >
-> > > Regards,
-> > > Kishon
-> >
-> > --
-> > =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=
-=A9=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=
-=AE=E0=AF=8D
->
-> --
-> =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=A9=
-=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=AE=
-=E0=AF=8D
+On 19/08/22 17:34, Krzysztof Kozlowski wrote:
+> On 19/08/2022 13:43, Siddharth Vadapalli wrote:
+> 
+>>>>> Anyway the location is not correct. Regardless if this is if-then or
+>>>>> allOf-if-then, put it just like example schema is suggesting.
+>>>>
+>>>> I will move the if-then statements to the lines above the
+>>>> "additionalProperties: false" line. Also, I will add an allOf for this
+>>>
+>>> I had a look at the example at [1] and it uses allOf after the
+>>> "additionalProperties: false" line. Would it be fine then for me to add
+>>> allOf and the single if-then statement below the "additionalProperties:
+>>> false" line? Please let me know.
+>>>
+>>> [1] -> https://github.com/devicetree-org/dt-schema/blob/mai/test/schemas/conditionals-allof-example.yaml
+>>
+>> Sorry, the correct link is:
+>> https://github.com/devicetree-org/dt-schema/blob/main/test/schemas/conditionals-allof-example.yaml
+> 
+> You are referring to tests? I did not suggest that. Please put it in
+> place like example schema is suggesting:
+> 
+> https://elixir.bootlin.com/linux/v5.19/source/Documentation/devicetree/bindings/example-schema.yaml
 
-Thanks,
-Shunsuke
+Thank you for the clarification. I will follow this schema and add the
+allOf and the single if-then statement just above the
+"additionalProperties: false" line.
+
+Regards,
+Siddharth.

@@ -2,99 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E76559BFAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE3159BFAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235158AbiHVMrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 08:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        id S235172AbiHVMrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 08:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbiHVMrW (ORCPT
+        with ESMTP id S235123AbiHVMra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:47:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347A333429
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 05:47:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFD0E60FF9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:47:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D44D0C433C1;
-        Mon, 22 Aug 2022 12:47:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661172441;
-        bh=45sAp7NJ5Cp2njuLK4XNvKlRVvcRksGwnpjWb0Min2U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QPHQHw7XYZrenAs5qCyREmmfBceoRLmbWQfwLqlBQ5wzQrSkwqG9UNT1sx4QOb1Wy
-         vRcEuTYz9n6tbcfncVaVkf5melaONOwjsKdn+GuyUEvrhEpNewYQa5MlOKqUrL1+h2
-         eemx8iPdaOVmHOFbL+S+cuNaVC6TCpQwsvyJZ3GEXnCcUBS0GdnI3hwwnepn1sNKDe
-         51J7i5j1rrY/yQJkd6eni20Uu3z3SCQGCEN4JhmVNWwOhav6qVOeVDqS2DoNk2v7mk
-         tzxBqBajClRF1iZP28HfmOBok0poMQwGdpKri/HrCHRl0qvwvEp6mtAxpAyxeiaEP4
-         4WPjBIFuZYQpw==
-Date:   Mon, 22 Aug 2022 13:47:16 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: dapm: Export new 'graph.dot' file in debugfs
-Message-ID: <YwN61JsJZNqCT/Vf@sirena.org.uk>
-References: <20220822095242.3779-1-povik+lin@cutebit.org>
- <YwN2Pd4Ez08yDFno@sirena.org.uk>
- <87bksccv7x.wl-tiwai@suse.de>
+        Mon, 22 Aug 2022 08:47:30 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BC33AB03;
+        Mon, 22 Aug 2022 05:47:29 -0700 (PDT)
+Received: by mail-ot1-f47.google.com with SMTP id z22-20020a056830129600b0063711f456ceso7602909otp.7;
+        Mon, 22 Aug 2022 05:47:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=7cbjI0WaZhQTvZlNz7q5LmNIlRjDT3q4dyHallkLrTo=;
+        b=CVhIP2M47w0eAhmUTcrlpYx2JKuSBdky0u8RWxwjXTgF7jPPfvZqtWxadk6wlfo3LQ
+         uiSl1hKd7tvRyMPsiNXc79cwLyYFtr5UADc3xacySrFPokO0qZLY4hi+Y0wTEODHl6Kw
+         CMLnSEiZjGRNmyVYkqurblMx7e7XJhUrAcP4lEbAraLfr65jcXlboaRT4PpnxauqWsMy
+         DxggInkjgCtEFeoKR6fxIdSitAnEUXpqCURE0o6eaVSinYAgZNLCm2NEqAN1llQmUAuM
+         A5T0jhSzNkT5+jmYMic8ndRqDRyXHDzME8qpcQ8EOdveo/lAdYxcMB/Qz5OPORNZCNJn
+         yUGQ==
+X-Gm-Message-State: ACgBeo0CBloaoQ8xySKTrdKo26ct4QylppTBG1kI/H9LD7XR8bBc5T68
+        ica1ixaSSDlCfybb8oOLOp6Jr5fEMg==
+X-Google-Smtp-Source: AA6agR6HuU3nFQ4lGlufxXNkmmzngtFFlaInk7mDi0EkehJepEpbode3NOBV0cAGi7IkodNWlHOamA==
+X-Received: by 2002:a05:6830:310d:b0:637:1b6c:6647 with SMTP id b13-20020a056830310d00b006371b6c6647mr7668149ots.170.1661172448975;
+        Mon, 22 Aug 2022 05:47:28 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k4-20020a056870570400b0010f07647598sm2978471oap.7.2022.08.22.05.47.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 05:47:28 -0700 (PDT)
+Received: (nullmailer pid 3653297 invoked by uid 1000);
+        Mon, 22 Aug 2022 12:47:28 -0000
+Date:   Mon, 22 Aug 2022 07:47:28 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Subject: Re: [PATCH 1/3] dt-bindings: reset: syscon-reboot: Add priority
+ property
+Message-ID: <20220822124728.GA3641041-robh@kernel.org>
+References: <20220820102925.29476-1-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WIOPiZGstgIytBzh"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <87bksccv7x.wl-tiwai@suse.de>
-X-Cookie: Do not write in this space.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220820102925.29476-1-pali@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Aug 20, 2022 at 12:29:23PM +0200, Pali Rohár wrote:
+> This new optional priority property allows to specify custom priority level
+> of reset device. Default level was always 192.
 
---WIOPiZGstgIytBzh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Why do we need/want this? What problem does it solve?
 
-On Mon, Aug 22, 2022 at 02:34:58PM +0200, Takashi Iwai wrote:
-> Mark Brown wrote:
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  .../devicetree/bindings/power/reset/syscon-reboot.yaml        | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> index da2509724812..d905133aab27 100644
+> --- a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> @@ -42,6 +42,10 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description: The reset value written to the reboot register (32 bit access).
+>  
+> +  priority:
 
-> > There was a tool floating about in the past (last copy I knew about was
-> > on Wolfson's git but they took that down) - can we not just continue to
-> > do that?
+A bit too generic for the name.
 
-> IMO such a conversion could be done in user-space gracefully.
-> Or is any info missing in debugfs as of now to achieve that?
+> +    $ref: /schemas/types.yaml#/definitions/sint32
+> +    description: Priority level of this syscon reset device. Default 192.
 
-Yes, we should fill any blanks in the data that's present already.
+default: 192
 
-> If any, we may put such a tool in the standard repo (e.g. alsa-tools),
-> too.
 
-Indeed.
+Though I'm not really sure about the whole concept of this in DT. Where 
+does 192 come from? Presumably if we have more than 1 reset device, then 
+'priority' is needed in multiple places. So you need a common schema 
+defining the property (as property types should be defined exactly 
+once) which this schema can reference.
 
---WIOPiZGstgIytBzh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMDetMACgkQJNaLcl1U
-h9Ac+QgAhdjWb5JcUjMSz6beTHlNa/jbsyJiL7IKyCYZc11ipw8TpfGug2pwad6K
-jGTPMuJielQfFZoaYZP1cEMiuxTilJrnQbxRuDEIf6lp6c2X/UNyHe0UIp/ZAuKX
-Ef9eIHN9IrLII+gcmhhmN0jU7YY3PcrmCUmI5lFvHkXmPMR/JjLjLL0DEHu5S5Jl
-Wq1/osIrHEjDGhxd8Z5ZPRS+MPBm7AD/1jyaGj4jlse0JqEq3hoQM3S3cuqLyevn
-jbTrItUrfiWIZDWOmUk9bN7VIfDUg1TI3orZczGOD7719/wah0fy57PVczV5kRpA
-HEjPVfJjap+2OuH1zL7tHARKZGs8iw==
-=D+yb
------END PGP SIGNATURE-----
-
---WIOPiZGstgIytBzh--
+Rob

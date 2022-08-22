@@ -2,81 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAD759C919
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E5059C91D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238713AbiHVTkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 15:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
+        id S237853AbiHVTlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 15:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiHVTkP (ORCPT
+        with ESMTP id S231494AbiHVTl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 15:40:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE79E48C98
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:40:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661197213;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PrW6FQ33VHjaFPww6I50ua2R22m09A1ZPI8tkRBeC24=;
-        b=gcx7MsunA/CMM8NCimBb+VixL02T5bkPs9btTbg0E+sYFyiombz9lxLMZGc0GNL82H/UbU
-        GVoLz3IJTJvQ9auA7DFFpkDkY/ysx8sjXHJkVCOwvYx1jgkba7qxkZQQr4TXkBTYKhpwJq
-        XWlRAwmQD9qLkLJQlvF4OPTvgZ03Eqo=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-255-bB_aq8HVOniIc-CcaogKkQ-1; Mon, 22 Aug 2022 15:40:11 -0400
-X-MC-Unique: bB_aq8HVOniIc-CcaogKkQ-1
-Received: by mail-ed1-f70.google.com with SMTP id x3-20020a05640226c300b00446ad76aeb5so2730259edd.8
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:40:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=PrW6FQ33VHjaFPww6I50ua2R22m09A1ZPI8tkRBeC24=;
-        b=Vlxfsxx1vHtOdPiytrv+cF4T28xZHhWYliHZPz083USf6XXP5+/RggM5g3Rt2sVu0E
-         YjM/eCIvr6zXMg5+zaXHYOwmJwfSQl10oyGu2JZQrGsv5mLDbjHd2nESUaXcYX4K3n97
-         kMFWomzkbu3/gUOVpJae814Uo0VDetLLykalmfMBGp2HUKAfW4XcKFhSApb6dlJ6Mnoz
-         DJBMwJFjoJnSBxXatC7FThlPY5j6ceSdsgu03HQsunr8FoCG93ohJ62VBymYK51xycgk
-         kC9N7ao7Ywg+gQuX1fwR8Ltjb9HoRPwG5dbXufzF16qUGizz8cfh/Dzs5p2KLKKu7SxX
-         URLw==
-X-Gm-Message-State: ACgBeo1YbtrDhHelWKclTgB2MtBs26Xge5nQmuEXLpKzmgUNfHGCOHBv
-        w7rQ8i0qXAgUId2v2BPKCT0BXDYO8km2X/b8fOP2FV1S7HvCq42rpDXi60yswPLUP50FSuJ24t7
-        TNgX879Vjx4ib7Wqf4m7ncMsV
-X-Received: by 2002:a17:906:eecb:b0:73c:5bcb:8eb3 with SMTP id wu11-20020a170906eecb00b0073c5bcb8eb3mr12429535ejb.284.1661197210456;
-        Mon, 22 Aug 2022 12:40:10 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4niDRL1RcFobHgT2AB075N+mpNaqURdq6mZbMNFfEFmFM9xPuItdS4fWDKpGE3WRVJj+XW2A==
-X-Received: by 2002:a17:906:eecb:b0:73c:5bcb:8eb3 with SMTP id wu11-20020a170906eecb00b0073c5bcb8eb3mr12429529ejb.284.1661197210269;
-        Mon, 22 Aug 2022 12:40:10 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id v1-20020a50d081000000b0043a7c24a669sm160532edd.91.2022.08.22.12.40.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 12:40:09 -0700 (PDT)
-Message-ID: <4edc98dc-31b4-bfb4-bb8e-4b453b006dec@redhat.com>
-Date:   Mon, 22 Aug 2022 21:40:08 +0200
+        Mon, 22 Aug 2022 15:41:27 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC31748CB3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 12:41:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661197286; x=1692733286;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ONoVEhGtoqXrJDMsWB6ACipS2h2oF8m5UdQT4iJsIZk=;
+  b=nbeN/e0arlbjpIY2g/MVISoYTsCX3i4sPoXhgrE+WrABtviapqn0y591
+   BSEEKEnhjZhK6roigIARGM9+WD22vhsS2wV3oARNtEwvmz8dMD7hxExiF
+   50eMViSzoTnZUwj1cTIBrv5TWI2z6WFTL0Cpb0dWRX+btIJmbG5z5jNkd
+   Ss8woXfEzghAULxmufw2AgsIsGdqE7Vq0xHxbBNrCPTaAgcAFCjQV3v85
+   8WwNtqf6RCGP3+2v47LEmRtZrMpC2bRHCbfEEgIGMuhAWgneaUx1/FVnm
+   Ws3MUnG1Gr+Yu3H3/PEp13CbUuqUdqIfWL2ICEbAG2UhXoqVDKBFO6hGB
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="293502762"
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="293502762"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 12:41:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="937166185"
+Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Aug 2022 12:41:03 -0700
+Received: from kbuild by dd9b29378baa with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQDIE-0000e7-2h;
+        Mon, 22 Aug 2022 19:41:02 +0000
+Date:   Tue, 23 Aug 2022 03:40:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:perf/wip.rewrite 1/5] kernel/events/core.c:12047:9:
+ error: implicit declaration of function 'mutex_lock_double'; did you mean
+ 'mutex_lock_killable'?
+Message-ID: <202208230309.KzpqxoH0-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 3/7] KVM: nVMX: Make an event request when pending an
- MTF nested VM-Exit
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        mlevitsk@redhat.com, seanjc@google.com, stable@vger.kernel.org
-References: <20220822170659.2527086-1-pbonzini@redhat.com>
- <20220822170659.2527086-4-pbonzini@redhat.com>
- <CALMp9eRaTV+B6+SA0ecwi6u6KfNyVX33VToYQe-A5ovS=UAwUg@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <CALMp9eRaTV+B6+SA0ecwi6u6KfNyVX33VToYQe-A5ovS=UAwUg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,45 +62,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/22/22 19:52, Jim Mattson wrote:
-> On Mon, Aug 22, 2022 at 10:08 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->>
->> From: Sean Christopherson <seanjc@google.com>
->>
->> Set KVM_REQ_EVENT when MTF becomes pending to ensure that KVM will run
->> through inject_pending_event() and thus vmx_check_nested_events() prior
->> to re-entering the guest.
->>
->> MTF currently works by virtue of KVM's hack that calls
->> kvm_check_nested_events() from kvm_vcpu_running(), but that hack will
->> be removed in the near future.  Until that call is removed, the patch
->> introduces no functional change.
->>
->> Fixes: 5ef8acbdd687 ("KVM: nVMX: Emulate MTF when performing instruction emulation")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Sean Christopherson <seanjc@google.com>
->> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
->> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
->> ---
-> What happens if live migration occurs before the KVM_REQ_EVENT is processed?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.rewrite
+head:   596b8cc92a97fa8defbff896dc9baedef441b983
+commit: 6a606214738273b4c6bd00c500bab6cb53a5b9d7 [1/5] perf: Rewrite core context handling
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220823/202208230309.KzpqxoH0-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=6a606214738273b4c6bd00c500bab6cb53a5b9d7
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue perf/wip.rewrite
+        git checkout 6a606214738273b4c6bd00c500bab6cb53a5b9d7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/
 
-Good point, this must be squashed in:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index ab135f9ef52f..a703b71d675d 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -6481,6 +6481,8 @@ static int vmx_set_nested_state(struct kvm_vcpu *vcpu,
-  	if (ret)
-  		goto error_guest_mode;
-  
-+	if (vmx->nested.mtf_pending)
-+		kvm_make_request(KVM_REQ_EVENT, vcpu);
-  	return 0;
-  
-  error_guest_mode:
+All errors (new ones prefixed by >>):
 
-so that the other side restores the request.
+   kernel/events/core.c: In function 'perf_rotate_context':
+   kernel/events/core.c:4236:36: warning: variable 'task_ctx' set but not used [-Wunused-but-set-variable]
+    4236 |         struct perf_event_context *task_ctx = NULL;
+         |                                    ^~~~~~~~
+   kernel/events/core.c: At top level:
+   kernel/events/core.c:4810:1: warning: no previous prototype for 'find_get_pmu_context' [-Wmissing-prototypes]
+    4810 | find_get_pmu_context(struct pmu *pmu, struct perf_event_context *ctx,
+         | ^~~~~~~~~~~~~~~~~~~~
+   kernel/events/core.c: In function 'perf_event_set_output':
+>> kernel/events/core.c:12047:9: error: implicit declaration of function 'mutex_lock_double'; did you mean 'mutex_lock_killable'? [-Werror=implicit-function-declaration]
+   12047 |         mutex_lock_double(&event->mmap_mutex, &output_event->mmap_mutex);
+         |         ^~~~~~~~~~~~~~~~~
+         |         mutex_lock_killable
+   cc1: some warnings being treated as errors
 
-Paolo
 
+vim +12047 kernel/events/core.c
+
+974802eaa1afdc kernel/perf_counter.c Peter Zijlstra          2009-06-12  11992  
+ac9721f3f54b27 kernel/perf_event.c   Peter Zijlstra          2010-05-27  11993  static int
+ac9721f3f54b27 kernel/perf_event.c   Peter Zijlstra          2010-05-27  11994  perf_event_set_output(struct perf_event *event, struct perf_event *output_event)
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  11995  {
+56de4e8f914668 kernel/events/core.c  Steven Rostedt (VMware  2019-12-13  11996) 	struct perf_buffer *rb = NULL;
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  11997  	int ret = -EINVAL;
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  11998  
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  11999  	if (!output_event) {
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12000  		mutex_lock(&event->mmap_mutex);
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12001  		goto set;
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12002  	}
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12003  
+ac9721f3f54b27 kernel/perf_event.c   Peter Zijlstra          2010-05-27  12004  	/* don't allow circular references */
+ac9721f3f54b27 kernel/perf_event.c   Peter Zijlstra          2010-05-27  12005  	if (event == output_event)
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12006  		goto out;
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12007  
+0f139300c9057c kernel/perf_event.c   Peter Zijlstra          2010-05-20  12008  	/*
+0f139300c9057c kernel/perf_event.c   Peter Zijlstra          2010-05-20  12009  	 * Don't allow cross-cpu buffers
+0f139300c9057c kernel/perf_event.c   Peter Zijlstra          2010-05-20  12010  	 */
+0f139300c9057c kernel/perf_event.c   Peter Zijlstra          2010-05-20  12011  	if (output_event->cpu != event->cpu)
+0f139300c9057c kernel/perf_event.c   Peter Zijlstra          2010-05-20  12012  		goto out;
+0f139300c9057c kernel/perf_event.c   Peter Zijlstra          2010-05-20  12013  
+0f139300c9057c kernel/perf_event.c   Peter Zijlstra          2010-05-20  12014  	/*
+76369139ceb955 kernel/events/core.c  Frederic Weisbecker     2011-05-19  12015  	 * If its not a per-cpu rb, it must be the same task.
+0f139300c9057c kernel/perf_event.c   Peter Zijlstra          2010-05-20  12016  	 */
+0f139300c9057c kernel/perf_event.c   Peter Zijlstra          2010-05-20  12017  	if (output_event->cpu == -1 && output_event->ctx != event->ctx)
+0f139300c9057c kernel/perf_event.c   Peter Zijlstra          2010-05-20  12018  		goto out;
+0f139300c9057c kernel/perf_event.c   Peter Zijlstra          2010-05-20  12019  
+34f439278cef7b kernel/events/core.c  Peter Zijlstra          2015-02-20  12020  	/*
+34f439278cef7b kernel/events/core.c  Peter Zijlstra          2015-02-20  12021  	 * Mixing clocks in the same buffer is trouble you don't need.
+34f439278cef7b kernel/events/core.c  Peter Zijlstra          2015-02-20  12022  	 */
+34f439278cef7b kernel/events/core.c  Peter Zijlstra          2015-02-20  12023  	if (output_event->clock != event->clock)
+34f439278cef7b kernel/events/core.c  Peter Zijlstra          2015-02-20  12024  		goto out;
+34f439278cef7b kernel/events/core.c  Peter Zijlstra          2015-02-20  12025  
+9ecda41acb971e kernel/events/core.c  Wang Nan                2016-04-05  12026  	/*
+9ecda41acb971e kernel/events/core.c  Wang Nan                2016-04-05  12027  	 * Either writing ring buffer from beginning or from end.
+9ecda41acb971e kernel/events/core.c  Wang Nan                2016-04-05  12028  	 * Mixing is not allowed.
+9ecda41acb971e kernel/events/core.c  Wang Nan                2016-04-05  12029  	 */
+9ecda41acb971e kernel/events/core.c  Wang Nan                2016-04-05  12030  	if (is_write_backward(output_event) != is_write_backward(event))
+9ecda41acb971e kernel/events/core.c  Wang Nan                2016-04-05  12031  		goto out;
+9ecda41acb971e kernel/events/core.c  Wang Nan                2016-04-05  12032  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  12033  	/*
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  12034  	 * If both events generate aux data, they must be on the same PMU
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  12035  	 */
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  12036  	if (has_aux(event) && has_aux(output_event) &&
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  12037  	    event->pmu != output_event->pmu)
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  12038  		goto out;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  12039  
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12040  	/*
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12041  	 * Hold both mmap_mutex to serialize against perf_mmap_close().  Since
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12042  	 * output_event is already on rb->event_list, and the list iteration
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12043  	 * restarts after every removal, it is guaranteed this new event is
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12044  	 * observed *OR* if output_event is already removed, it's guaranteed we
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12045  	 * observe !rb->mmap_count.
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12046  	 */
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05 @12047  	mutex_lock_double(&event->mmap_mutex, &output_event->mmap_mutex);
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12048  set:
+ac9721f3f54b27 kernel/perf_event.c   Peter Zijlstra          2010-05-27  12049  	/* Can't redirect output if we've got an active mmap() */
+ac9721f3f54b27 kernel/perf_event.c   Peter Zijlstra          2010-05-27  12050  	if (atomic_read(&event->mmap_count))
+ac9721f3f54b27 kernel/perf_event.c   Peter Zijlstra          2010-05-27  12051  		goto unlock;
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12052  
+ac9721f3f54b27 kernel/perf_event.c   Peter Zijlstra          2010-05-27  12053  	if (output_event) {
+76369139ceb955 kernel/events/core.c  Frederic Weisbecker     2011-05-19  12054  		/* get the rb we want to redirect to */
+76369139ceb955 kernel/events/core.c  Frederic Weisbecker     2011-05-19  12055  		rb = ring_buffer_get(output_event);
+76369139ceb955 kernel/events/core.c  Frederic Weisbecker     2011-05-19  12056  		if (!rb)
+ac9721f3f54b27 kernel/perf_event.c   Peter Zijlstra          2010-05-27  12057  			goto unlock;
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12058  
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12059  		/* did we race against perf_mmap_close() */
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12060  		if (!atomic_read(&rb->mmap_count)) {
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12061  			ring_buffer_put(rb);
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12062  			goto unlock;
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12063  		}
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12064  	}
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12065  
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  12066  	ring_buffer_attach(event, rb);
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  12067  
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12068  	ret = 0;
+ac9721f3f54b27 kernel/perf_event.c   Peter Zijlstra          2010-05-27  12069  unlock:
+ac9721f3f54b27 kernel/perf_event.c   Peter Zijlstra          2010-05-27  12070  	mutex_unlock(&event->mmap_mutex);
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12071  	if (output_event)
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  12072  		mutex_unlock(&output_event->mmap_mutex);
+ac9721f3f54b27 kernel/perf_event.c   Peter Zijlstra          2010-05-27  12073  
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12074  out:
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12075  	return ret;
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12076  }
+a4be7c2778d1fd kernel/perf_counter.c Peter Zijlstra          2009-08-19  12077  
+
+:::::: The code at line 12047 was first introduced by commit
+:::::: 68e3c69803dada336893640110cb87221bb01dcf perf/core: Fix data race between perf_event_set_output() and perf_mmap_close()
+
+:::::: TO: Peter Zijlstra <peterz@infradead.org>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

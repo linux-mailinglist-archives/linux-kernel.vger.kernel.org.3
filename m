@@ -2,130 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DD659CA04
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B4A59CA0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237229AbiHVUcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 16:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S237295AbiHVUdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 16:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiHVUcQ (ORCPT
+        with ESMTP id S232112AbiHVUde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 16:32:16 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4D352827
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:32:15 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id x25so11693308ljm.5
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:32:15 -0700 (PDT)
+        Mon, 22 Aug 2022 16:33:34 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBF16396;
+        Mon, 22 Aug 2022 13:33:32 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id d8so4507526lfq.0;
+        Mon, 22 Aug 2022 13:33:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=gUUJGDZZ7SmwoHkhrT602wMnsCfmfrGrVbXmH2wIM3g=;
-        b=Z+tUKeClXChR4jRlQGg41fHbT2bJsJZqVxlH7TSDRnIKVcsWoXGws6FK/hz5EGuT4S
-         yPu/tIYvMiV5u9nagc3sJ7K7VFdaJs3UH//tmuGoe95tcbMp5ov4mybmPAqUAwktzqOI
-         V0PJNpbtkpzFVVxtumlOm80eN4+ci0qXNJMp0=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=nRs4+6Qq+mxj3porzYhpRJretUtLEmOubukbTGJZYos=;
+        b=RyoKch+R+u7XVHOPQWfCyQ7JZ6UDzZN1bxqDFOEl40zYAgJ+9LBF8ohv04pqdv9dgd
+         hElovf9vyD3qWPFtZtFLshRW7Jjeh+Be0jB/YxrYhDc33PghHRNaVKrHdCfXlv+SuUfx
+         Uyx0+Qj3JofyDoW4IRaMte6Wg8xAo10UHG2v+H2pjHOsw6aTvrpuN9WDzJJOCN1M+CGK
+         rmOl6BK8VcNImnOwIZLPDI2EB28UjYUWpZHi4nI8+j2GgLFo7d8XOGkRNXm7Y9EcZj3K
+         2jjnbX5JFztGRwiFiT1DW5Bh8V73++2CL+yvloanMVkj2PzU6agU36yKC8yfRSZQij2L
+         MF3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=gUUJGDZZ7SmwoHkhrT602wMnsCfmfrGrVbXmH2wIM3g=;
-        b=JG3MSxmQE8mV4pq1uywz0vTqmoe/3uApjXhRQ1Q1o2pZd4oHEYF3IxsRoyf4PxLzwy
-         niCmvfzdDynNlTQ/LkLH0/w81Y0lcbl25inFpAGk+LgFDYB3MJWbyH7Qd/p59qA+dKjB
-         LRJiKuR3pjSBs2+p1heelJcQiErmjlkoQHKN2jc9CAxgLFfKPHm+Zm6jtFEnGs/mK9V6
-         WBrdMm3/Asw1jl2OLkwMZEs3Bsan9r9ZGk+KMGqmjkYcocR2/pikBVZXRZx1dtE76rM+
-         FvCJRGcv8fCT1E2y/lG/PMAiXVHzbSytoojwoaB1RjMOJpTFe9pPmHTCbgv0hAejUOeq
-         upbg==
-X-Gm-Message-State: ACgBeo2jUgeOuIvv1YGlNrOAAv+RkCPLy7q0Z4hxyg2fkZrHAVsEDr6U
-        HN4HZDy6dK+WsG4JBuzRA/X/dTlWAs3qJ87vATQ=
-X-Google-Smtp-Source: AA6agR4WW4Wl7xr7ee6xHDqmzztHmF6kGA17QLUgSbDC/tUww/81C/mBcMR8Vagt+7Ry3/OwKuWsPQ==
-X-Received: by 2002:a05:651c:221e:b0:25f:f069:1c13 with SMTP id y30-20020a05651c221e00b0025ff0691c13mr6516675ljq.390.1661200333323;
-        Mon, 22 Aug 2022 13:32:13 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
-        by smtp.gmail.com with ESMTPSA id k17-20020a05651239d100b0048d076373d0sm2088004lfu.98.2022.08.22.13.32.12
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=nRs4+6Qq+mxj3porzYhpRJretUtLEmOubukbTGJZYos=;
+        b=YqF1c6q9iTnCr07vfPWMgJwMVyP9W/GhbiAmGzCsk8eqV6VxNxvr1E7PWqrIgWBUyH
+         zGfg+Ut3ly02KWN/VTl/xTJnr/GsIZQGW5hqODOz7zqhzChKSoT/FfuwVLBR72zyqjX9
+         gimj8zVbaQOV7fluG1ei6syEhF0xm8sLMFLG9RVpBY6INxTCU2HlTZWeeAvQnFZwc92f
+         G8m/FE7CQG/vuZbWTB/uNHKdYhLqUOkmMbOeYBuDEz/uIxOtPJ3IM5jdfuCmXYwmi9qs
+         /892Qs0sf9FvKnwxMh0+jX0BMn44eroB261SeM3L5FEQUi/9A3OTwpCWFiWmoCm75/Qu
+         oWsg==
+X-Gm-Message-State: ACgBeo3Xo+hN/ab89mHH/F4AvWCjujmXaal8eKSPk9pOqKs6FQa/OiID
+        05KM0ypCNVbW9G1o1D3Pa7y6DO4uu9o=
+X-Google-Smtp-Source: AA6agR60sG9svcrPjilKrPuLt8ES8ivmFvsAIlhuBcZEy0DJcRY4UFXqXl18oUfdj1C/PqrWvmr+4Q==
+X-Received: by 2002:a05:6512:3092:b0:492:f323:f05b with SMTP id z18-20020a056512309200b00492f323f05bmr259974lfd.542.1661200410339;
+        Mon, 22 Aug 2022 13:33:30 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru. [109.252.119.13])
+        by smtp.googlemail.com with ESMTPSA id g6-20020a056512118600b004886508ca5csm2097448lfr.68.2022.08.22.13.33.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 13:32:12 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id d23so12531815lfl.13
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:32:12 -0700 (PDT)
-X-Received: by 2002:a05:6000:1541:b0:222:cf65:18d7 with SMTP id
- 1-20020a056000154100b00222cf6518d7mr11504823wry.659.1661200321380; Mon, 22
- Aug 2022 13:32:01 -0700 (PDT)
+        Mon, 22 Aug 2022 13:33:29 -0700 (PDT)
+Message-ID: <fac10841-1682-845f-3e4a-5668f59caed0@gmail.com>
+Date:   Mon, 22 Aug 2022 23:33:23 +0300
 MIME-Version: 1.0
-References: <20220819221616.2107893-1-saravanak@google.com> <20220819221616.2107893-4-saravanak@google.com>
-In-Reply-To: <20220819221616.2107893-4-saravanak@google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 22 Aug 2022 13:31:47 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Wrf2k1gY9+B0WW6D2nhvSHNfWAQrW+y4Td=-u08xe+rQ@mail.gmail.com>
-Message-ID: <CAD=FV=Wrf2k1gY9+B0WW6D2nhvSHNfWAQrW+y4Td=-u08xe+rQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] Revert "PM: domains: Delete usage of driver_deferred_probe_check_state()"
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Peng Fan <peng.fan@nxp.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        kernel-team@android.com, LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, iommu@lists.linux.dev,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH RESEND 1/2] i2c: tegra: Add GPCDMA support
+Content-Language: en-US
+To:     Akhil R <akhilrajeev@nvidia.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "wsa@kernel.org" <wsa@kernel.org>
+References: <20220819122313.40445-1-akhilrajeev@nvidia.com>
+ <20220819122313.40445-2-akhilrajeev@nvidia.com>
+ <20281ca7-e597-7030-4861-5f9a3594726d@gmail.com>
+ <89a746fd-a98e-3147-7811-33c5051c2b6d@gmail.com>
+ <SJ1PR12MB6339FC1F82EB1BB7417E533BC0719@SJ1PR12MB6339.namprd12.prod.outlook.com>
+ <ebb0764f-db92-d69d-49ac-151f4e3e0b8a@collabora.com>
+ <SJ1PR12MB63396DC508F63807F1CE9901C0719@SJ1PR12MB6339.namprd12.prod.outlook.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <SJ1PR12MB63396DC508F63807F1CE9901C0719@SJ1PR12MB6339.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+22.08.2022 13:29, Akhil R пишет:
+>> On 8/22/22 09:56, Akhil R wrote:
+>>>> 19.08.2022 18:15, Dmitry Osipenko пишет:
+>>>>> 19.08.2022 15:23, Akhil R пишет:
+>>>>>>      if (of_device_is_compatible(np, "nvidia,tegra210-i2c-vi"))
+>>>>>>              i2c_dev->is_vi = true;
+>>>>>> +    else
+>>>>>> +            i2c_dev->dma_support = !!(of_find_property(np, "dmas",
+>>>>>> + NULL));
+>>>>>
+>>>>> 1. You leak the np returned by of_find_property().
+>>>>>
+>>>>> 2. There is device_property_read_bool() for this kind of
+>>>>> property-exists checks.
+>>> Okay. I went by the implementation in of_dma_request_slave_channel() to
+>>> check 'dmas'.
+>>>
+>>>>>
+>>>>> 3. If "dmas" is missing in DT, then dma_request_chan() should return
+>>>>> NULL and everything will work fine. I suppose you haven't tried to
+>>>>> test this code.
+>>>>
+>>>> Although, no. It should return ERR_PTR(-ENODEV) and then you should check
+>>>> the return code.
+>>> Yes. Agree that it is more agnostic to check for ERR_PTR(-ENODEV). But since I
+>>> call tegra_init_dma() for every large transfer until DMA is initialized, wouldn't
+>>> it be better to have a flag inside the driver so that we do not have to go
+>> through
+>>> so many functions for every attempted DMA transaction to find out that the
+>> DT
+>>> properties don't exist?
+>>>
+>>> Shall I just put i2c_dev->dma_support = true here since DMA is supported by
+>>> hardware? It would turn false if dma_request_chan() returns something other
+>>> than -EPROBE_DEFER.
+>>>
+>>>       if (of_device_is_compatible(np, "nvidia,tegra210-i2c-vi"))
+>>>               i2c_dev->is_vi = true;
+>>>  +    else
+>>>  +            i2c_dev->dma_support = true;
+>>
+>> The code already has dma_mode for that. I don't see why another variable
+>> is needed.
+>>
+>> Either add new generic dma_request_chan_optional() that will return NULL
+>> if channel is not available and make Tegra I2C driver to use it, or
+>> handle the error code returned by dma_request_chan().
+> 
+> Let me elaborate my thoughts. 
+> 
+> The function tegra_i2c_init_dma() is also called inside tegra_i2c_xfer_msg() if
+> DMA is not initialized before, i.e. if (!i2c_dev->dma_buf).
 
-On Fri, Aug 19, 2022 at 3:16 PM Saravana Kannan <saravanak@google.com> wrote:
->
-> This reverts commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a.
->
-> Quite a few issues have been reported [1][2][3][4][5][6] on the original
-> commit. While about half of them have been fixed, I'll need to fix the rest
-> before driver_deferred_probe_check_state() can be deleted. So, revert the
-> deletion for now.
->
-> [1] - https://lore.kernel.org/all/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
-> [2] - https://lore.kernel.org/all/CM6REZS9Z8AC.2KCR9N3EFLNQR@otso/
-> [3] - https://lore.kernel.org/all/CAD=FV=XYVwaXZxqUKAuM5c7NiVjFz5C6m6gAHSJ7rBXBF94_Tg@mail.gmail.com/
-> [4] - https://lore.kernel.org/all/Yvpd2pwUJGp7R+YE@euler/
-> [5] - https://lore.kernel.org/lkml/20220601070707.3946847-2-saravanak@google.com/
-> [6] - https://lore.kernel.org/all/CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com/
->
-> Fixes: 5a46079a9645 ("PM: domains: Delete usage of driver_deferred_probe_check_state()")
-> Reported-by: Peng Fan <peng.fan@nxp.com>
-> Reported-by: Luca Weiss <luca.weiss@fairphone.com>
-> Reported-by: Doug Anderson <dianders@chromium.org>
-> Reported-by: Colin Foster <colin.foster@in-advantage.com>
-> Reported-by: Tony Lindgren <tony@atomide.com>
-> Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
-> Tested-by: Tony Lindgren <tony@atomide.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
->  drivers/base/power/domain.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+This is not true
 
-Tested-by: Douglas Anderson <dianders@chromium.org>
+i2c_dev->dma_mode=false if !i2c_dev->dma_buf and that's it
+
+https://elixir.bootlin.com/linux/v6.0-rc2/source/drivers/i2c/busses/i2c-tegra.c#L1253
+
+tegra_i2c_init_dma() is invoked only during probe
+
+> So, if suppose there is no DT entry for dmas, the driver would have to go take the
+> path tegra_i2c_init_dma() -> dma_request_chan() -> of_*() apis -> ... and then figure
+> out that DMA is not supported. This would happen for each transfer of size larger than
+> I2C_PIO_MODE_PREFERRED_LEN.
+> 
+> To avoid this, I am looking for a variable/flag which can indicate if the driver should attempt
+> to configure DMA or not. I didn't quite get the idea if dma_mode can be extended to support
+> this, because it is updated based on xfer_size on each transfer. My idea of i2c_dev->dma_support
+> is that it will be constant after the probe().
+
+

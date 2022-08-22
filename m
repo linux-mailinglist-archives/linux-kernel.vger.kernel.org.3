@@ -2,158 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0736359BE9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07A259BF29
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234674AbiHVLdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
+        id S234898AbiHVMAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 08:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234669AbiHVLct (ORCPT
+        with ESMTP id S234907AbiHVMAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:32:49 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69036356DC;
-        Mon, 22 Aug 2022 04:32:46 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4MB9Fn6Bx6zDrVf;
-        Mon, 22 Aug 2022 11:32:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1661167966; bh=OUMmq98oeFiEp0mE5Azg1/+y4ajDaWAKrWs37juM6GQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JBIv38YnsNub8oyAdKIUfVsmk2i07BNR/NLoePIHfxk8Di+mFkpYV8GTtIgbC12b7
-         OSfgYRhRDijabcLILZXwD9Eil3tzUdkkTR7WntaisTYrIvvfDaoG09polA8ht1VDeb
-         yatxb3BPdp6tPjmQLHKsg3rrJ+WCp5BM6oZSjMjY=
-X-Riseup-User-ID: CA0E823BECDD724A52C6470718F8117D69D41CA1458B0CBBFEC8D433579B3E1C
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4MB9Fj0pvpz5vNB;
-        Mon, 22 Aug 2022 11:32:40 +0000 (UTC)
-Message-ID: <fcbda624-239b-af9b-3674-d1cf6087942a@riseup.net>
-Date:   Mon, 22 Aug 2022 08:32:33 -0300
+        Mon, 22 Aug 2022 08:00:02 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AE11EEF6
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 05:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661169600; x=1692705600;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rwVBU5aAOEwE8/qVdFGsbYbMpI+icllJZ7FFpD72ytE=;
+  b=d5DLWzJfTshYQtwruuhuBwAzVZXCr+H6bnOR8TQ7LV90cfiZaD7s25dY
+   2Zgbc/oikaXOmEuMQXHQK5sHzCPGuPuWB/UU+NxWhjM1VqSJ2LqWn18Pj
+   T4BRkcHQ5H9gvK+LvMSwMIdpMFeaAAVktUAPD7mTUTRlg5ONwQhbNT4Hh
+   b8XGbgd0uNoNyCYOUMTauupHJ8KHtTa0HKwbz404jWD9w8Y+Fj/E0tWkz
+   ybUDRKVwPucCjW+mu6Lal8TmhZcQxoXIbFAWhUd6imx048Zv/LiP4lz1M
+   /YsTFKfYaqkbgICv7OKJWCpuyB647wqO9GbGaiovvtlfP/ARofa8Xc0BV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="293391779"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="293391779"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 05:00:00 -0700
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="712154892"
+Received: from mhakkine-mobl4.ger.corp.intel.com (HELO [10.249.43.69]) ([10.249.43.69])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 04:59:58 -0700
+Message-ID: <b899dbff-91d9-00eb-3879-3ca4b56b33d9@linux.intel.com>
+Date:   Mon, 22 Aug 2022 13:33:50 +0200
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 2/8] Documentation: KUnit: avoid repeating "kunit.py
- run" in start.rst
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 12/12] ASoC: cs42l42: Add support for Soundwire interrupts
 Content-Language: en-US
-To:     Tales Aparecida <tales.aparecida@gmail.com>,
-        Sadiya Kazi <sadiyakazi@google.com>
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        davidgow@google.com, corbet@lwn.net, brendan.higgins@linux.dev,
-        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
-        mwen@igalia.com, andrealmeid@riseup.net,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com
-References: <20220822022646.98581-1-tales.aparecida@gmail.com>
- <20220822022646.98581-3-tales.aparecida@gmail.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220822022646.98581-3-tales.aparecida@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, broonie@kernel.org
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220819125230.42731-1-rf@opensource.cirrus.com>
+ <20220819125230.42731-13-rf@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220819125230.42731-13-rf@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/21/22 23:26, Tales Aparecida wrote:
-> Combine two sections mentioning "kunit.py run" to streamline the
-> getting-started guide. Update "kunit.py run" expected output in
-> the guide and run_wrapper.
+
+
+On 8/19/22 14:52, Richard Fitzgerald wrote:
+> This adds support for using the Soundwire interrupt mechanism to
+> handle CS42L42 chip interrupts.
 > 
-> Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
+> Soundwire interrupts are used if a hard INT line is not declared.
 
-Thanks for the quick re-spin!
+This sounds really weird.
 
-Reviewed-by: Maíra Canal <mairacanal@riseup.net>
+The register access would still use the SoundWire read/writes, which
+raises a number of opens since the interrupt cannot be handled until the
+bus is resumed/operational, so there would be no speed-up at all. Unless
+I completely missed something, this seems like wasting one pin with no
+benefits?
 
-Best Regards,
-- Maíra Canal
+> Wake-from-clock-stop is not used. The CS42L42 has limited wake
+> capability, but clock-stop is already disabled when a snd_soc_jack is
+> registered to prevent the host controller issuing a bus-reset on exit
+> from clock stop mode, which would clear the interrupt status and break
+> jack and button detection.
+
+Same open as in previous patch on why this is needed.
 
 > 
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 > ---
-> Notes:
->      Update the expected output and the note that follows it (Maíra Canal and
->      Sadiya Kazi). The output was updated on the commit: 45ba7a893ad8
->      ("kunit: kunit_tool: Separate out config/build/exec/parse")
->      Add word "step" to note and fix the case of "kernel".
-> ---
->   Documentation/dev-tools/kunit/run_wrapper.rst |  2 +-
->   Documentation/dev-tools/kunit/start.rst       | 38 ++++++++-----------
->   2 files changed, 16 insertions(+), 24 deletions(-)
+>  sound/soc/codecs/cs42l42-sdw.c | 90 +++++++++++++++++++++++++++++++++-
+>  sound/soc/codecs/cs42l42.h     |  3 ++
+>  2 files changed, 92 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-> index 518cf87ea732..6b33caf6c8ab 100644
-> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
-> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-> @@ -22,7 +22,7 @@ We should see the following:
->   
->   .. code-block::
->   
-> -	Generating .config...
-> +	Configuring KUnit Kernel ...
->   	Building KUnit kernel...
->   	Starting KUnit kernel...
->   
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> index e730df1f468e..2e31350a85e1 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -19,7 +19,21 @@ can run kunit_tool:
->   
->   	./tools/testing/kunit/kunit.py run
->   
-> -For more information on this wrapper, see:
-> +If everything worked correctly, you should see the following:
+> diff --git a/sound/soc/codecs/cs42l42-sdw.c b/sound/soc/codecs/cs42l42-sdw.c
+> index ed69a0a44d8c..1bdeed93587d 100644
+> --- a/sound/soc/codecs/cs42l42-sdw.c
+> +++ b/sound/soc/codecs/cs42l42-sdw.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/soundwire/sdw.h>
+>  #include <linux/soundwire/sdw_registers.h>
+>  #include <linux/soundwire/sdw_type.h>
+> +#include <linux/workqueue.h>
+>  #include <sound/pcm.h>
+>  #include <sound/pcm_params.h>
+>  #include <sound/soc.h>
+> @@ -26,6 +27,8 @@
+>  /* Register addresses are offset when sent over Soundwire */
+>  #define CS42L42_SDW_ADDR_OFFSET		0x8000
+>  
+> +#define CS42L42_SDW_GEN_INT_STATUS_1	0xc0
+> +#define CS42L42_SDW_GEN_INT_MASK_1	0xc1
+>  #define CS42L42_SDW_MEM_ACCESS_STATUS	0xd0
+>  #define CS42L42_SDW_MEM_READ_DATA	0xd8
+>  
+> @@ -33,6 +36,11 @@
+>  #define CS42L42_SDW_CMD_IN_PROGRESS	BIT(2)
+>  #define CS42L42_SDW_RDATA_RDY		BIT(0)
+>  
+> +#define CS42L42_SDW_M_SCP_IMP_DEF1	BIT(0)
+> +#define CS42L42_GEN_INT_CASCADE		SDW_SCP_INT1_IMPL_DEF
 > +
-> +.. code-block::
+> +#define CS42L42_SDW_INT_MASK_CODEC_IRQ	BIT(0)
 > +
-> +	Configuring KUnit Kernel ...
-> +	Building KUnit Kernel ...
-> +	Starting KUnit Kernel ...
+>  #define CS42L42_DELAYED_READ_POLL_US	1
+>  #define CS42L42_DELAYED_READ_TIMEOUT_US	100
+>  
+> @@ -306,6 +314,13 @@ static void cs42l42_sdw_init(struct sdw_slave *peripheral)
+>  	/* Disable internal logic that makes clock-stop conditional */
+>  	regmap_clear_bits(cs42l42->regmap, CS42L42_PWR_CTL3, CS42L42_SW_CLK_STP_STAT_SEL_MASK);
+>  
+> +	/* Enable Soundwire interrupts */
+> +	if (!cs42l42->irq) {
+> +		dev_dbg(cs42l42->dev, "Using Soundwire interrupts\n");
+> +		sdw_write_no_pm(peripheral, CS42L42_SDW_GEN_INT_MASK_1,
+> +				CS42L42_SDW_INT_MASK_CODEC_IRQ);
+> +	}
 > +
-> +The tests will pass or fail.
+>  	/*
+>  	 * pm_runtime is needed to control bus manager suspend, and to
+>  	 * recover from an unattach_request when the manager suspends.
+> @@ -319,6 +334,49 @@ static void cs42l42_sdw_init(struct sdw_slave *peripheral)
+>  	pm_runtime_idle(cs42l42->dev);
+>  }
+>  
+> +static int cs42l42_sdw_interrupt(struct sdw_slave *peripheral,
+> +				 struct sdw_slave_intr_status *status)
+> +{
+> +	struct cs42l42_private *cs42l42 = dev_get_drvdata(&peripheral->dev);
 > +
-> +.. note ::
-> +   Because it is building a lot of sources for the first time,
-> +   the ``Building KUnit Kernel`` step may take a while.
+> +	/* Soundwire core holds our pm_runtime when calling this function. */
 > +
-> +For detailed information on this wrapper, see:
->   Documentation/dev-tools/kunit/run_wrapper.rst.
->   
->   Creating a ``.kunitconfig``
-> @@ -74,28 +88,6 @@ you if you have not included dependencies for the options used.
->      tools like ``make menuconfig O=.kunit``. As long as its a superset of
->      ``.kunitconfig``, kunit.py won't overwrite your changes.
->   
-> -Running Tests (KUnit Wrapper)
-> ------------------------------
-> -1. To make sure that everything is set up correctly, invoke the Python
-> -   wrapper from your kernel repository:
-> -
-> -.. code-block:: bash
-> -
-> -	./tools/testing/kunit/kunit.py run
-> -
-> -If everything worked correctly, you should see the following:
-> -
-> -.. code-block::
-> -
-> -	Generating .config ...
-> -	Building KUnit Kernel ...
-> -	Starting KUnit Kernel ...
-> -
-> -The tests will pass or fail.
-> -
-> -.. note ::
-> -   Because it is building a lot of sources for the first time, the
-> -   ``Building KUnit kernel`` may take a while.
->   
->   Running Tests without the KUnit Wrapper
->   =======================================
+> +	dev_dbg(cs42l42->dev, "int control_port=0x%x\n", status->control_port);
+> +
+> +	if ((status->control_port & CS42L42_GEN_INT_CASCADE) == 0)
+> +		return 0;
+> +
+> +	/*
+> +	 * Clear and mask until it has been handled. The read of GEN_INT_STATUS_1
+> +	 * is required as per the Soundwire spec for interrupt status bits to clear.
+
+Humm, this explanation is not very clear. What part of the spec are you
+referring to?
+
+Section 11.1.2 "Interrupt Model" says that a read is necessary to make
+sure a condition is not missed while clearing the status with successful
+write. You need to write the status to clear, and re-read the status to
+see if another condition remains. That's not how I understand the code
+below, which does the write and read in the opposite order.
+
+> +	 */
+> +	sdw_write_no_pm(peripheral, CS42L42_SDW_GEN_INT_MASK_1, 0);
+> +	sdw_read_no_pm(peripheral, CS42L42_SDW_GEN_INT_STATUS_1);
+> +	sdw_write_no_pm(peripheral, CS42L42_SDW_GEN_INT_STATUS_1, 0xFF);
+> +	queue_work(system_power_efficient_wq, &cs42l42->sdw_irq_work);
+> +
+> +	/* Prevent host controller suspending before we handle the interrupt */
+> +	pm_runtime_get_noresume(cs42l42->dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static void cs42l42_sdw_irq_work(struct work_struct *work)
+> +{
+> +	struct cs42l42_private *cs42l42 = container_of(work,
+> +						       struct cs42l42_private,
+> +						       sdw_irq_work);
+> +
+> +	cs42l42_irq_thread(-1, cs42l42);
+> +
+> +	/* unmask interrupt */
+> +	if (!cs42l42->sdw_irq_no_unmask)
+> +		sdw_write_no_pm(cs42l42->sdw_peripheral, CS42L42_SDW_GEN_INT_MASK_1,
+> +				CS42L42_SDW_INT_MASK_CODEC_IRQ);
+> +
+> +	pm_runtime_put_autosuspend(cs42l42->dev);
+> +}
+> +
+>  static int cs42l42_sdw_read_prop(struct sdw_slave *peripheral)
+>  {
+>  	struct cs42l42_private *cs42l42 = dev_get_drvdata(&peripheral->dev);
+> @@ -334,6 +392,14 @@ static int cs42l42_sdw_read_prop(struct sdw_slave *peripheral)
+>  	prop->quirks = SDW_SLAVE_QUIRKS_INVALID_INITIAL_PARITY;
+>  	prop->scp_int1_mask = SDW_SCP_INT1_BUS_CLASH | SDW_SCP_INT1_PARITY;
+>  
+> +	/*
+> +	 * CS42L42 doesn't have a SDW_SCP_INT1_IMPL_DEF mask bit but it must be
+> +	 * set in scp_int1_mask else the Soundwire framework won't notify us
+> +	 * when the IMPL_DEF interrupt is asserted.
+> +	 */
+> +	if (!cs42l42->irq)
+> +		prop->scp_int1_mask |= SDW_SCP_INT1_IMPL_DEF;
+
+Sorry, I don't follow the explanation. If you don't have a bit defined
+for a specific interrupt, how would that interrupt be handled?
+
+>  	/* DP1 - capture */
+>  	ports[0].num = CS42L42_SDW_CAPTURE_PORT,
+>  	ports[0].type = SDW_DPN_FULL,
+> @@ -403,6 +469,7 @@ static int __maybe_unused cs42l42_sdw_clk_stop(struct sdw_slave *peripheral,
+>  
+>  static const struct sdw_slave_ops cs42l42_sdw_ops = {
+>  	.read_prop = cs42l42_sdw_read_prop,
+> +	.interrupt_callback = cs42l42_sdw_interrupt,
+>  	.update_status = cs42l42_sdw_update_status,
+>  	.bus_config = cs42l42_sdw_bus_config,
+>  #ifdef DEBUG
+> @@ -473,6 +540,11 @@ static int __maybe_unused cs42l42_sdw_runtime_resume(struct device *dev)
+>  	regcache_sync_region(cs42l42->regmap, CS42L42_MIC_DET_CTL1, CS42L42_MIC_DET_CTL1);
+>  	regcache_sync(cs42l42->regmap);
+>  
+> +	/* Re-enable Soundwire interrupts */
+> +	if (!cs42l42->irq)
+> +		sdw_write_no_pm(cs42l42->sdw_peripheral, CS42L42_SDW_GEN_INT_MASK_1,
+> +				CS42L42_SDW_INT_MASK_CODEC_IRQ);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -495,6 +567,11 @@ static int __maybe_unused cs42l42_sdw_resume(struct device *dev)
+>  
+>  	cs42l42_resume_restore(dev);
+>  
+> +	/* Re-enable Soundwire interrupts */
+> +	if (!cs42l42->irq)
+> +		sdw_write_no_pm(cs42l42->sdw_peripheral, CS42L42_SDW_GEN_INT_MASK_1,
+> +				CS42L42_SDW_INT_MASK_CODEC_IRQ);
+> +
+
+that would prevent the device from waking up the system while in
+suspend? How would the resume be triggered then, only by the manager?
+That doesn't seem like a working model for a headset codec.
+
+This seems also weird since I don't see where the interrupts are
+disabled on suspend, so this 're-enable' does not have a clear 'disable'
+dual operation.
+
+>  	return 0;
+>  }
+>  
+> @@ -546,6 +623,7 @@ static int cs42l42_sdw_probe(struct sdw_slave *peripheral, const struct sdw_devi
+>  	component_drv->dapm_routes = cs42l42_sdw_audio_map;
+>  	component_drv->num_dapm_routes = ARRAY_SIZE(cs42l42_sdw_audio_map);
+>  
+> +	INIT_WORK(&cs42l42->sdw_irq_work, cs42l42_sdw_irq_work);
+>  	cs42l42->dev = dev;
+>  	cs42l42->regmap = regmap;
+>  	cs42l42->sdw_peripheral = peripheral;
+> @@ -562,8 +640,18 @@ static int cs42l42_sdw_remove(struct sdw_slave *peripheral)
+>  {
+>  	struct cs42l42_private *cs42l42 = dev_get_drvdata(&peripheral->dev);
+>  
+> -	/* Resume so that cs42l42_remove() can access registers */
+> +	/* Resume so that we can access registers */
+>  	pm_runtime_get_sync(cs42l42->dev);
+> +
+> +	/* Disable Soundwire interrupts */
+> +	if (!cs42l42->irq) {
+> +		cs42l42->sdw_irq_no_unmask = true;
+> +		cancel_work_sync(&cs42l42->sdw_irq_work);
+> +		sdw_write_no_pm(peripheral, CS42L42_SDW_GEN_INT_MASK_1, 0);
+> +		sdw_read_no_pm(peripheral, CS42L42_SDW_GEN_INT_STATUS_1);
+> +		sdw_write_no_pm(peripheral, CS42L42_SDW_GEN_INT_STATUS_1, 0xFF);
+> +	}
+> +
+>  	cs42l42_common_remove(cs42l42);
+>  	pm_runtime_put(cs42l42->dev);
+>  	pm_runtime_disable(cs42l42->dev);
+> diff --git a/sound/soc/codecs/cs42l42.h b/sound/soc/codecs/cs42l42.h
+> index 038db45d95b3..b29126d218c4 100644
+> --- a/sound/soc/codecs/cs42l42.h
+> +++ b/sound/soc/codecs/cs42l42.h
+> @@ -19,6 +19,7 @@
+>  #include <linux/regmap.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/soundwire/sdw.h>
+> +#include <linux/workqueue.h>
+>  #include <sound/jack.h>
+>  #include <sound/cs42l42.h>
+>  #include <sound/soc-component.h>
+> @@ -32,6 +33,7 @@ struct  cs42l42_private {
+>  	struct completion pdn_done;
+>  	struct snd_soc_jack *jack;
+>  	struct sdw_slave *sdw_peripheral;
+> +	struct work_struct sdw_irq_work;
+>  	struct mutex irq_lock;
+>  	int irq;
+>  	int pll_config;
+> @@ -52,6 +54,7 @@ struct  cs42l42_private {
+>  	bool hp_adc_up_pending;
+>  	bool suspended;
+>  	bool init_done;
+> +	bool sdw_irq_no_unmask;
+>  };
+>  
+>  extern const struct regmap_config cs42l42_regmap;

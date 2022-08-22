@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F8B59BACF
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA5059BAC2
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233518AbiHVIB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
+        id S232807AbiHVIB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233504AbiHVIBr (ORCPT
+        with ESMTP id S233324AbiHVIBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:01:47 -0400
+        Mon, 22 Aug 2022 04:01:53 -0400
 Received: from mail.fris.de (mail.fris.de [IPv6:2a01:4f8:c2c:390b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAA62AE22;
-        Mon, 22 Aug 2022 01:01:46 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E7C7ABFB01;
-        Mon, 22 Aug 2022 10:01:42 +0200 (CEST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9604F2B19F;
+        Mon, 22 Aug 2022 01:01:52 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 05392C01B8;
+        Mon, 22 Aug 2022 10:01:49 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-        t=1661155304; h=from:subject:date:message-id:to:cc:mime-version:
+        t=1661155310; h=from:subject:date:message-id:to:cc:mime-version:
          content-transfer-encoding:in-reply-to:references;
-        bh=VLD7rK7HYJT00mnuzEusL+Azqc9fPUAgIsqUp9tsh68=;
-        b=zSydjTQcxfEakzxHtaN7dSYyaJ2iV8ZPFFd63qCCIhnWwGBFJSqIWaXkkWIwl4BwqTAGHl
-        K4u3Cw7FVzhTkVbpXwgerTNlNLDza85lur/Xbq1083ls7MFIKVgNx0Ep4v/p5w6fZ3EwNC
-        GFEMwNxjI72IzwKb7xG4zlIFiYzKXOzHG3+WerUuKFWuDr+LAxVkO37o3mw8Xx+tI6FY4P
-        I6VVZdP/vc0B52pSOC78z9tJFXPpFqnFgq2/zRY7PHMlQa3w58FTV2bFIGZtIAQfr4xJXo
-        LxyW/X3sScAUMzKmB8Z3kN6XR40K+XUpZkuMqnXuqGjCGzGRJ8xOrJm35H4Ahg==
+        bh=Xyc3HeD/Wetg/6U2L3dZq0OudoqJsGiwjd9pgCHOEfw=;
+        b=Et6pJqRCG7E1UVTxH8xhhD7/xz8qaLDjQvPnnAi3EAojwv0hUyklMEJpYiYCp5XV9+c3ym
+        mR+01tuwuCbYy97lxfkigFiz3FKJQVRFrCuyUFhi1TFAZaA67FaANE1fRjH3QprfiP3XCK
+        5Ka4BsGea0rEFXxLigrHeK5lElJU0TWzvklucE7Z6lc76nXHbXzKeH9JoiVKyGH4jQmiwZ
+        aJ1o0Cdv6pMsXAdY0LOCa+/b/uJdYS35BSX8K95hm5Q/BvXjHAf4LkMeVj10i/kd+HKytq
+        1lrjPQGGrLagI+LGj9/r83RGDn33xBpRQRtyKNkQ1zYMt1tQFonpYL4tKemNOQ==
 From:   Frieder Schrempf <frieder@fris.de>
 To:     devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -35,22 +35,14 @@ To:     devicetree@vger.kernel.org,
         Shawn Guo <shawnguo@kernel.org>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
         Heiko Thiery <heiko.thiery@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Marek Vasut <marex@denx.de>,
+        Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Reinhold Mueller <reinhold.mueller@emtrion.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH v3 3/8] arm64: dts: imx8mm-kontron: Adjust compatibles, file names and model strings
-Date:   Mon, 22 Aug 2022 10:00:56 +0200
-Message-Id: <20220822080103.24016-4-frieder@fris.de>
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: [PATCH v3 4/8] arm64: dts: imx8mm-kontron: Use the VSELECT signal to switch SD card IO voltage
+Date:   Mon, 22 Aug 2022 10:00:57 +0200
+Message-Id: <20220822080103.24016-5-frieder@fris.de>
 In-Reply-To: <20220822080103.24016-1-frieder@fris.de>
 References: <20220822080103.24016-1-frieder@fris.de>
 MIME-Version: 1.0
@@ -67,76 +59,78 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-The official naming includes "SL" (SoM-Line) or "BL" (Board-Line).
-By updating we make sure, that we can maintain this more easily in
-future and make sure that the proper devicetree can be selected for
-the hardware.
+It turns out that it is not necessary to declare the VSELECT signal as
+GPIO and let the PMIC driver set it to a fixed high level. This switches
+the voltage between 3.3V and 1.8V by setting the PMIC register for LDO5
+accordingly.
 
+Instead we can do it like other boards already do and simply mux the
+VSELECT signal of the USDHC interface to the pin. This makes sure that
+the correct voltage is selected by setting the PMIC's SD_VSEL input
+to high or low accordingly.
+
+Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
 Changes in v3:
-* also rename compatibles and file names
 * rebase on v6.0-rc1
 
 Changes in v2:
 * none
 ---
- arch/arm64/boot/dts/freescale/Makefile                        | 2 +-
- .../{imx8mm-kontron-n801x-s.dts => imx8mm-kontron-bl.dts}     | 4 ++--
- .../{imx8mm-kontron-n801x-som.dtsi => imx8mm-kontron-sl.dtsi} | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
- rename arch/arm64/boot/dts/freescale/{imx8mm-kontron-n801x-s.dts => imx8mm-kontron-bl.dts} (98%)
- rename arch/arm64/boot/dts/freescale/{imx8mm-kontron-n801x-som.dtsi => imx8mm-kontron-sl.dtsi} (98%)
+ arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts  | 3 +++
+ arch/arm64/boot/dts/freescale/imx8mm-kontron-sl.dtsi | 2 --
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 8bf7f7ecebaa..d014f7c4c888 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -55,7 +55,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-emcon-avari.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-ctouch2.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-edimm2.2.dtb
--dtb-$(CONFIG_ARCH_MXC) += imx8mm-kontron-n801x-s.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mm-kontron-bl.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-mx8menlo.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-nitrogen-r2.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-phyboard-polis-rdk.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts b/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts
-similarity index 98%
-rename from arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
-rename to arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts
-index 23be1ec538ba..4e5828fa815b 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dts
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts b/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts
+index 4e5828fa815b..7af3c476fd9a 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts
 +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-bl.dts
-@@ -8,8 +8,8 @@
- #include "imx8mm-kontron-n801x-som.dtsi"
+@@ -321,6 +321,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x1d0
+ 			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x1d0
+ 			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x1d0
+ 			MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12		0x019
++			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x1d0
+ 		>;
+ 	};
  
- / {
--	model = "Kontron i.MX8MM N801X S";
--	compatible = "kontron,imx8mm-n801x-s", "kontron,imx8mm-n801x-som", "fsl,imx8mm";
-+	model = "Kontron BL i.MX8MM (N801X S)";
-+	compatible = "kontron,imx8mm-bl", "kontron,imx8mm-sl", "fsl,imx8mm";
+@@ -333,6 +334,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x1d4
+ 			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x1d4
+ 			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x1d4
+ 			MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12		0x019
++			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x1d0
+ 		>;
+ 	};
  
- 	aliases {
- 		ethernet1 = &usbnet;
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-kontron-sl.dtsi
-similarity index 98%
-rename from arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi
-rename to arch/arm64/boot/dts/freescale/imx8mm-kontron-sl.dtsi
-index 8f90eb02550d..30299c2a98ea 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-som.dtsi
+@@ -345,6 +347,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x1d6
+ 			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x1d6
+ 			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x1d6
+ 			MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12		0x019
++			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x1d0
+ 		>;
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-sl.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-kontron-sl.dtsi
+index 30299c2a98ea..33179157f619 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-sl.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-sl.dtsi
-@@ -6,8 +6,8 @@
- #include "imx8mm.dtsi"
+@@ -86,7 +86,6 @@ pca9450: pmic@25 {
+ 		pinctrl-0 = <&pinctrl_pmic>;
+ 		interrupt-parent = <&gpio1>;
+ 		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+-		sd-vsel-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
  
- / {
--	model = "Kontron i.MX8MM N801X SoM";
--	compatible = "kontron,imx8mm-n801x-som", "fsl,imx8mm";
-+	model = "Kontron SL i.MX8MM (N801X SOM)";
-+	compatible = "kontron,imx8mm-sl", "fsl,imx8mm";
+ 		regulators {
+ 			reg_vdd_soc: BUCK1 {
+@@ -229,7 +228,6 @@ MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA			0x400001c3
+ 	pinctrl_pmic: pmicgrp {
+ 		fsl,pins = <
+ 			MX8MM_IOMUXC_GPIO1_IO00_GPIO1_IO0		0x141
+-			MX8MM_IOMUXC_GPIO1_IO04_GPIO1_IO4		0x141
+ 		>;
+ 	};
  
- 	memory@40000000 {
- 		device_type = "memory";
 -- 
 2.37.1
 

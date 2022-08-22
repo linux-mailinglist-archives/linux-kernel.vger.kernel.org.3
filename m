@@ -2,89 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75AE759C527
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAC459C526
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236484AbiHVRkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S237277AbiHVRkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237048AbiHVRjx (ORCPT
+        with ESMTP id S237016AbiHVRkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:39:53 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE46A40BD8
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:50 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id z25so16323405lfr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:39:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=oZtQ/WFsgMHD1ADUx1lXU0GWvfCZk4DciPrC4xHBmeo=;
-        b=ESNJlDwwLUrymdH68KLBiBoUbRDrU0LvEqC6sPEtHnwPtcOtngzkU78N0rz0NnYLij
-         lsPZW+Z4Nq4PIUjlI6KYg6hG1Jg642JCGKGd4w8KCTiPq0cZl7NcIdxleU9M/fl7R5Aa
-         0l53PozQ0tmUIUrN/lVXWv9O6JpyWDm1U5C12Pwe2ZtbUbvZVODgdxmfV3hxS0qNlDtQ
-         2PiGETBptGNU2UUYw44vyFYRcwSmdRtMgRhK4gV8fWMicIqX9o5swC6ZG7dY50a6qzpb
-         LhAyGA21Bze3OjYjn9NTddMLRPxDTM3Zv7YTrqhh3TqvEIAx25Sf8hJm4fN2BZCvGH0o
-         poLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=oZtQ/WFsgMHD1ADUx1lXU0GWvfCZk4DciPrC4xHBmeo=;
-        b=10eh8/5fmccHpzNIGhYgg3Iuk5bFxvkuhiUO9Et7eTpQsFXB2kjtxUsfByd72fkx4T
-         AxbtTrZ2YRDK/efTaCCIR3qb9azyi0ClkgYl6ZMhPaXEjGRU9Q/zjA0WqL6tvjAnLwNX
-         ONp17RS9M0BxAVQWnQQWliTHnxCWx0jAVfp1QA/7spMn6V2z1zVimfNG5Vma/U/RiScR
-         v9asstUDHBVl+pd6PzmFfbBsYWb5pDvVnTtQMKgbZLop+OXyB+j311CxRXFkXCj5jPIm
-         ht4oa2c+17rDIDhUihQ90Tw9U+cTA2Wi9gz8Cykw8UOxFTUIvVBsQWvmBJqDK3NZNbLf
-         H16w==
-X-Gm-Message-State: ACgBeo1PbGjsDhAYNb4XEZoQUIvFDOgKmCv0yFn2uRWs7qAEtOcWdomG
-        SQNFmH3pY2O03tf/rWbLj8VGsA==
-X-Google-Smtp-Source: AA6agR4htFOFSAWl6c7BpunUIKLnmTFNLNG3Fia/CHZbF7Xxnrp6rEzVwwgfC7JJMb7eNB1tHyPLMQ==
-X-Received: by 2002:ac2:4e6a:0:b0:492:f027:218e with SMTP id y10-20020ac24e6a000000b00492f027218emr763637lfs.676.1661189989298;
-        Mon, 22 Aug 2022 10:39:49 -0700 (PDT)
-Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id p5-20020a05651238c500b0048a83336343sm2020168lft.252.2022.08.22.10.39.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 10:39:48 -0700 (PDT)
-Message-ID: <d8db1648-edcd-3580-60d3-96ef91d6bbed@linaro.org>
-Date:   Mon, 22 Aug 2022 20:39:47 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC PATCH 1/4] dt-bindings: net: can: add STM32 bxcan DT
- bindings
-Content-Language: en-US
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Dario Binacchi <dariobin@libero.it>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Mon, 22 Aug 2022 13:40:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD6340BFE;
+        Mon, 22 Aug 2022 10:40:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 742F7B816DD;
+        Mon, 22 Aug 2022 17:40:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0915C433D6;
+        Mon, 22 Aug 2022 17:39:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661190000;
+        bh=6CmQdowko0m3VEWl0fKzK9C0KmgTv5BlYHbJQN96nP0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Js2/6HWDWg4NXMH8+tRxvjuUIGmcjy7run71WD6MSM/AxdIYKI24l4Ioagg88clJu
+         2OzQ7ZBhMhpWBnwp/SZPh9w5cseL5P2hF97CMWTZgVA2ZE1MOnngKTyk7qjWTx7Bzn
+         muUfo1KOOLzrLJuD6zJviWHZqgR18jy/i0xheu4oaLw6QWqIz0bRa+RusaLpDceMx3
+         ppgHLAjtcNjQoe8fMxYi+VPx7eFoUbXWY3PvgVnf2ioweZ6w7Mvqg/4pZsVoiBi2er
+         WYGY+r0QaqCUC9PyMSjr5JqJgrcLw9cisr2i5bCF+clJc+QQ62deyf/Z8sYERWKsZX
+         FDQVzbkUemRDw==
+Date:   Mon, 22 Aug 2022 18:39:54 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220817143529.257908-1-dario.binacchi@amarulasolutions.com>
- <20220817143529.257908-2-dario.binacchi@amarulasolutions.com>
- <b851147b-6453-c19e-7c31-a9cf8f87c1a4@linaro.org>
- <CABGWkvomGpo9zWi59YNYfRfzAZZ90D9_HaiVV3Gs_x_eQ59e5A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CABGWkvomGpo9zWi59YNYfRfzAZZ90D9_HaiVV3Gs_x_eQ59e5A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] ASoC: apple: mca: Start new platform driver
+Message-ID: <YwO/aqs7eqZx07kS@sirena.org.uk>
+References: <20220819125430.4920-1-povik+lin@cutebit.org>
+ <20220819125430.4920-4-povik+lin@cutebit.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qCefvYX0tdeieUPa"
+Content-Disposition: inline
+In-Reply-To: <20220819125430.4920-4-povik+lin@cutebit.org>
+X-Cookie: Do not write in this space.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,143 +64,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/08/2022 11:08, Dario Binacchi wrote:
-> Hi Krzysztof,
-> 
-> On Thu, Aug 18, 2022 at 10:22 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 17/08/2022 17:35, Dario Binacchi wrote:
->>> Add documentation of device tree bindings for the STM32 basic extended
->>> CAN (bxcan) controller.
->>>
->>> Signed-off-by: Dario Binacchi <dariobin@libero.it>
->>> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
->>
->> You do not need two SoBs. Keep only one, matching the From field.
-> 
-> I started implementing this driver in my spare time, so my intention
-> was to keep track of it.
 
-SoB is not related to copyrights. Keep personal copyrights (with/next to
-work ones), but SoB is coming from a person and that's only one. Choose
-one "person".
+--qCefvYX0tdeieUPa
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
->>
->>> ---
->>>
->>>  .../devicetree/bindings/net/can/st,bxcan.yaml | 139 ++++++++++++++++++
->>>  1 file changed, 139 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/net/can/st,bxcan.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/can/st,bxcan.yaml b/Documentation/devicetree/bindings/net/can/st,bxcan.yaml
->>> new file mode 100644
->>> index 000000000000..f4cfd26e4785
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/net/can/st,bxcan.yaml
->>
->> File name like compatible, so st,stm32-bxcan-core.yaml (or some other
->> name, see comment later)
-> 
->>
->>> @@ -0,0 +1,139 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/net/can/st,bxcan.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: STMicroelectronics bxCAN controller Device Tree Bindings
->>
->> s/Device Tree Bindings//
-> 
->>
->>> +
->>> +description: STMicroelectronics BxCAN controller for CAN bus
->>> +
->>> +maintainers:
->>> +  - Dario Binacchi <dario.binacchi@amarulasolutions.com>
->>> +
->>> +allOf:
->>> +  - $ref: can-controller.yaml#
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - st,stm32-bxcan-core
->>
->> compatibles are supposed to be specific. If this is some type of
->> micro-SoC, then it should have its name/number. If it is dedicated
->> device, is the final name bxcan core? Google says  the first is true, so
->> you miss specific device part.
-> 
-> I don't know if I understand correctly, I hope the change in version 2
-> is what you requested.
+On Fri, Aug 19, 2022 at 02:54:29PM +0200, Martin Povi=C5=A1er wrote:
 
-What is the name of the SoC, where this is in?
+This all looks good, one style nit and a couple of requests for
+clarification below but basically this is fine.
 
-> 
->>
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  resets:
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    description:
->>> +      Input clock for registers access
->>> +    maxItems: 1
->>> +
->>> +  '#address-cells':
->>> +    const: 1
->>> +
->>> +  '#size-cells':
->>> +    const: 0
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - resets
->>> +  - clocks
->>> +  - '#address-cells'
->>> +  - '#size-cells'
->>> +
->>> +additionalProperties: false
->>> +
->>> +patternProperties:
->>
->> This goes after "properties: in top level (before "required").
->>
->>> +  "^can@[0-9]+$":
->>> +    type: object
->>> +    description:
->>> +      A CAN block node contains two subnodes, representing each one a CAN
->>> +      instance available on the machine.
->>> +
->>> +    properties:
->>> +      compatible:
->>> +        enum:
->>> +          - st,stm32-bxcan
->>
->> Why exactly do you need compatible for the child? Is it an entierly
->> separate device?
-> 
-> I took inspiration from other drivers for ST microcontroller
-> peripherals (e. g. drivers/iio/adc/stm32-adc-core.c,
-> drivers/iio/adc/stm32-adc.c) where
-> some resources are shared between the peripheral instances. In the
-> case of CAN, master (CAN1) and slave (CAN2) share the registers for
-> configuring the filters and the clock.
-> In the core module you can find the functions about the shared
-> resources, while the childrens implement the driver.
+> +++ b/sound/soc/apple/mca.c
+> @@ -0,0 +1,1149 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Apple SoCs MCA driver
+> + *
+> + * Copyright (C) The Asahi Linux Contributors
+> + *
+> + * The MCA peripheral is made up of a number of identical units called c=
+lusters.
 
-In both cases you refer to the driver, but we talk here about bindings
-which are rather not related. So I repeat the question - is the child
-entirely separate device which can be used in other devices?
+Please make the entire comment block a C++ one so things look more
+intentional.
 
+> +#define USE_RXB_FOR_CAPTURE
 
-Best regards,
-Krzysztof
+What's this all about?
+
+> +static int mca_fe_enable_clocks(struct mca_cluster *cl)
+> +{
+> +	struct mca_data *mca =3D cl->host;
+> +	int ret;
+> +
+> +	ret =3D clk_prepare_enable(cl->clk_parent);
+> +	if (ret) {
+> +		dev_err(mca->dev,
+> +			"cluster %d: unable to enable clock parent: %d\n",
+> +			cl->no, ret);
+> +		return ret;
+> +	}
+> +
+> +	/*
+> +	 * We can't power up the device earlier than this because
+> +	 * the power state driver would error out on seeing the device
+> +	 * as clock-gated.
+> +	 */
+> +	cl->pd_link =3D device_link_add(mca->dev, cl->pd_dev,
+> +				      DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME |
+> +					      DL_FLAG_RPM_ACTIVE);
+
+I'm not clear on this dynamically adding and removing device links stuff
+- it looks like the main (only?) purpose is to take a runtime PM
+reference to the target device which is fine but it's not clear why
+device links are involved given that the links are created and destroyed
+every time the DAI is used, AFAICT always in the same fixed
+relationship.  It's not a problem, it's just unclear.
+
+--qCefvYX0tdeieUPa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMDv2kACgkQJNaLcl1U
+h9Apnwf8DfhwTXhkRk42QdwLlD8jY+ALJxnAnI9N0WL27+ro0ik9D4csIFZ0yyep
+peioVGWLjZDtHb8hU/MA6iwVIjrGfFOaRzacALHikXMaknAqzNGAcY3iYt2PrivX
+l6glTR9aQZ9wqdVYbHjSpStEu4D1Fb+QzdgtJyPTFiduuGhv13pAGscTUmpTHaiL
+Oy80EJMZ1T/TUXevPew4EALeIZiT3dBch98K5VAEhpLpAQlyGjNAaJNMcHHBVyrB
+0NRvDmrVO+pXfiXQb0Fb/NtDm3jT6VJuBvOE7tmIDXL9RTk1NAEJC0qm56IQv1hR
+lDk432wlomyUxhOKnc6xZD51i5We8A==
+=y4jf
+-----END PGP SIGNATURE-----
+
+--qCefvYX0tdeieUPa--

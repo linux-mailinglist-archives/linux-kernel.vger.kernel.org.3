@@ -2,83 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FA759BF78
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A102659BF7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234185AbiHVM0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 08:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
+        id S235031AbiHVM06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 08:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235010AbiHVM0L (ORCPT
+        with ESMTP id S235010AbiHVM04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:26:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648252AC5C;
-        Mon, 22 Aug 2022 05:26:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 22 Aug 2022 08:26:56 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA2F326E1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 05:26:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F396C60F54;
-        Mon, 22 Aug 2022 12:26:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B52BC433C1;
-        Mon, 22 Aug 2022 12:26:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661171170;
-        bh=Ri26gF7yUd8i7s+mQIJeKN0Kh94Q0DOYvnDj0MwMB8M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oAOxOBHt69sGX5JQD1T0NjIlmtUrNXlGSCRAojbKOaA7EpFG3usQHgel8QMAC5DCf
-         mzNz3/0K/DuVzM4WamZlM8dcgFmBJry+f7TkC6l9KmaVo8GzecocxUm3Z4tuKk9pCX
-         vmNrS/Lg0P7wL3xjGdc75BobaWUPZcKCpqloCKiUQv/roAFh3K2d7+2/OEZc35gX+h
-         I76tvEbj3O+PqrGbe+uzK2+Drxj0PmUx/PuceR5S87528zSjenUprWKtGoVRmLERaU
-         JGi1MtLPe8TFlQnud4BS2/uG6H+4rIclW+epgTFJ9vXOiHKDGOdyR7/DFQTiw6ERDU
-         UkWZR71YBoTaQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oQ6VL-0001bH-5z; Mon, 22 Aug 2022 14:26:07 +0200
-Date:   Mon, 22 Aug 2022 14:26:07 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     =?utf-8?B?5peg5ZCN?= <yuanjilin@cdjrlc.com>
-Cc:     gregkh <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb/serial: fix repeated words in comments
-Message-ID: <YwN138qeP74YZ9Em@hovoldconsulting.com>
-References: <20220821153441.6165-1-yuanjilin@cdjrlc.com>
- <tencent_1AC094251C7AD08A5B832814@qq.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <tencent_1AC094251C7AD08A5B832814@qq.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 46F6734661;
+        Mon, 22 Aug 2022 12:26:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661171213; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iSqji7+RplKUj15nrzIvCRwogZkYtkkIhXpOVJMBSUI=;
+        b=O20d0zLleOtQmqw0mhd87raxNbhVu2Y7EKi++40ySNhTCxlv+QNbInfemcChU5kBeMXR6h
+        8xQaCAzfLA4GPZXcWVRovDQKR/V3TAiExFaN30PunKZtIfnDKlhzy+c2nsBmQksesDDI1u
+        /E3OMG5MKGQl6o2z6Gin8xqusnXvYdc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661171213;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iSqji7+RplKUj15nrzIvCRwogZkYtkkIhXpOVJMBSUI=;
+        b=VijFo/aX4JfIvlMeS6tkzwWcYyaY3aftEL2VeOedYXMGEaqTejOh5X1TC0I7lBCAOJb5hV
+        QTzg0FI0UGNG9ADw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0408D1332D;
+        Mon, 22 Aug 2022 12:26:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kZ4RAA12A2NESQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 22 Aug 2022 12:26:52 +0000
+Date:   Mon, 22 Aug 2022 14:26:52 +0200
+Message-ID: <87czcscvlf.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     syzbot <syzbot+f24934fe125a19d77eae@syzkaller.appspotmail.com>
+Cc:     airlied@linux.ie, airlied@redhat.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        sean@poorly.run, syzkaller-bugs@googlegroups.com, tiwai@suse.de,
+        tzimmermann@suse.de
+Subject: Re: [syzbot] KASAN: use-after-free Read in udl_get_urb_timeout
+In-Reply-To: <00000000000043579605e6d0ce41@google.com>
+References: <00000000000043579605e6d0ce41@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 07:47:39PM +0800, 无名 wrote:
-> Replace 'mode' with 'or'
+On Mon, 22 Aug 2022 11:09:31 +0200,
+syzbot wrote:
+> 
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    5b6a4bf680d6 Add linux-next specific files for 20220818
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=12341a3d080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
+> dashboard link: https://syzkaller.appspot.com/bug?extid=f24934fe125a19d77eae
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12731867080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=165b64f3080000
+> 
+> The issue was bisected to:
+> 
+> commit e25d5954264d1871ab2792c7ca2298b811462500
+> Author: Takashi Iwai <tiwai@suse.de>
+> Date:   Thu Aug 4 07:58:25 2022 +0000
+> 
+>     drm/udl: Kill pending URBs at suspend and disconnect
 
-This is not a proper commit message as it only says what you do, not
-why. Try to spell it out.
+FYI, the fix including the revert of this commit was already
+submitted, waiting for review & merge:
+  https://lore.kernel.org/r/20220816153655.27526-1-tiwai@suse.de
 
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com&gt;
-> ---
 
-Missing changelog here.
+thanks,
 
-> &nbsp;drivers/usb/serial/mct_u232.h | 4 ++--
-> &nbsp;1 file changed, 2 insertions(+), 2 deletions(-)
-
-This patch is corrupt and looks like it was sent as HTML too.
-
-Also look at the git log for this file and use the common Subject
-prefix.
-
-It's also customary to CC people that have helped review your patch.
-
-Johan
+Takashi

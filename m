@@ -2,57 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE0259C4A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE7A59C4B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237153AbiHVRHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S237231AbiHVRJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236737AbiHVRHJ (ORCPT
+        with ESMTP id S237181AbiHVRIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:07:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7160E42AC5
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:07:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661188022;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=toOdKmcdREooPLuAWBcpE8QdI77Shqa4ydpo0K4KBn8=;
-        b=CF49qM6Ah3rirenEzUzYebFctbQ8sWN4sfEuTn9JVOMTurXRxfue80ogE0irSqrl85nYVf
-        r2M2yC2Z85Vc5Z/11rGgX+iDIcINwqUN5qxXn1BNLwy2GFlAc8X8muE5PjwvZS6BT0fhoq
-        rPCd+r2onswvgkRjB0lGnkwJSjasPhk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-443-_gVzf2rvMLWiAAGpvaKrYw-1; Mon, 22 Aug 2022 13:07:01 -0400
-X-MC-Unique: _gVzf2rvMLWiAAGpvaKrYw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D070D811E76;
-        Mon, 22 Aug 2022 17:07:00 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AEDE4945D0;
-        Mon, 22 Aug 2022 17:07:00 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     mlevitsk@redhat.com, seanjc@google.com
-Subject: [PATCH v3 7/7] KVM: remove KVM_REQ_UNHALT
-Date:   Mon, 22 Aug 2022 13:06:59 -0400
-Message-Id: <20220822170659.2527086-8-pbonzini@redhat.com>
-In-Reply-To: <20220822170659.2527086-1-pbonzini@redhat.com>
-References: <20220822170659.2527086-1-pbonzini@redhat.com>
+        Mon, 22 Aug 2022 13:08:54 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4801AC
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:08:25 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id s11so14750824edd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=VcHeHOgMzpHFjV9q0iYLqwua0z0eWivxKKVLx5wZcKM=;
+        b=WRztOXCrfpLU9YhqRcSBJs6ojbRwUnW8Jgwi+Bh+2RpMIphjvZ3+Ks7dz5wPOPyhPG
+         FzwZ51FO6Uuwg50qmlVCdPfBet6nlujjKOG8f+4sY/VamdMJ9dpU5ZvhjwxhUisKAPu8
+         LNlv3wCuVSY8peVYoT00k0u40xLQGE31PHgpI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=VcHeHOgMzpHFjV9q0iYLqwua0z0eWivxKKVLx5wZcKM=;
+        b=y/e/eGZx7mkRLcWSZ6Seipa/4fWjEzMbnj2JSkYh8lAUUJgsNrUEkCVbnJGWSj/ymW
+         aDekEajTwYpdoqGStkj5L0fSfDoR0hQwieRZ175wUDyUcmN2BZtdPJSyPUudo2FQJyBl
+         rRWveswevQiLBIRdnmZEXCG4XA7pW1R79dA8R8FrrGIVGwebvWILj2S3AWlKpJbKg+ud
+         /8TfS8moUTrhqVRPwQUxHe8Z/5bybVZTVO+l1tSg3QCagM524cELfIeHSzWJAaQrSzeR
+         fbLrR7MyHHBhc7Kia+naZ/JZMBNPDC6PVwn2DwhO5P6PnJVxLwMZv5Kipc5fLpCG0Mb2
+         7iPQ==
+X-Gm-Message-State: ACgBeo29QqV3BhfgRKYejjfawXzlpdm1Hj6xHmA1AJFx93kvsTGGRlbW
+        thU//X325nPZotPX6SO/DD2XY/7NpayYc+2r
+X-Google-Smtp-Source: AA6agR5PMXUZb/QgpwT/VKKukMA6eVVNKx05RAeFkrzHPCl7cc9oOEtZubNSn5nYrQrRSmGpxsl+5w==
+X-Received: by 2002:a05:6402:369a:b0:43d:75c5:f16c with SMTP id ej26-20020a056402369a00b0043d75c5f16cmr122163edb.57.1661188103613;
+        Mon, 22 Aug 2022 10:08:23 -0700 (PDT)
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com. [209.85.128.51])
+        by smtp.gmail.com with ESMTPSA id 1-20020a170906318100b007030c97ae62sm6377994ejy.191.2022.08.22.10.08.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 10:08:23 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id h204-20020a1c21d5000000b003a5b467c3abso8141555wmh.5
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:08:22 -0700 (PDT)
+X-Received: by 2002:a05:600c:5114:b0:3a6:1ab9:5b3d with SMTP id
+ o20-20020a05600c511400b003a61ab95b3dmr12466472wms.93.1661188102603; Mon, 22
+ Aug 2022 10:08:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220820095933.20234-1-jeffy.chen@rock-chips.com> <20220820095933.20234-2-jeffy.chen@rock-chips.com>
+In-Reply-To: <20220820095933.20234-2-jeffy.chen@rock-chips.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 22 Aug 2022 10:08:10 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X0qJ2OC1SrAmhSQ5YeKEwvsSCbfVGPh457YYEuPCbRtg@mail.gmail.com>
+Message-ID: <CAD=FV=X0qJ2OC1SrAmhSQ5YeKEwvsSCbfVGPh457YYEuPCbRtg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] gpio/rockchip: Toggle edge trigger mode after acking
+To:     Jeffy Chen <jeffy.chen@rock-chips.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Brian Norris <briannorris@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,245 +79,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM_REQ_UNHALT is now unnecessary because it is replaced by the return
-value of kvm_vcpu_block/kvm_vcpu_halt.  Remove it.
+Hi,
 
-No functional change intended.
+On Sat, Aug 20, 2022 at 3:07 AM Jeffy Chen <jeffy.chen@rock-chips.com> wrote:
+>
+> Otherwise the trigger mode might be out-of-sync when a level change
+> occurred in between.
+>
+> Fixes: 53b1bfc76df2 ("pinctrl: rockchip: Avoid losing interrupts when supporting both edges")
+> Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+> ---
+>
+>  drivers/gpio/gpio-rockchip.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-rockchip.c b/drivers/gpio/gpio-rockchip.c
+> index a98351cd6821..736b4d90f1ca 100644
+> --- a/drivers/gpio/gpio-rockchip.c
+> +++ b/drivers/gpio/gpio-rockchip.c
+> @@ -338,7 +338,7 @@ static void rockchip_irq_demux(struct irq_desc *desc)
+>                 irq = __ffs(pend);
+>                 pend &= ~BIT(irq);
+>
+> -               dev_dbg(bank->dev, "handling irq %d\n", irq);
+> +               generic_handle_domain_irq(bank->domain, irq);
+>
+>                 /*
+>                  * Triggering IRQ on both rising and falling edge
+> @@ -370,8 +370,6 @@ static void rockchip_irq_demux(struct irq_desc *desc)
+>                                                      bank->gpio_regs->ext_port);
+>                         } while ((data & BIT(irq)) != (data_old & BIT(irq)));
+>                 }
+> -
+> -               generic_handle_domain_irq(bank->domain, irq);
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- Documentation/virt/kvm/vcpu-requests.rst | 28 +-----------------------
- arch/arm64/kvm/arm.c                     |  1 -
- arch/mips/kvm/emulate.c                  |  1 -
- arch/powerpc/kvm/book3s_pr.c             |  1 -
- arch/powerpc/kvm/book3s_pr_papr.c        |  1 -
- arch/powerpc/kvm/booke.c                 |  1 -
- arch/powerpc/kvm/powerpc.c               |  1 -
- arch/riscv/kvm/vcpu_insn.c               |  1 -
- arch/s390/kvm/kvm-s390.c                 |  2 --
- arch/x86/kvm/x86.c                       |  3 ---
- arch/x86/kvm/xen.c                       |  1 -
- include/linux/kvm_host.h                 |  3 +--
- virt/kvm/kvm_main.c                      |  4 +---
- 13 files changed, 3 insertions(+), 45 deletions(-)
+I'm happy to let others say for sure, but from my point of view I'm
+not convinced. It feels like with your new code you could lose edges.
 
-diff --git a/Documentation/virt/kvm/vcpu-requests.rst b/Documentation/virt/kvm/vcpu-requests.rst
-index 31f62b64e07b..87f04c1fa53d 100644
---- a/Documentation/virt/kvm/vcpu-requests.rst
-+++ b/Documentation/virt/kvm/vcpu-requests.rst
-@@ -97,7 +97,7 @@ VCPU requests are simply bit indices of the ``vcpu->requests`` bitmap.
- This means general bitops, like those documented in [atomic-ops]_ could
- also be used, e.g. ::
- 
--  clear_bit(KVM_REQ_UNHALT & KVM_REQUEST_MASK, &vcpu->requests);
-+  clear_bit(KVM_REQ_UNBLOCK & KVM_REQUEST_MASK, &vcpu->requests);
- 
- However, VCPU request users should refrain from doing so, as it would
- break the abstraction.  The first 8 bits are reserved for architecture
-@@ -126,17 +126,6 @@ KVM_REQ_UNBLOCK
-   or in order to update the interrupt routing and ensure that assigned
-   devices will wake up the vCPU.
- 
--KVM_REQ_UNHALT
--
--  This request may be made from the KVM common function kvm_vcpu_block(),
--  which is used to emulate an instruction that causes a CPU to halt until
--  one of an architectural specific set of events and/or interrupts is
--  received (determined by checking kvm_arch_vcpu_runnable()).  When that
--  event or interrupt arrives kvm_vcpu_block() makes the request.  This is
--  in contrast to when kvm_vcpu_block() returns due to any other reason,
--  such as a pending signal, which does not indicate the VCPU's halt
--  emulation should stop, and therefore does not make the request.
--
- KVM_REQ_OUTSIDE_GUEST_MODE
- 
-   This "request" ensures the target vCPU has exited guest mode prior to the
-@@ -297,21 +286,6 @@ architecture dependent.  kvm_vcpu_block() calls kvm_arch_vcpu_runnable()
- to check if it should awaken.  One reason to do so is to provide
- architectures a function where requests may be checked if necessary.
- 
--Clearing Requests
-------------------
--
--Generally it only makes sense for the receiving VCPU thread to clear a
--request.  However, in some circumstances, such as when the requesting
--thread and the receiving VCPU thread are executed serially, such as when
--they are the same thread, or when they are using some form of concurrency
--control to temporarily execute synchronously, then it's possible to know
--that the request may be cleared immediately, rather than waiting for the
--receiving VCPU thread to handle the request in VCPU RUN.  The only current
--examples of this are kvm_vcpu_block() calls made by VCPUs to block
--themselves.  A possible side-effect of that call is to make the
--KVM_REQ_UNHALT request, which may then be cleared immediately when the
--VCPU returns from the call.
--
- References
- ==========
- 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 2ff0ef62abad..4f949b64fdc9 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -666,7 +666,6 @@ void kvm_vcpu_wfi(struct kvm_vcpu *vcpu)
- 
- 	kvm_vcpu_halt(vcpu);
- 	vcpu_clear_flag(vcpu, IN_WFIT);
--	kvm_clear_request(KVM_REQ_UNHALT, vcpu);
- 
- 	preempt_disable();
- 	vgic_v4_load(vcpu);
-diff --git a/arch/mips/kvm/emulate.c b/arch/mips/kvm/emulate.c
-index 1d7c56defe93..edaec93a1a1f 100644
---- a/arch/mips/kvm/emulate.c
-+++ b/arch/mips/kvm/emulate.c
-@@ -958,7 +958,6 @@ enum emulation_result kvm_mips_emul_wait(struct kvm_vcpu *vcpu)
- 		 * We are runnable, then definitely go off to user space to
- 		 * check if any I/O interrupts are pending.
- 		 */
--		kvm_clear_request(KVM_REQ_UNHALT, vcpu);
- 		if (kvm_arch_vcpu_runnable(vcpu))
- 			vcpu->run->exit_reason = KVM_EXIT_IRQ_WINDOW_OPEN;
- 	}
-diff --git a/arch/powerpc/kvm/book3s_pr.c b/arch/powerpc/kvm/book3s_pr.c
-index d6abed6e51e6..9fc4dd8f66eb 100644
---- a/arch/powerpc/kvm/book3s_pr.c
-+++ b/arch/powerpc/kvm/book3s_pr.c
-@@ -499,7 +499,6 @@ static void kvmppc_set_msr_pr(struct kvm_vcpu *vcpu, u64 msr)
- 	if (msr & MSR_POW) {
- 		if (!vcpu->arch.pending_exceptions) {
- 			kvm_vcpu_halt(vcpu);
--			kvm_clear_request(KVM_REQ_UNHALT, vcpu);
- 			vcpu->stat.generic.halt_wakeup++;
- 
- 			/* Unset POW bit after we woke up */
-diff --git a/arch/powerpc/kvm/book3s_pr_papr.c b/arch/powerpc/kvm/book3s_pr_papr.c
-index a1f2978b2a86..b2c89e850d7a 100644
---- a/arch/powerpc/kvm/book3s_pr_papr.c
-+++ b/arch/powerpc/kvm/book3s_pr_papr.c
-@@ -393,7 +393,6 @@ int kvmppc_h_pr(struct kvm_vcpu *vcpu, unsigned long cmd)
- 	case H_CEDE:
- 		kvmppc_set_msr_fast(vcpu, kvmppc_get_msr(vcpu) | MSR_EE);
- 		kvm_vcpu_halt(vcpu);
--		kvm_clear_request(KVM_REQ_UNHALT, vcpu);
- 		vcpu->stat.generic.halt_wakeup++;
- 		return EMULATE_DONE;
- 	case H_LOGICAL_CI_LOAD:
-diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
-index 06c5830a93f9..7b4920e9fd26 100644
---- a/arch/powerpc/kvm/booke.c
-+++ b/arch/powerpc/kvm/booke.c
-@@ -719,7 +719,6 @@ int kvmppc_core_prepare_to_enter(struct kvm_vcpu *vcpu)
- 	if (vcpu->arch.shared->msr & MSR_WE) {
- 		local_irq_enable();
- 		kvm_vcpu_halt(vcpu);
--		kvm_clear_request(KVM_REQ_UNHALT, vcpu);
- 		hard_irq_disable();
- 
- 		kvmppc_set_exit_type(vcpu, EMULATED_MTMSRWE_EXITS);
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index fb1490761c87..ec9c1e3c2ff4 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -239,7 +239,6 @@ int kvmppc_kvm_pv(struct kvm_vcpu *vcpu)
- 	case EV_HCALL_TOKEN(EV_IDLE):
- 		r = EV_SUCCESS;
- 		kvm_vcpu_halt(vcpu);
--		kvm_clear_request(KVM_REQ_UNHALT, vcpu);
- 		break;
- 	default:
- 		r = EV_UNIMPLEMENTED;
-diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
-index 7eb90a47b571..0bb52761a3f7 100644
---- a/arch/riscv/kvm/vcpu_insn.c
-+++ b/arch/riscv/kvm/vcpu_insn.c
-@@ -191,7 +191,6 @@ void kvm_riscv_vcpu_wfi(struct kvm_vcpu *vcpu)
- 		kvm_vcpu_srcu_read_unlock(vcpu);
- 		kvm_vcpu_halt(vcpu);
- 		kvm_vcpu_srcu_read_lock(vcpu);
--		kvm_clear_request(KVM_REQ_UNHALT, vcpu);
- 	}
- }
- 
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index edfd4bbd0cba..aa39ea4582bd 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -4343,8 +4343,6 @@ static int kvm_s390_handle_requests(struct kvm_vcpu *vcpu)
- 		goto retry;
- 	}
- 
--	/* nothing to do, just clear the request */
--	kvm_clear_request(KVM_REQ_UNHALT, vcpu);
- 	/* we left the vsie handler, nothing to do, just clear the request */
- 	kvm_clear_request(KVM_REQ_VSIE_RESTART, vcpu);
- 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 66ae2f2cb618..762cdd08018a 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10633,8 +10633,6 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
- 		if (hv_timer)
- 			kvm_lapic_switch_to_hv_timer(vcpu);
- 
--		kvm_clear_request(KVM_REQ_UNHALT, vcpu);
--
- 		/*
- 		 * If the vCPU is not runnable, a signal or another host event
- 		 * of some kind is pending; service it without changing the
-@@ -10852,7 +10850,6 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
- 			r = 0;
- 			goto out;
- 		}
--		kvm_clear_request(KVM_REQ_UNHALT, vcpu);
- 		r = -EAGAIN;
- 		if (signal_pending(current)) {
- 			r = -EINTR;
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index 280cb5dc7341..93c628d3e3a9 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -1065,7 +1065,6 @@ static bool kvm_xen_schedop_poll(struct kvm_vcpu *vcpu, bool longmode,
- 			del_timer(&vcpu->arch.xen.poll_timer);
- 
- 		vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
--		kvm_clear_request(KVM_REQ_UNHALT, vcpu);
- 	}
- 
- 	vcpu->arch.xen.poll_evtchn = 0;
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index f4519d3689e1..4d35d2e3e440 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -151,12 +151,11 @@ static inline bool is_error_page(struct page *page)
- #define KVM_REQUEST_NO_ACTION      BIT(10)
- /*
-  * Architecture-independent vcpu->requests bit members
-- * Bits 4-7 are reserved for more arch-independent bits.
-+ * Bits 3-7 are reserved for more arch-independent bits.
-  */
- #define KVM_REQ_TLB_FLUSH         (0 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
- #define KVM_REQ_VM_DEAD           (1 | KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
- #define KVM_REQ_UNBLOCK           2
--#define KVM_REQ_UNHALT            3
- #define KVM_REQUEST_ARCH_BASE     8
- 
- /*
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 584a5bab3af3..dc326e4961d9 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -3409,10 +3409,8 @@ static int kvm_vcpu_check_block(struct kvm_vcpu *vcpu)
- 	int ret = -EINTR;
- 	int idx = srcu_read_lock(&vcpu->kvm->srcu);
- 
--	if (kvm_arch_vcpu_runnable(vcpu)) {
--		kvm_make_request(KVM_REQ_UNHALT, vcpu);
-+	if (kvm_arch_vcpu_runnable(vcpu))
- 		goto out;
--	}
- 	if (kvm_cpu_has_pending_timer(vcpu))
- 		goto out;
- 	if (signal_pending(current))
--- 
-2.31.1
+The abstraction I always assume for edge triggered interrupts is that
+multiple edges are coalesced into one IRQ but that if an edge comes in
+after the first line of the IRQ handler starts executing then the IRQ
+handler will run again. In other words:
 
+- edge A
+- edge B
+- IRQ handler starts running (once for A/B)
+- IRQ handler finishes running
+- <idle>
+- edge C
+- IRQ handler starts running (for C)
+- edge D
+- edge E
+- IRQ handler finishes running
+- IRQ handler starts running (for D/E)
+- IRQ handler finishes running
+- <idle>
+
+For your new code I don't think that will necessarily be the case. I
+think this can happen with your new code:
+
+- rising edge
+- IRQ handler starts running for rising edge
+- IRQ handler finishes running for rising edge
+- falling edge (not latched since we're looking for rising edges)
+- notice that level is low
+- keep it configured for rising edge
+
+...in other words an edge happened _after_ the IRQ handler ran but we
+didn't call the IRQ handler again. I don't think this is right.
+
+
+What problem are you trying to solve?
+
+-Doug

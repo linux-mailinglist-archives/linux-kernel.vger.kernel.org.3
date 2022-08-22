@@ -2,51 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFB559B969
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 08:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A23059B96C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 08:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbiHVG1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 02:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
+        id S232992AbiHVG2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 02:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233090AbiHVG0q (ORCPT
+        with ESMTP id S232615AbiHVG2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 02:26:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A3D27CE0;
-        Sun, 21 Aug 2022 23:26:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7FB560F97;
-        Mon, 22 Aug 2022 06:26:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB095C433D6;
-        Mon, 22 Aug 2022 06:26:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661149597;
-        bh=IlPx+jz4ID9t9OdRB8Sb3eBpSneT7unIyNSPi+15Vyw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PvAiCHZTd17wA9ZgT+uYIkzA5PC5pyMgMjZ3tjHdHq+A5RcBegLCdHJHZc1/gHIeY
-         KpZbdjAUP0Ze5AYLs4gBzSoHUAEcgWwg8U13sC0ZLu66xh9A1WWER1w6znSPWIndKy
-         CQ4JhMSucNK2WUGpPipvXiOweRwvrwK1nCtfBnKw=
-Date:   Mon, 22 Aug 2022 08:26:34 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guoqing Jiang <guoqing.jiang@linux.dev>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Song Liu <song@kernel.org>, Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH 5.10 055/545] md-raid: destroy the bitmap after
- destroying the thread
-Message-ID: <YwMhmoVlq9Dc8uAk@kroah.com>
-References: <20220819153829.135562864@linuxfoundation.org>
- <20220819153831.691474713@linuxfoundation.org>
- <0075cc2c-c48d-c7b7-5f08-f1c4322ef2bc@linux.dev>
+        Mon, 22 Aug 2022 02:28:32 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FA8AE6A
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 23:28:30 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id u12so1484764pgb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 23:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=PcDenPoUpnF+drtTh3h8L6vpahAeoGzcCYL+iwlFunI=;
+        b=C7lYATOjrPaBu6YBVJ8qJyEl3eD27KqIp3CS4jpqRhlP3trORsKHkITrPdOSMqK0JW
+         Mz6bHexUc6wuoadedorDQuq2HN5+8NvRhC7q2/6Y82gtDxgs/IwbXd+zA7L5vTZqqX3E
+         TXGR5NBcs2pLJPvsyRS8CjT/Axv2HQow8pd2M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=PcDenPoUpnF+drtTh3h8L6vpahAeoGzcCYL+iwlFunI=;
+        b=z36JH6uBwmRR0wVeY4qyLletLyXWEgsYYsOnptVVNeafo8rjsQzOEKR0yU6vuM41xF
+         do7X9AOvg7X/9+UGKUcEhaFG6xRiY9Z4oC94luKZ0ib9PJ1VW4HeqzwZ7nMfIrQjkq4b
+         LstWrtVtNY3dUrcgUh8g7RVG4QLYHdd2TFkSehobkE/NtKTdyO/UtJbBRXa1YBv/p2TX
+         l+zt58cubYAtrB+E7qHrkP3+zi1Qzuv1LSVhsRmCfeTVZFH5ywB2voXvpdfwR/W0+Hui
+         XtzhYHj5yZlYpHvFcqt8ATwV2JEG8QR5EK89p17lmYZx+muKSs/tyyG1qa4oQrk/iIbe
+         MJ1w==
+X-Gm-Message-State: ACgBeo3X6ClX2TSVtYeI9CDQ/AT21zsuZ0+OU6U7q5T7Qlt1bsf+I4Vc
+        r/C7UfevMvuxEUCFsEl88ifimg==
+X-Google-Smtp-Source: AA6agR4b4i59AzYNKMWT0S4xmMpUBpYXXZy6M8msHGTA+UN2LML9aDcvIS7VN6qWvr5KBRoEOoo2pw==
+X-Received: by 2002:a05:6a00:ac4:b0:535:c08:2da7 with SMTP id c4-20020a056a000ac400b005350c082da7mr19492734pfl.69.1661149710070;
+        Sun, 21 Aug 2022 23:28:30 -0700 (PDT)
+Received: from judyhsiao0523.c.googlers.com.com (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
+        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b0016d338160d6sm7552251plh.155.2022.08.21.23.28.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Aug 2022 23:28:29 -0700 (PDT)
+From:   Judy Hsiao <judyhsiao@chromium.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
+        judyhsiao@google.com, swboyd@chromium.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Judy Hsiao <judyhsiao@chromium.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v3] arm64: dts: qcom: sc7280: Use "PP1800_L2C" as the DMIC power source.
+Date:   Mon, 22 Aug 2022 06:28:20 +0000
+Message-Id: <20220822062820.1684139-1-judyhsiao@chromium.org>
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0075cc2c-c48d-c7b7-5f08-f1c4322ef2bc@linux.dev>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,144 +71,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 01:33:47PM +0800, Guoqing Jiang wrote:
-> 
-> 
-> On 8/19/22 11:37 PM, Greg Kroah-Hartman wrote:
-> > From: Mikulas Patocka <mpatocka@redhat.com>
-> > 
-> > commit e151db8ecfb019b7da31d076130a794574c89f6f upstream.
-> > 
-> > When we ran the lvm test "shell/integrity-blocksize-3.sh" on a kernel with
-> > kasan, we got failure in write_page.
-> > 
-> > The reason for the failure is that md_bitmap_destroy is called before
-> > destroying the thread and the thread may be waiting in the function
-> > write_page for the bio to complete. When the thread finishes waiting, it
-> > executes "if (test_bit(BITMAP_WRITE_ERROR, &bitmap->flags))", which
-> > triggers the kasan warning.
-> > 
-> > Note that the commit 48df498daf62 that caused this bug claims that it is
-> > neede for md-cluster, you should check md-cluster and possibly find
-> > another bugfix for it.
-> > 
-> > BUG: KASAN: use-after-free in write_page+0x18d/0x680 [md_mod]
-> > Read of size 8 at addr ffff889162030c78 by task mdX_raid1/5539
-> > 
-> > CPU: 10 PID: 5539 Comm: mdX_raid1 Not tainted 5.19.0-rc2 #1
-> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
-> > Call Trace:
-> >   <TASK>
-> >   dump_stack_lvl+0x34/0x44
-> >   print_report.cold+0x45/0x57a
-> >   ? __lock_text_start+0x18/0x18
-> >   ? write_page+0x18d/0x680 [md_mod]
-> >   kasan_report+0xa8/0xe0
-> >   ? write_page+0x18d/0x680 [md_mod]
-> >   kasan_check_range+0x13f/0x180
-> >   write_page+0x18d/0x680 [md_mod]
-> >   ? super_sync+0x4d5/0x560 [dm_raid]
-> >   ? md_bitmap_file_kick+0xa0/0xa0 [md_mod]
-> >   ? rs_set_dev_and_array_sectors+0x2e0/0x2e0 [dm_raid]
-> >   ? mutex_trylock+0x120/0x120
-> >   ? preempt_count_add+0x6b/0xc0
-> >   ? preempt_count_sub+0xf/0xc0
-> >   md_update_sb+0x707/0xe40 [md_mod]
-> >   md_reap_sync_thread+0x1b2/0x4a0 [md_mod]
-> >   md_check_recovery+0x533/0x960 [md_mod]
-> >   raid1d+0xc8/0x2a20 [raid1]
-> >   ? var_wake_function+0xe0/0xe0
-> >   ? psi_group_change+0x411/0x500
-> >   ? preempt_count_sub+0xf/0xc0
-> >   ? _raw_spin_lock_irqsave+0x78/0xc0
-> >   ? __lock_text_start+0x18/0x18
-> >   ? raid1_end_read_request+0x2a0/0x2a0 [raid1]
-> >   ? preempt_count_sub+0xf/0xc0
-> >   ? _raw_spin_unlock_irqrestore+0x19/0x40
-> >   ? del_timer_sync+0xa9/0x100
-> >   ? try_to_del_timer_sync+0xc0/0xc0
-> >   ? _raw_spin_lock_irqsave+0x78/0xc0
-> >   ? __lock_text_start+0x18/0x18
-> >   ? __list_del_entry_valid+0x68/0xa0
-> >   ? finish_wait+0xa3/0x100
-> >   md_thread+0x161/0x260 [md_mod]
-> >   ? unregister_md_personality+0xa0/0xa0 [md_mod]
-> >   ? _raw_spin_lock_irqsave+0x78/0xc0
-> >   ? prepare_to_wait_event+0x2c0/0x2c0
-> >   ? unregister_md_personality+0xa0/0xa0 [md_mod]
-> >   kthread+0x148/0x180
-> >   ? kthread_complete_and_exit+0x20/0x20
-> >   ret_from_fork+0x1f/0x30
-> >   </TASK>
-> > 
-> > Allocated by task 5522:
-> >   kasan_save_stack+0x1e/0x40
-> >   __kasan_kmalloc+0x80/0xa0
-> >   md_bitmap_create+0xa8/0xe80 [md_mod]
-> >   md_run+0x777/0x1300 [md_mod]
-> >   raid_ctr+0x249c/0x4a30 [dm_raid]
-> >   dm_table_add_target+0x2b0/0x620 [dm_mod]
-> >   table_load+0x1c8/0x400 [dm_mod]
-> >   ctl_ioctl+0x29e/0x560 [dm_mod]
-> >   dm_compat_ctl_ioctl+0x7/0x20 [dm_mod]
-> >   __do_compat_sys_ioctl+0xfa/0x160
-> >   do_syscall_64+0x90/0xc0
-> >   entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> > 
-> > Freed by task 5680:
-> >   kasan_save_stack+0x1e/0x40
-> >   kasan_set_track+0x21/0x40
-> >   kasan_set_free_info+0x20/0x40
-> >   __kasan_slab_free+0xf7/0x140
-> >   kfree+0x80/0x240
-> >   md_bitmap_free+0x1c3/0x280 [md_mod]
-> >   __md_stop+0x21/0x120 [md_mod]
-> >   md_stop+0x9/0x40 [md_mod]
-> >   raid_dtr+0x1b/0x40 [dm_raid]
-> >   dm_table_destroy+0x98/0x1e0 [dm_mod]
-> >   __dm_destroy+0x199/0x360 [dm_mod]
-> >   dev_remove+0x10c/0x160 [dm_mod]
-> >   ctl_ioctl+0x29e/0x560 [dm_mod]
-> >   dm_compat_ctl_ioctl+0x7/0x20 [dm_mod]
-> >   __do_compat_sys_ioctl+0xfa/0x160
-> >   do_syscall_64+0x90/0xc0
-> >   entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> > 
-> > Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-> > Cc: stable@vger.kernel.org
-> > Fixes: 48df498daf62 ("md: move bitmap_destroy to the beginning of __md_stop")
-> > Signed-off-by: Song Liu <song@kernel.org>
-> > Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >   drivers/md/md.c |    2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > --- a/drivers/md/md.c
-> > +++ b/drivers/md/md.c
-> > @@ -6278,11 +6278,11 @@ static void mddev_detach(struct mddev *m
-> >   static void __md_stop(struct mddev *mddev)
-> >   {
-> >   	struct md_personality *pers = mddev->pers;
-> > -	md_bitmap_destroy(mddev);
-> >   	mddev_detach(mddev);
-> >   	/* Ensure ->event_work is done */
-> >   	if (mddev->event_work.func)
-> >   		flush_workqueue(md_misc_wq);
-> > +	md_bitmap_destroy(mddev);
-> >   	spin_lock(&mddev->lock);
-> >   	mddev->pers = NULL;
-> >   	spin_unlock(&mddev->lock);
-> 
-> Pls consider drop this one from stable per the link given it cause issue for
-> md-cluster.
-> 
-> https://lore.kernel.org/linux-raid/a6657e08-b6a7-358b-2d2a-0ac37d49d23a@linux.dev/T/#m95ac225cab7409f66c295772483d091084a6d470
+Use "PP1800_L2C" as the DMIC power source to match the hardware
+schematic by:
+   1. Set MIC bias voltage regulator (vdd-micb-supply) to PP1800_L2C.
+   2. In audio-routing, set VA DMIC01~VA DMIC03 to use the vdd-micb-supply
+      setting.
 
-I will just take the fixup patch when it hits Linus's tree as this
-commit is already in the following releases:
-	5.10.137 5.15.61 5.18.18 5.19.2
+It fixes the DMIC no sound issue of villager-r1.
 
-thanks,
+Co-developed-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+---
+Changes since V2:
+    -- Update the commit message.
+Changes since V1:
+    -- Update the commit message.
 
-greg k-h
+This patch depends on:
+arm64: dts: qcom: sc7280: Add herobrine-villager-r1. [1]
+
+[1] https://patchwork.kernel.org/patch/12926099/
+
+.../dts/qcom/sc7280-herobrine-villager-r1.dts | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
+index c03b3ae4de50..983defa7c76d 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
+@@ -12,3 +12,31 @@ / {
+ 	model = "Google Villager (rev1+)";
+ 	compatible = "google,villager", "qcom,sc7280";
+ };
++
++&lpass_va_macro {
++	vdd-micb-supply = <&pp1800_l2c>;
++};
++
++&sound {
++	audio-routing =
++			"IN1_HPHL", "HPHL_OUT",
++			"IN2_HPHR", "HPHR_OUT",
++			"AMIC1", "MIC BIAS1",
++			"AMIC2", "MIC BIAS2",
++			"VA DMIC0", "vdd-micb",
++			"VA DMIC1", "vdd-micb",
++			"VA DMIC2", "vdd-micb",
++			"VA DMIC3", "vdd-micb",
++			"TX SWR_ADC0", "ADC1_OUTPUT",
++			"TX SWR_ADC1", "ADC2_OUTPUT",
++			"TX SWR_ADC2", "ADC3_OUTPUT",
++			"TX SWR_DMIC0", "DMIC1_OUTPUT",
++			"TX SWR_DMIC1", "DMIC2_OUTPUT",
++			"TX SWR_DMIC2", "DMIC3_OUTPUT",
++			"TX SWR_DMIC3", "DMIC4_OUTPUT",
++			"TX SWR_DMIC4", "DMIC5_OUTPUT",
++			"TX SWR_DMIC5", "DMIC6_OUTPUT",
++			"TX SWR_DMIC6", "DMIC7_OUTPUT",
++			"TX SWR_DMIC7", "DMIC8_OUTPUT";
++
++};
+-- 
+2.37.1.595.g718a3a8f04-goog
+

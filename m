@@ -2,99 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C817259BA23
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159E359BA35
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233079AbiHVHWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 03:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
+        id S232631AbiHVHZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 03:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbiHVHV6 (ORCPT
+        with ESMTP id S233355AbiHVHZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 03:21:58 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3967A29C88
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:21:57 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 2so4641613edx.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=K9GqH8J2Rtwg9al68hkNDhdyAqH2iZ0okDuLSh58pgQ=;
-        b=lcomsdQYETH++8/O8lDI76zbdmo8u73NvmYlTumg800wRLlB85LnH8xGZR3hpnq2ng
-         YM2W5trM6h53BduUHjBwQU5/ATLm3SpfWgCKzjNs6OSd0XUlv/Kd3ywDUtBkITmkN68p
-         Ec1JBUOsQpTNRVcdVnbVT04cmjsQKxHMk09ymwk+FCwhX7Y7ZEdVEBiRWVcgPpRLtkai
-         HuqgsCXZYusUEMAe51bTP7zo7Z6RjFOgZ4v7iij8PEn5jrov1ZG5fH2voQNQWozsJuPw
-         UohDEWX/Iga/EJHAw6mBbg3Lqixv/zy8AlYNtBgEDSkqVC1a5dQ/yfrbVyi1gM64LVRz
-         PFJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=K9GqH8J2Rtwg9al68hkNDhdyAqH2iZ0okDuLSh58pgQ=;
-        b=Umx3Zs7/CyytPglQIPxPIN4nINUghRjCd8mwZBuK4444DlFbnXzB8fy5I92toFdLVg
-         ORvcTvx5RRs93M8cPy4csM1AWlruHVd+2IVB4dXVKhiltS558YSOy9HK+rYaI+Y6YuKW
-         b6EGuXjylaPS5NsFJohNnR65u1Dg/WYR0TXTUdgpiq+gzBhEb+MEH0ZjWqOP5yQx8sjf
-         GwmFB07oEYzqPbYJAOTo+jCausQy5B8pJnXSEmTr7lATa0ecZ3ss7iYMZPSnwFbhxfYV
-         M/xfLZ77iIXl7mIUy1f2pctdeDlLrP6aDkO2LY55N+7h9epKgFuOE3lZ2ZM2+Zs2AxbT
-         3wqQ==
-X-Gm-Message-State: ACgBeo0dI0huWtFYAc/cuiDX9weu+c7dT4biMBSPG5QH/Ugj6VAwPJDE
-        ILrbmY4V/rPPH3/NuVwDJvdo87JNhp1I1YulrSZQhw==
-X-Google-Smtp-Source: AA6agR5/dTruYi9JrVkQ29gedLbwsDM/e6eJkPzc08FKA8BZSy+t8ph/0TIYsU90d5dOm1Ah5JSQ4Eb2qgytDr4Pfk0=
-X-Received: by 2002:aa7:c84f:0:b0:446:2bfb:5a63 with SMTP id
- g15-20020aa7c84f000000b004462bfb5a63mr12780779edt.172.1661152915747; Mon, 22
- Aug 2022 00:21:55 -0700 (PDT)
+        Mon, 22 Aug 2022 03:25:20 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C512A243;
+        Mon, 22 Aug 2022 00:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1661153098;
+        bh=++bx+FIr/OJ8Ma7DWnnidJKg8gGmATCR+MLXDTDjB7o=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=dwBdNXeMQEe3XNFKy8GeDuaJ+uT/G3UKIPTrSqiNqamt3/5oU+HgIvdUvoSm2RyTT
+         t5SLdXclKkbWavyW9bY72kE1CfsNywqC+4w4qd28AUUA8rDx7VT1mMzhBM5L8FRveW
+         iPd6MrnDaWPyO2WvczrO7h5Gmp5xt4NTGVxcGVHQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MCsUC-1oYnFJ0gd6-008pLx; Mon, 22
+ Aug 2022 09:24:57 +0200
+Message-ID: <1ed5a33a-b667-0e8e-e010-b4365f3713d6@gmx.com>
+Date:   Mon, 22 Aug 2022 15:24:53 +0800
 MIME-Version: 1.0
-References: <20220728091712.13395-1-m.zatovic1@gmail.com> <20220728091712.13395-2-m.zatovic1@gmail.com>
-In-Reply-To: <20220728091712.13395-2-m.zatovic1@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 22 Aug 2022 09:21:44 +0200
-Message-ID: <CACRpkdZKAzsdhyky1bEax3Jra0+MLYbu+LNWuk2KGAfEkBvBLQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v1 2/2] devicetree: bindings: bus: add Wiegand driver documentation
-To:     =?UTF-8?B?TWFydGluIFphxaVvdmnEjQ==?= <m.zatovic1@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        mani@kernel.org, hemantk@codeaurora.org, elder@linaro.org,
-        f.fainelli@gmail.com, Michael.Srba@seznam.cz,
-        jeffrey.l.hugo@gmail.com, gregkh@linuxfoundation.org,
-        bjorn.andersson@linaro.org, saravanak@google.com,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: LTS kernel Linux 4.14.290 unable to boot with edk2-ovmf (x86_64
+ UEFI runtime)
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable <stable@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-x86_64@vger.kernel.org
+References: <2d6012e8-805d-4225-80ed-d317c28f1899@gmx.com>
+ <YwMhXX6OhROLZ/LR@kroah.com>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <YwMhXX6OhROLZ/LR@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:Pvs5NuqGKX357tY1B+Cjpx2O8DVXYlGmkX/e91DFFh3+ZeSahql
+ Ofo4NJ+hLkV5y4fECV8KWRw08N9EhYQKihuyjWDKSPFMoydVJMHdF2fxxNHza4+vX4BPAYu
+ 1+DTnP41OJ+ZqPyZwXqe7Zi+F+p8knltDSBOuZ5RJGk+MAVXaROtHZ5/D7VVXpXubA+3ASt
+ EwXYnibS1Noksc7/oeP4Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BlCUppmJbYY=:PMEhlSE4Bwuice/SATKWJZ
+ 0+WkC3TAelS5kpVct3UgaGXay0QHvPHMgbqZ0d6PPB7QPAW+eyfGzZ7e+TENioMNp/43IwQ7f
+ FOxxp28o7eg11KzTp0AoZJyQ8ch+QEWeAWpA9R+NixOYThfeTRtfYb10xPxSv8348Cf6q+JZj
+ ioFdhEY7mY1fYNRvU2KN27Phk7mgVj0hfxyCzOCy4c8t6+QKX+3OoHbvEn3Z4n4BjXIaTKsXs
+ IQjRnLAUMWUN77OPL5rw7D5jmc04yH67vupJtCEtd+vVqiyxp++epMLcY52l68GJtikdUluV4
+ N5b3WrgYk92pP02t3XhCidWJhulwIcRuOeVlJdcc+8ffl1vJBx8tUMCILEmMWQhml/6J6wYee
+ I9ngtx1DVDJawj1UPatGWw+9kCNDZ+O/pclGKRWBZONGwrpXEf1uadtPHYCCTNoGTS7J/jxDc
+ gmSXqQ6GVxN4hZrxouBykKU3w42bJNFNZF3En3rU87B9HewnrzzQBxt2FBwEenz0ED6FXENLE
+ tkeTTJA7/CiKPFeji7h4aUpou/Xg1ikoU7EDvmqJrlSa+W/XAKOiNOI6HwCG3wjBKQZthtEMP
+ /+E3pfsdLlvw2xGg6SuIi3AX3qgSu4RxpXWvQS9V0EypGNBD9kSmceCuOpnf56M6Kncu27YfN
+ V9FYEZzdFLgW85Xl6d+B/V0Ijh5Uzqbts8GpgYZTZeSE83ROZIujaZJkSIcqvt0FjtxyEiFcj
+ 7oArtLqpXaAu1rwnz0nTLgm9APYYTfAU1MBX9vPTg/63eyTUTemg80qt3NIq3Dx0XvLnoV4i7
+ S6Nix+qztrIDZovmHb9WGMWWRnlwwOdFLsfCs8IJ4igVvV6jPDCNwOkO+pbscJgcuCTdK1ZXP
+ QeGSglXMP6HhQ5T9N6evQJmUyZpmzKniO4YOf2Wo+dmhYJd2HW3FIx3r7DNGuf+ad5SwCuoXI
+ 2LGaHP+L77mlfLVztjO0hVbKJVcQNImhSqSHw5Z/KsloOVrNH3nezXkxjjqlVBzSt3HhAyh/d
+ 0MSSrFxsFL9o0hUZnqo+kCfyOCRBB2o+JGrWiXbr4GcRyrcJoZr6tBWAYUv0/3N3VkwNeVlBB
+ wALrYvRXk2kuko16x+dlsbxr4An1jfKCATvaDcEKKVXbVMcbVUJIzXrAw==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 11:17 AM Martin Za=C5=A5ovi=C4=8D <m.zatovic1@gmail=
-.com> wrote:
 
-> Wiegand write-only driver requires definitions of two GPIO lines
-> in the devicetree. This adds the documentation of their
-> definitions.
 
-On top of the other comments:
+On 2022/8/22 14:25, Greg KH wrote:
+> On Mon, Aug 22, 2022 at 09:15:59AM +0800, Qu Wenruo wrote:
+>> Hi,
+>>
+>> When backporting some btrfs specific patches to all LTS kernels, I foun=
+d
+>> v4.14.290 kernel unable to boot as a KVM guest with edk2-ovmf
+>> (edk2-ovmf: 202205, qemu 7.0.0, libvirt 1:8.6.0).
+>>
+>> While all other LTS/stable branches (4.19.x, 5.4.x, 5.10.x, 5.15.x,
+>> 5.18.x, 5.19.x) can boot without a hipccup.
+>>
+>> I tried the following configs, but none of them can even provide an
+>> early output:
+>>
+>> - CONFIG_X86_VERBOSE_BOOTUP
+>> - CONFIG_EARLY_PRINTK
+>> - CONFIG_EARLY_PRINTK_EFI
+>>
+>> Is this a known bug or something new?
+>
+> Has this ever worked properly on this very old kernel tree?  If so, can
+> you use 'git bisect' to find the offending commit?
 
-> +  Both data lines are initially pulled up.
+Unfortunately the initial v4.14 from upstream can not even be compiled.
 
-That makes it sound like they are both open drain, right? Just like I2C.
+I'll try some more recent v4.14.x tags to see if I can get a working
+release to do the bisect.
 
-> +  wiegand-data-hi-gpios:
-> +  wiegand-data-lo-gpios:
+Thanks,
+Qu
 
-So these should be tagged with (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)
-See the I2C bindings in
-Documentation/devicetree/bindings/i2c/i2c-gpio.yaml
-
-> +        wiegand-data-hi-gpios =3D <&gpio2 1 GPIO_ACTIVE_HIGH>;
-> +        wiegand-data-lo-gpios =3D <&gpio2 2 GPIO_ACTIVE_HIGH>;
-
- (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN) on both then!
-
-Yours,
-Linus Walleij
+>
+> thanks,
+>
+> greg k-h

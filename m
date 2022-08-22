@@ -2,153 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C670F59C5B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3444759C5C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236608AbiHVSGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 14:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
+        id S235985AbiHVSHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 14:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236523AbiHVSGD (ORCPT
+        with ESMTP id S235516AbiHVSHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 14:06:03 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20654622A;
-        Mon, 22 Aug 2022 11:06:00 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id n4so14186420wrp.10;
-        Mon, 22 Aug 2022 11:06:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Csmpukwgo5IDJeAZNtEo51qxCB580Q6PQAbe+39XAEs=;
-        b=flMnpNlyMf98yXaTDUHLxaouu8dZiDrDL/ODHRRNw7MGZaD5AlbSioph709BtOkrFw
-         IZBoL15cn+9jUk/wMVedfuN1Rw0dYL83uNaRb24qCeOPdMTt9dHl1NdRox4nNATn3+m7
-         mvrJE2rek2CBrrBz3CIewfmNRX6gnifg/wv69uOq6QjFhG9ti/uRG4h4FPzd2I6+Baj8
-         BPcbN2TwmTC6JNZfi9F3+oFDr+RZDBtKY3H30SUzIHPz5WxO1eak1WcocbAYq6B2pCHQ
-         5NMkHTTcV0shr+GkeNH6my6Bk4JbRPIsvijstncvdvs4PrecIbQyKmm+7OOi3E2SKmof
-         tLSA==
+        Mon, 22 Aug 2022 14:07:16 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BF246D84;
+        Mon, 22 Aug 2022 11:07:15 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-11d08d7ece2so7134193fac.0;
+        Mon, 22 Aug 2022 11:07:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Csmpukwgo5IDJeAZNtEo51qxCB580Q6PQAbe+39XAEs=;
-        b=H412pHp10QzACLGw5WxWYz04+1QCvNXGHarVRhEfG/Zr63UujPwbWfbYtAAV9VcH67
-         uGVdnRlptQX1IZwAFrySxYNXzw9r2K0NAJA5sBAgUwdNvd/z1Seor4Z0SZ6qzcpoFabF
-         +qfar4NfAG22aysX3D+eaam0wj7YZFdQ9/VpqJgLiNF0UPie+2cVZjVl/MHJjrjkWp1Y
-         H8cGJpNMajzVqtNEYiXXQyhM276e5x6JlS66ShR6NdlnYjM0u7RwjjvI0/z2L5P5GqBy
-         PY6HBFrL22VqtinGIqCKJAlbH6PUK4Oegc82I+gezTIW/ata/hQ5LblQ8lmDYQsOGtKx
-         B6xw==
-X-Gm-Message-State: ACgBeo2FwCD81XKhEI5/mqPnLL+P1QWBXrixDJTQ9X2BdRHYyVuymSzd
-        ltf54Wyo+p9hjdMBnOdgj3E=
-X-Google-Smtp-Source: AA6agR6ZvTHnMaSxUzmtXd4F93OXpQZlDYmNRtz2QDv3B2maMzfD5b1HRYZ40Q/fTsDqOPFurm3I/g==
-X-Received: by 2002:a5d:634f:0:b0:225:2ab4:d539 with SMTP id b15-20020a5d634f000000b002252ab4d539mr11042085wrw.149.1661191559446;
-        Mon, 22 Aug 2022 11:05:59 -0700 (PDT)
-Received: from [192.168.1.100] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id w3-20020adfde83000000b002253af82fa7sm11469438wrl.9.2022.08.22.11.05.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 11:05:59 -0700 (PDT)
-Message-ID: <434d644b-2688-c3e8-814e-b9b2f2b86f85@gmail.com>
-Date:   Mon, 22 Aug 2022 20:05:57 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=4st3FM1bb6ia+hAlavpEGAbxXV7xofi5zmV7yc9Sy/E=;
+        b=4V1HWE/RTu9erDGsb8/3rfdWHnsryf7i1860GC/YjWR+F/5qpm5DMOP56Wh+e4iIUG
+         CXzOyq1jzPsP9K59OzOZMMTrutfxpXA4rg4FAYLs3+BxnmNeaWFEhtNpPFP0m78u99AZ
+         rhP1Kajq5Vpv2stB23pL4uKFnO4/CdHAY+vKQgo93rSTJxJmoeuOTofZ4Jcshpwk4Fe2
+         YSINYaMhAVd9WP65AgRgYt3lvigJU/311Ntgcoc9qkKGAGG9Rse9XoQl9Fbili7rLPRA
+         Ys70WrI5il4R6tD8VkgbsFfsKGhT7TXksSZilzfy0cVC7r1FgW5cy9ryUVv85PcUcwsz
+         j1cQ==
+X-Gm-Message-State: ACgBeo0esAAHqaiIZBZDkBW/LHUzXDUzrDtgGp+7/M7T+FLWh/I19HDA
+        kfBQvUjCMyyQP/3Un4dc+A==
+X-Google-Smtp-Source: AA6agR7XnzRL6Jn/3yMP/dI6TmfBLdDYyqWeS2JSRz9HOciSHoo08QZzFiSxHw3wKjI+/ntOSIyv3A==
+X-Received: by 2002:a05:6870:41c6:b0:11c:6053:2fed with SMTP id z6-20020a05687041c600b0011c60532fedmr9777964oac.114.1661191634964;
+        Mon, 22 Aug 2022 11:07:14 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p39-20020a05687056a700b0010d5d5c3fc3sm3104887oao.8.2022.08.22.11.07.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 11:07:14 -0700 (PDT)
+Received: (nullmailer pid 80167 invoked by uid 1000);
+        Mon, 22 Aug 2022 18:07:13 -0000
+Date:   Mon, 22 Aug 2022 13:07:13 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com,
+        shawnguo@kernel.org, vkoul@kernel.org,
+        alexander.stein@ew.tq-group.com, marex@denx.de,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: Re: [PATCH v3 2/6] dt-binding: phy: Add iMX8MP PCIe PHY binding
+Message-ID: <20220822180713.GA75195-robh@kernel.org>
+References: <1660806153-29001-1-git-send-email-hongxing.zhu@nxp.com>
+ <1660806153-29001-3-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] Split multiple assignments to individual lines.
-Content-Language: en-US
-To:     Christopher Carbone <chris.m.carbone@gmail.com>,
-        sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
-        gregkh@linuxfoundation.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <YwOjt+ZrQkKFGRH9@valhalla>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <YwOjt+ZrQkKFGRH9@valhalla>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1660806153-29001-3-git-send-email-hongxing.zhu@nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/22/22 17:41, Christopher Carbone wrote:
-> Adhere to Linux kernel coding style.
+On Thu, Aug 18, 2022 at 03:02:29PM +0800, Richard Zhu wrote:
+> Add i.MX8MP PCIe PHY binding.
+
+Explain the differences in h/w. The phy is connected to PERST#?
+
 > 
-> Reported by checkpatch:
-> 
-> CHECK: multiple assignments should be avoided
-> 
-> Signed-off-by: Christopher Carbone <chris.m.carbone@gmail.com>
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
 > ---
->   drivers/staging/sm750fb/sm750.c | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
+>  .../bindings/phy/fsl,imx8-pcie-phy.yaml          | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-> index dbd1159a2ef0..a0f8ae359248 100644
-> --- a/drivers/staging/sm750fb/sm750.c
-> +++ b/drivers/staging/sm750fb/sm750.c
-> @@ -386,7 +386,8 @@ static int lynxfb_ops_set_par(struct fb_info *info)
->   
->   	ret = lynxfb_set_color_offsets(info);
->   
-> -	var->height = var->width = -1;
-> +	var->width = -1;
-> +	var->height = var->width;
->   	var->accel_flags = 0;/*FB_ACCELF_TEXT;*/
->   
->   	if (ret) {
-> @@ -498,7 +499,8 @@ static int lynxfb_ops_check_var(struct fb_var_screeninfo *var,
->   		return ret;
->   	}
->   
-> -	var->height = var->width = -1;
-> +	var->width = -1;
-> +	var->height = var->width;
->   	var->accel_flags = 0;/* FB_ACCELF_TEXT; */
->   
->   	/* check if current fb's video memory big enough to hold the onscreen*/
-> @@ -723,7 +725,8 @@ static int lynxfb_set_fbinfo(struct fb_info *info, int index)
->   		0x800f0 + (int)crtc->channel * 0x140;
->   
->   	pr_info("crtc->cursor.mmio = %p\n", crtc->cursor.mmio);
-> -	crtc->cursor.max_h = crtc->cursor.max_w = 64;
-> +	crtc->cursor.max_w = 64;
-> +	crtc->cursor.max_h = crtc->cursor.max_w;
->   	crtc->cursor.size = crtc->cursor.max_h * crtc->cursor.max_w * 2 / 8;
->   	crtc->cursor.vstart = sm750_dev->pvMem + crtc->cursor.offset;
->   
-> @@ -1027,7 +1030,8 @@ static int lynxfb_pci_probe(struct pci_dev *pdev,
->   	if (!sm750_dev)
->   		return err;
->   
-> -	sm750_dev->fbinfo[0] = sm750_dev->fbinfo[1] = NULL;
-> +	sm750_dev->fbinfo[1] = NULL;
-> +	sm750_dev->fbinfo[0] = sm750_dev->fbinfo[1];
->   	sm750_dev->devid = pdev->device;
->   	sm750_dev->revid = pdev->revision;
->   	sm750_dev->pdev = pdev;
+> diff --git a/Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml
+> index b6421eedece3..692783c7fd69 100644
+> --- a/Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml
+> @@ -16,6 +16,7 @@ properties:
+>    compatible:
+>      enum:
+>        - fsl,imx8mm-pcie-phy
+> +      - fsl,imx8mp-pcie-phy
+>  
+>    reg:
+>      maxItems: 1
+> @@ -28,11 +29,16 @@ properties:
+>        - const: ref
+>  
+>    resets:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 2
+>  
+>    reset-names:
+> -    items:
+> -      - const: pciephy
+> +    oneOf:
+> +      - items:          # for iMX8MM
+> +          - const: pciephy
+> +      - items:          # for IMX8MP
+> +          - const: pciephy
+> +          - const: perst
+
+This does the same thing:
+
+minItems: 1
+items:
+  - const: pciephy
+  - const: perst
 
 
-Hi,
-
-the subsystem and the device is missing in the Subject.
-
-I propose you look into https://kernelnewbies.org/FirstKernelPatch to 
-read about the Subject.
-
-I personally prefer more this:
-
- > +	sm750_dev->fbinfo[1] = NULL;
- > +	sm750_dev->fbinfo[0] = NULL;
-
-That gives a better overview.
-
-Thanks for your support.
-
-Bye Philipp
-
+>  
+>    fsl,refclk-pad-mode:
+>      description: |
+> @@ -60,6 +66,10 @@ properties:
+>      description: A boolean property indicating the CLKREQ# signal is
+>        not supported in the board design (optional)
+>  
+> +  power-domains:
+> +    description: PCIe PHY  power domain (optional).
+> +    maxItems: 1
+> +
+>  required:
+>    - "#phy-cells"
+>    - compatible
+> -- 
+> 2.25.1
+> 
+> 

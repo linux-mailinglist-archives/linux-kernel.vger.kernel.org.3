@@ -2,108 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50AC359BF47
+	by mail.lfdr.de (Postfix) with ESMTP id 9B27F59BF48
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234938AbiHVMJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 08:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
+        id S234932AbiHVMJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 08:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234369AbiHVMJo (ORCPT
+        with ESMTP id S234960AbiHVMJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:09:44 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8D9399F6;
-        Mon, 22 Aug 2022 05:09:41 -0700 (PDT)
-X-QQ-mid: bizesmtp77t1661170150tizb7q9p
-Received: from localhost.localdomain ( [182.148.14.124])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 22 Aug 2022 20:09:08 +0800 (CST)
-X-QQ-SSF: 01000000002000C0D000B00A0000000
-X-QQ-FEAT: J5JfekO1WsjqZ9Csd1xMP8RiLXNCg6N05x9timq6hi6m6FxQ7t81A1rQPp8mO
-        pp0j2b89NGZLsTJsSEz2j+fbfVZ2IynUbhPo0xvT38blLo3I8iZWr/MPsuWMqtLKZs4kyqv
-        mw/3+OULHPpVGQk2SHg6k0uS+8FE0ZCbgTZY3DMXoKYDmHSoCHIgru2RrPTPIKHoIb/wh2+
-        FrD5pVGNwS9epJXtOvUF4aaEhLXd3EcU1vv0N7dNnCcfO+E56UFiLqhwnPk8AGmFcg91xk3
-        vr7h/EUdFSx5L+P/v3OxBwVJKpH+KVTmhrHbFvO6Cszy6PXmdBY6Xi42u2A9XkCkdawHlsD
-        /flw6msX6EyQi159wsGsxqj0mukGWbWOd4Y6XUYIyScYWEKGiEn5v7z5IAXqiZFZHPbxt2W
-        jwZYAkypJPs=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com
-Cc:     linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] tty/serial: fix repeated words in comments
-Date:   Mon, 22 Aug 2022 20:09:01 +0800
-Message-Id: <20220822120901.17913-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 22 Aug 2022 08:09:18 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EECF39BBF
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 05:09:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5985C1FE82;
+        Mon, 22 Aug 2022 12:09:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661170154; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BQf11C2SztSHaAc1fCCEYoFCW50NZH5mzh9dLltQPVs=;
+        b=p4lTmBdyCOljd88Lou0ApPiNTcrg55ISrXyy2Z2lgw6d95MbM2hP18vHea0UGA5CSG1Fju
+        7wgNx7ZgREOAm0apcWAR9/w46u0ucAGD/W+pMXpik/faroXcSl+gpHFdH+Ac/ev+kpgFsw
+        IdmcniYJyPob4UtDLTruYq88xgtW5xk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 36B9F13523;
+        Mon, 22 Aug 2022 12:09:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gm7eC+pxA2MlQQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 22 Aug 2022 12:09:14 +0000
+Date:   Mon, 22 Aug 2022 14:09:13 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     iommu@lists.linux.dev, Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] dma-pool: limit DMA and DMA32 zone size pools
+Message-ID: <YwNx6Q+FSwpKUOQ2@dhcp22.suse.cz>
+References: <20220817060647.1032426-1-hch@lst.de>
+ <20220817060647.1032426-4-hch@lst.de>
+ <Yvzk2wE7ta+zSZOQ@dhcp22.suse.cz>
+ <20220821104416.GC30530@lst.de>
+ <YwNBHbYXpatJHD0K@dhcp22.suse.cz>
+ <20220822111447.GA8935@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_00,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,RCVD_IN_PBL,RCVD_IN_SBL_CSS,
-        RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?43.154.54.12>]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [43.154.54.12 listed in zen.spamhaus.org]
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [43.154.54.12 listed in wl.mailspike.net]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822111447.GA8935@lst.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'power'.
- Delete the redundant word 'long'.
+On Mon 22-08-22 13:14:47, Christoph Hellwig wrote:
+> On Mon, Aug 22, 2022 at 10:41:01AM +0200, Michal Hocko wrote:
+> > ZONE_DMA existance is not runtime controlable (at least on x86).
+> 
+> This is more about ZONE_DMA32 that can disappear if all memory is
+> inside ZONE_DMA.  That is highly unusual (but still possible) with a
+> tiny x86-style ZONE_DMA, but can happen with a larger one other
+> architectures.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/tty/serial/imx.c         | 2 +-
- drivers/tty/serial/samsung_tty.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+OK, so you are worried about configurations that lack ZONE_DMA32 because
+that memory range is covered by ZONE_DMA? I thought though simply do not
+have CONFIG_ZONE_DMA32. Or am I wrong here?
 
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 30edb35a6a15..c72e0dad3544 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -2069,7 +2069,7 @@ imx_uart_console_get_options(struct imx_port *sport, int *baud,
- 		{	/*
- 			 * The next code provides exact computation of
- 			 *   baud_raw = round(((uartclk/16) * (ubir + 1)) / (ubmr + 1))
--			 * without need of float support or long long division,
-+			 * without need of float support or long division,
- 			 * which would be required to prevent 32bit arithmetic overflow
- 			 */
- 			unsigned int mul = ubir + 1;
-diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-index d5ca904def34..af799b79ba25 100644
---- a/drivers/tty/serial/samsung_tty.c
-+++ b/drivers/tty/serial/samsung_tty.c
-@@ -1353,7 +1353,7 @@ static int apple_s5l_serial_startup(struct uart_port *port)
- 	return ret;
- }
- 
--/* power power management control */
-+/* power management control */
- 
- static void s3c24xx_serial_pm(struct uart_port *port, unsigned int level,
- 			      unsigned int old)
 -- 
-2.36.1
-
+Michal Hocko
+SUSE Labs

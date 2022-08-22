@@ -2,88 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F306859BD56
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5500959BD54
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234580AbiHVKH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 06:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35080 "EHLO
+        id S234230AbiHVKG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 06:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbiHVKHW (ORCPT
+        with ESMTP id S232398AbiHVKGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 06:07:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D3B31DC2;
-        Mon, 22 Aug 2022 03:07:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 725CEB80EDD;
-        Mon, 22 Aug 2022 10:07:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1BE3C433D6;
-        Mon, 22 Aug 2022 10:07:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661162838;
-        bh=yYftufhCitw7VdIJ1a8lwLSUpA0zN+6TXeBezXYoObE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=j1Dl8+h4o6HK+7UsjSVbV1F86sgJPoJg5PysgAQAImj60eYPIsWrAKRvLccYPrFRF
-         dhWsK+GtmU/RONqV0adldhXL47lrelU726h8F9/bQB4ZjxCZiLRfNrvftChIT9o942
-         7dd5dbLlgN9U5uD0lUA+Tfz7kWPnnw1BpBn42ZoxOesBiNn8hSvPX1/egPP5nIaYm8
-         HAfEDmKCE1eWP1EqbWBUc6/BZwDdqLCFGZP5E8VbiMghuSFLshGj+JQ3gSIrhRNP2F
-         Iiekpw+qZVATCD+Fe1CDla6wUhXoinP0v7xWdy00x5FKdU/W07/9gRJSgcpkySZpbN
-         orZ5d2e+NLJbw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1oQ4Kw-0000nw-8y; Mon, 22 Aug 2022 12:07:15 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] usb: dwc3: qcom: suppress unused-variable warning
-Date:   Mon, 22 Aug 2022 12:05:50 +0200
-Message-Id: <20220822100550.3039-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Mon, 22 Aug 2022 06:06:54 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D31672AC77;
+        Mon, 22 Aug 2022 03:06:50 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B675513D5;
+        Mon, 22 Aug 2022 03:06:53 -0700 (PDT)
+Received: from [10.57.15.77] (unknown [10.57.15.77])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C0A723F718;
+        Mon, 22 Aug 2022 03:06:48 -0700 (PDT)
+Message-ID: <3b88438d-1bb0-e980-b4db-1f8663dc6042@arm.com>
+Date:   Mon, 22 Aug 2022 11:06:43 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] mmc: sdhci-xenon: Fix 2G limitation on AC5 SoC
+Content-Language: en-GB
+To:     Christoph Hellwig <hch@infradead.org>,
+        Vadym Kochan <vadym.kochan@plvision.eu>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hu Ziji <huziji@marvell.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Elad Nachman <enachman@marvell.com>, iommu@lists.linux.dev,
+        Mickey Rachamim <mickeyr@marvell.com>
+References: <20220808095237.GA15939@plvision.eu>
+ <6c94411c-4847-526c-d929-c9523aa65c11@intel.com>
+ <20220808122652.GA6599@plvision.eu>
+ <3f96b382-aede-1f52-33cb-5f95715bdf59@intel.com>
+ <3d16ebad-ea6c-555e-2481-ca5fb08a6c66@arm.com>
+ <20220816205129.GA6438@plvision.eu>
+ <94888b3b-8f54-367d-c6b4-5ebfeeafe4c4@arm.com>
+ <20220817160730.GA17202@plvision.eu>
+ <80d2538c-bac4-cc4f-85ae-352fcf86321d@arm.com>
+ <20220818120740.GA21548@plvision.eu> <YwHOCHmKaf7yfgOD@infradead.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <YwHOCHmKaf7yfgOD@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dwc3_qcom_read_usb2_speed() helper is now only called when the
-controller is acting as host, but the compiler will warn that the hcd
-variable is unused in gadget-only W=1 builds.
+On 2022-08-21 07:17, Christoph Hellwig wrote:
+> On Thu, Aug 18, 2022 at 03:07:40PM +0300, Vadym Kochan wrote:
+>> It works with the following changes:
+>>
+>>      #1 dma-ranges = <0x0 0x0 0x2 0x0 0x0 0x80000000>;
+>>
+>>      #3 swiotlb="force"
+>>
+>> Is it OK to force the memory allocation from the start for the swiotlb ?
+> 
+> It should be ok, but isn't really optimal.
+> 
+> I wonder if we should just allow DT to specify the swiotlb buffer
+> location.  Basically have yet another RESERVEDMEM_OF_DECLARE variant
+> for it, which shouldn't be all that much work except for figuring
+> out the interaction with the various kernel command line options.
 
-Fixes: c06795f114a6 ("usb: dwc3: qcom: fix gadget-only builds")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/usb/dwc3/dwc3-qcom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We already have all the information we need in the DT (and ACPI), the 
+arm64 init code just needs to do a better job of interpreting it 
+properly. I'll see what I can come up with once I've finished what I'm 
+currently tied up in.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index b3ba9aaf876c..8298aebd395e 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -310,7 +310,7 @@ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
- {
- 	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
- 	struct usb_device *udev;
--	struct usb_hcd *hcd;
-+	struct usb_hcd __maybe_unused *hcd;
- 
- 	/*
- 	 * FIXME: Fix this layering violation.
--- 
-2.35.1
-
+Thanks,
+Robin.

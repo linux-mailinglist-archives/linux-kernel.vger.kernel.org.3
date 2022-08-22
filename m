@@ -2,95 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCE759CAB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 23:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6662B59CAC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 23:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238021AbiHVVUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 17:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
+        id S238067AbiHVVWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 17:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238014AbiHVVUO (ORCPT
+        with ESMTP id S238045AbiHVVWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 17:20:14 -0400
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E580451432;
-        Mon, 22 Aug 2022 14:20:13 -0700 (PDT)
-Received: by mail-pl1-f174.google.com with SMTP id x19so11068107plc.5;
-        Mon, 22 Aug 2022 14:20:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=OiLq9jWCfKJ4+st1sKCjNqpo8+tt/E7IjyRd3lma/Xk=;
-        b=7grAJXH+3A6fUFD4/4s0bR7FzYfB1v74uTU33yzVRxBFB/gPFdEv03XnSfXX4812b4
-         QURQsL0IWC6tHrmoQSB5n1efzsWlMfrCVqr/DBEa2AwfivERB0NpUv5QTB2YZel/2NmR
-         owNAIhLsV8cg9L2bcUrpEnuhaCL3hzJFVYFgEt5vljSlCFRiV1yyx/Vs2lVmu1TBCDeb
-         NBetWwcKUHS+vT1nWaOK0IBHWIuWSymCWGkOZvi4ygmvS/elAyjPl8VAdFbgwRKKbnA5
-         /4TT0rvErj0MzvfjoQZ01uN74kK+ThofYv3Nei58nLcC7EHjL17g1jTFJyThskWqgPA6
-         9kPQ==
-X-Gm-Message-State: ACgBeo3TKYYd9YkP1rmhOUW09GzYzMHl8q39uCfxDhMC7rzvEP6aWrr3
-        ausyxUqukz4KScfbn39VymU=
-X-Google-Smtp-Source: AA6agR7pGr/VS86cFUj14yul6XaNpS7RjoD2KCfjUwqs9xoQDsolr/nUhyk3zWiZECxTsbOtHrazRw==
-X-Received: by 2002:a17:90a:744c:b0:1fa:c029:7a24 with SMTP id o12-20020a17090a744c00b001fac0297a24mr237385pjk.54.1661203213144;
-        Mon, 22 Aug 2022 14:20:13 -0700 (PDT)
-Received: from [192.168.3.217] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id a6-20020a17090ad80600b001fb1de10a4dsm3204272pjv.33.2022.08.22.14.20.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 14:20:12 -0700 (PDT)
-Message-ID: <27a26f00-95dd-c9bc-dab3-3bbd650b0d87@acm.org>
-Date:   Mon, 22 Aug 2022 14:20:10 -0700
+        Mon, 22 Aug 2022 17:22:05 -0400
+Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [IPv6:2001:1600:4:17::190c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B01B520B9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 14:22:03 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MBQKk0cnDzMpvsm;
+        Mon, 22 Aug 2022 23:22:02 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4MBQKh1Bfqzlh8T4;
+        Mon, 22 Aug 2022 23:22:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1661203322;
+        bh=OSYzzvdz84yPbQEGoIIrPXVz95TLy36MFz4gk4sipWQ=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=vMH/NwTXLN0eBDfx3zhrak/cpsAvtGELH43/eaZ5antgDtLsNj7IfQnOYKtTShNu3
+         2m1uXNRDqEhc469/RqF2qA6eNMkNal8c10It5bMv4NRU9nUnvCOz+nU8RS4pcYpL0V
+         8XYdpM6zeZEbIQqw6/mTHoYOl5DuhSnNZngi9s9k=
+Message-ID: <72ca592e-ff1b-120e-3d00-5c79aefbc247@digikod.net>
+Date:   Mon, 22 Aug 2022 23:21:59 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [syzbot] INFO: task hung in scsi_remove_host
+User-Agent: 
 Content-Language: en-US
-To:     syzbot <syzbot+bafeb834708b1bb750bc@syzkaller.appspotmail.com>,
-        dsterba@suse.com, hch@lst.de, hdanton@sina.com, jejb@linux.ibm.com,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        martin.petersen@oracle.com, ming.lei@redhat.com, nborisov@suse.com,
-        syzkaller-bugs@googlegroups.com, wqu@suse.com
-References: <0000000000006d456105e6da8d58@google.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <0000000000006d456105e6da8d58@google.com>
+To:     =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
+        corbet@lwn.net, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220822114701.26975-1-xiujianfeng@huawei.com>
+ <YwPWN/d15S24PuLS@nuc>
+ <39df1a34-51dc-da55-ff1c-59cab896c8a0@schaufler-ca.com>
+ <YwPyuX7oao6EqTvJ@nuc>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [PATCH -next 0/5] landlock: add chmod and chown support
+In-Reply-To: <YwPyuX7oao6EqTvJ@nuc>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/22/22 13:47, syzbot wrote:
-> syzbot has bisected this issue to:
-> 
-> commit ae643a74ebdb150b004601d0d5fe5a1faba9b04d
-> Author: Qu Wenruo <wqu@suse.com>
-> Date:   Sun May 22 11:47:48 2022 +0000
-> 
->      btrfs: introduce a data checksum checking helper
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=176ef485080000
-> start commit:   e3f259d33c0e Merge tag 'i2c-for-6.0-rc2' of git://git.kern..
-> git tree:       upstream
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=14eef485080000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10eef485080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3bd9363f7b80ef9c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=bafeb834708b1bb750bc
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=108e1a3d080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=154720f3080000
-> 
-> Reported-by: syzbot+bafeb834708b1bb750bc@syzkaller.appspotmail.com
-> Fixes: ae643a74ebdb ("btrfs: introduce a data checksum checking helper")
-> 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Qu, feel free to ignore the above bisection result. I think it is wrong.
 
-Bart.
+On 22/08/2022 23:18, Günther Noack wrote:
+> On Mon, Aug 22, 2022 at 12:35:18PM -0700, Casey Schaufler wrote:
+>> On 8/22/2022 12:17 PM, Günther Noack wrote:
+>>> Hi!
+>>>
+>>> Very exciting to see! Thank you for sending this! :)
+>>>
+>>> I'm just throwing in some comments based on the very similar truncate
+>>> patch set, in the hope that it helps. (But obviously, Mickaël Salaün
+>>> has the last word on this code.)
+>>>
+>>> Slightly higher level question: Should we start to group the
+>>> functionality of multiple LSM hooks under one Landlock flag? (Will it
+>>> be harder to change the LSM hook interface in the future if we
+>>> continue to add one flag per hook? Or is this structure already
+>>> exposed to userspace by other LSMs?)
+>>
+>> I'm not a landlock expert. The question is nonsensical, yet somewhat
+>> frightening nonetheless. Could you put just a touch more context into
+>> what you're asking for?
+> 
+> By "Landlock flags", I meant the integer that Landlock uses to
+> represent the set of possible operations on a file hierarchy:
+> 
+> Landlock's file system access rights (access_mode_t on the kernel
+> side) are defined with an integer with flags (LANDLOCK_ACCESS_FS_*)
+> for different operations that one might do with files. They get used
+> from userspace to control what is permitted on which parts of the file
+> system. (Docs: https://docs.kernel.org/userspace-api/landlock.html)
+> 
+> Currently most of the available Landlock flags map pretty closely to
+> one of the file- and path-related LSM hooks. (See various hook
+> implementations in security/landlock/fs.c)
+> 
+> The file system operations that Landlock doesn't cover yet (as of
+> kernel 5.19) are listed below, and there are potentially a few more
+> that might be missing. I suspect/hope that there will be more patches
+> in the style of the truncate/chmod/chown patches, which will add that
+> coverage.
+> 
+> The question is basically:
+> When these patches get added, how should the userspace-exposed
+> Landlock file system access rights map to the LSM hooks for these
+> upcoming Landlock features? Should each of the newly covered
+> operations have its own flag, or is it better to group them?
+> 
+> (It's well possible that the right answer is "one flag per feature",
+> but I feel it still makes sense to ask this before all these patches
+> get written?)
+
+Landlock is not strictly tied to the current LSM hooks, but they fit 
+well (because they are designed to be flexible enough to be use by 
+multiple access control systems). In fact, Landlock already uses 
+orthogonal access rights such as LANDLOCK_ACCESS_FS_REFER (using the 
+path_link or path_rename hooks), LANDLOCK_ACCESS_FS_MAKE_* (using the 
+path_mknod and path_mkdir hooks)…
+
+Anyway, the LSM framework is evolving, we can add new hooks and modify 
+others (e.g. see the security_path_rename hook modification for 
+FS_REFER) as long as mainline access control systems don't break and 
+subsystem maintainers are OK with such changes. Like any kernel API, the 
+LSM API is not stable, but this is not an issue for mainline code.
+
+Landlock's goal is to find the sweet spot between flexibility for 
+different sandboxing use cases and an understandable/simple-enough 
+access control system. The access rights should then be meaningful for 
+users, which are already familiar with the UAPI/syscalls, hence the 
+current Landlock access rights (which are not very original, and that is 
+a good thing). This is why I'm wondering if it is worth it to 
+differentiate between chmod and chgrp (and add a dedicated access right 
+per action or only one for both).
+
+
+> 
+> —Günther
+> 
+>>> For example, some of the "missing" operations listed on the Landlock
+>>> documentation could also be grouped roughly as:
+>>>
+>>> Modifying files:
+>>>   - truncate
+>>>
+>>> Modifying file metadata:
+>>>   - chmod
+>>>   - chown
+>>>   - setxattr
+>>>   - utime
+>>>
+>>> Observing files (check presence and file metadata):
+>>>   - access
+>>>   - stat
+>>>   - readlink, following links (can observe symlink presence)
+>>>   - chdir (can observe dir presence and 'x' attribute)
+>>>
+>>> Ungrouped:
+>>>   - flock
+>>>   - ioctl
+>>>   - fcntl
+>>>
+>>> Do you have opinions on this?
+
+That could indeed help users identifying currently missing pieces for 
+their use case.
+
+
+>>>
+>>> —Günther
+>>>
+>>> On Mon, Aug 22, 2022 at 07:46:56PM +0800, Xiu Jianfeng wrote:
+>>>> hi,
+>>>>    this patchset adds chmod and chown support for landlock
+>>>>
+>>>> Xiu Jianfeng (5):
+>>>>    landlock: expand access_mask_t to u32 type
+>>>>    landlock: add chmod and chown support
+>>>>    landlock/selftests: add selftests for chmod and chown
+>>>>    landlock/samples: add chmod and chown support
+>>>>    landlock: update chmod and chown support in document
+>>>>
+>>>>   Documentation/userspace-api/landlock.rst     |   8 +-
+>>>>   include/uapi/linux/landlock.h                |   8 +-
+>>>>   samples/landlock/sandboxer.c                 |  12 +-
+>>>>   security/landlock/fs.c                       |  16 +-
+>>>>   security/landlock/limits.h                   |   2 +-
+>>>>   security/landlock/ruleset.h                  |   2 +-
+>>>>   security/landlock/syscalls.c                 |   2 +-
+>>>>   tools/testing/selftests/landlock/base_test.c |   2 +-
+>>>>   tools/testing/selftests/landlock/fs_test.c   | 234 ++++++++++++++++++-
+>>>>   9 files changed, 274 insertions(+), 12 deletions(-)
+>>>>
+>>>> --
+>>>> 2.17.1
+>>>>
+>>> --
+> 
+> --

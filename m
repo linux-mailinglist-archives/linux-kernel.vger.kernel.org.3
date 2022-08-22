@@ -2,90 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5532D59BA08
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A364C59BA12
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 09:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233327AbiHVHKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 03:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
+        id S233050AbiHVHOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 03:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233301AbiHVHKh (ORCPT
+        with ESMTP id S230289AbiHVHOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 03:10:37 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964ED2982C;
-        Mon, 22 Aug 2022 00:10:36 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso13076917pjk.0;
-        Mon, 22 Aug 2022 00:10:36 -0700 (PDT)
+        Mon, 22 Aug 2022 03:14:51 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB441F2E0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:14:50 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w10so507724edc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 00:14:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=fOmZy3U9PAu2Ajzs2pnd09V97bF2APgIMcB5WGE/msY=;
-        b=l0rfl+hQJU8zVVcx5/GcRWbx6XKPNgoV01l1peZrKI+YqbJO2X9Tnm2rb2SbwQLmcJ
-         qgOzy38/kgzl9jOGBEHuclNE27yHqNgkyGJH/JVYJvWL6U8zmZqvnLT/qng+jsbfzigQ
-         lUSNy+eTdQr8onBI1gKLH4GEkC3hw56XGv0QgCDhqGAPNWQgVJlC0SefVtUSs9kjckFF
-         bHS5WrkEmRcIh394VLmk2hxLST75vcTK8irnYzDJjEU+Qt3//h+ICV3yCB1USR3zH+Op
-         b3i82RzDrWWa+erAyZjNLNiUtaQ/4uG51/tOCOO1dhDApjNGs3M9MAsk9+jRB3DT8R/C
-         cDMA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=L4C9jxDEHQJxeNb6tSjoDWUpW5OXjQBjDyyOgdCfm1c=;
+        b=HDpf9UEUkLM+5q7kzurPq7l8YVBs2Gwncdlt1GECYz1eWZorNMAeFaFnahENaZwyFY
+         18QtbkG2hpVzGZqil0J/u4IDUrBttXvTS+/GqOPCUsats9mqRRteaUrJWoPIjIjIv7aX
+         Q8JnYhEUPii5uclxswYUCtlv2KGWXtnfPH5Rm5qPiKSeJQBiZ1no0bMudmDO6W8RMAuz
+         E4hrIacq5HCEIw+9o/HrdNxJM5HkM8jr8BVXUrn7FmMLYDOGQoeZGwQUxfEvXIU6LrAi
+         x3DDMuFpfH56yBR8kkRMv5PS2rdu2xqG1le13VIig9oVjs9dKho40gBpQfMA1MMVpvmE
+         x3/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=fOmZy3U9PAu2Ajzs2pnd09V97bF2APgIMcB5WGE/msY=;
-        b=g18pTpxHBPlcUL6rOYsPCE3aDeMn1pK/i8/Pl/Dgu0FKwkbxh3/vj+R30xW8Wkxswi
-         in4F6wbeAXTEJQl52TPMQwysBwopuu73Wy3k30VJa77xEDItyxTb7yrG5i5liKQrKx8o
-         MmeoMsgB3IMPgPJ3TgwyGWJRe6PA254Lm4cixBXPYkKNl5hCKdwiNBz/5rddQ6W2Hfvr
-         kuN4N3ldi0mOCEtviiJIU1yhfucldOdMb6ZfPaNMsymQcwgxwGmkLgAXfR/GRQsg4j4O
-         39CqrEdo3vNFIKxn6QKI7bFd+q66OQoGoy85g/035NuBvQ5H/j8Azn3VqY5ow2cY2y1/
-         AYgg==
-X-Gm-Message-State: ACgBeo1QkiUoGy0dvgehJjdzqfGKoe8bfhLtcvCcMVrVFW7jHjPmTxcp
-        QXfOS8gF3xlmLcHhz6NxDXvYae8tl8o=
-X-Google-Smtp-Source: AA6agR4R/hMkIZekPmcVEAmEcwTdz9V4Cr6/vB8WEPIhG7paM9h1ocAaUNVTjTpg/rL5DKDNgBQgMA==
-X-Received: by 2002:a17:90a:5996:b0:1fb:fb6:2adc with SMTP id l22-20020a17090a599600b001fb0fb62adcmr8447156pji.177.1661152235745;
-        Mon, 22 Aug 2022 00:10:35 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id u16-20020a17090341d000b00172aa97b628sm7619421ple.186.2022.08.22.00.10.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 00:10:35 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sun, 21 Aug 2022 21:10:33 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Imran Khan <imran.f.khan@oracle.com>, kernel-team@fb.com
-Subject: Re: [PATCHSET for-6.1] kernfs, cgroup: implement kernfs_deactivate()
- and cgroup_file_show()
-Message-ID: <YwMr6X8X7Ncdm6V5@slm.duckdns.org>
-References: <20220820000550.367085-1-tj@kernel.org>
- <78d464bd-94db-a1bc-d864-d85f2751dca3@bytedance.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=L4C9jxDEHQJxeNb6tSjoDWUpW5OXjQBjDyyOgdCfm1c=;
+        b=dl4Lk0A7ZYkOY0QNwe4XRE7zlvbfy0xiWxbHFdAaSxrOTxXLrpSY7W7S4ENaulSDmu
+         uEpam7nwvtHn/p4dN4tkgXSCZPaEdfmHri8DxoN8rY3GtnqyoiucVq6S3OTQY5KnBz2X
+         2wMuiRh0HAwTWleb7VO5iK8FHieY12FlkWgcqc0wAz6TQGFuUH8f5emVv9gX8Ula8yj2
+         T8mKjnUcHEjpCXXDx12INk3BUmSJNyg37dU4x3xDPtDxQReqwkdksmptu+f0UauuJWQm
+         eq7lXitwwOiZLTIvKm1gDj3v5jM7QJ+dd20sw7k+uD+zjXX5bVDHeSuV6OVK83wUtfMi
+         3U/Q==
+X-Gm-Message-State: ACgBeo3PVRMGuB8f5HexLvviFbG/5UFDACIY58aUMuvXIru1OFFIC2ui
+        ZmSEPTX0dfMsoNZ7xcG32EDy6BefTCCpCS/JhlHRCw==
+X-Google-Smtp-Source: AA6agR6uP2gNGTFa2fluxSVgHP2Yn6gtVn9sUtgJUHExaMImKcS0hip/QX/7i0dab1r6zmm25gurJY8lIHclJj9VIs4=
+X-Received: by 2002:a05:6402:4312:b0:43d:b9c0:65ee with SMTP id
+ m18-20020a056402431200b0043db9c065eemr15253416edc.205.1661152489457; Mon, 22
+ Aug 2022 00:14:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <78d464bd-94db-a1bc-d864-d85f2751dca3@bytedance.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220728091712.13395-1-m.zatovic1@gmail.com>
+In-Reply-To: <20220728091712.13395-1-m.zatovic1@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 22 Aug 2022 09:14:38 +0200
+Message-ID: <CACRpkdbD1qzJujhq-U0UN0tWam9CaoLvVuAQfafq4XNaEdZ2QA@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 1/2] bus: add Wiegand write-only GPIO driver
+To:     =?UTF-8?B?TWFydGluIFphxaVvdmnEjQ==?= <m.zatovic1@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mani@kernel.org, hemantk@codeaurora.org, elder@linaro.org,
+        f.fainelli@gmail.com, Michael.Srba@seznam.cz,
+        jeffrey.l.hugo@gmail.com, gregkh@linuxfoundation.org,
+        bjorn.andersson@linaro.org, saravanak@google.com,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Martin!
 
-On Mon, Aug 22, 2022 at 09:58:22AM +0800, Chengming Zhou wrote:
-> It's so nice of you for implementing this! I will rebase on your work to
-> do per-cgroup PSI disable/re-enable and test it today.
+Thanks for your patch!
 
-Oh, I always kinda wanted it and am likely to need it for something else
-that I'm working on, so it isn't all that altruistic.
+On Thu, Jul 28, 2022 at 11:17 AM Martin Za=C5=A5ovi=C4=8D <m.zatovic1@gmail=
+.com> wrote:
 
-Thanks for working on PSI optimizations!
+> Wiegand is a communication protocol that is still widely used
+> especially for access control applications. It utilizes two wires to
+> transmit data - D0 and D1, the generic names of which are data-lo and
+> data-hi.
 
--- 
-tejun
+So the driver provides Wiegand GPIO, if you want to provide
+generic Wiegand infrastructure (for other things than GPIO
+as well) then that should indeed be in drivers/bus.
+
+However then you should provide an API for random WIegand
+drivers, such as the now baked-in GPIO driver, so I think
+what you want to achieve is:
+
+1. A wiegand bus transport driver in drives/bus
+2. A wiegand abstract API in include/linux/wiegand.h
+3. A GPIO driver on top of the wiegand bus in
+   drivers/gpio/wiegand-gpio.c that uses <linux/wiegand.h>
+
+How does this sound?
+
+I don't know how a wiegand device driver API would look
+but there are several examples in other subsystems and
+buses then the wiegand specifics need to be accounted for.
+
+Yours,
+Linus Walleij

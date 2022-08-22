@@ -2,99 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B96259B7A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 04:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F84E59B78E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 04:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbiHVCbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 Aug 2022 22:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
+        id S232384AbiHVC3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 Aug 2022 22:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232525AbiHVCaz (ORCPT
+        with ESMTP id S232199AbiHVC3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 Aug 2022 22:30:55 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8F822500;
-        Sun, 21 Aug 2022 19:30:50 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id t21so3821296uaq.3;
-        Sun, 21 Aug 2022 19:30:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=8OT18EiZzc67zed1enekOSrV6Cl7PLk6DpE6nm225uQ=;
-        b=RPrTXZwuaXKTbsgGqVYekGHgLkS7SNnKHj/ikYP8oT3kuqDfFzbBQ6BkpZ7cOUYpDV
-         dv0k8I1thp70tofntsyy8IQrm8RzoWVqjyQIWftDw/g/qrWOOrg8xu8eD7C/sEUkgItC
-         UyImC+/7R4Yz3AkZ2DN/+tGiBa7mnSuHlgtNN8m25xQDDdsNc+X2L9D9TiL64n4KH5Ab
-         46GzCuONuLgWdxHo4D2+EByqHe1stpecS5qW3/h2GCrQGIpO9NlmKGR4Nwc0oTnkMXs/
-         AHZS/5t9fMPyqK9KjkuYUi9xPLdFEpevQTEIhbS1zAHZc79ZZN5l0uMOY6gqXzXc3jOQ
-         N3gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=8OT18EiZzc67zed1enekOSrV6Cl7PLk6DpE6nm225uQ=;
-        b=0AuIFuyXSQNLesKsZbYcBOG07U8X7M5JIt25dsLSMDO7Ghc0evwUvxxCTHGN0yHHjc
-         8Fs/0OWYT3bxaNm53teb7KXT0S6Enn0iZP1mfbvZBNdH82jP9YLRRdQn9uBYaXRzDe2q
-         JMpe5fUq+kwZoBjX4RPsZJvKcOVy+/JXnTi47H1Ft1Qrjr5lSbwPFPK8tQdWHqLJhhyY
-         rqP0itVLFrgr2lbJ52TaLwJJMSLHPxg04/V/llFhsFgkvE6Pn5qXjIQoWxEhCx0g8+8d
-         rvO+MTuEOZpZ+Qk/v0hX7AHkXIJbqPM70wVGgBrRxXsOkwztazb9fflLulCOrIsp0Xls
-         q+gA==
-X-Gm-Message-State: ACgBeo1vPgPm1GK9mErlrjCkHW1B/8M759u4zP0XXYmWM9OkBxSBv8vA
-        Llfw0B8GoCQJ88nknkdgXC8=
-X-Google-Smtp-Source: AA6agR7LJvHa1vNGh2v2eNDqr+6op1KLplZdrqtgC87Uw2T6qVqUB/tJIRVbFrRZ8HaPNtC+Y1QB2A==
-X-Received: by 2002:ab0:4ad3:0:b0:392:fb0b:b617 with SMTP id t19-20020ab04ad3000000b00392fb0bb617mr6220367uae.57.1661135449859;
-        Sun, 21 Aug 2022 19:30:49 -0700 (PDT)
-Received: from localhost.localdomain ([2804:14c:4c2:8202::1001])
-        by smtp.gmail.com with ESMTPSA id y125-20020a1f3283000000b00378fe8518dcsm8330853vky.51.2022.08.21.19.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 19:30:49 -0700 (PDT)
-From:   Tales Aparecida <tales.aparecida@gmail.com>
-To:     Sadiya Kazi <sadiyakazi@google.com>
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        davidgow@google.com, corbet@lwn.net, brendan.higgins@linux.dev,
-        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
-        mwen@igalia.com, andrealmeid@riseup.net, mairacanal@riseup.net,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com
-Subject: [PATCH v2 8/8] lib: stackinit: update reference to kunit-tool
-Date:   Sun, 21 Aug 2022 23:26:46 -0300
-Message-Id: <20220822022646.98581-9-tales.aparecida@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220822022646.98581-1-tales.aparecida@gmail.com>
-References: <20220822022646.98581-1-tales.aparecida@gmail.com>
+        Sun, 21 Aug 2022 22:29:10 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A301EC55
+        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 19:29:08 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M9x7s4Sn8znTfY;
+        Mon, 22 Aug 2022 10:26:49 +0800 (CST)
+Received: from dggphis33418.huawei.com (10.244.148.83) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 22 Aug 2022 10:29:05 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <paul@paul-moore.com>, <eparis@redhat.com>, <mszeredi@redhat.com>,
+        <jack@suse.cz>, <amir73il@gmail.com>, <cuigaosheng1@huawei.com>
+CC:     <linux-audit@redhat.com>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH next] audit: fix potential double free on error path from fsnotify_add_inode_mark
+Date:   Mon, 22 Aug 2022 10:29:05 +0800
+Message-ID: <20220822022905.1949007-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace URL with an updated path to the full Documentation page
+Audit_alloc_mark() assign pathname to audit_mark->path, on error path
+from fsnotify_add_inode_mark(), fsnotify_put_mark will free memory
+of audit_mark->path, but the caller of audit_alloc_mark will free
+the pathname again, so there will be double free problem.
 
-Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
+Fix this by resetting audit_mark->path to NULL pointer on error path
+from fsnotify_add_inode_mark().
+
+Fixes: 7b1293234084d ("fsnotify: Add group pointer in fsnotify_init_mark()")
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 ---
- lib/stackinit_kunit.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/audit_fsnotify.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/lib/stackinit_kunit.c b/lib/stackinit_kunit.c
-index 35c69aa425b2..4591d6cf5e01 100644
---- a/lib/stackinit_kunit.c
-+++ b/lib/stackinit_kunit.c
-@@ -3,7 +3,7 @@
-  * Test cases for compiler-based stack variable zeroing via
-  * -ftrivial-auto-var-init={zero,pattern} or CONFIG_GCC_PLUGIN_STRUCTLEAK*.
-  * For example, see:
-- * https://www.kernel.org/doc/html/latest/dev-tools/kunit/kunit-tool.html#configuring-building-and-running-tests
-+ * "Running tests with kunit_tool" at Documentation/dev-tools/kunit/start.rst
-  *	./tools/testing/kunit/kunit.py run stackinit [--raw_output] \
-  *		--make_option LLVM=1 \
-  *		--kconfig_add CONFIG_INIT_STACK_ALL_ZERO=y
+diff --git a/kernel/audit_fsnotify.c b/kernel/audit_fsnotify.c
+index 6432a37ac1c9..c565fbf66ac8 100644
+--- a/kernel/audit_fsnotify.c
++++ b/kernel/audit_fsnotify.c
+@@ -102,6 +102,7 @@ struct audit_fsnotify_mark *audit_alloc_mark(struct audit_krule *krule, char *pa
+ 
+ 	ret = fsnotify_add_inode_mark(&audit_mark->mark, inode, 0);
+ 	if (ret < 0) {
++		audit_mark->path = NULL;
+ 		fsnotify_put_mark(&audit_mark->mark);
+ 		audit_mark = ERR_PTR(ret);
+ 	}
 -- 
-2.37.2
+2.25.1
 

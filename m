@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4461F59C458
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0704259C454
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbiHVQot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
+        id S236575AbiHVQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236320AbiHVQop (ORCPT
+        with ESMTP id S237123AbiHVQo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:44:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA0F19027
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:44:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pgna4G+ORkwBzTExUNzYbFkMVR58lcZ1tipVS99VrCA=; b=u8lhnh+ikact0cMnMKwecu96jg
-        YxEqXE052FfErSiTCh5bdaYrdBv3/bxlC71cukHzFd4bLqBxEXG2CatEXgiAlGHDnJGtgvBz7nF5B
-        EI5A7FXXR1FNZAo5Yg9vujiN4CuN76crEzzk+vTgG1r9aXuqNkRHEsTMMRr6Alk6uYa4isk8GAfxJ
-        r1eqtmg1JwTZwACtKa+dH0rFBz8KzeLym5OFW+a39ynu4qQBAqJYHtddxqaJ6EMGCGmja+6kjr1JT
-        MD5y63TYYQc+h0o5DqwUXbeoR7B23k3r7EAfqOKkzinc5CZVPyjR6thOkzuo0wN6Ct2YqXYujxrzs
-        MCHtYJhw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQAXI-00ET7y-1S; Mon, 22 Aug 2022 16:44:24 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AE3C19804A3; Mon, 22 Aug 2022 18:44:22 +0200 (CEST)
-Date:   Mon, 22 Aug 2022 18:44:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, alexey.budankov@linux.intel.com,
-        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
-        santosh.shukla@amd.com
-Subject: Re: [RFC v2] perf: Rewrite core context handling
-Message-ID: <YwOyZhk/eqrsPa1q@worktop.programming.kicks-ass.net>
-References: <20220113134743.1292-1-ravi.bangoria@amd.com>
- <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
- <YqdP4NExuwOHdC0G@hirez.programming.kicks-ass.net>
- <35394cb7-a490-5aeb-b3a8-0f46e3c8ca28@amd.com>
+        Mon, 22 Aug 2022 12:44:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB25518E25;
+        Mon, 22 Aug 2022 09:44:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 570726120C;
+        Mon, 22 Aug 2022 16:44:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB504C433C1;
+        Mon, 22 Aug 2022 16:44:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661186695;
+        bh=hFhF+HtHsqWMVE4q3w289LQbuAM7D1wcvxRb+QUpfz4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=JZWYE0xu4YHJCN761L/B/S7shttEN9JIplBp8bjrBVbaTuxf5lqzOwY958FZcdd2E
+         CS9PmsVuBmZFL66bOK9NYptOLyhNPXcUxjklnbfGLy9VXzQIrjgdhv6dblfWPXLrFh
+         L5DnEOFsAkAYlKbmD22qD5pY+OtaSzqZMdmWtdQvKGtDYxTmblrraCiHo1AFsc4YaG
+         4lG6frtyvLdVletNg57g4HeDjntAGCpUEfLY6668a6KAvSMaVE3xzf8ienyI4ufk84
+         OwMnAF1t3H8im1vaO1ZEPq4JlPIAe7SaAVP0qh/LkFxWieDbJQ8mVtoJsR+j8a2WR6
+         jWi3Fj9R+z7PQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 4C7925C05A0; Mon, 22 Aug 2022 09:44:55 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 09:44:55 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Shao-Tse Hung <ccs100203@gmail.com>
+Cc:     corbet@lwn.net, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, rostedt@goodmis.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] doc/rcu: Update LWN articles at the beginning
+Message-ID: <20220822164455.GH6159@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220820083244.28338-1-ccs100203@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <35394cb7-a490-5aeb-b3a8-0f46e3c8ca28@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220820083244.28338-1-ccs100203@gmail.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,38 +60,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 11:40:34AM +0530, Ravi Bangoria wrote:
-> On 13-Jun-22 8:25 PM, Peter Zijlstra wrote:
-> > On Mon, Jun 13, 2022 at 04:35:11PM +0200, Peter Zijlstra wrote:
-> >> @@ -12125,6 +12232,8 @@ SYSCALL_DEFINE5(perf_event_open,
-> >>  		goto err_task;
-> >>  	}
-> >>  
-> >> +	// XXX premature; what if this is allowed, but we get moved to a PMU
-> >> +	// that doesn't have this.
-> >>  	if (is_sampling_event(event)) {
-> >>  		if (event->pmu->capabilities & PERF_PMU_CAP_NO_INTERRUPT) {
-> >>  			err = -EOPNOTSUPP;
-> > 
-> > No; this really should be against the event's native PMU. If the event
-> > can't natively sample, it can't sample when placed in another group
-> > either.
+On Sat, Aug 20, 2022 at 04:32:44PM +0800, Shao-Tse Hung wrote:
+> This patch adds LWN articles about RCU APIs which were released in 2019.
+> Also, HTTP URLs are replaced by HTTPS.
 > 
-> Right. But IIUC, the question was, would there be any issue if we allow
-> grouping of perf_sw_context sampling event as group leader and
-> perf_{hw|invalid}_context counting event as group member. I think no. It
-> should just work fine. And, there could be real usecases of it as you
-> described in one old thread[1].
+> Signed-off-by: Shao-Tse Hung <ccs100203@gmail.com>
 
-Like you I need to bend my brain around this again, but I'm not seeing a
-contradiction. The use-case from [1] is a software sampler with a bunch
-of non-sampling uncore events.
+Good catch, queued, thank you!
 
-The uncore events aren't sampling, the are simply read by the software
-event (SAMPLE_READ). And moving the sampling software event to the
-non-sample capable uncore PMU shouldn't matter.
+							Thanx, Paul
 
-That is; the code as it stands here seems right, we should check
-is_sampling_event() against an event's native pmu->capabilities.
-
-Or am I misunderstanding things?
+> ---
+>  Documentation/RCU/whatisRCU.rst | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/RCU/whatisRCU.rst b/Documentation/RCU/whatisRCU.rst
+> index 77ea260efd12..682529123b9d 100644
+> --- a/Documentation/RCU/whatisRCU.rst
+> +++ b/Documentation/RCU/whatisRCU.rst
+> @@ -6,13 +6,15 @@ What is RCU?  --  "Read, Copy, Update"
+>  Please note that the "What is RCU?" LWN series is an excellent place
+>  to start learning about RCU:
+>  
+> -| 1.	What is RCU, Fundamentally?  http://lwn.net/Articles/262464/
+> -| 2.	What is RCU? Part 2: Usage   http://lwn.net/Articles/263130/
+> -| 3.	RCU part 3: the RCU API      http://lwn.net/Articles/264090/
+> -| 4.	The RCU API, 2010 Edition    http://lwn.net/Articles/418853/
+> -| 	2010 Big API Table           http://lwn.net/Articles/419086/
+> -| 5.	The RCU API, 2014 Edition    http://lwn.net/Articles/609904/
+> -|	2014 Big API Table           http://lwn.net/Articles/609973/
+> +| 1.	What is RCU, Fundamentally?  https://lwn.net/Articles/262464/
+> +| 2.	What is RCU? Part 2: Usage   https://lwn.net/Articles/263130/
+> +| 3.	RCU part 3: the RCU API      https://lwn.net/Articles/264090/
+> +| 4.	The RCU API, 2010 Edition    https://lwn.net/Articles/418853/
+> +| 	2010 Big API Table           https://lwn.net/Articles/419086/
+> +| 5.	The RCU API, 2014 Edition    https://lwn.net/Articles/609904/
+> +|	2014 Big API Table           https://lwn.net/Articles/609973/
+> +| 6.	The RCU API, 2019 Edition    https://lwn.net/Articles/777036/
+> +|	2019 Big API Table           https://lwn.net/Articles/777165/
+>  
+>  
+>  What is RCU?
+> -- 
+> 2.25.1
+> 

@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7638F59C402
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B23D59C407
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236967AbiHVQXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
+        id S236966AbiHVQXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236958AbiHVQXC (ORCPT
+        with ESMTP id S236961AbiHVQXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:23:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64623F330;
-        Mon, 22 Aug 2022 09:23:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6047CB815FC;
-        Mon, 22 Aug 2022 16:22:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2476CC4347C;
-        Mon, 22 Aug 2022 16:22:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661185378;
-        bh=biuYM5Wo1aN4Uc70XLQMc1KWtn0aEFg1laOYV4x1E/4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=N20YTc8cZ7KVHZzmtmfw0ttl9cGHZK/DLftpuAMa0hgEZizusL7ETyemPBOIfP2kI
-         aa6g/eaYWnClwhbxvUBr3CS12MAayFh7dAHubSG9ieSnfr5JB35ZYc3dR2A0LeLU6k
-         EuUJQCFAlhlMPtkOCtHjaUm1lNXtze3F+pi2U5tFbOHlVVHgFoUlXhpvUQV2WzmjWw
-         DUMxVxTGoKDAyOPru5+AI8toTlywJ3HHNzfNYyQbZyZZFeizioPn0BIVmCogRJdCF5
-         eAL0DtiUBdApu5TXD6fM/qG5wQRrBlDmnScz2lEOEqv4KbZyol4+33VivcmswQ2ZYA
-         3JXh8qjiNU4bw==
-Message-ID: <f17b9d627703bee2a7b531a051461671648a9dbd.camel@kernel.org>
-Subject: Re: [PATCH] iversion: update comments with info about atime updates
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, NeilBrown <neilb@suse.de>,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Dave Chinner <david@fromorbit.com>
-Date:   Mon, 22 Aug 2022 12:22:55 -0400
-In-Reply-To: <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>
-References: <20220822133309.86005-1-jlayton@kernel.org>
-         <ceb8f09a4cb2de67f40604d03ee0c475feb3130a.camel@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Mon, 22 Aug 2022 12:23:16 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D421A1DA
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:23:12 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id z30-20020a05660217de00b00688bd42dc1dso5877961iox.15
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:23:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=WkKZ5NODq/Qymdy1tEZzofeSuiOIi9pswPpZMiFn/38=;
+        b=PHuSHsNwUBng5flhRtyCgjcfSjY7M161Q+g0mHIRPol9NWQR5svd1mHb9b9uJwpXHk
+         OabvRS9iCfG316Lyyh/5L3kz+H1Ziuul0/Ics7mtZNxyMg7ptny69Lgy+SwbYF5bdV/R
+         JIoQLiWPR6lZADM+DeawdFg7z4hfUMLmyqe+maol1z56RkVuNgC+iA8Abd1WbKuHle50
+         1b0pGkKnWT2XY72vYftSPSNYAyx1D0d8Ap4TTNk6nuHmfP930lFZvDIA3mRJ3+MseRhH
+         4cHT/APDO36R9ey3UUwxo061cRO5IhBN4dvI6WpgCG8belGdIQNWOev7ZAIC4/naCwff
+         njDA==
+X-Gm-Message-State: ACgBeo36mW5SQ12m4e+PulRo9nmdrbh4M+z4NthG3gs77eXtdLXRn9Kg
+        vjg3nbhXYNYkV4z3vFP4itgWLzioxXe0fBkHnwvRtysRnRlN
+X-Google-Smtp-Source: AA6agR5hxkMoScoyFrXGJPc8cBZJhzujPur3+AOv0D6Bw2fqc99JQx50+BG7985kdQ+w40VR8ouNdtDdOoO+toD4LvEG5FZ+G7Nx
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:1c26:b0:2e9:9acc:911 with SMTP id
+ m6-20020a056e021c2600b002e99acc0911mr4028748ilh.131.1661185392232; Mon, 22
+ Aug 2022 09:23:12 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 09:23:12 -0700
+In-Reply-To: <1959174.1661183147@warthog.procyon.org.uk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000035d93c05e6d6dd39@google.com>
+Subject: Re: [syzbot] WARNING: bad unlock balance in rxrpc_do_sendmsg
+From:   syzbot <syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com, kuba@kernel.org,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+        marc.dionne@auristor.com, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,91 +57,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-08-22 at 11:40 -0400, Mimi Zohar wrote:
-> On Mon, 2022-08-22 at 09:33 -0400, Jeff Layton wrote:
-> > Add an explicit paragraph codifying that atime updates due to reads
-> > should not be counted against the i_version counter. None of the
-> > existing subsystems that use the i_version want those counted, and
-> > there is an easy workaround for those that do.
-> >=20
-> > Cc: NeilBrown <neilb@suse.de>
-> > Cc: Trond Myklebust <trondmy@hammerspace.com>
-> > Cc: Dave Chinner <david@fromorbit.com>
-> > Link: https://lore.kernel.org/linux-xfs/166086932784.5425.1713471269496=
-1326033@noble.neil.brown.name/#t
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > ---
-> >  include/linux/iversion.h | 10 ++++++++--
-> >  1 file changed, 8 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
-> > index 3bfebde5a1a6..da6cc1cc520a 100644
-> > --- a/include/linux/iversion.h
-> > +++ b/include/linux/iversion.h
-> > @@ -9,8 +9,8 @@
-> >   * ---------------------------
-> >   * The change attribute (i_version) is mandated by NFSv4 and is mostly=
- for
-> >   * knfsd, but is also used for other purposes (e.g. IMA). The i_versio=
-n must
-> > - * appear different to observers if there was a change to the inode's =
-data or
-> > - * metadata since it was last queried.
-> > + * appear different to observers if there was an explicit change to th=
-e inode's
-> > + * data or metadata since it was last queried.
-> >   *
-> >   * Observers see the i_version as a 64-bit number that never decreases=
-. If it
-> >   * remains the same since it was last checked, then nothing has change=
-d in the
-> > @@ -18,6 +18,12 @@
-> >   * anything about the nature or magnitude of the changes from the valu=
-e, only
-> >   * that the inode has changed in some fashion.
-> >   *
-> > + * Note that atime updates due to reads or similar activity do _not_ r=
-epresent
-> > + * an explicit change to the inode. If the only change is to the atime=
- and it
->=20
-> Thanks, Jeff.  The ext4 patch increments i_version on file metadata
-> changes.  Could the wording here be more explicit to reflect changes
-> based on either inode data or metadata changes?
->=20
->=20
+Hello,
 
-Thanks Mimi,
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Care to suggest some wording?
+Reported-and-tested-by: syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com
 
-The main issue we have is that ext4 and xfs both increment i_version on
-atime updates due to reads. I have patches in flight to fix those, but
-going forward, we want to ensure that i_version gets incremented on all
-changes _except_ for atime updates.
+Tested on:
 
-The best wording we have at the moment is what Trond suggested, which is
-to classify the changes to the inode as "explicit" (someone or something
-made a deliberate change to the inode) and "implicit" (the change to the
-inode was due to activity such as reads that don't actually change
-anything).
+commit:         f1e941db nfc: pn533: Fix use-after-free bugs caused by..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=1550e4f3080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=930fc801ca92783a
+dashboard link: https://syzkaller.appspot.com/bug?extid=7f0483225d0c94cb3441
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1518592d080000
 
-Is there a better way to describe this?
-
-> > + * wasn't set via utimes() or a similar mechanism, then i_version shou=
-ld not be
-> > + * incremented. If an observer cares about atime updates, it should pl=
-an to
-> > + * fetch and store them in conjunction with the i_version.
-> > + *
-> >   * Not all filesystems properly implement the i_version counter. Subsy=
-stems that
-> >   * want to use i_version field on an inode should first check whether =
-the
-> >   * filesystem sets the SB_I_VERSION flag (usually via the IS_I_VERSION=
- macro).
->=20
->=20
-
---=20
-Jeff Layton <jlayton@kernel.org>
+Note: testing is done by a robot and is best-effort only.

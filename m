@@ -2,83 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15E759BBF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7C759BBF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233709AbiHVIsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56184 "EHLO
+        id S233784AbiHVIta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 04:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233764AbiHVIr5 (ORCPT
+        with ESMTP id S233827AbiHVIs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:47:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679202DAA4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:47:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661158075;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=I4W0/Q6CKI1C/6ZS/LzkoVtWSqfZ4woltBoAnosrqTA=;
-        b=HqI3cwzhStDRcw2FlujAT3ochJ7alLih1VzM9MtzxgzzfYCe8LeDgdqyC4Pt7PV312bA+D
-        g5LGWdejxBQdGv6VsItb1BBzJ/BBxwiN17nsYQVtDIcTa3gCNIIV2AnJk9EzNxpc/OHbdm
-        P+SUvhvPrpwXxJRFpgfJNbkFsgdWoOA=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-628-mCrLOnh1M-WfM6qmcLOcOQ-1; Mon, 22 Aug 2022 04:47:53 -0400
-X-MC-Unique: mCrLOnh1M-WfM6qmcLOcOQ-1
-Received: by mail-wr1-f69.google.com with SMTP id h21-20020adfaa95000000b002252a5b0917so1516772wrc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:47:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=I4W0/Q6CKI1C/6ZS/LzkoVtWSqfZ4woltBoAnosrqTA=;
-        b=zCIGzySAoGzxVOMvB45NatSe/S1K6X9c3HyoqFfZvqmtascR4V+UNldmyxZEDmcYAw
-         8qr7NNql6nT/v/T6njs29T7Zq++ZWXC6MtkYfhz8jzCTSkCRXdgBgXpnIkK5DIMHrEyi
-         Fn+yWcn+OkVgrjzd3ZNfPo+fo9UeDazcP1Shl4zP0Yso1qJajNM3A4f9qeWJPjJd0EPB
-         QC6fLRKM1E0/EZzV0k2P80KRfa6IWgj26jTzBqkEe7p0Y0eDM3XkPq486M3RloBlBQxH
-         K6u40fKmgf7Eb99bLktLQMVdIc36YO121J+FxA9jPxseVn7rid860CNGV1wkr519fke/
-         sG8w==
-X-Gm-Message-State: ACgBeo2aNfzDmOb/ofReJw58RflALcsRwqUYRplk2EzEykjglMO1EHch
-        viOeZ8HjZQiMEV9s/ZDBfOyy4/p09SzmpwMNitThbyIj1ah7n+WEraq79jWKvQhcndQ0YsmkwA7
-        b/77WNPVv3awnyLJRl3MrHUMFrM9zJutJl8YZgEMBQSVUZfan+HLg8K8uDJohs2I3bqh84cNrF7
-        GK
-X-Received: by 2002:adf:f9ce:0:b0:225:24ce:3c0b with SMTP id w14-20020adff9ce000000b0022524ce3c0bmr10172148wrr.416.1661158072630;
-        Mon, 22 Aug 2022 01:47:52 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4xWItbRuSv43/5fBPSAEiNY9RrXBEgy0ZH/39Um/aohh773XKd+0EHJH9wl9xuKs4FJSlEAg==
-X-Received: by 2002:adf:f9ce:0:b0:225:24ce:3c0b with SMTP id w14-20020adff9ce000000b0022524ce3c0bmr10172123wrr.416.1661158072261;
-        Mon, 22 Aug 2022 01:47:52 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id h5-20020a05600c350500b003a6125562e1sm13961172wmq.46.2022.08.22.01.47.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 01:47:51 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 09/26] KVM: VMX: nVMX: Support TSC scaling and
- PERF_GLOBAL_CTRL with enlightened VMCS
-In-Reply-To: <Yv/CME8B1ueOMY5M@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-10-vkuznets@redhat.com>
- <Yv5zn4qTl0aiaQvh@google.com> <87sflssllu.fsf@redhat.com>
- <Yv/CME8B1ueOMY5M@google.com>
-Date:   Mon, 22 Aug 2022 10:47:50 +0200
-Message-ID: <87ilmkslzd.fsf@redhat.com>
+        Mon, 22 Aug 2022 04:48:58 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FFB1146F;
+        Mon, 22 Aug 2022 01:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661158122; x=1692694122;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aqreuZ0XbXPfbB6mvgSmsxtnzxVXkLrvDEBrwPh/UB0=;
+  b=JH2Wg4xYbKbxO/dHeIY4e6xvJMIblf5Z+9SP8MtSYnibN8lh18x+4FjH
+   BC5cLUSxUl27vCuP3FHie4ZewAvet6EywdChKZd9p2jxn4E3HqY9tmPPa
+   ujV0OYrBbKsjWVB7z3ApIdkakg4hWmY+n9mM3Og2kyekhX527EHOp36ny
+   WMqk/EL8bo67KWRgyf4VBeA+hTGtiLA5ZjoOefJE12SNl9m7SvVQg2wjx
+   2P67GlYlQVI3+M88ZkgxmimaDiakbT+vrQ3sgo3dWdTA3kT9yfWVBGD2q
+   uXilY6o1IcPEydEnnMCWPCzm5WmMFdHbJ/mZ7pCOQ8V3h0RBFiEfzGLOj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="357342562"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="357342562"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 01:48:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="638101722"
+Received: from lkp-server01.sh.intel.com (HELO 44b6dac04a33) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 22 Aug 2022 01:48:39 -0700
+Received: from kbuild by 44b6dac04a33 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQ36t-00058d-12;
+        Mon, 22 Aug 2022 08:48:39 +0000
+Date:   Mon, 22 Aug 2022 16:47:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     kbuild-all@lists.01.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+Subject: Re: [PATCH] soc: qcom: qmi: use const for struct qmi_elem_info
+Message-ID: <202208221632.bulgoDlE-lkp@intel.com>
+References: <20220822064648.30794-1-quic_jjohnson@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822064648.30794-1-quic_jjohnson@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,89 +68,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+Hi Jeff,
 
-> On Fri, Aug 19, 2022, Vitaly Kuznetsov wrote:
->> Sean Christopherson <seanjc@google.com> writes:
->> 
->> > On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
->> >> +static u32 evmcs_get_unsupported_ctls(struct kvm_vcpu *vcpu,
->> >> +				      enum evmcs_unsupported_ctrl_type ctrl_type)
->> >> +{
->> >> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
->> >> +	enum evmcs_revision evmcs_rev = EVMCSv1_2016;
->> >> +
->> >> +	if (!hv_vcpu)
->> >
->> > This is a functiontal change, and I don't think it's correct either.  Previously,
->> > KVM would apply the EVMCSv1_2016 filter irrespective of whether or not
->> > vcpu->arch.hyperv is non-NULL.  nested_enable_evmcs() doesn't require a Hyper-V
->> > vCPU, and AFAICT nothing requires a Hyper-V vCPU to use eVMCS.
->> 
->> Indeed, this *is* correct after PATCH11 when we get rid of VMX feature
->> MSR filtering for KVM-on-Hyper-V as the remaining use for
->> evmcs_get_unsupported_ctls() is Hyper-V on KVM and hv_vcpu is not NULL
->> there.
->
-> Hmm, nested_vmx_handle_enlightened_vmptrld() will fail without a Hyper-V vCPU, so
-> filtering eVMCS control iff there's a Hyper-V vCPU makes sense.  But that's a guest
-> visible change and should be a separate patch.
->
+Thank you for the patch! Perhaps something to improve:
 
-Yes, the change you suggested:
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.0-rc2 next-20220822]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-          if (hv_vcpu &&
-              hv_vcpu->cpuid_cache.nested_eb & HV_X64_NESTED_EVMCS1_2022_UPDATE) 
-			evmcs_rev = EVMCSv1_2022;
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Johnson/soc-qcom-qmi-use-const-for-struct-qmi_elem_info/20220822-144905
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 1c23f9e627a7b412978b4e852793c5e3c3efc555
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220822/202208221632.bulgoDlE-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/84f0de3071b40fad5e5a48ad27b16ce28f9210fb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jeff-Johnson/soc-qcom-qmi-use-const-for-struct-qmi_elem_info/20220822-144905
+        git checkout 84f0de3071b40fad5e5a48ad27b16ce28f9210fb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/soc/
 
-seems to keep the status quo so we can discuss dropping filtering when
-!hv_vcpu separately.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> But that also raises the question of whether or not KVM should honor hyperv_enabled
-> when filtering MSRs.  Same question for nested VM-Enter.  nested_enlightened_vmentry()
-> will "fail" without an assist page, and the guest can't set the assist page without
-> hyperv_enabled==true, but nothing prevents the host from stuffing the assist page.
+All warnings (new ones prefixed by >>):
 
-The case sounds more like a misbehaving VMM to me. It would probably be
-better to fail nested_enlightened_vmentry() immediately on !hyperv_enabled.
+   drivers/soc/qcom/qmi_encdec.c: In function 'skip_to_next_elem':
+>> drivers/soc/qcom/qmi_encdec.c:94:16: warning: return discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+      94 |         return temp_ei;
+         |                ^~~~~~~
 
->
-> And on a very related topic, the handling of kvm_hv_vcpu_init() in kvm_hv_set_cpuid()
-> is buggy.  KVM will not report an error to userspace for KVM_SET_CPUID2 if allocation
-> fails.  If a later operation successfully create a Hyper-V vCPU, KVM will chug along
-> with Hyper-V enabled but without having cached the relevant Hyper-V
-> CPUID info.
 
-Indeed, that's probably because kvm_vcpu_after_set_cpuid() itself is
-never supposed to fail and thus returns 'void'. I'm not up-to-date on
-the discussion whether small allocations can actually fail (and whether
-2832 bytes for 'struct kvm_vcpu_hv' is 'small') but propagating -ENOMEM
-all the way up to VMM is likely the right way to go.
+vim +/const +94 drivers/soc/qcom/qmi_encdec.c
 
->
-> Less important is that kvm_hv_set_cpuid() should also zero out the CPUID cache if
-> Hyper-V is disabled.  I'm pretty sure sure all paths check hyperv_enabled before
-> consuming cpuid_cache, but it's unnecessarily risky.
-
-+1
-
->
-> If we fix the kvm_hv_set_cpuid() allocation failure, then we can also guarantee
-> that vcpu->arch.hyperv is non-NULL if vcpu->arch.hyperv_enabled==true.  And then
-> we can add gate guest eVMCS flow on hyperv_enabled, and evmcs_get_unsupported_ctls()
-> can then WARN if hv_vcpu is NULL.
->
-
-Alternatively, we can just KVM_BUG_ON() in kvm_hv_set_cpuid() when
-allocation fails, at least for the time being as the VM is likely
-useless anyway.
-
-> Assuming I'm not overlooking something, I'll fold in yet more patches.
->
-
-Thanks for the thorough review here and don't hesitate to speak up when
-you think it's too much of a change to do upon queueing)
+9b8a11e8261527 Bjorn Andersson 2017-12-05  59  
+84f0de3071b40f Jeff Johnson    2022-08-21  60  static int qmi_encode(const struct qmi_elem_info *ei_array, void *out_buf,
+9b8a11e8261527 Bjorn Andersson 2017-12-05  61  		      const void *in_c_struct, u32 out_buf_len,
+9b8a11e8261527 Bjorn Andersson 2017-12-05  62  		      int enc_level);
+9b8a11e8261527 Bjorn Andersson 2017-12-05  63  
+84f0de3071b40f Jeff Johnson    2022-08-21  64  static int qmi_decode(const struct qmi_elem_info *ei_array, void *out_c_struct,
+9b8a11e8261527 Bjorn Andersson 2017-12-05  65  		      const void *in_buf, u32 in_buf_len, int dec_level);
+9b8a11e8261527 Bjorn Andersson 2017-12-05  66  
+9b8a11e8261527 Bjorn Andersson 2017-12-05  67  /**
+9b8a11e8261527 Bjorn Andersson 2017-12-05  68   * skip_to_next_elem() - Skip to next element in the structure to be encoded
+9b8a11e8261527 Bjorn Andersson 2017-12-05  69   * @ei_array: Struct info describing the element to be skipped.
+9b8a11e8261527 Bjorn Andersson 2017-12-05  70   * @level: Depth level of encoding/decoding to identify nested structures.
+9b8a11e8261527 Bjorn Andersson 2017-12-05  71   *
+9b8a11e8261527 Bjorn Andersson 2017-12-05  72   * This function is used while encoding optional elements. If the flag
+9b8a11e8261527 Bjorn Andersson 2017-12-05  73   * corresponding to an optional element is not set, then encoding the
+9b8a11e8261527 Bjorn Andersson 2017-12-05  74   * optional element can be skipped. This function can be used to perform
+9b8a11e8261527 Bjorn Andersson 2017-12-05  75   * that operation.
+9b8a11e8261527 Bjorn Andersson 2017-12-05  76   *
+9b8a11e8261527 Bjorn Andersson 2017-12-05  77   * Return: struct info of the next element that can be encoded.
+9b8a11e8261527 Bjorn Andersson 2017-12-05  78   */
+84f0de3071b40f Jeff Johnson    2022-08-21  79  static struct qmi_elem_info *skip_to_next_elem(const struct qmi_elem_info *ei_array,
+9b8a11e8261527 Bjorn Andersson 2017-12-05  80  					       int level)
+9b8a11e8261527 Bjorn Andersson 2017-12-05  81  {
+84f0de3071b40f Jeff Johnson    2022-08-21  82  	const struct qmi_elem_info *temp_ei = ei_array;
+9b8a11e8261527 Bjorn Andersson 2017-12-05  83  	u8 tlv_type;
+9b8a11e8261527 Bjorn Andersson 2017-12-05  84  
+9b8a11e8261527 Bjorn Andersson 2017-12-05  85  	if (level > 1) {
+9b8a11e8261527 Bjorn Andersson 2017-12-05  86  		temp_ei = temp_ei + 1;
+9b8a11e8261527 Bjorn Andersson 2017-12-05  87  	} else {
+9b8a11e8261527 Bjorn Andersson 2017-12-05  88  		do {
+9b8a11e8261527 Bjorn Andersson 2017-12-05  89  			tlv_type = temp_ei->tlv_type;
+9b8a11e8261527 Bjorn Andersson 2017-12-05  90  			temp_ei = temp_ei + 1;
+9b8a11e8261527 Bjorn Andersson 2017-12-05  91  		} while (tlv_type == temp_ei->tlv_type);
+9b8a11e8261527 Bjorn Andersson 2017-12-05  92  	}
+9b8a11e8261527 Bjorn Andersson 2017-12-05  93  
+9b8a11e8261527 Bjorn Andersson 2017-12-05 @94  	return temp_ei;
+9b8a11e8261527 Bjorn Andersson 2017-12-05  95  }
+9b8a11e8261527 Bjorn Andersson 2017-12-05  96  
 
 -- 
-Vitaly
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

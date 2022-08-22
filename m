@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87D659C3AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA85159C3AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235616AbiHVQFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S235929AbiHVQFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233909AbiHVQFe (ORCPT
+        with ESMTP id S235772AbiHVQFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:05:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B132C648;
-        Mon, 22 Aug 2022 09:05:32 -0700 (PDT)
+        Mon, 22 Aug 2022 12:05:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49EB2ED4C;
+        Mon, 22 Aug 2022 09:05:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50DFBB8124F;
-        Mon, 22 Aug 2022 16:05:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4A81C433C1;
-        Mon, 22 Aug 2022 16:05:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61F16611D3;
+        Mon, 22 Aug 2022 16:05:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C15FFC433C1;
+        Mon, 22 Aug 2022 16:05:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661184330;
-        bh=d3sUkYp6dks0UkiVe4t0K0fOPEi7K0LdjCO3EOU4CHU=;
+        s=k20201202; t=1661184338;
+        bh=uuMiUaC5/wvKmXz9DTRGlt3cPWVNksaOjRNpLBZP8II=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=PKaA0zHIXDboIrSbFj2n2Snj2sRRFvvZl5ts3UbD0yRBW5JmZVehRhl3HXUwnpK9o
-         RAQSGvE4kXpO1JFJnJFcxlILkSPJK4S9vowAaKKiMGFq37BKFgmZWBeeXkXVEIq9Ij
-         Rjn6ISoCm/Dwm83lcVU5SQFDukbSwcNySHpcRUmmFn2uv13XQz9umWVleoqmvNTbfm
-         rVjMv2A8Mzg7EhXCN1bqtOqkqIImzxJePK7OmSBy6X67fegVnKLI1gxEINP4/aEHMa
-         0qvEjLjC6+en6GWDytUQKHxghNuNkx4njeueghQ1sPcthh15xZ2o6hQlV+Nvem69IY
-         KHgWGHm5DYxdg==
+        b=hi3kF0hk4m5sv1XhA3aC5qpqdDppodyhGdiKBL1yZWmGWuoeEgxkjpI23WNPC+Hvw
+         d9O85NGNVWGsEedFea2NXA8lfmH8+Z7N3yu3GL+DKLIQsPosVd9DUAtyC2JgTQqQHV
+         Ko/HaPwo28OYbjHzUn0PMaA7xPvmTiJ/omsXiZddhDQWsXPk9xC1JNCNw/fNFIAooO
+         5FSyszZo89cqH5MxPrPGnQteJN0vjYDk4o4uGV+ZZosE8AaimFpM2eLUtf2unWk/Cd
+         G7VDUkUHZUkX+Yst5nVqc9tEeU2hIMHVHUcNudIeJ/mISAvBSe89YYkbPmQ0mXffnH
+         +8+hI5q81Qwhg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>
-In-Reply-To: <20220818121227.151016-1-linus.walleij@linaro.org>
-References: <20220818121227.151016-1-linus.walleij@linaro.org>
-Subject: Re: [PATCH] regmap/hexagon: Properly fix the generic IO helpers
-Message-Id: <166118432866.209062.6307998506272128787.b4-ty@kernel.org>
-Date:   Mon, 22 Aug 2022 17:05:28 +0100
+To:     patrice.chotard@foss.st.com, krzysztof.kozlowski+dt@linaro.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        robh+dt@kernel.org
+Cc:     christophe.kerello@foss.st.com, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+In-Reply-To: <20220810093215.794977-1-patrice.chotard@foss.st.com>
+References: <20220810093215.794977-1-patrice.chotard@foss.st.com>
+Subject: Re: (subset) [PATCH v2 0/2] spi: stm32_qspi: use QSPI bus as 8 lines communication channel
+Message-Id: <166118433650.209120.13370601331472107366.b4-ty@kernel.org>
+Date:   Mon, 22 Aug 2022 17:05:36 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,24 +59,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 Aug 2022 14:12:27 +0200, Linus Walleij wrote:
-> I was too naive in just including <asm-generic/io.h> into
-> hexagon: one has to specify defines for every call that uses
-> a (static) inline or this will not work.
+On Wed, 10 Aug 2022 11:32:13 +0200, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
 > 
-> Fix it up by providing proper defines for all shorthands that
-> hexagon provides.
+> 
+> The goal of this series is to allow to use QSPI bus as a 8 lines communication
+> channel for specific purpose.
+> 
+> The QSPI block offers the possibility to communicate with 2 flashes in
+> parrallel using the dual flash mode, 8 data lines are then used.
+> Usage of DT parallel-memories property is needed to enable dual flash mode.
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] regmap/hexagon: Properly fix the generic IO helpers
-      commit: f8f60615379c1b36d9220f3886fb9b229e95d8cd
+[1/2] spi: stm32_qspi: Add transfer_one_message() spi callback
+      commit: b051161f44d414e736fa2b011245441bae9babd7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

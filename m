@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7619E59BCDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5813B59BCDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234460AbiHVJ3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 05:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
+        id S234457AbiHVJaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234436AbiHVJ3o (ORCPT
+        with ESMTP id S229565AbiHVJaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 05:29:44 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2052.outbound.protection.outlook.com [40.92.99.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048C91D30D
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:29:42 -0700 (PDT)
+        Mon, 22 Aug 2022 05:30:12 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2101.outbound.protection.outlook.com [40.92.99.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B1E2E686
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:30:11 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A5MFgMZE3igu9pLIltVLdGLW++wQsdhkmboVwCD0IjU78F3Fd3NFLxwxzQgJWnmN578x38oKuRHzNcOCP0sV8Z4MzK6E3PZ18SexXJf1t8k8TqrPaI0HFOpb4+nCkJ4DmA0Fo6rO2UoBXVxJlk7BVGdIlngf43ns0O4mLW5hSTpJ3Vgx5yQtovxa2SxtUIhtS1PgSZfUWc/rEpCH4DTcYA2O6D05ZZMVad30LtYxgxGmiG4OKtfPKWUA0xF+VOI+L7V84rubI+80CAZ5fioOUs3LE5LZH4bUjtj/EZo/fVftjNdy0D++TSiMQ9nOkvFCAONW0+G47XsbdcOP/1hlUg==
+ b=E4ErQqMAZ77y9fYv4fUNgdy3/ZSUumwDqkn3/25BC71bnTsBFHEBADItBDC/JKcjHq3/fxgmPo+4OpfshHecEAAU3Jdlm6Wb+QjVeiNGq0f+ZYSf95zB8zCpUg9x1e66h0lJ5THCAKyeOZ24VU25E9JOpNb14TsLJOuI62XTeR1Oyh9t/XG9ewgIL1vFOXgKv19BCllwNeIipop/xL6Mr24GTspANKS1yNEvpI09l74eereL8k6MdoWdovxlkx2IGvMh2LXL8e/cS00ivmFrwEJ/RMEJ/bXYq3JrAM3zlTkepJqQfptvldfJszEQJApjXghBXPl0JGwxHzNCyp4rJg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5ejTeLBj2MS2aCNBejeJ19JpDfqU0woNcnS7nmZzaQg=;
- b=i/pCm66ueTl08HQSYV0xr88X9TxO/PSGc62VTzFXBVCe6sSzJb4/+5b6mcxBeLFw2wVuV2Y7qulpg+7dxTr4K2POyu85aa2GqAdkp+1sMzO1vr5kZauZ8h00JSoWYj/U8Mv6Oy3durCL1lzmCcx26qos145lQalrbx/J6nJkDAQCxdmVwS4H3OVnAIcOijASwAEp/7uKp0N79vJv3y8boEJxFQpdAcm52Oj2immUDI2/hSotlFskB7onCAZ07uim9c0K7t2B+jtf1dKCcFnOUd39zcTkdOYRtGBvseLVp/RgyCIKR+CEk2+tnvyPgjZaR+5DLJ3OQN6yJKbiio8VSg==
+ bh=mfhBDohEtcnQ/5ciQ+LBeRqhsHEesf2oggSR3O2+fyY=;
+ b=h4MdVAf8NnFuojg+XlVy9dw5mT8mkf7SdFTgcaaRRgMy4Z665w80IDy7hrA46RbhBolAvG86s5/pAkub4AlZXleNVbxbNDxIc6Nia9ay18LsdyVgqljLlgF8zRK8WqHnqvk+8j3TJ5PiXfpHwdn+3OUMAQax0kiISwNDWLhQxwH1/gDAukYQB05fMNW7oq9ZuZsBUGElS7Y/EvF+0foFMlVtSnoLCg/1JjxRXE3acbz7wtETGlj0l7gPSMLf4FioTedh4OI7Ej0Dt2tQLvshtP5IeH5RTnxC2uQD0neItWQkKGkA63hXZM3q8TWG5mXlPN6/oEQLI/k/lXTbZFwhQw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5ejTeLBj2MS2aCNBejeJ19JpDfqU0woNcnS7nmZzaQg=;
- b=n4rlsrcytB9Sx3DnwM9qAL7HLu/kdsR36+l/X5y6zawa0sgKxYvRnshJBmrzUEGgvtdtuVNt79udBfJJ2iJg0uXt/eNwn9L7IQ+NwzgHuITSsRc95SkFhRUJWWc/vcSaUym9VKwGWHwL0coTm9NNyHlzBHBAFQ9tRlyn223JQ/SHguzkUv/Qwmm5+6a5Hv1mICzjf9INX1cgIOPOG0+iICG9/+GbyYiZT/gZx6AntXnXnGsvUGh2uwR50Wq0j+3XLVkhmVnPmScBHixf0XU2qI34QQbEpCoPZU+ry/Zhl0XfBmAuzbKNYMaJtlEqUHO8ohm544Y7AQFIazPd9Z8lDQ==
+ bh=mfhBDohEtcnQ/5ciQ+LBeRqhsHEesf2oggSR3O2+fyY=;
+ b=p0I3K3LONiXuvblP/9jx9Qui6eMNC8DXLrJjwx/Px2Z08CrtClXMKoYNXDqPC5girtV2o+fBfvFDijZFs5LDN6Nc25XNYjLibufN7HGFpSxUwCZQocNXYAKadmihud1W0imGXtRQ1bAIFYQ6v5Vt6ZT/5SnU8Iq245wXyHZpXLxRRYwyBppPufr12MWr279uHZK4+UweIEJrssvqJvJU9vngceWtpsP93JDKwxt5p2i7etjAS7/poKu7xwKFAtj66WTt7U7+lILVkDDRb2daF9juD+XAn7djNsxQOk4cx+qzYO+rzCUOuq6niUujAHglPdKLpbMmpNTWm7L3730nqA==
 Received: from TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:ff::9) by
  TYCP286MB2590.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:241::5) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5546.16; Mon, 22 Aug 2022 09:29:39 +0000
+ 15.20.5546.16; Mon, 22 Aug 2022 09:30:09 +0000
 Received: from TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM
  ([fe80::d10b:afc9:3056:11d]) by TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM
  ([fe80::d10b:afc9:3056:11d%4]) with mapi id 15.20.5546.022; Mon, 22 Aug 2022
- 09:29:39 +0000
-Message-ID: <TYYP286MB176395568EC0A0C49C63C658C6719@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
-Date:   Mon, 22 Aug 2022 17:29:34 +0800
+ 09:30:09 +0000
+Message-ID: <TYYP286MB17633C3B6BFAFD8951BD06F0C6719@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
+Date:   Mon, 22 Aug 2022 17:30:05 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.2
-Subject: Re: [PATCH 1/3] scripts/gdb: fix lx-timerlist for struct
- timequeue_head change
+Subject: Re: [PATCH 2/3] scripts/gdb: fix lx-timerlist for Python3
 Content-Language: en-US
 To:     jan.kiszka@siemens.com
 Cc:     kbingham@kernel.org, linux-kernel@vger.kernel.org,
         Peng Liu <liupeng17@lenovo.com>
-References: <TYYP286MB17634911E6C6951ACD128342C68E9@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
- <TYYP286MB17631A31235CF10F476FFC34C69F9@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
+References: <20220720122711.6174-1-pngliu@hotmail.com>
+ <TYYP286MB17630AE047E8AD679B37C77AC68E9@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
+ <TYYP286MB17633E7DDA7739F53B1C4CF2C69F9@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
 From:   Peng Liu <pngliu@hotmail.com>
-In-Reply-To: <TYYP286MB17631A31235CF10F476FFC34C69F9@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
+In-Reply-To: <TYYP286MB17633E7DDA7739F53B1C4CF2C69F9@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TMN:  [1VcBy84+eQP2NVCUTrghd7Aw/vD5aWKj]
-X-ClientProxiedBy: SI2PR02CA0006.apcprd02.prod.outlook.com
- (2603:1096:4:194::8) To TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM
+X-TMN:  [OGMCMEFIZQBtVGZEY0qbwUv7WCjLObpG]
+X-ClientProxiedBy: SI2PR02CA0009.apcprd02.prod.outlook.com
+ (2603:1096:4:194::11) To TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM
  (2603:1096:400:ff::9)
-X-Microsoft-Original-Message-ID: <8adb150a-41d7-e1d5-5e3d-856ec7701456@hotmail.com>
+X-Microsoft-Original-Message-ID: <0ac5a378-c7f3-d8c5-a182-f829c40a5516@hotmail.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a95f5411-d8dd-4a7a-fda4-08da8420d627
+X-MS-Office365-Filtering-Correlation-Id: 9709eeee-d351-4b5a-5a47-08da8420e822
 X-MS-TrafficTypeDiagnostic: TYCP286MB2590:EE_
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bMgQC9wfnmAeyoy/FbkDa7KnJiiK8hJ5byq1FMgngiP/yqb9ngqHapIVif6AwZ5POXfTBP8P6Yn+yzLxtgLt0BSOI52fw1Jrz2SkqJoVpvtouZc2dI5pe55iyaiaiADh/xz8LVcp7GjQTI50ZLAnBUakNmdsJfnDB81YzM4xmmfwcbRHaHYJuT6hb/NvRHFQcXrRod45rVvvSHte1mTkOnAnwSjmGICDHAj+zJgRAmvgs7EoNWU+g9YE57l6f04svVjpNrMifPuw36SFAxSGR1bFu5fcRB2aPTMM7zn5bohyTinmm70GxjUfEmJMOECcZznFBi/L95o+ywRvBbrEe54ICLoDjDp5paZ3e3DVWx7pHF7KK3J7Lfz5QUKLOPjW6rrMlj/4u/QDNVCOVXZMfI/qNlFTYsyMEyaRyTknETCUoCX+4pWb1exVxMJpQj6VQ4/iRMW2PaK7qGb7V7gx97oZQnSov2lOOOaPo+uYqe52pEy2KozLBiISRQxsmjVjzfK2Bqzkgf+YQX83o0bosfEJ79I9TFu88oRa26cJEs3bkjn1BZoUp788tAtS4uggTq3Y8RFpj4gWPMHsu/IkD/cmxFdUGnO9+axwxtKA6m6JQUg3fcUT5sp3Twyv46EJkJ9nKjOZ7C+WWUmwSWk2CzLF1x9c/eRH/j8uDcIskZGH7h9VgLqu4gfh46S/uVW+
+X-Microsoft-Antispam-Message-Info: Kbp5NczsJdatorfrlBGsUcVaA2tW+ULOb4XaIiZoIXOR3hqPgVbIIqlVo/1JzZWsqYk4Vdfx7yL7czskwVXkTVGI/hBasPP5db7zq2Nu/wd0nbUweMrG7h12wd+h0QyFXNqOrxFe/gmeHW7ugqn1+sFqAgXm/U3+zFZRRF25QiElNWKaGTlIDGtTDRaUI2lpm3ZngoC3Ul/xQo4YTXCVDxKA0alFqLLDK7usIB+rcG7OgBsjKlXqDRpo7N6Ppa/oB1GKOxmz/nEiEgX4q+OQNyB9BQ3JzY60MeVhL6CGUcRgya98IZJZsJkPMuCHxRticL++tukuzKoJtySU9P4je3skCmD/9YtFFWiu7UWay/8qTErlpepG/PnOXIZE20Nkwgk/0/dy4kMzCpgf5Q9KaXj1YCODYsPn/VGYxJ9YsUr1cWNC2Ni69amgkJAAeywG4ilqChHUeUMxAiiQuKFlgKn1PgCu6ErIL6jxkKnAogbEEdK7Vf72mFZr79XL0LOvu9mlY7x5bcUVELjhnqMCaWfb4+D10Wstl8hzkWMkSlqHuDB+FZ9mOuyqvud1PEF8Txj5LnxoVyzPhbpmZzy1sqi5tCOZIMPYdvRwM+WYo5UL+6ZPOqGLkOfY0XcarUtFZsbNot73E+aWcQm1S7mI1KHDr6/bZzcaG4ls5zJXW5LeZ2z1svfXSW3cr2lk3801
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?REUrNDVzYWV6emkwd0RVa1ZFWEpDT09BMVltYTFDVFZYenJnN0tobFRxZlNF?=
- =?utf-8?B?b2JJa2I1MDA2eWJKYnd5U2dpRVBkbElobXp3UGZvYXhhWmMrYnd5Nk55WkVN?=
- =?utf-8?B?RVFIdmplTndWdTY0L0RtajU2dkMxL0FlVlcyZi9lQmR4K3NhR1JKSFhnV0tq?=
- =?utf-8?B?U1RKaDVJdldwclRZNXNZNWYxRDdjdW16Szg3TlBCcUlCM0VzaTFHQmNNQ2ph?=
- =?utf-8?B?cXdsOGcyQXFwK0NXQnBHQ0lBeXBuOWl4bld6elVKNDcvOWNkeitEQTRIM3kx?=
- =?utf-8?B?ZThpZUkyNk5EN2NCQnN1SDVVT3FsMDErVEI0N2ZQZzZDd2VHdFVNc3RUNUZi?=
- =?utf-8?B?cHFvT3NjYUhRZFdhcktwd1hFTnRhMWNWbFRqcnhSWTY1ck9GbEVtQjQySEp4?=
- =?utf-8?B?bEdQc1pNMjdFOGVFTThkMWxWNnV4Y0FwUXgrelNZMkxuRmpjTjd6SGYvU2I0?=
- =?utf-8?B?SlhxUHB0dS8ybWg2eGJhYTh6SzFFRlcxL1pMM0ZkaklnS0diZi9VSFJjL1J1?=
- =?utf-8?B?eGpsRVQxWHVsRGFOWmxxSFdocis2V3NaUXJGbTk0L3pHQlh5Z290VXIxUGVz?=
- =?utf-8?B?KzkrQXlPUUhVOGxZMTY0T1B2aUNPN1BhQ0Y0bjl3cUVSQWdMV2dLbTVoVk1C?=
- =?utf-8?B?bTVUOW5IbzFWZHAvYnN4d1ZMUnNUblFNR2U3YXBveERkQmxFdlhmRDcxT2Mv?=
- =?utf-8?B?WXhRVTJyb29OYk1Dd1owYTJpN1ZwMjBzQWJ6aExkWkpaT0NlYXUrbFdxV21W?=
- =?utf-8?B?QjNrM3EraGY4TGtwSXluWTk3OFlzS3dUQWdOeEVTT1p5ekFicnUvS3oxd003?=
- =?utf-8?B?VkZFV3FaN29lRTRJeDZFUDRZaEFVUlVyMkFWVGV5RGlHNGNRd1l4WEVRcTh0?=
- =?utf-8?B?U0Urb0dERGdHTVJMb3FycTM4L1puMHdGbE4wNFlPZFdzZ3dWeHc0SmhoUFRV?=
- =?utf-8?B?NGNsMkFOcDQrZEVpWG94ZWRqQVJHbWdaT3ZYTlk4cXAwU0pySC9PNW9oTy85?=
- =?utf-8?B?MmdWbW5nVUV0ZVY0NkhNelZaN01iUGhTL1NzQUgwdHVMRDB4akJUOUZUcFBU?=
- =?utf-8?B?RzZRWkJ4NFBqaENHM3liTXVmRUtta2FrY3ZFakdwdktCZkt0L2E1Nkd6Y05H?=
- =?utf-8?B?bGtwamswNnZwM01TZlJmaVlKbmUyRFMzS1JmNitvbXB5Nm44eHl4YjNYVnZU?=
- =?utf-8?B?VC9UUjhELzd5YWllNVhNMUNLNWErN3I1dEpuOG56TWdFczBzQ0J1MnFZakJD?=
- =?utf-8?B?aHQ2ZnVUSHNqYkFtQjNVNXdJYzhIQkFBR0hQcU82UmVXZjZ1QS9NeVRrVnpC?=
- =?utf-8?B?TjlXZlFhdGh6QnRqVFU1b2h4RHpLdkIwMjVYdkpqUE9jL3BEbUMrYmgyRHR5?=
- =?utf-8?B?NXNXU2w2WDVkTU9raStMcnVjVmc3eXNWbTBEN3I5MGcwdnZ5aVVqeUV6MWxO?=
- =?utf-8?B?M3FkcmJ4d0RuOUY2SCtzUGIzL3FNZ0RwNzdiYnJxZU85UXFrVXpieEptL2Jn?=
- =?utf-8?B?SHpPVEZpN28vcUxvYmY3S1lQRnc1bkt1YkVHOUd4YzM3d2txUUNhRHE4endt?=
- =?utf-8?B?dElPYkQ1RVVuWk8zWVhwSlJsT3B6eUNpUVdpVkgrWDFNWlhNUjhlbGVOWURw?=
- =?utf-8?B?OFVHSk1SV3B6RWd5dWQ1UmlERjlYdHNhUFFNSE4rSDZ4S0Iwc09CSWNFKzVF?=
- =?utf-8?Q?YLZfv892Ilf/vEQMf3R/?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S3QxZHJPTWRaZ3NodWY1cjJHaGRrUW5IdTdxeEk0Y3dWcEJJTDhwQVhiSk5F?=
+ =?utf-8?B?SGVpcjVaMXJCYk9UditRZXhES3VRNlNWM1QzZVlBQ3hBUzhDbzgvNWozSys3?=
+ =?utf-8?B?Nm1Obi9ZUG8yQUNPUis0U1prbzgvTVhKNWYyZW1zbk9QV0lxN2poUkFLZ285?=
+ =?utf-8?B?REt3YWRBL1JTb092bjJSWGdENDkwUlJkVVZkMVFya1ZLem81eHAvYzRCVVBL?=
+ =?utf-8?B?SjVIRHFyWExJN2d2L3hJWGtFUnBJek5sUEhSeWVveHNacWNqTG1HaUtvWHdR?=
+ =?utf-8?B?L1NBQ1liTG04SjRQcHZvZWNyWm1nK2FKM2tPRmJUT2R4elpUNm1WUnozZ0JR?=
+ =?utf-8?B?QnRRNFYzWVdKdm9WSW0vZVpET0E3eW55d1R4NWlFSG9PcUZXeUpRbGlhSGpM?=
+ =?utf-8?B?VW9CeXM1MUVncjBWck91elV3MCtPSjhTbGhLS1F4MXY0c3FxOCtIcTAzUW4z?=
+ =?utf-8?B?SWFUNHpmL0JaQjVIN2JabFVPSXRwN1lVQ0FPYU14NFROVjZEWDhEUnJTdnBX?=
+ =?utf-8?B?dTFMTWxwSCsxbDhEOTFUMG9QVUJtN0NqRG03VE9CMTlDSkpGTUZEdEpqaEpH?=
+ =?utf-8?B?M29oOEwxY1JEUFBkYkRnZjB1Z1Y4a3FhbXBGRklrbWFkVWwwYmVrUElkV3lk?=
+ =?utf-8?B?OWRib0J4ODBFa1d4KzZJMHFmdDlWMnhTWmQ3bWxidkdGVmUwZ1RWUWNZTzlS?=
+ =?utf-8?B?cDVFcWp5U1NucjN2YUdGN0llTi81UEd4ZnN6dTRoVjFuRElMc0M0cTZRbU9m?=
+ =?utf-8?B?VG9TUWpNVDJ0RWNFSStyWkJMVlRpTnp1R1BiOExTYkFNUGNyYVIrcWNZZElh?=
+ =?utf-8?B?ZDhjSElsNE5nOW1TaDFXY0hBdmtrRkhuaHEvbGVTcHIyTkxUZk5OYmtFQmd2?=
+ =?utf-8?B?QUkvb2NQc2ZKQm9TTWc4MG5xd2dhQUk3NGxnZjFLZHNHWStaWVR6dFNVKzk1?=
+ =?utf-8?B?WTRqTkU4WUFweVVFVDhua3drZC9QcnlkQkhsRE1jWmJXOUh1ZXRTaVBXVmpy?=
+ =?utf-8?B?cFlFWk51TE1oQVRQMFA3elhpaVNka3YzdjZGS0Z6WG1WSWdwd0VTUkNkNEs0?=
+ =?utf-8?B?NmNFT09GQkxLdUVjMVJ5TU5salYzTGM4S1pSWTRXcm9IVGJWZjBUQ012NkRH?=
+ =?utf-8?B?d3NLdWlSYkRGUEhhdXNzeDlISHFNTUs3aTdJQTFtc28xY2hFRkZNc3gxekx5?=
+ =?utf-8?B?YzAwczZKWGpieWQyZjdGYWw3cDduNmIvem1rWVlvbXV2cUVqbm9aRXpNVnNl?=
+ =?utf-8?B?V1M2WFc5YW9kL0tYVHFvdGNmRUtNYVhjd2lKbjVEaG1VQ1lMZUFOTnFtenVO?=
+ =?utf-8?B?NnJDaWNGMlREV3N2L0VReUZrOEN2MFBDVjVoekphYU9BZjdIaEhPUU1wQkhv?=
+ =?utf-8?B?YnJTOXR5RENIODZzalFyRXpXdzhzcVdjelRTZ3pvb1p2NzIvWFh0VktMcW1R?=
+ =?utf-8?B?RE9yU3l2eFRhU3FhUWxsdWJUNEtObmxUdTJjUEVOZ3RCSE1kcVJpd0d0dUhI?=
+ =?utf-8?B?M0JOQm9KYXhldVphV1pRUFQ0YXl3dU5pdnN2UVYyRlAxNGpZOFpGaWZoVHVi?=
+ =?utf-8?B?NVF0OERabXVOcmhEWGxtRk1sbUxLZTVycFJnR3hJOGxBN3VqRkUraTI1VmZ4?=
+ =?utf-8?B?b1RnSWRzejc2R1BiQm81Y0ZkZ1d6WUtITjhiYzFYNVp6T0ZkMTRtNDRRdzRa?=
+ =?utf-8?Q?/JzhZnKyT1wtJavZx1ow?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: a95f5411-d8dd-4a7a-fda4-08da8420d627
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9709eeee-d351-4b5a-5a47-08da8420e822
 X-MS-Exchange-CrossTenant-AuthSource: TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 09:29:39.8279
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2022 09:30:09.7401
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -118,31 +118,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 ping
 
-On 2022/8/4 16:49, Peng Liu wrote:
+On 2022/8/4 16:50, Peng Liu wrote:
 > ping
 >
 > On 2022/7/20 20:27, pngliu@hotmail.com wrote:
 >> From: Peng Liu <liupeng17@lenovo.com>
 >>
->> commit 511885d7061e ("lib/timerqueue: Rely on rbtree semantics for next
->> timer") changed struct timerqueue_head, and so print_active_timers()
->> should be changed accordingly with its way to interpret the structure.
+>> Below incompatibilities between Python2 and Python3 made lx-timerlist
+>> fail to run under Python3.
+>>
+>> o xrange() is replaced by range() in Python3
+>> o bytes and str are different types in Python3
+>> o the return value of Inferior.read_memory() is memoryview object in
+>>    Python3
 >>
 >> Signed-off-by: Peng Liu <liupeng17@lenovo.com>
 >> ---
->>   scripts/gdb/linux/timerlist.py | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>   scripts/gdb/linux/timerlist.py | 4 +++-
+>>   scripts/gdb/linux/utils.py     | 5 ++++-
+>>   2 files changed, 7 insertions(+), 2 deletions(-)
 >>
 >> diff --git a/scripts/gdb/linux/timerlist.py 
 >> b/scripts/gdb/linux/timerlist.py
->> index 071d0dd5a634..44e39dc3eb64 100644
+>> index 44e39dc3eb64..8281da068c5b 100644
 >> --- a/scripts/gdb/linux/timerlist.py
 >> +++ b/scripts/gdb/linux/timerlist.py
->> @@ -43,8 +43,7 @@ def print_timer(rb_node, idx):
->>       def print_active_timers(base):
->> -    curr = base['active']['next']['node']
->> -    curr = curr.address.cast(rbtree.rb_node_type.get_type().pointer())
->> +    curr = base['active']['rb_root']['rb_leftmost']
->>       idx = 0
->>       while curr:
->>           yield print_timer(curr, idx)
+>> @@ -72,7 +72,7 @@ def print_cpu(hrtimer_bases, cpu, max_clock_bases):
+>>       ts = cpus.per_cpu(tick_sched_ptr, cpu)
+>>         text = "cpu: {}\n".format(cpu)
+>> -    for i in xrange(max_clock_bases):
+>> +    for i in range(max_clock_bases):
+>>           text += " clock {}:\n".format(i)
+>>           text += print_base(cpu_base['clock_base'][i])
+>>   @@ -157,6 +157,8 @@ def pr_cpumask(mask):
+>>       num_bytes = (nr_cpu_ids + 7) / 8
+>>       buf = utils.read_memoryview(inf, bits, num_bytes).tobytes()
+>>       buf = binascii.b2a_hex(buf)
+>> +    if type(buf) is not str:
+>> +        buf=buf.decode()
+>>         chunks = []
+>>       i = num_bytes
+>> diff --git a/scripts/gdb/linux/utils.py b/scripts/gdb/linux/utils.py
+>> index ff7c1799d588..db59f986c7fd 100644
+>> --- a/scripts/gdb/linux/utils.py
+>> +++ b/scripts/gdb/linux/utils.py
+>> @@ -89,7 +89,10 @@ def get_target_endianness():
+>>       def read_memoryview(inf, start, length):
+>> -    return memoryview(inf.read_memory(start, length))
+>> +    m = inf.read_memory(start, length)
+>> +    if type(m) is memoryview:
+>> +        return m
+>> +    return memoryview(m)
+>>       def read_u16(buffer, offset):

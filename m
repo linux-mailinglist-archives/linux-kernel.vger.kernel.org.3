@@ -2,121 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748D059BDF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD3C59BDF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234154AbiHVK47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 06:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
+        id S234125AbiHVK4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 06:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234141AbiHVK45 (ORCPT
+        with ESMTP id S229637AbiHVK4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 06:56:57 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3A331EDC;
-        Mon, 22 Aug 2022 03:56:55 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id p18so9564554plr.8;
-        Mon, 22 Aug 2022 03:56:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:reply-to:message-id:date
-         :subject:cc:to:from:from:to:cc;
-        bh=hUQZ/Tp1Sqyiv6w3yUz+ygSiTM9PrSsj+REeubDk2qE=;
-        b=C3HaUGLQY/5xCsQrVkt+OdGw/vWjDEQbsfd0003LDMRZiClk+Q/ID/FH98FpvzpkhW
-         YmozuFBomyLxUP7iEui4cprVH2IL/wR6kybEI06V3D+1rKIOvuB2TD1db8RGJWmOn8BO
-         Ratq2FuXP5lPY+ygKTFYyzIWy0inHKk727PrNQfDFkKvRBTwLEKbXo+/gn+HMMKgYacO
-         rdBCeFi1Bl6PTxOETCCW7oGQBBfh+B+wNCG48TleMWHAtuFuzBf7Vns0E08EYK9wDqPu
-         zpaNILIeB1gIwrhs1EoEHnqsdoj9pdDc0wUs235s2eOFfGUM0Jyhgt9dzstb17bArH26
-         KoAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:reply-to:message-id:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=hUQZ/Tp1Sqyiv6w3yUz+ygSiTM9PrSsj+REeubDk2qE=;
-        b=Lf4wRxuSSo5TDCbkX9mMGUzMDY+0yxVL7AlT8EyzaR4u/JJaQDLUpFNivem5kHQQ/I
-         HbqW2MitBSSL1XbQOv19YHaB20J3JxvcIE58elUgSxX0pHt6l8colBHw+Z91YNG9uYqb
-         gX7I5w53G+5J9SL4/xJZQIXBE/q7bMBDPchgLJW6ZWikTmHtbCSM08H3r6sgCDtTtUvu
-         Gdn+FYx8Zybu0w5FV3iCMsaGBPKoMTOSQs13INoiy7q9AoObDKZGbzpXEW7L8XYjyVWl
-         sPdMDKkiO9bVK09/tYZbrqyTUNn91hi/3ALdyRFEYT8zpI1PbyKUuOh3rg4WsHYz/xhU
-         3tdQ==
-X-Gm-Message-State: ACgBeo0KiR1XAzHzIEV03KQedPUXdY73JX84nyO0Xjt/Fm/4dRyY1bIU
-        KobS52gDLGOBOPfkQ0yrgX8=
-X-Google-Smtp-Source: AA6agR5CXRqUs3HJRCeXUJI+lLofKDx4VbPUBq2jOgPfCZ7L6aGgxEOblRidGxRmwmFYt28M9X+3mQ==
-X-Received: by 2002:a17:902:7005:b0:172:98ef:863c with SMTP id y5-20020a170902700500b0017298ef863cmr19616019plk.131.1661165814407;
-        Mon, 22 Aug 2022 03:56:54 -0700 (PDT)
-Received: from KASONG-MB0.tencent.com ([103.7.29.31])
-        by smtp.gmail.com with ESMTPSA id m7-20020a1709026bc700b00172d9f6e22bsm3727399plt.15.2022.08.22.03.56.52
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 22 Aug 2022 03:56:53 -0700 (PDT)
-From:   Kairui Song <ryncsn@gmail.com>
-To:     damon@lists.linux.dev
-Cc:     SeongJae Park <sj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kairui Song <kasong@tencent.com>
-Subject: [PATCH] Docs/admin-guide/mm/damon/usage: fix the example code snip
-Date:   Mon, 22 Aug 2022 18:56:17 +0800
-Message-Id: <20220822105617.75524-1-ryncsn@gmail.com>
-X-Mailer: git-send-email 2.35.2
-Reply-To: Kairui Song <kasong@tencent.com>
+        Mon, 22 Aug 2022 06:56:43 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6FF31EDC;
+        Mon, 22 Aug 2022 03:56:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661165802; x=1692701802;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=sJN5WeBsvGXOKHDiMc4Ct+sVwyokaJcZFdngtgXZnI8=;
+  b=hTS4gtAA8Rpp/MUzUewua/vLimdIGNLldSB6eGrh0dnlk1hnRGzNlO/j
+   gRYBcjrH3hpZNveDQhjLFWfU4SYD9JEFBLST9Mt/Vy2OkoY5ii52tpRCc
+   QWuPst6qnWJey6jrwQeMatMFLgux9Z7NLsPJGnikr+1cv08HixbOGBLJq
+   O21zX2RDZWNfk6h+xSZDpROVdpfIp7mikjCCqNq4MP9U4AptdOD8BFtvS
+   xPoP1elkSk59in6D/cfiRu+w5G45zFyH7ktb/gXKBJDc0hBhBF0vcWhpb
+   BVIclPLrMcL+eNMuPUt7FqKz5z0qQE8E1UX7HE1Bn7W/b1LDIWJP9wJ0g
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="292125783"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="292125783"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 03:56:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="751243026"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 22 Aug 2022 03:56:37 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 22 Aug 2022 13:56:36 +0300
+Date:   Mon, 22 Aug 2022 13:56:36 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Dell XPS 13 9370: ucsi_acpi USBC000:00: UCSI_GET_PDOS returned 0
+ bytes
+Message-ID: <YwNg5L7ymdSgHUrJ@kuha.fi.intel.com>
+References: <726661bf-b95f-02fc-e7c5-c222820ee257@molgen.mpg.de>
+ <Yv+sqa8wdqiuSUZ3@kroah.com>
+ <ab679efe-df85-d2d2-2a4e-842ff9b59b6d@molgen.mpg.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ab679efe-df85-d2d2-2a4e-842ff9b59b6d@molgen.mpg.de>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kairui Song <kasong@tencent.com>
+Hi Paul,
 
-The workflow example code is not working since it got the file names
-wrong. So fix this.
+On Fri, Aug 19, 2022 at 05:59:54PM +0200, Paul Menzel wrote:
+> Am 19.08.22 um 17:30 schrieb Greg KH:
+> > On Fri, Aug 19, 2022 at 03:37:00PM +0200, Paul Menzel wrote:
+> 
+> > > On the Dell XPS 13 9370 with Debian sid/unstable, connecting a Dell DA300
+> > > port replicator Linux 5.18.16 logs a warning:
+> > > 
+> > > ```
+> > > $ dmesg
+> > > [    0.000000] Linux version 5.18.0-4-amd64 (debian-kernel@lists.debian.org)
+> > > (gcc-11 (Debian 11.3.0-5) 11.3.0, GNU ld (GNU Binutils for Debian)
+> > > 2.38.90.20220713) #1 SMP PREEMPT_DYNAMIC Debian 5.18.16-1 (2022-08-10)
+> > > [    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.18.0-4-amd64
+> > > root=UUID=56f398e0-1e25-4fda-aa9f-611dece4b333 ro quiet
+> > > […]
+> > > [    0.000000] DMI: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0 07/06/2022
+> > > […]
+> > > [   13.900028] ucsi_acpi USBC000:00: UCSI_GET_PDOS returned 0 bytes
+> > > ```
+> > 
+> > What warning?
+> 
+> `ucsi_acpi USBC000:00: UCSI_GET_PDOS returned 0 bytes` has log level
+> warning.
 
-Signed-off-by: Kairui Song <kasong@tencent.com>
----
- Documentation/admin-guide/mm/damon/usage.rst | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+Thanks for the report.
 
-diff --git a/Documentation/admin-guide/mm/damon/usage.rst b/Documentation/admin-guide/mm/damon/usage.rst
-index d52f572a90298..ca91ecc290785 100644
---- a/Documentation/admin-guide/mm/damon/usage.rst
-+++ b/Documentation/admin-guide/mm/damon/usage.rst
-@@ -50,10 +50,10 @@ For a short example, users can monitor the virtual address space of a given
- workload as below. ::
- 
-     # cd /sys/kernel/mm/damon/admin/
--    # echo 1 > kdamonds/nr && echo 1 > kdamonds/0/contexts/nr
-+    # echo 1 > kdamonds/nr_kdamonds && echo 1 > kdamonds/0/contexts/nr_contexts
-     # echo vaddr > kdamonds/0/contexts/0/operations
--    # echo 1 > kdamonds/0/contexts/0/targets/nr
--    # echo $(pidof <workload>) > kdamonds/0/contexts/0/targets/0/pid
-+    # echo 1 > kdamonds/0/contexts/0/targets/nr_targets
-+    # echo $(pidof <workload>) > kdamonds/0/contexts/0/targets/0/pid_target
-     # echo on > kdamonds/0/state
- 
- Files Hierarchy
-@@ -366,12 +366,12 @@ memory rate becomes larger than 60%, or lower than 30%". ::
-     # echo 1 > kdamonds/0/contexts/0/schemes/nr_schemes
-     # cd kdamonds/0/contexts/0/schemes/0
-     # # set the basic access pattern and the action
--    # echo 4096 > access_patterns/sz/min
--    # echo 8192 > access_patterns/sz/max
--    # echo 0 > access_patterns/nr_accesses/min
--    # echo 5 > access_patterns/nr_accesses/max
--    # echo 10 > access_patterns/age/min
--    # echo 20 > access_patterns/age/max
-+    # echo 4096 > access_pattern/sz/min
-+    # echo 8192 > access_pattern/sz/max
-+    # echo 0 > access_pattern/nr_accesses/min
-+    # echo 5 > access_pattern/nr_accesses/max
-+    # echo 10 > access_pattern/age/min
-+    # echo 20 > access_pattern/age/max
-     # echo pageout > action
-     # # set quotas
-     # echo 10 > quotas/ms
+That warning is meant to indicate that the underlying firmware (most
+likely the Embedded Controller firmware) is buggy and unable to tell
+us the Power Data Objects (PDO) that the partner device advertised.
+
+However, you will also see the warning if the firmware has notified
+our driver about a contract with the partner simply before making
+those objects available for the operating system. That problem is
+known, and it has actually already been worked around in the driver -
+the PDOs are now "polled" for a while after the firmware notification.
+
+I'll see if I can reproduce the problem so I understand exactly what's
+going on in this case - I should have access to one of those XPS 13
+9370 laptops.
+
+But I'll in any case clean up this part of the driver, so the warning
+should go away - one way or the other.
+
+thanks,
+
 -- 
-2.35.2
-
+heikki

@@ -2,145 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35DE659C882
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C140459C948
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 21:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238452AbiHVTSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 15:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
+        id S237477AbiHVTwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 15:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238496AbiHVTSP (ORCPT
+        with ESMTP id S231355AbiHVTwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 15:18:15 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB874DB7A;
-        Mon, 22 Aug 2022 12:17:17 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id gt3so10757409ejb.12;
-        Mon, 22 Aug 2022 12:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=Ww/zLVja8aGocviQTazyplD8WiIYTW+lQEN/JOcoOp0=;
-        b=eSIXWq3zBlZ5kRMrRBBhgnmPJWSwhwcolElJUXH3iiGx2gcK8xoKHZAuL6ll5nXc/r
-         vF3y4kQ+Fik0eYXxR1dWkOJAtDytOn7JlYDZ/knhqgKi++Q1T26q9ud0edqY2LkVoQoF
-         en6JrFaydF6c3gvy8u2RLYbyLaHnndUYLwv0R5d4shdPm4+Uhult19HUJH31gkRF8VAK
-         JrfgOedDtM55nkjmbnhPvWq2H2yA/mzbHH1gQN0Hpgm7MfkqaAlNGa1KiyKRBE0QtXeO
-         Nk5Xn9TtGxSCtWR4QoyGYSH4O22DcGowNF99CsAw/T3JFlaKgikr1hGqU6d2asSjDJpY
-         z/Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=Ww/zLVja8aGocviQTazyplD8WiIYTW+lQEN/JOcoOp0=;
-        b=3b4AC2Pi0zaWcbOC4X702GoIMZj3n+CqjXu6+PFNgWF/t5M4/XTGT60QdEREBjd1U6
-         pk+fWayG2SKv8i5fS36cvzLpdaucOPnGXxocbIzY5IRc+1FtNIIVqHVOMiBkHLOziDz7
-         Kttdio0aznG7XcwFXg1pJOp1yxTf9rXrvxLokIE4azA5ObdY5Sh/B07OfUJCmmgYN1ly
-         dtc041eXvGZ+7+3XIr0NI8gLKuCnzeggVAyIv7onRAPt2qO5RBoKv3oKRM9Eq2s3hSvq
-         xWZOTUjjxD7i48iHBkS/1hSfhpRa0zW3ysrcWTSXu2gU73RPomjnr4erOve27b0yESct
-         mudA==
-X-Gm-Message-State: ACgBeo3jt581mB3a+66u/hFBUvrarELbxh+B5bbmvCGMM61aBg+rIhIo
-        e8QPcvBg3YbLvZ9cQoQK4qM=
-X-Google-Smtp-Source: AA6agR74OXBMyMhgrrICVycGtQDBtWfFv0yng7NSivL2HvsIdp9lfatgEQrDaKYmO5dMRCVWay3U5Q==
-X-Received: by 2002:a17:907:c15:b0:73d:8337:3aa8 with SMTP id ga21-20020a1709070c1500b0073d83373aa8mr3788064ejc.254.1661195833128;
-        Mon, 22 Aug 2022 12:17:13 -0700 (PDT)
-Received: from nuc ([2a02:168:633b:1:1e69:7aff:fe05:97e6])
-        by smtp.gmail.com with ESMTPSA id bt2-20020a0564020a4200b0043d7b19abd0sm168795edb.39.2022.08.22.12.17.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 12:17:12 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 21:17:11 +0200
-From:   =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     mic@digikod.net, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, corbet@lwn.net,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH -next 0/5] landlock: add chmod and chown support
-Message-ID: <YwPWN/d15S24PuLS@nuc>
-References: <20220822114701.26975-1-xiujianfeng@huawei.com>
+        Mon, 22 Aug 2022 15:52:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0696E52DCF;
+        Mon, 22 Aug 2022 12:52:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9549E61254;
+        Mon, 22 Aug 2022 19:52:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0513CC433D6;
+        Mon, 22 Aug 2022 19:52:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661197934;
+        bh=ShFJ2TGJJbdMrkcEWhJxnGSDlE6UztbQu3XQLJxc21w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Dxj/TJruxaMrzKSDsghLzrUeoAfCfmE4I8J88DF7Thecpek92MPwUPmcWcWRC79ec
+         pB6F4uGMLA66pxSHA0EusRJ3By6cVpEHlBLJYhVf7appe+Luoq+X7eRCvaq2iKhuGQ
+         5wV8ZjvRcgTi2dV2B8Vm/eBreLrSiwJ7X32rKi6fO+A/RPPmKI0lLa+Y/6VuSLFiAp
+         CfKGamzm76RoD9QD0nkzgcW1TnPT6CM7VBT/mLv/snxUiGbevqq3gl2HT2wEK18h2e
+         ZgITcAZtPxRjxLqhZ4xLBLoMqIsrRF2scdcykyxZxLWr2+kF0I6aNzI8Drqjzvuh6v
+         J5cZItyUWnVEw==
+Date:   Mon, 22 Aug 2022 20:17:45 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Ciprian Regus <ciprian.regus@analog.com>,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, u.kleine-koenig@pengutronix.de
+Subject: Re: [PATCH 3/3] drivers: iio: adc: Rename the LTC249x iio device
+Message-ID: <20220822201745.1e09fee7@jic23-huawei>
+In-Reply-To: <0f778952-1909-1038-8f9a-3a7d7f12d6e1@metafoo.de>
+References: <20220822125106.1106798-1-ciprian.regus@analog.com>
+        <20220822125106.1106798-4-ciprian.regus@analog.com>
+        <0f778952-1909-1038-8f9a-3a7d7f12d6e1@metafoo.de>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220822114701.26975-1-xiujianfeng@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Mon, 22 Aug 2022 16:08:12 +0200
+Lars-Peter Clausen <lars@metafoo.de> wrote:
 
-Very exciting to see! Thank you for sending this! :)
+> On 8/22/22 14:51, Ciprian Regus wrote:
+> > Set the iio device's name based on the chip used.  
+> 
+> While the change is correct it breaks the ABI. This needs a bit of a 
+> better explanation what is being done, why, what are the potential 
+> problems, why do we want to do it anyway.
 
-I'm just throwing in some comments based on the very similar truncate
-patch set, in the hope that it helps. (But obviously, Mickaël Salaün
-has the last word on this code.)
++ it's a fix, so if we are doing this we need to enable backporting
+by moving to first patch in series (obviously just for the
+already supported parts).  
 
-Slightly higher level question: Should we start to group the
-functionality of multiple LSM hooks under one Landlock flag? (Will it
-be harder to change the LSM hook interface in the future if we
-continue to add one flag per hook? Or is this structure already
-exposed to userspace by other LSMs?)
+Jonathan
 
-For example, some of the "missing" operations listed on the Landlock
-documentation could also be grouped roughly as:
+> 
+> >
+> > Signed-off-by: Ciprian Regus <ciprian.regus@analog.com>
+> > ---
+> >   drivers/iio/adc/ltc2496.c      | 1 +
+> >   drivers/iio/adc/ltc2497-core.c | 2 +-
+> >   drivers/iio/adc/ltc2497.c      | 2 ++
+> >   drivers/iio/adc/ltc2497.h      | 1 +
+> >   4 files changed, 5 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/iio/adc/ltc2496.c b/drivers/iio/adc/ltc2496.c
+> > index 98338104c24a..86470f49e8ca 100644
+> > --- a/drivers/iio/adc/ltc2496.c
+> > +++ b/drivers/iio/adc/ltc2496.c
+> > @@ -89,6 +89,7 @@ static void ltc2496_remove(struct spi_device *spi)
+> >   
+> >   static struct chip_info ltc2496_info = {
+> >   	.resolution = 16,
+> > +	.name = "ltc2496"
+> >   };
+> >   
+> >   static const struct of_device_id ltc2496_of_match[] = {
+> > diff --git a/drivers/iio/adc/ltc2497-core.c b/drivers/iio/adc/ltc2497-core.c
+> > index b2752399402c..6dd9ab601904 100644
+> > --- a/drivers/iio/adc/ltc2497-core.c
+> > +++ b/drivers/iio/adc/ltc2497-core.c
+> > @@ -169,7 +169,7 @@ int ltc2497core_probe(struct device *dev, struct iio_dev *indio_dev)
+> >   	struct ltc2497core_driverdata *ddata = iio_priv(indio_dev);
+> >   	int ret;
+> >   
+> > -	indio_dev->name = dev_name(dev);
+> > +	indio_dev->name = ddata->chip_info->name;
+> >   	indio_dev->info = &ltc2497core_info;
+> >   	indio_dev->modes = INDIO_DIRECT_MODE;
+> >   	indio_dev->channels = ltc2497core_channel;
+> > diff --git a/drivers/iio/adc/ltc2497.c b/drivers/iio/adc/ltc2497.c
+> > index bb5e0d4301e2..a0aad71c8130 100644
+> > --- a/drivers/iio/adc/ltc2497.c
+> > +++ b/drivers/iio/adc/ltc2497.c
+> > @@ -99,9 +99,11 @@ static int ltc2497_remove(struct i2c_client *client)
+> >   static struct chip_info ltc2497_info[] = {
+> >   	[TYPE_LTC2497] = {
+> >   		.resolution = 16,
+> > +		.name = "ltc2497"
+> >   	},
+> >   	[TYPE_LTC2499] = {
+> >   		.resolution = 24,
+> > +		.name = "ltc2499"
+> >   	}
+> >   };
+> >   
+> > diff --git a/drivers/iio/adc/ltc2497.h b/drivers/iio/adc/ltc2497.h
+> > index f4d939cfd48b..0e86e38248ee 100644
+> > --- a/drivers/iio/adc/ltc2497.h
+> > +++ b/drivers/iio/adc/ltc2497.h
+> > @@ -12,6 +12,7 @@ enum chip_type {
+> >   
+> >   struct chip_info {
+> >   	u32 resolution;
+> > +	char *name;
+> >   };
+> >   
+> >   struct ltc2497core_driverdata {  
+> 
+> 
 
-Modifying files:
- - truncate
-
-Modifying file metadata:
- - chmod
- - chown
- - setxattr
- - utime
-
-Observing files (check presence and file metadata):
- - access
- - stat
- - readlink, following links (can observe symlink presence)
- - chdir (can observe dir presence and 'x' attribute)
-
-Ungrouped:
- - flock
- - ioctl
- - fcntl
-
-Do you have opinions on this?
-
-—Günther
-
-On Mon, Aug 22, 2022 at 07:46:56PM +0800, Xiu Jianfeng wrote:
-> hi,
->   this patchset adds chmod and chown support for landlock
->
-> Xiu Jianfeng (5):
->   landlock: expand access_mask_t to u32 type
->   landlock: add chmod and chown support
->   landlock/selftests: add selftests for chmod and chown
->   landlock/samples: add chmod and chown support
->   landlock: update chmod and chown support in document
->
->  Documentation/userspace-api/landlock.rst     |   8 +-
->  include/uapi/linux/landlock.h                |   8 +-
->  samples/landlock/sandboxer.c                 |  12 +-
->  security/landlock/fs.c                       |  16 +-
->  security/landlock/limits.h                   |   2 +-
->  security/landlock/ruleset.h                  |   2 +-
->  security/landlock/syscalls.c                 |   2 +-
->  tools/testing/selftests/landlock/base_test.c |   2 +-
->  tools/testing/selftests/landlock/fs_test.c   | 234 ++++++++++++++++++-
->  9 files changed, 274 insertions(+), 12 deletions(-)
->
-> --
-> 2.17.1
->
-
---

@@ -2,182 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A0059BE00
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0968059BE0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbiHVK7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 06:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S233763AbiHVLCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiHVK64 (ORCPT
+        with ESMTP id S231190AbiHVLCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 06:58:56 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D9C31230;
-        Mon, 22 Aug 2022 03:58:53 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id o22so13336677edc.10;
-        Mon, 22 Aug 2022 03:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=l/LzIhPe9ZTwGL9N0G3IR78vwpYSKjEk5JerrPZ+Ejo=;
-        b=Uo63L0oGuXttZhHN4XJDd7Yk9cuKw2mTwcaEljw6hjBYWig7OS9VB7K1mzfL2EFBKr
-         XBP2dIWW+q5jeGJWxci/I7uQ1EAi0SaQAPsFm+bcQQvpOY2BWq4qZEA3dzroYr/ttTMG
-         FNh3IvETdStsqN1/597U/tw//3tgux3GHuX+jdYjKniZkLV4BwBTgscQb59JsslnD3bR
-         hBLgtOlgJBH38JE/rDlFWCUO6BvD+5lpeZmuycDKOvHql6fm5WET93M+rTl5ab3YUKcq
-         Wctx2hTikYI/zIwRKOmIZWB+I8PM6A8O3Q1yLpqFlFymyuqBdR7novHoK7RZCsL0icQ7
-         mkqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=l/LzIhPe9ZTwGL9N0G3IR78vwpYSKjEk5JerrPZ+Ejo=;
-        b=gu9rFgYRSWXGuv1+LSxTfrqugGo8wWc0n1lgKZoBWFMlIVx++aIu960HmUdYPZnK0i
-         D2QupnhQ4WaK1tA99AgIrNPOk59OzRrnDYyeAL9Kq+1o5hyuFYqcPwx/fBKkmIJI9tAg
-         Qw8B+1VZO/auiv5Rqg0iwY9a6QJ3j5WTe7vCUMaybFeIil9ELNw2amSCBQNtkqSgpPaS
-         bnsGXcV3J7oOw9/CsM18/cK7b4I7LPhQ4vzfHhEr8XB0L69lFBStO2OuSLhBhFTjurxX
-         Pe/eNd+EdK/0ELcltfF/+NmL93G7yCaoNcNYm98Yv5v7wOslw6dwWr1cfhqUJeW8qfFm
-         wbtQ==
-X-Gm-Message-State: ACgBeo3VKMkyzrT/RNZa5eirv3punTWKs8gygREA4jPNsveHziVp/qVK
-        gfADMBlWajT9PgYha41WnQM=
-X-Google-Smtp-Source: AA6agR6cWPvpGJFviWOBgVZVY1+3fDdKs6dGgBZXzzVrjPl3a947xyPgoMPCgjTTt4XboZ2i5XPf5g==
-X-Received: by 2002:a05:6402:3805:b0:43e:8335:3a2a with SMTP id es5-20020a056402380500b0043e83353a2amr16055078edb.296.1661165932033;
-        Mon, 22 Aug 2022 03:58:52 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id ss2-20020a170907c00200b007309f007d3asm5874225ejc.128.2022.08.22.03.58.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 03:58:51 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 22 Aug 2022 12:58:49 +0200
-To:     roberto.sassu@huaweicloud.com
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        namhyung@kernel.org, quentin@isovalent.com,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH 3/3] tools/build: Display logical OR of a feature flavors
-Message-ID: <YwNhabqHEq3PfNM8@krava>
-References: <20220818120957.319995-1-roberto.sassu@huaweicloud.com>
- <20220818120957.319995-3-roberto.sassu@huaweicloud.com>
+        Mon, 22 Aug 2022 07:02:09 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65D631DF2;
+        Mon, 22 Aug 2022 04:02:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661166128; x=1692702128;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=ZDyXoOKFLsJWDZrI4atkglbvrUUdtWkTh1x2BJ1kAgI=;
+  b=cgjFHuUIhA+Ge5rLWhS++6HozXbx4k8D0O2DeY2XoTE4BxXAvtG78d9x
+   nCZpPOTmXKg2JZJxuQBsXmkREpzXCl2gyOatcdTwSBfhNdieNZGdj1AZb
+   jhsDKuHbIev4nN6Nic40meGw4fGJbE4rsqs+SkGJVClkHGto4dWcb74gd
+   kuQ9nnmBmcOMl88KIRBl4fAmmknSQloKIk5TEZN3BYAL+aJ2U13sTz4+P
+   +ZL1NEYbg0rGxbqsq6qaQc2eHvoRUSXMBz0kVX1oVshYOGLXIUJM3xV8I
+   fjHXy7LxaMrp8TmESQLzPrui2bCMx5rqIhzfIQV1zLZmWv8komfrwEMJE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="280355115"
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="280355115"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 04:02:08 -0700
+X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
+   d="scan'208";a="669489583"
+Received: from trangnek-mobl.gar.corp.intel.com (HELO localhost) ([10.252.50.159])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 04:02:03 -0700
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Andi Shyti <andi.shyti@linux.intel.com>
+Cc:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mchehab@kernel.org,
+        chris@chris-wilson.co.uk, matthew.auld@intel.com,
+        thomas.hellstrom@linux.intel.com, nirmoy.das@intel.com,
+        airlied@linux.ie, daniel@ffwll.ch, andrzej.hajda@intel.com,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v7 1/8] overflow: Move and add few utility macros into
+ overflow
+In-Reply-To: <202208171657.63AE7AC@keescook>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220816093525.184940-1-gwan-gyeong.mun@intel.com>
+ <20220816093525.184940-2-gwan-gyeong.mun@intel.com>
+ <Yv10sQADwdZrIV42@alfio.lan> <202208171657.63AE7AC@keescook>
+Date:   Mon, 22 Aug 2022 14:02:01 +0300
+Message-ID: <87r118mthy.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818120957.319995-3-roberto.sassu@huaweicloud.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 02:09:57PM +0200, roberto.sassu@huaweicloud.com wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Sometimes, features are simply different flavors of another feature, to
-> properly detect the exact dependencies needed by different Linux
-> distributions.
-> 
-> For example, libbfd has three flavors: libbfd if the distro does not
-> require any additional dependency; libbfd-liberty if it requires libiberty;
-> libbfd-liberty-z if it requires libiberty and libz.
-> 
-> It might not be clear to the user whether a feature has been successfully
-> detected or not, given that some of its flavors will be set to OFF, others
-> to ON.
-> 
-> Instead, display only the feature main flavor if not in verbose mode
-> (VF != 1), and set it to ON if at least one of its flavors has been
-> successfully detected (logical OR), OFF otherwise. Omit the other flavors.
-> 
-> Accomplish that by declaring a FEATURE_GROUP_MEMBERS-<feature main flavor>
-> variable, with the list of the other flavors as variable value. For now, do
-> it just for libbfd.
-> 
-> In verbose mode, of if no group is defined for a feature, show the feature
-> detection result as before.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  tools/build/Makefile.feature | 27 +++++++++++++++++++++++++--
->  1 file changed, 25 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
-> index 6c809941ff01..57619f240b56 100644
-> --- a/tools/build/Makefile.feature
-> +++ b/tools/build/Makefile.feature
-> @@ -137,6 +137,12 @@ FEATURE_DISPLAY ?=              \
->           libaio			\
->           libzstd
->  
-> +#
-> +# Declare group members of a feature to display the logical OR of the detection
-> +# result instead of each member result.
-> +#
-> +FEATURE_GROUP_MEMBERS-libbfd = libbfd-liberty libbfd-liberty-z
+On Wed, 17 Aug 2022, Kees Cook <keescook@chromium.org> wrote:
+> On Thu, Aug 18, 2022 at 01:07:29AM +0200, Andi Shyti wrote:
+>> Hi Kees,
+>>=20
+>> would you mind taking a look at this patch?
+>
+> Hi! Thanks for the heads-up!
 
-nice, I checked and could not find any other 'flavours' instance
-like libbfd, but it might happen in future
+Thanks for your review. This actually reaffirms my belief that we need
+to get these macros out of i915_utils.h and into the common headers,
+where we can get more eyes on them.
 
-for the whole patchset:
-
-Tested-by: Jiri Olsa <jolsa@kernel.org>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-thanks,
-jirka
+BR,
+Jani.
 
 
-> +
->  # Set FEATURE_CHECK_(C|LD)FLAGS-all for all FEATURE_TESTS features.
->  # If in the future we need per-feature checks/flags for features not
->  # mentioned in this list we need to refactor this ;-).
-> @@ -179,8 +185,17 @@ endif
->  #
->  feature_print_status = $(eval $(feature_print_status_code))
->  
-> +feature_group = $(eval $(feature_gen_group)) $(GROUP)
-> +
-> +define feature_gen_group
-> +  GROUP := $(1)
-> +  ifneq ($(feature_verbose),1)
-> +    GROUP += $(FEATURE_GROUP_MEMBERS-$(1))
-> +  endif
-> +endef
-> +
->  define feature_print_status_code
-> -  ifeq ($(feature-$(1)), 1)
-> +  ifneq (,$(filter 1,$(foreach feat,$(call feature_group,$(feat)),$(feature-$(feat)))))
->      MSG = $(shell printf '...%40s: [ \033[32mon\033[m  ]' $(1))
->    else
->      MSG = $(shell printf '...%40s: [ \033[31mOFF\033[m ]' $(1))
-> @@ -244,12 +259,20 @@ ifeq ($(VF),1)
->    feature_verbose := 1
->  endif
->  
-> +ifneq ($(feature_verbose),1)
-> +  #
-> +  # Determine the features to omit from the displayed message, as only the
-> +  # logical OR of the detection result will be shown.
-> +  #
-> +  FEATURE_OMIT := $(foreach feat,$(FEATURE_DISPLAY),$(FEATURE_GROUP_MEMBERS-$(feat)))
-> +endif
-> +
->  feature_display_entries = $(eval $(feature_display_entries_code))
->  define feature_display_entries_code
->    ifeq ($(feature_display),1)
->      $$(info )
->      $$(info Auto-detecting system features:)
-> -    $(foreach feat,$(FEATURE_DISPLAY),$(call feature_print_status,$(feat),) $$(info $(MSG)))
-> +    $(foreach feat,$(filter-out $(FEATURE_OMIT),$(FEATURE_DISPLAY)),$(call feature_print_status,$(feat),) $$(info $(MSG)))
->    endif
->  
->    ifeq ($(feature_verbose),1)
-> -- 
-> 2.25.1
-> 
+>
+>>=20
+>> Thanks,
+>> Andi
+>>=20
+>> On Tue, Aug 16, 2022 at 06:35:18PM +0900, Gwan-gyeong Mun wrote:
+>> > It moves overflows_type utility macro into overflow header from i915_u=
+tils
+>> > header. The overflows_type can be used to catch the truncation between=
+ data
+>> > types. And it adds safe_conversion() macro which performs a type conve=
+rsion
+>> > (cast) of an source value into a new variable, checking that the
+>> > destination is large enough to hold the source value. And the function=
+ality
+>> > of overflows_type has been improved to handle the signbit.
+>> > The is_unsigned_type macro has been added to check the sign bit of the
+>> > built-in type.
+>> >=20
+>> > v3: Add is_type_unsigned() macro (Mauro)
+>> >     Modify overflows_type() macro to consider signed data types (Mauro)
+>> >     Fix the problem that safe_conversion() macro always returns true
+>> > v4: Fix kernel-doc markups
+>> > v6: Move macro addition location so that it can be used by other than =
+drm
+>> >     subsystem (Jani, Mauro, Andi)
+>> >     Change is_type_unsigned to is_unsigned_type to have the same name =
+form
+>> >     as is_signed_type macro
+>> >=20
+>> > Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+>> > Cc: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
+>> > Cc: Matthew Auld <matthew.auld@intel.com>
+>> > Cc: Nirmoy Das <nirmoy.das@intel.com>
+>> > Cc: Jani Nikula <jani.nikula@intel.com>
+>> > Cc: Andi Shyti <andi.shyti@linux.intel.com>
+>> > Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org> (v5)
+>> > ---
+>> >  drivers/gpu/drm/i915/i915_utils.h |  5 +--
+>> >  include/linux/overflow.h          | 54 +++++++++++++++++++++++++++++++
+>> >  2 files changed, 55 insertions(+), 4 deletions(-)
+>> >=20
+>> > diff --git a/drivers/gpu/drm/i915/i915_utils.h b/drivers/gpu/drm/i915/=
+i915_utils.h
+>> > index c10d68cdc3ca..eb0ded23fa9c 100644
+>> > --- a/drivers/gpu/drm/i915/i915_utils.h
+>> > +++ b/drivers/gpu/drm/i915/i915_utils.h
+>> > @@ -32,6 +32,7 @@
+>> >  #include <linux/types.h>
+>> >  #include <linux/workqueue.h>
+>> >  #include <linux/sched/clock.h>
+>> > +#include <linux/overflow.h>
+>> >=20=20
+>> >  #ifdef CONFIG_X86
+>> >  #include <asm/hypervisor.h>
+>> > @@ -111,10 +112,6 @@ bool i915_error_injected(void);
+>> >  #define range_overflows_end_t(type, start, size, max) \
+>> >  	range_overflows_end((type)(start), (type)(size), (type)(max))
+>> >=20=20
+>> > -/* Note we don't consider signbits :| */
+>> > -#define overflows_type(x, T) \
+>> > -	(sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T))
+>> > -
+>> >  #define ptr_mask_bits(ptr, n) ({					\
+>> >  	unsigned long __v =3D (unsigned long)(ptr);			\
+>> >  	(typeof(ptr))(__v & -BIT(n));					\
+>> > diff --git a/include/linux/overflow.h b/include/linux/overflow.h
+>> > index f1221d11f8e5..462a03454377 100644
+>> > --- a/include/linux/overflow.h
+>> > +++ b/include/linux/overflow.h
+>> > @@ -35,6 +35,60 @@
+>> >  #define type_max(T) ((T)((__type_half_max(T) - 1) + __type_half_max(T=
+)))
+>> >  #define type_min(T) ((T)((T)-type_max(T)-(T)1))
+>> >=20=20
+>> > +/**
+>> > + * is_unsigned_type - helper for checking data type which is an unsig=
+ned data
+>> > + * type or not
+>> > + * @x: The data type to check
+>> > + *
+>> > + * Returns:
+>> > + * True if the data type is an unsigned data type, false otherwise.
+>> > + */
+>> > +#define is_unsigned_type(x) ((typeof(x))-1 >=3D (typeof(x))0)
+>
+> I'd rather not have separate logic for this. Instead, I'd like it to be:
+>
+> #define is_unsigned_type(x) (!is_signed_type(x))
+>
+>> > +
+>> > +/**
+>> > + * overflows_type - helper for checking the truncation between data t=
+ypes
+>> > + * @x: Source for overflow type comparison
+>> > + * @T: Destination for overflow type comparison
+>> > + *
+>> > + * It compares the values and size of each data type between the firs=
+t and
+>> > + * second argument to check whether truncation can occur when assigni=
+ng the
+>> > + * first argument to the variable of the second argument.
+>> > + * Source and Destination can be used with or without sign bit.
+>> > + * Composite data structures such as union and structure are not cons=
+idered.
+>> > + * Enum data types are not considered.
+>> > + * Floating point data types are not considered.
+>> > + *
+>> > + * Returns:
+>> > + * True if truncation can occur, false otherwise.
+>> > + */
+>> > +#define overflows_type(x, T) \
+>> > +	(is_unsigned_type(x) ? \
+>> > +		is_unsigned_type(T) ? \
+>> > +			(sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T)) ? 1 : 0 \
+>> > +			: (sizeof(x) >=3D sizeof(T) && (x) >> (BITS_PER_TYPE(T) - 1)) ? 1 =
+: 0 \
+>> > +	: is_unsigned_type(T) ? \
+>> > +		((x) < 0) ? 1 : (sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T)) =
+? 1 : 0 \
+>> > +		: (sizeof(x) > sizeof(T)) ? \
+>> > +			((x) < 0) ? (((x) * -1) >> BITS_PER_TYPE(T)) ? 1 : 0 \
+>> > +				: ((x) >> BITS_PER_TYPE(T)) ? 1 : 0 \
+>> > +			: 0)
+>
+> Like the other, I'd much rather this was rephrased in terms of the
+> existing macros (e.g. type_min()/type_max().)
+>
+>> > +
+>> > +/**
+>> > + * safe_conversion - perform a type conversion (cast) of an source va=
+lue into
+>> > + * a new variable, checking that the destination is large enough to h=
+old the
+>> > + * source value.
+>> > + * @ptr: Destination pointer address
+>> > + * @value: Source value
+>> > + *
+>> > + * Returns:
+>> > + * If the value would overflow the destination, it returns false.
+>> > + */
+>> > +#define safe_conversion(ptr, value) ({ \
+>> > +	typeof(value) __v =3D (value); \
+>> > +	typeof(ptr) __ptr =3D (ptr); \
+>> > +	overflows_type(__v, *__ptr) ? 0 : ((*__ptr =3D (typeof(*__ptr))__v),=
+ 1); \
+>> > +})
+>
+> I try to avoid "safe" as an adjective for interface names, since it
+> doesn't really answer "safe from what?" This looks more like "assign, but
+> zero when out of bounds". And it can be built from existing macros here:
+>
+> 	if (check_add_overflow(0, value, ptr))
+> 		*ptr =3D 0;
+>
+> I actually want to push back on this a bit, because there can still be
+> logic bugs built around this kind of primitive. Shouldn't out-of-bounds
+> assignments be seen as a direct failure? I would think this would be
+> sufficient:
+>
+> #define check_assign(value, ptr)	check_add_overflow(0, value, ptr)
+>
+> And callers would do:
+>
+> 	if (check_assign(value, &var))
+> 		return -EINVAL;
+>
+> etc.
+
+--=20
+Jani Nikula, Intel Open Source Graphics Center

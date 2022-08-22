@@ -2,318 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36FA559B9CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 08:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDF359B9DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 08:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232675AbiHVGt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 02:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S232791AbiHVG42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 02:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232403AbiHVGtX (ORCPT
+        with ESMTP id S229996AbiHVG4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 02:49:23 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429B419C37
-        for <linux-kernel@vger.kernel.org>; Sun, 21 Aug 2022 23:49:19 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MB2w40Ld9znTh8;
-        Mon, 22 Aug 2022 14:47:00 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 22 Aug 2022 14:49:16 +0800
-Received: from [10.174.178.93] (10.174.178.93) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 22 Aug 2022 14:49:16 +0800
-Message-ID: <919c20ad-6785-59e4-e39a-a345346fb550@huawei.com>
-Date:   Mon, 22 Aug 2022 14:49:15 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] sched/fair: Introduce priority load balance to reduce
- interference from IDLE tasks
+        Mon, 22 Aug 2022 02:56:24 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2069.outbound.protection.outlook.com [40.107.237.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EC127FFA;
+        Sun, 21 Aug 2022 23:56:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TQuHLlglgQwSCwnbiKfUBgOvZl/2wBSMZGTu5eB6XYu8Pk/W/TxFmR2A/NmKtc7rmzJ+7Vv8/gddpvxl549acX3lYvmWPusraErjebJyRES87G2UOumKfngleVJla8nI1ceg0s43tWrHsmtOmiyFnIjcp6JF413Ra2raA+u35anyrP+duDrytEuymP42U57dcmKcZFfbUCN7AlfKjDwdBt6l+xhwQBDKjVcmyokubBD2TWOCXZ+sY0WszOaeYo7b8cNV7f0RKrWn0SAuYnaZaHgmrD86+YEwfsGeThmVWUOoDv6hAXnxIFNeBmHXy/0xo5qCoPhoXYOQ627AXn6cMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3s9fMXdwNrnUrqTg06f+SplW05Xo+uG0uN9ALAFxXBM=;
+ b=bU7vQsJd+HKQD7j1zYAJvKrp4fH0AYVxYF74x+aIdpWkZmK4WVcMbVXZ1SF1FlQJMH0uXoJfxiCKVZwp47VU65QcpeWpsoT1jT434ZLpdZHsQO7CSifLnVKBw06rJifFOQ6X3PnmDXkWWss7Fym75X8SBEd3wfBmnNtYTWHJdwplH9bA2TTJB5LjUTvvZArNgsafDIuuLSDVoLGhQ/vwmQR/dQg+wSExOdLHqAwgvdVvB5SF8ORM99J0gOCKLZA2+++SB/aULTDF2yRkEoUuNcIw/lby4qrE7QQlKD+yHMpkhpOBykJoF4gUz2o0MbjpvbIDOPu3D9YXJgvpKdXNLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3s9fMXdwNrnUrqTg06f+SplW05Xo+uG0uN9ALAFxXBM=;
+ b=Ih88/5dN+lwLyJMxUFv5Yrjelif9UQ0E2K1B8QMsLxCTbg0f59ltSpD20SEjhxDLPZfRT/xNgmg04ACMEt6I+uQn3MWtEkryANU6zybh/K5yBpWc9J4VTBYySjSM9unkjYBRsHiqv65NxO26ZHsWU4AbOPeV9pP5j+ifoU3BSNPmuwWJJAGF5LHrl1qsHfJaJbnQPuUB8obXCJGRt/e2dmLE9CWpwpXOX+3bZgaslD9iEY3/67YoivmQUIy/M8m+Hjrf07NCIa9k4QH6CQrqh+YDytxeQNptvxYOh1eMUv40kEcMaqWBEe2lRe9fXb9vJfPnCBmzrKU0G6l1mW978w==
+Received: from SJ1PR12MB6339.namprd12.prod.outlook.com (2603:10b6:a03:454::10)
+ by DM5PR1201MB0156.namprd12.prod.outlook.com (2603:10b6:4:59::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Mon, 22 Aug
+ 2022 06:56:19 +0000
+Received: from SJ1PR12MB6339.namprd12.prod.outlook.com
+ ([fe80::24cb:46cd:5176:aa13]) by SJ1PR12MB6339.namprd12.prod.outlook.com
+ ([fe80::24cb:46cd:5176:aa13%9]) with mapi id 15.20.5546.022; Mon, 22 Aug 2022
+ 06:56:19 +0000
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "wsa@kernel.org" <wsa@kernel.org>
+Subject: RE: [PATCH RESEND 1/2] i2c: tegra: Add GPCDMA support
+Thread-Topic: [PATCH RESEND 1/2] i2c: tegra: Add GPCDMA support
+Thread-Index: AQHYs8aKp+OlLQycOkO470/UfA2RzK22VXAAgAADTwCABBngUA==
+Date:   Mon, 22 Aug 2022 06:56:19 +0000
+Message-ID: <SJ1PR12MB6339FC1F82EB1BB7417E533BC0719@SJ1PR12MB6339.namprd12.prod.outlook.com>
+References: <20220819122313.40445-1-akhilrajeev@nvidia.com>
+ <20220819122313.40445-2-akhilrajeev@nvidia.com>
+ <20281ca7-e597-7030-4861-5f9a3594726d@gmail.com>
+ <89a746fd-a98e-3147-7811-33c5051c2b6d@gmail.com>
+In-Reply-To: <89a746fd-a98e-3147-7811-33c5051c2b6d@gmail.com>
+Accept-Language: en-IN, en-US
 Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-CC:     Abel Wu <wuyun.abel@bytedance.com>, <mingo@redhat.com>,
-        <peterz@infradead.org>, <juri.lelli@redhat.com>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-References: <20220810015636.3865248-1-zhangsong34@huawei.com>
- <b62804cb-2b60-a534-5096-56785a1940bd@bytedance.com>
- <e2c9eccc-dd86-16e9-c43e-8415f99f413e@huawei.com>
- <13a7a412-5e2e-6ef8-acd6-a761aad66c3a@bytedance.com>
- <6ae319c0-e6ed-4aad-64b8-d3f6cbea688d@huawei.com>
- <CAKfTPtAcEstoqC+9-y9ubaXDSGbfLdMhFboMPn433QNPD114dQ@mail.gmail.com>
- <9a63b371-9940-caee-7fa1-2c230bec0bd1@bytedance.com>
- <20220818083133.GA536@vingu-book>
- <798411ac-6edb-d22c-5378-297268e77b1a@huawei.com>
- <CAKfTPtBcJhC4qPQuK9g4bL0sgtmqkA3JZmnGJz7DaejsUPkOeg@mail.gmail.com>
- <CAKfTPtBEaaLUdapJRvPFX3UZrkynRUfdDg6dAZ_vm2OK9eN0Fg@mail.gmail.com>
-From:   "zhangsong (J)" <zhangsong34@huawei.com>
-In-Reply-To: <CAKfTPtBEaaLUdapJRvPFX3UZrkynRUfdDg6dAZ_vm2OK9eN0Fg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.93]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5cab91d2-eb3e-43da-1f0f-08da840b6aaa
+x-ms-traffictypediagnostic: DM5PR1201MB0156:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TWJcIJr7Hg0PZmYqdT4JIp938LgsW4LZ8Cyu/6JNqaEbeDJ5LqsESDEjHUxTSsjH2qHyHZf83kDrAXPgjmZyohoxiZRgOsRohXPoy7CyUsWfIDDQTSLSWPKAENx7AWRcxWPzZWrTL1xM0vvgjOq1wEEZQVjU87d7TFJeAqF905ZB+7SV+Ksx3g34wpTzTROu0VnmKU6DHvIpNBzUrBMsrvOuZAncS+/LwxcxNlhp02hPlUPMzvWJsx9KBZ03In2L02l2P3jPx5/OfT1M1UOjbi3WL8MtldUQBVetEPZNoz975nO/gZ8+DmoQBpu1obnAVhXsD6zau1+4Euav2BmMmlMVcrEmS3H5nj80cQMvoxAeY7NgeN1PSi8vzRkxwdd+wEctZblgSJumrgOzk/O0HwfZ1/J1ZrQlICdn4y21C2MPjblsAeoR1v2h0jE4Sds0YFEkq8em0DI4ArV4+fsdhml6lo/4/b7izrXG+NP/8MSQpO8iQQG/kenyu8tfGRFKFzz1w3Ptq72Vd3LOpmuDUdcGfwgtDdP1Wsz3zwEq65diOio5NAdeF7VQhWaXMp0rIoqv5JYBiYBoPLrwxF17Jld6G3FkpCi9lLol7NeYtAronluCkrdz8QmvOFV7XPSJ45PRtZNTaanSaKxz967i793gCcYyX9K7LPtO1M54/IpvPlfBEs32fbBAaFp8OxT88+av3ESCOQbyQfVNbEVsT19hURot8XCNvL/SMFojPmktaqwpyvDCscrumNcQclBs4czQf5hjfIF2+qeZpJfk6FdKpK6ThfEPOgjW/XSBiGI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR12MB6339.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(346002)(39860400002)(136003)(366004)(8676002)(66446008)(64756008)(316002)(66556008)(110136005)(76116006)(66946007)(55016003)(66476007)(5660300002)(8936002)(7416002)(2906002)(38100700002)(52536014)(122000001)(86362001)(33656002)(38070700005)(921005)(478600001)(55236004)(6506007)(7696005)(71200400001)(186003)(41300700001)(83380400001)(9686003)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WXpYWE9WelNxRTlkNjQxQWlxWUVDeEhISDgxRHhHNE1lOHpOK2x0cnBzSThT?=
+ =?utf-8?B?N01SYW10dGZ2WDc0dlp6dzZieTBLcjVtK05zamNTRjdxYys5MHZTV1VlMFpv?=
+ =?utf-8?B?S200YzRUakRpdmlSakgxM2UzWGdCbXV5K3RzbmpycEw2Q2YvTXl1a2huSDdH?=
+ =?utf-8?B?NVowekF3dk1Zd3RxcGhqOGl5N3NaSkN3VjNHNXlCMk5mZEZQY1EwOHV1aDVx?=
+ =?utf-8?B?QkhIQU92MElRS3ZiOU85ZXhseW1sbUtuMTNqcVZjQjEvWWIraytBaThzSGJx?=
+ =?utf-8?B?SFNJZjc3SFJPNk9rbGIwcEh2SEd0T3pHU3prRjJCd0FhaS81TlYwMW51RVk1?=
+ =?utf-8?B?OGJtcElWTFRuT3NLem04VmUrdllLbGJzcUkyR29PSFpWSGZSZFJUL3lzcU01?=
+ =?utf-8?B?elZWQ3RqYTdCZ2R5dEVVQS8rSXZReUdtWG1FUFBDWHNCeEQ0QnJrZ2drNWNQ?=
+ =?utf-8?B?dGpQZVZ5Q2wrbEczd0VHMmtEN3B2aFhHakwvTHZaOE9tVGphTkpnZURmWGJh?=
+ =?utf-8?B?dlJZMzdGbWdWaUZCUnFQQkVSTUdwVGVTYmFuZkp6LzRMY0VOblZFTmRZdHQ5?=
+ =?utf-8?B?akR5MnQwN0JXMmpZcTJPdGFScXVqRzlzem5SK2J4c3ZrYklmdDM4NStUNUlr?=
+ =?utf-8?B?T3hrMXFjdnE4VXhheENYSjN0MFZLN3dGTy9kbGxwRVFiYjNyKzR0UFlvTGJz?=
+ =?utf-8?B?aytzQndEb3czck5xUUdzSE9ma3pUallFTWNzZ2h1Znl2SVI1c3RGVFRnZ003?=
+ =?utf-8?B?SmU0T3ZTNGV1SUMrYldadVFORU1WMXJLYWc5RkZyM1J5LzlndWxVWU9rOTF0?=
+ =?utf-8?B?N0JxN1dqQ1ByblFwSU1PNkJoNlhaakdBQmU4TmxzSUpIM0FDRjh5ZXRmQnFs?=
+ =?utf-8?B?RUMwbWhxRzROTzl4SjlWaXRsK3lKY0wzcktBUllNS0h5U2dKUGpoMk1TcFhT?=
+ =?utf-8?B?OUUzOTdVYUNkUUxSbkxUdEZycVlvVk9CbEE5ZHFzeHJ1djY0WGM0YWJyWFlI?=
+ =?utf-8?B?aDcydVVnSHBFdWxKNURacnFSQ3d0ZEZaT3NPajk5cDVpUm1tYlZIY2ZQTEVj?=
+ =?utf-8?B?Y2xqZTFaNHFuNmkxb3pIVkxqRTlodzYxenBnUGo3L2EvZjZxU3FEVnhMNDkr?=
+ =?utf-8?B?TnV0RklkeEEwM20rM2RkM000eVo3QzJyTmRqbzBYb1B5YkkwY1p3QjNFU3J0?=
+ =?utf-8?B?QmQ0SUNZWDdRUW9vNkxUUmcrL1AwcEpHY0dNMFVzVlh1ZlcyMUltSy9XbTZF?=
+ =?utf-8?B?UmJhSHFJb0dTN1RnUDVNelUvbHJOT3k0QjArZytUcHVHMzI5TTJyd0RTWjNj?=
+ =?utf-8?B?U3g2ZEE0Uk5GcnltSDJLa0U5WVFSWUVGYlhSSEp6REg0SjMxdVllbUhpSUcw?=
+ =?utf-8?B?TUc5ay9HUDlZc0MrL0NtcFJwVlpNVnFia3dnTzNZbXp2eGEzVGtCTzU3NUky?=
+ =?utf-8?B?TWE2VGF2ZVdJK0RhYWNpTXVKUk1wNGUzTEJjUHczVklQUE44YTlKZm8rc2c5?=
+ =?utf-8?B?QmFyKzRoQjViUHBaa0VVVWwyMUNoQXdiWnExckZSRHQwVWw0c3BKY0wxK3M4?=
+ =?utf-8?B?VzlidFFBTjZhaHkzcDBrUERxcllrUDdySXpxRDNvOEpSTmZZUFhDcUpJZ3JH?=
+ =?utf-8?B?dmlLMWFUZkREci9wdGdlUnRUTkRRRDlNQ2F6NVM1TWNWeWcycGNzaHg4Yndv?=
+ =?utf-8?B?TjZocDlicGExQW5pNllyd2dXaU4zQStOaUZoMVdpUUlPOVZtY0t6MTR1bXVL?=
+ =?utf-8?B?RVhkODNMSERqWDZIUnJNMklHUlRGaGlRQzcyN3hmbHEyQmx6bnNIcUtSL2J4?=
+ =?utf-8?B?dzZKZjcrVElzcnJXcHZyWlVEdnBRRmdNWTVpSHpiNitKUWVKeHNObW1BSDdk?=
+ =?utf-8?B?VWhPdjBJQjExLytTeTkvS25RaFBTZE9GSHh6SzVpekxhanJoMVE4TVhZOHZB?=
+ =?utf-8?B?M0dGZktBVGY4TGUrQUU1aGdobFp4QlZ4NFRxRGNwSVUwVFlYUE4vQ1J3dFBT?=
+ =?utf-8?B?MWxmaEZDSHZCWlBzNTBNWk1yclAyMDdGMnNBU2pSMS9ZQk8xbW1QbUxxQkUv?=
+ =?utf-8?B?bDd1UWdQeFlyVFdtTVlKT1p2bmJka296ODlJdDRpS0FRRDlvb1FncGhYUnho?=
+ =?utf-8?Q?pZFDovArjbFrcIb5mSDKAs8i/?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR12MB6339.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5cab91d2-eb3e-43da-1f0f-08da840b6aaa
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Aug 2022 06:56:19.5230
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LKEjuX61ALU6nUd81u6Z+r5qO7r07PX8P0vL427zoyub0mIRQZtfwcoOJ9hKpiGd3TQ35GItt3WnwjnWC5HjYQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0156
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Vincent,
-
-On 2022/8/20 0:04, Vincent Guittot wrote:
-> On Fri, 19 Aug 2022 at 14:35, Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
->>
->> Hi Zhang,
->>
->> On Fri, 19 Aug 2022 at 12:54, zhangsong (J) <zhangsong34@huawei.com> wrote:
->>>
->>>
->>> On 2022/8/18 16:31, Vincent Guittot wrote:
->>>> Le jeudi 18 août 2022 à 10:46:55 (+0800), Abel Wu a écrit :
->>>>> On 8/17/22 8:58 PM, Vincent Guittot Wrote:
->>>>>> On Tue, 16 Aug 2022 at 04:53, zhangsong (J) <zhangsong34@huawei.com> wrote:
->>>>>>>
->>>> ...
->>>>
->>>>>>> Yes, this is usually a corner case, but suppose that some non-idle tasks bounds to CPU 1-2
->>>>>>>
->>>>>>> and idle tasks bounds to CPU 0-1, so CPU 1 may has many idle tasks and some non-idle
->>>>>>>
->>>>>>> tasks while idle tasks on CPU 1 can not be pulled to CPU 2, when trigger load balance if
->>>>>>>
->>>>>>> CPU 2 should pull some tasks from CPU 1, the bad result is idle tasks of CPU 1 cannot be
->>>>>>>
->>>>>>> migrated and non-idle tasks also cannot be migrated in case of env->loop_max constraint.
->>>>>> env->loop_max adds a break but load_balance will continue with next
->>>>>> tasks so it also tries to pull your non idle task at the end after
->>>>>> several breaks.
->>>>> Loop will be terminated without LBF_NEED_BREAK if exceeds loop_max :)
->>>> Argh yes, my brain is not yet back from vacation
->>>> I have been confused by loop_max and loop_break being set to the same value 32
->>>>
->>>> Zhang Song, Could you try the patch below ? If it works, I will prepare a
->>>> clean patch with all tags
->>>>
->>>>
->>>>
->>>> sched/fair: make sure to try to detach at least one movable task
->>>>
->>>> During load balance we try at most env->loop_max time to move a task. But
->>>> it can happen that the LRU tasks (ie tail of the cfs_tasks list) can't
->>>> be moved to dst_cpu because of affinity. In this case, loop in the list
->>>> until we found at least one.
->>>>
->>>> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
->>>> ---
->>>>    kernel/sched/fair.c | 12 +++++++++---
->>>>    1 file changed, 9 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>>> index da388657d5ac..02b7b808e186 100644
->>>> --- a/kernel/sched/fair.c
->>>> +++ b/kernel/sched/fair.c
->>>> @@ -8052,8 +8052,12 @@ static int detach_tasks(struct lb_env *env)
->>>>                p = list_last_entry(tasks, struct task_struct, se.group_node);
->>>>
->>>>                env->loop++;
->>>> -             /* We've more or less seen every task there is, call it quits */
->>>> -             if (env->loop > env->loop_max)
->>>> +             /*
->>>> +              * We've more or less seen every task there is, call it quits
->>>> +              * unless we haven't found any movable task yet.
->>>> +              */
->>>> +             if (env->loop > env->loop_max &&
->>>> +                 !(env->flags & LBF_ALL_PINNED))
->>>>                        break;
->>>>
->>>>                /* take a breather every nr_migrate tasks */
->>>> @@ -10182,7 +10186,9 @@ static int load_balance(int this_cpu, struct rq *this_rq,
->>>>
->>>>                if (env.flags & LBF_NEED_BREAK) {
->>>>                        env.flags &= ~LBF_NEED_BREAK;
->>>> -                     goto more_balance;
->>>> +                     /* Stop if we tried all running tasks */
->>>> +                     if (env.loop < busiest->nr_running)
->>>> +                             goto more_balance;
->>>>                }
->>>>
->>>>                /*
->>>> --
->>>> 2.17.1
->>>
->>> Thanks for your reply.
->>> I have tried your patch and run test compared with it, it seems that the
->>> patch you provide makes no sense.
->>> The test result is below(1000 idle tasks bounds to CPU 0-1 and 10 normal
->>> tasks bounds to CPU 1-2):
->>>
->>> =================================================================
->>>
->>> Without patch:
->>>
->>>
->>>             6,777.37 msec cpu-clock                 #    1.355 CPUs utilized
->>>               20,812      context-switches          #    0.003 M/sec
->>>                    0      cpu-migrations            #    0.000 K/sec
->>>                    0      page-faults               #    0.000 K/sec
->>>       13,333,983,148      cycles                    #    1.967 GHz
->>>        6,457,930,305      instructions              #    0.48  insn per cycle
->>>        2,125,644,649      branches                  #  313.639 M/sec
->>>            1,690,587      branch-misses             #    0.08% of all
->>> branches
->>>         5.001931983 seconds time elapsed
->>>
->>> With your patch:
->>>
->>>
->>>             6,791.46 msec cpu-clock                 #    1.358 CPUs utilized
->>>               20,996      context-switches          #    0.003 M/sec
->>>                    0      cpu-migrations            #    0.000 K/sec
->>>                    0      page-faults               #    0.000 K/sec
->>>       13,467,573,052      cycles                    #    1.983 GHz
->>>        6,516,989,062      instructions              #    0.48  insn per cycle
->>>        2,145,139,220      branches                  #  315.858 M/sec
->>>            1,751,454      branch-misses             #    0.08% of all
->>> branches
->>>
->>>          5.002274267 seconds time elapsed
->>>
->>> With my patch:
->>>
->>>
->>>             7,495.14 msec cpu-clock                 #    1.499 CPUs utilized
->>>               23,176      context-switches          #    0.003 M/sec
->>>                  309      cpu-migrations            #    0.041 K/sec
->>>                    0      page-faults               #    0.000 K/sec
->>>       14,849,083,489      cycles                    #    1.981 GHz
->>>        7,180,832,268      instructions              #    0.48  insn per cycle
->>>        2,363,300,644      branches                  #  315.311 M/sec
->>>            1,964,169      branch-misses             #    0.08% of all
->>> branches
->>>
->>>          5.001713352 seconds time elapsed
->>> ===============================================================
->>>
->>> Obviously,  when your patch is applied, the cpu-migrations of normal
->>> tasks is still 0 and the
->>> CPU ulization of normal tasks have no improvement compared with no patch
->>> applied.
->>> When apply my patch, the cpu-migrations and CPU ulization of normal
->>> tasks can both improve.
->>> I cannot explain the result with your patch, you also can test it by
->>> yourself.
->>
->> Do you have more details about the test that your are running ?
->>
->> Do cpu0-2 share their cache ?
->> Which kingd of task are the normal and idle tasks ? always running tasks ?
->>
->> I'm going to try to reproduce your problem locally
-> 
-> Some details of your UC are missing. I have tried to reproduce your
-> example above:
->      1000 idle tasks bounds to CPU 0-1 and 10 normal tasks bounds to CPU 1-2
-> 
-> Let assume that for any reason, the 10 normal tasks wake up on CPU 1.
-> Then, the thousand of idle tasks are moved to CPU0 by load balance and
-> only normal tasks stay on CPU1. Then load balance will move some
-> normal tasks to CPU2.
-> 
-> My only way to reproduce something similar to your example, is to pin
-> the 1000 idle tasks on CPU1 so they can't move to CPU0. Then I can see
-> that load balance reaches loop_max limit and gets hard time moving
-> normal tasks on CPU2. But in this later case, my patch helps to move
-> normal tasks on CPU2. Something is missing in the description of your
-> UC.
-> 
-> Sidenote, I have the same kind of problem with 1000 normal task with
-> low priority so it's not a matter of idle vs normal tasks
-> 
-> Regards,
-> Vincent
-> 
-
-Sorry for my slow reply.
-
-I have found a test case which can more illustrate this problem 
-accurately. The test case is below.
-
-1. a dead foreach loop process run as normal or idle task
-$ cat test.c
-int main(int argc, char **argv)
-{
-         int i = 0;
-         int duration = atoi(argv[1]);
-
-         while(1) {
-                 usleep(duration);
-                 for(i = 0; i < 100000; i++) {}
-         }
-}
-$ gcc -o test test.c
-
-2. firstly spawn 500 idle tasks which bounds to CPU 0-2
-3. secondly spawn 10 normal tasks which also bounds to CPU 0-2
-4. lastly spawn 500 idle tasks which bounds to CPU 0 only
-5. perf stat normal tasks and get CPU utilization and cpu-migrations
-
-
-Below is the whole test script.
-$ cat test.sh
-#!/bin/bash
-
-# create normal and idle cgroup path
-mkdir /sys/fs/cgroup/cpu/normal/
-mkdir /sys/fs/cgroup/cpu/idle/
-
-# spawn 500 idle tasks and bind tasks to CPU 0-2
-for ((i = 0; i < 500; i++))
-do
-		taskset -c 0-2 ./test 200 &
-		pid=$!
-		# change to SCHED_IDLE policy
-		chrt -i -p 0 $pid
-		echo $pid > /sys/fs/cgroup/cpu/idle/tasks
-done
-
-# spawn 10 normal tasks and bind tasks to CPU 0-2
-normal_tasks=
-for ((i = 0; i < 10; i++))
-do
-		taskset -c 0-2 ./test 500 &
-		pid=$!
-		normal_tasks+=$pid,
-		echo $pid > /sys/fs/cgroup/cpu/normal/tasks
-done
-
-# spawn 500 idle tasks and bind tasks to CPU 0 only
-for ((i = 0; i < 500; i++))
-do
-		taskset -c 0 ./test 200 &
-		pid=$!
-		# change to SCHED_IDLE policy
-		chrt -i -p 0 $pid
-		echo $pid > /sys/fs/cgroup/cpu/idle/tasks
-done
-
-# perf stat normal tasks
-perf stat -a -p $normal_tasks sleep 5
-pkill -f test
-
-
-You can try the above case and test it with your patch.
-
-Regards,
-Zhang Song
+PiAxOS4wOC4yMDIyIDE4OjE1LCBEbWl0cnkgT3NpcGVua28g0L/QuNGI0LXRgjoNCj4gPiAxOS4w
+OC4yMDIyIDE1OjIzLCBBa2hpbCBSINC/0LjRiNC10YI6DQo+ID4+ICAgICAgaWYgKG9mX2Rldmlj
+ZV9pc19jb21wYXRpYmxlKG5wLCAibnZpZGlhLHRlZ3JhMjEwLWkyYy12aSIpKQ0KPiA+PiAgICAg
+ICAgICAgICAgaTJjX2Rldi0+aXNfdmkgPSB0cnVlOw0KPiA+PiArICAgIGVsc2UNCj4gPj4gKyAg
+ICAgICAgICAgIGkyY19kZXYtPmRtYV9zdXBwb3J0ID0gISEob2ZfZmluZF9wcm9wZXJ0eShucCwg
+ImRtYXMiLA0KPiA+PiArIE5VTEwpKTsNCj4gPg0KPiA+IDEuIFlvdSBsZWFrIHRoZSBucCByZXR1
+cm5lZCBieSBvZl9maW5kX3Byb3BlcnR5KCkuDQo+ID4NCj4gPiAyLiBUaGVyZSBpcyBkZXZpY2Vf
+cHJvcGVydHlfcmVhZF9ib29sKCkgZm9yIHRoaXMga2luZCBvZg0KPiA+IHByb3BlcnR5LWV4aXN0
+cyBjaGVja3MuDQpPa2F5LiBJIHdlbnQgYnkgdGhlIGltcGxlbWVudGF0aW9uIGluIG9mX2RtYV9y
+ZXF1ZXN0X3NsYXZlX2NoYW5uZWwoKSB0bw0KY2hlY2sgJ2RtYXMnLg0KDQo+ID4NCj4gPiAzLiBJ
+ZiAiZG1hcyIgaXMgbWlzc2luZyBpbiBEVCwgdGhlbiBkbWFfcmVxdWVzdF9jaGFuKCkgc2hvdWxk
+IHJldHVybg0KPiA+IE5VTEwgYW5kIGV2ZXJ5dGhpbmcgd2lsbCB3b3JrIGZpbmUuIEkgc3VwcG9z
+ZSB5b3UgaGF2ZW4ndCB0cmllZCB0bw0KPiA+IHRlc3QgdGhpcyBjb2RlLg0KPiANCj4gQWx0aG91
+Z2gsIG5vLiBJdCBzaG91bGQgcmV0dXJuIEVSUl9QVFIoLUVOT0RFVikgYW5kIHRoZW4geW91IHNo
+b3VsZCBjaGVjaw0KPiB0aGUgcmV0dXJuIGNvZGUuDQpZZXMuIEFncmVlIHRoYXQgaXQgaXMgbW9y
+ZSBhZ25vc3RpYyB0byBjaGVjayBmb3IgRVJSX1BUUigtRU5PREVWKS4gQnV0IHNpbmNlIEkNCmNh
+bGwgdGVncmFfaW5pdF9kbWEoKSBmb3IgZXZlcnkgbGFyZ2UgdHJhbnNmZXIgdW50aWwgRE1BIGlz
+IGluaXRpYWxpemVkLCB3b3VsZG4ndA0KaXQgYmUgYmV0dGVyIHRvIGhhdmUgYSBmbGFnIGluc2lk
+ZSB0aGUgZHJpdmVyIHNvIHRoYXQgd2UgZG8gbm90IGhhdmUgdG8gZ28gdGhyb3VnaA0Kc28gbWFu
+eSBmdW5jdGlvbnMgZm9yIGV2ZXJ5IGF0dGVtcHRlZCBETUEgdHJhbnNhY3Rpb24gdG8gZmluZCBv
+dXQgdGhhdCB0aGUgRFQNCnByb3BlcnRpZXMgZG9uJ3QgZXhpc3Q/DQoNClNoYWxsIEkganVzdCBw
+dXQgaTJjX2Rldi0+ZG1hX3N1cHBvcnQgPSB0cnVlIGhlcmUgc2luY2UgRE1BIGlzIHN1cHBvcnRl
+ZCBieQ0KaGFyZHdhcmU/IEl0IHdvdWxkIHR1cm4gZmFsc2UgaWYgZG1hX3JlcXVlc3RfY2hhbigp
+IHJldHVybnMgc29tZXRoaW5nIG90aGVyDQp0aGFuIC1FUFJPQkVfREVGRVIuDQoNCiAgICAgIGlm
+IChvZl9kZXZpY2VfaXNfY29tcGF0aWJsZShucCwgIm52aWRpYSx0ZWdyYTIxMC1pMmMtdmkiKSkN
+CiAgICAgICAgICAgICAgaTJjX2Rldi0+aXNfdmkgPSB0cnVlOw0KICsgICAgZWxzZQ0KICsgICAg
+ICAgICAgICBpMmNfZGV2LT5kbWFfc3VwcG9ydCA9IHRydWU7DQo=

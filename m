@@ -2,84 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31E259BE6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1862859BE6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233981AbiHVL1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
+        id S234119AbiHVL1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbiHVL1N (ORCPT
+        with ESMTP id S233777AbiHVL1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:27:13 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC09B32EE8;
-        Mon, 22 Aug 2022 04:27:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=80Iob7m0eygDIBir23phYVn1p4Wv+1QMEBqUT1N4EkE=; b=w0XmYMb16FRlUUx5UI1bfzmXXs
-        3Jftu942ei0pgarFAfjnelYfSJ1IYVx2GFd0g/XIbbbwSdYSfwVpxXxNmZZpXXf0lPRrMo860RMUe
-        3XI5NdIwij0SFJuWWoFkMxB/0QS5RjtPkF546G7HiLYHm1E6ZGWlcr7PPoW2+QCq8bYfN4olg3h2u
-        bw/1p2z4T/woptW0t9XxXDBhrPu8221SDDsGbUBRz0wveo2AEd+Oy0QCpYcUTj0gyGwdzJDTpx04/
-        EZyi5wBHcNzpVitRKhIN+VcPL7cLqgTTEwyQjh59+1GhRK8BoF6C8AoTSusP8DZvl7FacTlY4scXh
-        wJiVNl0g==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQ5Zv-008DCF-58; Mon, 22 Aug 2022 11:26:47 +0000
-Date:   Mon, 22 Aug 2022 04:26:47 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Yu Zhao <yuzhao@google.com>, dongli.zhang@oracle.com,
-        ak@linux.intel.com, akpm@linux-foundation.org,
-        alexander.sverdlin@nokia.com, andi.kleen@intel.com, bp@alien8.de,
-        bp@suse.de, cminyard@mvista.com, corbet@lwn.net,
-        damien.lemoal@opensource.wdc.com, dave.hansen@linux.intel.com,
-        hch@infradead.org, iommu@lists.linux-foundation.org,
-        joe.jin@oracle.com, joe@perches.com, keescook@chromium.org,
-        kirill.shutemov@intel.com, kys@microsoft.com,
-        linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        ltykernel@gmail.com, michael.h.kelley@microsoft.com,
-        mingo@redhat.com, m.szyprowski@samsung.com, parri.andrea@gmail.com,
-        paulmck@kernel.org, pmladek@suse.com, rdunlap@infradead.org,
-        tglx@linutronix.de, thomas.lendacky@amd.com,
-        Tianyu.Lan@microsoft.com, tsbogend@alpha.franken.de,
-        vkuznets@redhat.com, wei.liu@kernel.org, x86@kernel.org
-Subject: Re: [PATCH v1 4/4] swiotlb: panic if nslabs is too small
-Message-ID: <YwNn92WP3rP4ylZu@infradead.org>
-References: <20220611082514.37112-5-dongli.zhang@oracle.com>
- <20220820012031.1285979-1-yuzhao@google.com>
- <f8c743d8-fcbe-4ef7-5f86-d63086552ffd@arm.com>
+        Mon, 22 Aug 2022 07:27:33 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D2732EF7
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:27:31 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id gi31so14011845ejc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:27:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc;
+        bh=t3OYeX7kWxlsPaW3fbNLmb2bg7Gc/NegkzT2tgCob5U=;
+        b=IuYlNN7SMdin+fNrslQw9uMzHff4olPykrSZXrZGD2lyoXboUGdqK71s3THD/kGhv4
+         Q4PwwSmvsP1aUvLy5m+V+tdRx5HuxVf/P/L468MXXSV3ZgTh7tMIryEWHMgIU2hWvLjE
+         tqEiE7syPpGT2ElVdBedG1m+FH7TieZi8KsJw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=t3OYeX7kWxlsPaW3fbNLmb2bg7Gc/NegkzT2tgCob5U=;
+        b=RmchcjlYDspcWmYOdrd5QZvCDuTSq4lx5unH2GhQCIq5MAVZx+Gb3QdzE6wH1uOU1y
+         N3nxUCH2FfLcZZpZmGj4xpn5tNh5kvvrDIm4NbG4GULm0Ak20JAvuOwMFvoRm01KtBNu
+         EKXXt6ynfLb9iQjZvqmliYmaIFtvSOx1QyeIIvu+rhZe5wkSlmxDJjHdS5IELA/T94QY
+         xEDdWl6GhEnICMoi6i9f08rEb5ZKv8AiMBulMS0LApZT3JejmDjwSJ79AljoLqpXgd/B
+         665npcMc5vHhH4zUV7NnYr8dJxWK8Bs8ztrq0ijVmyorBgVeUq+ok/cEEafyjuIVpsSA
+         iOQA==
+X-Gm-Message-State: ACgBeo1UIVVzIZrTzt50cpa8nrccJMx0qHuWCIOad7WQWWTuPCYiCyWm
+        c26IFgv87rAUmVLGQJog+L91YFqbLEmj1g==
+X-Google-Smtp-Source: AA6agR47AZPI0oG6oH6DjrbsU2xLyLra67PGg4dCfjgefS7qv/wrFke1pdhd0WlIhUw1rZI56DhIdA==
+X-Received: by 2002:a17:907:c0d:b0:730:a85d:8300 with SMTP id ga13-20020a1709070c0d00b00730a85d8300mr12327942ejc.558.1661167650400;
+        Mon, 22 Aug 2022 04:27:30 -0700 (PDT)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id n2-20020a05640204c200b00445b822005dsm8122628edw.6.2022.08.22.04.27.29
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 04:27:29 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id z20so13395894edb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:27:29 -0700 (PDT)
+X-Received: by 2002:a05:6402:3585:b0:446:9d7b:2e38 with SMTP id
+ y5-20020a056402358500b004469d7b2e38mr5664787edc.248.1661167649019; Mon, 22
+ Aug 2022 04:27:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f8c743d8-fcbe-4ef7-5f86-d63086552ffd@arm.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220808134106.70100-1-ribalda@chromium.org>
+In-Reply-To: <20220808134106.70100-1-ribalda@chromium.org>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Mon, 22 Aug 2022 13:27:18 +0200
+X-Gmail-Original-Message-ID: <CANiDSCtyWTUn2qOpFLR=694_GFKfmj-TfMNE-8n2zwm=6mGr9A@mail.gmail.com>
+Message-ID: <CANiDSCtyWTUn2qOpFLR=694_GFKfmj-TfMNE-8n2zwm=6mGr9A@mail.gmail.com>
+Subject: Re: [PATCH] media: uvcvideo: Fix InterfaceProtocol for Quanta camera
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 10:49:09AM +0100, Robin Murphy wrote:
-> Hmm, it's possible this might be quietly fixed by 20347fca71a3, but either
-> way I'm not sure why we would need to panic *before* we've even tried to
-> allocate anything, when we could simply return with no harm done? If we've
-> ended up calculating (or being told) a buffer size which is too small to be
-> usable, that should be no different to disabling SWIOTLB entirely.
+Hi
 
-Hmm.  I think this might be a philosophical question, but I think
-failing the boot with a clear error report for a configuration that is
-supposed to work but can't is way better than just panicing later on.
+Friendly ping on text-mode with the correct account ;)
 
-> Historically, passing "swiotlb=1" on the command line has been used to save
-> memory when the user knows SWIOTLB isn't needed. That should definitely not
-> be allowed to start panicking.
+Regards!
 
-I've never seen swiotlb=1 advertized as a way to disable swiotlb.
-That's always been swiotlb=noforce, which cleanly disables it.
+On Mon, 8 Aug 2022 at 15:41, Ricardo Ribalda <ribalda@chromium.org> wrote:
+>
+> The device is using a different InterfaceProtocol than the one set in
+> the original quirk.
+>
+> Fixes: 95f03d973478 ("media: uvcvideo: Limit power line control for Quanta cameras")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>
+> This was fixed on the last version of the patchset. Unfortunately I did
+> checked that it was the version merged :(.
+>
+> It is too late to land it in this version?
+>
+>
+>  drivers/media/usb/uvc/uvc_driver.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 9c05776f11d1..6556158a8888 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -2740,7 +2740,7 @@ static const struct usb_device_id uvc_ids[] = {
+>           .idProduct            = 0x4034,
+>           .bInterfaceClass      = USB_CLASS_VIDEO,
+>           .bInterfaceSubClass   = 1,
+> -         .bInterfaceProtocol   = 0,
+> +         .bInterfaceProtocol   = 1,
+>           .driver_info          = (kernel_ulong_t)&uvc_ctrl_power_line_limited },
+>         /* LogiLink Wireless Webcam */
+>         { .match_flags          = USB_DEVICE_ID_MATCH_DEVICE
+> --
+> 2.37.1.559.g78731f0fdb-goog
+>
+
+
+-- 
+Ricardo Ribalda

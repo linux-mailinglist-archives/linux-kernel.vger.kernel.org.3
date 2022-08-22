@@ -2,85 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FBE59C608
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 034F459C60E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237261AbiHVSYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 14:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
+        id S236271AbiHVSY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 14:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237419AbiHVSYF (ORCPT
+        with ESMTP id S237422AbiHVSYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 14:24:05 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87E9186FF
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:24:01 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id m5so5796172lfj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:24:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=YUkvI1ao2/nZxDR/89eZVr7JU17ee6mwpioKOX/GLZY=;
-        b=HMioaNJm47OPAgL2VVemQ/2Eh8rwyzmTnehI+gSZsKON0/Ef92tGqc/kO4FOnxLWaz
-         nTgPQ9Fb3VCTZZfFGr59o/4dZLg9WLSQrgGgvCnWy/sqDk5Xh3Sznulj2UB7gmyP4yNB
-         3OcmfFOQ0D7OcPj+MqWYKsMotG8eXQ0PhGpVEchXDC/QkBINwWSiaE7bjoGyWEzO0qs2
-         weXEuVzxB2GdIasi9mZp7XX2x1LLViIX3WsUctS+E4Eyczf2wp8FGw8vEdLNdErpwJxH
-         kdH6CXK/QKB/5hE+6oivPTJxqtULEBZmyJPrL2NXAyi8PzQkvyKv7EWNwgq5WIGeX00R
-         9RpA==
+        Mon, 22 Aug 2022 14:24:24 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABE6481D3;
+        Mon, 22 Aug 2022 11:24:20 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id u14so13212917oie.2;
+        Mon, 22 Aug 2022 11:24:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=YUkvI1ao2/nZxDR/89eZVr7JU17ee6mwpioKOX/GLZY=;
-        b=SnREM6WMuitYn5ZXy2AAty14fySJhG3cZORs6zJGXZh1V7mgVEJzf0mXVVYIFV47rv
-         /sbS97tKqzMjJN0n+nWUj/dAW3Q6DB+p/nxbTV/ftA6jcdWf3TBq80jvfXNT+816e2b0
-         he5+0YRkONxv93BTEflVqiuahI8zcpXRVWlflzPEXw5M6nhaFlSyjinJkNEXXENPHcRS
-         Z8LdRzDKoVagEqx7BXs0lRlwLE2RfaHEY9yUdAt32825uBiVhFK+Oc6rQNKjuKseEwLM
-         vs5F71SsnP4RShuM8ml1nPS3qlE5zch6yiMegIcmt1NYvdOKHXU/NnhFxIBd0iWHKS5/
-         KJpA==
-X-Gm-Message-State: ACgBeo0KTj4NnIEI+4+Q1lTC49Vz/6DISWmWKkXf2W1ipEZ2pHXN6l3w
-        uv3A3hEknTGGbKRXJKaafzAvWw==
-X-Google-Smtp-Source: AA6agR4uFLXZY0ERbKcHpfiocsUDUUbWcub0EKPrxynySnRHxbQNoNycvPcmDV3IZvEETskrA5XK1w==
-X-Received: by 2002:a05:6512:260f:b0:492:8e9f:c647 with SMTP id bt15-20020a056512260f00b004928e9fc647mr6944753lfb.443.1661192640110;
-        Mon, 22 Aug 2022 11:24:00 -0700 (PDT)
-Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id g13-20020ac24d8d000000b0048af92aed6bsm1440151lfe.175.2022.08.22.11.23.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 11:23:59 -0700 (PDT)
-Message-ID: <565960af-2c16-b066-c846-78fcce73c070@linaro.org>
-Date:   Mon, 22 Aug 2022 21:23:57 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=kHHAGkcdDwIUojsw/Qh9mTAcNHVZ/83Lhyn//UEbyGE=;
+        b=KCM5lV6jh22OXLeWJuB2PF+QCC0TgTlKK3tnexJR1au8KWsichEDWaCgGAcFCNypyW
+         kXjuQYUUYyJJAWRTUDHD8gMnbvjz7KAhtnVgYlwWblmovisc9lM5nYimMJh8aIRbALUk
+         t78kFsAIAm/+ZYWUKzomcf9jBtjuppSb8eiNvjB459eBts2v2db+Wuzyn4ma/LNx5VbC
+         Y7SuDm0G56V/4aVvzl0Mj7e2kWzzII5g7Nu4bBfJBkYZUJKmmKCciSDhqR/NpO4ZkwNu
+         0qmnj1jmLNaPUKkk+hk0+pzZPUvJr9iP+Z8CohSlwgN2Xf64/Vcc4qdnA+ZpSeZeRJOa
+         okBg==
+X-Gm-Message-State: ACgBeo3SdrQGZWMmd2AzZBddFm+xglkb48wcrBNKXRCsnQZxun9D/u9y
+        5lEvcevkRGpkbyyYAOYT5g==
+X-Google-Smtp-Source: AA6agR4GcnCSOqfMPx7kKucGwdxFpONZqkYeDNNgwvLBMASnPewmx+dR5MZxR1QRtg6AOjnDW1mCwA==
+X-Received: by 2002:a05:6808:3a9:b0:343:4b14:ccce with SMTP id n9-20020a05680803a900b003434b14cccemr11840129oie.41.1661192659071;
+        Mon, 22 Aug 2022 11:24:19 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t20-20020a9d5914000000b0061cbd18bd18sm3145285oth.45.2022.08.22.11.24.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 11:24:18 -0700 (PDT)
+Received: (nullmailer pid 109846 invoked by uid 1000);
+        Mon, 22 Aug 2022 18:24:18 -0000
+Date:   Mon, 22 Aug 2022 13:24:18 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [RFT PATCH v3 01/16] dt-bindings: mfd: qcom,tcsr: add several
+ devices
+Message-ID: <20220822182418.GA109764-robh@kernel.org>
+References: <20220819083209.50844-1-krzysztof.kozlowski@linaro.org>
+ <20220819083209.50844-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v6 05/17] dt-bindings: mfd: syscon: Add
- amd,pensando-elba-syscon compatible
-Content-Language: en-US
-To:     Brad Larson <brad@pensando.io>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        adrian.hunter@intel.com, alcooperx@gmail.com,
-        andy.shevchenko@gmail.com, arnd@arndb.de, blarson@amd.com,
-        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
-        gsomlo@gmail.com, gerg@linux-m68k.org, krzk@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
-        broonie@kernel.org, yamada.masahiro@socionext.com,
-        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
-        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
-        fancer.lancer@gmail.com, suravee.suthikulpanit@amd.com,
-        thomas.lendacky@amd.com, ulf.hansson@linaro.org, will@kernel.org,
-        devicetree@vger.kernel.org
-References: <20220820195750.70861-1-brad@pensando.io>
- <20220820195750.70861-6-brad@pensando.io>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220820195750.70861-6-brad@pensando.io>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819083209.50844-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,22 +69,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/08/2022 22:57, Brad Larson wrote:
-> From: Brad Larson <blarson@amd.com>
+On Fri, 19 Aug 2022 11:31:54 +0300, Krzysztof Kozlowski wrote:
+> Document existing (MSM8996, SC7280) and new compatibles for TCSR syscon
+> registers (QCS404, SC7180, SDM630, SDM845, SM8150, MSM8998).
 > 
-> Add the AMD Pensando Elba SoC system registers compatible.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> Signed-off-by: Brad Larson <blarson@amd.com>
+> ---
+> 
+> Changes since v2:
+> 1. Add more compatibles.
+> 
+> Changes since v1:
+> 1. Correct order of compatibles.
+> ---
+>  Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-If a tag was not added on purpose, please state why and what changed.
-
-
-
-Best regards,
-Krzysztof
+Acked-by: Rob Herring <robh@kernel.org>

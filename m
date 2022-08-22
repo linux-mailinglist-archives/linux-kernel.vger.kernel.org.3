@@ -2,224 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE5C59C3FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D4659C401
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 18:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236596AbiHVQV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 12:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
+        id S236761AbiHVQWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 12:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235896AbiHVQV4 (ORCPT
+        with ESMTP id S235888AbiHVQWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 12:21:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB7A3F313
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661185314;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bj0u0rbGbus5Dq/FJao2yGhu5YXJhcLCBMsadHoSqdo=;
-        b=FSi65sizTpV7Lr056g0sRhUug+GFxj11LWv4/JuJGT69C3+e69tXwJdapDLfqYLve1L1pS
-        VBSK3VX/RXvcYx//tyzvw4uZAVVzFck2nQKw7sploKm3EBulobbHXlAhjjfq4AK9r9LBpN
-        pjAYJCrMG+/OkoatwZ1w9gyFt3OqxQ4=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-114-RXN8aUEOOVCQ6cKnwWJktA-1; Mon, 22 Aug 2022 12:21:53 -0400
-X-MC-Unique: RXN8aUEOOVCQ6cKnwWJktA-1
-Received: by mail-wr1-f70.google.com with SMTP id l25-20020adfa399000000b002252058bad2so1852096wrb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:21:53 -0700 (PDT)
+        Mon, 22 Aug 2022 12:22:52 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0A23F330
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:22:51 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3246910dac3so307489917b3.12
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 09:22:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=zBnLNnOuEm5lJhwtbUOYYe47b/c/6C+EcZMDaQGtBP4=;
+        b=pyq/6kJ6DsGWQlpt2s0VXNeG1rxbZvr1f8onglt28Gp3w96/d34SrxrZQKd8GAMLm+
+         msURTCw8d+HAGTCxXo+r1oPnP78lH3o/XZjrXAJql3eo/TWCz7OLc+KEwApPb0UJ7Hpl
+         FNm3OiQC2PTNuqZz8hzOyFowdGYaSR6FkBfiC3dfAhvA5oImQffN/izIYDhbbUtANHEn
+         3QyD1kGFtLsm3q0e56fiqMtObmqSmqyVA3koNFPZ1gFzMjjkRg1073VPTHRa79YYJ50A
+         L0VFjNfjcflJ6KITQLbLCagavJ31oWZyTuDrDWqMfEggK36BvBoMpUHUXSYo98tozrvY
+         IK2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=bj0u0rbGbus5Dq/FJao2yGhu5YXJhcLCBMsadHoSqdo=;
-        b=UisqL7LQ0P/X8+2t0Yz8Or27Brb0QkNhd1BRH8wP0u/bxE2z3qUOmmJKzz+sWFk2/I
-         b8+jy9blixpXOj8oryAvZ9jdjAqodhjeBF/k3y6h8aT6+rBfOrEirDPZNGDKDJ8DVj6l
-         T89uHsjCMEQYjiAZs4xbhM1Y/8OuXlclnOlOzcAXlTC6q2MoCf/VhP0Ck9eD9lF6SFP7
-         W9hfctfjRu3kR33+tfwvOupOigF5q9dw0s2q5hXLL/Ush4vL/a6x1tDDPSuSiaFGL6Y4
-         PPeGbxdk5PeXEBhTQnQ9Vs/rTZqqaUHmxdPsddD4hp9VvcftshnULzLvi9mDzl8f48Am
-         idig==
-X-Gm-Message-State: ACgBeo39FIw7yVxvGKqqZ2ZnKD/almTF9OxKKlrtZfBAJUR4lPGXZt37
-        12ckZLDAt3sxJa2rBdvrhFDroc61/vQ59aPvsRH0IhgW8a/nZC/GgJcOlY/Ige/bux1JAokN8Gh
-        NvWJSXGWXRQzy5AmfMrFeNwWl8htfIqTtu+/8VS5t6uzdpkAkY7I48ZbReYkIVX7sYMAmIQ48Sx
-        3P
-X-Received: by 2002:a05:600c:3c9b:b0:3a6:58b2:b80 with SMTP id bg27-20020a05600c3c9b00b003a658b20b80mr5223071wmb.132.1661185312255;
-        Mon, 22 Aug 2022 09:21:52 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7Kn2mEJXNUBEvtI+h/P2RDMUSo7Laz1MIfn2LUJ5bhNZYgLeYAwA6bjpOc6ng8CeUauHnPPw==
-X-Received: by 2002:a05:600c:3c9b:b0:3a6:58b2:b80 with SMTP id bg27-20020a05600c3c9b00b003a658b20b80mr5223047wmb.132.1661185311985;
-        Mon, 22 Aug 2022 09:21:51 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id g17-20020a5d46d1000000b0020fff0ea0a3sm11988449wrs.116.2022.08.22.09.21.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 09:21:51 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 03/26] x86/hyperv: Update 'struct
- hv_enlightened_vmcs' definition
-In-Reply-To: <YwOm7Ph54vIYAllm@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-4-vkuznets@redhat.com>
- <Yv5ZFgztDHzzIQJ+@google.com> <875yiptvsc.fsf@redhat.com>
- <Yv59dZwP6rNUtsrn@google.com> <87czcsskkj.fsf@redhat.com>
- <YwOm7Ph54vIYAllm@google.com>
-Date:   Mon, 22 Aug 2022 18:21:50 +0200
-Message-ID: <87edx8xn8h.fsf@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=zBnLNnOuEm5lJhwtbUOYYe47b/c/6C+EcZMDaQGtBP4=;
+        b=oYudKQ5vgMETebAU42FfsEL6hSJ7xCqAoucaMa84WsjCf1g96U+ieJQaatFqsf9vgB
+         fy0LobECYKV5VqIS5DaGR9iIKTVrPW7C+V07hxJ4GUpJdK3xKpnfOtv3wapC+l/h7vGN
+         P9eO/wtuLUp0zWojf34NIRfz18pbkWNjaLCknGg0rqEQglb+YWABBL+BJoXGzEiNflbv
+         qZNtCRFoBAb+/dPMyoXwlHMIkKdhtnATSdA6TsihIAe06Ihq1I0YlN0glxcRN0ecI+jU
+         aA5aBETts58Z1/5dJl1IWNpFMrksS/Psv0FfTbEwNr1fKJUdvNDtAXrfaSi1nA44mTBF
+         CGXw==
+X-Gm-Message-State: ACgBeo1nJVsOrmgdGkZmd3mSVsrRSB5yRFa5uY+oNmQrIYrmcF2RUGSw
+        9/iurh+yJU71sddju93KFX1gTIyp3ojMWRzgnh+Ivw==
+X-Google-Smtp-Source: AA6agR4U9cjCs7IQEA6wPhRWTBAzKHRxHy5hIjO+FjyWQehv0ldLHYX7kwD9c7qskJP7JL5/agrY+5wWjvdBiM0x1p0=
+X-Received: by 2002:a25:5091:0:b0:690:1f61:a7c9 with SMTP id
+ e139-20020a255091000000b006901f61a7c9mr20337108ybb.55.1661185370392; Mon, 22
+ Aug 2022 09:22:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1651800598.git.peilin.ye@bytedance.com> <cover.1661158173.git.peilin.ye@bytedance.com>
+In-Reply-To: <cover.1661158173.git.peilin.ye@bytedance.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 22 Aug 2022 09:22:39 -0700
+Message-ID: <CANn89iJsOHK1qgudpfFW9poC4NRBZiob-ynTOuRBkuJTw6FaJw@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 net-next 0/5] net: Qdisc backpressure infrastructure
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Dave Taht <dave.taht@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
-
-> On Mon, Aug 22, 2022, Vitaly Kuznetsov wrote:
->> Sean Christopherson <seanjc@google.com> writes:
->> 
->> > On Thu, Aug 18, 2022, Vitaly Kuznetsov wrote:
->> >> Sean Christopherson <seanjc@google.com> writes:
->> >> 
->> >> > On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
->> >> >> + * Note: HV_X64_NESTED_EVMCS1_2022_UPDATE is not currently documented in any
->> >> >> + * published TLFS version. When the bit is set, nested hypervisor can use
->> >> >> + * 'updated' eVMCSv1 specification (perf_global_ctrl, s_cet, ssp, lbr_ctl,
->> >> >> + * encls_exiting_bitmap, tsc_multiplier fields which were missing in 2016
->> >> >> + * specification).
->> >> >> + */
->> >> >> +#define HV_X64_NESTED_EVMCS1_2022_UPDATE		BIT(0)
->> >> >
->> >> > This bit is now defined[*], but the docs says it's only for perf_global_ctrl.  Are
->> >> > we expecting an update to the TLFS?
->> >> >
->> >> > 	Indicates support for the GuestPerfGlobalCtrl and HostPerfGlobalCtrl fields
->> >> > 	in the enlightened VMCS.
->> >> >
->> >> > [*] https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/feature-discovery#hypervisor-nested-virtualization-features---0x4000000a
->> >> >
->> >> 
->> >> Oh well, better this than nothing. I'll ping the people who told me
->> >> about this bit that their description is incomplete.
->> >
->> > Not that it changes anything, but I'd rather have no documentation.  I'd much rather
->> > KVM say "this is the undocumented behavior" than "the document behavior is wrong".
->> >
->> 
->> So I reached out to Microsoft and their answer was that for all these new
->> eVMCS fields (including *PerfGlobalCtrl) observing architectural VMX
->> MSRs should be enough. *PerfGlobalCtrl case is special because of Win11
->> bug (if we expose the feature in VMX feature MSRs but don't set
->> CPUID.0x4000000A.EBX BIT(0) it just doesn't boot).
+On Mon, Aug 22, 2022 at 2:10 AM Peilin Ye <yepeilin.cs@gmail.com> wrote:
 >
-> I.e. TSC_SCALING shouldn't be gated on the flag?  If so, then the 2-D array approach
-> is overkill since (a) the CPUID flag only controls PERF_GLOBAL_CTRL and (b) we aren't
-> expecting any more flags in the future.
+> From: Peilin Ye <peilin.ye@bytedance.com>
 >
-
-Unfortunately, we have to gate the presence of these new features on
-something, otherwise VMM has no way to specify which particular eVMCS
-"revision" it wants (TL;DR: we will break migration).
-
-My initial implementation was inventing 'eVMCS revision' concept:
-https://lore.kernel.org/kvm/20220629150625.238286-7-vkuznets@redhat.com/
-
-which is needed if we don't gate all these new fields on CPUID.0x4000000A.EBX BIT(0).
-
-Going forward, we will still (likely) need something when new fields show up.
-
-> What about this for an implementation?
+> Hi all,
 >
-> static bool evmcs_has_perf_global_ctrl(struct kvm_vcpu *vcpu)
-> {
-> 	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> Currently sockets (especially UDP ones) can drop a lot of packets at TC
+> egress when rate limited by shaper Qdiscs like HTB.  This patchset series
+> tries to solve this by introducing a Qdisc backpressure mechanism.
 >
-> 	/*
-> 	 * Filtering VMX controls for eVMCS compatibility should only be done
-> 	 * for guest accesses, and all such accesses should be gated on Hyper-V
-> 	 * being enabled and initialized.
-> 	 */
-> 	if (WARN_ON_ONCE(!hv_vcpu))
-> 		return false;
+> RFC v1 [1] used a throttle & unthrottle approach, which introduced several
+> issues, including a thundering herd problem and a socket reference count
+> issue [2].  This RFC v2 uses a different approach to avoid those issues:
 >
-> 	return hv_vcpu->cpuid_cache.nested_ebx & HV_X64_NESTED_EVMCS1_PERF_GLOBAL_CTRL;
-> }
+>   1. When a shaper Qdisc drops a packet that belongs to a local socket due
+>      to TC egress congestion, we make part of the socket's sndbuf
+>      temporarily unavailable, so it sends slower.
 >
-> static u32 evmcs_get_unsupported_ctls(struct kvm_vcpu *vcpu, u32 msr_index)
-> {
-> 	u32 unsupported_ctrls;
+>   2. Later, when TC egress becomes idle again, we gradually recover the
+>      socket's sndbuf back to normal.  Patch 2 implements this step using a
+>      timer for UDP sockets.
 >
-> 	switch (msr_index) {
-> 	case MSR_IA32_VMX_EXIT_CTLS:
-> 	case MSR_IA32_VMX_TRUE_EXIT_CTLS:
-> 		unsupported_ctrls = EVMCS1_UNSUPPORTED_VMEXIT_CTRL;
-> 		if (!evmcs_has_perf_global_ctrl(vcpu))
-> 			unsupported_ctrls |= VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
-> 		return unsupported_ctrls;
-> 	case MSR_IA32_VMX_ENTRY_CTLS:
-> 	case MSR_IA32_VMX_TRUE_ENTRY_CTLS:
-> 		unsupported_ctrls = EVMCS1_UNSUPPORTED_VMENTRY_CTRL;
-> 		if (!evmcs_has_perf_global_ctrl(vcpu))
-> 			unsupported_ctrls |= VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
-> 		return unsupported_ctrls;
-> 	case MSR_IA32_VMX_PROCBASED_CTLS2:
-> 		return EVMCS1_UNSUPPORTED_2NDEXEC;
-> 	case MSR_IA32_VMX_TRUE_PINBASED_CTLS:
-> 	case MSR_IA32_VMX_PINBASED_CTLS:
-> 		return EVMCS1_UNSUPPORTED_PINCTRL;
-> 	case MSR_IA32_VMX_VMFUNC:
-> 		return EVMCS1_UNSUPPORTED_VMFUNC;
-> 	default:
-> 		KVM_BUG_ON(1, vcpu->kvm);
-> 		return 0;
-> 	}
-> }
+> The thundering herd problem is avoided, since we no longer wake up all
+> throttled sockets at the same time in qdisc_watchdog().  The socket
+> reference count issue is also avoided, since we no longer maintain socket
+> list on Qdisc.
 >
-> void nested_evmcs_filter_control_msr(struct kvm_vcpu *vcpu, u32 msr_index, u64 *pdata)
-> {
-> 	u64 unsupported_ctrls = evmcs_get_unsupported_ctls(vcpu, msr_index);
+> Performance is better than RFC v1.  There is one concern about fairness
+> between flows for TBF Qdisc, which could be solved by using a SFQ inner
+> Qdisc.
 >
-> 	if (msr_index == MSR_IA32_VMX_VMFUNC)
-> 		*pdata &= ~unsupported_ctrls;
-> 	else
-> 		*pdata &= ~(unsupported_ctrls << 32);
-> }
+> Please see the individual patches for details and numbers.  Any comments,
+> suggestions would be much appreciated.  Thanks!
+>
+> [1] https://lore.kernel.org/netdev/cover.1651800598.git.peilin.ye@bytedance.com/
+> [2] https://lore.kernel.org/netdev/20220506133111.1d4bebf3@hermes.local/
+>
+> Peilin Ye (5):
+>   net: Introduce Qdisc backpressure infrastructure
+>   net/udp: Implement Qdisc backpressure algorithm
+>   net/sched: sch_tbf: Use Qdisc backpressure infrastructure
+>   net/sched: sch_htb: Use Qdisc backpressure infrastructure
+>   net/sched: sch_cbq: Use Qdisc backpressure infrastructure
 >
 
-It's smaller and I like it but it would only work in conjunction with
-KVM_CAP_HYPERV_ENLIGHTENED_VMCS2...
+I think the whole idea is wrong.
 
->
->> What I'm still concerned about is future proofing KVM for new
->> features. When something is getting added to KVM for which no eVMCS
->> field is currently defined, both Hyper-V-on-KVM and KVM-on-Hyper-V cases
->> should be taken care of. It would probably be better to reverse our
->> filtering, explicitly listing features supported in eVMCS. The lists are
->> going to be fairly long but at least we won't have to take care of any
->> new architectural feature added to KVM.
->
-> Having the filtering be opt-in crossed my mind as well.  Reversing the filtering
-> can be done after this series though, correct?
->
+Packet schedulers can be remote (offloaded, or on another box)
 
-Yes, that's my plan, Get this in to fix the immediate issue with 2022
-features and probably reverse the filtering before Microsoft releases
-something else :-)
+The idea of going back to socket level from a packet scheduler should
+really be a last resort.
 
--- 
-Vitaly
+Issue of having UDP sockets being able to flood a network is tough, I
+am not sure the core networking stack
+should pretend it can solve the issue.
 
+Note that FQ based packet schedulers can also help already.

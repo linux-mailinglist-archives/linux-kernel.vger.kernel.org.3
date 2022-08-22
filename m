@@ -2,90 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D670B59BC9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6253759BCAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234340AbiHVJTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 05:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
+        id S234346AbiHVJVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbiHVJSy (ORCPT
+        with ESMTP id S233268AbiHVJUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 05:18:54 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52BAB49F;
-        Mon, 22 Aug 2022 02:18:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661159927; x=1692695927;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PODeVLuIX9g0BxkQuwOWxZfhH1PA5lu7oTDDA6VcGDY=;
-  b=c28ifSh33/npFdtCxASSDUnnvKUIOOKZZCyhPFV+cFgxC0Fn9PJr7sLK
-   l9fTRE/jhAECfsHAKyK/KzgaDdES+Kw8AAoEpgnvxJKtxNK50mmjIEQoB
-   Uyobwd/vKehQDrHlA8Dx0tY7ybChLDJQmdfYGCGnZelQ8Vb4Ae3T1SSo9
-   qP8qT/h3ItO+F60WM5ebVJAmyIkTQXBW9EblXTjkcD+JJCOdJ+fCbYBrV
-   mfgWWt3HEXsvAlQbpg1EUd1oSUBo+I+4S0E2+uzwMRyAj9TwQ6HY953M8
-   4DMBRpdGcGRJdzDlxR+usJfj9uKCZskiid9IjKRxBUq9UOuMimsUp3S8p
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10446"; a="355097453"
-X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="355097453"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 02:18:45 -0700
-X-IronPort-AV: E=Sophos;i="5.93,254,1654585200"; 
-   d="scan'208";a="641961795"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 02:18:43 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 77AA020656;
-        Mon, 22 Aug 2022 12:18:41 +0300 (EEST)
-Date:   Mon, 22 Aug 2022 09:18:41 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     mchehab@kernel.org, laurent.pinchart+renesas@ideasonboard.com,
-        jacopo+renesas@jmondi.org, akinobu.mita@gmail.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 3/4] media: mt9m111: fix device power usage
-Message-ID: <YwNJ8RpSR+oVxnS/@paasikivi.fi.intel.com>
-References: <20220818144712.997477-1-m.felsch@pengutronix.de>
- <20220818144712.997477-3-m.felsch@pengutronix.de>
- <YwMix1+Bm1jEbWqv@paasikivi.fi.intel.com>
- <20220822075426.qjgxue7sjehazga4@pengutronix.de>
+        Mon, 22 Aug 2022 05:20:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7535BA9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:20:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661160003;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ngqpb8Rvk54UWz4xTDNZ012eO5zct1yya4XBjftITj4=;
+        b=jVPi3KF9FQjd4sbu2ucBSwq1dtNNG4JNu4wQmo4EIiAPw36Vk3fOK0LBJltN6FjJNQ1fE5
+        0/+MqTRZgZIPKr5ztv/970ZGuRHiUBj1IZtC3DGjLmyvCheY7X60PF0Novbfp9ohnbEPHS
+        IK+aMzoH4TJCaD4Ys4SCZRPZcGbDfYE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-473-ToeIBdFJMwihErbdufKduw-1; Mon, 22 Aug 2022 05:19:59 -0400
+X-MC-Unique: ToeIBdFJMwihErbdufKduw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A03885A586;
+        Mon, 22 Aug 2022 09:19:59 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.142])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C444C2166B26;
+        Mon, 22 Aug 2022 09:19:58 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v2] vfio/fsl-mc: Fix a typo in a message
+In-Reply-To: <3d2aa8434393ee8d2aa23a620e59ce1059c9d7ad.1660663440.git.christophe.jaillet@wanadoo.fr>
+Organization: Red Hat GmbH
+References: <3d2aa8434393ee8d2aa23a620e59ce1059c9d7ad.1660663440.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Notmuch/0.36 (https://notmuchmail.org)
+Date:   Mon, 22 Aug 2022 11:19:57 +0200
+Message-ID: <87y1vgocsi.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822075426.qjgxue7sjehazga4@pengutronix.de>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 09:54:26AM +0200, Marco Felsch wrote:
-> Hi Sakari,
-> 
-> On 22-08-22, Sakari Ailus wrote:
-> > Hi Marco,
-> > 
-> > On Thu, Aug 18, 2022 at 04:47:11PM +0200, Marco Felsch wrote:
-> > > Currently the driver turn off the power after probe and toggle it during
-> > > .stream by using the .s_power callback. This is problematic since other
-> > > callbacks like .set_fmt accessing the hardware as well which will fail.
-> > > So in the end the default format is the only supported format.
-> > 
-> > It'd be much better to add runtime PM support to the driver instead.
-> 
-> I got your point, but didn't have the time for it right now, I will drop
-> the patch from my v2.
+On Tue, Aug 16 2022, Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
 
-The API is different but generally involves doing more or less the same
-what this and the 4th patch do together.
+> L and S are swapped in the message.
+> s/VFIO_FLS_MC/VFIO_FSL_MC/
+>
+> Also use WARN instead of WARN_ON+dev_warn because WARN can already print
+> the message.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Changes in v2:
+>   * s/comment/message/ in the subject   [Cornelia Huck <cohuck@redhat.com>]
+>   * use WARN instead of WARN_ON+dev_warn   [Jason Gunthorpe <jgg@ziepe.ca>]
+>
+> v1:
+>   https://lore.kernel.org/all/2b65bf8d2b4d940cafbafcede07c23c35f042f5a.1659815764.git.christophe.jaillet@wanadoo.fr/
+> ---
+>  drivers/vfio/fsl-mc/vfio_fsl_mc.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/vfio/fsl-mc/vfio_fsl_mc.c b/drivers/vfio/fsl-mc/vfio_fsl_mc.c
+> index 3feff729f3ce..57774009e0eb 100644
+> --- a/drivers/vfio/fsl-mc/vfio_fsl_mc.c
+> +++ b/drivers/vfio/fsl-mc/vfio_fsl_mc.c
+> @@ -108,9 +108,7 @@ static void vfio_fsl_mc_close_device(struct vfio_device *core_vdev)
+>  	/* reset the device before cleaning up the interrupts */
+>  	ret = vfio_fsl_mc_reset_device(vdev);
+>  
+> -	if (WARN_ON(ret))
+> -		dev_warn(&mc_cont->dev,
+> -			 "VFIO_FLS_MC: reset device has failed (%d)\n", ret);
+> +	WARN(ret, "VFIO_FSL_MC: reset device has failed (%d)\n", ret);
 
--- 
-Sakari Ailus
+Hm, but this drops the device information, not such a fan... maybe the
+author can chime in?
+
+>  
+>  	vfio_fsl_mc_irqs_cleanup(vdev);
+>  
+

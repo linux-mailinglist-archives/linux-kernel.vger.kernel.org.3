@@ -2,129 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CB359BDAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628A859BDB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 12:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiHVKiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 06:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S229871AbiHVKjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 06:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiHVKh7 (ORCPT
+        with ESMTP id S229586AbiHVKjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 06:37:59 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9642FFC0;
-        Mon, 22 Aug 2022 03:37:58 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id bj12so3208168ejb.13;
-        Mon, 22 Aug 2022 03:37:58 -0700 (PDT)
+        Mon, 22 Aug 2022 06:39:41 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AEF2DAB1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 03:39:39 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id ca13so8994627ejb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 03:39:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc;
-        bh=Fic3qiVWuOXlTHP1LZdbaPSid2L5A3dsT7KZevdChfs=;
-        b=IHCuOUhy56vMwdwjLTG9NYX3fgcJdjJPjKhyta6Qno0VyVYmrtpv9plgj6qwWD/X2s
-         HwucGO9KuL0+fghF4vJmR4n6VrUCKt9Z1rHhlw2k27NTRRAGdLmbtW4v6PfYv0ohFFge
-         +XizqygcAKRGewcldYjjgWNN5F1sii+PSyPdOcaGhBabVrUjtVUM1abOU8eeWfl3fgEX
-         lUWYUW0pzYBASu2+AuJdgXCGAJVQfzFcGfJiTsq+RXzRk1ILQyG1WUAKMKKmp7/64veg
-         7LGqhggBuNU9M9ktMRIynqbAQVfL3FdjdzZuktCWyNiSuug2eGT+XuMWFl+4q31DvBvO
-         zrwQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=B8pLnsqFOp817XRYb/vm02deQ/vqjCuD0oAUsC/zdZk=;
+        b=Y8+1EQQEZF8mV38epQby0B2TirDJWZ2imPKnOUObslc06UkKZ7SFnpVSZq3aRE0kuL
+         X5mwD4equcMF8hQeA6nAAxCKhAWxRVBdi1BeK//4BMZqQhycgOJaE1++g+SGXwUNgxgC
+         MPzPSSTeayQUDqAbv8m5r0bXGqGgPUFiN+0EVi4tGfXK5lbLkxG5bRlmE5HwzM1oamg3
+         /bDjyXFoAn5Cbd8QZgTfn70QlBflbcVOsvIjZcbElyLgi/IrVxqGI3Gjm9uqS8jL1e7N
+         KAIprkPsHvZewRmvhcJXaXhqGyazD8FKglgA0P9omq4b1NLteRICmnrsd223Zuzcev24
+         zgkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc;
-        bh=Fic3qiVWuOXlTHP1LZdbaPSid2L5A3dsT7KZevdChfs=;
-        b=4ZO3/CTlBcDlHALq/lCRCMj9ybT+M4X8HKm6VWCCIQ1oNmgIWl+K5JmRPs1IEcg4ix
-         Q72avHcWaNqEiXGQkQVIOk9ectRn+uOaqPcDq1aawzK4upWTSovDw382ELgDg+p1fzPq
-         4kcZqFsDlUjEdJFebS5Ovg5ba18uis+0tl0Aiw5Dz7tk6dDMzQ1je2Gv9y7Dj1aTB4O9
-         P0rad6VWgDaY6zrH7NyA1aOHr9I7Xur0cgiP2RuUjzUIAmY/qo0nPexlUPZRVvxdhSvi
-         Y/ltOORlbPo4ndKQY8NHvLUp5OqUZO8UAKZdB7Q7FhAZ3ZPxSzmhB5MtBUpKOMEPGP3w
-         v+IA==
-X-Gm-Message-State: ACgBeo3iHPvsna1iKBnc157r8oX/taEiKX9zwEpiWgvz0wo59mlLLRDv
-        +s7x5Eyx9Zrj6hKBskhPqYA=
-X-Google-Smtp-Source: AA6agR61ZJH1BrR2M4z9iHGxFWbQH+3OJQa8rlccLSppDIjyOOz9ZmPu5f2e5WGvyZY474HoWqaSiw==
-X-Received: by 2002:a17:907:a408:b0:73d:6696:50af with SMTP id sg8-20020a170907a40800b0073d669650afmr6162308ejc.369.1661164676572;
-        Mon, 22 Aug 2022 03:37:56 -0700 (PDT)
-Received: from gmail.com (195-38-113-151.pool.digikabel.hu. [195.38.113.151])
-        by smtp.gmail.com with ESMTPSA id l17-20020a1709063d3100b00711edab7622sm5941550ejf.40.2022.08.22.03.37.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 03:37:55 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 22 Aug 2022 12:37:53 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     bp@suse.de, ndesaulniers@google.com, nathan@kernel.org,
-        alexandre.belloni@bootlin.com, acme@kernel.org,
-        namhyung@kernel.org, jolsa@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf tools: Fix compile error for x86
-Message-ID: <YwNcgdk/p18Cr+uv@gmail.com>
-References: <20220822092557.210209-1-yangjihong1@huawei.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=B8pLnsqFOp817XRYb/vm02deQ/vqjCuD0oAUsC/zdZk=;
+        b=OLFRZ2X5sh2daapddULqtmwNfwDkkB1H54VoKqPC4HsYQ78VXWTlb6MJOMGUAN3uiJ
+         aqFHFk0KRiy4ZepoeK/6XEHH6VyhzKv/YLLb1ZRLRndIHeyTnSuICz4NivrvY210vgpx
+         3nVYVIg0N8vgAGMZexvpV/i4UmwBwT7OaGWuaQHHnyQvB5RDQdINf6wcz3pY3BX8vHre
+         VSi/BnyOU3uq8k2bz083szsbX8OvOhN7LmNm4FyOilcWK/FOXd6GIynuKRc044vMtnnP
+         G8dGDPIMTCVV3oexgP4ew1cOulb7tQqmqCHvGiVpSAib3deS/jaS5ZItz1Vj/ZpsXsvs
+         mbbg==
+X-Gm-Message-State: ACgBeo2WE5agm/IOTQU8WwlTWIbBR15DEg8Mz+H/ammWNMOWyZGvw+Ko
+        mywqd5AyS9wD64iLFI6q7GmG3Roxsk2CnBJ5Am2h0Q==
+X-Google-Smtp-Source: AA6agR7UYsWI6RAl+mETEou8egftd5+12GtoWKr75gZFL0maYHt/Um7l6zoh+RBXUNNu023PyfZCYBwyD/8S1s3rl8A=
+X-Received: by 2002:a17:907:7389:b0:73d:81b9:ed2 with SMTP id
+ er9-20020a170907738900b0073d81b90ed2mr2833345ejc.448.1661164777962; Mon, 22
+ Aug 2022 03:39:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220822092557.210209-1-yangjihong1@huawei.com>
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220820182952.751374248@linuxfoundation.org>
+In-Reply-To: <20220820182952.751374248@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 22 Aug 2022 16:09:26 +0530
+Message-ID: <CA+G9fYu8GMuQrAYTf05Le=mhZWAWpnFP1xTBCPk9TrGcDO=kBQ@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/541] 5.10.137-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 21 Aug 2022 at 12:31, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.137 release.
+> There are 541 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Mon, 22 Aug 2022 18:28:24 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.137-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-* Yang Jihong <yangjihong1@huawei.com> wrote:
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> Commit a0a12c3ed057 ("asm goto: eradicate CC_HAS_ASM_GOTO") eradicates
-> CC_HAS_ASM_GOTO, perf on x86 call asm_volatile_goto when compiling __GEN_RMWcc.
-> However, asm_volatile_goto is not declared, which causes compilation error:
-> 
-> In file included from /home/linux/tools/include/asm/../../arch/x86/include/asm/atomic.h:7,
->                  from /home/linux/tools/include/asm/atomic.h:6,
->                  from /home/linux/tools/include/linux/atomic.h:5,
->                  from /home/linux/tools/include/linux/refcount.h:41,
->                  from /home/linux/tools/lib/perf/include/internal/cpumap.h:5,
->                  from /home/linux/tools/perf/util/cpumap.h:7,
->                  from /home/linux/tools/perf/util/env.h:7,
->                  from /home/linux/tools/perf/util/header.h:12,
->                  from pmu-events/pmu-events.c:9:
-> /home/linux/tools/include/asm/../../arch/x86/include/asm/atomic.h: In function ‘atomic_dec_and_test’:
-> /home/linux/tools/include/asm/../../arch/x86/include/asm/rmwcc.h:7:2: error: implicit declaration of function ‘asm_volatile_goto’ [-Werror=implicit-function-declaration]
->   asm_volatile_goto (fullop "; j" cc " %l[cc_label]"  \
->   ^~~~~~~~~~~~~~~~~
-> 
-> Solution:
-> Define asm_volatile_goto in compiler_types.h if not declared.
-> 
-> Currently, only x86 architecture uses asm_volatile_goto.
-> Theoretically, this patch affects only the x86 architecture.
-> 
-> Fixes: a0a12c3ed057 ("asm goto: eradicate CC_HAS_ASM_GOTO")
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> ---
->  tools/include/linux/compiler_types.h | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/include/linux/compiler_types.h b/tools/include/linux/compiler_types.h
-> index 24ae3054f304..1bdd834bdd57 100644
-> --- a/tools/include/linux/compiler_types.h
-> +++ b/tools/include/linux/compiler_types.h
-> @@ -36,4 +36,8 @@
->  #include <linux/compiler-gcc.h>
->  #endif
->  
-> +#ifndef asm_volatile_goto
-> +#define asm_volatile_goto(x...) asm goto(x)
-> +#endif
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Tested-by: Ingo Molnar <mingo@kernel.org>
+## Build
+* kernel: 5.10.137-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 879ffc7efcbe48e91264fd3bd3ec52cbcf69114c
+* git describe: v5.10.136-542-g879ffc7efcbe
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.136-542-g879ffc7efcbe
 
-Thanks,
+## No test Regressions (compared to v5.10.136)
 
-	Ingo
+## No metric Regressions (compared to v5.10.136)
+
+## No test Fixes (compared to v5.10.136)
+
+## No metric Fixes (compared to v5.10.136)
+
+
+## Test result summary
+total: 123695, pass: 109086, fail: 570, skip: 13312, xfail: 727
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 301 total, 301 passed, 0 failed
+* arm64: 62 total, 60 passed, 2 failed
+* i386: 52 total, 50 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 51 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 55 total, 53 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

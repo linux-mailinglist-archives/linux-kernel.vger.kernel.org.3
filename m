@@ -2,227 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A14A59BD26
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A4959BD28
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234555AbiHVJwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 05:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
+        id S234562AbiHVJx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233690AbiHVJwx (ORCPT
+        with ESMTP id S233690AbiHVJxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 05:52:53 -0400
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5B32982F
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:52:49 -0700 (PDT)
-From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1661161966; bh=vlMP781/oXy0hq0r4ltXOAMB3iba6lm5wXlI3u78Kgw=;
-        h=From:To:Cc:Subject:Date;
-        b=f7I3ouv1HuHUcHG2reTt21c57K0g62OrI/HNlNy7838nkBYjVjP8isR/FQU00B6Vg
-         5xsWVT7cICDooy/rVlSEz/t84v2/r5P8254lrPDzBqDzuoLNKPNC2bmfZLdb9XvW11
-         7CRTyQ6hTgcBIANPVcqLZTCy/7Ptxca9/yEsS0JM=
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-Subject: [PATCH] ASoC: dapm: Export new 'graph.dot' file in debugfs
-Date:   Mon, 22 Aug 2022 11:52:42 +0200
-Message-Id: <20220822095242.3779-1-povik+lin@cutebit.org>
+        Mon, 22 Aug 2022 05:53:24 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63974264A;
+        Mon, 22 Aug 2022 02:53:22 -0700 (PDT)
+Received: from [192.168.88.254] (unknown [125.160.110.187])
+        by gnuweeb.org (Postfix) with ESMTPSA id 8EB6F80927;
+        Mon, 22 Aug 2022 09:53:17 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1661162001;
+        bh=iT3I6GSMz8GsVcIXKTF1Mno6cYZkSK5yv1x/6Z/kQY8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NVdYj1mRqrGDiox7JcRo9HD9RT1M17Hs/y7e9cUiP9h0/AyRhmSp3bXQo1cpar10q
+         R/v8ux333PQ+1lX9vAQQPQaV8mXF6ZzfP4vhzwT7ACVmNtSf2bBwkvf2jueaaBN2EG
+         Ab0enwRZJUF5RL6+nMVQ8+dkRiI+ZbccA8hhiOoi7YfIj3ngxOMX7gVDg9PGsvR6bS
+         X+1yO+wiIEUFBehZ6QuhQy9WPCayxoqg96ge5nDsjSEaOoqIhN18J9Lt2MT9jt0udy
+         IOr/jl0+odNMKqVyeydiWrvBtE097tPVWvUAJKXxOqY7TMDFpLvrw8UGUZ8+ynAl/R
+         lS1xpn/FTB2QQ==
+Message-ID: <c327e887-dcbf-5537-4fbf-69b30cf9ae36@gnuweeb.org>
+Date:   Mon, 22 Aug 2022 16:53:10 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [LKP] Re: [vrf] 2ef23e860e:
+ kernel-selftests.net.fcnal-test.sh.fail
+Content-Language: en-US
+To:     Yujie Liu <yujie.liu@intel.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev Mailing List <netdev@vger.kernel.org>,
+        stable@vger.kernel.org, lkp@lists.01.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Stephen Suryaputra <ssuryaextr@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Ahern <dsahern@kernel.org>
+References: <20220822065003.GA33158@inn2.lkp.intel.com>
+ <532c4311-ada3-05c7-bc63-b5cb2d32ca1a@intel.com>
+ <c9451365-e582-3bb0-0180-462d0a4069ed@gnuweeb.org>
+ <70e690da-df88-5d78-d25c-b01ce1f3f886@intel.com>
+ <730e3e31-509b-23d4-3f35-cf787118b005@intel.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <730e3e31-509b-23d4-3f35-cf787118b005@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide a DOT summary of the DAPM graph in a newly added 'graph.dot'
-file in debugfs, placed in the card's DAPM directory.
 
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
----
++ Adding stable and netdev people to the participants.
 
-Sample output: https://cutebit.org/macaudio-j274.svg
-(With unupstreamed sound drivers on Mac mini (2020))
+Full story here:
 
-The helper bufprintf macro triggers checkpath.pl:
+    https://lore.gnuweeb.org/gwml/532c4311-ada3-05c7-bc63-b5cb2d32ca1a@intel.com
 
-ERROR: Macros with complex values should be enclosed in parentheses
-#47: FILE: sound/soc/soc-dapm.c:2235:
-+#define bufprintf(...) \
-+               ret += scnprintf(buf + ret, bufsize - ret, __VA_ARGS__)
+If you fix the issue, kindly add following tag
+Reported-by: kernel test robot <yujie.liu@intel.com>
 
-but adding in {} to the macro body interferes with the if/else
-constructions later, so I left it as-is.
+On 8/22/22 3:17 PM, Yujie Liu wrote:
+> On 8/22/2022 16:09, Yujie Liu wrote:
+>> On 8/22/2022 15:15, Ammar Faizi wrote:
+>>> On 8/22/22 2:03 PM, kernel test robot wrote:
+>>>> =========================================================================================
+>>>> tbox_group/testcase/rootfs/kconfig/compiler/group/test/atomic_test/ucode:
+>>>>    lkp-skl-d01/kernel-selftests/debian-12-x86_64-20220629.cgz/x86_64-rhel-8.3-kselftests/gcc-11/net/fcnal-test.sh/use_cases/0xf0
+>>>>
+>>>> commit:
+>>>>    cae90bd22cffb ("net: bridge: vlan: fix error return code in __vlan_add()")
+>>>>    2ef23e860e765 ("vrf: packets with lladdr src needs dst at input with orig_iif when needs strict")
+>>>>
+>>>> cae90bd22cffb1e1 2ef23e860e765eb1dd287492206
+>>>> ---------------- ---------------------------
+>>>>         fail:runs  %reproduction    fail:runs
+>>>>             |             |             |
+>>>>             :6          100%           6:6     kernel-selftests.net.fcnal-test.sh.fail
+>>>>
+>>>>
+>>>> FYI, we noticed that this is a backport commit of upstream 205704c618af0ab2366015d2281a3b0814d918a0
+>>>> (merged by v5.10), so we also test this case on mainline, and this issue doesn't exist.
+>>>
+>>> Can you test the latest linux-5.4.y branch and see whether the issue
+>>> exists on there?
+>>>
+>>> You can pull from:
+>>>
+>>>    https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git linux-5.4.y
+>>>
+>>> The HEAD commit is:
+>>>
+>>>     de0cd3ea700d1e8ed76705d02e33b524cbb84cf3 ("Linux 5.4.210")
+>>>
+>>
+>> The issue doesn't exist on latest head of linux-5.4.y branch
+> 
+> Sorry, I made a mistake, the issue still exists on linux-5.4-y head.
 
- sound/soc/soc-dapm.c | 141 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 141 insertions(+)
+Thanks for testing, unfortunately, I am not the committer nor author of
+the offending commit. This should have been reported to the netdev list.
 
-diff --git a/sound/soc/soc-dapm.c b/sound/soc/soc-dapm.c
-index 73b8bd452ca7..86524908c3fd 100644
---- a/sound/soc/soc-dapm.c
-+++ b/sound/soc/soc-dapm.c
-@@ -2210,6 +2210,143 @@ static const struct file_operations dapm_bias_fops = {
- 	.llseek = default_llseek,
- };
- 
-+static ssize_t dapm_graph_read_file(struct file *file, char __user *user_buf,
-+				    size_t count, loff_t *ppos)
-+{
-+	struct snd_soc_card *card = file->private_data;
-+	struct snd_soc_dapm_context *dapm;
-+	struct snd_soc_dapm_path *p;
-+	struct snd_soc_dapm_widget *w;
-+	struct snd_soc_pcm_runtime *rtd;
-+	struct snd_soc_dapm_widget *wdone[16];
-+	struct snd_soc_dai *dai;
-+	int i, num_wdone = 0, cluster = 0;
-+	char *buf;
-+	ssize_t bufsize;
-+	ssize_t ret = 0;
-+
-+	bufsize = 1024 * card->num_dapm_widgets;
-+	buf = kmalloc(bufsize, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	mutex_lock(&card->dapm_mutex);
-+
-+#define bufprintf(...) \
-+		ret += scnprintf(buf + ret, bufsize - ret, __VA_ARGS__)
-+
-+	bufprintf("digraph dapm {\n");
-+	bufprintf("label=\"%s\";\n", card->name);
-+
-+	/*
-+	 * Print the user-visible PCM devices of the card.
-+	 */
-+	bufprintf("subgraph cluster_%d {\n", cluster++);
-+	bufprintf("label=\"PCM devices\";style=filled;fillcolor=lightgray;\n");
-+	for_each_card_rtds(card, rtd) {
-+		if (rtd->dai_link->no_pcm)
-+			continue;
-+
-+		bufprintf("w%pK [label=\"%d: %s\"];\n", rtd,
-+			  rtd->pcm->device, rtd->dai_link->name);
-+	}
-+	bufprintf("};\n");
-+
-+	/*
-+	 * Print the playback/capture widgets of CPU-side DAIs, and link
-+	 * them to the PCM devices. Keep a list of already printed
-+	 * widgets in 'wdone', so they will be skipped later. Do not put
-+	 * these widgets in a component cluster like we will do with
-+	 * the other widgets later, since that just clutters the graph.
-+	 */
-+	for_each_card_rtds(card, rtd) {
-+		for_each_rtd_cpu_dais(rtd, i, dai) {
-+			if (dai->playback_widget) {
-+				w = dai->playback_widget;
-+				bufprintf("w%pK [label=\"%s\"];\n", w, w->name);
-+				if (!rtd->dai_link->no_pcm)
-+					bufprintf("w%pK -> w%pK;\n", rtd, w);
-+				wdone[num_wdone] = w;
-+				if (num_wdone < ARRAY_SIZE(wdone))
-+					num_wdone++;
-+			}
-+
-+			if (dai->capture_widget) {
-+				w = dai->capture_widget;
-+				bufprintf("w%pK [label=\"%s\"];\n", w, w->name);
-+				if (!rtd->dai_link->no_pcm)
-+					bufprintf("w%pK -> w%pK;\n", w, rtd);
-+				wdone[num_wdone] = w;
-+				if (num_wdone < ARRAY_SIZE(wdone))
-+					num_wdone++;
-+			}
-+		}
-+	}
-+
-+	for_each_card_dapms(card, dapm) {
-+		const char *prefix = soc_dapm_prefix(dapm);
-+
-+		if (dapm != &card->dapm) {
-+			bufprintf("subgraph cluster_%d {\n", cluster++);
-+			if (prefix && dapm->component)
-+				bufprintf("label=\"%s (%s)\";\n", prefix,
-+					  dapm->component->name);
-+			else if (dapm->component)
-+				bufprintf("label=\"%s\";\n",
-+					  dapm->component->name);
-+		}
-+
-+		for_each_card_widgets(dapm->card, w) {
-+			const char *name = w->name;
-+			bool skip = false;
-+
-+			if (w->dapm != dapm)
-+				continue;
-+
-+			if (list_empty(&w->edges[0]) && list_empty(&w->edges[1]))
-+				continue;
-+
-+			for (i = 0; i < num_wdone; i++)
-+				if (wdone[i] == w)
-+					skip = true;
-+			if (skip)
-+				continue;
-+
-+			if (prefix && strlen(name) > strlen(prefix) + 1)
-+				name += strlen(prefix) + 1;
-+
-+			bufprintf("w%pK [label=\"%s\"];\n", w, name);
-+		}
-+
-+		if (dapm != &card->dapm)
-+			bufprintf("}\n");
-+	}
-+
-+	list_for_each_entry(p, &card->paths, list) {
-+		if (p->name)
-+			bufprintf("w%pK -> w%pK [label=\"%s\"];\n",
-+				  p->source, p->sink, p->name);
-+		else
-+			bufprintf("w%pK -> w%pK;\n", p->source, p->sink);
-+	}
-+
-+	bufprintf("}\n");
-+#undef bufprintf
-+
-+	mutex_unlock(&card->dapm_mutex);
-+
-+	ret = simple_read_from_buffer(user_buf, count, ppos, buf, ret);
-+
-+	kfree(buf);
-+	return ret;
-+}
-+
-+static const struct file_operations dapm_graph_fops = {
-+	.open = simple_open,
-+	.read = dapm_graph_read_file,
-+	.llseek = default_llseek,
-+};
-+
- void snd_soc_dapm_debugfs_init(struct snd_soc_dapm_context *dapm,
- 	struct dentry *parent)
- {
-@@ -2220,6 +2357,10 @@ void snd_soc_dapm_debugfs_init(struct snd_soc_dapm_context *dapm,
- 
- 	debugfs_create_file("bias_level", 0444, dapm->debugfs_dapm, dapm,
- 			    &dapm_bias_fops);
-+
-+	if (dapm == &dapm->card->dapm)
-+		debugfs_create_file("graph.dot", 0444, dapm->debugfs_dapm,
-+				    dapm->card, &dapm_graph_fops);
- }
- 
- static void dapm_debugfs_add_widget(struct snd_soc_dapm_widget *w)
+I have added them to the CC list. Can you resend the reproducer and
+detailed test output with them CC'ed?
+
+>>
+>> =========================================================================================
+>> atomic_test/compiler/group/kconfig/rootfs/tbox_group/test/testcase/ucode:
+>>    use_cases/gcc-11/net/x86_64-rhel-8.3-kselftests/debian-12-x86_64-20220629.cgz/lkp-skl-d01/fcnal-test.sh/kernel-selftests/0xf0
+>>
+>> commit:
+>>    2ef23e860e765 ("vrf: packets with lladdr src needs dst at input with orig_iif when needs strict")
+>>    cae90bd22cffb ("net: bridge: vlan: fix error return code in __vlan_add()")
+>>    de0cd3ea700d1 ("Linux 5.4.210")
+>>
+>> 2ef23e860e765eb1 cae90bd22cffb1e19a83a794ad5                    v5.4.210
+>> ---------------- --------------------------- ---------------------------
+>>         fail:runs  %reproduction    fail:runs  %reproduction    fail:runs
+>>             |             |             |             |             |
+>>             :6          100%           6:6            0%            :2     kernel-selftests.net.fcnal-test.sh.pass
+> 
+> for this stat, only cae90bd22cffb can pass the test, while 2ef23e860e765 and v5.4.210
+> all failed.
+
+FYI, I found a backported commit with a Fixes tag contains
+205704c618af (commit upstream):
+
+    https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=e245ea3b524069e1a264bb50190dceedd59c36fb
+
+But the 5.4.y HEAD that already includes that commit still fails
+based on your report. Let's wait for netdev people' response on
+this. As the mainline doesn't have this issue, maybe something
+need to get backported?
+
+Summary:
+
+These commits only live in 5.4.x stable branch (backport from upstream):
+
+(notice the "Upstream commit")
+
+# Known good commit:
+
+     commit cae90bd22cffb1e19a83a794ad5f57dafb3e76ad
+     Author:     Zhang Changzhong <zhangchangzhong@huawei.com>
+     AuthorDate: Fri Dec 4 16:48:56 2020 +0800
+     Commit:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+     CommitDate: Mon Dec 21 13:27:03 2020 +0100
+
+     net: bridge: vlan: fix error return code in __vlan_add()
+     
+     [ Upstream commit ee4f52a8de2c6f78b01f10b4c330867d88c1653a ]
+     ...
+
+# The next commit after that one fails (first bad commit):
+
+     commit 2ef23e860e765eb1dd287492206d833f04eae9df
+     Author:     Stephen Suryaputra <ssuryaextr@gmail.com>
+     AuthorDate: Thu Dec 3 22:06:04 2020 -0500
+     Commit:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+     CommitDate: Mon Dec 21 13:27:03 2020 +0100
+
+     vrf: packets with lladdr src needs dst at input with orig_iif when needs strict
+     
+     [ Upstream commit 205704c618af0ab2366015d2281a3b0814d918a0 ]
+     ...
+
+# The HEAD of linux-5.4.x still fails:
+
+     commit de0cd3ea700d1e8ed76705d02e33b524cbb84cf3
+     Author:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+     AuthorDate: Thu Aug 11 12:57:53 2022 +0200
+     Commit:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+     CommitDate: Thu Aug 11 12:57:53 2022 +0200
+
+     Linux 5.4.210
+     ...
+
+netdev folks, any comment on this?
+
 -- 
-2.33.0
-
+Ammar Faizi

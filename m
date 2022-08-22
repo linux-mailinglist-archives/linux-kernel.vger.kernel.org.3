@@ -2,53 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7B659BC1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 10:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B37959BC2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbiHVI6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 04:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
+        id S233036AbiHVJBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233844AbiHVI6h (ORCPT
+        with ESMTP id S233599AbiHVJAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 04:58:37 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B0E5F88
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:58:27 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id w6-20020a056e02190600b002e74e05fdc2so8011206ilu.21
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 01:58:27 -0700 (PDT)
+        Mon, 22 Aug 2022 05:00:54 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EC12AE07
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:00:53 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id d21so473142eje.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:00:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=NW1o3Ocn9ui/wOKfe4NRQMpfgibTny5rRKgCzkPbONA=;
+        b=Symo+d5Y+hbSkSeGeF77LH2ZUvheytha7KL8jJE+h4fzp+uh5HIxPjztfcEQrspczm
+         /yPWcp3LYBD+LtoP/SDqNzvI2xbjwk8iwJujbgictlA0KGP0kCSpHrkSBZz9NU6wfKgv
+         28OjXi1mJyw3eRZJcNmPUv2EqiyKtiQY+gLWnvpoQEDY7MN80o1oifzIsYOUzamxmN16
+         M+1LydX7Nf89a17+y62vzEMzUaBVC5Dmp+rNscjlks6VpvQAbqSbZfbgR15DA3p3Ycc8
+         kS0XZsHpdNBb0A5EEBvuIp4sSPDTdqSxH5nbWN4JZANWVoY5SAx7AauXJZj4CvbpoJCb
+         LaPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=Tcyuj24O23vcHVhLzElBM890gQJozZlpTegCM2oZcMY=;
-        b=FS2Zc+n6S5rXpmrSNr0wvxUma3QMuOaxeFoNu4S4KTclUyZg0S27ibrLw67Fe95a9S
-         kdaaOVO+v/eZuGZjSLHotqqyi6/mzfH8G/9giVyjdxhmXrCxNG2pp1G0El/zrandGrJk
-         bBrDgCwxr4UNMzbPtheruFDM3QTv2LjUc8WA+GDA3wVi2JO+Mn24WXIZU3YvEk5ofGhQ
-         Yo9g45hBPIs5bCzUIdzoi1NWTsfE4x34Ihkzsts3M0c7wBr1fJJziWIEqfEQzdZLdDlo
-         d+T8+BnvWDT9Q12DyDvuhfh5wxQXziNvRLRVMaAsbLYyWqBV1gwKspXrSyDj3KMqw2lU
-         sHAw==
-X-Gm-Message-State: ACgBeo0oTkB/wZ6kMaKXERtOHGv9MvzgeYU7wjlnvun3T4wLlZ4z3c5A
-        7B3OHyb6/8mFAu5QPVq3WOYR64aFcvEu+zuyRIwXgXfBSDlM
-X-Google-Smtp-Source: AA6agR41PpDi6EtKzgHmda6SKdDcvaATTk73pKh4Co2iZTH1oHflXCqomztGn7IFsq8AQKqNn04lsg8lRIMIGxE64Z+W3LTCLzYB
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=NW1o3Ocn9ui/wOKfe4NRQMpfgibTny5rRKgCzkPbONA=;
+        b=3fr99iGl/Eybt4mFl9+eZZ1QzkExWGvcxPRz3Fj4USdYA+PovF56tjFUnTWUcMKQHa
+         1IqoconBSuiknXJq+NfIoqxNSjeiB/BZeanRhjNlBdysoRihjZTh8XZ1HlRyFUT8G+WQ
+         UOjcQXyCmBO/gdX1ZEcI1dmKZF+YJHVTBgG/s/u312bOY+yU4tVBB8zRLkFMAhiqk1Z9
+         b79TUhfslIsyj0PJ+u4UkatNzy0sQkrhpHAeAHl9YTSDEY+BHSNV+5D+sH/vQXjMxH76
+         SYMEh76XU6UthWH5T/TPsHdl5k9vLS4QlTkw/jSLuUZFVfGve4MAy4LU/JF+3AWUgy2r
+         8Tvg==
+X-Gm-Message-State: ACgBeo2ab+88UHsD66o0yzxhfGVXiwA2v4QCM0vExDdgubqr4WuDZEyM
+        ufb/NXPX6CsDF4p2OVo8CO1obLxMqOiOwJR6hDiU1w==
+X-Google-Smtp-Source: AA6agR4DB225L5YdzNnhmSE7dqcZhLxtiZeH/J/szCd1CdX8nzYuSTIzAfsVV0mLJjTVj5i65FzbO2pVztZl8lJy3QM=
+X-Received: by 2002:a17:907:6d93:b0:73d:8593:9608 with SMTP id
+ sb19-20020a1709076d9300b0073d85939608mr1620861ejc.203.1661158851971; Mon, 22
+ Aug 2022 02:00:51 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:25d3:b0:342:fa3d:1275 with SMTP id
- u19-20020a05663825d300b00342fa3d1275mr9511547jat.70.1661158706744; Mon, 22
- Aug 2022 01:58:26 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 01:58:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a1943305e6d0a695@google.com>
-Subject: [syzbot] WARNING: suspicious RCU usage in __access_remote_vm
-From:   syzbot <syzbot+6d42e44c5d6fa154fefa@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+References: <20220807192114.44890-1-sander@svanheule.net>
+In-Reply-To: <20220807192114.44890-1-sander@svanheule.net>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 22 Aug 2022 11:00:40 +0200
+Message-ID: <CACRpkdZahZO7WZt3m7MZ5yXdhAfVFTu0ZJ6Ln1Uz0q=NsgcF9w@mail.gmail.com>
+Subject: Re: [PATCH v3] gpio: realtek-otto: switch to 32-bit I/O
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     linux-gpio@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Jan Hoffmann <jan@3e8.eu>, Paul Cercueil <paul@crapouillou.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,236 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Aug 7, 2022 at 9:21 PM Sander Vanheule <sander@svanheule.net> wrote:
 
-syzbot found the following issue on:
+> By using 16-bit I/O on the GPIO peripheral, which is apparently not safe
+> on MIPS, the IMR can end up containing garbage. This then results in
+> interrupt triggers for lines that don't have an interrupt handler
+> associated. The irq_desc lookup fails, and the ISR will not be cleared,
+> keeping the CPU busy until reboot, or until another IMR operation
+> restores the correct value. This situation appears to happen very
+> rarely, for < 0.5% of IMR writes.
+>
+> Instead of using 8-bit or 16-bit I/O operations on the 32-bit memory
+> mapped peripheral registers, switch to using 32-bit I/O only, operating
+> on the entire bank for all single bit line settings. For 2-bit line
+> settings, with 16-bit port values, stick to manual (un)packing.
+>
+> This issue has been seen on RTL8382M (HPE 1920-16G), RTL8391M (Netgear
+> GS728TP v2), and RTL8393M (D-Link DGS-1210-52 F3, Zyxel GS1900-48).
+>
+> Reported-by: Luiz Angelo Daros de Luca <luizluca@gmail.com> # DGS-1210-52
+> Reported-by: Birger Koblitz <mail@birger-koblitz.de> # GS728TP
+> Reported-by: Jan Hoffmann <jan@3e8.eu> # 1920-16G
+> Fixes: 0d82fb1127fb ("gpio: Add Realtek Otto GPIO support")
+> Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> Cc: Paul Cercueil <paul@crapouillou.net>
 
-HEAD commit:    5b6a4bf680d6 Add linux-next specific files for 20220818
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=107558eb080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
-dashboard link: https://syzkaller.appspot.com/bug?extid=6d42e44c5d6fa154fefa
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6d42e44c5d6fa154fefa@syzkaller.appspotmail.com
-
-=============================
-WARNING: suspicious RCU usage
-6.0.0-rc1-next-20220818-syzkaller #0 Not tainted
------------------------------
-include/net/sock.h:592 suspicious rcu_dereference_check() usage!
-
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 2, debug_locks = 1
-4 locks held by syz-executor.3/11465:
- #0: ffff888039371a10 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
- #0: ffff888039371a10 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: __sock_release+0x86/0x280 net/socket.c:649
- #1: ffffc900014ebf38 (&table->hash[i].lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
- #1: ffffc900014ebf38 (&table->hash[i].lock){+...}-{2:2}, at: udp_lib_unhash net/ipv4/udp.c:2014 [inline]
- #1: ffffc900014ebf38 (&table->hash[i].lock){+...}-{2:2}, at: udp_lib_unhash+0x1d5/0x730 net/ipv4/udp.c:2004
- #2: ffffffff8d7beb78 (reuseport_lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
- #2: ffffffff8d7beb78 (reuseport_lock){+...}-{2:2}, at: reuseport_detach_sock+0x22/0x4a0 net/core/sock_reuseport.c:346
- #3: ffff8880202a6bb8 (clock-AF_INET6){++.-}-{2:2}, at: bpf_sk_reuseport_detach+0x26/0x190 kernel/bpf/reuseport_array.c:26
-
-stack backtrace:
-CPU: 0 PID: 11465 Comm: syz-executor.3 Not tainted 6.0.0-rc1-next-20220818-syzkaller #0
-BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1521
-in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 11465, name: syz-executor.3
-preempt_count: 603, expected: 0
-RCU nest depth: 0, expected: 0
-4 locks held by syz-executor.3/11465:
- #0: ffff888039371a10 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
- #0: ffff888039371a10 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: __sock_release+0x86/0x280 net/socket.c:649
- #1: ffffc900014ebf38 (&table->hash[i].lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
- #1: ffffc900014ebf38 (&table->hash[i].lock){+...}-{2:2}, at: udp_lib_unhash net/ipv4/udp.c:2014 [inline]
- #1: ffffc900014ebf38 (&table->hash[i].lock){+...}-{2:2}, at: udp_lib_unhash+0x1d5/0x730 net/ipv4/udp.c:2004
- #2: ffffffff8d7beb78 (reuseport_lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
- #2: ffffffff8d7beb78 (reuseport_lock){+...}-{2:2}, at: reuseport_detach_sock+0x22/0x4a0 net/core/sock_reuseport.c:346
- #3: ffff8880202a6bb8 (clock-AF_INET6){++.-}-{2:2}, at: bpf_sk_reuseport_detach+0x26/0x190 kernel/bpf/reuseport_array.c:26
-irq event stamp: 509
-hardirqs last  enabled at (508): [<ffffffff816199ce>] __up_console_sem+0xae/0xc0 kernel/printk/printk.c:264
-hardirqs last disabled at (509): [<ffffffff894bf6e6>] dump_stack_lvl+0x2e/0x134 lib/dump_stack.c:139
-softirqs last  enabled at (206): [<ffffffff881e0a2e>] udpv6_destroy_sock+0x8e/0x230 net/ipv6/udp.c:1624
-softirqs last disabled at (208): [<ffffffff87e911f5>] spin_lock_bh include/linux/spinlock.h:354 [inline]
-softirqs last disabled at (208): [<ffffffff87e911f5>] udp_lib_unhash net/ipv4/udp.c:2014 [inline]
-softirqs last disabled at (208): [<ffffffff87e911f5>] udp_lib_unhash+0x1d5/0x730 net/ipv4/udp.c:2004
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 0 PID: 11465 Comm: syz-executor.3 Not tainted 6.0.0-rc1-next-20220818-syzkaller #0
-
-=============================
-[ BUG: Invalid wait context ]
-6.0.0-rc1-next-20220818-syzkaller #0 Not tainted
------------------------------
-syz-executor.3/11465 is trying to lock:
-ffff88807eefc728 (&mm->mmap_lock#2){++++}-{3:3}, at: mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
-ffff88807eefc728 (&mm->mmap_lock#2){++++}-{3:3}, at: __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
-other info that might help us debug this:
-context-{4:4}
-4 locks held by syz-executor.3/11465:
- #0: ffff888039371a10 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
- #0: ffff888039371a10 (&sb->s_type->i_mutex_key#10){+.+.}-{3:3}, at: __sock_release+0x86/0x280 net/socket.c:649
- #1: ffffc900014ebf38 (&table->hash[i].lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
- #1: ffffc900014ebf38 (&table->hash[i].lock){+...}-{2:2}, at: udp_lib_unhash net/ipv4/udp.c:2014 [inline]
- #1: ffffc900014ebf38 (&table->hash[i].lock){+...}-{2:2}, at: udp_lib_unhash+0x1d5/0x730 net/ipv4/udp.c:2004
- #2: ffffffff8d7beb78 (reuseport_lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
- #2: ffffffff8d7beb78 (reuseport_lock){+...}-{2:2}, at: reuseport_detach_sock+0x22/0x4a0 net/core/sock_reuseport.c:346
- #3: ffff8880202a6bb8 (clock-AF_INET6){++.-}-{2:2}, at: bpf_sk_reuseport_detach+0x26/0x190 kernel/bpf/reuseport_array.c:26
-stack backtrace:
-CPU: 0 PID: 11465 Comm: syz-executor.3 Not tainted 6.0.0-rc1-next-20220818-syzkaller #0
-syz-executor.3[11465] cmdline: /root/syz-executor.3 exec
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:122 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
- print_lock_invalid_wait_context kernel/locking/lockdep.c:4705 [inline]
- check_wait_context kernel/locking/lockdep.c:4766 [inline]
- __lock_acquire.cold+0x322/0x3a7 kernel/locking/lockdep.c:5003
- lock_acquire kernel/locking/lockdep.c:5666 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5631
- down_read_killable+0x9b/0x490 kernel/locking/rwsem.c:1522
- mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
- __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
- get_mm_cmdline.part.0+0x217/0x620 fs/proc/base.c:299
- get_mm_cmdline fs/proc/base.c:367 [inline]
- get_task_cmdline_kernel+0x1d9/0x220 fs/proc/base.c:367
- dump_stack_print_cmdline.part.0+0x82/0x150 lib/dump_stack.c:61
- dump_stack_print_cmdline lib/dump_stack.c:89 [inline]
- dump_stack_print_info+0x185/0x190 lib/dump_stack.c:97
- __dump_stack lib/dump_stack.c:121 [inline]
- dump_stack_lvl+0xc1/0x134 lib/dump_stack.c:140
- __might_resched.cold+0x222/0x26b kernel/sched/core.c:9896
- down_read_killable+0x75/0x490 kernel/locking/rwsem.c:1521
- mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
- __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
- get_mm_cmdline.part.0+0x217/0x620 fs/proc/base.c:299
- get_mm_cmdline fs/proc/base.c:367 [inline]
- get_task_cmdline_kernel+0x1d9/0x220 fs/proc/base.c:367
- dump_stack_print_cmdline.part.0+0x82/0x150 lib/dump_stack.c:61
- dump_stack_print_cmdline lib/dump_stack.c:89 [inline]
- dump_stack_print_info+0x185/0x190 lib/dump_stack.c:97
- __dump_stack lib/dump_stack.c:121 [inline]
- dump_stack_lvl+0xc1/0x134 lib/dump_stack.c:140
- __rcu_dereference_sk_user_data_with_flags include/net/sock.h:592 [inline]
- bpf_sk_reuseport_detach+0x156/0x190 kernel/bpf/reuseport_array.c:27
- reuseport_detach_sock+0x8c/0x4a0 net/core/sock_reuseport.c:362
- udp_lib_unhash net/ipv4/udp.c:2016 [inline]
- udp_lib_unhash+0x210/0x730 net/ipv4/udp.c:2004
- sk_common_release+0xba/0x390 net/core/sock.c:3600
- inet_release+0x12e/0x270 net/ipv4/af_inet.c:428
- inet6_release+0x4c/0x70 net/ipv6/af_inet6.c:482
- __sock_release+0xcd/0x280 net/socket.c:650
- sock_close+0x18/0x20 net/socket.c:1365
- __fput+0x27c/0xa90 fs/file_table.c:320
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0f21689279
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0f22751168 EFLAGS: 00000246 ORIG_RAX: 0000000000000021
-RAX: 0000000000000004 RBX: 00007f0f2179bf80 RCX: 00007f0f21689279
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000003
-RBP: 00007f0f216e3189 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc99f634ef R14: 00007f0f22751300 R15: 0000000000022000
- </TASK>
-syz-executor.3[11465] cmdline: /root/syz-executor.3 exec
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:122 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
- __might_resched.cold+0x222/0x26b kernel/sched/core.c:9896
- down_read_killable+0x75/0x490 kernel/locking/rwsem.c:1521
- mmap_read_lock_killable include/linux/mmap_lock.h:126 [inline]
- __access_remote_vm+0xac/0x6f0 mm/memory.c:5461
- get_mm_cmdline.part.0+0x217/0x620 fs/proc/base.c:299
- get_mm_cmdline fs/proc/base.c:367 [inline]
- get_task_cmdline_kernel+0x1d9/0x220 fs/proc/base.c:367
- dump_stack_print_cmdline.part.0+0x82/0x150 lib/dump_stack.c:61
- dump_stack_print_cmdline lib/dump_stack.c:89 [inline]
- dump_stack_print_info+0x185/0x190 lib/dump_stack.c:97
- __dump_stack lib/dump_stack.c:121 [inline]
- dump_stack_lvl+0xc1/0x134 lib/dump_stack.c:140
- __rcu_dereference_sk_user_data_with_flags include/net/sock.h:592 [inline]
- bpf_sk_reuseport_detach+0x156/0x190 kernel/bpf/reuseport_array.c:27
- reuseport_detach_sock+0x8c/0x4a0 net/core/sock_reuseport.c:362
- udp_lib_unhash net/ipv4/udp.c:2016 [inline]
- udp_lib_unhash+0x210/0x730 net/ipv4/udp.c:2004
- sk_common_release+0xba/0x390 net/core/sock.c:3600
- inet_release+0x12e/0x270 net/ipv4/af_inet.c:428
- inet6_release+0x4c/0x70 net/ipv6/af_inet6.c:482
- __sock_release+0xcd/0x280 net/socket.c:650
- sock_close+0x18/0x20 net/socket.c:1365
- __fput+0x27c/0xa90 fs/file_table.c:320
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0f21689279
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0f22751168 EFLAGS: 00000246 ORIG_RAX: 0000000000000021
-RAX: 0000000000000004 RBX: 00007f0f2179bf80 RCX: 00007f0f21689279
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000003
-RBP: 00007f0f216e3189 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc99f634ef R14: 00007f0f22751300 R15: 0000000000022000
- </TASK>
-syz-executor.3[11465] cmdline: /root/syz-executor.3 exec
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:122 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
- __rcu_dereference_sk_user_data_with_flags include/net/sock.h:592 [inline]
- bpf_sk_reuseport_detach+0x156/0x190 kernel/bpf/reuseport_array.c:27
- reuseport_detach_sock+0x8c/0x4a0 net/core/sock_reuseport.c:362
- udp_lib_unhash net/ipv4/udp.c:2016 [inline]
- udp_lib_unhash+0x210/0x730 net/ipv4/udp.c:2004
- sk_common_release+0xba/0x390 net/core/sock.c:3600
- inet_release+0x12e/0x270 net/ipv4/af_inet.c:428
- inet6_release+0x4c/0x70 net/ipv6/af_inet6.c:482
- __sock_release+0xcd/0x280 net/socket.c:650
- sock_close+0x18/0x20 net/socket.c:1365
- __fput+0x27c/0xa90 fs/file_table.c:320
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0f21689279
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0f22751168 EFLAGS: 00000246 ORIG_RAX: 0000000000000021
-RAX: 0000000000000004 RBX: 00007f0f2179bf80 RCX: 00007f0f21689279
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000003
-RBP: 00007f0f216e3189 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc99f634ef R14: 00007f0f22751300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Yours,
+Linus Walleij

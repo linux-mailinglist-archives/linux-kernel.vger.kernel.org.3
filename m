@@ -2,191 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E9059BFA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7014559BF86
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 14:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235092AbiHVMjN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 22 Aug 2022 08:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S234807AbiHVMcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 08:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbiHVMjL (ORCPT
+        with ESMTP id S230503AbiHVMcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 08:39:11 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30E427FE3;
-        Mon, 22 Aug 2022 05:39:10 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-11d2dcc31dbso4534381fac.7;
-        Mon, 22 Aug 2022 05:39:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=JCvE0tIGIUKI4T1pwdPJfxx9bq80QkcidAq/OURkvig=;
-        b=TnFomN9yc9WJqaezfls/7EEodCjHDxDUWZvyLb/4SIfQkIEPbjV6FZQjsFy9SbJn1K
-         sc/yA/KXIpq0uz/wBmfomi86JLC8m4cHPSqKdJTPJuzmBs/VL8QRECcyqnViyN8MK1Tg
-         MwtGNYQFNcizQy7cqowHRGJ1w3fal+kHUMAlEc2btRlRPmw0BmcXlPZljJ03cT6KfD+N
-         Wdqg1rzX2QHr1cZuzSQk6bEMz3Txg7Gv/BzlLnzpc66mbxwfppa9tIEMFS1rvBVV2mup
-         U888Y43rTMBYJ3FNvLQSFuG0m1hjoJ9E1gyFSK53YlxUjhsbmpEm8/+oaPb79k3iNWGB
-         SsJg==
-X-Gm-Message-State: ACgBeo1sSS6MJaChNqkLxCPvY4yVKWNtMJG0sRcNCBktdw1ViT3ps+An
-        smNid+HbmadwGYvC5gNvQjlIGchIEEo0pA==
-X-Google-Smtp-Source: AA6agR60TzS5gSPuA5PbCprheU8HG/PMfogIWug9+T4yzYfrI24U0mUg9HYllyIAVFD8GXO9VKyDyg==
-X-Received: by 2002:a05:6870:b28d:b0:10b:d7fb:ba63 with SMTP id c13-20020a056870b28d00b0010bd7fbba63mr12399831oao.90.1661171949870;
-        Mon, 22 Aug 2022 05:39:09 -0700 (PDT)
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com. [209.85.210.46])
-        by smtp.gmail.com with ESMTPSA id s3-20020a9d7583000000b0063703952843sm2971185otk.47.2022.08.22.05.39.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 05:39:09 -0700 (PDT)
-Received: by mail-ot1-f46.google.com with SMTP id q39-20020a056830442700b0063889adc0ddso7605930otv.1;
-        Mon, 22 Aug 2022 05:39:09 -0700 (PDT)
-X-Received: by 2002:a5b:6c1:0:b0:669:a7c3:4c33 with SMTP id
- r1-20020a5b06c1000000b00669a7c34c33mr18348478ybq.543.1661171513514; Mon, 22
- Aug 2022 05:31:53 -0700 (PDT)
+        Mon, 22 Aug 2022 08:32:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF396BF4A;
+        Mon, 22 Aug 2022 05:32:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B03D612FC;
+        Mon, 22 Aug 2022 05:32:47 -0700 (PDT)
+Received: from [10.57.15.77] (unknown [10.57.15.77])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AEB0A3F718;
+        Mon, 22 Aug 2022 05:32:38 -0700 (PDT)
+Message-ID: <d5016c1e-55d9-4224-278a-50377d4c6454@arm.com>
+Date:   Mon, 22 Aug 2022 13:32:32 +0100
 MIME-Version: 1.0
-References: <20220815050815.22340-1-samuel@sholland.org> <20220815050815.22340-7-samuel@sholland.org>
- <20220815141159.10edeba5@donnerap.cambridge.arm.com> <3cd9ed5b-8348-38ac-feb1-9a7da858cebc@microchip.com>
- <932aaefd-e2ca-ef26-bf30-e315fb271ec5@sholland.org> <ff9e8bd3-c5f7-6319-060e-250151087a8e@microchip.com>
- <c6cba83ea9eea7fc41a9e78d0e45487b21f0f560.camel@icenowy.me>
- <c7599abd-c4cf-9ddd-1e74-e47dec9366d4@microchip.com> <CAMuHMdUHVpj9ikE2NxpBSBtTG8K6v92vGdbw3GLmEYUoVzatvg@mail.gmail.com>
- <538ae41e-664f-2efb-f941-9a063b727b6a@microchip.com>
-In-Reply-To: <538ae41e-664f-2efb-f941-9a063b727b6a@microchip.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 22 Aug 2022 14:31:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWWbR+Y=bJ7gdqV3d+ffHE1-hwQf-Owb8FAvZAaScdOgA@mail.gmail.com>
-Message-ID: <CAMuHMdWWbR+Y=bJ7gdqV3d+ffHE1-hwQf-Owb8FAvZAaScdOgA@mail.gmail.com>
-Subject: Re: [PATCH 06/12] riscv: dts: allwinner: Add the D1 SoC base devicetree
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 4/4] swiotlb: panic if nslabs is too small
+Content-Language: en-GB
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Yu Zhao <yuzhao@google.com>, dongli.zhang@oracle.com,
+        ak@linux.intel.com, akpm@linux-foundation.org,
+        alexander.sverdlin@nokia.com, andi.kleen@intel.com, bp@alien8.de,
+        bp@suse.de, cminyard@mvista.com, corbet@lwn.net,
+        damien.lemoal@opensource.wdc.com, dave.hansen@linux.intel.com,
+        iommu@lists.linux-foundation.org, joe.jin@oracle.com,
+        joe@perches.com, keescook@chromium.org, kirill.shutemov@intel.com,
+        kys@microsoft.com, linux-doc@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, ltykernel@gmail.com,
+        michael.h.kelley@microsoft.com, mingo@redhat.com,
+        m.szyprowski@samsung.com, parri.andrea@gmail.com,
+        paulmck@kernel.org, pmladek@suse.com, rdunlap@infradead.org,
+        tglx@linutronix.de, thomas.lendacky@amd.com,
+        Tianyu.Lan@microsoft.com, tsbogend@alpha.franken.de,
+        vkuznets@redhat.com, wei.liu@kernel.org, x86@kernel.org
+References: <20220611082514.37112-5-dongli.zhang@oracle.com>
+ <20220820012031.1285979-1-yuzhao@google.com>
+ <f8c743d8-fcbe-4ef7-5f86-d63086552ffd@arm.com>
+ <YwNn92WP3rP4ylZu@infradead.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <YwNn92WP3rP4ylZu@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+On 2022-08-22 12:26, Christoph Hellwig wrote:
+> On Mon, Aug 22, 2022 at 10:49:09AM +0100, Robin Murphy wrote:
+>> Hmm, it's possible this might be quietly fixed by 20347fca71a3, but either
+>> way I'm not sure why we would need to panic *before* we've even tried to
+>> allocate anything, when we could simply return with no harm done? If we've
+>> ended up calculating (or being told) a buffer size which is too small to be
+>> usable, that should be no different to disabling SWIOTLB entirely.
+> 
+> Hmm.  I think this might be a philosophical question, but I think
+> failing the boot with a clear error report for a configuration that is
+> supposed to work but can't is way better than just panicing later on.
 
-On Mon, Aug 22, 2022 at 2:13 PM <Conor.Dooley@microchip.com> wrote:
-> On 22/08/2022 12:46, Geert Uytterhoeven wrote:
-> > On Sun, Aug 21, 2022 at 12:07 PM <Conor.Dooley@microchip.com> wrote:
-> >> On 21/08/2022 07:45, Icenowy Zheng wrote:
-> >>> 在 2022-08-20星期六的 17:29 +0000，Conor.Dooley@microchip.com写道：
-> >>>> On 20/08/2022 18:24, Samuel Holland wrote:
->
-> >>>>> This is not feasible, due to the different #interrupt-cells. See
-> >>>>> https://lore.kernel.org/linux-riscv/CAMuHMdXHSMcrVOH+vcrdRRF+i2TkMcFisGxHMBPUEa8nTMFpzw@mail.gmail.com/
-> >>>>>
-> >>>>> Even if we share some file across architectures, you still have to
-> >>>>> update files
-> >>>>> in both places to get the interrupts properties correct.
-> >>>>>
-> >>>>> I get the desire to deduplicate things, but we already deal with
-> >>>>> updating the
-> >>>>> same/similar nodes across several SoCs, so that is nothing new. I
-> >>>>> think it would
-> >>>>> be more confusing/complicated to have all of the interrupts
-> >>>>> properties
-> >>>>> overridden in a separate file.
-> >>>>
-> >>>> Yeah, should maybe have circled back after that conversation, would
-> >>>> have been
-> >>>> nice but if the DTC can't do it nicely then w/e.
-> >>>
-> >>> Well, maybe we can overuse the facility of C preprocessor?
-> >>>
-> >>> e.g.
-> >>>
-> >>> ```
-> >>> // For ARM
-> >>> #define SOC_PERIPHERAL_IRQ(n) GIC_SPI n
-> >>> // For RISC-V
-> >>> #define SOC_PERIPHERAL_IRQ(n) n
-> >>> ```
-> >>>
-> >>
-> >> Geert pointed out that this is not possible (at least on the Renesas
-> >> stuff) because the GIC interrupt numbers are not the same as the
-> >> PLIC's & the DTC is not able to handle the addition:
-> >> https://lore.kernel.org/linux-riscv/CAMuHMdXHSMcrVOH+vcrdRRF+i2TkMcFisGxHMBPUEa8nTMFpzw@mail.gmail.com/
-> >
-> > Without the ability to do additions in DTC, we could e.g. list both
-> > interrupts in the macro, like:
-> >
-> >      // For ARM
-> >      #define SOC_PERIPHERAL_IRQ(na, nr) GIC_SPI na
-> >      // For RISC-V
-> >      #define SOC_PERIPHERAL_IRQ(na, nr) nr
->
-> Do you think this is worth doing? Or are you just providing an
-> example of what could be done?
+Depends which context of "supposed to work" you mean there. The most 
+logical reason to end up with a tiny SWIOTLB size is because you don't 
+expect to need SWIOTLB, therefore if there's now a functional minimum 
+size limit, failing gracefully such that the system keeps working as 
+before is correct in that context. Even if we assume the expectation 
+goes the other way, then it should be on SWIOTLB to adjust the initial 
+allocation size to whatever minimum it now needs, which as I say it 
+looks like 20347fca71a3 might do anyway. Creating new breakage by 
+panicking instead of making a decision one way or the other was never 
+the right answer.
 
-Just some brainstorming...
+>> Historically, passing "swiotlb=1" on the command line has been used to save
+>> memory when the user knows SWIOTLB isn't needed. That should definitely not
+>> be allowed to start panicking.
+> 
+> I've never seen swiotlb=1 advertized as a way to disable swiotlb.
+> That's always been swiotlb=noforce, which cleanly disables it.
 
-> Where would you envisage putting these macros? I forget the order
-> of the CPP operations that are done, can they be put in the dts?
+No, it's probably not been advertised as such, but it's what clearly 
+fell out of the available options before "noforce" was added (which was 
+considerably more recently than "always"), and the fact is that people 
+*are* still using it even today (presumably copy-pasted through Android 
+BSPs since before 4.10).
 
-The SOC_PERIPHERAL_IRQ() macro should be defined in the
-ARM-based SoC.dtsi file and the RISC-V-based SoC.dtsi file.
-
-> > On Mon, Aug 22, 2022 at 12:52 PM Andre Przywara <andre.przywara@arm.com> wrote:
-> >> There are interrupt-maps for that:
-> >> sun8i-r528.dtsi:
-> >>          soc {
-> >>                  #interrupt-cells = <1>;
-> >>                  interrupt-map = <0  18 &gic GIC_SPI  2 IRQ_TYPE_LEVEL_HIGH>,
-> >>                                  <0  19 &gic GIC_SPI  3 IRQ_TYPE_LEVEL_HIGH>,
-> >>                                  ....
-> >>
-> >> sun20i-d1.dtsi:
-> >>          soc {
-> >>                  #interrupt-cells = <1>;
-> >>                  interrupt-map = <0  18 &plic  18 IRQ_TYPE_LEVEL_HIGH>,
-> >>                                  <0  19 &plic  19 IRQ_TYPE_LEVEL_HIGH>,
-> >>
-> >> then, in the shared .dtsi:
-> >>                  uart0: serial@2500000 {
-> >>                          compatible = "snps,dw-apb-uart";
-> >>                          ...
-> >>                          interrupts = <18>;
-> >
-> > Nice! But it's gonna be a very large interrupt-map.
->
-> I quite like the idea of not duplicating files across the archs
-> if it can be helped, but not at the expense of making them hard to
-> understand & I feel like unfortunately the large interrupt map is
-> in that territory.
-
-I feel the same.
-Even listing both interrupt numbers in SOC_PERIPHERAL_IRQ(na, nr)
-is a risk for making mistakes.
-
-So personally, I'm in favor of teaching dtc arithmetic, so we can
-handle the offset in SOC_PERIPHERAL_IRQ().
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+Robin.

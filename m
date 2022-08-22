@@ -2,127 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFD959C2FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5444F59C30A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236600AbiHVPjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
+        id S236680AbiHVPlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235795AbiHVPjA (ORCPT
+        with ESMTP id S234683AbiHVPlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:39:00 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEAB10547
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:38:59 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id y141so10694654pfb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:38:59 -0700 (PDT)
+        Mon, 22 Aug 2022 11:41:00 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775581CFC0;
+        Mon, 22 Aug 2022 08:40:59 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id f17so4552603pfk.11;
+        Mon, 22 Aug 2022 08:40:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
-        bh=Bt5OnuHoLWMmd8kWNIJ/R5jWGGMn2gQUophJ4PVrMCg=;
-        b=KAQ5JnEkiyPTX1ixRcY1lxe6w4tclkMk9JYoFuGzhXmLAv2YEsRuL+dmKGXKdtZHbD
-         1nmetAEjUGP8B855hSW3fKIL79Eo2ehzywz3qRYZJa8yTbC88SGMS3FIsQ52d0lC4QZY
-         qF+u/l0aUiy4npT6yhapnHb8ysXVKrTF9QSCoqaaklmLJeoAp6lVmmALcmyybdI0pvJP
-         RSNmla26BXbyc5MlrpJHGp6DVWowopvh6x50+xfoii3xu9E1GFUwF9T7yKeBd+BzmxND
-         mLQxfmoD9QdCXtd8t4WtjKvMAfb5V6twBa2wkfBRg+EuAs5XRP/wKtn1NRWCPw2FqZ35
-         QZhg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=rk9SRCNftCXw4ksd+nOSPjNTRiAuzJr7RvJiVNql6UM=;
+        b=O4vuEFEkJRlTwdN5y1v9qKYbQMZ/LDJmgySuo9UvcuTnO9sANcT7+zck7c+0cmh4Jc
+         m57EnWe0Q3dh0oVrD8foo2mxUrRfoDjtV4/uCVGUGn+kUeUWzplzA637uPDSIcYKma0r
+         DpTgfMtTAThyyLbyBJuI+7qBLm6yVv6y0Q+iDxVCMeCqjmEFK6yNtMMGCgrEBOKZfbee
+         z0XxnQTUubPM1uGa1sCMqfXnoqsQ1afKZF00Dlq/y40LopmAFH+Jmuy0DBB7ratofrzX
+         KM/ODuqseNPILKG09uepYRl9cEXhehgXfYItn6pwOHOGOZKxI7np53JEax6LF4xD5hKK
+         a+AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=Bt5OnuHoLWMmd8kWNIJ/R5jWGGMn2gQUophJ4PVrMCg=;
-        b=FVnWkm8XdpY9+GYnVwa956ihnvKXBIwvGVxmN7f438xHO6rVSUs19uN9EZI5jQq6bq
-         xLmN/pDhuAlOIC3v1m4rrRwYKfasUmJnDjt1FdtbJ7Pio0vTVkY1YbhZ7U84C4Mocwyt
-         xlPgK1cDG3xlHPcbM/1Xt61zyG+OZJ2ZHK31hd0S/r82Akfimz222nUWEQiSAsy5/RsU
-         n7XxpJWe2F7yTtOV5EnagRLkypgE9jgHsX1Ovsb9szOLfQpzf6NWBcJGRNh2bhC9NGIS
-         44n1rZncV55QhLA6sJIOpsRecMr3ILougEGRdOC7RQpAYmey7voNFVOZgn10LINDBPmz
-         EXKA==
-X-Gm-Message-State: ACgBeo0zkNOXvE3PvbmZFAoixts67jwKL4d9jJx7RwXMuVi2dyue+XuS
-        zNq4GbQI+kihKE7DolknUvapjHsbMQjmjc2cmVc=
-X-Google-Smtp-Source: AA6agR45fSfuHXA18RCwusyg2CwMGA3ODaefpMQlrl8knjkqBPWr+gqZqgCfPeuhCqPqq5BQp1z5sjwd1c9ZNHFOmqA=
-X-Received: by 2002:a05:6a00:2308:b0:52f:8ae9:9465 with SMTP id
- h8-20020a056a00230800b0052f8ae99465mr21046562pfh.77.1661182738676; Mon, 22
- Aug 2022 08:38:58 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=rk9SRCNftCXw4ksd+nOSPjNTRiAuzJr7RvJiVNql6UM=;
+        b=3hamUounmLgbMK/Wa34kUwEySjp8WJjGJzXnqtTWKf8qLOBLJjRzJQVgwrE2LFYPyR
+         w5A7TUFcuIyqWgNyUObeh81GffrqMEoksI5PF4PkrEMjlLqvuDxWJQw6vQp4XJjZm8oh
+         zEFST8pLBeNJiatJ483j70bt8wXit16smr6fG8gzxdtsWH9P+p4M+yjwlaOe7/nRrRK/
+         MnRjj41awz5b2Qf6qBF/s0EFWU8utj23E+ZlTpx1I38D7Ht0o/SsPf/MILyiILgImVbX
+         j30ZYNKnwteiOI72EySa7DR5UhcaUuqFhLkRG97x2q+aHfuKc7afu9RJaxko1UUB9cBg
+         Scdw==
+X-Gm-Message-State: ACgBeo2TqybBMwFHrdaNnwS0bUrg715BEr/BrpjYTik8h0V/dHq9WDhH
+        OpFI8WYr/Q36DbqsK4WNGIAKFXWsvgm5+f3u
+X-Google-Smtp-Source: AA6agR5gl+Oek7jTSV2Py3XeGLz3Megkxk4EWM1wUwvswOLUWLHaz+rIRKSN8NH+NaRKi7TziiuRGA==
+X-Received: by 2002:a63:81c6:0:b0:42a:3d97:723c with SMTP id t189-20020a6381c6000000b0042a3d97723cmr13682587pgd.9.1661182859027;
+        Mon, 22 Aug 2022 08:40:59 -0700 (PDT)
+Received: from localhost ([36.112.204.208])
+        by smtp.gmail.com with ESMTPSA id w19-20020a656953000000b0040c40b022fbsm7370993pgq.94.2022.08.22.08.40.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 08:40:58 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     dan.carpenter@oracle.com
+Cc:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
+        khalid.masum.92@gmail.com, kuba@kernel.org,
+        linux-afs@lists.infradead.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com, paskripkin@gmail.com,
+        syzbot+7f0483225d0c94cb3441@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
+Subject: Re: [PATCH] rxrpc: fix bad unlock balance in rxrpc_do_sendmsg
+Date:   Mon, 22 Aug 2022 23:39:43 +0800
+Message-Id: <20220822153944.6204-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220822140532.GF2695@kadam>
+References: <20220822140532.GF2695@kadam>
 MIME-Version: 1.0
-Sender: dvavsvsvsvs@gmail.com
-Received: by 2002:a05:6a10:d142:b0:2d6:7875:e094 with HTTP; Mon, 22 Aug 2022
- 08:38:58 -0700 (PDT)
-From:   "carlsen.monika" <carlsen.monika@gmail.com>
-Date:   Mon, 22 Aug 2022 16:38:58 +0100
-X-Google-Sender-Auth: QVU8MPTQ422kPcOL_kc9RFXgGt4
-Message-ID: <CA+hPWRNiWuUu-JWD1GMuvF8XUk7n37=jh9tFHexK6R-ZqQyuAg@mail.gmail.com>
-Subject: Dearest One,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.2 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,HK_RANDOM_ENVFROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:442 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.0 HK_RANDOM_ENVFROM Envelope sender username looks random
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [dvavsvsvsvs[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  2.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dearest One,
-
-    CHARITY DONATION Please read carefully, I know it is true that
-this letter may come to you as a surprise. I came across your e-mail
-contact through a private search while in need of your assistance. am
-writing this mail to you with heavy sorrow in my heart, I have chose
-to reach out to you through internet because it still remains the
-fastest medium of communication. I sent this mail praying it will
-found you in a good condition of health, since I myself are in a very
-critical health condition in which I sleep every night without knowing
-if I may be alive to see the next day.
-
-aM Mrs.Monika John Carlsen, wife of late Mr John Carlsen, a widow
-suffering from long time illness. I have some funds I inherited from
-my late husband, the sum of ($11.000.000,eleven million dollars) my
-Doctor told me recently that I have serious sickness which is cancer
-problem. What disturbs me most is my stroke sickness. Having known my
-condition, I decided to donate this fund to a good person that will
-utilize it the way am going to instruct herein. I need a very honest
-and God fearing person who can claim this money and use it for Charity
-works, for orphanages, widows and also build schools for less
-privileges that will be named after my late husband if possible and to
-promote the word of God and the effort that the house of God is
-maintained.
-
-I do not want a situation where this money will be used in an ungodly
-manners. That's why am taking this decision. am not afraid of death so
-I know where am going. I accept this decision because I do not have
-any child who will inherit this money after I die. Please I want your
-sincerely and urgent answer to know if you will be able to execute
-this project, and I will give you more information on how the fund
-will be transferred to your bank account. am waiting for your reply,
-
-Best Regards
-Mrs.Monika John Carlsen,
+On Mon, 22 Aug 2022 at 22:06, Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Mon, Aug 22, 2022 at 07:55:27PM +0600, Khalid Masum wrote:
+> > >
+> > > /*
+> > > + * @holding_mutex: An indication whether caller can still holds
+> > > + * the call->user_mutex when returned to caller.
+> >
+> > Maybe we can use mutex_is_locked instead of using the holding_mutex
+> > parameter to get whether call->user_mutex is still held.
+>
+> That doesn't work.  What if there is contention for the lock and someone
+> else took it.  Locks under contention are sort of the whole point of
+> locking so it's highly likely.
+I trid this before, it doesn't work as Dan points out. I think
+it seems that mutex_is_locked() only checks whether there is a task
+holding the mutex, but do not check whether it is current task holding
+mutex. I also tried lockdep_is_held(), lockdep_is_held() seems can detect
+call->user_mutex is still held accurately, although this cannot be the patch.

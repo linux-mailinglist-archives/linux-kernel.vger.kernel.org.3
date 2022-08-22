@@ -2,87 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD37959C02E
+	by mail.lfdr.de (Postfix) with ESMTP id 4185159C02D
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234730AbiHVNHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 09:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
+        id S233706AbiHVNHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 09:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234133AbiHVNHH (ORCPT
+        with ESMTP id S234708AbiHVNHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 09:07:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB1933A1B
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 06:07:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13C22B81134
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:07:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A786C433D6;
-        Mon, 22 Aug 2022 13:07:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661173624;
-        bh=tc+H2IZAZYCcsk+W/qTN/Gurc56MzvlVN7bbGRvcG/8=;
+        Mon, 22 Aug 2022 09:07:34 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64573356F3;
+        Mon, 22 Aug 2022 06:07:30 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A9F662B3;
+        Mon, 22 Aug 2022 15:07:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1661173648;
+        bh=EgK/lj3WOzFoJY3t5OghKCjX9nJhMCtuKrfeio3gCCM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UWbhguo6slX2gCkBvkQDKi4z6EJRsxjArA7HDElXkjZM/QcrN7bJXNogEVMDwzfhR
-         wT8xkpFbn/8v1NhEkjj091LbJjSYthE2j7m8R/BjYJuFa+C0sl1ltXbzaP9ozJwKi1
-         9W/TlWvxIuY/U3bG8AT8l30zQ4WdyM1ZOcngH8lb3MsczRS7ulh5FimlfTtUZV3oUb
-         afQzRsua+Mnsll8h/6ETgCYdNO7/g1legmMBODv1HG6ex5WoQIYHZk7CujwjgG+fU/
-         1a9jy4qoQUyQZOqJt+E7gfllyZl8FTgviAzqdMb7LhkdSq5Cq6wOGXIvZSoaj23Nip
-         8sPWCHgEN8+uA==
-Date:   Mon, 22 Aug 2022 14:06:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        shengjiu.wang@gmail.com, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: fsl_sai: Add support multi fifo sdma script
-Message-ID: <YwN/c0Q8ooBCIB1z@sirena.org.uk>
-References: <1660555546-24223-1-git-send-email-shengjiu.wang@nxp.com>
+        b=LYLRqJKpqNWSi7RoHVeSnd6+lUMgxA3Y5yXyXQ8XcX0c8wl8vUdp1lgFj5i6Poaru
+         jNl6GqmffjTFvqC03B8TewA/SOnPcxnoChOCEdwuAalv4KDCUw1Xi9UzKwjtDbWqvX
+         RCko36GpWZG2S3m5TEsCdhLLIDws/2mRU7QSntsM=
+Date:   Mon, 22 Aug 2022 16:07:25 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: uvcvideo: Fix InterfaceProtocol for Quanta camera
+Message-ID: <YwN/jeElxyXpyyfU@pendragon.ideasonboard.com>
+References: <20220808134106.70100-1-ribalda@chromium.org>
+ <YwN+fU5ez0L5pi1j@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u43b6UwMPrtGu+8T"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1660555546-24223-1-git-send-email-shengjiu.wang@nxp.com>
-X-Cookie: Am I SHOPLIFTING?
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YwN+fU5ez0L5pi1j@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Aug 22, 2022 at 04:02:55PM +0300, Laurent Pinchart wrote:
+> Hi Ricardo,
+> 
+> Thank you for the patch.
+> 
+> On Mon, Aug 08, 2022 at 03:41:06PM +0200, Ricardo Ribalda wrote:
+> > The device is using a different InterfaceProtocol than the one set in
+> > the original quirk.
 
---u43b6UwMPrtGu+8T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Also, I would mention that the device implements UVC 1.5:
 
-On Mon, Aug 15, 2022 at 05:25:46PM +0800, Shengjiu Wang wrote:
-> With disabling combine mode, the multiple successive
-> FIFO registers or non successive FIFO registers of SAI module
-> can work with the sdma multi fifo script.
+The Quanta 0408:4034 camera implements UVC 1.5, and thus sets
+bInterfaceProtocol to UVC_PC_PROTOCOL_15. Commit 95f03d973478 ("media:
+uvcvideo: Limit power line control for Quanta cameras") added a quirk
+for the device that incorrectly specified the UVC 1.0 protocol,
+rendering the quirk inoperative. Fix it.
 
-This doesn't apply against current code, please check and resend.
+As this is a v6.0 fix, would you mind submitting a v2 with these changes
+? Mauro could then pick it up directly.
 
---u43b6UwMPrtGu+8T
-Content-Type: application/pgp-signature; name="signature.asc"
+> > Fixes: 95f03d973478 ("media: uvcvideo: Limit power line control for Quanta cameras")
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > ---
+> > 
+> > This was fixed on the last version of the patchset. Unfortunately I did
+> > checked that it was the version merged :(.
+> 
+> Oops :-(
+> 
+> > It is too late to land it in this version?
+> 
+> I think it can be considered as a v6.0 fix, yes.
+> 
+> >  drivers/media/usb/uvc/uvc_driver.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> > index 9c05776f11d1..6556158a8888 100644
+> > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > @@ -2740,7 +2740,7 @@ static const struct usb_device_id uvc_ids[] = {
+> >  	  .idProduct		= 0x4034,
+> >  	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> >  	  .bInterfaceSubClass	= 1,
+> > -	  .bInterfaceProtocol	= 0,
+> > +	  .bInterfaceProtocol	= 1,
+> 
+> Should we use UVC_PC_PROTOCOL_15 here ?
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> >  	  .driver_info		= (kernel_ulong_t)&uvc_ctrl_power_line_limited },
+> >  	/* LogiLink Wireless Webcam */
+> >  	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
 
------BEGIN PGP SIGNATURE-----
+-- 
+Regards,
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMDf3IACgkQJNaLcl1U
-h9BAlQf+L5kP4l9lQLSb9J7A0IJngh/vpXFA7wuR/7oW6SzHZxsyamK1IEPXVijQ
-6Is+lGT3ObIPZydx36IzJS+qkTOCIbuNTjeAl12SM/qCOQX4wZzhn80eKO3SKtvK
-9PVvmTaFFWvn+ANBeNWDKOXtdawBfBK5K+yLhiTNifOqQZ+8e0kL0TmnOhdecYEw
-//MgiNAkSEQV3c8F+u6JmXReT/9J7LLSGKbxTzu2Il8rXRPPbEfrfTxTF9V5BH3L
-XAYQYUTdrQ9/1rPXEW8/jAPJxvEOljTT4Q6iFAN5KF2xslmGD7pCuM5FW9ClHuCm
-rFKX5gZWGOaQn33E+zDa8HWh+usyVA==
-=BNOe
------END PGP SIGNATURE-----
-
---u43b6UwMPrtGu+8T--
+Laurent Pinchart

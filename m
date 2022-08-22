@@ -2,193 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9D459C389
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D9059C38F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236285AbiHVPzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        id S236888AbiHVP6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236912AbiHVPza (ORCPT
+        with ESMTP id S236684AbiHVP6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:55:30 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A93120AF
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:55:29 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id ds12-20020a17090b08cc00b001fae6343d9fso6086194pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:55:29 -0700 (PDT)
+        Mon, 22 Aug 2022 11:58:08 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971E02B625
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:58:07 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id jl18so10332376plb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:58:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=uvOjvk5/JKpMUdid2qTKTpTlRDvjI4C3kJclOnnPOWU=;
-        b=hmBTH3GmURqPsBXekxu7uRrt/53hS3AqzTzmCxJTHg9b7NsYKsfRQb5xMje4t6WGS6
-         RZHX2OLkGnt3p+FCYS7RpRJmNQhjqa/7MIkXuwRDT+EMKnV6t1W9UGaPqNsOoPs30rFa
-         lUmBWpu+yNYxqta56jmDUGvSMKp1HoJgl90x3kCnJAdOohocNe8y7jui+eGLk2vY58hh
-         I9om++sLFjyZvdj9VpdkfqxUrVahO6jrlcNgWKHL6E992708UG08bIg3nlWQjQALi8uU
-         ZNeBE0BM2WnXcblW3YbiNaRmW9Gjqwt3XEr3IIYhKDUPQvTyJc5vzP/n5jrdogToXyez
-         Nosw==
+        bh=lRsMu7u7pkvgPwCAcHon0nI7C9GxsTgw5MC2MQrhow0=;
+        b=uFdiRaLy1d28fCJR9DWr6kVIHS48hIvQbhDv/zPV5J5Mczdetr2+QmrdZHr27n2aPD
+         qYs5DKWV0u7JExAyx17hynaNQ6SODgx1S/JZlqatqY59yoaBcyeOSHKWGA9RNfkcvCY1
+         GvY8rjn+jzsYIKmqMZoG2g9+SeqyR+Tjj+4CT/gXmlM0ZzKbFPOQhNJNGfYGn82EcOj3
+         AXY843REFaFnE9xnqHJtgAT87S8RzwEk2CGrwgk8+eSX6QnJbNQlC6t+j1/MAdF9X3ux
+         W2EQLmybjPsSadxrNJv2+Y/RCnFqvUe28m7coZEJ25pCuq6ZHrI08NOEDNVZOX8CWN8I
+         w2nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=uvOjvk5/JKpMUdid2qTKTpTlRDvjI4C3kJclOnnPOWU=;
-        b=gezcWd6vAGuG/ZgQkzoTXeGvJK1lCAcHMHat3S4AYX/NlwlxnQqWI0sfd/DfS/WM2r
-         SwjIYsngAJEW6mK4pNcpE8FWpzbEMGqAB/HUt4+Lk9psFPomd86VMFy+0D3bstNbSjDQ
-         eylpQcs44iO4XweUk4CrBKUuKBagmUG0RnzorQ3AOfWFQNmNydRh0tRcziKDSJKOSmJ+
-         2ZN9OsxoDETFXKrD7an++mPtHhLEdpdwsR5RyI8TW9P8mO4KZMsMR9P2QNe42bRFedkt
-         75cvrNDmdCKuFetPD4uS7nuxi69UMQb5+tkHHT+l31GafofOitU80JbaO4evJxhipKrN
-         zn0w==
-X-Gm-Message-State: ACgBeo0+ZCU7ktAFrVVr2bIQEP2rzInFXQMNBPhYH+TlQ7VK/J860X8J
-        5O3bgybaV9wBPsIQm0tCvVMGXw==
-X-Google-Smtp-Source: AA6agR5CO1iiLQFd/Z4KgqSR8JMfAz667L9PjZAzFjAneq50mboqRPUGHRGSDH4zqWlhhM96X1J94Q==
-X-Received: by 2002:a17:902:9006:b0:172:927e:c19a with SMTP id a6-20020a170902900600b00172927ec19amr20904281plp.162.1661183728778;
-        Mon, 22 Aug 2022 08:55:28 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id f26-20020aa79d9a000000b0053602e1d6fcsm2168164pfq.105.2022.08.22.08.55.28
+        bh=lRsMu7u7pkvgPwCAcHon0nI7C9GxsTgw5MC2MQrhow0=;
+        b=Vuad9g2YOPozBCRCrvqPcxfeD3WQ6cvUV3AkUOSeyao/w3Yz4Z4z4D+6xcvMWPToRu
+         2SDZnuVeV0vvQxXsLXj9FsvbX13Gvtaphv2gPr49rQv3oaLge+TXSymaFdF5gJgE7BO/
+         +sgrA3aOG5fYF2Dg56Wkf5yh4HZP1PZPflTyR7lCQMKP1UMzsMNtyxS94ftdR6tk/C/B
+         Po4XYzW6lEqc2r7sGrzU4ZI8s5f1Vz7T2vWaoj+hGZTcXfn+LjybfmL7zl+sYfe/LDdB
+         1QCJVsidNqQDY+TO4HmN2qkWcK+j9qWrzGYiRGYKTtqWXIwSLriTJ2GkwQGIMLZIqLa2
+         Mn0Q==
+X-Gm-Message-State: ACgBeo23QRXOhSTTVeBmYiEy/1cgSc8Jeta0x6eTATtaZ62Ud1ldRPQv
+        SJ1Stud1t11FFSNkl/VzZRsSBw==
+X-Google-Smtp-Source: AA6agR6fJieHxJUsIxfV91LpmNfv1QWUOuSRWheIn+ggsRS+wj94JooRiWx6ZzER3vPihAUPgB7TwA==
+X-Received: by 2002:a17:90b:38d1:b0:1fa:ccde:fa4c with SMTP id nn17-20020a17090b38d100b001faccdefa4cmr23545408pjb.145.1661183887090;
+        Mon, 22 Aug 2022 08:58:07 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id u1-20020a17090341c100b0016d9b101413sm8586303ple.200.2022.08.22.08.58.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 08:55:28 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 15:55:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 03/26] x86/hyperv: Update 'struct hv_enlightened_vmcs'
- definition
-Message-ID: <YwOm7Ph54vIYAllm@google.com>
-References: <20220802160756.339464-1-vkuznets@redhat.com>
- <20220802160756.339464-4-vkuznets@redhat.com>
- <Yv5ZFgztDHzzIQJ+@google.com>
- <875yiptvsc.fsf@redhat.com>
- <Yv59dZwP6rNUtsrn@google.com>
- <87czcsskkj.fsf@redhat.com>
+        Mon, 22 Aug 2022 08:58:06 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 09:58:04 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] coresight: trbe: fix Kconfig "its" grammar
+Message-ID: <20220822155804.GA1583519@p14s>
+References: <20220715015925.12569-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87czcsskkj.fsf@redhat.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220715015925.12569-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
+On Thu, Jul 14, 2022 at 06:59:25PM -0700, Randy Dunlap wrote:
+> Use the possessive "its" instead of the contraction "it's"
+> where appropriate.
 > 
-> > On Thu, Aug 18, 2022, Vitaly Kuznetsov wrote:
-> >> Sean Christopherson <seanjc@google.com> writes:
-> >> 
-> >> > On Tue, Aug 02, 2022, Vitaly Kuznetsov wrote:
-> >> >> + * Note: HV_X64_NESTED_EVMCS1_2022_UPDATE is not currently documented in any
-> >> >> + * published TLFS version. When the bit is set, nested hypervisor can use
-> >> >> + * 'updated' eVMCSv1 specification (perf_global_ctrl, s_cet, ssp, lbr_ctl,
-> >> >> + * encls_exiting_bitmap, tsc_multiplier fields which were missing in 2016
-> >> >> + * specification).
-> >> >> + */
-> >> >> +#define HV_X64_NESTED_EVMCS1_2022_UPDATE		BIT(0)
-> >> >
-> >> > This bit is now defined[*], but the docs says it's only for perf_global_ctrl.  Are
-> >> > we expecting an update to the TLFS?
-> >> >
-> >> > 	Indicates support for the GuestPerfGlobalCtrl and HostPerfGlobalCtrl fields
-> >> > 	in the enlightened VMCS.
-> >> >
-> >> > [*] https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/feature-discovery#hypervisor-nested-virtualization-features---0x4000000a
-> >> >
-> >> 
-> >> Oh well, better this than nothing. I'll ping the people who told me
-> >> about this bit that their description is incomplete.
-> >
-> > Not that it changes anything, but I'd rather have no documentation.  I'd much rather
-> > KVM say "this is the undocumented behavior" than "the document behavior is wrong".
-> >
-> 
-> So I reached out to Microsoft and their answer was that for all these new
-> eVMCS fields (including *PerfGlobalCtrl) observing architectural VMX
-> MSRs should be enough. *PerfGlobalCtrl case is special because of Win11
-> bug (if we expose the feature in VMX feature MSRs but don't set
-> CPUID.0x4000000A.EBX BIT(0) it just doesn't boot).
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: coresight@lists.linaro.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+>  drivers/hwtracing/coresight/Kconfig |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
 
-I.e. TSC_SCALING shouldn't be gated on the flag?  If so, then the 2-D array approach
-is overkill since (a) the CPUID flag only controls PERF_GLOBAL_CTRL and (b) we aren't
-expecting any more flags in the future.
+Applied.
 
-What about this for an implementation?
+Thanks,
+Mathieu
 
-static bool evmcs_has_perf_global_ctrl(struct kvm_vcpu *vcpu)
-{
-	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-
-	/*
-	 * Filtering VMX controls for eVMCS compatibility should only be done
-	 * for guest accesses, and all such accesses should be gated on Hyper-V
-	 * being enabled and initialized.
-	 */
-	if (WARN_ON_ONCE(!hv_vcpu))
-		return false;
-
-	return hv_vcpu->cpuid_cache.nested_ebx & HV_X64_NESTED_EVMCS1_PERF_GLOBAL_CTRL;
-}
-
-static u32 evmcs_get_unsupported_ctls(struct kvm_vcpu *vcpu, u32 msr_index)
-{
-	u32 unsupported_ctrls;
-
-	switch (msr_index) {
-	case MSR_IA32_VMX_EXIT_CTLS:
-	case MSR_IA32_VMX_TRUE_EXIT_CTLS:
-		unsupported_ctrls = EVMCS1_UNSUPPORTED_VMEXIT_CTRL;
-		if (!evmcs_has_perf_global_ctrl(vcpu))
-			unsupported_ctrls |= VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
-		return unsupported_ctrls;
-	case MSR_IA32_VMX_ENTRY_CTLS:
-	case MSR_IA32_VMX_TRUE_ENTRY_CTLS:
-		unsupported_ctrls = EVMCS1_UNSUPPORTED_VMENTRY_CTRL;
-		if (!evmcs_has_perf_global_ctrl(vcpu))
-			unsupported_ctrls |= VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
-		return unsupported_ctrls;
-	case MSR_IA32_VMX_PROCBASED_CTLS2:
-		return EVMCS1_UNSUPPORTED_2NDEXEC;
-	case MSR_IA32_VMX_TRUE_PINBASED_CTLS:
-	case MSR_IA32_VMX_PINBASED_CTLS:
-		return EVMCS1_UNSUPPORTED_PINCTRL;
-	case MSR_IA32_VMX_VMFUNC:
-		return EVMCS1_UNSUPPORTED_VMFUNC;
-	default:
-		KVM_BUG_ON(1, vcpu->kvm);
-		return 0;
-	}
-}
-
-void nested_evmcs_filter_control_msr(struct kvm_vcpu *vcpu, u32 msr_index, u64 *pdata)
-{
-	u64 unsupported_ctrls = evmcs_get_unsupported_ctls(vcpu, msr_index);
-
-	if (msr_index == MSR_IA32_VMX_VMFUNC)
-		*pdata &= ~unsupported_ctrls;
-	else
-		*pdata &= ~(unsupported_ctrls << 32);
-}
-
-
-> What I'm still concerned about is future proofing KVM for new
-> features. When something is getting added to KVM for which no eVMCS
-> field is currently defined, both Hyper-V-on-KVM and KVM-on-Hyper-V cases
-> should be taken care of. It would probably be better to reverse our
-> filtering, explicitly listing features supported in eVMCS. The lists are
-> going to be fairly long but at least we won't have to take care of any
-> new architectural feature added to KVM.
-
-Having the filtering be opt-in crossed my mind as well.  Reversing the filtering
-can be done after this series though, correct?
+> --- a/drivers/hwtracing/coresight/Kconfig
+> +++ b/drivers/hwtracing/coresight/Kconfig
+> @@ -193,10 +193,10 @@ config CORESIGHT_TRBE
+>  	depends on ARM64 && CORESIGHT_SOURCE_ETM4X
+>  	help
+>  	  This driver provides support for percpu Trace Buffer Extension (TRBE).
+> -	  TRBE always needs to be used along with it's corresponding percpu ETE
+> +	  TRBE always needs to be used along with its corresponding percpu ETE
+>  	  component. ETE generates trace data which is then captured with TRBE.
+>  	  Unlike traditional sink devices, TRBE is a CPU feature accessible via
+> -	  system registers. But it's explicit dependency with trace unit (ETE)
+> +	  system registers. But its explicit dependency with trace unit (ETE)
+>  	  requires it to be plugged in as a coresight sink device.
+>  
+>  	  To compile this driver as a module, choose M here: the module will be

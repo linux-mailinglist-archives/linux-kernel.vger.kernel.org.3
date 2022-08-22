@@ -2,81 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4ACC59BE8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791FD59BE97
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234595AbiHVLaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S234667AbiHVLcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiHVLaK (ORCPT
+        with ESMTP id S234749AbiHVLcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:30:10 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607123334B
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5PcSssONmYM3nGWZ6RybkrMzsWV43+5Lu+oPjbsK9zI=; b=Aed23r0BX7Hj140U9k0lKyJGR8
-        Piw3zgTmPGsDamksZWnfXohz+mJqQOE8Faq0OpNVqaVGRnemNwYYe2HFgFEHn8KfF1Pg9ERojir1x
-        7V7Tp8SJivsdTaTkWWupTE9k6QnGrFTZikAa7n5N3zptDcEgyq8yXin3HRPlC5pHeyiT3gQoAbVhm
-        qkOhqJlZwlkYwv/RdH4F0fnune1YpcADQ5RwEVTBAFgqqd4GW8q2VzdMhlc00au8nclJHynTpzkDX
-        iKkT1tTOFSHQ+WrIoFyZjEv/eAaEYtog9XIuIaTaeAUNCdjS0fYV6BsQ2Dv1zYH6O59I3zLjZKjhz
-        DdyyUBzA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQ5d7-008FXQ-Tk; Mon, 22 Aug 2022 11:30:05 +0000
-Date:   Mon, 22 Aug 2022 04:30:05 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        "Gautham R . Shenoy" <ego@linux.vnet.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, amd-gfx@lists.freedesktop.org,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH] powerpc: export cpu_smallcore_map for modules
-Message-ID: <YwNovfuf3pDBh2Zk@infradead.org>
-References: <20220819210112.7924-1-rdunlap@infradead.org>
- <87o7wdkkt4.fsf@mpe.ellerman.id.au>
+        Mon, 22 Aug 2022 07:32:04 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C8A33E06;
+        Mon, 22 Aug 2022 04:31:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9898E340D8;
+        Mon, 22 Aug 2022 11:31:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661167908; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rN68WvWnS9a0ZMxHp34QNuXswa4YZncIEkckzvz7TD4=;
+        b=mwVzMNZp9O0hzvXg5oLi/niUhvKZEJ6VJ7/HIZrF/IKfgXAeDVGD2ApZ1ifROdoG4KgHvh
+        15oWw7JTG8NPmMALApOqNXx/LT5CmM6ffvqjjZHh0UxqXY27mjzw653QQw6luzzniOFIQW
+        DvHDdd/h+uUNsbz4qEuqBefHaHUApAY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7850013523;
+        Mon, 22 Aug 2022 11:31:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bRGUGiRpA2O4MAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 22 Aug 2022 11:31:48 +0000
+Date:   Mon, 22 Aug 2022 13:31:47 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>, ke.wang@unisoc.com,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [RFC PATCH] memcg: use root_mem_cgroup when css is inherited
+Message-ID: <YwNpI1ydy0yDnBH0@dhcp22.suse.cz>
+References: <1660908562-17409-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <Yv+6YjaGAv52yvq9@slm.duckdns.org>
+ <CALvZod7QdLSMdBoD2WztL72qS8kJe7F79JuCH6t19rRcw6Pn1w@mail.gmail.com>
+ <Yv/EArPDTcCrGqJh@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87o7wdkkt4.fsf@mpe.ellerman.id.au>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yv/EArPDTcCrGqJh@slm.duckdns.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 01:40:23PM +1000, Michael Ellerman wrote:
-> Randy Dunlap <rdunlap@infradead.org> writes:
-> > drivers/gpu/drm/amd/amdkfd/kfd_device.c calls cpu_smt_mask().
-> > This is an inline function on powerpc which references
-> > cpu_smallcore_map.
-> >
-> > Fixes: 425752c63b6f ("powerpc: Detect the presence of big-cores via "ibm, thread-groups"")
-> > Fixes: 7bc913085765 ("drm/amdkfd: Try to schedule bottom half on same core")
+On Fri 19-08-22 07:10:26, Tejun Heo wrote:
+> On Fri, Aug 19, 2022 at 10:08:59AM -0700, Shakeel Butt wrote:
+> > On Fri, Aug 19, 2022 at 9:29 AM Tejun Heo <tj@kernel.org> wrote:
+> > >
+> > > On Fri, Aug 19, 2022 at 07:29:22PM +0800, zhaoyang.huang wrote:
+> > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > >
+> > > > It is observed in android system where per-app cgroup is demanded by freezer
+> > > > subsys and part of groups require memory control. The hierarchy could be simplized
+> > > > as bellowing where memory charged on group B abserved while we only want have
+> > > > group E's memory be controlled and B's descendants compete freely for memory.
+> > > > This should be the consequences of unified hierarchy.
+> > > > Under this scenario, less efficient memory reclaim is observed when comparing
+> > > > with no memory control. It is believed that multi LRU scanning introduces some
+> > > > of the overhead. Furthermore, page thrashing is also heavier than global LRU
+> > > > which could be the consequences of partial failure of WORKINGSET mechanism as
+> > > > LRU is too short to protect the active pages.
+> > > >
+> > > > A(subtree_control = memory) - B(subtree_control = NULL) - C()
+> > > >                                                       \ D()
+> > > >                           - E(subtree_control = memory) - F()
+> > > >                                                         \ G()
+> > > >
+> > > > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > >
+> > > Just in case it wasn't clear.
+> > >
+> > > Nacked-by: Tejun Heo <tj@kernel.org>
+> > >
+> > > Thanks.
+> > >
+> > 
+> > Was there a previous discussion on this? The commit message is unreadable.
 > 
-> That 2nd commit is not in mainline, only linux-next.
-> 
-> I don't mind merging this fix preemptively, but is that SHA stable?
+> http://lkml.kernel.org/r/1660298966-11493-1-git-send-email-zhaoyang.huang@unisoc.com
 
-I really do not think this has any business being exported at all.
+Even that discussion doesn't really explain the real underlying problem.
+There are statements about inefficiency and trashing without any further
+details or clarifications.
 
-kfd_queue_work is not something that should be done in a driver.
-Something like this belongs into the workqueue core, not in an
-underdocumented helper in a random driver.
-
-Drm guys:  once again, please please work with the maintainers instead
-of just making up random stuff in the drivers.
+My very vague understanding is that the Android system would like to
+freeze specific applications and for that it requires each application
+to live in its own cgroup. This clashes with a requirement to age and
+reclaim memory on a different granularity (aka no per process reclaim).
+So in fact something that cgroup v1 would achieve by having 2
+hierarchies, one for the freezer which would have a dedicated cgroup for
+each application and the other for the memory controller where tasks are
+grouped by a different criteria. This would rule out that a global (or
+any external memory pressure) reclaim would age LRUs that contain a mix
+bag of application pages rather than iterate over per-application LRUs.
+Is that understanding correct?
+-- 
+Michal Hocko
+SUSE Labs

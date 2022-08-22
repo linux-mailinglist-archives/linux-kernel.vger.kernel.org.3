@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF1259BC4D
+	by mail.lfdr.de (Postfix) with ESMTP id 695EE59BC4E
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbiHVJIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 05:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
+        id S234031AbiHVJIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233218AbiHVJIh (ORCPT
+        with ESMTP id S233301AbiHVJIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 22 Aug 2022 05:08:37 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC40C120A7;
-        Mon, 22 Aug 2022 02:08:35 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 09:08:33 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDAC13DC8;
+        Mon, 22 Aug 2022 02:08:36 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 09:08:34 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661159314;
+        s=2020; t=1661159315;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1LjJUmQhs8JWWfXs/XFLie47/93a2JV46oxDFL6VxnU=;
-        b=n5kwvX6gwsRKoxFv8mKYG66190dsLW5G0mbPkDXBW19XAMzndFcE3SnP+piIaP/kf64y/M
-        cgIL0sUhzDI77Ao+4zDQ1lUXHCDmEUQby4ZnM9vDe/5qyOMd9PvULQ2C37EVcL/wbiTr40
-        uhB2GEtZ5MJ3zYOViGeL+Cxqc6SCPiOLZCZep2AhS8cDlrJcE5zfuKUlgK1V2WaYOEnO0t
-        wKlmFq4ReelY2bOaTzZQTpPwk4jxx3MeKJPm3gXNRzO9JgUuQaC9MzMwSH3mwX82uShDbB
-        EqSafbBP/BVXKyXxwi19PnePxKIktSSGuGxyriTS0ehbzrdcwy9/luV5xWSWvQ==
+        bh=ma56cxir0v02N0F6KOviPaOZXGv046jNuSJ4KvoXwgg=;
+        b=AGk3VI8jVcWEnQlBJVojNR1W3GQew5r0XOE4pmXdZZLioqBBSwy3DIWD6ugslvHNqBmGGr
+        KNEOWYBjz6zDu2RL7LGc+C8G/JgQ8pBawYEHGoWU9gPHWRsT9l9eOWfx+tBxpWeyWrz+PP
+        DUVnaDmv1+rGBq2sZKAYuaGK+XilEYeOF4HjhwW2BNee3Fozqo6wjWNVoYtRo1sbq+MmPQ
+        XX7kq5BwLE7oecRmvmtLsUJ3d0xpPKJahjnMWe1cxVxXoO05y1urRQFKvGX59bPANZ07WA
+        j3jhCWNK1nYbz6A0wYRp/zAVrQW34FZtN4ErKx9tpeSNbEqW1wg8MSJivnABpA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661159314;
+        s=2020e; t=1661159315;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1LjJUmQhs8JWWfXs/XFLie47/93a2JV46oxDFL6VxnU=;
-        b=D2K7eURP+A0a0Q3o8guFviXj6LdgFfGMt+StguwZOuhDkCsYHg3n/vHyRIKmPOivlm9kFO
-        lWn5Ym/Lff2upVBQ==
-From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
+        bh=ma56cxir0v02N0F6KOviPaOZXGv046jNuSJ4KvoXwgg=;
+        b=G4zwX+wGTo8fVZU0t5X+8K9pdlxtXqo8CdUeqLN8dScYPs3IvTYlnl3Ms3pHwrrFqrh1IG
+        TVJQEFV3XjV/ZNDg==
+From:   "tip-bot2 for Chen Zhongjin" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] objtool: Remove "ANNOTATE_NOENDBR on ENDBR" warning
-Cc:     kernel test robot <lkp@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
+Subject: [tip: objtool/core] objtool: Use arch_jump_destination() in
+ read_intra_function_calls()
+Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <142341a5dafdfc788e4c95b9e226a6eefc9b626e.1660839773.git.jpoimboe@kernel.org>
-References: <142341a5dafdfc788e4c95b9e226a6eefc9b626e.1660839773.git.jpoimboe@kernel.org>
+In-Reply-To: <20220818014553.220261-1-chenzhongjin@huawei.com>
+References: <20220818014553.220261-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-Message-ID: <166115931303.401.10570900112002921632.tip-bot2@tip-bot2>
+Message-ID: <166115931419.401.6469534927439670416.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,45 +68,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     3c6f3900808c483b0bbb2c351f995c7b880dae14
-Gitweb:        https://git.kernel.org/tip/3c6f3900808c483b0bbb2c351f995c7b880dae14
-Author:        Josh Poimboeuf <jpoimboe@kernel.org>
-AuthorDate:    Thu, 18 Aug 2022 09:26:57 -07:00
+Commit-ID:     7b3e31869081771c63c3d006347ad06738f843b5
+Gitweb:        https://git.kernel.org/tip/7b3e31869081771c63c3d006347ad06738f843b5
+Author:        Chen Zhongjin <chenzhongjin@huawei.com>
+AuthorDate:    Thu, 18 Aug 2022 09:45:53 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 19 Aug 2022 19:47:57 +02:00
+CommitterDate: Fri, 19 Aug 2022 19:47:56 +02:00
 
-objtool: Remove "ANNOTATE_NOENDBR on ENDBR" warning
+objtool: Use arch_jump_destination() in read_intra_function_calls()
 
-This warning isn't very useful: why would you put ANNOTATE_NOENDBR on
-ENDBR, and if you did, what's the harm?
+Use arch_jump_destiation() instead of the open-coded 'offset + len +
+immediate' that is x86 specific.
 
-And thus far it's only found one non-bug, where the
-'__end_entry_SYSENTER_compat' label happens to land on the ENDBR from
-entry_SYSCALL_compat:
+Avoids future trouble with other architectures.
 
-  vmlinux.o: warning: objtool: entry_SYSCALL_compat+0x0: ANNOTATE_NOENDBR on ENDBR
-
-.. which is fine.  Just remove the warning.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/142341a5dafdfc788e4c95b9e226a6eefc9b626e.1660839773.git.jpoimboe@kernel.org
+Link: https://lkml.kernel.org/r/20220818014553.220261-1-chenzhongjin@huawei.com
 ---
- tools/objtool/check.c | 3 ---
- 1 file changed, 3 deletions(-)
+ tools/objtool/check.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index b012d98..8b8c8f7 100644
+index 0cec74d..b012d98 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -2102,9 +2102,6 @@ static int read_noendbr_hints(struct objtool_file *file)
- 			return -1;
- 		}
+@@ -2233,7 +2233,7 @@ static int read_intra_function_calls(struct objtool_file *file)
+ 		 */
+ 		insn->type = INSN_JUMP_UNCONDITIONAL;
  
--		if (insn->type == INSN_ENDBR)
--			WARN_FUNC("ANNOTATE_NOENDBR on ENDBR", insn->sec, insn->offset);
--
- 		insn->noendbr = 1;
- 	}
- 
+-		dest_off = insn->offset + insn->len + insn->immediate;
++		dest_off = arch_jump_destination(insn);
+ 		insn->jump_dest = find_insn(file, insn->sec, dest_off);
+ 		if (!insn->jump_dest) {
+ 			WARN_FUNC("can't find call dest at %s+0x%lx",

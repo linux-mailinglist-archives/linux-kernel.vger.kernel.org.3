@@ -2,127 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A9A59CBAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0D459CBB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237633AbiHVWnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 18:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
+        id S231494AbiHVWoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 18:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238183AbiHVWmy (ORCPT
+        with ESMTP id S236952AbiHVWoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 18:42:54 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F8B5141E;
-        Mon, 22 Aug 2022 15:42:53 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id b9so9078230qka.2;
-        Mon, 22 Aug 2022 15:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc;
-        bh=6C/d8xlHQCGOlClXK65WdMdS1M8Gsu61gKL4UEc2TB8=;
-        b=p/68VzadPb34Psj/7p/+bpCgGsInjxK7JXKHCtWZIF7GrlzSxf0Pak5jJxw8fMbdu/
-         QU59+q+I1IAWDFndRk82ue5jatLFF5apcfv5vWxPC/dAx4l1/VQlbGZplcTGxgkbs4qM
-         sCko3XKSlsxJoC7zPduKFee+QyycEODSRjDbbsOwVliJ6wwnSF25VMy1gKzJeXP9Yrrb
-         JHLlsAhZj5Fd7eCoUozNQHzjTj562sFrB8cPiVpfWCPKHyH0R3o9zx5qYQrDXY7rQM9c
-         78QyeiGrSsDQeZ3Bc1T55qLZPU264B4krlqYHGlW1YTDUotx/J+bTSUiXu4N/NTRHKo+
-         Vmhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=6C/d8xlHQCGOlClXK65WdMdS1M8Gsu61gKL4UEc2TB8=;
-        b=swOk+M+K4YL8/kWGpHy5izwTIjcv29wgRjlp7MV1uhZDYE8DUJFHGWHtz0NzozZFOG
-         blvQr6Ix1Kzuctd3TdXdBlw9rFCRvAWQcBJnnB0nkkJrqrL1e8LJXZy7Pomqnlh0a4b/
-         szSm0YOcKTIRgBYHgF3y60fqD7cfKI05fzq8bb6lIUflu1SDHIFhcI6+Glpxso9Byt+H
-         MmimdfuferQS01hrVYA2c0A2jhetWg6VkWlZ3eVLvw1jlEktxiuwjqJMEvAygdozyMrv
-         6Bl9mWsPowtaLjwIrnRn+bl+evfFAEyNpGFkg5F5d07f8FYT9udqtEJwJRGtU0G+Vqn8
-         Z6Lw==
-X-Gm-Message-State: ACgBeo3QBVd1KIq/E7fGVIxxlaNxyqF2BnFuTW2gBhmcHnQ/d24n5sSw
-        UNOezZBEAMqD5hcPEWF7AYFKNao+lRt2Vw0G
-X-Google-Smtp-Source: AA6agR6193RM0nlcmpDSpP0KqEk10dsmRjfuA66BmNYTxwnKHnK7MI+FnN8t13CU1o+X6L17OmsoRg==
-X-Received: by 2002:a05:620a:4e1:b0:6bb:5c0e:ab58 with SMTP id b1-20020a05620a04e100b006bb5c0eab58mr14525126qkh.730.1661208172231;
-        Mon, 22 Aug 2022 15:42:52 -0700 (PDT)
-Received: from valhalla (2603-7081-5203-61c3-0000-0000-0000-1449.res6.spectrum.com. [2603:7081:5203:61c3::1449])
-        by smtp.gmail.com with ESMTPSA id hg17-20020a05622a611100b0034359fc348fsm9521347qtb.73.2022.08.22.15.42.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 15:42:51 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 18:42:48 -0400
-From:   Christopher Carbone <chris.m.carbone@gmail.com>
-To:     sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
-        gregkh@linuxfoundation.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: sm750fb: split multiple assignments to lines
-Message-ID: <YwQGaLoBHH9C0aXN@valhalla>
+        Mon, 22 Aug 2022 18:44:15 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1F251A2B
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661208254; x=1692744254;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2xeIorpJheoBtdm/CSetaHopp9lwCCU4CAT//VeGZA4=;
+  b=WTZB4LA/dqFgvaarnD0PnqVL30DC02NP+dSm+WFVsV++RPOruWKAJtVC
+   BZPTla4zLMVsEfLOovOFVzz8nNmf9wNvFjoBrYFd5THifv6MFwXBl60ZM
+   bCNew/K5XiQ6vGsqnoCb6mXxIyFvCUu9PIhzC7Oa4/9Lzr96KiYk9aw5y
+   co15ks7pT5ehGU+jRTiTYj+WJde1pWHB7x1mbruz5WHpmLVLmCmyN+DLm
+   ioqdVXxRDqUTZbEcV48g2NOCWfTP6BuSWT2wpTCvjc8b+RApDlVqHmAfd
+   tjfDTdBNMGxFLo/vttH7DhIuHjJ8fnTq0bTquzXLmzegAmfxSXqEWQot2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="293536193"
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="293536193"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 15:44:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="751458270"
+Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Aug 2022 15:44:12 -0700
+Received: from kbuild by dd9b29378baa with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQG9U-0000oV-0X;
+        Mon, 22 Aug 2022 22:44:12 +0000
+Date:   Tue, 23 Aug 2022 06:43:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Subject: [linux-stable-rc:linux-5.15.y 8690/9817] scripts/link-vmlinux.sh:
+ 123: is_enabled: not found
+Message-ID: <202208230606.C8kP9zQs-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adhere to Linux kernel coding style.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+head:   a0a7e0b2b8b22901945ea2aef1b65871d718accf
+commit: dab72c3c32ccde4f362fff993759b0133448d394 [8690/9817] objtool: Add entry UNRET validation
+config: x86_64-buildonly-randconfig-r001-20220822 (https://download.01.org/0day-ci/archive/20220823/202208230606.C8kP9zQs-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=dab72c3c32ccde4f362fff993759b0133448d394
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.15.y
+        git checkout dab72c3c32ccde4f362fff993759b0133448d394
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Reported by checkpatch:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-CHECK: multiple assignmentst should be avoided
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Christopher Carbone <chris.m.carbone@gmail.com>
----
- drivers/staging/sm750fb/sm750.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+>> scripts/link-vmlinux.sh: 123: is_enabled: not found
+   vmlinux.o: warning: objtool: svm_vcpu_enter_exit()+0x97: call to vmload() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret()+0x1e: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_task_stack()+0xc: call to task_stack_page() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_entry_stack()+0x10: call to cpu_entry_stack() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: mce_setup()+0xa3: call to cpuid_eax() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: mce_read_aux()+0x42: call to {dynamic}() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_machine_check()+0xdf: call to mce_gather_info() leaves .noinstr.text section
+   ld.lld: error: undefined symbol: fb_set_suspend
+   >>> referenced by drm_fb_helper.c
+   >>>               gpu/drm/drm_fb_helper.o:(drm_fb_helper_resume_worker) in archive drivers/built-in.a
+   >>> referenced by drm_fb_helper.c
+   >>>               gpu/drm/drm_fb_helper.o:(drm_fb_helper_set_suspend) in archive drivers/built-in.a
+   >>> referenced by drm_fb_helper.c
+   >>>               gpu/drm/drm_fb_helper.o:(drm_fb_helper_set_suspend_unlocked) in archive drivers/built-in.a
 
-diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-index dbd1159a2ef0..6f4c31635cc4 100644
---- a/drivers/staging/sm750fb/sm750.c
-+++ b/drivers/staging/sm750fb/sm750.c
-@@ -386,7 +386,8 @@ static int lynxfb_ops_set_par(struct fb_info *info)
- 
- 	ret = lynxfb_set_color_offsets(info);
- 
--	var->height = var->width = -1;
-+	var->height  = -1;
-+	var->width = -1;
- 	var->accel_flags = 0;/*FB_ACCELF_TEXT;*/
- 
- 	if (ret) {
-@@ -498,7 +499,8 @@ static int lynxfb_ops_check_var(struct fb_var_screeninfo *var,
- 		return ret;
- 	}
- 
--	var->height = var->width = -1;
-+	var->height = -1;
-+	var->width = -1;
- 	var->accel_flags = 0;/* FB_ACCELF_TEXT; */
- 
- 	/* check if current fb's video memory big enough to hold the onscreen*/
-@@ -723,7 +725,8 @@ static int lynxfb_set_fbinfo(struct fb_info *info, int index)
- 		0x800f0 + (int)crtc->channel * 0x140;
- 
- 	pr_info("crtc->cursor.mmio = %p\n", crtc->cursor.mmio);
--	crtc->cursor.max_h = crtc->cursor.max_w = 64;
-+	crtc->cursor.max_h = 64;
-+	crtc->cursor.max_w = 64;
- 	crtc->cursor.size = crtc->cursor.max_h * crtc->cursor.max_w * 2 / 8;
- 	crtc->cursor.vstart = sm750_dev->pvMem + crtc->cursor.offset;
- 
-@@ -1027,7 +1030,8 @@ static int lynxfb_pci_probe(struct pci_dev *pdev,
- 	if (!sm750_dev)
- 		return err;
- 
--	sm750_dev->fbinfo[0] = sm750_dev->fbinfo[1] = NULL;
-+	sm750_dev->fbinfo[0] = NULL;
-+	sm750_dev->fbinfo[1] = NULL;
- 	sm750_dev->devid = pdev->device;
- 	sm750_dev->revid = pdev->revision;
- 	sm750_dev->pdev = pdev;
 -- 
-2.37.2
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

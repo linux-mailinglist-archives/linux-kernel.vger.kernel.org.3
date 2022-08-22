@@ -2,101 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFA659C08A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3328C59C03E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbiHVN2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 09:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S235002AbiHVNLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 09:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235033AbiHVN2U (ORCPT
+        with ESMTP id S233450AbiHVNLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 09:28:20 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F1DF05;
-        Mon, 22 Aug 2022 06:28:18 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E6ABB2000FB;
-        Mon, 22 Aug 2022 15:28:16 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id AB799200002;
-        Mon, 22 Aug 2022 15:28:16 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 0D8F61820F59;
-        Mon, 22 Aug 2022 21:28:14 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, vkoul@kernel.org,
-        marcel.ziswiler@toradex.com, kishon@ti.com
-Cc:     hongxing.zhu@nxp.com, linux-phy@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Subject: [PATCH v1 2/2] phy: freescale: imx8m-pcie: Fix the wrong order of phy_init() and phy_power_on()
-Date:   Mon, 22 Aug 2022 21:10:56 +0800
-Message-Id: <1661173856-1192-3-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1661173856-1192-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1661173856-1192-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 22 Aug 2022 09:11:52 -0400
+Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F13B140F1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 06:11:50 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1661173908; bh=HTMe+NWdQhVrv4pk9fiHKxQBTpwr9lj6IAS27IV/VvE=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=q8L1pggjM0PWgIqJYCIL22femgo3CMmkx0sHKqqiWpKLGyDateOmHoMO2m3Jdpns4
+         pzMV1WmAXjXHC9xY7YeZueMmQYvpvJnomm4uMbPMJ1LJoTNpz49IJjCzAK99y2lC5u
+         xad/jYkJEXvQ9UBtmtWFntivWc3hmV2UGB+mIGi4=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH] ASoC: dapm: Export new 'graph.dot' file in debugfs
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
+In-Reply-To: <YwN+0yHSOSC2aD+J@sirena.org.uk>
+Date:   Mon, 22 Aug 2022 15:11:48 +0200
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6EDC1D4B-4B84-49A2-A60A-EA15D27251A7@cutebit.org>
+References: <20220822095242.3779-1-povik+lin@cutebit.org>
+ <YwN2Pd4Ez08yDFno@sirena.org.uk>
+ <3234D74E-0DFF-4BB5-87ED-6135BAC1F31D@cutebit.org>
+ <YwN+0yHSOSC2aD+J@sirena.org.uk>
+To:     Mark Brown <broonie@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refer to phy_core driver, phy_init() must be called before phy_power_on().
-Fix the wrong order of phy_init() and phy_power_on() here.
 
-Fixes: 1aa97b002258 ("phy: freescale: pcie: Initialize the imx8 pcie standalone phy driver")
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
----
- drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> On 22. 8. 2022, at 15:04, Mark Brown <broonie@kernel.org> wrote:
+>=20
+> On Mon, Aug 22, 2022 at 02:38:09PM +0200, Martin Povi=C5=A1er wrote:
+>>> On 22. 8. 2022, at 14:27, Mark Brown <broonie@kernel.org> wrote:
+>=20
+>>> There was a tool floating about in the past (last copy I knew about =
+was
+>>> on Wolfson's git but they took that down) - can we not just continue =
+to
+>>> do that?
+>=20
+>> I don=E2=80=99t know the tool or where would I find it. I think =
+it=E2=80=99s neat
+>=20
+> Copying in Charles and Richard who might know about the status of the
+> tool Dimitris wrote.
 
-diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-index ad7d2edfc414..c93286483b42 100644
---- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-+++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-@@ -59,7 +59,7 @@ struct imx8_pcie_phy {
- 	bool			clkreq_unused;
- };
- 
--static int imx8_pcie_phy_init(struct phy *phy)
-+static int imx8_pcie_phy_power_on(struct phy *phy)
- {
- 	int ret;
- 	u32 val, pad_mode;
-@@ -137,14 +137,14 @@ static int imx8_pcie_phy_init(struct phy *phy)
- 	return ret;
- }
- 
--static int imx8_pcie_phy_power_on(struct phy *phy)
-+static int imx8_pcie_phy_init(struct phy *phy)
- {
- 	struct imx8_pcie_phy *imx8_phy = phy_get_drvdata(phy);
- 
- 	return clk_prepare_enable(imx8_phy->clk);
- }
- 
--static int imx8_pcie_phy_power_off(struct phy *phy)
-+static int imx8_pcie_phy_exit(struct phy *phy)
- {
- 	struct imx8_pcie_phy *imx8_phy = phy_get_drvdata(phy);
- 
-@@ -155,8 +155,8 @@ static int imx8_pcie_phy_power_off(struct phy *phy)
- 
- static const struct phy_ops imx8_pcie_phy_ops = {
- 	.init		= imx8_pcie_phy_init,
-+	.exit		= imx8_pcie_phy_exit,
- 	.power_on	= imx8_pcie_phy_power_on,
--	.power_off	= imx8_pcie_phy_power_off,
- 	.owner		= THIS_MODULE,
- };
- 
--- 
-2.25.1
+Thanks.
+
+>> simply having a =E2=80=98graph.dot=E2=80=99 at hand, especially since =
+it requires
+>> little code. (Although sure there=E2=80=99s the danger of it =
+growing.)
+>=20
+> I'm also worried about people going in and wanting other more tool
+> specific formats adding, if we didn't have anything at all it'd be one
+> thing but we do have something.
+
+Sure, although I would argue DOT is by a large margin the standard
+format to represent graphs in.
+
+Best,
+Martin
 

@@ -2,303 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B96D59BC53
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED3859BC57
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233673AbiHVJJo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 22 Aug 2022 05:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        id S234166AbiHVJKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233088AbiHVJJe (ORCPT
+        with ESMTP id S234207AbiHVJKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 05:09:34 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD98A2F001
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:09:32 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id s11-20020a056e02216b00b002e9d4c9d98fso795967ilv.22
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:09:32 -0700 (PDT)
+        Mon, 22 Aug 2022 05:10:32 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CE219C06;
+        Mon, 22 Aug 2022 02:10:31 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id b2so7657032qvp.1;
+        Mon, 22 Aug 2022 02:10:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=wjrH7CkWFBaGclBblrE7HFL002i1VDYL9JXtkvBlksY=;
+        b=m9Eo8OodVq1Ets/OEiRoWJrWFhfn0xRM++GAXhZxITlqyA6MRrqB7PExQKR81BqoMd
+         3OOLgss+leeXQWJHXQTYBgXPN43Kk3H4s0SIfBeP7UDdI6AFj1JMbFxzr5rsNz1tBPdE
+         Iv1VKq0X0XEs8Ff5FzfIuStRtbAlMk+CfHruqHibJIINFwKVRjgmYjmrSfhrY0o2AAGX
+         3RnZFMzTzPbjj6It6Z7AtISosQrg2T+H5v/CINVs7+rHRhdVXOLdF64GuJ+Sv8IWUjku
+         ocK/gD5hezM0DCBxWrhwDB6vj7fPo8bdqadR+oH6EAXbsbaOLqG16LkJ0vbK8np0Vgtg
+         Zejg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:from:subject:message-id:date
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5fuT+q3jRQhVdVUK3P+aRK+U06XdPv6lq28/ejdp4ic=;
-        b=tRv53peCOIuQLQIn7pGLeX1WaOgVjVtGxRCdYAoOhG4EPtwMhF36b3qzyRKGh68SVM
-         7fzdRlzCdPamHDRFk/U3RnlmUW8fDcdja+6KP6gB/OnZl8b8Ge9kWbUTM4+haPk6aPwT
-         2CG+41Ex/bM8stQFwBQi+SILaHSrMVxdhcwBodfA/GbayIBAh+goiDfbNf19KVzt7hdV
-         NNUtDgCwT2bsc+tO1qG3fnGLwg1LYBo5gzuwDC4+fxJ4MHZ1Cbj2oSWkFcHqQapKbvrw
-         DqVCVE/G4gtjgA0sP9609HXKbsLNionc5oUPvAp0xZQ24JgAri+yFhVIO0p0FMIdeP9/
-         a6AQ==
-X-Gm-Message-State: ACgBeo08of6l+JCxlgJhXUDe4zBdeDmU8cvB1pF+wq9Wj2FrpxlhDdrp
-        NOMFe+rEx/zt0ZRxVzm2P75zz62qRgsi4OEUhLWNZfmku/fp
-X-Google-Smtp-Source: AA6agR4qPccZHg4Tc6VzGZ5lP7p6VRwR3C1UfOnXnsSjFdvc8KHkCQrkyBJdv2x/JWNPmD4S3m1tVQucfLGzHYbqfv9iFIwMXkU/
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=wjrH7CkWFBaGclBblrE7HFL002i1VDYL9JXtkvBlksY=;
+        b=1u/MkqwwBD1wTIedTEDb64YZVUpumM2wELjlyGYQ8+cTlSfx+fax/IVn/GTpJ8crSc
+         S6uGCz9C0xSQ3DmbMjuqB76DWXa/KQlWw/C3/fkorIQ/2/moA/j99thnj8cvurpJj7KE
+         HQ5pLW8YDoYWM9nonvEiAEJ94ytZuvNCe4PuqbPPW99pOqsaorx0WulGqmDj5bBbETf9
+         XkGHVgyTgBI6EoquXE5o4WPQmU4RMt77GKGYZNJQwkJi59KKdaL4rWGXA+dFsQFUuWuv
+         67aOMJgx21rQsNwP60zwaPQ9d5hBJvu8IVgX5wGBozoVWsAPJrU3a77Lbg2e0b80fCb8
+         kWHA==
+X-Gm-Message-State: ACgBeo1c1yQaL1jcJ/giqL8QQPyvKMDK1sFC/ns4TZPprBnVmfvIktPT
+        sC73Es2Ca0JAQzuLpgGOXfZMgOLrCQ==
+X-Google-Smtp-Source: AA6agR7wPzemjT6q2f5TdY9MG6eTw4P2dNhfct8chm1wIQ0lDkA2XQMVyUa58/ZjoALrmj5p72eA/w==
+X-Received: by 2002:a05:6214:27cb:b0:496:ac94:723d with SMTP id ge11-20020a05621427cb00b00496ac94723dmr14805024qvb.6.1661159430322;
+        Mon, 22 Aug 2022 02:10:30 -0700 (PDT)
+Received: from bytedance.attlocal.net (ec2-52-52-7-82.us-west-1.compute.amazonaws.com. [52.52.7.82])
+        by smtp.gmail.com with ESMTPSA id t201-20020a37aad2000000b006b9264191b5sm11046904qke.32.2022.08.22.02.10.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Aug 2022 02:10:29 -0700 (PDT)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Cong Wang <cong.wang@bytedance.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Dave Taht <dave.taht@gmail.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH RFC v2 net-next 0/5] net: Qdisc backpressure infrastructure
+Date:   Mon, 22 Aug 2022 02:10:17 -0700
+Message-Id: <cover.1661158173.git.peilin.ye@bytedance.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1651800598.git.peilin.ye@bytedance.com>
+References: <cover.1651800598.git.peilin.ye@bytedance.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1a9:b0:349:cef1:168f with SMTP id
- b9-20020a05663801a900b00349cef1168fmr3035961jaq.238.1661159371656; Mon, 22
- Aug 2022 02:09:31 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 02:09:31 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000043579605e6d0ce41@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in udl_get_urb_timeout
-From:   syzbot <syzbot+f24934fe125a19d77eae@syzkaller.appspotmail.com>
-To:     airlied@linux.ie, airlied@redhat.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        sean@poorly.run, syzkaller-bugs@googlegroups.com, tiwai@suse.de,
-        tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-syzbot found the following issue on:
+Hi all,
 
-HEAD commit:    5b6a4bf680d6 Add linux-next specific files for 20220818
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12341a3d080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
-dashboard link: https://syzkaller.appspot.com/bug?extid=f24934fe125a19d77eae
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12731867080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=165b64f3080000
+Currently sockets (especially UDP ones) can drop a lot of packets at TC
+egress when rate limited by shaper Qdiscs like HTB.  This patchset series
+tries to solve this by introducing a Qdisc backpressure mechanism.
 
-The issue was bisected to:
+RFC v1 [1] used a throttle & unthrottle approach, which introduced several
+issues, including a thundering herd problem and a socket reference count
+issue [2].  This RFC v2 uses a different approach to avoid those issues:
 
-commit e25d5954264d1871ab2792c7ca2298b811462500
-Author: Takashi Iwai <tiwai@suse.de>
-Date:   Thu Aug 4 07:58:25 2022 +0000
+  1. When a shaper Qdisc drops a packet that belongs to a local socket due
+     to TC egress congestion, we make part of the socket's sndbuf
+     temporarily unavailable, so it sends slower.
+  
+  2. Later, when TC egress becomes idle again, we gradually recover the
+     socket's sndbuf back to normal.  Patch 2 implements this step using a
+     timer for UDP sockets.
 
-    drm/udl: Kill pending URBs at suspend and disconnect
+The thundering herd problem is avoided, since we no longer wake up all
+throttled sockets at the same time in qdisc_watchdog().  The socket
+reference count issue is also avoided, since we no longer maintain socket
+list on Qdisc.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1393a8eb080000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1053a8eb080000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1793a8eb080000
+Performance is better than RFC v1.  There is one concern about fairness
+between flows for TBF Qdisc, which could be solved by using a SFQ inner
+Qdisc.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f24934fe125a19d77eae@syzkaller.appspotmail.com
-Fixes: e25d5954264d ("drm/udl: Kill pending URBs at suspend and disconnect")
+Please see the individual patches for details and numbers.  Any comments,
+suggestions would be much appreciated.  Thanks!
 
-[drm:udl_init.cold] *ERROR* Unrecognized vendor firmware descriptor
-[drm:udl_init] *ERROR* Selecting channel failed
-[drm] Initialized udl 0.0.1 20120220 for 1-1:0.0 on minor 2
-[drm] Initialized udl on minor 2
-[drm:udl_get_edid_block] *ERROR* Read EDID byte 0 failed err ffffffb9
-udl 1-1:0.0: [drm] Cannot find any crtc or sizes
-usb 1-1: USB disconnect, device number 2
-==================================================================
-BUG: KASAN: use-after-free in __list_add_valid+0x93/0xb0 lib/list_debug.c:27
-Read of size 8 at addr ffff8880756fce88 by task kworker/0:2/146
+[1] https://lore.kernel.org/netdev/cover.1651800598.git.peilin.ye@bytedance.com/
+[2] https://lore.kernel.org/netdev/20220506133111.1d4bebf3@hermes.local/
 
-CPU: 0 PID: 146 Comm: kworker/0:2 Not tainted 6.0.0-rc1-next-20220818-syzkaller #0
-kworker/0:2[146] cmdline: ��a�����
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:122 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:140
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- __list_add_valid+0x93/0xb0 lib/list_debug.c:27
- __list_add include/linux/list.h:69 [inline]
- list_add include/linux/list.h:88 [inline]
- list_move include/linux/list.h:218 [inline]
- udl_get_urb_timeout+0x20e/0x550 drivers/gpu/drm/udl/udl_main.c:250
- udl_free_urb_list+0x15f/0x250 drivers/gpu/drm/udl/udl_main.c:156
- udl_drop_usb+0xd0/0x160 drivers/gpu/drm/udl/udl_main.c:358
- udl_usb_disconnect+0x3f/0x50 drivers/gpu/drm/udl/udl_drv.c:114
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:520 [inline]
- device_remove+0x11f/0x170 drivers/base/dd.c:512
- __device_release_driver drivers/base/dd.c:1209 [inline]
- device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1235
- bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
- device_del+0x4f3/0xc80 drivers/base/core.c:3704
- usb_disable_device+0x356/0x7a0 drivers/usb/core/message.c:1419
- usb_disconnect.cold+0x259/0x6ed drivers/usb/core/hub.c:2235
- hub_port_connect drivers/usb/core/hub.c:5197 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5653 [inline]
- hub_event+0x1f86/0x4610 drivers/usb/core/hub.c:5735
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- process_scheduled_works kernel/workqueue.c:2352 [inline]
- worker_thread+0x854/0x1080 kernel/workqueue.c:2438
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+Peilin Ye (5):
+  net: Introduce Qdisc backpressure infrastructure
+  net/udp: Implement Qdisc backpressure algorithm
+  net/sched: sch_tbf: Use Qdisc backpressure infrastructure
+  net/sched: sch_htb: Use Qdisc backpressure infrastructure
+  net/sched: sch_cbq: Use Qdisc backpressure infrastructure
 
-Allocated by task 146:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc mm/kasan/common.c:516 [inline]
- ____kasan_kmalloc mm/kasan/common.c:475 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
- kmalloc include/linux/slab.h:606 [inline]
- kzalloc include/linux/slab.h:739 [inline]
- udl_alloc_urb_list drivers/gpu/drm/udl/udl_main.c:190 [inline]
- udl_init+0x736/0xc80 drivers/gpu/drm/udl/udl_main.c:331
- udl_driver_create drivers/gpu/drm/udl/udl_drv.c:79 [inline]
- udl_usb_probe+0x4f/0x100 drivers/gpu/drm/udl/udl_drv.c:94
- usb_probe_interface+0x30b/0x7f0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:530 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:609
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:748
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:778
- __device_attach_driver+0x206/0x2e0 drivers/base/dd.c:901
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x1e4/0x530 drivers/base/dd.c:973
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xbd5/0x1e90 drivers/base/core.c:3517
- usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd4/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:530 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:609
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:748
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:778
- __device_attach_driver+0x206/0x2e0 drivers/base/dd.c:901
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x1e4/0x530 drivers/base/dd.c:973
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xbd5/0x1e90 drivers/base/core.c:3517
- usb_new_device.cold+0x685/0x10ad drivers/usb/core/hub.c:2573
- hub_port_connect drivers/usb/core/hub.c:5353 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5653 [inline]
- hub_event+0x26c7/0x4610 drivers/usb/core/hub.c:5735
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ Documentation/networking/ip-sysctl.rst | 11 ++++
+ include/linux/udp.h                    |  3 ++
+ include/net/netns/ipv4.h               |  1 +
+ include/net/sch_generic.h              | 11 ++++
+ include/net/sock.h                     | 21 ++++++++
+ include/net/udp.h                      |  1 +
+ net/core/sock.c                        |  5 +-
+ net/ipv4/sysctl_net_ipv4.c             |  7 +++
+ net/ipv4/udp.c                         | 69 +++++++++++++++++++++++++-
+ net/ipv6/udp.c                         |  2 +-
+ net/sched/sch_cbq.c                    |  1 +
+ net/sched/sch_htb.c                    |  2 +
+ net/sched/sch_tbf.c                    |  2 +
+ 13 files changed, 132 insertions(+), 4 deletions(-)
 
-Freed by task 146:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:367 [inline]
- ____kasan_slab_free+0x166/0x1c0 mm/kasan/common.c:329
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1754 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1780
- slab_free mm/slub.c:3534 [inline]
- kfree+0xe2/0x580 mm/slub.c:4562
- udl_free_urb_list+0x136/0x250 drivers/gpu/drm/udl/udl_main.c:164
- udl_drop_usb+0xd0/0x160 drivers/gpu/drm/udl/udl_main.c:358
- udl_usb_disconnect+0x3f/0x50 drivers/gpu/drm/udl/udl_drv.c:114
- usb_unbind_interface+0x1d8/0x8e0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:520 [inline]
- device_remove+0x11f/0x170 drivers/base/dd.c:512
- __device_release_driver drivers/base/dd.c:1209 [inline]
- device_release_driver_internal+0x4a1/0x700 drivers/base/dd.c:1235
- bus_remove_device+0x2e3/0x590 drivers/base/bus.c:529
- device_del+0x4f3/0xc80 drivers/base/core.c:3704
- usb_disable_device+0x356/0x7a0 drivers/usb/core/message.c:1419
- usb_disconnect.cold+0x259/0x6ed drivers/usb/core/hub.c:2235
- hub_port_connect drivers/usb/core/hub.c:5197 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5497 [inline]
- port_event drivers/usb/core/hub.c:5653 [inline]
- hub_event+0x1f86/0x4610 drivers/usb/core/hub.c:5735
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- process_scheduled_works kernel/workqueue.c:2352 [inline]
- worker_thread+0x854/0x1080 kernel/workqueue.c:2438
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+-- 
+2.20.1
 
-The buggy address belongs to the object at ffff8880756fce80
- which belongs to the cache kmalloc-32 of size 32
-The buggy address is located 8 bytes inside of
- 32-byte region [ffff8880756fce80, ffff8880756fcea0)
-
-The buggy address belongs to the physical page:
-page:ffffea0001d5bf00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x756fc
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 0000000000000000 dead000000000122 ffff888011841500
-raw: 0000000000000000 0000000000400040 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12c40(GFP_NOFS|__GFP_NOWARN|__GFP_NORETRY), pid 3609, tgid 3609 (syz-executor401), ts 53404959933, free_ts 53124140132
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4283
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5507
- alloc_pages+0x1a6/0x270 mm/mempolicy.c:2272
- alloc_slab_page mm/slub.c:1824 [inline]
- allocate_slab+0x27e/0x3d0 mm/slub.c:1969
- new_slab mm/slub.c:2029 [inline]
- ___slab_alloc+0x7f1/0xe10 mm/slub.c:3031
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
- slab_alloc_node mm/slub.c:3209 [inline]
- slab_alloc mm/slub.c:3251 [inline]
- __kmalloc+0x32b/0x340 mm/slub.c:4420
- kmalloc include/linux/slab.h:611 [inline]
- kzalloc include/linux/slab.h:739 [inline]
- tomoyo_encode2.part.0+0xe9/0x3a0 security/tomoyo/realpath.c:45
- tomoyo_encode2 security/tomoyo/realpath.c:31 [inline]
- tomoyo_encode+0x28/0x50 security/tomoyo/realpath.c:80
- tomoyo_realpath_from_path+0x186/0x620 security/tomoyo/realpath.c:288
- tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
- tomoyo_path_number_perm+0x1d5/0x590 security/tomoyo/file.c:723
- security_file_ioctl+0x50/0xb0 security/security.c:1552
- __do_sys_ioctl fs/ioctl.c:864 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0xb3/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1449 [inline]
- free_pcp_prepare+0x5e4/0xd20 mm/page_alloc.c:1499
- free_unref_page_prepare mm/page_alloc.c:3380 [inline]
- free_unref_page+0x19/0x4d0 mm/page_alloc.c:3476
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:447
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:727 [inline]
- slab_alloc_node mm/slub.c:3243 [inline]
- kmem_cache_alloc_node+0x2b1/0x3f0 mm/slub.c:3293
- __alloc_skb+0x210/0x2f0 net/core/skbuff.c:418
- alloc_skb include/linux/skbuff.h:1257 [inline]
- alloc_skb_with_frags+0x93/0x6c0 net/core/skbuff.c:6018
- sock_alloc_send_pskb+0x7a3/0x930 net/core/sock.c:2663
- sock_alloc_send_skb include/net/sock.h:1841 [inline]
- mld_newpack.isra.0+0x1b9/0x770 net/ipv6/mcast.c:1748
- add_grhead+0x295/0x340 net/ipv6/mcast.c:1851
- add_grec+0x1082/0x1560 net/ipv6/mcast.c:1989
- mld_send_cr net/ipv6/mcast.c:2115 [inline]
- mld_ifc_work+0x452/0xdc0 net/ipv6/mcast.c:2653
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
-
-Memory state around the buggy address:
- ffff8880756fcd80: 00 00 00 00 fc fc fc fc 00 00 00 00 fc fc fc fc
- ffff8880756fce00: 00 00 00 00 fc fc fc fc 00 00 00 00 fc fc fc fc
->ffff8880756fce80: fa fb fb fb fc fc fc fc 00 00 00 00 fc fc fc fc
-                      ^
- ffff8880756fcf00: 00 00 00 00 fc fc fc fc 00 00 00 00 fc fc fc fc
- ffff8880756fcf80: 00 00 00 00 fc fc fc fc 00 00 00 fc fc fc fc fc
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches

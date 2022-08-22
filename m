@@ -2,126 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AD459C9BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4AB59C980
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 22:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235321AbiHVUOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 16:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
+        id S230172AbiHVUCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 16:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbiHVUOG (ORCPT
+        with ESMTP id S235144AbiHVUCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 16:14:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F83311C39;
-        Mon, 22 Aug 2022 13:14:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3186B818C4;
-        Mon, 22 Aug 2022 20:14:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0BF4C433C1;
-        Mon, 22 Aug 2022 20:14:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661199243;
-        bh=2eMArH3oTnfVZ7xyuUPC1MFLtY362q3YhN4a5dAfrmc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PpeqziVzy4KxHIkZ0JSfcaEQbP83+uVD3nGDRHK+OV4/16sxgQ3/e3iflKnbMOJ4Z
-         2xQn6NvTFGz3A/7UV5nvYNk9rUexI60WOiMj+QaowA6uUtvMm+nT0B42m79Vwr5npP
-         kCg3HT1Wgj8d+G1Q2oasYCthG8ccJMVd5LEABG11AJcGS0q9UtCDGNVP9cFNX8LI+n
-         UgoC/u5OQuyo1LQWiVH8VYc1b0LPom3ca7qglA0y1nIIuYFbjP7mbB8se6MwqwMeWL
-         oiDZkoMQ5EZWR34Dvo9Ixtm2Z2SmT5u9ERAezSI4GiXdvWQOOh/awSfgGkQ+cZHuUR
-         FPkOGrR03xLQw==
-Date:   Mon, 22 Aug 2022 20:39:35 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Ciprian Regus <ciprian.regus@analog.com>
-Cc:     <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH 1/3] dt-bindings: iio: adc: Add docs for LTC2499
-Message-ID: <20220822203935.02cfb580@jic23-huawei>
-In-Reply-To: <20220822202435.7dd54583@jic23-huawei>
-References: <20220822125106.1106798-1-ciprian.regus@analog.com>
-        <20220822125106.1106798-2-ciprian.regus@analog.com>
-        <20220822202435.7dd54583@jic23-huawei>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Mon, 22 Aug 2022 16:02:15 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C501D54642
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:02:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661198528; x=1692734528;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0HPJzTZJCyzz51oJb40DfeTcEqv2C1B8j5nBtpWnNS8=;
+  b=XvvAcjj2TIoyqbazZfVRbaXZuexSwFbzQO3JtpULs1C/gN3grmvtooIe
+   HbLEtDSF5x/1qDmD75VFFJSQUondc418h1JSJqAHH3K+C68Maa4ADZJKc
+   9E7e9WEdkYc7P7BFJ1FgG1JOBAeCEmuZDaW1OMXCiywaatmbyDsKpTp23
+   MRkGTn1865B5fqFVvn3RB1Q9EJBXZEjX8sNu1S95ABktuxqjp7VCUrydz
+   vm0sxbD12utwwXG6LvcYaw90mc/seL5euvvnVTgv+cM0N4UXhibqbU8eE
+   KufXvGm0KunwoTDmXv7UoQtpryaX3QUJOzesWt7WntSZ5Aa7Um+VvTygO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="273896406"
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="273896406"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 13:02:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="698412564"
+Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Aug 2022 13:02:06 -0700
+Received: from kbuild by dd9b29378baa with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQDcb-0000gC-38;
+        Mon, 22 Aug 2022 20:02:05 +0000
+Date:   Tue, 23 Aug 2022 04:01:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [peterz-queue:perf/wip.rewrite 5/5] kernel/events/core.c:846:3:
+ error: 'continue' statement not in loop statement
+Message-ID: <202208230329.okV9Yjck-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022 20:24:35 +0100
-Jonathan Cameron <jic23@kernel.org> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.rewrite
+head:   596b8cc92a97fa8defbff896dc9baedef441b983
+commit: 596b8cc92a97fa8defbff896dc9baedef441b983 [5/5] Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+config: x86_64-randconfig-a004-20220822 (https://download.01.org/0day-ci/archive/20220823/202208230329.okV9Yjck-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=596b8cc92a97fa8defbff896dc9baedef441b983
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue perf/wip.rewrite
+        git checkout 596b8cc92a97fa8defbff896dc9baedef441b983
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> On Mon, 22 Aug 2022 15:51:04 +0300
-> Ciprian Regus <ciprian.regus@analog.com> wrote:
-> 
-> > Update the bindings documentation for ltc2497 to include the ltc2499.
-> > 
-> > Signed-off-by: Ciprian Regus <ciprian.regus@analog.com>  
-> Looks fine to me.  Maybe a separate patch to add the ltc2496 binding
-> given the driver is included in this MAINTAINERS entry?
-> A random comment inline.
-> 
-> Jonathan
-> 
-> > ---
-> >  Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml | 6 +++++-
-> >  MAINTAINERS                                                 | 1 +
-> >  2 files changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml b/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
-> > index c1772b568cd1..7bb30eafc543 100644
-> > --- a/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
-> > +++ b/Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
-> > @@ -13,10 +13,14 @@ description: |
-> >    16bit ADC supporting up to 16 single ended or 8 differential inputs.
-> >    I2C interface.
-> >  
-> > +  https://www.analog.com/media/en/technical-documentation/data-sheets/2497fb.pdf
-> > +  https://www.analog.com/media/en/technical-documentation/data-sheets/2499fe.pdf
-> > +
-> >  properties:
-> >    compatible:
-> > -    const:
-> > +    enum:
-> >        lltc,ltc2497
-> > +      lltc,ltc2499
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Oops. Benefit of Rob's build bot later.
+All errors (new ones prefixed by >>):
 
-       enum:
-         - lltc,ltc2497
-         - lltc,ltc2499
+>> kernel/events/core.c:846:3: error: 'continue' statement not in loop statement
+                   continue;
+                   ^
+   kernel/events/core.c:4220:29: warning: variable 'task_ctx' set but not used [-Wunused-but-set-variable]
+           struct perf_event_context *task_ctx = NULL;
+                                      ^
+   kernel/events/core.c:4790:1: warning: no previous prototype for function 'find_get_pmu_context' [-Wmissing-prototypes]
+   find_get_pmu_context(struct pmu *pmu, struct perf_event_context *ctx,
+   ^
+   kernel/events/core.c:4789:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct perf_event_pmu_context *
+   ^
+   static 
+   kernel/events/core.c:12029:2: error: call to undeclared function 'mutex_lock_double'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           mutex_lock_double(&event->mmap_mutex, &output_event->mmap_mutex);
+           ^
+   2 warnings and 2 errors generated.
 
-Just goes to show how wonderful automatic checking is :)
 
-Jonathan
+vim +/continue +846 kernel/events/core.c
 
-> >  
-> >    reg: true
-> >    vref-supply: true
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 9d7f64dc0efe..3c847619ceb1 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -1327,6 +1327,7 @@ W:	https://ez.analog.com/linux-software-drivers
-> >  F:	Documentation/ABI/testing/sysfs-bus-iio-frequency-ad9523
-> >  F:	Documentation/ABI/testing/sysfs-bus-iio-frequency-adf4350
-> >  F:	Documentation/devicetree/bindings/iio/*/adi,*
-> > +F:	Documentation/devicetree/bindings/iio/adc/lltc,ltc2497.yaml
-> >  F:	Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml  
-> 
-> Unrelated question, but why is this here given the wild cards above match?
-> 
-> >  F:	drivers/iio/*/ad*
-> >  F:	drivers/iio/adc/ltc249*  
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  831  
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  832  /*
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  833   * reschedule events based on the cgroup constraint of task.
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  834   */
+96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  835  static void perf_cgroup_switch(struct task_struct *task)
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  836  {
+596b8cc92a97fa kernel/events/core.c Peter Zijlstra          2022-06-15  837  	struct perf_cpu_context *cpuctx = this_cpu_ptr(&cpu_context);
+96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  838  	struct perf_cgroup *cgrp;
+058fe1c0440e68 kernel/events/core.c David Carrillo-Cisneros 2017-01-18  839  	struct list_head *list;
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  840  	unsigned long flags;
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  841  
+96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  842  	cgrp = perf_cgroup_from_task(task, NULL);
+96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  843  
+058fe1c0440e68 kernel/events/core.c David Carrillo-Cisneros 2017-01-18  844  	WARN_ON_ONCE(cpuctx->ctx.nr_cgroups == 0);
+96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  845  	if (READ_ONCE(cpuctx->cgrp) == cgrp)
+96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29 @846  		continue;
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  847  
+facc43071cc0d4 kernel/events/core.c Peter Zijlstra          2011-04-09  848  	perf_ctx_lock(cpuctx, cpuctx->task_ctx);
+6a606214738273 kernel/events/core.c Peter Zijlstra          2022-01-13  849  	perf_ctx_disable(&cpuctx->ctx);
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  850  
+6a606214738273 kernel/events/core.c Peter Zijlstra          2022-01-13  851  	ctx_sched_out(&cpuctx->ctx, EVENT_ALL);
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  852  	/*
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  853  	 * must not be done before ctxswout due
+96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  854  	 * to update_cgrp_time_from_cpuctx() in
+96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  855  	 * ctx_sched_out()
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  856  	 */
+96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  857  	cpuctx->cgrp = cgrp;
+95cf59ea72331d kernel/events/core.c Peter Zijlstra          2012-10-02  858  	/*
+95cf59ea72331d kernel/events/core.c Peter Zijlstra          2012-10-02  859  	 * set cgrp before ctxsw in to allow
+a0827713e298d0 kernel/events/core.c Chengming Zhou          2022-03-29  860  	 * perf_cgroup_set_timestamp() in ctx_sched_in()
+a0827713e298d0 kernel/events/core.c Chengming Zhou          2022-03-29  861  	 * to not have to pass task around
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  862  	 */
+6a606214738273 kernel/events/core.c Peter Zijlstra          2022-01-13  863  	ctx_sched_in(&cpuctx->ctx, EVENT_ALL);
+96492a6c558acb kernel/events/core.c Chengming Zhou          2022-03-29  864  
+6a606214738273 kernel/events/core.c Peter Zijlstra          2022-01-13  865  	perf_ctx_enable(&cpuctx->ctx);
+facc43071cc0d4 kernel/events/core.c Peter Zijlstra          2011-04-09  866  	perf_ctx_unlock(cpuctx, cpuctx->task_ctx);
+facc43071cc0d4 kernel/events/core.c Peter Zijlstra          2011-04-09  867  }
+e5d1367f17ba6a kernel/perf_event.c  Stephane Eranian        2011-02-14  868  
 
+:::::: The code at line 846 was first introduced by commit
+:::::: 96492a6c558acb56124844d1409d9ef8624a0322 perf/core: Fix perf_cgroup_switch()
+
+:::::: TO: Chengming Zhou <zhouchengming@bytedance.com>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

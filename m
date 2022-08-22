@@ -2,66 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C393059BC94
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8D259BCA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 11:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbiHVJQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 05:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
+        id S234210AbiHVJRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 05:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234452AbiHVJPf (ORCPT
+        with ESMTP id S234586AbiHVJPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 05:15:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEE727B0A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 02:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661159691;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D8PX8VGV+zxa485SufkBq+IWwGWuDtC3c/GfFCmctrA=;
-        b=TwEiBYTC/Q+1fGB7kM6sj1SNC1l90ZpCPZq0dr6uxVwZ/PcDqCXNiZm66XV5WXf2Ovss5w
-        ekUDMTaHEh3ku+NuABnlkn/8lmZsfJ49hFE68kOTBsiBlFvuYI1Rv9gCyllSNcw3jztfls
-        zPpb4hbJQAbvJsvQ7AphzMIJg4T/TP8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-361-IKkzy2GiPiOmwXPFZyABEQ-1; Mon, 22 Aug 2022 05:14:40 -0400
-X-MC-Unique: IKkzy2GiPiOmwXPFZyABEQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 56D341C13941;
-        Mon, 22 Aug 2022 09:14:40 +0000 (UTC)
-Received: from localhost (unknown [10.39.193.142])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DCF19492C3B;
-        Mon, 22 Aug 2022 09:14:39 +0000 (UTC)
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Diana Craciun <diana.craciun@oss.nxp.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH] vfio/fsl-mc: Fix a typo in a comment
-In-Reply-To: <Yvuy/qUwU7StueDV@ziepe.ca>
-Organization: Red Hat GmbH
-References: <2b65bf8d2b4d940cafbafcede07c23c35f042f5a.1659815764.git.christophe.jaillet@wanadoo.fr>
- <YvKJTKYv2htxM1n/@ziepe.ca>
- <db505c50-e855-5e94-1f09-173310177bda@wanadoo.fr>
- <Yvuy/qUwU7StueDV@ziepe.ca>
-User-Agent: Notmuch/0.36 (https://notmuchmail.org)
-Date:   Mon, 22 Aug 2022 11:14:38 +0200
-Message-ID: <871qt8prlt.fsf@redhat.com>
+        Mon, 22 Aug 2022 05:15:52 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014F31A04D;
+        Mon, 22 Aug 2022 02:15:36 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27M9FXj6036832;
+        Mon, 22 Aug 2022 04:15:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1661159733;
+        bh=roTfperRVByHKT6yxJjjvpXH17NlwkzLgVIKQfXQcDc=;
+        h=From:To:CC:Subject:Date;
+        b=xpesxG5BVQ0y821yOZBos08Xelt3RuvB2lcys1LLChf02ZZk07LI983hVB3CdR8vo
+         IUrKrYRFNihgsg9O2pYYvBtVwW1TvELFw8SOyyrGWEXdB7x7Azv2yJWg1h5S22JAmp
+         ooPnVMFjL1TzTsXC9iJHVNNRrFzmTqQpbKlzfoys=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27M9FXJl111233
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 22 Aug 2022 04:15:33 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 22
+ Aug 2022 04:15:32 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 22 Aug 2022 04:15:32 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27M9FVXQ037023;
+        Mon, 22 Aug 2022 04:15:32 -0500
+From:   Vaishnav Achath <vaishnav.a@ti.com>
+To:     <peter.ujfalusi@gmail.com>, <vkoul@kernel.org>,
+        <broonie@kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>
+CC:     <vigneshr@ti.com>, <kishon@ti.com>, <vaishnav.a@ti.com>
+Subject: [PATCH 0/2] spi: spi-omap2-mcspi: Use EOW interrupt for transfer completion
+Date:   Mon, 22 Aug 2022 14:45:29 +0530
+Message-ID: <20220822091531.27827-1-vaishnav.a@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,56 +62,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16 2022, Jason Gunthorpe <jgg@ziepe.ca> wrote:
+When using MCSPI with DMA enabled in Master/Slave mode, real-time 
+performance issues were observed which were root caused to the 
+uncertain delays in the  TX completion calculation mechanism in
+k3-udma driver.
 
-> On Tue, Aug 16, 2022 at 05:00:50PM +0200, Christophe JAILLET wrote:
->> Le 09/08/2022 =C3=A0 18:20, Jason Gunthorpe a =C3=A9crit=C2=A0:
->> > On Sat, Aug 06, 2022 at 09:56:13PM +0200, Christophe JAILLET wrote:
->> > > L and S are swapped/
->> > > s/VFIO_FLS_MC/VFIO_FSL_MC/
->> > >=20
->> > > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> > > ---
->> > > All the dev_ logging functions in the file have the "VFIO_FSL_MC: "
->> > > prefix.
->> > > As they are dev_ function, the driver should already be displayed.
->> > >=20
->> > > So, does it make sense or could they be all removed?
->> > > ---
->> > >   drivers/vfio/fsl-mc/vfio_fsl_mc.c | 2 +-
->> > >   1 file changed, 1 insertion(+), 1 deletion(-)
->> > >=20
->> > > diff --git a/drivers/vfio/fsl-mc/vfio_fsl_mc.c b/drivers/vfio/fsl-mc=
-/vfio_fsl_mc.c
->> > > index 3feff729f3ce..66d01db1d240 100644
->> > > --- a/drivers/vfio/fsl-mc/vfio_fsl_mc.c
->> > > +++ b/drivers/vfio/fsl-mc/vfio_fsl_mc.c
->> > > @@ -110,7 +110,7 @@ static void vfio_fsl_mc_close_device(struct vfio=
-_device *core_vdev)
->> > >   	if (WARN_ON(ret))
->> > >   		dev_warn(&mc_cont->dev,
->> > > -			 "VFIO_FLS_MC: reset device has failed (%d)\n", ret);
->> > > +			 "VFIO_FSL_MC: reset device has failed (%d)\n", ret);
->> >=20
->> > WARN_ON already prints, this is better written as
->> >=20
->> > WARN(ret, "VFIO_FSL_MC: reset device has failed (%d)\n", ret);
->>=20
->> Or maybe, just:
->> if (ret)
->> 	dev_warn(&mc_cont->dev,
->> 		 "VFIO_FSL_MC: reset device has failed (%d)\n", ret);
->>=20
->> This keep information about the device, avoid the duplicate printing rel=
-ated
->> to WARN_ON+dev_warn and is more in line with error handling in other fil=
-es.
->>=20
->> Do you agree or do you prefer a v2 as you proposed with WARN()?
->
-> If the original author wrote WARN I would not degrade it to just a
-> dev_warn.
+This series updates the omap2-mcspi driver to use End of Word(EOW)
+interrupt to identify transaction completion and remove the usage
+of DMA rx_completion and tx_completion for identifying transaction
+completion.
 
-Having to decide between losing the WARN and losing the device info, I'd
-just... fix the typo :)
+Tested on J721E SK (for both Master and Slave Mode) for Full Duplex,
+TX Only and RX Only mode transactions.Also tested with ILI9225 based
+SPI TFT Display.
+
+Vaishnav Achath (2):
+  dmaengine: ti: k3-udma: Respond TX done if DMA_PREP_INTERRUPT is not
+    requested
+  spi: spi-omap2-mcspi: Use EOW interrupt for completion when DMA
+    enabled
+
+ drivers/dma/ti/k3-udma.c      |   5 +-
+ drivers/spi/spi-omap2-mcspi.c | 141 +++++++++-------------------------
+ 2 files changed, 40 insertions(+), 106 deletions(-)
+
+-- 
+2.17.1
 

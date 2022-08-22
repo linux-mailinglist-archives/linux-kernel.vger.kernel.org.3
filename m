@@ -2,104 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3F759C0AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E3A59C0C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 15:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbiHVNfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 09:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
+        id S235290AbiHVNlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 09:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235191AbiHVNfL (ORCPT
+        with ESMTP id S235244AbiHVNlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 09:35:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128522A96C
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 06:35:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8500B81221
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 13:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F8B7C433D6;
-        Mon, 22 Aug 2022 13:35:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661175307;
-        bh=qu81bEpu83VA10aS3AYSiUHtRFuL4LO72HPagtwl6K4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bpVtLRFuNwVU9uP82xV498EtC+k6chfBhOw+W+WVOVCnkMEKV3kKCf+Xw3QrTk4df
-         AXMZKBddw/HvLcuL7kQr0+FJc1YAMjf+HAtjoObJJRwvIPjEsEC9e4s1djd+QYu5q0
-         UgAuU7r3eOyi9TSGxnGF9UGzJf8ST+mIgANuIQVfD5o/yt17cRFhzovNx2/Qzvmr+c
-         OtOmV0mq9bPsJ6arnYmI3C9/9JQ4/reeZQul1IZDrYwLRlKtODD90k3VQLOk6AR3wO
-         8I5EYN+v+NM2sKMa9crla6dd7U0f+G5/179cyVJgtXcqfnUM5HNR+QMTT/UY00jNXK
-         wXRbbMGd0RqUw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oQ7a4-0002R3-2a; Mon, 22 Aug 2022 15:35:04 +0200
-Date:   Mon, 22 Aug 2022 15:35:04 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>
-Subject: Re: [PATCH] drm/panel-edp: add AUO B133UAN02.1 panel entry
-Message-ID: <YwOGCPFTx0+MNfN2@hovoldconsulting.com>
-References: <20220711075202.21775-1-johan+linaro@kernel.org>
- <YtpyeCHojFovBKxv@hovoldconsulting.com>
+        Mon, 22 Aug 2022 09:41:06 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962B215FC9;
+        Mon, 22 Aug 2022 06:41:05 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id r15-20020a17090a1bcf00b001fabf42a11cso11293969pjr.3;
+        Mon, 22 Aug 2022 06:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=zPi97ExUikdEhfcrJGFr1ffQESaGom6KZJXieoIftH4=;
+        b=mkTPMemOP4acTG60S3Hl5WBTG8ZAtPdovT7QZdsI5p5AxPKU2zKh0kgpRHUVVHQjbf
+         +EAqonNoO2IGw0EiwZWbcefHkrNojqBQhOtnpYUFTXZtKew8nzi5oJkrtw4Uv/VGZOUm
+         2cNNmcyTIrB507VqwtQubBMJj09+UzrKFy3eyL4gujU2jFdsFyshFzYuVP0XnPQXEJqm
+         G5RKeiCBdz3PXv0yq/GLHFIvTx/E7oxplZq9FK1Gbec7t4rpwTtalp2SGgDFQuRnNm5R
+         8Dc6IqiBC9YgLKOxPqr1FgoHa00G9NNwmMtzcqUxp+fwE5C6AIgnuoZf6p8KLzBkicZ7
+         v9VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=zPi97ExUikdEhfcrJGFr1ffQESaGom6KZJXieoIftH4=;
+        b=ijG5GqEqgMrsepFkJlbxC30MirowFQ5eZGwnjxpKICuaVJ3uYqtyod2ICc/smUY+V7
+         ku20Gbaw3FwbqeqWGJ+aKWP5f3SCqZg0RSr+2MbcoiApbi7HKjsyH4/HWsV7GVYMeUCi
+         9Jk5hXX3Tj8/3IGB8Idb4nMjqV+S9O7QHFiNCjPuvPw0hpleIybrSl0xkaazYmmvWAcA
+         allRVeZhgadpm8i3+x6lxpPr/kPPX/mugjoj+WBg4t/FRxp00Vi5WaBX/qzdVO9pIdt4
+         L4/DVYD7di+vKvY57gGO36T9lZsu4XG9yDLX7S0ICIy7LEp3qzjJoJ6NVhwF9b5bIoUR
+         falg==
+X-Gm-Message-State: ACgBeo1SYwHyAR1YIZSmyBD9zSgQx0B7GGlZ+2yfgzNmXHiJhN6LP8Oy
+        /kPV/tB7yE4U2pIdl8hEES8=
+X-Google-Smtp-Source: AA6agR6BmLWM4+c7BACerNedLr15QWhRQiBzPH6XlAV+yW1IbPumDgepk2/BpzLbsUqKkTcRv71xVw==
+X-Received: by 2002:a17:902:7247:b0:16f:8361:ba26 with SMTP id c7-20020a170902724700b0016f8361ba26mr20294979pll.83.1661175665106;
+        Mon, 22 Aug 2022 06:41:05 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-77.three.co.id. [180.214.232.77])
+        by smtp.gmail.com with ESMTPSA id q28-20020a63f95c000000b00428c216467csm7404876pgk.32.2022.08.22.06.41.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 06:41:04 -0700 (PDT)
+Message-ID: <78a90d0a-e0ba-0189-aa84-4ce2952e33f3@gmail.com>
+Date:   Mon, 22 Aug 2022 20:40:56 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtpyeCHojFovBKxv@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 3/3] docs: i2c: i2c-topology: fix typo
+Content-Language: en-US
+To:     luca.ceresoli@bootlin.com, linux-doc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        linux-kernel@vger.kernel.org
+References: <20220822091050.47099-1-luca.ceresoli@bootlin.com>
+ <20220822091050.47099-4-luca.ceresoli@bootlin.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220822091050.47099-4-luca.ceresoli@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 11:48:40AM +0200, Johan Hovold wrote:
-> On Mon, Jul 11, 2022 at 09:52:02AM +0200, Johan Hovold wrote:
-> > Add an eDP panel entry for AUO B133UAN02.1.
-> > 
-> > Due to lack of documentation, use the delay_200_500_e50 timings like
-> > some other AUO entries for now.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On 8/22/22 16:10, luca.ceresoli@bootlin.com wrote:
+> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 > 
-> Any comments to this one?
+> "intension" should have probably been "intention", however "intent" seems
+> even better.
 > 
-> It looks like it hasn't shown up in the dri-devel patchwork and just
-> want to make sure it isn't lost.
+> Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 > 
-> Rob Clark mentioned something about a spam filter on IRC.
 
-This one still hasn't been picked up.
+The typo error is introduced in [2/3], so it makes sense to squash this
+to the errored patch.
 
-Is this something you can do, Doug? I noticed you applied a couple of
-patches to this driver recently.
-
-Or who is really responsible for this driver?
-
-> > ---
-> >  drivers/gpu/drm/panel/panel-edp.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-> > index fe3897b86665..30f69cd8f9ee 100644
-> > --- a/drivers/gpu/drm/panel/panel-edp.c
-> > +++ b/drivers/gpu/drm/panel/panel-edp.c
-> > @@ -1845,6 +1845,7 @@ static const struct panel_delay delay_100_500_e200 = {
-> >   * Sort first by vendor, then by product ID.
-> >   */
-> >  static const struct edp_panel_entry edp_panels[] = {
-> > +	EDP_PANEL_ENTRY('A', 'U', 'O', 0x1e9b, &delay_200_500_e50, "B133UAN02.1"),
-> >  	EDP_PANEL_ENTRY('A', 'U', 'O', 0x405c, &auo_b116xak01.delay, "B116XAK01"),
-> >  	EDP_PANEL_ENTRY('A', 'U', 'O', 0x615c, &delay_200_500_e50, "B116XAN06.1"),
-> >  	EDP_PANEL_ENTRY('A', 'U', 'O', 0x8594, &delay_200_500_e50, "B133UAN01.0"),
-
-Johan
+-- 
+An old man doll... just what I always wanted! - Clara

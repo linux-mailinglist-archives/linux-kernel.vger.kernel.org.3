@@ -2,168 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B5859CB85
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B405959CB8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 00:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238436AbiHVWeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 18:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51188 "EHLO
+        id S238457AbiHVWfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 18:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234431AbiHVWea (ORCPT
+        with ESMTP id S238460AbiHVWfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 18:34:30 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D4C42AD5
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:34:28 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id s5so4936111uar.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:34:28 -0700 (PDT)
+        Mon, 22 Aug 2022 18:35:23 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BC4481E0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:35:19 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id v10so11933854ljh.9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 15:35:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=iZ4aTKxmgzYAEVUnlcLNmF4cSAWmUwWq1yIkniS2lL0=;
-        b=rtT+NsCSQka7KbyH7rAcBe92sgRFz606wyn75s7/lsMN+Hcw+JArgHz5ZqoCcW/8Rk
-         zPa0OaypuRKQbIm/dttjw3wlbfBYGB+VeWZOeQ4Y8cdFOeaWpYEQW0ZaJ6pzZGsPoxmY
-         //aByMBzPgAyM+2jHfOzM5sOLr8PTlp0IW4hx0M8wddu573kFri7H3v8UKlXpIcXDO8a
-         r/NIQDmwPwK40IKxM99L1c733FRFNIpV0Euik7VpUNq3WGBJYcjY3DoKzCphZPkk268+
-         V7NaIVePZZK7OlMf1Stu0q0plaMhsb/2GMXh7/SSWgFERJJ6Uy2MVrl5WHmGm/rfC9+I
-         LWiQ==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=/3Qz2I07qNsEqmUXX8sV18RiE73NXZbJtJL/a6pTzOM=;
+        b=oWPtAluKai50SM+qKue2D41Qzws4/k+V5RWd5eefNxz1X9aicH59ZvpfnjRJXMaLQs
+         oqxP/yJYA/pA0XUC3IAQ2pMsUZC5KWJCBsJB87xXEHpXJYh3UsodLH0bSrdVTyW8PqVU
+         fl7bU/ZoUTjyKr6lYqkht34lemnsdk4xtG++3RabmhF1f8ccW1cPhtNqTlSyiEEcsLzu
+         YmlkZJbQ8uLeYszYrnjAf1BiPDqMYPF7w2OYYQuBY8Qlu0DW1tannUkwgTEalQVTDxVO
+         5e5PuucVBSjpt4Fd7T9Y4gljaVUNRJApsbm1Vq6Mzh8cdPFYHKbekz+4ISdZpBbhyJKO
+         Yejw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=iZ4aTKxmgzYAEVUnlcLNmF4cSAWmUwWq1yIkniS2lL0=;
-        b=vT58pkgDMnvot90/rNd13i8WSJK0TjR4uVuVaXKsyYbEwULH1o5aIhGbCRxNqyH8/u
-         rsViF/FRTpu5i/sTXQxBfbDsH4HRgZCewoxltpab2VH5K/LSn/mH7mvy0hi+S2BC272N
-         p/8cTynMwx0eJvsk29kE4Inb0CflMjMVewYf04kdDSmJh9+JrAXSUn+nzRpUnARcIi3w
-         nOMShVsVVAkKmwn60pXqOCQpZDzucNMm5FDtyUZeJ6HDR39m0YloMF9QQucKhwk6GyPE
-         ENQOgOMXtS4OPkw3WcFYjGr639nsuEbaTxKhhqCN0zkEIG75yQ/ysSE5cjmaseGNdKJa
-         k/Og==
-X-Gm-Message-State: ACgBeo1KBE5SWOl89mIzBV+DbG0dJ80PlWCMGW2/L40Gj0AcVXCqiVUW
-        sHB7DvKWnD3vwwgceWn+IGfju2CVQ2dA8LzdojmDZg==
-X-Google-Smtp-Source: AA6agR7IQdMHvp5x/ilzybc9F3dX6tIA926NxCQb6p6jY5QhGizH1xIddOda33LFsoE769hy9fge67U5zAGfEu8ZFEA=
-X-Received: by 2002:ab0:5ac1:0:b0:39f:1ea5:250e with SMTP id
- x1-20020ab05ac1000000b0039f1ea5250emr199069uae.70.1661207667742; Mon, 22 Aug
- 2022 15:34:27 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=/3Qz2I07qNsEqmUXX8sV18RiE73NXZbJtJL/a6pTzOM=;
+        b=HfDssGrkmGjLFplDYdOqNFzUsq0XFrbypPmKRPJMp75eb1cfYL5ecVpir3e/utQ6jl
+         1D1xTlGVIJbw4gAMMCcNZ4EPm42Pn3drZLls+qhiei8iE61puvCqcs3u8SrPLaD8S1gX
+         PwYsP8PIIXtdfeEj0AW7W8UR0agadhUUqkekxIeU7mzPafKIp4im1+mNdO6Ez5I+EroA
+         LbvImBLamkqu23tWayej0wVztaOtZetbNPnapkwu8nEooGie1myd+2FeG/34GVA3a5zC
+         ZwD3F4ryfdHGkbkmNjgxnJl7vgW+6ayVsqupmwVRAY8Q6arjYufq3Sppx6fdOyWvF54v
+         pqvA==
+X-Gm-Message-State: ACgBeo2dChqrk+qq4iTp2CO3B4s0ZDJHlEYmYTpAYtTFk5u1f9hvL50l
+        7RKC9X4XKWGEzMubnwhA/I0wDGNvuv1hnK/ka28XCg==
+X-Google-Smtp-Source: AA6agR7Tldikzvhh2Bk23FXDw9lViwJukpyd5ZjJCRNzpjlVddMHxOB5z715HFFouGcVhLUk2TreqJEweh3FvxQ/Ygg=
+X-Received: by 2002:a2e:9dc5:0:b0:25e:6fa0:1243 with SMTP id
+ x5-20020a2e9dc5000000b0025e6fa01243mr6684227ljj.513.1661207718102; Mon, 22
+ Aug 2022 15:35:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220531223100.510392-1-surenb@google.com> <20220531223100.510392-2-surenb@google.com>
- <20220822152119.96d40c884078229ee3e6b25e@linux-foundation.org>
-In-Reply-To: <20220822152119.96d40c884078229ee3e6b25e@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 22 Aug 2022 16:33:51 -0600
-Message-ID: <CAOUHufbysRjhX_AiFirjvWCR129t4_bELd1wFQG+fBsZpzhgYw@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>, brauner@kernel.org,
-        hch@infradead.org, oleg@redhat.com,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
+References: <20220805154231.31257-1-ojeda@kernel.org> <20220805154231.31257-24-ojeda@kernel.org>
+In-Reply-To: <20220805154231.31257-24-ojeda@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 22 Aug 2022 15:35:05 -0700
+Message-ID: <CAKwvOd=y5T9bh4398K+5=82q=vVbkjQQ76KyXLy-qoM2Tph08A@mail.gmail.com>
+Subject: Re: [PATCH v9 23/27] Kbuild: add Rust support
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, patches@lists.linux.dev,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Douglas Su <d0u9.su@outlook.com>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kbuild@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 4:21 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+ On Fri, Aug 5, 2022 at 8:44 AM Miguel Ojeda <ojeda@kernel.org> wrote:
 >
-> On Tue, 31 May 2022 15:31:00 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
->
-> > With the last usage of MMF_OOM_VICTIM in exit_mmap gone, this flag is
-> > now unused and can be removed.
-> >
-> > ...
-> >
-> > --- a/include/linux/oom.h
-> > +++ b/include/linux/oom.h
-> > @@ -77,15 +77,6 @@ static inline bool tsk_is_oom_victim(struct task_struct * tsk)
-> >       return tsk->signal->oom_mm;
-> >  }
-> >
-> > -/*
-> > - * Use this helper if tsk->mm != mm and the victim mm needs a special
-> > - * handling. This is guaranteed to stay true after once set.
-> > - */
-> > -static inline bool mm_is_oom_victim(struct mm_struct *mm)
-> > -{
-> > -     return test_bit(MMF_OOM_VICTIM, &mm->flags);
-> > -}
-> > -
->
-> The patch "mm: multi-gen LRU: support page table walks" from the MGLRU
-> series
-> (https://lkml.kernel.org/r/20220815071332.627393-9-yuzhao@google.com)
-> adds two calls to mm_is_oom_victim(), so my build broke.
->
-> I assume the fix is simply
->
-> --- a/mm/vmscan.c~mm-delete-unused-mmf_oom_victim-flag-fix
-> +++ a/mm/vmscan.c
-> @@ -3429,9 +3429,6 @@ static bool should_skip_mm(struct mm_str
->         if (size < MIN_LRU_BATCH)
->                 return true;
->
-> -       if (mm_is_oom_victim(mm))
-> -               return true;
-> -
->         return !mmget_not_zero(mm);
->  }
->
-> @@ -4127,9 +4124,6 @@ restart:
->
->                 walk_pmd_range(&val, addr, next, args);
->
-> -               if (mm_is_oom_victim(args->mm))
-> -                       return 1;
-> -
->                 /* a racy check to curtail the waiting time */
->                 if (wq_has_sleeper(&walk->lruvec->mm_state.wait))
->                         return 1;
-> _
->
-> Please confirm?
+> Having most of the new files in place, we now enable Rust support
+> in the build system, including `Kconfig` entries related to Rust,
+> the Rust configuration printer and a few other bits.
 
-LGTM.  The deleted checks are not about correctness.
+Cool, I'm finally happy with this patch.
 
-I've queued
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -3402,7 +3402,7 @@ static bool should_skip_mm(struct mm_struct *mm,
-struct lru_gen_mm_walk *walk)
-        if (size < MIN_LRU_BATCH)
-                return true;
+I built and boot tested with CONFIG_RUST enabled, played with
+CLIPPY=3D1, and built all of the new make targets for rust.
 
--       if (mm_is_oom_victim(mm))
-+       if (test_bit(MMF_OOM_REAP_QUEUED, &mm->flags))
-                return true;
+Thanks for all of the work that went into these series from all of the
+authors and Miguel for your determination. Keep it up!
 
-        return !mmget_not_zero(mm);
-@@ -4109,7 +4109,7 @@ static int walk_pud_range(p4d_t *p4d, unsigned
-long start, unsigned long end,
+I've left comments on other patches (and I will leave one on
+rust/compiler_builtins.rs because I still don't like that approach)
+and there may be small cleanups we can do here or there, but I think
+we're in good shape to land something and start iterating on it
+upstream.  I'll file bugs in your issue tracker for small nits I come
+across, but so far, it's been more-so questions.
 
-                walk_pmd_range(&val, addr, next, args);
+---
 
--               if (mm_is_oom_victim(args->mm))
-+               if (test_bit(MMF_OOM_REAP_QUEUED, &args->mm->flags))
-                        return 1;
+LWN recently demonstrated that most fixes are in relatively younger
+code: https://lwn.net/Articles/902854/
 
-                /* a racy check to curtail the waiting time */
+An analysis of 0day exploits found in the wild in 2021 showed that for
+Android, researchers are attacking drivers:
+https://googleprojectzero.blogspot.com/2022/04/the-more-you-know-more-you-k=
+now-you.html
+
+Multiple independent reports cite high numbers (70% or more) of memory
+safety issues in native code:
+https://www.memorysafety.org/docs/memory-safety/
+
+I have colleagues that are developing a microkernel (they then use a
+memory unsafe language for their kernel as well :^P ) to move as much
+functionality as possible into lower levels of privilege.  It's
+interesting and I wish them well, but I also prefer more incremental
+approaches to existing solutions, and suspect the way of the monolith
+to still give us the best performance.
+
+I learned an interesting word the other day: Corten Steel
+from the YouTube channel Practical Engineering (it's a great channel
+on Civil Engineering):
+https://www.youtube.com/watch?v=3D2RbiCOFffRs&t=3D523s
+transcript:
+
+>> I should also note that there are even steel alloys whose rust is protec=
+tive! Weathering steel (sometimes known by its trade name of Corten Steel) =
+is a group of alloys that are naturally resilient against rust because of p=
+assivation. A special blend of elements, including manganese, nickel, silic=
+on, and chromium don=E2=80=99t keep the steel from rusting, but they allow =
+the layer of rust to stay attached, forming a protective layer that signifi=
+cantly slows corrosion.
+
+My hope is that Rust may provide a layer of Corten Steel to the Linux
+kernel to help us protect newly written driver code from memory safety
+related issues, so that Linux remains the best option for developing
+products for the next 30 years. I also suspect it may bring in a whole
+new generation of hackers to the kernel ecosystem.  That is my
+blessing for Rust in the Linux kernel.
+--
+Thanks,
+~Nick Desaulniers

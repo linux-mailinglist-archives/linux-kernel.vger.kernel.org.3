@@ -2,148 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E4359CBF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 01:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9D059CBFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 Aug 2022 01:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238211AbiHVXMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 19:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
+        id S231774AbiHVXPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 19:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238118AbiHVXMv (ORCPT
+        with ESMTP id S238118AbiHVXPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 19:12:51 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2C9474C4;
-        Mon, 22 Aug 2022 16:12:48 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id w29so6238854pfj.3;
-        Mon, 22 Aug 2022 16:12:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=RJgmW2b+G8hXZiK3ZuEGABCQXwn51u/i1lC21liP/hM=;
-        b=jmj/omCdwVIDuiWAp4qQLVmEt6FUbOlW0MvTdUyY90z419tVNF+7hGAm22OUgI7XhL
-         68zqoxK9CeaBCdEe4aViSysskDc/iKcCOoNhojtXcC5Pddokca2kR2PfBKkSi85pgfPK
-         g/j+JEqJEMSH032a4ZijbnlxKYuJjc8NTDAZwtnqQC9JzNNsET06Jod6dr/dB8chp8r8
-         LeQJNWsdylf05m+yBL//WT6mfFv/a/nYak8ipa7VSIA2JRxv1o6THqPug6LM/Mu3S5Hb
-         Oh2naRDNd/YrChLNim2mjGvvHjwvrSau9cuOIK5ZE/5l5cqajpL09QdvidM41dKdFK/j
-         Ld1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=RJgmW2b+G8hXZiK3ZuEGABCQXwn51u/i1lC21liP/hM=;
-        b=RlzgEzr2sqjSHFsyydP94F3HyIELUmzQB93XkRKzUI1BbKqZ99yFQphoe7PwY7i8bW
-         xShnkGrqEcUdL6wlZOXHZQD34SBvSFeYT8lTXGReZ7ZYhJLlzalb+Em8VRpk8EzyylkJ
-         SrG3fn3TkY3azo/atfvzLN6T3EM60QqyKm3sVV4fZ1UtsEM9A3Loqd5LvyNX+kilfOcN
-         rOwKrrkavrU7E7PdEt8nM+zpXzZZeTd/DPQgWfftoThibwed38se+MgVQojTIX1ZBgAW
-         FDPC1fm/3C8suO1dEnoNfjZtp+dJrqMtbv0Ev0fr4kIWKaaz9phkQpHMOF/AD2Z+SbTy
-         rQBQ==
-X-Gm-Message-State: ACgBeo1jWTu10vd2X5yqVYlxbAvuotx1yBEIRi5rSz48tN7afvl1GMtq
-        6QqLhe1fougiQV3ZNUd9a1K2wDMfIKK//VFdFzg=
-X-Google-Smtp-Source: AA6agR5g2knT+beY1JhsSfxLCH4lKMBaFfm1MSAs1YRElEg3QqXt7JjCt0Bmo9/fYFDI8GqyedTmwgAW60MNvgaP+bI=
-X-Received: by 2002:a63:cf0b:0:b0:419:f140:2876 with SMTP id
- j11-20020a63cf0b000000b00419f1402876mr18445354pgg.303.1661209967533; Mon, 22
- Aug 2022 16:12:47 -0700 (PDT)
+        Mon, 22 Aug 2022 19:15:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14222B27B
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 16:15:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E75861360
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 23:15:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75560C433C1;
+        Mon, 22 Aug 2022 23:15:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661210130;
+        bh=N8JZh6pTKTBOA0XZnc33h+Yp6alPmGRwIvBdJCN7Aj0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kb7T2sQGPK8dkH8EeeGqffGOH07c0WLL/cUPojmK0PWuWEC/9qff9K5/pcb71ucbX
+         TlSCxNoE0q9kQd/0p0rUX1tf4vl+KwAl0hNpMFfHWIJlCjwWw5uAP51kTkuuaDDcWF
+         HoDILhaI9E4Srjc+WuIQ6N4rw/uf5UjEtx3lOnbt3krsmf/LQgtkqwnVPE3MIJv71w
+         PtJcNzHNFD7gwXJqLvEYSuqx4DWnkJ5mYCVQgBAlE35YpYI2/HNr2zI6uO7ATuiIyN
+         W7Ckomynycpk/iWVBOfsUYFHgfMqznUDQihU7GXwmkthSiyel2iCCVZSw3bJ7ixn89
+         drvYT/Kic2bpg==
+Received: by pali.im (Postfix)
+        id 8AF9697B; Tue, 23 Aug 2022 01:15:27 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Nick Child <nick.child@ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] powerpc: Add support for early debugging via Serial 16550 console
+Date:   Tue, 23 Aug 2022 01:15:01 +0200
+Message-Id: <20220822231501.16827-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220819211254.22192-1-pali@kernel.org>
+References: <20220819211254.22192-1-pali@kernel.org>
 MIME-Version: 1.0
-References: <20220819053234.241501-1-tales.aparecida@gmail.com>
- <20220819053234.241501-8-tales.aparecida@gmail.com> <CAGS_qxoVuRPF39kcVBWGuhnmaixfLAkPN6HaDRyuXmDHqmWPXg@mail.gmail.com>
- <CAGVoLp6CQO=Vw20GYYoYUEZr4BJM5FS8H8Fi3TgS0aXWVie4Lg@mail.gmail.com> <CAGS_qxrGVHWiEQz5b+zWz0JYmUwxnsVaoa_8SYOxb7nsRZ=iSw@mail.gmail.com>
-In-Reply-To: <CAGS_qxrGVHWiEQz5b+zWz0JYmUwxnsVaoa_8SYOxb7nsRZ=iSw@mail.gmail.com>
-From:   Tales <tales.aparecida@gmail.com>
-Date:   Mon, 22 Aug 2022 20:12:09 -0300
-Message-ID: <CAGVoLp5zv5CR_Jo-dboaYF+7_8whV=rvfJHRGeVhNRTn6LzMoA@mail.gmail.com>
-Subject: Re: [PATCH 7/8] lib: overflow: update reference to kunit-tool
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Sadiya Kazi <sadiyakazi@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        linux-doc@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, David Gow <davidgow@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
-        Melissa Wen <mwen@igalia.com>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Magali Lemes <magalilemes00@gmail.com>,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em seg., 22 de ago. de 2022 =C3=A0s 19:52, Daniel Latypov
-<dlatypov@google.com> escreveu:
->
-> On Mon, Aug 22, 2022 at 3:35 PM Tales <tales.aparecida@gmail.com> wrote:
-> >
-> > Hi Daniel,
-> >
-> > Em seg., 22 de ago. de 2022 =C3=A0s 17:09, Daniel Latypov
-> > <dlatypov@google.com> escreveu:
-> > >
-> > > On Thu, Aug 18, 2022 at 10:33 PM Tales Aparecida
-> > > <tales.aparecida@gmail.com> wrote:
-> > > >
-> > > > Replace URL with an updated path to the full Documentation page
-> > > >
-> > > > Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
-> > > > ---
-> > > >  lib/overflow_kunit.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-> > > > index 7e3e43679b73..78075106c0df 100644
-> > > > --- a/lib/overflow_kunit.c
-> > > > +++ b/lib/overflow_kunit.c
-> > > > @@ -1,7 +1,7 @@
-> > > >  // SPDX-License-Identifier: GPL-2.0 OR MIT
-> > > >  /*
-> > > >   * Test cases for arithmetic overflow checks. See:
-> > > > - * https://www.kernel.org/doc/html/latest/dev-tools/kunit/kunit-to=
-ol.html#configuring-building-and-running-tests
-> > > > + * "Running tests with kunit_tool" at Documentation/dev-tools/kuni=
-t/start.rst
-> > >
-> > > Oh, I thought I had sent a patch out for this.
-> > > The rewritten version of the patch is
-> > > https://www.kernel.org/doc/html/latest/dev-tools/kunit/run_wrapper.ht=
-ml
-> > > That's what I was intending to rewrite this line to point to.
-> > >
-> > > But if people like a Documentation/ path to start.rst instead, that a=
-lso works.
-> > >
-> > > Daniel
-> >
-> > You are absolutely right! You did send and I wasn't aware, sorry.
-> > https://lore.kernel.org/all/20220603195626.121922-1-dlatypov@google.com=
-/
-> > I guess it stalled after that discussion about *where* it should be app=
-lied,
-> > I got a green flag in IRC and didn't do my due diligence carefully,
-> > just tried to find pending patches at linux-kselftest which wasn't
-> > CC'd
->
-> Oh right, it was that series where I didn't cc linux-kselftest.
-> That was my bad, sorry.
->
-> But I had forgotten to include a patch in that series to update this
-> file still, afaict.
-> I could revive that series and add on a version of this patch, if we want=
-?
->
-> Daniel
+Currently powerpc early debugging contains lot of platform specific
+options, but does not support standard UART / serial 16550 console.
 
-I can bring your patches in my V3, if you don't mind! :D
+Later legacy_serial.c code supports registering UART as early debug console
+from device tree but it is not early during booting, but rather later after
+machine description code finishes.
+
+So for real early debugging via UART is current code unsuitable.
+
+Add support for new early debugging option CONFIG_PPC_EARLY_DEBUG_16550
+which enable Serial 16550 console on address defined by new option
+CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR and by stride by option
+CONFIG_PPC_EARLY_DEBUG_16550_STRIDE.
+
+With this change it is possible to debug powerpc machine descriptor code.
+For example this early debugging code can print on serial console also
+"No suitable machine description found" error which is done before
+legacy_serial.c code.
+
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+Changes in v2:
+* Move PPC_EARLY_DEBUG_16550 after PPC_EARLY_DEBUG_MEMCONS, so memcons stay default
+* Add missing dependency on PPC_UDBG_16550
+---
+Tested on P2020 board. It allowed me do debug and implement this patch series:
+https://lore.kernel.org/linuxppc-dev/20220819191557.28116-1-pali@kernel.org/
+---
+ arch/powerpc/Kconfig.debug       | 15 +++++++++++++++
+ arch/powerpc/include/asm/udbg.h  |  1 +
+ arch/powerpc/kernel/udbg.c       |  2 ++
+ arch/powerpc/kernel/udbg_16550.c | 33 ++++++++++++++++++++++++++++++++
+ 4 files changed, 51 insertions(+)
+
+diff --git a/arch/powerpc/Kconfig.debug b/arch/powerpc/Kconfig.debug
+index 9f363c143d86..ad7238d28fa9 100644
+--- a/arch/powerpc/Kconfig.debug
++++ b/arch/powerpc/Kconfig.debug
+@@ -283,6 +283,12 @@ config PPC_EARLY_DEBUG_MEMCONS
+ 	  This console provides input and output buffers stored within the
+ 	  kernel BSS and should be safe to select on any system. A debugger
+ 	  can then be used to read kernel output or send input to the console.
++
++config PPC_EARLY_DEBUG_16550
++	bool "Serial 16550"
++	depends on PPC_UDBG_16550
++	help
++	  Select this to enable early debugging via Serial 16550 console
+ endchoice
+ 
+ config PPC_MEMCONS_OUTPUT_SIZE
+@@ -355,6 +361,15 @@ config PPC_EARLY_DEBUG_CPM_ADDR
+ 	  platform probing is done, all platforms selected must
+ 	  share the same address.
+ 
++config PPC_EARLY_DEBUG_16550_PHYSADDR
++	hex "Early debug Serial 16550 physical address"
++	depends on PPC_EARLY_DEBUG_16550
++
++config PPC_EARLY_DEBUG_16550_STRIDE
++	int "Early debug Serial 16550 stride"
++	depends on PPC_EARLY_DEBUG_16550
++	default 1
++
+ config FAIL_IOMMU
+ 	bool "Fault-injection capability for IOMMU"
+ 	depends on FAULT_INJECTION
+diff --git a/arch/powerpc/include/asm/udbg.h b/arch/powerpc/include/asm/udbg.h
+index b4aa0d88ce2c..20b5a37ab772 100644
+--- a/arch/powerpc/include/asm/udbg.h
++++ b/arch/powerpc/include/asm/udbg.h
+@@ -53,6 +53,7 @@ extern void __init udbg_init_ehv_bc(void);
+ extern void __init udbg_init_ps3gelic(void);
+ extern void __init udbg_init_debug_opal_raw(void);
+ extern void __init udbg_init_debug_opal_hvsi(void);
++extern void __init udbg_init_debug_16550(void);
+ 
+ #endif /* __KERNEL__ */
+ #endif /* _ASM_POWERPC_UDBG_H */
+diff --git a/arch/powerpc/kernel/udbg.c b/arch/powerpc/kernel/udbg.c
+index b1544b2f6321..92b3fc258d11 100644
+--- a/arch/powerpc/kernel/udbg.c
++++ b/arch/powerpc/kernel/udbg.c
+@@ -67,6 +67,8 @@ void __init udbg_early_init(void)
+ 	udbg_init_debug_opal_raw();
+ #elif defined(CONFIG_PPC_EARLY_DEBUG_OPAL_HVSI)
+ 	udbg_init_debug_opal_hvsi();
++#elif defined(CONFIG_PPC_EARLY_DEBUG_16550)
++	udbg_init_debug_16550();
+ #endif
+ 
+ #ifdef CONFIG_PPC_EARLY_DEBUG
+diff --git a/arch/powerpc/kernel/udbg_16550.c b/arch/powerpc/kernel/udbg_16550.c
+index d3942de254c6..46f2d831d7c9 100644
+--- a/arch/powerpc/kernel/udbg_16550.c
++++ b/arch/powerpc/kernel/udbg_16550.c
+@@ -8,6 +8,7 @@
+ #include <asm/udbg.h>
+ #include <asm/io.h>
+ #include <asm/reg_a2.h>
++#include <asm/early_ioremap.h>
+ 
+ extern u8 real_readb(volatile u8 __iomem  *addr);
+ extern void real_writeb(u8 data, volatile u8 __iomem *addr);
+@@ -335,3 +336,35 @@ void __init udbg_init_debug_microwatt(void)
+ }
+ 
+ #endif /* CONFIG_PPC_EARLY_DEBUG_MICROWATT */
++
++#ifdef CONFIG_PPC_EARLY_DEBUG_16550
++
++static void __iomem *udbg_uart_early_addr;
++
++void __init udbg_init_debug_16550(void)
++{
++	udbg_uart_early_addr = early_ioremap(CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR, 0x1000);
++	udbg_uart_init_mmio(udbg_uart_early_addr, CONFIG_PPC_EARLY_DEBUG_16550_STRIDE);
++}
++
++static int __init udbg_init_debug_16550_ioremap(void)
++{
++	void __iomem *addr;
++
++	if (!udbg_uart_early_addr)
++		return 0;
++
++	addr = ioremap(CONFIG_PPC_EARLY_DEBUG_16550_PHYSADDR, 0x1000);
++	if (WARN_ON(!addr))
++		return -ENOMEM;
++
++	udbg_uart_init_mmio(addr, CONFIG_PPC_EARLY_DEBUG_16550_STRIDE);
++	early_iounmap(udbg_uart_early_addr, 0x1000);
++	udbg_uart_early_addr = NULL;
++
++	return 0;
++}
++
++early_initcall(udbg_init_debug_16550_ioremap);
++
++#endif /* CONFIG_PPC_EARLY_DEBUG_16550 */
+-- 
+2.20.1
+

@@ -2,126 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4139459C612
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FBE59C608
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 20:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbiHVSYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 14:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
+        id S237261AbiHVSYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 14:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237425AbiHVSYI (ORCPT
+        with ESMTP id S237419AbiHVSYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 14:24:08 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA141A81F;
-        Mon, 22 Aug 2022 11:24:03 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 11:23:56 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1661192642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bQzUYJbzeSJVtDIpGsHXApQTdq+ArDiyBUiXh9dJl9c=;
-        b=ko5CwHMhDHobyMV2JTCqgpMz2+52hcGSQVRXn7bUUUSzOzmxP9AFk+/mRkwC+S5zY6MqdX
-        F2q4LAhYZbvIHrC86yIgvLfaWvRCGsb0n0M91E3H2sYMBQDtjW1gtraZ1MHGzTdRTZPXQf
-        PJRtOi3CP/lPjq5dDiL0j6nSDxN5b2s=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Oliver Sang <oliver.sang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] mm: page_counter: remove unneeded atomic ops for
- low/min
-Message-ID: <YwPJvGL6ZhgrYTeK@P9FQF9L96D>
-References: <20220822001737.4120417-1-shakeelb@google.com>
- <20220822001737.4120417-2-shakeelb@google.com>
+        Mon, 22 Aug 2022 14:24:05 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87E9186FF
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:24:01 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id m5so5796172lfj.4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 11:24:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=YUkvI1ao2/nZxDR/89eZVr7JU17ee6mwpioKOX/GLZY=;
+        b=HMioaNJm47OPAgL2VVemQ/2Eh8rwyzmTnehI+gSZsKON0/Ef92tGqc/kO4FOnxLWaz
+         nTgPQ9Fb3VCTZZfFGr59o/4dZLg9WLSQrgGgvCnWy/sqDk5Xh3Sznulj2UB7gmyP4yNB
+         3OcmfFOQ0D7OcPj+MqWYKsMotG8eXQ0PhGpVEchXDC/QkBINwWSiaE7bjoGyWEzO0qs2
+         weXEuVzxB2GdIasi9mZp7XX2x1LLViIX3WsUctS+E4Eyczf2wp8FGw8vEdLNdErpwJxH
+         kdH6CXK/QKB/5hE+6oivPTJxqtULEBZmyJPrL2NXAyi8PzQkvyKv7EWNwgq5WIGeX00R
+         9RpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=YUkvI1ao2/nZxDR/89eZVr7JU17ee6mwpioKOX/GLZY=;
+        b=SnREM6WMuitYn5ZXy2AAty14fySJhG3cZORs6zJGXZh1V7mgVEJzf0mXVVYIFV47rv
+         /sbS97tKqzMjJN0n+nWUj/dAW3Q6DB+p/nxbTV/ftA6jcdWf3TBq80jvfXNT+816e2b0
+         he5+0YRkONxv93BTEflVqiuahI8zcpXRVWlflzPEXw5M6nhaFlSyjinJkNEXXENPHcRS
+         Z8LdRzDKoVagEqx7BXs0lRlwLE2RfaHEY9yUdAt32825uBiVhFK+Oc6rQNKjuKseEwLM
+         vs5F71SsnP4RShuM8ml1nPS3qlE5zch6yiMegIcmt1NYvdOKHXU/NnhFxIBd0iWHKS5/
+         KJpA==
+X-Gm-Message-State: ACgBeo0KTj4NnIEI+4+Q1lTC49Vz/6DISWmWKkXf2W1ipEZ2pHXN6l3w
+        uv3A3hEknTGGbKRXJKaafzAvWw==
+X-Google-Smtp-Source: AA6agR4uFLXZY0ERbKcHpfiocsUDUUbWcub0EKPrxynySnRHxbQNoNycvPcmDV3IZvEETskrA5XK1w==
+X-Received: by 2002:a05:6512:260f:b0:492:8e9f:c647 with SMTP id bt15-20020a056512260f00b004928e9fc647mr6944753lfb.443.1661192640110;
+        Mon, 22 Aug 2022 11:24:00 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id g13-20020ac24d8d000000b0048af92aed6bsm1440151lfe.175.2022.08.22.11.23.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 11:23:59 -0700 (PDT)
+Message-ID: <565960af-2c16-b066-c846-78fcce73c070@linaro.org>
+Date:   Mon, 22 Aug 2022 21:23:57 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822001737.4120417-2-shakeelb@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v6 05/17] dt-bindings: mfd: syscon: Add
+ amd,pensando-elba-syscon compatible
+Content-Language: en-US
+To:     Brad Larson <brad@pensando.io>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de, blarson@amd.com,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        gsomlo@gmail.com, gerg@linux-m68k.org, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
+        broonie@kernel.org, yamada.masahiro@socionext.com,
+        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
+        fancer.lancer@gmail.com, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, ulf.hansson@linaro.org, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20220820195750.70861-1-brad@pensando.io>
+ <20220820195750.70861-6-brad@pensando.io>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220820195750.70861-6-brad@pensando.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 12:17:35AM +0000, Shakeel Butt wrote:
-> For cgroups using low or min protections, the function
-> propagate_protected_usage() was doing an atomic xchg() operation
-> irrespectively. It only needs to do that operation if the new value of
-> protection is different from older one. This patch does that.
+On 20/08/2022 22:57, Brad Larson wrote:
+> From: Brad Larson <blarson@amd.com>
 > 
-> To evaluate the impact of this optimization, on a 72 CPUs machine, we
-> ran the following workload in a three level of cgroup hierarchy with top
-> level having min and low setup appropriately. More specifically
-> memory.min equal to size of netperf binary and memory.low double of
-> that.
+> Add the AMD Pensando Elba SoC system registers compatible.
 > 
->  $ netserver -6
->  # 36 instances of netperf with following params
->  $ netperf -6 -H ::1 -l 60 -t TCP_SENDFILE -- -m 10K
-> 
-> Results (average throughput of netperf):
-> Without (6.0-rc1)	10482.7 Mbps
-> With patch		14542.5 Mbps (38.7% improvement)
-> 
-> With the patch, the throughput improved by 38.7%
+> Signed-off-by: Brad Larson <blarson@amd.com>
 
-Nice savings!
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-> 
-> Signed-off-by: Shakeel Butt <shakeelb@google.com>
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> ---
->  mm/page_counter.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/mm/page_counter.c b/mm/page_counter.c
-> index eb156ff5d603..47711aa28161 100644
-> --- a/mm/page_counter.c
-> +++ b/mm/page_counter.c
-> @@ -17,24 +17,23 @@ static void propagate_protected_usage(struct page_counter *c,
->  				      unsigned long usage)
->  {
->  	unsigned long protected, old_protected;
-> -	unsigned long low, min;
->  	long delta;
->  
->  	if (!c->parent)
->  		return;
->  
-> -	min = READ_ONCE(c->min);
-> -	if (min || atomic_long_read(&c->min_usage)) {
-> -		protected = min(usage, min);
-> +	protected = min(usage, READ_ONCE(c->min));
-> +	old_protected = atomic_long_read(&c->min_usage);
-> +	if (protected != old_protected) {
->  		old_protected = atomic_long_xchg(&c->min_usage, protected);
->  		delta = protected - old_protected;
->  		if (delta)
->  			atomic_long_add(delta, &c->parent->children_min_usage);
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 
-What if there is a concurrent update of c->min_usage? Then the patched version
-can miss an update. I can't imagine a case when it will lead to bad consequences,
-so probably it's ok. But not super obvious.
-I think the way to think of it is that a missed update will be fixed by the next
-one, so it's ok to run some time with old numbers.
+If a tag was not added on purpose, please state why and what changed.
 
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-Thanks!
+
+Best regards,
+Krzysztof

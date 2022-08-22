@@ -2,152 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD1959C264
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EADB159C235
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236328AbiHVPM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
+        id S236094AbiHVPIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236453AbiHVPKy (ORCPT
+        with ESMTP id S236102AbiHVPII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:10:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F13402CE;
-        Mon, 22 Aug 2022 08:08:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661180887; x=1692716887;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AZ3zcJFxLqvw4hD/FAvZLDC1AGZmGOi9qxc+JOuXmN4=;
-  b=HgSRTyOy9C2Em8KRmDUMh1r+1UAS5wurIp9AaV2rSH75N1KOLrf90qas
-   GN5SBUiJZqi9mDs2xIOyekmeMGXRlwxLZyIX5a4/RhE+/5FHOTsRBhjJ5
-   gytp7kascbQonZNyqQmh0hJKs+H2O9/0MGGZx73ODhTfLLyDvYTEWnRhC
-   GEWXyNnCow/vFB2Zasovho8dAimdnSvGgMmQztPe4k64p7ZvBFiAKG8Dq
-   NJqLdkEzuc7cw9Q6ds5wJzeHPvEgWZoWA6XetG1wl8xY/V2O+L0Ho5i6q
-   rMz6F1alzqxaLUABQzjcIjMzJCOBtsnQQV/BafluRVTcFKtqa0ho8VTE5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="379727738"
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="379727738"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 08:06:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
-   d="scan'208";a="712213742"
-Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 22 Aug 2022 08:06:48 -0700
-Received: from kbuild by dd9b29378baa with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oQ90p-0000Mx-2I;
-        Mon, 22 Aug 2022 15:06:47 +0000
-Date:   Mon, 22 Aug 2022 23:05:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-doc@vger.kernel.org
-Subject: [linux-stable-rc:linux-5.18.y 3493/3591] htmldocs:
- Documentation/tty/device_drivers/oxsemi-tornado.rst:41: WARNING: Inline
- interpreted text or phrase reference start-string without end-string.
-Message-ID: <202208222259.iWiGmKuH-lkp@intel.com>
+        Mon, 22 Aug 2022 11:08:08 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB8F3B96C
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:06:30 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 73so9608946pgb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:06:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=rfnLOnYHfibKVs6Fb4CyKhxW8tJzjkgGwDzJoC+bA0Y=;
+        b=WrEDmTe0u3FiZugr1PESRLE48S+q7XVC3UauDjAcW6HIAjvR0HdyDSvY4Yh8Xv56pD
+         zPk2pcgIpSUnoaMXQGMFXbv7itfEgQxASZu3plwAPK03XvXa6lCQJD9NZXVJ5o1FBtB8
+         X3x7rF1QRsVh4MXlsOXYfj66zh30hHfyZ2JsCANksMqp18M7jGVX8W3hXJJrdalpRqiG
+         suK5gjJfRKexqrQW/aKqFE+rYX7mOOZjjtfZCMzUoTVD8zZSvk9fiLVnIeZIGLgGzJaA
+         dDSVJr3UUABWryrmO8Xl1VpIQ5ZWGOWL9XjGltxQGHICMF2l1LmnoW0euDwnBGjZS2e+
+         1bmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=rfnLOnYHfibKVs6Fb4CyKhxW8tJzjkgGwDzJoC+bA0Y=;
+        b=YxiRWlzmxQtiLnp+Lu8vyap65yXLYbjvBB0N6CeX7uw/wf3YY5Wr7Ys5Ai/YfDLS83
+         rDvfNbbnAdNqWFOVr45XdOBpTgFmUtvhQQDcUIh/gTb9H/MH8U7susntAIu3Tw2QWkAK
+         PHnMHM/cH4++SHZW9LbYl8Pz/Md19624dFfAOCpALpGHXZvLrO2aiVAUGOF6pCE9hnMk
+         Bs1XxAervRsSjFMQ5E3xncuIumSq5FaNEUF2J7koZ8Isbe3SVw3sq2AXzrndj91wgFPd
+         njs0DZd42VMEcq2kC19mCfLQruO8BqkcnzLiYA3FgDxrqVflfWsBDdY8dMY5FnCS6Z0N
+         TZ5A==
+X-Gm-Message-State: ACgBeo2R9NqnVEManHAM4Lto1TB5LW4+QjDXCCh4mXRMQvS/2qcAu4JC
+        Wei0rzz4lnp2qoAyxqs8tHHr4YiLEOGjEFbXNSXR+A==
+X-Google-Smtp-Source: AA6agR5ItK2qWDc7jjr7fBTr2W7+SERWzFKsbKa/joz2WD3UuK5X9GUCKjlxWu+Hd97AdsMRT/n9+/7Fvy1T5C4iolI=
+X-Received: by 2002:a05:6a00:2392:b0:52e:b4fb:848 with SMTP id
+ f18-20020a056a00239200b0052eb4fb0848mr21499685pfc.8.1661180785557; Mon, 22
+ Aug 2022 08:06:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220822001737.4120417-1-shakeelb@google.com> <20220822001737.4120417-3-shakeelb@google.com>
+ <YwNZD4YlRkvQCWFi@dhcp22.suse.cz>
+In-Reply-To: <YwNZD4YlRkvQCWFi@dhcp22.suse.cz>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Mon, 22 Aug 2022 08:06:14 -0700
+Message-ID: <CALvZod5pw_7hnH44hdC3rDGQxQB2XATrViNNGosG3FnUoWo-4A@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mm: page_counter: rearrange struct page_counter fields
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Oliver Sang <oliver.sang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-head:   22a992953741ad79c07890d3f4104585e52ef26b
-commit: ca2e1cc1f82f619eeb2aa22f06f01097bac355fd [3493/3591] serial: 8250: Add proper clock handling for OxSemi PCIe devices
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=ca2e1cc1f82f619eeb2aa22f06f01097bac355fd
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.18.y
-        git checkout ca2e1cc1f82f619eeb2aa22f06f01097bac355fd
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+On Mon, Aug 22, 2022 at 3:23 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 22-08-22 00:17:36, Shakeel Butt wrote:
+> > With memcg v2 enabled, memcg->memory.usage is a very hot member for
+> > the workloads doing memcg charging on multiple CPUs concurrently.
+> > Particularly the network intensive workloads. In addition, there is a
+> > false cache sharing between memory.usage and memory.high on the charge
+> > path. This patch moves the usage into a separate cacheline and move all
+> > the read most fields into separate cacheline.
+> >
+> > To evaluate the impact of this optimization, on a 72 CPUs machine, we
+> > ran the following workload in a three level of cgroup hierarchy with top
+> > level having min and low setup appropriately. More specifically
+> > memory.min equal to size of netperf binary and memory.low double of
+> > that.
+>
+> Again the workload description is not particularly useful. I guess the
+> only important aspect is the netserver part below and the number of CPUs
+> because min and low setup doesn't have much to do with this, right? At
+> least that is my reading of the memory.high mentioned above.
+>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The experiment numbers below are for only this patch independently
+i.e. the unnecessary min/low atomic xchg() is still happening for both
+setups. I could run the experiment without setting min and low but I
+wanted to keep the setup exactly the same for all three optimizations.
 
-All warnings (new ones prefixed by >>):
+This patch and the following perf numbers shows only the impact of
+removing false sharing in struct page_counter for memcg->memory on the
+charging code path.
 
->> Documentation/tty/device_drivers/oxsemi-tornado.rst:41: WARNING: Inline interpreted text or phrase reference start-string without end-string.
->> Documentation/tty/device_drivers/oxsemi-tornado.rst:96: WARNING: Block quote ends without a blank line; unexpected unindent.
->> Documentation/tty/device_drivers/oxsemi-tornado.rst: WARNING: document isn't included in any toctree
+> >  $ netserver -6
+> >  # 36 instances of netperf with following params
+> >  $ netperf -6 -H ::1 -l 60 -t TCP_SENDFILE -- -m 10K
+> >
+> > Results (average throughput of netperf):
+> > Without (6.0-rc1)     10482.7 Mbps
+> > With patch            12413.7 Mbps (18.4% improvement)
+> >
+> > With the patch, the throughput improved by 18.4%.
+> >
+> > One side-effect of this patch is the increase in the size of struct
+> > mem_cgroup. However for the performance improvement, this additional
+> > size is worth it. In addition there are opportunities to reduce the size
+> > of struct mem_cgroup like deprecation of kmem and tcpmem page counters
+> > and better packing.
+> >
+> > Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > ---
+> >  include/linux/page_counter.h | 34 +++++++++++++++++++++++-----------
+> >  1 file changed, 23 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/include/linux/page_counter.h b/include/linux/page_counter.h
+> > index 679591301994..8ce99bde645f 100644
+> > --- a/include/linux/page_counter.h
+> > +++ b/include/linux/page_counter.h
+> > @@ -3,15 +3,27 @@
+> >  #define _LINUX_PAGE_COUNTER_H
+> >
+> >  #include <linux/atomic.h>
+> > +#include <linux/cache.h>
+> >  #include <linux/kernel.h>
+> >  #include <asm/page.h>
+> >
+> > +#if defined(CONFIG_SMP)
+> > +struct pc_padding {
+> > +     char x[0];
+> > +} ____cacheline_internodealigned_in_smp;
+> > +#define PC_PADDING(name)     struct pc_padding name
+> > +#else
+> > +#define PC_PADDING(name)
+> > +#endif
+> > +
+> >  struct page_counter {
+> > +     /*
+> > +      * Make sure 'usage' does not share cacheline with any other field. The
+> > +      * memcg->memory.usage is a hot member of struct mem_cgroup.
+> > +      */
+> > +     PC_PADDING(_pad1_);
+>
+> Why don't you simply require alignment for the structure?
 
-vim +41 Documentation/tty/device_drivers/oxsemi-tornado.rst
-
-    40	
-  > 41	Here are the figures for the standard and some non-standard baud rates
-    42	(including those quoted in Oxford Semiconductor documentation), giving
-    43	the requested rate (r), the actual rate yielded (a) and its deviation
-    44	from the requested rate (d), and the values of the oversampling rate
-    45	(tcr), the clock prescaler (cpr) and the divisor (div) produced by the
-    46	new `get_divisor' handler:
-    47	
-    48	r: 15625000, a: 15625000.00, d:  0.0000%, tcr:  4, cpr:  1.000, div:     1
-    49	r: 12500000, a: 12500000.00, d:  0.0000%, tcr:  5, cpr:  1.000, div:     1
-    50	r: 10416666, a: 10416666.67, d:  0.0000%, tcr:  6, cpr:  1.000, div:     1
-    51	r:  8928571, a:  8928571.43, d:  0.0000%, tcr:  7, cpr:  1.000, div:     1
-    52	r:  7812500, a:  7812500.00, d:  0.0000%, tcr:  8, cpr:  1.000, div:     1
-    53	r:  4000000, a:  4000000.00, d:  0.0000%, tcr:  5, cpr:  3.125, div:     1
-    54	r:  3686400, a:  3676470.59, d: -0.2694%, tcr:  8, cpr:  2.125, div:     1
-    55	r:  3500000, a:  3496503.50, d: -0.0999%, tcr: 13, cpr:  1.375, div:     1
-    56	r:  3000000, a:  2976190.48, d: -0.7937%, tcr: 14, cpr:  1.500, div:     1
-    57	r:  2500000, a:  2500000.00, d:  0.0000%, tcr: 10, cpr:  2.500, div:     1
-    58	r:  2000000, a:  2000000.00, d:  0.0000%, tcr: 10, cpr:  3.125, div:     1
-    59	r:  1843200, a:  1838235.29, d: -0.2694%, tcr: 16, cpr:  2.125, div:     1
-    60	r:  1500000, a:  1492537.31, d: -0.4975%, tcr:  5, cpr:  8.375, div:     1
-    61	r:  1152000, a:  1152073.73, d:  0.0064%, tcr: 14, cpr:  3.875, div:     1
-    62	r:   921600, a:   919117.65, d: -0.2694%, tcr: 16, cpr:  2.125, div:     2
-    63	r:   576000, a:   576036.87, d:  0.0064%, tcr: 14, cpr:  3.875, div:     2
-    64	r:   460800, a:   460829.49, d:  0.0064%, tcr:  7, cpr:  3.875, div:     5
-    65	r:   230400, a:   230414.75, d:  0.0064%, tcr: 14, cpr:  3.875, div:     5
-    66	r:   115200, a:   115207.37, d:  0.0064%, tcr: 14, cpr:  1.250, div:    31
-    67	r:    57600, a:    57603.69, d:  0.0064%, tcr:  8, cpr:  3.875, div:    35
-    68	r:    38400, a:    38402.46, d:  0.0064%, tcr: 14, cpr:  3.875, div:    30
-    69	r:    19200, a:    19201.23, d:  0.0064%, tcr:  8, cpr:  3.875, div:   105
-    70	r:     9600, a:     9600.06, d:  0.0006%, tcr:  9, cpr:  1.125, div:   643
-    71	r:     4800, a:     4799.98, d: -0.0004%, tcr:  7, cpr:  2.875, div:   647
-    72	r:     2400, a:     2400.02, d:  0.0008%, tcr:  9, cpr:  2.250, div:  1286
-    73	r:     1200, a:     1200.00, d:  0.0000%, tcr: 14, cpr:  2.875, div:  1294
-    74	r:      300, a:      300.00, d:  0.0000%, tcr: 11, cpr:  2.625, div:  7215
-    75	r:      200, a:      200.00, d:  0.0000%, tcr: 16, cpr:  1.250, div: 15625
-    76	r:      150, a:      150.00, d:  0.0000%, tcr: 13, cpr:  2.250, div: 14245
-    77	r:      134, a:      134.00, d:  0.0000%, tcr: 11, cpr:  2.625, div: 16153
-    78	r:      110, a:      110.00, d:  0.0000%, tcr: 12, cpr:  1.000, div: 47348
-    79	r:       75, a:       75.00, d:  0.0000%, tcr:  4, cpr:  5.875, div: 35461
-    80	r:       50, a:       50.00, d:  0.0000%, tcr: 16, cpr:  1.250, div: 62500
-    81	r:       25, a:       25.00, d:  0.0000%, tcr: 16, cpr:  2.500, div: 62500
-    82	r:        4, a:        4.00, d:  0.0000%, tcr: 16, cpr: 20.000, div: 48828
-    83	r:        2, a:        2.00, d:  0.0000%, tcr: 16, cpr: 40.000, div: 48828
-    84	r:        1, a:        1.00, d:  0.0000%, tcr: 16, cpr: 63.875, div: 61154
-    85	
-    86	With the baud base set to 15625000 and the unsigned 16-bit UART_DIV_MAX
-    87	limitation imposed by `serial8250_get_baud_rate' standard baud rates
-    88	below 300bps become unavailable in the regular way, e.g. the rate of
-    89	200bps requires the baud base to be divided by 78125 and that is beyond
-    90	the unsigned 16-bit range.  The historic spd_cust feature can still be
-    91	used by encoding the values for, the prescaler, the oversampling rate
-    92	and the clock divisor (DLM/DLL) as follows to obtain such rates if so
-    93	required:
-    94	
-    95	 31 29 28             20 19   16 15                            0
-  > 96	+-----+-----------------+-------+-------------------------------+
-    97	|0 0 0|    CPR2:CPR     |  TCR  |            DLM:DLL            |
-    98	+-----+-----------------+-------+-------------------------------+
-    99	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I don't just want the alignment of the structure. I want different
+fields of this structure to not share the cache line. More
+specifically the 'high' and 'usage' fields. With this change the usage
+will be its own cache line, the read-most fields will be on separate
+cache line and the fields which sometimes get updated on charge path
+based on some condition will be a different cache line from the
+previous two.

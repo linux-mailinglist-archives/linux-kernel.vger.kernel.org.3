@@ -2,142 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A63C59BF05
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB9C59BF0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 13:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234310AbiHVLzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 07:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
+        id S233777AbiHVLzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 07:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234192AbiHVLzV (ORCPT
+        with ESMTP id S229749AbiHVLzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 07:55:21 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601981408A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:55:19 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id s6so3660495lfo.11
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 04:55:19 -0700 (PDT)
+        Mon, 22 Aug 2022 07:55:13 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109905F67;
+        Mon, 22 Aug 2022 04:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=+w8P0+jPioBvyQX26soRJFaC6+SGfdkq8j/+0JNC+e0=;
-        b=AER/8rUkasnKGFksiHBr/K+aXL2clTOJNVuXg6OcUviHt2NDnY58m+ZqACS4ee9TRx
-         qEtl1ldAOea6CByntkGtXvhggmwgKKAWTAt7CeL9daZlpMX3n4WGfal3KgCXlRc0yXvu
-         3Ta9JCf3HOEFHhuwWQtHGEUfVTv0XXbFLGy5xhLzWgPps+pk69tl5cCpHYp+z8rLxTXO
-         mIb19Eg7N/Hx0A5uFABlQGgAeDfbWfyEHbZhO8CTQ6e9kObzERAOTyl5IhrGCzp7F/X5
-         6h7hUI9KtbUylHPJTxXY4ZG83ZhjjMAPw65m12NqeQhTQazdE/X7qf5gFyu64h6FWq6R
-         GpTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=+w8P0+jPioBvyQX26soRJFaC6+SGfdkq8j/+0JNC+e0=;
-        b=IrM9vG3huZPEqZBIx+nvpJK9t12ckNUNYCn74sfXr5Pwum8iDJ9gwmm3WoAXaEK6IK
-         VtyPUF9SBwfj/+9u4528ae7CcWLen1O5PpRNuu720C1hUx8fdhn1HBbOt3U9x+evwvi3
-         55RfxHY2+GsukVau8tIzbYLzWk37ANRRhgg/U3qbRYz3J41hR5TQXHyR5IHSwssq84/K
-         lxS/Qh8bcCAaxgAffhYsPugcLxDEdRHjAuCRIYTEHtlv0CqvmdR6S/PQPRk0k26jivfy
-         qLuEnomvxHv7UXCGO5tk0Ug0vE6tZj/imErgwYJTsp9vjRHwUVIeOC0RBd60XTSfZk40
-         69TQ==
-X-Gm-Message-State: ACgBeo34uVG+66xmYmDDjfLtsX30rXl2o5c1R4NqA0KvR+tN/vY5Lh8A
-        6UWkpNPle0M20vFXggHPsklssLOCukVIagFZuUYPUA==
-X-Google-Smtp-Source: AA6agR4TgMFnxun6qmWiRUjIOb95MacJPMwE2CqoxsUC5JiAXN89Frr0O4gZNCNpcV8Qzc9RSnpV70qRhd8su2IRP6c=
-X-Received: by 2002:a05:6512:239f:b0:491:cd95:f67d with SMTP id
- c31-20020a056512239f00b00491cd95f67dmr6606005lfv.184.1661169317655; Mon, 22
- Aug 2022 04:55:17 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1661169314; x=1692705314;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=LHol80d0QNnSsMm0XGb4D7IAnOiH2Nib3sBTmd/UCIc=;
+  b=cHXgaMuTzmF3SUsSQb0J2ML8bVw2N8tahmTpoUqlZpZ3LvEN+ODNAEMu
+   EvsfwobdkO9EjT8G5Mszq141L1X5CsIwrgzMlw/doQdX9wg9uJPF3cNXM
+   OspeaV6KOIExfuV/lxzcVmOb6rxrdloN1YYd8JY0n5KopHQoY6gihPsPy
+   E=;
+Subject: Re: [PATCH v2 04/16] hwmon: (mr75203) add Moortec PVT controller
+ reset-control-skip property
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-6a4112b2.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 11:55:01 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-6a4112b2.us-west-2.amazon.com (Postfix) with ESMTPS id 938504C0013;
+        Mon, 22 Aug 2022 11:54:57 +0000 (UTC)
+Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
+ EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Mon, 22 Aug 2022 11:54:56 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Mon, 22 Aug 2022 11:54:57 +0000
+Received: from [10.220.236.67] (10.220.236.67) by mail-relay.amazon.com
+ (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Mon, 22 Aug 2022 11:54:52 +0000
+Message-ID: <9757d669-c205-4ccd-78e0-3af6941d3177@amazon.com>
+Date:   Mon, 22 Aug 2022 14:54:52 +0300
 MIME-Version: 1.0
-References: <20220819221616.2107893-1-saravanak@google.com> <20220819221616.2107893-4-saravanak@google.com>
-In-Reply-To: <20220819221616.2107893-4-saravanak@google.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 22 Aug 2022 13:54:41 +0200
-Message-ID: <CAPDyKFqFKm4t=ccs82Mb8Qaa6N+KxyNabpceYHWF4W6n2D+jPg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] Revert "PM: domains: Delete usage of driver_deferred_probe_check_state()"
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Peng Fan <peng.fan@nxp.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
+        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
+        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
+        <dwmw@amazon.co.uk>, <rtanwar@maxlinear.com>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220817054321.6519-1-farbere@amazon.com>
+ <20220817054321.6519-5-farbere@amazon.com>
+ <20220818195742.GA3287145@roeck-us.net>
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <20220818195742.GA3287145@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 20 Aug 2022 at 00:16, Saravana Kannan <saravanak@google.com> wrote:
+On 8/18/2022 11:01 PM, Guenter Roeck wrote:
+> On Wed, Aug 17, 2022 at 05:43:09AM +0000, Eliav Farber wrote:
+>> Adding a "reset-control-skip" bool property to the mr75203 node will
+>> avoid looking up and obtaining a reference to a reset controller.
+>>
 >
-> This reverts commit 5a46079a96451cfb15e4f5f01f73f7ba24ef851a.
->
-> Quite a few issues have been reported [1][2][3][4][5][6] on the original
-> commit. While about half of them have been fixed, I'll need to fix the rest
-> before driver_deferred_probe_check_state() can be deleted. So, revert the
-> deletion for now.
->
-> [1] - https://lore.kernel.org/all/DU0PR04MB941735271F45C716342D0410886B9@DU0PR04MB9417.eurprd04.prod.outlook.com/
-> [2] - https://lore.kernel.org/all/CM6REZS9Z8AC.2KCR9N3EFLNQR@otso/
-> [3] - https://lore.kernel.org/all/CAD=FV=XYVwaXZxqUKAuM5c7NiVjFz5C6m6gAHSJ7rBXBF94_Tg@mail.gmail.com/
-> [4] - https://lore.kernel.org/all/Yvpd2pwUJGp7R+YE@euler/
-> [5] - https://lore.kernel.org/lkml/20220601070707.3946847-2-saravanak@google.com/
-> [6] - https://lore.kernel.org/all/CA+G9fYt_cc5SiNv1Vbse=HYY_+uc+9OYPZuJ-x59bROSaLN6fw@mail.gmail.com/
->
-> Fixes: 5a46079a9645 ("PM: domains: Delete usage of driver_deferred_probe_check_state()")
-> Reported-by: Peng Fan <peng.fan@nxp.com>
-> Reported-by: Luca Weiss <luca.weiss@fairphone.com>
-> Reported-by: Doug Anderson <dianders@chromium.org>
-> Reported-by: Colin Foster <colin.foster@in-advantage.com>
-> Reported-by: Tony Lindgren <tony@atomide.com>
-> Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
-> Tested-by: Tony Lindgren <tony@atomide.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> This seems overly complex. WHy not just declare the "resets"
+> property optional ? 
+Fixed. I declared "resets" property  as optional, and modified the driver
+to support it being optional instead of the change I did.
+Will be part of next version.
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Kind regards
-Uffe
-
-> ---
->  drivers/base/power/domain.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 5a2e0232862e..55a10e6d4e2a 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2733,7 +2733,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->                 mutex_unlock(&gpd_list_lock);
->                 dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
->                         __func__, PTR_ERR(pd));
-> -               return -ENODEV;
-> +               return driver_deferred_probe_check_state(base_dev);
->         }
->
->         dev_dbg(dev, "adding to PM domain %s\n", pd->name);
-> --
-> 2.37.1.595.g718a3a8f04-goog
->
+--
+Thanks, Eliav

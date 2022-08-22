@@ -2,100 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BEF59C49C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F13059C4AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 19:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbiHVRG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 13:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
+        id S235984AbiHVRH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 13:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234656AbiHVRGy (ORCPT
+        with ESMTP id S234656AbiHVRHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 13:06:54 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326C8422C8
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:06:53 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id z2so14799125edc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:06:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=yq00nMAmmdOVK3LrfY7efLvJa1UyHrXxc7OvcasMVWw=;
-        b=u7IL+AKZZZNWXnISptZyq8hMQdrEpTcugXYWPxYgGiIx97VYEb/Ofzv2TnO9P/O8tD
-         SMVRlqX4avEXXdXRA0DDBDUGmUyibgcztVdWq5esziWmP8hdXVu7VwBmQv2VrJBSZ9a5
-         XOVuLnebN3mxOHNzVIfu8VPfT0dQjfmbVznTbX020e6AKj9REq5RBk+62u2fVb9AJZFC
-         bBE8N0dd7qrNYbGps0yw5FJyzXD2zFUWzO/JXsfPw+eBF3CfKVK06tPSY4mhB4AB2oPi
-         GqDdOAI/NJutt4g2B/+FIKVcZtvJL1HBuV+/Sju7XCM+zxeLYCxUvXVxbKaEkIG8PU6M
-         zeBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=yq00nMAmmdOVK3LrfY7efLvJa1UyHrXxc7OvcasMVWw=;
-        b=Xy+8mGCa7wI5B+yjQmMPgbAZUvoMO56lQG6kjuIe2lkNpiqezA5vzqK1Du2lHpVYju
-         P8/pMQkj1JuwhqE3a3uySsoUYsBlbZIFMFP9bjk2w0FRPtCT02Z3q3OZ48H8+gDj4USv
-         RsvilMrBbs+vXelHk/0yNsGvkpoaWcbbA6khzFdwXQ1X/fAka8KC5u5saiyENDk7/yJl
-         SMuYbrNWPFAa3YiJX7Vd+jARFfGWcPd9Pflta01fKjd1JFC3PoGD8c/wXWmwcD2x4xuD
-         Nx/7Mr4RRETsi0OVDrtGBLH4kTHHai4+/EEtgV7iL8MTSDvtqFuLk96ynaMEWH9AxoqX
-         JRmQ==
-X-Gm-Message-State: ACgBeo3LvsWOvH/XSxevKKFJ0jQTpYV3seTCeSTlYvUMIQvqKvGEAzMK
-        MBCRwnlxVvuYHohzEzwlB70CXRFYEwuklFnaEyGM3g==
-X-Google-Smtp-Source: AA6agR5R+Iw/Vr1KokMtpw8qpbmlXsE28LNUhVY9yJGMOoDcEQne6vWTGopnXYGv6KYqVbH43wTlHo7R85OQBsdeue8=
-X-Received: by 2002:a05:6402:11cf:b0:446:fbf6:bf with SMTP id
- j15-20020a05640211cf00b00446fbf600bfmr106473edw.259.1661188011671; Mon, 22
- Aug 2022 10:06:51 -0700 (PDT)
+        Mon, 22 Aug 2022 13:07:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE0B42AD4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 10:07:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661188024;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OZupmRZtcUtlH4659i6zFhdu2zNlFDA9+3SfaNsY/Ro=;
+        b=AtmD5/C8GJ8XbWko+Oa2wgtfg4Vr3p8m/Ca/O6LHDeyuccIePjp2FjSxYW5jT2tZTZSIPf
+        Iwv4rbDUL1CTsDkA6bwVp7yGcEf9B3vVzJn43ItqCtfX/HjxpimCZIEl7T7bqPTGcRWa52
+        ipGLyra5D2YfIHOujCmUwWCXeXzYNpM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-261-NqFD413gOXqFk3OTVAUTbA-1; Mon, 22 Aug 2022 13:06:59 -0400
+X-MC-Unique: NqFD413gOXqFk3OTVAUTbA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6671485A585;
+        Mon, 22 Aug 2022 17:06:59 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 44529945D0;
+        Mon, 22 Aug 2022 17:06:59 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     mlevitsk@redhat.com, seanjc@google.com
+Subject: [PATCH v3 0/7] KVM: x86: never write to memory from kvm_vcpu_check_block
+Date:   Mon, 22 Aug 2022 13:06:52 -0400
+Message-Id: <20220822170659.2527086-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20220808111113.71890-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220808111113.71890-1-krzysztof.kozlowski@linaro.org>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Mon, 22 Aug 2022 10:06:39 -0700
-Message-ID: <CAJ+vNU2=kLpbGr_W9O0Tp=nawfgV5ioGr6C-7KWfjLXy8kGTmQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: mfd: Drop Robert Jones
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 4:11 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Emails to Robert Jones bounce ("550 5.2.1 The email account that you
-> tried to reach is disabled").
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> ---
->
-> For dt-bindings see:
-> https://lore.kernel.org/all/20220808104712.54315-1-krzysztof.kozlowski@linaro.org/T/#t
-> ---
->  MAINTAINERS | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4832b317fe05..ee8f04918d44 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -8442,7 +8442,6 @@ F:        tools/testing/selftests/futex/
->
->  GATEWORKS SYSTEM CONTROLLER (GSC) DRIVER
->  M:     Tim Harvey <tharvey@gateworks.com>
-> -M:     Robert Jones <rjones@gateworks.com>
->  S:     Maintained
->  F:     Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
->  F:     drivers/mfd/gateworks-gsc.c
-> --
-> 2.34.1
->
+The following backtrace:
 
-Acked-By: Tim Harvey <tharvey@gateworks.com>
+[ 1355.807187]  kvm_vcpu_map+0x159/0x190 [kvm]
+[ 1355.807628]  nested_svm_vmexit+0x4c/0x7f0 [kvm_amd]
+[ 1355.808036]  ? kvm_vcpu_block+0x54/0xa0 [kvm]
+[ 1355.808450]  svm_check_nested_events+0x97/0x390 [kvm_amd]
+[ 1355.808920]  kvm_check_nested_events+0x1c/0x40 [kvm] 
+[ 1355.809396]  kvm_arch_vcpu_runnable+0x4e/0x190 [kvm]
+[ 1355.809892]  kvm_vcpu_check_block+0x4f/0x100 [kvm]
+[ 1355.811259]  kvm_vcpu_block+0x6b/0xa0 [kvm] 
 
-Tim
+can occur due to kmap being called in non-sleepable (!TASK_RUNNING) context.
+The fix is to extend kvm_x86_ops->nested_ops.hv_timer_pending() to cover
+all events not already checked in kvm_arch_vcpu_is_runnable(), and then
+get rid of the annoying (and wrong) call to kvm_check_nested_events()
+from kvm_vcpu_check_block().
+
+Beware, this is not a complete fix, because kvm_guest_apic_has_interrupt()
+might still _read_ memory from non-sleepable context.  The fix here is
+probably to make kvm_arch_vcpu_is_runnable() return -EAGAIN, and in that
+case do a round of kvm_vcpu_check_block() polling in sleepable context.
+Nevertheless, it is a good start as it pushes the vmexit into vcpu_block().
+
+The series also does a small cleanup pass on kvm_vcpu_check_block(),
+removing KVM_REQ_UNHALT in favor of simply calling kvm_arch_vcpu_runnable()
+again.  Now that kvm_check_nested_events() is not called anymore by
+kvm_arch_vcpu_runnable(), it is much easier to see that KVM will never
+consume the event that caused kvm_vcpu_has_events() to return true,
+and therefore it is safe to evaluate it again.
+
+The alternative of propagating the return value of
+kvm_arch_vcpu_runnable() up to kvm_vcpu_{block,halt}() is inferior
+because it does not quite get right the edge cases where the vCPU becomes
+runnable right before schedule() or right after kvm_vcpu_check_block().
+While these edge cases are unlikely to truly matter in practice, it is
+also pointless to get them "wrong".
+
+Paolo
+
+v2->v3: do not propagate the return value of
+	kvm_arch_vcpu_runnable() up to kvm_vcpu_{block,halt}()
+
+	move and reformat the comment in vcpu_block()
+
+	move KVM_REQ_UNHALT removal last
+
+Paolo Bonzini (6):
+  KVM: x86: check validity of argument to KVM_SET_MP_STATE
+  KVM: x86: make vendor code check for all nested events
+  KVM: x86: lapic does not have to process INIT if it is blocked
+  KVM: x86: never write to memory from kvm_vcpu_check_block
+  KVM: mips, x86: do not rely on KVM_REQ_UNHALT
+  KVM: remove KVM_REQ_UNHALT
+
+Sean Christopherson (1):
+  KVM: nVMX: Make an event request when pending an MTF nested VM-Exit
+
+ Documentation/virt/kvm/vcpu-requests.rst | 28 +------------
+ arch/arm64/kvm/arm.c                     |  1 -
+ arch/mips/kvm/emulate.c                  |  6 +--
+ arch/powerpc/kvm/book3s_pr.c             |  1 -
+ arch/powerpc/kvm/book3s_pr_papr.c        |  1 -
+ arch/powerpc/kvm/booke.c                 |  1 -
+ arch/powerpc/kvm/powerpc.c               |  1 -
+ arch/riscv/kvm/vcpu_insn.c               |  1 -
+ arch/s390/kvm/kvm-s390.c                 |  2 -
+ arch/x86/include/asm/kvm_host.h          |  3 +-
+ arch/x86/kvm/i8259.c                     |  4 +-
+ arch/x86/kvm/lapic.h                     |  2 +-
+ arch/x86/kvm/vmx/nested.c                |  9 +++-
+ arch/x86/kvm/vmx/vmx.c                   |  6 ++-
+ arch/x86/kvm/x86.c                       | 53 ++++++++++++++++++------
+ arch/x86/kvm/x86.h                       |  5 ---
+ arch/x86/kvm/xen.c                       |  1 -
+ include/linux/kvm_host.h                 |  3 +-
+ virt/kvm/kvm_main.c                      |  4 +-
+ 19 files changed, 63 insertions(+), 69 deletions(-)
+
+-- 
+2.31.1
+

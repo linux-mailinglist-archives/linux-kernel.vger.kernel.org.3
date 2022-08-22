@@ -2,138 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D8259C2A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC4459C2A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 Aug 2022 17:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236431AbiHVPYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 Aug 2022 11:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        id S236361AbiHVP0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 Aug 2022 11:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236333AbiHVPYV (ORCPT
+        with ESMTP id S236526AbiHVPYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 Aug 2022 11:24:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2B31115;
-        Mon, 22 Aug 2022 08:20:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 22 Aug 2022 11:24:30 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6ACF54
+        for <linux-kernel@vger.kernel.org>; Mon, 22 Aug 2022 08:20:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661181609; x=1692717609;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PxH1XESOn3k/TaEO+M/yHzwrNdK4vC1UrGySGCfqGZI=;
+  b=OStXxSH0ylWCfCKLDuyUgSvzfL2JRSZrKYOWI/EBavTeOi/JsDTtg0lI
+   j4UsGn9Ux75/WH+tZ2SZzutgUGZTtdMkadAOdBgKn3BZ1jyqgHf4awmcg
+   cxOdiKOwqdyF8PMur+UrujqMpVHbVTwJeDm5XGyJ8JRLVcZRdjprPbmUz
+   gdBAjhYGvZI9v4d/Mrz0Q+PC8X4HxBD1qRE2Ski9Uf8g9tvCRnMxOHHZ2
+   rouaGBWwSaDaa1srYSvy5GLCqqNECeypVyIlObMa/q7vBQgHjmU6nvG8G
+   oTe869NqOU4uufnjwvalqw+9mzmOaacSR8oCFq5hrBDv5VQnGAyhAspdV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="355172261"
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="355172261"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 08:20:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="612080496"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Aug 2022 08:20:08 -0700
+Received: from [10.252.212.31] (kliang2-mobl1.ccr.corp.intel.com [10.252.212.31])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5067C2030D;
-        Mon, 22 Aug 2022 15:20:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661181602; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u+unRvwl5RKeXktuSK+JeocNb4ORKTqv8ZYCMY8yQM8=;
-        b=Z5JRAObP6PGpMdquxeMFMidbeOHtWJLVEE9H5TfjY4M/WMd9ZT0jW0WV9Yp7wIT2uHYujK
-        vrtWNCDHB5cxvadCzxPjVH948tgFEUdcfX8l61/jqmxdXQSDRyrYuCK77OhGk7sq3xkBGI
-        VPjgQZhJpqdOtppnpDO8v0bcGYh8wQQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 23E3D1332D;
-        Mon, 22 Aug 2022 15:20:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id T4jUBaKeA2O6FQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 22 Aug 2022 15:20:02 +0000
-Date:   Mon, 22 Aug 2022 17:20:01 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Oliver Sang <oliver.sang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>, lkp@lists.01.org,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] mm: page_counter: remove unneeded atomic ops for
- low/min
-Message-ID: <YwOeocdkF/lacpKn@dhcp22.suse.cz>
-References: <20220822001737.4120417-1-shakeelb@google.com>
- <20220822001737.4120417-2-shakeelb@google.com>
- <YwNSlZFPMgclrSCz@dhcp22.suse.cz>
- <YwNX+vq9svMynVgW@dhcp22.suse.cz>
- <CALvZod720nwfP68OM2QtyyWJpOV5aO8xF6iuN0U2hpX9Pzj8PA@mail.gmail.com>
+        by linux.intel.com (Postfix) with ESMTPS id 269AF5806C8;
+        Mon, 22 Aug 2022 08:20:07 -0700 (PDT)
+Message-ID: <feb6f311-1379-7482-21e3-94cf7e797495@linux.intel.com>
+Date:   Mon, 22 Aug 2022 11:20:05 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALvZod720nwfP68OM2QtyyWJpOV5aO8xF6iuN0U2hpX9Pzj8PA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [RESEND PATCH] perf/x86/intel: Fix unchecked MSR access error for
+ Alder Lake N
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     acme@redhat.com, linux-kernel@vger.kernel.org,
+        alexander.shishkin@linux.intel.com, ak@linux.intel.com,
+        Jianfeng Gao <jianfeng.gao@intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>
+References: <20220818181530.2355034-1-kan.liang@linux.intel.com>
+ <Yv9EVP6O9r867om4@worktop.programming.kicks-ass.net>
+ <Yv9Kw21Wl/f6KJTk@worktop.programming.kicks-ass.net>
+ <b54cd275-4fa6-9b5c-fdc2-858d2f7c1b46@linux.intel.com>
+ <YwOKyBL7lNmyaFqs@worktop.programming.kicks-ass.net>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <YwOKyBL7lNmyaFqs@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 22-08-22 07:55:58, Shakeel Butt wrote:
-> On Mon, Aug 22, 2022 at 3:18 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Mon 22-08-22 11:55:33, Michal Hocko wrote:
-> > > On Mon 22-08-22 00:17:35, Shakeel Butt wrote:
-> > [...]
-> > > > diff --git a/mm/page_counter.c b/mm/page_counter.c
-> > > > index eb156ff5d603..47711aa28161 100644
-> > > > --- a/mm/page_counter.c
-> > > > +++ b/mm/page_counter.c
-> > > > @@ -17,24 +17,23 @@ static void propagate_protected_usage(struct page_counter *c,
-> > > >                                   unsigned long usage)
-> > > >  {
-> > > >     unsigned long protected, old_protected;
-> > > > -   unsigned long low, min;
-> > > >     long delta;
-> > > >
-> > > >     if (!c->parent)
-> > > >             return;
-> > > >
-> > > > -   min = READ_ONCE(c->min);
-> > > > -   if (min || atomic_long_read(&c->min_usage)) {
-> > > > -           protected = min(usage, min);
-> > > > +   protected = min(usage, READ_ONCE(c->min));
-> > > > +   old_protected = atomic_long_read(&c->min_usage);
-> > > > +   if (protected != old_protected) {
-> > >
-> > > I have to cache that code back into brain. It is really subtle thing and
-> > > it is not really obvious why this is still correct. I will think about
-> > > that some more but the changelog could help with that a lot.
-> >
-> > OK, so the this patch will be most useful when the min > 0 && min <
-> > usage because then the protection doesn't really change since the last
-> > call. In other words when the usage grows above the protection and your
-> > workload benefits from this change because that happens a lot as only a
-> > part of the workload is protected. Correct?
+
+
+On 2022-08-22 9:55 a.m., Peter Zijlstra wrote:
+> On Mon, Aug 22, 2022 at 09:24:57AM -0400, Liang, Kan wrote:
+>> I think the only issue should be the PMU name. The non-hybrid PMU name
+>> is "cpu". The hybrid PMU name is "cpu_$coretype". If we move the
+>> ALDERLAKE_N to the non-hybrid PMU, the PMU name will be changed from
+>> "cpu_atom" to "cpu". It will be different from the rest of
+>> {ALDER,RAPTOP}LAKE.
+>>
+>> Also, I think we have to update the perf tool for the events because of
+>> the PMU name change.
+>>
+>> But I guess it should be OK, since the ALDERLAKE_N was just added and we
+>> know its an Atom-only system.
 > 
-> Yes, that is correct. I hope the experiment setup is clear now.
-
-Maybe it is just me that it took a bit to grasp but maybe we want to
-save our future selfs from going through that mental process again. So
-please just be explicit about that in the changelog. It is really the
-part that workloads excessing the protection will benefit the most that
-would help to understand this patch.
-
-> > Unless I have missed anything this shouldn't break the correctness but I
-> > still have to think about the proportional distribution of the
-> > protection because that adds to the complexity here.
+> cpu/caps/pmu_name should be 'Gracemont', which is exactly like all the
+> other !hybrid setups. Surely perf-tools already knows about this
+> pattern.
 > 
-> The patch is not changing any semantics. It is just removing an
-> unnecessary atomic xchg() for a specific scenario (min > 0 && min <
-> usage). I don't think there will be any change related to proportional
-> distribution of the protection.
+> IOW, if you need to change perf-tools for this, someone did something
+> wrong somewhere.
 
-Yes, I suspect you are right. I just remembered previous fixes
-like 503970e42325 ("mm: memcontrol: fix memory.low proportional
-distribution") which just made me nervous that this is a tricky area.
+The event list for ADL and RPL is different from the non-hybrid
+platforms. We combine the events from big core and small core into a
+single file and use the PMU name to distinguish from them. The PMU name
+is either cpu_core or cpu_atom.
 
-I will have another look tomorrow with a fresh brain and send an ack.
--- 
-Michal Hocko
-SUSE Labs
+If we change the ADL-N to non-hybrid, the simplest way is to create a
+dedicate gracemont event list. Or we have to specially handle the ADL-N
+in the parsing codes. We have to update the tool for either way.
+
+> 
+> (also, I just noticed, 'Tremont' is the *only* PMU that has a
+> capitalized name, perhaps we don't want Gracemont to follow but instead
+> fix tremont if that is still possible)
+
+I don't think the tool rely on the name under cpu/caps/pmu_name.
+The event list rely on the CPU model number.
+It should be OK to fix the tremont name.
+
+
+Thanks,
+Kan
